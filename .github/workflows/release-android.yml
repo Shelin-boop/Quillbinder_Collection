@@ -1,0 +1,588 @@
+# The public Android app of a version (2026-11-16: the first public Android release, 0.91.3, experimental).
+#
+# Working rules, section 9: Linux leads. Started by hand when the writer calls for the Android version; it changes
+# nothing in the Linux or Windows files. Its files go into a release of their own, "v<version>-android-experimental"
+# (never "Latest"), and the download page shows each system's newest release. "version" checks that Linux is at the same
+# functional level (a Linux release v<major>.<middle>.* with its full version).
+#
+#  1. "build": the program for Android tablets (arm64-v8a) with The Qt Company's Qt 6.12.0 for Android, as in the
+#     work branches' Android workflow (android.yml), but with the public app's permanent id (io.github.shelin_boop.quillbinder.app, the
+#     writer's choice of 2026-11-16) and unsigned (packaging/android/android-ci.sh with QB_ANDROID_RELEASE=1); its
+#     checks of the APK (id, version, permissions, libraries, plug-ins, dictionaries, the libraries' 16 KB segments).
+#  2. "sign-apk": the APK aligned to 16 KB and signed with the project's Android key (the secrets QB_ANDROID_KEYSTORE,
+#     base64 of the PKCS #12 file, and QB_ANDROID_KEYSTORE_PASS). The key must be the one whose certificate
+#     packaging/android/release-key.txt names: Android installs an update only when its signer is the same. Only the
+#     runner's Android build tools and Java run there, no code of this build.
+#  3. "sources": the source code of the third-party parts the APK carries that the release "third-party-sources" does
+#     not have yet (the names come from the Android license list, resources/licenses-android/index.json).
+#  4. "sign-checksums": SHA256SUMS-android.txt and its signature with the project's release key.
+#  5. "publish": the Android release of this version (made when it is not there yet), the sources into
+#     "third-party-sources".
+#  6. "download-page": the download page again, from the names of the newest releases' files.
+#
+# The same source was built, checked and run on emulated tablets on a work branch first (the Android build
+# and its system test on emulated tablets); there is no test suite for Android here.
+name: Android release
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Put the files into the release (off: build, sign and check only)'
+        type: boolean
+        default: true
+      page_only:
+        description: 'Only make the download page again (after its job failed); nothing is built or published'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-android
+  cancel-in-progress: false
+
+jobs:
+  version:
+    # only in the project's own repository, like release.yml
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      tag: ${{ steps.v.outputs.tag }}
+      version: ${{ steps.v.outputs.version }}
+      linux-tag: ${{ steps.v.outputs.linux-tag }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - id: v
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VERSION=$(sed -n 's/^set(APP_VERSION *"\(.*\)")/\1/p' CMakeLists.txt)
+          TAG="v$VERSION-android-experimental"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          # Linux leads: a Linux release at the same functional level (the same first two numbers), with its full version
+          LEVEL=$(echo "$VERSION" | cut -d. -f1,2)
+          linux=""
+          while IFS= read -r t; do
+            [ -n "$t" ] || continue
+            if gh release view "$t" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | grep -q -- '-full-.*\.AppImage$'; then
+              linux=$t; break
+            fi
+          done < <(gh api "repos/$GITHUB_REPOSITORY/releases?per_page=30" --jq ".[] | select(.draft | not) | .tag_name
+                     | select(startswith(\"v$LEVEL.\")) | select(contains(\"-windows-\") | not) | select(contains(\"-android-\") | not)")
+          if [ -z "$linux" ]; then
+            echo "::error title=No Linux release $LEVEL.x::Linux leads: Android $VERSION needs a published Linux version $LEVEL.x first."
+            exit 1
+          fi
+          echo "linux-tag=$linux" >> "$GITHUB_OUTPUT"
+          echo "Android $VERSION, release $TAG; Linux at the same level: $linux"
+
+  build:
+    needs: version
+    if: ${{ !inputs.page_only }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    env:
+      SCCACHE_GHA_ENABLED: 'true'
+      # Qt 6.12's documentation (Qt for Android, checked 2026-11-14): NDK r27c, JDK 21, SDK platform 36, build tools 36.0.0
+      QB_NDK: 27.2.12479018
+      QB_SDK_PLATFORM: android-36
+      QB_BUILD_TOOLS: 36.0.0
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: The Qt version and the folders
+        run: |
+          mkdir -p results
+          echo "QB_QT_VERSION=$(sed -n 's/^set(QB_QT_VERSION *"\(.*\)")/\1/p' CMakeLists.txt)" >> "$GITHUB_ENV"
+          echo "QT_ANDROID_BASE=$HOME/Qt" >> "$GITHUB_ENV"
+
+      - name: Qt cache
+        id: qtcache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ~/Qt
+          key: qt-${{ env.QB_QT_VERSION }}-android-arm64_v8a-x86_64-gcc_64-qtpdf-qtimageformats-v1-${{ hashFiles('packaging/android/android-qt.sh') }}
+
+      - name: Qt for Android and for the build machine
+        run: |
+          V=$QB_QT_VERSION
+          if [ "${{ steps.qtcache.outputs.cache-hit }}" != "true" ]; then
+            bash packaging/android/android-qt.sh "$HOME/Qt" results | tee results/qt-steps.txt
+          fi
+          test -f "$HOME/Qt/$V/gcc_64/bin/qmake"
+          test -f "$HOME/Qt/$V/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake"
+          test -f "$HOME/Qt/$V/android_arm64_v8a/lib/libQt6Core_arm64-v8a.so"
+          test -f "$HOME/Qt/$V/android_arm64_v8a/lib/libQt6Pdf_arm64-v8a.so"
+
+      - name: Compiler cache
+        uses: mozilla-actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba # v0.0.11
+
+      - name: Android SDK, NDK, JDK 21
+        run: |
+          # (no pipefail here: "yes | sdkmanager" ends "yes" with a broken pipe, which pipefail counts as a failure; the
+          # first run of this workflow, 2026-11-16, stopped so after the NDK was installed)
+          set -eu
+          set +o pipefail
+          SDK=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
+          SDKM=$(ls "$SDK"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -1)
+          need=""
+          [ -d "$SDK/ndk/$QB_NDK" ] || need="$need ndk;$QB_NDK"
+          [ -d "$SDK/platforms/$QB_SDK_PLATFORM" ] || need="$need platforms;$QB_SDK_PLATFORM"
+          [ -d "$SDK/build-tools/$QB_BUILD_TOOLS" ] || need="$need build-tools;$QB_BUILD_TOOLS"
+          if [ -n "$need" ]; then
+            echo "installing:$need"
+            yes | "$SDKM" --licenses > /dev/null 2>&1 || true
+            # shellcheck disable=SC2086
+            yes | "$SDKM" --install $need > results/sdk-install.log 2>&1 || { tail -20 results/sdk-install.log; exit 1; }
+          fi
+          test -d "$SDK/ndk/$QB_NDK"
+          test -n "${JAVA_HOME_21_X64:-}"
+          {
+            echo "ANDROID_SDK_ROOT=$SDK"
+            echo "ANDROID_NDK_ROOT=$SDK/ndk/$QB_NDK"
+            echo "ANDROID_NDK_HOME=$SDK/ndk/$QB_NDK"
+            echo "ANDROID_NDK=$SDK/ndk/$QB_NDK"
+            echo "ANDROID_NDK_LATEST_HOME=$SDK/ndk/$QB_NDK"
+            echo "JAVA_HOME=$JAVA_HOME_21_X64"
+          } >> "$GITHUB_ENV"
+          echo "$JAVA_HOME_21_X64/bin" >> "$GITHUB_PATH"
+          if ! command -v ninja > /dev/null 2>&1; then
+            (sudo apt-get update -q && sudo apt-get install -y -q ninja-build) > results/ninja-install.log 2>&1 || true
+          fi
+          if ! command -v ninja > /dev/null 2>&1; then
+            python3 -m pip install -q --break-system-packages ninja
+            echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          fi
+
+      - name: Gradle cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-qt-${{ env.QB_QT_VERSION }}-v1
+
+      - name: Build, pack, check (arm64-v8a, the public app, unsigned)
+        env:
+          QB_ANDROID_RELEASE: '1'
+          QB_ANDROID_BUILD: ${{ github.run_number }}
+          QB_ANDROID_VERSION_NAME: ${{ needs.version.outputs.version }} experimental
+          QB_ANDROID_LABEL: experimental
+          # (Hunspell and OpenSSL are built here; the packs are for the work branches' runs)
+          QB_ANDROID_PACKS_PUBLISH: '0'
+        run: |
+          bash packaging/android/android-ci.sh results arm64-v8a
+          cat results/summary.txt
+          result=$(grep '^result:' results/summary.txt | tail -1 | sed 's/^result: //')
+          if [ "$result" != ok ]; then
+            echo "::error title=Android build::$result"
+            [ -s results/errors.txt ] && head -80 results/errors.txt
+            exit 1
+          fi
+          mkdir -p unsigned
+          mv results/Quillbinder-*-android-*.apk unsigned/
+          ls -la unsigned
+
+      - name: Hand the unsigned APK to the job "sign-apk"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-unsigned
+          path: unsigned
+          retention-days: 3
+          if-no-files-found: error
+
+      - name: Logs of the build
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-build-logs
+          path: results
+          retention-days: 7
+          if-no-files-found: ignore
+
+  sign-apk:
+    # the Android key only here: the runner's Android build tools (zipalign, apksigner, aapt2) and Java, no code of this build
+    needs: [version, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: android-unsigned
+          path: unsigned
+
+      - name: Align and sign
+        env:
+          QB_ANDROID_KEYSTORE: ${{ secrets.QB_ANDROID_KEYSTORE }}
+          QB_ANDROID_KEYSTORE_PASS: ${{ secrets.QB_ANDROID_KEYSTORE_PASS }}
+        run: |
+          set -euo pipefail
+          if [ -z "$QB_ANDROID_KEYSTORE" ] || [ -z "$QB_ANDROID_KEYSTORE_PASS" ]; then
+            echo "::error title=No Android key::The secrets QB_ANDROID_KEYSTORE and QB_ANDROID_KEYSTORE_PASS are not set: the APK is not published unsigned."
+            exit 1
+          fi
+          SDK=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
+          BT="$SDK/build-tools/36.0.0"
+          [ -d "$BT" ] || BT=$(ls -d "$SDK"/build-tools/* | sort -V | tail -1)
+          export JAVA_HOME=${JAVA_HOME_21_X64:-$JAVA_HOME}
+          export PATH="$JAVA_HOME/bin:$PATH"
+          echo "build tools: $BT"
+          mkdir -p /tmp/qb-android-key && chmod 700 /tmp/qb-android-key
+          ( umask 077; printf '%s' "$QB_ANDROID_KEYSTORE" | base64 -d > /tmp/qb-android-key/release.p12 )
+          want=$(sed -n 's/^sha256: //p' packaging/android/release-key.txt)
+          have=$(keytool -list -keystore /tmp/qb-android-key/release.p12 -storetype PKCS12 -storepass:env QB_ANDROID_KEYSTORE_PASS \
+                   -alias quillbinder 2> /dev/null | sed -n 's/^Certificate fingerprint (SHA-256): //p' | tr -d ':' | tr 'A-F' 'a-f' || true)
+          if [ -z "$have" ] || [ "$have" != "$want" ]; then
+            echo "::error title=Wrong Android key::The key in QB_ANDROID_KEYSTORE is not the one packaging/android/release-key.txt names (or its password is wrong)."
+            rm -rf /tmp/qb-android-key
+            exit 1
+          fi
+          echo "Android key ok ($have)"
+          mkdir -p signed
+          for apk in unsigned/*.apk; do
+            "$BT/zipalign" -P 16 -f 4 "$apk" /tmp/aligned.apk
+            "$BT/apksigner" sign --ks /tmp/qb-android-key/release.p12 --ks-type PKCS12 --ks-key-alias quillbinder \
+              --ks-pass env:QB_ANDROID_KEYSTORE_PASS --key-pass env:QB_ANDROID_KEYSTORE_PASS \
+              --out "signed/$(basename "$apk")" /tmp/aligned.apk
+            rm -f /tmp/aligned.apk
+          done
+          rm -rf /tmp/qb-android-key
+          ls -la signed
+
+      - name: The key is gone
+        if: always()
+        run: rm -rf /tmp/qb-android-key
+
+      - name: Check the signed APK
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          SDK=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
+          BT="$SDK/build-tools/36.0.0"
+          [ -d "$BT" ] || BT=$(ls -d "$SDK"/build-tools/* | sort -V | tail -1)
+          export JAVA_HOME=${JAVA_HOME_21_X64:-$JAVA_HOME}
+          export PATH="$JAVA_HOME/bin:$PATH"
+          want=$(sed -n 's/^sha256: //p' packaging/android/release-key.txt)
+          fails=0
+          for apk in signed/*.apk; do
+            echo "== $(basename "$apk") $(stat -c %s "$apk") bytes"
+            "$BT/apksigner" verify -v --print-certs "$apk" > /tmp/verify.txt 2>&1 || { cat /tmp/verify.txt; fails=$((fails + 1)); continue; }
+            cat /tmp/verify.txt
+            signers=$(grep -c '^Signer #[0-9]* certificate SHA-256 digest:' /tmp/verify.txt || true)
+            cert=$(sed -n 's/^Signer #1 certificate SHA-256 digest: //p' /tmp/verify.txt)
+            [ "$signers" = 1 ] && [ "$cert" = "$want" ] || { echo "::error::$apk: signer '$cert' ($signers signers), expected $want"; fails=$((fails + 1)); }
+            # (apksigner signs an APK for Android 9 and later with scheme v3 and reports v2 as not used: run 43896982068)
+            grep -qE 'Verified using v(2|3) scheme \(APK Signature Scheme v(2|3)\): true' /tmp/verify.txt \
+              || { echo "::error::$apk: neither a v2 nor a v3 signature"; fails=$((fails + 1)); }
+            "$BT/zipalign" -c -P 16 4 "$apk" || { echo "::error::$apk: not at 16 KB borders"; fails=$((fails + 1)); }
+            "$BT/aapt2" dump badging "$apk" > /tmp/badging.txt || { echo "::error::$apk: aapt2 cannot read it"; fails=$((fails + 1)); }
+            sed -n '1p' /tmp/badging.txt
+            grep -q "^package: name='io.github.shelin_boop.quillbinder.app'" /tmp/badging.txt \
+              || { echo "::error::$apk: not the public app's id"; fails=$((fails + 1)); }
+            grep -q "versionName='$VERSION experimental'" /tmp/badging.txt \
+              || { echo "::error::$apk: not the version name $VERSION experimental"; fails=$((fails + 1)); }
+          done
+          [ "$fails" -eq 0 ] || exit 1
+          echo "the signed APK: ok"
+
+      - name: Hand the signed APK on
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-files
+          path: signed
+          retention-days: 3
+          compression-level: 0
+          if-no-files-found: error
+
+  sources:
+    # the source code of the third-party parts the APK carries, under the names its license list gives
+    # (Help > Third-Party Licenses, resources/licenses-android/index.json): those that third-party-sources lacks
+    needs: [version]
+    if: ${{ !inputs.page_only }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          mkdir -p sources
+          names=$(grep -o 'third-party-sources, file [^ ;)(]*' resources/licenses-android/index.json | awk '{print $3}' | sort -u)
+          echo "the license list names: $names"
+          have=$(gh release view third-party-sources --json assets --jq '.assets[].name')
+          for n in $names; do
+            if echo "$have" | grep -qxF "$n"; then
+              echo "there already: $n"
+              continue
+            fi
+            case "$n" in
+              openssl-*.tar.gz)
+                # the archive packaging/android/android-openssl.sh builds, with the SHA-256 pinned there
+                v=${n#openssl-}; v=${v%.tar.gz}
+                sv=$(sed -n 's/^VERSION=//p' packaging/android/android-openssl.sh)
+                [ "$v" = "$sv" ] || { echo "::error::the license list names $n, the build uses OpenSSL $sv"; exit 1; }
+                want=$(sed -n 's/^WANT=\${QB_OPENSSL_SHA256:-\([0-9a-f]*\)}/\1/p' packaging/android/android-openssl.sh)
+                curl -fsSL --retry 5 -o "sources/$n" "https://github.com/openssl/openssl/releases/download/openssl-$v/$n"
+                echo "$want  sources/$n" | sha256sum -c --quiet
+                echo "fetched and checked: $n" ;;
+              *)
+                echo "::error::the license list names $n, which is not on third-party-sources and not fetched here"
+                exit 1 ;;
+            esac
+          done
+          {
+            echo "Quillbinder $VERSION for Android: source code of the third-party parts"
+            echo
+            echo "The files are in the release \"Third-party source code\":"
+            echo "https://github.com/$GH_REPO/releases/tag/third-party-sources"
+            echo
+            for n in $names; do
+              case "$n" in
+                qt-everywhere-src-*) echo "$n"; echo "    Qt 6, as The Qt Company built it for Android (the Qt Project's source release)" ;;
+                hunspell-*) echo "$n"; echo "    Hunspell, the version the program is linked with" ;;
+                openssl-*) echo "$n"; echo "    OpenSSL, for https (File > Import > Web Page); how it is built: packaging/android/android-openssl.sh" ;;
+                libreoffice-dictionaries-*) echo "$n"; echo "    the German spelling dictionaries (the English ones are their own source)" ;;
+                *) echo "$n" ;;
+              esac
+            done
+            echo
+            echo "The Android libraries (AndroidX) Qt's build adds, zlib, Monocypher and the icons: see Help > Third-Party Licenses."
+          } > THIRD-PARTY-SOURCES-android.txt
+          cat THIRD-PARTY-SOURCES-android.txt
+          ls -la sources
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-sources
+          path: |
+            sources
+            THIRD-PARTY-SOURCES-android.txt
+          retention-days: 3
+          compression-level: 0
+          if-no-files-found: warn
+
+  sign-checksums:
+    # the release key, without third-party code: the checksum list of the Android files and its signature
+    needs: [version, sign-apk, sources]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: android-files
+          path: release/dist
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: android-sources
+          path: release/src
+
+      - name: Checksums and their signature
+        env:
+          QB_SIGNING_KEY: ${{ secrets.QB_SIGNING_KEY }}
+        run: |
+          set -euo pipefail
+          [ -n "$QB_SIGNING_KEY" ] || { echo "::error title=No signing key::The secret QB_SIGNING_KEY is not set."; exit 1; }
+          mkdir -p /tmp/qb-signing && chmod 700 /tmp/qb-signing
+          ( umask 077; printf '%s\n' "$QB_SIGNING_KEY" > /tmp/qb-signing/key.pem )
+          want=$(grep -o 'kReleaseKey\[\] = "[0-9a-f]*"' src/core/Signing.cpp | grep -o '"[0-9a-f]*"' | tr -d '"')
+          have=$(openssl pkey -in /tmp/qb-signing/key.pem -pubout -outform DER | tail -c 32 | od -An -tx1 | tr -d ' \n')
+          if [ -z "$have" ] || [ "$have" != "$want" ]; then
+            rm -rf /tmp/qb-signing
+            echo "::error title=Wrong signing key::QB_SIGNING_KEY is not the key whose public half the program carries."
+            exit 1
+          fi
+          cp release/src/THIRD-PARTY-SOURCES-android.txt release/dist/
+          (cd release/dist && rm -f SHA256SUMS-android.txt SHA256SUMS-android.txt.sig && sha256sum -- * > /tmp/SHA256SUMS-android.txt && mv /tmp/SHA256SUMS-android.txt SHA256SUMS-android.txt)
+          openssl pkeyutl -sign -rawin -inkey /tmp/qb-signing/key.pem -in release/dist/SHA256SUMS-android.txt -out release/dist/SHA256SUMS-android.txt.sig
+          rm -rf /tmp/qb-signing
+          openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in release/dist/SHA256SUMS-android.txt \
+            -sigfile release/dist/SHA256SUMS-android.txt.sig
+          cat release/dist/SHA256SUMS-android.txt
+          mkdir -p release/src/sources
+
+      - name: Hand the files to the job "publish"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-release-files
+          path: release
+          retention-days: 3
+          compression-level: 0
+          if-no-files-found: error
+
+      - name: The key is gone
+        if: always()
+        run: rm -rf /tmp/qb-signing
+
+  publish:
+    # the only job with write permission: it adds what the jobs before it built, signed and checked to the release
+    needs: [version, sign-checksums]
+    if: inputs.publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ needs.version.outputs.tag }}
+      VERSION: ${{ needs.version.outputs.version }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: android-release-files
+          path: release
+
+      - name: Third-party source code
+        run: |
+          set -euo pipefail
+          have=$(gh release view third-party-sources --json assets --jq '.assets[].name')
+          for f in release/src/sources/*; do
+            [ -f "$f" ] || continue
+            n=$(basename "$f")
+            if echo "$have" | grep -qxF "$n"; then echo "kept: $n"; else gh release upload third-party-sources "$f"; echo "added: $n"; fi
+          done
+
+      - name: The Android files
+        env:
+          LINUX_TAG: ${{ needs.version.outputs.linux-tag }}
+        run: |
+          set -euo pipefail
+          ls -la release/dist
+          cd release/dist
+          apk=$(ls ./*.apk | sed -n 1p); apk=${apk#./}
+          linux_shown=${LINUX_TAG#v}; linux_shown=${linux_shown//-/ }
+          {
+            echo "**Quillbinder $VERSION for Android tablets, experimental**: a writing studio for long texts. It opens and saves"
+            echo "projects in its own format and in Scrivener 3 format (.scriv); it is an independent program, not made by or"
+            echo "connected with Literature & Latte. The functions of Linux $linux_shown"
+            echo "([its release](https://github.com/$GH_REPO/releases/tag/$LINUX_TAG)), on a tablet: the same windows, made for"
+            echo "fingers and the on-screen keyboard. Linux, Windows and Android count their own fixes in the last number."
+            echo
+            echo "> **This is the first, experimental Android version.** Keep backups of your projects (File > Back Up > Back Up Now;"
+            echo "> the automatic backups are set under File > Options > Backup), and keep a copy of your manuscripts outside the app."
+            echo
+            echo "## Android 9 or later (tablets, 64-bit ARM)"
+            echo
+            echo "1. Open **$apk** on the tablet (download it there). Android asks whether the browser or the Files app may"
+            echo "   install apps: allow it for this install, then **Install**."
+            echo "2. At the first start Quillbinder asks for access to the tablet's files: it keeps projects, backups and exports in"
+            echo "   **Documents/Quillbinder**, where other apps and your computer can reach them. The button opens Android's page"
+            echo "   \"All files access\": switch it on for Quillbinder and go back."
+            echo "3. Add-ons for Android are installed with **File > Install Update or Add-on**; a new version of the app always"
+            echo "   comes as a new APK, which installs over the old one and keeps your settings."
+            echo
+            echo "| File | What it is |"
+            echo "|------|------------|"
+            echo "| $apk | the app for Android tablets (arm64), with the spelling dictionaries, the writing tools and the importers |"
+            echo
+            echo "Not in the Android version yet: Speech Transcription, audio and video in the editor, crash reports."
+            echo
+            echo "## Checking the files"
+            echo
+            echo "The APK is signed with the project's Android key; Android shows its certificate's SHA-256 as"
+            echo "\`8cdb2ad2d7c0855cc6a7297e1afb0466932272b618c6e5f165b0549299be0e5e\` (\`packaging/android/release-key.txt\` of the"
+            echo "source). Checksums: SHA256SUMS-android.txt (signed: SHA256SUMS-android.txt.sig, with"
+            echo "\`packaging/quillbinder-signing-public.pem\` of the source). Third-party source code: THIRD-PARTY-SOURCES-android.txt."
+          } > "$RUNNER_TEMP/body.md"
+          cat "$RUNNER_TEMP/body.md"
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release upload "$TAG" ./* --clobber
+            gh release edit "$TAG" --notes-file "$RUNNER_TEMP/body.md"
+          else
+            # never "Latest": GitHub's badge, .../releases/latest, the add-on workflow and the README lead to Linux
+            gh release create "$TAG" --title "Quillbinder $VERSION for Android (experimental)" --notes-file "$RUNNER_TEMP/body.md" \
+              --latest=false --target "$GITHUB_SHA" ./*
+          fi
+          gh release view "$TAG" --json assets --jq '.assets[].name'
+
+  download-page:
+    # the download page again, now with the Android files (the same steps as in release-windows.yml)
+    needs: [version, publish]
+    if: ${{ !cancelled() && needs.version.result == 'success' && (needs.publish.result == 'success' || inputs.page_only) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: The page
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          LINUX_TAG: ${{ needs.version.outputs.linux-tag }}
+        run: |
+          set -euo pipefail
+          mkdir -p release-names site
+          newest=$(gh api "repos/$GH_REPO/releases?per_page=30" --jq '[.[] | select(.draft | not) | .tag_name | select(startswith("v"))
+                     | select(contains("-windows-") | not) | select(contains("-android-") | not)] | .[0] // empty')
+          main=${newest:-$LINUX_TAG}
+          gh release view "$main" --json assets --jq '.assets[].name' | while IFS= read -r n; do : > "release-names/$n"; done
+          also=()
+          i=0
+          while IFS= read -r t; do
+            [ -n "$t" ] && [ "$t" != "$main" ] || continue
+            i=$((i + 1)); mkdir -p "older-$i"
+            gh release view "$t" --json assets --jq '.assets[].name' | while IFS= read -r n; do : > "older-$i/$n"; done
+            also+=(--also "older-$i" "$t")
+          done < <(gh api "repos/$GH_REPO/releases?per_page=12" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
+          python3 -I tools/download-page.py release-names "$main" site "${also[@]}"
+          grep -o 'releases/download/[^/]*/[^"]*' site/index.html | sort -u
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+          name: github-pages-${{ github.run_attempt }}
+
+      - id: deploy
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}

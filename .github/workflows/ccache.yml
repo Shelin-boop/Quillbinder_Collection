@@ -1,0 +1,145 @@
+# The compiled files for the Claude Code sessions (0.91.2, build optimization P5, a trial): the test build and the
+# AppImage's build of main, compiled through ccache in a clean Ubuntu 24.04 container, in the session's own folder
+# /home/claude/quillbinder_collection (the compile commands name absolute paths), starting from the last pack. ccache's folder
+# goes onto the pre-release "ccache-linux" of this repository ("not for downloading"); tools/get-ccache.sh unpacks
+# it at the start of a session, so that a session compiles only what changed.
+#
+# Runs when what is compiled changes on main; on a linux/ branch only with "[ccache]" in the commit message (a
+# trial); and by hand. The job "build" runs the builds without write permission; only the job "publish" writes
+# (no checkout, no build), as in deps.yml.
+name: Compiled files for the sessions
+
+on:
+  push:
+    branches: [main, 'linux/**']
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'plugins/**'
+      - 'addons/**'
+      - 'resources/**'
+      - 'translations/**'
+      - 'docs/manual.md'
+      - 'docs/quick-start.md'
+      - 'CMakeLists.txt'
+      - 'tools/get-ccache.sh'
+      - 'tools/get-qt.sh'
+      - '.github/workflows/ccache.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ccache
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: >-
+      github.repository == 'Shelin-boop/Quillbinder_Collection' && (github.ref == 'refs/heads/main'
+      || github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[ccache]'))
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    timeout-minutes: 120
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      GH_TOKEN: ${{ github.token }}
+      Q: /home/claude/quillbinder_collection
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Tools to fetch the source
+        run: |
+          apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl gh xz-utils ccache
+
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: The session's folder
+        run: |
+          mkdir -p /home/claude
+          cp -a "$GITHUB_WORKSPACE" "$Q"
+          git config --global --add safe.directory "$Q"
+
+      - name: Build tools, Qt, FFmpeg and whisper.cpp (the packs)
+        working-directory: /home/claude/quillbinder_collection
+        run: |
+          bash tools/cloud-setup.sh > /tmp/setup.log 2>&1 || { tail -40 /tmp/setup.log; exit 1; }
+          tools/get-ffmpeg.sh > /tmp/ffmpeg.log 2>&1 && tools/get-whisper.sh > /tmp/whisper.log 2>&1 \
+            || { tail -40 /tmp/ffmpeg.log /tmp/whisper.log; exit 1; }
+          tail -1 /tmp/ffmpeg.log; tail -1 /tmp/whisper.log
+
+      - name: The last compiled files
+        working-directory: /home/claude/quillbinder_collection
+        run: tools/get-ccache.sh
+
+      - name: The test build (as in a session)
+        working-directory: /home/claude/quillbinder_collection
+        run: |
+          start=$(date +%s)
+          cmake -S . -B build -G Ninja -DQB_TEST_SWITCHES=ON > /tmp/configure.log 2>&1 || { tail -40 /tmp/configure.log; exit 1; }
+          grep 'Compiler cache' /tmp/configure.log
+          cmake --build build -j"$(nproc)" > /tmp/build.log 2>&1 || { grep -m 40 'error' /tmp/build.log; tail -20 /tmp/build.log; exit 1; }
+          echo "test build: $(( $(date +%s) - start )) s"; ccache -s | grep -iE 'hits|misses|cache size' || true
+
+      - name: The AppImage's build (its compile only, the flags of packaging/linux/build-appimage.sh)
+        working-directory: /home/claude/quillbinder_collection
+        run: |
+          start=$(date +%s)
+          python3 -I tools/gen-resources.py > /dev/null
+          cmake -S . -B build-appimage -DCMAKE_BUILD_TYPE=Release -DQB_BUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr \
+            -DQB_QT_DIR=/opt/qt/6.12.0/gcc_64 > /tmp/configure2.log 2>&1 || { tail -40 /tmp/configure2.log; exit 1; }
+          cmake --build build-appimage -j"$(nproc)" > /tmp/build2.log 2>&1 || { grep -m 40 'error' /tmp/build2.log; tail -20 /tmp/build2.log; exit 1; }
+          echo "AppImage's build: $(( $(date +%s) - start )) s"
+
+      - name: Pack ccache's folder
+        run: |
+          ccache --evict-older-than 14d > /dev/null || true
+          ccache -s | tee /tmp/stats.txt
+          mkdir -p out
+          tar -C "$HOME/.cache/ccache" -cf out/ccache-linux.tar .
+          (cd out && sha256sum ccache-linux.tar > ccache-linux.tar.sha256)
+          { echo "commit: $GITHUB_SHA"; echo "branch: $GITHUB_REF_NAME"; echo "run: $GITHUB_RUN_ID"; echo "date: $(date -u +%FT%TZ)"
+            echo; cat /tmp/stats.txt; } > out/ccache-linux.txt
+          ls -la out
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: ccache-linux
+          path: out
+          retention-days: 1
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: ccache-linux
+          path: out
+
+      - name: The pre-release "ccache-linux"
+        run: |
+          gh release view ccache-linux > /dev/null 2>&1 \
+            || gh release create ccache-linux --prerelease --target "$GITHUB_SHA" \
+                 --title "Compiled files for the sessions' Linux builds, not for downloading" --notes "(being made)"
+          gh release upload ccache-linux out/ccache-linux.tar out/ccache-linux.tar.sha256 out/ccache-linux.txt --clobber
+          { echo "Working storage of tools/get-ccache.sh (.github/workflows/ccache.yml). Not for downloading."; echo
+            cat out/ccache-linux.txt; } > notes.txt
+          gh release edit ccache-linux --notes-file notes.txt
+          # the artifact is not needed any more (it counts against the repository's storage)
+          for id in $(gh api "repos/$GH_REPO/actions/runs/$GITHUB_RUN_ID/artifacts" --jq '.artifacts[] | select(.name=="ccache-linux") | .id'); do
+            gh api -X DELETE "repos/$GH_REPO/actions/artifacts/$id" || true
+          done

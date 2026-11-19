@@ -1,0 +1,7 @@
+Kotlin standard library 2.2.10 (org.jetbrains.kotlin:kotlin-stdlib)
+kotlinx.coroutines 1.8.1 (org.jetbrains.kotlinx:kotlinx-coroutines-core, -android)
+JetBrains annotations 23.0.0 (org.jetbrains:annotations)
+Copyright (C) JetBrains s.r.o. and Kotlin Programming Language contributors
+https://kotlinlang.org
+
+Licensed under the Apache License, Version 2.0 (the full text is listed under the full texts of common licenses, "Apache-2.0").

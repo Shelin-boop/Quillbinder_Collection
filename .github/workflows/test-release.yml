@@ -1,0 +1,31 @@
+# A test release (2026-11-12): the files of a test build on one release page (a pre-release marked as not published),
+# sorted by system, made by tools/test-release.sh from the list test-release.txt on the branch "test-release". The
+# session pushes that branch; it cannot make releases itself.
+name: Test release
+
+on:
+  push:
+    branches: ['test-release']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: test-release
+  cancel-in-progress: false
+
+jobs:
+  test-release:
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: The files and the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: tools/test-release.sh test-release.txt

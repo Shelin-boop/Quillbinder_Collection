@@ -1,0 +1,155 @@
+# Ready-made dependency packs for the Linux build (2026-11-15, working rules section 10, decision D1): FFmpeg (both
+# sets) and whisper.cpp, built once per recipe in the same machine as the release (a clean Ubuntu 24.04 container) and
+# put as a .tar.xz onto a pre-release "deps-<name>-linux-<recipe>" of this repository, titled "not for downloading"
+# (as qt-<version>-linux holds Qt). tools/deps-pack.sh says what a recipe is; tools/get-ffmpeg.sh and
+# tools/get-whisper.sh download the pack that tools/deps-packs.txt pins, and build from source without one.
+#
+# Runs when a recipe file changes on main or a linux/ branch, and by hand. A recipe whose pack is there already costs
+# only the setup (about 2 min). The job "build" runs the third-party builds without write permission; only the job
+# "publish" may write, and it runs nothing that was downloaded or built (as in release.yml, audit X-5).
+# After a new pack: put the line "pin: ..." of the release's text into tools/deps-packs.txt (a commit of its own).
+name: Dependency packs
+
+on:
+  push:
+    branches: [main, 'linux/**']
+    paths:
+      - 'tools/get-ffmpeg.sh'
+      - 'tools/build-ffmpeg.sh'
+      - 'tools/ffmpeg-patches/**'
+      - 'tools/get-whisper.sh'
+      - 'tools/deps-pack.sh'
+      - 'tools/cloud-setup.sh'
+      - '.github/workflows/deps.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deps-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    strategy:
+      fail-fast: false
+      matrix:
+        pack: [ffmpeg, whisper]
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    timeout-minutes: 90
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      QB_DEPS_PACK: '0'   # build from source here, never from an older pack
+      QB_SKIP_QT: '1'     # (Qt is not needed for these two)
+      GH_TOKEN: ${{ github.token }}
+      PACK: ${{ matrix.pack }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Tools to fetch the source
+        run: |
+          apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl gh xz-utils
+
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Build tools (the same as the release's)
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          bash tools/cloud-setup.sh > /tmp/setup.log 2>&1 || { tail -40 /tmp/setup.log; exit 1; }
+
+      - name: The recipe, and whether its pack is there
+        run: |
+          mkdir -p out
+          tools/deps-pack.sh recipe "$PACK" | tee "out/recipe-$PACK.txt"
+          TAG=$(tools/deps-pack.sh tag "$PACK"); FILE=$(tools/deps-pack.sh file "$PACK")
+          echo "TAG=$TAG" >> "$GITHUB_ENV"; echo "FILE=$FILE" >> "$GITHUB_ENV"
+          if gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" --jq '.assets[].name' 2>/dev/null | grep -qxF "$FILE"; then
+            echo "The pack $FILE is there already (pre-release $TAG): nothing to build."
+            echo "there" > "out/state-$PACK.txt"
+          else
+            echo "No pack $FILE yet: building it."
+            echo "new" > "out/state-$PACK.txt"
+          fi
+
+      - name: Build
+        run: |
+          [ "$(cat "out/state-$PACK.txt")" = new ] || exit 0
+          start=$(date +%s)
+          # (the scripts' own prefixes: build/ffmpeg, build/ffmpeg-full, build/whisper of this checkout)
+          if [ "$PACK" = ffmpeg ]; then
+            tools/get-ffmpeg.sh > "out/build-$PACK.log" 2>&1 || { tail -60 "out/build-$PACK.log"; exit 1; }
+          else
+            tools/get-whisper.sh > "out/build-$PACK.log" 2>&1 || { tail -60 "out/build-$PACK.log"; exit 1; }
+          fi
+          echo "built in $(( ($(date +%s) - start) / 60 )) min"; tail -5 "out/build-$PACK.log"
+
+      - name: Pack
+        run: |
+          [ "$(cat "out/state-$PACK.txt")" = new ] || exit 0
+          if [ "$PACK" = ffmpeg ]; then
+            tools/deps-pack.sh pack ffmpeg out build/ffmpeg build/ffmpeg-full
+          else
+            tools/deps-pack.sh pack whisper out build/whisper
+          fi
+          # the libraries in the pack, for the log (D3 asks the same of the release workflow's caches)
+          # (only this pack's folders: a folder that is not there would make find, and with it the step, fail)
+          if [ "$PACK" = ffmpeg ]; then dirs=(build/ffmpeg build/ffmpeg-full); else dirs=(build/whisper); fi
+          find "${dirs[@]}" -type f -name '*.so*' | sort | xargs -r sha256sum > "out/libraries-$PACK.txt"
+          wc -l "out/libraries-$PACK.txt"
+          ls -la out
+
+      - name: Hand the pack to the job "publish"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: pack-${{ matrix.pack }}
+          path: out
+          retention-days: 3
+          if-no-files-found: error
+
+  publish:
+    # the only job with write permission: it creates the pre-release and uploads the files; no checkout, no build
+    needs: build
+    # also when one pack failed: each pack stands alone, the one that was built is published
+    if: ${{ !cancelled() && github.repository == 'Shelin-boop/Quillbinder_Collection' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          pattern: pack-*
+          path: packs
+
+      - name: Pre-releases "not for downloading"
+        run: |
+          for d in packs/pack-*; do
+            p=${d#packs/pack-}
+            if [ "$(cat "$d/state-$p.txt")" != new ]; then echo "$p: the pack was there already"; continue; fi
+            file=$(ls "$d" | grep '\.tar\.xz$')
+            tag="deps-$p-linux-$(cut -c1-16 "$d/hash-$p.txt")"
+            pin=$(cat "$d/pin-$p.txt")
+            {
+              echo "Built by .github/workflows/deps.yml (run $GITHUB_RUN_ID, commit $GITHUB_SHA) for tools/deps-pack.sh."
+              echo "Not for downloading: working storage of the build."
+              echo
+              echo '```'
+              echo "$pin"
+              echo
+              cat "$d/recipe-$p.txt"
+              echo '```'
+            } > notes.txt
+            gh release view "$tag" > /dev/null 2>&1 \
+              || gh release create "$tag" --prerelease --target "$GITHUB_SHA" --title "$p for the Linux build, not for downloading" --notes-file notes.txt
+            gh release upload "$tag" "$d/$file" "$d/$file.sha256" "$d/recipe-$p.txt" "$d/libraries-$p.txt" "$d/build-$p.log" --clobber
+            echo "$pin"
+          done

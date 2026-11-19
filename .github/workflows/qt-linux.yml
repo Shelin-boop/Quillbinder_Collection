@@ -1,0 +1,75 @@
+# Qt's official binaries for Linux, for the cloud session (0.80.0): the session cannot reach download.qt.io, so
+# this workflow installs Qt with aqtinstall on GitHub's runner and puts it on the pre-release "qt-<version>-linux"
+# of this repository; tools/get-qt.sh downloads it in the session. Runs for a pushed branch named qt/<version>
+# (for example qt/6.12.0). Everything it finds is uploaded, also when a step fails (the session cannot read the
+# Actions logs of this repository).
+name: Qt for Linux
+
+on:
+  push:
+    branches: ['qt/**']
+
+permissions:
+  contents: write
+
+jobs:
+  qt:
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Announce the run on the pre-release
+        run: |
+          V="${GITHUB_REF_NAME#qt/}"
+          echo "V=$V" >> "$GITHUB_ENV"
+          echo "TAG=qt-$V-linux" >> "$GITHUB_ENV"
+          gh release delete "qt-$V-linux" --cleanup-tag -y || true
+          gh release create "qt-$V-linux" --prerelease --target "$GITHUB_SHA" --title "Qt $V for the Linux build, not for downloading (running)" \
+            --notes "sha=$GITHUB_SHA status=running run=$GITHUB_RUN_ID"
+
+      - name: Install Qt with aqtinstall
+        run: |
+          mkdir -p out
+          python3 -m pip install --user 'aqtinstall==3.3.0' > out/aqt.log 2>&1
+          export PATH="$HOME/.local/bin:$PATH"
+          aqt list-qt linux desktop --arch "$V" > out/arches.txt 2>> out/aqt.log
+          aqt list-qt linux desktop --modules "$V" linux_gcc_64 > out/modules.txt 2>> out/aqt.log
+          mods=""
+          for m in qtmultimedia qtimageformats qtpdf qtwayland; do
+            if tr ' ' '\n' < out/modules.txt | grep -qx "$m"; then mods="$mods $m"; fi
+          done
+          echo "modules:$mods" | tee -a out/aqt.log
+          aqt install-qt linux desktop "$V" linux_gcc_64 -O "$PWD/Qt" -m $mods >> out/aqt.log 2>&1
+
+      - name: Pack Qt and describe it
+        run: |
+          Q=$(ls -d Qt/"$V"/*/ | head -1); Q=${Q%/}
+          rm -rf "$Q/doc" "$Q/examples"
+          {
+            echo "qt=$V dir=$(basename "$Q")"
+            echo "glibc needed by libQt6Core: $(objdump -T "$Q/lib/libQt6Core.so.6" | grep -o 'GLIBC_[0-9.]*' | sort -Vu | tail -1)"
+            echo "--- multimedia plugins"; ls "$Q/plugins/multimedia" 2>&1
+            echo "--- NEEDED of the FFmpeg media plugin"
+            readelf -d "$Q/plugins/multimedia/libffmpegmediaplugin.so" 2>&1 | grep -E 'NEEDED|RUNPATH|RPATH'
+            echo "--- FFmpeg libraries shipped with Qt"; ls "$Q/lib" | grep -E '^lib(av|sw)' || echo none
+            echo "--- platform plugins"; ls "$Q/plugins/platforms" "$Q/plugins/platformthemes" 2>&1
+            echo "--- private font database headers"; ls "$Q"/include/QtGui/*/QtGui/private/qfontdatabase_p.h 2>&1
+            echo "--- size"; du -sh "$Q"
+          } > out/qt-info.txt 2>&1
+          XZ_OPT='-T0 -6' tar -C "$(dirname "$Q")" -cJf "out/qt-$V-linux-gcc_64.tar.xz" "$(basename "$Q")"
+          (cd out && sha256sum "qt-$V-linux-gcc_64.tar.xz" > SHA256SUMS)
+          cat out/qt-info.txt out/SHA256SUMS
+
+      - name: Put the results on the pre-release
+        if: always()
+        run: |
+          result=failed
+          [ -f "out/qt-$V-linux-gcc_64.tar.xz" ] && result=ok
+          gh release edit "$TAG" --title "Qt $V for the Linux build, not for downloading ($result)" \
+            --notes "sha=$GITHUB_SHA status=$result run=$GITHUB_RUN_ID"
+          for f in out/*; do
+            gh release upload "$TAG" "$f" --clobber || echo "upload failed: $f"
+          done

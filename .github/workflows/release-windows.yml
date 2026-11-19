@@ -1,0 +1,852 @@
+# The public Windows files of a version (0.91.1, 2026-11-14: the first public Windows files).
+#
+# Working rules, section 9: Linux leads. The release of a version is made by .github/workflows/release.yml with the
+# Linux files; this workflow is started by hand afterwards, when the writer calls for the Windows version. It changes
+# nothing in the Linux files, their checksum list or release.yml.
+#
+# Windows 0.91.3 (2026-11-15, the writer's choice when the Windows number first could differ from Linux, working rules
+# section 8): the Windows files go into a release of their own, "v<version>-windows-experimental" (never "Latest": the
+# badge, the add-on workflow and the README's links keep leading to the Linux release), and the download page shows
+# each system's newest release. "version" checks that Linux is at the same functional level (a Linux release
+# v<major>.<middle>.* with its full version). Before 0.91.3 the files were added to the Linux release of the same number.
+#
+#  1. "build": Windows 11 x64, MSVC, Qt 6.12.0 as in the work branches' Windows workflow (windows.yml), but without test switches
+#     (packaging/windows/win-ci.sh with QB_WIN_STAGE=release): the program refuses unsigned packages.
+#  2. "sign-packages": the program update and the update bundle are signed with the project's release key, the
+#     add-ons (since 0.91.3, as in release.yml) with the add-on key it vouches for. As in release.yml the keys are only
+#     here (and the release key in "sign-checksums"), and no third-party code runs there (openssl and Python of the
+#     runner, tools/make-package.py of this commit).
+#  3. "assemble": zips and setup programs with the signed add-ons inside, checked with the program as released
+#     (packaging/windows/win-release.sh). The .exe files carry no code-signing certificate (the writer's decision
+#     of 2026-11-14): Windows SmartScreen warns, Smart App Control blocks.
+#  4. "sources": the source code of the third-party parts only the Windows build carries.
+#  5. "sign-checksums": SHA256SUMS-windows.txt and its signature (the Linux list SHA256SUMS.txt stays as it is).
+#  6. "publish": once "tests" has passed, the files go into the Windows release of this version (made when it is not
+#     there yet), the sources into "third-party-sources".
+#  7. "download-page": the download page is made again from the names of the newest releases' files.
+#
+# "tests" (with "test-fonts"): as for Linux, a second build with the test switches runs the checks and the test
+# suites of windows.yml; "publish" waits for it. The same source is tested by windows.yml on a work
+# branch first.
+name: Windows release
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: 'Put the files into the release (off: build, sign and check only)'
+        type: boolean
+        default: true
+      page_only:
+        description: 'Only make the download page again (after its job failed); nothing is built or published'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-windows
+  cancel-in-progress: false
+
+jobs:
+  version:
+    # only in the project's own repository, like release.yml
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      tag: ${{ steps.v.outputs.tag }}
+      version: ${{ steps.v.outputs.version }}
+      linux-tag: ${{ steps.v.outputs.linux-tag }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - id: v
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VERSION=$(sed -n 's/^set(APP_VERSION *"\(.*\)")/\1/p' CMakeLists.txt)
+          # 0.91.3: a release of its own (the name in the Windows file names, packaging/windows/win-release.sh)
+          TAG="v$VERSION-windows-experimental"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          # Linux leads: a Linux release at the same functional level (the same first two numbers), with its full version
+          LEVEL=$(echo "$VERSION" | cut -d. -f1,2)
+          linux=""
+          while IFS= read -r t; do
+            [ -n "$t" ] || continue
+            if gh release view "$t" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | grep -q -- '-full-.*\.AppImage$'; then
+              linux=$t; break
+            fi
+          done < <(gh api "repos/$GITHUB_REPOSITORY/releases?per_page=30" --jq ".[] | select(.draft | not) | .tag_name
+                     | select(startswith(\"v$LEVEL.\")) | select(contains(\"-windows-\") | not) | select(contains(\"-android-\") | not)")
+          if [ -z "$linux" ]; then
+            echo "::error title=No Linux release $LEVEL.x::Linux leads: Windows $VERSION needs a published Linux version $LEVEL.x first."
+            exit 1
+          fi
+          echo "linux-tag=$linux" >> "$GITHUB_OUTPUT"
+          echo "Windows $VERSION, release $TAG; Linux at the same level: $linux"
+
+  build:
+    needs: version
+    if: ${{ !inputs.page_only }}
+    runs-on: windows-2025
+    timeout-minutes: 120
+    env:
+      VCPKG_TRIPLET: x64-windows-static-md
+      SCCACHE_GHA_ENABLED: 'true'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      # pinned (W2): program updates for Windows must run on the Qt of the installed program
+      # (runtime id in CMakeLists.txt); Qt Multimedia for the add-on "Media Playback"; Qt Image Formats for
+      # WebP, as on Linux (W4a). aqtinstall 3.3.0 as for the Linux build (tools/get-qt.sh), which checks every
+      # archive against the checksums of download.qt.io.
+      # Since Qt 6.11 Qt's repository keeps the Windows packages in one folder per compiler
+      # (windows_x86/desktop/qt6_6120/qt6_6120_msvc2022_64/, seen on the runner 2026-11-11); aqtinstall 3.3.0 (its
+      # newest release, 2025-06-02) looks in qt6_6120/qt6_6120/ and finds nothing, so the step gives it the folder
+      # name (its "extension" for that architecture) before it runs. jurplel/install-qt-action (W1 to W3) runs the
+      # same aqtinstall and cannot be patched, so the step installs and caches Qt itself.
+      - name: Qt 6.12.0 cache
+        id: qtcache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: C:\Qt\6.12.0
+          key: qt-6.12.0-win64_msvc2022_64-qtmultimedia-qtimageformats-qtpdf-v1
+
+      - name: Qt 6.12.0 for MSVC 2022
+        id: qt
+        shell: bash
+        run: |
+          if [ "${{ steps.qtcache.outputs.cache-hit }}" != "true" ]; then
+            python -m pip install -q 'aqtinstall==3.3.0'
+            python - <<'PY'
+          import pathlib
+          import aqt.metadata as m
+          p = pathlib.Path(m.__file__)
+          s = p.read_text(encoding="utf-8")
+          old = "    def extension_for_arch(architecture: str, is_version_ge_6: bool) -> str:\n"
+          new = old + ("        if architecture.startswith('win64_') and is_version_ge_6:  # Quillbinder W4a: Qt 6.11+ folders\n"
+                       "            return architecture[len('win64_'):]\n")
+          assert old in s, "aqtinstall changed: extension_for_arch not found"
+          p.write_text(s.replace(old, new, 1), encoding="utf-8")
+          print("aqtinstall patched:", p)
+          PY
+            python -m aqt install-qt windows desktop 6.12.0 win64_msvc2022_64 -O C:/Qt -m qtmultimedia qtimageformats qtpdf
+          fi
+          test -f /c/Qt/6.12.0/msvc2022_64/bin/Qt6Core.dll
+          echo 'QT_ROOT_DIR=C:\Qt\6.12.0\msvc2022_64' >> "$GITHUB_ENV"
+          echo 'C:\Qt\6.12.0\msvc2022_64\bin' >> "$GITHUB_PATH"
+          ls /c/Qt/6.12.0/msvc2022_64/plugins
+
+      - name: Compiler cache
+        id: sccache
+        uses: mozilla-actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba # v0.0.11
+
+      - name: vcpkg cache
+        id: vcpkgcache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ github.workspace }}/.vcpkg-cache
+          key: vcpkg-x64-windows-static-md-hunspell-zlib-v1
+
+      - name: Hunspell and zlib (vcpkg)
+        id: vcpkg
+        shell: bash
+        run: |
+          : "${VCPKG_INSTALLATION_ROOT:?vcpkg is not on this runner image}"
+          mkdir -p .vcpkg-cache
+          export VCPKG_DEFAULT_BINARY_CACHE="$(cygpath -w "$PWD/.vcpkg-cache")"
+          "$(cygpath -u "$VCPKG_INSTALLATION_ROOT")/vcpkg.exe" install hunspell zlib --triplet "$VCPKG_TRIPLET" > vcpkg.log 2>&1 \
+            || { tail -60 vcpkg.log; exit 1; }
+          tail -5 vcpkg.log
+
+      # W4c (2026-11-12): whisper.cpp built with MSVC for the add-on "Speech Transcription" (packaging/windows/win-whisper.sh,
+      # about 10 to 20 minutes the first time), (the tests' speech model is not needed here)
+      - name: whisper.cpp cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ github.workspace }}/.whisper
+          key: whisper-v1.9.5-msvc-cpu-${{ hashFiles('packaging/windows/win-whisper.sh') }}
+
+      - name: Find Visual Studio
+        id: vs
+        shell: pwsh
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * `
+                  -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          Write-Output "Visual Studio: $vs"
+          "VSDIR=$vs" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      # MSVC's environment only inside this step (see windows.yml)
+      - name: Build and pack (release stage, no test switches)
+        id: build
+        shell: cmd
+        env:
+          QB_WIN_STAGE: release
+        run: |
+          call "%VSDIR%\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
+          "C:\Program Files\Git\bin\bash.exe" packaging/windows/win-ci.sh results
+
+      - name: The result
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p results
+          [ -f vcpkg.log ] && tail -200 vcpkg.log > results/vcpkg-tail.log
+          [ -f results/summary.txt ] || echo "result: stopped before the build (see the step that failed)" > results/summary.txt
+          cat results/summary.txt
+          [ -s results/errors.txt ] && head -60 results/errors.txt
+          for f in results/build.log results/configure.log; do [ -f "$f" ] && tail -c 3000000 "$f" > "$f.tmp" && mv "$f.tmp" "$f"; done
+          grep -q '^result: ok$' results/summary.txt
+
+      - name: Hand the unsigned build to the job "sign-packages"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: win-unsigned
+          path: results/stage
+          retention-days: 3
+          if-no-files-found: error
+
+      - name: Logs of the build
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: win-build-logs
+          path: |
+            results/*.txt
+            results/*.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  sign-packages:
+    # as in release.yml (0.70.0, audit A S-03): the key is only here and in "sign-checksums": no third-party code runs in either
+    needs: [version, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: win-unsigned
+          path: unsigned
+
+      # Windows 0.91.3 (decided 2026-11-15: as for Linux): as release.yml since 0.91.3, add-ons are signed with the
+      # add-on key (the secret QB_ADDON_KEY) that the release key vouches for in a certificate; the program update keeps
+      # the release key, and in the update bundle each part is signed with its own key. Without the secret everything
+      # is signed with the release key, as before.
+      - name: The signing key
+        env:
+          QB_SIGNING_KEY: ${{ secrets.QB_SIGNING_KEY }}
+          QB_ADDON_KEY: ${{ secrets.QB_ADDON_KEY }}
+        run: |
+          if [ -z "$QB_SIGNING_KEY" ]; then
+            echo "::error title=No signing key::The secret QB_SIGNING_KEY is not set: the release is not published unsigned."
+            exit 1
+          fi
+          mkdir -p /tmp/qb-signing && chmod 700 /tmp/qb-signing
+          ( umask 077; printf '%s\n' "$QB_SIGNING_KEY" > /tmp/qb-signing/key.pem )
+          want=$(grep -o 'kReleaseKey\[\] = "[0-9a-f]*"' src/core/Signing.cpp | grep -o '"[0-9a-f]*"' | tr -d '"')
+          have=$(openssl pkey -in /tmp/qb-signing/key.pem -pubout -outform DER | tail -c 32 | od -An -tx1 | tr -d ' \n')
+          if [ -z "$have" ] || [ "$have" != "$want" ]; then
+            echo "::error title=Wrong signing key::QB_SIGNING_KEY is not the key whose public half the program carries."
+            exit 1
+          fi
+          echo "signing key ok"
+          if [ -n "$QB_ADDON_KEY" ]; then
+            ( umask 077; printf '%s\n' "$QB_ADDON_KEY" > /tmp/qb-signing/addon.pem )
+            addon=$(openssl pkey -in /tmp/qb-signing/addon.pem -pubout -outform DER | tail -c 32 | od -An -tx1 | tr -d ' \n')
+            if [ -z "$addon" ] || [ "$addon" = "$want" ]; then
+              echo "::error title=Wrong add-on key::QB_ADDON_KEY is not an Ed25519 key of its own."
+              exit 1
+            fi
+            QB_SIGNING_KEY_FILE=/tmp/qb-signing/key.pem python3 -I tools/make-package.py certify --name "Quillbinder official add-ons" \
+              /tmp/qb-signing/addon.pem /tmp/qb-signing/addon-cert.json
+          else
+            echo "no add-on key (secret QB_ADDON_KEY): the add-ons are signed with the release key, as before 0.91.3"
+          fi
+
+      - name: Sign the packages
+        env:
+          QB_SIGNING_KEY_FILE: /tmp/qb-signing/key.pem
+        run: |
+          mkdir -p signed
+          cp unsigned/packages/*.qbpkg signed/
+          if [ -f /tmp/qb-signing/addon.pem ]; then
+            export QB_ADDON_KEY_FILE=/tmp/qb-signing/addon.pem QB_ADDON_CERT=/tmp/qb-signing/addon-cert.json
+          fi
+          python3 -I tools/make-package.py sign signed/*.qbpkg
+          # every signature checked by the program's own rule (program updates only with the release key, add-ons also
+          # with an add-on key the release key vouches for) against the public key the program carries, bundles part by part
+          python3 -I tools/make-package.py verify --release-key packaging/quillbinder-signing-public.pem signed/*.qbpkg
+          rm -rf /tmp/qb-signing
+          ls -la signed
+
+      - name: Hand the signed packages on
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: win-signed-packages
+          path: signed
+          retention-days: 3
+          if-no-files-found: error
+
+      - name: The key is gone
+        if: always()
+        run: rm -rf /tmp/qb-signing
+
+  assemble:
+    # zips and setup programs with the signed add-ons inside (third-party packaging tools, but no key here)
+    needs: [version, build, sign-packages]
+    runs-on: windows-2025
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: win-unsigned
+          path: stage
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: win-signed-packages
+          path: signed
+
+      - name: Files and checks
+        shell: bash
+        env:
+          QB_WIN_NAME: experimental
+        run: |
+          rc=0
+          bash packaging/windows/win-release.sh stage signed out > out-run.log 2>&1 || rc=$?
+          cat out/summary.txt 2>/dev/null || tail -40 out-run.log
+          [ $rc -eq 0 ] || { tail -60 out/setup-run.log 2>/dev/null; exit 1; }
+
+      - name: Hand the files to the job "sign-checksums"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: win-files
+          path: out/files
+          retention-days: 3
+          compression-level: 0
+          if-no-files-found: error
+
+      - name: Logs of the checks
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: win-assemble-logs
+          path: |
+            out/*.txt
+            out/*.log
+            out/*.zip
+            out-run.log
+          retention-days: 7
+          if-no-files-found: ignore
+
+  sources:
+    # the source code of the third-party parts that only the Windows build carries, under the file names its
+    # license list (Help > Third-Party Licenses, resources/licenses-windows/index.json) and its add-ons name.
+    # Qt's own source (qt-everywhere-src-<version>.tar.xz) is the same file the Linux release names; fetched when missing.
+    needs: [version, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: win-unsigned
+          path: stage
+
+      - name: Collect
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.version.outputs.tag }}
+          VERSION: ${{ needs.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          mkdir -p sources
+          names=$(grep -o 'third-party-sources, file [^ ;)(]*' resources/licenses-windows/index.json | awk '{print $3}' | sort -u)
+          echo "the license list names: $names"
+          have=$(gh release view third-party-sources --json assets --jq '.assets[].name')
+          # Qt's own source release. The Linux release's list names the same file, but tools/publish-release.sh has
+          # never uploaded it (it takes only *.src.tar; found 2026-11-14): when it is missing, it is fetched here from
+          # the Qt Project, as tools/collect-sources.py does for Linux, and "publish" adds it.
+          qt=$(echo "$names" | grep '^qt-everywhere-src-')
+          if echo "$have" | grep -qxF "$qt"; then
+            echo "there already: $qt"
+          else
+            qv=${qt#qt-everywhere-src-}; qv=${qv%.tar.xz}
+            url="https://download.qt.io/official_releases/qt/${qv%.*}/$qv/single/$qt"
+            curl -fsSL --retry 10 --retry-delay 15 --retry-all-errors -o "sources/$qt" "$url"
+            want=$(curl -fsSL --retry 5 "$url.sha256" | awk '{print $1}' | head -1 || true)
+            if [ -n "$want" ]; then
+              echo "$want  sources/$qt" | sha256sum -c --quiet
+              echo "checked against the SHA-256 the Qt Project publishes: $qt"
+            else
+              echo "::warning::the Qt Project publishes no SHA-256 beside $qt: not checked"
+            fi
+            size=$(stat -c %s "sources/$qt")
+            echo "$qt: $size bytes"
+            [ "$size" -lt 2147483648 ] || { echo "::error::$qt is larger than a release file may be (2 GiB)"; exit 1; }
+          fi
+          # Hunspell, the version vcpkg builds (the archive of its tag)
+          hs=$(echo "$names" | grep '^hunspell-')
+          hv=${hs#hunspell-}; hv=${hv%.tar.gz}
+          curl -fsSL --retry 5 -o "sources/$hs" "https://github.com/hunspell/hunspell/archive/refs/tags/v$hv.tar.gz"
+          # the German dictionaries, as packaging/windows/win-dictionaries.sh fetches them (LibreOffice's repository at its tag)
+          lo=$(echo "$names" | grep '^libreoffice-dictionaries-')
+          lt=$(sed -n 's/^TAG=//p' packaging/windows/win-dictionaries.sh)
+          [ "$lo" = "libreoffice-dictionaries-${lt#libreoffice-}-de.tar" ] || { echo "::error::the license list names $lo, the build fetches $lt"; exit 1; }
+          git -c advice.detachedHead=false clone -q --depth 1 --branch "$lt" --filter=blob:none --sparse https://github.com/LibreOffice/dictionaries lo
+          git -C lo sparse-checkout set de
+          tar --sort=name --owner=0 --group=0 --numeric-owner --mtime='2026-01-01 00:00:00Z' -cf "sources/$lo" -C lo de
+          # FFmpeg as Qt's Windows package carries it (the add-on "Extra Video and Audio Formats"): the original archive
+          # of the version the add-on's own report names
+          pkg=$(ls stage/packages/media-extra-formats*.qbpkg | head -1)
+          ffline=$(unzip -p "$pkg" '*ffmpeg-build.txt' | tr -d '\r' | sed -n 's/^FFmpeg version: //p' | head -1)
+          ffv=$(echo "$ffline" | grep -oE '[0-9]+\.[0-9]+(\.[0-9]+)?' | head -1)
+          [ -n "$ffv" ] || { echo "::error::no FFmpeg version in the add-on's report ($ffline)"; exit 1; }
+          curl -fsSL --retry 5 -o "sources/ffmpeg-$ffv.tar.xz" "https://ffmpeg.org/releases/ffmpeg-$ffv.tar.xz"
+          for f in sources/*; do [ "$(stat -c %s "$f")" -gt 100000 ] || { echo "::error::$f is too small"; exit 1; }; done
+          {
+            echo "Quillbinder $VERSION for Windows: source code of the third-party parts"
+            echo
+            echo "The files are in the release \"Third-party source code\":"
+            echo "https://github.com/$GH_REPO/releases/tag/third-party-sources"
+            echo
+            echo "$qt"
+            echo "    Qt 6, as The Qt Company built it for Windows (the Qt Project's source release)"
+            echo "$hs"
+            echo "    Hunspell, the version the program is linked with"
+            echo "$lo"
+            echo "    the German spelling dictionaries (the English ones are their own source)"
+            echo "ffmpeg-$ffv.tar.xz"
+            echo "    FFmpeg ($ffline), as built by The Qt Company for Qt Multimedia, in the add-on"
+            echo "    \"Extra Video and Audio Formats\"; how it was built: ffmpeg-build.txt inside the add-on"
+            echo
+            echo "zlib, Monocypher, whisper.cpp and the icons: see Help > Third-Party Licenses in the program."
+          } > THIRD-PARTY-SOURCES-windows.txt
+          cat THIRD-PARTY-SOURCES-windows.txt
+          ls -la sources
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: win-sources
+          path: |
+            sources
+            THIRD-PARTY-SOURCES-windows.txt
+          retention-days: 3
+          compression-level: 0
+          if-no-files-found: error
+
+  sign-checksums:
+    # the key once more, again without third-party code: the checksum list of the Windows files and its signature
+    needs: [version, assemble, sources]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: win-files
+          path: release/dist
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: win-sources
+          path: release/src
+
+      - name: Checksums and their signature
+        env:
+          QB_SIGNING_KEY: ${{ secrets.QB_SIGNING_KEY }}
+        run: |
+          set -euo pipefail
+          [ -n "$QB_SIGNING_KEY" ] || { echo "::error title=No signing key::The secret QB_SIGNING_KEY is not set."; exit 1; }
+          mkdir -p /tmp/qb-signing && chmod 700 /tmp/qb-signing
+          ( umask 077; printf '%s\n' "$QB_SIGNING_KEY" > /tmp/qb-signing/key.pem )
+          cp release/src/THIRD-PARTY-SOURCES-windows.txt release/dist/
+          (cd release/dist && rm -f SHA256SUMS-windows.txt SHA256SUMS-windows.txt.sig && sha256sum -- * > /tmp/SHA256SUMS-windows.txt && mv /tmp/SHA256SUMS-windows.txt SHA256SUMS-windows.txt)
+          openssl pkeyutl -sign -rawin -inkey /tmp/qb-signing/key.pem -in release/dist/SHA256SUMS-windows.txt -out release/dist/SHA256SUMS-windows.txt.sig
+          rm -rf /tmp/qb-signing
+          openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in release/dist/SHA256SUMS-windows.txt \
+            -sigfile release/dist/SHA256SUMS-windows.txt.sig
+          cat release/dist/SHA256SUMS-windows.txt
+
+      - name: Hand the files to the job "publish"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: win-release-files
+          path: release
+          retention-days: 3
+          compression-level: 0
+          if-no-files-found: error
+
+      - name: The key is gone
+        if: always()
+        run: rm -rf /tmp/qb-signing
+
+  test-fonts:
+    # the fonts the Linux test runs see, for the Windows tests (many checks name these families): taken from Ubuntu
+    # 24.04's packages, unchanged, as the release workflow's Linux tests get them. windows.yml takes
+    # the same files from an archive on the branch assets.
+    needs: version
+    if: ${{ !inputs.page_only }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Collect
+        run: |
+          set -euo pipefail
+          mkdir -p debs out/test-fonts/licenses
+          cd debs
+          for p in fonts-dejavu-core fonts-dejavu-mono fonts-dejavu-extra fonts-crosextra-carlito fonts-crosextra-caladea fonts-freefont-ttf; do
+            apt-get download "$p" 2> /dev/null || echo "no package $p"
+          done
+          for d in *.deb; do
+            dpkg-deb -x "$d" "x-${d%%_*}"
+            c="x-${d%%_*}/usr/share/doc/${d%%_*}/copyright"
+            [ -f "$c" ] && cp "$c" "../out/test-fonts/licenses/${d%%_*}-copyright.txt"
+          done
+          cd ..
+          for f in Caladea-Bold Caladea-BoldItalic Caladea-Italic Caladea-Regular Carlito-Bold Carlito-BoldItalic Carlito-Italic \
+                   Carlito-Regular DejaVuSans-Bold DejaVuSans-BoldOblique DejaVuSans-Oblique DejaVuSans DejaVuSansMono-Bold \
+                   DejaVuSansMono-BoldOblique DejaVuSansMono-Oblique DejaVuSansMono DejaVuSerif-Bold DejaVuSerif-BoldItalic \
+                   DejaVuSerif-Italic DejaVuSerif FreeSerif FreeSerifBold FreeSerifBoldItalic FreeSerifItalic; do
+            src=$(find debs -type f -name "$f.ttf" | head -1)
+            [ -n "$src" ] || { echo "::error::font file $f.ttf not found in Ubuntu's packages"; exit 1; }
+            cp "$src" out/test-fonts/
+          done
+          echo "Fonts of Ubuntu 24.04's packages, unchanged, for the test suites on the Windows machine only; not part of the program or any download." > out/test-fonts/README.txt
+          (cd out && zip -q -r ../test-fonts.zip test-fonts)
+          ls out/test-fonts | wc -l
+          ls -la test-fonts.zip
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: test-fonts
+          path: test-fonts.zip
+          retention-days: 3
+          if-no-files-found: error
+
+  tests:
+    # as release.yml's job "tests" for Linux: a second build, with the test switches, and everything the Windows
+    # machine of windows.yml runs (packaging/windows/win-ci.sh without a stage: the program, setup and
+    # layout checks and the test suites of packaging/windows/win-tests.sh). "publish" waits for it.
+    needs: [version, test-fonts]
+    runs-on: windows-2025
+    timeout-minutes: 120
+    env:
+      VCPKG_TRIPLET: x64-windows-static-md
+      SCCACHE_GHA_ENABLED: 'true'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: test-fonts
+          path: test-fonts
+
+      # pinned (W2): program updates for Windows must run on the Qt of the installed program
+      # (runtime id in CMakeLists.txt); Qt Multimedia for the add-on "Media Playback"; Qt Image Formats for
+      # WebP, as on Linux (W4a). aqtinstall 3.3.0 as for the Linux build (tools/get-qt.sh), which checks every
+      # archive against the checksums of download.qt.io.
+      # Since Qt 6.11 Qt's repository keeps the Windows packages in one folder per compiler
+      # (windows_x86/desktop/qt6_6120/qt6_6120_msvc2022_64/, seen on the runner 2026-11-11); aqtinstall 3.3.0 (its
+      # newest release, 2025-06-02) looks in qt6_6120/qt6_6120/ and finds nothing, so the step gives it the folder
+      # name (its "extension" for that architecture) before it runs. jurplel/install-qt-action (W1 to W3) runs the
+      # same aqtinstall and cannot be patched, so the step installs and caches Qt itself.
+      - name: Qt 6.12.0 cache
+        id: qtcache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: C:\Qt\6.12.0
+          key: qt-6.12.0-win64_msvc2022_64-qtmultimedia-qtimageformats-qtpdf-v1
+
+      - name: Qt 6.12.0 for MSVC 2022
+        id: qt
+        shell: bash
+        run: |
+          if [ "${{ steps.qtcache.outputs.cache-hit }}" != "true" ]; then
+            python -m pip install -q 'aqtinstall==3.3.0'
+            python - <<'PY'
+          import pathlib
+          import aqt.metadata as m
+          p = pathlib.Path(m.__file__)
+          s = p.read_text(encoding="utf-8")
+          old = "    def extension_for_arch(architecture: str, is_version_ge_6: bool) -> str:\n"
+          new = old + ("        if architecture.startswith('win64_') and is_version_ge_6:  # Quillbinder W4a: Qt 6.11+ folders\n"
+                       "            return architecture[len('win64_'):]\n")
+          assert old in s, "aqtinstall changed: extension_for_arch not found"
+          p.write_text(s.replace(old, new, 1), encoding="utf-8")
+          print("aqtinstall patched:", p)
+          PY
+            python -m aqt install-qt windows desktop 6.12.0 win64_msvc2022_64 -O C:/Qt -m qtmultimedia qtimageformats qtpdf
+          fi
+          test -f /c/Qt/6.12.0/msvc2022_64/bin/Qt6Core.dll
+          echo 'QT_ROOT_DIR=C:\Qt\6.12.0\msvc2022_64' >> "$GITHUB_ENV"
+          echo 'C:\Qt\6.12.0\msvc2022_64\bin' >> "$GITHUB_PATH"
+          ls /c/Qt/6.12.0/msvc2022_64/plugins
+
+      - name: Compiler cache
+        id: sccache
+        uses: mozilla-actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba # v0.0.11
+
+      - name: vcpkg cache
+        id: vcpkgcache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ github.workspace }}/.vcpkg-cache
+          key: vcpkg-x64-windows-static-md-hunspell-zlib-v1
+
+      - name: Hunspell and zlib (vcpkg)
+        id: vcpkg
+        shell: bash
+        run: |
+          : "${VCPKG_INSTALLATION_ROOT:?vcpkg is not on this runner image}"
+          mkdir -p .vcpkg-cache
+          export VCPKG_DEFAULT_BINARY_CACHE="$(cygpath -w "$PWD/.vcpkg-cache")"
+          "$(cygpath -u "$VCPKG_INSTALLATION_ROOT")/vcpkg.exe" install hunspell zlib --triplet "$VCPKG_TRIPLET" > vcpkg.log 2>&1 \
+            || { tail -60 vcpkg.log; exit 1; }
+          tail -5 vcpkg.log
+
+      # W4c (2026-11-12): whisper.cpp built with MSVC for the add-on "Speech Transcription" (packaging/windows/win-whisper.sh,
+      # about 10 to 20 minutes the first time), and whisper.cpp's smallest model for the tests (packaging/windows/win-tests.sh)
+      - name: whisper.cpp cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ github.workspace }}/.whisper
+          key: whisper-v1.9.5-msvc-cpu-${{ hashFiles('packaging/windows/win-whisper.sh') }}
+
+      - name: Speech model cache (tests)
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ github.workspace }}/.models
+          key: speech-models-ggml-tiny-v1
+
+      - name: Find Visual Studio
+        id: vs
+        shell: pwsh
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * `
+                  -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          Write-Output "Visual Studio: $vs"
+          "VSDIR=$vs" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      # MSVC's environment only inside this step (see windows.yml)
+      - name: Build with the test suites, checks and tests
+        id: build
+        shell: cmd
+        env:
+          QB_TEST_FONTS_ZIP: ${{ github.workspace }}\test-fonts\test-fonts.zip
+        run: |
+          call "%VSDIR%\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
+          "C:\Program Files\Git\bin\bash.exe" packaging/windows/win-ci.sh results
+
+      - name: The result
+        if: always()
+        shell: bash
+        run: |
+          mkdir -p results
+          [ -f vcpkg.log ] && tail -200 vcpkg.log > results/vcpkg-tail.log
+          [ -f results/summary.txt ] || echo "result: stopped before the build (see the step that failed)" > results/summary.txt
+          cat results/summary.txt
+          [ -s results/errors.txt ] && head -60 results/errors.txt
+          grep -hE ' FAIL|^FAIL' results/tests-run.log 2>/dev/null | head -80 || true
+          for f in results/build.log results/configure.log; do [ -f "$f" ] && tail -c 3000000 "$f" > "$f.tmp" && mv "$f.tmp" "$f"; done
+          grep -q '^result: ok$' results/summary.txt
+
+      - name: Logs of the tests
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: win-tests-logs
+          path: |
+            results/*.txt
+            results/*.log
+            results/test-output.zip
+            results/check-files.zip
+          retention-days: 7
+          if-no-files-found: ignore
+
+  publish:
+    # the only job with write permission: it adds what the jobs before it built, signed and checked to the release
+    needs: [version, sign-checksums, tests]
+    if: inputs.publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ needs.version.outputs.tag }}
+      VERSION: ${{ needs.version.outputs.version }}
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: win-release-files
+          path: release
+
+      - name: Third-party source code
+        run: |
+          set -euo pipefail
+          have=$(gh release view third-party-sources --json assets --jq '.assets[].name')
+          for f in release/src/sources/*; do
+            n=$(basename "$f")
+            if echo "$have" | grep -qxF "$n"; then echo "kept: $n"; else gh release upload third-party-sources "$f"; echo "added: $n"; fi
+          done
+
+      - name: The Windows files
+        env:
+          LINUX_TAG: ${{ needs.version.outputs.linux-tag }}
+        run: |
+          set -euo pipefail
+          ls -la release/dist
+          cd release/dist
+          # (sed -n 1p, not head -1: under pipefail a head that stops reading early can end the job, see download-page)
+          one() { ls $1 2> /dev/null | sed -n 1p; }
+          full_setup=$(one '*-full-*-setup.exe'); main_setup=$(ls *-setup.exe | grep -v -- '-full-' | sed -n 1p)
+          full_zip=$(ls *-windows-x64.zip | grep -- '-full-' | sed -n 1p); main_zip=$(ls *-windows-x64.zip | grep -v -- '-full-' | sed -n 1p)
+          update=$(one '*-windows-update.qbpkg'); symbols=$(one '*-symbols.zip')
+          linux_shown=${LINUX_TAG#v}; linux_shown=${linux_shown//-/ }
+          {
+            echo "**Quillbinder $VERSION for Windows 11 (64-bit), experimental**: a writing studio for long texts. It opens and saves"
+            echo "projects in its own format and in Scrivener 3 format (.scriv); it is an independent program, not made by or"
+            echo "connected with Literature & Latte. The functions of Linux $linux_shown"
+            echo "([its release](https://github.com/$GH_REPO/releases/tag/$LINUX_TAG)); Linux, Windows and Android count their own"
+            echo "fixes in the last number. Not in the Windows version yet: Speech Transcription on graphics cards (the processor is used)."
+            echo
+            echo "> **This is an experimental version.** Keep backups of your projects (File > Back Up > Back Up Now; the automatic"
+            echo "> backups are set under File > Options > Backup), and keep a copy of your manuscripts outside the program."
+            echo
+            echo "## Windows 11"
+            echo
+            echo "1. Download **$full_setup**: the program with all add-ons. It only unpacks into a folder you choose: no admin"
+            echo "   rights, no entry in Windows' list of apps. Everything the program keeps stays in that folder."
+            echo "2. The files carry no code-signing certificate: Windows SmartScreen warns (**More info > Run anyway**), and a PC"
+            echo "   with Smart App Control switched on blocks them."
+            echo
+            echo "| File | What it is |"
+            echo "|------|------------|"
+            echo "| $full_setup | the program with every add-on (setup program) |"
+            [ -n "$main_setup" ] && echo "| $main_setup | the program alone (setup program) |"
+            [ -n "$full_zip" ] && echo "| $full_zip | the program with every add-on, as a folder to unpack |"
+            [ -n "$main_zip" ] && echo "| $main_zip | the program alone, as a folder to unpack |"
+            [ -n "$update" ] && echo "| $update | for a Quillbinder for Windows you already have: the program update and every add-on in one package (File > Install Update or Add-on) |"
+            [ -f media-all-formats-windows.qbpkg ] && echo "| media-all-formats-windows.qbpkg | audio and video in the editor, every format, in one package |"
+            for f in *.qbpkg; do
+              case "$f" in "$update"|media-all-formats-windows.qbpkg) ;; *) echo "| $f | an add-on |" ;; esac
+            done
+            [ -n "$symbols" ] && echo "| $symbols | for crash reports: turns their addresses into names |"
+            echo
+            echo "## Checking the files"
+            echo
+            echo "The program and its updates are signed with the project's own key; the add-ons, as on Linux since 0.91.3, with"
+            echo "the add-on key \"Quillbinder official add-ons\", which the project's key vouches for. Windows 0.91.1 does not"
+            echo "know add-on keys: it treats those add-ons as unsigned and warns before installing them, also inside the update"
+            echo "package (its program update itself is signed with the project's own key). Or run the new setup program into"
+            echo "the same folder: it keeps your settings. Checksums: SHA256SUMS-windows.txt (signed: SHA256SUMS-windows.txt.sig, with"
+            echo "\`packaging/quillbinder-signing-public.pem\` of the source). Third-party source code: THIRD-PARTY-SOURCES-windows.txt."
+          } > "$RUNNER_TEMP/body.md"
+          cat "$RUNNER_TEMP/body.md"
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            gh release upload "$TAG" ./* --clobber
+            gh release edit "$TAG" --notes-file "$RUNNER_TEMP/body.md"
+          else
+            # never "Latest": GitHub's badge, .../releases/latest, the add-on workflow and the README lead to Linux
+            gh release create "$TAG" --title "Quillbinder $VERSION for Windows (experimental)" --notes-file "$RUNNER_TEMP/body.md" \
+              --latest=false --target "$GITHUB_SHA" ./*
+          fi
+          gh release view "$TAG" --json assets --jq '.assets[].name'
+
+  download-page:
+    # the download page again, now with the Windows files (the same steps as in release.yml)
+    needs: [version, publish]
+    # (0.91.3: also alone, with the input page_only, when this job failed after the files were published)
+    if: ${{ !cancelled() && needs.version.result == 'success' && (needs.publish.result == 'success' || inputs.page_only) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      # 0.91.3: as release.yml does it since 0.91.2: the page names the newest Linux release, and each other system is
+      # taken from its newest release (here the Windows release of this run)
+      - name: The page
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          LINUX_TAG: ${{ needs.version.outputs.linux-tag }}
+        run: |
+          set -euo pipefail
+          mkdir -p release-names site
+          # (the first one picked by jq itself: "| head -1" after gh ended the job with a broken pipe, exit 141, in the first
+          # public run of 0.91.3)
+          newest=$(gh api "repos/$GH_REPO/releases?per_page=30" --jq '[.[] | select(.draft | not) | .tag_name | select(startswith("v"))
+                     | select(contains("-windows-") | not) | select(contains("-android-") | not)] | .[0] // empty')
+          main=${newest:-$LINUX_TAG}
+          gh release view "$main" --json assets --jq '.assets[].name' | while IFS= read -r n; do : > "release-names/$n"; done
+          also=()
+          i=0
+          while IFS= read -r t; do
+            [ -n "$t" ] && [ "$t" != "$main" ] || continue
+            i=$((i + 1)); mkdir -p "older-$i"
+            gh release view "$t" --json assets --jq '.assets[].name' | while IFS= read -r n; do : > "older-$i/$n"; done
+            also+=(--also "older-$i" "$t")
+          done < <(gh api "repos/$GH_REPO/releases?per_page=12" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
+          python3 -I tools/download-page.py release-names "$main" site "${also[@]}"
+          grep -o 'releases/download/[^/]*/[^"]*' site/index.html | sort -u
+
+      # a name per attempt (as release.yml, P7): a rerun of this job finds no artifact of the same name from the attempt before
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+          name: github-pages-${{ github.run_attempt }}
+
+      - id: deploy
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}

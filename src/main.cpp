@@ -1,0 +1,475 @@
+#include "AppInfo.h"
+#include "core/TestSwitches.h"
+#include "ui/Zoom.h"
+#include "compile/PluginManager.h"
+#include "core/SettingsLayer.h"
+#include "ui/FirstStartDialog.h"
+#include "core/Addons.h"
+#include "core/CrashGuard.h"
+#include "core/Launcher.h"
+#include "core/Platform.h"
+#include "core/Portable.h"
+#include "text/FontFaces.h"
+#include "ui/AppSettings.h"
+#include "ui/FontInstall.h"
+#include "ui/Language.h"
+#include "ui/CrashDialogs.h"
+#include "ui/MainWindow.h"
+#include "ui/MediaPlayback.h"
+#include "ui/ToolHost.h"
+#ifdef Q_OS_ANDROID
+#include "android/Mobile.h"
+#endif
+
+#include <QAction>
+#include "text/PageLayout.h"
+#include <QApplication>
+#include <QFontDatabase>
+#include <QTextDocument>
+#include <QThread>
+
+#include <cstdlib>
+#include <QHash>
+#include <QCommandLineParser>
+#include <QDir>
+#include <QFileInfo>
+#include <QIcon>
+#include <QJsonObject>
+#include <QLocalServer>
+#include <QMessageBox>
+#include <QSettings>
+#include <QStyleFactory>
+#include <QTimer>
+
+#include <cstdio>
+
+static bool isKde()
+{
+    const QByteArray d = qgetenv("XDG_CURRENT_DESKTOP").toUpper();
+    return d.contains("KDE") || !qgetenv("KDE_FULL_SESSION").isEmpty();
+}
+
+int main(int argc, char **argv)
+{
+    // An installed program update takes over here (see core/Launcher.h).
+    qb::launcher::maybeRunInstalledCore(argc, argv);
+
+    // Names first: QSettings (~/.config/<name>/<name>.conf) works before QApplication.
+#ifdef Q_OS_WIN
+    QSettings::setDefaultFormat(QSettings::IniFormat); // a file, not the registry (W3)
+    qb::portable::useProgramFolder(); // W4b: that file in the program folder (data\settings), portable
+#endif
+    QCoreApplication::setOrganizationName(QStringLiteral(QB_APP_NAME));
+    QCoreApplication::setApplicationName(QStringLiteral(QB_APP_NAME));
+    QCoreApplication::setApplicationVersion(QStringLiteral(QB_APP_VERSION));
+
+    // --version / --help work without a display
+    for (int i = 1; i < argc; ++i) {
+        const QByteArray a(argv[i]);
+        // these exit before a window opens: they count as a successful start
+        if (a == "--version" || a == "-v" || a == "--help" || a == "-h" || a == "--install" || a == "--versions")
+            qb::launcher::confirmStart();
+        if (a == "--version" || a == "-v") {
+            std::printf("%s %s\n", QB_APP_NAME, QB_APP_VERSION);
+            return 0;
+        }
+        if (a == "--help" || a == "-h") {
+            std::printf("Usage: %s [--no-restore] [project | package.qbpkg]\n\n"
+                        "  project            project folder or %s file to open\n"
+                        "  package.qbpkg      update or add-on to install\n"
+                        "  --no-restore       do not reopen the last project\n"
+                        "  --install <file>   install a package without opening a window\n"
+                        "  --allow-unsigned   with --install: also a package not signed by the project\n"
+                        "  --versions         list the installed program versions\n"
+                        "  --tool <key>       run a command of a writing tool without the main window\n"
+                        "  --scratch-pad      the scratch pad (same as --tool scratch-pad.show)\n",
+                        QB_APP_ID, QB_PROJECT_FILE_SUFFIX);
+            return 0;
+        }
+        if (a == "--install" && i + 1 < argc) {
+            QCoreApplication core(argc, argv); // the self-test of a program update starts a process
+            QStringList log;
+            QString error;
+            bool restart = false;
+            // Windows: the wide command line, so that any letter in the path works (argv is the ANSI code page)
+            const QString file = QCoreApplication::arguments().value(i + 1, QString::fromLocal8Bit(argv[i + 1]));
+            // 0.65.0 (audit F12): without the project's signature only with --allow-unsigned (no window to warn in)
+            bool allowUnsigned = false;
+            for (int k = 1; k < argc; ++k)
+                allowUnsigned = allowUnsigned || QByteArray(argv[k]) == "--allow-unsigned";
+            const bool ok = qb::addons::install(file, &log, &error, &restart,
+                                                allowUnsigned ? qb::addons::Unsigned::AllowAll : qb::addons::Unsigned::Refuse);
+            for (const QString &l : log)
+                std::printf("%s\n", qPrintable(l));
+            if (!ok)
+                std::fprintf(stderr, "%s\n", qPrintable(error));
+            return ok ? 0 : 1;
+        }
+        if (a == "--versions") {
+            if (qEnvironmentVariableIsSet("QB_DEBUG_ENV")) // developer check: nothing of the loader leaks to child processes
+                std::printf("LD_LIBRARY_PATH=[%s] QB_CORE_ACTIVE=[%s]\n", qgetenv("LD_LIBRARY_PATH").constData(),
+                            qgetenv("QB_CORE_ACTIVE").constData());
+#ifdef Q_OS_WIN
+            // the update loader's check on the Windows runner (packaging/windows/win-ci.sh)
+            if (qEnvironmentVariableIsSet("QB_DEBUG_ENV"))
+                std::printf("overlay=[%d] base=[%s] program=[%s] QB_CORE_APPDIR=[%s] path-starts-with-program=[%d]\n",
+                            int(qb::launcher::isOverlay()), qPrintable(qb::launcher::builtInVersion()),
+                            qPrintable(QDir::toNativeSeparators(QCoreApplication::applicationFilePath())),
+                            qgetenv("QB_CORE_APPDIR").constData(),
+                            int(qEnvironmentVariable("PATH").startsWith(QDir::toNativeSeparators(qb::launcher::appDir()),
+                                                                        Qt::CaseInsensitive)));
+#endif
+            for (const qb::addons::CoreVersion &cv : qb::addons::coreVersions())
+                std::printf("%s%s%s%s\n", qPrintable(cv.version), cv.builtIn ? " (built in)" : "",
+                            cv.running ? " (running)" : "", cv.active ? " (active)" : "");
+            return 0;
+        }
+    }
+
+    // KDE: native (Plasma) file dialogs through the desktop portal. Must be
+    // decided before the QApplication exists.
+    if (qEnvironmentVariableIsEmpty("QT_QPA_PLATFORMTHEME") && isKde()) {
+        QSettings s;
+        if (s.value(QStringLiteral("app/portal"), true).toBool())
+            qputenv("QT_QPA_PLATFORMTHEME", "xdgdesktopportal");
+    }
+
+#ifdef Q_OS_WIN
+    // W4a (2026-11-11): Qt's offscreen platform on Windows reads fonts with FreeType from one folder only
+    // (QT_QPA_FONTDIR, else "fonts" beside Qt's libraries), so it found none, and the self-test before an update
+    // (launcher::selfTest starts the new version offscreen) refused every update. Point it at Windows' fonts.
+    {
+        bool offscreen = qEnvironmentVariable("QT_QPA_PLATFORM").startsWith(QLatin1String("offscreen"));
+        for (int i = 1; i + 1 < argc; ++i)
+            if (qstrcmp(argv[i], "-platform") == 0 && qstrncmp(argv[i + 1], "offscreen", 9) == 0)
+                offscreen = true;
+        const QString windir = qEnvironmentVariable("WINDIR");
+        if (offscreen && qEnvironmentVariableIsEmpty("QT_QPA_FONTDIR") && !windir.isEmpty())
+            qputenv("QT_QPA_FONTDIR", QDir::toNativeSeparators(windir + QStringLiteral("/Fonts")).toLocal8Bit());
+        // 0.90.4 (Windows requirement W-03): AltGr types its character and no longer runs the command on Ctrl+Alt
+        // plus that key (platform::qpaWithAltGr). A platform named on the command line is left alone.
+        bool named = false;
+        for (int i = 1; i < argc; ++i)
+            if (qstrcmp(argv[i], "-platform") == 0)
+                named = true;
+        const QByteArray withAltGr = named ? QByteArray() : qb::platform::qpaWithAltGr(qgetenv("QT_QPA_PLATFORM"));
+        if (!withAltGr.isEmpty())
+            qputenv("QT_QPA_PLATFORM", withAltGr);
+    }
+#endif
+
+#ifdef Q_OS_ANDROID
+    // Android (A0, 2026-11-14, the trial build): Qt's own file dialogs. Android's file picker gives addresses
+    // ("content://...") that are no folders or files for the program; projects are folders.
+    QCoreApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
+    // The menu bar as a part of the window. Qt hands a "native" menu bar to Android's options menu, which
+    // today's Android shows nowhere: the first start on an emulated tablet (run 5) had no menus at all.
+    QCoreApplication::setAttribute(Qt::AA_DontUseNativeMenuBar);
+#endif
+    QApplication app(argc, argv);
+#ifdef Q_OS_WIN
+    // W4b: the program keeps everything in its own folder; one it cannot write to (Program Files, a read-only stick)
+    // is refused before anything is written elsewhere
+    {
+        const QString why = qb::portable::folderProblem();
+        if (!why.isEmpty()) {
+            const QString text = QCoreApplication::translate(
+                                     "main", "Quillbinder keeps its settings, add-ons and updates in its own folder, and it "
+                                             "cannot work there because %1.\n\nMove the whole Quillbinder folder to a place of "
+                                             "your own, for example C:\\Users\\<your name>\\Quillbinder, and start it "
+                                             "from there. Program Files and other protected folders do not work, because "
+                                             "the program needs no administrator rights.")
+                                     .arg(why);
+            std::fprintf(stderr, "%s\n", qPrintable(text));
+            if (!QB_TEST_ENV_SET("QB_NO_DIALOGS"))
+                QMessageBox::critical(nullptr, QStringLiteral(QB_APP_NAME), text);
+            return 2;
+        }
+    }
+    qb::portable::followProgramFolder();
+    // W4b: fonts installed through the program are files in data\fonts, loaded for this program at each start
+    // (nothing in Windows' font folder or the registry)
+    qb::fontinstall::reload();
+#endif
+    qb::language::install(); // 0.70.0: English or German (File > Options > General > Startup), before any window
+    // fonts with several designs in one family (Sitka: Small ... Banner) get a family per
+    // design, so that Bold and Italic stay within the design (0.40.1, text/FontFaces.h)
+    qb::fontfaces::install();
+    QGuiApplication::setApplicationDisplayName(QStringLiteral(QB_APP_NAME));
+    QGuiApplication::setDesktopFileName(QStringLiteral(QB_APP_ID));
+    QApplication::setWindowIcon(QIcon(QStringLiteral(":/app/" QB_APP_ID ".svg")));
+
+    // Icons: the desktop theme (Breeze on KDE) first, the bundled Breeze
+    // subset when an icon is missing or no theme is installed.
+    QStringList themePaths = QIcon::themeSearchPaths();
+    themePaths << QStringLiteral(":/icons");
+    QIcon::setThemeSearchPaths(themePaths);
+    QIcon::setFallbackThemeName(QStringLiteral("qbicons"));
+    if (QIcon::themeName().isEmpty() || QIcon::themeName() == QLatin1String("hicolor"))
+        QIcon::setThemeName(QStringLiteral("qbicons"));
+
+    // Fusion is the Qt style that follows the KDE colour scheme best and
+    // looks identical everywhere (the AppImage cannot load system styles).
+    // Windows (W4b, the writer's requirement 5a): Windows 11's own controls (Qt's style "windows11"), Fusion where
+    // Qt does not offer it.
+    QStyle *style = nullptr;
+#ifdef Q_OS_WIN
+    if (QStyleFactory::keys().contains(QStringLiteral("windows11"), Qt::CaseInsensitive))
+        style = QStyleFactory::create(QStringLiteral("windows11"));
+#endif
+    if (!style)
+        style = QStyleFactory::create(QStringLiteral("Fusion"));
+    if (style)
+        QApplication::setStyle(style);
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription(QStringLiteral("%1 - a writing studio for long texts").arg(QStringLiteral(QB_APP_NAME)));
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addPositionalArgument(QStringLiteral("project"), QStringLiteral("Project to open (folder or %1 file).")
+                                                                .arg(QStringLiteral(QB_PROJECT_FILE_SUFFIX)));
+    QCommandLineOption noRestore(QStringLiteral("no-restore"), QStringLiteral("Do not reopen the last project."));
+    parser.addOption(noRestore);
+    parser.addOption(QCommandLineOption(QStringLiteral("selftest"), QStringLiteral("Start invisibly and exit (used by the update routine).")));
+    QCommandLineOption toolOpt(QStringLiteral("tool"), QStringLiteral("Run a command of a writing tool without the main window."),
+                               QStringLiteral("key"));
+    parser.addOption(toolOpt);
+    QCommandLineOption scratchOpt(QStringLiteral("scratch-pad"), QStringLiteral("Show the scratch pad (--tool scratch-pad.show)."));
+    parser.addOption(scratchOpt);
+    parser.process(app);
+
+    qb::AppSettings::instance().load();
+    qb::theme::apply();
+    qb::zoom::install(); // Ctrl + mouse wheel zooms the area under the mouse (0.21)
+#ifdef Q_OS_ANDROID
+    qb::mobile::installTouch(); // a finger scrolls and taps, two fingers zoom (android/MobileTouch.cpp)
+    qb::mobile::tabletBeforeWindow(); // the tablet's shared folders, dictionaries out of the APK (android/MobileStart.cpp)
+#endif
+    // crash reports with a snapshot of the program and the system (0.19); not for the
+    // self-test of a program update, which runs invisibly and only once
+    const bool selftest = app.arguments().contains(QStringLiteral("--selftest"));
+    if (!selftest) {
+        qb::crash::install();
+        qb::crash::prune(qBound(1, qb::AppSettings::instance().keepReports, 200)); // File > Options > Extras (0.21)
+        qb::sysinfo::installActivityRecorder();
+    }
+#ifdef Q_OS_WIN
+    // The full version for Windows (W3): the add-ons in full-addons\ beside the program are installed
+    // once per version before the plugins load (on Linux the full AppImage's start script does this)
+    if (!selftest) {
+        QStringList log;
+        QString error;
+        const QString full = qb::launcher::appDir() + QStringLiteral("/full-addons");
+        if (!qb::addons::installBundled(full, &log, &error))
+            qWarning("full version: not every add-on could be installed: %s", qPrintable(error));
+        for (const QString &l : log)
+            qb::crash::note(QStringLiteral("full version: ") + l);
+    }
+#endif
+    qb::compile::PluginManager::instance().load();
+
+    // ---- a writing tool on its own (a desktop-wide shortcut starts this)
+    QString toolKey = parser.value(toolOpt);
+    if (parser.isSet(scratchOpt))
+        toolKey = QStringLiteral("scratch-pad.show");
+    if (!toolKey.isEmpty()) {
+        qb::launcher::confirmStart(); // a tool window counts as a successful start
+        qb::toolhost::Host &host = qb::toolhost::host();
+        host.setStandaloneCommand(toolKey);
+        // one standalone window per command: an open one comes to the front
+        for (const QString &peer : host.peers()) {
+            const QJsonObject info = qb::toolhost::Host::query(peer, QJsonObject{{QStringLiteral("cmd"), QStringLiteral("info")}}, 1500);
+            if (info.value(QStringLiteral("standalone")).toString() == toolKey) {
+                qb::toolhost::Host::query(peer, QJsonObject{{QStringLiteral("cmd"), QStringLiteral("run")}, {QStringLiteral("key"), toolKey}});
+                return 0;
+            }
+        }
+        bool standalone = false;
+        for (const qb::tools::Command &c : host.allCommands())
+            if (c.key == toolKey)
+                standalone = c.standalone;
+        if (!standalone) {
+            const QString msg = host.toolFor(toolKey)
+                ? QStringLiteral("The command %1 needs the main window.").arg(toolKey)
+                : QStringLiteral("No writing tool with the command %1 is installed and switched on (Help > Add-on Manager).").arg(toolKey);
+            std::fprintf(stderr, "%s\n", qPrintable(msg));
+            if (!QB_TEST_ENV_SET("QB_NO_DIALOGS"))
+                QMessageBox::warning(nullptr, QStringLiteral(QB_APP_NAME), msg);
+            return 2;
+        }
+        host.startLink();
+        QObject::connect(&app, &QCoreApplication::aboutToQuit, &app, [] { qb::toolhost::host().shutdownTools(); });
+        qb::sysinfo::refresh(nullptr);
+        qb::crash::note(QStringLiteral("started as a writing tool: %1").arg(toolKey));
+        qb::crash::onTermination([] {
+            qb::toolhost::host().shutdownTools();
+            QLocalServer::removeServer(qb::toolhost::host().linkPath());
+        });
+        host.runCommand(toolKey);
+        if (host.openToolWindows() == 0)
+            return 0;
+        return app.exec();
+    }
+
+    // 0.64.2: started again with a project that a running window of this program shows: that window
+    // comes to the front and this start ends (before, it asked the lock question "open in another window")
+    if (!selftest && !parser.positionalArguments().isEmpty()) {
+        const QString arg = QFileInfo(parser.positionalArguments().constFirst()).absoluteFilePath();
+        if (!arg.endsWith(QLatin1String(".qbpkg"), Qt::CaseInsensitive))
+            for (const QString &peer : qb::toolhost::host().peers()) {
+                const QJsonObject r = qb::toolhost::Host::query(
+                    peer, QJsonObject{{QStringLiteral("cmd"), QStringLiteral("showProject")}, {QStringLiteral("path"), arg}}, 3000);
+                if (r.value(QStringLiteral("ok")).toBool()) {
+                    std::fprintf(stderr, "%s is open in a running window of %s; that window was brought to the front.\n",
+                                 qPrintable(arg), QB_APP_NAME);
+                    qb::launcher::confirmStart();
+                    return 0;
+                }
+            }
+    }
+    qb::MainWindow w;
+    if (selftest) {
+        // Used before a program update is installed: everything loaded, window built.
+        // The page view relies on the Qt this program runs on (text/PageLayout.cpp): try it.
+        QTextDocument probe;
+        probe.setPlainText(QString(QStringLiteral("Page view self-test. ")).repeated(400));
+        const qb::PageMetrics pm = qb::PageMetrics::from(qb::PageSetup(), 1.0);
+        if (!qb::pagelayout::apply(&probe, pm) || qb::pagelayout::pageCount(&probe) < 2 || probe.isUndoAvailable()
+            || !qb::pagelayout::clear(&probe, 600) || probe.pageCount() != 1) {
+            std::printf("selftest failed: page layout\n");
+            return 3;
+        }
+        // 0.70.0 (audit A S-08): the font code works on Qt's private font list as well: the list is there, a family
+        // is found by its own name, and a face name of a family is found again (text/FontFaces.cpp)
+        {
+            const QStringList families = QFontDatabase::families();
+            if (families.isEmpty()) {
+                std::printf("selftest failed: no fonts\n");
+                return 3;
+            }
+            QString any = families.first();
+            bool common = false;
+            for (const char *f : {"DejaVu Sans", "Liberation Serif", "Noto Sans", "FreeSerif", "DejaVu Serif"})
+                if (families.contains(QLatin1String(f))) {
+                    any = QLatin1String(f);
+                    common = true;
+                    break;
+                }
+            const qb::fontfaces::Resolved r = qb::fontfaces::resolve(any);
+            const qb::fontfaces::Resolved bold = qb::fontfaces::resolve(QString(any).remove(QLatin1Char(' ')) + QStringLiteral("-Bold"));
+            if (r.family != any || (common && (bold.family != any || !bold.bold))) {
+                std::printf("selftest failed: fonts (%s)\n", qPrintable(any));
+                return 3;
+            }
+        }
+        std::printf("selftest ok %s\n", QB_APP_VERSION);
+        return 0;
+    }
+    if (qEnvironmentVariableIsSet("QB_DEBUG_SHORTCUTS")) {
+        // Developer check: report shortcuts used by more than one action.
+        QHash<QString, QStringList> seen;
+        for (QAction *ac : w.findChildren<QAction *>())
+            for (const QKeySequence &ks : ac->shortcuts())
+                seen[ks.toString()] << ac->text();
+        for (auto it = seen.cbegin(); it != seen.cend(); ++it)
+            if (it.value().size() > 1)
+                std::fprintf(stderr, "shortcut %s: %s\n", qPrintable(it.key()), qPrintable(it.value().join(QStringLiteral(" | "))));
+        return 0;
+    }
+    // how the sessions before this one ended (a crash, a power cut ...); this one starts
+    qb::sysinfo::refresh(nullptr);
+    const QList<qb::crash::PreviousEnd> previous = qb::crash::beginSession();
+    // log out, shutdown or a kill command: save first, then end
+    qb::crash::onTermination([&w] { w.saveForTermination(); });
+    w.show();
+#ifdef Q_OS_ANDROID
+    qb::mobile::installTouch();  // (again: before the filters the window made)
+    qb::mobile::fitToolbars(&w); // toolbar rows that follow the screen's width (android/MobileBars.cpp)
+    qb::mobile::startTablet(&w); // the question about the shared folders, saving when Android puts the app away
+#endif
+    // other instances (and standalone tools) reach this window through a local socket
+    qb::toolhost::host().startLink();
+
+    QString toOpen, toInstall;
+    if (!parser.positionalArguments().isEmpty()) {
+        const QString arg = QFileInfo(parser.positionalArguments().constFirst()).absoluteFilePath();
+        if (arg.endsWith(QLatin1String(".qbpkg"), Qt::CaseInsensitive))
+            toInstall = arg;
+        else
+            toOpen = arg;
+    }
+    bool reopening = false;
+    if (!toOpen.isEmpty()) {
+    } else if (!parser.isSet(noRestore) && qb::AppSettings::instance().openLastProject
+             && !qb::AppSettings::instance().recentProjects.isEmpty()) {
+        const QString last = qb::AppSettings::instance().recentProjects.constFirst();
+        if (QFileInfo::exists(last)) {
+            toOpen = last;
+            reopening = true;
+        }
+    }
+
+    QTimer::singleShot(0, &w, [&w, toOpen, toInstall, previous, reopening]() mutable {
+        w.showStartNotice();
+        w.showEmergencyNotice(); // 0.65.0 (audit F07): the last end could not save
+        if (!previous.isEmpty() && !QB_TEST_ENV_SET("QB_NO_DIALOGS")
+            && qb::showPreviousEnds(&w, previous, reopening))
+            toOpen.clear(); // the last session ended right after the start: not the last project this time
+        // 0.62: backups and which settings come first, once (also after an update from an older version)
+        if (qb::FirstStartDialog::due()) {
+            qb::FirstStartDialog first(&w);
+            first.exec();
+            first.take();
+        }
+        w.offerDesktopIntegration();
+        if (!toInstall.isEmpty()) {
+            w.installPackage(toInstall);
+            if (w.isClosing())
+                return; // restarting to finish the installation
+        }
+        // The first start (also the first start of 0.40 after an older version) opens the
+        // welcome project, unless a project file was given; the last project comes back next time.
+        if (!(toOpen.isEmpty() || reopening) || !w.openWelcomeOnFirstStart()) {
+            if (toOpen.isEmpty() || !w.openProject(toOpen))
+                w.showStartDialog(false);
+        }
+        if (!w.project())
+            w.close(); // start window cancelled: nothing to show
+    });
+    // The window is up: tell the start-up loader that this version works.
+    QTimer::singleShot(1000, &app, [] { qb::launcher::confirmStart(); });
+    // a freeze report when the window does not respond for 30 s (an endless loop ...);
+    // the time is set in File > Options > Extras > Crash Reports (0.21)
+    qb::crash::startWatchdog(qBound(10, qb::AppSettings::instance().freezeSeconds, 600));
+#ifdef Q_OS_WIN
+    // Checks of the crash guard on the Windows runner (packaging/windows/win-ci.sh; Linux sends signals instead).
+    // Nothing happens without the variable: QB_TEST_CRASH=access|abort|freeze|quit.
+    const QByteArray crashTest = QB_TEST_ENV_BYTES("QB_TEST_CRASH");
+    if (!crashTest.isEmpty())
+        QTimer::singleShot(4000, &app, [crashTest] {
+            qb::crash::note(QStringLiteral("check of the crash guard: %1").arg(QString::fromLatin1(crashTest)));
+            if (crashTest == "access") {
+                volatile int *nowhere = nullptr;
+                *nowhere = 42;
+            } else if (crashTest == "abort") {
+                std::abort();
+            } else if (crashTest == "media") { // the media add-on starts: Qt Multimedia and its backend load
+                QString error;
+                const bool ok = qb::playback::start(&error);
+                std::fprintf(stderr, "media: %s %s\n", ok ? "started" : "failed", qPrintable(ok ? qb::playback::status() : error));
+                std::fflush(stderr);
+                QCoreApplication::quit();
+            } else if (crashTest == "freeze") {
+                qb::crash::setFreezeSeconds(10);
+                QThread::msleep(14000);
+                QTimer::singleShot(3000, qApp, &QCoreApplication::quit);
+            } else {
+                QCoreApplication::quit();
+            }
+        });
+#endif
+    const int rc = app.exec();
+    qb::settingslayer::sync(); // the last changes to the program's or the project's own file (0.62)
+    qb::crash::endSession(); // a normal end
+    return rc;
+}

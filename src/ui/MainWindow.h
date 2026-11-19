@@ -1,0 +1,532 @@
+#pragma once
+#include "core/Project.h"
+#include "ui/EditorPane.h"
+#include "text/DirectFormat.h"
+#include "tools/ToolApi.h"
+
+#include <QJsonObject>
+#include <QDateTime>
+#include <QMainWindow>
+#include <QHash>
+#include <QSet>
+#include <QPointer>
+#include <QVariantMap>
+#include <memory>
+
+class QAbstractButton;
+class QAction;
+class QMessageBox;
+class QLabel;
+class QActionGroup;
+class QComboBox;
+class QFontComboBox;
+class QDoubleSpinBox;
+class QLineEdit;
+class QMenu;
+class QTimer;
+class QSplitter;
+class QToolBar;
+class QToolButton;
+class QTextDocument;
+class QTextEdit;
+class QCompleter;
+class QStandardItemModel;
+
+namespace qb {
+namespace script {
+struct Format;
+}
+
+
+class BarDock;
+class BinderPanel;
+class StylesPanel;
+class FormatFindWindow;
+class Inspector;
+class TextEditor;
+class CompositionWindow;
+class QuickRefWindow;
+class TargetLineEdit;
+class FontScopeBar;
+class ObjectTextEdit;
+struct PrintSettings;
+class ColorPickButton;
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+public:
+    MainWindow();
+    ~MainWindow() override;
+
+    bool openProject(const QString &path);
+    // a .scriv folder or its .scrivx (MainWindowFormat.cpp)
+    bool openScrivenerProject(const QString &path);
+    static QString projectFileFilter();
+    // isNew: a project just made (new, imported, the welcome project): it gets the look for
+    // new projects; an existing project keeps the look it has (0.40.2, ui/ProjectLook.h)
+    bool adoptProject(std::unique_ptr<Project> p, bool isNew = false);
+    // The project gets these styles; all text follows (MainWindowStyles.cpp; also used by the
+    // settings import and the tests). renamed: old name -> new name.
+    bool commitStyles(const StyleSheet &sheet, const QHash<QString, QString> &renamed = {});
+    // Project > Save / Load Project Settings (0.40.2, MainWindowSettings.cpp). An empty file name
+    // asks for one. importProjectSettings shows what differs and asks per section.
+    bool exportProjectSettings(const QString &file = QString());
+    bool importProjectSettings(const QString &file = QString());
+    QJsonObject currentProjectSettings();
+    // takes the sections over (key -> value as in a settings file); notes: what was kept
+    void applyProjectSettings(const QJsonObject &sections, QStringList *notes);
+    QStringList lastSettingsNotes() const { return m_lastSettingsNotes; }
+    // File > Compare and Transfer with this file (0.18; also for the tests): false if not compared
+    bool compareWithFile(const QString &path);
+    bool closeProject();
+    // an automatic backup that failed or is incomplete (0.65.0, audit F03); the last text for the tests
+    void tellBackupProblem(bool made, const QString &why, const QString &when);
+    QString lastBackupProblem() const { return m_lastBackupProblem; }
+    // the lock file that could not be written last (0.65.0, audit F13; for the tests)
+    QString lastLockProblem() const { return m_lastLockProblem; }
+    Project *project() const { return m_project.get(); }
+    void updateFormatBar();   // the format bar and the format commands follow the cursor (public for the tests, 0.62)
+    // File > Options > Corrections, Convert Quotes (0.61.1): the dialog over `parent` (the Options window)
+    void convertQuotes(bool typographic, const QString &style, QWidget *parent = nullptr);
+    // Project > Delete Old Snapshots (0.61.1); ask: confirm first. Returns the snapshots deleted.
+    int deleteOldSnapshots(bool ask = true);
+    void showStartDialog(bool recentFirst);
+    // First start from an AppImage: offer to add the program to the application menu.
+    void offerDesktopIntegration();
+    // Install a .qbpkg file (program update, add-on or bundle).
+    void installPackage(const QString &file);
+    // Message from the start-up loader (an update was switched off).
+    void showStartNotice();
+    // Saves the project, mind maps and tool notes without questions (termination signal; 0.19).
+    void saveForTermination();
+    // 0.65.0 (audit F07): a notice for the next start (notice.txt in the emergency folder), shown then once
+    static void writeEmergencyNotice(const QString &what, const QString &dir);
+    void showEmergencyNotice();
+    QString lastEmergencyNotice() const { return m_lastEmergencyNotice; }
+    // 0.65.0 (audit F19): what the opening found of an interrupted save (shown once; the last text for the tests)
+    QString lastSaveRecoveryNotice() const { return m_lastSaveRecovery; }
+    // 0.81.1 (audit of 0.81.0, F-01): the last notice about a change kept aside (a document whose file cannot be read)
+    QString lastChangeKeptAside() const { return m_lastChangeKeptAside; }
+    // 0.70.0 (audit A U-05): File > Back Up > Restore From Backup (a list of this project's backups); the file
+    // restored and opened (the checks call restoreBackupFile; lastRestoredProject() names what was opened)
+    void restoreBackup();
+    bool restoreBackupFile(const QString &zip);
+    QString lastRestoredProject() const { return m_lastRestored; }
+    // the backup made at the opening because the last session was ended by a signal (0.81.0; tests)
+    QString lastDueBackup() const { return m_lastDueBackup; }
+    // 0.70.0 (audit A S-01, B U-2, S-1): the state shown in the status bar ("Saved", "Not saved yet", "Not saved:
+    // the last save failed at ..."); the time the saves began to fail (invalid: they work)
+    QString saveStateText() const;
+    QDateTime saveFailedSince() const { return m_saveFailedSince; }
+    // 0.81.0 (audit of 0.80.0, S-08): the reason of a failed save in plain words
+    static QString plainSaveReason(const QString &err);
+    bool isClosing() const { return m_closing; }
+    // Help > Welcome Project, About, List of All Placeholders (MainWindowHelp.cpp; 0.40)
+    void openWelcomeProject(bool firstStart = false);
+    // At the very first start (and the first start of 0.40): makes and opens the welcome
+    // project; false when it was shown before (or QB_NO_WELCOME is set).
+    bool openWelcomeOnFirstStart();
+    void showAbout();
+    void showPlaceholders();
+    static QString welcomeName();        // "Welcome to Quillbinder"
+    static QString welcomeFolder();      // where the welcome project is (or would be) made
+
+    // Window layouts (Window > Layouts); the state is described in Layouts.h.
+    QVariantMap captureLayout(bool withWindowSize = false) const;
+    void applyLayout(const QVariantMap &state);
+    bool applyLayoutById(const QString &id);
+    // Which editor a click in the binder loads: current | first | second | other
+    QString binderAffects() const { return m_binderAffects; }
+    void setBinderAffects(const QString &mode);
+
+    // ---- writing tools (MainWindowTools.cpp): what toolhost::Host asks of the window
+    QString toolProjectTitle() const;
+    bool toolCanInsert() const;
+    bool toolInsertText(const QString &text);
+    QString toolSelectedText() const;
+    QList<tools::TextDocument> toolDocuments(tools::Scope scope) const;
+    void toolShowDocument(const QString &id);
+    void toolSearch(const QString &text);
+    QJsonObject toolProjectInfo() const;     // title, file, binder (instance link "info")
+    // 0.64.2: a second start with the project this window shows: the window comes to the front
+    // and the second start ends (instance link "showProject")
+    bool showIfOpen(const QString &path);
+    // A note of the scratch pad (or another tool): new document or added to a text.
+    bool receiveFromTool(const tools::SendRequest &request, QString *error);
+    // tool interface 1.1 (0.61)
+    void toolShowInspectorTab(const QString &key);
+    void toolSetCommandState(const QString &commandKey, bool checked, const QString &icon, const QString &toolTip);
+    void toolShowOptions(const QString &toolId);
+    static QIcon toolIcon(const QString &icon);   // a theme name or a file (tools' icons)
+
+    // ---- import (MainWindowImport.cpp)
+    // File > Import > Web Page (address may be empty: the add-on's window asks);
+    // interactive false: no questions (web links dropped on the binder). Without
+    // a parent: the selected folder, beneath the selected document, else Research.
+    BinderItem *importWebPage(const QString &address = QString(), bool interactive = true, BinderItem *parent = nullptr,
+                              int row = -1, bool select = true);
+    // Files and web links dropped on binder, corkboard or outliner; returns the files' documents
+    // (web pages are fetched right after the drop has finished).
+    QList<BinderItem *> importDropped(BinderItem *parent, int row, const QList<QUrl> &urls, bool select = true);
+
+    // ---- options of File > Options that the window carries out (0.21)
+    // File > Save: the project, then the snapshots and the backup the options ask for
+    bool manualSave();
+    // Automatic Quit: the time of the last key or mouse input (the tests set an earlier one)
+    void noteInput(const QDateTime &when);
+    bool autoQuitDue() const;
+    // the documents edited since the last File > Save (for the snapshots of a manual save)
+    QStringList editedSinceManualSave() const;
+
+    // Help > About: version, credits, license (0.21.1: the credits)
+    static QString aboutText();
+
+    // ---- 0.21.1: the text field the format bar and the Format menu act on
+    TextEditor *formatTarget() const { return editor(); }
+    ObjectTextEdit *formatObjectTarget() const { return objectTextTarget(); }
+
+protected:
+    void closeEvent(QCloseEvent *e) override;
+    void changeEvent(QEvent *e) override;
+
+private:
+    // File > Project Format (MainWindowFormat.cpp)
+    void switchToScrivenerFormat();
+    void switchToQuillbinderFormat();
+    void saveCopyAsScrivener();
+    void saveCopyAsQuillbinder();
+    bool confirmNotOpenElsewhere(const QString &projectFolder);
+    // A project in a synced folder (0.64, MainWindowSync.cpp): the lock names this computer and
+    // is renewed; another computer's lock is shown before opening; versions kept on conflicts.
+    QStringList lockFilesFor(const Project *p) const;
+    bool confirmLock(const QString &lockFile);   // false: the writer chose not to open
+    void takeLocks();
+    void renewLocks(bool write);
+    void lockNotWritten(const QString &file); // 0.65.0 (audit F13)
+    void releaseLocks();
+    void connectSyncSafety(Project *p);
+    void showWithoutTakingKeys(QMessageBox *box, QAbstractButton *safe);
+    // 0.70.0 (audit A S-01): a failed save: the sign in the status bar and the title, a new attempt by timer, the
+    // notice (not taking the keyboard; again after 5 min of failing); a save that works clears it
+    void noteSaveFailed(const QString &err, bool notice = true);
+    // 0.81.0 (audit of 0.80.0, S-08): a notice put beside the text
+    void placeBesideText(QWidget *notice);
+    void noteSaved();
+    void updateSaveState();
+    void retrySave();
+    void saveTextsElsewhere();
+    void showConflictNotice();
+    QTimer *m_lockTimer = nullptr;
+    QDateTime m_lockOpened;
+    bool m_lockLost = false;
+    QStringList m_conflictNotes;
+
+    // construction
+    void createActions();
+    void createMenus();
+    // additions of 0.17 (MainWindowExtras.cpp)
+    void createExtraActions();
+    void createFontMenu(QMenu *nav);
+    void installFonts();
+    void fillIconMenu(QMenu *menu);
+    void rememberIcon(const QString &icon);
+    QStringList iconBarIcons() const;
+    void createIconBar();
+    void rebuildIconBar();
+    void chooseIconBar();
+    void createColorButtons();
+    void showDeveloperGuide();
+    // additions of 0.18 (MainWindowExtras.cpp)
+    void chooseCompareFile();
+    // writing tools (MainWindowTools.cpp)
+    void createToolActions();                     // "tool:<key>" for every command of the loaded tools
+    QList<QAction *> toolActionsAt(const QString &place) const;
+    void fillWritingToolsMenu(QMenu *menu);
+    void updateToolActions();
+    void placeToolButtons();                      // the arrows (menus) beside tool buttons of the toolbars (0.61)
+    void createToolBars();
+    void createFormatBar();
+    // menus, toolbars, layouts, shortcut lists (MainWindowBars.cpp)
+    void rebuildToolBars();
+    // 0.91.0: the bars in their standard places (two rows at the top), and which of them are shown: a bar shows when
+    // its row's switch (Show Toolbar, Show Format Bar) and its own switch are on
+    void placeToolBars();
+    void applyBarVisibility();
+    void resetToolbarPlaces();
+    void fillBarsMenu(QMenu *menu, int bar);
+
+public:
+    QMenu *createPopupMenu() override;
+
+private:
+    QAction *barItem(const QString &id) const;
+    // Entry with a short text for a submenu ("Files…" under Import); acts as the command itself.
+    QAction *menuAlias(QMenu *menu, const QString &key, const QString &text);
+    void customizeToolbars(int bar);
+    void rebuildStyleActions();
+    void rebuildLayoutActions();
+    void fillLayoutMenu(QMenu *menu);
+    void saveLayoutAs();
+    void manageLayouts();
+    void applyQuickRefFloating();
+    EditorPane *binderTarget() const;
+    void updateActions();
+    void updateViewButtons();
+    void updateWindowTitle();
+    void showFontDialog(TextEditor *e);
+    void showParagraphDialog(TextEditor *e);
+    void convertToDefaultFormatting();
+    // Font list and size field of the format bar: the selection (or the whole
+    // paragraph) gets the font at once, then the bar above the editors offers
+    // the same for the paragraph's style or for all text of the project.
+    void applyFontFromBar(const direct::CharSpec &spec, int members);
+    void acceptFontOffer();
+
+    // styles (MainWindowStyles.cpp)
+    // target: the editor the entries act on (null = the active editor);
+    // full: with the commands to create, redefine, edit and delete styles
+    void fillStyleMenu(QMenu *menu, TextEditor *target, bool full);
+    // the chosen style list with the style commands fixed below it: the format bar's list and
+    // the right-click menus (0.40.3)
+    void fillStyleList(QMenu *menu, TextEditor *target);
+    void customizeStyleList();
+    void rebuildStyleCombo();
+    void refreshStyleUi();
+    void newStyleFromSelection();
+    void redefineStyleFromSelection(const QString &name = QString());
+    void editStyle(const QString &name);
+    void deleteStyle(const QString &name);
+    void resetStyle(const QString &name);
+    void moveStyle(const QString &name, int delta);
+    void importStyles();
+    void saveStylesAsDefault();
+    void showStylesPanel();
+    // "No Style" redefined from the selection: the project's main text style (0.40.3)
+    void redefineNoStyleFromSelection();
+    // the main text style as the paragraph at the cursor shows it ("Use Current" buttons)
+    bool formattingAtCursor(TextEditor *e, Formatting *f) const;
+    // the window that style dialogs and messages belong to: the Styles panel when the
+    // command came from it (so they open above it, 0.40.3), else the main window
+    QWidget *styleUiParent() { return m_styleUiParent ? m_styleUiParent.data() : static_cast<QWidget *>(this); }
+    // audio and video (MainWindowMedia.cpp): Navigate > Media
+    void createMediaActions();
+    void createMediaMenu(QMenu *nav);
+    void updateMediaActions();
+    void insertMediaTimestamp();
+    void goToMediaTimestamp();
+    // scriptwriting (MainWindowScript.cpp)
+    void createScriptActions();
+    void createScriptMenu(QMenu *formatMenu);
+    void fillScriptFormatMenu();
+    void rebuildScriptActions();   // "script:<element>", one per element of the script format
+    void updateScriptActions();
+    void setScriptMode(bool on);   // the document with the cursor (or the selected documents)
+    void chooseScriptFormat(const script::Format &format);
+    bool commitScriptFormat(const script::Format &format, const QHash<QString, QString> &renamedElements = {});
+    void showScriptSettings();
+    // search tools (MainWindowSearch.cpp)
+    void projectReplace();
+    void afterProjectWideChange(int changes);   // refresh and save after Project Replace, Convert Quotes
+    void updateSnapshotAction();                // Delete Old Snapshots: enabled while there are snapshots
+    void showFormatFind();
+    // Select the next (previous) text with the formatting asked for in the
+    // Find by Formatting window; goes on into the following documents.
+    bool findFormatting(bool backward);
+    void applySearchHighlights();     // the matches of the project search in both editors
+    void fillQuickSearch();
+    void updateTargetsDisplay();
+    void applySettings();
+    void rebuildRecentMenu();
+
+    // panes
+    EditorPane *activePane() const { return m_active; }
+    EditorPane *otherPane(EditorPane *p) const;
+    void setActivePane(EditorPane *p);
+    void setSplit(Qt::Orientation o, bool on);
+    bool isSplit() const;
+    EditorPane *ensureOtherPane();
+    void loadInPane(EditorPane *pane, const QList<BinderItem *> &items);
+    void connectPane(EditorPane *p);
+
+    // item helpers
+    QList<BinderItem *> actionItems() const; // selection in the focused place
+    BinderItem *insertionPoint(int *row) const;
+    BinderItem *newItem(ItemType type, const QString &templateId = QString());
+    void moveSelection(int dx, int dy);
+    void duplicateItems();
+    void splitDocument(bool selectionAsTitle);
+    void mergeDocuments();
+    void setIconFor(const QString &icon);
+    void openLink(EditorPane *from, const QString &href);
+    // the object in the Objects tab of the inspector (0.20)
+    void showObject(const QString &objectId);
+    QuickRefWindow *openQuickReference(BinderItem *item);
+    QList<QuickRefWindow *> quickRefWindows() const;
+    // Format and Insert commands (and Save) also answer to their shortcuts in this window.
+    void shareShortcuts(QWidget *window);
+    void addToProjectBookmarks(const QList<BinderItem *> &items);
+    void installToolbarDropTargets();
+    void fillGoToMenu(QMenu *menu);
+    void fillItemMenu(QMenu *menu);
+    // lookPart: lookmenu::Part of what was clicked (binder, corkboard, outliner), -1: none
+    void showItemContextMenu(const QPoint &globalPos, int lookPart = -1);
+    void showBinderBackgroundMenu(const QPoint &globalPos);
+    // 0.90.1 (the usability review of 0.90.0, UR-12): Undo and Redo name their step and act only where they can;
+    // the toolbar's Undo and Redo have a list of the steps (MainWindowUndo.cpp)
+    void setupUndoNames();
+    void watchUndoTarget();
+    void updateUndoNames();
+    void fillUndoList(QMenu *menu, bool undo);
+    void showHeaderMenu(EditorPane *pane, const QPoint &globalPos);
+    void enterComposition();
+    void showPageSetup();
+    void importFiles();
+    void explainWebImportAddon();
+    void backupNow(bool chooseLocation);
+    // W4b: the portable program (Windows) has no standard backup folder. Whether a backup may run now: true when a
+    // folder is set (elsewhere always); else, when `ask` allows, the writer is asked for one (Once: once per session,
+    // Always: an explicit Back Up Now); without a folder the status bar says that no backup was made (`tell`).
+    enum class AskFolder { Never, Once, Always };
+    bool backupFolderReady(AskFolder ask, bool tell = true);
+    void updateBackupState();
+    void convertFileTool();
+    void printDocument();
+    // File > Print Preview (with the given settings instead of the project's: the
+    // Preview button of the print settings)
+    void printPreview(const PrintSettings *settings = nullptr);
+    void showPrintSettings();
+    bool canPrint() const;
+    void integrateDesktop(bool quiet);
+    void restartApplication();
+    void showAddonManager();
+    void refreshInspector();
+    void saveUiState();
+    void restoreUiState();
+
+    TextEditor *editor() const;
+    // The text field the keyboard was in last (0.21.1): the format bar, the Format menu
+    // and their shortcuts act on it while the keyboard is on the format bar itself (the
+    // size field takes the keyboard when clicked) or in a menu.
+    QPointer<QTextEdit> m_lastTextField;
+    QMenu *m_undoMenu = nullptr;
+    QMenu *m_redoMenu = nullptr;
+    QTimer *m_undoNamesTimer = nullptr;
+    QList<QMetaObject::Connection> m_undoWatch;
+    // a long text field of the Objects sheet with the cursor (0.21.1): bold, italic,
+    // underline, strikethrough, text color and highlight act on it
+    ObjectTextEdit *objectTextTarget() const;
+    bool objectFormat(const QString &key, ObjectTextEdit *o);
+
+    std::unique_ptr<Project> m_project;
+    BinderPanel *m_binder = nullptr;
+    Inspector *m_inspector = nullptr;
+    QSplitter *m_mainSplit = nullptr;
+    QSplitter *m_editorSplit = nullptr;
+    EditorPane *m_panes[2] = {nullptr, nullptr};
+    EditorPane *m_active = nullptr;
+    QPointer<CompositionWindow> m_composition;
+    QStringList m_lastSettingsNotes;
+    QString m_lastBackupProblem;
+    bool m_lockWriteTold = false;
+    QString m_lastLockProblem;
+    QString m_lastEmergencyNotice;
+    QString m_lastSaveRecovery;
+    QString m_lastChangeKeptAside;
+    QLabel *m_saveState = nullptr;
+    QLabel *m_backupState = nullptr; // W4b: "No backups" while the portable program has no backup folder
+    bool m_backupFolderAsked = false;
+    QTimer *m_saveStateTimer = nullptr;
+    QTimer *m_saveRetry = nullptr;
+    QDateTime m_saveFailedSince;
+    QDateTime m_saveNoticeShown;
+    QString m_lastSaveError;
+    QPointer<QMessageBox> m_saveNotice;
+    QString m_lastRestored;
+    QString m_lastDueBackup;
+    QList<QAction *> m_toolActions;
+    QHash<QString, QPointer<QMenu>> m_toolMenus;   // menus beside tool buttons, by command key (0.61)
+
+    // toolbars
+    // 0.91.0: seven toolbars (the index is toolbars::Bar) and the icon bar, each to be switched off and moved by its
+    // grip; m_toolbar and m_formatBar are the bars Main and Format (the first of each row)
+    QToolBar *m_bars[7] = {};
+    QToolBar *m_toolbar = nullptr;
+    QToolBar *m_formatBar = nullptr;
+    QToolBar *m_iconBar = nullptr;
+    bool m_applyingBars = false;
+    BarDock *m_barDock = nullptr; // 0.91.1: the toolbars' places and the drag by their grips (ui/BarDock.*)
+    ColorPickButton *m_textColorBtn = nullptr;
+    ColorPickButton *m_highlightBtn = nullptr;
+    QComboBox *m_styleCombo = nullptr;
+    QMenu *m_styleMenu = nullptr;
+    QPointer<StylesPanel> m_stylesPanel;
+    QPointer<QWidget> m_styleUiParent;
+    QPointer<FormatFindWindow> m_formatFind;
+    QFontComboBox *m_fontCombo = nullptr;
+    QDoubleSpinBox *m_sizeSpin = nullptr;
+    QComboBox *m_lineCombo = nullptr;
+    // space before, space after, first line indent, indent of the whole paragraph (0.60.4)
+    QToolButton *m_paraButtons[4] = {};
+    void fillParagraphMenu(QMenu *menu, int which);
+    QList<QAction *> m_rtfOnly;
+    QList<QAction *> m_markdownOnly;
+    QHash<QString, QAction *> m_barItems;   // controls of the bars (id -> widget action)
+    QString m_builtBars;                    // what the bars were built from
+    QList<QToolButton *> m_barButtons;      // buttons among the controls (icon size, text)
+    QList<QAction *> m_barOwned;            // separators and spaces of the bars
+    QList<QAction *> m_scriptActions;       // "script:<element>", one per element of the script format
+    QMenu *m_scriptMenu = nullptr, *m_scriptElementMenu = nullptr, *m_scriptFormatMenu = nullptr;
+    QList<QAction *> m_styleActions;        // "style:<name>", one per style of the project
+    QList<QAction *> m_layoutActions;       // "layout:<id>"
+    QString m_binderAffects = QStringLiteral("current");
+    QActionGroup *m_affectsGroup = nullptr;
+    QMenu *m_layoutMenu = nullptr;
+    TargetLineEdit *m_quickSearch = nullptr;
+    QCompleter *m_completer = nullptr;
+    QStandardItemModel *m_completerModel = nullptr;
+
+    // actions
+    QHash<QString, QAction *> a;
+    QList<QAction *> m_mediaActions;
+    QAction *m_mediaMissing = nullptr;
+    double m_mediaVolumeBeforeMute = 1.0;
+    QMenu *m_recentMenu = nullptr;
+    QMenu *m_templateMenu = nullptr;
+    QMenu *m_labelMenu = nullptr;
+    QMenu *m_statusMenu = nullptr;
+    QMenu *m_iconMenu = nullptr;
+    QMenu *m_defaultTemplateMenu = nullptr;
+    QMenu *m_addMenu = nullptr;
+    QMenu *m_binderGearMenu = nullptr;
+    QMenu *m_bookmarkMenu = nullptr;
+    QActionGroup *m_viewGroup = nullptr;
+    QActionGroup *m_revisionGroup = nullptr;
+    bool m_updatingUi = false;
+    QSet<QString> m_editedSinceSave;        // texts edited since the last File > Save (0.21)
+    // documents without a name take the first line of their text (0.40.3, MainWindowTitles.cpp)
+    void queueAutoTitle(const QString &id);
+    void queueUntitledDocuments();
+    void updateAutoTitles();
+    QSet<QString> m_autoTitlePending;
+    QTimer *m_autoTitleTimer = nullptr;
+    QDateTime m_lastInput;                  // Automatic Quit (0.21)
+    QTimer *m_autoQuitTimer = nullptr;
+    void notifySnapshots(int count);        // File > Options > Behaviors > Snapshots (0.21)
+    bool m_quickSearchMark = false; // the matches of a quick search are marked in the editor
+    FontScopeBar *m_fontScope = nullptr;
+    struct FontOffer {
+        QPointer<TextEditor> editor;
+        QPointer<QTextDocument> doc;
+        int from = 0, to = 0;      // the text that got the font
+        int members = 0;           // direct::Family, direct::Size
+        direct::CharSpec spec;
+        QString style;             // empty: the offer is for all text of the project
+        bool character = false;    // style is a character style
+    } m_fontOffer;
+    void checkFontOffer();
+    bool m_closing = false;
+    bool m_maximizedBeforeFullScreen = false;
+};
+
+} // namespace qb

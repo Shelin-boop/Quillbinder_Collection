@@ -1,0 +1,665 @@
+{
+ "note": "Made by packaging/android/collect-licenses-android.py from the Windows list (the same Qt 6.12.0), Qt's own list of the parts of its Android build (its SBOM), OpenSSL 3.5.9, the NDK's C++ runtime and the Java libraries Gradle put into the APK (sources pinned in the script).",
+ "components": [
+  {
+   "name": "Quillbinder",
+   "version": "",
+   "license": "Apache-2.0 (Apache License 2.0)",
+   "where": "the program itself",
+   "text": "quillbinder-Apache-2.0.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection"
+  },
+  {
+   "name": "Breeze icons (a subset)",
+   "version": "",
+   "license": "LGPL-3.0-or-later",
+   "where": "icons of the menus and toolbars",
+   "text": "breeze-icons.txt",
+   "source": "the SVG files themselves, in resources/icons of the Quillbinder source (https://github.com/Shelin-boop/Quillbinder_Collection); upstream: https://invent.kde.org/frameworks/breeze-icons"
+  },
+  {
+   "name": "Qt 6.12.0",
+   "version": "6.12.0",
+   "license": "LGPL-3.0-only",
+   "where": "libQt6Core, libQt6Gui, libQt6Widgets, libQt6Network, libQt6Xml, libQt6Svg, libQt6PrintSupport, libQt6Pdf, libQt6PdfWidgets (libraries inside the APK), Qt's plugins (the Android platform plugin, styles, image formats, icon engine, TLS, network information) and Qt's Java part (in the APK's classes). The libraries are The Qt Company's own build for Android, unchanged; each can be replaced by another build of the same version (an APK is a ZIP archive: the library replaced, the archive aligned and signed again), or the APK built anew from the source.",
+   "text": "qt.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file qt-everywhere-src-6.12.0.tar.xz (the Qt Project's source release; also https://download.qt.io/official_releases/qt/6.12/6.12.0/single/ and the tag v6.12.0 of https://code.qt.io)",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "BLAKE2 (reference implementation) (in Qt)",
+   "version": "ed1974ea83433eba7b2d95c5dcd9ac33cb847913",
+   "license": "Creative Commons Zero v1.0 Universal or Apache License 2.0",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-blake2.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Efficient Binary-Decimal and Decimal-Binary Conversion Routines for IEEE Doubles (in Qt)",
+   "version": "3.4.0",
+   "license": "BSD 3-clause \"New\" or \"Revised\" License",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-doubleconversion.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Easing Equations by Robert Penner (in Qt)",
+   "version": "",
+   "license": "BSD 3-clause \"New\" or \"Revised\" License",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-easing.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "MD4 (in Qt)",
+   "version": "",
+   "license": "Public Domain",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-md4.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "MD5 (in Qt)",
+   "version": "",
+   "license": "Public Domain",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-md5.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "PCRE2 (in Qt)",
+   "version": "10.48",
+   "license": "BSD 3-clause \"New\" or \"Revised\" License with PCRE2 binary-like Packages Exception",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-pcre2.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "PCRE2 - Stack-less Just-In-Time Compiler (in Qt)",
+   "version": "10.48",
+   "license": "BSD 2-clause \"Simplified\" License",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-pcre2-sljit.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Secure Hash Algorithms SHA-384 and SHA-512 (in Qt)",
+   "version": "",
+   "license": "BSD 3-clause \"New\" or \"Revised\" License",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-rfc6234.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Secure Hash Algorithm SHA-1 (in Qt)",
+   "version": "",
+   "license": "Public Domain",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-sha1.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Secure Hash Algorithm SHA-3 - brg_endian (in Qt)",
+   "version": "1.0.0",
+   "license": "BSD 2-clause \"Simplified\" License",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-sha3_endian.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Secure Hash Algorithm SHA-3 - Keccak (in Qt)",
+   "version": "3.2",
+   "license": "Creative Commons Zero v1.0 Universal",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-sha3_keccak.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "SipHash Algorithm (in Qt)",
+   "version": "",
+   "license": "Creative Commons Zero v1.0 Universal",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-siphash.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "TinyCBOR (in Qt)",
+   "version": "7.0",
+   "license": "MIT License",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-tinycbor.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Apache Tika MimeType Definitions (in Qt)",
+   "version": "c29724782854bb5a319f4a1940d0828a58ace3f9",
+   "license": "Apache License 2.0",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-tika-mimetypes.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Unicode Character Database (UCD) (in Qt)",
+   "version": "36",
+   "license": "Unicode License Agreement - Data Files and Software (2016)",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-unicode-character-database.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Unicode Common Locale Data Repository (CLDR) (in Qt)",
+   "version": "v48.2",
+   "license": "Unicode License v3",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-unicode-cldr.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Vulkan Memory Allocator (in Qt)",
+   "version": "3.3.0",
+   "license": "MIT License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-vulkanmemoryallocator.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Freetype 2 (in Qt)",
+   "version": "2.14.3",
+   "license": "Freetype Project License or GNU General Public License v2.0 only",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-freetype.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Freetype 2 - zlib (in Qt)",
+   "version": "",
+   "license": "zlib License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-freetype-zlib.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Freetype 2 - Bitmap Distribution Format (BDF) support (in Qt)",
+   "version": "",
+   "license": "MIT License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-freetype-bdf.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Freetype 2 - Portable Compiled Format (PCF) support (in Qt)",
+   "version": "",
+   "license": "MIT License and MIT Open Group variant",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-freetype-pcf.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "HarfBuzz-NG (in Qt)",
+   "version": "14.5.0",
+   "license": "MIT License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-harfbuzz-ng.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "sRGB color profile icc file (in Qt)",
+   "version": "",
+   "license": "International Color Consortium License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-icc-srgb-color-profile.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "LibJPEG-turbo (in Qt)",
+   "version": "3.2.0",
+   "license": "Independent JPEG Group License and BSD 3-Clause \"New\" or \"Revised\" License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-libjpeg.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "LibPNG (in Qt)",
+   "version": "1.6.58",
+   "license": "libpng License and PNG Reference Library version 2",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-libpng.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "MD4C (in Qt)",
+   "version": "0.5.3",
+   "license": "MIT License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-md4c.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "OpenGL Headers (in Qt)",
+   "version": "Revision 27684",
+   "license": "MIT License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-opengl-headers.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "OpenGL ES 2 Headers (in Qt)",
+   "version": "Revision 27673",
+   "license": "MIT License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-opengl-es2-headers.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Anti-aliasing rasterizer from FreeType 2 (in Qt)",
+   "version": "",
+   "license": "Freetype Project License or GNU General Public License v2.0 only",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-grayraster.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Smooth Scaling Algorithm (in Qt)",
+   "version": "",
+   "license": "BSD 2-clause \"Simplified\" License and Imlib2 License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-smooth-scaling-algorithm.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "X Server helper (in Qt)",
+   "version": "",
+   "license": "X11 License and Historical Permission Notice and Disclaimer",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-xserverhelper.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Mipmap generator for D3D12 (in Qt)",
+   "version": "0aa79bad78992da0b6a8279ddb9002c1753cb849",
+   "license": "MIT License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-rhi-miniengine-d3d12-mipmap.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Adobe Glyph List For New Fonts (in Qt)",
+   "version": "1.7",
+   "license": "BSD 3-Clause \"New\" or \"Revised\" License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-aglfn.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Vulkan API Registry (in Qt)",
+   "version": "1.4.308",
+   "license": "Apache License 2.0 or MIT License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-vulkan-xml-spec.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "WebGradients (in Qt)",
+   "version": "",
+   "license": "MIT License",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-webgradients.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "The Public Suffix List (in Qt)",
+   "version": "2026-05-14_08-35-31_UTC",
+   "license": "Mozilla Public License 2.0",
+   "where": "libQt6Network (inside the APK)",
+   "text": "qt-psl-data.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "libpsl - C library to handle the Public Suffix List (in Qt)",
+   "version": "664f3dc85259ec65e30248a61fa1c45b7b0e4c3f",
+   "license": "BSD 3-clause \"New\" or \"Revised\" License",
+   "where": "libQt6Network (inside the APK)",
+   "text": "qt-libpsl.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "XSVG (in Qt)",
+   "version": "",
+   "license": "Historical Permission Notice and Disclaimer - sell variant",
+   "where": "libQt6Svg and the SVG plugins (inside the APK)",
+   "text": "qt-xsvg.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Emoji Segmenter (in Qt)",
+   "version": "0.4.0",
+   "license": "Apache License 2.0",
+   "where": "libQt6Gui (inside the APK; and the Android platform plugin, the image plugins)",
+   "text": "qt-emoji-segmenter.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "tl::expected (in Qt)",
+   "version": "41d3e1f48d682992a2230b2a715bca38b848b269",
+   "license": "Creative Commons Zero v1.0 Universal",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-tlexpected.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "forkfd (in Qt)",
+   "version": "",
+   "license": "MIT License",
+   "where": "libQt6Core (inside the APK)",
+   "text": "qt-forkfd.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "WebP (libwebp) (in Qt)",
+   "version": "1.6.0",
+   "license": "BSD 3-clause \"New\" or \"Revised\" License",
+   "where": "the image plugin for WebP (inside the APK)",
+   "text": "qt-libwebp.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "TIFF Software Distribution (libtiff) (in Qt)",
+   "version": "4.7.2",
+   "license": "libtiff License",
+   "where": "the image plugin for TIFF (inside the APK)",
+   "text": "qt-libtiff.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "PDFium (in Qt PDF)",
+   "version": "",
+   "license": "BSD-3-Clause",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-pdfium.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "The Chromium Project (in Qt PDF)",
+   "version": "",
+   "license": "BSD-3-Clause",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-the-chromium-project.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Abseil (in Qt PDF)",
+   "version": "",
+   "license": "Apache-2.0",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-abseil.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "FreeType (in Qt PDF)",
+   "version": "",
+   "license": "FTL (FreeType License)",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-freetype.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "ICU (in Qt PDF)",
+   "version": "",
+   "license": "Unicode-3.0 (ICU License)",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-icu.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "libjpeg-turbo (in Qt PDF)",
+   "version": "",
+   "license": "IJG, BSD-3-Clause, Zlib",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-libjpeg-turbo.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "libpng (in Qt PDF)",
+   "version": "",
+   "license": "Libpng-2.0, Libpng",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-libpng.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "zlib (in Qt PDF)",
+   "version": "",
+   "license": "Zlib",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-zlib.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "OpenJPEG (in Qt PDF)",
+   "version": "2.5.3",
+   "license": "BSD-2-Clause",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-openjpeg.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Little CMS (in Qt PDF)",
+   "version": "2.15",
+   "license": "MIT",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-little-cms.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Anti-Grain Geometry (in Qt PDF)",
+   "version": "2.3",
+   "license": "MIT-like (permission notice below)",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-anti-grain-geometry.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "BigInt (in Qt PDF)",
+   "version": "",
+   "license": "Public domain (notice below)",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-bigint.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "FP16 (in Qt PDF)",
+   "version": "",
+   "license": "MIT",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-fp16.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "fast_float (in Qt PDF)",
+   "version": "",
+   "license": "MIT",
+   "where": "libQt6Pdf (inside the APK; showing PDF files)",
+   "text": "qtpdf-fast-float.txt",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Hunspell",
+   "version": "1.7.5",
+   "license": "MPL-1.1 or GPL-2.0-or-later or LGPL-2.1-or-later (used under MPL-1.1)",
+   "where": "spelling (linked into the program's library)",
+   "text": "hunspell.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file hunspell-1.7.5.tar.gz (also https://github.com/hunspell/hunspell, tag v1.7.5)",
+   "sourceFile": "hunspell-1.7.5.tar.gz"
+  },
+  {
+   "name": "OpenSSL",
+   "version": "3.5.9",
+   "license": "Apache-2.0 (Apache License 2.0)",
+   "where": "libcrypto_3.so, libssl_3.so inside the APK (secure connections: File > Import > Web Page). Built from OpenSSL's source without changes (packaging/android/android-openssl.sh).",
+   "text": "openssl.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file openssl-3.5.9.tar.gz (also https://github.com/openssl/openssl, tag openssl-3.5.9)",
+   "sourceFile": "openssl-3.5.9.tar.gz"
+  },
+  {
+   "name": "LLVM libc++ (the C++ runtime of Android's NDK)",
+   "version": "NDK r27c (LLVM 18)",
+   "license": "Apache-2.0 WITH LLVM-exception (older parts: University of Illinois/NCSA Open Source License, MIT License)",
+   "where": "libc++_shared.so inside the APK, unchanged from the NDK",
+   "text": "libcxx.txt",
+   "source": "https://android.googlesource.com/toolchain/llvm-project (the NDK's LLVM); https://github.com/llvm/llvm-project"
+  },
+  {
+   "name": "AndroidX libraries (androidx.core 1.17.0 and the libraries it needs)",
+   "version": "",
+   "license": "Apache-2.0 (Apache License 2.0)",
+   "where": "the APK's Java part (classes.dex): Qt's Android part hands files to other apps with them",
+   "text": "androidx.txt",
+   "source": "https://android.googlesource.com/platform/frameworks/support (Google's Maven repository: https://maven.google.com)"
+  },
+  {
+   "name": "Kotlin standard library, kotlinx.coroutines, JetBrains annotations",
+   "version": "2.2.10, 1.8.1, 23.0.0",
+   "license": "Apache-2.0 (Apache License 2.0)",
+   "where": "the APK's Java part (classes.dex): the AndroidX libraries need them",
+   "text": "kotlin.txt",
+   "source": "https://github.com/JetBrains/kotlin, https://github.com/Kotlin/kotlinx.coroutines, https://github.com/JetBrains/java-annotations"
+  },
+  {
+   "name": "Guava ListenableFuture, JSpecify annotations",
+   "version": "1.0, 1.0.0",
+   "license": "Apache-2.0 (Apache License 2.0)",
+   "where": "the APK's Java part (classes.dex): the AndroidX libraries need them",
+   "text": "guava-jspecify.txt",
+   "source": "https://github.com/google/guava, https://github.com/jspecify/jspecify"
+  },
+  {
+   "name": "Monocypher",
+   "version": "4.0.3",
+   "license": "BSD-2-Clause (dual-licensed: BSD-2-Clause or CC0-1.0)",
+   "where": "the check of package signatures (Ed25519), compiled into the program's library",
+   "text": "monocypher.txt",
+   "source": "src/core/third_party/monocypher of the Quillbinder source; upstream: https://github.com/LoupVaillant/Monocypher, tag 4.0.3"
+  },
+  {
+   "name": "English (United States) spelling dictionary",
+   "version": "2020.12.07",
+   "license": "SCOWL license (BSD-like, permissive)",
+   "where": "en_US.aff, en_US.dic (the APK's assets, copied into the app's data folder)",
+   "text": "dict-en_US.txt",
+   "source": "the files themselves (Hunspell dictionaries are their own source); https://github.com/LibreOffice/dictionaries, tag libreoffice-25.8.7.3, folder en"
+  },
+  {
+   "name": "English (United Kingdom) spelling dictionary",
+   "version": "",
+   "license": "GNU LGPL (as stated by its authors, below)",
+   "where": "en_GB.aff, en_GB.dic (the APK's assets, copied into the app's data folder)",
+   "text": "dict-en_GB.txt",
+   "source": "the files themselves; https://github.com/LibreOffice/dictionaries, tag libreoffice-25.8.7.3, folder en",
+   "sourceFile": "libreoffice-dictionaries-25.8.7.3-en.tar"
+  },
+  {
+   "name": "German (Germany, Austria, Switzerland) spelling dictionaries (frami)",
+   "version": "",
+   "license": "GPL-2.0 or GPL-3.0",
+   "where": "de_DE, de_AT, de_CH (.aff, .dic; the APK's assets, copied into the app's data folder)",
+   "text": "dict-de-frami.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file libreoffice-dictionaries-25.8.7.3-de.tar (the dictionaries in the form LibreOffice and Ubuntu distribute and maintain them; https://github.com/LibreOffice/dictionaries, tag libreoffice-25.8.7.3, folder de)",
+   "sourceFile": "libreoffice-dictionaries-25.8.7.3-de.tar"
+  }
+ ],
+ "commonLicenses": [
+  {
+   "name": "LGPL-3.0",
+   "text": "common-LGPL-3.0.txt"
+  },
+  {
+   "name": "GPL-3.0",
+   "text": "common-GPL-3.0.txt"
+  },
+  {
+   "name": "GPL-2.0",
+   "text": "common-GPL-2.0.txt"
+  },
+  {
+   "name": "MPL-2.0",
+   "text": "common-MPL-2.0.txt"
+  },
+  {
+   "name": "Apache-2.0",
+   "text": "common-Apache-2.0.txt"
+  },
+  {
+   "name": "Unicode-3.0",
+   "text": "common-Unicode-3.0.txt"
+  },
+  {
+   "name": "LGPL-2.1",
+   "text": "common-LGPL-2.1.txt"
+  },
+  {
+   "name": "LGPL-2.0",
+   "text": "common-LGPL-2.0.txt"
+  },
+  {
+   "name": "GPL-2.0 (as shipped with the English dictionaries)",
+   "text": "common-en-license.txt"
+  }
+ ]
+}

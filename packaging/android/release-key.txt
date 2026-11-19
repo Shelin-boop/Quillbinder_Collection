@@ -1,0 +1,12 @@
+The key that signs the public Android app (made on 2026-11-16 at the writer's choice; kept by the writer and as the
+secrets QB_ANDROID_KEYSTORE and QB_ANDROID_KEYSTORE_PASS of this repository, never as a file in a repository).
+
+App id:       io.github.shelin_boop.quillbinder.app
+Key:          RSA 4096, alias "quillbinder", PKCS #12; certificate "CN=Quillbinder, O=The Quillbinder project",
+              SHA256withRSA, valid until 2126-10-23
+Certificate SHA-256 (what Android names as the app's signer; .github/workflows/release-android.yml checks the secret
+and the signed APK against it):
+sha256: 8cdb2ad2d7c0855cc6a7297e1afb0466932272b618c6e5f165b0549299be0e5e
+
+Every later version of the public app must be signed with this key: Android installs an update only when its signer is
+the same. Trial builds have another id and another key (packaging/android/android-trial-key.sh).

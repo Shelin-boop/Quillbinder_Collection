@@ -1,0 +1,171 @@
+# Test suites: what each one checks
+
+Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
+
+## The suites
+
+    QB_SUITES="v040 m13" QB_SAMPLE=10 tools/run-all-tests.sh build/test-results-x11 x11   # the default run
+    tools/run-all-tests.sh build/test-results-x11 x11       # the full suite, only when the user asks
+    xvfb-run -a build/tests/qb_fixes_tests /tmp/shots       # one suite by hand
+
+- `QB_SUITES` names suites as the runner prints them (`qb_tests`, `ui`, `m6` ... `m14`, `fixes`, `v017` ...).
+  `QB_SAMPLE=10` adds whole suites drawn at random until about 10 % of the checks are covered (counts from
+  `tests/check-counts.txt`); it prints the seed and the suites, and `QB_SEED=<n>` repeats a sample. A full X11 run
+  writes `tests/check-counts.txt` anew: commit it with the job. Keep logs out of the conversation: read the runner's
+  one line per suite and the FAIL lines, not whole logs.
+
+- `qb_tests` (core, formats, compile), `qb_ui_tests`, `qb_m6_tests` ... `qb_m15_tests`
+  (one per milestone; m14 printing; m15, the tutorial of 0.15 to 0.30, was removed in 0.40),
+  `qb_fixes_tests` (corrections of 0.14.1), `qb_v017_tests` (0.17: icons, icon bar, fonts,
+  color buttons, folder comments, mind maps, developer guide), `qb_v018_tests` (0.18: Compare and
+  Transfer with Word / LibreOffice files, Mind Map Help and example board; uses LibreOffice and
+  pdftoppm when installed), `qb_v019_tests` (0.19: Page Down / Page Up, crash and freeze reports,
+  sessions that ended unexpectedly, saving on SIGTERM, Help > System Information and Crash Reports;
+  starts `<build>/quillbinder` and ends it with signals), `qb_v020_tests` (0.20: the Objects sheet with
+  templates, colors, folders and links; the data-safety fixes: control characters, unreadable text files,
+  backups over 4 GiB (a sparse 4.3 GB file, about 30 s; `QB_SKIP_BIG_BACKUP=1` leaves it out), autosave
+  while typing, Scrivener-format working copies, the spare copy of the project file, mind map ranges), `qb_v021_tests` (0.21:
+  File > Options in Scrivener's layout and what each option does, Ctrl + wheel zoom, the inspector's zoom, mind map
+  colors / shapes / icons / line menus, the Compile Overview window), `qb_v0211_tests` (0.21.1: the format bar's target,
+  the editable bookmark preview and its mirror (a stress run of 400 edits; `QB_MIRROR_SEED` repeats one, `QB_MIRROR_DEBUG=1` traces),
+  a zoom per part, mind map backgrounds per theme kind, places kept with the project, formatted object texts, credits), `qb_v0212_tests`
+  (0.21.2: Scrivener style marks and paragraph styles, project bookmarks as Scrivener for Windows writes them, marks left in projects
+  imported before 0.14 taken out when they open, the writer's standard settings put once; `QB_USER_SAMPLE=<folder.scriv>` also imports
+  a real project), `qb_v040_tests` (0.40: the welcome project, the Quick Start Guide, Third-Party Licenses and About,
+  "Combined Text", menu places of the guide and the welcome texts), `qb_v0401_tests`
+  (0.40.1: a family per design of a font with several designs, the format buttons of a selection), `qb_v0402_tests`
+  (0.40.2: no jump on a click or right-click, the look per project and the built-in themes unchanged, the border,
+  the Appearance submenus of the right-click menus, project settings saved and loaded with the per-section choice,
+  style changes reaching all text of the style), `qb_v0403_tests` (0.40.3: titles from the first line, No Style redefined
+  from the panel, the short spelling menu, the format bar showing what is seen, dialogs above the Styles panel, the alignment
+  of the main text, the chosen style list), `qb_v0601_tests` (0.60.1: Paste with Formatting, Show Invisibles, the total of a
+  folder, paragraph styles over several paragraphs), `qb_v0602_tests` (0.60.2: the three ways to paste in the right-click menu),
+  menu audit.
+- `qb_v0604_tests` (0.60.4: the paragraph buttons of the format bar, the Wayland line of the README).
+- `qb_v0605_tests` (0.60.5: a generated 500,000-word project in Scrivener format: autosave times and what it writes,
+  the full save, the fingerprint, files changed in Scrivener; the right-click menu's time and size, Qt's animations off,
+  the quick save when a dialog takes over). Times are printed; the limits are generous for a two-core machine.
+- `qb_v061_tests` (0.61: tool interface 1.1 with a tool built for 1.0 (`tests/tool10`, the old header), Undo/Redo in the
+  standard toolbar, the add-on Speech Transcription: models, headers, languages, pieces, files, the package, the button and
+  its menu, the inspector tab, the options, downloads from a local test server, Vulkan through Mesa's lavapipe
+  (`GGML_VK_VISIBLE_DEVICES=0`), recordings from a WAV file and a PulseAudio pipe source). Needs `tools/get-whisper.sh` and
+  the add-on package; `QB_SPEECH_FAKE=1` writes "Piece n" instead of running a model; `QB_SPEECH_MODEL_FILE=<ggml model>`
+  adds checks with real recognition; `QB_SPEECH_OFFICIAL=small` downloads that model from Hugging Face through the add-on
+  (allowed in the cloud session since 2026-11-08: `huggingface.co` and its download host `us.aws.cdn.hf.co`);
+  `QB_SPEECH_EXTRA="<wav>=<word>|<word>;..."` (with `QB_SPEECH_HINT`) adds recordings that must hold one of the words.
+- `qb_v064_tests` (0.64: the spelling menu at every place of words with apostrophes, the autosave while typing on
+  (a gap after 5 s, at most 30 s; about 45 s of typing), the card size kept when settings are read again, the lock with
+  device and renewal, a lock taken over while open, conflicts kept as snapshot and copy (texts, the project file,
+  Scrivener format), opening and closing without a change writes nothing (also a .scriv), texts not arrived yet).
+  The speech add-on's Record only and Transcribe / Transcribe All are checked in `qb_v061_tests`.
+- `qb_v0641_tests` (0.64.1, the fixes of the system test's first run: Markdown table cells with empty paragraphs and
+  tables inside cells, Split at Selection next to and inside tables, a text only shown not written over a newer one,
+  nothing replaced when the other version cannot be kept (text, notes, project file), a figure cut and pasted, compile
+  progress with the event loop running, cells not justified, Merge with notes, Merge Cells / Undo / Redo / Delete Rows,
+  typing in a 1,000-row table against a plain `QTextEdit`; `QB_V0641_ONLY_TYPING=1` runs only that, `QB_V0641_KEYS=<n>`).
+- `qb_v0642_tests` (0.64.2, the fixes of the system test's full run of 0.64.1: word counts, a picture's format on
+  letters and pasted pictures, italic from RTF face names, German quotes, Markdown paragraphs (leading spaces, the style
+  Centered, a bold run ending in a space), the spare copy, project and .scriv folders that are gone, a .scriv as
+  Scrivener writes it opened and closed unchanged, pictures in notes, outside changes while open, Scrivener's XML lock,
+  linked notes over several formats, H2O by subscript, stale menu entries, the Documents menu, `showIfOpen`).
+- `qb_v0650_tests` (0.65.0, the fixes of the external audit of 2026-11-10: safe copies, the save journal and its recovery
+  (also a journal naming files outside the project), contents-by-title.txt, pictures that cannot be written, partial reads,
+  Roll Back (core and inspector), incomplete backups, Duplicate, object pictures, storage conversion, same size and time,
+  a 70 MB archive, command exporters (exit status, event loop), bundles and signatures (RFC 8032 vector, the release key,
+  test keys made with openssl, `QB_TEST_SIGNING_KEY`, `QB_REQUIRE_SIGNED`), the scratch pad, the close question, the end by a
+  signal, the lock, Scrivener format with a document and a picture changed elsewhere, the manual). Needs
+  `<build>/addons-dist/tool-scratch-pad.qbpkg`, python3 and openssl.
+- `qb_v0700_tests` (0.70.0 beta, the fixes of the two external audits of 2026-11-10 (report A: 31 faults, report B: 14
+  items) and the writer's decisions: Markdown round trips of touching formats (4,000 random sentences), the RTF
+  reader's lists, damaged RTF and other encodings read-only, control characters told, the save state and the
+  failed-save notice, mind maps that cannot be saved or read, backups per project, Restore, backup progress and
+  Cancel, pictures in Merge and Split, questions with a default (a source check), project settings only safer,
+  the 30 s latest save, the project file of a folder with several, binder depth, duplicate ids, foreign XML,
+  counts, boards, Word 97 damaged copies (needs `plugins/importers/qb_doc_dump`), reading speed, the release
+  workflow's jobs, `make-package.py sign`, `launcher::coreOrigin`, the self-test, German, the dark page).
+  `QB_V0700_ONLY=markdown,rtf,damaged,saves,backups,pictures,dialogs,hostile,release,german` runs parts.
+- `qb_v0810_tests` (0.81.0 beta, the fixes of the audit of 0.80.0: backups after a title change, restore of any size
+  (a sparse 2.3 GB file, `QB_SKIP_BIG_BACKUP=1` leaves it out; 70,000 entries), onto a full disk (child runs with
+  `qbfaultshim`), linked folders, snapshot titles, unchecked saves, Empty Trash, spare copies, storage conversion, the
+  ui file's name, opening with old counts on a full disk, readable explanations, the failed-save notice, First Start,
+  the missed backup of a signal, the release gate; `QB_V0810_ONLY=backups,saving,window,release` runs parts).
+- `qb_v0811_tests` (0.81.1 beta, the fixes of the audit of 0.81.0, part 1, the four findings at function level: a damaged
+  text and Roll Back (core and inspector, the damaged file kept), Merge and Split refused, Project Replace and a style
+  change leaving it out, a change kept aside, a text not arrived; pictures in notes written once; a save journal that
+  cannot be read and another computer's journal (young, then old); the auditor's RTF file in a child run with a time
+  limit; Roll Back shows the text at once).
+- `qb_v0812_tests` (0.81.2 beta, keywords, custom metadata and collections in Scrivener format: a hand-made project in
+  Scrivener 3 for Windows' form read (ids, values, collections, inline notes kept as text), opened and saved unchanged,
+  changed and written (forms, ids, order), saved again unchanged, read again after changes elsewhere (made here kept,
+  deleted there not brought back), a working copy of an older version joined once; a Quillbinder project switched to
+  Scrivener format; the inspector's values. `QB_SCRIV_REAL=<folder.scriv>` adds checks on a copy of a real project
+  (never named in the repository); `QB_V0812_KEEP=<file>` keeps the project file written in that run).
+- `qb_v0813_tests` (0.81.3 beta, Scrivener compatibility part 2: a hand-made Windows-form project with styles.xml, Ps/Cs
+  marks, an inline footnote, a picture in Scrivener's `\shppict` form, a picture with notes, a saved .mht; read, saved
+  unchanged, the marks written in Scrivener's placement, a style made here added once, content.styles removed with the
+  last style; web archives packed, unpacked (quoted-printable, windows-1252, Content-ID, a hostile archive); the page view
+  and its two buttons (`links::setOpenerForTests`, the copy in the Downloads folder); a Quillbinder project switched to
+  Scrivener format (inline notes, notes of media, its web page as .mht) and read back; the repair of 0.81.1's stand-ins.
+  `QB_SCRIV_REAL=<folder.scriv>` opens and saves a copy unchanged (every file), writes every text anew and compares what
+  reads back; `QB_V0813_DUMP=<dir>` writes the texts that differ and the written copy).
+- `qb_v0900_tests` (0.90.0 beta, Scrivener compatibility part 3: list items with a style in Markdown and RTF; a hand-made
+  Windows-form project `Quay.scriv` (lists, links, face-named fonts, comments, footnotes, bookmarks, targets, the deadline,
+  the writing history, compile.xml, ui-common.xml, a saved search, a card picture): read, saved unchanged, every text
+  written anew; changes made here (freeform corkboard, bookmarks, targets, history, saved searches, card picture, compile
+  author) written and read back; the project file in English and German. `QB_SCRIV_REAL=<folder.scriv>` adds a real
+  project (counts only of what it holds; never named); `QB_V0900_KEEP=<file>`).
+- `qb_v0901_tests` (0.90.1 beta: menus opened 30 times keep no old submenus; File > Options: every option control
+  marked with its place (P/A badge, tool tip; also in "This project" scope), the pages scroll; the keyboard back in the
+  text after Options, Project Targets, Take Snapshot, Project Settings, Compile; dialogs fitted to a 1366 x 768 screen;
+  placeholder contrast (light and dark); Compile's Formats column also at scale 2 (a child run with `QT_SCALE_FACTOR=2`);
+  Undo names and lists; the binder's empty space; Close in Find by Formatting and Print Preview; the busy pointer of
+  Project Statistics; the new shortcuts and no shortcut given twice; digit grouping; the link question of a long name).
+- `qb_v0902_tests` (0.90.2 beta: an arranged main toolbar gets the theme list once (and not again when taken away); the
+  download page's other downloads (Linux and Windows names); Appearance without "Page View", the color around the pages
+  in Main Editor, the invisibles' color in Textual Marks; the Mind Map page's color buttons beside their labels; the
+  invisibles' default and an own color in the project's look (red pixels); the theme list: placed between Redo and the
+  search button, Bright / Dark / Both, the kept filter, a theme chosen there and one chosen in Window > Themes).
+- `qb_v0903_tests` (0.90.3 beta: backups and sync programs: `backup::isOwnBackupName`; nine copies of a backup in the
+  folder push no real backup out; what a watcher of the backup folder sees during a backup (inotify: one `movedTo`, or
+  `create` + `written` for the copy of two drives, `QB_TEST_BACKUP_COPY=1`; a real second drive is `/dev/shm`); a backup
+  that waits for its folder and is put in place later, a cut-off copy replaced, a same-named whole backup kept; Cancel;
+  old `.part` files of the work folder; a full drive under the backup folder and under the work folder (child runs with
+  `qbfaultshim`); the window's messages).
+- `qb_v0913_tests` (0.91.3 beta: add-on keys; keys and certificates made with openssl and `make-package.py certify`,
+  packages signed with both keys as the release workflow does; add-on key trusted for add-ons, refused for a program
+  update (inspect, install, launcher), changed certificates, `make-package.py verify`, the install window's note, the
+  workflow's signing job; `tools/addon-entry.py` and the workflow "Official add-on"; see "Add-on keys" in
+  `saving-and-safety.md`).
+- `qb_v0911_tests` (0.91.1 beta: toolbars rearranged freely by their grips, the row that got stuck; see "Toolbars
+  rearranged freely").
+- `qb_v0910_tests` (0.91.0 beta: backups straight in the backup folder, the seven toolbars and the icon bar; see
+  "Backups in one folder, eight toolbars, theme buttons").
+- `qb_audit1_tests` (0.64.1, the fixes of the external audit of 2026-11-09: ids of a project file and names in archives
+  (`core/PathSafety.*`), damaged ZIP entries, a Word 97 file with a looping sector chain (compiles the plugin's `Cfb.cpp`),
+  XML nested 20,000 deep, the keys a project may hold and the question of Load Options, the code warning of packages,
+  links (`ui/LinkOpen.*`, also in imported web pages), the socket folder, Scrivener's lock before every write and a .scriv
+  file whose other version cannot be kept, the computer's name; `QB_RELEASE_BINARY=<files>` (':'-separated) searches a
+  release build for the test switches' names).
+- `qb_v0611_tests` (0.61.1: the quote rules, Convert Quotes from File > Options > Corrections with every place and the
+  scope, Project > Delete Old Snapshots with its question, Scrivener format: deleted snapshots leave the .scriv).
+- `qb_v062_tests` (0.62: settings per project: the first start window, File > Options with "Settings for", what goes
+  where (also changes made outside the window), Use Program Settings, the switch "which settings come first" and the look
+  following it, the Options section of project settings files; tables and pictures: designs, the Markdown and RTF forms
+  and RTF of other programs, the editor's table and picture commands in both storage formats, Scrivener format, the
+  needed version 0.62.0, compile to PDF, Word, e-book and Markdown; LibreOffice opens the Word file when installed,
+  `QB_SKIP_SOFFICE=1` leaves that out). The runner sets `QB_SKIP_FIRST_START=1` for all other suites.
+- `qb_w2_tests` (Windows port W2, on Linux: the packages' platform field, the process check, pruning reports with
+  their memory dumps; no window).
+- `qb_v0603_tests` (0.60.3: folder totals in the binder and the footers, Inspector Background, the color of the toolbars,
+  font names that are not families, double-click beside the text reveals the document).
+- Printing checks print into PDF files (Print to File) and read them with poppler-utils.
+- The add-on Media Playback needs FFmpeg: `tools/get-ffmpeg.sh` once (a few seconds from the pinned pack, 5 to 10
+  minutes from source without one), then the test runner builds the add-ons.
+- Scrivener format: `tests/scrivener_checks.cpp` reads a real Scrivener 3 project when
+  `QB_SCRIV_SAMPLE=<folder.scriv>` is set (a public sample: GitHub
+  writerslogic/scrivener-mcp, tests/sample-project.scriv, pinned to commit d4d42c3 of 2026-11-08 by a hash over its
+  files, `kTreeSha256`; since 2026-10-31 it has no docs.checksum, which the program writes only when a .scriv has one).
+- Offscreen runs have no window manager: a widget has focus only after
+  `activateWindow()`; modal dialogs are answered with `QTimer` + `activeModalWidget()`.
+- Never run `pkill -f` / `pgrep -f` with a pattern that also appears in your own
+  command line: it kills the shell that runs it.

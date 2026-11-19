@@ -1,0 +1,197 @@
+#!/bin/bash
+# Builds the AppImage on Ubuntu 24.04 LTS, with The Qt Company's own build of the Qt version in CMakeLists.txt
+# (QB_QT_VERSION; since 0.80.0, runtime u2404-qt6.12-r1) in /opt/qt/<version>/gcc_64 or QB_QT_DIR.
+#
+#   tools/cloud-setup.sh                  (Ubuntu packages, and Qt through tools/get-qt.sh)
+#   packaging/linux/build-appimage.sh
+#
+# Result: build-appimage/<Name>-<version>-x86_64.AppImage
+set -euo pipefail
+
+ROOT=$(cd "$(dirname "$0")/../.." && pwd)
+TOOLS=${TOOLS:-$ROOT/packaging/tools}
+BUILD=${BUILD:-$ROOT/build-appimage}
+APPDIR=$BUILD/AppDir
+APP_ID=$(sed -n 's/^set(APP_ID *"\(.*\)")/\1/p' "$ROOT/CMakeLists.txt")
+APP_NAME=$(sed -n 's/^set(APP_NAME *"\(.*\)")/\1/p' "$ROOT/CMakeLists.txt")
+VERSION=$(sed -n 's/^set(APP_VERSION *"\(.*\)")/\1/p' "$ROOT/CMakeLists.txt")
+# "alpha", "beta" or empty: goes into the file name only (Quillbinder-0.30.0-alpha-x86_64.AppImage)
+LABEL=$(sed -n 's/^set(APP_VERSION_LABEL *"\(.*\)")/\1/p' "$ROOT/CMakeLists.txt")
+QT_VERSION=$(sed -n 's/^set(QB_QT_VERSION *"\(.*\)")/\1/p' "$ROOT/CMakeLists.txt")
+export QB_QT_DIR=${QB_QT_DIR:-/opt/qt/$QT_VERSION/gcc_64}
+[ -x "$QB_QT_DIR/bin/qmake" ] || { echo "Qt $QT_VERSION is not in $QB_QT_DIR (tools/get-qt.sh)" >&2; exit 1; }
+QTPLUGINS=$QB_QT_DIR/plugins
+export APPIMAGE_EXTRACT_AND_RUN=1   # the tools also run without FUSE (containers)
+
+# ---------------------------------------------------------------- tools
+mkdir -p "$TOOLS"
+# The tools are pinned to tagged releases and their SHA-256 (0.64.1, the external audit's X-5: the
+# "continuous" releases change without notice, and the runtime becomes the first part of every
+# AppImage). A new version: download it, look at its release notes, put its tag and sum here.
+fetch() {   # <file> <url> <sha256>
+    if [ -s "$TOOLS/$1" ] && ! echo "$3  $TOOLS/$1" | sha256sum -c --status; then
+        rm -f "$TOOLS/$1"   # another version from before the pinning
+    fi
+    if ! [ -s "$TOOLS/$1" ]; then
+        # GitHub's release downloads answer 504 at times (2026-11-08: in the cloud session and on the
+        # release runner): retry, and keep a file only when it arrived whole
+        curl -fsSL --retry 20 --retry-delay 15 --retry-max-time 600 --retry-all-errors -o "$TOOLS/$1.part" "$2"
+        if ! echo "$3  $TOOLS/$1.part" | sha256sum -c --status; then
+            echo "error: $1 from $2 does not have the SHA-256 $3" >&2
+            rm -f "$TOOLS/$1.part"
+            exit 1
+        fi
+        mv "$TOOLS/$1.part" "$TOOLS/$1"
+    fi
+    chmod +x "$TOOLS/$1"
+}
+fetch linuxdeploy-x86_64.AppImage \
+    https://github.com/linuxdeploy/linuxdeploy/releases/download/1-alpha-20251107-1/linuxdeploy-x86_64.AppImage \
+    c20cd71e3a4e3b80c3483cef793cda3f4e990aca14014d23c544ca3ce1270b4d
+fetch linuxdeploy-plugin-qt-x86_64.AppImage \
+    https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/1-alpha-20250213-1/linuxdeploy-plugin-qt-x86_64.AppImage \
+    15106be885c1c48a021198e7e1e9a48ce9d02a86dd0a1848f00bdbf3c1c92724
+fetch appimagetool-x86_64.AppImage \
+    https://github.com/AppImage/appimagetool/releases/download/1.9.1/appimagetool-x86_64.AppImage \
+    ed4ce84f0d9caff66f50bcca6ff6f35aae54ce8135408b3fa33abfc3cb384eb0
+# static runtime: the AppImage does not need libfuse2 (not installed on 24.04 by default)
+fetch runtime-x86_64 \
+    https://github.com/AppImage/type2-runtime/releases/download/20251108/runtime-x86_64 \
+    2fca8b443c92510f1483a883f60061ad09b46b978b2631c807cd873a47ec260d
+
+# ---------------------------------------------------------------- licenses (0.50)
+# The license list (Help > Third-Party Licenses) names the source of exactly the libraries
+# this system has and of this runtime; brought up to date before the program is built.
+# QB_LICENSES_WRITE=1 (0.80.0, a new runtime): the list is made anew from the AppDir (Ubuntu's packages and Qt's
+# attribution files of tools/get-qt-licenses.sh), then the script starts again with it
+if [ "${QB_LICENSES_WRITE:-0}" != 1 ]; then
+    python3 -I "$ROOT/tools/collect-licenses.py" --refresh "$ROOT/resources/licenses" "$TOOLS/runtime-x86_64"
+fi
+python3 -I "$ROOT/tools/gen-resources.py" > /dev/null
+
+# ---------------------------------------------------------------- build
+cmake -S "$ROOT" -B "$BUILD" -DCMAKE_BUILD_TYPE=Release -DQB_BUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr -DQB_QT_DIR="$QB_QT_DIR"
+cmake --build "$BUILD" -j"$(nproc)"
+rm -rf "$APPDIR"
+DESTDIR="$APPDIR" cmake --install "$BUILD"
+strip "$APPDIR/usr/bin/$APP_ID" "$APPDIR"/usr/lib/"$APP_ID"/plugins/*.so 2>/dev/null || true
+
+# ---------------------------------------------------------------- Qt and libraries
+export PATH="$TOOLS:$PATH"
+export QMAKE=$QB_QT_DIR/bin/qmake
+# linuxdeploy finds the libraries of Qt's own build through the library path (0.80.0)
+export LD_LIBRARY_PATH="$QB_QT_DIR/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+# Qt 6.12: one Wayland platform plugin (libqwayland.so) instead of the -egl and -generic ones of Qt 6.4
+export EXTRA_PLATFORM_PLUGINS="libqwayland.so"
+export EXTRA_QT_MODULES="svg;waylandclient"
+export DISABLE_COPYRIGHT_FILES_DEPLOYMENT=1
+
+"$TOOLS/linuxdeploy-x86_64.AppImage" --appdir "$APPDIR" \
+    --executable "$APPDIR/usr/bin/$APP_ID" \
+    --desktop-file "$ROOT/packaging/linux/$APP_ID.desktop" \
+    --icon-file "$ROOT/resources/app/$APP_ID.svg" \
+    --plugin qt
+
+# libraries needed by the bundled exporter plugins
+for f in "$APPDIR"/usr/lib/"$APP_ID"/plugins/*.so; do
+    [ -f "$f" ] && "$TOOLS/linuxdeploy-x86_64.AppImage" --appdir "$APPDIR" --deploy-deps-only "$f" >/dev/null
+done
+
+# Plugins linuxdeploy-plugin-qt does not pick up by itself: desktop portal
+# (KDE file dialogs), SVG icons and images, Wayland integration.
+copy_plugin() {  # <plugin dir> <file>
+    local src="$QTPLUGINS/$1/$2"
+    [ -f "$src" ] || { echo "note: $src not installed, skipped"; return; }
+    mkdir -p "$APPDIR/usr/plugins/$1"
+    if [ ! -f "$APPDIR/usr/plugins/$1/$2" ]; then
+        cp "$src" "$APPDIR/usr/plugins/$1/"
+        "$TOOLS/linuxdeploy-x86_64.AppImage" --appdir "$APPDIR" --deploy-deps-only "$APPDIR/usr/plugins/$1/$2" >/dev/null
+    fi
+}
+copy_plugin platformthemes libqxdgdesktopportal.so
+# invisible platform: used to test a program update before it is installed
+copy_plugin platforms libqoffscreen.so
+copy_plugin iconengines libqsvgicon.so
+# typing accents with dead keys / compose key, and input methods (ibus)
+for f in "$QTPLUGINS"/platforminputcontexts/*.so; do copy_plugin platforminputcontexts "$(basename "$f")"; done
+for f in libqsvg.so libqjpeg.so libqgif.so libqico.so libqwebp.so; do copy_plugin imageformats "$f"; done
+for d in wayland-shell-integration wayland-decoration-client wayland-graphics-integration-client; do
+    if [ -d "$QTPLUGINS/$d" ]; then
+        for f in "$QTPLUGINS/$d"/*.so; do copy_plugin "$d" "$(basename "$f")"; done
+    fi
+done
+
+# System libraries that every Ubuntu 24.04 desktop has (and that talk to
+# system services, so the system's own copy is the better choice anyway).
+# Removing them keeps the AppImage small; the program finds them in /usr/lib.
+SYSTEM_LIBS=(
+    'libglib-2.0.so*' 'libgio-2.0.so*' 'libgobject-2.0.so*' 'libgmodule-2.0.so*' 'libffi.so*'
+    'libsystemd.so*' 'libdbus-1.so*' 'libcap.so*' 'libselinux.so*' 'libmount.so*' 'libblkid.so*'
+    'libcrypto.so*' 'libssl.so*' 'libgnutls.so*' 'libnettle.so*' 'libhogweed.so*' 'libgmp.so*'
+    'libp11-kit.so*' 'libtasn1.so*' 'libidn2.so*' 'libunistring.so*' 'libgcrypt.so*' 'libgpg-error.so*'
+    'libkrb5.so*' 'libk5crypto.so*' 'libkrb5support.so*' 'libgssapi_krb5.so*' 'libkeyutils.so*' 'libcom_err.so*'
+    'libcurl-gnutls.so*' 'libnghttp2.so*' 'librtmp.so*' 'libssh.so*' 'libpsl.so*' 'libbrotli*.so*'
+    'libldap.so*' 'liblber.so*' 'libsasl2.so*' 'libproxy.so*' 'libpxbackend-1.0.so' 'libduktape.so*'
+    'libavahi-client.so*' 'libavahi-common.so*' 'libcups.so*'
+    'libzstd.so*' 'liblz4.so*' 'liblzma.so*' 'libbz2.so*' 'libz.so*' 'libexpat.so*' 'libpcre2-8.so*'
+    'libmd.so*' 'libbsd.so*' 'libXau.so*' 'libXdmcp.so*'
+)
+for pattern in "${SYSTEM_LIBS[@]}"; do
+    rm -f "$APPDIR"/usr/lib/$pattern
+done
+# Plugins the program does not use (TIFF/MNG/TGA pictures, network) and
+# the libraries only they need.
+rm -f "$APPDIR"/usr/plugins/imageformats/{libqtiff.so,libqmng.so,libqtga.so,libqwbmp.so,libqicns.so}
+rm -rf "$APPDIR"/usr/plugins/tls "$APPDIR"/usr/plugins/networkinformation
+rm -f "$APPDIR"/usr/lib/{libtiff.so*,libjbig.so*,libLerc.so*,libdeflate.so*,libmng.so*,liblcms2.so*}
+# The pinned linuxdeploy-plugin-qt (0.64.1) also adds Qt's own translations, which the program never
+# loads, and a start hook that sets the GTK 2 look on GNOME and Xfce (no such plugin is bundled): both
+# left out, so the AppImage starts as before (AppRun = the program, as the "continuous" tools made it)
+rm -rf "$APPDIR/usr/translations" "$APPDIR/apprun-hooks"
+if [ -L "$APPDIR/AppRun.wrapped" ]; then
+    rm -f "$APPDIR/AppRun" "$APPDIR/AppRun.wrapped"
+    ln -s "usr/bin/$APP_ID" "$APPDIR/AppRun"
+fi
+# every remaining file must still find its libraries (bundled or system)
+missing=$(find "$APPDIR/usr" -type f \( -name '*.so*' -o -path '*/bin/*' \) | while read -r f; do
+    LD_LIBRARY_PATH="$APPDIR/usr/lib" ldd "$f" 2>/dev/null | grep 'not found' | sed "s|^|$f: |" || true; done)
+if [ -n "$missing" ]; then
+    echo "Missing libraries:"; echo "$missing"; exit 1
+fi
+
+if [ "${QB_LICENSES_WRITE:-0}" = 1 ]; then
+    QTLIC=${QB_QT_LICENSES:-$ROOT/build/qt-licenses}
+    [ -d "$QTLIC/qtbase" ] || "$ROOT/tools/get-qt-licenses.sh" "$QTLIC"
+    python3 -I "$ROOT/tools/collect-licenses.py" --qt-licenses "$QTLIC" "$APPDIR" "$ROOT/resources/licenses"
+    python3 -I "$ROOT/tools/collect-licenses.py" --refresh "$ROOT/resources/licenses" "$TOOLS/runtime-x86_64"
+    echo "license list made anew: building again with it"
+    QB_LICENSES_WRITE=0 exec "$0" "$@"
+fi
+
+# ---------------------------------------------------------------- licenses (0.40)
+# Every library and plugin the AppImage carries must have its license text in resources/licenses
+# (the program shows them under Help > Third-Party Licenses); they also go into the AppImage.
+# New libraries: run tools/collect-licenses.py <AppDir> resources/licenses and rebuild.
+python3 -I "$ROOT/tools/collect-licenses.py" --check "$APPDIR" "$ROOT/resources/licenses" || exit 1
+mkdir -p "$APPDIR/usr/share/doc/$APP_ID"
+rm -rf "$APPDIR/usr/share/doc/$APP_ID/licenses"
+cp -r "$ROOT/resources/licenses" "$APPDIR/usr/share/doc/$APP_ID/licenses"
+cp "$ROOT/LICENSE" "$APPDIR/usr/share/doc/$APP_ID/LICENSE"
+cp "$ROOT/THIRD-PARTY.md" "$APPDIR/usr/share/doc/$APP_ID/THIRD-PARTY.md"
+
+# ---------------------------------------------------------------- AppImage
+# The icon of the AppImage file (.DirIcon): appimagetool builds of 2026-10 and later want a PNG
+# at the top of the AppDir with the name the desktop file gives (Icon=quillbinder); the SVG alone
+# is refused. resources/app/quillbinder-256.png is the SVG drawn at 256 px.
+mkdir -p "$APPDIR/usr/share/icons/hicolor/256x256/apps"
+cp "$ROOT/resources/app/quillbinder-256.png" "$APPDIR/usr/share/icons/hicolor/256x256/apps/$APP_ID.png"
+rm -f "$APPDIR/$APP_ID.png" "$APPDIR/.DirIcon"
+cp "$ROOT/resources/app/quillbinder-256.png" "$APPDIR/$APP_ID.png"
+cp "$ROOT/resources/app/quillbinder-256.png" "$APPDIR/.DirIcon"
+OUT="$BUILD/$APP_NAME-$VERSION${LABEL:+-$LABEL}-x86_64.AppImage"
+rm -f "$OUT"
+ARCH=x86_64 "$TOOLS/appimagetool-x86_64.AppImage" --no-appstream \
+    --comp zstd --mksquashfs-opt -Xcompression-level --mksquashfs-opt 22 \
+    --runtime-file "$TOOLS/runtime-x86_64" "$APPDIR" "$OUT"
+echo
+echo "Built: $OUT"

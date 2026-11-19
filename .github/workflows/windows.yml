@@ -1,0 +1,203 @@
+# Windows 11 build of the work branches (port steps W1 and W2, 2026-11-07).
+#
+# Runs on a push to a branch "win/..." (or by hand). Builds the program with MSVC and Qt 6.12.0
+# (since W4a, 2026-11-11: the same Qt as the Linux AppImage; Qt 6.8.3 before), packs it with Qt's libraries into a zip,
+# runs its self-test, and puts everything on the pre-release "win-ci" of this repository: a Claude
+# session cannot read the Actions API, but it can read releases. The release is made anew on every
+# run; its notes say "status=running" while the job runs and the result at the end.
+#
+# Windows 0.91.3 (2026-11-15, working rules section 10):
+#  - D2: "[build-only]" or "[suites: <names>]" in the commit message choose a shorter run (packaging/windows/win-ci.sh);
+#    the last run before a Windows pull request is merged runs everything.
+#  - D1: Hunspell with zlib and whisper.cpp come from ready-made packs when QB_WIN_PACKS below pins one for their
+#    recipe (packaging/windows/win-deps-pack.sh); otherwise they are built (or taken from this branch's cache) as before,
+#    and a recipe without a pack gets one: its line "pin: ..." is in summary.txt and goes into QB_WIN_PACKS.
+#  - P3: after a Windows pull request is merged (a push to main whose message names a win/ branch) one build-only run
+#    on main, so that main holds the caches (compiler, Qt, vcpkg, whisper.cpp) and the next branch starts warm (a
+#    branch can use the caches of main, never those of another branch). It leaves win-ci as it is.
+name: Windows build
+
+on:
+  push:
+    branches: ['win/**', 'main']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: windows-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: >-
+      github.repository == 'Shelin-boop/Quillbinder_Collection' && (github.ref != 'refs/heads/main' ||
+      github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '/win/'))
+    runs-on: windows-2025
+    timeout-minutes: 120
+    env:
+      GH_TOKEN: ${{ github.token }}
+      VCPKG_TRIPLET: x64-windows-static-md
+      SCCACHE_GHA_ENABLED: 'true'
+      # D1: the packs, one line each: <name> <recipe hash> <file> <SHA-256 of the file> (packaging/windows/win-deps-pack.sh)
+      # (made by run 43746715076 of win/0.91.3, 2026-11-15: whisper.cpp v1.9.5 and Hunspell with zlib, MSVC 14.51)
+      QB_WIN_PACKS: |
+        whisper 4105b2802919f7ebf599d40e34e88e3a11c15602893deb0cc4f1474a532a456f whisper-windows-4105b2802919f7eb.tar.xz cffc3788b57adce79941f918ebd57fd8e0c3af28bf174803bd23ea0f19105e21
+        hunspell ac5c39a435047f77b0706a83efb5e340bac8697e316c1beac14a2bcf25474265 hunspell-windows-ac5c39a435047f77.tar.xz 0546743ede09f42fd0a7252377516e1f6070de7f63997d8c0151ad49bb0212ba
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0 (0.64.1: pinned, audit X-5)
+
+      - name: Announce the run on the pre-release win-ci
+        if: github.ref != 'refs/heads/main'
+        shell: bash
+        run: |
+          gh release delete win-ci --cleanup-tag -y || true
+          gh release create win-ci --prerelease --target "$GITHUB_SHA" --title "Windows build machine: raw output, not for downloading (running)" \
+            --notes "sha=$GITHUB_SHA status=running run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME"
+
+      # pinned (W2): program updates for Windows must run on the Qt of the installed program
+      # (runtime id in CMakeLists.txt); Qt Multimedia for the add-on "Media Playback"; Qt Image Formats for
+      # WebP, as on Linux (W4a). aqtinstall 3.3.0 as for the Linux build (tools/get-qt.sh), which checks every
+      # archive against the checksums of download.qt.io.
+      # Since Qt 6.11 Qt's repository keeps the Windows packages in one folder per compiler
+      # (windows_x86/desktop/qt6_6120/qt6_6120_msvc2022_64/, seen on the runner 2026-11-11); aqtinstall 3.3.0 (its
+      # newest release, 2025-06-02) looks in qt6_6120/qt6_6120/ and finds nothing, so the step gives it the folder
+      # name (its "extension" for that architecture) before it runs. jurplel/install-qt-action (W1 to W3) runs the
+      # same aqtinstall and cannot be patched, so the step installs and caches Qt itself.
+      - name: Qt 6.12.0 cache
+        id: qtcache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: C:\Qt\6.12.0
+          key: qt-6.12.0-win64_msvc2022_64-qtmultimedia-qtimageformats-qtpdf-v1
+
+      - name: Qt 6.12.0 for MSVC 2022
+        id: qt
+        shell: bash
+        run: |
+          if [ "${{ steps.qtcache.outputs.cache-hit }}" != "true" ]; then
+            python -m pip install -q 'aqtinstall==3.3.0'
+            python - <<'PY'
+          import pathlib
+          import aqt.metadata as m
+          p = pathlib.Path(m.__file__)
+          s = p.read_text(encoding="utf-8")
+          old = "    def extension_for_arch(architecture: str, is_version_ge_6: bool) -> str:\n"
+          new = old + ("        if architecture.startswith('win64_') and is_version_ge_6:  # Quillbinder W4a: Qt 6.11+ folders\n"
+                       "            return architecture[len('win64_'):]\n")
+          assert old in s, "aqtinstall changed: extension_for_arch not found"
+          p.write_text(s.replace(old, new, 1), encoding="utf-8")
+          print("aqtinstall patched:", p)
+          PY
+            python -m aqt install-qt windows desktop 6.12.0 win64_msvc2022_64 -O C:/Qt -m qtmultimedia qtimageformats qtpdf
+          fi
+          test -f /c/Qt/6.12.0/msvc2022_64/bin/Qt6Core.dll
+          echo 'QT_ROOT_DIR=C:\Qt\6.12.0\msvc2022_64' >> "$GITHUB_ENV"
+          echo 'C:\Qt\6.12.0\msvc2022_64\bin' >> "$GITHUB_PATH"
+          ls /c/Qt/6.12.0/msvc2022_64/plugins
+
+      - name: Compiler cache
+        id: sccache
+        uses: mozilla-actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba # v0.0.11
+
+      # (before vcpkg since 0.91.3: the packs' recipes name the compiler's version)
+      - name: Find Visual Studio
+        id: vs
+        shell: pwsh
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * `
+                  -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          Write-Output "Visual Studio: $vs"
+          "VSDIR=$vs" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: vcpkg cache
+        id: vcpkgcache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ github.workspace }}/.vcpkg-cache
+          key: vcpkg-x64-windows-static-md-hunspell-zlib-v1
+
+      # 0.91.3 (D1): the pinned pack of this recipe (vcpkg's installed/<triplet> folder) first; otherwise vcpkg as before,
+      # and a recipe without a pack gets one
+      - name: Hunspell and zlib (pack or vcpkg)
+        id: vcpkg
+        shell: bash
+        run: |
+          : "${VCPKG_INSTALLATION_ROOT:?vcpkg is not on this runner image}"
+          VR=$(cygpath -u "$VCPKG_INSTALLATION_ROOT")
+          bash packaging/windows/win-deps-pack.sh recipe hunspell
+          rm -rf hunspell-pack
+          if bash packaging/windows/win-deps-pack.sh get hunspell hunspell-pack > vcpkg.log 2>&1; then
+            mkdir -p "$VR/installed" && rm -rf "$VR/installed/$VCPKG_TRIPLET"
+            cp -r hunspell-pack "$VR/installed/$VCPKG_TRIPLET" && rm -rf hunspell-pack
+            echo "pack=yes" >> "$GITHUB_OUTPUT"
+            cat vcpkg.log
+            ls "$VR/installed/$VCPKG_TRIPLET/lib"
+            exit 0
+          fi
+          cat vcpkg.log
+          echo "pack=no" >> "$GITHUB_OUTPUT"
+          mkdir -p .vcpkg-cache
+          export VCPKG_DEFAULT_BINARY_CACHE="$(cygpath -w "$PWD/.vcpkg-cache")"
+          "$VR/vcpkg.exe" install hunspell zlib --triplet "$VCPKG_TRIPLET" >> vcpkg.log 2>&1 \
+            || { tail -60 vcpkg.log; exit 1; }
+          tail -5 vcpkg.log
+          if [ "$GITHUB_REPOSITORY" = Shelin-boop/Quillbinder_Collection ]; then
+            bash packaging/windows/win-deps-pack.sh publish hunspell "$VR/installed/$VCPKG_TRIPLET" 2>&1 | tee -a vcpkg.log \
+              || echo "::warning::the Hunspell pack was not published"
+          fi
+
+      # W4c (2026-11-12): whisper.cpp built with MSVC for the add-on "Speech Transcription" (packaging/windows/win-whisper.sh,
+      # about 10 to 20 minutes the first time), and whisper.cpp's smallest model for the tests (packaging/windows/win-tests.sh)
+      - name: whisper.cpp cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ github.workspace }}/.whisper
+          key: whisper-v1.9.5-msvc-cpu-${{ hashFiles('packaging/windows/win-whisper.sh') }}
+
+      - name: Speech model cache (tests)
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ github.workspace }}/.models
+          key: speech-models-ggml-tiny-v1
+
+      # MSVC's environment only inside this step: exported to all later steps (first run), its
+      # search path broke Git Bash there (exit code 127).
+      - name: Build, pack, self-test
+        id: build
+        shell: cmd
+        env:
+          GH_TOKEN: ${{ github.token }}   # W3: packaging/windows/win-tests.sh fetches the test fonts from the branch assets
+          QB_WIN_SWITCHES: ${{ github.event.head_commit.message }}   # D2 (0.91.3)
+          QB_WIN_ONLY: ${{ github.ref == 'refs/heads/main' && 'build' || '' }}   # P3 (0.91.3): main only fills the caches
+        run: |
+          call "%VSDIR%\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
+          "C:\Program Files\Git\bin\bash.exe" packaging/windows/win-ci.sh results
+
+      - name: Put the results on the pre-release win-ci
+        if: always() && github.ref != 'refs/heads/main'
+        shell: bash
+        run: |
+          mkdir -p results
+          [ -f vcpkg.log ] && tail -200 vcpkg.log > results/vcpkg-tail.log
+          grep -h '^pin: ' vcpkg.log 2> /dev/null | sed 's/^/hunspell pack: /' >> results/summary.txt || true
+          [ -f results/summary.txt ] || echo "result: stopped before the build (see the step that failed)" > results/summary.txt
+          echo "steps: qt=${{ steps.qt.outcome }} sccache=${{ steps.sccache.outcome }} vs=${{ steps.vs.outcome }} vcpkg-cache-hit=${{ steps.vcpkgcache.outputs.cache-hit }} vcpkg=${{ steps.vcpkg.outcome }} hunspell-pack=${{ steps.vcpkg.outputs.pack }} build=${{ steps.build.outcome }}" >> results/summary.txt
+          echo "job: ${{ job.status }}" >> results/summary.txt
+          result=$(grep '^result:' results/summary.txt | tail -1 | sed 's/^result: //')
+          for f in results/build.log results/configure.log; do [ -f "$f" ] && tail -c 3000000 "$f" > "$f.tmp" && mv "$f.tmp" "$f"; done
+          # the checks' small output files in one archive (W2)
+          if ls results/c-*.txt > /dev/null 2>&1; then
+            7z a -tzip results/check-files.zip results/c-*.txt results/c-*.clean > /dev/null && rm -f results/c-*.txt results/c-*.clean
+          fi
+          gh release edit win-ci --title "Windows build machine: raw output, not for downloading ($result)" \
+            --notes "sha=$GITHUB_SHA status=done result=$result run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME"
+          # one file at a time, the summary first; an empty file (errors.txt after a good build) is
+          # refused by GitHub and stopped the whole upload in run 3
+          find results -type f -empty -delete
+          failed=0
+          for f in results/summary.txt $(ls results/* | grep -v '/summary.txt$'); do
+            gh release upload win-ci "$f" --clobber || { echo "upload failed: $f"; failed=1; }
+          done
+          exit $failed

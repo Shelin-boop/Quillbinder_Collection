@@ -1,0 +1,182 @@
+name: Add-on for the official list
+description: Ask for an add-on you wrote to be reviewed, built, signed and listed as an official Quillbinder add-on.
+title: "Add-on submission: <name> <version>"
+labels: ["add-on submission"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for writing an add-on. How the official list works is described in
+        [docs/official-addons.md](https://github.com/Shelin-boop/Quillbinder_Collection/blob/main/docs/official-addons.md).
+        In short:
+
+        - Your code stays in **your own repository**. Please do not open a pull request that adds it to Quillbinder's source.
+        - The project reviews exactly the commit you name below, builds the package from it in its own workflow,
+          signs it with an add-on key and publishes it on a release of its own, listed on the download page.
+        - An add-on does not need to be official: anyone can share an unsigned package, and Quillbinder installs it
+          after a warning.
+
+        Answer in English, please. Fields marked with a red star are needed for the review.
+
+  - type: input
+    id: name
+    attributes:
+      label: Name of the add-on
+      description: As it should appear on the list and in Quillbinder's Add-on Manager.
+      placeholder: Translation and Proofreading
+    validations:
+      required: true
+
+  - type: input
+    id: addon-id
+    attributes:
+      label: Add-on id and version
+      description: The `id` and `version` of your `manifest.json`.
+      placeholder: translation-proofreading 1.0
+    validations:
+      required: true
+
+  - type: input
+    id: repository
+    attributes:
+      label: Repository
+      description: The public repository that holds the add-on's source.
+      placeholder: https://github.com/<you>/<repository>
+    validations:
+      required: true
+
+  - type: input
+    id: commit
+    attributes:
+      label: Commit to review
+      description: The full 40-character commit id (a tag can move; the commit cannot). This exact commit is reviewed and built.
+      placeholder: 0123456789abcdef0123456789abcdef01234567
+    validations:
+      required: true
+
+  - type: input
+    id: maintainer
+    attributes:
+      label: Who maintains it
+      description: Your GitHub name, and who else may answer for the add-on.
+      placeholder: "@your-name"
+    validations:
+      required: true
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: What it does
+      description: Two or three sentences for the list on the download page, written for writers, not programmers.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of add-on
+      multiple: true
+      options:
+        - A writing tool (tool interface 1.0 or 1.1)
+        - A compile output (exporter interface 1.4)
+        - An importer (importer interface 1.0)
+        - Data only (themes, layouts, templates, compile formats, dictionaries, script formats)
+        - Other (explain under "Anything else")
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: systems
+    attributes:
+      label: Systems
+      description: >-
+        Official builds are made for Linux (x86_64, the runtime u2404-qt6.12-r1) first. Windows and Android builds
+        follow when the project's workflow can make them.
+      options:
+        - label: Linux (x86_64)
+        - label: Windows 11 (x64)
+        - label: Android (arm64)
+
+  - type: input
+    id: requires
+    attributes:
+      label: Oldest Quillbinder version it needs
+      description: The `minApp` of your `manifest.json`.
+      placeholder: 0.80.0
+    validations:
+      required: true
+
+  - type: textarea
+    id: build
+    attributes:
+      label: How to build and test it
+      description: >-
+        The commands, from a clean Ubuntu 24.04 with Quillbinder's source next to yours (Qt 6.12.0 from
+        `tools/get-qt.sh`), that build the `.qbpkg` and run the add-on's own checks. A script in your repository is
+        best. Name everything it downloads while building, with versions.
+      render: shell
+    validations:
+      required: true
+
+  - type: input
+    id: license
+    attributes:
+      label: License of the add-on
+      description: An SPDX name, for example Apache-2.0, MIT or GPL-3.0-or-later.
+    validations:
+      required: true
+
+  - type: textarea
+    id: third-party
+    attributes:
+      label: Third-party parts inside the package
+      description: >-
+        Every library, word list, font, picture or other file in the package that you did not write: name, version,
+        license, and where its source can be had. Write "none" if there are none.
+    validations:
+      required: true
+
+  - type: textarea
+    id: downloads
+    attributes:
+      label: What it downloads while the writer uses it
+      description: >-
+        Models, dictionaries or other data the add-on fetches after it is installed: for each the address, the size,
+        the SHA-256 it is checked against, its license, and whether the writer is asked first. Mark anything whose
+        license allows only non-commercial use: such data may be offered when it is downloaded separately after the
+        writer has seen its license, and the add-on's release text will say that it must not be sold
+        (docs/official-addons.md). Write "nothing" if it downloads nothing.
+    validations:
+      required: true
+
+  - type: textarea
+    id: network
+    attributes:
+      label: What leaves the writer's computer
+      description: >-
+        Which texts or other data the add-on sends anywhere, when, and why. An official add-on sends nothing without
+        the writer's own action, and nothing at all to collect usage data. Write "nothing" if it sends nothing.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: promises
+    attributes:
+      label: Agreement
+      options:
+        - label: I wrote this add-on, or I have the right to submit it.
+          required: true
+        - label: It uses only Quillbinder's public interfaces and the package format; it changes nothing in Quillbinder's own files.
+          required: true
+        - label: It contains no text, pictures or code taken from Scrivener, Scapple or their manuals, templates and tutorials.
+          required: true
+        - label: The Quillbinder project may review, build, sign and publish the commit named above, and may take the add-on off the list again.
+          required: true
+        - label: I will submit every new version the same way (a new issue, or a comment here, with the new commit).
+          required: true
+
+  - type: textarea
+    id: other
+    attributes:
+      label: Anything else
+      description: Open questions, known limits, screenshots, a test build of your own (unsigned) for a first look.

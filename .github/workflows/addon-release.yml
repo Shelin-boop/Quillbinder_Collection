@@ -1,0 +1,395 @@
+# Official add-ons (0.91.3, the writer's decisions of 2026-11-15; docs/official-addons.md): builds an add-on of another
+# author from the reviewed commit named in official-addons/<id>.json, runs the add-on's own checks, packs it, checks
+# the package and installs it into the newest Quillbinder AppImage. Only when asked (input "publish") it is signed with
+# the add-on key and published as the release addon-<id>-<version> of this repository, never marked "Latest" (that
+# stays the program's release; the tag does not start with "v", so the download page and the program's release
+# workflow leave it alone).
+#
+#   prepare       the entry, the newest program release (its AppImage is used for the install checks)
+#   build         no secrets; the only job in which the add-on's own build scripts run; ends with the unsigned package,
+#                 its sources and the release text (artifact "addon-unsigned"). A dry run (publish off) ends here.
+#   sign          the release key (it vouches for the add-on key in a certificate) and the add-on key (secret
+#                 QB_ADDON_KEY); no container, no third-party code; every signature checked by the program's rule
+#   check-signed  the signed package installs into the AppImage without --allow-unsigned
+#   publish       the only job with write permission
+name: Official add-on
+
+on:
+  workflow_dispatch:
+    inputs:
+      addon:
+        description: 'The add-on: its file in official-addons/, without .json'
+        type: string
+        required: true
+        default: translation-proofreading
+      publish:
+        description: 'Sign and publish (needs the secret QB_ADDON_KEY); off: build and check only'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: addon-release
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      id: ${{ steps.entry.outputs.id }}
+      name: ${{ steps.entry.outputs.name }}
+      version: ${{ steps.entry.outputs.version }}
+      tag: ${{ steps.entry.outputs.tag }}
+      repository: ${{ steps.entry.outputs.repository }}
+      commit: ${{ steps.entry.outputs.commit }}
+      program-tag: ${{ steps.program.outputs.tag }}
+      appimage: ${{ steps.program.outputs.appimage }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: The entry
+        id: entry
+        env:
+          ADDON: ${{ inputs.addon }}
+        run: |
+          set -o pipefail
+          [[ "$ADDON" =~ ^[a-z0-9][a-z0-9-]{1,62}$ ]] || { echo "::error title=No such add-on::'$ADDON' is no name of a file in official-addons/"; exit 1; }
+          [ -f "official-addons/$ADDON.json" ] || { echo "::error title=No such add-on::official-addons/$ADDON.json does not exist"; exit 1; }
+          python3 -I tools/addon-entry.py check "official-addons/$ADDON.json" | tee -a "$GITHUB_OUTPUT"
+
+      - name: Published already?
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ steps.entry.outputs.tag }}
+          PUBLISH: ${{ inputs.publish }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            if [ "$PUBLISH" = true ]; then
+              echo "::error title=Published already::$TAG exists; a new version of the add-on needs a new entry (version and commit)"
+              exit 1
+            fi
+            echo "::notice::$TAG is published already; this run builds and checks only"
+          fi
+
+      # the newest program release; signed add-ons need a program that knows add-on keys (0.91.3)
+      - name: The newest Quillbinder
+        id: program
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -o pipefail
+          tag=$(gh release view --json tagName --jq .tagName)
+          [[ "$tag" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)-([a-z]+)$ ]] || { echo "::error::the newest release $tag is no program release"; exit 1; }
+          ver=${BASH_REMATCH[1]} label=${BASH_REMATCH[2]}
+          if [ "$(printf '%s\n0.91.3\n' "$ver" | sort -V | head -1)" != 0.91.3 ]; then
+            echo "::error title=Quillbinder too old::the newest release is $ver; official add-ons need 0.91.3 or later"
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "appimage=Quillbinder-$ver-$label-x86_64.AppImage" | tee -a "$GITHUB_OUTPUT"
+
+  build:
+    # the add-on's own build scripts run here, without any secret
+    needs: prepare
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    timeout-minutes: 300
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      ID: ${{ needs.prepare.outputs.id }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      # (in a container ${{ github.workspace }} names the runner's folder, not the container's: the paths come from
+      # $GITHUB_WORKSPACE)
+      - name: Tools to fetch the source
+        run: |
+          apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl gh xz-utils openssl zstd python3
+          echo "ENTRY=$GITHUB_WORKSPACE/official-addons/$ID.json" >> "$GITHUB_ENV"
+          echo "SRC=$GITHUB_WORKSPACE/addon-src" >> "$GITHUB_ENV"
+
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: The add-on's reviewed source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: ${{ needs.prepare.outputs.repository }}
+          ref: ${{ needs.prepare.outputs.commit }}
+          path: addon-src
+          persist-credentials: false
+
+      - name: Is it the reviewed commit?
+        env:
+          COMMIT: ${{ needs.prepare.outputs.commit }}
+        run: |
+          git config --global --add safe.directory '*'
+          have=$(git -C "$SRC" rev-parse HEAD)
+          [ "$have" = "$COMMIT" ] || { echo "::error::the source is at $have, the entry names $COMMIT"; exit 1; }
+          echo "building $COMMIT"
+
+      - name: Build tools, Qt (the AppImage's) and the add-on's Ubuntu packages
+        run: |
+          set -o pipefail
+          bash tools/enable-deb-src.sh
+          bash tools/cloud-setup.sh
+          mapfile -t pkgs < <(python3 -I -c 'import json,sys; print("\n".join(json.load(open(sys.argv[1]))["build"].get("packages", [])))' "$ENTRY")
+          [ "${#pkgs[@]}" -eq 0 ] || apt-get install -y -qq --no-install-recommends "${pkgs[@]}"
+          echo "QT_DIR=/opt/qt/$(sed -n 's/^set(QB_QT_VERSION *"\(.*\)")/\1/p' CMakeLists.txt)/gcc_64" | tee -a "$GITHUB_ENV"
+
+      - name: The folders kept between runs (their names)
+        id: cache
+        run: python3 -I tools/addon-entry.py cache "$ENTRY" "$SRC" | tee -a "$GITHUB_OUTPUT"
+
+      - name: The folders kept between runs
+        id: deps
+        if: steps.cache.outputs.any == 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ steps.cache.outputs.paths }}
+          key: ${{ steps.cache.outputs.key }}
+
+      - name: The add-on's setup (when the kept folders are missing)
+        id: setup
+        if: steps.deps.outputs.cache-hit != 'true'
+        run: python3 -I tools/addon-entry.py run "$ENTRY" setup "$SRC"
+
+      - name: Keep the folders
+        if: steps.cache.outputs.any == 'true' && steps.deps.outputs.cache-hit != 'true' && steps.setup.outcome == 'success'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ steps.cache.outputs.paths }}
+          key: ${{ steps.cache.outputs.key }}
+
+      - name: The test data (its name)
+        id: testdata
+        run: python3 -I tools/addon-entry.py testdata "$ENTRY" | tee -a "$GITHUB_OUTPUT"
+
+      - name: The test data (kept)
+        id: testdata-cache
+        if: steps.testdata.outputs.any == 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: addon-testdata
+          key: ${{ steps.testdata.outputs.key }}
+
+      - name: The test data (download)
+        if: steps.testdata.outputs.any == 'true' && steps.testdata-cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 -I tools/addon-entry.py fetch-testdata "$ENTRY" addon-testdata
+
+      - name: Keep the test data
+        if: steps.testdata.outputs.any == 'true' && steps.testdata-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: addon-testdata
+          key: ${{ steps.testdata.outputs.key }}
+
+      - name: Build, check and pack the add-on (its own commands)
+        env:
+          VARIABLE: ${{ steps.testdata.outputs.variable }}
+        run: |
+          [ -z "$VARIABLE" ] || export "$VARIABLE=$GITHUB_WORKSPACE/addon-testdata"
+          export OUT=$GITHUB_WORKSPACE/addon-out SHOTS=$GITHUB_WORKSPACE/addon-shots QT_DIR
+          mkdir -p "$OUT" "$SHOTS"
+          python3 -I tools/addon-entry.py run "$ENTRY" steps "$SRC"
+
+      - name: The package fits the entry and the program's runtime
+        run: |
+          set -o pipefail
+          ls -la addon-out
+          [ "$(find addon-out -maxdepth 1 -name '*.qbpkg' | wc -l)" -eq 1 ] || { echo "::error::the add-on's commands must leave exactly one package"; exit 1; }
+          python3 -I tools/addon-entry.py check-package "$ENTRY" addon-out/*.qbpkg
+
+      - name: It installs into the newest Quillbinder (unsigned, so only with --allow-unsigned)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PROGRAM_TAG: ${{ needs.prepare.outputs.program-tag }}
+          APPIMAGE: ${{ needs.prepare.outputs.appimage }}
+        run: |
+          set -o pipefail
+          gh release download "$PROGRAM_TAG" -p "$APPIMAGE" -D /tmp/program
+          chmod +x "/tmp/program/$APPIMAGE"
+          HOME=$(mktemp -d)
+          export HOME QT_QPA_PLATFORM=offscreen
+          pkg=$(ls "$GITHUB_WORKSPACE"/addon-out/*.qbpkg)
+          if "/tmp/program/$APPIMAGE" --appimage-extract-and-run --install "$pkg" > /tmp/refused.log 2>&1; then
+            cat /tmp/refused.log
+            echo "::error::an unsigned add-on was installed without --allow-unsigned"
+            exit 1
+          fi
+          "/tmp/program/$APPIMAGE" --appimage-extract-and-run --install "$pkg" --allow-unsigned 2>&1 | tail -5
+          find "$HOME/.local/share" -maxdepth 4 -path "*addons*" | head -20
+
+      - name: Sources and the release text
+        run: |
+          set -o pipefail
+          mkdir -p addon-files
+          cp addon-out/*.qbpkg addon-files/
+          python3 -I tools/addon-entry.py sources "$ENTRY" "$SRC" addon-files
+          python3 -I tools/addon-entry.py notes "$ENTRY" addon-out/*.qbpkg addon-files addon-notes.md
+          cat addon-notes.md
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: addon-unsigned
+          path: |
+            addon-files/
+            addon-notes.md
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: addon-screenshots
+          path: addon-shots/
+          if-no-files-found: ignore
+
+  sign:
+    # the keys are only here: no container, no third-party code
+    needs: [prepare, build]
+    if: inputs.publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: addon-unsigned
+          path: unsigned
+
+      - name: The keys
+        env:
+          QB_SIGNING_KEY: ${{ secrets.QB_SIGNING_KEY }}
+          QB_ADDON_KEY: ${{ secrets.QB_ADDON_KEY }}
+        run: |
+          if [ -z "$QB_ADDON_KEY" ]; then
+            echo "::error title=No add-on key::The secret QB_ADDON_KEY does not exist yet. Create the key (docs/official-addons.md, \"The add-on key\") and run again."
+            exit 1
+          fi
+          [ -n "$QB_SIGNING_KEY" ] || { echo "::error title=No signing key::the secret QB_SIGNING_KEY is missing"; exit 1; }
+          mkdir -p /tmp/qb-signing && chmod 700 /tmp/qb-signing
+          ( umask 077; printf '%s\n' "$QB_SIGNING_KEY" > /tmp/qb-signing/key.pem; printf '%s\n' "$QB_ADDON_KEY" > /tmp/qb-signing/addon.pem )
+          want=$(grep -o 'kReleaseKey\[\] = "[0-9a-f]*"' src/core/Signing.cpp | grep -o '"[0-9a-f]*"' | tr -d '"')
+          have=$(openssl pkey -in /tmp/qb-signing/key.pem -pubout -outform DER | tail -c 32 | od -An -tx1 | tr -d ' \n')
+          addon=$(openssl pkey -in /tmp/qb-signing/addon.pem -pubout -outform DER | tail -c 32 | od -An -tx1 | tr -d ' \n')
+          [ -n "$have" ] && [ "$have" = "$want" ] || { echo "::error title=Wrong signing key::QB_SIGNING_KEY is not the key the program carries"; exit 1; }
+          [ -n "$addon" ] && [ "$addon" != "$want" ] || { echo "::error title=Wrong add-on key::QB_ADDON_KEY is not an Ed25519 key of its own"; exit 1; }
+          QB_SIGNING_KEY_FILE=/tmp/qb-signing/key.pem python3 -I tools/make-package.py certify --name "Quillbinder official add-ons" \
+            /tmp/qb-signing/addon.pem /tmp/qb-signing/addon-cert.json
+          echo "add-on key $(echo "$addon" | cut -c1-16)..., vouched for by the release key"
+
+      - name: Sign and check
+        env:
+          QB_SIGNING_KEY_FILE: /tmp/qb-signing/key.pem
+          QB_ADDON_KEY_FILE: /tmp/qb-signing/addon.pem
+          QB_ADDON_CERT: /tmp/qb-signing/addon-cert.json
+        run: |
+          set -o pipefail
+          mkdir -p signed
+          cp -r unsigned/addon-files/. signed/
+          cp unsigned/addon-notes.md .
+          python3 -I tools/make-package.py sign signed/*.qbpkg
+          rm -rf /tmp/qb-signing
+          python3 -I tools/make-package.py verify --release-key packaging/quillbinder-signing-public.pem signed/*.qbpkg | tee verify.log
+          grep -q "the add-on key 'Quillbinder official add-ons'" verify.log || { echo "::error::not signed with the add-on key"; exit 1; }
+          (cd signed && sha256sum -- * > ../SHA256SUMS.txt) && mv SHA256SUMS.txt signed/
+          cat signed/SHA256SUMS.txt
+
+      - if: always()
+        run: rm -rf /tmp/qb-signing
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: addon-signed
+          path: |
+            signed/
+            addon-notes.md
+          if-no-files-found: error
+
+  check-signed:
+    needs: [prepare, sign]
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    timeout-minutes: 30
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: addon-signed
+          path: addon-signed
+
+      - name: The signed add-on installs into the newest Quillbinder without --allow-unsigned
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PROGRAM_TAG: ${{ needs.prepare.outputs.program-tag }}
+          APPIMAGE: ${{ needs.prepare.outputs.appimage }}
+          QB_SKIP_QT: '1'
+        run: |
+          set -o pipefail
+          apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl gh
+          bash tools/cloud-setup.sh > /tmp/setup.log 2>&1 || { tail -20 /tmp/setup.log; exit 1; }
+          gh release download "$PROGRAM_TAG" -p "$APPIMAGE" -D /tmp/program
+          chmod +x "/tmp/program/$APPIMAGE"
+          HOME=$(mktemp -d)
+          export HOME QT_QPA_PLATFORM=offscreen
+          (cd addon-signed/signed && sha256sum -c SHA256SUMS.txt)
+          "/tmp/program/$APPIMAGE" --appimage-extract-and-run --install addon-signed/signed/*.qbpkg 2>&1 | tail -5
+
+  publish:
+    # the only job with write permission
+    needs: [prepare, sign, check-signed]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: addon-signed
+          path: addon-signed
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          NAME: ${{ needs.prepare.outputs.name }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          gh release create "$TAG" --title "$NAME $VERSION (official add-on)" --notes-file addon-signed/addon-notes.md \
+            --latest=false --target "$GITHUB_SHA" addon-signed/signed/*
+          gh release view "$TAG" --json assets --jq '.assets[] | "\(.name) \(.size)"'

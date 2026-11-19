@@ -1,0 +1,209 @@
+# Android build of the work branches (port step A0, the trial build, 2026-11-14).
+#
+# Runs on a push to a branch "android/..." (or by hand). Builds the program with The Qt Company's Qt 6.12.0 for
+# Android (the same Qt version as the Linux AppImage and the Windows program) and the Android NDK Qt names for it,
+# packs it into an APK for tablets (arm64-v8a) signed with the key for trial builds, looks at the APK, then builds
+# the program once more for x86_64 and starts it on an emulated tablet (packaging/android/android-emulator.sh;
+# left out when the commit message has "[no-emu]"). Everything goes to the pre-release "android-ci" of this
+# repository: a Claude session cannot read the Actions API, but it can read releases. The release is made anew on
+# every run; its notes say "status=running" while the job runs (with "stage=emulator" once the APK's results are
+# there) and the result at the end. Commits with "[skip ci]" start no run.
+name: Android build
+
+on:
+  push:
+    branches: ['android/**', 'main']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    # P3 (0.91.3): a merge into main whose message names an android/ branch builds the APK once on main (no emulator,
+    # android-ci left alone), so that the next android/ branch finds main's caches
+    if: >-
+      github.repository == 'Shelin-boop/Quillbinder_Collection' && (github.ref != 'refs/heads/main' ||
+      github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '/android/'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SCCACHE_GHA_ENABLED: 'true'
+      # Qt 6.12's documentation (Qt for Android, checked 2026-11-14): NDK r27c, JDK 21, SDK platform 36, build tools
+      # 36.0.0; Gradle and the Android Gradle plugin come from Qt's own templates.
+      QB_NDK: 27.2.12479018
+      QB_SDK_PLATFORM: android-36
+      QB_BUILD_TOOLS: 36.0.0
+      # D1 (0.91.3): the packs, one line each: <name> <recipe hash> <file> <SHA-256 of the file>
+      # (packaging/android/android-deps-pack.sh; a recipe without a line is built and its pack published: summary.txt
+      # shows its "pin:" line, which goes here)
+      QB_ANDROID_PACKS: |
+        hunspell-arm64-v8a c1f589f9a870d0e1390021b3657e4f8c903ff4d433b40050e303e1cb825057be hunspell-arm64-v8a-android-c1f589f9a870d0e1.tar.xz 15bbe5b31bd3cf1f3d17300aaaf481687d9240fa4982601b6dc5ee852160ba3d
+        hunspell-x86_64 8745189cfe1943140ee55dfb74962503bb62aeac73b4d6dc2d788400e77c8e41 hunspell-x86_64-android-8745189cfe194314.tar.xz 665de8f17ea1c4f09fe122b4896312dfa1eeb48cb4f35036641dea79f0d4e82d
+        openssl-arm64-v8a bc6606200989542a5dd1d18106987d9c8e17f9795100940fd6259df518cda75e openssl-arm64-v8a-android-bc6606200989542a.tar.xz b81e6da297a7868d389587ff696030fc2bae6178c93b5e8ac82700e099497703
+        openssl-x86_64 105e0006344b014b217417327e3485f9252b908bfe7c8de4cece2da9c448e9b3 openssl-x86_64-android-105e0006344b014b.tar.xz 33f159b263b73eaf20ef6185e2a0d2ddb6b588e6b2913f2bf5776911d1b050fe
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0 (pinned as in windows.yml)
+
+      - name: The Qt version and the folders
+        run: |
+          mkdir -p results
+          echo "QB_QT_VERSION=$(sed -n 's/^set(QB_QT_VERSION *"\(.*\)")/\1/p' CMakeLists.txt)" >> "$GITHUB_ENV"
+          echo "QT_ANDROID_BASE=$HOME/Qt" >> "$GITHUB_ENV"
+
+      - name: Announce the run on the pre-release android-ci
+        if: github.ref != 'refs/heads/main'
+        run: |
+          gh release delete android-ci --cleanup-tag -y || true
+          gh release create android-ci --prerelease --target "$GITHUB_SHA" --title "Android build machine: raw output, not for downloading (running)" \
+            --notes "sha=$GITHUB_SHA status=running run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME"
+          # (run 14: GitHub kept the new release as a draft, which nothing can read by its tag)
+          gh release edit android-ci --draft=false || true
+
+      # Qt for the build machine (its tools: moc, rcc, androiddeployqt) and Qt for Android, for the tablet's ABI and
+      # the emulator's (packaging/android/android-qt.sh: aqtinstall 3.3.0 as for the Linux and Windows builds, with
+      # the folder of Qt PDF for Android told to it).
+      - name: Qt cache
+        id: qtcache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ~/Qt
+          key: qt-${{ env.QB_QT_VERSION }}-android-arm64_v8a-x86_64-gcc_64-qtpdf-qtimageformats-v1-${{ hashFiles('packaging/android/android-qt.sh') }}
+
+      - name: Qt for Android and for the build machine
+        id: qt
+        run: |
+          V=$QB_QT_VERSION
+          if [ "${{ steps.qtcache.outputs.cache-hit }}" != "true" ]; then
+            bash packaging/android/android-qt.sh "$HOME/Qt" results | tee results/qt-steps.txt
+          fi
+          {
+            echo "qt folders: $(ls "$HOME/Qt/$V" 2>/dev/null | tr '\n' ' ')"
+            for arch in android_arm64_v8a android_x86_64; do
+              echo "$arch: $(ls "$HOME/Qt/$V/$arch/lib" 2>/dev/null | grep -E '^libQt6.*\.so$' | tr '\n' ' ')"
+            done
+          } > results/qt-folders.txt
+          test -f "$HOME/Qt/$V/gcc_64/bin/qmake"
+          test -f "$HOME/Qt/$V/android_arm64_v8a/lib/cmake/Qt6/qt.toolchain.cmake"
+          test -f "$HOME/Qt/$V/android_arm64_v8a/lib/libQt6Core_arm64-v8a.so"
+          test -f "$HOME/Qt/$V/android_arm64_v8a/lib/libQt6Pdf_arm64-v8a.so"
+
+      - name: Compiler cache
+        id: sccache
+        uses: mozilla-actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba # v0.0.11
+
+      # GitHub's runner carries an Android SDK; the NDK version Qt names and the platform are added when missing
+      - name: Android SDK, NDK, JDK 21
+        id: sdk
+        run: |
+          SDK=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
+          {
+            echo "sdk: $SDK"
+            echo "ndk folders on the runner: $(ls "$SDK/ndk" 2>/dev/null | tr '\n' ' ')"
+            echo "build tools on the runner: $(ls "$SDK/build-tools" 2>/dev/null | tr '\n' ' ')"
+            echo "platforms on the runner: $(ls "$SDK/platforms" 2>/dev/null | tr '\n' ' ')"
+            echo "JAVA_HOME_21_X64: ${JAVA_HOME_21_X64:-not set}"
+          } | tee results/sdk.txt
+          SDKM=$(ls "$SDK"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -1)
+          need=""
+          [ -d "$SDK/ndk/$QB_NDK" ] || need="$need ndk;$QB_NDK"
+          [ -d "$SDK/platforms/$QB_SDK_PLATFORM" ] || need="$need platforms;$QB_SDK_PLATFORM"
+          [ -d "$SDK/build-tools/$QB_BUILD_TOOLS" ] || need="$need build-tools;$QB_BUILD_TOOLS"
+          if [ -n "$need" ]; then
+            echo "installing:$need" | tee -a results/sdk.txt
+            yes | "$SDKM" --licenses > /dev/null 2>&1 || true
+            # shellcheck disable=SC2086
+            yes | "$SDKM" --install $need > results/sdk-install.log 2>&1 || { tail -20 results/sdk-install.log; exit 1; }
+          fi
+          test -d "$SDK/ndk/$QB_NDK"
+          test -n "${JAVA_HOME_21_X64:-}"
+          {
+            echo "ANDROID_SDK_ROOT=$SDK"
+            echo "ANDROID_NDK_ROOT=$SDK/ndk/$QB_NDK"
+            # the runner's own variables name its newest NDK: the same one everywhere
+            echo "ANDROID_NDK_HOME=$SDK/ndk/$QB_NDK"
+            echo "ANDROID_NDK=$SDK/ndk/$QB_NDK"
+            echo "ANDROID_NDK_LATEST_HOME=$SDK/ndk/$QB_NDK"
+            echo "JAVA_HOME=$JAVA_HOME_21_X64"
+          } >> "$GITHUB_ENV"
+          echo "$JAVA_HOME_21_X64/bin" >> "$GITHUB_PATH"
+          if ! command -v ninja > /dev/null 2>&1; then
+            (sudo apt-get update -q && sudo apt-get install -y -q ninja-build) > results/ninja-install.log 2>&1 || true
+          fi
+          if ! command -v ninja > /dev/null 2>&1; then
+            python3 -m pip install -q --break-system-packages ninja
+            echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+            export PATH="$HOME/.local/bin:$PATH"
+          fi
+          ninja --version
+
+      - name: Gradle cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-qt-${{ env.QB_QT_VERSION }}-v1
+
+      # (Hunspell and OpenSSL come from their packs since 0.91.3, D1: no caches for them any more)
+      - name: Build, pack, check (arm64-v8a)
+        id: build
+        env:
+          QB_ANDROID_BUILD: ${{ github.run_number }}
+        run: bash packaging/android/android-ci.sh results arm64-v8a
+
+      # the APK and its results at once, so that they can be read while the emulator stage runs
+      - name: Put the first results on the pre-release android-ci
+        id: first
+        if: always() && github.ref != 'refs/heads/main'
+        run: |
+          mkdir -p results
+          [ -f results/summary.txt ] || echo "result: stopped before the build (see the step that failed)" > results/summary.txt
+          echo "steps: qt=${{ steps.qt.outcome }} qt-cache-hit=${{ steps.qtcache.outputs.cache-hit }} sccache=${{ steps.sccache.outcome }} sdk=${{ steps.sdk.outcome }} build=${{ steps.build.outcome }}" >> results/summary.txt
+          result=$(grep '^result:' results/summary.txt | tail -1 | sed 's/^result: //')
+          for f in results/build.log results/configure.log results/apk.log; do [ -f "$f" ] && tail -c 3000000 "$f" > "$f.tmp" && mv "$f.tmp" "$f"; done
+          emu=no
+          if [ "$result" = ok ] || [ "${result#apk built}" != "$result" ]; then
+            git log -1 --format=%B | grep -q '\[no-emu\]' || emu=yes
+          fi
+          echo "emu=$emu" >> "$GITHUB_OUTPUT"
+          echo "result=$result" >> "$GITHUB_OUTPUT"
+          gh release edit android-ci --notes "sha=$GITHUB_SHA status=running stage=$([ $emu = yes ] && echo emulator || echo upload) result=$result run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME"
+          find results -type f -empty -delete
+          failed=0
+          for f in results/summary.txt $(find results -maxdepth 1 -type f | grep -v '/summary.txt$' | sort); do
+            gh release upload android-ci "$f" --clobber || { echo "upload failed: $f"; failed=1; }
+          done
+          mkdir -p uploaded && mv results/* uploaded/ 2>/dev/null || true
+          exit $failed
+
+      - name: Start check on an emulated tablet (x86_64)
+        id: emulator
+        if: always() && steps.first.outputs.emu == 'yes'
+        env:
+          QB_ANDROID_BUILD: ${{ github.run_number }}
+        run: bash packaging/android/android-emulator.sh results
+
+      - name: Put the last results on the pre-release android-ci
+        if: always() && github.ref != 'refs/heads/main'
+        run: |
+          mkdir -p results
+          result="${{ steps.first.outputs.result }}"
+          [ -n "$result" ] || result="stopped before the build"
+          emures="not run"
+          [ -f results/emu-summary.txt ] && emures=$(grep -E '^emulator( result)?:' results/emu-summary.txt | tail -1 | sed 's/^emulator[^:]*: //')
+          echo "job: ${{ job.status }}; emulator step: ${{ steps.emulator.outcome }}" >> results/emu-job.txt
+          find results -type f -empty -delete
+          failed=0
+          for f in $(find results -maxdepth 1 -type f | sort); do
+            gh release upload android-ci "$f" --clobber || { echo "upload failed: $f"; failed=1; }
+          done
+          gh release edit android-ci --title "Android build machine: raw output, not for downloading ($result)" \
+            --notes "sha=$GITHUB_SHA status=done result=$result emulator=$emures run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME"
+          gh release edit android-ci --draft=false || true
+          exit $failed

@@ -1,0 +1,6 @@
+# The ready-made dependency packs of the Linux build (tools/deps-pack.sh; working rules, section 10, D1).
+# One line per pack: <name> <recipe hash> <file> <SHA-256 of the file>. The file is on the pre-release
+# deps-<name>-linux-<first 16 characters of the hash> of this repository, made by .github/workflows/deps.yml,
+# whose last job prints the line to put here. A recipe without a line here is built from source.
+ffmpeg 21da73da334e13688c454b9dd719d7ee93afbeb14c727dd6cd428206d947eb64 ffmpeg-linux-21da73da334e1368.tar.xz c26623cb7d6d4dbc156bdbc37874c337e8972aa90bdf545512ee0f72beb99890
+whisper c9bcf42a6b658b31371ecf4250854714e1a4f6c9ce9200536d89108aaa3b5045 whisper-linux-c9bcf42a6b658b31.tar.xz 8aacf347f2c401462e43d352aeadb4345ec802cdf824828380bd3d2877060928

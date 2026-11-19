@@ -1,0 +1,540 @@
+#include "ui/ToolbarConfig.h"
+#include "core/ItemIcons.h"
+#include "ui/AppSettings.h"
+#include "ui/Commands.h"
+
+#include <QAction>
+#include <QComboBox>
+#include <QDialogButtonBox>
+#include <QGridLayout>
+#include <QHash>
+#include <QHBoxLayout>
+#include <QLabel>
+#include <QLineEdit>
+#include <QListWidget>
+#include <QPushButton>
+#include <QToolButton>
+#include <QVBoxLayout>
+
+namespace qb {
+namespace toolbars {
+
+const QString Separator = QStringLiteral("|");
+const QString Spacer = QStringLiteral("<>");
+
+QList<Bar> allBars()
+{
+    return {Bar::Main, Bar::Themes, Bar::Search, Bar::Tools, Bar::Format, Bar::Character, Bar::Paragraph};
+}
+
+bool isFormatBar(Bar bar) { return bar == Bar::Format || bar == Bar::Character || bar == Bar::Paragraph; }
+
+QString barKey(Bar bar)
+{
+    switch (bar) {
+    case Bar::Main: return QStringLiteral("main");
+    case Bar::Themes: return QStringLiteral("themes");
+    case Bar::Search: return QStringLiteral("search");
+    case Bar::Tools: return QStringLiteral("tools");
+    case Bar::Format: return QStringLiteral("style");
+    case Bar::Character: return QStringLiteral("character");
+    case Bar::Paragraph: return QStringLiteral("paragraph");
+    }
+    return QString();
+}
+
+QString barName(Bar bar)
+{
+    switch (bar) {
+    case Bar::Main: return QObject::tr("Main");
+    case Bar::Themes: return QObject::tr("Themes");
+    case Bar::Search: return QObject::tr("Search");
+    case Bar::Tools: return QObject::tr("Tools");
+    case Bar::Format: return QObject::tr("Style and Font");
+    case Bar::Character: return QObject::tr("Character and Alignment");
+    case Bar::Paragraph: return QObject::tr("Paragraph and Insert");
+    }
+    return QString();
+}
+
+QString barObjectName(Bar bar)
+{
+    switch (bar) {
+    case Bar::Main: return QStringLiteral("mainToolbar");
+    case Bar::Format: return QStringLiteral("formatBar");
+    default: return barKey(bar) + QLatin1String("Bar");
+    }
+}
+
+QString barCommand(Bar bar)
+{
+    QString key = barKey(bar);
+    key[0] = key.at(0).toUpper();
+    return QLatin1String("showBar") + key;
+}
+
+// The controls of the main toolbars can stand on any of them, those of the format toolbars on any of those; a
+// control exists once (ToolbarDialog::addItem moves it).
+QList<Special> specials(Bar bar)
+{
+    if (!isFormatBar(bar))
+        return {
+            {QStringLiteral("view"), QObject::tr("View (binder, collections, inspector, layouts)"), QStringLiteral("view-sidetree")},
+            {QStringLiteral("add"), QObject::tr("Add (new text, folder, from template, import)"), QStringLiteral("document-new")},
+            {QStringLiteral("searchMenu"), QObject::tr("Search (project search and the other search tools)"), QStringLiteral("search")},
+            {QStringLiteral("search"), QObject::tr("Quick Search field with target bars"), QStringLiteral("edit-find")},
+            {QStringLiteral("viewModes"), QObject::tr("View Mode (document, corkboard, outliner)"), QStringLiteral("view-list-icons")},
+            {QStringLiteral("bookmarks"), QObject::tr("Project Bookmarks"), QStringLiteral("bookmarks")},
+            {QStringLiteral("notes"), QObject::tr("Comments and Footnotes"), QStringLiteral("edit-comment")},
+            {QStringLiteral("layoutsButton"), QObject::tr("Layouts"), QStringLiteral("view-split-left-right")},
+            // 0.90.2: the theme list; 0.91.0: with the buttons Bright, Dark, U1 and U2
+            {QStringLiteral("themePicker"), QObject::tr("Themes (Bright, Dark, U1, U2 and the list)"), QStringLiteral("format-text-color")},
+        };
+    return {
+        {QStringLiteral("styleCombo"), QObject::tr("Style list"), QStringLiteral("format-text-bold")},
+        {QStringLiteral("fontCombo"), QObject::tr("Font list"), QStringLiteral("font")},
+        {QStringLiteral("sizeSpin"), QObject::tr("Font size"), QStringLiteral("format-font-size-more")},
+        {QStringLiteral("lineCombo"), QObject::tr("Line spacing list"), QStringLiteral("format-justify-fill")},
+        // the paragraph buttons (0.60.4)
+        {QStringLiteral("spaceBefore"), QObject::tr("Space before the paragraph"), QLatin1String(icons::kSpaceBefore)},
+        {QStringLiteral("spaceAfter"), QObject::tr("Space after the paragraph"), QLatin1String(icons::kSpaceAfter)},
+        {QStringLiteral("indentFirst"), QObject::tr("Indent of the first line"), QLatin1String(icons::kIndentFirst)},
+        {QStringLiteral("indentLeft"), QObject::tr("Indent of the whole paragraph"), QLatin1String(icons::kIndentLeft)},
+    };
+}
+
+bool isSpecial(const QString &id)
+{
+    for (Bar b : {Bar::Main, Bar::Format})
+        for (const Special &s : specials(b))
+            if (s.id == id)
+                return true;
+    return false;
+}
+
+static QList<ToolButton> &toolButtonList()
+{
+    static QList<ToolButton> list;
+    return list;
+}
+
+void setToolButtons(const QList<ToolButton> &buttons) { toolButtonList() = buttons; }
+QList<ToolButton> toolButtons() { return toolButtonList(); }
+
+// puts the tool buttons into a bar before their items (at the end when the item is not there)
+static void insertToolButtons(QStringList &bar, const QList<ToolButton> &buttons)
+{
+    for (const ToolButton &b : buttons) {
+        if (bar.contains(b.id))
+            continue;
+        int at = b.before.isEmpty() ? -1 : int(bar.indexOf(b.before));
+        bar.insert(at < 0 ? int(bar.size()) : at, b.id);
+    }
+}
+
+bool placeToolButtonsOnce(QStringList &bar, QStringList &done)
+{
+    QList<ToolButton> fresh;
+    for (const ToolButton &b : toolButtonList())
+        if (!done.contains(b.id)) {
+            fresh << b;
+            done << b.id;
+        }
+    if (fresh.isEmpty() || bar.isEmpty()) // an empty list is the standard set, which has them
+        return false;
+    const QStringList before = bar;
+    insertToolButtons(bar, fresh);
+    return bar != before;
+}
+
+bool usableOnBar(const QString &id)
+{
+    return !id.contains(QLatin1Char(':')) || id.startsWith(QLatin1String("tool:"));
+}
+
+QStringList standard(Bar bar)
+{
+    switch (bar) {
+    case Bar::Main:
+        // Undo and Redo after Move to Trash (0.61, where the writer put them)
+        return {QStringLiteral("view"), Separator, QStringLiteral("add"), QStringLiteral("newFolder"), QStringLiteral("trash"),
+                QStringLiteral("undo"), QStringLiteral("redo")};
+    case Bar::Themes:
+        return {QStringLiteral("themePicker")};
+    case Bar::Search:
+        return {QStringLiteral("searchMenu"), QStringLiteral("search"), QStringLiteral("viewModes")};
+    case Bar::Tools: {
+        QStringList list = {QStringLiteral("bookmarks"), QStringLiteral("quickRef"), QStringLiteral("notes"), Separator,
+                            QStringLiteral("compile"), Separator, QStringLiteral("showInvisibles"), QStringLiteral("composition"),
+                            QStringLiteral("showInspector")};
+        insertToolButtons(list, toolButtonList());
+        return list;
+    }
+    case Bar::Format:
+        return {QStringLiteral("styleCombo"), QStringLiteral("fontCombo"), QStringLiteral("sizeSpin"), QStringLiteral("lineCombo"),
+                QStringLiteral("defaultTextFormatting")};
+    case Bar::Character:
+        return {QStringLiteral("showFonts"), Separator, QStringLiteral("bold"), QStringLiteral("italic"), QStringLiteral("underline"),
+                QStringLiteral("strike"), QStringLiteral("highlight"), QStringLiteral("textColor"), Separator,
+                QStringLiteral("alignLeft"), QStringLiteral("alignCenter"), QStringLiteral("alignRight"), QStringLiteral("alignJustify")};
+    case Bar::Paragraph:
+        return {QStringLiteral("bullets"), QStringLiteral("numbers"), Separator, QStringLiteral("spaceBefore"),
+                QStringLiteral("spaceAfter"), QStringLiteral("indentFirst"), QStringLiteral("indentLeft"), Separator,
+                QStringLiteral("comment"), QStringLiteral("footnote"), QStringLiteral("annotation"), QStringLiteral("image")};
+    }
+    return {};
+}
+
+QStringList configured(Bar bar)
+{
+    const QStringList own = AppSettings::instance().toolbarList(int(bar));
+    return own.isEmpty() ? standard(bar) : own;
+}
+
+Split splitFormer(const QStringList &formerMain, const QStringList &formerFormat)
+{
+    Split out;
+    auto split = [&out](const QStringList &former, const QList<Bar> &row) {
+        if (former.isEmpty())
+            return; // the standard set then, the standard sets now
+        QHash<QString, Bar> home;
+        for (Bar b : row)
+            for (const QString &id : standard(b))
+                if (id != Separator && id != Spacer)
+                    home.insert(id, b);
+        QStringList lists[BarCount];
+        Bar at = row.first();
+        bool separator = false;
+        for (const QString &id : former) {
+            if (id == Spacer)
+                continue;
+            if (id == Separator) {
+                separator = true;
+                continue;
+            }
+            const Bar to = home.value(id, at);
+            if (separator && to == at && !lists[int(at)].isEmpty())
+                lists[int(at)] << Separator;
+            separator = false;
+            at = to;
+            if (!lists[int(at)].contains(id))
+                lists[int(at)] << id;
+        }
+        for (Bar b : row) {
+            if (lists[int(b)].isEmpty())
+                out.hidden << barKey(b);
+            else if (lists[int(b)] != standard(b))
+                out.lists[int(b)] = lists[int(b)];
+        }
+    };
+    split(formerMain, {Bar::Main, Bar::Themes, Bar::Search, Bar::Tools});
+    split(formerFormat, {Bar::Format, Bar::Character, Bar::Paragraph});
+    return out;
+}
+
+QString label(const QString &id)
+{
+    if (id == Separator)
+        return QObject::tr("――  Separator  ――");
+    if (id == Spacer)
+        return QObject::tr("←  Flexible Space  →");
+    for (Bar b : {Bar::Main, Bar::Format})
+        for (const Special &s : specials(b))
+            if (s.id == id)
+                return s.label;
+    if (const commands::Command *c = commands::find(id))
+        return c->label();
+    return QString();
+}
+
+QIcon icon(const QString &id)
+{
+    for (Bar b : {Bar::Main, Bar::Format})
+        for (const Special &s : specials(b))
+            if (s.id == id)
+                return icons::action(s.icon);
+    return commands::listIcon(id);
+}
+
+} // namespace toolbars
+
+// ------------------------------------------------------------------ dialog
+
+ToolbarDialog::ToolbarDialog(QWidget *parent, toolbars::Bar bar) : QDialog(parent)
+{
+    setWindowTitle(tr("Customize Toolbars"));
+    resize(820, 560);
+    const AppSettings &s = AppSettings::instance();
+    for (toolbars::Bar b : toolbars::allBars())
+        m_lists[int(b)] = toolbars::configured(b);
+
+    auto *lay = new QVBoxLayout(this);
+    auto *top = new QHBoxLayout;
+    top->addWidget(new QLabel(tr("Toolbar:"), this));
+    m_barCombo = new QComboBox(this);
+    m_barCombo->setObjectName(QStringLiteral("toolbarBar"));
+    for (toolbars::Bar b : toolbars::allBars()) // 0.91.0: seven toolbars
+        m_barCombo->addItem(toolbars::barName(b), int(b));
+    top->addWidget(m_barCombo);
+    top->addStretch(1);
+    lay->addLayout(top);
+
+    auto *grid = new QGridLayout;
+    grid->addWidget(new QLabel(tr("Available commands"), this), 0, 0);
+    grid->addWidget(new QLabel(tr("In the toolbar (from left to right)"), this), 0, 2);
+    m_filter = new QLineEdit(this);
+    m_filter->setPlaceholderText(tr("Search commands"));
+    m_filter->setClearButtonEnabled(true);
+    grid->addWidget(m_filter, 1, 0);
+    m_available = new QListWidget(this);
+    m_available->setObjectName(QStringLiteral("toolbarAvailable"));
+    grid->addWidget(m_available, 2, 0);
+    m_current = new QListWidget(this);
+    m_current->setObjectName(QStringLiteral("toolbarCurrent"));
+    m_current->setDragDropMode(QAbstractItemView::InternalMove);
+    grid->addWidget(m_current, 1, 2, 2, 1);
+
+    auto *mid = new QVBoxLayout;
+    auto button = [this](const QString &icon, const QString &tip, const QString &name) {
+        auto *b = new QToolButton(this);
+        b->setIcon(icons::action(icon));
+        b->setToolTip(tip);
+        b->setObjectName(name);
+        b->setIconSize(QSize(22, 22));
+        return b;
+    };
+    auto *add = button(QStringLiteral("arrow-right"), tr("Add to the toolbar"), QStringLiteral("toolbarAdd"));
+    auto *remove = button(QStringLiteral("arrow-left"), tr("Remove from the toolbar"), QStringLiteral("toolbarRemove"));
+    auto *up = button(QStringLiteral("arrow-up"), tr("Move to the left"), QStringLiteral("toolbarUp"));
+    auto *down = button(QStringLiteral("arrow-down"), tr("Move to the right"), QStringLiteral("toolbarDown"));
+    mid->addStretch(1);
+    for (QToolButton *b : {add, remove})
+        mid->addWidget(b);
+    mid->addSpacing(16);
+    for (QToolButton *b : {up, down})
+        mid->addWidget(b);
+    mid->addStretch(1);
+    grid->addLayout(mid, 2, 1);
+    grid->setColumnStretch(0, 1);
+    grid->setColumnStretch(2, 1);
+    lay->addLayout(grid, 1);
+
+    auto *opts = new QHBoxLayout;
+    opts->addWidget(new QLabel(tr("Icons of the main toolbars:"), this));
+    m_iconSize = new QComboBox(this);
+    m_iconSize->setObjectName(QStringLiteral("toolbarIconSize"));
+    m_iconSize->addItem(tr("Small"), 16);
+    m_iconSize->addItem(tr("Medium"), 22);
+    m_iconSize->addItem(tr("Large"), 32);
+    m_iconSize->setCurrentIndex(qMax(0, m_iconSize->findData(s.toolbarIconSize)));
+    opts->addWidget(m_iconSize);
+    m_style = new QComboBox(this);
+    m_style->setObjectName(QStringLiteral("toolbarStyle"));
+    m_style->addItem(tr("Icons only"), QStringLiteral("icons"));
+    m_style->addItem(tr("Text beside the icons"), QStringLiteral("beside"));
+    m_style->addItem(tr("Text under the icons"), QStringLiteral("under"));
+    m_style->setCurrentIndex(qMax(0, m_style->findData(s.toolbarStyle)));
+    opts->addWidget(m_style);
+    opts->addStretch(1);
+    auto *reset = new QPushButton(tr("Standard Set"), this);
+    reset->setObjectName(QStringLiteral("toolbarReset"));
+    reset->setToolTip(tr("Put the buttons the program came with back into this toolbar"));
+    opts->addWidget(reset);
+    lay->addLayout(opts);
+
+    auto *bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Apply | QDialogButtonBox::Cancel, this);
+    lay->addWidget(bb);
+    connect(bb, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(bb, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(bb->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &ToolbarDialog::apply);
+
+    connect(m_barCombo, qOverload<int>(&QComboBox::activated), this,
+            [this](int i) { setBar(toolbars::Bar(m_barCombo->itemData(i).toInt())); });
+    connect(m_filter, &QLineEdit::textChanged, this, [this] { fillAvailable(); });
+    auto addSelected = [this] {
+        if (QListWidgetItem *it = m_available->currentItem())
+            addItem(it->data(Qt::UserRole).toString(), m_current->currentRow() < 0 ? -1 : m_current->currentRow() + 1);
+    };
+    connect(add, &QToolButton::clicked, this, addSelected);
+    connect(m_available, &QListWidget::itemDoubleClicked, this, addSelected);
+    auto removeSelected = [this] {
+        const int row = m_current->currentRow();
+        if (row < 0)
+            return;
+        delete m_current->takeItem(row);
+        m_current->setCurrentRow(qMin(row, m_current->count() - 1));
+        fillAvailable();
+    };
+    connect(remove, &QToolButton::clicked, this, removeSelected);
+    connect(m_current, &QListWidget::itemDoubleClicked, this, removeSelected);
+    connect(up, &QToolButton::clicked, this, [this] { moveItem(m_current->currentRow(), -1); });
+    connect(down, &QToolButton::clicked, this, [this] { moveItem(m_current->currentRow(), 1); });
+    connect(reset, &QPushButton::clicked, this, &ToolbarDialog::resetToStandard);
+
+    m_bar = bar;
+    m_barCombo->setCurrentIndex(m_barCombo->findData(int(bar)));
+    fillCurrent(m_lists[int(m_bar)]);
+    fillAvailable();
+}
+
+QStringList ToolbarDialog::items() const
+{
+    QStringList ids;
+    for (int i = 0; i < m_current->count(); ++i)
+        ids << m_current->item(i)->data(Qt::UserRole).toString();
+    return ids;
+}
+
+void ToolbarDialog::storeCurrent() { m_lists[int(m_bar)] = items(); }
+
+void ToolbarDialog::setBar(toolbars::Bar bar)
+{
+    storeCurrent();
+    m_bar = bar;
+    m_barCombo->setCurrentIndex(m_barCombo->findData(int(bar)));
+    fillCurrent(m_lists[int(bar)]);
+    fillAvailable();
+}
+
+static QListWidgetItem *makeItem(const QString &id)
+{
+    const QString label = toolbars::label(id);
+    if (label.isEmpty())
+        return nullptr; // a command this version does not have
+    auto *it = new QListWidgetItem(toolbars::icon(id), label);
+    it->setData(Qt::UserRole, id);
+    if (const commands::Command *c = commands::find(id))
+        it->setToolTip(c->category + QStringLiteral(" ▸ ") + c->fullLabel());
+    if (id == toolbars::Separator || id == toolbars::Spacer)
+        it->setForeground(QPalette().color(QPalette::Disabled, QPalette::Text));
+    return it;
+}
+
+void ToolbarDialog::fillCurrent(const QStringList &ids)
+{
+    m_current->clear();
+    for (const QString &id : ids)
+        if (QListWidgetItem *it = makeItem(id))
+            m_current->addItem(it);
+}
+
+void ToolbarDialog::fillAvailable()
+{
+    const QString keep = m_available->currentItem() ? m_available->currentItem()->data(Qt::UserRole).toString() : QString();
+    const QString filter = m_filter->text().trimmed();
+    const QStringList used = items();
+    m_available->clear();
+    auto offer = [&](const QString &id, const QString &extra = QString()) {
+        const bool repeatable = id == toolbars::Separator || id == toolbars::Spacer;
+        if (!repeatable && used.contains(id))
+            return;
+        QListWidgetItem *it = makeItem(id);
+        if (!it)
+            return;
+        if (!filter.isEmpty() && !it->text().contains(filter, Qt::CaseInsensitive) && !extra.contains(filter, Qt::CaseInsensitive)) {
+            delete it;
+            return;
+        }
+        m_available->addItem(it);
+        if (id == keep)
+            m_available->setCurrentItem(it);
+    };
+    offer(toolbars::Separator);
+    offer(toolbars::Spacer);
+    for (const toolbars::Special &s : toolbars::specials(m_bar))
+        offer(s.id);
+    for (const commands::Command &c : commands::all())
+        if (!c.dynamic)
+            offer(c.key, c.category + QLatin1Char(' ') + c.path);
+}
+
+bool ToolbarDialog::addItem(const QString &id, int row)
+{
+    const bool repeatable = id == toolbars::Separator || id == toolbars::Spacer;
+    if (!repeatable && items().contains(id))
+        return false;
+    // styles and layouts come and go with projects and files: not for a toolbar (writing tools' commands are)
+    if (!toolbars::usableOnBar(id))
+        return false;
+    // the controls of the main toolbars cannot move to the format toolbars, nor the other way
+    if (toolbars::isSpecial(id)) {
+        bool mine = false;
+        for (const toolbars::Special &s : toolbars::specials(m_bar))
+            mine = mine || s.id == id;
+        if (!mine)
+            return false;
+        // 0.91.0: a control exists once: it moves here from the bar that has it
+        for (toolbars::Bar b : toolbars::allBars())
+            if (b != m_bar)
+                m_lists[int(b)].removeAll(id);
+    }
+    QListWidgetItem *it = makeItem(id);
+    if (!it)
+        return false;
+    if (row < 0 || row > m_current->count())
+        row = m_current->count();
+    m_current->insertItem(row, it);
+    m_current->setCurrentItem(it);
+    fillAvailable();
+    return true;
+}
+
+bool ToolbarDialog::removeItem(const QString &id)
+{
+    for (int i = 0; i < m_current->count(); ++i)
+        if (m_current->item(i)->data(Qt::UserRole).toString() == id) {
+            delete m_current->takeItem(i);
+            fillAvailable();
+            return true;
+        }
+    return false;
+}
+
+bool ToolbarDialog::moveItem(int row, int delta)
+{
+    const int to = row + delta;
+    if (row < 0 || row >= m_current->count() || to < 0 || to >= m_current->count())
+        return false;
+    QListWidgetItem *it = m_current->takeItem(row);
+    m_current->insertItem(to, it);
+    m_current->setCurrentItem(it);
+    return true;
+}
+
+void ToolbarDialog::resetToStandard()
+{
+    const QStringList standard = toolbars::standard(m_bar);
+    // 0.91.0: a control of the standard set that was moved to another bar comes back from there
+    for (const QString &id : standard)
+        if (toolbars::isSpecial(id))
+            for (toolbars::Bar b : toolbars::allBars())
+                if (b != m_bar)
+                    m_lists[int(b)].removeAll(id);
+    fillCurrent(standard);
+    fillAvailable();
+}
+
+void ToolbarDialog::apply()
+{
+    storeCurrent();
+    AppSettings &s = AppSettings::instance();
+    // the standard set is stored as "nothing of one's own", so later versions can extend it
+    for (toolbars::Bar b : toolbars::allBars()) {
+        const QStringList &list = m_lists[int(b)];
+        s.toolbarList(int(b)) = list == toolbars::standard(b) ? QStringList() : list;
+        // 0.91.0: a bar with nothing in it is switched off (an empty list means the standard set)
+        if (list.isEmpty() && !s.toolbarHidden.contains(toolbars::barKey(b)))
+            s.toolbarHidden << toolbars::barKey(b);
+    }
+    s.toolbarIconSize = m_iconSize->currentData().toInt();
+    s.toolbarStyle = m_style->currentData().toString();
+    s.notifyChanged();
+}
+
+void ToolbarDialog::accept()
+{
+    apply();
+    QDialog::accept();
+}
+
+} // namespace qb

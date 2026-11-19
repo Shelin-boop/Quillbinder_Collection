@@ -1,0 +1,218 @@
+# The system test on emulated tablets (2026-11-14).
+#
+# Runs on a push to a branch "android-st/..." (or by hand): builds the system test's program as an Android app
+# (tests/android; x86_64, the emulator's ABI), then runs its cases on emulated tablets, several side by side
+# (packaging/android/android-system-test.sh; what to run: packaging/android/system-test-run.txt). The results go
+# to the pre-release "android-st" of this repository (a Claude session cannot read the Actions API, but it can read
+# releases): st-build-summary.txt, then per tablet <n>-st-summary.txt (one line per case), <n>-st-logs.tar.gz and
+# pictures of cases that did not come out clean. The notes say "status=running" and at the end "status=done".
+# Only when the writer asks for a system test.
+name: Android system test
+
+on:
+  push:
+    branches: ['android-st/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: android-st-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      built: ${{ steps.result.outputs.built }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SCCACHE_GHA_ENABLED: 'true'
+      QB_NDK: 27.2.12479018
+      QB_SDK_PLATFORM: android-36
+      QB_BUILD_TOOLS: 36.0.0
+      # Hunspell and OpenSSL as packs (D1; packaging/android/android-deps-pack.sh): the same pins as android.yml,
+      # which publishes a pack when it has none; without a pin the build makes them (a few minutes)
+      QB_ANDROID_PACKS: |
+        hunspell-arm64-v8a c1f589f9a870d0e1390021b3657e4f8c903ff4d433b40050e303e1cb825057be hunspell-arm64-v8a-android-c1f589f9a870d0e1.tar.xz 15bbe5b31bd3cf1f3d17300aaaf481687d9240fa4982601b6dc5ee852160ba3d
+        hunspell-x86_64 8745189cfe1943140ee55dfb74962503bb62aeac73b4d6dc2d788400e77c8e41 hunspell-x86_64-android-8745189cfe194314.tar.xz 665de8f17ea1c4f09fe122b4896312dfa1eeb48cb4f35036641dea79f0d4e82d
+        openssl-arm64-v8a bc6606200989542a5dd1d18106987d9c8e17f9795100940fd6259df518cda75e openssl-arm64-v8a-android-bc6606200989542a.tar.xz b81e6da297a7868d389587ff696030fc2bae6178c93b5e8ac82700e099497703
+        openssl-x86_64 105e0006344b014b217417327e3485f9252b908bfe7c8de4cece2da9c448e9b3 openssl-x86_64-android-105e0006344b014b.tar.xz 33f159b263b73eaf20ef6185e2a0d2ddb6b588e6b2913f2bf5776911d1b050fe
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+      - name: Announce the run on the pre-release android-st, read what to run
+        id: plan
+        run: |
+          gh release delete android-st --cleanup-tag -y || true
+          gh release create android-st --prerelease --target "$GITHUB_SHA" --title "Android system test: raw output, not for downloading (running)" \
+            --notes "sha=$GITHUB_SHA status=running stage=build run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME"
+          gh release edit android-st --draft=false || true
+          mkdir -p results
+          shards=$(sed -n 's/^shards: *//p' packaging/android/system-test-run.txt | head -1)
+          case "$shards" in ''|*[!0-9]*) shards=1 ;; esac
+          [ "$shards" -lt 1 ] && shards=1
+          [ "$shards" -gt 16 ] && shards=16
+          list=$(seq -s, 0 $((shards - 1)))
+          echo "matrix={\"shard\":[$list]}" >> "$GITHUB_OUTPUT"
+          echo "QB_QT_VERSION=$(sed -n 's/^set(QB_QT_VERSION *"\(.*\)")/\1/p' CMakeLists.txt)" >> "$GITHUB_ENV"
+          echo "QT_ANDROID_BASE=$HOME/Qt" >> "$GITHUB_ENV"
+
+      - name: Qt cache
+        id: qtcache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ~/Qt
+          key: qt-${{ env.QB_QT_VERSION }}-android-arm64_v8a-x86_64-gcc_64-qtpdf-qtimageformats-v1-${{ hashFiles('packaging/android/android-qt.sh') }}
+
+      - name: Qt for Android and for the build machine
+        run: |
+          V=$QB_QT_VERSION
+          if [ "${{ steps.qtcache.outputs.cache-hit }}" != "true" ]; then
+            bash packaging/android/android-qt.sh "$HOME/Qt" results | tee results/st-qt-steps.txt
+          fi
+          test -f "$HOME/Qt/$V/gcc_64/bin/qmake"
+          test -f "$HOME/Qt/$V/android_x86_64/lib/cmake/Qt6/qt.toolchain.cmake"
+          test -f "$HOME/Qt/$V/android_x86_64/lib/libQt6Test_x86_64.so"
+
+      - name: Compiler cache
+        uses: mozilla-actions/sccache-action@fc920bf0ec8de6ee65d409111f7ec508035751ba # v0.0.11
+
+      - name: Android SDK, NDK, JDK 21
+        run: |
+          SDK=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
+          SDKM=$(ls "$SDK"/cmdline-tools/*/bin/sdkmanager | sort -V | tail -1)
+          need=""
+          [ -d "$SDK/ndk/$QB_NDK" ] || need="$need ndk;$QB_NDK"
+          [ -d "$SDK/platforms/$QB_SDK_PLATFORM" ] || need="$need platforms;$QB_SDK_PLATFORM"
+          [ -d "$SDK/build-tools/$QB_BUILD_TOOLS" ] || need="$need build-tools;$QB_BUILD_TOOLS"
+          if [ -n "$need" ]; then
+            yes | "$SDKM" --licenses > /dev/null 2>&1 || true
+            # shellcheck disable=SC2086
+            yes | "$SDKM" --install $need > results/st-sdk-install.log 2>&1 || { tail -20 results/st-sdk-install.log; exit 1; }
+          fi
+          test -d "$SDK/ndk/$QB_NDK"
+          test -n "${JAVA_HOME_21_X64:-}"
+          {
+            echo "ANDROID_SDK_ROOT=$SDK"
+            echo "ANDROID_NDK_ROOT=$SDK/ndk/$QB_NDK"
+            echo "ANDROID_NDK_HOME=$SDK/ndk/$QB_NDK"
+            echo "ANDROID_NDK=$SDK/ndk/$QB_NDK"
+            echo "ANDROID_NDK_LATEST_HOME=$SDK/ndk/$QB_NDK"
+            echo "JAVA_HOME=$JAVA_HOME_21_X64"
+          } >> "$GITHUB_ENV"
+          echo "$JAVA_HOME_21_X64/bin" >> "$GITHUB_PATH"
+          if ! command -v ninja > /dev/null 2>&1; then
+            (sudo apt-get update -q && sudo apt-get install -y -q ninja-build) > results/st-ninja-install.log 2>&1 || true
+          fi
+          ninja --version
+
+      - name: Gradle cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-qt-${{ env.QB_QT_VERSION }}-v1
+
+      - name: Build the system test's program (x86_64)
+        env:
+          QB_ANDROID_BUILD: ${{ github.run_number }}
+        run: bash packaging/android/android-system-test.sh build results
+
+      - name: The build's results
+        id: result
+        if: always()
+        run: |
+          mkdir -p results
+          [ -f results/st-build-summary.txt ] || echo "result: stopped before the build (see the step that failed)" > results/st-build-summary.txt
+          result=$(grep '^result:' results/st-build-summary.txt | tail -1 | sed 's/^result: //')
+          built=no
+          [ "$result" = ok ] && [ -f results/qb-system-test.apk ] && built=yes
+          echo "built=$built" >> "$GITHUB_OUTPUT"
+          for f in results/st-build.log results/st-configure.log results/st-apk.log; do [ -f "$f" ] && tail -c 3000000 "$f" > "$f.tmp" && mv "$f.tmp" "$f"; done
+          find results -type f -empty -delete
+          for f in $(find results -maxdepth 1 -type f ! -name '*.apk' | sort); do
+            gh release upload android-st "$f" --clobber || echo "upload failed: $f"
+          done
+          if [ $built = yes ]; then
+            gh release edit android-st --notes "sha=$GITHUB_SHA status=running stage=cases build=$result run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME"
+          else
+            gh release edit android-st --title "Android system test: raw output, not for downloading ($result)" \
+              --notes "sha=$GITHUB_SHA status=done build=$result run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME"
+          fi
+          gh release edit android-st --draft=false || true
+
+      - name: Hand the test program to the tablets
+        if: steps.result.outputs.built == 'yes'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: qb-system-test-apk
+          path: results/qb-system-test.apk
+          retention-days: 3
+
+  cases:
+    needs: build
+    if: needs.build.outputs.built == 'yes'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.build.outputs.matrix) }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: qb-system-test-apk
+          path: apk
+
+      - name: The cases on an emulated tablet
+        run: |
+          export ANDROID_SDK_ROOT=${ANDROID_HOME:-${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}}
+          shards=$(sed -n 's/^shards: *//p' packaging/android/system-test-run.txt | head -1)
+          case "$shards" in ''|*[!0-9]*) shards=1 ;; esac
+          cases=$(sed -n 's/^cases: *//p' packaging/android/system-test-run.txt | head -1)
+          profile=$(sed -n 's/^profile: *//p' packaging/android/system-test-run.txt | head -1)
+          minutes=$(sed -n 's/^minutes: *//p' packaging/android/system-test-run.txt | head -1)
+          factor=$(sed -n 's/^factor: *//p' packaging/android/system-test-run.txt | head -1)
+          export QB_ST_TIME_FACTOR=${factor:-4}
+          export QB_CS_PROFILE=${profile:-quick}
+          export QB_ST_MAX_MIN=${minutes:-300}
+          # shellcheck disable=SC2086
+          bash packaging/android/android-system-test.sh run results apk/qb-system-test.apk ${{ matrix.shard }} "$shards" $cases
+
+      - name: Put this tablet's results on the pre-release android-st
+        if: always()
+        run: |
+          mkdir -p results
+          n=${{ matrix.shard }}
+          [ -f results/st-summary.txt ] || echo "result: stopped before the cases" > results/st-summary.txt
+          if [ -d results/st-shots ] && [ -n "$(ls results/st-shots 2>/dev/null)" ]; then
+            tar -C results -czf results/st-shots.tar.gz st-shots
+          fi
+          find results -maxdepth 1 -type f -empty -delete
+          for f in $(find results -maxdepth 1 -type f ! -name '*.apk' | sort); do
+            cp "$f" "results/$n-$(basename "$f")"
+            gh release upload android-st "results/$n-$(basename "$f")" --clobber || echo "upload failed: $f"
+          done
+
+  finish:
+    needs: [build, cases]
+    if: always() && needs.build.outputs.built == 'yes'
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+      - name: The end of the run
+        run: |
+          gh release edit android-st --title "Android system test: raw output, not for downloading (done)" \
+            --notes "sha=$GITHUB_SHA status=done cases=${{ needs.cases.result }} run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME"
+          gh release edit android-st --draft=false || true

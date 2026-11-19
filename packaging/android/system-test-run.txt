@@ -1,0 +1,12 @@
+# What the next run of the Android system test does (.github/workflows/android-system-test.yml reads this file
+# when a branch "android-st/..." is pushed).
+#   shards: how many emulated tablets run side by side (each takes every n-th case of the list)
+#   cases: only these cases, shared among the tablets as the whole list is; empty: all cases
+#   profile: quick | full | smoke (as QB_CS_PROFILE of the Linux system test)
+#   minutes: the time one tablet may take for its cases (a job of the build machine ends after 6 hours at most)
+#   factor: a case may take this many times its estimate (from the Linux machine) plus two minutes
+shards: 8
+cases:
+profile: quick
+minutes: 170
+factor: 3

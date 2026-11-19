@@ -1,0 +1,9 @@
+Guava ListenableFuture 1.0 (com.google.guava:listenablefuture)
+Copyright (C) The Guava Authors
+https://github.com/google/guava
+
+JSpecify annotations 1.0.0 (org.jspecify:jspecify)
+Copyright (C) The JSpecify Authors
+https://jspecify.dev
+
+Licensed under the Apache License, Version 2.0 (the full text is listed under the full texts of common licenses, "Apache-2.0").

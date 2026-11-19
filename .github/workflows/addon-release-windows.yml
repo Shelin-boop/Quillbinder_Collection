@@ -1,0 +1,421 @@
+# Official add-ons for Windows (2026-11-16; the same rules as
+# .github/workflows/addon-release.yml, docs/official-addons.md): builds an add-on of another author for Quillbinder for
+# Windows from the reviewed commit named in the "windows" block of official-addons/<id>.json, runs the add-on's own
+# checks, packs it, checks the package and installs it into the newest Quillbinder for Windows. Only when asked (input
+# "publish") it is signed with the add-on key and published as the release addon-<id>-<version>-windows of this
+# repository, never marked "Latest"; the tag does not start with "v", so the download page and the program's release
+# workflows leave it alone.
+#
+#   prepare       the entry's Windows block, the newest Quillbinder for Windows (its program zip is used for the
+#                 install checks)
+#   build         no secrets; the only job in which the add-on's own build scripts run (Windows, MSVC, The Qt Company's
+#                 Qt for MSVC as in Quillbinder for Windows); ends with the unsigned package, its sources and the
+#                 release text (artifact "addon-unsigned"). A dry run (publish off) ends here.
+#   sign          the release key (it vouches for the add-on key in a certificate) and the add-on key (secret
+#                 QB_ADDON_KEY); no container, no third-party code; every signature checked by the program's rule
+#   check-signed  the signed package installs into Quillbinder for Windows without --allow-unsigned
+#   publish       the only job with write permission
+name: Official add-on for Windows
+
+on:
+  workflow_dispatch:
+    inputs:
+      addon:
+        description: 'The add-on: its file in official-addons/, without .json'
+        type: string
+        required: true
+        default: translation-proofreading
+      publish:
+        description: 'Sign and publish (needs the secret QB_ADDON_KEY); off: build and check only'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: addon-release-windows
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    outputs:
+      id: ${{ steps.entry.outputs.id }}
+      name: ${{ steps.entry.outputs.name }}
+      version: ${{ steps.entry.outputs.version }}
+      tag: ${{ steps.entry.outputs.tag }}
+      repository: ${{ steps.entry.outputs.repository }}
+      commit: ${{ steps.entry.outputs.commit }}
+      program-tag: ${{ steps.program.outputs.tag }}
+      program-zip: ${{ steps.program.outputs.zip }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: The entry's Windows build
+        id: entry
+        env:
+          ADDON: ${{ inputs.addon }}
+        run: |
+          set -o pipefail
+          [[ "$ADDON" =~ ^[a-z0-9][a-z0-9-]{1,62}$ ]] || { echo "::error title=No such add-on::'$ADDON' is no name of a file in official-addons/"; exit 1; }
+          [ -f "official-addons/$ADDON.json" ] || { echo "::error title=No such add-on::official-addons/$ADDON.json does not exist"; exit 1; }
+          python3 -I tools/addon-entry.py check "official-addons/$ADDON.json" --windows | tee -a "$GITHUB_OUTPUT"
+
+      - name: Published already?
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ steps.entry.outputs.tag }}
+          PUBLISH: ${{ inputs.publish }}
+        run: |
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            if [ "$PUBLISH" = true ]; then
+              echo "::error title=Published already::$TAG exists; a new version of the add-on needs a new entry (version and commit)"
+              exit 1
+            fi
+            echo "::notice::$TAG is published already; this run builds and checks only"
+          fi
+
+      # the newest Quillbinder for Windows (its own release since 0.91.3: v<version>-windows-<name>); signed add-ons
+      # need a program that knows add-on keys (0.91.3)
+      - name: The newest Quillbinder for Windows
+        id: program
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -o pipefail
+          tag=$(gh api "repos/$GH_REPO/releases?per_page=30" --jq '[.[] | select(.draft | not) | .tag_name
+                  | select(test("^v[0-9]+\\.[0-9]+\\.[0-9]+-windows-[a-z]+$"))] | .[0] // empty')
+          [[ "$tag" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)-windows-([a-z]+)$ ]] || { echo "::error::no release of Quillbinder for Windows found"; exit 1; }
+          ver=${BASH_REMATCH[1]} name=${BASH_REMATCH[2]}
+          if [ "$(printf '%s\n0.91.3\n' "$ver" | sort -V | sed -n 1p)" != 0.91.3 ]; then
+            echo "::error title=Quillbinder too old::the newest Windows release is $ver; official add-ons need 0.91.3 or later"
+            exit 1
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "zip=Quillbinder-$ver-$name-windows-x64.zip" | tee -a "$GITHUB_OUTPUT"
+
+  build:
+    # the add-on's own build scripts run here, without any secret
+    needs: prepare
+    runs-on: windows-2025
+    timeout-minutes: 300
+    env:
+      ID: ${{ needs.prepare.outputs.id }}
+      QB_BASH: 'C:\Program Files\Git\bin\bash.exe'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: The add-on's reviewed source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          repository: ${{ needs.prepare.outputs.repository }}
+          ref: ${{ needs.prepare.outputs.commit }}
+          path: addon-src
+          persist-credentials: false
+
+      - name: Is it the reviewed commit?
+        env:
+          COMMIT: ${{ needs.prepare.outputs.commit }}
+        run: |
+          have=$(git -C addon-src rev-parse HEAD)
+          [ "$have" = "$COMMIT" ] || { echo "::error::the source is at $have, the entry names $COMMIT"; exit 1; }
+          echo "building $COMMIT"
+          echo "ENTRY=$GITHUB_WORKSPACE\\official-addons\\$ID.json" >> "$GITHUB_ENV"
+          echo "SRC=$GITHUB_WORKSPACE\\addon-src" >> "$GITHUB_ENV"
+          echo "QT_VERSION=$(sed -n 's/^set(QB_QT_VERSION *"\(.*\)")/\1/p' CMakeLists.txt | tr -d '\r')" | tee -a "$GITHUB_ENV"
+
+      - name: Qt cache
+        id: qtcache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: C:\Qt\${{ env.QT_VERSION }}
+          key: addon-qt-${{ env.QT_VERSION }}-win64_msvc2022_64-v1
+
+      # The Qt Company's Qt for MSVC, as in Quillbinder for Windows (release-windows.yml: aqtinstall 3.3.0, which
+      # checks every archive against download.qt.io's checksums, with the folder name of Qt 6.11 and later)
+      - name: Qt for MSVC 2022
+        run: |
+          if [ "${{ steps.qtcache.outputs.cache-hit }}" != "true" ]; then
+            python -m pip install -q 'aqtinstall==3.3.0'
+            python - <<'PY'
+          import pathlib
+          import aqt.metadata as m
+          p = pathlib.Path(m.__file__)
+          s = p.read_text(encoding="utf-8")
+          old = "    def extension_for_arch(architecture: str, is_version_ge_6: bool) -> str:\n"
+          new = old + ("        if architecture.startswith('win64_') and is_version_ge_6:\n"
+                       "            return architecture[len('win64_'):]\n")
+          assert old in s, "aqtinstall changed: extension_for_arch not found"
+          p.write_text(s.replace(old, new, 1), encoding="utf-8")
+          PY
+            python -m aqt install-qt windows desktop "$QT_VERSION" win64_msvc2022_64 -O C:/Qt
+          fi
+          test -f "/c/Qt/$QT_VERSION/msvc2022_64/bin/Qt6Core.dll"
+          echo "QT_DIR=C:/Qt/$QT_VERSION/msvc2022_64" >> "$GITHUB_ENV"
+
+      - name: Find Visual Studio
+        shell: pwsh
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * `
+                  -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          "VSDIR=$vs" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: The folders kept between runs (their names)
+        id: cache
+        run: python -I tools/addon-entry.py cache "$ENTRY" "$SRC" --windows | tee -a "$GITHUB_OUTPUT"
+
+      - name: The folders kept between runs
+        id: deps
+        if: steps.cache.outputs.any == 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ steps.cache.outputs.paths }}
+          key: ${{ steps.cache.outputs.key }}
+
+      # the add-on's commands run in Git Bash (QB_BASH) inside MSVC's environment
+      - name: The add-on's setup (when the kept folders are missing)
+        id: setup
+        if: steps.deps.outputs.cache-hit != 'true'
+        shell: cmd
+        run: |
+          call "%VSDIR%\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
+          python -I tools\addon-entry.py run "%ENTRY%" setup "%SRC%" --windows
+
+      - name: Keep the folders
+        if: steps.cache.outputs.any == 'true' && steps.deps.outputs.cache-hit != 'true' && steps.setup.outcome == 'success'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ steps.cache.outputs.paths }}
+          key: ${{ steps.cache.outputs.key }}
+
+      - name: The test data (its name)
+        id: testdata
+        run: python -I tools/addon-entry.py testdata "$ENTRY" --windows | tee -a "$GITHUB_OUTPUT"
+
+      - name: The test data (kept)
+        id: testdata-cache
+        if: steps.testdata.outputs.any == 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: addon-testdata
+          key: ${{ steps.testdata.outputs.key }}-windows
+
+      - name: The test data (download)
+        if: steps.testdata.outputs.any == 'true' && steps.testdata-cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -I tools/addon-entry.py fetch-testdata "$ENTRY" addon-testdata --windows
+
+      - name: Keep the test data
+        if: steps.testdata.outputs.any == 'true' && steps.testdata-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: addon-testdata
+          key: ${{ steps.testdata.outputs.key }}-windows
+
+      - name: Build, check and pack the add-on (its own commands)
+        shell: cmd
+        env:
+          VARIABLE: ${{ steps.testdata.outputs.variable }}
+        run: |
+          call "%VSDIR%\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
+          if not "%VARIABLE%"=="" set "%VARIABLE%=%GITHUB_WORKSPACE%\addon-testdata"
+          set "OUT=%GITHUB_WORKSPACE%\addon-out"
+          set "SHOTS=%GITHUB_WORKSPACE%\addon-shots"
+          mkdir "%OUT%" "%SHOTS%"
+          python -I tools\addon-entry.py run "%ENTRY%" steps "%SRC%" --windows
+
+      - name: The package fits the entry and Quillbinder for Windows
+        run: |
+          set -o pipefail
+          ls -la addon-out
+          [ "$(find addon-out -maxdepth 1 -name '*.qbpkg' | wc -l)" -eq 1 ] || { echo "::error::the add-on's commands must leave exactly one package"; exit 1; }
+          python -I tools/addon-entry.py check-package "$ENTRY" addon-out/*.qbpkg --windows
+
+      - name: It installs into the newest Quillbinder for Windows (unsigned, so only with --allow-unsigned)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PROGRAM_TAG: ${{ needs.prepare.outputs.program-tag }}
+          PROGRAM_ZIP: ${{ needs.prepare.outputs.program-zip }}
+        run: |
+          set -o pipefail
+          gh release download "$PROGRAM_TAG" -p "$PROGRAM_ZIP" -D program-zip
+          rm -rf program && mkdir program && (cd program && 7z x -y "../program-zip/$PROGRAM_ZIP" > /dev/null)
+          pkg=$(cygpath -w "$(ls "$PWD"/addon-out/*.qbpkg)")
+          # the portable program keeps its data beside itself (data\addons)
+          if (cd program/Quillbinder && QT_QPA_PLATFORM=offscreen timeout 300 ./quillbinder.exe --install "$pkg" > ../refused.log 2>&1); then
+            cat program/refused.log
+            echo "::error::an unsigned add-on was installed without --allow-unsigned"
+            exit 1
+          fi
+          [ ! -d "program/Quillbinder/data/addons/$ID" ] || { echo "::error::refused, but installed all the same"; exit 1; }
+          (cd program/Quillbinder && QT_QPA_PLATFORM=offscreen timeout 300 ./quillbinder.exe --install "$pkg" --allow-unsigned 2>&1 | tail -5)
+          ls "program/Quillbinder/data/addons"
+          [ -d "program/Quillbinder/data/addons/$ID" ] || { echo "::error::not installed with --allow-unsigned"; exit 1; }
+
+      - name: Sources and the release text
+        run: |
+          set -o pipefail
+          mkdir -p addon-files
+          cp addon-out/*.qbpkg addon-files/
+          python -I tools/addon-entry.py sources "$ENTRY" "$SRC" addon-files --windows
+          python -I tools/addon-entry.py notes "$ENTRY" addon-out/*.qbpkg addon-files addon-notes.md --windows
+          cat addon-notes.md
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: addon-unsigned
+          path: |
+            addon-files/
+            addon-notes.md
+          if-no-files-found: error
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        if: always()
+        with:
+          name: addon-screenshots
+          path: addon-shots/
+          if-no-files-found: ignore
+
+  sign:
+    # the keys are only here: no container, no third-party code
+    needs: [prepare, build]
+    if: inputs.publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: addon-unsigned
+          path: unsigned
+
+      - name: The keys
+        env:
+          QB_SIGNING_KEY: ${{ secrets.QB_SIGNING_KEY }}
+          QB_ADDON_KEY: ${{ secrets.QB_ADDON_KEY }}
+        run: |
+          if [ -z "$QB_ADDON_KEY" ]; then
+            echo "::error title=No add-on key::The secret QB_ADDON_KEY does not exist yet. Create the key (docs/official-addons.md, \"The add-on key\") and run again."
+            exit 1
+          fi
+          [ -n "$QB_SIGNING_KEY" ] || { echo "::error title=No signing key::the secret QB_SIGNING_KEY is missing"; exit 1; }
+          mkdir -p /tmp/qb-signing && chmod 700 /tmp/qb-signing
+          ( umask 077; printf '%s\n' "$QB_SIGNING_KEY" > /tmp/qb-signing/key.pem; printf '%s\n' "$QB_ADDON_KEY" > /tmp/qb-signing/addon.pem )
+          want=$(grep -o 'kReleaseKey\[\] = "[0-9a-f]*"' src/core/Signing.cpp | grep -o '"[0-9a-f]*"' | tr -d '"')
+          have=$(openssl pkey -in /tmp/qb-signing/key.pem -pubout -outform DER | tail -c 32 | od -An -tx1 | tr -d ' \n')
+          addon=$(openssl pkey -in /tmp/qb-signing/addon.pem -pubout -outform DER | tail -c 32 | od -An -tx1 | tr -d ' \n')
+          [ -n "$have" ] && [ "$have" = "$want" ] || { echo "::error title=Wrong signing key::QB_SIGNING_KEY is not the key the program carries"; exit 1; }
+          [ -n "$addon" ] && [ "$addon" != "$want" ] || { echo "::error title=Wrong add-on key::QB_ADDON_KEY is not an Ed25519 key of its own"; exit 1; }
+          QB_SIGNING_KEY_FILE=/tmp/qb-signing/key.pem python3 -I tools/make-package.py certify --name "Quillbinder official add-ons" \
+            /tmp/qb-signing/addon.pem /tmp/qb-signing/addon-cert.json
+          echo "add-on key $(echo "$addon" | cut -c1-16)..., vouched for by the release key"
+
+      - name: Sign and check
+        env:
+          QB_SIGNING_KEY_FILE: /tmp/qb-signing/key.pem
+          QB_ADDON_KEY_FILE: /tmp/qb-signing/addon.pem
+          QB_ADDON_CERT: /tmp/qb-signing/addon-cert.json
+        run: |
+          set -o pipefail
+          mkdir -p signed
+          cp -r unsigned/addon-files/. signed/
+          cp unsigned/addon-notes.md .
+          python3 -I tools/make-package.py sign signed/*.qbpkg
+          rm -rf /tmp/qb-signing
+          python3 -I tools/make-package.py verify --release-key packaging/quillbinder-signing-public.pem signed/*.qbpkg | tee verify.log
+          grep -q "the add-on key 'Quillbinder official add-ons'" verify.log || { echo "::error::not signed with the add-on key"; exit 1; }
+          (cd signed && sha256sum -- * > ../SHA256SUMS.txt) && mv SHA256SUMS.txt signed/
+          cat signed/SHA256SUMS.txt
+
+      - if: always()
+        run: rm -rf /tmp/qb-signing
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: addon-signed
+          path: |
+            signed/
+            addon-notes.md
+          if-no-files-found: error
+
+  check-signed:
+    needs: [prepare, sign]
+    runs-on: windows-2025
+    timeout-minutes: 30
+    env:
+      ID: ${{ needs.prepare.outputs.id }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: addon-signed
+          path: addon-signed
+
+      - name: The signed add-on installs into the newest Quillbinder for Windows without --allow-unsigned
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PROGRAM_TAG: ${{ needs.prepare.outputs.program-tag }}
+          PROGRAM_ZIP: ${{ needs.prepare.outputs.program-zip }}
+        run: |
+          set -o pipefail
+          (cd addon-signed/signed && sha256sum -c SHA256SUMS.txt)
+          gh release download "$PROGRAM_TAG" -p "$PROGRAM_ZIP" -D program-zip
+          rm -rf program && mkdir program && (cd program && 7z x -y "../program-zip/$PROGRAM_ZIP" > /dev/null)
+          pkg=$(cygpath -w "$(ls "$PWD"/addon-signed/signed/*.qbpkg)")
+          (cd program/Quillbinder && QT_QPA_PLATFORM=offscreen timeout 300 ./quillbinder.exe --install "$pkg" 2>&1 | tail -5)
+          ls "program/Quillbinder/data/addons"
+          [ -d "program/Quillbinder/data/addons/$ID" ] || { echo "::error::the signed add-on was not installed"; exit 1; }
+
+  publish:
+    # the only job with write permission
+    needs: [prepare, sign, check-signed]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: addon-signed
+          path: addon-signed
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+          NAME: ${{ needs.prepare.outputs.name }}
+          VERSION: ${{ needs.prepare.outputs.version }}
+        run: |
+          gh release create "$TAG" --title "$NAME $VERSION for Windows (official add-on)" --notes-file addon-signed/addon-notes.md \
+            --latest=false --target "$GITHUB_SHA" addon-signed/signed/*
+          gh release view "$TAG" --json assets --jq '.assets[] | "\(.name) \(.size)"'

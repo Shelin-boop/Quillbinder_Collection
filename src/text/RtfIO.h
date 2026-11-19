@@ -1,0 +1,61 @@
+#pragma once
+// RTF import / export for QTextDocument.
+//
+// The writer produces standard RTF that Word, LibreOffice and Scrivener can
+// open. Notes are stored in small custom groups ({\qbannot ...} etc.) which
+// other programs ignore while still showing the text.
+//
+// The reader understands the common RTF subset (fonts, colours, styles,
+// paragraph formatting, fields/links, pictures, footnotes) plus the markers
+// Scrivener uses for comments and document links.
+
+#include "core/ProjectTypes.h"
+
+#include <QByteArray>
+#include <QHash>
+#include <QString>
+
+class QTextDocument;
+
+namespace qb {
+namespace rtf {
+
+struct ReadOptions {
+    // Keep fonts, sizes, colours and paragraph metrics (RTF projects).
+    // When false only semantic formatting is kept (for conversion to Markdown).
+    bool keepFormatting = true;
+};
+
+struct ReadResult {
+    bool ok = false;
+    QString error;
+    // Scrivener linked comment ids (scrivcmt://ID) found in the text.
+    QStringList linkedNoteIds;
+    // statistics used to guess the project's body font
+    QHash<QString, int> fontUsage;   // family -> characters
+    QHash<int, int> sizeUsage;       // half-points -> characters
+};
+
+ReadResult read(const QByteArray &data, QTextDocument *doc, const Formatting &f,
+                const ReadOptions &opt = ReadOptions());
+// How a text is written. scrivener (0.90.0): the forms Scrivener 3 for Windows writes where this program's own
+// differ: lists with a list table, links to outside addresses underlined, and nothing of the page setup.
+struct WriteOptions {
+    bool scrivener = false;
+};
+QByteArray write(const QTextDocument *doc, const Formatting &f, const WriteOptions &opt = WriteOptions());
+
+// Quick plain-text extraction (used for synopses stored as RTF, comments ...)
+QString toPlainText(const QByteArray &data);
+
+bool looksLikeRtf(const QByteArray &data);
+// 0.70.0 (audit A F-05): an RTF file as this program writes it starts with "{\rtf" and closes its groups in
+// order to the end. False (with a reason) for a file whose start is damaged, that closes groups it never
+// opened, or that is cut off.
+bool wellFormed(const QByteArray &data, QString *why = nullptr);
+// A copy of a damaged RTF file mended as far as that is safe (junk before the start dropped, closing braces
+// that close nothing dropped, groups left open closed), to show what it still holds.
+QByteArray mended(const QByteArray &data);
+
+} // namespace rtf
+} // namespace qb

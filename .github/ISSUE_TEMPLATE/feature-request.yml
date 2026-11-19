@@ -1,0 +1,58 @@
+name: Propose a function
+description: Something Quillbinder should be able to do, or do differently.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for the idea. Please describe it in your own words; do not post screenshots, texts or files of other programs.
+
+        Much of what one writer needs and another does not fits an add-on better than the program itself. If you
+        would like to write one: [the developer guide](https://github.com/Shelin-boop/Quillbinder_Collection/blob/main/docs/developer-guide.md).
+
+        Write in English or German. Fields marked with a red star are needed.
+
+  - type: textarea
+    id: goal
+    attributes:
+      label: What do you want to do?
+      description: The task in your writing work, not yet the solution. What is hard or impossible today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: idea
+    attributes:
+      label: How could Quillbinder help?
+      description: Where it would appear (a menu, a window, the inspector, compile ...) and what it would do.
+    validations:
+      required: true
+
+  - type: textarea
+    id: today
+    attributes:
+      label: How do you manage today?
+      description: A way around it that you use now, if there is one.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: system
+    attributes:
+      label: System you use
+      multiple: true
+      options:
+        - Linux
+        - Windows
+        - Android
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version of Quillbinder
+      description: "Shown under Help > About."
+      placeholder: 0.91.3 beta
+    validations:
+      required: false

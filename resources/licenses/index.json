@@ -1,0 +1,1139 @@
+{
+ "note": "Made by tools/collect-licenses.py from the Ubuntu 24.04 packages the AppImage carries and from the attribution files of Qt's own build (0.80.0).",
+ "components": [
+  {
+   "name": "Quillbinder",
+   "version": "",
+   "license": "Apache-2.0 (Apache License 2.0)",
+   "where": "the program itself",
+   "text": "quillbinder-Apache-2.0.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection"
+  },
+  {
+   "name": "Breeze icons (a subset)",
+   "version": "",
+   "license": "LGPL-3.0-or-later",
+   "where": "icons of the menus and toolbars",
+   "text": "breeze-icons.txt",
+   "source": "the SVG files themselves, in resources/icons of the Quillbinder source (https://github.com/Shelin-boop/Quillbinder_Collection); upstream: https://invent.kde.org/frameworks/breeze-icons"
+  },
+  {
+   "name": "Monocypher",
+   "version": "4.0.3",
+   "license": "BSD-2-Clause (dual-licensed: BSD-2-Clause or CC0-1.0)",
+   "where": "the check of package signatures (Ed25519), compiled into the program (0.65.0)",
+   "text": "monocypher.txt",
+   "source": "src/core/third_party/monocypher of the Quillbinder source (https://github.com/Shelin-boop/Quillbinder_Collection); upstream: https://github.com/LoupVaillant/Monocypher, tag 4.0.3"
+  },
+  {
+   "name": "AppImage type2-runtime",
+   "version": "",
+   "license": "MIT",
+   "where": "the start code at the beginning of the AppImage file",
+   "text": "appimage-type2-runtime.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file appimage-type2-runtime-dd6cebe.src.tar (the AppImage runtime at commit dd6cebe with the sources of the libraries its build links in)",
+   "runtimePart": true,
+   "sourceFile": "appimage-type2-runtime-dd6cebe.src.tar"
+  },
+  {
+   "name": "musl libc (in the AppImage runtime)",
+   "version": "",
+   "license": "MIT",
+   "where": "linked into the AppImage runtime",
+   "text": "runtime-musl.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file appimage-type2-runtime-dd6cebe.src.tar (the AppImage runtime at commit dd6cebe with the sources of the libraries its build links in)",
+   "runtimePart": true,
+   "sourceFile": "appimage-type2-runtime-dd6cebe.src.tar"
+  },
+  {
+   "name": "libfuse (in the AppImage runtime)",
+   "version": "",
+   "license": "LGPL-2.1",
+   "where": "linked into the AppImage runtime",
+   "text": "runtime-libfuse3.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file appimage-type2-runtime-dd6cebe.src.tar (the AppImage runtime at commit dd6cebe with the sources of the libraries its build links in)",
+   "runtimePart": true,
+   "sourceFile": "appimage-type2-runtime-dd6cebe.src.tar"
+  },
+  {
+   "name": "squashfuse (in the AppImage runtime)",
+   "version": "",
+   "license": "BSD-2-Clause",
+   "where": "linked into the AppImage runtime",
+   "text": "runtime-squashfuse.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file appimage-type2-runtime-dd6cebe.src.tar (the AppImage runtime at commit dd6cebe with the sources of the libraries its build links in)",
+   "runtimePart": true,
+   "sourceFile": "appimage-type2-runtime-dd6cebe.src.tar"
+  },
+  {
+   "name": "zstd (in the AppImage runtime)",
+   "version": "",
+   "license": "BSD-3-Clause or GPL-2.0",
+   "where": "linked into the AppImage runtime",
+   "text": "runtime-zstd.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file appimage-type2-runtime-dd6cebe.src.tar (the AppImage runtime at commit dd6cebe with the sources of the libraries its build links in)",
+   "runtimePart": true,
+   "sourceFile": "appimage-type2-runtime-dd6cebe.src.tar"
+  },
+  {
+   "name": "zlib (in the AppImage runtime)",
+   "version": "",
+   "license": "Zlib",
+   "where": "linked into the AppImage runtime",
+   "text": "runtime-zlib.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file appimage-type2-runtime-dd6cebe.src.tar (the AppImage runtime at commit dd6cebe with the sources of the libraries its build links in)",
+   "runtimePart": true,
+   "sourceFile": "appimage-type2-runtime-dd6cebe.src.tar"
+  },
+  {
+   "name": "Qt",
+   "version": "6.12.0",
+   "license": "LGPL-3.0-only",
+   "where": "libQt6Core.so.6, libQt6DBus.so.6, libQt6Gui.so.6, libQt6Network.so.6, libQt6OpenGL.so.6, libQt6Pdf.so.6, libQt6PdfWidgets.so.6, libQt6PrintSupport.so.6, libQt6Svg.so.6, libQt6WaylandClient.so.6, libQt6Widgets.so.6, libQt6WlShellIntegration.so.6, libQt6XcbQpa.so.6, libQt6Xml.so.6, libadwaita.so, libbradient.so, libcomposeplatforminputcontextplugin.so, libcupsprintersupport.so, libdmabuf-server.so, libdrm-egl-server.so, libfullscreen-shell-v1.so, libibusplatforminputcontextplugin.so, libivi-shell.so, libqgif.so, libqico.so, libqjpeg.so, libqoffscreen.so, libqpdf.so, libqsvg.so, libqsvgicon.so, libqt-plugin-wayland-egl.so, libqt-shell.so, libqwayland.so, libqwebp.so, libqxcb-egl-integration.so, libqxcb-glx-integration.so, libqxcb.so, libqxdgdesktopportal.so, libshm-emulation-server.so, libvulkan-server.so, libwl-shell-plugin.so, libxdg-shell.so",
+   "files": [
+    "usr/lib/libQt6Core.so.6",
+    "usr/lib/libQt6DBus.so.6",
+    "usr/lib/libQt6Gui.so.6",
+    "usr/lib/libQt6Network.so.6",
+    "usr/lib/libQt6OpenGL.so.6",
+    "usr/lib/libQt6Pdf.so.6",
+    "usr/lib/libQt6PdfWidgets.so.6",
+    "usr/lib/libQt6PrintSupport.so.6",
+    "usr/lib/libQt6Svg.so.6",
+    "usr/lib/libQt6WaylandClient.so.6",
+    "usr/lib/libQt6Widgets.so.6",
+    "usr/lib/libQt6WlShellIntegration.so.6",
+    "usr/lib/libQt6XcbQpa.so.6",
+    "usr/lib/libQt6Xml.so.6",
+    "usr/plugins/iconengines/libqsvgicon.so",
+    "usr/plugins/imageformats/libqgif.so",
+    "usr/plugins/imageformats/libqico.so",
+    "usr/plugins/imageformats/libqjpeg.so",
+    "usr/plugins/imageformats/libqpdf.so",
+    "usr/plugins/imageformats/libqsvg.so",
+    "usr/plugins/imageformats/libqwebp.so",
+    "usr/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so",
+    "usr/plugins/platforminputcontexts/libibusplatforminputcontextplugin.so",
+    "usr/plugins/platforms/libqoffscreen.so",
+    "usr/plugins/platforms/libqwayland.so",
+    "usr/plugins/platforms/libqxcb.so",
+    "usr/plugins/platformthemes/libqxdgdesktopportal.so",
+    "usr/plugins/printsupport/libcupsprintersupport.so",
+    "usr/plugins/wayland-decoration-client/libadwaita.so",
+    "usr/plugins/wayland-decoration-client/libbradient.so",
+    "usr/plugins/wayland-graphics-integration-client/libdmabuf-server.so",
+    "usr/plugins/wayland-graphics-integration-client/libdrm-egl-server.so",
+    "usr/plugins/wayland-graphics-integration-client/libqt-plugin-wayland-egl.so",
+    "usr/plugins/wayland-graphics-integration-client/libshm-emulation-server.so",
+    "usr/plugins/wayland-graphics-integration-client/libvulkan-server.so",
+    "usr/plugins/wayland-shell-integration/libfullscreen-shell-v1.so",
+    "usr/plugins/wayland-shell-integration/libivi-shell.so",
+    "usr/plugins/wayland-shell-integration/libqt-shell.so",
+    "usr/plugins/wayland-shell-integration/libwl-shell-plugin.so",
+    "usr/plugins/wayland-shell-integration/libxdg-shell.so",
+    "usr/plugins/xcbglintegrations/libqxcb-egl-integration.so",
+    "usr/plugins/xcbglintegrations/libqxcb-glx-integration.so"
+   ],
+   "qtBuild": "6.12.0",
+   "text": "qt.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file qt-everywhere-src-6.12.0.tar.xz (the Qt Project's source release; also https://download.qt.io/official_releases/qt/6.12/6.12.0/single/ and the tag v6.12.0 of https://code.qt.io)"
+  },
+  {
+   "name": "ICU (Qt's build)",
+   "version": "73.2",
+   "license": "Unicode-3.0 (ICU License)",
+   "where": "libicudata.so.73, libicui18n.so.73, libicuuc.so.73",
+   "files": [
+    "usr/lib/libicudata.so.73",
+    "usr/lib/libicui18n.so.73",
+    "usr/lib/libicuuc.so.73"
+   ],
+   "qtBuild": "6.12.0",
+   "text": "qt-icu.txt",
+   "source": "https://github.com/unicode-org/icu, tag release-73-2 (a permissive license: the source is not required, and is named for convenience)"
+  },
+  {
+   "name": "Adobe Glyph List For New Fonts (in Qt)",
+   "version": "1.7",
+   "license": "BSD 3-Clause \"New\" or \"Revised\" License",
+   "where": "Qt",
+   "text": "qt-aglfn.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland KDE DBus Menu Protocol (in Qt)",
+   "version": "1",
+   "license": "GNU Lesser General Public License 2.1 or later",
+   "where": "Qt",
+   "text": "qt-appmenu.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "BLAKE2 (reference implementation) (in Qt)",
+   "version": "ed1974ea83433eba7b2d95c5dcd9ac33cb847913",
+   "license": "Creative Commons Zero v1.0 Universal or Apache License 2.0",
+   "where": "Qt",
+   "text": "qt-blake2.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "DejaVu Fonts (in Qt)",
+   "version": "2.37",
+   "license": "Bitstream Vera Font License",
+   "where": "Qt",
+   "text": "qt-dejayvu.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Efficient Binary-Decimal and Decimal-Binary Conversion Routines for IEEE Doubles (in Qt)",
+   "version": "3.4.0",
+   "license": "BSD 3-clause \"New\" or \"Revised\" License",
+   "where": "Qt",
+   "text": "qt-doubleconversion.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Easing Equations by Robert Penner (in Qt)",
+   "version": "",
+   "license": "BSD 3-clause \"New\" or \"Revised\" License",
+   "where": "Qt",
+   "text": "qt-easing.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Emoji Segmenter (in Qt)",
+   "version": "0.4.0",
+   "license": "Apache License 2.0",
+   "where": "Qt",
+   "text": "qt-emoji-segmenter.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "forkfd (in Qt)",
+   "version": "",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-forkfd.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Fractional Scale Protocol (in Qt)",
+   "version": "1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-fractional-scale-v1.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Freetype 2 (in Qt)",
+   "version": "2.14.3",
+   "license": "Freetype Project License or GNU General Public License v2.0 only",
+   "where": "Qt",
+   "text": "qt-freetype.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Freetype 2 - Bitmap Distribution Format (BDF) support (in Qt)",
+   "version": "",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-freetype-bdf.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Freetype 2 - Portable Compiled Format (PCF) support (in Qt)",
+   "version": "",
+   "license": "MIT License and MIT Open Group variant",
+   "where": "Qt",
+   "text": "qt-freetype-pcf.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Freetype 2 - zlib (in Qt)",
+   "version": "",
+   "license": "zlib License",
+   "where": "Qt",
+   "text": "qt-freetype-zlib.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Anti-aliasing rasterizer from FreeType 2 (in Qt)",
+   "version": "",
+   "license": "Freetype Project License or GNU General Public License v2.0 only",
+   "where": "Qt",
+   "text": "qt-grayraster.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "HarfBuzz-NG (in Qt)",
+   "version": "14.5.0",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-harfbuzz-ng.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "sRGB color profile icc file (in Qt)",
+   "version": "",
+   "license": "International Color Consortium License",
+   "where": "Qt",
+   "text": "qt-icc-srgb-color-profile.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "KWin (in Qt)",
+   "version": "5.13.4",
+   "license": "BSD 3-Clause \"New\" or \"Revised\" License",
+   "where": "Qt",
+   "text": "qt-kwin.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "libdbus-1 headers (in Qt)",
+   "version": "1.13.12",
+   "license": "Academic Free License v2.1, or GNU General Public License v2.0 or later",
+   "where": "Qt",
+   "text": "qt-libdbus-1-headers.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "LibJPEG-turbo (in Qt)",
+   "version": "3.2.0",
+   "license": "Independent JPEG Group License and BSD 3-Clause \"New\" or \"Revised\" License",
+   "where": "Qt",
+   "text": "qt-libjpeg.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "LibPNG (in Qt)",
+   "version": "1.6.58",
+   "license": "libpng License and PNG Reference Library version 2",
+   "where": "Qt",
+   "text": "qt-libpng.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "libpsl - C library to handle the Public Suffix List (in Qt)",
+   "version": "664f3dc85259ec65e30248a61fa1c45b7b0e4c3f",
+   "license": "BSD 3-clause \"New\" or \"Revised\" License",
+   "where": "Qt",
+   "text": "qt-libpsl.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "WebP (libwebp) (in Qt)",
+   "version": "1.6.0",
+   "license": "BSD 3-clause \"New\" or \"Revised\" License",
+   "where": "Qt",
+   "text": "qt-libwebp.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "MD4 (in Qt)",
+   "version": "",
+   "license": "Public Domain",
+   "where": "Qt",
+   "text": "qt-md4.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "MD4C (in Qt)",
+   "version": "0.5.3",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-md4c.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "MD5 (in Qt)",
+   "version": "",
+   "license": "Public Domain",
+   "where": "Qt",
+   "text": "qt-md5.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "OpenGL ES 2 Headers (in Qt)",
+   "version": "Revision 27673",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-opengl-es2-headers.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "OpenGL Headers (in Qt)",
+   "version": "Revision 27684",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-opengl-headers.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "PCRE2 (in Qt)",
+   "version": "10.48",
+   "license": "BSD 3-clause \"New\" or \"Revised\" License with PCRE2 binary-like Packages Exception",
+   "where": "Qt",
+   "text": "qt-pcre2.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "PCRE2 - Stack-less Just-In-Time Compiler (in Qt)",
+   "version": "10.48",
+   "license": "BSD 2-clause \"Simplified\" License",
+   "where": "Qt",
+   "text": "qt-pcre2-sljit.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Presentation Time Protocol (in Qt)",
+   "version": "1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-presentation-time.xml.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "The Public Suffix List (in Qt)",
+   "version": "2026-05-14_08-35-31_UTC",
+   "license": "Mozilla Public License 2.0",
+   "where": "Qt",
+   "text": "qt-psl-data.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Secure Hash Algorithms SHA-384 and SHA-512 (in Qt)",
+   "version": "",
+   "license": "BSD 3-clause \"New\" or \"Revised\" License",
+   "where": "Qt",
+   "text": "qt-rfc6234.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Secure Hash Algorithm SHA-1 (in Qt)",
+   "version": "",
+   "license": "Public Domain",
+   "where": "Qt",
+   "text": "qt-sha1.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Secure Hash Algorithm SHA-3 - brg_endian (in Qt)",
+   "version": "1.0.0",
+   "license": "BSD 2-clause \"Simplified\" License",
+   "where": "Qt",
+   "text": "qt-sha3_endian.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Secure Hash Algorithm SHA-3 - Keccak (in Qt)",
+   "version": "3.2",
+   "license": "Creative Commons Zero v1.0 Universal",
+   "where": "Qt",
+   "text": "qt-sha3_keccak.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "SipHash Algorithm (in Qt)",
+   "version": "",
+   "license": "Creative Commons Zero v1.0 Universal",
+   "where": "Qt",
+   "text": "qt-siphash.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Smooth Scaling Algorithm (in Qt)",
+   "version": "",
+   "license": "BSD 2-clause \"Simplified\" License and Imlib2 License",
+   "where": "Qt",
+   "text": "qt-smooth-scaling-algorithm.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Apache Tika MimeType Definitions (in Qt)",
+   "version": "c29724782854bb5a319f4a1940d0828a58ace3f9",
+   "license": "Apache License 2.0",
+   "where": "Qt",
+   "text": "qt-tika-mimetypes.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "TinyCBOR (in Qt)",
+   "version": "7.0",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-tinycbor.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "tl::expected (in Qt)",
+   "version": "41d3e1f48d682992a2230b2a715bca38b848b269",
+   "license": "Creative Commons Zero v1.0 Universal",
+   "where": "Qt",
+   "text": "qt-tlexpected.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Unicode Character Database (UCD) (in Qt)",
+   "version": "36",
+   "license": "Unicode License Agreement - Data Files and Software (2016)",
+   "where": "Qt",
+   "text": "qt-unicode-character-database.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Unicode Common Locale Data Repository (CLDR) (in Qt)",
+   "version": "v48.2",
+   "license": "Unicode License v3",
+   "where": "Qt",
+   "text": "qt-unicode-cldr.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Vulkan API Registry (in Qt)",
+   "version": "1.4.308",
+   "license": "Apache License 2.0 or MIT License",
+   "where": "Qt",
+   "text": "qt-vulkan-xml-spec.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Vulkan Memory Allocator (in Qt)",
+   "version": "3.3.0",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-vulkanmemoryallocator.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Color Management Protocol (in Qt)",
+   "version": "1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-color-management-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland EGLStream Controller Protocol (in Qt)",
+   "version": "1.1.1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-eglstream-controller.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Fullscreen Shell Protocol (in Qt)",
+   "version": "unstable v1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-fullscreen-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Linux Dmabuf Unstable V1 Protocol (in Qt)",
+   "version": "unstable v1, version 3",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-linux-dmabuf-unstable-v1.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Linux Dmabuf V1 Protocol (in Qt)",
+   "version": "v1, version 5",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-linux-dmabuf-v1.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Pointer Gestures Protocol (in Qt)",
+   "version": "unstable v1, version 2",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-pointer-gestures-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Pointer Warp Protocol (in Qt)",
+   "version": "version 1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-pointer-warp-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Primary Selection Protocol (in Qt)",
+   "version": "1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-primary-selection-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Protocol (in Qt)",
+   "version": "1.24.0",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Scaler Protocol (in Qt)",
+   "version": "2",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-scaler-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Session Management Protocol (in Qt)",
+   "version": "experimental V1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-session-management-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Tablet Protocol (in Qt)",
+   "version": "unstable v2, version 1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-tablet-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Text Input Protocol v1 (in Qt)",
+   "version": "unstable v1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-text-input-unstable-v1.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Text Input Protocol v2 (in Qt)",
+   "version": "unstable v2",
+   "license": "HPND License",
+   "where": "Qt",
+   "text": "qt-wayland-text-input-unstable-v2.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Text Input Protocol (in Qt)",
+   "version": "unstable v3",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-text-input-unstable-v3.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Viewporter Protocol (in Qt)",
+   "version": "1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-viewporter-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland xdg-activation Protocol (in Qt)",
+   "version": "unstable v1, version 1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-xdg-activation.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland xdg-decoration Protocol (in Qt)",
+   "version": "unstable v1, version 1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-xdg-decoration-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland XDG Output Protocol (in Qt)",
+   "version": "unstable v1, version 3",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-xdg-output-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland XDG Shell Protocol (in Qt)",
+   "version": "1.18",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-xdg-shell-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland XDG System Bell Protocol (in Qt)",
+   "version": "1.18",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-xdg-system-bell-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland xdg-toplevel-icon Protocol (in Qt)",
+   "version": "version 1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wayland-xdg-toplevel-icon-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "WebGradients (in Qt)",
+   "version": "",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-webgradients.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wlr Data Control Unstable V1 Protocol (in Qt)",
+   "version": "2",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-wlr-data-control-unstable-v1-protocol.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "XCB-XInput (in Qt)",
+   "version": "",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-xcb-xinput.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland Dialog Protocol (in Qt)",
+   "version": "1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-xdg-dialog-v1.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Wayland XDG Foreign Protocol (in Qt)",
+   "version": "1",
+   "license": "MIT License",
+   "where": "Qt",
+   "text": "qt-xdg-foreign-unstable-v2.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "X Server helper (in Qt)",
+   "version": "",
+   "license": "X11 License and Historical Permission Notice and Disclaimer",
+   "where": "Qt",
+   "text": "qt-xserverhelper.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "XSVG (in Qt)",
+   "version": "",
+   "license": "Historical Permission Notice and Disclaimer - sell variant",
+   "where": "Qt",
+   "text": "qt-xsvg.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Data Compression Library (zlib) (in Qt)",
+   "version": "1.3.2",
+   "license": "zlib License",
+   "where": "Qt",
+   "text": "qt-zlib.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "PDFium (in Qt PDF)",
+   "version": "",
+   "license": "BSD-3-Clause",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-pdfium.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "The Chromium Project (in Qt PDF)",
+   "version": "",
+   "license": "BSD-3-Clause",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-the-chromium-project.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Abseil (in Qt PDF)",
+   "version": "",
+   "license": "Apache-2.0",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-abseil.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "FreeType (in Qt PDF)",
+   "version": "",
+   "license": "FTL (FreeType License)",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-freetype.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "ICU (in Qt PDF)",
+   "version": "",
+   "license": "Unicode-3.0 (ICU License)",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-icu.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "libjpeg-turbo (in Qt PDF)",
+   "version": "",
+   "license": "IJG, BSD-3-Clause, Zlib",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-libjpeg-turbo.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "libpng (in Qt PDF)",
+   "version": "",
+   "license": "Libpng-2.0, Libpng",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-libpng.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "zlib (in Qt PDF)",
+   "version": "",
+   "license": "Zlib",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-zlib.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "OpenJPEG (in Qt PDF)",
+   "version": "",
+   "license": "BSD-2-Clause",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-openjpeg.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Little CMS (in Qt PDF)",
+   "version": "",
+   "license": "MIT",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-little-cms.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "Anti-Grain Geometry (in Qt PDF)",
+   "version": "",
+   "license": "MIT-like (permission notice below)",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-anti-grain-geometry.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "BigInt (in Qt PDF)",
+   "version": "",
+   "license": "Public domain (notice below)",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-bigint.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "FP16 (in Qt PDF)",
+   "version": "",
+   "license": "MIT",
+   "where": "libQt6Pdf.so.6 (showing PDF files)",
+   "text": "qtpdf-fp16.txt",
+   "sourceFile": "qt-everywhere-src-6.12.0.tar.xz",
+   "source": "the Qt source, file qt-everywhere-src-6.12.0.tar.xz"
+  },
+  {
+   "name": "glib2.0",
+   "version": "2.80.0-6ubuntu3.10",
+   "license": "LGPL-2.1+, old-glib-tests, AFL-2.0 or LGPL-2.1+, Janik-permissive, LGPL-2+, FSFULLR, Iconv-PD, CC0-1.0 ...",
+   "where": "libgthread-2.0.so.0",
+   "files": [
+    "usr/lib/libgthread-2.0.so.0"
+   ],
+   "text": "ubuntu-glib2.0.txt",
+   "package": "glib2.0",
+   "sourceFile": "glib2.0_2.80.0-6ubuntu3.10.src.tar",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file glib2.0_2.80.0-6ubuntu3.10.src.tar (the Ubuntu 24.04 source package glib2.0 2.80.0-6ubuntu3.10; also from Ubuntu: apt-get source glib2.0=2.80.0-6ubuntu3.10)"
+  },
+  {
+   "name": "hunspell",
+   "version": "1.7.2+really1.7.2-10build3",
+   "license": "MPL 1.1/GPL 2.0/LGPL 2.1",
+   "where": "libhunspell-1.7.so.0",
+   "files": [
+    "usr/lib/libhunspell-1.7.so.0"
+   ],
+   "text": "ubuntu-hunspell.txt",
+   "package": "hunspell",
+   "sourceFile": "hunspell_1.7.2_really1.7.2-10build3.src.tar",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file hunspell_1.7.2_really1.7.2-10build3.src.tar (the Ubuntu 24.04 source package hunspell 1.7.2+really1.7.2-10build3; also from Ubuntu: apt-get source hunspell=1.7.2+really1.7.2-10build3)"
+  },
+  {
+   "name": "libpng1.6",
+   "version": "1.6.43-5ubuntu0.7",
+   "license": "libpng, expat, GPL-2+ or BSD-like-with-advertising-clause, libpng OR Apache-2.0 OR BSD-3-clause, Apache-2.0, GPL-2+, BSD-like-with-advertising-clause, BSD-3-clause",
+   "where": "libpng16.so.16",
+   "files": [
+    "usr/lib/libpng16.so.16"
+   ],
+   "text": "ubuntu-libpng1.6.txt",
+   "package": "libpng1.6",
+   "sourceFile": "libpng1.6_1.6.43-5ubuntu0.7.src.tar",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file libpng1.6_1.6.43-5ubuntu0.7.src.tar (the Ubuntu 24.04 source package libpng1.6 1.6.43-5ubuntu0.7; also from Ubuntu: apt-get source libpng1.6=1.6.43-5ubuntu0.7)"
+  },
+  {
+   "name": "libxcb",
+   "version": "1.15-1ubuntu2",
+   "license": "MIT (X11 style)",
+   "where": "libxcb-glx.so.0, libxcb-randr.so.0, libxcb-render.so.0, libxcb-shape.so.0, libxcb-shm.so.0, libxcb-sync.so.1, libxcb-xfixes.so.0, libxcb-xkb.so.1",
+   "files": [
+    "usr/lib/libxcb-glx.so.0",
+    "usr/lib/libxcb-randr.so.0",
+    "usr/lib/libxcb-render.so.0",
+    "usr/lib/libxcb-shape.so.0",
+    "usr/lib/libxcb-shm.so.0",
+    "usr/lib/libxcb-sync.so.1",
+    "usr/lib/libxcb-xfixes.so.0",
+    "usr/lib/libxcb-xkb.so.1"
+   ],
+   "text": "ubuntu-libxcb.txt",
+   "package": "libxcb",
+   "sourceFile": "libxcb_1.15-1ubuntu2.src.tar",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file libxcb_1.15-1ubuntu2.src.tar (the Ubuntu 24.04 source package libxcb 1.15-1ubuntu2; also from Ubuntu: apt-get source libxcb=1.15-1ubuntu2)"
+  },
+  {
+   "name": "libxkbcommon",
+   "version": "1.6.0-1build1",
+   "license": "MIT (X11 style)",
+   "where": "libxkbcommon-x11.so.0, libxkbcommon.so.0",
+   "files": [
+    "usr/lib/libxkbcommon-x11.so.0",
+    "usr/lib/libxkbcommon.so.0"
+   ],
+   "text": "ubuntu-libxkbcommon.txt",
+   "package": "libxkbcommon",
+   "sourceFile": "libxkbcommon_1.6.0-1build1.src.tar",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file libxkbcommon_1.6.0-1build1.src.tar (the Ubuntu 24.04 source package libxkbcommon 1.6.0-1build1; also from Ubuntu: apt-get source libxkbcommon=1.6.0-1build1)"
+  },
+  {
+   "name": "wayland",
+   "version": "1.22.0-2.1build1",
+   "license": "X11",
+   "where": "libwayland-cursor.so.0, libwayland-egl.so.1",
+   "files": [
+    "usr/lib/libwayland-cursor.so.0",
+    "usr/lib/libwayland-egl.so.1"
+   ],
+   "text": "ubuntu-wayland.txt",
+   "package": "wayland",
+   "sourceFile": "wayland_1.22.0-2.1build1.src.tar",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file wayland_1.22.0-2.1build1.src.tar (the Ubuntu 24.04 source package wayland 1.22.0-2.1build1; also from Ubuntu: apt-get source wayland=1.22.0-2.1build1)"
+  },
+  {
+   "name": "xcb-util",
+   "version": "0.4.0-1build3",
+   "license": "MIT, GPL-2+",
+   "where": "libxcb-util.so.1",
+   "files": [
+    "usr/lib/libxcb-util.so.1"
+   ],
+   "text": "ubuntu-xcb-util.txt",
+   "package": "xcb-util",
+   "sourceFile": "xcb-util_0.4.0-1build3.src.tar",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file xcb-util_0.4.0-1build3.src.tar (the Ubuntu 24.04 source package xcb-util 0.4.0-1build3; also from Ubuntu: apt-get source xcb-util=0.4.0-1build3)"
+  },
+  {
+   "name": "xcb-util-cursor",
+   "version": "0.1.4-1build1",
+   "license": "MIT/X",
+   "where": "libxcb-cursor.so.0",
+   "files": [
+    "usr/lib/libxcb-cursor.so.0"
+   ],
+   "text": "ubuntu-xcb-util-cursor.txt",
+   "package": "xcb-util-cursor",
+   "sourceFile": "xcb-util-cursor_0.1.4-1build1.src.tar",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file xcb-util-cursor_0.1.4-1build1.src.tar (the Ubuntu 24.04 source package xcb-util-cursor 0.1.4-1build1; also from Ubuntu: apt-get source xcb-util-cursor=0.1.4-1build1)"
+  },
+  {
+   "name": "xcb-util-image",
+   "version": "0.4.0-2build1",
+   "license": "MIT/X11, GPL-2+",
+   "where": "libxcb-image.so.0",
+   "files": [
+    "usr/lib/libxcb-image.so.0"
+   ],
+   "text": "ubuntu-xcb-util-image.txt",
+   "package": "xcb-util-image",
+   "sourceFile": "xcb-util-image_0.4.0-2build1.src.tar",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file xcb-util-image_0.4.0-2build1.src.tar (the Ubuntu 24.04 source package xcb-util-image 0.4.0-2build1; also from Ubuntu: apt-get source xcb-util-image=0.4.0-2build1)"
+  },
+  {
+   "name": "xcb-util-keysyms",
+   "version": "0.4.0-1build4",
+   "license": "MIT/X11, GPL-2+",
+   "where": "libxcb-keysyms.so.1",
+   "files": [
+    "usr/lib/libxcb-keysyms.so.1"
+   ],
+   "text": "ubuntu-xcb-util-keysyms.txt",
+   "package": "xcb-util-keysyms",
+   "sourceFile": "xcb-util-keysyms_0.4.0-1build4.src.tar",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file xcb-util-keysyms_0.4.0-1build4.src.tar (the Ubuntu 24.04 source package xcb-util-keysyms 0.4.0-1build4; also from Ubuntu: apt-get source xcb-util-keysyms=0.4.0-1build4)"
+  },
+  {
+   "name": "xcb-util-renderutil",
+   "version": "0.3.9-1build4",
+   "license": "MIT/X Consortium License, GPL-2+",
+   "where": "libxcb-render-util.so.0",
+   "files": [
+    "usr/lib/libxcb-render-util.so.0"
+   ],
+   "text": "ubuntu-xcb-util-renderutil.txt",
+   "package": "xcb-util-renderutil",
+   "sourceFile": "xcb-util-renderutil_0.3.9-1build4.src.tar",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file xcb-util-renderutil_0.3.9-1build4.src.tar (the Ubuntu 24.04 source package xcb-util-renderutil 0.3.9-1build4; also from Ubuntu: apt-get source xcb-util-renderutil=0.3.9-1build4)"
+  },
+  {
+   "name": "xcb-util-wm",
+   "version": "0.4.1-1.1build3",
+   "license": "MIT/X Consortium License, GPL-2+",
+   "where": "libxcb-icccm.so.4",
+   "files": [
+    "usr/lib/libxcb-icccm.so.4"
+   ],
+   "text": "ubuntu-xcb-util-wm.txt",
+   "package": "xcb-util-wm",
+   "sourceFile": "xcb-util-wm_0.4.1-1.1build3.src.tar",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file xcb-util-wm_0.4.1-1.1build3.src.tar (the Ubuntu 24.04 source package xcb-util-wm 0.4.1-1.1build3; also from Ubuntu: apt-get source xcb-util-wm=0.4.1-1.1build3)"
+  }
+ ],
+ "commonLicenses": [
+  {
+   "name": "Apache-2.0",
+   "text": "common-Apache-2.0.txt"
+  },
+  {
+   "name": "CC0-1.0",
+   "text": "common-CC0-1.0.txt"
+  },
+  {
+   "name": "GPL-2",
+   "text": "common-GPL-2.txt"
+  },
+  {
+   "name": "GPL-3",
+   "text": "common-GPL-3.txt"
+  },
+  {
+   "name": "LGPL-2",
+   "text": "common-LGPL-2.txt"
+  },
+  {
+   "name": "LGPL-2.1",
+   "text": "common-LGPL-2.1.txt"
+  },
+  {
+   "name": "LGPL-3",
+   "text": "common-LGPL-3.txt"
+  }
+ ],
+ "runtime": {
+  "commit": "dd6cebe",
+  "sourceFile": "appimage-type2-runtime-dd6cebe.src.tar"
+ }
+}

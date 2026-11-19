@@ -1,0 +1,705 @@
+# Builds Quillbinder on GitHub and publishes a release (0.50).
+#
+# Runs
+#  - when main changes CMakeLists.txt (where the version is) or this file, and the version on main
+#    has no release yet (the job "version" looks first; a Claude Code session cannot push tags, so a
+#    new version on main is the usual way to a release),
+#  - when a tag v<version>[-<label>] is pushed (from a computer),
+#  - by hand: Actions > Release > Run workflow (the version on main, if it has no release yet).
+# Everything is built from that commit in a clean Ubuntu 24.04 (the system the AppImage's libraries
+# come from): both FFmpeg sets, the AppImage, the add-ons and the program update. The AppImage is
+# checked end to end, the source code of every third-party library is collected, and
+# tools/publish-release.sh puts it all on the Releases page (the library sources into the release
+# "Third-party source code") and creates the tag v<version>-<label> if it is not there yet.
+#
+# 0.64.1 (the external audit's X-5): only the job "publish" may write (releases, tags); it runs no
+# code that was downloaded or built, it takes the files of the jobs before it as an artifact. No
+# checkout keeps the token (persist-credentials: false), and the actions are pinned to commits
+# (the tag each one had on 2026-11-09 in the comment).
+#
+# 0.70.0 (the external audits of 2026-11-10, A S-02 and S-03):
+#  - "build" builds and checks everything WITHOUT the signing key (FFmpeg, whisper.cpp, the packaging
+#    tools and Ubuntu's packages run there); "sign-packages" and "sign-checksums" get the key and run no
+#    third-party code: only openssl and Python of the runner and tools/make-package.py of this commit;
+#    "assemble" puts the signed add-ons into the full version (without the key).
+#  - "tests" runs the project's full test suite (all suites but v060: it was left out while it
+#    checked the copy into a second repository; whether it can run here now is not tried yet); nothing is published unless it passes (a suite that fails is run once more, for the
+#    rare timing failures of a two-core machine).
+#
+# 2026-11-15 (build optimization P2 and P7; working rules section 10, decision D3, with its safeguards):
+#  - FFmpeg (both sets) and whisper.cpp are kept between runs in GitHub's cache, under their recipe hash
+#    (tools/deps-pack.sh: the build scripts, the pinned versions, the patches, the build machine and its compilers), so
+#    a changed recipe is built anew by itself. Only the job "build" writes these caches, only on main, only when it
+#    built them itself; "tests" only reads them. The signing jobs touch no cache. Every run writes the SHA-256 of the
+#    libraries it uses into its log, from the cache or built.
+#  - ccache keeps the compiled files of the program ("build") and of the test build ("tests"), each job its own,
+#    written only on main.
+#  - "Build fresh" (Run workflow > fresh) uses no cache at all; it is also used by itself for a main-number release
+#    (x.0.0). Use it whenever FFmpeg or whisper.cpp changes, or when a cached build is in doubt.
+#  - The download page's artifact has a name per attempt, so that "Re-run failed jobs" works for the job
+#    "download-page" (before, a rerun ended with "Multiple artifacts named github-pages").
+name: Release
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths: ['CMakeLists.txt', '.github/workflows/release.yml']
+  workflow_dispatch:
+    inputs:
+      fresh:
+        description: 'Build fresh: no caches (FFmpeg or whisper.cpp changed, a main-number release, a cache in doubt)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  version:
+    # only in the project's own repository: a copy of it carries the same file but never builds or
+    # publishes releases itself
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    outputs:
+      tag: ${{ steps.v.outputs.tag }}
+      build: ${{ steps.v.outputs.build }}
+      fresh: ${{ steps.v.outputs.fresh }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - id: v
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FRESH_INPUT: ${{ inputs.fresh }}
+        run: |
+          VERSION=$(sed -n 's/^set(APP_VERSION *"\(.*\)")/\1/p' CMakeLists.txt)
+          LABEL=$(sed -n 's/^set(APP_VERSION_LABEL *"\(.*\)")/\1/p' CMakeLists.txt)
+          # 2026-11-15 (D3): no caches when asked, and for a main-number release (x.0.0)
+          if [ "$FRESH_INPUT" = true ] || [[ "$VERSION" =~ ^[1-9][0-9]*\.0\.0$ ]]; then
+            echo "Build fresh: no caches in this run."
+            echo "fresh=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "fresh=false" >> "$GITHUB_OUTPUT"
+          fi
+          if [ "$GITHUB_REF_TYPE" = tag ]; then TAG=$GITHUB_REF_NAME; else TAG="v$VERSION${LABEL:+-$LABEL}"; fi
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            # (0.60) a release without the full version gets everything built and uploaded again
+            if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | grep -q -- '-full-.*\.AppImage$'; then
+              echo "The release $TAG exists already: nothing to build."
+              echo "build=false" >> "$GITHUB_OUTPUT"
+            else
+              echo "The release $TAG has no full version yet: build and publish again."
+              echo "build=true" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "No release $TAG yet: build and publish it."
+            echo "build=true" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    # everything is built and checked here, without the signing key
+    needs: version
+    if: needs.version.outputs.build == 'true'
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    timeout-minutes: 300
+    env:
+      TAG: ${{ needs.version.outputs.tag }}
+      DEBIAN_FRONTEND: noninteractive
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Tools to fetch the source
+        run: |
+          set -o pipefail
+          mkdir -p /tmp/ci-log && echo tools > /tmp/ci-log/last-step
+          { apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl gh xz-utils openssl \
+              ccache zstd \
+            && apt-get -y -qq upgrade; } 2>&1 | tee /tmp/ci-log/tools.log
+
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Build tools and the libraries of Ubuntu 24.04
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          tools/ci-step.sh deb-src bash tools/enable-deb-src.sh
+          tools/ci-step.sh setup bash tools/cloud-setup.sh
+          tools/ci-step.sh upgrade apt-get -y -qq upgrade
+
+      - name: The recipes of FFmpeg and whisper.cpp (the names of their caches)
+        id: recipe
+        run: |
+          for p in ffmpeg whisper; do tools/deps-pack.sh recipe "$p"; echo "$p=$(tools/deps-pack.sh hash "$p")" | tee -a "$GITHUB_OUTPUT"; done
+
+      - name: FFmpeg from the cache
+        id: ffmpeg-cache
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: |
+            build/ffmpeg
+            build/ffmpeg-full
+          key: deps-linux-ffmpeg-${{ steps.recipe.outputs.ffmpeg }}
+
+      - name: whisper.cpp from the cache
+        id: whisper-cache
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/whisper
+          key: deps-linux-whisper-${{ steps.recipe.outputs.whisper }}
+
+      - name: FFmpeg for the media add-ons (both sets)
+        env:
+          QB_DEPS_PACK: '0'   # built here from the pinned source (or taken from this workflow's own cache)
+        run: tools/ci-step.sh ffmpeg tools/get-ffmpeg.sh
+
+      - name: whisper.cpp for the add-on "Speech Transcription" (0.61)
+        env:
+          QB_DEPS_PACK: '0'
+        run: tools/ci-step.sh whisper tools/get-whisper.sh
+
+      - name: The SHA-256 of the FFmpeg and whisper.cpp libraries in this release
+        env:
+          FFMPEG_HIT: ${{ steps.ffmpeg-cache.outputs.cache-hit }}
+          WHISPER_HIT: ${{ steps.whisper-cache.outputs.cache-hit }}
+        run: |
+          echo "FFmpeg: $([ "$FFMPEG_HIT" = true ] && echo 'from the cache' || echo 'built in this run')"
+          echo "whisper.cpp: $([ "$WHISPER_HIT" = true ] && echo 'from the cache' || echo 'built in this run')"
+          find build/ffmpeg build/ffmpeg-full build/whisper -type f -name '*.so*' | sort | xargs sha256sum
+
+      - name: FFmpeg into the cache (main only)
+        if: github.ref == 'refs/heads/main' && needs.version.outputs.fresh != 'true' && steps.ffmpeg-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: |
+            build/ffmpeg
+            build/ffmpeg-full
+          key: deps-linux-ffmpeg-${{ steps.recipe.outputs.ffmpeg }}
+
+      - name: whisper.cpp into the cache (main only)
+        if: github.ref == 'refs/heads/main' && needs.version.outputs.fresh != 'true' && steps.whisper-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/whisper
+          key: deps-linux-whisper-${{ steps.recipe.outputs.whisper }}
+
+      - name: The compiled files of the last build (ccache)
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: /tmp/ccache
+          key: ccache-linux-appimage-${{ github.sha }}
+          restore-keys: ccache-linux-appimage-
+
+      - name: AppImage
+        env:
+          CMAKE_C_COMPILER_LAUNCHER: ccache
+          CMAKE_CXX_COMPILER_LAUNCHER: ccache
+        run: |
+          { echo "CCACHE_DIR=/tmp/ccache"; echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE"; echo "CCACHE_MAXSIZE=500M"; } >> "$GITHUB_ENV"
+          export CCACHE_DIR=/tmp/ccache CCACHE_BASEDIR="$GITHUB_WORKSPACE" CCACHE_MAXSIZE=500M
+          ccache -z > /dev/null
+          tools/ci-step.sh appimage packaging/linux/build-appimage.sh
+          ccache -s
+
+      - name: The compiled files into the cache (main only)
+        if: github.ref == 'refs/heads/main' && needs.version.outputs.fresh != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: /tmp/ccache
+          key: ccache-linux-appimage-${{ github.sha }}
+
+      - name: Add-ons and program update (not signed yet)
+        env:
+          QB_FFMPEG_DIR: ${{ github.workspace }}/build/ffmpeg
+          QB_FFMPEG_FULL_DIR: ${{ github.workspace }}/build/ffmpeg-full
+        run: |
+          mkdir -p dist
+          tools/ci-step.sh addons packaging/linux/build-addons.sh build-appimage dist
+          mapfile -t NEWS < <(python3 -I tools/release-notes.py --whats-new)
+          BUILD=build-appimage OUT=dist tools/ci-step.sh update packaging/linux/build-update.sh "${NEWS[@]}"
+          cp build-appimage/*.AppImage dist/
+          ls -la dist
+
+      - name: Check the AppImage
+        run: tools/ci-step.sh e2e packaging/linux/e2e-appimage.sh "$(ls dist/*-x86_64.AppImage | grep -v -- -full-)" - /tmp/e2e
+
+      - name: Third-party source code
+        run: tools/ci-step.sh sources python3 -I tools/collect-sources.py sources
+
+      - name: Hand the files to the job "sign-packages"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: unsigned
+          path: |
+            dist
+            sources
+            packaging/tools/appimagetool-x86_64.AppImage
+            packaging/tools/runtime-x86_64
+          retention-days: 3
+          if-no-files-found: error
+
+      - name: The end of the failed step's log (as an annotation)
+        if: failure()
+        run: |
+          s=$(cat /tmp/ci-log/last-step 2>/dev/null || echo unknown)
+          f=/tmp/ci-log/$s.log
+          [ -f "$f" ] || { echo "::error title=Step $s failed::no log"; exit 0; }
+          msg=$(tail -n 80 "$f" | cut -c1-300 | sed -e 's/%/%25/g' -e 's/\r/%0D/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+          echo "::error title=Step $s failed::$msg"
+
+      - name: Logs of the check
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: e2e-logs
+          path: /tmp/e2e
+          if-no-files-found: ignore
+
+  tests:
+    # 0.70.0 (audit A S-02): the full test suite of this commit. 0.81.0 (audit of 0.80.0, S-02): publishing waits for
+    # it again (from 2026-11-11 08:00 to 0.81.0 it did not): a build that fails its own tests is never published or
+    # signed as a release
+    needs: version
+    if: needs.version.outputs.build == 'true'
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    timeout-minutes: 330
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Tools to fetch the source
+        run: |
+          apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl xz-utils openssl ccache zstd
+
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Build tools, LibreOffice and epubcheck
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          bash tools/enable-deb-src.sh
+          QB_FULL_SETUP=1 bash tools/cloud-setup.sh
+
+      - name: The recipes of FFmpeg and whisper.cpp (the names of their caches)
+        id: recipe
+        run: |
+          for p in ffmpeg whisper; do echo "$p=$(tools/deps-pack.sh hash "$p")" | tee -a "$GITHUB_OUTPUT"; done
+
+      # read only: the job "build" writes these caches (D3)
+      - name: FFmpeg from the cache
+        id: ffmpeg-cache
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: |
+            build/ffmpeg
+            build/ffmpeg-full
+          key: deps-linux-ffmpeg-${{ steps.recipe.outputs.ffmpeg }}
+
+      - name: whisper.cpp from the cache
+        id: whisper-cache
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/whisper
+          key: deps-linux-whisper-${{ steps.recipe.outputs.whisper }}
+
+      - name: FFmpeg and whisper.cpp (for the add-ons' suites)
+        env:
+          QB_DEPS_PACK: '0'
+          FFMPEG_HIT: ${{ steps.ffmpeg-cache.outputs.cache-hit }}
+          WHISPER_HIT: ${{ steps.whisper-cache.outputs.cache-hit }}
+        run: |
+          tools/get-ffmpeg.sh > /tmp/ffmpeg.log 2>&1 && tools/get-whisper.sh > /tmp/whisper.log 2>&1 || { tail -40 /tmp/ffmpeg.log /tmp/whisper.log; exit 1; }
+          echo "FFmpeg: $([ "$FFMPEG_HIT" = true ] && echo 'from the cache' || echo 'built in this run')"
+          echo "whisper.cpp: $([ "$WHISPER_HIT" = true ] && echo 'from the cache' || echo 'built in this run')"
+          find build/ffmpeg build/ffmpeg-full build/whisper -type f -name '*.so*' | sort | xargs sha256sum
+
+      - name: The compiled files of the last test build (ccache)
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: /tmp/ccache
+          key: ccache-linux-tests-${{ github.sha }}
+          restore-keys: ccache-linux-tests-
+
+      - name: Build with the test suites
+        env:
+          CCACHE_DIR: /tmp/ccache
+          CCACHE_MAXSIZE: 500M
+        run: |
+          export CCACHE_BASEDIR="$GITHUB_WORKSPACE"
+          ccache -z > /dev/null
+          cmake -S . -B build -G Ninja -DQB_TEST_SWITCHES=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            > /tmp/configure.log 2>&1 || { tail -40 /tmp/configure.log; exit 1; }
+          cmake --build build -j"$(nproc)" > /tmp/build.log 2>&1 || { grep -m 40 'error' /tmp/build.log; tail -20 /tmp/build.log; exit 1; }
+          ccache -s
+
+      - name: The compiled files into the cache (main only)
+        if: github.ref == 'refs/heads/main' && needs.version.outputs.fresh != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: /tmp/ccache
+          key: ccache-linux-tests-${{ github.sha }}
+
+      - name: The full test suite
+        run: |
+          set +e
+          QB_SKIP_SUITES="v060" tools/run-all-tests.sh build/test-results x11 2>&1 | tee /tmp/tests.log
+          rc=${PIPESTATUS[0]}
+          if [ "$rc" != 0 ]; then
+            failed=$(sed -n 's/^failed: *//p' /tmp/tests.log | tail -1)
+            missing=$(sed -n 's/^not built: *//p' /tmp/tests.log | tail -1)
+            if [ -n "$missing" ] || [ -z "$failed" ]; then
+              echo "::error title=Test suites::not built: $missing; failed: $failed"
+              exit 1
+            fi
+            echo "once more: $failed"
+            QB_SUITES="$failed" tools/run-all-tests.sh build/test-results-again x11 2>&1 | tee /tmp/tests-again.log
+            if [ "${PIPESTATUS[0]}" != 0 ]; then
+              # the failed checks with their details in the job's log (the session reads the log, not the artifacts)
+              for s in $(sed -n 's/^failed: *//p' /tmp/tests-again.log | tail -1); do
+                echo "== $s"; grep -h -A3 'FAIL' "build/test-results-again/$s.x11.log" | cut -c1-400 | head -60
+              done
+              tail -n 20 build/test-results/pulseaudio.log build/test-results-again/pulseaudio.log 2>/dev/null
+              echo "::error title=Test suites failed::$(tail -n 3 /tmp/tests-again.log | tr '\n' ' ')"
+              exit 1
+            fi
+          fi
+
+      - name: Logs of the suites
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: test-logs
+          path: |
+            build/test-results/*.log
+            build/test-results-again/*.log
+          if-no-files-found: ignore
+
+  code-check:
+    # 0.81.0 (audit of 0.80.0, S-11): a second look at the saving, backup and update code by another tool (cppcheck,
+    # tools/code-check.sh); nothing is published before it passes
+    needs: version
+    if: needs.version.outputs.build == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+      - name: cppcheck
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq --no-install-recommends cppcheck
+          tools/code-check.sh
+
+  sign-packages:
+    # 0.70.0 (audit A S-03): the key is only here and in "sign-checksums": no third-party code runs in either
+    needs: [version, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: unsigned
+          path: unsigned
+
+      # 0.65.0 (external audit of 2026-11-10, F12): every package and the checksum list are signed with the project's
+      # release key. Without the secret, or with a key that is not the one the program carries, nothing is signed.
+      # 0.91.3 (the writer's decision of 2026-11-15): add-ons are signed with an add-on key (the secret QB_ADDON_KEY)
+      # that the release key vouches for in a certificate; program updates keep the release key. Without the secret
+      # everything is signed with the release key, as before.
+      - name: The signing key
+        env:
+          QB_SIGNING_KEY: ${{ secrets.QB_SIGNING_KEY }}
+          QB_ADDON_KEY: ${{ secrets.QB_ADDON_KEY }}
+        run: |
+          if [ -z "$QB_SIGNING_KEY" ]; then
+            echo "::error title=No signing key::The secret QB_SIGNING_KEY is not set: the release is not published unsigned."
+            exit 1
+          fi
+          mkdir -p /tmp/qb-signing && chmod 700 /tmp/qb-signing
+          ( umask 077; printf '%s\n' "$QB_SIGNING_KEY" > /tmp/qb-signing/key.pem )
+          want=$(grep -o 'kReleaseKey\[\] = "[0-9a-f]*"' src/core/Signing.cpp | grep -o '"[0-9a-f]*"' | tr -d '"')
+          have=$(openssl pkey -in /tmp/qb-signing/key.pem -pubout -outform DER | tail -c 32 | od -An -tx1 | tr -d ' \n')
+          if [ -z "$have" ] || [ "$have" != "$want" ]; then
+            echo "::error title=Wrong signing key::QB_SIGNING_KEY is not the key whose public half the program carries."
+            exit 1
+          fi
+          echo "signing key ok"
+          if [ -n "$QB_ADDON_KEY" ]; then
+            ( umask 077; printf '%s\n' "$QB_ADDON_KEY" > /tmp/qb-signing/addon.pem )
+            addon=$(openssl pkey -in /tmp/qb-signing/addon.pem -pubout -outform DER | tail -c 32 | od -An -tx1 | tr -d ' \n')
+            if [ -z "$addon" ] || [ "$addon" = "$want" ]; then
+              echo "::error title=Wrong add-on key::QB_ADDON_KEY is not an Ed25519 key of its own."
+              exit 1
+            fi
+            QB_SIGNING_KEY_FILE=/tmp/qb-signing/key.pem python3 -I tools/make-package.py certify --name "Quillbinder official add-ons" \
+              /tmp/qb-signing/addon.pem /tmp/qb-signing/addon-cert.json
+          else
+            echo "no add-on key (secret QB_ADDON_KEY) yet: the add-ons are signed with the release key, as before"
+          fi
+
+      - name: Sign the packages
+        env:
+          QB_SIGNING_KEY_FILE: /tmp/qb-signing/key.pem
+        run: |
+          mkdir -p signed
+          cp unsigned/dist/*.qbpkg signed/
+          if [ -f /tmp/qb-signing/addon.pem ]; then
+            export QB_ADDON_KEY_FILE=/tmp/qb-signing/addon.pem QB_ADDON_CERT=/tmp/qb-signing/addon-cert.json
+          fi
+          python3 -I tools/make-package.py sign signed/*.qbpkg
+          # every signature checked by the program's own rule (0.91.3: program updates only with the release key, add-ons
+          # also with an add-on key the release key vouches for) against the public key the program carries
+          python3 -I tools/make-package.py verify --release-key packaging/quillbinder-signing-public.pem signed/*.qbpkg
+          rm -rf /tmp/qb-signing
+
+      - name: Hand the signed packages on
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: signed-packages
+          path: signed
+          retention-days: 3
+          if-no-files-found: error
+
+      - name: The key is gone
+        if: always()
+        run: rm -rf /tmp/qb-signing
+
+  assemble:
+    # the full version with the signed add-ons inside (third-party packaging tools, but no key here)
+    needs: [version, build, sign-packages]
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    timeout-minutes: 120
+    env:
+      DEBIAN_FRONTEND: noninteractive
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Tools to fetch the source
+        run: |
+          apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl xz-utils openssl
+
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: unsigned
+          path: unsigned
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: signed-packages
+          path: signed
+
+      - name: The libraries for the check
+        run: |
+          mkdir -p /tmp/ci-log
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          tools/ci-step.sh setup bash tools/cloud-setup.sh
+
+      - name: Full version (the AppImage with all signed add-ons inside)
+        run: |
+          mkdir -p dist build-appimage packaging/tools
+          cp unsigned/dist/* dist/
+          cp signed/*.qbpkg dist/                          # the signed packages take the place of the unsigned ones
+          cp unsigned/packaging/tools/* packaging/tools/
+          chmod +x packaging/tools/* dist/*.AppImage       # (artifacts do not keep the executable bit)
+          cp "$(ls dist/*-x86_64.AppImage | grep -v -- -full-)" build-appimage/
+          tools/ci-step.sh full packaging/linux/build-full-appimage.sh build-appimage dist
+          cp build-appimage/*-full-*.AppImage dist/
+          ls -la dist
+
+      - name: Check the full version
+        run: tools/ci-step.sh e2e-full packaging/linux/e2e-appimage.sh "$(ls dist/*-full-*-x86_64.AppImage)" - /tmp/e2e-full
+
+      - name: Hand the files to the job "sign-checksums"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: assembled
+          path: |
+            dist
+            unsigned/sources
+          retention-days: 3
+          if-no-files-found: error
+
+      - name: The end of the failed step's log (as an annotation)
+        if: failure()
+        run: |
+          s=$(cat /tmp/ci-log/last-step 2>/dev/null || echo unknown)
+          f=/tmp/ci-log/$s.log
+          [ -f "$f" ] || { echo "::error title=Step $s failed::no log"; exit 0; }
+          msg=$(tail -n 80 "$f" | cut -c1-300 | sed -e 's/%/%25/g' -e 's/\r/%0D/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+          echo "::error title=Step $s failed::$msg"
+
+  sign-checksums:
+    # the checksum list of every release file, signed (0.65.0, audit F12). 0.70.0: does not wait for the test suites
+    # (the writer's decision of 2026-11-11: the release is published as soon as it is built, signed and checked end to
+    # end; the job "tests" runs beside it and reports)
+    needs: [version, assemble]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: assembled
+          path: assembled
+
+      - name: Checksums and their signature
+        env:
+          QB_SIGNING_KEY: ${{ secrets.QB_SIGNING_KEY }}
+        run: |
+          mkdir -p /tmp/qb-signing && chmod 700 /tmp/qb-signing
+          ( umask 077; printf '%s\n' "$QB_SIGNING_KEY" > /tmp/qb-signing/key.pem )
+          mkdir -p release/dist release/sources
+          cp assembled/dist/* release/dist/
+          cp -r assembled/unsigned/sources/. release/sources/
+          cp packaging/quillbinder-signing-public.pem release/dist/
+          cp release/sources/SOURCES.txt release/dist/THIRD-PARTY-SOURCES.txt
+          (cd release/dist && rm -f SHA256SUMS.txt SHA256SUMS.txt.sig && sha256sum -- * > /tmp/SHA256SUMS.txt && mv /tmp/SHA256SUMS.txt SHA256SUMS.txt)
+          openssl pkeyutl -sign -rawin -inkey /tmp/qb-signing/key.pem -in release/dist/SHA256SUMS.txt -out release/dist/SHA256SUMS.txt.sig
+          rm -rf /tmp/qb-signing
+          openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in release/dist/SHA256SUMS.txt \
+            -sigfile release/dist/SHA256SUMS.txt.sig
+
+      - name: Hand the files to the job "publish"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: release-files
+          path: release
+          retention-days: 3
+          if-no-files-found: error
+
+      - name: The key is gone
+        if: always()
+        run: rm -rf /tmp/qb-signing
+
+  publish:
+    # the only job with write permission: it publishes what the jobs before it built, signed and checked, once the
+    # full test suite has passed (0.81.0, audit of 0.80.0, S-02)
+    needs: [version, sign-checksums, tests, code-check]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    permissions:
+      contents: write
+    env:
+      TAG: ${{ needs.version.outputs.tag }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: release-files
+          path: release-files
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          mkdir -p /tmp/ci-log
+          chmod +x release-files/dist/*.AppImage
+          ls -la release-files/dist
+          tools/ci-step.sh publish tools/publish-release.sh "$TAG" release-files/dist release-files/sources
+
+      - name: The end of the failed step's log (as an annotation)
+        if: failure()
+        run: |
+          s=$(cat /tmp/ci-log/last-step 2>/dev/null || echo unknown)
+          f=/tmp/ci-log/$s.log
+          [ -f "$f" ] || { echo "::error title=Step $s failed::no log"; exit 0; }
+          msg=$(tail -n 80 "$f" | cut -c1-300 | sed -e 's/%/%25/g' -e 's/\r/%0D/g' | sed ':a;N;$!ba;s/\n/%0A/g')
+          echo "::error title=Step $s failed::$msg"
+
+  download-page:
+    # 2026-11-12: the download page on GitHub Pages (https://shelin-boop.github.io/Quillbinder_Collection/): one button
+    # per system for the full version, made by tools/download-page.py from the names of the release's files. Needs,
+    # once, Settings > Pages > Build and deployment > Source "GitHub Actions". Runs after
+    # the release is published and changes nothing in it.
+    needs: [version, publish]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: The page
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ needs.version.outputs.tag }}
+        run: |
+          mkdir -p release-names site
+          gh release view "$TAG" --json assets --jq '.assets[].name' | while IFS= read -r n; do : > "release-names/$n"; done
+          ls release-names
+          # 0.91.2: each system's newest files (a system may have a later last number than another, working rules
+          # section 8): the older releases, newest first, for the systems this release has no files for
+          also=()
+          i=0
+          while IFS= read -r t; do
+            [ -n "$t" ] && [ "$t" != "$TAG" ] || continue
+            i=$((i + 1)); mkdir -p "older-$i"
+            gh release view "$t" --json assets --jq '.assets[].name' | while IFS= read -r n; do : > "older-$i/$n"; done
+            also+=(--also "older-$i" "$t")
+          done < <(gh api "repos/$GH_REPO/releases?per_page=12" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
+          python3 -I tools/download-page.py release-names "$TAG" site "${also[@]}"
+          grep -o 'releases/download/[^/]*/[^"]*' site/index.html | sort -u
+
+      # a name per attempt (P7, 2026-11-15): a rerun of this job finds no artifact of the same name from the attempt before
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+          name: github-pages-${{ github.run_attempt }}
+
+      - id: deploy
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}

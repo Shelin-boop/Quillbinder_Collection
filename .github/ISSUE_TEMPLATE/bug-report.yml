@@ -1,0 +1,102 @@
+name: Report a problem
+description: Something does not work, looks wrong, crashes, or text was damaged or lost.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for the report. Quillbinder is beta software, and reports from real use are what it needs most.
+
+        - Please check first that you use the newest version: [the download page](https://shelin-boop.github.io/Quillbinder_Collection/).
+        - **Do not attach your manuscript or your project.** Issues are public.
+        - A security problem does not belong here: see [SECURITY.md](https://github.com/Shelin-boop/Quillbinder_Collection/blob/main/SECURITY.md).
+
+        Write in English or German. Fields marked with a red star are needed.
+
+  - type: input
+    id: version
+    attributes:
+      label: Version of Quillbinder
+      description: "Shown under Help > About."
+      placeholder: 0.91.3 beta
+    validations:
+      required: true
+
+  - type: dropdown
+    id: system
+    attributes:
+      label: System
+      options:
+        - Linux
+        - Windows
+        - Android
+    validations:
+      required: true
+
+  - type: input
+    id: system-details
+    attributes:
+      label: System details
+      description: "Linux: the distribution, the desktop, and X11 or Wayland. Windows: the version. Android: the tablet and the Android version."
+      placeholder: Kubuntu 26.04, KDE Plasma, Wayland
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: What you did, step by step
+      description: As exactly as you can, from the start of the program if possible.
+      placeholder: |
+        1. Open a project in Scrivener 3 format
+        2. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: happened
+    attributes:
+      label: What happened, and what you expected
+    validations:
+      required: true
+
+  - type: dropdown
+    id: data
+    attributes:
+      label: Was text or a project damaged or lost?
+      options:
+        - "No"
+        - "Yes"
+        - Not sure
+    validations:
+      required: true
+
+  - type: dropdown
+    id: format
+    attributes:
+      label: Format of the project
+      options:
+        - Quillbinder's own format
+        - Scrivener 3 format (.scriv)
+        - Not about a project
+    validations:
+      required: true
+
+  - type: textarea
+    id: report
+    attributes:
+      label: System information or crash report
+      description: |
+        Help > System Information… shows a text you can copy. After a crash or a freeze: Help > Crash Reports… > Copy to Clipboard.
+        A crash report names the open project and its folder: take those lines out if you do not want them read. Do not upload the memory dump that Windows keeps beside a crash report; it can hold text you were writing.
+      render: text
+    validations:
+      required: false
+
+  - type: textarea
+    id: more
+    attributes:
+      label: Anything else
+      description: Screenshots of Quillbinder help. Please make sure they show no text you want to keep private.
+    validations:
+      required: false

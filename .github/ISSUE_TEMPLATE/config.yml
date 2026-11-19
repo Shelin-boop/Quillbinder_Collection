@@ -1,0 +1,14 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Report a security problem (not in a public issue)
+    url: https://github.com/Shelin-boop/Quillbinder_Collection/security/policy
+    about: How to report a security problem privately.
+  - name: Ask a question or talk an idea over
+    url: https://github.com/Shelin-boop/Quillbinder_Collection/discussions
+    about: Discussions, for everything that is not yet a report or a proposal.
+  - name: User manual
+    url: https://github.com/Shelin-boop/Quillbinder_Collection/blob/main/docs/manual.md
+    about: How Quillbinder works; section 21 helps with trouble. In the program it opens with F1.
+  - name: Download page
+    url: https://shelin-boop.github.io/Quillbinder_Collection/
+    about: The newest version for Linux, Windows and Android.

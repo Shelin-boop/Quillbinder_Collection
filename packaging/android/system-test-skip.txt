@@ -1,0 +1,12 @@
+# Cases of the system test that are not run on a tablet, each with the reason (read by
+# packaging/android/android-system-test.sh: the case's name, then the reason on the same line).
+# A line is written here only for a case that cannot be run there at all; a case that fails is not skipped.
+C-26	the add-on Speech Transcription is not built for Android yet
+S-A06	the add-on Speech Transcription is not built for Android yet (the tool extensions of interface 1.1 are checked with it)
+S-R01	the add-on Speech Transcription is not built for Android yet
+S-R02	the add-on Speech Transcription is not built for Android yet
+S-R03	the add-on Speech Transcription is not built for Android yet
+S-R04	the add-on Speech Transcription is not built for Android yet
+S-R05	the add-on Speech Transcription is not built for Android yet
+U-13	the add-on Speech Transcription is not built for Android yet
+U-19	the add-on Speech Transcription is not built for Android yet

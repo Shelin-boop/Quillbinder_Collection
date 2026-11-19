@@ -1,0 +1,196 @@
+{
+  "format": 1,
+  "id": "translation-proofreading",
+  "name": "Translation and Proofreading",
+  "version": "1.1",
+  "repository": "Shelin-boop/Quillbinder_Translation_Addon",
+  "commit": "fb9b8a1dea3e494f943d6ccec94183b1a86dc26b",
+  "author": "The Quillbinder Translation Add-on project",
+  "license": "Apache License 2.0",
+  "reviewed": "2026-11-15",
+  "summary": "Checks English text for spelling and grammar and translates German text into English, on your own computer; once a model is downloaded, it works without any connection.",
+  "nonCommercialData": [
+    {
+      "name": "CoEdIT Large (Grammarly), a proofreading model",
+      "license": "CC BY-NC 4.0"
+    }
+  ],
+  "build": {
+    "packages": [
+      "hunspell-en-us",
+      "hunspell-en-gb",
+      "hunspell-tools",
+      "fonts-dejavu-core",
+      "libgomp1",
+      "binutils",
+      "wordnet-base"
+    ],
+    "cachePaths": [
+      "deps/install",
+      "deps/CTranslate2",
+      "deps/oneDNN",
+      "deps/sentencepiece"
+    ],
+    "cacheKeyFiles": [
+      "packaging/build-deps.sh"
+    ],
+    "setup": [
+      "packaging/build-deps.sh",
+      "rm -rf deps/b-onednn deps/b-ct2 deps/b-spm"
+    ],
+    "testData": {
+      "variable": "TP_MODELS_DIR",
+      "downloads": [
+        {
+          "release": "models-1"
+        },
+        {
+          "release": "models-2",
+          "patterns": [
+            "catalog.json",
+            "qwen3-1.7b--*",
+            "opus-mt-big-de-en--*",
+            "qwen3-4b--tokenizer*",
+            "qwen3-4b--vocabulary.json"
+          ]
+        }
+      ]
+    },
+    "steps": [
+      "cp resources/en-thesaurus.tsv /tmp/en-thesaurus.tsv && python3 tools/make-thesaurus.py && cmp resources/en-thesaurus.tsv /tmp/en-thesaurus.tsv",
+      "cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH=\"$QT_DIR\" -DTP_TEST_SWITCHES=ON",
+      "cmake --build build",
+      "cd build && QT_QPA_PLATFORM=offscreen TP_SHOTS=\"$SHOTS\" ctest --output-on-failure --timeout 3600",
+      "cmake -S . -B build-release -G Ninja -DCMAKE_PREFIX_PATH=\"$QT_DIR\" -DTP_TEST_SWITCHES=OFF",
+      "cmake --build build-release",
+      "tests/check-exports.sh build-release",
+      "QB_QT_DIR=\"$QT_DIR\" packaging/make-addon.sh build-release \"$OUT\""
+    ],
+    "dependencySources": [
+      {
+        "name": "oneDNN",
+        "dir": "deps/oneDNN"
+      },
+      {
+        "name": "CTranslate2",
+        "dir": "deps/CTranslate2"
+      },
+      {
+        "name": "SentencePiece",
+        "dir": "deps/sentencepiece"
+      }
+    ],
+    "systemLibraries": [
+      {
+        "file": "build-release/addon/translation-proofreading/lib/libgomp.so.1",
+        "from": "/usr/lib/x86_64-linux-gnu/libgomp.so.1"
+      }
+    ]
+  },
+  "windows": {
+    "commit": "70c04c80f4b9287f891ffbcee6a87b01862a3039",
+    "reviewed": "2026-11-16",
+    "build": {
+      "cachePaths": [
+        "deps/install",
+        "deps/CTranslate2",
+        "deps/oneDNN",
+        "deps/sentencepiece"
+      ],
+      "cacheKeyFiles": [
+        "packaging/build-deps-windows.sh"
+      ],
+      "setup": [
+        "packaging/build-deps-windows.sh",
+        "rm -rf deps/b-onednn deps/b-ct2 deps/b-spm"
+      ],
+      "testData": {
+        "variable": "TP_MODELS_DIR",
+        "downloads": [
+          {
+            "release": "models-1"
+          },
+          {
+            "release": "models-2",
+            "patterns": [
+              "catalog.json",
+              "qwen3-1.7b--*",
+              "opus-mt-big-de-en--*",
+              "qwen3-4b--tokenizer*",
+              "qwen3-4b--vocabulary.json"
+            ]
+          }
+        ]
+      },
+      "steps": [
+        "cmake -S . -B build -G Ninja -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=\"$QT_DIR\" -DTP_TEST_SWITCHES=ON",
+        "cmake --build build",
+        "T=\"$(cygpath -w \"$RUNNER_TEMP\")\\\\Prüfung Jürgen ß\" && mkdir -p \"$(cygpath -u \"$T\")\" && cd build && rc=0 && PATH=\"$(cygpath -u \"$QT_DIR\")/bin:$PATH\" TEMP=\"$T\" TMP=\"$T\" QT_QPA_PLATFORM=offscreen TP_SHOTS=\"$SHOTS\" ctest --output-on-failure --timeout 3600 || rc=$?; for f in test-*.txt; do [ -f \"$f\" ] || continue; echo \"===== $f\"; cat \"$f\"; done; exit $rc",
+        "cmake -S . -B build-release -G Ninja -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=\"$QT_DIR\" -DTP_TEST_SWITCHES=OFF",
+        "cmake --build build-release",
+        "tests/check-exports-windows.sh build-release",
+        "packaging/make-addon-windows.sh build-release \"$(cygpath -u \"$OUT\")\""
+      ],
+      "dependencySources": [
+        {
+          "name": "oneDNN",
+          "dir": "deps/oneDNN"
+        },
+        {
+          "name": "CTranslate2",
+          "dir": "deps/CTranslate2"
+        },
+        {
+          "name": "SentencePiece",
+          "dir": "deps/sentencepiece"
+        }
+      ],
+      "redistributables": [
+        {
+          "file": "build-release/addon/translation-proofreading/vcomp140.dll",
+          "name": "Microsoft's OpenMP runtime of Visual C++ (vcomp140.dll)"
+        }
+      ]
+    }
+  },
+  "android": {
+    "commit": "d0316b5ae5681be6350bf79de09a2ab9e56a1262",
+    "reviewed": "2026-11-16",
+    "build": {
+      "cachePaths": [
+        "deps-android/arm64-v8a/install",
+        "deps/CTranslate2",
+        "deps/sentencepiece"
+      ],
+      "cacheKeyFiles": [
+        "packaging/build-deps-android.sh"
+      ],
+      "setup": [
+        "packaging/build-deps-android.sh \"$ANDROID_NDK_ROOT\" arm64-v8a",
+        "rm -rf deps-android/arm64-v8a/b-ct2 deps-android/arm64-v8a/b-spm"
+      ],
+      "steps": [
+        "cmake -S . -B build-android -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=\"$QT_DIR/lib/cmake/Qt6/qt.toolchain.cmake\" -DQT_HOST_PATH=\"$QT_HOST_DIR\" -DANDROID_SDK_ROOT=\"$ANDROID_SDK_ROOT\" -DANDROID_NDK_ROOT=\"$ANDROID_NDK_ROOT\" -DTP_DEPS_DIR=\"$PWD/deps-android/arm64-v8a/install\" -DTP_TEST_SWITCHES=OFF",
+        "cmake --build build-android",
+        "NM=\"$ANDROID_NDK_ROOT/toolchains/llvm/prebuilt/linux-x86_64/bin/llvm-nm\" tests/check-exports.sh build-android",
+        "packaging/make-addon-android.sh build-android \"$OUT\" arm64-v8a \"$ANDROID_NDK_ROOT\""
+      ],
+      "dependencySources": [
+        {
+          "name": "CTranslate2",
+          "dir": "deps/CTranslate2"
+        },
+        {
+          "name": "SentencePiece",
+          "dir": "deps/sentencepiece"
+        }
+      ],
+      "toolchainLibraries": [
+        {
+          "name": "LLVM's OpenMP runtime (libomp.a of the Android NDK 27.2.12479018), linked into the engine",
+          "source": "https://github.com/llvm/llvm-project (the NDK's toolchain; Apache-2.0 WITH LLVM-exception, its license text is inside the add-on)"
+        }
+      ]
+    }
+  }
+}

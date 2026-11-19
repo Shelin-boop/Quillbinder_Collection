@@ -1,0 +1,370 @@
+#include "compile/PluginManager.h"
+#include "compile/Progress.h"
+#include "core/SafeSave.h"
+
+#include "compile/ScriptExporters.h"
+#include "compile/EpubExporter.h"
+#include "compile/PdfExporter.h"
+#include "core/Paths.h"
+#include "compile/DocxWriter.h"
+#include "core/Addons.h"
+#include "core/Launcher.h"
+#include "core/Platform.h"
+
+#include <QCoreApplication>
+#include <QElapsedTimer>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QPluginLoader>
+#include <QProcess>
+#include <QStandardPaths>
+#include <QTemporaryDir>
+
+namespace qb {
+namespace compile {
+
+CommandExporter::CommandExporter(const QJsonObject &def, const QString &sourceFile) : m_source(sourceFile)
+{
+    m_id = def.value(QStringLiteral("id")).toString();
+    m_name = def.value(QStringLiteral("name")).toString(m_id);
+    m_extension = def.value(QStringLiteral("extension")).toString();
+    m_input = def.value(QStringLiteral("input")).toString(QStringLiteral("docx"));
+    m_output = def.value(QStringLiteral("output")).toString();
+    m_timeout = def.value(QStringLiteral("timeout")).toInt(180);
+    for (const QJsonValue &v : def.value(QStringLiteral("arguments")).toArray())
+        m_arguments << v.toString();
+    QStringList programs;
+    if (def.contains(QStringLiteral("programs")))
+        for (const QJsonValue &v : def.value(QStringLiteral("programs")).toArray())
+            programs << v.toString();
+    else
+        programs << def.value(QStringLiteral("program")).toString();
+    m_requires = programs.join(QStringLiteral(" / "));
+    for (const QString &p : programs) {
+        if (p.isEmpty())
+            continue;
+        const QString found = QStandardPaths::findExecutable(p);
+        if (!found.isEmpty()) {
+            m_program = found;
+            break;
+        }
+    }
+}
+
+bool CommandExporter::exportManuscript(const Manuscript &m, const QString &path, QString *error)
+{
+    if (m_program.isEmpty()) {
+        if (error)
+            *error = QObject::tr("This format needs the program \"%1\", which is not installed.").arg(m_requires);
+        return false;
+    }
+    QTemporaryDir tmp;
+    if (!tmp.isValid()) {
+        if (error)
+            *error = QObject::tr("Cannot create a temporary folder.");
+        return false;
+    }
+    const QString base = QStringLiteral("manuscript");
+    const QString input = tmp.filePath(base + QLatin1Char('.') + m_input);
+    if (m_input == QLatin1String("md")) {
+        if (!writeMarkdown(m, input, error))
+            return false;
+    } else {
+        DocxExporter docx;
+        if (!docx.exportManuscript(m, input, error))
+            return false;
+    }
+    const QString outDir = tmp.filePath(QStringLiteral("out"));
+    QDir().mkpath(outDir);
+    const QString directOut = tmp.filePath(QStringLiteral("out/") + base + QLatin1Char('.') + m_extension);
+    auto subst = [&](QString s) {
+        s.replace(QLatin1String("{input}"), input);
+        s.replace(QLatin1String("{inputbase}"), base);
+        s.replace(QLatin1String("{outdir}"), outDir);
+        s.replace(QLatin1String("{output}"), directOut);
+        s.replace(QLatin1String("{tmpdir}"), tmp.path());
+        s.replace(QLatin1String("{title}"), m.title);
+        s.replace(QLatin1String("{author}"), m.author);
+        return s;
+    };
+    // 0.64.2: an argument whose only value is an empty title or author ("author={author}" without an author)
+    // is left out with the option before it ("--metadata"): Pandoc wrote an empty dc:creator, which EPUB
+    // checkers refuse
+    QStringList args;
+    for (const QString &a : m_arguments) {
+        const bool emptyValue = (a.contains(QLatin1String("{author}")) && m.author.trimmed().isEmpty()
+                                 && QString(a).remove(QLatin1String("{author}")).endsWith(QLatin1Char('=')))
+                                || (a.contains(QLatin1String("{title}")) && m.title.trimmed().isEmpty()
+                                    && QString(a).remove(QLatin1String("{title}")).endsWith(QLatin1Char('=')));
+        if (emptyValue) {
+            if (!args.isEmpty() && args.last().startsWith(QLatin1Char('-')))
+                args.removeLast();
+            continue;
+        }
+        args << subst(a);
+    }
+    QProcess proc;
+    proc.setWorkingDirectory(tmp.path());
+    // Inside the AppImage some variables point into the image (Qt plugin
+    // paths etc.); the external program must see the normal system values.
+    const QString appDir = qEnvironmentVariable("APPDIR");
+    if (!appDir.isEmpty()) {
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        for (const QString &k : env.keys())
+            if (env.value(k).contains(appDir))
+                env.remove(k);
+        env.remove(QStringLiteral("QT_QPA_PLATFORMTHEME"));
+        proc.setProcessEnvironment(env);
+    }
+    proc.start(m_program, args);
+    if (!proc.waitForStarted(10000)) {
+        if (error)
+            *error = QObject::tr("Could not start %1.").arg(m_program);
+        return false;
+    }
+    // 0.65.0 (audit F24): waited in short steps with the compile's progress ticks, so the window keeps being drawn
+    // (and the freeze watchdog sees the program alive) while the other program works
+    QElapsedTimer waited;
+    waited.start();
+    while (!proc.waitForFinished(100) && proc.state() != QProcess::NotRunning) {
+        progress::tick();
+        if (waited.elapsed() > qint64(m_timeout) * 1000) {
+            proc.kill();
+            proc.waitForFinished(3000);
+            if (error)
+                *error = QObject::tr("%1 did not finish in time.").arg(QFileInfo(m_program).fileName());
+            return false;
+        }
+    }
+    // 0.65.0 (found while checking audit F11): a program that ended with an error or crashed has not made a file to
+    // trust, even when part of one is there
+    if (proc.exitStatus() != QProcess::NormalExit || proc.exitCode() != 0) {
+        if (error)
+            *error = QObject::tr("%1 ended with an error (exit code %2).\n%3")
+                         .arg(QFileInfo(m_program).fileName())
+                         .arg(proc.exitStatus() == QProcess::NormalExit ? proc.exitCode() : -1)
+                         .arg(QString::fromLocal8Bit(proc.readAllStandardError()).left(800));
+        return false;
+    }
+    const QString produced = m_output.isEmpty() ? directOut : subst(m_output);
+    if (!QFile::exists(produced)) {
+        if (error)
+            *error = QObject::tr("%1 did not produce a file.\n%2")
+                         .arg(QFileInfo(m_program).fileName(),
+                              QString::fromLocal8Bit(proc.readAllStandardError()).left(800));
+        return false;
+    }
+    // 0.65.0 (audit F11): replaced in one step; the earlier export stays when the copy fails (it was deleted first)
+    QString why;
+    if (!safesave::copyFile(produced, path, &why)) {
+        if (error)
+            *error = QObject::tr("Cannot write %1: %2").arg(path, why);
+        return false;
+    }
+    return true;
+}
+
+PluginManager &PluginManager::instance()
+{
+    static PluginManager pm;
+    return pm;
+}
+
+QString PluginManager::userPluginDir() const
+{
+    return dataDir() + QLatin1String("/plugins");
+}
+
+QStringList PluginManager::searchDirs() const
+{
+    const QString appDir = QCoreApplication::applicationDirPath();
+    // Order matters: the first plugin with a given id wins. A program update
+    // may carry newer plugins next to its binary; the AppImage's own come next.
+    QStringList dirs = {QDir::cleanPath(appDir + QLatin1String("/plugins")),
+                        QDir::cleanPath(appDir + QLatin1String("/../lib/" QB_APP_ID "/plugins")),
+                        QDir::cleanPath(appDir + QLatin1String("/../share/" QB_APP_ID "/plugins"))};
+    const QString image = launcher::appDir();
+#ifdef Q_OS_WIN
+    // the program folder's plugins (the Markdown exporter), also when a program update runs (W3)
+    dirs << QDir::cleanPath(image + QLatin1String("/plugins"));
+#else
+    if (!image.isEmpty())
+        dirs << QDir::cleanPath(image + QLatin1String("/usr/lib/" QB_APP_ID "/plugins"))
+             << QDir::cleanPath(image + QLatin1String("/usr/share/" QB_APP_ID "/plugins"));
+#endif
+    dirs << addons::contentDirs(QStringLiteral("plugins")) << userPluginDir();
+#ifdef Q_OS_ANDROID
+    // Android (2026-11-14): an APK keeps every library in one folder, which Qt's loader names in QT_PLUGIN_PATH
+    // (inside the APK itself, or where Android unpacked it). The writing tools, importers and the Markdown exporter
+    // are there among Qt's own libraries; load() takes them by their names.
+    for (const QString &d : qEnvironmentVariable("QT_PLUGIN_PATH").split(QDir::listSeparator(), Qt::SkipEmptyParts))
+        dirs << QDir::cleanPath(d);
+#endif
+#ifdef QB_TEST_SWITCHES
+    // extra folders for the tests and developers (colon separated; Windows: semicolon); only in
+    // builds with the tests (0.64.1, audit X-10)
+    for (const QString &d : qEnvironmentVariable("QB_PLUGIN_PATH").split(QDir::listSeparator(), Qt::SkipEmptyParts))
+        dirs.prepend(QDir::cleanPath(d));
+#endif
+    dirs.removeDuplicates();
+    return dirs;
+}
+
+tools::ToolInterface *PluginManager::tool(const QString &id) const
+{
+    for (tools::ToolInterface *t : m_tools)
+        if (t->id() == id)
+            return t;
+    return nullptr;
+}
+
+importers::ImporterInterface *PluginManager::importerFor(const QString &suffix) const
+{
+    const QString ext = suffix.toLower();
+    for (importers::ImporterInterface *i : m_importers)
+        if (i->suffixes().contains(ext))
+            return i;
+    return nullptr;
+}
+
+importers::ImporterInterface *PluginManager::webImporter() const
+{
+    for (importers::ImporterInterface *i : m_importers)
+        if (i->importsWebPages())
+            return i;
+    return nullptr;
+}
+
+QStringList PluginManager::importerSuffixes() const
+{
+    QStringList out;
+    for (importers::ImporterInterface *i : m_importers)
+        out << i->suffixes();
+    out.removeDuplicates();
+    return out;
+}
+
+ExporterInterface *PluginManager::exporter(const QString &id) const
+{
+    for (ExporterInterface *e : m_exporters)
+        if (e->id() == id)
+            return e;
+    return nullptr;
+}
+
+void PluginManager::load()
+{
+    if (m_loaded)
+        return;
+    m_loaded = true;
+    auto *docx = new DocxExporter;
+    m_owned << docx;
+    m_exporters << docx;
+
+    QStringList seenIds = {docx->id()};
+    // scripts for other screenwriting programs
+    // PDF and e-books without other programs (0.14), scripts for other screenwriting programs
+    for (ExporterInterface *e : {static_cast<ExporterInterface *>(new PdfExporter), static_cast<ExporterInterface *>(new EpubExporter),
+                                 static_cast<ExporterInterface *>(new FountainExporter),
+                                 static_cast<ExporterInterface *>(new FdxExporter)}) {
+        m_owned << dynamic_cast<QObject *>(e);
+        m_exporters << e;
+        seenIds << e->id();
+    }
+    for (const QString &dir : searchDirs()) {
+        QDir d(dir);
+        if (!d.exists())
+            continue;
+        // C++ plugins
+#ifdef Q_OS_ANDROID
+        // (the APK's library folder: only the program's own plug-ins, not Qt's libraries and plug-ins beside them)
+        QStringList apkFolders;
+        for (const QString &apk : qEnvironmentVariable("QT_PLUGIN_PATH").split(QDir::listSeparator(), Qt::SkipEmptyParts))
+            apkFolders << QDir::cleanPath(apk);
+        const QStringList patterns = apkFolders.contains(dir)
+                                         ? QStringList{QStringLiteral("libqb-*.so"), QStringLiteral("libmarkdown-exporter*.so")}
+                                         : platform::libraryPatterns();
+        for (const QFileInfo &fi : d.entryInfoList(patterns, QDir::Files)) {
+#else
+        for (const QFileInfo &fi : d.entryInfoList(platform::libraryPatterns(), QDir::Files)) {
+#endif
+            QPluginLoader loader(fi.absoluteFilePath());
+            QObject *obj = loader.instance();
+            if (!obj) {
+                m_messages << QObject::tr("%1: %2").arg(fi.fileName(), loader.errorString());
+                continue;
+            }
+            if (auto *tool = qobject_cast<tools::ToolInterface *>(obj)) {
+                if (this->tool(tool->id()))
+                    continue;
+                m_tools << tool;
+#ifdef Q_OS_ANDROID
+                m_toolObjects.insert(tool, obj);
+#endif
+                m_messages << QObject::tr("Loaded writing tool %1 %2 (%3)").arg(tool->name(), tool->version(), fi.fileName());
+                continue;
+            }
+            if (auto *imp = qobject_cast<importers::ImporterInterface *>(obj)) {
+                bool seen = false;
+                for (importers::ImporterInterface *i : m_importers)
+                    seen = seen || i->id() == imp->id();
+                if (seen)
+                    continue;
+                m_importers << imp;
+                m_messages << QObject::tr("Loaded importer %1 %2 (%3)").arg(imp->name(), imp->version(), fi.fileName());
+                continue;
+            }
+            if (auto *engine = qobject_cast<media::EngineInterface *>(obj)) {
+                bool seen = false;
+                for (media::EngineInterface *e : m_media)
+                    seen = seen || e->id() == engine->id();
+                if (seen)
+                    continue;
+                m_media << engine;
+                m_messages << QObject::tr("Loaded media engine %1 %2 (%3)").arg(engine->name(), engine->version(), fi.fileName());
+                continue;
+            }
+            auto *exp = qobject_cast<ExporterInterface *>(obj);
+            if (!exp) {
+                m_messages << QObject::tr("%1 is neither an exporter, an importer, a writing tool nor a media engine (or built for another version)").arg(fi.fileName());
+                continue;
+            }
+            if (seenIds.contains(exp->id()))
+                continue;
+            seenIds << exp->id();
+            m_exporters << exp;
+            m_messages << QObject::tr("Loaded %1 (%2)").arg(exp->name(), fi.fileName());
+        }
+        // command plugins
+        for (const QFileInfo &fi : d.entryInfoList({QStringLiteral("*.json")}, QDir::Files)) {
+            QFile f(fi.absoluteFilePath());
+            if (!f.open(QIODevice::ReadOnly))
+                continue;
+            QJsonParseError pe;
+            const QJsonDocument doc = QJsonDocument::fromJson(f.readAll(), &pe);
+            if (pe.error != QJsonParseError::NoError) {
+                m_messages << QObject::tr("%1: %2").arg(fi.fileName(), pe.errorString());
+                continue;
+            }
+            auto *ce = new CommandExporter(doc.object(), fi.absoluteFilePath());
+            if (ce->id().isEmpty() || seenIds.contains(ce->id())) {
+                delete ce;
+                continue;
+            }
+            m_commands << ce;
+            if (ce->isAvailable()) {
+                seenIds << ce->id();
+                m_exporters << ce;
+                m_messages << QObject::tr("Loaded %1 (%2)").arg(ce->name(), fi.fileName());
+            } else {
+                m_unavailable << QObject::tr("%1 (needs %2)").arg(ce->name(), ce->requirement());
+            }
+        }
+    }
+}
+
+} // namespace compile
+} // namespace qb
