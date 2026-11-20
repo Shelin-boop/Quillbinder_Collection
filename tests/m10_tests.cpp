@@ -280,7 +280,12 @@ int main(int argc, char **argv)
     {
         QStringList problems;
         for (const QString &id : pkgs) {
+#ifdef Q_OS_WIN
+            // Windows: the packages of the Windows build (packaging/windows/win-addons.sh; the runner names their folder)
+            const QString pkg = qEnvironmentVariable("QB_TEST_ADDONS_DIR") + QLatin1Char('/') + id + QStringLiteral("-windows.qbpkg");
+#else
             const QString pkg = buildDir + QStringLiteral("/addons-dist/") + id + QStringLiteral(".qbpkg");
+#endif
             QStringList log;
             QString err;
             bool restart = false;
@@ -289,7 +294,11 @@ int main(int argc, char **argv)
                 problems << id + QLatin1String(": ") + info.error + err;
         }
         check(problems.isEmpty(), QStringLiteral("the three add-on packages install"), problems.join(QLatin1String("; ")));
+#ifdef Q_OS_WIN
+        const addons::PackageInfo older = addons::inspect(qEnvironmentVariable("QB_TEST_ADDONS_DIR") + QStringLiteral("/tool-scratch-pad-windows.qbpkg"));
+#else
         const addons::PackageInfo older = addons::inspect(buildDir + QStringLiteral("/addons-dist/tool-scratch-pad.qbpkg"));
+#endif
         // 0.80.0: an add-on with program code needs the first version of the runtime it was built for
         check(older.manifest.minApp == QLatin1String(QB_RUNTIME_SINCE) && older.manifest.runtime == QLatin1String(QB_RUNTIME_ID),
               QStringLiteral("the tool add-ons need program version %1 and name the runtime %2").arg(QStringLiteral(QB_RUNTIME_SINCE), QStringLiteral(QB_RUNTIME_ID)),

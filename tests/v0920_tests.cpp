@@ -762,6 +762,16 @@ int main(int argc, char **argv)
             settle(100);
             QTest::mouseMove(tree->viewport(), tree->visualRect(otherRow).center());
             settle(200);
+#ifdef Q_OS_WIN
+            // Windows: QTest's move also sets the real pointer, and on the build machine's desktop the binder is then
+            // told that the mouse left (run of f7bb321: the click fixed the item, but no row counted as under the
+            // mouse). The move is handed to the binder itself once more and looked at before the desktop answers.
+            if (tree->hoverIndex() != otherRow) {
+                const QPoint at = tree->visualRect(otherRow).center();
+                QMouseEvent move(QEvent::MouseMove, at, tree->viewport()->mapToGlobal(at), Qt::NoButton, Qt::NoButton, Qt::NoModifier);
+                QApplication::sendEvent(tree->viewport(), &move);
+            }
+#endif
             const bool hovered = tree->hoverIndex() == otherRow;
             shot(binder, QStringLiteral("v0920-binder-pin-hover"));
             QTest::mouseClick(tree->viewport(), Qt::LeftButton, Qt::NoModifier, tree->pinRectOf(otherRow).center());
@@ -1453,7 +1463,13 @@ int main(int argc, char **argv)
                 upd->checkNow();
             else
                 upd->startAutomatic();
+#ifdef Q_OS_WIN
+            // (Windows takes about two seconds to report a refused connection, four with the second try; the look of
+            // the unreachable address took 8.2 s in the run of f7bb321)
+            waitFor([&] { return looks > before; }, 30000);
+#else
             waitFor([&] { return looks > before; }, 8000);
+#endif
             settle(200);
             return looks > before;
         };
@@ -1817,6 +1833,19 @@ int main(int argc, char **argv)
                   && !store.contains("Quillbinder_Translation_Addon")
                   && readAll(addon + QStringLiteral("/source/resources/catalog.json")).contains("\"release\": \"models-1\""),
               QStringLiteral("it fetches its models from the releases models-1 and models-2 of this repository"));
+#ifdef Q_OS_WIN
+        // Windows: the add-on is staged by packaging/windows/win-addons.sh, not by stage.sh (a Linux script): left out
+        // without its engine libraries, which win-ci.sh builds with the add-on's own script; a release build fails without it
+        const QByteArray winAddons = readAll(src + QStringLiteral("/packaging/windows/win-addons.sh"));
+        const QByteArray winCi = readAll(src + QStringLiteral("/packaging/windows/win-ci.sh"));
+        const QByteArray winRelease = readAll(src + QStringLiteral("/.github/workflows/release-windows.yml"));
+        check(winAddons.contains("left out (its engine libraries are missing") && winAddons.contains("make-addon-windows.sh")
+                  && winCi.contains("build-deps-windows.sh") && winCi.contains("stage/packages/translation-proofreading-windows.qbpkg")
+                  && winRelease.contains("translator-deps-windows-msvc-")
+                  && readAll(src + QStringLiteral("/.github/workflows/models-mirror.yml")).contains("Quillbinder_Translation_Addon"),
+              QStringLiteral("Windows: the Windows build stages the add-on with its own scripts and leaves it out when its engine "
+                             "libraries are not built; a release build fails without the add-on; a workflow copies the model files here"));
+#else
         // without its engine libraries it is left out of a local build (exit code 3), as the packing script expects
         QProcess stage;
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -1832,6 +1861,7 @@ int main(int argc, char **argv)
               QStringLiteral("stage.sh leaves the add-on out when its engine libraries are not built; the release workflow builds "
                              "them and fails without the add-on; a workflow copies the model files here"),
               QString::fromUtf8(stage.readAllStandardError()) + QStringLiteral(" exit %1").arg(stage.exitCode()));
+#endif
     }
 
     // ================================================================ the reason of a failed save, by its kind (item 10)
@@ -1857,7 +1887,12 @@ int main(int argc, char **argv)
         QCoreApplication::installTranslator(&qtDe);
         const QString full = QCoreApplication::translate("qb::MainWindow", "The disk is full.");
         const QString unknown = QCoreApplication::translate("qb::MainWindow", "The files could not be written.");
+#ifdef Q_OS_WIN
+        // (Windows takes qputenv's bytes in the system's code page, and the program reads the variable as text)
+        qputenv("QB_TEST_WRITE_FAILS", QByteArray::number(ENOSPC) + '|' + german.toLocal8Bit() + '|' + QFileInfo(p->docs()->textPath(other->id)).absolutePath().section(QLatin1Char('/'), -1).toLocal8Bit());
+#else
         qputenv("QB_TEST_WRITE_FAILS", QByteArray::number(ENOSPC) + '|' + german.toUtf8() + '|' + QFileInfo(p->docs()->textPath(other->id)).absolutePath().section(QLatin1Char('/'), -1).toUtf8());
+#endif
         typeInto(p, other, QStringLiteral(" Typed while the disk is full."));
         waitFor([&] { return w.saveFailedSince().isValid(); }, 20000);
         settle(400);

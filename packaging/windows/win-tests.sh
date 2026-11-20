@@ -56,7 +56,9 @@ SUITES="qb_tests qb_ui_tests qb_fixes_tests qb_w2_tests qb_w3_tests qb_w4_tests 
 # Windows 0.92.0 (2026-11-20): v0920 (the fixed mind map, the shown lock, the check for updates with its Windows
 # hand-over to the setup program, the backups' names with an ID, checked copies) is counted from its first run here.
 # v017 and m10 are looked at again ("explore": reported, not counted): v017's mind map check, because 0.92.0 changed
-# the mind map, and m10's own crash, which was never examined.
+# the mind map, and m10's own crash, which was never examined (run of f7bb321: the suite used a writing tool that was
+# not loaded, because it looked for the tools' packages under their Linux names; it takes the Windows packages now).
+# v0913 leaves out its check of an Android package on Windows (its stand-in for readelf is a shell script).
 EXPLORE="qb_v017_tests qb_m10_tests"
 # D2 (Windows 0.91.3): QB_WIN_SUITES (packaging/windows/win-ci.sh, from "[suites: ...]" in a commit message) runs only
 # the suites it names, as the runner prints them (qb_tests, ui, v0913 ...); a name of no suite fails the run

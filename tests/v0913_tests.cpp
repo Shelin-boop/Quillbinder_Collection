@@ -710,6 +710,9 @@ int main(int argc, char **argv)
             auto checkPkg = [&](const QString &package, int *rc, const QProcessEnvironment &env) {
                 return run(py, {QStringLiteral("-I"), entryTool, QStringLiteral("check-package"), aEntry, package, QStringLiteral("--android")}, rc, env);
             };
+#ifndef Q_OS_WIN
+            // (not on Windows: the stand-in for readelf is a shell script, which Windows does not start as a program;
+            // the tool runs on Linux in the Android add-on's workflow)
             const QString fits = checkPkg(aPkg, &p1, withReadelf);
             const QString badLibs = checkPkg(aPkg, &p2, badElf);
             const QString unchecked = checkPkg(aPkg, &p3, noReadelf);
@@ -725,6 +728,9 @@ int main(int argc, char **argv)
                                  "libraries' needs and 16 KB pages); refused: a library that needs a Linux library or has 4 KB pages, no "
                                  "readelf to look with, the Linux runtime, a Windows or a Linux package"),
                   made + rewritten + fits + badLibs + unchecked + wrongRuntime + windowsPkg + linuxPkg);
+#else
+            Q_UNUSED(rz); Q_UNUSED(p1); Q_UNUSED(p2); Q_UNUSED(p3); Q_UNUSED(p4); Q_UNUSED(p5); Q_UNUSED(p6);
+#endif
 
             // sources and release text for Android
             const QString aFiles = W + QStringLiteral("/android-files");
