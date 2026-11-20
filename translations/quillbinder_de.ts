@@ -19609,6 +19609,36 @@ Es wird höchstens einmal am Tag eine kleine Datei abgerufen, und Sie erfahren, 
         <source>Later</source>
         <translation>Später</translation>
     </message>
+    <message>
+        <source>The new program version needs the whole program anew. %1 downloads its setup program, checks it and closes; the setup program then unpacks the new version into the folder of this one (%2) and starts it. Your settings, your add-ons and everything else in &quot;data&quot; stay as they are.</source>
+        <translation>Die neue Programmversion braucht das ganze Programm neu. %1 lädt das zugehörige Setup-Programm herunter, prüft es und beendet sich; das Setup-Programm entpackt dann die neue Version in den Ordner dieser Version (%2) und startet sie. Ihre Einstellungen, Ihre Erweiterungen und alles andere in „data“ bleiben, wie sie sind.</translation>
+    </message>
+    <message>
+        <source>%1 %2: its setup program is downloaded and checked.</source>
+        <translation>%1 %2: Das Setup-Programm ist heruntergeladen und geprüft.</translation>
+    </message>
+    <message>
+        <source>%1 closes now, and the setup program unpacks the new version into this folder and starts it. With &quot;Later&quot; nothing changes, and the update is offered again.</source>
+        <translation>%1 wird jetzt beendet, und das Setup-Programm entpackt die neue Version in diesen Ordner und startet sie. Mit „Später“ ändert sich nichts, und das Update wird wieder angeboten.</translation>
+    </message>
+    <message>
+        <source>Close and Update Now</source>
+        <translation>Jetzt beenden und aktualisieren</translation>
+    </message>
+    <message>
+        <source>The setup program could not be started (%1). Windows may block it because it carries no signature. Nothing was changed.
+
+You can close %2 and start the file yourself:
+%3
+
+Or download the current version from the project&apos;s page.</source>
+        <translation>Das Setup-Programm konnte nicht gestartet werden (%1). Windows blockiert es möglicherweise, weil es keine Signatur trägt. Es wurde nichts geändert.
+
+Sie können %2 beenden und die Datei selbst starten:
+%3
+
+Oder laden Sie die aktuelle Version von der Seite des Projekts herunter.</translation>
+    </message>
 </context>
 <context>
     <name>qb::addons</name>

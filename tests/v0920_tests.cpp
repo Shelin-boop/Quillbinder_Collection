@@ -26,6 +26,12 @@
 //    project's page is a small server inside this test;
 //  - the add-on "Translation and Proofreading" as one of the project's own (its place, version and model address).
 //
+//
+// Windows 0.92.0 (2026-11-20): on Windows the whole program anew is its setup program, not an AppImage. The checks
+// of the rules take the system's names for it; in the place of the AppImage that is swapped, Windows checks the
+// hand-over to the setup program (downloaded into <data>/update-setup, checked, started for the program's folder),
+// and the tool that writes the update file is also run for Windows.
+//
 //   xvfb-run -a ./qb_v0920_tests /tmp/shots
 
 #include "core/Addons.h"
@@ -101,6 +107,12 @@
 #include <functional>
 
 using namespace qb;
+
+// The checks of Windows' setup programs that need no Windows (the rules, the tool): on Windows always; defined by
+// hand on another system they can be tried there (the hand-over itself is in an #ifdef Q_OS_WIN part).
+#if defined(Q_OS_WIN) && !defined(QB_V0920_SETUP_RULES)
+#define QB_V0920_SETUP_RULES
+#endif
 
 static int failures = 0;
 static QString outDir;
@@ -1102,8 +1114,16 @@ int main(int argc, char **argv)
             program.insert(QStringLiteral("security"), QJsonArray{QStringLiteral("9.0.5")});
             program.insert(QStringLiteral("whatsNew"), QJsonArray{QStringLiteral("Something new.")});
             program.insert(QStringLiteral("update"), fileEntry(QStringLiteral("https://example.org/u.qbpkg"), "update", QStringLiteral("u.qbpkg")));
-            program.insert(QStringLiteral("appimage"), fileEntry(QStringLiteral("https://example.org/a.AppImage"), "plain", QStringLiteral("a.AppImage")));
-            program.insert(QStringLiteral("appimageFull"), fileEntry(QStringLiteral("https://example.org/f.AppImage"), "full", QStringLiteral("f.AppImage")));
+#ifdef Q_OS_WIN
+            // Windows: the whole program anew is named by its setup programs
+            const QString kPlain = QStringLiteral("setup"), kFull = QStringLiteral("setupFull");
+            const Offer::Kind kWhole = Offer::Kind::NewSetup;
+#else
+            const QString kPlain = QStringLiteral("appimage"), kFull = QStringLiteral("appimageFull");
+            const Offer::Kind kWhole = Offer::Kind::NewAppImage;
+#endif
+            program.insert(kPlain, fileEntry(QStringLiteral("https://example.org/a.AppImage"), "plain", QStringLiteral("a.AppImage")));
+            program.insert(kFull, fileEntry(QStringLiteral("https://example.org/f.AppImage"), "full", QStringLiteral("f.AppImage")));
             QJsonObject addonA, addonB, addonC;
             addonA.insert(QStringLiteral("id"), QStringLiteral("have-it"));
             addonA.insert(QStringLiteral("name"), QStringLiteral("Have It"));
@@ -1144,7 +1164,7 @@ int main(int argc, char **argv)
             const QList<Offer> image = offersFor(feed, systemName(), here);
             here.appVersion = QStringLiteral("9.1.0");
             here.addons = {{QStringLiteral("have-it"), QStringLiteral("2.0")}};
-            check(image.size() == 2 && image.first().kind == Offer::Kind::NewAppImage && image.first().file.name == QLatin1String("f.AppImage")
+            check(image.size() == 2 && image.first().kind == kWhole && image.first().file.name == QLatin1String("f.AppImage")
                       && !image.first().security && image.last().id == QLatin1String("have-it") && offersFor(feed, systemName(), here).isEmpty()
                       && offersFor(feed, QStringLiteral("some-other-system"), here).isEmpty(),
                   QStringLiteral("another runtime: the new AppImage is offered (the full one to the full version) beside the add-on "
@@ -1271,10 +1291,15 @@ int main(int argc, char **argv)
             oldRoot.insert(QStringLiteral("systems"), oldSystems);
             writeAll(W + QStringLiteral("/previous.json"), QJsonDocument(oldRoot).toJson());
             const QString out = W + QStringLiteral("/made-updates-1.json");
-            const QByteArray said = runTool(QStringLiteral("python3"), {QStringLiteral("-I"), src + QStringLiteral("/tools/update-feed.py"), QStringLiteral("--dist"), dist,
-                                                                        QStringLiteral("--tag"), QStringLiteral("v%1-beta").arg(version), QStringLiteral("--repo"),
-                                                                        QStringLiteral("Some-One/Some_Repo"), QStringLiteral("--previous"), W + QStringLiteral("/previous.json"),
-                                                                        QStringLiteral("--date"), QStringLiteral("2026-11-20T10:00:00Z"), QStringLiteral("--out"), out});
+            QStringList toolArgs{QStringLiteral("-I"), src + QStringLiteral("/tools/update-feed.py"), QStringLiteral("--dist"), dist,
+                                 QStringLiteral("--tag"), QStringLiteral("v%1-beta").arg(version), QStringLiteral("--repo"),
+                                 QStringLiteral("Some-One/Some_Repo"), QStringLiteral("--previous"), W + QStringLiteral("/previous.json"),
+                                 QStringLiteral("--date"), QStringLiteral("2026-11-20T10:00:00Z"), QStringLiteral("--out"), out};
+#ifdef Q_OS_WIN
+            // (the tool's own runtime is the Linux one of CMakeLists.txt; this check compares with the program's)
+            toolArgs << QStringLiteral("--runtime") << QStringLiteral(QB_RUNTIME_ID);
+#endif
+            const QByteArray said = runTool(QStringLiteral("python3"), toolArgs);
             const QByteArray made = readAll(out);
             Feed feed;
             QString why;
@@ -1305,6 +1330,90 @@ int main(int argc, char **argv)
                   QStringLiteral("... and both AppImages, so that the full version is offered the full one"));
             check(QSslSocket::supportsSsl(), QStringLiteral("Qt's TLS part finds this system's OpenSSL (secure connections for the check)"),
                   QSslSocket::sslLibraryBuildVersionString());
+#ifdef QB_V0920_SETUP_RULES
+            // ---- Windows: the same tool writes Windows' block from the files of a Windows release, beside Linux's
+            const QString distW = W + QStringLiteral("/dist-windows");
+            const QString winRuntime = QStringLiteral("win64-test-runtime");
+            const QByteArray setupPlain = "the setup program", setupFull = "the full setup program, larger";
+            const QString nameW = QStringLiteral("Quillbinder-%1-experimental-windows-x64").arg(version);
+            const QString nameWFull = QStringLiteral("Quillbinder-%1-full-experimental-windows-x64").arg(version);
+            writeAll(distW + QLatin1Char('/') + nameW + QStringLiteral("-setup.exe"), setupPlain);
+            writeAll(distW + QLatin1Char('/') + nameWFull + QStringLiteral("-setup.exe"), setupFull);
+            writeAll(distW + QLatin1Char('/') + nameW + QStringLiteral(".zip"), "a zip, not named in the file");
+            writeAll(distW + QStringLiteral("/SHA256SUMS-windows.txt"), "not a package");
+            auto packageW = [&](const QString &name, const QJsonObject &manifest) {
+                ZipWriter zw(distW + QLatin1Char('/') + name);
+                zw.addFile(QStringLiteral("manifest.json"), QJsonDocument(manifest).toJson());
+                zw.close();
+            };
+            const QString coreW = QStringLiteral("quillbinder-%1-experimental-windows-program.qbpkg").arg(version);
+            packageW(coreW, core);
+            bundle.insert(QStringLiteral("version"), version);
+            packageW(QStringLiteral("quillbinder-%1-experimental-windows-update.qbpkg").arg(version), bundle);
+            QJsonObject withLibraries = addon, plainData, linuxLibraries = addon;
+            withLibraries.insert(QStringLiteral("version"), QStringLiteral("3.2"));
+            withLibraries.insert(QStringLiteral("platform"), QStringLiteral("windows-x64"));
+            withLibraries.insert(QStringLiteral("runtime"), winRuntime);
+            packageW(QStringLiteral("feed-addon-windows.qbpkg"), withLibraries);
+            plainData.insert(QStringLiteral("id"), QStringLiteral("plain-data"));
+            plainData.insert(QStringLiteral("kind"), QStringLiteral("addon"));
+            plainData.insert(QStringLiteral("version"), QStringLiteral("2.0"));
+            packageW(QStringLiteral("plain-data-windows.qbpkg"), plainData);
+            linuxLibraries.insert(QStringLiteral("id"), QStringLiteral("linux-libraries"));
+            packageW(QStringLiteral("linux-libraries.qbpkg"), linuxLibraries);
+            const QString outW = W + QStringLiteral("/made-updates-1-windows.json");
+            const QString tagW = QStringLiteral("v%1-windows-experimental").arg(version);
+            const QByteArray saidW = runTool(QStringLiteral("python3"),
+                                             {QStringLiteral("-I"), src + QStringLiteral("/tools/update-feed.py"), QStringLiteral("--dist"), distW, QStringLiteral("--tag"), tagW,
+                                              QStringLiteral("--repo"), QStringLiteral("Some-One/Some_Repo"), QStringLiteral("--previous"), out,
+                                              QStringLiteral("--system"), QStringLiteral("windows-x64"), QStringLiteral("--runtime"), winRuntime,
+                                              QStringLiteral("--label"), QStringLiteral("experimental"), QStringLiteral("--date"),
+                                              QStringLiteral("2026-11-21T10:00:00Z"), QStringLiteral("--out"), outW});
+            const QByteArray madeW = readAll(outW);
+            Feed feedW;
+            QString whyW;
+            const bool readW = readFeed(madeW, sign(madeW), &feedW, &whyW);
+            const QJsonObject blockW = feedW.systems.value(QStringLiteral("windows-x64")).toObject();
+            const QJsonObject progW = blockW.value(QStringLiteral("program")).toObject();
+            Installed hereW;
+            hereW.appVersion = QStringLiteral("0.0.5");
+            hereW.runtime = winRuntime;
+            hereW.addons = {{QStringLiteral("feed-addon"), QStringLiteral("3.0")}, {QStringLiteral("plain-data"), QStringLiteral("1.0")},
+                          {QStringLiteral("linux-libraries"), QStringLiteral("1.0")}, {QStringLiteral("a-bundle"), QStringLiteral("0.5")}};
+            const QList<Offer> offersW = offersFor(feedW, QStringLiteral("windows-x64"), hereW);
+            const QString startW = QStringLiteral("https://github.com/Some-One/Some_Repo/releases/download/%1/").arg(tagW);
+            QStringList offered;
+            for (const Offer &o : offersW)
+                offered << o.id + QLatin1Char(' ') + o.version;
+            check(readW && feedW.systems.value(QStringLiteral("linux-x86_64")) == feed.systems.value(QStringLiteral("linux-x86_64"))
+                      && progW.value(QStringLiteral("label")).toString() == QLatin1String("experimental")
+                      && progW.value(QStringLiteral("runtime")).toString() == winRuntime && !progW.contains(QStringLiteral("appimage"))
+                      && offered == QStringList{QStringLiteral("program ") + version, QStringLiteral("feed-addon 3.2"), QStringLiteral("plain-data 2.0")}
+                      && offersW.value(0).kind == Offer::Kind::ProgramUpdate && offersW.value(0).file.url == startW + coreW
+                      && offersW.value(1).file.url == startW + QStringLiteral("feed-addon-windows.qbpkg"),
+                  QStringLiteral("Windows: tools/update-feed.py writes Windows' block from a Windows release's files (the program update, the "
+                                 "add-ons made for Windows and those without libraries; not the bundle, not Linux libraries) and leaves "
+                                 "Linux's block as it was"),
+                  QString::fromUtf8(saidW) + whyW + QStringLiteral(" offered: ") + offered.join(QLatin1String(", ")));
+            hereW.runtime = QStringLiteral("another-runtime");
+            const QList<Offer> plainW = offersFor(feedW, QStringLiteral("windows-x64"), hereW);
+            hereW.fullAppImage = true;
+            const QList<Offer> fullW = offersFor(feedW, QStringLiteral("windows-x64"), hereW);
+            check(plainW.value(0).kind == Offer::Kind::NewSetup && plainW.value(0).file.url == startW + nameW + QStringLiteral("-setup.exe")
+                      && plainW.value(0).file.size == setupPlain.size() && fullW.value(0).kind == Offer::Kind::NewSetup
+                      && fullW.value(0).file.url == startW + nameWFull + QStringLiteral("-setup.exe")
+                      && fullW.value(0).file.sha256 == QString::fromLatin1(QCryptographicHash::hash(setupFull, QCryptographicHash::Sha256).toHex())
+                      && offersFor(feed, QStringLiteral("windows-x64"), hereW).isEmpty(),
+                  QStringLiteral("Windows: on another runtime the new version is offered as its setup program, the full one to the full "
+                                 "version; a file that names no Windows program offers Windows none"),
+                  QStringLiteral("%1 / %2").arg(plainW.value(0).file.url, fullW.value(0).file.url));
+            check(UpdateChecker::setupArguments(QStringLiteral("C:/Schöne Bücher/Quill binder/"))
+                          == QStringLiteral("/SILENT /NOCANCEL /QBUPDATE=1 /DIR=\"C:\\Schöne Bücher\\Quill binder\"")
+                      || QDir::separator() != QLatin1Char('\\'),
+                  QStringLiteral("Windows: the setup program is started for the program's folder, without pages, as an update run; a "
+                                 "folder's blanks and a backslash at its end do not break the command"),
+                  UpdateChecker::setupArguments(QStringLiteral("C:/Schöne Bücher/Quill binder/")));
+#endif
         }
 
         // ---- with a server on this computer in the place of the project's page
@@ -1582,6 +1691,68 @@ int main(int argc, char **argv)
         check(upd->requests() == requestsNow + 2 && notes == 1 && fading.isNull(),
               QStringLiteral("the note comes at most once a day, and it is gone after its two rounds"));
 
+#ifdef Q_OS_WIN
+        // Windows: a new version that needs the whole program anew comes as its setup program. It is downloaded into
+        // <data>/update-setup, checked, and started for the program's folder when the writer says so
+        server.start();
+        const QString baseNow = server.base();
+        qputenv("QB_TEST_UPDATE_URL", (baseNow + QStringLiteral("/updates-1.json")).toUtf8());
+        const QByteArray setupBytes = QByteArray("the new setup program ") + QByteArray(5000, 's');
+        server.files.insert(QStringLiteral("/files/new-setup.exe"), setupBytes);
+        const QString setupName = QStringLiteral("Quillbinder-99.0.0-experimental-windows-x64-setup.exe");
+        const QString setupLog = W + QStringLiteral("/setup-started.txt");
+        qputenv("QB_TEST_SETUP_LOG", setupLog.toUtf8());
+        QJsonObject program;
+        program.insert(QStringLiteral("version"), QStringLiteral("99.0.0"));
+        program.insert(QStringLiteral("runtime"), QStringLiteral("a-later-runtime"));
+        program.insert(QStringLiteral("whatsNew"), QJsonArray{QStringLiteral("New libraries.")});
+        program.insert(QStringLiteral("setup"), fileEntry(baseNow + QStringLiteral("/files/new-setup.exe"), setupBytes, setupName));
+        publish(program, QJsonArray(), QStringLiteral("2027-02-01T09:00:00Z"));
+        qputenv("QB_TEST_UPDATE_NOW", start.addDays(80).toString(Qt::ISODate).toUtf8());
+        lookAndWait(false);
+        win = upd->window();
+        QLabel *notesLabel = win ? win->findChild<QLabel *>(QStringLiteral("updateNotes")) : nullptr;
+        const QString setupNote = notesLabel ? notesLabel->text() : QString();
+        resultText.clear();
+        answerResult("updateSetupNow", &resultText);
+        if (QPushButton *b = buttonOf("updateInstall"))
+            b->click();
+        waitFor([&] { return installs == 3; }, 15000);
+        settle(300);
+        const QString kept = updates::setupDownloadDir() + QLatin1Char('/') + setupName;
+        const QString folder = QDir::toNativeSeparators(launcher::appDir());
+        const QStringList started = QString::fromUtf8(readAll(setupLog)).split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+        check(installs == 3 && setupNote.contains(folder) && setupNote.contains(QLatin1String("setup program")) && readAll(kept) == setupBytes
+                  && resultText.contains(QLatin1String("downloaded and checked")) && resultText.contains(QLatin1String("closes now"))
+                  && started.size() == 2 && started.value(0) == QDir::toNativeSeparators(kept)
+                  && started.value(1) == QStringLiteral("/SILENT /NOCANCEL /QBUPDATE=1 /DIR=\"%1\"").arg(folder),
+              QStringLiteral("Windows: a new version that needs the whole program anew is downloaded as its setup program into the "
+                             "program's own data folder, checked against the signed list, and started for the program's folder, "
+                             "without pages, when the writer chooses \"Close and Update Now\""),
+              resultText + QStringLiteral(" || ") + started.join(QLatin1String(" | ")) + QStringLiteral(" || ") + setupNote);
+        shot(&w, QStringLiteral("v0920-update-setup"));
+        // a setup program that is not the one the signed list names is neither kept nor started
+        QFile::remove(setupLog);
+        QByteArray otherBytes = setupBytes;
+        otherBytes[otherBytes.size() - 1] = 'X';
+        server.files.insert(QStringLiteral("/files/new-setup.exe"), otherBytes);
+        publish(program, QJsonArray(), QStringLiteral("2027-02-02T09:00:00Z"));
+        lookAndWait(true);
+        win = upd->window();
+        resultText.clear();
+        answerResult("none", &resultText);
+        if (QPushButton *b = buttonOf("updateInstall"))
+            b->click();
+        waitFor([&] { return installs == 4; }, 15000);
+        settle(300);
+        check(installs == 4 && !QFile::exists(kept) && !QFile::exists(setupLog) && resultText.contains(QLatin1String("not the one the signed list names")),
+              QStringLiteral("Windows: a setup program that is not the one the signed list names is not kept and not started"), resultText);
+        // what was downloaded goes at the program's next start
+        writeAll(updates::setupDownloadDir() + QStringLiteral("/an-older-setup.exe"), "left over");
+        updates::clearSetupDownload();
+        check(!QDir(updates::setupDownloadDir()).exists(), QStringLiteral("Windows: a setup program downloaded before is removed at the next start"));
+        qunsetenv("QB_TEST_SETUP_LOG");
+#else
         // a new AppImage: it takes the place of the AppImage that runs, and the one before is kept beside it
         server.start();
         const QString baseNow = server.base();
@@ -1622,6 +1793,7 @@ int main(int argc, char **argv)
         check(refused && readAll(W + QStringLiteral("/somewhere/own2")) == "own" && !QFile::exists(W + QStringLiteral("/somewhere/own2.before-update"))
                   && whyNot.contains(QLatin1String("Nothing was changed")),
               QStringLiteral("when the new file cannot take the place, the AppImage that runs is put back and the message says so"), whyNot);
+#endif
         qunsetenv("QB_TEST_APPIMAGE");
         qunsetenv("QB_TEST_UPDATE_URL");
         qunsetenv("QB_TEST_UPDATE_NOW");

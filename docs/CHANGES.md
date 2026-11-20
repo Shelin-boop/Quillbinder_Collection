@@ -50,6 +50,23 @@ its secure connection).
   status bar. A choice in the Add-on Manager, or an install, that could not be written is reported as failed; and
   when a failed install cannot put the earlier version back, the message says where it is.
 
+## Windows 0.92.0 experimental (2026-11-20)
+
+Quillbinder for Windows 11 at the level of Linux 0.92.0, and the first Windows version released from the project's
+one repository. Everything above is in it. What is Windows' own:
+
+- Translation and Proofreading 1.2 comes inside the full version (setup program and zip) and as a package of its
+  own, built from the same source as on Linux. Before, it was an official add-on from a repository of its own.
+- The check for updates knows Windows' files. The usual update is installed inside Quillbinder, as on Linux. A
+  version that needs the whole program anew (new libraries) is downloaded as its setup program into Quillbinder's
+  own folder, checked against the project's signed list, and started when you choose **Close and Update Now**:
+  Quillbinder closes, the setup program unpacks the new version into the folder you use, without its pages, and
+  starts it. Your settings, add-ons and everything else in `data` stay. Where Windows blocks the setup program
+  (it carries no code-signing certificate), Quillbinder says so and names the file.
+- The Windows release now also carries the program update alone and every add-on as a package of its own (their
+  names end with `-windows`), which is what the check for updates offers.
+- A setup program can be run as an update (`/QBUPDATE=1`): it waits until the Quillbinder in the folder has ended.
+
 ## 0.91.3 beta (2026-11-15)
 
 A new AppImage and a program update for Linux. It prepares the list of official add-ons, which other authors can

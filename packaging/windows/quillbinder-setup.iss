@@ -8,6 +8,12 @@
 ; Built by packaging/windows/win-setup.sh:
 ;   ISCC /DAppVer=0.90.4 /DAppLabel=beta /DSourceDir=<program folder> /DOutDir=<dir> /DOutName=<file name without .exe>
 ;        /DIconFile=<quillbinder.ico> quillbinder-setup.iss
+;
+; Windows 0.92.0 (2026-11-20), the update run: the program's check for updates downloads the setup program of a new
+; version, checks it against the signed list, starts it with
+;   /SILENT /NOCANCEL /QBUPDATE=1 /DIR="<the program's folder>"
+; and closes. With /QBUPDATE=1 the setup waits until the program in that folder has ended (its file can be written
+; again), unpacks as always ("data" stays) and starts the new version. Nothing else differs from a run by hand.
 
 #ifndef AppVer
   #define AppVer "0.0.0"
@@ -98,6 +104,8 @@ english.FolderNotEmpty=This folder is not empty and holds no Quillbinder:%n%n%1%
 german.FolderNotEmpty=Dieser Ordner ist nicht leer und enthält kein Quillbinder:%n%n%1%n%nDie Dateien von Quillbinder trotzdem hinein entpacken?
 english.StartNow=Start Quillbinder now
 german.StartNow=Quillbinder jetzt starten
+english.StillRunning=Quillbinder is still running in this folder:%n%n%1%n%nNothing was changed. Close Quillbinder and start the update again (Help > Check for Updates Now).
+german.StillRunning=Quillbinder läuft noch in diesem Ordner:%n%n%1%n%nEs wurde nichts geändert. Schließen Sie Quillbinder und starten Sie das Update erneut (Hilfe > Jetzt nach Updates suchen).
 
 [Files]
 ; the program folder as it is in the zip; "data" (settings, add-ons, fonts of the writer) is never part of it
@@ -105,8 +113,26 @@ Source: "{#SourceDir}\*"; DestDir: "{app}"; Excludes: "\data\*"; Flags: ignoreve
 
 [Run]
 Filename: "{app}\quillbinder.exe"; Description: "{cm:StartNow}"; Flags: nowait postinstall skipifsilent
+; an update run has no pages: the new version starts when the files are in place
+Filename: "{app}\quillbinder.exe"; Flags: nowait; Check: UpdateRun
 
 [Code]
+// An update run, started by the program's check for updates (see the top of this file)
+function UpdateRun: Boolean;
+begin
+  Result := ExpandConstant('{param:QBUPDATE|0}') = '1';
+end;
+
+// Has the program in this folder ended? The file of a running program cannot be opened for writing; an empty text
+// is appended, so the file stays as it is.
+function ProgramEnded(const Dir: String): Boolean;
+var
+  Exe: String;
+begin
+  Exe := AddBackslash(Dir) + 'quillbinder.exe';
+  Result := (not FileExists(Exe)) or SaveStringToFile(Exe, '', True);
+end;
+
 // Can this user write into the folder? The folder is made when it is not there (and taken away again when it was
 // made here and stays empty), then a small file is written and removed.
 function CanWriteInto(const Dir: String): Boolean;
@@ -180,9 +206,25 @@ end;
 function PrepareToInstall(var NeedsRestart: Boolean): String;
 var
   Dir: String;
+  Tries: Integer;
 begin
   Result := '';
   Dir := ExpandConstant('{app}');
   if not CanWriteInto(Dir) then
+  begin
     Result := FmtMessage(CustomMessage('FolderNotWritable'), [Dir]);
+    Exit;
+  end;
+  // an update run: the program that started it is closing; up to two minutes for it (it saves the project first)
+  if UpdateRun then
+  begin
+    Tries := 0;
+    while (not ProgramEnded(Dir)) and (Tries < 240) do
+    begin
+      Sleep(500);
+      Tries := Tries + 1;
+    end;
+    if not ProgramEnded(Dir) then
+      Result := FmtMessage(CustomMessage('StillRunning'), [Dir]);
+  end;
 end;

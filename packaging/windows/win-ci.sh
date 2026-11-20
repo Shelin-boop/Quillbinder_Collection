@@ -84,6 +84,25 @@ fi
 say "whisper.cpp: rc=$rc, $(cat "$WHISPER/version.txt" 2>/dev/null | cut -d' ' -f1), modules: $(ls "$WHISPER/bin" 2>/dev/null | grep -i '^ggml-cpu-' | sed 's/^ggml-cpu-//; s/\.dll$//' | tr '\n' ' ')($(mins))$pack"
 [ $rc -eq 0 ] && export QB_WHISPER_DIR="$(cygpath -m "$WHISPER")"
 
+# ---- the engine libraries of the add-on "Translation and Proofreading" (Windows 0.92.0: one of the project's own
+# add-ons, as on Linux since 0.92.0): oneDNN, CTranslate2 and SentencePiece, built with MSVC by the add-on's own script
+# into .translator-deps, which the workflow keeps in a cache under that script's hash. packaging/windows/win-addons.sh
+# builds the add-on against them (QB_TRANSLATOR_DEPS); without them the add-on is left out (a release build then fails).
+TPDEPS="$PWD/.translator-deps"
+if [ -f "$TPDEPS/install/lib/ctranslate2.lib" ] && [ -f "$TPDEPS/install/lib/sentencepiece.lib" ]; then
+  rc=0
+  how="from the cache"
+else
+  rm -rf "$TPDEPS"
+  TP_DEPS="$TPDEPS" bash addons/translation-proofreading/source/packaging/build-deps-windows.sh > "$OUT/translator-deps.log" 2>&1
+  rc=$?
+  how="built"
+  # the build folders are not needed again (the sources stay: the add-on's package takes the license texts from them)
+  rm -rf "$TPDEPS/b-onednn" "$TPDEPS/b-ct2" "$TPDEPS/b-spm"
+  tail -c 400000 "$OUT/translator-deps.log" > "$OUT/translator-deps.log.tmp" && mv "$OUT/translator-deps.log.tmp" "$OUT/translator-deps.log"
+fi
+say "translator libraries: rc=$rc, $how, $(ls "$TPDEPS/install/lib" 2>/dev/null | grep -c '\.lib$') libraries ($(mins))"
+[ $rc -eq 0 ] && export QB_TRANSLATOR_DEPS="$TPDEPS"
 # ---- configure
 cmake -S . -B build -G Ninja \
   -DCMAKE_BUILD_TYPE=Release \
@@ -198,6 +217,7 @@ say "plugin dlls: $(ls build/tool-plugins build/tool-plugins/media build/tool-pl
 mkdir -p "$OUT/addons"
 bash packaging/windows/win-addons.sh build "$QT" "$OUT/addons" > "$OUT/addons.log" 2>&1
 say "addons: rc=$? $(ls "$OUT/addons" | grep -c '\.qbpkg$') packages ($(mins))"
+grep -E '^translation-proofreading: ' "$OUT/addons.log" >> "$SUM"
 
 # the program update and every add-on in one bundle (needs $singles)
 make_bundle() {
@@ -218,10 +238,13 @@ if [ "$STAGE" = release ]; then
   echo "$ver" > "$OUT/stage/version.txt"
   npk=$(ls "$OUT/stage/packages" | grep -c '\.qbpkg$')
   say "stage: $npk packages, program folder $(du -k "$OUT/stage/program-folder.zip" | cut -f1) KiB"
-  if [ $selftest_ok -eq 1 ] && [ "$npk" -ge 12 ] && [ -f "$OUT/stage/Quillbinder-$ver-windows-x64-symbols.zip" ]; then
+  # (0.92.0: with the translator, which a release never leaves out)
+  tp=0
+  [ -f "$OUT/stage/packages/translation-proofreading-windows.qbpkg" ] && tp=1
+  if [ $selftest_ok -eq 1 ] && [ "$npk" -ge 13 ] && [ $tp -eq 1 ] && [ -f "$OUT/stage/Quillbinder-$ver-windows-x64-symbols.zip" ]; then
     say "result: ok"
   else
-    say "result: release build incomplete (selftest $selftest_ok, packages $npk)"
+    say "result: release build incomplete (selftest $selftest_ok, packages $npk, translator $tp)"
   fi
   say "time: $(mins)"
   exit 0

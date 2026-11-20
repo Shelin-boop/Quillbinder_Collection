@@ -13,6 +13,10 @@
 #   quillbinder-<v>-<name>-windows-update.qbpkg                    the program update and every add-on (signed)
 #   media-all-formats-windows.qbpkg                                the audio and video add-ons (signed), if built
 #   Quillbinder-<v>-<name>-windows-x64-symbols.zip                 for crash reports
+#   quillbinder-<v>-<name>-windows-program.qbpkg            the program update alone (signed; Windows 0.92.0)
+#   <id>-windows.qbpkg                                             every add-on on its own (signed; Windows 0.92.0)
+# The last two kinds are what the program's check for updates offers: the program update when the libraries stay
+# the same, and an add-on only where it is installed (tools/update-feed.py names them in the update file).
 # and checks them with the program as released (no test switches): the setup programs (win-setup.sh), the signed
 # bundle goes in without --allow-unsigned, an unsigned package is refused, the full version installs its add-ons at
 # its first start. Lines "check <name>: ok|FAIL <why>" and "checks: ..." in <out dir>/summary.txt; exit status 0
@@ -131,8 +135,17 @@ for p in "$SIGNED"/media-all-formats*.qbpkg; do
     b=$(basename "$p")
     case "$b" in *windows*) cp "$p" "$FILES/$b" ;; *) cp "$p" "$FILES/${b%.qbpkg}-windows.qbpkg" ;; esac
 done
+# Windows 0.92.0: the program update alone and every add-on as a package of its own (the names all end with
+# "-windows", also for add-ons without libraries, so that no name of the Linux release comes twice)
+cp "$SIGNED/core.qbpkg" "$FILES/quillbinder-$ver-$name-windows-program.qbpkg"
+for p in $singles; do
+    b=$(basename "$p")
+    case "$b" in *-windows.qbpkg) cp "$p" "$FILES/$b" ;; *) cp "$p" "$FILES/${b%.qbpkg}-windows.qbpkg" ;; esac
+done
 n=$(ls "$FILES" | wc -l)
-[ "$n" -ge 6 ] && [ -z "$(find "$FILES" -type f -size -100k)" ] && pass files || fail files "$n files; small: $(find "$FILES" -type f -size -100k | tr '\n' ' ')"
+small=$(find "$FILES" -type f -iname 'quillbinder-*' -size -100k | tr '\n' ' ')
+[ "$n" -ge $((7 + nfull)) ] && [ -z "$small" ] && [ -f "$FILES/translation-proofreading-windows.qbpkg" ] && pass files \
+    || fail files "$n files (expected at least $((7 + nfull))); small: $small; translator: $(ls "$FILES" | grep -c '^translation-proofreading')"
 ( cd "$FILES" && ls -l ) >> "$SUM"
 say "checks: $ok ok, $failed failed"
 if [ $failed -eq 0 ]; then say "result: ok"; else say "result: checks failed"; fi

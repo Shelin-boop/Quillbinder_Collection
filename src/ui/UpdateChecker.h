@@ -36,6 +36,13 @@ public:
     static bool replaceOwnFile(const QString &own, const QString &fresh, QString *backup, QString *error);
     // The AppImage this program was started from ("" when it is none), and whether its folder can be written.
     static QString ownAppImage();
+    // Windows 0.92.0: a new version that needs the whole program anew comes as its setup program. The program
+    // downloads it into <data>/update-setup, checks it against the signed list, closes and starts it for its own
+    // folder: an update run (/QBUPDATE=1, packaging/windows/quillbinder-setup.iss) shows no pages, waits until this
+    // program has ended, unpacks over the folder ("data" stays) and starts the new version.
+    // setupArguments: the command line of that run. startSetup: starts it, detached; false with the system's reason.
+    static QString setupArguments(const QString &folder);
+    static bool startSetup(const QString &setup, const QString &folder, QString *error);
 
 signals:
     void finished(bool reached, int offers);   // a look has ended (reached: the address answered)
@@ -73,6 +80,7 @@ private:
     QStringList m_done, m_problems;
     bool m_restart = false;
     QString m_replaced;      // the AppImage that was replaced (then the program starts again)
+    QString m_setupFile;     // Windows: the downloaded setup program of the new version (the program closes for it)
 };
 
 } // namespace qb
