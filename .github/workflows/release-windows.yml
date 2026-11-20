@@ -838,6 +838,8 @@ jobs:
             also+=(--also "older-$i" "$t")
           done < <(gh api "repos/$GH_REPO/releases?per_page=12" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
           python3 -I tools/download-page.py release-names "$main" site "${also[@]}"
+          # 0.92.0: the page is replaced as a whole; the update file the programs read is carried along
+          tools/keep-update-feed.sh site
           grep -o 'releases/download/[^/]*/[^"]*' site/index.html | sort -u
 
       # a name per attempt (as release.yml, P7): a rerun of this job finds no artifact of the same name from the attempt before

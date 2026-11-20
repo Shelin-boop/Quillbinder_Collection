@@ -4940,6 +4940,14 @@ Verschieben Sie den ganzen Quillbinder-Ordner an einen eigenen Ort, zum Beispiel
         <translation>Zurück zum Binder</translation>
     </message>
     <message>
+        <source>Release</source>
+        <translation>Lösen</translation>
+    </message>
+    <message>
+        <source>Release the fixed mind map: the inspector&apos;s Mind Map tab follows the selected item again</source>
+        <translation>Die angeheftete Mindmap lösen: Der Reiter „Mindmap“ des Inspektors folgt wieder dem ausgewählten Element</translation>
+    </message>
+    <message>
         <source>New document (Ctrl+N)</source>
         <translation>Neues Dokument (Ctrl+N)</translation>
     </message>
@@ -5092,6 +5100,14 @@ Verschieben Sie den ganzen Quillbinder-Ordner an einen eigenen Ort, zum Beispiel
         <translation>Name der Sammlung:</translation>
     </message>
     <message>
+        <source>Mind map fixed: %1</source>
+        <translation>Mindmap angeheftet: %1</translation>
+    </message>
+    <message>
+        <source>The inspector&apos;s Mind Map tab shows this item&apos;s mind map whatever is selected.</source>
+        <translation>Der Reiter „Mindmap“ des Inspektors zeigt die Mindmap dieses Elements, egal was ausgewählt ist.</translation>
+    </message>
+    <message>
         <source>Regular expression: %1</source>
         <translation>Regulärer Ausdruck: %1</translation>
     </message>
@@ -5122,6 +5138,17 @@ Verschieben Sie den ganzen Quillbinder-Ordner an einen eigenen Ort, zum Beispiel
     <message>
         <source>Search Results (no search yet)</source>
         <translation>Suchergebnisse (noch keine Suche)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::BinderTree</name>
+    <message>
+        <source>The inspector&apos;s Mind Map tab is fixed on this item. Click to release it.</source>
+        <translation>Der Reiter „Mindmap“ des Inspektors ist an dieses Element angeheftet. Klicken, um ihn zu lösen.</translation>
+    </message>
+    <message>
+        <source>Fix the inspector&apos;s Mind Map tab on this item: it then shows this item&apos;s mind map whatever is selected.</source>
+        <translation>Den Reiter „Mindmap“ des Inspektors an dieses Element anheften: Er zeigt dann die Mindmap dieses Elements, egal was ausgewählt ist.</translation>
     </message>
 </context>
 <context>
@@ -9902,6 +9929,14 @@ Das Projekt bleibt geöffnet; das Programm versucht weiter, es in seinem eigenen
         <translation>&amp;Objekte</translation>
     </message>
     <message>
+        <source>&amp;Fix the Mind Map of This Item</source>
+        <translation>Mindmap dieses Elements an&amp;heften</translation>
+    </message>
+    <message>
+        <source>&amp;Release the Fixed Mind Map</source>
+        <translation>Angeheftete Mindmap &amp;lösen</translation>
+    </message>
+    <message>
         <source>&amp;Save Current Layout…</source>
         <translation>Aktuelles Layout &amp;speichern…</translation>
     </message>
@@ -10216,6 +10251,14 @@ Das Projekt bleibt geöffnet.</translation>
     <message>
         <source>when the project closed</source>
         <translation>beim Schließen des Projekts</translation>
+    </message>
+    <message>
+        <source>The Mind Map tab of the inspector now stays on &quot;%1&quot;.</source>
+        <translation>Der Reiter „Mindmap“ des Inspektors bleibt jetzt bei „%1“.</translation>
+    </message>
+    <message>
+        <source>The Mind Map tab of the inspector follows the selected item again.</source>
+        <translation>Der Reiter „Mindmap“ des Inspektors folgt wieder dem ausgewählten Element.</translation>
     </message>
     <message>
         <source>New Project</source>
@@ -11140,6 +11183,18 @@ Schriften können hier mit Navigieren &gt; Schriften &gt; Schriftdateien install
     <message>
         <source>&amp;Mind Map Help</source>
         <translation>&amp;Mindmap-Hilfe</translation>
+    </message>
+    <message>
+        <source>Check for Updates at Startup</source>
+        <translation>Beim Start nach Updates suchen</translation>
+    </message>
+    <message>
+        <source>Look once a day, at the program&apos;s start, whether a newer version of the program or of an installed add-on exists. Nothing about you is sent. Off: the program contacts nothing.</source>
+        <translation>Einmal am Tag beim Programmstart nachsehen, ob es eine neuere Version des Programms oder einer installierten Erweiterung gibt. Über Sie wird nichts gesendet. Aus: Das Programm nimmt keinerlei Verbindung auf.</translation>
+    </message>
+    <message>
+        <source>Check for Updates Now</source>
+        <translation>Jetzt nach Updates suchen</translation>
     </message>
     <message>
         <source>&amp;Developer Guide: Updates and Add-ons</source>
@@ -12079,6 +12134,22 @@ Arbeiten Sie jeweils nur an einem Computer daran: Änderungen auf beiden können
     <message>
         <source>Project Not Marked as Open</source>
         <translation>Projekt nicht als geöffnet markiert</translation>
+    </message>
+    <message>
+        <source>“%1” has this document open or has changed it (it opened the project at %2).</source>
+        <translation>„%1“ hat dieses Dokument geöffnet oder geändert (hat das Projekt um %2 geöffnet).</translation>
+    </message>
+    <message>
+        <source>A hint only: nothing is blocked. It can be some minutes old, as your sync program carries it.</source>
+        <translation>Nur ein Hinweis: Nichts ist gesperrt. Er kann einige Minuten alt sein, da Ihr Synchronisationsprogramm ihn überträgt.</translation>
+    </message>
+    <message>
+        <source>“%1” works on documents in here.</source>
+        <translation>„%1“ arbeitet an Dokumenten hier drin.</translation>
+    </message>
+    <message>
+        <source>” and “</source>
+        <translation>“ und „</translation>
     </message>
     <message>
         <source>a snapshot of the document</source>
@@ -14202,6 +14273,34 @@ Der Inhalt wird so weit angezeigt, wie er gelesen werden konnte, und lässt sich
     <message>
         <source>Open this mind map in a large window (with the inspector of the board)</source>
         <translation>Diese Mindmap in einem großen Fenster öffnen (mit dem Inspektor der Tafel)</translation>
+    </message>
+    <message>
+        <source>Release</source>
+        <translation>Lösen</translation>
+    </message>
+    <message>
+        <source>Fix</source>
+        <translation>Anheften</translation>
+    </message>
+    <message>
+        <source>Release this mind map: the tab follows the selected item again</source>
+        <translation>Diese Mindmap lösen: Der Reiter folgt wieder dem ausgewählten Element</translation>
+    </message>
+    <message>
+        <source>Fix this mind map: the tab keeps showing it whatever is selected</source>
+        <translation>Diese Mindmap anheften: Der Reiter zeigt sie weiter, egal was ausgewählt ist</translation>
+    </message>
+    <message>
+        <source>Fixed: %1</source>
+        <translation>Angeheftet: %1</translation>
+    </message>
+    <message>
+        <source>Untitled</source>
+        <translation>Unbenannt</translation>
+    </message>
+    <message>
+        <source>This is the mind map of &quot;%1&quot;, not of the selected item. The pin button releases it.</source>
+        <translation>Das ist die Mindmap von „%1“, nicht die des ausgewählten Elements. Der Knopf mit der Nadel löst sie.</translation>
     </message>
 </context>
 <context>
@@ -19298,6 +19397,217 @@ Strg+Klick zum Öffnen</translation>
     <message>
         <source>Icons of the main toolbars:</source>
         <translation>Symbole der Hauptsymbolleisten:</translation>
+    </message>
+</context>
+<context>
+    <name>qb::UpdateChecker</name>
+    <message>
+        <source>%1 (the copy kept at the last update) could not be removed.</source>
+        <translation>%1 (die beim letzten Update aufbewahrte Kopie) konnte nicht entfernt werden.</translation>
+    </message>
+    <message>
+        <source>%1 could not be moved aside.</source>
+        <translation>%1 konnte nicht beiseitegelegt werden.</translation>
+    </message>
+    <message>
+        <source>The new file could not be put in the place of %1. Nothing was changed.</source>
+        <translation>Die neue Datei konnte nicht an die Stelle von %1 gesetzt werden. Es wurde nichts geändert.</translation>
+    </message>
+    <message>
+        <source>The new file could not be put in the place of %1, and that file could not be put back: it is now %2. Rename it to its old name.</source>
+        <translation>Die neue Datei konnte nicht an die Stelle von %1 gesetzt werden, und diese Datei konnte nicht zurückgelegt werden: Sie heißt jetzt %2. Geben Sie ihr wieder ihren alten Namen.</translation>
+    </message>
+    <message>
+        <source>Check for Updates</source>
+        <translation>Nach Updates suchen</translation>
+    </message>
+    <message>
+        <source>%1 looks for updates when it starts. Nothing about you is sent.
+
+It fetches one small file, at most once a day, and tells you when a newer version of the program or of an installed add-on is there. You can switch this off or on at any time with Help &gt; Check for Updates at Startup.</source>
+        <translation>%1 sucht beim Start nach Updates. Über Sie wird nichts gesendet.
+
+Es wird höchstens einmal am Tag eine kleine Datei abgerufen, und Sie erfahren, wenn es eine neuere Version des Programms oder einer installierten Erweiterung gibt. Sie können das jederzeit mit Hilfe &gt; Beim Start nach Updates suchen aus- oder einschalten.</translation>
+    </message>
+    <message>
+        <source>Turn Off</source>
+        <translation>Ausschalten</translation>
+    </message>
+    <message>
+        <source>Looking for updates...</source>
+        <translation>Suche nach Updates...</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Abbrechen</translation>
+    </message>
+    <message>
+        <source>This copy of %1 cannot make a secure connection, so it cannot look for updates. Download the current AppImage once from the project&apos;s page; from then on the check works.</source>
+        <translation>Diese Kopie von %1 kann keine sichere Verbindung aufbauen und daher nicht nach Updates suchen. Laden Sie einmal das aktuelle AppImage von der Seite des Projekts herunter; danach funktioniert die Suche.</translation>
+    </message>
+    <message>
+        <source>No update information was found at the project&apos;s address.</source>
+        <translation>Unter der Adresse des Projekts wurden keine Update-Informationen gefunden.</translation>
+    </message>
+    <message>
+        <source>The update address could not be reached (%1).</source>
+        <translation>Die Update-Adresse konnte nicht erreicht werden (%1).</translation>
+    </message>
+    <message>
+        <source>Could not look for updates (no connection to the update address).</source>
+        <translation>Es konnte nicht nach Updates gesucht werden (keine Verbindung zur Update-Adresse).</translation>
+    </message>
+    <message>
+        <source>The update information could not be trusted and was ignored: %1.</source>
+        <translation>Den Update-Informationen konnte nicht vertraut werden; sie wurden ignoriert: %1.</translation>
+    </message>
+    <message>
+        <source>The update information was older than the one %1 has already seen, and was ignored.</source>
+        <translation>Die Update-Informationen waren älter als die, die %1 bereits gesehen hat, und wurden ignoriert.</translation>
+    </message>
+    <message>
+        <source>%1 and its add-ons are up to date.</source>
+        <translation>%1 und seine Erweiterungen sind auf dem neuesten Stand.</translation>
+    </message>
+    <message>
+        <source>1 day</source>
+        <translation>1 Tag</translation>
+    </message>
+    <message>
+        <source>1 week</source>
+        <translation>1 Woche</translation>
+    </message>
+    <message>
+        <source>%1 weeks</source>
+        <translation>%1 Wochen</translation>
+    </message>
+    <message>
+        <source>Updates</source>
+        <translation>Updates</translation>
+    </message>
+    <message>
+        <source>Updates are available. One of them is recommended (security).</source>
+        <translation>Es gibt Updates. Eines davon wird empfohlen (Sicherheit).</translation>
+    </message>
+    <message>
+        <source>A recommended update (security) is available.</source>
+        <translation>Es gibt ein empfohlenes Update (Sicherheit).</translation>
+    </message>
+    <message>
+        <source>Updates are available.</source>
+        <translation>Es gibt Updates.</translation>
+    </message>
+    <message>
+        <source>An update is available.</source>
+        <translation>Es gibt ein Update.</translation>
+    </message>
+    <message>
+        <source>recommended (security)</source>
+        <translation>empfohlen (Sicherheit)</translation>
+    </message>
+    <message>
+        <source>functional</source>
+        <translation>Funktionen</translation>
+    </message>
+    <message>
+        <source>The new program version needs a new AppImage. %1 downloads it, puts it in the place of the AppImage you started (%2), keeps the one you have now beside it as &quot;%3&quot;, and starts again.</source>
+        <translation>Die neue Programmversion braucht ein neues AppImage. %1 lädt es herunter, setzt es an die Stelle des AppImage, das Sie gestartet haben (%2), bewahrt das bisherige daneben als „%3“ auf und startet neu.</translation>
+    </message>
+    <message>
+        <source>The new program version needs a new AppImage. It is saved in your Downloads folder; close %1, put the new file in the place of the old one and start it.</source>
+        <translation>Die neue Programmversion braucht ein neues AppImage. Es wird in Ihrem Download-Ordner gespeichert; beenden Sie %1, setzen Sie die neue Datei an die Stelle der alten und starten Sie sie.</translation>
+    </message>
+    <message>
+        <source>Delay: you are reminded again in %1. Each further delay waits longer (1 day, 1 week, 2 weeks, then every 4 weeks). A security update cannot be ignored, and its reminders do not end.</source>
+        <translation>Später: Sie werden in %1 wieder erinnert. Jedes weitere Verschieben wartet länger (1 Tag, 1 Woche, 2 Wochen, dann alle 4 Wochen). Ein Sicherheitsupdate kann nicht ignoriert werden, und seine Erinnerungen enden nicht.</translation>
+    </message>
+    <message>
+        <source>You have delayed this four times. This is the last reminder: Delay now ends the reminders for this version. Help &gt; Check for Updates Now still shows it.</source>
+        <translation>Sie haben dies viermal verschoben. Das ist die letzte Erinnerung: „Später“ beendet jetzt die Erinnerungen an diese Version. Hilfe &gt; Jetzt nach Updates suchen zeigt sie weiterhin.</translation>
+    </message>
+    <message>
+        <source>Delay: you are reminded again in %1. Each further delay waits longer (1 day, 1 week, 2 weeks, 4 weeks); after that there is one last reminder, and then the reminders for this version end.</source>
+        <translation>Später: Sie werden in %1 wieder erinnert. Jedes weitere Verschieben wartet länger (1 Tag, 1 Woche, 2 Wochen, 4 Wochen); danach gibt es eine letzte Erinnerung, und dann enden die Erinnerungen an diese Version.</translation>
+    </message>
+    <message>
+        <source>Download and Install (recommended: security)</source>
+        <translation>Herunterladen und installieren (empfohlen: Sicherheit)</translation>
+    </message>
+    <message>
+        <source>Download and Install</source>
+        <translation>Herunterladen und installieren</translation>
+    </message>
+    <message>
+        <source>Ignore These Versions</source>
+        <translation>Diese Versionen ignorieren</translation>
+    </message>
+    <message>
+        <source>Ignore This Version</source>
+        <translation>Diese Version ignorieren</translation>
+    </message>
+    <message>
+        <source>Delay (ends the reminders)</source>
+        <translation>Später (beendet die Erinnerungen)</translation>
+    </message>
+    <message>
+        <source>Delay (%1)</source>
+        <translation>Später (%1)</translation>
+    </message>
+    <message>
+        <source>%1: %2 could not be written.</source>
+        <translation>%1: %2 konnte nicht geschrieben werden.</translation>
+    </message>
+    <message>
+        <source>Downloading %1 %2...</source>
+        <translation>%1 %2 wird heruntergeladen...</translation>
+    </message>
+    <message>
+        <source>%1: the download was cancelled.</source>
+        <translation>%1: Der Download wurde abgebrochen.</translation>
+    </message>
+    <message>
+        <source>%1: the download failed (%2).</source>
+        <translation>%1: Der Download ist fehlgeschlagen (%2).</translation>
+    </message>
+    <message>
+        <source>the file could not be written, or is larger than announced</source>
+        <translation>die Datei konnte nicht geschrieben werden oder ist größer als angekündigt</translation>
+    </message>
+    <message>
+        <source>%1: the downloaded file is not the one the signed list names, so it was not installed.</source>
+        <translation>%1: Die heruntergeladene Datei ist nicht die, die die signierte Liste nennt, und wurde daher nicht installiert.</translation>
+    </message>
+    <message>
+        <source>%1 %2 is in the place of your AppImage. The one you had is kept as %3; delete it when the new version works for you.</source>
+        <translation>%1 %2 steht jetzt an der Stelle Ihres AppImage. Das bisherige ist als %3 aufbewahrt; löschen Sie es, wenn die neue Version bei Ihnen funktioniert.</translation>
+    </message>
+    <message>
+        <source>%1 %2: %3</source>
+        <translation>%1 %2: %3</translation>
+    </message>
+    <message>
+        <source>%1 %2 was saved as %3. Close %1, put that file in the place of the AppImage you use, and start it.</source>
+        <translation>%1 %2 wurde als %3 gespeichert. Beenden Sie %1, setzen Sie diese Datei an die Stelle des AppImage, das Sie verwenden, und starten Sie sie.</translation>
+    </message>
+    <message>
+        <source>Not installed:</source>
+        <translation>Nicht installiert:</translation>
+    </message>
+    <message>
+        <source>Nothing was installed.</source>
+        <translation>Es wurde nichts installiert.</translation>
+    </message>
+    <message>
+        <source>The new version is used after a restart.</source>
+        <translation>Die neue Version wird nach einem Neustart verwendet.</translation>
+    </message>
+    <message>
+        <source>Restart Now</source>
+        <translation>Jetzt neu starten</translation>
+    </message>
+    <message>
+        <source>Later</source>
+        <translation>Später</translation>
     </message>
 </context>
 <context>

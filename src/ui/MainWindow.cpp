@@ -108,7 +108,10 @@
 #include <QFontComboBox>
 #include <QSysInfo>
 #include <QInputDialog>
+#include <QGraphicsOpacityEffect>
 #include <QLabel>
+#include <QPropertyAnimation>
+#include <QSequentialAnimationGroup>
 #include <QDialogButtonBox>
 #include <QTreeWidget>
 #include <QElapsedTimer>
@@ -3350,6 +3353,41 @@ bool MainWindow::closeProject()
     updateActions();
     toolhost::host().notifyProjectChanged();
     return true;
+}
+
+// 0.92.0: a note that asks for nothing (the update address could not be reached): a small text at the left of the
+// status bar, below the editor, that fades in and out twice and is gone.
+void MainWindow::showFadingNote(const QString &text)
+{
+    auto *note = new QLabel(text, statusBar());
+    note->setObjectName(QStringLiteral("fadingNote"));
+    auto *fx = new QGraphicsOpacityEffect(note);
+    fx->setOpacity(0.0);
+    note->setGraphicsEffect(fx);
+    statusBar()->addWidget(note);
+    note->show();
+    auto *run = new QSequentialAnimationGroup(note);
+    for (int round = 0; round < 2; ++round) {
+        auto *in = new QPropertyAnimation(fx, "opacity", run);
+        in->setDuration(700);
+        in->setStartValue(0.0);
+        in->setEndValue(1.0);
+        run->addAnimation(in);
+        run->addPause(2200);
+        auto *out = new QPropertyAnimation(fx, "opacity", run);
+        out->setDuration(700);
+        out->setStartValue(1.0);
+        out->setEndValue(0.0);
+        run->addAnimation(out);
+        if (round == 0)
+            run->addPause(500);
+    }
+    note->setProperty("fades", 2);
+    connect(run, &QAbstractAnimation::finished, note, [this, note] {
+        statusBar()->removeWidget(note);
+        note->deleteLater();
+    });
+    run->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 // ---------------------------------------------------------------- the fixed mind map (0.92.0)

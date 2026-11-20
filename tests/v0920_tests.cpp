@@ -19,7 +19,11 @@
 //    project, released when the item goes into the Trash;
 //  - the shown lock: each device writes which documents it has open or has changed beside the project's lock, only
 //    when that list changes; the binder marks what other devices work on with a padlock (documents and the folders
-//    around them), with a tool tip; a list without a sign of life is not shown; the list goes at closing.
+//    around them), with a tool tip; a list without a sign of life is not shown; the list goes at closing;
+//  - the check for updates: the signed file and what it offers, the delays and "ignore", the first start's note, at
+//    most one look a day, the window for functional and for security updates, download and install, a new AppImage
+//    in the place of the one that runs, an address that cannot be reached, a missing, forged or older file. The
+//    project's page is a small server inside this test.
 //
 //   xvfb-run -a ./qb_v0920_tests /tmp/shots
 
@@ -34,6 +38,7 @@
 #include "core/ProjectTemplates.h"
 #include "core/Snapshots.h"
 #include "core/SyncSafety.h"
+#include "core/UpdateCheck.h"
 #include "core/WorkMarks.h"
 #include "core/Zip.h"
 #include "compile/PluginManager.h"
@@ -46,6 +51,7 @@
 #include "ui/MainWindow.h"
 #include "ui/MindMapDoc.h"
 #include "ui/MindMapUi.h"
+#include "ui/UpdateChecker.h"
 #include "ui/Theme.h"
 
 #include "AppInfo.h"
@@ -70,11 +76,16 @@
 #include <QLabel>
 #include <QMessageBox>
 #include <QPointer>
+#include <QProcess>
+#include <QProcessEnvironment>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QSet>
+#include <QSslSocket>
 #include <QStatusBar>
 #include <QStyleFactory>
+#include <QTcpServer>
+#include <QTcpSocket>
 #include <QTemporaryDir>
 #include <QTest>
 #include <QTextCursor>
@@ -225,6 +236,55 @@ static QString addonPackage(const QString &dir, const QString &id, const QString
     zw.close();
     return path;
 }
+
+static QByteArray runTool(const QString &prog, const QStringList &args, const QProcessEnvironment &env = QProcessEnvironment::systemEnvironment())
+{
+    QProcess p;
+    p.setProcessEnvironment(env);
+    p.start(prog, args);
+    if (!p.waitForFinished(60000))
+        return QByteArray();
+    return p.readAllStandardOutput();
+}
+
+// The project's page, on this computer: serves the files it was given, and keeps what was asked for.
+class TestServer : public QObject
+{
+public:
+    QTcpServer server;
+    QHash<QString, QByteArray> files;
+    QStringList requests;
+    QList<QByteArray> raw;
+    QHash<QTcpSocket *, QByteArray> incoming;
+    TestServer()
+    {
+        connect(&server, &QTcpServer::newConnection, this, [this] {
+            while (QTcpSocket *s = server.nextPendingConnection()) {
+                connect(s, &QTcpSocket::readyRead, this, [this, s] {
+                    incoming[s] += s->readAll();
+                    if (!incoming[s].contains("\r\n\r\n"))
+                        return;
+                    const QByteArray request = incoming.take(s);
+                    raw << request;
+                    const QString path = QString::fromLatin1(request.split(' ').value(1));
+                    requests << path;
+                    if (files.contains(path)) {
+                        const QByteArray body = files.value(path);
+                        s->write("HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: " + QByteArray::number(body.size())
+                                 + "\r\nConnection: close\r\n\r\n" + body);
+                    } else {
+                        s->write("HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\nConnection: close\r\n\r\n");
+                    }
+                    s->disconnectFromHost();
+                });
+                connect(s, &QTcpSocket::disconnected, s, &QObject::deleteLater);
+            }
+        });
+    }
+    bool start() { return server.isListening() || server.listen(QHostAddress::LocalHost, 0); }
+    void stop() { server.close(); }
+    QString base() const { return QStringLiteral("http://127.0.0.1:%1").arg(server.serverPort()); }
+};
 
 static bool addonEnabled(const QString &id, bool *found = nullptr)
 {
@@ -991,6 +1051,580 @@ int main(int argc, char **argv)
               coreErr);
         check(launcher::writeState(st, &why) && launcher::readState().contains(QStringLiteral("probe")) && addons::setActiveCore(QString(), &coreErr),
               QStringLiteral("(written when it can be)"), why + coreErr);
+    }
+
+    // ================================================================ the check for updates (to-do item 7)
+    {
+        using namespace updates;
+        const QString src = QStringLiteral(QB_TEST_SOURCE_DIR "/..");
+        // a release key of the test, and a signed file as the release workflow makes one
+        const QString keyFile = W + QStringLiteral("/update-key.pem");
+        runTool(QStringLiteral("openssl"), {QStringLiteral("genpkey"), QStringLiteral("-algorithm"), QStringLiteral("ed25519"), QStringLiteral("-out"), keyFile});
+        const QByteArray pub = runTool(QStringLiteral("openssl"), {QStringLiteral("pkey"), QStringLiteral("-in"), keyFile, QStringLiteral("-pubout"),
+                                                                    QStringLiteral("-outform"), QStringLiteral("DER")}).right(32);
+        qputenv("QB_TEST_SIGNING_KEY", pub.toHex());
+        auto sign = [&](const QByteArray &bytes) {
+            writeAll(W + QStringLiteral("/to-sign"), bytes);
+            QFile::remove(W + QStringLiteral("/to-sign.sig"));
+            runTool(QStringLiteral("openssl"), {QStringLiteral("pkeyutl"), QStringLiteral("-sign"), QStringLiteral("-rawin"), QStringLiteral("-inkey"), keyFile,
+                                               QStringLiteral("-in"), W + QStringLiteral("/to-sign"), QStringLiteral("-out"), W + QStringLiteral("/to-sign.sig")});
+            return readAll(W + QStringLiteral("/to-sign.sig"));
+        };
+        auto fileEntry = [](const QString &url, const QByteArray &bytes, const QString &name) {
+            QJsonObject o;
+            o.insert(QStringLiteral("url"), url);
+            o.insert(QStringLiteral("name"), name);
+            o.insert(QStringLiteral("size"), bytes.size());
+            o.insert(QStringLiteral("sha256"), QString::fromLatin1(QCryptographicHash::hash(bytes, QCryptographicHash::Sha256).toHex()));
+            return o;
+        };
+        const QString t0 = QStringLiteral("2026-11-20T08:00:00Z");
+        const QDateTime start = QDateTime::fromString(t0, Qt::ISODate);
+        auto feedBytes = [&](const QJsonObject &program, const QJsonArray &addonList, const QString &date) {
+            QJsonObject sys, systems, root;
+            if (!program.isEmpty())
+                sys.insert(QStringLiteral("program"), program);
+            sys.insert(QStringLiteral("addons"), addonList);
+            systems.insert(systemName(), sys);
+            root.insert(QStringLiteral("format"), 1);
+            root.insert(QStringLiteral("date"), date);
+            root.insert(QStringLiteral("systems"), systems);
+            return QJsonDocument(root).toJson();
+        };
+
+        // ---- the rules, without any network
+        {
+            const QByteArray file = "https://example.org/file";
+            QJsonObject program;
+            program.insert(QStringLiteral("version"), QStringLiteral("9.1.0"));
+            program.insert(QStringLiteral("runtime"), QStringLiteral(QB_RUNTIME_ID));
+            program.insert(QStringLiteral("security"), QJsonArray{QStringLiteral("9.0.5")});
+            program.insert(QStringLiteral("whatsNew"), QJsonArray{QStringLiteral("Something new.")});
+            program.insert(QStringLiteral("update"), fileEntry(QStringLiteral("https://example.org/u.qbpkg"), "update", QStringLiteral("u.qbpkg")));
+            program.insert(QStringLiteral("appimage"), fileEntry(QStringLiteral("https://example.org/a.AppImage"), "plain", QStringLiteral("a.AppImage")));
+            program.insert(QStringLiteral("appimageFull"), fileEntry(QStringLiteral("https://example.org/f.AppImage"), "full", QStringLiteral("f.AppImage")));
+            QJsonObject addonA, addonB, addonC;
+            addonA.insert(QStringLiteral("id"), QStringLiteral("have-it"));
+            addonA.insert(QStringLiteral("name"), QStringLiteral("Have It"));
+            addonA.insert(QStringLiteral("version"), QStringLiteral("2.0"));
+            addonA.insert(QStringLiteral("minApp"), QStringLiteral("0.80.0"));
+            addonA.insert(QStringLiteral("file"), fileEntry(QStringLiteral("https://example.org/a.qbpkg"), "a", QStringLiteral("a.qbpkg")));
+            addonB = addonA;
+            addonB.insert(QStringLiteral("id"), QStringLiteral("not-installed"));
+            addonC = addonA;
+            addonC.insert(QStringLiteral("id"), QStringLiteral("other-runtime"));
+            addonC.insert(QStringLiteral("runtime"), QStringLiteral("some-other-runtime"));
+            const QByteArray json = feedBytes(program, QJsonArray{addonA, addonB, addonC}, t0);
+            const QByteArray sig = sign(json);
+            Feed feed;
+            QString why;
+            QByteArray changed = json;
+            changed.replace("9.1.0", "9.9.0");
+            check(sig.size() == 64 && readFeed(json, sig, &feed, &why) && readFeed(json, sig.toBase64() + '\n', &feed, &why)
+                      && !readFeed(changed, sig, nullptr, &why) && !readFeed(json, QByteArray(64, 'x'), nullptr, &why)
+                      && !readFeed(json, QByteArray(), nullptr, &why) && feed.date == start,
+                  QStringLiteral("the update file counts only with the release key's signature of exactly its bytes"), why);
+            Installed here;
+            here.appVersion = QStringLiteral("9.0.0");
+            here.runtime = QStringLiteral(QB_RUNTIME_ID);
+            here.addons = {{QStringLiteral("have-it"), QStringLiteral("1.0")}, {QStringLiteral("other-runtime"), QStringLiteral("1.0")}};
+            const QList<Offer> offers = offersFor(feed, systemName(), here);
+            const Offer prog = offers.value(0), add = offers.value(1);
+            check(offers.size() == 2 && prog.id == QLatin1String("program") && prog.kind == Offer::Kind::ProgramUpdate && prog.security
+                      && prog.file.name == QLatin1String("u.qbpkg") && prog.whatsNew.size() == 1 && add.id == QLatin1String("have-it")
+                      && add.kind == Offer::Kind::Addon && !add.security && add.installed == QLatin1String("1.0"),
+                  QStringLiteral("a newer program (as a program update on the same runtime; a security update lies between) and the "
+                                 "newer version of an installed add-on are offered; an add-on that is not installed or is made "
+                                 "for another runtime is not"),
+                  QString::number(offers.size()));
+            here.runtime = QStringLiteral("an-older-runtime");
+            here.appVersion = QStringLiteral("9.0.5");
+            here.fullAppImage = true;
+            const QList<Offer> image = offersFor(feed, systemName(), here);
+            here.appVersion = QStringLiteral("9.1.0");
+            here.addons = {{QStringLiteral("have-it"), QStringLiteral("2.0")}};
+            check(image.size() == 2 && image.first().kind == Offer::Kind::NewAppImage && image.first().file.name == QLatin1String("f.AppImage")
+                      && !image.first().security && image.last().id == QLatin1String("have-it") && offersFor(feed, systemName(), here).isEmpty()
+                      && offersFor(feed, QStringLiteral("some-other-system"), here).isEmpty(),
+                  QStringLiteral("another runtime: the new AppImage is offered (the full one to the full version) beside the add-on "
+                                 "that fits the program as it is; who has the newest versions is offered nothing"),
+                  QString::number(image.size()));
+
+            // the delays of a functional update, with the clock moved
+            State st;
+            st.enabled = true;
+            Offer f = add;
+            QStringList seen;
+            QDateTime t = start;
+            for (int round = 0; round < 6; ++round) {
+                const Shown s = toShow({f}, st, t, false);
+                if (s.offers.isEmpty()) {
+                    seen << QStringLiteral("none");
+                    break;
+                }
+                // not a minute before it is due
+                seen << QStringLiteral("%1%2").arg(s.delayDays).arg(s.lastReminder ? QStringLiteral(" last") : QString());
+                applyDelay(s, &st, t);
+                const QDateTime due = st.versions.value(f.key()).next;
+                if (due.isValid() && !st.versions.value(f.key()).off) {
+                    if (!toShow({f}, st, due.addSecs(-60), false).offers.isEmpty())
+                        seen << QStringLiteral("too early");
+                    t = due.addSecs(60);
+                } else {
+                    t = t.addDays(400);
+                }
+            }
+            check(seen == QStringList{QStringLiteral("1"), QStringLiteral("7"), QStringLiteral("14"), QStringLiteral("28"), QStringLiteral("28 last"), QStringLiteral("none")}
+                      && st.versions.value(f.key()).off && toShow({f}, st, t, true).offers.size() == 1,
+                  QStringLiteral("a functional update delayed: 1 day, 1 week, 2 weeks, 4 weeks, one last reminder, then no more; "
+                                 "Check for Updates Now still shows it"),
+                  seen.join(QLatin1String(", ")));
+            // a security update: no end, and "ignore" does not touch it
+            State ss;
+            Offer sec = prog;
+            seen.clear();
+            t = start;
+            for (int round = 0; round < 7; ++round) {
+                const Shown s = toShow({sec}, ss, t, false);
+                seen << (s.offers.isEmpty() ? QStringLiteral("none") : QString::number(s.delayDays) + (s.lastReminder ? QStringLiteral(" last") : QString()));
+                applyIgnore(s, &ss);
+                applyDelay(s, &ss, t);
+                t = ss.versions.value(sec.key()).next.addSecs(60);
+            }
+            check(seen == QStringList{QStringLiteral("1"), QStringLiteral("7"), QStringLiteral("14"), QStringLiteral("28"), QStringLiteral("28"), QStringLiteral("28"), QStringLiteral("28")}
+                      && !ss.versions.value(sec.key()).ignored && !ss.versions.value(sec.key()).off && toShow({sec}, ss, t, false).security,
+                  QStringLiteral("a security update delayed: 1 day, 1 week, 2 weeks, then every 4 weeks, without an end; it cannot be ignored"),
+                  seen.join(QLatin1String(", ")));
+            // ignore, and a newer version starts over; together with a security update the window follows its rules
+            State si;
+            applyIgnore(toShow({f}, si, start, false), &si);
+            Offer newer = f;
+            newer.version = QStringLiteral("2.1");
+            const Shown both = toShow({f, sec}, State(), start, false);
+            check(toShow({f}, si, start.addDays(90), false).offers.isEmpty() && toShow({newer}, si, start, false).offers.size() == 1
+                      && both.offers.size() == 2 && both.security && !both.lastReminder,
+                  QStringLiteral("an ignored version stays away, a newer one is offered again; a security update beside a functional "
+                                 "one makes the window follow the security rules"));
+            State sd;
+            sd.enabled = true;
+            const bool beforeNote = autoCheckDue(sd, start);
+            sd.noteShown = true;
+            const bool first = autoCheckDue(sd, start);
+            sd.lastCheck = start;
+            const bool sameDay = autoCheckDue(sd, start.addSecs(23 * 3600)), nextDay = autoCheckDue(sd, start.addSecs(24 * 3600 + 1));
+            sd.enabled = false;
+            check(!beforeNote && first && !sameDay && nextDay && !autoCheckDue(sd, start.addDays(30)),
+                  QStringLiteral("the automatic look: not before the first start's note was seen, at most once in 24 hours, never "
+                                 "when switched off"));
+        }
+
+        // ---- the release workflow's tool writes the file the program reads
+        {
+            const QString dist = W + QStringLiteral("/dist");
+            const QString version = QStringLiteral(QB_APP_VERSION);
+            const QByteArray plain = "plain AppImage", full = "the full AppImage, larger";
+            writeAll(dist + QStringLiteral("/Quillbinder-%1-beta-x86_64.AppImage").arg(version), plain);
+            writeAll(dist + QStringLiteral("/Quillbinder-%1-full-beta-x86_64.AppImage").arg(version), full);
+            writeAll(dist + QStringLiteral("/SHA256SUMS.txt"), "not a package");
+            auto package = [&](const QString &name, const QJsonObject &manifest) {
+                ZipWriter zw(dist + QLatin1Char('/') + name);
+                zw.addFile(QStringLiteral("manifest.json"), QJsonDocument(manifest).toJson());
+                zw.close();
+            };
+            QJsonObject core, addon, bundle, windows;
+            core.insert(QStringLiteral("id"), QStringLiteral("core"));
+            core.insert(QStringLiteral("kind"), QStringLiteral("core"));
+            core.insert(QStringLiteral("version"), version);
+            package(QStringLiteral("quillbinder-%1-update.qbpkg").arg(version), core);
+            addon.insert(QStringLiteral("id"), QStringLiteral("feed-addon"));
+            addon.insert(QStringLiteral("kind"), QStringLiteral("addon"));
+            addon.insert(QStringLiteral("name"), QStringLiteral("Feed Add-on"));
+            addon.insert(QStringLiteral("version"), QStringLiteral("3.1"));
+            addon.insert(QStringLiteral("minApp"), QStringLiteral("0.80.0"));
+            addon.insert(QStringLiteral("runtime"), QStringLiteral(QB_RUNTIME_ID));
+            addon.insert(QStringLiteral("whatsNew"), QJsonArray{QStringLiteral("One thing.")});
+            package(QStringLiteral("feed-addon.qbpkg"), addon);
+            windows = addon;
+            windows.insert(QStringLiteral("id"), QStringLiteral("feed-addon-windows"));
+            windows.insert(QStringLiteral("platform"), QStringLiteral("windows-x64"));
+            package(QStringLiteral("feed-addon-windows.qbpkg"), windows);
+            bundle.insert(QStringLiteral("id"), QStringLiteral("a-bundle"));
+            bundle.insert(QStringLiteral("kind"), QStringLiteral("bundle"));
+            bundle.insert(QStringLiteral("version"), QStringLiteral("1.0"));
+            package(QStringLiteral("a-bundle.qbpkg"), bundle);
+            // the file published so far: another system's block, and an add-on of this system released on its own
+            QJsonObject oldAddon;
+            oldAddon.insert(QStringLiteral("id"), QStringLiteral("released-alone"));
+            oldAddon.insert(QStringLiteral("version"), QStringLiteral("1.4"));
+            QJsonObject oldProgram;
+            oldProgram.insert(QStringLiteral("version"), QStringLiteral("0.1.0"));
+            oldProgram.insert(QStringLiteral("security"), QJsonArray{QStringLiteral("0.0.9")});
+            QJsonObject oldSystems, oldRoot, oldLinux, oldWindows;
+            oldLinux.insert(QStringLiteral("program"), oldProgram);
+            oldLinux.insert(QStringLiteral("addons"), QJsonArray{oldAddon});
+            oldWindows.insert(QStringLiteral("addons"), QJsonArray());
+            oldSystems.insert(QStringLiteral("linux-x86_64"), oldLinux);
+            oldSystems.insert(QStringLiteral("windows-x64"), oldWindows);
+            oldRoot.insert(QStringLiteral("format"), 1);
+            oldRoot.insert(QStringLiteral("date"), QStringLiteral("2026-01-01T00:00:00Z"));
+            oldRoot.insert(QStringLiteral("systems"), oldSystems);
+            writeAll(W + QStringLiteral("/previous.json"), QJsonDocument(oldRoot).toJson());
+            const QString out = W + QStringLiteral("/made-updates-1.json");
+            const QByteArray said = runTool(QStringLiteral("python3"), {QStringLiteral("-I"), src + QStringLiteral("/tools/update-feed.py"), QStringLiteral("--dist"), dist,
+                                                                        QStringLiteral("--tag"), QStringLiteral("v%1-beta").arg(version), QStringLiteral("--repo"),
+                                                                        QStringLiteral("Some-One/Some_Repo"), QStringLiteral("--previous"), W + QStringLiteral("/previous.json"),
+                                                                        QStringLiteral("--date"), QStringLiteral("2026-11-20T10:00:00Z"), QStringLiteral("--out"), out});
+            const QByteArray made = readAll(out);
+            Feed feed;
+            QString why;
+            const bool read = readFeed(made, sign(made), &feed, &why);
+            Installed here;
+            here.appVersion = QStringLiteral("0.0.5");
+            here.runtime = QStringLiteral(QB_RUNTIME_ID);
+            here.addons = {{QStringLiteral("feed-addon"), QStringLiteral("3.0")}, {QStringLiteral("released-alone"), QStringLiteral("1.4")},
+                           {QStringLiteral("feed-addon-windows"), QStringLiteral("1.0")}, {QStringLiteral("a-bundle"), QStringLiteral("0.5")}};
+            const QList<Offer> offers = offersFor(feed, QStringLiteral("linux-x86_64"), here);
+            const Offer prog = offers.value(0), add = offers.value(1);
+            const QString start = QStringLiteral("https://github.com/Some-One/Some_Repo/releases/download/v%1-beta/").arg(version);
+            check(read && offers.size() == 2 && prog.kind == Offer::Kind::ProgramUpdate && prog.version == version && prog.security
+                      && prog.file.url == start + QStringLiteral("quillbinder-%1-update.qbpkg").arg(version)
+                      && prog.file.size == QFileInfo(dist + QStringLiteral("/quillbinder-%1-update.qbpkg").arg(version)).size()
+                      && add.id == QLatin1String("feed-addon") && add.version == QLatin1String("3.1") && add.whatsNew == QStringList{QStringLiteral("One thing.")}
+                      && feed.systems.contains(QStringLiteral("windows-x64")) && feed.date == QDateTime::fromString(QStringLiteral("2026-11-20T10:00:00Z"), Qt::ISODate)
+                      && made.contains("released-alone"),
+                  QStringLiteral("tools/update-feed.py writes the file from a release's files: the program update with address, size and "
+                                 "SHA-256, the add-ons of this system, the security versions and the other systems of the file before"),
+                  QString::fromUtf8(said) + why + QStringLiteral(" offers: %1").arg(offers.size()));
+            here.runtime = QStringLiteral("another-runtime");
+            here.fullAppImage = true;
+            const QList<Offer> image = offersFor(feed, QStringLiteral("linux-x86_64"), here);
+            check(image.value(0).kind == Offer::Kind::NewAppImage && image.value(0).file.size == full.size()
+                      && image.value(0).file.sha256 == QString::fromLatin1(QCryptographicHash::hash(full, QCryptographicHash::Sha256).toHex())
+                      && image.value(0).file.url.endsWith(QStringLiteral("-full-beta-x86_64.AppImage")),
+                  QStringLiteral("... and both AppImages, so that the full version is offered the full one"));
+            check(QSslSocket::supportsSsl(), QStringLiteral("Qt's TLS part finds this system's OpenSSL (secure connections for the check)"),
+                  QSslSocket::sslLibraryBuildVersionString());
+        }
+
+        // ---- with a server on this computer in the place of the project's page
+        TestServer server;
+        const bool listening = server.start();
+        const QString base = server.base();
+        qputenv("QB_TEST_UPDATE_URL", (base + QStringLiteral("/updates-1.json")).toUtf8());
+        qputenv("QB_TEST_UPDATE_RETRY_MS", "300");
+        qputenv("QB_TEST_NO_RESTART", "1");
+        qputenv("QB_TEST_UPDATE_NOW", t0.toUtf8());
+        UpdateChecker *upd = w.updateChecker();
+        QAction *atStart = w.findChild<QAction *>(QStringLiteral("updateCheckAuto"));
+        QAction *nowAct = w.findChild<QAction *>(QStringLiteral("updateCheckNow"));
+        check(listening && upd && atStart && nowAct && atStart->isCheckable() && atStart->isChecked() && upd->isEnabled(),
+              QStringLiteral("Help has \"Check for Updates at Startup\" (on at first) and \"Check for Updates Now\""));
+        int looks = 0, reached = 0, lastOffers = -1;
+        QObject::connect(upd, &UpdateChecker::finished, &app, [&](bool ok, int n) {
+            ++looks;
+            reached += ok ? 1 : 0;
+            lastOffers = n;
+        });
+        auto publish = [&](const QJsonObject &program, const QJsonArray &addonList, const QString &date) {
+            const QByteArray json = feedBytes(program, addonList, date);
+            server.files.insert(QStringLiteral("/updates-1.json"), json);
+            server.files.insert(QStringLiteral("/updates-1.json.sig"), sign(json));
+        };
+        auto setState = [](bool enabled, bool noteShown) {
+            QFile::remove(State::file());
+            State st;
+            st.enabled = enabled;
+            st.noteShown = noteShown;
+            st.save();
+        };
+        auto lookAndWait = [&](bool manual) {
+            const int before = looks;
+            if (manual)
+                upd->checkNow();
+            else
+                upd->startAutomatic();
+            waitFor([&] { return looks > before; }, 8000);
+            settle(200);
+            return looks > before;
+        };
+        // version 1.1 of the add-on "test-state" is installed (above); the page offers 1.2
+        const QByteArray themeNew = "{\"name\":\"Way Back\",\"colors\":{\"window\":\"#404040\",\"text\":\"#f0f0f0\"}}";
+        const QString pkg12 = addonPackage(W, QStringLiteral("test-state"), QStringLiteral("1.2"), themeNew);
+        {
+            QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+            env.insert(QStringLiteral("QB_SIGNING_KEY_FILE"), keyFile);
+            runTool(QStringLiteral("python3"), {QStringLiteral("-I"), src + QStringLiteral("/tools/make-package.py"), QStringLiteral("sign"), pkg12}, env);
+        }
+        const QByteArray pkgBytes = readAll(pkg12);
+        server.files.insert(QStringLiteral("/files/test-state-1.2.qbpkg"), pkgBytes);
+        auto addonEntry = [&](const QString &version, bool security, const QByteArray &bytes) {
+            QJsonObject a;
+            a.insert(QStringLiteral("id"), QStringLiteral("test-state"));
+            a.insert(QStringLiteral("name"), QStringLiteral("Way Back Test"));
+            a.insert(QStringLiteral("version"), version);
+            a.insert(QStringLiteral("minApp"), QStringLiteral("0.80.0"));
+            a.insert(QStringLiteral("security"), security ? QJsonArray{version} : QJsonArray());
+            a.insert(QStringLiteral("whatsNew"), QJsonArray{QStringLiteral("A darker window color.")});
+            a.insert(QStringLiteral("file"), fileEntry(base + QStringLiteral("/files/test-state-1.2.qbpkg"), bytes, QStringLiteral("test-state-1.2.qbpkg")));
+            return a;
+        };
+        publish(QJsonObject(), QJsonArray{addonEntry(QStringLiteral("1.2"), false, pkgBytes)}, t0);
+
+        // switched off: nothing leaves the program
+        setState(false, true);
+        upd->startAutomatic();
+        settle(900);
+        check(upd->requests() == 0 && server.requests.isEmpty() && looks == 0 && !upd->isBusy(),
+              QStringLiteral("switched off: the program's start contacts nothing"));
+
+        // the first start: the note, and no contact before it was answered
+        setState(true, false);
+        upd->startAutomatic();
+        settle(900);
+        QPointer<QMessageBox> note = visibleBox(QStringLiteral("updateFirstNote"));
+        const bool quietBefore = upd->requests() == 0 && server.requests.isEmpty();
+        auto *offButton = note ? note->findChild<QPushButton *>(QStringLiteral("updateNoteOff")) : nullptr;
+        check(note && quietBefore && !note->isModal() && offButton && note->text().contains(QLatin1String("Nothing about you is sent")),
+              QStringLiteral("the first start shows a note with OK and \"Turn Off\"; nothing is contacted before it is answered"),
+              note ? note->text() : QStringLiteral("no note"));
+        shot(note, QStringLiteral("v0920-update-first-note"));
+        if (offButton)
+            offButton->click();
+        settle(500);
+        check(!State::load().enabled && State::load().noteShown && !atStart->isChecked() && upd->requests() == 0,
+              QStringLiteral("\"Turn Off\" switches the check off (the Help menu shows it) and nothing was contacted"));
+        setState(true, false);
+        atStart->setChecked(true);
+        upd->startAutomatic();
+        settle(600);
+        note = visibleBox(QStringLiteral("updateFirstNote"));
+        auto *okButton = note ? note->findChild<QPushButton *>(QStringLiteral("updateNoteOk")) : nullptr;
+        const int looksBefore = looks;
+        if (okButton)
+            okButton->click();
+        waitFor([&] { return looks > looksBefore; }, 8000);
+        settle(300);
+        QPointer<QDialog> win = upd->window();
+        auto buttonOf = [&](const char *name) { return win ? win->findChild<QPushButton *>(QLatin1String(name)) : nullptr; };
+        check(okButton && reached == 1 && lastOffers == 1 && server.requests == QStringList{QStringLiteral("/updates-1.json"), QStringLiteral("/updates-1.json.sig")}
+                  && upd->requests() == 2,
+              QStringLiteral("after OK the program fetches the one small file and its signature, nothing else"), server.requests.join(QLatin1Char(' ')));
+        {
+            // what the request carries: the program's name as the sender, no cookie, no version, nothing about the system
+            const QByteArray raw = server.raw.value(0);
+            QStringList headers;
+            for (const QByteArray &line : raw.split('\n'))
+                if (line.contains(':'))
+                    headers << QString::fromLatin1(line.left(line.indexOf(':'))).trimmed().toLower();
+            headers.sort();
+            const QString lower = QString::fromLatin1(raw).toLower();
+            check(raw.startsWith("GET /updates-1.json HTTP/1.1") && lower.contains(QLatin1String("user-agent: quillbinder\r\n"))
+                      && !lower.contains(QLatin1String("cookie")) && !lower.contains(QLatin1String(QB_APP_VERSION)) && !lower.contains(QLatin1String("linux"))
+                      && !lower.contains(QLatin1String("x11")) && !raw.contains(syncsafe::deviceName().toUtf8()),
+                  QStringLiteral("the request is a plain GET with the program's name as sender: no version, no system, no cookie, "
+                                 "no name of this computer"),
+                  headers.join(QLatin1String(", ")));
+        }
+        check(win && win->isVisible() && !win->isModal() && buttonOf("updateInstall") && buttonOf("updateIgnore") && buttonOf("updateDelay")
+                  && buttonOf("updateDelay")->text() == QLatin1String("Delay (1 day)")
+                  && win->findChild<QLabel *>(QStringLiteral("updateList"))->text().contains(QLatin1String("functional"))
+                  && win->findChild<QLabel *>(QStringLiteral("updateList"))->text().contains(QLatin1String("1.1"))
+                  && win->findChild<QLabel *>(QStringLiteral("updateNotes"))->text().contains(QLatin1String("1 day, 1 week, 2 weeks, 4 weeks")),
+              QStringLiteral("a functional update: a window with \"Download and Install\", \"Ignore This Version\" and \"Delay (1 day)\", "
+                             "the installed and the new version, the kind, and the timeline of the delays"));
+        shot(win, QStringLiteral("v0920-update-window"));
+        if (QPushButton *b = buttonOf("updateDelay"))
+            b->click();
+        settle(300);
+        // once a day: the same day nothing is fetched; a day later the delay has passed too
+        const int requestsBefore = upd->requests();
+        upd->startAutomatic();
+        settle(700);
+        const bool sameDayQuiet = upd->requests() == requestsBefore && !upd->window();
+        qputenv("QB_TEST_UPDATE_NOW", start.addSecs(25 * 3600).toString(Qt::ISODate).toUtf8());
+        const bool looked = lookAndWait(false);
+        win = upd->window();
+        check(sameDayQuiet && looked && upd->requests() == requestsBefore + 2 && win && buttonOf("updateDelay")
+                  && buttonOf("updateDelay")->text() == QLatin1String("Delay (1 week)"),
+              QStringLiteral("at most one look a day; a day after \"Delay\" the window is back and offers \"Delay (1 week)\""));
+        if (QPushButton *b = buttonOf("updateIgnore"))
+            b->click();
+        settle(300);
+        qputenv("QB_TEST_UPDATE_NOW", start.addDays(40).toString(Qt::ISODate).toUtf8());
+        const bool lookedLater = lookAndWait(false);
+        const bool ignoredQuiet = lookedLater && !upd->window() && lastOffers == 0;
+        // Check for Updates Now shows it all the same
+        nowAct->trigger();
+        waitFor([&] { return upd->window() != nullptr; }, 8000);
+        win = upd->window();
+        check(ignoredQuiet && win && win->isVisible(),
+              QStringLiteral("\"Ignore This Version\": no window any more at the start; Help > Check for Updates Now still shows it"));
+        if (win)
+            win->close();
+        settle(200);
+
+        // a security update: two buttons, marked as recommended
+        publish(QJsonObject(), QJsonArray{addonEntry(QStringLiteral("1.2"), true, pkgBytes)}, QStringLiteral("2026-12-30T09:00:00Z"));
+        qputenv("QB_TEST_UPDATE_NOW", start.addDays(42).toString(Qt::ISODate).toUtf8());
+        lookAndWait(false);
+        win = upd->window();
+        check(win && buttonOf("updateInstall") && buttonOf("updateInstall")->text().contains(QLatin1String("recommended: security"))
+                  && !buttonOf("updateIgnore") && buttonOf("updateDelay")
+                  && win->findChild<QLabel *>(QStringLiteral("updateHeadline"))->text().contains(QLatin1String("recommended"))
+                  && win->findChild<QLabel *>(QStringLiteral("updateList"))->text().contains(QLatin1String("recommended (security)"))
+                  && win->findChild<QLabel *>(QStringLiteral("updateNotes"))->text().contains(QLatin1String("cannot be ignored")),
+              QStringLiteral("a security update comes although the version was ignored as a functional one: \"Download and Install "
+                             "(recommended: security)\" and \"Delay\" only, no \"Ignore\""));
+        shot(win, QStringLiteral("v0920-update-window-security"));
+
+        // Download and Install: the signed package of the page is installed
+        auto answerBox = [&](const char *boxName, const char *button, QString *text) {
+            auto *poll = new QTimer(&app);
+            poll->setInterval(100);
+            QObject::connect(poll, &QTimer::timeout, &app, [poll, boxName, button, text] {
+                if (QMessageBox *b = visibleBox(QLatin1String(boxName))) {
+                    if (text)
+                        *text = b->text() + QLatin1Char(' ') + b->informativeText();
+                    poll->stop();
+                    poll->deleteLater();
+                    QPushButton *named = b->findChild<QPushButton *>(QLatin1String(button));
+                    if (named)
+                        named->click();
+                    else
+                        b->accept();
+                }
+            });
+            poll->start();
+        };
+        auto answerResult = [&](const char *button, QString *text) { answerBox("updateResult", button, text); };
+        auto installedVersion = [](const QString &id) {
+            for (const addons::Installed &a : addons::installedAddons())
+                if (a.manifest.id == id)
+                    return a.manifest.version;
+            return QString();
+        };
+        int installs = 0;
+        QObject::connect(upd, &UpdateChecker::installed, &app, [&installs] { ++installs; });
+        QString resultText;
+        answerResult("none", &resultText);
+        if (QPushButton *b = buttonOf("updateInstall"))
+            b->click();
+        waitFor([&] { return installs == 1; }, 15000);
+        settle(300);
+        check(installs == 1 && installedVersion(QStringLiteral("test-state")) == QLatin1String("1.2")
+                  && readAll(addons::addonsRoot() + QStringLiteral("/test-state/themes/test.json")) == themeNew
+                  && server.requests.contains(QStringLiteral("/files/test-state-1.2.qbpkg")) && resultText.contains(QLatin1String("1.2")),
+              QStringLiteral("\"Download and Install\" fetches the add-on's package, checks it and installs it; a message says what was installed"),
+              resultText);
+        // asked for by hand with nothing new: a message says so
+        QString upToDate;
+        answerBox("updateNothing", "none", &upToDate);
+        lookAndWait(true);
+        waitFor([&] { return !upToDate.isEmpty(); }, 5000);
+        check(upToDate.contains(QLatin1String("up to date")) && !upd->window(),
+              QStringLiteral("Help > Check for Updates Now with nothing new says that everything is up to date"), upToDate);
+        // a file that is not the one the signed list names is not installed
+        const QString pkg13 = addonPackage(W, QStringLiteral("test-state"), QStringLiteral("1.3"), themeNew);
+        server.files.insert(QStringLiteral("/files/test-state-1.2.qbpkg"), readAll(pkg13));
+        publish(QJsonObject(), QJsonArray{addonEntry(QStringLiteral("1.3"), false, pkgBytes)}, QStringLiteral("2026-12-31T09:00:00Z"));
+        qputenv("QB_TEST_UPDATE_NOW", start.addDays(44).toString(Qt::ISODate).toUtf8());
+        lookAndWait(false);
+        win = upd->window();
+        resultText.clear();
+        answerResult("none", &resultText);
+        if (QPushButton *b = buttonOf("updateInstall"))
+            b->click();
+        waitFor([&] { return installs == 2; }, 15000);
+        settle(300);
+        check(installs == 2 && installedVersion(QStringLiteral("test-state")) == QLatin1String("1.2")
+                  && resultText.contains(QLatin1String("not the one the signed list names")),
+              QStringLiteral("a downloaded file that is not the one the signed list names is not installed, and the message says so"), resultText);
+
+        // a file with a wrong signature, and an older file, are ignored
+        const QDateTime accepted = State::load().feedDate;
+        QByteArray forged = feedBytes(QJsonObject(), QJsonArray{addonEntry(QStringLiteral("7.0"), true, pkgBytes)}, QStringLiteral("2027-01-05T09:00:00Z"));
+        server.files.insert(QStringLiteral("/updates-1.json"), forged);   // (the signature of the file before)
+        qputenv("QB_TEST_UPDATE_NOW", start.addDays(46).toString(Qt::ISODate).toUtf8());
+        lookAndWait(false);
+        const bool forgedIgnored = !upd->window() && State::load().feedDate == accepted && lastOffers == 0;
+        publish(QJsonObject(), QJsonArray{addonEntry(QStringLiteral("6.0"), true, pkgBytes)}, QStringLiteral("2026-12-01T09:00:00Z"));
+        qputenv("QB_TEST_UPDATE_NOW", start.addDays(48).toString(Qt::ISODate).toUtf8());
+        lookAndWait(false);
+        check(forgedIgnored && !upd->window() && State::load().feedDate == accepted && lastOffers == 0,
+              QStringLiteral("a file whose signature does not fit is ignored, and so is a signed file older than the newest one seen"));
+
+        // the address answers, but the file is not there: quiet (no note)
+        server.files.remove(QStringLiteral("/updates-1.json"));
+        qputenv("QB_TEST_UPDATE_NOW", start.addDays(50).toString(Qt::ISODate).toUtf8());
+        int requestsNow = upd->requests();
+        lookAndWait(false);
+        const bool quiet404 = upd->requests() == requestsNow + 1 && !w.statusBar()->findChild<QLabel *>(QStringLiteral("fadingNote")) && !upd->window();
+        // the address cannot be reached: two tries, then a small note in the status bar that fades in and out twice
+        server.stop();
+        requestsNow = upd->requests();
+        QElapsedTimer took;
+        took.start();
+        lookAndWait(false);
+        const qint64 ms = took.elapsed();
+        QPointer<QLabel> fading = w.statusBar()->findChild<QLabel *>(QStringLiteral("fadingNote"));
+        const bool modalNow = QApplication::activeModalWidget() != nullptr;
+        check(quiet404 && upd->requests() == requestsNow + 2 && ms >= 300 && fading && fading->isVisible() && fading->property("fades").toInt() == 2
+                  && fading->text().contains(QLatin1String("Could not look for updates")) && !modalNow && !upd->window(),
+              QStringLiteral("a missing file is no failure; an address that cannot be reached is tried twice, then a small text below "
+                             "the editor fades in and out twice (no window)"),
+              QStringLiteral("requests +%1, %2 ms, note %3").arg(upd->requests() - requestsNow).arg(ms).arg(fading != nullptr));
+        shot(&w, QStringLiteral("v0920-update-not-reached"));
+        requestsNow = upd->requests();
+        lookAndWait(false);
+        const int notes = int(w.statusBar()->findChildren<QLabel *>(QStringLiteral("fadingNote")).size());
+        waitFor([&] { return fading.isNull(); }, 12000);
+        check(upd->requests() == requestsNow + 2 && notes == 1 && fading.isNull(),
+              QStringLiteral("the note comes at most once a day, and it is gone after its two rounds"));
+
+        // a new AppImage: it takes the place of the AppImage that runs, and the one before is kept beside it
+        server.start();
+        const QString baseNow = server.base();
+        qputenv("QB_TEST_UPDATE_URL", (baseNow + QStringLiteral("/updates-1.json")).toUtf8());
+        const QString own = W + QStringLiteral("/somewhere/Quillbinder-test-x86_64.AppImage");
+        writeAll(own, "the AppImage that runs");
+        qputenv("QB_TEST_APPIMAGE", own.toUtf8());
+        const QByteArray image = QByteArray("the new AppImage ") + QByteArray(5000, 'n');
+        server.files.insert(QStringLiteral("/files/new.AppImage"), image);
+        QJsonObject program;
+        program.insert(QStringLiteral("version"), QStringLiteral("99.0.0"));
+        program.insert(QStringLiteral("runtime"), QStringLiteral("a-later-runtime"));
+        program.insert(QStringLiteral("whatsNew"), QJsonArray{QStringLiteral("New libraries.")});
+        program.insert(QStringLiteral("appimage"), fileEntry(baseNow + QStringLiteral("/files/new.AppImage"), image, QStringLiteral("Quillbinder-99.0.0-x86_64.AppImage")));
+        publish(program, QJsonArray(), QStringLiteral("2027-02-01T09:00:00Z"));
+        qputenv("QB_TEST_UPDATE_NOW", start.addDays(80).toString(Qt::ISODate).toUtf8());
+        lookAndWait(false);
+        win = upd->window();
+        const QString imageNote = win ? win->findChild<QLabel *>(QStringLiteral("updateNotes"))->text() : QString();
+        resultText.clear();
+        answerResult("updateRestart", &resultText);
+        if (QPushButton *b = buttonOf("updateInstall"))
+            b->click();
+        waitFor([&] { return installs == 3; }, 15000);
+        settle(300);
+        check(installs == 3 && imageNote.contains(QDir::toNativeSeparators(own)) && imageNote.contains(QLatin1String(".before-update"))
+                  && readAll(own) == image && (QFileInfo(own).permissions() & QFileDevice::ExeOwner)
+                  && readAll(own + QStringLiteral(".before-update")) == "the AppImage that runs"
+                  && QDir(QFileInfo(own).absolutePath()).entryList(QDir::Files | QDir::Hidden).size() == 2
+                  && resultText.contains(QLatin1String("in the place of your AppImage")) && resultText.contains(QLatin1String("after a restart")),
+              QStringLiteral("a new AppImage is downloaded, checked and put in the place of the AppImage that runs, wherever that is; "
+                             "the one before is kept beside it, and the program offers to start again"),
+              resultText + QStringLiteral(" || ") + QDir(QFileInfo(own).absolutePath()).entryList(QDir::Files | QDir::Hidden).join(QLatin1String(", ")));
+        // the way back when the new file cannot take the place
+        QString backup, whyNot;
+        writeAll(W + QStringLiteral("/somewhere/own2"), "own");
+        const bool refused = !UpdateChecker::replaceOwnFile(W + QStringLiteral("/somewhere/own2"), W + QStringLiteral("/somewhere/not-there"), &backup, &whyNot);
+        check(refused && readAll(W + QStringLiteral("/somewhere/own2")) == "own" && !QFile::exists(W + QStringLiteral("/somewhere/own2.before-update"))
+                  && whyNot.contains(QLatin1String("Nothing was changed")),
+              QStringLiteral("when the new file cannot take the place, the AppImage that runs is put back and the message says so"), whyNot);
+        qunsetenv("QB_TEST_APPIMAGE");
+        qunsetenv("QB_TEST_UPDATE_URL");
+        qunsetenv("QB_TEST_UPDATE_NOW");
+        setState(false, true);
     }
 
     // ================================================================ the reason of a failed save, by its kind (item 10)

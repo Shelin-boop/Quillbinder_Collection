@@ -41,6 +41,7 @@ struct Format;
 
 class BarDock;
 class BinderPanel;
+class UpdateChecker;
 class StylesPanel;
 class FormatFindWindow;
 class Inspector;
@@ -228,6 +229,10 @@ public:
     QString fixedMindMapId() const { return m_fixedMindMapId; }
     // 0.92.0 (the shown lock): reads what other devices say they work on and marks those rows (also by a timer)
     void readWorkMarks();
+    // 0.92.0: the check for updates (Help > Check for Updates at Startup, Check for Updates Now)
+    UpdateChecker *updateChecker() const { return m_updates; }
+    // 0.92.0: a small text in the status bar that fades in and out twice and is gone (no window, no sound)
+    void showFadingNote(const QString &text);
     // 0.92.0: the notice "Other Versions Kept" turned off until the program quits (its button; the tests set it back)
     static bool conflictNoticeOff();
     static void setConflictNoticeOff(bool off);
@@ -445,6 +450,8 @@ private:
     QString m_lastBackupProblem;
     QSet<QString> m_backupCausesTold;                       // 0.92.0: the notice of a manual save's backup, per cause
     failure::Kind m_lastSaveKind = failure::Kind::None;     // 0.92.0: the kind of the last failed save
+    UpdateChecker *m_updates = nullptr;                     // 0.92.0
+    friend class UpdateChecker;
     QString m_fixedMindMapId;                               // 0.92.0
     void applyFixedMindMap();
     void updateMindMapActions();

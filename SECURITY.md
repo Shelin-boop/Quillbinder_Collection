@@ -30,8 +30,12 @@ What helps in a report:
   download yourself: the user manual, section 17).
 - A project, an imported file, a web page or a package that makes Quillbinder run code, or read or write
   files outside the folders it works in.
-- Anything that sends data from the computer without the writer starting it. Quillbinder sends nothing on
-  its own (the user manual, section 1, "Privacy: what leaves your computer").
+- Anything that sends data from the computer without the writer starting it. Quillbinder contacts the
+  internet for one thing only: to look for updates. It fetches one small file, sends nothing about you, and
+  you can switch it off in the Help menu (the user manual, section 1, "Privacy: what leaves your computer",
+  and section 17, "Checking for updates").
+- A way to make the check for updates offer or install something the project did not release: the list it
+  reads counts only with the release key's signature, and every download is checked against that list.
 - A fault in the release workflows (`.github/workflows`) that could let someone else's code reach a
   signing key or a release.
 

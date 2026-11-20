@@ -314,7 +314,7 @@ target_compile_definitions(qb_v0913_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CU
 # a failed save, the states of add-ons; the fixed mind map, the shown lock, the check for updates
 # (xvfb-run -a ./qb_v0920_tests /tmp/shots)
 add_executable(qb_v0920_tests v0920_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_SOURCE_DIR}/translations/translations.qrc)
-target_link_libraries(qb_v0920_tests PRIVATE qbui Qt6::Test)
+target_link_libraries(qb_v0920_tests PRIVATE qbui Qt6::Test Qt6::Network)
 target_compile_definitions(qb_v0920_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 target_compile_definitions(qb_v0900_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # The readers against damaged input (0.80.0, the external audit of 2026-11-09, ST-5): fixed-seed damage of small

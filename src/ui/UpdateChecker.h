@@ -39,17 +39,18 @@ public:
 
 signals:
     void finished(bool reached, int offers);   // a look has ended (reached: the address answered)
+    void installed(int done, int problems);    // "Download and Install" has ended
+    void enabledChanged(bool on);              // the first start's note switched it
 
 private:
     void look(bool manual);
     void attempt();
     void fetched(QNetworkReply *reply);
-    void failed(const QString &why, bool notFound);
-    void evaluate();
+    void failed(const QString &why, bool quiet);
+    void evaluate(const QByteArray &signature);
     void offer(const updates::Shown &shown);
     void install(const QList<updates::Offer> &offers);
     void installNext();
-    void downloaded(QNetworkReply *reply);
     void finishInstall();
     void end(bool reached, int offers);
     QNetworkReply *get(const QString &address);

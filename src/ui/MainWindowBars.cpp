@@ -632,7 +632,8 @@ void MainWindow::createMenus()
     // ---- Help
     QMenu *help = mb->addMenu(tr("&Help"));
     add(help, {"manual", "quickStart", "welcome", "placeholders", "keyboardShortcuts", "", "addonManager", "pluginFolder",
-               "integrate", "thisComputer", "", "mindMapHelp", "developerGuide", "", "systemInfo", "crashReports", "", "licenses", "about"});
+               "integrate", "thisComputer", "", "updateCheckAuto", "updateCheckNow", "", "mindMapHelp", "developerGuide", "", "systemInfo",
+               "crashReports", "", "licenses", "about"});
 
     // binder footer menus
     m_addMenu = new QMenu(this);

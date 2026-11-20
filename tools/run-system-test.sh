@@ -24,6 +24,7 @@ START=$(date +%s)
 # budget (its own estimate can be too short); QB_ST_CALL_MIN changes it
 LIMIT=$(( ${QB_ST_CALL_MIN:-90} * 60 ))
 export QB_CS_PROFILE=${QB_CS_PROFILE:-quick}
+export QB_NO_UPDATE_CHECK=1   # 0.92.0: no check for updates in the programs the cases start
 mins() { echo $(( ($(date +%s) - START) / 60 )); }
 more() { echo "$1"; echo "system test: call again with the same command to go on (this call $(mins) min)"; echo "system test rc=3"; exit 3; }
 step() {   # step <marker> <minutes it may take> <title> <command...>

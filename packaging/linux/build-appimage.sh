@@ -115,6 +115,10 @@ copy_plugin iconengines libqsvgicon.so
 # typing accents with dead keys / compose key, and input methods (ibus)
 for f in "$QTPLUGINS"/platforminputcontexts/*.so; do copy_plugin platforminputcontexts "$(basename "$f")"; done
 for f in libqsvg.so libqjpeg.so libqgif.so libqico.so libqwebp.so; do copy_plugin imageformats "$f"; done
+# 0.92.0: secure connections for the check for updates (Help menu). Qt's TLS part for OpenSSL; it loads the
+# system's OpenSSL 3 when it is first used (libssl and libcrypto are not put into the AppImage, see below), and
+# without one the check says so and the program works as ever.
+copy_plugin tls libqopensslbackend.so
 for d in wayland-shell-integration wayland-decoration-client wayland-graphics-integration-client; do
     if [ -d "$QTPLUGINS/$d" ]; then
         for f in "$QTPLUGINS/$d"/*.so; do copy_plugin "$d" "$(basename "$f")"; done
@@ -139,10 +143,12 @@ SYSTEM_LIBS=(
 for pattern in "${SYSTEM_LIBS[@]}"; do
     rm -f "$APPDIR"/usr/lib/$pattern
 done
-# Plugins the program does not use (TIFF/MNG/TGA pictures, network) and
-# the libraries only they need.
+# Plugins the program does not use (TIFF/MNG/TGA pictures, network information, TLS parts other than the one
+# for OpenSSL) and the libraries only they need.
 rm -f "$APPDIR"/usr/plugins/imageformats/{libqtiff.so,libqmng.so,libqtga.so,libqwbmp.so,libqicns.so}
-rm -rf "$APPDIR"/usr/plugins/tls "$APPDIR"/usr/plugins/networkinformation
+rm -rf "$APPDIR"/usr/plugins/networkinformation
+find "$APPDIR/usr/plugins/tls" -type f ! -name libqopensslbackend.so -delete 2>/dev/null || true
+[ -f "$APPDIR/usr/plugins/tls/libqopensslbackend.so" ] || { echo "error: Qt's TLS part (plugins/tls/libqopensslbackend.so) is missing"; exit 1; }
 rm -f "$APPDIR"/usr/lib/{libtiff.so*,libjbig.so*,libLerc.so*,libdeflate.so*,libmng.so*,liblcms2.so*}
 # The pinned linuxdeploy-plugin-qt (0.64.1) also adds Qt's own translations, which the program never
 # loads, and a start hook that sets the GTK 2 look on GNOME and Xfce (no such plugin is bundled): both

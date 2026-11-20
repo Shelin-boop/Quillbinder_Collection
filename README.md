@@ -10,10 +10,8 @@ Quillbinder is an independent program. It is not made by or connected with Liter
 the maker of Scrivener and Scapple; it reads and writes their file formats so that projects can move
 between the programs. Scrivener and Scapple are names of products of Literature & Latte.
 
-**This repository is new.** From version 0.92.0 on, Quillbinder is developed and released here. Until that version
-is out, the current version 0.91.3 and its downloads are at
-[Quillbinder_Public](https://github.com/Shelin-boop/Quillbinder_Public); the download links below start to work
-with 0.92.0.
+Quillbinder contacts the internet for one thing only: to look for updates. It fetches one small file, sends nothing
+about you, and you can switch it off in the Help menu.
 
 Found a problem, or have an idea? See [Feedback](#feedback) below.
 
@@ -70,16 +68,17 @@ Add-ons are installed with **File > Install Update or Add-on**.
 ### Windows
 
 **Quillbinder 0.91.3 for Windows 11 (64-bit), experimental:** the same functions as Linux 0.91.3 (each system counts
-its own fixes in the last number). All Windows files: [the release 0.91.3 for Windows](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.91.3-windows-experimental).
+its own fixes in the last number); the Windows version of 0.92.0 follows. These files are still in the project's
+former repository, and the next Windows version is released here. All Windows files: [the release 0.91.3 for Windows](https://github.com/Shelin-boop/Quillbinder_Public/releases/tag/v0.91.3-windows-experimental).
 
-- **[Quillbinder-0.91.3-full-experimental-windows-x64-setup.exe](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.91.3-windows-experimental/Quillbinder-0.91.3-full-experimental-windows-x64-setup.exe)**:
+- **[Quillbinder-0.91.3-full-experimental-windows-x64-setup.exe](https://github.com/Shelin-boop/Quillbinder_Public/releases/download/v0.91.3-windows-experimental/Quillbinder-0.91.3-full-experimental-windows-x64-setup.exe)**:
   **the full version** (the program with all add-ons) as a setup program. It asks for a folder (for example
   `C:\Users\<your name>\Quillbinder`, not Program Files) and only unpacks into it: no admin rights, no installation,
   nothing in the registry. The same files as a zip:
-  [Quillbinder-0.91.3-full-experimental-windows-x64.zip](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.91.3-windows-experimental/Quillbinder-0.91.3-full-experimental-windows-x64.zip).
-- The program alone: [setup program](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.91.3-windows-experimental/Quillbinder-0.91.3-experimental-windows-x64-setup.exe),
-  [zip](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.91.3-windows-experimental/Quillbinder-0.91.3-experimental-windows-x64.zip). For a Quillbinder you already have:
-  [quillbinder-0.91.3-experimental-windows-update.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.91.3-windows-experimental/quillbinder-0.91.3-experimental-windows-update.qbpkg)
+  [Quillbinder-0.91.3-full-experimental-windows-x64.zip](https://github.com/Shelin-boop/Quillbinder_Public/releases/download/v0.91.3-windows-experimental/Quillbinder-0.91.3-full-experimental-windows-x64.zip).
+- The program alone: [setup program](https://github.com/Shelin-boop/Quillbinder_Public/releases/download/v0.91.3-windows-experimental/Quillbinder-0.91.3-experimental-windows-x64-setup.exe),
+  [zip](https://github.com/Shelin-boop/Quillbinder_Public/releases/download/v0.91.3-windows-experimental/Quillbinder-0.91.3-experimental-windows-x64.zip). For a Quillbinder you already have:
+  [quillbinder-0.91.3-experimental-windows-update.qbpkg](https://github.com/Shelin-boop/Quillbinder_Public/releases/download/v0.91.3-windows-experimental/quillbinder-0.91.3-experimental-windows-update.qbpkg)
   (**File > Install Update or Add-on**). Windows 0.91.1 does not know the add-on key yet and warns before it installs
   the add-ons in that package; running the new setup program into the same folder keeps your settings.
 
@@ -92,15 +91,16 @@ processor). A later version for Linux can be out before its Windows files are.
 ### Android
 
 **Quillbinder 0.91.3 for Android tablets, experimental:** the same functions as Linux 0.91.3, made for fingers and
-the on-screen keyboard (Android 9 or later, 64-bit ARM). All Android files: [the release 0.91.3 for Android](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.91.3-android-experimental).
+the on-screen keyboard (Android 9 or later, 64-bit ARM). These files are still in the project's former repository, and
+the next Android version is released here. All Android files: [the release 0.91.3 for Android](https://github.com/Shelin-boop/Quillbinder_Public/releases/tag/v0.91.3-android-experimental).
 
-- **[Quillbinder-0.91.3-experimental-android-arm64.apk](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.91.3-android-experimental/Quillbinder-0.91.3-experimental-android-arm64.apk)**:
+- **[Quillbinder-0.91.3-experimental-android-arm64.apk](https://github.com/Shelin-boop/Quillbinder_Public/releases/download/v0.91.3-android-experimental/Quillbinder-0.91.3-experimental-android-arm64.apk)**:
   the app, with the spelling dictionaries, the writing tools and the importers. Open it on the tablet; Android asks
   whether the browser or the Files app may install apps. At the first start Quillbinder asks for "All files access":
   with it, projects, backups and exports are kept in *Documents/Quillbinder*, where other apps and your computer can
   reach them. A new version comes as a new APK, which installs over the old one and keeps your settings.
 - **Official add-on** [Translation and Proofreading 1.1 for Android](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/addon-translation-proofreading-1.1-android):
-  download [translation-proofreading-1.1-android-arm64.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/addon-translation-proofreading-1.1-android/translation-proofreading-1.1-android-arm64.qbpkg)
+  download [translation-proofreading-1.1-android-arm64.qbpkg](https://github.com/Shelin-boop/Quillbinder_Public/releases/download/addon-translation-proofreading-1.1-android/translation-proofreading-1.1-android-arm64.qbpkg)
   on the tablet and install it with **File > Install Update or Add-on**.
 
 The APK is signed with the project's Android key (its certificate's SHA-256 is in `packaging/android/release-key.txt`);

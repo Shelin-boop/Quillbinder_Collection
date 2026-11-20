@@ -3,6 +3,48 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.92.0 beta (2026-11-20)
+
+A new AppImage and a program update for Linux, and the first version from the project's one repository,
+`Shelin-boop/Quillbinder_Collection`. Three new functions and four groups of fixes. The add-ons of 0.80.0 and later
+fit it, and 0.80.0 and later can take the program update (the check for updates needs the new AppImage once, for
+its secure connection).
+
+- **A fixed mind map**. One document or folder of a project can be fixed: the inspector's Mind Map tab then keeps
+  showing that item's mind map, whatever is selected. A pin on the binder's rows (on the fixed row, and on the row
+  under the mouse) fixes and releases, and so do the pin button of the tab and two commands in **Navigate > Inspect**.
+  While an item is fixed, a slim bar at the binder's bottom names it and has **Release**. Kept with the project,
+  released when the item goes into the Trash.
+- **A padlock on what another device works on**. Each device notes beside the project's lock which documents it has
+  open or has changed; a second device that opens the project shows a padlock on those rows and on the folders
+  around them, with the device's name in the tool tip. A hint: nothing is blocked. The note is written only when it
+  changes and goes when the project is closed.
+- **Check for updates**. **Help > Check for Updates at Startup** (on at first, after a note at the first start) and
+  **Help > Check for Updates Now**. At most once a day the program fetches one small signed file from the project's
+  page, sends nothing about you, and compares on its own. A window offers a newer program version or add-on:
+  **Download and Install**, **Ignore This Version**, **Delay** (1 day, 1 week, 2 weeks, 4 weeks, then one last
+  reminder). A security update is marked as recommended, cannot be ignored and keeps reminding. A version that needs
+  a new AppImage is put in the place of the AppImage you started, wherever it is, and the one before is kept beside
+  it. It is the only thing for which Quillbinder contacts the internet on its own; switched off, it contacts nothing.
+- **No more false "Other Versions Kept" in a synced folder**. Some sync programs set a file's time again a few
+  seconds after Quillbinder wrote it. That alone counted as a change from elsewhere, so the notice came at every save
+  and left a copy and a snapshot each time. Now the content decides: the same bytes are no other version, nothing is
+  kept, told or written, and a project file that already holds what a save would write is left alone. A real change
+  elsewhere is kept and told as before. The notice has a button **Don't Show Again Until Quillbinder Is Closed**.
+- **Backups carry the project's ID**. A backup is now named *Title #K7T2M bak 2026-11-20 15-40-00.zip*. Two projects
+  with the same title keep their own backups and their own number kept; before, each could push the other's older
+  backups out. The ID is the same on every computer the project is opened on. Backups of earlier versions (no ID in
+  the name) are no longer deleted by the clean-up and are still offered by **Restore From Backup**: delete them
+  yourself when you no longer need them.
+- **A copy that fails is told**. At **File > Import > Scrivener Project**, at **File > Import > Files** and when a
+  Scrivener project is read again after a change elsewhere, a file that could not be copied was left out without a
+  word. Now the report names it, a file import leaves no empty item, and a re-read that cannot carry a file over
+  stops and leaves everything as it was. An import whose final save fails is told as failed.
+- **Failures that were told too quietly**. The reason of a failed save ("The disk is full.") no longer depends on
+  the system wording its errors in English. A manual save whose backup cannot be made shows a notice, not only the
+  status bar. A choice in the Add-on Manager, or an install, that could not be written is reported as failed; and
+  when a failed install cannot put the earlier version back, the message says where it is.
+
 ## 0.91.3 beta (2026-11-15)
 
 A new AppImage and a program update for Linux. It prepares the list of official add-ons, which other authors can

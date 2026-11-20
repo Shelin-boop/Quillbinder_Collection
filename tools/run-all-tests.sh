@@ -18,6 +18,7 @@
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 # 0.62: programs started by the suites skip the questions of the first start
 export QB_SKIP_FIRST_START=1
+export QB_NO_UPDATE_CHECK=1   # 0.92.0: no check for updates in a program the suites start
 OUT=${1:-$ROOT/build/test-results}
 MODE=${2:-offscreen}
 export QB_FFMPEG_DIR=${QB_FFMPEG_DIR:-$ROOT/build/ffmpeg}
