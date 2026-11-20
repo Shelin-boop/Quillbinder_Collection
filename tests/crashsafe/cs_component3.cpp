@@ -1363,6 +1363,12 @@ void caseC32()
         editHere(it, QStringLiteral(" Changed here (c)."));
         p->save(&err);
         fact(QStringLiteral("C-32 (c) only the time changed"), conflictsIn(p.get()).size() > before.size() ? QStringLiteral("a copy was kept (noise)") : QStringLiteral("no copy"));
+        // 0.92.0: a check, not only a record (a sync program that sets a file's time after its upload made the
+        // notice "Other Versions Kept" come at every save)
+        check(conflictsIn(p.get()).size() == before.size() && otherVersionSnapshots(p.get(), it->id) == 0
+                  && readText(file).contains(QLatin1String("Changed here (c).")),
+              QStringLiteral("(c) only the file's time changed: the text is saved, no copy and no snapshot is kept (0.92.0)"),
+              conflictsIn(p.get()).join(QLatin1String(", ")));
         BinderItem *it2 = scenes.value(6);
         p->docs()->text(it2->id);
         const QString file2 = p->docs()->textPath(it2->id);
