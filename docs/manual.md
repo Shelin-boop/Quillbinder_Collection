@@ -76,9 +76,10 @@ A project in **Scrivener format** is a *YourTitle.scriv* folder instead; open it
 
 ### Privacy: what leaves your computer
 
-{{APP}} contacts the internet for one thing only: to look for updates. It fetches one small file, sends nothing about you, and you can switch it off in the Help menu. (Section 17, *Checking for updates*, says exactly what is fetched and when. Before 0.92.0 the program did not look for updates at all.) There are no usage statistics and no crash reports. Two more things go on the internet, and only when you start them:
+{{APP}} contacts the internet for one thing only: to look for updates. It fetches one small file, sends nothing about you, and you can switch it off in the Help menu. (Section 17, *Checking for updates*, says exactly what is fetched and when. Before 0.92.0 the program did not look for updates at all.) There are no usage statistics and no crash reports. Three more things go on the internet, and only when you start them:
 
 - **File > Import > Web Page…** fetches the page you name and its pictures from that site. Like a browser, it sends the name of a common browser (Firefox on Linux), the languages of your system (for the page's language) and, like every connection, your computer's internet address.
+- **Downloading a language model** for the add-on Translation and Proofreading (section 10) fetches it from the releases of {{APP}}'s repository on GitHub. It sends the add-on's name ("Quillbinder-Translation-Addon") and, like every connection, your internet address.
 - **Downloading a speech model** (the add-on Speech Transcription, section 10) fetches the model from Hugging Face (huggingface.co, a company in the USA) or from the address you set in its options. It sends "{{APP}}/<version>" as the program's name and, like every connection, your internet address. A model is installed only when its checksum is the known one; a file from another address or one you downloaded yourself is used only after you agree.
 
 What others can see of your work:
@@ -1030,6 +1031,15 @@ The models come from whisper.cpp's model files on Hugging Face. Under **Source**
 **Other options.** **Compute on**: the processor, or a graphics card that whisper.cpp can use through Vulkan (shown when one is found; cards with too little memory for the model are listed but cannot be chosen). On Windows the add-on uses the processor only, for now: Small or Medium keep up best there. **Processor threads**: one less than the processor has keeps typing smooth. **Accuracy**: *Careful* weighs several possible texts and finds the language of each piece first: better, but slower. **Microphone**, **Sensitivity** (low for a noisy room, high for a quiet voice), **A pause that ends a piece**, **New paragraph after a pause of** (*never* switches it off), the **folder**, and under **Advanced**: leaving out text in silence and noise (whisper sometimes invents a line such as "Thank you for watching" there), and using the text before as context for the next piece.
 
 ---
+
+### Translation and Proofreading
+
+Since 0.92.0 the add-on **Translation and Proofreading** (version 1.2) is one of {{APP}}'s own add-ons and comes inside the full version; for a {{APP}} you already have, it is a package of its own on the Releases page (section 17). It checks English text for spelling and grammar and translates German text into English, on your own computer: a text never leaves it. {{APP}} itself has no AI functions; this add-on works with language models and can be switched off or removed in the Add-on Manager like any other.
+
+- It has a tab of its own in the inspector and a window of its own (its command is in the Writing Tools submenu of the Edit menu, and it has a toolbar button). The text goes in, the result comes out with every change marked, live while you type; a click on a word keeps the original or offers other words.
+- It needs a model, which you choose and download once in the add-on's options (a few hundred megabytes to several gigabytes; a model too large for the computer is not offered). The models are fetched from the releases *models-1* and *models-2* of {{APP}}'s repository, each is installed only when its checksum is the known one, and after that the add-on works without any connection. One model, CoEdIT Large, may be used for non-commercial purposes only; the add-on says so before it is downloaded.
+- Models you downloaded with version 1.1 stay as they are. Version 1.1 fetched models from the add-on's former repository; 1.2 knows the new place.
+- The add-on's own description, with its rules for proofreading (American spelling, curly quotes, no em-dashes) and what each model is good at, is *addons/translation-proofreading/source/README.md* in {{APP}}'s source.
 
 ## 11. Snapshots
 

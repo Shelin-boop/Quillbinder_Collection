@@ -23,7 +23,8 @@
 //  - the check for updates: the signed file and what it offers, the delays and "ignore", the first start's note, at
 //    most one look a day, the window for functional and for security updates, download and install, a new AppImage
 //    in the place of the one that runs, an address that cannot be reached, a missing, forged or older file. The
-//    project's page is a small server inside this test.
+//    project's page is a small server inside this test;
+//  - the add-on "Translation and Proofreading" as one of the project's own (its place, version and model address).
 //
 //   xvfb-run -a ./qb_v0920_tests /tmp/shots
 
@@ -1625,6 +1626,40 @@ int main(int argc, char **argv)
         qunsetenv("QB_TEST_UPDATE_URL");
         qunsetenv("QB_TEST_UPDATE_NOW");
         setState(false, true);
+    }
+
+    // ================================================================ the translator as one of the project's own add-ons (item 6)
+    {
+        const QString src = QStringLiteral(QB_TEST_SOURCE_DIR "/..");
+        const QString addon = src + QStringLiteral("/addons/translation-proofreading");
+        const QByteArray top = readAll(addon + QStringLiteral("/manifest.json")), inner = readAll(addon + QStringLiteral("/source/packaging/manifest.json"));
+        const QJsonObject m = QJsonDocument::fromJson(top).object();
+        const QByteArray store = readAll(addon + QStringLiteral("/source/src/ModelStore.cpp"));
+        const QByteArray cmake = readAll(addon + QStringLiteral("/source/CMakeLists.txt"));
+        check(!top.isEmpty() && top == inner && m.value(QStringLiteral("id")).toString() == QLatin1String("translation-proofreading")
+                  && m.value(QStringLiteral("version")).toString() == QLatin1String("1.2") && cmake.contains("set(TP_VERSION \"1.2\")")
+                  && m.value(QStringLiteral("minApp")).toString() == QLatin1String(QB_RUNTIME_SINCE),
+              QStringLiteral("Translation and Proofreading 1.2 is in addons/ with its source; its two manifests and its build agree on the version"),
+              m.value(QStringLiteral("version")).toString());
+        check(store.contains("https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/")
+                  && !store.contains("Quillbinder_Translation_Addon")
+                  && readAll(addon + QStringLiteral("/source/resources/catalog.json")).contains("\"release\": \"models-1\""),
+              QStringLiteral("it fetches its models from the releases models-1 and models-2 of this repository"));
+        // without its engine libraries it is left out of a local build (exit code 3), as the packing script expects
+        QProcess stage;
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        env.insert(QStringLiteral("QB_TRANSLATOR_DEPS"), W + QStringLiteral("/no-deps-here"));
+        stage.setProcessEnvironment(env);
+        QDir().mkpath(W + QStringLiteral("/stage-build"));
+        stage.start(QStringLiteral("bash"), {addon + QStringLiteral("/stage.sh"), W + QStringLiteral("/stage-build"), W + QStringLiteral("/stage-out")});
+        stage.waitForFinished(60000);
+        const QByteArray release = readAll(src + QStringLiteral("/.github/workflows/release.yml"));
+        check(stage.exitStatus() == QProcess::NormalExit && stage.exitCode() == 3
+                  && release.contains("tools/get-translator-deps.sh") && release.contains("for must in speech-transcription translation-proofreading")
+                  && readAll(src + QStringLiteral("/.github/workflows/models-mirror.yml")).contains("Quillbinder_Translation_Addon"),
+              QStringLiteral("stage.sh leaves the add-on out when its engine libraries are not built; the release workflow builds "
+                             "them and fails without the add-on; a workflow copies the model files here"),
+              QString::fromUtf8(stage.readAllStandardError()) + QStringLiteral(" exit %1").arg(stage.exitCode()));
     }
 
     // ================================================================ the reason of a failed save, by its kind (item 10)

@@ -33,10 +33,14 @@ add-ons. The files, sorted by system:
   used audio and video formats, extra themes, project templates, the scriptwriting pack, the writing tools with offline speech recognition, the
   importers of web pages and old Word files). They are installed at the first start: one download, nothing
   else to install.
-- **Official add-ons** of other authors, each on a release of its own: [Translation and Proofreading 1.1](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/addon-translation-proofreading-1.1)
-  for Linux, [for Windows](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/addon-translation-proofreading-1.1-windows)
-  [and for Android tablets](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/addon-translation-proofreading-1.1-android)
-  (English proofreading and German-to-English translation on your computer; see [the list](docs/official-addons.md#the-list))
+- **Translation and Proofreading** (English proofreading and German-to-English translation on your computer) is one
+  of Quillbinder's own add-ons since 0.92.0: version 1.2 is inside the full version, and
+  [translation-proofreading.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.92.0-beta/translation-proofreading.qbpkg)
+  is beside it for a Quillbinder you already have. It downloads the language models you choose; one of them (CoEdIT
+  Large) may be used for non-commercial purposes only, and the add-on says so. Its 1.1 for
+  [Windows](https://github.com/Shelin-boop/Quillbinder_Public/releases/tag/addon-translation-proofreading-1.1-windows)
+  and for [Android tablets](https://github.com/Shelin-boop/Quillbinder_Public/releases/tag/addon-translation-proofreading-1.1-android)
+  is still an official add-on in the project's former repository (see [the list](docs/official-addons.md#the-list))
 - [All files of the newest version](https://github.com/Shelin-boop/Quillbinder_Collection/releases/latest): the other
   add-ons and SHA-256 checksums. Earlier versions: [Releases](https://github.com/Shelin-boop/Quillbinder_Collection/releases).
 
@@ -99,7 +103,7 @@ the next Android version is released here. All Android files: [the release 0.91.
   whether the browser or the Files app may install apps. At the first start Quillbinder asks for "All files access":
   with it, projects, backups and exports are kept in *Documents/Quillbinder*, where other apps and your computer can
   reach them. A new version comes as a new APK, which installs over the old one and keeps your settings.
-- **Official add-on** [Translation and Proofreading 1.1 for Android](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/addon-translation-proofreading-1.1-android):
+- **Official add-on** [Translation and Proofreading 1.1 for Android](https://github.com/Shelin-boop/Quillbinder_Public/releases/tag/addon-translation-proofreading-1.1-android):
   download [translation-proofreading-1.1-android-arm64.qbpkg](https://github.com/Shelin-boop/Quillbinder_Public/releases/download/addon-translation-proofreading-1.1-android/translation-proofreading-1.1-android-arm64.qbpkg)
   on the tablet and install it with **File > Install Update or Add-on**.
 

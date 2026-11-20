@@ -6,7 +6,7 @@ Manual in the program) describes every function.
 ## 0.92.0 beta (2026-11-20)
 
 A new AppImage and a program update for Linux, and the first version from the project's one repository,
-`Shelin-boop/Quillbinder_Collection`. Three new functions and four groups of fixes. The add-ons of 0.80.0 and later
+`Shelin-boop/Quillbinder_Collection`. Three new functions, an add-on that moved in, and four groups of fixes. The add-ons of 0.80.0 and later
 fit it, and 0.80.0 and later can take the program update (the check for updates needs the new AppImage once, for
 its secure connection).
 
@@ -26,6 +26,11 @@ its secure connection).
   reminder). A security update is marked as recommended, cannot be ignored and keeps reminding. A version that needs
   a new AppImage is put in the place of the AppImage you started, wherever it is, and the one before is kept beside
   it. It is the only thing for which Quillbinder contacts the internet on its own; switched off, it contacts nothing.
+- **Translation and Proofreading is one of Quillbinder's own add-ons now**. Version 1.2 comes inside the full
+  version, its source is in Quillbinder's repository, and it downloads its language models from there (before: an
+  official add-on with a repository of its own). English text is checked, German text is translated into English,
+  on your own computer. Nothing else changed since 1.1; models you already have stay. Quillbinder itself still has
+  no AI functions: the add-on can be switched off or removed.
 - **No more false "Other Versions Kept" in a synced folder**. Some sync programs set a file's time again a few
   seconds after Quillbinder wrote it. That alone counted as a change from elsewhere, so the notice came at every save
   and left a copy and a snapshot each time. Now the content decides: the same bytes are no other version, nothing is

@@ -2,6 +2,45 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.92.0 beta (2026-11-20): the content decides, the project ID in backup names, checked copies, failures that are told
+
+- **A file whose time alone changed is no other version** (the sync program of the report sets a file's time a few
+  seconds after the program's write). `DocumentStore::writeEntry`: when the stamp differs, the file's bytes are
+  compared with `e.read` (what was read or last written here; `it->read = data` after each write); equal: `elsewhere`
+  is false and only `e.stamp` is renewed. `Project::saveIndex`: `shaOnDisk` against `m_indexSha` both ways (other
+  bytes with the same stamp: changed, as since 0.65.0; the same bytes with another stamp: not changed), and a file
+  that already holds the bytes to write is not written (the marks are cleared, `writeUiState` still runs). Scrivener
+  format: `SyncState::scrivxSha` (key `scrivxSha` of `settings/scrivener-sync.json`) for the `.scrivx`; texts there
+  were compared by SHA-1 already; media files are still judged by size and time (`statHash`), which only matters
+  when a media file was changed on both sides.
+- **No round of save, sync, changed time, save**: nothing in the program watches file times; a time-only change
+  writes no file, no copy, no snapshot. v0920 touches every file of a project and saves three times: no file changes.
+- **The notice's button**: `MainWindow::conflictNoticeOff` / `setConflictNoticeOff` (a static, not saved); versions
+  are still kept while it is off.
+- **Backup names** `"<title> #<ID> bak <date>.zip"`: `backup::projectId` = `idFromSeed` (SHA-256, five characters of
+  `23456789ABCDEFGHJKMNPQRSTUVWXYZ`) of, in this order: the `.scrivx` Identifier (a project in Scrivener format: its
+  working copy is local, the identifier travels), the seed in `settings/backup-id.txt`, the Draft folder's id, the
+  title. No new id is written for an existing project, so two computers agree without talking. `giveNewId` writes
+  the seed file for copies the program makes (`copyAsQuillbinder`, `backup::restore`, a project made from a
+  template file), which all carry their original's Draft id. `nameStart` is what the clean-up counts
+  (`ownBackupsOf(dir, mine)`); `backupsFor` offers every own-form name whose title without the ID is this title, and
+  the others that begin `"<title> bak "` or `"<title> #"`. A version before 0.92.0 takes `"<title> #<ID>"` for another
+  title: it neither counts nor deletes the new backups (read in its code, not run).
+- **Checked copies**: `safesave::copyChecked` (SafeSave.h; the tests make it fail with `QB_TEST_FAIL_COPY=<part of a
+  path>`). The Scrivener import adds a warning per failed file and does not count it; `importMedia` / `addWebPage`
+  leave no item behind; `mergeFromOld(..., QString *copyFailed)` stops `scrivener::open` (the new copy in `.reading`
+  is removed, the old working copy stays, the project does not open); `importProject` returns nullptr when its
+  final save fails. Left as they were, since no file of the project is at stake: `DragDrop.cpp` (the export of a
+  drag), `MediaView.cpp` (a page's side files into a temporary folder), the app icon of the menu entry,
+  `SpeechTool.cpp` (it checks that the copy exists).
+- **The kind of a failed write**: `core/FailureKind.h` (`failure::note`, `noteErrno`, `last`; one slot, cleared at
+  the start of `Project::saveImpl`, the first kind stays), noted in `savebatch::writeSynced` from `errno`;
+  `MainWindow::plainSaveReason(err, kind)`. Test switch `QB_TEST_WRITE_FAILS="<errno>|<text>|<part of path>"`.
+- **States that report**: `addons::writeAddonState` / `launcher::writeState` return bool with a reason
+  (`QB_TEST_FAIL_STATE=addons|core`); `setEnabled`, `setActiveCore`, `removeCore`, `finish` hand it on. The way back
+  of `installData` (`backOne`, `tellLeft`; `QB_TEST_FAIL_RENAME="<part>|<moves that still work>"`).
+- **The backup of a manual save**: `MainWindow::tellManualBackupProblem` (once per cause, the date taken out of it).
+
 ## Add-on keys (0.91.3 beta, 2026-11-15)
 
 - **Official add-ons for Windows (2026-11-16)**: an entry may carry a `windows` block (its own reviewed commit and
