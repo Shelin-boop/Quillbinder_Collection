@@ -25,6 +25,8 @@ jobs:
         run: |
           set -euo pipefail
           listing() { gh release view "$1" -R "$2" --json assets --jq '.assets[] | "\(.name) \(.size)"' | sort; }
+          # a transfer of some gigabytes can be cut off: up to four tries each
+          try() { local n=0; until "$@"; do n=$((n + 1)); [ "$n" -lt 4 ] || return 1; echo "  again in 30 s (try $((n + 1)))"; sleep 30; done; }
           for tag in models-1 models-2; do
             listing "$tag" "$FROM" > "there-$tag.txt"
             echo "$tag: $(wc -l < "there-$tag.txt") file(s), $(awk '{s+=$2} END {printf "%.0f", s/1048576}' "there-$tag.txt") MB in $FROM"
@@ -47,8 +49,8 @@ jobs:
               name=${line% *}; size=${line##* }
               if grep -qxF "$name $size" "here-$tag.txt"; then continue; fi
               rm -rf one; mkdir one
-              gh release download "$tag" -R "$FROM" -D one -p "$name"
-              gh release upload "$tag" -R "$GITHUB_REPOSITORY" --clobber "one/$name"
+              try gh release download "$tag" -R "$FROM" -D one -p "$name" --clobber
+              try gh release upload "$tag" -R "$GITHUB_REPOSITORY" --clobber "one/$name"
               echo "  copied $name ($size bytes)"
             done < "there-$tag.txt"
             rm -rf one
