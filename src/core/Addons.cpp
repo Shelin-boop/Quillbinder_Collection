@@ -17,9 +17,9 @@
 #include <QRegularExpression>
 #include <QSaveFile>
 #include <QSet>
+#include <QThread>
 #ifdef Q_OS_ANDROID
 #include <QStandardPaths>
-#include <QThread>
 #endif
 
 #include <algorithm>
