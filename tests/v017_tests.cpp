@@ -1286,10 +1286,16 @@ int main(int argc, char **argv)
         settle(300);
         check(!mindmaps::hasMap(p, d1->id) && panel->doc() && panel->doc()->itemId() == d1->id && panel->doc()->board.isEmpty(),
               QStringLiteral("Mind map: another document has a board of its own (empty, no file until something is on it)"),
-              QStringLiteral("a file: %1, the panel's item is the document: %2, notes on its board: %3")
+              QStringLiteral("a file: %1, the panel's item is the document: %2, notes on its board: %3; the panel shows \"%4\", the "
+                             "inspector \"%5\" on tab %6, selected in the binder: %7")
                   .arg(mindmaps::hasMap(p, d1->id))
                   .arg(panel->doc() && panel->doc()->itemId() == d1->id)
-                  .arg(panel->doc() ? int(panel->doc()->board.notes.size()) : -1));
+                  .arg(panel->doc() ? int(panel->doc()->board.notes.size()) : -1)
+                  .arg(p->item(panel->itemId()) ? p->item(panel->itemId())->title : panel->itemId(),
+                       inspector->item() ? inspector->item()->title : QStringLiteral("nothing"))
+                  .arg(inspector->currentTab())
+                  .arg(binder->selectedItems().size() == 1 ? binder->selectedItems().first()->title
+                                                           : QString::number(binder->selectedItems().size())));
         binder->select({ch}, true);
         settle(300);
         check(panel->doc() == doc && doc->board.notes.size() == notesBefore, QStringLiteral("... back to the folder: its board"));

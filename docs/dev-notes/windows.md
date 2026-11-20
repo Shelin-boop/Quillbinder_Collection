@@ -2,6 +2,82 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## Windows 0.92.0 (2026-11-20): pulled to Linux 0.92.0 in the one repository, the translator inside, the check for updates
+
+- **What it brings**: the source of Linux 0.92.0, built, tested and released from `Shelin-boop/Quillbinder_Collection` for
+  the first time (version 0.92.0, release `v0.92.0-windows-experimental`). Windows' own parts: the translator as one of
+  the project's add-ons, the check for updates with Windows' files, and what the workflows needed in this repository.
+- **Shared files** (the project's rule since 2026-11-20): a Windows or Android job may add parts for its own system
+  to files Linux shares when Linux shows and does nothing new; the job proves it with the Linux suites around those
+  files. Here: five German texts (`translations/quillbinder_de.ts`; the compiled file differs by exactly these
+  entries), a Windows branch in `tools/update-feed.py`, `Offer::Kind::NewSetup` and the setup keys in
+  `core/UpdateCheck.*`, the hand-over in `ui/UpdateChecker.*`, `MainWindow::closeThenExit`. The code that only
+  Windows can run sits in `#ifdef Q_OS_WIN`; the rest compiles on Linux too, where no update file names a setup program.
+- **The translator** (`addons/translation-proofreading`, version 1.2 as on Linux): `win-ci.sh` builds the engine
+  libraries (oneDNN, CTranslate2, SentencePiece) with the add-on's `packaging/build-deps-windows.sh` into
+  `.translator-deps` when that folder is empty (18 min on the build machine; the workflows keep it in a cache named
+  with the script's hash, the same key in `windows.yml` and `release-windows.yml`, so the run on `main` after a merge
+  fills it for the release). `win-addons.sh` builds the add-on's own project against them (a release build, no test
+  switches), checks its exports and packs it with the add-on's `packaging/make-addon-windows.sh`:
+  `translation-proofreading-windows.qbpkg`, about 8 MiB. Without the libraries it is left out with a line in the
+  log; a build that fails fails the add-on step after everything else was made; a release build
+  (`QB_WIN_STAGE=release`) is incomplete without it. `addons/translation-proofreading/.gitattributes` keeps
+  `manifest.json` at LF: it is compared byte by byte with `source/packaging/manifest.json` (the scripts, v0920), and
+  Windows checks text files out with CRLF (the first run left the add-on out for that).
+- **The check for updates on Windows**: the usual update is the program update, installed inside the program as on
+  Linux. A version on another runtime is offered as its setup program (`Offer::Kind::NewSetup`; the update file's
+  Windows block names `setup` and `setupFull` where Linux names `appimage` and `appimageFull`; the full version is
+  known by `full-addons\` beside the program). `UpdateChecker` downloads it into `<data>/update-setup` (inside the
+  program folder: the portable program keeps nothing elsewhere, and the setup leaves `data` alone), checks size and
+  SHA-256 against the signed list, and offers **Close and Update Now**: `MainWindow::closeThenExit` closes the
+  project as a restart does, `startSetup` starts the setup detached with `setupArguments` (`/SILENT /NOCANCEL
+  /QBUPDATE=1 /DIR="<folder>"`, handed over with `QProcess::setNativeArguments` so that the quotes stay where Inno
+  Setup wants them), and the program ends. When the start fails (Windows blocks unsigned programs where Smart App
+  Control is on), the project is opened again and a message names the file. The folder is emptied at the next start
+  (`UpdateChecker`'s constructor) and before a new download. Test switch: `QB_TEST_SETUP_LOG` writes the command into
+  a file instead of running it.
+- **The setup's update run** (`quillbinder-setup.iss`): with `/QBUPDATE=1`, `PrepareToInstall` waits up to two minutes
+  until the program in the folder has ended (`ProgramEnded`: the file of a running program cannot be opened for
+  writing; `SaveStringToFile(exe, '', True)` appends nothing and tells), then unpacks as always and starts the new
+  version (a `[Run]` entry with `Check: UpdateRun`, without `postinstall`). `win-setup.sh` tries both with the real
+  setup program: over a folder whose program is not running, and while it runs (the setup waits, the check ends the
+  program, the setup goes on and starts it).
+- **The update file**: `tools/update-feed.py --system windows-x64 --runtime <win64-...> --label experimental` writes
+  Windows' block from the release's files and takes the other systems' blocks from the published file;
+  `release-windows.yml` does this in `sign-checksums`, signs the file with the release key, checks that Windows'
+  block is complete and Linux's unchanged, and `download-page` publishes it with the page, unless the published file
+  is newer than this run's (a job started again after a later release). For this the Windows release carries the
+  program update alone (`quillbinder-<v>-experimental-windows-program.qbpkg`) and every add-on as a package of its
+  own (all named `...-windows.qbpkg`). **The program update's name must not end in `-update.qbpkg`**: the download
+  page takes the first such Windows file for its "update" link, which is the bundle.
+- **The workflows in this repository**: the test fonts come from a job `test-fonts` in `windows.yml` too (no archive
+  on a branch any more); the packs were made anew by the first run and pinned (`QB_WIN_PACKS`: whisper.cpp v1.9.5,
+  Hunspell 1.7.5 with zlib 1.3.2, MSVC 14.51), and their public pre-releases name content, license and source
+  (`win-deps-pack.sh`, `about`); the Windows jobs' time limit is 180 minutes. Times on the build machine: the first
+  run with empty caches 47 min (engine libraries 18, build 6, checks and 39 suites 20); a `[suites: ...]` run with
+  warm caches and packs 6 min.
+- **Tests**: `qb_v0920_tests` is counted (109 checks on Windows: Linux's 105 without the two of the swapped AppImage,
+  plus six of Windows' own: the hand-over, a wrong setup file, the emptied folder, the tool for Windows, the offer
+  as a setup program, the command line). What the first run showed, all in the tests and corrected inside
+  `#ifdef Q_OS_WIN`:
+  - `QTest::mouseMove` also sets the real pointer; on the build machine's desktop the binder then gets a leave event
+    and no row counts as under the mouse. The move is sent to the viewport once more and looked at at once.
+  - Windows needs about two seconds to refuse a connection: a look at an address that cannot be reached takes about
+    8 s with its second try (Linux: under a second). Waits and "the first note is still there" follow that.
+  - `qputenv` takes bytes in the system's code page while the program reads the variable as text: a German text
+    goes in with `toLocal8Bit()`.
+  - `stage.sh` is the Linux staging of the translator; started as `bash` from a test program it ended with exit
+    code 1 (why was not looked for). Windows checks its own scripts instead.
+  - `qb_v0913_tests` leaves out its check of an Android package (its stand-in for readelf is a shell script).
+  - `qb_m10_tests` (still "explore") takes the Windows packages of the writing tools (`QB_TEST_ADDONS_DIR`,
+    `tool-*-windows.qbpkg`); before, it looked for the Linux packages, loaded no tool and ended with a crash of its
+    own on a null action. Windows add-ons with program code name a platform and no runtime id (the Linux ones name
+    their runtime): the check for updates and the installer therefore do not hold a Windows add-on back when the
+    Windows runtime changes one day. Not changed here.
+  - `qb_v017_tests` (still "explore"): its one failing check says now which part fails and what the panel shows.
+- **Pictures**: the pin and the padlock of `ui/RowMarks.*` look right on Windows at 100 % (the suite's pictures in
+  `test-output.zip`, `shots-v0920`); other scale factors were not looked at on the build machine.
+
 ## Windows with what Linux 0.90.3 has, the setup programs (0.90.4 beta, 2026-11-13)
 
 The writer's requirements: project document `claude/quillbinder-windows-requirements-0.90.4.md` (W-01 to W-12, S-01 to
