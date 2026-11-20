@@ -1477,7 +1477,9 @@ static void tabletChecks(MainWindow &w, BinderItem *longDoc)
     }
     mobile::startTablet(&w);
     auto *install = w.findChild<QAction *>(QStringLiteral("installPackage"));
-    check(install && !install->isVisible(), QStringLiteral("File > Install Update or Add-on is not offered on a tablet (one full package)"));
+    // (since Android 0.91.3 add-ons are installed on a tablet: the command is offered; a program update is refused there
+    // with its reason. This check expected the opposite until Android 0.92.0.)
+    check(install && install->isVisible(), QStringLiteral("File > Install Update or Add-on is offered on a tablet (add-ons since 0.91.3)"));
 }
 
 static void widgetChecks()

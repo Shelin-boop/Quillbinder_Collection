@@ -10,6 +10,8 @@
 #include <QCoreApplication>
 #include <QCryptographicHash>
 #include <QDialog>
+#include <QDesktopServices>
+#include <QUrl>
 #include <QDialogButtonBox>
 #include <QDir>
 #include <QFile>
@@ -404,6 +406,7 @@ void UpdateChecker::offer(const updates::Shown &shown)
     QString html;
     bool newImage = false;
     bool newSetup = false;   // Windows
+    bool newApk = false;     // Android
     for (const updates::Offer &o : shown.offers) {
         html += QStringLiteral("<p><b>%1</b> %2 → %3 &nbsp; <i>%4</i>")
                     .arg(o.name.toHtmlEscaped(), o.installed.toHtmlEscaped(), o.version.toHtmlEscaped(),
@@ -413,6 +416,7 @@ void UpdateChecker::offer(const updates::Shown &shown)
         html += QStringLiteral("</p>");
         newImage = newImage || o.kind == updates::Offer::Kind::NewAppImage;
         newSetup = newSetup || o.kind == updates::Offer::Kind::NewSetup;
+        newApk = newApk || o.kind == updates::Offer::Kind::NewApk;
     }
     auto *list = new QLabel(html, dlg);
     list->setObjectName(QStringLiteral("updateList"));
@@ -440,6 +444,11 @@ void UpdateChecker::offer(const updates::Shown &shown)
                    "Your settings, your add-ons and everything else in \"data\" stay as they are.")
                     .arg(QStringLiteral(QB_APP_NAME), QDir::toNativeSeparators(launcher::appDir()))
                 + QStringLiteral("\n\n");
+    if (newApk)
+        notes = tr("The new version for Android is a new app file (APK). %1 opens its download in your browser; install it "
+                   "from there or from your Downloads folder. Your projects, your settings and your add-ons stay as they are.")
+                    .arg(QStringLiteral(QB_APP_NAME))
+                + QStringLiteral("\n\n");
     const QString wait = delayWords(shown.delayDays);
     if (shown.security)
         notes += tr("Delay: you are reminded again in %1. Each further delay waits longer (1 day, 1 week, 2 weeks, then every "
@@ -458,7 +467,9 @@ void UpdateChecker::offer(const updates::Shown &shown)
     lay->addWidget(note);
 
     auto *buttons = new QDialogButtonBox(dlg);
-    QPushButton *installBtn = buttons->addButton(shown.security ? tr("Download and Install (recommended: security)") : tr("Download and Install"),
+    const bool apkOnly = newApk && shown.offers.size() == 1;
+    QPushButton *installBtn = buttons->addButton(apkOnly ? tr("Open the Download in the Browser")
+                                                 : shown.security ? tr("Download and Install (recommended: security)") : tr("Download and Install"),
                                                  QDialogButtonBox::AcceptRole);
     installBtn->setObjectName(QStringLiteral("updateInstall"));
     QPushButton *ignoreBtn = nullptr;
@@ -521,6 +532,18 @@ void UpdateChecker::installNext()
         return;
     }
     m_current = m_queue.takeFirst();
+    if (m_current.kind == updates::Offer::Kind::NewApk) {
+        // Android: the browser downloads the APK, and Android installs it from there (the address is the one of the
+        // signed list; Android checks the APK's signature against the installed app's)
+        if (QDesktopServices::openUrl(QUrl(m_current.file.url)))
+            m_done << tr("%1 %2: its download is open in your browser. Install the file from there; your projects and "
+                         "settings stay.").arg(m_current.name, m_current.version);
+        else
+            m_problems << tr("%1 %2: the browser could not be opened. The file is %3").arg(m_current.name, m_current.version,
+                                                                                      m_current.file.url);
+        installNext();
+        return;
+    }
     const QString own = ownAppImage();
     const bool inPlace = m_current.kind == updates::Offer::Kind::NewAppImage && !own.isEmpty()
                          && QFileInfo(QFileInfo(own).absolutePath()).isWritable();

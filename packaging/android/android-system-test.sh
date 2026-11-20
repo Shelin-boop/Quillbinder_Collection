@@ -246,19 +246,26 @@ run_app() { # <seconds> <log file on the device> <arguments...>
   elif [ $seen -eq 1 ]; then echo ended; else echo "no start"; fi
 }
 EXTRA_ENV=(); WATCH_NEEDS=""; WATCH_DIR=""
-# The add-on Translation and Proofreading for this tablet's processor and one of its models (case A-A01, needs "T"),
-# from the add-on's public repository: its test build for Android (pre-release test-android, checked against its
-# SHA256SUMS) and the release of the models. Fetched once, put where the case looks (QB_CS_SOURCE: addons/, models/).
-ADDON_BASE=${QB_ST_ADDON_URL:-https://github.com/Shelin-boop/Quillbinder_Translation_Addon/releases/download/test-android}
-MODEL_BASE=${QB_ST_MODEL_URL:-https://github.com/Shelin-boop/Quillbinder_Translation_Addon/releases/download/models-1}
+# The add-on Translation and Proofreading for this tablet's processor and one of its models (case A-A01, needs "T").
+# Android 0.92.0: the package the workflow's build job made from addons/translation-proofreading
+# (packaging/android/android-translator.sh x86_64; QB_ST_ADDON_FILE), and the model from this repository's release
+# models-1. Without QB_ST_ADDON_FILE the package is fetched from QB_ST_ADDON_URL and checked against its SHA256SUMS.
+# Put where the case looks (QB_CS_SOURCE: addons/, models/), once.
+ADDON_BASE=${QB_ST_ADDON_URL:-}
+MODEL_BASE=${QB_ST_MODEL_URL:-https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/models-1}
 provided=""
 provide_addon() {
   [ -n "$provided" ] && return 0
   provided=tried
-  local d=/tmp/qbst-addon f pkg="translation-proofreading-1.1-android-$ABI.qbpkg"
+  local d=/tmp/qbst-addon f pkg="translation-proofreading-android-$ABI.qbpkg" got=no
   rm -rf "$d"; mkdir -p "$d/models/opus-mt-de-en"
-  if curl -fsSL --retry 2 -o "$d/$pkg" "$ADDON_BASE/$pkg" && curl -fsSL --retry 2 -o "$d/SUMS" "$ADDON_BASE/SHA256SUMS-android.txt" \
+  if [ -n "${QB_ST_ADDON_FILE:-}" ] && [ -f "$QB_ST_ADDON_FILE" ]; then
+    cp "$QB_ST_ADDON_FILE" "$d/$pkg" && got=yes
+  elif [ -n "$ADDON_BASE" ] && curl -fsSL --retry 2 -o "$d/$pkg" "$ADDON_BASE/$pkg" && curl -fsSL --retry 2 -o "$d/SUMS" "$ADDON_BASE/SHA256SUMS-android.txt" \
      && (cd "$d" && grep " \*\?$pkg\$" SUMS | sha256sum -c - > /dev/null 2>&1); then
+    got=yes
+  fi
+  if [ "$got" = yes ]; then
     "$ADB" shell mkdir -p "$DEV/source/addons" "$DEV/source/models" > /dev/null 2>&1
     "$ADB" push "$d/$pkg" "$DEV/source/addons/" > /dev/null 2>&1
     for f in config.json MODEL-LICENSE.txt model.bin shared_vocabulary.json source.spm target.spm; do
@@ -268,7 +275,7 @@ provide_addon() {
     provided=yes
     say "add-on: $pkg and the model opus-mt-de-en put on the tablet ($(mins))"
   else
-    say "add-on: $pkg could not be fetched or did not match its SHA256SUMS ($ADDON_BASE)"
+    say "add-on: $pkg is not there (QB_ST_ADDON_FILE '${QB_ST_ADDON_FILE:-}', QB_ST_ADDON_URL '$ADDON_BASE')"
   fi
 }
 # Runs one case, or a sub-run of it, and writes its line into the summary.

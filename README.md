@@ -38,9 +38,7 @@ add-ons. The files, sorted by system:
   [translation-proofreading.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.92.0-beta/translation-proofreading.qbpkg)
   is beside it for a Quillbinder you already have. It downloads the language models you choose; one of them (CoEdIT
   Large) may be used for non-commercial purposes only, and the add-on says so. For Windows it is inside the full
-  version too since Windows 0.92.0. Its 1.1 for
-  [Android tablets](https://github.com/Shelin-boop/Quillbinder_Public/releases/tag/addon-translation-proofreading-1.1-android)
-  is still an official add-on in the project's former repository (see [the list](docs/official-addons.md#the-list))
+  version too since Windows 0.92.0, and for Android tablets inside the app since Android 0.92.0
 - [All files of the newest version](https://github.com/Shelin-boop/Quillbinder_Collection/releases/latest): the other
   add-ons and SHA-256 checksums. Earlier versions: [Releases](https://github.com/Shelin-boop/Quillbinder_Collection/releases).
 
@@ -98,18 +96,18 @@ processor). A later version for Linux can be out before its Windows files are.
 
 ### Android
 
-**Quillbinder 0.91.3 for Android tablets, experimental:** the same functions as Linux 0.91.3, made for fingers and
-the on-screen keyboard (Android 9 or later, 64-bit ARM). These files are still in the project's former repository, and
-the next Android version is released here. All Android files: [the release 0.91.3 for Android](https://github.com/Shelin-boop/Quillbinder_Public/releases/tag/v0.91.3-android-experimental).
+**Quillbinder 0.92.0 for Android tablets, experimental:** the same functions as Linux 0.92.0, made for a tablet with
+an external keyboard and mouse and for fingers (Android 9 or later, 64-bit ARM). All Android files:
+[the release 0.92.0 for Android](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.92.0-android-experimental).
 
-- **[Quillbinder-0.91.3-experimental-android-arm64.apk](https://github.com/Shelin-boop/Quillbinder_Public/releases/download/v0.91.3-android-experimental/Quillbinder-0.91.3-experimental-android-arm64.apk)**:
-  the app, with the spelling dictionaries, the writing tools and the importers. Open it on the tablet; Android asks
-  whether the browser or the Files app may install apps. At the first start Quillbinder asks for "All files access":
-  with it, projects, backups and exports are kept in *Documents/Quillbinder*, where other apps and your computer can
-  reach them. A new version comes as a new APK, which installs over the old one and keeps your settings.
-- **Official add-on** [Translation and Proofreading 1.1 for Android](https://github.com/Shelin-boop/Quillbinder_Public/releases/tag/addon-translation-proofreading-1.1-android):
-  download [translation-proofreading-1.1-android-arm64.qbpkg](https://github.com/Shelin-boop/Quillbinder_Public/releases/download/addon-translation-proofreading-1.1-android/translation-proofreading-1.1-android-arm64.qbpkg)
-  on the tablet and install it with **File > Install Update or Add-on**.
+- **[Quillbinder-0.92.0-experimental-android-arm64.apk](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.92.0-android-experimental/Quillbinder-0.92.0-experimental-android-arm64.apk)**:
+  the app, with the spelling dictionaries, the writing tools, the importers and Translation and Proofreading. Open it
+  on the tablet; Android asks whether the browser or the Files app may install apps. At the first start Quillbinder
+  asks for "All files access": with it, projects, backups and exports are kept in *Documents/Quillbinder*, where other
+  apps and your computer can reach them. A new version comes as a new APK, which installs over the old one and keeps
+  your settings; Help > Check for Updates Now tells you when there is one.
+- [translation-proofreading-android-arm64.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.92.0-android-experimental/translation-proofreading-android-arm64.qbpkg):
+  Translation and Proofreading on its own (the app has it already), for **File > Install Update or Add-on**.
 
 The APK is signed with the project's Android key (its certificate's SHA-256 is in `packaging/android/release-key.txt`);
 the checksums of the Android files are in `SHA256SUMS-android.txt` (signed, `SHA256SUMS-android.txt.sig`). Not in the

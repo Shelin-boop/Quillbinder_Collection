@@ -38,10 +38,10 @@ jobs:
       # Hunspell and OpenSSL as packs (D1; packaging/android/android-deps-pack.sh): the same pins as android.yml,
       # which publishes a pack when it has none; without a pin the build makes them (a few minutes)
       QB_ANDROID_PACKS: |
-        hunspell-arm64-v8a c1f589f9a870d0e1390021b3657e4f8c903ff4d433b40050e303e1cb825057be hunspell-arm64-v8a-android-c1f589f9a870d0e1.tar.xz 15bbe5b31bd3cf1f3d17300aaaf481687d9240fa4982601b6dc5ee852160ba3d
-        hunspell-x86_64 8745189cfe1943140ee55dfb74962503bb62aeac73b4d6dc2d788400e77c8e41 hunspell-x86_64-android-8745189cfe194314.tar.xz 665de8f17ea1c4f09fe122b4896312dfa1eeb48cb4f35036641dea79f0d4e82d
-        openssl-arm64-v8a bc6606200989542a5dd1d18106987d9c8e17f9795100940fd6259df518cda75e openssl-arm64-v8a-android-bc6606200989542a.tar.xz b81e6da297a7868d389587ff696030fc2bae6178c93b5e8ac82700e099497703
-        openssl-x86_64 105e0006344b014b217417327e3485f9252b908bfe7c8de4cece2da9c448e9b3 openssl-x86_64-android-105e0006344b014b.tar.xz 33f159b263b73eaf20ef6185e2a0d2ddb6b588e6b2913f2bf5776911d1b050fe
+        hunspell-arm64-v8a c1f589f9a870d0e1390021b3657e4f8c903ff4d433b40050e303e1cb825057be hunspell-arm64-v8a-android-c1f589f9a870d0e1.tar.xz d6045c811367c60b83a910511c166b50aa15f40185e3cb5ff01d091e35840161
+        hunspell-x86_64 8745189cfe1943140ee55dfb74962503bb62aeac73b4d6dc2d788400e77c8e41 hunspell-x86_64-android-8745189cfe194314.tar.xz 746f543a69f4ed91099d1c696b57b2eca8fb06c0e7e67b7b5e728cefaeea662f
+        openssl-arm64-v8a bc6606200989542a5dd1d18106987d9c8e17f9795100940fd6259df518cda75e openssl-arm64-v8a-android-bc6606200989542a.tar.xz cecf78a899c157b919e77f3f1d50975f23def05288bdac40c62cf99ea1af2985
+        openssl-x86_64 105e0006344b014b217417327e3485f9252b908bfe7c8de4cece2da9c448e9b3 openssl-x86_64-android-105e0006344b014b.tar.xz 70c043801ea90be0e6bc66e6bee9ad64048d6995cedcacf0b49e2c3e4b7b5cb9
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
@@ -119,10 +119,25 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-qt-${{ env.QB_QT_VERSION }}-v1
 
+      - name: The translator's engine libraries (x86_64)
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: |
+            addons/translation-proofreading/source/deps-android/x86_64/install
+            addons/translation-proofreading/source/deps
+          key: translator-android-x86_64-${{ env.QB_NDK }}-${{ hashFiles('addons/translation-proofreading/source/packaging/build-deps-android.sh') }}
+
       - name: Build the system test's program (x86_64)
         env:
           QB_ANDROID_BUILD: ${{ github.run_number }}
         run: bash packaging/android/android-system-test.sh build results
+
+      # Android 0.92.0: Translation and Proofreading for the emulated tablets (case A-A01), from this source
+      - name: The translator's package (x86_64)
+        run: |
+          bash packaging/android/android-translator.sh x86_64 results/addon > results/st-translator.log 2>&1 \
+            || { tail -30 results/st-translator.log; echo "result: the translator could not be built" >> results/st-build-summary.txt; }
+          grep -E '^package:|FAIL' results/st-translator.log || true
 
       - name: The build's results
         id: result
@@ -152,7 +167,9 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: qb-system-test-apk
-          path: results/qb-system-test.apk
+          path: |
+            results/qb-system-test.apk
+            results/addon/translation-proofreading-android-x86_64.qbpkg
           retention-days: 3
 
   cases:
@@ -185,6 +202,7 @@ jobs:
           export QB_ST_TIME_FACTOR=${factor:-4}
           export QB_CS_PROFILE=${profile:-quick}
           export QB_ST_MAX_MIN=${minutes:-300}
+          [ -f apk/addon/translation-proofreading-android-x86_64.qbpkg ] && export QB_ST_ADDON_FILE=$PWD/apk/addon/translation-proofreading-android-x86_64.qbpkg
           # shellcheck disable=SC2086
           bash packaging/android/android-system-test.sh run results apk/qb-system-test.apk ${{ matrix.shard }} "$shards" $cases
 

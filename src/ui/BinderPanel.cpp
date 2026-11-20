@@ -10,6 +10,7 @@
 #include "ui/AppSettings.h"
 #include "ui/DragDrop.h"
 #include "ui/RowMarks.h"
+#include "ui/WindowCare.h"
 
 #include <QColorDialog>
 #include <QDrag>
@@ -29,6 +30,7 @@
 #include <QStackedWidget>
 #include <QStyledItemDelegate>
 #include <QTabBar>
+#include <QPointer>
 #include <QTimer>
 #include <QToolTip>
 #include <QHelpEvent>
@@ -71,7 +73,7 @@ public:
                 rowmarks::paintLock(p, rowmarks::lockRect(option.rect, right), c);
             }
             const bool fixed = !id.isEmpty() && id == tree->fixedMindMapId();
-            const bool hovered = tree->hoverIndex().isValid() && tree->hoverIndex() == index.siblingAtColumn(0);
+            const bool hovered = tree->pinShownOn(index);
             if (fixed || (hovered && tree->canFixMindMap && tree->canFixMindMap(index))) {
                 QColor c = fixed && !(option.state & QStyle::State_Selected) ? option.palette.color(QPalette::Highlight) : ink;
                 if (!fixed)
@@ -254,7 +256,8 @@ void BinderTree::mousePressEvent(QMouseEvent *e)
     if (e->button() == Qt::LeftButton && e->modifiers() == Qt::NoModifier) {
         const QModelIndex idx = indexAt(e->pos());
         if (idx.isValid() && pinRectOf(idx).adjusted(-2, -2, 2, 2).contains(e->pos())
-            && (idx.data(BinderModel::IdRole).toString() == m_fixedMapId || (canFixMindMap && canFixMindMap(idx)))) {
+            && (idx.data(BinderModel::IdRole).toString() == m_fixedMapId
+                || (canFixMindMap && canFixMindMap(idx) && (!windowcare::tabletMode() || pinShownOn(idx))))) {
             m_pinPressed = true;
             emit mindMapPinClicked(idx.data(BinderModel::IdRole).toString());
             e->accept();
@@ -263,7 +266,27 @@ void BinderTree::mousePressEvent(QMouseEvent *e)
     }
     if (e->button() == Qt::LeftButton)
         m_mouseDown = true;
+    // Android 0.92.0: a tap on a row's padlock shows its text when the finger goes up (a tablet has no mouse to rest)
+    m_lockPressed = QModelIndex();
+    if (windowcare::tabletMode() && e->button() == Qt::LeftButton) {
+        const QModelIndex idx = indexAt(e->pos());
+        if (idx.isValid() && !lockTip(idx.data(BinderModel::IdRole).toString()).isEmpty()
+            && lockRectOf(idx).adjusted(-4, -4, 4, 4).contains(e->pos()))
+            m_lockPressed = idx.siblingAtColumn(0);
+    }
     QTreeView::mousePressEvent(e);
+}
+
+bool BinderTree::pinShownOn(const QModelIndex &index) const
+{
+    const QModelIndex row = index.siblingAtColumn(0);
+    if (!row.isValid())
+        return false;
+    if (m_hover.isValid() && QModelIndex(m_hover) == row)
+        return true;
+    // Android 0.92.0: on a tablet the pin shows on the selected row too (a finger has no place "under the mouse")
+    return windowcare::tabletMode() && selectionModel() && selectionModel()->isSelected(row)
+           && selectionModel()->selectedRows().size() == 1;
 }
 
 void BinderTree::setFixedMindMapId(const QString &id)
@@ -356,6 +379,21 @@ void BinderTree::mouseReleaseEvent(QMouseEvent *e)
         m_pinPressed = false;
         e->accept();
         return;
+    }
+    if (m_lockPressed.isValid()) {   // Android 0.92.0: the padlock's text, after the tap
+        const QModelIndex idx = indexAt(e->pos()).siblingAtColumn(0);
+        const QPersistentModelIndex pressed = m_lockPressed;
+        m_lockPressed = QModelIndex();
+        if (idx.isValid() && QModelIndex(pressed) == idx && lockRectOf(idx).adjusted(-4, -4, 4, 4).contains(e->pos())) {
+            const QString tip = lockTip(idx.data(BinderModel::IdRole).toString());
+            const QPoint at = viewport()->mapToGlobal(lockRectOf(idx).bottomLeft() + QPoint(0, 4));
+            QPointer<QWidget> port = viewport();
+            // after the release and the selection it makes (both would close a tip shown now)
+            QTimer::singleShot(0, this, [port, at, tip] {
+                if (port)
+                    QToolTip::showText(at, tip, port);
+            });
+        }
     }
     QTreeView::mouseReleaseEvent(e);
     if (e->button() != Qt::LeftButton)

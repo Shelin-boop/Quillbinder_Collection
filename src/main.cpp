@@ -222,6 +222,9 @@ int main(int argc, char **argv)
         style = QStyleFactory::create(QStringLiteral("Fusion"));
     if (style)
         QApplication::setStyle(style);
+#ifdef Q_OS_ANDROID
+    qb::mobile::installCare(); // Back, Close rows, windows that fit, menus that scroll, Ctrl with the mouse (android/MobileCare.cpp)
+#endif
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QStringLiteral("%1 - a writing studio for long texts").arg(QStringLiteral(QB_APP_NAME)));
@@ -266,6 +269,12 @@ int main(int argc, char **argv)
         for (const QString &l : log)
             qb::crash::note(QStringLiteral("full version: ") + l);
     }
+#endif
+#ifdef Q_OS_ANDROID
+    // Android 0.92.0: the APK is the full version; the add-ons it carries (the translator) are installed once per
+    // version before the plug-ins load (android/MobileStart.cpp)
+    if (!selftest)
+        qb::mobile::installFullAddons(QStringLiteral("assets:/full-addons"));
 #endif
     qb::compile::PluginManager::instance().load();
 

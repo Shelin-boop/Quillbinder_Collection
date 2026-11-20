@@ -1,6 +1,7 @@
 #include "android/Mobile.h"
 
 #include "compile/PluginManager.h"
+#include "core/Addons.h"
 #include "core/Paths.h"
 #include "core/Project.h"
 #include "ui/AppSettings.h"
@@ -131,6 +132,33 @@ void spellingAtStart()
 }
 
 } // namespace
+
+int installFullAddons(const QString &from)
+{
+    const QFileInfoList packages = QDir(from).entryInfoList({QStringLiteral("*.qbpkg")}, QDir::Files, QDir::Name);
+    if (packages.isEmpty())
+        return 0;
+    // once per version (addons::installBundled keeps its mark in the data folder): nothing to copy after that
+    if (QFile::exists(dataDir() + QStringLiteral("/full-addons-installed-" QB_APP_VERSION)))
+        return 0;
+    // out of the APK into a folder of the app's own (the installer opens the package as a file of the file system)
+    const QString dir = QDir::tempPath() + QStringLiteral("/qb-full-addons");
+    QDir(dir).removeRecursively();
+    if (!QDir().mkpath(dir))
+        return -1;
+    bool copied = true;
+    for (const QFileInfo &fi : packages)
+        copied = QFile::copy(fi.filePath(), dir + QLatin1Char('/') + fi.fileName()) && copied;
+    QStringList log;
+    QString error;
+    const bool ok = copied && addons::installBundled(dir, &log, &error);
+    for (const QString &l : log)
+        qCInfo(lcStart, "full version: %s", qPrintable(l));
+    if (!ok)
+        qCWarning(lcStart, "full version: not every add-on could be installed: %s", qPrintable(copied ? error : QStringLiteral("a copy failed")));
+    QDir(dir).removeRecursively();
+    return ok ? int(packages.size()) : -1;
+}
 
 void tabletBeforeWindow()
 {

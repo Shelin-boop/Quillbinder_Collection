@@ -920,6 +920,11 @@ void setUpProgram()
     as.capitalizeSentences = false;
     as.capitalizeI = false;
     as.save();
+#ifdef Q_OS_ANDROID
+    // Android 0.92.0: Back, Close rows, windows that fit, menus that scroll, Ctrl with the mouse, as main() sets them
+    // up right after the style (android/MobileCare.cpp)
+    qb::mobile::installCare();
+#endif
     theme::apply();
 #ifdef Q_OS_ANDROID
     // Android (2026-11-14): the tablet's own interface code, as the program's main() sets it up (src/android)

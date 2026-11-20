@@ -9,16 +9,22 @@
 #     work branches' Android workflow (android.yml), but with the public app's permanent id (io.github.shelin_boop.quillbinder.app, the
 #     writer's choice of 2026-11-16) and unsigned (packaging/android/android-ci.sh with QB_ANDROID_RELEASE=1); its
 #     checks of the APK (id, version, permissions, libraries, plug-ins, dictionaries, the libraries' 16 KB segments).
-#  2. "sign-apk": the APK aligned to 16 KB and signed with the project's Android key (the secrets QB_ANDROID_KEYSTORE,
+#     Android 0.92.0: also Translation and Proofreading (packaging/android/android-translator.sh), which the APK carries
+#     in assets/full-addons and the release publishes on its own; its engine libraries are kept in an Actions cache.
+#  1b. "sign-packages" (Android 0.92.0): the translator's package signed with the add-on key, which the release key
+#     vouches for (as release.yml and release-windows.yml do); no code of this build runs there.
+#  2. "sign-apk": the signed translator put into the APK in place of the unsigned one, then
+#     the APK aligned to 16 KB and signed with the project's Android key (the secrets QB_ANDROID_KEYSTORE,
 #     base64 of the PKCS #12 file, and QB_ANDROID_KEYSTORE_PASS). The key must be the one whose certificate
 #     packaging/android/release-key.txt names: Android installs an update only when its signer is the same. Only the
 #     runner's Android build tools and Java run there, no code of this build.
 #  3. "sources": the source code of the third-party parts the APK carries that the release "third-party-sources" does
 #     not have yet (the names come from the Android license list, resources/licenses-android/index.json).
-#  4. "sign-checksums": SHA256SUMS-android.txt and its signature with the project's release key.
+#  4. "sign-checksums": SHA256SUMS-android.txt and its signature with the project's release key; Android 0.92.0: the
+#     update file (updates-1.json) with Android's block made anew (the APK, the translator), the other blocks as published.
 #  5. "publish": the Android release of this version (made when it is not there yet), the sources into
 #     "third-party-sources".
-#  6. "download-page": the download page again, from the names of the newest releases' files.
+#  6. "download-page": the download page again, from the names of the newest releases' files, with this run's update file.
 #
 # The same source was built, checked and run on emulated tablets on a work branch first (the Android build
 # and its system test on emulated tablets); there is no test suite for Android here.
@@ -87,7 +93,7 @@ jobs:
     needs: version
     if: ${{ !inputs.page_only }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 120
+    timeout-minutes: 180
     defaults:
       run:
         shell: bash
@@ -174,6 +180,16 @@ jobs:
             ~/.gradle/wrapper
           key: gradle-qt-${{ env.QB_QT_VERSION }}-v1
 
+      # Android 0.92.0: the translator's engine libraries (CTranslate2, SentencePiece) and their sources, built once per
+      # recipe (the add-on's build-deps-android.sh), the same key as in android.yml
+      - name: The translator's engine libraries
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: |
+            addons/translation-proofreading/source/deps-android/arm64-v8a/install
+            addons/translation-proofreading/source/deps
+          key: translator-android-arm64-v8a-${{ env.QB_NDK }}-${{ hashFiles('addons/translation-proofreading/source/packaging/build-deps-android.sh') }}
+
       - name: Build, pack, check (arm64-v8a, the public app, unsigned)
         env:
           QB_ANDROID_RELEASE: '1'
@@ -193,13 +209,24 @@ jobs:
           fi
           mkdir -p unsigned
           mv results/Quillbinder-*-android-*.apk unsigned/
-          ls -la unsigned
+          # the translator's package as it went into the APK, for the job "sign-packages"
+          mkdir -p unsigned-packages
+          cp results/addons/translation-proofreading-android-arm64.qbpkg unsigned-packages/
+          ls -la unsigned unsigned-packages
 
       - name: Hand the unsigned APK to the job "sign-apk"
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: android-unsigned
           path: unsigned
+          retention-days: 3
+          if-no-files-found: error
+
+      - name: Hand the translator's package to the job "sign-packages"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-unsigned-packages
+          path: unsigned-packages
           retention-days: 3
           if-no-files-found: error
 
@@ -212,9 +239,84 @@ jobs:
           retention-days: 7
           if-no-files-found: ignore
 
+  sign-packages:
+    # Android 0.92.0, as in release.yml and release-windows.yml (0.70.0, audit A S-03): the release key and the add-on
+    # key only here and in "sign-checksums": no third-party code runs in either
+    needs: [version, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: android-unsigned-packages
+          path: unsigned
+
+      - name: The signing keys
+        env:
+          QB_SIGNING_KEY: ${{ secrets.QB_SIGNING_KEY }}
+          QB_ADDON_KEY: ${{ secrets.QB_ADDON_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "$QB_SIGNING_KEY" ] || [ -z "$QB_ADDON_KEY" ]; then
+            echo "::error title=No signing key::The secrets QB_SIGNING_KEY and QB_ADDON_KEY must be set: the add-on is not published unsigned."
+            exit 1
+          fi
+          mkdir -p /tmp/qb-signing && chmod 700 /tmp/qb-signing
+          ( umask 077; printf '%s\n' "$QB_SIGNING_KEY" > /tmp/qb-signing/key.pem; printf '%s\n' "$QB_ADDON_KEY" > /tmp/qb-signing/addon.pem )
+          want=$(grep -o 'kReleaseKey\[\] = "[0-9a-f]*"' src/core/Signing.cpp | grep -o '"[0-9a-f]*"' | tr -d '"')
+          have=$(openssl pkey -in /tmp/qb-signing/key.pem -pubout -outform DER | tail -c 32 | od -An -tx1 | tr -d ' \n')
+          addon=$(openssl pkey -in /tmp/qb-signing/addon.pem -pubout -outform DER | tail -c 32 | od -An -tx1 | tr -d ' \n')
+          if [ -z "$have" ] || [ "$have" != "$want" ]; then
+            rm -rf /tmp/qb-signing
+            echo "::error title=Wrong signing key::QB_SIGNING_KEY is not the key whose public half the program carries."
+            exit 1
+          fi
+          if [ -z "$addon" ] || [ "$addon" = "$want" ]; then
+            rm -rf /tmp/qb-signing
+            echo "::error title=Wrong add-on key::QB_ADDON_KEY is not an Ed25519 key of its own."
+            exit 1
+          fi
+          QB_SIGNING_KEY_FILE=/tmp/qb-signing/key.pem python3 -I tools/make-package.py certify --name "Quillbinder official add-ons" \
+            /tmp/qb-signing/addon.pem /tmp/qb-signing/addon-cert.json
+          echo "keys ok"
+
+      - name: Sign the package
+        env:
+          QB_SIGNING_KEY_FILE: /tmp/qb-signing/key.pem
+          QB_ADDON_KEY_FILE: /tmp/qb-signing/addon.pem
+          QB_ADDON_CERT: /tmp/qb-signing/addon-cert.json
+        run: |
+          set -euo pipefail
+          mkdir -p signed
+          cp unsigned/*.qbpkg signed/
+          python3 -I tools/make-package.py sign signed/*.qbpkg
+          rm -rf /tmp/qb-signing
+          # checked by the program's own rule against the public key the program carries
+          python3 -I tools/make-package.py verify --release-key packaging/quillbinder-signing-public.pem signed/*.qbpkg
+          ls -la signed
+
+      - name: The keys are gone
+        if: always()
+        run: rm -rf /tmp/qb-signing
+
+      - name: Hand the signed package on
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-signed-packages
+          path: signed
+          retention-days: 3
+          if-no-files-found: error
+
   sign-apk:
     # the Android key only here: the runner's Android build tools (zipalign, apksigner, aapt2) and Java, no code of this build
-    needs: [version, build]
+    needs: [version, build, sign-packages]
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     defaults:
@@ -229,6 +331,30 @@ jobs:
         with:
           name: android-unsigned
           path: unsigned
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: android-signed-packages
+          path: packages
+
+      # Android 0.92.0: the APK carries the translator's package as the release publishes it (signed with the add-on key)
+      - name: The signed translator into the APK
+        run: |
+          set -euo pipefail
+          pkg=packages/translation-proofreading-android-arm64.qbpkg
+          [ -f "$pkg" ] || { echo "::error::no signed translator package"; exit 1; }
+          rm -rf /tmp/qb-apk-assets && mkdir -p /tmp/qb-apk-assets/assets/full-addons
+          cp "$pkg" /tmp/qb-apk-assets/assets/full-addons/
+          for apk in unsigned/*.apk; do
+            unzip -l "$apk" | grep -q 'assets/full-addons/translation-proofreading-android-arm64.qbpkg' \
+              || { echo "::error::$apk carries no translator"; exit 1; }
+            abs=$(cd "$(dirname "$apk")" && pwd)/$(basename "$apk")
+            (cd /tmp/qb-apk-assets && zip -0 -q "$abs" assets/full-addons/translation-proofreading-android-arm64.qbpkg)
+            got=$(unzip -p "$apk" assets/full-addons/translation-proofreading-android-arm64.qbpkg | sha256sum | cut -d' ' -f1)
+            [ "$got" = "$(sha256sum "$pkg" | cut -d' ' -f1)" ] || { echo "::error::$apk: the translator inside is not the signed one"; exit 1; }
+            echo "$(basename "$apk"): the signed translator inside ($got)"
+          done
+          rm -rf /tmp/qb-apk-assets
 
       - name: Align and sign
         env:
@@ -261,7 +387,7 @@ jobs:
           for apk in unsigned/*.apk; do
             "$BT/zipalign" -P 16 -f 4 "$apk" /tmp/aligned.apk
             "$BT/apksigner" sign --ks /tmp/qb-android-key/release.p12 --ks-type PKCS12 --ks-key-alias quillbinder \
-              --ks-pass env:QB_ANDROID_KEYSTORE_PASS --key-pass env:QB_ANDROID_KEYSTORE_PASS \
+              --ks-pass env:QB_ANDROID_KEYSTORE_PASS --key-pass env:QB_ANDROID_KEYSTORE_PASS --v4-signing-enabled false \
               --out "signed/$(basename "$apk")" /tmp/aligned.apk
             rm -f /tmp/aligned.apk
           done
@@ -306,7 +432,9 @@ jobs:
           echo "the signed APK: ok"
 
       - name: Hand the signed APK on
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        run: cp packages/*.qbpkg signed/
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: android-files
           path: signed
@@ -414,9 +542,27 @@ jobs:
           name: android-sources
           path: release/src
 
+      # Android 0.92.0: the file the program's check for updates reads (tools/update-feed.py), as release-windows.yml
+      # makes it: Android's block anew from this release's files, the other systems' blocks from the file published so
+      # far, taken only when its signature is the release key's. Fetched before the key is on the disk.
+      - name: The update file published so far
+        run: |
+          mkdir -p previous
+          page=https://shelin-boop.github.io/Quillbinder_Collection
+          if curl -fsSL --max-time 30 -o previous/updates-1.json "$page/updates-1.json" \
+             && curl -fsSL --max-time 30 -o previous/updates-1.json.sig "$page/updates-1.json.sig" \
+             && openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in previous/updates-1.json \
+                  -sigfile previous/updates-1.json.sig; then
+            echo "the published file is taken as the start"
+          else
+            rm -f previous/updates-1.json previous/updates-1.json.sig
+            echo "no published file (or its signature is not the release key's): the new one names Android only"
+          fi
+
       - name: Checksums and their signature
         env:
           QB_SIGNING_KEY: ${{ secrets.QB_SIGNING_KEY }}
+          TAG: ${{ needs.version.outputs.tag }}
         run: |
           set -euo pipefail
           [ -n "$QB_SIGNING_KEY" ] || { echo "::error title=No signing key::The secret QB_SIGNING_KEY is not set."; exit 1; }
@@ -432,11 +578,49 @@ jobs:
           cp release/src/THIRD-PARTY-SOURCES-android.txt release/dist/
           (cd release/dist && rm -f SHA256SUMS-android.txt SHA256SUMS-android.txt.sig && sha256sum -- * > /tmp/SHA256SUMS-android.txt && mv /tmp/SHA256SUMS-android.txt SHA256SUMS-android.txt)
           openssl pkeyutl -sign -rawin -inkey /tmp/qb-signing/key.pem -in release/dist/SHA256SUMS-android.txt -out release/dist/SHA256SUMS-android.txt.sig
+          # the update file with Android's block (the APK and the translator; "experimental" as in their names)
+          mkdir -p updates
+          prev=()
+          [ -f previous/updates-1.json ] && prev=(--previous previous/updates-1.json)
+          runtime=$(sed -n 's/^  set(APP_RUNTIME "\(android-[^"]*\)")/\1/p' CMakeLists.txt | sed -n 1p)
+          [ -n "$runtime" ] || { echo "::error::no Android runtime id in CMakeLists.txt"; rm -rf /tmp/qb-signing; exit 1; }
+          python3 -I tools/update-feed.py --dist release/dist --tag "$TAG" --repo "$GITHUB_REPOSITORY" --system android-arm64 \
+            --runtime "$runtime" --label experimental --out updates/updates-1.json "${prev[@]}"
+          openssl pkeyutl -sign -rawin -inkey /tmp/qb-signing/key.pem -in updates/updates-1.json -out updates/updates-1.json.sig
           rm -rf /tmp/qb-signing
           openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in release/dist/SHA256SUMS-android.txt \
             -sigfile release/dist/SHA256SUMS-android.txt.sig
+          openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in updates/updates-1.json \
+            -sigfile updates/updates-1.json.sig
           cat release/dist/SHA256SUMS-android.txt
+          # Android's block must name the APK and the translator; the other systems' must be as they were
+          python3 -I - updates/updates-1.json previous/updates-1.json "$runtime" <<'PY'
+          import json, os, sys
+          new = json.load(open(sys.argv[1], encoding="utf-8"))
+          blk = new["systems"]["android-arm64"]
+          prog = blk.get("program") or {}
+          ids = [a.get("id") for a in blk.get("addons") or []]
+          print("Android: program %s (%s), add-ons %s" % (prog.get("version"), ", ".join(k for k in ("apk", "update") if k in prog), ", ".join(ids)))
+          if "apk" not in prog or "update" in prog or prog.get("label") != "experimental" or prog.get("runtime") != sys.argv[3]:
+              sys.exit("the update file's Android block is not right: %r" % sorted(prog))
+          if "translation-proofreading" not in ids:
+              sys.exit("the update file's Android block lacks the translator")
+          if os.path.isfile(sys.argv[2]):
+              old = json.load(open(sys.argv[2], encoding="utf-8"))
+              for name, block in (old.get("systems") or {}).items():
+                  if name != "android-arm64" and new["systems"].get(name) != block:
+                      sys.exit("the block of %s changed" % name)
+              print("the other systems' blocks are as published: %s" % ", ".join(sorted(k for k in old.get("systems", {}) if k != "android-arm64")))
+          PY
           mkdir -p release/src/sources
+
+      - name: Hand the update file to the job "download-page"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: android-update-file
+          path: updates
+          retention-days: 3
+          if-no-files-found: error
 
       - name: Hand the files to the job "publish"
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -497,9 +681,9 @@ jobs:
             echo "projects in its own format and in Scrivener 3 format (.scriv); it is an independent program, not made by or"
             echo "connected with Literature & Latte. The functions of Linux $linux_shown"
             echo "([its release](https://github.com/$GH_REPO/releases/tag/$LINUX_TAG)), on a tablet: the same windows, made for"
-            echo "fingers and the on-screen keyboard. Linux, Windows and Android count their own fixes in the last number."
+            echo "an external keyboard and mouse and for fingers. Linux, Windows and Android count their own fixes in the last number."
             echo
-            echo "> **This is the first, experimental Android version.** Keep backups of your projects (File > Back Up > Back Up Now;"
+            echo "> **This is an experimental Android version.** Keep backups of your projects (File > Back Up > Back Up Now;"
             echo "> the automatic backups are set under File > Options > Backup), and keep a copy of your manuscripts outside the app."
             echo
             echo "## Android 9 or later (tablets, 64-bit ARM)"
@@ -510,11 +694,19 @@ jobs:
             echo "   **Documents/Quillbinder**, where other apps and your computer can reach them. The button opens Android's page"
             echo "   \"All files access\": switch it on for Quillbinder and go back."
             echo "3. Add-ons for Android are installed with **File > Install Update or Add-on**; a new version of the app always"
-            echo "   comes as a new APK, which installs over the old one and keeps your settings."
+            echo "   comes as a new APK, which installs over the old one and keeps your settings. **Help > Check for Updates Now**"
+            echo "   tells you when there is one and opens its download in the browser."
+            echo "4. Translation and Proofreading comes with the app (installed at its first start); it downloads a language model"
+            echo "   only when you choose one in the add-on."
             echo
             echo "| File | What it is |"
             echo "|------|------------|"
-            echo "| $apk | the app for Android tablets (arm64), with the spelling dictionaries, the writing tools and the importers |"
+            echo "| $apk | the app for Android tablets (arm64), with the spelling dictionaries, the writing tools, the importers and Translation and Proofreading |"
+            for f in ./*.qbpkg; do
+              [ -f "$f" ] || continue
+              f=${f#./}
+              echo "| $f | Translation and Proofreading on its own (the app carries it already): for **File > Install Update or Add-on** |"
+            done
             echo
             echo "Not in the Android version yet: Speech Transcription, audio and video in the editor, crash reports."
             echo
@@ -554,6 +746,13 @@ jobs:
         with:
           persist-credentials: false
 
+      # Android 0.92.0: the update file of this run (none with page_only)
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        if: ${{ !inputs.page_only }}
+        with:
+          name: android-update-file
+          path: updates
+
       - name: The page
         env:
           GH_TOKEN: ${{ github.token }}
@@ -575,8 +774,19 @@ jobs:
             also+=(--also "older-$i" "$t")
           done < <(gh api "repos/$GH_REPO/releases?per_page=12" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
           python3 -I tools/download-page.py release-names "$main" site "${also[@]}"
-          # 0.92.0: the page is replaced as a whole; the update file the programs read is carried along
-          tools/keep-update-feed.sh site
+          # 0.92.0: the page is replaced as a whole; the update file the programs read is carried along. Android 0.92.0:
+          # this run's file (Android's block made anew) takes its place, unless the published one is newer (a later release
+          # ran before this job was started again); with page_only there is none of this run.
+          new=updates
+          page=https://shelin-boop.github.io/Quillbinder_Collection
+          if [ -f updates/updates-1.json ] && curl -fsSL --max-time 30 -o published.json "$page/updates-1.json"; then
+            if python3 -I -c 'import json, sys; a = json.load(open(sys.argv[1], encoding="utf-8"))["date"]; b = json.load(open(sys.argv[2], encoding="utf-8"))["date"]; sys.exit(0 if b > a else 1)' updates/updates-1.json published.json; then
+              echo "the published update file is newer than this run's: kept"
+              new=
+            fi
+          fi
+          [ -f updates/updates-1.json ] || new=
+          tools/keep-update-feed.sh site $new
           grep -o 'releases/download/[^/]*/[^"]*' site/index.html | sort -u
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0

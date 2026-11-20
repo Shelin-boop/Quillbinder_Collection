@@ -219,6 +219,13 @@ void readablePlaceholder(QWidget *field)
     field->setProperty(kBusy, false);
 }
 
+namespace {
+bool g_tablet = false;
+}
+
+void setTabletMode(bool on) { g_tablet = on; }
+bool tabletMode() { return g_tablet; }
+
 void addCloseButton(QDialog *dialog)
 {
     if (!dialog || !dialog->layout() || dialog->findChild<QDialogButtonBox *>(QStringLiteral("windowClose")))

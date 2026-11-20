@@ -43,6 +43,29 @@ recipe() { # <name> <ndk>
 }
 
 hash_of() { recipe "$1" "$2" | sha256sum | cut -d' ' -f1; }
+
+# Android 0.92.0 (the move to the one public repository): the pre-release's text names what is inside, its license,
+# and where its source is, as packaging/windows/win-deps-pack.sh does for the Windows packs; the license texts are in
+# the pack.
+about() { # <name> <dir>
+    local what=${1%%-*} abi=${1#*-} v
+    case "$what" in
+    hunspell)
+        v=$(sed -n 's/^VERSION=//p' "$ROOT/packaging/android/android-hunspell.sh")
+        echo "Inside: Hunspell $v as a static library for Android ($abi), unchanged, built with the Android NDK by packaging/android/android-hunspell.sh (the source archive is pinned there by its SHA-256)."
+        echo "License: MPL-1.1, GPL-2.0-or-later or LGPL-2.1-or-later (Hunspell's three licenses). Source: https://github.com/hunspell/hunspell at the tag v$v."
+        ;;
+    openssl)
+        v=$(sed -n 's/^VERSION=//p' "$ROOT/packaging/android/android-openssl.sh")
+        echo "Inside: OpenSSL $v as the shared libraries libcrypto_3.so and libssl_3.so for Android ($abi), unchanged, built with the Android NDK by packaging/android/android-openssl.sh (the source archive is pinned there by its SHA-256)."
+        echo "License: Apache-2.0. Source: https://github.com/openssl/openssl/releases/tag/openssl-$v (also on this repository's release third-party-sources)."
+        ;;
+    esac
+    local texts
+    texts=$(cd "$2" 2>/dev/null && find . -maxdepth 3 \( -iname 'COPYING*' -o -iname 'LICENSE*' -o -iname 'license.*' \) -type f | sed 's|^\./||' | sort | tr '\n' ' ')
+    [ -n "$texts" ] && echo "The license texts are in the pack: $texts"
+    return 0
+}
 tag_of() { echo "deps-$1-android-$(hash_of "$1" "$2" | cut -c1-16)"; }
 file_of() { echo "$1-android-$(hash_of "$1" "$2" | cut -c1-16).tar.xz"; }
 
@@ -98,6 +121,8 @@ publish)
     {
         echo "Built by .github/workflows/android.yml (run ${GITHUB_RUN_ID:-local}, commit ${GITHUB_SHA:-local}) for packaging/android/android-deps-pack.sh."
         echo "Not for downloading: working storage of the Android build."
+        echo
+        about "$name" "$dir"
         echo
         echo '```'
         echo "pin: $pin"

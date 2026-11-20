@@ -148,13 +148,18 @@ QList<Offer> offersFor(const Feed &feed, const QString &system, const Installed 
         o.security = securityBetween(prog.value(QStringLiteral("security")), here.appVersion, newest);
         o.whatsNew = linesOf(prog.value(QStringLiteral("whatsNew")));
         const Download update = downloadOf(prog.value(QStringLiteral("update")));
-        // the whole program anew: Linux names its AppImages, Windows (0.92.0) its setup programs
+        // the whole program anew: Linux names its AppImages, Windows (0.92.0) its setup programs, Android (0.92.0) its
+        // APK, and Android takes nothing else (a new version for Android is always a new APK)
+        const bool android = system.startsWith(QLatin1String("android"));
         const bool windows = system.startsWith(QLatin1String("windows"));
         const QString plain = windows ? QStringLiteral("setup") : QStringLiteral("appimage");
         const QString full = windows ? QStringLiteral("setupFull") : QStringLiteral("appimageFull");
         const Download image = downloadOf(prog.value(here.fullAppImage ? full : plain));
         const Download other = downloadOf(prog.value(here.fullAppImage ? plain : full));
-        if (prog.value(QStringLiteral("runtime")).toString() == here.runtime && update.isValid()) {
+        if (android) {
+            o.kind = Offer::Kind::NewApk;
+            o.file = downloadOf(prog.value(QStringLiteral("apk")));
+        } else if (prog.value(QStringLiteral("runtime")).toString() == here.runtime && update.isValid()) {
             o.kind = Offer::Kind::ProgramUpdate;
             o.file = update;
         } else {

@@ -398,8 +398,18 @@ if(QB_MOBILE_PREVIEW)
   add_executable(qb_mobile_tests mobile_tests.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileBars.cpp
                  ${CMAKE_SOURCE_DIR}/src/android/MobileTouch.cpp
                  ${CMAKE_SOURCE_DIR}/src/android/MobileHandles.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileFiles.cpp
-                 ${CMAKE_SOURCE_DIR}/src/android/MobileStart.cpp ${QB_RESOURCES_OBJECTS})
+                 ${CMAKE_SOURCE_DIR}/src/android/MobileStart.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileCare.cpp
+                 ${QB_RESOURCES_OBJECTS})
   target_link_libraries(qb_mobile_tests PRIVATE qbui Qt6::Test)
+  # Android 0.92.0: every menu and every window a command opens, at a tablet's size, fits and can be closed; Back, the
+  # keys Ctrl and Shift with the mouse, the line between panes, the pin and the padlock on a tablet
+  # (packaging/android/run-tablet-fit.sh <build dir> runs it at every size)
+  add_executable(qb_mobile_fit_tests mobile_fit_tests.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileBars.cpp
+                 ${CMAKE_SOURCE_DIR}/src/android/MobileTouch.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileHandles.cpp
+                 ${CMAKE_SOURCE_DIR}/src/android/MobileCare.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileStart.cpp
+                 ${CMAKE_SOURCE_DIR}/src/android/MobileFiles.cpp ${QB_RESOURCES_OBJECTS})
+  target_link_libraries(qb_mobile_fit_tests PRIVATE qbui Qt6::Test)
+  target_compile_definitions(qb_mobile_fit_tests PRIVATE QB_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
   # Android's copy of the system test (tests/android/systemtest), built for the desktop to try its cases here before
   # they run on emulated tablets (what needs Android itself is inside Q_OS_ANDROID there)
   file(GLOB QB_ST_ANDROID_SOURCES ${CMAKE_SOURCE_DIR}/tests/android/systemtest/*.cpp)

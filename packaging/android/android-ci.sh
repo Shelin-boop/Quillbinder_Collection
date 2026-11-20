@@ -122,6 +122,22 @@ rc=$?
 say "dictionaries: rc=$rc, $(ls "$ASSETS/dictionaries" 2>/dev/null | grep -c '\.dic$') languages, $(du -sk "$ASSETS" | cut -f1) KB ($(mins))"
 [ $rc -ne 0 ] && tail -8 "$OUT/dictionaries.log" >> "$SUM"
 
+# ---- Translation and Proofreading (Android 0.92.0): the APK carries its package in assets/full-addons, installed at
+# the first start of a version, as the full version on Linux and Windows does. The release workflow hands over the
+# package its job sign-translator signed (QB_ANDROID_FULL_ADDONS); a trial build makes it here (unsigned).
+mkdir -p "$ASSETS/full-addons"
+if [ -n "${QB_ANDROID_FULL_ADDONS:-}" ]; then
+  cp "$QB_ANDROID_FULL_ADDONS"/translation-proofreading-android-$short.qbpkg "$ASSETS/full-addons/" 2>/dev/null
+  rc=$?
+  say "translator: rc=$rc, the package of the release ($(ls "$ASSETS/full-addons" | tr '\n' ' '))"
+else
+  bash packaging/android/android-translator.sh "$ABI" "$OUT/addons" > "$OUT/translator.log" 2>&1
+  rc=$?
+  [ $rc -eq 0 ] && cp "$OUT/addons/translation-proofreading-android-$short.qbpkg" "$ASSETS/full-addons/"
+  say "translator: rc=$rc, $(grep '^package:' "$OUT/translator.log" | sed 's|.*/||') ($(grep -c 'FAIL' "$OUT/translator.log") FAIL lines) ($(mins))"
+  [ $rc -ne 0 ] && { echo "---- translator.log (end)"; tail -30 "$OUT/translator.log"; } >> "$OUT/errors.txt"
+fi
+
 # ---- configure: the program, and what the Linux program gets as add-on packages or beside it: the writing tools
 # (Name Generator, Scratch Pad, Text Statistics), the Word 97-2003 importer and the Markdown exporter go into the
 # APK as libraries. No tests, no developer tools. The APK is signed with the key for trial builds.
@@ -258,6 +274,8 @@ for l in en_US en_GB de_DE de_AT de_CH; do
   grep -q "assets/dictionaries/$l.dic" "$OUT/apk-files.txt" && grep -q "assets/dictionaries/$l.aff" "$OUT/apk-files.txt" || missing="$missing $l"
 done
 [ -z "$missing" ] && ok "the spelling dictionaries are in the APK (English and German)" || bad "dictionaries missing in the APK:$missing"
+grep -q "assets/full-addons/translation-proofreading-android-$short.qbpkg" "$OUT/apk-files.txt" \
+  && ok "Translation and Proofreading is in the APK (assets/full-addons)" || bad "the translator's package is missing in the APK"
 if [ "$RELEASE" = 1 ]; then
   # unsigned here: the job "sign-apk" of the release workflow aligns and signs it with the project's Android key and
   # checks the result (signer, schemes, 16 KB borders)

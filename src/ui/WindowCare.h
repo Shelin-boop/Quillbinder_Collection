@@ -37,5 +37,12 @@ void readablePlaceholder(QWidget *field);
 // as Esc does. Named "windowClose".
 void addCloseButton(QDialog *dialog);
 
+// Android 0.92.0: switched on by the tablet's own code (android/MobileCare.cpp, mobile::installCare) and by the
+// tablet preview test; the Linux and Windows programs never switch it on. What it changes where it is asked: the pin
+// of the fixed mind map shows on the selected binder row too, a tap on a row's padlock shows its text, the binder
+// row's menu has the two mind map commands, About is a window that scrolls.
+void setTabletMode(bool on);
+bool tabletMode();
+
 } // namespace windowcare
 } // namespace qb
