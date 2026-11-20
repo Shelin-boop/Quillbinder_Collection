@@ -137,14 +137,22 @@ QJsonObject readAddonState()
     return QJsonDocument::fromJson(f.readAll()).object();
 }
 
-void writeAddonState(const QJsonObject &o)
+// 0.92.0 (audit finding QBA-F05): with its result and reason (before: nothing came back, so a state that was not
+// written was reported as set, and the old state was back after the restart, without a word). The old file stays
+// when the write fails (QSaveFile). The tests can make it fail: QB_TEST_FAIL_STATE=addons.
+bool writeAddonState(const QJsonObject &o, QString *error = nullptr)
 {
+    const QString file = addonsRoot() + QLatin1String("/state.json");
     QDir().mkpath(addonsRoot());
-    QSaveFile f(addonsRoot() + QLatin1String("/state.json"));
-    if (f.open(QIODevice::WriteOnly)) {
-        safesave::write(f, QJsonDocument(o).toJson());
-        safesave::commit(f);
-    }
+    QSaveFile f(file);
+    if (QB_TEST_ENV("QB_TEST_FAIL_STATE") != QLatin1String("addons") && f.open(QIODevice::WriteOnly)
+        && safesave::write(f, QJsonDocument(o).toJson()) >= 0 && safesave::commit(f))
+        return true;
+    if (error)
+        *error = tr("Cannot write %1%2").arg(QDir::toNativeSeparators(file),
+                                            f.errorString().isEmpty() || f.error() == QFileDevice::NoError
+                                                ? QString() : QStringLiteral(": ") + f.errorString());
+    return false;
 }
 
 QSet<QString> disabledIds()
@@ -455,7 +463,7 @@ bool prepare(const QByteArray &data, const PackageInfo &info, QList<Prepared> *o
     return true;
 }
 
-void finish(const Prepared &p, QStringList *log, bool *restart)
+bool finish(const Prepared &p, QStringList *log, bool *restart, QString *error)
 {
     const Manifest &m = p.m;
     if (p.core) {
@@ -471,13 +479,27 @@ void finish(const Prepared &p, QStringList *log, bool *restart)
         st.insert(QStringLiteral("active"), m.version);
         st.insert(QStringLiteral("attempts"), 0);
         st.remove(QStringLiteral("notice"));
-        launcher::writeState(st);
+        // 0.92.0 (QBA-F05): an install whose state was not written is not reported as done
+        QString why;
+        if (!launcher::writeState(st, &why)) {
+            if (error)
+                *error = tr("Program version %1 was unpacked, but it could not be set as the version to start (%2). "
+                            "The version in use stays. Free some space or check the folder, then install it again.")
+                             .arg(m.version, why);
+            return false;
+        }
         if (restart)
             *restart = true;
         if (log)
             *log << tr("Program version %1 installed. It starts the next time you open the program.").arg(m.version);
     } else {
-        setEnabled(m.id, true);
+        QString why;
+        if (!setEnabled(m.id, true, &why)) {   // 0.92.0 (QBA-F05)
+            if (error)
+                *error = tr("Add-on \"%1\" was unpacked, but it could not be switched on (%2). Free some space or check "
+                            "the folder, then switch it on in the Add-on Manager.").arg(m.name, why);
+            return false;
+        }
         bool plugins = false;
         for (const FileEntry &fe : m.files)
             plugins = plugins || fe.path.startsWith(QLatin1String("plugins/"))
@@ -488,6 +510,7 @@ void finish(const Prepared &p, QStringList *log, bool *restart)
             *log << tr("Add-on \"%1\" %2 installed (%3).")
                         .arg(m.name, m.version, p.info.provides.isEmpty() ? tr("no content") : p.info.provides.join(QLatin1String(", ")));
     }
+    return true;
 }
 
 bool installData(const QByteArray &data, const PackageInfo &info, QStringList *log, QString *error, bool *restart)
@@ -504,30 +527,64 @@ bool installData(const QByteArray &data, const PackageInfo &info, QStringList *l
     // 0.64.1 (audit S-4): an installed version moves aside first and goes only once the new one is in place
     struct Placed { QString target, aside; };
     QList<Placed> placed;
-    auto putBack = [&placed] {
-        for (int i = int(placed.size()) - 1; i >= 0; --i) {
-            QDir(placed.at(i).target).removeRecursively();
-            if (!placed.at(i).aside.isEmpty())
-                QDir().rename(placed.at(i).aside, placed.at(i).target);
+    // 0.92.0 (audit finding QBA-U05): the way back looks at what it does. Before, a version that could not be put
+    // back stayed in "<target>.old-<process number>" and the message named only the first failure. Now the message
+    // also says what was left where. (The tests can make a move fail: QB_TEST_FAIL_RENAME holds a part of the source's
+    // path and, behind a "|", how many moves of it still work.)
+    QStringList left;
+    auto move = [](const QString &from, const QString &to) {
+        const QString fakeSwitch = QB_TEST_ENV("QB_TEST_FAIL_RENAME");
+        if (!fakeSwitch.isEmpty()) {
+            static QString last;
+            static int moved = 0;
+            if (fakeSwitch != last) {   // a new value of the switch counts anew
+                last = fakeSwitch;
+                moved = 0;
+            }
+            const QStringList fake = fakeSwitch.split(QLatin1Char('|'));
+            if (from.contains(fake.first()) && moved++ >= fake.value(1).toInt())
+                return false;
         }
+        return QDir().rename(from, to);
+    };
+    auto backOne = [&left, &move](const QString &target, const QString &aside) {
+        if (QFileInfo::exists(target) && !QDir(target).removeRecursively()) {
+            left << tr("%1 could not be removed").arg(QDir::toNativeSeparators(target));
+            if (!aside.isEmpty())
+                left << tr("the version installed before is in %1").arg(QDir::toNativeSeparators(aside));
+            return;
+        }
+        if (!aside.isEmpty() && !move(aside, target))
+            left << tr("the version installed before could not be put back and is in %1 (rename that folder to \"%2\")")
+                        .arg(QDir::toNativeSeparators(aside), QFileInfo(target).fileName());
+    };
+    auto putBack = [&placed, &backOne] {
+        for (int i = int(placed.size()) - 1; i >= 0; --i)
+            backOne(placed.at(i).target, placed.at(i).aside);
+    };
+    auto tellLeft = [&left, error] {
+        if (error && !left.isEmpty())
+            *error += QStringLiteral("\n\n") + tr("Not everything could be put back as it was: %1.").arg(left.join(QLatin1String("; ")));
     };
     for (const Prepared &p : std::as_const(prepared)) {
         const QString aside = p.target + QStringLiteral(".old-") + QString::number(QCoreApplication::applicationPid());
         QDir(aside).removeRecursively();
         const bool hadOld = QFileInfo::exists(p.target);
-        if (hadOld && !QDir().rename(p.target, aside)) {
+        if (hadOld && !move(p.target, aside)) {
             if (error)
                 *error = tr("Cannot replace %1").arg(p.target);
             putBack();
+            tellLeft();
             cleanTmp();
             return false;
         }
-        if (!QDir().rename(p.tmp, p.target)) {
+        if (!move(p.tmp, p.target)) {
             if (error)
                 *error = tr("Cannot create %1").arg(p.target);
             if (hadOld)
-                QDir().rename(aside, p.target);
+                backOne(p.target, aside);
             putBack();
+            tellLeft();
             cleanTmp();
             return false;
         }
@@ -536,8 +593,11 @@ bool installData(const QByteArray &data, const PackageInfo &info, QStringList *l
     for (const Placed &pl : std::as_const(placed))
         if (!pl.aside.isEmpty())
             QDir(pl.aside).removeRecursively();
+    // 0.92.0 (QBA-F05): the state is written last; when that fails the install is told as failed (the files stay,
+    // and installing again or switching the add-on on finishes it)
     for (const Prepared &p : std::as_const(prepared))
-        finish(p, log, restart);
+        if (!finish(p, log, restart, error))
+            return false;
     return true;
 }
 
@@ -769,11 +829,11 @@ QList<Installed> installedAddons()
     return out;
 }
 
-void setEnabled(const QString &id, bool on)
+bool setEnabled(const QString &id, bool on, QString *error)
 {
     QSet<QString> off = disabledIds();
     if (on == !off.contains(id))
-        return;
+        return true;
     if (on)
         off.remove(id);
     else
@@ -782,7 +842,7 @@ void setEnabled(const QString &id, bool on)
     QStringList l = off.values();
     l.sort();
     st.insert(QStringLiteral("disabled"), QJsonArray::fromStringList(l));
-    writeAddonState(st);
+    return writeAddonState(st, error);
 }
 
 bool removeAddon(const QString &id, QString *error)
@@ -891,7 +951,13 @@ bool setActiveCore(const QString &version, QString *error)
     st.insert(QStringLiteral("attempts"), 0);
     st.remove(QStringLiteral("notice"));
     st.remove(QStringLiteral("previous")); // a deliberate choice: no automatic return
-    launcher::writeState(st);
+    // 0.92.0 (QBA-F05): true only when the choice was written (before: true whatever the write did)
+    QString why;
+    if (!launcher::writeState(st, &why)) {
+        if (error)
+            *error = tr("The choice could not be saved, so the version in use stays (%1).").arg(why);
+        return false;
+    }
     return true;
 }
 
@@ -914,7 +980,13 @@ bool removeCore(const QString &version, QString *error)
         st.insert(QStringLiteral("active"), QString());
     if (st.value(QStringLiteral("previous")).toString() == version)
         st.remove(QStringLiteral("previous"));
-    launcher::writeState(st);
+    // 0.92.0 (QBA-F05): not removed while the state still names it as the version to start
+    QString why;
+    if (!launcher::writeState(st, &why)) {
+        if (error)
+            *error = tr("Program version %1 was not removed: the list of versions could not be updated (%2).").arg(version, why);
+        return false;
+    }
     if (!QDir(dir).removeRecursively()) {
         if (error)
             *error = tr("Cannot remove %1").arg(dir);

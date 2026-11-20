@@ -18,6 +18,7 @@
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 # 0.62: programs started by the suites skip the questions of the first start
 export QB_SKIP_FIRST_START=1
+export QB_NO_UPDATE_CHECK=1   # 0.92.0: no check for updates in a program the suites start
 OUT=${1:-$ROOT/build/test-results}
 MODE=${2:-offscreen}
 export QB_FFMPEG_DIR=${QB_FFMPEG_DIR:-$ROOT/build/ffmpeg}
@@ -224,6 +225,7 @@ runx v0904 $B/tests/qb_v0904_tests $B/tests/qb_v0904_tests "$OUT/shots-v0904"
 runx v0910 $B/tests/qb_v0910_tests $B/tests/qb_v0910_tests "$OUT/shots-v0910"
 runx v0911 $B/tests/qb_v0911_tests $B/tests/qb_v0911_tests "$OUT/shots-v0911"
 runx v0913 $B/tests/qb_v0913_tests $B/tests/qb_v0913_tests "$OUT/shots-v0913"
+runx v0920 $B/tests/qb_v0920_tests $B/tests/qb_v0920_tests "$OUT/shots-v0920"
 runx audit1 $B/tests/qb_audit1_tests $B/tests/qb_audit1_tests "$OUT/shots-audit1"
 runx fuzz $B/tests/qb_fuzz_tests $B/tests/qb_fuzz_tests "$OUT/shots-fuzz"
 runx w2 $B/tests/qb_w2_tests $B/tests/qb_w2_tests "$OUT/shots-w2"

@@ -133,14 +133,25 @@ class MindMapPanel : public QWidget
 public:
     explicit MindMapPanel(QWidget *parent = nullptr);
     void setItem(Project *project, const QString &itemId);
+    QString itemId() const { return m_itemId; }
+    // 0.92.0: the tab is fixed on the item it shows (its button is pressed, and a line names the item, so that it
+    // is clear the board does not belong to the selected document)
+    void setFixed(bool fixed, const QString &title);
+    bool isFixed() const { return m_fixed; }
     MindMapView *view() const { return m_view; }
     MindMapController *controller() const { return m_ctl; }
     MindMapDoc *doc() const { return m_doc; }
 signals:
     void openWindowRequested(qb::MindMapDoc *doc);
+    void fixToggleRequested();   // 0.92.0: the button of the bar (fixes the board shown, or releases it)
 
 private:
     void rebuild();
+    void applyFixed();
+    bool m_fixed = false;
+    QString m_fixedTitle;
+    QLabel *m_fixedLine = nullptr;
+    QToolButton *m_fixButton = nullptr;
     QPointer<Project> m_project;
     QString m_itemId;
     QPointer<MindMapDoc> m_doc;

@@ -1,0 +1,64 @@
+# 0.92.0: the language models of the add-on "Translation and Proofreading" (version 1.2 downloads them from this
+# repository). Copies the two model releases of the add-on's former repository into releases of the same names here,
+# unchanged, and compares what arrived. Run by pushing the branch "models-mirror" (a session cannot create releases)
+# or by hand; a release that already holds every file is left alone.
+name: Models of the translator (copy)
+
+on:
+  push:
+    branches: [models-mirror]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mirror:
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - name: Copy the model releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FROM: Shelin-boop/Quillbinder_Translation_Addon
+        run: |
+          set -euo pipefail
+          listing() { gh release view "$1" -R "$2" --json assets --jq '.assets[] | "\(.name) \(.size)"' | sort; }
+          # a transfer of some gigabytes can be cut off: up to four tries each
+          try() { local n=0; until "$@"; do n=$((n + 1)); [ "$n" -lt 4 ] || return 1; echo "  again in 30 s (try $((n + 1)))"; sleep 30; done; }
+          for tag in models-1 models-2; do
+            listing "$tag" "$FROM" > "there-$tag.txt"
+            echo "$tag: $(wc -l < "there-$tag.txt") file(s), $(awk '{s+=$2} END {printf "%.0f", s/1048576}' "there-$tag.txt") MB in $FROM"
+            if gh release view "$tag" -R "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+              listing "$tag" "$GITHUB_REPOSITORY" > "here-$tag.txt"
+            else
+              : > "here-$tag.txt"
+              title=$(gh release view "$tag" -R "$FROM" --json name --jq .name)
+              gh release view "$tag" -R "$FROM" --json body --jq .body > "notes-$tag.md"
+              printf '\n\nCopied unchanged from the add-on'"'"'s former repository (%s) on %s. Not for downloading by hand: the add-on fetches what it needs.\n' "$FROM" "$(date -u +%F)" >> "notes-$tag.md"
+              gh release create "$tag" -R "$GITHUB_REPOSITORY" --target main --prerelease --latest=false \
+                --title "$title" --notes-file "notes-$tag.md"
+            fi
+            if cmp -s "there-$tag.txt" "here-$tag.txt"; then
+              echo "$tag: every file is here already"
+              continue
+            fi
+            # file by file, so that the runner's disk never holds more than one
+            while IFS= read -r line; do
+              name=${line% *}; size=${line##* }
+              if grep -qxF "$name $size" "here-$tag.txt"; then continue; fi
+              rm -rf one; mkdir one
+              try gh release download "$tag" -R "$FROM" -D one -p "$name" --clobber
+              try gh release upload "$tag" -R "$GITHUB_REPOSITORY" --clobber "one/$name"
+              echo "  copied $name ($size bytes)"
+            done < "there-$tag.txt"
+            rm -rf one
+            listing "$tag" "$GITHUB_REPOSITORY" > "here-$tag.txt"
+            if ! cmp -s "there-$tag.txt" "here-$tag.txt"; then
+              echo "::error::$tag: the files here differ from the files there"
+              diff "there-$tag.txt" "here-$tag.txt" || true
+              exit 1
+            fi
+            echo "$tag: complete"
+          done

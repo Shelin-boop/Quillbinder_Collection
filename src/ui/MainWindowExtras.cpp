@@ -9,6 +9,7 @@
 #include "core/ItemIcons.h"
 #include "core/Project.h"
 #include "ui/MindMapHelp.h"
+#include "ui/UpdateChecker.h"
 #include "ui/CompareDialog.h"
 #include "import/Compare.h"
 #include "ui/AppSettings.h"
@@ -124,6 +125,22 @@ void MainWindow::createExtraActions()
     });
     connect(act(QStringLiteral("mindMapHelp"), tr("&Mind Map Help"), QStringLiteral("qb-mindmap")), &QAction::triggered, this,
             [this] { mindmaphelp::showHelp(this); });
+    // 0.92.0: the check for updates. Switched off, the program contacts nothing.
+    {
+        m_updates = new UpdateChecker(this);
+        QAction *atStart = act(QStringLiteral("updateCheckAuto"), tr("Check for Updates at Startup"));
+        atStart->setCheckable(true);
+        atStart->setChecked(m_updates->isEnabled());
+        atStart->setToolTip(tr("Look once a day, at the program's start, whether a newer version of the program or of an "
+                               "installed add-on exists. Nothing about you is sent. Off: the program contacts nothing."));
+        connect(atStart, &QAction::toggled, this, [this](bool on) { m_updates->setEnabled(on); });
+        connect(m_updates, &UpdateChecker::enabledChanged, atStart, [atStart](bool on) {
+            QSignalBlocker b(atStart);
+            atStart->setChecked(on);
+        });
+        connect(act(QStringLiteral("updateCheckNow"), tr("Check for Updates Now")), &QAction::triggered, this,
+                [this] { m_updates->checkNow(); });
+    }
     connect(act(QStringLiteral("developerGuide"), tr("&Developer Guide: Updates and Add-ons"), QStringLiteral("help-about")),
             &QAction::triggered, this, [this] { showDeveloperGuide(); });
 }

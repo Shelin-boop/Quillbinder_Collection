@@ -17,6 +17,27 @@ QString defaultDirectory();
 // key made from the project folder's place on this computer). Such a folder is left as it is (the writer's choice):
 // nothing is written, counted or deleted there any more; Restore From Backup still offers its backups.
 QString projectKey(const Project *p);
+
+// 0.92.0: an ID in the backups' names, so that two projects with the same title keep their own backups (before, they
+// shared them and the number kept: the backups of one pushed the other's out). A backup is named
+// "<title> #<ID> bak <date time>.zip"; only the backups with this project's title and ID are counted and deleted.
+// The ID is five characters out of 31 (capital letters and digits without 0, O, 1, I and L, which are easily mixed up;
+// capitals only, since Windows and OneDrive take upper and lower case in names for the same). It belongs to the
+// project, not to its place: it is derived from what the project holds on every computer (a project in Scrivener
+// format: its Identifier; Quillbinder's own format: the id of its Draft folder), so two computers that share a
+// project through a sync program get the same ID without writing anything. A project folder copied by hand carries
+// the same ID. Backups without an ID (of versions before) are no longer counted or deleted; Restore From Backup
+// still offers them, and those of the same title with another ID.
+// A copy the program makes itself (Save a Copy as a project, a project restored from a backup, a project made from
+// a template file, which all carry their original's Draft id) gets an ID of its own: giveNewId writes a seed into
+// settings/backup-id.txt, which comes before the Draft's id (a file of the project, so it travels with it; a
+// version without this function leaves it alone).
+QString projectId(const Project *p);
+bool giveNewId(const QString &projectFolder);
+// The ID that a seed gives (the characters above).
+QString idFromSeed(const QString &seed);
+// The start of this project's backup names: "<title> #<ID>" (the title in its safe file name form).
+QString nameStart(const Project *p);
 // That folder of 0.70.0 to 0.90.4; "" when the backup folder holds none for this project.
 QString formerProjectFolder(const Project *p, const QString &dir);
 

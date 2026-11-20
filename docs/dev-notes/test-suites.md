@@ -136,6 +136,15 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   update (inspect, install, launcher), changed certificates, `make-package.py verify`, the install window's note, the
   workflow's signing job; `tools/addon-entry.py` and the workflow "Official add-on"; see "Add-on keys" in
   `saving-and-safety.md`).
+- `qb_v0920_tests` (0.92.0 beta: files whose time alone changed and the pattern of a sync program that touches
+  every file, the notice's button, the project ID in backup names and the IDs of copies, copies that fail
+  (`QB_TEST_FAIL_COPY`), states that cannot be written (`QB_TEST_FAIL_STATE`, `QB_TEST_FAIL_RENAME`), the kind of a
+  failed save in the German interface (`QB_TEST_WRITE_FAILS`; the suite links `translations.qrc`), the fixed mind
+  map, the shown lock (`QB_WORK_MARKS_MS`, a second device through `QB_DEVICE_NAME`), the check for updates with
+  a small server inside the test (`QB_TEST_UPDATE_URL`, `QB_TEST_UPDATE_NOW`, `QB_TEST_UPDATE_RETRY_MS`,
+  `QB_TEST_APPIMAGE`, `QB_TEST_NO_RESTART`; a key made with openssl in `QB_TEST_SIGNING_KEY`), `tools/update-feed.py`,
+  and the translator add-on's place. Needs python3 and openssl; links Qt Network. The unreachable case waits for
+  two tries and a fading note, so the suite takes about 50 s.)
 - `qb_v0911_tests` (0.91.1 beta: toolbars rearranged freely by their grips, the row that got stuck; see "Toolbars
   rearranged freely").
 - `qb_v0910_tests` (0.91.0 beta: backups straight in the backup folder, the seven toolbars and the icon bar; see

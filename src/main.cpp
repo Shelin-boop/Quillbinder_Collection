@@ -15,6 +15,7 @@
 #include "ui/Language.h"
 #include "ui/CrashDialogs.h"
 #include "ui/MainWindow.h"
+#include "ui/UpdateChecker.h"
 #include "ui/MediaPlayback.h"
 #include "ui/ToolHost.h"
 #ifdef Q_OS_ANDROID
@@ -436,6 +437,22 @@ int main(int argc, char **argv)
         if (!w.project())
             w.close(); // start window cancelled: nothing to show
     });
+    // 0.92.0: the check for updates, a few seconds after the start (the first start shows its note before any
+    // contact; switched off in the Help menu, or with QB_NO_UPDATE_CHECK set, the program contacts nothing)
+    if (!qEnvironmentVariableIsSet("QB_NO_UPDATE_CHECK") && !QB_TEST_ENV_SET("QB_NO_DIALOGS")) {
+        // (not while a window of the start is open: the note must be reachable)
+        auto *later = new QTimer(&w);
+        later->setInterval(4000);
+        QObject::connect(later, &QTimer::timeout, &w, [&w, later] {
+            if (QApplication::activeModalWidget() || !w.isVisible())
+                return;
+            later->stop();
+            later->deleteLater();
+            if (w.updateChecker())
+                w.updateChecker()->startAutomatic();
+        });
+        later->start();
+    }
     // The window is up: tell the start-up loader that this version works.
     QTimer::singleShot(1000, &app, [] { qb::launcher::confirmStart(); });
     // a freeze report when the window does not respond for 30 s (an endless loop ...);

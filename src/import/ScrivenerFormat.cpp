@@ -1,4 +1,5 @@
 #include "import/ScrivenerFormat.h"
+#include "core/Backup.h"
 #include "core/SafeSave.h"
 #include "core/Timing.h"
 #include "core/IconCatalog.h"
@@ -311,7 +312,8 @@ bool sameExceptStamps(const QByteArray &a, const QByteArray &b)
     return norm(a) == norm(b);
 }
 
-bool copyDir(const QString &from, const QString &to, const QStringList &skipRelative = {})
+// (0.92.0: *failedFile names the file that could not be copied)
+bool copyDir(const QString &from, const QString &to, const QStringList &skipRelative = {}, QString *failedFile = nullptr)
 {
     QDir src(from);
     if (!src.exists())
@@ -329,8 +331,11 @@ bool copyDir(const QString &from, const QString &to, const QStringList &skipRela
         } else {
             QDir().mkpath(QFileInfo(target).absolutePath());
             // 0.65.0 (audit F05): copied beside the target and renamed over it; the old file stays when it fails
-            if (!safesave::copyFile(path, target))
+            if (!safesave::copyChecked(path, target)) {
+                if (failedFile)
+                    *failedFile = path;
                 return false;
+            }
         }
     }
     return true;
@@ -2371,6 +2376,7 @@ bool SyncState::load(const QString &file)
     for (const QJsonValue &v : o.value(QStringLiteral("binder")).toArray())
         binder << v.toString();
     meta = o.value(QStringLiteral("meta")).toInt();
+    scrivxSha = o.value(QStringLiteral("scrivxSha")).toString();
     return true;
 }
 
@@ -2394,6 +2400,8 @@ bool SyncState::save(const QString &file) const
         o[QStringLiteral("binder")] = QJsonArray::fromStringList(binder);
     if (meta > 0)
         o[QStringLiteral("meta")] = meta;
+    if (!scrivxSha.isEmpty())
+        o[QStringLiteral("scrivxSha")] = scrivxSha;
     QDir().mkpath(QFileInfo(file).absolutePath());
     QSaveFile f(file);
     if (!f.open(QIODevice::WriteOnly))
@@ -3003,8 +3011,14 @@ bool write(Project *p, const QString &scrivDirIn, SyncState &state, WriteReport 
         // 0.64: the binder was written elsewhere since this program read or wrote it: kept first
         const QString stampNow = scrivxStamp(scrivx);
         bool binderKept = false;
-        const bool binderElsewhere = !fresh && state.theirs.contains(QStringLiteral(".scrivx"))
-                                     && state.theirs.value(QStringLiteral(".scrivx")) != stampNow && QFileInfo::exists(scrivx);
+        bool binderElsewhere = !fresh && state.theirs.contains(QStringLiteral(".scrivx"))
+                               && state.theirs.value(QStringLiteral(".scrivx")) != stampNow && QFileInfo::exists(scrivx);
+        // 0.92.0: the content decides, not the time (a sync program sets the file's time after its upload): the same
+        // bytes as read or written here are no other version; only the remembered stamp is renewed
+        if (binderElsewhere && !state.scrivxSha.isEmpty() && sha1File(scrivx) == state.scrivxSha) {
+            binderElsewhere = false;
+            state.theirs.insert(QStringLiteral(".scrivx"), stampNow);
+        }
         const QStringList addedElsewhere = binderElsewhere ? madeElsewhere() : QStringList();
         if (binderElsewhere && !addedElsewhere.isEmpty()) {
             // 0.65.0 (audit F10): the binder on disk names documents made elsewhere: replacing it would drop them.
@@ -3044,6 +3058,7 @@ bool write(Project *p, const QString &scrivDirIn, SyncState &state, WriteReport 
         }
         if (!binderKept && !rep.keepFailed.contains(QFileInfo(scrivx).fileName())) {
             state.theirs.insert(QStringLiteral(".scrivx"), scrivxStamp(scrivx));
+            state.scrivxSha = sha1File(scrivx);
             state.binder = QStringList(present.cbegin(), present.cend());
             state.binderKnown = true;
             state.meta = kMetaLevel;   // keywords, custom metadata, collections (0.81.2), bookmarks and targets (0.90.0)
@@ -3212,6 +3227,7 @@ static void recordAll(Project *p, const QString &scrivDir, SyncState &st)
             for (const Snapshot &s : snapshots::list(p, it->id))
                 st.snapshots << uuidFor(it->id) + QLatin1Char('/') + snapshotFileName(s.date);
     st.theirs.insert(QStringLiteral(".scrivx"), scrivxStamp(scrivxIn(scrivDir)));
+    st.scrivxSha = sha1File(scrivxIn(scrivDir));
     st.binder.clear();
     for (BinderItem *it : p->allItems())
         if (!it->isRootFolder())
@@ -3344,11 +3360,28 @@ static bool takeValue(const Project *np, const QString &fieldId, const QString &
     return true;
 }
 
+// 0.92.0: *copyFailed names the first file of the old working copy that could not be copied into the new one ("" when
+// all arrived). The caller then stops the re-read and leaves the old working copy as it is: it is removed afterwards,
+// so what only it held (a document that never reached the .scriv, a mind map, a picture, an icon, the objects) would
+// be gone without a word. (Before, none of these copies was looked at.)
 static int mergeFromOld(Project *np, Project *op, const QString &scrivDir, const SyncState &st, int *keptNew = nullptr,
-                        bool *metaAdded = nullptr)
+                        bool *metaAdded = nullptr, QString *copyFailed = nullptr)
 {
     const QString data = scrivDir + QLatin1String("/Files/Data/");
     int fromScriv = 0;
+    auto failed = [copyFailed](const QString &what) {
+        if (copyFailed && copyFailed->isEmpty())
+            *copyFailed = QDir::toNativeSeparators(what);
+    };
+    auto copyFolder = [&failed](const QString &from, const QString &to) {
+        QString file;
+        if (!copyDir(from, to, {}, &file))
+            failed(file.isEmpty() ? from : file);
+    };
+    auto copyOne = [&failed](const QString &from, const QString &to) {
+        if (!safesave::copyChecked(from, to))
+            failed(from);
+    };
     // section types that went through uuidFor get their old ids back
     QHash<QString, QString> stIds;
     for (const SectionType &t : op->sectionTypes)
@@ -3447,7 +3480,7 @@ static int mergeFromOld(Project *np, Project *op, const QString &scrivDir, const
             it->fileExt = old->fileExt;
             it->originalFileName = old->originalFileName;
             it->sourceUrl = old->sourceUrl;
-            copyDir(op->contentDir(old->id), np->contentDir(it->id));
+            copyFolder(op->contentDir(old->id), np->contentDir(it->id));
             np->docs()->removeDocument(it->id);
         } else if (it->hasText() && old->hasText()) {
             if (textSame) {
@@ -3514,14 +3547,14 @@ static int mergeFromOld(Project *np, Project *op, const QString &scrivDir, const
             const QString newMap = mindmap::pathFor(np->contentDir(it->id));
             if (QFile::exists(oldMap) && !QFile::exists(newMap)) {
                 QDir().mkpath(np->contentDir(it->id));
-                QFile::copy(oldMap, newMap);
+                copyOne(oldMap, newMap);
             }
         }
         if (joinMarks && !old->synopsisImage.isEmpty() && it->synopsisImage.isEmpty()) {   // 0.90.0: in the .scriv now
             it->synopsisImage = old->synopsisImage;
             QDir().mkpath(np->contentDir(it->id));
-            QFile::copy(op->contentDir(old->id) + QLatin1Char('/') + old->synopsisImage,
-                        np->contentDir(it->id) + QLatin1Char('/') + old->synopsisImage);
+            copyOne(op->contentDir(old->id) + QLatin1Char('/') + old->synopsisImage,
+                    np->contentDir(it->id) + QLatin1Char('/') + old->synopsisImage);
         }
     }
     // documents of the working copy that never reached the .scriv (a crash or a failed
@@ -3612,9 +3645,9 @@ static int mergeFromOld(Project *np, Project *op, const QString &scrivDir, const
             np->model()->insertExisting(parent, row, copy);
             placed.insert(old, copy);
             if (QDir(op->contentDir(old->id)).exists())
-                copyDir(op->contentDir(old->id), np->contentDir(old->id));
+                copyFolder(op->contentDir(old->id), np->contentDir(old->id));
             if (QDir(op->snapshotsDir(old->id)).exists())
-                copyDir(op->snapshotsDir(old->id), np->snapshotsDir(old->id));
+                copyFolder(op->snapshotsDir(old->id), np->snapshotsDir(old->id));
             ++kept;
         }
         if (keptNew)
@@ -3622,12 +3655,12 @@ static int mergeFromOld(Project *np, Project *op, const QString &scrivDir, const
     }
     // the objects of the project (0.20): only the working copy has them
     if (QDir(op->folderPath() + QLatin1String("/objects")).exists())
-        copyDir(op->folderPath() + QLatin1String("/objects"), np->folderPath() + QLatin1String("/objects"));
+        copyFolder(op->folderPath() + QLatin1String("/objects"), np->folderPath() + QLatin1String("/objects"));
     // own icons of the working copy
     for (const QString &n : icons::customNames(op))
         if (!icons::customNames(np).contains(n)) {
             QDir().mkpath(icons::customDir(np));
-            QFile::copy(icons::customPath(op, n), icons::customPath(np, n));
+            copyOne(icons::customPath(op, n), icons::customPath(np, n));
         }
     np->docs()->recountAll();
     np->markIndexDirty();
@@ -3709,8 +3742,23 @@ OpenResult open(const QString &path, QString *error)
         return res;
     }
     res.warnings = rep.warnings;
+    QString copyFailed;
     if (oldP)
-        res.changedElsewhere = mergeFromOld(np.get(), oldP.get(), scrivDir, st, &keptNew, &metaAdded);
+        res.changedElsewhere = mergeFromOld(np.get(), oldP.get(), scrivDir, st, &keptNew, &metaAdded, &copyFailed);
+    if (!copyFailed.isEmpty()) {
+        // 0.92.0: the re-read stops; the old working copy stays as it is and the project does not open (the writer's
+        // decision of 2026-11-19), with the reason
+        np.reset();
+        oldP.reset();
+        QDir(tmp).removeRecursively();
+        if (error)
+            *error = QObject::tr("The Scrivener project was changed elsewhere and had to be read again, but a file that only "
+                                 "this computer's working copy holds could not be copied over:\n%1\n\nNothing was changed: "
+                                 "the working copy is as it was, and so is the Scrivener project. The project was not opened. "
+                                 "Check that the disk is not full and can be written, then open the project again.")
+                         .arg(copyFailed);
+        return res;
+    }
     if (keptNew > 0)
         res.warnings << QObject::tr("%n document(s) that had not reached the Scrivener project yet (the last save did not end) "
                                     "were kept and are saved into it now.", nullptr, keptNew);
@@ -3875,7 +3923,14 @@ std::unique_ptr<Project> copyAsQuillbinder(Project *p, const QString &parentDir,
             *error = QObject::tr("Cannot copy the project to %1").arg(target);
         return nullptr;
     }
-    QFile::copy(p->indexPath(), QDir(target).filePath(safe + QLatin1String(QB_PROJECT_FILE_SUFFIX)));
+    // 0.92.0: checked (before: a copy that failed left a folder without a project file, and the error named that)
+    QString why;
+    if (!safesave::copyChecked(p->indexPath(), QDir(target).filePath(safe + QLatin1String(QB_PROJECT_FILE_SUFFIX)), &why)) {
+        if (error)
+            *error = QObject::tr("Cannot copy the project file into %1: %2").arg(QDir::toNativeSeparators(target), why);
+        return nullptr;
+    }
+    backup::giveNewId(target);   // 0.92.0: the copy is a project of its own, with its own backups
     auto np = Project::open(target, error);
     if (!np)
         return nullptr;

@@ -1,9 +1,11 @@
 #include "core/ProjectTemplates.h"
 #include "core/Paths.h"
 #include "core/Addons.h"
+#include "core/Backup.h"
 #include "core/BinderModel.h"
 #include "core/DocumentStore.h"
 #include "core/Project.h"
+#include "core/SafeSave.h"
 #include "core/Zip.h"
 #include "text/MarkdownIO.h"
 #include "text/TextUtil.h"
@@ -308,18 +310,31 @@ std::unique_ptr<Project> createProject(const Info &info, const QString &parentDi
             ZipReader again(info.zipPath);
             QTemporaryDir t2;
             again.extractAll(t2.path());
-            // simple recursive copy
+            // simple recursive copy. 0.92.0 (audit finding QBA-U03, the same kind of place): a file that could not
+            // be copied stops the new project with a message (before: a project that lacked files, without a word)
+            QString failedAt;
             std::function<void(const QString &, const QString &)> copyRec = [&](const QString &a, const QString &b) {
                 QDir().mkpath(b);
                 for (const QFileInfo &fi : QDir(a).entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot)) {
+                    if (!failedAt.isEmpty())
+                        return;
                     if (fi.isDir())
                         copyRec(fi.absoluteFilePath(), b + QLatin1Char('/') + fi.fileName());
-                    else
-                        QFile::copy(fi.absoluteFilePath(), b + QLatin1Char('/') + fi.fileName());
+                    else if (!safesave::copyChecked(fi.absoluteFilePath(), b + QLatin1Char('/') + fi.fileName()))
+                        failedAt = b + QLatin1Char('/') + fi.fileName();
                 }
             };
             copyRec(src, folder);
+            if (!failedAt.isEmpty()) {
+                QDir(folder).removeRecursively();
+                if (error)
+                    *error = QObject::tr("The new project could not be made: %1 could not be written. Is the drive full or "
+                                         "write-protected?").arg(QDir::toNativeSeparators(failedAt));
+                return nullptr;
+            }
         }
+        // 0.92.0: a project of its own, with its own backups (the template's items keep their ids, the Draft's too)
+        backup::giveNewId(folder);
         // rename the index file
         const QString oldIndex = Project::resolveProjectFile(folder);
         const QString newIndex = QDir(folder).filePath(safe + QLatin1String(QB_PROJECT_FILE_SUFFIX));

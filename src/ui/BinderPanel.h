@@ -2,6 +2,7 @@
 #include "core/Project.h"
 #include "core/ProjectTypes.h"
 
+#include <QHash>
 #include <QListWidget>
 #include <QPersistentModelIndex>
 #include <QPointer>
@@ -35,7 +36,20 @@ public:
     // scroll bar instead of being cut off (0.17).
     void updateColumnWidth();
     int contentWidth() const;
+    // 0.92.0: the item whose mind map is fixed in the inspector ("" = none). Its row carries a pin; the row under
+    // the mouse shows an empty one that fixes it with a click (a click on the fixed row's pin releases).
+    void setFixedMindMapId(const QString &id);
+    QString fixedMindMapId() const { return m_fixedMapId; }
+    QModelIndex hoverIndex() const { return m_hover; }
+    std::function<bool(const QModelIndex &)> canFixMindMap;   // set by the panel (not the Trash and what is in it)
+    // 0.92.0: the documents another device works on, with the tool tip of each ("" = none): a padlock on their rows
+    void setLockMarks(const QHash<QString, QString> &tips);
+    QString lockTip(const QString &id) const { return m_lockTips.value(id); }
+    // the places of the two marks in a row, for the tests (viewport coordinates)
+    QRect pinRectOf(const QModelIndex &index) const;
+    QRect lockRectOf(const QModelIndex &index) const;
 signals:
+    void mindMapPinClicked(const QString &itemId);
     void enterPressed();
     void deletePressed();
     void spacePressed();
@@ -50,11 +64,20 @@ protected:
     void mouseDoubleClickEvent(QMouseEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void leaveEvent(QEvent *e) override;
+    bool viewportEvent(QEvent *e) override;
     void dropEvent(QDropEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;
 
 private:
     void scheduleWidthUpdate();
+    void setHover(const QModelIndex &index);
+    void updateRow(const QModelIndex &index);
+    QString m_fixedMapId;
+    QPersistentModelIndex m_hover;
+    QHash<QString, QString> m_lockTips;
+    bool m_pinPressed = false;
     QTimer *m_widthTimer = nullptr;
     // A click loads the document when the button is released, so that a
     // document can be dragged elsewhere (an editor's header bar, a copyholder)
@@ -138,6 +161,11 @@ public:
     void flash(BinderItem *item);
     void editTitle(BinderItem *item);
     void setFooterMenus(QMenu *addMenu, QMenu *gearMenu);
+    // 0.92.0: the fixed mind map (the pin on its row, and a slim bar above the footer with the item's title and
+    // "Release" while one is fixed); the panel only shows it, the main window keeps it
+    void setFixedMindMap(BinderItem *item);
+    // 0.92.0: the padlocks (documents another device works on; id -> tool tip)
+    void setLockMarks(const QHash<QString, QString> &tips);
 
     // project search
     void showSearch(bool focus);
@@ -175,6 +203,8 @@ signals:
     void selectionChanged(const QList<qb::BinderItem *> &items);
     void contextMenuRequested(const QPoint &globalPos);
     void backgroundMenuRequested(const QPoint &globalPos); // empty space of the binder (0.90.1)
+    void fixMindMapRequested(qb::BinderItem *item);   // 0.92.0: the pin of a row
+    void releaseMindMapRequested();                   // 0.92.0: the pin of the fixed row, or the bar's button
     void newDocumentRequested();
     void newFolderRequested();
     void trashRequested();
@@ -209,6 +239,9 @@ private:
     QToolButton *m_addButton = nullptr;
     QToolButton *m_folderButton = nullptr;
     QToolButton *m_gearButton = nullptr;
+    QWidget *m_fixedBar = nullptr;      // 0.92.0
+    QLabel *m_fixedLabel = nullptr;
+    QString m_fixedTitle;
     SearchQuery m_query;
     QString m_shownCollection; // id or "__search"
     bool m_updatingTabs = false;

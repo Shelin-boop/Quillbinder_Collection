@@ -79,6 +79,7 @@ changed and what was checked. Preferences:
   X11 run writes `tests/check-counts.txt` anew: commit it. Read the runner's one line per suite and the FAIL lines,
   not whole logs.
 - What each suite checks, its switches and its needs (FFmpeg, whisper.cpp, LibreOffice): `docs/dev-notes/test-suites.md`.
+- The suites and scripted starts set `QB_NO_UPDATE_CHECK=1` (0.92.0): a program they start never looks for updates.
 - Offscreen runs have no window manager: a widget has focus only after `activateWindow()`; modal dialogs are answered
   with `QTimer` + `activeModalWidget()`.
 - Never run `pkill -f` / `pgrep -f` with a pattern that also appears in your own command line: it kills the shell
@@ -152,13 +153,13 @@ them with grep (`grep -n '<word>' docs/dev-notes/*.md`) and read only the sectio
 short index (under about 20 KB), so that it costs little when it is loaded.
 
 - `test-suites.md`: what each test suite checks, its switches and what it needs.
-- `ui.md`: toolbars and their places (0.91.x), theme buttons, menus filled on opening, undo names, the format bar,
+- `ui.md`: the marks of a binder row, the fixed mind map and the shown lock (0.92.0), toolbars and their places (0.91.x), theme buttons, menus filled on opening, undo names, the format bar,
   the look per project, fonts with several designs, zoom parts, objects.
-- `saving-and-safety.md`: backups and sync programs, the save journal, safe copies, signatures, the audits' fixes
+- `saving-and-safety.md`: 0.92.0 (the content decides, the project ID in backup names, checked copies, failures that are told), backups and sync programs, the save journal, safe copies, signatures, the audits' fixes
   (0.64.1 to 0.81.1), the system test's fixes, settings per project, speed with large projects, crash reports.
 - `scrivener-format.md`: reading and writing .scriv (styles, inline notes, web pages, keywords, metadata, collections,
   the rest of a project).
-- `runtime-and-addons.md`: Qt 6.12 and FFmpeg 9.0.2 (the runtime), tool interface 1.1 and Speech Transcription,
+- `runtime-and-addons.md`: the check for updates and the translator add-on (0.92.0), Qt 6.12 and FFmpeg 9.0.2 (the runtime), tool interface 1.1 and Speech Transcription,
   release files and third-party sources.
 - `windows.md`: the Windows port (W1 to W4c), what 0.90.4 brought, the public Windows files, Windows 0.91.3 (its own
   release, `[build-only]` / `[suites: ...]` in a commit message, the Windows dependency packs, the run on main).
@@ -177,6 +178,13 @@ short index (under about 20 KB), so that it costs little when it is loaded.
   `usr/share/quillbinder/full-addons/`, and a start script (`AppRun`) that runs `quillbinder --install` for each at the
   first start of that version (marker `~/.local/share/Quillbinder/full-addons-installed-<version>`), then the program.
   No program change; the release workflow builds and checks it, and builds a release again when it lacks one.
+- **The update file** (0.92.0): `tools/update-feed.py` writes `updates-1.json` for the program's check for updates, the
+  job `sign-checksums` signs it and `download-page` publishes it; every workflow that publishes the page carries it
+  along (`tools/keep-update-feed.sh`); a security update is marked in `packaging/update-feed/security.json` in the
+  commit that raises the version. The address is built into the program and must never change.
+- **Translation and Proofreading** (0.92.0) is one of the project's own add-ons (`addons/translation-proofreading`, a
+  project of its own in `source/`); its engine libraries come from `tools/get-translator-deps.sh`, its models are on
+  the releases `models-1` and `models-2`.
 - **Official add-ons** (0.91.3): `official-addons/<id>.json`, workflow `addon-release.yml`, `tools/addon-entry.py`;
   `docs/official-addons.md` (the way to the list, the add-on key) and `docs/dev-notes/saving-and-safety.md` ("Add-on keys").
 - Every picture, sound, video, font and document file says where it comes from (a README, LICENSE or COPYING file in

@@ -2,6 +2,27 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.92.0 beta (2026-11-20): the marks of a binder row, the fixed mind map, the shown lock
+
+- **Row marks** (`ui/RowMarks.*`): the pin and the padlock are painted (no picture files), left of the label dot:
+  `rowmarks::lockRect`, `pinRect` (the same functions for painting, clicks and tool tips; `BinderTree::pinRectOf`,
+  `lockRectOf` for the tests). The tree tracks the mouse (`setMouseTracking`, `m_hover`); a press on a pin is
+  swallowed (`m_pinPressed`: no selection, no drag) and emits `mindMapPinClicked`. Tool tips in `viewportEvent`.
+- **The fixed mind map**: the main window keeps `m_fixedMindMapId` (`fixMindMap`, `releaseMindMap`,
+  `applyFixedMindMap`), in the project's view state (`uiState["fixedMindMap"]`, per computer, so the project file
+  is not touched). `Inspector::setFixedMindMapId` makes `refreshMindMap` show that item's board and
+  `updateTabDots` mark its state; `MindMapPanel::setFixed` shows the line and the pressed button (the bar is built
+  anew with every board, `applyFixed` sets it again). `BinderPanel::setFixedMindMap` shows the bar above the
+  footer. Released in `applyFixedMindMap` when the item is gone or in the Trash (the model's rows signals queue it).
+  Commands `fixMindMap`, `releaseMindMap` (Navigate > Inspect), enabled by `updateMindMapActions`.
+- **The shown lock** (`core/WorkMarks.*`, `MainWindowSync.cpp`): one file per device beside each lock file,
+  `<lock>-work-<machine key>.json` (`device`, `key`, `opened`, `alive`, `docs`). Written a few seconds after the
+  list changed (`noteWorkChange`, `m_workDebounce`; the list: the documents changed since opening and each pane's
+  current document), never for the same list; removed in `releaseLocks`; left out of backups (`Zip.cpp`). Its sign
+  of life is the lock's while that device holds the lock; a device that lost the lock (`m_lockLost`) renews the file
+  itself every `renewIntervalMs`. `workmarks::others` drops lists older than `staleAfterSeconds`. Read every 30 s
+  (`m_workPoll`; `QB_WORK_MARKS_MS` in test builds), which writes nothing.
+
 ## Toolbars rearranged freely (0.91.1 beta, 2026-11-13)
 
 Reported on 0.91.0 (Kubuntu, Wayland): no order change, no way from one row into the other (nothing

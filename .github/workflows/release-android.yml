@@ -575,6 +575,8 @@ jobs:
             also+=(--also "older-$i" "$t")
           done < <(gh api "repos/$GH_REPO/releases?per_page=12" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
           python3 -I tools/download-page.py release-names "$main" site "${also[@]}"
+          # 0.92.0: the page is replaced as a whole; the update file the programs read is carried along
+          tools/keep-update-feed.sh site
           grep -o 'releases/download/[^/]*/[^"]*' site/index.html | sort -u
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0

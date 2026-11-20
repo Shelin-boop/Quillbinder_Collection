@@ -1,4 +1,5 @@
 #include "import/FileImporter.h"
+#include "core/SafeSave.h"
 #include "core/TestSwitches.h"
 
 #include "compile/PluginManager.h"
@@ -962,7 +963,7 @@ bool readTextFile(const QString &path, QTextDocument *doc, const Formatting &f, 
     return true;
 }
 
-BinderItem *importMedia(Project *p, const QString &path, BinderItem *parent, int row)
+BinderItem *importMedia(Project *p, const QString &path, BinderItem *parent, int row, QStringList *warnings)
 {
     const QFileInfo fi(path);
     ItemType t = ItemType::File;
@@ -977,7 +978,15 @@ BinderItem *importMedia(Project *p, const QString &path, BinderItem *parent, int
     it->fileExt = fi.suffix().toLower();
     it->originalFileName = fi.fileName();
     QDir().mkpath(p->contentDir(it->id));
-    QFile::copy(path, p->mediaFilePath(it));
+    // 0.92.0: a copy that fails is told, and no item is left behind without its file
+    QString why;
+    if (!safesave::copyChecked(path, p->mediaFilePath(it), &why)) {
+        if (warnings)
+            warnings->append(QObject::tr("%1 could not be copied into the project and was not imported (%2).").arg(fi.fileName(), why));
+        QDir(p->contentDir(it->id)).removeRecursively();
+        p->model()->deletePermanently(it);
+        return nullptr;
+    }
     p->notifyItemChanged(it, false);
     return it;
 }
@@ -991,7 +1000,7 @@ static bool copyTree(const QString &from, const QString &to)
         if (fi.isDir())
             ok = copyTree(fi.absoluteFilePath(), dest) && ok;
         else
-            ok = QFile::copy(fi.absoluteFilePath(), dest) && ok;
+            ok = safesave::copyChecked(fi.absoluteFilePath(), dest) && ok;
     }
     return ok;
 }
@@ -1026,11 +1035,22 @@ BinderItem *addWebPage(Project *p, const importers::WebPage &page, BinderItem *p
         it->sourceUrl = page.url; // 0.81.3: the page's address (Open Original Address, Scrivener's OriginalURL)
         const QString dir = p->contentDir(it->id);
         QDir().mkpath(dir);
-        QFile::copy(page.htmlFile, p->mediaFilePath(it));
+        // 0.92.0: a page whose file does not arrive is told and not added (before: an item without its file)
+        QString why;
+        if (!safesave::copyChecked(page.htmlFile, p->mediaFilePath(it), &why)) {
+            if (warnings)
+                warnings->append(QObject::tr("“%1”: the page could not be copied into the project and was not added (%2).").arg(title, why));
+            QDir(dir).removeRecursively();
+            p->model()->deletePermanently(it);
+            return nullptr;
+        }
         // the pictures: folders beside the page
         const QFileInfo hf(page.htmlFile);
+        bool pictures = true;
         for (const QFileInfo &fi : hf.dir().entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot))
-            copyTree(fi.absoluteFilePath(), dir + QLatin1Char('/') + fi.fileName());
+            pictures = copyTree(fi.absoluteFilePath(), dir + QLatin1Char('/') + fi.fileName()) && pictures;
+        if (!pictures && warnings)
+            warnings->append(QObject::tr("“%1”: some of the page's pictures could not be copied; the page was added without them.").arg(title));
     } else {
         it = p->model()->createItem(parent, row, ItemType::Text, title);
         QTextDocument tmp;
@@ -1111,10 +1131,14 @@ QList<BinderItem *> importFiles(Project *p, const QStringList &paths, BinderItem
                 if (warnings)
                     warnings->append(QObject::tr("%1: only text can be placed in the Draft; it was added to Research instead.")
                                          .arg(fi.fileName()));
-                out << importMedia(p, path, p->research(), -1);
+                if (BinderItem *m = importMedia(p, path, p->research(), -1, warnings))
+                    out << m;
                 continue;
             }
-            out << importMedia(p, path, parent, row);
+            if (BinderItem *m = importMedia(p, path, parent, row, warnings))
+                out << m;
+            else
+                continue;
         }
         if (row >= 0)
             ++row;

@@ -20,10 +20,14 @@
 #include <cstring>
 #include <QFileInfo>
 #include <QHash>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QLocale>
 #include <QRegularExpression>
+#include <QSaveFile>
 #include <QStandardPaths>
 #include <QStorageInfo>
+#include <QUuid>
 #ifdef Q_OS_UNIX
 #include <unistd.h>
 #elif defined(Q_OS_WIN)
@@ -327,6 +331,65 @@ QString workFolderFor(const QString &backupFolder)
            + QString::fromLatin1(QCryptographicHash::hash(place.toUtf8(), QCryptographicHash::Sha1).toHex().left(12));
 }
 
+QString idFromSeed(const QString &seed)
+{
+    static const char alphabet[] = "23456789ABCDEFGHJKMNPQRSTUVWXYZ"; // 31: no 0, O, 1, I, L
+    const QByteArray h = QCryptographicHash::hash(seed.toUtf8(), QCryptographicHash::Sha256);
+    quint64 n = 0;
+    for (int i = 0; i < 8; ++i)
+        n = (n << 8) | quint8(h.at(i));
+    QString id;
+    for (int i = 0; i < 5; ++i) {
+        id += QLatin1Char(alphabet[n % 31]);
+        n /= 31;
+    }
+    return id;
+}
+
+QString projectId(const Project *p)
+{
+    // a project in Scrivener format: the Identifier of its .scrivx, as the working copy's state keeps it
+    QString seed;
+    QFile state(p->settingsDir() + QLatin1String("/scrivener-sync.json"));
+    if (!p->scrivenerPath.isEmpty() && state.open(QIODevice::ReadOnly))
+        seed = QJsonDocument::fromJson(state.readAll()).object().value(QStringLiteral("identifier")).toString().toUpper();
+    // Quillbinder's own format: the seed of a copy the program made (giveNewId), else the id of the Draft folder
+    // (made once with the project, and it cannot be deleted)
+    QFile own(p->settingsDir() + QLatin1String("/backup-id.txt"));
+    if (seed.isEmpty() && own.open(QIODevice::ReadOnly))
+        seed = QString::fromUtf8(own.read(200)).trimmed();
+    if (seed.isEmpty() && p->draft())
+        seed = p->draft()->id;
+    if (seed.isEmpty())
+        seed = p->title();
+    return idFromSeed(seed);
+}
+
+bool giveNewId(const QString &projectFolder)
+{
+    const QString dir = projectFolder + QLatin1String("/settings");
+    if (!QDir().mkpath(dir))
+        return false;
+    QSaveFile f(dir + QLatin1String("/backup-id.txt"));
+    const QByteArray seed = QUuid::createUuid().toString(QUuid::WithoutBraces).toUtf8() + '\n';
+    return f.open(QIODevice::WriteOnly) && f.write(seed) == seed.size() && f.commit();
+}
+
+QString nameStart(const Project *p)
+{
+    return text::safeFileName(p->title()) + QLatin1String(" #") + projectId(p);
+}
+
+namespace {
+// "<title> #<ID>" without its ID; the title itself when it carries none
+QString withoutId(const QString &title)
+{
+    static const QRegularExpression id(QStringLiteral(" #[2-9A-HJKMNP-Z]{5}$"));
+    const QRegularExpressionMatch m = id.match(title);
+    return m.hasMatch() ? title.left(m.capturedStart()) : title;
+}
+} // namespace
+
 bool isOwnBackupName(const QString &fileName)
 {
     const QRegularExpressionMatch m = ownForm().match(fileName);
@@ -360,15 +423,17 @@ QStringList backupsFor(const Project *p, const QString &dirIn)
 {
     const QString dir = dirIn.isEmpty() ? defaultDirectory() : dirIn;
     const QString mine = text::safeFileName(p->title());
-    const QString begins = mine + QLatin1String(" bak ");
+    const QString begins = mine + QLatin1String(" bak "), beginsWithId = mine + QLatin1String(" #");
     QStringList out;
     const QStringList all = zipsIn(dir, QStringLiteral("* bak *.zip"));
     for (const QString &f : all) {
         const QString name = QFileInfo(f).fileName();
         // a name in the program's own form says exactly which title it is of; any other one (a sync program's copy)
-        // is taken by how it begins
+        // is taken by how it begins. 0.92.0: with this project's ID, with another ID (a project of the same title)
+        // or without one (a backup of a version before): all are offered, so that nothing gets out of reach
         const QString title = ownTitle(name);
-        if (title.isEmpty() ? name.startsWith(begins) : title == mine)
+        if (title.isEmpty() ? (name.startsWith(begins) || (name.startsWith(beginsWithId) && withoutId(name.left(name.indexOf(QLatin1String(" bak ")))) == mine))
+                            : withoutId(title) == mine)
             out << f;
     }
     return out;
@@ -390,12 +455,14 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
     // 0.91.0: every backup goes straight into the folder given (see Backup.h); the backups of this project are those
     // that carry its title, and only they are counted and cleaned up
     const QString dir = dirIn.isEmpty() ? defaultDirectory() : dirIn;
-    const QString mine = text::safeFileName(p->title());
+    // 0.92.0: "<title> #<ID>": the backups of this project, and no other project's of the same title (Backup.h)
+    const QString plainTitle = text::safeFileName(p->title());
+    const QString mine = nameStart(p);
     // Backups that waited for the project's own folder of 0.70.0 to 0.90.4 (it could not be reached then) wait in
     // that folder's work folder; they are put into the backup folder with this backup.
     QStringList formerWork;
     if (where == Where::BackupFolder) {
-        const QString wouldBe = QDir(dir).filePath(mine + QLatin1Char(' ') + projectKey(p));
+        const QString wouldBe = QDir(dir).filePath(plainTitle + QLatin1Char(' ') + projectKey(p));
         formerWork << workFolderFor(wouldBe);
         const QString former = formerProjectFolder(p, dir);
         if (!former.isEmpty() && QDir::cleanPath(former) != QDir::cleanPath(wouldBe))
@@ -422,7 +489,7 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
     }
     noteTarget(work, dir);
     sweepWork(work);
-    const QString stem = text::safeFileName(p->title()) + QLatin1String(" bak ")
+    const QString stem = mine + QLatin1String(" bak ")
                          + QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd HH-mm-ss"));
     // two backups in the same second (File > Save twice with "back up with each manual save",
     // 0.21): the second gets a number instead of failing. The name must be free in the backup folder and among
@@ -782,6 +849,10 @@ QString restore(const QString &zipFile, const QString &intoParent, QString *proj
         // what was written stays: the writer can look at it
     }
     const QString projectDir = QDir(dest).filePath(top);
+    // 0.92.0: the restored project is a project of its own, with its own backups (not for a .scriv: its ID comes
+    // from Scrivener's identifier)
+    if (!top.endsWith(QLatin1String(".scriv"), Qt::CaseInsensitive) && QDir(projectDir).exists())
+        giveNewId(projectDir);
     if (projectFile) {
         if (top.endsWith(QLatin1String(".scriv"), Qt::CaseInsensitive)) {
             *projectFile = projectDir;

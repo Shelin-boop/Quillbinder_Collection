@@ -113,7 +113,8 @@ struct Installed {
 // were built for ("runtime" in manifest.json); one without it was made before 0.80.0 (Qt 6.4).
 bool fitsRuntime(const Manifest &m);
 QList<Installed> installedAddons();
-void setEnabled(const QString &id, bool on);
+// 0.92.0: false with the reason when the choice could not be written (it is then undone at the next start)
+bool setEnabled(const QString &id, bool on, QString *error = nullptr);
 bool removeAddon(const QString &id, QString *error);
 QString addonsRoot();
 

@@ -2,6 +2,40 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.92.0 beta (2026-11-20): the check for updates, the translator as one of the project's own add-ons
+
+- **The rules** are `core/UpdateCheck.*` (no network, no windows): `readFeed` (the release key's signature over the
+  file's bytes), `offersFor` (a program update when the runtime is the same and the file has one, else the new
+  AppImage, the full one for the full version; add-ons only when installed, newer and fitting), `State`
+  (`<data>/updates-state.json`), `toShow`, `applyDelay`, `applyIgnore`, `autoCheckDue`. The form of the file is in
+  the header.
+- **The network and the windows** are `ui/UpdateChecker.*`: no `QNetworkAccessManager` exists until a look runs.
+  `startAutomatic` is called from `main.cpp` 4 s after the start, when no start window is open (not with
+  `QB_NO_UPDATE_CHECK` set, which the scripted runs set). A plain GET: user agent "Quillbinder", no cookies, no
+  cache, redirects only to https. Two tries (`QB_TEST_UPDATE_RETRY_MS`), then `MainWindow::showFadingNote`. HTTP 404
+  is "no information" and quiet. A download is hashed while it comes in and must be the size and SHA-256 of the
+  signed list; packages go through `addons::install(..., Unsigned::Refuse)`; `replaceOwnFile` swaps the AppImage
+  (`$APPIMAGE`) and keeps `<name>.before-update`.
+- **Test switches**: `QB_TEST_UPDATE_URL` (also allows `http://127.0.0.1:` downloads), `QB_TEST_UPDATE_NOW` (the
+  clock), `QB_TEST_APPIMAGE`, `QB_TEST_NO_RESTART`, `QB_TEST_SIGNING_KEY` (as for packages). v0920 runs a small
+  server inside the test.
+- **The file** is made by `tools/update-feed.py` in the job `sign-checksums` of `release.yml` (signed with the
+  release key, verified with the public one) and published by `download-page`; the Windows and Android workflows
+  call `tools/keep-update-feed.sh` because the page is replaced as a whole. `packaging/update-feed/security.json`
+  marks security versions. The address is built in: `https://shelin-boop.github.io/Quillbinder_Collection/updates-1.json`.
+- **TLS**: the AppImage carries `plugins/tls/libqopensslbackend.so` since 0.92.0 (`build-appimage.sh`); OpenSSL 3 is
+  the system's. A program update that runs on an AppImage before 0.92.0 has no TLS part: `QSslSocket::supportsSsl()`
+  is false, the automatic look stays quiet and "Check for Updates Now" says why.
+- **Translation and Proofreading 1.2** is `addons/translation-proofreading`: `source/` is the add-on as a project of
+  its own (unchanged from 1.1 but for the version and the model address `kRepo` in `src/ModelStore.cpp`), `stage.sh`
+  builds it into `<build>/translator` and stages it with the add-on's `packaging/make-addon.sh`
+  (`TP_STAGE_DIR`); exit code 3 without the engine libraries of `tools/get-translator-deps.sh`
+  (`build/translator-deps`; the release workflow keeps them under the hash of `build-deps.sh` and fails when the
+  add-on is missing). The models: releases `models-1`, `models-2` of this repository, copied by
+  `.github/workflows/models-mirror.yml` (push the branch `models-mirror`). The add-on's own checks need models and
+  are not part of the suites. `official-addons/translation-proofreading.json` still describes 1.1 for Windows and
+  Android.
+
 ## 0.91.2: the download page per system, a compiler cache for the sessions (2026-11-15)
 
 - **The download page takes each system's newest files.** Since the last number is counted per system (working rules,

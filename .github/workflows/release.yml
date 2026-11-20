@@ -194,6 +194,30 @@ jobs:
           path: build/whisper
           key: deps-linux-whisper-${{ steps.recipe.outputs.whisper }}
 
+      # 0.92.0: the engine libraries of the add-on "Translation and Proofreading" (oneDNN, CTranslate2, SentencePiece,
+      # from their sources at fixed versions; about 40 minutes when they are built), kept under the hash of their recipe
+      - name: The translator's engine libraries (the name of their cache)
+        id: translator-recipe
+        run: echo "hash=$(tools/get-translator-deps.sh --recipe)" | tee -a "$GITHUB_OUTPUT"
+
+      - name: The translator's engine libraries from the cache
+        id: translator-cache
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/translator-deps
+          key: deps-linux-translator-${{ steps.translator-recipe.outputs.hash }}
+
+      - name: The translator's engine libraries (built when the cache has none)
+        run: tools/ci-step.sh translator-deps tools/get-translator-deps.sh
+
+      - name: The translator's engine libraries into the cache (main only)
+        if: github.ref == 'refs/heads/main' && needs.version.outputs.fresh != 'true' && steps.translator-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/translator-deps
+          key: deps-linux-translator-${{ steps.translator-recipe.outputs.hash }}
+
       - name: The compiled files of the last build (ccache)
         if: needs.version.outputs.fresh != 'true'
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
@@ -227,6 +251,10 @@ jobs:
         run: |
           mkdir -p dist
           tools/ci-step.sh addons packaging/linux/build-addons.sh build-appimage dist
+          # 0.92.0: the two add-ons that are left out of a local build without their libraries must be in a release
+          for must in speech-transcription translation-proofreading; do
+            [ -f "dist/$must.qbpkg" ] || { echo "::error::the add-on $must was not built"; exit 1; }
+          done
           mapfile -t NEWS < <(python3 -I tools/release-notes.py --whats-new)
           BUILD=build-appimage OUT=dist tools/ci-step.sh update packaging/linux/build-update.sh "${NEWS[@]}"
           cp build-appimage/*.AppImage dist/
@@ -580,9 +608,27 @@ jobs:
           name: assembled
           path: assembled
 
+      # 0.92.0: the file the program's check for updates reads (tools/update-feed.py, packaging/update-feed/README.md).
+      # The blocks of the other systems come from the file published so far, taken only when its signature is the
+      # release key's. Fetched before the key is on the disk.
+      - name: The update file published so far
+        run: |
+          mkdir -p previous
+          page=https://shelin-boop.github.io/Quillbinder_Collection
+          if curl -fsSL --max-time 30 -o previous/updates-1.json "$page/updates-1.json" \
+             && curl -fsSL --max-time 30 -o previous/updates-1.json.sig "$page/updates-1.json.sig" \
+             && openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in previous/updates-1.json \
+                  -sigfile previous/updates-1.json.sig; then
+            echo "the published file is taken as the start"
+          else
+            rm -f previous/updates-1.json previous/updates-1.json.sig
+            echo "no published file (or its signature is not the release key's): the new one starts empty"
+          fi
+
       - name: Checksums and their signature
         env:
           QB_SIGNING_KEY: ${{ secrets.QB_SIGNING_KEY }}
+          TAG: ${{ needs.version.outputs.tag }}
         run: |
           mkdir -p /tmp/qb-signing && chmod 700 /tmp/qb-signing
           ( umask 077; printf '%s\n' "$QB_SIGNING_KEY" > /tmp/qb-signing/key.pem )
@@ -593,9 +639,19 @@ jobs:
           cp release/sources/SOURCES.txt release/dist/THIRD-PARTY-SOURCES.txt
           (cd release/dist && rm -f SHA256SUMS.txt SHA256SUMS.txt.sig && sha256sum -- * > /tmp/SHA256SUMS.txt && mv /tmp/SHA256SUMS.txt SHA256SUMS.txt)
           openssl pkeyutl -sign -rawin -inkey /tmp/qb-signing/key.pem -in release/dist/SHA256SUMS.txt -out release/dist/SHA256SUMS.txt.sig
+          # 0.92.0: the update file of this release, and its signature
+          mkdir -p release/updates
+          prev=()
+          [ -f previous/updates-1.json ] && prev=(--previous previous/updates-1.json)
+          python3 -I tools/update-feed.py --dist release/dist --tag "$TAG" --repo "$GITHUB_REPOSITORY" \
+            --out release/updates/updates-1.json "${prev[@]}"
+          openssl pkeyutl -sign -rawin -inkey /tmp/qb-signing/key.pem -in release/updates/updates-1.json \
+            -out release/updates/updates-1.json.sig
           rm -rf /tmp/qb-signing
           openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in release/dist/SHA256SUMS.txt \
             -sigfile release/dist/SHA256SUMS.txt.sig
+          openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in release/updates/updates-1.json \
+            -sigfile release/updates/updates-1.json.sig
 
       - name: Hand the files to the job "publish"
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -671,6 +727,14 @@ jobs:
         with:
           persist-credentials: false
 
+      # 0.92.0: the signed update file of this release goes onto the page with it (a rerun after the files of the
+      # run are gone keeps the file the page has: tools/keep-update-feed.sh)
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        continue-on-error: true
+        with:
+          name: release-files
+          path: release-files
+
       - name: The page
         env:
           GH_TOKEN: ${{ github.token }}
@@ -692,6 +756,8 @@ jobs:
           done < <(gh api "repos/$GH_REPO/releases?per_page=12" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
           python3 -I tools/download-page.py release-names "$TAG" site "${also[@]}"
           grep -o 'releases/download/[^/]*/[^"]*' site/index.html | sort -u
+          tools/keep-update-feed.sh site release-files/updates
+          ls -la site
 
       # a name per attempt (P7, 2026-11-15): a rerun of this job finds no artifact of the same name from the attempt before
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0

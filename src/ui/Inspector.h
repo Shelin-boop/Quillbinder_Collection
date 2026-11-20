@@ -46,6 +46,11 @@ public:
     void setItem(BinderItem *item);
     void setEditor(TextEditor *editor);
     BinderItem *item() const { return m_item; }
+    // 0.92.0: the item whose mind map the Mind Map tab keeps showing ("" = the selected item's, as before). Only
+    // that tab is fixed; the other tabs follow the selected document.
+    void setFixedMindMapId(const QString &id);
+    QString fixedMindMapId() const { return m_fixedMapId; }
+    BinderItem *fixedMindMapItem() const;
     void showTab(Tab t);
     // 0.90.1 (the usability review of 0.90.0, UR-07): the keyboard into the synopsis or the document notes (Navigate >
     // Inspect > Go to Synopsis / Go to Document Notes); false when there is nothing to write in (no document)
@@ -93,6 +98,7 @@ signals:
     void openItemRequested(qb::BinderItem *item);
     void openNoteRequested(qb::BinderItem *item, const QString &noteId);
     void openMindMapWindow(qb::MindMapDoc *doc);
+    void mindMapFixToggleRequested();   // 0.92.0: the pin button of the Mind Map tab
     void openObjectsWindow(const QString &objectId);
     // a link in a long text of an object that is no object link (documents, web pages)
     void objectLinkActivated(const QString &href);
@@ -132,6 +138,7 @@ private:
 
     QPointer<Project> m_project;
     BinderItem *m_item = nullptr;
+    QString m_fixedMapId;   // 0.92.0
     QPointer<TextEditor> m_editor;
     QStackedWidget *m_stack = nullptr;
     QList<QToolButton *> m_tabButtons;

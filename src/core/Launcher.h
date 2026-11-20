@@ -53,7 +53,8 @@ bool selfTest(const QString &dir, const QString &binaryName, QString *error);
 
 // Shared state file <data>/core/state.json
 QJsonObject readState();
-void writeState(const QJsonObject &state);
+// 0.92.0: false with the reason when the file could not be written (the old file stays)
+bool writeState(const QJsonObject &state, QString *error = nullptr);
 
 } // namespace launcher
 } // namespace qb

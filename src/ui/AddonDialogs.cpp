@@ -327,7 +327,12 @@ AddonManagerDialog::AddonManagerDialog(QWidget *parent) : QDialog(parent)
     connect(m_addons, &QTreeWidget::itemChanged, this, [this](QTreeWidgetItem *it, int col) {
         if (m_updating || col != 0)
             return;
-        addons::setEnabled(it->data(0, Qt::UserRole).toString(), it->checkState(0) == Qt::Checked);
+        // 0.92.0 (QBA-F05): a choice that could not be written is told (before: back to the old state after the
+        // restart, without a word)
+        QString why;
+        if (!addons::setEnabled(it->data(0, Qt::UserRole).toString(), it->checkState(0) == Qt::Checked, &why))
+            QMessageBox::warning(this, tr("Add-on Manager"),
+                                 tr("The change could not be saved, so it will be undone when the program starts again.\n\n%1").arg(why));
         if (it->data(0, Qt::UserRole + 1).toBool()) { // has plugins: needs a restart
             m_restart = true;
             m_restartHint->setText(tr("Changes take effect after a restart."));

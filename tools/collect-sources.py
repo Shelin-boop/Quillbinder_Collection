@@ -47,7 +47,8 @@ RUNTIME_REPO = "https://github.com/AppImage/type2-runtime"
 
 # library files of this system that add-ons carry (addons/*/stage.sh); since 0.80.0 the add-ons take Qt's parts
 # (Qt Multimedia, the TLS plugin) from Qt's own build, whose source is the Qt entry below
-ADDON_LIBRARIES = []
+# 0.92.0: the GNU OpenMP runtime the add-on "Translation and Proofreading" brings (Ubuntu's libgomp1, unchanged)
+ADDON_LIBRARIES = ["/usr/lib/x86_64-linux-gnu/libgomp.so.1"]
 QT_URL = "https://download.qt.io/official_releases/qt/%s/%s/single/%s"
 
 

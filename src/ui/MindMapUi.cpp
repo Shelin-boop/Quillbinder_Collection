@@ -1,5 +1,6 @@
 #include "ui/MindMapUi.h"
 #include "ui/MenuClear.h"
+#include "ui/RowMarks.h"
 #include "ui/ColorPalette.h"
 #include "core/ItemIcons.h"
 #include "core/Project.h"
@@ -757,6 +758,8 @@ void MindMapPanel::rebuild()
     m_view = nullptr;
     m_findBar = nullptr;
     m_footer = nullptr;
+    m_fixedLine = nullptr;
+    m_fixButton = nullptr;
     if (m_ctl)
         m_ctl->deleteLater();
     m_ctl = nullptr;
@@ -819,11 +822,27 @@ void MindMapPanel::rebuild()
     menuBtn->setMenu(menu);
     bl->addWidget(menuBtn);
     bl->addStretch(1);
+    // 0.92.0: fixes the tab on the board shown, or releases it
+    m_fixButton = new QToolButton(m_bar);
+    m_fixButton->setObjectName(QStringLiteral("mmFixButton"));
+    m_fixButton->setCheckable(true);
+    m_fixButton->setAutoRaise(true);
+    m_fixButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    m_fixButton->setIconSize(QSize(18, 18));
+    connect(m_fixButton, &QToolButton::clicked, this, &MindMapPanel::fixToggleRequested);
+    bl->addWidget(m_fixButton);
     QToolButton *help = button(QStringLiteral("mm_help"), tr("How the mind map works: notes, lines, arrows (and an example board)"));
     help->setObjectName(QStringLiteral("mmHelpButton"));
     QToolButton *big = button(QStringLiteral("mm_openWindow"), tr("Open this mind map in a large window (with the inspector of the board)"));
     big->setObjectName(QStringLiteral("mmOpenWindow"));
     lay->addWidget(m_bar);
+    m_fixedLine = new QLabel(m_holder);
+    m_fixedLine->setObjectName(QStringLiteral("mmFixedTitle"));
+    m_fixedLine->setTextFormat(Qt::PlainText);
+    m_fixedLine->setMargin(3);
+    m_fixedLine->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
+    lay->addWidget(m_fixedLine);
+    applyFixed();
     m_findBar = new MindMapFindBar(m_ctl, m_holder);
     m_ctl->setFindBar(m_findBar);
     lay->addWidget(m_findBar);
@@ -841,6 +860,31 @@ void MindMapPanel::rebuild()
     // the zoom and place this board had in the inspector (0.21.1)
     m_view->setViewMemory(m_project, m_itemId, QStringLiteral("inspector"));
     m_stack->setCurrentWidget(m_holder);
+}
+
+void MindMapPanel::setFixed(bool fixed, const QString &title)
+{
+    m_fixed = fixed;
+    m_fixedTitle = title;
+    applyFixed();
+}
+
+void MindMapPanel::applyFixed()
+{
+    if (m_fixButton) {
+        m_fixButton->setChecked(m_fixed);
+        m_fixButton->setIcon(rowmarks::pinIcon(palette().color(m_fixed ? QPalette::Highlight : QPalette::WindowText), m_fixed));
+        m_fixButton->setText(m_fixed ? tr("Release") : tr("Fix"));
+        m_fixButton->setToolTip(m_fixed ? tr("Release this mind map: the tab follows the selected item again")
+                                        : tr("Fix this mind map: the tab keeps showing it whatever is selected"));
+    }
+    if (m_fixedLine) {
+        m_fixedLine->setVisible(m_fixed);
+        const QString text = tr("Fixed: %1").arg(m_fixedTitle.isEmpty() ? tr("Untitled") : m_fixedTitle);
+        m_fixedLine->setText(text);
+        m_fixedLine->setToolTip(tr("This is the mind map of \"%1\", not of the selected item. The pin button releases it.")
+                                    .arg(m_fixedTitle));
+    }
 }
 
 // ------------------------------------------------------------------ window

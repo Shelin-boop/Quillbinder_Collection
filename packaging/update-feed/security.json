@@ -1,0 +1,9 @@
+{
+  "comment": "The versions that were security updates, per system (the program) and per add-on. tools/update-feed.py reads this file when a release is made: a version listed here makes the update window say \"recommended (security)\" for everyone who has an older version, with no \"Ignore This Version\". Add a version here in the commit that raises it, when it closes a security hole; nothing else marks a release as a security update.",
+  "program": {
+    "linux-x86_64": [],
+    "windows-x64": [],
+    "android-arm64": []
+  },
+  "addons": {}
+}

@@ -2,6 +2,7 @@
 #include <QSet>
 #include <QDirIterator>
 #include <limits>
+#include "core/FailureKind.h"
 #include "core/SafeSave.h"
 #include "core/SaveBatch.h"
 #include "core/PathSafety.h"
@@ -994,6 +995,7 @@ bool Project::save(QString *error)
 
 bool Project::saveImpl(QString *error, bool quick)
 {
+    failure::clear();   // 0.92.0: the kind of a failure belongs to the save it happens in (FailureKind.h)
     timing::Laps laps;
     m_saveTimer.stop();
     m_gapTimer.stop();
@@ -1008,6 +1010,7 @@ bool Project::saveImpl(QString *error, bool quick)
                                "Nothing was written; your changes are kept while the project stays open. Put the folder "
                                "back and save again.")
                                 .arg(QDir::toNativeSeparators(m_folder));
+        failure::note(failure::Kind::FolderGone);   // 0.92.0
         if (error)
             *error = why;
         m_lastSaveFailed = true;
@@ -1598,12 +1601,23 @@ bool Project::saveIndex(QString *error)
     // 0.64: the project file was written by someone else since it was read here (another computer
     // through a sync program): that version is kept before this one replaces it
     bool indexElsewhere = syncsafe::changedSince(m_indexMark, m_indexFile) && QFileInfo::exists(m_indexFile);
-    // 0.65.0 (audit F14): the same size and time, other bytes than read or written here
-    if (!indexElsewhere && m_indexMark.known && !m_indexSha.isEmpty() && QFileInfo::exists(m_indexFile)) {
+    // what the file holds now (0.65.0, audit F14; 0.92.0)
+    QByteArray shaOnDisk;
+    if (m_indexMark.known && QFileInfo::exists(m_indexFile)) {
         QFile cur(m_indexFile);
-        if (cur.open(QIODevice::ReadOnly)
-            && QCryptographicHash::hash(cur.readAll(), QCryptographicHash::Sha256) != m_indexSha)
+        if (cur.open(QIODevice::ReadOnly))
+            shaOnDisk = QCryptographicHash::hash(cur.readAll(), QCryptographicHash::Sha256);
+    }
+    if (!shaOnDisk.isEmpty() && !m_indexSha.isEmpty()) {
+        if (shaOnDisk != m_indexSha) {
+            // 0.65.0 (audit F14): other bytes than read or written here, whatever its size and time say
             indexElsewhere = true;
+        } else if (indexElsewhere) {
+            // 0.92.0: the content decides, not the time. Only the file's time changed (a sync program sets it after
+            // its upload): no other version, nothing kept or told; the remembered stamp is renewed
+            indexElsewhere = false;
+            m_indexMark = syncsafe::stampOf(m_indexFile);
+        }
     }
     if (indexElsewhere) {
         const QString copy = syncsafe::keepCopy(m_indexFile, settingsDir(), tr("project file"));
@@ -1623,6 +1637,18 @@ bool Project::saveIndex(QString *error)
     // 0.65.0 (audit F19): with the other files of the save; the marks are cleared once it is in place
     QString why;
     const QByteArray sha = QCryptographicHash::hash(bytes, QCryptographicHash::Sha256);
+    // 0.92.0: the file holds exactly these bytes already: not written again (as texts since 0.64), so that a save
+    // which changes nothing in the project file gives a sync program nothing to carry, and no round of
+    // save, sync, changed time, save can start
+    if (!indexElsewhere && !shaOnDisk.isEmpty() && shaOnDisk == sha) {
+        m_indexMark = syncsafe::stampOf(m_indexFile);
+        m_indexSha = sha;
+        m_indexDirty = false;
+        m_countsDirty = false;
+        m_lastIndexWrite.start();
+        writeUiState();
+        return true;
+    }
     if (!savebatch::put(m_indexFile, bytes, &why, tr("project file"), QString(), [this, sha] {
             m_indexMark = syncsafe::stampOf(m_indexFile);
             m_indexSha = sha;
