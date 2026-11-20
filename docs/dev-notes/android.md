@@ -2,6 +2,73 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## Android 0.92.0 (2026-11-20): pulled to Linux 0.92.0 in the one repository, a tablet with keyboard and mouse
+
+What 0.91.3 showed on a tablet with an external keyboard and mouse (the findings of 2026-11-16): About could not be closed, some windows had no button that closes them, menus hid and
+jittered and did not fit at small sizes, Ctrl + wheel did not zoom, and the binder's width could not be changed
+upright. The decisions: Android 0.92.0 at the function level of Linux 0.92.0, on Qt 6.12.0 with a workaround for Qt's
+fault (Qt 6.12.1 later as Android 0.92.1), all the program's own points of the report, the pin and the padlock by
+touch, the check for updates that only tells and opens the APK in the browser, released without a trial build.
+
+- **`src/android/MobileCare.cpp`, `mobile::installCare()`** (main.cpp right after the style; the system test app's
+  `cs_common.cpp` too): switches `windowcare::tabletMode()` on, wraps the style (`TabletStyle`: `SH_Menu_Scrollable`,
+  `PM_SplitterWidth` 7 with three dots), and one application filter:
+  - **Keys with the mouse**: Qt 6.12.0 for Android (`androidjniinput.cpp`, `mouseDown/Up/Move/Wheel`) sends mouse and
+    wheel events with `Qt::NoModifier`, and each clears `QGuiApplicationPrivate::modifier_buttons`. The filter keeps
+    Ctrl, Shift, Alt, Meta from the key events (a modifier key's press and release; the other keys carry the state)
+    and adds them with `QInputEvent::setModifiers` to mouse and wheel events. It acts on the window's event too, so
+    that `QApplication::notify` captures the corrected modifiers again for the widget's event: Qt's item views read
+    the global state in `currentChanged` (`selectionCommand(index, nullptr)`), and Shift + click failed in the
+    preview until the clicks went through the window as on Android (`QTest::mouseClick(QWindow *, ...)`).
+  - **Back** (`Qt::Key_Back`; Qt puts the app away when the press was not accepted, `keyUp` in the same file): a
+    popup, a tip, the modal window, the active window or the window shown last (non-modal windows such as Targets
+    do not get the keyboard) is closed; with the main window alone the filter does nothing.
+  - **Windows** (on `Show`): one of the program's own dialogs (`QDialog` or `qb::...`, not Qt's message boxes and
+    file dialogs) or a `QMainWindow` with no button at all gets a Close row (`windowcare::addCloseButton`, a bottom
+    toolbar for `QMainWindow`); a dialog that cannot be as small as the usable area gets its layout moved into a
+    `QScrollArea` (`setLayout` takes a layout from another widget), its `QDialogButtonBox` rows below it, and its
+    least size reset (the old layout had set it); then `windowcare::fitInto`. Again on `availableGeometryChanged`.
+  - **Menus of the menu bar**: when `QMenuBar` put one over the bar (it does when the menu fits neither below nor
+    above), it is moved below its title and made as high as the room; it scrolls (`SH_Menu_Scrollable`).
+  - **Panes**: a `QStackedWidget` of the main window counts only its shown page for its least width (the other pages'
+    horizontal policy `Ignored`, restored when shown): text 402 -> 275, inspector 317 -> 253 px, so at 800 and 736 px
+    upright the binder, the text and the inspector fit and the line moves.
+  - **The line between panes by mouse**: a real mouse (`MouseEventNotSynthesized`, device type `Mouse`) pressed up to
+    9 px beside a `QSplitterHandle` drives the handle, as `MobileTouch.cpp` does for fingers.
+- **Shared code behind `windowcare::tabletMode()`** (compiled on Linux, never on there): `BinderTree::pinShownOn`
+  (the row under the mouse, on a tablet also the one selected row; a click on a pin that is not shown does nothing
+  there), a tap on the padlock shows `lockTip` with `QToolTip` after the release, `showItemContextMenu` adds
+  `fixMindMap` and `releaseMindMap` for the binder, `showAbout` is a `QDialog` with a `QTextBrowser`.
+- **The check for updates**: `Offer::Kind::NewApk` for a system `android-...`: always the block's `"apk"`, never a
+  program update; `UpdateChecker::installNext` opens its address with `QDesktopServices::openUrl` (the browser
+  downloads, Android installs; no `REQUEST_INSTALL_PACKAGES`). Four texts only Android shows, in the translation
+  file. `tools/update-feed.py --system android-arm64`: `"apk"`, the add-ons with `platform: android-arm64`, the
+  headlines of `## Android <version>` first. `release-android.yml` writes and signs Android's block, checks that the
+  others are unchanged, and publishes it with the page.
+- **Translation and Proofreading 1.2**: `packaging/android/android-translator.sh <abi> <out>` (the add-on's own
+  `build-deps-android.sh`, cached by the workflows under its hash and the NDK; its CMake project with Qt's Android
+  toolchain; `check-exports.sh`; `make-addon-android.sh`; then the libraries' machine, 16 KB segments and needs) ->
+  `translation-proofreading-android-<arm64|x86_64>.qbpkg`. `android-ci.sh` puts it into `assets/full-addons`
+  (`QB_ANDROID_FULL_ADDONS`: the release's signed one). `mobile::installFullAddons("assets:/full-addons")` (main.cpp,
+  before the plug-ins load) copies the packages out of the APK and calls `addons::installBundled` (once per version).
+  The release: `build` -> `sign-packages` (add-on key, certificate of the release key) -> `sign-apk` (the signed
+  package replaces the unsigned one in the APK with `zip -0`, checked by SHA-256, then zipalign and apksigner with
+  `--v4-signing-enabled false`). The system test's build job makes the x86_64 package (`QB_ST_ADDON_FILE`); the
+  model comes from this repository's `models-1`.
+- **Packs**: their pre-releases name content, license and source (`about` in `android-deps-pack.sh`); made anew in this
+  repository by the first run, pins in `android.yml` and `android-system-test.yml`.
+- **Tests**: `tests/mobile_fit_tests.cpp` (`qb_mobile_fit_tests`, preview only), run by
+  `packaging/android/run-tablet-fit.sh <build>` at nine sizes (1472x920, 1472x836, 1920x1080, 1280x720, 1178x660,
+  960x540, 800x1200, 736x1100, 1472x420): 24 checks each, 62 windows opened by 73 commands (every command with "..."
+  and the Help menu), each inside the screen, its buttons in view, a button that closes it, Back closes it; every menu
+  below the bar, one column, its last entry in reach; About; Back; Ctrl/Shift + click and Ctrl + wheel through the
+  window; the line by mouse; pin and padlock; `offersFor` on Android; the APK's add-ons. `QB_FIT_ONLY` runs parts,
+  `QB_FIT_WIDTHS=1` prints which widgets decide the panes' least widths. `qb_mobile_tests`' check that the install
+  command is hidden on a tablet was stale since 0.91.3 and now expects it shown.
+- **Not here**: the Android trial key stays per run; `official-addons/translation-proofreading.json` keeps its Android
+  block (a Linux suite, v0913, reads the file); the menus' jitter on the writer's tablets is not explained (each menu
+  is a new Android surface under `WindowGuard`, and Qt asks for the on-screen keyboard when a menu closes).
+
 ## The translation add-on as an official add-on for Android (2026-11-16)
 
 The second step after the public APK (the APK first, the add-on next): Translation and Proofreading 1.1 for Quillbinder for
