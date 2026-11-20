@@ -11,6 +11,7 @@
 #include "ui/AppSettings.h"
 #include "ui/BinderPanel.h"
 #include "ui/LicensesDialog.h"
+#include "ui/WindowCare.h"
 
 #include "AppInfo.h"
 
@@ -29,6 +30,9 @@
 #include <QIcon>
 #include <QJsonObject>
 #include <QStatusBar>
+#include <QHBoxLayout>
+#include <QScreen>
+#include <QTextBrowser>
 #include <QLabel>
 #include <QMessageBox>
 #include <QPushButton>
@@ -144,6 +148,42 @@ void MainWindow::openWelcomeProject(bool firstStart)
 
 void MainWindow::showAbout()
 {
+    if (windowcare::tabletMode()) {
+        // Android 0.92.0: Qt gives a message box with a long text a fixed size, which can be taller than a tablet's
+        // screen (its buttons then lie below it); on a tablet About is a window whose text scrolls above its buttons
+        QDialog box(this);
+        box.setWindowTitle(tr("About %1").arg(QLatin1String(QB_APP_NAME)));
+        box.setObjectName(QStringLiteral("aboutBox"));
+        auto *lay = new QVBoxLayout(&box);
+        auto *top = new QHBoxLayout;
+        auto *icon = new QLabel(&box);
+        icon->setPixmap(QIcon(QStringLiteral(":/app/quillbinder.svg")).pixmap(64, 64));
+        icon->setAlignment(Qt::AlignTop);
+        top->addWidget(icon);
+        auto *text = new QTextBrowser(&box);
+        text->setObjectName(QStringLiteral("aboutText"));
+        text->setOpenExternalLinks(true);
+        text->setFrameShape(QFrame::NoFrame);
+        text->setHtml(aboutText());
+        top->addWidget(text, 1);
+        lay->addLayout(top, 1);
+        auto *buttons = new QDialogButtonBox(QDialogButtonBox::Close, &box);
+        QPushButton *licenses = buttons->addButton(tr("Third-Party Licenses…"), QDialogButtonBox::ActionRole);
+        licenses->setObjectName(QStringLiteral("aboutLicenses"));
+        bool wantLicenses = false;
+        connect(licenses, &QPushButton::clicked, &box, [&box, &wantLicenses] {
+            wantLicenses = true;
+            box.accept();
+        });
+        connect(buttons, &QDialogButtonBox::rejected, &box, &QDialog::reject);
+        lay->addWidget(buttons);
+        const QRect area = windowcare::usableArea(this);
+        box.resize(qMin(620, area.width() - 16), qMin(820, area.height() - 40));
+        box.exec();
+        if (wantLicenses)
+            showThirdPartyLicenses(this);
+        return;
+    }
     QMessageBox box(this);
     box.setWindowTitle(tr("About %1").arg(QLatin1String(QB_APP_NAME)));
     box.setObjectName(QStringLiteral("aboutBox"));

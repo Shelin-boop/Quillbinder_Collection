@@ -38,6 +38,19 @@ void handlesAway(); // a finger began to swipe or two fingers came down: the dro
 // picture instead, at a moment when no such call is on its way.
 void installWindowGuard();
 
+// Every window on a tablet with an external keyboard and mouse (android/MobileCare.cpp, Android 0.92.0). Call once,
+// right after the program's style is set (main.cpp): it switches the shared windowcare::tabletMode() on and
+//  - wraps the style: menus scroll instead of wrapping into columns over the menu bar; the line between two panes is
+//    wider and shows a grip;
+//  - gives a window that has no button at all a Close row (on a computer its title bar closes it), and puts the
+//    contents of one of the program's own dialogs that cannot be as small as the screen into a part that scrolls,
+//    its buttons below it in view; again when the usable area changes (the on-screen keyboard, a turned tablet);
+//  - Android's Back closes the menu, the tip or the window in front instead of putting the app away;
+//  - keeps the keys Ctrl, Shift, Alt and Meta for mouse and wheel events, which Qt 6.12.0 for Android sends without
+//    them (Ctrl + wheel zooms, Ctrl + click and Shift + click choose several documents);
+//  - a mouse pressed a few pixels beside the line between two panes takes the line along.
+void installCare();
+
 // Toolbars that fit the window's width (android/MobileBars.cpp). Call once for the main window, after it is shown.
 // A row whose toolbars need more room than the window is wide hands its last toolbars to the next row (a third row
 // and more when needed), at the start and whenever the window's width changes (a turned tablet). When that would
@@ -88,6 +101,11 @@ QString spellLanguageFor(const QString &locale);
 // Copies the dictionary files of `from` (inside the APK) into `to` (where the spelling checker looks) when they are
 // missing there or differ in size. Returns how many files it copied, -1 when one could not be copied.
 int copyDictionaries(const QString &from, const QString &to);
+
+// Android 0.92.0: installs the add-on packages of `from` (inside the APK: "assets:/full-addons", the translator) once
+// per version, as the full version on Linux and Windows does (addons::installBundled), before the program loads its
+// plug-ins. Returns how many packages it installed, 0 when there was nothing to do, -1 when one failed.
+int installFullAddons(const QString &from);
 
 // Saves the open project in full (texts, mind maps), as the program does on the way to another program. False when
 // something could not be saved (the program's own notice tells the writer).

@@ -65,8 +65,13 @@ def others(files):
         (first(lambda f: f.startswith("media-all-formats") and win(f) and f.endswith(".qbpkg")),
          "Audio and video add-ons", "sound and video in all common formats (File &gt; Install Update or Add-on)"),
     ]
+    # Android 0.92.0: the app carries Translation and Proofreading; its package on its own, for an app that lacks it
+    android = [
+        (first(lambda f: f.startswith("translation-proofreading-android") and f.endswith(".qbpkg")),
+         "Translation and Proofreading on its own", "the app has it already; for File &gt; Install Update or Add-on"),
+    ]
     keep = lambda rows: [r for r in rows if r[0]]
-    return {"linux": keep(linux), "windows": keep(windows), "android": []}
+    return {"linux": keep(linux), "windows": keep(windows), "android": keep(android)}
 
 
 def shown_of(tag):
@@ -114,7 +119,8 @@ def page(files, tag, also=()):
           "install apps: allow it for this install, then &ldquo;Install&rdquo;.",
           "At the first start Quillbinder asks for access to the tablet&rsquo;s files: it keeps projects, backups and "
           "exports in <b>Documents/Quillbinder</b>. Switch on &ldquo;All files access&rdquo; for it and go back.",
-          "A new version comes as a new APK, which installs over the old one and keeps your settings."]),
+          "A new version comes as a new APK, which installs over the old one and keeps your settings; "
+          "Help &gt; Check for Updates Now tells you when there is one."]),
     ]
     cards = []
     for key, name, detail, steps in systems:

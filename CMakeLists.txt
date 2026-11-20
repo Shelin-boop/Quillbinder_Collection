@@ -226,7 +226,7 @@ if(ANDROID)
   # with two fingers. Only this program contains it (src/android is in none of the libraries).
   target_sources(${APP_ID} PRIVATE src/android/Mobile.h src/android/MobileBars.cpp src/android/MobileTouch.cpp
     src/android/MobileHandles.cpp src/android/MobileWindows.cpp src/android/MobileFiles.cpp src/android/MobileStart.cpp
-    src/android/MobileOpen.cpp)
+    src/android/MobileOpen.cpp src/android/MobileCare.cpp)
   # MobileWindows.cpp (new windows while the keyboard program calls; a fault of Qt 6.12.0) reaches the window's
   # drawing engine and the input context through Qt's private headers.
   target_link_libraries(${APP_ID} PRIVATE Qt6::GuiPrivate)

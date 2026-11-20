@@ -50,6 +50,40 @@ its secure connection).
   status bar. A choice in the Add-on Manager, or an install, that could not be written is reported as failed; and
   when a failed install cannot put the earlier version back, the message says where it is.
 
+## Android 0.92.0 experimental (2026-11-20)
+
+Quillbinder for Android tablets at the level of Linux 0.92.0, and the first Android version released from the
+project's one repository. Everything in 0.92.0 above is in it. What is Android's own, most of it for a tablet with an
+external keyboard and mouse:
+
+- **Ctrl and Shift work with the mouse.** Ctrl + mouse wheel zooms every part, and Ctrl + click or Shift + click
+  chooses several documents in the binder. Qt 6.12.0 for Android hands mouse clicks and wheel turns to the program
+  without the keys held down; Quillbinder now remembers them from the keyboard (until a Qt version with the repair
+  is used).
+- **Every window can be closed.** About is a window whose text scrolls above its buttons (before, its buttons could
+  lie below the screen). The manual, the Quick Start Guide, the Developer Guide and the Objects window have a Close
+  button. A dialog that is taller or wider than the screen (or than the room the on-screen keyboard leaves) scrolls,
+  its buttons stay in view.
+- **Back closes the menu, the tip or the window in front** instead of putting the app away. With nothing open in
+  front of the main window, Back does what Android does.
+- **The line between two panes is easier to find and to move.** It is wider and shows a grip, and a mouse pressed a
+  few pixels beside it takes it along. On a tablet held upright the binder can be made wider or narrower: only the
+  page a pane shows counts for its least width, so the binder, the text and the inspector fit side by side.
+- **Menus stay below the menu bar.** A menu that is longer than the room below the bar scrolls there, instead of
+  wrapping into columns or covering the other menus.
+- **The fixed mind map and the shown lock by touch.** The pin shows on the selected binder row (a tablet has no
+  place "under the mouse"); a click on it fixes the mind map, and the row's menu has Fix and Release too. A tap on a
+  row's padlock shows who works on it and since when.
+- **Translation and Proofreading 1.2 comes with the app**, built from the same source as on Linux and Windows and
+  installed at the first start of the version; its models are downloaded only when you choose one. The release also
+  carries its package on its own. Before, it was the official add-on 1.1 from a repository of its own.
+- **Help > Check for Updates knows Android.** A new version is always a new APK: Quillbinder tells you when there is
+  one and opens its download in the browser (Quillbinder asks for no right to install apps); newer add-ons are
+  installed inside Quillbinder, as on Linux.
+- The tests: a preview test on the desktop opens every menu and every window a command opens at nine tablet sizes
+  (upright, and with the on-screen keyboard up) and checks that each fits, shows its buttons, and closes with a
+  button and with Back; it also checks the keys with the mouse, the line between panes, the pin and the padlock.
+
 ## Windows 0.92.0 experimental (2026-11-20)
 
 Quillbinder for Windows 11 at the level of Linux 0.92.0, and the first Windows version released from the project's

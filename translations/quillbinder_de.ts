@@ -19639,6 +19639,22 @@ Sie können %2 beenden und die Datei selbst starten:
 
 Oder laden Sie die aktuelle Version von der Seite des Projekts herunter.</translation>
     </message>
+    <message>
+        <source>The new version for Android is a new app file (APK). %1 opens its download in your browser; install it from there or from your Downloads folder. Your projects, your settings and your add-ons stay as they are.</source>
+        <translation>Die neue Version für Android ist eine neue App-Datei (APK). %1 öffnet ihren Download in Ihrem Browser; installieren Sie sie von dort oder aus Ihrem Download-Ordner. Ihre Projekte, Ihre Einstellungen und Ihre Erweiterungen bleiben, wie sie sind.</translation>
+    </message>
+    <message>
+        <source>Open the Download in the Browser</source>
+        <translation>Download im Browser öffnen</translation>
+    </message>
+    <message>
+        <source>%1 %2: its download is open in your browser. Install the file from there; your projects and settings stay.</source>
+        <translation>%1 %2: Der Download ist in Ihrem Browser geöffnet. Installieren Sie die Datei von dort; Ihre Projekte und Einstellungen bleiben.</translation>
+    </message>
+    <message>
+        <source>%1 %2: the browser could not be opened. The file is %3</source>
+        <translation>%1 %2: Der Browser konnte nicht geöffnet werden. Die Datei ist %3</translation>
+    </message>
 </context>
 <context>
     <name>qb::addons</name>

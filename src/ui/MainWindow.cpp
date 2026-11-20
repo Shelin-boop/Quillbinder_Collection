@@ -4316,6 +4316,14 @@ void MainWindow::showItemContextMenu(const QPoint &globalPos, int lookPart)
         menu.addAction(tr("Remove From Collection"), this,
                        [this] { m_binder->removeFromCollection(m_binder->selectedItems()); });
     }
+    // Android 0.92.0: on a tablet the binder row's menu also fixes or releases the mind map (the pin shows only on the
+    // selected row there)
+    if (windowcare::tabletMode() && lookPart == int(lookmenu::Part::Binder) && a.contains(QStringLiteral("fixMindMap"))) {
+        updateMindMapActions();
+        menu.addSeparator();
+        menu.addAction(a[QStringLiteral("fixMindMap")]);
+        menu.addAction(a[QStringLiteral("releaseMindMap")]);
+    }
     // the colors and fonts of the binder, corkboard or outliner (0.40.2)
     if (lookPart >= 0)
         lookmenu::add(&menu, lookmenu::Part(lookPart), this);

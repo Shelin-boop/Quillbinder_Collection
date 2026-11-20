@@ -14,6 +14,10 @@ nothing and needs no key.
 
 Windows 0.92.0: with --system windows-x64 (and --runtime, --label of the Windows files) the whole program anew is
 named by its setup programs ("setup", "setupFull": the files "...-setup.exe" of the version) instead of AppImages.
+
+Android 0.92.0: with --system android-arm64 the program is named by its APK only ("apk": the file "...-android-arm64.apk"
+of the version; Android takes no program update), and the headlines of the section "## Android <version> ..." of
+docs/CHANGES.md come before those of the version itself.
 """
 import argparse
 import datetime
@@ -27,7 +31,7 @@ import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # the files a program block can name: the program update, Linux's AppImages, Windows' setup programs
-FILE_KINDS = ("update", "appimage", "appimageFull", "setup", "setupFull")
+FILE_KINDS = ("update", "appimage", "appimageFull", "setup", "setupFull", "apk")
 
 
 def cmake_var(name):
@@ -54,18 +58,21 @@ def file_entry(path, repo, tag):
     }
 
 
-def whats_new(version):
-    """The headlines of this version's entry in docs/CHANGES.md (the bold starts of its points)."""
+def whats_new(version, own=""):
+    """The headlines of this version's entry in docs/CHANGES.md (the bold starts of its points); with `own` ("Android")
+    those of the section "## <own> <version> ..." first."""
     try:
         with open(os.path.join(ROOT, "docs", "CHANGES.md"), encoding="utf-8") as f:
             text = f.read()
     except OSError:
         return []
-    m = re.search(r"^## %s\b.*?$(.*?)(?=^## |\Z)" % re.escape(version), text, re.M | re.S)
-    if not m:
-        return []
-    lines = re.findall(r"^- \*\*(.+?)\*\*", m.group(1), re.M)
-    return [re.sub(r"\s+", " ", x).strip().rstrip(".") + "." for x in lines][:8]
+    out = []
+    for head in ([re.escape(own) + r"\s+" + re.escape(version)] if own else []) + [re.escape(version)]:
+        m = re.search(r"^## %s\b.*?$(.*?)(?=^## |\Z)" % head, text, re.M | re.S)
+        if m:
+            lines = re.findall(r"^- \*\*(.+?)\*\*", m.group(1), re.M)
+            out += [re.sub(r"\s+", " ", x).strip().rstrip(".") + "." for x in lines]
+    return out[:8]
 
 
 def manifest_of(path):
@@ -111,7 +118,7 @@ def main():
     program = {"version": version, "label": label, "runtime": runtime,
                "security": merged((security.get("program") or {}).get(args.system),
                                   (old_sys.get("program") or {}).get("security")),
-               "whatsNew": whats_new(version)}
+               "whatsNew": whats_new(version, "Android" if args.system.startswith("android") else "")}
     addons = {}
     for name in names:
         path = os.path.join(args.dist, name)
@@ -119,12 +126,14 @@ def main():
             program["appimageFull" if "-full-" in name else "appimage"] = file_entry(path, args.repo, args.tag)
         elif args.system.startswith("windows") and name.endswith("-setup.exe") and version in name:
             program["setupFull" if "-full-" in name else "setup"] = file_entry(path, args.repo, args.tag)
+        elif args.system.startswith("android") and name.endswith(".apk") and version in name:
+            program["apk"] = file_entry(path, args.repo, args.tag)
         elif name.endswith(".qbpkg"):
             m = manifest_of(path)
             if not m:
                 continue
             kind = m.get("kind")
-            if kind == "core" and m.get("version") == version:
+            if kind == "core" and m.get("version") == version and not args.system.startswith("android"):
                 program["update"] = file_entry(path, args.repo, args.tag)
             elif kind == "addon":
                 platform = m.get("platform") or ""

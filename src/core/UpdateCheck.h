@@ -16,6 +16,7 @@
 //                    "update":       {"url": "...", "name": "...", "size": 1, "sha256": "..."},   // program update
 //                    "appimage":     {...}, "appimageFull": {...}},                               // new AppImages
 //                    // Windows 0.92.0: "windows-x64" names its setup programs instead: "setup", "setupFull"
+//                    // Android 0.92.0: "android-arm64" names its APK only: "apk" (no program update)
 //        "addons": [{"id": "media-playback", "name": "Media Playback", "version": "1.5", "minApp": "0.80.0",
 //                    "runtime": "u2404-qt6.12-r1", "security": [], "file": {...}}]}}}
 // A file whose signature does not fit is ignored, and so is one older than the newest one accepted before.
@@ -38,7 +39,9 @@ struct Download {
 
 struct Offer {
     // NewSetup (Windows 0.92.0): the whole program anew as its setup program, where Linux takes a new AppImage
-    enum class Kind { ProgramUpdate, NewAppImage, Addon, NewSetup };
+    // NewApk (Android 0.92.0): a new version is a new APK, which the program does not download itself: it opens the
+    // APK's address in the browser, and the writer installs it from there (no right to install apps is asked for)
+    enum class Kind { ProgramUpdate, NewAppImage, Addon, NewSetup, NewApk };
     Kind kind = Kind::Addon;
     QString id;          // "program", or the add-on's id
     QString name;        // as shown
@@ -72,7 +75,8 @@ struct Installed {
 };
 Installed installedHere();
 // What the file offers this installation: a newer program (as a program update when the runtime is the same and
-// the file has one, else as a new AppImage; for a system "windows-...": else as its setup program) and newer
+// the file has one, else as a new AppImage; for a system "windows-...": else as its setup program; for "android-...":
+// always as its APK) and newer
 // versions of installed add-ons that fit the program.
 QList<Offer> offersFor(const Feed &feed, const QString &system, const Installed &here);
 

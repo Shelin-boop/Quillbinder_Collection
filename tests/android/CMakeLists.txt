@@ -22,6 +22,7 @@ qt_add_executable(${QB_ST_APP}
   ${CMAKE_SOURCE_DIR}/src/android/MobileTouch.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileHandles.cpp
   ${CMAKE_SOURCE_DIR}/src/android/MobileWindows.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileFiles.cpp
   ${CMAKE_SOURCE_DIR}/src/android/MobileStart.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileOpen.cpp
+  ${CMAKE_SOURCE_DIR}/src/android/MobileCare.cpp
   ${QB_RESOURCES_QRC} ${CMAKE_SOURCE_DIR}/translations/translations.qrc)
 target_include_directories(${QB_ST_APP} PRIVATE ${CS} ${CMAKE_SOURCE_DIR}/plugins/tools ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(${QB_ST_APP} PRIVATE qbui Qt6::Test Qt6::Network Qt6::GuiPrivate)

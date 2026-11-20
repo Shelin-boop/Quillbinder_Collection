@@ -41,6 +41,9 @@ public:
     void setFixedMindMapId(const QString &id);
     QString fixedMindMapId() const { return m_fixedMapId; }
     QModelIndex hoverIndex() const { return m_hover; }
+    // whether the pin of the fixed mind map may show on this row: the row under the mouse (Android 0.92.0: on a
+    // tablet also the one selected row)
+    bool pinShownOn(const QModelIndex &index) const;
     std::function<bool(const QModelIndex &)> canFixMindMap;   // set by the panel (not the Trash and what is in it)
     // 0.92.0: the documents another device works on, with the tool tip of each ("" = none): a padlock on their rows
     void setLockMarks(const QHash<QString, QString> &tips);
@@ -78,6 +81,7 @@ private:
     QPersistentModelIndex m_hover;
     QHash<QString, QString> m_lockTips;
     bool m_pinPressed = false;
+    QPersistentModelIndex m_lockPressed;   // Android 0.92.0: a tap that began on this row's padlock
     QTimer *m_widthTimer = nullptr;
     // A click loads the document when the button is released, so that a
     // document can be dragged elsewhere (an editor's header bar, a copyholder)
