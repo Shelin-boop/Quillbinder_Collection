@@ -66,6 +66,9 @@ one repository. Everything above is in it. What is Windows' own:
 - The Windows release now also carries the program update alone and every add-on as a package of its own (their
   names end with `-windows`), which is what the check for updates offers.
 - A setup program can be run as an update (`/QBUPDATE=1`): it waits until the Quillbinder in the folder has ended.
+- Installing a program update no longer fails with "Cannot create ...\data\core\<version>" when Windows still
+  holds a file of the new version for a moment (the new version is started once before it is put in place, and a
+  virus scanner may be reading it): Quillbinder tries for up to five seconds before it gives up.
 
 ## 0.91.3 beta (2026-11-15)
 

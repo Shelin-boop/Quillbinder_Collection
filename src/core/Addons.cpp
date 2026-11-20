@@ -19,6 +19,7 @@
 #include <QSet>
 #ifdef Q_OS_ANDROID
 #include <QStandardPaths>
+#include <QThread>
 #endif
 
 #include <algorithm>
@@ -62,6 +63,25 @@ int compareVersions(const QString &a, const QString &b)
             return x < y ? -1 : 1;
     }
     return 0;
+}
+
+bool moveIntoPlace(const QString &from, const QString &to, int tries, int waitMs)
+{
+#ifdef Q_OS_WIN
+    for (int i = 0; i < qMax(1, tries); ++i) {
+        if (i > 0)
+            QThread::msleep(static_cast<unsigned long>(qMax(0, waitMs)));
+        if (QDir().rename(from, to))
+            return true;
+        if (!QFileInfo::exists(from))
+            return false;   // nothing to wait for
+    }
+    return false;
+#else
+    Q_UNUSED(tries);
+    Q_UNUSED(waitMs);
+    return QDir().rename(from, to);
+#endif
 }
 
 namespace {
@@ -578,7 +598,10 @@ bool installData(const QByteArray &data, const PackageInfo &info, QStringList *l
             cleanTmp();
             return false;
         }
-        if (!move(p.tmp, p.target)) {
+        // (Windows 0.92.0: the new version's folder gets its tries, see moveIntoPlace; a move the tests make fail is
+        // made once, as before)
+        const bool moved = QB_TEST_ENV("QB_TEST_FAIL_RENAME").isEmpty() ? moveIntoPlace(p.tmp, p.target) : move(p.tmp, p.target);
+        if (!moved) {
             if (error)
                 *error = tr("Cannot create %1").arg(p.target);
             if (hadOld)

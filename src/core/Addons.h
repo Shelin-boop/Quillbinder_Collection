@@ -99,6 +99,13 @@ bool install(const QString &file, QStringList *log, QString *error, bool *restar
 // one failed (error names it); true when all installed, the marker existed or dir holds none.
 bool installBundled(const QString &dir, QStringList *log, QString *error);
 
+// Windows 0.92.0: moves the folder of a newly unpacked version into its place. Windows refuses to move a folder
+// while a file in it is still open: a program update was just started from it for its self-test and may not be
+// quite gone, and a virus scanner may be reading the new files. So on Windows the move is tried again for up to
+// five seconds (a release run failed on the single try, "Cannot create ...\data\core\<version>"); elsewhere it is
+// one rename, as before. tries and waitMs are for the tests.
+bool moveIntoPlace(const QString &from, const QString &to, int tries = 20, int waitMs = 250);
+
 // ---- add-ons
 struct Installed {
     Manifest manifest;

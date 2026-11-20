@@ -71,6 +71,9 @@
 #include <QDir>
 #include <QDirIterator>
 #include <QElapsedTimer>
+#ifdef Q_OS_WIN
+#include <QThread>
+#endif
 #include <QFile>
 #include <QFileInfo>
 #include <QFont>
@@ -1948,6 +1951,44 @@ int main(int argc, char **argv)
               QStringLiteral("before %1, cleared %2, opened %3, now \"%4\"").arg(fixedBefore).arg(cleared).arg(opened).arg(w.fixedMindMapId()));
         w.releaseMindMap();
     }
+
+#ifdef Q_OS_WIN
+    // ================================================================ Windows: a new version's folder that is still held for a moment
+    // (the release run of aa9f73a: a program update was started for its self-test from its temporary folder, and the
+    // move of that folder into its place, tried once, was refused: "Cannot create ...\data\core\<version>")
+    {
+        const QString from = W + QStringLiteral("/held-new"), to = W + QStringLiteral("/held-in-place");
+        const QString from2 = W + QStringLiteral("/held-new-2"), to2 = W + QStringLiteral("/held-in-place-2");
+        QDir().mkpath(from);
+        QDir().mkpath(from2);
+        writeAll(from + QStringLiteral("/program.bin"), "the new version");
+        writeAll(from2 + QStringLiteral("/program.bin"), "the new version");
+        // a file that is open in the folder, as the program that was just started from it, or a virus scanner, holds one
+        auto *held = new QFile(from + QStringLiteral("/program.bin"));
+        auto *held2 = new QFile(from2 + QStringLiteral("/program.bin"));
+        const bool opened = held->open(QIODevice::ReadOnly) && held2->open(QIODevice::ReadOnly);
+        const bool refusedOnce = !QDir().rename(from, to) && !addons::moveIntoPlace(from2, to2, 1, 0);
+        QThread *release = QThread::create([held] {
+            QThread::msleep(900);
+            held->close();
+        });
+        release->start();
+        QElapsedTimer took;
+        took.start();
+        const bool moved = addons::moveIntoPlace(from, to);
+        const qint64 ms = took.elapsed();
+        release->wait(5000);
+        delete release;
+        delete held;
+        held2->close();
+        delete held2;
+        check(opened && refusedOnce && moved && ms >= 500 && ms < 5000 && readAll(to + QStringLiteral("/program.bin")) == "the new version"
+                  && !QFileInfo::exists(from) && QFileInfo::exists(from2) && !QFileInfo::exists(to2),
+              QStringLiteral("Windows: a new version's folder that is still held for a moment (the program just started from it, a "
+                             "virus scanner) is moved into its place once it is free; a single try is refused"),
+              QStringLiteral("opened %1, refused at once %2, moved %3 after %4 ms").arg(opened).arg(refusedOnce).arg(moved).arg(ms));
+    }
+#endif
 
     w.closeProject();
     settle(300);

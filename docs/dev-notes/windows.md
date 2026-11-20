@@ -56,9 +56,17 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   (`win-deps-pack.sh`, `about`); the Windows jobs' time limit is 180 minutes. Times on the build machine: the first
   run with empty caches 47 min (engine libraries 18, build 6, checks and 39 suites 20); a `[suites: ...]` run with
   warm caches and packs 6 min.
-- **Tests**: `qb_v0920_tests` is counted (109 checks on Windows: Linux's 105 without the two of the swapped AppImage,
-  plus six of Windows' own: the hand-over, a wrong setup file, the emptied folder, the tool for Windows, the offer
-  as a setup program, the command line). What the first run showed, all in the tests and corrected inside
+- **The move of a new version into its place** (`addons::moveIntoPlace`, used by the installer for the folder
+  `.new-<name>` -> its place): Windows refuses to rename a folder while a file in it is open. A program update is
+  started once from that folder for its self-test (`launcher::selfTest`) right before the move, and a virus scanner
+  may be reading the new files; with one try, the first release run of 0.92.0 stopped in its program checks
+  ("Cannot create ...\data\core\0.92.1": `update-install` and the three checks after it; the four work runs
+  before had passed). On Windows the move is now tried again every 250 ms for up to five seconds; on the other
+  systems it is one rename as before, and a move the tests make fail (`QB_TEST_FAIL_RENAME`) is made once. The move
+  of an installed version aside (`.old-<process>`) is still one try.
+- **Tests**: `qb_v0920_tests` is counted (110 checks on Windows: Linux's 105 without the two of the swapped AppImage,
+  plus seven of Windows' own: the hand-over, a wrong setup file, the emptied folder, the tool for Windows, the offer
+  as a setup program, the command line, and a folder that is held for a moment and then moved into place). What the first run showed, all in the tests and corrected inside
   `#ifdef Q_OS_WIN`:
   - `QTest::mouseMove` also sets the real pointer; on the build machine's desktop the binder then gets a leave event
     and no row counts as under the mouse. The move is sent to the viewport once more and looked at at once.
