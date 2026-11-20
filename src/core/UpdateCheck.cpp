@@ -1,5 +1,6 @@
 #include "core/UpdateCheck.h"
 #include "core/Addons.h"
+#include "core/Launcher.h"
 #include "core/Paths.h"
 #include "core/SafeSave.h"
 #include "core/Signing.h"
@@ -81,8 +82,13 @@ Installed installedHere()
     Installed here;
     here.appVersion = QStringLiteral(QB_APP_VERSION);
     here.runtime = QStringLiteral(QB_RUNTIME_ID);
+#ifdef Q_OS_WIN
+    // the full version's folder carries its add-ons in full-addons\ beside the program (main.cpp)
+    here.fullAppImage = QDir(launcher::appDir() + QLatin1String("/full-addons")).exists();
+#else
     const QString appDir = qEnvironmentVariable("APPDIR");
     here.fullAppImage = !appDir.isEmpty() && QDir(appDir + QLatin1String("/usr/share/quillbinder/full-addons")).exists();
+#endif
     for (const addons::Installed &a : addons::installedAddons())
         here.addons.insert(a.manifest.id, a.manifest.version);
     return here;
@@ -142,13 +148,17 @@ QList<Offer> offersFor(const Feed &feed, const QString &system, const Installed 
         o.security = securityBetween(prog.value(QStringLiteral("security")), here.appVersion, newest);
         o.whatsNew = linesOf(prog.value(QStringLiteral("whatsNew")));
         const Download update = downloadOf(prog.value(QStringLiteral("update")));
-        const Download image = downloadOf(prog.value(here.fullAppImage ? QStringLiteral("appimageFull") : QStringLiteral("appimage")));
-        const Download other = downloadOf(prog.value(here.fullAppImage ? QStringLiteral("appimage") : QStringLiteral("appimageFull")));
+        // the whole program anew: Linux names its AppImages, Windows (0.92.0) its setup programs
+        const bool windows = system.startsWith(QLatin1String("windows"));
+        const QString plain = windows ? QStringLiteral("setup") : QStringLiteral("appimage");
+        const QString full = windows ? QStringLiteral("setupFull") : QStringLiteral("appimageFull");
+        const Download image = downloadOf(prog.value(here.fullAppImage ? full : plain));
+        const Download other = downloadOf(prog.value(here.fullAppImage ? plain : full));
         if (prog.value(QStringLiteral("runtime")).toString() == here.runtime && update.isValid()) {
             o.kind = Offer::Kind::ProgramUpdate;
             o.file = update;
         } else {
-            o.kind = Offer::Kind::NewAppImage;
+            o.kind = windows ? Offer::Kind::NewSetup : Offer::Kind::NewAppImage;
             o.file = image.isValid() ? image : other;
         }
         if (o.file.isValid()) {
@@ -181,6 +191,15 @@ QList<Offer> offersFor(const Feed &feed, const QString &system, const Installed 
             out << o;
     }
     return out;
+}
+
+QString setupDownloadDir() { return dataDir() + QLatin1String("/update-setup"); }
+
+void clearSetupDownload()
+{
+    QDir dir(setupDownloadDir());
+    if (dir.exists())
+        dir.removeRecursively();
 }
 
 // ---------------------------------------------------------------- state

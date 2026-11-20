@@ -1,0 +1,3 @@
+# manifest.json is compared byte by byte with source/packaging/manifest.json (the packing scripts and
+# qb_v0920_tests); source/ keeps LF on every system (its own .gitattributes), so this file does too
+manifest.json text eol=lf

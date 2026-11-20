@@ -2,6 +2,7 @@
 #include "ui/MainWindow.h"
 
 #include "core/Addons.h"
+#include "core/Launcher.h"
 #include "core/TestSwitches.h"
 
 #include "AppInfo.h"
@@ -18,6 +19,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QProcess>
 #include <QProgressDialog>
 #include <QPushButton>
 #include <QSslSocket>
@@ -46,7 +48,13 @@ struct Incoming {
 };
 } // namespace
 
-UpdateChecker::UpdateChecker(MainWindow *window) : QObject(window), m_window(window) {}
+UpdateChecker::UpdateChecker(MainWindow *window) : QObject(window), m_window(window)
+{
+#ifdef Q_OS_WIN
+    // a setup program downloaded before (the update ran, or "Later" was chosen) is not kept
+    updates::clearSetupDownload();
+#endif
+}
 
 bool UpdateChecker::isEnabled() const { return updates::State::load().enabled; }
 
@@ -96,6 +104,44 @@ bool UpdateChecker::replaceOwnFile(const QString &own, const QString &fresh, QSt
     if (backup)
         *backup = aside;
     return true;
+}
+
+QString UpdateChecker::setupArguments(const QString &folder)
+{
+    QString dir = QDir::toNativeSeparators(folder);
+    while (dir.size() > 3 && dir.endsWith(QLatin1Char('\\')))   // a backslash before the closing quote would swallow it
+        dir.chop(1);
+    return QStringLiteral("/SILENT /NOCANCEL /QBUPDATE=1 /DIR=\"%1\"").arg(dir);
+}
+
+bool UpdateChecker::startSetup(const QString &setup, const QString &folder, QString *error)
+{
+    const QString arguments = setupArguments(folder);
+    // the tests: the command is written down instead of run
+    const QString log = QB_TEST_ENV("QB_TEST_SETUP_LOG");
+    if (!log.isEmpty()) {
+        QFile f(log);
+        if (!f.open(QIODevice::WriteOnly))
+            return false;
+        f.write((QDir::toNativeSeparators(setup) + QLatin1Char('\n') + arguments + QLatin1Char('\n')).toUtf8());
+        return true;
+    }
+#ifdef Q_OS_WIN
+    QProcess p;
+    p.setProgram(setup);
+    p.setNativeArguments(arguments);
+    p.setWorkingDirectory(QFileInfo(setup).absolutePath());
+    if (p.startDetached())
+        return true;
+    if (error)
+        *error = p.errorString();
+    return false;
+#else
+    Q_UNUSED(setup);
+    if (error)
+        *error = QStringLiteral("setup programs are for Windows only");
+    return false;
+#endif
 }
 
 // ---------------------------------------------------------------- looking
@@ -357,6 +403,7 @@ void UpdateChecker::offer(const updates::Shown &shown)
 
     QString html;
     bool newImage = false;
+    bool newSetup = false;   // Windows
     for (const updates::Offer &o : shown.offers) {
         html += QStringLiteral("<p><b>%1</b> %2 → %3 &nbsp; <i>%4</i>")
                     .arg(o.name.toHtmlEscaped(), o.installed.toHtmlEscaped(), o.version.toHtmlEscaped(),
@@ -365,6 +412,7 @@ void UpdateChecker::offer(const updates::Shown &shown)
             html += QStringLiteral("<br>• ") + line.toHtmlEscaped();
         html += QStringLiteral("</p>");
         newImage = newImage || o.kind == updates::Offer::Kind::NewAppImage;
+        newSetup = newSetup || o.kind == updates::Offer::Kind::NewSetup;
     }
     auto *list = new QLabel(html, dlg);
     list->setObjectName(QStringLiteral("updateList"));
@@ -386,6 +434,12 @@ void UpdateChecker::offer(const updates::Shown &shown)
                         .arg(QStringLiteral(QB_APP_NAME));
         notes += QStringLiteral("\n\n");
     }
+    if (newSetup)
+        notes = tr("The new program version needs the whole program anew. %1 downloads its setup program, checks it and "
+                   "closes; the setup program then unpacks the new version into the folder of this one (%2) and starts it. "
+                   "Your settings, your add-ons and everything else in \"data\" stay as they are.")
+                    .arg(QStringLiteral(QB_APP_NAME), QDir::toNativeSeparators(launcher::appDir()))
+                + QStringLiteral("\n\n");
     const QString wait = delayWords(shown.delayDays);
     if (shown.security)
         notes += tr("Delay: you are reminded again in %1. Each further delay waits longer (1 day, 1 week, 2 weeks, then every "
@@ -456,6 +510,7 @@ void UpdateChecker::install(const QList<updates::Offer> &offers)
     m_problems.clear();
     m_restart = false;
     m_replaced.clear();
+    m_setupFile.clear();
     installNext();
 }
 
@@ -478,6 +533,12 @@ void UpdateChecker::installNext()
         for (int n = 2; QFileInfo::exists(m_partFile) && n < 100; ++n)
             m_partFile = dir + QLatin1Char('/') + QFileInfo(m_current.file.name).completeBaseName() + QStringLiteral(" (%1).").arg(n)
                          + QFileInfo(m_current.file.name).suffix();
+    } else if (m_current.kind == updates::Offer::Kind::NewSetup) {
+        // Windows: inside the program folder's "data", which the setup program leaves alone
+        const QString dir = updates::setupDownloadDir();
+        updates::clearSetupDownload();
+        QDir().mkpath(dir);
+        m_partFile = dir + QLatin1Char('/') + m_current.file.name;
     } else {
         const QString dir = QDir::tempPath() + QStringLiteral("/quillbinder-update-%1").arg(QCoreApplication::applicationPid());
         QDir().mkpath(dir);
@@ -544,7 +605,10 @@ void UpdateChecker::installNext()
             return;
         }
         // the file is the one the release key vouches for
-        if (m_current.kind == updates::Offer::Kind::NewAppImage) {
+        if (m_current.kind == updates::Offer::Kind::NewSetup) {
+            m_setupFile = m_partFile;
+            m_done << tr("%1 %2: its setup program is downloaded and checked.").arg(m_current.name, m_current.version);
+        } else if (m_current.kind == updates::Offer::Kind::NewAppImage) {
             const QString own = ownAppImage();
             if (m_partFile.endsWith(QLatin1String(".update-part")) && !own.isEmpty()) {
                 QString backup, err;
@@ -598,7 +662,15 @@ void UpdateChecker::finishInstall()
     QMessageBox box(m_problems.isEmpty() ? QMessageBox::Information : QMessageBox::Warning, tr("Updates"), text, QMessageBox::NoButton, m_window);
     box.setObjectName(QStringLiteral("updateResult"));
     QPushButton *restart = nullptr;
-    if (m_restart) {
+    QPushButton *setupNow = nullptr;
+    if (!m_setupFile.isEmpty()) {
+        box.setInformativeText(tr("%1 closes now, and the setup program unpacks the new version into this folder and starts "
+                                  "it. With \"Later\" nothing changes, and the update is offered again.")
+                                   .arg(QStringLiteral(QB_APP_NAME)));
+        setupNow = box.addButton(tr("Close and Update Now"), QMessageBox::AcceptRole);
+        setupNow->setObjectName(QStringLiteral("updateSetupNow"));
+        box.addButton(tr("Later"), QMessageBox::RejectRole);
+    } else if (m_restart) {
         box.setInformativeText(tr("The new version is used after a restart."));
         restart = box.addButton(tr("Restart Now"), QMessageBox::AcceptRole);
         restart->setObjectName(QStringLiteral("updateRestart"));
@@ -608,6 +680,23 @@ void UpdateChecker::finishInstall()
     }
     box.exec();
     emit installed(m_done.size(), m_problems.size());
+    if (setupNow && box.clickedButton() == setupNow) {
+        const QString setup = m_setupFile;
+        const QString folder = launcher::appDir();
+        QString err;
+        bool started = false;
+        if (QB_TEST_ENV_SET("QB_TEST_NO_RESTART"))
+            started = startSetup(setup, folder, &err);
+        else   // the project is closed as for a restart; the program ends only when the setup program started
+            m_window->closeThenExit([&] { return started = startSetup(setup, folder, &err); });
+        if (!started && !err.isEmpty())
+            QMessageBox::warning(m_window, tr("Updates"),
+                                 tr("The setup program could not be started (%1). Windows may block it because it carries no "
+                                    "signature. Nothing was changed.\n\nYou can close %2 and start the file yourself:\n%3\n\nOr "
+                                    "download the current version from the project's page.")
+                                     .arg(err, QStringLiteral(QB_APP_NAME), QDir::toNativeSeparators(setup)));
+        return;
+    }
     if (restart && box.clickedButton() == restart && !QB_TEST_ENV_SET("QB_TEST_NO_RESTART"))
         m_window->restartApplication();
 }

@@ -15,7 +15,7 @@ DIST=$(cd "$3" && pwd)
 OUT=$4
 mkdir -p "$OUT/tests"
 # the suites for Windows; more join as they are made to work here
-SUITES="qb_tests qb_ui_tests qb_fixes_tests qb_w2_tests qb_w3_tests qb_w4_tests qb_w4c_tests qb_v0602_tests qb_v0601_tests qb_v0650_tests qb_v0604_tests qb_v0700_tests qb_fuzz_tests qb_v0811_tests qb_v064_tests qb_v0611_tests qb_v0603_tests qb_v0812_tests qb_v0813_tests qb_v0900_tests qb_v0901_tests qb_v0902_tests qb_v0903_tests qb_v0904_tests qb_m7_tests qb_m8_tests qb_m9_tests qb_v018_tests qb_v0212_tests qb_v0402_tests qb_v0403_tests qb_v0605_tests qb_v0642_tests qb_v0910_tests qb_v0911_tests qb_v0913_tests"
+SUITES="qb_tests qb_ui_tests qb_fixes_tests qb_w2_tests qb_w3_tests qb_w4_tests qb_w4c_tests qb_v0602_tests qb_v0601_tests qb_v0650_tests qb_v0604_tests qb_v0700_tests qb_fuzz_tests qb_v0811_tests qb_v064_tests qb_v0611_tests qb_v0603_tests qb_v0812_tests qb_v0813_tests qb_v0900_tests qb_v0901_tests qb_v0902_tests qb_v0903_tests qb_v0904_tests qb_m7_tests qb_m8_tests qb_m9_tests qb_v018_tests qb_v0212_tests qb_v0402_tests qb_v0403_tests qb_v0605_tests qb_v0642_tests qb_v0910_tests qb_v0911_tests qb_v0913_tests qb_v0920_tests"
 # W4a (2026-11-11): suites written for Linux after W3, run to see where they stand on Windows; their failures are
 # reported ("explore") but do not count for the result until they are made to work here and move up to SUITES
 # (v0810 is left out: it needs the Linux fault shim, tests/faultshim.cpp, an LD_PRELOAD library)
@@ -53,7 +53,13 @@ SUITES="qb_tests qb_ui_tests qb_fixes_tests qb_w2_tests qb_w3_tests qb_w4_tests 
 # Windows 0.91.3 (2026-11-15): v0913 (add-on keys and certificates, the official add-ons' tools) is counted from its
 # first run here (one full run less; a failure fails the run all the same); it runs python3 and openssl as the release
 # workflow does (python3 is given the runner's Python below).
-EXPLORE=""
+# Windows 0.92.0 (2026-11-20): v0920 (the fixed mind map, the shown lock, the check for updates with its Windows
+# hand-over to the setup program, the backups' names with an ID, checked copies) is counted from its first run here.
+# v017 and m10 are looked at again ("explore": reported, not counted): v017's mind map check, because 0.92.0 changed
+# the mind map, and m10's own crash, which was never examined (run of f7bb321: the suite used a writing tool that was
+# not loaded, because it looked for the tools' packages under their Linux names; it takes the Windows packages now).
+# v0913 leaves out its check of an Android package on Windows (its stand-in for readelf is a shell script).
+EXPLORE="qb_v017_tests qb_m10_tests"
 # D2 (Windows 0.91.3): QB_WIN_SUITES (packaging/windows/win-ci.sh, from "[suites: ...]" in a commit message) runs only
 # the suites it names, as the runner prints them (qb_tests, ui, v0913 ...); a name of no suite fails the run
 if [ -n "${QB_WIN_SUITES:-}" ]; then
@@ -87,19 +93,15 @@ brc=$?
 grep -E ': (fatal )?error [A-Z]+[0-9]+|error LNK|FAILED:' "$OUT/tests-build.log" | sort -u > "$OUT/tests-errors.txt"
 echo "tests build: rc=$brc, failed files $(grep -c '^FAILED:' "$OUT/tests-errors.txt")"
 
-# the fonts the Linux test runs see (DejaVu, Carlito, Caladea, FreeSerif; an archive on the branch
-# assets, made from Ubuntu 24.04's packages), installed for the whole runner: many checks name these
-# families, and Windows would put another font in their place.
-# 0.91.1 (2026-11-14): QB_TEST_FONTS_ZIP names an archive of the same form that is there already (the
-# workflow release-windows.yml makes it from Ubuntu's packages).
+# the fonts the Linux test runs see (DejaVu, Carlito, Caladea, FreeSerif, from Ubuntu 24.04's packages), installed
+# for the whole runner: many checks name these families, and Windows would put another font in their place.
+# QB_TEST_FONTS_ZIP names their archive (the workflows' job "test-fonts" makes it; since Windows 0.92.0 that is the
+# only way: no archive is kept on a branch any more).
 fonts="$OUT/test-fonts"
 rm -rf "$fonts" && mkdir -p "$fonts"
 have_fonts=0
 if [ -n "${QB_TEST_FONTS_ZIP:-}" ]; then
     cp "$(cygpath -u "$QB_TEST_FONTS_ZIP")" "$fonts/f.zip" 2> /dev/null && have_fonts=1
-elif gh api 'repos/Shelin-boop/Quillbinder_Collection/contents/test-fonts-linux-1.zip?ref=assets' -H 'Accept: application/vnd.github.raw' > "$fonts/f.zip" \
-   && echo "c0486979264d37889697cd56298e08bdd89ada594a09136cb69b46e56f32a145  $fonts/f.zip" | sha256sum -c --quiet; then
-    have_fonts=1
 fi
 if [ $have_fonts -eq 1 ]; then
     ( cd "$fonts" && 7z x -y f.zip > /dev/null )

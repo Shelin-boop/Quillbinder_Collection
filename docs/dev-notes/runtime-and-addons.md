@@ -34,7 +34,8 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   add-on is missing). The models: releases `models-1`, `models-2` of this repository, copied by
   `.github/workflows/models-mirror.yml` (push the branch `models-mirror`). The add-on's own checks need models and
   are not part of the suites. `official-addons/translation-proofreading.json` still describes 1.1 for Windows and
-  Android.
+  Android; since Windows 0.92.0 the Windows package is built with Quillbinder too (`docs/dev-notes/windows.md`), and
+  the check for updates has its Windows way (the setup program) described there.
 
 ## 0.91.2: the download page per system, a compiler cache for the sessions (2026-11-15)
 

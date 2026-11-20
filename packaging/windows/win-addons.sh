@@ -13,6 +13,9 @@
 #   builds for Qt Multimedia; refused when FFmpeg reports a GPL or non-free build.
 # - Speech Transcription (W4c, 2026-11-12): qb-speech.dll, qb-speech-impl.dll, Qt Multimedia, whisper.cpp of
 #   packaging/windows/win-whisper.sh (QB_WHISPER_DIR; the processor only).
+# - Translation and Proofreading (Windows 0.92.0, one of the project's own add-ons as on Linux): the add-on's own
+#   project in addons/translation-proofreading/source, built here with MSVC against the engine libraries of
+#   QB_TRANSLATOR_DEPS (packaging/windows/win-ci.sh) and packed by its own script.
 # Every package with libraries gets "platform": "windows-x64" and the file name <id>-windows.qbpkg.
 # Add-ons without libraries (themes, templates, compile formats; W3) are built here too, as on Linux
 # (templates from their outlines with qb_template), without a platform: <id>.qbpkg.
@@ -258,6 +261,38 @@ else
     echo "speech-transcription: left out (whisper.cpp in QB_WHISPER_DIR or the speech engine is missing)"
 fi
 
+# ---- Translation and Proofreading (Windows 0.92.0): a project of its own (addons/translation-proofreading/source,
+# its notes: DEVELOPING.md, "Windows"), built as a release build (no test switches) against Qt and the engine libraries
+# oneDNN, CTranslate2 and SentencePiece; its own script stages the payload, the libraries' license texts and the
+# manifest for Windows. Left out, with a line in the log, when the engine libraries are not there.
+id=translation-proofreading
+TP="$ROOT/addons/$id"
+TPD=${QB_TRANSLATOR_DEPS:-}
+build_translator() {
+    cmp -s "$TP/manifest.json" "$TP/source/packaging/manifest.json" \
+        || { echo "$id: FAILED, manifest.json and source/packaging/manifest.json differ"; return 1; }
+    local TB="$BUILD/translator" launcher=()
+    command -v sccache > /dev/null && launcher=(-DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache)
+    cmake -S "$(cygpath -m "$TP/source")" -B "$(cygpath -m "$TB")" -G Ninja -DCMAKE_BUILD_TYPE=Release \
+        -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe "${launcher[@]}" -DCMAKE_PREFIX_PATH="$QT" \
+        -DTP_DEPS_DIR="$(cygpath -m "$TPD/install")" -DTP_TEST_SWITCHES=OFF > "$TB.configure.log" 2>&1 \
+        || { echo "$id: FAILED, configure"; tail -30 "$TB.configure.log"; return 1; }
+    cmake --build "$(cygpath -m "$TB")" > "$TB.build.log" 2>&1 \
+        || { echo "$id: FAILED, build"; grep -E ': (fatal )?error [A-Z]+[0-9]+|error LNK|FAILED:' "$TB.build.log" | sort -u | head -40; return 1; }
+    bash "$TP/source/tests/check-exports-windows.sh" "$TB" || { echo "$id: FAILED, its libraries export more than they should"; return 1; }
+    rm -rf "$OUT/.tp"
+    TP_DEPS="$TPD" bash "$TP/source/packaging/make-addon-windows.sh" "$TB" "$OUT/.tp" || { echo "$id: FAILED, packing"; return 1; }
+    mv "$OUT/.tp"/translation-proofreading-*-windows.qbpkg "$OUT/$id-windows.qbpkg" || return 1
+    rm -rf "$OUT/.tp"
+    echo "$id: built, $(du -k "$OUT/$id-windows.qbpkg" | cut -f1) KiB"
+}
+tp_failed=0
+if [ -n "$TPD" ] && [ -f "$TPD/install/lib/ctranslate2.lib" ]; then
+    build_translator || tp_failed=1
+else
+    echo "$id: left out (its engine libraries are missing: QB_TRANSLATOR_DEPS)"
+fi
+
 # ---- add-ons without libraries (W3): as packaging/linux/build-addons.sh makes them on Linux
 for dir in "$ROOT"/addons/*/; do
     id=$(basename "$dir")
@@ -281,3 +316,5 @@ done
 
 rm -rf "$STAGES"
 ls -l "$OUT"
+# (0.92.0) a translator that failed to build fails this step, after everything else was made
+[ $tp_failed -eq 0 ]

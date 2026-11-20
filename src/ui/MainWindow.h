@@ -12,6 +12,7 @@
 #include <QSet>
 #include <QPointer>
 #include <QVariantMap>
+#include <functional>
 #include <memory>
 
 class QAbstractButton;
@@ -419,6 +420,9 @@ private:
     bool canPrint() const;
     void integrateDesktop(bool quiet);
     void restartApplication();
+    // Windows 0.92.0 (the check for updates hands over to the setup program): closes the project as a restart does,
+    // then calls run. When run succeeded the program ends; else the project is opened again and the program stays.
+    bool closeThenExit(const std::function<bool()> &run);
     void showAddonManager();
     void refreshInspector();
     void saveUiState();

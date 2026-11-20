@@ -161,8 +161,10 @@ short index (under about 20 KB), so that it costs little when it is loaded.
   the rest of a project).
 - `runtime-and-addons.md`: the check for updates and the translator add-on (0.92.0), Qt 6.12 and FFmpeg 9.0.2 (the runtime), tool interface 1.1 and Speech Transcription,
   release files and third-party sources.
-- `windows.md`: the Windows port (W1 to W4c), what 0.90.4 brought, the public Windows files, Windows 0.91.3 (its own
-  release, `[build-only]` / `[suites: ...]` in a commit message, the Windows dependency packs, the run on main).
+- `windows.md`: Windows 0.92.0 (the translator's build, the check for updates with the setup program's update run, the
+  update file's Windows block, what a Windows job may add to shared files), the Windows port (W1 to W4c), what 0.90.4
+  brought, the public Windows files, Windows 0.91.3 (its own release, `[build-only]` / `[suites: ...]` in a commit
+  message, the Windows dependency packs, the run on main).
 - `android.md`: the Android trial builds, the public APK, add-ons on Android.
 
 ## Publishing

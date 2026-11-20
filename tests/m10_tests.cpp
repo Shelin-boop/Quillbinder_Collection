@@ -280,7 +280,12 @@ int main(int argc, char **argv)
     {
         QStringList problems;
         for (const QString &id : pkgs) {
+#ifdef Q_OS_WIN
+            // Windows: the packages of the Windows build (packaging/windows/win-addons.sh; the runner names their folder)
+            const QString pkg = qEnvironmentVariable("QB_TEST_ADDONS_DIR") + QLatin1Char('/') + id + QStringLiteral("-windows.qbpkg");
+#else
             const QString pkg = buildDir + QStringLiteral("/addons-dist/") + id + QStringLiteral(".qbpkg");
+#endif
             QStringList log;
             QString err;
             bool restart = false;
@@ -289,11 +294,22 @@ int main(int argc, char **argv)
                 problems << id + QLatin1String(": ") + info.error + err;
         }
         check(problems.isEmpty(), QStringLiteral("the three add-on packages install"), problems.join(QLatin1String("; ")));
+#ifdef Q_OS_WIN
+        const addons::PackageInfo older = addons::inspect(qEnvironmentVariable("QB_TEST_ADDONS_DIR") + QStringLiteral("/tool-scratch-pad-windows.qbpkg"));
+#else
         const addons::PackageInfo older = addons::inspect(buildDir + QStringLiteral("/addons-dist/tool-scratch-pad.qbpkg"));
+#endif
+#ifdef Q_OS_WIN
+        // Windows: an add-on with program code names the system it was built for (no runtime id, as the Linux ones)
+        check(older.manifest.platform == QLatin1String("windows-x64") && older.manifest.runtime.isEmpty(),
+              QStringLiteral("Windows: the tool add-ons name the system they were built for (windows-x64)"),
+              older.manifest.platform + QLatin1String(" / ") + older.manifest.runtime);
+#else
         // 0.80.0: an add-on with program code needs the first version of the runtime it was built for
         check(older.manifest.minApp == QLatin1String(QB_RUNTIME_SINCE) && older.manifest.runtime == QLatin1String(QB_RUNTIME_ID),
               QStringLiteral("the tool add-ons need program version %1 and name the runtime %2").arg(QStringLiteral(QB_RUNTIME_SINCE), QStringLiteral(QB_RUNTIME_ID)),
               older.manifest.minApp + QLatin1String(" / ") + older.manifest.runtime);
+#endif
     }
     AppSettings &as = AppSettings::instance();
     as.load();
@@ -1061,6 +1077,7 @@ int main(int argc, char **argv)
     }
 
     // ================================================================ desktop entry
+#ifndef Q_OS_WIN   // (the application menu's entry file is Linux's; Windows has its own guide, checked by qb_w4_tests)
     {
         withModal<QMessageBox>(800, [](QMessageBox *mb) { mb->accept(); });
         w.findChild<QAction *>(QStringLiteral("integrate"))->trigger();
@@ -1070,6 +1087,7 @@ int main(int argc, char **argv)
                   && desktop.contains(QLatin1String("--tool scratch-pad.show")),
               QStringLiteral("Help > Add to Application Menu: the menu entry has the action \"Scratch Pad\" (a desktop shortcut can call it)"));
     }
+#endif
 
     std::printf("\n%d failure(s)\n", failures);
     QTimer::singleShot(0, &app, [&] { w.close(); });

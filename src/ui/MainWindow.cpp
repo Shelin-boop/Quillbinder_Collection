@@ -4833,6 +4833,25 @@ void MainWindow::restartApplication()
     QCoreApplication::quit();
 }
 
+bool MainWindow::closeThenExit(const std::function<bool()> &run)
+{
+    const QString projectFile = m_project ? m_project->displayFile() : QString();
+    if (!closeProject())
+        return false;
+    if (!projectFile.isEmpty())
+        AppSettings::instance().addRecent(projectFile);
+    AppSettings::instance().save();
+    if (!run()) {
+        if (!projectFile.isEmpty())
+            openProject(projectFile);
+        return false;
+    }
+    m_closing = true;
+    close();
+    QCoreApplication::quit();
+    return true;
+}
+
 void MainWindow::showStartNotice()
 {
     const QString notice = addons::takeStartNotice();

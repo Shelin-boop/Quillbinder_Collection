@@ -77,6 +77,21 @@ loads in a newer one), but releases come only from the workflow "Build" (Qt 6.12
   once (never Latest). The official Windows add-on is built by Quillbinder_Collection's workflow "Official add-on for
   Windows" from the `windows` block of the entry.
 
+## Windows 1.2: one of Quillbinder's own add-ons (2026-11-20)
+
+- Since Quillbinder for Windows 0.92.0 the Windows package is built with Quillbinder, as the Linux one since 0.92.0:
+  `packaging/windows/win-ci.sh` builds the engine libraries with `packaging/build-deps-windows.sh` into
+  `.translator-deps` (`TP_DEPS`; the workflows keep the folder in a cache under that script's hash, without the build
+  folders `b-*`), and `packaging/windows/win-addons.sh` configures this project as a release build
+  (`-DTP_DEPS_DIR=<deps>/install -DTP_TEST_SWITCHES=OFF`), runs `tests/check-exports-windows.sh` and
+  `packaging/make-addon-windows.sh`. The package is `translation-proofreading-windows.qbpkg`; it goes into the full
+  version's `full-addons\` and into the Windows release, signed with the add-on key like the project's other add-ons.
+- The add-on's own checks (`ctest`, which needs the language models) are not part of Quillbinder's Windows runs, as
+  on Linux. They ran for 1.1 on Windows on 2026-11-16; the code is unchanged since but for the version and the
+  models' address.
+- The entry `official-addons/translation-proofreading.json` and the workflow "Official add-on for Windows" describe
+  1.1 from the add-on's former repository; they are no longer the way the Windows package is made.
+
 ## Android (2026-11-16, branch `addon/android`, not merged)
 
 - From Quillbinder's Android build (private trial builds, 0.91.3): add-ons with `"platform": "android-arm64"` (tablets)

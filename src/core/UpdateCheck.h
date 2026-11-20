@@ -15,6 +15,7 @@
 //                    "whatsNew": ["...", "..."],
 //                    "update":       {"url": "...", "name": "...", "size": 1, "sha256": "..."},   // program update
 //                    "appimage":     {...}, "appimageFull": {...}},                               // new AppImages
+//                    // Windows 0.92.0: "windows-x64" names its setup programs instead: "setup", "setupFull"
 //        "addons": [{"id": "media-playback", "name": "Media Playback", "version": "1.5", "minApp": "0.80.0",
 //                    "runtime": "u2404-qt6.12-r1", "security": [], "file": {...}}]}}}
 // A file whose signature does not fit is ignored, and so is one older than the newest one accepted before.
@@ -36,7 +37,8 @@ struct Download {
 };
 
 struct Offer {
-    enum class Kind { ProgramUpdate, NewAppImage, Addon };
+    // NewSetup (Windows 0.92.0): the whole program anew as its setup program, where Linux takes a new AppImage
+    enum class Kind { ProgramUpdate, NewAppImage, Addon, NewSetup };
     Kind kind = Kind::Addon;
     QString id;          // "program", or the add-on's id
     QString name;        // as shown
@@ -65,13 +67,19 @@ bool readFeed(const QByteArray &json, const QByteArray &signature, Feed *feed, Q
 struct Installed {
     QString appVersion;                 // QB_APP_VERSION
     QString runtime;                    // the runtime id of this program's libraries
-    bool fullAppImage = false;          // the AppImage with the add-ons inside
+    bool fullAppImage = false;          // the AppImage with the add-ons inside (Windows: the full version's folder)
     QHash<QString, QString> addons;     // installed add-ons: id -> version
 };
 Installed installedHere();
 // What the file offers this installation: a newer program (as a program update when the runtime is the same and
-// the file has one, else as a new AppImage) and newer versions of installed add-ons that fit the program.
+// the file has one, else as a new AppImage; for a system "windows-...": else as its setup program) and newer
+// versions of installed add-ons that fit the program.
 QList<Offer> offersFor(const Feed &feed, const QString &system, const Installed &here);
+
+// Windows 0.92.0: where a downloaded setup program waits, <data>/update-setup (inside the program folder: the
+// portable program keeps nothing elsewhere; the setup leaves "data" alone), and its removal at the next start.
+QString setupDownloadDir();
+void clearSetupDownload();
 
 // ---- what was decided per version, and when the program looked last (<data>/updates-state.json)
 struct State {

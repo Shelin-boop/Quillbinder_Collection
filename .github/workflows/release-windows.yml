@@ -25,6 +25,14 @@
 #     there yet), the sources into "third-party-sources".
 #  7. "download-page": the download page is made again from the names of the newest releases' files.
 #
+# Windows 0.92.0 (2026-11-20, the first Windows release from this repository):
+#  - "Translation and Proofreading" is one of the project's own add-ons, as on Linux: its engine libraries are built
+#    by packaging/windows/win-ci.sh (a cache under the hash of their build script), the add-on by win-addons.sh;
+#  - the release also carries the program update alone and every add-on as a package of its own, and
+#    "sign-checksums" writes Windows' block of the update file the program's check for updates reads
+#    (tools/update-feed.py --system windows-x64; the other systems' blocks stay as published), signed with the
+#    release key; "download-page" publishes it with the page.
+#
 # "tests" (with "test-fonts"): as for Linux, a second build with the test switches runs the checks and the test
 # suites of windows.yml; "publish" waits for it. The same source is tested by windows.yml on a work
 # branch first.
@@ -94,7 +102,7 @@ jobs:
     needs: version
     if: ${{ !inputs.page_only }}
     runs-on: windows-2025
-    timeout-minutes: 120
+    timeout-minutes: 180
     env:
       VCPKG_TRIPLET: x64-windows-static-md
       SCCACHE_GHA_ENABLED: 'true'
@@ -173,6 +181,15 @@ jobs:
         with:
           path: ${{ github.workspace }}/.whisper
           key: whisper-v1.9.5-msvc-cpu-${{ hashFiles('packaging/windows/win-whisper.sh') }}
+
+      # Windows 0.92.0: oneDNN, CTranslate2 and SentencePiece for the add-on "Translation and Proofreading" (the same
+      # key as in windows.yml, whose run on main after a Windows merge fills it; packaging/windows/win-ci.sh builds
+      # them when the folder is empty)
+      - name: Translator libraries cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ github.workspace }}/.translator-deps
+          key: translator-deps-windows-msvc-${{ hashFiles('addons/translation-proofreading/source/packaging/build-deps-windows.sh') }}
 
       - name: Find Visual Studio
         id: vs
@@ -483,9 +500,27 @@ jobs:
           name: win-sources
           path: release/src
 
+      # Windows 0.92.0: the file the program's check for updates reads (tools/update-feed.py). Windows' block is written
+      # anew from this release's files; the other systems' blocks come from the file published so far, taken only when
+      # its signature is the release key's. Fetched before the key is on the disk.
+      - name: The update file published so far
+        run: |
+          mkdir -p previous
+          page=https://shelin-boop.github.io/Quillbinder_Collection
+          if curl -fsSL --max-time 30 -o previous/updates-1.json "$page/updates-1.json" \
+             && curl -fsSL --max-time 30 -o previous/updates-1.json.sig "$page/updates-1.json.sig" \
+             && openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in previous/updates-1.json \
+                  -sigfile previous/updates-1.json.sig; then
+            echo "the published file is taken as the start"
+          else
+            rm -f previous/updates-1.json previous/updates-1.json.sig
+            echo "no published file (or its signature is not the release key's): the new one names Windows only"
+          fi
+
       - name: Checksums and their signature
         env:
           QB_SIGNING_KEY: ${{ secrets.QB_SIGNING_KEY }}
+          TAG: ${{ needs.version.outputs.tag }}
         run: |
           set -euo pipefail
           [ -n "$QB_SIGNING_KEY" ] || { echo "::error title=No signing key::The secret QB_SIGNING_KEY is not set."; exit 1; }
@@ -494,10 +529,46 @@ jobs:
           cp release/src/THIRD-PARTY-SOURCES-windows.txt release/dist/
           (cd release/dist && rm -f SHA256SUMS-windows.txt SHA256SUMS-windows.txt.sig && sha256sum -- * > /tmp/SHA256SUMS-windows.txt && mv /tmp/SHA256SUMS-windows.txt SHA256SUMS-windows.txt)
           openssl pkeyutl -sign -rawin -inkey /tmp/qb-signing/key.pem -in release/dist/SHA256SUMS-windows.txt -out release/dist/SHA256SUMS-windows.txt.sig
+          # the update file with Windows' block (the files as the release names them; "experimental" as in their names)
+          mkdir -p updates
+          prev=()
+          [ -f previous/updates-1.json ] && prev=(--previous previous/updates-1.json)
+          runtime=$(sed -n 's/^  set(APP_RUNTIME "\(win64-[^"]*\)")/\1/p' CMakeLists.txt | sed -n 1p)
+          [ -n "$runtime" ] || { echo "::error::no Windows runtime id in CMakeLists.txt"; exit 1; }
+          python3 -I tools/update-feed.py --dist release/dist --tag "$TAG" --repo "$GITHUB_REPOSITORY" --system windows-x64 \
+            --runtime "$runtime" --label experimental --out updates/updates-1.json "${prev[@]}"
+          openssl pkeyutl -sign -rawin -inkey /tmp/qb-signing/key.pem -in updates/updates-1.json -out updates/updates-1.json.sig
           rm -rf /tmp/qb-signing
           openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in release/dist/SHA256SUMS-windows.txt \
             -sigfile release/dist/SHA256SUMS-windows.txt.sig
+          openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in updates/updates-1.json \
+            -sigfile updates/updates-1.json.sig
           cat release/dist/SHA256SUMS-windows.txt
+          # Windows' block must name the program update, both setup programs and the add-ons; Linux's must be as it was
+          python3 -I - updates/updates-1.json previous/updates-1.json <<'PY'
+          import json, os, sys
+          new = json.load(open(sys.argv[1], encoding="utf-8"))
+          win = new["systems"]["windows-x64"]
+          prog = win.get("program") or {}
+          missing = [k for k in ("update", "setup", "setupFull") if k not in prog]
+          print("Windows: program %s (%s), %d add-on(s)" % (prog.get("version"), ", ".join(k for k in ("update", "setup", "setupFull") if k in prog), len(win.get("addons") or [])))
+          if missing or len(win.get("addons") or []) < 10 or prog.get("label") != "experimental":
+              sys.exit("the update file's Windows block is incomplete: missing %s, %d add-ons, label %r" % (missing, len(win.get("addons") or []), prog.get("label")))
+          if os.path.isfile(sys.argv[2]):
+              old = json.load(open(sys.argv[2], encoding="utf-8"))
+              for name, block in (old.get("systems") or {}).items():
+                  if name != "windows-x64" and new["systems"].get(name) != block:
+                      sys.exit("the block of %s changed" % name)
+              print("the other systems' blocks are as published: %s" % ", ".join(sorted(k for k in old.get("systems", {}) if k != "windows-x64")))
+          PY
+
+      - name: Hand the update file to the job "download-page"
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: win-update-file
+          path: updates
+          retention-days: 3
+          if-no-files-found: error
 
       - name: Hand the files to the job "publish"
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -564,7 +635,7 @@ jobs:
     # layout checks and the test suites of packaging/windows/win-tests.sh). "publish" waits for it.
     needs: [version, test-fonts]
     runs-on: windows-2025
-    timeout-minutes: 120
+    timeout-minutes: 180
     env:
       VCPKG_TRIPLET: x64-windows-static-md
       SCCACHE_GHA_ENABLED: 'true'
@@ -648,6 +719,15 @@ jobs:
         with:
           path: ${{ github.workspace }}/.whisper
           key: whisper-v1.9.5-msvc-cpu-${{ hashFiles('packaging/windows/win-whisper.sh') }}
+
+      # Windows 0.92.0: oneDNN, CTranslate2 and SentencePiece for the add-on "Translation and Proofreading" (the same
+      # key as in windows.yml, whose run on main after a Windows merge fills it; packaging/windows/win-ci.sh builds
+      # them when the folder is empty)
+      - name: Translator libraries cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ github.workspace }}/.translator-deps
+          key: translator-deps-windows-msvc-${{ hashFiles('addons/translation-proofreading/source/packaging/build-deps-windows.sh') }}
 
       - name: Speech model cache (tests)
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
@@ -742,7 +822,7 @@ jobs:
           one() { ls $1 2> /dev/null | sed -n 1p; }
           full_setup=$(one '*-full-*-setup.exe'); main_setup=$(ls *-setup.exe | grep -v -- '-full-' | sed -n 1p)
           full_zip=$(ls *-windows-x64.zip | grep -- '-full-' | sed -n 1p); main_zip=$(ls *-windows-x64.zip | grep -v -- '-full-' | sed -n 1p)
-          update=$(one '*-windows-update.qbpkg'); symbols=$(one '*-symbols.zip')
+          update=$(one '*-windows-update.qbpkg'); symbols=$(one '*-symbols.zip'); program=$(one '*-windows-program.qbpkg')
           linux_shown=${LINUX_TAG#v}; linux_shown=${linux_shown//-/ }
           {
             echo "**Quillbinder $VERSION for Windows 11 (64-bit), experimental**: a writing studio for long texts. It opens and saves"
@@ -750,6 +830,11 @@ jobs:
             echo "connected with Literature & Latte. The functions of Linux $linux_shown"
             echo "([its release](https://github.com/$GH_REPO/releases/tag/$LINUX_TAG)); Linux, Windows and Android count their own"
             echo "fixes in the last number. Not in the Windows version yet: Speech Transcription on graphics cards (the processor is used)."
+            echo
+            echo "New in Windows 0.92.0: the add-on Translation and Proofreading comes inside the full version, as on Linux, and"
+            echo "Quillbinder can look for updates itself (Help > Check for Updates at Startup; it fetches one small signed file"
+            echo "and sends nothing about you). A later version that needs the whole program anew is downloaded as its setup"
+            echo "program, checked, and unpacked into the folder you use."
             echo
             echo "> **This is an experimental version.** Keep backups of your projects (File > Back Up > Back Up Now; the automatic"
             echo "> backups are set under File > Options > Backup), and keep a copy of your manuscripts outside the program."
@@ -768,9 +853,10 @@ jobs:
             [ -n "$full_zip" ] && echo "| $full_zip | the program with every add-on, as a folder to unpack |"
             [ -n "$main_zip" ] && echo "| $main_zip | the program alone, as a folder to unpack |"
             [ -n "$update" ] && echo "| $update | for a Quillbinder for Windows you already have: the program update and every add-on in one package (File > Install Update or Add-on) |"
+            [ -n "$program" ] && echo "| $program | the program update alone (the check for updates takes it; File > Install Update or Add-on) |"
             [ -f media-all-formats-windows.qbpkg ] && echo "| media-all-formats-windows.qbpkg | audio and video in the editor, every format, in one package |"
             for f in *.qbpkg; do
-              case "$f" in "$update"|media-all-formats-windows.qbpkg) ;; *) echo "| $f | an add-on |" ;; esac
+              case "$f" in "$update"|"$program"|media-all-formats-windows.qbpkg) ;; *) echo "| $f | an add-on on its own |" ;; esac
             done
             [ -n "$symbols" ] && echo "| $symbols | for crash reports: turns their addresses into names |"
             echo
@@ -813,6 +899,13 @@ jobs:
         with:
           persist-credentials: false
 
+      # Windows 0.92.0: the update file of this run (none with page_only)
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        if: ${{ !inputs.page_only }}
+        with:
+          name: win-update-file
+          path: updates
+
       # 0.91.3: as release.yml does it since 0.91.2: the page names the newest Linux release, and each other system is
       # taken from its newest release (here the Windows release of this run)
       - name: The page
@@ -838,8 +931,18 @@ jobs:
             also+=(--also "older-$i" "$t")
           done < <(gh api "repos/$GH_REPO/releases?per_page=12" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
           python3 -I tools/download-page.py release-names "$main" site "${also[@]}"
-          # 0.92.0: the page is replaced as a whole; the update file the programs read is carried along
-          tools/keep-update-feed.sh site
+          # 0.92.0: the page is replaced as a whole; the update file the programs read is carried along. Windows
+          # 0.92.0: this run's file (Windows' block made anew) takes its place, unless the published one is newer
+          # (a later release ran before this job was started again); with page_only there is none of this run.
+          new=updates
+          page=https://shelin-boop.github.io/Quillbinder_Collection
+          if [ -f updates/updates-1.json ] && curl -fsSL --max-time 30 -o published.json "$page/updates-1.json"; then
+            if python3 -I -c 'import json, sys; a = json.load(open(sys.argv[1], encoding="utf-8"))["date"]; b = json.load(open(sys.argv[2], encoding="utf-8"))["date"]; sys.exit(0 if b > a else 1)' updates/updates-1.json published.json; then
+              echo "the published update file is newer than this run's: kept"
+              new=
+            fi
+          fi
+          tools/keep-update-feed.sh site $new
           grep -o 'releases/download/[^/]*/[^"]*' site/index.html | sort -u
 
       # a name per attempt (as release.yml, P7): a rerun of this job finds no artifact of the same name from the attempt before

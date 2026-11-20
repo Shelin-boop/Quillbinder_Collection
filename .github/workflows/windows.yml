@@ -15,6 +15,13 @@
 #  - P3: after a Windows pull request is merged (a push to main whose message names a win/ branch) one build-only run
 #    on main, so that main holds the caches (compiler, Qt, vcpkg, whisper.cpp) and the next branch starts warm (a
 #    branch can use the caches of main, never those of another branch). It leaves win-ci as it is.
+#
+# Windows 0.92.0 (2026-11-20, the first Windows job in this repository):
+#  - the test fonts come from the job "test-fonts" (Ubuntu 24.04's packages, as release-windows.yml takes them); no
+#    archive of them is kept anywhere;
+#  - the engine libraries of the add-on "Translation and Proofreading" (one of the project's own add-ons since
+#    0.92.0) are built by packaging/windows/win-ci.sh and kept in a cache under the hash of their build script;
+#  - the packs are made anew here (their pre-releases name content, license and source).
 name: Windows build
 
 on:
@@ -30,23 +37,79 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  test-fonts:
+    # the fonts the Linux test runs see, for the Windows tests (many checks name these families): taken from Ubuntu
+    # 24.04's packages, unchanged (the same step as in release-windows.yml)
+    if: >-
+      github.repository == 'Shelin-boop/Quillbinder_Collection' && (github.ref != 'refs/heads/main' ||
+      github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '/win/'))
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Collect
+        run: |
+          set -euo pipefail
+          mkdir -p debs out/test-fonts/licenses
+          cd debs
+          for p in fonts-dejavu-core fonts-dejavu-mono fonts-dejavu-extra fonts-crosextra-carlito fonts-crosextra-caladea fonts-freefont-ttf; do
+            apt-get download "$p" 2> /dev/null || echo "no package $p"
+          done
+          for d in *.deb; do
+            dpkg-deb -x "$d" "x-${d%%_*}"
+            c="x-${d%%_*}/usr/share/doc/${d%%_*}/copyright"
+            [ -f "$c" ] && cp "$c" "../out/test-fonts/licenses/${d%%_*}-copyright.txt"
+          done
+          cd ..
+          for f in Caladea-Bold Caladea-BoldItalic Caladea-Italic Caladea-Regular Carlito-Bold Carlito-BoldItalic Carlito-Italic \
+                   Carlito-Regular DejaVuSans-Bold DejaVuSans-BoldOblique DejaVuSans-Oblique DejaVuSans DejaVuSansMono-Bold \
+                   DejaVuSansMono-BoldOblique DejaVuSansMono-Oblique DejaVuSansMono DejaVuSerif-Bold DejaVuSerif-BoldItalic \
+                   DejaVuSerif-Italic DejaVuSerif FreeSerif FreeSerifBold FreeSerifBoldItalic FreeSerifItalic; do
+            src=$(find debs -type f -name "$f.ttf" | head -1)
+            [ -n "$src" ] || { echo "::error::font file $f.ttf not found in Ubuntu's packages"; exit 1; }
+            cp "$src" out/test-fonts/
+          done
+          echo "Fonts of Ubuntu 24.04's packages, unchanged, for the test suites on the Windows machine only; not part of the program or any download." > out/test-fonts/README.txt
+          (cd out && zip -q -r ../test-fonts.zip test-fonts)
+          ls out/test-fonts | wc -l
+          ls -la test-fonts.zip
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: test-fonts
+          path: test-fonts.zip
+          retention-days: 3
+          if-no-files-found: error
+
   build:
+    needs: test-fonts
     if: >-
       github.repository == 'Shelin-boop/Quillbinder_Collection' && (github.ref != 'refs/heads/main' ||
       github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '/win/'))
     runs-on: windows-2025
-    timeout-minutes: 120
+    # (180 since 0.92.0: a run with empty caches also builds the translator's engine libraries)
+    timeout-minutes: 180
     env:
       GH_TOKEN: ${{ github.token }}
       VCPKG_TRIPLET: x64-windows-static-md
       SCCACHE_GHA_ENABLED: 'true'
       # D1: the packs, one line each: <name> <recipe hash> <file> <SHA-256 of the file> (packaging/windows/win-deps-pack.sh)
-      # (made by run 43746715076 of win/0.91.3, 2026-11-15: whisper.cpp v1.9.5 and Hunspell with zlib, MSVC 14.51)
+      # (made in this repository by run 44708049313 of win/0.92.0, 2026-11-20: whisper.cpp v1.9.5 and Hunspell 1.7.5 with
+      # zlib 1.3.2, MSVC 14.51; their pre-releases name content, license and source)
       QB_WIN_PACKS: |
-        whisper 4105b2802919f7ebf599d40e34e88e3a11c15602893deb0cc4f1474a532a456f whisper-windows-4105b2802919f7eb.tar.xz cffc3788b57adce79941f918ebd57fd8e0c3af28bf174803bd23ea0f19105e21
-        hunspell ac5c39a435047f77b0706a83efb5e340bac8697e316c1beac14a2bcf25474265 hunspell-windows-ac5c39a435047f77.tar.xz 0546743ede09f42fd0a7252377516e1f6070de7f63997d8c0151ad49bb0212ba
+        whisper 4105b2802919f7ebf599d40e34e88e3a11c15602893deb0cc4f1474a532a456f whisper-windows-4105b2802919f7eb.tar.xz 6671900f7687acc47c72d2595e63a444e85b04587ef8d0acedd4114721a36026
+        hunspell c6d7d63aa6b7301c6ac5b182f2e03769817b9e84963232c0e5c42a74c55c2efb hunspell-windows-c6d7d63aa6b7301c.tar.xz e9ff749993bc02931909a194e6576620d4310d9835d44170b3047fe8cbbae99c
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0 (0.64.1: pinned, audit X-5)
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: test-fonts
+          path: test-fonts
 
       - name: Announce the run on the pre-release win-ci
         if: github.ref != 'refs/heads/main'
@@ -162,13 +225,22 @@ jobs:
           path: ${{ github.workspace }}/.models
           key: speech-models-ggml-tiny-v1
 
+      # Windows 0.92.0: oneDNN, CTranslate2 and SentencePiece for the add-on "Translation and Proofreading", built with
+      # MSVC by the add-on's own script (packaging/windows/win-ci.sh calls it when the folder is empty)
+      - name: Translator libraries cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: ${{ github.workspace }}/.translator-deps
+          key: translator-deps-windows-msvc-${{ hashFiles('addons/translation-proofreading/source/packaging/build-deps-windows.sh') }}
+
       # MSVC's environment only inside this step: exported to all later steps (first run), its
       # search path broke Git Bash there (exit code 127).
       - name: Build, pack, self-test
         id: build
         shell: cmd
         env:
-          GH_TOKEN: ${{ github.token }}   # W3: packaging/windows/win-tests.sh fetches the test fonts from the branch assets
+          GH_TOKEN: ${{ github.token }}   # the packs (packaging/windows/win-deps-pack.sh)
+          QB_TEST_FONTS_ZIP: ${{ github.workspace }}\test-fonts\test-fonts.zip
           QB_WIN_SWITCHES: ${{ github.event.head_commit.message }}   # D2 (0.91.3)
           QB_WIN_ONLY: ${{ github.ref == 'refs/heads/main' && 'build' || '' }}   # P3 (0.91.3): main only fills the caches
         run: |

@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 # Ready-made dependency packs for the Windows build (Windows 0.91.3, 2026-11-15; working rules section 10, decision D1):
 # whisper.cpp built with MSVC (packaging/windows/win-whisper.sh) and Hunspell with zlib from vcpkg, each built once per
-# recipe and kept as a .tar.xz on a pre-release "deps-<name>-windows-<first 16 characters of the hash>" of the private
+# recipe and kept as a .tar.xz on a pre-release "deps-<name>-windows-<first 16 characters of the hash>" of this
 # repository, titled "not for downloading" (as tools/deps-pack.sh does for Linux). Runs in Git Bash on GitHub's
 # Windows machine (.github/workflows/windows.yml, packaging/windows/win-ci.sh).
+# Windows 0.92.0 (2026-11-20): the repository is public, so a pack's pre-release says what is inside, under which
+# license, and where its source is (about, below); the license texts are in the pack.
 #
 #   packaging/windows/win-deps-pack.sh recipe <name>         the recipe (lines of text)
 #   packaging/windows/win-deps-pack.sh hash|tag|file <name>  its SHA-256, the pre-release's tag, the pack's file name
@@ -91,6 +93,22 @@ with tarfile.open(sys.argv[1], "r:xz") as t:
     fi
 }
 
+# What a pack holds, its license and its source (the text of its public pre-release). <name> <dir of the pack>
+about() {
+    case "$1" in
+    whisper)
+        echo "Inside: whisper.cpp with ggml, $(sed -n 's/^TAG=//p' "$ROOT/packaging/windows/win-whisper.sh") (commit $(sed -n 's/^COMMIT=//p' "$ROOT/packaging/windows/win-whisper.sh")), unchanged, built with Microsoft Visual C++ by packaging/windows/win-whisper.sh, and the test recording whisper.cpp ships (public domain)."
+        echo "License: MIT; its text is in the pack (LICENSE-whisper.cpp.txt). Source: https://github.com/ggml-org/whisper.cpp at that tag."
+        ;;
+    hunspell)
+        echo "Inside: Hunspell and zlib as static libraries, unchanged, built with Microsoft Visual C++ by vcpkg from its ports (their versions: the recipe below)."
+        echo "Licenses: Hunspell under MPL-1.1, GPL-2.0-or-later or LGPL-2.1-or-later (its three licenses), zlib under the zlib license. Sources: https://github.com/hunspell/hunspell and https://github.com/madler/zlib at the ports' versions."
+        local texts=""
+        for c in share/hunspell/copyright share/zlib/copyright; do [ -f "$2/$c" ] && texts="$texts $c"; done
+        if [ -n "$texts" ]; then echo "The license texts are in the pack:$texts."; else echo "The license texts: the sources above (COPYING* and README of Hunspell, zlib.h of zlib)."; fi
+        ;;
+    esac
+}
 hash_of() { recipe "$1" | tr -d '\r' | sha256sum | cut -d' ' -f1; }
 tag_of() { echo "deps-$1-windows-$(hash_of "$1" | cut -c1-16)"; }
 file_of() { echo "$1-windows-$(hash_of "$1" | cut -c1-16).tar.xz"; }
@@ -145,6 +163,8 @@ publish)
     {
         echo "Built by .github/workflows/windows.yml (run ${GITHUB_RUN_ID:-local}, commit ${GITHUB_SHA:-local}) for packaging/windows/win-deps-pack.sh."
         echo "Not for downloading: working storage of the Windows build."
+        echo
+        about "$name" "$dir"
         echo
         echo '```'
         echo "pin: $pin"

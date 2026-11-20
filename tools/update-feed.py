@@ -3,7 +3,7 @@
 
     tools/update-feed.py --dist <folder with the release's files> --tag <tag> --repo <owner/name> --out <file>
                          [--system linux-x86_64] [--runtime <id>] [--previous <the file published so far>]
-                         [--date <UTC time, ISO>]
+                         [--date <UTC time, ISO>] [--label <the version's label>]
 
 It names, for one system, the program's newest version (its program update and its AppImages, each with address,
 size and SHA-256) and the newest version of every add-on package in the folder. The blocks of the other systems and
@@ -11,6 +11,9 @@ the add-ons of this system that the folder does not hold (add-ons released on th
 --previous. The versions that were security updates come from packaging/update-feed/security.json and from
 --previous. The release workflow signs the result with the release key (job sign-checksums); this script signs
 nothing and needs no key.
+
+Windows 0.92.0: with --system windows-x64 (and --runtime, --label of the Windows files) the whole program anew is
+named by its setup programs ("setup", "setupFull": the files "...-setup.exe" of the version) instead of AppImages.
 """
 import argparse
 import datetime
@@ -23,6 +26,8 @@ import urllib.parse
 import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# the files a program block can name: the program update, Linux's AppImages, Windows' setup programs
+FILE_KINDS = ("update", "appimage", "appimageFull", "setup", "setupFull")
 
 
 def cmake_var(name):
@@ -86,10 +91,11 @@ def main():
     ap.add_argument("--runtime", default="")
     ap.add_argument("--previous", default="")
     ap.add_argument("--date", default="")
+    ap.add_argument("--label", default="")
     args = ap.parse_args()
 
     version = cmake_var("APP_VERSION")
-    label = cmake_var("APP_VERSION_LABEL")
+    label = args.label or cmake_var("APP_VERSION_LABEL")
     runtime = args.runtime or cmake_var("APP_RUNTIME")
     previous = {}
     if args.previous and os.path.isfile(args.previous):
@@ -111,6 +117,8 @@ def main():
         path = os.path.join(args.dist, name)
         if name.endswith(".AppImage") and version in name:
             program["appimageFull" if "-full-" in name else "appimage"] = file_entry(path, args.repo, args.tag)
+        elif args.system.startswith("windows") and name.endswith("-setup.exe") and version in name:
+            program["setupFull" if "-full-" in name else "setup"] = file_entry(path, args.repo, args.tag)
         elif name.endswith(".qbpkg"):
             m = manifest_of(path)
             if not m:
@@ -141,7 +149,7 @@ def main():
 
     systems = dict(previous.get("systems") or {})
     block = {"addons": [addons[k] for k in sorted(addons)]}
-    if any(k in program for k in ("update", "appimage", "appimageFull")):
+    if any(k in program for k in FILE_KINDS):
         block["program"] = program
     elif old_sys.get("program"):
         block["program"] = old_sys["program"]
@@ -153,7 +161,7 @@ def main():
         f.write("\n")
     prog = block.get("program") or {}
     print("updates-1.json: %s, program %s (%s), %d add-on(s)" % (args.system, prog.get("version", "-"),
-          ", ".join(k for k in ("update", "appimage", "appimageFull") if k in prog) or "no files", len(block["addons"])))
+          ", ".join(k for k in FILE_KINDS if k in prog) or "no files", len(block["addons"])))
     return 0
 
 

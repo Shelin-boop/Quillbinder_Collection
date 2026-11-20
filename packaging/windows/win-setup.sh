@@ -8,6 +8,7 @@
 # Inno Setup (packaging/windows/quillbinder-setup.iss), then checks what the writer asked of them (2026-11-11): no admin
 # rights, only unpacking into the chosen folder, the same files as the zip, no uninstaller, nothing in the registry, no
 # Start menu or desktop entry, "data" of an older folder kept, a folder that cannot be written refused.
+# Windows 0.92.0: the update run (/QBUPDATE=1), as the program's check for updates starts the setup.
 # Lines "setup: ...", "check <name>: ok|FAIL <why>", then "checks: ...".
 set -u
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
@@ -134,6 +135,58 @@ else
     fail setup-keeps-data "rc=$rc marker: $(cat "$T/data/settings/setup-check-marker.txt" 2>/dev/null || echo gone)"
 fi
 
+# ---- Windows 0.92.0, the update run (/QBUPDATE=1; the program's check for updates starts the setup this way): no
+# pages, over the program's folder, "data" kept, the new version started afterwards
+running() { tasklist //FI "IMAGENAME eq quillbinder.exe" //NH 2> /dev/null | grep -qi '^quillbinder\.exe'; }
+stop_program() {
+    local i=0
+    taskkill //F //IM quillbinder.exe > /dev/null 2>&1
+    while running && [ $i -lt 20 ]; do sleep 0.5; i=$((i + 1)); done
+}
+wait_running() { # <seconds>
+    local i=0
+    while ! running && [ $i -lt "$1" ]; do sleep 1; i=$((i + 1)); done
+    running
+}
+update_run() { # <setup exe> <folder> <log>; the program it starts stays invisible and looks for no updates
+    QT_QPA_PLATFORM=offscreen QB_NO_UPDATE_CHECK=1 QB_NO_DIALOGS=1 MSYS_NO_PATHCONV=1 timeout 600 "$1" /SILENT /NOCANCEL /QBUPDATE=1 \
+        "/DIR=$(cygpath -w "$2")" "/LOG=$(cygpath -w "$3")"
+}
+marker() { cat "$T/data/settings/setup-check-marker.txt" 2>/dev/null || echo gone; }
+back() { [ -f "$T/LICENSE.txt" ] && echo yes || echo no; }
+stop_program
+rm -f "$T/LICENSE.txt"
+update_run "$OUT/$MAIN_EXE.exe" "$T" "$OUT/setup-update-run.log"; rc=$?
+started=no; wait_running 30 && started=yes
+stop_program
+if [ $rc -eq 0 ] && [ "$(back)" = yes ] && [ "$(marker)" = "kept" ] && [ $started = yes ]; then
+    pass setup-update-run
+else
+    fail setup-update-run "rc=$rc, missing file back: $(back), marker: $(marker), program started: $started; $(tail -4 "$OUT/setup-update-run.log" 2>/dev/null | tr '\r\n' '  ' | head -c 300)"
+fi
+# ... and while the program in the folder still runs, the update run waits for its end
+( cd "$T" && QT_QPA_PLATFORM=offscreen QB_NO_UPDATE_CHECK=1 QB_NO_DIALOGS=1 ./quillbinder.exe --no-restore > "$OUT/setup-update-program.txt" 2>&1 & )
+if wait_running 40; then
+    sleep 3
+    rm -f "$T/LICENSE.txt"
+    update_run "$OUT/$MAIN_EXE.exe" "$T" "$OUT/setup-update-wait.log" &
+    upid=$!
+    sleep 8
+    waited=no
+    [ "$(back)" = no ] && kill -0 $upid 2> /dev/null && waited=yes
+    stop_program
+    wait $upid; rc=$?
+    started=no; wait_running 30 && started=yes
+    stop_program
+    if [ $waited = yes ] && [ $rc -eq 0 ] && [ "$(back)" = yes ] && [ "$(marker)" = "kept" ] && [ $started = yes ]; then
+        pass setup-update-waits-for-the-program
+    else
+        fail setup-update-waits-for-the-program "waited: $waited, rc=$rc, missing file back: $(back), marker: $(marker), program started: $started; $(tail -4 "$OUT/setup-update-wait.log" 2>/dev/null | tr '\r\n' '  ' | head -c 300)"
+    fi
+else
+    fail setup-update-waits-for-the-program "the program did not start for the check: $(tr '\r\n' '  ' < "$OUT/setup-update-program.txt" | head -c 300)"
+fi
+stop_program
 # ---- full: unpacked with its add-ons, the same as the full zip's folder
 TF="$WORK/Unpacked Full"
 unpack "$OUT/$FULL_EXE.exe" "$TF" "$OUT/setup-full-run.log"; rc=$?
