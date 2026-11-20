@@ -89,7 +89,7 @@
    "name": "Qt",
    "version": "6.12.0",
    "license": "LGPL-3.0-only",
-   "where": "libQt6Core.so.6, libQt6DBus.so.6, libQt6Gui.so.6, libQt6Network.so.6, libQt6OpenGL.so.6, libQt6Pdf.so.6, libQt6PdfWidgets.so.6, libQt6PrintSupport.so.6, libQt6Svg.so.6, libQt6WaylandClient.so.6, libQt6Widgets.so.6, libQt6WlShellIntegration.so.6, libQt6XcbQpa.so.6, libQt6Xml.so.6, libadwaita.so, libbradient.so, libcomposeplatforminputcontextplugin.so, libcupsprintersupport.so, libdmabuf-server.so, libdrm-egl-server.so, libfullscreen-shell-v1.so, libibusplatforminputcontextplugin.so, libivi-shell.so, libqgif.so, libqico.so, libqjpeg.so, libqoffscreen.so, libqpdf.so, libqsvg.so, libqsvgicon.so, libqt-plugin-wayland-egl.so, libqt-shell.so, libqwayland.so, libqwebp.so, libqxcb-egl-integration.so, libqxcb-glx-integration.so, libqxcb.so, libqxdgdesktopportal.so, libshm-emulation-server.so, libvulkan-server.so, libwl-shell-plugin.so, libxdg-shell.so",
+   "where": "libQt6Core.so.6, libQt6DBus.so.6, libQt6Gui.so.6, libQt6Network.so.6, libQt6OpenGL.so.6, libQt6Pdf.so.6, libQt6PdfWidgets.so.6, libQt6PrintSupport.so.6, libQt6Svg.so.6, libQt6WaylandClient.so.6, libQt6Widgets.so.6, libQt6WlShellIntegration.so.6, libQt6XcbQpa.so.6, libQt6Xml.so.6, libadwaita.so, libbradient.so, libcomposeplatforminputcontextplugin.so, libcupsprintersupport.so, libdmabuf-server.so, libdrm-egl-server.so, libfullscreen-shell-v1.so, libibusplatforminputcontextplugin.so, libivi-shell.so, libqgif.so, libqico.so, libqjpeg.so, libqoffscreen.so, libqopensslbackend.so, libqpdf.so, libqsvg.so, libqsvgicon.so, libqt-plugin-wayland-egl.so, libqt-shell.so, libqwayland.so, libqwebp.so, libqxcb-egl-integration.so, libqxcb-glx-integration.so, libqxcb.so, libqxdgdesktopportal.so, libshm-emulation-server.so, libvulkan-server.so, libwl-shell-plugin.so, libxdg-shell.so",
    "files": [
     "usr/lib/libQt6Core.so.6",
     "usr/lib/libQt6DBus.so.6",
@@ -119,6 +119,7 @@
     "usr/plugins/platforms/libqxcb.so",
     "usr/plugins/platformthemes/libqxdgdesktopportal.so",
     "usr/plugins/printsupport/libcupsprintersupport.so",
+    "usr/plugins/tls/libqopensslbackend.so",
     "usr/plugins/wayland-decoration-client/libadwaita.so",
     "usr/plugins/wayland-decoration-client/libbradient.so",
     "usr/plugins/wayland-graphics-integration-client/libdmabuf-server.so",
