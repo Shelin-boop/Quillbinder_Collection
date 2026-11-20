@@ -167,6 +167,7 @@ Inspector::Inspector(QWidget *parent) : QWidget(parent)
     m_mindMap = new MindMapPanel(m_stack);
     m_stack->addWidget(m_mindMap);
     connect(m_mindMap, &MindMapPanel::openWindowRequested, this, &Inspector::openMindMapWindow);
+    connect(m_mindMap, &MindMapPanel::fixToggleRequested, this, &Inspector::mindMapFixToggleRequested);
     m_objects = new ObjectsPanel(false, m_stack);
     m_objects->setZoomKeys(QLatin1String(zoom::kInspObjectList), QLatin1String(zoom::kInspObjectSheet));
     m_stack->addWidget(m_objects);
@@ -2195,8 +2196,30 @@ void Inspector::refreshMindMap()
     // the board is opened only while the tab is shown (each document has one)
     if (m_stack->currentIndex() != int(MindMap))
         return;
-    m_mindMap->setItem(m_project, m_item ? m_item->id : QString());
+    // 0.92.0: a fixed item's board stays, whatever is selected
+    BinderItem *shown = fixedMindMapItem();
+    m_mindMap->setFixed(shown != nullptr, shown ? shown->title : QString());
+    if (!shown)
+        shown = m_item;
+    m_mindMap->setItem(m_project, shown ? shown->id : QString());
     refreshMindMapZoom();
+}
+
+BinderItem *Inspector::fixedMindMapItem() const
+{
+    return m_project && !m_fixedMapId.isEmpty() ? m_project->item(m_fixedMapId) : nullptr;
+}
+
+void Inspector::setFixedMindMapId(const QString &id)
+{
+    if (id == m_fixedMapId) {
+        if (BinderItem *it = fixedMindMapItem())   // its title may have changed
+            m_mindMap->setFixed(true, it->title);
+        return;
+    }
+    m_fixedMapId = id;
+    refreshMindMap();
+    updateTabDots();
 }
 
 int Inspector::currentTab() const { return m_stack->currentIndex(); }
@@ -2241,9 +2264,11 @@ void Inspector::updateTabDots()
         m_tabButtons[i]->setStyleSheet(on ? QStringLiteral("QToolButton { border-bottom: 2px solid palette(highlight); }")
                                           : QString());
     };
+    // 0.92.0: the Mind Map tab shows the fixed item's board, so its mark is that item's too
+    BinderItem *fixedMap = fixedMindMapItem();
     if (!m_item || !m_project) {
         for (int i = 0; i < m_tabButtons.size(); ++i)
-            mark(i, false);
+            mark(i, i == int(MindMap) && fixedMap && mindmaps::hasMap(m_project, fixedMap->id));
         return;
     }
     mark(Notes, !m_item->synopsis.isEmpty() || !m_project->docs()->notesPlainText(m_item->id).trimmed().isEmpty());
@@ -2251,7 +2276,7 @@ void Inspector::updateTabDots()
     mark(Metadata, !m_item->keywords.isEmpty() || !m_item->custom.isEmpty());
     mark(Snapshots, m_item->hasSnapshots);
     mark(Comments, !m_noteCards.isEmpty());
-    mark(MindMap, mindmaps::hasMap(m_project, m_item->id));
+    mark(MindMap, mindmaps::hasMap(m_project, fixedMap ? fixedMap->id : m_item->id));
     mark(Objects, !m_project->objects()->objectsForDocument(m_item->id).isEmpty());
 }
 

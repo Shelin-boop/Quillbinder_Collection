@@ -9,6 +9,7 @@
 #include <QApplication>
 #include "ui/AppSettings.h"
 #include "ui/DragDrop.h"
+#include "ui/RowMarks.h"
 
 #include <QColorDialog>
 #include <QDrag>
@@ -29,6 +30,8 @@
 #include <QStyledItemDelegate>
 #include <QTabBar>
 #include <QTimer>
+#include <QToolTip>
+#include <QHelpEvent>
 #include <QToolButton>
 #include <QVBoxLayout>
 
@@ -57,6 +60,25 @@ public:
             p->restore();
         }
         QStyledItemDelegate::paint(p, option, index);
+        // 0.92.0: the padlock (another device works on it) and the pin of the fixed mind map, left of the label dot
+        if (tree) {
+            const QString id = index.data(BinderModel::IdRole).toString();
+            const int right = qMin(option.rect.right(), tree->viewport()->width() - 1);
+            QColor ink = option.palette.color((option.state & QStyle::State_Selected) ? QPalette::HighlightedText : QPalette::Text);
+            if (!tree->lockTip(id).isEmpty()) {
+                QColor c = ink;
+                c.setAlpha(190);
+                rowmarks::paintLock(p, rowmarks::lockRect(option.rect, right), c);
+            }
+            const bool fixed = !id.isEmpty() && id == tree->fixedMindMapId();
+            const bool hovered = tree->hoverIndex().isValid() && tree->hoverIndex() == index.siblingAtColumn(0);
+            if (fixed || (hovered && tree->canFixMindMap && tree->canFixMindMap(index))) {
+                QColor c = fixed && !(option.state & QStyle::State_Selected) ? option.palette.color(QPalette::Highlight) : ink;
+                if (!fixed)
+                    c.setAlpha(150);
+                rowmarks::paintPin(p, rowmarks::pinRect(option.rect, right), c, fixed);
+            }
+        }
         if (!AppSettings::instance().labelColorInBinder)
             return;
         const QColor c = index.data(BinderModel::LabelColorRole).value<QColor>();
@@ -104,6 +126,8 @@ BinderTree::BinderTree(QWidget *parent) : QTreeView(parent)
     setItemDelegate(new BinderDelegate(this));
     setFrameShape(QFrame::NoFrame);
     setExpandsOnDoubleClick(false);
+    setMouseTracking(true);            // 0.92.0: the row under the mouse shows the pin of the mind map
+    viewport()->setMouseTracking(true);
     // narrower steps than Qt's 20 px (0.17: more of the titles to be seen)
     setIndentation(AppSettings::instance().binderIndent);
     connect(&AppSettings::instance(), &AppSettings::changed, this, [this] {
@@ -226,13 +250,113 @@ void BinderTree::mousePressEvent(QMouseEvent *e)
             return;
         }
     }
+    // 0.92.0: a click on a row's pin fixes or releases the mind map; it selects nothing and starts no drag
+    if (e->button() == Qt::LeftButton && e->modifiers() == Qt::NoModifier) {
+        const QModelIndex idx = indexAt(e->pos());
+        if (idx.isValid() && pinRectOf(idx).adjusted(-2, -2, 2, 2).contains(e->pos())
+            && (idx.data(BinderModel::IdRole).toString() == m_fixedMapId || (canFixMindMap && canFixMindMap(idx)))) {
+            m_pinPressed = true;
+            emit mindMapPinClicked(idx.data(BinderModel::IdRole).toString());
+            e->accept();
+            return;
+        }
+    }
     if (e->button() == Qt::LeftButton)
         m_mouseDown = true;
     QTreeView::mousePressEvent(e);
 }
 
+void BinderTree::setFixedMindMapId(const QString &id)
+{
+    if (id == m_fixedMapId)
+        return;
+    m_fixedMapId = id;
+    viewport()->update();
+}
+
+void BinderTree::setLockMarks(const QHash<QString, QString> &tips)
+{
+    if (tips == m_lockTips)
+        return;
+    m_lockTips = tips;
+    viewport()->update();
+}
+
+QRect BinderTree::pinRectOf(const QModelIndex &index) const
+{
+    const QRect row = visualRect(index);
+    return rowmarks::pinRect(row, qMin(row.right(), viewport()->width() - 1));
+}
+
+QRect BinderTree::lockRectOf(const QModelIndex &index) const
+{
+    const QRect row = visualRect(index);
+    return rowmarks::lockRect(row, qMin(row.right(), viewport()->width() - 1));
+}
+
+void BinderTree::updateRow(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+    const QRect r = visualRect(index);
+    viewport()->update(QRect(0, r.top(), viewport()->width(), r.height()));
+}
+
+void BinderTree::setHover(const QModelIndex &index)
+{
+    const QModelIndex now = index.isValid() ? index.siblingAtColumn(0) : QModelIndex();
+    if (now == QModelIndex(m_hover))
+        return;
+    updateRow(m_hover);
+    m_hover = now;
+    updateRow(m_hover);
+}
+
+void BinderTree::mouseMoveEvent(QMouseEvent *e)
+{
+    setHover(indexAt(e->pos()));
+    if (m_pinPressed)
+        return;   // no drag out of a click on the pin
+    QTreeView::mouseMoveEvent(e);
+}
+
+void BinderTree::leaveEvent(QEvent *e)
+{
+    setHover(QModelIndex());
+    QTreeView::leaveEvent(e);
+}
+
+bool BinderTree::viewportEvent(QEvent *e)
+{
+    if (e->type() == QEvent::ToolTip) {
+        auto *he = static_cast<QHelpEvent *>(e);
+        const QModelIndex idx = indexAt(he->pos());
+        if (idx.isValid()) {
+            const QString id = idx.data(BinderModel::IdRole).toString();
+            if (!lockTip(id).isEmpty() && lockRectOf(idx).adjusted(-2, -2, 2, 2).contains(he->pos())) {
+                QToolTip::showText(he->globalPos(), lockTip(id), viewport());
+                return true;
+            }
+            if (pinRectOf(idx).adjusted(-2, -2, 2, 2).contains(he->pos()) && (id == m_fixedMapId || (canFixMindMap && canFixMindMap(idx)))) {
+                QToolTip::showText(he->globalPos(),
+                                   id == m_fixedMapId ? tr("The inspector's Mind Map tab is fixed on this item. Click to release it.")
+                                                      : tr("Fix the inspector's Mind Map tab on this item: it then shows this "
+                                                           "item's mind map whatever is selected."),
+                                   viewport());
+                return true;
+            }
+        }
+    }
+    return QTreeView::viewportEvent(e);
+}
+
 void BinderTree::mouseReleaseEvent(QMouseEvent *e)
 {
+    if (m_pinPressed) {   // 0.92.0: the click on a pin ends here
+        m_pinPressed = false;
+        e->accept();
+        return;
+    }
     QTreeView::mouseReleaseEvent(e);
     if (e->button() != Qt::LeftButton)
         return;
@@ -647,6 +771,46 @@ BinderPanel::BinderPanel(QWidget *parent) : QWidget(parent)
             icons();
     });
 
+    // 0.92.0: a slim bar while a mind map is fixed in the inspector: whose it is, and "Release"
+    m_fixedBar = new QWidget(this);
+    m_fixedBar->setObjectName(QStringLiteral("binderFixedMindMapBar"));
+    {
+        auto *bl = new QHBoxLayout(m_fixedBar);
+        bl->setContentsMargins(6, 2, 4, 2);
+        bl->setSpacing(4);
+        auto *pin = new QLabel(m_fixedBar);
+        pin->setPixmap(rowmarks::pinIcon(palette().color(QPalette::Highlight), true).pixmap(14, 14));
+        bl->addWidget(pin);
+        m_fixedLabel = new QLabel(m_fixedBar);
+        m_fixedLabel->setObjectName(QStringLiteral("binderFixedMindMapTitle"));
+        m_fixedLabel->setTextFormat(Qt::PlainText);
+        m_fixedLabel->setMinimumWidth(20);
+        m_fixedLabel->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
+        bl->addWidget(m_fixedLabel, 1);
+        auto *release = new QToolButton(m_fixedBar);
+        release->setObjectName(QStringLiteral("binderReleaseMindMap"));
+        release->setText(tr("Release"));
+        release->setToolButtonStyle(Qt::ToolButtonTextOnly);
+        release->setAutoRaise(true);
+        release->setToolTip(tr("Release the fixed mind map: the inspector's Mind Map tab follows the selected item again"));
+        connect(release, &QToolButton::clicked, this, &BinderPanel::releaseMindMapRequested);
+        bl->addWidget(release);
+    }
+    m_fixedBar->hide();
+    lay->addWidget(m_fixedBar);
+    m_tree->canFixMindMap = [this](const QModelIndex &idx) {
+        BinderItem *it = m_project ? m_project->item(idx.data(BinderModel::IdRole).toString()) : nullptr;
+        return it && it != m_project->trash() && !m_project->isInTrash(it);
+    };
+    connect(m_tree, &BinderTree::mindMapPinClicked, this, [this](const QString &id) {
+        if (!m_project)
+            return;
+        if (id == m_tree->fixedMindMapId())
+            emit releaseMindMapRequested();
+        else if (BinderItem *it = m_project->item(id))
+            emit fixMindMapRequested(it);
+    });
+
     // footer
     auto *footer = new QWidget(this);
     auto *fl = new QHBoxLayout(footer);
@@ -940,9 +1104,29 @@ void BinderPanel::fillSearchMenu(QMenu *menu)
     save->setEnabled(m_project && !m_query.text.trimmed().isEmpty());
 }
 
+void BinderPanel::setFixedMindMap(BinderItem *item)
+{
+    m_tree->setFixedMindMapId(item ? item->id : QString());
+    m_fixedTitle = item ? item->title : QString();
+    m_fixedBar->setVisible(item != nullptr);
+    if (item) {
+        const QString text = tr("Mind map fixed: %1").arg(m_fixedTitle.isEmpty() ? tr("Untitled") : m_fixedTitle);
+        m_fixedLabel->setText(text);
+        m_fixedLabel->setToolTip(text + QLatin1Char('\n')
+                                 + tr("The inspector's Mind Map tab shows this item's mind map whatever is selected."));
+    }
+}
+
+void BinderPanel::setLockMarks(const QHash<QString, QString> &tips)
+{
+    m_tree->setLockMarks(tips);
+}
+
 void BinderPanel::setProject(Project *p)
 {
     m_project = p;
+    setFixedMindMap(nullptr);
+    m_tree->setLockMarks({});
     m_results->setProject(p);
     m_results->setReorderable(false);
     m_tree->setEditorItemId(QString());

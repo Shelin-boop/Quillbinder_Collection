@@ -222,6 +222,12 @@ private:
     void saveTextsElsewhere();
     void showConflictNotice();
 public:
+    // 0.92.0: the fixed mind map (one item of the project whose board the inspector's Mind Map tab keeps showing)
+    void fixMindMap(BinderItem *item);
+    void releaseMindMap();
+    QString fixedMindMapId() const { return m_fixedMindMapId; }
+    // 0.92.0 (the shown lock): reads what other devices say they work on and marks those rows (also by a timer)
+    void readWorkMarks();
     // 0.92.0: the notice "Other Versions Kept" turned off until the program quits (its button; the tests set it back)
     static bool conflictNoticeOff();
     static void setConflictNoticeOff(bool off);
@@ -439,6 +445,20 @@ private:
     QString m_lastBackupProblem;
     QSet<QString> m_backupCausesTold;                       // 0.92.0: the notice of a manual save's backup, per cause
     failure::Kind m_lastSaveKind = failure::Kind::None;     // 0.92.0: the kind of the last failed save
+    QString m_fixedMindMapId;                               // 0.92.0
+    void applyFixedMindMap();
+    void updateMindMapActions();
+    // 0.92.0: the shown lock (MainWindowSync.cpp)
+    void startWorkMarks();
+    void noteWorkChange();
+    void writeWorkMarks(bool renew = false);
+    QStringList workDocs() const;
+    QSet<QString> m_changedSinceOpen;
+    QTimer *m_workDebounce = nullptr;
+    QTimer *m_workPoll = nullptr;
+    QStringList m_workWritten;
+    bool m_workWrittenOnce = false;
+    QDateTime m_workAlive;
     bool m_lockWriteTold = false;
     QString m_lastLockProblem;
     QString m_lastEmergencyNotice;

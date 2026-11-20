@@ -406,7 +406,8 @@ void MainWindow::createMenus()
     for (QAction *ac : m_affectsGroup->actions())
         affects->addAction(ac);
     QMenu *inspect = nav->addMenu(tr("&Inspect"));
-    add(inspect, {"goSynopsis", "goNotes", "", "inspect0", "inspect1", "inspect5", "inspect6", "inspect2", "inspect3", "inspect4"});
+    add(inspect, {"goSynopsis", "goNotes", "", "inspect0", "inspect1", "inspect5", "inspect6", "inspect2", "inspect3", "inspect4", "",
+                  "fixMindMap", "releaseMindMap"});
     connect(inspect, &QMenu::aboutToShow, this, [this] {
         const bool item = m_project && m_inspector->item();
         a[QStringLiteral("goSynopsis")]->setEnabled(item);

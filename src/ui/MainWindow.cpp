@@ -321,6 +321,7 @@ MainWindow::MainWindow()
             m_inspector->setItem(items.size() == 1 ? items.first() : nullptr);
         }
         updateActions();
+        updateMindMapActions();
     });
     connect(m_binder, &BinderPanel::searchChanged, this, &MainWindow::applySearchHighlights);
     connect(m_binder, &BinderPanel::contextMenuRequested, this,
@@ -354,6 +355,15 @@ MainWindow::MainWindow()
         QTimer::singleShot(0, this, [select] { select(); });
     });
     connect(m_inspector, &Inspector::openMindMapWindow, this, [this](MindMapDoc *doc) { MindMapWindow::open(doc, this); });
+    // 0.92.0: the fixed mind map (the pin of a binder row, the bar at the binder's bottom, the pin button of the tab)
+    connect(m_inspector, &Inspector::mindMapFixToggleRequested, this, [this] {
+        if (m_fixedMindMapId.isEmpty())
+            fixMindMap(m_inspector->item());
+        else
+            releaseMindMap();
+    });
+    connect(m_binder, &BinderPanel::fixMindMapRequested, this, &MainWindow::fixMindMap);
+    connect(m_binder, &BinderPanel::releaseMindMapRequested, this, &MainWindow::releaseMindMap);
     connect(m_inspector, &Inspector::openObjectsWindow, this, [this](const QString &id) {
         if (m_project)
             if (ObjectsWindow *ow = ObjectsWindow::open(m_project.get(), id, this))
@@ -2002,6 +2012,11 @@ void MainWindow::createActions()
             });
         }
     }
+    // 0.92.0: the fixed mind map from the menu (so that both can get shortcuts)
+    connect(act(QStringLiteral("fixMindMap"), tr("&Fix the Mind Map of This Item")), &QAction::triggered, this,
+            [this] { fixMindMap(m_inspector->item()); });
+    connect(act(QStringLiteral("releaseMindMap"), tr("&Release the Fixed Mind Map")), &QAction::triggered, this,
+            &MainWindow::releaseMindMap);
     // 0.90.1 (the usability review of 0.90.0, UR-07): the synopsis and the notes from the keyboard
     connect(act(QStringLiteral("goSynopsis"), tr("Go to S&ynopsis"), QString(), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_Y)),
             &QAction::triggered, this, [this] {
@@ -2247,6 +2262,7 @@ void MainWindow::updateActions()
     // the synopsis and notes of the document the inspector shows (0.90.1)
     a[QStringLiteral("goSynopsis")]->setEnabled(has && m_inspector->item());
     a[QStringLiteral("goNotes")]->setEnabled(has && m_inspector->item());
+    updateMindMapActions();
     {
         const bool scriv = has && !m_project->scrivenerPath.isEmpty();
         a[QStringLiteral("formatQuillbinder")]->setChecked(has && !scriv);
@@ -2840,10 +2856,13 @@ void MainWindow::refreshInspector()
         // the keyboard is in the copyholder: its document is the one being worked on
         m_inspector->setItem(m_active->copyholderItem());
         m_inspector->setEditor(held);
+        updateMindMapActions();
         return;
     }
     BinderItem *it = m_active->currentItem();
     m_inspector->setItem(it);
+    updateMindMapActions();
+    noteWorkChange();   // 0.92.0 (the shown lock): another document is open here
     TextEditor *ed = m_active->currentEditor();
     if (!ed && it && it->hasText()) {
         // inspector comments need an editor on the document: use the text view if any
@@ -3001,8 +3020,14 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
     if (!AppSettings::instance().reloadZoom || !proj->uiState.contains(QStringLiteral("zoom")))
         proj->docs()->setZoom(zoom::defaultFactor(QLatin1String(zoom::kEditor)));
     m_editedSinceSave.clear();
+    m_changedSinceOpen.clear();
     connect(proj->docs(), &DocumentStore::textEdited, this, [this](const QString &id) {
         m_editedSinceSave.insert(id);
+        // 0.92.0 (the shown lock): the first change of a document here is told to other devices
+        if (!m_changedSinceOpen.contains(id)) {
+            m_changedSinceOpen.insert(id);
+            noteWorkChange();
+        }
         queueAutoTitle(id);
     });
     m_autoTitlePending.clear();
@@ -3228,6 +3253,9 @@ bool MainWindow::closeProject()
         v->release();
     saveUiState();
     // mind maps: saved, their windows closed, their boards let go (before the project goes)
+    m_fixedMindMapId.clear();   // 0.92.0: kept in the project's view state (saveUiState above); the views let go
+    m_inspector->setFixedMindMapId(QString());
+    m_binder->setFixedMindMap(nullptr);
     m_inspector->mindMapPanel()->setItem(nullptr, QString());
     // 0.70.0 (audit A U-01): the boards are saved first and a failure counts like a failed save of texts (the
     // question below); they are closed only after it, and dropped only on "Close Without Saving"
@@ -3324,6 +3352,56 @@ bool MainWindow::closeProject()
     return true;
 }
 
+// ---------------------------------------------------------------- the fixed mind map (0.92.0)
+// One item of the project can be fixed: the inspector's Mind Map tab then shows that item's board, whatever is
+// selected in the binder or open in the editor. Kept per project and computer (the view state), released when the
+// item goes into the Trash or is deleted. Only the tab is fixed: the other tabs follow the selected document, and a
+// large window of a board does not switch.
+
+void MainWindow::fixMindMap(BinderItem *item)
+{
+    if (!m_project || !item || item == m_project->trash() || m_project->isInTrash(item) || !m_project->item(item->id))
+        return;
+    m_fixedMindMapId = item->id;
+    applyFixedMindMap();
+    statusBar()->showMessage(tr("The Mind Map tab of the inspector now stays on \"%1\".").arg(item->title), 6000);
+}
+
+void MainWindow::releaseMindMap()
+{
+    if (m_fixedMindMapId.isEmpty())
+        return;
+    m_fixedMindMapId.clear();
+    applyFixedMindMap();
+    statusBar()->showMessage(tr("The Mind Map tab of the inspector follows the selected item again."), 6000);
+}
+
+void MainWindow::applyFixedMindMap()
+{
+    BinderItem *item = m_project && !m_fixedMindMapId.isEmpty() ? m_project->item(m_fixedMindMapId) : nullptr;
+    if (item && (item == m_project->trash() || m_project->isInTrash(item)))
+        item = nullptr;
+    if (!item)
+        m_fixedMindMapId.clear();
+    m_binder->setFixedMindMap(item);
+    m_inspector->setFixedMindMapId(m_fixedMindMapId);
+    if (m_project && m_project->uiState.value(QStringLiteral("fixedMindMap")).toString() != m_fixedMindMapId) {
+        m_project->uiState[QStringLiteral("fixedMindMap")] = m_fixedMindMapId;
+        m_project->markUiStateDirty();
+    }
+    updateMindMapActions();
+}
+
+void MainWindow::updateMindMapActions()
+{
+    if (!a.contains(QStringLiteral("fixMindMap")))
+        return;
+    BinderItem *it = m_project ? m_inspector->item() : nullptr;
+    const bool can = it && it != m_project->trash() && !m_project->isInTrash(it) && it->id != m_fixedMindMapId;
+    a[QStringLiteral("fixMindMap")]->setEnabled(can);
+    a[QStringLiteral("releaseMindMap")]->setEnabled(m_project && !m_fixedMindMapId.isEmpty());
+}
+
 void MainWindow::saveUiState()
 {
     if (!m_project)
@@ -3342,6 +3420,7 @@ void MainWindow::saveUiState()
     ui[QStringLiteral("activePane")] = m_active == m_panes[1] ? 1 : 0;
     ui[QStringLiteral("collections")] = m_binder->collectionsVisible();
     ui[QStringLiteral("binderAffects")] = m_binderAffects;
+    ui[QStringLiteral("fixedMindMap")] = m_fixedMindMapId;   // 0.92.0
     for (int i = 0; i < 2; ++i) {
         ui[QStringLiteral("corkMode%1").arg(i)] = m_panes[i]->corkMode();
         ui[QStringLiteral("affectsOther%1").arg(i)] = m_panes[i]->selectionAffectsOther();
@@ -3380,6 +3459,9 @@ void MainWindow::restoreUiState()
     m_binder->select(sel, false);
     m_updatingUi = false;
     setBinderAffects(ui.value(QStringLiteral("binderAffects"), QStringLiteral("current")).toString());
+    // 0.92.0: the fixed mind map of this project (not when its item is gone or in the Trash by now)
+    m_fixedMindMapId = ui.value(QStringLiteral("fixedMindMap")).toString();
+    applyFixedMindMap();
     for (int i = 0; i < 2; ++i) {
         m_panes[i]->setCorkMode(ui.value(QStringLiteral("corkMode%1").arg(i), 0).toInt());
         m_panes[i]->setSelectionAffectsOther(ui.value(QStringLiteral("affectsOther%1").arg(i), false).toBool());

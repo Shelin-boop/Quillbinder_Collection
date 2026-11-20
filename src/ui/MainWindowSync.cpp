@@ -4,11 +4,15 @@
 // texts whose files have not arrived yet. Works on files only (core/SyncSafety.h), whatever
 // the sync program is.
 #include "ui/MainWindow.h"
+#include "ui/BinderPanel.h"
+#include "ui/EditorPane.h"
+#include "core/BinderModel.h"
 #include "core/TestSwitches.h"
 
 #include "core/DocumentStore.h"
 #include "core/Platform.h"
 #include "core/SyncSafety.h"
+#include "core/WorkMarks.h"
 
 #include "AppInfo.h"
 
@@ -112,6 +116,7 @@ void MainWindow::takeLocks()
         connect(m_lockTimer, &QTimer::timeout, this, [this] { renewLocks(true); });
     }
     m_lockTimer->start(syncsafe::renewIntervalMs());
+    startWorkMarks();   // 0.92.0: the shown lock
 }
 
 void MainWindow::renewLocks(bool write)
@@ -176,8 +181,115 @@ void MainWindow::releaseLocks()
 {
     if (m_lockTimer)
         m_lockTimer->stop();
-    for (const QString &f : lockFilesFor(m_project.get()))
+    // 0.92.0 (the shown lock): this device's list goes with its lock
+    if (m_workDebounce)
+        m_workDebounce->stop();
+    if (m_workPoll)
+        m_workPoll->stop();
+    for (const QString &f : lockFilesFor(m_project.get())) {
+        workmarks::removeOwn(f);
         syncsafe::removeOwnLock(f);
+    }
+    m_workWritten.clear();
+    m_workWrittenOnce = false;
+    m_binder->setLockMarks({});
+}
+
+// ---------------------------------------------------------------- the shown lock (0.92.0)
+// This device says which documents it has open or has changed since it opened the project (core/WorkMarks.h), and
+// the binder marks the documents other devices say so about with a padlock. Written a few seconds after the list
+// changed, and only then; read when the project is opened and every half minute (reading writes nothing).
+
+void MainWindow::startWorkMarks()
+{
+    if (!m_workDebounce) {
+        m_workDebounce = new QTimer(this);
+        m_workDebounce->setSingleShot(true);
+        connect(m_workDebounce, &QTimer::timeout, this, [this] { writeWorkMarks(); });
+        m_workPoll = new QTimer(this);
+        connect(m_workPoll, &QTimer::timeout, this, [this] {
+            // a device that lost the lock and keeps working shows its own sign of life (the lock's is the other's now)
+            if (m_lockLost && m_workWrittenOnce && m_workAlive.isValid() && m_workAlive.msecsTo(QDateTime::currentDateTimeUtc()) >= syncsafe::renewIntervalMs())
+                writeWorkMarks(true);
+            readWorkMarks();
+        });
+    }
+    bool ok = false;
+    const int debounce = QB_TEST_ENV_INT("QB_WORK_MARKS_MS", &ok);
+    m_workDebounce->setInterval(ok && debounce > 0 ? debounce : 5000);
+    m_workPoll->start(ok && debounce > 0 ? qMax(debounce, 200) : 30000);
+    m_workWritten.clear();
+    m_workWrittenOnce = false;
+    readWorkMarks();
+    noteWorkChange();
+}
+
+void MainWindow::noteWorkChange()
+{
+    if (m_project && m_workDebounce && !m_workDebounce->isActive())
+        m_workDebounce->start();
+}
+
+QStringList MainWindow::workDocs() const
+{
+    QSet<QString> ids = m_changedSinceOpen;
+    for (EditorPane *pane : m_panes)
+        if (pane && pane->isVisible())
+            if (BinderItem *it = pane->currentItem())
+                ids.insert(it->id);
+    QStringList out;
+    for (const QString &id : std::as_const(ids)) {
+        BinderItem *it = m_project ? m_project->item(id) : nullptr;
+        if (it && !m_project->isInTrash(it))
+            out << id;
+    }
+    out.sort();
+    return out;
+}
+
+void MainWindow::writeWorkMarks(bool renew)
+{
+    if (!m_project)
+        return;
+    const QStringList docs = workDocs();
+    if (!renew && m_workWrittenOnce && docs == m_workWritten)
+        return;   // the same list: nothing for a sync program to carry
+    for (const QString &f : lockFilesFor(m_project.get()))
+        workmarks::write(f, m_lockOpened, docs);   // (a failure is not told: the lock's own notice covers the folder)
+    m_workWritten = docs;
+    m_workWrittenOnce = true;
+    m_workAlive = QDateTime::currentDateTimeUtc();
+}
+
+void MainWindow::readWorkMarks()
+{
+    if (!m_project)
+        return;
+    QHash<QString, QString> tips;
+    QHash<QString, QStringList> folders;   // folder id -> the devices that work inside
+    for (const QString &f : lockFilesFor(m_project.get())) {
+        for (const workmarks::Entry &e : workmarks::others(f, syncsafe::staleAfterSeconds())) {
+            const QString since = e.opened.isValid() ? localTime(e.opened) : ago(e.alive);
+            for (const QString &id : e.docs) {
+                BinderItem *it = m_project->item(id);
+                if (!it)
+                    continue;
+                const QString line = tr("“%1” has this document open or has changed it (it opened the project at %2).").arg(e.device, since);
+                if (!tips.value(id).contains(line))
+                    tips[id] = tips.value(id).isEmpty() ? line : tips.value(id) + QLatin1Char('\n') + line;
+                for (BinderItem *up = it->parent; up && up != m_project->root(); up = up->parent)
+                    if (!folders[up->id].contains(e.device))
+                        folders[up->id] << e.device;
+            }
+        }
+    }
+    const QString hint = tr("A hint only: nothing is blocked. It can be some minutes old, as your sync program carries it.");
+    for (auto it = tips.begin(); it != tips.end(); ++it)
+        it.value() += QLatin1Char('\n') + hint;
+    for (auto it = folders.cbegin(); it != folders.cend(); ++it)
+        if (!tips.contains(it.key()))
+            tips.insert(it.key(), tr("“%1” works on documents in here.").arg(it.value().join(tr("” and “"))) + QLatin1Char('\n') + hint);
+    m_binder->setLockMarks(tips);
 }
 
 void MainWindow::connectSyncSafety(Project *p)
@@ -193,6 +305,14 @@ void MainWindow::connectSyncSafety(Project *p)
         QTimer::singleShot(0, this, &MainWindow::showConflictNotice);
     });
     connect(p, &Project::saved, this, [this] { renewLocks(false); });
+    // 0.92.0: the fixed mind map is released when its item goes into the Trash or is deleted, and the bar and the
+    // tab's line follow its title
+    auto recheck = [this] { QTimer::singleShot(0, this, [this] { if (m_project && !m_fixedMindMapId.isEmpty()) applyFixedMindMap(); }); };
+    connect(p->model(), &QAbstractItemModel::rowsMoved, this, recheck);
+    connect(p->model(), &QAbstractItemModel::rowsRemoved, this, recheck);
+    connect(p->model(), &QAbstractItemModel::rowsInserted, this, recheck);
+    connect(p->model(), &QAbstractItemModel::modelReset, this, recheck);
+    connect(p->model(), &QAbstractItemModel::dataChanged, this, recheck);
     connect(p->docs(), &DocumentStore::missingFile, this, [this](const QString &id, const QString &) {
         BinderItem *it = m_project ? m_project->item(id) : nullptr;
         statusBar()->showMessage(tr("“%1”: its text has not arrived on this computer yet; it is shown empty and "

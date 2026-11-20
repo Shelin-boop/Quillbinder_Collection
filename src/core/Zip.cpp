@@ -354,6 +354,8 @@ bool ZipWriter::addDirectory(const QString &diskDir, const QString &prefix)
         if (rel == QLatin1String("settings/lock") || rel.endsWith(QLatin1String("/quillbinder.lock"))
             || rel == QLatin1String("quillbinder.lock"))
             continue; // 0.70.0 (audit A U-09): who has the project open (computer and login name) stays out
+        if (rel.startsWith(QLatin1String("settings/lock-work-")) || rel.contains(QLatin1String("quillbinder.lock-work-")))
+            continue; // 0.92.0: which documents a device has open (the shown lock) stays out as well
         const QString suffix = QFileInfo(path).suffix().toLower();
         static const QStringList packed = {QStringLiteral("png"), QStringLiteral("jpg"), QStringLiteral("jpeg"), QStringLiteral("zip"),
                                            QStringLiteral("mp3"), QStringLiteral("mp4"), QStringLiteral("m4a"), QStringLiteral("ogg"),

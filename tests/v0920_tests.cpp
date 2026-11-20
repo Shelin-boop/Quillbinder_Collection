@@ -13,6 +13,14 @@
 //    install says what was left where.
 // Saves screenshots into the folder given as first argument. Exit code = number of failed checks.
 //
+// Part 2, the new functions:
+//  - the fixed mind map: a pin on the binder's rows (the fixed row, and the row under the mouse), the pin button of
+//    the inspector's Mind Map tab, the bar at the binder's bottom with "Release", the two menu commands; kept per
+//    project, released when the item goes into the Trash;
+//  - the shown lock: each device writes which documents it has open or has changed beside the project's lock, only
+//    when that list changes; the binder marks what other devices work on with a padlock (documents and the folders
+//    around them), with a tool tip; a list without a sign of life is not shown; the list goes at closing.
+//
 //   xvfb-run -a ./qb_v0920_tests /tmp/shots
 
 #include "core/Addons.h"
@@ -25,17 +33,24 @@
 #include "core/Project.h"
 #include "core/ProjectTemplates.h"
 #include "core/Snapshots.h"
+#include "core/SyncSafety.h"
+#include "core/WorkMarks.h"
 #include "core/Zip.h"
 #include "compile/PluginManager.h"
 #include "import/FileImporter.h"
 #include "import/ScrivenerFormat.h"
 #include "import/ScrivenerImporter.h"
 #include "ui/AppSettings.h"
+#include "ui/BinderPanel.h"
+#include "ui/Inspector.h"
 #include "ui/MainWindow.h"
+#include "ui/MindMapDoc.h"
+#include "ui/MindMapUi.h"
 #include "ui/Theme.h"
 
 #include "AppInfo.h"
 
+#include <QAction>
 #include <QApplication>
 #include <QBuffer>
 #include <QColor>
@@ -46,11 +61,13 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QFont>
+#include <QHelpEvent>
 #include <QIcon>
 #include <QImage>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLabel>
 #include <QMessageBox>
 #include <QPointer>
 #include <QPushButton>
@@ -63,6 +80,8 @@
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QTimer>
+#include <QToolButton>
+#include <QToolTip>
 #include <QTranslator>
 
 #include <cerrno>
@@ -225,6 +244,7 @@ int main(int argc, char **argv)
     QTemporaryDir home;
     qputenv("XDG_CONFIG_HOME", (home.path() + QLatin1String("/config")).toUtf8());
     qputenv("XDG_DATA_HOME", (home.path() + QLatin1String("/data")).toUtf8());
+    qputenv("QB_WORK_MARKS_MS", "300");   // the shown lock: its list is written 0.3 s after a change (5 s in the program)
     QCoreApplication::setOrganizationName(QStringLiteral("QuillbinderV0920Test"));
     QCoreApplication::setApplicationName(QStringLiteral("QuillbinderV0920Test"));
     QApplication app(argc, argv);
@@ -634,6 +654,232 @@ int main(int argc, char **argv)
         }
     }
 
+    // ================================================================ the fixed mind map (to-do item 1)
+    {
+        auto *binder = w.findChild<BinderPanel *>();
+        auto *insp = w.findChild<Inspector *>();
+        BinderTree *tree = binder ? binder->tree() : nullptr;
+        QAction *fixAct = w.findChild<QAction *>(QStringLiteral("fixMindMap"));
+        QAction *releaseAct = w.findChild<QAction *>(QStringLiteral("releaseMindMap"));
+        QAction *showInspector = w.findChild<QAction *>(QStringLiteral("showInspector"));
+        check(binder && insp && tree && fixAct && releaseAct && showInspector, QStringLiteral("(binder, inspector and the two commands found)"));
+        if (binder && insp && tree && fixAct && releaseAct && showInspector) {
+            if (!showInspector->isChecked())
+                showInspector->trigger();
+            insp->showTab(Inspector::MindMap);
+            MindMapPanel *panel = insp->mindMapPanel();
+            auto *bar = binder->findChild<QWidget *>(QStringLiteral("binderFixedMindMapBar"));
+            auto *barTitle = binder->findChild<QLabel *>(QStringLiteral("binderFixedMindMapTitle"));
+            auto *barRelease = binder->findChild<QToolButton *>(QStringLiteral("binderReleaseMindMap"));
+            auto rowOf = [&](const BinderItem *it) { return p->model()->indexFor(it); };
+            auto selectOne = [&](BinderItem *it) {
+                binder->select({it}, true);
+                settle(400);
+            };
+            tree->expandAll();
+            selectOne(synced);
+            check(bar && barTitle && barRelease && !bar->isVisible() && panel->itemId() == synced->id && !panel->isFixed()
+                      && w.fixedMindMapId().isEmpty() && fixAct->isEnabled() && !releaseAct->isEnabled(),
+                  QStringLiteral("nothing fixed: the Mind Map tab shows the selected item's board, the binder has no bar, "
+                                 "\"Fix\" can be used and \"Release\" cannot"));
+
+            // the pin: only on the row under the mouse; a click fixes without selecting
+            const QModelIndex otherRow = rowOf(other);
+            tree->scrollTo(otherRow);
+            settle(100);
+            QTest::mouseMove(tree->viewport(), tree->visualRect(otherRow).center());
+            settle(200);
+            const bool hovered = tree->hoverIndex() == otherRow;
+            shot(binder, QStringLiteral("v0920-binder-pin-hover"));
+            QTest::mouseClick(tree->viewport(), Qt::LeftButton, Qt::NoModifier, tree->pinRectOf(otherRow).center());
+            settle(500);
+            auto *fixedLine = panel->findChild<QLabel *>(QStringLiteral("mmFixedTitle"));
+            auto *fixButton = panel->findChild<QToolButton *>(QStringLiteral("mmFixButton"));
+            check(hovered && w.fixedMindMapId() == other->id && tree->fixedMindMapId() == other->id
+                      && binder->selectedItems() == QList<BinderItem *>{synced},
+                  QStringLiteral("a click on the pin of the row under the mouse fixes that item; the selection stays"),
+                  QStringLiteral("hovered %1, fixed %2").arg(hovered).arg(w.fixedMindMapId()));
+            check(panel->itemId() == other->id && panel->isFixed() && panel->doc() != nullptr && !mindmaps::hasMap(p, other->id)
+                      && fixedLine && fixedLine->isVisible() && fixedLine->text().contains(QLatin1String("Other")) && fixButton
+                      && fixButton->isChecked() && insp->item() == synced,
+                  QStringLiteral("the Mind Map tab shows the fixed item's board (an empty one to start on), names the item, and "
+                                 "its pin button is pressed; the inspector's other tabs stay with the selected document"),
+                  fixedLine ? fixedLine->text() : QStringLiteral("no line"));
+            check(bar->isVisible() && barTitle->text().contains(QLatin1String("Other")) && releaseAct->isEnabled() && fixAct->isEnabled(),
+                  QStringLiteral("the binder shows the slim bar with the item's title and \"Release\""), barTitle->text());
+            shot(&w, QStringLiteral("v0920-mind-map-fixed"));
+            shot(binder, QStringLiteral("v0920-binder-fixed-bar"));
+
+            // another selection: the tab stays
+            BinderItem *third = textDoc(p, p->draft(), QStringLiteral("Third"), QStringLiteral("Third text."));
+            selectOne(third);
+            check(panel->itemId() == other->id && insp->item() == third && w.fixedMindMapId() == other->id,
+                  QStringLiteral("another document selected: the tab still shows the fixed board"));
+            // fixing another item moves the fixing (at most one in the project)
+            const QModelIndex syncedRow = rowOf(synced);
+            QTest::mouseMove(tree->viewport(), tree->visualRect(syncedRow).center());
+            settle(150);
+            QTest::mouseClick(tree->viewport(), Qt::LeftButton, Qt::NoModifier, tree->pinRectOf(syncedRow).center());
+            settle(400);
+            check(w.fixedMindMapId() == synced->id && panel->itemId() == synced->id && barTitle->text().contains(QLatin1String("Synced")),
+                  QStringLiteral("the pin of another row moves the fixing there: one fixed item per project"), barTitle->text());
+            // the fixed row's pin releases
+            QTest::mouseClick(tree->viewport(), Qt::LeftButton, Qt::NoModifier, tree->pinRectOf(syncedRow).center());
+            settle(400);
+            check(w.fixedMindMapId().isEmpty() && !bar->isVisible() && panel->itemId() == third->id && !panel->isFixed()
+                      && !releaseAct->isEnabled(),
+                  QStringLiteral("a click on the fixed row's pin releases: the tab follows the selected item again, the bar goes"));
+
+            // the tab's own button works both ways
+            fixButton = panel->findChild<QToolButton *>(QStringLiteral("mmFixButton"));
+            if (fixButton)
+                fixButton->click();
+            settle(400);
+            const bool fixedByTab = w.fixedMindMapId() == third->id && panel->isFixed() && bar->isVisible();
+            selectOne(other);
+            const bool stays = panel->itemId() == third->id;
+            fixButton = panel->findChild<QToolButton *>(QStringLiteral("mmFixButton"));
+            if (fixButton)
+                fixButton->click();
+            settle(400);
+            check(fixedByTab && stays && w.fixedMindMapId().isEmpty() && panel->itemId() == other->id,
+                  QStringLiteral("the pin button of the Mind Map tab fixes the board it shows and releases it again"));
+
+            // the menu commands, and the bar's button
+            fixAct->trigger();
+            settle(300);
+            const bool byMenu = w.fixedMindMapId() == other->id && !fixAct->isEnabled() && releaseAct->isEnabled();
+            barRelease->click();
+            settle(300);
+            const bool byBar = w.fixedMindMapId().isEmpty() && fixAct->isEnabled() && !releaseAct->isEnabled();
+            fixAct->trigger();
+            settle(200);
+            releaseAct->trigger();
+            settle(300);
+            check(byMenu && byBar && w.fixedMindMapId().isEmpty(),
+                  QStringLiteral("Inspect > Fix the Mind Map of This Item and Release the Fixed Mind Map work, each enabled only "
+                                 "when it can act; the bar's \"Release\" releases"),
+                  QStringLiteral("menu %1, bar %2").arg(byMenu).arg(byBar));
+
+            // into the Trash: released
+            fixAct->trigger();   // "Other" is selected
+            settle(200);
+            const bool wasFixed = w.fixedMindMapId() == other->id;
+            BinderItem *gone = textDoc(p, p->draft(), QStringLiteral("Goes away"), QStringLiteral("Soon in the Trash."));
+            selectOne(gone);
+            w.fixMindMap(gone);
+            settle(200);
+            const bool moved = w.fixedMindMapId() == gone->id;
+            p->model()->moveToTrash({gone});
+            settle(400);
+            check(wasFixed && moved && w.fixedMindMapId().isEmpty() && !bar->isVisible() && !tree->canFixMindMap(rowOf(gone)),
+                  QStringLiteral("the fixed item moved to the Trash: the fixing is released, and an item in the Trash cannot be fixed"));
+            // fixed for the reopening check at the end
+            w.fixMindMap(other);
+            settle(200);
+        }
+    }
+
+    // ================================================================ the shown lock (to-do item 3)
+    {
+        auto *binder = w.findChild<BinderPanel *>();
+        BinderTree *tree = binder ? binder->tree() : nullptr;
+        const QString lockFile = p->settingsDir() + QStringLiteral("/lock");
+        const QString ownFile = workmarks::fileFor(lockFile);
+        auto docsIn = [](const QString &file) {
+            QStringList out;
+            for (const QJsonValue &v : QJsonDocument::fromJson(readAll(file)).object().value(QStringLiteral("docs")).toArray())
+                out << v.toString();
+            return out;
+        };
+        binder->select({other}, true);
+        settle(1200);
+        const QStringList mine = docsIn(ownFile);
+        check(QFile::exists(ownFile) && mine.contains(other->id) && mine.contains(synced->id)
+                  && QJsonDocument::fromJson(readAll(ownFile)).object().value(QStringLiteral("key")).toString() == syncsafe::machineKey(),
+              QStringLiteral("this device writes beside the lock which documents it has open or has changed since it opened the project"),
+              mine.join(QLatin1Char(' ')));
+        // more typing in a document that is already on the list: the file stays as it is
+        const QByteArray bytes = readAll(ownFile);
+        const QDateTime stamp = QFileInfo(ownFile).lastModified();
+        for (int i = 0; i < 4; ++i) {
+            typeInto(p, other, QStringLiteral(" more"));
+            settle(400);
+        }
+        check(readAll(ownFile) == bytes && QFileInfo(ownFile).lastModified() == stamp,
+              QStringLiteral("typing on does not write the list again: it is written only when it changes"));
+        // another document opened: the list changes once
+        BinderItem *opened = textDoc(p, p->draft(), QStringLiteral("Opened later"), QStringLiteral("Read only."));
+        binder->select({opened}, true);
+        settle(1200);
+        check(docsIn(ownFile).contains(opened->id) && readAll(ownFile) != bytes,
+              QStringLiteral("another document opened in the editor: the list is written again and names it"));
+
+        // another device says it works on "Synced"
+        qputenv("QB_DEVICE_NAME", "Laptop");
+        const QString theirFile = workmarks::fileFor(lockFile);
+        const bool wrote = workmarks::write(lockFile, QDateTime::currentDateTimeUtc().addSecs(-600), {synced->id, QStringLiteral("not-in-this-project")});
+        qunsetenv("QB_DEVICE_NAME");
+        w.readWorkMarks();
+        settle(200);
+        tree->expandAll();
+        settle(100);
+        const QModelIndex syncedRow = p->model()->indexFor(synced);
+        check(wrote && theirFile != ownFile && tree->lockTip(synced->id).contains(QLatin1String("Laptop"))
+                  && tree->lockTip(synced->id).contains(QLatin1String("nothing is blocked")) && tree->lockTip(other->id).isEmpty()
+                  && tree->lockTip(p->draft()->id).contains(QLatin1String("Laptop")) && tree->lockTip(p->draft()->id).contains(QLatin1String("in here")),
+              QStringLiteral("a document another device works on gets the padlock, and so does the folder around it; the tool tip "
+                             "names the device and says that nothing is blocked"),
+              tree->lockTip(synced->id) + QStringLiteral(" || ") + tree->lockTip(p->draft()->id));
+        shot(binder, QStringLiteral("v0920-binder-padlock"));
+        {
+            // the padlock is painted at the row's right end: the row looks different there than without the mark
+            const QRect at = tree->lockRectOf(syncedRow);
+            const QImage with = tree->viewport()->grab(at).toImage();
+            binder->setLockMarks({});   // (no wait: the window reads the lists again every 0.3 s in this test)
+            const QImage without = tree->viewport()->grab(at).toImage();
+            w.readWorkMarks();
+            settle(100);
+            QHelpEvent tipEvent(QEvent::ToolTip, at.center(), tree->viewport()->mapToGlobal(at.center()));
+            QCoreApplication::sendEvent(tree->viewport(), &tipEvent);
+            settle(100);
+            check(with != without && at.right() < tree->viewport()->width() && QToolTip::text().contains(QLatin1String("Laptop")),
+                  QStringLiteral("the padlock is drawn at the right end of the row, and pointing at it shows the tool tip"),
+                  QToolTip::text());
+            QToolTip::hideText();
+        }
+        // it is a hint: the document can be edited and saved as ever
+        typeInto(p, synced, QStringLiteral(" Edited under the padlock."));
+        check(p->save(&err) && readAll(p->docs()->textPath(synced->id)).contains("Edited under the padlock."),
+              QStringLiteral("a hint, not a guard: a marked document is edited and saved as ever"), err);
+
+        // without a sign of life for longer than a lock counts as left over: not shown
+        QJsonObject theirs = QJsonDocument::fromJson(readAll(theirFile)).object();
+        theirs.insert(QStringLiteral("alive"), QDateTime::currentDateTimeUtc().addSecs(-20 * 60).toString(Qt::ISODate));
+        writeAll(theirFile, QJsonDocument(theirs).toJson(QJsonDocument::Compact));
+        w.readWorkMarks();
+        const bool gone = tree->lockTip(synced->id).isEmpty() && tree->lockTip(p->draft()->id).isEmpty();
+        // ... unless that device holds the lock, which it renews: the lock's sign of life counts
+        const QByteArray ourLock = readAll(lockFile);
+        qputenv("QB_DEVICE_NAME", "Laptop");
+        syncsafe::writeLock(lockFile, QDateTime::currentDateTimeUtc().addSecs(-600));
+        qunsetenv("QB_DEVICE_NAME");
+        w.readWorkMarks();
+        const bool byLock = tree->lockTip(synced->id).contains(QLatin1String("Laptop"));
+        writeAll(lockFile, ourLock);   // (this window's lock again, before anything looks at it)
+        check(gone && byLock,
+              QStringLiteral("a list without a sign of life for more than 15 minutes is not shown, unless its device holds the "
+                             "lock and renews that"),
+              QStringLiteral("gone %1, by the lock %2").arg(gone).arg(byLock));
+        // their list is left alone by this device; only its own goes at closing (checked at the end)
+        QFile::remove(theirFile);
+        w.readWorkMarks();
+        check(tree->lockTip(synced->id).isEmpty(), QStringLiteral("the other device closed the project (its list is gone): the padlock goes"));
+        qputenv("QB_DEVICE_NAME", "Laptop");
+        workmarks::write(lockFile, QDateTime::currentDateTimeUtc(), {other->id});
+        qunsetenv("QB_DEVICE_NAME");
+    }
+
     // ================================================================ a manual save whose backup cannot be made (item 10)
     {
         writeAll(W + QStringLiteral("/a-file"), "not a folder");
@@ -790,6 +1036,34 @@ int main(int argc, char **argv)
             notice->close();
         QCoreApplication::removeTranslator(&de);
         QCoreApplication::removeTranslator(&qtDe);
+    }
+
+    // ================================================================ the fixed mind map is kept with the project
+    {
+        const QString otherId = other->id;
+        const bool fixedBefore = w.fixedMindMapId() == otherId;
+        check(p->save(&err), QStringLiteral("(saved)"), err);
+        const QString lockFile = p->settingsDir() + QStringLiteral("/lock");
+        const QString ownWork = workmarks::fileFor(lockFile);
+        qputenv("QB_DEVICE_NAME", "Laptop");
+        const QString theirWork = workmarks::fileFor(lockFile);
+        qunsetenv("QB_DEVICE_NAME");
+        const bool both = QFile::exists(ownWork) && QFile::exists(theirWork);
+        w.closeProject();
+        settle(400);
+        check(both && !QFile::exists(ownWork) && QFile::exists(theirWork) && !QFile::exists(lockFile),
+              QStringLiteral("closing the project removes this device's list with its lock, and leaves the other device's alone"));
+        QFile::remove(theirWork);
+        const bool cleared = w.fixedMindMapId().isEmpty();
+        const bool opened = w.openProject(projFolder);
+        settle(900);
+        auto *binder = w.findChild<BinderPanel *>();
+        auto *bar = binder ? binder->findChild<QWidget *>(QStringLiteral("binderFixedMindMapBar")) : nullptr;
+        check(fixedBefore && cleared && opened && w.project() && w.fixedMindMapId() == otherId && bar && bar->isVisible()
+                  && binder->tree()->fixedMindMapId() == otherId,
+              QStringLiteral("the fixing is kept with the project: closed and opened again, the same item is fixed"),
+              QStringLiteral("before %1, cleared %2, opened %3, now \"%4\"").arg(fixedBefore).arg(cleared).arg(opened).arg(w.fixedMindMapId()));
+        w.releaseMindMap();
     }
 
     w.closeProject();
