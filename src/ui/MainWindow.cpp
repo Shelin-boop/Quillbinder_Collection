@@ -640,6 +640,7 @@ void MainWindow::noteSaveFailed(const QString &err, bool notice)
     if (first)
         m_saveFailedSince = QDateTime::currentDateTime();
     m_lastSaveError = err;
+    m_lastSaveKind = failure::last();   // 0.92.0: what kind of failure the save noted (FailureKind.h)
     updateSaveState();
     // a new attempt by itself: every 15 s for 2 minutes, then every minute, until a save works
     if (!m_saveRetry->isActive())
@@ -653,14 +654,14 @@ void MainWindow::noteSaveFailed(const QString &err, bool notice)
     const QStringList titles = m_project ? m_project->unsavedTitles(8) : QStringList();
     // 0.81.0 (audit of 0.80.0, S-08): the plain reason and the documents first; the paths and the system's own words
     // are in the details (before, the reason was hidden in two full paths and the name of a temporary file)
-    QString text = tr("Your latest changes could not be saved. %1").arg(plainSaveReason(err));
+    QString text = tr("Your latest changes could not be saved. %1").arg(plainSaveReason(err, m_lastSaveKind));
     if (!titles.isEmpty())
         text += QStringLiteral("\n\n") + tr("Not saved: %1.").arg(titles.join(QLatin1String(", ")));
     // 0.81.0 (audit of 0.80.0, S-12): a save of new word counts only (found at the opening, or while typing)
     if (m_project && m_project->lastFailureWithoutChanges() && titles.isEmpty())
         text = tr("The project file could not be updated with the new word counts. %1 Nothing you wrote is lost: your "
                   "texts are on the disk, only the counts in the project file are older.")
-                   .arg(plainSaveReason(err));
+                   .arg(plainSaveReason(err, m_lastSaveKind));
     text += QStringLiteral("\n\n")
             + tr("The program tries again by itself, and the status bar shows \"Not saved\" until a save works. Check "
                  "that the disk is not full and the project folder is writable, or save the texts into another folder.");
@@ -683,6 +684,21 @@ void MainWindow::noteSaveFailed(const QString &err, bool notice)
     showWithoutTakingKeys(box, ok);
     // (a message box takes its final size only when it is shown: placed again then)
     QTimer::singleShot(0, box, [this, box] { placeBesideText(box); });
+}
+
+// 0.92.0 (audit finding QBA-F06): the kind noted where the write failed decides; the words of the error text only
+// when no kind is known (they are English, and a system can word its errors in another language)
+QString MainWindow::plainSaveReason(const QString &err, failure::Kind kind)
+{
+    switch (kind) {
+    case failure::Kind::DiskFull: return tr("The disk is full.");
+    case failure::Kind::ReadOnly: return tr("The drive of the project can only be read (write-protected, or mounted for reading only).");
+    case failure::Kind::NoRights: return tr("The program may not write into the project folder.");
+    case failure::Kind::DriveError: return tr("The drive reported an error: it may be failing, or it was removed.");
+    case failure::Kind::FolderGone: return tr("The project folder is not there any more (renamed, moved, or its drive is not connected).");
+    case failure::Kind::None: break;
+    }
+    return plainSaveReason(err);
 }
 
 QString MainWindow::plainSaveReason(const QString &err)
@@ -4850,8 +4866,35 @@ bool MainWindow::manualSave()
             statusBar()->showMessage(tr("The backup could not be made: %1").arg(err), 15000);
         else if (!err.isEmpty()) // 0.65.0 (audit F03)
             statusBar()->showMessage(err, 15000);
+        // 0.92.0 (audit finding QBA-F07): also a notice, as at closing (before: the status bar alone, for 15 s)
+        if (!ok || !err.isEmpty())
+            tellManualBackupProblem(ok, waits, err);
     }
     return true;
+}
+
+// 0.92.0: the backup that goes with a manual save failed, is incomplete, or waits outside the backup folder. The save
+// itself worked. A notice beside the text that does not take the keyboard; once per cause until the program quits
+// (the status bar says it every time), so that it does not come back at every save while the cause lasts.
+void MainWindow::tellManualBackupProblem(bool made, bool waits, const QString &why)
+{
+    const QString msg = waits  ? why
+                        : made ? tr("Your changes are saved. The backup made with this save is incomplete.\n\n%1").arg(why)
+                               : tr("Your changes are saved, but the backup that goes with each manual save could not be made.\n\n%1").arg(why);
+    m_lastBackupProblem = msg;
+    // the cause without what differs from save to save (the date and time in a backup's name)
+    QString cause = why;
+    static const QRegularExpression stamp(QStringLiteral("\\d{4}-\\d{2}-\\d{2} \\d{2}-\\d{2}-\\d{2}( \\(\\d+\\))?"));
+    cause.remove(stamp);
+    if (m_backupCausesTold.contains(cause))
+        return;
+    m_backupCausesTold.insert(cause);
+    auto *box = new QMessageBox(QMessageBox::Warning, tr("Backup"), msg, QMessageBox::Ok, this);
+    box->setAttribute(Qt::WA_DeleteOnClose);
+    box->setObjectName(QStringLiteral("manualBackupNotice"));
+    placeBesideText(box);
+    showWithoutTakingKeys(box, box->button(QMessageBox::Ok));
+    QTimer::singleShot(0, box, [this, box] { placeBesideText(box); });
 }
 
 QStringList MainWindow::editedSinceManualSave() const

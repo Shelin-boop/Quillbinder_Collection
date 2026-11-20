@@ -222,12 +222,21 @@ void MainWindow::connectSyncSafety(Project *p)
     }
 }
 
+// 0.92.0: the notice can be turned off until the program quits (its button). The other versions are still kept; only
+// the window stays away. Not saved anywhere: the next start shows it again.
+static bool s_conflictNoticeOff = false;
+
+bool MainWindow::conflictNoticeOff() { return s_conflictNoticeOff; }
+void MainWindow::setConflictNoticeOff(bool off) { s_conflictNoticeOff = off; }
+
 void MainWindow::showConflictNotice()
 {
     if (m_conflictNotes.isEmpty())
         return;
     const QStringList lines = m_conflictNotes;
     m_conflictNotes.clear();
+    if (s_conflictNoticeOff)
+        return;
     auto *box = new QMessageBox(QMessageBox::Information, tr("Other Versions Kept"),
                                 tr("Some files of the project were changed elsewhere (on another computer through your "
                                    "sync program, or by another program) after %1 read them, and were changed here as well. "
@@ -238,6 +247,11 @@ void MainWindow::showConflictNotice()
                                 QMessageBox::Ok, this);
     box->setAttribute(Qt::WA_DeleteOnClose);
     box->setObjectName(QStringLiteral("conflictNotice"));
+    QPushButton *quiet = box->addButton(tr("Don't Show Again Until %1 Is Closed").arg(QStringLiteral(QB_APP_NAME)),
+                                        QMessageBox::ActionRole);
+    quiet->setObjectName(QStringLiteral("conflictNoticeOff"));
+    quiet->setToolTip(tr("Other versions are still kept; only this notice stays away until you quit the program."));
+    connect(quiet, &QPushButton::clicked, box, [] { s_conflictNoticeOff = true; });
     showWithoutTakingKeys(box, box->button(QMessageBox::Ok));
 }
 

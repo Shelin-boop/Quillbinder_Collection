@@ -445,8 +445,11 @@ void importItem(Ctx &c, const QDomElement &e, BinderItem *parent)
             QDir().mkpath(p->contentDir(it->id));
             const QString name = QStringLiteral("card.") + ext;
             QFile::remove(p->contentDir(it->id) + QLatin1Char('/') + name);
-            if (QFile::copy(src, p->contentDir(it->id) + QLatin1Char('/') + name))
+            QString why;
+            if (safesave::copyChecked(src, p->contentDir(it->id) + QLatin1Char('/') + name, &why))
                 it->synopsisImage = name;
+            else   // 0.92.0: told (before: left out without a word)
+                c.report->warnings << QObject::tr("The index card picture of \"%1\" could not be copied (%2).").arg(it->title, why);
         }
     }
     // 0.81.3: a web page's address (Scrivener for Windows keeps it with the page)
@@ -461,7 +464,9 @@ void importItem(Ctx &c, const QDomElement &e, BinderItem *parent)
             QDir().mkpath(c.p->contentDir(it->id));
             const QString target = mindmap::pathFor(c.p->contentDir(it->id));
             QFile::remove(target);
-            QFile::copy(map, target);
+            QString why;
+            if (!safesave::copyChecked(map, target, &why))   // 0.92.0
+                c.report->warnings << QObject::tr("The mind map of \"%1\" could not be copied (%2).").arg(it->title, why);
         }
     }
 
@@ -481,14 +486,22 @@ void importItem(Ctx &c, const QDomElement &e, BinderItem *parent)
                                                                                         : ItemType::File;
             it->fileExt = ext;
             QDir().mkpath(p->contentDir(it->id));
-            QFile::copy(fi.absoluteFilePath(), p->mediaFilePath(it));
+            // 0.92.0: a copy that fails is told and the file is not counted as imported (before: counted either way)
+            QString why;
+            bool arrived = safesave::copyChecked(fi.absoluteFilePath(), p->mediaFilePath(it), &why);
+            if (!arrived)
+                c.report->warnings << QObject::tr("The file of \"%1\" (%2) could not be copied (%3).").arg(it->title, fi.fileName(), why);
             const QString pages = d.filePath(QStringLiteral("page-files"));
             if (QDir(pages).exists()) {
                 QDir().mkpath(p->contentDir(it->id) + QLatin1String("/page-files"));
                 for (const QFileInfo &pf : QDir(pages).entryInfoList(QDir::Files))
-                    QFile::copy(pf.absoluteFilePath(), p->contentDir(it->id) + QLatin1String("/page-files/") + pf.fileName());
+                    if (!safesave::copyChecked(pf.absoluteFilePath(), p->contentDir(it->id) + QLatin1String("/page-files/") + pf.fileName(), &why)) {
+                        c.report->warnings << QObject::tr("A file of the page \"%1\" (%2) could not be copied (%3).").arg(it->title, pf.fileName(), why);
+                        arrived = false;
+                    }
             }
-            ++c.report->mediaFiles;
+            if (arrived)
+                ++c.report->mediaFiles;
             break;
         }
     }
@@ -552,8 +565,12 @@ void importItem(Ctx &c, const QDomElement &e, BinderItem *parent)
             if (!media.isEmpty()) {
                 it->fileExt = QFileInfo(media).suffix().toLower();
                 QDir().mkpath(p->contentDir(it->id));
-                QFile::copy(media, p->mediaFilePath(it));
-                ++c.report->mediaFiles;
+                QString why;
+                if (safesave::copyChecked(media, p->mediaFilePath(it), &why))
+                    ++c.report->mediaFiles;
+                else   // 0.92.0: told and not counted
+                    c.report->warnings << QObject::tr("The file of \"%1\" (%2) could not be copied (%3).")
+                                              .arg(it->title, QFileInfo(media).fileName(), why);
             } else {
                 c.report->warnings << QObject::tr("Media file of \"%1\" was not found.").arg(it->title);
             }
@@ -1176,8 +1193,17 @@ std::unique_ptr<Project> ScrivenerImporter::importProject(const QString &path, c
     for (auto it = c.modifiedAt.cbegin(); it != c.modifiedAt.cend(); ++it)
         if (p->item(it.key()->id) == it.key())
             it.key()->modified = it.value();
-    if (!p->save(error))
-        report->warnings << QObject::tr("Saving the imported project reported a problem.");
+    // 0.92.0 (audit finding QBA-F03): an import whose final save fails has failed. Before, it added a note and the
+    // project was handed on as imported, without the reason; now the caller gets no project and the reason, with
+    // the folder that was left
+    QString why;
+    if (!p->save(&why)) {
+        if (error)
+            *error = QObject::tr("The imported project could not be saved: %1\n\nWhat was written so far is in %2. "
+                                 "Nothing was changed in the Scrivener project.")
+                         .arg(why, QDir::toNativeSeparators(p->folderPath()));
+        return nullptr;
+    }
     return p;
 }
 

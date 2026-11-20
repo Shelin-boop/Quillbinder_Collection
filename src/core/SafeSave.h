@@ -10,6 +10,8 @@
 #include <QSaveFile>
 #include <QString>
 
+#include "core/TestSwitches.h"
+
 #ifdef Q_OS_UNIX
 #include <cerrno>
 #include <unistd.h>
@@ -116,6 +118,21 @@ inline bool copyFile(const QString &from, const QString &to, QString *error = nu
         return false;
     }
     return true;
+}
+
+// 0.92.0: the copy for imports and for reading a Scrivener project again: copyFile above, whose failure and reason
+// the caller tells (before, QFile::copy was called there without a look at its result, so a file that did not
+// arrive was counted as imported, or was lost with the old working copy). The tests can make one copy fail:
+// QB_TEST_FAIL_COPY holds a part of the source's or the target's path.
+inline bool copyChecked(const QString &from, const QString &to, QString *error = nullptr)
+{
+    const QString refused = QB_TEST_ENV("QB_TEST_FAIL_COPY");
+    if (!refused.isEmpty() && (from.contains(refused) || to.contains(refused))) {
+        if (error)
+            *error = QStringLiteral("%1: the copy failed (a test's switch)").arg(to);
+        return false;
+    }
+    return copyFile(from, to, error);
 }
 
 } // namespace safesave

@@ -74,7 +74,8 @@ QList<BinderItem *> importAndSplit(Project *p, const QString &path, const QStrin
 BinderItem *addWebPage(Project *p, const importers::WebPage &page, BinderItem *parent, int row, QStringList *warnings);
 
 // Create a media item from a file (copies it into the project).
-BinderItem *importMedia(Project *p, const QString &path, BinderItem *parent, int row);
+// 0.92.0: nullptr when the file could not be copied into the project (told in *warnings; no item is left behind)
+BinderItem *importMedia(Project *p, const QString &path, BinderItem *parent, int row, QStringList *warnings = nullptr);
 
 } // namespace importer
 } // namespace qb

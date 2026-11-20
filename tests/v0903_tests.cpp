@@ -779,7 +779,7 @@ static void fullDriveChecks(const QString &H)
         QStringList zips, waitingOnes;
         for (const QString &f : allFilesBelow(dir))
             zips << f;
-        QDirIterator it(backup::workDirectory(), {QStringLiteral("Full bak *.zip")}, QDir::Files, QDirIterator::Subdirectories);
+        QDirIterator it(backup::workDirectory(), {QStringLiteral("Full #* bak *.zip")}, QDir::Files, QDirIterator::Subdirectories);
         while (it.hasNext())
             waitingOnes << it.next();
         check(rc == 1 && out.contains(QLatin1String("result=0 waiting=1")) && zips.isEmpty() && waitingOnes.size() == 1
@@ -801,7 +801,7 @@ static void fullDriveChecks(const QString &H)
         QString out;
         const int rc = child(backup::workDirectory(), false, dir, &out);
         QStringList left;
-        QDirIterator it(backup::workDirectory(), {QStringLiteral("Full bak *")}, QDir::Files, QDirIterator::Subdirectories);
+        QDirIterator it(backup::workDirectory(), {QStringLiteral("Full #* bak *")}, QDir::Files, QDirIterator::Subdirectories);
         while (it.hasNext())
             left << it.next();
         check(rc == 1 && out.contains(QLatin1String("result=0 waiting=0")) && allFilesBelow(dir).isEmpty() && left.isEmpty(),

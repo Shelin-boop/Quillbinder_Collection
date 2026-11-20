@@ -447,6 +447,17 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
         }
     }
     bool elsewhere = syncsafe::changedSince(e.stamp, path) && QFileInfo::exists(path);
+    // 0.92.0: the content decides, not the time. A sync program can set a file's time again a few seconds after this
+    // program wrote it (after its upload): the same bytes as read or last written here are no other version. Nothing
+    // is kept, told or written for it; only the remembered stamp is renewed. (Without bytes to compare with, a text
+    // that was not read from a file here, the stamp decides as before.)
+    if (elsewhere && !e.read.isNull()) {
+        QFile cur(path);
+        if (cur.open(QIODevice::ReadOnly) && cur.size() == e.read.size() && cur.readAll() == e.read) {
+            elsewhere = false;
+            e.stamp = syncsafe::stampOf(path);
+        }
+    }
     // 0.65.0 (audit F14): the same size and time as read or written here, but other bytes (a sync program that sets
     // times of its own, a file system with times in 2 s steps): changed elsewhere too
     if (!elsewhere && e.stamp.known && !e.read.isNull() && QFileInfo::exists(path)) {

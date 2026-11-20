@@ -1,4 +1,5 @@
 #pragma once
+#include "core/FailureKind.h"
 #include "core/Project.h"
 #include "ui/EditorPane.h"
 #include "text/DirectFormat.h"
@@ -82,6 +83,8 @@ public:
     bool closeProject();
     // an automatic backup that failed or is incomplete (0.65.0, audit F03); the last text for the tests
     void tellBackupProblem(bool made, const QString &why, const QString &when);
+    // 0.92.0: the backup with a manual save (a notice that does not take the keyboard, once per cause)
+    void tellManualBackupProblem(bool made, bool waits, const QString &why);
     QString lastBackupProblem() const { return m_lastBackupProblem; }
     // the lock file that could not be written last (0.65.0, audit F13; for the tests)
     QString lastLockProblem() const { return m_lastLockProblem; }
@@ -121,6 +124,7 @@ public:
     QDateTime saveFailedSince() const { return m_saveFailedSince; }
     // 0.81.0 (audit of 0.80.0, S-08): the reason of a failed save in plain words
     static QString plainSaveReason(const QString &err);
+    static QString plainSaveReason(const QString &err, failure::Kind kind);   // 0.92.0: by the failure's kind
     bool isClosing() const { return m_closing; }
     // Help > Welcome Project, About, List of All Placeholders (MainWindowHelp.cpp; 0.40)
     void openWelcomeProject(bool firstStart = false);
@@ -217,6 +221,11 @@ private:
     void retrySave();
     void saveTextsElsewhere();
     void showConflictNotice();
+public:
+    // 0.92.0: the notice "Other Versions Kept" turned off until the program quits (its button; the tests set it back)
+    static bool conflictNoticeOff();
+    static void setConflictNoticeOff(bool off);
+private:
     QTimer *m_lockTimer = nullptr;
     QDateTime m_lockOpened;
     bool m_lockLost = false;
@@ -428,6 +437,8 @@ private:
     QPointer<CompositionWindow> m_composition;
     QStringList m_lastSettingsNotes;
     QString m_lastBackupProblem;
+    QSet<QString> m_backupCausesTold;                       // 0.92.0: the notice of a manual save's backup, per cause
+    failure::Kind m_lastSaveKind = failure::Kind::None;     // 0.92.0: the kind of the last failed save
     bool m_lockWriteTold = false;
     QString m_lastLockProblem;
     QString m_lastEmergencyNotice;

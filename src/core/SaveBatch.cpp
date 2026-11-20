@@ -1,8 +1,10 @@
 #include "SaveBatch.h"
 
+#include "FailureKind.h"
 #include "PathSafety.h"
 #include "SafeSave.h"
 #include "SyncSafety.h"
+#include "TestSwitches.h"
 
 #include <QCryptographicHash>
 #include <QDateTime>
@@ -64,20 +66,37 @@ void syncFolder(const QString &dir)
 
 bool writeSynced(const QString &path, const QByteArray &data, QString *error)
 {
+    // the tests' switch for 0.92.0 (the kind of a failure): "<error number>|<the system's text>|<a part of the path>"
+    // makes the write of such a file fail with that number and that text (a text in any language)
+    const QStringList fake = QB_TEST_ENV("QB_TEST_WRITE_FAILS").split(QLatin1Char('|'));
+    if (fake.size() == 3 && !fake.at(2).isEmpty() && path.contains(fake.at(2))) {
+        failure::noteErrno(fake.at(0).toInt());
+        if (error)
+            *error = QObject::tr("Cannot write %1: %2").arg(QDir::toNativeSeparators(path), fake.at(1));
+        return false;
+    }
     QFile f(path);
+    errno = 0;
     if (!f.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+        failure::noteErrno(errno);   // 0.92.0: the kind of the failure beside its text (FailureKind.h)
         if (error)
             *error = QObject::tr("Cannot write %1: %2").arg(QDir::toNativeSeparators(path), f.errorString());
         return false;
     }
+    errno = 0;
     bool ok = f.write(data) == data.size() && f.flush();
+    int number = ok ? 0 : errno;
 #ifdef Q_OS_UNIX
-    if (ok && ::fsync(f.handle()) != 0 && errno != EINVAL && errno != ENOTSUP && errno != EOPNOTSUPP && errno != ENOSYS)
+    if (ok && ::fsync(f.handle()) != 0 && errno != EINVAL && errno != ENOTSUP && errno != EOPNOTSUPP && errno != ENOSYS) {
+        number = errno;
         ok = false;
+    }
     if (ok) {
         const int copy = ::dup(f.handle());
-        if (copy >= 0 && ::close(copy) != 0 && errno != EINTR)
+        if (copy >= 0 && ::close(copy) != 0 && errno != EINTR) {
+            number = errno;
             ok = false;
+        }
     }
 #elif defined(Q_OS_WIN)
     if (ok && ::_commit(f.handle()) != 0)
@@ -86,6 +105,9 @@ bool writeSynced(const QString &path, const QByteArray &data, QString *error)
     const QString why = f.errorString();
     f.close();
     if (!ok || f.error() != QFileDevice::NoError) {
+        failure::noteErrno(number);
+        if (failure::last() == failure::Kind::None && f.error() == QFileDevice::ResourceError)
+            failure::note(failure::Kind::DiskFull);   // Qt's own kind for "no space left"
         QFile::remove(path);
         if (error)
             *error = QObject::tr("Cannot write %1: %2")

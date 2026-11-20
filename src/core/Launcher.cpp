@@ -147,14 +147,20 @@ QJsonObject readState()
     return QJsonDocument::fromJson(f.readAll()).object();
 }
 
-void writeState(const QJsonObject &state)
+// 0.92.0 (audit finding QBA-F05): with its result and reason. The tests can make it fail: QB_TEST_FAIL_STATE=core.
+bool writeState(const QJsonObject &state, QString *error)
 {
     QDir().mkpath(addons::coreRoot());
     QSaveFile f(statePath());
-    if (f.open(QIODevice::WriteOnly)) {
-        f.write(QJsonDocument(state).toJson());
-        f.commit();
-    }
+    const QByteArray bytes = QJsonDocument(state).toJson();
+    if (QB_TEST_ENV("QB_TEST_FAIL_STATE") != QLatin1String("core") && f.open(QIODevice::WriteOnly)
+        && f.write(bytes) == bytes.size() && f.commit())
+        return true;
+    if (error)
+        *error = QObject::tr("Cannot write %1%2").arg(QDir::toNativeSeparators(statePath()),
+                                                     f.errorString().isEmpty() || f.error() == QFileDevice::NoError
+                                                         ? QString() : QStringLiteral(": ") + f.errorString());
+    return false;
 }
 
 bool isOverlay()

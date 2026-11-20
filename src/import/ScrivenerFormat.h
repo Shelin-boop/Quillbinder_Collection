@@ -79,6 +79,9 @@ struct SyncState {
     // version, which kept them in the working copy only: the next opening reads the .scriv again and joins
     // the two once (nothing made here is lost), and the next write puts them into the .scriv.
     int meta = 0;
+    // 0.92.0: SHA-1 of the .scrivx as last read or written here. With it, a .scrivx whose time alone changed (a sync
+    // program) is not taken for one written elsewhere. "" = a state of an older version (then its stamp decides).
+    QString scrivxSha;
     bool load(const QString &file);
     bool save(const QString &file) const;
 };

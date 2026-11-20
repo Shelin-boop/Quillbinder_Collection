@@ -637,14 +637,21 @@ static void backups(const QString &W)
     check(flat && QDir(bdir).entryList(QDir::Dirs | QDir::NoDotAndDotDot) == QStringList{QFileInfo(formerDir).fileName()},
           QStringLiteral("0.91.0: backups go straight into the backup folder; no folder per project is made"),
           QDir(bdir).entryList(QDir::Dirs | QDir::NoDotAndDotDot).join(QLatin1String(", ")));
-    check(ofA.size() == 2 && ofA == ofB && !ofA.contains(lastOfA),
-          QStringLiteral("two projects with the same title share their backups and the number kept (the writer's choice)"),
-          QStringLiteral("%1 / %2").arg(ofA.size()).arg(ofB.size()));
+    // 0.92.0: the names carry the project's ID, so each of the two keeps its own two; Restore From Backup offers
+    // both projects' backups and the one without an ID (before: they shared their backups and the number kept)
+    auto withId = [&bdir](Project *p) {
+        return QDir(bdir).entryList({backup::nameStart(p) + QStringLiteral(" bak *.zip")}, QDir::Files);
+    };
+    check(withId(a.get()).size() == 2 && withId(b.get()).size() == 2 && backup::projectId(a.get()) != backup::projectId(b.get())
+              && ofA.size() == 5 && ofA == ofB && ofA.contains(lastOfA),
+          QStringLiteral("0.92.0: two projects with the same title keep their own backups and their own number kept; both are offered for restoring"),
+          QStringLiteral("%1 / %2 / offered %3").arg(withId(a.get()).size()).arg(withId(b.get()).size()).arg(ofA.size()));
     check(ofC.size() == 2 && backup::backupsFor(c.get(), bdir) == ofC,
           QStringLiteral("a project with another title (one that begins the same) keeps its own backups; the others' clean-up leaves them"),
           QString::number(backup::backupsFor(c.get(), bdir).size()));
-    check(!QFile::exists(bdir + QStringLiteral("/My Novel bak 2026-11-01 10-00-00.zip")),
-          QStringLiteral("an older backup with the project's title in the backup folder counts again and goes as the oldest"));
+    check(QFile::exists(bdir + QStringLiteral("/My Novel bak 2026-11-01 10-00-00.zip"))
+              && ofA.contains(bdir + QStringLiteral("/My Novel bak 2026-11-01 10-00-00.zip")),
+          QStringLiteral("0.92.0: an older backup without an ID in its name is not deleted by the clean-up and is still offered for restoring"));
     check(QDir(formerDir).entryList(QDir::Files) == QStringList{QStringLiteral("My Novel bak 2026-11-05 10-00-00.zip")}
               && backup::formerProjectFolder(a.get(), bdir) == formerDir && backup::formerBackupsFor(a.get(), bdir).size() == 1
               && backup::formerProjectFolder(b.get(), bdir).isEmpty(),
