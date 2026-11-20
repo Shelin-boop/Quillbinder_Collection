@@ -751,7 +751,9 @@ void caseSI12()
             if (name != QLatin1String("linkQuestion"))
                 wrong << QStringLiteral("%1: no question (%2)").arg(tg.href.right(40), name);
             const QString shown = QUrl(tg.href).isLocalFile() ? QUrl(tg.href).toLocalFile() : tg.href;
-            if (answer == 0 && !text.contains(QFileInfo(shown).fileName().left(80)))
+            // (the question shows names and folders with places where a line may break, U+200B (LinkOpen.cpp,
+            // breakable): taken out before the name is looked for; found by the system test run of 0.92.0)
+            if (answer == 0 && !QString(text).remove(QChar(0x200B)).contains(QFileInfo(shown).fileName().left(80)))
                 wrong << QStringLiteral("%1: the question does not show the target").arg(tg.href.right(40));
             if (answer < 2 && !opened.isEmpty())
                 wrong << QStringLiteral("%1: opened after %2").arg(tg.href.right(40), answer == 0 ? QStringLiteral("Esc") : QStringLiteral("Enter"));
