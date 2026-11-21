@@ -1298,8 +1298,11 @@ bool Board::fromXml(const QByteArray &xml, QString *error)
             s.id = -1; // given a free id below
         bool ok = false;
         const QPointF p = parsePoint(e.attribute(QStringLiteral("Position")), &ok);
-        s.rect = QRectF(p, QSizeF(qBound(10.0, e.attribute(QStringLiteral("Width"), QStringLiteral("100")).toDouble(), 1.0e6),
-                                  qBound(10.0, e.attribute(QStringLiteral("Height"), QStringLiteral("100")).toDouble(), 1.0e6)));
+        // each size into a variable of its own first, as for the notes: with the bounds taken inside the
+        // constructor's arguments, MSVC 14.52 read the sizes as garbage (item 19 probe)
+        const double w = qBound(10.0, e.attribute(QStringLiteral("Width"), QStringLiteral("100")).toDouble(), 1.0e6);
+        const double h = qBound(10.0, e.attribute(QStringLiteral("Height"), QStringLiteral("100")).toDouble(), 1.0e6);
+        s.rect = QRectF(p, QSizeF(w, h));
         s.look.borderWeight = 1;
         readAppearance(e.firstChildElement(QStringLiteral("Appearance")), s.look, nullptr, nullptr, nullptr, nullptr, nullptr);
         const QDomElement mag = e.firstChildElement(QStringLiteral("Magnetic"));
