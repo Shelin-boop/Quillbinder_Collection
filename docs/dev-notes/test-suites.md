@@ -145,6 +145,10 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   `QB_TEST_APPIMAGE`, `QB_TEST_NO_RESTART`; a key made with openssl in `QB_TEST_SIGNING_KEY`), `tools/update-feed.py`,
   and the translator add-on's place. Needs python3 and openssl; links Qt Network. The unreachable case waits for
   two tries and a fading note, so the suite takes about 50 s.)
+- `secwatch` (2026-11-21, `tests/security_watch_tests.py`, Python only, no build): the security watch
+  (`tools/security-watch.py`) offline: versions and ranges, the CVE records' ratings and versions, Qt's list,
+  GitHub's advisories, whole runs against made-up sources (what is reported, one issue per project, comments,
+  failed sources), the watch list's versions against the build's files, and the workflow's rights.
 - `qb_v0911_tests` (0.91.1 beta: toolbars rearranged freely by their grips, the row that got stuck; see "Toolbars
   rearranged freely").
 - `qb_v0910_tests` (0.91.0 beta: backups straight in the backup folder, the seven toolbars and the icon bar; see
