@@ -143,6 +143,8 @@ changed and what was checked. Preferences:
   `src/compile`: compile, built-in PDF/EPUB/DOCX. `src/import`: file import, Scrivener,
   Compare and Transfer (`Compare.*` engine, `CompareFiles.*` Word/LibreOffice writers, `MiniXml.*`).
 - `src/android`: Android's own code (the Android program only).
+- `.claude/agents/`: the helpers' role files (`qb-runner`, `qb-ci`, `qb-coder`, `qb-analyst`, `qb-expert`); a lead
+  that cannot load them as agent types starts a general helper with the role's model and tells it to read its file.
 - `addons/`: add-on packages; `packaging/`: AppImage, update and add-on build scripts per system;
   `tools/`: helper scripts; `resources/`: icons (`qbicons` themes), templates, manual.
 
