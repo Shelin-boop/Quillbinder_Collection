@@ -88,6 +88,16 @@ check("Ubuntu's priority decides for its packages", [r[1] for r in sw.decisive(
     [("Ubuntu", "LOW", "priority", "maker"), ("NVD", "HIGH", "CVSS 3.1", "maker")])] == ["LOW"])
 gdal = {"containers": {"cna": {"affected": [{"vendor": "OSGeo", "product": "gdal",
                                              "versions": [{"version": "0", "lessThan": "3.11.0", "status": "affected"}]}]}}}
+ossl = {"containers": {"cna": {"affected": [{"product": "OpenSSL", "versions": [
+    {"version": "3.5.0", "lessThan": "3.5.9", "status": "affected"},
+    {"version": "1.1.1", "lessThan": "1.1.1zj", "status": "affected"}]}]}}}
+check("a bound with letters (OpenSSL's 1.1.1zj) does not make a record unclear",
+      sw.record_affects(ossl, "3.5.9", None, "openssl") == "no" and sw.record_affects(ossl, "3.5.8", None, "openssl") == "yes")
+old_qt = {"containers": {"cna": {"descriptions": [{"lang": "en", "value": "An issue in HTTP2 in Qt before 5.15.18, "
+          "6.x before 6.2.13, 6.3.x through 6.5.x before 6.5.7, and 6.6.x through 6.7.x before 6.7.2."}]}}}
+ff = {"containers": {"cna": {"descriptions": [{"lang": "en", "value": "FFmpeg through 9.0.2 has a heap overflow."}]}}}
+check("a record without versions whose description names only older fixes is past",
+      sw.described_past(old_qt, "6.12.0") and not sw.described_past(old_qt, "6.7.1") and not sw.described_past(ff, "9.0.2"))
 check("another project's copy of a part is not the part", sw.record_affects(gdal, "1.3.2", None, "zlib") == "other part")
 check("'fixed in' from the ranges", sw.record_fixed(r_yes) == ["6.12.1"])
 check("the path of a CVE record", sw.cve_url("CVE-2026-116337").endswith("/cves/2026/116xxx/CVE-2026-116337.json")

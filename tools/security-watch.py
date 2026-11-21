@@ -149,21 +149,43 @@ def newer_versions(comp, tags):
     return sorted(out, key=lambda v: vtuple(v) + (0,) * (8 - len(vtuple(v))))
 
 
-def in_range(v, start=None, below=None, upto=None):
-    """v in [start, below) or [start, upto]; None when a bound is not a plain version."""
-    vt = vtuple(v)
-    st = (0,) if start in (None, "", "0", "*") else vtuple(start)
-    if vt is None or st is None:
+def loose(s):
+    """'1.1.1zj' -> ((1, 1, 1), 'zj'), '6.12.0' -> ((6, 12, 0), ''); (None, '') for anything else."""
+    m = re.fullmatch(r"v?(\d+(?:\.\d+)*)([a-z]{0,3})", (s or "").strip())
+    return (tuple(int(x) for x in m.group(1).split(".")), m.group(2)) if m else (None, "")
+
+
+def bound_cmp(vt, s):
+    """vt against a bound that may carry letters ('1.1.1zj' lies between 1.1.1 and 1.1.2): -1, 1, or None."""
+    b, suffix = loose(s)
+    if b is None:
         return None
-    if vcmp(vt, st) < 0:
-        return False
+    c = vcmp(vt, b)
+    if not suffix:
+        return c
+    return None if c == 0 else c
+
+
+def in_range(v, start=None, below=None, upto=None):
+    """v in [start, below) or [start, upto]; None when a bound cannot be compared."""
+    vt = vtuple((v or "").lstrip("v"))
+    if vt is None:
+        return None
+    if start not in (None, "", "0", "*"):
+        c = bound_cmp(vt, start)
+        if c is None:
+            return None
+        if c < 0:
+            return False
+    elif below is None and upto is None:
+        return None
     if below is not None:
-        b = vtuple(below)
-        return None if b is None else vcmp(vt, b) < 0
+        c = bound_cmp(vt, below)
+        return None if c is None else c < 0
     if upto is not None:
-        u = vtuple(upto)
-        return None if u is None else vcmp(vt, u) <= 0
-    return vcmp(vt, st) == 0
+        c = bound_cmp(vt, upto)
+        return None if c is None else c <= 0
+    return bound_cmp(vt, start) == 0
 
 
 def text_range(version, rng):
@@ -260,6 +282,19 @@ def record_affects(rec, version, modules=None, product=None):
     return "unclear" if unclear or not entries else "no"
 
 
+def described_past(rec, version):
+    """For a record without versions: True when its description names only fixes our version already has
+    ("... before 6.2.13, 6.3.x through 6.5.x before 6.5.7 ..."; "through 9.0.2" is not past for 9.0.2)."""
+    cna = (rec.get("containers") or {}).get("cna") or {}
+    desc = " ".join(d.get("value", "") for d in cna.get("descriptions") or [] if d.get("lang", "en").startswith("en"))
+    ours = vtuple(version)
+    before = [vtuple(x) for x in re.findall(r"\bbefore (?:version )?v?(\d+(?:\.\d+)+)", desc)]
+    through = [vtuple(x) for x in re.findall(r"\bthrough (?:version )?v?(\d+(?:\.\d+)+)", desc)]
+    if not before and not through:
+        return False
+    return all(vcmp(b, ours) <= 0 for b in before) and all(vcmp(t, ours) < 0 for t in through)
+
+
 def record_fixed(rec):
     """The versions a CVE record names as the end of an affected range ('fixed in')."""
     out = []
@@ -300,7 +335,7 @@ def qt_list_candidates(text, version):
                 end = n.start()
                 break
         block, _, fixes = text[m.end():end].partition("Fixed")    # the versions that fix it do not count here
-        fixed[cve] = re.findall(r"Qt\s+(\d+\.\d+\.\d+)", fixes)
+        fixed[cve] = re.findall(r"\b(\d+\.\d+\.\d+)\b", fixes)
         if re.search(r"\bQt\s+" + re.escape(series) + r"(?:\.\d+)?\b", block):
             out.append(cve)
             continue
@@ -422,7 +457,7 @@ class Watch:
                 self.add(cve, part, group, how, list(extra_ratings), "unclear", "", fixed, [link] + list(extra_links))
             return
         aff = record_affects(rec, comp["version"], modules, None if modules else product_word(comp["name"]))
-        if aff in ("no", "other part") or (aff == "unclear" and past_fix):
+        if aff in ("no", "other part") or (aff == "unclear" and (past_fix or described_past(rec, comp["version"]))):
             return
         self.add(cve, part, group, how, record_ratings(rec) + list(extra_ratings), aff, record_title(rec),
                  list(fixed) + record_fixed(rec), [link] + list(extra_links))
