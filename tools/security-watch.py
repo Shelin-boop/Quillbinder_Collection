@@ -185,28 +185,46 @@ def cve_url(cve):
 
 
 def record_ratings(rec):
-    """[(who, rating, kind)] of a CVE record: the CNA's and the ADPs' CVSS ratings, and CISA's 'actively exploited'."""
+    """[(who, rating, kind, role)] of a CVE record: the CNA's ratings (role 'maker': CVSS or its own scale, as
+    OpenSSL's "Low"), the ADPs' (role 'other': CISA), and CISA's 'actively exploited'."""
     out = []
     cont = rec.get("containers") or {}
-    parts = [cont.get("cna") or {}] + list(cont.get("adp") or [])
-    for c in parts:
+    parts = [(cont.get("cna") or {}, "maker")] + [(a, "other") for a in cont.get("adp") or []]
+    for c, role in parts:
         who = ((c.get("providerMetadata") or {}).get("shortName") or "CNA").strip()
         for m in c.get("metrics") or []:
             for k in ("cvssV4_0", "cvssV3_1", "cvssV3_0"):
                 s = (m.get(k) or {}).get("baseSeverity")
                 if s:
-                    out.append((who, s.upper(), "CVSS " + k[5:].replace("_", ".")))
+                    out.append((who, s.upper(), "CVSS " + k[5:].replace("_", "."), role))
             other = m.get("other") or {}
+            content = other.get("content") or {}
             if other.get("type") == "ssvc":
-                for o in (other.get("content") or {}).get("options") or []:
+                for o in content.get("options") or []:
                     if str(o.get("Exploitation", "")).lower() == "active":
-                        out.append((who, "EXPLOITED", "SSVC"))
+                        out.append((who, "EXPLOITED", "SSVC", role))
+            elif isinstance(content, dict) and str(content.get("text", "")).upper() in ORDER:
+                out.append((who, content["text"].upper(), "its own scale", role))
     return out
 
 
-def record_affects(rec, version, modules=None):
-    """Whether a CVE record names `version` as affected: 'yes', 'no', 'unclear', or 'other part' (another product or
-    a Qt module we do not ship; modules: the set of shipped modules, or None)."""
+def decisive(ratings):
+    """The ratings that decide: a distribution's priority (Ubuntu) where there is one, else the maker's (the CNA,
+    the project's own advisory), else all; CISA's 'actively exploited' always counts."""
+    for pick in (lambda r: r[0] == "Ubuntu", lambda r: r[3] == "maker", lambda r: True):
+        chosen = [r for r in ratings if pick(r) and r[1] != "EXPLOITED"]
+        if chosen:
+            break
+    return chosen + [r for r in ratings if r[1] == "EXPLOITED"]
+
+
+def product_word(name):
+    return re.split(r"[^a-z0-9]+", name.lower())[0]
+
+
+def record_affects(rec, version, modules=None, product=None):
+    """Whether a CVE record names `version` as affected: 'yes', 'no', 'unclear', or 'other part' (another product, or
+    a Qt module we do not ship). modules: the set of shipped Qt modules (Qt), product: the part's word (the others)."""
     cna = (rec.get("containers") or {}).get("cna") or {}
     entries = cna.get("affected") or []
     considered = 0
@@ -214,6 +232,9 @@ def record_affects(rec, version, modules=None):
     for a in entries:
         prod = f"{a.get('vendor', '')} {a.get('product', '')}"
         if modules is not None and QT_OTHER.search(prod):
+            continue
+        squeezed = re.sub(r"[^a-z0-9]", "", prod.lower())
+        if product and squeezed not in ("", "na", "nana") and product not in squeezed:
             continue
         if modules is not None and a.get("modules"):
             if not {str(m).lower() for m in a["modules"]} & modules:
@@ -263,10 +284,11 @@ def record_title(rec):
 # ---------------------------------------------------------------------------------------------------- Qt's list
 def qt_list_candidates(text, version):
     """CVE ids of Qt's list whose entry may concern `version` (a cheap filter before the records are read):
-    the entry names the version's series, a range that holds it, or no Qt version at all."""
+    the entry names the version's series, a range that holds it, or no Qt version at all. Also returns the number
+    of entries and, per entry, the versions its "Fixed" part names."""
     series = ".".join(version.split(".")[:2])
     found = list(CVE_RX.finditer(text))
-    seen, out = set(), []
+    seen, out, fixed = set(), [], {}
     for i, m in enumerate(found):
         cve = m.group(0)
         if cve in seen:
@@ -277,7 +299,8 @@ def qt_list_candidates(text, version):
             if n.group(0) != cve:
                 end = n.start()
                 break
-        block = re.split(r"Fixed", text[m.end():end], maxsplit=1)[0]   # the versions that fix it do not count
+        block, _, fixes = text[m.end():end].partition("Fixed")    # the versions that fix it do not count here
+        fixed[cve] = re.findall(r"Qt\s+(\d+\.\d+\.\d+)", fixes)
         if re.search(r"\bQt\s+" + re.escape(series) + r"(?:\.\d+)?\b", block):
             out.append(cve)
             continue
@@ -290,7 +313,7 @@ def qt_list_candidates(text, version):
                 hit = True
         if hit or not re.search(r"Qt\s+\d+\.\d+", block):
             out.append(cve)
-    return out, len(seen)
+    return out, len(seen), fixed
 
 
 # ---------------------------------------------------------------------------------------------------- GitHub advisories
@@ -321,10 +344,10 @@ def osv_ratings(v):
     out = []
     for s in v.get("severity") or []:
         if s.get("type") == "Ubuntu" and s.get("score"):
-            out.append(("Ubuntu", str(s["score"]).upper(), "priority"))
+            out.append(("Ubuntu", str(s["score"]).upper(), "priority", "maker"))
     ds = v.get("database_specific") or {}
     if isinstance(ds.get("severity"), str) and ds["severity"]:
-        out.append((v.get("id", "OSV").split("-")[0], ds["severity"].upper(), "advisory"))
+        out.append((v.get("id", "OSV").split("-")[0], ds["severity"].upper(), "advisory", "maker"))
     return out
 
 
@@ -363,6 +386,11 @@ class Watch:
         self.lines.append(s)
         print(s, flush=True)
 
+    def tags(self, url):
+        if url not in self.tag_cache:
+            self.tag_cache[url] = git_tags(url)
+        return self.tag_cache[url]
+
     def record(self, cve):
         if cve not in self.records:
             st, rec = http_json(cve_url(cve))
@@ -371,60 +399,75 @@ class Watch:
             self.records[cve] = rec if rec and (rec.get("cveMetadata") or {}).get("state") != "REJECTED" else None
         return self.records[cve]
 
-    def add(self, key, part, how, ratings, affects, title="", fixed=(), links=()):
-        f = self.findings.setdefault(key, {"key": key, "parts": [], "how": [], "ratings": [], "affects": affects,
-                                           "title": title, "fixed": [], "links": []})
+    def add(self, key, part, group, how, ratings, affects, title="", fixed=(), links=()):
+        f = self.findings.setdefault(key, {"key": key, "group": group, "parts": [], "how": [], "ratings": [],
+                                           "affects": affects, "title": title, "fixed": [], "links": []})
         if part not in f["parts"]:
             f["parts"].append(part)
         for lst, new in (("how", [how]), ("ratings", ratings), ("fixed", list(fixed)), ("links", list(links))):
             for x in new:
                 if x and x not in f[lst]:
                     f[lst].append(x)
-        if affects == "yes" or f["affects"] not in ("yes",) and affects == "unclear":
+        if affects == "yes" or (f["affects"] != "yes" and affects == "unclear"):
             f["affects"] = affects
         f["title"] = f["title"] or title
 
-    def add_cve(self, cve, part, how, version, modules=None, extra_ratings=(), extra_links=(), fixed=()):
+    def add_cve(self, cve, comp, how, modules=None, extra_ratings=(), extra_links=(), fixed=(), past_fix=False):
+        """A CVE named by a source for a part: kept unless its record says the version or the product is not ours."""
+        part, group = self.part(comp), self.group(comp)
         rec = self.record(cve)
+        link = f"https://www.cve.org/CVERecord?id={cve}"
         if rec is None:
             if extra_ratings:
-                self.add(cve, part, how, list(extra_ratings), "unclear", "", fixed,
-                         [f"https://www.cve.org/CVERecord?id={cve}"] + list(extra_links))
+                self.add(cve, part, group, how, list(extra_ratings), "unclear", "", fixed, [link] + list(extra_links))
             return
-        aff = record_affects(rec, version, modules)
-        if aff in ("no", "other part"):
+        aff = record_affects(rec, comp["version"], modules, None if modules else product_word(comp["name"]))
+        if aff in ("no", "other part") or (aff == "unclear" and past_fix):
             return
-        self.add(cve, part, how, record_ratings(rec) + list(extra_ratings), aff, record_title(rec),
-                 list(fixed) + record_fixed(rec), [f"https://www.cve.org/CVERecord?id={cve}"] + list(extra_links))
+        self.add(cve, part, group, how, record_ratings(rec) + list(extra_ratings), aff, record_title(rec),
+                 list(fixed) + record_fixed(rec), [link] + list(extra_links))
+
+    @staticmethod
+    def part(comp):
+        return f"{comp['name']} {comp['version']}"
+
+    @staticmethod
+    def group(comp):
+        return comp["repo"]
 
     # ---- Qt
     def check_qt(self, tags):
         qt = self.wl["qt"]
-        part = f"Qt {qt['version']}"
+        part = self.part(qt)
         newer = newer_versions(qt, tags)
-        texts = []
+        text = None
         for url in qt["lists"]:
             st, body = http(url)
             if st == 200 and CVE_RX.search(body.decode("utf-8", "replace")):
-                texts.append(body.decode("utf-8", "replace"))
+                text = body.decode("utf-8", "replace")
                 break
-        if not texts:
+        if text is None:
             raise SourceError("Qt's list of known vulnerabilities: no list could be read")
-        cands, total = qt_list_candidates(texts[0], qt["version"])
+        cands, total, fixed = qt_list_candidates(text, qt["version"])
         if total < qt.get("list_min_entries", 20):
             raise SourceError(f"Qt's list of known vulnerabilities holds only {total} entries: its form may have changed")
+        ours = vtuple(qt["version"])
         before = set(self.findings)
         for cve in cands:
-            self.add_cve(cve, part, "Qt's list of known vulnerabilities", qt["version"], set(qt["modules"]),
-                         extra_links=[qt["lists"][-1]])
-        ours = [k for k in self.findings if k not in before]
+            fx = [vtuple(v) for v in fixed.get(cve, [])]
+            # a record without versions, for an entry whose newest fix is not newer than ours: fixed in our version
+            past = bool(fx) and vcmp(max(fx), ours) <= 0
+            self.add_cve(cve, qt, "Qt's list of known vulnerabilities", set(qt["modules"]),
+                         extra_links=[qt["lists"][-1]], fixed=fixed.get(cve, []), past_fix=past)
+        mine = [k for k in self.findings if k not in before]
+        top = [k for k in mine if self.is_high(self.findings[k])]
         self.say(f"{part}: newer releases {', '.join(newer) or 'none'}; Qt's list: {total} entries, "
-                 f"{len(cands)} looked at, {len(ours)} for a version and module we ship"
-                 + (": " + ", ".join(f"{k} {self.rating(self.findings[k])}" for k in ours) if ours else ""))
+                 f"{len(cands)} looked at, {len(mine)} for a version and module we ship, High or Critical {len(top)}"
+                 + (": " + ", ".join(f"{k} {self.rating(self.findings[k])}" for k in top) if top else ""))
         for v in qt.get("tell_when_released") or []:
             if tag_of(qt, v) in tags:
-                self.findings[f"Qt {v}"] = {"key": f"Qt {v}", "release": True, "parts": [part], "version": v,
-                                            "tag": tag_of(qt, v), "repo": qt["repo"]}
+                self.findings[f"Qt {v}"] = {"key": f"Qt {v}", "release": True, "group": f"release: Qt {v}",
+                                            "parts": [part], "version": v, "tag": tag_of(qt, v), "repo": qt["repo"]}
 
     # ---- GitHub: advisories and release notes
     def github_extras(self, comp, newer):
@@ -432,7 +475,6 @@ class Watch:
         if not m:
             return 0
         repo = m.group(1)
-        part = f"{comp['name']} {comp['version']}"
         n = 0
         try:
             st, advs = http_json(f"https://api.github.com/repos/{repo}/security-advisories?state=published&per_page=100",
@@ -442,27 +484,27 @@ class Watch:
                 if aff == "no":
                     continue
                 n += 1
-                rat = [(repo, str(adv.get("severity", "")).upper(), "GitHub advisory")] if adv.get("severity") else []
+                rat = ([(repo, str(adv["severity"]).upper(), "GitHub advisory", "maker")]
+                       if adv.get("severity") else [])
                 links = [adv.get("html_url", "")]
                 if adv.get("cve_id"):
-                    self.add_cve(adv["cve_id"], part, f"the security advisories of {repo}", comp["version"],
-                                 extra_ratings=rat, extra_links=links)
+                    self.add_cve(adv["cve_id"], comp, f"the security advisories of {repo}", extra_ratings=rat,
+                                 extra_links=links)
                 else:
-                    self.add(adv.get("ghsa_id"), part, f"the security advisories of {repo}", rat, aff,
-                             adv.get("summary", ""), [], links)
+                    self.add(adv.get("ghsa_id"), self.part(comp), self.group(comp),
+                             f"the security advisories of {repo}", rat, aff, adv.get("summary", ""), [], links)
         except SourceError as e:
-            self.warnings.append(f"{part}: advisories not read ({e})")
+            self.warnings.append(f"{self.part(comp)}: advisories not read ({e})")
         for v in newer[-3:]:
             try:
                 st, rel = http_json(f"https://api.github.com/repos/{repo}/releases/tags/{tag_of(comp, v)}",
                                     headers=gh_headers())
             except SourceError as e:
-                self.warnings.append(f"{part}: release notes of {v} not read ({e})")
+                self.warnings.append(f"{self.part(comp)}: release notes of {v} not read ({e})")
                 continue
-            body = (rel or {}).get("body") or ""
-            for cve in dict.fromkeys(CVE_RX.findall(body)):
+            for cve in dict.fromkeys(CVE_RX.findall((rel or {}).get("body") or "")):
                 n += 1
-                self.add_cve(cve, part, f"the release notes of {comp['name']} {v}", comp["version"], fixed=[v],
+                self.add_cve(cve, comp, f"the release notes of {comp['name']} {v}", fixed=[v],
                              extra_links=[(rel or {}).get("html_url", "")])
         return n
 
@@ -489,15 +531,16 @@ class Watch:
         return res
 
     def osv_vuln(self, vid):
-        cache = self.osv_cache
-        if vid not in cache:
+        if vid not in self.osv_cache:
             st, v = http_json(f"{OSV}/vulns/{vid}")
             if st != 200 or not v:
                 raise SourceError(f"OSV's record {vid}: HTTP {st}")
-            cache[vid] = v
-        return cache[vid]
+            self.osv_cache[vid] = v
+        return self.osv_cache[vid]
 
-    def osv_finding(self, vid, part, version):
+    def osv_finding(self, vid, owner):
+        """owner: (part, group, the component or None for an Ubuntu package)."""
+        part, group, comp = owner
         v = self.osv_vuln(vid)
         if v.get("withdrawn"):
             return
@@ -505,29 +548,25 @@ class Watch:
         rat = osv_ratings(v)
         links = [f"https://osv.dev/vulnerability/{vid}"]
         fixed = osv_fixed(v)
-        if cves:
-            rec = self.record(cves[0])
-            rat += record_ratings(rec) if rec else []
-            title = record_title(rec) if rec else v.get("summary", "")
-            self.add(cves[0], part, "OSV.dev", rat, "yes", title or v.get("summary", ""), fixed,
-                     [f"https://www.cve.org/CVERecord?id={cves[0]}"] + links)
-        else:
-            self.add(vid, part, "OSV.dev", rat, "yes", v.get("summary", ""), fixed, links)
-
-    def tags(self, url):
-        if url not in self.tag_cache:
-            self.tag_cache[url] = git_tags(url)
-        return self.tag_cache[url]
+        rec = self.record(cves[0]) if cves else None
+        if rec and comp is not None:
+            # OSV matched a commit we ship; the record can still say that it is another product or version
+            if record_affects(rec, comp["version"], None, product_word(comp["name"])) in ("no", "other part"):
+                return
+        title = (record_title(rec) if rec else "") or v.get("summary", "")
+        key = cves[0] if cves else vid
+        self.add(key, part, group, "OSV.dev", rat + (record_ratings(rec) if rec else []), "yes", title, fixed,
+                 ([f"https://www.cve.org/CVERecord?id={key}"] if cves else []) + links)
 
     # ---- decisions
     @staticmethod
     def rating(f):
-        best = max((r[1] for r in f["ratings"]), key=lambda r: ORDER.get(r, -1), default="")
+        best = max((r[1] for r in decisive(f["ratings"])), key=lambda r: ORDER.get(r, -1), default="")
         return {"EXPLOITED": "actively exploited", "": "not rated yet"}.get(best, best.capitalize())
 
     @staticmethod
     def is_high(f):
-        return f.get("release") or any(r[1] in HIGH for r in f["ratings"])
+        return bool(f.get("release")) or any(r[1] in HIGH for r in decisive(f["ratings"]))
 
     def run(self):
         wl = self.wl
@@ -541,23 +580,22 @@ class Watch:
             if tag_of(c) not in tags:
                 raise SourceError(f"{c['name']}: the tag {tag_of(c)} is not in {c['repo']}")
             comps.append((c, tags))
-        # OSV: the commits we ship, the Ubuntu packages, and two queries that must find something
+        # OSV: the commits we ship, the Ubuntu packages, and the queries that must find something
         ub = wl["ubuntu"]
         queries, owners = [], []
         for c, tags in comps:
             if c.get("osv", True):
                 queries.append({"commit": tags[tag_of(c)]})
-                owners.append((f"{c['name']} {c['version']}", c["version"]))
+                owners.append((self.part(c), self.group(c), c))
         for pkg, ver in sorted(ub["packages"].items()):
             queries.append({"package": {"name": pkg, "ecosystem": ub["ecosystem"]}, "version": ver})
-            owners.append((f"{pkg} {ver} (Ubuntu, in the AppImage)", ver))
+            owners.append((f"{pkg} {ver} (Ubuntu, in the AppImage)", f"ubuntu: {pkg}", None))
         canaries = []
         for cq in wl.get("osv_canaries") or []:
             q = dict(cq)
             if "commit_of" in q:
-                c = next((c for c, _ in comps if c["name"] == q["commit_of"]), None)
-                tags = next((t for cc, t in comps if cc["name"] == q["commit_of"]), {})
-                if not c or q["tag"] not in tags:
+                tags = next((t for c, t in comps if c["name"] == q["commit_of"]), {})
+                if q["tag"] not in tags:
                     continue
                 q = {"commit": tags[q["tag"]]}
             canaries.append(len(queries))
@@ -569,112 +607,151 @@ class Watch:
                 raise SourceError(f"OSV found nothing for a query that must find something ({queries[i]}): "
                                   "the query form may have changed")
         osv_count = {}
-        for (owner, res) in zip(owners, results):
+        for owner, res in zip(owners, results):
             if owner is None:
                 continue
             osv_count[owner[0]] = len(res)
             for vid in res:
-                self.osv_finding(vid, owner[0], owner[1])
+                self.osv_finding(vid, owner)
         # Qt, then each part's newer releases with their advisories and notes
         self.check_qt(qt_tags)
         for c, tags in comps:
-            part = f"{c['name']} {c['version']}"
+            part = self.part(c)
             newer = newer_versions(c, tags)
             nx = self.github_extras(c, newer)
             mine = [k for k, f in self.findings.items() if part in f.get("parts", [])]
             top = [k for k in mine if self.is_high(self.findings[k])]
-            line = (f"{part}: newer releases {', '.join(newer[-4:]) if newer else 'none'}"
-                    + (f" ({len(newer)} in all)" if len(newer) > 4 else "")
-                    + (f"; OSV {osv_count[part]}" if part in osv_count else "")
-                    + (f"; advisories and notes {nx}" if nx else "")
-                    + (f"; findings {len(mine)}, High or Critical {len(top)}" if mine else "")
-                    + (": " + ", ".join(f"{k} {self.rating(self.findings[k])}" for k in top) if top else ""))
-            self.say(line)
-        ub_parts = [o[0] for o in owners if o and "(Ubuntu" in o[0]]
+            self.say(f"{part}: newer releases {', '.join(newer[-4:]) if newer else 'none'}"
+                     + (f" ({len(newer)} in all)" if len(newer) > 4 else "")
+                     + (f"; OSV {osv_count[part]}" if part in osv_count else "")
+                     + (f"; advisories and notes {nx}" if nx else "")
+                     + (f"; findings {len(mine)}, High or Critical {len(top)}" if mine else "")
+                     + (": " + ", ".join(f"{k} {self.rating(self.findings[k])}" for k in top) if top else ""))
+        ub_parts = [o[0] for o in owners if o and o[2] is None]
         ub_keys = [k for k, f in self.findings.items() if set(f.get("parts", [])) & set(ub_parts)]
         self.say(f"Ubuntu packages in the AppImage ({ub['ecosystem']}): {len(ub_parts)} asked, "
                  f"{sum(osv_count.get(p, 0) for p in ub_parts)} known vulnerabilities, "
                  f"{sum(1 for k in ub_keys if self.is_high(self.findings[k]))} rated High or Critical")
 
-    # ---- issues
-    def body(self, f):
-        if f.get("release"):
-            return (f"Qt {f['version']} is out: the tag `{f['tag']}` is in Qt's source repository ({f['repo']}).\n\n"
-                    "Watched because the next round of builds waits for this release.\n\n"
-                    "Made by the daily security watch (`.github/workflows/security-watch.yml`); it changes nothing "
-                    "by itself.\n\n" f"<!-- security-watch-key: {f['key']} -->\n")
-        rat = "; ".join(f"{who}: {r.lower()} ({kind})" for who, r, kind in f["ratings"]) or "none yet"
-        aff = {"yes": "yes", "unclear": "not clear from the record (counted as affected)"}.get(f["affects"], f["affects"])
-        return "\n".join([
-            f"**What:** {f['title'] or 'see the links'}",
-            f"**Part:** {'; '.join(self.describe(p) for p in f['parts'])}",
-            f"**Rating:** {self.rating(f)} ({rat})",
-            f"**The version we ship is affected:** {aff}",
-            f"**Fixed in:** {', '.join(f['fixed']) or 'not named'}",
-            f"**Found through:** {', '.join(f['how'])}",
-            "**Links:** " + " ".join(l for l in f["links"] if l),
-            "",
-            "Made by the daily security watch (`.github/workflows/security-watch.yml`). It changes nothing by itself; "
-            "whether and how to act is decided by hand.",
-            "",
-            f"<!-- security-watch-key: {f['key']} -->",
-        ]) + "\n"
+    # ---- issues: one per upstream project (or Ubuntu package); later findings for it as comments while it is open
+    def group_label(self, group):
+        if group.startswith("ubuntu: "):
+            return f"{group[8:]} (the Ubuntu package in the AppImage)"
+        if group.startswith("release: "):
+            return group[9:]
+        for c in [self.wl["qt"]] + self.wl["components"]:
+            if c["repo"] == group:
+                return re.sub(r"\s*\(.*\)$", "", c["name"])
+        return group
 
     def describe(self, part):
         for c in [self.wl["qt"]] + self.wl["components"]:
-            if part == f"{c['name']} {c['version']}":
+            if part == self.part(c):
                 return f"{part} ({c['uses']})"
         return part
 
-    def title(self, f):
-        if f.get("release"):
-            return f"Release watch: Qt {f['version']} is out"
-        t = f"Security watch: {f['key']} ({self.rating(f)}) in {', '.join(f['parts'])}"
-        return t if len(t) <= 250 else t[:246] + " ..."
+    def section(self, f):
+        rat = "; ".join(f"{who}: {r.lower()} ({kind})" for who, r, kind, _ in f["ratings"]) or "none yet"
+        aff = {"yes": "yes", "unclear": "not clear from the record (counted as affected)"}.get(f["affects"], f["affects"])
+        return "\n".join([
+            f"### {f['key']}: {self.rating(f)}",
+            f"- **What:** {f['title'] or 'see the links'}",
+            f"- **Parts:** {'; '.join(self.describe(p) for p in f['parts'])}",
+            f"- **Ratings:** {rat}",
+            f"- **The version we ship is affected:** {aff}",
+            f"- **Fixed in:** {', '.join(f['fixed']) or 'not named'}",
+            f"- **Found through:** {', '.join(f['how'])}",
+            "- **Links:** " + " ".join(l for l in f["links"] if l),
+            f"<!-- security-watch-key: {f['key']} -->",
+            ""])
+
+    FOOT = ("Made by the daily security watch (`.github/workflows/security-watch.yml`). It changes nothing by itself; "
+            "whether and how to act is decided by hand. Rated by the maker of the part where it gives a rating "
+            "(the CNA, the project's own advisory, Ubuntu for its packages), otherwise by CISA.")
+
+    def issue_body(self, group, fs):
+        if fs[0].get("release"):
+            f = fs[0]
+            return (f"Qt {f['version']} is out: the tag `{f['tag']}` is in Qt's source repository ({f['repo']}).\n\n"
+                    "Watched because the next round of builds waits for this release.\n\n"
+                    "Made by the daily security watch (`.github/workflows/security-watch.yml`); it changes nothing "
+                    f"by itself.\n\n<!-- security-watch-key: {f['key']} -->\n<!-- security-watch-group: {group} -->\n")
+        text = "\n".join(self.section(f) for f in fs)
+        if len(text) > 60000:
+            text = text[:60000] + "\n\n(cut: more in the run's summary)\n"
+        return f"{text}\n{self.FOOT}\n\n<!-- security-watch-group: {group} -->\n"
+
+    def issue_title(self, group, fs):
+        if fs[0].get("release"):
+            return f"Release watch: Qt {fs[0]['version']} is out"
+        n = len(fs)
+        return f"Security watch: {self.group_label(group)}: {n} finding{'s' if n != 1 else ''} rated High or Critical"
 
     def existing(self, repo):
-        keys = set()
+        """(the keys already reported, {group: number of its open issue})."""
+        keys, open_groups = set(), {}
         for page in range(1, 21):
             st, items = http_json(f"https://api.github.com/repos/{repo}/issues?labels={LABEL}&state=all&per_page=100"
                                   f"&page={page}", headers=gh_headers())
             if st != 200 or items is None:
                 raise SourceError(f"the issues of {repo}: HTTP {st}")
             for it in items:
-                m = re.search(r"security-watch-key: (.+?) -->", it.get("body") or "")
-                if m:
-                    keys.add(m.group(1))
+                body = it.get("body") or ""
+                keys |= set(re.findall(r"security-watch-key: (.+?) -->", body))
+                g = re.search(r"security-watch-group: (.+?) -->", body)
+                if g and it.get("state") == "open":
+                    open_groups[g.group(1)] = it["number"]
+                    if it.get("comments"):
+                        st, cs = http_json(f"https://api.github.com/repos/{repo}/issues/{it['number']}/comments"
+                                           "?per_page=100", headers=gh_headers())
+                        for c in cs or []:
+                            keys |= set(re.findall(r"security-watch-key: (.+?) -->", c.get("body") or ""))
             if len(items) < 100:
                 break
-        return keys
+        return keys, open_groups
 
     def report_issues(self):
         repo = os.environ.get("GITHUB_REPOSITORY", "")
         high = [f for f in self.findings.values() if self.is_high(f)]
+        groups = {}
+        for f in high:
+            groups.setdefault(f["group"], []).append(f)
         self.say(f"Findings rated High or Critical for a version we ship: {sum(1 for f in high if not f.get('release'))}"
-                 + "".join(f"\n  {self.title(f)}" for f in high))
+                 + "".join(f"\n  {self.issue_title(g, fs)}: " + ", ".join(f["key"] for f in fs)
+                           for g, fs in groups.items()))
         if not high:
             return
         if self.dry or not repo:
             self.say("(dry run: no issue written)")
             return
-        known = self.existing(repo)
-        new = [f for f in high if f["key"] not in known]
-        self.say(f"Already reported: {len(high) - len(new)}; new issues: {len(new)}")
-        if not new:
+        known, open_groups = self.existing(repo)
+        todo = {g: [f for f in fs if f["key"] not in known] for g, fs in groups.items()}
+        todo = {g: fs for g, fs in todo.items() if fs}
+        self.say(f"New: {sum(len(fs) for fs in todo.values())} in {len(todo)} group(s)")
+        if not todo:
             return
         http(f"https://api.github.com/repos/{repo}/labels",
              {"name": LABEL, "color": "b60205", "description": "Found by the security watch (High or Critical)"},
              gh_headers())
         owner = os.environ.get("GITHUB_REPOSITORY_OWNER", "")
-        for f in new:
-            issue = {"title": self.title(f), "body": self.body(f), "labels": [LABEL]}
+        for g, fs in todo.items():
+            if g in open_groups:
+                body = ("New findings rated High or Critical:\n\n" + "\n".join(self.section(f) for f in fs)
+                        + f"\n{self.FOOT}\n")
+                st, _ = http(f"https://api.github.com/repos/{repo}/issues/{open_groups[g]}/comments",
+                             {"body": body}, gh_headers())
+                if st != 201:
+                    raise SourceError(f"the comment on #{open_groups[g]} was not written: HTTP {st}")
+                self.say(f"  commented on #{open_groups[g]}: {', '.join(f['key'] for f in fs)}")
+                continue
+            issue = {"title": self.issue_title(g, fs), "body": self.issue_body(g, fs), "labels": [LABEL]}
             st, _ = http(f"https://api.github.com/repos/{repo}/issues", dict(issue, assignees=[owner] if owner else []),
                          gh_headers())
             if st == 422:
                 st, _ = http(f"https://api.github.com/repos/{repo}/issues", issue, gh_headers())
             if st != 201:
-                raise SourceError(f"the issue for {f['key']} was not written: HTTP {st}")
-            self.say(f"  written: {self.title(f)}")
+                raise SourceError(f"the issue for {g} was not written: HTTP {st}")
+            self.say(f"  written: {issue['title']}")
 
     def summary(self):
         p = os.environ.get("GITHUB_STEP_SUMMARY")

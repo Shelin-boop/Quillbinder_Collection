@@ -77,7 +77,18 @@ exploited = rec("CVE-2026-1005", "LOW", [("6.0.0", "6.13.0")],
                 adp=[{"other": {"type": "ssvc", "content": {"options": [{"Exploitation": "active"}]}}}])
 rats = sw.record_ratings(exploited)
 check("ratings of the CNA and CISA's 'actively exploited'",
-      ("Qt", "LOW", "CVSS 4.0") in rats and ("CISA-ADP", "EXPLOITED", "SSVC") in rats, rats)
+      ("Qt", "LOW", "CVSS 4.0", "maker") in rats and ("CISA-ADP", "EXPLOITED", "SSVC", "other") in rats, rats)
+own = {"containers": {"cna": {"providerMetadata": {"shortName": "openssl"},
+                              "metrics": [{"other": {"type": "policy", "content": {"text": "Low"}}}]},
+                      "adp": [{"providerMetadata": {"shortName": "CISA-ADP"}, "metrics": [{"cvssV3_1": {"baseSeverity": "HIGH"}}]}]}}
+check("the maker's own rating decides over CISA's score", [r[1] for r in sw.decisive(sw.record_ratings(own))] == ["LOW"])
+check("CISA's score counts where the maker gives none", [r[1] for r in sw.decisive(
+    [("CISA-ADP", "HIGH", "CVSS 3.1", "other")])] == ["HIGH"])
+check("Ubuntu's priority decides for its packages", [r[1] for r in sw.decisive(
+    [("Ubuntu", "LOW", "priority", "maker"), ("NVD", "HIGH", "CVSS 3.1", "maker")])] == ["LOW"])
+gdal = {"containers": {"cna": {"affected": [{"vendor": "OSGeo", "product": "gdal",
+                                             "versions": [{"version": "0", "lessThan": "3.11.0", "status": "affected"}]}]}}}
+check("another project's copy of a part is not the part", sw.record_affects(gdal, "1.3.2", None, "zlib") == "other part")
 check("'fixed in' from the ranges", sw.record_fixed(r_yes) == ["6.12.1"])
 check("the path of a CVE record", sw.cve_url("CVE-2026-116337").endswith("/cves/2026/116xxx/CVE-2026-116337.json")
       and sw.cve_url("CVE-2021-0007").endswith("/cves/2021/0xxx/CVE-2021-0007.json"))
@@ -91,10 +102,14 @@ Affected versions: from Qt 4.3.0 to Qt 6.8.8, from Qt 6.9.0 to Qt 6.11.1. Fixed:
 Affected versions: from Qt 6.10.0 to Qt 6.13.2. Fixed: Qt 6.13.3
 === CVE-2026-1007: ===
 A flaw in a tool. No versions named here.
+=== CVE-2026-1008: ===
+A flaw in the network authorization. Fixed: Qt 5.15.17, Qt 6.7.1
 """
-cands, total = sw.qt_list_candidates(QT_LIST, "6.12.0")
-check("Qt's list: the entries that may concern our version", total == 4
-      and cands == ["CVE-2026-1001", "CVE-2026-1006", "CVE-2026-1007"], (total, cands))
+cands, total, fixed = sw.qt_list_candidates(QT_LIST, "6.12.0")
+check("Qt's list: the entries that may concern our version", total == 5
+      and cands == ["CVE-2026-1001", "CVE-2026-1006", "CVE-2026-1007", "CVE-2026-1008"], (total, cands))
+check("Qt's list: the versions an entry names as fixed", fixed["CVE-2026-1008"] == ["5.15.17", "6.7.1"]
+      and fixed["CVE-2026-1001"] == ["6.12.1"])
 adv = {"vulnerabilities": [{"vulnerable_version_range": "<= 1.9.5", "patched_versions": "1.9.6"}]}
 check("a GitHub advisory for our version", sw.advisory_affects(adv, "1.9.5") == "yes"
       and sw.advisory_affects(adv, "1.9.6") == "no" and sw.advisory_affects({"vulnerabilities": []}, "1.0") == "unclear")
@@ -104,7 +119,7 @@ check("a GitHub advisory for our version", sw.advisory_affects(adv, "1.9.5") == 
 WL = {
     "qt": {"name": "Qt", "version": "6.12.0", "repo": "https://github.com/qt/qtbase", "tag": "v{v}", "uses": "the program",
            "modules": ["qtbase", "qtsvg"], "lists": ["https://qt.example/list?action=raw", "https://qt.example/list"],
-           "list_min_entries": 3, "tell_when_released": ["6.12.1"]},
+           "list_min_entries": 4, "tell_when_released": ["6.12.1"]},
     "components": [
         {"name": "FFmpeg", "version": "9.0.2", "repo": "https://github.com/FFmpeg/FFmpeg", "tag": "n{v}",
          "uses": "the media add-ons"},
@@ -121,6 +136,16 @@ RECORDS = {
     "CVE-2026-1001": r_yes,                                                          # High, ours: reported
     "CVE-2026-1006": rec("CVE-2026-1006", "LOW", [("6.10.0", "6.13.3")]),          # ours, but Low: not reported
     "CVE-2026-1007": rec("CVE-2026-1007", "CRITICAL", [("1.0.0", "2.0.0")], (), "Qt Creator"),  # another product
+    "CVE-2026-1008": {"cveMetadata": {"state": "PUBLISHED"}, "containers": {"cna": {
+        "affected": [{"vendor": "n/a", "product": "n/a", "versions": [{"version": "n/a", "status": "affected"}]}],
+        "metrics": [{"cvssV3_1": {"baseSeverity": "CRITICAL"}}]}}},                  # fixed long before ours
+    "CVE-2026-2002": {"containers": {"cna": {"providerMetadata": {"shortName": "ffmpeg"}, "affected": [
+        {"product": "FFmpeg", "versions": [{"version": "0", "lessThanOrEqual": "9.0.2", "status": "affected"}]}],
+        "metrics": [{"other": {"type": "policy", "content": {"text": "Low"}}}]},
+        "adp": [{"providerMetadata": {"shortName": "CISA-ADP"}, "metrics": [{"cvssV3_1": {"baseSeverity": "HIGH"}}]}]}},
+    "CVE-2026-2003": {"containers": {"cna": {"affected": [
+        {"product": "gdal", "versions": [{"version": "0", "lessThan": "3.11.0", "status": "affected"}]}],
+        "metrics": [{"cvssV3_1": {"baseSeverity": "HIGH"}}]}}},
     "CVE-2026-2001": {"containers": {"cna": {"title": "FFmpeg overflow", "affected": [], "metrics": []},
                                      "adp": [{"providerMetadata": {"shortName": "CISA-ADP"},
                                               "metrics": [{"cvssV3_1": {"baseSeverity": "HIGH"}}]}]}},
@@ -131,6 +156,8 @@ RECORDS = {
 }
 OSV_VULNS = {
     "CVE-2026-2001": {"id": "CVE-2026-2001", "summary": "FFmpeg overflow"},
+    "CVE-2026-2002": {"id": "CVE-2026-2002"},
+    "CVE-2026-2003": {"id": "CVE-2026-2003"},
     "UBUNTU-CVE-2026-3001": {"id": "UBUNTU-CVE-2026-3001", "upstream": ["CVE-2026-3001"],
                              "severity": [{"type": "Ubuntu", "score": "high"}],
                              "affected": [{"ranges": [{"type": "ECOSYSTEM", "events": [
@@ -156,7 +183,7 @@ class Net:
                 out = []
                 for q in data["queries"]:
                     if q.get("commit") == "f902":
-                        out.append({"vulns": [{"id": "CVE-2026-2001"}]})
+                        out.append({"vulns": [{"id": "CVE-2026-2001"}, {"id": "CVE-2026-2002"}, {"id": "CVE-2026-2003"}]})
                     elif q.get("commit") == "f400":
                         out.append({"vulns": [] if self.over.get("empty_canary") else [{"id": "CVE-2018-1"}]})
                     elif q.get("version") == "1.6.43-5ubuntu0.7":
@@ -188,8 +215,9 @@ class Net:
         if "/releases/tags/" in url:
             return 404, b""
         if "/issues?labels=" in url:
-            return 200, json.dumps([{"title": "x", "body": f"<!-- security-watch-key: {k} -->"}
-                                    for k in self.existing]).encode()
+            return 200, json.dumps(self.existing).encode()
+        if "/comments" in url:
+            return 200, b"[]"
         raise AssertionError("unexpected request " + url)
 
 
@@ -208,30 +236,39 @@ def run(dry, **over):
 
 
 rc, out, net = run(True)
-titles = re.findall(r"^  (Security watch: \S+|Release watch: .*)", out, re.M)
-keys = sorted(t.split(": ", 1)[1].split(" ")[0] if t.startswith("Security") else "Qt 6.12.1" for t in titles)
+lines = re.findall(r"^  ((?:Security|Release) watch: .*)", out, re.M)
+keys = sorted(k for l in lines for k in l.rsplit(": ", 1)[1].split(", "))
 check("dry run: the run ends well", rc == 0, out[-600:])
 check("dry run: High findings for versions we ship are reported, and only those",
       keys == ["CVE-2026-1001", "CVE-2026-2001", "CVE-2026-3001", "CVE-2026-4001", "Qt 6.12.1"], keys)
-check("a Low finding, another product and a range we are past are not reported",
-      not re.search(r"watch: CVE-2026-100[267]", out) and "UBUNTU-CVE-2026-3002" not in "".join(titles))
-check("a GitHub advisory rated High counts, though the CNA says Medium", "CVE-2026-4001 (High)" in out)
+check("one issue per project, named by its title",
+      "  Security watch: FFmpeg: 1 finding rated High or Critical: CVE-2026-2001" in out
+      and "  Release watch: Qt 6.12.1 is out: Qt 6.12.1" in out, lines)
+check("a GitHub advisory rated High counts, though the CNA says Medium", "CVE-2026-4001 High" in out)
 check("the release asked for is reported", "Release watch: Qt 6.12.1 is out" in out)
 check("dry run: no issue written", not net.posts and "(dry run: no issue written)" in out, net.posts)
 check("the report names every part", all(p in out for p in ("Qt 6.12.0:", "FFmpeg 9.0.2:", "whisper.cpp 1.9.5:",
                                                              "Ubuntu packages in the AppImage")))
 check("the report names newer releases", "newer releases 6.12.1" in out and "newer releases 1.9.6" in out)
 
-rc, out, net = run(False, existing=["CVE-2026-2001"])
+rc, out, net = run(False, existing=[
+    {"number": 3, "state": "closed", "comments": 0, "body": "<!-- security-watch-key: CVE-2026-2001 -->\n"
+     "<!-- security-watch-group: https://github.com/FFmpeg/FFmpeg -->"},
+    {"number": 7, "state": "open", "comments": 1, "body": "<!-- security-watch-group: https://github.com/ggml-org/whisper.cpp -->"}])
 issues = [d for u, d in net.posts if u.endswith("/issues")]
-check("a real run writes the new issues only", rc == 0 and len(issues) == 4
-      and not any("CVE-2026-2001" in d["title"] for d in issues), [d["title"] for d in issues])
+comments = [(u, d) for u, d in net.posts if u.endswith("/comments")]
+check("a real run writes issues for new findings only", rc == 0 and len(issues) == 3
+      and not any("FFmpeg" in d["title"] for d in issues), [d["title"] for d in issues])
+check("a new finding for a project with an open issue becomes a comment on it", len(comments) == 1
+      and comments[0][0].endswith("/issues/7/comments") and "CVE-2026-4001" in comments[0][1]["body"]
+      and not any("whisper" in d["title"] for d in issues), comments)
 check("issues carry the label and are assigned to the owner",
       all(d["labels"] == ["security"] and d["assignees"] == ["owner"] for d in issues))
-body = next((d["body"] for d in issues if "CVE-2026-3001" in d["title"]), "")
+body = next((d["body"] for d in issues if "CVE-2026-3001" in d["body"]), "")
 check("an issue says what, where, how rated and how found",
       all(s in body for s in ("**What:** libpng read", "libpng1.6 1.6.43-5ubuntu0.7", "Ubuntu: high (priority)",
-                              "1.6.43-5ubuntu0.8", "OSV.dev", "security-watch-key: CVE-2026-3001")), body)
+                              "1.6.43-5ubuntu0.8", "OSV.dev", "security-watch-key: CVE-2026-3001",
+                              "security-watch-group: ubuntu: libpng1.6")), body)
 check("the label is made before the first issue", net.posts and net.posts[0][0].endswith("/labels"))
 
 rc, out, net = run(False, empty_canary=True)
