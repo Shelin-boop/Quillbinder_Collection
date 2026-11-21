@@ -2,6 +2,42 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## The security watch (2026-11-21)
+
+- **What**: `.github/workflows/security-watch.yml` runs `tools/security-watch.py` once a day (04:37 UTC) on the
+  parts in `tools/security-watch.json` (Qt, FFmpeg, whisper.cpp, the translator's libraries, OpenSSL and Hunspell
+  for Android and Windows, zlib, Monocypher, the libraries inside Qt's own build, the Ubuntu packages of the
+  AppImage). It checks out only those two files, reads nothing else of the repository and writes nothing to it.
+- **Sources**: `git ls-remote` of each part's repository (newer releases, and the commit of our tag); OSV.dev's
+  querybatch (those commits; the Ubuntu packages in `Ubuntu:24.04:LTS`); Qt's list of known vulnerabilities on
+  wiki.qt.io (`?action=raw`); each GitHub repository's published security advisories and the release notes of
+  its newer releases; the CVE records of `CVEProject/cvelistV5` on raw.githubusercontent.com (ratings and versions).
+  Only raw.githubusercontent.com and git can be reached from the session; the rest is tried on GitHub's runner
+  (a push to `all/security-watch*` is a dry run that writes no issue).
+- **What is reported**: a finding for a version we ship whose deciding rating is High or Critical, or that CISA's
+  SSVC marks as actively exploited. The deciding rating is Ubuntu's priority for its packages, else the maker's
+  (the CNA's CVSS or its own scale, as OpenSSL's "Low"; the project's own GitHub advisory), else CISA's. A record
+  for another product (GDAL's copy of zlib) is not the part's; a record without versions counts as affected unless
+  Qt's list names only older fixes or its description says "before" versions we are past; a bound with letters
+  (OpenSSL's 1.1.1zj) lies between its numbers.
+- **Issues**: one per upstream project (or Ubuntu package), label `security`, assigned to the repository's owner;
+  the keys of the findings are hidden in the issue (`security-watch-key:`, `security-watch-group:`), so a finding
+  is reported once. A new finding for a project whose issue is still open becomes a comment on it; after the issue
+  is closed, a new finding opens a new issue. The release named in `tell_when_released` (Qt 6.12.1) gets one issue
+  of its own when its tag appears.
+- **A source that cannot be read** (after three tries), a missing tag, too few entries in Qt's list or an OSV query
+  that must find something (`osv_canaries`) and finds nothing fails the run: GitHub's notice of a failed run tells.
+  GitHub's advisories and release notes are extras: when they fail, the run warns and goes on.
+- **Keeping it in step**: a new version of a part goes into the watch list in the same commit; the suite `secwatch`
+  compares each `pin` (a file and pattern, an entry of `resources/licenses/index.json`, or `comes_with` for the
+  FFmpeg of Qt's Windows build) with the list, and the AppImage's Ubuntu packages with the license list.
+- **Not covered**: PDFium inside Qt PDF (Chromium has no releases to watch); the ggml inside whisper.cpp (its
+  flaws are often filed with llama.cpp); the AppImage's runtime; the Windows runtime of Microsoft. A public
+  repository's scheduled workflow is switched off after 60 days without activity (GitHub sends a notice first).
+- **The first dry run** (2026-11-21, 40 s): 14 findings in 4 projects would have been reported: FFmpeg 9.0.2 and
+  Qt's FFmpeg 9.0.1 for Windows (11, up to 9.0.2, newer: 9.1), zlib 1.3.2 (gzwrite, fixed in 1.4), HarfBuzz 14.5.0
+  (its WebAssembly shaper), PCRE2 10.48 (JIT with a regular expression from outside, fixed in 10.49).
+
 ## 0.92.0 beta (2026-11-20): the check for updates, the translator as one of the project's own add-ons
 
 - **The rules** are `core/UpdateCheck.*` (no network, no windows): `readFeed` (the release key's signature over the

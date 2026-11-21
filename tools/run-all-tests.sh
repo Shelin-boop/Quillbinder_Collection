@@ -232,6 +232,8 @@ runx w2 $B/tests/qb_w2_tests $B/tests/qb_w2_tests "$OUT/shots-w2"
 runx w3 $B/tests/qb_w3_tests $B/tests/qb_w3_tests "$OUT/shots-w3"
 runx w4 $B/tests/qb_w4_tests $B/tests/qb_w4_tests "$OUT/shots-w4"
 runx w4c $B/tests/qb_w4c_tests $B/tests/qb_w4c_tests "$OUT/shots-w4c"
+# the security watch (2026-11-21): offline, Python only (its network is made up inside the suite)
+run secwatch python3 -I tests/security_watch_tests.py
 # a suite that was asked for and is not there at all (a name mistyped in QB_SUITES)
 for n in $SELECTED; do
     [[ " $RAN $MISSING " == *" $n "* ]] || MISSING="$MISSING $n"

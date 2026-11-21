@@ -46,6 +46,12 @@ An unsigned add-on is not a security problem either: Quillbinder installs one on
 add-on is a program that can do what any program on the computer can do. Install only add-ons whose source
 you trust.
 
+## Third-party parts
+
+The third-party parts Quillbinder ships (Qt and the libraries inside it, FFmpeg, OpenSSL, the add-ons' libraries,
+the Ubuntu packages inside the AppImage) are checked every day against public vulnerability sources. A finding
+rated High or Critical for a version Quillbinder ships becomes an issue with the label `security`.
+
 ## Which versions get fixes
 
 Only the newest published version of each system: Linux (beta), Windows (experimental) and Android
