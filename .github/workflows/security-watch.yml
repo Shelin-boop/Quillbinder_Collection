@@ -1,0 +1,44 @@
+# The security watch (2026-11-21): once a day the third-party parts Quillbinder ships are checked against public
+# sources (tools/security-watch.py; the parts and their versions: tools/security-watch.json). Only a finding that a
+# source rates High or Critical (or CISA marks as actively exploited) for a version we ship becomes an issue, labeled
+# "security" and assigned to the repository's owner, once; everything else stays in the run's summary. A source that
+# cannot be read fails the run, so that GitHub's notice of a failed run tells that the watch needs a look.
+# It checks out only those two files and changes nothing in the repository. A push to all/security-watch* is a dry
+# run (no issue is written).
+name: Security watch
+
+on:
+  schedule:
+    - cron: '37 4 * * *'
+  workflow_dispatch:
+  push:
+    branches: ['all/security-watch*']
+    paths: ['tools/security-watch.py', 'tools/security-watch.json', '.github/workflows/security-watch.yml']
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: security-watch
+  cancel-in-progress: false
+
+jobs:
+  watch:
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          sparse-checkout: |
+            tools/security-watch.py
+            tools/security-watch.json
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
+      - name: Check the third-party parts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DRY: ${{ github.event_name == 'push' && '--dry-run' || '' }}
+        run: python3 -I tools/security-watch.py --watchlist tools/security-watch.json $DRY
