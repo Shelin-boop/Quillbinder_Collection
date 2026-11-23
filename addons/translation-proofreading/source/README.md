@@ -90,10 +90,10 @@ Everything the add-on needs from Quillbinder is its public tool interface, `thir
 (version 1.1, copied unchanged from the public source), and Qt. On Ubuntu 24.04:
 
     packaging/build-deps.sh        # oneDNN, CTranslate2 and SentencePiece into deps/install (once, about 40 minutes)
-    cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH=/opt/qt/6.12.0/gcc_64 -DTP_TEST_SWITCHES=ON
+    cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH=/opt/qt/6.12.1/gcc_64 -DTP_TEST_SWITCHES=ON
     cmake --build build
     TP_MODELS_DIR=<folder with the files of models-1> QT_QPA_PLATFORM=offscreen ctest --test-dir build
-    cmake -S . -B build-release -G Ninja -DCMAKE_PREFIX_PATH=/opt/qt/6.12.0/gcc_64
+    cmake -S . -B build-release -G Ninja -DCMAKE_PREFIX_PATH=/opt/qt/6.12.1/gcc_64
     cmake --build build-release && packaging/make-addon.sh build-release dist
 
 On Windows 11 (since 2026-11-16), in Git Bash inside MSVC's environment (`vcvars64.bat`), with The Qt Company's Qt

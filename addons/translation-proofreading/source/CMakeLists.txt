@@ -1,7 +1,7 @@
 # The Quillbinder add-on "Translation and Proofreading": two libraries (see src/EngineApi.h) and the checks.
 #
 #   packaging/build-deps.sh                       # once: oneDNN, CTranslate2, SentencePiece into deps/install
-#   cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH=/opt/qt/6.12.0/gcc_64 [-DTP_TEST_SWITCHES=ON]
+#   cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH=/opt/qt/6.12.1/gcc_64 [-DTP_TEST_SWITCHES=ON]
 #   cmake --build build
 #   packaging/make-addon.sh build dist            # the .qbpkg
 #

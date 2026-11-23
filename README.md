@@ -160,7 +160,7 @@ written in `resources/welcome`. `docs/CHANGES.md` lists what each version brough
 ## Build (Ubuntu 24.04)
 
 Since 0.80.0 Quillbinder is built with The Qt Company's own build of Qt 6.12.0 (Ubuntu 24.04's Qt 6.4.2 is too old);
-`tools/get-qt.sh` installs it into `/opt/qt/6.12.0/gcc_64` with aqtinstall (`-DQB_QT_DIR=<folder>` names another
+`tools/get-qt.sh` installs it into `/opt/qt/6.12.1/gcc_64` with aqtinstall (`-DQB_QT_DIR=<folder>` names another
 place):
 
 ```

@@ -91,7 +91,7 @@ jobs:
           start=$(date +%s)
           python3 -I tools/gen-resources.py > /dev/null
           cmake -S . -B build-appimage -DCMAKE_BUILD_TYPE=Release -DQB_BUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr \
-            -DQB_QT_DIR=/opt/qt/6.12.0/gcc_64 > /tmp/configure2.log 2>&1 || { tail -40 /tmp/configure2.log; exit 1; }
+            -DQB_QT_DIR=/opt/qt/6.12.1/gcc_64 > /tmp/configure2.log 2>&1 || { tail -40 /tmp/configure2.log; exit 1; }
           cmake --build build-appimage -j"$(nproc)" > /tmp/build2.log 2>&1 || { grep -m 40 'error' /tmp/build2.log; tail -20 /tmp/build2.log; exit 1; }
           echo "AppImage's build: $(( $(date +%s) - start )) s"
 

@@ -39,7 +39,7 @@ changed and what was checked. Preferences:
 - **Runtime**: the AppImages since 0.80.0 share the runtime id `u2404-qt6.12-r1` (`APP_RUNTIME`, `QB_QT_VERSION`,
   `APP_RUNTIME_SINCE`, `APP_RUNTIME_DATE` in CMakeLists.txt; a new AppImage with other libraries needs a new id).
   The AppImages 0.2.0 to 0.70.0 had `u2404-qt6.4-r1` (Ubuntu's Qt 6.4.2). Program updates (.qbpkg) run on the
-  AppImage's libraries: build on Ubuntu 24.04 with Qt 6.12.0 of `tools/get-qt.sh` (`/opt/qt/6.12.0/gcc_64`; CMake
+  AppImage's libraries: build on Ubuntu 24.04 with Qt 6.12.0 of `tools/get-qt.sh` (`/opt/qt/6.12.1/gcc_64`; CMake
   refuses another Qt version on Linux) and add **no new library dependencies**. Something that needs a library goes
   into an add-on (`addons/`, see the Media Playback add-on with its own FFmpeg). Add-ons with Linux libraries name
   the runtime in their manifest (`tools/make-package.py` adds it, and `minApp` = `APP_RUNTIME_SINCE`); the program

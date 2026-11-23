@@ -1,7 +1,7 @@
 #!/bin/bash
 # Stages the add-on from a build and writes the package.
 #   packaging/make-addon.sh <build dir> <out dir>      -> <out dir>/translation-proofreading-<version>.qbpkg
-# The build must be a release build (TP_TEST_SWITCHES off) against Qt 6.12.0. QB_QT_DIR (default /opt/qt/6.12.0/gcc_64)
+# The build must be a release build (TP_TEST_SWITCHES off) against Qt 6.12.0. QB_QT_DIR (default /opt/qt/6.12.1/gcc_64)
 # gives Qt's TLS plugin for the model download; without it the package is made without the plugin and a warning (the
 # download then needs the plugin of another add-on, such as Speech Transcription).
 set -euo pipefail
@@ -9,7 +9,7 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 BUILD=$(cd "$1" && pwd)
 OUT=$2
 DEPS=${TP_DEPS:-$ROOT/deps}
-QT=${QB_QT_DIR:-/opt/qt/6.12.0/gcc_64}
+QT=${QB_QT_DIR:-/opt/qt/6.12.1/gcc_64}
 VERSION=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['version'])" "$ROOT/packaging/manifest.json")
 CMAKE_VERSION=$(sed -n 's/^set(TP_VERSION *"\(.*\)")/\1/p' "$ROOT/CMakeLists.txt")
 [ "$VERSION" = "$CMAKE_VERSION" ] || { echo "manifest.json has $VERSION, CMakeLists.txt $CMAKE_VERSION" >&2; exit 1; }
