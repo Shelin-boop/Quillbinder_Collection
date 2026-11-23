@@ -1212,7 +1212,7 @@ Left out: headers and footers, floating pictures and drawings, pictures in the o
 3. Click **Load** (or press Enter). The page and its pictures are fetched, and the window shows what will be imported, with the number of words and pictures, the author, the site and the date.
 4. Correct the **Title** if you like, check the choices below, and click **Import**.
 
-**Only the article** keeps the text you came for and leaves out menus, adverts, cookie notices, share buttons, comment sections, and lists of other articles. {{APP}} finds the article the way reading tools do (the text with the most sentences, commas and the fewest links wins; names like "article" or "sidebar" in the page count for or against a part). If something is missing, untick it to take the whole page. **Pictures** fetches the pictures of the article (very large ones are made 1600 pixels wide).
+**Only the article** keeps the text you came for and leaves out menus, adverts, cookie notices, share buttons, comment sections, and lists of other articles. {{APP}} finds the article the way reading tools do (the text with the most sentences, commas and the fewest links wins; names like "article" or "sidebar" in the page count for or against a part). If something is missing, untick it to take the whole page. **Pictures** fetches the pictures of the article (very large ones are made 1600 pixels wide). For a page from the internet, pictures are fetched only from public addresses: one that lies on your own computer or on a private network (even through a redirection) is left out, and the result tells how many. A page that itself comes from your own computer or network is fetched with all its pictures.
 
 **Import as**:
 

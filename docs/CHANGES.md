@@ -46,6 +46,14 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   **Save Theme Options to File** (File > Options) write a temporary file beside the target, check it and only then put
   it in place. When the write fails, the file that was there stays as it was and the message says so (before, a
   failed write could leave no file, or an empty one). A new options file holds only the new options.
+- **Web Page Import fetches the pictures of a page from the internet only from public addresses.** A picture that lies
+  on this computer or on a private network (also after a redirection, and when a name leads there) is left out, and the
+  import's result says how many pictures were left out and why. A page that itself lies on such an address (your own
+  computer or network) works as before.
+- **Four limits for prepared input.** **Install Update or Add-on** refuses a package of more than 400 MB without
+  reading it (as the check of the package already did); a backup archive whose sizes cannot be added up is refused
+  by **Restore From Backup**, with nothing made; and the link between {{APP}}'s windows and the writing tools reads a
+  request of 64 KiB at most.
 
 ## 0.92.0 beta (2026-11-20)
 

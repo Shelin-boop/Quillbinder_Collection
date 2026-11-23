@@ -327,8 +327,11 @@ add_dependencies(qb_v0930_tests qbfaultshim)
 
 # 0.93.0, second suite: fixes in shared code (exports that keep the old file, four limits for prepared input, the main
 # window's undo watcher at its end) (xvfb-run -a ./qb_v0930b_tests /tmp/shots)
-add_executable(qb_v0930b_tests v0930b_tests.cpp ${QB_RESOURCES_OBJECTS})
-target_link_libraries(qb_v0930b_tests PRIVATE qbui Qt6::Test)
+add_executable(qb_v0930b_tests v0930b_tests.cpp ${QB_RESOURCES_OBJECTS}
+               ${CMAKE_SOURCE_DIR}/plugins/importers/web/WebImporter.cpp ${CMAKE_SOURCE_DIR}/plugins/importers/web/Article.cpp
+               ${CMAKE_SOURCE_DIR}/plugins/importers/web/Html.cpp)
+target_include_directories(qb_v0930b_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins/importers/web)
+target_link_libraries(qb_v0930b_tests PRIVATE qbui Qt6::Test Qt6::Network ${CMAKE_DL_LIBS})
 target_compile_definitions(qb_v0900_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # The readers against damaged input (0.80.0, the external audit of 2026-11-09, ST-5): fixed-seed damage of small
 # valid inputs of RTF, Markdown, XML, ZIP, DOCX, ODT, Word 97 and .scrivx, each read in this process

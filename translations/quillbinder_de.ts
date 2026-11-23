@@ -2998,6 +2998,10 @@ Quelle: %1</translation>
         <translation>Die Datei ist größer als %1 MB.</translation>
     </message>
     <message>
+        <source>Not fetched: the address is on this computer or on a private network.</source>
+        <translation>Nicht abgerufen: Die Adresse liegt auf diesem Computer oder in einem privaten Netz.</translation>
+    </message>
+    <message>
         <source>Cancelled.</source>
         <translation>Abgebrochen.</translation>
     </message>
@@ -3301,6 +3305,10 @@ Quelle: %1</translation>
     <message>
         <source>damaged table of contents</source>
         <translation>beschädigtes Inhaltsverzeichnis</translation>
+    </message>
+    <message>
+        <source>the sizes named in the file are impossibly large</source>
+        <translation>die in der Datei genannten Größen sind unmöglich groß</translation>
     </message>
     <message>
         <source>the table of contents could not be read</source>
@@ -20678,6 +20686,14 @@ Sie wird von hier aus nicht geöffnet. Wenn Sie ihr vertrauen, öffnen Sie sie s
     <message>
         <source>%1 pictures could not be fetched or are in a format the program does not show.</source>
         <translation>%1 Bilder konnten nicht abgerufen werden oder haben ein Format, das das Programm nicht anzeigt.</translation>
+    </message>
+    <message>
+        <source>1 picture was left out: its address is on this computer or on a private network, and the page comes from the internet.</source>
+        <translation>1 Bild wurde ausgelassen: Seine Adresse liegt auf diesem Computer oder in einem privaten Netz, die Seite aber kommt aus dem Internet.</translation>
+    </message>
+    <message>
+        <source>%1 pictures were left out: their addresses are on this computer or on a private network, and the page comes from the internet.</source>
+        <translation>%1 Bilder wurden ausgelassen: Ihre Adressen liegen auf diesem Computer oder in einem privaten Netz, die Seite aber kommt aus dem Internet.</translation>
     </message>
     <message>
         <source>The page builds its text with a script; the text was taken from the page&apos;s data, without formatting and pictures.</source>
