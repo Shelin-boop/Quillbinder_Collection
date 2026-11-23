@@ -149,6 +149,11 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   (`tools/security-watch.py`) offline: versions and ranges, the CVE records' ratings and versions, Qt's list,
   GitHub's advisories, whole runs against made-up sources (what is reported, one issue per project, comments,
   failed sources), the watch list's versions against the build's files, and the workflow's rights.
+- `deps` (0.93.0, `tests/deps_packs_tests.py`, Python only, no build): the dependency packs of the Linux build
+  (`tools/deps-pack.sh`): the three recipes and the texts of their pre-releases (what is inside, license, source), the
+  workflow's matrix, push filter and rights, the translator pack's license files against the add-on's
+  `make-addon.sh`, and a pack made and fetched through a made-up `gh` (SHA-256 checked, paths made new).
+  `secwatch` also checks `tools/verify-ffmpeg-source.sh` with keys made for the check (needs gpg).
 - `qb_v0911_tests` (0.91.1 beta: toolbars rearranged freely by their grips, the row that got stuck; see "Toolbars
   rearranged freely").
 - `qb_v0910_tests` (0.91.0 beta: backups straight in the backup folder, the seven toolbars and the icon bar; see

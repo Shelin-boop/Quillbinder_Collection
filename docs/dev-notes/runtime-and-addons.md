@@ -20,6 +20,19 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - **Release text** (`tools/addon-entry.py notes`): the warning "Quillbinder X to 0.91.2 does not know add-on keys" appears
   only when the package's `minApp` is below 0.91.3; an add-on built for r2 needs 0.93.0 and has no such sentence (suite
   `v0913`).
+- **FFmpeg 9.1** (security watch issue: eleven High findings up to 9.0.2): `tools/get-ffmpeg.sh` takes
+  `https://ffmpeg.org/releases/ffmpeg-9.1.tar.xz` (Ubuntu's pool has 9.0.2 only). Sonames stay (avcodec/avformat 63,
+  swresample 7, swscale 10, avutil 61), the configure switches and the patch of `tools/build-ffmpeg.sh` were read against
+  tag n9.1 (no change needed; libpostproc is gone as before). The SHA-256 pin starts empty: then
+  `tools/verify-ffmpeg-source.sh` accepts the archive only with a good release signature (`.asc` and
+  `https://ffmpeg.org/ffmpeg-devel.asc`) of the key `KEY_FPR` (stops and prints the fingerprints it found otherwise)
+  and prints "pin this". The first run of `deps.yml` prints it (step "Build", group "FFmpeg source archive"); it goes into
+  `SHA256` of `get-ffmpeg.sh` in a commit of its own, then the pack line into `tools/deps-packs.txt`. Media Playback and
+  Extra Video and Audio Formats are 2.1 (the engine's `version()` too).
+- **The translator pack** (`deps-pack.sh`, name `translator`): `build/translator-deps/install` and the license files
+  that `make-addon.sh` copies (the list `TP_LICENSES`, checked by the suite `deps`). `get-translator-deps.sh --recipe`
+  still prints the hash of `build-deps.sh` for the release's cache. Each pre-release's text comes from
+  `deps-pack.sh about <name>`.
 - **Baseline on 6.12.1** (before these changes): every suite passed except `secwatch`, `v0920` and `v0913`, which followed
   from the new runtime.
 
