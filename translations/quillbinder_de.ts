@@ -3492,6 +3492,20 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
         <source>The file %1 of an earlier save is in the way and could not be moved aside.</source>
         <translation>Die Datei %1 eines früheren Speicherns ist im Weg und ließ sich nicht beiseite legen.</translation>
     </message>
+    <message>
+        <source>The journal and the files of that save could not all be moved aside; what stayed is left in the project folder (the journal, and files whose names end in .qbstage).</source>
+        <translation>Das Journal und die Dateien dieses Speicherns ließen sich nicht alle beiseite legen; was geblieben ist, liegt im Projektordner (das Journal und Dateien, deren Namen auf .qbstage enden).</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n file(s) of that save were moved into:
+%1</source>
+        <translation>
+            <numerusform>%n Datei dieses Speicherns wurde verschoben nach:
+%1</numerusform>
+            <numerusform>%n Dateien dieses Speicherns wurden verschoben nach:
+%1</numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>
@@ -17408,6 +17422,18 @@ The copy is complete: %2 of %2 files were written, with the project file as it i
 %1
 
 Die Kopie ist vollständig: %2 von %2 Dateien wurden geschrieben, mit der Projektdatei, wie sie im Speicher ist, als *.copy benannt (die README in diesem Ordner sagt, wie sie zurückgespielt wird).</translation>
+    </message>
+    <message>
+        <source>No copy was needed: nothing was waiting to be written into the project's own folder.</source>
+        <translation>Es war keine Kopie nötig: Nichts wartete darauf, in den eigenen Ordner des Projekts geschrieben zu werden.</translation>
+    </message>
+    <message>
+        <source>The .scriv gets the changes with the next save that works.</source>
+        <translation>Das .scriv bekommt die Änderungen mit dem nächsten Speichern, das gelingt.</translation>
+    </message>
+    <message>
+        <source>temporary file of an earlier save</source>
+        <translation>temporäre Datei eines früheren Speicherns</translation>
     </message>
 </context>
 <context>

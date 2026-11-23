@@ -27,6 +27,9 @@ constexpr const char *kStageSuffix = ".qbstage";
 
 // A file name of a save in progress (never read as project data, never backed up)
 bool isStaged(const QString &fileName);
+// 0.93.0: the temporary files of earlier saves that Batch::stage moved into settings/conflicts since the last call (the
+// save tells them once)
+QStringList takeKeptAside();
 // 0.70.0: a folder's entries (a new or renamed file in it) reach the disk (POSIX; nothing elsewhere)
 void syncDir(const QString &dir);
 // 0.93.0: false when the drive reported an error for the folder (not for a file system that cannot sync); number: errno

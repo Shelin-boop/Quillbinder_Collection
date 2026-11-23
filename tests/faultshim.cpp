@@ -8,6 +8,7 @@
 //                          are put in place, not the ones before
 //   QB_SHIM_MODE=dirsync-early   the other folders: those with a temporary file or journal.json (before anything is replaced)
 //   QB_SHIM_MODE=dirsync-notsup   fsync() of a folder (only) fails with ENOTSUP (a file system that cannot sync folders)
+//   QB_SHIM_MODE=dirsync-err   fsync() of a folder fails with the error number in QB_SHIM_ERRNO (EBADF, EACCES, EPERM ...)
 //   QB_SHIM_ARM=<file>     the dirsync modes act only once this file exists (the program switches the fault on after opening)
 //   QB_SHIM_MODE=close     close() fails with EIO (the descriptor is closed all the same, as the kernel does)
 #ifndef _GNU_SOURCE
@@ -95,8 +96,12 @@ int fsync(int fd)
         errno = EIO;
         return -1;
     }
-    if ((mode("dirsync") || mode("dirsync-early") || mode("dirsync-notsup")) && armed() && below(fd) && isFolder(fd)) {
-        const bool hold = mode("dirsync-notsup") ? true : holdsSaveFiles(fd);
+    if ((mode("dirsync") || mode("dirsync-early") || mode("dirsync-notsup") || mode("dirsync-err")) && armed() && below(fd) && isFolder(fd)) {
+        const bool hold = (mode("dirsync-notsup") || mode("dirsync-err")) ? true : holdsSaveFiles(fd);
+        if (mode("dirsync-err")) {
+            errno = getenv("QB_SHIM_ERRNO") ? atoi(getenv("QB_SHIM_ERRNO")) : EIO;
+            return -1;
+        }
         if (mode("dirsync-notsup") || (mode("dirsync") && !hold) || (mode("dirsync-early") && hold)) {
             errno = mode("dirsync-notsup") ? ENOTSUP : EIO;
             return -1;

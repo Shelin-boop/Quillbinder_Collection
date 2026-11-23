@@ -271,6 +271,7 @@ struct CopyTally {
 struct EmergencyReport {
     QString dir;       // the folder; empty when none could be made or written
     QString reason;    // why there is no folder
+    QString scrivenerWaits;      // a project in Scrivener format: its .scriv may still wait for the changes
     bool nothingToWrite = false; // nothing was unsaved: no copy was needed (no failure)
     CopyTally tally;
     bool complete() const { return !dir.isEmpty() && tally.missing.isEmpty() && tally.written == tally.wanted; }

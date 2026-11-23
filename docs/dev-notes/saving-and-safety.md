@@ -31,7 +31,7 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   | Name | Where | Lives | A crash can leave it | Removed by |
   |---|---|---|---|---|
   | `<file>.qbstage` | beside each target in the project folder (batch save) | from staging to the rename, with `settings/journal.json` | yes | `savebatch::recover` at the opening (finished with the journal, else dropped); `Batch::stage` sets a foreign one aside |
-  | `<file>.qbstage.kept-<time>` | same place | for good | made on purpose | nothing, on purpose: it may hold the only copy of unsaved text (open question: when may it go?) |
+  | `<file>.qbstage` of an earlier save, in the way of a new save | `settings/conflicts/<file> (temporary file of an earlier save <time>)` | for good | made on purpose by `Batch::stage` (before 0.93.0 beside the target as `.qbstage.kept-<time>`) | nothing, on purpose: it may hold the only copy of unsaved text; the save tells it once (`conflictKept`, like the other kept versions) |
   | QSaveFile `<file>.XXXXXX` (also `safesave::copyFile`, settings, index, snapshots, `.scriv` files) | beside the target | milliseconds | yes | **new**: `savebatch::removeSaveLeftovers` at `Project::open` and `ScrivenerFormat::open` (a known file type, six characters, 10 minutes old); before, only the reader of a .scriv ignored `content.*.XXXXXX` |
   | `<name>.zip.part` of a backup | the program's work folder, not the backup folder | the packing | yes | `sweepWork` (an hour old) at the next backup into that folder (0.90.3) |
   | `<export>.docx.part` | beside the export's target | the export | yes | **new**: replaced in one step (`savebatch::replace`; before, the old file was deleted first and the `.part` stayed when the rename failed), removed when it fails, an hour-old one beside the target goes at the next export |
@@ -72,7 +72,7 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   failure, `drop()`). `probeFolderSync` (at `Project::open`) remembers a device whose folder sync errs as "cannot sync";
   EBADF, EACCES, EPERM also count as "cannot sync". Storage conversion keeps the new format when `placed()`.
   `keepUnreadable` puts the journal back when a temporary file could not be moved; `Batch::stage` moves a foreign
-  `.qbstage` aside (`.qbstage.kept-<time>`); `failure::Kind::JournalInTheWay`. `recover()` reports no "lost" file whose
+  `.qbstage` into `settings/conflicts` (`takeKeptAside`, told once); `failure::Kind::JournalInTheWay`. `recover()` reports no "lost" file whose
   temporary file is gone and whose target was replaced later. Known: an opening still deletes temporary files when no
   journal is there (a save that never began to land). Shim: `dirsync` acts only on folders without temporary files or
   journal (after the renames), `dirsync-early` on the others, `QB_SHIM_ARM=<file>` switches the fault on once the file
@@ -91,6 +91,13 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   restored / "restored INCOMPLETELY" (warning icon, `backup::restore`'s text with the files) / not restored; a title that
   could not be saved ("could not be marked") is added; `lastRestoreText()` for the checks. Suite `v0930` (child runs
   with the fault library: `--child-save`).
+
+- **Second review (0.93.0):** `writeEntry` and `saveIndex` clear the dirty marks of their "holds exactly this already" path in
+  `Batch::after` (only after a good commit and its sync; at once without a batch). `Project::create` probes the folder sync as
+  `open` does; the probe's device set has a mutex (a backup's worker thread reads it). `keepUnreadable` with a file that
+  stayed: the journal goes back, the new folder in `settings/conflicts` is removed when empty, otherwise named in the notice
+  with what stayed (test switch `QB_TEST_FAIL_MOVE`, a part of the source path). `EmergencyReport::scrivenerWaits`; the
+  "nothing to write" text no longer says everything is saved. Shim mode `dirsync-err` with `QB_SHIM_ERRNO`.
 
 ## 0.92.0 beta (2026-11-20): the content decides, the project ID in backup names, checked copies, failures that are told
 

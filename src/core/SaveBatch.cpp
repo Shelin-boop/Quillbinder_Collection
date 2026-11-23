@@ -15,6 +15,8 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QObject>
 #include <QRegularExpression>
 #include <QSet>
@@ -58,6 +60,7 @@ QByteArray shaOf(const QByteArray &data) { return QCryptographicHash::hash(data,
 // folder that cannot be opened for reading are no error; any other error of the sync (EIO and the like) is: the drive
 // reported it. `number` gets the error number then.
 QSet<quint64> g_noFolderSync;  // devices whose folders cannot be synced (probeFolderSync)
+QMutex g_noFolderSyncLock;     // read by a backup's worker thread (syncDir), written by a project that opens meanwhile
 QSet<QString> g_unsynced;      // folders whose checked sync failed and has not worked since
 
 bool cannotSync(int e)
@@ -72,7 +75,12 @@ bool syncFolder(const QString &dir, int *number = nullptr)
     if (fd < 0)
         return true;
     struct stat st;
-    if (::fstat(fd, &st) == 0 && g_noFolderSync.contains(quint64(st.st_dev))) {
+    bool noSync = false;
+    if (::fstat(fd, &st) == 0) {
+        QMutexLocker lock(&g_noFolderSyncLock);
+        noSync = g_noFolderSync.contains(quint64(st.st_dev));
+    }
+    if (noSync) {
         ::close(fd);
         return true;
     }
@@ -151,6 +159,21 @@ bool writeSynced(const QString &path, const QByteArray &data, QString *error)
     return true;
 }
 
+QStringList g_keptAside; // temporary files of earlier saves that Batch::stage moved aside (told by the save)
+
+// a file moved, or copied and removed (another file system)
+bool moveAside(const QString &from, const QString &to)
+{
+    if (QFile::rename(from, to))
+        return true;
+    if (!QFile::copy(from, to))
+        return false;
+    if (QFile::remove(from))
+        return true;
+    QFile::remove(to);
+    return false;
+}
+
 QString relativeTo(const QString &folder, const QString &path) { return QDir(folder).relativeFilePath(path); }
 
 } // namespace
@@ -162,8 +185,10 @@ bool probeFolderSync(const QString &folder)
     if (syncFolder(folder, &number))
         return true;
     struct stat st;
-    if (::stat(QFile::encodeName(folder).constData(), &st) == 0)
+    if (::stat(QFile::encodeName(folder).constData(), &st) == 0) {
+        QMutexLocker lock(&g_noFolderSyncLock);
         g_noFolderSync.insert(quint64(st.st_dev));
+    }
     std::fprintf(stderr, "%s: the file system of %s answers a folder's sync with an error (%s); folder syncs there are not checked\n",
                  "Quillbinder", QFile::encodeName(folder).constData(), std::strerror(number));
     return false;
@@ -176,6 +201,13 @@ bool probeFolderSync(const QString &folder)
 void syncDir(const QString &dir) { syncFolder(dir); }
 
 bool syncDirChecked(const QString &dir, int *number) { return syncFolder(dir, number); }
+
+QStringList takeKeptAside()
+{
+    const QStringList l = g_keptAside;
+    g_keptAside.clear();
+    return l;
+}
 
 bool isStaged(const QString &fileName) { return fileName.endsWith(QLatin1String(kStageSuffix)); }
 
@@ -244,13 +276,21 @@ bool Batch::stage(const QString &target, const QByteArray &data, const QString &
     // 0.93.0: a temporary file that is not this save's own (left by a journal that could not be set aside) is moved aside,
     // never written over or deleted
     if (!contains(target) && QFileInfo(item.staged).isFile()) {
-        const QString aside = item.staged + QStringLiteral(".kept-") + QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-HHmmss-zzz"));
-        if (!QFile::rename(item.staged, aside)) {
+        // 0.93.0: into settings/conflicts (the other kept versions' place), told once by the save (takeKeptAside)
+        const QString dir = QFileInfo(m_journal).absolutePath() + QStringLiteral("/conflicts");
+        QString rel = relativeTo(m_folder, target);
+        rel.replace(QLatin1Char('/'), QLatin1String(" - "));
+        QString aside = dir + QLatin1Char('/') + rel + QStringLiteral(" (temporary file of an earlier save ")
+                        + QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd HH-mm-ss")) + QLatin1Char(')');
+        for (int n = 2; QFileInfo::exists(aside); ++n)
+            aside = dir + QLatin1Char('/') + rel + QStringLiteral(" (temporary file of an earlier save %1)").arg(n);
+        if (!QDir().mkpath(dir) || !moveAside(item.staged, aside)) {
             if (error)
                 *error = QObject::tr("The file %1 of an earlier save is in the way and could not be moved aside.")
                              .arg(QDir::toNativeSeparators(item.staged));
             return false;
         }
+        g_keptAside << aside;
     }
     if (!writeSynced(item.staged, data, error))
         return false;
@@ -490,9 +530,14 @@ QString Recovery::text() const
                                 "was putting in place) cannot be read: %1. So it is not known which of its files were "
                                 "already in place; none of them was put in place or deleted now.")
                         .arg(unreadable);
-        if (keptFailed)
-            s += QLatin1Char(' ') + QObject::tr("The journal and the files of that save could not be moved aside; they are "
-                                                "left in the project folder (their names end in .qbstage).");
+        if (keptFailed) {
+            s += QLatin1Char(' ') + QObject::tr("The journal and the files of that save could not all be moved aside; what "
+                                                "stayed is left in the project folder (the journal, and files whose names "
+                                                "end in .qbstage).");
+            if (keptFiles > 0)
+                s += QLatin1Char(' ') + QObject::tr("%n file(s) of that save were moved into:\n%1", nullptr, keptFiles)
+                                            .arg(QDir::toNativeSeparators(keptIn));
+        }
         else
             s += QLatin1Char(' ') + QObject::tr("The journal and the %n file(s) that save had written beside their targets "
                                                 "are kept in:\n%1", nullptr, keptFiles)
@@ -523,6 +568,10 @@ namespace {
 // a file moved, or copied and removed (another file system); false when it is still where it was
 bool moveFile(const QString &from, const QString &to)
 {
+    // (tests: QB_TEST_FAIL_MOVE holds a part of the source's path: that move fails)
+    const QString fake = QB_TEST_ENV("QB_TEST_FAIL_MOVE");
+    if (!fake.isEmpty() && from.contains(fake))
+        return false;
     QDir().mkpath(QFileInfo(to).absolutePath());
     if (QFile::rename(from, to))
         return true;
@@ -566,9 +615,14 @@ void keepUnreadable(Recovery &r, const QString &folder, const QString &journal, 
     }
     // 0.93.0: the journal goes back when a temporary file stayed behind: journal and files are then in one place, and no
     // save writes over them (the files are told by their names)
+    // The folder stays (named in the notice) only when some files were moved into it; else it goes, so that every retry does
+    // not add an empty one.
     if (r.keptFailed) {
         moveFile(dir + QStringLiteral("/journal.json"), journal);
-        r.keptIn.clear();
+        if (r.keptFiles == 0) {
+            QDir().rmdir(dir);
+            r.keptIn.clear();
+        }
     }
     syncFolder(QFileInfo(journal).absolutePath());
 }

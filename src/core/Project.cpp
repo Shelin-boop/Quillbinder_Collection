@@ -208,6 +208,7 @@ std::unique_ptr<Project> Project::create(const QString &parentDir, const QString
     p->startSession(true);
     if (!p->saveIndex(error))
         return nullptr;
+    savebatch::probeFolderSync(p->folderPath()); // 0.93.0: as at the opening
     return p;
 }
 
@@ -227,6 +228,7 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
         const savebatch::Recovery r = savebatch::recover(p->m_folder, p->journalFile(), p->settingsDir());
         if (r.any())
             p->m_saveRecovery = r.text();
+        p->m_keptFailedTold = r.keptFailed; // (told by the opening: the saves' retries do not tell it again)
         // 0.93.0: the temporary files of a plain write that was cut off (Qt's QSaveFile: "<file>.XXXXXX") are removed
         // once they are ten minutes old
         savebatch::removeSaveLeftovers(p->m_folder);
@@ -896,6 +898,7 @@ EmergencyReport Project::makeEmergencyCopy(const QString &parent)
     if (!needsEmergencyCopy()) {
         rep.reason = tr("nothing to write");
         rep.nothingToWrite = true;
+        rep.scrivenerWaits = scrivenerPath;
         return rep;
     }
     const QString base = parent.isEmpty() ? dataDir() + QStringLiteral("/Emergency") : parent;
@@ -967,8 +970,13 @@ EmergencyReport Project::makeEmergencyCopy(const QString &parent)
 
 QString Project::emergencyText(const EmergencyReport &r)
 {
-    if (r.nothingToWrite)
-        return tr("Everything is saved: no copy was needed.");
+    if (r.nothingToWrite) {
+        // (not "everything is saved": a project in Scrivener format may still wait for its .scriv)
+        QString t = tr("No copy was needed: nothing was waiting to be written into the project's own folder.");
+        if (!r.scrivenerWaits.isEmpty())
+            t += QLatin1Char(' ') + tr("The .scriv gets the changes with the next save that works.");
+        return t;
+    }
     if (r.dir.isEmpty())
         return tr("No copy could be written: %1").arg(r.reason.isEmpty() ? tr("nothing to write") : r.reason);
     if (r.complete())
@@ -1172,6 +1180,8 @@ bool Project::saveImpl(QString *error, bool quick)
         batch.drop();
     else if (!batch.commit(error))
         ok = false;
+    for (const QString &kept : savebatch::takeKeptAside())
+        emit conflictKept(QString(), tr("temporary file of an earlier save"), kept, false);
     if (m_uiDirty)
         writeUiState();
     laps.lap("project file");
