@@ -90,7 +90,7 @@ public:
     QString lastBackupProblem() const { return m_lastBackupProblem; }
     // 0.93.0: older backups that the clean-up could not delete (the last text, for the checks)
     QString lastBackupCleanupNote() const { return m_lastBackupCleanupNote; }
-    void tellBackupCleanup(const QStringList &notes);
+    void tellBackupCleanup(const QStringList &notes, bool modal = false);
     // 0.93.0: the last message of Restore From Backup, in its form (restored, restored incompletely, not restored)
     QString lastRestoreText() const { return m_lastRestoreText; }
     // 0.93.0: the message about an emergency copy (the three places that make one)

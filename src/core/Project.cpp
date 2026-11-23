@@ -892,6 +892,7 @@ EmergencyReport Project::makeEmergencyCopy(const QString &parent)
     EmergencyReport rep;
     if (!needsEmergencyCopy()) {
         rep.reason = tr("nothing to write");
+        rep.nothingToWrite = true;
         return rep;
     }
     const QString base = parent.isEmpty() ? dataDir() + QStringLiteral("/Emergency") : parent;
@@ -922,11 +923,13 @@ EmergencyReport Project::makeEmergencyCopy(const QString &parent)
         m_objects->writeUnsaved(dir, &rep.tally);
     // 0.93.0: the project file as it is in memory (binder, titles, labels): when the real one cannot be written, the
     // changes of the binder are not lost
+    // The copy must not open as a project (and must never share the original's backup ID): the file's name ends in ".copy"
     const QString indexName = QFileInfo(m_indexFile).fileName();
+    const QString copyName = indexName + QStringLiteral(".copy");
     {
         QString why;
-        const bool ok = safesave::writeFile(QDir(dir).filePath(indexName), indexBytes(), &why);
-        rep.tally.add(indexName, ok, why);
+        const bool ok = safesave::writeFile(QDir(dir).filePath(copyName), indexBytes(), &why);
+        rep.tally.add(copyName, ok, why);
     }
     if (rep.tally.written == 0) {
         QDir(dir).removeRecursively();
@@ -936,12 +939,19 @@ EmergencyReport Project::makeEmergencyCopy(const QString &parent)
     }
     QString readme = tr("The project \"%1\" (%2) could not be saved. This folder holds what was not saved yet: texts and "
                         "notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the "
-                        "folder \"objects\") and the project file %4 as it was in memory (the binder, titles and labels). "
-                        "Copy what you need back into the project.\n\n")
-                         .arg(m_title, QDir::toNativeSeparators(displayFile()), QLatin1String(QB_APP_NAME), indexName);
-    readme += tr("To put the project file back: close the project, rename the project file %1 in the project folder %2 "
-                 "(so that it is kept), and copy the file %1 of this folder there. Then open the project again.\n\n")
-                  .arg(indexName, QDir::toNativeSeparators(m_folder));
+                        "folder \"objects\") and the project file as it was in memory (the binder, titles and labels), as "
+                        "%4. Copy what you need back into the project.\n\n")
+                         .arg(m_title, QDir::toNativeSeparators(displayFile()), QLatin1String(QB_APP_NAME), copyName);
+    if (scrivenerPath.isEmpty())
+        readme += tr("To put the project file back: close the project, rename the project file %1 in the project folder %2 "
+                     "(so that it is kept), copy the file %3 of this folder there and rename it to %1. Then open the "
+                     "project again. (The copy's name ends in .copy so that this folder is not taken for a project.)\n\n")
+                      .arg(indexName, QDir::toNativeSeparators(m_folder), copyName);
+    else
+        readme += tr("The project is in Scrivener format: the file %1 belongs to its working copy (%2), not to the .scriv "
+                     "folder. The binder is written into the .scriv with the next save that works; do not copy this file "
+                     "over anything by hand.\n\n")
+                      .arg(copyName, QDir::toNativeSeparators(m_folder));
     if (rep.complete())
         readme += tr("This copy is complete: all %1 files were written.\n").arg(rep.tally.wanted);
     else
@@ -954,11 +964,13 @@ EmergencyReport Project::makeEmergencyCopy(const QString &parent)
 
 QString Project::emergencyText(const EmergencyReport &r)
 {
+    if (r.nothingToWrite)
+        return tr("Everything is saved: no copy was needed.");
     if (r.dir.isEmpty())
         return tr("No copy could be written: %1").arg(r.reason.isEmpty() ? tr("nothing to write") : r.reason);
     if (r.complete())
         return tr("The texts not saved are in:\n%1\n\nThe copy is complete: %2 of %2 files were written, with the project "
-                  "file as it is in memory (the README in that folder says how to put it back).")
+                  "file as it is in memory, named *.copy (the README in that folder says how to put it back).")
             .arg(QDir::toNativeSeparators(r.dir)).arg(r.tally.wanted);
     return tr("This copy is INCOMPLETE: %1 of %2 files were written, in:\n%3\n\nNot written:\n%4")
         .arg(r.tally.written).arg(r.tally.wanted).arg(QDir::toNativeSeparators(r.dir), r.tally.missing.join(QLatin1Char('\n')));

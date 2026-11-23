@@ -16,6 +16,9 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   text of all places (`MainWindow::tellEmergencyCopy` for Save Texts Elsewhere and Close Project; the notice of
   `saveForTermination` through `writeEmergencyNotice(what, report)`). An incomplete copy shows a warning box with
   "Copy Incomplete" in its title. Android's own save (`src/android/MobileStart.cpp`) was not changed.
+  Review fixes: the project file in the copy is `<name>.<suffix>.copy` (never opens as a project, takes no backup ID);
+  `EmergencyReport::nothingToWrite` (no failure text); the README of a Scrivener project gives no way back;
+  `tellBackupCleanup(notes, modal)` is non-modal except at closing.
   Test switch: `QB_TEST_WRITE_FAILS` ("number|text|part of the path") now also works in `safesave::writeFile`.
   Boards (and texts) with the same title get " (2)", " (3)" in their file names.
 - **A folder's sync** (`savebatch::syncFolder` now returns false with errno): EINVAL, ENOTSUP, EOPNOTSUPP, ENOSYS and a

@@ -322,8 +322,10 @@ target_compile_definitions(qb_v0920_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CU
 # backups that cannot be deleted, the wording of a restore (xvfb-run -a ./qb_v0930_tests /tmp/shots)
 add_executable(qb_v0930_tests v0930_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0930_tests PRIVATE qbui Qt6::Test)
-target_compile_definitions(qb_v0930_tests PRIVATE QB_FAULT_SHIM="$<TARGET_FILE:qbfaultshim>")
-add_dependencies(qb_v0930_tests qbfaultshim)
+if(NOT WIN32) # the fault library is an LD_PRELOAD library: the child runs are on Linux only (as v0903)
+  target_compile_definitions(qb_v0930_tests PRIVATE QB_FAULT_SHIM="$<TARGET_FILE:qbfaultshim>")
+  add_dependencies(qb_v0930_tests qbfaultshim)
+endif()
 
 # 0.93.0, second suite: fixes in shared code (exports that keep the old file, four limits for prepared input, the main
 # window's undo watcher at its end) (xvfb-run -a ./qb_v0930b_tests /tmp/shots)

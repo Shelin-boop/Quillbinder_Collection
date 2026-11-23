@@ -17294,6 +17294,44 @@ Nicht geschrieben:
         <source>Not saved yet: the journal of an earlier save, %1, cannot be read and could not be moved aside, so this save would overwrite it. Nothing was written; your changes are kept while the project stays open. Make the folder %2 writable (the files of that save, named *.qbstage in the project folder, are kept as they are); the program then sets the journal aside and saves by itself.</source>
         <translation>Noch nicht gespeichert: Das Journal eines früheren Speicherns, %1, kann nicht gelesen werden und ließ sich nicht beiseite legen; dieses Speichern würde es überschreiben. Es wurde nichts geschrieben; Ihre Änderungen bleiben erhalten, solange das Projekt offen ist. Machen Sie den Ordner %2 beschreibbar (die Dateien dieses Speicherns, im Projektordner als *.qbstage benannt, bleiben unverändert); das Programm legt das Journal dann beiseite und speichert von selbst.</translation>
     </message>
+    <message>
+        <source>The project "%1" (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder "objects") and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
+
+</source>
+        <translation>Das Projekt "%1" (%2) konnte nicht gespeichert werden. Dieser Ordner enthält, was noch nicht gespeichert war: Texte und Notizen als RTF-Dateien (Word, LibreOffice und %3 öffnen sie), Mind-Map-Tafeln, geänderte Objekte (im Ordner "objects") und die Projektdatei, wie sie im Speicher war (Gliederung, Titel und Farbmarken), als %4. Kopieren Sie, was Sie brauchen, zurück ins Projekt.
+
+</translation>
+    </message>
+    <message>
+        <source>To put the project file back: close the project, rename the project file %1 in the project folder %2 (so that it is kept), copy the file %3 of this folder there and rename it to %1. Then open the project again. (The copy's name ends in .copy so that this folder is not taken for a project.)
+
+</source>
+        <translation>So spielen Sie die Projektdatei zurück: Schließen Sie das Projekt, benennen Sie die Projektdatei %1 im Projektordner %2 um (damit sie erhalten bleibt), kopieren Sie die Datei %3 dieses Ordners dorthin und benennen Sie sie in %1 um. Öffnen Sie danach das Projekt wieder. (Der Name der Kopie endet auf .copy, damit dieser Ordner nicht für ein Projekt gehalten wird.)
+
+</translation>
+    </message>
+    <message>
+        <source>The project is in Scrivener format: the file %1 belongs to its working copy (%2), not to the .scriv folder. The binder is written into the .scriv with the next save that works; do not copy this file over anything by hand.
+
+</source>
+        <translation>Das Projekt liegt im Scrivener-Format: Die Datei %1 gehört zu seiner Arbeitskopie (%2), nicht zum .scriv-Ordner. Die Gliederung wird beim nächsten Speichern, das gelingt, in das .scriv geschrieben; kopieren Sie diese Datei nicht von Hand über etwas.
+
+</translation>
+    </message>
+    <message>
+        <source>Everything is saved: no copy was needed.</source>
+        <translation>Alles ist gespeichert: Es war keine Kopie nötig.</translation>
+    </message>
+    <message>
+        <source>The texts not saved are in:
+%1
+
+The copy is complete: %2 of %2 files were written, with the project file as it is in memory, named *.copy (the README in that folder says how to put it back).</source>
+        <translation>Die nicht gespeicherten Texte liegen in:
+%1
+
+Die Kopie ist vollständig: %2 von %2 Dateien wurden geschrieben, mit der Projektdatei, wie sie im Speicher ist, als *.copy benannt (die README in diesem Ordner sagt, wie sie zurückgespielt wird).</translation>
+    </message>
 </context>
 <context>
     <name>qb::ProjectReplaceDialog</name>

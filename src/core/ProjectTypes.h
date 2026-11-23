@@ -254,8 +254,9 @@ struct CopyTally {
     void add(const QString &name, bool ok, QString why)
     {
         ++wanted;
-        if (why.startsWith(QLatin1Char('/'))) { // "<path>: <reason>": the name is given already
-            const qsizetype i = why.indexOf(QLatin1String(": "));
+        // "<path>: <reason>": the name is given already (a path of Linux, or of Windows: "C:\...")
+        if (why.startsWith(QLatin1Char('/')) || (why.size() > 2 && why.at(1) == QLatin1Char(':') && why.at(0).isLetter())) {
+            const qsizetype i = why.indexOf(QLatin1String(": "), why.at(0) == QLatin1Char('/') ? 0 : 2);
             if (i > 0)
                 why = why.mid(i + 2);
         }
@@ -270,6 +271,7 @@ struct CopyTally {
 struct EmergencyReport {
     QString dir;       // the folder; empty when none could be made or written
     QString reason;    // why there is no folder
+    bool nothingToWrite = false; // nothing was unsaved: no copy was needed (no failure)
     CopyTally tally;
     bool complete() const { return !dir.isEmpty() && tally.missing.isEmpty() && tally.written == tally.wanted; }
 };

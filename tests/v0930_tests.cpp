@@ -144,6 +144,7 @@ static QString textOfFiles(const QString &dir)
 
 // ------------------------------------------------------------------ child run: a save with the drive's answers faked
 
+#ifdef QB_FAULT_SHIM // the fault library is an LD_PRELOAD library: Linux only (as in v0903)
 static int childSave(int argc, char **argv)
 {
     qputenv("QB_NO_DIALOGS", "1");
@@ -232,6 +233,8 @@ static QString runChild(const QString &projectFile, const QString &folder, const
     return QString::fromUtf8(pr.readAllStandardOutput());
 }
 
+#endif
+
 // ------------------------------------------------------------------ item 12: the emergency copy
 
 static void emergencyCopy(const QString &W)
@@ -276,7 +279,7 @@ static void emergencyCopy(const QString &W)
         check(ra.contains("is complete: all 4 files") && ra.contains("To put the project file back") && ra.contains(QFileInfo(p->indexPath()).fileName().toUtf8()),
               QStringLiteral("a whole copy's README says it is whole and says in two sentences how to put the project file back"),
               QString::fromUtf8(ra));
-        const QByteArray idx = readAll(a.dir + QLatin1Char('/') + QFileInfo(p->indexPath()).fileName());
+        const QByteArray idx = readAll(a.dir + QLatin1Char('/') + QFileInfo(p->indexPath()).fileName() + QStringLiteral(".copy"));
         check(idx.contains("<QuillbinderProject") && idx.contains("<Title>One</Title>") && idx.contains("<Title>Three</Title>"),
               QStringLiteral("the copy holds the project file as it is in memory (the documents not yet saved are in its binder)"));
         const QString ok = Project::emergencyText(a);
@@ -316,14 +319,34 @@ static void emergencyCopy(const QString &W)
         check(p->save(&err) && !p->hasUnsavedChanges(), QStringLiteral("(saved)"), err);
         EmergencyReport none = p->makeEmergencyCopy(W + QStringLiteral("/e2"));
         check(none.dir.isEmpty() && !QDir(W + QStringLiteral("/e2")).exists(QStringLiteral("x")), QStringLiteral("nothing unsaved: no copy"));
+        check(none.nothingToWrite && Project::emergencyText(none).contains(QLatin1String("Everything is saved")),
+              QStringLiteral("nothing unsaved is no failure: the text says everything is saved and no copy was needed"), Project::emergencyText(none));
+        MainWindow::writeEmergencyNotice(QStringLiteral("x"), none);
+        {
+            QFile n(qb::dataDir() + QStringLiteral("/Emergency/notice.txt"));
+            const bool there = n.open(QIODevice::ReadOnly) && QString::fromUtf8(n.readAll()).contains(QLatin1String("Everything is saved"));
+            n.close();
+            QFile::remove(n.fileName());
+            check(there, QStringLiteral("... and so does the notice (not \"No copy of the texts could be written either\")"));
+        }
         it->title = QStringLiteral("Renamed Chapter");
         p->notifyItemChanged(it);
         check(!p->docs()->hasDirty() && p->hasUnsavedChanges(), QStringLiteral("(only the binder changed)"));
         const EmergencyReport r = p->makeEmergencyCopy(W + QStringLiteral("/e2"));
         const QString idxName = QFileInfo(p->indexPath()).fileName();
-        check(r.complete() && r.tally.wanted == 1 && readAll(r.dir + QLatin1Char('/') + idxName).contains("Renamed Chapter"),
+        check(r.complete() && r.tally.wanted == 1 && readAll(r.dir + QLatin1Char('/') + idxName + QStringLiteral(".copy")).contains("Renamed Chapter") && QDir(r.dir).entryList({QStringLiteral("*.qbx")}).isEmpty(),
               QStringLiteral("a change of the binder alone leaves a copy with the project file (before: no copy)"),
               QStringLiteral("%1 | %2").arg(r.dir, QString::number(r.tally.wanted)));
+        {
+            // a project in Scrivener format: the README says the file belongs to the working copy
+            p->scrivenerPath = W + QStringLiteral("/Some.scriv");
+            const EmergencyReport rs = p->makeEmergencyCopy(W + QStringLiteral("/e-scriv"));
+            const QByteArray rd = readAll(rs.dir + QStringLiteral("/README.txt"));
+            check(rd.contains("Scrivener format") && rd.contains("working copy") && !rd.contains("To put the project file back"),
+                  QStringLiteral("the README of a project in Scrivener format does not tell to copy the working copy's file over anything"),
+                  QString::fromUtf8(rd));
+            p->scrivenerPath.clear();
+        }
         // the objects alone
         BinderItem *x = textDoc(p.get(), QStringLiteral("More"), QStringLiteral("More words."));
         Q_UNUSED(x);
@@ -374,7 +397,7 @@ static void emergencyWindow(const QString &W)
     QString copy;
     for (const QString &f : foldersIn(emergencyDir))
         copy = emergencyDir + QLatin1Char('/') + f;
-    check(!copy.isEmpty() && readAll(copy + QLatin1Char('/') + indexName).contains("Binder only title"),
+    check(!copy.isEmpty() && readAll(copy + QLatin1Char('/') + indexName + QStringLiteral(".copy")).contains("Binder only title"),
           QStringLiteral("a save that fails after a change of the binder alone, and the end by a signal: a copy with the project file"), copy);
     w.showEmergencyNotice();
     check(w.lastEmergencyNotice().contains(QLatin1String("1 of 1 files")) && w.lastEmergencyNotice().contains(copy),
@@ -425,6 +448,7 @@ static void saving(const QString &W)
         p->save(&err);
         return p->indexPath();
     };
+#ifdef QB_FAULT_SHIM
     {
         const QString file = make(QStringLiteral("Fsync"));
         const QString folder = QFileInfo(file).absolutePath();
@@ -519,6 +543,7 @@ static void saving(const QString &W)
         check(out.contains(QLatin1String("saved=1")) && out.contains(QLatin1String("journal=0")) && out.contains(QLatin1String("unsaved=0")),
               QStringLiteral("a file system that cannot sync folders (ENOTSUP) is no error: saved as before"), out.left(600));
     }
+#endif
     {
         // S3: a temporary file of an earlier save that is not the save's own is moved aside, never written over or deleted
         const QString file = make(QStringLiteral("Stray"));
@@ -717,6 +742,21 @@ static void backups(const QString &W)
         wp->tellBackupCleanup(QStringList() << QStringLiteral("/backups/Keep bak 2026-11-20 10-00-00.zip: Permission denied"));
         check(wp->lastBackupCleanupNote().contains(QLatin1String("Permission denied")) && wp->lastBackupCleanupNote().contains(QLatin1String("could not be deleted")),
               QStringLiteral("the window's note names the backup and the reason"), wp->lastBackupCleanupNote());
+        // S9: while the writer goes on typing, the notice is not modal and takes no keys
+        qunsetenv("QB_NO_DIALOGS");
+        wp->show();
+        wp->tellBackupCleanup(QStringList() << QStringLiteral("/backups/Keep bak 2026-11-20 10-00-00.zip: Permission denied"));
+        settle(300);
+        QMessageBox *notice = nullptr;
+        for (QWidget *tl : QApplication::topLevelWidgets())
+            if (auto *b = qobject_cast<QMessageBox *>(tl); b && b->objectName() == QLatin1String("backupCleanupNotice"))
+                notice = b;
+        check(notice && notice->isVisible() && !notice->isModal() && !QApplication::activeModalWidget(),
+              QStringLiteral("the note about a backup that cannot be deleted (manual save, opening) is not modal and takes no keys"));
+        shot(notice, QStringLiteral("v0930-backup-cleanup-notice"));
+        if (notice)
+            notice->close();
+        qputenv("QB_NO_DIALOGS", "1");
         delete wp;
     }
     {
@@ -772,8 +812,10 @@ static void backups(const QString &W)
 
 int main(int argc, char **argv)
 {
+#ifdef QB_FAULT_SHIM
     if (argc > 2 && qstrcmp(argv[1], "--child-save") == 0)
         return childSave(argc, argv);
+#endif
     QTemporaryDir home;
     qputenv("HOME", home.path().toUtf8());
     qputenv("XDG_CONFIG_HOME", (home.path() + QLatin1String("/config")).toUtf8());

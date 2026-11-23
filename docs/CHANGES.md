@@ -32,6 +32,7 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   is also made when only the binder or the Objects changed, and it holds the project file as it is in memory and the
   Objects not saved; its README says how to put the project file back. A folder that is there is never used again: a
   second copy in the same second gets a number.
+  The project file in the copy is named *.copy, so that the folder can no longer be opened as a project by mistake.
 - **Saving tells a drive's error for a folder, and an unreadable journal stops the saves.** When the drive reports an
   error while a folder is synced after a save (not a file system that cannot sync: that is no error, as before), the
   save counts as failed, the journal stays, and the next save or opening finishes it. While an unreadable journal of an
@@ -40,7 +41,8 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   "changed elsewhere" that was the program's own), and a picture is not written twice.
 - **Backups.** The note of a backup that an ending by a signal left undone is removed only when the next opening's
   backup was made (in the folder, or waiting beside it); a backup that fails leaves the note for the next opening. An
-  older backup that the clean-up cannot delete is told once with the file and the reason. **Restore From Backup** says
+  older backup that the clean-up cannot delete is told once with the file and the reason, in a notice that takes no keys
+  while you write. **Restore From Backup** says
   "restored", "restored incompletely" (headed so, with the files named) or "not restored", and says when the
   restored project's title could not be saved.
 - **Saving options and themes to a file never destroys the file that was there.** **Manage > Save Options to File** and

@@ -223,7 +223,7 @@ bool Batch::stage(const QString &target, const QByteArray &data, const QString &
     QDir().mkpath(QFileInfo(target).absolutePath());
     // 0.93.0: a temporary file that is not this save's own (left by a journal that could not be set aside) is moved aside,
     // never written over or deleted
-    if (!contains(target) && QFile::exists(item.staged)) {
+    if (!contains(target) && QFileInfo(item.staged).isFile()) {
         const QString aside = item.staged + QStringLiteral(".kept-") + QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-HHmmss-zzz"));
         if (!QFile::rename(item.staged, aside)) {
             if (error)

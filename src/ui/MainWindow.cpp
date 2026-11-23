@@ -794,12 +794,12 @@ void MainWindow::tellEmergencyCopy(const EmergencyReport &rep, const QString &ti
     QString text = Project::emergencyText(rep);
     if (!rep.dir.isEmpty())
         text += QStringLiteral("\n\n") + tail;
-    else
+    else if (!rep.nothingToWrite)
         text = tr("The texts could not be written there either: %1").arg(rep.reason.isEmpty() ? tr("nothing to write") : rep.reason);
     m_lastEmergencyCopyText = text;
     // an incomplete copy is headed as incomplete and never looks like a done one (0.93.0)
-    QMessageBox box(rep.complete() || rep.dir.isEmpty() ? QMessageBox::Information : QMessageBox::Warning,
-                    rep.complete() || rep.dir.isEmpty() ? title : tr("%1: Copy Incomplete").arg(title), text, QMessageBox::Ok, this);
+    QMessageBox box(rep.complete() || rep.dir.isEmpty() || rep.nothingToWrite ? QMessageBox::Information : QMessageBox::Warning,
+                    rep.complete() || rep.dir.isEmpty() || rep.nothingToWrite ? title : tr("%1: Copy Incomplete").arg(title), text, QMessageBox::Ok, this);
     box.setObjectName(QStringLiteral("emergencyCopyMessage"));
     box.exec();
 }
@@ -3287,7 +3287,7 @@ void MainWindow::tellBackupProblem(bool made, const QString &why, const QString 
         QMessageBox::warning(this, tr("Backup"), msg);
 }
 
-void MainWindow::tellBackupCleanup(const QStringList &notes)
+void MainWindow::tellBackupCleanup(const QStringList &notes, bool modal)
 {
     if (notes.isEmpty())
         return;
@@ -3296,8 +3296,19 @@ void MainWindow::tellBackupCleanup(const QStringList &notes)
                             .arg(notes.join(QLatin1Char('\n')));
     m_lastBackupCleanupNote = msg;
     statusBar()->showMessage(tr("An older backup could not be deleted."), 15000);
-    if (!QB_TEST_ENV_SET("QB_NO_DIALOGS"))
+    if (QB_TEST_ENV_SET("QB_NO_DIALOGS"))
+        return;
+    if (modal) { // at closing: nobody types any more
         QMessageBox::warning(this, tr("Backup"), msg);
+        return;
+    }
+    // 0.93.0: while writing goes on (after a manual save, at opening), the notice never takes the keyboard
+    auto *box = new QMessageBox(QMessageBox::Warning, tr("Backup"), msg, QMessageBox::Ok, this);
+    box->setAttribute(Qt::WA_DeleteOnClose);
+    box->setObjectName(QStringLiteral("backupCleanupNotice"));
+    placeBesideText(box);
+    showWithoutTakingKeys(box, box->button(QMessageBox::Ok));
+    QTimer::singleShot(0, box, [this, box] { placeBesideText(box); });
 }
 
 bool MainWindow::closeProject()
@@ -3379,7 +3390,7 @@ bool MainWindow::closeProject()
                                               AppSettings::instance().backupKeep, &out, &err, backup::Where::BackupFolder, nullptr, &notes);
         if (!ok || !err.isEmpty()) // 0.65.0 (audit F03): an incomplete backup is told too
             tellBackupProblem(ok, err, tr("when the project closed"));
-        tellBackupCleanup(notes);
+        tellBackupCleanup(notes, true);
     }
     releaseLocks();
     for (QWidget *w : QApplication::topLevelWidgets())
@@ -3733,6 +3744,8 @@ void MainWindow::writeEmergencyNotice(const QString &what, const EmergencyReport
                                                    .arg(rep.tally.wanted).arg(QDir::toNativeSeparators(rep.dir));
         else
             text += QStringLiteral("\n\n") + Project::emergencyText(rep);
+    } else if (rep.nothingToWrite) {
+        text += QStringLiteral("\n\n") + Project::emergencyText(rep);
     } else {
         text += QStringLiteral("\n\n") + tr("No copy of the texts could be written either.");
         if (!rep.reason.isEmpty() && rep.reason != tr("nothing to write"))
