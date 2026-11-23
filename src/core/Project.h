@@ -47,6 +47,8 @@ public:
     // cleared by scrivener::write; a quick write leaves the .scrivx alone while it is false
     bool binderChangedSinceSync = true;
     bool saveIndex(QString *error = nullptr);
+    // the project file as it is in memory (binder, titles, labels), as saveIndex writes it (0.93.0)
+    QByteArray indexBytes();
     // Saves when no change came for the autosave delay, but at the latest
     // max(maxSaveWait, delay) after the first unsaved change (0.20: before, changes
     // that kept coming were never saved). 0.64: after max(gapAfter, delay) of changes that
@@ -87,7 +89,7 @@ public:
     bool hasUnsavedExtra() const { return !m_unsavedExtra.isEmpty(); }
     // the titles of the documents (and boards) not saved, at most `max`
     QStringList unsavedTitles(int max = 8) const;
-    std::function<int(const QString &dir, QString *error)> emergencyExtra;
+    std::function<int(const QString &dir, QString *error, CopyTally *tally)> emergencyExtra;
 
     QString folderPath() const { return m_folder; }
     QString indexPath() const { return m_indexFile; }
@@ -107,7 +109,15 @@ public:
     void clearSaveRecoveryText() { m_saveRecovery.clear(); }
     // 0.65.0 (audit F07, F26): the texts and notes not yet saved, as RTF files in a new folder under `parent`
     // (default: <data folder>/Emergency); the folder, or "" when nothing could be written (or nothing was unsaved)
+    // 0.93.0: also when only the binder or the objects changed; the copy holds the project file as it is in memory and the
+    // objects not saved; the error text names what could not be written ("n of m files")
     QString writeEmergencyCopy(const QString &parent = QString(), QString *error = nullptr);
+    // the same, with the whole report (what should have been written, what was, what is missing and why)
+    EmergencyReport makeEmergencyCopy(const QString &parent = QString());
+    // the words for a report: where the copy is, "n of m" and the files missing (complete or incomplete)
+    static QString emergencyText(const EmergencyReport &r);
+    // 0.93.0: something an emergency copy would hold (texts, boards, binder, objects)
+    bool needsEmergencyCopy() const;
     // the plain list of the documents with their titles and files (contents-by-title.txt, 0.65.0)
     QString titleListFile() const;
     QString titleListText() const;

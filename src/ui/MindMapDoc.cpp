@@ -425,7 +425,7 @@ void closeAll(Project *project, bool discard)
     registry().remove(project);
 }
 
-int writeUnsaved(Project *project, const QString &dir, QString *error)
+int writeUnsaved(Project *project, const QString &dir, QString *error, CopyTally *tally)
 {
     int n = 0;
     for (const QPointer<MindMapDoc> &d : registry().value(project)) {
@@ -433,10 +433,13 @@ int writeUnsaved(Project *project, const QString &dir, QString *error)
             continue;
         const QString file = QDir(dir).filePath(text::safeFileName(d->unsavedTitle()) + QStringLiteral(".xml"));
         QString why;
-        if (safesave::writeFile(file, d->board.toXml(), &why))
+        const bool ok = safesave::writeFile(file, d->board.toXml(), &why);
+        if (ok)
             ++n;
         else if (error && error->isEmpty())
             *error = why;
+        if (tally)
+            tally->add(QFileInfo(file).fileName(), ok, why);
     }
     return n;
 }

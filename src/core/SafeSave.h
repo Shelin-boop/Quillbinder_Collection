@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QSaveFile>
 #include <QString>
+#include <QStringList>
 
 #include "core/TestSwitches.h"
 
@@ -70,6 +71,14 @@ inline bool commit(QSaveFile &f)
 // A whole file written and committed as above (0.65.0): false with a reason, and nothing replaced.
 inline bool writeFile(const QString &path, const QByteArray &data, QString *error = nullptr)
 {
+    // the tests' switch of savebatch (0.92.0), also here (0.93.0, the emergency copy): "<number>|<text>|<a part of the
+    // path>" makes the write of such a file fail with that text
+    const QStringList fake = QB_TEST_ENV("QB_TEST_WRITE_FAILS").split(QLatin1Char('|'));
+    if (fake.size() == 3 && !fake.at(2).isEmpty() && path.contains(fake.at(2))) {
+        if (error)
+            *error = QStringLiteral("%1: %2").arg(path, fake.at(1));
+        return false;
+    }
     QSaveFile f(path);
     if (!f.open(QIODevice::WriteOnly) || write(f, data) != data.size() || !commit(f)) {
         if (error)

@@ -316,6 +316,14 @@ target_compile_definitions(qb_v0913_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CU
 add_executable(qb_v0920_tests v0920_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_SOURCE_DIR}/translations/translations.qrc)
 target_link_libraries(qb_v0920_tests PRIVATE qbui Qt6::Test Qt6::Network)
 target_compile_definitions(qb_v0920_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
+
+# 0.93.0: the emergency copy (whole or told incomplete, also for the binder alone), a folder's sync that reports a disk
+# error (child runs with qbfaultshim), an unreadable journal that cannot be set aside, the backup note of a signal's end,
+# backups that cannot be deleted, the wording of a restore (xvfb-run -a ./qb_v0930_tests /tmp/shots)
+add_executable(qb_v0930_tests v0930_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0930_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0930_tests PRIVATE QB_FAULT_SHIM="$<TARGET_FILE:qbfaultshim>")
+add_dependencies(qb_v0930_tests qbfaultshim)
 target_compile_definitions(qb_v0900_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # The readers against damaged input (0.80.0, the external audit of 2026-11-09, ST-5): fixed-seed damage of small
 # valid inputs of RTF, Markdown, XML, ZIP, DOCX, ODT, Word 97 and .scrivx, each read in this process

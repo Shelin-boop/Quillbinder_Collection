@@ -42,7 +42,8 @@ public:
     // into its own folder (text moved between documents: Merge, Split, templates)
     static void carryPictures(const QTextDocument *namesIn, const QTextDocument *from, QTextDocument *to);
     // 0.65.0: every text and notes not saved yet, as RTF files (pictures inside) into `dir`; how many were written
-    int writeUnsaved(const QString &dir, QString *error = nullptr);
+    // 0.93.0: every file counted in `tally` (wanted, written, missing with the reason); returns how many were written
+    int writeUnsaved(const QString &dir, QString *error = nullptr, CopyTally *tally = nullptr);
     bool saveDirty(QString *error);
     bool saveDocument(const QString &id, QString *error = nullptr);
 

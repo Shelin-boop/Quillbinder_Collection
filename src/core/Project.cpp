@@ -854,32 +854,95 @@ QString Project::titleListText() const
     return lines.join(QLatin1Char('\n')) + QLatin1Char('\n');
 }
 
+bool Project::needsEmergencyCopy() const
+{
+    // 0.93.0: also a change of the binder alone or of the objects (before: only texts, notes and boards)
+    return m_indexDirty || (m_docs && m_docs->hasDirty()) || (m_objects && m_objects->isDirty()) || !m_unsavedExtra.isEmpty();
+}
+
+EmergencyReport Project::makeEmergencyCopy(const QString &parent)
+{
+    EmergencyReport rep;
+    if (!needsEmergencyCopy()) {
+        rep.reason = tr("nothing to write");
+        return rep;
+    }
+    const QString base = parent.isEmpty() ? dataDir() + QStringLiteral("/Emergency") : parent;
+    // 0.93.0: a folder that is there is never used again (its files would be replaced): the new one gets a number
+    const QString name = text::safeFileName(m_title) + QStringLiteral(" ")
+                         + QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd HH-mm-ss"));
+    QString dir;
+    if (QDir().mkpath(base)) {
+        for (int n = 1; n < 1000 && dir.isEmpty(); ++n) {
+            const QString candidate = QDir(base).filePath(n == 1 ? name : QStringLiteral("%1 (%2)").arg(name).arg(n));
+            if (QDir(base).mkdir(QFileInfo(candidate).fileName()))
+                dir = candidate;
+            else if (!QFileInfo::exists(candidate))
+                break; // cannot be made for another reason
+        }
+    }
+    if (dir.isEmpty()) {
+        rep.reason = tr("Cannot create a folder in %1").arg(QDir::toNativeSeparators(base));
+        return rep;
+    }
+    rep.dir = dir;
+    QString firstError;
+    if (m_docs)
+        m_docs->writeUnsaved(dir, &firstError, &rep.tally);
+    if (emergencyExtra) // 0.70.0: mind map boards not saved
+        emergencyExtra(dir, &firstError, &rep.tally);
+    if (m_objects)
+        m_objects->writeUnsaved(dir, &rep.tally);
+    // 0.93.0: the project file as it is in memory (binder, titles, labels): when the real one cannot be written, the
+    // changes of the binder are not lost
+    const QString indexName = QFileInfo(m_indexFile).fileName();
+    {
+        QString why;
+        const bool ok = safesave::writeFile(QDir(dir).filePath(indexName), indexBytes(), &why);
+        rep.tally.add(indexName, ok, why);
+    }
+    if (rep.tally.written == 0) {
+        QDir(dir).removeRecursively();
+        rep.reason = rep.tally.missing.isEmpty() ? tr("nothing to write") : rep.tally.missing.first();
+        rep.dir.clear();
+        return rep;
+    }
+    QString readme = tr("The project \"%1\" (%2) could not be saved. This folder holds what was not saved yet: texts and "
+                        "notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the "
+                        "folder \"objects\") and the project file %4 as it was in memory (the binder, titles and labels). "
+                        "Copy what you need back into the project.\n\n")
+                         .arg(m_title, QDir::toNativeSeparators(displayFile()), QLatin1String(QB_APP_NAME), indexName);
+    readme += tr("To put the project file back: close the project, rename the project file %1 in the project folder %2 "
+                 "(so that it is kept), and copy the file %1 of this folder there. Then open the project again.\n\n")
+                  .arg(indexName, QDir::toNativeSeparators(m_folder));
+    if (rep.complete())
+        readme += tr("This copy is complete: all %1 files were written.\n").arg(rep.tally.wanted);
+    else
+        readme = tr("THIS COPY IS INCOMPLETE: %1 of %2 files were written. Not written:\n%3\n\n")
+                     .arg(rep.tally.written).arg(rep.tally.wanted).arg(rep.tally.missing.join(QLatin1Char('\n')))
+                 + readme;
+    safesave::writeFile(QDir(dir).filePath(QStringLiteral("README.txt")), readme.toUtf8());
+    return rep;
+}
+
+QString Project::emergencyText(const EmergencyReport &r)
+{
+    if (r.dir.isEmpty())
+        return tr("No copy could be written: %1").arg(r.reason.isEmpty() ? tr("nothing to write") : r.reason);
+    if (r.complete())
+        return tr("The texts not saved are in:\n%1\n\nThe copy is complete: %2 of %2 files were written, with the project "
+                  "file as it is in memory (the README in that folder says how to put it back).")
+            .arg(QDir::toNativeSeparators(r.dir)).arg(r.tally.wanted);
+    return tr("This copy is INCOMPLETE: %1 of %2 files were written, in:\n%3\n\nNot written:\n%4")
+        .arg(r.tally.written).arg(r.tally.wanted).arg(QDir::toNativeSeparators(r.dir), r.tally.missing.join(QLatin1Char('\n')));
+}
+
 QString Project::writeEmergencyCopy(const QString &parent, QString *error)
 {
-    if ((!m_docs || !m_docs->hasDirty()) && m_unsavedExtra.isEmpty())
-        return QString();
-    const QString base = parent.isEmpty() ? dataDir() + QStringLiteral("/Emergency") : parent;
-    const QString dir = QDir(base).filePath(text::safeFileName(m_title) + QStringLiteral(" ")
-                                            + QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd HH-mm-ss")));
-    if (!QDir().mkpath(dir)) {
-        if (error)
-            *error = tr("Cannot create %1").arg(QDir::toNativeSeparators(dir));
-        return QString();
-    }
-    int n = m_docs ? m_docs->writeUnsaved(dir, error) : 0;
-    if (emergencyExtra) // 0.70.0: mind map boards not saved
-        n += emergencyExtra(dir, error);
-    if (n == 0) {
-        QDir(dir).removeRecursively();
-        return QString();
-    }
-    safesave::writeFile(QDir(dir).filePath(QStringLiteral("README.txt")),
-                        tr("The project \"%1\" (%2) could not be saved. These are its texts and notes that were not saved "
-                           "yet, as RTF files (Word, LibreOffice and %3 open them). Copy what you need back into the "
-                           "project.\n")
-                            .arg(m_title, QDir::toNativeSeparators(displayFile()), QLatin1String(QB_APP_NAME))
-                            .toUtf8());
-    return dir;
+    const EmergencyReport r = makeEmergencyCopy(parent);
+    if (error)
+        *error = r.dir.isEmpty() ? r.reason : (r.complete() ? QString() : emergencyText(r));
+    return r.dir;
 }
 
 QString Project::spareCopyOf(const QString &projectFile)
@@ -1337,7 +1400,7 @@ static BinderItem *readOneItem(const QDomElement &e, BinderItem *parent)
     return it;
 }
 
-bool Project::saveIndex(QString *error)
+QByteArray Project::indexBytes()
 {
     QDomDocument dom;
     dom.appendChild(dom.createProcessingInstruction(QStringLiteral("xml"),
@@ -1598,6 +1661,12 @@ bool Project::saveIndex(QString *error)
     }
     rootEl.appendChild(hist);
 
+    // characters XML does not allow (pasted control characters) would make the file unreadable
+    return text::xmlSafeBytes(dom.toByteArray(1));
+}
+
+bool Project::saveIndex(QString *error)
+{
     // 0.64: the project file was written by someone else since it was read here (another computer
     // through a sync program): that version is kept before this one replaces it
     bool indexElsewhere = syncsafe::changedSince(m_indexMark, m_indexFile) && QFileInfo::exists(m_indexFile);
@@ -1632,8 +1701,7 @@ bool Project::saveIndex(QString *error)
         }
         emit conflictKept(QString(), tr("project file"), copy, false);
     }
-    // characters XML does not allow (pasted control characters) would make the file unreadable
-    const QByteArray bytes = text::xmlSafeBytes(dom.toByteArray(1));
+    const QByteArray bytes = indexBytes();
     // 0.65.0 (audit F19): with the other files of the save; the marks are cleared once it is in place
     QString why;
     const QByteArray sha = QCryptographicHash::hash(bytes, QCryptographicHash::Sha256);

@@ -782,13 +782,23 @@ void MainWindow::saveTextsElsewhere()
     const QString parent = QFileDialog::getExistingDirectory(this, tr("Save the Texts Not Saved Into"), QDir::homePath());
     if (parent.isEmpty())
         return;
-    QString why;
-    const QString dir = m_project->writeEmergencyCopy(parent, &why);
-    QMessageBox::information(this, tr("Save Texts Elsewhere"),
-                             dir.isEmpty() ? tr("The texts could not be written there either: %1").arg(why.isEmpty() ? tr("nothing to write") : why)
-                                           : tr("The texts not saved are in:\n%1\n\nThe project stays open; the program "
-                                                "keeps trying to save it in its own folder.")
-                                                 .arg(QDir::toNativeSeparators(dir)));
+    tellEmergencyCopy(m_project->makeEmergencyCopy(parent), tr("Save Texts Elsewhere"),
+                      tr("The project stays open; the program keeps trying to save it in its own folder."));
+}
+
+void MainWindow::tellEmergencyCopy(const EmergencyReport &rep, const QString &title, const QString &tail)
+{
+    QString text = Project::emergencyText(rep);
+    if (!rep.dir.isEmpty())
+        text += QStringLiteral("\n\n") + tail;
+    else
+        text = tr("The texts could not be written there either: %1").arg(rep.reason.isEmpty() ? tr("nothing to write") : rep.reason);
+    m_lastEmergencyCopyText = text;
+    // an incomplete copy is headed as incomplete and never looks like a done one (0.93.0)
+    QMessageBox box(rep.complete() || rep.dir.isEmpty() ? QMessageBox::Information : QMessageBox::Warning,
+                    rep.complete() || rep.dir.isEmpty() ? title : tr("%1: Copy Incomplete").arg(title), text, QMessageBox::Ok, this);
+    box.setObjectName(QStringLiteral("emergencyCopyMessage"));
+    box.exec();
 }
 
 MainWindow::~MainWindow()
@@ -3142,7 +3152,7 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
     });
     connect(proj, &Project::saved, this, &MainWindow::noteSaved);
     // 0.70.0 (audit A U-01): mind map boards not saved go into the emergency copy with the texts
-    proj->emergencyExtra = [proj](const QString &dir, QString *error) { return mindmaps::writeUnsaved(proj, dir, error); };
+    proj->emergencyExtra = [proj](const QString &dir, QString *error, CopyTally *tally) { return mindmaps::writeUnsaved(proj, dir, error, tally); };
     // 0.64.1: a document deleted for good leaves every pane that shows it (Empty Trash does this
     // itself; any other way of deleting now does it too)
     connect(proj->model(), &BinderModel::itemsAboutToBeDeleted, this, [this](const QList<BinderItem *> &gone) {
@@ -3308,12 +3318,7 @@ bool MainWindow::closeProject()
                                                                          QDir::homePath());
                 if (parent.isEmpty())
                     return false;
-                QString why;
-                const QString dir = m_project->writeEmergencyCopy(parent, &why);
-                QMessageBox::information(this, tr("Close Project"),
-                                         dir.isEmpty() ? tr("The texts could not be written there either: %1").arg(why)
-                                                       : tr("The texts not saved are in:\n%1\n\nThe project stays open.")
-                                                             .arg(QDir::toNativeSeparators(dir)));
+                tellEmergencyCopy(m_project->makeEmergencyCopy(parent), tr("Close Project"), tr("The project stays open."));
                 return false;
             }
             if (box.clickedButton() != lose)
@@ -3650,14 +3655,14 @@ void MainWindow::saveForTermination()
             // the program ends with status 1 (before: a line on the error output only, and status 0)
             std::fprintf(stderr, "%s: saving before the end failed: %s\n", QB_APP_NAME, qPrintable(err));
             crash::setTerminationSaveFailed();
-            QString why;
-            const QString dir = m_project->writeEmergencyCopy(QString(), &why);
-            if (!dir.isEmpty())
-                std::fprintf(stderr, "%s: the texts not saved are in %s\n", QB_APP_NAME, qPrintable(dir));
+            const EmergencyReport rep = m_project->makeEmergencyCopy(QString());
+            if (!rep.dir.isEmpty())
+                std::fprintf(stderr, "%s: %d of %d files are in %s%s\n", QB_APP_NAME, rep.tally.written,
+                             rep.tally.wanted, qPrintable(rep.dir), rep.complete() ? "" : " (INCOMPLETE)");
             writeEmergencyNotice(tr("When the program was ended (by logging out, shutting down or a command), the "
                                     "project \"%1\" could not be saved: %2")
                                      .arg(m_project->title(), err),
-                                 dir);
+                                 rep);
         }
         // 0.81.0 (audit of 0.80.0, S-03): no time for the backup of the closing here; the next opening makes it
         if (projectSaved && AppSettings::instance().backupOnClose && backupFolderReady(AskFolder::Never, false))
@@ -3668,15 +3673,23 @@ void MainWindow::saveForTermination()
     QLocalServer::removeServer(toolhost::host().linkPath());
 }
 
-void MainWindow::writeEmergencyNotice(const QString &what, const QString &dir)
+void MainWindow::writeEmergencyNotice(const QString &what, const EmergencyReport &rep)
 {
     const QString folder = dataDir() + QStringLiteral("/Emergency");
     QDir().mkpath(folder);
     QString text = what;
-    if (!dir.isEmpty())
-        text += QStringLiteral("\n\n") + tr("The texts and notes that were not saved are in:\n%1").arg(QDir::toNativeSeparators(dir));
-    else
+    if (!rep.dir.isEmpty()) {
+        if (rep.complete())
+            text += QStringLiteral("\n\n") + tr("The texts and notes that were not saved are in (%1 of %1 files, with the "
+                                                 "project file as it was in memory):\n%2")
+                                                   .arg(rep.tally.wanted).arg(QDir::toNativeSeparators(rep.dir));
+        else
+            text += QStringLiteral("\n\n") + Project::emergencyText(rep);
+    } else {
         text += QStringLiteral("\n\n") + tr("No copy of the texts could be written either.");
+        if (!rep.reason.isEmpty() && rep.reason != tr("nothing to write"))
+            text += QLatin1Char(' ') + rep.reason;
+    }
     QFile f(folder + QStringLiteral("/notice.txt"));
     if (f.open(QIODevice::Append)) {
         f.write(text.toUtf8() + "\n\n");

@@ -12466,6 +12466,24 @@ Die Schriften sind sofort nutzbar. Sie bleiben im Ordner des Programms: Andere P
         <source>The toolbars are back in their standard places.</source>
         <translation>Die Symbolleisten stehen wieder an ihren Standardplätzen.</translation>
     </message>
+    <message>
+        <source>The project stays open; the program keeps trying to save it in its own folder.</source>
+        <translation>Das Projekt bleibt offen; das Programm versucht weiter, es in seinem eigenen Ordner zu speichern.</translation>
+    </message>
+    <message>
+        <source>The project stays open.</source>
+        <translation>Das Projekt bleibt offen.</translation>
+    </message>
+    <message>
+        <source>%1: Copy Incomplete</source>
+        <translation>%1: Kopie unvollständig</translation>
+    </message>
+    <message>
+        <source>The texts and notes that were not saved are in (%1 of %1 files, with the project file as it was in memory):
+%2</source>
+        <translation>Die nicht gespeicherten Texte und Notizen liegen in (%1 von %1 Dateien, mit der Projektdatei, wie sie im Speicher war):
+%2</translation>
+    </message>
 </context>
 <context>
     <name>qb::ManageIconsDialog</name>
@@ -17086,6 +17104,72 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
     <message>
         <source>another computer</source>
         <translation>ein anderer Computer</translation>
+    </message>
+    <message>
+        <source>nothing to write</source>
+        <translation>nichts zu schreiben</translation>
+    </message>
+    <message>
+        <source>Cannot create a folder in %1</source>
+        <translation>In %1 kann kein Ordner erstellt werden</translation>
+    </message>
+    <message>
+        <source>The project "%1" (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder "objects") and the project file %4 as it was in memory (the binder, titles and labels). Copy what you need back into the project.
+
+</source>
+        <translation>Das Projekt "%1" (%2) konnte nicht gespeichert werden. Dieser Ordner enthält, was noch nicht gespeichert war: Texte und Notizen als RTF-Dateien (Word, LibreOffice und %3 öffnen sie), Mind-Map-Tafeln, geänderte Objekte (im Ordner "objects") und die Projektdatei %4 so, wie sie im Speicher war (Gliederung, Titel und Farbmarken). Kopieren Sie, was Sie brauchen, zurück ins Projekt.
+
+</translation>
+    </message>
+    <message>
+        <source>To put the project file back: close the project, rename the project file %1 in the project folder %2 (so that it is kept), and copy the file %1 of this folder there. Then open the project again.
+
+</source>
+        <translation>So spielen Sie die Projektdatei zurück: Schließen Sie das Projekt, benennen Sie die Projektdatei %1 im Projektordner %2 um (damit sie erhalten bleibt) und kopieren Sie die Datei %1 dieses Ordners dorthin. Öffnen Sie danach das Projekt wieder.
+
+</translation>
+    </message>
+    <message>
+        <source>This copy is complete: all %1 files were written.
+</source>
+        <translation>Diese Kopie ist vollständig: Alle %1 Dateien wurden geschrieben.
+</translation>
+    </message>
+    <message>
+        <source>THIS COPY IS INCOMPLETE: %1 of %2 files were written. Not written:
+%3
+
+</source>
+        <translation>DIESE KOPIE IST UNVOLLSTÄNDIG: %1 von %2 Dateien wurden geschrieben. Nicht geschrieben:
+%3
+
+</translation>
+    </message>
+    <message>
+        <source>No copy could be written: %1</source>
+        <translation>Es konnte keine Kopie geschrieben werden: %1</translation>
+    </message>
+    <message>
+        <source>The texts not saved are in:
+%1
+
+The copy is complete: %2 of %2 files were written, with the project file as it is in memory (the README in that folder says how to put it back).</source>
+        <translation>Die nicht gespeicherten Texte liegen in:
+%1
+
+Die Kopie ist vollständig: %2 von %2 Dateien wurden geschrieben, mit der Projektdatei, wie sie im Speicher ist (die README in diesem Ordner sagt, wie sie zurückgespielt wird).</translation>
+    </message>
+    <message>
+        <source>This copy is INCOMPLETE: %1 of %2 files were written, in:
+%3
+
+Not written:
+%4</source>
+        <translation>Diese Kopie ist UNVOLLSTÄNDIG: %1 von %2 Dateien wurden geschrieben, in:
+%3
+
+Nicht geschrieben:
+%4</translation>
     </message>
 </context>
 <context>

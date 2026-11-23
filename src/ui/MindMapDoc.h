@@ -133,7 +133,7 @@ bool saveAll(Project *project, QString *error = nullptr);
 // Closes the boards of a project (after saving them; `discard`: without saving).
 void closeAll(Project *project, bool discard = false);
 // The boards with changes not saved, as XML files in `dir` (the emergency copy); how many were written.
-int writeUnsaved(Project *project, const QString &dir, QString *error = nullptr);
+int writeUnsaved(Project *project, const QString &dir, QString *error = nullptr, CopyTally *tally = nullptr);
 // Every open board draws itself anew (after File > Options > Extras > Mind Map).
 void refreshAll();
 } // namespace mindmaps

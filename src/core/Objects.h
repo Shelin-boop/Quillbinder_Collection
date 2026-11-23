@@ -12,6 +12,7 @@
 //   objects/<category>/<id>.json   one file per object
 //   objects/images/                pictures of the objects
 // Nothing is written until the first object or a change of the templates.
+#include "core/ProjectTypes.h"
 #include <QColor>
 #include <QDateTime>
 #include <QHash>
@@ -114,6 +115,8 @@ public:
     // files written since the last save: changed objects, removed ones, the schema
     bool isDirty() const;
     bool save(QString *error = nullptr);
+    // 0.93.0: the objects and the schema not saved yet, as the files they would be (objects/...) under `dir`, into the tally
+    void writeUnsaved(const QString &dir, CopyTally *tally) const;
     // what could not be read (damaged files are kept as they are)
     QStringList warnings() const { return m_warnings; }
 

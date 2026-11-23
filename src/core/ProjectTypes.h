@@ -246,6 +246,34 @@ struct CompileProjectSettings {
     QList<CompileReplacement> replacements; // the project's own replacements
 };
 
+// 0.93.0: what an emergency copy should hold and what it holds (Project::makeEmergencyCopy)
+struct CopyTally {
+    int wanted = 0;
+    int written = 0;
+    QStringList missing; // "<name>: <reason>" of every file that could not be written
+    void add(const QString &name, bool ok, QString why)
+    {
+        ++wanted;
+        if (why.startsWith(QLatin1Char('/'))) { // "<path>: <reason>": the name is given already
+            const qsizetype i = why.indexOf(QLatin1String(": "));
+            if (i > 0)
+                why = why.mid(i + 2);
+        }
+        if (ok)
+            ++written;
+        else
+            missing << (why.isEmpty() ? name : name + QStringLiteral(": ") + why);
+    }
+};
+
+// the result of an emergency copy
+struct EmergencyReport {
+    QString dir;       // the folder; empty when none could be made or written
+    QString reason;    // why there is no folder
+    CopyTally tally;
+    bool complete() const { return !dir.isEmpty() && tally.missing.isEmpty() && tally.written == tally.wanted; }
+};
+
 struct WritingDay {
     QDate date;
     int draftWords = 0;   // net words written in draft that day

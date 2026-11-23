@@ -515,7 +515,7 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
     return true;
 }
 
-int DocumentStore::writeUnsaved(const QString &dir, QString *error)
+int DocumentStore::writeUnsaved(const QString &dir, QString *error, CopyTally *tally)
 {
     int n = 0;
     QSet<QString> used;
@@ -531,10 +531,13 @@ int DocumentStore::writeUnsaved(const QString &dir, QString *error)
             base = QStringLiteral("%1 (%2)").arg(name).arg(k);
         used.insert(base.toLower());
         QString why;
-        if (safesave::writeFile(QDir(dir).filePath(base + QStringLiteral(".rtf")), rtf::write(it->doc, m_project->formatting), &why))
+        const bool ok = safesave::writeFile(QDir(dir).filePath(base + QStringLiteral(".rtf")), rtf::write(it->doc, m_project->formatting), &why);
+        if (ok)
             ++n;
         else if (error && error->isEmpty())
             *error = why;
+        if (tally)
+            tally->add(base + QStringLiteral(".rtf"), ok, why);
     }
     return n;
 }

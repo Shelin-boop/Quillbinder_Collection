@@ -2,6 +2,23 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.93.0 beta (2026-11-23): the emergency copy counted
+
+- **The emergency copy** (`Project::makeEmergencyCopy`, returns an `EmergencyReport` of `ProjectTypes.h`: `dir`, `reason`,
+  `tally` = `CopyTally` with `wanted`, `written`, `missing` "name: reason"). `writeEmergencyCopy(parent, &error)` stays for
+  the old callers (the folder; `error` = the reason, or the incomplete text). `DocumentStore::writeUnsaved`,
+  `mindmaps::writeUnsaved` (`Project::emergencyExtra` now takes the tally) and the new `objects::Store::writeUnsaved`
+  (changed objects and the schema as `objects/...`) all count into the tally. The copy is made when
+  `Project::needsEmergencyCopy()` (texts, boards, **binder** `m_indexDirty`, **objects**); it always holds the project file
+  as `Project::indexBytes()` makes it (split out of `saveIndex`; the same bytes a save would write). The folder is made
+  with `mkdir` (atomic): "<title> <time>", then " (2)", " (3)" ...; nothing is ever reused. README: the way back in two
+  sentences, headed "THIS COPY IS INCOMPLETE: n of m" when files are missing. `Project::emergencyText(report)` is the
+  text of all places (`MainWindow::tellEmergencyCopy` for Save Texts Elsewhere and Close Project; the notice of
+  `saveForTermination` through `writeEmergencyNotice(what, report)`). An incomplete copy shows a warning box with
+  "Copy Incomplete" in its title. Android's own save (`src/android/MobileStart.cpp`) was not changed.
+  Test switch: `QB_TEST_WRITE_FAILS` ("number|text|part of the path") now also works in `safesave::writeFile`.
+  Not done: two boards with the same title still write one file (the second replaces the first).
+
 ## 0.92.0 beta (2026-11-20): the content decides, the project ID in backup names, checked copies, failures that are told
 
 - **A file whose time alone changed is no other version** (the sync program of the report sets a file's time a few

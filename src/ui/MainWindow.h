@@ -88,6 +88,8 @@ public:
     // 0.92.0: the backup with a manual save (a notice that does not take the keyboard, once per cause)
     void tellManualBackupProblem(bool made, bool waits, const QString &why);
     QString lastBackupProblem() const { return m_lastBackupProblem; }
+    // 0.93.0: the message about an emergency copy (the three places that make one)
+    void tellEmergencyCopy(const EmergencyReport &rep, const QString &title, const QString &tail);
     // the lock file that could not be written last (0.65.0, audit F13; for the tests)
     QString lastLockProblem() const { return m_lastLockProblem; }
     Project *project() const { return m_project.get(); }
@@ -106,7 +108,9 @@ public:
     // Saves the project, mind maps and tool notes without questions (termination signal; 0.19).
     void saveForTermination();
     // 0.65.0 (audit F07): a notice for the next start (notice.txt in the emergency folder), shown then once
-    static void writeEmergencyNotice(const QString &what, const QString &dir);
+    static void writeEmergencyNotice(const QString &what, const EmergencyReport &rep);
+    // the words of the last message about an emergency copy (for the checks)
+    QString lastEmergencyCopyText() const { return m_lastEmergencyCopyText; }
     void showEmergencyNotice();
     QString lastEmergencyNotice() const { return m_lastEmergencyNotice; }
     // 0.65.0 (audit F19): what the opening found of an interrupted save (shown once; the last text for the tests)
@@ -473,6 +477,7 @@ private:
     bool m_lockWriteTold = false;
     QString m_lastLockProblem;
     QString m_lastEmergencyNotice;
+    QString m_lastEmergencyCopyText;
     QString m_lastSaveRecovery;
     QString m_lastChangeKeptAside;
     QLabel *m_saveState = nullptr;

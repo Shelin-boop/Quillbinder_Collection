@@ -26,6 +26,12 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
 - **The download page lists the official add-ons** (Translation and Proofreading so far): name, one line of what it
   does, the systems it is for, whether it is inside the full version, and the note for a model that may be used
   non-commercially only. Each system's card shows that system's newest version.
+- **The emergency copy is whole, or says it is not.** When texts cannot be saved, the copy of what was not saved now
+  counts its files: every message and the notice after an ending by a signal say "n of m files" and name each file that
+  is missing with the reason, and an incomplete copy is headed as incomplete (a warning sign), never as done. The copy
+  is also made when only the binder or the Objects changed, and it holds the project file as it is in memory and the
+  Objects not saved; its README says how to put the project file back. A folder that is there is never used again: a
+  second copy in the same second gets a number.
 
 ## 0.92.0 beta (2026-11-20)
 
