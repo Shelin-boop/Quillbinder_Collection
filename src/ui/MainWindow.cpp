@@ -484,8 +484,8 @@ MainWindow::MainWindow()
     currentFormatting::setProvider([self = QPointer<MainWindow>(this)](Formatting *f) {
         return self && self->formattingAtCursor(self->m_active ? self->m_active->currentEditor() : nullptr, f);
     });
-    connect(qApp, &QApplication::focusChanged, this, [this](QWidget *, QWidget *now) {
-        if (!now)
+    m_focusLinks << connect(qApp, &QApplication::focusChanged, this, [this](QWidget *, QWidget *now) {
+        if (!now || m_ending)
             return;
         // the text field the format bar acts on (0.21.1): the one the keyboard was in last,
         // also while the keyboard is on the format bar (the size field) or in a popup
@@ -803,6 +803,23 @@ void MainWindow::tellEmergencyCopy(const EmergencyReport &rep, const QString &ti
 
 MainWindow::~MainWindow()
 {
+    // 0.93.0 (Android's system test, a crash at the window's end): the keyboard focus changes while the window's own
+    // widgets are deleted (after this body, with the members already gone), and the application's focus signal then
+    // reached the undo watcher of a window half destroyed. Every connection to the application's signals is cut first.
+    m_ending = true;
+    for (const QMetaObject::Connection &c : std::as_const(m_focusLinks))
+        disconnect(c);
+    m_focusLinks.clear();
+    for (const QMetaObject::Connection &c : std::as_const(m_undoWatch))
+        disconnect(c);
+    m_undoWatch.clear();
+    if (m_undoNamesTimer)
+        m_undoNamesTimer->stop();
+    disconnect(qApp, nullptr, this, nullptr);
+    disconnect(&AppSettings::instance(), nullptr, this, nullptr);
+    disconnect(&layouts::Notifier::instance(), nullptr, this, nullptr);
+    disconnect(&zoom::notifier(), nullptr, this, nullptr);
+    disconnect(&theme::Notifier::instance(), nullptr, this, nullptr);
     // The project goes away with the members below: its documents leave the editors, which
     // report a moved cursor or a changed selection. The window, half gone by then, must not
     // answer them (seen when a window with an open project and the cursor inside a text is

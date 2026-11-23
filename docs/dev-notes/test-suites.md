@@ -138,7 +138,11 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   `saving-and-safety.md`).
 - `qb_v0930b_tests` (0.93.0 beta, second suite: fixes in shared code. Exports of options and themes that keep the old file
   when a write fails (`QB_TEST_WRITE_FAILS`; the options go through a temporary file, since QSettings would mix an old
-  file's entries with the new).)
+  file's entries with the new). Item 16: the picture rule of the Web Page Import (the plugin's sources are compiled into the
+  suite; `QB_TEST_WEB_PUBLIC` names "host:port" entries that count as public, as every test server is on this computer),
+  the 400 MB limit of install, a crafted archive whose sizes overflow, the 64 KiB request line. Item 26: the main window
+  listens to no application signal while its own widgets are deleted (a probe child counts the focus signal's receivers
+  then; without the fix the suite counts two and ends in a segmentation fault).)
 - `qb_v0930_tests` (0.93.0 beta: the emergency copy whole or said to be incomplete ("n of m", names, README), made for a
   change of the binder or the objects alone, never into an existing folder, the end by a signal and its notice, the
   messages (screenshots);

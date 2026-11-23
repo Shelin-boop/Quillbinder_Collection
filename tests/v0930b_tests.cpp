@@ -3,6 +3,9 @@
 //    Web Page Import fetches pictures of a page from the internet only from public addresses (and says how many it left
 //    out); an archive whose sizes cannot be added up is refused; a request on the link of the writing tools is one line
 //    of at most 64 KiB;
+//  - item 26: the main window cuts its connections to the application's focus signal (and other application-wide
+//    signals) first when it is deleted, as the focus changes while its own widgets go; a window deleted with the
+//    keyboard in a text field and another window to take the focus does not crash;
 //  - item 15: exporting options and themes never destroys the file that was there (a write that fails leaves the old
 //    file byte for byte, and says so);
 // Saves screenshots into the folder given as first argument. Exit code = number of failed checks.
@@ -28,6 +31,9 @@
 #include <QElapsedTimer>
 #include <QFile>
 #include <QFileInfo>
+#include <QLineEdit>
+#include <QTextEdit>
+#include <QTimer>
 #include <QHostAddress>
 #include <QImage>
 #include <QBuffer>
@@ -42,6 +48,26 @@
 #include <cstdio>
 
 using namespace qb;
+
+// an application that can tell how many receivers the focus signal has (a protected function of QObject)
+class TestApp : public QApplication
+{
+public:
+    using QApplication::QApplication;
+    int focusReceivers() { return receivers(SIGNAL(focusChanged(QWidget *, QWidget *))); }
+};
+static TestApp *theApp = nullptr;
+
+// a child of the window that is deleted with it, after the window's own destructor: notes who still listens then
+class Probe : public QWidget
+{
+public:
+    Probe(QWidget *parent, int *listeners) : QWidget(parent), m_listeners(listeners) {}
+    ~Probe() override { *m_listeners = theApp->focusReceivers(); }
+
+private:
+    int *m_listeners;
+};
 
 static int failures = 0;
 static QString outDir;
@@ -357,6 +383,61 @@ static void limits(const QString &W)
     check(ask("{\"cmd\":\"info\"}\n").contains("\"pid\""), QStringLiteral("... and the link goes on answering"));
 }
 
+// ------------------------------------------------------------------ item 26: the window's end
+
+static void windowEnd(const QString &W)
+{
+    Q_UNUSED(W);
+    const int before = theApp->focusReceivers();
+    int during = -1, duringSecond = -1;
+    // 1: the keyboard is in a text field of the window, another window is there to take it
+    QLineEdit other;
+    other.setWindowTitle(QStringLiteral("Other window"));
+    other.show();
+    other.activateWindow();
+    {
+        auto *w = new MainWindow;
+        w->resize(1100, 800);
+        w->show();
+        w->activateWindow();
+        (void)QTest::qWaitForWindowActive(w, 2000);
+        new Probe(w, &during);
+        auto *own = w->findChild<QLineEdit *>();
+        if (own) {
+            own->setFocus();
+            QTest::qWait(150);
+        }
+        check(theApp->focusReceivers() >= before + 2, QStringLiteral("a window listens to the application's focus signal while it is open"),
+              QStringLiteral("before %1 now %2").arg(before).arg(theApp->focusReceivers()));
+        delete w; // the focus goes to the other window while the window's widgets are deleted
+        QTest::qWait(300);
+    }
+    check(during == before, QStringLiteral("when the window's own widgets are deleted, the window no longer listens to the focus signal"),
+          QStringLiteral("receivers then %1, before the window %2").arg(during).arg(before));
+    check(theApp->focusReceivers() == before, QStringLiteral("... and nothing of it is left afterwards"));
+    // 2: a text field of another panel took the keyboard last (an add-on's panel: a widget with a timer of its own)
+    {
+        auto *w = new MainWindow;
+        w->show();
+        w->activateWindow();
+        (void)QTest::qWaitForWindowActive(w, 2000);
+        new Probe(w, &duringSecond);
+        auto *panel = new QTextEdit(w);
+        panel->setWindowFlag(Qt::Window, false);
+        panel->show();
+        panel->setFocus();
+        QTimer::singleShot(0, panel, [] {});
+        QTest::qWait(150);
+        QTimer::singleShot(10, w, [w] { delete w; });
+        other.setFocus();
+        QTest::qWait(400);
+    }
+    check(duringSecond == before, QStringLiteral("... also when the keyboard was last in another panel's text field"), QString::number(duringSecond));
+    other.hide();
+    QTest::qWait(50);
+    check(true, QStringLiteral("the window was deleted twice with the focus changing: no crash"));
+}
+
 int main(int argc, char **argv)
 {
     QTemporaryDir home;
@@ -369,7 +450,8 @@ int main(int argc, char **argv)
     qputenv("QB_NO_DIALOGS", "1");
     QCoreApplication::setOrganizationName(QStringLiteral("QuillbinderV0930bTest"));
     QCoreApplication::setApplicationName(QStringLiteral("QuillbinderV0930bTest"));
-    QApplication app(argc, argv);
+    TestApp app(argc, argv);
+    theApp = &app;
     outDir = argc > 1 ? QString::fromLocal8Bit(argv[1]) : QDir::currentPath() + QLatin1String("/shots");
     QDir().mkpath(outDir);
     QApplication::setStyle(QStyleFactory::create(QStringLiteral("Fusion")));
@@ -383,6 +465,7 @@ int main(int argc, char **argv)
     webPictures(W);
     limits(W);
     exports(W);
+    windowEnd(W);
     std::printf("%d failure(s)\n", failures);
     return failures;
 }

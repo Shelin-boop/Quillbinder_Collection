@@ -54,6 +54,9 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   reading it (as the check of the package already did); a backup archive whose sizes cannot be added up is refused
   by **Restore From Backup**, with nothing made; and the link between {{APP}}'s windows and the writing tools reads a
   request of 64 KiB at most.
+- **No crash when a window ends.** A window that was closed while the keyboard moved to another window or panel could
+  crash at its very end (found by the system test on Android: the program answered the focus change with a window
+  already half deleted). The window now cuts its links to the application's signals before anything of it is deleted.
 
 ## 0.92.0 beta (2026-11-20)
 

@@ -444,8 +444,12 @@ private:
     QPointer<QTextEdit> m_lastTextField;
     QMenu *m_undoMenu = nullptr;
     QMenu *m_redoMenu = nullptr;
-    QTimer *m_undoNamesTimer = nullptr;
+    QPointer<QTimer> m_undoNamesTimer; // 0.93.0: a pointer that knows when the timer is gone
     QList<QMetaObject::Connection> m_undoWatch;
+    // 0.93.0: the window's connections to the application's focus signal; ~MainWindow cuts them first, as the focus
+    // changes while the window's own widgets are deleted, and a window half gone must not answer
+    QList<QMetaObject::Connection> m_focusLinks;
+    bool m_ending = false;
     // a long text field of the Objects sheet with the cursor (0.21.1): bold, italic,
     // underline, strikethrough, text color and highlight act on it
     ObjectTextEdit *objectTextTarget() const;
