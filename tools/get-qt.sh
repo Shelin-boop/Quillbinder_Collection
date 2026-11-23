@@ -15,8 +15,9 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 VERSION=$(sed -n 's/^set(QB_QT_VERSION *"\(.*\)")/\1/p' "$ROOT/CMakeLists.txt")
 DEST=${QB_QT_DIR:-/opt/qt/$VERSION/gcc_64}
 FILE=qt-$VERSION-linux-gcc_64.tar.xz
-# the archive the workflow made for this version (2026-11-23, run 45212130786 of commit ab123d1)
-SHA256=2c68c48b4cea227ce39384be0cb5fa7174c07b56e5a776bba303c1aae24b0064
+# the archive the workflow made for this version (2026-11-23, run 45216068834 of commit cd1716a; Qt PDF from the
+# Qt Extensions release for Qt 6.12, folder 6.12.0 of Qt's repository)
+SHA256=41f51339c8e9c1759bd110d2a925ffb8988ae0578060e2249353bbbe79de1362
 REPO=${QB_QT_REPO:-Shelin-boop/Quillbinder_Collection}
 
 if [ -f "$DEST/lib/libQt6Core.so.$VERSION" ] && [ -f "$DEST/bin/qmake" ]; then
