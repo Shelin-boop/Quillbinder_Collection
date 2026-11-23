@@ -24,7 +24,7 @@ SIG_URL=$URL.asc
 KEYS_URL=https://ffmpeg.org/ffmpeg-devel.asc
 # FFmpeg's release signing key (primary key fingerprint); the script stops and prints what it found when the key file differs
 KEY_FPR=FCF986EA15E6E293A5644F10B4322F04D67658D8
-SHA256=""
+SHA256="1a4d394ae63d190a526cd052eb4415c156b5c5e2df37efab41a7de0b8fde2433"
 TARBALL=ffmpeg-$VERSION.tar.xz
 need() {  # <prefix> <set>: missing, or another set (before 0.50 build/ffmpeg held every decoder)
     [ ! -f "$1/lib/libavcodec.so.63" ] || [ "$(cat "$1/set.txt" 2>/dev/null)" != "$2" ]
