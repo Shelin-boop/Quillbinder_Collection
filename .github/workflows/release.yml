@@ -22,9 +22,9 @@
 #    tools and Ubuntu's packages run there); "sign-packages" and "sign-checksums" get the key and run no
 #    third-party code: only openssl and Python of the runner and tools/make-package.py of this commit;
 #    "assemble" puts the signed add-ons into the full version (without the key).
-#  - "tests" runs the project's full test suite (all suites but v060: it was left out while it
-#    checked the copy into a second repository; whether it can run here now is not tried yet); nothing is published unless it passes (a suite that fails is run once more, for the
-#    rare timing failures of a two-core machine).
+#  - "tests" runs the project's full test suite; nothing is published unless it passes (a suite that fails is
+#    run once more, for the rare timing failures of a two-core machine). Since 0.93.0 it runs v060 too: that suite
+#    was left out only while it checked the copy into a second repository, which no longer exists.
 #
 # 2026-11-15 (build optimization P2 and P7; working rules section 10, decision D3, with its safeguards):
 #  - FFmpeg (both sets) and whisper.cpp are kept between runs in GitHub's cache, under their recipe hash
@@ -389,7 +389,7 @@ jobs:
       - name: The full test suite
         run: |
           set +e
-          QB_SKIP_SUITES="v060" tools/run-all-tests.sh build/test-results x11 2>&1 | tee /tmp/tests.log
+          tools/run-all-tests.sh build/test-results x11 2>&1 | tee /tmp/tests.log
           rc=${PIPESTATUS[0]}
           if [ "$rc" != 0 ]; then
             failed=$(sed -n 's/^failed: *//p' /tmp/tests.log | tail -1)

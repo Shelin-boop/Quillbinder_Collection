@@ -13,7 +13,7 @@
 #   QB_SUITES="v040 m13"   run these
 #   QB_SAMPLE=10           add whole suites drawn at random until about 10 % of the checks are covered
 #                          (counts from tests/check-counts.txt); QB_SEED=<n> repeats a draw
-#   QB_SKIP_SUITES="v060"  leave these out (0.70.0: the release workflow)
+#   QB_SKIP_SUITES="a b"   leave these out (0.70.0; none is left out by the release workflow since 0.93.0)
 # A full run in x11 mode (neither variable set) writes tests/check-counts.txt anew.
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 # 0.62: programs started by the suites skip the questions of the first start
