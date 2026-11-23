@@ -23,6 +23,9 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   ggml library inside whisper.cpp and the AppImage's own starter, and says in its report when the repository has had
   no change for 50 days (GitHub stops such a check after 60). For the project's builds: a third ready-made pack, for
   the translator's libraries, and the packs' pages name what is inside, the license and the source.
+- **The download page lists the official add-ons** (Translation and Proofreading so far): name, one line of what it
+  does, the systems it is for, whether it is inside the full version, and the note for a model that may be used
+  non-commercially only. Each system's card shows that system's newest version.
 
 ## 0.92.0 beta (2026-11-20)
 

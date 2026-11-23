@@ -15,6 +15,7 @@ has shows "comes later". The visitor's own system comes first (the page's
 script reads the browser's user agent; without script the order is Windows, Linux, Android).
 """
 import html
+import json
 import os
 import re
 import sys
@@ -72,6 +73,55 @@ def others(files):
     ]
     keep = lambda rows: [r for r in rows if r[0]]
     return {"linux": keep(linux), "windows": keep(windows), "android": keep(android)}
+
+
+def official_addons(root=ROOT):
+    """The official add-ons (0.93.0), read from official-addons/*.json: [{name, summary, systems, builtin, id, version,
+    nonCommercial}] sorted by name. "systems" is Linux, plus Windows and Android where the entry has a block for them;
+    "builtin" is true for an add-on of the project's own (a folder in addons/): the full version carries it."""
+    found = []
+    folder = os.path.join(root, "official-addons")
+    for name in sorted(os.listdir(folder)) if os.path.isdir(folder) else []:
+        if not name.endswith(".json"):
+            continue
+        try:
+            with open(os.path.join(folder, name), encoding="utf-8") as f:
+                e = json.load(f)
+        except (OSError, ValueError):
+            continue
+        if not isinstance(e, dict) or not all(isinstance(e.get(k), str) and e[k] for k in ("id", "name", "version", "summary")):
+            continue
+        systems = ["Linux"] + [label for key, label in (("windows", "Windows"), ("android", "Android")) if isinstance(e.get(key), dict)]
+        nc = [d for d in e.get("nonCommercialData", []) if isinstance(d, dict) and d.get("name") and d.get("license")]
+        found.append({"id": e["id"], "name": e["name"], "version": e["version"], "summary": e["summary"].strip(),
+                      "systems": systems, "nonCommercial": nc,
+                      "builtin": os.path.isdir(os.path.join(root, "addons", e["id"]))})
+    return sorted(found, key=lambda a: a["name"].lower())
+
+
+def addons_section(addons, home):
+    """The list of official add-ons for the page (empty when there are none): name and version, one line, the systems
+    it is for, where to get it, and the note for data that may be used non-commercially only."""
+    if not addons:
+        return ""
+    items = []
+    for a in addons:
+        entry = "%s/blob/main/official-addons/%s.json" % (home, a["id"])
+        where = ("Included in the full version of each system it is for; also a package of its own on the program's releases."
+                 if a["builtin"] else
+                 'A package of its own on its release <code>addon-%s-%s</code> (one per system).' % (html.escape(a["id"]), html.escape(a["version"])))
+        note = ""
+        if a["nonCommercial"]:
+            note = ('\n        <p class="small">Free; it must not be sold. It can download %s, whose license allows non-commercial use only.</p>'
+                    % html.escape("; ".join("%s (%s)" % (d["name"], d["license"]) for d in a["nonCommercial"])))
+        items.append('      <li data-addon="%s"><b>%s</b> <span class="file">version %s &middot; for %s</span>\n'
+                     '        <p>%s</p>\n        <p class="small">%s <a href="%s">Its entry</a>, <a href="%s/blob/main/docs/official-addons.md">'
+                     'how an add-on becomes official</a>.</p>%s</li>'
+                     % (html.escape(a["id"]), html.escape(a["name"]), html.escape(a["version"]),
+                        html.escape(", ".join(a["systems"])), html.escape(a["summary"]), where, html.escape(entry), html.escape(home), note))
+    return ('  <section class="system official" id="official-addons">\n    <h2>Official add-ons</h2>\n'
+            '    <p class="later">Reviewed, built and signed by the project; all are free.</p>\n    <ul class="others">\n%s\n    </ul>\n  </section>\n'
+            % "\n".join(items))
 
 
 def shown_of(tag):
@@ -141,6 +191,7 @@ def page(files, tag, also=()):
             body += ('\n      <h3>Other downloads</h3>\n      <ul class="others">%s\n      </ul>' % rows)
         cards.append('    <section class="system" data-system="%s">\n      <h2>%s <span>%s</span></h2>\n      %s\n    </section>'
                      % (key, html.escape(name), html.escape(detail), body))
+    addons = addons_section(official_addons(), home)
     return """<!doctype html>
 <html lang="en">
 <head>
@@ -171,6 +222,8 @@ def page(files, tag, also=()):
   .others a { color: var(--accent); font-weight: 600; }
   .others .file { display: block; margin: 0; }
   .later { color: var(--muted); margin: 0; }
+  .official p { margin: 2px 0 6px; }
+  .small { color: var(--muted); font-size: 14px; }
   .more { margin-top: 28px; }
   .more a { color: var(--accent); }
   .note { color: var(--muted); font-size: 14px; margin-top: 28px; }
@@ -184,7 +237,7 @@ def page(files, tag, also=()):
   <div id="systems">
 %(cards)s
   </div>
-  <p class="more"><a href="%(release)s">All files of this version</a> (single add-ons, the symbols for crash reports,
+%(addons)s  <p class="more"><a href="%(release)s">All files of this version</a> (single add-ons, the symbols for crash reports,
   checksums) &middot; <a href="%(home)s/releases">Earlier versions</a> &middot;
   <a href="%(home)s">Source code</a> &middot;
   <a href="%(home)s/issues/new/choose">Report a problem or propose a function</a></p>
@@ -204,7 +257,7 @@ def page(files, tag, also=()):
 </script>
 </body>
 </html>
-""" % {"shown": html.escape(shown), "cards": "\n".join(cards), "release": html.escape("%s/releases/tag/%s" % (home, tag)),
+""" % {"shown": html.escape(shown), "cards": "\n".join(cards), "addons": addons, "release": html.escape("%s/releases/tag/%s" % (home, tag)),
        "home": html.escape(home), "label": html.escape(cmake_var("APP_VERSION_LABEL") or "test"),
        "article": "an" if (cmake_var("APP_VERSION_LABEL")[:1].lower() in "aeiou" and cmake_var("APP_VERSION_LABEL")) else "a"}
 
