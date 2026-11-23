@@ -103,6 +103,16 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - **TLS**: the AppImage carries `plugins/tls/libqopensslbackend.so` since 0.92.0 (`build-appimage.sh`); OpenSSL 3 is
   the system's. A program update that runs on an AppImage before 0.92.0 has no TLS part: `QSslSocket::supportsSsl()`
   is false, the automatic look stays quiet and "Check for Updates Now" says why.
+- **Translation and Proofreading 1.3** (0.93.0, to-do item 23; details in the add-on's own `source/DEVELOPING.md`, "1.3"):
+  a word on its own (WordNet meanings built in as `resources/en-glosses.tsv`, made with the thesaurus by
+  `tools/make-thesaurus.py`; the German dictionary, a data download "wiktionary-de" made by
+  `tools/make-de-dictionary.py` from kaikki.org's extract, CC BY-SA 4.0 shown before the download), Swap and Translate
+  back, `opus-mt-en-de`, the large model kept away from words and up to three words (catalog flag `forWords`). The data
+  is on the release `models-3`, made by `.github/workflows/translator-data.yml` (push of a `linux/0.93.0*` branch that
+  changes it; it does nothing when the release has the files; the job `publish` alone writes). Until the run, the
+  catalog names the new files with `PLACEHOLDER...` sums (the add-on says "not published yet" and downloads nothing);
+  after the run the sizes and sums of the artifact's `catalog.json` go in. `official-addons/translation-proofreading.json`
+  still describes 1.2 until the release (`tests/v0920_tests.cpp` compares its version with the manifest).
 - **Translation and Proofreading 1.2** is `addons/translation-proofreading`: `source/` is the add-on as a project of
   its own (unchanged from 1.1 but for the version and the model address `kRepo` in `src/ModelStore.cpp`), `stage.sh`
   builds it into `<build>/translator` and stages it with the add-on's `packaging/make-addon.sh`

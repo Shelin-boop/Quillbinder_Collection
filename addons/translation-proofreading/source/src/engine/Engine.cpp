@@ -162,6 +162,33 @@ public:
         }
     }
 
+    QStringList variants(const QString &slot, const QString &text, const tp::RunOptions &o, int count,
+                         QString *error) override
+    {
+        QMutexLocker lock(&m_mutex);
+        Model *s = slotFor(slot, error);
+        QStringList out;
+        if (!s)
+            return out;
+        try {
+            if (s->chat())
+                return chatBatch(*s, {text}, o);
+            ctranslate2::TranslationOptions t = options(*s, o);
+            t.num_hypotheses = size_t(qMax(1, count));
+            t.beam_size = std::max(t.beam_size, t.num_hypotheses);
+            const auto results = s->translator->translate_batch({encodeSource(*s, o.prefix + text)}, t);
+            for (const Tokens &h : results.front().hypotheses) {
+                const QString d = decodeTarget(*s, h);
+                if (!d.isEmpty() && !out.contains(d))
+                    out << d;
+            }
+        } catch (const std::exception &e) {
+            fail(error, QString::fromLocal8Bit(e.what()));
+            return {};
+        }
+        return out;
+    }
+
     QString version() const override
     {
         return QStringLiteral("CTranslate2 4.9.0, oneDNN 3.9.1, SentencePiece 0.2.1, BPE tokenizer for chat models");

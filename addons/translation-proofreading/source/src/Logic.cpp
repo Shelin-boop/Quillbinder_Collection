@@ -820,12 +820,17 @@ void loadThesaurus(const QString &file)
 
 QStringList baseForms(const QString &word)
 {
+    return baseFormsIn(word, [](const QString &b) { return thesaurus().entries.contains(b); });
+}
+
+QStringList baseFormsIn(const QString &word, const std::function<bool(const QString &)> &has)
+{
     const Thesaurus &th = thesaurus();
     QString w = word.toLower();
     w.replace(QChar(0x2019), QLatin1Char('\''));
     QStringList out;
     auto add = [&](const QString &b) {
-        if (th.entries.contains(b) && !out.contains(b))
+        if (has(b) && !out.contains(b))
             out << b;
     };
     add(w);
@@ -857,7 +862,7 @@ QStringList baseForms(const QString &word)
     return out;
 }
 
-QList<Similar> similarWords(const QString &word, QString *base)
+QList<Similar> similarWords(const QString &word, QString *base, const QString &onlyPos)
 {
     QList<Similar> out;
     const QStringList bases = baseForms(word);
@@ -872,6 +877,8 @@ QList<Similar> similarWords(const QString &word, QString *base)
                 continue;
             Similar s;
             s.pos = posName(group.left(colon));
+            if (!onlyPos.isEmpty() && s.pos != onlyPos)
+                continue;
             for (QString w : group.mid(colon + 1).split(QLatin1Char(';'), Qt::SkipEmptyParts)) {
                 // American spelling: "well-favoured" becomes "well-favored"
                 QStringList pieces = w.split(QLatin1Char('-'));
@@ -953,6 +960,31 @@ QStringList usefulModelWords(const QStringList &found, const QString &word, bool
         out << w;
     }
     return out;
+}
+
+bool hasStrangeName(const QString &text, const QString &source)
+{
+    static const QRegularExpression edges(QStringLiteral("^[^\\p{L}]+|[^\\p{L}]+$"));
+    QSet<QString> fromSource;
+    for (const QString &w : words(source))
+        fromSource.insert(QString(w).remove(edges));
+    bool start = true;
+    for (const QString &raw : words(text)) {
+        const QString w = QString(raw).remove(edges);
+        const bool atStart = start;
+        start = raw.endsWith(QLatin1Char('.')) || raw.endsWith(QLatin1Char('!')) || raw.endsWith(QLatin1Char('?'))
+                || raw.endsWith(QChar(0x201D)) || raw.endsWith(QLatin1Char('"'));
+        if (w.size() < 2 || !w.at(0).isUpper() || atStart)
+            continue;
+        if (fromSource.contains(w) || wordList().contains(w) || wordList().contains(w.toLower()))
+            continue;
+        // "I'm", "I'll": the part before the apostrophe is read as one word by `edges` only at its edges
+        const int apo = raw.indexOf(QLatin1Char('\''));
+        if (apo == 1 && raw.at(0) == QLatin1Char('I'))
+            continue;
+        return true;
+    }
+    return false;
 }
 
 } // namespace tp

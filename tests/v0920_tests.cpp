@@ -1835,14 +1835,14 @@ int main(int argc, char **argv)
         const QByteArray store = readAll(addon + QStringLiteral("/source/src/ModelStore.cpp"));
         const QByteArray cmake = readAll(addon + QStringLiteral("/source/CMakeLists.txt"));
         check(!top.isEmpty() && top == inner && m.value(QStringLiteral("id")).toString() == QLatin1String("translation-proofreading")
-                  && m.value(QStringLiteral("version")).toString() == QLatin1String("1.2") && cmake.contains("set(TP_VERSION \"1.2\")")
+                  && m.value(QStringLiteral("version")).toString() == QLatin1String("1.3") && cmake.contains("set(TP_VERSION \"1.3\")")
                   && m.value(QStringLiteral("minApp")).toString() == QLatin1String(QB_RUNTIME_SINCE),
-              QStringLiteral("Translation and Proofreading 1.2 is in addons/ with its source; its two manifests and its build agree on the version"),
+              QStringLiteral("Translation and Proofreading 1.3 is in addons/ with its source; its two manifests and its build agree on the version"),
               m.value(QStringLiteral("version")).toString());
         check(store.contains("https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/")
                   && !store.contains("Quillbinder_Translation_Addon")
                   && readAll(addon + QStringLiteral("/source/resources/catalog.json")).contains("\"release\": \"models-1\""),
-              QStringLiteral("it fetches its models from the releases models-1 and models-2 of this repository"));
+              QStringLiteral("it fetches its models from the releases models-1, models-2 and models-3 of this repository"));
         {
             // 0.93.0: the pinned entry describes 1.2 and this repository; no file names the former repositories
             const QJsonObject entry = QJsonDocument::fromJson(readAll(src + QStringLiteral("/official-addons/translation-proofreading.json"))).object();
