@@ -47,7 +47,9 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   wiki.qt.io (`?action=raw`); each GitHub repository's published security advisories and the release notes of
   its newer releases; the CVE records of `CVEProject/cvelistV5` on raw.githubusercontent.com (ratings and versions).
   Only raw.githubusercontent.com and git can be reached from the session; the rest is tried on GitHub's runner
-  (a push to `all/security-watch*` is a dry run that writes no issue).
+  (a push to `all/security-watch*` is a dry run that writes no issue). 0.93.0: when the repository had no commit for
+  50 days (`QUIET_DAYS`), the report has a line "QUIET REPOSITORY" (GitHub stops a scheduled workflow after 60 days
+  without activity); the commit's date is read through the API.
 - **What is reported**: a finding for a version we ship whose deciding rating is High or Critical, or that CISA's
   SSVC marks as actively exploited. The deciding rating is Ubuntu's priority for its packages, else the maker's
   (the CNA's CVSS or its own scale, as OpenSSL's "Low"; the project's own GitHub advisory), else CISA's. A record
@@ -65,8 +67,13 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - **Keeping it in step**: a new version of a part goes into the watch list in the same commit; the suite `secwatch`
   compares each `pin` (a file and pattern, an entry of `resources/licenses/index.json`, or `comes_with` for the
   FFmpeg of Qt's Windows build) with the list, and the AppImage's Ubuntu packages with the license list.
-- **Not covered**: PDFium inside Qt PDF (Chromium has no releases to watch); the ggml inside whisper.cpp (its
-  flaws are often filed with llama.cpp); the AppImage's runtime; the Windows runtime of Microsoft. A public
+- **Not covered**: the Windows runtime of Microsoft. (0.93.0 added, Linux entries: PDFium inside Qt PDF as the
+  revision `1afaa1a3...` in Chromium 140.0.7339.264, which Qt WebEngine 6.140.0 is based on, watched as that Chromium
+  version of github.com/chromium/chromium, OSV not asked, its flaws reach the watch only through Qt's list (module
+  qtpdf); the ggml of whisper.cpp v1.9.5 as ggml 0.26.0, OSV not asked; the AppImage runtime type2-runtime 20251108. Each
+  entry has a `note` that says what the databases know. A `pin` with `comes_with` names the part whose version it
+  follows: `Qt 6.12.1` or `whisper.cpp 1.9.5`, and the suite checks it. The Windows and Android entries of Qt's parts,
+  and Qt's FFmpeg for Windows, are left for their runs.) A public
   repository's scheduled workflow is switched off after 60 days without activity (GitHub sends a notice first).
 - **The first dry run** (2026-11-21, 40 s): 14 findings in 4 projects would have been reported: FFmpeg 9.0.2 and
   Qt's FFmpeg 9.0.1 for Windows (11, up to 9.0.2, newer: 9.1), zlib 1.3.2 (gzwrite, fixed in 1.4), HarfBuzz 14.5.0

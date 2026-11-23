@@ -19,6 +19,7 @@ failed run tells that the watch itself needs a look.
 Environment: GH_TOKEN (the workflow's token, for GitHub's API), GITHUB_REPOSITORY, GITHUB_REPOSITORY_OWNER,
 GITHUB_STEP_SUMMARY. --dry-run writes no issue.
 """
+import calendar
 import json
 import os
 import re
@@ -30,6 +31,7 @@ import urllib.request
 
 UA = "quillbinder-security-watch/1"
 LABEL = "security"
+QUIET_DAYS = 50   # a line in the report when the repository had no commit for this long (GitHub stops at 60)
 HIGH = {"HIGH", "CRITICAL", "EXPLOITED"}
 ORDER = {"EXPLOITED": 5, "CRITICAL": 4, "HIGH": 3, "MEDIUM": 2, "MODERATE": 2, "LOW": 1, "NEGLIGIBLE": 0, "NONE": 0}
 CVE_RX = re.compile(r"CVE-\d{4}-\d{4,}")
@@ -745,6 +747,31 @@ class Watch:
                 break
         return keys, open_groups
 
+    def check_activity(self):
+        """A line in the report when the repository had no commit for QUIET_DAYS days: GitHub stops a scheduled
+        workflow (this one) after 60 days without activity in a public repository."""
+        repo = os.environ.get("GITHUB_REPOSITORY", "")
+        if not repo:
+            return
+        try:
+            st, commits = http_json(f"https://api.github.com/repos/{repo}/commits?per_page=1", headers=gh_headers())
+        except SourceError as e:
+            self.warnings.append(f"the last commit of {repo} was not read ({e})")
+            return
+        try:
+            when = commits[0]["commit"]["committer"]["date"] if st == 200 and commits else None
+            last = calendar.timegm(time.strptime(when, "%Y-%m-%dT%H:%M:%SZ")) if when else None
+        except (KeyError, IndexError, TypeError, ValueError):
+            last = None
+        if last is None:
+            self.warnings.append(f"the last commit of {repo} was not read (HTTP {st})")
+            return
+        days = int((time.time() - last) // 86400)
+        if days >= QUIET_DAYS:
+            self.say(f"QUIET REPOSITORY: no commit for {days} days. GitHub stops a scheduled workflow after 60 days "
+                     "without activity in a public repository, and then this watch stops without a notice: a commit "
+                     "on the default branch keeps it running.")
+
     def report_issues(self):
         repo = os.environ.get("GITHUB_REPOSITORY", "")
         high = [f for f in self.findings.values() if self.is_high(f)]
@@ -806,6 +833,7 @@ def main(argv):
     w.say(f"Security watch {time.strftime('%Y-%m-%d %H:%M', time.gmtime())} UTC" + (" (dry run)" if dry else ""))
     try:
         w.run()
+        w.check_activity()
         w.report_issues()
     except SourceError as e:
         w.say(f"SOURCE FAILED: {e}")

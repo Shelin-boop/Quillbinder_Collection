@@ -1,8 +1,8 @@
-Qt 6.12.0
+Qt 6.12.1
 Copyright (C) The Qt Company Ltd. and other contributors.
 https://www.qt.io
 
-The libraries and plugins are The Qt Company's own build of Qt 6.12.0 for Linux (x86_64), unchanged; each can be replaced by another build of the same version. Qt is used under the GNU Lesser General Public License version 3 (below); the GNU General Public License version 3 it refers to is listed under the full texts of common licenses (GPL-3).
+The libraries and plugins are The Qt Company's own build of Qt 6.12.1 for Linux (x86_64), unchanged; each can be replaced by another build of the same version. Qt is used under the GNU Lesser General Public License version 3 (below); the GNU General Public License version 3 it refers to is listed under the full texts of common licenses (GPL-3).
 
                    GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
