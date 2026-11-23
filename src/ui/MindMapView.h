@@ -14,6 +14,7 @@ class MindMapScene;
 class MindMapController;
 class BoardItem;
 class Project;
+class MindMapOverview;
 
 class MindMapView : public QGraphicsView
 {
@@ -51,6 +52,8 @@ public:
     // A board never zoomed starts at the default zoom of File > Options > Editing.
     void setViewMemory(Project *project, const QString &itemId, const QString &kind);
     void saveView();
+    // the small map in the top left corner (0.93.0)
+    MindMapOverview *overview() const { return m_overview; }
     bool viewRestored() const { return m_viewRestored; }
 
 signals:
@@ -78,6 +81,7 @@ protected:
 
 private:
     void restoreView();
+    MindMapOverview *m_overview = nullptr;
     QPointer<Project> m_memProject;
     QString m_memItem, m_memKind;
     bool m_viewRestored = false;

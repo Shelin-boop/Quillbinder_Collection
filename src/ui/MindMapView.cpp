@@ -6,6 +6,7 @@
 #include "ui/MindMapDoc.h"
 #include "ui/MindMapScene.h"
 #include "ui/MindMapUi.h"
+#include "ui/MindMapOverview.h"
 
 #include <QAbstractTextDocumentLayout>
 #include <QAction>
@@ -37,6 +38,13 @@ MindMapView::MindMapView(QWidget *parent) : QGraphicsView(parent)
     setFocusPolicy(Qt::StrongFocus);
     setFrameShape(QFrame::NoFrame);
     setMouseTracking(true);
+    // the overview follows the view (0.93.0)
+    m_overview = new MindMapOverview(this);
+    auto follow = [this] { m_overview->refresh(); };
+    connect(horizontalScrollBar(), &QScrollBar::valueChanged, this, follow);
+    connect(verticalScrollBar(), &QScrollBar::valueChanged, this, follow);
+    connect(this, &MindMapView::zoomChanged, this, follow);
+    connect(overview::hub(), &OverviewHub::modeChanged, this, follow);
     m_scrollTimer = new QTimer(this);
     m_scrollTimer->setInterval(30);
     connect(m_scrollTimer, &QTimer::timeout, this, [this] {
@@ -53,6 +61,7 @@ void MindMapView::setViewMemory(Project *project, const QString &itemId, const Q
     m_memProject = project;
     m_memItem = itemId;
     m_memKind = kind;
+    m_overview->setKind(kind);
     m_viewRestored = false;
     if (!m_memTimer) {
         m_memTimer = new QTimer(this);
@@ -111,13 +120,18 @@ void MindMapView::setBoardScene(MindMapScene *scene)
     m_scene = scene;
     setScene(scene);
     if (scene) {
-        connect(scene->doc(), &MindMapDoc::boardChanged, this, [this] { updateSceneRect(); });
+        connect(scene->doc(), &MindMapDoc::boardChanged, this, [this] {
+            updateSceneRect();
+            m_overview->refresh();
+        });
+        connect(scene, &QGraphicsScene::changed, m_overview, [this] { m_overview->refresh(); });
         updateSceneRect();
         // the first view shows the top left of the board
         const QRectF c = scene->contentRect();
         if (!c.isNull())
             centerOn(c.center().x(), c.top() + viewport()->height() / 2.0 / zoom() - 20);
     }
+    m_overview->refresh();
 }
 
 double MindMapView::zoom() const { return transform().m11(); }
@@ -1050,6 +1064,7 @@ void MindMapView::resizeEvent(QResizeEvent *e)
 {
     QGraphicsView::resizeEvent(e);
     updateSceneRect();
+    m_overview->refresh();
 }
 
 // ------------------------------------------------------------------ drag and drop from elsewhere

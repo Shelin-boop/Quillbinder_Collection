@@ -2,6 +2,32 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.93.0 beta (2026-11-23): the overview of the mind map
+
+- **`ui/MindMapOverview.*`**: a child of the board view's **viewport** (so it takes mouse events and the wheel itself;
+  the wheel is ignored so that it travels on to the view as over the board, `zoom::markOwn` of the view applies).
+  `MindMapView` owns it (`overview()`), follows it from the scroll bars, `zoomChanged`, `resizeEvent`, the scene's
+  `changed` and `boardChanged` (`refresh()`: place, size, shown or not, repaint). Not a scene item, so
+  `MindMapScene::render` (PNG/PDF export, print) never holds it.
+- **The map**: the area is `contentRect()` united with `visibleRect()` (the frame stays inside when the view is moved
+  past the content); scale and origin come from it (`map()`). Painted from the board and `liveRect(id)` (shapes, lines,
+  notes; text only when the font would be 5.5 px or more, else the colored frame). While a drag runs the map is frozen
+  (`m_frozen`), or the area would change under the pointer. A click centers (`centerOn`), a press inside the frame
+  keeps the grab offset. A locked board moves too: only the view changes; the scroll bars feed `setViewMemory`'s timer.
+- **Shown or not** (`wantedShown`): "always" (setting) -> shown; else shown when `visibleRect()` does not hold
+  `contentRect()`, hidden only when it holds it with a margin of 10 scene units (Zoom to Fit leaves 30), in between the last answer stays (no flicker).
+- **Settings** (`overview::` in the same files, plain `QSettings`, per device, not in the project): `mindMap/overviewAlways`
+  (bool), `mindMap/overviewSize/<kind>` (QSize; kind = the view memory's "inspector" or "window"). `overview::hub()`
+  signals `modeChanged` to every view and to every controller's command. `sizeFor` is the size rule (a fifth of the
+  width, at least 80 x 60, at most half the view); the grip is 22 px, 40 px with a touch screen or on Android.
+- **The command** `mm_overview` (checkable, checked = always; its tool tip is "Overview: automatic" or "Overview: always
+  shown", set in `updateActions`) is in `fillViewMenu` (the large window's View menu and the inspector's Menu > View) and is
+  the default action of the bar's button `mmOverviewButton`, right after `mmMenuButton`. Icon `qb-mm-overview` (made by
+  `tools/make-item-icons.py`).
+- **The "Fixed:" text** (`mmFixedTitle`) is an `ElidedLabel` inside the bar (after the overview button, before the
+  stretch), shortened to its room with "..." (full title in the tool tip); no row under the bar any more.
+- Suite `mmoverview` (`tests/mmoverview_tests.cpp`).
+
 ## 0.92.0 beta (2026-11-20): the marks of a binder row, the fixed mind map, the shown lock
 
 - **Row marks** (`ui/RowMarks.*`): the pin and the padlock are painted (no picture files), left of the label dot:

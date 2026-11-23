@@ -9,6 +9,12 @@ A new AppImage and a program update for Linux. Nothing changes in how you write;
 in the parts it is built from. The add-ons of 0.80.0 and later are rebuilt for this version: the ones that bring
 their own libraries now need 0.93.0 (the check for updates and **File > Install Update or Add-on** tell you).
 
+- **An overview for the mind map.** A small map in the top left corner of a board (in the inspector's tab and in the large
+  window) shows all of the board and a frame for the part you see; click in it to move the view there, drag the frame to
+  move the view with it. It shows by itself when some of the board lies outside the view and hides when all of it fits;
+  the new button after **Menu** in the board's bar (or the entry Overview Always Shown in the board's View menu) keeps it shown. Drag the grip in its
+  corner to change its size. The text **Fixed: ...** of a fixed board now stands in the bar itself, shortened when the
+  bar is narrow, and the row under the bar is gone.
 - **Qt 6.12.1** (before: 6.12.0). The libraries Qt carries inside itself are newer, with safety fixes: zlib 1.4,
   HarfBuzz 15.1.0, PCRE2 10.49, libpng 1.6.59, libjpeg-turbo 3.2.1, FreeType 2.15.0 and md4c 0.6.0. Because the
   AppImage carries them, a program update alone cannot bring them: the check for updates offers the new AppImage

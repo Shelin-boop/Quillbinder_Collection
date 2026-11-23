@@ -13009,6 +13009,18 @@ Die Schriften sind sofort nutzbar. Sie bleiben im Ordner des Programms: Andere P
         <translation>&amp;Seitenführungslinien</translation>
     </message>
     <message>
+        <source>O&amp;verview Always Shown</source>
+        <translation>Über&amp;sicht immer sichtbar</translation>
+    </message>
+    <message>
+        <source>Overview: always shown</source>
+        <translation>Übersicht: immer sichtbar</translation>
+    </message>
+    <message>
+        <source>Overview: automatic</source>
+        <translation>Übersicht: automatisch</translation>
+    </message>
+    <message>
         <source>&amp;Actual Size</source>
         <translation>&amp;Tatsächliche Größe</translation>
     </message>

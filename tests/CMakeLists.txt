@@ -447,3 +447,8 @@ if(QB_MOBILE_PREVIEW)
   target_compile_definitions(qb_android_st_preview PRIVATE QB_ST_PREVIEW QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}"
                              QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
 endif()
+
+# 0.93.0: the overview of a mind map board (automatic / always, the rectangle, click and drag, size, the bar's button
+# and "Fixed:" text, the large window, not in exports) (xvfb-run -a ./qb_mmoverview_tests /tmp/shots)
+add_executable(qb_mmoverview_tests mmoverview_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_mmoverview_tests PRIVATE qbui Qt6::Test)
