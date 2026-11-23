@@ -27,12 +27,21 @@ mkdir -p "$OUT"
 OUT=$(cd "$OUT" && pwd)
 cd "$ROOT" || exit 1
 B=build
-if [ ! -x $B/tests/qb_tests ]; then
+# 0.93.0: the Python-only suites (secwatch, deps) need no build folder: when only they are asked for, nothing is
+# built, no FFmpeg pack or sound server is needed, and no X server is started
+PYONLY=0
+if [ -n "$QB_SUITES" ] && { [ -z "$QB_SAMPLE" ] || [ "$QB_SAMPLE" = 0 ]; }; then
+    PYONLY=1
+    for n in $QB_SUITES; do
+        case $n in secwatch|deps) ;; *) PYONLY=0 ;; esac
+    done
+fi
+if [ "$PYONLY" != 1 ] && [ ! -x $B/tests/qb_tests ]; then
     echo "no build in $ROOT/$B: cmake -S . -B build -DQB_TEST_SWITCHES=ON && cmake --build build -j\$(nproc)"
     exit 1
 fi
 # 0.70.0 (audit A S-04): the switches are off by default; the suites need them
-if ! grep -q '^QB_TEST_SWITCHES:BOOL=ON' "$B/CMakeCache.txt" 2>/dev/null; then
+if [ "$PYONLY" != 1 ] && ! grep -q '^QB_TEST_SWITCHES:BOOL=ON' "$B/CMakeCache.txt" 2>/dev/null; then
     echo "the build in $ROOT/$B has no test switches: cmake -S . -B build -DQB_TEST_SWITCHES=ON, then build again"
     exit 1
 fi
@@ -86,6 +95,7 @@ EOF
 elif [ "$MODE" = x11 ] && [ -z "$QB_SKIP_SUITES" ]; then
     COUNTS=$(mktemp)
 fi
+if [ "$PYONLY" != 1 ]; then
 if [ -d "$QB_FFMPEG_DIR/lib" ]; then
     # FFmpeg built after the build folder was configured (0.60): CMake keeps "headers not found", and the
     # player of Media Playback would lack its format check; configure and build again first
@@ -138,6 +148,7 @@ if command -v pactl > /dev/null; then
         echo "(no sound server: the media checks will fail; $(tail -n 3 "$OUT/pulseaudio.log" 2>/dev/null | tr '\n' ' '))"
     fi
 fi
+fi   # PYONLY
 run() {
     local name=$1; shift
     [ -n "$SELECTED" ] && [[ " $SELECTED " != *" $name "* ]] && return
@@ -147,7 +158,9 @@ run() {
     local start=$(date +%s)
     # every suite gets a fresh home, so settings and add-ons do not leak between suites
     local h=$(mktemp -d /tmp/qbhome.XXXX)
-    if [ "$MODE" = x11 ]; then
+    if [ "$PYONLY" = 1 ]; then
+        HOME=$h XDG_RUNTIME_DIR=$h timeout 1800 "$@" > "$log" 2>&1
+    elif [ "$MODE" = x11 ]; then
         HOME=$h XDG_RUNTIME_DIR=$h timeout 1800 xvfb-run -a -s "-screen 0 1920x1080x24" "$@" > "$log" 2>&1
     else
         HOME=$h XDG_RUNTIME_DIR=$h QT_QPA_PLATFORM=offscreen timeout 1800 "$@" > "$log" 2>&1

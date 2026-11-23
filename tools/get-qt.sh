@@ -26,7 +26,16 @@ if [ -f "$DEST/lib/libQt6Core.so.$VERSION" ] && [ -f "$DEST/bin/qmake" ]; then
 fi
 # Where download.qt.io can be reached (GitHub's runners): aqtinstall, as the workflow qt-linux.yml does; aqtinstall
 # checks every archive against the checksums of Qt's own repository
-if curl -fsS -m 20 -o /dev/null https://download.qt.io/online/qtsdkrepository/ 2>/dev/null; then
+# 0.93.0: asked up to three times (20 s each, 5 s apart) before the script falls back to the pack
+qt_io_reachable() {
+    local try
+    for try in 1 2 3; do
+        curl -fsS -m 20 -o /dev/null https://download.qt.io/online/qtsdkrepository/ 2>/dev/null && return 0
+        [ "$try" = 3 ] || sleep "${QB_QT_IO_PAUSE:-5}"
+    done
+    return 1
+}
+if qt_io_reachable; then
     python3 -m pip install -q --break-system-packages 'aqtinstall==3.3.0' 2>/dev/null \
         || python3 -m pip install -q 'aqtinstall==3.3.0'
     BASE=$(dirname "$(dirname "$DEST")")
