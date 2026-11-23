@@ -1844,14 +1844,16 @@ int main(int argc, char **argv)
                   && readAll(addon + QStringLiteral("/source/resources/catalog.json")).contains("\"release\": \"models-1\""),
               QStringLiteral("it fetches its models from the releases models-1, models-2 and models-3 of this repository"));
         {
-            // 0.93.0: the pinned entry describes 1.2 and this repository; no file names the former repositories
+            // 0.93.0: the pinned entry describes the last published package (the manifest's version, or a lower one while a
+            // release is pending: the entry is updated after the release) and this repository; no file names the former repositories
             const QJsonObject entry = QJsonDocument::fromJson(readAll(src + QStringLiteral("/official-addons/translation-proofreading.json"))).object();
             const QByteArray official = readAll(src + QStringLiteral("/docs/official-addons.md"));
-            check(entry.value(QStringLiteral("version")).toString() == m.value(QStringLiteral("version")).toString()
+            check(!entry.value(QStringLiteral("version")).toString().isEmpty()
+                      && Project::compareVersionText(entry.value(QStringLiteral("version")).toString(), m.value(QStringLiteral("version")).toString()) <= 0
                       && entry.value(QStringLiteral("repository")).toString() == QLatin1String("Shelin-boop/Quillbinder_Collection")
                       && !official.contains("Quillbinder_Translation_Addon") && !official.contains("addon-translation-proofreading-1.1")
                       && !QFileInfo::exists(src + QStringLiteral("/.github/workflows/models-mirror.yml")),
-                  QStringLiteral("the pinned entry and docs/official-addons.md describe the add-on's version in this repository; "
+                  QStringLiteral("the pinned entry and docs/official-addons.md describe the add-on's version (or the last published one) in this repository; "
                                  "no link leads to the former repositories"));
         }
 #ifdef Q_OS_WIN
