@@ -36,7 +36,8 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   error while a folder is synced after a save (not a file system that cannot sync: that is no error, as before), the
   save counts as failed, the journal stays, and the next save or opening finishes it. While an unreadable journal of an
   earlier save could not be moved aside, no save writes a new journal over it: the save waits and its message names the
-  file.
+  file. After a drive error for a folder, the retries no longer report conflicts that are none (a project file or a text
+  "changed elsewhere" that was the program's own), and a picture is not written twice.
 - **Backups.** The note of a backup that an ending by a signal left undone is removed only when the next opening's
   backup was made (in the folder, or waiting beside it); a backup that fails leaves the note for the next opening. An
   older backup that the clean-up cannot delete is told once with the file and the reason. **Restore From Backup** says

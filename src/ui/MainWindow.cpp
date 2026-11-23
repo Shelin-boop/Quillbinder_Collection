@@ -709,6 +709,9 @@ QString MainWindow::plainSaveReason(const QString &err, failure::Kind kind)
     case failure::Kind::NoRights: return tr("The program may not write into the project folder.");
     case failure::Kind::DriveError: return tr("The drive reported an error: it may be failing, or it was removed.");
     case failure::Kind::FolderGone: return tr("The project folder is not there any more (renamed, moved, or its drive is not connected).");
+    case failure::Kind::JournalInTheWay:
+        return tr("The journal of an earlier save is in the way and could not be moved aside; nothing was written. The message "
+                  "below names the file.");
     case failure::Kind::None: break;
     }
     return plainSaveReason(err);

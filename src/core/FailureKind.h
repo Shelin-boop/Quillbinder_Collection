@@ -10,7 +10,7 @@
 namespace qb {
 namespace failure {
 
-enum class Kind { None, DiskFull, ReadOnly, NoRights, DriveError, FolderGone };
+enum class Kind { None, DiskFull, ReadOnly, NoRights, DriveError, FolderGone, JournalInTheWay };
 
 inline Kind &slot()
 {

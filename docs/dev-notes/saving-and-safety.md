@@ -23,7 +23,20 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   `Batch::commit` keeps the journal (`m_journalWritten` stays true, the temporary files stay for `recover`), does not run
   the `after` steps (the changes stay marked as unsaved), and returns false with "The drive reported an error ...".
   Without a journal (one file) the save is told as failed the same way. The syncs before the journal is written and
-  the one after it is removed are still not checked. `savebatch::syncDirChecked` is the public form. The fault library
+  the one after it is removed are still not checked.
+  **Review fixes (0.93.0):** `put(..., done, placed)`: `placed` steps (stamps, `e.read`, index mark and sha,
+  `savedImages`) run once every rename is done, also when the sync then fails (`Batch::afterPlaced`, `placed()`); `done`
+  steps (dirty flags, old-format files) only after a good sync. `savebatch` keeps the set of folders whose checked sync
+  failed (`g_unsynced`): every commit (also an empty one) and `recover()` sync it again; success clears it, `recover()`
+  keeps the journal while it fails (`Recovery::syncFailed`). The syncs before anything is replaced are checked (clean
+  failure, `drop()`). `probeFolderSync` (at `Project::open`) remembers a device whose folder sync errs as "cannot sync";
+  EBADF, EACCES, EPERM also count as "cannot sync". Storage conversion keeps the new format when `placed()`.
+  `keepUnreadable` puts the journal back when a temporary file could not be moved; `Batch::stage` moves a foreign
+  `.qbstage` aside (`.qbstage.kept-<time>`); `failure::Kind::JournalInTheWay`. `recover()` reports no "lost" file whose
+  temporary file is gone and whose target was replaced later. Known: an opening still deletes temporary files when no
+  journal is there (a save that never began to land). Shim: `dirsync` acts only on folders without temporary files or
+  journal (after the renames), `dirsync-early` on the others, `QB_SHIM_ARM=<file>` switches the fault on once the file
+  exists. `savebatch::syncDirChecked` is the public form. The fault library
   has the modes `dirsync` (EIO) and `dirsync-notsup` (ENOTSUP), for folders only.
 - **An unreadable journal that cannot be set aside** (`Recovery::keptFailed` with the journal still there):
   `Project::finishInterruptedSave` returns false with a message that names `settings/journal.json`; no journal of a new

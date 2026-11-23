@@ -23,6 +23,7 @@
 #include <cstdio>
 #include <cstring>
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <unistd.h>
 #elif defined(Q_OS_WIN)
 #include <io.h>
@@ -55,15 +56,28 @@ QByteArray shaOf(const QByteArray &data) { return QCryptographicHash::hash(data,
 // 0.93.0: the result is told. "This file system cannot sync" (EINVAL, ENOTSUP, EOPNOTSUPP, ENOSYS: as for files) and a
 // folder that cannot be opened for reading are no error; any other error of the sync (EIO and the like) is: the drive
 // reported it. `number` gets the error number then.
+QSet<quint64> g_noFolderSync;  // devices whose folders cannot be synced (probeFolderSync)
+QSet<QString> g_unsynced;      // folders whose checked sync failed and has not worked since
+
+bool cannotSync(int e)
+{
+    return e == EINVAL || e == ENOTSUP || e == EOPNOTSUPP || e == ENOSYS || e == EBADF || e == EACCES || e == EPERM;
+}
+
 bool syncFolder(const QString &dir, int *number = nullptr)
 {
 #ifdef Q_OS_UNIX
     const int fd = ::open(QFile::encodeName(dir).constData(), O_RDONLY | O_DIRECTORY | O_CLOEXEC);
     if (fd < 0)
         return true;
+    struct stat st;
+    if (::fstat(fd, &st) == 0 && g_noFolderSync.contains(quint64(st.st_dev))) {
+        ::close(fd);
+        return true;
+    }
     bool ok = true;
     errno = 0;
-    if (::fsync(fd) != 0 && errno != EINVAL && errno != ENOTSUP && errno != EOPNOTSUPP && errno != ENOSYS) {
+    if (::fsync(fd) != 0 && !cannotSync(errno)) {
         if (number)
             *number = errno;
         ok = false;
@@ -140,6 +154,24 @@ QString relativeTo(const QString &folder, const QString &path) { return QDir(fol
 
 } // namespace
 
+bool probeFolderSync(const QString &folder)
+{
+#ifdef Q_OS_UNIX
+    int number = 0;
+    if (syncFolder(folder, &number))
+        return true;
+    struct stat st;
+    if (::stat(QFile::encodeName(folder).constData(), &st) == 0)
+        g_noFolderSync.insert(quint64(st.st_dev));
+    std::fprintf(stderr, "%s: the file system of %s answers a folder's sync with an error (%s); folder syncs there are not checked\n",
+                 "Quillbinder", QFile::encodeName(folder).constData(), std::strerror(number));
+    return false;
+#else
+    Q_UNUSED(folder);
+    return true;
+#endif
+}
+
 void syncDir(const QString &dir) { syncFolder(dir); }
 
 bool syncDirChecked(const QString &dir, int *number) { return syncFolder(dir, number); }
@@ -189,6 +221,17 @@ bool Batch::stage(const QString &target, const QByteArray &data, const QString &
     bool exists = false;
     item.before = shaOfFile(target, &exists);
     QDir().mkpath(QFileInfo(target).absolutePath());
+    // 0.93.0: a temporary file that is not this save's own (left by a journal that could not be set aside) is moved aside,
+    // never written over or deleted
+    if (!contains(target) && QFile::exists(item.staged)) {
+        const QString aside = item.staged + QStringLiteral(".kept-") + QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-HHmmss-zzz"));
+        if (!QFile::rename(item.staged, aside)) {
+            if (error)
+                *error = QObject::tr("The file %1 of an earlier save is in the way and could not be moved aside.")
+                             .arg(QDir::toNativeSeparators(item.staged));
+            return false;
+        }
+    }
     if (!writeSynced(item.staged, data, error))
         return false;
     if (exists)
@@ -206,6 +249,12 @@ void Batch::after(std::function<void()> done)
 {
     if (done)
         m_after << std::move(done);
+}
+
+void Batch::afterPlaced(std::function<void()> placed)
+{
+    if (placed)
+        m_placedSteps << std::move(placed);
 }
 
 bool Batch::commit(QString *error)
@@ -243,8 +292,18 @@ bool Batch::commit(QString *error)
             QSet<QString> staged;
             for (const Item &i : std::as_const(m_items))
                 staged.insert(QFileInfo(i.staged).absolutePath());
-            for (const QString &d : std::as_const(staged))
-                syncFolder(d);
+            for (const QString &d : std::as_const(staged)) {
+                int n = 0;
+                if (!syncFolder(d, &n)) { // 0.93.0: nothing is replaced yet: a clean failure
+                    failure::noteErrno(n);
+                    if (error)
+                        *error = QObject::tr("The drive reported an error when the folder %1 was synced (%2). Nothing was "
+                                             "changed.")
+                                     .arg(QDir::toNativeSeparators(d), QString::fromLocal8Bit(std::strerror(n)));
+                    drop();
+                    return false;
+                }
+            }
         }
         QString why;
         if (!safesave::writeFile(m_journal, QJsonDocument(root).toJson(), &why)) {
@@ -253,7 +312,19 @@ bool Batch::commit(QString *error)
             drop();
             return false;
         }
-        syncFolder(QFileInfo(m_journal).absolutePath());
+        {
+            int n = 0;
+            if (!syncFolder(QFileInfo(m_journal).absolutePath(), &n)) {
+                QFile::remove(m_journal);
+                failure::noteErrno(n);
+                if (error)
+                    *error = QObject::tr("The drive reported an error when the folder %1 was synced (%2). Nothing was "
+                                         "changed.")
+                                 .arg(QDir::toNativeSeparators(QFileInfo(m_journal).absolutePath()), QString::fromLocal8Bit(std::strerror(n)));
+                drop();
+                return false;
+            }
+        }
         journal = true;
         m_journalWritten = true;
     }
@@ -273,14 +344,37 @@ bool Batch::commit(QString *error)
         }
         dirs.insert(QFileInfo(i.target).absolutePath());
     }
+    // 0.93.0: every file is in place: what records that (stamps, what was read, sha) runs now, whatever the sync says
+    m_placedAll = true;
+    {
+        const auto steps = m_placedSteps;
+        m_placedSteps.clear();
+        for (const auto &f : steps)
+            f();
+    }
     // 0.93.0: a folder that the drive could not sync (EIO and the like) keeps the journal: the files are in place, but
     // the drive has not said that they are safe. The save counts as failed (the changes stay marked as not saved) and
-    // the next save or opening finishes it from the journal. (Without a journal, the same: told as failed.)
+    // the next save or opening finishes it from the journal. Folders whose sync failed before are synced again at every
+    // commit, also one with nothing to write: no "saved" without a checked sync.
+    QSet<QString> toSync = dirs;
+    const QString root = QDir::cleanPath(QFileInfo(m_folder).absoluteFilePath());
+    for (const QString &d : std::as_const(g_unsynced))
+        if (QDir::cleanPath(d) == root || QDir::cleanPath(d).startsWith(root + QLatin1Char('/')))
+            toSync.insert(d);
     int syncNumber = 0;
     QString syncedFolder;
-    for (const QString &d : std::as_const(dirs))
-        if (!syncFolder(d, &syncNumber) && syncedFolder.isEmpty())
-            syncedFolder = d;
+    for (const QString &d : std::as_const(toSync)) {
+        int n = 0;
+        if (syncFolder(d, &n)) {
+            g_unsynced.remove(d);
+        } else {
+            g_unsynced.insert(d);
+            if (syncedFolder.isEmpty()) {
+                syncedFolder = d;
+                syncNumber = n;
+            }
+        }
+    }
     if (!syncedFolder.isEmpty()) {
         failure::noteErrno(syncNumber);
         if (error)
@@ -314,6 +408,7 @@ void Batch::drop()
             QFile::remove(i.staged);
     m_items.clear();
     m_after.clear();
+    m_placedSteps.clear();
     m_done = true;
 }
 
@@ -323,7 +418,7 @@ Scope::Scope(Batch *b) : m_prev(g_current) { g_current = b; }
 Scope::~Scope() { g_current = m_prev; }
 
 bool put(const QString &path, const QByteArray &data, QString *error, const QString &title, const QString &place,
-         std::function<void()> done)
+         std::function<void()> done, std::function<void()> placed)
 {
     // a file of another project (a second window's save started from this one) is not this batch's
     Batch *b = current();
@@ -332,6 +427,7 @@ bool put(const QString &path, const QByteArray &data, QString *error, const QStr
     if (b) {
         if (!b->stage(path, data, title, place, error))
             return false;
+        b->afterPlaced(std::move(placed));
         b->after(std::move(done));
         return true;
     }
@@ -342,6 +438,8 @@ bool put(const QString &path, const QByteArray &data, QString *error, const QStr
             *error = QObject::tr("Cannot write %1").arg(why);
         return false;
     }
+    if (placed)
+        placed();
     if (done)
         done();
     return true;
@@ -384,6 +482,10 @@ QString Recovery::text() const
                                                   "files hold the texts of that save and open in a text editor.");
         parts << s;
     }
+    if (!syncFailed.isEmpty())
+        parts << QObject::tr("The last save of this project was put in place, but the drive has not confirmed it: %1 The "
+                             "journal of that save is kept; the program saves again once the drive answers.")
+                     .arg(syncFailed);
     if (waiting()) {
         const QString who = otherDevice.isEmpty() ? QObject::tr("Another computer") : otherDevice;
         parts << QObject::tr("%1 began a save of this project at %2 that has not ended yet, or whose files are still "
@@ -441,6 +543,12 @@ void keepUnreadable(Recovery &r, const QString &folder, const QString &journal, 
             ++r.keptFiles;
         else
             r.keptFailed = true;
+    }
+    // 0.93.0: the journal goes back when a temporary file stayed behind: journal and files are then in one place, and no
+    // save writes over them (the files are told by their names)
+    if (r.keptFailed) {
+        moveFile(dir + QStringLiteral("/journal.json"), journal);
+        r.keptIn.clear();
     }
     syncFolder(QFileInfo(journal).absolutePath());
 }
@@ -516,8 +624,12 @@ Recovery recover(const QString &folder, const QString &journal, const QString &s
                 continue;
             }
             if (!QFile::exists(staged) || shaOfFile(staged) != sha) {
+                const bool gone = !QFile::exists(staged);
                 QFile::remove(staged);
-                r.lost << label;
+                // 0.93.0: a file that is gone and whose target is neither the old nor the new content was replaced
+                // later (by something else): nothing of this save is lost then
+                if (!gone || !exists || now == before)
+                    r.lost << label;
                 continue;
             }
             if (!exists || now == before) {
@@ -544,6 +656,22 @@ Recovery recover(const QString &folder, const QString &journal, const QString &s
                 r.kept << label;
             else
                 r.lost << label;
+        }
+        // 0.93.0: while a folder still fails the checked sync, the journal stays (the files are in place, not yet safe)
+        {
+            const QString rootDir = QDir::cleanPath(QFileInfo(folder).absoluteFilePath());
+            for (const QString &d : QSet<QString>(g_unsynced)) {
+                if (!(QDir::cleanPath(d) == rootDir || QDir::cleanPath(d).startsWith(rootDir + QLatin1Char('/'))))
+                    continue;
+                int n = 0;
+                if (syncFolder(d, &n)) {
+                    g_unsynced.remove(d);
+                } else {
+                    r.syncFailed = QObject::tr("The drive still reports an error for the folder %1 (%2).")
+                                       .arg(QDir::toNativeSeparators(d), QString::fromLocal8Bit(std::strerror(n)));
+                    return r;
+                }
+            }
         }
         QFile::remove(journal);
         syncFolder(QFileInfo(journal).absolutePath());

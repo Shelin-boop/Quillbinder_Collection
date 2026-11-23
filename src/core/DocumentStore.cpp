@@ -341,7 +341,8 @@ QByteArray DocumentStore::serialize(const QString &id, const QTextDocument *doc,
             return rel;
         }
         if (!savebatch::put(QDir(dir).filePath(rel), png, &why, tr("picture in %1").arg(titleOf(id)), placeOf(id),
-                            [this, key, name, rel] {
+                            nullptr,
+                            [this, key, name, rel] { // in place: remembered whatever the folder's sync says
                                 auto e = m_entries.find(key);
                                 if (e != m_entries.end())
                                     e->savedImages.insert(name, rel);
@@ -494,14 +495,18 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
     const bool rtfNow = m_project->storage == StorageFormat::Rtf;
     QString why;
     const bool put = savebatch::put(path, data, &why, notes ? tr("%1 (notes)").arg(titleOf(id)) : titleOf(id), placeOf(id),
-                                    [this, key, path, other, data, rtfNow] {
-                                        // remove a file of the other storage format if one is still there
+                                    [this, key, other] {
+                                        // counts as saved (after a good sync): remove a file of the other storage format
                                         if (QFile::exists(other))
                                             QFile::remove(other);
                                         auto it = m_entries.find(key);
+                                        if (it != m_entries.end())
+                                            it->dirty = false;
+                                    },
+                                    [this, key, path, data, rtfNow] { // in place: what is on disk now
+                                        auto it = m_entries.find(key);
                                         if (it == m_entries.end())
                                             return;
-                                        it->dirty = false;
                                         if (it->stamp.known)
                                             it->stamp = syncsafe::stampOf(path);
                                         it->read = data;
@@ -1092,10 +1097,14 @@ bool DocumentStore::convertStorage(StorageFormat to, QString *error)
         ok = false;
     if (ok && !batch.commit(error))
         ok = false;
+    // 0.93.0: when every file is in place already (only the folders' sync reported an error), the new format stays: it is
+    // what the project file on disk says; the error is passed on
     if (!ok) {
         batch.drop();
-        m_project->storage = was;
-        m_project->markIndexDirty();
+        if (!batch.placed()) {
+            m_project->storage = was;
+            m_project->markIndexDirty();
+        }
     }
     return ok;
 }

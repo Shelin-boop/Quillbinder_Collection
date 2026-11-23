@@ -17,6 +17,7 @@
 #include "core/DocumentStore.h"
 #include "core/Objects.h"
 #include "core/Paths.h"
+#include "core/FailureKind.h"
 #include "core/Project.h"
 #include "core/SaveBatch.h"
 #include "ui/AppSettings.h"
@@ -26,12 +27,14 @@
 #include "AppInfo.h"
 
 #include <QApplication>
+#include <QCryptographicHash>
 #include <QDateTime>
 #include <QDir>
 #include <QDirIterator>
 #include <QElapsedTimer>
 #include <QFile>
 #include <QFileInfo>
+#include <QImage>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -151,26 +154,77 @@ static int childSave(int argc, char **argv)
         std::printf("opened=0 %s\n", qPrintable(err));
         return 0;
     }
+    // the fault is switched on after the opening (the fault library acts once this file exists)
+    const QString arm = qEnvironmentVariable("QB_SHIM_ARM");
+    if (!arm.isEmpty())
+        writeAll(arm, "on");
+    const bool retry = qEnvironmentVariableIsSet("QB_CHILD_RETRY");
+    if (qEnvironmentVariableIsSet("QB_CHILD_CONVERT")) {
+        QString why;
+        const bool ok = p->docs()->convertStorage(StorageFormat::Rtf, &why);
+        const bool disk = readAll(p->indexPath()).contains("storage=\"rtf\"");
+        std::printf("convert=%d memoryRtf=%d diskRtf=%d\nwhy=%s\n", ok ? 1 : 0, p->storage == StorageFormat::Rtf ? 1 : 0, disk ? 1 : 0, qPrintable(why));
+        std::fflush(stdout);
+        std::_Exit(0);
+    }
+    int conflictsKept = 0;
+    QObject::connect(p.get(), &Project::conflictKept, [&conflictsKept] { ++conflictsKept; });
     int n = 0;
+    BinderItem *first = nullptr;
     for (BinderItem *it : p->allItems())
         if (it->hasText() && n < 2) {
+            if (!first)
+                first = it;
             typeInto(p.get(), it, QStringLiteral(" child%1").arg(++n));
         }
+    if (retry && first) {
+        QTextDocument *doc = p->docs()->text(first->id);
+        QImage img(8, 8, QImage::Format_RGB32);
+        img.fill(Qt::red);
+        doc->addResource(QTextDocument::ImageResource, QUrl(QStringLiteral("data:pasted1")), img);
+        QTextCursor c(doc);
+        c.movePosition(QTextCursor::End);
+        c.insertImage(QStringLiteral("data:pasted1"));
+    }
     QString why;
     const bool ok = p->save(&why);
     std::printf("saved=%d journal=%d unsaved=%d\nwhy=%s\n", ok ? 1 : 0, QFile::exists(p->journalFile()) ? 1 : 0,
                 p->hasUnsavedChanges() ? 1 : 0, qPrintable(why));
+    if (retry && first) {
+        typeInto(p.get(), first, QStringLiteral(" again"));
+        QString why2;
+        const bool second = p->save(&why2); // the fault lasts: never "saved" without a checked sync
+        QFile::remove(arm);                 // the fault is gone
+        QString why3;
+        const bool third = p->save(&why3);
+        int images = 0;
+        QDirIterator it(p->contentDir(first->id), {QStringLiteral("*.png")}, QDir::Files, QDirIterator::Subdirectories);
+        while (it.hasNext()) {
+            it.next();
+            ++images;
+        }
+        const int files = int(QDir(p->settingsDir() + QStringLiteral("/conflicts")).entryList(QDir::Files | QDir::NoDotAndDotDot).size());
+        std::printf("second=%d third=%d thirdJournal=%d conflictSignals=%d conflictFiles=%d images=%d unsavedAfter=%d\n", second ? 1 : 0,
+                    third ? 1 : 0, QFile::exists(p->journalFile()) ? 1 : 0, conflictsKept, files, images, p->hasUnsavedChanges() ? 1 : 0);
+    }
     std::fflush(stdout);
     std::_Exit(0); // no closing
 }
 
-static QString runChild(const QString &projectFile, const QString &folder, const QString &mode)
+static QString runChild(const QString &projectFile, const QString &folder, const QString &mode, bool armed = true, bool retry = false,
+                        bool convert = false)
 {
     QProcess pr;
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     env.insert(QStringLiteral("LD_PRELOAD"), QStringLiteral(QB_FAULT_SHIM));
     env.insert(QStringLiteral("QB_SHIM_DIR"), folder);
     env.insert(QStringLiteral("QB_SHIM_MODE"), mode);
+    if (armed)
+        env.insert(QStringLiteral("QB_SHIM_ARM"), folder + QStringLiteral("/../shim-armed-") + QFileInfo(projectFile).baseName());
+    if (retry)
+        env.insert(QStringLiteral("QB_CHILD_RETRY"), QStringLiteral("1"));
+    if (convert)
+        env.insert(QStringLiteral("QB_CHILD_CONVERT"), QStringLiteral("1"));
     env.insert(QStringLiteral("QT_QPA_PLATFORM"), QStringLiteral("offscreen"));
     pr.setProcessEnvironment(env);
     pr.start(QCoreApplication::applicationFilePath(), {QStringLiteral("--child-save"), projectFile});
@@ -374,18 +428,89 @@ static void saving(const QString &W)
     {
         const QString file = make(QStringLiteral("Fsync"));
         const QString folder = QFileInfo(file).absolutePath();
+        // the text file of the first document, as it is before the save
+        QString target;
+        QByteArray oldBytes;
+        {
+            auto look = Project::open(file, &err);
+            for (const BinderItem *it : look->allItems())
+                if (it->title == QLatin1String("A"))
+                    for (const QString &n : {QStringLiteral("text.md"), QStringLiteral("text.rtf")})
+                        if (target.isEmpty() && QFileInfo::exists(look->contentDir(it->id) + QLatin1Char('/') + n))
+                            target = look->contentDir(it->id) + QLatin1Char('/') + n;
+            oldBytes = readAll(target);
+        }
         const QString out = runChild(file, folder, QStringLiteral("dirsync"));
         const QString journal = folder + QStringLiteral("/settings/journal.json");
         check(out.contains(QLatin1String("saved=0")) && out.contains(QLatin1String("unsaved=1")) && out.contains(QLatin1String("drive reported an error"))
                   && QFile::exists(journal),
               QStringLiteral("a folder's sync that the drive answers with EIO: the save is told as failed, the journal is there"), out.left(600));
+        // the next opening finishes the save from the journal, for real: the old bytes are back in the target and the new
+        // ones wait beside it as the temporary file
+        const QByteArray newBytes = readAll(target);
+        check(newBytes != oldBytes && newBytes.contains("child"), QStringLiteral("(the new text is in place after the failed sync)"));
+        writeAll(target, oldBytes);
+        writeAll(target + QStringLiteral(".qbstage"), newBytes);
         auto q = Project::open(file, &err);
         QString all;
         for (const BinderItem *it : q->allItems())
             if (it->hasText())
                 all += q->docs()->plainText(it->id) + QLatin1Char('|');
-        check(q && !QFile::exists(journal) && all.contains(QLatin1String("child1")) && all.contains(QLatin1String("child2")),
-              QStringLiteral("... the next opening finishes the save from the journal (the journal is gone, both texts are there)"), all);
+        check(q && !QFile::exists(journal) && !QFile::exists(target + QStringLiteral(".qbstage")) && all.contains(QLatin1String("child1")) && all.contains(QLatin1String("child2")),
+              QStringLiteral("... the next opening finishes the save from the journal (the journal is gone, the new text is back, both texts are there)"), all);
+        q.reset();
+    }
+    {
+        // S2: a folder's sync that fails before anything is replaced: a clean failure, nothing changed
+        const QString file = make(QStringLiteral("Early"));
+        const QString folder = QFileInfo(file).absolutePath();
+        const QString out = runChild(file, folder, QStringLiteral("dirsync-early"));
+        int staged = 0;
+        QDirIterator it(folder, QDir::Files | QDir::Hidden, QDirIterator::Subdirectories);
+        while (it.hasNext())
+            staged += savebatch::isStaged(it.next()) ? 1 : 0;
+        auto q = Project::open(file, &err);
+        QString all;
+        for (const BinderItem *i : q->allItems())
+            if (i->hasText())
+                all += q->docs()->plainText(i->id) + QLatin1Char('|');
+        check(out.contains(QLatin1String("saved=0")) && out.contains(QLatin1String("Nothing was changed")) && out.contains(QLatin1String("journal=0"))
+                  && staged == 0 && !all.contains(QLatin1String("child")),
+              QStringLiteral("a folder's sync that fails before anything is replaced is a clean failure: no journal, no temporary file, the texts as before"),
+              out.left(500) + all);
+    }
+    {
+        // S1: a storage conversion whose files are all in place when the folder's sync reports an error keeps the new format
+        const QString file = make(QStringLiteral("Convert"));
+        const QString folder = QFileInfo(file).absolutePath();
+        const QString out = runChild(file, folder, QStringLiteral("dirsync"), true, false, true);
+        check(out.contains(QLatin1String("convert=0")) && out.contains(QLatin1String("memoryRtf=1")) && out.contains(QLatin1String("diskRtf=1")),
+              QStringLiteral("a conversion of the storage format under a folder sync that fails leaves the format in memory matching the project file on disk"),
+              out.left(500));
+    }
+    {
+        // a lasting fault: save, retry, save: never "saved" without a checked sync; no false conflicts, no second picture
+        const QString file = make(QStringLiteral("Lasting"));
+        const QString folder = QFileInfo(file).absolutePath();
+        const QString out = runChild(file, folder, QStringLiteral("dirsync"), true, true);
+        check(out.contains(QLatin1String("saved=0")) && out.contains(QLatin1String("second=0")) && out.contains(QLatin1String("third=1"))
+                  && out.contains(QLatin1String("thirdJournal=0")) && out.contains(QLatin1String("unsavedAfter=0")),
+              QStringLiteral("a fault that lasts: the first and the retry are told as failed, the save after it is gone works and the journal goes"),
+              out.left(800));
+        check(out.contains(QLatin1String("conflictSignals=0")) && out.contains(QLatin1String("conflictFiles=0")),
+              QStringLiteral("after a failed folder sync the retries make no false conflict (no copy in settings/conflicts, no notice)"), out.left(800));
+        check(out.contains(QLatin1String("images=1")), QStringLiteral("a picture pasted as data is written once, not again under a new name at the retry"),
+              out.left(800));
+    }
+    {
+        // a file system that cannot sync folders (the fault is on from the opening): remembered, no error at a save
+        const QString file = make(QStringLiteral("Remembered"));
+        const QString folder = QFileInfo(file).absolutePath();
+        const QString out = runChild(file, folder, QStringLiteral("dirsync"), false);
+        check(out.contains(QLatin1String("saved=1")) && out.contains(QLatin1String("journal=0")) && out.contains(QLatin1String("unsaved=0")),
+              QStringLiteral("a file system that answers a folder's sync with an error already at the opening is remembered as one that cannot "
+                             "sync folders: its saves are no failure"),
+              out.left(600));
     }
     {
         const QString file = make(QStringLiteral("Notsup"));
@@ -393,6 +518,72 @@ static void saving(const QString &W)
         const QString out = runChild(file, folder, QStringLiteral("dirsync-notsup"));
         check(out.contains(QLatin1String("saved=1")) && out.contains(QLatin1String("journal=0")) && out.contains(QLatin1String("unsaved=0")),
               QStringLiteral("a file system that cannot sync folders (ENOTSUP) is no error: saved as before"), out.left(600));
+    }
+    {
+        // S3: a temporary file of an earlier save that is not the save's own is moved aside, never written over or deleted
+        const QString file = make(QStringLiteral("Stray"));
+        auto q = Project::open(file, &err);
+        BinderItem *a = nullptr;
+        for (BinderItem *it : q->allItems())
+            if (it->title == QLatin1String("A"))
+                a = it;
+        const QString text = q->contentDir(a->id) + QStringLiteral("/text.md");
+        const QString text2 = QFileInfo::exists(text) ? text : q->contentDir(a->id) + QStringLiteral("/text.rtf");
+        writeAll(text2 + QStringLiteral(".qbstage"), "old temporary content of an earlier save");
+        typeInto(q.get(), a, QStringLiteral(" newer"));
+        QString why;
+        const bool ok = q->save(&why);
+        bool kept = false;
+        for (const QString &f : QDir(QFileInfo(text2).absolutePath()).entryList(QDir::Files | QDir::Hidden))
+            if (f.contains(QLatin1String(".qbstage.kept-")) && readAll(QFileInfo(text2).absolutePath() + QLatin1Char('/') + f).startsWith("old temporary"))
+                kept = true;
+        check(ok && kept && !QFile::exists(text2 + QStringLiteral(".qbstage")) && readAll(text2).contains("newer"),
+              QStringLiteral("a temporary file of an earlier save in the way is moved aside (its content kept), and the save goes through"), why);
+        q.reset();
+    }
+    {
+        // S4: the journal in the way has its own plain sentence
+        check(MainWindow::plainSaveReason(QStringLiteral("x"), failure::Kind::JournalInTheWay).contains(QLatin1String("journal"))
+                  && !MainWindow::plainSaveReason(QStringLiteral("x"), failure::Kind::JournalInTheWay).contains(QLatin1String("could not be written")),
+              QStringLiteral("a journal in the way is told in its own words, not as \"The files could not be written.\""));
+    }
+    {
+        // S8: a temporary file that is gone and a target that was replaced later: nothing "lost" is reported; a target that
+        // still holds the old content is
+        auto journalFor = [&](const QString &name, bool targetLater) {
+            const QString file = make(name);
+            const QString folder = QFileInfo(file).absolutePath();
+            QString rel;
+            {
+                auto q = Project::open(file, &err);
+                for (BinderItem *it : q->allItems())
+                    if (it->title == QLatin1String("A"))
+                        for (const QString &n : {QStringLiteral("text.md"), QStringLiteral("text.rtf")})
+                            if (rel.isEmpty() && QFileInfo::exists(q->contentDir(it->id) + QLatin1Char('/') + n))
+                                rel = QDir(folder).relativeFilePath(q->contentDir(it->id) + QLatin1Char('/') + n);
+            }
+            const QByteArray old = readAll(folder + QLatin1Char('/') + rel);
+            if (targetLater)
+                writeAll(folder + QLatin1Char('/') + rel, "replaced later by something else");
+            QJsonObject f;
+            f.insert(QStringLiteral("file"), rel);
+            f.insert(QStringLiteral("staged"), rel + QStringLiteral(".qbstage"));
+            f.insert(QStringLiteral("sha256"), QString::fromLatin1(QCryptographicHash::hash("never written", QCryptographicHash::Sha256).toHex()));
+            f.insert(QStringLiteral("replaces"), QString::fromLatin1(QCryptographicHash::hash(old, QCryptographicHash::Sha256).toHex()));
+            f.insert(QStringLiteral("size"), 13);
+            f.insert(QStringLiteral("title"), QStringLiteral("A"));
+            QJsonObject root;
+            root.insert(QStringLiteral("version"), 1);
+            root.insert(QStringLiteral("files"), QJsonArray{f});
+            writeAll(folder + QStringLiteral("/settings/journal.json"), QJsonDocument(root).toJson());
+            auto q = Project::open(file, &err);
+            return q->saveRecoveryText();
+        };
+        const QString later = journalFor(QStringLiteral("Later"), true);
+        const QString same = journalFor(QStringLiteral("Same"), false);
+        check(!later.contains(QLatin1String("not complete")) && same.contains(QLatin1String("not complete")),
+              QStringLiteral("a file replaced after the journal's save is no \"lost\" file; one still at its old content is"),
+              later + QLatin1String(" || ") + same);
     }
     {
         // an unreadable journal that cannot be set aside: no save writes over it

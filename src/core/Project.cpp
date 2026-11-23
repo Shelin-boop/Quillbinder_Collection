@@ -295,6 +295,9 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
     // save or a minute after the opening, like any new count; before, the first autosave wrote the project file at
     // once, and on a full disk "Your latest changes could not be saved" appeared before the writer had done anything
     p->m_lastIndexWrite.start();
+    // 0.93.0: one checked sync of the project folder: a file system that answers it with an error (a FUSE file system
+    // that does not implement it) is remembered, so that no save of the session says "the drive reported an error"
+    savebatch::probeFolderSync(p->folderPath());
     return p;
 }
 
@@ -809,17 +812,27 @@ bool Project::finishInterruptedSave(QString *error)
     // 0.93.0: while an unreadable journal could not be set aside, no save writes a journal over it (this save's journal
     // has the same name): the save waits, and says which file is in the way
     if (r.keptFailed && QFile::exists(journalFile())) {
+        failure::note(failure::Kind::JournalInTheWay);
         if (error)
             *error = tr("Not saved yet: the journal of an earlier save, %1, cannot be read and could not be moved aside, so "
                         "this save would overwrite it. Nothing was written; your changes are kept while the project stays "
-                        "open. Check that the folder %2 can be written, or move that file away by hand; the program then "
-                        "saves by itself.")
+                        "open. Make the folder %2 writable (the files of that save, named *.qbstage in the project folder, "
+                        "are kept as they are); the program then sets the journal aside and saves by itself.")
                          .arg(QDir::toNativeSeparators(journalFile()),
                               QDir::toNativeSeparators(settingsDir() + QStringLiteral("/conflicts")));
         return false;
     }
     // 0.81.1 (audit of 0.81.0, F-03): the journal of another computer's save that may still be running or arriving is
     // not written over (this save's journal has the same name) and its files are not replaced: this save waits
+    // 0.93.0: every file of the journal is in place, but a folder's sync still fails: nothing is saved over it unchecked
+    if (!r.syncFailed.isEmpty()) {
+        failure::note(failure::Kind::DriveError);
+        if (error)
+            *error = tr("Not saved yet: the drive reported an error. %1 The journal of the last save is kept and the program "
+                        "tries again by itself.")
+                         .arg(r.syncFailed);
+        return false;
+    }
     if (r.waiting()) {
         if (error)
             *error = tr("Not saved yet: %1 began a save of this project at %2, and that save is not complete here yet (its "
@@ -1731,12 +1744,13 @@ bool Project::saveIndex(QString *error)
         writeUiState();
         return true;
     }
-    if (!savebatch::put(m_indexFile, bytes, &why, tr("project file"), QString(), [this, sha] {
-            m_indexMark = syncsafe::stampOf(m_indexFile);
-            m_indexSha = sha;
+    if (!savebatch::put(m_indexFile, bytes, &why, tr("project file"), QString(), [this] {
             m_indexDirty = false;
             m_countsDirty = false;
             m_lastIndexWrite.start();
+        }, [this, sha] { // in place (also when the folder's sync then fails): what is on disk now
+            m_indexMark = syncsafe::stampOf(m_indexFile);
+            m_indexSha = sha;
         })) {
         if (error)
             *error = why;

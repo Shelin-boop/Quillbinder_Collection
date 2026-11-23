@@ -3,12 +3,17 @@
 //   QB_SHIM_DIR=<folder>   the files whose path starts with it
 //   QB_SHIM_MODE=write     write() fails with ENOSPC
 //   QB_SHIM_MODE=fsync     fsync() and fdatasync() fail with EIO
-//   QB_SHIM_MODE=dirsync   fsync() of a folder (only) fails with EIO (0.93.0: the drive reports an error for a folder)
+//   QB_SHIM_MODE=dirsync   fsync() of a folder (only) fails with EIO (0.93.0: the drive reports an error for a folder), but only
+//                          for a folder that holds no temporary file (.qbstage) and no journal.json: the sync after the files
+//                          are put in place, not the ones before
+//   QB_SHIM_MODE=dirsync-early   the other folders: those with a temporary file or journal.json (before anything is replaced)
 //   QB_SHIM_MODE=dirsync-notsup   fsync() of a folder (only) fails with ENOTSUP (a file system that cannot sync folders)
+//   QB_SHIM_ARM=<file>     the dirsync modes act only once this file exists (the program switches the fault on after opening)
 //   QB_SHIM_MODE=close     close() fails with EIO (the descriptor is closed all the same, as the kernel does)
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
+#include <dirent.h>
 #include <dlfcn.h>
 #include <errno.h>
 #include <limits.h>
@@ -38,6 +43,32 @@ bool mode(const char *m)
     const char *v = getenv("QB_SHIM_MODE");
     return v && strcmp(v, m) == 0;
 }
+bool armed()
+{
+    const char *f = getenv("QB_SHIM_ARM");
+    return !f || !*f || access(f, F_OK) == 0;
+}
+// does the folder hold a temporary file of a save (.qbstage) or the journal?
+bool holdsSaveFiles(int fd)
+{
+    char link[64], path[PATH_MAX];
+    snprintf(link, sizeof link, "/proc/self/fd/%d", fd);
+    const ssize_t n = readlink(link, path, sizeof path - 1);
+    if (n <= 0)
+        return false;
+    path[n] = 0;
+    DIR *d = opendir(path);
+    if (!d)
+        return false;
+    bool found = false;
+    while (struct dirent *e = readdir(d)) {
+        const size_t len = strlen(e->d_name);
+        if ((len > 8 && strcmp(e->d_name + len - 8, ".qbstage") == 0) || strcmp(e->d_name, "journal.json") == 0)
+            found = true;
+    }
+    closedir(d);
+    return found;
+}
 bool isFolder(int fd)
 {
     struct stat st;
@@ -64,9 +95,12 @@ int fsync(int fd)
         errno = EIO;
         return -1;
     }
-    if ((mode("dirsync") || mode("dirsync-notsup")) && below(fd) && isFolder(fd)) {
-        errno = mode("dirsync") ? EIO : ENOTSUP;
-        return -1;
+    if ((mode("dirsync") || mode("dirsync-early") || mode("dirsync-notsup")) && armed() && below(fd) && isFolder(fd)) {
+        const bool hold = mode("dirsync-notsup") ? true : holdsSaveFiles(fd);
+        if (mode("dirsync-notsup") || (mode("dirsync") && !hold) || (mode("dirsync-early") && hold)) {
+            errno = mode("dirsync-notsup") ? ENOTSUP : EIO;
+            return -1;
+        }
     }
     return real(fd);
 }

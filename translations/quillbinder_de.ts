@@ -3464,6 +3464,22 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
         <source>Permission denied</source>
         <translation>Zugriff verweigert</translation>
     </message>
+    <message>
+        <source>The drive reported an error when the folder %1 was synced (%2). Nothing was changed.</source>
+        <translation>Das Laufwerk hat beim Abgleichen des Ordners %1 einen Fehler gemeldet (%2). Es wurde nichts geändert.</translation>
+    </message>
+    <message>
+        <source>The last save of this project was put in place, but the drive has not confirmed it: %1 The journal of that save is kept; the program saves again once the drive answers.</source>
+        <translation>Das letzte Speichern dieses Projekts wurde an seinen Platz gebracht, aber das Laufwerk hat es nicht bestätigt: %1 Das Journal dieses Speicherns bleibt erhalten; das Programm speichert erneut, sobald das Laufwerk antwortet.</translation>
+    </message>
+    <message>
+        <source>The drive still reports an error for the folder %1 (%2).</source>
+        <translation>Das Laufwerk meldet für den Ordner %1 weiterhin einen Fehler (%2).</translation>
+    </message>
+    <message>
+        <source>The file %1 of an earlier save is in the way and could not be moved aside.</source>
+        <translation>Die Datei %1 eines früheren Speicherns ist im Weg und ließ sich nicht beiseite legen.</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>
@@ -12567,6 +12583,10 @@ Die Schriften sind sofort nutzbar. Sie bleiben im Ordner des Programms: Andere P
         <source>Open it now? The project open now is closed first (it stays as it is).</source>
         <translation>Jetzt öffnen? Das jetzt offene Projekt wird zuerst geschlossen (es bleibt, wie es ist).</translation>
     </message>
+    <message>
+        <source>The journal of an earlier save is in the way and could not be moved aside; nothing was written. The message below names the file.</source>
+        <translation>Das Journal eines früheren Speicherns ist im Weg und ließ sich nicht beiseite legen; es wurde nichts geschrieben. Die Meldung unten nennt die Datei.</translation>
+    </message>
 </context>
 <context>
     <name>qb::ManageIconsDialog</name>
@@ -17265,6 +17285,14 @@ Nicht geschrieben:
     <message>
         <source>Not saved yet: the journal of an earlier save, %1, cannot be read and could not be moved aside, so this save would overwrite it. Nothing was written; your changes are kept while the project stays open. Check that the folder %2 can be written, or move that file away by hand; the program then saves by itself.</source>
         <translation>Noch nicht gespeichert: Das Journal eines früheren Speicherns, %1, kann nicht gelesen werden und ließ sich nicht beiseite legen; dieses Speichern würde es überschreiben. Es wurde nichts geschrieben; Ihre Änderungen bleiben erhalten, solange das Projekt offen ist. Prüfen Sie, ob der Ordner %2 beschreibbar ist, oder verschieben Sie die Datei von Hand; danach speichert das Programm von selbst.</translation>
+    </message>
+    <message>
+        <source>Not saved yet: the drive reported an error. %1 The journal of the last save is kept and the program tries again by itself.</source>
+        <translation>Noch nicht gespeichert: Das Laufwerk hat einen Fehler gemeldet. %1 Das Journal des letzten Speicherns bleibt erhalten, und das Programm versucht es von selbst erneut.</translation>
+    </message>
+    <message>
+        <source>Not saved yet: the journal of an earlier save, %1, cannot be read and could not be moved aside, so this save would overwrite it. Nothing was written; your changes are kept while the project stays open. Make the folder %2 writable (the files of that save, named *.qbstage in the project folder, are kept as they are); the program then sets the journal aside and saves by itself.</source>
+        <translation>Noch nicht gespeichert: Das Journal eines früheren Speicherns, %1, kann nicht gelesen werden und ließ sich nicht beiseite legen; dieses Speichern würde es überschreiben. Es wurde nichts geschrieben; Ihre Änderungen bleiben erhalten, solange das Projekt offen ist. Machen Sie den Ordner %2 beschreibbar (die Dateien dieses Speicherns, im Projektordner als *.qbstage benannt, bleiben unverändert); das Programm legt das Journal dann beiseite und speichert von selbst.</translation>
     </message>
 </context>
 <context>
