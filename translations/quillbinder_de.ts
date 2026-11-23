@@ -10894,6 +10894,62 @@ Wenn Sie das AppImage verschieben, wählen Sie diesen Menüeintrag erneut.</tran
         <translation>Editor-&amp;Layout</translation>
     </message>
     <message>
+        <source>La&amp;yout</source>
+        <translation>La&amp;yout</translation>
+    </message>
+    <message>
+        <source>Upright window</source>
+        <translation>Hochformatfenster</translation>
+    </message>
+    <message>
+        <source>Wide window</source>
+        <translation>Querformatfenster</translation>
+    </message>
+    <message>
+        <source>Editor in the &amp;Middle</source>
+        <translation>Editor in der &amp;Mitte</translation>
+    </message>
+    <message>
+        <source>Editor at the &amp;Bottom</source>
+        <translation>Editor &amp;unten</translation>
+    </message>
+    <message>
+        <source>Binder &amp;Left</source>
+        <translation>Binder &amp;links</translation>
+    </message>
+    <message>
+        <source>Binder &amp;Right</source>
+        <translation>Binder &amp;rechts</translation>
+    </message>
+    <message>
+        <source>Binder, Editor, Inspector</source>
+        <translation>Binder, Editor, Inspektor</translation>
+    </message>
+    <message>
+        <source>Binder, Inspector, Editor</source>
+        <translation>Binder, Inspektor, Editor</translation>
+    </message>
+    <message>
+        <source>Editor, Binder, Inspector</source>
+        <translation>Editor, Binder, Inspektor</translation>
+    </message>
+    <message>
+        <source>Editor, Inspector, Binder</source>
+        <translation>Editor, Inspektor, Binder</translation>
+    </message>
+    <message>
+        <source>Inspector, Binder, Editor</source>
+        <translation>Inspektor, Binder, Editor</translation>
+    </message>
+    <message>
+        <source>Inspector, Editor, Binder</source>
+        <translation>Inspektor, Editor, Binder</translation>
+    </message>
+    <message>
+        <source>&amp;Reset Layout</source>
+        <translation>Layout &amp;zurücksetzen</translation>
+    </message>
+    <message>
         <source>Tool&amp;bars</source>
         <translation>Symbol&amp;leisten</translation>
     </message>

@@ -134,7 +134,7 @@ The window has three columns:
 | **Editor** (middle) | Shows what you selected in the binder: text, a corkboard of index cards, or an outline. |
 | **Inspector** (right) | Information about the current document: synopsis, notes, bookmarks, metadata, snapshots, and comments. |
 
-Hide the binder with **Ctrl+Alt+B** and the inspector with **Ctrl+Alt+I** to get more room. The colors and fonts of all three, and of the corkboard, outliner, and composition mode, come from the theme (**Window > Themes**) and can be changed area by area (section 16), also with a right-click on the area (**Appearance**). Every project keeps its own look.
+Hide the binder with **Ctrl+Alt+B** and the inspector with **Ctrl+Alt+I** to get more room. That is the window as long as it is wide; a window taller than wide arranges the same three areas differently (next section). The colors and fonts of all three, and of the corkboard, outliner, and composition mode, come from the theme (**Window > Themes**) and can be changed area by area (section 16), also with a right-click on the area (**Appearance**). Every project keeps its own look.
 
 The **toolbar** at the top holds, from left to right: the **View** button (binder, collections, inspector, layouts), new document (with a menu for folders, templates, and import), new folder, trash, **undo** and **redo**, the **search** button (project search; the arrow beside it lists the other search tools: Search in Document, Project Replace, Find by Formatting), the **quick search** field, the three view buttons (text, corkboard, outliner), project bookmarks, quick reference, comments and footnotes, compile, composition mode, the **microphone** of Speech Transcription (when that add-on is installed), and the inspector button. You decide what it holds (see "Toolbars of your own" below).
 
@@ -164,6 +164,17 @@ The **footer** of each editor shows the word and character count (select text to
 A submenu shows short names: **File > Import > Files**, **Documents > Split > at Selection**, **Navigate > Open > as Quick Reference**. The shortcut of a command is shown next to it and can be changed (section 19). Every entry of a menu has a letter of its own (underlined when you hold **Alt**), so **Alt** and the letters reach every command.
 
 Without an open project, the menus **Insert**, **Navigate**, **Project**, **Documents**, and **Format** are grayed out, and so are the commands of the other menus that need a text or a binder (Find, Zoom, the editor layout, Focus Binder ...). What works without a project: creating, opening, and importing projects, converting files, installing updates and add-ons, the options, themes and layouts, the writing tools that need no project, and Help.
+
+### The panes by the window's shape
+
+The window arranges the binder, the editor, and the inspector by its shape, and changes by itself when the shape changes (you drag the window taller than wide, or you turn a tablet). A square window counts as wide.
+
+- **Wide window** (wider than tall, or square): three columns. Choose their order under **View > Layout > Wide window**: any of the six orders of binder, editor, and inspector. The widths are set by the lines between the columns.
+- **Upright window** (taller than wide): two rows below the toolbars. One row is the editor, in the full width of the window; the other holds the binder and the inspector beside each other. Under **View > Layout > Upright window**, **Editor in the Middle** puts the editor's row above the other one, **Editor at the Bottom** below it; **Binder Left** and **Binder Right** choose the side of the binder (the inspector takes the other). The heights of the two rows and the widths of the binder and the inspector are set by the lines between them. With the on-screen keyboard showing (Android), the row of the binder and the inspector keeps its height; move the line if you want it different.
+- A hidden binder or inspector leaves its room to the other one in the upright row, at full width; with both hidden, the editor has the whole window. Two editors (**View > Editor Layout**) stay inside the editor's place.
+- **View > Layout > Reset Layout** puts the shape the window has now back to its start values: binder, editor, inspector in a wide window; the editor in the middle and the binder left in an upright one.
+
+Both groups are always in the menu; each takes effect when the window has that shape, and each shape comes back as you left it (places and sizes). The choices belong to this computer or tablet and are kept in the program's settings, never in a project: a project that you share between computers keeps each device's arrangement, and nothing about it is written into the project's files.
 
 ### Layouts
 

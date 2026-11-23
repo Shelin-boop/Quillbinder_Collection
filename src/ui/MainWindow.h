@@ -27,6 +27,8 @@ class QLineEdit;
 class QMenu;
 class QTimer;
 class QSplitter;
+class QSettings;
+class QResizeEvent;
 class QToolBar;
 class QToolButton;
 class QTextDocument;
@@ -159,6 +161,23 @@ public:
     QString binderAffects() const { return m_binderAffects; }
     void setBinderAffects(const QString &mode);
 
+    // ---- the panes placed by the window's shape (MainWindowPanes.cpp, 0.93.0; kept per device in the settings)
+    // Wide window (not taller than wide): three columns in a chosen order ("BEI" = binder, editor, inspector; the six
+    // orders). Upright window: the editor's row and a row with the binder and the inspector beside each other.
+    bool isUpright() const { return m_upright; }
+    QString wideOrder() const { return m_wideOrder; }
+    bool uprightEditorFirst() const { return m_uprightEditorFirst; }
+    bool uprightBinderLeft() const { return m_uprightBinderLeft; }
+    void setWideOrder(const QString &order);
+    void setUprightEditorFirst(bool first);
+    void setUprightBinderLeft(bool left);
+    void resetPaneLayout();                       // View > Layout > Reset Layout: the shown shape's start values
+    void followWindowShape();                     // arranges the panes for the window's shape now
+    QSplitter *paneSplitter() const { return m_mainSplit; }
+    QSplitter *sideSplitter() const { return m_sideSplit; }
+    QList<int> paneSizes() const;                 // {binder, editor, inspector} of the wide shape (stored or shown)
+    void savePaneSettings();
+
     // ---- writing tools (MainWindowTools.cpp): what toolhost::Host asks of the window
     QString toolProjectTitle() const;
     bool toolCanInsert() const;
@@ -208,6 +227,7 @@ public:
 protected:
     void closeEvent(QCloseEvent *e) override;
     void changeEvent(QEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
 
 private:
     // File > Project Format (MainWindowFormat.cpp)
@@ -464,6 +484,28 @@ private:
     Inspector *m_inspector = nullptr;
     QSplitter *m_mainSplit = nullptr;
     QSplitter *m_editorSplit = nullptr;
+    // the panes placed by the window's shape (MainWindowPanes.cpp)
+    QSplitter *m_sideSplit = nullptr;               // upright: the binder and the inspector beside each other
+    QWidget *m_editorArea = nullptr;
+    bool m_upright = false;                         // the arrangement shown now
+    bool m_shapeCheckQueued = false;
+    QString m_wideOrder = QStringLiteral("BEI");
+    bool m_uprightEditorFirst = true;               // "Editor in the Middle": the editor's row is the upper one
+    bool m_uprightBinderLeft = true;
+    int m_wideSizes[3] = {260, 800, 300};           // by pane: binder, editor, inspector
+    double m_uprightEditorShare = 0.62;             // the editor's row of the height
+    double m_uprightBinderShare = 0.46;             // the binder's part of the side row
+    QActionGroup *m_paneGroups[3] = {nullptr, nullptr, nullptr};
+    void initPaneSplitters();
+    void createPaneActions();
+    void loadPaneSettings(QSettings &s);
+    void arrangePanes();
+    void applyPaneSizes();
+    void capturePaneSizes();
+    void updatePaneRow();
+    void updatePaneActions();
+    bool wantsUpright() const;
+    QWidget *paneWidget(int pane) const;
     EditorPane *m_panes[2] = {nullptr, nullptr};
     EditorPane *m_active = nullptr;
     QPointer<CompositionWindow> m_composition;

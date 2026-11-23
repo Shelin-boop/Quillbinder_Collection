@@ -314,6 +314,14 @@ void MainWindow::createMenus()
     add(view, {"viewText", "viewCork", "viewOutline", ""});
     QMenu *layout = view->addMenu(tr("Editor &Layout"));
     add(layout, {"noSplit", "splitH", "splitV"});
+    // 0.93.0: where the binder, the editor and the inspector sit, by the window's shape
+    QMenu *panes = view->addMenu(tr("La&yout"));
+    panes->setObjectName(QStringLiteral("paneLayoutMenu"));
+    panes->addSection(tr("Upright window"));
+    add(panes, {"layoutEditorMiddle", "layoutEditorBottom", "", "layoutBinderLeft", "layoutBinderRight"});
+    panes->addSection(tr("Wide window"));
+    add(panes, {"layoutOrderBEI", "layoutOrderBIE", "layoutOrderEBI", "layoutOrderEIB", "layoutOrderIBE", "layoutOrderIEB",
+                "", "layoutReset"});
     add(view, {"", "showBinder", "showCollections", "showInspector", ""});
     QMenu *bars = view->addMenu(tr("Tool&bars"));
     // 0.91.0: the rows' switches, a switch per toolbar, the standard places
@@ -1415,7 +1423,7 @@ QVariantMap MainWindow::captureLayout(bool withWindowSize) const
     st[QStringLiteral("formatBar")] = a[QStringLiteral("showFormatBar")]->isChecked();
     st[QStringLiteral("iconBar")] = a[QStringLiteral("showIconBar")]->isChecked();
     st[QStringLiteral("ruler")] = AppSettings::instance().showRuler;
-    const QList<int> sizes = m_mainSplit->sizes();
+    const QList<int> sizes = paneSizes(); // by pane (binder, editor, inspector), whatever the shape of the window
     const double total = qMax(1, sizes.value(0) + sizes.value(1) + sizes.value(2));
     if (binder && sizes.value(0) > 0)
         st[QStringLiteral("binderShare")] = share(sizes.value(0) / total);
@@ -1501,11 +1509,20 @@ void MainWindow::applyLayout(const QVariantMap &st)
         setSplit(Qt::Vertical, false);
 
     // widths: shares of the window, so a layout fits small and large screens
-    const QList<int> now = m_mainSplit->sizes();
-    const int total = qMax(300, now.value(0) + now.value(1) + now.value(2));
+    // (0.93.0: they are the wide shape's widths by pane; an upright window keeps them for when it is wide again)
+    const QList<int> now = paneSizes();
+    const int total = m_upright ? qMax(300, width()) : qMax(300, now.value(0) + now.value(1) + now.value(2));
     const int bw = binder ? int(total * qBound(0.05, st.value(QStringLiteral("binderShare"), 0.2).toDouble(), 0.6)) : 0;
     const int iw = inspector ? int(total * qBound(0.05, st.value(QStringLiteral("inspectorShare"), 0.22).toDouble(), 0.6)) : 0;
-    m_mainSplit->setSizes({bw, qMax(100, total - bw - iw), iw});
+    {
+        if (bw > 0)
+            m_wideSizes[0] = bw;
+        m_wideSizes[1] = qMax(100, total - bw - iw);
+        if (iw > 0)
+            m_wideSizes[2] = iw;
+        if (!m_upright)
+            applyPaneSizes();
+    }
     if (isSplit()) {
         const QList<int> es = m_editorSplit->sizes();
         const int et = qMax(100, es.value(0) + es.value(1));

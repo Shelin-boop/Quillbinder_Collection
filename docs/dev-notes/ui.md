@@ -2,6 +2,34 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.93.0 beta (2026-11-23): the panes placed by the window's shape
+
+- **Where**: `ui/MainWindowPanes.cpp` (`MainWindow::initPaneSplitters`, `arrangePanes`, `applyPaneSizes`, `capturePaneSizes`,
+  `followWindowShape`, `createPaneActions`; the state is `m_upright`, `m_wideOrder`, `m_uprightEditorFirst`,
+  `m_uprightBinderLeft`, `m_wideSizes[3]`, `m_uprightEditorShare`, `m_uprightBinderShare`). `m_mainSplit` is the one splitter
+  below the toolbars: three columns (horizontal) when wide, two rows (vertical) when upright; `m_sideSplit` is the row of the
+  binder and the inspector (upright only; when wide it hangs hidden under the window with no children). The three panes are
+  moved with `QSplitter::insertWidget` (a moved pane forgets that it was hidden: `arrangePanes` sets it again from the
+  switches `showBinder` / `showInspector`; `updatePaneRow` hides the side row when both are hidden).
+- **Shape**: `wantsUpright()` is height > width (a square is wide); with the on-screen keyboard showing, its height is added,
+  so a tablet held upright does not turn "wide" when the keyboard takes room. `resizeEvent` queues `followWindowShape` (a
+  zero timer: no re-parenting inside a resize). The wide shape's least width is 808 px (binder 100 + editor 389 + inspector
+  311 + lines), so a window asked for 736 px is held at 808 until the shape has changed; the upright window's least size is 525
+  x 578 (the binder 100 and the inspector 311 fit beside each other from 525 px).
+- **Stretch**: the editor's row has stretch 1 and the side row 0 (a shorter window, as with the keyboard, takes the height from
+  the editor's row only). Sizes are set in pixels of the splitter's present size (weights that do not add up to it gave
+  wrong rows).
+- **Kept**: per device, in `QSettings` (never in the project): `window/paneOrder` ("BEI" ...), `window/uprightEditorFirst`,
+  `window/uprightBinderLeft`, `window/uprightShares` (editor row of the height, binder of the side row), and `window/mainSplit`
+  (now by pane: binder, editor, inspector; before by place, the start order is the same). Sizes are taken over (`capturePaneSizes`)
+  when the writer moves a line (`splitterMoved`), when a choice changes and at closing; not at every resize, so that a
+  window made narrow does not change what the wide shape remembers. A size set by code does not count unless it calls
+  `capturePaneSizes` (tests move a line with the mouse events: `QSplitter::moveSplitter` is protected).
+- **Named layouts** (`captureLayout` / `applyLayout`) keep their shares of the wide shape by pane (`paneSizes()`); applied in an
+  upright window they are stored for the wide shape. They carry no order.
+- **Menu**: View > Layout (`paneLayoutMenu`, actions `layoutEditorMiddle`, `layoutEditorBottom`, `layoutBinderLeft`,
+  `layoutBinderRight`, `layoutOrder<BEI...>`, `layoutReset`), radio groups, always enabled. Test: `tests/v0930d_tests.cpp`.
+
 ## 0.92.0 beta (2026-11-20): the marks of a binder row, the fixed mind map, the shown lock
 
 - **Row marks** (`ui/RowMarks.*`): the pin and the padlock are painted (no picture files), left of the label dot:

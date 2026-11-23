@@ -247,6 +247,7 @@ MainWindow::MainWindow()
     m_binder = new BinderPanel(m_mainSplit);
     // the editors with the bar for offers of the format bar above them
     auto *editorArea = new QWidget(m_mainSplit);
+    m_editorArea = editorArea;
     editorArea->setObjectName(QStringLiteral("editorArea"));
     auto *editorLayout = new QVBoxLayout(editorArea);
     editorLayout->setContentsMargins(0, 0, 0, 0);
@@ -268,6 +269,7 @@ MainWindow::MainWindow()
     m_mainSplit->setStretchFactor(2, 0);
     m_mainSplit->setSizes({260, 800, 300});
     m_mainSplit->setChildrenCollapsible(false);
+    initPaneSplitters(); // 0.93.0: the row of the binder and the inspector for an upright window
     setCentralWidget(m_mainSplit);
     m_active = m_panes[0];
     connectPane(m_panes[0]);
@@ -281,6 +283,7 @@ MainWindow::MainWindow()
     createActions();
     createExtraActions();
     createToolActions();
+    createPaneActions(); // 0.93.0: View > Layout
     createMenus();
     commands::addFromMenuBar(menuBar());
     for (QAction *ac : actions()) // commands that sit in no menu
@@ -534,11 +537,9 @@ MainWindow::MainWindow()
         m_barDock = new BarDock(this, gripBars, {rowOne, rowTwo});
         m_barDock->load();
     }
-    const QVariantList sizes = s.value(QStringLiteral("window/mainSplit")).toList();
-    if (sizes.size() == 3)
-        m_mainSplit->setSizes({sizes[0].toInt(), sizes[1].toInt(), sizes[2].toInt()});
     if (!s.contains(QStringLiteral("window/geometry")))
         resize(1300, 820);
+    loadPaneSettings(s); // 0.93.0: the places and sizes of both shapes; arranged for the window's shape
     a[QStringLiteral("showInspector")]->setChecked(s.value(QStringLiteral("window/inspector"), true).toBool());
     a[QStringLiteral("showBinder")]->setChecked(s.value(QStringLiteral("window/binder"), true).toBool());
     a[QStringLiteral("showToolbar")]->setChecked(s.value(QStringLiteral("window/toolbar"), true).toBool());
@@ -3691,8 +3692,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
     QSettings s;
     s.setValue(QStringLiteral("window/geometry"), saveGeometry());
     s.setValue(QStringLiteral("window/state"), saveState());
-    const QList<int> sizes = m_mainSplit->sizes();
-    s.setValue(QStringLiteral("window/mainSplit"), QVariantList{sizes.value(0), sizes.value(1), sizes.value(2)});
+    savePaneSettings(); // 0.93.0: the places and sizes (both shapes, per device)
     s.setValue(QStringLiteral("window/inspector"), a[QStringLiteral("showInspector")]->isChecked());
     s.setValue(QStringLiteral("window/binder"), a[QStringLiteral("showBinder")]->isChecked());
     s.setValue(QStringLiteral("window/toolbar"), a[QStringLiteral("showToolbar")]->isChecked());

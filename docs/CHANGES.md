@@ -9,6 +9,15 @@ A new AppImage and a program update for Linux. Nothing changes in how you write;
 in the parts it is built from. The add-ons of 0.80.0 and later are rebuilt for this version: the ones that bring
 their own libraries now need 0.93.0 (the check for updates and **File > Install Update or Add-on** tell you).
 
+- **The panes placed by the window's shape.** A window taller than wide now shows two rows: the editor in the full
+  width, and the binder and the inspector beside each other in the other row. **View > Layout > Upright window**
+  chooses whether the editor's row is the upper one (Editor in the Middle) or the lower one (Editor at the Bottom),
+  and whether the binder is left or right. A wide window (a square one counts as wide) keeps three columns; **View >
+  Layout > Wide window** chooses any of the six orders. The window follows its shape by itself (also when a tablet is
+  turned), and each shape comes back as you left it, places and sizes. **Reset Layout** puts the shown shape back to
+  its start values. The choices are kept per computer in the program's settings, never in a project. A hidden binder
+  or inspector leaves its room to the other one. With the on-screen keyboard (Android) the row of the binder and the
+  inspector keeps its height.
 - **Qt 6.12.1** (before: 6.12.0). The libraries Qt carries inside itself are newer, with safety fixes: zlib 1.4,
   HarfBuzz 15.1.0, PCRE2 10.49, libpng 1.6.59, libjpeg-turbo 3.2.1, FreeType 2.15.0 and md4c 0.6.0. Because the
   AppImage carries them, a program update alone cannot bring them: the check for updates offers the new AppImage
