@@ -88,6 +88,11 @@ public:
     // 0.92.0: the backup with a manual save (a notice that does not take the keyboard, once per cause)
     void tellManualBackupProblem(bool made, bool waits, const QString &why);
     QString lastBackupProblem() const { return m_lastBackupProblem; }
+    // 0.93.0: older backups that the clean-up could not delete (the last text, for the checks)
+    QString lastBackupCleanupNote() const { return m_lastBackupCleanupNote; }
+    void tellBackupCleanup(const QStringList &notes);
+    // 0.93.0: the last message of Restore From Backup, in its form (restored, restored incompletely, not restored)
+    QString lastRestoreText() const { return m_lastRestoreText; }
     // 0.93.0: the message about an emergency copy (the three places that make one)
     void tellEmergencyCopy(const EmergencyReport &rep, const QString &title, const QString &tail);
     // the lock file that could not be written last (0.65.0, audit F13; for the tests)
@@ -456,6 +461,8 @@ private:
     QPointer<CompositionWindow> m_composition;
     QStringList m_lastSettingsNotes;
     QString m_lastBackupProblem;
+    QString m_lastBackupCleanupNote;
+    QString m_lastRestoreText;
     QSet<QString> m_backupCausesTold;                       // 0.92.0: the notice of a manual save's backup, per cause
     failure::Kind m_lastSaveKind = failure::Kind::None;     // 0.92.0: the kind of the last failed save
     UpdateChecker *m_updates = nullptr;                     // 0.92.0

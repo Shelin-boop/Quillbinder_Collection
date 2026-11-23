@@ -35,6 +35,7 @@
 #endif
 
 #include "core/TestSwitches.h"
+#include <QSet>
 
 namespace qb {
 namespace backup {
@@ -445,8 +446,36 @@ QStringList formerBackupsFor(const Project *p, const QString &dir)
     return former.isEmpty() ? QStringList() : zipsIn(former, QStringLiteral("* bak *.zip"));
 }
 
-bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath, QString *error, Where where, bool *waiting)
+namespace {
+// 0.93.0: a backup of the clean-up that cannot be deleted is told, once per file and session, with the reason
+// (tests: QB_TEST_FAIL_REMOVE holds a part of the file's name)
+bool removeBackupFile(const QString &path, QStringList *notes)
 {
+    static QSet<QString> told;
+    QString why;
+    bool ok;
+    const QString fake = QB_TEST_ENV("QB_TEST_FAIL_REMOVE");
+    if (!fake.isEmpty() && path.contains(fake)) {
+        ok = false;
+        why = QObject::tr("Permission denied");
+    } else {
+        QFile f(path);
+        ok = f.remove() || !QFile::exists(path);
+        why = f.errorString();
+    }
+    if (!ok && notes && !told.contains(path)) {
+        told.insert(path);
+        *notes << QObject::tr("%1: %2").arg(QDir::toNativeSeparators(path), why);
+    }
+    return ok;
+}
+} // namespace
+
+bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath, QString *error, Where where, bool *waiting,
+                   QStringList *cleanupNotes)
+{
+    if (cleanupNotes)
+        cleanupNotes->clear();
     if (waiting)
         *waiting = false;
     // (0.90.3: an empty *error after a backup means "complete": a text left in it from an earlier step is not kept)
@@ -685,13 +714,13 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
             (isIncomplete(f) ? incomplete : complete) << f;
         const QString made = QFileInfo(path).absoluteFilePath();
         // the backup just made is never one of those deleted, whatever its name says (0.81.0)
-        auto trim = [&made](QStringList &list, int keepCount) {
+        auto trim = [&made, cleanupNotes](QStringList &list, int keepCount) {
             for (int i = 0; list.size() > keepCount && i < list.size();) {
                 if (list.at(i) == made) {
                     ++i;
                     continue;
                 }
-                QFile::remove(list.takeAt(i));
+                removeBackupFile(list.takeAt(i), cleanupNotes);
             }
         };
         if (res.skipped.isEmpty()) {
@@ -701,7 +730,7 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
                 const QString oldest = ageKey(QFileInfo(complete.first()));
                 for (const QString &f : std::as_const(incomplete))
                     if (f != made && ageKey(QFileInfo(f)) < oldest)
-                        QFile::remove(f);
+                        removeBackupFile(f, cleanupNotes);
             }
         } else {
             // 0.81.0: older complete backups stay until a complete one is made; of the incomplete ones, the newest
@@ -739,18 +768,20 @@ QString placeOf(const QString &projectFile)
 }
 } // namespace
 
-void markDue(const QString &projectFile)
+bool markDue(const QString &projectFile)
 {
     QStringList list = dueList();
     const QString place = placeOf(projectFile);
     if (list.contains(place))
-        return;
+        return true;
     list << place;
     QDir().mkpath(QFileInfo(dueFile()).absolutePath());
-    safesave::writeFile(dueFile(), list.join(QLatin1Char('\n')).toUtf8() + '\n');
+    return safesave::writeFile(dueFile(), list.join(QLatin1Char('\n')).toUtf8() + '\n'); // 0.93.0: the result is told
 }
 
-bool takeDue(const QString &projectFile)
+bool isDue(const QString &projectFile) { return dueList().contains(placeOf(projectFile)); }
+
+bool clearDue(const QString &projectFile)
 {
     QStringList list = dueList();
     if (!list.removeAll(placeOf(projectFile)))
@@ -759,6 +790,14 @@ bool takeDue(const QString &projectFile)
         QFile::remove(dueFile());
     else
         safesave::writeFile(dueFile(), list.join(QLatin1Char('\n')).toUtf8() + '\n');
+    return true;
+}
+
+bool takeDue(const QString &projectFile)
+{
+    if (!isDue(projectFile))
+        return false;
+    clearDue(projectFile);
     return true;
 }
 

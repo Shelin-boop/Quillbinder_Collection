@@ -37,6 +37,11 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   save counts as failed, the journal stays, and the next save or opening finishes it. While an unreadable journal of an
   earlier save could not be moved aside, no save writes a new journal over it: the save waits and its message names the
   file.
+- **Backups.** The note of a backup that an ending by a signal left undone is removed only when the next opening's
+  backup was made (in the folder, or waiting beside it); a backup that fails leaves the note for the next opening. An
+  older backup that the clean-up cannot delete is told once with the file and the reason. **Restore From Backup** says
+  "restored", "restored incompletely" (headed so, with the files named) or "not restored", and says when the
+  restored project's title could not be saved.
 
 ## 0.92.0 beta (2026-11-20)
 

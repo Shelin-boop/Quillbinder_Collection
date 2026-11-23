@@ -29,6 +29,15 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   `Project::finishInterruptedSave` returns false with a message that names `settings/journal.json`; no journal of a new
   save is written over it. The notice of the recovery is told once (`m_keptFailedTold`); every save tries to set the
   journal aside again.
+- **The backup note** (`backup::isDue`, `clearDue`; `takeDue` = both; `markDue` returns its write's result). The
+  opening (`MainWindow::openProject`) looks with `isDue` and clears the note only when its backup was made
+  (`ok`) or waits in the work folder (`waiting`); with "back up at closing" switched off the note is cleared at once.
+  **Clean-up**: `backupProject(..., &waiting, &cleanupNotes)`; `removeBackupFile` tells a backup that cannot be deleted,
+  once per file and session ("<file>: <reason>"); `MainWindow::tellBackupCleanup`. Test switch
+  `QB_TEST_FAIL_REMOVE` (a part of the file's name). **Restore** (`MainWindow::restoreBackupFile`): the forms are
+  restored / "restored INCOMPLETELY" (warning icon, `backup::restore`'s text with the files) / not restored; a title that
+  could not be saved ("could not be marked") is added; `lastRestoreText()` for the checks. Suite `v0930` (child runs
+  with the fault library: `--child-save`).
 
 ## 0.92.0 beta (2026-11-20): the content decides, the project ID in backup names, checked copies, failures that are told
 

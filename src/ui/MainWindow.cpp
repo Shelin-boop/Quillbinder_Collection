@@ -3227,11 +3227,21 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
         }
     }
     // 0.81.0 (audit of 0.80.0, S-03): the backup the closing would have made, when the program was ended by a signal
-    const bool due = backup::takeDue(proj->displayFile()) && AppSettings::instance().backupOnClose;
+    // 0.93.0: the note is removed only when this backup was made (in the folder, or waiting in the work folder); a
+    // backup that failed (or could not be tried) leaves it for the next opening
+    const bool markedDue = backup::isDue(proj->displayFile());
+    const bool due = markedDue && AppSettings::instance().backupOnClose;
+    if (markedDue && !AppSettings::instance().backupOnClose)
+        backup::clearDue(proj->displayFile()); // the backup at closing is switched off: nothing is due
     if ((AppSettings::instance().backupOnOpen || due) && backupFolderReady(AskFolder::Once)) {
         // 0.65.0 (found while checking audit F03): the result is told; before, even a backup that failed was not
         QString out, err;
-        const bool ok = backup::backupProject(proj, AppSettings::instance().backupDir, AppSettings::instance().backupKeep, &out, &err);
+        QStringList notes;
+        bool waits = false;
+        const bool ok = backup::backupProject(proj, AppSettings::instance().backupDir, AppSettings::instance().backupKeep, &out, &err,
+                                              backup::Where::BackupFolder, &waits, &notes);
+        if (markedDue && (ok || waits))
+            backup::clearDue(proj->displayFile());
         if (!ok || !err.isEmpty())
             QTimer::singleShot(0, this, [this, ok, err] { tellBackupProblem(ok, err, tr("when the project opened")); });
         else if (due)
@@ -3239,6 +3249,8 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
                                         "command); the backup was made now: %1")
                                          .arg(QFileInfo(out).fileName()),
                                      20000);
+        if (!notes.isEmpty())
+            QTimer::singleShot(0, this, [this, notes] { tellBackupCleanup(notes); });
         m_lastDueBackup = due && ok ? out : QString();
     }
     toolhost::host().notifyProjectChanged();
@@ -3251,6 +3263,19 @@ void MainWindow::tellBackupProblem(bool made, const QString &why, const QString 
                              : tr("The automatic backup %1 failed.\n\n%2").arg(when, why);
     m_lastBackupProblem = msg;
     statusBar()->showMessage(made ? tr("The automatic backup is incomplete.") : tr("The automatic backup failed."), 15000);
+    if (!QB_TEST_ENV_SET("QB_NO_DIALOGS"))
+        QMessageBox::warning(this, tr("Backup"), msg);
+}
+
+void MainWindow::tellBackupCleanup(const QStringList &notes)
+{
+    if (notes.isEmpty())
+        return;
+    const QString msg = tr("The backup was made, but %n older backup(s) could not be deleted and stay in the backup folder. "
+                           "Delete them by hand, or check who may delete there:\n\n%1", nullptr, int(notes.size()))
+                            .arg(notes.join(QLatin1Char('\n')));
+    m_lastBackupCleanupNote = msg;
+    statusBar()->showMessage(tr("An older backup could not be deleted."), 15000);
     if (!QB_TEST_ENV_SET("QB_NO_DIALOGS"))
         QMessageBox::warning(this, tr("Backup"), msg);
 }
@@ -3329,10 +3354,12 @@ bool MainWindow::closeProject()
     mindmaps::closeAll(m_project.get(), discardBoards);
     if (AppSettings::instance().backupOnClose && backupFolderReady(AskFolder::Once)) {
         QString out;
+        QStringList notes;
         const bool ok = backup::backupProject(m_project.get(), AppSettings::instance().backupDir,
-                                              AppSettings::instance().backupKeep, &out, &err);
+                                              AppSettings::instance().backupKeep, &out, &err, backup::Where::BackupFolder, nullptr, &notes);
         if (!ok || !err.isEmpty()) // 0.65.0 (audit F03): an incomplete backup is told too
             tellBackupProblem(ok, err, tr("when the project closed"));
+        tellBackupCleanup(notes);
     }
     releaseLocks();
     for (QWidget *w : QApplication::topLevelWidgets())
@@ -3666,7 +3693,8 @@ void MainWindow::saveForTermination()
         }
         // 0.81.0 (audit of 0.80.0, S-03): no time for the backup of the closing here; the next opening makes it
         if (projectSaved && AppSettings::instance().backupOnClose && backupFolderReady(AskFolder::Never, false))
-            backup::markDue(m_project->displayFile());
+            if (!backup::markDue(m_project->displayFile()))
+                std::fprintf(stderr, "%s: the note of the backup due could not be written\n", QB_APP_NAME);
         releaseLocks();
     }
     toolhost::host().shutdownTools(); // the writing tools save their work (scratch pad notes)
@@ -4491,12 +4519,22 @@ void MainWindow::backupNow(bool chooseLocation)
             return;
     }
     QString out, err;
+    QStringList notes;
     QApplication::setOverrideCursor(Qt::WaitCursor);
     const bool ok = backup::backupProject(m_project.get(), dir, chooseLocation ? 0 : AppSettings::instance().backupKeep, &out, &err,
-                                          chooseLocation ? backup::Where::AsChosen : backup::Where::BackupFolder);
+                                          chooseLocation ? backup::Where::AsChosen : backup::Where::BackupFolder, nullptr, &notes);
     QApplication::restoreOverrideCursor();
+    // 0.93.0: older backups that the clean-up could not delete are named in the same message
+    const QString left = notes.isEmpty() ? QString()
+                                         : QStringLiteral("\n\n")
+                                               + tr("%n older backup(s) could not be deleted and stay in the backup folder:\n%1",
+                                                    nullptr, int(notes.size()))
+                                                     .arg(notes.join(QLatin1Char('\n')));
+    m_lastBackupCleanupNote = left.trimmed();
     if (ok && !err.isEmpty()) // saved, but some files could not be read (0.20)
-        QMessageBox::warning(this, tr("Back Up"), tr("Backup saved:\n%1\n\n%2").arg(out, err));
+        QMessageBox::warning(this, tr("Back Up"), tr("Backup saved:\n%1\n\n%2").arg(out, err) + left);
+    else if (ok && !left.isEmpty())
+        QMessageBox::warning(this, tr("Back Up"), tr("Backup saved:\n%1").arg(out) + left);
     else if (ok)
         QMessageBox::information(this, tr("Back Up"), tr("Backup saved:\n%1").arg(out));
     else
@@ -4636,30 +4674,47 @@ bool MainWindow::restoreBackupFile(const QString &zip)
     const QString dest = backup::restore(zip, parent, &projectFile, &err);
     m_lastRestored = projectFile;
     if (dest.isEmpty() || projectFile.isEmpty()) {
-        QMessageBox::warning(this, tr("Restore From Backup"),
-                             tr("The backup could not be restored: %1").arg(err.isEmpty() ? tr("no project in it") : err));
+        // form 3: not restored
+        m_lastRestoreText = tr("The backup could not be restored: %1").arg(err.isEmpty() ? tr("no project in it") : err);
+        QMessageBox failed(QMessageBox::Warning, tr("Restore From Backup: Not Restored"), m_lastRestoreText, QMessageBox::Ok, this);
+        failed.setObjectName(QStringLiteral("restoreFailed"));
+        failed.exec();
         return false;
     }
     // a project in this program's format gets a title that says what it is, so the two are not mistaken
     // for one another (its backups have their own folder anyway)
+    // 0.93.0: a title that could not be saved is said
+    QString titleNote;
     if (!projectFile.endsWith(QLatin1String(".scriv"), Qt::CaseInsensitive)) {
         QString why;
         if (std::unique_ptr<Project> r = Project::open(projectFile, &why)) {
             r->setTitle(tr("%1 (restored %2)").arg(r->title(), QLocale().toString(QDateTime::currentDateTime(), QStringLiteral("yyyy-MM-dd HH:mm"))));
-            r->save(&why);
+            if (!r->save(&why))
+                titleNote = tr("The title of the restored project could not be marked \"(restored ...)\", so it has the title of "
+                               "the project it was made from: %1")
+                                .arg(why);
+        } else {
+            titleNote = tr("The restored project could not be opened to mark its title \"(restored ...)\": %1").arg(why);
         }
     }
-    const QString note = err.isEmpty() ? QString() : QStringLiteral("\n\n") + err;
+    // form 2: restored incompletely (files are named in err); form 1: restored
+    const bool incomplete = !err.isEmpty();
+    QString text = incomplete ? tr("The backup was restored INCOMPLETELY into:\n%1\n\n%2").arg(QDir::toNativeSeparators(dest), err)
+                              : tr("The backup was restored into:\n%1").arg(QDir::toNativeSeparators(dest));
+    if (!titleNote.isEmpty())
+        text += QStringLiteral("\n\n") + titleNote;
+    m_lastRestoreText = text;
     if (QB_TEST_ENV_SET("QB_NO_DIALOGS")) {
         if (closeProject())
             openProject(projectFile);
         return true;
     }
-    QMessageBox box(QMessageBox::Information, tr("Restore From Backup"),
-                    tr("The backup was restored into:\n%1%2\n\nOpen it now? The project open now is closed first (it "
-                       "stays as it is).")
-                        .arg(QDir::toNativeSeparators(dest), note),
+    QMessageBox box(incomplete || !titleNote.isEmpty() ? QMessageBox::Warning : QMessageBox::Information,
+                    incomplete ? tr("Restore From Backup: Restored Incompletely") : tr("Restore From Backup"),
+                    text + QStringLiteral("\n\n")
+                        + tr("Open it now? The project open now is closed first (it stays as it is)."),
                     QMessageBox::NoButton, this);
+    box.setObjectName(QStringLiteral("restoreResult"));
     QPushButton *open = box.addButton(tr("Open Restored Project"), QMessageBox::AcceptRole);
     QPushButton *later = box.addButton(tr("Not Now"), QMessageBox::RejectRole);
     box.setDefaultButton(open);
@@ -5019,7 +5074,10 @@ bool MainWindow::manualSave()
     if (s.backupOnManualSave && backupFolderReady(AskFolder::Once)) {
         QString out;
         bool waits = false;
-        const bool ok = backup::backupProject(m_project.get(), s.backupDir, s.backupKeep, &out, &err, backup::Where::BackupFolder, &waits);
+        QStringList cleanupNotes;
+        const bool ok = backup::backupProject(m_project.get(), s.backupDir, s.backupKeep, &out, &err, backup::Where::BackupFolder, &waits,
+                                              &cleanupNotes);
+        tellBackupCleanup(cleanupNotes);
         if (!ok && waits) // 0.90.3: made, but not in the backup folder yet: its own text says so (and where it is kept)
             statusBar()->showMessage(QString(err).replace(QLatin1String("\n\n"), QLatin1String(" ")), 20000);
         else if (!ok)

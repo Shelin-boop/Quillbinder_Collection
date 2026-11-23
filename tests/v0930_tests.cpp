@@ -394,6 +394,163 @@ static void saving(const QString &W)
     }
 }
 
+// ------------------------------------------------------------------ item 14: backups
+
+static QByteArray damageAnEntry(const QString &zip)
+{
+    QByteArray z = readAll(zip);
+    const qsizetype eocd = z.lastIndexOf("PK\x05\x06");
+    auto u16 = [&](qsizetype at) { return quint16(quint8(z[at]) | (quint8(z[at + 1]) << 8)); };
+    auto u32 = [&](qsizetype at) { return quint32(u16(at)) | (quint32(u16(at + 2)) << 16); };
+    qsizetype at = qsizetype(u32(eocd + 16));
+    const int count = u16(eocd + 10);
+    for (int i = 0; i < count; ++i) {
+        const quint32 comp = u32(at + 20);
+        const int nameLen = u16(at + 28), extraLen = u16(at + 30), commentLen = u16(at + 32);
+        const qsizetype local = qsizetype(u32(at + 42));
+        const QByteArray name = z.mid(at + 46, nameLen);
+        if (comp >= 16 && name.contains("/content/")) {
+            const qsizetype data = local + 30 + u16(local + 26) + u16(local + 28);
+            for (int k = 4; k < 12; ++k)
+                z[data + k] = char(z[data + k] ^ 0x5A);
+            writeAll(zip, z);
+            return name;
+        }
+        at += 46 + nameLen + extraLen + commentLen;
+    }
+    return QByteArray();
+}
+
+static void backups(const QString &W)
+{
+    QString err;
+    AppSettings &as = AppSettings::instance();
+    {
+        // the note of a backup that a signal left undone stays until the opening's backup is made
+        auto proj = Project::create(W, QStringLiteral("Due"), &err);
+        textDoc(proj.get(), QStringLiteral("Text"), QStringLiteral("Words."));
+        proj->save(&err);
+        const QString file = proj->indexPath();
+        const QString journal = QFileInfo(file).absolutePath() + QStringLiteral("/settings/journal.json");
+        as.backupDir = W + QStringLiteral("/bk-due");
+        as.backupKeep = 5;
+        as.backupOnClose = true;
+        as.backupOnOpen = false;
+        auto *wp = new MainWindow;
+        MainWindow &w = *wp;
+        w.show();
+        w.adoptProject(std::move(proj));
+        settle(400);
+        w.saveForTermination();
+        check(backup::isDue(file), QStringLiteral("(a signal ended the session: the backup is noted as due)"));
+        as.backupOnClose = false;
+        w.closeProject();
+        as.backupOnClose = true;
+        settle(200);
+        // another computer's save is going on: the save before the backup waits, so the backup fails
+        QJsonObject root;
+        root.insert(QStringLiteral("version"), 1);
+        root.insert(QStringLiteral("device"), QStringLiteral("Other computer"));
+        root.insert(QStringLiteral("key"), QStringLiteral("some-other-computer"));
+        root.insert(QStringLiteral("time"), QDateTime::currentDateTimeUtc().toString(Qt::ISODate));
+        root.insert(QStringLiteral("files"), QJsonArray());
+        writeAll(journal, QJsonDocument(root).toJson());
+        auto again = Project::open(file, &err);
+        w.adoptProject(std::move(again));
+        settle(600);
+        check(w.lastDueBackup().isEmpty() && backup::isDue(file) && !w.lastBackupProblem().isEmpty(),
+              QStringLiteral("an opening whose backup fails (the project cannot be saved first): the note stays for the next opening"),
+              w.lastBackupProblem());
+        QFile::remove(journal); // (so that closing is not stopped by the save that waits)
+        as.backupOnClose = false;
+        w.closeProject();
+        as.backupOnClose = true;
+        auto third = Project::open(file, &err);
+        w.adoptProject(std::move(third));
+        settle(600);
+        check(!w.lastDueBackup().isEmpty() && QFile::exists(w.lastDueBackup()) && !backup::isDue(file),
+              QStringLiteral("... the opening after it makes the backup, and only then the note goes"), w.lastDueBackup());
+        as.backupOnClose = false;
+        w.closeProject();
+        delete wp;
+    }
+    {
+        // a clean-up that cannot delete an older backup
+        auto p = Project::create(W, QStringLiteral("Keep"), &err);
+        textDoc(p.get(), QStringLiteral("Text"), QStringLiteral("Words."));
+        p->save(&err);
+        const QString dir = W + QStringLiteral("/bk-keep");
+        QString out1, out2, out3, out4, e;
+        QStringList notes;
+        check(backup::backupProject(p.get(), dir, 2, &out1, &e) && backup::backupProject(p.get(), dir, 2, &out2, &e), QStringLiteral("(two backups)"), e);
+        qputenv("QB_TEST_FAIL_REMOVE", QFileInfo(out1).fileName().toUtf8());
+        const bool ok3 = backup::backupProject(p.get(), dir, 2, &out3, &e, backup::Where::BackupFolder, nullptr, &notes);
+        check(ok3 && e.isEmpty() && notes.size() == 1 && notes.first().contains(QFileInfo(out1).fileName()) && notes.first().contains(QLatin1String("Permission denied"))
+                  && QFile::exists(out1),
+              QStringLiteral("a backup that cannot be deleted is told with the file and the reason (the new backup is made)"), notes.join(QLatin1Char('|')) + e);
+        QStringList notes2;
+        const bool ok4 = backup::backupProject(p.get(), dir, 2, &out4, &e, backup::Where::BackupFolder, nullptr, &notes2);
+        check(ok4 && notes2.isEmpty(), QStringLiteral("... and told once"), notes2.join(QLatin1Char('|')));
+        qunsetenv("QB_TEST_FAIL_REMOVE");
+        // the window's message
+        auto *wp = new MainWindow;
+        wp->show();
+        wp->tellBackupCleanup(QStringList() << QStringLiteral("/backups/Keep bak 2026-11-20 10-00-00.zip: Permission denied"));
+        check(wp->lastBackupCleanupNote().contains(QLatin1String("Permission denied")) && wp->lastBackupCleanupNote().contains(QLatin1String("could not be deleted")),
+              QStringLiteral("the window's note names the backup and the reason"), wp->lastBackupCleanupNote());
+        delete wp;
+    }
+    {
+        // Restore From Backup: restored, restored incompletely, not restored; a title that could not be saved
+        auto proj = Project::create(W, QStringLiteral("Source"), &err);
+        textDoc(proj.get(), QStringLiteral("First"), QStringLiteral("The first text of the project, long enough to be stored."));
+        textDoc(proj.get(), QStringLiteral("Second"), QStringLiteral("The second text of the project, long enough to be stored too."));
+        proj->save(&err);
+        QString zip, e;
+        check(backup::backupProject(proj.get(), W + QStringLiteral("/bk-restore"), 3, &zip, &e), QStringLiteral("(a backup)"), e);
+        auto *wp = new MainWindow;
+        MainWindow &w = *wp;
+        w.show();
+        qputenv("QB_NO_DIALOGS", "1");
+        w.adoptProject(std::move(proj));
+        settle(400);
+        check(w.restoreBackupFile(zip) && w.lastRestoreText().startsWith(QLatin1String("The backup was restored into:")) && !w.lastRestoreText().contains(QLatin1String("INCOMPLETELY")),
+              QStringLiteral("restore, form 1: restored"), w.lastRestoreText());
+        settle(300);
+        const QString bad = W + QStringLiteral("/bk-restore/damaged.zip");
+        QFile::copy(zip, bad);
+        const QByteArray entry = damageAnEntry(bad);
+        check(!entry.isEmpty(), QStringLiteral("(an entry of the archive is damaged)"));
+        check(w.restoreBackupFile(bad) && w.lastRestoreText().startsWith(QLatin1String("The backup was restored INCOMPLETELY into:"))
+                  && w.lastRestoreText().contains(QString::fromUtf8(entry.mid(entry.lastIndexOf('/') + 1))),
+              QStringLiteral("restore, form 2: an archive with a damaged entry is restored incompletely, headed so, with the file named"),
+              w.lastRestoreText());
+        settle(300);
+        // the dialog itself
+        qunsetenv("QB_NO_DIALOGS");
+        shotLater(QStringLiteral("restoreResult"), QStringLiteral("v0930-restore-incomplete"), 600);
+        w.restoreBackupFile(bad);
+        settle(300);
+        qputenv("QB_NO_DIALOGS", "1");
+        // a title that cannot be saved
+        qputenv("QB_TEST_WRITE_FAILS", "5|Input/output error|.qbstage");
+        w.restoreBackupFile(zip);
+        qunsetenv("QB_TEST_WRITE_FAILS");
+        check(w.lastRestoreText().contains(QLatin1String("could not be marked")) && w.lastRestoreText().contains(QLatin1String("Input/output error")),
+              QStringLiteral("a title that could not be saved is said"), w.lastRestoreText());
+        settle(300);
+        // form 3
+        const QString junk = W + QStringLiteral("/junk.zip");
+        writeAll(junk, "not a zip file at all");
+        shotLater(QStringLiteral("restoreFailed"), QStringLiteral("v0930-restore-not-restored"), 300);
+        check(!w.restoreBackupFile(junk) && w.lastRestoreText().startsWith(QLatin1String("The backup could not be restored:")),
+              QStringLiteral("restore, form 3: not restored"), w.lastRestoreText());
+        as.backupOnClose = false;
+        w.closeProject();
+        delete wp;
+    }
+}
+
 int main(int argc, char **argv)
 {
     if (argc > 2 && qstrcmp(argv[1], "--child-save") == 0)
@@ -424,6 +581,7 @@ int main(int argc, char **argv)
     emergencyCopy(W);
     emergencyWindow(W);
     saving(W);
+    backups(W);
     std::printf("%d failure(s)\n", failures);
     return failures;
 }

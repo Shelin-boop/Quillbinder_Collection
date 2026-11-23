@@ -3452,6 +3452,10 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
         <source>The journal of the save is kept, and the next save or opening finishes it.</source>
         <translation>Das Journal des Speicherns bleibt erhalten, und das nächste Speichern oder Öffnen schließt es ab.</translation>
     </message>
+    <message>
+        <source>Permission denied</source>
+        <translation>Zugriff verweigert</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>
@@ -12491,6 +12495,69 @@ Die Schriften sind sofort nutzbar. Sie bleiben im Ordner des Programms: Andere P
 %2</source>
         <translation>Die nicht gespeicherten Texte und Notizen liegen in (%1 von %1 Dateien, mit der Projektdatei, wie sie im Speicher war):
 %2</translation>
+    </message>
+    <message numerus="yes">
+        <source>The backup was made, but %n older backup(s) could not be deleted and stay in the backup folder. Delete them by hand, or check who may delete there:
+
+%1</source>
+        <translation>
+            <numerusform>Die Sicherung wurde angelegt, aber %n ältere Sicherung konnte nicht gelöscht werden und bleibt im Sicherungsordner. Löschen Sie sie von Hand oder prüfen Sie, wer dort löschen darf:
+
+%1</numerusform>
+            <numerusform>Die Sicherung wurde angelegt, aber %n ältere Sicherungen konnten nicht gelöscht werden und bleiben im Sicherungsordner. Löschen Sie sie von Hand oder prüfen Sie, wer dort löschen darf:
+
+%1</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>An older backup could not be deleted.</source>
+        <translation>Eine ältere Sicherung konnte nicht gelöscht werden.</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n older backup(s) could not be deleted and stay in the backup folder:
+%1</source>
+        <translation>
+            <numerusform>%n ältere Sicherung konnte nicht gelöscht werden und bleibt im Sicherungsordner:
+%1</numerusform>
+            <numerusform>%n ältere Sicherungen konnten nicht gelöscht werden und bleiben im Sicherungsordner:
+%1</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Restore From Backup: Not Restored</source>
+        <translation>Sicherung wiederherstellen: nicht wiederhergestellt</translation>
+    </message>
+    <message>
+        <source>The title of the restored project could not be marked "(restored ...)", so it has the title of the project it was made from: %1</source>
+        <translation>Der Titel des wiederhergestellten Projekts konnte nicht mit "(wiederhergestellt ...)" gekennzeichnet werden und ist der Titel des Projekts, aus dem es entstand: %1</translation>
+    </message>
+    <message>
+        <source>The restored project could not be opened to mark its title "(restored ...)": %1</source>
+        <translation>Das wiederhergestellte Projekt ließ sich nicht öffnen, um seinen Titel mit "(wiederhergestellt ...)" zu kennzeichnen: %1</translation>
+    </message>
+    <message>
+        <source>The backup was restored INCOMPLETELY into:
+%1
+
+%2</source>
+        <translation>Die Sicherung wurde UNVOLLSTÄNDIG wiederhergestellt in:
+%1
+
+%2</translation>
+    </message>
+    <message>
+        <source>The backup was restored into:
+%1</source>
+        <translation>Die Sicherung wurde wiederhergestellt in:
+%1</translation>
+    </message>
+    <message>
+        <source>Restore From Backup: Restored Incompletely</source>
+        <translation>Sicherung wiederherstellen: unvollständig wiederhergestellt</translation>
+    </message>
+    <message>
+        <source>Open it now? The project open now is closed first (it stays as it is).</source>
+        <translation>Jetzt öffnen? Das jetzt offene Projekt wird zuerst geschlossen (es bleibt, wie es ist).</translation>
     </message>
 </context>
 <context>

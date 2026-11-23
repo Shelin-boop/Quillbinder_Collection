@@ -69,8 +69,10 @@ bool isOwnBackupName(const QString &fileName);
 // 0.90.3: false with *waiting true: the backup was made and checked but could not be put into the backup folder;
 // it is kept in the work folder (*outPath names it there) and *error says so (Where::BackupFolder only: a backup
 // to a chosen folder that cannot be put there is removed).
+// 0.93.0: *cleanupNotes: older backups that the clean-up could not delete ("<file>: <reason>"), each told once per
+// session (the backup itself is made: this is no failure)
 bool backupProject(Project *p, const QString &dir, int keep, QString *outPath, QString *error,
-                   Where where = Where::BackupFolder, bool *waiting = nullptr);
+                   Where where = Where::BackupFolder, bool *waiting = nullptr, QStringList *cleanupNotes = nullptr);
 // The backups in dir that carry this project's title, oldest first: those in the program's own name form, and other
 // files that begin "<title> bak " (a sync program's copy of a backup), which Restore From Backup offers too.
 QStringList backupsFor(const Project *p, const QString &dir);
@@ -85,7 +87,12 @@ void setProgressHandler(std::function<void(const QString &what, qint64 done, qin
 // 0.81.0 (audit of 0.80.0, S-03): a backup that the closing would have made but the program was ended by a signal
 // (a kill command, a shutdown that does not wait): the project is noted in <data>/backups-due.txt, and the next
 // opening makes the backup and says so. takeDue: true when the project was noted (the note goes).
-void markDue(const QString &projectFile);
+// 0.93.0: the opening looks (isDue) and removes the note (clearDue) only when its backup was made (in the folder, or
+// waiting in the work folder); a backup that fails leaves the note for the next opening. markDue: false when the note
+// could not be written.
+bool markDue(const QString &projectFile);
+bool isDue(const QString &projectFile);
+bool clearDue(const QString &projectFile);
 bool takeDue(const QString &projectFile);
 
 // 0.70.0 (audit A U-05): unpacks a backup into a new folder "<name> (restored <date time>)" inside intoParent;

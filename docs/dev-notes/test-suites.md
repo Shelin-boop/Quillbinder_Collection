@@ -140,7 +140,9 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   change of the binder or the objects alone, never into an existing folder, the end by a signal and its notice, the
   messages (screenshots);
   a folder's sync answered with EIO or ENOTSUP in a child run (`--child-save`, the fault library's `dirsync` modes), an
-  unreadable journal that cannot be set aside. Uses `QB_TEST_WRITE_FAILS`, which also works for `safesave::writeFile` since 0.93.0.)
+  unreadable journal that cannot be set aside;
+  the backup note after a failed opening backup, a backup that cannot be deleted (`QB_TEST_FAIL_REMOVE`), the three forms
+  of a restore. Uses `QB_TEST_WRITE_FAILS`, which also works for `safesave::writeFile` since 0.93.0.)
 - `qb_v0920_tests` (0.92.0 beta: files whose time alone changed and the pattern of a sync program that touches
   every file, the notice's button, the project ID in backup names and the IDs of copies, copies that fail
   (`QB_TEST_FAIL_COPY`), states that cannot be written (`QB_TEST_FAIL_STATE`, `QB_TEST_FAIL_RENAME`), the kind of a
