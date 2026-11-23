@@ -43,6 +43,23 @@ jobs:
           done
           echo "modules:$mods" | tee -a out/aqt.log
           aqt install-qt linux desktop "$V" linux_gcc_64 -O "$PWD/Qt" -m $mods >> out/aqt.log 2>&1
+          # Since Qt 6.12, Qt PDF is a "Qt Extensions" module released on its own schedule (Qt WebEngine 6.140.0 for
+          # Qt 6.12): the repository lists it only under the Qt version it was built with. When this version has none,
+          # take it from the newest earlier patch release of the same Qt (6.12.0 for 6.12.1), its files only
+          # (--noarchives), into this Qt's folder.
+          if ! tr ' ' '\n' < out/modules.txt | grep -qx qtpdf; then
+            base=${V%.*}; patch=${V##*.}; from=""
+            for p in $(seq $((patch - 1)) -1 0); do
+              if aqt list-qt linux desktop --modules "$base.$p" linux_gcc_64 2>> out/aqt.log | tr ' ' '\n' | grep -qx qtpdf; then
+                from="$base.$p"; break
+              fi
+            done
+            [ -n "$from" ] || { echo "no Qt PDF for Qt $base" | tee -a out/aqt.log; exit 1; }
+            aqt install-qt linux desktop "$from" linux_gcc_64 -O "$PWD/QtPdf" -m qtpdf --noarchives >> out/aqt.log 2>&1
+            echo "qtpdf: from Qt $from's repository folder (the Qt Extensions release for Qt $base)" | tee -a out/aqt.log out/qtpdf-origin.txt
+            (cd "QtPdf/$from/gcc_64" && find . -type f | sort) > out/qtpdf-files.txt
+            cp -an "QtPdf/$from/gcc_64/." "Qt/$V/gcc_64/"
+          fi
 
       - name: Pack Qt and describe it
         run: |
@@ -75,6 +92,7 @@ jobs:
             echo "What this is: Qt $V for Linux (gcc_64), The Qt Company's own binaries, installed unchanged with aqtinstall"
             echo "from download.qt.io (modules: Qt's essentials and$(grep -o 'modules:.*' out/aqt.log | head -1 | cut -d: -f2)), without"
             echo "documentation and examples. It is working storage for the Linux build of this repository, not for downloading."
+            [ -f out/qtpdf-origin.txt ] && { echo; echo "Qt PDF: $(cat out/qtpdf-origin.txt | cut -d: -f2-)."; }
             echo
             echo "License: Qt is available under the GNU Lesser General Public License v3 and the GNU General Public License"
             echo "(v2 or v3); some modules only under the GPL. The license files of every part are inside the pack."
