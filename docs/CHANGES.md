@@ -3,6 +3,27 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.93.0 beta (2026-11-..)
+
+A new AppImage and a program update for Linux. Nothing changes in how you write; what changes is under the program,
+in the parts it is built from. The add-ons of 0.80.0 and later are rebuilt for this version: the ones that bring
+their own libraries now need 0.93.0 (the check for updates and **File > Install Update or Add-on** tell you).
+
+- **Qt 6.12.1** (before: 6.12.0). The libraries Qt carries inside itself are newer, with safety fixes: zlib 1.4,
+  HarfBuzz 15.1.0, PCRE2 10.49, libpng 1.6.59, libjpeg-turbo 3.2.1, FreeType 2.15.0 and md4c 0.6.0. Because the
+  AppImage carries them, a program update alone cannot bring them: the check for updates offers the new AppImage
+  (the runtime is called `u2404-qt6.12-r2`).
+- **FFmpeg 9.1 in the media add-ons** (before: 9.0.2). Media Playback and Extra Video and Audio Formats 2.1 play the
+  same formats, with the newer FFmpeg's safety fixes. The source is taken from FFmpeg's own site and checked by its
+  release signature.
+- **The other add-ons with libraries** (Import Web Page, Import Word 97, Name Generator, Scratch Pad, Text Statistics,
+  Speech Transcription) are rebuilt for the new runtime, with a new last number each. Translation and Proofreading
+  stays 1.2.
+- **The security watch** (the daily check of the parts the project ships) now also looks at PDFium inside Qt PDF, the
+  ggml library inside whisper.cpp and the AppImage's own starter, and says in its report when the repository has had
+  no change for 50 days (GitHub stops such a check after 60). For the project's builds: a third ready-made pack, for
+  the translator's libraries, and the packs' pages name what is inside, the license and the source.
+
 ## 0.92.0 beta (2026-11-20)
 
 A new AppImage and a program update for Linux, and the first version from the project's one repository,

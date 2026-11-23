@@ -1533,6 +1533,8 @@ Program updates run on the libraries inside your AppImage. From time to time a l
 
 0.80.0 is such a version: its AppImage carries a new Qt (The Qt Company's own build of Qt 6.12 instead of Ubuntu's Qt 6.4.2). Add-ons with program code (*Media Playback*, *Extra Video and Audio Formats*, *Speech Transcription*, the writing tools and the importers) must be installed again in their versions for 0.80.0 (the bundle and **media-all-formats.qbpkg** on the Releases page bring them all); until then, the Add-on Manager marks the old ones as built for an older program, and their code is not loaded. The full version of 0.80.0 brings every add-on.
 
+0.93.0 is another (Linux): its AppImage carries Qt 6.12.1, whose built-in libraries (zlib, HarfBuzz, PCRE2, libpng, libjpeg-turbo, FreeType and others) are newer and have safety fixes. A program update cannot bring them, so the check for updates offers the new AppImage. The add-ons with program code of the earlier AppImage (the ones listed above) are installed again in their versions for 0.93.0 in the same way, and the media add-ons now carry FFmpeg 9.1.
+
 A new AppImage also brings a new program version of its own (for example the AppImage 0.20.0). It starts that version, even if you installed updates into the old AppImage before: older updates are switched off and stay listed under **Help > Add-on Manager…**, where you can remove them. If the new file has another name or lies in another folder than the old one, choose **Help > Add to Application Menu** once, so that the menu entry and double-clicked projects use the new file.
 
 ---
