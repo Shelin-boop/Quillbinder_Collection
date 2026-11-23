@@ -45,6 +45,7 @@ recipe() {
         echo "nasm: $(first nasm -v)"
         echo "file tools/get-ffmpeg.sh $(filehash tools/get-ffmpeg.sh)"
         echo "file tools/build-ffmpeg.sh $(filehash tools/build-ffmpeg.sh)"
+        echo "file tools/verify-ffmpeg-source.sh $(filehash tools/verify-ffmpeg-source.sh)"
         local p
         for p in "$ROOT"/tools/ffmpeg-patches/*.patch; do
             [ -f "$p" ] && echo "file tools/ffmpeg-patches/$(basename "$p") $(filehash "tools/ffmpeg-patches/$(basename "$p")")"

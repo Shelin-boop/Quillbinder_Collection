@@ -40,7 +40,7 @@ class MediaEngine : public QObject, public qb::media::EngineInterface
 public:
     QString id() const override { return QStringLiteral("media-playback"); }
     QString name() const override { return tr("Media Playback"); }
-    QString version() const override { return QStringLiteral("2.0"); } // the add-on's version (2.0: Qt 6.12, FFmpeg 9.0.2)
+    QString version() const override { return QStringLiteral("2.1"); } // the add-on's version (2.1: Qt 6.12.1, FFmpeg 9.1)
     QList<qb::media::Backend> backends() const override;
     bool start(const QString &backend, QString *error) override;
     bool isStarted() const override { return m_impl != nullptr; }

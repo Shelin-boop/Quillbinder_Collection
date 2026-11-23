@@ -1646,7 +1646,7 @@ This section is for a technically minded friend who helps you set things up.
 
 ### Media engines
 
-Audio and video are played by a plugin of the add-on *Media Playback* that implements `src/media/MediaApi.h` of the source (Qt Multimedia 6.12 with a decoding-only FFmpeg 9.0.2, see `addons/media-playback` and `tools/build-ffmpeg.sh`). The add-on keeps its libraries in its own folder (`media/lib`), with the parts of Qt its decoding needs that the AppImage does not carry (Qt Quick and Qt QML). Its FFmpeg decodes free formats only; the add-on *Extra Video and Audio Formats* brings a full FFmpeg of the same version in `media-extra/lib`, which *Media Playback* loads instead while that add-on is installed and switched on. **File > Options > Plugins** lists the engine.
+Audio and video are played by a plugin of the add-on *Media Playback* that implements `src/media/MediaApi.h` of the source (Qt Multimedia 6.12 with a decoding-only FFmpeg 9.1, see `addons/media-playback` and `tools/build-ffmpeg.sh`). The add-on keeps its libraries in its own folder (`media/lib`), with the parts of Qt its decoding needs that the AppImage does not carry (Qt Quick and Qt QML). Its FFmpeg decodes free formats only; the add-on *Extra Video and Audio Formats* brings a full FFmpeg of the same version in `media-extra/lib`, which *Media Playback* loads instead while that add-on is installed and switched on. **File > Options > Plugins** lists the engine.
 
 ### Adding compile formats
 

@@ -83,7 +83,7 @@ OBJ="$PREFIX.build"
 rm -rf "$OBJ"
 mkdir -p "$OBJ"
 cd "$OBJ"
-# libpostproc is gone since FFmpeg 8.0 (0.80.0 builds 9.0.2): its switch only where the source still has it
+# libpostproc is gone since FFmpeg 8.0 (0.80.0 builds 9.0.2, 0.93.0 builds 9.1): its switch only where the source still has it
 POSTPROC=()
 "$SRC/configure" --help | grep -q -- '--disable-postproc' && POSTPROC=(--disable-postproc)
 "$SRC/configure" --prefix="$PREFIX" --enable-shared --disable-static --disable-programs --disable-doc \

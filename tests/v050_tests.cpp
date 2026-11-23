@@ -289,7 +289,7 @@ static int runBase()
         return failures;
     compile::PluginManager::instance().load();
     media::EngineInterface *e = playback::engine();
-    check(e && e->version() == QLatin1String("2.0"), QStringLiteral("the media engine of Media Playback 2.0 is loaded"),
+    check(e && e->version() == QLatin1String("2.1"), QStringLiteral("the media engine of Media Playback 2.1 is loaded"),
           e ? e->version() : QStringLiteral("none"));
     if (!e)
         return failures;
@@ -542,7 +542,7 @@ int main(int argc, char **argv)
         }
         const QString ff = run(QStringLiteral("python3"), {QStringLiteral("-I"), tools + QStringLiteral("collect-sources.py"),
                                                            QStringLiteral("--name"), QStringLiteral("ffmpeg")}).trimmed();
-        check(rc == 0 && missing.isEmpty() && names.contains(ff) && ff.startsWith(QLatin1String("ffmpeg-9.0.2-quillbinder-")),
+        check(rc == 0 && missing.isEmpty() && names.contains(ff) && ff.startsWith(QLatin1String("ffmpeg-9.1-quillbinder-")),
               QStringLiteral("collect-sources.py lists a source file for every entry of the license list and for FFmpeg"),
               QStringLiteral("rc %1, missing %2, ffmpeg %3").arg(rc).arg(missing.join(QLatin1Char(' ')), ff));
         // 0.80.0: the add-ons' Qt parts (Qt Multimedia, the TLS plugin) come from Qt's own build: its source release
@@ -574,10 +574,10 @@ int main(int argc, char **argv)
     {
         const addons::PackageInfo b = addons::inspect(base);
         const addons::PackageInfo x = addons::inspect(extra);
-        check(b.isValid() && b.manifest.version == QLatin1String("2.0") && x.isValid() && x.manifest.id == kExtraId
-                  && x.manifest.name == QLatin1String("Extra Video and Audio Formats") && x.manifest.version == QLatin1String("2.0")
+        check(b.isValid() && b.manifest.version == QLatin1String("2.1") && x.isValid() && x.manifest.id == kExtraId
+                  && x.manifest.name == QLatin1String("Extra Video and Audio Formats") && x.manifest.version == QLatin1String("2.1")
                   && QFileInfo(base).size() < 30LL * 1024 * 1024 && QFileInfo(extra).size() < 30LL * 1024 * 1024,
-              QStringLiteral("Media Playback 2.0 and Extra Video and Audio Formats 2.0 are valid packages below the 30 MiB delivery limit"),
+              QStringLiteral("Media Playback 2.1 and Extra Video and Audio Formats 2.1 are valid packages below the 30 MiB delivery limit"),
               QStringLiteral("%1 %2 / %3 %4, %5 and %6 bytes").arg(b.manifest.version, b.error, x.manifest.version, x.error)
                   .arg(QFileInfo(base).size()).arg(QFileInfo(extra).size()));
         QStringList xf;

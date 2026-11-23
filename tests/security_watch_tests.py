@@ -340,5 +340,65 @@ check("the workflow checks out only the watch's two files",
 check("a push to the work branch is a dry run", "all/security-watch" in wf
       and "github.event_name == 'push' && '--dry-run'" in wf)
 
+# ---------------------------------------------------------------------------------------------------- FFmpeg's source
+# 0.93.0: tools/verify-ffmpeg-source.sh accepts an archive only with a good signature of the key with the expected
+# fingerprint (here a key made for the check; the real one is named in tools/get-ffmpeg.sh)
+import shutil
+import subprocess
+import tempfile
+
+verify = os.path.join(ROOT, "tools", "verify-ffmpeg-source.sh")
+with open(os.path.join(ROOT, "tools", "get-ffmpeg.sh"), encoding="utf-8") as fh:
+    getff = fh.read()
+fpr_real = re.search(r"^KEY_FPR=([0-9A-F]{40})$", getff, re.M)
+check("get-ffmpeg.sh names FFmpeg 9.1 from ffmpeg.org, its signature file, the key file and the key's fingerprint",
+      re.search(r"^VERSION=9\.1$", getff, re.M) and "https://ffmpeg.org/releases/ffmpeg-$VERSION.tar.xz" in getff
+      and "SIG_URL=$URL.asc" in getff and "https://ffmpeg.org/ffmpeg-devel.asc" in getff and fpr_real is not None
+      and "--enable-gpl" not in getff)
+bf = open(os.path.join(ROOT, "tools", "build-ffmpeg.sh"), encoding="utf-8").read()
+check("the FFmpeg build has no GPL or non-free switch", "--enable-gpl" not in bf and "--enable-nonfree" not in bf
+      and "--enable-version3" not in bf)
+if shutil.which("gpg") and shutil.which("gpgv"):
+    work = tempfile.mkdtemp(prefix="qb-verify-")
+    home = os.path.join(work, "home")
+    os.makedirs(home, mode=0o700)
+    env = dict(os.environ, GNUPGHOME=home)
+    gen = lambda who: subprocess.run(["gpg", "--batch", "--pinentry-mode", "loopback", "--passphrase", "", "--quick-generate-key",
+                                      who, "ed25519", "sign", "never"], env=env, capture_output=True, text=True)
+    fprs = {}
+    for who in ("Release Key <release@example.invalid>", "Other Key <other@example.invalid>"):
+        gen(who)
+        out = subprocess.run(["gpg", "--batch", "--with-colons", "--fingerprint", who], env=env, capture_output=True, text=True).stdout
+        fprs[who.split()[0]] = [l.split(":")[9] for l in out.splitlines() if l.startswith("fpr")][0]
+    tar = os.path.join(work, "ffmpeg-9.1.tar.xz")
+    with open(tar, "wb") as fh:
+        fh.write(b"not really FFmpeg\n")
+    asc = tar + ".asc"
+    subprocess.run(["gpg", "--batch", "--pinentry-mode", "loopback", "--passphrase", "", "--local-user", fprs["Release"],
+                    "--armor", "--detach-sign", "--output", asc, tar], env=env, check=True, capture_output=True)
+    keys = os.path.join(work, "keys.asc")
+    with open(keys, "wb") as fh:
+        for who in ("Release", "Other"):
+            fh.write(subprocess.run(["gpg", "--batch", "--armor", "--export", fprs[who]], env=env, capture_output=True).stdout)
+    envv = dict(os.environ)
+    envv.pop("GNUPGHOME", None)
+    ver = lambda t, a, k, f: subprocess.run([verify, t, a, k, f], env=envv, capture_output=True, text=True)
+    r = ver(tar, asc, keys, fprs["Release"])
+    sha = subprocess.run(["sha256sum", tar], capture_output=True, text=True).stdout.split()[0]
+    check("a good signature of the expected key: accepted, with the SHA-256 and the line to pin",
+          r.returncode == 0 and f'pin this: SHA256="{sha}"' in r.stdout, r.stdout + r.stderr)
+    r = ver(tar, asc, keys, fprs["Other"])
+    check("a good signature of another key than the expected one is refused", r.returncode == 1 and "STOP" in r.stderr, r.stderr)
+    r = ver(tar, asc, keys, "FCF986EA15E6E293A5644F10B4322F04D67658D8")
+    check("a key file without the expected fingerprint stops with the fingerprints it holds",
+          r.returncode == 1 and "STOP" in r.stderr and fprs["Release"] in r.stderr and fprs["Other"] in r.stderr, r.stderr)
+    with open(tar, "ab") as fh:
+        fh.write(b"changed\n")
+    r = ver(tar, asc, keys, fprs["Release"])
+    check("an archive that was changed after signing is refused", r.returncode == 1 and "pin this" not in r.stdout, r.stdout + r.stderr)
+    shutil.rmtree(work, ignore_errors=True)
+else:
+    print("(no gpg: the signature checks are left out)")
+
 print(f"{FAILS} failure(s)")
 sys.exit(1 if FAILS else 0)

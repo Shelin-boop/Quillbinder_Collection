@@ -517,7 +517,7 @@ public:
 #else
         if (m_backend == QLatin1String("ffmpeg")) {
             const QString v = ffmpegVersion();
-            s += QCoreApplication::translate("qbmedia", " with FFmpeg %1").arg(v.isEmpty() ? QStringLiteral("9.0") : v);
+            s += QCoreApplication::translate("qbmedia", " with FFmpeg %1").arg(v.isEmpty() ? QStringLiteral("9.1") : v);
             s += extraFormats() ? QCoreApplication::translate("qbmedia", " (with the extra formats)")
                                 : QCoreApplication::translate("qbmedia", " (free formats)");
         } else if (m_backend == QLatin1String("gstreamer")) {

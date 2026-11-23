@@ -4,7 +4,7 @@
 // screenshots into the folder given as first argument. Exit code = number of
 // failed checks.
 //
-//   tools/build-ffmpeg.sh <ffmpeg-9.0.2 source> build/ffmpeg
+//   tools/build-ffmpeg.sh <ffmpeg-9.1 source> build/ffmpeg
 //   packaging/linux/build-addons.sh build build/addons-dist
 //   pulseaudio -D --exit-idle-time=-1     (any sound server; a null sink is enough)
 //   QT_QPA_PLATFORM=offscreen ./qb_m11_tests /tmp/shots
@@ -572,10 +572,10 @@ int main(int argc, char **argv)
     check(loaded && engine->isStarted() && engine->startedBackend() == QLatin1String("ffmpeg"),
           QStringLiteral("selecting an MP3 starts the engine (FFmpeg) and loads the file into the editor's player"),
           engine->description() + QLatin1String(" / ") + v->playerError());
-    check(engine->description().contains(QLatin1String("FFmpeg 9.0.2")) && mapsContain(QStringLiteral("/media-extra/lib/libavcodec.so.63"))
+    check(engine->description().contains(QLatin1String("FFmpeg 9.1")) && mapsContain(QStringLiteral("/media-extra/lib/libavcodec.so.63"))
               && !mapsContain(QStringLiteral("/media/lib/libavcodec.so.63")) && mapsContain(QStringLiteral("/media/lib/libQt6Multimedia.so.6"))
               && engine->description().contains(QLatin1String("extra formats")),
-          QStringLiteral("the add-on's own Qt Multimedia and the full FFmpeg 9.0.2 of \"Extra Video and Audio Formats\" are the ones loaded"),
+          QStringLiteral("the add-on's own Qt Multimedia and the full FFmpeg 9.1 of \"Extra Video and Audio Formats\" are the ones loaded"),
           engine->description());
     const bool sound = !engine->description().contains(QLatin1String("no sound output"));
     if (!sound)

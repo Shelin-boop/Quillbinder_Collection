@@ -273,11 +273,11 @@ decode gets a message naming its formats and the add-on (`plugins/media/impl/QtP
 `src/media/MediaApi.h` and draws the controls (`src/ui/MediaPlayback.*`, `MediaView`, `MainWindowMedia.cpp`);
 the add-on brings two libraries from `plugins/media` (a small plugin the program loads at start, and the
 player built on Qt Multimedia, loaded with the first audio or video file) plus Qt Multimedia 6.12.0 (with the
-Qt Quick and Qt QML libraries its FFmpeg backend needs) and an FFmpeg 9.0.2 that decodes only. To build the add-on:
+Qt Quick and Qt QML libraries its FFmpeg backend needs) and an FFmpeg 9.1 that decodes only. To build the add-on:
 
 ```
 sudo apt install nasm                              # build time only; Qt Multimedia comes with tools/get-qt.sh
-tools/get-ffmpeg.sh                                # FFmpeg 9.0.2 source (Ubuntu's copy) -> tools/build-ffmpeg.sh -> build/ffmpeg
+tools/get-ffmpeg.sh                                # FFmpeg 9.1 source (ffmpeg.org, signature checked) -> tools/build-ffmpeg.sh -> build/ffmpeg
                                                    # (set "base") and build/ffmpeg-full (set "full"); applies
                                                    # tools/ffmpeg-patches, about 10 minutes for both on 2 cores
 packaging/linux/build-addons.sh build build/addons-dist  # addons/media-*/stage.sh copy the libraries in

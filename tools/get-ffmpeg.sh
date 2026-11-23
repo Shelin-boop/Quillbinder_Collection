@@ -1,5 +1,5 @@
 #!/bin/bash
-# Builds the two FFmpeg sets of the media add-ons from the pinned FFmpeg 9.0.2 source
+# Builds the two FFmpeg sets of the media add-ons from the pinned FFmpeg 9.1 source
 # (tools/build-ffmpeg.sh says what is in each and why):
 #   base -> "Media Playback"                      (default prefix build/ffmpeg)
 #   full -> "Extra Video and Audio Formats"       (default prefix build/ffmpeg-full)
@@ -15,8 +15,17 @@ FULL=${2:-${QB_FFMPEG_FULL_DIR:-$ROOT/build/ffmpeg-full}}
 BASE=$(realpath -m "$BASE")
 FULL=$(realpath -m "$FULL")
 WORK=$ROOT/build/ffmpeg-src
-URL=http://archive.ubuntu.com/ubuntu/pool/universe/f/ffmpeg/ffmpeg_9.0.2.orig.tar.xz
-SHA256=8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e
+# 0.93.0: FFmpeg 9.1 from ffmpeg.org (Ubuntu's pool has 9.0.2 only). The pin is the SHA-256 of the archive; while it is
+# empty, the archive is accepted only with a good release signature of the key below (tools/verify-ffmpeg-source.sh),
+# which prints the SHA-256 and "pin this": put it here. With a pin the SHA-256 decides, as before.
+VERSION=9.1
+URL=https://ffmpeg.org/releases/ffmpeg-$VERSION.tar.xz
+SIG_URL=$URL.asc
+KEYS_URL=https://ffmpeg.org/ffmpeg-devel.asc
+# FFmpeg's release signing key (primary key fingerprint); the script stops and prints what it found when the key file differs
+KEY_FPR=FCF986EA15E6E293A5644F10B4322F04D67658D8
+SHA256=""
+TARBALL=ffmpeg-$VERSION.tar.xz
 need() {  # <prefix> <set>: missing, or another set (before 0.50 build/ffmpeg held every decoder)
     [ ! -f "$1/lib/libavcodec.so.63" ] || [ "$(cat "$1/set.txt" 2>/dev/null)" != "$2" ]
 }
@@ -30,18 +39,25 @@ if "$ROOT/tools/deps-pack.sh" fetch ffmpeg "$BASE" "$FULL" && ! need "$BASE" bas
 fi
 mkdir -p "$WORK"
 cd "$WORK"
-[ -f ffmpeg_9.0.2.orig.tar.xz ] || curl -fsSLO "$URL"
-echo "$SHA256  ffmpeg_9.0.2.orig.tar.xz" | sha256sum -c -
-if [ ! -f ffmpeg-9.0.2/configure ]; then
-    rm -rf ffmpeg-9.0.2
-    tar xf ffmpeg_9.0.2.orig.tar.xz
+[ -f "$TARBALL" ] || curl -fsSLO "$URL"
+if [ -n "$SHA256" ]; then
+    echo "$SHA256  $TARBALL" | sha256sum -c -
+else
+    echo "get-ffmpeg: no SHA-256 pinned yet: only a good release signature is accepted"
+    curl -fsSL -o "$TARBALL.asc" "$SIG_URL"
+    curl -fsSL -o ffmpeg-devel.asc "$KEYS_URL"
+    "$ROOT/tools/verify-ffmpeg-source.sh" "$TARBALL" "$TARBALL.asc" ffmpeg-devel.asc "$KEY_FPR"
+fi
+if [ ! -f ffmpeg-$VERSION/configure ]; then
+    rm -rf ffmpeg-$VERSION
+    tar xf "$TARBALL"
 fi
 if need "$BASE" base; then
     rm -rf "$BASE"
-    "$ROOT/tools/build-ffmpeg.sh" "$WORK/ffmpeg-9.0.2" "$BASE" base
+    "$ROOT/tools/build-ffmpeg.sh" "$WORK/ffmpeg-$VERSION" "$BASE" base
 fi
 if need "$FULL" full; then
     rm -rf "$FULL"
-    "$ROOT/tools/build-ffmpeg.sh" "$WORK/ffmpeg-9.0.2" "$FULL" full
+    "$ROOT/tools/build-ffmpeg.sh" "$WORK/ffmpeg-$VERSION" "$FULL" full
 fi
 echo "FFmpeg built: $BASE (base), $FULL (full)"

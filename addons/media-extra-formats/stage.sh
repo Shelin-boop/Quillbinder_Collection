@@ -27,8 +27,8 @@ Libraries in this add-on ("Extra Video and Audio Formats")
 ==========================================================
 
 media-extra/lib/libavutil.so.61, libswresample.so.7, libswscale.so.10, libavcodec.so.63, libavformat.so.63
-    FFmpeg 9.0.2, built for this add-on (set "full" of tools/build-ffmpeg.sh of the Quillbinder
-    source): every decoder of FFmpeg 9.0.2 but WMA Pro and WMV 9 (the list:
+    FFmpeg 9.1, built for this add-on (set "full" of tools/build-ffmpeg.sh of the Quillbinder
+    source): every decoder of FFmpeg 9.1 but WMA Pro and WMV 9 (the list:
     ffmpeg-decoders.txt), demuxers and parsers, no external libraries but zlib, with one change
     (tools/ffmpeg-patches/0001-stream-duration-from-file.patch). The add-on "Media Playback"
     (2.0 or newer) loads these libraries instead of its own while this add-on is installed and
@@ -36,7 +36,7 @@ media-extra/lib/libavutil.so.61, libswresample.so.7, libswscale.so.10, libavcode
     Licence: GNU LGPL 2.1 or later (FFmpeg-LGPL-2.1.txt).
     Source: file $FF_FILE of the release "Third-party source code"
     of the project page: $SRC_URL
-    (the original FFmpeg 9.0.2 archive, the patch and the build scripts).
+    (the original FFmpeg 9.1 archive, the patch and the build scripts).
 
 Formats licensed under patents
     Some formats these libraries decode (among them H.264, H.265, AAC, AC-3) are covered by

@@ -16,6 +16,7 @@ on:
     paths:
       - 'tools/get-ffmpeg.sh'
       - 'tools/build-ffmpeg.sh'
+      - 'tools/verify-ffmpeg-source.sh'
       - 'tools/ffmpeg-patches/**'
       - 'tools/get-whisper.sh'
       - 'tools/deps-pack.sh'
@@ -52,7 +53,7 @@ jobs:
     steps:
       - name: Tools to fetch the source
         run: |
-          apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl gh xz-utils
+          apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl gh xz-utils gnupg gpgv
 
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
@@ -88,6 +89,12 @@ jobs:
             tools/get-whisper.sh > "out/build-$PACK.log" 2>&1 || { tail -60 "out/build-$PACK.log"; exit 1; }
           fi
           echo "built in $(( ($(date +%s) - start) / 60 )) min"; tail -5 "out/build-$PACK.log"
+          # FFmpeg: the signature check of the source archive (tools/verify-ffmpeg-source.sh) prints the SHA-256 to pin
+          if [ "$PACK" = ffmpeg ]; then
+            echo "::group::FFmpeg source archive: release signature and SHA-256 (put the pin into tools/get-ffmpeg.sh)"
+            grep -E 'get-ffmpeg:|verify-ffmpeg-source:|SHA-256 of|pin this|tar.xz: OK' "out/build-$PACK.log" || echo "(no such lines in the log)"
+            echo "::endgroup::"
+          fi
 
       - name: Pack
         run: |

@@ -73,7 +73,7 @@ media/qtplugins/multimedia/libffmpegmediaplugin.so
     (also https://download.qt.io/official_releases/qt/).
 
 media/lib/libavutil.so.61, libswresample.so.7, libswscale.so.10, libavcodec.so.63, libavformat.so.63
-    FFmpeg 9.0.2, built for this add-on (set "base" of tools/build-ffmpeg.sh of the Quillbinder
+    FFmpeg 9.1, built for this add-on (set "base" of tools/build-ffmpeg.sh of the Quillbinder
     source): decoders for free formats only (the list: ffmpeg-decoders.txt), demuxers and
     parsers, no external libraries but zlib, with one change
     (tools/ffmpeg-patches/0001-stream-duration-from-file.patch).
@@ -81,5 +81,5 @@ media/lib/libavutil.so.61, libswresample.so.7, libswscale.so.10, libavcodec.so.6
     "Extra Video and Audio Formats".
     Licence: GNU LGPL 2.1 or later (FFmpeg-LGPL-2.1.txt).
     Source: file $FF_FILE of the release named above (the original
-    FFmpeg 9.0.2 archive, the patch and the build scripts).
+    FFmpeg 9.1 archive, the patch and the build scripts).
 TEXT
