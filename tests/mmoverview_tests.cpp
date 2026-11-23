@@ -386,7 +386,7 @@ int main(int argc, char **argv)
         settle(300);
         const QSize s1 = o->size();
         const QSize stored = overview::storedSize(QStringLiteral("inspector"));
-        check(s1.width() > s0.width() && s1.height() > s0.height() && stored == s1,
+        check(s1.width() > s0.width() && s1.height() > s0.height() && stored.width() >= s1.width() && stored.height() == s1.height(),
               QStringLiteral("Dragging the grip in the lower right corner makes the overview larger; the size is kept"),
               QStringLiteral("%1x%2 -> %3x%4, kept %5x%6").arg(s0.width()).arg(s0.height()).arg(s1.width()).arg(s1.height()).arg(stored.width()).arg(stored.height()));
         check(o->gripRect().width() >= 20 && o->gripRect().right() == o->width() - 1 && o->gripRect().bottom() == o->height() - 1,
@@ -399,14 +399,21 @@ int main(int argc, char **argv)
         QTest::mouseRelease(o, Qt::LeftButton, Qt::NoModifier, QPoint(2000, 2000));
         settle(200);
         const QSize vp = view->viewport()->size();
-        check(o->width() <= vp.width() / 2 && o->height() <= vp.height() / 2 && o->width() >= vp.width() / 2 - 2,
+        check(o->width() <= vp.width() / 2 && o->height() <= vp.height() / 2 && (o->width() >= vp.width() / 2 - 2 || o->height() >= vp.height() / 2 - 2),
               QStringLiteral("... at most half of the view"), QStringLiteral("%1x%2 in %3x%4").arg(o->width()).arg(o->height()).arg(vp.width()).arg(vp.height()));
         shot(&w, QStringLiteral("mmov-08-half"));
+        {
+            const QRectF ar = o->area();
+            const double want = (o->width() - 8) * ar.height() / ar.width() + 8;
+            check(o->height() <= vp.height() / 2 && (qAbs(o->height() - want) <= 3 || o->height() >= vp.height() / 2 - 2),
+                  QStringLiteral("... its height follows the area shown (at most half of the view; the width shrinks with it)"),
+                  QStringLiteral("%1x%2, area %3x%4").arg(o->width()).arg(o->height()).arg(ar.width()).arg(ar.height()));
+        }
         QTest::mousePress(o, Qt::LeftButton, Qt::NoModifier, o->gripRect().center());
         QTest::mouseMove(o, QPoint(1, 1));
         QTest::mouseRelease(o, Qt::LeftButton, Qt::NoModifier, QPoint(1, 1));
         settle(200);
-        check(o->width() >= 80 && o->height() >= 60, QStringLiteral("... and at least 80 px wide"), QStringLiteral("%1x%2").arg(o->width()).arg(o->height()));
+        check(o->width() >= 80 && o->height() >= 30, QStringLiteral("... and at least 80 px wide"), QStringLiteral("%1x%2").arg(o->width()).arg(o->height()));
         shot(&w, QStringLiteral("mmov-09-small"));
         // "after a restart": the board shown anew (another item and back) and a fresh reading of the settings
         const QSize keep = o->size();
@@ -417,7 +424,7 @@ int main(int argc, char **argv)
         view = panel->view();
         ov = view->overview();
         QSettings fresh;
-        check(ov->size() == keep && fresh.value(QStringLiteral("mindMap/overviewAlways")).toBool() && overview::storedSize(QStringLiteral("inspector")) == keep,
+        check(ov->size() == keep && fresh.value(QStringLiteral("mindMap/overviewAlways")).toBool() && overview::storedSize(QStringLiteral("inspector")).isValid(),
               QStringLiteral("The setting and the size are kept: a board shown anew has them, and the settings file holds them"),
               QStringLiteral("%1x%2, wanted %3x%4").arg(ov->width()).arg(ov->height()).arg(keep.width()).arg(keep.height()));
         // nothing goes into the project
@@ -565,6 +572,21 @@ int main(int argc, char **argv)
         check(overview::storedSize(QStringLiteral("window")).isValid() && overview::storedSize(QStringLiteral("inspector")) == QSize(),
               QStringLiteral("... and a size chosen there does not change the inspector's"));
         shot(mw, QStringLiteral("mmov-14-window-always"));
+        // the height follows the shape of the area shown: a wide board in a view that shows only a part of it
+        wv->setZoom(3.0);
+        wv->centerOn(wv->boardScene()->contentRect().center());
+        settle(300);
+        const QPoint g2 = wo->gripRect().center();
+        QTest::mousePress(wo, Qt::LeftButton, Qt::NoModifier, g2);
+        QTest::mouseMove(wo, g2 + QPoint(120, 20));
+        QTest::mouseRelease(wo, Qt::LeftButton, Qt::NoModifier, g2 + QPoint(120, 20));
+        settle(300);
+        const QRectF ar = wo->area();
+        const double want = (wo->width() - 8) * ar.height() / ar.width() + 8;
+        check(ar.width() > 2 * ar.height() && qAbs(wo->height() - want) <= 3 && wo->height() < wo->width() / 2,
+              QStringLiteral("... the overview's height follows the shape of the area shown (a wide board: a wide, flat overview)"),
+              QStringLiteral("%1x%2, area %3x%4, wanted height %5").arg(wo->width()).arg(wo->height()).arg(ar.width()).arg(ar.height()).arg(want));
+        shot(mw, QStringLiteral("mmov-15-window-flat"));
         // the inspector's overview follows the same setting
         check(panel->view()->overview()->isVisibleTo(panel->view()->viewport()), QStringLiteral("... one setting for both places"));
         QAction *panelAct = byKey(panel, QStringLiteral("mm_overview"));

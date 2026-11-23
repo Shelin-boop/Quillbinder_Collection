@@ -74,6 +74,8 @@ private:
         QPointF origin;   // where the area's top left lies in the overview
     };
     Map map() const;
+    QSize fittedSize(int chosenWidth) const;
+    int m_chosenWidth = 0;
     void moveViewTo(const QPointF &scenePos);
     QPointer<MindMapView> m_view;
     QString m_kind = QStringLiteral("inspector");

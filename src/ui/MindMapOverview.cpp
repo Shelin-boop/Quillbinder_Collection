@@ -181,14 +181,36 @@ bool MindMapOverview::wantedShown() const
     return m_shown;                      // in between: as it is (no flicker at the edge)
 }
 
+// The width the writer chose (0: the standard) and the height that follows the shape of the area shown; when the
+// height would pass its limit the width shrinks with it.
+QSize MindMapOverview::fittedSize(int chosenWidth) const
+{
+    const QSize vp = m_view->viewport()->size();
+    const QSize base = overview::sizeFor(vp, chosenWidth > 0 ? QSize(chosenWidth, 60) : QSize());
+    const QRectF a = area();
+    const double aspect = (a.isEmpty() || a.width() <= 0) ? 0.75 : a.height() / a.width();
+    const int maxH = std::max(30, vp.height() / 2);
+    const int pad = 8; // the map's own border (innerRect)
+    int w = base.width();
+    int h = int(std::ceil((w - pad) * aspect)) + pad;
+    if (h > maxH) {
+        h = maxH;
+        w = std::max(40, int(std::floor((h - pad) / aspect)) + pad);
+    }
+    h = std::max(h, std::min(30, maxH));
+    return QSize(w, h);
+}
+
 void MindMapOverview::refresh()
 {
     if (!m_view)
         return;
     const QSize vp = m_view->viewport()->size();
-    const QSize sz = overview::sizeFor(vp, overview::storedSize(m_kind));
-    if (!m_resizing && size() != sz)
-        resize(sz);
+    if (!m_resizing && !m_dragging) {
+        const QSize sz = fittedSize(overview::storedSize(m_kind).isValid() ? overview::storedSize(m_kind).width() : 0);
+        if (size() != sz)
+            resize(sz);
+    }
     move(kMargin, kMargin);
     const bool want = wantedShown();
     m_shown = want;
@@ -247,8 +269,9 @@ void MindMapOverview::mouseMoveEvent(QMouseEvent *e)
 {
     e->accept();
     if (m_resizing) {
-        const QSize want(int(e->position().x()) + 2, int(e->position().y()) + 2);
-        const QSize sz = overview::sizeFor(m_view->viewport()->size(), want);
+        // the grip changes the width; the height follows
+        m_chosenWidth = int(e->position().x()) + 2;
+        const QSize sz = fittedSize(m_chosenWidth);
         if (sz != size()) {
             resize(sz);
             update();
@@ -274,7 +297,7 @@ void MindMapOverview::mouseReleaseEvent(QMouseEvent *e)
     e->accept();
     if (m_resizing) {
         m_resizing = false;
-        overview::setStoredSize(m_kind, size());
+        overview::setStoredSize(m_kind, QSize(overview::sizeFor(m_view->viewport()->size(), QSize(m_chosenWidth, 60)).width(), height()));
         emit resized(size());
     }
     if (m_dragging) {

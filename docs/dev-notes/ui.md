@@ -19,7 +19,7 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - **Settings** (`overview::` in the same files, plain `QSettings`, per device, not in the project): `mindMap/overviewAlways`
   (bool), `mindMap/overviewSize/<kind>` (QSize; kind = the view memory's "inspector" or "window"). `overview::hub()`
   signals `modeChanged` to every view and to every controller's command. `sizeFor` is the size rule (a fifth of the
-  width, at least 80 x 60, at most half the view); the grip is 22 px, 40 px with a touch screen or on Android.
+  width, at least 80 px wide, at most half the view); the overview's own size is `fittedSize`: the writer's width, the height from the area's proportions (at most half the view, the width shrinks with it); the stored height is not used; the grip is 22 px, 40 px with a touch screen or on Android.
 - **The command** `mm_overview` (checkable, checked = always; its tool tip is "Overview: automatic" or "Overview: always
   shown", set in `updateActions`) is in `fillViewMenu` (the large window's View menu and the inspector's Menu > View) and is
   the default action of the bar's button `mmOverviewButton`, right after `mmMenuButton`. Icon `qb-mm-overview` (made by
