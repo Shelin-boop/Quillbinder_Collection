@@ -42,7 +42,7 @@ model is downloaded, it works without any internet connection.
 
 1. Download `translation-proofreading-<version>.qbpkg` (Linux) or `translation-proofreading-<version>-windows.qbpkg`
    (Windows): the official add-on, built and signed by the Quillbinder project, from its release in
-   [Quillbinder_Public](https://github.com/Shelin-boop/Quillbinder_Collection/releases) ("Translation and Proofreading ...
+   [the Quillbinder releases](https://github.com/Shelin-boop/Quillbinder_Collection/releases) ("Translation and Proofreading ...
    (official add-on)", for Windows "... for Windows (official add-on)"); or a test build from the pre-release **test**
    (Linux) or **test-windows** (Windows) of this repository.
 2. In Quillbinder (0.91.3 or later): **File > Install Update or Add-on**, choose the file. The official add-on is shown

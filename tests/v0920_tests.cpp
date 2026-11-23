@@ -1843,6 +1843,17 @@ int main(int argc, char **argv)
                   && !store.contains("Quillbinder_Translation_Addon")
                   && readAll(addon + QStringLiteral("/source/resources/catalog.json")).contains("\"release\": \"models-1\""),
               QStringLiteral("it fetches its models from the releases models-1 and models-2 of this repository"));
+        {
+            // 0.93.0: the pinned entry describes 1.2 and this repository; no file names the former repositories
+            const QJsonObject entry = QJsonDocument::fromJson(readAll(src + QStringLiteral("/official-addons/translation-proofreading.json"))).object();
+            const QByteArray official = readAll(src + QStringLiteral("/docs/official-addons.md"));
+            check(entry.value(QStringLiteral("version")).toString() == m.value(QStringLiteral("version")).toString()
+                      && entry.value(QStringLiteral("repository")).toString() == QLatin1String("Shelin-boop/Quillbinder_Collection")
+                      && !official.contains("Quillbinder_Translation_Addon") && !official.contains("addon-translation-proofreading-1.1")
+                      && !QFileInfo::exists(src + QStringLiteral("/.github/workflows/models-mirror.yml")),
+                  QStringLiteral("the pinned entry and docs/official-addons.md describe the add-on's version in this repository; "
+                                 "no link leads to the former repositories"));
+        }
 #ifdef Q_OS_WIN
         // Windows: the add-on is staged by packaging/windows/win-addons.sh, not by stage.sh (a Linux script): left out
         // without its engine libraries, which win-ci.sh builds with the add-on's own script; a release build fails without it
@@ -1852,9 +1863,9 @@ int main(int argc, char **argv)
         check(winAddons.contains("left out (its engine libraries are missing") && winAddons.contains("make-addon-windows.sh")
                   && winCi.contains("build-deps-windows.sh") && winCi.contains("stage/packages/translation-proofreading-windows.qbpkg")
                   && winRelease.contains("translator-deps-windows-msvc-")
-                  && readAll(src + QStringLiteral("/.github/workflows/models-mirror.yml")).contains("Quillbinder_Translation_Addon"),
+                  && readAll(src + QStringLiteral("/.github/workflows/models-check.yml")).contains("releases/tags/$tag") && !readAll(src + QStringLiteral("/.github/workflows/models-check.yml")).contains("Quillbinder_Translation_Addon"),
               QStringLiteral("Windows: the Windows build stages the add-on with its own scripts and leaves it out when its engine "
-                             "libraries are not built; a release build fails without the add-on; a workflow copies the model files here"));
+                             "libraries are not built; a release build fails without the add-on; a workflow checks the model files here"));
 #else
         // without its engine libraries it is left out of a local build (exit code 3), as the packing script expects
         QProcess stage;
@@ -1867,9 +1878,9 @@ int main(int argc, char **argv)
         const QByteArray release = readAll(src + QStringLiteral("/.github/workflows/release.yml"));
         check(stage.exitStatus() == QProcess::NormalExit && stage.exitCode() == 3
                   && release.contains("tools/get-translator-deps.sh") && release.contains("for must in speech-transcription translation-proofreading")
-                  && readAll(src + QStringLiteral("/.github/workflows/models-mirror.yml")).contains("Quillbinder_Translation_Addon"),
+                  && readAll(src + QStringLiteral("/.github/workflows/models-check.yml")).contains("releases/tags/$tag") && !readAll(src + QStringLiteral("/.github/workflows/models-check.yml")).contains("Quillbinder_Translation_Addon"),
               QStringLiteral("stage.sh leaves the add-on out when its engine libraries are not built; the release workflow builds "
-                             "them and fails without the add-on; a workflow copies the model files here"),
+                             "them and fails without the add-on; a workflow checks the model files here"),
               QString::fromUtf8(stage.readAllStandardError()) + QStringLiteral(" exit %1").arg(stage.exitCode()));
 #endif
     }

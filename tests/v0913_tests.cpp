@@ -659,7 +659,7 @@ int main(int argc, char **argv)
                                                  src + QStringLiteral("/official-addons/translation-proofreading.json"), QStringLiteral("--android")}, &r4);
             check(r1 == 0 && aView.contains(QLatin1String("tag=addon-check-official-2.1-android")) && r2 == 2
                       && noAndroid.contains(QLatin1String("no Android build")) && r3 == 2 && wrongView.contains(QLatin1String("redistributables"))
-                      && r4 == 0 && realAndroid.contains(QLatin1String("tag=addon-translation-proofreading-1.1-android")),
+                      && r4 == 0 && realAndroid.contains(QLatin1String("tag=addon-translation-proofreading-1.2-android")),
                   QStringLiteral("addon-entry.py --android: the entry's Android block (its tag ends in -android), refused without one or with "
                                  "Windows' redistributables; the pinned translation add-on has one"),
                   aView + noAndroid + wrongView + realAndroid);

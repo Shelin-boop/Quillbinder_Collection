@@ -64,7 +64,7 @@ with an add-on key as an unsigned one and warns, so the release text of such an 
    latest release, with a list of checksums and the sources. The release text names the add-on's license, its author,
    and every download for non-commercial use only, with the sentence that the add-on must not be sold.
 6. **Listing.** This page (below) and the README list the official add-ons: name, author, what each does, and notes
-   such as a model for non-commercial use only. (The download page lists them in a later version.)
+   such as a model for non-commercial use only. The download page lists them too (since 0.93.0).
 7. **New versions.** The author names the new commit in a new issue or in a comment. The review covers what changed
    since the reviewed commit; then the catalog entry moves to the new commit and the add-on is built and signed anew.
    When Quillbinder moves to new libraries (a new runtime), the workflow builds every listed add-on again.
@@ -106,9 +106,13 @@ before the download; the project gives no legal advice on it.
 
 | Add-on | Author | What it does | Notes | State |
 |--------|--------|--------------|-------|-------|
-| Translation and Proofreading 1.1 ([source](https://github.com/Shelin-boop/Quillbinder_Translation_Addon)) | The Quillbinder Translation Add-on project | Checks English text for spelling and grammar and translates German text into English, on the writer's computer; works while the writer types, shows suggestions for single words | Can download CoEdIT Large, whose license (CC BY-NC 4.0) allows non-commercial use only; the larger models need 2.8 to 5.5 GB of memory (the add-on refuses one the computer cannot hold) | 1.1 published 2026-11-15: [release addon-translation-proofreading-1.1](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/addon-translation-proofreading-1.1) (needs Quillbinder 0.91.3 or later); **for Windows** 1.1 published 2026-11-16: [release addon-translation-proofreading-1.1-windows](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/addon-translation-proofreading-1.1-windows) (needs Quillbinder for Windows 0.91.3 or later); **for Android** 1.1 published 2026-11-16: [release addon-translation-proofreading-1.1-android](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/addon-translation-proofreading-1.1-android) (needs Quillbinder for Android 0.91.3 or later, a tablet with 64-bit ARM); 1.0: [release addon-translation-proofreading-1.0](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/addon-translation-proofreading-1.0) |
+| Translation and Proofreading 1.2 ([source](https://github.com/Shelin-boop/Quillbinder_Collection/tree/main/addons/translation-proofreading)) | The Quillbinder project | Checks English text for spelling and grammar and translates German text into English, on the writer's computer; works while the writer types, shows suggestions for single words | Can download CoEdIT Large, whose license (CC BY-NC 4.0) allows non-commercial use only; the larger models need 2.8 to 5.5 GB of memory (the add-on refuses one the computer cannot hold) | 1.2 published 2026-11-20 with Quillbinder 0.92.0, inside the full version and as a package of its own: [Linux](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.92.0-beta) (`translation-proofreading.qbpkg`), [Windows](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.92.0-windows-experimental) (`translation-proofreading-windows.qbpkg`), [Android](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.92.0-android-experimental) (`translation-proofreading-android-arm64.qbpkg`, a tablet with 64-bit ARM) |
 
-Since Quillbinder 0.92.0 the add-on is one of the project's own on Linux, since Windows 0.92.0 on Windows and since Android 0.92.0 on Android too (version 1.2: its source is `addons/translation-proofreading`, it is built and signed with Quillbinder and is part of the full version, on Android of the app, and its models are on this repository's releases `models-1` and `models-2`). The row above describes 1.1, the version for Quillbinder before 0.92.0 on each system.
+Since Quillbinder 0.92.0 the add-on is one of the project's own on every system: its source is
+`addons/translation-proofreading` in this repository, it is built and signed with Quillbinder, and it is part of the
+full version (on Android of the app). Its models are on this repository's releases `models-1` and `models-2`. The
+1.0 and 1.1 packages were published from the add-on's former repository and are not on this repository's releases;
+`official-addons/translation-proofreading.json` describes 1.2.
 
 ## The add-on key (for the maintainer)
 

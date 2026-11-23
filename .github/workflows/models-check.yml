@@ -1,0 +1,55 @@
+# 0.93.0: checks the language models of the add-on "Translation and Proofreading" (version 1.2 and later download them
+# from the releases models-1 and models-2 of this repository). Reads the add-on's catalog
+# (addons/translation-proofreading/source/resources/catalog.json) and compares every file it names, with its size,
+# against the files of those two releases. (It replaced "models-mirror.yml", which copied the releases from the
+# add-on's former repository in 0.92.0; the copy is done, and nothing here needs that repository any more.)
+# Run by pushing the branch "models-check" or by hand; it only reads and changes nothing.
+name: Models of the translator (check)
+
+on:
+  push:
+    branches: [models-check]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - name: Compare the catalog with the releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          for tag in models-1 models-2; do
+            gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" --jq '.assets[] | "\(.name) \(.size)"' | sort > "here-$tag.txt"
+            echo "$tag: $(wc -l < "here-$tag.txt") file(s), $(awk '{s+=$2} END {printf "%.0f", s/1048576}' "here-$tag.txt") MB"
+          done
+          python3 -I - addons/translation-proofreading/source/resources/catalog.json <<'PY'
+          import json, sys
+          catalog = json.load(open(sys.argv[1], encoding="utf-8"))
+          have = {}
+          for tag in ("models-1", "models-2"):
+              for line in open("here-%s.txt" % tag, encoding="utf-8"):
+                  name, size = line.rsplit(" ", 1)
+                  have[(tag, name)] = int(size)
+          bad = []
+          for model in catalog["models"]:
+              tag = model.get("release") or catalog["release"]
+              for f in model["files"]:
+                  for part in (f.get("parts") or [f]):
+                      if have.get((tag, part["asset"])) != part["size"]:
+                          bad.append("%s: %s (%d bytes) is not on %s" % (model["id"], part["asset"], part["size"], tag))
+          for tag in ("models-1", "models-2"):
+              if have.get((tag, "catalog.json")) is None:
+                  bad.append("%s has no catalog.json" % tag)
+          print("\n".join(bad) if bad else "every file of the catalog is on its release, with its size")
+          sys.exit(1 if bad else 0)
+          PY
