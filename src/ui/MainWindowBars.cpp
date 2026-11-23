@@ -3,6 +3,10 @@
 #include "ui/ThemePicker.h"
 #include "ui/MainWindow.h"
 #include "ui/UndoNames.h"
+#include "core/Backup.h"
+#include "core/Portable.h"
+#include "core/Project.h"
+#include "ui/AppSettings.h"
 #include "ui/MenuClear.h"
 #include "ui/LinkOpen.h"
 #include "ui/ProjectLook.h"
@@ -218,7 +222,14 @@ void MainWindow::createMenus()
     projectFormat->setObjectName(QStringLiteral("projectFormatMenu"));
     add(projectFormat, {"formatQuillbinder", "formatScrivener", "", "saveCopyScrivener", "saveCopyQuillbinder"});
     QMenu *bk = file->addMenu(tr("&Back Up"));
-    add(bk, {"backupNow", "backupTo", "", "restoreBackup", "showBackups"});
+    add(bk, {"backupNow", "backupTo", "", "restoreBackup", "moveOldBackups", "showBackups"});
+    // 0.93.0: "Move Old Backups" is on only while the project's folder of 0.70.0 to 0.90.4 holds backups
+    connect(bk, &QMenu::aboutToShow, this, [this] {
+        const AppSettings &s = AppSettings::instance();
+        const bool can = m_project && (!portable::active() || !s.backupDir.trimmed().isEmpty())
+                         && !backup::formerBackupsFor(m_project.get(), s.backupDir.trimmed()).isEmpty();
+        a[QStringLiteral("moveOldBackups")]->setEnabled(can);
+    });
     file->addSeparator();
     QMenu *imp = file->addMenu(icons::action(QStringLiteral("document-import")), tr("&Import"));
     menuAlias(imp, QStringLiteral("importFiles"), tr("&Files…"));

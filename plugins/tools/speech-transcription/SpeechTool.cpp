@@ -38,6 +38,8 @@
 #include <QPushButton>
 #include <QRadioButton>
 #include <QSaveFile>
+#include <atomic>
+#include <memory>
 #include <QSignalBlocker>
 #include <QSpinBox>
 #include <QStandardItemModel>
@@ -779,11 +781,18 @@ void SpeechTool::useLocalModel(const QString &file)
     const QString part = modelsDir() + QLatin1Char('/') + QFileInfo(file).fileName() + QStringLiteral(".part");
     m_modelMessage = tr("Copying %1 ...").arg(QFileInfo(file).fileName());
     QFile::remove(part);
-    QThread *t = QThread::create([file, part] { QFile::copy(file, part); });
-    connect(t, &QThread::finished, this, [this, t, part] {
+    // 0.93.0: the result of the copy counts (a full disk or a cut-off copy left a part of the file, which then went on to
+    // the check as if it were the model): the copy must have succeeded and be as large as the original
+    auto copied = std::make_shared<std::atomic<bool>>(false);
+    QThread *t = QThread::create([file, part, copied] {
+        QFile::copy(file, part);
+        copied->store(QFileInfo(part).size() == QFileInfo(file).size() && QFileInfo(part).size() > 0);
+    });
+    connect(t, &QThread::finished, this, [this, t, part, copied] {
         t->deleteLater();
-        if (!QFileInfo::exists(part)) {
-            finishJob(false, tr("The file could not be copied to %1.").arg(modelsDir()));
+        if (!copied->load()) {
+            QFile::remove(part);
+            finishJob(false, tr("The file could not be copied to %1 (the disk may be full).").arg(modelsDir()));
             return;
         }
         checkAndInstall(part, QString(), false);
@@ -1071,6 +1080,8 @@ TranscriptPanel::~TranscriptPanel()
 void TranscriptPanel::refresh()
 {
     const QString folder = m_tool->folder();
+    if (!m_tool->isBusy())
+        speech::removeLeftoverParts(folder); // 0.93.0: what a cut-off transcription left (an hour old)
     if (folder != m_folder) {
         if (!m_watch->directories().isEmpty())
             m_watch->removePaths(m_watch->directories());

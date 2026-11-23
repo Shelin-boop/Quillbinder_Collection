@@ -214,6 +214,9 @@ static bool writeFile(const QString &path, const QByteArray &data)
     return safesave::commit(out);
 }
 
+// 0.93.0: no result is told on purpose: this makes the copies that are handed to another program (the pictures of a web
+// page beside its page). The originals stay where they are and a failed copy is a missing picture in the copy; a drag has no
+// place to tell it, and the page itself (whose copy is checked above) still opens.
 static void copyTreeTo(const QString &from, const QString &to)
 {
     QDir().mkpath(to);

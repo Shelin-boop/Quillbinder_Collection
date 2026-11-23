@@ -126,6 +126,10 @@ public:
     // restored and opened (the checks call restoreBackupFile; lastRestoredProject() names what was opened)
     void restoreBackup();
     bool restoreBackupFile(const QString &zip);
+    // 0.93.0: File > Back Up > Move Old Backups Into the Backup Folder (the backups of the project's own folder of
+    // 0.70.0 to 0.90.4); lastMoveOldText() is the report (the checks)
+    void moveOldBackups();
+    QString lastMoveOldText() const { return m_lastMoveOldText; }
     QString lastRestoredProject() const { return m_lastRestored; }
     // the backup made at the opening because the last session was ended by a signal (0.81.0; tests)
     QString lastDueBackup() const { return m_lastDueBackup; }
@@ -467,6 +471,7 @@ private:
     QString m_lastBackupProblem;
     QString m_lastBackupCleanupNote;
     QString m_lastRestoreText;
+    QString m_lastMoveOldText;
     QSet<QString> m_backupCausesTold;                       // 0.92.0: the notice of a manual save's backup, per cause
     failure::Kind m_lastSaveKind = failure::Kind::None;     // 0.92.0: the kind of the last failed save
     UpdateChecker *m_updates = nullptr;                     // 0.92.0

@@ -9,6 +9,7 @@
 #include "core/DocumentStore.h"
 #include "core/Paths.h"
 #include "core/Project.h"
+#include "core/SaveBatch.h"
 #include "core/Snapshots.h"
 #include "core/SyncSafety.h"
 #include "core/WebArchive.h"
@@ -3690,6 +3691,8 @@ OpenResult open(const QString &path, QString *error)
             *error = QObject::tr("No Scrivener project (.scrivx) was found in:\n%1").arg(scrivDir);
         return res;
     }
+    // 0.93.0: what a cut-off write of this program left in the .scriv (QSaveFile's "<file>.XXXXXX", ten minutes old)
+    savebatch::removeSaveLeftovers(scrivDir);
     QString identifier;
     {
         QFile f(scrivx);

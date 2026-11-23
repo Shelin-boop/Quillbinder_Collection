@@ -422,6 +422,8 @@ QString MediaView::openSavedPage(QString *error)
                 const QString from = it.next();
                 const QString to = dir + QLatin1Char('/') + src.relativeFilePath(from);
                 QDir().mkpath(QFileInfo(to).absolutePath());
+                // (0.93.0: the result is not told on purpose: this is a temporary copy for the web browser, the
+                // original stays; a picture that could not be copied is a gap in the page shown)
                 QFile::copy(from, to);
             }
         }

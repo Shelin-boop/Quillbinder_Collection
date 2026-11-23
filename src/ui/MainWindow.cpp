@@ -1035,6 +1035,10 @@ void MainWindow::createActions()
     // 0.70.0 (audit A U-05): backups restored by the program
     connect(act(QStringLiteral("restoreBackup"), tr("&Restore From Backup…")), &QAction::triggered, this,
             withProject([this] { restoreBackup(); }));
+    // 0.93.0: the backups of the project's own folder of 0.70.0 to 0.90.4 into the backup folder
+    connect(act(QStringLiteral("moveOldBackups"), tr("Move &Old Backups Into the Backup Folder…")), &QAction::triggered, this,
+            withProject([this] { moveOldBackups(); }));
+    a[QStringLiteral("moveOldBackups")]->setEnabled(false); // on when the Back Up menu opens and an old folder holds backups
     connect(act(QStringLiteral("importFiles"), tr("Import &Files…"), QStringLiteral("document-import"),
                 QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_I)),
             &QAction::triggered, this, withProject([this] { importFiles(); }));
@@ -2283,6 +2287,8 @@ void MainWindow::updateActions()
                           "resetIcon", "iconFromText", "manageIcons", "compareFile", "compareByChapter", "compareStepByStep",
                           "formatQuillbinder", "formatScrivener", "saveCopyScrivener", "saveCopyQuillbinder"})
         a[QLatin1String(k)]->setEnabled(has);
+    if (!has)
+        a[QStringLiteral("moveOldBackups")]->setEnabled(false); // 0.93.0 (with a project: on when the Back Up menu opens)
     // without a project there is no text to search, link, zoom or split, and no binder to go to
     // (their keys must not reach them either); the menus with nothing but such commands are off as a whole
     for (const char *k : {"find", "replace", "findNext", "findPrev", "useSelectionForFind", "selectAnnotation", "hyperlink",
@@ -4639,6 +4645,8 @@ void MainWindow::restoreBackup()
         return;
     const QString dir = AppSettings::instance().backupDir;
     const QStringList own = backup::backupsFor(m_project.get(), dir);
+    // 0.93.0: backups made while the backup folder was out of reach wait in the program's work folder
+    const QStringList waiting = backup::waitingBackupsFor(m_project.get(), dir);
     // 0.91.0: the backups of the project's own folder of 0.70.0 to 0.90.4 stay where they are and are offered too
     const QStringList older = backup::formerBackupsFor(m_project.get(), dir);
     const QString olderFolder = QFileInfo(backup::formerProjectFolder(m_project.get(), dir)).fileName();
@@ -4656,6 +4664,7 @@ void MainWindow::restoreBackup()
     list->setObjectName(QStringLiteral("restoreBackupList"));
     list->setRootIsDecorated(false);
     list->setHeaderLabels({tr("Made"), tr("Size"), tr("State")});
+    const QSet<QString> waitingSet(waiting.begin(), waiting.end());
     auto addRows = [&](const QStringList &files, bool olderKind) {
         for (int i = int(files.size()) - 1; i >= 0; --i) {
             const QFileInfo fi(files.at(i));
@@ -4665,12 +4674,18 @@ void MainWindow::restoreBackup()
             QString state = fi.completeBaseName().contains(QLatin1String(" (incomplete")) ? tr("incomplete") : tr("complete");
             if (olderKind)
                 state += tr(" (in the folder \"%1\")").arg(olderFolder);
+            if (waitingSet.contains(files.at(i)))
+                state += tr(", waiting (not yet in the backup folder)");
             row->setText(2, state);
             row->setData(0, Qt::UserRole, fi.absoluteFilePath());
             row->setToolTip(0, QDir::toNativeSeparators(fi.absoluteFilePath()));
         }
     };
-    addRows(own, false);
+    // the backups of the folder and those that wait for it, in one list by their time (newest first below)
+    QStringList together = own + waiting;
+    std::stable_sort(together.begin(), together.end(),
+                     [](const QString &x, const QString &y) { return QFileInfo(x).lastModified() < QFileInfo(y).lastModified(); });
+    addRows(together, false);
     addRows(older, true);
     list->resizeColumnToContents(0);
     list->resizeColumnToContents(1);
@@ -4696,6 +4711,53 @@ void MainWindow::restoreBackup()
     if (dlg.exec() != QDialog::Accepted || !list->currentItem())
         return;
     restoreBackupFile(list->currentItem()->data(0, Qt::UserRole).toString());
+}
+
+void MainWindow::moveOldBackups()
+{
+    if (!m_project)
+        return;
+    if (!backupFolderReady(AskFolder::Always, false))
+        return;
+    const AppSettings &s = AppSettings::instance();
+    const QString dir = s.backupDir.trimmed().isEmpty() ? backup::defaultDirectory() : s.backupDir;
+    const QStringList old = backup::formerBackupsFor(m_project.get(), dir);
+    if (old.isEmpty()) {
+        m_lastMoveOldText = tr("There are no old backups of this project to move: the folder that versions 0.70.0 to 0.90.4 kept "
+                               "for it holds none.");
+        QMessageBox::information(this, tr("Move Old Backups"), m_lastMoveOldText);
+        return;
+    }
+    const QString folder = QDir::toNativeSeparators(backup::formerProjectFolder(m_project.get(), dir));
+    QMessageBox ask(QMessageBox::Question, tr("Move Old Backups"),
+                    tr("%n old backup(s) of this project are in its own folder inside the backup folder:\n%1\n\nVersions "
+                       "0.70.0 to 0.90.4 kept them there. Move them into the backup folder itself, under their names? A "
+                       "backup whose name is already there stays where it is.",
+                       nullptr, int(old.size()))
+                        .arg(folder),
+                    QMessageBox::NoButton, this);
+    ask.setObjectName(QStringLiteral("moveOldBackupsAsk"));
+    QPushButton *go = ask.addButton(tr("Move"), QMessageBox::AcceptRole);
+    QPushButton *no = ask.addButton(QMessageBox::Cancel);
+    ask.setDefaultButton(go);
+    ask.setEscapeButton(no);
+    ask.exec();
+    if (ask.clickedButton() != go)
+        return;
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    const backup::MoveReport r = backup::moveFormerBackups(m_project.get(), dir);
+    QApplication::restoreOverrideCursor();
+    QString text = tr("%n backup(s) moved into the backup folder.", nullptr, int(r.moved.size()));
+    if (!r.left.isEmpty())
+        text += QStringLiteral("\n\n")
+                + tr("%n backup(s) left where they were:\n%1", nullptr, int(r.left.size())).arg(r.left.join(QLatin1Char('\n')));
+    if (r.folderRemoved)
+        text += QStringLiteral("\n\n") + tr("The old folder is empty and was removed.");
+    m_lastMoveOldText = text;
+    QMessageBox box(r.left.isEmpty() ? QMessageBox::Information : QMessageBox::Warning, tr("Move Old Backups"), text,
+                    QMessageBox::Ok, this);
+    box.setObjectName(QStringLiteral("moveOldBackupsReport"));
+    box.exec();
 }
 
 bool MainWindow::restoreBackupFile(const QString &zip)
@@ -5003,7 +5065,8 @@ void MainWindow::integrateDesktop(bool quiet)
     QDir().mkpath(data + QLatin1String("/mime/packages"));
     const QString icon = data + QLatin1String("/icons/hicolor/scalable/apps/" QB_APP_ID ".svg");
     QFile::remove(icon);
-    QFile::copy(QStringLiteral(":/app/quillbinder.svg"), icon);
+    // 0.93.0: a failed copy is told below (the menu entry works without the icon)
+    const bool iconCopied = QFile::copy(QStringLiteral(":/app/quillbinder.svg"), icon);
     QFile::setPermissions(icon, QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ReadOther | QFileDevice::ReadGroup);
     // writing tools that run on their own (the scratch pad) become actions of the
     // menu entry; the desktop can give them a shortcut that works in every program
@@ -5060,7 +5123,12 @@ void MainWindow::integrateDesktop(bool quiet)
         QMessageBox::information(this, tr("Application Menu"),
                                  tr("%1 now appears in the application menu, and double-clicking a project file (*%2) "
                                     "opens it.\n\nIf you move the AppImage, choose this menu entry again.")
-                                     .arg(QLatin1String(QB_APP_NAME), QLatin1String(QB_PROJECT_FILE_SUFFIX)));
+                                         .arg(QLatin1String(QB_APP_NAME), QLatin1String(QB_PROJECT_FILE_SUFFIX))
+                                     + (iconCopied ? QString()
+                                                   : QStringLiteral("\n\n")
+                                                         + tr("The program's icon could not be copied to %1, so the menu entry "
+                                                              "shows no icon.")
+                                                               .arg(QDir::toNativeSeparators(icon))));
 }
 
 // ------------------------------------------------------------------ options carried out here (0.21)

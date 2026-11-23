@@ -6,9 +6,12 @@
 
 #include <QBuffer>
 #include <QDateTime>
+#include <QDir>
+#include <QFileInfo>
 #include <QFile>
 #include <QHash>
 #include <QSaveFile>
+#include "core/SaveBatch.h"
 #include <QSet>
 
 namespace qb {
@@ -1021,6 +1024,15 @@ bool DocxExporter::exportManuscript(const Manuscript &m, const QString &path, QS
     const QByteArray doc = b.document();
     const QByteArray fn = b.footnotes();
     const QString tmpPath = path + QStringLiteral(".part");
+    // 0.93.0: a ".docx.part" that an earlier export left (a crash, a power failure) beside the target goes once it is an
+    // hour old (a younger one may be an export that is running)
+    {
+        const QDateTime limit = QDateTime::currentDateTime().addSecs(-3600);
+        const QFileInfoList old = QDir(QFileInfo(path).absolutePath()).entryInfoList({QStringLiteral("*.docx.part")}, QDir::Files);
+        for (const QFileInfo &fi : old)
+            if (fi.lastModified() < limit && fi.absoluteFilePath() != QFileInfo(tmpPath).absoluteFilePath())
+                QFile::remove(fi.absoluteFilePath());
+    }
     {
         ZipWriter zw(tmpPath);
         if (!zw.isOpen()) {
@@ -1065,10 +1077,11 @@ bool DocxExporter::exportManuscript(const Manuscript &m, const QString &path, QS
             return false;
         }
     }
-    QFile::remove(path);
-    if (!QFile::rename(tmpPath, path)) {
+    // 0.93.0: put in place in one step (the old file stays when this fails), and the ".part" file never stays behind
+    if (!savebatch::replace(tmpPath, path)) {
         if (error)
             *error = tr("Cannot write %1").arg(path);
+        QFile::remove(tmpPath);
         return false;
     }
     return true;

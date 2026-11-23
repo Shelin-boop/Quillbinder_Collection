@@ -78,6 +78,20 @@ bool backupProject(Project *p, const QString &dir, int keep, QString *outPath, Q
 QStringList backupsFor(const Project *p, const QString &dir);
 // The backups in this project's folder of 0.70.0 to 0.90.4 (see formerProjectFolder), oldest first.
 QStringList formerBackupsFor(const Project *p, const QString &dir);
+// 0.93.0: this project's backups that wait in the work folder (they were made while the backup folder was out of
+// reach, see backupProject), picked as backupsFor picks them; Restore From Backup offers them, marked as waiting.
+QStringList waitingBackupsFor(const Project *p, const QString &dir);
+
+// 0.93.0: File > Back Up > Move Old Backups Into the Backup Folder: the backups of the project's own folder of
+// 0.70.0 to 0.90.4 go into the backup folder under their names. A name that is already there stays where it is (never
+// overwritten) and is told in `left` ("<name>: <reason>"); the folder of the old backups is removed when it is empty.
+struct MoveReport {
+    QString from;          // the old folder ("" when there is none)
+    QStringList moved;     // file names
+    QStringList left;      // "<name>: <reason>"
+    bool folderRemoved = false;
+};
+MoveReport moveFormerBackups(const Project *p, const QString &dir);
 
 // 0.70.0 (audit A U-06): while a backup is packed and checked (in a thread of its own) the calling thread hands
 // over to this handler every 50 ms: what is done (a title; "" when it is over), bytes done, bytes in all, and

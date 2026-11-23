@@ -420,13 +420,13 @@ QString formerProjectFolder(const Project *p, const QString &dirIn)
     return found.isEmpty() ? QString() : QDir(dir).filePath(found.first());
 }
 
-QStringList backupsFor(const Project *p, const QString &dirIn)
+namespace {
+// 0.93.0: the files of `all` (backups of any project) that are this project's, in the way Restore From Backup offers them
+QStringList mineOf(const Project *p, const QStringList &all)
 {
-    const QString dir = dirIn.isEmpty() ? defaultDirectory() : dirIn;
     const QString mine = text::safeFileName(p->title());
     const QString begins = mine + QLatin1String(" bak "), beginsWithId = mine + QLatin1String(" #");
     QStringList out;
-    const QStringList all = zipsIn(dir, QStringLiteral("* bak *.zip"));
     for (const QString &f : all) {
         const QString name = QFileInfo(f).fileName();
         // a name in the program's own form says exactly which title it is of; any other one (a sync program's copy)
@@ -439,11 +439,96 @@ QStringList backupsFor(const Project *p, const QString &dirIn)
     }
     return out;
 }
+} // namespace
+
+QStringList backupsFor(const Project *p, const QString &dirIn)
+{
+    const QString dir = dirIn.isEmpty() ? defaultDirectory() : dirIn;
+    return mineOf(p, zipsIn(dir, QStringLiteral("* bak *.zip")));
+}
+
+QStringList waitingBackupsFor(const Project *p, const QString &dirIn)
+{
+    const QString dir = dirIn.isEmpty() ? defaultDirectory() : dirIn;
+    // the work folders a backup of this project can wait in: that of the backup folder, and (0.70.0 to 0.90.4) those of
+    // the project's own folder in it
+    QStringList works{workFolderFor(dir)};
+    const QString plainTitle = text::safeFileName(p->title());
+    works << workFolderFor(QDir(dir).filePath(plainTitle + QLatin1Char(' ') + projectKey(p)));
+    const QString former = formerProjectFolder(p, dir);
+    if (!former.isEmpty())
+        works << workFolderFor(former);
+    works.removeDuplicates();
+    QStringList out;
+    for (const QString &w : std::as_const(works))
+        out << mineOf(p, zipsIn(w, QStringLiteral("* bak *.zip")));
+    return out;
+}
 
 QStringList formerBackupsFor(const Project *p, const QString &dir)
 {
     const QString former = formerProjectFolder(p, dir);
     return former.isEmpty() ? QStringList() : zipsIn(former, QStringLiteral("* bak *.zip"));
+}
+
+// 0.93.0: one backup of the project's own folder of 0.70.0 to 0.90.4 into the backup folder, under its name, never
+// over a file that is there: a hard link where the drive allows (one step, no copy; fails when the name exists), else a
+// copy straight to the final name that is read again and compared (copyInto, NewOnly). The original goes after that.
+namespace {
+bool moveOne(const QString &from, const QString &to, QString *why)
+{
+#ifdef Q_OS_UNIX
+    if (::link(QFile::encodeName(from).constData(), QFile::encodeName(to).constData()) == 0) {
+        if (!QFile::remove(from)) {
+            *why = QObject::tr("it is in the backup folder now, but the original could not be removed");
+            return false;
+        }
+        return true;
+    }
+    if (errno == EEXIST) {
+        *why = QObject::tr("a backup of this name is already in the backup folder");
+        return false;
+    }
+#endif
+    if (QFileInfo::exists(to)) {
+        *why = QObject::tr("a backup of this name is already in the backup folder");
+        return false;
+    }
+    if (copyInto(from, to, why, nullptr) != Put::Done)
+        return false;
+    if (!QFile::remove(from)) {
+        *why = QObject::tr("it is in the backup folder now, but the original could not be removed");
+        return false;
+    }
+    return true;
+}
+} // namespace
+
+MoveReport moveFormerBackups(const Project *p, const QString &dirIn)
+{
+    MoveReport r;
+    const QString dir = dirIn.isEmpty() ? defaultDirectory() : dirIn;
+    r.from = formerProjectFolder(p, dir);
+    if (r.from.isEmpty())
+        return r;
+    QStringList all = zipsIn(r.from, QStringLiteral("* bak *.zip"));
+    if (!all.isEmpty() && !QDir().mkpath(dir)) {
+        r.left << QObject::tr("the backup folder cannot be created");
+        return r;
+    }
+    for (const QString &f : std::as_const(all)) {
+        const QString name = QFileInfo(f).fileName();
+        QString why;
+        if (moveOne(f, QDir(dir).filePath(name), &why))
+            r.moved << name;
+        else
+            r.left << name + QLatin1String(": ") + why;
+    }
+    if (!r.moved.isEmpty())
+        savebatch::syncDir(dir);
+    // the folder goes when nothing is left in it (a rmdir: it fails by itself when something is there)
+    r.folderRemoved = QDir().rmdir(r.from);
+    return r;
 }
 
 namespace {

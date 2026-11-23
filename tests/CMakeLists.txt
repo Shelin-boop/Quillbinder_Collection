@@ -334,6 +334,13 @@ add_executable(qb_v0930b_tests v0930b_tests.cpp ${QB_RESOURCES_OBJECTS}
                ${CMAKE_SOURCE_DIR}/plugins/importers/web/Html.cpp)
 target_include_directories(qb_v0930b_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins/importers/web)
 target_link_libraries(qb_v0930b_tests PRIVATE qbui Qt6::Test Qt6::Network ${CMAKE_DL_LIBS})
+
+# 0.93.0, third suite: to-do item 38 (backups and saving: waiting backups in the restore list, the temporary names that a crash
+# can leave, the command that moves the backups of 0.70.0 to 0.90.4) (xvfb-run -a ./qb_v0930c_tests /tmp/shots)
+add_executable(qb_v0930c_tests v0930c_tests.cpp ${QB_RESOURCES_OBJECTS}
+               ${CMAKE_SOURCE_DIR}/plugins/tools/speech-transcription/SpeechLogic.cpp)
+target_include_directories(qb_v0930c_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins)
+target_link_libraries(qb_v0930c_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0900_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # The readers against damaged input (0.80.0, the external audit of 2026-11-09, ST-5): fixed-seed damage of small
 # valid inputs of RTF, Markdown, XML, ZIP, DOCX, ODT, Word 97 and .scrivx, each read in this process

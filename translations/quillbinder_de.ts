@@ -3417,6 +3417,18 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
         <translation>die Kopie weicht von der Sicherung ab</translation>
     </message>
     <message>
+        <source>a backup of this name is already in the backup folder</source>
+        <translation>eine Sicherung dieses Namens ist schon im Sicherungsordner</translation>
+    </message>
+    <message>
+        <source>it is in the backup folder now, but the original could not be removed</source>
+        <translation>sie ist jetzt im Sicherungsordner, aber das Original konnte nicht entfernt werden</translation>
+    </message>
+    <message>
+        <source>the backup folder cannot be created</source>
+        <translation>der Sicherungsordner kann nicht erstellt werden</translation>
+    </message>
+    <message>
         <source>a file of this name is in the way and cannot be removed</source>
         <translation>eine Datei dieses Namens ist im Weg und kann nicht entfernt werden</translation>
     </message>
@@ -4089,6 +4101,10 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
     <message>
         <source>The file could not be copied to %1.</source>
         <translation>Die Datei konnte nicht nach %1 kopiert werden.</translation>
+    </message>
+    <message>
+        <source>The file could not be copied to %1 (the disk may be full).</source>
+        <translation>Die Datei konnte nicht nach %1 kopiert werden (vielleicht ist die Platte voll).</translation>
     </message>
     <message>
         <source>Checking the model (checksum, description, test transcription) ...</source>
@@ -9033,6 +9049,67 @@ Das Projekt bleibt geöffnet; das Programm versucht weiter, es in seinem eigenen
     <message>
         <source>&amp;Restore From Backup…</source>
         <translation>Aus Sicherung &amp;wiederherstellen…</translation>
+    </message>
+    <message>
+        <source>Move &amp;Old Backups Into the Backup Folder…</source>
+        <translation>&amp;Alte Sicherungen in den Sicherungsordner verschieben…</translation>
+    </message>
+    <message>
+        <source>, waiting (not yet in the backup folder)</source>
+        <translation>, wartet (noch nicht im Sicherungsordner)</translation>
+    </message>
+    <message>
+        <source>There are no old backups of this project to move: the folder that versions 0.70.0 to 0.90.4 kept for it holds none.</source>
+        <translation>Es gibt keine alten Sicherungen dieses Projekts zu verschieben: Der Ordner, den die Versionen 0.70.0 bis 0.90.4 dafür angelegt haben, enthält keine.</translation>
+    </message>
+    <message>
+        <source>Move Old Backups</source>
+        <translation>Alte Sicherungen verschieben</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n old backup(s) of this project are in its own folder inside the backup folder:
+%1
+
+Versions 0.70.0 to 0.90.4 kept them there. Move them into the backup folder itself, under their names? A backup whose name is already there stays where it is.</source>
+        <translation>
+            <numerusform>%n alte Sicherung dieses Projekts liegt in dessen eigenem Ordner im Sicherungsordner:
+%1
+
+Die Versionen 0.70.0 bis 0.90.4 haben sie dort abgelegt. In den Sicherungsordner selbst verschieben, unter ihrem Namen? Eine Sicherung, deren Name dort schon vorhanden ist, bleibt, wo sie ist.</numerusform>
+            <numerusform>%n alte Sicherungen dieses Projekts liegen in dessen eigenem Ordner im Sicherungsordner:
+%1
+
+Die Versionen 0.70.0 bis 0.90.4 haben sie dort abgelegt. In den Sicherungsordner selbst verschieben, unter ihren Namen? Eine Sicherung, deren Name dort schon vorhanden ist, bleibt, wo sie ist.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Move</source>
+        <translation>Verschieben</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n backup(s) moved into the backup folder.</source>
+        <translation>
+            <numerusform>%n Sicherung wurde in den Sicherungsordner verschoben.</numerusform>
+            <numerusform>%n Sicherungen wurden in den Sicherungsordner verschoben.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n backup(s) left where they were:
+%1</source>
+        <translation>
+            <numerusform>%n Sicherung blieb, wo sie war:
+%1</numerusform>
+            <numerusform>%n Sicherungen blieben, wo sie waren:
+%1</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>The old folder is empty and was removed.</source>
+        <translation>Der alte Ordner ist leer und wurde entfernt.</translation>
+    </message>
+    <message>
+        <source>The program's icon could not be copied to %1, so the menu entry shows no icon.</source>
+        <translation>Das Symbol des Programms konnte nicht nach %1 kopiert werden; der Menüeintrag zeigt deshalb kein Symbol.</translation>
     </message>
     <message>
         <source>Import &amp;Files…</source>

@@ -16,6 +16,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QObject>
+#include <QRegularExpression>
 #include <QSet>
 
 #ifdef Q_OS_UNIX
@@ -177,6 +178,25 @@ void syncDir(const QString &dir) { syncFolder(dir); }
 bool syncDirChecked(const QString &dir, int *number) { return syncFolder(dir, number); }
 
 bool isStaged(const QString &fileName) { return fileName.endsWith(QLatin1String(kStageSuffix)); }
+
+int removeSaveLeftovers(const QString &folder, int minAge)
+{
+    static const QRegularExpression re(
+        QStringLiteral("\\.(json|md|rtf|txt|html|xml|plist|comments|styles|indexes|scrivx|qbx)\\.[A-Za-z0-9]{6}$"),
+        QRegularExpression::CaseInsensitiveOption);
+    int removed = 0;
+    const QDateTime limit = QDateTime::currentDateTime().addSecs(-minAge);
+    QDirIterator it(folder, QDir::Files | QDir::Hidden | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        const QString path = it.next();
+        const QFileInfo fi(path);
+        if (!re.match(fi.fileName()).hasMatch() || fi.lastModified() > limit)
+            continue;
+        if (QFile::remove(path))
+            ++removed;
+    }
+    return removed;
+}
 
 bool replace(const QString &from, const QString &to)
 {

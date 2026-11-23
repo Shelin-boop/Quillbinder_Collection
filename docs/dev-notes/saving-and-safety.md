@@ -4,6 +4,43 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 
 ## 0.93.0 beta (2026-11-23): the emergency copy counted, a folder's sync, the journal that cannot be set aside, the backup note
 
+- **Item 38: backups and saving, what was not done** (suite `v0930c`).
+  **(a) Waiting backups in Restore From Backup**: `backup::waitingBackupsFor(p, dir)` = the backups of this project in
+  the work folder of the backup folder (and those of the project's own folder of 0.70 to 0.90, as `backupProject` puts
+  them in place), picked by the same rule as `backupsFor` (`mineOf`); `MainWindow::restoreBackup` merges them with the
+  folder's by time and adds ", waiting (not yet in the backup folder)" to the state. A restore never moves them.
+  **(c) Move Old Backups** (`File > Back Up`, action `moveOldBackups`, `MainWindow::moveOldBackups`,
+  `backup::moveFormerBackups` -> `MoveReport{from, moved, left, folderRemoved}`): asks (box `moveOldBackupsAsk`), then
+  per file a hard link into the backup folder where the drive allows (never over a name: EEXIST), else `copyInto`
+  (`NewOnly`, synced, compared), then the original is removed; a name that is there stays in the old folder and is told
+  ("<name>: <reason>"); the old folder is removed with `rmdir` (only when empty). Report box `moveOldBackupsReport`.
+  The action is switched on when the Back Up menu opens (`aboutToShow`: project, a backup folder, and
+  `formerBackupsFor` not empty), off without a project (`updateActions`). The moved files have no ID in their names, so
+  the clean-up still never counts or deletes them. The former folders can still exist: the 0.91.0 notes say they were
+  left as they were. The work folder of the old folder (backups that waited for it) is not touched by this command; the
+  next backup puts them in place.
+  **(d) Copies whose result was not checked**: the speech add-on's `useLocalModel` (a part of a model went to the check
+  after a failed copy: now the copy must have the original's size, else the part is removed and the failure told; the
+  string is in the add-on's context in the .ts); the application icon of `integrateDesktop` (told in the message when
+  it fails; the quiet start-up call stays quiet); `DragDrop::copyTreeTo` (the pictures of a web page copied for another
+  program) and `MediaView` (the pictures beside a web page shown in the browser) stay unchecked on purpose, with a note
+  in the code: originals are never touched and a failure is a gap in a copy that has no place to say so.
+  **(b) The temporary names that Quillbinder writes where a sync program may see them** (Linux; the same code on the
+  other systems):
+
+  | Name | Where | Lives | A crash can leave it | Removed by |
+  |---|---|---|---|---|
+  | `<file>.qbstage` | beside each target in the project folder (batch save) | from staging to the rename, with `settings/journal.json` | yes | `savebatch::recover` at the opening (finished with the journal, else dropped); `Batch::stage` sets a foreign one aside |
+  | `<file>.qbstage.kept-<time>` | same place | for good | made on purpose | nothing, on purpose: it may hold the only copy of unsaved text (open question: when may it go?) |
+  | QSaveFile `<file>.XXXXXX` (also `safesave::copyFile`, settings, index, snapshots, `.scriv` files) | beside the target | milliseconds | yes | **new**: `savebatch::removeSaveLeftovers` at `Project::open` and `ScrivenerFormat::open` (a known file type, six characters, 10 minutes old); before, only the reader of a .scriv ignored `content.*.XXXXXX` |
+  | `<name>.zip.part` of a backup | the program's work folder, not the backup folder | the packing | yes | `sweepWork` (an hour old) at the next backup into that folder (0.90.3) |
+  | `<export>.docx.part` | beside the export's target | the export | yes | **new**: replaced in one step (`savebatch::replace`; before, the old file was deleted first and the `.part` stayed when the rename failed), removed when it fails, an hour-old one beside the target goes at the next export |
+  | `<name>.txt.part` | the speech add-on's recordings folder (a folder of the writer's choice) | the transcription | yes | **new**: `speech::removeLeftoverParts` (an hour old, not while it transcribes) when the panel refreshes; before, only a new run of the same recording overwrote it |
+  | `<file>.qbtmp` | beside a file of Save Options to File | the write | yes | the next save to the same file only (left: rare, a folder the writer chose) |
+  | `<name>.old` (a Scrivener working copy moved aside) | the program's data folder, not the project | a re-read | yes | the next read of that project (`ScrivenerFormat::open`) |
+  | `.update-part`, `.before-update` | beside the AppImage | the update | yes | the update's next run; not a project folder |
+  | model `<file>.part` | the add-on's data folder | the download | yes | the next download; not a project folder |
+
 - **The emergency copy** (`Project::makeEmergencyCopy`, returns an `EmergencyReport` of `ProjectTypes.h`: `dir`, `reason`,
   `tally` = `CopyTally` with `wanted`, `written`, `missing` "name: reason"). `writeEmergencyCopy(parent, &error)` stays for
   the old callers (the folder; `error` = the reason, or the incomplete text). `DocumentStore::writeUnsaved`,
@@ -167,8 +204,7 @@ were this program's:
   files older than an hour.
 - Test switch `QB_TEST_BACKUP_COPY` (test builds): the copy also on one drive. `MainWindow::manualSave` shows a waiting
   backup's own text in the status bar; `tellBackupProblem` shows it under "failed".
-- Not done: the same review for temporary names written inside a project folder (`.qbstage`, QSaveFile's names, the
-  speech add-on's `.txt.part`, the Word writer's `.part`).
+- (The review of the temporary names written inside a project folder was done in 0.93.0: see its table at the top.)
 
 ## The audit of 0.81.0 (0.81.1 beta, 2026-11-11, part 1, the four findings at function level)
 

@@ -227,6 +227,9 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
         const savebatch::Recovery r = savebatch::recover(p->m_folder, p->journalFile(), p->settingsDir());
         if (r.any())
             p->m_saveRecovery = r.text();
+        // 0.93.0: the temporary files of a plain write that was cut off (Qt's QSaveFile: "<file>.XXXXXX") are removed
+        // once they are ten minutes old
+        savebatch::removeSaveLeftovers(p->m_folder);
     }
     if (!p->loadIndex(error))
         return nullptr;

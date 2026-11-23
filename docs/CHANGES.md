@@ -45,6 +45,22 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   while you write. **Restore From Backup** says
   "restored", "restored incompletely" (headed so, with the files named) or "not restored", and says when the
   restored project's title could not be saved.
+- **Backups that wait are listed, and the old backups can be moved.** **Restore From Backup** now also lists the backups
+  of the open project that wait in the program's own work folder (they were made while the backup folder could not be
+  reached); they are marked "waiting (not yet in the backup folder)" and are restored like the others. The new command
+  **File > Back Up > Move Old Backups Into the Backup Folder** moves the backups that versions 0.70 to 0.90 kept in a
+  folder of their own for the project into the backup folder, under their names; it asks first, never overwrites a
+  backup of the same name (that one stays where it was and is named in the report), tells what it moved and what it left,
+  and removes the old folder when it is empty. The command is on only while the project has such a folder with backups.
+- **Temporary files that a crash can leave are removed.** The files Qt writes while it replaces a file (*name.json.AbC123*)
+  are removed from a project at the opening, and from a Scrivener project when it is read, when they are ten minutes
+  old. A Word export no longer leaves its *.docx.part* file when the file cannot be put in place, the old file is not
+  deleted before the new one is in place, and an old *.docx.part* of a cut-off export beside the target goes at the next
+  export. The speech add-on removes old *.txt.part* files of a cut-off transcription from its folder. (The list of all
+  temporary names is in the developer notes.)
+- **Copies that were not checked.** The speech add-on's copy of a model file you choose is checked (a full disk gave a
+  part of the file that went on to the model check); the failure is told. When the application menu entry is made and
+  the program's icon cannot be copied, the message says so.
 - **Saving options and themes to a file never destroys the file that was there.** **Manage > Save Options to File** and
   **Save Theme Options to File** (File > Options) write a temporary file beside the target, check it and only then put
   it in place. When the write fails, the file that was there stays as it was and the message says so (before, a

@@ -136,6 +136,11 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   update (inspect, install, launcher), changed certificates, `make-package.py verify`, the install window's note, the
   workflow's signing job; `tools/addon-entry.py` and the workflow "Official add-on"; see "Add-on keys" in
   `saving-and-safety.md`).
+- `qb_v0930c_tests` (0.93.0 beta, third suite, item 38: the restore list with backups that wait in the work folder (a
+  screenshot of the list), the command Move Old Backups Into the Backup Folder (its question and report as screenshots,
+  never overwriting, the folder removed when empty, the action off without a project and when nothing is left), the
+  temporary names (QSaveFile leftovers at the opening, the Word writer's `.part`, the speech `.txt.part`); the sources
+  of the speech add-on's logic are compiled into the suite).
 - `qb_v0930b_tests` (0.93.0 beta, second suite: fixes in shared code. Exports of options and themes that keep the old file
   when a write fails (`QB_TEST_WRITE_FAILS`; the options go through a temporary file, since QSettings would mix an old
   file's entries with the new). Item 16: the picture rule of the Web Page Import (the plugin's sources are compiled into the

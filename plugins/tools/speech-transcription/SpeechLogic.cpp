@@ -540,6 +540,17 @@ QString partFileFor(const QString &textFile)
     return textFile + QStringLiteral(".part");
 }
 
+int removeLeftoverParts(const QString &folder, int minAge)
+{
+    int removed = 0;
+    const QDateTime limit = QDateTime::currentDateTime().addSecs(-minAge);
+    const QFileInfoList parts = QDir(folder).entryInfoList({QStringLiteral("*.txt.part")}, QDir::Files);
+    for (const QFileInfo &fi : parts)
+        if (fi.lastModified() < limit && QFile::remove(fi.absoluteFilePath()))
+            ++removed;
+    return removed;
+}
+
 QList<Transcript> transcriptsIn(const QString &folder)
 {
     QList<Transcript> out;

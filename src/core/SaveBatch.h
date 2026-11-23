@@ -101,6 +101,13 @@ bool probeFolderSync(const QString &folder);
 // Replaces `to` with `from` in one step (POSIX rename; MoveFileEx on Windows)
 bool replace(const QString &from, const QString &to);
 
+// 0.93.0: removes the temporary files of Qt's QSaveFile ("<file>.XXXXXX", six letters or digits after a name that ends in a
+// file type this program writes) that a crash or a power failure left in `folder` and below, when they are older than
+// `minAge` seconds (a younger one may be a write that is running, on another computer too). Returns how many went.
+// Nothing else is touched: a file counts only when the name before the six characters is a file's own (".json",
+// ".md", ".rtf" ...).
+int removeSaveLeftovers(const QString &folder, int minAge = 600);
+
 struct Recovery {
     QStringList finished; // put in place now: "title (file)"
     QStringList kept;     // the target had changed: the new version kept as a copy
