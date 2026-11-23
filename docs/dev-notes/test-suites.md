@@ -136,6 +136,9 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   update (inspect, install, launcher), changed certificates, `make-package.py verify`, the install window's note, the
   workflow's signing job; `tools/addon-entry.py` and the workflow "Official add-on"; see "Add-on keys" in
   `saving-and-safety.md`).
+- `qb_v0930b_tests` (0.93.0 beta, second suite: fixes in shared code. Exports of options and themes that keep the old file
+  when a write fails (`QB_TEST_WRITE_FAILS`; the options go through a temporary file, since QSettings would mix an old
+  file's entries with the new).)
 - `qb_v0930_tests` (0.93.0 beta: the emergency copy whole or said to be incomplete ("n of m", names, README), made for a
   change of the binder or the objects alone, never into an existing folder, the end by a signal and its notice, the
   messages (screenshots);

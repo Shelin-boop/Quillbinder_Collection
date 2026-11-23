@@ -16251,8 +16251,16 @@ Fortfahren?</translation>
         <translation>Designordner anzeigen...</translation>
     </message>
     <message>
-        <source>The file could not be written.</source>
-        <translation>Die Datei konnte nicht geschrieben werden.</translation>
+        <source>The file could not be written. The file that was there is unchanged.</source>
+        <translation>Die Datei konnte nicht geschrieben werden. Die bisherige Datei ist unverändert.</translation>
+    </message>
+    <message>
+        <source>The file could not be written (%1). The file that was there is unchanged.</source>
+        <translation>Die Datei konnte nicht geschrieben werden (%1). Die bisherige Datei ist unverändert.</translation>
+    </message>
+    <message>
+        <source>nothing to write</source>
+        <translation>nichts zu schreiben</translation>
     </message>
     <message>
         <source>This is not a file of options saved by Quillbinder.</source>

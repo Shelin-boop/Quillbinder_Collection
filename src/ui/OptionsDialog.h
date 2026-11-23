@@ -110,6 +110,8 @@ public:
 
     // Manage > Save Options to File / Load Options from File (also used by the tests)
     bool saveOptionsToFile(const QString &file, QString *error = nullptr);
+    // Manage > Save Theme Options to File: a temporary file beside the target, checked, then put in place
+    static bool saveThemeToFile(const QString &file, const theme::Theme &look, QString *error = nullptr);
     bool loadOptionsFromFile(const QString &file, QString *error = nullptr);
     // Defaults: every option back to the standard (asks first when "ask" is true)
     bool restoreDefaults(bool ask);

@@ -8,6 +8,7 @@
 #include "core/Backup.h"
 #include "core/Paths.h"
 #include "core/Portable.h"
+#include "core/SafeSave.h"
 #include "ui/PortableSetup.h"
 #include "core/CrashGuard.h"
 #include "core/ItemIcons.h"
@@ -2388,9 +2389,10 @@ void OptionsDialog::fillManageMenu()
                                                           tr("Themes (*.qbtheme)"));
         if (file.isEmpty())
             return;
-        QFile out(file);
-        if (!out.open(QIODevice::WriteOnly) || out.write(QJsonDocument(look.toJson()).toJson()) < 0)
-            QMessageBox::warning(this, tr("Save Theme Options"), out.errorString());
+        // a temporary file beside the target, checked, then put in place: a failure leaves the old file as it was (0.93.0)
+        QString why;
+        if (!saveThemeToFile(file, look, &why))
+            QMessageBox::warning(this, tr("Save Theme Options"), why);
     })->setObjectName(QStringLiteral("manageSaveTheme"));
     m_manageMenu->addSeparator();
     // the themes: a click shows one here (OK or Apply uses it)
@@ -2416,14 +2418,30 @@ void OptionsDialog::fillManageMenu()
     });
 }
 
+bool OptionsDialog::saveThemeToFile(const QString &file, const theme::Theme &look, QString *error)
+{
+    QString why;
+    if (!qb::safesave::writeFile(file, QJsonDocument(look.toJson()).toJson(), &why)) {
+        if (error)
+            *error = tr("The file could not be written (%1). The file that was there is unchanged.").arg(why);
+        return false;
+    }
+    return true;
+}
+
 bool OptionsDialog::saveOptionsToFile(const QString &file, QString *error)
 {
     // a copy of the program's settings (INI text), without what belongs to this
     // computer only: recent projects, window places, the desktop integration
     QSettings from;
     from.sync();
-    QFile::remove(file);
-    QSettings to(file, QSettings::IniFormat);
+    // 0.93.0: into a fresh temporary file beside the target (QSettings would mix an old file's entries with the new),
+    // checked, then put in place: a failure leaves the file that was there as it was
+    const QString tmp = file + QStringLiteral(".qbtmp");
+    QFile::remove(tmp);
+    QByteArray bytes;
+    {
+    QSettings to(tmp, QSettings::IniFormat);
     for (const QString &k : from.allKeys()) {
         if (k.startsWith(QLatin1String("window/")) || k == QLatin1String("app/recent") || k == QLatin1String("app/lastDir")
             || k == QLatin1String("app/integrated") || k == QLatin1String("app/welcomeFolder") || k == QLatin1String("app/welcomeShown"))
@@ -2433,8 +2451,21 @@ bool OptionsDialog::saveOptionsToFile(const QString &file, QString *error)
     to.setValue(QStringLiteral("quillbinderOptions/version"), 1);
     to.sync();
     if (to.status() != QSettings::NoError) {
+        QFile::remove(tmp);
         if (error)
-            *error = tr("The file could not be written.");
+            *error = tr("The file could not be written. The file that was there is unchanged.");
+        return false;
+    }
+    }
+    QFile in(tmp);
+    if (in.open(QIODevice::ReadOnly))
+        bytes = in.readAll();
+    in.close();
+    QFile::remove(tmp);
+    QString why;
+    if (bytes.isEmpty() || !qb::safesave::writeFile(file, bytes, &why)) {
+        if (error)
+            *error = tr("The file could not be written (%1). The file that was there is unchanged.").arg(bytes.isEmpty() ? tr("nothing to write") : why);
         return false;
     }
     return true;

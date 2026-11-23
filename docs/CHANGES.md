@@ -42,6 +42,10 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   older backup that the clean-up cannot delete is told once with the file and the reason. **Restore From Backup** says
   "restored", "restored incompletely" (headed so, with the files named) or "not restored", and says when the
   restored project's title could not be saved.
+- **Saving options and themes to a file never destroys the file that was there.** **Manage > Save Options to File** and
+  **Save Theme Options to File** (File > Options) write a temporary file beside the target, check it and only then put
+  it in place. When the write fails, the file that was there stays as it was and the message says so (before, a
+  failed write could leave no file, or an empty one). A new options file holds only the new options.
 
 ## 0.92.0 beta (2026-11-20)
 
