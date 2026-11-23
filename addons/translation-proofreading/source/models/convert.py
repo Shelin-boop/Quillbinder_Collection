@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Converts the add-on's models for the engine (CTranslate2, int8) and writes their catalog.
 
-    python3 models/convert.py <out dir>
+    python3 models/convert.py <out dir> [<dictionary dir>]
 
 Run by .github/workflows/models.yml on GitHub's runner; the files go onto the release named in RELEASE, from where
 the add-on downloads the model the writer chooses. Every file is named "<model id>--<file name>" there; a file
@@ -9,7 +9,9 @@ larger than GitHub allows for one release file is cut into parts ("...--model.bi
 joins after checking each. The catalog (written into <out dir> as catalog.json, copied into resources/catalog.json)
 lists the models of every release with size and SHA-256 of each file; the add-on checks each download against it.
 A published release is never changed: the models of "models-1" (1.0) are taken over from resources/catalog.json as
-they are, the new ones of this run go onto "models-2" (1.1).
+they are, the new ones of this run go onto "models-3" (1.3): OPUS-MT English to German (small) and, when a dictionary
+folder is given (tools/make-de-dictionary.py writes it), the German dictionary extract as a data download. The models
+of "models-2" (1.1) are taken over as they are, too.
 
 Needs: ctranslate2 4.9.0, transformers 4.51 or later, torch (CPU), sentencepiece, huggingface_hub.
 """
@@ -23,7 +25,7 @@ import sys
 from huggingface_hub import hf_hub_download
 
 CT2_VERSION = "4.9.0"
-RELEASE = "models-2"
+RELEASE = "models-3"
 PART = 1_900_000_000   # GitHub takes files up to 2 GiB on a release
 
 # The models of "models-1" (1.0), converted then; kept here as the record of how (not converted again).
@@ -84,8 +86,40 @@ MODELS_1 = [
     },
 ]
 
-# The models of "models-2" (1.1). "revision": None takes the newest revision at conversion time and records it.
+# The models of "models-3" (1.3). "revision" is pinned: the revision of 2026-11-23 (Hugging Face's API; the license
+# there is CC BY 4.0).
 MODELS = [
+    {
+        "id": "opus-mt-en-de",
+        "kinds": ["translator-en"],
+        "type": "seq2seq",
+        "title": "OPUS-MT English to German (small) (University of Helsinki)",
+        "summary": "Translates English into German: the way back for Swap and Translate back, and English to German on "
+                   "its own. Free for any use with credit (CC BY 4.0).",
+        "repo": "Helsinki-NLP/opus-mt-en-de",
+        "revision": "6183067f769a302e3861815543b9f312c71b0ca4",
+        "tokenizer": {"type": "marian", "source": "source.spm", "target": "target.spm"},
+        # what Hugging Face lists for that revision (2026-11-23): the SHA-256 of the large file, the git object ids of
+        # the small ones; convert.py stops when a download differs
+        "pins": {
+            "pytorch_model.bin": {"sha256": "da068344b1b0c20e6d4a8f77f48e06646b90d679029006b18579e68977206bdd"},
+            "source.spm": {"git": "e73d58f99c702eb1746e3dc55bc76255d7aa4a94"},
+            "target.spm": {"git": "9dd0d88081be8d75fbc029762329cc11bfad07b9"},
+            "config.json": {"git": "0a49d3f4024d5ea51560d51f29d75722d794fb16"},
+            "vocab.json": {"git": "0da41bcf74fa9a6af4855c7350e27819796d9ca9"},
+        },
+        "license": "CC BY 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+        "nonCommercial": False,
+        "credit": "opus-mt-en-de by the Language Technology Research Group at the University of Helsinki "
+                  "(Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-en-de, licensed under CC BY 4.0. "
+                  "Changed: converted to CTranslate2 with 8-bit weights.",
+    },
+]
+
+# The models of "models-2" (1.1), converted then; kept as the record of how (not converted again).
+# "revision": None took the newest revision at conversion time and recorded it.
+MODELS_2 = [
     {
         "id": "qwen3-1.7b",
         "kinds": ["corrector", "translator"],
@@ -125,8 +159,11 @@ MODELS = [
         "kinds": ["translator"],
         "type": "seq2seq",
         "title": "OPUS-MT Big, German to English (University of Helsinki)",
-        "summary": "A larger translation model than OPUS-MT German to English; usually translates better. Free for any "
-                   "use with credit (CC BY 4.0).",
+        # 1.3: the description names what the model is not good at; "forWords": False keeps single words and short
+        # texts away from it (they go to the small model; the catalog carries the flag)
+        "summary": "Better for whole sentences and passages (CC BY 4.0, free for any use with credit); unreliable for "
+                   "single words and short phrases, which the add-on always gives to the small model.",
+        "forWords": False,
         "repo": "Helsinki-NLP/opus-mt-tc-big-gmw-gmw",
         "revision": None,
         "tokenizer": {"type": "marian", "source": "source.spm", "target": "target.spm"},
@@ -177,6 +214,20 @@ def check_t5_tokenizer(m, spm_file):
         b = tok.convert_ids_to_tokens(tok.encode(s, add_special_tokens=False))
         if a != b:
             sys.exit(f"{m['id']}: tokenizer differs for {s!r}:\n  {a}\n  {b}")
+
+
+def verify_pins(m, rev):
+    """The downloaded originals must be the files the pins name (SHA-256, or git's object id for small files)."""
+    for name, pin in m.get("pins", {}).items():
+        path = hf_hub_download(m["repo"], name, revision=rev)
+        if "sha256" in pin:
+            ok = sha256(path) == pin["sha256"]
+        else:
+            data = open(path, "rb").read()
+            ok = hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest() == pin["git"]
+        print(f"  pin {name}: {'ok' if ok else 'DIFFERENT'}", flush=True)
+        if not ok:
+            sys.exit(f"{m['id']}: {name} is not the file the pin names (revision {rev})")
 
 
 def resolve(m):
@@ -230,8 +281,11 @@ def preview(m, d):
         src = spm.SentencePieceProcessor(model_file=os.path.join(d, m["tokenizer"]["source"]))
         tgt = spm.SentencePieceProcessor(model_file=os.path.join(d, m["tokenizer"]["target"]))
         tr = ctranslate2.Translator(d, device="cpu", compute_type="int8")
-        for text in ["Der Regen hatte seit drei Tagen nicht aufgehört.", "„Ich glaube nicht, dass er kommt“, sagte sie."]:
-            pieces = [m["sourceToken"]] + src.encode(text, out_type=str) + ["</s>"]
+        texts = ["Der Regen hatte seit drei Tagen nicht aufgehört.", "„Ich glaube nicht, dass er kommt“, sagte sie."]
+        if m["kinds"] == ["translator-en"]:
+            texts = ["The rain had not stopped for three days.", "\"I don't think he is coming,\" she said.", "curse"]
+        for text in texts:
+            pieces = ([m["sourceToken"]] if m.get("sourceToken") else []) + src.encode(text, out_type=str) + ["</s>"]
             r = tr.translate_batch([pieces], beam_size=4)[0]
             print(f"  {text!r}\n    -> {tgt.decode(r.hypotheses[0])!r}")
 
@@ -242,8 +296,34 @@ def memory_mb(m, model_bin):
     return int(mb * 1.2 + 700) if m["type"] == "chat" else int(mb * 2 + 100)
 
 
+def add_dictionary(catalog, out, folder):
+    """The German dictionary: a data download beside the models. The folder (tools/make-de-dictionary.py) holds
+    de-dictionary.qz, DICTIONARY-LICENSE.txt and LICENSE-CC-BY-SA-4.0.txt."""
+    files = []
+    for name in ("DICTIONARY-LICENSE.txt", "LICENSE-CC-BY-SA-4.0.txt", "de-dictionary.qz"):
+        src = os.path.join(folder, name)
+        asset = f"wiktionary-de--{name}"
+        shutil.copy(src, os.path.join(out, asset))
+        files.append({"name": name, "asset": asset, "size": os.path.getsize(src), "sha256": sha256(src)})
+    catalog["models"].append({
+        "id": "wiktionary-de", "kinds": ["dictionary"], "type": "data",
+        "title": "German dictionary (extract of the Wiktionary)",
+        "summary": "Word classes, meanings and English words for German words; used first when you translate a single "
+                   "German word. Licensed under CC BY-SA 4.0: the license is shown before the download.",
+        "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "nonCommercial": False, "askLicense": True,
+        "credit": "Dictionary data from the English Wiktionary (en.wiktionary.org) by its contributors, taken from the "
+                  "extract of kaikki.org (made with wiktextract), licensed under CC BY-SA 4.0. Changed: reduced to word "
+                  "classes, English words and definitions, and inflected forms.",
+        "release": RELEASE, "memoryMB": 0, "source": "https://kaikki.org/dictionary/German/",
+        "files": files, "sizeMB": round(sum(f["size"] for f in files) / 1e6),
+    })
+    print(f"wiktionary-de: {catalog['models'][-1]['sizeMB']} MB", flush=True)
+
+
 def main():
     out = sys.argv[1]
+    dictionary = sys.argv[2] if len(sys.argv) > 2 else None
     os.makedirs(out, exist_ok=True)
     work = os.path.join(out, ".work")
     here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -252,7 +332,7 @@ def main():
     # "release": the release of this run (the workflow uploads to it); each model names its own release
     catalog = {"format": 2, "release": RELEASE, "engine": f"CTranslate2 {CT2_VERSION}", "models": []}
     for e in old["models"]:
-        if e.get("release", old.get("release", "models-1")) == RELEASE:
+        if e.get("release", old.get("release", "models-1")) == RELEASE and (e["id"] != "wiktionary-de" or dictionary):
             continue   # converted again below
         e.setdefault("release", old.get("release", "models-1"))
         if "kinds" not in e:
@@ -263,6 +343,7 @@ def main():
         d = os.path.join(work, m["id"])
         shutil.rmtree(d, ignore_errors=True)
         rev = resolve(m)
+        verify_pins(m, rev)
         cmd = ["ct2-transformers-converter", "--model", m["repo"], "--revision", rev, "--output_dir", d,
                "--quantization", "int8", "--force", "--low_cpu_mem_usage"]
         if m["type"] == "chat":
@@ -280,7 +361,7 @@ def main():
             vocab = json.load(open(os.path.join(d, "shared_vocabulary.json"), encoding="utf-8")) \
                 if os.path.exists(os.path.join(d, "shared_vocabulary.json")) else \
                 json.load(open(os.path.join(d, "source_vocabulary.json"), encoding="utf-8"))
-            if m["sourceToken"] not in vocab:
+            if m.get("sourceToken") and m["sourceToken"] not in vocab:
                 sys.exit(f"{m['id']}: {m['sourceToken']} is not in the vocabulary")
         print(f"{m['id']} ({m['repo']} at {rev}):", flush=True)
         preview(m, d)
@@ -330,6 +411,8 @@ def main():
         shutil.rmtree(d, ignore_errors=True)
         clear_hf_cache()
     shutil.rmtree(work, ignore_errors=True)
+    if dictionary:
+        add_dictionary(catalog, out, dictionary)
     with open(os.path.join(out, "catalog.json"), "w", encoding="utf-8") as f:
         json.dump(catalog, f, indent=2, ensure_ascii=False)
         f.write("\n")
