@@ -2,6 +2,27 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## Qt 6.12.1 and the runtime u2404-qt6.12-r2 (0.93.0)
+
+- **Why a new runtime id**: Qt 6.12.1 brings newer libraries inside its own build: zlib 1.4, HarfBuzz 15.1.0, PCRE2 10.49,
+  libpng 1.6.59, libjpeg-turbo 3.2.1, FreeType 2.15.0 and md4c 0.6.0 (read from the `qt_attribution.json` files of qtbase
+  v6.12.1). The AppImage carries them; a program update (.qbpkg) runs on the libraries of the AppImage that is installed.
+  `src/core/UpdateCheck.cpp` offers the program update alone when the runtime is the same, and the new AppImage only when
+  it differs, so the runtime id is `u2404-qt6.12-r2`, with `APP_RUNTIME_SINCE` 0.93.0 (`QB_QT_VERSION` 6.12.1).
+- **Qt PDF**: Qt 6.12.1 has no Qt PDF of its own. The Qt pack (`tools/get-qt.sh`) takes it from the "Qt Extensions" release
+  for Qt 6.12 (Qt WebEngine 6.140.0; Qt's repository folder is still 6.12.0). Quillbinder uses no Qt private headers on
+  Linux (only `src/android/MobileWindows.cpp`), so nothing else depends on the exact patch version.
+- **Add-ons with libraries** name the runtime and `minApp` 0.93.0: `tools/make-package.py` fills both (`runtime`, and
+  `minApp` = `APP_RUNTIME_SINCE` when the manifest has a lower one), the manifests of the add-ons with libraries carry the
+  0.93.0 too (Translation and Proofreading has it in `addons/translation-proofreading/manifest.json` and
+  `source/packaging/manifest.json`, which must stay equal; suite `v0920` checks it against `QB_RUNTIME_SINCE`). Each
+  rebuilt add-on got its last version number raised (Translation and Proofreading stays 1.2 until its own change).
+- **Release text** (`tools/addon-entry.py notes`): the warning "Quillbinder X to 0.91.2 does not know add-on keys" appears
+  only when the package's `minApp` is below 0.91.3; an add-on built for r2 needs 0.93.0 and has no such sentence (suite
+  `v0913`).
+- **Baseline on 6.12.1** (before these changes): every suite passed except `secwatch`, `v0920` and `v0913`, which followed
+  from the new runtime.
+
 ## The security watch (2026-11-21)
 
 - **What**: `.github/workflows/security-watch.yml` runs `tools/security-watch.py` once a day (04:37 UTC) on the

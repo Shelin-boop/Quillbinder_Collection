@@ -26,6 +26,7 @@
 #include <QMap>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QVersionNumber>
 #include <QProcess>
 #include <QRegularExpression> // the AppImage's runtime (Windows 0.91.3) and Android's (2026-11-16) from CMakeLists.txt
 #include <QTemporaryDir>
@@ -534,7 +535,9 @@ int main(int argc, char **argv)
         check(notesRc == 0
                   && notes.contains(QLatin1String("This add-on is free and must not be sold. It can download Model X, whose license "
                                                   "(CC BY-NC 4.0) allows non-commercial use only."))
-                  && notes.contains(QLatin1String("Linux 0.91.3 or later")) && notes.contains(QLatin1String("0.80.0 to 0.91.2"))
+                  && notes.contains(QLatin1String("Linux 0.91.3 or later")) && (QVersionNumber::fromString(QLatin1String(QB_RUNTIME_SINCE)) < QVersionNumber(0, 91, 3)
+                      ? notes.contains(QLatin1String("0.80.0 to 0.91.2")) // the warning for a program without add-on keys
+                      : !notes.contains(QLatin1String("does not know add-on keys")))  // (0.93.0) a minApp above it needs none
                   && notes.contains(QLatin1String("`SHA256SUMS.txt`")) && notes.contains(QLatin1String("not made by or connected with Literature & Latte"))
                   && notes.contains(commit.left(12)),
               QStringLiteral("the release text: free and not to be sold, the data for non-commercial use only by name and license, which "

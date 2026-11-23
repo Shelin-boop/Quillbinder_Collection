@@ -1,11 +1,12 @@
 {
   "id": "tool-scratch-pad",
   "name": "Scratch Pad",
-  "version": "1.4",
+  "version": "1.5",
   "description": "Writing tool: Window > Scratch Pad (Alt+Shift+Return) keeps notes outside every project, as formatted or plain text, with pictures of the screen (camera button). Notes are sent to any open project, as a new document or added to the end of a text. The scratch pad can also be opened from every program with a desktop shortcut (Options > Keyboard). Folder and format: Options > General.",
   "author": "Quillbinder",
-  "minApp": "0.11.0",
+  "minApp": "0.93.0",
   "whatsNew": [
-    "Built for Quillbinder 0.80.0 and later (the program's new Qt 6.12)"
+    "Built for Quillbinder 0.80.0 and later (the program's new Qt 6.12)",
+    "Built for Quillbinder 0.93.0 and later (the program's Qt 6.12.1 and its runtime u2404-qt6.12-r2)"
   ]
 }
