@@ -68,8 +68,20 @@ jobs:
         run: |
           result=failed
           [ -f "out/qt-$V-linux-gcc_64.tar.xz" ] && result=ok
-          gh release edit "$TAG" --title "Qt $V for the Linux build, not for downloading ($result)" \
-            --notes "sha=$GITHUB_SHA status=$result run=$GITHUB_RUN_ID"
+          # the first line stays as it was (sessions read it); below it what the pack holds, its license and its source
+          {
+            echo "sha=$GITHUB_SHA status=$result run=$GITHUB_RUN_ID"
+            echo
+            echo "What this is: Qt $V for Linux (gcc_64), The Qt Company's own binaries, installed unchanged with aqtinstall"
+            echo "from download.qt.io (modules: Qt's essentials and$(grep -o 'modules:.*' out/aqt.log | head -1 | cut -d: -f2)), without"
+            echo "documentation and examples. It is working storage for the Linux build of this repository, not for downloading."
+            echo
+            echo "License: Qt is available under the GNU Lesser General Public License v3 and the GNU General Public License"
+            echo "(v2 or v3); some modules only under the GPL. The license files of every part are inside the pack."
+            echo "Source: https://download.qt.io/official_releases/qt/${V%.*}/$V/single/ (qt-everywhere-src-$V), also kept"
+            echo "with the release \"third-party-sources\" of this repository."
+          } > "$RUNNER_TEMP/notes.txt"
+          gh release edit "$TAG" --title "Qt $V for the Linux build, not for downloading ($result)" --notes-file "$RUNNER_TEMP/notes.txt"
           for f in out/*; do
             gh release upload "$TAG" "$f" --clobber || echo "upload failed: $f"
           done
