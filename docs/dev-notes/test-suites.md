@@ -154,6 +154,11 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   workflow's matrix, push filter and rights, the translator pack's license files against the add-on's
   `make-addon.sh`, and a pack made and fetched through a made-up `gh` (SHA-256 checked, paths made new).
   `secwatch` also checks `tools/verify-ffmpeg-source.sh` with keys made for the check (needs gpg).
+- `verlines` (0.93.0, `tests/version_lines_tests.py`, Python only, no build): the version line per system in
+  `CMakeLists.txt` (`APP_VERSION` for Linux, `APP_VERSION_WINDOWS`, `APP_VERSION_ANDROID`: the same first two numbers,
+  the build's pick and its stop on a wrong number), the shell lines of the scripts and workflows that read them,
+  `tools/update-feed.py`, `tools/release-notes.py --whats-new [--system]` and `tools/download-page.py` on a copy whose
+  Windows and Android lines have other last numbers, and the version jobs of the two release workflows.
 - `qb_v0911_tests` (0.91.1 beta: toolbars rearranged freely by their grips, the row that got stuck; see "Toolbars
   rearranged freely").
 - `qb_v0910_tests` (0.91.0 beta: backups straight in the backup folder, the seven toolbars and the icon bar; see

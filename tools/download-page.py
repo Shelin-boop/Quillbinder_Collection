@@ -9,8 +9,10 @@ repository's GitHub Pages (job download-page of .github/workflows/release.yml).
         [--also <folder> <tag>]...
 
 Since 0.91.2 each system can have a last number of its own (working rules, section 8), so a new Linux release may
-come before the Windows files of its number: a system without a file in the release is taken from the first
-"--also" release that has one (give them newest first), and its card names that version. A system that none of them
+come before the Windows files of its number: a system without a file in the release is taken from the "--also"
+release that has one (give them newest first), and its card names that version. Since 0.93.0 (a version line per
+system in CMakeLists.txt) each system shows its newest release: where several releases have a file of the system,
+the one with the highest version wins, whichever order they are given in. A system that none of them
 has shows "comes later". The visitor's own system comes first (the page's
 script reads the browser's user agent; without script the order is Windows, Linux, Android).
 """
@@ -124,6 +126,12 @@ def addons_section(addons, home):
             % "\n".join(items))
 
 
+def tag_version(tag):
+    """[0, 93, 0] for "v0.93.0-beta" and "v0.93.1-windows-experimental" (what the tag's number compares as)."""
+    m = re.match(r"v(\d+(?:\.\d+)*)", tag)
+    return [int(x) for x in m.group(1).split(".")] if m else []
+
+
 def shown_of(tag):
     return tag[1:].replace("-", " ") if tag.startswith("v") else tag
 
@@ -136,10 +144,13 @@ def page(files, tag, also=()):
     full = pick(files)
     more = others(files)
     tag_of = {key: tag for key in full}
+    # 0.93.0 (a version line per system): each system shows its newest release, the one with the highest version
+    # among the release and the older ones (a tie goes to the earlier one in the list: this release, then the
+    # newest-first "--also" ones); before, the first release that had a file of the system won
     for older_files, older_tag in also:
         older_full, older_more = pick(older_files), others(older_files)
         for key in full:
-            if not full[key] and older_full[key]:
+            if older_full[key] and (not full[key] or tag_version(older_tag) > tag_version(tag_of[key])):
                 full[key], more[key], tag_of[key] = older_full[key], older_more[key], older_tag
     url = lambda key, f: "%s/releases/download/%s/%s" % (home, tag_of[key], f)
     if full["windows"].endswith("-setup.exe"):

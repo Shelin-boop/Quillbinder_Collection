@@ -27,13 +27,13 @@ mkdir -p "$OUT"
 OUT=$(cd "$OUT" && pwd)
 cd "$ROOT" || exit 1
 B=build
-# 0.93.0: the Python-only suites (secwatch, deps) need no build folder: when only they are asked for, nothing is
+# 0.93.0: the Python-only suites (secwatch, deps, verlines) need no build folder: when only they are asked for, nothing is
 # built, no FFmpeg pack or sound server is needed, and no X server is started
 PYONLY=0
 if [ -n "$QB_SUITES" ] && { [ -z "$QB_SAMPLE" ] || [ "$QB_SAMPLE" = 0 ]; }; then
     PYONLY=1
     for n in $QB_SUITES; do
-        case $n in secwatch|deps) ;; *) PYONLY=0 ;; esac
+        case $n in secwatch|deps|verlines) ;; *) PYONLY=0 ;; esac
     done
 fi
 if [ "$PYONLY" != 1 ] && [ ! -x $B/tests/qb_tests ]; then
@@ -249,6 +249,8 @@ runx w4c $B/tests/qb_w4c_tests $B/tests/qb_w4c_tests "$OUT/shots-w4c"
 run secwatch python3 -I tests/security_watch_tests.py
 # the dependency packs of the Linux build (0.93.0): offline, Python only
 run deps python3 -I tests/deps_packs_tests.py
+# the version line per system (0.93.0): offline, Python only
+run verlines python3 -I tests/version_lines_tests.py
 # a suite that was asked for and is not there at all (a name mistyped in QB_SUITES)
 for n in $SELECTED; do
     [[ " $RAN $MISSING " == *" $n "* ]] || MISSING="$MISSING $n"

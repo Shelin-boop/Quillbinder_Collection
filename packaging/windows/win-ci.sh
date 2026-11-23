@@ -52,7 +52,7 @@ if [ -z "$ONLY" ] && [ -n "$line" ]; then
 fi
 picked() { case " $PICK " in *" $1 "*) return 0 ;; *) return 1 ;; esac; }
 
-ver=$(sed -n 's/^set(APP_VERSION "\(.*\)")/\1/p' CMakeLists.txt)
+ver=$(sed -n 's/^set(APP_VERSION_WINDOWS "\(.*\)")/\1/p' CMakeLists.txt)   # 0.93.0: Windows' own version line
 say "run: ${ONLY:-full}${PICK:+ ($PICK)}"
 say "commit: ${GITHUB_SHA:-local}"
 say "version: $ver"

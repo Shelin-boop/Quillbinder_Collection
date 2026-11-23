@@ -25,11 +25,25 @@ def cmake_var(name):
     return m.group(1) if m else ""
 
 
-def changes(version):
+def version_var(system):
+    """The line of CMakeLists.txt that holds the system's version (0.93.0: a version line per system)."""
+    return {"windows": "APP_VERSION_WINDOWS", "android": "APP_VERSION_ANDROID"}.get(system, "APP_VERSION")
+
+
+def system_version(system="linux"):
+    return cmake_var(version_var(system)) or cmake_var("APP_VERSION")
+
+
+def changes(version, own=""):
     with open(os.path.join(ROOT, "docs", "CHANGES.md"), encoding="utf-8") as f:
         text = f.read()
-    m = re.search(r"^## %s\b[^\n]*\n(.*?)(?=^## |\Z)" % re.escape(version), text, re.M | re.S)
-    return m.group(1).strip() if m else ""
+    # `own` ("Windows", "Android"): the section "## <own> <version> ..." comes first, then the version's own section
+    parts = []
+    for head in ([re.escape(own) + r"\s+" + re.escape(version)] if own else []) + [re.escape(version)]:
+        m = re.search(r"^## %s\b[^\n]*\n(.*?)(?=^## |\Z)" % head, text, re.M | re.S)
+        if m:
+            parts.append(m.group(1).strip())
+    return "\n".join(parts)
 
 
 def addon_info(path):
@@ -274,10 +288,11 @@ def main(dist, test=False):
     return 0
 
 
-def whats_new():
-    """The changes of this version as short lines: the first sentence of each item."""
+def whats_new(system="linux"):
+    """The changes of this version as short lines: the first sentence of each item (of the system's own version line
+    with --system)."""
     items, cur = [], None
-    for line in changes(cmake_var("APP_VERSION")).splitlines():
+    for line in changes(system_version(system), "" if system == "linux" else system.capitalize()).splitlines():
         if line.startswith("- "):
             cur = [line[2:].strip()]
             items.append(cur)
@@ -295,6 +310,8 @@ def whats_new():
 if __name__ == "__main__":
     if len(sys.argv) == 2 and sys.argv[1] == "--whats-new":
         sys.exit(whats_new())
+    if len(sys.argv) == 4 and sys.argv[1] == "--whats-new" and sys.argv[2] == "--system" and sys.argv[3] in ("linux", "windows", "android"):
+        sys.exit(whats_new(sys.argv[3]))
     if len(sys.argv) == 3 and sys.argv[2] == "--test":
         sys.exit(main(sys.argv[1], test=True))
     if len(sys.argv) != 2:

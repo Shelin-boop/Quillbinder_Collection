@@ -76,7 +76,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          VERSION=$(sed -n 's/^set(APP_VERSION *"\(.*\)")/\1/p' CMakeLists.txt)
+          VERSION=$(sed -n 's/^set(APP_VERSION_WINDOWS *"\(.*\)")/\1/p' CMakeLists.txt)
           # 0.91.3: a release of its own (the name in the Windows file names, packaging/windows/win-release.sh)
           TAG="v$VERSION-windows-experimental"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
