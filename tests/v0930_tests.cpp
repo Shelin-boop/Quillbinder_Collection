@@ -21,6 +21,7 @@
 #include "core/SaveBatch.h"
 #include "ui/AppSettings.h"
 #include "ui/MainWindow.h"
+#include "ui/MindMapDoc.h"
 
 #include "AppInfo.h"
 
@@ -226,6 +227,33 @@ static void emergencyCopy(const QString &W)
               QStringLiteral("the copy holds the project file as it is in memory (the documents not yet saved are in its binder)"));
         const QString ok = Project::emergencyText(a);
         check(ok.contains(QLatin1String("complete: 4 of 4")) && !ok.contains(QLatin1String("INCOMPLETE")), QStringLiteral("a whole copy is told as whole"), ok);
+    }
+    {
+        // two boards with the same title: both are in the copy, and n of m is true
+        auto p = Project::create(W, QStringLiteral("Boards"), &err);
+        BinderItem *a = textDoc(p.get(), QStringLiteral("Plot"), QStringLiteral("A."));
+        BinderItem *b = textDoc(p.get(), QStringLiteral("Plot"), QStringLiteral("B."));
+        check(p->save(&err), QStringLiteral("(saved)"), err);
+        Project *pp = p.get();
+        pp->emergencyExtra = [pp](const QString &dir, QString *e, CopyTally *t) { return mindmaps::writeUnsaved(pp, dir, e, t); };
+        for (BinderItem *it : {a, b}) {
+            MindMapDoc *d = mindmaps::docFor(pp, it->id);
+            const QString text = it == a ? QStringLiteral("Note of the first board") : QStringLiteral("Note of the second board");
+            d->change(QStringLiteral("Add"), [d, text] {
+                mindmap::Note n;
+                n.id = 1;
+                n.text = text;
+                d->board.notes << n;
+            });
+        }
+        const EmergencyReport r = pp->makeEmergencyCopy(W + QStringLiteral("/e-boards"));
+        const QStringList xml = QDir(r.dir).entryList({QStringLiteral("*.xml")}, QDir::Files);
+        const QString all = textOfFiles(r.dir);
+        check(r.complete() && xml.size() == 2 && r.tally.wanted == 3 && r.tally.written == 3 && all.contains(QLatin1String("first board"))
+                  && all.contains(QLatin1String("second board")),
+              QStringLiteral("two boards with the same title: each has its own file in the copy, and \"n of m\" is true"),
+              xml.join(QLatin1Char('|')) + QStringLiteral(" %1/%2").arg(r.tally.written).arg(r.tally.wanted));
+        mindmaps::closeAll(pp, true);
     }
     {
         // the binder alone

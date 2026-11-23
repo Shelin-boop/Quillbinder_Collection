@@ -17,7 +17,7 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   `saveForTermination` through `writeEmergencyNotice(what, report)`). An incomplete copy shows a warning box with
   "Copy Incomplete" in its title. Android's own save (`src/android/MobileStart.cpp`) was not changed.
   Test switch: `QB_TEST_WRITE_FAILS` ("number|text|part of the path") now also works in `safesave::writeFile`.
-  Not done: two boards with the same title still write one file (the second replaces the first).
+  Boards (and texts) with the same title get " (2)", " (3)" in their file names.
 - **A folder's sync** (`savebatch::syncFolder` now returns false with errno): EINVAL, ENOTSUP, EOPNOTSUPP, ENOSYS and a
   folder that cannot be opened are no error (as for files); any other error (EIO ...) after the files are in place:
   `Batch::commit` keeps the journal (`m_journalWritten` stays true, the temporary files stay for `recover`), does not run

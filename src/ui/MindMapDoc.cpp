@@ -4,6 +4,7 @@
 #include "text/TextUtil.h"
 #include "core/SafeSave.h"
 #include <QDir>
+#include <QSet>
 #include <QMessageBox>
 #include <QApplication>
 #include <QRegularExpression>
@@ -428,10 +429,16 @@ void closeAll(Project *project, bool discard)
 int writeUnsaved(Project *project, const QString &dir, QString *error, CopyTally *tally)
 {
     int n = 0;
+    QSet<QString> used; // 0.93.0: boards with the same title get a number each: every board its own file
     for (const QPointer<MindMapDoc> &d : registry().value(project)) {
         if (!d || !d->isDirty())
             continue;
-        const QString file = QDir(dir).filePath(text::safeFileName(d->unsavedTitle()) + QStringLiteral(".xml"));
+        const QString name = text::safeFileName(d->unsavedTitle());
+        QString base = name;
+        for (int k = 2; used.contains(base.toLower()); ++k)
+            base = QStringLiteral("%1 (%2)").arg(name).arg(k);
+        used.insert(base.toLower());
+        const QString file = QDir(dir).filePath(base + QStringLiteral(".xml"));
         QString why;
         const bool ok = safesave::writeFile(file, d->board.toXml(), &why);
         if (ok)
