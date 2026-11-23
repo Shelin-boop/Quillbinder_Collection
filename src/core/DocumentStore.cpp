@@ -441,7 +441,17 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
     if (!QFile::exists(other)) {
         QFile cur(path);
         if (cur.open(QIODevice::ReadOnly) && cur.size() == data.size() && cur.readAll() == data) {
-            e.dirty = false;
+            // 0.93.0: when a save runs, the text counts as saved only after the commit's checked sync (a folder whose
+            // sync failed before is synced again there); the stamp is renewed at once, it records what is on disk
+            if (savebatch::Batch *b = savebatch::current()) {
+                b->after([this, key] {
+                    auto it = m_entries.find(key);
+                    if (it != m_entries.end())
+                        it->dirty = false;
+                });
+            } else {
+                e.dirty = false;
+            }
             if (e.stamp.known)
                 e.stamp = syncsafe::stampOf(path);
             return true;

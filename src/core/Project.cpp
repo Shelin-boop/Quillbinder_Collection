@@ -1753,9 +1753,17 @@ bool Project::saveIndex(QString *error)
     if (!indexElsewhere && !shaOnDisk.isEmpty() && shaOnDisk == sha) {
         m_indexMark = syncsafe::stampOf(m_indexFile);
         m_indexSha = sha;
-        m_indexDirty = false;
-        m_countsDirty = false;
-        m_lastIndexWrite.start();
+        // 0.93.0: when a save runs, the marks go only after the commit's checked sync (a folder whose sync failed before
+        // is synced again there); at once when no save runs
+        auto clear = [this] {
+            m_indexDirty = false;
+            m_countsDirty = false;
+            m_lastIndexWrite.start();
+        };
+        if (savebatch::Batch *b = savebatch::current())
+            b->after(clear);
+        else
+            clear();
         writeUiState();
         return true;
     }
