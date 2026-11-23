@@ -32,6 +32,11 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   is also made when only the binder or the Objects changed, and it holds the project file as it is in memory and the
   Objects not saved; its README says how to put the project file back. A folder that is there is never used again: a
   second copy in the same second gets a number.
+- **Saving tells a drive's error for a folder, and an unreadable journal stops the saves.** When the drive reports an
+  error while a folder is synced after a save (not a file system that cannot sync: that is no error, as before), the
+  save counts as failed, the journal stays, and the next save or opening finishes it. While an unreadable journal of an
+  earlier save could not be moved aside, no save writes a new journal over it: the save waits and its message names the
+  file.
 
 ## 0.92.0 beta (2026-11-20)
 

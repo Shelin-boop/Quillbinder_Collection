@@ -289,6 +289,7 @@ private:
     bool writeUiState();
     QByteArray m_loadedIndex;   // the project file as it was read (for the spare copy)
     bool m_indexDirty = false;
+    bool m_keptFailedTold = false; // an unreadable journal that could not be set aside was told (0.93.0)
     bool m_countsDirty = false;     // counts and modification times only (0.60.5)
     QElapsedTimer m_lastIndexWrite; // the last write of the project file
     bool saveImpl(QString *error, bool quick);

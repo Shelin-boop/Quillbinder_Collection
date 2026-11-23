@@ -802,8 +802,22 @@ bool Project::finishInterruptedSave(QString *error)
     if (!QFile::exists(journalFile()))
         return true;
     const savebatch::Recovery r = savebatch::recover(m_folder, journalFile(), settingsDir());
-    if (r.any())
+    // 0.93.0: a journal that cannot be read and could not be set aside is tried again at every save, and told once
+    if (r.any() && !(r.keptFailed && m_keptFailedTold))
         m_saveRecovery = r.text();
+    m_keptFailedTold = r.keptFailed;
+    // 0.93.0: while an unreadable journal could not be set aside, no save writes a journal over it (this save's journal
+    // has the same name): the save waits, and says which file is in the way
+    if (r.keptFailed && QFile::exists(journalFile())) {
+        if (error)
+            *error = tr("Not saved yet: the journal of an earlier save, %1, cannot be read and could not be moved aside, so "
+                        "this save would overwrite it. Nothing was written; your changes are kept while the project stays "
+                        "open. Check that the folder %2 can be written, or move that file away by hand; the program then "
+                        "saves by itself.")
+                         .arg(QDir::toNativeSeparators(journalFile()),
+                              QDir::toNativeSeparators(settingsDir() + QStringLiteral("/conflicts")));
+        return false;
+    }
     // 0.81.1 (audit of 0.81.0, F-03): the journal of another computer's save that may still be running or arriving is
     // not written over (this save's journal has the same name) and its files are not replaced: this save waits
     if (r.waiting()) {

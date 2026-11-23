@@ -3444,6 +3444,14 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
         <source>Themes (Bright, Dark, U1, U2 and the list)</source>
         <translation>Designs (Hell, Dunkel, U1, U2 und die Liste)</translation>
     </message>
+    <message>
+        <source>The drive reported an error when the folder %1 was synced (%2). The files of this save may not have reached the disk safely.%3</source>
+        <translation>Das Laufwerk hat beim Abgleichen des Ordners %1 einen Fehler gemeldet (%2). Die Dateien dieses Speicherns sind möglicherweise nicht sicher auf den Datenträger gelangt.%3</translation>
+    </message>
+    <message>
+        <source>The journal of the save is kept, and the next save or opening finishes it.</source>
+        <translation>Das Journal des Speicherns bleibt erhalten, und das nächste Speichern oder Öffnen schließt es ab.</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>
@@ -17170,6 +17178,10 @@ Not written:
 
 Nicht geschrieben:
 %4</translation>
+    </message>
+    <message>
+        <source>Not saved yet: the journal of an earlier save, %1, cannot be read and could not be moved aside, so this save would overwrite it. Nothing was written; your changes are kept while the project stays open. Check that the folder %2 can be written, or move that file away by hand; the program then saves by itself.</source>
+        <translation>Noch nicht gespeichert: Das Journal eines früheren Speicherns, %1, kann nicht gelesen werden und ließ sich nicht beiseite legen; dieses Speichern würde es überschreiben. Es wurde nichts geschrieben; Ihre Änderungen bleiben erhalten, solange das Projekt offen ist. Prüfen Sie, ob der Ordner %2 beschreibbar ist, oder verschieben Sie die Datei von Hand; danach speichert das Programm von selbst.</translation>
     </message>
 </context>
 <context>

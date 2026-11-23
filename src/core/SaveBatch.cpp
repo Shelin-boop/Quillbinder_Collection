@@ -21,6 +21,7 @@
 #ifdef Q_OS_UNIX
 #include <cerrno>
 #include <cstdio>
+#include <cstring>
 #include <fcntl.h>
 #include <unistd.h>
 #elif defined(Q_OS_WIN)
@@ -50,17 +51,34 @@ QByteArray shaOfFile(const QString &path, bool *exists = nullptr)
 
 QByteArray shaOf(const QByteArray &data) { return QCryptographicHash::hash(data, QCryptographicHash::Sha256).toHex(); }
 
-// the folder's entry of a renamed or new file reaches the disk (POSIX: the rename itself is in the folder)
-void syncFolder(const QString &dir)
+// the folder's entry of a renamed or new file reaches the disk (POSIX: the rename itself is in the folder).
+// 0.93.0: the result is told. "This file system cannot sync" (EINVAL, ENOTSUP, EOPNOTSUPP, ENOSYS: as for files) and a
+// folder that cannot be opened for reading are no error; any other error of the sync (EIO and the like) is: the drive
+// reported it. `number` gets the error number then.
+bool syncFolder(const QString &dir, int *number = nullptr)
 {
 #ifdef Q_OS_UNIX
     const int fd = ::open(QFile::encodeName(dir).constData(), O_RDONLY | O_DIRECTORY | O_CLOEXEC);
-    if (fd >= 0) {
-        ::fsync(fd);
-        ::close(fd);
+    if (fd < 0)
+        return true;
+    bool ok = true;
+    errno = 0;
+    if (::fsync(fd) != 0 && errno != EINVAL && errno != ENOTSUP && errno != EOPNOTSUPP && errno != ENOSYS) {
+        if (number)
+            *number = errno;
+        ok = false;
     }
+    errno = 0;
+    if (::close(fd) != 0 && errno == EIO && ok) {
+        if (number)
+            *number = errno;
+        ok = false;
+    }
+    return ok;
 #else
     Q_UNUSED(dir);
+    Q_UNUSED(number);
+    return true;
 #endif
 }
 
@@ -123,6 +141,8 @@ QString relativeTo(const QString &folder, const QString &path) { return QDir(fol
 } // namespace
 
 void syncDir(const QString &dir) { syncFolder(dir); }
+
+bool syncDirChecked(const QString &dir, int *number) { return syncFolder(dir, number); }
 
 bool isStaged(const QString &fileName) { return fileName.endsWith(QLatin1String(kStageSuffix)); }
 
@@ -253,8 +273,27 @@ bool Batch::commit(QString *error)
         }
         dirs.insert(QFileInfo(i.target).absolutePath());
     }
+    // 0.93.0: a folder that the drive could not sync (EIO and the like) keeps the journal: the files are in place, but
+    // the drive has not said that they are safe. The save counts as failed (the changes stay marked as not saved) and
+    // the next save or opening finishes it from the journal. (Without a journal, the same: told as failed.)
+    int syncNumber = 0;
+    QString syncedFolder;
     for (const QString &d : std::as_const(dirs))
-        syncFolder(d);
+        if (!syncFolder(d, &syncNumber) && syncedFolder.isEmpty())
+            syncedFolder = d;
+    if (!syncedFolder.isEmpty()) {
+        failure::noteErrno(syncNumber);
+        if (error)
+            *error = QObject::tr("The drive reported an error when the folder %1 was synced (%2). The files of this save may "
+                                 "not have reached the disk safely.%3")
+                         .arg(QDir::toNativeSeparators(syncedFolder), QString::fromLocal8Bit(std::strerror(syncNumber)),
+                              journal ? QLatin1Char(' ') + QObject::tr("The journal of the save is kept, and the next save or "
+                                                                       "opening finishes it.")
+                                      : QString());
+        m_after.clear();
+        m_done = true; // the journal (if any) and nothing else stays
+        return false;
+    }
     if (journal) {
         QFile::remove(m_journal);
         syncFolder(QFileInfo(m_journal).absolutePath());

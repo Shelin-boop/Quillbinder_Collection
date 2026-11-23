@@ -29,6 +29,8 @@ constexpr const char *kStageSuffix = ".qbstage";
 bool isStaged(const QString &fileName);
 // 0.70.0: a folder's entries (a new or renamed file in it) reach the disk (POSIX; nothing elsewhere)
 void syncDir(const QString &dir);
+// 0.93.0: false when the drive reported an error for the folder (not for a file system that cannot sync); number: errno
+bool syncDirChecked(const QString &dir, int *number = nullptr);
 
 class Batch
 {

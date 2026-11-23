@@ -138,6 +138,45 @@ static QString textOfFiles(const QString &dir)
     return all;
 }
 
+// ------------------------------------------------------------------ child run: a save with the drive's answers faked
+
+static int childSave(int argc, char **argv)
+{
+    qputenv("QB_NO_DIALOGS", "1");
+    QApplication app(argc, argv);
+    QString err;
+    auto p = Project::open(QString::fromLocal8Bit(argv[2]), &err);
+    if (!p) {
+        std::printf("opened=0 %s\n", qPrintable(err));
+        return 0;
+    }
+    int n = 0;
+    for (BinderItem *it : p->allItems())
+        if (it->hasText() && n < 2) {
+            typeInto(p.get(), it, QStringLiteral(" child%1").arg(++n));
+        }
+    QString why;
+    const bool ok = p->save(&why);
+    std::printf("saved=%d journal=%d unsaved=%d\nwhy=%s\n", ok ? 1 : 0, QFile::exists(p->journalFile()) ? 1 : 0,
+                p->hasUnsavedChanges() ? 1 : 0, qPrintable(why));
+    std::fflush(stdout);
+    std::_Exit(0); // no closing
+}
+
+static QString runChild(const QString &projectFile, const QString &folder, const QString &mode)
+{
+    QProcess pr;
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert(QStringLiteral("LD_PRELOAD"), QStringLiteral(QB_FAULT_SHIM));
+    env.insert(QStringLiteral("QB_SHIM_DIR"), folder);
+    env.insert(QStringLiteral("QB_SHIM_MODE"), mode);
+    env.insert(QStringLiteral("QT_QPA_PLATFORM"), QStringLiteral("offscreen"));
+    pr.setProcessEnvironment(env);
+    pr.start(QCoreApplication::applicationFilePath(), {QStringLiteral("--child-save"), projectFile});
+    pr.waitForFinished(120000);
+    return QString::fromUtf8(pr.readAllStandardOutput());
+}
+
 // ------------------------------------------------------------------ item 12: the emergency copy
 
 static void emergencyCopy(const QString &W)
@@ -291,8 +330,74 @@ static void emergencyWindow(const QString &W)
     delete wp;
 }
 
+// ------------------------------------------------------------------ item 13: saving
+
+static void saving(const QString &W)
+{
+    QString err;
+    // a project with two documents
+    auto make = [&](const QString &name) {
+        auto p = Project::create(W, name, &err);
+        textDoc(p.get(), QStringLiteral("A"), QStringLiteral("Alpha."));
+        textDoc(p.get(), QStringLiteral("B"), QStringLiteral("Beta."));
+        p->save(&err);
+        return p->indexPath();
+    };
+    {
+        const QString file = make(QStringLiteral("Fsync"));
+        const QString folder = QFileInfo(file).absolutePath();
+        const QString out = runChild(file, folder, QStringLiteral("dirsync"));
+        const QString journal = folder + QStringLiteral("/settings/journal.json");
+        check(out.contains(QLatin1String("saved=0")) && out.contains(QLatin1String("unsaved=1")) && out.contains(QLatin1String("drive reported an error"))
+                  && QFile::exists(journal),
+              QStringLiteral("a folder's sync that the drive answers with EIO: the save is told as failed, the journal is there"), out.left(600));
+        auto q = Project::open(file, &err);
+        QString all;
+        for (const BinderItem *it : q->allItems())
+            if (it->hasText())
+                all += q->docs()->plainText(it->id) + QLatin1Char('|');
+        check(q && !QFile::exists(journal) && all.contains(QLatin1String("child1")) && all.contains(QLatin1String("child2")),
+              QStringLiteral("... the next opening finishes the save from the journal (the journal is gone, both texts are there)"), all);
+    }
+    {
+        const QString file = make(QStringLiteral("Notsup"));
+        const QString folder = QFileInfo(file).absolutePath();
+        const QString out = runChild(file, folder, QStringLiteral("dirsync-notsup"));
+        check(out.contains(QLatin1String("saved=1")) && out.contains(QLatin1String("journal=0")) && out.contains(QLatin1String("unsaved=0")),
+              QStringLiteral("a file system that cannot sync folders (ENOTSUP) is no error: saved as before"), out.left(600));
+    }
+    {
+        // an unreadable journal that cannot be set aside: no save writes over it
+        const QString file = make(QStringLiteral("Stuck"));
+        const QString folder = QFileInfo(file).absolutePath();
+        const QString journal = folder + QStringLiteral("/settings/journal.json");
+        const QByteArray damaged = "{ this journal was cut off";
+        writeAll(journal, damaged);
+        writeAll(folder + QStringLiteral("/settings/conflicts"), "a file where the folder should be");
+        auto q = Project::open(file, &err);
+        check(q != nullptr, QStringLiteral("(opened with the damaged journal)"), err);
+        if (q) {
+            for (BinderItem *it : q->allItems())
+                if (it->hasText())
+                    typeInto(q.get(), it, QStringLiteral(" new"));
+            QString why;
+            const bool ok = q->save(&why);
+            check(!ok && why.contains(QLatin1String("journal.json")) && readAll(journal) == damaged,
+                  QStringLiteral("a damaged journal whose move fails, then a save of two documents: it waits, names the file, and the journal's bytes "
+                                 "are unchanged"),
+                  why);
+            QFile::remove(folder + QStringLiteral("/settings/conflicts"));
+            const bool again = q->save(&why);
+            check(again && !QFile::exists(journal) && !QDir(folder + QStringLiteral("/settings/conflicts")).isEmpty(),
+                  QStringLiteral("... and once the journal can be set aside, the save goes through (the journal is kept in settings/conflicts)"), why);
+        }
+    }
+}
+
 int main(int argc, char **argv)
 {
+    if (argc > 2 && qstrcmp(argv[1], "--child-save") == 0)
+        return childSave(argc, argv);
     QTemporaryDir home;
     qputenv("HOME", home.path().toUtf8());
     qputenv("XDG_CONFIG_HOME", (home.path() + QLatin1String("/config")).toUtf8());
@@ -318,6 +423,7 @@ int main(int argc, char **argv)
     const QString W = work.path();
     emergencyCopy(W);
     emergencyWindow(W);
+    saving(W);
     std::printf("%d failure(s)\n", failures);
     return failures;
 }

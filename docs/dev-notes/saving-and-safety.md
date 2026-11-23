@@ -2,7 +2,7 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
-## 0.93.0 beta (2026-11-23): the emergency copy counted
+## 0.93.0 beta (2026-11-23): the emergency copy counted, a folder's sync, the journal that cannot be set aside, the backup note
 
 - **The emergency copy** (`Project::makeEmergencyCopy`, returns an `EmergencyReport` of `ProjectTypes.h`: `dir`, `reason`,
   `tally` = `CopyTally` with `wanted`, `written`, `missing` "name: reason"). `writeEmergencyCopy(parent, &error)` stays for
@@ -18,6 +18,17 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   "Copy Incomplete" in its title. Android's own save (`src/android/MobileStart.cpp`) was not changed.
   Test switch: `QB_TEST_WRITE_FAILS` ("number|text|part of the path") now also works in `safesave::writeFile`.
   Not done: two boards with the same title still write one file (the second replaces the first).
+- **A folder's sync** (`savebatch::syncFolder` now returns false with errno): EINVAL, ENOTSUP, EOPNOTSUPP, ENOSYS and a
+  folder that cannot be opened are no error (as for files); any other error (EIO ...) after the files are in place:
+  `Batch::commit` keeps the journal (`m_journalWritten` stays true, the temporary files stay for `recover`), does not run
+  the `after` steps (the changes stay marked as unsaved), and returns false with "The drive reported an error ...".
+  Without a journal (one file) the save is told as failed the same way. The syncs before the journal is written and
+  the one after it is removed are still not checked. `savebatch::syncDirChecked` is the public form. The fault library
+  has the modes `dirsync` (EIO) and `dirsync-notsup` (ENOTSUP), for folders only.
+- **An unreadable journal that cannot be set aside** (`Recovery::keptFailed` with the journal still there):
+  `Project::finishInterruptedSave` returns false with a message that names `settings/journal.json`; no journal of a new
+  save is written over it. The notice of the recovery is told once (`m_keptFailedTold`); every save tries to set the
+  journal aside again.
 
 ## 0.92.0 beta (2026-11-20): the content decides, the project ID in backup names, checked copies, failures that are told
 

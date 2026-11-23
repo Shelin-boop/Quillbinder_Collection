@@ -3,6 +3,8 @@
 //   QB_SHIM_DIR=<folder>   the files whose path starts with it
 //   QB_SHIM_MODE=write     write() fails with ENOSPC
 //   QB_SHIM_MODE=fsync     fsync() and fdatasync() fail with EIO
+//   QB_SHIM_MODE=dirsync   fsync() of a folder (only) fails with EIO (0.93.0: the drive reports an error for a folder)
+//   QB_SHIM_MODE=dirsync-notsup   fsync() of a folder (only) fails with ENOTSUP (a file system that cannot sync folders)
 //   QB_SHIM_MODE=close     close() fails with EIO (the descriptor is closed all the same, as the kernel does)
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
@@ -13,6 +15,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
@@ -35,6 +38,11 @@ bool mode(const char *m)
     const char *v = getenv("QB_SHIM_MODE");
     return v && strcmp(v, m) == 0;
 }
+bool isFolder(int fd)
+{
+    struct stat st;
+    return fstat(fd, &st) == 0 && S_ISDIR(st.st_mode);
+}
 } // namespace
 
 extern "C" {
@@ -54,6 +62,10 @@ int fsync(int fd)
     static Fn real = reinterpret_cast<Fn>(dlsym(RTLD_NEXT, "fsync"));
     if (mode("fsync") && below(fd)) {
         errno = EIO;
+        return -1;
+    }
+    if ((mode("dirsync") || mode("dirsync-notsup")) && below(fd) && isFolder(fd)) {
+        errno = mode("dirsync") ? EIO : ENOTSUP;
         return -1;
     }
     return real(fd);
