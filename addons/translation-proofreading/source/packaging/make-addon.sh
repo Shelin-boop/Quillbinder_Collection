@@ -100,12 +100,16 @@ translation-proofreading/qtplugins/tls/libqopensslbackend.so
     to GPL-3.0.txt). Source: https://download.qt.io/official_releases/qt/ (qtbase of that version).
 
 The models are not part of the add-on: it downloads the ones the writer chooses, from the releases
-"models-1" and "models-2" of Quillbinder's repository, under their own licenses (each model's MODEL-LICENSE.txt):
+"models-1", "models-2" and "models-3" of Quillbinder's repository, under their own licenses (each model's MODEL-LICENSE.txt):
     CoEdIT Large (Grammarly): CC BY-NC 4.0, non-commercial use only.
     CoEdIT Base (J. Bochi): Apache-2.0.
     OPUS-MT German to English (University of Helsinki): Apache-2.0.
     Qwen3 1.7B and Qwen3 4B (Qwen team, Alibaba Cloud): Apache-2.0.
     OPUS-MT Big, German to English (University of Helsinki): CC BY 4.0.
+    OPUS-MT English to German, small (University of Helsinki): CC BY 4.0.
+A separate download, the German dictionary (an extract of the English Wiktionary by its contributors, through
+kaikki.org), is licensed under CC BY-SA 4.0; the add-on shows the license before the download. The meanings of English
+words are from Princeton WordNet 3.0 (see WordNet-3.0.txt, which covers both lists).
 TEXT
 
 [ -n "${TP_STAGE_DIR:-}" ] && exit 0

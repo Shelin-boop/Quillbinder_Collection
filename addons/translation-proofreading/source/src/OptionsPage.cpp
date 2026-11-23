@@ -26,7 +26,8 @@ OptionsPage::OptionsPage(TranslateTool *tool, QWidget *parent)
     m_w = new QWidget(parent);
     m_w->setObjectName(QStringLiteral("tpOptions"));
     auto *l = new QVBoxLayout(m_w);
-    auto *intro = new QLabel(tr("English text is proofread and German text is translated into English, on this computer. "
+    auto *intro = new QLabel(tr("English text is proofread and German text is translated into English (and English into "
+                                "German), on this computer. "
                                 "Choose a model for each and download it once (it is checked, then used without any "
                                 "connection)."),
                              m_w);
@@ -49,7 +50,15 @@ OptionsPage::OptionsPage(TranslateTool *tool, QWidget *parent)
                             tr("Try them: CoEdIT Large finds many errors but rewrites more; the Qwen models are told to "
                                "fix only real errors and to leave your style and dialogue alone (4B is better, 1.7B "
                                "faster). A Qwen model downloaded once also translates.")));
-    l->addWidget(modelGroup(QStringLiteral("translator"), tr("Translation (German to English)"), QString()));
+    l->addWidget(modelGroup(QStringLiteral("translator"), tr("Translation (German to English)"),
+                            tr("Single words and texts of up to three words are always translated by the small model "
+                               "(OPUS-MT German to English); the large one is better for whole sentences.")));
+    l->addWidget(modelGroup(QStringLiteral("translator-en"), tr("Translation (English to German)"),
+                            tr("Also the way back for Swap and Translate back.")));
+    l->addWidget(modelGroup(QStringLiteral("dictionary"), tr("German dictionary"),
+                            tr("What a single German word means: its word classes, meanings and English words. Used first "
+                               "when you translate one German word; it is not needed for sentences. A separate download "
+                               "under its own license, which is shown first.")));
 
     auto *rules = new QGroupBox(tr("Rules for the result"), m_w);
     auto *rl = new QVBoxLayout(rules);
@@ -98,7 +107,7 @@ OptionsPage::OptionsPage(TranslateTool *tool, QWidget *parent)
         credits << QStringLiteral("<li>%1</li>").arg(m.credit.toHtmlEscaped());
     auto *about = new QLabel(tr("<b>Models</b><ul>%1</ul>The engine: CTranslate2 (MIT), oneDNN (Apache-2.0), "
                                 "SentencePiece (Apache-2.0); the American spellings from SCOWL by Kevin Atkinson; the "
-                                "words of a similar meaning from Princeton WordNet 3.0. Details in the add-on's licenses "
+                                "words of a similar meaning from Princeton WordNet 3.0 (also its meanings); the German dictionary from the Wiktionary. Details in the add-on's licenses "
                                 "folder. Add-on %2.")
                                  .arg(credits.join(QString()), m_tool->version()),
                              m_w);
@@ -154,8 +163,9 @@ QWidget *OptionsPage::modelGroup(const QString &kind, const QString &title, cons
         r.choose->setProperty("modelId", m.id);
         group->addButton(r.choose);
         r.choose->setChecked(m.id == chosen);
-        auto *info = new QLabel(tr("%1<br>%2 MB to download, about %3 MB of memory while working. License: "
-                                   "<a href=\"%4\">%5</a>%6.")
+        auto *info = new QLabel((m.memoryMB > 0 ? tr("%1<br>%2 MB to download, about %3 MB of memory while working. License: "
+                                                     "<a href=\"%4\">%5</a>%6.")
+                                                : tr("%1<br>%2 MB to download. License: <a href=\"%4\">%5</a>%6."))
                                     .arg(m.summary.toHtmlEscaped())
                                     .arg(m.sizeMB)
                                     .arg(m.memoryMB)
@@ -249,9 +259,10 @@ void OptionsPage::startDownload(const QString &id)
     if (!m)
         return;
     const QString key = QStringLiteral("accepted/") + id;
-    if (m->nonCommercial && !m_tool->setting(key, false).toBool()) {
+    if ((m->nonCommercial || m->askLicense) && !m_tool->setting(key, false).toBool()) {
         QMessageBox box(QMessageBox::Question, m_tool->name(),
-                        tr("%1 may be used for non-commercial purposes only (license %2).").arg(m->title, m->license),
+                        m->nonCommercial ? tr("%1 may be used for non-commercial purposes only (license %2).").arg(m->title, m->license)
+                                         : tr("%1 comes under the license %2.").arg(m->title, m->license),
                         QMessageBox::Cancel, m_w);
         box.setInformativeText(tr("%1\n\nBy downloading it you accept its license: %2").arg(m->credit, m->licenseUrl));
         QPushButton *accept = box.addButton(tr("Accept and Download"), QMessageBox::AcceptRole);

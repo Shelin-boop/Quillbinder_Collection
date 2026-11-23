@@ -18,7 +18,32 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   release signature.
 - **The other add-ons with libraries** (Import Web Page, Import Word 97, Name Generator, Scratch Pad, Text Statistics,
   Speech Transcription) are rebuilt for the new runtime, with a new last number each. Translation and Proofreading
-  stays 1.2.
+  is 1.3 (next item).
+- **Translation and Proofreading 1.3: a word on its own, and both directions.** Type one English word: below it the
+  panel says what the word means, in English, with the classes it belongs to (the meanings are from the dictionary
+  WordNet 3.0, built into the add-on, and the output says so); a word WordNet does not have gets a meaning written by
+  the add-on's chat model (Qwen3 4B, or Qwen3 1.7B) with a warning that it may be inaccurate, and without such a model
+  the output says what can be downloaded. Type one German word: it is looked up first in a German dictionary (an
+  extract of the Wiktionary, a separate download in the add-on's options, shown with its license, CC BY-SA 4.0, before
+  it comes), which gives the base form, the word classes, the meanings and the English words of each meaning
+  ("fluchen", verb: to curse, to swear); the first five meanings of a class are shown and the rest is behind "more".
+  A class the dictionary has no English word for, and a word it does not have, are translated by the small model, with
+  a warning. "Similar" follows the English word you chose, and only its word class. The old lines "The model's other
+  words here:" (word pane) and "Other translations:" under a single word are gone: they were beginnings of other
+  sentences, which with the large model were often names. For a short text of several words, "Other translations:"
+  now lists the model's best complete translations, without names it made up.
+- **Swap and Translate back; English to German.** Two new buttons: **Swap** turns German to English into English to
+  German and back (the result moves into the text and is translated the other way), **Translate back** shows below
+  the result what the translation says in the language of your text, until you change the text. English to German is
+  new: **OPUS-MT English to German (small)** is downloaded on request (the reverse model is offered when you press
+  Translate back without it). One English word in English to German is translated by its word classes, as one
+  German word is the other way round. The second row of the controls shows the translation model while you translate
+  (switching it changes the translation), and the list of styles ("Correct", "More Formal") is only there while you
+  proofread.
+- **Single words and up to three words never go to the large translation model**, which puts names first on single
+  words: the dictionary first, else the small model (also when the large one is chosen; when the small one is not
+  downloaded, a note offers it). The large model's description now says it is for whole sentences. (The models are
+  on the new release *models-3*; the workflow `translator-data.yml` makes it.)
 - **The security watch** (the daily check of the parts the project ships) now also looks at PDFium inside Qt PDF, the
   ggml library inside whisper.cpp and the AppImage's own starter, and says in its report when the repository has had
   no change for 50 days (GitHub stops such a check after 60). For the project's builds: a third ready-made pack, for

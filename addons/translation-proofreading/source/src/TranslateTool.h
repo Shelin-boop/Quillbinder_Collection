@@ -61,6 +61,12 @@ public:
     QString loadProblem(const QString &slot, const QString &modelId);
     static void lowerPriority();   // the calling thread (and the threads it starts) at a low priority
     QString chosenModel(const QString &kind) const;   // the chosen model of the kind, if it is installed
+    // 1.3: the model that translates single words and short texts (never the large one); empty: none is installed
+    QString wordModel(const QString &kind) const;
+    QString dictionaryFile() const;   // the downloaded German dictionary, or empty
+#ifdef TP_TEST_SWITCHES
+    void setEngineForTest(EngineInterface *engine) { m_engine = engine; }   // a stand-in for the checks
+#endif
     // The engine (loaded on first use); null with *error when it cannot be loaded.
     EngineInterface *engine(QString *error);
     void touchEngine();            // after work: the models are freed after a while without work

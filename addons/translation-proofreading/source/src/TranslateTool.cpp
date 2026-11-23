@@ -92,6 +92,7 @@ TranslateTool::TranslateTool()
             }
         m_engine->unload(QStringLiteral("corrector"));
         m_engine->unload(QStringLiteral("translator"));
+        m_engine->unload(QStringLiteral("translator-en"));
     });
     connect(this, &TranslateTool::settingsChangedSignal, this, &TranslateTool::updateCommandState);
 }
@@ -254,7 +255,7 @@ void TranslateTool::setSetting(const QString &key, const QVariant &value)
 {
     if (m_host)
         m_host->setSetting(id(), key, value);
-    if (key == QLatin1String("corrector") || key == QLatin1String("translator"))
+    if (key == QLatin1String("corrector") || key == QLatin1String("translator") || key == QLatin1String("translator-en"))
         for (const QPointer<Panel> &p : m_panels)
             if (p)
                 p->reloadSettings();
@@ -282,15 +283,19 @@ QString TranslateTool::loadProblem(const QString &slot, const QString &modelId)
     const CatalogModel *m = m_store.model(modelId);
     if (!m)
         return QString();
-    const QString corrector = QStringLiteral("corrector"), translator = QStringLiteral("translator");
-    if (m_engine && (m_engine->loaded(corrector) == modelId || m_engine->loaded(translator) == modelId))
-        return QString();   // loaded already (or shared with the other slot)
-    // the model in this slot is freed first, unless the other slot keeps it
+    const QStringList allSlots{QStringLiteral("corrector"), QStringLiteral("translator"), QStringLiteral("translator-en")};
+    if (m_engine)
+        for (const QString &s : allSlots)
+            if (m_engine->loaded(s) == modelId)
+                return QString();   // loaded already (or shared with another slot)
+    // the model in this slot is freed first, unless another slot keeps it
     qint64 freed = 0;
     if (m_engine) {
         const QString current = m_engine->loaded(slot);
-        const QString other = m_engine->loaded(slot == corrector ? translator : corrector);
-        if (!current.isEmpty() && current != other)
+        bool shared = false;
+        for (const QString &s : allSlots)
+            shared = shared || (s != slot && !current.isEmpty() && m_engine->loaded(s) == current);
+        if (!current.isEmpty() && !shared)
             if (const CatalogModel *c = m_store.model(current))
                 freed = c->memoryMB;
     }
@@ -320,6 +325,25 @@ QString TranslateTool::chosenModel(const QString &kind) const
         if (m_store.isInstalled(m.id))
             return m.id;
     return QString();
+}
+
+QString TranslateTool::wordModel(const QString &kind) const
+{
+    // the model for single words and short texts: the chosen one when it may translate them, else the first installed
+    // one that may (never the large model, 1.3)
+    const QString chosen = chosenModel(kind);
+    if (const CatalogModel *c = m_store.model(chosen); c && c->forWords)
+        return chosen;
+    for (const CatalogModel &m : m_store.models(kind))
+        if (m.forWords && m_store.isInstalled(m.id))
+            return m.id;
+    return QString();
+}
+
+QString TranslateTool::dictionaryFile() const
+{
+    const QString id = chosenModel(QStringLiteral("dictionary"));
+    return id.isEmpty() ? QString() : m_store.filePath(id, QStringLiteral("de-dictionary.qz"));
 }
 
 EngineInterface *TranslateTool::engine(QString *error)

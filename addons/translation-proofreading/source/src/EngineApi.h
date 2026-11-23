@@ -64,6 +64,10 @@ public:
     // writer chose) for `source`; each with the sentence as the model goes on after it. Blocks.
     virtual QList<Alternative> alternatives(const QString &slot, const QString &source, const QString &current,
                                             int wordIndex, const RunOptions &options, int count, QString *error) = 0;
+    // 1.3: the model's best complete translations of one text (one run with several hypotheses, best first); a model
+    // that is not seq2seq gives its one answer. Blocks.
+    virtual QStringList variants(const QString &slot, const QString &text, const RunOptions &options, int count,
+                                 QString *error) = 0;
     virtual QString version() const = 0;
 };
 

@@ -2,9 +2,11 @@
 // kept as written, spelling suggestions, similar words, single words, and the chat models' tokenizer against the
 // pieces of the model's own tokenizer (tokenizer-check.json of each chat model in TP_MODELS_DIR).
 #include "Bpe.h"
+#include "Dictionary.h"
 #include "Logic.h"
 
 #include <QDir>
+#include <QTemporaryDir>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
@@ -193,6 +195,109 @@ private slots:
             verb = verb || x.pos == QLatin1String("verb");
         QVERIFY(verb);
         QVERIFY(similarWords(QStringLiteral("xqzt")).isEmpty());
+    }
+
+    // ---- 1.3
+    void meanings()
+    {
+        // WordNet's definitions built into the add-on (the real file): classes in WordNet's order, base forms
+        loadGlosses(QStringLiteral(":/translation-proofreading/en-glosses.tsv"));
+        QString base;
+        const QList<EnglishClass> c = englishMeanings(QStringLiteral("curses"), &base);
+        QVERIFY(!c.isEmpty());
+        QCOMPARE(base, QStringLiteral("curse"));
+        QStringList classes;
+        for (const EnglishClass &e : c) {
+            classes << e.pos;
+            QVERIFY(!e.meanings.isEmpty());
+            for (const QString &m : e.meanings)
+                QVERIFY(!m.contains(QStringLiteral("; \"")));   // no example sentences
+        }
+        QVERIFY(classes.contains(QStringLiteral("noun")) && classes.contains(QStringLiteral("verb")));
+        QCOMPARE(englishMeanings(QStringLiteral("geese"), &base).first().pos, QStringLiteral("noun"));
+        QCOMPARE(base, QStringLiteral("goose"));   // an irregular form
+        QVERIFY(englishMeanings(QStringLiteral("xqzt")).isEmpty());
+        loadGlosses(QStringLiteral(":/translation-proofreading/en-glosses.tsv"));
+    }
+
+    void germanDictionary()
+    {
+        QTemporaryDir dir;
+        const QByteArray text = "#qb-de-dictionary 1\n"
+                                "fluchen\tL\tfluchen\tverb\t\tto curse; to swear^to use bad words\n"
+                                "fluchte\tF\tfluchen\tverb\n"
+                                "essen\tL\tessen\tverb\t\tto eat^x\n"
+                                "essen\tL\tEssen\tnoun\tn\tfood; meal^x\n";
+        auto save = [&](const QString &name, const QByteArray &data) -> QString {
+            QFile f(dir.path() + QLatin1Char('/') + name);
+            if (!f.open(QIODevice::WriteOnly))
+                return QString();
+            f.write(data);
+            return f.fileName();
+        };
+        // plain, and compressed as qCompress writes it (the form the download has)
+        for (const QString &file : {save(QStringLiteral("a.txt"), text), save(QStringLiteral("b.qz"), qCompress(text, 9))}) {
+            QVERIFY(loadGermanDictionary(file));
+            const QList<GermanEntry> e = lookupGerman(QStringLiteral("fluchen"));
+            QCOMPARE(e.size(), 1);
+            QCOMPARE(e.first().pos, QStringLiteral("verb"));
+            QCOMPARE(e.first().meanings.first().english, (QStringList{QStringLiteral("to curse"), QStringLiteral("to swear")}));
+            QCOMPARE(lookupGerman(QStringLiteral("Fluchte")).first().headword, QStringLiteral("fluchen"));
+            QVERIFY(lookupGerman(QStringLiteral("fluchte")).first().viaForm);
+            // a capital letter is a hint: nouns first, a lower-case word has them last
+            QCOMPARE(lookupGerman(QStringLiteral("Essen")).first().pos, QStringLiteral("noun"));
+            QCOMPARE(lookupGerman(QStringLiteral("essen")).first().pos, QStringLiteral("verb"));
+            QCOMPARE(lookupGerman(QStringLiteral("essen")).size(), 2);
+            QVERIFY(lookupGerman(QStringLiteral("nichtda")).isEmpty());
+        }
+        QVERIFY(!loadGermanDictionary(save(QStringLiteral("c.txt"), "not a dictionary\n")));
+        QVERIFY(!germanDictionaryLoaded());
+        unloadGermanDictionary();
+    }
+
+    // the extract the tool makes (tools/make-de-dictionary.py --selftest, run by ctest before) is read as the download is
+    void dictionaryTool()
+    {
+        const QString file = qEnvironmentVariable("TP_TEST_DE_DICTIONARY");
+        if (file.isEmpty() || !QFileInfo::exists(file))
+            QSKIP("TP_TEST_DE_DICTIONARY not set (ctest sets it)");
+        QVERIFY(loadGermanDictionary(file));
+        const QList<GermanEntry> e = lookupGerman(QStringLiteral("fluchte"));
+        QCOMPARE(e.size(), 1);
+        QCOMPARE(e.first().headword, QStringLiteral("fluchen"));
+        QCOMPARE(e.first().meanings.first().english, (QStringList{QStringLiteral("to curse"), QStringLiteral("to swear")}));
+        QVERIFY(e.first().meanings.at(1).english.isEmpty());
+        QCOMPARE(lookupGerman(QStringLiteral("Flüche")).first().headword, QStringLiteral("Fluch"));
+        QCOMPARE(lookupGerman(QStringLiteral("Fluch")).first().gender, QStringLiteral("m"));
+        unloadGermanDictionary();
+    }
+
+    void frames()
+    {
+        QCOMPARE(frameFor(QStringLiteral("de"), QStringLiteral("verb"), QStringLiteral("fluchen")), QStringLiteral("zu fluchen"));
+        QCOMPARE(frameFor(QStringLiteral("de"), QStringLiteral("noun"), QStringLiteral("Fluch"), QStringLiteral("m")), QStringLiteral("der Fluch"));
+        QCOMPARE(frameFor(QStringLiteral("de"), QStringLiteral("noun"), QStringLiteral("Fluchen"), QStringLiteral("n")), QStringLiteral("das Fluchen"));
+        QCOMPARE(frameFor(QStringLiteral("en"), QStringLiteral("verb"), QStringLiteral("curse")), QStringLiteral("to curse"));
+        QCOMPARE(frameFor(QStringLiteral("en"), QStringLiteral("noun"), QStringLiteral("curse")), QStringLiteral("the curse"));
+        QCOMPARE(unframe(QStringLiteral("en"), QStringLiteral("verb"), QStringLiteral("To curse.")), QStringLiteral("to curse"));
+        QCOMPARE(unframe(QStringLiteral("en"), QStringLiteral("verb"), QStringLiteral("cursing")), QStringLiteral("to cursing"));
+        QCOMPARE(unframe(QStringLiteral("en"), QStringLiteral("noun"), QStringLiteral("The Curse.")), QStringLiteral("Curse"));
+        QCOMPARE(unframe(QStringLiteral("en"), QStringLiteral("adjective"), QStringLiteral("That is beautiful!")), QStringLiteral("beautiful"));
+        QCOMPARE(unframe(QStringLiteral("de"), QStringLiteral("verb"), QStringLiteral("zu fluchen")), QStringLiteral("fluchen"));
+        QCOMPARE(unframe(QStringLiteral("de"), QStringLiteral("noun"), QStringLiteral("der Fluch")), QStringLiteral("der Fluch"));
+        QCOMPARE(unframe(QStringLiteral("de"), QStringLiteral("adjective"), QStringLiteral("Das ist schön.")), QStringLiteral("schön"));
+        QCOMPARE(bareVerb(QStringLiteral("to curse")), QStringLiteral("curse"));
+        QCOMPARE(bareVerb(QStringLiteral("curse")), QStringLiteral("curse"));
+    }
+
+    void similarByClass()
+    {
+        QString base;
+        const QList<Similar> all = similarWords(QStringLiteral("curse"), &base);
+        const QList<Similar> verb = similarWords(QStringLiteral("curse"), &base, QStringLiteral("verb"));
+        QVERIFY(all.size() > 1);
+        QCOMPARE(verb.size(), 1);
+        QCOMPARE(verb.first().pos, QStringLiteral("verb"));
     }
 
     void modelWords()

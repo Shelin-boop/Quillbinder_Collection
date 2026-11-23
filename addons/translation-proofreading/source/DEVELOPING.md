@@ -6,7 +6,7 @@ is still a project of its own in this folder: its own `CMakeLists.txt`, its own 
 interface it was written against (`third_party/quillbinder`). Quillbinder's build packs it through
 `addons/translation-proofreading/stage.sh` (the folder above), with the engine libraries of
 `tools/get-translator-deps.sh`; the release workflow builds, signs and publishes it with the other add-ons, and it
-is part of the full version. The models are on the releases `models-1` and `models-2` of Quillbinder's repository.
+is part of the full version. The models are on the releases `models-1`, `models-2` and (1.3) `models-3` of Quillbinder's repository.
 The Windows and Android packages of 1.1 were built from the former repository and are rebuilt here when those
 systems are released from this repository.
 
@@ -111,6 +111,48 @@ loads in a newer one), but releases come only from the workflow "Build" (Qt 6.12
   the next start, its Options section, a model taken from a folder, "Das Haus ist alt und das Wetter ist schön."
   translated to "The house is old and the weather is nice." in 41 s (the first run, loading included). Not tried: a
   real tablet (arm64), the speed there, the proofreading models.
+
+## 1.3: a word on its own, Swap, English to German (2026-11-23, to-do item 23)
+
+- **Why** (what a writer saw): the large model (opus-mt-tc-big-gmw-gmw with `>>eng<<`) gave "Eriksson" for "erlebt", with
+  "Other translations: Irving, O'Hara, ...". Causes found in the code: the panel's second row set only `corrector`
+  while the translation reads `translator`; `seq2seqAlternatives` lets the model finish each of its likeliest first
+  pieces (names with the large model: a sentence's first piece is mostly a name or a capital); the word pane's list
+  was beginnings of other wordings. All three are gone for single words.
+- **One word** (`Panel::runSingleTranslation`, `computeSingle` in a worker thread): German to English: the German
+  dictionary (`src/Dictionary.*`), classes and meanings; English words per meaning are shown as they are (the dictionary
+  note); a class with no English word at all, and a word the dictionary does not have, go to the small model: `frameFor`
+  ("zu fluchen", "der Fluch", "Das ist schön") and `unframe` cut the frame off the answer. English to German: WordNet's
+  classes (`englishMeanings`, `resources/en-glosses.tsv`) are the frames ("to curse", "the curse") for the reverse small
+  model. A single English word being proofread gets the same meanings (`finishSingle`); no WordNet entry: a chat model
+  (Qwen3 4B, else 1.7B) writes the meaning in the slot `corrector`, with a warning (`requestChatMeaning`).
+- **Dictionary file** (`Dictionary.h` describes it; `tools/make-de-dictionary.py` makes it from kaikki.org's extract of the
+  English Wiktionary: German entries with English glosses; I chose that extract because its glosses are English
+  words, which "English words per meaning" needs): sorted lines, binary search, qCompress form. The catalog entry
+  `wiktionary-de` has type `data`, `askLicense` (the license dialog before the download) and files named by `filePath`.
+  A catalog file with a sum that starts with `PLACEHOLDER` is "not published yet" (`downloadProblem`).
+- **The small model**: catalog flag `forWords` (false only for `opus-mt-big-de-en`); `TranslateTool::wordModel(kind)`.
+  A text of up to three words (one run, other translations, the way back) takes it; none installed: a note offers it.
+- **Directions**: `Panel::Direction` (`Proofread`, `DeToEn`, `EnToDe`); kinds and slots are `corrector`, `translator`,
+  `translator-en` (the setting of each is the key of that name; `chosenModel`); the task list has "Translate English to
+  German"; Swap sets the task to the other direction and runs the result as the new input; Translate back runs the reverse
+  model on the result (`m_back`, cleared by `textChanged`). English rules (American spelling, curly quotes) are not
+  applied to German (`rulesForRun`). The chat models are not in `translator-en` (the catalog lists only the OPUS model
+  for it), though `systemFor("translate-de")` is there for them.
+- **Other translations** (short texts of at least two words, one sentence): `EngineInterface::variants` (one run with
+  several hypotheses), names dropped by `hasStrangeName` (a capitalized word not at a sentence's start, not in the word
+  list, not in the source).
+- **Checks without models**: `tests/word_tests.cpp` (ctest "words") with `tests/FakeEngine.h` (stand-in engine, set with
+  `TranslateTool::setEngineForTest` in test builds) and a catalog of its own (`TP_TEST_CATALOG`, files of the declared
+  size); `logic_tests` reads the real `en-glosses.tsv`, a small dictionary, and the extract that the tool's selftest
+  writes (ctest "dictionary-tool", "dictionary-reader"). `ui_tests` (real models) lost its checks of the model's other
+  words in the word pane. `UiTests::memoryGuard` depends on a model loaded by the checks before it (CoEdIT Large): without
+  `TP_MODELS_DIR` it fails (it did before 1.3, too).
+- **Data**: `.github/workflows/translator-data.yml` (push of a `linux/0.93.0*` branch that changes it or `models/convert.py`
+  or `tools/make-de-dictionary.py`) downloads, checks the pins (revision and SHA-256 or git ids of the model's files),
+  converts, builds the extract, and uploads to the release `models-3`, which it creates once; it does nothing when the
+  release has the files. The job `build` has no write permission. After the run, the artifact's `catalog.json` gives the
+  sizes and sums for `resources/catalog.json` (until then they are `PLACEHOLDER`).
 
 ## Things learned (2026-11-15, 1.1)
 

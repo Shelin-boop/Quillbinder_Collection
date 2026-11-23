@@ -1,6 +1,6 @@
 {
   "format": 2,
-  "release": "models-2",
+  "release": "models-3",
   "engine": "CTranslate2 4.9.0",
   "models": [
     {
@@ -321,7 +321,7 @@
       ],
       "type": "seq2seq",
       "title": "OPUS-MT Big, German to English (University of Helsinki)",
-      "summary": "A larger translation model than OPUS-MT German to English; usually translates better. Free for any use with credit (CC BY 4.0).",
+      "summary": "Better for whole sentences and passages (CC BY 4.0, free for any use with credit); unreliable for single words and short phrases, which the add-on always gives to the small model.",
       "license": "CC BY 4.0",
       "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
       "nonCommercial": false,
@@ -373,7 +373,106 @@
           "sha256": "6af6fcca1f79b251959fb1ab2f1461fde04c8e5070879e951862c20b026975e7"
         }
       ],
-      "sizeMB": 218
+      "sizeMB": 218,
+      "forWords": false
+    },
+    {
+      "id": "opus-mt-en-de",
+      "kinds": [
+        "translator-en"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT English to German (small) (University of Helsinki)",
+      "summary": "Translates English into German: the way back for Swap and Translate back, and English to German on its own. Free for any use with credit (CC BY 4.0).",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "nonCommercial": false,
+      "credit": "opus-mt-en-de by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-en-de, licensed under CC BY 4.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "release": "models-3",
+      "memoryMB": 300,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-en-de/tree/6183067f769a302e3861815543b9f312c71b0ca4",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-en-de--MODEL-LICENSE.txt",
+          "size": 0,
+          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-en-de--config.json",
+          "size": 0,
+          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-en-de--model.bin",
+          "size": 0,
+          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-en-de--shared_vocabulary.json",
+          "size": 0,
+          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-en-de--source.spm",
+          "size": 0,
+          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-en-de--target.spm",
+          "size": 0,
+          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+        }
+      ],
+      "sizeMB": 79
+    },
+    {
+      "id": "wiktionary-de",
+      "kinds": [
+        "dictionary"
+      ],
+      "type": "data",
+      "title": "German dictionary (extract of the Wiktionary)",
+      "summary": "Word classes, meanings and English words for German words; used first when you translate a single German word. Licensed under CC BY-SA 4.0: the license is shown before the download.",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "nonCommercial": false,
+      "askLicense": true,
+      "credit": "Dictionary data from the English Wiktionary (en.wiktionary.org) by its contributors, taken from the extract of kaikki.org (made with wiktextract), licensed under CC BY-SA 4.0. Changed: reduced to word classes, English words and definitions, and inflected forms.",
+      "release": "models-3",
+      "memoryMB": 0,
+      "source": "https://kaikki.org/dictionary/German/",
+      "files": [
+        {
+          "name": "DICTIONARY-LICENSE.txt",
+          "asset": "wiktionary-de--DICTIONARY-LICENSE.txt",
+          "size": 0,
+          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+        },
+        {
+          "name": "LICENSE-CC-BY-SA-4.0.txt",
+          "asset": "wiktionary-de--LICENSE-CC-BY-SA-4.0.txt",
+          "size": 0,
+          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+        },
+        {
+          "name": "de-dictionary.qz",
+          "asset": "wiktionary-de--de-dictionary.qz",
+          "size": 0,
+          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+        }
+      ],
+      "sizeMB": 0
     }
   ]
 }

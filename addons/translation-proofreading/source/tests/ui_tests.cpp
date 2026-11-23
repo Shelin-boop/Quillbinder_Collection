@@ -616,8 +616,8 @@ private slots:
         QVERIFY(info.contains(QStringLiteral("Spelling: correct")));   // "bellow" is a word (to roar)
         QVERIFY(info.contains(QStringLiteral("Similar (verb)")));
         if (haveModels()) {
-            QTRY_VERIFY_WITH_TIMEOUT(!p.infoPending(), 120000);
-            QVERIFY(p.info()->toPlainText().contains(QStringLiteral("other words")));
+            // 1.3: the word pane has no line of the model's other words
+            QVERIFY(!p.info()->toPlainText().contains(QStringLiteral("other words")));
             // and in the result: a double click is no click (no menu)
             QVERIFY(runPanel(&p));
             QTextDocument *doc = p.output()->document();
@@ -628,7 +628,6 @@ private slots:
             QTRY_VERIFY(p.info()->toPlainText().startsWith(QStringLiteral("window")));
             QTest::qWait(QApplication::doubleClickInterval() + 200);
             QVERIFY(!p.findChild<QMenu *>(QStringLiteral("tpWordMenu")));
-            QTRY_VERIFY_WITH_TIMEOUT(!p.infoPending(), 120000);
         }
         QCoreApplication::processEvents();
         shot(&p, QStringLiteral("inspector-info"));

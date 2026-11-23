@@ -10,6 +10,8 @@
 #include <QString>
 #include <QStringList>
 
+#include <functional>
+
 namespace tp {
 
 // "de" or "en"
@@ -95,7 +97,10 @@ struct Similar {
 };
 void loadThesaurus(const QString &file);
 QStringList baseForms(const QString &word);       // the forms the thesaurus has: "went" -> "go", "cities" -> "city"
-QList<Similar> similarWords(const QString &word, QString *base = nullptr);
+// 1.3: onlyPos ("verb" ...) keeps one part of speech
+QList<Similar> similarWords(const QString &word, QString *base = nullptr, const QString &onlyPos = QString());
+// 1.3: the same for any word list: the base forms of a word that `has` accepts (irregular forms from the thesaurus)
+QStringList baseFormsIn(const QString &word, const std::function<bool(const QString &)> &has);
 
 // A text that is a single word (letters, an apostrophe or a hyphen inside; quotes and punctuation around it).
 bool isSingleWord(const QString &text, QString *word = nullptr);
@@ -107,5 +112,10 @@ bool isSingleWord(const QString &text, QString *word = nullptr);
 // model's other words are mostly ones a sentence starts with ("It", "The").
 QStringList usefulModelWords(const QStringList &found, const QString &word, bool otherForms = true,
                              const QStringList *near = nullptr);
+
+// 1.3: a word written with a capital letter that is not at the start of a sentence, not in the word list and not in the
+// source text: a name the model made up (the large model put names first on single words). Such translations are dropped
+// from the list of other translations.
+bool hasStrangeName(const QString &text, const QString &source);
 
 } // namespace tp

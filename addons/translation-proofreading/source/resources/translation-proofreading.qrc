@@ -4,5 +4,6 @@
     <file>us-spelling.tsv</file>
     <file>en-words.txt</file>
     <file>en-thesaurus.tsv</file>
+    <file>en-glosses.tsv</file>
   </qresource>
 </RCC>
