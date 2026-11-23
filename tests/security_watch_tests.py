@@ -406,7 +406,7 @@ if shutil.which("gpg") and shutil.which("gpgv"):
     gen = lambda who: subprocess.run(["gpg", "--batch", "--pinentry-mode", "loopback", "--passphrase", "", "--quick-generate-key",
                                       who, "ed25519", "sign", "never"], env=env, capture_output=True, text=True)
     fprs = {}
-    for who in ("Release Key <release@example.invalid>", "Other Key <other@example.invalid>"):
+    for who in ("Release Key <release@example.org>", "Other Key <other@example.org>"):
         gen(who)
         out = subprocess.run(["gpg", "--batch", "--with-colons", "--fingerprint", who], env=env, capture_output=True, text=True).stdout
         fprs[who.split()[0]] = [l.split(":")[9] for l in out.splitlines() if l.startswith("fpr")][0]
