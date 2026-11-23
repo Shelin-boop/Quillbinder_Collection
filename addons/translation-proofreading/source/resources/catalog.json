@@ -389,7 +389,7 @@
       "nonCommercial": false,
       "credit": "opus-mt-en-de by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-en-de, licensed under CC BY 4.0. Changed: converted to CTranslate2 with 8-bit weights.",
       "release": "models-3",
-      "memoryMB": 300,
+      "memoryMB": 251,
       "source": "https://huggingface.co/Helsinki-NLP/opus-mt-en-de/tree/6183067f769a302e3861815543b9f312c71b0ca4",
       "tokenizer": {
         "type": "marian",
@@ -400,38 +400,38 @@
         {
           "name": "MODEL-LICENSE.txt",
           "asset": "opus-mt-en-de--MODEL-LICENSE.txt",
-          "size": 0,
-          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+          "size": 473,
+          "sha256": "7353eddd9c0fd160883919a897302ac64867e5ed9eb0fdfaadd3234ab1b5d674"
         },
         {
           "name": "config.json",
           "asset": "opus-mt-en-de--config.json",
-          "size": 0,
-          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
         },
         {
           "name": "model.bin",
           "asset": "opus-mt-en-de--model.bin",
-          "size": 0,
-          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+          "size": 75979635,
+          "sha256": "3cad348e65aa400a0fce83b2b89a876030092e108ebc5a824ac1def6c76957b2"
         },
         {
           "name": "shared_vocabulary.json",
           "asset": "opus-mt-en-de--shared_vocabulary.json",
-          "size": 0,
-          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+          "size": 993828,
+          "sha256": "fa4c8d666c582ad39892a2ae5d4ded1b0ddde4b49dc784a7fcbd73940f9fa13e"
         },
         {
           "name": "source.spm",
           "asset": "opus-mt-en-de--source.spm",
-          "size": 0,
-          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+          "size": 768489,
+          "sha256": "678f2a1177d8389f67b66299762dcc4fc567e89b07e212ba91b0c56daecf47ce"
         },
         {
           "name": "target.spm",
           "asset": "opus-mt-en-de--target.spm",
-          "size": 0,
-          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+          "size": 796845,
+          "sha256": "bbd1f495eea99c8e21ae086d9146e0fa7b096c3dfdd9ba07ab8b631889df5c9b"
         }
       ],
       "sizeMB": 79
@@ -456,23 +456,23 @@
         {
           "name": "DICTIONARY-LICENSE.txt",
           "asset": "wiktionary-de--DICTIONARY-LICENSE.txt",
-          "size": 0,
-          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+          "size": 1104,
+          "sha256": "2fe6c45e77b3cd504022fae3d0e0bb86335284ca467f836d26077ac46f7f587a"
         },
         {
           "name": "LICENSE-CC-BY-SA-4.0.txt",
           "asset": "wiktionary-de--LICENSE-CC-BY-SA-4.0.txt",
-          "size": 0,
-          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+          "size": 20138,
+          "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
         },
         {
           "name": "de-dictionary.qz",
           "asset": "wiktionary-de--de-dictionary.qz",
-          "size": 0,
-          "sha256": "PLACEHOLDER-SET-FROM-THE-MODELS-3-RUN"
+          "size": 3905809,
+          "sha256": "2b990c5350b4b2325850616bf92dace939fe58ce0c2f1d82eafdf87b9e82062f"
         }
       ],
-      "sizeMB": 0
+      "sizeMB": 4
     }
   ]
 }
