@@ -618,7 +618,7 @@ int main(int argc, char **argv)
         const QString bReadme = zipEntry(base, QStringLiteral("payload/media/licenses/README.txt"));
         const QString xReadme = zipEntry(extra, QStringLiteral("payload/media-extra/licenses/README.txt"));
         check(bReadme.contains(QLatin1String(QB_SOURCES_URL)) && bReadme.contains(ff) && bReadme.contains(QLatin1String("qt-everywhere-src-"))
-                  && !bReadme.contains(QLatin1String("libva")) && bReadme.contains(QLatin1String("\"Media Playback\" 2.0"))
+                  && !bReadme.contains(QLatin1String("libva")) && bReadme.contains(QLatin1String("\"Media Playback\" 2.1"))
                   && xReadme.contains(QLatin1String(QB_SOURCES_URL)) && xReadme.contains(ff) && xReadme.contains(QLatin1String("patents")),
               QStringLiteral("both add-ons' licence notes name the source files of their libraries"), bReadme.left(400) + QLatin1String(" | ") + xReadme.left(400));
         const QString web = kBuild + QStringLiteral("/addons-dist/import-web.qbpkg");
@@ -676,8 +676,8 @@ int main(int argc, char **argv)
         const QString article = QStringLiteral("aeiou").contains(label.left(1)) ? QStringLiteral("an") : QStringLiteral("a");
         check(rc == 0 && notes.contains(QStringLiteral("**This is %1 %2 version.**").arg(article, label)) && notes.contains(QLatin1String("Back Up Now"))
                   && notes.contains(QStringLiteral("Quillbinder-%1-%2-x86_64.AppImage").arg(v, label))
-                  && notes.contains(QLatin1String("Add-on \"Extra Video and Audio Formats\" 2.0"))
-                  && notes.contains(QLatin1String("Add-on \"Media Playback\" 2.0"))
+                  && notes.contains(QLatin1String("Add-on \"Extra Video and Audio Formats\" 2.1"))
+                  && notes.contains(QLatin1String("Add-on \"Media Playback\" 2.1"))
                   && notes.contains(QLatin1String("not made by or connected with Literature & Latte"))
                   && notes.contains(QLatin1String("releases/tag/third-party-sources")) && notes.contains(QStringLiteral("What is new in %1 %2").arg(v, label)),
               QStringLiteral("the release text: the label's note with backups, every file with what it is, non-affiliation, source code, what is new"),
