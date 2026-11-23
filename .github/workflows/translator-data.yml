@@ -37,7 +37,7 @@ env:
   # the dictionary's source (kaikki.org's extract of the English Wiktionary, entries of the language German); its size and
   # SHA-256 are printed by the run. Put the SHA-256 here to pin it (the file changes when kaikki.org makes a new extract).
   KAIKKI_URL: https://kaikki.org/dictionary/German/kaikki.org-dictionary-German.jsonl
-  KAIKKI_SHA256: ''
+  KAIKKI_SHA256: 4fb15662a125085e1eb6b533a210b45edcdffa7b8e72e07634f46e1485e4e715  # 2026-11-23, 1,095,258,648 bytes, 371,793 entries
   LEGAL_URL: https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt
   LEGAL_SHA256: ''
 
@@ -69,6 +69,8 @@ jobs:
         if: steps.state.outputs.there != 'true'
         run: |
           python3 -m venv /tmp/venv
+          # the converter (ct2-transformers-converter) is a program of this environment: later steps find it on the PATH
+          echo /tmp/venv/bin >> "$GITHUB_PATH"
           /tmp/venv/bin/pip install --quiet --upgrade pip
           # (CPU build of torch: the runner has no GPU; versions as models/convert.py names them: CTranslate2 4.9.0,
           # transformers 4.51 or later)
