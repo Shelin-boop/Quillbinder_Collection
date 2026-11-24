@@ -3,7 +3,7 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
-## 0.93.0 beta (2026-11-..)
+## 0.93.0 beta (2026-11-24)
 
 A new AppImage and a program update for Linux. Nothing changes in how you write; what changes is under the program,
 in the parts it is built from. The add-ons of 0.80.0 and later are rebuilt for this version: the ones that bring
