@@ -51,6 +51,14 @@ on:
         description: 'Build fresh: no caches (FFmpeg or whisper.cpp changed, a main-number release, a cache in doubt)'
         type: boolean
         default: false
+      page_only:
+        description: 'Only make the download page and the update file again (a release that is published, its page not); nothing is built or published'
+        type: boolean
+        default: false
+      from_run:
+        description: 'With page_only: the id of the run whose artifact release-files holds the signed update file'
+        type: string
+        default: ''
 
 permissions:
   contents: read
@@ -77,6 +85,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           FRESH_INPUT: ${{ inputs.fresh }}
+          PAGE_ONLY: ${{ inputs.page_only }}
         run: |
           VERSION=$(sed -n 's/^set(APP_VERSION *"\(.*\)")/\1/p' CMakeLists.txt)
           LABEL=$(sed -n 's/^set(APP_VERSION_LABEL *"\(.*\)")/\1/p' CMakeLists.txt)
@@ -89,6 +98,16 @@ jobs:
           fi
           if [ "$GITHUB_REF_TYPE" = tag ]; then TAG=$GITHUB_REF_NAME; else TAG="v$VERSION${LABEL:+-$LABEL}"; fi
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          # 2026-11-24: page_only: no build; the release of this version must exist, the job download-page does the rest
+          if [ "$PAGE_ONLY" = true ]; then
+            if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+              echo "Page only: the release $TAG exists; nothing is built."
+              echo "build=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "::error title=No release $TAG::page_only needs a published release of the version on main."
+            exit 1
+          fi
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
             # (0.60) a release without the full version gets everything built and uploaded again
             if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json assets --jq '.assets[].name' | grep -q -- '-full-.*\.AppImage$'; then
@@ -713,15 +732,19 @@ jobs:
     # once, Settings > Pages > Build and deployment > Source "GitHub Actions". Runs after
     # the release is published and changes nothing in it.
     needs: [version, publish]
+    # (2026-11-24: also alone, with the input page_only, when the release is published and its page is not; publish is
+    # skipped then. Without page_only the condition is the one of before: publish has succeeded.)
+    if: ${{ !cancelled() && needs.version.result == 'success' && (needs.publish.result == 'success' || inputs.page_only) }}
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     permissions:
       contents: read
+      actions: read
       pages: write
       id-token: write
     environment:
       name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
+      url: ${{ steps.deploy_retry.outputs.page_url || steps.deploy.outputs.page_url }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
@@ -730,10 +753,29 @@ jobs:
       # 0.92.0: the signed update file of this release goes onto the page with it (a rerun after the files of the
       # run are gone keeps the file the page has: tools/keep-update-feed.sh)
       - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        if: ${{ !inputs.page_only }}
         continue-on-error: true
         with:
           name: release-files
           path: release-files
+
+      # page_only: the update file of the run named in from_run (its artifact is kept 3 days), checked before it is used
+      - name: The update file of the earlier run
+        if: ${{ inputs.page_only }}
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: release-files
+          path: release-files
+          run-id: ${{ inputs.from_run }}
+          github-token: ${{ github.token }}
+
+      - name: Check the update file of the earlier run
+        if: ${{ inputs.page_only }}
+        run: |
+          set -euo pipefail
+          u=release-files/updates
+          [ -f "$u/updates-1.json" ] && [ -f "$u/updates-1.json.sig" ] || { echo "::error title=No update file::release-files/updates lacks updates-1.json or its .sig"; exit 1; }
+          openssl pkeyutl -verify -pubin -inkey packaging/quillbinder-signing-public.pem -rawin -in "$u/updates-1.json" -sigfile "$u/updates-1.json.sig"
 
       - name: The page
         env:
@@ -765,7 +807,33 @@ jobs:
           path: site
           name: github-pages-${{ github.run_attempt }}
 
+      # 2026-11-24: deploy-pages lists the run's artifacts at once and may miss the one just uploaded (release 0.93.0: three
+      # runs in a row); wait until the list shows it (at most 3 minutes, then go on), and try the deploy twice
+      - name: Wait until the page artifact is listed
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ATTEMPT: ${{ github.run_attempt }}
+        run: |
+          for i in $(seq 1 18); do
+            n=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID/artifacts?name=github-pages-$ATTEMPT" --jq .total_count || echo 0)
+            if [ "${n:-0}" -ge 1 ]; then echo "github-pages-$ATTEMPT is listed."; exit 0; fi
+            echo "github-pages-$ATTEMPT not listed yet ($i of 18)"
+            sleep 10
+          done
+          echo "::warning title=Page artifact not listed::going on to the deploy anyway"
+
       - id: deploy
+        continue-on-error: true
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+        with:
+          artifact_name: github-pages-${{ github.run_attempt }}
+
+      - name: Pause before the second try
+        if: steps.deploy.outcome == 'failure'
+        run: sleep 60
+
+      - id: deploy_retry
+        if: steps.deploy.outcome == 'failure'
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
         with:
           artifact_name: github-pages-${{ github.run_attempt }}
