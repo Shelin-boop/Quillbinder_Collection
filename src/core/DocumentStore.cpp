@@ -2,7 +2,10 @@
 #include "core/SafeSave.h"
 #include "core/SaveBatch.h"
 #include "core/DocumentStore.h"
+#include "core/TestSwitches.h"
 
+#include <QElapsedTimer>
+#include <QThread>
 #include <algorithm>
 
 #include "text/Script.h"
@@ -58,12 +61,15 @@ DocumentStore::DocumentStore(Project *project) : QObject(project), m_project(pro
     m_unloadTimer.setInterval(1500);
     connect(&m_unloadTimer, &QTimer::timeout, this, [this] {
         m_unloadAgain = false;
+        m_unloadRefused = false;
         unloadUnused();
         if (m_unloadAgain)
             m_unloadTimer.start(300); // more to compare
-        else if (m_probe && m_entries.size() > kKeepLoaded && s_hold > 0)
-            m_unloadTimer.start(3000); // a job holds documents: later
+        else if (m_probe && m_entries.size() > kKeepLoaded && (s_hold > 0 || m_unloadRefused))
+            m_unloadTimer.start(3000); // a job holds documents, a window is open: later
     });
+    // the unsaved marks of shown-only documents are cleared by a save: that is the time to let them go
+    connect(project, &Project::saved, this, &DocumentStore::armUnloading);
 }
 
 DocumentStore::~DocumentStore()
@@ -193,32 +199,51 @@ void DocumentStore::readFile(const QString &id, bool notes, QTextDocument *doc, 
         }
     }
     QFile f(path);
-    if (f.exists() && !f.open(QIODevice::ReadOnly)) {
-        // there, but not readable: shown empty, never saved over (0.20)
-        const QString key = keyFor(id, notes);
-        if (!m_unreadable.contains(key)) {
-            m_unreadable.insert(key);
-            emit unreadableFile(id, notes, path, f.errorString());
-        }
-    }
+    const QString key = keyFor(id, notes);
     QByteArray data;
-    if (f.isOpen()) {
-        data = f.readAll();
-        // 0.65.0 (audit F23): a read cut short (an I/O error, a file of a sync folder that is not all there)
-        // is not the text: shown empty and never saved over, as a file that cannot be opened
-        const bool regular = QFileInfo(path).isFile();
-        if (f.error() != QFileDevice::NoError || (regular && data.size() != f.size())) {
-            const QString key = keyFor(id, notes);
-            const QString why = f.error() != QFileDevice::NoError ? f.errorString()
-                                                                   : tr("only %1 of %2 bytes could be read").arg(data.size()).arg(f.size());
+    bool have = false;          // data holds the text (read, or kept from before the document was unloaded)
+    QString failure;            // why the file could not be read ("" : it could)
+    bool unreadableNow = false;
+    // the tests' switch (0.93.0): a part of the path whose file cannot be opened (a root user ignores permissions)
+    const QString fakeUnreadable = QB_TEST_ENV("QB_TEST_READ_FAILS");
+    if (f.exists()) {
+        if ((!fakeUnreadable.isEmpty() && path.contains(fakeUnreadable)) || !f.open(QIODevice::ReadOnly)) {
+            unreadableNow = true;
+            failure = f.isOpen() ? QStringLiteral("not readable") : f.errorString();
             f.close();
-            if (!m_unreadable.contains(key)) {
-                m_unreadable.insert(key);
-                emit unreadableFile(id, notes, path, why);
+        } else {
+            data = f.readAll();
+            // 0.65.0 (audit F23): a read cut short (an I/O error, a file of a sync folder that is not all there)
+            // is not the text: shown empty and never saved over, as a file that cannot be opened
+            const bool regular = QFileInfo(path).isFile();
+            if (f.error() != QFileDevice::NoError || (regular && data.size() != f.size())) {
+                unreadableNow = true;
+                failure = f.error() != QFileDevice::NoError
+                              ? f.errorString()
+                              : tr("only %1 of %2 bytes could be read").arg(data.size()).arg(f.size());
+                f.close();
+            } else {
+                have = true;
             }
         }
     }
-    if (f.isOpen()) {
+    if (unreadableNow) {
+        // 0.93.0: a document that was unloaded and is shown again is read from its file again; when that fails for a
+        // moment (a sync program or a scanner has the file) and the file is the one that was read, the bytes kept at
+        // the unloading are the text (nothing is marked unreadable). Another file (another computer wrote it): as before.
+        auto kept = m_kept.constFind(key);
+        if (kept != m_kept.constEnd() && kept->stamp.known && kept->stamp.sameAs(syncsafe::stampOf(path))) {
+            data = kept->bytes;
+            rtfFile = kept->rtf;
+            have = true;
+        } else {
+            if (!m_unreadable.contains(key)) {
+                m_unreadable.insert(key);
+                emit unreadableFile(id, notes, path, failure);
+            }
+        }
+    }
+    if (have) {
         if (bytes)
             *bytes = data;
         if (rtf)
@@ -277,6 +302,7 @@ QTextDocument *DocumentStore::load(const QString &id, bool notes)
     doc->setUndoRedoEnabled(false);
     Entry e;
     readFile(id, notes, doc, &e.read, &e.readRtf);
+    m_kept.remove(key); // (the entry holds what was read now)
     if (notes) {
         // 0.93.0: new and empty notes start as plain text, notes that were plain stay so (see display::applyPlainNotes)
         if (!doc->property(display::kPlainNotesProp).toBool() && doc->isEmpty())
@@ -311,18 +337,22 @@ QTextDocument *DocumentStore::load(const QString &id, bool notes)
     m_entries.insert(key, e);
     if (m_probe && m_entries.size() > kKeepLoaded && !m_unloadTimer.isActive())
         m_unloadTimer.start();
-    connect(doc, &QTextDocument::contentsChanged, this, [this, key, id, notes] {
+    connect(doc, &QTextDocument::contentsChanged, this, [this, doc, key, id, notes] {
         auto it = m_entries.find(key);
         if (it == m_entries.end())
             return;
         it->dirty = true;
+        ++it->changes;
         m_project->scheduleSave();
         m_plainCache.remove(key); // (0.93.0: also for notes: an unloaded and read again notes text can be edited)
         if (!notes) {
             m_plainCache.remove(id);
             m_countPending.insert(id);
             m_countTimer.start();
-            emit textEdited(id);
+            // 0.93.0: a document read anew gets its spell check's first pass, which fires this signal without a change
+            // of the text (the document is not modified): that is no edit (no snapshot "Saved", no title taken)
+            if (doc->isModified())
+                emit textEdited(id);
         }
     });
     return doc;
@@ -331,13 +361,28 @@ QTextDocument *DocumentStore::load(const QString &id, bool notes)
 // 0.93.0 (to-do item 39): see the header. What is kept: a shown document, one with a change not saved, one with an
 // undo or redo step (the history lives in the document), one that is read-only because of its file, and the last
 // `keep` used. A shown-only document is clean (a save finds it unchanged since it was read) and has no steps.
+void DocumentStore::armUnloading()
+{
+    if (m_probe && m_entries.size() > kKeepLoaded && !m_unloadTimer.isActive())
+        m_unloadTimer.start();
+}
+
 int DocumentStore::unloadUnused(int keep)
 {
-    if (!m_probe || s_hold > 0 || m_entries.size() <= keep)
+    if (!m_probe || m_entries.size() <= keep)
         return 0;
+    if (s_hold > 0)
+        return 0;
+    // a nested event loop (a menu, a drag, a native dialog the probe does not see): what runs below it may hold documents
+    if (QThread::currentThread()->loopLevel() > 1) {
+        m_unloadRefused = true;
+        return 0;
+    }
     QSet<const QTextDocument *> shown;
-    if (!m_probe(&shown))
+    if (!m_probe(&shown)) {
+        m_unloadRefused = true;
         return 0;
+    }
     QList<QPair<quint64, QString>> candidates;
     for (auto it = m_entries.constBegin(); it != m_entries.constEnd(); ++it) {
         const Entry &e = it.value();
@@ -346,6 +391,8 @@ int DocumentStore::unloadUnused(int keep)
             continue;
         if (m_unreadable.contains(key) || m_damaged.contains(key) || m_shown.contains(key) || m_missing.contains(key))
             continue;
+        if (e.read.size() > kKeptMax)
+            continue; // (large files are not unloaded: their bytes are not kept for a failed read)
         candidates.append({e.used, key});
     }
     // the ones used last stay (the shown ones are not among the candidates but do count as kept)
@@ -355,26 +402,34 @@ int DocumentStore::unloadUnused(int keep)
         return 0;
     std::sort(candidates.begin(), candidates.end(), [](const auto &a, const auto &b) { return a.first < b.first; });
     const int drop = int(candidates.size()) - canKeep;
-    int budget = 40, done = 0; // documents marked as changed by showing them are compared with their file (some per run)
+    QElapsedTimer clock; // the compares of one run take about 15 ms at most (the timer comes again for the rest)
+    clock.start();
+    int done = 0;
     for (int i = 0; i < drop; ++i) {
         const QString &key = candidates.at(i).second;
         auto it = m_entries.find(key);
         if (it == m_entries.end())
             continue;
         if (it->dirty) {
-            if (budget-- <= 0) {
-                m_unloadAgain = true;
+            if (it->comparedAt == it->changes)
+                continue; // found really changed and not changed since: it stays until it is saved
+            if (clock.elapsed() >= 15) {
+                m_unloadAgain = true; // this one and the next were not looked at
                 break;
             }
-            if (!sameAsRead(key, *it))
-                continue; // really changed: it stays until it is saved
+            if (!sameAsRead(key, *it)) {
+                it->comparedAt = it->changes;
+                continue;
+            }
         }
         ++done;
         QTextDocument *doc = it->doc;
+        if (!it->read.isNull() && it->stamp.known)
+            m_kept.insert(key, Kept{it->read, it->readRtf, it->stamp});
         emit aboutToDeleteDocument(doc);
         disconnect(doc, nullptr, this, nullptr);
         doc->deleteLater();
-        m_entries.erase(it);
+        m_entries.remove(key); // (by key: a slot of the signal may have changed the table)
         m_plainCache.remove(key);
     }
     return done;
@@ -385,6 +440,7 @@ bool DocumentStore::sameAsRead(const QString &key, const Entry &e) const
 {
     if (e.read.isNull() || !e.doc)
         return false;
+    ++m_compares;
     QTextDocument tmp;
     tmp.setProperty("qbZoom", e.doc->property("qbZoom"));
     tmp.setBaseUrl(e.doc->baseUrl());
@@ -888,10 +944,12 @@ void DocumentStore::forgetDocument(const QString &id)
     for (const QString &key : {id, keyFor(id, true)}) {
         auto it = m_entries.find(key);
         if (it != m_entries.end()) {
-            emit aboutToDeleteDocument(it->doc);
-            it->doc->deleteLater();
-            m_entries.erase(it);
+            QTextDocument *doc = it->doc;
+            emit aboutToDeleteDocument(doc);
+            doc->deleteLater();
+            m_entries.remove(key); // (by key: a slot of the signal may have changed the table)
         }
+        m_kept.remove(key);
         m_plainCache.remove(key);
     }
 }

@@ -43,8 +43,12 @@ public:
     // Unloads every text and notes that is not shown, has no unsaved change and no undo or redo step, except the `keep`
     // used last; how many were unloaded. Called by the store itself a moment after a document was read.
     int unloadUnused(int keep = kKeepLoaded);
+    // arms the unloading (after a save that cleared the unsaved marks, when more than kKeepLoaded are held)
+    void armUnloading();
+    int comparesDone() const { return m_compares; } // how often an unsaved-looking document was compared with its file (tests)
     int loadedCount() const { return int(m_entries.size()); }
     static constexpr int kKeepLoaded = 8;
+    static constexpr int kKeptMax = 512 * 1024; // a document whose file is larger is not unloaded
     // While one is alive nothing is unloaded (a long job that keeps documents in hand and runs the event loop)
     struct Hold {
         Hold() { ++s_hold; }
@@ -193,13 +197,25 @@ private:
         QByteArray read;
         bool readRtf = false;
         quint64 used = 0; // 0.93.0: the order the documents were asked for (the unloading keeps the last ones)
+        quint64 changes = 0;           // 0.93.0: how often the document changed since it was read here
+        quint64 comparedAt = ~quint64(0); // 0.93.0: `changes` when the unloading found it really changed (no new compare until it moves)
     };
     // the file of this entry was written by someone else: keep that version (0.64); false when
     // neither a copy nor a snapshot could be kept (0.64.1: then this one must not replace it)
     bool keepOtherVersion(const QString &id, bool notes, const QString &path);
     // what would be written is what was read (or last written) here: nothing was edited (0.64.1)
     bool sameAsRead(const QString &key, const Entry &e) const;
+    mutable int m_compares = 0;
     bool m_unloadAgain = false;
+    bool m_unloadRefused = false; // the last run could not say (a window is open, a nested event loop): again later
+    // 0.93.0: what an unloaded document was read from, kept (up to kKeptMax bytes) for the case that its file cannot be
+    // read when it is shown again and still looks as it did (a sync program or a scanner holds it for a moment)
+    struct Kept {
+        QByteArray bytes;
+        bool rtf = false;
+        syncsafe::Stamp stamp;
+    };
+    QHash<QString, Kept> m_kept;
     bool unchangedSinceRead(const QString &id, const Entry &e, const QByteArray &data);
     QTextDocument *load(const QString &id, bool notes);
     void readFile(const QString &id, bool notes, QTextDocument *doc, QByteArray *bytes = nullptr, bool *rtf = nullptr);
