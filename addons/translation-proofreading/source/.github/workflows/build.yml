@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 150
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
       - name: System packages
         run: |
@@ -44,7 +44,7 @@ jobs:
       # restore and save on their own: the libraries are kept even when a later step fails
       - name: Engine libraries (cache)
         id: deps
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: |
             deps/install
@@ -61,7 +61,7 @@ jobs:
 
       - name: Engine libraries (keep)
         if: steps.deps.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: |
             deps/install
@@ -90,7 +90,7 @@ jobs:
 
       - name: Models for the checks (cache)
         id: models
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: models-cache
           key: models-${{ hashFiles('resources/catalog.json') }}
@@ -109,7 +109,7 @@ jobs:
 
       - name: Models for the checks (keep)
         if: steps.models.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: models-cache
           key: ${{ steps.models.outputs.cache-primary-key }}
@@ -136,7 +136,7 @@ jobs:
           QB_QT_DIR="$QT_DIR" packaging/make-addon.sh build-release dist
           sha256sum dist/*.qbpkg | tee dist/SHA256SUMS.txt
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: translation-proofreading
           path: |
@@ -187,11 +187,11 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
       - name: Qt cache
         id: qtcache
-        uses: actions/cache@v4
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: C:\Qt\6.12.0
           key: qt-6.12.0-win64_msvc2022_64-v1
@@ -226,7 +226,7 @@ jobs:
 
       - name: Engine libraries (cache)
         id: deps
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: |
             deps/install
@@ -244,7 +244,7 @@ jobs:
 
       - name: Engine libraries (keep)
         if: steps.deps.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: |
             deps/install
@@ -255,7 +255,7 @@ jobs:
 
       - name: Models for the checks (cache)
         id: models
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: models-cache
           key: models-${{ hashFiles('resources/catalog.json') }}-windows
@@ -272,7 +272,7 @@ jobs:
 
       - name: Models for the checks (keep)
         if: ${{ !cancelled() && steps.models.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: models-cache
           key: ${{ steps.models.outputs.cache-primary-key }}
@@ -328,7 +328,7 @@ jobs:
           cmake --build build-release || exit /b 1
           "C:\Program Files\Git\bin\bash.exe" -c "tests/check-exports-windows.sh build-release && packaging/make-addon-windows.sh build-release dist && sha256sum dist/*.qbpkg | tee dist/SHA256SUMS-windows.txt" || exit /b 1
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
           name: translation-proofreading-windows
@@ -385,7 +385,7 @@ jobs:
       NDK_VERSION: "27.2.12479018"
       QT_BASE: /opt/qt
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 
       - name: The Android NDK
         run: |
@@ -395,7 +395,7 @@ jobs:
 
       - name: Qt cache
         id: qtcache
-        uses: actions/cache@v4
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: /opt/qt
           key: qt-${{ env.QT_VERSION }}-android-arm64-x86_64-v1
@@ -413,7 +413,7 @@ jobs:
 
       - name: Engine libraries for Android (cache)
         id: deps
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: |
             deps-android/arm64-v8a/install
@@ -433,7 +433,7 @@ jobs:
 
       - name: Engine libraries for Android (keep)
         if: steps.deps.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: |
             deps-android/arm64-v8a/install
@@ -479,7 +479,7 @@ jobs:
           (cd dist && sha256sum ./*.qbpkg | sed 's# \./# #' | tee SHA256SUMS-android.txt)
           exit $fail
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
           name: translation-proofreading-android

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Stages the add-on from a build and writes the package.
 #   packaging/make-addon.sh <build dir> <out dir>      -> <out dir>/translation-proofreading-<version>.qbpkg
-# The build must be a release build (TP_TEST_SWITCHES off) against Qt 6.12.0. QB_QT_DIR (default /opt/qt/6.12.1/gcc_64)
+# The build must be a release build (TP_TEST_SWITCHES off) against Qt 6.12.1. QB_QT_DIR (default /opt/qt/6.12.1/gcc_64)
 # gives Qt's TLS plugin for the model download; without it the package is made without the plugin and a warning (the
 # download then needs the plugin of another add-on, such as Speech Transcription).
 set -euo pipefail
