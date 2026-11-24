@@ -10,6 +10,7 @@
 #include "core/Objects.h"
 #include "text/DirectFormat.h"
 #include "text/DisplayFormat.h"
+#include "text/FontFaces.h"
 #include "text/TextProps.h"
 #include "text/Tables.h"
 #include "text/TextUtil.h"
@@ -336,8 +337,13 @@ static QString exportFamily(const QString &family)
         && family.compare(QLatin1String("sans-serif"), Qt::CaseInsensitive) != 0)
         return family;
     auto it = cache.constFind(family);
-    if (it == cache.constEnd())
-        it = cache.insert(family, QFontInfo(QFont(family)).family());
+    if (it == cache.constEnd()) {
+        // 0.93.1: with the name's style hint, so that a platform that does not know the generic names (Qt for
+        // Android) gives a font of that kind and not its default font (the Android system test, S-K01)
+        QFont f(family);
+        f.setStyleHint(fontfaces::genericHint(family));
+        it = cache.insert(family, QFontInfo(f).family());
+    }
     return it.value();
 }
 

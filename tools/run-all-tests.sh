@@ -246,6 +246,7 @@ runx v0930d $B/tests/qb_v0930d_tests $B/tests/qb_v0930d_tests "$OUT/shots-v0930d
 runx v0930e $B/tests/qb_v0930e_tests $B/tests/qb_v0930e_tests "$OUT/shots-v0930e"
 runx saveas $B/tests/qb_saveas_tests $B/tests/qb_saveas_tests "$OUT/shots-saveas"
 runx v0930f $B/tests/qb_v0930f_tests $B/tests/qb_v0930f_tests "$OUT/shots-v0930f"
+runx v0931 $B/tests/qb_v0931_tests $B/tests/qb_v0931_tests "$OUT/shots-v0931"
 runx notesplain $B/tests/qb_notesplain_tests $B/tests/qb_notesplain_tests "$OUT/shots-notesplain"
 runx mmoverview $B/tests/qb_mmoverview_tests $B/tests/qb_mmoverview_tests "$OUT/shots-mmoverview"
 runx audit1 $B/tests/qb_audit1_tests $B/tests/qb_audit1_tests "$OUT/shots-audit1"
@@ -260,6 +261,8 @@ run secwatch python3 -I tests/security_watch_tests.py
 run deps python3 -I tests/deps_packs_tests.py
 # the version line per system (0.93.0): offline, Python only
 run verlines python3 -I tests/version_lines_tests.py
+# the official add-ons' entries with a folder and the translator's own packaging (0.93.1): offline, Python only
+run addonentry python3 -I tests/addon_entry_tests.py
 # a suite that was asked for and is not there at all (a name mistyped in QB_SUITES)
 for n in $SELECTED; do
     [[ " $RAN $MISSING " == *" $n "* ]] || MISSING="$MISSING $n"

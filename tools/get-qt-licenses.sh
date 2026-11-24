@@ -53,11 +53,13 @@ for repo in qtbase qtsvg qtimageformats qtmultimedia; do
 done
 
 # Qt PDF: the chromium checkout qtwebengine's tag points to
-# (GitHub's copy of qtwebengine has no tag v6.12.0 (2026-11-11, only the betas): then its branch 6.12, whose
-# license files are those of the release)
+# (0.93.1, to-do item 48: since Qt 6.12 Qt PDF is a Qt Extensions release of its own, QB_QTPDF_VERSION in CMakeLists.txt,
+# e.g. 6.140.0 for Qt 6.12; its tag v<that>, else its branch of that version, whose license files are those of the release)
+PDFVERSION=$(sed -n 's/^set(QB_QTPDF_VERSION *"\(.*\)")/\1/p' "$ROOT/CMakeLists.txt")
+[ -n "$PDFVERSION" ] || PDFVERSION=$VERSION
 W=$DIR/qtwebengine
-WREF=v$VERSION
-git ls-remote --exit-code https://github.com/qt/qtwebengine "refs/tags/$WREF" >/dev/null 2>&1 || WREF=${VERSION%.*}
+WREF=v$PDFVERSION
+git ls-remote --exit-code https://github.com/qt/qtwebengine "refs/tags/$WREF" >/dev/null 2>&1 || WREF=${PDFVERSION%.*}
 if [ ! -d "$W/.git" ]; then
     git clone -q --filter=blob:none --no-checkout --depth 1 --branch "$WREF" https://github.com/qt/qtwebengine "$W"
 fi

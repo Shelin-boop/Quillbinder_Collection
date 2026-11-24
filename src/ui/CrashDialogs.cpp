@@ -23,6 +23,8 @@
 #include <QFileInfo>
 #include <QFontDatabase>
 #include <QHBoxLayout>
+#include <QInputDevice>
+#include <QInputMethod>
 #include <QKeyEvent>
 #include <QLabel>
 #include <QListWidget>
@@ -372,6 +374,32 @@ QStringList concerns(const Project *project)
     return out;
 }
 
+// The input devices Qt knows, by kind (0.93.1, to-do item 34): on a tablet whether a keyboard and a mouse are attached
+static QString inputDevices()
+{
+    QStringList out;
+    for (const QInputDevice *d : QInputDevice::devices()) {
+        QString kind;
+        switch (d->type()) {
+        case QInputDevice::DeviceType::Mouse: kind = QStringLiteral("mouse"); break;
+        case QInputDevice::DeviceType::TouchScreen: kind = QStringLiteral("touch screen"); break;
+        case QInputDevice::DeviceType::TouchPad: kind = QStringLiteral("touch pad"); break;
+        case QInputDevice::DeviceType::Puck: kind = QStringLiteral("puck"); break;
+        case QInputDevice::DeviceType::Stylus: kind = QStringLiteral("pen"); break;
+        case QInputDevice::DeviceType::Airbrush: kind = QStringLiteral("airbrush"); break;
+        case QInputDevice::DeviceType::Keyboard: kind = QStringLiteral("keyboard"); break;
+        default: kind = QStringLiteral("other"); break;
+        }
+        QString name;
+        for (const QChar ch : d->name()) // (X11 names can end in a control character)
+            if (ch.isPrint())
+                name += ch;
+        name = name.simplified();
+        out << (name.isEmpty() ? kind : QStringLiteral("%1 (%2)").arg(name, kind));
+    }
+    return out.isEmpty() ? QStringLiteral("none reported") : out.join(QLatin1String("; "));
+}
+
 QString text(const Project *project)
 {
     QStringList t;
@@ -495,10 +523,15 @@ QString text(const Project *project)
         t << QStringLiteral("  Screens: none");
     for (QScreen *sc : screens) {
         const QSize px = sc->size() * sc->devicePixelRatio();
-        t << QStringLiteral("  Screen %1: %2 x %3 px, scale %4, %5 dpi, %6 x %7 mm, %8 Hz%9")
+        // 0.93.1 (to-do item 34, test idea C): the usable area (without panels, the task bar, Android's bars and an
+        // on-screen keyboard that the system takes off) in pixels of the screen
+        const QSize usable = sc->availableGeometry().size() * sc->devicePixelRatio();
+        t << QStringLiteral("  Screen %1: %2 x %3 px (usable %4 x %5 px), scale %6, %7 dpi, %8 x %9 mm, %10 Hz%11")
                  .arg(sc->name().isEmpty() ? QString::number(screens.indexOf(sc) + 1) : sc->name())
                  .arg(px.width())
                  .arg(px.height())
+                 .arg(usable.width())
+                 .arg(usable.height())
                  .arg(sc->devicePixelRatio())
                  .arg(qRound(sc->logicalDotsPerInch()))
                  .arg(qRound(sc->physicalSize().width()))
@@ -506,6 +539,9 @@ QString text(const Project *project)
                  .arg(qRound(sc->refreshRate()))
                  .arg(sc == QGuiApplication::primaryScreen() ? QStringLiteral(" (primary)") : QString());
     }
+    t << QStringLiteral("  Input devices: %1").arg(inputDevices());
+    if (QInputMethod *im = QGuiApplication::inputMethod())
+        t << QStringLiteral("  On-screen keyboard: %1").arg(im->isVisible() ? QStringLiteral("shown") : QStringLiteral("not shown"));
     t << QStringLiteral("  Language: %1 (%2), time zone %3")
              .arg(QLocale::system().name(), QLocale::system().uiLanguages().mid(0, 4).join(QLatin1String(", ")),
                   QString::fromLatin1(QTimeZone::systemTimeZoneId()));

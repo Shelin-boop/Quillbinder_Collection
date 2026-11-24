@@ -76,7 +76,13 @@ public:
 
     QString plainText(const QString &id);
     QString notesPlainText(const QString &id);
-    void invalidatePlain(const QString &id) { m_plainCache.remove(id); }
+    void invalidatePlain(const QString &id) { dropPlain(id); }
+    // 0.93.1 (to-do item 45): the plain texts kept for search and the counts are bounded by their characters (about
+    // 8 MB at the default); past the bound a plain text is read from its file each time it is asked for and not kept.
+    void setPlainCacheBudget(qint64 characters) { m_plainBudget = characters; }
+    qint64 plainCacheCharacters() const { return m_plainChars; }
+    int plainCacheCount() const { return int(m_plainCache.size()); }
+    static constexpr qint64 kPlainCacheBudget = 4000000;
 
     // file level operations
     QString textPath(const QString &id) const;
@@ -252,6 +258,11 @@ private:
     QSet<QString> m_toldNotKept; // keys whose changed text could not be kept either (told once)
     QStringList m_skippedUnreadable;
     QHash<QString, QString> m_plainCache;
+    qint64 m_plainChars = 0;
+    qint64 m_plainBudget = kPlainCacheBudget;
+    void keepPlain(const QString &key, const QString &plain);
+    void dropPlain(const QString &key);
+    void clearPlain();
     QSet<QString> m_countPending;
     QTimer m_countTimer;
     double m_zoom = 1.0;

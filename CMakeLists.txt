@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.16)
 # ---------------------------------------------------------------------------
 set(APP_NAME "Quillbinder")
 set(APP_ID   "quillbinder")
-set(APP_VERSION "0.93.0")
+set(APP_VERSION "0.93.1")
 # 0.93.0: a version line per system (working rules, section 8). The first two numbers (the functional level) are the same
 # on every system; the last number counts each system's own fixes, so that a system is released as soon as its own
 # tests pass. "APP_VERSION" is the Linux line (the AppImage, the update package; every script that reads it for
@@ -43,6 +43,11 @@ set(APP_RUNTIME_SINCE "0.93.0")
 # into /opt/qt/<version>/gcc_64; the release workflow installs the same with aqtinstall), no longer Ubuntu's
 # Qt 6.4.2. The runtime id above names it; change both together.
 set(QB_QT_VERSION "6.12.1")
+# 0.93.1 (to-do item 48): Qt PDF is no longer part of Qt's source release since Qt 6.12: it is a "Qt Extensions" module
+# of Qt WebEngine, released with its own version (the Qt PDF the builds take with Qt 6.12, tools/get-qt.sh). Its source
+# is qtwebengine-everywhere-src-<this>.tar.xz (tools/collect-sources.py), its parts' licenses come from that tag
+# (tools/get-qt-licenses.sh).
+set(QB_QTPDF_VERSION "6.140.0")
 # The day that Qt version was released (its tag in qt/qtbase): Help > System Information shows the runtime's age
 # (the external audit of 2026-11-09, X-7).
 set(APP_RUNTIME_DATE "2026-11-23")

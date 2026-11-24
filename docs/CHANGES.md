@@ -3,6 +3,31 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.93.1 beta (2026-11-24)
+
+Fixes and small changes (a program update for 0.93.0; the AppImage stays on the runtime `u2404-qt6.12-r2`).
+
+- **The generic font names on systems that do not know them.** The style **Code Span** and other text in the font
+  "monospace" (and "serif", "sans-serif") is shown and written into Word, e-book and PDF files in a font of that kind
+  wherever the system does not know these names (on Android tablets it was the system's default font, so a text
+  message in Code Span reached a Word file without its fixed-width font). On Linux, which knows the names, nothing
+  changes.
+- **Search and the counts keep less in memory.** The plain texts kept for search, the word counts and the targets are
+  held up to about 8 MB; past that a text is read from its file each time it is needed (large projects use less
+  memory, mostly on tablets; nothing changes in what is found or counted).
+- **Help > System Information names more for reports from tablets.** It also names the area a window can use on
+  each screen, the input devices (keyboard, mouse, touch screen, pen) and whether the on-screen keyboard is shown.
+- **Help > Third-Party Licenses names Qt PDF with its own source.** Since Qt 6.12 Qt PDF is released with Qt
+  WebEngine and has a version of its own (Qt PDF 6.140.0 for Qt 6.12), and Qt's own source release no longer holds
+  it: the list names it as a part of its own with its source, `qtwebengine-everywhere-src-6.140.0.tar.xz`, which the
+  release "Third-party source code" gets with this version.
+
+For developers (nothing changes in the program): the official entry of Translation and Proofreading describes 1.3
+and names the add-on's folder in this repository (`folder`, used by the three official add-on workflows through
+`tools/addon-entry.py`); the add-on's own packaging script names the program's runtime (it named the runtime before
+0.93.0); `tools/get-ffmpeg.sh` builds FFmpeg anew when a folder holds another FFmpeg version; the workflows use the
+artifact actions that run on Node.js 24.
+
 ## 0.93.0 beta (2026-11-24)
 
 A new AppImage for Linux, on Qt 6.12.1, whose built-in libraries bring safety fixes: the check for updates offers it

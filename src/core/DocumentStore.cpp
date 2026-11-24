@@ -344,9 +344,9 @@ QTextDocument *DocumentStore::load(const QString &id, bool notes)
         it->dirty = true;
         ++it->changes;
         m_project->scheduleSave();
-        m_plainCache.remove(key); // (0.93.0: also for notes: an unloaded and read again notes text can be edited)
+        dropPlain(key); // (0.93.0: also for notes: an unloaded and read again notes text can be edited)
         if (!notes) {
-            m_plainCache.remove(id);
+            dropPlain(id);
             m_countPending.insert(id);
             m_countTimer.start();
             // 0.93.0: a document read anew gets its spell check's first pass, which fires this signal without a change
@@ -430,7 +430,7 @@ int DocumentStore::unloadUnused(int keep)
         disconnect(doc, nullptr, this, nullptr);
         doc->deleteLater();
         m_entries.remove(key); // (by key: a slot of the signal may have changed the table)
-        m_plainCache.remove(key);
+        dropPlain(key);
     }
     return done;
 }
@@ -946,6 +946,30 @@ bool DocumentStore::saveDocument(const QString &id, QString *error)
     return writeEntry(id, it.value(), error);
 }
 
+void DocumentStore::keepPlain(const QString &key, const QString &plain)
+{
+    dropPlain(key);
+    if (m_plainChars + plain.size() > m_plainBudget)
+        return; // past the bound: read from the file the next time (the first texts asked for stay kept)
+    m_plainCache.insert(key, plain);
+    m_plainChars += plain.size();
+}
+
+void DocumentStore::dropPlain(const QString &key)
+{
+    auto it = m_plainCache.find(key);
+    if (it == m_plainCache.end())
+        return;
+    m_plainChars -= it->size();
+    m_plainCache.erase(it);
+}
+
+void DocumentStore::clearPlain()
+{
+    m_plainCache.clear();
+    m_plainChars = 0;
+}
+
 QString DocumentStore::plainText(const QString &id)
 {
     if (QTextDocument *d = loadedText(id))
@@ -956,7 +980,7 @@ QString DocumentStore::plainText(const QString &id)
     QTextDocument tmp;
     readFile(id, false, &tmp);
     const QString p = text::plainText(&tmp);
-    m_plainCache.insert(id, p);
+    keepPlain(id, p);
     return p;
 }
 
@@ -972,7 +996,7 @@ QString DocumentStore::notesPlainText(const QString &id)
     QTextDocument tmp;
     readFile(id, true, &tmp);
     const QString p = text::plainText(&tmp, true);
-    m_plainCache.insert(key, p);
+    keepPlain(key, p);
     return p;
 }
 
@@ -998,7 +1022,7 @@ void DocumentStore::forgetDocument(const QString &id)
             m_entries.remove(key); // (by key: a slot of the signal may have changed the table)
         }
         m_kept.remove(key);
-        m_plainCache.remove(key);
+        dropPlain(key);
     }
 }
 
@@ -1333,7 +1357,7 @@ bool DocumentStore::convertStorage(StorageFormat to, QString *error)
                 break;
             }
     }
-    m_plainCache.clear();
+    clearPlain();
     m_project->markIndexDirty();
     if (ok && !m_project->saveIndex(error))
         ok = false;
@@ -1474,7 +1498,7 @@ int DocumentStore::editStored(const QString &id, bool notes, const std::function
     e.dirty = true;
     if (!writeEntry(key, e, error))
         return -1;
-    m_plainCache.remove(key);
+    dropPlain(key);
     if (!notes)
         recount(id);
     return n;
