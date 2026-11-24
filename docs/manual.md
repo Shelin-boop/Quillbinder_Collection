@@ -933,7 +933,7 @@ Example: to see everything that still has the status "To Do", search for `To Do`
 
 Project Replace cannot be undone as a whole. Leave **Take a snapshot of every text before it is changed** ticked: every changed text then has a snapshot named "Before replacing …" to roll back to (section 11). Titles and synopses have no snapshots; for a large change, make a backup first with **File > Back Up > Back Up Now**. A text that is open in an editor can also be taken back there with **Edit > Undo**.
 
-Formatting stays as it is: the new text takes over the formatting of the text it replaces.
+Formatting stays as it is: the new text takes over the formatting of the text it replaces. A text that is not open in an editor is changed in its file, so **Edit > Undo** does not take that change back (the snapshot taken first does); the same holds for Convert Quotes, comment cards and Compare and Transfer.
 
 ### Find by Formatting
 
