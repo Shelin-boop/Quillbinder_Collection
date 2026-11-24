@@ -709,13 +709,14 @@ void caseSR03()
     if (!w->project())
         return;
     QStringList controls;
+    ScopedWaiter waiter(QDialog::staticMetaObject.className());
     withModal<QDialog>(500, [&controls](QDialog *d) {
         for (QWidget *x : d->findChildren<QWidget *>())
             if (x->objectName().startsWith(QLatin1String("speech")) && x->isVisible())
                 controls << x->objectName();
         shot(d, QStringLiteral("speech-options"));
         d->reject();
-    });
+    }, 100, waiter.alive);
     w->toolShowOptions(QStringLiteral("speech-transcription"));
     settle(1200);
     fact(QStringLiteral("S-R03 the controls of the Speech section"), controls.join(QLatin1String(", ")));

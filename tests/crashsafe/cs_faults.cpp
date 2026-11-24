@@ -932,10 +932,11 @@ void caseSD06()
             firedFaults(true);
             setFaults({c.rule});
             QString shown;
+            ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
             withModal<QMessageBox>(600, [&shown](QMessageBox *b) {
                 shown = b->text();
                 b->accept();
-            }, 20);
+            }, 20, waiter.alive);
             const int signalsBefore = failedSignals;
             BoxWatch watch;
             qApp->installEventFilter(&watch);
@@ -957,10 +958,11 @@ void caseSD06()
         if (e) {
             setFaults({QStringLiteral("write %1 ENOSPC 0").arg(folder)});
             QString shown;
+            ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
             withModal<QMessageBox>(500, [&shown](QMessageBox *b) {
                 shown = b->text();
                 b->accept();
-            }, 60);
+            }, 60, waiter.alive);
             const int signalsBefore = failedSignals;
             typeInto(e, QStringLiteral(" Typed while the disk is full."));
             settle(8000);   // the autosave (2 s pause, 5 s gap rule)
@@ -982,13 +984,14 @@ void caseSD06()
         // closing with a save that fails: the program must not close silently
         setFaults({QStringLiteral("write %1 ENOSPC 0").arg(folder)});
         QString asked;
+        ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
         withModal<QMessageBox>(500, [&asked](QMessageBox *b) {
             asked = b->text();
             if (QAbstractButton *no = b->button(QMessageBox::No))
                 no->click();
             else
                 b->reject();
-        }, 20);
+        }, 20, waiter.alive);
         const bool closed = w->closeProject();
         settle(500);
         clearFaults();

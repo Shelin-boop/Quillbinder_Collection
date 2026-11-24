@@ -555,6 +555,7 @@ void caseSP06()
         w->closeProject();
     // delete the template file while the start dialog lists it
     BoxText message;
+    ScopedWaiter waiter(StartDialog::staticMetaObject.className());
     withModal<StartDialog>(300, [mine, parent, &message](StartDialog *d) {
         QFile::remove(mine.zipPath);
         const QList<QListWidget *> lists = d->findChildren<QListWidget *>();
@@ -581,7 +582,7 @@ void caseSP06()
                 return;
             }
         d->reject();
-    });
+    }, 100, waiter.alive);
     chooseByMenu(w, QStringLiteral("newProject"));
     settle(1500);
     fact(QStringLiteral("S-P06 a template deleted while listed"), message.isEmpty() ? QStringLiteral("no message") : message.left(160));
