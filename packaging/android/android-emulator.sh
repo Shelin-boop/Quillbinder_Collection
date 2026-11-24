@@ -389,7 +389,10 @@ grep -nE "fingers:|files: |files \(|tablet: |open: |windows: (surface|no context
   grep -E '(files|tablet|open): |files \(' /tmp/emu-logcat-all.txt | grep -vE 'fingers:' | sed -E 's/^[0-9-]+ ([0-9:.]+) .*(files[: (]|tablet: |open: )/  \1 \2/' | cut -c1-330 | head -45; } >> "$SUM"
 # new windows: Qt 6.12.1 makes their surfaces itself (Android 0.93.0; Qt 6.12.0 ended the program there)
 {
-  echo "new windows: Qt's lock fault of 6.12.0 (\"deadlock protector\", must be 0): $(grep -c 'deadlock protector' /tmp/emu-logcat-all.txt)"
+  echo "new windows: Qt's lock fault of 6.12.0 (\"deadlock protector for QAndroidPlatformOpenGLWindow::eglSurface()\", which ended the program; must be 0): $(grep -c 'deadlock protector for .QAndroidPlatformOpenGLWindow' /tmp/emu-logcat-all.txt)"
+  # (Qt's other uses of that lock only warn and go on, e.g. its event loop while the keyboard program calls: listed)
+  echo "Qt's warnings about that lock elsewhere (harmless): $(grep 'deadlock protector' /tmp/emu-logcat-all.txt | grep -vc 'QAndroidPlatformOpenGLWindow')"
+  grep 'deadlock protector' /tmp/emu-logcat-all.txt | grep -v 'QAndroidPlatformOpenGLWindow' | sed -E 's/^[0-9-]+ ([0-9:.]+) [^:]*: /  \1 /' | cut -c1-160 | head -4
   echo "drawing contexts that did not fit a surface (must be 0): $(grep -cE 'eglMakeCurrent failed|Failed to create QRhi|Could not create the egl surface' /tmp/emu-logcat-all.txt)"
   # (Qt draws once more while Android takes the app's surfaces away; seen in run 19 at the Home key, harmless there)
   echo "pictures Qt could not draw (\"Failed to make context current\"; expected only when the app is put away): $(grep -c 'Failed to make context current' /tmp/emu-logcat-all.txt)"

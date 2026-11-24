@@ -151,6 +151,31 @@ and need 0.93.0 (the check for updates and **File > Install Update or Add-on** t
   they cannot say "alpha" again; `docs/design-decisions.md` gives the reasons behind choices that can look like faults
   (README, SECURITY.md and the manual's introduction link to it).
 
+## Android 0.93.0 experimental (2026-11-24)
+
+Quillbinder for Android tablets at the level of Linux 0.93.0. Everything in 0.93.0 above is in it: the panes placed by
+the window's shape (also when you turn the tablet), File > Save As, the mind map's overview, the translator for single
+words and both directions, and the fixes around saving and backups. What is Android's own:
+
+- **Qt 6.12.1 for Android**, with the safety fixes of its built-in HarfBuzz and PCRE2 (and newer libpng, libjpeg-turbo
+  and FreeType). This is a security update; it comes, as always on Android, as a new APK.
+- **New windows and the keys with the mouse now work through Qt itself.** Qt 6.12.1 repairs both faults Android
+  0.92.0 worked around: a window that opened while the on-screen keyboard was busy could end the program, and mouse
+  clicks and wheel turns came without the keys held down. Quillbinder's own workarounds are gone. On an emulated
+  tablet, windows opened from the File menu with the keyboard up and the app put away right after typing ended
+  nothing, and Ctrl + click, Shift + click and Ctrl + wheel work as before.
+- **The mind map's overview by finger.** A tap in the overview moves the view there, a finger drags the rectangle of
+  the part shown, and the grip in its corner changes its size. Before, a finger on the overview scrolled the board
+  under it, the other way.
+- **File > Save As asks for the format first** (Scrivener 3 or Quillbinder), then opens the file window.
+- **Newer add-ons without libraries are offered on the tablet too.** The extra themes, the templates and the formats
+  come with the Linux release; the check for updates now names them for Android as well.
+- Translation and Proofreading 1.3 comes with the app, as on Linux and Windows.
+- The tests: the preview test checks the overview by finger in an upright tablet's window and in a phone-sized one,
+  the unloading of documents in a project of 300 documents (a word the on-screen keyboard is still composing is
+  kept), and the update file's Android block; the start check on the emulated tablet also opens File > Save As with
+  the keyboard up.
+
 ## Windows 0.93.0 experimental (2026-11-24)
 
 Quillbinder for Windows 11 at the level of Linux 0.93.0. Everything above is in it. What is Windows' own:

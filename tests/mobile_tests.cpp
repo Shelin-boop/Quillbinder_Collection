@@ -26,6 +26,11 @@
 #include "ui/BinderPanel.h"
 #include "ui/EditorPane.h"
 #include "ui/GripBar.h"
+#include "ui/Inspector.h"
+#include "ui/MindMapDoc.h"
+#include "ui/MindMapOverview.h"
+#include "ui/MindMapUi.h"
+#include "ui/MindMapView.h"
 #include "ui/MainWindow.h"
 #include "ui/TextColumnView.h"
 #include "ui/TextEditor.h"
@@ -45,6 +50,10 @@
 #include <QMenuBar>
 #include <QMouseEvent>
 #include <QPlainTextEdit>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QProcess>
 #include <QPointingDevice>
 #include <QPushButton>
 #include <QScrollArea>
@@ -1638,6 +1647,285 @@ static void widgetChecks()
     settle(100);
 }
 
+// ---- Android 0.93.0, item 42: the mind map's overview with a finger, in an upright tablet's window and a phone-sized one
+static bool nearPt(const QPointF &a, const QPointF &b, double tol) { return QLineF(a, b).length() <= tol; }
+static QString ptText(const QPointF &q) { return QStringLiteral("%1,%2").arg(q.x(), 0, 'f', 1).arg(q.y(), 0, 'f', 1); }
+
+static void overviewChecks(MainWindow &w)
+{
+    info(QStringLiteral("---- the mind map's overview with a finger (0.93.0, item 42)"));
+    Project *p = w.project();
+    auto *binder = w.findChild<BinderPanel *>();
+    auto *insp = w.findChild<Inspector *>();
+    if (!p || !binder || !insp) {
+        check(false, QStringLiteral("(the window's binder and inspector found)"));
+        return;
+    }
+    BinderItem *doc = p->model()->createItem(p->draft(), -1, ItemType::Text, QStringLiteral("The Board"));
+    MindMapDoc *md = mindmaps::docFor(p, doc->id);
+    md->change(QStringLiteral("notes"), [md] {
+        for (int i = 0; i < 8; ++i) {
+            mindmap::Note n;
+            n.id = i + 1;
+            n.text = QStringLiteral("Note %1 of the harbor").arg(i + 1);
+            n.pos = QPointF(40 + (i % 4) * 260, 40 + (i / 4) * 200);
+            n.width = 160;
+            md->board.notes << n;
+        }
+    });
+    if (QAction *si = w.findChild<QAction *>(QStringLiteral("showInspector")); si && !si->isChecked())
+        si->trigger();
+    overview::setAlways(true);
+    const QSize sizeBefore = w.size();
+    Hand hand;
+    hand.dev = QTest::createTouchDevice();
+    hand.win = &w;
+    for (const QSize &size : {QSize(800, 1200), QSize(412, 860)}) {
+        const QString name = QStringLiteral("%1 x %2").arg(size.width()).arg(size.height());
+        w.resize(size);
+        settle(400);
+        binder->select({doc}, true);
+        settle(300);
+        insp->showTab(Inspector::MindMap);
+        settle(500);
+        MindMapPanel *panel = insp->mindMapPanel();
+        MindMapView *view = panel ? panel->view() : nullptr;
+        MindMapOverview *ov = view ? view->overview() : nullptr;
+        if (!ov || !ov->isVisibleTo(view->viewport())) {
+            check(false, QStringLiteral("(%1: the overview is shown)").arg(name));
+            continue;
+        }
+        view->setZoom(1.5);
+        view->centerOn(QPointF(300, 150));
+        settle(300);
+        const double z = view->zoom();
+        // a tap beside the rectangle of the part shown and beside the grip (in a small overview the grip, made large
+        // enough for a finger, takes much of its right part): the point of the map farthest from the rectangle
+        const QRectF in = ov->innerRect();
+        QPointF target = in.center();
+        double best = -1;
+        for (int ix = 1; ix < 10; ++ix)
+            for (int iy = 1; iy < 4; ++iy) {
+                const QPointF c(in.left() + in.width() * ix / 10.0, in.top() + in.height() * iy / 4.0);
+                if (ov->shownRectInOverview().adjusted(-3, -3, 3, 3).contains(c) || ov->gripRect().adjusted(-3, -3, 3, 3).contains(c.toPoint()))
+                    continue;
+                const double far = QLineF(c, ov->shownRectInOverview().center()).length();
+                if (far > best) {
+                    best = far;
+                    target = c;
+                }
+            }
+        const QPointF expect = ov->sceneAt(QPointF(target.toPoint()));
+        hand.tap(ov->mapTo(&w, target.toPoint()));
+        settle(300);
+        check(nearPt(view->visibleCenter(), expect, 8) && qFuzzyCompare(view->zoom(), z),
+              QStringLiteral("%1: a tap in the overview centers the view on that point, the zoom stays").arg(name),
+              QStringLiteral("center %1, wanted %2, zoom %3 -> %4").arg(ptText(view->visibleCenter()), ptText(expect)).arg(z).arg(view->zoom()));
+        // a finger drags the rectangle: the view goes with it (the board under the overview does not scroll instead)
+        const QRectF r = ov->shownRectInOverview();
+        const double scale = r.width() / view->visibleRect().width();
+        const QPointF before = view->visibleCenter();
+        const QPoint from = r.center().toPoint();
+        hand.swipe(ov->mapTo(&w, from), ov->mapTo(&w, from + QPoint(16, 10)), 8, 15, 60);
+        settle(300);
+        const QPointF moved = view->visibleCenter() - before;
+        // (the overview keeps the finger's point inside its map, as it does the mouse's: a small overview cuts the drag)
+        const QPointF end(std::clamp(double(from.x() + 16), in.left(), in.right()), std::clamp(double(from.y() + 10), in.top(), in.bottom()));
+        const QPointF wanted = (end - QPointF(from)) / scale;
+        check(nearPt(moved, wanted, 10) && qFuzzyCompare(view->zoom(), z),
+              QStringLiteral("%1: a finger drags the overview's rectangle and the view goes with it").arg(name),
+              QStringLiteral("moved %1, wanted %2").arg(ptText(moved), ptText(wanted)));
+        // a finger on the grip in the lower right corner makes it larger, never more than half of the view
+        const QSize s0 = ov->size();
+        const QPoint g = ov->gripRect().center();
+        hand.swipe(ov->mapTo(&w, g), ov->mapTo(&w, g + QPoint(30, 20)), 8, 15, 60);
+        settle(300);
+        check(ov->width() > s0.width() && ov->height() > s0.height() && ov->width() <= view->viewport()->width() / 2 + 1,
+              QStringLiteral("%1: a finger on the grip makes the overview larger, at most half of the view").arg(name),
+              QStringLiteral("%1x%2 -> %3x%4, view %5 wide").arg(s0.width()).arg(s0.height()).arg(ov->width()).arg(ov->height())
+                  .arg(view->viewport()->width()));
+        shot(&w, QStringLiteral("overview-%1x%2").arg(size.width()).arg(size.height()));
+    }
+    overview::setAlways(false);
+    w.resize(sizeBefore);
+    settle(300);
+}
+
+// ---- Android 0.93.0, item 39: documents that are not shown are unloaded, on a tablet: a project of 300 documents, a word
+// the on-screen keyboard composes, a document shown again
+static TextEditor *shownEditorWith(MainWindow &w, const QString &needle)
+{
+    for (TextEditor *e : w.findChildren<TextEditor *>())
+        if (e->isVisible() && e->document()->toPlainText().contains(needle))
+            return e;
+    return nullptr;
+}
+
+static void unloadChecks()
+{
+    info(QStringLiteral("---- documents that are not shown are unloaded, on a tablet (0.93.0, item 39)"));
+    QTemporaryDir dir;
+    QString err, folder;
+    const int kDocs = 300;
+    {
+        auto big = Project::create(dir.path(), QStringLiteral("Large Book"), &err);
+        if (!big) {
+            check(false, QStringLiteral("(the large project is made)"), err);
+            return;
+        }
+        folder = big->folderPath();
+        for (int i = 0; i < kDocs; ++i) {
+            BinderItem *it = big->model()->createItem(big->draft(), -1, ItemType::Text, QStringLiteral("Part %1").arg(i));
+            QTextCursor c(big->docs()->text(it->id));
+            if (i == 3) {
+                QTextCharFormat bold;
+                bold.setFontWeight(QFont::Bold);
+                c.insertText(QStringLiteral("Boldface"), bold);
+                c.insertText(QStringLiteral(" "), QTextCharFormat());
+            }
+            c.insertText(QStringLiteral("The harbor lay quiet under the morning fog. ").repeated(24) + QStringLiteral("Marker%1").arg(i));
+        }
+        big->save(&err);
+    }
+    auto *wp = new MainWindow;
+    MainWindow &w = *wp;
+    w.move(0, 0);
+    w.resize(1472, 920);
+    w.show();
+    w.activateWindow();
+    (void)QTest::qWaitForWindowActive(&w, 2000);
+    w.openProject(folder);
+    settle(600);
+    mobile::installTouch();
+    Project *p = w.project();
+    auto *binder = w.findChild<BinderPanel *>();
+    if (!p || !binder || p->draft()->children.size() != kDocs) {
+        check(false, QStringLiteral("(the project of %1 documents is open)").arg(kDocs));
+        w.close();
+        delete wp;
+        return;
+    }
+    QList<BinderItem *> items;
+    for (BinderItem *it : p->draft()->children)
+        items << it;
+    auto show = [&](BinderItem *it, int ms) {
+        binder->select({it}, true);
+        settle(ms);
+    };
+    // the on-screen keyboard composes a word at the end of document 5 (what Android's keyboard sends: the word as
+    // "preedit" while it is typed, then the same word committed; Qt 6.12.1 for Android commits it when the writer
+    // touches somewhere else or the text loses the keyboard, QAndroidInputContext::reset, commit, touchDown)
+    show(items[5], 300);
+    TextEditor *e5 = shownEditorWith(w, QStringLiteral("Marker5"));
+    check(e5 != nullptr, QStringLiteral("(document 5 is shown)"));
+    if (!e5) {
+        w.close();
+        delete wp;
+        return;
+    }
+    e5->setFocus();
+    {
+        QTextCursor c = e5->textCursor();
+        c.movePosition(QTextCursor::End);
+        e5->setTextCursor(c);
+        QInputMethodEvent space(QString(), {});
+        space.setCommitString(QStringLiteral(" "));
+        QApplication::sendEvent(e5, &space);
+        QInputMethodEvent composing(QStringLiteral("Zanzibar"), {QInputMethodEvent::Attribute(QInputMethodEvent::Cursor, 8, 1, QVariant())});
+        QApplication::sendEvent(e5, &composing);
+    }
+    settle(100);
+    p->docs()->unloadUnused();
+    check(p->docs()->loadedText(items[5]->id) != nullptr,
+          QStringLiteral("a document the keyboard is composing a word in is shown, and it is not unloaded"));
+    {
+        QInputMethodEvent commit(QString(), {});
+        commit.setCommitString(QStringLiteral("Zanzibar"));
+        QApplication::sendEvent(e5, &commit);
+    }
+    settle(100);
+    check(e5->document()->toPlainText().endsWith(QLatin1String("Marker5 Zanzibar")) && p->docs()->hasDirty(),
+          QStringLiteral("(the composed word is in the text once it is committed, not yet saved)"), e5->document()->toPlainText().right(40));
+    // one document after another, as a writer taps the binder's rows: a bounded number stays laid out
+    int maxLoaded = 0;
+    for (int part = 0; part < 4; ++part) {
+        for (int i = 10 + part * 60; i < 10 + (part + 1) * 60 && i < kDocs; ++i)
+            show(items[i], 25);
+        settle(2600);
+        maxLoaded = qMax(maxLoaded, p->docs()->loadedCount());
+    }
+    check(maxLoaded <= 16, QStringLiteral("after 240 of %1 documents were shown one after another, at most 16 are held laid out (%2)")
+                               .arg(kDocs).arg(maxLoaded));
+    check(p->docs()->loadedText(items[20]->id) == nullptr, QStringLiteral("a document shown long ago is not held"));
+    QTextDocument *d5 = p->docs()->loadedText(items[5]->id);
+    check(d5 && d5->toPlainText().endsWith(QLatin1String("Zanzibar")),
+          QStringLiteral("the word the keyboard composed, not yet saved, is kept (that document is not unloaded)"));
+    // a document shown again is as it was
+    show(items[3], 400);
+    TextEditor *e3 = shownEditorWith(w, QStringLiteral("Marker3"));
+    bool boldBack = false;
+    if (e3) {
+        QTextCursor c(e3->document());
+        c.setPosition(2);
+        boldBack = c.charFormat().fontWeight() >= QFont::Bold;
+    }
+    check(e3 && e3->document()->toPlainText().startsWith(QLatin1String("Boldface The harbor")) && boldBack,
+          QStringLiteral("a document shown again has its text and its formatting as they were"));
+    show(items[5], 400);
+    TextEditor *again5 = shownEditorWith(w, QStringLiteral("Marker5"));
+    check(again5 && again5->document()->toPlainText().endsWith(QLatin1String("Marker5 Zanzibar")),
+          QStringLiteral("document 5 shown again has the composed word"));
+    shot(&w, QStringLiteral("unload-shown-again"));
+    p->save(&err);
+    w.close();
+    delete wp;
+    settle(100);
+}
+
+// ---- Android 0.93.0, item 36: the update file's Android block names the add-ons without libraries that only the Linux
+// release carries (a tablet installs them too), and not those with Linux libraries
+static void feedChecks()
+{
+    info(QStringLiteral("---- the update file's Android block (0.93.0, item 36)"));
+    QTemporaryDir dir;
+    const QString dist = dir.path() + QStringLiteral("/dist");
+    QDir().mkpath(dist);
+    QFile apk(dist + QStringLiteral("/Quillbinder-0.93.0-experimental-android-arm64.apk"));
+    if (apk.open(QIODevice::WriteOnly))
+        apk.write("not a real APK");
+    apk.close();
+    const QByteArray previous = R"({"format": 1, "date": "2026-11-24T00:00:00Z", "systems": {"linux-x86_64": {"addons": [
+ {"id": "themes-extra", "name": "Extra Themes", "version": "1.1", "minApp": "", "runtime": "", "security": [], "whatsNew": [],
+  "file": {"url": "https://example.org/themes-extra.qbpkg", "size": 10, "sha256": "00"}},
+ {"id": "media-playback", "name": "Media Playback", "version": "2.0", "minApp": "0.93.0", "runtime": "u2404-qt6.12-r2",
+  "security": [], "whatsNew": [], "file": {"url": "https://example.org/media-playback.qbpkg", "size": 10, "sha256": "00"}}],
+ "program": {"version": "0.93.0"}}}})";
+    QFile prev(dir.path() + QStringLiteral("/previous.json"));
+    if (prev.open(QIODevice::WriteOnly))
+        prev.write(previous);
+    prev.close();
+    const QString out = dir.path() + QStringLiteral("/updates-1.json");
+    QProcess py;
+    py.start(QStringLiteral("python3"), {QStringLiteral("-I"), QStringLiteral(QB_SOURCE_DIR "/tools/update-feed.py"), QStringLiteral("--dist"), dist,
+                                        QStringLiteral("--tag"), QStringLiteral("v0.93.0-android-experimental"), QStringLiteral("--repo"),
+                                        QStringLiteral("example/example"), QStringLiteral("--system"), QStringLiteral("android-arm64"),
+                                        QStringLiteral("--runtime"), QStringLiteral("android-qt6.12-r2"), QStringLiteral("--label"),
+                                        QStringLiteral("experimental"), QStringLiteral("--previous"), prev.fileName(), QStringLiteral("--out"), out});
+    const bool ran = py.waitForFinished(60000) && py.exitCode() == 0;
+    QFile f(out);
+    const QJsonObject feed = f.open(QIODevice::ReadOnly) ? QJsonDocument::fromJson(f.readAll()).object() : QJsonObject();
+    const QJsonObject systems = feed.value(QStringLiteral("systems")).toObject();
+    QStringList ids;
+    for (const QJsonValue &a : systems.value(QStringLiteral("android-arm64")).toObject().value(QStringLiteral("addons")).toArray())
+        ids << a.toObject().value(QStringLiteral("id")).toString();
+    const QJsonObject linuxBlock = systems.value(QStringLiteral("linux-x86_64")).toObject();
+    check(ran && ids.contains(QLatin1String("themes-extra")) && !ids.contains(QLatin1String("media-playback")),
+          QStringLiteral("the update file's Android block names an add-on without libraries of the Linux release, and not one with Linux libraries"),
+          QStringLiteral("add-ons %1; %2").arg(ids.join(QLatin1String(", ")), QString::fromLocal8Bit(py.readAllStandardError()).left(400)));
+    check(linuxBlock.value(QStringLiteral("addons")).toArray().size() == 2,
+          QStringLiteral("... and Linux's block stays as it was"));
+}
+
 int main(int argc, char **argv)
 {
     QTemporaryDir home;
@@ -1707,10 +1995,13 @@ int main(int argc, char **argv)
     widgetChecks();
     menuChecks(w, longDoc);
     tabletChecks(w, longDoc);
+    overviewChecks(w);
 
     w.close();
     delete wp;
     settle(100);
+    unloadChecks();
+    feedChecks();
     std::printf("\n%d failure(s)\n", failures);
     return failures;
 }

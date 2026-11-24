@@ -2,6 +2,37 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## Android 0.93.0 (2026-11-24): Qt 6.12.1, the workarounds gone, the shared 0.93.0 items checked on a tablet
+
+- **Qt 6.12.1 for Android** (`packaging/android/android-qt.sh`): Qt PDF is a "Qt Extensions" module since Qt 6.12 and is
+  listed only under Qt 6.12.0; the script installs Qt 6.12.1 with Qt Image Formats and, when Qt PDF is missing, takes
+  Qt PDF's files from the newest earlier patch release (`--noarchives`), as `tools/get-qt.sh` and
+  `packaging/windows/win-qt.sh` do. Run 45415663597: "Qt PDF taken from Qt 6.12.0's repository folder" for both ABIs.
+  Runtime id `android-qt6.12-r2`. The license list (`resources/licenses-android`) was made anew with
+  `collect-licenses-android.py` (Qt 6.12.1; forkfd and libtiff from the v6.12.1 tags). Qt's Android manifest template
+  is the same in v6.12.0 and v6.12.1.
+- **Both workarounds of 0.92.0 are gone**, read in qtbase v6.12.1 before: `qandroidplatformopenglwindow.cpp` makes the
+  surface without the "deadlock protector" (so `src/android/MobileWindows.cpp` and the program's use of Qt's private
+  headers are gone), and `androidjniinput.cpp` hands `metaState` to mouse and wheel events (so `MobileCare.cpp` no
+  longer keeps Ctrl, Shift, Alt and Meta; the fit test sends them with the mouse, as Qt 6.12.1 does). Qt's other uses
+  of that lock only warn and go on: the start check found one warning from `QAndroidEventDispatcher::processEvents()`
+  while the keyboard program called; it now counts the fatal kind (`eglSurface`) apart. The program ended 0 times.
+- **The mind map's overview by finger** (item 42): the overview lies on the board view's viewport, so `waits()` in
+  `MobileTouch.cpp` took a finger on it for a swipe of the board (it scrolled the other way). A finger on a
+  `MindMapOverview` is now a mouse (tap, drag of the rectangle, the grip). In a narrow view the overview can be
+  80 x 30 px, and its grip (made large enough for a finger) takes much of its right part.
+- **Unloading on a tablet** (item 39): checked in the preview on a project of 300 documents. Qt for Android commits the
+  word the keyboard is composing when the text is reset, committed or touched elsewhere
+  (`QAndroidInputContext::reset`, `commit`, `touchDown` call `focusObjectStopComposing`); a shown document is never
+  unloaded, and a committed word makes it unsaved, so it is kept.
+- **File > Save As** (item 25): the format is asked first under `Q_OS_ANDROID` (`MainWindowFormat.cpp`); compiled in
+  run 45415663597, and the start check opens it with the keyboard up (place 175 in the File menu at 1472 x 920).
+- **The update file** (item 36): `tools/update-feed.py` gives Android's block the add-ons without a runtime from Linux's
+  block of the published file (their files stay in the Linux release).
+- **Version line** (item 31): the first Android configure took `APP_VERSION_ANDROID` (summary: "version: 0.93.0").
+- **Tests**: `qb_mobile_tests` 120 checks (16 new: the overview at 800 x 1200 and 412 x 860, unloading, the update
+  file), `qb_mobile_fit_tests` 28 checks at each of the nine sizes.
+
 ## Android 0.92.0 (2026-11-20): pulled to Linux 0.92.0 in the one repository, a tablet with keyboard and mouse
 
 What 0.91.3 showed on a tablet with an external keyboard and mouse (the findings of 2026-11-16): About could not be closed, some windows had no button that closes them, menus hid and

@@ -446,6 +446,8 @@ if(QB_MOBILE_PREVIEW)
                  ${CMAKE_SOURCE_DIR}/src/android/MobileStart.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileCare.cpp
                  ${QB_RESOURCES_OBJECTS})
   target_link_libraries(qb_mobile_tests PRIVATE qbui Qt6::Test)
+  # (Android 0.93.0: the check of the update file's Android block runs tools/update-feed.py from the source)
+  target_compile_definitions(qb_mobile_tests PRIVATE QB_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
   # Android 0.92.0: every menu and every window a command opens, at a tablet's size, fits and can be closed; Back, the
   # keys Ctrl and Shift with the mouse, the line between panes, the pin and the padlock on a tablet
   # (packaging/android/run-tablet-fit.sh <build dir> runs it at every size)
