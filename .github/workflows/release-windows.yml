@@ -422,7 +422,8 @@ jobs:
           git -c advice.detachedHead=false clone -q --depth 1 --branch "$lt" --filter=blob:none --sparse https://github.com/LibreOffice/dictionaries lo
           git -C lo sparse-checkout set de
           tar --sort=name --owner=0 --group=0 --numeric-owner --mtime='2026-01-01 00:00:00Z' -cf "sources/$lo" -C lo de
-          # FFmpeg as Qt's Windows package carries it (the add-on "Extra Video and Audio Formats"): the original archive
+          # FFmpeg as the add-on "Extra Video and Audio Formats" carries it (since Windows 0.93.0 the project's own build of
+          # FFmpeg's release; Qt's Windows package before): the original archive
           # of the version the add-on's own report names
           pkg=$(ls stage/packages/media-extra-formats*.qbpkg | head -1)
           ffline=$(unzip -p "$pkg" '*ffmpeg-build.txt' | tr -d '\r' | sed -n 's/^FFmpeg version: //p' | head -1)
@@ -443,7 +444,8 @@ jobs:
             echo "$lo"
             echo "    the German spelling dictionaries (the English ones are their own source)"
             echo "ffmpeg-$ffv.tar.xz"
-            echo "    FFmpeg ($ffline), as built by The Qt Company for Qt Multimedia, in the add-on"
+            echo "    FFmpeg ($ffline), built by the project with the configuration of Qt Multimedia"
+            echo "    (packaging/windows/win-ffmpeg.sh, Windows 0.93.0; The Qt Company's own build before), in the add-on"
             echo "    \"Extra Video and Audio Formats\"; how it was built: ffmpeg-build.txt inside the add-on"
             echo
             echo "zlib, Monocypher, whisper.cpp and the icons: see Help > Third-Party Licenses in the program."

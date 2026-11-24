@@ -84,6 +84,27 @@ fi
 say "whisper.cpp: rc=$rc, $(cat "$WHISPER/version.txt" 2>/dev/null | cut -d' ' -f1), modules: $(ls "$WHISPER/bin" 2>/dev/null | grep -i '^ggml-cpu-' | sed 's/^ggml-cpu-//; s/\.dll$//' | tr '\n' ' ')($(mins))$pack"
 [ $rc -eq 0 ] && export QB_WHISPER_DIR="$(cygpath -m "$WHISPER")"
 
+# ---- FFmpeg 9.1 for the add-on "Extra Video and Audio Formats" (Windows 0.93.0: built by the project, in place of the
+# FFmpeg 9.0.2 that Qt 6.12.1 brings; packaging/windows/win-ffmpeg.sh), from its pack as whisper.cpp
+FFW="$PWD/.ffmpeg"
+pack=""
+if [ -n "${QB_WIN_PACKS:-}" ]; then
+  rm -rf "$FFW.pack"
+  if bash packaging/windows/win-deps-pack.sh get ffmpeg "$FFW.pack" > "$OUT/ffmpeg-pack.log" 2>&1; then
+    rm -rf "$FFW" && mv "$FFW.pack" "$FFW" && pack=" (pack)"
+  fi
+  rm -rf "$FFW.pack"
+fi
+bash packaging/windows/win-ffmpeg.sh "$FFW" > "$OUT/ffmpeg.log" 2>&1
+rc=$?
+if [ $rc -eq 0 ] && grep -q '^FFmpeg built:' "$OUT/ffmpeg.log" && [ "${GITHUB_REPOSITORY:-}" = Shelin-boop/Quillbinder_Collection ] && [ "$STAGE" != release ]; then
+  bash packaging/windows/win-deps-pack.sh publish ffmpeg "$FFW" >> "$OUT/ffmpeg-pack.log" 2>&1 || echo "publish failed" >> "$OUT/ffmpeg-pack.log"
+  grep -E '^pin: |failed' "$OUT/ffmpeg-pack.log" | sed 's/^/ffmpeg pack: /' >> "$SUM"
+fi
+[ $rc -eq 0 ] || tail -30 "$OUT/ffmpeg.log" | sed 's/^/  ffmpeg: /' >> "$SUM"
+say "ffmpeg: rc=$rc, $(cut -d' ' -f1 "$FFW/version.txt" 2>/dev/null), $(ls "$FFW/bin" 2>/dev/null | grep -iE '\.dll$' | tr '\n' ' ')($(mins))$pack"
+[ $rc -eq 0 ] && export QB_FFMPEG_WIN_DIR="$(cygpath -m "$FFW")"
+
 # ---- the engine libraries of the add-on "Translation and Proofreading" (Windows 0.92.0: one of the project's own
 # add-ons, as on Linux since 0.92.0): oneDNN, CTranslate2 and SentencePiece, built with MSVC by the add-on's own script
 # into .translator-deps, which the workflow keeps in a cache under that script's hash. packaging/windows/win-addons.sh

@@ -811,6 +811,9 @@ static void backups(const QString &W)
         as.backupKeep = 5;
         as.backupOnClose = true;
         as.backupOnOpen = false;
+        // (Windows 0.93.0: kept in the settings file, because opening a project reads the settings again; on Windows,
+        // which has no standard backup folder, the folder set only in memory was gone and no backup was due)
+        as.save();
         auto *wp = new MainWindow;
         MainWindow &w = *wp;
         w.show();

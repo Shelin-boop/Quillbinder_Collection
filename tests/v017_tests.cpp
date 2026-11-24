@@ -38,7 +38,6 @@
 
 #include <QAbstractTextDocumentLayout>
 #include <QAction>
-#include <QDomDocument>
 #include <QApplication>
 #include <QCheckBox>
 #include <QClipboard>
@@ -228,93 +227,6 @@ static QString someFontFile()
     return QString();
 }
 
-// Item 19 probe (diagnosis only, branch win/item19-shapes): what the reader makes of a shape's size on this
-// build, and what the same steps give when written out one by one or compiled without the optimizer.
-static QRectF probe19Same(const QDomElement &e, const QPointF &p) // the reader's own expression
-{
-    return QRectF(p, QSizeF(qBound(10.0, e.attribute(QStringLiteral("Width"), QStringLiteral("100")).toDouble(), 1.0e6),
-                            qBound(10.0, e.attribute(QStringLiteral("Height"), QStringLiteral("100")).toDouble(), 1.0e6)));
-}
-#if defined(_MSC_VER)
-#pragma optimize("", off)
-#endif
-static QRectF probe19NoOpt(const QDomElement &e, const QPointF &p)
-{
-    return QRectF(p, QSizeF(qBound(10.0, e.attribute(QStringLiteral("Width"), QStringLiteral("100")).toDouble(), 1.0e6),
-                            qBound(10.0, e.attribute(QStringLiteral("Height"), QStringLiteral("100")).toDouble(), 1.0e6)));
-}
-#if defined(_MSC_VER)
-#pragma optimize("", on)
-#endif
-
-static QString probe19Rect(const QRectF &r)
-{
-    return QStringLiteral("x %1 y %2 w %3 h %4").arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
-}
-
-static void probeItem19()
-{
-#if defined(_MSC_FULL_VER)
-    info(QStringLiteral("item19 compiler: MSVC %1, Qt %2").arg(_MSC_FULL_VER).arg(QLatin1String(QT_VERSION_STR)));
-#else
-    info(QStringLiteral("item19 compiler: %1, Qt %2").arg(QLatin1String(__VERSION__)).arg(QLatin1String(QT_VERSION_STR)));
-#endif
-    const QByteArray xml = R"(<?xml version="1.0" encoding="UTF-8"?>
-<ScappleDocument Version="1.2" ID="PROBE19">
-  <Notes>
-    <Note ID="1" FontSize="12.0" Position="30.0,40.0" Width="150.0"><String>Probe note</String></Note>
-  </Notes>
-  <BackgroundShapes>
-    <Shape ID="2" Position="20.0,30.0" Width="240.5" Height="130.25"><Magnetic>No</Magnetic></Shape>
-  </BackgroundShapes>
-</ScappleDocument>)";
-    // 1. the reader
-    Board b;
-    QString err;
-    const bool read = b.fromXml(xml, &err);
-    const Shape *s = b.shapes.isEmpty() ? nullptr : &b.shapes.first();
-    info(QStringLiteral("item19 fromXml: read %1 (%2), shapes %3: %4; note width %5")
-             .arg(read).arg(err).arg(b.shapes.size())
-             .arg(s ? QString(QStringLiteral("id %1 ").arg(s->id) + probe19Rect(s->rect)) : QStringLiteral("-"))
-             .arg(b.notes.isEmpty() ? -1.0 : b.notes.first().width));
-    // 2. the same values step by step
-    QDomDocument d;
-    d.setContent(xml);
-    const QDomElement e = d.documentElement().firstChildElement(QStringLiteral("BackgroundShapes")).firstChildElement(QStringLiteral("Shape"));
-    const QString ws = e.attribute(QStringLiteral("Width"), QStringLiteral("100"));
-    const QString hs = e.attribute(QStringLiteral("Height"), QStringLiteral("100"));
-    bool okw = false, okh = false;
-    const double wd = ws.toDouble(&okw), hd = hs.toDouble(&okh);
-    const double wb = qBound(10.0, wd, 1.0e6), hb = qBound(10.0, hd, 1.0e6);
-    info(QStringLiteral("item19 steps: Width '%1' -> %2 (ok %3) -> bounded %4; Height '%5' -> %6 (ok %7) -> bounded %8")
-             .arg(ws).arg(wd).arg(okw).arg(wb).arg(hs).arg(hd).arg(okh).arg(hb));
-    const QPointF p(20, 30);
-    info(QStringLiteral("item19 the reader's expression, optimized: ") + probe19Rect(probe19Same(e, p)));
-    info(QStringLiteral("item19 the reader's expression, optimizer off: ") + probe19Rect(probe19NoOpt(e, p)));
-    const double w2 = qBound(10.0, e.attribute(QStringLiteral("Width"), QStringLiteral("100")).toDouble(), 1.0e6);
-    const double h2 = qBound(10.0, e.attribute(QStringLiteral("Height"), QStringLiteral("100")).toDouble(), 1.0e6);
-    info(QStringLiteral("item19 each size into a variable first (like the notes' part): w %1 h %2").arg(w2).arg(h2));
-    // 3. writing a shape of known size, and reading that back
-    Board w;
-    Shape sh;
-    sh.id = 2;
-    sh.rect = QRectF(20, 30, 240.5, 130.25);
-    w.shapes << sh;
-    info(QStringLiteral("item19 a shape appended to a board's list in the test: ") + probe19Rect(w.shapes.first().rect));
-    const QByteArray out = w.toXml();
-    const int at = out.indexOf("<Shape ");
-    info(QStringLiteral("item19 written: ") + QString::fromUtf8(out.mid(at, at >= 0 ? out.indexOf('>', at) - at + 1 : 0)));
-    Board c;
-    c.fromXml(out);
-    info(QStringLiteral("item19 read back: ") + (c.shapes.isEmpty() ? QStringLiteral("-") : probe19Rect(c.shapes.first().rect)));
-    check(s && qFuzzyCompare(s->rect.width(), 240.5) && qFuzzyCompare(s->rect.height(), 130.25),
-          QStringLiteral("item 19 probe: a shape's size is read as the file has it"), s ? probe19Rect(s->rect) : QStringLiteral("no shape"));
-    // (the file keeps one decimal: 130.25 is written as 130.3)
-    check(!c.shapes.isEmpty() && qAbs(c.shapes.first().rect.width() - 240.5) < 0.06 && qAbs(c.shapes.first().rect.height() - 130.25) < 0.06,
-          QStringLiteral("item 19 probe: a shape written and read back keeps its size"),
-          c.shapes.isEmpty() ? QStringLiteral("no shape") : probe19Rect(c.shapes.first().rect));
-}
-
 int main(int argc, char **argv)
 {
     QTemporaryDir home;
@@ -326,7 +238,6 @@ int main(int argc, char **argv)
     QApplication app(argc, argv);
     outDir = argc > 1 ? QString::fromLocal8Bit(argv[1]) : QDir::currentPath() + QLatin1String("/shots");
     QDir().mkpath(outDir);
-    probeItem19();
     QApplication::setStyle(QStyleFactory::create(QStringLiteral("Fusion")));
     QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << QStringLiteral(":/icons"));
     QIcon::setThemeName(QStringLiteral("qbicons"));

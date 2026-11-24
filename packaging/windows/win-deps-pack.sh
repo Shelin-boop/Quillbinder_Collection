@@ -68,7 +68,17 @@ recipe() {
         echo "script: packaging/windows/win-deps-pack.sh $(sha256sum "$ROOT/packaging/windows/win-deps-pack.sh" | cut -d' ' -f1)"
         echo "msvc: $(msvc)"
         ;;
-    *) echo "win-deps-pack.sh: unknown pack $1 (whisper, hunspell)" >&2; exit 2 ;;
+    ffmpeg)
+        # (Windows 0.93.0) the source, the script, the compiler and the zlib it links
+        local zi
+        zi="$(cygpath -u "${VCPKG_INSTALLATION_ROOT:?vcpkg is not on this machine}")/installed/$TRIPLET/include/zlib.h"
+        echo "pack: ffmpeg (Windows x64)"
+        echo "source: ffmpeg-$(sed -n 's/^VERSION=//p' "$ROOT/packaging/windows/win-ffmpeg.sh").tar.xz $(sed -n 's/^SHA256=\([0-9a-f]*\).*/\1/p' "$ROOT/packaging/windows/win-ffmpeg.sh")"
+        echo "script: packaging/windows/win-ffmpeg.sh $(sha256sum "$ROOT/packaging/windows/win-ffmpeg.sh" | cut -d' ' -f1)"
+        echo "zlib: $(sed -n 's/^#define ZLIB_VERSION "\(.*\)".*/\1/p' "$zi" 2>/dev/null | head -1)"
+        echo "msvc: $(msvc)"
+        ;;
+    *) echo "win-deps-pack.sh: unknown pack $1 (whisper, hunspell, ffmpeg)" >&2; exit 2 ;;
     esac
 }
 
@@ -106,6 +116,10 @@ about() {
         local texts=""
         for c in share/hunspell/copyright share/zlib/copyright; do [ -f "$2/$c" ] && texts="$texts $c"; done
         if [ -n "$texts" ]; then echo "The license texts are in the pack:$texts."; else echo "The license texts: the sources above (COPYING* and README of Hunspell, zlib.h of zlib)."; fi
+        ;;
+    ffmpeg)
+        echo "Inside: FFmpeg $(sed -n 's/^VERSION=//p' "$ROOT/packaging/windows/win-ffmpeg.sh") as DLLs (avcodec, avformat, avutil, swresample, swscale) with their headers and import libraries, unchanged, built with Microsoft Visual C++ by packaging/windows/win-ffmpeg.sh with the configuration of The Qt Company's FFmpeg for Qt Multimedia (configure.txt in the pack), zlib linked in statically."
+        echo "Licenses: FFmpeg under the GNU LGPL 2.1 or later (no GPL or non-free parts); zlib under the zlib license. Sources: https://ffmpeg.org/releases/ (the archive named in the recipe below) and https://github.com/madler/zlib at the version below."
         ;;
     esac
 }
