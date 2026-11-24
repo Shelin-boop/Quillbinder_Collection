@@ -20,8 +20,13 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   build it. The same archive and SHA-256 as `tools/get-ffmpeg.sh`; Qt's own configuration (its
   `avcodec_configuration()`: no programs, devices or filters, no Vulkan, `--disable-decoder=truemotion1`, zlib, shared,
   `--toolchain=msvc`) with vcpkg's zlib 1.4 copied as `z.lib` (configure asks for `-lz`); configure and make in the
-  runner's MSYS2 (`C:\msys64`, `MSYS2_PATH_TYPE=inherit` so that MSVC's environment comes along, MSVC's `link.exe` put
-  before MSYS2's own `link`). FFmpeg 9.1 keeps 9.0's major versions, so Qt's `ffmpegmediaplugin.dll` loads these DLLs;
+  runner's MSYS2 (`C:\msys64`), about 10 minutes. Pitfalls of the four runs it took: MSYS2's login shell keeps neither
+  the PATH it was started with nor MSVC's INCLUDE and LIB; an empty argument is dropped on the way into it; Git Bash's
+  `$LIB` was empty although the program's build links in the same step. So the script runs `vcvars64.bat` in cmd
+  (`VSDIR`), takes INCLUDE, LIB and MSVC's folders from the environment it prints (`set`), and hands them over in a
+  file (`msvc-env.sh`) that the MSYS2 script reads; MSVC's folders go before MSYS2's own `link`. A change of
+  `win-ffmpeg.sh`, even of a comment, changes the pack's recipe (its header still says 20 to 30 minutes and that MSYS2
+  inherits the environment: left as it is so that the pack of run 45390886814 stays pinned). FFmpeg 9.1 keeps 9.0's major versions, so Qt's `ffmpegmediaplugin.dll` loads these DLLs;
   `win-addons.sh` checks that the names are the ones in Qt's `bin`, and a release (`QB_WIN_STAGE=release`) refuses to
   make the add-on with Qt's FFmpeg. A pack (`win-deps-pack.sh ffmpeg`: source, script, zlib, MSVC) as for whisper.cpp.
   zlib 1.4's own CMake build names its static library `libzs.lib` (the zlib.lib of older ports is gone).
