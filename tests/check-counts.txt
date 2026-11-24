@@ -1,5 +1,5 @@
 # Checks per suite on X11, written by tools/run-all-tests.sh after a full X11 run.
-# 2026-11-24, APP_VERSION 0.93.0
+# 2026-11-24, APP_VERSION 0.93.1
 qb_tests 393
 ui 181
 m6 53
@@ -58,6 +58,7 @@ v0930d 80
 v0930e 41
 saveas 58
 v0930f 41
+v0931 30
 notesplain 22
 mmoverview 53
 audit1 61
@@ -69,3 +70,4 @@ w4c 5
 secwatch 62
 deps 33
 verlines 30
+addonentry 28
