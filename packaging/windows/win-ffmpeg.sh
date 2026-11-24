@@ -50,13 +50,15 @@ echo "$SHA256  $WORK/ffmpeg.tar.xz" | sha256sum -c --quiet
 cat > "$WORK/build.sh" <<'SH'
 set -euo pipefail
 work=$(cygpath -u "$1"); prefix=$(cygpath -u "$2"); z=$3; opts=$4   # (zlib: a C:/... path, which cl and link read as it is)
-# MSVC's folders (compiler, linker, Windows SDK tools) before MSYS2's own tools: MSYS2's login profile does not keep the
-# PATH it was started with (run 45365674495 of win/0.93.0: "cl.exe is not on the PATH"), and MSVC's INCLUDE and LIB did
-# not reach it either (run 45370498738: "windows.h: no include path set", "cannot open file 'LIBCMT.lib'"): all three come
-# as arguments
-export PATH="$(cygpath -u -p "$5"):$PATH"
-export INCLUDE="$6" LIB="$7"
+# MSVC's folders (compiler, linker, Windows SDK tools) before MSYS2's own tools, and MSVC's INCLUDE and LIB: MSYS2's login
+# profile does not keep the PATH it was started with (run 45365674495 of win/0.93.0: "cl.exe is not on the PATH"), INCLUDE
+# and LIB did not reach it (run 45370498738: "windows.h: no include path set"), and as arguments the second list was lost
+# (run 45380641653): all three come in a file the script reads
+. "$work/msvc-env.sh"
+export PATH="$(cygpath -u -p "$QB_MSVC_PATH"):$PATH"
+export INCLUDE="$QB_MSVC_INCLUDE" LIB="$QB_MSVC_LIB"
 [ -n "$INCLUDE" ] && [ -n "$LIB" ] || { echo "MSVC's INCLUDE or LIB is empty"; exit 1; }
+echo "INCLUDE: $(echo "$INCLUDE" | tr ';' '\n' | wc -l) folders, LIB: $(echo "$LIB" | tr ';' '\n' | wc -l) folders"
 pacman -Sy --noconfirm --needed make nasm diffutils tar xz > "$work/pacman.log" 2>&1 || { tail -20 "$work/pacman.log"; exit 1; }
 cl=$(command -v cl.exe) || { echo "cl.exe is not on the PATH (MSVC's environment): $PATH"; exit 1; }
 echo "compiler: $cl; linker: $(command -v link.exe); nasm: $(nasm -v | head -1)"
@@ -76,9 +78,11 @@ MSVCPATH=$(cygpath -m "$(dirname "$cl")")
 while IFS= read -r d; do
     case "$d" in *"Microsoft Visual Studio"*|*"Windows Kits"*) MSVCPATH="$MSVCPATH;$(cygpath -m "$d")" ;; esac
 done < <(printf '%s\n' "$PATH" | tr ':' '\n')
+printf 'QB_MSVC_PATH=%q\nQB_MSVC_INCLUDE=%q\nQB_MSVC_LIB=%q\n' "$MSVCPATH" \
+    "$(printf '%s' "${INCLUDE:?MSVC's INCLUDE is not set}" | tr '\\' '/')" "$(printf '%s' "${LIB:?MSVC's LIB is not set}" | tr '\\' '/')" \
+    > "$WORK/msvc-env.sh"
 MSYS2_PATH_TYPE=inherit CHERE_INVOKING=1 MSYSTEM=MSYS "$MSYS" -l "$(cygpath -m "$WORK/build.sh")" \
-    "$(cygpath -m "$WORK")" "$(cygpath -m "$PREFIX")" "$(cygpath -m "$WORK/zlib")" "$OPTS" "$MSVCPATH" \
-    "$(printf '%s' "${INCLUDE:?MSVC's INCLUDE is not set}" | tr '\\' '/')" "$(printf '%s' "${LIB:?MSVC's LIB is not set}" | tr '\\' '/')"
+    "$(cygpath -m "$WORK")" "$(cygpath -m "$PREFIX")" "$(cygpath -m "$WORK/zlib")" "$OPTS"
 have_all || { echo "win-ffmpeg.sh: not every DLL was built: $(ls "$PREFIX/bin" 2>/dev/null | tr '\n' ' ')" >&2; exit 1; }
 echo "$OPTS (zlib $ZV of vcpkg)" > "$PREFIX/configure.txt"
 echo "$STAMP" > "$PREFIX/version.txt"
