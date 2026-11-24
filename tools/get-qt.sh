@@ -39,8 +39,27 @@ if qt_io_reachable; then
     python3 -m pip install -q --break-system-packages 'aqtinstall==3.3.0' 2>/dev/null \
         || python3 -m pip install -q 'aqtinstall==3.3.0'
     BASE=$(dirname "$(dirname "$DEST")")
-    python3 -m aqt install-qt linux desktop "$VERSION" linux_gcc_64 -O "$BASE" -m qtmultimedia qtimageformats qtpdf
+    has_module() { python3 -m aqt list-qt linux desktop --modules "$1" linux_gcc_64 2>/dev/null | tr ' ' '\n' | grep -qx "$2"; }
+    MODS="qtmultimedia qtimageformats"
+    has_module "$VERSION" qtpdf && MODS="$MODS qtpdf"
+    python3 -m aqt install-qt linux desktop "$VERSION" linux_gcc_64 -O "$BASE" -m $MODS
     [ "$BASE/$VERSION/gcc_64" = "$DEST" ] || { rm -rf "$DEST"; mkdir -p "$(dirname "$DEST")"; mv "$BASE/$VERSION/gcc_64" "$DEST"; }
+    # 0.93.0: since Qt 6.12, Qt PDF is a "Qt Extensions" module with its own releases (Qt WebEngine 6.140.0 for
+    # Qt 6.12), listed only under the Qt version it was built with (6.12.0). When this version has none, take it from
+    # the newest earlier patch release of the same Qt, its files only, as .github/workflows/qt-linux.yml does for the
+    # session's pack: the release then gets the same Qt that the sessions test with.
+    if [ ! -f "$DEST/lib/cmake/Qt6Pdf/Qt6PdfConfig.cmake" ]; then
+        from=""
+        for p in $(seq $(( ${VERSION##*.} - 1 )) -1 0); do
+            if has_module "${VERSION%.*}.$p" qtpdf; then from="${VERSION%.*}.$p"; break; fi
+        done
+        [ -n "$from" ] || { echo "no Qt PDF for Qt ${VERSION%.*} in Qt's repository" >&2; exit 1; }
+        PDFTMP=$(mktemp -d)
+        python3 -m aqt install-qt linux desktop "$from" linux_gcc_64 -O "$PDFTMP" -m qtpdf --noarchives
+        cp -an "$PDFTMP/$from/gcc_64/." "$DEST/"
+        rm -rf "$PDFTMP"
+        echo "Qt PDF taken from Qt $from's repository folder (the Qt Extensions release for Qt ${VERSION%.*})"
+    fi
     rm -rf "$DEST/doc" "$DEST/examples"
     echo "Qt $VERSION installed with aqtinstall: $DEST"
     exit 0
