@@ -2,6 +2,19 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.93.0 beta: notes start as plain text (item 24)
+
+- A notes document (`DocumentStore::load(id, true)`, also `projectNotes()`) is **plain** when it is new or empty, or when
+  its file carries the mark: document property `display::kPlainNotesProp` ("qbPlainNotes"). `display::applyPlainNotes` sets the
+  interface font (`plainNotesFont`, at the notes' zoom), an empty default paragraph and (Markdown) flattens the normal
+  paragraphs. `setNotesZoom` and `applyFormatting` keep plain notes in that font and do not normalize them.
+- **The mark in the file**: RTF `{\*\qbplainnotes}` after the header (an ignorable group), Markdown a first line
+  `<!--qb-plain-notes-->`; `readFile` and `deserialize` take it off and set the property, `serialize` puts it back, so the
+  checks that compare bytes (`unchangedSinceRead`) agree. Notes with text and no mark are read as before (project look).
+- `TextEditor::plainNotes()`: Enter on an empty list item gives a plain paragraph; `insertFromMimeData` inserts text only
+  (no formatting) unless `m_pasteKeepAll` (Edit > Paste with Formatting, the existing `pasteKeep` command).
+- Suite `notesplain`.
+
 ## 0.93.0 beta (2026-11-23): the overview of the mind map
 
 - **`ui/MindMapOverview.*`**: a child of the board view's **viewport** (so it takes mouse events and the wheel itself;

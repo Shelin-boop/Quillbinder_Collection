@@ -452,3 +452,7 @@ endif()
 # and "Fixed:" text, the large window, not in exports) (xvfb-run -a ./qb_mmoverview_tests /tmp/shots)
 add_executable(qb_mmoverview_tests mmoverview_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_mmoverview_tests PRIVATE qbui Qt6::Test)
+
+# 0.93.0 (item 24): the notes start as plain text, pasting into them is plain (xvfb-run -a ./qb_notesplain_tests /tmp/shots)
+add_executable(qb_notesplain_tests notesplain_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_notesplain_tests PRIVATE qbui Qt6::Test)

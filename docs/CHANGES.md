@@ -17,6 +17,10 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   bar is narrow, and the row under the bar is gone.
 - **A new background shape starts medium gray and not magnetic** (before: pale gray and magnetic). The values you set in Mind
   Map Options stay, except a stored pale gray fill and a stored "Magnetic", which are changed once.
+- **Notes start as plain text.** The notes of a document and the project notes no longer take the font, size, indent, spacing
+  or style of the project's text formatting: new notes and new text in empty notes are plain, in the interface's font; what you
+  format by hand stays, and notes that already have text are unchanged. Pasting into the notes gives plain text; **Edit > Paste with
+  Formatting** keeps the formatting.
 - **Qt 6.12.1** (before: 6.12.0). The libraries Qt carries inside itself are newer, with safety fixes: zlib 1.4,
   HarfBuzz 15.1.0, PCRE2 10.49, libpng 1.6.59, libjpeg-turbo 3.2.1, FreeType 2.15.0 and md4c 0.6.0. Because the
   AppImage carries them, a program update alone cannot bring them: the check for updates offers the new AppImage
