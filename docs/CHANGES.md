@@ -7,9 +7,9 @@ Manual in the program) describes every function.
 
 Fixes and small changes (a program update for 0.93.0; the AppImage stays on the runtime `u2404-qt6.12-r2`).
 
-- **The generic font names on systems that do not know them.** The style **Code Span** and other text in the font
-  "monospace" (and "serif", "sans-serif") is shown and written into Word, e-book and PDF files in a font of that kind
-  wherever the system does not know these names (on Android tablets it was the system's default font, so a text
+- **Fonts named by their kind** ("monospace", "serif", "sans-serif") work on systems that do not know these names.
+  The style **Code Span** and other text in such a font is shown and written into Word, e-book and PDF files in a
+  font of that kind wherever the system does not know the names (on Android tablets it was the system's default font, so a text
   message in Code Span reached a Word file without its fixed-width font). On Linux, which knows the names, nothing
   changes.
 - **Search and the counts keep less in memory.** The plain texts kept for search, the word counts and the targets are
