@@ -182,6 +182,19 @@ The working rules' section 10 (decisions D1 and D3) and the project document `cl
   by `get-whisper.sh` (`samples/jfk.wav`, `test-models/for-tests-ggml-{tiny,small,medium}.bin`, the empty models of
   `qb_v061_tests` and the system test). The pack is unpacked into the prefix asked for; the few `.pc` and `.cmake` files
   that name the build machine's prefix get the new one (the libraries find each other by `$ORIGIN` and sonames).
+- **The page's deploy, waited for and tried twice** (2026-11-24; `release.yml`, `release-windows.yml`,
+  `release-android.yml`). `actions/deploy-pages` lists the run's artifacts at once and may miss the one
+  `upload-pages-artifact` has just uploaded (0.93.0: "No artifacts named github-pages-N were found", three runs in a row,
+  the API listed it a little later). Before the deploy a step waits until `github-pages-<attempt>` is listed (every 10 s,
+  at most 3 minutes, then it goes on); the first deploy has `continue-on-error`; after a 60 s pause a second deploy
+  runs only when the first failed, and when it fails the job fails. The job has `actions: read` for the wait.
+- **Page only, Linux** (`release.yml`, same idea as the input in `release-windows.yml`): for a release that is published
+  while its page and update file are not. Inputs `page_only` and `from_run` (id of the run whose artifact
+  `release-files` holds the signed `updates/updates-1.json` and `.sig`; artifacts are kept 3 days). The job `version`
+  then builds nothing (it fails when the release of CMakeLists.txt's version does not exist), `publish` is skipped,
+  `download-page` takes `release-files` from `from_run`, checks the file and its signature with
+  `packaging/quillbinder-signing-public.pem` and makes and deploys the page as usual. Start it with
+  `gh api -X POST repos/Shelin-boop/Quillbinder_Collection/actions/workflows/release.yml/dispatches -f ref=main -F 'inputs[page_only]=true' -f 'inputs[from_run]=<id>'`.
 - **The release workflow (P2, D3).** `release.yml` keeps `build/ffmpeg`, `build/ffmpeg-full` and `build/whisper`
   in GitHub's cache under `deps-linux-<name>-<recipe hash>` (a new recipe is a new key, so it is built anew by itself);
   only the job `build` writes them, only on `main`, only after building them itself; `tests` only reads them; the
