@@ -327,7 +327,8 @@ int main(int argc, char **argv)
         settle(300);
         const double zoomBefore = view->zoom();
         const QPointF target = ov->innerRect().center() + QPointF(ov->innerRect().width() * 0.2, 0);
-        const QPointF expect = ov->sceneAt(target);
+        // (a click lands on a whole pixel of the overview, which is several board units: the point wanted is that pixel's)
+        const QPointF expect = ov->sceneAt(QPointF(target.toPoint()));
         QTest::mouseClick(ov, Qt::LeftButton, Qt::NoModifier, target.toPoint());
         settle(300);
         check(near(view->visibleCenter(), expect, 6) && qFuzzyCompare(view->zoom(), zoomBefore),
