@@ -2,6 +2,7 @@
 
 #include "text/TextUtil.h"
 #include "ui/Ask.h"
+#include "ui/MainWindow.h"
 #include "ui/ProjectLook.h"
 #include "ui/Theme.h"
 #include "ui/ThemeDialogs.h"
@@ -15,7 +16,6 @@
 #include <QPointer>
 #include <QPushButton>
 #include <QSettings>
-#include <QStatusBar>
 #include <QTimer>
 #include <QToolBar>
 #include <QToolButton>
@@ -199,8 +199,8 @@ bool ThemePicker::assign(Button b, const QString &themeId)
 
 void ThemePicker::tell(const QString &text)
 {
-    if (auto *mw = qobject_cast<QMainWindow *>(window()))
-        mw->statusBar()->showMessage(text, 8000);
+    if (auto *mw = qobject_cast<MainWindow *>(window()))
+        mw->showStatusNote(text, 8000);
 }
 
 // The look shown now (theme and the writer's own colors and fonts on top) written as the own theme of a U button.

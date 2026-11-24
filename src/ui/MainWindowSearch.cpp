@@ -20,7 +20,6 @@
 #include <QLocale>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QStatusBar>
 #include <QSet>
 #include <QStandardItemModel>
 #include <QTextCursor>
@@ -317,7 +316,7 @@ int MainWindow::deleteOldSnapshots(bool ask)
     if (!err.isEmpty())
         QMessageBox::warning(this, tr("Delete Old Snapshots"), err);
     else if (ask)
-        statusBar()->showMessage(tr("%1 deleted.").arg(text::plural(n, tr("snapshot"), tr("snapshots"))), 6000);
+        showStatusNote(tr("%1 deleted.").arg(text::plural(n, tr("snapshot"), tr("snapshots"))), 6000);
     return n;
 }
 

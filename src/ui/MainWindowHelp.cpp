@@ -29,7 +29,6 @@
 #include <QHeaderView>
 #include <QIcon>
 #include <QJsonObject>
-#include <QStatusBar>
 #include <QHBoxLayout>
 #include <QScreen>
 #include <QTextBrowser>
@@ -141,7 +140,7 @@ void MainWindow::openWelcomeProject(bool firstStart)
             m_binder->select({it}, true);
             break;
         }
-    statusBar()->showMessage(tr("The welcome project is saved in %1. Help > Welcome Project opens it again.")
+    showStatusNote(tr("The welcome project is saved in %1. Help > Welcome Project opens it again.")
                                  .arg(QDir::toNativeSeparators(QFileInfo(proj->folderPath()).absolutePath())),
                              15000);
 }

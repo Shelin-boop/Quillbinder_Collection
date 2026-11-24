@@ -2,6 +2,25 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.93.0 beta (2026-11-24): the save text in the first editor's footer bar, no status bar row (item 11)
+
+- **`FooterStatus`** (`src/ui/FooterStatus.*`, no Q_OBJECT): one in each `EditorPane` (`footerStatus()`, `MainWindow::editorPane(i)`),
+  only the first editor's (`m_panes[0]`) is filled. It holds the label `saveState` (the save text, or a short message
+  while one is shown), the label `backupState` (the link "No backups") and the `fadingNote` labels. It lays its labels
+  out by hand from its width: the whole text; a message shortened with `elidedText` and the whole message as tooltip;
+  below that a "●" mark (green, yellow, red for saved, not saved yet, failed; the highlight color for a message) with the
+  text as tooltip; the link becomes "!" when even that is tight. `minimumSizeHint` is 0 wide, so it never widens a footer.
+- **Where it sits**: `EditorPane::placeStatus()` moves the one widget into the layout of the footer page shown (text:
+  the stretch between the page label and the word count; corkboard and outliner: the left half after their buttons; picture
+  and PDF: after the zoom buttons; player: the end of the controls' row; empty: alone); it runs at the end of `applyMode`
+  and when playback starts or ends.
+- **`MainWindow`**: `showStatusNote(text, ms)` replaces `statusBar()->showMessage` (0 ms = until `clearStatusNote()`; the
+  toolbar drag's hint uses it), `statusNote()` reads it, `showFadingNote` goes to `FooterStatus::showFading`. The window
+  never calls `statusBar()`, so there is no row (`findChild<QStatusBar *>()` is null); `placeBesideText` no longer
+  subtracts the row. Toolbars at the bottom edge are dock areas of the window and are unaffected.
+  The status bar's tests read `w.statusNote()`; the crash-safe system test too.
+- No project: both labels empty and hidden. Composition mode has its own window: nothing there.
+
 ## 0.93.0 beta (2026-11-23): the panes placed by the window's shape
 
 - **Where**: `ui/MainWindowPanes.cpp` (`MainWindow::initPaneSplitters`, `arrangePanes`, `applyPaneSizes`, `capturePaneSizes`,

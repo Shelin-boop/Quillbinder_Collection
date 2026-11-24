@@ -138,6 +138,12 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   update (inspect, install, launcher), changed certificates, `make-package.py verify`, the install window's note, the
   workflow's signing job; `tools/addon-entry.py` and the workflow "Official add-on"; see "Add-on keys" in
   `saving-and-safety.md`).
+- `qb_v0930e_tests` (0.93.0 beta, fifth suite, items 11, 17, 18, 30: the save text, the short messages, the link, the
+  fading note in the first editor's footer bar (also the corkboard's), two editors, a narrow place (mark and tooltip), a
+  long message shortened, no status bar row and the window's height; the label of `APP_VERSION_LABEL` in the manual,
+  the Quick Start (as shown) and the README; `docs/design-decisions.md` (ten entries, entry 2, links, comments in the
+  code); Help > Report a Problem; the README's picture. `QB_README_SHOT=<file.png>` makes that picture of the welcome
+  project instead of running the checks.)
 - `qb_v0930c_tests` (0.93.0 beta, third suite, item 38: the restore list with backups that wait in the work folder (a
   screenshot of the list), the command Move Old Backups Into the Backup Folder (its question and report as screenshots,
   never overwriting, the folder removed when empty, the action off without a project and when nothing is left), the

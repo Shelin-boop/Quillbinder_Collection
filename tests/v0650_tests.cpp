@@ -61,7 +61,6 @@
 #include <QProcess>
 #include <QPushButton>
 #include <QRandomGenerator>
-#include <QStatusBar>
 #include <QStandardPaths>
 #include <QStyleFactory>
 #include <QTemporaryDir>
@@ -1004,9 +1003,9 @@ int main(int argc, char **argv)
         if (QAction *dup = w.findChild<QAction *>(QStringLiteral("duplicate")))
             dup->trigger();
         settle(300);
-        check(int(p->allItems().size()) == count && w.statusBar()->currentMessage().contains(QLatin1String("could not be made")),
+        check(int(p->allItems().size()) == count && w.statusNote().contains(QLatin1String("could not be made")),
               QStringLiteral("Duplicate takes a copy that is not complete out again and says so (audit F06)"),
-              w.statusBar()->currentMessage());
+              w.statusNote());
         QFile::remove(p->contentDir(alpha->id) + QStringLiteral("/attachment.bin"));
 #else
         note(QStringLiteral("Duplicate with a file that cannot be copied whole: checked on Linux only (a file of /proc)"));

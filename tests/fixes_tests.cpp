@@ -50,7 +50,6 @@
 #include <QMessageBox>
 #include <QPlainTextEdit>
 #include <QPushButton>
-#include <QStatusBar>
 #include <QStyleFactory>
 #include <QTemporaryDir>
 #include <QTest>

@@ -35,7 +35,6 @@
 #include <QIcon>
 #include <QProcess>
 #include <QRandomGenerator>
-#include <QStatusBar>
 #include <QStyleFactory>
 #include <QTemporaryDir>
 #include <QTest>
@@ -853,7 +852,7 @@ static void windowChecks(const QString &H)
         waitNextSecond();
         w.manualSave();
         settle(300);
-        const QString bar = w.statusBar()->currentMessage();
+        const QString bar = w.statusNote();
         check(bar.contains(QLatin1String("was made")) && !bar.contains(QLatin1String("could not be made")) && !bar.contains(QLatin1Char('\n')),
               QStringLiteral("... and after File > Save with a backup per save, the status bar says so in one line"), bar);
     }

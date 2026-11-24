@@ -347,6 +347,12 @@ target_link_libraries(qb_v0930c_tests PRIVATE qbui Qt6::Test)
 add_executable(qb_v0930d_tests v0930d_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0930d_tests PRIVATE qbui Qt6::Test)
 
+# 0.93.0, fifth suite: items 11 (the save text in the first editor's footer bar), 17 (the label in the documents), 18 (the design
+# decisions), 30 (where to report a problem, the README's picture) (xvfb-run -a ./qb_v0930e_tests /tmp/shots;
+# QB_README_SHOT=<file.png> makes the README picture of the welcome project)
+add_executable(qb_v0930e_tests v0930e_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0930e_tests PRIVATE qbui Qt6::Test)
+
 # 0.93.0, to-do item 25: File > Save As (the file type chooses the format) and the copies in File > Export
 # (xvfb-run -a ./qb_saveas_tests /tmp/shots)
 add_executable(qb_saveas_tests saveas_tests.cpp ${QB_RESOURCES_OBJECTS})

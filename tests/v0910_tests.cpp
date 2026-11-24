@@ -33,7 +33,6 @@
 #include <QFileInfo>
 #include <QMenu>
 #include <QSettings>
-#include <QStatusBar>
 #include <QStyleFactory>
 #include <QTemporaryDir>
 #include <QTest>
@@ -358,7 +357,7 @@ static void toolbarChecks(MainWindow &w)
     const bool back = inRow({mainBar, themesBar, searchBar, toolsBar}) && inRow({styleBar, characterBar, paragraphBar, iconBar})
                       && w.toolBarArea(paragraphBar) == Qt::TopToolBarArea && placeOf(w, searchBar).x() == searchX && themesGrip->gap() == 0
                       && QSettings().value(QStringLiteral("window/barGaps")).toMap().isEmpty();
-    check(atBottom && againX > searchX + 100 && reset && back && w.statusBar()->currentMessage().contains(QLatin1String("standard places")),
+    check(atBottom && againX > searchX + 100 && reset && back && w.statusNote().contains(QLatin1String("standard places")),
           QStringLiteral("a bar can stand at the bottom edge; View > Toolbars > Reset Toolbar Places puts all bars back and closes "
                          "the spaces"),
           places());

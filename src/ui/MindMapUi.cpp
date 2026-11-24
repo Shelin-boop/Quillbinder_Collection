@@ -38,7 +38,6 @@
 #include <QSlider>
 #include <QSpinBox>
 #include <QStackedWidget>
-#include <QStatusBar>
 #include <QToolBox>
 #include <QUndoStack>
 #include <QVBoxLayout>

@@ -43,7 +43,6 @@
 #include <QRegularExpression>
 #include <QProcessEnvironment>
 #include <QPushButton>
-#include <QStatusBar>
 #include <QStyleFactory>
 #include <QTemporaryDir>
 #include <QTest>

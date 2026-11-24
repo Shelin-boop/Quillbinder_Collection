@@ -42,7 +42,6 @@
 #include <QLabel>
 #include <QListWidget>
 #include <QMenu>
-#include <QStatusBar>
 #include <QMessageBox>
 #include <QProcess>
 #include <QPushButton>
@@ -381,9 +380,9 @@ static void pickerChecks(MainWindow &w)
           QStringLiteral("Dark: one click shows the dark theme as it is, for the project and for new projects (the window is dark)"),
           QStringLiteral("own before %1, theme %2, own now %3").arg(ownBefore).arg(look::active().theme).arg(themeui::ownChanges()));
     check(picker->themeOf(ThemePicker::User1) == QLatin1String("user:User_1") && picker->themeOf(ThemePicker::User2).isEmpty()
-              && w.statusBar()->currentMessage().contains(QLatin1String("U1")),
+              && w.statusNote().contains(QLatin1String("U1")),
           QStringLiteral("the look with the writer's own colors was saved in the empty U1 first, and the status bar says so"),
-          w.statusBar()->currentMessage());
+          w.statusNote());
     check(bDark->isChecked() && bDark->font().bold() && !bBright->isChecked() && !bBright->font().bold(),
           QStringLiteral("Dark is the checked, bold button now"));
     ids = picker->shownIds();
@@ -407,8 +406,8 @@ static void pickerChecks(MainWindow &w)
     u2->click();
     settle(400);
     check(picker->themeOf(ThemePicker::User2) == QLatin1String("user:User_2") && look::active().theme == QLatin1String("user:User_2")
-              && u2->isChecked() && w.statusBar()->currentMessage().contains(QLatin1String("U2")),
-          QStringLiteral("a click on the empty U2 saves the look shown now there"), w.statusBar()->currentMessage());
+              && u2->isChecked() && w.statusNote().contains(QLatin1String("U2")),
+          QStringLiteral("a click on the empty U2 saves the look shown now there"), w.statusNote());
     // a change on top of U2 with both buttons taken: the question. Cancelled: nothing happens
     v = look::active();
     v.colors.insert(QStringLiteral("invisibles"), QColor(20, 20, 230));

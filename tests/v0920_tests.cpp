@@ -92,7 +92,6 @@
 #include <QRegularExpression>
 #include <QSet>
 #include <QSslSocket>
-#include <QStatusBar>
 #include <QStyleFactory>
 #include <QTcpServer>
 #include <QTcpSocket>
@@ -980,7 +979,7 @@ int main(int argc, char **argv)
                   && !notice->text().trimmed().isEmpty() && readAll(p->docs()->textPath(other->id)).contains("Saved by hand."),
               QStringLiteral("File > Save with a backup that cannot be put into its folder: the text is saved and a notice says "
                              "what happened to the backup (not modal)"),
-              notice ? notice->text() : QStringLiteral("no notice; status bar: ") + w.statusBar()->currentMessage());
+              notice ? notice->text() : QStringLiteral("no notice; status bar: ") + w.statusNote());
         shot(&w, QStringLiteral("v0920-manual-backup"));
         shot(notice, QStringLiteral("v0920-manual-backup-notice"));
         if (notice)
@@ -989,9 +988,9 @@ int main(int argc, char **argv)
         typeInto(p, other, QStringLiteral(" And once more."));
         const bool saved2 = w.manualSave();
         settle(500);
-        check(saved2 && !visibleBox(QStringLiteral("manualBackupNotice")) && !w.statusBar()->currentMessage().isEmpty(),
+        check(saved2 && !visibleBox(QStringLiteral("manualBackupNotice")) && !w.statusNote().isEmpty(),
               QStringLiteral("the same cause at the next save: no second notice, the status bar says it"),
-              w.statusBar()->currentMessage());
+              w.statusNote());
         if (QMessageBox *b = visibleBox(QStringLiteral("manualBackupNotice")))
             b->accept();
         as.backupOnManualSave = false;
@@ -1687,7 +1686,7 @@ int main(int argc, char **argv)
         qputenv("QB_TEST_UPDATE_NOW", start.addDays(50).toString(Qt::ISODate).toUtf8());
         int requestsNow = upd->requests();
         lookAndWait(false);
-        const bool quiet404 = upd->requests() == requestsNow + 1 && !w.statusBar()->findChild<QLabel *>(QStringLiteral("fadingNote")) && !upd->window();
+        const bool quiet404 = upd->requests() == requestsNow + 1 && !w.findChild<QLabel *>(QStringLiteral("fadingNote")) && !upd->window();
         // the address cannot be reached: two tries, then a small note in the status bar that fades in and out twice
         server.stop();
         requestsNow = upd->requests();
@@ -1695,7 +1694,7 @@ int main(int argc, char **argv)
         took.start();
         lookAndWait(false);
         const qint64 ms = took.elapsed();
-        QPointer<QLabel> fading = w.statusBar()->findChild<QLabel *>(QStringLiteral("fadingNote"));
+        QPointer<QLabel> fading = w.findChild<QLabel *>(QStringLiteral("fadingNote"));
         const bool modalNow = QApplication::activeModalWidget() != nullptr;
         check(quiet404 && upd->requests() == requestsNow + 2 && ms >= 300 && fading && fading->isVisible() && fading->property("fades").toInt() == 2
                   && fading->text().contains(QLatin1String("Could not look for updates")) && !modalNow && !upd->window(),
@@ -1705,7 +1704,7 @@ int main(int argc, char **argv)
         shot(&w, QStringLiteral("v0920-update-not-reached"));
         requestsNow = upd->requests();
         lookAndWait(false);
-        const int notes = int(w.statusBar()->findChildren<QLabel *>(QStringLiteral("fadingNote")).size());
+        const int notes = int(w.findChildren<QLabel *>(QStringLiteral("fadingNote")).size());
 #ifdef Q_OS_WIN
         // (Windows needs seconds to refuse each connection, so the first note can be gone before the second look
         // has ended: then there is no note, and never a second one)

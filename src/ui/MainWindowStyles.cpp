@@ -25,7 +25,6 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QProgressDialog>
-#include <QStatusBar>
 #include <QLocale>
 #include <QTextBlock>
 
@@ -269,7 +268,7 @@ bool MainWindow::commitStyles(const StyleSheet &sheet, const QHash<QString, QStr
     // 0.81.1 (audit of 0.81.0, F-01): a document whose file cannot be read keeps the look it was read with (its file is
     // never written over); the writer is told which
     if (const QStringList left = m_project->docs()->takeSkippedUnreadable(); !left.isEmpty())
-        statusBar()->showMessage(tr("Not changed, because their file cannot be read (such a file is never written over): %1")
+        showStatusNote(tr("Not changed, because their file cannot be read (such a file is never written over): %1")
                                      .arg(left.join(QLatin1String(", "))),
                                  20000);
     refreshInspector();

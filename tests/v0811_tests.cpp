@@ -53,7 +53,6 @@
 #include <QSignalSpy>
 #include <QScrollBar>
 #include <QSplitter>
-#include <QStatusBar>
 #include <QStyleFactory>
 #include <QTemporaryDir>
 #include <QTest>
@@ -303,7 +302,7 @@ static void unreadableWindowChecks(const QString &W)
     if (QAction *m = byKey(&w, QStringLiteral("merge")))
         m->trigger();
     settle(400);
-    const QString mergeMsg = w.statusBar()->currentMessage();
+    const QString mergeMsg = w.statusNote();
     check(mergeMsg.contains(QLatin1String("not merged")) && mergeMsg.contains(QLatin1String("Broken")) && !pr->isInTrash(fine)
               && !pr->isInTrash(broken) && readAll(chFile) == damaged,
           QStringLiteral("F-01: Merge with a document whose file is damaged is refused with the reason; nothing goes to the "
@@ -328,11 +327,11 @@ static void unreadableWindowChecks(const QString &W)
         c.setPosition(10);
         ed->setTextCursor(c);
     }
-    w.statusBar()->clearMessage();
+    w.clearStatusNote();
     if (QAction *s = byKey(&w, QStringLiteral("split")))
         s->trigger();
     settle(400);
-    const QString splitMsg = w.statusBar()->currentMessage();
+    const QString splitMsg = w.statusNote();
     check(readOnly && splitMsg.contains(QLatin1String("cannot be split")) && int(pr->allItems().size()) == items,
           QStringLiteral("F-01: Split of a damaged text is refused with the reason"),
           QStringLiteral("read-only %1, items %2 -> %3: %4").arg(readOnly).arg(items).arg(pr->allItems().size()).arg(splitMsg));

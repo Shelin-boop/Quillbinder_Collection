@@ -9,6 +9,18 @@ A new AppImage and a program update for Linux. Nothing changes in how you write;
 in the parts it is built from. The add-ons of 0.80.0 and later are rebuilt for this version: the ones that bring
 their own libraries now need 0.93.0 (the check for updates and **File > Install Update or Add-on** tell you).
 
+- **The save text moved into the editor's footer bar**. The window's bottom row is gone. "Saved", "Not saved yet",
+  the red "Not saved" sign, the "No backups" link and the short messages of the program (a backup's result, "Saved
+  again ...", and the like) show in the empty stretch of the footer bar of the first editor (the left or upper one);
+  a message takes the place for its seconds, a message too long is shortened (its tooltip reads it all), and in a very
+  narrow editor a small colored mark stands there instead (the text is its tooltip). The status bar row is no more, so
+  the window gains that row. Toolbars at the bottom edge stay where they are.
+- **Help > Report a Problem…** opens the project's issue forms in the browser; the manual's troubleshooting section says
+  where to report a problem and that a security problem goes privately (`SECURITY.md`). The README has a picture of the
+  main window.
+- **Documents:** the manual and the Quick Start take the label of the version ("beta") from the program (a placeholder, as for its name), so
+  they cannot say "alpha" again; `docs/design-decisions.md` gives the reasons behind choices that can look like faults
+  (README, SECURITY.md and the manual's introduction link to it).
 - **File > Save As…** (Ctrl+Shift+S) replaces the menu "Project Format" of the File menu. Type the name and choose the place; the
   file type in the dialog (Scrivener 3 Project or Quillbinder Project) decides the format, so the same command changes
   the format and saves a project under another name or in another place. The window then works on the new project, and

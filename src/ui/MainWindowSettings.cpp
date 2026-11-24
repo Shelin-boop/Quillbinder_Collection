@@ -23,7 +23,6 @@
 #include <QJsonDocument>
 #include <QMessageBox>
 #include <QSaveFile>
-#include <QStatusBar>
 
 namespace qb {
 
@@ -61,7 +60,7 @@ bool MainWindow::exportProjectSettings(const QString &fileIn)
         QMessageBox::warning(this, tr("Save Project Settings"), tr("Cannot write %1: %2").arg(file, f.errorString()));
         return false;
     }
-    statusBar()->showMessage(tr("The project's settings were saved to %1.").arg(QDir::toNativeSeparators(file)), 10000);
+    showStatusNote(tr("The project's settings were saved to %1.").arg(QDir::toNativeSeparators(file)), 10000);
     return true;
 }
 

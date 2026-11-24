@@ -603,7 +603,7 @@ void caseSP09()
     settle(400);
     const int third = notices();
     closeNotices(&texts);
-    const QString status = w->statusBar()->currentMessage();
+    const QString status = w->statusNote();
     fact(QStringLiteral("S-P09 notices: first save, second, File > Save"), QStringLiteral("%1, %2, %3; status bar: %4").arg(first).arg(second).arg(third).arg(status));
     check(first == 1 && second == 0 && third == 0, QStringLiteral("the notice comes once per lock"), QStringLiteral("%1, %2, %3").arg(first).arg(second).arg(third));
     check(texts.join(QLatin1Char(' ')).contains(QLatin1String("scrivener-writer")) && texts.join(QLatin1Char(' ')).contains(QLatin1String("OTHER-PC")),

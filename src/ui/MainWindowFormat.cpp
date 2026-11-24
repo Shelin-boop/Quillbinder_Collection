@@ -24,7 +24,6 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QStatusBar>
 #include <QSysInfo>
 #include <QUrl>
 
@@ -131,7 +130,7 @@ bool MainWindow::openScrivenerProject(const QString &path)
     if (ok)
         notes << r.warnings;
     if (!notes.isEmpty())
-        statusBar()->showMessage(notes.join(QLatin1Char(' ')), 10000);
+        showStatusNote(notes.join(QLatin1Char(' ')), 10000);
     return ok;
 }
 
@@ -263,7 +262,7 @@ void MainWindow::saveProjectAs()
         return;
     }
     leaving.p = nullptr; // the original is gone from the window
-    statusBar()->showMessage(tr("Saved as %1. The original stays as it was: %2").arg(QDir::toNativeSeparators(where), QDir::toNativeSeparators(from)), 15000);
+    showStatusNote(tr("Saved as %1. The original stays as it was: %2").arg(QDir::toNativeSeparators(where), QDir::toNativeSeparators(from)), 15000);
 }
 
 void MainWindow::saveCopyAsScrivener()

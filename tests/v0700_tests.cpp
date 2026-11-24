@@ -65,7 +65,6 @@
 #include <QRandomGenerator>
 #include <QRegularExpression>
 #include <QSettings>
-#include <QStatusBar>
 #include <QStyleFactory>
 #include <QTemporaryDir>
 #include <QTest>

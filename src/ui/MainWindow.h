@@ -138,6 +138,7 @@ public:
     // 0.70.0 (audit A S-01, B U-2, S-1): the state shown in the status bar ("Saved", "Not saved yet", "Not saved:
     // the last save failed at ..."); the time the saves began to fail (invalid: they work)
     QString saveStateText() const;
+    EditorPane *editorPane(int i) const { return m_panes[i ? 1 : 0]; } // 0.93.0: the first (left or upper) editor, or the second
     QDateTime saveFailedSince() const { return m_saveFailedSince; }
     // 0.81.0 (audit of 0.80.0, S-08): the reason of a failed save in plain words
     static QString plainSaveReason(const QString &err);
@@ -266,6 +267,10 @@ public:
     UpdateChecker *updateChecker() const { return m_updates; }
     // 0.92.0: a small text in the status bar that fades in and out twice and is gone (no window, no sound)
     void showFadingNote(const QString &text);
+    // 0.93.0: a short message of the program in the first editor's footer bar (it was the status bar's)
+    void showStatusNote(const QString &text, int ms = 0);
+    void clearStatusNote();
+    QString statusNote() const;
     // 0.92.0: the notice "Other Versions Kept" turned off until the program quits (its button; the tests set it back)
     static bool conflictNoticeOff();
     static void setConflictNoticeOff(bool off);
@@ -537,8 +542,6 @@ private:
     QString m_lastEmergencyCopyText;
     QString m_lastSaveRecovery;
     QString m_lastChangeKeptAside;
-    QLabel *m_saveState = nullptr;
-    QLabel *m_backupState = nullptr; // W4b: "No backups" while the portable program has no backup folder
     bool m_backupFolderAsked = false;
     QTimer *m_saveStateTimer = nullptr;
     QTimer *m_saveRetry = nullptr;
