@@ -355,9 +355,10 @@ if [ -n "$pid" ]; then
   # S4, S7) once the input method was active. Android 0.92.0's guard (android/MobileWindows.cpp) made each window's
   # surface ahead of its first picture; Qt 6.12.1 makes the surface without that lock (Android 0.93.0: the guard is
   # gone), and these steps check that. File > Save As (0.93.0) asks for the format first on a tablet.
-  # Places in the menu as on the 1472 x 920 screen (27 px a row, 2 px a line): Open Project 65, Save As 175,
-  # Compile 339, Print Settings 368.
-  for item in "Open Project:65" "Save As:175" "Compile:339" "Print Settings:368"; do
+  # Places in the menu as on the 1472 x 920 screen, read from the run's picture of the File menu (0.93.0: New Project
+  # at 62, then 27 px a row, a line between groups; the places of 0.92.0 were a row too high and opened New Project,
+  # Compare and Transfer and Compile): Open Project 89, Save As 199, Compile 363, Print Settings 392.
+  for item in "Open Project:89" "Save As:199" "Compile:363" "Print Settings:392"; do
     tap "$MX" "$MY"; sleep 2; tap 100 "${item##*:}"; sleep 4
     shot "s6-$(echo "${item%%:*}" | tr 'A-Z ' 'a-z-')"
     step "S6 ${item%%:*}" "File > ${item%%:*} with the cursor in the text"
@@ -365,8 +366,8 @@ if [ -n "$pid" ]; then
     back_to_text
   done
   # O: File > Show Project in File Manager (android/MobileOpen.cpp): the tablet's Files app at the project's folder.
-  # The last step, because its place in the menu is a guess (below Print): the picture of the menu shows it.
-  tap "$MX" "$MY"; sleep 2; shot "o0-file-menu"; tap 100 452; sleep 5; shot "o1-files-app"
+  # The last step (0.93.0: 475, below Print Current Document and a line; 452 was Print Current Document).
+  tap "$MX" "$MY"; sleep 2; shot "o0-file-menu"; tap 100 475; sleep 5; shot "o1-files-app"
   fr=$(front)
   say "  O: File > Show Project in File Manager: in front: $fr"
   case "$fr" in *"$PKG/"*) key 111; sleep 1 ;; *) key 4; sleep 3 ;; esac
