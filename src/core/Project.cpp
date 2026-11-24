@@ -391,6 +391,11 @@ QString Project::contentDir(const QString &id) const
     return m_folder + QLatin1String("/content/") + folderNameFor(id);
 }
 
+QString Project::contentDirIn(const QString &folder, const QString &id)
+{
+    return folder + QLatin1String("/content/") + folderNameFor(id);
+}
+
 QString Project::snapshotsDir(const QString &id) const
 {
     return id.isEmpty() ? m_folder + QLatin1String("/snapshots/") : m_folder + QLatin1String("/snapshots/") + folderNameFor(id);
@@ -1058,6 +1063,41 @@ int Project::recoverUnlistedDocuments(QString *folderTitle)
     return n;
 }
 
+bool Project::writeUnsavedInto(const QString &folder, const QString &indexFileName, QString *error)
+{
+    bool ok = true;
+    QString first;
+    if (m_docs && !m_docs->writeDirtyInto(folder, &first))
+        ok = false;
+    if (m_objects && m_objects->isDirty()) {
+        CopyTally tally;
+        m_objects->writeUnsaved(folder, &tally);
+        m_objects->removeLeftoversIn(folder);
+        if (!tally.missing.isEmpty()) {
+            ok = false;
+            if (first.isEmpty())
+                first = tally.missing.first();
+        }
+    }
+    // the project file as it is in memory (binder, titles, labels, counts)
+    QString why;
+    if (!safesave::writeFile(QDir(folder).filePath(indexFileName.isEmpty() ? QFileInfo(m_indexFile).fileName() : indexFileName), indexBytes(), &why)) {
+        ok = false;
+        if (first.isEmpty())
+            first = why;
+    }
+    if (!ok && error)
+        *error = first;
+    return ok;
+}
+
+void Project::setLeaving(bool leaving)
+{
+    m_leaving = leaving;
+    if (!leaving && hasUnsavedChanges())
+        scheduleSave();
+}
+
 bool Project::hasUnsavedChanges() const
 {
     return m_indexDirty || (m_docs && m_docs->hasDirty()) || (m_objects && m_objects->isDirty()) || !m_unsavedExtra.isEmpty();
@@ -1109,6 +1149,11 @@ bool Project::save(QString *error)
 bool Project::saveImpl(QString *error, bool quick)
 {
     failure::clear();   // 0.92.0: the kind of a failure belongs to the save it happens in (FailureKind.h)
+    if (m_leaving) {    // 0.93.0 (File > Save As): the changes went into the new project; this one stays as it was
+        m_saveTimer.stop();
+        m_gapTimer.stop();
+        return true;
+    }
     timing::Laps laps;
     m_saveTimer.stop();
     m_gapTimer.stop();

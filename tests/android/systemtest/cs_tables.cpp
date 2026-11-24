@@ -1268,7 +1268,7 @@ void caseST04()
     step(QStringLiteral("the project to Scrivener format and back"));
     {
         const QJsonObject before = modelOf(p, true);
-        QAction *toScriv = action(w, QStringLiteral("formatScrivener"));
+        QAction *toScriv = action(w, QStringLiteral("saveAs"));
         const QString target = ctx().work + QStringLiteral("/switched.scriv");
         bool asked = false;
         withModal<QFileDialog>(400, [&](QFileDialog *fd) {
@@ -1279,23 +1279,23 @@ void caseST04()
         if (toScriv)
             toScriv->trigger();
         settle(1500);
-        fact(QStringLiteral("S-T04 File > Project Format > Scrivener 3 Project"), w->project() && !w->project()->scrivenerPath.isEmpty()
+        fact(QStringLiteral("S-T04 File > Save As (.scriv)"), w->project() && !w->project()->scrivenerPath.isEmpty()
                                                                                        ? QStringLiteral("switched (%1)").arg(asked ? QStringLiteral("asked where") : QStringLiteral("no question"))
                                                                                        : QStringLiteral("not switched"));
         if (w->project() && !w->project()->scrivenerPath.isEmpty()) {
             compareModels(before, modelOf(w->project(), true), QStringLiteral("after the switch to Scrivener format"));
-            // back: File > Project Format > Quillbinder Project asks for the folder to put it in
+            // back: File > Save As (.qbx)
             const QString backParent = ctx().work + QStringLiteral("/back");
             QDir().mkpath(backParent);
             withModal<QFileDialog>(400, [backParent](QFileDialog *fd) {
                 fd->setDirectory(backParent);
-                fd->selectFile(backParent);
+                fd->selectFile(backParent + QStringLiteral("/Back.qbx"));
                 static_cast<QDialog *>(fd)->accept();
             });
-            if (QAction *back = action(w, QStringLiteral("formatQuillbinder")))
+            if (QAction *back = action(w, QStringLiteral("saveAs")))
                 back->trigger();
             settle(1500);
-            fact(QStringLiteral("S-T04 File > Project Format > Quillbinder Project"),
+            fact(QStringLiteral("S-T04 File > Save As (.qbx)"),
                  w->project() && w->project()->scrivenerPath.isEmpty() ? QStringLiteral("switched back") : QStringLiteral("not switched back"));
         }
     }

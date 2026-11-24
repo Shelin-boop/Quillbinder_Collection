@@ -1,4 +1,4 @@
-// File > Project Format: projects in Scrivener 3 format (.scriv) and in the
+// File > Save As and File > Export (copies): projects in Scrivener 3 format (.scriv) and in the
 // program's own format, and converting between them (import/ScrivenerFormat.h).
 #include "ui/MainWindow.h"
 #include "ui/Ask.h"
@@ -8,8 +8,11 @@
 #include "import/ScrivenerFormat.h"
 #include "text/TextUtil.h"
 #include "ui/AppSettings.h"
+#include "ui/MindMapDoc.h"
 
 #include "AppInfo.h"
+
+#include <cstring>
 
 #include <QApplication>
 #include <QCoreApplication>
@@ -18,6 +21,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QInputDialog>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QStatusBar>
@@ -131,82 +135,135 @@ bool MainWindow::openScrivenerProject(const QString &path)
     return ok;
 }
 
-void MainWindow::switchToScrivenerFormat()
+// File > Save As: the name and place in a save dialog whose file types are the two formats; the type decides the format
+// (a name that ends in .scriv, .qbx or .quillbinder decides as well). A project is a folder: the dialog asks for a name,
+// the program makes the folder.
+struct SaveAsChoice {
+    QString parent; // the folder the new project goes into
+    QString name;   // the project's name (its title)
+    bool scriv = false;
+};
+
+static bool chooseSaveAs(QWidget *parent, const QString &title, const QString &suggestedName, const QString &startDir,
+                         bool currentIsScriv, SaveAsChoice *out)
 {
-    if (!m_project || !m_project->scrivenerPath.isEmpty()) {
-        updateActions();
-        return;
-    }
-    const QString dir = chooseScrivPath(this, tr("Save the Project in Scrivener Format"), m_project->title());
-    if (dir.isEmpty()) {
-        updateActions();
-        return;
-    }
-    if (QFileInfo::exists(dir)) {
-        QMessageBox::warning(this, tr("Project Format"), tr("There is a file or folder with this name already:\n%1").arg(dir));
-        updateActions();
-        return;
-    }
-    const QString oldFolder = m_project->folderPath();
-    saveUiState();
-    QString err;
-    std::unique_ptr<Project> wc;
+    const QString scrivFilter = QObject::tr("Scrivener 3 Project (*.scriv)");
+    const QString ownFilter = QObject::tr("%1 Project (*.qbx)").arg(QStringLiteral(QB_APP_NAME));
+    QString start = startDir;
+    if (start.isEmpty() || !QDir(start).exists())
+        start = AppSettings::instance().lastProjectDir;
+    if (start.isEmpty() || !QDir(start).exists())
+        start = QDir::homePath();
+    QString selected = currentIsScriv ? scrivFilter : ownFilter;
+    bool scriv = currentIsScriv;
+#ifdef Q_OS_ANDROID
+    // the file picker of Android may offer no file types: the format is asked first
     {
-        WaitCursor wait;
-        wc = scrivener::convertToScrivener(m_project.get(), dir, &err);
+        const QStringList kinds{ownFilter, scrivFilter};
+        bool ok = false;
+        const QString kind = QInputDialog::getItem(parent, title, QObject::tr("Format:"), kinds, currentIsScriv ? 1 : 0, false, &ok);
+        if (!ok)
+            return false;
+        selected = kind;
+        scriv = kind == scrivFilter;
     }
-    if (!wc) {
-        QMessageBox::warning(this, tr("Project Format"), err);
-        updateActions();
-        return;
-    }
-    // the working copy holds everything now; the window takes it
-    adoptProject(std::move(wc));
-    AppSettings::instance().removeRecent(QDir(oldFolder).filePath(QFileInfo(oldFolder).completeBaseName() + QLatin1String(QB_PROJECT_FILE_SUFFIX)));
-    QMessageBox box(QMessageBox::Information, tr("Project Format"),
-                    tr("From now on the project is saved in Scrivener format:\n%1\n\nThe project folder in %2's own format "
-                       "stays as it was at this moment:\n%3\nYou can keep it as a copy or delete it.")
-                        .arg(dir, QStringLiteral(QB_APP_NAME), oldFolder),
-                    QMessageBox::Ok, this);
-    box.setObjectName(QStringLiteral("formatSwitched"));
-    box.exec();
+#endif
+    const QString suggested = text::safeFileName(suggestedName) + (scriv ? QLatin1String(".scriv") : QLatin1String(QB_PROJECT_FILE_SUFFIX));
+    const QString filters = (scriv ? scrivFilter + QLatin1String(";;") + ownFilter : ownFilter + QLatin1String(";;") + scrivFilter);
+    const QString f = QFileDialog::getSaveFileName(parent, title, QDir(start).filePath(suggested), filters, &selected);
+    if (f.isEmpty())
+        return false;
+    const QFileInfo fi(f);
+    QString name = fi.fileName();
+    bool isScriv = selected == scrivFilter;
+    auto cut = [&name](const char *suffix) {
+        if (name.endsWith(QLatin1String(suffix), Qt::CaseInsensitive)) {
+            name.chop(int(strlen(suffix)));
+            return true;
+        }
+        return false;
+    };
+    if (cut(".scriv"))
+        isScriv = true;
+    else if (cut(QB_PROJECT_FILE_SUFFIX) || cut(QB_PROJECT_SUFFIX))
+        isScriv = false;
+    name = name.trimmed();
+    if (name.isEmpty())
+        return false;
+    out->parent = fi.absolutePath();
+    out->name = name;
+    out->scriv = isScriv;
+    return true;
 }
 
-void MainWindow::switchToQuillbinderFormat()
+void MainWindow::saveProjectAs()
 {
-    if (!m_project || m_project->scrivenerPath.isEmpty()) {
-        updateActions();
+    if (!m_project)
+        return;
+    SaveAsChoice c;
+    const bool wasScriv = !m_project->scrivenerPath.isEmpty();
+    // from the dialog on, nothing more is written into the original (the window's own save when a dialog takes over
+    // included): what is not saved yet goes into the new project only
+    struct Leaving {
+        Project *p;
+        ~Leaving()
+        {
+            if (p)
+                p->setLeaving(false);
+        }
+    } leaving{m_project.get()};
+    m_project->setLeaving(true);
+    if (!chooseSaveAs(this, tr("Save As"), m_project->title(), QFileInfo(m_project->displayFolder()).absolutePath(), wasScriv, &c))
+        return;
+    const QString target = c.scriv ? QDir(c.parent).filePath(c.name + QLatin1String(".scriv"))
+                                   : QDir(c.parent).filePath(text::safeFileName(c.name) + QLatin1String(QB_PROJECT_SUFFIX));
+    if (QFileInfo::exists(target)) {
+        QMessageBox::warning(this, tr("Save As"), tr("There is a file or folder with this name already:\n%1").arg(QDir::toNativeSeparators(target)));
         return;
     }
-    QString start = QFileInfo(m_project->scrivenerPath).absolutePath();
-    const QString parent = QFileDialog::getExistingDirectory(
-        this, tr("Where Should the Project in %1 Format Be Saved?").arg(QStringLiteral(QB_APP_NAME)), start);
-    if (parent.isEmpty()) {
-        updateActions();
-        return;
-    }
-    const QString scriv = m_project->scrivenerPath;
     saveUiState();
+    Project *old = m_project.get();
     QString err;
-    std::unique_ptr<Project> copy;
+    // what the open project holds unsaved goes into the new folder only (the original is not written)
+    auto into = [old](const QString &folder, const QString &indexName, QString *e) {
+        QString why;
+        bool ok = old->writeUnsavedInto(folder, indexName, &why);
+        if (!mindmaps::writeDirtyInto(old, folder, &why))
+            ok = false;
+        if (!ok && e)
+            *e = why;
+        return ok;
+    };
+    std::unique_ptr<Project> np;
     {
         WaitCursor wait;
-        copy = scrivener::copyAsQuillbinder(m_project.get(), parent, m_project->title(), &err);
+        if (c.scriv)
+            np = scrivener::convertToScrivener(old, target, &err, false,
+                                               [&into](const QString &folder, QString *e) { return into(folder, QString(), e); }, c.name);
+        else
+            np = scrivener::saveAsQuillbinder(old, c.parent, c.name, &err, into);
+        if (np) {
+            np->uiState = old->uiState;
+            np->markUiStateDirty();
+            np->save(&err);
+        }
     }
-    if (!copy) {
-        QMessageBox::warning(this, tr("Project Format"), err);
-        updateActions();
+    if (!np) {
+        QMessageBox::warning(this, tr("Save As"), err);
         return;
     }
-    const QString where = copy->folderPath();
-    adoptProject(std::move(copy));
-    QMessageBox box(QMessageBox::Information, tr("Project Format"),
-                    tr("From now on the project is saved in %1's own format:\n%2\n\nThe Scrivener project stays as it was "
-                       "at this moment:\n%3")
-                        .arg(QStringLiteral(QB_APP_NAME), where, scriv),
-                    QMessageBox::Ok, this);
-    box.setObjectName(QStringLiteral("formatSwitched"));
-    box.exec();
+    const QString where = np->displayFolder();
+    const QString from = old->displayFolder();
+    // the changes went into the new project: the original is left as it was (nothing is written into it when the window
+    // leaves it)
+    mindmaps::forgetUnsaved(old);
+    if (!adoptProject(std::move(np))) {
+        QMessageBox::warning(this, tr("Save As"),
+                             tr("The project was saved as\n%1\n\nbut this window could not leave the original. Open the new project from File > Open Recent.").arg(QDir::toNativeSeparators(where)));
+        return;
+    }
+    leaving.p = nullptr; // the original is gone from the window
+    statusBar()->showMessage(tr("Saved as %1. The original stays as it was: %2").arg(QDir::toNativeSeparators(where), QDir::toNativeSeparators(from)), 15000);
 }
 
 void MainWindow::saveCopyAsScrivener()

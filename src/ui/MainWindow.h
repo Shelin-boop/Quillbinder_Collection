@@ -231,8 +231,7 @@ protected:
 
 private:
     // File > Project Format (MainWindowFormat.cpp)
-    void switchToScrivenerFormat();
-    void switchToQuillbinderFormat();
+    void saveProjectAs();
     void saveCopyAsScrivener();
     void saveCopyAsQuillbinder();
     bool confirmNotOpenElsewhere(const QString &projectFolder);

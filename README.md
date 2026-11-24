@@ -315,7 +315,7 @@ system's Qt TLS plugin).
 
 ## Projects in Scrivener 3 format
 
-`src/import/ScrivenerFormat.*` reads and writes `.scriv` folders (File > Project Format, New Project > Format, opening a
+`src/import/ScrivenerFormat.*` reads and writes `.scriv` folders (File > Save As, New Project > Format, opening a
 `.scrivx`). The window works on a working copy (an ordinary project in `~/.local/share/Quillbinder/ScrivenerProjects/`)
 whose `Project::scrivenerPath` names the `.scriv`; `Project::save` then calls `scrivener::sync`, which writes only what
 changed (state in `settings/scrivener-sync.json`: hashes of both sides, so files Scrivener changed meanwhile are not

@@ -362,6 +362,24 @@ Die Vornamen dieser Liste sind nicht in weiblich und männlich unterteilt.</tran
 <context>
     <name>QObject</name>
     <message>
+        <source>Scrivener 3 Project (*.scriv)</source>
+        <translation>Scrivener-3-Projekt (*.scriv)</translation>
+    </message>
+    <message>
+        <source>%1 Project (*.qbx)</source>
+        <translation>%1-Projekt (*.qbx)</translation>
+    </message>
+    <message>
+        <source>Format:</source>
+        <translation>Format:</translation>
+    </message>
+    <message>
+        <source>There is a file or folder with this name already:
+%1</source>
+        <translation>Es gibt bereits eine Datei oder einen Ordner mit diesem Namen:
+%1</translation>
+    </message>
+    <message>
         <source>The saved page holds no web page.</source>
         <translation>Die gespeicherte Seite enthält keine Webseite.</translation>
     </message>
@@ -9017,6 +9035,32 @@ Das Projekt bleibt geöffnet; das Programm versucht weiter, es in seinem eigenen
         <translation>Kopie als %1-Projekt speichern…</translation>
     </message>
     <message>
+        <source>Save &amp;As…</source>
+        <translation>Speichern &amp;unter…</translation>
+    </message>
+    <message>
+        <source>Save the project under another name or in another place, in Scrivener 3 format or in %1&apos;s own format; the window works on the new project from then on</source>
+        <translation>Das Projekt unter einem anderen Namen oder an einem anderen Ort speichern, im Format von Scrivener 3 oder in %1s eigenem Format; das Fenster arbeitet danach am neuen Projekt</translation>
+    </message>
+    <message>
+        <source>Save As</source>
+        <translation>Speichern unter</translation>
+    </message>
+    <message>
+        <source>The project was saved as
+%1
+
+but this window could not leave the original. Open the new project from File &gt; Open Recent.</source>
+        <translation>Das Projekt wurde gespeichert als
+%1
+
+dieses Fenster konnte das Original aber nicht verlassen. Öffnen Sie das neue Projekt über Datei &gt; Zuletzt geöffnet.</translation>
+    </message>
+    <message>
+        <source>Saved as %1. The original stays as it was: %2</source>
+        <translation>Gespeichert als %1. Das Original bleibt, wie es war: %2</translation>
+    </message>
+    <message>
         <source>&amp;Close Project</source>
         <translation>Projekt &amp;schließen</translation>
     </message>
@@ -10764,6 +10808,10 @@ Wenn Sie das AppImage verschieben, wählen Sie diesen Menüeintrag erneut.</tran
     <message>
         <source>&amp;Scrivener Project…</source>
         <translation>&amp;Scrivener-Projekt…</translation>
+    </message>
+    <message>
+        <source>&amp;%1 Project…</source>
+        <translation>&amp;%1-Projekt…</translation>
     </message>
     <message>
         <source>&amp;Export</source>
@@ -18702,8 +18750,8 @@ Gespeichert %2 aus dem Projekt „%3“ von %4.</translation>
         <translation>Scrivener-3-Projekt (.scriv)</translation>
     </message>
     <message>
-        <source>Scrivener format: the project can be opened in Scrivener 3 as well (File &gt; Project Format)</source>
-        <translation>Scrivener-Format: Das Projekt kann auch in Scrivener 3 geöffnet werden (Datei &gt; Projektformat)</translation>
+        <source>Scrivener format: the project can be opened in Scrivener 3 as well (File &gt; Save As)</source>
+        <translation>Scrivener-Format: Das Projekt kann auch in Scrivener 3 geöffnet werden (Datei &gt; Speichern unter)</translation>
     </message>
     <message>
         <source>Open Other…</source>

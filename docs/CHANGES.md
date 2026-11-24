@@ -9,6 +9,14 @@ A new AppImage and a program update for Linux. Nothing changes in how you write;
 in the parts it is built from. The add-ons of 0.80.0 and later are rebuilt for this version: the ones that bring
 their own libraries now need 0.93.0 (the check for updates and **File > Install Update or Add-on** tell you).
 
+- **File > Save As…** (Ctrl+Shift+S) replaces the menu "Project Format" of the File menu. Type the name and choose the place; the
+  file type in the dialog (Scrivener 3 Project or Quillbinder Project) decides the format, so the same command changes
+  the format and saves a project under another name or in another place. The window then works on the new project, and
+  every later save goes there; the original stays on disk as it was, and what you had not saved yet goes into the new
+  project only. The new project starts its own series of backups (the backups so far stay with the original), and
+  its title is the name you typed. The copies that leave the window on the original are in **File > Export** now:
+  Scrivener Project... and (new there) Quillbinder Project.... A toolbar or shortcut you set for the old entries
+  (Quillbinder Project, Scrivener 3 Project, Save a Copy as ...) is left out quietly.
 - **The panes placed by the window's shape.** A window taller than wide now shows two rows: the editor in the full
   width, and the binder and the inspector beside each other in the other row. **View > Layout > Upright window**
   chooses whether the editor's row is the upper one (Editor in the Middle) or the lower one (Editor at the Bottom),

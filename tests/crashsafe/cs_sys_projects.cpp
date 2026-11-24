@@ -306,19 +306,19 @@ void caseSP03()
         typeInto(e, QStringLiteral(" Written before the switch."));
     const QString scriv = ctx().work + QStringLiteral("/Switched.scriv");
     fileDialogLater(400, scriv);
-    chooseByMenu(w, QStringLiteral("formatScrivener"));
+    chooseByMenu(w, QStringLiteral("saveAs"));
     settle(1500);
-    check(w->project() && !w->project()->scrivenerPath.isEmpty(), QStringLiteral("File > Project Format > Scrivener 3 Project"));
+    check(w->project() && !w->project()->scrivenerPath.isEmpty(), QStringLiteral("File > Save As (.scriv)"));
     p = w->project();
     BinderItem *again = p ? itemByTitle(p, title) : nullptr;
     if ((e = showDoc(w, again)))
         typeInto(e, QStringLiteral(" Written in Scrivener format."));
     const QString backParent = ctx().work + QStringLiteral("/back");
     QDir().mkpath(backParent);
-    fileDialogLater(400, backParent);
-    chooseByMenu(w, QStringLiteral("formatQuillbinder"));
+    fileDialogLater(400, backParent + QStringLiteral("/Back.qbx"));
+    chooseByMenu(w, QStringLiteral("saveAs"));
     settle(1500);
-    check(w->project() && w->project()->scrivenerPath.isEmpty(), QStringLiteral("File > Project Format > Quillbinder Project"));
+    check(w->project() && w->project()->scrivenerPath.isEmpty(), QStringLiteral("File > Save As (.qbx)"));
     p = w->project();
     if (!p)
         return;

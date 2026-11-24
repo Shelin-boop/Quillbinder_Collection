@@ -45,6 +45,10 @@ public:
     // 0.93.0: every file counted in `tally` (wanted, written, missing with the reason); returns how many were written
     int writeUnsaved(const QString &dir, QString *error = nullptr, CopyTally *tally = nullptr);
     bool saveDirty(QString *error);
+    // 0.93.0 (File > Save As): every text and notes not saved yet is written into the project folder `folder` (a copy of
+    // the project's folder) in the project's storage format; nothing is written into the project's own folder. The
+    // entries stay unsaved.
+    bool writeDirtyInto(const QString &folder, QString *error);
     bool saveDocument(const QString &id, QString *error = nullptr);
 
     QString plainText(const QString &id);
@@ -188,6 +192,7 @@ private:
     Project *m_project;
     QHash<QString, Entry> m_entries;
     QSet<QString> m_unreadable; // keys of files that are there but could not be read
+    QString m_serializeFolder;  // writeDirtyInto: pictures of a text go into this project folder
     QString m_serializeError;   // set by serialize when a picture could not be written (0.65.0)
     QSet<QString> m_missing;    // ids of texts whose file has not arrived (0.64)
     QSet<QString> m_toldControl; // keys told about control characters left out (0.70.0)

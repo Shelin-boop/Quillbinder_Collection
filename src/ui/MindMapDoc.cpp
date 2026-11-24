@@ -451,6 +451,33 @@ int writeUnsaved(Project *project, const QString &dir, QString *error, CopyTally
     return n;
 }
 
+bool writeDirtyInto(Project *project, const QString &folder, QString *error)
+{
+    bool ok = true;
+    for (const QPointer<MindMapDoc> &d : registry().value(project)) {
+        if (!d || !d->isDirty() || !project->item(d->itemId()))
+            continue;
+        const QString file = mindmap::pathFor(Project::contentDirIn(folder, d->itemId()));
+        if (!QFile::exists(file) && !d->board.worthSaving())
+            continue;
+        QString why;
+        QDir().mkpath(QFileInfo(file).absolutePath());
+        if (!d->board.save(file, &why)) {
+            ok = false;
+            if (error && error->isEmpty())
+                *error = MindMapDoc::tr("The %1 could not be saved: %2").arg(d->unsavedTitle(), why);
+        }
+    }
+    return ok;
+}
+
+void forgetUnsaved(Project *project)
+{
+    for (const QPointer<MindMapDoc> &d : registry().value(project))
+        if (d)
+            d->discardChanges();
+}
+
 } // namespace mindmaps
 
 } // namespace qb

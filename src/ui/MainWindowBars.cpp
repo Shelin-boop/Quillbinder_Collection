@@ -217,10 +217,7 @@ void MainWindow::createMenus()
     add(file, {"newProject", "openProject"});
     m_recentMenu = file->addMenu(icons::action(QStringLiteral("document-open-recent")), tr("Open &Recent"));
     connect(m_recentMenu, &QMenu::aboutToShow, this, &MainWindow::rebuildRecentMenu);
-    add(file, {"closeProject", "", "save", "saveTemplate"});
-    QMenu *projectFormat = file->addMenu(tr("Project &Format"));
-    projectFormat->setObjectName(QStringLiteral("projectFormatMenu"));
-    add(projectFormat, {"formatQuillbinder", "formatScrivener", "", "saveCopyScrivener", "saveCopyQuillbinder"});
+    add(file, {"closeProject", "", "save", "saveAs", "saveTemplate"});
     QMenu *bk = file->addMenu(tr("&Back Up"));
     add(bk, {"backupNow", "backupTo", "", "restoreBackup", "moveOldBackups", "showBackups"});
     // 0.93.0: "Move Old Backups" is on only while the project's folder of 0.70.0 to 0.90.4 holds backups
@@ -239,6 +236,7 @@ void MainWindow::createMenus()
     QMenu *exp = file->addMenu(icons::action(QStringLiteral("document-export")), tr("&Export"));
     menuAlias(exp, QStringLiteral("exportFiles"), tr("&Files…"));
     menuAlias(exp, QStringLiteral("saveCopyScrivener"), tr("&Scrivener Project…"));
+    menuAlias(exp, QStringLiteral("saveCopyQuillbinder"), tr("&%1 Project…").arg(QStringLiteral(QB_APP_NAME)));
     QMenu *cmp = file->addMenu(tr("Compare and &Transfer"));
     cmp->setObjectName(QStringLiteral("compareMenu"));
     add(cmp, {"compareFile", "", "compareByChapter", "compareStepByStep"});

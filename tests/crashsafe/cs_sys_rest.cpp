@@ -716,7 +716,7 @@ void caseSE04()
         return;
     const QSet<QString> never = {QStringLiteral("quit"), QStringLiteral("closeProject"), QStringLiteral("emptyTrash"), QStringLiteral("deleteSnapshots"),
                                  QStringLiteral("showProjectFolder"), QStringLiteral("showBackups"), QStringLiteral("pluginFolder"), QStringLiteral("fontFolder"),
-                                 QStringLiteral("fontManager"), QStringLiteral("integrate"), QStringLiteral("formatScrivener"), QStringLiteral("formatQuillbinder"),
+                                 QStringLiteral("fontManager"), QStringLiteral("integrate"), QStringLiteral("saveAs"),
                                  QStringLiteral("installPackage"), QStringLiteral("newProject"), QStringLiteral("openProject"), QStringLiteral("print")};
     std::mt19937 r(ctx().seed);
     const int n = qEnvironmentVariableIsSet("QB_CS_MONKEY_N") ? qEnvironmentVariableIntValue("QB_CS_MONKEY_N")   // to find a step

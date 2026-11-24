@@ -544,6 +544,22 @@ void Store::writeUnsaved(const QString &dir, CopyTally *tally) const
     }
 }
 
+void Store::removeLeftoversIn(const QString &projectFolder) const
+{
+    const QDir root(QFileInfo(m_dir).absolutePath());
+    auto drop = [&](const QString &file) {
+        if (file.isEmpty())
+            return;
+        const QString rel = root.relativeFilePath(file);
+        if (!rel.startsWith(QLatin1String("..")))
+            QFile::remove(QDir(projectFolder).filePath(rel));
+    };
+    for (const QString &f : m_removedFiles)
+        drop(f);
+    for (const QString &f : m_orphanPictures)
+        drop(picturePath(f));
+}
+
 bool Store::save(QString *error)
 {
     bool ok = true;

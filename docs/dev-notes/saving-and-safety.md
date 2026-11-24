@@ -2,6 +2,24 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.93.0 beta: File > Save As (item 25, suite `saveas`)
+
+- `MainWindow::saveProjectAs` (MainWindowFormat.cpp) replaces the menu Project Format. The save dialog's file types
+  decide the format (a name that ends in .scriv, .qbx or .quillbinder decides first; Android's picker shows no types:
+  `#ifdef Q_OS_ANDROID` asks the format first). Own format: `scrivener::saveAsQuillbinder`; Scrivener format:
+  `scrivener::convertToScrivener(old, dir, err, saveFirst=false, overlay, title)`, which now also takes a project that is
+  itself in Scrivener format (the new working copy leaves out `scrivener-sync.json`, so it gets a new identifier).
+- The original is never written: the new folder is a copy of the original's folder on disk, and what the open project
+  holds unsaved goes into the copy by `Project::writeUnsavedInto` (documents through `DocumentStore::writeDirtyInto`,
+  pictures too; objects with their removals; the project file from `indexBytes()`) and `mindmaps::writeDirtyInto`.
+  `Project::setLeaving(true)` from the dialog on makes save and autosave write nothing (a window that is deactivated
+  by a dialog saves, MainWindow::changeEvent: without this flag the original was saved when the dialog opened); it is
+  switched off when the dialog is canceled or the save fails, and the window's own close of the original writes nothing.
+- Backups: the own format gets `backup::giveNewId`; the Scrivener format's ID is the new identifier. The backups so far
+  stay with the original. The settings folder of the original (window layout) is not written either.
+- Pitfall: Qt's save dialog goes into an existing folder (a `.scriv`) instead of returning it; the refusal of an
+  existing name is reached through a file of that name or an existing `.quillbinder` folder.
+
 ## 0.93.0 beta (2026-11-23): the emergency copy counted, a folder's sync, the journal that cannot be set aside, the backup note
 
 - **Item 38: backups and saving, what was not done** (suite `v0930c`).

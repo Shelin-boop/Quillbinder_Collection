@@ -14,6 +14,8 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   writes `tests/check-counts.txt` anew: commit it with the job. Keep logs out of the conversation: read the runner's
   one line per suite and the FAIL lines, not whole logs.
 
+- `qb_saveas_tests` (0.93.0, item 25: File > Save As in four ways with changes not saved, the original unchanged byte by byte, IDs, locks,
+  Open Recent, later saves, the backups' fresh start, refused names, File > Export > Quillbinder Project..., the menus and the dialog).
 - `qb_tests` (core, formats, compile), `qb_ui_tests`, `qb_m6_tests` ... `qb_m15_tests`
   (one per milestone; m14 printing; m15, the tutorial of 0.15 to 0.30, was removed in 0.40),
   `qb_fixes_tests` (corrections of 0.14.1), `qb_v017_tests` (0.17: icons, icon bar, fonts,

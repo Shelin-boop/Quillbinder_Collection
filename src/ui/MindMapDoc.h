@@ -134,6 +134,11 @@ bool saveAll(Project *project, QString *error = nullptr);
 void closeAll(Project *project, bool discard = false);
 // The boards with changes not saved, as XML files in `dir` (the emergency copy); how many were written.
 int writeUnsaved(Project *project, const QString &dir, QString *error = nullptr, CopyTally *tally = nullptr);
+// 0.93.0 (File > Save As): the boards with changes not saved are written into the project folder `folder` (a copy of the
+// project's folder); nothing is written into the project's own folder. False (and the reason) when one could not be.
+bool writeDirtyInto(Project *project, const QString &folder, QString *error = nullptr);
+// The boards count as saved (their changes went into another project).
+void forgetUnsaved(Project *project);
 // Every open board draws itself anew (after File > Options > Extras > Mind Map).
 void refreshAll();
 } // namespace mindmaps

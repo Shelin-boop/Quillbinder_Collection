@@ -79,6 +79,17 @@ public:
     // Returns how many; the folder's title goes into folderTitle.
     int recoverUnlistedDocuments(QString *folderTitle = nullptr);
     bool hasUnsavedChanges() const;
+    // 0.93.0 (File > Save As): what this project holds that is not saved (the texts and notes, the changed objects, the
+    // binder as it is in memory) is written into the project folder `folder` (a copy of this project's folder, the
+    // project file under this file's name), and nothing is written into this project's own folder. False with a
+    // reason when something could not be written.
+    bool writeUnsavedInto(const QString &folder, const QString &indexFileName, QString *error);
+    // The window is about to leave this project for another one that holds its unsaved changes (File > Save As): save() and
+    // autosave() write nothing from now on (the project is left as it was), until this is switched off again (a save is then
+    // due again when something is unsaved).
+    void setLeaving(bool leaving);
+    // the content folder of an item in the project folder `folder`
+    static QString contentDirIn(const QString &folder, const QString &id);
     // 0.81.0 (audit of 0.80.0, S-12): the last save failed while nothing the writer did was waiting (only new word
     // counts for the project file)
     bool lastFailureWithoutChanges() const { return m_failedWithoutChanges; }
@@ -262,6 +273,7 @@ private:
 
     QString m_folder;
     QString m_indexFile;
+    bool m_leaving = false;
     QString m_title;
     BinderItem *m_root = nullptr;
     BinderItem *m_draft = nullptr;

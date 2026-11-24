@@ -3861,7 +3861,8 @@ bool sync(Project *p, QString *error, bool quick)
     return ok;
 }
 
-std::unique_ptr<Project> convertToScrivener(Project *p, const QString &scrivDirIn, QString *error)
+std::unique_ptr<Project> convertToScrivener(Project *p, const QString &scrivDirIn, QString *error, bool saveFirst,
+                                            const FolderStep &overlay, const QString &newTitle)
 {
     const QString scrivDir = QFileInfo(scrivDirIn).absoluteFilePath();
     if (QFileInfo::exists(scrivxIn(scrivDir)) && QFileInfo(scrivxIn(scrivDir)).isFile()) {
@@ -3869,7 +3870,7 @@ std::unique_ptr<Project> convertToScrivener(Project *p, const QString &scrivDirI
             *error = QObject::tr("There is a Scrivener project at this place already:\n%1").arg(scrivDir);
         return nullptr;
     }
-    if (!p->save(error))
+    if (saveFirst && !p->save(error))
         return nullptr;
     const QString identifier = QUuid::createUuid().toString(QUuid::WithoutBraces).toUpper();
     const QString wcDir = workingCopiesDir() + QLatin1Char('/') + keyFor(identifier, scrivDir);
@@ -3880,9 +3881,15 @@ std::unique_ptr<Project> convertToScrivener(Project *p, const QString &scrivDirI
             *error = QObject::tr("Cannot copy the project to %1").arg(target);
         return nullptr;
     }
+    if (overlay && !overlay(target, error)) {
+        QDir(wcDir).removeRecursively();
+        return nullptr;
+    }
     auto wc = Project::open(target, error);
     if (!wc)
         return nullptr;
+    if (!newTitle.isEmpty())
+        wc->setTitle(newTitle);
     wc->scrivenerPath = scrivDir;
     SyncState st;
     st.identifier = identifier;
@@ -3939,6 +3946,42 @@ std::unique_ptr<Project> copyAsQuillbinder(Project *p, const QString &parentDir,
         return nullptr;
     np->scrivenerPath.clear();
     np->markIndexDirty();
+    if (!np->save(error))
+        return nullptr;
+    return np;
+}
+
+std::unique_ptr<Project> saveAsQuillbinder(Project *p, const QString &parentDir, const QString &name, QString *error,
+                                           const ProjectFileStep &overlay)
+{
+    const QString safe = text::safeFileName(name);
+    const QString target = QDir(parentDir).filePath(safe + QLatin1String(QB_PROJECT_SUFFIX));
+    if (QFileInfo::exists(target)) {
+        if (error)
+            *error = QObject::tr("There is a file or folder with this name already:\n%1").arg(QDir::toNativeSeparators(target));
+        return nullptr;
+    }
+    const QString oldIndex = QFileInfo(p->indexPath()).fileName();
+    if (!copyDir(p->folderPath(), target, {QStringLiteral("settings/lock"), QStringLiteral("settings/scrivener-sync.json"),
+                                           QStringLiteral("settings/journal.json"), oldIndex})) {
+        if (error)
+            *error = QObject::tr("Cannot copy the project to %1").arg(QDir::toNativeSeparators(target));
+        QDir(target).removeRecursively();
+        return nullptr;
+    }
+    const QString indexName = safe + QLatin1String(QB_PROJECT_FILE_SUFFIX);
+    if (!overlay || !overlay(target, indexName, error)) {
+        QDir(target).removeRecursively();
+        return nullptr;
+    }
+    backup::giveNewId(target);   // a project of its own, with its own backups
+    auto np = Project::open(target, error);
+    if (!np) {
+        QDir(target).removeRecursively();
+        return nullptr;
+    }
+    np->scrivenerPath.clear();
+    np->setTitle(name);
     if (!np->save(error))
         return nullptr;
     return np;

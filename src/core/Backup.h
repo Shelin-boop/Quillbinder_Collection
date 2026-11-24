@@ -28,7 +28,7 @@ QString projectKey(const Project *p);
 // project through a sync program get the same ID without writing anything. A project folder copied by hand carries
 // the same ID. Backups without an ID (of versions before) are no longer counted or deleted; Restore From Backup
 // still offers them, and those of the same title with another ID.
-// A copy the program makes itself (Save a Copy as a project, a project restored from a backup, a project made from
+// A copy the program makes itself (File > Save As, Export > Quillbinder Project, a project restored from a backup, a project made from
 // a template file, which all carry their original's Draft id) gets an ID of its own: giveNewId writes a seed into
 // settings/backup-id.txt, which comes before the Draft's id (a file of the project, so it travels with it; a
 // version without this function leaves it alone).

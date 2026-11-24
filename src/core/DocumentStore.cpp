@@ -310,7 +310,7 @@ QByteArray DocumentStore::serialize(const QString &id, const QTextDocument *doc,
     auto it = m_entries.find(key);
     if (it != m_entries.end())
         entry = &it.value();
-    const QString dir = m_project->contentDir(id);
+    const QString dir = m_serializeFolder.isEmpty() ? m_project->contentDir(id) : Project::contentDirIn(m_serializeFolder, id);
     m_serializeError.clear();
     auto saver = [&](const QTextImageFormat &fmt) -> QString {
         const QString name = fmt.name();
@@ -706,6 +706,44 @@ bool DocumentStore::saveDirty(QString *error)
         for (const QString &id : ids)
             recount(id);
     }
+    return ok;
+}
+
+bool DocumentStore::writeDirtyInto(const QString &folder, QString *error)
+{
+    bool ok = true;
+    m_serializeFolder = folder;
+    for (auto it = m_entries.begin(); it != m_entries.end(); ++it) {
+        if (!it->dirty || m_unreadable.contains(it.key()))
+            continue;
+        const QString id = it->isNotes ? it.key().mid(2) : it.key();
+        const QString dir = Project::contentDirIn(folder, id);
+        const QString path = dir + (it->isNotes ? QLatin1String("/notes.") : QLatin1String("/text.")) + extension();
+        const QByteArray data = serialize(id, it->doc, it->isNotes);
+        if (!m_serializeError.isEmpty()) {
+            if (error && error->isEmpty())
+                *error = m_serializeError;
+            ok = false;
+            continue;
+        }
+        if (it->doc->isEmpty() && !QFile::exists(path))
+            continue;
+        if (unchangedSinceRead(id, *it, data))
+            continue; // only shown here, not edited
+        QString why;
+        if (!QDir().mkpath(dir) || !safesave::writeFile(path, data, &why)) {
+            if (error && error->isEmpty())
+                *error = why.isEmpty() ? tr("Cannot write %1").arg(path) : why;
+            ok = false;
+            continue;
+        }
+        // a file of the other storage format would win when the project is read
+        const QString other = dir + (it->isNotes ? QLatin1String("/notes.") : QLatin1String("/text."))
+                              + (m_project->storage == StorageFormat::Rtf ? QStringLiteral("md") : QStringLiteral("rtf"));
+        if (QFile::exists(other))
+            QFile::remove(other);
+    }
+    m_serializeFolder.clear();
     return ok;
 }
 

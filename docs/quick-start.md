@@ -55,7 +55,7 @@
 
 - A **{{APP}} project** is a folder: every document is an ordinary text file, as **Markdown** (the standard) or **RTF**, so your writing stays readable without the program.
 - **Import Scrivener Project…** (**File > Import**) makes a {{APP}} project from a Scrivener 3 or 2 project and leaves the original untouched.
-- **Working in Scrivener format**: open the *.scrivx* file of a Scrivener 3 project and choose **Work in Scrivener Format**. {{APP}} then saves into the *.scriv* folder, so the project stays readable by Scrivener. **File > Project Format** switches a project between the two formats or saves a copy in the other one.
+- **Working in Scrivener format**: open the *.scrivx* file of a Scrivener 3 project and choose **Work in Scrivener Format**. {{APP}} then saves into the *.scriv* folder, so the project stays readable by Scrivener. **File > Save As…** saves a project in the other format (or under another name), and **File > Export** saves a copy that leaves the project you work on as it is.
 
 ### Getting text in and out
 

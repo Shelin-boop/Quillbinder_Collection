@@ -973,25 +973,19 @@ void MainWindow::createActions()
                 if (p)
                     adoptProject(std::move(p), true);
             });
-    // File > Project Format
-    {
-        QAction *own = act(QStringLiteral("formatQuillbinder"), tr("&%1 Project").arg(QStringLiteral(QB_APP_NAME)));
-        QAction *scriv = act(QStringLiteral("formatScrivener"), tr("&Scrivener 3 Project (.scriv)"));
-        own->setCheckable(true);
-        scriv->setCheckable(true);
-        auto *group = new QActionGroup(this);
-        group->addAction(own);
-        group->addAction(scriv);
-        own->setToolTip(tr("Save the project in %1's own format").arg(QStringLiteral(QB_APP_NAME)));
-        scriv->setToolTip(tr("Save the project in the format of Scrivener 3, so that Scrivener can open it too"));
-        connect(own, &QAction::triggered, this, [this] { switchToQuillbinderFormat(); });
-        connect(scriv, &QAction::triggered, this, [this] { switchToScrivenerFormat(); });
-        connect(act(QStringLiteral("saveCopyScrivener"), tr("Save a Copy as Scrivener Project…"), QStringLiteral("document-save-as")),
-                &QAction::triggered, this, withProject([this] { saveCopyAsScrivener(); }));
-        connect(act(QStringLiteral("saveCopyQuillbinder"), tr("Save a Copy as %1 Project…").arg(QStringLiteral(QB_APP_NAME)),
-                    QStringLiteral("document-save-as")),
-                &QAction::triggered, this, withProject([this] { saveCopyAsQuillbinder(); }));
-    }
+    // File > Save As (0.93.0: in place of the menu Project Format) and the copies of File > Export
+    connect(act(QStringLiteral("saveAs"), tr("Save &As…"), QStringLiteral("document-save-as"),
+                QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S)),
+            &QAction::triggered, this, withProject([this] { saveProjectAs(); }));
+    a[QStringLiteral("saveAs")]->setToolTip(
+        tr("Save the project under another name or in another place, in Scrivener 3 format or in %1's own format; "
+           "the window works on the new project from then on")
+            .arg(QStringLiteral(QB_APP_NAME)));
+    connect(act(QStringLiteral("saveCopyScrivener"), tr("Save a Copy as Scrivener Project…"), QStringLiteral("document-export")),
+            &QAction::triggered, this, withProject([this] { saveCopyAsScrivener(); }));
+    connect(act(QStringLiteral("saveCopyQuillbinder"), tr("Save a Copy as %1 Project…").arg(QStringLiteral(QB_APP_NAME)),
+                QStringLiteral("document-export")),
+            &QAction::triggered, this, withProject([this] { saveCopyAsQuillbinder(); }));
     connect(act(QStringLiteral("closeProject"), tr("&Close Project"), QStringLiteral("document-close"), QKeySequence::Close),
             &QAction::triggered, this, [this] {
                 closeProject();
@@ -2286,7 +2280,7 @@ void MainWindow::updateActions()
                           "defaultTextFormatting", "pageView", "pageSetup", "openCopyholder", "enclosingGroup", "inspect0", "inspect1", "inspect2", "inspect3", "inspect4", "inspect5", "inspect6",
                           "objectLink", "objectsWindow", "objectTemplates",
                           "resetIcon", "iconFromText", "manageIcons", "compareFile", "compareByChapter", "compareStepByStep",
-                          "formatQuillbinder", "formatScrivener", "saveCopyScrivener", "saveCopyQuillbinder"})
+                          "saveAs", "saveCopyScrivener", "saveCopyQuillbinder"})
         a[QLatin1String(k)]->setEnabled(has);
     if (!has)
         a[QStringLiteral("moveOldBackups")]->setEnabled(false); // 0.93.0 (with a project: on when the Back Up menu opens)
@@ -2303,11 +2297,6 @@ void MainWindow::updateActions()
     a[QStringLiteral("goSynopsis")]->setEnabled(has && m_inspector->item());
     a[QStringLiteral("goNotes")]->setEnabled(has && m_inspector->item());
     updateMindMapActions();
-    {
-        const bool scriv = has && !m_project->scrivenerPath.isEmpty();
-        a[QStringLiteral("formatQuillbinder")]->setChecked(has && !scriv);
-        a[QStringLiteral("formatScrivener")]->setChecked(scriv);
-    }
     m_quickSearch->setEnabled(has);
     updateToolActions();
     m_labelMenu->setEnabled(has);
