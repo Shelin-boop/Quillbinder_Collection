@@ -4,6 +4,7 @@
 #include "text/TextUtil.h"
 #include "core/SafeSave.h"
 #include <QDir>
+#include <QSet>
 #include <QMessageBox>
 #include <QApplication>
 #include <QRegularExpression>
@@ -51,6 +52,20 @@ void MindMapPrefs::load()
         newShapeFill = c;
     newShapeBorder = s.value(QStringLiteral("newShapeBorder"), newShapeBorder).toInt();
     newShapeMagnetic = s.value(QStringLiteral("newShapeMagnetic"), newShapeMagnetic).toBool();
+    // 0.93.0: the start look of a new shape changed (medium gray, not magnetic). Values somebody stored (by pressing OK in
+    // Mind Map Options) win, except the two old start values, once: a stored #eeeeee becomes the new gray and a stored
+    // "magnetic" becomes off; a color somebody chose stays, and so does a "magnetic" switched on later.
+    if (!s.value(QStringLiteral("newShapeStart0930"), false).toBool()) {
+        if (s.contains(QStringLiteral("newShapeFill")) && newShapeFill == QColor(238, 238, 238)) {
+            newShapeFill = QColor(128, 128, 128);
+            s.setValue(QStringLiteral("newShapeFill"), newShapeFill.name());
+        }
+        if (s.contains(QStringLiteral("newShapeMagnetic")) && newShapeMagnetic) {
+            newShapeMagnetic = false;
+            s.setValue(QStringLiteral("newShapeMagnetic"), false);
+        }
+        s.setValue(QStringLiteral("newShapeStart0930"), true);
+    }
     if (const QColor c(s.value(QStringLiteral("boardBackground")).toString()); c.isValid())
         boardBackground = c;
     if (const QColor c(s.value(QStringLiteral("boardBackgroundDark")).toString()); c.isValid())
@@ -425,20 +440,56 @@ void closeAll(Project *project, bool discard)
     registry().remove(project);
 }
 
-int writeUnsaved(Project *project, const QString &dir, QString *error)
+int writeUnsaved(Project *project, const QString &dir, QString *error, CopyTally *tally)
 {
     int n = 0;
+    QSet<QString> used; // 0.93.0: boards with the same title get a number each: every board its own file
     for (const QPointer<MindMapDoc> &d : registry().value(project)) {
         if (!d || !d->isDirty())
             continue;
-        const QString file = QDir(dir).filePath(text::safeFileName(d->unsavedTitle()) + QStringLiteral(".xml"));
+        const QString name = text::safeFileName(d->unsavedTitle());
+        QString base = name;
+        for (int k = 2; used.contains(base.toLower()); ++k)
+            base = QStringLiteral("%1 (%2)").arg(name).arg(k);
+        used.insert(base.toLower());
+        const QString file = QDir(dir).filePath(base + QStringLiteral(".xml"));
         QString why;
-        if (safesave::writeFile(file, d->board.toXml(), &why))
+        const bool ok = safesave::writeFile(file, d->board.toXml(), &why);
+        if (ok)
             ++n;
         else if (error && error->isEmpty())
             *error = why;
+        if (tally)
+            tally->add(QFileInfo(file).fileName(), ok, why);
     }
     return n;
+}
+
+bool writeDirtyInto(Project *project, const QString &folder, QString *error)
+{
+    bool ok = true;
+    for (const QPointer<MindMapDoc> &d : registry().value(project)) {
+        if (!d || !d->isDirty() || !project->item(d->itemId()))
+            continue;
+        const QString file = mindmap::pathFor(Project::contentDirIn(folder, d->itemId()));
+        if (!QFile::exists(file) && !d->board.worthSaving())
+            continue;
+        QString why;
+        QDir().mkpath(QFileInfo(file).absolutePath());
+        if (!d->board.save(file, &why)) {
+            ok = false;
+            if (error && error->isEmpty())
+                *error = MindMapDoc::tr("The %1 could not be saved: %2").arg(d->unsavedTitle(), why);
+        }
+    }
+    return ok;
+}
+
+void forgetUnsaved(Project *project)
+{
+    for (const QPointer<MindMapDoc> &d : registry().value(project))
+        if (d)
+            d->discardChanges();
 }
 
 } // namespace mindmaps

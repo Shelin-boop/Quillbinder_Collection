@@ -2,6 +2,7 @@
 // The panel of the add-on: the text to work on, the controls, and the result, in which each change is marked and
 // every word can be clicked for the original and for other words. In the inspector the parts stand one above the
 // other; in the add-on's window side by side (input left, output right) with the controls above and between.
+#include "Dictionary.h"
 #include "EngineApi.h"
 #include "Logic.h"
 
@@ -16,6 +17,7 @@
 #include <memory>
 
 class QComboBox;
+class QGridLayout;
 class QLabel;
 class QMenu;
 class QProgressBar;
@@ -128,22 +130,60 @@ public:
     QTextBrowser *info() const { return m_info; }
     void showInfoForOutput(int position);
     void showInfoForInput(int position);
-    bool infoPending() const { return m_infoPending; }
     // a single word in the input: the word as it should be, and below it every suggestion for it
+    // 1.3: a class of the German dictionary (translating a German word), or a class of an English word (English to German)
+    struct DictSense {
+        QStringList english;    // the English words of the meaning
+        QString definition;
+    };
+    struct DictClass {
+        QString headword, pos, gender;
+        QList<DictSense> senses;
+        QString modelWord;      // the small model's word, for a class the dictionary has no English word for
+    };
     struct SingleWord {
         bool on = false;
+        QString kind;           // "proofread", "de-en" (German word to English), "en-de"
         QString word;           // as typed
         QString result;         // as it should be
+        QString resultPos;      // the word class of the chosen word (translations), empty: not known
         QStringList spelling;   // when it is misspelled
         QString base;           // the form the similar words are for ("walk" for "walked")
         QList<Similar> similar;
-        QStringList modelWords; // the model's other words (they come a moment later)
+        QStringList modelWords; // proofreading: the model's other words (they come a moment later)
         bool modelPending = false;
+        // 1.3
+        QList<DictClass> classes;       // the German dictionary's entries, or the classes of an English word
+        bool fromDictionary = false;    // the German dictionary had the word
+        bool fromModel = false;         // some of the words are the small model's: the warning
+        QString note;                   // what the writer should know: the dictionary is missing, a model is missing ...
+        QList<EnglishClass> meanings;   // what an English word means (WordNet)
+        QString meaningText;            // or a model's words for it
+        QString meaningModel;           // the model that wrote it
+        QString meaningNote;            // why there is none
+        bool meaningPending = false;
+        QStringList expanded;           // the lists shown in full ("more")
     };
     const SingleWord &singleWord() const { return m_single; }
     int cachedSentences() const { return int(m_cache.size()); }
 
+    // ---- 1.3
+    enum class Direction { Proofread, DeToEn, EnToDe };
+    Direction direction() const { return m_dir; }          // of the last run (or of the settings, before the first)
+    Direction directionNow() const;                        // of the settings and the text now
+    QComboBox *modelBox() const { return m_model; }
+    QComboBox *styleBox() const { return m_style; }
+    QComboBox *taskBox() const { return m_task; }
+    QPushButton *swapButton() const { return m_swap; }
+    QPushButton *backButton() const { return m_backButton; }
+    QTextBrowser *backView() const { return m_back; }
+    QStringList otherTranslations() const { return m_variants; }
+    bool variantsPending() const { return m_variantsPending; }
+    // the output pane's text of the lists under a single word, for the checks: see output()->toPlainText()
+
 public slots:
+    void swapDirection();    // German to English becomes English to German and back; the result moves into the input
+    void translateBack();    // the result translated back into the language of the input, shown under it
     void run();
     void stop();
     void takeFromEditor();
@@ -176,20 +216,31 @@ private:
     void finishSingle();
     void requestSingleModelWords();
     void fillInfo();
-    void requestInfoModelWords(const AltJob &job, bool ok, const QString &jobError, const QString &word);
     void buildInspectorLayout();
     void buildWindowLayout();
     void updateModelBox();
+    void updateModeUi();
+    void runSingleTranslation(const QString &word);
+    void finishSingleTranslation(const SingleWord &w, const QString &error);
+    void requestChatMeaning();
+    void requestVariants();
+    void pickWord(const QString &word, const QString &pos);
+    void showBack(const QString &html);
+    QString kindOf(Direction d) const;
+    QString workKey() const;           // "correct", "formal", "translate" or "translate-de"
+    Rules rulesForRun() const;
+    static Direction directionFor(const QString &task, const QString &text);
     void setBusy(bool busy);
     void setStatus(const QString &text);
     void finishRun(const QStringList &results, const QString &error, double seconds, bool stopped);
     void linkClicked(const QString &href);
     void render();
+    void renderSingle(QTextCursor &c, const QTextCharFormat &plain);
     QString unitText(int unit) const;
     void outputClicked(int position, const QPoint &globalPos);
     void outputContextMenu(const QPoint &globalPos);
-    QString slot() const { return m_lang == QLatin1String("de") ? QStringLiteral("translator") : QStringLiteral("corrector"); }
-    bool proofreading() const { return m_lang != QLatin1String("de"); }
+    QString slot() const { return kindOf(m_dir); }
+    bool proofreading() const { return m_dir == Direction::Proofread; }
     bool realWord(const QString &word) const;
     bool outputJob(int unit, int word, AltJob *job, QString *error);
     QList<Alternative> filterAlternatives(const QList<Alternative> &alts, const QString &currentWord) const;
@@ -206,6 +257,16 @@ private:
     QSplitter *m_split = nullptr;
     QTextBrowser *m_info = nullptr;
     QToolButton *m_live = nullptr;
+    QPushButton *m_swap = nullptr, *m_backButton = nullptr;
+    QTextBrowser *m_back = nullptr;
+    QGridLayout *m_controls = nullptr;     // the inspector's controls (the model box spans two columns without a style list)
+    Direction m_dir = Direction::Proofread;
+    QString m_modeKind;                    // the kind the model box shows now
+    QStringList m_variants;                // other complete translations of a short text
+    bool m_variantsPending = false;
+    int m_variantsRequest = 0;
+    int m_meaningRequest = 0;
+    int m_singleTranslationRequest = 0;
 
     QString m_lang = QStringLiteral("en");
     QString m_styleId;
@@ -231,9 +292,6 @@ private:
     QString m_infoWord;
     QString m_infoContext;          // "input" or "output", and whether the word is English
     bool m_infoEnglish = true;
-    QStringList m_infoModelWords;
-    QString m_infoModelError;
-    bool m_infoPending = false;
     int m_infoRequest = 0;
 };
 

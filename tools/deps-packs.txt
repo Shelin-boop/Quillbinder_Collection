@@ -1,6 +1,7 @@
 # The ready-made dependency packs of the Linux build (tools/deps-pack.sh; working rules, section 10, D1).
-# One line per pack: <name> <recipe hash> <file> <SHA-256 of the file>. The file is on the pre-release
+# One line per pack (ffmpeg, whisper, translator): <name> <recipe hash> <file> <SHA-256 of the file>. The file is on the pre-release
 # deps-<name>-linux-<first 16 characters of the hash> of this repository, made by .github/workflows/deps.yml,
 # whose last job prints the line to put here. A recipe without a line here is built from source.
-ffmpeg 21da73da334e13688c454b9dd719d7ee93afbeb14c727dd6cd428206d947eb64 ffmpeg-linux-21da73da334e1368.tar.xz c26623cb7d6d4dbc156bdbc37874c337e8972aa90bdf545512ee0f72beb99890
-whisper c9bcf42a6b658b31371ecf4250854714e1a4f6c9ce9200536d89108aaa3b5045 whisper-linux-c9bcf42a6b658b31.tar.xz 8aacf347f2c401462e43d352aeadb4345ec802cdf824828380bd3d2877060928
+ffmpeg 2717652c35c6571df2aa5883e063c934f1e38a81513526c88e7e3161436d5719 ffmpeg-linux-2717652c35c6571d.tar.xz 2a91fb983e9d7db26137cd76400230c0a67aa51f38e54f5ac18a52e94d571215
+whisper c9bcf42a6b658b31371ecf4250854714e1a4f6c9ce9200536d89108aaa3b5045 whisper-linux-c9bcf42a6b658b31.tar.xz bd6cec0b9f32d88197723fb5c8e804a93d3fee9936f3d9e8786c5ac9be619b56
+translator 13d14560cd572077065c9a10cd927dfa222f9364e1dae66789f2eba7a9723ff6 translator-linux-13d14560cd572077.tar.xz 806fa696a00ba4bba35dd75e6f2bc4c03fd099950e252e201db44baf125664eb

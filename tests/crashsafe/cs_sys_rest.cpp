@@ -195,13 +195,14 @@ void caseSA03()
     QStringList messages;
     auto install = [&](const QString &file) {
         QString text;
+        ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
         withModal<QMessageBox>(500, [&text](QMessageBox *b) {
             text = b->text();
             if (QAbstractButton *later = b->button(QMessageBox::No))
                 later->click();
             else
                 b->accept();
-        });
+        }, 100, waiter.alive);
         clickLater(500, QStringLiteral("Install"));
         clickLater(1500, QStringLiteral("Later"));
         w->installPackage(file);
@@ -288,6 +289,7 @@ void caseSA05()
     for (const QString &a : {QStringLiteral("manual"), QStringLiteral("quickStart"), QStringLiteral("placeholders"), QStringLiteral("keyboardShortcuts"), QStringLiteral("addonManager"),
                              QStringLiteral("mindMapHelp"), QStringLiteral("developerGuide"), QStringLiteral("systemInfo"), QStringLiteral("crashReports"), QStringLiteral("licenses"),
                              QStringLiteral("about")}) {
+        ScopedWaiter waiter(QDialog::staticMetaObject.className());
         withModal<QDialog>(500, [a, &seen](QDialog *d) {
             seen << a + QStringLiteral(": ") + d->windowTitle();
             shot(d, QStringLiteral("help-") + a);
@@ -295,7 +297,7 @@ void caseSA05()
                 if (b->text().remove(QLatin1Char('&')).contains(QLatin1String("Copy")))
                     b->click();
             d->reject();
-        });
+        }, 100, waiter.alive);
         check(chooseByMenu(w, a), QStringLiteral("Help > %1").arg(a));
         settle(900);
         for (QWidget *tl : QApplication::topLevelWidgets())
@@ -716,7 +718,7 @@ void caseSE04()
         return;
     const QSet<QString> never = {QStringLiteral("quit"), QStringLiteral("closeProject"), QStringLiteral("emptyTrash"), QStringLiteral("deleteSnapshots"),
                                  QStringLiteral("showProjectFolder"), QStringLiteral("showBackups"), QStringLiteral("pluginFolder"), QStringLiteral("fontFolder"),
-                                 QStringLiteral("fontManager"), QStringLiteral("integrate"), QStringLiteral("formatScrivener"), QStringLiteral("formatQuillbinder"),
+                                 QStringLiteral("fontManager"), QStringLiteral("integrate"), QStringLiteral("saveAs"),
                                  QStringLiteral("installPackage"), QStringLiteral("newProject"), QStringLiteral("openProject"), QStringLiteral("print")};
     std::mt19937 r(ctx().seed);
     const int n = qEnvironmentVariableIsSet("QB_CS_MONKEY_N") ? qEnvironmentVariableIntValue("QB_CS_MONKEY_N")   // to find a step

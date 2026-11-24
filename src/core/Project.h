@@ -47,6 +47,8 @@ public:
     // cleared by scrivener::write; a quick write leaves the .scrivx alone while it is false
     bool binderChangedSinceSync = true;
     bool saveIndex(QString *error = nullptr);
+    // the project file as it is in memory (binder, titles, labels), as saveIndex writes it (0.93.0)
+    QByteArray indexBytes();
     // Saves when no change came for the autosave delay, but at the latest
     // max(maxSaveWait, delay) after the first unsaved change (0.20: before, changes
     // that kept coming were never saved). 0.64: after max(gapAfter, delay) of changes that
@@ -77,6 +79,17 @@ public:
     // Returns how many; the folder's title goes into folderTitle.
     int recoverUnlistedDocuments(QString *folderTitle = nullptr);
     bool hasUnsavedChanges() const;
+    // 0.93.0 (File > Save As): what this project holds that is not saved (the texts and notes, the changed objects, the
+    // binder as it is in memory) is written into the project folder `folder` (a copy of this project's folder, the
+    // project file under this file's name), and nothing is written into this project's own folder. False with a
+    // reason when something could not be written.
+    bool writeUnsavedInto(const QString &folder, const QString &indexFileName, QString *error);
+    // The window is about to leave this project for another one that holds its unsaved changes (File > Save As): save() and
+    // autosave() write nothing from now on (the project is left as it was), until this is switched off again (a save is then
+    // due again when something is unsaved).
+    void setLeaving(bool leaving);
+    // the content folder of an item in the project folder `folder`
+    static QString contentDirIn(const QString &folder, const QString &id);
     // 0.81.0 (audit of 0.80.0, S-12): the last save failed while nothing the writer did was waiting (only new word
     // counts for the project file)
     bool lastFailureWithoutChanges() const { return m_failedWithoutChanges; }
@@ -87,7 +100,7 @@ public:
     bool hasUnsavedExtra() const { return !m_unsavedExtra.isEmpty(); }
     // the titles of the documents (and boards) not saved, at most `max`
     QStringList unsavedTitles(int max = 8) const;
-    std::function<int(const QString &dir, QString *error)> emergencyExtra;
+    std::function<int(const QString &dir, QString *error, CopyTally *tally)> emergencyExtra;
 
     QString folderPath() const { return m_folder; }
     QString indexPath() const { return m_indexFile; }
@@ -107,7 +120,15 @@ public:
     void clearSaveRecoveryText() { m_saveRecovery.clear(); }
     // 0.65.0 (audit F07, F26): the texts and notes not yet saved, as RTF files in a new folder under `parent`
     // (default: <data folder>/Emergency); the folder, or "" when nothing could be written (or nothing was unsaved)
+    // 0.93.0: also when only the binder or the objects changed; the copy holds the project file as it is in memory and the
+    // objects not saved; the error text names what could not be written ("n of m files")
     QString writeEmergencyCopy(const QString &parent = QString(), QString *error = nullptr);
+    // the same, with the whole report (what should have been written, what was, what is missing and why)
+    EmergencyReport makeEmergencyCopy(const QString &parent = QString());
+    // the words for a report: where the copy is, "n of m" and the files missing (complete or incomplete)
+    static QString emergencyText(const EmergencyReport &r);
+    // 0.93.0: something an emergency copy would hold (texts, boards, binder, objects)
+    bool needsEmergencyCopy() const;
     // the plain list of the documents with their titles and files (contents-by-title.txt, 0.65.0)
     QString titleListFile() const;
     QString titleListText() const;
@@ -252,6 +273,7 @@ private:
 
     QString m_folder;
     QString m_indexFile;
+    bool m_leaving = false;
     QString m_title;
     BinderItem *m_root = nullptr;
     BinderItem *m_draft = nullptr;
@@ -279,6 +301,7 @@ private:
     bool writeUiState();
     QByteArray m_loadedIndex;   // the project file as it was read (for the spare copy)
     bool m_indexDirty = false;
+    bool m_keptFailedTold = false; // an unreadable journal that could not be set aside was told (0.93.0)
     bool m_countsDirty = false;     // counts and modification times only (0.60.5)
     QElapsedTimer m_lastIndexWrite; // the last write of the project file
     bool saveImpl(QString *error, bool quick);

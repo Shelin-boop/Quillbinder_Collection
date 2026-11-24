@@ -813,6 +813,12 @@ bool install(const QString &file, QStringList *log, QString *error, bool *restar
             *error = tr("Cannot read %1").arg(file);
         return false;
     }
+    // the same limit as inspect(file) (0.93.0): a file of more than 400 MB is no package, and is not read whole
+    if (f.size() > 400 * 1024 * 1024) {
+        if (error)
+            *error = tr("The file is too large to be a package.");
+        return false;
+    }
     const QByteArray data = f.readAll();
     const PackageInfo info = inspect(data);
     if (!info.isValid()) {

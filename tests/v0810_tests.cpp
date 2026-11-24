@@ -48,7 +48,6 @@
 #include <QProcess>
 #include <QRadioButton>
 #include <QSignalSpy>
-#include <QStatusBar>
 #include <QStyleFactory>
 #include <QSysInfo>
 #include <QTemporaryDir>
@@ -795,10 +794,10 @@ static void windowChecks(const QString &W)
         w.adoptProject(std::move(again));
         settle(600);
         const QString due = w.lastDueBackup();
-        check(!due.isEmpty() && QFile::exists(due) && w.statusBar()->currentMessage().contains(QLatin1String("backup was made now")),
+        check(!due.isEmpty() && QFile::exists(due) && w.statusNote().contains(QLatin1String("backup was made now")),
               QStringLiteral("S-03: after the program was ended by a signal, the next opening makes the backup the closing "
                              "would have made, and says so"),
-              due + QLatin1String(" | ") + w.statusBar()->currentMessage());
+              due + QLatin1String(" | ") + w.statusNote());
         check(!backup::takeDue(projectFile), QStringLiteral("S-03: ... once"));
     }
 

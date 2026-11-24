@@ -1,12 +1,14 @@
 {
   "id": "media-playback",
   "name": "Media Playback",
-  "version": "2.0",
-  "description": "Plays audio and video files of the binder inside the program: play controls in the editor's footer bar, Navigate > Media with keyboard shortcuts (Ctrl+Return plays or pauses while you type in the other editor), pause and rewind for transcription, playing speed, timestamps. Brings Qt Multimedia 6.12 and a decoding-only FFmpeg 9.0.2 (LGPL) for free formats (MP3, Ogg Vorbis, Opus, FLAC, WAV, WebM with VP8 or VP9, Theora ...), so no other program is needed. H.264, H.265, AAC and the other formats licensed under patents come with the separate add-on \"Extra Video and Audio Formats\".",
+  "version": "2.1",
+  "description": "Plays audio and video files of the binder inside the program: play controls in the editor's footer bar, Navigate > Media with keyboard shortcuts (Ctrl+Return plays or pauses while you type in the other editor), pause and rewind for transcription, playing speed, timestamps. Brings Qt Multimedia 6.12 and a decoding-only FFmpeg 9.1 (LGPL) for free formats (MP3, Ogg Vorbis, Opus, FLAC, WAV, WebM with VP8 or VP9, Theora ...), so no other program is needed. H.264, H.265, AAC and the other formats licensed under patents come with the separate add-on \"Extra Video and Audio Formats\".",
   "author": "Quillbinder",
-  "minApp": "0.12.0",
+  "minApp": "0.93.0",
   "whatsNew": [
     "Built for Quillbinder 0.80.0 and later (the program's new Qt 6.12)",
-    "Qt Multimedia 6.12 and FFmpeg 9.0.2 (before: Qt 6.4.2 and FFmpeg 6.1.1); GStreamer of the system can no longer be chosen"
+    "Built for Quillbinder 0.93.0 and later (the program's Qt 6.12.1 and its runtime u2404-qt6.12-r2)",
+    "Qt Multimedia 6.12 and FFmpeg 9.1 (before: Qt 6.4.2 and FFmpeg 6.1.1); GStreamer of the system can no longer be chosen",
+    "FFmpeg 9.1 (before: 9.0.2), with the safety fixes of the newer FFmpeg"
   ]
 }

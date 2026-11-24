@@ -14,6 +14,8 @@
 
 #include <QDialog>
 #include <QHash>
+#include <QHostAddress>
+#include <QSet>
 #include <QObject>
 #include <QPointer>
 #include <QUrl>
@@ -30,6 +32,10 @@ class QDialogButtonBox;
 
 namespace qbweb {
 
+// 0.93.0: an address on this computer or on a private network: loopback, link-local, private-use, unspecified, unique-local
+// and multicast ones, IPv4 and IPv6 (an IPv4 address inside an IPv6 one counts as the IPv4 address).
+bool isNonPublicAddress(const QHostAddress &a);
+
 // Fetching, with an event loop inside (the caller's window stays usable).
 class Fetcher : public QObject
 {
@@ -43,6 +49,7 @@ public:
         QString contentType; // lower case, without parameters
         QString charset;
         QString error;
+        bool blocked = false; // 0.93.0: not fetched, as it lies on this computer's own or a private network address
     };
     Result get(const QUrl &url, const QByteArray &accept, qint64 maxBytes);
     // Several at once (pictures); progress(done, total).
@@ -50,6 +57,13 @@ public:
                          const std::function<void(int, int)> &progress);
     void cancel();
     bool cancelled() const { return m_cancelled; }
+    // 0.93.0: true when every address the host of the URL leads to is a public one (a name is looked up, with a time
+    // limit, and the answer kept; a name that cannot be looked up counts as public: nothing can be reached there). The
+    // tests can name "host:port" entries of QB_TEST_WEB_PUBLIC that count as public.
+    bool urlIsPublic(const QUrl &url);
+    // While set, a redirection to a non-public address (or from https to http) is not followed; the result is marked
+    // "blocked".
+    void setPublicOnly(bool on) { m_publicOnly = on; }
 
 signals:
     void cancelRequested();
@@ -59,6 +73,8 @@ private:
     static Result finish(QNetworkReply *r, qint64 maxBytes);
     QNetworkAccessManager *m_nam;
     bool m_cancelled = false;
+    bool m_publicOnly = false;
+    QHash<QString, bool> m_publicHosts; // "host:port" -> public
 };
 
 struct Choices {
@@ -82,6 +98,10 @@ public:
     bool cancelled() const { return m_fetcher->cancelled(); }
     const Extracted &extracted() const { return m_extracted; }
     QUrl url() const { return m_url; }
+    // 0.93.0: pictures are fetched from public addresses only when the page itself came from one
+    bool pageIsPublic() const { return m_pagePublic; }
+    void setPageIsPublic(bool on) { m_pagePublic = on; }   // the tests
+    int leftOutPictures() const { return int(m_blocked.size()); }
     bool loaded() const { return m_loaded; }
     QByteArray pictureData(int index) const;             // empty if missing or unreadable
     // The finished page for the program; writes the web page document's files into workDir.
@@ -96,6 +116,8 @@ private:
     QString m_html;
     bool m_loaded = false;
     bool m_isHtml = true;
+    bool m_pagePublic = false;
+    QSet<QString> m_blocked; // addresses of pictures left out
     QByteArray m_rawImage;  // the address was a picture
     QString m_rawText;      // or plain text
     Extracted m_extracted;

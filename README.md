@@ -13,7 +13,9 @@ between the programs. Scrivener and Scapple are names of products of Literature 
 Quillbinder contacts the internet for one thing only: to look for updates. It fetches one small file, sends nothing
 about you, and you can switch it off in the Help menu.
 
-Found a problem, or have an idea? See [Feedback](#feedback) below.
+![The main window of Quillbinder with its welcome project: binder, editor and inspector](docs/images/main-window.png)
+
+Found a problem, or have an idea? See [Feedback](#feedback) below (in the program: **Help > Report a Problem…**).
 
 ## Download
 
@@ -23,19 +25,19 @@ add-ons. The files, sorted by system:
 
 ### Linux
 
-**Quillbinder 0.92.0 beta for Linux (x86_64):**
+**Quillbinder 0.93.0 beta for Linux (x86_64):**
 
-- **[Quillbinder-0.92.0-beta-x86_64.AppImage](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.92.0-beta/Quillbinder-0.92.0-beta-x86_64.AppImage)**: the program
-- **[quillbinder-0.92.0-update.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.92.0-beta/quillbinder-0.92.0-update.qbpkg)**: the program update, for a Quillbinder you already have (0.80.0 or later; **File > Install Update or Add-on**)
-- **[media-all-formats.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.92.0-beta/media-all-formats.qbpkg)**: the commonly used audio and video formats (an add-on; optional)
-- **[Quillbinder-0.92.0-full-beta-x86_64.AppImage](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.92.0-beta/Quillbinder-0.92.0-full-beta-x86_64.AppImage)**:
+- **[Quillbinder-0.93.0-beta-x86_64.AppImage](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.0-beta/Quillbinder-0.93.0-beta-x86_64.AppImage)**: the program
+- **[quillbinder-0.93.0-update.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.0-beta/quillbinder-0.93.0-update.qbpkg)**: the program update, for a Quillbinder you already have (0.80.0 or later; **File > Install Update or Add-on**)
+- **[media-all-formats.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.0-beta/media-all-formats.qbpkg)**: the commonly used audio and video formats (an add-on; optional)
+- **[Quillbinder-0.93.0-full-beta-x86_64.AppImage](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.0-beta/Quillbinder-0.93.0-full-beta-x86_64.AppImage)**:
   **the full version**: the program with all add-ons and all the libraries they need included (the commonly
   used audio and video formats, extra themes, project templates, the scriptwriting pack, the writing tools with offline speech recognition, the
   importers of web pages and old Word files). They are installed at the first start: one download, nothing
   else to install.
 - **Translation and Proofreading** (English proofreading and German-to-English translation on your computer) is one
   of Quillbinder's own add-ons since 0.92.0: version 1.2 is inside the full version, and
-  [translation-proofreading.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.92.0-beta/translation-proofreading.qbpkg)
+  [translation-proofreading.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.0-beta/translation-proofreading.qbpkg)
   is beside it for a Quillbinder you already have. It downloads the language models you choose; one of them (CoEdIT
   Large) may be used for non-commercial purposes only, and the add-on says so. For Windows it is inside the full
   version too since Windows 0.92.0, and for Android tablets inside the app since Android 0.92.0
@@ -149,6 +151,7 @@ write in English or German.
   [propose a function](https://github.com/Shelin-boop/Quillbinder_Collection/issues/new?template=feature-request.yml).
 - **A question, or an idea to talk over first:** [Discussions](https://github.com/Shelin-boop/Quillbinder_Collection/discussions).
 - **A security problem:** not in a public issue; see [SECURITY.md](SECURITY.md).
+- **Why something is the way it is** (a lock that only warns, plain unencrypted files, a save that runs in the window's thread): [docs/design-decisions.md](docs/design-decisions.md).
 - **A change to the source, or an add-on of your own:** see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Documentation
@@ -160,7 +163,7 @@ written in `resources/welcome`. `docs/CHANGES.md` lists what each version brough
 ## Build (Ubuntu 24.04)
 
 Since 0.80.0 Quillbinder is built with The Qt Company's own build of Qt 6.12.0 (Ubuntu 24.04's Qt 6.4.2 is too old);
-`tools/get-qt.sh` installs it into `/opt/qt/6.12.0/gcc_64` with aqtinstall (`-DQB_QT_DIR=<folder>` names another
+`tools/get-qt.sh` installs it into `/opt/qt/6.12.1/gcc_64` with aqtinstall (`-DQB_QT_DIR=<folder>` names another
 place):
 
 ```
@@ -273,11 +276,11 @@ decode gets a message naming its formats and the add-on (`plugins/media/impl/QtP
 `src/media/MediaApi.h` and draws the controls (`src/ui/MediaPlayback.*`, `MediaView`, `MainWindowMedia.cpp`);
 the add-on brings two libraries from `plugins/media` (a small plugin the program loads at start, and the
 player built on Qt Multimedia, loaded with the first audio or video file) plus Qt Multimedia 6.12.0 (with the
-Qt Quick and Qt QML libraries its FFmpeg backend needs) and an FFmpeg 9.0.2 that decodes only. To build the add-on:
+Qt Quick and Qt QML libraries its FFmpeg backend needs) and an FFmpeg 9.1 that decodes only. To build the add-on:
 
 ```
 sudo apt install nasm                              # build time only; Qt Multimedia comes with tools/get-qt.sh
-tools/get-ffmpeg.sh                                # FFmpeg 9.0.2 source (Ubuntu's copy) -> tools/build-ffmpeg.sh -> build/ffmpeg
+tools/get-ffmpeg.sh                                # FFmpeg 9.1 source (ffmpeg.org, signature checked) -> tools/build-ffmpeg.sh -> build/ffmpeg
                                                    # (set "base") and build/ffmpeg-full (set "full"); applies
                                                    # tools/ffmpeg-patches, about 10 minutes for both on 2 cores
 packaging/linux/build-addons.sh build build/addons-dist  # addons/media-*/stage.sh copy the libraries in
@@ -315,7 +318,7 @@ system's Qt TLS plugin).
 
 ## Projects in Scrivener 3 format
 
-`src/import/ScrivenerFormat.*` reads and writes `.scriv` folders (File > Project Format, New Project > Format, opening a
+`src/import/ScrivenerFormat.*` reads and writes `.scriv` folders (File > Save As, New Project > Format, opening a
 `.scrivx`). The window works on a working copy (an ordinary project in `~/.local/share/Quillbinder/ScrivenerProjects/`)
 whose `Project::scrivenerPath` names the `.scriv`; `Project::save` then calls `scrivener::sync`, which writes only what
 changed (state in `settings/scrivener-sync.json`: hashes of both sides, so files Scrivener changed meanwhile are not

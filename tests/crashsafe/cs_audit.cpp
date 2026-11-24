@@ -603,7 +603,7 @@ void caseSP09()
     settle(400);
     const int third = notices();
     closeNotices(&texts);
-    const QString status = w->statusBar()->currentMessage();
+    const QString status = w->statusNote();
     fact(QStringLiteral("S-P09 notices: first save, second, File > Save"), QStringLiteral("%1, %2, %3; status bar: %4").arg(first).arg(second).arg(third).arg(status));
     check(first == 1 && second == 0 && third == 0, QStringLiteral("the notice comes once per lock"), QStringLiteral("%1, %2, %3").arg(first).arg(second).arg(third));
     check(texts.join(QLatin1Char(' ')).contains(QLatin1String("scrivener-writer")) && texts.join(QLatin1Char(' ')).contains(QLatin1String("OTHER-PC")),
@@ -716,10 +716,11 @@ void caseSI12()
         if (tg.kind == Refuse) {
             opened.clear();
             QString text;
+            ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
             withModal<QMessageBox>(250, [&text](QMessageBox *b) {
                 text = b->objectName() + QStringLiteral(": ") + b->text();
                 b->accept();
-            });
+            }, 100, waiter.alive);
             emit pane->linkActivated(pane, tg.href);
             settle(400);
             if (!opened.isEmpty())
@@ -732,6 +733,7 @@ void caseSI12()
         for (int answer = 0; answer < 3; ++answer) {
             opened.clear();
             QString text, name;
+            ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
             withModal<QMessageBox>(250, [answer, &text, &name](QMessageBox *b) {
                 name = b->objectName();
                 text = b->text();
@@ -743,7 +745,7 @@ void caseSI12()
                     o->click();
                 else
                     b->reject();
-            });
+            }, 100, waiter.alive);
             emit pane->linkActivated(pane, tg.href);
             settle(300);
             if (answer == 0)
@@ -805,6 +807,7 @@ void caseSL08()
     const QString folder = p->folderPath();
     auto setName = [&](const QString &name) {
         bool found = false;
+        ScopedWaiter waiter(OptionsDialog::staticMetaObject.className());
         withModal<OptionsDialog>(400, [name, &found](OptionsDialog *d) {
             if (auto *le = d->findChild<QLineEdit *>(QStringLiteral("optDeviceName"))) {
                 found = true;
@@ -817,7 +820,7 @@ void caseSL08()
                     return;
                 }
             d->accept();
-        });
+        }, 100, waiter.alive);
         chooseByMenu(w, QStringLiteral("options"));
         settle(500);
         return found;
@@ -938,6 +941,7 @@ void caseSA07()
             };
             const QString before = installedSet();
             bool warned = false, seen = false, installDefault = false;
+            ScopedWaiter waiter(QDialog::staticMetaObject.className());
             withModal<QDialog>(300, [answer, &warned, &seen, &installDefault](QDialog *d) {
                 seen = true;
                 if (auto *l = d->findChild<QLabel *>(QStringLiteral("addonCodeWarning")))
@@ -955,7 +959,7 @@ void caseSA07()
                         }
                     d->reject();
                 }
-            });
+            }, 100, waiter.alive);
             bool restart = false;
             const bool ok = runInstallPackage(w, file, &restart);
             settle(300);
@@ -1003,23 +1007,25 @@ void caseU20()
         w->resize(sz.width() - 40, sz.height() - 60);
         settle(300);
         // the link question with a long target
+        ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
         withModal<QMessageBox>(300, [&shots, sz](QMessageBox *b) {
             shot(b, QStringLiteral("u20-linkQuestion-%1x%2").arg(sz.width()).arg(sz.height()));
             fact(QStringLiteral("U-20 link question %1x%2: size").arg(sz.width()).arg(sz.height()), QStringLiteral("%1 x %2").arg(b->width()).arg(b->height()));
             ++shots;
             b->reject();
-        });
+        }, 100, waiter.alive);
         links::setOpenerForTests([](const QUrl &) {});
         emit visiblePane(w)->linkActivated(visiblePane(w), QUrl::fromLocalFile(ctx().work + QLatin1Char('/') + QString(300, QLatin1Char('n')) + QStringLiteral(".txt")).toString());
         settle(400);
         // the refusal of a program file
         writeText(ctx().work + QStringLiteral("/u20.sh"), "#!/bin/sh\n");
+        ScopedWaiter waiter2(QMessageBox::staticMetaObject.className());
         withModal<QMessageBox>(300, [&shots, sz](QMessageBox *b) {
             shot(b, QStringLiteral("u20-linkRefused-%1x%2").arg(sz.width()).arg(sz.height()));
             fact(QStringLiteral("U-20 link refused %1x%2: text").arg(sz.width()).arg(sz.height()), b->text().left(400));
             ++shots;
             b->accept();
-        });
+        }, 100, waiter2.alive);
         emit visiblePane(w)->linkActivated(visiblePane(w), QUrl::fromLocalFile(ctx().work + QStringLiteral("/u20.sh")).toString());
         settle(400);
         links::setOpenerForTests(nullptr);

@@ -316,6 +316,51 @@ target_compile_definitions(qb_v0913_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CU
 add_executable(qb_v0920_tests v0920_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_SOURCE_DIR}/translations/translations.qrc)
 target_link_libraries(qb_v0920_tests PRIVATE qbui Qt6::Test Qt6::Network)
 target_compile_definitions(qb_v0920_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
+
+# 0.93.0: the emergency copy (whole or told incomplete, also for the binder alone), a folder's sync that reports a disk
+# error (child runs with qbfaultshim), an unreadable journal that cannot be set aside, the backup note of a signal's end,
+# backups that cannot be deleted, the wording of a restore (xvfb-run -a ./qb_v0930_tests /tmp/shots)
+add_executable(qb_v0930_tests v0930_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0930_tests PRIVATE qbui Qt6::Test)
+if(NOT WIN32) # the fault library is an LD_PRELOAD library: the child runs are on Linux only (as v0903)
+  target_compile_definitions(qb_v0930_tests PRIVATE QB_FAULT_SHIM="$<TARGET_FILE:qbfaultshim>")
+  add_dependencies(qb_v0930_tests qbfaultshim)
+endif()
+
+# 0.93.0, second suite: fixes in shared code (exports that keep the old file, four limits for prepared input, the main
+# window's undo watcher at its end) (xvfb-run -a ./qb_v0930b_tests /tmp/shots)
+add_executable(qb_v0930b_tests v0930b_tests.cpp ${QB_RESOURCES_OBJECTS}
+               ${CMAKE_SOURCE_DIR}/plugins/importers/web/WebImporter.cpp ${CMAKE_SOURCE_DIR}/plugins/importers/web/Article.cpp
+               ${CMAKE_SOURCE_DIR}/plugins/importers/web/Html.cpp)
+target_include_directories(qb_v0930b_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins/importers/web)
+target_link_libraries(qb_v0930b_tests PRIVATE qbui Qt6::Test Qt6::Network ${CMAKE_DL_LIBS})
+
+# 0.93.0, third suite: to-do item 38 (backups and saving: waiting backups in the restore list, the temporary names that a crash
+# can leave, the command that moves the backups of 0.70.0 to 0.90.4) (xvfb-run -a ./qb_v0930c_tests /tmp/shots)
+add_executable(qb_v0930c_tests v0930c_tests.cpp ${QB_RESOURCES_OBJECTS}
+               ${CMAKE_SOURCE_DIR}/plugins/tools/speech-transcription/SpeechLogic.cpp)
+target_include_directories(qb_v0930c_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins)
+target_link_libraries(qb_v0930c_tests PRIVATE qbui Qt6::Test)
+
+# 0.93.0, fourth suite: to-do item 22 (the panes placed by the window's shape: the six orders when wide, the two rows when
+# upright, following the shape, kept per device) (xvfb-run -a ./qb_v0930d_tests /tmp/shots)
+add_executable(qb_v0930d_tests v0930d_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0930d_tests PRIVATE qbui Qt6::Test)
+
+# 0.93.0, fifth suite: items 11 (the save text in the first editor's footer bar), 17 (the label in the documents), 18 (the design
+# decisions), 30 (where to report a problem, the README's picture) (xvfb-run -a ./qb_v0930e_tests /tmp/shots;
+# QB_README_SHOT=<file.png> makes the README picture of the welcome project)
+add_executable(qb_v0930e_tests v0930e_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0930e_tests PRIVATE qbui Qt6::Test)
+
+# 0.93.0, to-do item 25: File > Save As (the file type chooses the format) and the copies in File > Export
+# (xvfb-run -a ./qb_saveas_tests /tmp/shots)
+add_executable(qb_saveas_tests saveas_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_saveas_tests PRIVATE qbui Qt6::Test)
+# 0.93.0, fourth suite: to-do item 39 (documents that are not shown are unloaded: a bounded number stays laid out)
+# (xvfb-run -a ./qb_v0930f_tests /tmp/shots; QB_MEASURE=1 prints the memory of a large project)
+add_executable(qb_v0930f_tests v0930f_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0930f_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0900_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # The readers against damaged input (0.80.0, the external audit of 2026-11-09, ST-5): fixed-seed damage of small
 # valid inputs of RTF, Markdown, XML, ZIP, DOCX, ODT, Word 97 and .scrivx, each read in this process
@@ -422,3 +467,12 @@ if(QB_MOBILE_PREVIEW)
   target_compile_definitions(qb_android_st_preview PRIVATE QB_ST_PREVIEW QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}"
                              QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
 endif()
+
+# 0.93.0: the overview of a mind map board (automatic / always, the rectangle, click and drag, size, the bar's button
+# and "Fixed:" text, the large window, not in exports) (xvfb-run -a ./qb_mmoverview_tests /tmp/shots)
+add_executable(qb_mmoverview_tests mmoverview_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_mmoverview_tests PRIVATE qbui Qt6::Test)
+
+# 0.93.0 (item 24): the notes start as plain text, pasting into them is plain (xvfb-run -a ./qb_notesplain_tests /tmp/shots)
+add_executable(qb_notesplain_tests notesplain_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_notesplain_tests PRIVATE qbui Qt6::Test)

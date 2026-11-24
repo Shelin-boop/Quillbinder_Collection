@@ -14,6 +14,8 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   writes `tests/check-counts.txt` anew: commit it with the job. Keep logs out of the conversation: read the runner's
   one line per suite and the FAIL lines, not whole logs.
 
+- `qb_saveas_tests` (0.93.0, item 25: File > Save As in four ways with changes not saved, the original unchanged byte by byte, IDs, locks,
+  Open Recent, later saves, the backups' fresh start, refused names, File > Export > Quillbinder Project..., the menus and the dialog).
 - `qb_tests` (core, formats, compile), `qb_ui_tests`, `qb_m6_tests` ... `qb_m15_tests`
   (one per milestone; m14 printing; m15, the tutorial of 0.15 to 0.30, was removed in 0.40),
   `qb_fixes_tests` (corrections of 0.14.1), `qb_v017_tests` (0.17: icons, icon bar, fonts,
@@ -136,6 +138,36 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   update (inspect, install, launcher), changed certificates, `make-package.py verify`, the install window's note, the
   workflow's signing job; `tools/addon-entry.py` and the workflow "Official add-on"; see "Add-on keys" in
   `saving-and-safety.md`).
+- `qb_v0930e_tests` (0.93.0 beta, fifth suite, items 11, 17, 18, 30: the save text, the short messages, the link, the
+  fading note in the first editor's footer bar (also the corkboard's), two editors, a narrow place (mark and tooltip), a
+  long message shortened, no status bar row and the window's height; the label of `APP_VERSION_LABEL` in the manual,
+  the Quick Start (as shown) and the README; `docs/design-decisions.md` (ten entries, entry 2, links, comments in the
+  code); Help > Report a Problem; the README's picture. `QB_README_SHOT=<file.png>` makes that picture of the welcome
+  project instead of running the checks.)
+- `qb_v0930f_tests` (0.93.0 beta, fourth suite, item 39: a project of 150 documents shown one after another holds at most
+  16 laid out (`DocumentStore::loadedCount`); a document shown again has its text, bold text and cursor place; unsaved text
+  and unsaved notes are not unloaded and the undo history of the typing works; search, plain texts and word counts cover
+  every document; a `DocumentStore::Hold` keeps all, also while the timer runs; without the window's probe nothing is
+  unloaded. `QB_MEASURE=1` (`QB_MEASURE_DOCS`) prints the memory of 500 documents instead of checking; one screenshot).
+- `qb_v0930c_tests` (0.93.0 beta, third suite, item 38: the restore list with backups that wait in the work folder (a
+  screenshot of the list), the command Move Old Backups Into the Backup Folder (its question and report as screenshots,
+  never overwriting, the folder removed when empty, the action off without a project and when nothing is left), the
+  temporary names (QSaveFile leftovers at the opening, the Word writer's `.part`, the speech `.txt.part`); the sources
+  of the speech add-on's logic are compiled into the suite).
+- `qb_v0930b_tests` (0.93.0 beta, second suite: fixes in shared code. Exports of options and themes that keep the old file
+  when a write fails (`QB_TEST_WRITE_FAILS`; the options go through a temporary file, since QSettings would mix an old
+  file's entries with the new). Item 16: the picture rule of the Web Page Import (the plugin's sources are compiled into the
+  suite; `QB_TEST_WEB_PUBLIC` names "host:port" entries that count as public, as every test server is on this computer),
+  the 400 MB limit of install, a crafted archive whose sizes overflow, the 64 KiB request line. Item 26: the main window
+  listens to no application signal while its own widgets are deleted (a probe child counts the focus signal's receivers
+  then; without the fix the suite counts two and ends in a segmentation fault).)
+- `qb_v0930_tests` (0.93.0 beta: the emergency copy whole or said to be incomplete ("n of m", names, README), made for a
+  change of the binder or the objects alone, never into an existing folder, the end by a signal and its notice, the
+  messages (screenshots);
+  a folder's sync answered with EIO or ENOTSUP in a child run (`--child-save`, the fault library's `dirsync` modes), an
+  unreadable journal that cannot be set aside;
+  the backup note after a failed opening backup, a backup that cannot be deleted (`QB_TEST_FAIL_REMOVE`), the three forms
+  of a restore. Uses `QB_TEST_WRITE_FAILS`, which also works for `safesave::writeFile` since 0.93.0.)
 - `qb_v0920_tests` (0.92.0 beta: files whose time alone changed and the pattern of a sync program that touches
   every file, the notice's button, the project ID in backup names and the IDs of copies, copies that fail
   (`QB_TEST_FAIL_COPY`), states that cannot be written (`QB_TEST_FAIL_STATE`, `QB_TEST_FAIL_RENAME`), the kind of a
@@ -149,6 +181,16 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   (`tools/security-watch.py`) offline: versions and ranges, the CVE records' ratings and versions, Qt's list,
   GitHub's advisories, whole runs against made-up sources (what is reported, one issue per project, comments,
   failed sources), the watch list's versions against the build's files, and the workflow's rights.
+- `deps` (0.93.0, `tests/deps_packs_tests.py`, Python only, no build): the dependency packs of the Linux build
+  (`tools/deps-pack.sh`): the three recipes and the texts of their pre-releases (what is inside, license, source), the
+  workflow's matrix, push filter and rights, the translator pack's license files against the add-on's
+  `make-addon.sh`, and a pack made and fetched through a made-up `gh` (SHA-256 checked, paths made new).
+  `secwatch` also checks `tools/verify-ffmpeg-source.sh` with keys made for the check (needs gpg).
+- `verlines` (0.93.0, `tests/version_lines_tests.py`, Python only, no build): the version line per system in
+  `CMakeLists.txt` (`APP_VERSION` for Linux, `APP_VERSION_WINDOWS`, `APP_VERSION_ANDROID`: the same first two numbers,
+  the build's pick and its stop on a wrong number), the shell lines of the scripts and workflows that read them,
+  `tools/update-feed.py`, `tools/release-notes.py --whats-new [--system]` and `tools/download-page.py` on a copy whose
+  Windows and Android lines have other last numbers, and the version jobs of the two release workflows.
 - `qb_v0911_tests` (0.91.1 beta: toolbars rearranged freely by their grips, the row that got stuck; see "Toolbars
   rearranged freely").
 - `qb_v0910_tests` (0.91.0 beta: backups straight in the backup folder, the seven toolbars and the icon bar; see

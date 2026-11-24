@@ -92,7 +92,6 @@
 #include <QRegularExpression>
 #include <QSet>
 #include <QSslSocket>
-#include <QStatusBar>
 #include <QStyleFactory>
 #include <QTcpServer>
 #include <QTcpSocket>
@@ -980,7 +979,7 @@ int main(int argc, char **argv)
                   && !notice->text().trimmed().isEmpty() && readAll(p->docs()->textPath(other->id)).contains("Saved by hand."),
               QStringLiteral("File > Save with a backup that cannot be put into its folder: the text is saved and a notice says "
                              "what happened to the backup (not modal)"),
-              notice ? notice->text() : QStringLiteral("no notice; status bar: ") + w.statusBar()->currentMessage());
+              notice ? notice->text() : QStringLiteral("no notice; status bar: ") + w.statusNote());
         shot(&w, QStringLiteral("v0920-manual-backup"));
         shot(notice, QStringLiteral("v0920-manual-backup-notice"));
         if (notice)
@@ -989,9 +988,9 @@ int main(int argc, char **argv)
         typeInto(p, other, QStringLiteral(" And once more."));
         const bool saved2 = w.manualSave();
         settle(500);
-        check(saved2 && !visibleBox(QStringLiteral("manualBackupNotice")) && !w.statusBar()->currentMessage().isEmpty(),
+        check(saved2 && !visibleBox(QStringLiteral("manualBackupNotice")) && !w.statusNote().isEmpty(),
               QStringLiteral("the same cause at the next save: no second notice, the status bar says it"),
-              w.statusBar()->currentMessage());
+              w.statusNote());
         if (QMessageBox *b = visibleBox(QStringLiteral("manualBackupNotice")))
             b->accept();
         as.backupOnManualSave = false;
@@ -1687,7 +1686,7 @@ int main(int argc, char **argv)
         qputenv("QB_TEST_UPDATE_NOW", start.addDays(50).toString(Qt::ISODate).toUtf8());
         int requestsNow = upd->requests();
         lookAndWait(false);
-        const bool quiet404 = upd->requests() == requestsNow + 1 && !w.statusBar()->findChild<QLabel *>(QStringLiteral("fadingNote")) && !upd->window();
+        const bool quiet404 = upd->requests() == requestsNow + 1 && !w.findChild<QLabel *>(QStringLiteral("fadingNote")) && !upd->window();
         // the address cannot be reached: two tries, then a small note in the status bar that fades in and out twice
         server.stop();
         requestsNow = upd->requests();
@@ -1695,7 +1694,7 @@ int main(int argc, char **argv)
         took.start();
         lookAndWait(false);
         const qint64 ms = took.elapsed();
-        QPointer<QLabel> fading = w.statusBar()->findChild<QLabel *>(QStringLiteral("fadingNote"));
+        QPointer<QLabel> fading = w.findChild<QLabel *>(QStringLiteral("fadingNote"));
         const bool modalNow = QApplication::activeModalWidget() != nullptr;
         check(quiet404 && upd->requests() == requestsNow + 2 && ms >= 300 && fading && fading->isVisible() && fading->property("fades").toInt() == 2
                   && fading->text().contains(QLatin1String("Could not look for updates")) && !modalNow && !upd->window(),
@@ -1705,7 +1704,7 @@ int main(int argc, char **argv)
         shot(&w, QStringLiteral("v0920-update-not-reached"));
         requestsNow = upd->requests();
         lookAndWait(false);
-        const int notes = int(w.statusBar()->findChildren<QLabel *>(QStringLiteral("fadingNote")).size());
+        const int notes = int(w.findChildren<QLabel *>(QStringLiteral("fadingNote")).size());
 #ifdef Q_OS_WIN
         // (Windows needs seconds to refuse each connection, so the first note can be gone before the second look
         // has ended: then there is no note, and never a second one)
@@ -1835,14 +1834,27 @@ int main(int argc, char **argv)
         const QByteArray store = readAll(addon + QStringLiteral("/source/src/ModelStore.cpp"));
         const QByteArray cmake = readAll(addon + QStringLiteral("/source/CMakeLists.txt"));
         check(!top.isEmpty() && top == inner && m.value(QStringLiteral("id")).toString() == QLatin1String("translation-proofreading")
-                  && m.value(QStringLiteral("version")).toString() == QLatin1String("1.2") && cmake.contains("set(TP_VERSION \"1.2\")")
+                  && m.value(QStringLiteral("version")).toString() == QLatin1String("1.3") && cmake.contains("set(TP_VERSION \"1.3\")")
                   && m.value(QStringLiteral("minApp")).toString() == QLatin1String(QB_RUNTIME_SINCE),
-              QStringLiteral("Translation and Proofreading 1.2 is in addons/ with its source; its two manifests and its build agree on the version"),
+              QStringLiteral("Translation and Proofreading 1.3 is in addons/ with its source; its two manifests and its build agree on the version"),
               m.value(QStringLiteral("version")).toString());
         check(store.contains("https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/")
                   && !store.contains("Quillbinder_Translation_Addon")
                   && readAll(addon + QStringLiteral("/source/resources/catalog.json")).contains("\"release\": \"models-1\""),
-              QStringLiteral("it fetches its models from the releases models-1 and models-2 of this repository"));
+              QStringLiteral("it fetches its models from the releases models-1, models-2 and models-3 of this repository"));
+        {
+            // 0.93.0: the pinned entry describes the last published package (the manifest's version, or a lower one while a
+            // release is pending: the entry is updated after the release) and this repository; no file names the former repositories
+            const QJsonObject entry = QJsonDocument::fromJson(readAll(src + QStringLiteral("/official-addons/translation-proofreading.json"))).object();
+            const QByteArray official = readAll(src + QStringLiteral("/docs/official-addons.md"));
+            check(!entry.value(QStringLiteral("version")).toString().isEmpty()
+                      && Project::compareVersionText(entry.value(QStringLiteral("version")).toString(), m.value(QStringLiteral("version")).toString()) <= 0
+                      && entry.value(QStringLiteral("repository")).toString() == QLatin1String("Shelin-boop/Quillbinder_Collection")
+                      && !official.contains("Quillbinder_Translation_Addon") && !official.contains("addon-translation-proofreading-1.1")
+                      && !QFileInfo::exists(src + QStringLiteral("/.github/workflows/models-mirror.yml")),
+                  QStringLiteral("the pinned entry and docs/official-addons.md describe the add-on's version (or the last published one) in this repository; "
+                                 "no link leads to the former repositories"));
+        }
 #ifdef Q_OS_WIN
         // Windows: the add-on is staged by packaging/windows/win-addons.sh, not by stage.sh (a Linux script): left out
         // without its engine libraries, which win-ci.sh builds with the add-on's own script; a release build fails without it
@@ -1852,9 +1864,9 @@ int main(int argc, char **argv)
         check(winAddons.contains("left out (its engine libraries are missing") && winAddons.contains("make-addon-windows.sh")
                   && winCi.contains("build-deps-windows.sh") && winCi.contains("stage/packages/translation-proofreading-windows.qbpkg")
                   && winRelease.contains("translator-deps-windows-msvc-")
-                  && readAll(src + QStringLiteral("/.github/workflows/models-mirror.yml")).contains("Quillbinder_Translation_Addon"),
+                  && readAll(src + QStringLiteral("/.github/workflows/models-check.yml")).contains("releases/tags/$tag") && !readAll(src + QStringLiteral("/.github/workflows/models-check.yml")).contains("Quillbinder_Translation_Addon"),
               QStringLiteral("Windows: the Windows build stages the add-on with its own scripts and leaves it out when its engine "
-                             "libraries are not built; a release build fails without the add-on; a workflow copies the model files here"));
+                             "libraries are not built; a release build fails without the add-on; a workflow checks the model files here"));
 #else
         // without its engine libraries it is left out of a local build (exit code 3), as the packing script expects
         QProcess stage;
@@ -1867,9 +1879,9 @@ int main(int argc, char **argv)
         const QByteArray release = readAll(src + QStringLiteral("/.github/workflows/release.yml"));
         check(stage.exitStatus() == QProcess::NormalExit && stage.exitCode() == 3
                   && release.contains("tools/get-translator-deps.sh") && release.contains("for must in speech-transcription translation-proofreading")
-                  && readAll(src + QStringLiteral("/.github/workflows/models-mirror.yml")).contains("Quillbinder_Translation_Addon"),
+                  && readAll(src + QStringLiteral("/.github/workflows/models-check.yml")).contains("releases/tags/$tag") && !readAll(src + QStringLiteral("/.github/workflows/models-check.yml")).contains("Quillbinder_Translation_Addon"),
               QStringLiteral("stage.sh leaves the add-on out when its engine libraries are not built; the release workflow builds "
-                             "them and fails without the add-on; a workflow copies the model files here"),
+                             "them and fails without the add-on; a workflow checks the model files here"),
               QString::fromUtf8(stage.readAllStandardError()) + QStringLiteral(" exit %1").arg(stage.exitCode()));
 #endif
     }

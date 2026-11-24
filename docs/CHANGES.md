@@ -3,6 +3,154 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.93.0 beta (2026-11-24)
+
+A new AppImage for Linux, on Qt 6.12.1, whose built-in libraries bring safety fixes: the check for updates offers it
+as a recommended security update (a program update cannot bring those libraries, so 0.93.0 needs the new AppImage
+once; later program updates fit it). Four new functions (the panes placed by the
+window's shape, File > Save As, an overview for the mind map, the translator for single words and both directions),
+and many fixes of the safety nets around saving and backups. The add-ons that bring their own libraries are rebuilt
+and need 0.93.0 (the check for updates and **File > Install Update or Add-on** tell you).
+
+- **Qt 6.12.1** (before: 6.12.0). The libraries Qt carries inside itself are newer, with safety fixes: zlib 1.4,
+  HarfBuzz 15.1.0, PCRE2 10.49, libpng 1.6.59, libjpeg-turbo 3.2.1, FreeType 2.15.0 and md4c 0.6.0. Because the
+  AppImage carries them, a program update alone cannot bring them: the check for updates offers the new AppImage
+  (the runtime is called `u2404-qt6.12-r2`).
+- **The panes placed by the window's shape.** A window taller than wide now shows two rows: the editor in the full
+  width, and the binder and the inspector beside each other in the other row. **View > Layout > Upright window**
+  chooses whether the editor's row is the upper one (Editor in the Middle) or the lower one (Editor at the Bottom),
+  and whether the binder is left or right. A wide window (a square one counts as wide) keeps three columns; **View >
+  Layout > Wide window** chooses any of the six orders. The window follows its shape by itself (also when a tablet is
+  turned), and each shape comes back as you left it, places and sizes. **Reset Layout** puts the shown shape back to
+  its start values. The choices are kept per computer in the program's settings, never in a project. A hidden binder
+  or inspector leaves its room to the other one. With the on-screen keyboard (Android) the row of the binder and the
+  inspector keeps its height.
+- **File > Save As…** (Ctrl+Shift+S) replaces the menu "Project Format" of the File menu. Type the name and choose the place; the
+  file type in the dialog (Scrivener 3 Project or Quillbinder Project) decides the format, so the same command changes
+  the format and saves a project under another name or in another place. The window then works on the new project, and
+  every later save goes there; the original stays on disk as it was, and what you had not saved yet goes into the new
+  project only. The new project starts its own series of backups (the backups so far stay with the original), and
+  its title is the name you typed. The copies that leave the window on the original are in **File > Export** now:
+  Scrivener Project... and (new there) Quillbinder Project.... A toolbar or shortcut you set for the old entries
+  (Quillbinder Project, Scrivener 3 Project, Save a Copy as ...) is left out quietly.
+- **An overview for the mind map.** A small map in the top left corner of a board (in the inspector's tab and in the large
+  window) shows all of the board and a frame for the part you see; click in it to move the view there, drag the frame to
+  move the view with it. It shows by itself when some of the board lies outside the view and hides when all of it fits;
+  the new button after **Menu** in the board's bar (or the entry Overview Always Shown in the board's View menu) keeps it shown. Drag the grip in its
+  corner to change its size. The text **Fixed: ...** of a fixed board now stands in the bar itself, shortened when the
+  bar is narrow, and the row under the bar is gone.
+- **Translation and Proofreading 1.3: a word on its own, and both directions.** Type one English word: below it the
+  panel says what the word means, in English, with the classes it belongs to (the meanings are from the dictionary
+  WordNet 3.0, built into the add-on, and the output says so); a word WordNet does not have gets a meaning written by
+  the add-on's chat model (Qwen3 4B, or Qwen3 1.7B) with a warning that it may be inaccurate, and without such a model
+  the output says what can be downloaded. Type one German word: it is looked up first in a German dictionary (an
+  extract of the Wiktionary, a separate download in the add-on's options, shown with its license, CC BY-SA 4.0, before
+  it comes), which gives the base form, the word classes, the meanings and the English words of each meaning
+  ("fluchen", verb: to curse, to swear); the first five meanings of a class are shown and the rest is behind "more".
+  A class the dictionary has no English word for, and a word it does not have, are translated by the small model, with
+  a warning. "Similar" follows the English word you chose, and only its word class. The old lines "The model's other
+  words here:" (word pane) and "Other translations:" under a single word are gone: they were beginnings of other
+  sentences, which with the large model were often names. For a short text of several words, "Other translations:"
+  now lists the model's best complete translations, without names it made up.
+- **Swap and Translate back; English to German.** Two new buttons: **Swap** turns German to English into English to
+  German and back (the result moves into the text and is translated the other way), **Translate back** shows below
+  the result what the translation says in the language of your text, until you change the text. English to German is
+  new: **OPUS-MT English to German (small)** is downloaded on request (the reverse model is offered when you press
+  Translate back without it). One English word in English to German is translated by its word classes, as one
+  German word is the other way round. The second row of the controls shows the translation model while you translate
+  (switching it changes the translation), and the list of styles ("Correct", "More Formal") is only there while you
+  proofread.
+- **Single words and up to three words never go to the large translation model**, which puts names first on single
+  words: the dictionary first, else the small model (also when the large one is chosen; when the small one is not
+  downloaded, a note offers it). The large model's description now says it is for whole sentences. (The models are
+  on the new release *models-3*; the workflow `translator-data.yml` makes it.)
+- **Notes start as plain text.** The notes of a document and the project notes no longer take the font, size, indent, spacing
+  or style of the project's text formatting: new notes and new text in empty notes are plain, in the interface's font; what you
+  format by hand stays, and notes that already have text are unchanged. Pasting into the notes gives plain text; **Edit > Paste with
+  Formatting** keeps the formatting.
+- **The save text moved into the editor's footer bar**. The window's bottom row is gone. "Saved", "Not saved yet",
+  the red "Not saved" sign, the "No backups" link and the short messages of the program (a backup's result, "Saved
+  again ...", and the like) show in the empty stretch of the footer bar of the first editor (the left or upper one);
+  a message takes the place for its seconds, a message too long is shortened (its tooltip reads it all), and in a very
+  narrow editor a small colored mark stands there instead (the text is its tooltip). The status bar row is no more, so
+  the window gains that row. Toolbars at the bottom edge stay where they are.
+- **A new background shape starts medium gray and not magnetic** (before: pale gray and magnetic). The values you set in Mind
+  Map Options stay, except a stored pale gray fill and a stored "Magnetic", which are changed once.
+- **Less memory with large projects.** The texts of a session no longer stay laid out until the project closes: a
+  document that is not shown, has no change that is not saved and no step to undo is let go a moment after you moved
+  on, and read again from its file when you show it again (its text, formatting and the place of the cursor are as
+  they were). Showing 500 documents of 1,000 words one after another took about 52 MB more before; now about 2 MB more.
+  Search, Combined Text, Compile and the word counts still see every document.
+- **The emergency copy is whole, or says it is not.** When texts cannot be saved, the copy of what was not saved now
+  counts its files: every message and the notice after an ending by a signal say "n of m files" and name each file that
+  is missing with the reason, and an incomplete copy is headed as incomplete (a warning sign), never as done. The copy
+  is also made when only the binder or the Objects changed, and it holds the project file as it is in memory and the
+  Objects not saved; its README says how to put the project file back. A folder that is there is never used again: a
+  second copy in the same second gets a number.
+  The project file in the copy is named *.copy, so that the folder can no longer be opened as a project by mistake.
+- **Saving tells a drive's error for a folder, and an unreadable journal stops the saves.** When the drive reports an
+  error while a folder is synced after a save (not a file system that cannot sync: that is no error, as before), the
+  save counts as failed, the journal stays, and the next save or opening finishes it. While an unreadable journal of an
+  earlier save could not be moved aside, no save writes a new journal over it: the save waits and its message names the
+  file. After a drive error for a folder, the retries no longer report conflicts that are none (a project file or a text
+  "changed elsewhere" that was the program's own), and a picture is not written twice.
+- **Backups.** The note of a backup that an ending by a signal left undone is removed only when the next opening's
+  backup was made (in the folder, or waiting beside it); a backup that fails leaves the note for the next opening. An
+  older backup that the clean-up cannot delete is told once with the file and the reason, in a notice that takes no keys
+  while you write. **Restore From Backup** says
+  "restored", "restored incompletely" (headed so, with the files named) or "not restored", and says when the
+  restored project's title could not be saved.
+- **Backups that wait are listed, and the old backups can be moved.** **Restore From Backup** now also lists the backups
+  of the open project that wait in the program's own work folder (they were made while the backup folder could not be
+  reached); they are marked "waiting (not yet in the backup folder)" and are restored like the others. The new command
+  **File > Back Up > Move Old Backups Into the Backup Folder** moves the backups that versions 0.70 to 0.90 kept in a
+  folder of their own for the project into the backup folder, under their names; it asks first, never overwrites a
+  backup of the same name (that one stays where it was and is named in the report), tells what it moved and what it left,
+  and removes the old folder when it is empty. The command is on only while the project has such a folder with backups.
+- **Temporary files that a crash can leave are removed.** The files Qt writes while it replaces a file (*name.json.AbC123*)
+  are removed from a project at the opening, and from a Scrivener project when it is read, when they are ten minutes
+  old. A Word export no longer leaves its *.docx.part* file when the file cannot be put in place, the old file is not
+  deleted before the new one is in place, and an old *.docx.part* of a cut-off export beside the target goes at the next
+  export. The speech add-on removes old *.txt.part* files of a cut-off transcription from its folder. (The list of all
+  temporary names is in the developer notes.)
+- **Copies that were not checked.** The speech add-on's copy of a model file you choose is checked (a full disk gave a
+  part of the file that went on to the model check); the failure is told. When the application menu entry is made and
+  the program's icon cannot be copied, the message says so.
+- **Saving options and themes to a file never destroys the file that was there.** **Manage > Save Options to File** and
+  **Save Theme Options to File** (File > Options) write a temporary file beside the target, check it and only then put
+  it in place. When the write fails, the file that was there stays as it was and the message says so (before, a
+  failed write could leave no file, or an empty one). A new options file holds only the new options.
+- **Web Page Import fetches the pictures of a page from the internet only from public addresses.** A picture that lies
+  on this computer or on a private network (also after a redirection, and when a name leads there) is left out, and the
+  import's result says how many pictures were left out and why. A page that itself lies on such an address (your own
+  computer or network) works as before.
+- **Four limits for prepared input.** **Install Update or Add-on** refuses a package of more than 400 MB without
+  reading it (as the check of the package already did); a backup archive whose sizes cannot be added up is refused
+  by **Restore From Backup**, with nothing made; and the link between {{APP}}'s windows and the writing tools reads a
+  request of 64 KiB at most.
+- **No crash when a window ends.** A window that was closed while the keyboard moved to another window or panel could
+  crash at its very end (found by the system test on Android: the program answered the focus change with a window
+  already half deleted). The window now cuts its links to the application's signals before anything of it is deleted.
+- **FFmpeg 9.1 in the media add-ons** (before: 9.0.2). Media Playback and Extra Video and Audio Formats 2.1 play the
+  same formats, with the newer FFmpeg's safety fixes. The source is taken from FFmpeg's own site and checked by its
+  release signature.
+- **The other add-ons with libraries** (Import Web Page, Import Word 97, Name Generator, Scratch Pad, Text Statistics,
+  Speech Transcription) are rebuilt for the new runtime, with a new last number each. Translation and Proofreading
+  is 1.3 (next item).
+- **Help > Report a Problem…** opens the project's issue forms in the browser; the manual's troubleshooting section says
+  where to report a problem and that a security problem goes privately (`SECURITY.md`). The README has a picture of the
+  main window.
+- **The download page lists the official add-ons** (Translation and Proofreading so far): name, one line of what it
+  does, the systems it is for, whether it is inside the full version, and the note for a model that may be used
+  non-commercially only. Each system's card shows that system's newest version.
+- **The security watch** (the daily check of the parts the project ships) now also looks at PDFium inside Qt PDF, the
+  ggml library inside whisper.cpp and the AppImage's own starter, and says in its report when the repository has had
+  no change for 50 days (GitHub stops such a check after 60). For the project's builds: a third ready-made pack, for
+  the translator's libraries, and the packs' pages name what is inside, the license and the source.
+- **Documents:** the manual and the Quick Start take the label of the version ("beta") from the program (a placeholder, as for its name), so
+  they cannot say "alpha" again; `docs/design-decisions.md` gives the reasons behind choices that can look like faults
+  (README, SECURITY.md and the manual's introduction link to it).
+
 ## 0.92.0 beta (2026-11-20)
 
 A new AppImage and a program update for Linux, and the first version from the project's one repository,

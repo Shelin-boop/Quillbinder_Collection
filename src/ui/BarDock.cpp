@@ -1,6 +1,7 @@
 #include "ui/BarDock.h"
 
 #include "ui/GripBar.h"
+#include "ui/MainWindow.h"
 
 #include <QApplication>
 #include <QEvent>
@@ -9,7 +10,6 @@
 #include <QMainWindow>
 #include <QPainter>
 #include <QSettings>
-#include <QStatusBar>
 #include <QTimer>
 
 namespace qb {
@@ -19,6 +19,8 @@ using namespace barplaces;
 namespace {
 
 constexpr int kSlack = 6; // the mouse may leave its row's height by this much and still count as in the row
+static MainWindow *mainWindowOf(QMainWindow *w) { return qobject_cast<MainWindow *>(w); }
+
 constexpr int kZone = 28; // the strip under the top rows and over the bottom edge that takes a toolbar into a new row
 
 // The line that shows where a dragged toolbar will stand. It paints itself, so no theme's style sheet changes it.
@@ -391,14 +393,14 @@ void BarDock::follow(const QPoint &p)
         m_marker->setGeometry(marker);
         m_marker->raise();
         m_marker->show();
-        if (!m_hinted && m_window->statusBar()) {
-            m_window->statusBar()->showMessage(tr("Release the mouse button to put the toolbar at the marked place. Esc leaves it where it is."));
+        if (!m_hinted && mainWindowOf(m_window)) {
+            mainWindowOf(m_window)->showStatusNote(tr("Release the mouse button to put the toolbar at the marked place. Esc leaves it where it is."));
             m_hinted = true;
         }
     } else {
         m_marker->hide();
-        if (m_hinted && m_window->statusBar())
-            m_window->statusBar()->clearMessage();
+        if (m_hinted && mainWindowOf(m_window))
+            mainWindowOf(m_window)->clearStatusNote();
         m_hinted = false;
     }
     if (m_cursorSet)
@@ -507,8 +509,8 @@ void BarDock::endDrag()
     const bool was = m_drag.started;
     m_drag = Drag();
     m_marker->hide();
-    if (m_hinted && m_window->statusBar())
-        m_window->statusBar()->clearMessage();
+    if (m_hinted && mainWindowOf(m_window))
+        mainWindowOf(m_window)->clearStatusNote();
     m_hinted = false;
     if (m_cursorSet) {
         QGuiApplication::restoreOverrideCursor();

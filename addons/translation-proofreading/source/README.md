@@ -24,6 +24,24 @@ model is downloaded, it works without any internet connection.
   (English), the right mouse button offers **Other Words for ...** as well.
 - **Live** (1.1). About a second after you stop typing, the result follows; only the sentences you changed are worked
   on again. The **Live** button switches it off.
+- **What a word means** (1.3). One English word: below the result, what it means in English, by word class (the
+  meanings are from WordNet 3.0, built into the add-on, and the output says so). A word WordNet does not have gets a
+  meaning written by Qwen3 4B (or Qwen3 1.7B, when that is the one downloaded), with a warning that it may be
+  inaccurate; with neither, the output says what can be downloaded.
+- **One German word** (1.3). It is looked up first in the **German dictionary** (an extract of the English
+  Wiktionary's German entries, about the size shown in the options; a separate download, with its license, CC BY-SA
+  4.0, shown first): base form, word classes, meanings and the English words of each meaning, the first five meanings
+  of a class and the rest behind "more". A class without an English word, and a word that is not in the dictionary,
+  are translated by the small model (in a frame for the class: "zu fluchen", "das Fluchen"), with a warning. A click
+  on an English word makes it the result; "Similar" follows it and its word class. English to German does the same
+  for one English word, with WordNet's classes and OPUS-MT English to German (small).
+- **Swap and Translate back** (1.3). Swap turns German to English into English to German and back; Translate back
+  shows what the result says in the language of your text, until you change the text. OPUS-MT English to German
+  (small) (CC BY 4.0, about 79 MB) is the model for the way back and for English to German; it is offered for download
+  when it is missing. In translate mode the second row shows the translation model, and the list of styles is hidden.
+- **Short texts** (1.3). A single word or up to three words never go to the large translation model: the dictionary
+  first, else the small model. For a short text, "Other translations:" lists the model's best complete translations
+  (without made-up names). The information area no longer lists the model's other words.
 - **A single word** (1.1). Type one word: the result is the word as it should be, and below it its spelling
   suggestions, words of a similar meaning and the model's other words; click one to take it.
 - **The information area** (1.1). Double-click a word in the text or in the result: its spelling suggestions, words of
@@ -42,7 +60,7 @@ model is downloaded, it works without any internet connection.
 
 1. Download `translation-proofreading-<version>.qbpkg` (Linux) or `translation-proofreading-<version>-windows.qbpkg`
    (Windows): the official add-on, built and signed by the Quillbinder project, from its release in
-   [Quillbinder_Public](https://github.com/Shelin-boop/Quillbinder_Collection/releases) ("Translation and Proofreading ...
+   [the Quillbinder releases](https://github.com/Shelin-boop/Quillbinder_Collection/releases) ("Translation and Proofreading ...
    (official add-on)", for Windows "... for Windows (official add-on)"); or a test build from the pre-release **test**
    (Linux) or **test-windows** (Windows) of this repository.
 2. In Quillbinder (0.91.3 or later): **File > Install Update or Add-on**, choose the file. The official add-on is shown
@@ -62,7 +80,9 @@ The models are not part of the add-on. You choose which ones to download:
 | Qwen3 1.7B (Qwen team, Alibaba Cloud) | proofreading and translation (1.1) | 1,739 MB | about 2.8 GB | Apache-2.0 |
 | Qwen3 4B (Qwen team, Alibaba Cloud) | proofreading and translation (1.1): better, slower | 4,043 MB | about 5.5 GB | Apache-2.0 |
 | OPUS-MT German to English (University of Helsinki) | translation | 79 MB | about 0.3 GB | Apache-2.0 |
-| OPUS-MT Big, German to English (University of Helsinki) | translation (1.1): larger | 218 MB | about 0.5 GB | CC BY 4.0 |
+| OPUS-MT Big, German to English (University of Helsinki) | translation (1.1): better for whole sentences, unreliable for single words (those always go to the small model) | 218 MB | about 0.5 GB | CC BY 4.0 |
+| OPUS-MT English to German, small (University of Helsinki) | translation (1.3): English to German, the way back | about 79 MB (set from the release models-3) | about 0.3 GB | CC BY 4.0 |
+| German dictionary (extract of the Wiktionary) | a single German word (1.3): classes, meanings, English words | set from the release models-3 | small | CC BY-SA 4.0 (shown before the download) |
 
 The Qwen models are general models told what to do: fix only real errors and leave your words, style and dialogue
 alone, or translate. One downloaded Qwen model does both and is loaded once.
@@ -76,7 +96,7 @@ Before CoEdIT Large is downloaded, the add-on asks you to accept its license. Wh
 your decision; this project gives no legal advice. The models are the originals from Hugging Face (fixed revisions),
 converted for the engine with 8-bit weights; the converted files are on the pre-releases
 [models-1](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/models-1) and
-[models-2](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/models-2) (1.1; the 4B model's
+[models-2](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/models-2) (1.1; the release [models-3](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/models-3) holds the 1.3 downloads; the 4B model's
 large file in three parts, joined after the download), made by the workflow "Models" (`models/convert.py`). On a computer without internet, **From Folder...** takes the files of that release from
 a folder.
 
@@ -90,10 +110,10 @@ Everything the add-on needs from Quillbinder is its public tool interface, `thir
 (version 1.1, copied unchanged from the public source), and Qt. On Ubuntu 24.04:
 
     packaging/build-deps.sh        # oneDNN, CTranslate2 and SentencePiece into deps/install (once, about 40 minutes)
-    cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH=/opt/qt/6.12.0/gcc_64 -DTP_TEST_SWITCHES=ON
+    cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH=/opt/qt/6.12.1/gcc_64 -DTP_TEST_SWITCHES=ON
     cmake --build build
     TP_MODELS_DIR=<folder with the files of models-1> QT_QPA_PLATFORM=offscreen ctest --test-dir build
-    cmake -S . -B build-release -G Ninja -DCMAKE_PREFIX_PATH=/opt/qt/6.12.0/gcc_64
+    cmake -S . -B build-release -G Ninja -DCMAKE_PREFIX_PATH=/opt/qt/6.12.1/gcc_64
     cmake --build build-release && packaging/make-addon.sh build-release dist
 
 On Windows 11 (since 2026-11-16), in Git Bash inside MSVC's environment (`vcvars64.bat`), with The Qt Company's Qt
@@ -116,8 +136,10 @@ Quillbinder for Windows (the workflow "Build" installs it with aqtinstall). The 
   the model's own tokenizer: `tokenizer-check.json` of each Qwen model).
 - `tests/`: the checks: the text logic, the panel and options with the engine and the real models in a stand-in for
   Quillbinder (`FakeHost.h`), the plugin as Quillbinder loads it, and the libraries' visible symbols.
+- `src/Dictionary.*`: what a word means (WordNet's definitions, the German dictionary's reader, the frames a lone word is translated in).
+- `tools/make-de-dictionary.py`: makes the German dictionary extract from kaikki.org's file (run by the workflow `translator-data.yml`).
 - `tools/make-us-spelling.py`: makes the American spelling list from SCOWL's Hunspell dictionaries;
-  `tools/make-thesaurus.py`: the list of similar words from Princeton WordNet 3.0 (Ubuntu package wordnet-base).
+  `tools/make-thesaurus.py`: the list of similar words and (1.3) the list of meanings from Princeton WordNet 3.0 (Ubuntu package wordnet-base).
 
 The add-on's own code is under the Apache License 2.0 (LICENSE, NOTICE); the libraries inside it come under their own
 licenses, listed in the package's `translation-proofreading/licenses/README.txt`.

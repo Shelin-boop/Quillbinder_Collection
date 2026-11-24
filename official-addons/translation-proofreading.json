@@ -2,12 +2,12 @@
   "format": 1,
   "id": "translation-proofreading",
   "name": "Translation and Proofreading",
-  "version": "1.1",
-  "repository": "Shelin-boop/Quillbinder_Translation_Addon",
-  "commit": "fb9b8a1dea3e494f943d6ccec94183b1a86dc26b",
-  "author": "The Quillbinder Translation Add-on project",
+  "version": "1.2",
+  "repository": "Shelin-boop/Quillbinder_Collection",
+  "commit": "006e447644662985e5a3230f880c93950e4dfa23",
+  "author": "The Quillbinder project",
   "license": "Apache License 2.0",
-  "reviewed": "2026-11-15",
+  "reviewed": "2026-11-20",
   "summary": "Checks English text for spelling and grammar and translates German text into English, on your own computer; once a model is downloaded, it works without any connection.",
   "nonCommercialData": [
     {
@@ -88,8 +88,8 @@
     ]
   },
   "windows": {
-    "commit": "70c04c80f4b9287f891ffbcee6a87b01862a3039",
-    "reviewed": "2026-11-16",
+    "commit": "a5908e5b7c14404dc02cc00bf441db946b5b2071",
+    "reviewed": "2026-11-20",
     "build": {
       "cachePaths": [
         "deps/install",
@@ -154,8 +154,8 @@
     }
   },
   "android": {
-    "commit": "d0316b5ae5681be6350bf79de09a2ab9e56a1262",
-    "reviewed": "2026-11-16",
+    "commit": "8aeeb6740ddd804c5c34e1037271cb08838b669b",
+    "reviewed": "2026-11-20",
     "build": {
       "cachePaths": [
         "deps-android/arm64-v8a/install",

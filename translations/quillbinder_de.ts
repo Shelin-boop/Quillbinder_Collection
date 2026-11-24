@@ -362,6 +362,24 @@ Die Vornamen dieser Liste sind nicht in weiblich und männlich unterteilt.</tran
 <context>
     <name>QObject</name>
     <message>
+        <source>Scrivener 3 Project (*.scriv)</source>
+        <translation>Scrivener-3-Projekt (*.scriv)</translation>
+    </message>
+    <message>
+        <source>%1 Project (*.qbx)</source>
+        <translation>%1-Projekt (*.qbx)</translation>
+    </message>
+    <message>
+        <source>Format:</source>
+        <translation>Format:</translation>
+    </message>
+    <message>
+        <source>There is a file or folder with this name already:
+%1</source>
+        <translation>Es gibt bereits eine Datei oder einen Ordner mit diesem Namen:
+%1</translation>
+    </message>
+    <message>
         <source>The saved page holds no web page.</source>
         <translation>Die gespeicherte Seite enthält keine Webseite.</translation>
     </message>
@@ -2998,6 +3016,10 @@ Quelle: %1</translation>
         <translation>Die Datei ist größer als %1 MB.</translation>
     </message>
     <message>
+        <source>Not fetched: the address is on this computer or on a private network.</source>
+        <translation>Nicht abgerufen: Die Adresse liegt auf diesem Computer oder in einem privaten Netz.</translation>
+    </message>
+    <message>
         <source>Cancelled.</source>
         <translation>Abgebrochen.</translation>
     </message>
@@ -3303,6 +3325,10 @@ Quelle: %1</translation>
         <translation>beschädigtes Inhaltsverzeichnis</translation>
     </message>
     <message>
+        <source>the sizes named in the file are impossibly large</source>
+        <translation>die in der Datei genannten Größen sind unmöglich groß</translation>
+    </message>
+    <message>
         <source>the table of contents could not be read</source>
         <translation>das Inhaltsverzeichnis konnte nicht gelesen werden</translation>
     </message>
@@ -3409,6 +3435,18 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
         <translation>die Kopie weicht von der Sicherung ab</translation>
     </message>
     <message>
+        <source>a backup of this name is already in the backup folder</source>
+        <translation>eine Sicherung dieses Namens ist schon im Sicherungsordner</translation>
+    </message>
+    <message>
+        <source>it is in the backup folder now, but the original could not be removed</source>
+        <translation>sie ist jetzt im Sicherungsordner, aber das Original konnte nicht entfernt werden</translation>
+    </message>
+    <message>
+        <source>the backup folder cannot be created</source>
+        <translation>der Sicherungsordner kann nicht erstellt werden</translation>
+    </message>
+    <message>
         <source>a file of this name is in the way and cannot be removed</source>
         <translation>eine Datei dieses Namens ist im Weg und kann nicht entfernt werden</translation>
     </message>
@@ -3443,6 +3481,48 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
     <message>
         <source>Themes (Bright, Dark, U1, U2 and the list)</source>
         <translation>Designs (Hell, Dunkel, U1, U2 und die Liste)</translation>
+    </message>
+    <message>
+        <source>The drive reported an error when the folder %1 was synced (%2). The files of this save may not have reached the disk safely.%3</source>
+        <translation>Das Laufwerk hat beim Abgleichen des Ordners %1 einen Fehler gemeldet (%2). Die Dateien dieses Speicherns sind möglicherweise nicht sicher auf den Datenträger gelangt.%3</translation>
+    </message>
+    <message>
+        <source>The journal of the save is kept, and the next save or opening finishes it.</source>
+        <translation>Das Journal des Speicherns bleibt erhalten, und das nächste Speichern oder Öffnen schließt es ab.</translation>
+    </message>
+    <message>
+        <source>Permission denied</source>
+        <translation>Zugriff verweigert</translation>
+    </message>
+    <message>
+        <source>The drive reported an error when the folder %1 was synced (%2). Nothing was changed.</source>
+        <translation>Das Laufwerk hat beim Abgleichen des Ordners %1 einen Fehler gemeldet (%2). Es wurde nichts geändert.</translation>
+    </message>
+    <message>
+        <source>The last save of this project was put in place, but the drive has not confirmed it: %1 The journal of that save is kept; the program saves again once the drive answers.</source>
+        <translation>Das letzte Speichern dieses Projekts wurde an seinen Platz gebracht, aber das Laufwerk hat es nicht bestätigt: %1 Das Journal dieses Speicherns bleibt erhalten; das Programm speichert erneut, sobald das Laufwerk antwortet.</translation>
+    </message>
+    <message>
+        <source>The drive still reports an error for the folder %1 (%2).</source>
+        <translation>Das Laufwerk meldet für den Ordner %1 weiterhin einen Fehler (%2).</translation>
+    </message>
+    <message>
+        <source>The file %1 of an earlier save is in the way and could not be moved aside.</source>
+        <translation>Die Datei %1 eines früheren Speicherns ist im Weg und ließ sich nicht beiseite legen.</translation>
+    </message>
+    <message>
+        <source>The journal and the files of that save could not all be moved aside; what stayed is left in the project folder (the journal, and files whose names end in .qbstage).</source>
+        <translation>Das Journal und die Dateien dieses Speicherns ließen sich nicht alle beiseite legen; was geblieben ist, liegt im Projektordner (das Journal und Dateien, deren Namen auf .qbstage enden).</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n file(s) of that save were moved into:
+%1</source>
+        <translation>
+            <numerusform>%n Datei dieses Speicherns wurde verschoben nach:
+%1</numerusform>
+            <numerusform>%n Dateien dieses Speicherns wurden verschoben nach:
+%1</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -4053,6 +4133,10 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
     <message>
         <source>The file could not be copied to %1.</source>
         <translation>Die Datei konnte nicht nach %1 kopiert werden.</translation>
+    </message>
+    <message>
+        <source>The file could not be copied to %1 (the disk may be full).</source>
+        <translation>Die Datei konnte nicht nach %1 kopiert werden (vielleicht ist die Platte voll).</translation>
     </message>
     <message>
         <source>Checking the model (checksum, description, test transcription) ...</source>
@@ -8951,6 +9035,32 @@ Das Projekt bleibt geöffnet; das Programm versucht weiter, es in seinem eigenen
         <translation>Kopie als %1-Projekt speichern…</translation>
     </message>
     <message>
+        <source>Save &amp;As…</source>
+        <translation>Speichern &amp;unter…</translation>
+    </message>
+    <message>
+        <source>Save the project under another name or in another place, in Scrivener 3 format or in %1&apos;s own format; the window works on the new project from then on</source>
+        <translation>Das Projekt unter einem anderen Namen oder an einem anderen Ort speichern, im Format von Scrivener 3 oder in %1s eigenem Format; das Fenster arbeitet danach am neuen Projekt</translation>
+    </message>
+    <message>
+        <source>Save As</source>
+        <translation>Speichern unter</translation>
+    </message>
+    <message>
+        <source>The project was saved as
+%1
+
+but this window could not leave the original. Open the new project from File &gt; Open Recent.</source>
+        <translation>Das Projekt wurde gespeichert als
+%1
+
+dieses Fenster konnte das Original aber nicht verlassen. Öffnen Sie das neue Projekt über Datei &gt; Zuletzt geöffnet.</translation>
+    </message>
+    <message>
+        <source>Saved as %1. The original stays as it was: %2</source>
+        <translation>Gespeichert als %1. Das Original bleibt, wie es war: %2</translation>
+    </message>
+    <message>
         <source>&amp;Close Project</source>
         <translation>Projekt &amp;schließen</translation>
     </message>
@@ -8997,6 +9107,67 @@ Das Projekt bleibt geöffnet; das Programm versucht weiter, es in seinem eigenen
     <message>
         <source>&amp;Restore From Backup…</source>
         <translation>Aus Sicherung &amp;wiederherstellen…</translation>
+    </message>
+    <message>
+        <source>Move &amp;Old Backups Into the Backup Folder…</source>
+        <translation>&amp;Alte Sicherungen in den Sicherungsordner verschieben…</translation>
+    </message>
+    <message>
+        <source>, waiting (not yet in the backup folder)</source>
+        <translation>, wartet (noch nicht im Sicherungsordner)</translation>
+    </message>
+    <message>
+        <source>There are no old backups of this project to move: the folder that versions 0.70.0 to 0.90.4 kept for it holds none.</source>
+        <translation>Es gibt keine alten Sicherungen dieses Projekts zu verschieben: Der Ordner, den die Versionen 0.70.0 bis 0.90.4 dafür angelegt haben, enthält keine.</translation>
+    </message>
+    <message>
+        <source>Move Old Backups</source>
+        <translation>Alte Sicherungen verschieben</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n old backup(s) of this project are in its own folder inside the backup folder:
+%1
+
+Versions 0.70.0 to 0.90.4 kept them there. Move them into the backup folder itself, under their names? A backup whose name is already there stays where it is.</source>
+        <translation>
+            <numerusform>%n alte Sicherung dieses Projekts liegt in dessen eigenem Ordner im Sicherungsordner:
+%1
+
+Die Versionen 0.70.0 bis 0.90.4 haben sie dort abgelegt. In den Sicherungsordner selbst verschieben, unter ihrem Namen? Eine Sicherung, deren Name dort schon vorhanden ist, bleibt, wo sie ist.</numerusform>
+            <numerusform>%n alte Sicherungen dieses Projekts liegen in dessen eigenem Ordner im Sicherungsordner:
+%1
+
+Die Versionen 0.70.0 bis 0.90.4 haben sie dort abgelegt. In den Sicherungsordner selbst verschieben, unter ihren Namen? Eine Sicherung, deren Name dort schon vorhanden ist, bleibt, wo sie ist.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Move</source>
+        <translation>Verschieben</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n backup(s) moved into the backup folder.</source>
+        <translation>
+            <numerusform>%n Sicherung wurde in den Sicherungsordner verschoben.</numerusform>
+            <numerusform>%n Sicherungen wurden in den Sicherungsordner verschoben.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n backup(s) left where they were:
+%1</source>
+        <translation>
+            <numerusform>%n Sicherung blieb, wo sie war:
+%1</numerusform>
+            <numerusform>%n Sicherungen blieben, wo sie waren:
+%1</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>The old folder is empty and was removed.</source>
+        <translation>Der alte Ordner ist leer und wurde entfernt.</translation>
+    </message>
+    <message>
+        <source>The program's icon could not be copied to %1, so the menu entry shows no icon.</source>
+        <translation>Das Symbol des Programms konnte nicht nach %1 kopiert werden; der Menüeintrag zeigt deshalb kein Symbol.</translation>
     </message>
     <message>
         <source>Import &amp;Files…</source>
@@ -9825,6 +9996,14 @@ Das Projekt bleibt geöffnet; das Programm versucht weiter, es in seinem eigenen
         <translation>Programm, Versionen und Computer auf einen Blick, zum Kopieren in einen Problembericht</translation>
     </message>
     <message>
+        <source>Report a Problem…</source>
+        <translation>Problem melden…</translation>
+    </message>
+    <message>
+        <source>Opens the project&apos;s page for reports of problems and wishes in your browser</source>
+        <translation>Öffnet die Seite des Projekts für Problemmeldungen und Wünsche im Browser</translation>
+    </message>
+    <message>
         <source>&amp;Crash Reports…</source>
         <translation>&amp;Absturzberichte…</translation>
     </message>
@@ -10639,6 +10818,10 @@ Wenn Sie das AppImage verschieben, wählen Sie diesen Menüeintrag erneut.</tran
         <translation>&amp;Scrivener-Projekt…</translation>
     </message>
     <message>
+        <source>&amp;%1 Project…</source>
+        <translation>&amp;%1-Projekt…</translation>
+    </message>
+    <message>
         <source>&amp;Export</source>
         <translation>&amp;Exportieren</translation>
     </message>
@@ -10765,6 +10948,62 @@ Wenn Sie das AppImage verschieben, wählen Sie diesen Menüeintrag erneut.</tran
     <message>
         <source>Editor &amp;Layout</source>
         <translation>Editor-&amp;Layout</translation>
+    </message>
+    <message>
+        <source>La&amp;yout</source>
+        <translation>La&amp;yout</translation>
+    </message>
+    <message>
+        <source>Upright window</source>
+        <translation>Hochformatfenster</translation>
+    </message>
+    <message>
+        <source>Wide window</source>
+        <translation>Querformatfenster</translation>
+    </message>
+    <message>
+        <source>Editor in the &amp;Middle</source>
+        <translation>Editor in der &amp;Mitte</translation>
+    </message>
+    <message>
+        <source>Editor at the &amp;Bottom</source>
+        <translation>Editor &amp;unten</translation>
+    </message>
+    <message>
+        <source>Binder &amp;Left</source>
+        <translation>Binder &amp;links</translation>
+    </message>
+    <message>
+        <source>Binder &amp;Right</source>
+        <translation>Binder &amp;rechts</translation>
+    </message>
+    <message>
+        <source>Binder, Editor, Inspector</source>
+        <translation>Binder, Editor, Inspektor</translation>
+    </message>
+    <message>
+        <source>Binder, Inspector, Editor</source>
+        <translation>Binder, Inspektor, Editor</translation>
+    </message>
+    <message>
+        <source>Editor, Binder, Inspector</source>
+        <translation>Editor, Binder, Inspektor</translation>
+    </message>
+    <message>
+        <source>Editor, Inspector, Binder</source>
+        <translation>Editor, Inspektor, Binder</translation>
+    </message>
+    <message>
+        <source>Inspector, Binder, Editor</source>
+        <translation>Inspektor, Binder, Editor</translation>
+    </message>
+    <message>
+        <source>Inspector, Editor, Binder</source>
+        <translation>Inspektor, Editor, Binder</translation>
+    </message>
+    <message>
+        <source>&amp;Reset Layout</source>
+        <translation>Layout &amp;zurücksetzen</translation>
     </message>
     <message>
         <source>Tool&amp;bars</source>
@@ -12466,6 +12705,91 @@ Die Schriften sind sofort nutzbar. Sie bleiben im Ordner des Programms: Andere P
         <source>The toolbars are back in their standard places.</source>
         <translation>Die Symbolleisten stehen wieder an ihren Standardplätzen.</translation>
     </message>
+    <message>
+        <source>The project stays open; the program keeps trying to save it in its own folder.</source>
+        <translation>Das Projekt bleibt offen; das Programm versucht weiter, es in seinem eigenen Ordner zu speichern.</translation>
+    </message>
+    <message>
+        <source>The project stays open.</source>
+        <translation>Das Projekt bleibt offen.</translation>
+    </message>
+    <message>
+        <source>%1: Copy Incomplete</source>
+        <translation>%1: Kopie unvollständig</translation>
+    </message>
+    <message>
+        <source>The texts and notes that were not saved are in (%1 of %1 files, with the project file as it was in memory):
+%2</source>
+        <translation>Die nicht gespeicherten Texte und Notizen liegen in (%1 von %1 Dateien, mit der Projektdatei, wie sie im Speicher war):
+%2</translation>
+    </message>
+    <message numerus="yes">
+        <source>The backup was made, but %n older backup(s) could not be deleted and stay in the backup folder. Delete them by hand, or check who may delete there:
+
+%1</source>
+        <translation>
+            <numerusform>Die Sicherung wurde angelegt, aber %n ältere Sicherung konnte nicht gelöscht werden und bleibt im Sicherungsordner. Löschen Sie sie von Hand oder prüfen Sie, wer dort löschen darf:
+
+%1</numerusform>
+            <numerusform>Die Sicherung wurde angelegt, aber %n ältere Sicherungen konnten nicht gelöscht werden und bleiben im Sicherungsordner. Löschen Sie sie von Hand oder prüfen Sie, wer dort löschen darf:
+
+%1</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>An older backup could not be deleted.</source>
+        <translation>Eine ältere Sicherung konnte nicht gelöscht werden.</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n older backup(s) could not be deleted and stay in the backup folder:
+%1</source>
+        <translation>
+            <numerusform>%n ältere Sicherung konnte nicht gelöscht werden und bleibt im Sicherungsordner:
+%1</numerusform>
+            <numerusform>%n ältere Sicherungen konnten nicht gelöscht werden und bleiben im Sicherungsordner:
+%1</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Restore From Backup: Not Restored</source>
+        <translation>Sicherung wiederherstellen: nicht wiederhergestellt</translation>
+    </message>
+    <message>
+        <source>The title of the restored project could not be marked "(restored ...)", so it has the title of the project it was made from: %1</source>
+        <translation>Der Titel des wiederhergestellten Projekts konnte nicht mit "(wiederhergestellt ...)" gekennzeichnet werden und ist der Titel des Projekts, aus dem es entstand: %1</translation>
+    </message>
+    <message>
+        <source>The restored project could not be opened to mark its title "(restored ...)": %1</source>
+        <translation>Das wiederhergestellte Projekt ließ sich nicht öffnen, um seinen Titel mit "(wiederhergestellt ...)" zu kennzeichnen: %1</translation>
+    </message>
+    <message>
+        <source>The backup was restored INCOMPLETELY into:
+%1
+
+%2</source>
+        <translation>Die Sicherung wurde UNVOLLSTÄNDIG wiederhergestellt in:
+%1
+
+%2</translation>
+    </message>
+    <message>
+        <source>The backup was restored into:
+%1</source>
+        <translation>Die Sicherung wurde wiederhergestellt in:
+%1</translation>
+    </message>
+    <message>
+        <source>Restore From Backup: Restored Incompletely</source>
+        <translation>Sicherung wiederherstellen: unvollständig wiederhergestellt</translation>
+    </message>
+    <message>
+        <source>Open it now? The project open now is closed first (it stays as it is).</source>
+        <translation>Jetzt öffnen? Das jetzt offene Projekt wird zuerst geschlossen (es bleibt, wie es ist).</translation>
+    </message>
+    <message>
+        <source>The journal of an earlier save is in the way and could not be moved aside; nothing was written. The message below names the file.</source>
+        <translation>Das Journal eines früheren Speicherns ist im Weg und ließ sich nicht beiseite legen; es wurde nichts geschrieben. Die Meldung unten nennt die Datei.</translation>
+    </message>
 </context>
 <context>
     <name>qb::ManageIconsDialog</name>
@@ -12809,6 +13133,18 @@ Die Schriften sind sofort nutzbar. Sie bleiben im Ordner des Programms: Andere P
     <message>
         <source>&amp;Page Guides</source>
         <translation>&amp;Seitenführungslinien</translation>
+    </message>
+    <message>
+        <source>O&amp;verview Always Shown</source>
+        <translation>Über&amp;sicht immer sichtbar</translation>
+    </message>
+    <message>
+        <source>Overview: always shown</source>
+        <translation>Übersicht: immer sichtbar</translation>
+    </message>
+    <message>
+        <source>Overview: automatic</source>
+        <translation>Übersicht: automatisch</translation>
     </message>
     <message>
         <source>&amp;Actual Size</source>
@@ -16158,8 +16494,16 @@ Fortfahren?</translation>
         <translation>Designordner anzeigen...</translation>
     </message>
     <message>
-        <source>The file could not be written.</source>
-        <translation>Die Datei konnte nicht geschrieben werden.</translation>
+        <source>The file could not be written. The file that was there is unchanged.</source>
+        <translation>Die Datei konnte nicht geschrieben werden. Die bisherige Datei ist unverändert.</translation>
+    </message>
+    <message>
+        <source>The file could not be written (%1). The file that was there is unchanged.</source>
+        <translation>Die Datei konnte nicht geschrieben werden (%1). Die bisherige Datei ist unverändert.</translation>
+    </message>
+    <message>
+        <source>nothing to write</source>
+        <translation>nichts zu schreiben</translation>
     </message>
     <message>
         <source>This is not a file of options saved by Quillbinder.</source>
@@ -17086,6 +17430,134 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
     <message>
         <source>another computer</source>
         <translation>ein anderer Computer</translation>
+    </message>
+    <message>
+        <source>nothing to write</source>
+        <translation>nichts zu schreiben</translation>
+    </message>
+    <message>
+        <source>Cannot create a folder in %1</source>
+        <translation>In %1 kann kein Ordner erstellt werden</translation>
+    </message>
+    <message>
+        <source>The project "%1" (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder "objects") and the project file %4 as it was in memory (the binder, titles and labels). Copy what you need back into the project.
+
+</source>
+        <translation>Das Projekt "%1" (%2) konnte nicht gespeichert werden. Dieser Ordner enthält, was noch nicht gespeichert war: Texte und Notizen als RTF-Dateien (Word, LibreOffice und %3 öffnen sie), Mind-Map-Tafeln, geänderte Objekte (im Ordner "objects") und die Projektdatei %4 so, wie sie im Speicher war (Gliederung, Titel und Farbmarken). Kopieren Sie, was Sie brauchen, zurück ins Projekt.
+
+</translation>
+    </message>
+    <message>
+        <source>To put the project file back: close the project, rename the project file %1 in the project folder %2 (so that it is kept), and copy the file %1 of this folder there. Then open the project again.
+
+</source>
+        <translation>So spielen Sie die Projektdatei zurück: Schließen Sie das Projekt, benennen Sie die Projektdatei %1 im Projektordner %2 um (damit sie erhalten bleibt) und kopieren Sie die Datei %1 dieses Ordners dorthin. Öffnen Sie danach das Projekt wieder.
+
+</translation>
+    </message>
+    <message>
+        <source>This copy is complete: all %1 files were written.
+</source>
+        <translation>Diese Kopie ist vollständig: Alle %1 Dateien wurden geschrieben.
+</translation>
+    </message>
+    <message>
+        <source>THIS COPY IS INCOMPLETE: %1 of %2 files were written. Not written:
+%3
+
+</source>
+        <translation>DIESE KOPIE IST UNVOLLSTÄNDIG: %1 von %2 Dateien wurden geschrieben. Nicht geschrieben:
+%3
+
+</translation>
+    </message>
+    <message>
+        <source>No copy could be written: %1</source>
+        <translation>Es konnte keine Kopie geschrieben werden: %1</translation>
+    </message>
+    <message>
+        <source>The texts not saved are in:
+%1
+
+The copy is complete: %2 of %2 files were written, with the project file as it is in memory (the README in that folder says how to put it back).</source>
+        <translation>Die nicht gespeicherten Texte liegen in:
+%1
+
+Die Kopie ist vollständig: %2 von %2 Dateien wurden geschrieben, mit der Projektdatei, wie sie im Speicher ist (die README in diesem Ordner sagt, wie sie zurückgespielt wird).</translation>
+    </message>
+    <message>
+        <source>This copy is INCOMPLETE: %1 of %2 files were written, in:
+%3
+
+Not written:
+%4</source>
+        <translation>Diese Kopie ist UNVOLLSTÄNDIG: %1 von %2 Dateien wurden geschrieben, in:
+%3
+
+Nicht geschrieben:
+%4</translation>
+    </message>
+    <message>
+        <source>Not saved yet: the journal of an earlier save, %1, cannot be read and could not be moved aside, so this save would overwrite it. Nothing was written; your changes are kept while the project stays open. Check that the folder %2 can be written, or move that file away by hand; the program then saves by itself.</source>
+        <translation>Noch nicht gespeichert: Das Journal eines früheren Speicherns, %1, kann nicht gelesen werden und ließ sich nicht beiseite legen; dieses Speichern würde es überschreiben. Es wurde nichts geschrieben; Ihre Änderungen bleiben erhalten, solange das Projekt offen ist. Prüfen Sie, ob der Ordner %2 beschreibbar ist, oder verschieben Sie die Datei von Hand; danach speichert das Programm von selbst.</translation>
+    </message>
+    <message>
+        <source>Not saved yet: the drive reported an error. %1 The journal of the last save is kept and the program tries again by itself.</source>
+        <translation>Noch nicht gespeichert: Das Laufwerk hat einen Fehler gemeldet. %1 Das Journal des letzten Speicherns bleibt erhalten, und das Programm versucht es von selbst erneut.</translation>
+    </message>
+    <message>
+        <source>Not saved yet: the journal of an earlier save, %1, cannot be read and could not be moved aside, so this save would overwrite it. Nothing was written; your changes are kept while the project stays open. Make the folder %2 writable (the files of that save, named *.qbstage in the project folder, are kept as they are); the program then sets the journal aside and saves by itself.</source>
+        <translation>Noch nicht gespeichert: Das Journal eines früheren Speicherns, %1, kann nicht gelesen werden und ließ sich nicht beiseite legen; dieses Speichern würde es überschreiben. Es wurde nichts geschrieben; Ihre Änderungen bleiben erhalten, solange das Projekt offen ist. Machen Sie den Ordner %2 beschreibbar (die Dateien dieses Speicherns, im Projektordner als *.qbstage benannt, bleiben unverändert); das Programm legt das Journal dann beiseite und speichert von selbst.</translation>
+    </message>
+    <message>
+        <source>The project "%1" (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder "objects") and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
+
+</source>
+        <translation>Das Projekt "%1" (%2) konnte nicht gespeichert werden. Dieser Ordner enthält, was noch nicht gespeichert war: Texte und Notizen als RTF-Dateien (Word, LibreOffice und %3 öffnen sie), Mind-Map-Tafeln, geänderte Objekte (im Ordner "objects") und die Projektdatei, wie sie im Speicher war (Gliederung, Titel und Farbmarken), als %4. Kopieren Sie, was Sie brauchen, zurück ins Projekt.
+
+</translation>
+    </message>
+    <message>
+        <source>To put the project file back: close the project, rename the project file %1 in the project folder %2 (so that it is kept), copy the file %3 of this folder there and rename it to %1. Then open the project again. (The copy's name ends in .copy so that this folder is not taken for a project.)
+
+</source>
+        <translation>So spielen Sie die Projektdatei zurück: Schließen Sie das Projekt, benennen Sie die Projektdatei %1 im Projektordner %2 um (damit sie erhalten bleibt), kopieren Sie die Datei %3 dieses Ordners dorthin und benennen Sie sie in %1 um. Öffnen Sie danach das Projekt wieder. (Der Name der Kopie endet auf .copy, damit dieser Ordner nicht für ein Projekt gehalten wird.)
+
+</translation>
+    </message>
+    <message>
+        <source>The project is in Scrivener format: the file %1 belongs to its working copy (%2), not to the .scriv folder. The binder is written into the .scriv with the next save that works; do not copy this file over anything by hand.
+
+</source>
+        <translation>Das Projekt liegt im Scrivener-Format: Die Datei %1 gehört zu seiner Arbeitskopie (%2), nicht zum .scriv-Ordner. Die Gliederung wird beim nächsten Speichern, das gelingt, in das .scriv geschrieben; kopieren Sie diese Datei nicht von Hand über etwas.
+
+</translation>
+    </message>
+    <message>
+        <source>Everything is saved: no copy was needed.</source>
+        <translation>Alles ist gespeichert: Es war keine Kopie nötig.</translation>
+    </message>
+    <message>
+        <source>The texts not saved are in:
+%1
+
+The copy is complete: %2 of %2 files were written, with the project file as it is in memory, named *.copy (the README in that folder says how to put it back).</source>
+        <translation>Die nicht gespeicherten Texte liegen in:
+%1
+
+Die Kopie ist vollständig: %2 von %2 Dateien wurden geschrieben, mit der Projektdatei, wie sie im Speicher ist, als *.copy benannt (die README in diesem Ordner sagt, wie sie zurückgespielt wird).</translation>
+    </message>
+    <message>
+        <source>No copy was needed: nothing was waiting to be written into the project's own folder.</source>
+        <translation>Es war keine Kopie nötig: Nichts wartete darauf, in den eigenen Ordner des Projekts geschrieben zu werden.</translation>
+    </message>
+    <message>
+        <source>The .scriv gets the changes with the next save that works.</source>
+        <translation>Das .scriv bekommt die Änderungen mit dem nächsten Speichern, das gelingt.</translation>
+    </message>
+    <message>
+        <source>temporary file of an earlier save</source>
+        <translation>temporäre Datei eines früheren Speicherns</translation>
     </message>
 </context>
 <context>
@@ -18298,8 +18770,8 @@ Gespeichert %2 aus dem Projekt „%3“ von %4.</translation>
         <translation>Scrivener-3-Projekt (.scriv)</translation>
     </message>
     <message>
-        <source>Scrivener format: the project can be opened in Scrivener 3 as well (File &gt; Project Format)</source>
-        <translation>Scrivener-Format: Das Projekt kann auch in Scrivener 3 geöffnet werden (Datei &gt; Projektformat)</translation>
+        <source>Scrivener format: the project can be opened in Scrivener 3 as well (File &gt; Save As)</source>
+        <translation>Scrivener-Format: Das Projekt kann auch in Scrivener 3 geöffnet werden (Datei &gt; Speichern unter)</translation>
     </message>
     <message>
         <source>Open Other…</source>
@@ -20507,6 +20979,14 @@ Sie wird von hier aus nicht geöffnet. Wenn Sie ihr vertrauen, öffnen Sie sie s
     <message>
         <source>%1 pictures could not be fetched or are in a format the program does not show.</source>
         <translation>%1 Bilder konnten nicht abgerufen werden oder haben ein Format, das das Programm nicht anzeigt.</translation>
+    </message>
+    <message>
+        <source>1 picture was left out: its address is on this computer or on a private network, and the page comes from the internet.</source>
+        <translation>1 Bild wurde ausgelassen: Seine Adresse liegt auf diesem Computer oder in einem privaten Netz, die Seite aber kommt aus dem Internet.</translation>
+    </message>
+    <message>
+        <source>%1 pictures were left out: their addresses are on this computer or on a private network, and the page comes from the internet.</source>
+        <translation>%1 Bilder wurden ausgelassen: Ihre Adressen liegen auf diesem Computer oder in einem privaten Netz, die Seite aber kommt aus dem Internet.</translation>
     </message>
     <message>
         <source>The page builds its text with a script; the text was taken from the page&apos;s data, without formatting and pictures.</source>

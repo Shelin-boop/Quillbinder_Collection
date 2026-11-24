@@ -1,4 +1,5 @@
 #include "ui/EditorPane.h"
+#include "ui/FooterStatus.h"
 #include <cmath>
 #include "ui/Zoom.h"
 #include "core/Search.h"
@@ -472,7 +473,10 @@ void EditorPane::buildFooter()
     m_pageLabel->setToolTip(tr("Page view: the page of the cursor and the number of pages shown"));
     m_pageLabel->hide();
     tl->addWidget(m_pageLabel);
-    tl->addStretch(1);
+    // 0.93.0: the empty stretch holds the save text (FooterStatus); it moves to the stretch of the footer shown
+    m_status = new FooterStatus(tf);
+    m_statusPlaces[0] = {tl, int(tl->count())};
+    tl->addWidget(m_status, 1);
     m_countButton = new QToolButton(tf);
     m_countButton->setAutoRaise(true);
     m_countButton->setToolTip(tr("Click for details"));
@@ -585,6 +589,7 @@ void EditorPane::buildFooter()
     cl->addWidget(m_corkFree);
     cl->addWidget(m_corkLabels);
     cl->addWidget(m_corkCommit);
+    m_statusPlaces[1] = {cl, int(cl->count())};
     cl->addStretch(1);
     cr->addStretch(1);
     cr->addWidget(new QLabel(tr("Size"), cf));
@@ -628,6 +633,7 @@ void EditorPane::buildFooter()
     m_affectOutliner->setCheckable(true);
     ol->addWidget(m_synopsisToggle);
     ol->addWidget(cols);
+    m_statusPlaces[2] = {ol, int(ol->count())};
     ol->addStretch(1);
     orr->addStretch(1);
     orr->addWidget(m_affectOutliner);
@@ -651,6 +657,7 @@ void EditorPane::buildFooter()
     ml->addWidget(zoomOut);
     ml->addWidget(zoomIn);
     ml->addWidget(fit);
+    m_statusPlaces[3] = {ml, int(ml->count())};
     ml->addStretch(1);
     ml->addWidget(pPrev);
     ml->addWidget(m_mediaInfo);
@@ -660,8 +667,10 @@ void EditorPane::buildFooter()
     m_mediaControls->setView(m_media);
     m_mediaFooter->addWidget(m_mediaControls);
     m_footer->addWidget(m_mediaFooter);
+    m_statusPlaces[4] = {static_cast<QHBoxLayout *>(m_mediaControls->layout()), int(m_mediaControls->layout()->count())};
     connect(m_media, &MediaView::playbackChanged, this, [this] {
         m_mediaFooter->setCurrentWidget(m_media->isPlayer() ? static_cast<QWidget *>(m_mediaControls) : m_mediaFooter->widget(0));
+        placeStatus();
     });
     connect(zoomOut, &QToolButton::clicked, this, [this] { m_media->zoomBy(1 / 1.25); });
     connect(zoomIn, &QToolButton::clicked, this, [this] { m_media->zoomBy(1.25); });
@@ -670,8 +679,31 @@ void EditorPane::buildFooter()
     connect(pNext, &QToolButton::clicked, this, [this] { m_media->pdfPage(1); });
 
     // empty footer
-    m_footer->addWidget(new QWidget(m_footer));
+    auto *emptyFooter = new QWidget(m_footer);
+    auto *el = new QHBoxLayout(emptyFooter);
+    el->setContentsMargins(4, 1, 4, 1);
+    m_statusPlaces[5] = {el, 0};
+    m_footer->addWidget(emptyFooter);
     m_footer->setCurrentIndex(4);
+    placeStatus();
+}
+
+// 0.93.0: the save text sits in the footer bar shown now (text, corkboard, outliner, picture, player, nothing)
+void EditorPane::placeStatus()
+{
+    int at = m_footer->currentIndex();
+    if (at == 3)
+        at = m_media->isPlayer() ? 4 : 3;
+    else if (at == 4)
+        at = 5;
+    const StatusPlace &pl = m_statusPlaces[at];
+    if (!pl.layout || !m_status)
+        return;
+    if (pl.layout->indexOf(m_status) >= 0)
+        return;
+    m_status->setParent(pl.layout->parentWidget());
+    pl.layout->insertWidget(qMin(pl.index, int(pl.layout->count())), m_status, at == 4 ? 0 : 1);
+    m_status->show();
 }
 
 void EditorPane::setProject(Project *p)
@@ -1078,6 +1110,7 @@ void EditorPane::applyMode()
             m_outliner->filterCounts(&shown, &total);
         m_filterBar->setCount(shown, total);
     }
+    placeStatus();
     updateFindHighlights();
     updateFooter();
     updateRuler();

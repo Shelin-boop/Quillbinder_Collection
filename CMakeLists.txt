@@ -7,7 +7,21 @@ cmake_minimum_required(VERSION 3.16)
 # ---------------------------------------------------------------------------
 set(APP_NAME "Quillbinder")
 set(APP_ID   "quillbinder")
-set(APP_VERSION "0.92.0")
+set(APP_VERSION "0.93.0")
+# 0.93.0: a version line per system (working rules, section 8). The first two numbers (the functional level) are the same
+# on every system; the last number counts each system's own fixes, so that a system is released as soon as its own
+# tests pass. "APP_VERSION" is the Linux line (the AppImage, the update package; every script that reads it for
+# Linux keeps reading it); the Windows and the Android builds use their own line below: the build takes it as
+# APP_VERSION, so that the program, the packages and AppInfo.h see one number. Scripts of those systems read
+# APP_VERSION_WINDOWS / APP_VERSION_ANDROID from this file (the Python tools take --system). Raise the last number of a system's line when that system gets a delivery of its own.
+set(APP_VERSION_WINDOWS "0.93.0")
+set(APP_VERSION_ANDROID "0.93.0")
+if(WIN32)
+  set(APP_VERSION "${APP_VERSION_WINDOWS}")
+elseif(ANDROID OR CMAKE_SYSTEM_NAME STREQUAL "Android")
+  # (ANDROID itself is only known after project(); the toolchain file sets the system's name before)
+  set(APP_VERSION "${APP_VERSION_ANDROID}")
+endif()
 # A word shown after the version number in Help > About, System Information and the
 # AppImage's file name ("alpha", "beta"; empty for a normal release). It is never part
 # of version comparisons: the program, the loader and the packages compare APP_VERSION only.
@@ -20,16 +34,16 @@ endif()
 # Identifies the set of libraries inside the AppImage. Program updates
 # (.qbpkg "core" packages) only run on the runtime they were built for;
 # change it whenever the bundled libraries change (new Qt, new modules).
-set(APP_RUNTIME "u2404-qt6.12-r1")
+set(APP_RUNTIME "u2404-qt6.12-r2")
 # the first program version of that runtime: add-ons with libraries built for it need it (tools/make-package.py)
-set(APP_RUNTIME_SINCE "0.80.0")
+set(APP_RUNTIME_SINCE "0.93.0")
 # The Qt of the Linux build (0.80.0): The Qt Company's own binaries of this version (tools/get-qt.sh puts them
 # into /opt/qt/<version>/gcc_64; the release workflow installs the same with aqtinstall), no longer Ubuntu's
 # Qt 6.4.2. The runtime id above names it; change both together.
-set(QB_QT_VERSION "6.12.0")
+set(QB_QT_VERSION "6.12.1")
 # The day that Qt version was released (its tag in qt/qtbase): Help > System Information shows the runtime's age
 # (the external audit of 2026-11-09, X-7).
-set(APP_RUNTIME_DATE "2026-09-30")
+set(APP_RUNTIME_DATE "2026-11-23")
 if(WIN32)
   # Windows (port, W2; Qt 6.12.0 since W4a, 2026-11-11, the same Qt as Linux): The Qt Company's build of
   # QB_QT_VERSION for MSVC with its DLLs in the program folder; program updates for Windows must be built with the
@@ -41,6 +55,12 @@ endif()
 set(APP_HOMEPAGE "https://github.com/Shelin-boop/Quillbinder_Collection")
 
 project(${APP_ID} VERSION ${APP_VERSION} LANGUAGES C CXX) # C: Monocypher (src/core/third_party, 0.65.0)
+# a build must carry its own system's line: stop loudly rather than build a program with another system's number
+if(WIN32 AND NOT APP_VERSION STREQUAL APP_VERSION_WINDOWS)
+  message(FATAL_ERROR "Windows build: APP_VERSION must be APP_VERSION_WINDOWS (${APP_VERSION_WINDOWS}), not ${APP_VERSION}")
+elseif(ANDROID AND NOT APP_VERSION STREQUAL APP_VERSION_ANDROID)
+  message(FATAL_ERROR "Android build: APP_VERSION must be APP_VERSION_ANDROID (${APP_VERSION_ANDROID}), not ${APP_VERSION}")
+endif()
 
 if(ANDROID)
   # Android (port, A0, 2026-11-14): The Qt Company's build of QB_QT_VERSION for Android inside the APK

@@ -22,9 +22,9 @@
 #    tools and Ubuntu's packages run there); "sign-packages" and "sign-checksums" get the key and run no
 #    third-party code: only openssl and Python of the runner and tools/make-package.py of this commit;
 #    "assemble" puts the signed add-ons into the full version (without the key).
-#  - "tests" runs the project's full test suite (all suites but v060: it was left out while it
-#    checked the copy into a second repository; whether it can run here now is not tried yet); nothing is published unless it passes (a suite that fails is run once more, for the
-#    rare timing failures of a two-core machine).
+#  - "tests" runs the project's full test suite; nothing is published unless it passes (a suite that fails is
+#    run once more, for the rare timing failures of a two-core machine). Since 0.93.0 it runs v060 too: that suite
+#    was left out only while it checked the copy into a second repository, which no longer exists.
 #
 # 2026-11-15 (build optimization P2 and P7; working rules section 10, decision D3, with its safeguards):
 #  - FFmpeg (both sets) and whisper.cpp are kept between runs in GitHub's cache, under their recipe hash
@@ -70,7 +70,7 @@ jobs:
       build: ${{ steps.v.outputs.build }}
       fresh: ${{ steps.v.outputs.fresh }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
       - id: v
@@ -125,7 +125,7 @@ jobs:
               ccache zstd \
             && apt-get -y -qq upgrade; } 2>&1 | tee /tmp/ci-log/tools.log
 
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
 
@@ -314,7 +314,7 @@ jobs:
         run: |
           apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl xz-utils openssl ccache zstd
 
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
 
@@ -389,7 +389,7 @@ jobs:
       - name: The full test suite
         run: |
           set +e
-          QB_SKIP_SUITES="v060" tools/run-all-tests.sh build/test-results x11 2>&1 | tee /tmp/tests.log
+          tools/run-all-tests.sh build/test-results x11 2>&1 | tee /tmp/tests.log
           rc=${PIPESTATUS[0]}
           if [ "$rc" != 0 ]; then
             failed=$(sed -n 's/^failed: *//p' /tmp/tests.log | tail -1)
@@ -429,7 +429,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
       - name: cppcheck
@@ -446,7 +446,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
 
@@ -534,7 +534,7 @@ jobs:
         run: |
           apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl xz-utils openssl
 
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
 
@@ -599,7 +599,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
 
@@ -679,7 +679,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
 
@@ -723,7 +723,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           persist-credentials: false
 

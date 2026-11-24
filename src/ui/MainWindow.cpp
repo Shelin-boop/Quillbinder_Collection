@@ -59,6 +59,7 @@
 #include "ui/CrashDialogs.h"
 #include "ui/Commands.h"
 #include "ui/ToolHost.h"
+#include "ui/DocMirror.h"
 #include "ui/Inspector.h"
 #include "ui/MindMapController.h"
 #include "ui/MindMapDoc.h"
@@ -123,9 +124,10 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QPlainTextEdit>
+#include <QTextEdit>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
-#include <QStatusBar>
+#include "ui/FooterStatus.h"
 #include <QPrinter>
 #include <QProcess>
 #include <QPushButton>
@@ -247,6 +249,7 @@ MainWindow::MainWindow()
     m_binder = new BinderPanel(m_mainSplit);
     // the editors with the bar for offers of the format bar above them
     auto *editorArea = new QWidget(m_mainSplit);
+    m_editorArea = editorArea;
     editorArea->setObjectName(QStringLiteral("editorArea"));
     auto *editorLayout = new QVBoxLayout(editorArea);
     editorLayout->setContentsMargins(0, 0, 0, 0);
@@ -268,6 +271,7 @@ MainWindow::MainWindow()
     m_mainSplit->setStretchFactor(2, 0);
     m_mainSplit->setSizes({260, 800, 300});
     m_mainSplit->setChildrenCollapsible(false);
+    initPaneSplitters(); // 0.93.0: the row of the binder and the inspector for an upright window
     setCentralWidget(m_mainSplit);
     m_active = m_panes[0];
     connectPane(m_panes[0]);
@@ -281,6 +285,7 @@ MainWindow::MainWindow()
     createActions();
     createExtraActions();
     createToolActions();
+    createPaneActions(); // 0.93.0: View > Layout
     createMenus();
     commands::addFromMenuBar(menuBar());
     for (QAction *ac : actions()) // commands that sit in no menu
@@ -484,8 +489,8 @@ MainWindow::MainWindow()
     currentFormatting::setProvider([self = QPointer<MainWindow>(this)](Formatting *f) {
         return self && self->formattingAtCursor(self->m_active ? self->m_active->currentEditor() : nullptr, f);
     });
-    connect(qApp, &QApplication::focusChanged, this, [this](QWidget *, QWidget *now) {
-        if (!now)
+    m_focusLinks << connect(qApp, &QApplication::focusChanged, this, [this](QWidget *, QWidget *now) {
+        if (!now || m_ending)
             return;
         // the text field the format bar acts on (0.21.1): the one the keyboard was in last,
         // also while the keyboard is on the format bar (the size field) or in a popup
@@ -534,11 +539,9 @@ MainWindow::MainWindow()
         m_barDock = new BarDock(this, gripBars, {rowOne, rowTwo});
         m_barDock->load();
     }
-    const QVariantList sizes = s.value(QStringLiteral("window/mainSplit")).toList();
-    if (sizes.size() == 3)
-        m_mainSplit->setSizes({sizes[0].toInt(), sizes[1].toInt(), sizes[2].toInt()});
     if (!s.contains(QStringLiteral("window/geometry")))
         resize(1300, 820);
+    loadPaneSettings(s); // 0.93.0: the places and sizes of both shapes; arranged for the window's shape
     a[QStringLiteral("showInspector")]->setChecked(s.value(QStringLiteral("window/inspector"), true).toBool());
     a[QStringLiteral("showBinder")]->setChecked(s.value(QStringLiteral("window/binder"), true).toBool());
     a[QStringLiteral("showToolbar")]->setChecked(s.value(QStringLiteral("window/toolbar"), true).toBool());
@@ -551,20 +554,13 @@ MainWindow::MainWindow()
         a[QStringLiteral("showIconBar")]->setChecked(shown);
         m_iconBar->setVisible(shown);
     }
-    // 0.70.0 (audit A S-01, B S-1): a sign of the save state that is always there
-    m_saveState = new QLabel(this);
-    m_saveState->setObjectName(QStringLiteral("saveState"));
-    m_saveState->setContentsMargins(6, 0, 6, 0);
-    statusBar()->addPermanentWidget(m_saveState);
-    // W4b: the portable program makes no automatic backup until a folder is chosen; this says so
-    m_backupState = new QLabel(this);
-    m_backupState->setObjectName(QStringLiteral("backupState"));
-    m_backupState->setContentsMargins(6, 0, 6, 0);
-    m_backupState->setTextFormat(Qt::RichText);
-    connect(m_backupState, &QLabel::linkActivated, this, [this] {
+    // 0.70.0 (audit A S-01, B S-1): a sign of the save state that is always there. Since 0.93.0 it sits in the empty
+    // stretch of the first editor's footer bar (FooterStatus), together with the warning link and the short messages;
+    // the window has no status bar row. W4b: the portable program makes no automatic backup until a folder is chosen;
+    // the link says so
+    connect(m_panes[0]->footerStatus()->backupLabel(), &QLabel::linkActivated, this, [this] {
         OptionsDialog::run(this, [](OptionsDialog &dlg) { dlg.showSection(OptionsDialog::SBackup); });
     });
-    statusBar()->addPermanentWidget(m_backupState);
     connect(&AppSettings::instance(), &AppSettings::changed, this, &MainWindow::updateBackupState);
     connect(&theme::Notifier::instance(), &theme::Notifier::changed, this, &MainWindow::updateBackupState); // its color
     updateBackupState();
@@ -614,36 +610,51 @@ MainWindow::MainWindow()
     updateSaveState();
 }
 
-QString MainWindow::saveStateText() const { return m_saveState ? m_saveState->text() : QString(); }
+QString MainWindow::saveStateText() const { return m_panes[0] ? m_panes[0]->footerStatus()->saveText() : QString(); }
+
+// 0.93.0: a short message of the program, in the footer bar of the first editor for its seconds (0 = until it is
+// cleared); the save text comes back after it
+void MainWindow::showStatusNote(const QString &text, int ms)
+{
+    if (m_panes[0])
+        m_panes[0]->footerStatus()->showNote(text, ms);
+}
+
+void MainWindow::clearStatusNote()
+{
+    if (m_panes[0])
+        m_panes[0]->footerStatus()->clearNote();
+}
+
+QString MainWindow::statusNote() const { return m_panes[0] ? m_panes[0]->footerStatus()->noteText() : QString(); }
 
 void MainWindow::updateSaveState()
 {
-    if (!m_saveState)
+    if (!m_panes[0])
         return;
+    FooterStatus *fs = m_panes[0]->footerStatus();
     if (!m_project) {
-        m_saveState->clear();
-        m_saveState->setToolTip(QString());
+        fs->clearSave();
+        fs->clearNote();
         setWindowModified(false);
         return;
     }
-    QString text, tip, style;
+    QString text, tip;
+    FooterStatus::Kind kind = FooterStatus::Saved;
     if (m_saveFailedSince.isValid()) {
         text = tr("Not saved: the last save failed at %1").arg(QLocale().toString(m_saveFailedSince.time(), QStringLiteral("HH:mm")));
         tip = tr("The latest changes are only in this window. The program tries to save them again by itself.\n%1")
                   .arg(m_lastSaveError);
-        style = QStringLiteral("QLabel { color: white; background: #b00020; padding: 1px 6px; border-radius: 3px; }");
+        kind = FooterStatus::Failed;
     } else if (m_project->hasUnsavedChanges()) {
         text = tr("Not saved yet");
         tip = tr("The latest changes are saved within a few seconds.");
+        kind = FooterStatus::Pending;
     } else {
         text = tr("Saved");
         tip = tr("All changes are saved.");
     }
-    if (m_saveState->text() != text) {
-        m_saveState->setText(text);
-        m_saveState->setStyleSheet(style);
-    }
-    m_saveState->setToolTip(tip);
+    fs->setSave(text, tip, kind);
     setWindowModified(m_saveFailedSince.isValid());
 }
 
@@ -709,6 +720,9 @@ QString MainWindow::plainSaveReason(const QString &err, failure::Kind kind)
     case failure::Kind::NoRights: return tr("The program may not write into the project folder.");
     case failure::Kind::DriveError: return tr("The drive reported an error: it may be failing, or it was removed.");
     case failure::Kind::FolderGone: return tr("The project folder is not there any more (renamed, moved, or its drive is not connected).");
+    case failure::Kind::JournalInTheWay:
+        return tr("The journal of an earlier save is in the way and could not be moved aside; nothing was written. The message "
+                  "below names the file.");
     case failure::Kind::None: break;
     }
     return plainSaveReason(err);
@@ -735,7 +749,7 @@ void MainWindow::placeBesideText(QWidget *notice)
     notice->ensurePolished();
     notice->adjustSize();
     const QRect g = frameGeometry();
-    const int bottom = g.bottom() - (statusBar() ? statusBar()->height() : 0) - 16;
+    const int bottom = g.bottom() - 16;
     QPoint at(g.right() - notice->frameGeometry().width() - 16, bottom - notice->frameGeometry().height());
     if (QScreen *s = screen()) {
         const QRect a = s->availableGeometry();
@@ -756,7 +770,7 @@ void MainWindow::noteSaved()
     m_saveRetry->stop();
     if (m_saveNotice)
         m_saveNotice->close();
-    statusBar()->showMessage(tr("Saved again: all changes are on the disk."), 10000);
+    showStatusNote(tr("Saved again: all changes are on the disk."), 10000);
     updateSaveState();
 }
 
@@ -782,17 +796,44 @@ void MainWindow::saveTextsElsewhere()
     const QString parent = QFileDialog::getExistingDirectory(this, tr("Save the Texts Not Saved Into"), QDir::homePath());
     if (parent.isEmpty())
         return;
-    QString why;
-    const QString dir = m_project->writeEmergencyCopy(parent, &why);
-    QMessageBox::information(this, tr("Save Texts Elsewhere"),
-                             dir.isEmpty() ? tr("The texts could not be written there either: %1").arg(why.isEmpty() ? tr("nothing to write") : why)
-                                           : tr("The texts not saved are in:\n%1\n\nThe project stays open; the program "
-                                                "keeps trying to save it in its own folder.")
-                                                 .arg(QDir::toNativeSeparators(dir)));
+    tellEmergencyCopy(m_project->makeEmergencyCopy(parent), tr("Save Texts Elsewhere"),
+                      tr("The project stays open; the program keeps trying to save it in its own folder."));
+}
+
+void MainWindow::tellEmergencyCopy(const EmergencyReport &rep, const QString &title, const QString &tail)
+{
+    QString text = Project::emergencyText(rep);
+    if (!rep.dir.isEmpty())
+        text += QStringLiteral("\n\n") + tail;
+    else if (!rep.nothingToWrite)
+        text = tr("The texts could not be written there either: %1").arg(rep.reason.isEmpty() ? tr("nothing to write") : rep.reason);
+    m_lastEmergencyCopyText = text;
+    // an incomplete copy is headed as incomplete and never looks like a done one (0.93.0)
+    QMessageBox box(rep.complete() || rep.dir.isEmpty() || rep.nothingToWrite ? QMessageBox::Information : QMessageBox::Warning,
+                    rep.complete() || rep.dir.isEmpty() || rep.nothingToWrite ? title : tr("%1: Copy Incomplete").arg(title), text, QMessageBox::Ok, this);
+    box.setObjectName(QStringLiteral("emergencyCopyMessage"));
+    box.exec();
 }
 
 MainWindow::~MainWindow()
 {
+    // 0.93.0 (Android's system test, a crash at the window's end): the keyboard focus changes while the window's own
+    // widgets are deleted (after this body, with the members already gone), and the application's focus signal then
+    // reached the undo watcher of a window half destroyed. Every connection to the application's signals is cut first.
+    m_ending = true;
+    for (const QMetaObject::Connection &c : std::as_const(m_focusLinks))
+        disconnect(c);
+    m_focusLinks.clear();
+    for (const QMetaObject::Connection &c : std::as_const(m_undoWatch))
+        disconnect(c);
+    m_undoWatch.clear();
+    if (m_undoNamesTimer)
+        m_undoNamesTimer->stop();
+    disconnect(qApp, nullptr, this, nullptr);
+    disconnect(&AppSettings::instance(), nullptr, this, nullptr);
+    disconnect(&layouts::Notifier::instance(), nullptr, this, nullptr);
+    disconnect(&zoom::notifier(), nullptr, this, nullptr);
+    disconnect(&theme::Notifier::instance(), nullptr, this, nullptr);
     // The project goes away with the members below: its documents leave the editors, which
     // report a moved cursor or a changed selection. The window, half gone by then, must not
     // answer them (seen when a window with an open project and the cursor inside a text is
@@ -942,25 +983,19 @@ void MainWindow::createActions()
                 if (p)
                     adoptProject(std::move(p), true);
             });
-    // File > Project Format
-    {
-        QAction *own = act(QStringLiteral("formatQuillbinder"), tr("&%1 Project").arg(QStringLiteral(QB_APP_NAME)));
-        QAction *scriv = act(QStringLiteral("formatScrivener"), tr("&Scrivener 3 Project (.scriv)"));
-        own->setCheckable(true);
-        scriv->setCheckable(true);
-        auto *group = new QActionGroup(this);
-        group->addAction(own);
-        group->addAction(scriv);
-        own->setToolTip(tr("Save the project in %1's own format").arg(QStringLiteral(QB_APP_NAME)));
-        scriv->setToolTip(tr("Save the project in the format of Scrivener 3, so that Scrivener can open it too"));
-        connect(own, &QAction::triggered, this, [this] { switchToQuillbinderFormat(); });
-        connect(scriv, &QAction::triggered, this, [this] { switchToScrivenerFormat(); });
-        connect(act(QStringLiteral("saveCopyScrivener"), tr("Save a Copy as Scrivener Project…"), QStringLiteral("document-save-as")),
-                &QAction::triggered, this, withProject([this] { saveCopyAsScrivener(); }));
-        connect(act(QStringLiteral("saveCopyQuillbinder"), tr("Save a Copy as %1 Project…").arg(QStringLiteral(QB_APP_NAME)),
-                    QStringLiteral("document-save-as")),
-                &QAction::triggered, this, withProject([this] { saveCopyAsQuillbinder(); }));
-    }
+    // File > Save As (0.93.0: in place of the menu Project Format) and the copies of File > Export
+    connect(act(QStringLiteral("saveAs"), tr("Save &As…"), QStringLiteral("document-save-as"),
+                QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S)),
+            &QAction::triggered, this, withProject([this] { saveProjectAs(); }));
+    a[QStringLiteral("saveAs")]->setToolTip(
+        tr("Save the project under another name or in another place, in Scrivener 3 format or in %1's own format; "
+           "the window works on the new project from then on")
+            .arg(QStringLiteral(QB_APP_NAME)));
+    connect(act(QStringLiteral("saveCopyScrivener"), tr("Save a Copy as Scrivener Project…"), QStringLiteral("document-export")),
+            &QAction::triggered, this, withProject([this] { saveCopyAsScrivener(); }));
+    connect(act(QStringLiteral("saveCopyQuillbinder"), tr("Save a Copy as %1 Project…").arg(QStringLiteral(QB_APP_NAME)),
+                QStringLiteral("document-export")),
+            &QAction::triggered, this, withProject([this] { saveCopyAsQuillbinder(); }));
     connect(act(QStringLiteral("closeProject"), tr("&Close Project"), QStringLiteral("document-close"), QKeySequence::Close),
             &QAction::triggered, this, [this] {
                 closeProject();
@@ -1005,6 +1040,10 @@ void MainWindow::createActions()
     // 0.70.0 (audit A U-05): backups restored by the program
     connect(act(QStringLiteral("restoreBackup"), tr("&Restore From Backup…")), &QAction::triggered, this,
             withProject([this] { restoreBackup(); }));
+    // 0.93.0: the backups of the project's own folder of 0.70.0 to 0.90.4 into the backup folder
+    connect(act(QStringLiteral("moveOldBackups"), tr("Move &Old Backups Into the Backup Folder…")), &QAction::triggered, this,
+            withProject([this] { moveOldBackups(); }));
+    a[QStringLiteral("moveOldBackups")]->setEnabled(false); // on when the Back Up menu opens and an old folder holds backups
     connect(act(QStringLiteral("importFiles"), tr("Import &Files…"), QStringLiteral("document-import"),
                 QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_I)),
             &QAction::triggered, this, withProject([this] { importFiles(); }));
@@ -1540,7 +1579,6 @@ void MainWindow::createActions()
                                              .arg(failed.mid(0, 5).join(QLatin1String(", ")), firstError));
                 else if (!titleError.isEmpty())
                     QMessageBox::warning(this, tr("Snapshot"), titleError);
-                statusBar();
                 QApplication::beep();
                 if (n)
                     setWindowTitle(windowTitle()); // no status bar: inspector shows the new snapshot
@@ -1884,6 +1922,12 @@ void MainWindow::createActions()
                 dlg.exec();
             });
     a[QStringLiteral("systemInfo")]->setToolTip(tr("Program, versions and computer at a glance, to copy into a problem report"));
+    // 0.93.0: where to report a problem: the repository's issue forms (a security problem goes privately: SECURITY.md)
+    connect(act(QStringLiteral("reportProblem"), tr("Report a Problem…"), QStringLiteral("help-hint")),
+            &QAction::triggered, this, [] {
+                QDesktopServices::openUrl(QUrl(QStringLiteral("https://github.com/Shelin-boop/Quillbinder_Collection/issues/new/choose")));
+            });
+    a[QStringLiteral("reportProblem")]->setToolTip(tr("Opens the project's page for reports of problems and wishes in your browser"));
     connect(act(QStringLiteral("crashReports"), tr("&Crash Reports…")), &QAction::triggered, this, [this] {
         CrashReportsDialog dlg(this);
         dlg.exec();
@@ -2251,8 +2295,10 @@ void MainWindow::updateActions()
                           "defaultTextFormatting", "pageView", "pageSetup", "openCopyholder", "enclosingGroup", "inspect0", "inspect1", "inspect2", "inspect3", "inspect4", "inspect5", "inspect6",
                           "objectLink", "objectsWindow", "objectTemplates",
                           "resetIcon", "iconFromText", "manageIcons", "compareFile", "compareByChapter", "compareStepByStep",
-                          "formatQuillbinder", "formatScrivener", "saveCopyScrivener", "saveCopyQuillbinder"})
+                          "saveAs", "saveCopyScrivener", "saveCopyQuillbinder"})
         a[QLatin1String(k)]->setEnabled(has);
+    if (!has)
+        a[QStringLiteral("moveOldBackups")]->setEnabled(false); // 0.93.0 (with a project: on when the Back Up menu opens)
     // without a project there is no text to search, link, zoom or split, and no binder to go to
     // (their keys must not reach them either); the menus with nothing but such commands are off as a whole
     for (const char *k : {"find", "replace", "findNext", "findPrev", "useSelectionForFind", "selectAnnotation", "hyperlink",
@@ -2266,11 +2312,6 @@ void MainWindow::updateActions()
     a[QStringLiteral("goSynopsis")]->setEnabled(has && m_inspector->item());
     a[QStringLiteral("goNotes")]->setEnabled(has && m_inspector->item());
     updateMindMapActions();
-    {
-        const bool scriv = has && !m_project->scrivenerPath.isEmpty();
-        a[QStringLiteral("formatQuillbinder")]->setChecked(has && !scriv);
-        a[QStringLiteral("formatScrivener")]->setChecked(scriv);
-    }
     m_quickSearch->setEnabled(has);
     updateToolActions();
     m_labelMenu->setEnabled(has);
@@ -2999,6 +3040,23 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
         return false;
     m_project = std::move(p);
     Project *proj = m_project.get();
+    // 0.93.0 (to-do item 39): documents that no editor shows are unloaded a moment after others were read (the
+    // store decides which; this tells it which are shown, in every window and place, and that a dialog is open)
+    proj->docs()->setShownProbe([](QSet<const QTextDocument *> *shown) {
+        if (QApplication::activeModalWidget())
+            return false;
+        for (QWidget *w : QApplication::allWidgets()) {
+            if (auto *te = qobject_cast<QTextEdit *>(w))
+                shown->insert(te->document());
+            else if (auto *pe = qobject_cast<QPlainTextEdit *>(w))
+                shown->insert(pe->document());
+        }
+        for (QWidget *top : QApplication::topLevelWidgets())
+            for (DocMirror *m : top->findChildren<DocMirror *>())
+                if (m->source())
+                    shown->insert(m->source());
+        return true;
+    });
     palette::setProject(proj); // the label colors in every color choice (0.21)
     // every project keeps its own look (0.40.2): a project opened for the first time by this
     // version keeps the look it had, a new one gets the look for new projects
@@ -3012,7 +3070,7 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
     // marks ("<$Scr_H::1>Title<!$Scr_H::1>") as text: taken out before anything shows it (0.21.2)
     if (const int fixed = ScrivenerImporter::removeLeftoverMarkers(proj); fixed > 0) {
         QTimer::singleShot(0, this, [this, fixed] {
-            statusBar()->showMessage(fixed == 1 ? tr("Scrivener's style marks were taken out of 1 document.")
+            showStatusNote(fixed == 1 ? tr("Scrivener's style marks were taken out of 1 document.")
                                                 : tr("Scrivener's style marks were taken out of %1 documents.").arg(fixed),
                                      15000);
         });
@@ -3118,14 +3176,14 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
     // 0.70.0 (audit B F-4): control characters (from pasted data) are left out when a text is stored
     connect(proj->docs(), &DocumentStore::charactersLeftOut, this, [this](const QString &id, bool notes, int count) {
         BinderItem *it = m_project ? m_project->item(id) : nullptr;
-        statusBar()->showMessage(tr("%n control character(s) in the %1 of \"%2\" cannot be stored and were left out.", nullptr, count)
+        showStatusNote(tr("%n control character(s) in the %1 of \"%2\" cannot be stored and were left out.", nullptr, count)
                                      .arg(notes ? tr("notes") : tr("text"), it ? it->title : id),
                                  15000);
     });
     connect(proj, &Project::saveFailed, this, [this](const QString &err) {
         // 0.64.1 (audit C-4): Scrivener opened the .scriv: told once per lock, then in the status bar
         if (m_project && !m_project->scrivenerLockRefused.isEmpty()) {
-            statusBar()->showMessage(tr("Not written into the Scrivener project while Scrivener has it open (%1).")
+            showStatusNote(tr("Not written into the Scrivener project while Scrivener has it open (%1).")
                                          .arg(m_project->scrivenerLockWho),
                                      15000);
             static QString told;
@@ -3142,7 +3200,7 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
     });
     connect(proj, &Project::saved, this, &MainWindow::noteSaved);
     // 0.70.0 (audit A U-01): mind map boards not saved go into the emergency copy with the texts
-    proj->emergencyExtra = [proj](const QString &dir, QString *error) { return mindmaps::writeUnsaved(proj, dir, error); };
+    proj->emergencyExtra = [proj](const QString &dir, QString *error, CopyTally *tally) { return mindmaps::writeUnsaved(proj, dir, error, tally); };
     // 0.64.1: a document deleted for good leaves every pane that shows it (Empty Trash does this
     // itself; any other way of deleting now does it too)
     connect(proj->model(), &BinderModel::itemsAboutToBeDeleted, this, [this](const QList<BinderItem *> &gone) {
@@ -3217,18 +3275,30 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
         }
     }
     // 0.81.0 (audit of 0.80.0, S-03): the backup the closing would have made, when the program was ended by a signal
-    const bool due = backup::takeDue(proj->displayFile()) && AppSettings::instance().backupOnClose;
+    // 0.93.0: the note is removed only when this backup was made (in the folder, or waiting in the work folder); a
+    // backup that failed (or could not be tried) leaves it for the next opening
+    const bool markedDue = backup::isDue(proj->displayFile());
+    const bool due = markedDue && AppSettings::instance().backupOnClose;
+    if (markedDue && !AppSettings::instance().backupOnClose)
+        backup::clearDue(proj->displayFile()); // the backup at closing is switched off: nothing is due
     if ((AppSettings::instance().backupOnOpen || due) && backupFolderReady(AskFolder::Once)) {
         // 0.65.0 (found while checking audit F03): the result is told; before, even a backup that failed was not
         QString out, err;
-        const bool ok = backup::backupProject(proj, AppSettings::instance().backupDir, AppSettings::instance().backupKeep, &out, &err);
+        QStringList notes;
+        bool waits = false;
+        const bool ok = backup::backupProject(proj, AppSettings::instance().backupDir, AppSettings::instance().backupKeep, &out, &err,
+                                              backup::Where::BackupFolder, &waits, &notes);
+        if (markedDue && (ok || waits))
+            backup::clearDue(proj->displayFile());
         if (!ok || !err.isEmpty())
             QTimer::singleShot(0, this, [this, ok, err] { tellBackupProblem(ok, err, tr("when the project opened")); });
         else if (due)
-            statusBar()->showMessage(tr("The last session was ended before its backup could be made (a shutdown or a kill "
+            showStatusNote(tr("The last session was ended before its backup could be made (a shutdown or a kill "
                                         "command); the backup was made now: %1")
                                          .arg(QFileInfo(out).fileName()),
                                      20000);
+        if (!notes.isEmpty())
+            QTimer::singleShot(0, this, [this, notes] { tellBackupCleanup(notes); });
         m_lastDueBackup = due && ok ? out : QString();
     }
     toolhost::host().notifyProjectChanged();
@@ -3240,9 +3310,33 @@ void MainWindow::tellBackupProblem(bool made, const QString &why, const QString 
     const QString msg = made ? tr("The automatic backup %1 is incomplete.\n\n%2").arg(when, why)
                              : tr("The automatic backup %1 failed.\n\n%2").arg(when, why);
     m_lastBackupProblem = msg;
-    statusBar()->showMessage(made ? tr("The automatic backup is incomplete.") : tr("The automatic backup failed."), 15000);
+    showStatusNote(made ? tr("The automatic backup is incomplete.") : tr("The automatic backup failed."), 15000);
     if (!QB_TEST_ENV_SET("QB_NO_DIALOGS"))
         QMessageBox::warning(this, tr("Backup"), msg);
+}
+
+void MainWindow::tellBackupCleanup(const QStringList &notes, bool modal)
+{
+    if (notes.isEmpty())
+        return;
+    const QString msg = tr("The backup was made, but %n older backup(s) could not be deleted and stay in the backup folder. "
+                           "Delete them by hand, or check who may delete there:\n\n%1", nullptr, int(notes.size()))
+                            .arg(notes.join(QLatin1Char('\n')));
+    m_lastBackupCleanupNote = msg;
+    showStatusNote(tr("An older backup could not be deleted."), 15000);
+    if (QB_TEST_ENV_SET("QB_NO_DIALOGS"))
+        return;
+    if (modal) { // at closing: nobody types any more
+        QMessageBox::warning(this, tr("Backup"), msg);
+        return;
+    }
+    // 0.93.0: while writing goes on (after a manual save, at opening), the notice never takes the keyboard
+    auto *box = new QMessageBox(QMessageBox::Warning, tr("Backup"), msg, QMessageBox::Ok, this);
+    box->setAttribute(Qt::WA_DeleteOnClose);
+    box->setObjectName(QStringLiteral("backupCleanupNotice"));
+    placeBesideText(box);
+    showWithoutTakingKeys(box, box->button(QMessageBox::Ok));
+    QTimer::singleShot(0, box, [this, box] { placeBesideText(box); });
 }
 
 bool MainWindow::closeProject()
@@ -3308,12 +3402,7 @@ bool MainWindow::closeProject()
                                                                          QDir::homePath());
                 if (parent.isEmpty())
                     return false;
-                QString why;
-                const QString dir = m_project->writeEmergencyCopy(parent, &why);
-                QMessageBox::information(this, tr("Close Project"),
-                                         dir.isEmpty() ? tr("The texts could not be written there either: %1").arg(why)
-                                                       : tr("The texts not saved are in:\n%1\n\nThe project stays open.")
-                                                             .arg(QDir::toNativeSeparators(dir)));
+                tellEmergencyCopy(m_project->makeEmergencyCopy(parent), tr("Close Project"), tr("The project stays open."));
                 return false;
             }
             if (box.clickedButton() != lose)
@@ -3324,10 +3413,12 @@ bool MainWindow::closeProject()
     mindmaps::closeAll(m_project.get(), discardBoards);
     if (AppSettings::instance().backupOnClose && backupFolderReady(AskFolder::Once)) {
         QString out;
+        QStringList notes;
         const bool ok = backup::backupProject(m_project.get(), AppSettings::instance().backupDir,
-                                              AppSettings::instance().backupKeep, &out, &err);
+                                              AppSettings::instance().backupKeep, &out, &err, backup::Where::BackupFolder, nullptr, &notes);
         if (!ok || !err.isEmpty()) // 0.65.0 (audit F03): an incomplete backup is told too
             tellBackupProblem(ok, err, tr("when the project closed"));
+        tellBackupCleanup(notes, true);
     }
     releaseLocks();
     for (QWidget *w : QApplication::topLevelWidgets())
@@ -3355,39 +3446,12 @@ bool MainWindow::closeProject()
     return true;
 }
 
-// 0.92.0: a note that asks for nothing (the update address could not be reached): a small text at the left of the
-// status bar, below the editor, that fades in and out twice and is gone.
+// 0.92.0: a note that asks for nothing (the update address could not be reached): a small text in the footer bar of
+// the first editor (it was the status bar's left side before 0.93.0) that fades in and out twice and is gone.
 void MainWindow::showFadingNote(const QString &text)
 {
-    auto *note = new QLabel(text, statusBar());
-    note->setObjectName(QStringLiteral("fadingNote"));
-    auto *fx = new QGraphicsOpacityEffect(note);
-    fx->setOpacity(0.0);
-    note->setGraphicsEffect(fx);
-    statusBar()->addWidget(note);
-    note->show();
-    auto *run = new QSequentialAnimationGroup(note);
-    for (int round = 0; round < 2; ++round) {
-        auto *in = new QPropertyAnimation(fx, "opacity", run);
-        in->setDuration(700);
-        in->setStartValue(0.0);
-        in->setEndValue(1.0);
-        run->addAnimation(in);
-        run->addPause(2200);
-        auto *out = new QPropertyAnimation(fx, "opacity", run);
-        out->setDuration(700);
-        out->setStartValue(1.0);
-        out->setEndValue(0.0);
-        run->addAnimation(out);
-        if (round == 0)
-            run->addPause(500);
-    }
-    note->setProperty("fades", 2);
-    connect(run, &QAbstractAnimation::finished, note, [this, note] {
-        statusBar()->removeWidget(note);
-        note->deleteLater();
-    });
-    run->start(QAbstractAnimation::DeleteWhenStopped);
+    if (m_panes[0])
+        m_panes[0]->footerStatus()->showFading(text);
 }
 
 // ---------------------------------------------------------------- the fixed mind map (0.92.0)
@@ -3402,7 +3466,7 @@ void MainWindow::fixMindMap(BinderItem *item)
         return;
     m_fixedMindMapId = item->id;
     applyFixedMindMap();
-    statusBar()->showMessage(tr("The Mind Map tab of the inspector now stays on \"%1\".").arg(item->title), 6000);
+    showStatusNote(tr("The Mind Map tab of the inspector now stays on \"%1\".").arg(item->title), 6000);
 }
 
 void MainWindow::releaseMindMap()
@@ -3411,7 +3475,7 @@ void MainWindow::releaseMindMap()
         return;
     m_fixedMindMapId.clear();
     applyFixedMindMap();
-    statusBar()->showMessage(tr("The Mind Map tab of the inspector follows the selected item again."), 6000);
+    showStatusNote(tr("The Mind Map tab of the inspector follows the selected item again."), 6000);
 }
 
 void MainWindow::applyFixedMindMap()
@@ -3622,8 +3686,7 @@ void MainWindow::closeEvent(QCloseEvent *e)
     QSettings s;
     s.setValue(QStringLiteral("window/geometry"), saveGeometry());
     s.setValue(QStringLiteral("window/state"), saveState());
-    const QList<int> sizes = m_mainSplit->sizes();
-    s.setValue(QStringLiteral("window/mainSplit"), QVariantList{sizes.value(0), sizes.value(1), sizes.value(2)});
+    savePaneSettings(); // 0.93.0: the places and sizes (both shapes, per device)
     s.setValue(QStringLiteral("window/inspector"), a[QStringLiteral("showInspector")]->isChecked());
     s.setValue(QStringLiteral("window/binder"), a[QStringLiteral("showBinder")]->isChecked());
     s.setValue(QStringLiteral("window/toolbar"), a[QStringLiteral("showToolbar")]->isChecked());
@@ -3650,33 +3713,44 @@ void MainWindow::saveForTermination()
             // the program ends with status 1 (before: a line on the error output only, and status 0)
             std::fprintf(stderr, "%s: saving before the end failed: %s\n", QB_APP_NAME, qPrintable(err));
             crash::setTerminationSaveFailed();
-            QString why;
-            const QString dir = m_project->writeEmergencyCopy(QString(), &why);
-            if (!dir.isEmpty())
-                std::fprintf(stderr, "%s: the texts not saved are in %s\n", QB_APP_NAME, qPrintable(dir));
+            const EmergencyReport rep = m_project->makeEmergencyCopy(QString());
+            if (!rep.dir.isEmpty())
+                std::fprintf(stderr, "%s: %d of %d files are in %s%s\n", QB_APP_NAME, rep.tally.written,
+                             rep.tally.wanted, qPrintable(rep.dir), rep.complete() ? "" : " (INCOMPLETE)");
             writeEmergencyNotice(tr("When the program was ended (by logging out, shutting down or a command), the "
                                     "project \"%1\" could not be saved: %2")
                                      .arg(m_project->title(), err),
-                                 dir);
+                                 rep);
         }
         // 0.81.0 (audit of 0.80.0, S-03): no time for the backup of the closing here; the next opening makes it
         if (projectSaved && AppSettings::instance().backupOnClose && backupFolderReady(AskFolder::Never, false))
-            backup::markDue(m_project->displayFile());
+            if (!backup::markDue(m_project->displayFile()))
+                std::fprintf(stderr, "%s: the note of the backup due could not be written\n", QB_APP_NAME);
         releaseLocks();
     }
     toolhost::host().shutdownTools(); // the writing tools save their work (scratch pad notes)
     QLocalServer::removeServer(toolhost::host().linkPath());
 }
 
-void MainWindow::writeEmergencyNotice(const QString &what, const QString &dir)
+void MainWindow::writeEmergencyNotice(const QString &what, const EmergencyReport &rep)
 {
     const QString folder = dataDir() + QStringLiteral("/Emergency");
     QDir().mkpath(folder);
     QString text = what;
-    if (!dir.isEmpty())
-        text += QStringLiteral("\n\n") + tr("The texts and notes that were not saved are in:\n%1").arg(QDir::toNativeSeparators(dir));
-    else
+    if (!rep.dir.isEmpty()) {
+        if (rep.complete())
+            text += QStringLiteral("\n\n") + tr("The texts and notes that were not saved are in (%1 of %1 files, with the "
+                                                 "project file as it was in memory):\n%2")
+                                                   .arg(rep.tally.wanted).arg(QDir::toNativeSeparators(rep.dir));
+        else
+            text += QStringLiteral("\n\n") + Project::emergencyText(rep);
+    } else if (rep.nothingToWrite) {
+        text += QStringLiteral("\n\n") + Project::emergencyText(rep);
+    } else {
         text += QStringLiteral("\n\n") + tr("No copy of the texts could be written either.");
+        if (!rep.reason.isEmpty() && rep.reason != tr("nothing to write"))
+            text += QLatin1Char(' ') + rep.reason;
+    }
     QFile f(folder + QStringLiteral("/notice.txt"));
     if (f.open(QIODevice::Append)) {
         f.write(text.toUtf8() + "\n\n");
@@ -3911,7 +3985,7 @@ void MainWindow::duplicateItems()
         m_project->markIndexDirty();
         const QString msg = tr("The duplicate could not be made, so nothing was added:\n%1").arg(copyError);
         if (QB_TEST_ENV_SET("QB_NO_DIALOGS"))
-            statusBar()->showMessage(msg, 10000);
+            showStatusNote(msg, 10000);
         else
             QMessageBox::warning(this, tr("Duplicate"), msg);
         return;
@@ -3945,7 +4019,7 @@ void MainWindow::splitDocument(bool selectionAsTitle)
                                "Back to a snapshot in the inspector, or repair the file in the program that wrote it).")
                                 .arg(item->title, why);
         if (QB_TEST_ENV_SET("QB_NO_DIALOGS"))
-            statusBar()->showMessage(msg, 10000);
+            showStatusNote(msg, 10000);
         else
             QMessageBox::information(this, tr("Split"), msg);
         return;
@@ -3959,7 +4033,7 @@ void MainWindow::splitDocument(bool selectionAsTitle)
             const QString why = tr("A document cannot be split inside a table or a picture's caption. Put the cursor "
                                    "before or after the table or the picture, then split again.");
             if (QB_TEST_ENV_SET("QB_NO_DIALOGS"))
-                statusBar()->showMessage(why, 10000);
+                showStatusNote(why, 10000);
             else
                 QMessageBox::information(this, tr("Split"), why);
             return;
@@ -4056,7 +4130,7 @@ void MainWindow::mergeDocuments()
                                    "repair the file in the program that wrote it and open the project again), then merge.")
                                     .arg(blocked.join(QLatin1Char('\n')));
             if (QB_TEST_ENV_SET("QB_NO_DIALOGS"))
-                statusBar()->showMessage(msg, 15000);
+                showStatusNote(msg, 15000);
             else
                 QMessageBox::information(this, tr("Merge Documents"), msg);
             return;
@@ -4478,12 +4552,22 @@ void MainWindow::backupNow(bool chooseLocation)
             return;
     }
     QString out, err;
+    QStringList notes;
     QApplication::setOverrideCursor(Qt::WaitCursor);
     const bool ok = backup::backupProject(m_project.get(), dir, chooseLocation ? 0 : AppSettings::instance().backupKeep, &out, &err,
-                                          chooseLocation ? backup::Where::AsChosen : backup::Where::BackupFolder);
+                                          chooseLocation ? backup::Where::AsChosen : backup::Where::BackupFolder, nullptr, &notes);
     QApplication::restoreOverrideCursor();
+    // 0.93.0: older backups that the clean-up could not delete are named in the same message
+    const QString left = notes.isEmpty() ? QString()
+                                         : QStringLiteral("\n\n")
+                                               + tr("%n older backup(s) could not be deleted and stay in the backup folder:\n%1",
+                                                    nullptr, int(notes.size()))
+                                                     .arg(notes.join(QLatin1Char('\n')));
+    m_lastBackupCleanupNote = left.trimmed();
     if (ok && !err.isEmpty()) // saved, but some files could not be read (0.20)
-        QMessageBox::warning(this, tr("Back Up"), tr("Backup saved:\n%1\n\n%2").arg(out, err));
+        QMessageBox::warning(this, tr("Back Up"), tr("Backup saved:\n%1\n\n%2").arg(out, err) + left);
+    else if (ok && !left.isEmpty())
+        QMessageBox::warning(this, tr("Back Up"), tr("Backup saved:\n%1").arg(out) + left);
     else if (ok)
         QMessageBox::information(this, tr("Back Up"), tr("Backup saved:\n%1").arg(out));
     else
@@ -4524,29 +4608,28 @@ bool MainWindow::backupFolderReady(AskFolder ask, bool tell)
         }
     }
     if (tell)
-        statusBar()->showMessage(tr("No backup was made: no folder for backups has been chosen (File > Options > Backup)."),
+        showStatusNote(tr("No backup was made: no folder for backups has been chosen (File > Options > Backup)."),
                                  15000);
     return false;
 }
 
 void MainWindow::updateBackupState()
 {
-    if (!m_backupState)
+    if (!m_panes[0])
         return;
     const AppSettings &s = AppSettings::instance();
     const bool off = portable::active() && s.backupDir.trimmed().isEmpty()
                      && (s.backupOnClose || s.backupOnOpen || s.backupOnManualSave);
-    m_backupState->setVisible(off);
+    QString html, tip;
     if (off) {
         // the text's own color, underlined: a link's blue is hard to read on a dark theme. Taken from the program's
         // palette: the label's own palette may not have followed a change of theme yet when this runs (W4b run 6: black
         // on the dark status bar)
-        m_backupState->setText(QStringLiteral("<a href=\"backup\" style=\"color:%1\">%2</a>")
-                                   .arg(QApplication::palette(m_backupState).color(QPalette::WindowText).name(),
-                                        tr("No backups").toHtmlEscaped()));
-        m_backupState->setToolTip(tr("Automatic backups are not made until a folder for them is chosen: click here, or "
-                                     "File > Options > Backup."));
+        html = QStringLiteral("<a href=\"backup\" style=\"color:%1\">%2</a>")
+                   .arg(QApplication::palette(this).color(QPalette::WindowText).name(), tr("No backups").toHtmlEscaped());
+        tip = tr("Automatic backups are not made until a folder for them is chosen: click here, or File > Options > Backup.");
     }
+    m_panes[0]->footerStatus()->setBackup(html, tip, off);
 }
 
 void MainWindow::restoreBackup()
@@ -4555,6 +4638,8 @@ void MainWindow::restoreBackup()
         return;
     const QString dir = AppSettings::instance().backupDir;
     const QStringList own = backup::backupsFor(m_project.get(), dir);
+    // 0.93.0: backups made while the backup folder was out of reach wait in the program's work folder
+    const QStringList waiting = backup::waitingBackupsFor(m_project.get(), dir);
     // 0.91.0: the backups of the project's own folder of 0.70.0 to 0.90.4 stay where they are and are offered too
     const QStringList older = backup::formerBackupsFor(m_project.get(), dir);
     const QString olderFolder = QFileInfo(backup::formerProjectFolder(m_project.get(), dir)).fileName();
@@ -4572,6 +4657,7 @@ void MainWindow::restoreBackup()
     list->setObjectName(QStringLiteral("restoreBackupList"));
     list->setRootIsDecorated(false);
     list->setHeaderLabels({tr("Made"), tr("Size"), tr("State")});
+    const QSet<QString> waitingSet(waiting.begin(), waiting.end());
     auto addRows = [&](const QStringList &files, bool olderKind) {
         for (int i = int(files.size()) - 1; i >= 0; --i) {
             const QFileInfo fi(files.at(i));
@@ -4581,12 +4667,18 @@ void MainWindow::restoreBackup()
             QString state = fi.completeBaseName().contains(QLatin1String(" (incomplete")) ? tr("incomplete") : tr("complete");
             if (olderKind)
                 state += tr(" (in the folder \"%1\")").arg(olderFolder);
+            if (waitingSet.contains(files.at(i)))
+                state += tr(", waiting (not yet in the backup folder)");
             row->setText(2, state);
             row->setData(0, Qt::UserRole, fi.absoluteFilePath());
             row->setToolTip(0, QDir::toNativeSeparators(fi.absoluteFilePath()));
         }
     };
-    addRows(own, false);
+    // the backups of the folder and those that wait for it, in one list by their time (newest first below)
+    QStringList together = own + waiting;
+    std::stable_sort(together.begin(), together.end(),
+                     [](const QString &x, const QString &y) { return QFileInfo(x).lastModified() < QFileInfo(y).lastModified(); });
+    addRows(together, false);
     addRows(older, true);
     list->resizeColumnToContents(0);
     list->resizeColumnToContents(1);
@@ -4614,6 +4706,53 @@ void MainWindow::restoreBackup()
     restoreBackupFile(list->currentItem()->data(0, Qt::UserRole).toString());
 }
 
+void MainWindow::moveOldBackups()
+{
+    if (!m_project)
+        return;
+    if (!backupFolderReady(AskFolder::Always, false))
+        return;
+    const AppSettings &s = AppSettings::instance();
+    const QString dir = s.backupDir.trimmed().isEmpty() ? backup::defaultDirectory() : s.backupDir;
+    const QStringList old = backup::formerBackupsFor(m_project.get(), dir);
+    if (old.isEmpty()) {
+        m_lastMoveOldText = tr("There are no old backups of this project to move: the folder that versions 0.70.0 to 0.90.4 kept "
+                               "for it holds none.");
+        QMessageBox::information(this, tr("Move Old Backups"), m_lastMoveOldText);
+        return;
+    }
+    const QString folder = QDir::toNativeSeparators(backup::formerProjectFolder(m_project.get(), dir));
+    QMessageBox ask(QMessageBox::Question, tr("Move Old Backups"),
+                    tr("%n old backup(s) of this project are in its own folder inside the backup folder:\n%1\n\nVersions "
+                       "0.70.0 to 0.90.4 kept them there. Move them into the backup folder itself, under their names? A "
+                       "backup whose name is already there stays where it is.",
+                       nullptr, int(old.size()))
+                        .arg(folder),
+                    QMessageBox::NoButton, this);
+    ask.setObjectName(QStringLiteral("moveOldBackupsAsk"));
+    QPushButton *go = ask.addButton(tr("Move"), QMessageBox::AcceptRole);
+    QPushButton *no = ask.addButton(QMessageBox::Cancel);
+    ask.setDefaultButton(go);
+    ask.setEscapeButton(no);
+    ask.exec();
+    if (ask.clickedButton() != go)
+        return;
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    const backup::MoveReport r = backup::moveFormerBackups(m_project.get(), dir);
+    QApplication::restoreOverrideCursor();
+    QString text = tr("%n backup(s) moved into the backup folder.", nullptr, int(r.moved.size()));
+    if (!r.left.isEmpty())
+        text += QStringLiteral("\n\n")
+                + tr("%n backup(s) left where they were:\n%1", nullptr, int(r.left.size())).arg(r.left.join(QLatin1Char('\n')));
+    if (r.folderRemoved)
+        text += QStringLiteral("\n\n") + tr("The old folder is empty and was removed.");
+    m_lastMoveOldText = text;
+    QMessageBox box(r.left.isEmpty() ? QMessageBox::Information : QMessageBox::Warning, tr("Move Old Backups"), text,
+                    QMessageBox::Ok, this);
+    box.setObjectName(QStringLiteral("moveOldBackupsReport"));
+    box.exec();
+}
+
 bool MainWindow::restoreBackupFile(const QString &zip)
 {
     if (!m_project)
@@ -4623,30 +4762,47 @@ bool MainWindow::restoreBackupFile(const QString &zip)
     const QString dest = backup::restore(zip, parent, &projectFile, &err);
     m_lastRestored = projectFile;
     if (dest.isEmpty() || projectFile.isEmpty()) {
-        QMessageBox::warning(this, tr("Restore From Backup"),
-                             tr("The backup could not be restored: %1").arg(err.isEmpty() ? tr("no project in it") : err));
+        // form 3: not restored
+        m_lastRestoreText = tr("The backup could not be restored: %1").arg(err.isEmpty() ? tr("no project in it") : err);
+        QMessageBox failed(QMessageBox::Warning, tr("Restore From Backup: Not Restored"), m_lastRestoreText, QMessageBox::Ok, this);
+        failed.setObjectName(QStringLiteral("restoreFailed"));
+        failed.exec();
         return false;
     }
     // a project in this program's format gets a title that says what it is, so the two are not mistaken
     // for one another (its backups have their own folder anyway)
+    // 0.93.0: a title that could not be saved is said
+    QString titleNote;
     if (!projectFile.endsWith(QLatin1String(".scriv"), Qt::CaseInsensitive)) {
         QString why;
         if (std::unique_ptr<Project> r = Project::open(projectFile, &why)) {
             r->setTitle(tr("%1 (restored %2)").arg(r->title(), QLocale().toString(QDateTime::currentDateTime(), QStringLiteral("yyyy-MM-dd HH:mm"))));
-            r->save(&why);
+            if (!r->save(&why))
+                titleNote = tr("The title of the restored project could not be marked \"(restored ...)\", so it has the title of "
+                               "the project it was made from: %1")
+                                .arg(why);
+        } else {
+            titleNote = tr("The restored project could not be opened to mark its title \"(restored ...)\": %1").arg(why);
         }
     }
-    const QString note = err.isEmpty() ? QString() : QStringLiteral("\n\n") + err;
+    // form 2: restored incompletely (files are named in err); form 1: restored
+    const bool incomplete = !err.isEmpty();
+    QString text = incomplete ? tr("The backup was restored INCOMPLETELY into:\n%1\n\n%2").arg(QDir::toNativeSeparators(dest), err)
+                              : tr("The backup was restored into:\n%1").arg(QDir::toNativeSeparators(dest));
+    if (!titleNote.isEmpty())
+        text += QStringLiteral("\n\n") + titleNote;
+    m_lastRestoreText = text;
     if (QB_TEST_ENV_SET("QB_NO_DIALOGS")) {
         if (closeProject())
             openProject(projectFile);
         return true;
     }
-    QMessageBox box(QMessageBox::Information, tr("Restore From Backup"),
-                    tr("The backup was restored into:\n%1%2\n\nOpen it now? The project open now is closed first (it "
-                       "stays as it is).")
-                        .arg(QDir::toNativeSeparators(dest), note),
+    QMessageBox box(incomplete || !titleNote.isEmpty() ? QMessageBox::Warning : QMessageBox::Information,
+                    incomplete ? tr("Restore From Backup: Restored Incompletely") : tr("Restore From Backup"),
+                    text + QStringLiteral("\n\n")
+                        + tr("Open it now? The project open now is closed first (it stays as it is)."),
                     QMessageBox::NoButton, this);
+    box.setObjectName(QStringLiteral("restoreResult"));
     QPushButton *open = box.addButton(tr("Open Restored Project"), QMessageBox::AcceptRole);
     QPushButton *later = box.addButton(tr("Not Now"), QMessageBox::RejectRole);
     box.setDefaultButton(open);
@@ -4737,7 +4893,7 @@ void MainWindow::printDocument()
         QMessageBox::warning(this, tr("Print"), err.isEmpty() ? tr("Printing did not work.") : err);
         return;
     }
-    statusBar()->showMessage(tr("Printed: %1 (%2)").arg(printing::describe(job), text::plural(pages, tr("page"), tr("pages"))), 6000);
+    showStatusNote(tr("Printed: %1 (%2)").arg(printing::describe(job), text::plural(pages, tr("page"), tr("pages"))), 6000);
 }
 
 void MainWindow::printPreview(const PrintSettings *settings)
@@ -4902,7 +5058,8 @@ void MainWindow::integrateDesktop(bool quiet)
     QDir().mkpath(data + QLatin1String("/mime/packages"));
     const QString icon = data + QLatin1String("/icons/hicolor/scalable/apps/" QB_APP_ID ".svg");
     QFile::remove(icon);
-    QFile::copy(QStringLiteral(":/app/quillbinder.svg"), icon);
+    // 0.93.0: a failed copy is told below (the menu entry works without the icon)
+    const bool iconCopied = QFile::copy(QStringLiteral(":/app/quillbinder.svg"), icon);
     QFile::setPermissions(icon, QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ReadOther | QFileDevice::ReadGroup);
     // writing tools that run on their own (the scratch pad) become actions of the
     // menu entry; the desktop can give them a shortcut that works in every program
@@ -4959,7 +5116,12 @@ void MainWindow::integrateDesktop(bool quiet)
         QMessageBox::information(this, tr("Application Menu"),
                                  tr("%1 now appears in the application menu, and double-clicking a project file (*%2) "
                                     "opens it.\n\nIf you move the AppImage, choose this menu entry again.")
-                                     .arg(QLatin1String(QB_APP_NAME), QLatin1String(QB_PROJECT_FILE_SUFFIX)));
+                                         .arg(QLatin1String(QB_APP_NAME), QLatin1String(QB_PROJECT_FILE_SUFFIX))
+                                     + (iconCopied ? QString()
+                                                   : QStringLiteral("\n\n")
+                                                         + tr("The program's icon could not be copied to %1, so the menu entry "
+                                                              "shows no icon.")
+                                                               .arg(QDir::toNativeSeparators(icon))));
 }
 
 // ------------------------------------------------------------------ options carried out here (0.21)
@@ -4993,7 +5155,8 @@ bool MainWindow::manualSave()
         int n = 0;
         for (const QString &id : editedSinceManualSave()) {
             BinderItem *it = m_project->item(id);
-            if (it && it->hasText() && !m_project->isInTrash(it) && snapshots::take(m_project.get(), id, tr("Saved")))
+            if (it && it->hasText() && !m_project->isInTrash(it) && !snapshots::sameAsNewest(m_project.get(), id)
+                && snapshots::take(m_project.get(), id, tr("Saved")))
                 ++n;
         }
         if (n) {
@@ -5006,13 +5169,16 @@ bool MainWindow::manualSave()
     if (s.backupOnManualSave && backupFolderReady(AskFolder::Once)) {
         QString out;
         bool waits = false;
-        const bool ok = backup::backupProject(m_project.get(), s.backupDir, s.backupKeep, &out, &err, backup::Where::BackupFolder, &waits);
+        QStringList cleanupNotes;
+        const bool ok = backup::backupProject(m_project.get(), s.backupDir, s.backupKeep, &out, &err, backup::Where::BackupFolder, &waits,
+                                              &cleanupNotes);
+        tellBackupCleanup(cleanupNotes);
         if (!ok && waits) // 0.90.3: made, but not in the backup folder yet: its own text says so (and where it is kept)
-            statusBar()->showMessage(QString(err).replace(QLatin1String("\n\n"), QLatin1String(" ")), 20000);
+            showStatusNote(QString(err).replace(QLatin1String("\n\n"), QLatin1String(" ")), 20000);
         else if (!ok)
-            statusBar()->showMessage(tr("The backup could not be made: %1").arg(err), 15000);
+            showStatusNote(tr("The backup could not be made: %1").arg(err), 15000);
         else if (!err.isEmpty()) // 0.65.0 (audit F03)
-            statusBar()->showMessage(err, 15000);
+            showStatusNote(err, 15000);
         // 0.92.0 (audit finding QBA-F07): also a notice, as at closing (before: the status bar alone, for 15 s)
         if (!ok || !err.isEmpty())
             tellManualBackupProblem(ok, waits, err);
@@ -5054,7 +5220,7 @@ QStringList MainWindow::editedSinceManualSave() const
 void MainWindow::notifySnapshots(int count)
 {
     if (count > 0 && AppSettings::instance().snapshotNotify)
-        statusBar()->showMessage(tr("Snapshot taken of %1.").arg(text::plural(count, tr("document"), tr("documents"))), 5000);
+        showStatusNote(tr("Snapshot taken of %1.").arg(text::plural(count, tr("document"), tr("documents"))), 5000);
 }
 
 void MainWindow::noteInput(const QDateTime &when)

@@ -236,7 +236,7 @@ static void windowChecks(MainWindow &w)
                                 QStringLiteral("objectsWindow")};
     // never: the end, a project of their own, the network, the printer, the desktop
     const QSet<QString> skip = {QStringLiteral("quit"), QStringLiteral("welcome"), QStringLiteral("pluginFolder"),
-                                QStringLiteral("integrate"), QStringLiteral("updateCheckNow"), QStringLiteral("updateCheckAuto"),
+                                QStringLiteral("integrate"), QStringLiteral("updateCheckNow"), QStringLiteral("updateCheckAuto"), QStringLiteral("reportProblem"),
                                 QStringLiteral("print"), QStringLiteral("printPreview"), QStringLiteral("closeProject"),
                                 QStringLiteral("restart")};
     QList<QAction *> all;
@@ -469,8 +469,51 @@ static QSplitterHandle *mainLine(MainWindow &w)
     return nullptr;
 }
 
+// 0.93.0: an upright window has two rows; the lines between them (the rows, and the binder and the inspector) are found
+// and taken along by a mouse pressed 5 px beside them
+static void uprightLineChecks(MainWindow &w)
+{
+    info(QStringLiteral("---- the lines of the upright window (%1)").arg(sizeName));
+    QSplitter *rows = w.paneSplitter(), *side = w.sideSplitter();
+    check(rows->count() == 2 && side->count() == 2 && rows->orientation() == Qt::Vertical, QStringLiteral("(the two rows and the side row are found)"));
+    auto press = [&](QWidget *to, const QPoint &inWindow, QEvent::Type t, Qt::MouseButton b, Qt::MouseButtons bs) {
+        const QPoint g = w.mapToGlobal(inWindow);
+        QMouseEvent e(t, to->mapFromGlobal(QPointF(g)), w.mapFromGlobal(QPointF(g)), QPointF(g), b, bs, Qt::NoModifier);
+        QApplication::sendEvent(to, &e);
+    };
+    auto drag = [&](const QPoint &from, const QPoint &by) {
+        QWidget *under = w.childAt(from);
+        if (!under)
+            return false;
+        press(under, from, QEvent::MouseButtonPress, Qt::LeftButton, Qt::LeftButton);
+        press(under, from + by / 2, QEvent::MouseMove, Qt::NoButton, Qt::LeftButton);
+        press(under, from + by, QEvent::MouseMove, Qt::NoButton, Qt::LeftButton);
+        press(under, from + by, QEvent::MouseButtonRelease, Qt::LeftButton, Qt::NoButton);
+        settle(60);
+        return true;
+    };
+    QSplitterHandle *rowLine = rows->handle(1), *sideLine = side->handle(1);
+    check(rowLine->height() >= 6 && sideLine->width() >= 6,
+          QStringLiteral("the lines are wide enough to be found (%1 and %2 px)").arg(rowLine->height()).arg(sideLine->width()));
+    shot(&w, QStringLiteral("upright-lines"));
+    const int sideStart = side->sizes().value(0), inspMin = side->widget(1)->minimumSizeHint().width();
+    const int room = qMin(40, side->sizes().value(1) - inspMin);
+    const bool d1 = drag(sideLine->mapTo(&w, QPoint(sideLine->width() + 5, sideLine->height() / 2)), QPoint(-40, 0));
+    check(d1 && side->sizes().value(0) < sideStart - 10, QStringLiteral("a mouse pressed beside the line of the binder and the inspector takes it along"),
+          QStringLiteral("%1 -> %2 (room %3)").arg(sideStart).arg(side->sizes().value(0)).arg(room));
+    const int rowStart = rows->sizes().value(0);
+    const bool d2 = drag(rowLine->mapTo(&w, QPoint(rowLine->width() / 2, rowLine->height() + 5)), QPoint(0, -40));
+    check(d2 && rows->sizes().value(0) < rowStart - 10, QStringLiteral("a mouse pressed beside the line between the rows takes it along"),
+          QStringLiteral("%1 -> %2").arg(rowStart).arg(rows->sizes().value(0)));
+    check(w.width() <= screenArea().width() + 1, QStringLiteral("the main window is not wider than the screen"));
+}
+
 static void lineChecks(MainWindow &w)
 {
+    if (w.isUpright()) {
+        uprightLineChecks(w);
+        return;
+    }
     info(QStringLiteral("---- the line between the binder and the text (%1)").arg(sizeName));
     QSplitterHandle *h = mainLine(w);
     check(h != nullptr, QStringLiteral("(the line is found)"));

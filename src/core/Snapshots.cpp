@@ -107,6 +107,17 @@ QList<Snapshot> list(Project *p, const QString &docId)
     return out;
 }
 
+bool sameAsNewest(Project *p, const QString &docId)
+{
+    const QList<Snapshot> all = list(p, docId);
+    if (all.isEmpty())
+        return false;
+    QFile f(all.first().file);
+    if (!f.open(QIODevice::ReadOnly))
+        return false;
+    return f.readAll() == p->docs()->serialize(docId, p->docs()->text(docId));
+}
+
 bool take(Project *p, const QString &docId, const QString &title, QString *error, QTextDocument *from)
 {
     BinderItem *it = p->item(docId);

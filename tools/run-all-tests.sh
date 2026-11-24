@@ -13,7 +13,7 @@
 #   QB_SUITES="v040 m13"   run these
 #   QB_SAMPLE=10           add whole suites drawn at random until about 10 % of the checks are covered
 #                          (counts from tests/check-counts.txt); QB_SEED=<n> repeats a draw
-#   QB_SKIP_SUITES="v060"  leave these out (0.70.0: the release workflow)
+#   QB_SKIP_SUITES="a b"   leave these out (0.70.0; none is left out by the release workflow since 0.93.0)
 # A full run in x11 mode (neither variable set) writes tests/check-counts.txt anew.
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 # 0.62: programs started by the suites skip the questions of the first start
@@ -27,12 +27,21 @@ mkdir -p "$OUT"
 OUT=$(cd "$OUT" && pwd)
 cd "$ROOT" || exit 1
 B=build
-if [ ! -x $B/tests/qb_tests ]; then
+# 0.93.0: the Python-only suites (secwatch, deps, verlines) need no build folder: when only they are asked for, nothing is
+# built, no FFmpeg pack or sound server is needed, and no X server is started
+PYONLY=0
+if [ -n "$QB_SUITES" ] && { [ -z "$QB_SAMPLE" ] || [ "$QB_SAMPLE" = 0 ]; }; then
+    PYONLY=1
+    for n in $QB_SUITES; do
+        case $n in secwatch|deps|verlines) ;; *) PYONLY=0 ;; esac
+    done
+fi
+if [ "$PYONLY" != 1 ] && [ ! -x $B/tests/qb_tests ]; then
     echo "no build in $ROOT/$B: cmake -S . -B build -DQB_TEST_SWITCHES=ON && cmake --build build -j\$(nproc)"
     exit 1
 fi
 # 0.70.0 (audit A S-04): the switches are off by default; the suites need them
-if ! grep -q '^QB_TEST_SWITCHES:BOOL=ON' "$B/CMakeCache.txt" 2>/dev/null; then
+if [ "$PYONLY" != 1 ] && ! grep -q '^QB_TEST_SWITCHES:BOOL=ON' "$B/CMakeCache.txt" 2>/dev/null; then
     echo "the build in $ROOT/$B has no test switches: cmake -S . -B build -DQB_TEST_SWITCHES=ON, then build again"
     exit 1
 fi
@@ -86,6 +95,7 @@ EOF
 elif [ "$MODE" = x11 ] && [ -z "$QB_SKIP_SUITES" ]; then
     COUNTS=$(mktemp)
 fi
+if [ "$PYONLY" != 1 ]; then
 if [ -d "$QB_FFMPEG_DIR/lib" ]; then
     # FFmpeg built after the build folder was configured (0.60): CMake keeps "headers not found", and the
     # player of Media Playback would lack its format check; configure and build again first
@@ -138,6 +148,7 @@ if command -v pactl > /dev/null; then
         echo "(no sound server: the media checks will fail; $(tail -n 3 "$OUT/pulseaudio.log" 2>/dev/null | tr '\n' ' '))"
     fi
 fi
+fi   # PYONLY
 run() {
     local name=$1; shift
     [ -n "$SELECTED" ] && [[ " $SELECTED " != *" $name "* ]] && return
@@ -147,7 +158,9 @@ run() {
     local start=$(date +%s)
     # every suite gets a fresh home, so settings and add-ons do not leak between suites
     local h=$(mktemp -d /tmp/qbhome.XXXX)
-    if [ "$MODE" = x11 ]; then
+    if [ "$PYONLY" = 1 ]; then
+        HOME=$h XDG_RUNTIME_DIR=$h timeout 1800 "$@" > "$log" 2>&1
+    elif [ "$MODE" = x11 ]; then
         HOME=$h XDG_RUNTIME_DIR=$h timeout 1800 xvfb-run -a -s "-screen 0 1920x1080x24" "$@" > "$log" 2>&1
     else
         HOME=$h XDG_RUNTIME_DIR=$h QT_QPA_PLATFORM=offscreen timeout 1800 "$@" > "$log" 2>&1
@@ -226,6 +239,15 @@ runx v0910 $B/tests/qb_v0910_tests $B/tests/qb_v0910_tests "$OUT/shots-v0910"
 runx v0911 $B/tests/qb_v0911_tests $B/tests/qb_v0911_tests "$OUT/shots-v0911"
 runx v0913 $B/tests/qb_v0913_tests $B/tests/qb_v0913_tests "$OUT/shots-v0913"
 runx v0920 $B/tests/qb_v0920_tests $B/tests/qb_v0920_tests "$OUT/shots-v0920"
+runx v0930 $B/tests/qb_v0930_tests $B/tests/qb_v0930_tests "$OUT/shots-v0930"
+runx v0930b $B/tests/qb_v0930b_tests $B/tests/qb_v0930b_tests "$OUT/shots-v0930b"
+runx v0930c $B/tests/qb_v0930c_tests $B/tests/qb_v0930c_tests "$OUT/shots-v0930c"
+runx v0930d $B/tests/qb_v0930d_tests $B/tests/qb_v0930d_tests "$OUT/shots-v0930d"
+runx v0930e $B/tests/qb_v0930e_tests $B/tests/qb_v0930e_tests "$OUT/shots-v0930e"
+runx saveas $B/tests/qb_saveas_tests $B/tests/qb_saveas_tests "$OUT/shots-saveas"
+runx v0930f $B/tests/qb_v0930f_tests $B/tests/qb_v0930f_tests "$OUT/shots-v0930f"
+runx notesplain $B/tests/qb_notesplain_tests $B/tests/qb_notesplain_tests "$OUT/shots-notesplain"
+runx mmoverview $B/tests/qb_mmoverview_tests $B/tests/qb_mmoverview_tests "$OUT/shots-mmoverview"
 runx audit1 $B/tests/qb_audit1_tests $B/tests/qb_audit1_tests "$OUT/shots-audit1"
 runx fuzz $B/tests/qb_fuzz_tests $B/tests/qb_fuzz_tests "$OUT/shots-fuzz"
 runx w2 $B/tests/qb_w2_tests $B/tests/qb_w2_tests "$OUT/shots-w2"
@@ -234,6 +256,10 @@ runx w4 $B/tests/qb_w4_tests $B/tests/qb_w4_tests "$OUT/shots-w4"
 runx w4c $B/tests/qb_w4c_tests $B/tests/qb_w4c_tests "$OUT/shots-w4c"
 # the security watch (2026-11-21): offline, Python only (its network is made up inside the suite)
 run secwatch python3 -I tests/security_watch_tests.py
+# the dependency packs of the Linux build (0.93.0): offline, Python only
+run deps python3 -I tests/deps_packs_tests.py
+# the version line per system (0.93.0): offline, Python only
+run verlines python3 -I tests/version_lines_tests.py
 # a suite that was asked for and is not there at all (a name mistyped in QB_SUITES)
 for n in $SELECTED; do
     [[ " $RAN $MISSING " == *" $n "* ]] || MISSING="$MISSING $n"

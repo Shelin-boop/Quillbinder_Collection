@@ -781,6 +781,7 @@ std::unique_ptr<Project> runScrivenerImport(QWidget *parent, const QString &give
     if (dlg.exec() != QDialog::Accepted)
         return nullptr;
 
+    DocumentStore::Hold unloadHold; // 0.93.0: no document goes while this job runs events
     QProgressDialog progress(QObject::tr("Importing…"), QString(), 0, 100, parent);
     progress.setWindowModality(Qt::WindowModal);
     progress.setMinimumDuration(200);
@@ -833,6 +834,7 @@ static QDialog *helpWindow(QPointer<QDialog> &win, QWidget *parent, const QStrin
         QString text = QString::fromUtf8(f.readAll());
         text.replace(QLatin1String("{{APP}}"), QLatin1String(QB_APP_NAME))
             .replace(QLatin1String("{{VERSION}}"), QLatin1String(QB_APP_VERSION))
+            .replace(QLatin1String("{{LABEL}}"), QLatin1String(QB_APP_VERSION_LABEL)) // 0.93.0: "beta"; the documents never go stale
             .replace(QLatin1String("{{SUFFIX}}"), QLatin1String(QB_PROJECT_SUFFIX))
             .replace(QLatin1String("{{FILE}}"), QLatin1String(QB_PROJECT_FILE_SUFFIX));
         tb->setMarkdown(text);

@@ -77,7 +77,7 @@ StartDialog::StartDialog(QWidget *parent, bool showRecentFirst) : QDialog(parent
     m_format->setObjectName(QStringLiteral("projectFormat"));
     m_format->addItem(tr("%1 project").arg(QStringLiteral(QB_APP_NAME)));
     m_format->addItem(tr("Scrivener 3 project (.scriv)"));
-    m_format->setToolTip(tr("Scrivener format: the project can be opened in Scrivener 3 as well (File > Project Format)"));
+    m_format->setToolTip(tr("Scrivener format: the project can be opened in Scrivener 3 as well (File > Save As)"));
     form->addWidget(m_format);
     lay->addLayout(form);
 

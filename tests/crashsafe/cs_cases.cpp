@@ -724,6 +724,7 @@ ReplaceResult convertThroughOptions(MainWindow *w, bool typographic, const QStri
         qs->setCurrentIndex(qs->findData(style));
     auto *button = dlg.findChild<QPushButton *>(typographic ? QStringLiteral("optConvertQuotesSmart") : QStringLiteral("optConvertQuotesStraight"));
     bool opened = false;
+    ScopedWaiter waiter(ConvertQuotesDialog::staticMetaObject.className());
     withModal<ConvertQuotesDialog>(400, [&](ConvertQuotesDialog *d) {
         opened = true;
         if (!selection.isEmpty()) {
@@ -740,7 +741,7 @@ ReplaceResult convertThroughOptions(MainWindow *w, bool typographic, const QStri
         if (!cancelAfterCount)
             done = d->convert(false);
         d->reject();
-    });
+    }, 100, waiter.alive);
     if (button)
         button->click();
     settle(500);
@@ -1200,11 +1201,12 @@ void caseSL06()
             writeFile(answer == 0 ? QStringLiteral("fr") : QStringLiteral("de"));
             OptionsDialog dlg(w);
             QString asked, name;
+            ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
             withModal<QMessageBox>(300, [answer, &asked, &name](QMessageBox *b) {
                 name = b->objectName();
                 asked = b->text();
                 (answer == 0 ? b->button(QMessageBox::No) : b->button(QMessageBox::Yes))->click();
-            });
+            }, 100, waiter.alive);
             QString err;
             const bool ok = dlg.loadOptionsFromFile(file, &err);
             settle(300);

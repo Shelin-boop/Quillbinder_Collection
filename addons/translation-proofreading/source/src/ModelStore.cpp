@@ -133,6 +133,8 @@ void ModelStore::loadCatalog()
         m.credit = o.value(QStringLiteral("credit")).toString();
         m.source = o.value(QStringLiteral("source")).toString();
         m.nonCommercial = o.value(QStringLiteral("nonCommercial")).toBool();
+        m.askLicense = o.value(QStringLiteral("askLicense")).toBool();
+        m.forWords = o.value(QStringLiteral("forWords")).toBool(true);
         m.memoryMB = o.value(QStringLiteral("memoryMB")).toInt();
         m.sizeMB = o.value(QStringLiteral("sizeMB")).toInt();
         m.sourceToken = o.value(QStringLiteral("sourceToken")).toString();
@@ -238,6 +240,10 @@ QString ModelStore::downloadProblem(const QString &id) const
     const CatalogModel *m = model(id);
     if (!m)
         return tr("Unknown model.");
+    // 1.3: a file the release does not have yet (the catalog names it with a placeholder sum)
+    for (const CatalogFile &f : m->files)
+        if (f.sha256.startsWith(QLatin1String("PLACEHOLDER")))
+            return tr("%1 is not published yet.").arg(m->title);
     const QString memory = memoryProblem(*m, Machine::now(), false);
     if (!memory.isEmpty())
         return memory;

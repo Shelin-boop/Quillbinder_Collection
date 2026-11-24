@@ -28,7 +28,7 @@ QString projectKey(const Project *p);
 // project through a sync program get the same ID without writing anything. A project folder copied by hand carries
 // the same ID. Backups without an ID (of versions before) are no longer counted or deleted; Restore From Backup
 // still offers them, and those of the same title with another ID.
-// A copy the program makes itself (Save a Copy as a project, a project restored from a backup, a project made from
+// A copy the program makes itself (File > Save As, Export > Quillbinder Project, a project restored from a backup, a project made from
 // a template file, which all carry their original's Draft id) gets an ID of its own: giveNewId writes a seed into
 // settings/backup-id.txt, which comes before the Draft's id (a file of the project, so it travels with it; a
 // version without this function leaves it alone).
@@ -69,13 +69,29 @@ bool isOwnBackupName(const QString &fileName);
 // 0.90.3: false with *waiting true: the backup was made and checked but could not be put into the backup folder;
 // it is kept in the work folder (*outPath names it there) and *error says so (Where::BackupFolder only: a backup
 // to a chosen folder that cannot be put there is removed).
+// 0.93.0: *cleanupNotes: older backups that the clean-up could not delete ("<file>: <reason>"), each told once per
+// session (the backup itself is made: this is no failure)
 bool backupProject(Project *p, const QString &dir, int keep, QString *outPath, QString *error,
-                   Where where = Where::BackupFolder, bool *waiting = nullptr);
+                   Where where = Where::BackupFolder, bool *waiting = nullptr, QStringList *cleanupNotes = nullptr);
 // The backups in dir that carry this project's title, oldest first: those in the program's own name form, and other
 // files that begin "<title> bak " (a sync program's copy of a backup), which Restore From Backup offers too.
 QStringList backupsFor(const Project *p, const QString &dir);
 // The backups in this project's folder of 0.70.0 to 0.90.4 (see formerProjectFolder), oldest first.
 QStringList formerBackupsFor(const Project *p, const QString &dir);
+// 0.93.0: this project's backups that wait in the work folder (they were made while the backup folder was out of
+// reach, see backupProject), picked as backupsFor picks them; Restore From Backup offers them, marked as waiting.
+QStringList waitingBackupsFor(const Project *p, const QString &dir);
+
+// 0.93.0: File > Back Up > Move Old Backups Into the Backup Folder: the backups of the project's own folder of
+// 0.70.0 to 0.90.4 go into the backup folder under their names. A name that is already there stays where it is (never
+// overwritten) and is told in `left` ("<name>: <reason>"); the folder of the old backups is removed when it is empty.
+struct MoveReport {
+    QString from;          // the old folder ("" when there is none)
+    QStringList moved;     // file names
+    QStringList left;      // "<name>: <reason>"
+    bool folderRemoved = false;
+};
+MoveReport moveFormerBackups(const Project *p, const QString &dir);
 
 // 0.70.0 (audit A U-06): while a backup is packed and checked (in a thread of its own) the calling thread hands
 // over to this handler every 50 ms: what is done (a title; "" when it is over), bytes done, bytes in all, and
@@ -85,7 +101,12 @@ void setProgressHandler(std::function<void(const QString &what, qint64 done, qin
 // 0.81.0 (audit of 0.80.0, S-03): a backup that the closing would have made but the program was ended by a signal
 // (a kill command, a shutdown that does not wait): the project is noted in <data>/backups-due.txt, and the next
 // opening makes the backup and says so. takeDue: true when the project was noted (the note goes).
-void markDue(const QString &projectFile);
+// 0.93.0: the opening looks (isDue) and removes the note (clearDue) only when its backup was made (in the folder, or
+// waiting in the work folder); a backup that fails leaves the note for the next opening. markDue: false when the note
+// could not be written.
+bool markDue(const QString &projectFile);
+bool isDue(const QString &projectFile);
+bool clearDue(const QString &projectFile);
 bool takeDue(const QString &projectFile);
 
 // 0.70.0 (audit A U-05): unpacks a backup into a new folder "<name> (restored <date time>)" inside intoParent;

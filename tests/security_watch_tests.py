@@ -12,6 +12,7 @@ import json
 import os
 import re
 import sys
+import time
 from contextlib import redirect_stdout
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -224,6 +225,12 @@ class Net:
             return 200, b"[]"
         if "/releases/tags/" in url:
             return 404, b""
+        if url.endswith("/commits?per_page=1"):
+            age = self.over.get("last_commit_days", 3)
+            if age is None:
+                return 404, b""
+            t = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime(time.time() - age * 86400 - 3600))
+            return 200, json.dumps([{"commit": {"committer": {"date": t}}}]).encode()
         if "/issues?labels=" in url:
             return 200, json.dumps(self.existing).encode()
         if "/comments" in url:
@@ -316,8 +323,12 @@ for c in [real["qt"]] + real["components"]:
         continue
     pin = c["pin"]
     if "comes_with" in pin:
-        if pin["comes_with"] != f"Qt {real['qt']['version']}":
-            bad.append(f"{c['name']}: comes with {pin['comes_with']}, the list has Qt {real['qt']['version']}")
+        # "Qt <version>" or "<name of another part> <version>": the part's version is the one of the part it comes with
+        owners = {"Qt": real["qt"]["version"]}
+        owners.update({x["name"]: x["version"] for x in real["components"]})
+        name, _, ver = pin["comes_with"].rpartition(" ")
+        if owners.get(name) != ver:
+            bad.append(f"{c['name']}: comes with {pin['comes_with']}, the list has {name} {owners.get(name)}")
     elif pinned(pin) != c["version"]:
         bad.append(f"{c['name']}: list {c['version']}, build {pinned(pin)}")
 check("every part of the watch list has the version the build uses", not bad, bad)
@@ -326,6 +337,35 @@ check("the watch list holds the AppImage's Ubuntu packages at their versions", u
       set(ub.items()) ^ set(real["ubuntu"]["packages"].items()))
 check("the release asked for is newer than the Qt we ship",
       all(sw.vcmp(sw.vtuple(v), sw.vtuple(real["qt"]["version"])) > 0 for v in real["qt"].get("tell_when_released", [])))
+
+names = [c["name"] for c in real["components"]]
+check("the parts inside Qt's Linux build are in the list with the versions of Qt 6.12.1's own files",
+      {c["name"]: c["version"] for c in real["components"]}.items() >= {
+          "zlib": "1.4", "HarfBuzz (in Qt)": "15.1.0", "PCRE2 (in Qt)": "10.49", "libpng (in Qt)": "1.6.59",
+          "libjpeg-turbo (in Qt)": "3.2.1", "FreeType (in Qt)": "2.15.0", "MD4C (in Qt)": "0.6.0", "FFmpeg": "9.1"}.items()
+      and real["qt"]["version"] == "6.12.1", [(c["name"], c["version"]) for c in real["components"]])
+byname = {c["name"]: c for c in real["components"]}
+check("PDFium, the ggml inside whisper.cpp and the AppImage runtime are watched, each with its note on what the databases know",
+      all(n in byname and byname[n].get("note") for n in ("PDFium (in Qt PDF)", "ggml (in whisper.cpp)",
+                                                           "AppImage runtime (type2-runtime)"))
+      and byname["PDFium (in Qt PDF)"]["version"] == "140.0.7339.264" and byname["ggml (in whisper.cpp)"]["version"] == "0.26.0"
+      and byname["AppImage runtime (type2-runtime)"]["version"] == "20251108"
+      and "1afaa1a380fcd06cec420f3e5b6ec1d2ccb920dc" in byname["PDFium (in Qt PDF)"]["note"], list(byname))
+check("the ggml copy named in the list is the one of whisper.cpp's tag",
+      byname["ggml (in whisper.cpp)"]["pin"] == {"comes_with": "whisper.cpp " + byname["whisper.cpp"]["version"]})
+check("a part that no database names is not asked from OSV", all(byname[n].get("osv") is False
+                                                                   for n in ("PDFium (in Qt PDF)", "ggml (in whisper.cpp)")))
+
+# ---------------------------------------------------------------------------------------------------- the quiet repository
+rc, out, net = run(True, last_commit_days=3)
+check("a repository with a recent commit gets no line about quiet", rc == 0 and "QUIET REPOSITORY" not in out, out[-300:])
+rc, out, net = run(True, last_commit_days=49)
+check("49 days without a commit: no line yet", rc == 0 and "QUIET REPOSITORY" not in out)
+rc, out, net = run(True, last_commit_days=50)
+check("50 days without a commit: a line in the report, and the run goes on",
+      rc == 0 and "QUIET REPOSITORY: no commit for 50 days" in out and "60 days" in out and "Findings rated High or Critical" in out, out[-400:])
+rc, out, net = run(True, last_commit_days=None)
+check("a last commit that cannot be read is a warning, not a failure", rc == 0 and "warning: the last commit of owner/repo" in out, out[-300:])
 
 # ---------------------------------------------------------------------------------------------------- the workflow
 with open(os.path.join(ROOT, ".github", "workflows", "security-watch.yml"), encoding="utf-8") as fh:
@@ -339,6 +379,66 @@ check("the workflow checks out only the watch's two files",
       and "sparse-checkout-cone-mode: false" in wf and "persist-credentials: false" in wf)
 check("a push to the work branch is a dry run", "all/security-watch" in wf
       and "github.event_name == 'push' && '--dry-run'" in wf)
+
+# ---------------------------------------------------------------------------------------------------- FFmpeg's source
+# 0.93.0: tools/verify-ffmpeg-source.sh accepts an archive only with a good signature of the key with the expected
+# fingerprint (here a key made for the check; the real one is named in tools/get-ffmpeg.sh)
+import shutil
+import subprocess
+import tempfile
+
+verify = os.path.join(ROOT, "tools", "verify-ffmpeg-source.sh")
+with open(os.path.join(ROOT, "tools", "get-ffmpeg.sh"), encoding="utf-8") as fh:
+    getff = fh.read()
+fpr_real = re.search(r"^KEY_FPR=([0-9A-F]{40})$", getff, re.M)
+check("get-ffmpeg.sh names FFmpeg 9.1 from ffmpeg.org, its signature file, the key file and the key's fingerprint",
+      re.search(r"^VERSION=9\.1$", getff, re.M) and "https://ffmpeg.org/releases/ffmpeg-$VERSION.tar.xz" in getff
+      and "SIG_URL=$URL.asc" in getff and "https://ffmpeg.org/ffmpeg-devel.asc" in getff and fpr_real is not None
+      and "--enable-gpl" not in getff)
+bf = open(os.path.join(ROOT, "tools", "build-ffmpeg.sh"), encoding="utf-8").read()
+check("the FFmpeg build has no GPL or non-free switch", "--enable-gpl" not in bf and "--enable-nonfree" not in bf
+      and "--enable-version3" not in bf)
+if shutil.which("gpg") and shutil.which("gpgv"):
+    work = tempfile.mkdtemp(prefix="qb-verify-")
+    home = os.path.join(work, "home")
+    os.makedirs(home, mode=0o700)
+    env = dict(os.environ, GNUPGHOME=home)
+    gen = lambda who: subprocess.run(["gpg", "--batch", "--pinentry-mode", "loopback", "--passphrase", "", "--quick-generate-key",
+                                      who, "ed25519", "sign", "never"], env=env, capture_output=True, text=True)
+    fprs = {}
+    for who in ("Release Key <release@example.org>", "Other Key <other@example.org>"):
+        gen(who)
+        out = subprocess.run(["gpg", "--batch", "--with-colons", "--fingerprint", who], env=env, capture_output=True, text=True).stdout
+        fprs[who.split()[0]] = [l.split(":")[9] for l in out.splitlines() if l.startswith("fpr")][0]
+    tar = os.path.join(work, "ffmpeg-9.1.tar.xz")
+    with open(tar, "wb") as fh:
+        fh.write(b"not really FFmpeg\n")
+    asc = tar + ".asc"
+    subprocess.run(["gpg", "--batch", "--pinentry-mode", "loopback", "--passphrase", "", "--local-user", fprs["Release"],
+                    "--armor", "--detach-sign", "--output", asc, tar], env=env, check=True, capture_output=True)
+    keys = os.path.join(work, "keys.asc")
+    with open(keys, "wb") as fh:
+        for who in ("Release", "Other"):
+            fh.write(subprocess.run(["gpg", "--batch", "--armor", "--export", fprs[who]], env=env, capture_output=True).stdout)
+    envv = dict(os.environ)
+    envv.pop("GNUPGHOME", None)
+    ver = lambda t, a, k, f: subprocess.run([verify, t, a, k, f], env=envv, capture_output=True, text=True)
+    r = ver(tar, asc, keys, fprs["Release"])
+    sha = subprocess.run(["sha256sum", tar], capture_output=True, text=True).stdout.split()[0]
+    check("a good signature of the expected key: accepted, with the SHA-256 and the line to pin",
+          r.returncode == 0 and f'pin this: SHA256="{sha}"' in r.stdout, r.stdout + r.stderr)
+    r = ver(tar, asc, keys, fprs["Other"])
+    check("a good signature of another key than the expected one is refused", r.returncode == 1 and "STOP" in r.stderr, r.stderr)
+    r = ver(tar, asc, keys, "FCF986EA15E6E293A5644F10B4322F04D67658D8")
+    check("a key file without the expected fingerprint stops with the fingerprints it holds",
+          r.returncode == 1 and "STOP" in r.stderr and fprs["Release"] in r.stderr and fprs["Other"] in r.stderr, r.stderr)
+    with open(tar, "ab") as fh:
+        fh.write(b"changed\n")
+    r = ver(tar, asc, keys, fprs["Release"])
+    check("an archive that was changed after signing is refused", r.returncode == 1 and "pin this" not in r.stdout, r.stdout + r.stderr)
+    shutil.rmtree(work, ignore_errors=True)
+else:
+    print("(no gpg: the signature checks are left out)")
 
 print(f"{FAILS} failure(s)")
 sys.exit(1 if FAILS else 0)

@@ -572,23 +572,19 @@ int main(int argc, char **argv)
 
     // =========================================================== the menu entries
     {
-        QAction *fmt = menuPath(&w, {QStringLiteral("File"), QStringLiteral("Project Format")});
-        QStringList texts;
-        if (fmt && fmt->menu())
-            for (QAction *a : fmt->menu()->actions())
-                if (!a->isSeparator())
-                    texts << menuText(a->text());
-        check(texts == QStringList{QStringLiteral("Quillbinder Project"), QStringLiteral("Scrivener 3 Project (.scriv)"),
-                                   QStringLiteral("Save a Copy as Scrivener Project"), QStringLiteral("Save a Copy as Quillbinder Project")},
-              QStringLiteral("File > Project Format: own format, Scrivener 3 format, two kinds of copies"), texts.join(QLatin1String(" | ")));
-        check(fmt && fmt->menu() && byKey(&w, QStringLiteral("formatScrivener"))->isCheckable()
-                  && byKey(&w, QStringLiteral("formatScrivener"))->actionGroup()
-                  && byKey(&w, QStringLiteral("formatScrivener"))->actionGroup()->isExclusive(),
-              QStringLiteral("the two formats are a choice of one (radio entries)"));
+        // 0.93.0: File > Save As in place of the menu Project Format; the copies are in File > Export
+        check(menuPath(&w, {QStringLiteral("File"), QStringLiteral("Project Format")}) == nullptr,
+              QStringLiteral("the menu File > Project Format is gone"));
+        QAction *saveAs = menuPath(&w, {QStringLiteral("File"), QStringLiteral("Save As")});
+        check(saveAs && saveAs == byKey(&w, QStringLiteral("saveAs")) && saveAs->shortcut() == QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S),
+              QStringLiteral("File > Save As… has Ctrl+Shift+S"));
+        QAction *expOwn = menuPath(&w, {QStringLiteral("File"), QStringLiteral("Export"), QStringLiteral("Quillbinder Project")});
+        check(expOwn != nullptr && menuPath(&w, {QStringLiteral("File"), QStringLiteral("Export"), QStringLiteral("Scrivener Project")}) != nullptr,
+              QStringLiteral("File > Export holds the copies: Scrivener Project and Quillbinder Project"));
         bool off = true;
-        for (const char *k : {"formatQuillbinder", "formatScrivener", "saveCopyScrivener", "saveCopyQuillbinder"})
+        for (const char *k : {"saveAs", "saveCopyScrivener", "saveCopyQuillbinder"})
             off = off && !byKey(&w, QLatin1String(k))->isEnabled();
-        check(off, QStringLiteral("without a project the format entries are off"));
+        check(off, QStringLiteral("without a project Save As and the copies are off"));
         check(menuPath(&w, {QStringLiteral("File"), QStringLiteral("Export"), QStringLiteral("Scrivener Project")}) != nullptr
                   && menuPath(&w, {QStringLiteral("File"), QStringLiteral("Import"), QStringLiteral("Scrivener Project")}) != nullptr,
               QStringLiteral("File > Export > Scrivener Project and File > Import > Scrivener Project"));
@@ -622,8 +618,6 @@ int main(int argc, char **argv)
               QStringLiteral("New Project in Scrivener format: no project folder of the own format beside it"));
         check(w.windowTitle().contains(QLatin1String("(Scrivener format)")), QStringLiteral("the window title says \"Scrivener format\""),
               w.windowTitle());
-        check(byKey(&w, QStringLiteral("formatScrivener"))->isChecked() && !byKey(&w, QStringLiteral("formatQuillbinder"))->isChecked(),
-              QStringLiteral("File > Project Format ticks Scrivener 3"));
         check(AppSettings::instance().recentProjects.value(0) == scrivener::scrivxIn(scrivNew),
               QStringLiteral("Open Recent lists the .scrivx"), AppSettings::instance().recentProjects.value(0));
         if (p) {
@@ -728,38 +722,36 @@ int main(int argc, char **argv)
         QFile::remove(lock.fileName());
     }
 
-    // =========================================================== converting the open project
+    // =========================================================== File > Save As (0.93.0)
     {
         Project *p = w.project();
         const QString ownFolder = p ? p->folderPath() : QString();
         const QString target = QDir(W).filePath(QStringLiteral("Converted.scriv"));
         fileDialog(500, target);
-        QString seen;
-        answer(2500, QStringLiteral("OK"), &seen);
-        byKey(&w, QStringLiteral("formatScrivener"))->trigger();
+        byKey(&w, QStringLiteral("saveAs"))->trigger();
         settle(2800);
         check(w.project() && w.project()->scrivenerPath == QFileInfo(target).absoluteFilePath() && QFile::exists(scrivener::scrivxIn(target))
-                  && QDir(ownFolder).exists() && byKey(&w, QStringLiteral("formatScrivener"))->isChecked(),
-              QStringLiteral("Project Format > Scrivener 3: the project is saved as .scriv from now on, the old folder stays"),
-              seen.left(300));
+                  && QDir(ownFolder).exists() && w.project()->title() == QLatin1String("Converted"),
+              QStringLiteral("Save As, type .scriv: the project is saved as .scriv from now on, the old folder stays, the title follows the name"),
+              w.project() ? w.project()->title() : QString());
         // and back
-        const QString backParent = QDir(W).filePath(QStringLiteral("back"));
-        QDir().mkpath(backParent);
-        fileDialog(500, backParent);
-        answer(2500, QStringLiteral("OK"));
-        byKey(&w, QStringLiteral("formatQuillbinder"))->trigger();
+        const QString back = QDir(W).filePath(QStringLiteral("back/Back Home.qbx"));
+        QDir().mkpath(QFileInfo(back).absolutePath());
+        fileDialog(500, back);
+        byKey(&w, QStringLiteral("saveAs"))->trigger();
         settle(2800);
-        check(w.project() && w.project()->scrivenerPath.isEmpty() && w.project()->folderPath().startsWith(backParent)
-                  && QFile::exists(scrivener::scrivxIn(target)) && byKey(&w, QStringLiteral("formatQuillbinder"))->isChecked(),
-              QStringLiteral("Project Format > own format: a project folder again, the .scriv stays as it was"),
+        check(w.project() && w.project()->scrivenerPath.isEmpty()
+                  && w.project()->folderPath() == QFileInfo(QDir(W).filePath(QStringLiteral("back/Back Home.quillbinder"))).absoluteFilePath()
+                  && QFile::exists(scrivener::scrivxIn(target)),
+              QStringLiteral("Save As, type .qbx: a project folder with its .qbx, the .scriv stays as it was"),
               w.project() ? w.project()->folderPath() : QString());
-        // a canceled file dialog changes nothing (and the tick stays where it was)
+        // a canceled file dialog changes nothing
+        const QString before = w.project() ? w.project()->folderPath() : QString();
         withModal<QFileDialog>(500, [](QFileDialog *d) { d->reject(); });
-        byKey(&w, QStringLiteral("formatScrivener"))->trigger();
+        byKey(&w, QStringLiteral("saveAs"))->trigger();
         settle(900);
-        check(w.project() && w.project()->scrivenerPath.isEmpty() && byKey(&w, QStringLiteral("formatQuillbinder"))->isChecked()
-                  && !byKey(&w, QStringLiteral("formatScrivener"))->isChecked(),
-              QStringLiteral("canceling the switch: nothing changes, the tick goes back"));
+        check(w.project() && w.project()->folderPath() == before && w.project()->scrivenerPath.isEmpty(),
+              QStringLiteral("canceling Save As: nothing changes"));
         // copies
         const QString copyScriv = QDir(W).filePath(QStringLiteral("Copy For Scrivener.scriv"));
         fileDialog(500, copyScriv);
@@ -774,10 +766,13 @@ int main(int argc, char **argv)
         QDir().mkpath(copyParent);
         fileDialog(500, copyParent);
         answer(2000, QStringLiteral("OK"));
-        byKey(&w, QStringLiteral("saveCopyQuillbinder"))->trigger();
+        QAction *exportOwn = menuPath(&w, {QStringLiteral("File"), QStringLiteral("Export"), QStringLiteral("Quillbinder Project")});
+        if (exportOwn)
+            exportOwn->trigger();
         settle(2300);
-        check(!QDir(copyParent).entryList({QStringLiteral("*.quillbinder")}, QDir::Dirs).isEmpty(),
-              QStringLiteral("Save a Copy as Quillbinder Project: a project folder in the chosen place"));
+        check(!QDir(copyParent).entryList({QStringLiteral("*.quillbinder")}, QDir::Dirs).isEmpty() && w.project()
+                  && w.project()->folderPath() == before,
+              QStringLiteral("File > Export > Quillbinder Project: a project folder in the chosen place, the window stays on the original"));
     }
 
     // =========================================================== compile window
@@ -1025,8 +1020,7 @@ int main(int argc, char **argv)
         // every command once, with the project open, on a text with a selected word in the
         // editor that has the keyboard: no crash, the window still there, and something happens
         // ("welcome" opens another project: checked by qb_v040_tests)
-        const QSet<QString> skip = {QStringLiteral("quit"), QStringLiteral("closeProject"), QStringLiteral("formatQuillbinder"),
-                                    QStringLiteral("formatScrivener"), QStringLiteral("welcome")};
+        const QSet<QString> skip = {QStringLiteral("quit"), QStringLiteral("closeProject"), QStringLiteral("welcome")};
         // a text with "bell" outside the trash (commands such as Split or Move to Trash change it)
         auto ensureText = [&w]() -> QString {
             Project *p = w.project();
@@ -1131,7 +1125,7 @@ int main(int argc, char **argv)
             QStringLiteral("File > Exit"), QStringLiteral("Edit > Undo"), QStringLiteral("Edit > Redo"), QStringLiteral("Edit > Cut"),
             QStringLiteral("Edit > Copy"), QStringLiteral("Edit > Paste"), QStringLiteral("Edit > Select All"),
             QStringLiteral("Edit > Writing Tools > "), QStringLiteral("View > Show Binder"), QStringLiteral("View > Show Collections"),
-            QStringLiteral("View > Show Inspector"), QStringLiteral("View > Toolbars > "), QStringLiteral("View > Text Editing > "),
+            QStringLiteral("View > Show Inspector"), QStringLiteral("View > Layout > "), QStringLiteral("View > Toolbars > "), QStringLiteral("View > Text Editing > "),
             QStringLiteral("View > Corkboard Options > Status Stamps"), QStringLiteral("View > Use Label Color In > "),
             QStringLiteral("View > Full Screen"), QStringLiteral("View > Zoom Inspector Tabs Separately"), QStringLiteral("Window > Themes > "), QStringLiteral("Window > Layouts > "),
             QStringLiteral("Window > Scratch Pad"), QStringLiteral("Window > Float Quick Reference Panels"), QStringLiteral("Help > ")};

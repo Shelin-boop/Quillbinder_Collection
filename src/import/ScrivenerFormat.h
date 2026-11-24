@@ -39,6 +39,7 @@
 #include <QHash>
 #include <QString>
 #include <QStringList>
+#include <functional>
 #include <memory>
 
 namespace qb {
@@ -143,12 +144,23 @@ bool sync(Project *p, QString *error, bool quick = false);
 // Switch the open project to Scrivener format: a working copy of it is made and
 // written to scrivDir (which must not exist yet). The original project folder
 // stays as it is. Returns the working copy.
-std::unique_ptr<Project> convertToScrivener(Project *p, const QString &scrivDir, QString *error);
+// 0.93.0 (File > Save As): with `saveFirst` false the original is not saved (nothing is written into it): the working
+// copy is made from what is on disk, `overlay` is then called with the new project folder (and writes what the open
+// project holds unsaved into it), and the new project gets the title `newTitle` (when given).
+using FolderStep = std::function<bool(const QString &folder, QString *error)>;
+std::unique_ptr<Project> convertToScrivener(Project *p, const QString &scrivDir, QString *error, bool saveFirst = true,
+                                            const FolderStep &overlay = FolderStep(), const QString &newTitle = QString());
 // A copy in Scrivener format; the open project stays as it is.
 bool saveCopyAsScrivener(Project *p, const QString &scrivDir, WriteReport *report, QString *error);
 // A copy as an ordinary project "<parentDir>/<name>.quillbinder" (not linked to
 // any .scriv). Returns the copy, opened.
 std::unique_ptr<Project> copyAsQuillbinder(Project *p, const QString &parentDir, const QString &name, QString *error);
+// 0.93.0 (File > Save As): "<parentDir>/<name>.quillbinder" as a project of its own (its own backup ID, the title `name`);
+// the original is not saved or written (see convertToScrivener); `overlay` writes the unsaved changes into the new folder
+// (it gets the folder and the name of the project file to write). The new project is opened, not linked to a .scriv.
+using ProjectFileStep = std::function<bool(const QString &folder, const QString &indexFileName, QString *error)>;
+std::unique_ptr<Project> saveAsQuillbinder(Project *p, const QString &parentDir, const QString &name, QString *error,
+                                           const ProjectFileStep &overlay);
 
 // Scrivener's date text: "2025-09-02 03:48:53 -0700"
 QString dateText(const QDateTime &dt);

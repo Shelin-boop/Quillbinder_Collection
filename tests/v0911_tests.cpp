@@ -29,7 +29,6 @@
 #include <QFile>
 #include <QRandomGenerator>
 #include <QSettings>
-#include <QStatusBar>
 #include <QStyleFactory>
 #include <QTemporaryDir>
 #include <QTest>
@@ -480,7 +479,7 @@ static void windowChecks(MainWindow &w)
         // into that new row, and the bottom edge
         b.drag(tools, QPoint(w.width() / 2, b.rowY(search)));
         const bool joined = b.seen() == QLatin1String("mainToolbar themesBar / formatBar characterBar paragraphBar iconBar / searchBar toolsBar");
-        b.drag(paragraph, QPoint(400, w.statusBar()->mapTo(&w, QPoint(0, 0)).y() + 4));
+        b.drag(paragraph, QPoint(400, w.centralWidget()->mapTo(&w, QPoint(0, w.centralWidget()->height())).y() - 4));
         const bool bottom = w.toolBarArea(paragraph) == Qt::BottomToolBarArea && b.at(paragraph).y() > w.height() / 2 && paragraph->isVisible()
                             && b.dock->places().bottom.size() == 1;
         check(joined && bottom && b.consistent(&why)
@@ -542,7 +541,7 @@ static void windowChecks(MainWindow &w)
         settle(300);
         check(b.seen() == standard && b.dock->places() == b.dock->standardPlaces() && b.consistent(&why)
                   && QSettings().value(QStringLiteral("window/barGaps")).toMap().isEmpty() && w.toolBarArea(paragraph) == Qt::TopToolBarArea
-                  && w.statusBar()->currentMessage().contains(QLatin1String("standard places")),
+                  && w.statusNote().contains(QLatin1String("standard places")),
               QStringLiteral("View > Toolbars > Reset Toolbar Places: the two standard rows in their order, nothing at the bottom, no free space"),
               why);
     }

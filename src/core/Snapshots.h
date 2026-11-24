@@ -19,6 +19,8 @@ struct Snapshot {
 namespace snapshots {
 QList<Snapshot> list(Project *p, const QString &docId);   // newest first
 // from: the text to store if it is not the document's own (a copy read from its file)
+// 0.93.0: the text of the document is what its newest snapshot holds (a snapshot of it would be a copy of that one)
+bool sameAsNewest(Project *p, const QString &docId);
 bool take(Project *p, const QString &docId, const QString &title, QString *error = nullptr, QTextDocument *from = nullptr);
 void load(Project *p, const Snapshot &s, QTextDocument *into);
 // 0.65.0 (audit F02): false with a reason when the snapshot's file cannot be read whole

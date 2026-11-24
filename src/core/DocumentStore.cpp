@@ -2,6 +2,11 @@
 #include "core/SafeSave.h"
 #include "core/SaveBatch.h"
 #include "core/DocumentStore.h"
+#include "core/TestSwitches.h"
+
+#include <QElapsedTimer>
+#include <QThread>
+#include <algorithm>
 
 #include "text/Script.h"
 #include "core/BinderItem.h"
@@ -52,6 +57,19 @@ DocumentStore::DocumentStore(Project *project) : QObject(project), m_project(pro
         for (const QString &id : ids)
             recount(id);
     });
+    m_unloadTimer.setSingleShot(true);
+    m_unloadTimer.setInterval(1500);
+    connect(&m_unloadTimer, &QTimer::timeout, this, [this] {
+        m_unloadAgain = false;
+        m_unloadRefused = false;
+        unloadUnused();
+        if (m_unloadAgain)
+            m_unloadTimer.start(300); // more to compare
+        else if (m_probe && m_entries.size() > kKeepLoaded && (s_hold > 0 || m_unloadRefused))
+            m_unloadTimer.start(3000); // a job holds documents, a window is open: later
+    });
+    // the unsaved marks of shown-only documents are cleared by a save: that is the time to let them go
+    connect(project, &Project::saved, this, &DocumentStore::armUnloading);
 }
 
 DocumentStore::~DocumentStore()
@@ -111,6 +129,28 @@ void DocumentStore::preloadImages(QTextDocument *doc, const QString &dir)
 // 0.70.0 (audit A F-04): the program writes its Markdown files in UTF-8. A file in another encoding (saved by
 // another editor as Windows-1252 or UTF-16) is decoded as well as possible for showing, and *damage says why it
 // must not be written over.
+namespace {
+// 0.93.0: a notes file that starts as plain text carries a mark (an ignorable RTF group, a first line of Markdown), so
+// that it opens plain again; it is taken off before the text is read and put back when it is written
+const QByteArray kRtfPlainMark = "{\\*\\qbplainnotes}";
+const QString kMdPlainMark = QStringLiteral("<!--qb-plain-notes-->\n");
+bool takeRtfMark(QByteArray &d)
+{
+    const int i = d.left(600).indexOf(kRtfPlainMark);
+    if (i < 0)
+        return false;
+    d.remove(i, kRtfPlainMark.size());
+    return true;
+}
+bool takeMdMark(QString &t)
+{
+    if (!t.startsWith(kMdPlainMark))
+        return false;
+    t.remove(0, kMdPlainMark.size());
+    return true;
+}
+} // namespace
+
 QString DocumentStore::decodeStored(const QByteArray &data, QString *damage)
 {
     if (data.startsWith("\xFF\xFE") || data.startsWith("\xFE\xFF")) {
@@ -159,32 +199,51 @@ void DocumentStore::readFile(const QString &id, bool notes, QTextDocument *doc, 
         }
     }
     QFile f(path);
-    if (f.exists() && !f.open(QIODevice::ReadOnly)) {
-        // there, but not readable: shown empty, never saved over (0.20)
-        const QString key = keyFor(id, notes);
-        if (!m_unreadable.contains(key)) {
-            m_unreadable.insert(key);
-            emit unreadableFile(id, notes, path, f.errorString());
-        }
-    }
+    const QString key = keyFor(id, notes);
     QByteArray data;
-    if (f.isOpen()) {
-        data = f.readAll();
-        // 0.65.0 (audit F23): a read cut short (an I/O error, a file of a sync folder that is not all there)
-        // is not the text: shown empty and never saved over, as a file that cannot be opened
-        const bool regular = QFileInfo(path).isFile();
-        if (f.error() != QFileDevice::NoError || (regular && data.size() != f.size())) {
-            const QString key = keyFor(id, notes);
-            const QString why = f.error() != QFileDevice::NoError ? f.errorString()
-                                                                   : tr("only %1 of %2 bytes could be read").arg(data.size()).arg(f.size());
+    bool have = false;          // data holds the text (read, or kept from before the document was unloaded)
+    QString failure;            // why the file could not be read ("" : it could)
+    bool unreadableNow = false;
+    // the tests' switch (0.93.0): a part of the path whose file cannot be opened (a root user ignores permissions)
+    const QString fakeUnreadable = QB_TEST_ENV("QB_TEST_READ_FAILS");
+    if (f.exists()) {
+        if ((!fakeUnreadable.isEmpty() && path.contains(fakeUnreadable)) || !f.open(QIODevice::ReadOnly)) {
+            unreadableNow = true;
+            failure = f.isOpen() ? QStringLiteral("not readable") : f.errorString();
             f.close();
-            if (!m_unreadable.contains(key)) {
-                m_unreadable.insert(key);
-                emit unreadableFile(id, notes, path, why);
+        } else {
+            data = f.readAll();
+            // 0.65.0 (audit F23): a read cut short (an I/O error, a file of a sync folder that is not all there)
+            // is not the text: shown empty and never saved over, as a file that cannot be opened
+            const bool regular = QFileInfo(path).isFile();
+            if (f.error() != QFileDevice::NoError || (regular && data.size() != f.size())) {
+                unreadableNow = true;
+                failure = f.error() != QFileDevice::NoError
+                              ? f.errorString()
+                              : tr("only %1 of %2 bytes could be read").arg(data.size()).arg(f.size());
+                f.close();
+            } else {
+                have = true;
             }
         }
     }
-    if (f.isOpen()) {
+    if (unreadableNow) {
+        // 0.93.0: a document that was unloaded and is shown again is read from its file again; when that fails for a
+        // moment (a sync program or a scanner has the file) and the file is the one that was read, the bytes kept at
+        // the unloading are the text (nothing is marked unreadable). Another file (another computer wrote it): as before.
+        auto kept = m_kept.constFind(key);
+        if (kept != m_kept.constEnd() && kept->stamp.known && kept->stamp.sameAs(syncsafe::stampOf(path))) {
+            data = kept->bytes;
+            rtfFile = kept->rtf;
+            have = true;
+        } else {
+            if (!m_unreadable.contains(key)) {
+                m_unreadable.insert(key);
+                emit unreadableFile(id, notes, path, failure);
+            }
+        }
+    }
+    if (have) {
         if (bytes)
             *bytes = data;
         if (rtf)
@@ -199,13 +258,18 @@ void DocumentStore::readFile(const QString &id, bool notes, QTextDocument *doc, 
             QByteArray shown = data;
             if (!blank && !rtf::wellFormed(data, &damage))
                 shown = rtf::mended(data);
+            if (takeRtfMark(shown))
+                doc->setProperty(display::kPlainNotesProp, true);
             rtf::ReadOptions o;
             o.keepFormatting = m_project->storage == StorageFormat::Rtf;
             rtf::read(shown, doc, m_project->formatting, o);
             if (m_project->storage == StorageFormat::Markdown)
                 display::normalizeDocument(doc, m_project->formatting);
         } else {
-            md::read(decodeStored(data, &damage), doc, m_project->formatting);
+            QString mdText = decodeStored(data, &damage);
+            if (takeMdMark(mdText))
+                doc->setProperty(display::kPlainNotesProp, true);
+            md::read(mdText, doc, m_project->formatting);
             preloadImages(doc, dir);
         }
         if (!damage.isEmpty()) {
@@ -227,8 +291,10 @@ QTextDocument *DocumentStore::load(const QString &id, bool notes)
 {
     const QString key = keyFor(id, notes);
     auto it = m_entries.find(key);
-    if (it != m_entries.end())
+    if (it != m_entries.end()) {
+        it->used = ++m_useTick;
         return it->doc;
+    }
     auto *doc = new QTextDocument;
     display::prepareDocument(doc, m_project->formatting, zoomFor(notes));
     doc->setProperty("qbZoom", zoomFor(notes)); // explicit font sizes are zoomed by the editor's highlighter
@@ -236,9 +302,18 @@ QTextDocument *DocumentStore::load(const QString &id, bool notes)
     doc->setUndoRedoEnabled(false);
     Entry e;
     readFile(id, notes, doc, &e.read, &e.readRtf);
+    m_kept.remove(key); // (the entry holds what was read now)
+    if (notes) {
+        // 0.93.0: new and empty notes start as plain text, notes that were plain stay so (see display::applyPlainNotes)
+        if (!doc->property(display::kPlainNotesProp).toBool() && doc->isEmpty())
+            doc->setProperty(display::kPlainNotesProp, true);
+        if (doc->property(display::kPlainNotesProp).toBool())
+            display::applyPlainNotes(doc, zoomFor(true), m_project->storage == StorageFormat::Markdown);
+    }
     doc->setUndoRedoEnabled(true);
     e.doc = doc;
     e.isNotes = notes;
+    e.used = ++m_useTick;
     // 0.64: what the file was when it was read; a different file at the next write means someone
     // else (another computer through a sync program) wrote it meanwhile
     const QString path = notes ? notesPath(id) : textPath(id);
@@ -260,20 +335,121 @@ QTextDocument *DocumentStore::load(const QString &id, bool notes)
         m_shown.insert(key, Shown{shownBytes(doc, m_project->formatting, m_project->storage), m_project->formatting,
                                   m_project->storage});
     m_entries.insert(key, e);
-    connect(doc, &QTextDocument::contentsChanged, this, [this, key, id, notes] {
+    if (m_probe && m_entries.size() > kKeepLoaded && !m_unloadTimer.isActive())
+        m_unloadTimer.start();
+    connect(doc, &QTextDocument::contentsChanged, this, [this, doc, key, id, notes] {
         auto it = m_entries.find(key);
         if (it == m_entries.end())
             return;
         it->dirty = true;
+        ++it->changes;
         m_project->scheduleSave();
+        m_plainCache.remove(key); // (0.93.0: also for notes: an unloaded and read again notes text can be edited)
         if (!notes) {
             m_plainCache.remove(id);
             m_countPending.insert(id);
             m_countTimer.start();
-            emit textEdited(id);
+            // 0.93.0: a document read anew gets its spell check's first pass, which fires this signal without a change
+            // of the text (the document is not modified): that is no edit (no snapshot "Saved", no title taken)
+            if (doc->isModified())
+                emit textEdited(id);
         }
     });
     return doc;
+}
+
+// 0.93.0 (to-do item 39): see the header. What is kept: a shown document, one with a change not saved, one with an
+// undo or redo step (the history lives in the document), one that is read-only because of its file, and the last
+// `keep` used. A shown-only document is clean (a save finds it unchanged since it was read) and has no steps.
+void DocumentStore::armUnloading()
+{
+    if (m_probe && m_entries.size() > kKeepLoaded && !m_unloadTimer.isActive())
+        m_unloadTimer.start();
+}
+
+int DocumentStore::unloadUnused(int keep)
+{
+    if (!m_probe || m_entries.size() <= keep)
+        return 0;
+    if (s_hold > 0)
+        return 0;
+    // a nested event loop (a menu, a drag, a native dialog the probe does not see): what runs below it may hold documents
+    if (QThread::currentThread()->loopLevel() > 1) {
+        m_unloadRefused = true;
+        return 0;
+    }
+    QSet<const QTextDocument *> shown;
+    if (!m_probe(&shown)) {
+        m_unloadRefused = true;
+        return 0;
+    }
+    QList<QPair<quint64, QString>> candidates;
+    for (auto it = m_entries.constBegin(); it != m_entries.constEnd(); ++it) {
+        const Entry &e = it.value();
+        const QString &key = it.key();
+        if (!e.doc || shown.contains(e.doc) || e.doc->isUndoAvailable() || e.doc->isRedoAvailable())
+            continue;
+        if (m_unreadable.contains(key) || m_damaged.contains(key) || m_shown.contains(key) || m_missing.contains(key))
+            continue;
+        if (e.read.size() > kKeptMax)
+            continue; // (large files are not unloaded: their bytes are not kept for a failed read)
+        candidates.append({e.used, key});
+    }
+    // the ones used last stay (the shown ones are not among the candidates but do count as kept)
+    const int kept = int(m_entries.size()) - int(candidates.size());
+    const int canKeep = qMax(0, keep - kept);
+    if (candidates.size() <= canKeep)
+        return 0;
+    std::sort(candidates.begin(), candidates.end(), [](const auto &a, const auto &b) { return a.first < b.first; });
+    const int drop = int(candidates.size()) - canKeep;
+    QElapsedTimer clock; // the compares of one run take about 15 ms at most (the timer comes again for the rest)
+    clock.start();
+    int done = 0;
+    for (int i = 0; i < drop; ++i) {
+        const QString &key = candidates.at(i).second;
+        auto it = m_entries.find(key);
+        if (it == m_entries.end())
+            continue;
+        if (it->dirty) {
+            if (it->comparedAt == it->changes)
+                continue; // found really changed and not changed since: it stays until it is saved
+            if (clock.elapsed() >= 15) {
+                m_unloadAgain = true; // this one and the next were not looked at
+                break;
+            }
+            if (!sameAsRead(key, *it)) {
+                it->comparedAt = it->changes;
+                continue;
+            }
+        }
+        ++done;
+        QTextDocument *doc = it->doc;
+        if (!it->read.isNull() && it->stamp.known)
+            m_kept.insert(key, Kept{it->read, it->readRtf, it->stamp});
+        emit aboutToDeleteDocument(doc);
+        disconnect(doc, nullptr, this, nullptr);
+        doc->deleteLater();
+        m_entries.remove(key); // (by key: a slot of the signal may have changed the table)
+        m_plainCache.remove(key);
+    }
+    return done;
+}
+
+// 0.93.0: the text of this entry is what its file held when it was read here (compared without writing anything)
+bool DocumentStore::sameAsRead(const QString &key, const Entry &e) const
+{
+    if (e.read.isNull() || !e.doc)
+        return false;
+    ++m_compares;
+    QTextDocument tmp;
+    tmp.setProperty("qbZoom", e.doc->property("qbZoom"));
+    tmp.setBaseUrl(e.doc->baseUrl());
+    const_cast<DocumentStore *>(this)->deserialize(e.isNotes ? key.mid(2) : key, e.read, &tmp, e.readRtf);
+    if (e.readRtf && m_project->storage == StorageFormat::Markdown)
+        display::normalizeDocument(&tmp, m_project->formatting);
+    if (e.isNotes && e.doc->property(display::kPlainNotesProp).toBool())
+        return false; // (plain notes are shaped on loading: compared as changed, kept)
+    return shownBytes(&tmp, m_project->formatting, m_project->storage) == shownBytes(e.doc, m_project->formatting, m_project->storage);
 }
 
 bool DocumentStore::hasDirty() const
@@ -300,8 +476,16 @@ QStringList DocumentStore::dirtyTitles(int max) const
 
 QByteArray DocumentStore::serialize(const QString &id, const QTextDocument *doc, bool notes)
 {
-    if (m_project->storage == StorageFormat::Rtf)
-        return rtf::write(doc, m_project->formatting);
+    const bool plainNotes = notes && doc->property(display::kPlainNotesProp).toBool();
+    if (m_project->storage == StorageFormat::Rtf) {
+        QByteArray out = rtf::write(doc, m_project->formatting);
+        if (plainNotes) {
+            const int at = out.indexOf("\\deff0\n");
+            if (at >= 0)
+                out.insert(at + 7, kRtfPlainMark);
+        }
+        return out;
+    }
     // 0.81.1 (audit of 0.81.0, F-02): the pictures already written are looked up under the entry's own key; notes are
     // kept under "n:" + id, and the lookup by the id alone never found theirs, so a picture in notes whose name is not
     // a file (pasted from a word processor) was written again with every save
@@ -310,7 +494,7 @@ QByteArray DocumentStore::serialize(const QString &id, const QTextDocument *doc,
     auto it = m_entries.find(key);
     if (it != m_entries.end())
         entry = &it.value();
-    const QString dir = m_project->contentDir(id);
+    const QString dir = m_serializeFolder.isEmpty() ? m_project->contentDir(id) : Project::contentDirIn(m_serializeFolder, id);
     m_serializeError.clear();
     auto saver = [&](const QTextImageFormat &fmt) -> QString {
         const QString name = fmt.name();
@@ -341,7 +525,8 @@ QByteArray DocumentStore::serialize(const QString &id, const QTextDocument *doc,
             return rel;
         }
         if (!savebatch::put(QDir(dir).filePath(rel), png, &why, tr("picture in %1").arg(titleOf(id)), placeOf(id),
-                            [this, key, name, rel] {
+                            nullptr,
+                            [this, key, name, rel] { // in place: remembered whatever the folder's sync says
                                 auto e = m_entries.find(key);
                                 if (e != m_entries.end())
                                     e->savedImages.insert(name, rel);
@@ -351,7 +536,8 @@ QByteArray DocumentStore::serialize(const QString &id, const QTextDocument *doc,
         }
         return rel;
     };
-    return md::write(doc, m_project->formatting, saver).toUtf8();
+    const QString written = md::write(doc, m_project->formatting, saver);
+    return (plainNotes ? kMdPlainMark + written : written).toUtf8();
 }
 
 void DocumentStore::deserialize(const QString &id, const QByteArray &data, QTextDocument *doc, bool rtfData)
@@ -363,9 +549,15 @@ void DocumentStore::deserialize(const QString &id, const QByteArray &data, QText
     if (rtfData || rtf::looksLikeRtf(data)) {
         rtf::ReadOptions o;
         o.keepFormatting = m_project->storage == StorageFormat::Rtf;
-        rtf::read(data, doc, m_project->formatting, o);
+        QByteArray shown = data;
+        if (takeRtfMark(shown))
+            doc->setProperty(display::kPlainNotesProp, true);
+        rtf::read(shown, doc, m_project->formatting, o);
     } else {
-        md::read(QString::fromUtf8(data), doc, m_project->formatting);
+        QString mdText = QString::fromUtf8(data);
+        if (takeMdMark(mdText))
+            doc->setProperty(display::kPlainNotesProp, true);
+        md::read(mdText, doc, m_project->formatting);
         preloadImages(doc, m_project->contentDir(id));
     }
 }
@@ -440,7 +632,17 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
     if (!QFile::exists(other)) {
         QFile cur(path);
         if (cur.open(QIODevice::ReadOnly) && cur.size() == data.size() && cur.readAll() == data) {
-            e.dirty = false;
+            // 0.93.0: when a save runs, the text counts as saved only after the commit's checked sync (a folder whose
+            // sync failed before is synced again there); the stamp is renewed at once, it records what is on disk
+            if (savebatch::Batch *b = savebatch::current()) {
+                b->after([this, key] {
+                    auto it = m_entries.find(key);
+                    if (it != m_entries.end())
+                        it->dirty = false;
+                });
+            } else {
+                e.dirty = false;
+            }
             if (e.stamp.known)
                 e.stamp = syncsafe::stampOf(path);
             return true;
@@ -494,14 +696,18 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
     const bool rtfNow = m_project->storage == StorageFormat::Rtf;
     QString why;
     const bool put = savebatch::put(path, data, &why, notes ? tr("%1 (notes)").arg(titleOf(id)) : titleOf(id), placeOf(id),
-                                    [this, key, path, other, data, rtfNow] {
-                                        // remove a file of the other storage format if one is still there
+                                    [this, key, other] {
+                                        // counts as saved (after a good sync): remove a file of the other storage format
                                         if (QFile::exists(other))
                                             QFile::remove(other);
                                         auto it = m_entries.find(key);
+                                        if (it != m_entries.end())
+                                            it->dirty = false;
+                                    },
+                                    [this, key, path, data, rtfNow] { // in place: what is on disk now
+                                        auto it = m_entries.find(key);
                                         if (it == m_entries.end())
                                             return;
-                                        it->dirty = false;
                                         if (it->stamp.known)
                                             it->stamp = syncsafe::stampOf(path);
                                         it->read = data;
@@ -515,7 +721,7 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
     return true;
 }
 
-int DocumentStore::writeUnsaved(const QString &dir, QString *error)
+int DocumentStore::writeUnsaved(const QString &dir, QString *error, CopyTally *tally)
 {
     int n = 0;
     QSet<QString> used;
@@ -531,10 +737,13 @@ int DocumentStore::writeUnsaved(const QString &dir, QString *error)
             base = QStringLiteral("%1 (%2)").arg(name).arg(k);
         used.insert(base.toLower());
         QString why;
-        if (safesave::writeFile(QDir(dir).filePath(base + QStringLiteral(".rtf")), rtf::write(it->doc, m_project->formatting), &why))
+        const bool ok = safesave::writeFile(QDir(dir).filePath(base + QStringLiteral(".rtf")), rtf::write(it->doc, m_project->formatting), &why);
+        if (ok)
             ++n;
         else if (error && error->isEmpty())
             *error = why;
+        if (tally)
+            tally->add(base + QStringLiteral(".rtf"), ok, why);
     }
     return n;
 }
@@ -691,6 +900,44 @@ bool DocumentStore::saveDirty(QString *error)
     return ok;
 }
 
+bool DocumentStore::writeDirtyInto(const QString &folder, QString *error)
+{
+    bool ok = true;
+    m_serializeFolder = folder;
+    for (auto it = m_entries.begin(); it != m_entries.end(); ++it) {
+        if (!it->dirty || m_unreadable.contains(it.key()))
+            continue;
+        const QString id = it->isNotes ? it.key().mid(2) : it.key();
+        const QString dir = Project::contentDirIn(folder, id);
+        const QString path = dir + (it->isNotes ? QLatin1String("/notes.") : QLatin1String("/text.")) + extension();
+        const QByteArray data = serialize(id, it->doc, it->isNotes);
+        if (!m_serializeError.isEmpty()) {
+            if (error && error->isEmpty())
+                *error = m_serializeError;
+            ok = false;
+            continue;
+        }
+        if (it->doc->isEmpty() && !QFile::exists(path))
+            continue;
+        if (unchangedSinceRead(id, *it, data))
+            continue; // only shown here, not edited
+        QString why;
+        if (!QDir().mkpath(dir) || !safesave::writeFile(path, data, &why)) {
+            if (error && error->isEmpty())
+                *error = why.isEmpty() ? tr("Cannot write %1").arg(path) : why;
+            ok = false;
+            continue;
+        }
+        // a file of the other storage format would win when the project is read
+        const QString other = dir + (it->isNotes ? QLatin1String("/notes.") : QLatin1String("/text."))
+                              + (m_project->storage == StorageFormat::Rtf ? QStringLiteral("md") : QStringLiteral("rtf"));
+        if (QFile::exists(other))
+            QFile::remove(other);
+    }
+    m_serializeFolder.clear();
+    return ok;
+}
+
 bool DocumentStore::saveDocument(const QString &id, QString *error)
 {
     auto it = m_entries.find(id);
@@ -745,10 +992,12 @@ void DocumentStore::forgetDocument(const QString &id)
     for (const QString &key : {id, keyFor(id, true)}) {
         auto it = m_entries.find(key);
         if (it != m_entries.end()) {
-            emit aboutToDeleteDocument(it->doc);
-            it->doc->deleteLater();
-            m_entries.erase(it);
+            QTextDocument *doc = it->doc;
+            emit aboutToDeleteDocument(doc);
+            doc->deleteLater();
+            m_entries.remove(key); // (by key: a slot of the signal may have changed the table)
         }
+        m_kept.remove(key);
         m_plainCache.remove(key);
     }
 }
@@ -955,7 +1204,7 @@ void DocumentStore::setNotesZoom(double z)
     for (Entry &e : m_entries) {
         if (!e.isNotes)
             continue;
-        e.doc->setDefaultFont(f);
+        e.doc->setDefaultFont(e.doc->property(display::kPlainNotesProp).toBool() ? display::plainNotesFont(m_notesZoom) : f);
         e.doc->setProperty("qbZoom", m_notesZoom);
     }
     emit notesZoomChanged(z);
@@ -996,9 +1245,10 @@ void DocumentStore::applyFormatting()
     for (auto it = m_entries.begin(); it != m_entries.end(); ++it) {
         Entry &e = it.value();
         const bool wasDirty = e.dirty;
-        e.doc->setDefaultFont(display::baseFont(m_project->formatting, zoomFor(e.isNotes)));
+        const bool plain = e.isNotes && e.doc->property(display::kPlainNotesProp).toBool();
+        e.doc->setDefaultFont(plain ? display::plainNotesFont(zoomFor(true)) : display::baseFont(m_project->formatting, zoomFor(e.isNotes)));
         // 0.81.1 (F-01): a text that is never written is left as it was read
-        if (m_project->storage == StorageFormat::Markdown && !m_unreadable.contains(it.key())) {
+        if (!plain && m_project->storage == StorageFormat::Markdown && !m_unreadable.contains(it.key())) {
             const bool undo = e.doc->isUndoRedoEnabled();
             e.doc->setUndoRedoEnabled(false);
             display::normalizeDocument(e.doc, m_project->formatting);
@@ -1089,10 +1339,14 @@ bool DocumentStore::convertStorage(StorageFormat to, QString *error)
         ok = false;
     if (ok && !batch.commit(error))
         ok = false;
+    // 0.93.0: when every file is in place already (only the folders' sync reported an error), the new format stays: it is
+    // what the project file on disk says; the error is passed on
     if (!ok) {
         batch.drop();
-        m_project->storage = was;
-        m_project->markIndexDirty();
+        if (!batch.placed()) {
+            m_project->storage = was;
+            m_project->markIndexDirty();
+        }
     }
     return ok;
 }

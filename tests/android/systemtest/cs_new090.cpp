@@ -19,6 +19,8 @@
 #include "ui/EditorPane.h"
 #include "ui/Language.h"
 #include "ui/LinkOpen.h"
+#include "ui/EditorPane.h"
+#include "ui/FooterStatus.h"
 #include "ui/MainWindow.h"
 #include "ui/MediaView.h"
 #include "ui/TextEditor.h"
@@ -42,7 +44,7 @@ namespace {
 
 QLabel *saveStateOf(MainWindow *w)
 {
-    return w ? w->findChild<QLabel *>(QStringLiteral("saveState")) : nullptr;
+    return w ? w->editorPane(0)->footerStatus()->textLabel() : nullptr;
 }
 
 QWidget *visibleNamed(const QString &name)

@@ -19,6 +19,8 @@
 #include "ui/AppSettings.h"
 #include "ui/DragDrop.h"
 #include "ui/EditorPane.h"
+#include "ui/EditorPane.h"
+#include "ui/FooterStatus.h"
 #include "ui/MainWindow.h"
 #include "ui/TextEditor.h"
 
@@ -932,10 +934,11 @@ void caseSD06()
             firedFaults(true);
             setFaults({c.rule});
             QString shown;
+            ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
             withModal<QMessageBox>(600, [&shown](QMessageBox *b) {
                 shown = b->text();
                 b->accept();
-            }, 20);
+            }, 20, waiter.alive);
             const int signalsBefore = failedSignals;
             BoxWatch watch;
             qApp->installEventFilter(&watch);
@@ -946,7 +949,7 @@ void caseSD06()
                 shown = watch.texts.join(QLatin1String(" / "));
             clearFaults();
             const QStringList fired = firedFaults(true);
-            const QString status = w->statusBar() ? w->statusBar()->currentMessage() : QString();
+            const QString status = w->statusNote();
             const bool told = !shown.isEmpty() || failedSignals > signalsBefore || status.contains(QLatin1String("could not"), Qt::CaseInsensitive);
             rows << QStringLiteral("%1: faults hit %2; message \"%3\"; status \"%4\"; save-failed signals %5").arg(c.what).arg(fired.size()).arg(shown.left(100), status.left(100)).arg(failedSignals - signalsBefore);
             if (!fired.isEmpty())   // 0.64.2: where the faults hit
@@ -957,17 +960,18 @@ void caseSD06()
         if (e) {
             setFaults({QStringLiteral("write %1 ENOSPC 0").arg(folder)});
             QString shown;
+            ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
             withModal<QMessageBox>(500, [&shown](QMessageBox *b) {
                 shown = b->text();
                 b->accept();
-            }, 60);
+            }, 60, waiter.alive);
             const int signalsBefore = failedSignals;
             typeInto(e, QStringLiteral(" Typed while the disk is full."));
             settle(8000);   // the autosave (2 s pause, 5 s gap rule)
             // 0.70.0 (audit A S-01): after the first notice, a failure within 5 minutes is told by the sign in the status
             // bar ("Not saved: the last save failed at ..."), and the window's own retry (every 15 s) may try before the autosave does, without
             // the project's signal: the sign counts as telling (2026-11-12, the full run: it went either way)
-            auto *sign = w->findChild<QLabel *>(QStringLiteral("saveState"));
+            auto *sign = w->editorPane(0)->footerStatus()->textLabel();
             const QString signText = sign ? sign->text() : QString();
             clearFaults();
             const QStringList fired = firedFaults(true);
@@ -982,13 +986,14 @@ void caseSD06()
         // closing with a save that fails: the program must not close silently
         setFaults({QStringLiteral("write %1 ENOSPC 0").arg(folder)});
         QString asked;
+        ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
         withModal<QMessageBox>(500, [&asked](QMessageBox *b) {
             asked = b->text();
             if (QAbstractButton *no = b->button(QMessageBox::No))
                 no->click();
             else
                 b->reject();
-        }, 20);
+        }, 20, waiter.alive);
         const bool closed = w->closeProject();
         settle(500);
         clearFaults();

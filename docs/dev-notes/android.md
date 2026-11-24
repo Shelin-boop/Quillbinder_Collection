@@ -164,8 +164,8 @@ system test's run. `main` 6c23dfd (Linux 0.91.3) was merged into `android/full`.
   from run 43851207847: `hunspell-arm64-v8a`, `hunspell-x86_64`, `openssl-arm64-v8a`, `openssl-x86_64`. A new NDK or
   a changed build script makes a new recipe: the next run builds it, publishes it and prints the `pin:` line.
   `android.yml` also runs on `main` when the merge message names `/android/` (build only; `android-ci` untouched).
-- **The translation add-on for Android** (repository `Quillbinder_Translation_Addon`, branch `addon/android`, not
-  merged yet): CTranslate2 4.9.0 with Ruy (oneDNN is for x86 only), SentencePiece 0.2.1, LLVM's OpenMP linked in
+- **The translation add-on for Android** (1.1 was built in the add-on's former repository, branch `addon/android`;
+  since 0.92.0 its source is `addons/translation-proofreading` here): CTranslate2 4.9.0 with Ruy (oneDNN is for x86 only), SentencePiece 0.2.1, LLVM's OpenMP linked in
   (`-static-openmp`), 16 KB pages, plain `.so` names (`SUFFIX ".so"`), `CMAKE_FIND_ROOT_PATH_MODE_* BOTH` for the
   engine's own libraries. Its workflow builds both ABIs on the public repository's free runners, checks exports, the
   libraries each needs and the 16 KB pages, and puts `translation-proofreading-1.1-android-<abi>.qbpkg` and

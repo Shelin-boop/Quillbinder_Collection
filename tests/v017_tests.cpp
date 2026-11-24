@@ -955,7 +955,9 @@ int main(int argc, char **argv)
 
         // a background shape around notes; magnetic: it takes them along
         scene->selectIds({storm, rain});
+        MindMapPrefs::instance().newShapeMagnetic = true; // (since 0.93.0 new shapes start not magnetic)
         ctl->action(QStringLiteral("mm_newShape"))->trigger();
+        MindMapPrefs::instance().newShapeMagnetic = false;
         check(b.shapes.size() == 1 && b.shapes.first().rect.contains(b.rectOf(storm)) && b.shapes.first().rect.contains(b.rectOf(rain)),
               QStringLiteral("Notes > New Background Shape Around Selection"));
         const int shape = b.shapes.first().id;

@@ -34,6 +34,29 @@ public:
     QTextDocument *projectNotes();
     QTextDocument *loadedText(const QString &id) const;
 
+    // 0.93.0 (to-do item 39): documents that are not shown are unloaded (their layout and memory go; the file is read again
+    // when one is shown again). The window tells which documents are shown (an editor of any kind has them); without it
+    // nothing is unloaded (Android, the tests that have no window). The probe returns false when it cannot say now
+    // (a dialog is open).
+    using ShownProbe = std::function<bool(QSet<const QTextDocument *> *shown)>;
+    void setShownProbe(ShownProbe probe) { m_probe = std::move(probe); }
+    // Unloads every text and notes that is not shown, has no unsaved change and no undo or redo step, except the `keep`
+    // used last; how many were unloaded. Called by the store itself a moment after a document was read.
+    int unloadUnused(int keep = kKeepLoaded);
+    // arms the unloading (after a save that cleared the unsaved marks, when more than kKeepLoaded are held)
+    void armUnloading();
+    int comparesDone() const { return m_compares; } // how often an unsaved-looking document was compared with its file (tests)
+    int loadedCount() const { return int(m_entries.size()); }
+    static constexpr int kKeepLoaded = 8;
+    static constexpr int kKeptMax = 512 * 1024; // a document whose file is larger is not unloaded
+    // While one is alive nothing is unloaded (a long job that keeps documents in hand and runs the event loop)
+    struct Hold {
+        Hold() { ++s_hold; }
+        ~Hold() { --s_hold; }
+        Hold(const Hold &) = delete;
+        Hold &operator=(const Hold &) = delete;
+    };
+
     bool hasDirty() const;
     // the titles of the documents with changes not saved, at most `max` (0.70.0, for the failed-save notice)
     QStringList dirtyTitles(int max = 8) const;
@@ -42,8 +65,13 @@ public:
     // into its own folder (text moved between documents: Merge, Split, templates)
     static void carryPictures(const QTextDocument *namesIn, const QTextDocument *from, QTextDocument *to);
     // 0.65.0: every text and notes not saved yet, as RTF files (pictures inside) into `dir`; how many were written
-    int writeUnsaved(const QString &dir, QString *error = nullptr);
+    // 0.93.0: every file counted in `tally` (wanted, written, missing with the reason); returns how many were written
+    int writeUnsaved(const QString &dir, QString *error = nullptr, CopyTally *tally = nullptr);
     bool saveDirty(QString *error);
+    // 0.93.0 (File > Save As): every text and notes not saved yet is written into the project folder `folder` (a copy of
+    // the project's folder) in the project's storage format; nothing is written into the project's own folder. The
+    // entries stay unsaved.
+    bool writeDirtyInto(const QString &folder, QString *error);
     bool saveDocument(const QString &id, QString *error = nullptr);
 
     QString plainText(const QString &id);
@@ -172,11 +200,26 @@ private:
         // only shown here (marked as changed by showing it) from one the writer edited
         QByteArray read;
         bool readRtf = false;
+        quint64 used = 0; // 0.93.0: the order the documents were asked for (the unloading keeps the last ones)
+        quint64 changes = 0;           // 0.93.0: how often the document changed since it was read here
+        quint64 comparedAt = ~quint64(0); // 0.93.0: `changes` when the unloading found it really changed (no new compare until it moves)
     };
     // the file of this entry was written by someone else: keep that version (0.64); false when
     // neither a copy nor a snapshot could be kept (0.64.1: then this one must not replace it)
     bool keepOtherVersion(const QString &id, bool notes, const QString &path);
     // what would be written is what was read (or last written) here: nothing was edited (0.64.1)
+    bool sameAsRead(const QString &key, const Entry &e) const;
+    mutable int m_compares = 0;
+    bool m_unloadAgain = false;
+    bool m_unloadRefused = false; // the last run could not say (a window is open, a nested event loop): again later
+    // 0.93.0: what an unloaded document was read from, kept (up to kKeptMax bytes) for the case that its file cannot be
+    // read when it is shown again and still looks as it did (a sync program or a scanner holds it for a moment)
+    struct Kept {
+        QByteArray bytes;
+        bool rtf = false;
+        syncsafe::Stamp stamp;
+    };
+    QHash<QString, Kept> m_kept;
     bool unchangedSinceRead(const QString &id, const Entry &e, const QByteArray &data);
     QTextDocument *load(const QString &id, bool notes);
     void readFile(const QString &id, bool notes, QTextDocument *doc, QByteArray *bytes = nullptr, bool *rtf = nullptr);
@@ -186,7 +229,12 @@ private:
 
     Project *m_project;
     QHash<QString, Entry> m_entries;
+    ShownProbe m_probe;
+    QTimer m_unloadTimer;
+    quint64 m_useTick = 0;
+    static inline int s_hold = 0;
     QSet<QString> m_unreadable; // keys of files that are there but could not be read
+    QString m_serializeFolder;  // writeDirtyInto: pictures of a text go into this project folder
     QString m_serializeError;   // set by serialize when a picture could not be written (0.65.0)
     QSet<QString> m_missing;    // ids of texts whose file has not arrived (0.64)
     QSet<QString> m_toldControl; // keys told about control characters left out (0.70.0)

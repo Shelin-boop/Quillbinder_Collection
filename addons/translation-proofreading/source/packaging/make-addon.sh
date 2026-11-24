@@ -1,7 +1,7 @@
 #!/bin/bash
 # Stages the add-on from a build and writes the package.
 #   packaging/make-addon.sh <build dir> <out dir>      -> <out dir>/translation-proofreading-<version>.qbpkg
-# The build must be a release build (TP_TEST_SWITCHES off) against Qt 6.12.0. QB_QT_DIR (default /opt/qt/6.12.0/gcc_64)
+# The build must be a release build (TP_TEST_SWITCHES off) against Qt 6.12.0. QB_QT_DIR (default /opt/qt/6.12.1/gcc_64)
 # gives Qt's TLS plugin for the model download; without it the package is made without the plugin and a warning (the
 # download then needs the plugin of another add-on, such as Speech Transcription).
 set -euo pipefail
@@ -9,7 +9,7 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 BUILD=$(cd "$1" && pwd)
 OUT=$2
 DEPS=${TP_DEPS:-$ROOT/deps}
-QT=${QB_QT_DIR:-/opt/qt/6.12.0/gcc_64}
+QT=${QB_QT_DIR:-/opt/qt/6.12.1/gcc_64}
 VERSION=$(python3 -c "import json,sys; print(json.load(open(sys.argv[1]))['version'])" "$ROOT/packaging/manifest.json")
 CMAKE_VERSION=$(sed -n 's/^set(TP_VERSION *"\(.*\)")/\1/p' "$ROOT/CMakeLists.txt")
 [ "$VERSION" = "$CMAKE_VERSION" ] || { echo "manifest.json has $VERSION, CMakeLists.txt $CMAKE_VERSION" >&2; exit 1; }
@@ -100,12 +100,16 @@ translation-proofreading/qtplugins/tls/libqopensslbackend.so
     to GPL-3.0.txt). Source: https://download.qt.io/official_releases/qt/ (qtbase of that version).
 
 The models are not part of the add-on: it downloads the ones the writer chooses, from the releases
-"models-1" and "models-2" of Quillbinder's repository, under their own licenses (each model's MODEL-LICENSE.txt):
+"models-1", "models-2" and "models-3" of Quillbinder's repository, under their own licenses (each model's MODEL-LICENSE.txt):
     CoEdIT Large (Grammarly): CC BY-NC 4.0, non-commercial use only.
     CoEdIT Base (J. Bochi): Apache-2.0.
     OPUS-MT German to English (University of Helsinki): Apache-2.0.
     Qwen3 1.7B and Qwen3 4B (Qwen team, Alibaba Cloud): Apache-2.0.
     OPUS-MT Big, German to English (University of Helsinki): CC BY 4.0.
+    OPUS-MT English to German, small (University of Helsinki): CC BY 4.0.
+A separate download, the German dictionary (an extract of the English Wiktionary by its contributors, through
+kaikki.org), is licensed under CC BY-SA 4.0; the add-on shows the license before the download. The meanings of English
+words are from Princeton WordNet 3.0 (see WordNet-3.0.txt, which covers both lists).
 TEXT
 
 [ -n "${TP_STAGE_DIR:-}" ] && exit 0

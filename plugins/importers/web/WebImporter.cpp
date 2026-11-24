@@ -1,6 +1,7 @@
 #include "WebImporter.h"
 
 #include "Html.h"
+#include "core/TestSwitches.h"
 
 #include <QApplication>
 #include <QBuffer>
@@ -13,6 +14,7 @@
 #include <QEventLoop>
 #include <QFileInfo>
 #include <QFormLayout>
+#include <QHostInfo>
 #include <QGroupBox>
 #include <QHBoxLayout>
 #include <QImage>
@@ -84,7 +86,81 @@ void stripImage(qb::importers::Content &c, int index)
                 p.runs.removeAt(i);
 }
 
+// the addresses of a host: a literal address as it is, a name looked up (10 s at most; empty when it does not answer)
+QList<QHostAddress> addressesOf(const QString &host)
+{
+    QHostAddress literal;
+    if (literal.setAddress(host))
+        return {literal};
+    QEventLoop loop;
+    QList<QHostAddress> out;
+    bool done = false;
+    const int id = QHostInfo::lookupHost(host, &loop, [&](const QHostInfo &info) {
+        out = info.addresses();
+        done = true;
+        loop.quit();
+    });
+    if (!done) {
+        QTimer::singleShot(10000, &loop, [&] {
+            if (!done)
+                QHostInfo::abortHostLookup(id);
+            loop.quit();
+        });
+        loop.exec();
+    }
+    return out;
+}
+
 } // namespace
+
+bool isNonPublicAddress(const QHostAddress &a)
+{
+    if (a.isNull() || a.isLoopback() || a.isMulticast())
+        return true;
+    auto v4 = [](quint32 ip) {
+        const quint32 b0 = ip >> 24, b1 = (ip >> 16) & 0xff;
+        return b0 == 0 || b0 == 10 || b0 == 127 || (b0 == 100 && b1 >= 64 && b1 <= 127) || (b0 == 169 && b1 == 254)
+               || (b0 == 172 && b1 >= 16 && b1 <= 31) || (b0 == 192 && b1 == 168);
+    };
+    if (a.protocol() == QAbstractSocket::IPv4Protocol)
+        return v4(a.toIPv4Address());
+    const Q_IPV6ADDR b = a.toIPv6Address();
+    bool zeros10 = true;
+    for (int i = 0; i < 10; ++i)
+        zeros10 = zeros10 && b[i] == 0;
+    const quint32 low = (quint32(b[12]) << 24) | (quint32(b[13]) << 16) | (quint32(b[14]) << 8) | quint32(b[15]);
+    if (zeros10 && b[10] == 0xff && b[11] == 0xff)
+        return v4(low); // an IPv4 address in an IPv6 one (::ffff:a.b.c.d)
+    if (zeros10 && b[10] == 0 && b[11] == 0)
+        return true;    // ::, ::1 and the old IPv4-compatible form
+    if (b[0] == 0x00 && b[1] == 0x64 && b[2] == 0xff && b[3] == 0x9b) {
+        bool rest = true;
+        for (int i = 4; i < 12; ++i)
+            rest = rest && b[i] == 0;
+        if (rest)
+            return v4(low); // NAT64's 64:ff9b::/96
+    }
+    return a.isLinkLocal() || a.isSiteLocal() || a.isUniqueLocalUnicast();
+}
+
+bool Fetcher::urlIsPublic(const QUrl &url)
+{
+    const QString host = url.host();
+    const QString key = host.toLower() + QLatin1Char(':') + QString::number(url.port(url.scheme() == QLatin1String("https") ? 443 : 80));
+    const auto known = m_publicHosts.constFind(key);
+    if (known != m_publicHosts.constEnd())
+        return known.value();
+    bool isPublic = true;
+    if (QB_TEST_ENV("QB_TEST_WEB_PUBLIC").split(QLatin1Char(','), Qt::SkipEmptyParts).contains(key)) {
+        isPublic = true;
+    } else {
+        for (const QHostAddress &a : addressesOf(host))
+            if (isNonPublicAddress(a))
+                isPublic = false;
+    }
+    m_publicHosts.insert(key, isPublic);
+    return isPublic;
+}
 
 // ------------------------------------------------------------------ fetching
 
@@ -106,7 +182,10 @@ QNetworkReply *Fetcher::start(const QUrl &url, const QByteArray &accept, qint64 
     req.setRawHeader("User-Agent", userAgent());
     req.setRawHeader("Accept", accept);
     req.setRawHeader("Accept-Language", acceptLanguage());
-    req.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
+    // 0.93.0: with "public only" every redirection is looked at before it is followed (the same rule as NoLessSafe, and
+    // no step to a non-public address)
+    req.setAttribute(QNetworkRequest::RedirectPolicyAttribute,
+                     m_publicOnly ? QNetworkRequest::UserVerifiedRedirectPolicy : QNetworkRequest::NoLessSafeRedirectPolicy);
     req.setMaximumRedirectsAllowed(10);
     req.setTransferTimeout(30000);
     QNetworkReply *r = m_nam->get(req);
@@ -117,6 +196,18 @@ QNetworkReply *Fetcher::start(const QUrl &url, const QByteArray &accept, qint64 
             r->abort();
         }
     });
+    if (m_publicOnly)
+        connect(r, &QNetworkReply::redirected, r, [this, r](const QUrl &to) {
+            const QUrl target = r->url().resolved(to);
+            const bool downgrade = r->url().scheme() == QLatin1String("https") && target.scheme() != QLatin1String("https");
+            const bool web = target.scheme() == QLatin1String("http") || target.scheme() == QLatin1String("https");
+            if (downgrade || !web || !urlIsPublic(target)) {
+                r->setProperty("qbBlocked", true);
+                r->abort();
+            } else {
+                emit r->redirectAllowed();
+            }
+        });
     connect(this, &Fetcher::cancelRequested, r, &QNetworkReply::abort);
     return r;
 }
@@ -125,6 +216,11 @@ Fetcher::Result Fetcher::finish(QNetworkReply *r, qint64 maxBytes)
 {
     Result res;
     res.url = r->url();
+    if (r->property("qbBlocked").toBool()) {
+        res.blocked = true;
+        res.error = QObject::tr("Not fetched: the address is on this computer or on a private network.");
+        return res;
+    }
     const int status = r->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     if (r->property("qbTooLarge").toBool()) {
         res.error = QObject::tr("The file is larger than %1 MB.").arg(maxBytes / (1024 * 1024));
@@ -231,6 +327,9 @@ bool Loader::load(const QUrl &url, QString *error)
 {
     m_loaded = false;
     m_pictures.clear();
+    m_blocked.clear();
+    m_pagePublic = false;
+    m_fetcher->setPublicOnly(false); // the page itself is fetched from the address that was given
     m_rawImage.clear();
     m_rawText.clear();
     m_html.clear();
@@ -248,6 +347,9 @@ bool Loader::load(const QUrl &url, QString *error)
         return false;
     }
     m_url = r.url;
+    // 0.93.0: a page from the internet gets its pictures from public addresses only; a page that itself lies on this
+    // computer or a private network (the address typed and the one reached) works as before
+    m_pagePublic = m_fetcher->urlIsPublic(url) && m_fetcher->urlIsPublic(m_url);
     const QString ct = r.contentType;
     const QByteArray head = r.data.left(1024).trimmed().toLower();
     const bool looksHtml = head.startsWith("<!doctype html") || head.contains("<html") || head.contains("<head")
@@ -318,6 +420,15 @@ void Loader::fetchPictures()
     for (const ImageRef &ref : m_extracted.images)
         if (ref.url.isValid() && !m_pictures.contains(ref.url.toString()) && !todo.contains(ref.url) && todo.size() < kMaxPictures)
             todo << ref.url;
+    m_fetcher->setPublicOnly(m_pagePublic);
+    if (m_pagePublic) {
+        for (int i = todo.size() - 1; i >= 0; --i)
+            if (!m_fetcher->urlIsPublic(todo.at(i))) {
+                m_blocked.insert(todo.at(i).toString());
+                m_pictures.insert(todo.at(i).toString(), QByteArray());
+                todo.removeAt(i);
+            }
+    }
     if (todo.isEmpty())
         return;
     emit status(todo.size() == 1 ? tr("Fetching 1 picture …") : tr("Fetching %1 pictures …").arg(todo.size()));
@@ -328,6 +439,8 @@ void Loader::fetchPictures()
         QByteArray data = res.at(i).ok ? res.at(i).data : QByteArray();
         if (!data.isEmpty() && QImage::fromData(data).isNull())
             data.clear(); // a format the program cannot show (AVIF …)
+        if (res.at(i).blocked)
+            m_blocked.insert(todo.at(i).toString());
         if (!m_fetcher->cancelled() || res.at(i).ok)
             m_pictures.insert(todo.at(i).toString(), data);
     }
@@ -347,13 +460,18 @@ bool Loader::result(const Choices &c, const QString &title, const QString &workD
     QList<qb::importers::Image> images;
     QVector<int> map(content.images.size(), -1);
     QStringList exts;
-    int missing = 0;
+    int missing = 0, leftOut = 0;
     for (int i = 0; i < content.images.size(); ++i) {
         QByteArray bytes = c.pictures ? pictureData(i) : QByteArray();
         QImage img;
         if (bytes.isEmpty() || !img.loadFromData(bytes)) {
-            if (c.pictures)
-                ++missing;
+            if (c.pictures) {
+                const QUrl u = i < m_extracted.images.size() ? m_extracted.images.at(i).url : QUrl();
+                if (u.isValid() && m_blocked.contains(u.toString()))
+                    ++leftOut;
+                else
+                    ++missing;
+            }
             continue;
         }
         QBuffer buf(&bytes);
@@ -392,6 +510,12 @@ bool Loader::result(const Choices &c, const QString &title, const QString &workD
     if (missing > 0)
         content.warnings << (missing == 1 ? tr("1 picture could not be fetched or is in a format the program does not show.")
                                           : tr("%1 pictures could not be fetched or are in a format the program does not show.").arg(missing));
+    if (leftOut > 0)
+        content.warnings << (leftOut == 1 ? tr("1 picture was left out: its address is on this computer or on a private network, "
+                                               "and the page comes from the internet.")
+                                          : tr("%1 pictures were left out: their addresses are on this computer or on a private "
+                                               "network, and the page comes from the internet.")
+                                                .arg(leftOut));
     if (m_extracted.fromScriptData)
         content.warnings << tr("The page builds its text with a script; the text was taken from the page's data, "
                                "without formatting and pictures.");

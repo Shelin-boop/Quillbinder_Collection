@@ -38,7 +38,6 @@
 #include <QSlider>
 #include <QSpinBox>
 #include <QStackedWidget>
-#include <QStatusBar>
 #include <QToolBox>
 #include <QUndoStack>
 #include <QVBoxLayout>
@@ -716,6 +715,57 @@ void MindMapFooter::refresh()
 
 // ------------------------------------------------------------------ inspector panel
 
+namespace {
+// A line of text that is shortened with "..." when its place is narrow (0.93.0: "Fixed: <title>" in the bar);
+// the whole text stays in full() and in the tool tip.
+class ElidedLabel : public QLabel
+{
+public:
+    explicit ElidedLabel(QWidget *parent) : QLabel(parent)
+    {
+        setTextFormat(Qt::PlainText);
+        setContentsMargins(4, 0, 4, 0);
+        setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    }
+    void setFull(const QString &t)
+    {
+        m_full = t;
+        shorten();
+        updateGeometry();
+    }
+    QString full() const { return m_full; }
+    QSize sizeHint() const override
+    {
+        const QMargins m = contentsMargins();
+        return QSize(fontMetrics().horizontalAdvance(m_full) + m.left() + m.right() + 2, QLabel::sizeHint().height());
+    }
+    QSize minimumSizeHint() const override { return QSize(24, QLabel::sizeHint().height()); }
+
+protected:
+    void resizeEvent(QResizeEvent *e) override
+    {
+        QLabel::resizeEvent(e);
+        shorten();
+    }
+    void showEvent(QShowEvent *e) override
+    {
+        QLabel::showEvent(e);
+        shorten();
+    }
+
+private:
+    void shorten()
+    {
+        const QMargins m = contentsMargins();
+        const int room = qMax(0, width() - m.left() - m.right() - 2);
+        const QString t = isVisible() ? fontMetrics().elidedText(m_full, Qt::ElideRight, room) : m_full;
+        if (t != text())
+            QLabel::setText(t);
+    }
+    QString m_full;
+};
+} // namespace
+
 MindMapPanel::MindMapPanel(QWidget *parent) : QWidget(parent)
 {
     setObjectName(QStringLiteral("mindMapPanel"));
@@ -821,6 +871,11 @@ void MindMapPanel::rebuild()
     addMenu(tr("&Help"), [ctl](QMenu *m) { ctl->fillHelpMenu(m); });
     menuBtn->setMenu(menu);
     bl->addWidget(menuBtn);
+    // 0.93.0: the overview, "automatic" or "always shown" (checked); then the line "Fixed: ..." (shortened when the bar is narrow)
+    button(QStringLiteral("mm_overview"))->setObjectName(QStringLiteral("mmOverviewButton"));
+    m_fixedLine = new ElidedLabel(m_bar);
+    m_fixedLine->setObjectName(QStringLiteral("mmFixedTitle"));
+    bl->addWidget(m_fixedLine);
     bl->addStretch(1);
     // 0.92.0: fixes the tab on the board shown, or releases it
     m_fixButton = new QToolButton(m_bar);
@@ -836,12 +891,6 @@ void MindMapPanel::rebuild()
     QToolButton *big = button(QStringLiteral("mm_openWindow"), tr("Open this mind map in a large window (with the inspector of the board)"));
     big->setObjectName(QStringLiteral("mmOpenWindow"));
     lay->addWidget(m_bar);
-    m_fixedLine = new QLabel(m_holder);
-    m_fixedLine->setObjectName(QStringLiteral("mmFixedTitle"));
-    m_fixedLine->setTextFormat(Qt::PlainText);
-    m_fixedLine->setMargin(3);
-    m_fixedLine->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Preferred);
-    lay->addWidget(m_fixedLine);
     applyFixed();
     m_findBar = new MindMapFindBar(m_ctl, m_holder);
     m_ctl->setFindBar(m_findBar);
@@ -881,7 +930,7 @@ void MindMapPanel::applyFixed()
     if (m_fixedLine) {
         m_fixedLine->setVisible(m_fixed);
         const QString text = tr("Fixed: %1").arg(m_fixedTitle.isEmpty() ? tr("Untitled") : m_fixedTitle);
-        m_fixedLine->setText(text);
+        static_cast<ElidedLabel *>(m_fixedLine)->setFull(text);
         m_fixedLine->setToolTip(tr("This is the mind map of \"%1\", not of the selected item. The pin button releases it.")
                                     .arg(m_fixedTitle));
     }

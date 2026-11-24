@@ -28,7 +28,7 @@ say() { echo "$*" | tee -a "$SUM"; }
 t0=$(date +%s)
 mins() { echo "$(( ($(date +%s) - t0) / 60 )) min"; }
 
-ver=$(sed -n 's/^set(APP_VERSION "\(.*\)")/\1/p' CMakeLists.txt)
+ver=$(sed -n 's/^set(APP_VERSION_ANDROID "\(.*\)")/\1/p' CMakeLists.txt)   # 0.93.0: Android's own version line
 RELEASE=${QB_ANDROID_RELEASE:-0}
 if [ "$RELEASE" = 1 ]; then
   APPID=io.github.shelin_boop.quillbinder.app

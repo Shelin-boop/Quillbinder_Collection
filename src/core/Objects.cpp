@@ -523,6 +523,43 @@ static bool writeJson(const QString &path, const QJsonObject &o, QString *error,
     return true;
 }
 
+void Store::writeUnsaved(const QString &dir, CopyTally *tally) const
+{
+    if (!tally)
+        return;
+    const QDir root(QFileInfo(m_dir).absolutePath());
+    auto put = [&](const QString &file, const QJsonObject &json) {
+        const QString rel = root.relativeFilePath(file);
+        const QString target = QDir(dir).filePath(rel);
+        QDir().mkpath(QFileInfo(target).absolutePath());
+        QString why;
+        tally->add(rel, safesave::writeFile(target, QJsonDocument(json).toJson(), &why), why);
+    };
+    if (m_schemaDirty)
+        put(m_dir + QLatin1String("/schema.json"), m_schema.toJson());
+    for (const QString &id : m_dirty) {
+        const auto it = m_objects.constFind(id);
+        if (it != m_objects.constEnd())
+            put(fileOf(*it), it->toJson());
+    }
+}
+
+void Store::removeLeftoversIn(const QString &projectFolder) const
+{
+    const QDir root(QFileInfo(m_dir).absolutePath());
+    auto drop = [&](const QString &file) {
+        if (file.isEmpty())
+            return;
+        const QString rel = root.relativeFilePath(file);
+        if (!rel.startsWith(QLatin1String("..")))
+            QFile::remove(QDir(projectFolder).filePath(rel));
+    };
+    for (const QString &f : m_removedFiles)
+        drop(f);
+    for (const QString &f : m_orphanPictures)
+        drop(picturePath(f));
+}
+
 bool Store::save(QString *error)
 {
     bool ok = true;

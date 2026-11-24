@@ -56,7 +56,6 @@
 #include <QSet>
 #include <QSettings>
 #include <QSpinBox>
-#include <QStatusBar>
 #include <QStyleFactory>
 #include <QTemporaryDir>
 #include <QTest>
@@ -483,8 +482,8 @@ static void leftoverChecks(MainWindow &w)
               p->docs()->notesPlainText(a->id));
         check(QFileInfo(untouchedFile).lastModified() == untouchedTime && readAll(untouchedFile).contains("$5"),
               QStringLiteral("[%1] a document without marks is not written").arg(label));
-        check(w.statusBar()->currentMessage().contains(QLatin1String("1 document")),
-              QStringLiteral("[%1] the status bar says so").arg(label), w.statusBar()->currentMessage());
+        check(w.statusNote().contains(QLatin1String("1 document")),
+              QStringLiteral("[%1] the status bar says so").arg(label), w.statusNote());
         if (st == StorageFormat::Markdown) {
             w.findChild<BinderPanel *>()->select({a}, true);
             settle(400);
@@ -492,12 +491,12 @@ static void leftoverChecks(MainWindow &w)
         }
         w.closeProject();
         settle(200);
-        w.statusBar()->clearMessage();
+        w.clearStatusNote();
         // opened again: nothing more to do
         check(w.openProject(folder), QStringLiteral("[%1] opened once more").arg(label));
         settle(300);
-        check(!w.statusBar()->currentMessage().contains(QLatin1String("style marks")),
-              QStringLiteral("[%1] ... nothing is taken out the second time").arg(label), w.statusBar()->currentMessage());
+        check(!w.statusNote().contains(QLatin1String("style marks")),
+              QStringLiteral("[%1] ... nothing is taken out the second time").arg(label), w.statusNote());
         w.closeProject();
         settle(200);
     }

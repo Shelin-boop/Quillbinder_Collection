@@ -2,7 +2,7 @@
 
 Quillbinder is a writing program for Linux (binder, editor, corkboard, outliner,
 inspector, compile), for writers who know Scrivener; it reads and writes Scrivener's
-file formats but is an independent program (Apache License 2.0 since 0.80.0; 0BSD before). C++17 and Qt 6.12.0,
+file formats but is an independent program (Apache License 2.0 since 0.80.0; 0BSD before). C++17 and Qt 6.12.1,
 The Qt Company's own build (since 0.80.0; Ubuntu 24.04's Qt 6.4.2 before), built on Ubuntu 24.04. Never copy text, pictures or code of Scrivener, Scapple or
 their manuals and tutorials into the source; describe functions in words of your own.
 
@@ -36,10 +36,10 @@ changed and what was checked. Preferences:
   Audio and video for everyone: the add-on "Media Playback" (free formats), the add-on "Extra
   Video and Audio Formats" (formats licensed under patents), and the package `media-all-formats.qbpkg` that installs
   both in one step (built by `packaging/linux/build-addons.sh`).
-- **Runtime**: the AppImages since 0.80.0 share the runtime id `u2404-qt6.12-r1` (`APP_RUNTIME`, `QB_QT_VERSION`,
+- **Runtime**: the AppImages since 0.93.0 have the runtime id `u2404-qt6.12-r2` (Qt 6.12.1; 0.80.0 to 0.92.x: `-r1`, Qt 6.12.0) (`APP_RUNTIME`, `QB_QT_VERSION`,
   `APP_RUNTIME_SINCE`, `APP_RUNTIME_DATE` in CMakeLists.txt; a new AppImage with other libraries needs a new id).
   The AppImages 0.2.0 to 0.70.0 had `u2404-qt6.4-r1` (Ubuntu's Qt 6.4.2). Program updates (.qbpkg) run on the
-  AppImage's libraries: build on Ubuntu 24.04 with Qt 6.12.0 of `tools/get-qt.sh` (`/opt/qt/6.12.0/gcc_64`; CMake
+  AppImage's libraries: build on Ubuntu 24.04 with Qt 6.12.1 of `tools/get-qt.sh` (`/opt/qt/6.12.1/gcc_64`; CMake
   refuses another Qt version on Linux) and add **no new library dependencies**. Something that needs a library goes
   into an add-on (`addons/`, see the Media Playback add-on with its own FFmpeg). Add-ons with Linux libraries name
   the runtime in their manifest (`tools/make-package.py` adds it, and `minApp` = `APP_RUNTIME_SINCE`); the program
@@ -61,7 +61,7 @@ changed and what was checked. Preferences:
 
 ## Build
 
-    tools/cloud-setup.sh                  # once on a fresh Ubuntu 24.04 (as root); fetches Qt 6.12.0 (tools/get-qt.sh)
+    tools/cloud-setup.sh                  # once on a fresh Ubuntu 24.04 (as root); fetches Qt 6.12.1 (tools/get-qt.sh)
     tools/get-ccache.sh                   # the compiled files of main (0.91.2); before the first configure
     tools/get-ffmpeg.sh; tools/get-whisper.sh   # ready-made packs, seconds (only when the media or speech suites run)
     cmake -S . -B build -G Ninja -DQB_TEST_SWITCHES=ON   # the switches the suites need (off by default since 0.70.0)
@@ -161,7 +161,7 @@ short index (under about 20 KB), so that it costs little when it is loaded.
   (0.64.1 to 0.81.1), the system test's fixes, settings per project, speed with large projects, crash reports.
 - `scrivener-format.md`: reading and writing .scriv (styles, inline notes, web pages, keywords, metadata, collections,
   the rest of a project).
-- `runtime-and-addons.md`: the check for updates and the translator add-on (0.92.0), Qt 6.12 and FFmpeg 9.0.2 (the runtime), tool interface 1.1 and Speech Transcription,
+- `runtime-and-addons.md`: the check for updates and the translator add-on (0.92.0), Qt 6.12.1 and FFmpeg 9.1 (the runtime r2, 0.93.0), tool interface 1.1 and Speech Transcription,
   release files and third-party sources.
 - `windows.md`: Windows 0.92.0 (the translator's build, the check for updates with the setup program's update run, the
   update file's Windows block, what a Windows job may add to shared files), the Windows port (W1 to W4c), what 0.90.4

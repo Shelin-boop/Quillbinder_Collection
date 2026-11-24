@@ -74,7 +74,6 @@
 #include <QSettings>
 #include <QSpinBox>
 #include <QStackedWidget>
-#include <QStatusBar>
 #include <QTextLayout>
 #include <QStyleFactory>
 #include <QTabWidget>
@@ -579,8 +578,8 @@ static void generalOptionChecks()
         check(snapshots::list(p, b->id).size() == before + 1 && snapshots::list(p, a->id).size() == beforeA,
               QStringLiteral("General > Saving: File > Save takes snapshots of the texts changed since the last save, of no others"),
               QStringLiteral("b %1 -> %2, a %3 -> %4").arg(before).arg(snapshots::list(p, b->id).size()).arg(beforeA).arg(snapshots::list(p, a->id).size()));
-        check(w.statusBar()->currentMessage().contains(QLatin1String("Snapshot")),
-              QStringLiteral("Behaviors > Snapshots: a message says that snapshots were taken"), w.statusBar()->currentMessage());
+        check(w.statusNote().contains(QLatin1String("Snapshot")),
+              QStringLiteral("Behaviors > Snapshots: a message says that snapshots were taken"), w.statusNote());
         check(QDir(projectBackups).entryList(QDir::Files).size() == backupsBefore + 1,
               QStringLiteral("Backup: a backup with each manual save"), QDir(projectBackups).entryList(QDir::Files).join(QLatin1Char(',')));
     }

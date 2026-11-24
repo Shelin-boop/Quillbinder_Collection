@@ -15,8 +15,9 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 VERSION=$(sed -n 's/^set(QB_QT_VERSION *"\(.*\)")/\1/p' "$ROOT/CMakeLists.txt")
 DEST=${QB_QT_DIR:-/opt/qt/$VERSION/gcc_64}
 FILE=qt-$VERSION-linux-gcc_64.tar.xz
-# the archive the workflow made for this version (2026-11-11, run 42959624084 of commit 657f2f7)
-SHA256=bd112a287dc015b09b8d05486a1eebb18601135eecf57d80f16fdc9d795dace2
+# the archive the workflow made for this version (2026-11-23, run 45216068834 of commit cd1716a; Qt PDF from the
+# Qt Extensions release for Qt 6.12, folder 6.12.0 of Qt's repository)
+SHA256=41f51339c8e9c1759bd110d2a925ffb8988ae0578060e2249353bbbe79de1362
 REPO=${QB_QT_REPO:-Shelin-boop/Quillbinder_Collection}
 
 if [ -f "$DEST/lib/libQt6Core.so.$VERSION" ] && [ -f "$DEST/bin/qmake" ]; then
@@ -25,7 +26,16 @@ if [ -f "$DEST/lib/libQt6Core.so.$VERSION" ] && [ -f "$DEST/bin/qmake" ]; then
 fi
 # Where download.qt.io can be reached (GitHub's runners): aqtinstall, as the workflow qt-linux.yml does; aqtinstall
 # checks every archive against the checksums of Qt's own repository
-if curl -fsS -m 20 -o /dev/null https://download.qt.io/online/qtsdkrepository/ 2>/dev/null; then
+# 0.93.0: asked up to three times (20 s each, 5 s apart) before the script falls back to the pack
+qt_io_reachable() {
+    local try
+    for try in 1 2 3; do
+        curl -fsS -m 20 -o /dev/null https://download.qt.io/online/qtsdkrepository/ 2>/dev/null && return 0
+        [ "$try" = 3 ] || sleep "${QB_QT_IO_PAUSE:-5}"
+    done
+    return 1
+}
+if qt_io_reachable; then
     python3 -m pip install -q --break-system-packages 'aqtinstall==3.3.0' 2>/dev/null \
         || python3 -m pip install -q 'aqtinstall==3.3.0'
     BASE=$(dirname "$(dirname "$DEST")")

@@ -703,6 +703,7 @@ void ZipReader::parse()
         return bad(QObject::tr("the table of contents could not be read"));
     m_entries.reserve(qsizetype(count));
     qint64 pos = 0;
+    quint64 sizeSum = 0;
     for (quint64 i = 0; i < count; ++i) {
         if (pos + 46 > cd.size() || get32(cd, int(pos)) != 0x02014b50)
             return bad(QObject::tr("damaged table of contents"));
@@ -740,6 +741,10 @@ void ZipReader::parse()
             }
             x += 4 + len;
         }
+        // 0.93.0: sizes that cannot be added up are no archive (the restore's check for room uses their sum)
+        if (e.size > std::numeric_limits<quint64>::max() - sizeSum)
+            return bad(QObject::tr("the sizes named in the file are impossibly large"));
+        sizeSum += e.size;
         m_entries.append(e);
         pos += qint64(46) + nameLen + extraLen + commentLen;
     }
@@ -757,9 +762,13 @@ QStringList ZipReader::fileNames() const
 
 quint64 ZipReader::totalSize() const
 {
+    // 0.93.0: a sum that cannot overflow (it stops at the largest number; open() refuses an archive that reaches it)
     quint64 n = 0;
-    for (const Entry &e : m_entries)
+    for (const Entry &e : m_entries) {
+        if (e.size > std::numeric_limits<quint64>::max() - n)
+            return std::numeric_limits<quint64>::max();
         n += e.size;
+    }
     return n;
 }
 

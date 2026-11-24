@@ -59,7 +59,7 @@ Select the two notes and choose **Menu > Notes > Connection Label…** (**Ctrl+S
 
 ![Notes on a background shape](qbmm:shape)
 
-**Menu > Notes > New Background Shape** (**Ctrl+Shift+G**) puts a colored area behind the selected notes. A magnetic shape (the default) takes the notes on it along when you move it.
+**Menu > Notes > New Background Shape** (**Ctrl+Shift+G**) puts a colored area behind the selected notes. A magnetic shape takes the notes on it along when you move it; a new shape starts medium gray and not magnetic (switch it on with **Menu > Notes > Magnetic**).
 
 ## Looking around
 

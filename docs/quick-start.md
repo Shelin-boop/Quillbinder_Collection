@@ -55,7 +55,7 @@
 
 - A **{{APP}} project** is a folder: every document is an ordinary text file, as **Markdown** (the standard) or **RTF**, so your writing stays readable without the program.
 - **Import Scrivener Project…** (**File > Import**) makes a {{APP}} project from a Scrivener 3 or 2 project and leaves the original untouched.
-- **Working in Scrivener format**: open the *.scrivx* file of a Scrivener 3 project and choose **Work in Scrivener Format**. {{APP}} then saves into the *.scriv* folder, so the project stays readable by Scrivener. **File > Project Format** switches a project between the two formats or saves a copy in the other one.
+- **Working in Scrivener format**: open the *.scrivx* file of a Scrivener 3 project and choose **Work in Scrivener Format**. {{APP}} then saves into the *.scriv* folder, so the project stays readable by Scrivener. **File > Save As…** saves a project in the other format (or under another name), and **File > Export** saves a copy that leaves the project you work on as it is.
 
 ### Getting text in and out
 
@@ -77,7 +77,7 @@
 
 ### Updates and add-ons
 
-The **full version** of the AppImage (*...-full-alpha-x86_64.AppImage*) has every add-on inside and installs them at its first start. Updates and extensions come as small package files (*.qbpkg*), on the Releases page of the project page (https://github.com/Shelin-boop/Quillbinder_Collection/releases) next to the AppImage. Install them with **File > Install Update or Add-on…** (or double-click the file). **Help > Add-on Manager…** switches add-ons on and off and goes back to an earlier program version if an update does not suit you. Add-ons include extra themes, project templates, compile formats, the Name Generator, the Scratch Pad, Text Statistics, audio and video playback (one package for the commonly used formats, *media-all-formats.qbpkg*; or *media-playback.qbpkg* for the free formats only), and the import of web pages and old Word files.
+The **full version** of the AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) has every add-on inside and installs them at its first start. Updates and extensions come as small package files (*.qbpkg*), on the Releases page of the project page (https://github.com/Shelin-boop/Quillbinder_Collection/releases) next to the AppImage. Install them with **File > Install Update or Add-on…** (or double-click the file). **Help > Add-on Manager…** switches add-ons on and off and goes back to an earlier program version if an update does not suit you. Add-ons include extra themes, project templates, compile formats, the Name Generator, the Scratch Pad, Text Statistics, audio and video playback (one package for the commonly used formats, *media-all-formats.qbpkg*; or *media-playback.qbpkg* for the free formats only), and the import of web pages and old Word files.
 
 ---
 

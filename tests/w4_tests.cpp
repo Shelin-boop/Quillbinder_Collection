@@ -16,6 +16,8 @@
 #include "ui/AppSettings.h"
 #include "ui/FirstStartDialog.h"
 #include "ui/FontInstall.h"
+#include "ui/EditorPane.h"
+#include "ui/FooterStatus.h"
 #include "ui/MainWindow.h"
 #include "ui/OptionStorage.h"
 #include "ui/OptionsDialog.h"
@@ -39,7 +41,6 @@
 #include <QScrollArea>
 #include <QSettings>
 #include <QStandardPaths>
-#include <QStatusBar>
 #include <QStyleFactory>
 #include <QTemporaryDir>
 #include <QTest>
@@ -367,7 +368,7 @@ static void windowChecks(const QString &W)
         look::change(v);
         settle(300);
     };
-    auto *state = w.findChild<QLabel *>(QStringLiteral("backupState"));
+    auto *state = w.editorPane(0)->footerStatus()->backupLabel();
 #ifdef Q_OS_WIN
     // what the program looks like with Windows 11's own controls (main.cpp sets the style "windows11"), light and dark
     if (QStyleFactory::keys().contains(QStringLiteral("windows11"), Qt::CaseInsensitive)) {
@@ -415,10 +416,10 @@ static void windowChecks(const QString &W)
     if (now)
         now->trigger();
     settle(200);
-    check(asked == QLatin1String("backupFolderQuestion") && w.statusBar()->currentMessage().contains(QLatin1String("No backup was made"))
+    check(asked == QLatin1String("backupFolderQuestion") && w.statusNote().contains(QLatin1String("No backup was made"))
               && QDir(backups).entryList(QDir::NoDotAndDotDot | QDir::AllEntries).isEmpty(),
           QStringLiteral("Back Up Now without a folder asks; \"Not Now\" makes no backup and says so"),
-          asked + QStringLiteral(" | ") + w.statusBar()->currentMessage());
+          asked + QStringLiteral(" | ") + w.statusNote());
     // "Choose Folder" takes the folder and makes the backup
     whenModal([](QWidget *m) {
         if (auto *box = qobject_cast<QMessageBox *>(m)) {

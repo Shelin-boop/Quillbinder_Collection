@@ -1,7 +1,8 @@
 #!/bin/bash
 # Ready-made dependency packs for the Linux build (2026-11-15, working rules section 10, decision D1).
 #
-# FFmpeg (both sets of tools/get-ffmpeg.sh) and whisper.cpp (tools/get-whisper.sh) are built from pinned sources.
+# FFmpeg (both sets of tools/get-ffmpeg.sh), whisper.cpp (tools/get-whisper.sh) and the translator's engine libraries
+# (tools/get-translator-deps.sh; 0.93.0) are built from pinned sources.
 # The workflow .github/workflows/deps.yml builds each of them once per recipe and puts the result as a
 # .tar.xz on a pre-release titled "not for downloading" (as qt-6.12.0-linux holds Qt).
 # tools/deps-packs.txt pins every pack by its SHA-256, as tools/get-qt.sh pins Qt's archive. get-ffmpeg.sh and
@@ -12,13 +13,17 @@
 # machine (Ubuntu release, processor type) and the versions of the tools that compile. Its SHA-256 (the recipe hash)
 # names the pack; a changed script, patch, pinned version or compiler gives a new hash and so a new pack, built once.
 #
-#   tools/deps-pack.sh recipe <ffmpeg|whisper>              the recipe's lines (what the hash is made of)
-#   tools/deps-pack.sh hash <ffmpeg|whisper>                its SHA-256
+#   tools/deps-pack.sh recipe <ffmpeg|whisper|translator>   the recipe's lines (what the hash is made of)
+#   tools/deps-pack.sh hash <ffmpeg|whisper|translator>     its SHA-256
+#   tools/deps-pack.sh about <name>                         what the pack holds, its licenses and the source (the text
+#                                                           of its pre-release, made by deps.yml)
 #   tools/deps-pack.sh fetch ffmpeg <base prefix> <full prefix>
 #   tools/deps-pack.sh fetch whisper <prefix>               download the pinned pack of this recipe, check its SHA-256,
 #                                                           unpack it into the prefixes; exit 1 when there is none
+#   tools/deps-pack.sh fetch translator <folder>            (build/translator-deps: install/ and the license texts)
 #   tools/deps-pack.sh pack ffmpeg <out dir> <base prefix> <full prefix>
 #   tools/deps-pack.sh pack whisper <out dir> <prefix>      make the pack of finished prefixes (deps.yml)
+#   tools/deps-pack.sh pack translator <out dir> <folder>
 #
 # QB_DEPS_PACK=0: never download (the release workflow: it builds from source or uses its own cache, D3).
 # QB_DEPS_REPO: the repository with the packs (default Shelin-boop/Quillbinder_Collection); "fetch" needs gh, logged in.
@@ -28,6 +33,12 @@ ROOT=$(cd "$(dirname "$0")/.." && pwd)
 FORMAT=1
 REPO=${QB_DEPS_REPO:-Shelin-boop/Quillbinder_Collection}
 PINS=$ROOT/tools/deps-packs.txt
+TP_BUILD=addons/translation-proofreading/source/packaging/build-deps.sh
+# the license files of the translator's sources that the add-on's make-addon.sh copies (the pack holds them, so that
+# the add-on can be made from a pack; tests/deps_packs_tests.py compares this list with make-addon.sh)
+TP_LICENSES="CTranslate2/LICENSE CTranslate2/third_party/cpu_features/LICENSE CTranslate2/third_party/spdlog/LICENSE
+oneDNN/LICENSE oneDNN/THIRD-PARTY-PROGRAMS sentencepiece/LICENSE sentencepiece/third_party/absl/LICENSE
+sentencepiece/third_party/protobuf-lite/LICENSE sentencepiece/third_party/darts_clone/LICENSE sentencepiece/third_party/esaxx/LICENSE"
 
 die() { echo "deps-pack: $*" >&2; exit 2; }
 filehash() { sha256sum "$ROOT/$1" | cut -d' ' -f1; }
@@ -45,6 +56,7 @@ recipe() {
         echo "nasm: $(first nasm -v)"
         echo "file tools/get-ffmpeg.sh $(filehash tools/get-ffmpeg.sh)"
         echo "file tools/build-ffmpeg.sh $(filehash tools/build-ffmpeg.sh)"
+        echo "file tools/verify-ffmpeg-source.sh $(filehash tools/verify-ffmpeg-source.sh)"
         local p
         for p in "$ROOT"/tools/ffmpeg-patches/*.patch; do
             [ -f "$p" ] && echo "file tools/ffmpeg-patches/$(basename "$p") $(filehash "tools/ffmpeg-patches/$(basename "$p")")"
@@ -61,7 +73,13 @@ recipe() {
         echo "vulkan: $vulkan glslc $(pkgver glslc) libvulkan-dev $(pkgver libvulkan-dev) spirv-headers $(pkgver spirv-headers)"
         echo "file tools/get-whisper.sh $(filehash tools/get-whisper.sh)"
         ;;
-    *) die "unknown pack: $1 (ffmpeg or whisper)" ;;
+    translator)
+        echo "cmake: $(first cmake --version)"
+        echo "ninja: $(first ninja --version)"
+        echo "file tools/get-translator-deps.sh $(filehash tools/get-translator-deps.sh)"
+        echo "file $TP_BUILD $(filehash "$TP_BUILD")"
+        ;;
+    *) die "unknown pack: $1 (ffmpeg, whisper or translator)" ;;
     esac
 }
 recipehash() { recipe "$1" | sha256sum | cut -d' ' -f1; }
@@ -145,6 +163,12 @@ fetch() {  # <name> <prefix...>
         [ -f "$x/whisper/version.txt" ] || die "$file has no whisper folder"
         place "$x/whisper" "$1"
         ;;
+    translator)
+        [ $# = 1 ] || die "fetch translator <folder>"
+        [ -f "$x/translator/install/lib/libctranslate2.a" ] || [ -f "$x/translator/install/lib64/libctranslate2.a" ] \
+            || die "$file has no translator libraries"
+        place "$x/translator" "$1"
+        ;;
     esac
     rm -rf "$x" "$work/$file"
     echo "deps-pack: $name from $file (recipe $(short "$h"), SHA-256 checked)"
@@ -175,6 +199,19 @@ pack() {  # <name> <out dir> <prefix...>
         cp -a "$1" "$s/whisper"
         (cd "$1" && pwd) > "$s/whisper/prefix.txt"
         ;;
+    translator)
+        [ $# = 1 ] || die "pack translator <out dir> <folder>"
+        [ -f "$1/install/lib/libctranslate2.a" ] || [ -f "$1/install/lib64/libctranslate2.a" ] || die "no finished translator libraries in $1"
+        mkdir -p "$s/translator"
+        cp -a "$1/install" "$s/translator/install"
+        local f
+        for f in $TP_LICENSES; do
+            [ -f "$1/$f" ] || die "the license file $f is missing in $1"
+            mkdir -p "$s/translator/$(dirname "$f")"
+            cp "$1/$f" "$s/translator/$f"
+        done
+        (cd "$1" && pwd) > "$s/translator/prefix.txt"
+        ;;
     esac
     # the same files give the same archive: names sorted, no owners, no times of the build
     XZ_OPT='-T0 -6' tar -C "$s" --sort=name --owner=0 --group=0 --numeric-owner --mtime='@0' -cJf "$out/$file" .
@@ -185,11 +222,32 @@ pack() {  # <name> <out dir> <prefix...>
     echo "pin: $name $h $file $(cut -d' ' -f1 "$out/$file.sha256")" | tee "$out/pin-$name.txt"
 }
 
-cmd=${1:-}; [ $# -ge 2 ] || die "usage: deps-pack.sh recipe|hash|fetch|pack <ffmpeg|whisper> ..."
+# What a pack holds, its licenses and its source (the text of its pre-release; deps.yml writes it into the pack's files)
+setting() { sed -n "s/^$2=\"\{0,1\}\([^\" ]*\).*/\1/p" "$ROOT/$1" | head -1; }
+about() {
+    case "$1" in
+    ffmpeg)
+        echo "Inside: FFmpeg $(setting tools/get-ffmpeg.sh VERSION), decoding only, in two sets (base: free formats; full: every decoder but WMA Pro and WMV 9), shared libraries, built from the source by tools/get-ffmpeg.sh and tools/build-ffmpeg.sh (with tools/ffmpeg-patches/)."
+        echo "License: LGPL-2.1-or-later (built without GPL and non-free parts); the license text is COPYING.LGPLv2.1 of the source, and the media add-ons carry it. Source: https://ffmpeg.org/releases/ffmpeg-$(setting tools/get-ffmpeg.sh VERSION).tar.xz (release signature checked by tools/verify-ffmpeg-source.sh); the build scripts are in this repository."
+        ;;
+    whisper)
+        echo "Inside: whisper.cpp with ggml, $(setting tools/get-whisper.sh TAG) (commit $(setting tools/get-whisper.sh COMMIT)), unchanged, built by tools/get-whisper.sh (shared libraries, compute modules per instruction set, the Vulkan module where the build machine has it), and the test models and the test recording that whisper.cpp ships (the recording is public domain)."
+        echo "License: MIT; its text is the file LICENSE of the source. Source: https://github.com/ggml-org/whisper.cpp at that tag."
+        ;;
+    translator)
+        echo "Inside: oneDNN, CTranslate2 and SentencePiece as static libraries (with the headers), unchanged, built from the sources at fixed versions by $TP_BUILD (oneDNN $(sed -n 's|.*oneDNN.git \(v[0-9.]*\).*|\1|p' "$ROOT/$TP_BUILD"), CTranslate2 $(sed -n 's|.*CTranslate2.git \(v[0-9.]*\).*|\1|p' "$ROOT/$TP_BUILD"), SentencePiece $(sed -n 's|.*sentencepiece.git \(v[0-9.]*\).*|\1|p' "$ROOT/$TP_BUILD")), and the license files of their sources."
+        echo "Licenses: oneDNN under Apache-2.0; CTranslate2 under MIT (with cpu_features under Apache-2.0 and spdlog under MIT); SentencePiece under Apache-2.0 (with abseil under Apache-2.0, protobuf-lite under BSD-3-Clause, darts_clone under BSD-2-Clause and esaxx under MIT). The license texts are in the pack (the files LICENSE and THIRD-PARTY-PROGRAMS of the sources). Sources: https://github.com/uxlfoundation/oneDNN, https://github.com/OpenNMT/CTranslate2 and https://github.com/google/sentencepiece at those tags."
+        ;;
+    *) die "unknown pack: $1 (ffmpeg, whisper or translator)" ;;
+    esac
+}
+
+cmd=${1:-}; [ $# -ge 2 ] || die "usage: deps-pack.sh recipe|hash|about|fetch|pack <ffmpeg|whisper|translator> ..."
 shift
 case "$cmd" in
 recipe) recipe "$1" ;;
 hash) recipehash "$1" ;;
+about) about "$1" ;;
 tag) tagof "$1" "$(recipehash "$1")" ;;
 file) fileof "$1" "$(recipehash "$1")" ;;
 fetch) fetch "$@" ;;

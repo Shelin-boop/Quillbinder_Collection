@@ -40,6 +40,15 @@ def cmake_var(name):
     return m.group(1) if m else ""
 
 
+def version_var(system):
+    """The line of CMakeLists.txt that holds the system's version (0.93.0: a version line per system)."""
+    return {"windows": "APP_VERSION_WINDOWS", "android": "APP_VERSION_ANDROID"}.get(system.split("-")[0], "APP_VERSION")
+
+
+def system_version(system):
+    return cmake_var(version_var(system)) or cmake_var("APP_VERSION")
+
+
 def version_key(v):
     return [int(x) if x.isdigit() else 0 for x in re.split(r"[.\-]", v)]
 
@@ -101,7 +110,7 @@ def main():
     ap.add_argument("--label", default="")
     args = ap.parse_args()
 
-    version = cmake_var("APP_VERSION")
+    version = system_version(args.system)   # 0.93.0: this system's own line
     label = args.label or cmake_var("APP_VERSION_LABEL")
     runtime = args.runtime or cmake_var("APP_RUNTIME")
     previous = {}
@@ -118,7 +127,8 @@ def main():
     program = {"version": version, "label": label, "runtime": runtime,
                "security": merged((security.get("program") or {}).get(args.system),
                                   (old_sys.get("program") or {}).get("security")),
-               "whatsNew": whats_new(version, "Android" if args.system.startswith("android") else "")}
+               "whatsNew": whats_new(version, "Android" if args.system.startswith("android")
+                                     else "Windows" if args.system.startswith("windows") else "")}
     addons = {}
     for name in names:
         path = os.path.join(args.dist, name)

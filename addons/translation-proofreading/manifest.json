@@ -1,13 +1,14 @@
 {
   "id": "translation-proofreading",
   "name": "Translation and Proofreading",
-  "version": "1.2",
-  "description": "English text is checked for spelling and grammar, German text is translated into English, on this computer only. In the inspector (its own tab) or in a window of its own: the text goes in, the result comes out with every change marked, live while you type; a click on a word keeps the original or offers other words, a double click shows its spelling suggestions, words of a similar meaning and the model's other words at the bottom. A single word gets every suggestion. Dialogue keeps its quotation marks as written. Rules: no em-dashes, American spelling, curly quotes, three periods instead of the ellipsis character, and your own replacements. The models are chosen and downloaded once under File > Options > Proofreading (CoEdIT, Qwen3 1.7B and 4B, OPUS-MT), checked, and then used without any connection; models too large for the computer are not offered. Engine: CTranslate2 with oneDNN and SentencePiece. Brings Qt's TLS plugin for the download.",
+  "version": "1.3",
+  "description": "English text is checked for spelling and grammar, German text is translated into English and English into German, on this computer only. In the inspector (its own tab) or in a window of its own: the text goes in, the result comes out with every change marked, live while you type; a click on a word keeps the original or offers other words, a double click shows its spelling suggestions and words of a similar meaning. A single word gets what it means (English words: WordNet; German words: an optional dictionary download), its word classes and its suggestions. Swap turns the direction around, Translate back shows what the translation says. Dialogue keeps its quotation marks as written. Rules: no em-dashes, American spelling, curly quotes, three periods instead of the ellipsis character, and your own replacements. The models are chosen and downloaded once under File > Options > Proofreading (CoEdIT, Qwen3 1.7B and 4B, OPUS-MT), checked, and then used without any connection; models too large for the computer are not offered. Engine: CTranslate2 with oneDNN and SentencePiece. Brings Qt's TLS plugin for the download.",
   "author": "Quillbinder",
-  "minApp": "0.80.0",
+  "minApp": "0.93.0",
   "whatsNew": [
-    "The add-on is now one of Quillbinder's own: it comes inside the full version, and its source is in Quillbinder's repository",
-    "The models are downloaded from Quillbinder's repository (before: from the add-on's own, which is given up); models you have already downloaded stay as they are",
-    "Nothing else changed since 1.1"
+    "A single word is looked up first: English words show what they mean (WordNet), German words use an optional dictionary download (Wiktionary extract, CC BY-SA 4.0) with word classes and English words per meaning",
+    "New buttons Swap and Translate back, and English to German with a small model (OPUS-MT English to German, downloaded on request)",
+    "Single words and texts of up to three words never go to the large translation model; in translate mode the second row shows the translation model",
+    "The word pane no longer lists the model's other words; other translations of a short text are complete translations without invented names"
   ]
 }

@@ -33,9 +33,9 @@ struct MindMapPrefs {
     int newNoteBorder = 0;
     int newNoteShape = 0;            // mindmap::BorderStyle of new notes (0.21; 0 = rounded)
     int iconSize = 16;               // size of the icons on notes and lines, px at 100 % (0.21)
-    QColor newShapeFill = QColor(238, 238, 238);
+    QColor newShapeFill = QColor(128, 128, 128);   // 0.93.0: medium gray (before: #eeeeee)
     int newShapeBorder = 1;
-    bool newShapeMagnetic = true;
+    bool newShapeMagnetic = false;                  // 0.93.0: off (before: on)
     // board defaults (Document Settings > Set As Defaults)
     QColor boardBackground = QColor(253, 251, 240);
     // the background of boards without a color of their own in dark themes (0.21.1;
@@ -133,7 +133,12 @@ bool saveAll(Project *project, QString *error = nullptr);
 // Closes the boards of a project (after saving them; `discard`: without saving).
 void closeAll(Project *project, bool discard = false);
 // The boards with changes not saved, as XML files in `dir` (the emergency copy); how many were written.
-int writeUnsaved(Project *project, const QString &dir, QString *error = nullptr);
+int writeUnsaved(Project *project, const QString &dir, QString *error = nullptr, CopyTally *tally = nullptr);
+// 0.93.0 (File > Save As): the boards with changes not saved are written into the project folder `folder` (a copy of the
+// project's folder); nothing is written into the project's own folder. False (and the reason) when one could not be.
+bool writeDirtyInto(Project *project, const QString &folder, QString *error = nullptr);
+// The boards count as saved (their changes went into another project).
+void forgetUnsaved(Project *project);
 // Every open board draws itself anew (after File > Options > Extras > Mind Map).
 void refreshAll();
 } // namespace mindmaps

@@ -2,6 +2,121 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.93.0 beta: File > Save As (item 25, suite `saveas`)
+
+- `MainWindow::saveProjectAs` (MainWindowFormat.cpp) replaces the menu Project Format. The save dialog's file types
+  decide the format (a name that ends in .scriv, .qbx or .quillbinder decides first; Android's picker shows no types:
+  `#ifdef Q_OS_ANDROID` asks the format first). Own format: `scrivener::saveAsQuillbinder`; Scrivener format:
+  `scrivener::convertToScrivener(old, dir, err, saveFirst=false, overlay, title)`, which now also takes a project that is
+  itself in Scrivener format (the new working copy leaves out `scrivener-sync.json`, so it gets a new identifier).
+- The original is never written: the new folder is a copy of the original's folder on disk, and what the open project
+  holds unsaved goes into the copy by `Project::writeUnsavedInto` (documents through `DocumentStore::writeDirtyInto`,
+  pictures too; objects with their removals; the project file from `indexBytes()`) and `mindmaps::writeDirtyInto`.
+  `Project::setLeaving(true)` from the dialog on makes save and autosave write nothing (a window that is deactivated
+  by a dialog saves, MainWindow::changeEvent: without this flag the original was saved when the dialog opened); it is
+  switched off when the dialog is canceled or the save fails, and the window's own close of the original writes nothing.
+- Backups: the own format gets `backup::giveNewId`; the Scrivener format's ID is the new identifier. The backups so far
+  stay with the original. The settings folder of the original (window layout) is not written either.
+- Pitfall: Qt's save dialog goes into an existing folder (a `.scriv`) instead of returning it; the refusal of an
+  existing name is reached through a file of that name or an existing `.quillbinder` folder.
+
+## 0.93.0 beta (2026-11-23): the emergency copy counted, a folder's sync, the journal that cannot be set aside, the backup note
+
+- **Item 38: backups and saving, what was not done** (suite `v0930c`).
+  **(a) Waiting backups in Restore From Backup**: `backup::waitingBackupsFor(p, dir)` = the backups of this project in
+  the work folder of the backup folder (and those of the project's own folder of 0.70 to 0.90, as `backupProject` puts
+  them in place), picked by the same rule as `backupsFor` (`mineOf`); `MainWindow::restoreBackup` merges them with the
+  folder's by time and adds ", waiting (not yet in the backup folder)" to the state. A restore never moves them.
+  **(c) Move Old Backups** (`File > Back Up`, action `moveOldBackups`, `MainWindow::moveOldBackups`,
+  `backup::moveFormerBackups` -> `MoveReport{from, moved, left, folderRemoved}`): asks (box `moveOldBackupsAsk`), then
+  per file a hard link into the backup folder where the drive allows (never over a name: EEXIST), else `copyInto`
+  (`NewOnly`, synced, compared), then the original is removed; a name that is there stays in the old folder and is told
+  ("<name>: <reason>"); the old folder is removed with `rmdir` (only when empty). Report box `moveOldBackupsReport`.
+  The action is switched on when the Back Up menu opens (`aboutToShow`: project, a backup folder, and
+  `formerBackupsFor` not empty), off without a project (`updateActions`). The moved files have no ID in their names, so
+  the clean-up still never counts or deletes them. The former folders can still exist: the 0.91.0 notes say they were
+  left as they were. The work folder of the old folder (backups that waited for it) is not touched by this command; the
+  next backup puts them in place.
+  **(d) Copies whose result was not checked**: the speech add-on's `useLocalModel` (a part of a model went to the check
+  after a failed copy: now the copy must have the original's size, else the part is removed and the failure told; the
+  string is in the add-on's context in the .ts); the application icon of `integrateDesktop` (told in the message when
+  it fails; the quiet start-up call stays quiet); `DragDrop::copyTreeTo` (the pictures of a web page copied for another
+  program) and `MediaView` (the pictures beside a web page shown in the browser) stay unchecked on purpose, with a note
+  in the code: originals are never touched and a failure is a gap in a copy that has no place to say so.
+  **(b) The temporary names that Quillbinder writes where a sync program may see them** (Linux; the same code on the
+  other systems):
+
+  | Name | Where | Lives | A crash can leave it | Removed by |
+  |---|---|---|---|---|
+  | `<file>.qbstage` | beside each target in the project folder (batch save) | from staging to the rename, with `settings/journal.json` | yes | `savebatch::recover` at the opening (finished with the journal, else dropped); `Batch::stage` sets a foreign one aside |
+  | `<file>.qbstage` of an earlier save, in the way of a new save | `settings/conflicts/<file> (temporary file of an earlier save <time>)` | for good | made on purpose by `Batch::stage` (before 0.93.0 beside the target as `.qbstage.kept-<time>`) | nothing, on purpose: it may hold the only copy of unsaved text; the save tells it once (`conflictKept`, like the other kept versions) |
+  | QSaveFile `<file>.XXXXXX` (also `safesave::copyFile`, settings, index, snapshots, `.scriv` files) | beside the target | milliseconds | yes | **new**: `savebatch::removeSaveLeftovers` at `Project::open` and `ScrivenerFormat::open` (a known file type, six characters, 10 minutes old); before, only the reader of a .scriv ignored `content.*.XXXXXX` |
+  | `<name>.zip.part` of a backup | the program's work folder, not the backup folder | the packing | yes | `sweepWork` (an hour old) at the next backup into that folder (0.90.3) |
+  | `<export>.docx.part` | beside the export's target | the export | yes | **new**: replaced in one step (`savebatch::replace`; before, the old file was deleted first and the `.part` stayed when the rename failed), removed when it fails, an hour-old one beside the target goes at the next export |
+  | `<name>.txt.part` | the speech add-on's recordings folder (a folder of the writer's choice) | the transcription | yes | **new**: `speech::removeLeftoverParts` (an hour old, not while it transcribes) when the panel refreshes; before, only a new run of the same recording overwrote it |
+  | `<file>.qbtmp` | beside a file of Save Options to File | the write | yes | the next save to the same file only (left: rare, a folder the writer chose) |
+  | `<name>.old` (a Scrivener working copy moved aside) | the program's data folder, not the project | a re-read | yes | the next read of that project (`ScrivenerFormat::open`) |
+  | `.update-part`, `.before-update` | beside the AppImage | the update | yes | the update's next run; not a project folder |
+  | model `<file>.part` | the add-on's data folder | the download | yes | the next download; not a project folder |
+
+- **The emergency copy** (`Project::makeEmergencyCopy`, returns an `EmergencyReport` of `ProjectTypes.h`: `dir`, `reason`,
+  `tally` = `CopyTally` with `wanted`, `written`, `missing` "name: reason"). `writeEmergencyCopy(parent, &error)` stays for
+  the old callers (the folder; `error` = the reason, or the incomplete text). `DocumentStore::writeUnsaved`,
+  `mindmaps::writeUnsaved` (`Project::emergencyExtra` now takes the tally) and the new `objects::Store::writeUnsaved`
+  (changed objects and the schema as `objects/...`) all count into the tally. The copy is made when
+  `Project::needsEmergencyCopy()` (texts, boards, **binder** `m_indexDirty`, **objects**); it always holds the project file
+  as `Project::indexBytes()` makes it (split out of `saveIndex`; the same bytes a save would write). The folder is made
+  with `mkdir` (atomic): "<title> <time>", then " (2)", " (3)" ...; nothing is ever reused. README: the way back in two
+  sentences, headed "THIS COPY IS INCOMPLETE: n of m" when files are missing. `Project::emergencyText(report)` is the
+  text of all places (`MainWindow::tellEmergencyCopy` for Save Texts Elsewhere and Close Project; the notice of
+  `saveForTermination` through `writeEmergencyNotice(what, report)`). An incomplete copy shows a warning box with
+  "Copy Incomplete" in its title. Android's own save (`src/android/MobileStart.cpp`) was not changed.
+  Review fixes: the project file in the copy is `<name>.<suffix>.copy` (never opens as a project, takes no backup ID);
+  `EmergencyReport::nothingToWrite` (no failure text); the README of a Scrivener project gives no way back;
+  `tellBackupCleanup(notes, modal)` is non-modal except at closing.
+  Test switch: `QB_TEST_WRITE_FAILS` ("number|text|part of the path") now also works in `safesave::writeFile`.
+  Boards (and texts) with the same title get " (2)", " (3)" in their file names.
+- **A folder's sync** (`savebatch::syncFolder` now returns false with errno): EINVAL, ENOTSUP, EOPNOTSUPP, ENOSYS and a
+  folder that cannot be opened are no error (as for files); any other error (EIO ...) after the files are in place:
+  `Batch::commit` keeps the journal (`m_journalWritten` stays true, the temporary files stay for `recover`), does not run
+  the `after` steps (the changes stay marked as unsaved), and returns false with "The drive reported an error ...".
+  Without a journal (one file) the save is told as failed the same way. The syncs before the journal is written and
+  the one after it is removed are still not checked.
+  **Review fixes (0.93.0):** `put(..., done, placed)`: `placed` steps (stamps, `e.read`, index mark and sha,
+  `savedImages`) run once every rename is done, also when the sync then fails (`Batch::afterPlaced`, `placed()`); `done`
+  steps (dirty flags, old-format files) only after a good sync. `savebatch` keeps the set of folders whose checked sync
+  failed (`g_unsynced`): every commit (also an empty one) and `recover()` sync it again; success clears it, `recover()`
+  keeps the journal while it fails (`Recovery::syncFailed`). The syncs before anything is replaced are checked (clean
+  failure, `drop()`). `probeFolderSync` (at `Project::open`) remembers a device whose folder sync errs as "cannot sync";
+  EBADF, EACCES, EPERM also count as "cannot sync". Storage conversion keeps the new format when `placed()`.
+  `keepUnreadable` puts the journal back when a temporary file could not be moved; `Batch::stage` moves a foreign
+  `.qbstage` into `settings/conflicts` (`takeKeptAside`, told once); `failure::Kind::JournalInTheWay`. `recover()` reports no "lost" file whose
+  temporary file is gone and whose target was replaced later. Known: an opening still deletes temporary files when no
+  journal is there (a save that never began to land). Shim: `dirsync` acts only on folders without temporary files or
+  journal (after the renames), `dirsync-early` on the others, `QB_SHIM_ARM=<file>` switches the fault on once the file
+  exists. `savebatch::syncDirChecked` is the public form. The fault library
+  has the modes `dirsync` (EIO) and `dirsync-notsup` (ENOTSUP), for folders only.
+- **An unreadable journal that cannot be set aside** (`Recovery::keptFailed` with the journal still there):
+  `Project::finishInterruptedSave` returns false with a message that names `settings/journal.json`; no journal of a new
+  save is written over it. The notice of the recovery is told once (`m_keptFailedTold`); every save tries to set the
+  journal aside again.
+- **The backup note** (`backup::isDue`, `clearDue`; `takeDue` = both; `markDue` returns its write's result). The
+  opening (`MainWindow::openProject`) looks with `isDue` and clears the note only when its backup was made
+  (`ok`) or waits in the work folder (`waiting`); with "back up at closing" switched off the note is cleared at once.
+  **Clean-up**: `backupProject(..., &waiting, &cleanupNotes)`; `removeBackupFile` tells a backup that cannot be deleted,
+  once per file and session ("<file>: <reason>"); `MainWindow::tellBackupCleanup`. Test switch
+  `QB_TEST_FAIL_REMOVE` (a part of the file's name). **Restore** (`MainWindow::restoreBackupFile`): the forms are
+  restored / "restored INCOMPLETELY" (warning icon, `backup::restore`'s text with the files) / not restored; a title that
+  could not be saved ("could not be marked") is added; `lastRestoreText()` for the checks. Suite `v0930` (child runs
+  with the fault library: `--child-save`).
+
+- **Second review (0.93.0):** `writeEntry` and `saveIndex` clear the dirty marks of their "holds exactly this already" path in
+  `Batch::after` (only after a good commit and its sync; at once without a batch). `Project::create` probes the folder sync as
+  `open` does; the probe's device set has a mutex (a backup's worker thread reads it). `keepUnreadable` with a file that
+  stayed: the journal goes back, the new folder in `settings/conflicts` is removed when empty, otherwise named in the notice
+  with what stayed (test switch `QB_TEST_FAIL_MOVE`, a part of the source path). `EmergencyReport::scrivenerWaits`; the
+  "nothing to write" text no longer says everything is saved. Shim mode `dirsync-err` with `QB_SHIM_ERRNO`.
+
 ## 0.92.0 beta (2026-11-20): the content decides, the project ID in backup names, checked copies, failures that are told
 
 - **A file whose time alone changed is no other version** (the sync program of the report sets a file's time a few
@@ -114,8 +229,7 @@ were this program's:
   files older than an hour.
 - Test switch `QB_TEST_BACKUP_COPY` (test builds): the copy also on one drive. `MainWindow::manualSave` shows a waiting
   backup's own text in the status bar; `tellBackupProblem` shows it under "failed".
-- Not done: the same review for temporary names written inside a project folder (`.qbstage`, QSaveFile's names, the
-  speech add-on's `.txt.part`, the Word writer's `.part`).
+- (The review of the temporary names written inside a project folder was done in 0.93.0: see its table at the top.)
 
 ## The audit of 0.81.0 (0.81.1 beta, 2026-11-11, part 1, the four findings at function level)
 
@@ -524,7 +638,7 @@ were this program's:
 - Measured on the cloud machine (2 cores) with the v0605 project: autosave 250 to 350 ms before, 30 to 40 ms after; the
   right-click menu about 10 ms (60 ms the first time on a misspelled word: Hunspell's suggestions). Not done: the
   Combined Text view of a large folder (one editor per document, full layout and spell check of every document) and
-  unloading documents that are no longer shown.
+  unloading documents that are no longer shown (done in 0.93.0, see ui.md "documents that are not shown are unloaded").
 
 ## Crash and freeze reports (0.19)
 

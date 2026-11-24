@@ -28,8 +28,10 @@ struct CatalogModel {
     QString id, title, summary, license, licenseUrl, credit, source;
     QString release;             // the release of Quillbinder's repository the files are on ("models-1", "models-2")
     QStringList kinds;           // "corrector", "translator" (a chat model does both)
-    QString type;                // "seq2seq" or "chat"
+    QString type;                // "seq2seq", "chat" or (1.3) "data" (the German dictionary)
     bool nonCommercial = false;
+    bool askLicense = false;     // 1.3: the writer sees the license before the download (data such as the dictionary)
+    bool forWords = true;        // 1.3: may translate single words and short texts (false: the large translation model)
     int memoryMB = 0, sizeMB = 0;
     QString tokenizer, spm, spmSource, spmTarget, sourceToken;
     bool thinkTags = false;
@@ -65,7 +67,9 @@ public:
     QString release() const { return m_release; }
 
     bool isInstalled(const QString &id) const;
-    ModelFiles files(const QString &id) const;   // for the engine (only for an installed model)
+    ModelFiles files(const QString &id) const;
+    // 1.3: the path of a file of an installed model or data download ("wiktionary-de", "de-dictionary.qz")
+    QString filePath(const QString &id, const QString &name) const { return modelsDir() + QLatin1Char('/') + id + QLatin1Char('/') + name; }   // for the engine (only for an installed model)
     bool remove(const QString &id, QString *error = nullptr);
 
     // Downloads every file of the model that is not there yet; one download at a time.

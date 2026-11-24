@@ -472,8 +472,13 @@ def cmd_notes(path, package, files_dir, out):
         text += [
             "In Quillbinder for Linux %s or later: **File > Install Update or Add-on**, choose `%s`. The install window "
             "says that the add-on is signed with the add-on key \"Quillbinder official add-ons\", which the Quillbinder "
-            "project vouches for. Quillbinder %s to %s does not know add-on keys yet and warns that the add-on is not "
-            "signed: update Quillbinder first." % (REQUIRED_PROGRAM, pkg, m.get("minApp", "0.80.0"), "0.91.2"), ""]
+            "project vouches for." % (REQUIRED_PROGRAM, pkg)]
+        # (0.93.0) the warning only matters when the add-on installs on a program that does not know add-on keys; an
+        # add-on built for a newer runtime has a minApp above that program
+        if version_tuple(m.get("minApp", "0.80.0")) < version_tuple(REQUIRED_PROGRAM):
+            text[-1] += (" Quillbinder %s to %s does not know add-on keys yet and warns that the add-on is not "
+                         "signed: update Quillbinder first." % (m.get("minApp", "0.80.0"), "0.91.2"))
+        text += [""]
     if m.get("whatsNew"):
         text += ["## What is new", ""] + ["- %s" % w for w in m["whatsNew"]] + [""]
     text += ["## Files", ""]

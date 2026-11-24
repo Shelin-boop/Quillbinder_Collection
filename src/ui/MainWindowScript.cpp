@@ -203,6 +203,7 @@ bool MainWindow::commitScriptFormat(const script::Format &format, const QHash<QS
 {
     if (!m_project)
         return false;
+    DocumentStore::Hold unloadHold; // 0.93.0: no document goes while this job runs events
     QProgressDialog progress(tr("Updating the scripts of the project…"), QString(), 0, 0, this);
     progress.setObjectName(QStringLiteral("scriptProgress"));
     progress.setWindowTitle(tr("Script Format"));

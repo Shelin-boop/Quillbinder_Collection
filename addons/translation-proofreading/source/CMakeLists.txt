@@ -1,7 +1,7 @@
 # The Quillbinder add-on "Translation and Proofreading": two libraries (see src/EngineApi.h) and the checks.
 #
 #   packaging/build-deps.sh                       # once: oneDNN, CTranslate2, SentencePiece into deps/install
-#   cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH=/opt/qt/6.12.0/gcc_64 [-DTP_TEST_SWITCHES=ON]
+#   cmake -S . -B build -G Ninja -DCMAKE_PREFIX_PATH=/opt/qt/6.12.1/gcc_64 [-DTP_TEST_SWITCHES=ON]
 #   cmake --build build
 #   packaging/make-addon.sh build dist            # the .qbpkg
 #
@@ -10,7 +10,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(QuillbinderTranslationAddon LANGUAGES CXX)
 
-set(TP_VERSION "1.2")
+set(TP_VERSION "1.3")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
@@ -32,6 +32,7 @@ add_library(qb-translation-proofreading MODULE
   src/OptionsPage.cpp src/OptionsPage.h
   src/ModelStore.cpp src/ModelStore.h
   src/Logic.cpp src/Logic.h
+  src/Dictionary.cpp src/Dictionary.h
   src/EngineApi.h
   third_party/quillbinder/ToolApi.h
   resources/translation-proofreading.qrc)
@@ -159,7 +160,7 @@ if(TP_TEST_SWITCHES)
   enable_testing()
   find_package(Qt6 REQUIRED COMPONENTS Test)
   # the text logic and the chat models' tokenizer (Qt Core only)
-  add_executable(tp_logic_tests tests/logic_tests.cpp src/Logic.cpp src/Logic.h src/engine/Bpe.cpp src/engine/Bpe.h
+  add_executable(tp_logic_tests tests/logic_tests.cpp src/Logic.cpp src/Logic.h src/Dictionary.cpp src/Dictionary.h src/engine/Bpe.cpp src/engine/Bpe.h
     resources/translation-proofreading.qrc)
   target_include_directories(tp_logic_tests PRIVATE src src/engine)
   target_link_libraries(tp_logic_tests PRIVATE Qt6::Core Qt6::Test)
@@ -174,8 +175,8 @@ if(TP_TEST_SWITCHES)
   # real models: the tool's sources are compiled in, so the checks can look inside
   add_executable(tp_ui_tests tests/ui_tests.cpp tests/FakeHost.h
     src/TranslateTool.cpp src/TranslateTool.h src/Panel.cpp src/Panel.h src/OptionsPage.cpp src/OptionsPage.h
-    src/ModelStore.cpp src/ModelStore.h src/Logic.cpp src/Logic.h src/EngineApi.h third_party/quillbinder/ToolApi.h
-    resources/translation-proofreading.qrc)
+    src/ModelStore.cpp src/ModelStore.h src/Logic.cpp src/Logic.h src/Dictionary.cpp src/Dictionary.h src/EngineApi.h
+    third_party/quillbinder/ToolApi.h resources/translation-proofreading.qrc)
   target_include_directories(tp_ui_tests PRIVATE src third_party/quillbinder tests)
   target_link_libraries(tp_ui_tests PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::Test ${CMAKE_DL_LIBS})
   target_compile_definitions(tp_ui_tests PRIVATE TP_BUILD_DIR="${CMAKE_BINARY_DIR}" TP_VERSION="${TP_VERSION}" TP_TEST_SWITCHES)
@@ -184,6 +185,31 @@ if(TP_TEST_SWITCHES)
     add_test(NAME ui COMMAND tp_ui_tests -o ${CMAKE_BINARY_DIR}/test-ui.txt,txt)
   else()
   add_test(NAME ui COMMAND tp_ui_tests)
+  endif()
+
+  # 1.3: a word on its own, Swap and Translate back, the second row: the panel with a stand-in engine and stand-in models
+  # (no downloaded models needed)
+  add_executable(tp_word_tests tests/word_tests.cpp tests/FakeHost.h tests/FakeEngine.h
+    src/TranslateTool.cpp src/TranslateTool.h src/Panel.cpp src/Panel.h src/OptionsPage.cpp src/OptionsPage.h
+    src/ModelStore.cpp src/ModelStore.h src/Logic.cpp src/Logic.h src/Dictionary.cpp src/Dictionary.h src/EngineApi.h
+    third_party/quillbinder/ToolApi.h resources/translation-proofreading.qrc)
+  target_include_directories(tp_word_tests PRIVATE src third_party/quillbinder tests)
+  target_link_libraries(tp_word_tests PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::Test ${CMAKE_DL_LIBS})
+  target_compile_definitions(tp_word_tests PRIVATE TP_BUILD_DIR="${CMAKE_BINARY_DIR}" TP_VERSION="${TP_VERSION}" TP_TEST_SWITCHES)
+  if(WIN32)
+    add_test(NAME words COMMAND tp_word_tests -o ${CMAKE_BINARY_DIR}/test-words.txt,txt)
+  else()
+    add_test(NAME words COMMAND tp_word_tests)
+  endif()
+
+  # 1.3: the tool that makes the German dictionary extract, and the add-on's reader on what it made
+  find_package(Python3 COMPONENTS Interpreter)
+  if(Python3_Interpreter_FOUND)
+    add_test(NAME dictionary-tool COMMAND ${Python3_EXECUTABLE} -I ${CMAKE_SOURCE_DIR}/tools/make-de-dictionary.py
+      --selftest ${CMAKE_BINARY_DIR}/test-de-dictionary.qz)
+    add_test(NAME dictionary-reader COMMAND tp_logic_tests dictionaryTool)
+    set_tests_properties(dictionary-reader PROPERTIES DEPENDS dictionary-tool
+      ENVIRONMENT "TP_TEST_DE_DICTIONARY=${CMAKE_BINARY_DIR}/test-de-dictionary.qz")
   endif()
 
   # the built plugin as the program loads it: its interfaces, commands, tab and options through QPluginLoader

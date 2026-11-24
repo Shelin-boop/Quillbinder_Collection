@@ -151,6 +151,9 @@ QList<Transcript> transcriptsIn(const QString &folder);
 // While a recording is transcribed later, its text goes into "<name>.txt.part" and becomes
 // "<name>.txt" at the end (an interrupted run leaves the recording without text: it can run again).
 QString partFileFor(const QString &textFile);
+// 0.93.0: the "<name>.txt.part" files that a crash or a power failure left in the folder (a sync program uploads
+// them) and that nobody writes any more: those not changed for `minAge` seconds. Returns how many went.
+int removeLeftoverParts(const QString &folder, int minAge = 3600);
 
 // A WAV file (PCM 16 bit, 16 kHz, mono) written while the microphone runs (0.64, "Record only").
 // The sizes in the header are brought up to date every second or so, so a recording that ends

@@ -216,6 +216,7 @@ void caseSO03()
     if (!p)
         return;
     TextEditor *e = showDoc(w, textItems(p).value(1));
+    ScopedWaiter waiter(FormatFindWindow::staticMetaObject.className());
     withModal<FormatFindWindow>(300, [&](FormatFindWindow *d) {
         auto *kind = d->findChild<QComboBox *>(QStringLiteral("formatKind"));
         auto *next = d->findChild<QAbstractButton *>(QStringLiteral("formatNext"));
@@ -236,7 +237,7 @@ void caseSO03()
         }
         fact(QStringLiteral("S-O03 where each kind led"), seen.join(QLatin1String("; ")));
         d->close();
-    });
+    }, 100, waiter.alive);
     chooseByMenu(w, QStringLiteral("findFormat"));
     settle(2500);
     Q_UNUSED(e)
@@ -296,6 +297,7 @@ void caseSO05()
         }
         p->save();
         QString history;
+        ScopedWaiter waiter(QDialog::staticMetaObject.className());
         withModal<QDialog>(400, [&history](QDialog *d) {
             for (QLabel *l : d->findChildren<QLabel *>())
                 history += l->text() + QLatin1Char(' ');
@@ -303,7 +305,7 @@ void caseSO05()
                 if (t->topLevelItemCount())
                     history += t->topLevelItem(0)->text(0) + QLatin1Char(' ') + t->topLevelItem(0)->text(1);
             d->accept();
-        });
+        }, 100, waiter.alive);
         chooseByMenu(w, QStringLiteral("history"));
         settle(600);
         check(history.contains(QDate::currentDate().toString(Qt::ISODate)) || history.contains(QDate::currentDate().toString(QStringLiteral("d MMM"))) || !history.isEmpty(),
@@ -621,6 +623,7 @@ void caseSC06()
     fact(QStringLiteral("S-C06 edits made in the Word file"), edits);
     // Step by Step: accept 10, reject 5; the windows of the compare are answered by their buttons
     int accepted = 0, rejected = 0;
+    ScopedWaiter waiter(QDialog::staticMetaObject.className());
     withModal<QDialog>(800, [&](QDialog *d) {
         for (int k = 0; k < 15; ++k) {
             const QString want = k < 10 ? QStringLiteral("Accept") : QStringLiteral("Reject");
@@ -634,7 +637,7 @@ void caseSC06()
         }
         shot(d, QStringLiteral("compare"));
         d->accept();
-    });
+    }, 100, waiter.alive);
     w->compareWithFile(docx);
     settle(2000);
     fact(QStringLiteral("S-C06 accepted / rejected"), QStringLiteral("%1 / %2").arg(accepted).arg(rejected));

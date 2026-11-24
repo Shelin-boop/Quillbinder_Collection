@@ -23,12 +23,18 @@
 namespace qb {
 namespace savebatch {
 
+// Why a waiting file carries its target's name and a fixed ending: docs/design-decisions.md, entry 1.
 constexpr const char *kStageSuffix = ".qbstage";
 
 // A file name of a save in progress (never read as project data, never backed up)
 bool isStaged(const QString &fileName);
+// 0.93.0: the temporary files of earlier saves that Batch::stage moved into settings/conflicts since the last call (the
+// save tells them once)
+QStringList takeKeptAside();
 // 0.70.0: a folder's entries (a new or renamed file in it) reach the disk (POSIX; nothing elsewhere)
 void syncDir(const QString &dir);
+// 0.93.0: false when the drive reported an error for the folder (not for a file system that cannot sync); number: errno
+bool syncDirChecked(const QString &dir, int *number = nullptr);
 
 class Batch
 {
@@ -44,6 +50,11 @@ public:
                QString *error);
     // Runs after the commit put every file in place (marks cleared, stamps taken)
     void after(std::function<void()> done);
+    // 0.93.0: runs once every file is in place, also when the folders' sync then reports an error (stamps, what was read,
+    // sha: they record what is on disk); `after` steps are the "counts as saved" ones and run only after a good sync
+    void afterPlaced(std::function<void()> placed);
+    // 0.93.0: every rename is done (the files are in place), whatever the sync said
+    bool placed() const { return m_placedAll; }
     int size() const { return m_items.size(); }
     QString folder() const { return m_folder; }
     bool contains(const QString &target) const;
@@ -62,6 +73,8 @@ private:
     QString m_folder, m_journal;
     QVector<Item> m_items;
     QVector<std::function<void()>> m_after;
+    QVector<std::function<void()>> m_placedSteps;
+    bool m_placedAll = false;
     bool m_done = false;
     bool m_journalWritten = false; // its temporary files belong to the journal now: recover() handles them
 };
@@ -82,10 +95,22 @@ private:
 // Writes `data` to `path`: into the running batch when there is one, else at once (QSaveFile, checked).
 // `done` runs once the file is in place (at once, or after the batch's commit).
 bool put(const QString &path, const QByteArray &data, QString *error, const QString &title = QString(),
-         const QString &place = QString(), std::function<void()> done = nullptr);
+         const QString &place = QString(), std::function<void()> done = nullptr,
+         std::function<void()> placed = nullptr);
+// 0.93.0: before the first save of a project: one checked sync of its folder. A file system that answers it with an
+// error is remembered (by device) as "cannot sync folders": no later sync of a folder on it is checked (a FUSE file
+// system that does not implement it). True: it works (or cannot be told).
+bool probeFolderSync(const QString &folder);
 
 // Replaces `to` with `from` in one step (POSIX rename; MoveFileEx on Windows)
 bool replace(const QString &from, const QString &to);
+
+// 0.93.0: removes the temporary files of Qt's QSaveFile ("<file>.XXXXXX", six letters or digits after a name that ends in a
+// file type this program writes) that a crash or a power failure left in `folder` and below, when they are older than
+// `minAge` seconds (a younger one may be a write that is running, on another computer too). Returns how many went.
+// Nothing else is touched: a file counts only when the name before the six characters is a file's own (".json",
+// ".md", ".rtf" ...).
+int removeSaveLeftovers(const QString &folder, int minAge = 600);
 
 struct Recovery {
     QStringList finished; // put in place now: "title (file)"
@@ -105,9 +130,11 @@ struct Recovery {
     QString otherDevice;
     QString otherSince; // when it began, local time
     bool waiting() const { return !otherSince.isEmpty(); }
+    // 0.93.0: every file of the journal is in place, but the drive still reports an error for a folder: the journal stays
+    QString syncFailed;
     bool any() const
     {
-        return !finished.isEmpty() || !kept.isEmpty() || !lost.isEmpty() || dropped > 0 || !unreadable.isEmpty() || waiting();
+        return !finished.isEmpty() || !kept.isEmpty() || !lost.isEmpty() || dropped > 0 || !unreadable.isEmpty() || waiting() || !syncFailed.isEmpty();
     }
     QString text() const; // for the writer
 };

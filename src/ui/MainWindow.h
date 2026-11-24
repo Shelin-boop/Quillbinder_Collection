@@ -27,6 +27,8 @@ class QLineEdit;
 class QMenu;
 class QTimer;
 class QSplitter;
+class QSettings;
+class QResizeEvent;
 class QToolBar;
 class QToolButton;
 class QTextDocument;
@@ -88,6 +90,13 @@ public:
     // 0.92.0: the backup with a manual save (a notice that does not take the keyboard, once per cause)
     void tellManualBackupProblem(bool made, bool waits, const QString &why);
     QString lastBackupProblem() const { return m_lastBackupProblem; }
+    // 0.93.0: older backups that the clean-up could not delete (the last text, for the checks)
+    QString lastBackupCleanupNote() const { return m_lastBackupCleanupNote; }
+    void tellBackupCleanup(const QStringList &notes, bool modal = false);
+    // 0.93.0: the last message of Restore From Backup, in its form (restored, restored incompletely, not restored)
+    QString lastRestoreText() const { return m_lastRestoreText; }
+    // 0.93.0: the message about an emergency copy (the three places that make one)
+    void tellEmergencyCopy(const EmergencyReport &rep, const QString &title, const QString &tail);
     // the lock file that could not be written last (0.65.0, audit F13; for the tests)
     QString lastLockProblem() const { return m_lastLockProblem; }
     Project *project() const { return m_project.get(); }
@@ -106,7 +115,9 @@ public:
     // Saves the project, mind maps and tool notes without questions (termination signal; 0.19).
     void saveForTermination();
     // 0.65.0 (audit F07): a notice for the next start (notice.txt in the emergency folder), shown then once
-    static void writeEmergencyNotice(const QString &what, const QString &dir);
+    static void writeEmergencyNotice(const QString &what, const EmergencyReport &rep);
+    // the words of the last message about an emergency copy (for the checks)
+    QString lastEmergencyCopyText() const { return m_lastEmergencyCopyText; }
     void showEmergencyNotice();
     QString lastEmergencyNotice() const { return m_lastEmergencyNotice; }
     // 0.65.0 (audit F19): what the opening found of an interrupted save (shown once; the last text for the tests)
@@ -117,12 +128,17 @@ public:
     // restored and opened (the checks call restoreBackupFile; lastRestoredProject() names what was opened)
     void restoreBackup();
     bool restoreBackupFile(const QString &zip);
+    // 0.93.0: File > Back Up > Move Old Backups Into the Backup Folder (the backups of the project's own folder of
+    // 0.70.0 to 0.90.4); lastMoveOldText() is the report (the checks)
+    void moveOldBackups();
+    QString lastMoveOldText() const { return m_lastMoveOldText; }
     QString lastRestoredProject() const { return m_lastRestored; }
     // the backup made at the opening because the last session was ended by a signal (0.81.0; tests)
     QString lastDueBackup() const { return m_lastDueBackup; }
     // 0.70.0 (audit A S-01, B U-2, S-1): the state shown in the status bar ("Saved", "Not saved yet", "Not saved:
     // the last save failed at ..."); the time the saves began to fail (invalid: they work)
     QString saveStateText() const;
+    EditorPane *editorPane(int i) const { return m_panes[i ? 1 : 0]; } // 0.93.0: the first (left or upper) editor, or the second
     QDateTime saveFailedSince() const { return m_saveFailedSince; }
     // 0.81.0 (audit of 0.80.0, S-08): the reason of a failed save in plain words
     static QString plainSaveReason(const QString &err);
@@ -145,6 +161,23 @@ public:
     // Which editor a click in the binder loads: current | first | second | other
     QString binderAffects() const { return m_binderAffects; }
     void setBinderAffects(const QString &mode);
+
+    // ---- the panes placed by the window's shape (MainWindowPanes.cpp, 0.93.0; kept per device in the settings)
+    // Wide window (not taller than wide): three columns in a chosen order ("BEI" = binder, editor, inspector; the six
+    // orders). Upright window: the editor's row and a row with the binder and the inspector beside each other.
+    bool isUpright() const { return m_upright; }
+    QString wideOrder() const { return m_wideOrder; }
+    bool uprightEditorFirst() const { return m_uprightEditorFirst; }
+    bool uprightBinderLeft() const { return m_uprightBinderLeft; }
+    void setWideOrder(const QString &order);
+    void setUprightEditorFirst(bool first);
+    void setUprightBinderLeft(bool left);
+    void resetPaneLayout();                       // View > Layout > Reset Layout: the shown shape's start values
+    void followWindowShape();                     // arranges the panes for the window's shape now
+    QSplitter *paneSplitter() const { return m_mainSplit; }
+    QSplitter *sideSplitter() const { return m_sideSplit; }
+    QList<int> paneSizes() const;                 // {binder, editor, inspector} of the wide shape (stored or shown)
+    void savePaneSettings();
 
     // ---- writing tools (MainWindowTools.cpp): what toolhost::Host asks of the window
     QString toolProjectTitle() const;
@@ -195,11 +228,11 @@ public:
 protected:
     void closeEvent(QCloseEvent *e) override;
     void changeEvent(QEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
 
 private:
     // File > Project Format (MainWindowFormat.cpp)
-    void switchToScrivenerFormat();
-    void switchToQuillbinderFormat();
+    void saveProjectAs();
     void saveCopyAsScrivener();
     void saveCopyAsQuillbinder();
     bool confirmNotOpenElsewhere(const QString &projectFolder);
@@ -234,6 +267,10 @@ public:
     UpdateChecker *updateChecker() const { return m_updates; }
     // 0.92.0: a small text in the status bar that fades in and out twice and is gone (no window, no sound)
     void showFadingNote(const QString &text);
+    // 0.93.0: a short message of the program in the first editor's footer bar (it was the status bar's)
+    void showStatusNote(const QString &text, int ms = 0);
+    void clearStatusNote();
+    QString statusNote() const;
     // 0.92.0: the notice "Other Versions Kept" turned off until the program quits (its button; the tests set it back)
     static bool conflictNoticeOff();
     static void setConflictNoticeOff(bool off);
@@ -435,8 +472,12 @@ private:
     QPointer<QTextEdit> m_lastTextField;
     QMenu *m_undoMenu = nullptr;
     QMenu *m_redoMenu = nullptr;
-    QTimer *m_undoNamesTimer = nullptr;
+    QPointer<QTimer> m_undoNamesTimer; // 0.93.0: a pointer that knows when the timer is gone
     QList<QMetaObject::Connection> m_undoWatch;
+    // 0.93.0: the window's connections to the application's focus signal; ~MainWindow cuts them first, as the focus
+    // changes while the window's own widgets are deleted, and a window half gone must not answer
+    QList<QMetaObject::Connection> m_focusLinks;
+    bool m_ending = false;
     // a long text field of the Objects sheet with the cursor (0.21.1): bold, italic,
     // underline, strikethrough, text color and highlight act on it
     ObjectTextEdit *objectTextTarget() const;
@@ -447,11 +488,36 @@ private:
     Inspector *m_inspector = nullptr;
     QSplitter *m_mainSplit = nullptr;
     QSplitter *m_editorSplit = nullptr;
+    // the panes placed by the window's shape (MainWindowPanes.cpp)
+    QSplitter *m_sideSplit = nullptr;               // upright: the binder and the inspector beside each other
+    QWidget *m_editorArea = nullptr;
+    bool m_upright = false;                         // the arrangement shown now
+    bool m_shapeCheckQueued = false;
+    QString m_wideOrder = QStringLiteral("BEI");
+    bool m_uprightEditorFirst = true;               // "Editor in the Middle": the editor's row is the upper one
+    bool m_uprightBinderLeft = true;
+    int m_wideSizes[3] = {260, 800, 300};           // by pane: binder, editor, inspector
+    double m_uprightEditorShare = 0.62;             // the editor's row of the height
+    double m_uprightBinderShare = 0.46;             // the binder's part of the side row
+    QActionGroup *m_paneGroups[3] = {nullptr, nullptr, nullptr};
+    void initPaneSplitters();
+    void createPaneActions();
+    void loadPaneSettings(QSettings &s);
+    void arrangePanes();
+    void applyPaneSizes();
+    void capturePaneSizes();
+    void updatePaneRow();
+    void updatePaneActions();
+    bool wantsUpright() const;
+    QWidget *paneWidget(int pane) const;
     EditorPane *m_panes[2] = {nullptr, nullptr};
     EditorPane *m_active = nullptr;
     QPointer<CompositionWindow> m_composition;
     QStringList m_lastSettingsNotes;
     QString m_lastBackupProblem;
+    QString m_lastBackupCleanupNote;
+    QString m_lastRestoreText;
+    QString m_lastMoveOldText;
     QSet<QString> m_backupCausesTold;                       // 0.92.0: the notice of a manual save's backup, per cause
     failure::Kind m_lastSaveKind = failure::Kind::None;     // 0.92.0: the kind of the last failed save
     UpdateChecker *m_updates = nullptr;                     // 0.92.0
@@ -473,10 +539,9 @@ private:
     bool m_lockWriteTold = false;
     QString m_lastLockProblem;
     QString m_lastEmergencyNotice;
+    QString m_lastEmergencyCopyText;
     QString m_lastSaveRecovery;
     QString m_lastChangeKeptAside;
-    QLabel *m_saveState = nullptr;
-    QLabel *m_backupState = nullptr; // W4b: "No backups" while the portable program has no backup folder
     bool m_backupFolderAsked = false;
     QTimer *m_saveStateTimer = nullptr;
     QTimer *m_saveRetry = nullptr;

@@ -208,6 +208,7 @@ std::unique_ptr<Project> Project::create(const QString &parentDir, const QString
     p->startSession(true);
     if (!p->saveIndex(error))
         return nullptr;
+    savebatch::probeFolderSync(p->folderPath()); // 0.93.0: as at the opening
     return p;
 }
 
@@ -227,6 +228,10 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
         const savebatch::Recovery r = savebatch::recover(p->m_folder, p->journalFile(), p->settingsDir());
         if (r.any())
             p->m_saveRecovery = r.text();
+        p->m_keptFailedTold = r.keptFailed; // (told by the opening: the saves' retries do not tell it again)
+        // 0.93.0: the temporary files of a plain write that was cut off (Qt's QSaveFile: "<file>.XXXXXX") are removed
+        // once they are ten minutes old
+        savebatch::removeSaveLeftovers(p->m_folder);
     }
     if (!p->loadIndex(error))
         return nullptr;
@@ -295,6 +300,9 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
     // save or a minute after the opening, like any new count; before, the first autosave wrote the project file at
     // once, and on a full disk "Your latest changes could not be saved" appeared before the writer had done anything
     p->m_lastIndexWrite.start();
+    // 0.93.0: one checked sync of the project folder: a file system that answers it with an error (a FUSE file system
+    // that does not implement it) is remembered, so that no save of the session says "the drive reported an error"
+    savebatch::probeFolderSync(p->folderPath());
     return p;
 }
 
@@ -381,6 +389,11 @@ static QString folderNameFor(const QString &id)
 QString Project::contentDir(const QString &id) const
 {
     return m_folder + QLatin1String("/content/") + folderNameFor(id);
+}
+
+QString Project::contentDirIn(const QString &folder, const QString &id)
+{
+    return folder + QLatin1String("/content/") + folderNameFor(id);
 }
 
 QString Project::snapshotsDir(const QString &id) const
@@ -774,6 +787,7 @@ QString Project::oldUiStateFile() const
     return QDir(settingsDir()).filePath(QStringLiteral("ui-%1.json").arg(dev));
 }
 
+// Why a failure here does not turn the save red: docs/design-decisions.md, entry 3.
 bool Project::writeUiState()
 {
     const QByteArray data = QJsonDocument::fromVariant(uiState).toJson();
@@ -797,15 +811,40 @@ bool Project::writeUiState()
 
 QString Project::journalFile() const { return settingsDir() + QStringLiteral("/journal.json"); }
 
+// Why the journal has one fixed name: docs/design-decisions.md, entry 1.
 bool Project::finishInterruptedSave(QString *error)
 {
     if (!QFile::exists(journalFile()))
         return true;
     const savebatch::Recovery r = savebatch::recover(m_folder, journalFile(), settingsDir());
-    if (r.any())
+    // 0.93.0: a journal that cannot be read and could not be set aside is tried again at every save, and told once
+    if (r.any() && !(r.keptFailed && m_keptFailedTold))
         m_saveRecovery = r.text();
+    m_keptFailedTold = r.keptFailed;
+    // 0.93.0: while an unreadable journal could not be set aside, no save writes a journal over it (this save's journal
+    // has the same name): the save waits, and says which file is in the way
+    if (r.keptFailed && QFile::exists(journalFile())) {
+        failure::note(failure::Kind::JournalInTheWay);
+        if (error)
+            *error = tr("Not saved yet: the journal of an earlier save, %1, cannot be read and could not be moved aside, so "
+                        "this save would overwrite it. Nothing was written; your changes are kept while the project stays "
+                        "open. Make the folder %2 writable (the files of that save, named *.qbstage in the project folder, "
+                        "are kept as they are); the program then sets the journal aside and saves by itself.")
+                         .arg(QDir::toNativeSeparators(journalFile()),
+                              QDir::toNativeSeparators(settingsDir() + QStringLiteral("/conflicts")));
+        return false;
+    }
     // 0.81.1 (audit of 0.81.0, F-03): the journal of another computer's save that may still be running or arriving is
     // not written over (this save's journal has the same name) and its files are not replaced: this save waits
+    // 0.93.0: every file of the journal is in place, but a folder's sync still fails: nothing is saved over it unchecked
+    if (!r.syncFailed.isEmpty()) {
+        failure::note(failure::Kind::DriveError);
+        if (error)
+            *error = tr("Not saved yet: the drive reported an error. %1 The journal of the last save is kept and the program "
+                        "tries again by itself.")
+                         .arg(r.syncFailed);
+        return false;
+    }
     if (r.waiting()) {
         if (error)
             *error = tr("Not saved yet: %1 began a save of this project at %2, and that save is not complete here yet (its "
@@ -854,32 +893,113 @@ QString Project::titleListText() const
     return lines.join(QLatin1Char('\n')) + QLatin1Char('\n');
 }
 
+bool Project::needsEmergencyCopy() const
+{
+    // 0.93.0: also a change of the binder alone or of the objects (before: only texts, notes and boards)
+    return m_indexDirty || (m_docs && m_docs->hasDirty()) || (m_objects && m_objects->isDirty()) || !m_unsavedExtra.isEmpty();
+}
+
+EmergencyReport Project::makeEmergencyCopy(const QString &parent)
+{
+    EmergencyReport rep;
+    if (!needsEmergencyCopy()) {
+        rep.reason = tr("nothing to write");
+        rep.nothingToWrite = true;
+        rep.scrivenerWaits = scrivenerPath;
+        return rep;
+    }
+    const QString base = parent.isEmpty() ? dataDir() + QStringLiteral("/Emergency") : parent;
+    // 0.93.0: a folder that is there is never used again (its files would be replaced): the new one gets a number
+    const QString name = text::safeFileName(m_title) + QStringLiteral(" ")
+                         + QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd HH-mm-ss"));
+    QString dir;
+    if (QDir().mkpath(base)) {
+        for (int n = 1; n < 1000 && dir.isEmpty(); ++n) {
+            const QString candidate = QDir(base).filePath(n == 1 ? name : QStringLiteral("%1 (%2)").arg(name).arg(n));
+            if (QDir(base).mkdir(QFileInfo(candidate).fileName()))
+                dir = candidate;
+            else if (!QFileInfo::exists(candidate))
+                break; // cannot be made for another reason
+        }
+    }
+    if (dir.isEmpty()) {
+        rep.reason = tr("Cannot create a folder in %1").arg(QDir::toNativeSeparators(base));
+        return rep;
+    }
+    rep.dir = dir;
+    QString firstError;
+    if (m_docs)
+        m_docs->writeUnsaved(dir, &firstError, &rep.tally);
+    if (emergencyExtra) // 0.70.0: mind map boards not saved
+        emergencyExtra(dir, &firstError, &rep.tally);
+    if (m_objects)
+        m_objects->writeUnsaved(dir, &rep.tally);
+    // 0.93.0: the project file as it is in memory (binder, titles, labels): when the real one cannot be written, the
+    // changes of the binder are not lost
+    // The copy must not open as a project (and must never share the original's backup ID): the file's name ends in ".copy"
+    const QString indexName = QFileInfo(m_indexFile).fileName();
+    const QString copyName = indexName + QStringLiteral(".copy");
+    {
+        QString why;
+        const bool ok = safesave::writeFile(QDir(dir).filePath(copyName), indexBytes(), &why);
+        rep.tally.add(copyName, ok, why);
+    }
+    if (rep.tally.written == 0) {
+        QDir(dir).removeRecursively();
+        rep.reason = rep.tally.missing.isEmpty() ? tr("nothing to write") : rep.tally.missing.first();
+        rep.dir.clear();
+        return rep;
+    }
+    QString readme = tr("The project \"%1\" (%2) could not be saved. This folder holds what was not saved yet: texts and "
+                        "notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the "
+                        "folder \"objects\") and the project file as it was in memory (the binder, titles and labels), as "
+                        "%4. Copy what you need back into the project.\n\n")
+                         .arg(m_title, QDir::toNativeSeparators(displayFile()), QLatin1String(QB_APP_NAME), copyName);
+    if (scrivenerPath.isEmpty())
+        readme += tr("To put the project file back: close the project, rename the project file %1 in the project folder %2 "
+                     "(so that it is kept), copy the file %3 of this folder there and rename it to %1. Then open the "
+                     "project again. (The copy's name ends in .copy so that this folder is not taken for a project.)\n\n")
+                      .arg(indexName, QDir::toNativeSeparators(m_folder), copyName);
+    else
+        readme += tr("The project is in Scrivener format: the file %1 belongs to its working copy (%2), not to the .scriv "
+                     "folder. The binder is written into the .scriv with the next save that works; do not copy this file "
+                     "over anything by hand.\n\n")
+                      .arg(copyName, QDir::toNativeSeparators(m_folder));
+    if (rep.complete())
+        readme += tr("This copy is complete: all %1 files were written.\n").arg(rep.tally.wanted);
+    else
+        readme = tr("THIS COPY IS INCOMPLETE: %1 of %2 files were written. Not written:\n%3\n\n")
+                     .arg(rep.tally.written).arg(rep.tally.wanted).arg(rep.tally.missing.join(QLatin1Char('\n')))
+                 + readme;
+    safesave::writeFile(QDir(dir).filePath(QStringLiteral("README.txt")), readme.toUtf8());
+    return rep;
+}
+
+QString Project::emergencyText(const EmergencyReport &r)
+{
+    if (r.nothingToWrite) {
+        // (not "everything is saved": a project in Scrivener format may still wait for its .scriv)
+        QString t = tr("No copy was needed: nothing was waiting to be written into the project's own folder.");
+        if (!r.scrivenerWaits.isEmpty())
+            t += QLatin1Char(' ') + tr("The .scriv gets the changes with the next save that works.");
+        return t;
+    }
+    if (r.dir.isEmpty())
+        return tr("No copy could be written: %1").arg(r.reason.isEmpty() ? tr("nothing to write") : r.reason);
+    if (r.complete())
+        return tr("The texts not saved are in:\n%1\n\nThe copy is complete: %2 of %2 files were written, with the project "
+                  "file as it is in memory, named *.copy (the README in that folder says how to put it back).")
+            .arg(QDir::toNativeSeparators(r.dir)).arg(r.tally.wanted);
+    return tr("This copy is INCOMPLETE: %1 of %2 files were written, in:\n%3\n\nNot written:\n%4")
+        .arg(r.tally.written).arg(r.tally.wanted).arg(QDir::toNativeSeparators(r.dir), r.tally.missing.join(QLatin1Char('\n')));
+}
+
 QString Project::writeEmergencyCopy(const QString &parent, QString *error)
 {
-    if ((!m_docs || !m_docs->hasDirty()) && m_unsavedExtra.isEmpty())
-        return QString();
-    const QString base = parent.isEmpty() ? dataDir() + QStringLiteral("/Emergency") : parent;
-    const QString dir = QDir(base).filePath(text::safeFileName(m_title) + QStringLiteral(" ")
-                                            + QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd HH-mm-ss")));
-    if (!QDir().mkpath(dir)) {
-        if (error)
-            *error = tr("Cannot create %1").arg(QDir::toNativeSeparators(dir));
-        return QString();
-    }
-    int n = m_docs ? m_docs->writeUnsaved(dir, error) : 0;
-    if (emergencyExtra) // 0.70.0: mind map boards not saved
-        n += emergencyExtra(dir, error);
-    if (n == 0) {
-        QDir(dir).removeRecursively();
-        return QString();
-    }
-    safesave::writeFile(QDir(dir).filePath(QStringLiteral("README.txt")),
-                        tr("The project \"%1\" (%2) could not be saved. These are its texts and notes that were not saved "
-                           "yet, as RTF files (Word, LibreOffice and %3 open them). Copy what you need back into the "
-                           "project.\n")
-                            .arg(m_title, QDir::toNativeSeparators(displayFile()), QLatin1String(QB_APP_NAME))
-                            .toUtf8());
-    return dir;
+    const EmergencyReport r = makeEmergencyCopy(parent);
+    if (error)
+        *error = r.dir.isEmpty() ? r.reason : (r.complete() ? QString() : emergencyText(r));
+    return r.dir;
 }
 
 QString Project::spareCopyOf(const QString &projectFile)
@@ -945,6 +1065,41 @@ int Project::recoverUnlistedDocuments(QString *folderTitle)
     return n;
 }
 
+bool Project::writeUnsavedInto(const QString &folder, const QString &indexFileName, QString *error)
+{
+    bool ok = true;
+    QString first;
+    if (m_docs && !m_docs->writeDirtyInto(folder, &first))
+        ok = false;
+    if (m_objects && m_objects->isDirty()) {
+        CopyTally tally;
+        m_objects->writeUnsaved(folder, &tally);
+        m_objects->removeLeftoversIn(folder);
+        if (!tally.missing.isEmpty()) {
+            ok = false;
+            if (first.isEmpty())
+                first = tally.missing.first();
+        }
+    }
+    // the project file as it is in memory (binder, titles, labels, counts)
+    QString why;
+    if (!safesave::writeFile(QDir(folder).filePath(indexFileName.isEmpty() ? QFileInfo(m_indexFile).fileName() : indexFileName), indexBytes(), &why)) {
+        ok = false;
+        if (first.isEmpty())
+            first = why;
+    }
+    if (!ok && error)
+        *error = first;
+    return ok;
+}
+
+void Project::setLeaving(bool leaving)
+{
+    m_leaving = leaving;
+    if (!leaving && hasUnsavedChanges())
+        scheduleSave();
+}
+
 bool Project::hasUnsavedChanges() const
 {
     return m_indexDirty || (m_docs && m_docs->hasDirty()) || (m_objects && m_objects->isDirty()) || !m_unsavedExtra.isEmpty();
@@ -993,9 +1148,15 @@ bool Project::save(QString *error)
     return ok;
 }
 
+// Why a save runs in the window's thread: docs/design-decisions.md, entry 10.
 bool Project::saveImpl(QString *error, bool quick)
 {
     failure::clear();   // 0.92.0: the kind of a failure belongs to the save it happens in (FailureKind.h)
+    if (m_leaving) {    // 0.93.0 (File > Save As): the changes went into the new project; this one stays as it was
+        m_saveTimer.stop();
+        m_gapTimer.stop();
+        return true;
+    }
     timing::Laps laps;
     m_saveTimer.stop();
     m_gapTimer.stop();
@@ -1067,6 +1228,8 @@ bool Project::saveImpl(QString *error, bool quick)
         batch.drop();
     else if (!batch.commit(error))
         ok = false;
+    for (const QString &kept : savebatch::takeKeptAside())
+        emit conflictKept(QString(), tr("temporary file of an earlier save"), kept, false);
     if (m_uiDirty)
         writeUiState();
     laps.lap("project file");
@@ -1337,7 +1500,7 @@ static BinderItem *readOneItem(const QDomElement &e, BinderItem *parent)
     return it;
 }
 
-bool Project::saveIndex(QString *error)
+QByteArray Project::indexBytes()
 {
     QDomDocument dom;
     dom.appendChild(dom.createProcessingInstruction(QStringLiteral("xml"),
@@ -1598,6 +1761,12 @@ bool Project::saveIndex(QString *error)
     }
     rootEl.appendChild(hist);
 
+    // characters XML does not allow (pasted control characters) would make the file unreadable
+    return text::xmlSafeBytes(dom.toByteArray(1));
+}
+
+bool Project::saveIndex(QString *error)
+{
     // 0.64: the project file was written by someone else since it was read here (another computer
     // through a sync program): that version is kept before this one replaces it
     bool indexElsewhere = syncsafe::changedSince(m_indexMark, m_indexFile) && QFileInfo::exists(m_indexFile);
@@ -1632,8 +1801,7 @@ bool Project::saveIndex(QString *error)
         }
         emit conflictKept(QString(), tr("project file"), copy, false);
     }
-    // characters XML does not allow (pasted control characters) would make the file unreadable
-    const QByteArray bytes = text::xmlSafeBytes(dom.toByteArray(1));
+    const QByteArray bytes = indexBytes();
     // 0.65.0 (audit F19): with the other files of the save; the marks are cleared once it is in place
     QString why;
     const QByteArray sha = QCryptographicHash::hash(bytes, QCryptographicHash::Sha256);
@@ -1643,18 +1811,27 @@ bool Project::saveIndex(QString *error)
     if (!indexElsewhere && !shaOnDisk.isEmpty() && shaOnDisk == sha) {
         m_indexMark = syncsafe::stampOf(m_indexFile);
         m_indexSha = sha;
-        m_indexDirty = false;
-        m_countsDirty = false;
-        m_lastIndexWrite.start();
-        writeUiState();
-        return true;
-    }
-    if (!savebatch::put(m_indexFile, bytes, &why, tr("project file"), QString(), [this, sha] {
-            m_indexMark = syncsafe::stampOf(m_indexFile);
-            m_indexSha = sha;
+        // 0.93.0: when a save runs, the marks go only after the commit's checked sync (a folder whose sync failed before
+        // is synced again there); at once when no save runs
+        auto clear = [this] {
             m_indexDirty = false;
             m_countsDirty = false;
             m_lastIndexWrite.start();
+        };
+        if (savebatch::Batch *b = savebatch::current())
+            b->after(clear);
+        else
+            clear();
+        writeUiState();
+        return true;
+    }
+    if (!savebatch::put(m_indexFile, bytes, &why, tr("project file"), QString(), [this] {
+            m_indexDirty = false;
+            m_countsDirty = false;
+            m_lastIndexWrite.start();
+        }, [this, sha] { // in place (also when the folder's sync then fails): what is on disk now
+            m_indexMark = syncsafe::stampOf(m_indexFile);
+            m_indexSha = sha;
         })) {
         if (error)
             *error = why;

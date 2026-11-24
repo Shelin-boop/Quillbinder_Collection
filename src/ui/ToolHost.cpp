@@ -349,10 +349,30 @@ bool Host::startLink()
             auto serve = [this, s] {
                 if (qEnvironmentVariableIsSet("QB_DEBUG_LINK"))
                     std::fprintf(stderr, "link: data %d line %d\n", int(s->bytesAvailable()), int(s->canReadLine()));
-                if (!s->canReadLine() || s->property("qbAnswered").toBool())
+                if (s->property("qbAnswered").toBool())
                     return;
+                // 0.93.0: a request is one line of at most 64 KiB (the real ones are a few hundred bytes); a longer
+                // one is refused, and the rest of it is not kept
+                constexpr qint64 kMaxRequest = 64 * 1024;
+                auto refuse = [s] {
+                    s->setProperty("qbAnswered", true);
+                    const QJsonObject r{{QStringLiteral("ok"), false}, {QStringLiteral("error"), QStringLiteral("request too long")}};
+                    s->write(QJsonDocument(r).toJson(QJsonDocument::Compact) + '\n');
+                    s->flush();
+                    s->disconnectFromServer();
+                };
+                if (!s->canReadLine()) {
+                    if (s->bytesAvailable() > kMaxRequest)
+                        refuse();
+                    return;
+                }
+                const QByteArray line = s->readLine(kMaxRequest + 2); // the request, and its end of line
+                if (!line.endsWith('\n') || line.size() > kMaxRequest + 1) {
+                    refuse();
+                    return;
+                }
                 s->setProperty("qbAnswered", true);
-                const QJsonObject req = QJsonDocument::fromJson(s->readLine()).object();
+                const QJsonObject req = QJsonDocument::fromJson(line).object();
                 const QJsonObject reply = handle(req);
                 s->write(QJsonDocument(reply).toJson(QJsonDocument::Compact) + '\n');
                 s->flush();

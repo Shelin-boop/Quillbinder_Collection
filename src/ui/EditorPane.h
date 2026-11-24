@@ -16,6 +16,7 @@ class QCheckBox;
 class QProgressBar;
 class QSlider;
 class QSplitter;
+class QHBoxLayout;
 
 namespace qb {
 
@@ -30,6 +31,7 @@ class MediaControls;
 class Ruler;
 class Copyholder;
 class FilterBar;
+class FooterStatus;
 
 enum class ViewMode { Single = 0, Combined = 1, Corkboard = 2, Outliner = 3, Media = 4, Empty = 5 };
 
@@ -110,6 +112,8 @@ public:
     void refresh();         // after structural changes
     void refreshHeader();
     void updateFooter();
+    // 0.93.0: the save text, the warning link and the short messages of the window (only the first editor's is filled)
+    FooterStatus *footerStatus() const { return m_status; }
     // "Folder: 1,234 words": the total of the folder (or the items) shown; empty when none is (0.60.1)
     QString folderCountText() const;
     // The details of the folder total (words, characters, characters without spaces,
@@ -171,6 +175,7 @@ private:
     };
     void buildHeader();
     void buildFooter();
+    void placeStatus();
     void buildFindBar();
     void applyMode();
     void pushHistory();
@@ -227,6 +232,9 @@ private:
     bool m_filterOpen = false;
     // footer
     QStackedWidget *m_footer;
+    FooterStatus *m_status = nullptr;
+    struct StatusPlace { QHBoxLayout *layout = nullptr; int index = 0; };
+    StatusPlace m_statusPlaces[6]; // text, corkboard, outliner, picture, player, nothing
     QComboBox *m_zoom;
     QToolButton *m_countButton;
     // the total of a folder (0.60.1); buttons with the details since 0.60.3

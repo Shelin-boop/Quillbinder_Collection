@@ -14,6 +14,7 @@
 #include "import/FileImporter.h"
 #include "text/RtfIO.h"
 #include "ui/MindMapDoc.h"
+#include "ui/MindMapOverview.h"
 #include "ui/MindMapScene.h"
 #include "ui/MindMapUi.h"
 #include "ui/MindMapView.h"
@@ -74,6 +75,7 @@ MindMapController::MindMapController(MindMapDoc *doc, MindMapView *view, QWidget
     connect(scene(), &MindMapScene::selectionOrderChanged, this, &MindMapController::updateActions);
     connect(scene(), &MindMapScene::editingChanged, this, &MindMapController::updateActions);
     connect(doc, &MindMapDoc::boardChanged, this, &MindMapController::updateActions);
+    connect(overview::hub(), &OverviewHub::modeChanged, this, &MindMapController::updateActions);
     connect(view, &MindMapView::movementModeChanged, this, [this](bool on) { m_a[QStringLiteral("mm_movement")]->setChecked(on); });
     connect(view, &MindMapView::contextMenuRequested, this, [this](const QPoint &g, const QPointF &) {
         QMenu menu;
@@ -226,6 +228,10 @@ void MindMapController::createActions()
         m_doc->saveOrTell(); // 0.70.0: a failure is told
         m_view->viewport()->update();
     });
+    // 0.93.0: the overview is "automatic" or "always shown" (one setting for all boards, kept per device)
+    QAction *ov = add(QStringLiteral("mm_overview"), tr("O&verview Always Shown"), QKeySequence(), QStringLiteral("qb-mm-overview"));
+    ov->setCheckable(true);
+    on(ov, [](bool b) { overview::setAlways(b); });
     on(add(QStringLiteral("mm_actualSize"), tr("&Actual Size"), QKeySequence(Qt::CTRL | Qt::Key_0), QStringLiteral("zoom-original")),
        [this] { m_view->actualSize(); });
     on(add(QStringLiteral("mm_zoomFit"), tr("Zoom to &Fit"), QKeySequence(Qt::CTRL | Qt::Key_9), QStringLiteral("zoom-fit-best")),
@@ -440,7 +446,7 @@ void MindMapController::fillEditMenu(QMenu *m)
 
 void MindMapController::fillViewMenu(QMenu *m)
 {
-    for (const char *k : {"mm_inspector", "mm_footer", "mm_pageGuides", "", "mm_actualSize", "mm_zoomFit", "mm_zoomIn", "mm_zoomOut",
+    for (const char *k : {"mm_inspector", "mm_footer", "mm_pageGuides", "mm_overview", "", "mm_actualSize", "mm_zoomFit", "mm_zoomIn", "mm_zoomOut",
                           "mm_zoomSelection", "mm_zoomRandom"}) {
         if (!*k)
             m->addSeparator();
@@ -953,6 +959,11 @@ void MindMapController::updateActions()
     m_a[board().settings.rightToLeft ? QStringLiteral("mm_rtl") : QStringLiteral("mm_ltr")]->setChecked(true);
     m_a[QStringLiteral("mm_footer")]->setChecked(board().settings.footer);
     m_a[QStringLiteral("mm_pageGuides")]->setChecked(board().settings.pageGuides);
+    {
+        QAction *ov = m_a[QStringLiteral("mm_overview")];
+        ov->setChecked(overview::always());
+        ov->setToolTip(overview::always() ? tr("Overview: always shown") : tr("Overview: automatic"));
+    }
     // the state of the first selected item
     const int first = sel.isEmpty() ? 0 : sel.first();
     Appearance look;

@@ -35,6 +35,7 @@
 #endif
 
 #include "core/TestSwitches.h"
+#include <QSet>
 
 namespace qb {
 namespace backup {
@@ -235,6 +236,7 @@ Put copyInto(const QString &staged, const QString &target, QString *why, const s
     return Put::Done;
 }
 
+// Why one step under the final name: docs/design-decisions.md, entry 4.
 // Puts a finished backup of the work folder into the backup folder, in one step: renamed there (one drive), else
 // copied straight to the final name. *finalPath: where it is now. The waiting file is gone only when the backup is
 // in the folder, whole.
@@ -419,13 +421,13 @@ QString formerProjectFolder(const Project *p, const QString &dirIn)
     return found.isEmpty() ? QString() : QDir(dir).filePath(found.first());
 }
 
-QStringList backupsFor(const Project *p, const QString &dirIn)
+namespace {
+// 0.93.0: the files of `all` (backups of any project) that are this project's, in the way Restore From Backup offers them
+QStringList mineOf(const Project *p, const QStringList &all)
 {
-    const QString dir = dirIn.isEmpty() ? defaultDirectory() : dirIn;
     const QString mine = text::safeFileName(p->title());
     const QString begins = mine + QLatin1String(" bak "), beginsWithId = mine + QLatin1String(" #");
     QStringList out;
-    const QStringList all = zipsIn(dir, QStringLiteral("* bak *.zip"));
     for (const QString &f : all) {
         const QString name = QFileInfo(f).fileName();
         // a name in the program's own form says exactly which title it is of; any other one (a sync program's copy)
@@ -438,6 +440,31 @@ QStringList backupsFor(const Project *p, const QString &dirIn)
     }
     return out;
 }
+} // namespace
+
+QStringList backupsFor(const Project *p, const QString &dirIn)
+{
+    const QString dir = dirIn.isEmpty() ? defaultDirectory() : dirIn;
+    return mineOf(p, zipsIn(dir, QStringLiteral("* bak *.zip")));
+}
+
+QStringList waitingBackupsFor(const Project *p, const QString &dirIn)
+{
+    const QString dir = dirIn.isEmpty() ? defaultDirectory() : dirIn;
+    // the work folders a backup of this project can wait in: that of the backup folder, and (0.70.0 to 0.90.4) those of
+    // the project's own folder in it
+    QStringList works{workFolderFor(dir)};
+    const QString plainTitle = text::safeFileName(p->title());
+    works << workFolderFor(QDir(dir).filePath(plainTitle + QLatin1Char(' ') + projectKey(p)));
+    const QString former = formerProjectFolder(p, dir);
+    if (!former.isEmpty())
+        works << workFolderFor(former);
+    works.removeDuplicates();
+    QStringList out;
+    for (const QString &w : std::as_const(works))
+        out << mineOf(p, zipsIn(w, QStringLiteral("* bak *.zip")));
+    return out;
+}
 
 QStringList formerBackupsFor(const Project *p, const QString &dir)
 {
@@ -445,8 +472,96 @@ QStringList formerBackupsFor(const Project *p, const QString &dir)
     return former.isEmpty() ? QStringList() : zipsIn(former, QStringLiteral("* bak *.zip"));
 }
 
-bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath, QString *error, Where where, bool *waiting)
+// 0.93.0: one backup of the project's own folder of 0.70.0 to 0.90.4 into the backup folder, under its name, never
+// over a file that is there: a hard link where the drive allows (one step, no copy; fails when the name exists), else a
+// copy straight to the final name that is read again and compared (copyInto, NewOnly). The original goes after that.
+namespace {
+bool moveOne(const QString &from, const QString &to, QString *why)
 {
+#ifdef Q_OS_UNIX
+    if (::link(QFile::encodeName(from).constData(), QFile::encodeName(to).constData()) == 0) {
+        if (!QFile::remove(from)) {
+            *why = QObject::tr("it is in the backup folder now, but the original could not be removed");
+            return false;
+        }
+        return true;
+    }
+    if (errno == EEXIST) {
+        *why = QObject::tr("a backup of this name is already in the backup folder");
+        return false;
+    }
+#endif
+    if (QFileInfo::exists(to)) {
+        *why = QObject::tr("a backup of this name is already in the backup folder");
+        return false;
+    }
+    if (copyInto(from, to, why, nullptr) != Put::Done)
+        return false;
+    if (!QFile::remove(from)) {
+        *why = QObject::tr("it is in the backup folder now, but the original could not be removed");
+        return false;
+    }
+    return true;
+}
+} // namespace
+
+MoveReport moveFormerBackups(const Project *p, const QString &dirIn)
+{
+    MoveReport r;
+    const QString dir = dirIn.isEmpty() ? defaultDirectory() : dirIn;
+    r.from = formerProjectFolder(p, dir);
+    if (r.from.isEmpty())
+        return r;
+    QStringList all = zipsIn(r.from, QStringLiteral("* bak *.zip"));
+    if (!all.isEmpty() && !QDir().mkpath(dir)) {
+        r.left << QObject::tr("the backup folder cannot be created");
+        return r;
+    }
+    for (const QString &f : std::as_const(all)) {
+        const QString name = QFileInfo(f).fileName();
+        QString why;
+        if (moveOne(f, QDir(dir).filePath(name), &why))
+            r.moved << name;
+        else
+            r.left << name + QLatin1String(": ") + why;
+    }
+    if (!r.moved.isEmpty())
+        savebatch::syncDir(dir);
+    // the folder goes when nothing is left in it (a rmdir: it fails by itself when something is there)
+    r.folderRemoved = QDir().rmdir(r.from);
+    return r;
+}
+
+namespace {
+// 0.93.0: a backup of the clean-up that cannot be deleted is told, once per file and session, with the reason
+// (tests: QB_TEST_FAIL_REMOVE holds a part of the file's name)
+bool removeBackupFile(const QString &path, QStringList *notes)
+{
+    static QSet<QString> told;
+    QString why;
+    bool ok;
+    const QString fake = QB_TEST_ENV("QB_TEST_FAIL_REMOVE");
+    if (!fake.isEmpty() && path.contains(fake)) {
+        ok = false;
+        why = QObject::tr("Permission denied");
+    } else {
+        QFile f(path);
+        ok = f.remove() || !QFile::exists(path);
+        why = f.errorString();
+    }
+    if (!ok && notes && !told.contains(path)) {
+        told.insert(path);
+        *notes << QObject::tr("%1: %2").arg(QDir::toNativeSeparators(path), why);
+    }
+    return ok;
+}
+} // namespace
+
+bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath, QString *error, Where where, bool *waiting,
+                   QStringList *cleanupNotes)
+{
+    if (cleanupNotes)
+        cleanupNotes->clear();
     if (waiting)
         *waiting = false;
     // (0.90.3: an empty *error after a backup means "complete": a text left in it from an earlier step is not kept)
@@ -685,13 +800,13 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
             (isIncomplete(f) ? incomplete : complete) << f;
         const QString made = QFileInfo(path).absoluteFilePath();
         // the backup just made is never one of those deleted, whatever its name says (0.81.0)
-        auto trim = [&made](QStringList &list, int keepCount) {
+        auto trim = [&made, cleanupNotes](QStringList &list, int keepCount) {
             for (int i = 0; list.size() > keepCount && i < list.size();) {
                 if (list.at(i) == made) {
                     ++i;
                     continue;
                 }
-                QFile::remove(list.takeAt(i));
+                removeBackupFile(list.takeAt(i), cleanupNotes);
             }
         };
         if (res.skipped.isEmpty()) {
@@ -701,7 +816,7 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
                 const QString oldest = ageKey(QFileInfo(complete.first()));
                 for (const QString &f : std::as_const(incomplete))
                     if (f != made && ageKey(QFileInfo(f)) < oldest)
-                        QFile::remove(f);
+                        removeBackupFile(f, cleanupNotes);
             }
         } else {
             // 0.81.0: older complete backups stay until a complete one is made; of the incomplete ones, the newest
@@ -739,18 +854,20 @@ QString placeOf(const QString &projectFile)
 }
 } // namespace
 
-void markDue(const QString &projectFile)
+bool markDue(const QString &projectFile)
 {
     QStringList list = dueList();
     const QString place = placeOf(projectFile);
     if (list.contains(place))
-        return;
+        return true;
     list << place;
     QDir().mkpath(QFileInfo(dueFile()).absolutePath());
-    safesave::writeFile(dueFile(), list.join(QLatin1Char('\n')).toUtf8() + '\n');
+    return safesave::writeFile(dueFile(), list.join(QLatin1Char('\n')).toUtf8() + '\n'); // 0.93.0: the result is told
 }
 
-bool takeDue(const QString &projectFile)
+bool isDue(const QString &projectFile) { return dueList().contains(placeOf(projectFile)); }
+
+bool clearDue(const QString &projectFile)
 {
     QStringList list = dueList();
     if (!list.removeAll(placeOf(projectFile)))
@@ -759,6 +876,14 @@ bool takeDue(const QString &projectFile)
         QFile::remove(dueFile());
     else
         safesave::writeFile(dueFile(), list.join(QLatin1Char('\n')).toUtf8() + '\n');
+    return true;
+}
+
+bool takeDue(const QString &projectFile)
+{
+    if (!isDue(projectFile))
+        return false;
+    clearDue(projectFile);
     return true;
 }
 

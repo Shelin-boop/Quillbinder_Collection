@@ -2,6 +2,40 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## Qt 6.12.1 and the runtime u2404-qt6.12-r2 (0.93.0)
+
+- **Why a new runtime id**: Qt 6.12.1 brings newer libraries inside its own build: zlib 1.4, HarfBuzz 15.1.0, PCRE2 10.49,
+  libpng 1.6.59, libjpeg-turbo 3.2.1, FreeType 2.15.0 and md4c 0.6.0 (read from the `qt_attribution.json` files of qtbase
+  v6.12.1). The AppImage carries them; a program update (.qbpkg) runs on the libraries of the AppImage that is installed.
+  `src/core/UpdateCheck.cpp` offers the program update alone when the runtime is the same, and the new AppImage only when
+  it differs, so the runtime id is `u2404-qt6.12-r2`, with `APP_RUNTIME_SINCE` 0.93.0 (`QB_QT_VERSION` 6.12.1).
+- **Qt PDF**: Qt 6.12.1 has no Qt PDF of its own. The Qt pack (`tools/get-qt.sh`) takes it from the "Qt Extensions" release
+  for Qt 6.12 (Qt WebEngine 6.140.0; Qt's repository folder is still 6.12.0). Quillbinder uses no Qt private headers on
+  Linux (only `src/android/MobileWindows.cpp`), so nothing else depends on the exact patch version.
+- **Add-ons with libraries** name the runtime and `minApp` 0.93.0: `tools/make-package.py` fills both (`runtime`, and
+  `minApp` = `APP_RUNTIME_SINCE` when the manifest has a lower one), the manifests of the add-ons with libraries carry the
+  0.93.0 too (Translation and Proofreading has it in `addons/translation-proofreading/manifest.json` and
+  `source/packaging/manifest.json`, which must stay equal; suite `v0920` checks it against `QB_RUNTIME_SINCE`). Each
+  rebuilt add-on got its last version number raised (Translation and Proofreading stays 1.2 until its own change).
+- **Release text** (`tools/addon-entry.py notes`): the warning "Quillbinder X to 0.91.2 does not know add-on keys" appears
+  only when the package's `minApp` is below 0.91.3; an add-on built for r2 needs 0.93.0 and has no such sentence (suite
+  `v0913`).
+- **FFmpeg 9.1** (security watch issue: eleven High findings up to 9.0.2): `tools/get-ffmpeg.sh` takes
+  `https://ffmpeg.org/releases/ffmpeg-9.1.tar.xz` (Ubuntu's pool has 9.0.2 only). Sonames stay (avcodec/avformat 63,
+  swresample 7, swscale 10, avutil 61), the configure switches and the patch of `tools/build-ffmpeg.sh` were read against
+  tag n9.1 (no change needed; libpostproc is gone as before). The SHA-256 pin starts empty: then
+  `tools/verify-ffmpeg-source.sh` accepts the archive only with a good release signature (`.asc` and
+  `https://ffmpeg.org/ffmpeg-devel.asc`) of the key `KEY_FPR` (stops and prints the fingerprints it found otherwise)
+  and prints "pin this". The first run of `deps.yml` prints it (step "Build", group "FFmpeg source archive"); it goes into
+  `SHA256` of `get-ffmpeg.sh` in a commit of its own, then the pack line into `tools/deps-packs.txt`. Media Playback and
+  Extra Video and Audio Formats are 2.1 (the engine's `version()` too).
+- **The translator pack** (`deps-pack.sh`, name `translator`): `build/translator-deps/install` and the license files
+  that `make-addon.sh` copies (the list `TP_LICENSES`, checked by the suite `deps`). `get-translator-deps.sh --recipe`
+  still prints the hash of `build-deps.sh` for the release's cache. Each pre-release's text comes from
+  `deps-pack.sh about <name>`.
+- **Baseline on 6.12.1** (before these changes): every suite passed except `secwatch`, `v0920` and `v0913`, which followed
+  from the new runtime.
+
 ## The security watch (2026-11-21)
 
 - **What**: `.github/workflows/security-watch.yml` runs `tools/security-watch.py` once a day (04:37 UTC) on the
@@ -13,7 +47,9 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   wiki.qt.io (`?action=raw`); each GitHub repository's published security advisories and the release notes of
   its newer releases; the CVE records of `CVEProject/cvelistV5` on raw.githubusercontent.com (ratings and versions).
   Only raw.githubusercontent.com and git can be reached from the session; the rest is tried on GitHub's runner
-  (a push to `all/security-watch*` is a dry run that writes no issue).
+  (a push to `all/security-watch*` is a dry run that writes no issue). 0.93.0: when the repository had no commit for
+  50 days (`QUIET_DAYS`), the report has a line "QUIET REPOSITORY" (GitHub stops a scheduled workflow after 60 days
+  without activity); the commit's date is read through the API.
 - **What is reported**: a finding for a version we ship whose deciding rating is High or Critical, or that CISA's
   SSVC marks as actively exploited. The deciding rating is Ubuntu's priority for its packages, else the maker's
   (the CNA's CVSS or its own scale, as OpenSSL's "Low"; the project's own GitHub advisory), else CISA's. A record
@@ -31,8 +67,13 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - **Keeping it in step**: a new version of a part goes into the watch list in the same commit; the suite `secwatch`
   compares each `pin` (a file and pattern, an entry of `resources/licenses/index.json`, or `comes_with` for the
   FFmpeg of Qt's Windows build) with the list, and the AppImage's Ubuntu packages with the license list.
-- **Not covered**: PDFium inside Qt PDF (Chromium has no releases to watch); the ggml inside whisper.cpp (its
-  flaws are often filed with llama.cpp); the AppImage's runtime; the Windows runtime of Microsoft. A public
+- **Not covered**: the Windows runtime of Microsoft. (0.93.0 added, Linux entries: PDFium inside Qt PDF as the
+  revision `1afaa1a3...` in Chromium 140.0.7339.264, which Qt WebEngine 6.140.0 is based on, watched as that Chromium
+  version of github.com/chromium/chromium, OSV not asked, its flaws reach the watch only through Qt's list (module
+  qtpdf); the ggml of whisper.cpp v1.9.5 as ggml 0.26.0, OSV not asked; the AppImage runtime type2-runtime 20251108. Each
+  entry has a `note` that says what the databases know. A `pin` with `comes_with` names the part whose version it
+  follows: `Qt 6.12.1` or `whisper.cpp 1.9.5`, and the suite checks it. The Windows and Android entries of Qt's parts,
+  and Qt's FFmpeg for Windows, are left for their runs.) A public
   repository's scheduled workflow is switched off after 60 days without activity (GitHub sends a notice first).
 - **The first dry run** (2026-11-21, 40 s): 14 findings in 4 projects would have been reported: FFmpeg 9.0.2 and
   Qt's FFmpeg 9.0.1 for Windows (11, up to 9.0.2, newer: 9.1), zlib 1.3.2 (gzwrite, fixed in 1.4), HarfBuzz 14.5.0
@@ -62,15 +103,28 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - **TLS**: the AppImage carries `plugins/tls/libqopensslbackend.so` since 0.92.0 (`build-appimage.sh`); OpenSSL 3 is
   the system's. A program update that runs on an AppImage before 0.92.0 has no TLS part: `QSslSocket::supportsSsl()`
   is false, the automatic look stays quiet and "Check for Updates Now" says why.
+- **Translation and Proofreading 1.3** (0.93.0, to-do item 23; details in the add-on's own `source/DEVELOPING.md`, "1.3"):
+  a word on its own (WordNet meanings built in as `resources/en-glosses.tsv`, made with the thesaurus by
+  `tools/make-thesaurus.py`; the German dictionary, a data download "wiktionary-de" made by
+  `tools/make-de-dictionary.py` from kaikki.org's extract, CC BY-SA 4.0 shown before the download), Swap and Translate
+  back, `opus-mt-en-de`, the large model kept away from words and up to three words (catalog flag `forWords`). The data
+  is on the release `models-3`, made by `.github/workflows/translator-data.yml` (push of a `linux/0.93.0*` branch that
+  changes it; it does nothing when the release has the files; the job `publish` alone writes). Until the run, the
+  catalog names the new files with `PLACEHOLDER...` sums (the add-on says "not published yet" and downloads nothing);
+  after the run the sizes and sums of the artifact's `catalog.json` go in. `official-addons/translation-proofreading.json`
+  still describes 1.2 until the release (`tests/v0920_tests.cpp` compares its version with the manifest).
 - **Translation and Proofreading 1.2** is `addons/translation-proofreading`: `source/` is the add-on as a project of
   its own (unchanged from 1.1 but for the version and the model address `kRepo` in `src/ModelStore.cpp`), `stage.sh`
   builds it into `<build>/translator` and stages it with the add-on's `packaging/make-addon.sh`
   (`TP_STAGE_DIR`); exit code 3 without the engine libraries of `tools/get-translator-deps.sh`
   (`build/translator-deps`; the release workflow keeps them under the hash of `build-deps.sh` and fails when the
-  add-on is missing). The models: releases `models-1`, `models-2` of this repository, copied by
-  `.github/workflows/models-mirror.yml` (push the branch `models-mirror`). The add-on's own checks need models and
-  are not part of the suites. `official-addons/translation-proofreading.json` still describes 1.1 for Windows and
-  Android; since Windows 0.92.0 the Windows package is built with Quillbinder too (`docs/dev-notes/windows.md`), and
+  add-on is missing). The models: releases `models-1`, `models-2` of this repository, copied in 0.92.0
+  from the add-on's former repository; since 0.93.0 `.github/workflows/models-check.yml` (push the branch
+  `models-check`) only compares the files of `catalog.json` with the two releases. The add-on's own checks need models
+  and are not part of the suites. `official-addons/translation-proofreading.json` describes 1.2 since 0.93.0 (this
+  repository, the commits of the 0.92.0 releases; its build lists still name the add-on's source folder
+  `addons/translation-proofreading/source` as the root, which `addon-release.yml` does not check out: it builds an
+  add-on of another repository). Since Windows 0.92.0 the Windows package is built with Quillbinder too (`docs/dev-notes/windows.md`), and
   the check for updates has its Windows way (the setup program) described there.
 
 ## 0.91.2: the download page per system, a compiler cache for the sessions (2026-11-15)

@@ -3,11 +3,14 @@
 #include "ui/ThemePicker.h"
 #include "ui/MainWindow.h"
 #include "ui/UndoNames.h"
+#include "core/Backup.h"
+#include "core/Portable.h"
+#include "core/Project.h"
+#include "ui/AppSettings.h"
 #include "ui/MenuClear.h"
 #include "ui/LinkOpen.h"
 #include "ui/ProjectLook.h"
 #include <QSettings>
-#include <QStatusBar>
 #include <QMimeData>
 #include "ui/QuickRef.h"
 #include "ui/DragDrop.h"
@@ -213,12 +216,16 @@ void MainWindow::createMenus()
     add(file, {"newProject", "openProject"});
     m_recentMenu = file->addMenu(icons::action(QStringLiteral("document-open-recent")), tr("Open &Recent"));
     connect(m_recentMenu, &QMenu::aboutToShow, this, &MainWindow::rebuildRecentMenu);
-    add(file, {"closeProject", "", "save", "saveTemplate"});
-    QMenu *projectFormat = file->addMenu(tr("Project &Format"));
-    projectFormat->setObjectName(QStringLiteral("projectFormatMenu"));
-    add(projectFormat, {"formatQuillbinder", "formatScrivener", "", "saveCopyScrivener", "saveCopyQuillbinder"});
+    add(file, {"closeProject", "", "save", "saveAs", "saveTemplate"});
     QMenu *bk = file->addMenu(tr("&Back Up"));
-    add(bk, {"backupNow", "backupTo", "", "restoreBackup", "showBackups"});
+    add(bk, {"backupNow", "backupTo", "", "restoreBackup", "moveOldBackups", "showBackups"});
+    // 0.93.0: "Move Old Backups" is on only while the project's folder of 0.70.0 to 0.90.4 holds backups
+    connect(bk, &QMenu::aboutToShow, this, [this] {
+        const AppSettings &s = AppSettings::instance();
+        const bool can = m_project && (!portable::active() || !s.backupDir.trimmed().isEmpty())
+                         && !backup::formerBackupsFor(m_project.get(), s.backupDir.trimmed()).isEmpty();
+        a[QStringLiteral("moveOldBackups")]->setEnabled(can);
+    });
     file->addSeparator();
     QMenu *imp = file->addMenu(icons::action(QStringLiteral("document-import")), tr("&Import"));
     menuAlias(imp, QStringLiteral("importFiles"), tr("&Files…"));
@@ -228,6 +235,7 @@ void MainWindow::createMenus()
     QMenu *exp = file->addMenu(icons::action(QStringLiteral("document-export")), tr("&Export"));
     menuAlias(exp, QStringLiteral("exportFiles"), tr("&Files…"));
     menuAlias(exp, QStringLiteral("saveCopyScrivener"), tr("&Scrivener Project…"));
+    menuAlias(exp, QStringLiteral("saveCopyQuillbinder"), tr("&%1 Project…").arg(QStringLiteral(QB_APP_NAME)));
     QMenu *cmp = file->addMenu(tr("Compare and &Transfer"));
     cmp->setObjectName(QStringLiteral("compareMenu"));
     add(cmp, {"compareFile", "", "compareByChapter", "compareStepByStep"});
@@ -303,6 +311,14 @@ void MainWindow::createMenus()
     add(view, {"viewText", "viewCork", "viewOutline", ""});
     QMenu *layout = view->addMenu(tr("Editor &Layout"));
     add(layout, {"noSplit", "splitH", "splitV"});
+    // 0.93.0: where the binder, the editor and the inspector sit, by the window's shape
+    QMenu *panes = view->addMenu(tr("La&yout"));
+    panes->setObjectName(QStringLiteral("paneLayoutMenu"));
+    panes->addSection(tr("Upright window"));
+    add(panes, {"layoutEditorMiddle", "layoutEditorBottom", "", "layoutBinderLeft", "layoutBinderRight"});
+    panes->addSection(tr("Wide window"));
+    add(panes, {"layoutOrderBEI", "layoutOrderBIE", "layoutOrderEBI", "layoutOrderEIB", "layoutOrderIBE", "layoutOrderIEB",
+                "", "layoutReset"});
     add(view, {"", "showBinder", "showCollections", "showInspector", ""});
     QMenu *bars = view->addMenu(tr("Tool&bars"));
     // 0.91.0: the rows' switches, a switch per toolbar, the standard places
@@ -633,7 +649,7 @@ void MainWindow::createMenus()
     QMenu *help = mb->addMenu(tr("&Help"));
     add(help, {"manual", "quickStart", "welcome", "placeholders", "keyboardShortcuts", "", "addonManager", "pluginFolder",
                "integrate", "thisComputer", "", "updateCheckAuto", "updateCheckNow", "", "mindMapHelp", "developerGuide", "", "systemInfo",
-               "crashReports", "", "licenses", "about"});
+               "crashReports", "reportProblem", "", "licenses", "about"});
 
     // binder footer menus
     m_addMenu = new QMenu(this);
@@ -1146,7 +1162,7 @@ void MainWindow::resetToolbarPlaces()
         m_barDock->reset(); // the standard rows and order, no free space between the toolbars
     else
         placeToolBars();
-    statusBar()->showMessage(tr("The toolbars are back in their standard places."), 5000);
+    showStatusNote(tr("The toolbars are back in their standard places."), 5000);
 }
 
 // A bar shows when its row is switched on (Show Toolbar for Main, Themes, Search and Tools; Show Format Bar for the
@@ -1404,7 +1420,7 @@ QVariantMap MainWindow::captureLayout(bool withWindowSize) const
     st[QStringLiteral("formatBar")] = a[QStringLiteral("showFormatBar")]->isChecked();
     st[QStringLiteral("iconBar")] = a[QStringLiteral("showIconBar")]->isChecked();
     st[QStringLiteral("ruler")] = AppSettings::instance().showRuler;
-    const QList<int> sizes = m_mainSplit->sizes();
+    const QList<int> sizes = paneSizes(); // by pane (binder, editor, inspector), whatever the shape of the window
     const double total = qMax(1, sizes.value(0) + sizes.value(1) + sizes.value(2));
     if (binder && sizes.value(0) > 0)
         st[QStringLiteral("binderShare")] = share(sizes.value(0) / total);
@@ -1490,11 +1506,20 @@ void MainWindow::applyLayout(const QVariantMap &st)
         setSplit(Qt::Vertical, false);
 
     // widths: shares of the window, so a layout fits small and large screens
-    const QList<int> now = m_mainSplit->sizes();
-    const int total = qMax(300, now.value(0) + now.value(1) + now.value(2));
+    // (0.93.0: they are the wide shape's widths by pane; an upright window keeps them for when it is wide again)
+    const QList<int> now = paneSizes();
+    const int total = m_upright ? qMax(300, width()) : qMax(300, now.value(0) + now.value(1) + now.value(2));
     const int bw = binder ? int(total * qBound(0.05, st.value(QStringLiteral("binderShare"), 0.2).toDouble(), 0.6)) : 0;
     const int iw = inspector ? int(total * qBound(0.05, st.value(QStringLiteral("inspectorShare"), 0.22).toDouble(), 0.6)) : 0;
-    m_mainSplit->setSizes({bw, qMax(100, total - bw - iw), iw});
+    {
+        if (bw > 0)
+            m_wideSizes[0] = bw;
+        m_wideSizes[1] = qMax(100, total - bw - iw);
+        if (iw > 0)
+            m_wideSizes[2] = iw;
+        if (!m_upright)
+            applyPaneSizes();
+    }
     if (isSplit()) {
         const QList<int> es = m_editorSplit->sizes();
         const int et = qMax(100, es.value(0) + es.value(1));

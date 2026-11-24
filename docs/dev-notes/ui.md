@@ -2,6 +2,144 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.93.0 beta (2026-11-24): the save text in the first editor's footer bar, no status bar row (item 11)
+
+- **`FooterStatus`** (`src/ui/FooterStatus.*`, no Q_OBJECT): one in each `EditorPane` (`footerStatus()`, `MainWindow::editorPane(i)`),
+  only the first editor's (`m_panes[0]`) is filled. It holds the label `saveState` (the save text, or a short message
+  while one is shown), the label `backupState` (the link "No backups") and the `fadingNote` labels. It lays its labels
+  out by hand from its width: the whole text; a message shortened with `elidedText` and the whole message as tooltip;
+  below that a "●" mark (green, yellow, red for saved, not saved yet, failed; the highlight color for a message) with the
+  text as tooltip; the link becomes "!" when even that is tight. `minimumSizeHint` is 0 wide, so it never widens a footer.
+- **Where it sits**: `EditorPane::placeStatus()` moves the one widget into the layout of the footer page shown (text:
+  the stretch between the page label and the word count; corkboard and outliner: the left half after their buttons; picture
+  and PDF: after the zoom buttons; player: the end of the controls' row; empty: alone); it runs at the end of `applyMode`
+  and when playback starts or ends.
+- **`MainWindow`**: `showStatusNote(text, ms)` replaces `statusBar()->showMessage` (0 ms = until `clearStatusNote()`; the
+  toolbar drag's hint uses it), `statusNote()` reads it, `showFadingNote` goes to `FooterStatus::showFading`. The window
+  never calls `statusBar()`, so there is no row (`findChild<QStatusBar *>()` is null); `placeBesideText` no longer
+  subtracts the row. Toolbars at the bottom edge are dock areas of the window and are unaffected.
+  The status bar's tests read `w.statusNote()`; the crash-safe system test too.
+- No project: both labels empty and hidden. Composition mode has its own window: nothing there.
+
+## 0.93.0 beta (2026-11-23): the panes placed by the window's shape
+
+- **Where**: `ui/MainWindowPanes.cpp` (`MainWindow::initPaneSplitters`, `arrangePanes`, `applyPaneSizes`, `capturePaneSizes`,
+  `followWindowShape`, `createPaneActions`; the state is `m_upright`, `m_wideOrder`, `m_uprightEditorFirst`,
+  `m_uprightBinderLeft`, `m_wideSizes[3]`, `m_uprightEditorShare`, `m_uprightBinderShare`). `m_mainSplit` is the one splitter
+  below the toolbars: three columns (horizontal) when wide, two rows (vertical) when upright; `m_sideSplit` is the row of the
+  binder and the inspector (upright only; when wide it hangs hidden under the window with no children). The three panes are
+  moved with `QSplitter::insertWidget` (a moved pane forgets that it was hidden: `arrangePanes` sets it again from the
+  switches `showBinder` / `showInspector`; `updatePaneRow` hides the side row when both are hidden).
+- **Shape**: `wantsUpright()` is height > width (a square is wide); with the on-screen keyboard showing, its height is added,
+  so a tablet held upright does not turn "wide" when the keyboard takes room. `resizeEvent` queues `followWindowShape` (a
+  zero timer: no re-parenting inside a resize). The wide shape's least width is 808 px (binder 100 + editor 389 + inspector
+  311 + lines), so a window asked for 736 px is held at 808 until the shape has changed; the upright window's least size is 525
+  x 578 (the binder 100 and the inspector 311 fit beside each other from 525 px).
+- **Stretch**: the editor's row has stretch 1 and the side row 0 (a shorter window, as with the keyboard, takes the height from
+  the editor's row only). Sizes are set in pixels of the splitter's present size (weights that do not add up to it gave
+  wrong rows).
+- **Kept**: per device, in `QSettings` (never in the project): `window/paneOrder` ("BEI" ...), `window/uprightEditorFirst`,
+  `window/uprightBinderLeft`, `window/uprightShares` (editor row of the height, binder of the side row), and `window/mainSplit`
+  (now by pane: binder, editor, inspector; before by place, the start order is the same). Sizes are taken over (`capturePaneSizes`)
+  when the writer moves a line (`splitterMoved`), when a choice changes and at closing; not at every resize, so that a
+  window made narrow does not change what the wide shape remembers. A size set by code does not count unless it calls
+  `capturePaneSizes` (tests move a line with the mouse events: `QSplitter::moveSplitter` is protected).
+- **Named layouts** (`captureLayout` / `applyLayout`) keep their shares of the wide shape by pane (`paneSizes()`); applied in an
+  upright window they are stored for the wide shape. They carry no order.
+- **Menu**: View > Layout (`paneLayoutMenu`, actions `layoutEditorMiddle`, `layoutEditorBottom`, `layoutBinderLeft`,
+  `layoutBinderRight`, `layoutOrder<BEI...>`, `layoutReset`), radio groups, always enabled. Test: `tests/v0930d_tests.cpp`.
+## 0.93.0 beta: documents that are not shown are unloaded (item 39)
+
+- **Where the memory went** (measured with `qb_v0930f_tests`, `QB_MEASURE=1`, `QB_MEASURE_DOCS=<n>`: a generated project of 500
+  documents of 1,000 words, shown one after another through the binder; `mallinfo2` for the heap in use, `VmRSS` for the
+  process): before, 168 kB of heap per document shown (the 500 documents: 16 MB when opened, 100 MB at the end, RSS 104 to
+  156 MB); of it about 61 kB is the `QTextDocument` itself (read with `DocumentStore::text` only, no editor) and about
+  107 kB the layout of the editor that showed it (and the spell check's block data). Nothing gave it back: `DocumentStore`
+  kept every `Entry` until the project closed. After: 24.7 MB heap in use at the end (16.4 MB at the opening), RSS 106 MB,
+  8 to 30 documents held at a time.
+- **What is unloaded** (`DocumentStore::unloadUnused`): the whole `QTextDocument` (layout, spell check data, text) of a
+  text or notes document that is not shown, has no unsaved change, and has no undo or redo step. The entry is erased
+  (`aboutToDeleteDocument` first, as `forgetDocument` does; the editors let go of it), the plain-text cache for its key
+  is dropped, and the next `text()` / `notes()` reads the file again (cursor places are in `ViewMemory`, by document id,
+  not in the document). The `kKeepLoaded` (8) documents used last stay, so that jumping back and forth costs nothing.
+  Kept always: shown ones, one with an undo or redo step, one that is read-only for its file (`m_unreadable`,
+  `m_damaged`, `m_shown`, `m_missing`). A document that is only marked as changed by showing it (0.64.1) is compared with
+  the bytes it was read from (`sameAsRead`, at most 40 per run, the timer comes again in 300 ms); a really changed one stays
+  until it is saved.
+- **The undo history** is the document's own (`QTextDocument`'s stack, `UndoNames` hangs on it), so a document with steps is
+  not unloaded: its layout stays too (the stack cannot be kept without the document, and the layout cannot be freed from
+  outside Qt's own classes). Every document the writer has edited in the session therefore stays until the project
+  closes; documents only read or shown are the many ones in a large project, and they go.
+- **Who says what is shown**: `DocumentStore::setShownProbe`, set by `MainWindow::adoptProject`: every `QTextEdit` and
+  `QPlainTextEdit` of the program (the editors of any pane, Combined Text, quick references, the inspector's notes and
+  snapshots), the sources of every `DocMirror` (the inspector's bookmark preview); false while a modal window is open.
+  Without a probe (tests without a window, a project the window does not own) nothing is unloaded. **Android does
+  unload**: `src/main.cpp` builds `qb::MainWindow` there too and `adoptProject` sets the probe without an `#ifdef` (this note
+  said the opposite until the review). The Android run has to check: a project of some hundred documents browsed one
+  after another holds a bounded number (`loadedCount`), text typed on the tablet and not yet saved is kept, a document
+  shown again is as it was, and the on-screen keyboard's composing text is not lost when the document is shown again.
+  The timer (1.5 s, from a document read while more than 8 are held) is in the store; it comes again after 3 s when a
+  window is open, a job holds documents, or a nested event loop runs (`loopLevel() > 1`: a menu, a drag, a native
+  dialog the probe cannot see), and once after each save (`Project::saved`, `armUnloading`), which clears the marks of
+  documents that were only shown.
+- **Review of 0.93.0 (the analyst's six points)**: (1) the timer comes again after a refusal (above); (2) a document found
+  really changed (`sameAsRead`) is not compared again until it changes (`Entry::changes`, `comparedAt`), the compares of one
+  run take about 15 ms (`QElapsedTimer`), and the timer comes again only when some were left (`comparesDone()` counts them
+  for the tests); (3) `textEdited` is emitted only when `doc->isModified()` (the spell check's first pass on a document read
+  anew fires `contentsChanged` without a change), and `snapshots::sameAsNewest` keeps the snapshot "Saved" from copying the
+  newest snapshot; (4) Android (above); (5) on unloading, `{read, rtf, stamp}` are kept in `m_kept` (documents whose file
+  is larger than `kKeptMax`, 512 kB, are not unloaded at all); when the file cannot be opened or is cut short at the next
+  `readFile` and its stamp is still the kept one, the kept bytes are the text, else the file is read as before (0.64,
+  0.92: unreadable, shown empty and read-only). The test switch `QB_TEST_READ_FAILS=<part of a path>` makes such a file
+  unopenable (a root user ignores permissions); (6) a nested event loop refuses the run, and the entry is removed by its
+  key after `aboutToDeleteDocument`.
+- **`DocumentStore::Hold`**: a job that keeps documents in hand and runs the event loop (progress windows with
+  `processEvents`: Compile, Replace in Project, Convert Quotes, the style and script updates, the import) creates one;
+  nothing is unloaded while one lives. A new such job needs one.
+- Also fixed on the way: `m_plainCache` for a notes key was not emptied when the notes were edited (a notes text
+  unloaded, read again and changed would have shown the older plain text); the key is emptied at every change now.
+- Not unloaded: documents with undo steps (above); the plain-text cache (`m_plainCache`, the text of every document
+  asked for by search or counts, about 16 kB per 1,000 words) is not bounded yet.
+
+## 0.93.0 beta: notes start as plain text (item 24)
+
+- A notes document (`DocumentStore::load(id, true)`, also `projectNotes()`) is **plain** when it is new or empty, or when
+  its file carries the mark: document property `display::kPlainNotesProp` ("qbPlainNotes"). `display::applyPlainNotes` sets the
+  interface font (`plainNotesFont`, at the notes' zoom), an empty default paragraph and (Markdown) flattens the normal
+  paragraphs. `setNotesZoom` and `applyFormatting` keep plain notes in that font and do not normalize them.
+- **The mark in the file**: RTF `{\*\qbplainnotes}` after the header (an ignorable group), Markdown a first line
+  `<!--qb-plain-notes-->`; `readFile` and `deserialize` take it off and set the property, `serialize` puts it back, so the
+  checks that compare bytes (`unchangedSinceRead`) agree. Notes with text and no mark are read as before (project look).
+- `TextEditor::plainNotes()`: Enter on an empty list item gives a plain paragraph; `insertFromMimeData` inserts text only
+  (no formatting) unless `m_pasteKeepAll` (Edit > Paste with Formatting, the existing `pasteKeep` command).
+- Suite `notesplain`.
+
+## 0.93.0 beta (2026-11-23): the overview of the mind map
+
+- **`ui/MindMapOverview.*`**: a child of the board view's **viewport** (so it takes mouse events and the wheel itself;
+  the wheel is ignored so that it travels on to the view as over the board, `zoom::markOwn` of the view applies).
+  `MindMapView` owns it (`overview()`), follows it from the scroll bars, `zoomChanged`, `resizeEvent`, the scene's
+  `changed` and `boardChanged` (`refresh()`: place, size, shown or not, repaint). Not a scene item, so
+  `MindMapScene::render` (PNG/PDF export, print) never holds it.
+- **The map**: the area is `contentRect()` united with `visibleRect()` (the frame stays inside when the view is moved
+  past the content); scale and origin come from it (`map()`). Painted from the board and `liveRect(id)` (shapes, lines,
+  notes; text only when the font would be 5.5 px or more, else the colored frame). While a drag runs the map is frozen
+  (`m_frozen`), or the area would change under the pointer. A click centers (`centerOn`), a press inside the frame
+  keeps the grab offset. A locked board moves too: only the view changes; the scroll bars feed `setViewMemory`'s timer.
+- **Shown or not** (`wantedShown`): "always" (setting) -> shown; else shown when `visibleRect()` does not hold
+  `contentRect()`, hidden only when it holds it with a margin of 10 scene units (Zoom to Fit leaves 30), in between the last answer stays (no flicker).
+- **Settings** (`overview::` in the same files, plain `QSettings`, per device, not in the project): `mindMap/overviewAlways`
+  (bool), `mindMap/overviewSize/<kind>` (QSize; kind = the view memory's "inspector" or "window"). `overview::hub()`
+  signals `modeChanged` to every view and to every controller's command. `sizeFor` is the size rule (a fifth of the
+  width, at least 80 px wide, at most half the view); the overview's own size is `fittedSize`: the writer's width, the height from the area's proportions (at most half the view, the width shrinks with it); the stored height is not used; the grip is 22 px, 40 px with a touch screen or on Android.
+- **The command** `mm_overview` (checkable, checked = always; its tool tip is "Overview: automatic" or "Overview: always
+  shown", set in `updateActions`) is in `fillViewMenu` (the large window's View menu and the inspector's Menu > View) and is
+  the default action of the bar's button `mmOverviewButton`, right after `mmMenuButton`. Icon `qb-mm-overview` (made by
+  `tools/make-item-icons.py`).
+- **The "Fixed:" text** (`mmFixedTitle`) is an `ElidedLabel` inside the bar (after the overview button, before the
+  stretch), shortened to its room with "..." (full title in the tool tip); no row under the bar any more.
+- Suite `mmoverview` (`tests/mmoverview_tests.cpp`).
+
 ## 0.92.0 beta (2026-11-20): the marks of a binder row, the fixed mind map, the shown lock
 
 - **Row marks** (`ui/RowMarks.*`): the pin and the padlock are painted (no picture files), left of the label dot:

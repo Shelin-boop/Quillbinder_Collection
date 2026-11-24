@@ -774,7 +774,7 @@ void TextEditor::keyPressEvent(QKeyEvent *e)
         if (QTextList *list = c.block().textList()) {
             if (c.block().text().isEmpty()) {
                 list->remove(c.block());
-                QTextBlockFormat bf = display::normalBlockFormat(f);
+                QTextBlockFormat bf = plainNotes() ? QTextBlockFormat() : display::normalBlockFormat(f);
                 c.setBlockFormat(bf);
                 return;
             }
@@ -1332,6 +1332,22 @@ void TextEditor::insertFromMimeData(const QMimeData *source)
         }
         if (any)
             return;
+    }
+    // 0.93.0: plain notes take pasted text as plain text; Paste with Formatting keeps what the text brings
+    if (plainNotes() && !keepAll && (source->hasText() || source->hasHtml() || !rtfFormatOf(source).isEmpty())) {
+        QString t = source->hasText() ? source->text() : QString();
+        if (t.isEmpty() && source->hasHtml()) {
+            QTextDocument tmpHtml;
+            tmpHtml.setHtml(source->html());
+            t = tmpHtml.toPlainText();
+        }
+        t.remove(QLatin1Char('\r'));
+        c.beginEditBlock();
+        c.insertText(t);
+        c.endEditBlock();
+        setTextCursor(c);
+        ensureCursorVisible();
+        return;
     }
     c.beginEditBlock();
     if (const QString rtfFormat = rtfFormatOf(source); !rtfFormat.isEmpty()) {

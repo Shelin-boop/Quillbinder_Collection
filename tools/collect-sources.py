@@ -20,7 +20,7 @@ add-ons name these files.
     the .dsc, the original upstream archive and Ubuntu's changes, as "apt-get source" fetches them
     (needs deb-src lines in the apt sources);
   - the Ubuntu source packages of the libraries the add-ons bring (ADDON_LIBRARIES below);
-  - FFmpeg 9.0.2 of the media add-ons (0.80.0; before: 6.1.1): the original archive plus tools/build-ffmpeg.sh,
+  - FFmpeg 9.1 of the media add-ons (0.93.0; 9.0.2 from 0.80.0, 6.1.1 before): the original archive plus tools/build-ffmpeg.sh,
     tools/get-ffmpeg.sh and tools/ffmpeg-patches (the file name carries a hash of these, so a
     changed build gets a new file);
   - the AppImage runtime (type2-runtime) at the commit named in index.json, with the archives of
@@ -40,9 +40,18 @@ import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MULTIARCH = "/usr/lib/x86_64-linux-gnu"
-FFMPEG_ORIG = "ffmpeg_9.0.2.orig.tar.xz"
-FFMPEG_URL = "http://archive.ubuntu.com/ubuntu/pool/universe/f/ffmpeg/" + FFMPEG_ORIG
-FFMPEG_SHA256 = "8c3850283eb25fa026482078a04051e0be17347b09ef81a0849bec15a96e002e"
+# 0.93.0: FFmpeg 9.1 from ffmpeg.org; the version, the pin and the signing key are the ones of tools/get-ffmpeg.sh
+def _get_ffmpeg_setting(name):
+    with open(os.path.join(ROOT, "tools", "get-ffmpeg.sh")) as f:
+        m = re.search(r'^%s="?([^"\n]*)"?$' % name, f.read(), re.M)
+    return m.group(1) if m else ""
+
+
+FFMPEG_VERSION = _get_ffmpeg_setting("VERSION")
+FFMPEG_ORIG = "ffmpeg-%s.tar.xz" % FFMPEG_VERSION
+FFMPEG_URL = "https://ffmpeg.org/releases/" + FFMPEG_ORIG
+FFMPEG_SHA256 = _get_ffmpeg_setting("SHA256")   # empty until pinned: then the release signature decides
+FFMPEG_KEY = _get_ffmpeg_setting("KEY_FPR")
 RUNTIME_REPO = "https://github.com/AppImage/type2-runtime"
 
 # library files of this system that add-ons carry (addons/*/stage.sh); since 0.80.0 the add-ons take Qt's parts
@@ -86,7 +95,7 @@ def ffmpeg_source_file():
         h.update(os.path.basename(f).encode() + b"\0")
         with open(f, "rb") as fh:
             h.update(fh.read())
-    return "ffmpeg-9.0.2-quillbinder-%s.src.tar" % h.hexdigest()[:8], files
+    return "ffmpeg-%s-quillbinder-%%s.src.tar" % FFMPEG_VERSION % h.hexdigest()[:8], files
 
 
 def package_of(path):
@@ -187,21 +196,27 @@ def get_ffmpeg(work):
         shutil.copy(cached, dst)
     else:
         sh("curl", "-fsSL", "-o", dst, FFMPEG_URL, check=True)
-    with open(dst, "rb") as f:
-        if hashlib.sha256(f.read()).hexdigest() != FFMPEG_SHA256:
-            raise RuntimeError("FFmpeg archive: wrong checksum")
+    if FFMPEG_SHA256:
+        with open(dst, "rb") as f:
+            if hashlib.sha256(f.read()).hexdigest() != FFMPEG_SHA256:
+                raise RuntimeError("FFmpeg archive: wrong checksum")
+    else:
+        # no pin yet: only a good release signature of FFmpeg's key is accepted (tools/verify-ffmpeg-source.sh)
+        sh("curl", "-fsSL", "-o", dst + ".asc", FFMPEG_URL + ".asc", check=True)
+        sh("curl", "-fsSL", "-o", dst + ".keys.asc", "https://ffmpeg.org/ffmpeg-devel.asc", check=True)
+        sh(os.path.join(ROOT, "tools", "verify-ffmpeg-source.sh"), dst, dst + ".asc", dst + ".keys.asc", FFMPEG_KEY, check=True)
     _name, files = ffmpeg_source_file()
     os.makedirs(os.path.join(work, "quillbinder-build", "ffmpeg-patches"))
-    for f in files + [os.path.join(ROOT, "tools", "get-ffmpeg.sh")]:
+    for f in files + [os.path.join(ROOT, "tools", "get-ffmpeg.sh"), os.path.join(ROOT, "tools", "verify-ffmpeg-source.sh")]:
         sub = "ffmpeg-patches" if os.path.basename(os.path.dirname(f)) == "ffmpeg-patches" else ""
         shutil.copy(f, os.path.join(work, "quillbinder-build", sub, os.path.basename(f)))
     with open(os.path.join(work, "README.txt"), "w") as f:
-        f.write("FFmpeg 6.1.1 as built for the Quillbinder add-ons \"Media Playback\" (set \"base\") and\n"
+        f.write("FFmpeg %s as built for the Quillbinder add-ons \"Media Playback\" (set \"base\") and\n"
                 "\"Extra Video and Audio Formats\" (set \"full\").\n\n"
-                "%s  the unchanged FFmpeg 9.0.2 source (Ubuntu's copy of ffmpeg.org's release)\n"
+                "%s  the unchanged FFmpeg source of ffmpeg.org (its release signature checked)\n"
                 "quillbinder-build/                 how it was built: get-ffmpeg.sh unpacks the archive and calls\n"
                 "                                   build-ffmpeg.sh, which applies ffmpeg-patches/ and configures\n"
-                "                                   each set (the options are in that script)\n" % FFMPEG_ORIG)
+                "                                   each set (the options are in that script)\n" % (FFMPEG_VERSION, FFMPEG_ORIG))
 
 
 def get_runtime(d, work):
@@ -299,7 +314,7 @@ def main(argv):
             if kind == "ubuntu":
                 what = "Ubuntu 24.04 source package %s %s (for %s)" % (d["package"], d["version"], d["for"])
             elif kind == "ffmpeg":
-                what = "FFmpeg 9.0.2 and the Quillbinder build of it (for %s)" % d["for"]
+                what = "FFmpeg %s and the Quillbinder build of it (for %s)" % (FFMPEG_VERSION, d["for"])
             elif kind == "qt":
                 what = "Qt %s, the Qt Project's source release, unchanged (for %s)" % (d["version"], d["for"])
             else:

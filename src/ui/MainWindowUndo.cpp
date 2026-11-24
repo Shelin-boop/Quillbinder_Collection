@@ -64,7 +64,9 @@ void MainWindow::setupUndoNames()
     m_undoNamesTimer->setSingleShot(true);
     m_undoNamesTimer->setInterval(60);
     connect(m_undoNamesTimer, &QTimer::timeout, this, &MainWindow::updateUndoNames);
-    connect(qApp, &QApplication::focusChanged, this, [this](QWidget *, QWidget *now) {
+    m_focusLinks << connect(qApp, &QApplication::focusChanged, this, [this](QWidget *, QWidget *now) {
+        if (m_ending)
+            return;
         // a menu or a toolbar button that takes the keyboard for a moment is not a new target
         if (now && !qobject_cast<QMenu *>(now) && !qobject_cast<QToolButton *>(now))
             watchUndoTarget();
@@ -75,6 +77,8 @@ void MainWindow::setupUndoNames()
 
 void MainWindow::watchUndoTarget()
 {
+    if (m_ending)
+        return;
     for (const QMetaObject::Connection &c : std::as_const(m_undoWatch))
         disconnect(c);
     m_undoWatch.clear();
@@ -99,6 +103,8 @@ void MainWindow::watchUndoTarget()
 
 void MainWindow::updateUndoNames()
 {
+    if (m_ending)
+        return;
     QAction *undo = a.value(QStringLiteral("undo")), *redo = a.value(QStringLiteral("redo"));
     if (!undo || !redo)
         return;
