@@ -5,30 +5,17 @@ Manual in the program) describes every function.
 
 ## 0.93.0 beta (2026-11-24)
 
-A new AppImage and a program update for Linux. Nothing changes in how you write; what changes is under the program,
-in the parts it is built from. The add-ons of 0.80.0 and later are rebuilt for this version: the ones that bring
-their own libraries now need 0.93.0 (the check for updates and **File > Install Update or Add-on** tell you).
+A new AppImage for Linux, on Qt 6.12.1, whose built-in libraries bring safety fixes: the check for updates offers it
+as a recommended security update (a program update cannot bring those libraries, so 0.93.0 needs the new AppImage
+once; later program updates fit it). Four new functions (the panes placed by the
+window's shape, File > Save As, an overview for the mind map, the translator for single words and both directions),
+and many fixes of the safety nets around saving and backups. The add-ons that bring their own libraries are rebuilt
+and need 0.93.0 (the check for updates and **File > Install Update or Add-on** tell you).
 
-- **The save text moved into the editor's footer bar**. The window's bottom row is gone. "Saved", "Not saved yet",
-  the red "Not saved" sign, the "No backups" link and the short messages of the program (a backup's result, "Saved
-  again ...", and the like) show in the empty stretch of the footer bar of the first editor (the left or upper one);
-  a message takes the place for its seconds, a message too long is shortened (its tooltip reads it all), and in a very
-  narrow editor a small colored mark stands there instead (the text is its tooltip). The status bar row is no more, so
-  the window gains that row. Toolbars at the bottom edge stay where they are.
-- **Help > Report a Problem…** opens the project's issue forms in the browser; the manual's troubleshooting section says
-  where to report a problem and that a security problem goes privately (`SECURITY.md`). The README has a picture of the
-  main window.
-- **Documents:** the manual and the Quick Start take the label of the version ("beta") from the program (a placeholder, as for its name), so
-  they cannot say "alpha" again; `docs/design-decisions.md` gives the reasons behind choices that can look like faults
-  (README, SECURITY.md and the manual's introduction link to it).
-- **File > Save As…** (Ctrl+Shift+S) replaces the menu "Project Format" of the File menu. Type the name and choose the place; the
-  file type in the dialog (Scrivener 3 Project or Quillbinder Project) decides the format, so the same command changes
-  the format and saves a project under another name or in another place. The window then works on the new project, and
-  every later save goes there; the original stays on disk as it was, and what you had not saved yet goes into the new
-  project only. The new project starts its own series of backups (the backups so far stay with the original), and
-  its title is the name you typed. The copies that leave the window on the original are in **File > Export** now:
-  Scrivener Project... and (new there) Quillbinder Project.... A toolbar or shortcut you set for the old entries
-  (Quillbinder Project, Scrivener 3 Project, Save a Copy as ...) is left out quietly.
+- **Qt 6.12.1** (before: 6.12.0). The libraries Qt carries inside itself are newer, with safety fixes: zlib 1.4,
+  HarfBuzz 15.1.0, PCRE2 10.49, libpng 1.6.59, libjpeg-turbo 3.2.1, FreeType 2.15.0 and md4c 0.6.0. Because the
+  AppImage carries them, a program update alone cannot bring them: the check for updates offers the new AppImage
+  (the runtime is called `u2404-qt6.12-r2`).
 - **The panes placed by the window's shape.** A window taller than wide now shows two rows: the editor in the full
   width, and the binder and the inspector beside each other in the other row. **View > Layout > Upright window**
   chooses whether the editor's row is the upper one (Editor in the Middle) or the lower one (Editor at the Bottom),
@@ -38,33 +25,20 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   its start values. The choices are kept per computer in the program's settings, never in a project. A hidden binder
   or inspector leaves its room to the other one. With the on-screen keyboard (Android) the row of the binder and the
   inspector keeps its height.
+- **File > Save As…** (Ctrl+Shift+S) replaces the menu "Project Format" of the File menu. Type the name and choose the place; the
+  file type in the dialog (Scrivener 3 Project or Quillbinder Project) decides the format, so the same command changes
+  the format and saves a project under another name or in another place. The window then works on the new project, and
+  every later save goes there; the original stays on disk as it was, and what you had not saved yet goes into the new
+  project only. The new project starts its own series of backups (the backups so far stay with the original), and
+  its title is the name you typed. The copies that leave the window on the original are in **File > Export** now:
+  Scrivener Project... and (new there) Quillbinder Project.... A toolbar or shortcut you set for the old entries
+  (Quillbinder Project, Scrivener 3 Project, Save a Copy as ...) is left out quietly.
 - **An overview for the mind map.** A small map in the top left corner of a board (in the inspector's tab and in the large
   window) shows all of the board and a frame for the part you see; click in it to move the view there, drag the frame to
   move the view with it. It shows by itself when some of the board lies outside the view and hides when all of it fits;
   the new button after **Menu** in the board's bar (or the entry Overview Always Shown in the board's View menu) keeps it shown. Drag the grip in its
   corner to change its size. The text **Fixed: ...** of a fixed board now stands in the bar itself, shortened when the
   bar is narrow, and the row under the bar is gone.
-- **A new background shape starts medium gray and not magnetic** (before: pale gray and magnetic). The values you set in Mind
-  Map Options stay, except a stored pale gray fill and a stored "Magnetic", which are changed once.
-- **Notes start as plain text.** The notes of a document and the project notes no longer take the font, size, indent, spacing
-  or style of the project's text formatting: new notes and new text in empty notes are plain, in the interface's font; what you
-  format by hand stays, and notes that already have text are unchanged. Pasting into the notes gives plain text; **Edit > Paste with
-  Formatting** keeps the formatting.
-- **Less memory with large projects.** The texts of a session no longer stay laid out until the project closes: a
-  document that is not shown, has no change that is not saved and no step to undo is let go a moment after you moved
-  on, and read again from its file when you show it again (its text, formatting and the place of the cursor are as
-  they were). Showing 500 documents of 1,000 words one after another took about 52 MB more before; now about 2 MB more.
-  Search, Combined Text, Compile and the word counts still see every document.
-- **Qt 6.12.1** (before: 6.12.0). The libraries Qt carries inside itself are newer, with safety fixes: zlib 1.4,
-  HarfBuzz 15.1.0, PCRE2 10.49, libpng 1.6.59, libjpeg-turbo 3.2.1, FreeType 2.15.0 and md4c 0.6.0. Because the
-  AppImage carries them, a program update alone cannot bring them: the check for updates offers the new AppImage
-  (the runtime is called `u2404-qt6.12-r2`).
-- **FFmpeg 9.1 in the media add-ons** (before: 9.0.2). Media Playback and Extra Video and Audio Formats 2.1 play the
-  same formats, with the newer FFmpeg's safety fixes. The source is taken from FFmpeg's own site and checked by its
-  release signature.
-- **The other add-ons with libraries** (Import Web Page, Import Word 97, Name Generator, Scratch Pad, Text Statistics,
-  Speech Transcription) are rebuilt for the new runtime, with a new last number each. Translation and Proofreading
-  is 1.3 (next item).
 - **Translation and Proofreading 1.3: a word on its own, and both directions.** Type one English word: below it the
   panel says what the word means, in English, with the classes it belongs to (the meanings are from the dictionary
   WordNet 3.0, built into the add-on, and the output says so); a word WordNet does not have gets a meaning written by
@@ -90,13 +64,23 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
   words: the dictionary first, else the small model (also when the large one is chosen; when the small one is not
   downloaded, a note offers it). The large model's description now says it is for whole sentences. (The models are
   on the new release *models-3*; the workflow `translator-data.yml` makes it.)
-- **The security watch** (the daily check of the parts the project ships) now also looks at PDFium inside Qt PDF, the
-  ggml library inside whisper.cpp and the AppImage's own starter, and says in its report when the repository has had
-  no change for 50 days (GitHub stops such a check after 60). For the project's builds: a third ready-made pack, for
-  the translator's libraries, and the packs' pages name what is inside, the license and the source.
-- **The download page lists the official add-ons** (Translation and Proofreading so far): name, one line of what it
-  does, the systems it is for, whether it is inside the full version, and the note for a model that may be used
-  non-commercially only. Each system's card shows that system's newest version.
+- **Notes start as plain text.** The notes of a document and the project notes no longer take the font, size, indent, spacing
+  or style of the project's text formatting: new notes and new text in empty notes are plain, in the interface's font; what you
+  format by hand stays, and notes that already have text are unchanged. Pasting into the notes gives plain text; **Edit > Paste with
+  Formatting** keeps the formatting.
+- **The save text moved into the editor's footer bar**. The window's bottom row is gone. "Saved", "Not saved yet",
+  the red "Not saved" sign, the "No backups" link and the short messages of the program (a backup's result, "Saved
+  again ...", and the like) show in the empty stretch of the footer bar of the first editor (the left or upper one);
+  a message takes the place for its seconds, a message too long is shortened (its tooltip reads it all), and in a very
+  narrow editor a small colored mark stands there instead (the text is its tooltip). The status bar row is no more, so
+  the window gains that row. Toolbars at the bottom edge stay where they are.
+- **A new background shape starts medium gray and not magnetic** (before: pale gray and magnetic). The values you set in Mind
+  Map Options stay, except a stored pale gray fill and a stored "Magnetic", which are changed once.
+- **Less memory with large projects.** The texts of a session no longer stay laid out until the project closes: a
+  document that is not shown, has no change that is not saved and no step to undo is let go a moment after you moved
+  on, and read again from its file when you show it again (its text, formatting and the place of the cursor are as
+  they were). Showing 500 documents of 1,000 words one after another took about 52 MB more before; now about 2 MB more.
+  Search, Combined Text, Compile and the word counts still see every document.
 - **The emergency copy is whole, or says it is not.** When texts cannot be saved, the copy of what was not saved now
   counts its files: every message and the notice after an ending by a signal say "n of m files" and name each file that
   is missing with the reason, and an incomplete copy is headed as incomplete (a warning sign), never as done. The copy
@@ -147,6 +131,25 @@ their own libraries now need 0.93.0 (the check for updates and **File > Install 
 - **No crash when a window ends.** A window that was closed while the keyboard moved to another window or panel could
   crash at its very end (found by the system test on Android: the program answered the focus change with a window
   already half deleted). The window now cuts its links to the application's signals before anything of it is deleted.
+- **FFmpeg 9.1 in the media add-ons** (before: 9.0.2). Media Playback and Extra Video and Audio Formats 2.1 play the
+  same formats, with the newer FFmpeg's safety fixes. The source is taken from FFmpeg's own site and checked by its
+  release signature.
+- **The other add-ons with libraries** (Import Web Page, Import Word 97, Name Generator, Scratch Pad, Text Statistics,
+  Speech Transcription) are rebuilt for the new runtime, with a new last number each. Translation and Proofreading
+  is 1.3 (next item).
+- **Help > Report a Problem…** opens the project's issue forms in the browser; the manual's troubleshooting section says
+  where to report a problem and that a security problem goes privately (`SECURITY.md`). The README has a picture of the
+  main window.
+- **The download page lists the official add-ons** (Translation and Proofreading so far): name, one line of what it
+  does, the systems it is for, whether it is inside the full version, and the note for a model that may be used
+  non-commercially only. Each system's card shows that system's newest version.
+- **The security watch** (the daily check of the parts the project ships) now also looks at PDFium inside Qt PDF, the
+  ggml library inside whisper.cpp and the AppImage's own starter, and says in its report when the repository has had
+  no change for 50 days (GitHub stops such a check after 60). For the project's builds: a third ready-made pack, for
+  the translator's libraries, and the packs' pages name what is inside, the license and the source.
+- **Documents:** the manual and the Quick Start take the label of the version ("beta") from the program (a placeholder, as for its name), so
+  they cannot say "alpha" again; `docs/design-decisions.md` gives the reasons behind choices that can look like faults
+  (README, SECURITY.md and the manual's introduction link to it).
 
 ## 0.92.0 beta (2026-11-20)
 
