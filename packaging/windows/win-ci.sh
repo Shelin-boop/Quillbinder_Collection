@@ -63,6 +63,12 @@ say "triplet: ${VCPKG_TRIPLET:-unknown}"
 QT=$(cygpath -m "$QT_ROOT_DIR")
 VCPKG=$(cygpath -m "$VCPKG_INSTALLATION_ROOT")
 
+# the pins of the ready-made packs (Windows 0.93.0: packaging/windows/win-packs.txt, one list for windows.yml and
+# release-windows.yml; QB_WIN_PACKS, when set, wins)
+if [ -z "${QB_WIN_PACKS:-}" ] && [ -f packaging/windows/win-packs.txt ]; then
+  export QB_WIN_PACKS="$(grep -v '^[[:space:]]*#' packaging/windows/win-packs.txt)"
+fi
+
 # ---- whisper.cpp for the add-on "Speech Transcription" (W4c, 2026-11-12; processor only; cached by the workflow)
 WHISPER="$PWD/.whisper"
 # Windows 0.91.3 (D1): the pinned pack of this recipe first (seconds); without one the cache or a build as before, and

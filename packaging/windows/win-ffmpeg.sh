@@ -26,7 +26,10 @@ URL=https://ffmpeg.org/releases/ffmpeg-$VERSION.tar.xz
 OPTS="--disable-programs --disable-doc --disable-debug --enable-network --disable-lzma --enable-pic --disable-vulkan --disable-v4l2-m2m --disable-decoder=truemotion1 --disable-avdevice --disable-avfilter --enable-zlib --toolchain=msvc --enable-shared --disable-static"
 TRIPLET=${VCPKG_TRIPLET:-x64-windows-static-md}
 ZI="$(cygpath -u "${VCPKG_INSTALLATION_ROOT:?vcpkg is not on this machine}")/installed/$TRIPLET"
-[ -f "$ZI/include/zlib.h" ] && [ -f "$ZI/lib/zlib.lib" ] || { echo "win-ffmpeg.sh: no zlib in $ZI (the vcpkg step first)" >&2; exit 1; }
+# (zlib 1.4's own CMake build names its static library libzs.lib; older ports made zlib.lib)
+ZLIB=""
+for n in libzs.lib zs.lib zlib.lib zlibstatic.lib; do [ -f "$ZI/lib/$n" ] && { ZLIB="$ZI/lib/$n"; break; }; done
+[ -f "$ZI/include/zlib.h" ] && [ -n "$ZLIB" ] || { echo "win-ffmpeg.sh: no zlib in $ZI (the vcpkg step first): $(ls "$ZI/lib" 2>/dev/null | tr '\n' ' ')" >&2; exit 1; }
 ZV=$(sed -n 's/^#define ZLIB_VERSION "\(.*\)".*/\1/p' "$ZI/include/zlib.h" | head -1)
 STAMP="$VERSION $SHA256 $(sha256sum "$0" | cut -c1-16) zlib $ZV"
 LIBS="avcodec avformat avutil swresample swscale"
@@ -41,7 +44,7 @@ WORK="$PWD/.ffmpeg-work"
 rm -rf "$WORK" "$PREFIX"
 mkdir -p "$WORK/zlib/include" "$WORK/zlib/lib"
 cp "$ZI/include/zlib.h" "$ZI/include/zconf.h" "$WORK/zlib/include/"
-cp "$ZI/lib/zlib.lib" "$WORK/zlib/lib/z.lib"   # FFmpeg's configure asks for -lz, which MSVC's link reads as z.lib
+cp "$ZLIB" "$WORK/zlib/lib/z.lib"   # FFmpeg's configure asks for -lz, which MSVC's link reads as z.lib
 curl -fsSL --retry 5 --retry-delay 10 -o "$WORK/ffmpeg.tar.xz" "$URL"
 echo "$SHA256  $WORK/ffmpeg.tar.xz" | sha256sum -c --quiet
 cat > "$WORK/build.sh" <<'SH'

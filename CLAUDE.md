@@ -163,7 +163,8 @@ short index (under about 20 KB), so that it costs little when it is loaded.
   the rest of a project).
 - `runtime-and-addons.md`: the check for updates and the translator add-on (0.92.0), Qt 6.12.1 and FFmpeg 9.1 (the runtime r2, 0.93.0), tool interface 1.1 and Speech Transcription,
   release files and third-party sources.
-- `windows.md`: Windows 0.92.0 (the translator's build, the check for updates with the setup program's update run, the
+- `windows.md`: Windows 0.93.0 (Qt 6.12.1 through `win-qt.sh`, vcpkg pinned, FFmpeg 9.1 built by the project, the
+  mind map reader without MSVC's optimizer), Windows 0.92.0 (the translator's build, the check for updates with the setup program's update run, the
   update file's Windows block, what a Windows job may add to shared files), the Windows port (W1 to W4c), what 0.90.4
   brought, the public Windows files, Windows 0.91.3 (its own release, `[build-only]` / `[suites: ...]` in a commit
   message, the Windows dependency packs, the run on main).

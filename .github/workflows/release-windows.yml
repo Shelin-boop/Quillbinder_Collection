@@ -190,6 +190,7 @@ jobs:
         shell: cmd
         env:
           QB_WIN_STAGE: release
+          GH_TOKEN: ${{ github.token }}   # the ready-made packs (packaging/windows/win-packs.txt; Windows 0.93.0)
         run: |
           call "%VSDIR%\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
           "C:\Program Files\Git\bin\bash.exe" packaging/windows/win-ci.sh results
@@ -720,6 +721,7 @@ jobs:
         shell: cmd
         env:
           QB_TEST_FONTS_ZIP: ${{ github.workspace }}\test-fonts\test-fonts.zip
+          GH_TOKEN: ${{ github.token }}   # the ready-made packs (packaging/windows/win-packs.txt; Windows 0.93.0)
         run: |
           call "%VSDIR%\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
           "C:\Program Files\Git\bin\bash.exe" packaging/windows/win-ci.sh results

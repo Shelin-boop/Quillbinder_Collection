@@ -200,7 +200,7 @@ qtplugins/multimedia/ffmpegmediaplugin.dll
 Some formats this add-on plays (H.264, H.265, AAC and others) are covered by patents in some
 countries; whether a patent license is needed to use them depends on the country.
 TEXT
-"$PY" - "$ROOT/addons/media-extra-formats/manifest.json" "$stage/manifest.json" "$ffver" "$FFBYTEXT" <<'PY'
+"$PY" - "$ROOT/addons/media-extra-formats/manifest.json" "$stage/manifest.json" "$ffver" "$FFBYTEXT" "$FFBY" <<'PY'
 import json, sys
 m = json.load(open(sys.argv[1], encoding="utf-8"))
 m["description"] = ("Lets the add-on \"Media Playback\" (2.0 or newer) play with FFmpeg: besides what Windows plays, "
@@ -209,8 +209,9 @@ m["description"] = ("Lets the add-on \"Media Playback\" (2.0 or newer) play with
                     + sys.argv[4] + ", and Qt's FFmpeg backend. While it is installed and switched on, "
                     "it is used instead of the decoders of Windows. Kept apart so that it can be left out: everything "
                     "else works without it. Whether a patent license is needed to use these formats depends on the country.")
-m["whatsNew"] = ["FFmpeg " + sys.argv[3] + " with its security fixes (Windows 0.93.0; built by the project: Qt 6.12.1 "
-                 "for Windows brings FFmpeg 9.0.2)"]
+m["whatsNew"] = (["FFmpeg " + sys.argv[3] + " with its security fixes (Windows 0.93.0; built by the project: Qt 6.12.1 "
+                  "for Windows brings FFmpeg 9.0.2)"] if sys.argv[5] == "project"
+                 else ["FFmpeg " + sys.argv[3] + " as Qt Multimedia brings it (a build without the project's FFmpeg)"])
 json.dump(m, open(sys.argv[2], "w", encoding="utf-8"), indent=2, ensure_ascii=False)
 PY
 pack "$id" "$stage"

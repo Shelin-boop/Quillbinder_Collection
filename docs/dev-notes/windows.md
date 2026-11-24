@@ -2,6 +2,49 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## Windows 0.93.0 (2026-11-24): Qt 6.12.1, zlib 1.4, FFmpeg 9.1 of the project, the mind map's shapes
+
+- **Qt 6.12.1** through `packaging/windows/win-qt.sh` (one place for `windows.yml` and both Qt steps of
+  `release-windows.yml`): aqtinstall 3.3.0 with its patch for the folders per compiler, then Qt PDF. Qt 6.12.1 has no
+  Qt PDF of its own (a Qt Extensions module since Qt 6.12, listed under 6.12.0 only): the script tries Qt PDF with the
+  version, and else installs it from the newest earlier patch release with `--noarchives` (as `tools/get-qt.sh` on
+  Linux). The runtime id is `win64-qt6.12-msvc-r2`: a Windows program update carries only `quillbinder.exe`, so a
+  0.92.0 folder with Qt 6.12.0's DLLs is offered the setup program (`UpdateCheck.cpp` compares the runtime), and an r1
+  program refuses an r2 program update.
+- **vcpkg pinned** (`packaging/windows/win-vcpkg.sh`): the runner's vcpkg is moved to one commit (`COMMIT`), its zlib
+  and Hunspell ports are checked against `ZLIB` and `HUNSPELL`, and `tool` fetches the vcpkg program that commit names
+  before `vcpkg install`. The Hunspell pack's recipe of that commit is the one of 2026-11-21 (`d70c6b0d...`, zlib 1.4).
+  The security watch lists "zlib (vcpkg, Windows)" pinned to `ZLIB` there.
+- **FFmpeg 9.1 of the project** (`packaging/windows/win-ffmpeg.sh`): Qt 6.12.1 for Windows brings FFmpeg 9.0.2 (its
+  `av_version_info`, run 45342399136), which the High findings of issue #7 name ("through 9.0.2"); the writer chose to
+  build it. The same archive and SHA-256 as `tools/get-ffmpeg.sh`; Qt's own configuration (its
+  `avcodec_configuration()`: no programs, devices or filters, no Vulkan, `--disable-decoder=truemotion1`, zlib, shared,
+  `--toolchain=msvc`) with vcpkg's zlib 1.4 copied as `z.lib` (configure asks for `-lz`); configure and make in the
+  runner's MSYS2 (`C:\msys64`, `MSYS2_PATH_TYPE=inherit` so that MSVC's environment comes along, MSVC's `link.exe` put
+  before MSYS2's own `link`). FFmpeg 9.1 keeps 9.0's major versions, so Qt's `ffmpegmediaplugin.dll` loads these DLLs;
+  `win-addons.sh` checks that the names are the ones in Qt's `bin`, and a release (`QB_WIN_STAGE=release`) refuses to
+  make the add-on with Qt's FFmpeg. A pack (`win-deps-pack.sh ffmpeg`: source, script, zlib, MSVC) as for whisper.cpp.
+  zlib 1.4's own CMake build names its static library `libzs.lib` (the zlib.lib of older ports is gone).
+- **The pins of the packs** are in `packaging/windows/win-packs.txt` (before: `QB_WIN_PACKS` in `windows.yml`), read by
+  `win-ci.sh` and the Hunspell step of `windows.yml`, so that `release-windows.yml` takes the same packs (its build
+  steps have `GH_TOKEN` for the download). A change of `win-deps-pack.sh` changes the Hunspell recipe (the script is
+  part of it): its next run builds the pack anew and prints the new pin.
+- **Item 19, the mind map's background shapes**: the MSVC 14.52 build (19.52.37029) read a shape's width and height in
+  `Board::fromXml` as garbage, also with Qt 6.12.1 (the probe of v017: the place right, the same lines compiled in the
+  test file right, with and without the optimizer, a shape appended in the test right). `Board::fromXml` is compiled
+  without the optimizer under `_MSC_VER` (`#pragma optimize("", off)`): the probe then read 240.5 x 130.25, and the
+  counted check in `mmoverview` (`#ifdef Q_OS_WIN`: read, write, read again) passes. The cause inside the optimized
+  function is not known; GCC and the MSVC 14.51 build were right. Take the pragma out only with a probe on a newer MSVC.
+- **Item 33**: the installed version's folder moves aside with `moveIntoPlace`'s tries (on Linux the one rename);
+  examined in v0920 (an INFO line, run 45350224680): a folder whose add-on DLL is loaded can be moved aside on Windows.
+- **Tests**: m10 and the suites of Linux 0.93.0 are counted (`win-tests.sh`); v017 stays "explore" for its one old
+  failure (another document's board). The new suites' Linux assumptions, each under `Q_OS_WIN` or with no effect on
+  Linux: v0930f's heap measure is glibc's (`__GLIBC__`); v0930's notice is compared with the system's separators and
+  its backup folder is saved to the settings file (opening a project reads the settings again, and Windows, always
+  portable, has no standard backup folder); v0930e sets a backup folder on Windows instead of leaving the portable
+  mode; saveas uses Qt's own file dialog on Windows (`AA_DontUseNativeDialogs`: the system's dialog is no widget the
+  test can fill in). `win-ci.sh`'s result line names explore suites with failures (item 32).
+
 ## Windows 0.92.0 (2026-11-20): pulled to Linux 0.92.0 in the one repository, the translator inside, the check for updates
 
 - **What it brings**: the source of Linux 0.92.0, built, tested and released from `Shelin-boop/Quillbinder_Collection` for
