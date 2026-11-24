@@ -1,3 +1,4 @@
+#include "core/DocumentStore.h"
 #include "ui/SearchTools.h"
 #include "core/BinderItem.h"
 #include "core/ItemIcons.h"
@@ -257,6 +258,7 @@ ReplaceResult ProjectReplaceDialog::replaceAll(bool ask)
     s_lastOptions.scopeIds.clear();
     s_lastSelectionOnly = m_selected->isChecked();
     s_haveLast = true;
+    DocumentStore::Hold unloadHold; // 0.93.0: no document goes while this job runs events
     QProgressDialog *progress = nullptr;
     if (ask) {
         progress = new QProgressDialog(tr("Replacing…"), tr("Stop"), 0, 100, this);
@@ -484,6 +486,7 @@ ReplaceResult ConvertQuotesDialog::convert(bool ask)
             != QMessageBox::Yes)
             return r;
     }
+    DocumentStore::Hold unloadHold; // 0.93.0: no document goes while this job runs events
     QProgressDialog *progress = nullptr;
     if (ask) {
         progress = new QProgressDialog(tr("Converting…"), tr("Stop"), 0, 100, this);

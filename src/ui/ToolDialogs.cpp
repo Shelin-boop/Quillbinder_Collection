@@ -781,6 +781,7 @@ std::unique_ptr<Project> runScrivenerImport(QWidget *parent, const QString &give
     if (dlg.exec() != QDialog::Accepted)
         return nullptr;
 
+    DocumentStore::Hold unloadHold; // 0.93.0: no document goes while this job runs events
     QProgressDialog progress(QObject::tr("Importing…"), QString(), 0, 100, parent);
     progress.setWindowModality(Qt::WindowModal);
     progress.setMinimumDuration(200);

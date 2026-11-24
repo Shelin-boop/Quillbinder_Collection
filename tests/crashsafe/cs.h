@@ -69,25 +69,46 @@ bool copyTree(const QString &from, const QString &to);
 QString runTool(const QString &program, const QStringList &args, int *rc = nullptr, int ms = 120000);
 
 // alive: when given, the answer waits only while *alive is true (see BoxText)
+// (from the Android copy, 2026-11-16: on the tablet a window may come late, and a waiter of an earlier step then answered a
+// later step's window with references to variables gone by then (U-04 crashed so on 2026-11-14, run 43648133653).
+// So (second form, run 43856407155): waiters of one kind of window answer in the order they were armed (an open
+// dialog's waiter before the save dialog's waiter armed after it); step() and a new waiter of the same kind end the
+// waiters that have already looked for their window in vain (those of an earlier action), not those armed just before.
+std::shared_ptr<bool> newWaiter(const char *kind);
+bool waiterMayAct(const char *kind, const std::shared_ptr<bool> &alive); // the oldest pending waiter of its kind
+void waiterLooked(const std::shared_ptr<bool> &alive);                   // it looked once and found nothing
+void waiterDone(const char *kind, const std::shared_ptr<bool> &alive);
+void endWaiters();
 template <typename T>
-void withModal(int delayMs, std::function<void(T *)> fn, int tries = 100,   // about 15 s (shakedown 2026-11-09: 6 s was too short)
-               std::shared_ptr<bool> alive = nullptr)
+void withModalTry(int delayMs, std::function<void(T *)> fn, int tries, std::shared_ptr<bool> alive)
 {
     QTimer::singleShot(delayMs, qApp, [fn, tries, alive] {
         if (alive && !*alive)
             return;   // the step that waited for the window is over
-        for (QWidget *tl : QApplication::topLevelWidgets())
-            if (auto *d = qobject_cast<T *>(tl))
-                if (d->isVisible()) {
-                    fn(d);
-                    return;
-                }
+        const char *kind = T::staticMetaObject.className();
+        if (!alive || waiterMayAct(kind, alive))
+            for (QWidget *tl : QApplication::topLevelWidgets())
+                if (auto *d = qobject_cast<T *>(tl))
+                    if (d->isVisible()) {
+                        waiterDone(kind, alive);
+                        fn(d);
+                        return;
+                    }
+        if (alive)
+            waiterLooked(alive);
         if (tries > 0) {
-            withModal<T>(150, fn, tries - 1, alive);
+            withModalTry<T>(150, fn, tries - 1, alive);
             return;
         }
+        waiterDone(kind, alive);
         note(QStringLiteral("(the expected window did not open)"));
     });
+}
+template <typename T>
+void withModal(int delayMs, std::function<void(T *)> fn, int tries = 100,   // about 15 s (shakedown 2026-11-09: 6 s was too short)
+               std::shared_ptr<bool> alive = nullptr)
+{
+    withModalTry<T>(delayMs, fn, tries, alive ? alive : newWaiter(T::staticMetaObject.className()));
 }
 
 // The text of a box answered by answerBoxLater: the answer waits only while this variable lives. (2026-11-12, S-I10:
@@ -101,6 +122,19 @@ public:
     BoxText(const BoxText &) = delete;
     BoxText &operator=(const BoxText &) = delete;
     using QString::operator=;
+    std::shared_ptr<bool> alive;
+};
+
+// A waiter that ends with the scope that armed it (from the Android copy): for a waiter whose answer writes into
+// that scope's variables (a loop over windows: U-04, U-05). On the tablet a window may come after its loop step is
+// over; such a late answer wrote into a dead variable (U-04's SIGSEGV, runs 43856407155 and 43870845331).
+class ScopedWaiter
+{
+public:
+    explicit ScopedWaiter(const char *kind) : alive(newWaiter(kind)) {}
+    ~ScopedWaiter() { *alive = false; }
+    ScopedWaiter(const ScopedWaiter &) = delete;
+    ScopedWaiter &operator=(const ScopedWaiter &) = delete;
     std::shared_ptr<bool> alive;
 };
 

@@ -1,3 +1,4 @@
+#include "core/DocumentStore.h"
 #include "ui/CompileDialog.h"
 #include "ui/HintLabel.h"
 #include "ui/Ask.h"
@@ -82,6 +83,7 @@ public:
     }
 
 private:
+    DocumentStore::Hold unloadHold; // 0.93.0: no document goes while this job runs events
     QProgressDialog m_dlg;
     compile::progress::Scope m_scope;
 };

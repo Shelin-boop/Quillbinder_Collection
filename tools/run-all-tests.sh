@@ -245,6 +245,8 @@ runx v0930c $B/tests/qb_v0930c_tests $B/tests/qb_v0930c_tests "$OUT/shots-v0930c
 runx v0930d $B/tests/qb_v0930d_tests $B/tests/qb_v0930d_tests "$OUT/shots-v0930d"
 runx v0930e $B/tests/qb_v0930e_tests $B/tests/qb_v0930e_tests "$OUT/shots-v0930e"
 runx saveas $B/tests/qb_saveas_tests $B/tests/qb_saveas_tests "$OUT/shots-saveas"
+runx v0930f $B/tests/qb_v0930f_tests $B/tests/qb_v0930f_tests "$OUT/shots-v0930f"
+runx notesplain $B/tests/qb_notesplain_tests $B/tests/qb_notesplain_tests "$OUT/shots-notesplain"
 runx mmoverview $B/tests/qb_mmoverview_tests $B/tests/qb_mmoverview_tests "$OUT/shots-mmoverview"
 runx audit1 $B/tests/qb_audit1_tests $B/tests/qb_audit1_tests "$OUT/shots-audit1"
 runx fuzz $B/tests/qb_fuzz_tests $B/tests/qb_fuzz_tests "$OUT/shots-fuzz"

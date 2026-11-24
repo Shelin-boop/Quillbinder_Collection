@@ -46,6 +46,14 @@ enum class StyleOver { KeepOwn, Paragraphs };
 void applyParagraphStyle(QTextCursor cursor, const QString &style, const Formatting &f,
                          StyleOver over = StyleOver::KeepOwn);
 
+// 0.93.0: notes (a document's notes and the project notes) start as plain text: no font, size, indent, spacing or style of
+// the project's text formatting; the neutral look is the interface's font at the notes' zoom. A notes document that is
+// plain has this property (set when it is new or empty, or when its file carries the mark; written to the file again).
+extern const char *const kPlainNotesProp;
+QFont plainNotesFont(double zoom);
+// the default font, the empty paragraph and (Markdown) the normal paragraphs of a plain notes document
+void applyPlainNotes(QTextDocument *doc, double zoom, bool flattenParagraphs);
+
 // Set the default font, margins etc. of a document.
 void prepareDocument(QTextDocument *doc, const Formatting &f, double zoom);
 

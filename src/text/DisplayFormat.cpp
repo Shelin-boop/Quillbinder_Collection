@@ -1,3 +1,4 @@
+#include <QGuiApplication>
 #include "text/DisplayFormat.h"
 
 #include "text/DirectFormat.h"
@@ -206,6 +207,41 @@ void prepareDocument(QTextDocument *doc, const Formatting &f, double zoom)
     opt.setWrapMode(QTextOption::WrapAtWordBoundaryOrAnywhere);
     doc->setDefaultTextOption(opt);
     doc->setIndentWidth(28);
+}
+
+const char *const kPlainNotesProp = "qbPlainNotes";
+
+QFont plainNotesFont(double zoom)
+{
+    QFont f = QGuiApplication::font();
+    if (f.pointSizeF() > 0)
+        f.setPointSizeF(f.pointSizeF() * zoom);
+    else if (f.pixelSize() > 0)
+        f.setPixelSize(qMax(1, int(f.pixelSize() * zoom)));
+    return f;
+}
+
+void applyPlainNotes(QTextDocument *doc, double zoom, bool flattenParagraphs)
+{
+    doc->setDefaultFont(plainNotesFont(zoom));
+    if (flattenParagraphs) {
+        // Markdown keeps no paragraph metrics: the normal paragraphs get none of the project's
+        QTextCursor c(doc);
+        c.beginEditBlock();
+        for (QTextBlock b = doc->begin(); b.isValid(); b = b.next()) {
+            const QTextBlockFormat bf = b.blockFormat();
+            if (b.textList() || bf.headingLevel() > 0 || !bf.property(props::Style).toString().isEmpty())
+                continue;
+            QTextCursor bc(b);
+            bc.setBlockFormat(QTextBlockFormat());
+        }
+        c.endEditBlock();
+    }
+    if (doc->isEmpty()) {
+        QTextCursor c(doc);
+        c.setBlockFormat(QTextBlockFormat());
+        c.setBlockCharFormat(QTextCharFormat());
+    }
 }
 
 void normalizeDocument(QTextDocument *doc, const Formatting &f)

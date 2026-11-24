@@ -638,7 +638,7 @@ were this program's:
 - Measured on the cloud machine (2 cores) with the v0605 project: autosave 250 to 350 ms before, 30 to 40 ms after; the
   right-click menu about 10 ms (60 ms the first time on a misspelled word: Hunspell's suggestions). Not done: the
   Combined Text view of a large folder (one editor per document, full layout and spell check of every document) and
-  unloading documents that are no longer shown.
+  unloading documents that are no longer shown (done in 0.93.0, see ui.md "documents that are not shown are unloaded").
 
 ## Crash and freeze reports (0.19)
 

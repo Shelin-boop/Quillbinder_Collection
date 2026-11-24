@@ -357,6 +357,10 @@ target_link_libraries(qb_v0930e_tests PRIVATE qbui Qt6::Test)
 # (xvfb-run -a ./qb_saveas_tests /tmp/shots)
 add_executable(qb_saveas_tests saveas_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_saveas_tests PRIVATE qbui Qt6::Test)
+# 0.93.0, fourth suite: to-do item 39 (documents that are not shown are unloaded: a bounded number stays laid out)
+# (xvfb-run -a ./qb_v0930f_tests /tmp/shots; QB_MEASURE=1 prints the memory of a large project)
+add_executable(qb_v0930f_tests v0930f_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0930f_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0900_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # The readers against damaged input (0.80.0, the external audit of 2026-11-09, ST-5): fixed-seed damage of small
 # valid inputs of RTF, Markdown, XML, ZIP, DOCX, ODT, Word 97 and .scrivx, each read in this process
@@ -468,3 +472,7 @@ endif()
 # and "Fixed:" text, the large window, not in exports) (xvfb-run -a ./qb_mmoverview_tests /tmp/shots)
 add_executable(qb_mmoverview_tests mmoverview_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_mmoverview_tests PRIVATE qbui Qt6::Test)
+
+# 0.93.0 (item 24): the notes start as plain text, pasting into them is plain (xvfb-run -a ./qb_notesplain_tests /tmp/shots)
+add_executable(qb_notesplain_tests notesplain_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_notesplain_tests PRIVATE qbui Qt6::Test)

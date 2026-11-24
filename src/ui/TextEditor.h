@@ -58,6 +58,8 @@ public:
     Project *project() const { return m_project; }
     BinderItem *item() const { return m_item; }
     bool isNotes() const { return m_isNotes; }
+    // notes that start as plain text (0.93.0): no look of the project's text formatting
+    bool plainNotes() const { return document() && document()->property("qbPlainNotes").toBool(); }
 
     // auto height: the editor grows with its text (used inside scroll areas)
     void setAutoHeight(bool on);

@@ -388,6 +388,12 @@ void caseX02()
                      .arg(sent.text.size() - ins.size())
                      .arg((killedAt - lostFrom) / 1e9, 0, 'f', 1));
         }
+        // (2026-11-24, looked at for the open finding of one letter lost in one of three runs: a letter typed after the last
+        // save is expected to be lost by a kill: `Project::scheduleSave` saves at the latest 30 s after the first unsaved
+        // change, the gap rule after about 5 s, and there is no other recovery file for typing; the check therefore asks
+        // only for what was typed more than 31 s before the kill, and for a prefix. A letter missing in the middle (not
+        // a prefix) or of the older part would be a fault; the finding's run log is not in the repository, so which of
+        // the two it was is not known: a new run that fails here keeps its focus record (-focus.txt) for that.)
         if (!rd.fullSave)
             check(prefix && ins.size() >= sentBeforeLimit,
                   QStringLiteral("round %1: the text typed up to the last autosave (30 s at most while typing on) is there (at least %2 of %3 characters)").arg(n).arg(sentBeforeLimit).arg(sent.text.size()),

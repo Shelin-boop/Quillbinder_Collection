@@ -216,6 +216,7 @@ bool MainWindow::commitStyles(const StyleSheet &sheet, const QHash<QString, QStr
 {
     if (!m_project)
         return false;
+    DocumentStore::Hold unloadHold; // 0.93.0: no document goes while this job runs events
     QProgressDialog progress(tr("Updating the text of the project…"), QString(), 0, 0, styleUiParent());
     progress.setObjectName(QStringLiteral("styleProgress"));
     progress.setWindowTitle(tr("Styles"));

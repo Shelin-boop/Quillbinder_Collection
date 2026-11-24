@@ -144,6 +144,11 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   the Quick Start (as shown) and the README; `docs/design-decisions.md` (ten entries, entry 2, links, comments in the
   code); Help > Report a Problem; the README's picture. `QB_README_SHOT=<file.png>` makes that picture of the welcome
   project instead of running the checks.)
+- `qb_v0930f_tests` (0.93.0 beta, fourth suite, item 39: a project of 150 documents shown one after another holds at most
+  16 laid out (`DocumentStore::loadedCount`); a document shown again has its text, bold text and cursor place; unsaved text
+  and unsaved notes are not unloaded and the undo history of the typing works; search, plain texts and word counts cover
+  every document; a `DocumentStore::Hold` keeps all, also while the timer runs; without the window's probe nothing is
+  unloaded. `QB_MEASURE=1` (`QB_MEASURE_DOCS`) prints the memory of 500 documents instead of checking; one screenshot).
 - `qb_v0930c_tests` (0.93.0 beta, third suite, item 38: the restore list with backups that wait in the work folder (a
   screenshot of the list), the command Move Old Backups Into the Backup Folder (its question and report as screenshots,
   never overwriting, the folder removed when empty, the action off without a project and when nothing is left), the

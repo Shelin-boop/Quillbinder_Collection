@@ -334,6 +334,7 @@ void caseU04()
         QAction *act = action(w, a);
         const int posBefore = e ? e->textCursor().position() : -1;
         QStringList order;
+        ScopedWaiter waiter(QDialog::staticMetaObject.className());
         withModal<QDialog>(400, [&order](QDialog *d) {
             for (int i = 0; i < 12; ++i) {
                 QTest::keyClick(QApplication::focusWidget() ? QApplication::focusWidget() : d, Qt::Key_Tab);
@@ -346,7 +347,7 @@ void caseU04()
                 order << QStringLiteral("(Esc did not close it)");
                 d->reject();
             }
-        });
+        }, 100, waiter.alive);
         if (act && !act->shortcut().isEmpty() && e)
             QTest::keySequence(e, act->shortcut());
         else if (act)
@@ -380,6 +381,7 @@ void caseU05()
         if (e.name == QLatin1String("newProject") || e.name == QLatin1String("openProject") || e.name == QLatin1String("installPackage") || e.name.startsWith(QLatin1String("import")))
             continue;
         QString row;
+        ScopedWaiter waiter(QDialog::staticMetaObject.className());
         withModal<QDialog>(500, [&row, screen, e](QDialog *d) {
             const QRect g = d->frameGeometry();
             bool hasDefault = false, hasCancel = false;
@@ -392,7 +394,7 @@ void caseU05()
                       .arg(hasDefault ? QStringLiteral("yes") : QStringLiteral("no"), hasCancel ? QStringLiteral("yes") : QStringLiteral("no"));
             shot(d, QStringLiteral("dialog-") + e.name);
             d->reject();
-        }, 10);
+        }, 10, waiter.alive);
         if (QAction *a = action(w, e.name))
             a->trigger();
         settle(800);
@@ -617,6 +619,7 @@ void caseU11()
         c.prepare();
         settle(150);
         QString asked;
+        ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
         withModal<QMessageBox>(300, [&asked](QMessageBox *b) {
             asked = b->text().left(80);
             if (QAbstractButton *y = b->button(QMessageBox::Yes))
@@ -625,7 +628,7 @@ void caseU11()
                 o->click();
             else
                 b->accept();
-        }, 6);
+        }, 6, waiter.alive);
         withModal<QDialog>(300, [](QDialog *d) {
             if (!qobject_cast<QMessageBox *>(d))
                 d->accept();
@@ -727,6 +730,7 @@ void caseU14()
         return;
     QStringList rows = {QStringLiteral("scope\tpage\tscope visible")};
     for (int scope = 0; scope < 2; ++scope) {
+        ScopedWaiter waiter(OptionsDialog::staticMetaObject.className());
         withModal<OptionsDialog>(400, [&rows, scope](OptionsDialog *d) {
             auto *sc = d->findChild<QComboBox *>(QStringLiteral("optScope"));
             if (sc && sc->count() > scope)
@@ -742,7 +746,7 @@ void caseU14()
                     }
                 }
             d->reject();
-        });
+        }, 100, waiter.alive);
         chooseByMenu(w, QStringLiteral("options"));
         settle(2000);
     }
@@ -854,6 +858,7 @@ void caseU18()
     w->resize(1366, 768);
     w->show();
     settle(300);
+    ScopedWaiter waiter(QMessageBox::staticMetaObject.className());
     withModal<QMessageBox>(500, [&rows](QMessageBox *b) {
         QStringList buttons;
         for (QAbstractButton *x : b->buttons())
@@ -861,7 +866,7 @@ void caseU18()
         rows << QStringLiteral("%1\t%2\t%3\t%4x%5").arg(b->objectName(), b->text().simplified(), buttons.join(QLatin1String(", "))).arg(b->width()).arg(b->height());
         shot(b, QStringLiteral("lock-question"));
         b->reject();
-    });
+    }, 100, waiter.alive);
     w->openProject(path);
     settle(1200);
     writeTable(QStringLiteral("u18-messages.tsv"), rows);

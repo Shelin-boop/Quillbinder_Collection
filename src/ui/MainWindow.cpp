@@ -59,6 +59,7 @@
 #include "ui/CrashDialogs.h"
 #include "ui/Commands.h"
 #include "ui/ToolHost.h"
+#include "ui/DocMirror.h"
 #include "ui/Inspector.h"
 #include "ui/MindMapController.h"
 #include "ui/MindMapDoc.h"
@@ -123,6 +124,7 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QPlainTextEdit>
+#include <QTextEdit>
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include "ui/FooterStatus.h"
@@ -3038,6 +3040,23 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
         return false;
     m_project = std::move(p);
     Project *proj = m_project.get();
+    // 0.93.0 (to-do item 39): documents that no editor shows are unloaded a moment after others were read (the
+    // store decides which; this tells it which are shown, in every window and place, and that a dialog is open)
+    proj->docs()->setShownProbe([](QSet<const QTextDocument *> *shown) {
+        if (QApplication::activeModalWidget())
+            return false;
+        for (QWidget *w : QApplication::allWidgets()) {
+            if (auto *te = qobject_cast<QTextEdit *>(w))
+                shown->insert(te->document());
+            else if (auto *pe = qobject_cast<QPlainTextEdit *>(w))
+                shown->insert(pe->document());
+        }
+        for (QWidget *top : QApplication::topLevelWidgets())
+            for (DocMirror *m : top->findChildren<DocMirror *>())
+                if (m->source())
+                    shown->insert(m->source());
+        return true;
+    });
     palette::setProject(proj); // the label colors in every color choice (0.21)
     // every project keeps its own look (0.40.2): a project opened for the first time by this
     // version keeps the look it had, a new one gets the look for new projects

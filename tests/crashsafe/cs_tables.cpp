@@ -456,6 +456,7 @@ void caseST01()
         c.movePosition(QTextCursor::End);
         e->setTextCursor(c);
         bool answered = false;
+        ScopedWaiter waiter(TableDialog::staticMetaObject.className());
         withModal<TableDialog>(300, [&, k](TableDialog *d) {
             if (auto *r = d->findChild<QSpinBox *>(QStringLiteral("tableRows")))
                 r->setValue(3);
@@ -468,7 +469,7 @@ void caseST01()
             shot(d, QStringLiteral("insert-table-%1").arg(k));
             answered = true;
             d->accept();
-        });
+        }, 100, waiter.alive);
         step(QStringLiteral("Insert > Table, design %1").arg(k));
         e->activateWindow();
         e->setFocus();
@@ -559,6 +560,7 @@ void caseST01()
         // Table Properties... with every control at its minimum, then at its maximum
         for (const bool atMax : {false, true}) {
             QStringList changed;
+            ScopedWaiter waiter(TableDialog::staticMetaObject.className());
             withModal<TableDialog>(300, [&](TableDialog *d) {
                 for (QSpinBox *s : d->findChildren<QSpinBox *>()) {
                     s->setValue(atMax ? s->maximum() : s->minimum());
@@ -580,7 +582,7 @@ void caseST01()
                     le->setText(atMax ? QStringLiteral("90 5 5 0") : QStringLiteral("1"));
                 shot(d, atMax ? QStringLiteral("table-properties-max") : QStringLiteral("table-properties-min"));
                 d->accept();
-            });
+            }, 100, waiter.alive);
             e->setTextCursor(cellCursor(small, 0, 0));
             command(w, e, QStringLiteral("tableProperties"), atMax ? QStringLiteral("Table Properties... at the maximum")
                                                                    : QStringLiteral("Table Properties... at the minimum"));
@@ -946,13 +948,14 @@ void caseST03()
     if (lastImage >= 0) {
         bool opened = false;
         QString capSeen;
+        ScopedWaiter waiter(PictureDialog::staticMetaObject.className());
         withModal<PictureDialog>(300, [&](PictureDialog *pd) {
             opened = true;
             if (auto *cap = pd->findChild<QLineEdit *>(QStringLiteral("pictureCaption")))
                 capSeen = cap->text();
             shot(pd, QStringLiteral("picture-dialog"));
             pd->accept();
-        });
+        }, 100, waiter.alive);
         QStringList entries;
         const bool chosen = rightClickChoose(e, lastImage, QStringLiteral("Picture..."), &entries);
         settle(300);
@@ -1257,11 +1260,12 @@ void caseST04()
         QAction *toScriv = action(w, QStringLiteral("saveAs"));
         const QString target = ctx().work + QStringLiteral("/switched.scriv");
         bool asked = false;
+        ScopedWaiter waiter(QFileDialog::staticMetaObject.className());
         withModal<QFileDialog>(400, [&](QFileDialog *fd) {
             asked = true;
             fd->selectFile(target);
             static_cast<QDialog *>(fd)->accept();
-        });
+        }, 100, waiter.alive);
         if (toScriv)
             toScriv->trigger();
         settle(1500);

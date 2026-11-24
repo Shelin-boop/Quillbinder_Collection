@@ -2,6 +2,9 @@
 // the outside sender, the program in the test process, fixtures, the model and the verify step).
 #include "cs.h"
 
+#include <deque>
+#include <map>
+
 #include "compile/PluginManager.h"
 #include "core/CrashGuard.h"
 #include "core/ProjectTemplates.h"
@@ -122,9 +125,89 @@ void fact(const QString &key, const QJsonValue &v)
 void step(const QString &s)
 {
     heartbeat();
+    endWaiters(); // (the waiters that looked in vain belong to an earlier action: they end here)
     crash::note(s);
     std::printf("  -- %s\n", qPrintable(s));
     std::fflush(stdout);
+}
+
+namespace {
+struct Waiter {
+    std::shared_ptr<bool> alive;
+    bool looked = false;
+};
+std::map<QByteArray, std::deque<Waiter>> &waiters()
+{
+    static std::map<QByteArray, std::deque<Waiter>> w;
+    return w;
+}
+} // namespace
+
+std::shared_ptr<bool> newWaiter(const char *kind)
+{
+    // a waiter of this kind that has already looked in vain belongs to an earlier action (a loop over menu entries,
+    // U-05): it ends here, so it cannot answer this action's window with its own, by then dead, variables
+    std::deque<Waiter> &q = waiters()[QByteArray(kind)];
+    std::deque<Waiter> keep;
+    for (Waiter &w : q) {
+        if (w.looked)
+            *w.alive = false;
+        else if (*w.alive)
+            keep.push_back(w);
+    }
+    q.swap(keep);
+    auto alive = std::make_shared<bool>(true);
+    q.push_back(Waiter{alive, false});
+    return alive;
+}
+
+bool waiterMayAct(const char *kind, const std::shared_ptr<bool> &alive)
+{
+    auto it = waiters().find(QByteArray(kind));
+    if (it == waiters().end())
+        return true;
+    std::deque<Waiter> &q = it->second;
+    while (!q.empty() && !*q.front().alive)
+        q.pop_front();
+    bool known = false;
+    for (const Waiter &w : q)
+        known = known || w.alive == alive;
+    return !known || q.front().alive == alive; // (a waiter with a caller's own token is not in the queue)
+}
+
+void waiterLooked(const std::shared_ptr<bool> &alive)
+{
+    for (auto &k : waiters())
+        for (Waiter &w : k.second)
+            if (w.alive == alive)
+                w.looked = true;
+}
+
+void waiterDone(const char *kind, const std::shared_ptr<bool> &alive)
+{
+    auto it = waiters().find(QByteArray(kind));
+    if (it == waiters().end() || !alive)
+        return;
+    std::deque<Waiter> &q = it->second;
+    for (auto i = q.begin(); i != q.end(); ++i)
+        if (i->alive == alive) {
+            q.erase(i);
+            break;
+        }
+}
+
+void endWaiters()
+{
+    for (auto &k : waiters()) {
+        std::deque<Waiter> keep;
+        for (Waiter &w : k.second) {
+            if (w.looked)
+                *w.alive = false;
+            else if (*w.alive)
+                keep.push_back(w);
+        }
+        k.second.swap(keep);
+    }
 }
 
 void settle(int ms)
