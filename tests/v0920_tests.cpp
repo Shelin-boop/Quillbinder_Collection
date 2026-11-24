@@ -784,8 +784,10 @@ int main(int argc, char **argv)
                       && binder->selectedItems() == QList<BinderItem *>{synced},
                   QStringLiteral("a click on the pin of the row under the mouse fixes that item; the selection stays"),
                   QStringLiteral("hovered %1, fixed %2").arg(hovered).arg(w.fixedMindMapId()));
+            // 0.93.0: the line "Fixed: ..." stands in the bar and is shortened when the bar is narrow; the item's whole
+            // name is in its tooltip, so that is what names the item here (the shown text depends on the window's width).
             check(panel->itemId() == other->id && panel->isFixed() && panel->doc() != nullptr && !mindmaps::hasMap(p, other->id)
-                      && fixedLine && fixedLine->isVisible() && fixedLine->text().contains(QLatin1String("Other")) && fixButton
+                      && fixedLine && fixedLine->isVisible() && fixedLine->toolTip().contains(QLatin1String("Other")) && fixButton
                       && fixButton->isChecked() && insp->item() == synced,
                   QStringLiteral("the Mind Map tab shows the fixed item's board (an empty one to start on), names the item, and "
                                  "its pin button is pressed; the inspector's other tabs stay with the selected document"),
