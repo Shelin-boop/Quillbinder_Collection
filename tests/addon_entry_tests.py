@@ -149,6 +149,29 @@ with tempfile.TemporaryDirectory() as tmp:
     check("fetch-testdata: after three failed tries it stops with a message", r.returncode != 0 and "three tries" in r.stdout + r.stderr,
           r.stdout + r.stderr)
 
+# ---------------------------------------------------------------- the release text names the program the package needs
+with tempfile.TemporaryDirectory() as tmp:
+    entry = {"format": 1, "id": "sample-addon", "name": "Sample Add-on", "version": "1.0", "repository": "someone/sample",
+             "commit": "0" * 40, "author": "Someone", "license": "MIT", "reviewed": "2026-11-24", "summary": "For the checks.",
+             "build": {"steps": ["true"]}, "windows": {"commit": "0" * 40, "build": {"steps": ["true"]}}}
+    path = os.path.join(tmp, "sample-addon.json")
+    with open(path, "w") as f:
+        json.dump(entry, f)
+    for min_app, flag, want, warn in (("0.93.0", None, "Linux 0.93.0 or later", False), ("0.80.0", None, "Linux 0.91.3 or later", True),
+                                      ("0.93.0", "--windows", "Windows 0.93.0 or later", False),
+                                      ("0.91.1", "--windows", "Windows 0.91.3 or later", True)):
+        files = os.path.join(tmp, "files-%s%s" % (min_app, flag or ""))
+        os.makedirs(files)
+        pkg = os.path.join(files, "sample-addon.qbpkg")
+        with zipfile.ZipFile(pkg, "w") as z:
+            z.writestr("manifest.json", json.dumps({"id": "sample-addon", "version": "1.0", "minApp": min_app}))
+        out = os.path.join(tmp, "notes.md")
+        rc, msg = tool("notes", path, pkg, files, out, *([flag] if flag else []))
+        notes = open(out).read() if os.path.exists(out) else ""
+        check("the release text of a package with minApp %s%s says \"%s\"%s" % (min_app, " (Windows)" if flag else "", want,
+                                                                              ", with the unsigned warning" if warn else ""),
+              rc == 0 and want in notes and ("does not know add-on keys" in notes) == warn, msg + notes[:600])
+
 # ---------------------------------------------------------------- item 23: the real entry describes 1.3
 real_path = os.path.join(ROOT, "official-addons", "translation-proofreading.json")
 real = json.load(open(real_path, encoding="utf-8"))

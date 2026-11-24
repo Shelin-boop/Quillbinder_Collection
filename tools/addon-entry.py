@@ -478,6 +478,11 @@ def cmd_notes(path, package, files_dir, out):
     files = sorted(set(n for n in os.listdir(files_dir) if os.path.isfile(os.path.join(files_dir, n))) | {"SHA256SUMS.txt"})
     pkg = os.path.basename(package)
     src_url = "https://github.com/%s/tree/%s" % (e["repository"], e["commit"])
+    # (0.93.1) the program the package needs: the first that knows add-on keys, or the package's own minApp when that is
+    # later (an add-on built for the runtime of 0.93.0 needs 0.93.0; the text said "0.91.3 or later")
+    min_app = m.get("minApp", "0.80.0")
+    need = min_app if version_tuple(min_app) > version_tuple(REQUIRED_PROGRAM) else REQUIRED_PROGRAM
+    unsigned_warning = version_tuple(min_app) < version_tuple(REQUIRED_PROGRAM)
     windows = e.get("system") == "windows"
     android = e.get("system") == "android"
     text = ["# %s %s%s, an official add-on for Quillbinder" % (e["name"], e["version"],
@@ -494,21 +499,21 @@ def cmd_notes(path, package, files_dir, out):
                  "choose it. The install window says that the add-on is signed with the add-on key \"Quillbinder official "
                  "add-ons\", which the Quillbinder project vouches for; Quillbinder offers to start again, which loads it. The add-on is kept "
                  "in the app's own folder; its models are downloaded from the add-on's window (**Models...**). (For Linux and "
-                 "Windows, the add-on has releases of its own.)" % (REQUIRED_PROGRAM, pkg), ""]
+                 "Windows, the add-on has releases of its own.)" % (need, pkg), ""]
     elif windows:
         text += ["In Quillbinder for Windows %s or later: **File > Install Update or Add-on**, choose `%s`. The install "
                  "window says that the add-on is signed with the add-on key \"Quillbinder official add-ons\", which the "
-                 "Quillbinder project vouches for. Quillbinder for Windows %s does not know add-on keys yet and warns that "
-                 "the add-on is not signed: update Quillbinder first. (For Linux, the add-on has a release of its own.)"
-                 % (REQUIRED_PROGRAM, pkg, m.get("minApp", "0.91.1")), ""]
+                 "Quillbinder project vouches for.%s (For Linux, the add-on has a release of its own.)"
+                 % (need, pkg, (" Quillbinder for Windows %s does not know add-on keys yet and warns that the add-on is not "
+                                "signed: update Quillbinder first." % min_app) if unsigned_warning else ""), ""]
     else:
         text += [
             "In Quillbinder for Linux %s or later: **File > Install Update or Add-on**, choose `%s`. The install window "
             "says that the add-on is signed with the add-on key \"Quillbinder official add-ons\", which the Quillbinder "
-            "project vouches for." % (REQUIRED_PROGRAM, pkg)]
+            "project vouches for." % (need, pkg)]
         # (0.93.0) the warning only matters when the add-on installs on a program that does not know add-on keys; an
         # add-on built for a newer runtime has a minApp above that program
-        if version_tuple(m.get("minApp", "0.80.0")) < version_tuple(REQUIRED_PROGRAM):
+        if unsigned_warning:
             text[-1] += (" Quillbinder %s to %s does not know add-on keys yet and warns that the add-on is not "
                          "signed: update Quillbinder first." % (m.get("minApp", "0.80.0"), "0.91.2"))
         text += [""]
