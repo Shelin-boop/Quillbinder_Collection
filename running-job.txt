@@ -1,8 +1,8 @@
-state: running
-system: Linux (then Windows, then Android)
-job: the run on Qt 6.12.1 (0.93.0): Linux released (v0.93.0-beta, 2026-11-24); writing the project's documents
-branch: linux/0.93.0 (merged, pull request #13)
-chat: started 2026-11-23T16:20+01:00
-started: 2026-11-23T16:21+01:00
+state: free
+system:
+job:
+branch:
+chat:
+started:
 paused:
-note: the lock moved here from the former private repository on 2026-11-24 (to-do item 29). Windows and Android of 0.93.0 follow in jobs of their own.
+note: last job: the run on Qt 6.12.1 (0.93.0), Linux part: Linux 0.93.0 released (v0.93.0-beta, 2026-11-24), page and update file published; Windows and Android of 0.93.0 follow in jobs of their own (to-do list, section A).
