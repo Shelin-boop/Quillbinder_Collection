@@ -1,8 +1,8 @@
-state: free
-system:
-job:
-branch:
-chat:
-started:
+state: running
+system: Android
+job: the run on Qt 6.12.1 (0.93.0), Android part: Android 0.93.0 (to-do list, section A)
+branch: android/0.93.0
+chat: 2026-11-24 15:14
+started: 2026-11-24 15:20
 paused:
-note: last job: the run on Qt 6.12.1 (0.93.0), Windows part: Windows 0.93.0 released (v0.93.0-windows-experimental, 2026-11-24), page and update file published; Android of 0.93.0 follows in a job of its own (to-do list, section A).
+note: Linux 0.93.0 and Windows 0.93.0 are released; this job pulls Android to main and releases Android 0.93.0.
