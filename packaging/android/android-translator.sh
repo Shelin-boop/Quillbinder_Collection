@@ -76,5 +76,15 @@ while IFS= read -r so; do
   done
 done < <(find "$LIBS" -name '*.so' | sort)
 rm -rf "$LIBS"
+# Android 0.93.1: the package names the runtime of the APK it goes with (the package of Android 0.93.0 still named
+# Qt 6.12.0's "android-qt6.12-r1", and Quillbinder 0.93.0 refused it)
+want_rt=$(sed -n 's/^  set(APP_RUNTIME "\(android-[^"]*\)")/\1/p' "$ROOT/CMakeLists.txt" | sed -n 1p)
+have_rt=$(unzip -p "$OUT/translation-proofreading-android-$short.qbpkg" manifest.json | python3 -I -c 'import json, sys; print(json.load(sys.stdin).get("runtime", ""))')
+if [ -z "$want_rt" ] || [ "$have_rt" != "$want_rt" ]; then
+  echo "  FAIL: the package names the runtime \"$have_rt\", the APK has \"$want_rt\""
+  bad=1
+else
+  echo "  the package names the APK's runtime: $have_rt"
+fi
 [ $bad -eq 0 ] || { echo "android-translator.sh: the package's libraries do not fit Android" >&2; exit 1; }
 echo "package: $OUT/translation-proofreading-android-$short.qbpkg $(stat -c %s "$OUT/translation-proofreading-android-$short.qbpkg") bytes"

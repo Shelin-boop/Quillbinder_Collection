@@ -95,7 +95,7 @@ loads in a newer one), but releases come only from the workflow "Build" (Qt 6.12
 ## Android (2026-11-16, branch `addon/android`, not merged)
 
 - From Quillbinder's Android build (private trial builds, 0.91.3): add-ons with `"platform": "android-arm64"` (tablets)
-  or `"android-x86_64"` (emulated tablets), runtime `android-qt6.12-r1`, minApp 0.91.3; Quillbinder for Android keeps
+  or `"android-x86_64"` (emulated tablets), runtime `android-qt6.12-r2`, minApp 0.93.0 (Quillbinder for Android 0.93.0 and later, Qt 6.12.1; `-r1` and 0.91.3 before); Quillbinder for Android keeps
   them in the app's private folder (Android runs no library from the shared storage) and refuses another system's or
   processor's package with its reason. `packaging/make-addon-android.sh <build> <out> <abi> <ndk>` writes the package.
 - Every Android change sits in `if(ANDROID)` / `#ifdef Q_OS_ANDROID`; the Linux and Windows builds stay as they were.

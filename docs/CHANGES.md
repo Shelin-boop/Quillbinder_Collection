@@ -151,6 +151,15 @@ and need 0.93.0 (the check for updates and **File > Install Update or Add-on** t
   they cannot say "alpha" again; `docs/design-decisions.md` gives the reasons behind choices that can look like faults
   (README, SECURITY.md and the manual's introduction link to it).
 
+## Android 0.93.1 experimental (2026-11-24)
+
+A fix of Android 0.93.0 alone; everything of Android 0.93.0 below is in it.
+
+- **Translation and Proofreading works again on the tablet.** The package of it inside the APK of 0.93.0 (and the one
+  published beside it) still named the libraries of Android 0.92.0 (Qt 6.12.0), so Quillbinder 0.93.0 refused to
+  install it, at the first start and from File > Install Update or Add-on. Its package now names the app's own, and
+  the build checks that the two are the same.
+
 ## Android 0.93.0 experimental (2026-11-24)
 
 Quillbinder for Android tablets at the level of Linux 0.93.0. Everything in 0.93.0 above is in it: the panes placed by

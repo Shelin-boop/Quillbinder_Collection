@@ -98,17 +98,17 @@ processor). A later version for Linux can be out before its Windows files are.
 
 ### Android
 
-**Quillbinder 0.93.0 for Android tablets, experimental:** the same functions as Linux 0.93.0, made for a tablet with
+**Quillbinder 0.93.1 for Android tablets, experimental:** the same functions as Linux 0.93.0, made for a tablet with
 an external keyboard and mouse and for fingers (Android 9 or later, 64-bit ARM). All Android files:
-[the release 0.93.0 for Android](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.93.0-android-experimental).
+[the release 0.93.1 for Android](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.93.1-android-experimental).
 
-- **[Quillbinder-0.93.0-experimental-android-arm64.apk](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.0-android-experimental/Quillbinder-0.93.0-experimental-android-arm64.apk)**:
+- **[Quillbinder-0.93.1-experimental-android-arm64.apk](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-android-experimental/Quillbinder-0.93.1-experimental-android-arm64.apk)**:
   the app, with the spelling dictionaries, the writing tools, the importers and Translation and Proofreading. Open it
   on the tablet; Android asks whether the browser or the Files app may install apps. At the first start Quillbinder
   asks for "All files access": with it, projects, backups and exports are kept in *Documents/Quillbinder*, where other
   apps and your computer can reach them. A new version comes as a new APK, which installs over the old one and keeps
   your settings; Help > Check for Updates Now tells you when there is one.
-- [translation-proofreading-android-arm64.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.0-android-experimental/translation-proofreading-android-arm64.qbpkg):
+- [translation-proofreading-android-arm64.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-android-experimental/translation-proofreading-android-arm64.qbpkg):
   Translation and Proofreading on its own (the app has it already), for **File > Install Update or Add-on**.
 
 The APK is signed with the project's Android key (its certificate's SHA-256 is in `packaging/android/release-key.txt`);

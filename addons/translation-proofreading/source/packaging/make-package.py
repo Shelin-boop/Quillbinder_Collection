@@ -21,10 +21,12 @@ import zipfile
 # in the CMakeLists.txt of the public source)
 RUNTIME = "u2404-qt6.12-r1"
 RUNTIME_SINCE = "0.80.0"
-# Quillbinder for Android (2026-11-16, not published yet): The Qt Company's Qt 6.12.0 for Android in the APK; add-ons
-# since 0.91.3
-ANDROID_RUNTIME = "android-qt6.12-r1"
-ANDROID_RUNTIME_SINCE = "0.91.3"
+# Quillbinder for Android: The Qt Company's Qt for Android in the APK; add-ons since 0.91.3. Qt 6.12.1 since Android
+# 0.93.0 ("android-qt6.12-r2"; "-r1" was Qt 6.12.0, Android 0.91.3 to 0.92.x). It must be the runtime of the APK the
+# package goes with: Quillbinder refuses an add-on with libraries of another runtime (Quillbinder's
+# packaging/android/android-translator.sh checks it against APP_RUNTIME)
+ANDROID_RUNTIME = "android-qt6.12-r2"
+ANDROID_RUNTIME_SINCE = "0.93.0"
 
 
 def version_key(v):
