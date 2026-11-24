@@ -1,8 +1,8 @@
-state: free
-system:
-job:
-branch:
-chat:
-started:
+state: running
+system: Linux (then Windows, then Android)
+job: run 0.93.1 (all of section A), Linux part
+branch: linux/0.93.1
+chat: 2026-11-24 19:32 Berlin
+started: 2026-11-24 19:35 Berlin
 paused:
-note: last job: the run on Qt 6.12.1, Android part: Android 0.93.0 and 0.93.1 released (v0.93.1-android-experimental, 2026-11-24), page and update file published; the Android system test could not start (to-do list, item 51).
+note: Linux 0.93.1, Windows 0.93.1, Android 0.93.2 (fixes)
