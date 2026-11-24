@@ -5155,7 +5155,8 @@ bool MainWindow::manualSave()
         int n = 0;
         for (const QString &id : editedSinceManualSave()) {
             BinderItem *it = m_project->item(id);
-            if (it && it->hasText() && !m_project->isInTrash(it) && snapshots::take(m_project.get(), id, tr("Saved")))
+            if (it && it->hasText() && !m_project->isInTrash(it) && !snapshots::sameAsNewest(m_project.get(), id)
+                && snapshots::take(m_project.get(), id, tr("Saved")))
                 ++n;
         }
         if (n) {

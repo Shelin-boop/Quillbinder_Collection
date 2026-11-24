@@ -73,8 +73,26 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - **Who says what is shown**: `DocumentStore::setShownProbe`, set by `MainWindow::adoptProject`: every `QTextEdit` and
   `QPlainTextEdit` of the program (the editors of any pane, Combined Text, quick references, the inspector's notes and
   snapshots), the sources of every `DocMirror` (the inspector's bookmark preview); false while a modal window is open.
-  Without a probe (Android, tests without a window) nothing is unloaded. The timer (1.5 s, from a document read while
-  more than 8 are held) is in the store.
+  Without a probe (tests without a window, a project the window does not own) nothing is unloaded. **Android does
+  unload**: `src/main.cpp` builds `qb::MainWindow` there too and `adoptProject` sets the probe without an `#ifdef` (this note
+  said the opposite until the review). The Android run has to check: a project of some hundred documents browsed one
+  after another holds a bounded number (`loadedCount`), text typed on the tablet and not yet saved is kept, a document
+  shown again is as it was, and the on-screen keyboard's composing text is not lost when the document is shown again.
+  The timer (1.5 s, from a document read while more than 8 are held) is in the store; it comes again after 3 s when a
+  window is open, a job holds documents, or a nested event loop runs (`loopLevel() > 1`: a menu, a drag, a native
+  dialog the probe cannot see), and once after each save (`Project::saved`, `armUnloading`), which clears the marks of
+  documents that were only shown.
+- **Review of 0.93.0 (the analyst's six points)**: (1) the timer comes again after a refusal (above); (2) a document found
+  really changed (`sameAsRead`) is not compared again until it changes (`Entry::changes`, `comparedAt`), the compares of one
+  run take about 15 ms (`QElapsedTimer`), and the timer comes again only when some were left (`comparesDone()` counts them
+  for the tests); (3) `textEdited` is emitted only when `doc->isModified()` (the spell check's first pass on a document read
+  anew fires `contentsChanged` without a change), and `snapshots::sameAsNewest` keeps the snapshot "Saved" from copying the
+  newest snapshot; (4) Android (above); (5) on unloading, `{read, rtf, stamp}` are kept in `m_kept` (documents whose file
+  is larger than `kKeptMax`, 512 kB, are not unloaded at all); when the file cannot be opened or is cut short at the next
+  `readFile` and its stamp is still the kept one, the kept bytes are the text, else the file is read as before (0.64,
+  0.92: unreadable, shown empty and read-only). The test switch `QB_TEST_READ_FAILS=<part of a path>` makes such a file
+  unopenable (a root user ignores permissions); (6) a nested event loop refuses the run, and the entry is removed by its
+  key after `aboutToDeleteDocument`.
 - **`DocumentStore::Hold`**: a job that keeps documents in hand and runs the event loop (progress windows with
   `processEvents`: Compile, Replace in Project, Convert Quotes, the style and script updates, the import) creates one;
   nothing is unloaded while one lives. A new such job needs one.

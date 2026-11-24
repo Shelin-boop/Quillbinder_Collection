@@ -9,14 +9,18 @@
 #include "core/BinderModel.h"
 #include "core/DocumentStore.h"
 #include "core/Search.h"
+#include "core/Snapshots.h"
 #include "core/Project.h"
 #include "ui/AppSettings.h"
 #include "ui/BinderPanel.h"
 #include "ui/EditorPane.h"
+#include "ui/Inspector.h"
+#include "ui/BookmarkList.h"
 #include "ui/MainWindow.h"
 #include "ui/TextEditor.h"
 
 #include <QApplication>
+#include <QDialog>
 #include <QDir>
 #include <QFile>
 #include <QStyleFactory>
@@ -184,7 +188,7 @@ static void run(const QString &W)
     }
     check(maxLoaded <= 16, QStringLiteral("after 135 documents were shown one after another, at most 16 are held laid out (%1)").arg(maxLoaded));
     check(p->docs()->loadedText(items[20]->id) == nullptr, QStringLiteral("a document shown long ago is not held"));
-    check(p->docs()->loadedText(items[kDocs - 3]->id) != nullptr || p->docs()->loadedCount() >= 1, QStringLiteral("(a document shown last is held)"));
+    check(p->docs()->loadedText(items[144]->id) != nullptr, QStringLiteral("the document shown last is held"));
 
     // unsaved text and notes survive, with their undo history
     QTextDocument *d7 = p->docs()->loadedText(id7);
@@ -195,7 +199,7 @@ static void run(const QString &W)
         n9 = p->docs()->notes(id9);
         check(n9 && n9->toPlainText().contains(QLatin1String("NOTESLATE")), QStringLiteral("notes typed and not saved are not unloaded"));
     }
-    check(dirtyAtStart || true, QStringLiteral("(typing made the project dirty)"));
+    check(dirtyAtStart, QStringLiteral("(typing made the project dirty)"));
 
     // a document shown again is as it was
     show(binder, items[3], 400);
@@ -288,6 +292,252 @@ static void run(const QString &W)
     }
 }
 
+// ------------------------------------------------------------------ the analyst's review of item 39
+
+static QList<BinderItem *> docsOf(Project *p, BinderItem *parent)
+{
+    QList<BinderItem *> out;
+    for (BinderItem *it : parent->children)
+        out << it;
+    Q_UNUSED(p);
+    return out;
+}
+
+static void review(const QString &W)
+{
+    std::printf("== the review of item 39: after a window, bookmarks, Combined Text, snapshots, unreadable files\n");
+    QString folder, err;
+    QDir().mkpath(W + QStringLiteral("/rev"));
+    BinderItem *chapter = nullptr;
+    {
+        auto p = Project::create(W + QStringLiteral("/rev"), QStringLiteral("Review Book"), &err);
+        folder = p->folderPath();
+        chapter = p->model()->createItem(p->draft(), -1, ItemType::Folder, QStringLiteral("Chapter"));
+        const QString chId = chapter->id;
+        for (int i = 0; i < 12; ++i) {
+            BinderItem *it = p->model()->createItem(chapter, -1, ItemType::Text, QStringLiteral("Part %1").arg(i));
+            QTextCursor c(p->docs()->text(it->id));
+            c.insertText(words(60, 500 + i) + QStringLiteral(" Part%1").arg(i));
+        }
+        for (int i = 0; i < 45; ++i) {
+            BinderItem *it = p->model()->createItem(p->draft(), -1, ItemType::Text, QStringLiteral("Scene %1").arg(i));
+            QTextCursor c(p->docs()->text(it->id));
+            c.insertText(words(100, i) + QStringLiteral(" Marker%1").arg(i));
+        }
+        p->save(&err);
+        Q_UNUSED(chId);
+    }
+    MainWindow w;
+    w.resize(1200, 800);
+    w.show();
+    QTest::qWait(300);
+    w.openProject(folder);
+    QTest::qWait(500);
+    Project *p = w.project();
+    auto *binder = w.findChild<BinderPanel *>();
+    auto *insp = w.findChild<Inspector *>();
+    if (!p || !binder || !insp) {
+        check(false, QStringLiteral("(the review project is open)"));
+        return;
+    }
+    chapter = nullptr;
+    QList<BinderItem *> scenes;
+    for (BinderItem *it : p->draft()->children) {
+        if (it->type == ItemType::Folder)
+            chapter = it;
+        else
+            scenes << it;
+    }
+    const QList<BinderItem *> parts = chapter ? docsOf(p, chapter) : QList<BinderItem *>();
+    check(chapter && parts.size() == 12 && scenes.size() == 45, QStringLiteral("(the review project: a chapter of 12 parts and 45 scenes)"));
+    if (!chapter || parts.size() != 12 || scenes.size() != 45)
+        return;
+    DocumentStore *ds = p->docs();
+    auto browse = [&](int from, int to) {
+        for (int i = from; i < to; ++i)
+            show(binder, scenes[i], 25);
+    };
+
+    // (a) a window that is open while the program unloads: nothing goes; when it is closed, the unloading goes on
+    //     without a document having to be read first (before the fix the timer was not set again)
+    {
+        QDialog dlg(&w);
+        dlg.setWindowModality(Qt::ApplicationModal);
+        dlg.open();
+        QTest::qWait(150);
+        browse(0, 20);
+        QTest::qWait(2600);
+        const int during = ds->loadedCount();
+        check(during > 16, QStringLiteral("(a) while a window is open nothing is unloaded (%1 held)").arg(during));
+        dlg.close();
+        QTest::qWait(3800);
+        check(ds->loadedCount() <= 16, QStringLiteral("(a) after the window is closed the unloading goes on by itself (%1 held)").arg(ds->loadedCount()));
+    }
+
+    // (b) the bookmark preview of a document no editor shows: it stays, and typing there marks it changed
+    {
+        BinderItem *x = scenes[30];
+        p->projectBookmarks.append({x->title, QStringLiteral("qb://") + x->id});
+        p->notifyBookmarksChanged();
+        insp->showTab(Inspector::Bookmarks);
+        QTest::qWait(150);
+        insp->projectBookmarkList()->setCurrentRow(0);
+        QTest::qWait(250);
+        browse(0, 20);
+        QTest::qWait(2600);
+        check(ds->loadedText(x->id) != nullptr, QStringLiteral("(b) the document of the bookmark preview is held though no editor shows it"));
+        TextEditor *pv = insp->bookmarkPreview();
+        if (pv) {
+            QTextCursor c(pv->document());
+            c.movePosition(QTextCursor::End);
+            c.insertText(QStringLiteral(" PREVIEWTYPED"));
+        }
+        QTest::qWait(200);
+        check(ds->hasDirty() && ds->dirtyTitles().contains(x->title) && ds->text(x->id)->toPlainText().contains(QLatin1String("PREVIEWTYPED")),
+              QStringLiteral("(b) typing in the preview changes the document and marks it unsaved"));
+        p->projectBookmarks.clear();
+        p->notifyBookmarksChanged();
+        QTest::qWait(200);
+        QString e;
+        p->save(&e);
+    }
+
+    // (c) Combined Text of the 12 parts: every one of them is shown, none is unloaded
+    {
+        show(binder, chapter, 300);
+        EditorPane *pane = nullptr;
+        for (EditorPane *ep : w.findChildren<EditorPane *>())
+            if (!pane && ep->isVisible())
+                pane = ep;
+        if (pane && pane->mode() != ViewMode::Combined)
+            pane->setViewMode(ViewMode::Combined);
+        QTest::qWait(300);
+        int heldEarly = 0;
+        for (BinderItem *it : parts)
+            if (ds->loadedText(it->id))
+                ++heldEarly;
+        std::printf("      combined: mode %d, held after 300 ms %d, editors %d\n", pane ? int(pane->mode()) : -1, heldEarly, int(w.findChildren<TextEditor *>().size()));
+        QTest::qWait(2900);
+        int held = 0;
+        for (BinderItem *it : parts)
+            if (ds->loadedText(it->id))
+                ++held;
+        check(pane && pane->mode() == ViewMode::Combined && held == 12, QStringLiteral("(c) Combined Text of 12 documents: all 12 are held (%1)").arg(held));
+        shot(&w, QStringLiteral("v0930f-combined"));
+        if (pane)
+            pane->setViewMode(ViewMode::Single);
+        QTest::qWait(300);
+    }
+
+    // (d) the plain notes cache: notes read while unloaded, then loaded, changed, saved and unloaded: the search finds the change
+    {
+        BinderItem *x = scenes[40];
+        const QString before = ds->notesPlainText(x->id);
+        QTextDocument *n = ds->notes(x->id);
+        n->setUndoRedoEnabled(false);
+        QTextCursor c(n);
+        c.insertText(QStringLiteral("zebrafinch"));
+        n->setUndoRedoEnabled(true);
+        QString e;
+        p->save(&e);
+        QTest::qWait(300);
+        browse(0, 20);
+        QTest::qWait(2600);
+        check(before.isEmpty() && ds->loadedText(x->id) == nullptr, QStringLiteral("(d) (the notes of a document are unloaded again)"));
+        SearchQuery q;
+        q.text = QStringLiteral("zebrafinch");
+        q.inTitle = q.inText = q.inSynopsis = q.inKeywords = q.inCustom = false;
+        q.inNotes = true;
+        check(searchProject(p, q).size() == 1, QStringLiteral("(d) a notes search finds the word typed after the notes were read while unloaded"));
+    }
+
+    // (e) the option "snapshot with Save": a document only shown (again) gets no snapshot; a changed one gets one
+    {
+        AppSettings::instance().snapshotOnManualSave = true;
+        BinderItem *x = scenes[10];
+        show(binder, x, 400);
+        w.manualSave();
+        QTest::qWait(200);
+        const int first = snapshots::list(p, x->id).size();
+        browse(11, 31);
+        QTest::qWait(2600);
+        check(ds->loadedText(x->id) == nullptr, QStringLiteral("(e) (the document is unloaded)"));
+        show(binder, x, 400);
+        w.manualSave();
+        QTest::qWait(200);
+        const int second = snapshots::list(p, x->id).size();
+        check(first == 0 && second == first, QStringLiteral("(e) a document only shown, unloaded and shown again gets no snapshot (%1, then %2)").arg(first).arg(second));
+        // a changed one gets one, once
+        BinderItem *y = scenes[12];
+        show(binder, y, 400);
+        if (TextEditor *ey = shownEditor(w, QStringLiteral("Marker12"))) {
+            QTextCursor c(ey->document());
+            c.movePosition(QTextCursor::End);
+            c.insertText(QStringLiteral(" snapshotword"));
+        }
+        w.manualSave();
+        QTest::qWait(200);
+        const int ys1 = snapshots::list(p, y->id).size();
+        w.manualSave();
+        QTest::qWait(200);
+        check(ys1 == 1 && snapshots::list(p, y->id).size() == 1, QStringLiteral("(e) a changed document gets one snapshot, the next save finds nothing changed"));
+        AppSettings::instance().snapshotOnManualSave = false;
+    }
+
+    // (f) many changed documents without an undo step are not compared again and again
+    {
+        QTest::qWait(300);
+        p->setAutosaveDelay(600000); // nothing is saved meanwhile
+        QList<BinderItem *> every = scenes;
+        every << parts;
+        for (BinderItem *it : every) {
+            QTextDocument *d = ds->text(it->id);
+            if (d->isUndoAvailable() || d->isRedoAvailable())
+                continue;
+            d->setUndoRedoEnabled(false);
+            QTextCursor c(d);
+            c.movePosition(QTextCursor::End);
+            c.insertText(QStringLiteral(" late"));
+            d->setUndoRedoEnabled(true);
+        }
+        const int c0 = ds->comparesDone();
+        QTest::qWait(3200);
+        const int compares = ds->comparesDone() - c0;
+        check(compares <= 114, QStringLiteral("(f) 57 changed documents are compared at most twice each in 3 s (%1 compares)").arg(compares));
+        QString e;
+        p->setAutosaveDelay(5000);
+        p->save(&e);
+    }
+
+    // (g) a file that cannot be read for a moment when an unloaded document is shown again: the kept text is shown
+    {
+        BinderItem *x = scenes[20];
+        show(binder, x, 300);
+        browse(21, 40);
+        QTest::qWait(2600);
+        check(ds->loadedText(x->id) == nullptr, QStringLiteral("(g) (the document is unloaded)"));
+        qputenv("QB_TEST_READ_FAILS", x->id.toUtf8());
+        show(binder, x, 500);
+        qunsetenv("QB_TEST_READ_FAILS");
+        TextEditor *ex = shownEditor(w, QStringLiteral("Marker20"));
+        check(ex && !ex->isReadOnly() && ds->whyNotEditable(x->id).isEmpty() && !ds->isDamaged(x->id),
+              QStringLiteral("(g) its file cannot be opened for a moment: the text is shown and can be edited"),
+              ex ? ds->whyNotEditable(x->id) : QStringLiteral("not shown"));
+        // another computer wrote the file meanwhile: its text is read
+        BinderItem *z = scenes[22];
+        show(binder, z, 300);
+        browse(23, 40);
+        QTest::qWait(2600);
+        const QString zf = ds->textPath(z->id);
+        QFile f(zf);
+        const bool wrote = f.open(QIODevice::WriteOnly | QIODevice::Truncate) && f.write("The other computer's words, Marker22 and more.\n") > 0;
+        f.close();
+        show(binder, z, 500);
+        TextEditor *ez = shownEditor(w, QStringLiteral("other computer"));
+        check(wrote && ez, QStringLiteral("(g) a file written by another computer meanwhile: the new text is read"));
+    }
+}
+
 static void measure(const QString &W)
 {
     const int N = qEnvironmentVariableIntValue("QB_MEASURE_DOCS") ? qEnvironmentVariableIntValue("QB_MEASURE_DOCS") : 500;
@@ -350,8 +600,10 @@ int main(int argc, char **argv)
     QTemporaryDir work;
     if (qEnvironmentVariableIsSet("QB_MEASURE"))
         measure(work.path());
-    else
+    else {
         run(work.path());
+        review(work.path());
+    }
     std::printf("%d failure(s)\n", failures);
     return failures;
 }
