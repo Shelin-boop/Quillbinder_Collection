@@ -1,5 +1,5 @@
 Data Compression Library (zlib)
-Version: 1.3.2
+Version: 1.4
 Homepage: https://zlib.net/
 zlib is a general purpose data compression library.
 

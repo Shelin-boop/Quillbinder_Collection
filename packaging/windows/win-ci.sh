@@ -2,7 +2,7 @@
 # Windows build on GitHub Actions (.github/workflows/windows.yml, port steps W1 and W2, 2026-11-07).
 # W2: the writing tools, importers and Media Playback as Windows add-ons (packaging/windows/win-addons.sh), a
 # program update package, the symbols file (.pdb), and the checks of packaging/windows/win-check.sh.
-# W4a (2026-11-11): Qt 6.12.0, runtime win64-qt6.12-msvc-r1. W4c (2026-11-12): whisper.cpp (packaging/windows/win-whisper.sh)
+# W4a (2026-11-11): Qt 6.12.0, runtime win64-qt6.12-msvc-r1 (Windows 0.93.0: Qt 6.12.1, -r2). W4c (2026-11-12): whisper.cpp (packaging/windows/win-whisper.sh)
 # and the add-on "Speech Transcription".
 # Runs in Git Bash on the runner after Qt, MSVC's environment, vcpkg and sccache are set up.
 # Never stops at the first failure: every step writes its result into results/, which the
@@ -309,10 +309,15 @@ say "$(grep -E '^tests: ' "$OUT/tests-run.log" || echo 'tests: did not finish')"
 mv "$OUT"/addons/*.qbpkg "$OUT/" 2>/dev/null
 rm -rf "$OUT/addons" "$OUT/c-update" "$OUT/c-linux-addon" "$OUT/core.qbpkg" full
 
+# Windows 0.93.0 (item 32): an explore suite's failure does not fail the result, but the result line says so
+xfail=$(sed -n 's/^tests: .*(explore: \([0-9]*\) of .*/\1/p' "$OUT/tests-run.log" | tail -1)
+xnote=""
+[ -n "$xfail" ] && [ "$xfail" != 0 ] && xnote=", explore suites with failures: $xfail"
 if [ $selftest_ok -eq 1 ] && [ $crc -eq 0 ] && [ $lrc -eq 0 ] && [ $src -eq 0 ] && [ $trc -eq 0 ] && [ "$ONLY" = suites ]; then
-  say "result: partial ok (only: $PICK; not a run before a merge)"
+  say "result: partial ok (only: $PICK; not a run before a merge$xnote)"
 elif [ $selftest_ok -eq 1 ] && [ $crc -eq 0 ] && [ $lrc -eq 0 ] && [ $src -eq 0 ] && [ $trc -eq 0 ]; then
   say "result: ok"
+  [ -n "$xnote" ] && say "note: explore suites with failures: $xfail (reported, not counted)"
 elif [ $selftest_ok -eq 1 ]; then
   say "result: built, checks failed (program $crc, layout $lrc, setup $src, tests $trc)"
 else

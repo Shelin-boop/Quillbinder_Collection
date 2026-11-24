@@ -1,14 +1,14 @@
 MD4C
-Version: 0.5.3
+Version: 0.6.0
 Homepage: https://github.com/mity/md4c
 A CommonMark-compliant Markdown parser.
 
-Copyright © 2016-2024 Martin Mitáš
+Copyright © 2016-2026 Martin Mitáš
 
 
 # The MIT License (MIT)
 
-Copyright © 2016-2024 Martin Mitáš
+Copyright © 2016-2026 Martin Mitáš
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the “Software”),

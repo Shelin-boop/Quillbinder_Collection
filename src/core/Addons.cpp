@@ -590,7 +590,12 @@ bool installData(const QByteArray &data, const PackageInfo &info, QStringList *l
         const QString aside = p.target + QStringLiteral(".old-") + QString::number(QCoreApplication::applicationPid());
         QDir(aside).removeRecursively();
         const bool hadOld = QFileInfo::exists(p.target);
-        if (hadOld && !move(p.target, aside)) {
+        // (Windows 0.93.0, item 33: the installed version's folder moves aside with the same tries as the new one
+        // moves into place, for a file that a virus scanner or the indexer holds for a moment; on Linux moveIntoPlace
+        // is the one rename it was before)
+        const bool asideOk = !hadOld
+            || (QB_TEST_ENV("QB_TEST_FAIL_RENAME").isEmpty() ? moveIntoPlace(p.target, aside) : move(p.target, aside));
+        if (!asideOk) {
             if (error)
                 *error = tr("Cannot replace %1").arg(p.target);
             putBack();

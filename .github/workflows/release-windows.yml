@@ -10,7 +10,7 @@
 # each system's newest release. "version" checks that Linux is at the same functional level (a Linux release
 # v<major>.<middle>.* with its full version). Before 0.91.3 the files were added to the Linux release of the same number.
 #
-#  1. "build": Windows 11 x64, MSVC, Qt 6.12.0 as in the work branches' Windows workflow (windows.yml), but without test switches
+#  1. "build": Windows 11 x64, MSVC, Qt 6.12.1 as in the work branches' Windows workflow (windows.yml), but without test switches
 #     (packaging/windows/win-ci.sh with QB_WIN_STAGE=release): the program refuses unsigned packages.
 #  2. "sign-packages": the program update and the update bundle are signed with the project's release key, the
 #     add-ons (since 0.91.3, as in release.yml) with the add-on key it vouches for. As in release.yml the keys are only
@@ -111,46 +111,29 @@ jobs:
         with:
           persist-credentials: false
 
-      # pinned (W2): program updates for Windows must run on the Qt of the installed program
-      # (runtime id in CMakeLists.txt); Qt Multimedia for the add-on "Media Playback"; Qt Image Formats for
-      # WebP, as on Linux (W4a). aqtinstall 3.3.0 as for the Linux build (tools/get-qt.sh), which checks every
-      # archive against the checksums of download.qt.io.
-      # Since Qt 6.11 Qt's repository keeps the Windows packages in one folder per compiler
-      # (windows_x86/desktop/qt6_6120/qt6_6120_msvc2022_64/, seen on the runner 2026-11-11); aqtinstall 3.3.0 (its
-      # newest release, 2025-06-02) looks in qt6_6120/qt6_6120/ and finds nothing, so the step gives it the folder
-      # name (its "extension" for that architecture) before it runs. jurplel/install-qt-action (W1 to W3) runs the
-      # same aqtinstall and cannot be patched, so the step installs and caches Qt itself.
-      - name: Qt 6.12.0 cache
+      # pinned (W2): program updates for Windows must run on the Qt of the installed program (runtime id in
+      # CMakeLists.txt). How Qt is installed (aqtinstall 3.3.0, its patch for Qt's folders per compiler, Qt PDF of
+      # Qt 6.12): packaging/windows/win-qt.sh (0.93.0). jurplel/install-qt-action (W1 to W3) runs the same aqtinstall and
+      # cannot be patched, so the step installs and caches Qt itself.
+      - name: Qt 6.12.1 cache
         id: qtcache
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
-          path: C:\Qt\6.12.0
-          key: qt-6.12.0-win64_msvc2022_64-qtmultimedia-qtimageformats-qtpdf-v1
+          path: C:\Qt\6.12.1
+          key: qt-6.12.1-win64_msvc2022_64-qtmultimedia-qtimageformats-qtpdf-v1
 
-      - name: Qt 6.12.0 for MSVC 2022
+      - name: Qt 6.12.1 for MSVC 2022
         id: qt
         shell: bash
         run: |
           if [ "${{ steps.qtcache.outputs.cache-hit }}" != "true" ]; then
-            python -m pip install -q 'aqtinstall==3.3.0'
-            python - <<'PY'
-          import pathlib
-          import aqt.metadata as m
-          p = pathlib.Path(m.__file__)
-          s = p.read_text(encoding="utf-8")
-          old = "    def extension_for_arch(architecture: str, is_version_ge_6: bool) -> str:\n"
-          new = old + ("        if architecture.startswith('win64_') and is_version_ge_6:  # Quillbinder W4a: Qt 6.11+ folders\n"
-                       "            return architecture[len('win64_'):]\n")
-          assert old in s, "aqtinstall changed: extension_for_arch not found"
-          p.write_text(s.replace(old, new, 1), encoding="utf-8")
-          print("aqtinstall patched:", p)
-          PY
-            python -m aqt install-qt windows desktop 6.12.0 win64_msvc2022_64 -O C:/Qt -m qtmultimedia qtimageformats qtpdf
+            bash packaging/windows/win-qt.sh 6.12.1 C:/Qt
           fi
-          test -f /c/Qt/6.12.0/msvc2022_64/bin/Qt6Core.dll
-          echo 'QT_ROOT_DIR=C:\Qt\6.12.0\msvc2022_64' >> "$GITHUB_ENV"
-          echo 'C:\Qt\6.12.0\msvc2022_64\bin' >> "$GITHUB_PATH"
-          ls /c/Qt/6.12.0/msvc2022_64/plugins
+          test -f /c/Qt/6.12.1/msvc2022_64/bin/Qt6Core.dll
+          test -f /c/Qt/6.12.1/msvc2022_64/lib/cmake/Qt6Pdf/Qt6PdfConfig.cmake
+          echo 'QT_ROOT_DIR=C:\Qt\6.12.1\msvc2022_64' >> "$GITHUB_ENV"
+          echo 'C:\Qt\6.12.1\msvc2022_64\bin' >> "$GITHUB_PATH"
+          ls /c/Qt/6.12.1/msvc2022_64/plugins
 
       - name: Compiler cache
         id: sccache
@@ -161,13 +144,14 @@ jobs:
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: ${{ github.workspace }}/.vcpkg-cache
-          key: vcpkg-x64-windows-static-md-hunspell-zlib-v1
+          key: vcpkg-x64-windows-static-md-hunspell-zlib-v2
 
       - name: Hunspell and zlib (vcpkg)
         id: vcpkg
         shell: bash
         run: |
           : "${VCPKG_INSTALLATION_ROOT:?vcpkg is not on this runner image}"
+          bash packaging/windows/win-vcpkg.sh tool   # 0.93.0: the ports of a pinned vcpkg commit (zlib 1.4)
           mkdir -p .vcpkg-cache
           export VCPKG_DEFAULT_BINARY_CACHE="$(cygpath -w "$PWD/.vcpkg-cache")"
           "$(cygpath -u "$VCPKG_INSTALLATION_ROOT")/vcpkg.exe" install hunspell zlib --triplet "$VCPKG_TRIPLET" > vcpkg.log 2>&1 \
@@ -649,46 +633,29 @@ jobs:
           name: test-fonts
           path: test-fonts
 
-      # pinned (W2): program updates for Windows must run on the Qt of the installed program
-      # (runtime id in CMakeLists.txt); Qt Multimedia for the add-on "Media Playback"; Qt Image Formats for
-      # WebP, as on Linux (W4a). aqtinstall 3.3.0 as for the Linux build (tools/get-qt.sh), which checks every
-      # archive against the checksums of download.qt.io.
-      # Since Qt 6.11 Qt's repository keeps the Windows packages in one folder per compiler
-      # (windows_x86/desktop/qt6_6120/qt6_6120_msvc2022_64/, seen on the runner 2026-11-11); aqtinstall 3.3.0 (its
-      # newest release, 2025-06-02) looks in qt6_6120/qt6_6120/ and finds nothing, so the step gives it the folder
-      # name (its "extension" for that architecture) before it runs. jurplel/install-qt-action (W1 to W3) runs the
-      # same aqtinstall and cannot be patched, so the step installs and caches Qt itself.
-      - name: Qt 6.12.0 cache
+      # pinned (W2): program updates for Windows must run on the Qt of the installed program (runtime id in
+      # CMakeLists.txt). How Qt is installed (aqtinstall 3.3.0, its patch for Qt's folders per compiler, Qt PDF of
+      # Qt 6.12): packaging/windows/win-qt.sh (0.93.0). jurplel/install-qt-action (W1 to W3) runs the same aqtinstall and
+      # cannot be patched, so the step installs and caches Qt itself.
+      - name: Qt 6.12.1 cache
         id: qtcache
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
-          path: C:\Qt\6.12.0
-          key: qt-6.12.0-win64_msvc2022_64-qtmultimedia-qtimageformats-qtpdf-v1
+          path: C:\Qt\6.12.1
+          key: qt-6.12.1-win64_msvc2022_64-qtmultimedia-qtimageformats-qtpdf-v1
 
-      - name: Qt 6.12.0 for MSVC 2022
+      - name: Qt 6.12.1 for MSVC 2022
         id: qt
         shell: bash
         run: |
           if [ "${{ steps.qtcache.outputs.cache-hit }}" != "true" ]; then
-            python -m pip install -q 'aqtinstall==3.3.0'
-            python - <<'PY'
-          import pathlib
-          import aqt.metadata as m
-          p = pathlib.Path(m.__file__)
-          s = p.read_text(encoding="utf-8")
-          old = "    def extension_for_arch(architecture: str, is_version_ge_6: bool) -> str:\n"
-          new = old + ("        if architecture.startswith('win64_') and is_version_ge_6:  # Quillbinder W4a: Qt 6.11+ folders\n"
-                       "            return architecture[len('win64_'):]\n")
-          assert old in s, "aqtinstall changed: extension_for_arch not found"
-          p.write_text(s.replace(old, new, 1), encoding="utf-8")
-          print("aqtinstall patched:", p)
-          PY
-            python -m aqt install-qt windows desktop 6.12.0 win64_msvc2022_64 -O C:/Qt -m qtmultimedia qtimageformats qtpdf
+            bash packaging/windows/win-qt.sh 6.12.1 C:/Qt
           fi
-          test -f /c/Qt/6.12.0/msvc2022_64/bin/Qt6Core.dll
-          echo 'QT_ROOT_DIR=C:\Qt\6.12.0\msvc2022_64' >> "$GITHUB_ENV"
-          echo 'C:\Qt\6.12.0\msvc2022_64\bin' >> "$GITHUB_PATH"
-          ls /c/Qt/6.12.0/msvc2022_64/plugins
+          test -f /c/Qt/6.12.1/msvc2022_64/bin/Qt6Core.dll
+          test -f /c/Qt/6.12.1/msvc2022_64/lib/cmake/Qt6Pdf/Qt6PdfConfig.cmake
+          echo 'QT_ROOT_DIR=C:\Qt\6.12.1\msvc2022_64' >> "$GITHUB_ENV"
+          echo 'C:\Qt\6.12.1\msvc2022_64\bin' >> "$GITHUB_PATH"
+          ls /c/Qt/6.12.1/msvc2022_64/plugins
 
       - name: Compiler cache
         id: sccache
@@ -699,13 +666,14 @@ jobs:
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
         with:
           path: ${{ github.workspace }}/.vcpkg-cache
-          key: vcpkg-x64-windows-static-md-hunspell-zlib-v1
+          key: vcpkg-x64-windows-static-md-hunspell-zlib-v2
 
       - name: Hunspell and zlib (vcpkg)
         id: vcpkg
         shell: bash
         run: |
           : "${VCPKG_INSTALLATION_ROOT:?vcpkg is not on this runner image}"
+          bash packaging/windows/win-vcpkg.sh tool   # 0.93.0: the ports of a pinned vcpkg commit (zlib 1.4)
           mkdir -p .vcpkg-cache
           export VCPKG_DEFAULT_BINARY_CACHE="$(cygpath -w "$PWD/.vcpkg-cache")"
           "$(cygpath -u "$VCPKG_INSTALLATION_ROOT")/vcpkg.exe" install hunspell zlib --triplet "$VCPKG_TRIPLET" > vcpkg.log 2>&1 \

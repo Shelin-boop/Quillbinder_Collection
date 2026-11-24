@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Writes resources/licenses-windows/ (Help > Third-Party Licenses of the Windows program; port, W3, 2026-11-08).
 
-The Windows program ships other files than the AppImage: Qt's own build of Qt 6.12.0 for MSVC (W4a, 2026-11-11; Qt 6.8.3
+The Windows program ships other files than the AppImage: Qt's own build of Qt 6.12.1 for MSVC (Windows 0.93.0; Qt 6.12.0 since W4a, 2026-11-11; Qt 6.8.3
 in W3), with the third-party
 code compiled into its DLLs), Hunspell and zlib linked in (vcpkg), Microsoft's C++ runtime DLLs and the spelling
 dictionaries. The list has the format of resources/licenses/index.json (tools/collect-licenses.py) and is compiled
 into the Windows program under the same resource names (resources/resources-windows.qrc, tools/gen-resources.py).
 
 It is made in a Claude session from these checkouts (the cloud session cannot reach download.qt.io; GitHub works):
-  <lic>/qtbase, <lic>/qtsvg,          git clone https://github.com/qt/<repo> at tag v6.12.0, sparse: every
+  <lic>/qtbase, <lic>/qtsvg,          git clone https://github.com/qt/<repo> at tag v6.12.1, sparse: every
   <lic>/qtimageformats                qt_attribution.json, /LICENSES/, and the files they name (tools/get-qt-licenses.sh
                                       makes them for the Linux list: build/qt-licenses)
   <lic>/chromium                      https://github.com/qt/qtwebengine-chromium at 71a2fa55e2e2 (the submodule
@@ -16,7 +16,7 @@ It is made in a Claude session from these checkouts (the cloud session cannot re
                                       mirror has no tag v6.12.0): license files of PDFium and the parts Qt names in
                                       "Qt PDF Licensing" (doc.qt.io/qt-6/qtpdf-licensing.html)
   <lic>/hunspell                      https://github.com/hunspell/hunspell at v1.7.5 (the version vcpkg builds)
-  <lic>/zlib                          https://github.com/madler/zlib at v1.3.2
+  <lic>/zlib                          https://github.com/madler/zlib at v1.4 (vcpkg's port, packaging/windows/win-vcpkg.sh)
   <dict>                              https://github.com/LibreOffice/dictionaries at libreoffice-25.8.7.3 (en/, de/)
 
   packaging/windows/collect-licenses-windows.py <lic> <dict>
@@ -31,7 +31,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 OUT = os.path.join(ROOT, "resources", "licenses-windows")
 LINUX_TEXTS = os.path.join(ROOT, "resources", "licenses", "texts")
 LIC, DICT = sys.argv[1], sys.argv[2]
-QT_VERSION = "6.12.0"
+QT_VERSION = "6.12.1"
 SOURCES = "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources"
 
 QT_MODULES = {
@@ -200,8 +200,8 @@ def main():
                                           ("COPYING", "license.hunspell", "license.myspell", "COPYING.MPL"))),
          f"{SOURCES}, file hunspell-1.7.5.tar.gz (also https://github.com/hunspell/hunspell, tag v1.7.5)",
          "hunspell-1.7.5.tar.gz")
-    comp("zlib", "1.3.2", "Zlib", "reading and writing packed files (linked into quillbinder.exe)",
-         add_text("zlib.txt", read(os.path.join(LIC, "zlib", "LICENSE"))), "https://github.com/madler/zlib, tag v1.3.2")
+    comp("zlib", "1.4", "Zlib", "reading and writing packed files (linked into quillbinder.exe)",
+         add_text("zlib.txt", read(os.path.join(LIC, "zlib", "LICENSE"))), "https://github.com/madler/zlib, tag v1.4")
     # 0.65.0: the check of package signatures, compiled in from the Quillbinder source (src/core/third_party)
     comp("Monocypher", "4.0.3", "BSD-2-Clause (dual-licensed: BSD-2-Clause or CC0-1.0)",
          "the check of package signatures (Ed25519), compiled into quillbinder.exe",
@@ -252,7 +252,7 @@ def main():
 
     index = {
         "note": "Made by packaging/windows/collect-licenses-windows.py from Qt " + QT_VERSION + "'s attribution files, the license files of "
-                "Qt PDF's parts, Hunspell 1.7.5, zlib 1.3.2 and LibreOffice's dictionaries (sources pinned in the script).",
+                "Qt PDF's parts, Hunspell 1.7.5, zlib 1.4 and LibreOffice's dictionaries (sources pinned in the script).",
         "components": components,
         "commonLicenses": common,
     }
