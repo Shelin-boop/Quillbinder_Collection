@@ -52,6 +52,20 @@ void MindMapPrefs::load()
         newShapeFill = c;
     newShapeBorder = s.value(QStringLiteral("newShapeBorder"), newShapeBorder).toInt();
     newShapeMagnetic = s.value(QStringLiteral("newShapeMagnetic"), newShapeMagnetic).toBool();
+    // 0.93.0: the start look of a new shape changed (medium gray, not magnetic). Values somebody stored (by pressing OK in
+    // Mind Map Options) win, except the two old start values, once: a stored #eeeeee becomes the new gray and a stored
+    // "magnetic" becomes off; a color somebody chose stays, and so does a "magnetic" switched on later.
+    if (!s.value(QStringLiteral("newShapeStart0930"), false).toBool()) {
+        if (s.contains(QStringLiteral("newShapeFill")) && newShapeFill == QColor(238, 238, 238)) {
+            newShapeFill = QColor(128, 128, 128);
+            s.setValue(QStringLiteral("newShapeFill"), newShapeFill.name());
+        }
+        if (s.contains(QStringLiteral("newShapeMagnetic")) && newShapeMagnetic) {
+            newShapeMagnetic = false;
+            s.setValue(QStringLiteral("newShapeMagnetic"), false);
+        }
+        s.setValue(QStringLiteral("newShapeStart0930"), true);
+    }
     if (const QColor c(s.value(QStringLiteral("boardBackground")).toString()); c.isValid())
         boardBackground = c;
     if (const QColor c(s.value(QStringLiteral("boardBackgroundDark")).toString()); c.isValid())

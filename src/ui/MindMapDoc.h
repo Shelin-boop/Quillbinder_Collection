@@ -33,9 +33,9 @@ struct MindMapPrefs {
     int newNoteBorder = 0;
     int newNoteShape = 0;            // mindmap::BorderStyle of new notes (0.21; 0 = rounded)
     int iconSize = 16;               // size of the icons on notes and lines, px at 100 % (0.21)
-    QColor newShapeFill = QColor(238, 238, 238);
+    QColor newShapeFill = QColor(128, 128, 128);   // 0.93.0: medium gray (before: #eeeeee)
     int newShapeBorder = 1;
-    bool newShapeMagnetic = true;
+    bool newShapeMagnetic = false;                  // 0.93.0: off (before: on)
     // board defaults (Document Settings > Set As Defaults)
     QColor boardBackground = QColor(253, 251, 240);
     // the background of boards without a color of their own in dark themes (0.21.1;

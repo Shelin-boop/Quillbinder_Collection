@@ -595,6 +595,58 @@ int main(int argc, char **argv)
         settle(200);
     }
 
+
+    // ============================================================ 9. new background shapes start medium gray, not magnetic (item 20)
+    {
+        QSettings().remove(QStringLiteral("mindmap"));
+        MindMapPrefs fresh;
+        fresh.load();
+        check(fresh.newShapeFill == QColor(0x80, 0x80, 0x80) && !fresh.newShapeMagnetic && fresh.newShapeBorder == 1,
+              QStringLiteral("New shapes: with a fresh settings file the start look is medium gray (#808080), border 1, not magnetic"));
+        doc->board.settings.locked = false; // (the board was locked and unlocked in section 4)
+        panel->controller()->updateActions();
+        const int before = doc->board.shapes.size();
+        panel->controller()->action(QStringLiteral("mm_newShape"))->trigger();
+        settle(200);
+        const Shape *made = nullptr;
+        for (const Shape &sh : doc->board.shapes)
+            if (sh.id != 5 && (!made || sh.id > made->id))
+                made = &sh;
+        check(doc->board.shapes.size() == before + 1 && made && made->look.fill == QColor(0x80, 0x80, 0x80) && !made->magnetic,
+              QStringLiteral("... a shape made on a board has that look"),
+              QStringLiteral("locked %5 enabled %6 same doc %7; shapes %1 (was %2), fill %3, magnetic %4").arg(doc->board.shapes.size()).arg(before)
+                  .arg(made ? made->look.fill.name(QColor::HexArgb) : QString()).arg(made ? made->magnetic : -1).arg(doc->locked()).arg(panel->controller()->action(QStringLiteral("mm_newShape"))->isEnabled()).arg(panel->doc() == doc));
+        shot(&w, QStringLiteral("mmov-16-new-shape"));
+        // the old start values stored by Mind Map Options: replaced once
+        {
+            QSettings st;
+            st.setValue(QStringLiteral("mindmap/newShapeFill"), QStringLiteral("#eeeeee"));
+            st.setValue(QStringLiteral("mindmap/newShapeMagnetic"), true);
+            st.remove(QStringLiteral("mindmap/newShapeStart0930"));
+        }
+        MindMapPrefs old;
+        old.load();
+        check(old.newShapeFill == QColor(0x80, 0x80, 0x80) && !old.newShapeMagnetic,
+              QStringLiteral("... stored old values (#eeeeee, magnetic) give gray and off at the first start"));
+        QSettings().setValue(QStringLiteral("mindmap/newShapeMagnetic"), true);
+        MindMapPrefs again;
+        again.load();
+        check(again.newShapeMagnetic && again.newShapeFill == QColor(0x80, 0x80, 0x80),
+              QStringLiteral("... a later \"magnetic on\" by the writer stays on (the step is done once)"));
+        // a chosen color stays
+        {
+            QSettings st;
+            st.setValue(QStringLiteral("mindmap/newShapeFill"), QStringLiteral("#336699"));
+            st.setValue(QStringLiteral("mindmap/newShapeMagnetic"), true);
+            st.remove(QStringLiteral("mindmap/newShapeStart0930"));
+        }
+        MindMapPrefs chosen;
+        chosen.load();
+        check(chosen.newShapeFill == QColor(0x33, 0x66, 0x99) && !chosen.newShapeMagnetic,
+              QStringLiteral("... a color somebody chose stays (magnetic still goes off once)"));
+        QSettings().remove(QStringLiteral("mindmap"));
+    }
+
     overview::setAlways(false);
     w.closeProject();
     std::printf("%d failure(s)\n", failures);
