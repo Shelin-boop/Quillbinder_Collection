@@ -72,15 +72,40 @@ grep -E '^(License|External libraries|Enabled)' -A 2 "$work/configure.log" | hea
 make -j"$(nproc)" > "$work/make.log" 2>&1 || { grep -E 'error|Error' "$work/make.log" | head -40; tail -20 "$work/make.log"; exit 1; }
 make install > "$work/install.log" 2>&1 || { tail -20 "$work/install.log"; exit 1; }
 SH
-# the folders of MSVC's environment (Git Bash has them on its PATH inside the build step), in Windows' form
-cl=$(command -v cl.exe) || { echo "win-ffmpeg.sh: cl.exe is not on the PATH (MSVC's environment)" >&2; exit 1; }
-MSVCPATH=$(cygpath -m "$(dirname "$cl")")
-while IFS= read -r d; do
-    case "$d" in *"Microsoft Visual Studio"*|*"Windows Kits"*) MSVCPATH="$MSVCPATH;$(cygpath -m "$d")" ;; esac
-done < <(printf '%s\n' "$PATH" | tr ':' '\n')
-printf 'QB_MSVC_PATH=%q\nQB_MSVC_INCLUDE=%q\nQB_MSVC_LIB=%q\n' "$MSVCPATH" \
-    "$(printf '%s' "${INCLUDE:?MSVC's INCLUDE is not set}" | tr '\\' '/')" "$(printf '%s' "${LIB:?MSVC's LIB is not set}" | tr '\\' '/')" \
-    > "$WORK/msvc-env.sh"
+# MSVC's environment for the MSYS2 shell: its folders on the PATH, INCLUDE and LIB, in Windows' form. Taken from
+# MSVC's own vcvars64.bat run in cmd (VSDIR, from the workflow's step "Find Visual Studio"), which prints the
+# environment it makes; Git Bash's own copy is the second choice, its names looked up without regard to case (run
+# 45385585996: Git Bash's $LIB was empty although the program's build in the same step links)
+winlist() { tr -d '\r' | tr '\\' '/'; }
+VCENV=""
+if [ -n "${VSDIR:-}" ] && [ -f "$(cygpath -u "$VSDIR")/VC/Auxiliary/Build/vcvars64.bat" ]; then
+    printf '@call "%s\\VC\\Auxiliary\\Build\\vcvars64.bat" > nul 2>&1\r\n@set\r\n' "$(cygpath -w "$VSDIR")" > "$WORK/vcenv.bat"
+    cmd.exe //d //c "$(cygpath -w "$WORK/vcenv.bat")" > "$WORK/vcenv.txt" 2> /dev/null || true
+    VCENV="$WORK/vcenv.txt"
+fi
+fromvc() { [ -n "$VCENV" ] && grep -ai "^$1=" "$VCENV" | head -1 | cut -d= -f2- | winlist; }
+fromsh() { env | grep -ai "^$1=" | head -1 | cut -d= -f2- | winlist; }
+INC=$(fromvc INCLUDE); [ -n "$INC" ] || INC=$(fromsh INCLUDE)
+LIBV=$(fromvc LIB); [ -n "$LIBV" ] || LIBV=$(fromsh LIB)
+VCPATH=$(fromvc PATH)
+MSVCPATH=""
+if [ -n "$VCPATH" ]; then
+    while IFS= read -r d; do
+        case "$d" in *"Microsoft Visual Studio"*|*"Windows Kits"*) MSVCPATH="${MSVCPATH:+$MSVCPATH;}$d" ;; esac
+    done < <(printf '%s\n' "$VCPATH" | tr ';' '\n')
+else
+    cl=$(command -v cl.exe) || { echo "win-ffmpeg.sh: cl.exe is not on the PATH (MSVC's environment)" >&2; exit 1; }
+    MSVCPATH=$(cygpath -m "$(dirname "$cl")")
+    while IFS= read -r d; do
+        case "$d" in *"Microsoft Visual Studio"*|*"Windows Kits"*) MSVCPATH="$MSVCPATH;$(cygpath -m "$d")" ;; esac
+    done < <(printf '%s\n' "$PATH" | tr ':' '\n')
+fi
+if [ -z "$INC" ] || [ -z "$LIBV" ] || [ -z "$MSVCPATH" ]; then
+    echo "win-ffmpeg.sh: MSVC's environment not found (INCLUDE ${#INC}, LIB ${#LIBV}, folders ${#MSVCPATH} characters; vcvars: ${VCENV:-not run}, $(grep -ciE '^(include|lib|path)=' "${VCENV:-/dev/null}" 2>/dev/null) of its lines; Git Bash's names: $(env | cut -d= -f1 | grep -iE '^(include|lib|libpath|vsdir)$' | tr '\n' ' '))" >&2
+    exit 1
+fi
+echo "MSVC's environment: INCLUDE $(echo "$INC" | tr ';' '\n' | grep -c .) folders, LIB $(echo "$LIBV" | tr ';' '\n' | grep -c .) folders, $(echo "$MSVCPATH" | tr ';' '\n' | grep -c .) folders for the PATH ($([ -n "$VCPATH" ] && echo vcvars || echo "Git Bash"))"
+printf 'QB_MSVC_PATH=%q\nQB_MSVC_INCLUDE=%q\nQB_MSVC_LIB=%q\n' "$MSVCPATH" "$INC" "$LIBV" > "$WORK/msvc-env.sh"
 MSYS2_PATH_TYPE=inherit CHERE_INVOKING=1 MSYSTEM=MSYS "$MSYS" -l "$(cygpath -m "$WORK/build.sh")" \
     "$(cygpath -m "$WORK")" "$(cygpath -m "$PREFIX")" "$(cygpath -m "$WORK/zlib")" "$OPTS"
 have_all || { echo "win-ffmpeg.sh: not every DLL was built: $(ls "$PREFIX/bin" 2>/dev/null | tr '\n' ' ')" >&2; exit 1; }
