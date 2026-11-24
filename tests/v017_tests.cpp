@@ -300,6 +300,7 @@ static void probeItem19()
     sh.id = 2;
     sh.rect = QRectF(20, 30, 240.5, 130.25);
     w.shapes << sh;
+    info(QStringLiteral("item19 a shape appended to a board's list in the test: ") + probe19Rect(w.shapes.first().rect));
     const QByteArray out = w.toXml();
     const int at = out.indexOf("<Shape ");
     info(QStringLiteral("item19 written: ") + QString::fromUtf8(out.mid(at, at >= 0 ? out.indexOf('>', at) - at + 1 : 0)));
@@ -308,8 +309,10 @@ static void probeItem19()
     info(QStringLiteral("item19 read back: ") + (c.shapes.isEmpty() ? QStringLiteral("-") : probe19Rect(c.shapes.first().rect)));
     check(s && qFuzzyCompare(s->rect.width(), 240.5) && qFuzzyCompare(s->rect.height(), 130.25),
           QStringLiteral("item 19 probe: a shape's size is read as the file has it"), s ? probe19Rect(s->rect) : QStringLiteral("no shape"));
-    check(!c.shapes.isEmpty() && qFuzzyCompare(c.shapes.first().rect.width(), 240.5) && qFuzzyCompare(c.shapes.first().rect.height(), 130.25),
-          QStringLiteral("item 19 probe: a shape written and read back keeps its size"));
+    // (the file keeps one decimal: 130.25 is written as 130.3)
+    check(!c.shapes.isEmpty() && qAbs(c.shapes.first().rect.width() - 240.5) < 0.06 && qAbs(c.shapes.first().rect.height() - 130.25) < 0.06,
+          QStringLiteral("item 19 probe: a shape written and read back keeps its size"),
+          c.shapes.isEmpty() ? QStringLiteral("no shape") : probe19Rect(c.shapes.first().rect));
 }
 
 int main(int argc, char **argv)

@@ -126,6 +126,40 @@ int main(int argc, char **argv)
         check(d.width() >= 80 && d.height() >= 60, QStringLiteral("... a size chosen too small is raised"), QStringLiteral("%1x%2").arg(d.width()).arg(d.height()));
     }
 
+#ifdef Q_OS_WIN
+    // ---- Windows 0.93.0 (item 19): a board with background shapes keeps their sizes when it is read and written
+    // (the MSVC 14.52 build read a shape's width and height as garbage; Board::fromXml)
+    {
+        const QByteArray xml = R"(<?xml version="1.0" encoding="UTF-8"?>
+<ScappleDocument Version="1.2" ID="ITEM19">
+  <Notes>
+    <Note ID="1" FontSize="12.0" Position="30.0,40.0" Width="150.0"><String>A note</String></Note>
+  </Notes>
+  <BackgroundShapes>
+    <Shape ID="2" Position="20.0,30.0" Width="240.5" Height="130.2"><Magnetic>No</Magnetic></Shape>
+    <Shape ID="3" Position="400.0,10.0" Width="80.0" Height="600.0"></Shape>
+  </BackgroundShapes>
+</ScappleDocument>)";
+        Board b;
+        const bool read = b.fromXml(xml);
+        auto sizes = [](const Board &x) {
+            QStringList out;
+            for (const Shape &s : x.shapes)
+                out << QStringLiteral("%1: %2,%3 %4x%5").arg(s.id).arg(s.rect.x()).arg(s.rect.y()).arg(s.rect.width()).arg(s.rect.height());
+            return out.join(QLatin1String("; "));
+        };
+        const QString first = sizes(b);
+        Board again;
+        const bool readAgain = again.fromXml(b.toXml());
+        const QString second = sizes(again);
+        const QString want = QStringLiteral("2: 20,30 240.5x130.2; 3: 400,10 80x600");
+        check(read && readAgain && first == want && second == want,
+              QStringLiteral("Windows: a board's background shapes keep their place and size when it is read, and when it is "
+                             "written and read again"),
+              first + QStringLiteral(" / ") + second);
+    }
+#endif
+
     QTemporaryDir work;
     templates::Info novel;
     for (const auto &t : templates::all())

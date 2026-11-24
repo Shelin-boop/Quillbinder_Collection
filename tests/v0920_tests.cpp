@@ -83,6 +83,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLibrary>
 #include <QLabel>
 #include <QMessageBox>
 #include <QPointer>
@@ -2001,6 +2002,29 @@ int main(int argc, char **argv)
               QStringLiteral("Windows: a new version's folder that is still held for a moment (the program just started from it, a "
                              "virus scanner) is moved into its place once it is free; a single try is refused"),
               QStringLiteral("opened %1, refused at once %2, moved %3 after %4 ms").arg(opened).arg(refusedOnce).arg(moved).arg(ms));
+    }
+    // Windows 0.93.0 (item 33, an examination, not a check): can the folder of an add-on whose library is loaded be
+    // moved aside, as installing a newer version of it does? (printed as an INFO line)
+    {
+        const QDir plugins(QCoreApplication::applicationDirPath() + QStringLiteral("/../tool-plugins"));
+        const QStringList dlls = plugins.entryList({QStringLiteral("*.dll")}, QDir::Files, QDir::Name);
+        if (dlls.isEmpty()) {
+            std::printf("INFO item33 no plugin library in %s\n", qPrintable(plugins.absolutePath()));
+        } else {
+            const QString dir = W + QStringLiteral("/loaded-addon"), aside = W + QStringLiteral("/loaded-addon.old");
+            QDir().mkpath(dir);
+            QFile::copy(plugins.filePath(dlls.first()), dir + QLatin1Char('/') + dlls.first());
+            QLibrary lib(dir + QLatin1Char('/') + dlls.first());
+            const bool loaded = lib.load();
+            const bool movedLoaded = addons::moveIntoPlace(dir, aside, 1, 0);
+            if (movedLoaded)
+                addons::moveIntoPlace(aside, dir, 1, 0);
+            lib.unload();
+            const bool movedAfter = addons::moveIntoPlace(dir, aside, 1, 0);
+            std::printf("INFO item33 %s loaded %d: its folder moved aside while loaded %d, after unloading %d\n",
+                        qPrintable(dlls.first()), loaded, movedLoaded, movedAfter);
+        }
+        std::fflush(stdout);
     }
 #endif
 
