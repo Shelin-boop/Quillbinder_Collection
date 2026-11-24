@@ -14,7 +14,7 @@ folder is used by the Linux or the Windows build.
 | `android-system-test.sh` | The system test on emulated tablets (`.github/workflows/android-system-test.yml`, a push to `android-st/...`): builds Android's own copy of the system test (`tests/android/systemtest`) as an app and starts it once per case; sub-runs (`<case>@<variant>`), the app killed or sent away from outside (needs K, H), the translation add-on and a model fetched for A-A01 (needs T). What a run does: `system-test-run.txt`; cases a tablet cannot run yet: `system-test-skip.txt`. Results on the pre-release `android-st`. |
 | `android-resources.py`, `collect-licenses-android.py` | The program's resources for Android (`resources-android.qrc`) and its list of licenses (`resources/licenses-android`). |
 | `android-emulator.sh` | The start check: the program built for x86_64, installed and started on an emulated tablet with Android 14; the toolbar rows at other screen sizes, swipes, two fingers and the lines between panes as raw touch events, every menu and three windows opened while the on-screen keyboard is up, the handles of a text; pictures of the screen and the system's log. |
-| `package/` | The package's own files, which Qt's `androiddeployqt` puts into the APK: `AndroidManifest.xml` (Qt 6.12.0's own manifest with the changes named at its top) and the launcher icon in five sizes (`res/mipmap-*/ic_launcher.png`). |
+| `package/` | The package's own files, which Qt's `androiddeployqt` puts into the APK: `AndroidManifest.xml` (Qt 6.12.0's own manifest, unchanged in Qt 6.12.1, with the changes named at its top) and the launcher icon in five sizes (`res/mipmap-*/ic_launcher.png`). |
 | `android-trial-key.sh` | The key that signs trial builds and the system test's app: a kept key named by `QB_ANDROID_TRIAL_KEYSTORE` and `QB_ANDROID_TRIAL_KEYSTORE_PASS`, or without them a key made for the run alone (such a trial build cannot be installed over the one before). Never for a public APK. |
 | `release-key.txt` | The public app's key (2026-11-16): its app id `io.github.shelin_boop.quillbinder.app` and the SHA-256 of its certificate. The key itself is the writer's and a secret of this repository (`QB_ANDROID_KEYSTORE`, `QB_ANDROID_KEYSTORE_PASS`); `.github/workflows/release-android.yml` checks it against this file. |
 
@@ -26,10 +26,10 @@ Android's own interface code is in `src/android` and is compiled into the Androi
 inside `if(ANDROID)`): `MobileBars.cpp` (toolbar rows that follow the screen's width), `MobileTouch.cpp` (a finger
 scrolls and taps, two fingers zoom, a finger moves the line between two panes), `MobileHandles.cpp` (the drop under
 the cursor and a selection's handles: only where their place in the text can be seen, the drop only for a moment
-after a tap) and `MobileWindows.cpp` (Qt 6.12.0 ends the program when a window is first drawn while Android's
-keyboard program calls into it: each window's surface is made ahead of its first picture; to be taken out with the
-Qt version that has this repaired). On a desktop the same code, but for `MobileWindows.cpp`, is checked by the test
-program `tests/mobile_tests.cpp`, in windows of a tablet's size and with simulated fingers; it is built only when
+after a tap), `MobileFiles.cpp`, `MobileStart.cpp`, `MobileOpen.cpp` and `MobileCare.cpp` (Android 0.92.0 had
+`MobileWindows.cpp` too, a guard for a fault of Qt 6.12.0 that ended the program when a window was first drawn while
+Android's keyboard program called into it; Qt 6.12.1 has it repaired, and Android 0.93.0 has no guard). On a desktop
+the same code is checked by the test program `tests/mobile_tests.cpp`, in windows of a tablet's size and with simulated fingers; it is built only when
 asked for:
 
     cmake -S . -B build -G Ninja -DQB_TEST_SWITCHES=ON -DQB_MOBILE_PREVIEW=ON
@@ -40,7 +40,7 @@ The launcher icons are the program icon of Quillbinder (`resources/app/quillbind
 under the same license as the rest of Quillbinder's own files), made with
 `rsvg-convert -w <size> -h <size>` at 48, 72, 96, 144 and 192 px.
 
-To build by hand (Linux, with Qt 6.12.0 for Android and for the build machine side by side in one folder, the
+To build by hand (Linux, with Qt 6.12.1 for Android and for the build machine side by side in one folder, the
 Android SDK with NDK 27.2.12479018, and JDK 21):
 
     QT_ANDROID_BASE=~/Qt ANDROID_SDK_ROOT=<sdk> ANDROID_NDK_ROOT=<sdk>/ndk/27.2.12479018 JAVA_HOME=<jdk 21> \

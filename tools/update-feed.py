@@ -17,7 +17,9 @@ named by its setup programs ("setup", "setupFull": the files "...-setup.exe" of 
 
 Android 0.92.0: with --system android-arm64 the program is named by its APK only ("apk": the file "...-android-arm64.apk"
 of the version; Android takes no program update), and the headlines of the section "## Android <version> ..." of
-docs/CHANGES.md come before those of the version itself.
+docs/CHANGES.md come before those of the version itself. Android 0.93.0: Android's block also names the add-ons
+without libraries that only the Linux release carries (the formats, templates, themes; no runtime in the Linux
+block), with their files there, so that a tablet is told of a newer one.
 """
 import argparse
 import datetime
@@ -159,6 +161,13 @@ def main():
                          "file": file_entry(path, args.repo, args.tag)}
                 if entry["id"]:
                     addons[entry["id"]] = entry
+    # Android 0.93.0: the add-ons without libraries come with the Linux release only (no runtime in Linux's block); a
+    # tablet installs them too, so Android's block names them, with their files in the Linux release
+    if args.system.startswith("android"):
+        linux_block = (previous.get("systems") or {}).get("linux-x86_64") or {}
+        for old in linux_block.get("addons") or []:
+            if old.get("id") and not old.get("runtime") and old["id"] not in addons:
+                addons[old["id"]] = old
     # add-ons of this system that this release does not carry (released on their own): kept as they were
     for old in old_sys.get("addons") or []:
         if old.get("id") and old["id"] not in addons:

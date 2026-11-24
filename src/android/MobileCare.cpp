@@ -51,8 +51,6 @@ constexpr int kSplitterWidth = 7;  // the line between two panes (Fusion: 3 px),
 const char *kScrolled = "qbTabletScrolls";
 const char *kClosable = "qbTabletClosable";
 
-const Qt::KeyboardModifiers kMods = Qt::ControlModifier | Qt::ShiftModifier | Qt::AltModifier | Qt::MetaModifier;
-
 // Menus that scroll instead of wrapping into columns, and a wider line between panes with a visible grip (Qt for
 // Android shows no mouse pointer shapes, so the line must be seen to be found).
 class TabletStyle : public QProxyStyle
@@ -291,15 +289,8 @@ public:
         case QEvent::MouseButtonRelease:
         case QEvent::MouseButtonDblClick:
         case QEvent::MouseMove:
-            addHeld(static_cast<QInputEvent *>(e));
             if (o->isWidgetType())
                 return mouse(static_cast<QWidget *>(o), static_cast<QMouseEvent *>(e));
-            break;
-        case QEvent::Wheel:
-            addHeld(static_cast<QInputEvent *>(e));
-            break;
-        case QEvent::ApplicationDeactivate:
-            m_held = Qt::NoModifier;
             break;
         case QEvent::Show:
             if (auto *stack = qobject_cast<QStackedWidget *>(o))
@@ -328,28 +319,11 @@ public:
     }
 
 private:
-    // ---- the keys Ctrl, Shift, Alt and Meta, kept for the mouse: Qt 6.12.0 for Android sends mouse and wheel events
-    // without them (repaired in Qt 6.12.1), so Ctrl + wheel did not zoom and Ctrl + click or Shift + click selected one
-    // document only
+    // ---- the keys (Android 0.93.0: Qt 6.12.1 for Android sends mouse and wheel events with Ctrl, Shift, Alt and Meta;
+    // Qt 6.12.0 sent them without, and the program kept the keys for the mouse until then)
     bool key(QKeyEvent *k)
     {
         const bool down = k->type() == QEvent::KeyPress;
-        Qt::KeyboardModifier own = Qt::NoModifier;
-        switch (k->key()) {
-        case Qt::Key_Control: own = Qt::ControlModifier; break;
-        case Qt::Key_Shift: own = Qt::ShiftModifier; break;
-        case Qt::Key_Alt: own = Qt::AltModifier; break;
-        case Qt::Key_Meta: own = Qt::MetaModifier; break;
-        default: break;
-        }
-        if (own != Qt::NoModifier) {
-            if (down)
-                m_held |= own;
-            else
-                m_held &= ~Qt::KeyboardModifiers(own);
-        } else if (!k->isAutoRepeat()) {
-            m_held = k->modifiers() & kMods; // the other keys carry the modifiers as they are now
-        }
         if (k->key() == Qt::Key_Back) {
             if (down && !k->isAutoRepeat()) {
                 m_backTaken = closeTop();
@@ -362,12 +336,6 @@ private:
             }
         }
         return false;
-    }
-
-    void addHeld(QInputEvent *e) const
-    {
-        if (m_held && (e->modifiers() & m_held) != m_held)
-            e->setModifiers(e->modifiers() | m_held);
     }
 
     // ---- Android's Back closes what is in front (a menu, a tip, a window) instead of putting the app away; with only
@@ -491,7 +459,6 @@ private:
         return true;
     }
 
-    Qt::KeyboardModifiers m_held = Qt::NoModifier;
     bool m_backTaken = false;
     QPointer<QSplitterHandle> m_line;
     bool m_delivering = false;

@@ -32,12 +32,6 @@ void installTouch();
 void installHandles();
 void handlesAway(); // a finger began to swipe or two fingers came down: the drop under the cursor goes
 
-// New windows while Android's keyboard program calls into the program (android/MobileWindows.cpp, which exists on
-// Android only: the preview test on a desktop does not have it; set up by installTouch()). Qt 6.12.0 ends the program
-// when a window is first drawn during such a call. Each window's Android surface is made right before its first
-// picture instead, at a moment when no such call is on its way.
-void installWindowGuard();
-
 // Every window on a tablet with an external keyboard and mouse (android/MobileCare.cpp, Android 0.92.0). Call once,
 // right after the program's style is set (main.cpp): it switches the shared windowcare::tabletMode() on and
 //  - wraps the style: menus scroll instead of wrapping into columns over the menu bar; the line between two panes is
@@ -46,8 +40,6 @@ void installWindowGuard();
 //    contents of one of the program's own dialogs that cannot be as small as the screen into a part that scrolls,
 //    its buttons below it in view; again when the usable area changes (the on-screen keyboard, a turned tablet);
 //  - Android's Back closes the menu, the tip or the window in front instead of putting the app away;
-//  - keeps the keys Ctrl, Shift, Alt and Meta for mouse and wheel events, which Qt 6.12.0 for Android sends without
-//    them (Ctrl + wheel zooms, Ctrl + click and Shift + click choose several documents);
 //  - a mouse pressed a few pixels beside the line between two panes takes the line along.
 void installCare();
 

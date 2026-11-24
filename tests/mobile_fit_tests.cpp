@@ -11,8 +11,8 @@
 //    it, a button that closes it, and Android's Back closes it.
 //  - About: a window whose text scrolls, its buttons in view.
 //  - Back: closes a menu, a tip, a window; with the main window alone it is left to Android.
-//  - The keys Ctrl and Shift held while the mouse clicks (Qt 6.12.0 for Android sends the mouse without them): Ctrl +
-//    click and Shift + click choose several documents, Ctrl + wheel zooms the binder.
+//  - The keys Ctrl and Shift held while the mouse clicks (as Qt 6.12.1 for Android sends them, with the mouse; Android
+//    0.93.0): Ctrl + click and Shift + click choose several documents, Ctrl + wheel zooms the binder.
 //  - The line between the binder and the text: a mouse pressed beside it takes it along; the binder's width can be
 //    changed at every size, upright too.
 //  - The pin of the fixed mind map on the selected row, by a click on it and by the row's menu; a tap on a row's
@@ -420,24 +420,25 @@ static void keyChecks(MainWindow &w)
     tree->scrollTo(a);
     settle(60);
     QWidget *port = tree->viewport();
-    // as Qt 6.12.0 for Android delivers them: the keys and the clicks through the window (the platform's way), the
-    // key with its modifier, the click without any (Qt then also forgets the key it was told of)
+    // as Qt 6.12.1 for Android delivers them (Android 0.93.0): the keys and the clicks through the window (the
+    // platform's way), each click and the wheel with the keys that are held (Qt 6.12.0 sent the mouse without them,
+    // and the program kept the keys for the mouse until 0.92.0)
     QWindow *win = w.windowHandle();
-    auto click = [&](const QModelIndex &i) {
-        QTest::mouseClick(win, Qt::LeftButton, Qt::NoModifier, port->mapTo(&w, tree->visualRect(i).center()));
+    auto click = [&](const QModelIndex &i, Qt::KeyboardModifiers m = Qt::NoModifier) {
+        QTest::mouseClick(win, Qt::LeftButton, m, port->mapTo(&w, tree->visualRect(i).center()));
         settle(60);
     };
     click(a);
     QTest::keyPress(win, Qt::Key_Control);
-    click(b);
+    click(b, Qt::ControlModifier);
     QTest::keyRelease(win, Qt::Key_Control);
     settle(60);
     const int both = tree->selectionModel()->selectedRows().size();
-    check(both == 2, QStringLiteral("Ctrl held on the keyboard + a click without it chooses a second document"),
+    check(both == 2, QStringLiteral("Ctrl held on the keyboard + a click chooses a second document"),
           QStringLiteral("%1 chosen").arg(both));
     click(a);
     QTest::keyPress(win, Qt::Key_Shift);
-    click(b);
+    click(b, Qt::ShiftModifier);
     QTest::keyRelease(win, Qt::Key_Shift);
     settle(60);
     const int range = tree->selectionModel()->selectedRows().size();
@@ -449,7 +450,7 @@ static void keyChecks(MainWindow &w)
     const double before = zoom::factor(QLatin1String(zoom::kBinder));
     QTest::keyPress(win, Qt::Key_Control);
     const QPointF at = tree->visualRect(b).center();
-    QWheelEvent wheel(at, port->mapToGlobal(at), QPoint(), QPoint(0, 120), Qt::NoButton, Qt::NoModifier, Qt::NoScrollPhase, false);
+    QWheelEvent wheel(at, port->mapToGlobal(at), QPoint(), QPoint(0, 120), Qt::NoButton, Qt::ControlModifier, Qt::NoScrollPhase, false);
     QApplication::sendEvent(port, &wheel);
     QTest::keyRelease(win, Qt::Key_Control);
     settle(80);

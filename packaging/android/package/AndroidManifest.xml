@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
   Quillbinder for Android (port step A0, the trial build, 2026-11-14).
-  Qt 6.12.0's own manifest (qtbase, src/android/templates/AndroidManifest.xml, tag v6.12.0) with these changes:
+  Qt 6.12.0's own manifest (qtbase, src/android/templates/AndroidManifest.xml, tag v6.12.0; the same in v6.12.1) with these changes:
   - no "INSERT_PERMISSIONS" line: Qt would add the internet permission for Qt Network, which the program uses only
     for local sockets between its own windows. The permissions the app asks for are written out below.
   - the access to the tablet's shared folders (2026-11-14): projects and backups are kept in Documents/Quillbinder,

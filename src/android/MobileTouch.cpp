@@ -1,4 +1,5 @@
 #include "android/Mobile.h"
+#include "ui/MindMapOverview.h"
 
 #include <QAbstractButton>
 #include <QAbstractItemView>
@@ -247,6 +248,12 @@ private:
     // swipe never selects or drags)
     bool waits(const QWidget *w) const
     {
+        // (Android 0.93.0) the mind map's overview lies on the board's view: a finger on it is a mouse (a tap moves the
+        // view there, a drag takes the rectangle of the part shown along, the grip changes its size), never a swipe of
+        // the board under it (which went the other way)
+        for (const QWidget *x = w; x && !x->isWindow(); x = x->parentWidget())
+            if (qobject_cast<const MindMapOverview *>(x))
+                return false;
         bool inside = false;
         for (const QWidget *x = w; x; x = x->parentWidget()) {
             if (auto *area = qobject_cast<const QAbstractScrollArea *>(x); area && holds(area, w)) {
@@ -779,9 +786,6 @@ void installTouch()
         fingers = new Fingers(qApp);
         fingers->setObjectName(name);
         installHandles(); // the cursor's and the selection's handles (android/MobileHandles.cpp)
-#ifdef Q_OS_ANDROID
-        installWindowGuard(); // new windows while the keyboard program calls (android/MobileWindows.cpp)
-#endif
     }
     // the filter installed last is asked first: a later call puts this one before the filters made since
     qApp->removeEventFilter(fingers);
