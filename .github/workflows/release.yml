@@ -790,12 +790,14 @@ jobs:
           # section 8): the older releases, newest first, for the systems this release has no files for
           also=()
           i=0
+          # (2026-11-24: the newest 100 releases, not 12: the pre-releases of the packs had pushed the Android release out
+          # of the newest 12, and the page showed "Comes later" for Android)
           while IFS= read -r t; do
             [ -n "$t" ] && [ "$t" != "$TAG" ] || continue
             i=$((i + 1)); mkdir -p "older-$i"
             gh release view "$t" --json assets --jq '.assets[].name' | while IFS= read -r n; do : > "older-$i/$n"; done
             also+=(--also "older-$i" "$t")
-          done < <(gh api "repos/$GH_REPO/releases?per_page=12" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
+          done < <(gh api "repos/$GH_REPO/releases?per_page=100" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
           python3 -I tools/download-page.py release-names "$TAG" site "${also[@]}"
           grep -o 'releases/download/[^/]*/[^"]*' site/index.html | sort -u
           tools/keep-update-feed.sh site release-files/updates

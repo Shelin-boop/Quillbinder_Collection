@@ -897,12 +897,14 @@ jobs:
           gh release view "$main" --json assets --jq '.assets[].name' | while IFS= read -r n; do : > "release-names/$n"; done
           also=()
           i=0
+          # (2026-11-24: the newest 100 releases, not 12: the pre-releases of the packs had pushed the Android release out
+          # of the newest 12, and the page showed "Comes later" for Android)
           while IFS= read -r t; do
             [ -n "$t" ] && [ "$t" != "$main" ] || continue
             i=$((i + 1)); mkdir -p "older-$i"
             gh release view "$t" --json assets --jq '.assets[].name' | while IFS= read -r n; do : > "older-$i/$n"; done
             also+=(--also "older-$i" "$t")
-          done < <(gh api "repos/$GH_REPO/releases?per_page=12" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
+          done < <(gh api "repos/$GH_REPO/releases?per_page=100" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
           python3 -I tools/download-page.py release-names "$main" site "${also[@]}"
           # 0.92.0: the page is replaced as a whole; the update file the programs read is carried along. Windows
           # 0.92.0: this run's file (Windows' block made anew) takes its place, unless the published one is newer
