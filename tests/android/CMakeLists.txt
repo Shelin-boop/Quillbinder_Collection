@@ -20,7 +20,7 @@ qt_add_executable(${QB_ST_APP}
   # the tablet's own interface code, as in the program
   ${CMAKE_SOURCE_DIR}/src/android/Mobile.h ${CMAKE_SOURCE_DIR}/src/android/MobileBars.cpp
   ${CMAKE_SOURCE_DIR}/src/android/MobileTouch.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileHandles.cpp
-  ${CMAKE_SOURCE_DIR}/src/android/MobileWindows.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileFiles.cpp
+  ${CMAKE_SOURCE_DIR}/src/android/MobileFiles.cpp
   ${CMAKE_SOURCE_DIR}/src/android/MobileStart.cpp ${CMAKE_SOURCE_DIR}/src/android/MobileOpen.cpp
   ${CMAKE_SOURCE_DIR}/src/android/MobileCare.cpp
   ${QB_RESOURCES_QRC} ${CMAKE_SOURCE_DIR}/translations/translations.qrc)

@@ -352,11 +352,12 @@ if [ -n "$pid" ]; then
   # (runs 8 to 14): the menu closes, the text gets the focus back, Android's input method starts anew and calls
   # into the program, and Qt aborts when the new window is first drawn during such a call ("Failed to acquire
   # deadlock protector for QAndroidPlatformOpenGLWindow::eglSurface()"). The same hit the menus themselves (S3,
-  # S4, S7) once the input method was active. android/MobileWindows.cpp makes each window's surface ahead of its
-  # first picture, at a moment when no such call can be on its way (two earlier guards, runs 9 and 10, held Qt's
-  # lock instead and were taken out). Qt's branch for 6.12.1 has this part rewritten.
-  # Places in the menu as on the 1472 x 920 screen: Open Project 65, Compile 339, Print Settings 368.
-  for item in "Open Project:65" "Compile:339" "Print Settings:368"; do
+  # S4, S7) once the input method was active. Android 0.92.0's guard (android/MobileWindows.cpp) made each window's
+  # surface ahead of its first picture; Qt 6.12.1 makes the surface without that lock (Android 0.93.0: the guard is
+  # gone), and these steps check that. File > Save As (0.93.0) asks for the format first on a tablet.
+  # Places in the menu as on the 1472 x 920 screen (27 px a row, 2 px a line): Open Project 65, Save As 175,
+  # Compile 339, Print Settings 368.
+  for item in "Open Project:65" "Save As:175" "Compile:339" "Print Settings:368"; do
     tap "$MX" "$MY"; sleep 2; tap 100 "${item##*:}"; sleep 4
     shot "s6-$(echo "${item%%:*}" | tr 'A-Z ' 'a-z-')"
     step "S6 ${item%%:*}" "File > ${item%%:*} with the cursor in the text"
@@ -386,10 +387,9 @@ grep -nE "fingers:|files: |files \(|tablet: |open: |windows: (surface|no context
 # the start on a tablet: the shared folders, the dictionaries, the plug-ins, the save when the app is put away
 { echo "folders, dictionaries, plug-ins, saving (android/MobileFiles.cpp, MobileStart.cpp):"
   grep -E '(files|tablet|open): |files \(' /tmp/emu-logcat-all.txt | grep -vE 'fingers:' | sed -E 's/^[0-9-]+ ([0-9:.]+) .*(files[: (]|tablet: |open: )/  \1 \2/' | cut -c1-330 | head -45; } >> "$SUM"
-# new windows, as android/MobileWindows.cpp made their surfaces
+# new windows: Qt 6.12.1 makes their surfaces itself (Android 0.93.0; Qt 6.12.0 ended the program there)
 {
-  echo "new windows: surfaces made ahead $(grep -c 'windows: surface of' /tmp/emu-logcat-all.txt), of them without Android's thread standing still $(grep -c 'DID NOT STAND STILL' /tmp/emu-logcat-all.txt), without a context $(grep -c 'windows: no context' /tmp/emu-logcat-all.txt)"
-  grep 'windows: surface of' /tmp/emu-logcat-all.txt | sed -E 's/^[0-9-]+ ([0-9:.]+) .*windows: /  \1 /' | awk 'NR <= 6 || /DID NOT/' | head -30
+  echo "new windows: Qt's lock fault of 6.12.0 (\"deadlock protector\", must be 0): $(grep -c 'deadlock protector' /tmp/emu-logcat-all.txt)"
   echo "drawing contexts that did not fit a surface (must be 0): $(grep -cE 'eglMakeCurrent failed|Failed to create QRhi|Could not create the egl surface' /tmp/emu-logcat-all.txt)"
   # (Qt draws once more while Android takes the app's surfaces away; seen in run 19 at the Home key, harmless there)
   echo "pictures Qt could not draw (\"Failed to make context current\"; expected only when the app is put away): $(grep -c 'Failed to make context current' /tmp/emu-logcat-all.txt)"

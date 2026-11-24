@@ -70,7 +70,9 @@ if(ANDROID)
   # (.github/workflows/android.yml installs it). No program updates there: a new version is a new APK; add-ons for
   # Android since 0.91.3 (packages for android-arm64 / android-x86_64).
   # (After project(): CMake knows only from there on that it builds for Android; run 3 of the workflow.)
-  set(APP_RUNTIME "android-qt6.12-r1")
+  # Qt 6.12.0 (0.80.0 to 0.92.x): android-qt6.12-r1; Qt 6.12.1 since Android 0.93.0: -r2 (a new APK carries its Qt;
+  # add-ons with libraries name the runtime).
+  set(APP_RUNTIME "android-qt6.12-r2")
   # Trial builds have an id of their own. The public APK's id is permanent (the writer, 2026-11-16):
   # io.github.shelin_boop.quillbinder.app, set by .github/workflows/release-android.yml with its own key.
   set(QB_ANDROID_PACKAGE "io.github.shelin_boop.quillbinder.trial" CACHE STRING "The Android app's id (package name)")
@@ -248,11 +250,10 @@ if(ANDROID)
   # Android's own interface code (2026-11-14): toolbar rows fitted to the screen's width, scrolling by finger, zoom
   # with two fingers. Only this program contains it (src/android is in none of the libraries).
   target_sources(${APP_ID} PRIVATE src/android/Mobile.h src/android/MobileBars.cpp src/android/MobileTouch.cpp
-    src/android/MobileHandles.cpp src/android/MobileWindows.cpp src/android/MobileFiles.cpp src/android/MobileStart.cpp
+    src/android/MobileHandles.cpp src/android/MobileFiles.cpp src/android/MobileStart.cpp
     src/android/MobileOpen.cpp src/android/MobileCare.cpp)
-  # MobileWindows.cpp (new windows while the keyboard program calls; a fault of Qt 6.12.0) reaches the window's
-  # drawing engine and the input context through Qt's private headers.
-  target_link_libraries(${APP_ID} PRIVATE Qt6::GuiPrivate)
+  # (Android 0.93.0: MobileWindows.cpp, the guard for new windows while the keyboard program calls, a fault of
+  # Qt 6.12.0 repaired in Qt 6.12.1, is gone, and with it the program's own use of Qt's private headers.)
   string(REPLACE "." ";" QB_VERSION_PARTS "${APP_VERSION}")
   list(GET QB_VERSION_PARTS 0 QB_V_MAJOR)
   list(GET QB_VERSION_PARTS 1 QB_V_MINOR)

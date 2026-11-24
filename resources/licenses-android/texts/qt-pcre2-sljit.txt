@@ -1,5 +1,5 @@
 PCRE2 - Stack-less Just-In-Time Compiler
-Version: 10.48
+Version: 10.49
 Homepage: http://www.pcre.org/
 The PCRE library is a set of functions that implement regular expression pattern matching using the same syntax and semantics as Perl 5.
 

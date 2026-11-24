@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Writes resources/licenses-android/ (Help > Third-Party Licenses of the Android program; 2026-11-14).
 
-The APK ships other files than the AppImage and the Windows program: The Qt Company's build of Qt 6.12.0 for Android
+The APK ships other files than the AppImage and the Windows program: The Qt Company's build of Qt 6.12.1 for Android
 with the third-party code compiled into its libraries, Hunspell linked into the program, OpenSSL (for https),
 the C++ runtime of Android's NDK, the Java libraries Qt's Android part needs, and the spelling dictionaries. The list
 has the format of resources/licenses/index.json and is compiled into the Android program under the same resource
@@ -11,8 +11,8 @@ It is made from the Windows list (resources/licenses-windows, the same Qt versio
 PDF's parts, of Hunspell, Monocypher and the dictionaries are the same files) and from a folder with the texts only
 the Android build needs:
 
-  <extra>/forkfd/qt_attribution.json, LICENSE      qtbase v6.12.0, src/3rdparty/forkfd
-  <extra>/libtiff/qt_attribution.json, COPYRIGHT   qtimageformats v6.12.0, src/3rdparty/libtiff
+  <extra>/forkfd/qt_attribution.json, LICENSE      qtbase v6.12.1, src/3rdparty/forkfd
+  <extra>/libtiff/qt_attribution.json, COPYRIGHT   qtimageformats v6.12.1, src/3rdparty/libtiff
   <extra>/libcxx/LICENSE.TXT                       llvm-project llvmorg-18.1.8, libcxx (NDK r27c's C++ runtime is LLVM 18)
   <extra>/openssl/LICENSE.txt                      openssl openssl-3.5.9
   (all from raw.githubusercontent.com/<project>/<repository>/<tag>/<path>)
@@ -34,7 +34,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 WIN = os.path.join(ROOT, "resources", "licenses-windows")
 OUT = os.path.join(ROOT, "resources", "licenses-android")
 EXTRA = sys.argv[1]
-QT_VERSION = "6.12.0"
+QT_VERSION = "6.12.1"
 SOURCES = "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources"
 
 # Qt's own list of the third-party parts in its Android libraries the APK carries (the Ids of qt_attribution.json;

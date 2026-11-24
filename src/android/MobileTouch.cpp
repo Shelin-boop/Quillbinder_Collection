@@ -779,9 +779,6 @@ void installTouch()
         fingers = new Fingers(qApp);
         fingers->setObjectName(name);
         installHandles(); // the cursor's and the selection's handles (android/MobileHandles.cpp)
-#ifdef Q_OS_ANDROID
-        installWindowGuard(); // new windows while the keyboard program calls (android/MobileWindows.cpp)
-#endif
     }
     // the filter installed last is asked first: a later call puts this one before the filters made since
     qApp->removeEventFilter(fingers);

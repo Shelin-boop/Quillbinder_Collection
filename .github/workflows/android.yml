@@ -1,6 +1,6 @@
 # Android build of the work branches (port step A0, the trial build, 2026-11-14).
 #
-# Runs on a push to a branch "android/..." (or by hand). Builds the program with The Qt Company's Qt 6.12.0 for
+# Runs on a push to a branch "android/..." (or by hand). Builds the program with The Qt Company's Qt 6.12.1 for
 # Android (the same Qt version as the Linux AppImage and the Windows program) and the Android NDK Qt names for it,
 # packs it into an APK for tablets (arm64-v8a) signed with the key for trial builds, looks at the APK, then builds
 # the program once more for x86_64 and starts it on an emulated tablet (packaging/android/android-emulator.sh;

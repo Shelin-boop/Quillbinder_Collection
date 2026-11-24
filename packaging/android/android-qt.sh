@@ -12,6 +12,10 @@
 # repository's listings 2026-11-14). aqtinstall 3.3.0 looks in .../6120/android_arm64_v8a/ and finds nothing
 # (run 1 of the Android workflow: "The packages ['qtpdf'] were not found"), so this script gives it the folder
 # name before it runs, as the Windows workflow does for Qt's Windows folders.
+# Since Qt 6.12, Qt PDF is a "Qt Extensions" module with releases of its own (Qt WebEngine 6.140.0 for Qt 6.12), listed
+# only under the Qt version it was built with (6.12.0): when this version has none (Android 0.93.0, Qt 6.12.1), it is
+# taken from the newest earlier patch release of the same Qt, its files only (--noarchives), as tools/get-qt.sh does
+# on Linux and packaging/windows/win-qt.sh on Windows.
 set -uo pipefail
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 BASE=${1:?base folder}
@@ -42,9 +46,31 @@ if [ ! -f "$BASE/$V/gcc_64/bin/qmake" ]; then
   python3 -m aqt install-qt linux desktop "$V" linux_gcc_64 -O "$BASE" 2>&1 | tee "$LOGS/qt-install.log" || exit 1
 fi
 for arch in $ARCHS; do
-  abi=${arch#android_}
   python3 -m aqt install-qt all_os android "$V" "$arch" -O "$BASE" -m qtpdf qtimageformats 2>&1 | tee -a "$LOGS/qt-install.log" \
-    || echo "aqtinstall ended with an error for $arch (see qt-install.log)"
+    || echo "aqtinstall ended with an error for $arch with Qt PDF (see qt-install.log)"
+  if [ ! -f "$BASE/$V/$arch/lib/cmake/Qt6Pdf/Qt6PdfConfig.cmake" ]; then
+    if [ ! -f "$BASE/$V/$arch/lib/cmake/Qt6/qt.toolchain.cmake" ]; then
+      python3 -m aqt install-qt all_os android "$V" "$arch" -O "$BASE" -m qtimageformats 2>&1 | tee -a "$LOGS/qt-install.log" \
+        || echo "aqtinstall ended with an error for $arch (see qt-install.log)"
+    fi
+    from=""
+    T=$(mktemp -d)
+    for p in $(seq $(( ${V##*.} - 1 )) -1 0); do
+      f="${V%.*}.$p"
+      if python3 -m aqt install-qt all_os android "$f" "$arch" -O "$T" -m qtpdf --noarchives >> "$LOGS/qt-install.log" 2>&1 \
+          && [ -f "$T/$f/$arch/lib/cmake/Qt6Pdf/Qt6PdfConfig.cmake" ]; then
+        from=$f
+        break
+      fi
+    done
+    if [ -n "$from" ]; then
+      cp -an "$T/$from/$arch/." "$BASE/$V/$arch/"
+      echo "$arch: Qt PDF taken from Qt $from's repository folder (the Qt Extensions release for Qt ${V%.*})"
+    else
+      echo "$arch: no Qt PDF for Qt ${V%.*} in Qt's repository"
+    fi
+    rm -rf "$T"
+  fi
   ls "$BASE/$V/$arch/lib" 2>/dev/null | grep -cE "^libQt6(Pdf|PdfWidgets|Core|Widgets|PrintSupport|Svg|Network|Xml)_" | sed "s/^/$arch: Qt libraries of the program found (of 8): /"
 done
 rm -rf "$BASE/$V"/*/doc "$BASE/$V"/*/examples
