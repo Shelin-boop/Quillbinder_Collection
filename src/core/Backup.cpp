@@ -236,6 +236,7 @@ Put copyInto(const QString &staged, const QString &target, QString *why, const s
     return Put::Done;
 }
 
+// Why one step under the final name: docs/design-decisions.md, entry 4.
 // Puts a finished backup of the work folder into the backup folder, in one step: renamed there (one drive), else
 // copied straight to the final name. *finalPath: where it is now. The waiting file is gone only when the backup is
 // in the folder, whole.

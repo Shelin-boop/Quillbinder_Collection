@@ -787,6 +787,7 @@ QString Project::oldUiStateFile() const
     return QDir(settingsDir()).filePath(QStringLiteral("ui-%1.json").arg(dev));
 }
 
+// Why a failure here does not turn the save red: docs/design-decisions.md, entry 3.
 bool Project::writeUiState()
 {
     const QByteArray data = QJsonDocument::fromVariant(uiState).toJson();
@@ -810,6 +811,7 @@ bool Project::writeUiState()
 
 QString Project::journalFile() const { return settingsDir() + QStringLiteral("/journal.json"); }
 
+// Why the journal has one fixed name: docs/design-decisions.md, entry 1.
 bool Project::finishInterruptedSave(QString *error)
 {
     if (!QFile::exists(journalFile()))
@@ -1146,6 +1148,7 @@ bool Project::save(QString *error)
     return ok;
 }
 
+// Why a save runs in the window's thread: docs/design-decisions.md, entry 10.
 bool Project::saveImpl(QString *error, bool quick)
 {
     failure::clear();   // 0.92.0: the kind of a failure belongs to the save it happens in (FailureKind.h)

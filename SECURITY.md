@@ -58,6 +58,12 @@ Only the newest published version of each system: Linux (beta), Windows (experim
 (experimental). They are listed on the [download page](https://shelin-boop.github.io/Quillbinder_Collection/).
 Quillbinder is beta software.
 
+## Choices that look like faults
+
+Some properties are deliberate, for example that projects are plain files, that a lock warns and does not block, and
+where the program does and does not check signatures. Their reasons, costs and what would change them are in
+[docs/design-decisions.md](docs/design-decisions.md); please read it before reporting one of them.
+
 ## What to expect
 
 Quillbinder is a small project. Reports are read and answered, but there is no fixed response time and no

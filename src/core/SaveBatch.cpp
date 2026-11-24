@@ -63,6 +63,7 @@ QSet<quint64> g_noFolderSync;  // devices whose folders cannot be synced (probeF
 QMutex g_noFolderSyncLock;     // read by a backup's worker thread (syncDir), written by a project that opens meanwhile
 QSet<QString> g_unsynced;      // folders whose checked sync failed and has not worked since
 
+// Why "cannot sync" counts as success and a real error does not: docs/design-decisions.md, entry 2.
 bool cannotSync(int e)
 {
     return e == EINVAL || e == ENOTSUP || e == EOPNOTSUPP || e == ENOSYS || e == EBADF || e == EACCES || e == EPERM;

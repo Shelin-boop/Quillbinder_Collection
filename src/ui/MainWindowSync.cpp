@@ -21,7 +21,6 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QStatusBar>
 #include <QTimer>
 
 namespace qb {
@@ -58,6 +57,7 @@ QStringList MainWindow::lockFilesFor(const Project *p) const
     return out;
 }
 
+// Why the lock only warns and does not block: docs/design-decisions.md, entry 1.
 bool MainWindow::confirmLock(const QString &lockFile)
 {
     const syncsafe::LockInfo l = syncsafe::readLock(lockFile);
@@ -168,7 +168,7 @@ void MainWindow::lockNotWritten(const QString &file)
                            "computer that opens it through your sync folder will not be warned. Check that the project "
                            "folder is writable and the disk is not full.")
                             .arg(QDir::toNativeSeparators(file));
-    statusBar()->showMessage(msg, 15000);
+    showStatusNote(msg, 15000);
     if (QB_TEST_ENV_SET("QB_NO_DIALOGS"))
         return;
     auto *box = new QMessageBox(QMessageBox::Warning, tr("Project Not Marked as Open"), msg, QMessageBox::Ok, this);
@@ -315,7 +315,7 @@ void MainWindow::connectSyncSafety(Project *p)
     connect(p->model(), &QAbstractItemModel::dataChanged, this, recheck);
     connect(p->docs(), &DocumentStore::missingFile, this, [this](const QString &id, const QString &) {
         BinderItem *it = m_project ? m_project->item(id) : nullptr;
-        statusBar()->showMessage(tr("“%1”: its text has not arrived on this computer yet; it is shown empty and "
+        showStatusNote(tr("“%1”: its text has not arrived on this computer yet; it is shown empty and "
                                     "cannot be edited until the project is opened again.")
                                      .arg(it ? it->title : id),
                                  15000);

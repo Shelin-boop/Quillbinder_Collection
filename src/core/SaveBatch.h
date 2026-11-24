@@ -23,6 +23,7 @@
 namespace qb {
 namespace savebatch {
 
+// Why a waiting file carries its target's name and a fixed ending: docs/design-decisions.md, entry 1.
 constexpr const char *kStageSuffix = ".qbstage";
 
 // A file name of a save in progress (never read as project data, never backed up)

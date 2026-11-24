@@ -43,6 +43,7 @@ inline bool commit(QSaveFile &f)
     }
     const int fd = f.handle();
 #ifdef Q_OS_UNIX
+    // Why: docs/design-decisions.md, entry 2.
     // a file system that cannot sync (EINVAL, ENOTSUP on some network and FUSE mounts) is no error
     if (fd >= 0 && ::fsync(fd) != 0 && errno != EINVAL && errno != ENOTSUP && errno != EOPNOTSUPP && errno != ENOSYS) {
         f.cancelWriting();
