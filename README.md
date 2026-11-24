@@ -13,7 +13,9 @@ between the programs. Scrivener and Scapple are names of products of Literature 
 Quillbinder contacts the internet for one thing only: to look for updates. It fetches one small file, sends nothing
 about you, and you can switch it off in the Help menu.
 
-Found a problem, or have an idea? See [Feedback](#feedback) below.
+![The main window of Quillbinder with its welcome project: binder, editor and inspector](docs/images/main-window.png)
+
+Found a problem, or have an idea? See [Feedback](#feedback) below (in the program: **Help > Report a Problem…**).
 
 ## Download
 
@@ -149,6 +151,7 @@ write in English or German.
   [propose a function](https://github.com/Shelin-boop/Quillbinder_Collection/issues/new?template=feature-request.yml).
 - **A question, or an idea to talk over first:** [Discussions](https://github.com/Shelin-boop/Quillbinder_Collection/discussions).
 - **A security problem:** not in a public issue; see [SECURITY.md](SECURITY.md).
+- **Why something is the way it is** (a lock that only warns, plain unencrypted files, a save that runs in the window's thread): [docs/design-decisions.md](docs/design-decisions.md).
 - **A change to the source, or an add-on of your own:** see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Documentation

@@ -9996,6 +9996,14 @@ Die Versionen 0.70.0 bis 0.90.4 haben sie dort abgelegt. In den Sicherungsordner
         <translation>Programm, Versionen und Computer auf einen Blick, zum Kopieren in einen Problembericht</translation>
     </message>
     <message>
+        <source>Report a Problem…</source>
+        <translation>Problem melden…</translation>
+    </message>
+    <message>
+        <source>Opens the project&apos;s page for reports of problems and wishes in your browser</source>
+        <translation>Öffnet die Seite des Projekts für Problemmeldungen und Wünsche im Browser</translation>
+    </message>
+    <message>
         <source>&amp;Crash Reports…</source>
         <translation>&amp;Absturzberichte…</translation>
     </message>

@@ -236,7 +236,7 @@ static void windowChecks(MainWindow &w)
                                 QStringLiteral("objectsWindow")};
     // never: the end, a project of their own, the network, the printer, the desktop
     const QSet<QString> skip = {QStringLiteral("quit"), QStringLiteral("welcome"), QStringLiteral("pluginFolder"),
-                                QStringLiteral("integrate"), QStringLiteral("updateCheckNow"), QStringLiteral("updateCheckAuto"),
+                                QStringLiteral("integrate"), QStringLiteral("updateCheckNow"), QStringLiteral("updateCheckAuto"), QStringLiteral("reportProblem"),
                                 QStringLiteral("print"), QStringLiteral("printPreview"), QStringLiteral("closeProject"),
                                 QStringLiteral("restart")};
     QList<QAction *> all;

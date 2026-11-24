@@ -11,7 +11,6 @@
 #include "ui/LinkOpen.h"
 #include "ui/ProjectLook.h"
 #include <QSettings>
-#include <QStatusBar>
 #include <QMimeData>
 #include "ui/QuickRef.h"
 #include "ui/DragDrop.h"
@@ -650,7 +649,7 @@ void MainWindow::createMenus()
     QMenu *help = mb->addMenu(tr("&Help"));
     add(help, {"manual", "quickStart", "welcome", "placeholders", "keyboardShortcuts", "", "addonManager", "pluginFolder",
                "integrate", "thisComputer", "", "updateCheckAuto", "updateCheckNow", "", "mindMapHelp", "developerGuide", "", "systemInfo",
-               "crashReports", "", "licenses", "about"});
+               "crashReports", "reportProblem", "", "licenses", "about"});
 
     // binder footer menus
     m_addMenu = new QMenu(this);
@@ -1163,7 +1162,7 @@ void MainWindow::resetToolbarPlaces()
         m_barDock->reset(); // the standard rows and order, no free space between the toolbars
     else
         placeToolBars();
-    statusBar()->showMessage(tr("The toolbars are back in their standard places."), 5000);
+    showStatusNote(tr("The toolbars are back in their standard places."), 5000);
 }
 
 // A bar shows when its row is switched on (Show Toolbar for Main, Themes, Search and Tools; Show Format Bar for the
