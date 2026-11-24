@@ -400,7 +400,8 @@ def refresh(licdir, runtime_file=None):
 QT_LEFT_OUT = {
     "android-gradle-wrapper", "android-native-style", "cocoa-platform-plugin", "qeventdispatcher_cf",
     "d3d12memoryallocator", "rhi-miniengine-d3d12-mipmap", "wintab", "catch2", "cmake-runcmake-test-modules",
-    "sbom-test-child", "sbom-test-parent", "extra-cmake-modules", "linuxperf", "valgrind", "cycle", "sqlite",
+    "sbom-test-child", "sbom-test-parent", "entry-index-first", "entry-index-second", "entry-index-third",
+    "extra-cmake-modules", "linuxperf", "valgrind", "cycle", "sqlite",
     "pixman", "libtiff",
 }
 
@@ -416,6 +417,9 @@ def qt_attributions(qtlic):
         base = os.path.join(qtlic, repo)
         for dirpath, _, files in os.walk(base):
             if ".git" in dirpath or "qt_attribution.json" not in files:
+                continue
+            # 0.93.1: the attribution files of Qt's own tests describe made-up parts (Qt 6.12.1's SBOM tests)
+            if "tests" in os.path.relpath(dirpath, base).split(os.sep):
                 continue
             data = json.loads(qt_read(os.path.join(dirpath, "qt_attribution.json")), strict=False)
             for item in data if isinstance(data, list) else [data]:

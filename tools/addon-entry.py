@@ -231,7 +231,14 @@ def cmd_fetch_testdata(path, out):
         for p in d.get("patterns", []):
             cmd += ["-p", p]
         print(" ".join(cmd), flush=True)
-        subprocess.run(cmd, check=True)
+        # (0.93.1: up to three tries; a download of a release's large model files was cut once by "connection reset
+        # by peer", and --clobber fetches them again whole)
+        for attempt in (1, 2, 3):
+            if subprocess.run(cmd).returncode == 0:
+                break
+            if attempt == 3:
+                raise EntryError("the test data of %s could not be downloaded (three tries)" % d["release"])
+            print("download cut off: trying again (%d of 3)" % (attempt + 1), flush=True)
     return 0
 
 

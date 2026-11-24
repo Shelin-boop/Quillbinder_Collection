@@ -186,6 +186,16 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   workflow's matrix, push filter and rights, the translator pack's license files against the add-on's
   `make-addon.sh`, and a pack made and fetched through a made-up `gh` (SHA-256 checked, paths made new).
   `secwatch` also checks `tools/verify-ffmpeg-source.sh` with keys made for the check (needs gpg).
+- `qb_v0931_tests` (0.93.1: the rule that maps the generic font names "monospace", "serif", "sans-serif" on a platform
+  that does not know them, with Android-like and Linux-like inputs, and that Linux maps none; the plain texts kept for
+  search and counts stay within `DocumentStore::setPlainCacheBudget`, every text is right kept or not, a changed text
+  frees its room; Help > System Information names each screen's usable area, the input devices by kind with printable
+  names and the on-screen keyboard's state; screenshot `system-information.png`).
+- `addonentry` (0.93.1, `tests/addon_entry_tests.py`, Python only, no build): the official entries' `folder` (a
+  made-up repository with the add-on in a subfolder: commands, cache paths and keys, the source archive of that folder
+  only, a Windows block's own folder, folders outside refused, no folder as before); the real entry of Translation and
+  Proofreading against the add-on's manifest and folder (1.3, every script its commands name, models-3 last); the
+  add-on's own `make-package.py` naming the program's runtime for Linux and Android.
 - `verlines` (0.93.0, `tests/version_lines_tests.py`, Python only, no build): the version line per system in
   `CMakeLists.txt` (`APP_VERSION` for Linux, `APP_VERSION_WINDOWS`, `APP_VERSION_ANDROID`: the same first two numbers,
   the build's pick and its stop on a wrong number), the shell lines of the scripts and workflows that read them,

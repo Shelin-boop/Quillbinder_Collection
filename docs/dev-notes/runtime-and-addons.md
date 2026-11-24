@@ -2,6 +2,26 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.93.1: Qt PDF's own source, the official entry's folder, the generic font names
+
+- **Qt PDF** is, since Qt 6.12, a Qt Extensions module released with Qt WebEngine under a version of its own
+  (6.140.0 for Qt 6.12: `QB_QTPDF_VERSION` in `CMakeLists.txt`); Qt's super-repository no longer has qtwebengine at
+  v6.12.1, so `qt-everywhere-src-6.12.1.tar.xz` holds no Qt PDF source. `tools/collect-licenses.py` lists "Qt PDF" (its
+  libraries and `libqpdf.so`) as a part of its own and names `qtwebengine-everywhere-src-<QB_QTPDF_VERSION>.tar.xz` for
+  it and its parts; `tools/collect-sources.py` fetches that archive from
+  `download.qt.io/official_releases/qtwebengine/<major.minor>/<version>/src/` (the Qt Project publishes only an MD5
+  list there, `md5sums.txt`: checked, and the SHA-256 printed); `tools/get-qt-licenses.sh` reads Qt PDF's parts from
+  qtwebengine's tag `v<QB_QTPDF_VERSION>`. The list written anew for 0.93.1 also has the versions of Qt 6.12.1's own
+  parts (the 0.93.0 list still had 6.12.0's), and Qt's test attribution files (`tests/` of a repository, e.g. the SBOM
+  test entries of 6.12.1) are left out.
+- **Official entries name a folder** (`folder`, and per Windows or Android block): `tools/addon-entry.py`'s
+  `source_dir()`; `cache`, `run` and `sources` (`git archive <commit>:<folder>`) use it. The entry of Translation and
+  Proofreading names `addons/translation-proofreading/source` and the commit that holds 1.3 with its packaging fix.
+- **The generic font names**: `fontfaces::mapGenericFamilies()` (called by `install()`) adds a `QFont` substitution
+  for "monospace", "serif" or "sans-serif" only where the name falls to the default font while its style hint gives a
+  font of its kind (Qt for Android: `QAndroidPlatformFontDatabase::fallbacksForFamily` answers by the style hint);
+  the compiler's `exportFamily()` gives the style hint too. On Linux fontconfig knows the names: nothing is mapped.
+
 ## Qt 6.12.1 and the runtime u2404-qt6.12-r2 (0.93.0)
 
 - **Why a new runtime id**: Qt 6.12.1 brings newer libraries inside its own build: zlib 1.4, HarfBuzz 15.1.0, PCRE2 10.49,

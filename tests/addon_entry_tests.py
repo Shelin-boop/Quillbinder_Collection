@@ -122,6 +122,33 @@ with tempfile.TemporaryDirectory() as tmp:
     check("without a folder the repository's top is the add-on's folder (as before)",
           rc == 0 and os.path.join(repo, "deps/install") in out, out)
 
+# ---------------------------------------------------------------- the test data's download tries three times
+with tempfile.TemporaryDirectory() as tmp:
+    bindir = os.path.join(tmp, "bin")
+    os.makedirs(bindir)
+    count = os.path.join(tmp, "count")
+    with open(os.path.join(bindir, "gh"), "w") as f:
+        f.write("#!/bin/sh\nn=$(cat %s 2>/dev/null || echo 0); n=$((n+1)); echo $n > %s\n[ $n -ge 3 ]\n" % (count, count))
+    os.chmod(os.path.join(bindir, "gh"), 0o755)
+    entry = {"format": 1, "id": "sample-addon", "name": "Sample Add-on", "version": "1.0", "repository": "someone/sample",
+             "commit": "0" * 40, "author": "Someone", "license": "MIT", "reviewed": "2026-11-24", "summary": "For the checks.",
+             "build": {"steps": ["true"], "testData": {"variable": "TD", "downloads": [{"release": "data-1"}]}}}
+    path = os.path.join(tmp, "sample-addon.json")
+    with open(path, "w") as f:
+        json.dump(entry, f)
+    env = dict(os.environ, PATH=bindir + os.pathsep + os.environ.get("PATH", ""))
+    r = subprocess.run([sys.executable, "-I", TOOL, "fetch-testdata", path, os.path.join(tmp, "data")], capture_output=True,
+                       text=True, env=env)
+    check("fetch-testdata: a download cut off twice is tried again and then succeeds",
+          r.returncode == 0 and open(count).read().strip() == "3", r.stdout + r.stderr)
+    os.remove(count)
+    with open(os.path.join(bindir, "gh"), "w") as f:
+        f.write("#!/bin/sh\nexit 1\n")
+    r = subprocess.run([sys.executable, "-I", TOOL, "fetch-testdata", path, os.path.join(tmp, "data")], capture_output=True,
+                       text=True, env=env)
+    check("fetch-testdata: after three failed tries it stops with a message", r.returncode != 0 and "three tries" in r.stdout + r.stderr,
+          r.stdout + r.stderr)
+
 # ---------------------------------------------------------------- item 23: the real entry describes 1.3
 real_path = os.path.join(ROOT, "official-addons", "translation-proofreading.json")
 real = json.load(open(real_path, encoding="utf-8"))

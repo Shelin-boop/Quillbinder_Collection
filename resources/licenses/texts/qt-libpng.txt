@@ -1,5 +1,5 @@
 LibPNG
-Version: 1.6.58
+Version: 1.6.59
 Homepage: http://www.libpng.org/pub/png/libpng.html
 libpng is the official PNG reference library.
 

@@ -20,13 +20,16 @@ Fixes and small changes (a program update for 0.93.0; the AppImage stays on the 
 - **Help > Third-Party Licenses names Qt PDF with its own source.** Since Qt 6.12 Qt PDF is released with Qt
   WebEngine and has a version of its own (Qt PDF 6.140.0 for Qt 6.12), and Qt's own source release no longer holds
   it: the list names it as a part of its own with its source, `qtwebengine-everywhere-src-6.140.0.tar.xz`, which the
-  release "Third-party source code" gets with this version.
+  release "Third-party source code" gets with this version. The parts Qt carries inside itself are listed in the
+  versions of Qt 6.12.1 (0.93.0 still showed those of Qt 6.12.0, such as zlib 1.3.2 instead of 1.4 and HarfBuzz
+  14.5.0 instead of 15.1.0); the made-up parts of Qt's own tests are left out.
 
 For developers (nothing changes in the program): the official entry of Translation and Proofreading describes 1.3
 and names the add-on's folder in this repository (`folder`, used by the three official add-on workflows through
 `tools/addon-entry.py`); the add-on's own packaging script names the program's runtime (it named the runtime before
 0.93.0); `tools/get-ffmpeg.sh` builds FFmpeg anew when a folder holds another FFmpeg version; the workflows use the
-artifact actions that run on Node.js 24.
+artifact actions that run on Node.js 24; the security watch follows Qt PDF's own releases; the official add-on
+workflows try a cut-off download of test data again.
 
 ## 0.93.0 beta (2026-11-24)
 

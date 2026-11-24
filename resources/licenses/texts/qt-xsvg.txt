@@ -1,4 +1,6 @@
 XSVG
+Version: 0.2.1
+Homepage: https://cairographics.org/snapshots/
 Some code for arc handling is derived from code from the XSVG project.
 
 Copyright 2002 USC/Information Sciences Institute
