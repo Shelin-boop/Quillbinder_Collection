@@ -46,7 +46,7 @@ check("the functional level (the first two numbers) is the same on every system"
 check("Linux keeps APP_VERSION as the first line that starts with set(APP_VERSION \"",
       cm.index('set(APP_VERSION "') < cm.index('set(APP_VERSION_WINDOWS "') < cm.index('set(APP_VERSION_ANDROID "'))
 check("the build takes the system's own line before the label and the shown version are made",
-      re.search(r'^if\(WIN32\)\n  set\(APP_VERSION "\$\{APP_VERSION_WINDOWS\}"\)\nelseif\(ANDROID OR CMAKE_SYSTEM_NAME STREQUAL "Android"\)\n'
+      re.search(r'^if\(WIN32\)\n  set\(APP_VERSION "\$\{APP_VERSION_WINDOWS\}"\)\nelseif\(ANDROID OR CMAKE_SYSTEM_NAME STREQUAL "Android" OR CMAKE_TOOLCHAIN_FILE MATCHES "/android_\[\^/\]\+/lib/cmake/Qt6/"\)\n'
                 r'(  #[^\n]*\n)*  set\(APP_VERSION "\$\{APP_VERSION_ANDROID\}"\)\nendif\(\)', cm, re.M)
       and cm.index("APP_VERSION_ANDROID}") < cm.index("set(APP_VERSION_SHOWN"))
 check("a build with another system's number stops (a check after project())",
