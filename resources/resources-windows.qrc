@@ -469,6 +469,7 @@
     <file alias="icons/qbicons/status/16/qb-magnifier.svg">icons/qbicons/status/16/qb-magnifier.svg</file>
     <file alias="icons/qbicons/status/16/qb-mindmap.svg">icons/qbicons/status/16/qb-mindmap.svg</file>
     <file alias="icons/qbicons/status/16/qb-mm-menu.svg">icons/qbicons/status/16/qb-mm-menu.svg</file>
+    <file alias="icons/qbicons/status/16/qb-mm-overview.svg">icons/qbicons/status/16/qb-mm-overview.svg</file>
     <file alias="icons/qbicons/status/16/qb-mm-shape.svg">icons/qbicons/status/16/qb-mm-shape.svg</file>
     <file alias="icons/qbicons/status/16/qb-music.svg">icons/qbicons/status/16/qb-music.svg</file>
     <file alias="icons/qbicons/status/16/qb-musical-notes.svg">icons/qbicons/status/16/qb-musical-notes.svg</file>
@@ -550,6 +551,7 @@
     <file alias="icons/qbicons/status/22/qb-magnifier.svg">icons/qbicons/status/22/qb-magnifier.svg</file>
     <file alias="icons/qbicons/status/22/qb-mindmap.svg">icons/qbicons/status/22/qb-mindmap.svg</file>
     <file alias="icons/qbicons/status/22/qb-mm-menu.svg">icons/qbicons/status/22/qb-mm-menu.svg</file>
+    <file alias="icons/qbicons/status/22/qb-mm-overview.svg">icons/qbicons/status/22/qb-mm-overview.svg</file>
     <file alias="icons/qbicons/status/22/qb-mm-shape.svg">icons/qbicons/status/22/qb-mm-shape.svg</file>
     <file alias="icons/qbicons/status/22/qb-music.svg">icons/qbicons/status/22/qb-music.svg</file>
     <file alias="icons/qbicons/status/22/qb-musical-notes.svg">icons/qbicons/status/22/qb-musical-notes.svg</file>
@@ -630,6 +632,7 @@
     <file alias="icons/qbicons/status/32/qb-magnifier.svg">icons/qbicons/status/32/qb-magnifier.svg</file>
     <file alias="icons/qbicons/status/32/qb-mindmap.svg">icons/qbicons/status/32/qb-mindmap.svg</file>
     <file alias="icons/qbicons/status/32/qb-mm-menu.svg">icons/qbicons/status/32/qb-mm-menu.svg</file>
+    <file alias="icons/qbicons/status/32/qb-mm-overview.svg">icons/qbicons/status/32/qb-mm-overview.svg</file>
     <file alias="icons/qbicons/status/32/qb-mm-shape.svg">icons/qbicons/status/32/qb-mm-shape.svg</file>
     <file alias="icons/qbicons/status/32/qb-music.svg">icons/qbicons/status/32/qb-music.svg</file>
     <file alias="icons/qbicons/status/32/qb-musical-notes.svg">icons/qbicons/status/32/qb-musical-notes.svg</file>
@@ -710,6 +713,7 @@
     <file alias="icons/qbicons/status/48/qb-magnifier.svg">icons/qbicons/status/48/qb-magnifier.svg</file>
     <file alias="icons/qbicons/status/48/qb-mindmap.svg">icons/qbicons/status/48/qb-mindmap.svg</file>
     <file alias="icons/qbicons/status/48/qb-mm-menu.svg">icons/qbicons/status/48/qb-mm-menu.svg</file>
+    <file alias="icons/qbicons/status/48/qb-mm-overview.svg">icons/qbicons/status/48/qb-mm-overview.svg</file>
     <file alias="icons/qbicons/status/48/qb-mm-shape.svg">icons/qbicons/status/48/qb-mm-shape.svg</file>
     <file alias="icons/qbicons/status/48/qb-music.svg">icons/qbicons/status/48/qb-music.svg</file>
     <file alias="icons/qbicons/status/48/qb-musical-notes.svg">icons/qbicons/status/48/qb-musical-notes.svg</file>
@@ -791,6 +795,7 @@
     <file alias="icons/qbicons/status/64/qb-magnifier.svg">icons/qbicons/status/64/qb-magnifier.svg</file>
     <file alias="icons/qbicons/status/64/qb-mindmap.svg">icons/qbicons/status/64/qb-mindmap.svg</file>
     <file alias="icons/qbicons/status/64/qb-mm-menu.svg">icons/qbicons/status/64/qb-mm-menu.svg</file>
+    <file alias="icons/qbicons/status/64/qb-mm-overview.svg">icons/qbicons/status/64/qb-mm-overview.svg</file>
     <file alias="icons/qbicons/status/64/qb-mm-shape.svg">icons/qbicons/status/64/qb-mm-shape.svg</file>
     <file alias="icons/qbicons/status/64/qb-music.svg">icons/qbicons/status/64/qb-music.svg</file>
     <file alias="icons/qbicons/status/64/qb-musical-notes.svg">icons/qbicons/status/64/qb-musical-notes.svg</file>
@@ -1299,6 +1304,7 @@
     <file alias="icons/qbicons-dark/status/16/qb-magnifier.svg">icons/qbicons-dark/status/16/qb-magnifier.svg</file>
     <file alias="icons/qbicons-dark/status/16/qb-mindmap.svg">icons/qbicons-dark/status/16/qb-mindmap.svg</file>
     <file alias="icons/qbicons-dark/status/16/qb-mm-menu.svg">icons/qbicons-dark/status/16/qb-mm-menu.svg</file>
+    <file alias="icons/qbicons-dark/status/16/qb-mm-overview.svg">icons/qbicons-dark/status/16/qb-mm-overview.svg</file>
     <file alias="icons/qbicons-dark/status/16/qb-mm-shape.svg">icons/qbicons-dark/status/16/qb-mm-shape.svg</file>
     <file alias="icons/qbicons-dark/status/16/qb-music.svg">icons/qbicons-dark/status/16/qb-music.svg</file>
     <file alias="icons/qbicons-dark/status/16/qb-musical-notes.svg">icons/qbicons-dark/status/16/qb-musical-notes.svg</file>
@@ -1380,6 +1386,7 @@
     <file alias="icons/qbicons-dark/status/22/qb-magnifier.svg">icons/qbicons-dark/status/22/qb-magnifier.svg</file>
     <file alias="icons/qbicons-dark/status/22/qb-mindmap.svg">icons/qbicons-dark/status/22/qb-mindmap.svg</file>
     <file alias="icons/qbicons-dark/status/22/qb-mm-menu.svg">icons/qbicons-dark/status/22/qb-mm-menu.svg</file>
+    <file alias="icons/qbicons-dark/status/22/qb-mm-overview.svg">icons/qbicons-dark/status/22/qb-mm-overview.svg</file>
     <file alias="icons/qbicons-dark/status/22/qb-mm-shape.svg">icons/qbicons-dark/status/22/qb-mm-shape.svg</file>
     <file alias="icons/qbicons-dark/status/22/qb-music.svg">icons/qbicons-dark/status/22/qb-music.svg</file>
     <file alias="icons/qbicons-dark/status/22/qb-musical-notes.svg">icons/qbicons-dark/status/22/qb-musical-notes.svg</file>
@@ -1460,6 +1467,7 @@
     <file alias="icons/qbicons-dark/status/32/qb-magnifier.svg">icons/qbicons-dark/status/32/qb-magnifier.svg</file>
     <file alias="icons/qbicons-dark/status/32/qb-mindmap.svg">icons/qbicons-dark/status/32/qb-mindmap.svg</file>
     <file alias="icons/qbicons-dark/status/32/qb-mm-menu.svg">icons/qbicons-dark/status/32/qb-mm-menu.svg</file>
+    <file alias="icons/qbicons-dark/status/32/qb-mm-overview.svg">icons/qbicons-dark/status/32/qb-mm-overview.svg</file>
     <file alias="icons/qbicons-dark/status/32/qb-mm-shape.svg">icons/qbicons-dark/status/32/qb-mm-shape.svg</file>
     <file alias="icons/qbicons-dark/status/32/qb-music.svg">icons/qbicons-dark/status/32/qb-music.svg</file>
     <file alias="icons/qbicons-dark/status/32/qb-musical-notes.svg">icons/qbicons-dark/status/32/qb-musical-notes.svg</file>
@@ -1540,6 +1548,7 @@
     <file alias="icons/qbicons-dark/status/48/qb-magnifier.svg">icons/qbicons-dark/status/48/qb-magnifier.svg</file>
     <file alias="icons/qbicons-dark/status/48/qb-mindmap.svg">icons/qbicons-dark/status/48/qb-mindmap.svg</file>
     <file alias="icons/qbicons-dark/status/48/qb-mm-menu.svg">icons/qbicons-dark/status/48/qb-mm-menu.svg</file>
+    <file alias="icons/qbicons-dark/status/48/qb-mm-overview.svg">icons/qbicons-dark/status/48/qb-mm-overview.svg</file>
     <file alias="icons/qbicons-dark/status/48/qb-mm-shape.svg">icons/qbicons-dark/status/48/qb-mm-shape.svg</file>
     <file alias="icons/qbicons-dark/status/48/qb-music.svg">icons/qbicons-dark/status/48/qb-music.svg</file>
     <file alias="icons/qbicons-dark/status/48/qb-musical-notes.svg">icons/qbicons-dark/status/48/qb-musical-notes.svg</file>
@@ -1621,6 +1630,7 @@
     <file alias="icons/qbicons-dark/status/64/qb-magnifier.svg">icons/qbicons-dark/status/64/qb-magnifier.svg</file>
     <file alias="icons/qbicons-dark/status/64/qb-mindmap.svg">icons/qbicons-dark/status/64/qb-mindmap.svg</file>
     <file alias="icons/qbicons-dark/status/64/qb-mm-menu.svg">icons/qbicons-dark/status/64/qb-mm-menu.svg</file>
+    <file alias="icons/qbicons-dark/status/64/qb-mm-overview.svg">icons/qbicons-dark/status/64/qb-mm-overview.svg</file>
     <file alias="icons/qbicons-dark/status/64/qb-mm-shape.svg">icons/qbicons-dark/status/64/qb-mm-shape.svg</file>
     <file alias="icons/qbicons-dark/status/64/qb-music.svg">icons/qbicons-dark/status/64/qb-music.svg</file>
     <file alias="icons/qbicons-dark/status/64/qb-musical-notes.svg">icons/qbicons-dark/status/64/qb-musical-notes.svg</file>

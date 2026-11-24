@@ -539,6 +539,15 @@ def _():
     return f'<path d="M6 9 H26 M6 16 H26 M6 23 H26" fill="none" {S(2.6, "#7f8487")}/>'
 
 
+@icon("qb-mm-overview")
+def _():
+    # a small map with a rectangle for the part shown (0.93.0, the mind map's overview)
+    g = "#7f8487"
+    return (f'<rect x="4" y="6" width="24" height="20" rx="2" fill="none" {S(2.2, g)}/>'
+            f'<rect x="13" y="11" width="10" height="8" rx="1" fill="{g}" fill-opacity="0.35" {S(1.8, g)}/>'
+            f'<path d="M8 12 H10 M8 16 H10 M8 20 H12" fill="none" {S(1.6, g)}/>')
+
+
 def write():
     for theme in ("qbicons", "qbicons-dark"):
         for size in SIZES:
