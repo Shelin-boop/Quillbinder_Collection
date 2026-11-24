@@ -2,6 +2,41 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.93.0 beta: documents that are not shown are unloaded (item 39)
+
+- **Where the memory went** (measured with `qb_v0930d_tests`, `QB_MEASURE=1`, `QB_MEASURE_DOCS=<n>`: a generated project of 500
+  documents of 1,000 words, shown one after another through the binder; `mallinfo2` for the heap in use, `VmRSS` for the
+  process): before, 168 kB of heap per document shown (the 500 documents: 16 MB when opened, 100 MB at the end, RSS 104 to
+  156 MB); of it about 61 kB is the `QTextDocument` itself (read with `DocumentStore::text` only, no editor) and about
+  107 kB the layout of the editor that showed it (and the spell check's block data). Nothing gave it back: `DocumentStore`
+  kept every `Entry` until the project closed. After: 24.7 MB heap in use at the end (16.4 MB at the opening), RSS 106 MB,
+  8 to 30 documents held at a time.
+- **What is unloaded** (`DocumentStore::unloadUnused`): the whole `QTextDocument` (layout, spell check data, text) of a
+  text or notes document that is not shown, has no unsaved change, and has no undo or redo step. The entry is erased
+  (`aboutToDeleteDocument` first, as `forgetDocument` does; the editors let go of it), the plain-text cache for its key
+  is dropped, and the next `text()` / `notes()` reads the file again (cursor places are in `ViewMemory`, by document id,
+  not in the document). The `kKeepLoaded` (8) documents used last stay, so that jumping back and forth costs nothing.
+  Kept always: shown ones, one with an undo or redo step, one that is read-only for its file (`m_unreadable`,
+  `m_damaged`, `m_shown`, `m_missing`). A document that is only marked as changed by showing it (0.64.1) is compared with
+  the bytes it was read from (`sameAsRead`, at most 40 per run, the timer comes again in 300 ms); a really changed one stays
+  until it is saved.
+- **The undo history** is the document's own (`QTextDocument`'s stack, `UndoNames` hangs on it), so a document with steps is
+  not unloaded: its layout stays too (the stack cannot be kept without the document, and the layout cannot be freed from
+  outside Qt's own classes). Every document the writer has edited in the session therefore stays until the project
+  closes; documents only read or shown are the many ones in a large project, and they go.
+- **Who says what is shown**: `DocumentStore::setShownProbe`, set by `MainWindow::adoptProject`: every `QTextEdit` and
+  `QPlainTextEdit` of the program (the editors of any pane, Combined Text, quick references, the inspector's notes and
+  snapshots), the sources of every `DocMirror` (the inspector's bookmark preview); false while a modal window is open.
+  Without a probe (Android, tests without a window) nothing is unloaded. The timer (1.5 s, from a document read while
+  more than 8 are held) is in the store.
+- **`DocumentStore::Hold`**: a job that keeps documents in hand and runs the event loop (progress windows with
+  `processEvents`: Compile, Replace in Project, Convert Quotes, the style and script updates, the import) creates one;
+  nothing is unloaded while one lives. A new such job needs one.
+- Also fixed on the way: `m_plainCache` for a notes key was not emptied when the notes were edited (a notes text
+  unloaded, read again and changed would have shown the older plain text); the key is emptied at every change now.
+- Not unloaded: documents with undo steps (above); the plain-text cache (`m_plainCache`, the text of every document
+  asked for by search or counts, about 16 kB per 1,000 words) is not bounded yet.
+
 ## 0.93.0 beta: notes start as plain text (item 24)
 
 - A notes document (`DocumentStore::load(id, true)`, also `projectNotes()`) is **plain** when it is new or empty, or when

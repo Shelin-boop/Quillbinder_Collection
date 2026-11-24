@@ -341,6 +341,10 @@ add_executable(qb_v0930c_tests v0930c_tests.cpp ${QB_RESOURCES_OBJECTS}
                ${CMAKE_SOURCE_DIR}/plugins/tools/speech-transcription/SpeechLogic.cpp)
 target_include_directories(qb_v0930c_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins)
 target_link_libraries(qb_v0930c_tests PRIVATE qbui Qt6::Test)
+# 0.93.0, fourth suite: to-do item 39 (documents that are not shown are unloaded: a bounded number stays laid out)
+# (xvfb-run -a ./qb_v0930d_tests /tmp/shots; QB_MEASURE=1 prints the memory of a large project)
+add_executable(qb_v0930d_tests v0930d_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0930d_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0900_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # The readers against damaged input (0.80.0, the external audit of 2026-11-09, ST-5): fixed-seed damage of small
 # valid inputs of RTF, Markdown, XML, ZIP, DOCX, ODT, Word 97 and .scrivx, each read in this process
