@@ -18,8 +18,10 @@ set(APP_VERSION_WINDOWS "0.93.0")
 set(APP_VERSION_ANDROID "0.93.1")
 if(WIN32)
   set(APP_VERSION "${APP_VERSION_WINDOWS}")
-elseif(ANDROID OR CMAKE_SYSTEM_NAME STREQUAL "Android")
-  # (ANDROID itself is only known after project(); the toolchain file sets the system's name before)
+elseif(ANDROID OR CMAKE_SYSTEM_NAME STREQUAL "Android" OR CMAKE_TOOLCHAIN_FILE MATCHES "/android_[^/]+/lib/cmake/Qt6/")
+  # (ANDROID and the system's name are only known after project(), when the toolchain file has run: before it, the
+  # toolchain file's path tells, Qt's own for Android in <Qt>/<version>/android_<abi>/; Android 0.93.1, whose
+  # configure stopped at the check below with the Linux line)
   set(APP_VERSION "${APP_VERSION_ANDROID}")
 endif()
 # A word shown after the version number in Help > About, System Information and the
