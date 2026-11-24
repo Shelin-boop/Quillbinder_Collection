@@ -400,7 +400,8 @@ def refresh(licdir, runtime_file=None):
 QT_LEFT_OUT = {
     "android-gradle-wrapper", "android-native-style", "cocoa-platform-plugin", "qeventdispatcher_cf",
     "d3d12memoryallocator", "rhi-miniengine-d3d12-mipmap", "wintab", "catch2", "cmake-runcmake-test-modules",
-    "sbom-test-child", "sbom-test-parent", "extra-cmake-modules", "linuxperf", "valgrind", "cycle", "sqlite",
+    "sbom-test-child", "sbom-test-parent", "entry-index-first", "entry-index-second", "entry-index-third",
+    "extra-cmake-modules", "linuxperf", "valgrind", "cycle", "sqlite",
     "pixman", "libtiff",
 }
 
@@ -416,6 +417,9 @@ def qt_attributions(qtlic):
         base = os.path.join(qtlic, repo)
         for dirpath, _, files in os.walk(base):
             if ".git" in dirpath or "qt_attribution.json" not in files:
+                continue
+            # 0.93.1: the attribution files of Qt's own tests describe made-up parts (Qt 6.12.1's SBOM tests)
+            if "tests" in os.path.relpath(dirpath, base).split(os.sep):
                 continue
             data = json.loads(qt_read(os.path.join(dirpath, "qt_attribution.json")), strict=False)
             for item in data if isinstance(data, list) else [data]:
@@ -460,14 +464,28 @@ def qt_part_text(item):
     return "\n".join(lines)
 
 
+def is_qtpdf_file(rel):
+    """Qt PDF's own files (0.93.1): its libraries and its image plugin, built from Qt WebEngine's source."""
+    b = os.path.basename(rel)
+    return b.startswith("libQt6Pdf") or b == "libqpdf.so"
+
+
 def qt_entries(qtlic, qt_files):
-    """[(entry, text file name, text)] of Qt's own build: Qt itself, ICU, Qt's parts, Qt PDF's parts."""
+    """[(entry, text file name, text)] of Qt's own build: Qt itself, ICU, Qt PDF, Qt's parts, Qt PDF's parts."""
     ver = qt_version()
     qtsrc = "qt-everywhere-src-%s.tar.xz" % ver
     src = ("%s, file %s (the Qt Project's source release; also https://download.qt.io/official_releases/qt/%s/%s/"
            "single/ and the tag v%s of https://code.qt.io)" % (sources_url(), qtsrc, ver.rsplit(".", 1)[0], ver, ver))
+    # 0.93.1 (to-do item 48): since Qt 6.12 Qt PDF is built from Qt WebEngine's source (a Qt Extensions release with a
+    # version of its own), which qt-everywhere-src no longer holds
+    pdfver = cmake_var("QB_QTPDF_VERSION")
+    pdfsrc = "qtwebengine-everywhere-src-%s.tar.xz" % pdfver
+    pdfsource = ("%s, file %s (the Qt Project's source release of Qt WebEngine and Qt PDF; also "
+                 "https://download.qt.io/official_releases/qtwebengine/%s/%s/src/ and the tag v%s of "
+                 "https://code.qt.io/qt/qtwebengine)" % (sources_url(), pdfsrc, pdfver.rsplit(".", 1)[0], pdfver, pdfver))
     icu = sorted(r for r in qt_files if os.path.basename(r).startswith("libicu"))
-    qt = sorted(r for r in qt_files if r not in icu)
+    qtpdf = sorted(r for r in qt_files if r not in icu and is_qtpdf_file(r))
+    qt = sorted(r for r in qt_files if r not in icu and r not in qtpdf)
     out = []
     lgpl = qt_read(os.path.join(qtlic, "qtbase", "LICENSES", "LGPL-3.0-only.txt"))
     out.append(({"name": "Qt", "version": ver, "license": "LGPL-3.0-only",
@@ -479,6 +497,18 @@ def qt_entries(qtlic, qt_files):
                 "can be replaced by another build of the same version. Qt is used under the GNU Lesser General Public "
                 "License version 3 (below); the GNU General Public License version 3 it refers to is listed under the "
                 "full texts of common licenses (GPL-3).\n\n%s" % (ver, ver, lgpl)))
+    if qtpdf:
+        out.append(({"name": "Qt PDF", "version": pdfver, "license": "LGPL-3.0-only",
+                     "where": ", ".join(sorted(os.path.basename(r) for r in qtpdf)), "files": qtpdf, "qtBuild": ver,
+                     "text": "qt-pdf.txt", "sourceFile": pdfsrc, "source": pdfsource},
+                    "qt-pdf.txt",
+                    "Qt PDF %s\nCopyright (C) The Qt Company Ltd. and other contributors.\nhttps://www.qt.io\n\n"
+                    "The libraries and the image plugin are The Qt Company's own build of Qt PDF %s, the Qt Extensions "
+                    "release for Qt %s, unchanged; each can be replaced by another build of the same version. Since Qt "
+                    "6.12 Qt PDF is released with Qt WebEngine, apart from Qt itself; its source is Qt WebEngine's. "
+                    "Qt PDF is used under the GNU Lesser General Public License version 3 (below); the parts inside it "
+                    "(PDFium and the parts of Chromium it uses) are listed under their own licenses.\n\n%s"
+                    % (pdfver, pdfver, ver.rsplit(".", 1)[0], lgpl)))
     if icu:
         out.append(({"name": "ICU (Qt's build)", "version": "73.2", "license": "Unicode-3.0 (ICU License)",
                      "where": ", ".join(sorted(os.path.basename(r) for r in icu)), "files": icu, "qtBuild": ver,
@@ -503,8 +533,8 @@ def qt_entries(qtlic, qt_files):
         text = body + "".join(qt_read(os.path.join(ch, f)) + "\n" for f in files)
         key = "qtpdf-" + re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") + ".txt"
         out.append(({"name": "%s (in Qt PDF)" % name, "version": "", "license": license,
-                     "where": "libQt6Pdf.so.6 (showing PDF files)", "text": key, "sourceFile": qtsrc,
-                     "source": "the Qt source, file %s" % qtsrc}, key, text))
+                     "where": "libQt6Pdf.so.6 (showing PDF files)", "text": key, "sourceFile": pdfsrc,
+                     "source": "the source of Qt WebEngine and Qt PDF, file %s" % pdfsrc}, key, text))
 
     pdf("PDFium", "BSD-3-Clause", ["third_party/pdfium/LICENSE"])
     pdf("The Chromium Project", "BSD-3-Clause", ["LICENSE"])

@@ -1,9 +1,9 @@
 TinyCBOR
-Version: 7.0
+Version: 7.1
 Homepage: https://github.com/intel/tinycbor
 Concise Binary Object Representation (CBOR) Library
 
-Copyright (C) 2015-2025 Intel Corporation
+Copyright (C) 2015-2026 Intel Corporation
 
 MIT License
 

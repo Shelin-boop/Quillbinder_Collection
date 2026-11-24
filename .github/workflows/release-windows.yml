@@ -208,7 +208,7 @@ jobs:
           grep -q '^result: ok$' results/summary.txt
 
       - name: Hand the unsigned build to the job "sign-packages"
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: win-unsigned
           path: results/stage
@@ -217,7 +217,7 @@ jobs:
 
       - name: Logs of the build
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: win-build-logs
           path: |
@@ -239,7 +239,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: win-unsigned
           path: unsigned
@@ -296,7 +296,7 @@ jobs:
           ls -la signed
 
       - name: Hand the signed packages on
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: win-signed-packages
           path: signed
@@ -317,12 +317,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: win-unsigned
           path: stage
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: win-signed-packages
           path: signed
@@ -338,7 +338,7 @@ jobs:
           [ $rc -eq 0 ] || { tail -60 out/setup-run.log 2>/dev/null; exit 1; }
 
       - name: Hand the files to the job "sign-checksums"
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: win-files
           path: out/files
@@ -348,7 +348,7 @@ jobs:
 
       - name: Logs of the checks
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: win-assemble-logs
           path: |
@@ -374,7 +374,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: win-unsigned
           path: stage
@@ -454,7 +454,7 @@ jobs:
           cat THIRD-PARTY-SOURCES-windows.txt
           ls -la sources
 
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: win-sources
           path: |
@@ -477,12 +477,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: win-files
           path: release/dist
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: win-sources
           path: release/src
@@ -550,7 +550,7 @@ jobs:
           PY
 
       - name: Hand the update file to the job "download-page"
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: win-update-file
           path: updates
@@ -558,7 +558,7 @@ jobs:
           if-no-files-found: error
 
       - name: Hand the files to the job "publish"
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: win-release-files
           path: release
@@ -609,7 +609,7 @@ jobs:
           ls out/test-fonts | wc -l
           ls -la test-fonts.zip
 
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: test-fonts
           path: test-fonts.zip
@@ -631,7 +631,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: test-fonts
           path: test-fonts
@@ -741,7 +741,7 @@ jobs:
 
       - name: Logs of the tests
         if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: win-tests-logs
           path: |
@@ -769,7 +769,7 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: win-release-files
           path: release
@@ -873,7 +873,7 @@ jobs:
           persist-credentials: false
 
       # Windows 0.92.0: the update file of this run (none with page_only)
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         if: ${{ !inputs.page_only }}
         with:
           name: win-update-file

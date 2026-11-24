@@ -25,19 +25,19 @@ add-ons. The files, sorted by system:
 
 ### Linux
 
-**Quillbinder 0.93.0 beta for Linux (x86_64):**
+**Quillbinder 0.93.1 beta for Linux (x86_64):**
 
-- **[Quillbinder-0.93.0-beta-x86_64.AppImage](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.0-beta/Quillbinder-0.93.0-beta-x86_64.AppImage)**: the program
-- **[quillbinder-0.93.0-update.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.0-beta/quillbinder-0.93.0-update.qbpkg)**: the program update, for a Quillbinder you already have (0.80.0 or later; **File > Install Update or Add-on**)
-- **[media-all-formats.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.0-beta/media-all-formats.qbpkg)**: the commonly used audio and video formats (an add-on; optional)
-- **[Quillbinder-0.93.0-full-beta-x86_64.AppImage](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.0-beta/Quillbinder-0.93.0-full-beta-x86_64.AppImage)**:
+- **[Quillbinder-0.93.1-beta-x86_64.AppImage](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-beta/Quillbinder-0.93.1-beta-x86_64.AppImage)**: the program
+- **[quillbinder-0.93.1-update.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-beta/quillbinder-0.93.1-update.qbpkg)**: the program update, for a Quillbinder you already have (0.80.0 or later; **File > Install Update or Add-on**)
+- **[media-all-formats.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-beta/media-all-formats.qbpkg)**: the commonly used audio and video formats (an add-on; optional)
+- **[Quillbinder-0.93.1-full-beta-x86_64.AppImage](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-beta/Quillbinder-0.93.1-full-beta-x86_64.AppImage)**:
   **the full version**: the program with all add-ons and all the libraries they need included (the commonly
   used audio and video formats, extra themes, project templates, the scriptwriting pack, the writing tools with offline speech recognition, the
   importers of web pages and old Word files). They are installed at the first start: one download, nothing
   else to install.
 - **Translation and Proofreading** (English proofreading and German-to-English translation on your computer) is one
   of Quillbinder's own add-ons since 0.92.0: version 1.3 is inside the full version, and
-  [translation-proofreading.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.0-beta/translation-proofreading.qbpkg)
+  [translation-proofreading.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-beta/translation-proofreading.qbpkg)
   is beside it for a Quillbinder you already have. It downloads the language models you choose; one of them (CoEdIT
   Large) may be used for non-commercial purposes only, and the add-on says so. For Windows it is inside the full
   version too since Windows 0.92.0, and for Android tablets inside the app since Android 0.92.0
@@ -162,7 +162,7 @@ written in `resources/welcome`. `docs/CHANGES.md` lists what each version brough
 
 ## Build (Ubuntu 24.04)
 
-Since 0.80.0 Quillbinder is built with The Qt Company's own build of Qt 6.12.0 (Ubuntu 24.04's Qt 6.4.2 is too old);
+Since 0.80.0 Quillbinder is built with The Qt Company's own build of Qt (6.12.1 since 0.93.0; Ubuntu 24.04's Qt 6.4.2 is too old);
 `tools/get-qt.sh` installs it into `/opt/qt/6.12.1/gcc_64` with aqtinstall (`-DQB_QT_DIR=<folder>` names another
 place):
 
@@ -275,7 +275,7 @@ installed and switched on (`plugins/media/MediaEngine.*`). Without it, a file in
 decode gets a message naming its formats and the add-on (`plugins/media/impl/QtPlayer.cpp`). The program only knows the interface
 `src/media/MediaApi.h` and draws the controls (`src/ui/MediaPlayback.*`, `MediaView`, `MainWindowMedia.cpp`);
 the add-on brings two libraries from `plugins/media` (a small plugin the program loads at start, and the
-player built on Qt Multimedia, loaded with the first audio or video file) plus Qt Multimedia 6.12.0 (with the
+player built on Qt Multimedia, loaded with the first audio or video file) plus Qt Multimedia 6.12.1 (with the
 Qt Quick and Qt QML libraries its FFmpeg backend needs) and an FFmpeg 9.1 that decodes only. To build the add-on:
 
 ```
@@ -309,7 +309,7 @@ built into `build/tool-plugins/` and delivered as add-ons:
   `build/plugins/importers/qb_doc_dump file.doc` prints what the reader makes of a file.
 - `plugins/importers/web` → add-on "Web Page Import" (`addons/import-web`): fetching with Qt Network, a forgiving
   HTML parser (`Html.*`), the article finder (`Article.*`, the approach of "readability" tools) and the window.
-  The add-on brings Qt's TLS plugin of Qt 6.12.0 (`addons/import-web/stage.sh`), because the AppImage has none;
+  The add-on brings Qt's TLS plugin of Qt 6.12.1 (`addons/import-web/stage.sh`), because the AppImage has none;
   OpenSSL 3 comes from the system. `build/plugins/importers/qb_web_extract page.html [address]` prints what the
   article finder makes of a saved page.
 

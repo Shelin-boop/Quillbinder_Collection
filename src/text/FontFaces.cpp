@@ -2,6 +2,7 @@
 
 #include <QFile>
 #include <QFontDatabase>
+#include <QFontInfo>
 #include <QGuiApplication>
 #include <QList>
 #include <QMutex>
@@ -463,8 +464,63 @@ int separate()
 #endif
 }
 
+QFont::StyleHint genericHint(const QString &family)
+{
+    const QString f = family.trimmed();
+    if (f.compare(QLatin1String("monospace"), Qt::CaseInsensitive) == 0)
+        return QFont::Monospace;
+    if (f.compare(QLatin1String("serif"), Qt::CaseInsensitive) == 0)
+        return QFont::Serif;
+    if (f.compare(QLatin1String("sans-serif"), Qt::CaseInsensitive) == 0)
+        return QFont::SansSerif;
+    return QFont::AnyStyle;
+}
+
+QString genericTarget(const QString &generic, const QString &plainFamily, bool plainFixed, const QString &hintedFamily,
+                      bool hintedFixed, const QString &defaultFamily)
+{
+    const QFont::StyleHint hint = genericHint(generic);
+    if (hint == QFont::AnyStyle || hintedFamily.isEmpty())
+        return QString();
+    if (hint == QFont::Monospace) {
+        // a monospace name that already gives a fixed-pitch font is known (Linux); a hint that gives none is no help
+        if (plainFixed || !hintedFixed)
+            return QString();
+        return hintedFamily;
+    }
+    // serif and sans-serif: the name is unknown when it fell through to the default font and the hint gives another
+    if (plainFamily.compare(defaultFamily, Qt::CaseInsensitive) != 0
+        || hintedFamily.compare(plainFamily, Qt::CaseInsensitive) == 0)
+        return QString();
+    return hintedFamily;
+}
+
+void mapGenericFamilies()
+{
+    if (!qGuiApp)
+        return;
+    const QString defaultFamily = QFontInfo(QFont()).family();
+    for (const QString &name : {QStringLiteral("monospace"), QStringLiteral("serif"), QStringLiteral("sans-serif")}) {
+        if (!QFont::substitutes(name).isEmpty())
+            continue; // mapped already (or by the platform)
+        const QFontInfo plain{QFont(name)};
+        QFont hinted(name);
+        hinted.setStyleHint(genericHint(name));
+        const QFontInfo h{hinted};
+        QString target = genericTarget(name, plain.family(), plain.fixedPitch(), h.family(), h.fixedPitch(), defaultFamily);
+        if (target.isEmpty() && genericHint(name) == QFont::Monospace && !plain.fixedPitch()) {
+            const QFont fixed = QFontDatabase::systemFont(QFontDatabase::FixedFont);
+            const QFontInfo fi{fixed};
+            target = genericTarget(name, plain.family(), plain.fixedPitch(), fi.family(), fi.fixedPitch(), defaultFamily);
+        }
+        if (!target.isEmpty())
+            QFont::insertSubstitution(name, target);
+    }
+}
+
 void install()
 {
+    mapGenericFamilies();
     // QB_KEEP_FONT_FAMILIES=1 leaves Qt's list of fonts as it is (to compare, or if
     // a font ever looks wrong because of the separation)
     if (!qGuiApp || qEnvironmentVariableIntValue("QB_KEEP_FONT_FAMILIES") == 1)

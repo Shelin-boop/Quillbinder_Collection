@@ -286,7 +286,7 @@ jobs:
         run: tools/ci-step.sh sources python3 -I tools/collect-sources.py sources
 
       - name: Hand the files to the job "sign-packages"
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: unsigned
           path: |
@@ -308,7 +308,7 @@ jobs:
 
       - name: Logs of the check
         if: failure()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: e2e-logs
           path: /tmp/e2e
@@ -432,7 +432,7 @@ jobs:
 
       - name: Logs of the suites
         if: failure()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: test-logs
           path: |
@@ -469,7 +469,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: unsigned
           path: unsigned
@@ -526,7 +526,7 @@ jobs:
           rm -rf /tmp/qb-signing
 
       - name: Hand the signed packages on
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: signed-packages
           path: signed
@@ -557,12 +557,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: unsigned
           path: unsigned
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: signed-packages
           path: signed
@@ -589,7 +589,7 @@ jobs:
         run: tools/ci-step.sh e2e-full packaging/linux/e2e-appimage.sh "$(ls dist/*-full-*-x86_64.AppImage)" - /tmp/e2e-full
 
       - name: Hand the files to the job "sign-checksums"
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: assembled
           path: |
@@ -622,7 +622,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: assembled
           path: assembled
@@ -673,7 +673,7 @@ jobs:
             -sigfile release/updates/updates-1.json.sig
 
       - name: Hand the files to the job "publish"
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: release-files
           path: release
@@ -702,7 +702,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: release-files
           path: release-files
@@ -752,7 +752,7 @@ jobs:
 
       # 0.92.0: the signed update file of this release goes onto the page with it (a rerun after the files of the
       # run are gone keeps the file the page has: tools/keep-update-feed.sh)
-      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         if: ${{ !inputs.page_only }}
         continue-on-error: true
         with:
@@ -762,7 +762,7 @@ jobs:
       # page_only: the update file of the run named in from_run (its artifact is kept 3 days), checked before it is used
       - name: The update file of the earlier run
         if: ${{ inputs.page_only }}
-        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: release-files
           path: release-files

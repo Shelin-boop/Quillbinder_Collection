@@ -18,6 +18,12 @@ and the build for Quillbinder for Windows, .github/workflows/addon-release-windo
 "android" block: the build for Quillbinder for Android's tablets, .github/workflows/addon-release-android.yml).
 Without either, everything is as before (Linux).
 
+An entry may name the add-on's folder inside its repository (0.93.1, "folder", e.g. "addons/translation-proofreading/source"
+for the project's own add-on, whose source is a folder of Quillbinder's repository); a Windows or Android block may name
+its own. Every path of the entry (cache folders and key files, setup and steps, system libraries, redistributables and
+dependency sources) is then inside that folder, the commands run there, and the source archive holds that folder only.
+Without it the folder is the repository's top (as before).
+
 The entries are written by the project (see official-addons/README.md); their commands run in the build job only.
 """
 import hashlib
@@ -78,6 +84,8 @@ def load(path):
     for key, pattern in checks.items():
         if not isinstance(e.get(key), str) or not re.match(pattern, e[key]):
             raise EntryError("%s is missing or has the wrong form" % key)
+    if "folder" in e:
+        relative(e["folder"], "folder")
     if os.path.splitext(os.path.basename(path))[0] != e["id"]:
         raise EntryError("the file must be named after the id (%s.json)" % e["id"])
     for key in ("name", "author", "license", "summary"):
@@ -131,7 +139,14 @@ def load(path):
         e = dict(e)
         e["commit"], e["build"], e["system"] = block["commit"], block["build"], SYSTEM
         e["reviewed"] = block.get("reviewed", e["reviewed"])
+        if "folder" in block:
+            e["folder"] = block["folder"]
     return e
+
+
+def source_dir(e, src):
+    """The add-on's own folder in the checked-out repository (0.93.1: the entry's "folder", else the top)."""
+    return os.path.join(src, e["folder"]) if e.get("folder") else src
 
 
 def check_windows(w):
@@ -149,6 +164,8 @@ def check_system_block(w, name):
         raise EntryError("%s.commit is missing or has the wrong form" % name)
     if "reviewed" in w and not re.match(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$", str(w["reviewed"])):
         raise EntryError("%s.reviewed has the wrong form" % name)
+    if "folder" in w:
+        relative(w["folder"], "%s.folder" % name)
     b = w.get("build")
     if not isinstance(b, dict):
         raise EntryError("%s.build is missing" % name)
@@ -214,7 +231,14 @@ def cmd_fetch_testdata(path, out):
         for p in d.get("patterns", []):
             cmd += ["-p", p]
         print(" ".join(cmd), flush=True)
-        subprocess.run(cmd, check=True)
+        # (0.93.1: up to three tries; a download of a release's large model files was cut once by "connection reset
+        # by peer", and --clobber fetches them again whole)
+        for attempt in (1, 2, 3):
+            if subprocess.run(cmd).returncode == 0:
+                break
+            if attempt == 3:
+                raise EntryError("the test data of %s could not be downloaded (three tries)" % d["release"])
+            print("download cut off: trying again (%d of 3)" % (attempt + 1), flush=True)
     return 0
 
 
@@ -229,12 +253,14 @@ def cmd_check(path):
     e = load(path)
     for k in ("id", "name", "version", "repository", "commit"):
         print("%s=%s" % (k, e[k]))
+    print("folder=%s" % e.get("folder", ""))
     print("tag=%s" % tag(e))
     return 0
 
 
 def cmd_cache(path, src):
     e = load(path)
+    src = source_dir(e, src)
     b = e["build"]
     h = hashlib.sha256()
     h.update(json.dumps({"setup": b.get("setup", []), "packages": b.get("packages", [])}, sort_keys=True).encode())
@@ -256,6 +282,9 @@ def cmd_run(path, which, src):
     e = load(path)
     if which not in ("setup", "steps"):
         raise EntryError("run: setup or steps")
+    src = source_dir(e, src)
+    if not os.path.isdir(src):
+        raise EntryError("the add-on's folder %s is not in the source" % e.get("folder", "."))
     for c in e["build"].get(which, []):
         print("::group::%s" % c, flush=True)
         # (QB_BASH: Git Bash on Windows; there "bash" alone could be found in System32 first)
@@ -380,10 +409,14 @@ def cmd_sources(path, src, out):
     windows = e.get("system") == "windows"
     android = e.get("system") == "android"
     archive = "%s-%s-%ssource.tar.gz" % (e["id"], e["version"], "windows-" if windows else "android-" if android else "")
+    folder = e.get("folder", "")
     with open(os.path.join(out, archive), "wb") as f:
+        # (0.93.1: with a folder, only the add-on's folder of the reviewed commit)
         subprocess.run(["git", "-C", src, "archive", "--format=tar.gz", "--prefix=%s-%s/" % (e["id"], e["version"]),
-                        e["commit"]], stdout=f, check=True)
-    lines.append("%s\n    the add-on's own source, the reviewed commit %s of %s\n" % (archive, e["commit"], e["repository"]))
+                        e["commit"] + (":" + folder if folder else "")], stdout=f, check=True)
+    lines.append("%s\n    the add-on's own source, the reviewed commit %s of %s%s\n"
+                 % (archive, e["commit"], e["repository"], " (its folder %s)" % folder if folder else ""))
+    src = source_dir(e, src)
     for lib in e["build"].get("systemLibraries", []):
         built = os.path.join(src, lib["file"])
         with open(built, "rb") as a, open(os.path.realpath(lib["from"]), "rb") as b:
@@ -445,6 +478,11 @@ def cmd_notes(path, package, files_dir, out):
     files = sorted(set(n for n in os.listdir(files_dir) if os.path.isfile(os.path.join(files_dir, n))) | {"SHA256SUMS.txt"})
     pkg = os.path.basename(package)
     src_url = "https://github.com/%s/tree/%s" % (e["repository"], e["commit"])
+    # (0.93.1) the program the package needs: the first that knows add-on keys, or the package's own minApp when that is
+    # later (an add-on built for the runtime of 0.93.0 needs 0.93.0; the text said "0.91.3 or later")
+    min_app = m.get("minApp", "0.80.0")
+    need = min_app if version_tuple(min_app) > version_tuple(REQUIRED_PROGRAM) else REQUIRED_PROGRAM
+    unsigned_warning = version_tuple(min_app) < version_tuple(REQUIRED_PROGRAM)
     windows = e.get("system") == "windows"
     android = e.get("system") == "android"
     text = ["# %s %s%s, an official add-on for Quillbinder" % (e["name"], e["version"],
@@ -461,21 +499,21 @@ def cmd_notes(path, package, files_dir, out):
                  "choose it. The install window says that the add-on is signed with the add-on key \"Quillbinder official "
                  "add-ons\", which the Quillbinder project vouches for; Quillbinder offers to start again, which loads it. The add-on is kept "
                  "in the app's own folder; its models are downloaded from the add-on's window (**Models...**). (For Linux and "
-                 "Windows, the add-on has releases of its own.)" % (REQUIRED_PROGRAM, pkg), ""]
+                 "Windows, the add-on has releases of its own.)" % (need, pkg), ""]
     elif windows:
         text += ["In Quillbinder for Windows %s or later: **File > Install Update or Add-on**, choose `%s`. The install "
                  "window says that the add-on is signed with the add-on key \"Quillbinder official add-ons\", which the "
-                 "Quillbinder project vouches for. Quillbinder for Windows %s does not know add-on keys yet and warns that "
-                 "the add-on is not signed: update Quillbinder first. (For Linux, the add-on has a release of its own.)"
-                 % (REQUIRED_PROGRAM, pkg, m.get("minApp", "0.91.1")), ""]
+                 "Quillbinder project vouches for.%s (For Linux, the add-on has a release of its own.)"
+                 % (need, pkg, (" Quillbinder for Windows %s does not know add-on keys yet and warns that the add-on is not "
+                                "signed: update Quillbinder first." % min_app) if unsigned_warning else ""), ""]
     else:
         text += [
             "In Quillbinder for Linux %s or later: **File > Install Update or Add-on**, choose `%s`. The install window "
             "says that the add-on is signed with the add-on key \"Quillbinder official add-ons\", which the Quillbinder "
-            "project vouches for." % (REQUIRED_PROGRAM, pkg)]
+            "project vouches for." % (need, pkg)]
         # (0.93.0) the warning only matters when the add-on installs on a program that does not know add-on keys; an
         # add-on built for a newer runtime has a minApp above that program
-        if version_tuple(m.get("minApp", "0.80.0")) < version_tuple(REQUIRED_PROGRAM):
+        if unsigned_warning:
             text[-1] += (" Quillbinder %s to %s does not know add-on keys yet and warns that the add-on is not "
                          "signed: update Quillbinder first." % (m.get("minApp", "0.80.0"), "0.91.2"))
         text += [""]

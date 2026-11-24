@@ -161,7 +161,7 @@ short index (under about 20 KB), so that it costs little when it is loaded.
   (0.64.1 to 0.81.1), the system test's fixes, settings per project, speed with large projects, crash reports.
 - `scrivener-format.md`: reading and writing .scriv (styles, inline notes, web pages, keywords, metadata, collections,
   the rest of a project).
-- `runtime-and-addons.md`: the check for updates and the translator add-on (0.92.0), Qt 6.12.1 and FFmpeg 9.1 (the runtime r2, 0.93.0), tool interface 1.1 and Speech Transcription,
+- `runtime-and-addons.md`: the check for updates and the translator add-on (0.92.0), Qt 6.12.1 and FFmpeg 9.1 (the runtime r2, 0.93.0), Qt PDF's own source, the official entries' folder and the generic font names (0.93.1), tool interface 1.1 and Speech Transcription,
   release files and third-party sources.
 - `windows.md`: Windows 0.93.0 (Qt 6.12.1 through `win-qt.sh`, vcpkg pinned, FFmpeg 9.1 built by the project, the
   mind map reader without MSVC's optimizer), Windows 0.92.0 (the translator's build, the check for updates with the setup program's update run, the

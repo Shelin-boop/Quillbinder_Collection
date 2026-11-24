@@ -89,15 +89,13 @@
    "name": "Qt",
    "version": "6.12.1",
    "license": "LGPL-3.0-only",
-   "where": "libQt6Core.so.6, libQt6DBus.so.6, libQt6Gui.so.6, libQt6Network.so.6, libQt6OpenGL.so.6, libQt6Pdf.so.6, libQt6PdfWidgets.so.6, libQt6PrintSupport.so.6, libQt6Svg.so.6, libQt6WaylandClient.so.6, libQt6Widgets.so.6, libQt6WlShellIntegration.so.6, libQt6XcbQpa.so.6, libQt6Xml.so.6, libadwaita.so, libbradient.so, libcomposeplatforminputcontextplugin.so, libcupsprintersupport.so, libdmabuf-server.so, libdrm-egl-server.so, libfullscreen-shell-v1.so, libibusplatforminputcontextplugin.so, libivi-shell.so, libqgif.so, libqico.so, libqjpeg.so, libqoffscreen.so, libqopensslbackend.so, libqpdf.so, libqsvg.so, libqsvgicon.so, libqt-plugin-wayland-egl.so, libqt-shell.so, libqwayland.so, libqwebp.so, libqxcb-egl-integration.so, libqxcb-glx-integration.so, libqxcb.so, libqxdgdesktopportal.so, libshm-emulation-server.so, libvulkan-server.so, libwl-shell-plugin.so, libxdg-shell.so",
+   "where": "libQt6Core.so.6, libQt6DBus.so.6, libQt6Gui.so.6, libQt6Network.so.6, libQt6OpenGL.so.6, libQt6PrintSupport.so.6, libQt6Svg.so.6, libQt6WaylandClient.so.6, libQt6Widgets.so.6, libQt6WlShellIntegration.so.6, libQt6XcbQpa.so.6, libQt6Xml.so.6, libadwaita.so, libbradient.so, libcomposeplatforminputcontextplugin.so, libcupsprintersupport.so, libdmabuf-server.so, libdrm-egl-server.so, libfullscreen-shell-v1.so, libibusplatforminputcontextplugin.so, libivi-shell.so, libqgif.so, libqico.so, libqjpeg.so, libqoffscreen.so, libqopensslbackend.so, libqsvg.so, libqsvgicon.so, libqt-plugin-wayland-egl.so, libqt-shell.so, libqwayland.so, libqwebp.so, libqxcb-egl-integration.so, libqxcb-glx-integration.so, libqxcb.so, libqxdgdesktopportal.so, libshm-emulation-server.so, libvulkan-server.so, libwl-shell-plugin.so, libxdg-shell.so",
    "files": [
     "usr/lib/libQt6Core.so.6",
     "usr/lib/libQt6DBus.so.6",
     "usr/lib/libQt6Gui.so.6",
     "usr/lib/libQt6Network.so.6",
     "usr/lib/libQt6OpenGL.so.6",
-    "usr/lib/libQt6Pdf.so.6",
-    "usr/lib/libQt6PdfWidgets.so.6",
     "usr/lib/libQt6PrintSupport.so.6",
     "usr/lib/libQt6Svg.so.6",
     "usr/lib/libQt6WaylandClient.so.6",
@@ -109,7 +107,6 @@
     "usr/plugins/imageformats/libqgif.so",
     "usr/plugins/imageformats/libqico.so",
     "usr/plugins/imageformats/libqjpeg.so",
-    "usr/plugins/imageformats/libqpdf.so",
     "usr/plugins/imageformats/libqsvg.so",
     "usr/plugins/imageformats/libqwebp.so",
     "usr/plugins/platforminputcontexts/libcomposeplatforminputcontextplugin.so",
@@ -139,6 +136,21 @@
    "text": "qt.txt",
    "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
    "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file qt-everywhere-src-6.12.1.tar.xz (the Qt Project's source release; also https://download.qt.io/official_releases/qt/6.12/6.12.1/single/ and the tag v6.12.1 of https://code.qt.io)"
+  },
+  {
+   "name": "Qt PDF",
+   "version": "6.140.0",
+   "license": "LGPL-3.0-only",
+   "where": "libQt6Pdf.so.6, libQt6PdfWidgets.so.6, libqpdf.so",
+   "files": [
+    "usr/lib/libQt6Pdf.so.6",
+    "usr/lib/libQt6PdfWidgets.so.6",
+    "usr/plugins/imageformats/libqpdf.so"
+   ],
+   "qtBuild": "6.12.1",
+   "text": "qt-pdf.txt",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file qtwebengine-everywhere-src-6.140.0.tar.xz (the Qt Project's source release of Qt WebEngine and Qt PDF; also https://download.qt.io/official_releases/qtwebengine/6.140/6.140.0/src/ and the tag v6.140.0 of https://code.qt.io/qt/qtwebengine)"
   },
   {
    "name": "ICU (Qt's build)",
@@ -498,7 +510,7 @@
   },
   {
    "name": "TinyCBOR (in Qt)",
-   "version": "7.0",
+   "version": "7.1",
    "license": "MIT License",
    "where": "Qt",
    "text": "qt-tinycbor.txt",
@@ -804,7 +816,7 @@
   },
   {
    "name": "XSVG (in Qt)",
-   "version": "",
+   "version": "0.2.1",
    "license": "Historical Permission Notice and Disclaimer - sell variant",
    "where": "Qt",
    "text": "qt-xsvg.txt",
@@ -826,8 +838,8 @@
    "license": "BSD-3-Clause",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-pdfium.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "The Chromium Project (in Qt PDF)",
@@ -835,8 +847,8 @@
    "license": "BSD-3-Clause",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-the-chromium-project.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "Abseil (in Qt PDF)",
@@ -844,8 +856,8 @@
    "license": "Apache-2.0",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-abseil.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "FreeType (in Qt PDF)",
@@ -853,8 +865,8 @@
    "license": "FTL (FreeType License)",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-freetype.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "ICU (in Qt PDF)",
@@ -862,8 +874,8 @@
    "license": "Unicode-3.0 (ICU License)",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-icu.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "libjpeg-turbo (in Qt PDF)",
@@ -871,8 +883,8 @@
    "license": "IJG, BSD-3-Clause, Zlib",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-libjpeg-turbo.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "libpng (in Qt PDF)",
@@ -880,8 +892,8 @@
    "license": "Libpng-2.0, Libpng",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-libpng.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "zlib (in Qt PDF)",
@@ -889,8 +901,8 @@
    "license": "Zlib",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-zlib.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "OpenJPEG (in Qt PDF)",
@@ -898,8 +910,8 @@
    "license": "BSD-2-Clause",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-openjpeg.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "Little CMS (in Qt PDF)",
@@ -907,8 +919,8 @@
    "license": "MIT",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-little-cms.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "Anti-Grain Geometry (in Qt PDF)",
@@ -916,8 +928,8 @@
    "license": "MIT-like (permission notice below)",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-anti-grain-geometry.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "BigInt (in Qt PDF)",
@@ -925,8 +937,8 @@
    "license": "Public domain (notice below)",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-bigint.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "FP16 (in Qt PDF)",
@@ -934,8 +946,8 @@
    "license": "MIT",
    "where": "libQt6Pdf.so.6 (showing PDF files)",
    "text": "qtpdf-fp16.txt",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz"
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "glib2.0",

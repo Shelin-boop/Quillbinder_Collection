@@ -13,8 +13,9 @@ and in the program under **Help > Third-Party Licenses** (also a button of **Hel
 
 | Part | Where | License |
 |------|-------|---------|
-| Qt 6.12.0 (Core, Gui, Widgets, Network, PrintSupport, Pdf, PdfWidgets, Svg, Xml, DBus, Wayland and XCB platform parts, image format plugins; The Qt Company's own build for Linux, since 0.80.0), with the parts Qt builds in (Qt's attribution files) and ICU 73.2 as Qt ships it | linked dynamically; carried by the AppImage | LGPL-3.0 (also available under GPL-2.0 / GPL-3.0); the parts inside Qt and Qt PDF (PDFium) under their own licenses (MIT, BSD, Zlib, FTL, Unicode and others), ICU Unicode-3.0 |
-| Qt Multimedia 6.12.0 with Qt Quick, Qt QML, Qt OpenGL and Qt Concurrent (what its FFmpeg backend needs), Qt's TLS plugin | the add-ons "Media Playback", "Speech Transcription" and "Web Page Import" | LGPL-3.0 |
+| Qt 6.12.1 (Core, Gui, Widgets, Network, PrintSupport, Svg, Xml, DBus, Wayland and XCB platform parts, image format plugins; The Qt Company's own build for Linux, since 0.80.0; 6.12.0 before 0.93.0), with the parts Qt builds in (Qt's attribution files) and ICU 73.2 as Qt ships it | linked dynamically; carried by the AppImage | LGPL-3.0 (also available under GPL-2.0 / GPL-3.0); the parts inside Qt under their own licenses (MIT, BSD, Zlib, FTL, Unicode and others), ICU Unicode-3.0 |
+| Qt PDF 6.140.0 (Pdf, PdfWidgets and its image plugin; since Qt 6.12 a Qt Extensions release of Qt WebEngine and Qt PDF with a version of its own, The Qt Company's build for Qt 6.12) | linked dynamically; carried by the AppImage | LGPL-3.0 (also available under GPL-2.0 / GPL-3.0); the parts inside it (PDFium and the parts of Chromium it uses) under their own licenses (BSD, Apache-2.0, FTL, Unicode, MIT and others) |
+| Qt Multimedia 6.12.1 with Qt Quick, Qt QML, Qt OpenGL and Qt Concurrent (what its FFmpeg backend needs), Qt's TLS plugin | the add-ons "Media Playback", "Speech Transcription" and "Web Page Import" | LGPL-3.0 |
 | Hunspell (spell checking) | linked dynamically; carried by the AppImage | tri-license MPL-1.1 / GPL-2.0-or-later / LGPL-2.1-or-later |
 | The other libraries the AppImage carries (Hunspell's and the system parts linuxdeploy takes from Ubuntu 24.04: libxkbcommon, Wayland and XCB libraries and others) | carried by the AppImage | their own licenses (MIT, BSD, Zlib, LGPL and others); each with its Ubuntu copyright file in `resources/licenses` |
 | AppImage type2-runtime (the start code of the AppImage file), with musl libc, libfuse, squashfuse, zstd and zlib linked into it | the beginning of the AppImage file | MIT; musl MIT, libfuse LGPL-2.1, squashfuse BSD-2-Clause, zstd BSD-3-Clause or GPL-2.0, zlib Zlib (`packaging/linux/licenses`) |
@@ -30,7 +31,8 @@ and in the program under **Help > Third-Party Licenses** (also a button of **Hel
 The source code of every one of these parts, exactly in the version the AppImage and the add-ons
 carry, is in the release "Third-party source code" of the project page:
 https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources (the Qt Project's
-source release of Qt 6.12.0, one file per Ubuntu source package, FFmpeg with the patch and build scripts of
+source release of Qt 6.12.1 and, since 0.93.1, the one of Qt WebEngine and Qt PDF 6.140.0 (Qt PDF's source, which
+Qt's own source release no longer holds since Qt 6.12), one file per Ubuntu source package, FFmpeg with the patch and build scripts of
 the add-ons, the AppImage runtime with the libraries it links in; `tools/collect-sources.py` makes them, the
 release workflow publishes them). Help > Third-Party Licenses names the file for each library; Ubuntu's archive has the Ubuntu
 packages as well (`apt-get source <package>=<version>`). The libraries inside the AppImage may be

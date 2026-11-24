@@ -1717,6 +1717,7 @@
     <file alias="licenses/texts/qt-opengl-headers.txt">licenses/texts/qt-opengl-headers.txt</file>
     <file alias="licenses/texts/qt-pcre2-sljit.txt">licenses/texts/qt-pcre2-sljit.txt</file>
     <file alias="licenses/texts/qt-pcre2.txt">licenses/texts/qt-pcre2.txt</file>
+    <file alias="licenses/texts/qt-pdf.txt">licenses/texts/qt-pdf.txt</file>
     <file alias="licenses/texts/qt-presentation-time.xml.txt">licenses/texts/qt-presentation-time.xml.txt</file>
     <file alias="licenses/texts/qt-psl-data.txt">licenses/texts/qt-psl-data.txt</file>
     <file alias="licenses/texts/qt-rfc6234.txt">licenses/texts/qt-rfc6234.txt</file>

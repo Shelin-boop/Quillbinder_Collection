@@ -44,17 +44,17 @@ with an add-on key as an unsigned one and warns, so the release text of such an 
    the reviewed commit, the version, the license, the downloads for non-commercial use only, and the commands that
    build it (`official-addons/README.md`). That entry is all of the add-on that goes into Quillbinder's repository.
 4. **Build and checks.** The project's workflow "Official add-on" (`.github/workflows/addon-release.yml`) builds the
-   package from that commit for the current Quillbinder (Linux first: Ubuntu 24.04, Qt 6.12.0, runtime
-   `u2404-qt6.12-r1`), runs the add-on's own checks, checks the package against the entry and the runtime, installs it
+   package from that commit for the current Quillbinder (Linux first: Ubuntu 24.04, Qt 6.12.1, runtime
+   `u2404-qt6.12-r2`), runs the add-on's own checks, checks the package against the entry and the runtime, installs it
    into the newest released AppImage, and collects the source code of the third-party parts. A run without "Publish"
    ends here, with the unsigned package to look at. An add-on for Windows too (since 2026-11-16) has a Windows block
    in its entry, with its own reviewed commit and commands; the workflow "Official add-on for Windows"
    (`.github/workflows/addon-release-windows.yml`) builds it the same way for Quillbinder for Windows (Windows 11 x64,
-   MSVC, Qt 6.12.0 for MSVC) and installs it into the newest Quillbinder for Windows. An add-on for Android's tablets
+   MSVC, Qt 6.12.1 for MSVC) and installs it into the newest Quillbinder for Windows. An add-on for Android's tablets
    (since 2026-11-16) has an Android block in the same way; the workflow "Official add-on for Android"
-   (`.github/workflows/addon-release-android.yml`) builds it on Ubuntu with the Android NDK and Qt 6.12.0 for Android
+   (`.github/workflows/addon-release-android.yml`) builds it on Ubuntu with the Android NDK and Qt 6.12.1 for Android
    (arm64), and checks that the package is for Quillbinder for Android (platform `android-arm64`, runtime
-   `android-qt6.12-r1`, 0.91.3 or later), that its libraries need nothing the app does not bring, and that they keep
+   `android-qt6.12-r2`, 0.91.3 or later), that its libraries need nothing the app does not bring, and that they keep
    to 16 KB memory pages. It cannot install the add-on there (Quillbinder for Android runs only on a tablet).
 5. **Signing and publishing.** A job that runs no code of the add-on signs the package with the add-on key, and the
    signed package must install into the AppImage (for Windows: into Quillbinder for Windows) without
@@ -106,13 +106,14 @@ before the download; the project gives no legal advice on it.
 
 | Add-on | Author | What it does | Notes | State |
 |--------|--------|--------------|-------|-------|
-| Translation and Proofreading 1.2 ([source](https://github.com/Shelin-boop/Quillbinder_Collection/tree/main/addons/translation-proofreading)) | The Quillbinder project | Checks English text for spelling and grammar and translates German text into English, on the writer's computer; works while the writer types, shows suggestions for single words | Can download CoEdIT Large, whose license (CC BY-NC 4.0) allows non-commercial use only; the larger models need 2.8 to 5.5 GB of memory (the add-on refuses one the computer cannot hold) | 1.2 published 2026-11-20 with Quillbinder 0.92.0, inside the full version and as a package of its own: [Linux](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.92.0-beta) (`translation-proofreading.qbpkg`), [Windows](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.92.0-windows-experimental) (`translation-proofreading-windows.qbpkg`), [Android](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.92.0-android-experimental) (`translation-proofreading-android-arm64.qbpkg`, a tablet with 64-bit ARM) |
+| Translation and Proofreading 1.3 ([source](https://github.com/Shelin-boop/Quillbinder_Collection/tree/main/addons/translation-proofreading)) | The Quillbinder project | Checks English text for spelling and grammar and translates German text into English and English into German, on the writer's computer; works while the writer types, shows suggestions and meanings for single words | Can download CoEdIT Large, whose license (CC BY-NC 4.0) allows non-commercial use only; the larger models need 2.8 to 5.5 GB of memory (the add-on refuses one the computer cannot hold); the German dictionary (a Wiktionary extract) is under CC BY-SA 4.0 | 1.3 published 2026-11-24 with Quillbinder 0.93.0 (Android 0.93.1), inside the full version and as a package of its own: [Linux](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.93.0-beta) (`translation-proofreading.qbpkg`), [Windows](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.93.0-windows-experimental) (`translation-proofreading-windows.qbpkg`), [Android](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.93.1-android-experimental) (`translation-proofreading-android-arm64.qbpkg`, a tablet with 64-bit ARM) |
 
 Since Quillbinder 0.92.0 the add-on is one of the project's own on every system: its source is
 `addons/translation-proofreading` in this repository, it is built and signed with Quillbinder, and it is part of the
-full version (on Android of the app). Its models are on this repository's releases `models-1` and `models-2`. The
-1.0 and 1.1 packages were published from the add-on's former repository and are not on this repository's releases;
-`official-addons/translation-proofreading.json` describes 1.2.
+full version (on Android of the app). Its models are on this repository's releases `models-1`, `models-2` and
+`models-3` (1.3: OPUS-MT English to German and the German dictionary). The 1.0 and 1.1 packages were published from
+the add-on's former repository and are not on this repository's releases; `official-addons/translation-proofreading.json`
+describes 1.3, with the add-on's folder in this repository (`folder`, 0.93.1).
 
 ## The add-on key (for the maintainer)
 

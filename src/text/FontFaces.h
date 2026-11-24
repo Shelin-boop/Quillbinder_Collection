@@ -23,6 +23,7 @@
 // before a program update is installed, so a crash there stops the update
 // before it is installed. QB_KEEP_FONT_FAMILIES=1 switches it off.
 
+#include <QFont>
 #include <QHash>
 #include <QString>
 #include <QStringList>
@@ -49,6 +50,21 @@ int separate();
 // separate() now and again whenever Qt reads the fonts anew (fonts added or
 // removed while the program runs). Call once after the application object exists.
 void install();
+
+// The generic names "monospace", "serif" and "sans-serif" (0.93.1). Linux's fontconfig knows them; Qt for Android
+// does not, and gives the default font (Roboto) for a family it lacks unless the font asks for a kind by its style
+// hint, so the style Code Span was shown and written into Word files in Roboto (the Android system test, S-K01).
+// mapGenericFamilies() maps each name the platform does not know to the family of its kind (by the style hint),
+// so that the editor, the PDF and the word processor files get a font of that kind; where the platform knows the
+// names (Linux) it changes nothing. install() calls it.
+void mapGenericFamilies();
+// The rule, apart from Qt's font matching: the generic name's own family and whether it is fixed pitch, the family
+// the style hint gives and whether that is fixed pitch, and the default font's family. Returns the family to map
+// the name to, or an empty string when the name needs no mapping.
+QString genericTarget(const QString &generic, const QString &plainFamily, bool plainFixed, const QString &hintedFamily,
+                      bool hintedFixed, const QString &defaultFamily);
+// The style hint of a generic name (QFont::AnyStyle for any other family).
+QFont::StyleHint genericHint(const QString &family);
 
 // The families separate() made, each with the family it came from.
 QHash<QString, QString> separatedFamilies();

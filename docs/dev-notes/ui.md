@@ -98,8 +98,12 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   nothing is unloaded while one lives. A new such job needs one.
 - Also fixed on the way: `m_plainCache` for a notes key was not emptied when the notes were edited (a notes text
   unloaded, read again and changed would have shown the older plain text); the key is emptied at every change now.
-- Not unloaded: documents with undo steps (above); the plain-text cache (`m_plainCache`, the text of every document
-  asked for by search or counts, about 16 kB per 1,000 words) is not bounded yet.
+- Not unloaded: documents with undo steps (above). The plain-text cache (`m_plainCache`, the text of every document
+  asked for by search or counts, about 16 kB per 1,000 words) is bounded since 0.93.1 (to-do item 45):
+  `DocumentStore::kPlainCacheBudget` characters (4,000,000, about 8 MB); past it a plain text is read from its file and
+  not kept. The first texts asked for stay (no eviction): a search that walks every document of a project larger than
+  the bound would otherwise throw out each kept text before it is asked for again. A changed text drops its entry
+  (`dropPlain`), which frees its room.
 
 ## 0.93.0 beta: notes start as plain text (item 24)
 

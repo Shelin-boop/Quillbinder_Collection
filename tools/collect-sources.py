@@ -24,7 +24,9 @@ add-ons name these files.
     tools/get-ffmpeg.sh and tools/ffmpeg-patches (the file name carries a hash of these, so a
     changed build gets a new file);
   - the AppImage runtime (type2-runtime) at the commit named in index.json, with the archives of
-    the libraries its build links in (as its scripts/common/install-dependencies.sh downloads them).
+    the libraries its build links in (as its scripts/common/install-dependencies.sh downloads them);
+  - Qt's source release, and (0.93.1) Qt PDF's: since Qt 6.12 the source release of Qt WebEngine and Qt PDF
+    (qtwebengine-everywhere-src-<QB_QTPDF_VERSION>.tar.xz), which Qt's own no longer holds.
 
 A SOURCES.txt in <out dir> lists the files and what each holds.
 """
@@ -69,6 +71,22 @@ def qt_version():
 
 def qt_source_file():
     return "qt-everywhere-src-%s.tar.xz" % qt_version()
+
+
+# 0.93.1 (to-do item 48): Qt PDF's source. Since Qt 6.12 Qt PDF is released with Qt WebEngine as a Qt Extensions module
+# of its own version (QB_QTPDF_VERSION), and qt-everywhere-src no longer holds it. The Qt Project publishes an MD5 list
+# beside the archive (no SHA-256): the archive is checked against it, and its SHA-256 is printed.
+QTPDF_URL = "https://download.qt.io/official_releases/qtwebengine/%s/%s/src/%s"
+
+
+def qtpdf_version():
+    with open(os.path.join(ROOT, "CMakeLists.txt"), encoding="utf-8") as f:
+        m = re.search(r'^set\(QB_QTPDF_VERSION\s+"([^"]*)"\)', f.read(), re.M)
+    return m.group(1) if m else ""
+
+
+def qtpdf_source_file():
+    return "qtwebengine-everywhere-src-%s.tar.xz" % qtpdf_version()
 
 
 def sh(*args, cwd=None, check=False):
@@ -147,6 +165,9 @@ def wanted():
     if any(c.get("qtBuild") for c in index["components"]):
         out.append((qt_source_file(), "qt", {"version": qt_version(),
                                              "for": "the AppImage (Qt) and the add-ons Media Playback and Web Page Import"}))
+    if any(c.get("sourceFile") == qtpdf_source_file() for c in index["components"]):
+        out.append((qtpdf_source_file(), "qtpdf", {"version": qtpdf_version(),
+                                                   "for": "the AppImage (Qt PDF: the PDF preview and the PDF files of Help)"}))
     name, _files = ffmpeg_source_file()
     out.append((name, "ffmpeg", {"for": "the add-ons Media Playback and Extra Video and Audio Formats"}))
     rt = index.get("runtime")
@@ -186,6 +207,29 @@ def get_qt(d, target):
         if h.hexdigest() != r.stdout.split()[0].lower():
             os.remove(target + ".part")
             raise RuntimeError("%s does not have the SHA-256 the Qt Project publishes" % url)
+    os.replace(target + ".part", target)
+
+
+def get_qtpdf(d, target):
+    ver = d["version"]
+    name = os.path.basename(target)
+    url = QTPDF_URL % (ver.rsplit(".", 1)[0], ver, name)
+    sh("curl", "-fsSL", "--retry", "10", "--retry-delay", "15", "--retry-all-errors", "-o", target + ".part", url, check=True)
+    r = subprocess.run(["curl", "-fsSL", "--retry", "5", url.rsplit("/", 1)[0] + "/md5sums.txt"], capture_output=True,
+                       text=True)
+    want = [l.split()[0].lower() for l in r.stdout.splitlines() if l.split() and l.split()[-1].lstrip("*") == name]
+    md5, sha = hashlib.md5(), hashlib.sha256()
+    with open(target + ".part", "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            md5.update(chunk)
+            sha.update(chunk)
+    if r.returncode != 0 or not want:
+        os.remove(target + ".part")
+        raise RuntimeError("%s: the Qt Project's md5sums.txt beside it names no sum for it" % url)
+    if md5.hexdigest() != want[0]:
+        os.remove(target + ".part")
+        raise RuntimeError("%s does not have the MD5 sum the Qt Project publishes" % url)
+    print("%s: MD5 as published; SHA-256 %s" % (name, sha.hexdigest()), flush=True)
     os.replace(target + ".part", target)
 
 
@@ -277,6 +321,9 @@ def main(argv):
     if len(argv) == 3 and argv[1] == "--name" and argv[2] == "qt":
         print(qt_source_file())
         return 0
+    if len(argv) == 3 and argv[1] == "--name" and argv[2] == "qtpdf":
+        print(qtpdf_source_file())
+        return 0
     if len(argv) == 4 and argv[1] == "--name" and argv[2] == "ubuntu":
         r = ubuntu_of_file(argv[3])
         if not r:
@@ -317,6 +364,9 @@ def main(argv):
                 what = "FFmpeg %s and the Quillbinder build of it (for %s)" % (FFMPEG_VERSION, d["for"])
             elif kind == "qt":
                 what = "Qt %s, the Qt Project's source release, unchanged (for %s)" % (d["version"], d["for"])
+            elif kind == "qtpdf":
+                what = ("Qt WebEngine and Qt PDF %s, the Qt Project's source release, unchanged (for %s)"
+                        % (d["version"], d["for"]))
             else:
                 what = "AppImage runtime type2-runtime %s with its libraries (for %s)" % (d["commit"], d["for"])
             lines.append("%s\n    %s\n" % (name, what))
@@ -327,6 +377,10 @@ def main(argv):
                 # the Qt Project's own archive, as it is (not packed again)
                 print("collecting %s" % name, flush=True)
                 get_qt(d, target)
+                continue
+            if kind == "qtpdf":
+                print("collecting %s" % name, flush=True)
+                get_qtpdf(d, target)
                 continue
             work = os.path.join(tmp_root, name)
             os.makedirs(work)

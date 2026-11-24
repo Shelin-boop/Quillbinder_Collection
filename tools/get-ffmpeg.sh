@@ -26,8 +26,13 @@ KEYS_URL=https://ffmpeg.org/ffmpeg-devel.asc
 KEY_FPR=FCF986EA15E6E293A5644F10B4322F04D67658D8
 SHA256="1a4d394ae63d190a526cd052eb4415c156b5c5e2df37efab41a7de0b8fde2433"
 TARBALL=ffmpeg-$VERSION.tar.xz
-need() {  # <prefix> <set>: missing, or another set (before 0.50 build/ffmpeg held every decoder)
-    [ ! -f "$1/lib/libavcodec.so.63" ] || [ "$(cat "$1/set.txt" 2>/dev/null)" != "$2" ]
+# 0.93.1 (to-do item 44): also another FFmpeg version (an older build of the same set was kept and used: its
+# version is in the installed header libavutil/ffversion.h; a set built before 0.50 has no header and is built anew)
+built_version() {  # <prefix>
+    sed -n 's/^#define FFMPEG_VERSION "\(.*\)"$/\1/p' "$1/include/libavutil/ffversion.h" 2>/dev/null
+}
+need() {  # <prefix> <set>: missing, another set (before 0.50 build/ffmpeg held every decoder) or another version
+    [ ! -f "$1/lib/libavcodec.so.63" ] || [ "$(cat "$1/set.txt" 2>/dev/null)" != "$2" ] || [ "$(built_version "$1")" != "$VERSION" ]
 }
 if ! need "$BASE" base && ! need "$FULL" full; then
     echo "FFmpeg is there: $BASE (base), $FULL (full)"

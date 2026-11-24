@@ -37,6 +37,14 @@ using namespace qb;
 
 namespace {
 int g_failures = 0;
+
+// The program an official add-on's release text names (0.93.1): the later of 0.91.3, the first that knows add-on keys,
+// and the minApp of a package with libraries (the runtime's first version, QB_RUNTIME_SINCE)
+static QString neededProgram()
+{
+    const QVersionNumber since = QVersionNumber::fromString(QLatin1String(QB_RUNTIME_SINCE));
+    return since > QVersionNumber(0, 91, 3) ? since.toString() : QStringLiteral("0.91.3");
+}
 int g_passes = 0;
 
 void check(bool ok, const QString &what, const QString &detail = QString())
@@ -535,7 +543,7 @@ int main(int argc, char **argv)
         check(notesRc == 0
                   && notes.contains(QLatin1String("This add-on is free and must not be sold. It can download Model X, whose license "
                                                   "(CC BY-NC 4.0) allows non-commercial use only."))
-                  && notes.contains(QLatin1String("Linux 0.91.3 or later")) && (QVersionNumber::fromString(QLatin1String(QB_RUNTIME_SINCE)) < QVersionNumber(0, 91, 3)
+                  && notes.contains(QStringLiteral("Linux %1 or later").arg(neededProgram())) && (QVersionNumber::fromString(QLatin1String(QB_RUNTIME_SINCE)) < QVersionNumber(0, 91, 3)
                       ? notes.contains(QLatin1String("0.80.0 to 0.91.2")) // the warning for a program without add-on keys
                       : !notes.contains(QLatin1String("does not know add-on keys")))  // (0.93.0) a minApp above it needs none
                   && notes.contains(QLatin1String("`SHA256SUMS.txt`")) && notes.contains(QLatin1String("not made by or connected with Literature & Latte"))
@@ -659,7 +667,7 @@ int main(int argc, char **argv)
                                                  src + QStringLiteral("/official-addons/translation-proofreading.json"), QStringLiteral("--android")}, &r4);
             check(r1 == 0 && aView.contains(QLatin1String("tag=addon-check-official-2.1-android")) && r2 == 2
                       && noAndroid.contains(QLatin1String("no Android build")) && r3 == 2 && wrongView.contains(QLatin1String("redistributables"))
-                      && r4 == 0 && realAndroid.contains(QLatin1String("tag=addon-translation-proofreading-1.2-android")),
+                      && r4 == 0 && realAndroid.contains(QStringLiteral("tag=addon-translation-proofreading-%1-android").arg(QJsonDocument::fromJson(readAll(src + QStringLiteral("/official-addons/translation-proofreading.json"))).object().value(QStringLiteral("version")).toString())),
                   QStringLiteral("addon-entry.py --android: the entry's Android block (its tag ends in -android), refused without one or with "
                                  "Windows' redistributables; the pinned translation add-on has one"),
                   aView + noAndroid + wrongView + realAndroid);
@@ -747,7 +755,7 @@ int main(int argc, char **argv)
             check(s1 == 0 && QFile::exists(aFiles + QStringLiteral("/check-official-2.1-android-source.tar.gz"))
                       && sourcesTxt.contains(QLatin1String("A runtime of the toolchain")) && sourcesTxt.contains(QLatin1String("Quillbinder for Android brings Qt"))
                       && s2 == 0 && aText.contains(QLatin1String("Check Official 2.1 for Android")) && aText.contains(QLatin1String("File > Install Update or Add-on"))
-                      && aText.contains(QLatin1String("Quillbinder for Android 0.91.3")),
+                      && aText.contains(QStringLiteral("Quillbinder for Android %1 or later").arg(neededProgram())),
                   QStringLiteral("addon-entry.py sources/notes --android: the Android source archive, the toolchain's libraries and where Qt "
                                  "comes from in SOURCES.txt; the release text tells how to install on the tablet"),
                   srcOut + notesOut + sourcesTxt.left(600) + aText.left(600));
