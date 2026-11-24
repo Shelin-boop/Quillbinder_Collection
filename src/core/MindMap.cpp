@@ -1219,6 +1219,13 @@ QByteArray Board::toXml() const
     return d.toByteArray(4);
 }
 
+// Windows 0.93.0 (item 19): the MSVC 14.52 build read a background shape's width and height in this function as
+// garbage (the place was right, and the same lines compiled in a test were right, with and without the optimizer; GCC
+// and the MSVC 14.51 build were right too, and Qt 6.12.1 did not change it): with MSVC this one function is compiled
+// without the optimizer. It runs once per board read, so the time it costs is not to be noticed.
+#if defined(_MSC_VER) && !defined(__clang__)
+#pragma optimize("", off)
+#endif
 bool Board::fromXml(const QByteArray &xml, QString *error)
 {
     QDomDocument d;
@@ -1461,6 +1468,9 @@ bool Board::fromXml(const QByteArray &xml, QString *error)
     settings.pageGuides = isYes(ui.firstChildElement(QStringLiteral("PageGuides")).text());
     return true;
 }
+#if defined(_MSC_VER) && !defined(__clang__)
+#pragma optimize("", on)
+#endif
 
 bool Board::save(const QString &path, QString *error) const
 {

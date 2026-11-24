@@ -151,6 +151,22 @@ and need 0.93.0 (the check for updates and **File > Install Update or Add-on** t
   they cannot say "alpha" again; `docs/design-decisions.md` gives the reasons behind choices that can look like faults
   (README, SECURITY.md and the manual's introduction link to it).
 
+## Windows 0.93.0 experimental (2026-11-24)
+
+Quillbinder for Windows 11 at the level of Linux 0.93.0. Everything above is in it. What is Windows' own:
+
+- Qt 6.12.1 for Windows, with the safety fixes of its built-in zlib, HarfBuzz and PCRE2, and zlib 1.4 inside
+  `quillbinder.exe` (1.3.2 before). This is a security update. Because the program's libraries changed, a
+  Quillbinder 0.92.0 for Windows gets the new setup program from its check for updates, not the program update.
+- **Extra Video and Audio Formats** carries FFmpeg 9.1 with its safety fixes. Qt 6.12.1 for Windows still brings
+  FFmpeg 9.0.2, so the project now builds FFmpeg itself, with the same configuration Qt uses.
+- Mind maps: background shapes keep their size when a board is opened. In 0.92.0 a shape drawn elsewhere showed as
+  a tiny circle at its corner, and a board saved on Windows kept the shrunk sizes. A board saved with 0.92.0 on
+  Windows keeps those sizes; draw such shapes again where needed.
+- Installing an add-on or a program update tries again for a few seconds when Windows still holds a file of the
+  installed version (a virus scanner reading it, for example), as it already did for the new version.
+- Translation and Proofreading 1.3, as on Linux.
+
 ## 0.92.0 beta (2026-11-20)
 
 A new AppImage and a program update for Linux, and the first version from the project's one repository,

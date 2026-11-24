@@ -451,7 +451,9 @@ static void emergencyWindow(const QString &W)
     check(!copy.isEmpty() && readAll(copy + QLatin1Char('/') + indexName + QStringLiteral(".copy")).contains("Binder only title"),
           QStringLiteral("a save that fails after a change of the binder alone, and the end by a signal: a copy with the project file"), copy);
     w.showEmergencyNotice();
-    check(QRegularExpression(QStringLiteral("\\d of \\d files")).match(w.lastEmergencyNotice()).hasMatch() && w.lastEmergencyNotice().contains(copy),
+    // (Windows 0.93.0: the notice names the folder with the system's separators)
+    check(QRegularExpression(QStringLiteral("\\d of \\d files")).match(w.lastEmergencyNotice()).hasMatch()
+              && w.lastEmergencyNotice().contains(QDir::toNativeSeparators(copy)),
           QStringLiteral("the notice of the signal's end says how many files and where"), w.lastEmergencyNotice());
 
     // the notice of an incomplete copy
@@ -809,13 +811,20 @@ static void backups(const QString &W)
         as.backupKeep = 5;
         as.backupOnClose = true;
         as.backupOnOpen = false;
+        // (Windows 0.93.0: kept in the settings file, because opening a project reads the settings again; on Windows,
+        // which has no standard backup folder, the folder set only in memory was gone and no backup was due)
+        as.save();
         auto *wp = new MainWindow;
         MainWindow &w = *wp;
         w.show();
         w.adoptProject(std::move(proj));
         settle(400);
         w.saveForTermination();
-        check(backup::isDue(file), QStringLiteral("(a signal ended the session: the backup is noted as due)"));
+        check(backup::isDue(file), QStringLiteral("(a signal ended the session: the backup is noted as due)"),
+              QStringLiteral("the list: \"%1\"; this project: %2 (%3); backups in %4, on closing %5")
+                  .arg(QString::fromUtf8(readAll(qb::dataDir() + QStringLiteral("/backups-due.txt"))).trimmed(), file,
+                       QFileInfo(file).canonicalFilePath(), as.backupDir)
+                  .arg(as.backupOnClose));
         as.backupOnClose = false;
         w.closeProject();
         as.backupOnClose = true;

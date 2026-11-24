@@ -129,11 +129,26 @@ stage="$STAGES/$id"
 E="$stage/payload/media-extra"
 mkdir -p "$E/qtplugins/multimedia" "$E/lib" "$E/licenses"
 cp "$QT/plugins/multimedia/ffmpegmediaplugin.dll" "$E/qtplugins/multimedia/"
+# Windows 0.93.0: the FFmpeg the project builds (packaging/windows/win-ffmpeg.sh, QB_FFMPEG_WIN_DIR), under the DLL names
+# of Qt's own (the same major versions: Qt's backend is linked against these names); Qt's own FFmpeg only for a build
+# without it, and never in a release
+FFSRC="$QT/bin"
+FFBY="qt"
+if [ -n "${QB_FFMPEG_WIN_DIR:-}" ]; then
+    FFSRC="$(cygpath -u "$QB_FFMPEG_WIN_DIR")/bin"
+    FFBY="project"
+elif [ "${QB_WIN_STAGE:-}" = release ]; then
+    echo "no FFmpeg of the project (QB_FFMPEG_WIN_DIR) for a release: add-on not made"
+    exit 1
+fi
 for lib in avcodec avformat avutil swresample swscale; do
-    f=$(ls "$QT/bin/" | grep -iE "^$lib-[0-9]+\.dll$" | head -1)
-    [ -n "$f" ] || { echo "missing $lib in $QT/bin"; exit 1; }
-    cp "$QT/bin/$f" "$E/lib/"
+    q=$(ls "$QT/bin/" | grep -iE "^$lib-[0-9]+\.dll$" | head -1)
+    f=$(ls "$FFSRC/" | grep -iE "^$lib-[0-9]+\.dll$" | head -1)
+    [ -n "$f" ] || { echo "missing $lib in $FFSRC"; exit 1; }
+    [ -z "$q" ] || [ "$q" = "$f" ] || { echo "FFmpeg's $f does not have the name Qt's backend loads ($q): add-on not made"; exit 1; }
+    cp "$FFSRC/$f" "$E/lib/"
 done
+echo "FFmpeg DLLs from: $FFSRC ($FFBY)"
 # what FFmpeg says about itself: version, license, configuration (the LGPL check)
 "$PY" - "$(cygpath -w "$E/lib")" > "$E/licenses/ffmpeg-build.txt" <<'PY'
 import ctypes, glob, os, sys
@@ -154,6 +169,16 @@ if ! grep -q '^License: LGPL' "$E/licenses/ffmpeg-build.txt" || grep -qE -- '--e
     exit 1
 fi
 ffver=$(sed -n 's/^FFmpeg version: //p' "$E/licenses/ffmpeg-build.txt" | tr -d '\r')
+if [ "$FFBY" = project ]; then
+    FFTEXT="built by the Quillbinder project with Microsoft Visual C++ (packaging/windows/win-ffmpeg.sh)
+    from FFmpeg's own release, unchanged, with the configuration The Qt Company uses for Qt
+    Multimedia $QTVER and zlib linked in."
+    FFBYTEXT="the Quillbinder project with the configuration of Qt Multimedia"
+else
+    FFTEXT="as built by The Qt Company for Qt Multimedia $QTVER (installed with Qt's
+    \"qtmultimedia\" module for MSVC 2022, 64 bit), unchanged."
+    FFBYTEXT="The Qt Company for Qt Multimedia"
+fi
 cp "$ROOT/addons/media-extra-formats/payload/media-extra/licenses/FFmpeg-LGPL-2.1.txt" "$E/licenses/"
 cp "$ROOT/addons/media-playback/payload/media/licenses/Qt-LGPL-3.0.txt" \
    "$ROOT/addons/media-playback/payload/media/licenses/GPL-3.0.txt" "$E/licenses/"
@@ -162,8 +187,7 @@ Libraries in this add-on ("Extra Video and Audio Formats", Windows)
 ==================================================================
 
 lib/avcodec, avformat, avutil, swresample, swscale (*.dll)
-    FFmpeg $ffver, as built by The Qt Company for Qt Multimedia $QTVER (installed with Qt's
-    "qtmultimedia" module for MSVC 2022, 64 bit), unchanged. Licence: GNU LGPL 2.1 or later
+    FFmpeg $ffver, $FFTEXT Licence: GNU LGPL 2.1 or later
     (FFmpeg-LGPL-2.1.txt). How it was built (FFmpeg's own report): ffmpeg-build.txt.
     Source code: the release "Third-party source code" of Quillbinder; FFmpeg's own sources:
     https://ffmpeg.org and https://github.com/FFmpeg/FFmpeg. Each DLL can be replaced by another
@@ -176,16 +200,18 @@ qtplugins/multimedia/ffmpegmediaplugin.dll
 Some formats this add-on plays (H.264, H.265, AAC and others) are covered by patents in some
 countries; whether a patent license is needed to use them depends on the country.
 TEXT
-"$PY" - "$ROOT/addons/media-extra-formats/manifest.json" "$stage/manifest.json" "$ffver" <<'PY'
+"$PY" - "$ROOT/addons/media-extra-formats/manifest.json" "$stage/manifest.json" "$ffver" "$FFBYTEXT" "$FFBY" <<'PY'
 import json, sys
 m = json.load(open(sys.argv[1], encoding="utf-8"))
 m["description"] = ("Lets the add-on \"Media Playback\" (2.0 or newer) play with FFmpeg: besides what Windows plays, "
                     "also Ogg Vorbis, Opus, WebM, Matroska and many more, including formats that are licensed under "
                     "patents (H.264, H.265 (HEVC), AAC, AC-3 ...). Brings FFmpeg " + sys.argv[3] + " (LGPL) as built by "
-                    "The Qt Company for Qt Multimedia, and Qt's FFmpeg backend. While it is installed and switched on, "
+                    + sys.argv[4] + ", and Qt's FFmpeg backend. While it is installed and switched on, "
                     "it is used instead of the decoders of Windows. Kept apart so that it can be left out: everything "
                     "else works without it. Whether a patent license is needed to use these formats depends on the country.")
-m["whatsNew"] = ["First version for Windows: Qt Multimedia's FFmpeg backend"]
+m["whatsNew"] = (["FFmpeg " + sys.argv[3] + " with its security fixes (Windows 0.93.0; built by the project: Qt 6.12.1 "
+                  "for Windows brings FFmpeg 9.0.2)"] if sys.argv[5] == "project"
+                 else ["FFmpeg " + sys.argv[3] + " as Qt Multimedia brings it (a build without the project's FFmpeg)"])
 json.dump(m, open(sys.argv[2], "w", encoding="utf-8"), indent=2, ensure_ascii=False)
 PY
 pack "$id" "$stage"

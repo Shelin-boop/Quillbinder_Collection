@@ -2,7 +2,7 @@
 # Windows build on GitHub Actions (.github/workflows/windows.yml, port steps W1 and W2, 2026-11-07).
 # W2: the writing tools, importers and Media Playback as Windows add-ons (packaging/windows/win-addons.sh), a
 # program update package, the symbols file (.pdb), and the checks of packaging/windows/win-check.sh.
-# W4a (2026-11-11): Qt 6.12.0, runtime win64-qt6.12-msvc-r1. W4c (2026-11-12): whisper.cpp (packaging/windows/win-whisper.sh)
+# W4a (2026-11-11): Qt 6.12.0, runtime win64-qt6.12-msvc-r1 (Windows 0.93.0: Qt 6.12.1, -r2). W4c (2026-11-12): whisper.cpp (packaging/windows/win-whisper.sh)
 # and the add-on "Speech Transcription".
 # Runs in Git Bash on the runner after Qt, MSVC's environment, vcpkg and sccache are set up.
 # Never stops at the first failure: every step writes its result into results/, which the
@@ -63,6 +63,12 @@ say "triplet: ${VCPKG_TRIPLET:-unknown}"
 QT=$(cygpath -m "$QT_ROOT_DIR")
 VCPKG=$(cygpath -m "$VCPKG_INSTALLATION_ROOT")
 
+# the pins of the ready-made packs (Windows 0.93.0: packaging/windows/win-packs.txt, one list for windows.yml and
+# release-windows.yml; QB_WIN_PACKS, when set, wins)
+if [ -z "${QB_WIN_PACKS:-}" ] && [ -f packaging/windows/win-packs.txt ]; then
+  export QB_WIN_PACKS="$(grep -v '^[[:space:]]*#' packaging/windows/win-packs.txt)"
+fi
+
 # ---- whisper.cpp for the add-on "Speech Transcription" (W4c, 2026-11-12; processor only; cached by the workflow)
 WHISPER="$PWD/.whisper"
 # Windows 0.91.3 (D1): the pinned pack of this recipe first (seconds); without one the cache or a build as before, and
@@ -83,6 +89,27 @@ if [ $rc -eq 0 ] && grep -q '^whisper.cpp built:' "$OUT/whisper.log" && [ "${GIT
 fi
 say "whisper.cpp: rc=$rc, $(cat "$WHISPER/version.txt" 2>/dev/null | cut -d' ' -f1), modules: $(ls "$WHISPER/bin" 2>/dev/null | grep -i '^ggml-cpu-' | sed 's/^ggml-cpu-//; s/\.dll$//' | tr '\n' ' ')($(mins))$pack"
 [ $rc -eq 0 ] && export QB_WHISPER_DIR="$(cygpath -m "$WHISPER")"
+
+# ---- FFmpeg 9.1 for the add-on "Extra Video and Audio Formats" (Windows 0.93.0: built by the project, in place of the
+# FFmpeg 9.0.2 that Qt 6.12.1 brings; packaging/windows/win-ffmpeg.sh), from its pack as whisper.cpp
+FFW="$PWD/.ffmpeg"
+pack=""
+if [ -n "${QB_WIN_PACKS:-}" ]; then
+  rm -rf "$FFW.pack"
+  if bash packaging/windows/win-deps-pack.sh get ffmpeg "$FFW.pack" > "$OUT/ffmpeg-pack.log" 2>&1; then
+    rm -rf "$FFW" && mv "$FFW.pack" "$FFW" && pack=" (pack)"
+  fi
+  rm -rf "$FFW.pack"
+fi
+bash packaging/windows/win-ffmpeg.sh "$FFW" > "$OUT/ffmpeg.log" 2>&1
+rc=$?
+if [ $rc -eq 0 ] && grep -q '^FFmpeg built:' "$OUT/ffmpeg.log" && [ "${GITHUB_REPOSITORY:-}" = Shelin-boop/Quillbinder_Collection ] && [ "$STAGE" != release ]; then
+  bash packaging/windows/win-deps-pack.sh publish ffmpeg "$FFW" >> "$OUT/ffmpeg-pack.log" 2>&1 || echo "publish failed" >> "$OUT/ffmpeg-pack.log"
+  grep -E '^pin: |failed' "$OUT/ffmpeg-pack.log" | sed 's/^/ffmpeg pack: /' >> "$SUM"
+fi
+[ $rc -eq 0 ] || tail -30 "$OUT/ffmpeg.log" | sed 's/^/  ffmpeg: /' >> "$SUM"
+say "ffmpeg: rc=$rc, $(cut -d' ' -f1 "$FFW/version.txt" 2>/dev/null), $(ls "$FFW/bin" 2>/dev/null | grep -iE '\.dll$' | tr '\n' ' ')($(mins))$pack"
+[ $rc -eq 0 ] && export QB_FFMPEG_WIN_DIR="$(cygpath -m "$FFW")"
 
 # ---- the engine libraries of the add-on "Translation and Proofreading" (Windows 0.92.0: one of the project's own
 # add-ons, as on Linux since 0.92.0): oneDNN, CTranslate2 and SentencePiece, built with MSVC by the add-on's own script
@@ -309,10 +336,15 @@ say "$(grep -E '^tests: ' "$OUT/tests-run.log" || echo 'tests: did not finish')"
 mv "$OUT"/addons/*.qbpkg "$OUT/" 2>/dev/null
 rm -rf "$OUT/addons" "$OUT/c-update" "$OUT/c-linux-addon" "$OUT/core.qbpkg" full
 
+# Windows 0.93.0 (item 32): an explore suite's failure does not fail the result, but the result line says so
+xfail=$(sed -n 's/^tests: .*(explore: \([0-9]*\) of .*/\1/p' "$OUT/tests-run.log" | tail -1)
+xnote=""
+[ -n "$xfail" ] && [ "$xfail" != 0 ] && xnote=", explore suites with failures: $xfail"
 if [ $selftest_ok -eq 1 ] && [ $crc -eq 0 ] && [ $lrc -eq 0 ] && [ $src -eq 0 ] && [ $trc -eq 0 ] && [ "$ONLY" = suites ]; then
-  say "result: partial ok (only: $PICK; not a run before a merge)"
+  say "result: partial ok (only: $PICK; not a run before a merge$xnote)"
 elif [ $selftest_ok -eq 1 ] && [ $crc -eq 0 ] && [ $lrc -eq 0 ] && [ $src -eq 0 ] && [ $trc -eq 0 ]; then
   say "result: ok"
+  [ -n "$xnote" ] && say "note: explore suites with failures: $xfail (reported, not counted)"
 elif [ $selftest_ok -eq 1 ]; then
   say "result: built, checks failed (program $crc, layout $lrc, setup $src, tests $trc)"
 else

@@ -61,8 +61,12 @@ static long rssKb()
 
 static long heapKb()
 {
+#ifdef __GLIBC__
     const struct mallinfo2 mi = mallinfo2();
     return long((mi.uordblks + mi.hblkhd) / 1024);
+#else
+    return 0; // (Windows 0.93.0: the count is glibc's; only the printed measures use it, no check)
+#endif
 }
 
 static void shot(QWidget *w, const QString &name)

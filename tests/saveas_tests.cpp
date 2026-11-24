@@ -331,6 +331,11 @@ int main(int argc, char **argv)
     QDir().mkpath(home.path() + QLatin1String("/run"));
     QFile::setPermissions(home.path() + QLatin1String("/run"), QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner);
     qputenv("QB_NO_DIALOGS", "1");
+#ifdef Q_OS_WIN
+    // (Windows 0.93.0: the test fills in Qt's own file dialog; the system's dialog of the program is not a widget it can
+    // reach, and the suite ended at its first one)
+    QCoreApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
+#endif
     QCoreApplication::setOrganizationName(QStringLiteral("QuillbinderSaveAsTest"));
     QCoreApplication::setApplicationName(QStringLiteral("QuillbinderSaveAsTest"));
     QApplication app(argc, argv);

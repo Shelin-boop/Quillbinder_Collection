@@ -208,9 +208,17 @@ static void footerChecks(const QString &W)
     check(opened, QStringLiteral("a click on the link opens File > Options > Backup"));
     delete t.data();
     qunsetenv("QB_TEST_PORTABLE");
+#ifdef Q_OS_WIN
+    // (Windows 0.93.0: the Windows program is always the portable one; a chosen folder ends the concern there)
+    const QString keptBackupDir = as.backupDir;
+    as.backupDir = QDir::tempPath() + QStringLiteral("/qb-v0930e-backups");
+#endif
     as.notifyChanged();
     settle(200);
     check(!link->isVisible(), QStringLiteral("the link is gone when backups are no concern"));
+#ifdef Q_OS_WIN
+    as.backupDir = keptBackupDir;
+#endif
 
     // the update check's note appears there and fades twice
     w.showFadingNote(QStringLiteral("Could not look for updates."));
@@ -228,7 +236,8 @@ static void footerChecks(const QString &W)
     w.editorPane(0)->setViewMode(ViewMode::Corkboard);
     settle(300);
     check(fs->isVisible() && text->isVisible() && text->text() == fs->saveText() && !fs->saveText().isEmpty(),
-          QStringLiteral("the corkboard's footer bar holds the save text as well"));
+          QStringLiteral("the corkboard's footer bar holds the save text as well"),
+          QStringLiteral("bar %1, text %2: \"%3\", save text \"%4\"").arg(fs->isVisible()).arg(text->isVisible()).arg(text->text(), fs->saveText()));
     shot(&w, QStringLiteral("footer-corkboard"));
     binder->select({item}, true);
     settle(300);

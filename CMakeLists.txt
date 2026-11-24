@@ -47,8 +47,11 @@ set(APP_RUNTIME_DATE "2026-11-23")
 if(WIN32)
   # Windows (port, W2; Qt 6.12.0 since W4a, 2026-11-11, the same Qt as Linux): The Qt Company's build of
   # QB_QT_VERSION for MSVC with its DLLs in the program folder; program updates for Windows must be built with the
-  # same Qt (.github/workflows/windows.yml pins it). The test builds of 0.60.5 had win64-qt6.8.3-msvc-r1.
-  set(APP_RUNTIME "win64-qt6.12-msvc-r1")
+  # same Qt (.github/workflows/windows.yml pins it). The test builds of 0.60.5 had win64-qt6.8.3-msvc-r1; Qt 6.12.0 (0.80.0 to
+  # 0.92.x) win64-qt6.12-msvc-r1; Qt 6.12.1 since Windows 0.93.0 -r2 (its DLLs carry the fixes of zlib, HarfBuzz and PCRE2,
+  # so a Windows program update, which carries only quillbinder.exe, must not go into a folder with Qt 6.12.0's DLLs: the
+  # check for updates offers the new setup program instead, src/core/UpdateCheck.cpp).
+  set(APP_RUNTIME "win64-qt6.12-msvc-r2")
 endif()
 # The public project page (0.50): downloads, and the release "Third-party source code" with the
 # source of every library the AppImage and the add-ons carry (Help > Third-Party Licenses).

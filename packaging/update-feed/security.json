@@ -4,7 +4,9 @@
     "linux-x86_64": [
       "0.93.0"
     ],
-    "windows-x64": [],
+    "windows-x64": [
+      "0.93.0"
+    ],
     "android-arm64": []
   },
   "addons": {}

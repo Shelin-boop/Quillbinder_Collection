@@ -15,7 +15,7 @@ DIST=$(cd "$3" && pwd)
 OUT=$4
 mkdir -p "$OUT/tests"
 # the suites for Windows; more join as they are made to work here
-SUITES="qb_tests qb_ui_tests qb_fixes_tests qb_w2_tests qb_w3_tests qb_w4_tests qb_w4c_tests qb_v0602_tests qb_v0601_tests qb_v0650_tests qb_v0604_tests qb_v0700_tests qb_fuzz_tests qb_v0811_tests qb_v064_tests qb_v0611_tests qb_v0603_tests qb_v0812_tests qb_v0813_tests qb_v0900_tests qb_v0901_tests qb_v0902_tests qb_v0903_tests qb_v0904_tests qb_m7_tests qb_m8_tests qb_m9_tests qb_v018_tests qb_v0212_tests qb_v0402_tests qb_v0403_tests qb_v0605_tests qb_v0642_tests qb_v0910_tests qb_v0911_tests qb_v0913_tests qb_v0920_tests"
+SUITES="qb_tests qb_ui_tests qb_fixes_tests qb_w2_tests qb_w3_tests qb_w4_tests qb_w4c_tests qb_v0602_tests qb_v0601_tests qb_v0650_tests qb_v0604_tests qb_v0700_tests qb_fuzz_tests qb_v0811_tests qb_v064_tests qb_v0611_tests qb_v0603_tests qb_v0812_tests qb_v0813_tests qb_v0900_tests qb_v0901_tests qb_v0902_tests qb_v0903_tests qb_v0904_tests qb_m7_tests qb_m8_tests qb_m9_tests qb_v018_tests qb_v0212_tests qb_v0402_tests qb_v0403_tests qb_v0605_tests qb_v0642_tests qb_v0910_tests qb_v0911_tests qb_v0913_tests qb_v0920_tests qb_m10_tests qb_v0930_tests qb_v0930b_tests qb_v0930c_tests qb_v0930d_tests qb_v0930e_tests qb_v0930f_tests qb_saveas_tests qb_notesplain_tests qb_mmoverview_tests"
 # W4a (2026-11-11): suites written for Linux after W3, run to see where they stand on Windows; their failures are
 # reported ("explore") but do not count for the result until they are made to work here and move up to SUITES
 # (v0810 is left out: it needs the Linux fault shim, tests/faultshim.cpp, an LD_PRELOAD library)
@@ -59,7 +59,12 @@ SUITES="qb_tests qb_ui_tests qb_fixes_tests qb_w2_tests qb_w3_tests qb_w4_tests 
 # the mind map, and m10's own crash, which was never examined (run of f7bb321: the suite used a writing tool that was
 # not loaded, because it looked for the tools' packages under their Linux names; it takes the Windows packages now).
 # v0913 leaves out its check of an Android package on Windows (its stand-in for readelf is a shell script).
-EXPLORE="qb_v017_tests qb_m10_tests"
+# Windows 0.93.0: m10 counted (its 77 checks passed in every run since 2026-11-20); the suites of Linux 0.93.0 counted from
+# their first run here, as v0913 and v0920 were: v0930 (its child runs with the fault library are Linux only: built
+# without QB_FAULT_SHIM), v0930b to v0930f, saveas, notesplain, mmoverview. The Python suites of 0.93.0 (deps: the Linux
+# dependency packs; verlines: the version lines in CMakeLists.txt; secwatch) check the repository's files and run on
+# Linux only. v017 stays here until item 19 (the mind map's background shapes in the MSVC build) is settled.
+EXPLORE="qb_v017_tests"
 # D2 (Windows 0.91.3): QB_WIN_SUITES (packaging/windows/win-ci.sh, from "[suites: ...]" in a commit message) runs only
 # the suites it names, as the runner prints them (qb_tests, ui, v0913 ...); a name of no suite fails the run
 if [ -n "${QB_WIN_SUITES:-}" ]; then
