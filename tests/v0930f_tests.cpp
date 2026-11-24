@@ -5,7 +5,7 @@
 //  - search, the word counts and the plain texts still cover every document; a Hold keeps all documents;
 //  - without a window that tells what is shown, nothing is unloaded.
 //
-//   xvfb-run -a ./qb_v0930d_tests /tmp/shots        (QB_MEASURE=1: the memory of a large project, before and after)
+//   xvfb-run -a ./qb_v0930f_tests /tmp/shots        (QB_MEASURE=1: the memory of a large project, before and after)
 #include "core/BinderModel.h"
 #include "core/DocumentStore.h"
 #include "core/Search.h"
@@ -269,7 +269,7 @@ static void run(const QString &W)
     QTest::qWait(300);
     QFile f7(p->docs()->textPath(id7));
     check(f7.open(QIODevice::ReadOnly) && QString::fromUtf8(f7.readAll()).contains(QLatin1String("TYPEDLATE")), QStringLiteral("the typed text is in its file"));
-    shot(&w, QStringLiteral("v0930d-large-project"));
+    shot(&w, QStringLiteral("v0930f-large-project"));
 
     // without a window that tells what is shown nothing is unloaded
     {

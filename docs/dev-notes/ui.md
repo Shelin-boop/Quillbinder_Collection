@@ -4,7 +4,7 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 
 ## 0.93.0 beta: documents that are not shown are unloaded (item 39)
 
-- **Where the memory went** (measured with `qb_v0930d_tests`, `QB_MEASURE=1`, `QB_MEASURE_DOCS=<n>`: a generated project of 500
+- **Where the memory went** (measured with `qb_v0930f_tests`, `QB_MEASURE=1`, `QB_MEASURE_DOCS=<n>`: a generated project of 500
   documents of 1,000 words, shown one after another through the binder; `mallinfo2` for the heap in use, `VmRSS` for the
   process): before, 168 kB of heap per document shown (the 500 documents: 16 MB when opened, 100 MB at the end, RSS 104 to
   156 MB); of it about 61 kB is the `QTextDocument` itself (read with `DocumentStore::text` only, no editor) and about

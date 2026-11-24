@@ -136,7 +136,7 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   update (inspect, install, launcher), changed certificates, `make-package.py verify`, the install window's note, the
   workflow's signing job; `tools/addon-entry.py` and the workflow "Official add-on"; see "Add-on keys" in
   `saving-and-safety.md`).
-- `qb_v0930d_tests` (0.93.0 beta, fourth suite, item 39: a project of 150 documents shown one after another holds at most
+- `qb_v0930f_tests` (0.93.0 beta, fourth suite, item 39: a project of 150 documents shown one after another holds at most
   16 laid out (`DocumentStore::loadedCount`); a document shown again has its text, bold text and cursor place; unsaved text
   and unsaved notes are not unloaded and the undo history of the typing works; search, plain texts and word counts cover
   every document; a `DocumentStore::Hold` keeps all, also while the timer runs; without the window's probe nothing is
