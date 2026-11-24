@@ -1,8 +1,8 @@
-state: running
-system: Linux (then Windows, then Android)
-job: run 0.93.1 (all of section A), Linux part
-branch: linux/0.93.1
-chat: 2026-11-24 19:32 Berlin
-started: 2026-11-24 19:35 Berlin
+state: free
+system:
+job:
+branch:
+chat:
+started:
 paused:
-note: Linux 0.93.1, Windows 0.93.1, Android 0.93.2 (fixes)
+note: last job: the run 0.93.1, Linux part: Linux 0.93.1 released (v0.93.1-beta, 2026-11-24), page and update file published. Next: the run's Windows part (Windows 0.93.1), then Android (0.93.2).
