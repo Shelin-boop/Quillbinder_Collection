@@ -294,6 +294,10 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
     bool newSession = reset == QLatin1String("open") || !p->targets.sessionStart.isValid();
     if (reset == QLatin1String("midnight") && p->targets.sessionStart.date() != QDate::currentDate())
         newSession = true;
+    // 0.94.0 (item 73): the first opening of a project counts its text once, so that the words it holds are the
+    // start of the session and not words written in it
+    if (!p->targets.sessionStart.isValid())
+        p->m_docs->recountAll();
     p->startSession(newSession);
     // 0.81.0 (audit of 0.80.0, S-12): counts found different from the project file at the opening (after a session
     // that ended without closing, the texts were saved but the project file's counts not yet) go with the next full
@@ -554,6 +558,52 @@ void Project::startSession(bool force)
     targets.sessionStartTotal = totalWordCount();
     targets.sessionStartDraftChars = draftCharCount();
     targets.sessionStartTotalChars = totalCharCount();
+    markIndexDirty();
+    emit countsChanged(); // the displays of the session count follow at once (0.94.0)
+}
+
+Project::CountSnapshot Project::countSnapshot() const
+{
+    return {draftWordCount(), totalWordCount(), draftCharCount(), totalCharCount()};
+}
+
+Project::CountSnapshot Project::beginSessionExclusion()
+{
+    if (m_sessionExcludeDepth++ > 0)
+        return {};
+    if (m_docs)
+        m_docs->flushCounts();
+    return countSnapshot();
+}
+
+void Project::endSessionExclusion(const CountSnapshot &before)
+{
+    if (--m_sessionExcludeDepth == 0)
+        excludeFromSession(before);
+}
+
+void Project::excludeFromSession(const CountSnapshot &before)
+{
+    if (m_docs)
+        m_docs->flushCounts();
+    const CountSnapshot now = countSnapshot();
+    targets.sessionStartDraft += now.draftW - before.draftW;
+    targets.sessionStartTotal += now.totalW - before.totalW;
+    targets.sessionStartDraftChars += now.draftC - before.draftC;
+    targets.sessionStartTotalChars += now.totalC - before.totalC;
+    markIndexDirty();
+}
+
+void Project::excludeFromSession(const BinderItem *item, int dWords, int dChars)
+{
+    if (!item || isInTrash(item))
+        return;
+    targets.sessionStartTotal += dWords;
+    targets.sessionStartTotalChars += dChars;
+    if (isInDraft(item)) {
+        targets.sessionStartDraft += dWords;
+        targets.sessionStartDraftChars += dChars;
+    }
     markIndexDirty();
 }
 

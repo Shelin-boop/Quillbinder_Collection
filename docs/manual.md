@@ -970,7 +970,7 @@ Formatting stays as it is: the new text takes over the formatting of the text it
 
 ## 10. Targets, statistics, and writing tools
 
-- **Project > Project Targets** (**Ctrl+Shift+T**): set a word or character target for the Draft and for each writing session, and optionally a deadline and your writing days. {{APP}} can then calculate how much you need to write each session. The two thin bars under the quick-search box show your progress (blue: Draft; orange: session).
+- **Project > Project Targets** (**Ctrl+Shift+T**): set a word or character target for the Draft and for each writing session, and optionally a deadline and your writing days. {{APP}} can then calculate how much you need to write each session. The two thin bars under the quick-search box show your progress (blue: Draft; orange: session). Words that come into the project in one step are not counted as written in the session (0.94.0): imported text (**File > Import**, **Import and Split**, dropped files, web pages), a paste of more than 200 words, and the words a project already holds when you open it the first time. **Reset Session Now** starts the count at 0 and the tooltip of the quick-search box shows it at once. The window of the targets keeps the room of its bars, so the fields do not move when you set a target.
 - **Document targets**: click the target in the editor footer.
 - **Project > Project Statistics**: words and characters in the Draft, in the compiled text, and in the whole project, plus an estimate of the page count. In a large project the counting takes a moment; the busy pointer shows it.
 - **Project > Writing History**: how many words you wrote on each day.

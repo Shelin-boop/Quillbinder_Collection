@@ -965,6 +965,7 @@ bool readTextFile(const QString &path, QTextDocument *doc, const Formatting &f, 
 
 BinderItem *importMedia(Project *p, const QString &path, BinderItem *parent, int row, QStringList *warnings)
 {
+    SessionExclusion keepSession(p); // imported text is not written in the session (0.94.0, item 73)
     const QFileInfo fi(path);
     ItemType t = ItemType::File;
     switch (classify(path)) {
@@ -1007,6 +1008,7 @@ static bool copyTree(const QString &from, const QString &to)
 
 BinderItem *addWebPage(Project *p, const importers::WebPage &page, BinderItem *parent, int row, QStringList *warnings)
 {
+    SessionExclusion keepSession(p); // imported text is not written in the session (0.94.0, item 73)
     if (!parent || p->isInTrash(parent))
         parent = p->research();
     QString title = page.title.simplified();
@@ -1083,6 +1085,7 @@ BinderItem *addWebPage(Project *p, const importers::WebPage &page, BinderItem *p
 
 QList<BinderItem *> importFiles(Project *p, const QStringList &paths, BinderItem *parent, int row, QStringList *warnings)
 {
+    SessionExclusion keepSession(p); // imported text is not written in the session (0.94.0, item 73)
     QList<BinderItem *> out;
     if (!parent)
         parent = p->research();
@@ -1149,6 +1152,7 @@ QList<BinderItem *> importFiles(Project *p, const QStringList &paths, BinderItem
 QList<BinderItem *> importAndSplit(Project *p, const QString &path, const QString &separator, bool firstLineIsTitle,
                                    BinderItem *parent, int row, QString *error, QStringList *warnings)
 {
+    SessionExclusion keepSession(p); // imported text is not written in the session (0.94.0, item 73)
     QList<BinderItem *> out;
     QTextDocument whole;
     if (!readTextFile(path, &whole, p->formatting, p->storage == StorageFormat::Rtf, error, nullptr, warnings))

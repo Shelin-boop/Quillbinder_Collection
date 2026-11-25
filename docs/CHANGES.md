@@ -21,6 +21,11 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
 - **The inspector shows the document chosen in the binder**. When the editor already showed the chosen document while
   the inspector showed another one, a click in the binder left the inspector where it was (found by a check that
   failed on Windows only). After a choice in the binder the inspector always shows the chosen document.
+- **Imported text and pastes are no session words**. After **Import and Split** of a long text the Project Targets
+  counted all imported words as written in the session; the first opening of a project counted its words too; and
+  after **Reset Session Now** the tooltip of the quick-search field kept the old number until the next change. One
+  rule now: imported text, the words a project holds when it is opened the first time, and a paste of more than 200
+  words do not count as session words; the tooltip follows **Reset Session Now** at once.
 
 ## 0.93.1 beta (2026-11-24)
 

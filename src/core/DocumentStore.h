@@ -141,7 +141,10 @@ public:
     // op returned (the number of changes), -1 if the file could not be written.
     int editStored(const QString &id, bool notes, const std::function<int(QTextDocument *)> &op, QString *error = nullptr);
 
-    void recount(const QString &id);
+    // typed: a text typed or pasted (not a replacement as a whole); a rise of more than 200 words by one recount is
+    // a paste or an insertion and is not counted as written in the session (0.94.0, item 73)
+    void recount(const QString &id, bool typed = false);
+    void flushCounts(); // the counts that are pending now
     void recountAll();
 
     // The text (or notes) of this document could not be read: it must not be edited. Also a text
