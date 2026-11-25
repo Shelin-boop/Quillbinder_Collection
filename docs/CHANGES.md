@@ -145,7 +145,7 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
 - **A message line under the binder, and tool interface 1.2**. Short messages of the program and of add-ons appear in a
   small line under the binder: one at a time, each for 5 seconds (10 seconds with a link) or until it is clicked; the
   others wait. The tool interface has a new host call, `showMessage(text, milliseconds)` (add-ons call it only when the program
-  says 1.2 or later; older add-ons keep working). Translation and Proofreading 1.4 and Speech Transcription free their models
+  says 1.2 or later; older add-ons keep working). Translation and Proofreading 1.4 and Speech Transcription 1.9 free their models
   after 15 minutes without use (the time can be changed in their options; Speech Transcription has a new field "Free the model
   after") and say "Model unloaded, RAM usage minimal" in this line. **Help > Troubleshooting and Development > System
   Information** names the memory the program holds (resident size).

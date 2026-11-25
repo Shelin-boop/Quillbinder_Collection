@@ -1,11 +1,12 @@
 {
   "id": "speech-transcription",
   "name": "Speech Transcription",
-  "version": "1.8",
+  "version": "1.9",
   "description": "Speech becomes text, on this computer only: a microphone button in the main toolbar starts and stops a recording (the arrow beside it chooses the microphone), and what is said is written into a new transcription file, listed in the inspector's tab \"Transcriptions\", where it can be edited and copied. You can also record only, using little power, and let the text be written later with Transcribe. Nothing is sent anywhere; a speech model is downloaded once under File > Options > Speech and then used without any connection.",
   "author": "Quillbinder",
   "minApp": "0.93.0",
   "whatsNew": [
+    "The speech model is freed after 15 minutes without use (adjustable in the add-on's options); Quillbinder 0.94.0 and later say so in a short message under the binder",
     "Built for Quillbinder 0.93.0 and later"
   ],
   "details": [
