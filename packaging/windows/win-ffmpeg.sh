@@ -9,12 +9,14 @@
 #
 #   packaging/windows/win-ffmpeg.sh <prefix>
 #
-# Runs in Git Bash inside MSVC's environment (packaging/windows/win-ci.sh); configure and make run in the runner's
-# MSYS2 (C:\msys64, with make, nasm and diffutils from its packages), which inherits that environment. zlib: the one
+# Runs in Git Bash (packaging/windows/win-ci.sh); configure and make run in the runner's MSYS2 (C:\msys64, with make,
+# nasm and diffutils from its packages). MSYS2 does not inherit MSVC's environment: this script runs MSVC's own
+# vcvars64.bat in cmd (VSDIR, from the workflow's step "Find Visual Studio"), takes MSVC's folders, INCLUDE and LIB
+# from what it prints, and hands them to the MSYS2 script in a file (msvc-env.sh in the work folder). zlib: the one
 # vcpkg built for the program (1.4, static; packaging/windows/win-vcpkg.sh), in place of Qt's zlib 1.3.1.
 # Result: <prefix>/bin (the five DLLs), <prefix>/include, <prefix>/lib, <prefix>/version.txt, <prefix>/configure.txt.
 # A finished build of the same version, script and zlib is reused (D1: packaging/windows/win-deps-pack.sh keeps it as
-# a pack). Without a pack it takes about 20 to 30 minutes on GitHub's runner.
+# a pack). Without a pack it takes about 10 minutes on GitHub's runner.
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 PREFIX=$1
