@@ -324,6 +324,18 @@ static void findCommand(MainWindow &w, Project *p)
 static void appMenu(MainWindow &w, const QString &home)
 {
     std::printf("== the entry in the application menu (items 60, 69 and 70)\n");
+#ifdef Q_OS_WIN
+    // Windows 0.94.0: no AppImage and no application menu of the Linux desktop; the command is hidden (the setup program
+    // and the portable program's guide make the Start menu entry)
+    {
+        QAction *integrate = w.findChild<QAction *>(QStringLiteral("integrate"));
+        check(integrate && !integrate->isVisible() && !integrate->isEnabled(), QStringLiteral("Windows: Help shows no \"Add to Application Menu\""));
+        qputenv("APPIMAGE", (home + QLatin1String("/Downloads/Quillbinder-9.9.9-test-x86_64.AppImage")).toUtf8());
+        check(!appmenu::runsFromAppImage() && !appmenu::canMove(), QStringLiteral("Windows: $APPIMAGE set makes no AppImage of the program and offers no move"));
+        qunsetenv("APPIMAGE");
+        return;
+    }
+#endif
     const QString data = qEnvironmentVariable("XDG_DATA_HOME");
     // an AppImage in the Downloads folder
     const QString dl = home + QLatin1String("/Downloads/Quillbinder-9.9.9-test-x86_64.AppImage");
@@ -442,6 +454,26 @@ static void firstStart(MainWindow &w, const QString &home)
     const QString dl = home + QLatin1String("/Downloads/First.AppImage");
     writeFile(dl, QByteArray(20000, 'f'));
     qputenv("APPIMAGE", dl.toUtf8());
+#ifdef Q_OS_WIN
+    // Windows 0.94.0 (item 69): the page has no question about the application menu, even with $APPIMAGE set
+    {
+        FirstStartDialog dlg(&w);
+        dlg.show();
+        settle(300);
+        auto *upd = dlg.findChild<QCheckBox *>(QStringLiteral("firstUpdates"));
+        auto *backup = dlg.findChild<QCheckBox *>(QStringLiteral("firstBackup"));
+        check(!dlg.findChild<QCheckBox *>(QStringLiteral("firstMenuAdd")) && !dlg.findChild<QCheckBox *>(QStringLiteral("firstMenuMove"))
+                  && !dlg.findChild<QLabel *>(QStringLiteral("firstMenuHint")) && upd && backup && upd->isChecked() && !dlg.hasMenuQuestion(),
+              QStringLiteral("Windows: the page holds the backups and the check for updates, nothing of the application menu"));
+        check(dlg.findChildren<QDialogButtonBox *>().size() == 1 && dlg.findChildren<QDialogButtonBox *>().first()->buttons().size() == 1,
+              QStringLiteral("one OK"));
+        shot(&dlg, QStringLiteral("first-start-page"));
+        check(dlg.hasUpdateQuestion() && dlg.checkForUpdates(), QStringLiteral("the answers are read from the page"));
+        if (upd)
+            upd->setChecked(false);
+        check(!dlg.checkForUpdates(), QStringLiteral("the check for updates can be switched off on the page"));
+    }
+#else
     {
         FirstStartDialog dlg(&w);
         dlg.show();
@@ -465,6 +497,7 @@ static void firstStart(MainWindow &w, const QString &home)
         upd->setChecked(false);
         check(!dlg.checkForUpdates(), QStringLiteral("the check for updates can be switched off on the page"));
     }
+#endif
     // the page's answer reaches the check for updates
     UpdateChecker *uc = w.updateChecker();
     updates::State st = updates::State::load();
@@ -489,9 +522,15 @@ static void firstStart(MainWindow &w, const QString &home)
     qputenv("QB_NO_UPDATE_CHECK", "1");
     // declined at the first start: not asked again at the next start
     qputenv("APPIMAGE", dl.toUtf8());
+#ifdef Q_OS_WIN
+    w.applyFirstStartMenuChoice(true, true);
+    check(QSettings().value(QStringLiteral("app/integrated")).toString().isEmpty() && !appmenu::hasEntry() && QFile::exists(dl),
+          QStringLiteral("Windows: the first start's menu choice makes no entry and moves nothing"));
+#else
     w.applyFirstStartMenuChoice(false, false);
     check(QSettings().value(QStringLiteral("app/integrationDeclined")).toString() == dl && !appmenu::hasEntry(),
           QStringLiteral("\"no\" on the page makes no entry and is remembered"));
+#endif
     qunsetenv("APPIMAGE");
 }
 
@@ -539,7 +578,11 @@ static void fullInstall(const QString &work)
     QFile::remove(dataDir() + QStringLiteral("/full-addons-installed-" QB_APP_VERSION));
 
     // the program's own call (--install-folder), with the window and without a display
+#ifdef Q_OS_WIN
+    const QString program = QStringLiteral(QB_TEST_BUILD_DIR "/quillbinder.exe");
+#else
     const QString program = QStringLiteral(QB_TEST_BUILD_DIR "/quillbinder");
+#endif
     if (QFile::exists(program)) {
         for (const bool display : {true, false}) {
             QProcess p;

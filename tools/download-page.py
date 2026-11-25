@@ -54,9 +54,9 @@ def others(files):
         (first(lambda f: f.endswith(".AppImage") and "-full-" not in f),
          "The program alone (the small AppImage)", "without the add-ons; they can be installed later, one by one"),
         (first(lambda f: f.endswith("-update.qbpkg") and not win(f)),
-         "Program update", "for a Quillbinder you already have (File &gt; Install Update or Add-on)"),
+         "Program update", "for a Quillbinder you already have (Help &gt; Add-ons and Updates &gt; Install Update or Add-on)"),
         (first(lambda f: f == "media-all-formats.qbpkg"),
-         "Audio and video add-ons", "sound and video in all common formats (File &gt; Install Update or Add-on)"),
+         "Audio and video add-ons", "sound and video in all common formats (Help &gt; Add-ons and Updates &gt; Install Update or Add-on)"),
     ]
     has_setup = bool(first(lambda f: f.endswith("-setup.exe") and win(f) and "-full-" in f))
     windows = [
@@ -68,14 +68,14 @@ def others(files):
          "The program alone as a zip file" if has_setup else "The program alone",
          "without the add-ons; they can be installed later, one by one"),
         (first(lambda f: f.endswith("-update.qbpkg") and win(f)),
-         "Program update", "for a Quillbinder you already have (File &gt; Install Update or Add-on)"),
+         "Program update", "for a Quillbinder you already have (Help &gt; Add-ons and Updates &gt; Install Update or Add-on)"),
         (first(lambda f: f.startswith("media-all-formats") and win(f) and f.endswith(".qbpkg")),
-         "Audio and video add-ons", "sound and video in all common formats (File &gt; Install Update or Add-on)"),
+         "Audio and video add-ons", "sound and video in all common formats (Help &gt; Add-ons and Updates &gt; Install Update or Add-on)"),
     ]
     # Android 0.92.0: the app carries Translation and Proofreading; its package on its own, for an app that lacks it
     android = [
         (first(lambda f: f.startswith("translation-proofreading-android") and f.endswith(".qbpkg")),
-         "Translation and Proofreading on its own", "the app has it already; for File &gt; Install Update or Add-on"),
+         "Translation and Proofreading on its own", "the app has it already; for Help &gt; Add-ons and Updates &gt; Install Update or Add-on"),
     ]
     keep = lambda rows: [r for r in rows if r[0]]
     return {"linux": keep(linux), "windows": keep(windows), "android": keep(android)}
@@ -284,7 +284,7 @@ def page(files, tag, also=(), addon_bytes=0):
                             % (html.escape(af), html.escape(url(key, af)), html.escape(an), html.escape(al), html.escape(af),
                                (" &middot; " + size_text(ab)) if size_text(ab) else "") for af, an, al, ab in addon_of[key])
             body += ('\n      <h3>Add-ons on their own</h3>\n      <p class="small">The full version has them all. With the '
-                     'program alone, install one with File &gt; Install Update or Add-on.</p>\n'
+                     'program alone, install one with Help &gt; Add-ons and Updates &gt; Install Update or Add-on.</p>\n'
                      '      <ul class="others">%s\n      </ul>' % arows)
         cards.append('    <section class="system" data-system="%s">\n      <h2>%s <span>%s</span></h2>\n      %s\n    </section>'
                      % (key, html.escape(name), html.escape(detail), body))
