@@ -32,7 +32,7 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       SCCACHE_GHA_ENABLED: 'true'
-      QB_NDK: 27.2.12479018
+      QB_NDK: 30.0.16248370
       QB_SDK_PLATFORM: android-36
       QB_BUILD_TOOLS: 36.0.0
       # Hunspell and OpenSSL as packs (D1; packaging/android/android-deps-pack.sh): the same pins as android.yml,

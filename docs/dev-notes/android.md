@@ -2,6 +2,40 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## Android 0.93.2 (2026-11-25): NDK r30, the on-screen keyboard with a keyboard attached, the system test's harness
+
+- **NDK r30** (30.0.16248370, Clang 21): Qt 6.12's documentation (read 2026-11-25) names it as the NDK Qt 6.12 is
+  built with and asks apps to use the same; Android 9 to 17 (API 28 to 37) are supported. With r27c the system test
+  app ended at once: Qt Test's library needed `std::__ndk1::__hash_memory`, a function of r30's libc++ (the released
+  APK carried every function it needed). `QB_NDK` in `android.yml`, `release-android.yml`, `android-system-test.yml`
+  and `addon-release-android.yml`; the packs of Hunspell and OpenSSL have new recipes (the NDK's version is part of
+  them) and the translator's engine libraries new cache keys, so their first runs build them. No NDK since r26 raised
+  the lowest API (21); the app's lowest stays 28, and the start check proves it on Android 9.
+- **The on-screen keyboard** (to-do item 34): Qt 6.12.1's `QTextEdit::keyReleaseEvent` and
+  `QPlainTextEdit::keyReleaseEvent` call `QWidgetPrivate::handleSoftwareInputPanel()`, which calls
+  `QInputMethod::show()` while `QApplication::autoSipEnabled()` is on: every key let go asked Android for the
+  on-screen keyboard explicitly, and a click did the same. The filter of `installCare()` (MobileCare.cpp) reads
+  Android's `Configuration.keyboard` and `hardKeyboardHidden` before each key release and mouse release and switches
+  `autoSipEnabled` off while a physical keyboard is in use (Android's own rule of `InputMethodService`: keys, not
+  hidden), on again without one. Android's setting `show_ime_with_hard_keyboard` is read only for System Information
+  (a hidden setting; it may be refused to an app: then "not known"). The preview test checks the switch with a
+  stand-in for Android's answer (`mobile::setKeyboardStateSource`, fit test part "keyboard", 4 checks a size).
+- **The start check**: Android 14's tablet has a keyboard attached (`hw.keyboard=yes`; S2 says whether the on-screen
+  keyboard came up), and with `[emu-api28]` in the commit message a second tablet with Android 9 and none (the
+  on-screen keyboard in play; Android's storage question answered by its Allow button, found with `uiautomator dump`;
+  files `emu28-*`). The File menu scrolls on the 1472 x 920 screen: its last command (Show Project in File Manager)
+  is reached with Up and Enter; the text's popup is closed before the File menu steps.
+- **The system test's harness**: lines of the program's output that are no case (the emulated graphics driver's) are
+  counted out of the list; no list is a failure (exit 3, the job fails, its files are still uploaded); S-K01 accepts
+  any family of the Word file the tablet calls fixed-pitch; S-T04 reads the Word file and the e-book with `ZipReader`
+  (the other cases' desktop programs: `touch` and `chmod` are in Android's toybox, `mount` is refused and the case
+  says so, `java` and `soffice` are asked for only where they exist). S-T03: a paste logs what Android's clipboard gave
+  and whether the program's own copy was taken (`clipboard: paste; ...` in logcat).
+- **Licenses**: `collect-licenses-android.py` takes Qt PDF 6.140.0 from the Windows list as a part of its own (its
+  parts with Qt WebEngine's source), libc++'s text from LLVM 21.1.0 (the same text as 18.1.8's); `release-android.yml`
+  fetches Qt PDF's archive when `third-party-sources` lacks it (MD5 as the Qt Project publishes) and names it in
+  `THIRD-PARTY-SOURCES-android.txt`.
+
 ## Android 0.93.0 (2026-11-24): Qt 6.12.1, the workarounds gone, the shared 0.93.0 items checked on a tablet
 
 - **Qt 6.12.1 for Android** (`packaging/android/android-qt.sh`): Qt PDF is a "Qt Extensions" module since Qt 6.12 and is
@@ -346,8 +380,8 @@ nothing the Linux or Windows build compiles, packs or tests changed.
   (`summary.txt` first; the notes say `status=running`, `stage=emulator`, then `status=done result=... emulator=...`).
   Times: Qt install 2 min the first time (then cached), the APK 3 min with warm caches (11 min the first compile),
   the x86_64 build 1 to 4 min, the emulator stage about 10 min.
-- **Tools** (Qt 6.12's documentation, checked 2026-11-14): NDK r27c (27.2.12479018, installed with sdkmanager; the
-  runner carries 27.3, 29, 30), JDK 21 (`JAVA_HOME_21_X64`), SDK platform 36, build tools 36.0.0; Gradle 9.5.1 and
+- **Tools** (Qt 6.12's documentation, checked 2026-11-14; since Android 0.93.2 NDK r30, 30.0.16248370): NDK r27c
+  (27.2.12479018, installed with sdkmanager; the runner carries 27.3, 29, 30), JDK 21 (`JAVA_HOME_21_X64`), SDK platform 36, build tools 36.0.0; Gradle 9.5.1 and
   the Android Gradle plugin 9.2.1 come from Qt's own templates.
 - **Qt** (`packaging/android/android-qt.sh`): aqtinstall 3.3.0, `install-qt linux desktop` (the tools) and
   `install-qt all_os android 6.12.0 android_arm64_v8a|android_x86_64 -m qtpdf qtimageformats` into one folder.

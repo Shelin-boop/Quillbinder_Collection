@@ -32,6 +32,7 @@
 #include <QDialog>
 #include <QDir>
 #include <QElapsedTimer>
+#include <QFontDatabase>
 #include <QFileInfo>
 #include <QLabel>
 #include <QLineEdit>
@@ -834,8 +835,26 @@ void caseSK01()
     check(pt.contains(QLatin1String("#")) && pt.contains(QLatin1String("this cannot be")), QStringLiteral("the PDF holds the separator and the thoughts"));
     const QString xml = QString::fromUtf8(zipFile(docx, QStringLiteral("word/document.xml")));
     check(xml.contains(QLatin1String("<w:i/>")) || xml.contains(QLatin1String("<w:i ")), QStringLiteral("the Word file has the italics"));
-    check(xml.contains(QLatin1String("DejaVu Sans Mono")) || QString::fromUtf8(zipFile(docx, QStringLiteral("word/styles.xml"))).contains(QLatin1String("Mono")),
-          QStringLiteral("the Word file keeps the monospace font of the text message"));
+    // Android 0.93.2 (to-do item 35): a tablet has no "DejaVu Sans Mono"; since Linux 0.93.1 the compiler asks for the
+    // style's generic family with its style hint (fontfaces::mapGenericFamilies), and Android gives a fixed-width font
+    // of its own (its name is not known beforehand): any family of the Word file the tablet calls fixed-pitch counts
+    const QString styles = QString::fromUtf8(zipFile(docx, QStringLiteral("word/styles.xml")));
+    QStringList families;
+    static const QRegularExpression rFonts(QStringLiteral("w:(?:ascii|hAnsi)=\"([^\"]+)\""));
+    for (const QString &part : {xml, styles}) {
+        auto it = rFonts.globalMatch(part);
+        while (it.hasNext())
+            families << it.next().captured(1);
+    }
+    families.removeDuplicates();
+    QString fixed;
+    for (const QString &f : std::as_const(families))
+        if (QFontDatabase::isFixedPitch(f) || f.contains(QLatin1String("Mono")) || f.startsWith(QLatin1String("Courier"))) {
+            fixed = f;
+            break;
+        }
+    check(!fixed.isEmpty(), QStringLiteral("the Word file keeps the monospace font of the text message"),
+          QStringLiteral("fixed-width: %1; the file's families: %2").arg(fixed.isEmpty() ? QStringLiteral("none") : fixed, families.join(QStringLiteral(", "))));
     check(epubText(epub).contains(QLatin1String("this cannot be")), QStringLiteral("the e-book holds the chapter"));
     for (BinderItem *it : p->allItems())
         it->includeInCompile = true;

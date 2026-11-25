@@ -10,6 +10,9 @@
 #include "core/Project.h"
 #include "text/TextUtil.h"
 #include "ui/AppSettings.h"
+#ifdef Q_OS_ANDROID
+#include "android/Mobile.h"
+#endif
 
 #include <QAbstractButton>
 #include <QApplication>
@@ -542,6 +545,11 @@ QString text(const Project *project)
     t << QStringLiteral("  Input devices: %1").arg(inputDevices());
     if (QInputMethod *im = QGuiApplication::inputMethod())
         t << QStringLiteral("  On-screen keyboard: %1").arg(im->isVisible() ? QStringLiteral("shown") : QStringLiteral("not shown"));
+#ifdef Q_OS_ANDROID
+    // Android 0.93.2 (to-do item 34): Android's keyboard configuration and whether the program asks for the
+    // on-screen keyboard (android/MobileCare.cpp)
+    t << QStringLiteral("  Keyboard: %1").arg(mobile::keyboardText(mobile::keyboardState()));
+#endif
     t << QStringLiteral("  Language: %1 (%2), time zone %3")
              .arg(QLocale::system().name(), QLocale::system().uiLanguages().mid(0, 4).join(QLatin1String(", ")),
                   QString::fromLatin1(QTimeZone::systemTimeZoneId()));

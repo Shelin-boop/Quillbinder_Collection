@@ -43,6 +43,29 @@ void handlesAway(); // a finger began to swipe or two fingers came down: the dro
 //  - a mouse pressed a few pixels beside the line between two panes takes the line along.
 void installCare();
 
+// The keyboard of the moment (android/MobileCare.cpp, Android 0.93.2, to-do item 34). Qt's text widgets ask for the
+// on-screen keyboard after every key that is let go (QTextEdit::keyReleaseEvent and QPlainTextEdit's call
+// QWidgetPrivate::handleSoftwareInputPanel()) and after a click, while QApplication::autoSipEnabled() is on: with a
+// keyboard attached to the tablet, the on-screen keyboard came up while the writer typed on the real one. The filter
+// of installCare() switches that request off before such a key or click is handled while Android says a physical
+// keyboard is in use, and on again when it is gone.
+struct KeyboardState
+{
+    bool known = false; // Android answered (false in the preview test without a stand-in)
+    int keyboard = 0;   // Android's Configuration.keyboard: 0 undefined, 1 no keys, 2 qwerty, 3 twelve keys
+    int hidden = 0;     // Configuration.hardKeyboardHidden: 0 undefined, 1 no, 2 yes
+    int showWithKeyboard = -1; // Android's setting "on-screen keyboard while a physical keyboard is in use": 1, 0, -1 unknown
+    // Android's own rule (InputMethodService::onEvaluateInputViewShown): keys, and not hidden
+    bool physical() const { return known && keyboard > 1 && hidden != 2; }
+};
+KeyboardState keyboardState();
+// The preview test's stand-in for Android's answer (an empty function: Android's own, or "not known" on a desktop).
+void setKeyboardStateSource(std::function<KeyboardState()> source);
+// Brings QApplication::autoSipEnabled() in line with the keyboard: off while a physical keyboard is in use.
+void followKeyboard();
+// One line for Help > System Information ("physical keyboard in use (Android: keyboard qwerty, ...)").
+QString keyboardText(const KeyboardState &k);
+
 // Toolbars that fit the window's width (android/MobileBars.cpp). Call once for the main window, after it is shown.
 // A row whose toolbars need more room than the window is wide hands its last toolbars to the next row (a third row
 // and more when needed), at the start and whenever the window's width changes (a turned tablet). When that would

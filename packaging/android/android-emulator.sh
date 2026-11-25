@@ -21,6 +21,9 @@ t0=$(date +%s)
 mins() { echo "$(( ($(date +%s) - t0) / 60 )) min"; }
 SDK=${ANDROID_SDK_ROOT:?}
 API=${QB_EMU_API:-34}                       # Android 14, as the tablet the trial is for
+# A keyboard attached to the tablet (Android 0.93.2, to-do item 34): Android 14's tablet has one (yes), as the
+# writer's tablets do; Android 9's (QB_EMU_API=28, to-do item 35) has none, so the on-screen keyboard is in play there
+KBD=${QB_EMU_KEYBOARD:-$([ "$API" -ge 30 ] && echo yes || echo no)}
 IMAGE="system-images;android-$API;default;x86_64"
 PKG=io.github.shelin_boop.quillbinder.trial
 # the tablet's screen (2944 x 1840 at about 2x) in its own units: the same layout with a quarter of the pixels
@@ -74,7 +77,7 @@ fi
 sed -i -E '/^(hw\.lcd\.(width|height|density)|hw\.initialOrientation|hw\.keyboard|hw\.ramSize|disk\.dataPartition\.size|hw\.gpu\.(enabled|mode)|showDeviceFrame)[ ]*=/d' "$CFG"
 {
   echo "hw.lcd.width=$W"; echo "hw.lcd.height=$H"; echo "hw.lcd.density=$DPI"
-  echo "hw.initialOrientation=landscape"; echo "hw.keyboard=yes"; echo "hw.ramSize=3072"; echo "disk.dataPartition.size=2G"
+  echo "hw.initialOrientation=landscape"; echo "hw.keyboard=$KBD"; echo "hw.ramSize=3072"; echo "disk.dataPartition.size=2G"
   echo "hw.gpu.enabled=yes"; echo "hw.gpu.mode=swiftshader_indirect"; echo "showDeviceFrame=no"
 } >> "$CFG"
 ADB="$SDK/platform-tools/adb"
@@ -156,15 +159,38 @@ if [ -n "$pid" ]; then
   tap 725 510; sleep 6; shot "a2-android-page"
   fr=$(front)
   say "  A: in front after a tap on the window's first button: $fr"
-  "$ADB" shell appops set --uid "$PKG" MANAGE_EXTERNAL_STORAGE allow > /dev/null 2>&1
-  sleep 1
-  case "$fr" in *"$PKG/"*) say "  A: ANDROID'S PAGE DID NOT COME; the access was given from here all the same" ;; *) key 4 ;; esac
+  if [ "$API" -ge 30 ]; then
+    "$ADB" shell appops set --uid "$PKG" MANAGE_EXTERNAL_STORAGE allow > /dev/null 2>&1
+    sleep 1
+    case "$fr" in *"$PKG/"*) say "  A: ANDROID'S PAGE DID NOT COME; the access was given from here all the same" ;; *) key 4 ;; esac
+  else
+    # Android 9 and 10 (Android 0.93.2, to-do item 35): no page for all files; the program asks Android's own question
+    # about the storage. Its Allow button is found by its id or text in the screen's description and tapped.
+    "$ADB" shell uiautomator dump /sdcard/qb-ui.xml > /dev/null 2>&1
+    allow=$("$ADB" shell cat /sdcard/qb-ui.xml 2>/dev/null | tr '>' '\n' \
+      | grep -iE 'permission_allow_button|text="allow"' | grep -oE 'bounds="\[[0-9]+,[0-9]+\]\[[0-9]+,[0-9]+\]"' | head -1 \
+      | sed -E 's/bounds="\[([0-9]+),([0-9]+)\]\[([0-9]+),([0-9]+)\]"/\1 \2 \3 \4/')
+    if [ -n "$allow" ]; then
+      set -- $allow
+      tap $(( ($1 + $3) / 2 )) $(( ($2 + $4) / 2 ))
+      say "  A: Android's question about the storage: Allow tapped at $(( ($1 + $3) / 2 )),$(( ($2 + $4) / 2 ))"
+    else
+      "$ADB" shell pm grant "$PKG" android.permission.READ_EXTERNAL_STORAGE > /dev/null 2>&1
+      "$ADB" shell pm grant "$PKG" android.permission.WRITE_EXTERNAL_STORAGE > /dev/null 2>&1
+      say "  A: ANDROID'S QUESTION WAS NOT FOUND; the access was given from here all the same"
+      case "$fr" in *"$PKG/"*) ;; *) key 4 ;; esac
+    fi
+  fi
   sleep 7; shot "a3-back"
   if ! "$ADB" logcat -d 2>/dev/null | grep -q 'files (the first question)'; then
     say "  A: THE WINDOW DID NOT CLOSE BY ITSELF; its button (now OK) is tapped"
     tap 725 422; sleep 4; shot "a4-ok"
   fi
-  step "A" "the question about the shared folders, allowed on Android's page (appops: $("$ADB" shell appops get "$PKG" MANAGE_EXTERNAL_STORAGE 2>/dev/null | tr -d '\r' | head -1)); in front: $(front)"
+  if [ "$API" -ge 30 ]; then
+    step "A" "the question about the shared folders, allowed on Android's page (appops: $("$ADB" shell appops get "$PKG" MANAGE_EXTERNAL_STORAGE 2>/dev/null | tr -d '\r' | head -1)); in front: $(front)"
+  else
+    step "A" "the question about the shared folders, allowed in Android's question (storage: $("$ADB" shell dumpsys package "$PKG" 2>/dev/null | tr -d '\r' | grep -oE 'WRITE_EXTERNAL_STORAGE: granted=[a-z]+' | head -1)); in front: $(front)"
+  fi
   # the first start's windows: Enter presses the default button of each
   for s in 1 2; do key 66; sleep 8; step "enter-$s" "Enter in the first start's windows"; done
   shot "s0-project"
@@ -282,11 +308,19 @@ if [ -n "$pid" ]; then
   back_to_text; shot "s1-text"
   # S2: typed text, as a hardware keyboard sends it
   "$ADB" shell input text 'Android%s' > /dev/null 2>&1
-  sleep 3; shot "s2-typed"; step "S2" "a typed word"
+  sleep 3; shot "s2-typed"
+  # Android 0.93.2 (to-do item 34): with a keyboard attached the program does not ask for the on-screen keyboard
+  # (Qt's text widgets asked after every key); without one it does
+  kb=$(shown)
+  say "  S2: keyboard attached: $KBD; on-screen keyboard after typing: $kb"
+  case "$KBD:$kb" in
+    yes:mInputShown=true) say "  S2: THE ON-SCREEN KEYBOARD CAME UP although a keyboard is attached" ;;
+  esac
+  step "S2" "a typed word (keyboard attached: $KBD, $kb)"
   # S3: the menu while the on-screen keyboard is up
   for s in 1 2; do
     tap "$MX" "$MY"; sleep 2; [ $s = 1 ] && shot "s3-menu"
-    step "S3.$s" "the File menu while the on-screen keyboard is up"
+    step "S3.$s" "the File menu with the cursor in the text (keyboard attached: $KBD, $(shown))"
     back_to_text
   done
   # S7: every menu of the menu bar once while the on-screen keyboard is up: ten windows drawn for the first time
@@ -294,7 +328,7 @@ if [ -n "$pid" ]; then
   for item in "Edit:54" "Insert:96" "View:141" "Navigate:197" "Project:259" "Documents:330" "Format:400" "Window:460" "Help:511"; do
     tap "${item##*:}" "$MY"; sleep 2
     [ "${item%%:*}" = Format ] && shot "s7-format-menu"
-    step "S7 ${item%%:*}" "the ${item%%:*} menu while the on-screen keyboard is up"
+    step "S7 ${item%%:*}" "the ${item%%:*} menu with the cursor in the text (keyboard attached: $KBD)"
     back_to_text
   done
   # S4: a long press on a word (a selection with handles), then the menu
@@ -358,6 +392,12 @@ if [ -n "$pid" ]; then
   # Places in the menu as on the 1472 x 920 screen, read from the run's picture of the File menu (0.93.0: New Project
   # at 62, then 27 px a row, a line between groups; the places of 0.92.0 were a row too high and opened New Project,
   # Compare and Transfer and Compile): Open Project 89, Save As 199, Compile 363, Print Settings 392.
+  # Android 0.93.2 (to-do item 54): in run 45432275744 the text's Cut/Copy/Select all popup, left from an earlier step,
+  # took the Open Project tap: the selection goes first (a tap in the text, Esc, a tap again), and the steps count the
+  # app's popup windows (Android's PopupWindow) before the File menu.
+  popups() { "$ADB" shell dumpsys window windows 2>/dev/null | grep -c "PopupWindow" | tr -d '\r'; }
+  back_to_text; key 111; sleep 1; tap "$TX" "$TY"; sleep 2
+  say "  S6: popup windows before the File menu steps: $(popups)"
   for item in "Open Project:89" "Save As:199" "Compile:363" "Print Settings:392"; do
     tap "$MX" "$MY"; sleep 2; tap 100 "${item##*:}"; sleep 4
     shot "s6-$(echo "${item%%:*}" | tr 'A-Z ' 'a-z-')"
@@ -366,8 +406,11 @@ if [ -n "$pid" ]; then
     back_to_text
   done
   # O: File > Show Project in File Manager (android/MobileOpen.cpp): the tablet's Files app at the project's folder.
-  # The last step (0.93.0: 475, below Print Current Document and a line; 452 was Print Current Document).
-  tap "$MX" "$MY"; sleep 2; shot "o0-file-menu"; tap 100 475; sleep 5; shot "o1-files-app"
+  # It is the menu's last row, and on the 1472 x 920 screen the menu scrolls: its last rows are below the screen's
+  # edge (run 45432275744's picture ends at Print Current Document and the scroll arrow), so the tap at 475 of 0.93.0
+  # closed the menu (Android 0.93.2, to-do item 54). Reached with the keys: Up with no row chosen takes the menu's
+  # last row and scrolls to it (QMenu), Enter starts it.
+  tap "$MX" "$MY"; sleep 2; key 19; sleep 1; shot "o0-file-menu"; key 66; sleep 5; shot "o1-files-app"
   fr=$(front)
   say "  O: File > Show Project in File Manager: in front: $fr"
   case "$fr" in *"$PKG/"*) key 111; sleep 1 ;; *) key 4; sleep 3 ;; esac

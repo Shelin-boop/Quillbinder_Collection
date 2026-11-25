@@ -59,6 +59,7 @@
 #include <QTemporaryDir>
 #include <QTest>
 #include <QTextBrowser>
+#include <QTextEdit>
 #include <QTimer>
 #include <QToolTip>
 #include <QWheelEvent>
@@ -734,6 +735,63 @@ static void updateChecks()
           QStringLiteral("first %1, installed %2, second %3").arg(first).arg(installed).arg(second));
 }
 
+// Android 0.93.2 (to-do item 34): Qt's text widgets ask for the on-screen keyboard after every key let go and after a
+// click (QWidgetPrivate::handleSoftwareInputPanel, while qApp->autoSipEnabled()); with a physical keyboard in
+// use (Android's configuration, a stand-in here) the filter of installCare() switches that off before the widget
+// sees the key or the click, and on again when the keyboard is gone or folded away.
+static void keyboardChecks(MainWindow &w)
+{
+    info(QStringLiteral("---- The keyboard (%1)").arg(sizeName));
+    QTextEdit *text = nullptr;
+    for (QTextEdit *t : w.findChildren<QTextEdit *>())
+        if (t->isVisible() && !t->isReadOnly() && (!text || t->width() * t->height() > text->width() * text->height()))
+            text = t; // (the largest: the editor's text)
+    if (!text) {
+        check(false, QStringLiteral("(the main window shows a text to type in)"));
+        return;
+    }
+    text->setFocus();
+    settle(50);
+    mobile::KeyboardState state;
+    state.known = true;
+    state.keyboard = 2; // qwerty
+    state.hidden = 1;   // not hidden
+    state.showWithKeyboard = 0;
+    mobile::setKeyboardStateSource([&state] { return state; });
+    qApp->setAutoSipEnabled(true);
+    QTest::keyRelease(text, Qt::Key_A);
+    const bool offByKey = !qApp->autoSipEnabled();
+    state.keyboard = 1; // no keys: the keyboard was taken off
+    QTest::keyRelease(text, Qt::Key_A);
+    const bool onAgain = qApp->autoSipEnabled();
+    check(offByKey && onAgain,
+          QStringLiteral("a key let go in the text: with a physical keyboard in use the program does not ask for the "
+                         "on-screen keyboard, without one it does"),
+          QStringLiteral("off with the keyboard: %1, on without: %2").arg(offByKey).arg(onAgain));
+    state.keyboard = 2;
+    QTest::mouseClick(text->viewport(), Qt::LeftButton, Qt::NoModifier, text->viewport()->rect().center());
+    const bool offByClick = !qApp->autoSipEnabled();
+    state.hidden = 2; // the keyboard folded away (Android: hardKeyboardHidden yes)
+    QTest::mouseClick(text->viewport(), Qt::LeftButton, Qt::NoModifier, text->viewport()->rect().center());
+    const bool onFolded = qApp->autoSipEnabled();
+    check(offByClick && onFolded,
+          QStringLiteral("a click in the text: the same, and a keyboard folded away counts as none"),
+          QStringLiteral("off with the keyboard: %1, on with it folded away: %2").arg(offByClick).arg(onFolded));
+    state.hidden = 1;
+    const QString inUse = mobile::keyboardText(state);
+    state.known = false;
+    const QString unknown = mobile::keyboardText(state);
+    check(inUse.startsWith(QLatin1String("physical keyboard in use"))
+              && inUse.contains(QLatin1String("keyboard qwerty, hardKeyboardHidden no"))
+              && inUse.contains(QLatin1String("in use: off)")) && unknown == QLatin1String("not known"),
+          QStringLiteral("System Information's keyboard line names Android's configuration and its setting"),
+          inUse + QStringLiteral(" | ") + unknown);
+    QTest::keyRelease(text, Qt::Key_A);
+    check(qApp->autoSipEnabled(), QStringLiteral("(when Android gives no answer, Qt's own way stays)"));
+    mobile::setKeyboardStateSource({});
+    settle(50);
+}
+
 int main(int argc, char **argv)
 {
     QTemporaryDir home;
@@ -799,13 +857,15 @@ int main(int argc, char **argv)
     info(QStringLiteral("(screen %1, main window %2)").arg(rectText(area), rectText(w.geometry())));
     shot(&w, QStringLiteral("main"));
 
-    // QB_FIT_ONLY="keys menus ..." runs some parts only (line, keys, marks, back, about, menus, windows)
+    // QB_FIT_ONLY="keys menus ..." runs some parts only (line, keys, keyboard, marks, back, about, menus, windows)
     const QStringList only = qEnvironmentVariable("QB_FIT_ONLY").split(QLatin1Char(' '), Qt::SkipEmptyParts);
     auto run = [&only](const char *name) { return only.isEmpty() || only.contains(QLatin1String(name)); };
     if (run("line"))
         lineChecks(w);
     if (run("keys"))
         keyChecks(w);
+    if (run("keyboard"))
+        keyboardChecks(w);
     if (run("marks"))
         markChecks(w);
     if (run("back"))
