@@ -40,6 +40,8 @@ jobs:
       QB_ANDROID_PACKS: |
         hunspell-arm64-v8a 4bc5e476088b297d707b67f08a58439a657c09dc1c29a25bdaa86ebeafc354a1 hunspell-arm64-v8a-android-4bc5e476088b297d.tar.xz 6828dffe2b47d9afbc823eaf61b2862a92ffbf9c5183c546dfa749101cfbbc21
         openssl-arm64-v8a 3620641cd0876ef45655cdaa4301611dab0072e72eff4b325d87b46c045b2603 openssl-arm64-v8a-android-3620641cd0876ef4.tar.xz eeea7569edfc7aa93f807e85aaa44080e045ae742d3e1dcf17a6510d5f7ebeb2
+        hunspell-x86_64 631a8687a57d2fc51e23ff05f1f7d44ab9688ce6636a2f48c526a804716d110a hunspell-x86_64-android-631a8687a57d2fc5.tar.xz ec8d5a4c8d611d5607899818be6d604bdb1e481c69c0c157568bfbfcc5e719a0
+        openssl-x86_64 c945ae8fc3df0200f5f8b3e26a61ffda33574c6a80b1b67271649cdc393a2e33 openssl-x86_64-android-c945ae8fc3df0200.tar.xz 13df03330487c4d1768fb98fa75f471eebb399e6d1e935398d5c0298884d2a8e
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 

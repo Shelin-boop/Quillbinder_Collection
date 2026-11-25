@@ -398,19 +398,29 @@ if [ -n "$pid" ]; then
   popups() { "$ADB" shell dumpsys window windows 2>/dev/null | grep -c "PopupWindow" | tr -d '\r'; }
   back_to_text; key 111; sleep 1; tap "$TX" "$TY"; sleep 2
   say "  S6: popup windows before the File menu steps: $(popups)"
-  for item in "Open Project:89" "Save As:199" "Compile:363" "Print Settings:392"; do
-    tap "$MX" "$MY"; sleep 2; tap 100 "${item##*:}"; sleep 4
+  # Android 0.93.2 run 45557251539: the "Backup saved" notice and the update check's notice lay at the top left over
+  # the File menu's rows, and the taps at these places opened nothing (picture s6-open-project). The menu is opened
+  # with a tap on its title (above the notices) and its row is chosen with the keys, which reach the open menu
+  # whatever lies over it: Down from no row takes the first row (New Project), separators are passed over.
+  # Rows: New Project 1, Open Project 2, ..., Save As 6, ..., Compile 12, Print Settings 13.
+  for item in "Open Project:2" "Save As:6" "Compile:12" "Print Settings:13"; do
+    tap "$MX" "$MY"; sleep 2
+    for _ in $(seq 1 "${item##*:}"); do key 20; done
+    sleep 1; key 66; sleep 4
     shot "s6-$(echo "${item%%:*}" | tr 'A-Z ' 'a-z-')"
     step "S6 ${item%%:*}" "File > ${item%%:*} with the cursor in the text"
     key 111; sleep 2
     back_to_text
   done
   # O: File > Show Project in File Manager (android/MobileOpen.cpp): the tablet's Files app at the project's folder.
-  # It is the menu's last row, and on the 1472 x 920 screen the menu scrolls: its last rows are below the screen's
-  # edge (run 45432275744's picture ends at Print Current Document and the scroll arrow), so the tap at 475 of 0.93.0
-  # closed the menu (Android 0.93.2, to-do item 54). Reached with the keys: Up with no row chosen takes the menu's
-  # last row and scrolls to it (QMenu), Enter starts it.
-  tap "$MX" "$MY"; sleep 2; key 19; sleep 1; shot "o0-file-menu"; key 66; sleep 5; shot "o1-files-app"
+  # With the on-screen keyboard up the menu scrolls and its last rows are below the screen's edge (run 45432275744's
+  # picture ends at Print Current Document and the scroll arrow), so the tap at 475 of 0.93.0 missed (Android 0.93.2,
+  # to-do item 54). Reached with the keys: Up with no row chosen takes the menu's last row (Exit) and scrolls to it,
+  # five more go up through Options, Files on This Tablet, Install Update or Add-on, Convert Markdown to the step;
+  # Enter starts it.
+  tap "$MX" "$MY"; sleep 2
+  for _ in 1 2 3 4 5 6; do key 19; done
+  sleep 1; shot "o0-file-menu"; key 66; sleep 5; shot "o1-files-app"
   fr=$(front)
   say "  O: File > Show Project in File Manager: in front: $fr"
   case "$fr" in *"$PKG/"*) key 111; sleep 1 ;; *) key 4; sleep 3 ;; esac
