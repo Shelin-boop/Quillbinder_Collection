@@ -97,7 +97,7 @@
     ]
   },
   "windows": {
-    "commit": "76a903a3e47f9d0c10ddfe6db0fc21d431e64bdc",
+    "commit": "532bb3cb80c5230aa78f089e38b2465f177e1792",
     "reviewed": "2026-11-25",
     "build": {
       "cachePaths": [
@@ -127,6 +127,14 @@
               "opus-mt-big-de-en--*",
               "qwen3-4b--tokenizer*",
               "qwen3-4b--vocabulary.json"
+            ]
+          },
+          {
+            "release": "models-3",
+            "patterns": [
+              "catalog.json",
+              "opus-mt-en-de--*",
+              "wiktionary-de--*"
             ]
           }
         ]
