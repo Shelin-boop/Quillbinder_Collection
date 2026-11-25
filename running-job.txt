@@ -1,8 +1,8 @@
-state: free
-system:
-job:
-branch:
-chat:
-started:
+state: running
+system: Linux
+job: the run 0.93.5 (fixes), Linux part: section A of the to-do list
+branch: linux/0.93.5
+chat: started 2026-11-25 12:20 Berlin
+started: 2026-11-25 12:22 Berlin
 paused:
-note: last job: the run 0.93.1, Android part: Android 0.93.2 released (v0.93.2-android-experimental, 2026-11-25), page and update file published. The run 0.93.1 is complete; the next run takes section A of the to-do list.
+note: Linux first, then Windows, then Android.
