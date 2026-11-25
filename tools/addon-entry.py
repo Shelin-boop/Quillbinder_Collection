@@ -495,20 +495,20 @@ def cmd_notes(path, package, files_dir, out):
             "## Installing", ""]
     if android:
         text += ["In Quillbinder for Android %s or later (tablets, 64-bit ARM): download `%s` on the tablet, then "
-                 "**File > Install Update or Add-on** in Quillbinder (the file window opens in the Download folder) and "
+                 "**Help > Add-ons and Updates > Install Update or Add-on** in Quillbinder (the file window opens in the Download folder) and "
                  "choose it. The install window says that the add-on is signed with the add-on key \"Quillbinder official "
                  "add-ons\", which the Quillbinder project vouches for; Quillbinder offers to start again, which loads it. The add-on is kept "
                  "in the app's own folder; its models are downloaded from the add-on's window (**Models...**). (For Linux and "
                  "Windows, the add-on has releases of its own.)" % (need, pkg), ""]
     elif windows:
-        text += ["In Quillbinder for Windows %s or later: **File > Install Update or Add-on**, choose `%s`. The install "
+        text += ["In Quillbinder for Windows %s or later: **Help > Add-ons and Updates > Install Update or Add-on**, choose `%s`. The install "
                  "window says that the add-on is signed with the add-on key \"Quillbinder official add-ons\", which the "
                  "Quillbinder project vouches for.%s (For Linux, the add-on has a release of its own.)"
                  % (need, pkg, (" Quillbinder for Windows %s does not know add-on keys yet and warns that the add-on is not "
                                 "signed: update Quillbinder first." % min_app) if unsigned_warning else ""), ""]
     else:
         text += [
-            "In Quillbinder for Linux %s or later: **File > Install Update or Add-on**, choose `%s`. The install window "
+            "In Quillbinder for Linux %s or later: **Help > Add-ons and Updates > Install Update or Add-on**, choose `%s`. The install window "
             "says that the add-on is signed with the add-on key \"Quillbinder official add-ons\", which the Quillbinder "
             "project vouches for." % (need, pkg)]
         # (0.93.0) the warning only matters when the add-on installs on a program that does not know add-on keys; an

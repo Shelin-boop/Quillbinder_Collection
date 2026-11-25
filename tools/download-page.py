@@ -8,6 +8,10 @@ repository's GitHub Pages (job download-page of .github/workflows/release.yml).
     tools/download-page.py <folder with the release's files (their names are enough)> <tag> <out dir>
         [--also <folder> <tag>]...
 
+A file "full-addons-size" in the folder (the add-ons' installed size in bytes) adds the space to the Linux card.
+A file of the folder may hold its own size in bytes (the release workflow writes it so); the page names the size of
+the add-on packages it lists under each system's other downloads (name, one line, size; 0.94.0).
+
 Since 0.91.2 each system can have a last number of its own (working rules, section 8), so a new Linux release may
 come before the Windows files of its number: a system without a file in the release is taken from the "--also"
 release that has one (give them newest first), and its card names that version. Since 0.93.0 (a version line per
@@ -77,6 +81,67 @@ def others(files):
     return {"linux": keep(linux), "windows": keep(windows), "android": keep(android)}
 
 
+# the size of each file by its name, in bytes (filled by main() from the folder: an empty file has none)
+SIZES = {}
+
+
+def known_addons(root=ROOT):
+    """{id: (name, one line)} of the project's own add-ons (addons/<id>/manifest.json) and the official ones (0.94.0)."""
+    out = {}
+    folder = os.path.join(root, "addons")
+    for name in sorted(os.listdir(folder)) if os.path.isdir(folder) else []:
+        try:
+            with open(os.path.join(folder, name, "manifest.json"), encoding="utf-8") as f:
+                m = json.load(f)
+        except (OSError, ValueError):
+            continue
+        if isinstance(m, dict) and m.get("name") and m.get("description"):
+            out[m.get("id", name)] = (m["name"], first_sentence(m["description"]))
+    for a in official_addons(root):
+        out.setdefault(a["id"], (a["name"], first_sentence(a["summary"])))
+    return out
+
+
+def first_sentence(text):
+    """The first sentence of a description (up to 160 characters): the one line of an add-on on the page."""
+    text = " ".join(text.split())
+    m = re.match(r"(.+?[.!?])(\s|$)", text)
+    line = m.group(1) if m else text
+    if len(line) > 160:
+        colon = line.find(":")
+        line = line[:colon] + "." if 20 < colon < 160 else line[:157].rsplit(" ", 1)[0] + "..."
+    return line
+
+
+def addon_rows(files, root=ROOT):
+    """The add-on packages of a release, by system (0.94.0): {"linux": [(file, name, line, bytes)], "windows": ..., "android": ...}.
+    Only packages of add-ons that are known (addons/ and official-addons/); the program update and the audio and video
+    package have their own lines."""
+    known = known_addons(root)
+    ids = sorted(known, key=len, reverse=True)
+    out = {"linux": [], "windows": [], "android": []}
+    for f in files:
+        low = f.lower()
+        if not f.endswith(".qbpkg") or f.endswith("-update.qbpkg") or f.startswith("media-all-formats"):
+            continue
+        stem = f[:-len(".qbpkg")]
+        found = next((i for i in ids if stem == i or stem.startswith(i + "-")), "")
+        if not found:
+            continue
+        key = "windows" if "windows" in low else "android" if "android" in low else "linux"
+        name, line = known[found]
+        out[key].append((f, name, line, SIZES.get(f, 0)))
+    for key in out:
+        out[key].sort(key=lambda r: r[1].lower())
+    return out
+
+
+def size_text(n):
+    if n <= 0:
+        return ""
+    return "%d MB" % max(1, int(round(n / 1e6)))
+
+
 def official_addons(root=ROOT):
     """The official add-ons (0.93.0), read from official-addons/*.json: [{name, summary, systems, builtin, id, version,
     nonCommercial}] sorted by name. "systems" is Linux, plus Windows and Android where the entry has a block for them;
@@ -136,22 +201,33 @@ def shown_of(tag):
     return tag[1:].replace("-", " ") if tag.startswith("v") else tag
 
 
-def page(files, tag, also=()):
+def space_note(addon_bytes):
+    """The space the full version's add-ons take beside its button (0.94.0); nothing when the release gives no number."""
+    if addon_bytes <= 0:
+        return ""
+    mb = max(1, int(round(addon_bytes / 1e6)))
+    return ('\n      <p class="small">The add-ons inside take about %d MB of disk space once they are unpacked (at the first start); '
+            'a window shows the progress.</p>' % mb)
+
+
+def page(files, tag, also=(), addon_bytes=0):
     """also: [(files, tag)] of older releases, newest first (0.91.2): a system the release has no file for is taken
     from the first of them that has one."""
     home = cmake_var("APP_HOMEPAGE") or "https://github.com/Shelin-boop/Quillbinder_Collection"
     shown = shown_of(tag)
     full = pick(files)
     more = others(files)
+    addon_of = addon_rows(files)
     tag_of = {key: tag for key in full}
     # 0.93.0 (a version line per system): each system shows its newest release, the one with the highest version
     # among the release and the older ones (a tie goes to the earlier one in the list: this release, then the
     # newest-first "--also" ones); before, the first release that had a file of the system won
     for older_files, older_tag in also:
-        older_full, older_more = pick(older_files), others(older_files)
+        older_full, older_more, older_addons = pick(older_files), others(older_files), addon_rows(older_files)
         for key in full:
             if older_full[key] and (not full[key] or tag_version(older_tag) > tag_version(tag_of[key])):
                 full[key], more[key], tag_of[key] = older_full[key], older_more[key], older_tag
+                addon_of[key] = older_addons[key]
     url = lambda key, f: "%s/releases/download/%s/%s" % (home, tag_of[key], f)
     if full["windows"].endswith("-setup.exe"):
         # 0.90.4: the setup program only unpacks (no admin rights, nothing in the registry, no entry under Apps)
@@ -172,7 +248,8 @@ def page(files, tag, also=()):
         ("windows", "Windows 11", "64-bit", win_steps),
         ("linux", "Linux", "x86_64, an AppImage",
          ["Make the file executable: right-click &gt; Properties &gt; Permissions &gt; <i>Is executable</i>.",
-          "Double-click it. The add-ons are installed at the first start.",
+          "Double-click it. Your desktop may ask whether to execute the file (KDE Plasma: <i>Execute</i> or <i>Cancel</i>): "
+          "choose <i>Execute</i>. The add-ons are installed at the first start.",
           "Help &gt; Add to Application Menu puts it into the menu of the desktop."]),
         # Android (0.91.3, 2026-11-16, the first public APK)
         ("android", "Android", "tablets, Android 9 or later",
@@ -191,8 +268,9 @@ def page(files, tag, also=()):
             detail += ", version %s" % shown_of(tag_of[key])
         if f:
             body = ('<a class="button" href="%s">Download for %s</a>\n'
-                    '      <p class="file">%s</p>\n      <ol>%s</ol>'
+                    '      <p class="file">%s</p>%s\n      <ol>%s</ol>'
                     % (html.escape(url(key, f)), html.escape(name), html.escape(f),
+                       space_note(addon_bytes) if key == "linux" and tag_of[key] == tag else "",
                        "".join("<li>%s</li>" % s for s in steps)))
         else:
             body = '<p class="later">Comes later.</p>'
@@ -200,6 +278,14 @@ def page(files, tag, also=()):
             rows = "".join('\n        <li><a href="%s">%s</a>: %s <span class="file">%s</span></li>'
                            % (html.escape(url(key, of)), what, how, html.escape(of)) for of, what, how in more[key])
             body += ('\n      <h3>Other downloads</h3>\n      <ul class="others">%s\n      </ul>' % rows)
+        if addon_of[key]:
+            # the add-ons of this system on their own (name, one line, size): for the program alone, or one more later
+            arows = "".join('\n        <li data-addon-file="%s"><a href="%s">%s</a>: %s <span class="file">%s%s</span></li>'
+                            % (html.escape(af), html.escape(url(key, af)), html.escape(an), html.escape(al), html.escape(af),
+                               (" &middot; " + size_text(ab)) if size_text(ab) else "") for af, an, al, ab in addon_of[key])
+            body += ('\n      <h3>Add-ons on their own</h3>\n      <p class="small">The full version has them all. With the '
+                     'program alone, install one with File &gt; Install Update or Add-on.</p>\n'
+                     '      <ul class="others">%s\n      </ul>' % arows)
         cards.append('    <section class="system" data-system="%s">\n      <h2>%s <span>%s</span></h2>\n      %s\n    </section>'
                      % (key, html.escape(name), html.escape(detail), body))
     addons = addons_section(official_addons(), home)
@@ -279,10 +365,35 @@ def main(argv):
         print(__doc__, file=sys.stderr)
         return 2
     files = sorted(os.listdir(argv[1]))
+    # the size of a file: the number it holds (the release workflow writes it so), else its length
+    def read_sizes(folder, names):
+        for n in names:
+            try:
+                with open(os.path.join(folder, n), encoding="utf-8") as f:
+                    text = f.read(32).strip()
+                SIZES[n] = int(text) if text.isdigit() else os.path.getsize(os.path.join(folder, n))
+            except (OSError, ValueError):
+                pass
+    read_sizes(argv[1], [n for n in files if n.endswith(".qbpkg")])
+    # 0.94.0: a file "full-addons-size" in the folder (the installed size of the full version's add-ons in bytes, written
+    # by the job that builds them) lets the Linux card name the disk space; without it nothing is said
+    addon_bytes = 0
+    size_file = os.path.join(argv[1], "full-addons-size")
+    if "full-addons-size" in files:
+        files.remove("full-addons-size")
+        try:
+            with open(size_file, encoding="utf-8") as f:
+                addon_bytes = int(f.read().strip() or 0)
+        except (OSError, ValueError):
+            addon_bytes = 0
     also = [(sorted(os.listdir(rest[i + 1])), rest[i + 2]) for i in range(0, len(rest), 3)]
+    for i, (names, _tag) in enumerate(also):
+        for n in names:
+            if n.endswith(".qbpkg") and n not in SIZES:
+                read_sizes(rest[3 * i + 1], [n])
     os.makedirs(argv[3], exist_ok=True)
     with open(os.path.join(argv[3], "index.html"), "w", encoding="utf-8") as f:
-        f.write(page(files, argv[2], also))
+        f.write(page(files, argv[2], also, addon_bytes))
     return 0
 
 

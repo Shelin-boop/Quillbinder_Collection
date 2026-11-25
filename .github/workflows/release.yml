@@ -583,6 +583,9 @@ jobs:
           cp "$(ls dist/*-x86_64.AppImage | grep -v -- -full-)" build-appimage/
           tools/ci-step.sh full packaging/linux/build-full-appimage.sh build-appimage dist
           cp build-appimage/*-full-*.AppImage dist/
+          # 0.94.0: the installed size of the add-ons inside, for the download page (it is not a file of the release: it
+          # travels in the artifact "assembled" and then in "release-files", beside dist)
+          python3 -I tools/full-addons-size.py dist full-addons-size
           ls -la dist
 
       - name: Check the full version
@@ -595,6 +598,7 @@ jobs:
           path: |
             dist
             unsigned/sources
+            full-addons-size
           retention-days: 3
           if-no-files-found: error
 
@@ -654,6 +658,7 @@ jobs:
           mkdir -p release/dist release/sources
           cp assembled/dist/* release/dist/
           cp -r assembled/unsigned/sources/. release/sources/
+          cp assembled/full-addons-size release/full-addons-size   # (0.94.0: for the download page; not published)
           cp packaging/quillbinder-signing-public.pem release/dist/
           cp release/sources/SOURCES.txt release/dist/THIRD-PARTY-SOURCES.txt
           (cd release/dist && rm -f SHA256SUMS.txt SHA256SUMS.txt.sig && sha256sum -- * > /tmp/SHA256SUMS.txt && mv /tmp/SHA256SUMS.txt SHA256SUMS.txt)
@@ -784,7 +789,10 @@ jobs:
           TAG: ${{ needs.version.outputs.tag }}
         run: |
           mkdir -p release-names site
-          gh release view "$TAG" --json assets --jq '.assets[].name' | while IFS= read -r n; do : > "release-names/$n"; done
+          # (0.94.0: a file holds its size in bytes, the page names the size of the add-on packages)
+          gh release view "$TAG" --json assets --jq '.assets[] | "\(.name)\t\(.size)"' | while IFS=$'\t' read -r n sz; do printf '%s\n' "$sz" > "release-names/$n"; done
+          # the installed size of the full version's add-ons, written when the full AppImage was built
+          [ -f release-files/full-addons-size ] && cp release-files/full-addons-size release-names/full-addons-size || true
           ls release-names
           # 0.91.2: each system's newest files (a system may have a later last number than another, working rules
           # section 8): the older releases, newest first, for the systems this release has no files for
@@ -795,7 +803,7 @@ jobs:
           while IFS= read -r t; do
             [ -n "$t" ] && [ "$t" != "$TAG" ] || continue
             i=$((i + 1)); mkdir -p "older-$i"
-            gh release view "$t" --json assets --jq '.assets[].name' | while IFS= read -r n; do : > "older-$i/$n"; done
+            gh release view "$t" --json assets --jq '.assets[] | "\(.name)\t\(.size)"' | while IFS=$'\t' read -r n sz; do printf '%s\n' "$sz" > "older-$i/$n"; done
             also+=(--also "older-$i" "$t")
           done < <(gh api "repos/$GH_REPO/releases?per_page=100" --jq '.[] | select(.draft | not) | select(.tag_name | startswith("v")) | .tag_name')
           python3 -I tools/download-page.py release-names "$TAG" site "${also[@]}"

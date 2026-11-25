@@ -370,7 +370,7 @@ QStringList concerns(const Project *project)
         if (r.when >= monthAgo)
             ++recent;
     if (recent > 0)
-        out << QStringLiteral("%1 in the last 30 days (Help > Crash Reports).")
+        out << QStringLiteral("%1 in the last 30 days (Help > Troubleshooting and Development > Crash Reports).")
                    .arg(text::plural(recent, QStringLiteral("crash or freeze report"), QStringLiteral("crash or freeze reports")));
     if (QLatin1String(qVersion()) != QLatin1String(QT_VERSION_STR))
         out << QStringLiteral("Qt %1 is running, but the program was built with Qt %2.").arg(QLatin1String(qVersion()), QLatin1String(QT_VERSION_STR));
@@ -476,6 +476,8 @@ QString text(const Project *project)
     t << QStringLiteral("  Add-ons: %1").arg(ads.isEmpty() ? QStringLiteral("none") : ads.join(QLatin1String("; ")));
     t << QStringLiteral("  Started: %1").arg(g_started.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss")));
     t << QStringLiteral("  Process: %1").arg(QCoreApplication::applicationPid());
+    // 0.94.0: the memory the program holds now (its resident size; the add-ons' models are freed after a while without use)
+    t << QStringLiteral("  Program memory (resident size): %1").arg(gb(memory().own));
 
     // ---- system
     t << QString() << QStringLiteral("System");
@@ -802,7 +804,7 @@ bool showPreviousEnds(QWidget *parent, const QList<crash::PreviousEnd> &ends, bo
         text += QLatin1String("\n\n")
                 + QCoreApplication::translate("qb::CrashReportsDialog",
                                               "A freeze report was saved on this computer. It shows where the program was "
-                                              "stuck: Help > Crash Reports shows it, and you can copy it from there into a "
+                                              "stuck: Help > Troubleshooting and Development > Crash Reports shows it, and you can copy it from there into a "
                                               "message. It holds no text of your documents.");
     } else if (!e.report.isEmpty()) {
         text = QCoreApplication::translate("qb::CrashReportsDialog", "%1 ended because of an error on %2 (version %3, %4).")
@@ -811,7 +813,7 @@ bool showPreviousEnds(QWidget *parent, const QList<crash::PreviousEnd> &ends, bo
         text += QLatin1String("\n\n")
                 + QCoreApplication::translate("qb::CrashReportsDialog",
                                               "A crash report was saved on this computer. It helps to find the cause: "
-                                              "Help > Crash Reports shows it, and you can copy it from there into a message. "
+                                              "Help > Troubleshooting and Development > Crash Reports shows it, and you can copy it from there into a message. "
                                               "It holds no text of your documents.");
     } else {
         text = QCoreApplication::translate("qb::CrashReportsDialog",

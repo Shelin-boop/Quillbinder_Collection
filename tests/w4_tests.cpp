@@ -1,6 +1,6 @@
 // Windows port, step W4b (2026-11-12): the portable program. On Linux with QB_TEST_PORTABLE=1 (set here) the Windows
 // parts of the windows are shown and checked: the place of notes and transcriptions, the guide of the first start,
-// File > Options > General > This Computer, Help > This Computer, no standard backup folder (the question, the status
+// File > Options > General > This Computer, Help > Troubleshooting and Development > This Computer, no standard backup folder (the question, the status
 // bar); Linux itself stays as it was (the data folder, the first start without the guide, the font folder). On the
 // Windows runner also: the data folder inside the program folder, the settings file there, fonts in data\fonts and
 // not in the registry, the Start menu entry, the desktop shortcut and the file types (in a test folder and a test key).
@@ -423,12 +423,7 @@ static void windowChecks(const QString &W)
     // "Choose Folder" takes the folder and makes the backup
     whenModal([](QWidget *m) {
         if (auto *box = qobject_cast<QMessageBox *>(m)) {
-            box->defaultButton()->click();
-            // then the message "Backup saved"
-            whenModal([](QWidget *m2) {
-                if (auto *b2 = qobject_cast<QMessageBox *>(m2))
-                    b2->accept();
-            });
+            box->defaultButton()->click(); // (the backup's success is a note in the footer; no box follows, 0.94.0)
         }
     });
     if (now)
@@ -440,7 +435,7 @@ static void windowChecks(const QString &W)
     qunsetenv("QB_TEST_ASK_BACKUP_FOLDER");
     qunsetenv("QB_TEST_BACKUP_FOLDER");
 
-    // Help > This Computer
+    // Help > Troubleshooting and Development > This Computer
     QAction *again = w.findChild<QAction *>(QStringLiteral("thisComputer"));
     QString title;
     bool hasSetup = false;
@@ -455,7 +450,7 @@ static void windowChecks(const QString &W)
         again->trigger();
     settle(200);
     check(again && again->isVisible() && title.contains(QLatin1String("This Computer")) && hasSetup,
-          QStringLiteral("Help > This Computer shows the guide again"), title);
+          QStringLiteral("Help > Troubleshooting and Development > This Computer shows the guide again"), title);
 
     // File > Options > General > This Computer, and Backup's empty folder
     QString whereText, placeholder;

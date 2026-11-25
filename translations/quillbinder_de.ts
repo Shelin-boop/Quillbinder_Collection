@@ -300,6 +300,10 @@ Die Vornamen dieser Liste sind nicht in weiblich und männlich unterteilt.</tran
             <numerusform>Liste „%1“ mit %n Namen.</numerusform>
         </translation>
     </message>
+    <message>
+        <source>No name lists found. They come with the add-on “Name Generator” (Help &gt; Add-ons and Updates &gt; Add-on Manager).</source>
+        <translation>Keine Namenslisten gefunden. Sie gehören zur Erweiterung „Namensgenerator“ (Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung).</translation>
+    </message>
 </context>
 <context>
     <name>OptionsDialog</name>
@@ -3524,6 +3528,26 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
 %1</numerusform>
         </translation>
     </message>
+    <message>
+        <source>%1: Word 97–2003 files become text with the add-on “Word 97–2003 Import” (Help &gt; Add-ons and Updates &gt; Add-on Manager); the file was added as it is.</source>
+        <translation>%1: Word-97–2003-Dateien werden mit der Erweiterung „Word 97–2003 Import“ (Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung) zu Text; die Datei wurde unverändert hinzugefügt.</translation>
+    </message>
+    <message>
+        <source>My Look 1</source>
+        <translation>Mein Aussehen 1</translation>
+    </message>
+    <message>
+        <source>My Look 2</source>
+        <translation>Mein Aussehen 2</translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation>Details</translation>
+    </message>
+    <message>
+        <source>Theme button (Light, Dark, My Look 1, My Look 2 and all themes)</source>
+        <translation>Design-Schaltfläche (Hell, Dunkel, Mein Aussehen 1, Mein Aussehen 2 und alle Designs)</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>
@@ -4019,6 +4043,18 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
         <source>whisper translates only into English: with %1 as the main language, what you say in %2 stays in %2.</source>
         <translation>whisper übersetzt nur ins Englische: Mit %1 als Hauptsprache bleibt, was Sie in %2 sagen, in %2.</translation>
     </message>
+    <message>
+        <source>Free the model after:</source>
+        <translation>Modell freigeben nach:</translation>
+    </message>
+    <message>
+        <source> minutes</source>
+        <translation> Minuten</translation>
+    </message>
+    <message>
+        <source>The model takes memory while it is loaded; after this time without use it is freed and the program says so. It loads again at the next recording.</source>
+        <translation>Das Modell belegt Speicher, solange es geladen ist; nach dieser Zeit ohne Nutzung wird es freigegeben, und das Programm sagt es. Bei der nächsten Aufnahme wird es wieder geladen.</translation>
+    </message>
 </context>
 <context>
     <name>SpeechTool</name>
@@ -4201,6 +4237,10 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
     <message>
         <source>Cannot load %1: %2</source>
         <translation>%1 kann nicht geladen werden: %2</translation>
+    </message>
+    <message>
+        <source>Model unloaded, RAM usage minimal</source>
+        <translation>Modell entladen, minimaler RAM-Verbrauch</translation>
     </message>
 </context>
 <context>
@@ -4807,6 +4847,10 @@ Verschieben Sie den ganzen Quillbinder-Ordner an einen eigenen Ort, zum Beispiel
     <message>
         <source>: starts with the first audio or video file.</source>
         <translation>: beginnt mit der ersten Audio- oder Videodatei.</translation>
+    </message>
+    <message>
+        <source>Playing audio and video inside the program needs the add-on &quot;Media Playback&quot; (Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager).</source>
+        <translation>Das Abspielen von Audio und Video im Programm braucht die Erweiterung „Media Playback“ (Hilfe &gt; Erweiterungen und Updates &gt; Programmaktualisierung oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung).</translation>
     </message>
 </context>
 <context>
@@ -5908,6 +5952,22 @@ Verschieben Sie den ganzen Quillbinder-Ordner an einen eigenen Ort, zum Beispiel
         <source>Preview — %1 (%2 pages)</source>
         <translation>Vorschau — %1 (%2 Seiten)</translation>
     </message>
+    <message>
+        <source>Author's Name</source>
+        <translation>Name der Autorin oder des Autors</translation>
+    </message>
+    <message>
+        <source>The title page names the author. Who is the author? The name is kept with the author information in File &gt; Options &gt; General. Left empty, the title page has no "by" line.</source>
+        <translation>Die Titelseite nennt die Autorin oder den Autor. Wie lautet der Name? Er wird bei den Angaben zur Autorin oder zum Autor in Datei &gt; Optionen &gt; Allgemein gespeichert. Bleibt das Feld leer, hat die Titelseite keine „von“-Zeile.</translation>
+    </message>
+    <message>
+        <source>First name:</source>
+        <translation>Vorname:</translation>
+    </message>
+    <message>
+        <source>Last name:</source>
+        <translation>Nachname:</translation>
+    </message>
 </context>
 <context>
     <name>qb::CompositionWindow</name>
@@ -6334,6 +6394,14 @@ Dies kann nicht als Ganzes rückgängig gemacht werden.%3</translation>
     <message>
         <source>When %1 ends because of an error, or does not respond for 30 seconds, it writes a report on this computer. Nothing is sent anywhere. To report the problem, copy the report into a message (or send the file). It names files, folders and the commands used before the error, but holds no text of your documents. Names of files and folders (and project titles) can contain personal names: look the report over before you send it.</source>
         <translation>Wenn %1 wegen eines Fehlers endet oder 30 Sekunden lang nicht reagiert, schreibt es einen Bericht auf diesem Computer. Nichts wird irgendwohin gesendet. Um das Problem zu melden, kopieren Sie den Bericht in eine Nachricht (oder senden Sie die Datei). Er nennt Dateien, Ordner und die Befehle, die vor dem Fehler verwendet wurden, enthält aber keinen Text Ihrer Dokumente. Namen von Dateien und Ordnern (und Projekttitel) können Personennamen enthalten: Sehen Sie den Bericht durch, bevor Sie ihn senden.</translation>
+    </message>
+    <message>
+        <source>A freeze report was saved on this computer. It shows where the program was stuck: Help &gt; Troubleshooting and Development &gt; Crash Reports shows it, and you can copy it from there into a message. It holds no text of your documents.</source>
+        <translation>Ein Hängerbericht wurde auf diesem Computer gespeichert. Er zeigt, wo das Programm hängen blieb: Unter Hilfe &gt; Fehlersuche und Entwicklung &gt; Absturzberichte können Sie ihn ansehen und von dort in eine Nachricht kopieren. Er enthält keinen Text Ihrer Dokumente.</translation>
+    </message>
+    <message>
+        <source>A crash report was saved on this computer. It helps to find the cause: Help &gt; Troubleshooting and Development &gt; Crash Reports shows it, and you can copy it from there into a message. It holds no text of your documents.</source>
+        <translation>Ein Absturzbericht wurde auf diesem Computer gespeichert. Er hilft, die Ursache zu finden: Unter Hilfe &gt; Fehlersuche und Entwicklung &gt; Absturzberichte können Sie ihn ansehen und von dort in eine Nachricht kopieren. Er enthält keinen Text Ihrer Dokumente.</translation>
     </message>
 </context>
 <context>
@@ -7078,6 +7146,34 @@ In die Ordner von Windows und in die Registrierung wird nichts geschrieben, auß
     <message>
         <source>Before you start: where Quillbinder keeps its files on this computer and how your projects are backed up. OK keeps what is filled in; you can change all of it later in File &gt; Options (General &gt; This Computer, Backup) or with Help &gt; This Computer.</source>
         <translation>Bevor Sie beginnen: wo Quillbinder seine Dateien auf diesem Computer aufbewahrt und wie Ihre Projekte gesichert werden. OK übernimmt, was ausgefüllt ist; Sie können alles später unter Datei &gt; Einstellungen (Allgemein &gt; Dieser Computer, Sicherung) oder mit Hilfe &gt; Dieser Computer ändern.</translation>
+    </message>
+    <message>
+        <source>Application Menu</source>
+        <translation>Anwendungsmenü</translation>
+    </message>
+    <message>
+        <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them</source>
+        <translation>%1 zum Anwendungsmenü hinzufügen, damit Sie es wie jedes andere Programm starten und Projekte per Doppelklick öffnen können</translation>
+    </message>
+    <message>
+        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
+        <translation>AppImage nach %1 verschieben (eine verschobene Datei lässt sich nicht mehr aus dem Menü starten)</translation>
+    </message>
+    <message>
+        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later.</source>
+        <translation>Mit Hilfe &gt; Zum Anwendungsmenü hinzufügen oder Aus dem Anwendungsmenü entfernen ändern Sie das später.</translation>
+    </message>
+    <message>
+        <source>Check for Updates</source>
+        <translation>Nach Updates suchen</translation>
+    </message>
+    <message>
+        <source>Look for updates when the program starts</source>
+        <translation>Beim Programmstart nach Updates suchen</translation>
+    </message>
+    <message>
+        <source>%1 fetches one small file, at most once a day, and tells you when a newer version of the program or of an installed add-on is there. Nothing about you is sent. You can switch this off or on at any time with Help &gt; Add-ons and Updates &gt; Check for Updates at Startup.</source>
+        <translation>%1 ruft höchstens einmal am Tag eine kleine Datei ab und sagt Ihnen Bescheid, wenn es eine neuere Version des Programms oder einer installierten Erweiterung gibt. Über Sie wird nichts gesendet. Sie können das jederzeit mit Hilfe &gt; Erweiterungen und Updates &gt; Beim Start nach Updates suchen aus- oder einschalten.</translation>
     </message>
 </context>
 <context>
@@ -8078,6 +8174,61 @@ In die Ordner von Windows und in die Registrierung wird nichts geschrieben, auß
     <message>
         <source>Use the first line of each section as its title</source>
         <translation>Erste Zeile jedes Abschnitts als Titel verwenden</translation>
+    </message>
+    <message>
+        <source>Headings (.docx, .odt, .md): Heading 1 makes a folder</source>
+        <translation>Überschriften (.docx, .odt, .md): Überschrift 1 wird ein Ordner</translation>
+    </message>
+    <message>
+        <source>Heading 2 makes:</source>
+        <translation>Überschrift 2 wird:</translation>
+    </message>
+    <message>
+        <source>a folder (its text becomes a document inside)</source>
+        <translation>ein Ordner (sein Text wird ein Dokument darin)</translation>
+    </message>
+    <message>
+        <source>a document (with the text under it)</source>
+        <translation>ein Dokument (mit dem Text darunter)</translation>
+    </message>
+    <message>
+        <source>Title of a document: the scene heading.</source>
+        <translation>Titel eines Dokuments: die Szenenüberschrift.</translation>
+    </message>
+    <message>
+        <source>Title of a document: the first line of its text that is not empty (a line longer than 120 characters is shortened and stays in the text); a section without a line is called “&lt;file name&gt; &lt;number&gt;”.</source>
+        <translation>Titel eines Dokuments: die erste nicht leere Zeile seines Textes (eine Zeile über 120 Zeichen wird gekürzt und bleibt im Text); ein Abschnitt ohne Zeile heißt „&lt;Dateiname&gt; &lt;Nummer&gt;“.</translation>
+    </message>
+    <message>
+        <source>Title of a document: “&lt;file name&gt; &lt;number&gt;”.</source>
+        <translation>Titel eines Dokuments: „&lt;Dateiname&gt; &lt;Nummer&gt;“.</translation>
+    </message>
+    <message>
+        <source>Headings name the folders and, for Heading 2 as a document, the document. Lower headings stay in the text.</source>
+        <translation>Überschriften benennen die Ordner und, bei Überschrift 2 als Dokument, das Dokument. Tiefere Überschriften bleiben im Text.</translation>
+    </message>
+    <message>
+        <source>Choose a file to see the binder it makes.</source>
+        <translation>Wählen Sie eine Datei, um den daraus entstehenden Binder zu sehen.</translation>
+    </message>
+    <message>
+        <source>Splitting at headings works for .docx, .odt and .md files.</source>
+        <translation>Das Teilen an Überschriften gilt für .docx-, .odt- und .md-Dateien.</translation>
+    </message>
+    <message>
+        <source>The file could not be read.</source>
+        <translation>Die Datei konnte nicht gelesen werden.</translation>
+    </message>
+    <message>
+        <source>Nothing to import: the file has no text.</source>
+        <translation>Nichts zu importieren: Die Datei enthält keinen Text.</translation>
+    </message>
+    <message numerus="yes">
+        <source>The binder after the import (%n item(s)):</source>
+        <translation>
+            <numerusform>Der Binder nach dem Import (%n Eintrag):</numerusform>
+            <numerusform>Der Binder nach dem Import (%n Einträge):</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -10124,6 +10275,14 @@ Die Versionen 0.70.0 bis 0.90.4 haben sie dort abgelegt. In den Sicherungsordner
         <translation>Layouts &amp;verwalten…</translation>
     </message>
     <message>
+        <source>Quick-Add &amp;Keys in the Binder</source>
+        <translation>&amp;Schnellanlege-Tasten im Binder</translation>
+    </message>
+    <message>
+        <source>Return adds a new document below; Space opens a Quick Reference window</source>
+        <translation>Die Eingabetaste legt ein neues Dokument darunter an; die Leertaste öffnet ein Schnellansicht-Fenster</translation>
+    </message>
+    <message>
         <source>&amp;Float Quick Reference Panels</source>
         <translation>Schnellansicht-Bereiche &amp;abdocken</translation>
     </message>
@@ -10578,6 +10737,10 @@ Das Projekt bleibt geöffnet.</translation>
 %1</translation>
     </message>
     <message>
+        <source>Backup saved: %1</source>
+        <translation>Sicherung gespeichert: %1</translation>
+    </message>
+    <message>
         <source>Restore From Backup</source>
         <translation>Aus Sicherung wiederherstellen</translation>
     </message>
@@ -10854,8 +11017,8 @@ Wenn Sie das AppImage verschieben, wählen Sie diesen Menüeintrag erneut.</tran
         <translation>&amp;Einfügen</translation>
     </message>
     <message>
-        <source>Media &amp;Timestamp</source>
-        <translation>Medien-&amp;Zeitmarke</translation>
+        <source>Insert &amp;Media Timestamp</source>
+        <translation>&amp;Medien-Zeitmarke einfügen</translation>
     </message>
     <message>
         <source>Auto &amp;Number</source>
@@ -11940,8 +12103,8 @@ Das Projekt, an dem Sie arbeiten, bleibt, wo es ist.</translation>
         <translation>&amp;Stummschalten</translation>
     </message>
     <message>
-        <source>Insert &amp;Timestamp</source>
-        <translation>&amp;Zeitmarke einfügen</translation>
+        <source>&amp;Insert Media Timestamp</source>
+        <translation>Medien-&amp;Zeitmarke einfügen</translation>
     </message>
     <message>
         <source>&amp;Go to Timestamp at Cursor</source>
@@ -12789,6 +12952,187 @@ Die Schriften sind sofort nutzbar. Sie bleiben im Ordner des Programms: Andere P
     <message>
         <source>The journal of an earlier save is in the way and could not be moved aside; nothing was written. The message below names the file.</source>
         <translation>Das Journal eines früheren Speicherns ist im Weg und ließ sich nicht beiseite legen; es wurde nichts geschrieben. Die Meldung unten nennt die Datei.</translation>
+    </message>
+    <message>
+        <source>This project was saved by a newer version of %1. It uses things that version %2 does not know (it needs version %3 or later).
+
+If you work on it here, parts of it can be lost when it is saved. Better switch to the newer version first (Help &gt; Add-ons and Updates &gt; Add-on Manager), or work on a copy of the project.</source>
+        <translation>Dieses Projekt wurde von einer neueren Version von %1 gespeichert. Es verwendet Dinge, die Version %2 nicht kennt (es benötigt Version %3 oder neuer).
+
+Wenn Sie hier daran arbeiten, können beim Speichern Teile davon verloren gehen. Wechseln Sie besser zuerst zur neueren Version (Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung) oder arbeiten Sie an einer Kopie des Projekts.</translation>
+    </message>
+    <message>
+        <source>No font manager was found on this computer (KDE: System Settings &gt; Text &amp; Fonts &gt; Font Management; or the package “font-manager”).
+
+Fonts can be installed here with Format &gt; Font &gt; Install Font Files, or by copying them into:
+%1</source>
+        <translation>Auf diesem Computer wurde keine Schriftenverwaltung gefunden (KDE: Systemeinstellungen &gt; Text &amp; Schriften &gt; Schriftverwaltung; oder das Paket „font-manager“).
+
+Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren eingerichtet werden oder indem Sie sie in diesen Ordner kopieren:
+%1</translation>
+    </message>
+    <message>
+        <source>Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager switches add-ons on and off.</source>
+        <translation>Installieren Sie sie mit Hilfe &gt; Erweiterungen und Updates &gt; Aktualisierung oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung schaltet Erweiterungen ein und aus.</translation>
+    </message>
+    <message>
+        <source>&amp;Split Editor</source>
+        <translation>Editor &amp;teilen</translation>
+    </message>
+    <message>
+        <source>&amp;Add-ons and Updates</source>
+        <translation>&amp;Erweiterungen und Updates</translation>
+    </message>
+    <message>
+        <source>&amp;Troubleshooting and Development</source>
+        <translation>&amp;Fehlersuche und Entwicklung</translation>
+    </message>
+    <message>
+        <source>Find &amp;Command…</source>
+        <translation>&amp;Befehl suchen…</translation>
+    </message>
+    <message>
+        <source>Saved layouts</source>
+        <translation>Gespeicherte Layouts</translation>
+    </message>
+    <message>
+        <source>Remove from &amp;Application Menu</source>
+        <translation>Aus dem &amp;Anwendungsmenü entfernen</translation>
+    </message>
+    <message>
+        <source>Add to Application Menu</source>
+        <translation>Zum Anwendungsmenü hinzufügen</translation>
+    </message>
+    <message>
+        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
+        <translation>AppImage nach %1 verschieben (eine verschobene Datei lässt sich nicht mehr aus dem Menü starten)</translation>
+    </message>
+    <message>
+        <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them?</source>
+        <translation>%1 zum Anwendungsmenü hinzufügen, damit Sie es wie jedes andere Programm starten und Projekte per Doppelklick öffnen können?</translation>
+    </message>
+    <message>
+        <source>The menu entry could not be made.
+
+%1</source>
+        <translation>Der Menüeintrag konnte nicht angelegt werden.
+
+%1</translation>
+    </message>
+    <message>
+        <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove from Application Menu and then Add to Application Menu again.</source>
+        <translation>Die AppImage-Datei konnte nicht nach %1 verschoben werden (%2). Der Menüeintrag startet sie dort, wo sie ist; wenn Sie die Datei selbst verschieben, wählen Sie Hilfe &gt; Aus dem Anwendungsmenü entfernen und danach erneut Zum Anwendungsmenü hinzufügen.</translation>
+    </message>
+    <message>
+        <source>The program's icon could not be copied, so the menu entry shows no icon.</source>
+        <translation>Das Programmsymbol konnte nicht kopiert werden, der Menüeintrag zeigt daher kein Symbol.</translation>
+    </message>
+    <message>
+        <source>%1 is in the application menu now (%2).</source>
+        <translation>%1 ist jetzt im Anwendungsmenü (%2).</translation>
+    </message>
+    <message>
+        <source>%1 is no longer in the application menu.</source>
+        <translation>%1 ist nicht mehr im Anwendungsmenü.</translation>
+    </message>
+    <message>
+        <source>The menu entry could not be removed.
+
+%1</source>
+        <translation>Der Menüeintrag konnte nicht entfernt werden.
+
+%1</translation>
+    </message>
+    <message>
+        <source>Backup saved.</source>
+        <translation>Sicherung gespeichert.</translation>
+    </message>
+    <message>
+        <source>&amp;Translate and Proofread…</source>
+        <translation>&amp;Übersetzen und Korrekturlesen…</translation>
+    </message>
+    <message>
+        <source>Proofread English text or translate German text into English (the add-on is not installed)</source>
+        <translation>Englischen Text korrigieren oder deutschen Text ins Englische übersetzen (die Erweiterung ist nicht installiert)</translation>
+    </message>
+    <message>
+        <source>Speech &amp;Transcription…</source>
+        <translation>&amp;Sprachtranskription…</translation>
+    </message>
+    <message>
+        <source>Turn speech into text (the add-on is not installed)</source>
+        <translation>Sprache in Text umwandeln (die Erweiterung ist nicht installiert)</translation>
+    </message>
+    <message>
+        <source>Speech Transcription</source>
+        <translation>Sprachtranskription</translation>
+    </message>
+    <message>
+        <source>Translation and Proofreading</source>
+        <translation>Übersetzung und Korrektur</translation>
+    </message>
+    <message>
+        <source>is not installed</source>
+        <translation>ist nicht installiert</translation>
+    </message>
+    <message>
+        <source>is switched off</source>
+        <translation>ist ausgeschaltet</translation>
+    </message>
+    <message>
+        <source>does not fit this program version</source>
+        <translation>passt nicht zu dieser Programmversion</translation>
+    </message>
+    <message>
+        <source>could not be loaded</source>
+        <translation>konnte nicht geladen werden</translation>
+    </message>
+    <message>
+        <source>The add-on “%1” %2.</source>
+        <translation>Die Erweiterung „%1“ %2.</translation>
+    </message>
+    <message>
+        <source>It turns speech into text. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>Sie wandelt Sprache in Text um. Installieren Sie sie mit Hilfe &gt; Erweiterungen und Updates &gt; Update oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung zeigt die Erweiterungen und schaltet sie ein und aus.</translation>
+    </message>
+    <message>
+        <source>It proofreads English text and translates German text into English. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>Sie korrigiert englischen Text und übersetzt deutschen Text ins Englische. Installieren Sie sie mit Hilfe &gt; Erweiterungen und Updates &gt; Update oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung zeigt die Erweiterungen und schaltet sie ein und aus.</translation>
+    </message>
+    <message>
+        <source>Open Add-on Manager</source>
+        <translation>Erweiterungsverwaltung öffnen</translation>
+    </message>
+    <message>
+        <source>&amp;Group</source>
+        <translation>&amp;Gruppieren</translation>
+    </message>
+    <message>
+        <source>Put the selected documents into a new folder, at the place of the first one</source>
+        <translation>Die gewählten Dokumente in einen neuen Ordner legen, an die Stelle des ersten</translation>
+    </message>
+    <message>
+        <source>&amp;Sheet to Object</source>
+        <translation>&amp;Blatt in Objekt umwandeln</translation>
+    </message>
+    <message>
+        <source>Make an Object (Window &gt; Objects) of the selected sheet documents: the title is the name, the text goes into Other, a picture becomes the picture. The binder item then shows the Object; the document keeps its text.</source>
+        <translation>Aus den gewählten Blatt-Dokumenten Objekte machen (Fenster &gt; Objekte): der Titel ist der Name, der Text kommt in „Sonstiges“, ein Bild wird das Bild. Der Eintrag im Binder zeigt dann das Objekt; das Dokument behält seinen Text.</translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation>Gruppe</translation>
+    </message>
+    <message>
+        <source>Sheet to Object</source>
+        <translation>Blatt in Objekt umwandeln</translation>
+    </message>
+    <message numerus="yes">
+        <source>Which kind of object should %n sheet(s) become?</source>
+        <translation>
+            <numerusform>Welche Art Objekt soll aus %n Blatt werden?</numerusform>
+            <numerusform>Welche Art Objekt soll aus %n Blättern werden?</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -14696,6 +15040,10 @@ Der Inhalt wird so weit angezeigt, wie er gelesen werden konnte, und lässt sich
         <source>New in %1: “%2”</source>
         <translation>Neu in %1: „%2“</translation>
     </message>
+    <message>
+        <source>Ctrl or Shift chooses several documents.</source>
+        <translation>Mit Strg oder Umschalt wählen Sie mehrere Dokumente.</translation>
+    </message>
 </context>
 <context>
     <name>qb::ObjectForm</name>
@@ -14762,6 +15110,10 @@ Der Inhalt wird so weit angezeigt, wie er gelesen werden konnte, und lässt sich
     <message>
         <source>Picture</source>
         <translation>Bild</translation>
+    </message>
+    <message>
+        <source>Link to Documents</source>
+        <translation>Mit Dokumenten verknüpfen</translation>
     </message>
 </context>
 <context>
@@ -16586,6 +16938,22 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
     <message>
         <source>Backups are ZIP files of the whole project folder. The backups of all projects are in this folder, each named after its project with the date and time. To restore one, use File &gt; Back Up &gt; Restore From Backup, or unpack it and open the project inside.</source>
         <translation>Sicherungen sind ZIP-Dateien des gesamten Projektordners. Die Sicherungen aller Projekte liegen in diesem Ordner, jede nach ihrem Projekt benannt, mit Datum und Uhrzeit. Zum Wiederherstellen verwenden Sie Datei &gt; Sichern &gt; Aus Sicherung wiederherstellen, oder Sie entpacken eine Sicherung und öffnen das darin enthaltene Projekt.</translation>
+    </message>
+    <message>
+        <source>The Scratch Pad (Window &gt; Scratch Pad) comes with the add-on &quot;Scratch Pad&quot;; once it is installed (Help &gt; Add-ons and Updates &gt; Add-on Manager), its folder and the kind of new notes are set here.</source>
+        <translation>Der Notizblock (Fenster &gt; Notizblock) gehört zur Erweiterung „Notizblock“; sobald sie installiert ist (Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung), werden hier sein Ordner und die Art neuer Notizen festgelegt.</translation>
+    </message>
+    <message>
+        <source>Add-ons are installed with Help &gt; Add-ons and Updates &gt; Install Update or Add-on and switched on and off in Help &gt; Add-ons and Updates &gt; Add-on Manager.</source>
+        <translation>Erweiterungen werden mit Hilfe &gt; Erweiterungen und Updates &gt; Aktualisierung oder Erweiterung installieren installiert und unter Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung ein- und ausgeschaltet.</translation>
+    </message>
+    <message>
+        <source>Reports stay on this computer; Help &gt; Troubleshooting and Development &gt; Crash Reports shows them. Fewer reports to keep take effect at the next start.</source>
+        <translation>Berichte bleiben auf diesem Computer; Hilfe &gt; Fehlersuche und Entwicklung &gt; Absturzberichte zeigt sie an. Eine kleinere Anzahl zu behaltender Berichte gilt ab dem nächsten Start.</translation>
+    </message>
+    <message>
+        <source>Show the draft and session progress as two thin lines under the quick search field (the footer shows it as well)</source>
+        <translation>Fortschritt von Entwurf und Sitzung als zwei dünne Linien unter dem Schnellsuchfeld zeigen (die Fußzeile zeigt ihn ebenfalls)</translation>
     </message>
 </context>
 <context>
@@ -19625,32 +19993,12 @@ Strg+Klick zum Öffnen</translation>
 <context>
     <name>qb::ThemePicker</name>
     <message>
-        <source>Bright</source>
-        <translation>Hell</translation>
-    </message>
-    <message>
         <source>Dark</source>
         <translation>Dunkel</translation>
     </message>
     <message>
-        <source>The theme of the open project and of new projects (as Window &gt; Themes)</source>
-        <translation>Das Design des geöffneten Projekts und neuer Projekte (wie Fenster &gt; Designs)</translation>
-    </message>
-    <message>
         <source>Theme</source>
         <translation>Design</translation>
-    </message>
-    <message>
-        <source>Choose a theme</source>
-        <translation>Ein Design wählen</translation>
-    </message>
-    <message>
-        <source>U1</source>
-        <translation>U1</translation>
-    </message>
-    <message>
-        <source>U2</source>
-        <translation>U2</translation>
     </message>
     <message>
         <source>Themes</source>
@@ -19669,28 +20017,12 @@ Strg+Klick zum Öffnen</translation>
         <translation>Design wechseln</translation>
     </message>
     <message>
-        <source>The look you see has %1 of your own that are not saved in U1 or U2.</source>
-        <translation>Das Aussehen, das Sie sehen, enthält %1 von Ihnen, die weder in U1 noch in U2 gespeichert sind.</translation>
-    </message>
-    <message>
         <source>color or font</source>
         <translation>eine Farbe oder Schrift</translation>
     </message>
     <message>
         <source>colors and fonts</source>
         <translation>Farben und Schriften</translation>
-    </message>
-    <message>
-        <source>Save the look in U1 or U2 first (it replaces the look saved there), or switch without saving it?</source>
-        <translation>Das Aussehen zuerst in U1 oder U2 speichern (es ersetzt das dort gespeicherte Aussehen) oder wechseln, ohne es zu speichern?</translation>
-    </message>
-    <message>
-        <source>Save in U1</source>
-        <translation>In U1 speichern</translation>
-    </message>
-    <message>
-        <source>Save in U2</source>
-        <translation>In U2 speichern</translation>
     </message>
     <message>
         <source>Switch Without Saving</source>
@@ -19713,32 +20045,56 @@ Strg+Klick zum Öffnen</translation>
         <translation>Das Aussehen, das Sie sehen, ist in %1 gespeichert. Ein Klick auf %1 holt es zurück.</translation>
     </message>
     <message>
-        <source>Save the Current Look Here</source>
-        <translation>Aktuelles Aussehen hier speichern</translation>
+        <source>Light</source>
+        <translation>Hell</translation>
     </message>
     <message>
-        <source>Show This Look</source>
-        <translation>Dieses Aussehen zeigen</translation>
+        <source>My Look 1</source>
+        <translation>Mein Aussehen 1</translation>
     </message>
     <message>
-        <source>Theme of the Button Bright</source>
-        <translation>Design der Schaltfläche Hell</translation>
+        <source>My Look 2</source>
+        <translation>Mein Aussehen 2</translation>
     </message>
     <message>
-        <source>Theme of the Button Dark</source>
-        <translation>Design der Schaltfläche Dunkel</translation>
+        <source>%1 (empty)</source>
+        <translation>%1 (leer)</translation>
     </message>
     <message>
-        <source>Save the look you see now in %1 (the button is empty)</source>
-        <translation>Das Aussehen, das Sie jetzt sehen, in %1 speichern (die Schaltfläche ist leer)</translation>
+        <source>Empty: choosing it saves the look you see now as %1</source>
+        <translation>Leer: Der Eintrag speichert das Aussehen, das Sie jetzt sehen, als %1</translation>
     </message>
     <message>
-        <source>Show your look saved in %1 (right-click: save the look you see now here)</source>
-        <translation>Ihr in %1 gespeichertes Aussehen zeigen (Rechtsklick: das Aussehen, das Sie jetzt sehen, hier speichern)</translation>
+        <source>Your own look saved as %1; it brings back the colors and fonts saved there</source>
+        <translation>Ihr eigenes Aussehen, gespeichert als %1; es holt die dort gespeicherten Farben und Schriften zurück</translation>
     </message>
     <message>
-        <source>Show the theme “%1” (right-click: choose the theme of this button)</source>
-        <translation>Das Design „%1“ zeigen (Rechtsklick: das Design dieser Schaltfläche wählen)</translation>
+        <source>Show the theme “%1”</source>
+        <translation>Das Design „%1“ zeigen</translation>
+    </message>
+    <message>
+        <source>Save the Current Look as %1</source>
+        <translation>Aktuelles Aussehen als %1 speichern</translation>
+    </message>
+    <message>
+        <source>Theme: %1 (click for the list of themes, Light, Dark and your own looks)</source>
+        <translation>Design: %1 (ein Klick zeigt die Liste der Designs, Hell, Dunkel und Ihre eigenen Aussehen)</translation>
+    </message>
+    <message>
+        <source>The look you see has %1 of your own that are not saved in My Look 1 or My Look 2.</source>
+        <translation>Das Aussehen, das Sie sehen, enthält %1 von Ihnen, die weder in Mein Aussehen 1 noch in Mein Aussehen 2 gespeichert sind.</translation>
+    </message>
+    <message>
+        <source>Save the look in My Look 1 or My Look 2 first (it replaces the look saved there), or switch without saving it?</source>
+        <translation>Das Aussehen zuerst in Mein Aussehen 1 oder Mein Aussehen 2 speichern (es ersetzt das dort gespeicherte Aussehen) oder wechseln, ohne es zu speichern?</translation>
+    </message>
+    <message>
+        <source>Save in My Look 1</source>
+        <translation>In Mein Aussehen 1 speichern</translation>
+    </message>
+    <message>
+        <source>Save in My Look 2</source>
+        <translation>In Mein Aussehen 2 speichern</translation>
     </message>
 </context>
 <context>
@@ -20126,6 +20482,18 @@ Oder laden Sie die aktuelle Version von der Seite des Projekts herunter.</transl
     <message>
         <source>%1 %2: the browser could not be opened. The file is %3</source>
         <translation>%1 %2: Der Browser konnte nicht geöffnet werden. Die Datei ist %3</translation>
+    </message>
+    <message>
+        <source>%1 looks for updates when it starts. Nothing about you is sent.
+
+It fetches one small file, at most once a day, and tells you when a newer version of the program or of an installed add-on is there. You can switch this off or on at any time with Help &gt; Add-ons and Updates &gt; Check for Updates at Startup.</source>
+        <translation>%1 sucht beim Start nach Updates. Über Sie wird nichts gesendet.
+
+Es wird höchstens einmal am Tag eine kleine Datei abgerufen, und Sie erfahren, wenn es eine neuere Version des Programms oder einer installierten Erweiterung gibt. Sie können das jederzeit mit Hilfe &gt; Erweiterungen und Updates &gt; Beim Start nach Updates suchen aus- oder einschalten.</translation>
+    </message>
+    <message>
+        <source>You have delayed this four times. This is the last reminder: Delay now ends the reminders for this version. Help &gt; Add-ons and Updates &gt; Check for Updates Now still shows it.</source>
+        <translation>Sie haben dies viermal verschoben. Das ist die letzte Erinnerung: „Später“ beendet jetzt die Erinnerungen an diese Version. Hilfe &gt; Erweiterungen und Updates &gt; Jetzt nach Updates suchen zeigt sie weiterhin.</translation>
     </message>
 </context>
 <context>
@@ -21090,6 +21458,151 @@ Sie wird von hier aus nicht geöffnet. Wenn Sie ihr vertrauen, öffnen Sie sie s
     <message>
         <source>The page builds its text with a script: the text comes from the page&apos;s data.</source>
         <translation>Die Seite baut ihren Text mit einem Skript auf: Der Text stammt aus den Daten der Seite.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::CommandFinder</name>
+    <message>
+        <source>Find Command</source>
+        <translation>Befehl suchen</translation>
+    </message>
+    <message>
+        <source>Type part of a command's name or of its menu. Return or a double-click runs it.</source>
+        <translation>Geben Sie einen Teil des Befehlsnamens oder seines Menüs ein. Eingabetaste oder Doppelklick führt ihn aus.</translation>
+    </message>
+    <message>
+        <source>Command</source>
+        <translation>Befehl</translation>
+    </message>
+</context>
+<context>
+    <name>qb::FullInstallWindow</name>
+    <message>
+        <source>Installing %1 (%2 MB)...</source>
+        <translation>%1 werden installiert (%2 MB)...</translation>
+    </message>
+    <message>
+        <source>add-on</source>
+        <translation>Erweiterung</translation>
+    </message>
+    <message>
+        <source>add-ons</source>
+        <translation>Erweiterungen</translation>
+    </message>
+    <message>
+        <source>%1 of %2: %3</source>
+        <translation>%1 von %2: %3</translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation>Fertig</translation>
+    </message>
+</context>
+<context>
+    <name>qb::appmenu</name>
+    <message>
+        <source>The program does not run from an AppImage file.</source>
+        <translation>Das Programm läuft nicht aus einer AppImage-Datei.</translation>
+    </message>
+    <message>
+        <source>The folder %1 could not be made.</source>
+        <translation>Der Ordner %1 konnte nicht angelegt werden.</translation>
+    </message>
+    <message>
+        <source>There is a file with this name in %1 already.</source>
+        <translation>In %1 gibt es bereits eine Datei mit diesem Namen.</translation>
+    </message>
+    <message>
+        <source>The file could not be copied to %1.</source>
+        <translation>Die Datei konnte nicht nach %1 kopiert werden.</translation>
+    </message>
+    <message>
+        <source>The copy in %1 is not complete.</source>
+        <translation>Die Kopie in %1 ist nicht vollständig.</translation>
+    </message>
+    <message>
+        <source>The old file could not be removed after the copy.</source>
+        <translation>Die alte Datei konnte nach dem Kopieren nicht entfernt werden.</translation>
+    </message>
+    <message>
+        <source>The file %1 could not be written.</source>
+        <translation>Die Datei %1 konnte nicht geschrieben werden.</translation>
+    </message>
+    <message>
+        <source>These files could not be removed:
+%1</source>
+        <translation>Diese Dateien konnten nicht entfernt werden:
+%1</translation>
+    </message>
+</context>
+<context>
+    <name>qb::ManualWindow</name>
+    <message>
+        <source>Search the manual (Ctrl+F)</source>
+        <translation>Im Handbuch suchen (Strg+F)</translation>
+    </message>
+    <message>
+        <source>Search the manual</source>
+        <translation>Im Handbuch suchen</translation>
+    </message>
+    <message>
+        <source>Previous</source>
+        <translation>Zurück</translation>
+    </message>
+    <message>
+        <source>The previous hit (Shift+Return)</source>
+        <translation>Der vorige Treffer (Umschalt+Eingabe)</translation>
+    </message>
+    <message>
+        <source>Next</source>
+        <translation>Weiter</translation>
+    </message>
+    <message>
+        <source>The next hit (Return)</source>
+        <translation>Der nächste Treffer (Eingabe)</translation>
+    </message>
+    <message>
+        <source>No hits</source>
+        <translation>Keine Treffer</translation>
+    </message>
+    <message>
+        <source>%1 of %2</source>
+        <translation>%1 von %2</translation>
+    </message>
+    <message>
+        <source>Contents</source>
+        <translation>Inhalt</translation>
+    </message>
+    <message>
+        <source>Contents of the manual</source>
+        <translation>Inhaltsverzeichnis des Handbuchs</translation>
+    </message>
+</context>
+<context>
+    <name>qb::WritingProgress</name>
+    <message>
+        <source>%1 / %2 today</source>
+        <translation>%1 / %2 heute</translation>
+    </message>
+    <message>
+        <source>%1 / %2 draft</source>
+        <translation>%1 / %2 Entwurf</translation>
+    </message>
+    <message>
+        <source>Today's writing: %1 of %2 %3 (click for Project Targets)</source>
+        <translation>Heute geschrieben: %1 von %2 %3 (Klick öffnet die Projektziele)</translation>
+    </message>
+    <message>
+        <source>The draft: %1 of %2 %3 (click for Project Targets)</source>
+        <translation>Der Entwurf: %1 von %2 %3 (Klick öffnet die Projektziele)</translation>
+    </message>
+    <message>
+        <source>characters</source>
+        <translation>Zeichen</translation>
+    </message>
+    <message>
+        <source>words</source>
+        <translation>Wörter</translation>
     </message>
 </context>
 </TS>

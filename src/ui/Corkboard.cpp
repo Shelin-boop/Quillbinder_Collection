@@ -96,6 +96,14 @@ static void drawWrapped(QPainter *p, const QRectF &r, const QString &text, const
     }
 }
 
+QColor CardItem::bodyTextColor(const QColor &paper, const QColor &cardText, bool fromDocument)
+{
+    QColor col = cardText;
+    if (fromDocument) // a little fainter than the text of a synopsis (0.94.0; was 130/255 of the color, about 3:1 on the card)
+        col = QColor((col.red() * 3 + paper.red()) / 4, (col.green() * 3 + paper.green()) / 4, (col.blue() * 3 + paper.blue()) / 4);
+    return theme::withContrast(col, paper, 4.5);
+}
+
 void CardItem::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
 {
     const AppSettings &s = AppSettings::instance();
@@ -152,12 +160,13 @@ void CardItem::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
         for (qreal y = body.top() + lh; y < body.bottom(); y += lh)
             p->drawLine(QPointF(4, y + 1), QPointF(r.width() - 4, y + 1));
         QString text = m_item->synopsis;
-        QColor col = theme::color(theme::Role::CardText);
+        bool fromDocument = false;
         if (text.isEmpty() && m_item->hasText()) {
             text = text::previewText(m_project->docs()->plainText(m_item->id), 400);
-            col.setAlpha(130); // text taken from the document, not a synopsis
+            fromDocument = true; // text taken from the document, not a synopsis
             bfnt.setItalic(true);
         }
+        const QColor col = bodyTextColor(bg, theme::color(theme::Role::CardText), fromDocument);
         drawWrapped(p, body, text, bfnt, col);
     }
 

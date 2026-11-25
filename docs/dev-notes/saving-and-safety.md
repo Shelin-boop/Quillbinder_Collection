@@ -2,6 +2,10 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.94.0 beta: values compared in the form the file gives back (settings per project)
+
+`takeProjectValues()` in `src/core/SettingsLayer.cpp` compares the program's values with the base. Qt keeps a settings file it has written in its own small cache (about 100 units; 10 + keys/4 per file) with the values as set: an empty list reads back as an empty `QStringList`, a one-item list as a `QStringList`. Once the cache has dropped the file and it is read from disk, an empty list is an invalid `QVariant` and a one-item list a `QString`, and Qt 6 calls these different. The three new keys of 0.94.0 pushed the program file out of the cache, so every empty or one-item list (the 7 toolbars, `revisionColors`, hidden toolbars) counted as changed and went into the project. `snapshot()` now passes every value through `asRead()`, which turns a list into the form read from disk. The check in `tests/v062_settings.cpp` writes a large scratch settings file before `apply()` so that the cache is emptied whatever the key counts are.
+
 ## 0.93.0 beta: File > Save As (item 25, suite `saveas`)
 
 - `MainWindow::saveProjectAs` (MainWindowFormat.cpp) replaces the menu Project Format. The save dialog's file types

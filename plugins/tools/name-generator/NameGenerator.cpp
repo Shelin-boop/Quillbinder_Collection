@@ -270,7 +270,7 @@ void NameGeneratorWindow::reloadLists()
     if (!foreOn.isEmpty() || !surOn.isEmpty())
         chooseLists(foreOn, surOn);
     if (m_lists.isEmpty())
-        m_status->setText(tr("No name lists found. They come with the add-on “Name Generator” (Help > Add-on Manager)."));
+        m_status->setText(tr("No name lists found. They come with the add-on “Name Generator” (Help > Add-ons and Updates > Add-on Manager)."));
 }
 
 void NameGeneratorWindow::fillListWidgets()

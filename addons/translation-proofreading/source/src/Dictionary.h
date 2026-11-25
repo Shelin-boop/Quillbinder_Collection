@@ -20,6 +20,9 @@ struct EnglishClass {
 };
 void loadGlosses(const QString &file);   // tests load another file
 // The meanings of an English word (its base form: "walked" gives "walk"), by part of speech; empty: WordNet has none.
+// 1.4: the word (as it is, lower case) is a lemma of WordNet itself: "number" is one, "numb" too, "river" too (the thesaurus
+// lists only words with synonyms, this lists every word WordNet has)
+bool isWordNetEntry(const QString &word);
 QList<EnglishClass> englishMeanings(const QString &word, QString *base = nullptr);
 
 // ---------------------------------------------------------------- German (Wiktionary extract)
@@ -48,6 +51,28 @@ bool germanDictionaryLoaded();
 // Every entry for a word, any case ("Fluchen" is also the verb); a capital letter is a hint: nouns first, a lower-case
 // word has them last. Entries are not repeated.
 QList<GermanEntry> lookupGerman(const QString &word);
+
+// 1.4: reads the file when no dictionary or another file is loaded (the work of the panel's threads and of the main thread
+// share it); false with *error when it cannot be read.
+bool ensureGermanDictionary(const QString &file, QString *error = nullptr);
+
+// 1.4: the German words whose meanings name one of the English words (a reverse lookup; the German similar words of an
+// English word: the word itself, then its WordNet synonyms). `english` is ordered: rank 0 is the first (the word itself).
+// "to " before a verb's meaning is ignored, the case too. `pos` keeps one class ("noun" ...; empty: all). Sorted by rank, then
+// by the position of the meaning in the entry, then alphabetically; at most `max` headwords. Needs the dictionary loaded.
+struct GermanReverse {
+    QString headword, pos;
+    int rank = 0;
+};
+QList<GermanReverse> reverseLookupGerman(const QStringList &english, const QString &pos, int max = 20);
+
+// 1.4: the capital letters of German nouns put right in a copy of the text that goes to the translation model (OPUS-MT
+// learned from German with capitals; a text in lower case is translated in pieces). A word the dictionary knows only as a
+// noun gets its capital; a word known both ways ("essen") keeps its form as typed, except right after an article or a
+// preposition with article (der, die, das, des, dem, den, ein, eine, einer, eines, einem, einen, im, am, zum, zur, vom,
+// beim, ins, ans), where it gets the capital unless the next word is a noun itself (then it is an adjective: "der alte
+// Mann"). Needs the dictionary loaded; without it the text is returned as it is.
+QString correctGermanCapitals(const QString &text);
 
 // ---------------------------------------------------------------- frames for a lone word
 

@@ -12,7 +12,7 @@ systems are released from this repository.
 
 ## Facts the add-on depends on (from the public Quillbinder source)
 
-- Tool interface 1.1: `third_party/quillbinder/ToolApi.h` (copied unchanged; see its README for the commit). Never
+- Tool interface 1.2 (since 0.94.0; 1.1 before): `third_party/quillbinder/ToolApi.h` (copied unchanged; see its README). Never
   change it; a new Quillbinder interface version would be copied in as a whole.
 - Package format and install: Quillbinder's `docs/developer-guide.md`, sections 2, 3, 5, 6 (`packaging/make-package.py`
   writes it). Add-ons with Linux libraries carry `runtime` = `u2404-qt6.12-r1` and `minApp` >= `0.80.0`.
@@ -154,6 +154,50 @@ loads in a newer one), but releases come only from the workflow "Build" (Qt 6.12
   converts, builds the extract, and uploads to the release `models-3`, which it creates once; it does nothing when the
   release has the files. The job `build` has no write permission. After the run, the artifact's `catalog.json` gives the
   sizes and sums for `resources/catalog.json` (until then they are `PLACEHOLDER`).
+
+## 1.4: lone words in both directions, German capitals, a notice, unloading (2026-11-25, to-do items 57, 58, 72, 78, 89)
+
+- **Why "Automatic" corrected a lone German word**: `directionFor` (Automatic) asked `detectLanguage`, which counts words of two
+  short lists and umlauts; a lone lower-case German word that is on neither list (and has no umlaut) counted 0 to 0 and was
+  "English", so the proofreading model ran and the output repeated the word. Now a lone word that `knownWord` (the English
+  word list) does not know and the German dictionary does is German (`directionFor` is a member since 1.4; it loads the
+  dictionary through `ensureGermanDictionary` in the main thread, once). Without the dictionary a lone unknown word is still
+  proofread. `detectLanguage` itself is unchanged (it judges texts).
+- **Both forms**: the dictionary's `lookupGerman` already gives every class (verb `fluchen`, noun `Fluchen`). A word the
+  dictionary lacks goes to the small model in the form as typed and in the other form (first letter's case turned), the
+  second answer as a class of its own (`DictClass` without `pos`).
+- **Similar German words** (`reverseLookupGerman`, Dictionary.h): one linear pass over the loaded file (L lines), matching the
+  English words of each meaning (case and a leading "to " ignored) against the English word and its WordNet synonyms of that
+  class (at most 25 words); sorted by rank (the word itself first), position of the meaning, headword; the translation itself
+  is left out (its article or "zu" cut off). No new data file; the pass runs in the worker thread of `computeSingle`. Without
+  the dictionary: one line in the note (`SingleWord::note`).
+- **Capitals** (`correctGermanCapitals`): only in the copy that goes to the model (`Unit::modelInput`; `Unit::original` stays).
+  A word is capitalized when all its dictionary entries are nouns or names with a capital headword; when it is a noun and
+  something else, only right after an article or a preposition with an article, unless the next word is a noun itself (then
+  it is an adjective: "der alte Mann"; the brief did not say this, without it every adjective that is also a noun would be
+  wrong). Words next to a hyphen and single letters are left alone.
+- **Duplicates**: `filterAlternatives` and the variants of a short text compare in lower case (also against the main
+  translation); the first one, the higher ranked, stays.
+- **"number" read as "numb"**: `baseFormsIn` skips the adjective rules (-er, -est, -ier, -iest) when the word is an entry of
+  WordNet. The thesaurus lists only words that have synonyms, so "is an entry" asks the glosses (`isWordNetEntry`, every lemma).
+  The exception list ("better" gives "good") still works. A noun such as "walker" no longer shows the words of "walk".
+- **The word pane**: no "Spelling" line when the word comes from the output (`m_infoContext`).
+- **The notice** (`Panel::missingParts`, `updateNotice`): a frame above the controls (both layouts), shown when the model of
+  the direction now (or any model, for "Automatic" without text) or, for a translation, the German dictionary is missing; its
+  button is `TranslateTool::showOptions` (the host's `showOptions`, which opens the add-on's page).
+- **Unloading** (`TranslateTool::touchEngine`): the timer is `unloadMinutes` (setting, 15 at first, 0 = never; in the options
+  under Speed); it unloads only the slots that are loaded and then emits `modelsUnloaded(message, 5000)` with the text
+  "Model unloaded, RAM usage minimal". With tool interface 1.2 (Quillbinder 0.94.0; `third_party/quillbinder/ToolApi.h`
+  is the program's header of that version) it also calls `ToolHost::showMessage(message, 5000)` when `apiVersion() >= 120`
+  (the program shows it under the binder); in a program with 1.1 only the signal says it. Test builds: `TP_TEST_UNLOAD_MS` sets the waiting time.
+- **Placeholders**: Qt's placeholder text of the three fields was replaced by a word-wrapping label over the viewport
+  (`WrappedPlaceholder`); the panel's width cannot go below its layout's minimum (about 390 px in the inspector), the label
+  wraps at whatever the field has.
+- **Checks**: `word_tests` (stand-in engine; `FakeEngine::alternativeList` is new) and `logic_tests` have the new checks;
+  `ui_tests` (real models) is unchanged and was not run here (no models). A late "variants" call of a run is recorded
+  after `clearCalls`: wait for `variantsPending()` first.
+- The add-on's texts have no German translation file (they are English only; Quillbinder's quillbinder_de.ts has none of
+  them), so none was added.
 
 ## Things learned (2026-11-15, 1.1)
 

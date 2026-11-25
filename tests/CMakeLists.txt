@@ -365,6 +365,27 @@ target_link_libraries(qb_v0930f_tests PRIVATE qbui Qt6::Test)
 # (item 45), the usable area and the input devices in System Information (item 34) (xvfb-run -a ./qb_v0931_tests /tmp/shots)
 add_executable(qb_v0931_tests v0931_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0931_tests PRIVATE qbui Qt6::Test)
+# 0.94.0: a window is not deleted under its own menu (item 63), the focus of a new mind map note (item 64), the corkboard
+# after the Trash (item 88), the inspector after a choice in the binder (item 32), session words (item 73), the backup
+# note (item 85), the targets window and the window's place (item 89) (xvfb-run -a ./qb_v0940a_tests /tmp/shots)
+add_executable(qb_v0940a_tests v0940a_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0940a_tests PRIVATE qbui Qt6::Test)
+# 0.94.0: one place per topic in the menus and Help > Find Command (items 68, 86), the first start's one page and the entry in
+# the application menu (items 60, 69, 70), the full AppImage's installation window (item 71)
+# (xvfb-run -a ./qb_v0940b_tests /tmp/shots)
+add_executable(qb_v0940b_tests v0940b_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0940b_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0940b_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.94.0: one name and one key per command, the check over all menus (item 87), the binder's keys (item 84), the shortcuts
+# that follow the keyboard layout (item 79) (xvfb-run -a ./qb_v0940c_tests /tmp/shots)
+add_executable(qb_v0940c_tests v0940c_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0940c_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0940c_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.94.0: the message line and tool interface 1.2 (items 72, 85), the notice for a missing add-on (59), the writing progress in the
+# footer (74), Import and Split at headings (75), Documents > Group (76), the Objects form (77), Sheet to Object (67)
+# (xvfb-run -a ./qb_v0940e_tests /tmp/shots)
+add_executable(qb_v0940e_tests v0940e_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0940e_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0900_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # The readers against damaged input (0.80.0, the external audit of 2026-11-09, ST-5): fixed-seed damage of small
 # valid inputs of RTF, Markdown, XML, ZIP, DOCX, ODT, Word 97 and .scrivx, each read in this process
@@ -482,3 +503,9 @@ target_link_libraries(qb_mmoverview_tests PRIVATE qbui Qt6::Test)
 # 0.93.0 (item 24): the notes start as plain text, pasting into them is plain (xvfb-run -a ./qb_notesplain_tests /tmp/shots)
 add_executable(qb_notesplain_tests notesplain_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_notesplain_tests PRIVATE qbui Qt6::Test)
+# 0.94.0, fourth part: the composition bar, card text and ruler contrast (items 65, 81), the theme button (item 80), the
+# manual's window (item 66), the author's name (item 82), the add-on window (item 90), the download page (item 83), the
+# system test's harness (item 61) (xvfb-run -a ./qb_v0940d_tests /tmp/shots)
+add_executable(qb_v0940d_tests v0940d_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0940d_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0940d_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")

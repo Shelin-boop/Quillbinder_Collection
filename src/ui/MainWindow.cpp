@@ -3,6 +3,7 @@
 #include "ui/Ask.h"
 #include "ui/LinkOpen.h"
 #include "ui/MainWindow.h"
+#include "ui/ManualWindow.h"
 #ifdef Q_OS_ANDROID
 #include "ui/Language.h" // (the Android program's About text: English or German, see aboutText())
 #endif
@@ -51,6 +52,7 @@
 #include "core/CrashGuard.h"
 #include "core/Launcher.h"
 #include "ui/AddonDialogs.h"
+#include "ui/AppMenuEntry.h"
 #include "ui/AppSettings.h"
 #include "ui/BinderPanel.h"
 #include "ui/BookmarkList.h"
@@ -113,6 +115,7 @@
 #include <QLabel>
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
+#include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QTreeWidget>
 #include <QElapsedTimer>
@@ -128,6 +131,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include "ui/FooterStatus.h"
+#include "ui/MessageLine.h"
 #include <QPrinter>
 #include <QProcess>
 #include <QPushButton>
@@ -327,6 +331,16 @@ MainWindow::MainWindow()
         }
         if (!items.isEmpty() && (!target || target == nullptr)) {
             m_inspector->setItem(items.size() == 1 ? items.first() : nullptr);
+        } else if (target && items.size() == 1 && m_inspector->item() != items.first()) {
+            // the pane may show the chosen document already while the inspector shows another one (it follows the
+            // active pane): after a choice in the binder the inspector shows the chosen document (0.94.0, item 32)
+            m_inspector->setItem(items.first());
+        }
+        // 0.94.0 (item 67): a document that stands for an Object shows the Object
+        if (items.size() == 1) {
+            const QString oid = sheetObjectOf(items.first());
+            if (!oid.isEmpty())
+                showObject(oid);
         }
         updateActions();
         updateMindMapActions();
@@ -336,6 +350,28 @@ MainWindow::MainWindow()
             [this](const QPoint &pos) { showItemContextMenu(pos, int(lookmenu::Part::Binder)); });
     connect(m_binder, &BinderPanel::backgroundMenuRequested, this, &MainWindow::showBinderBackgroundMenu);
     connect(m_binder, &BinderPanel::newDocumentRequested, this, [this] { a[QStringLiteral("newText")]->trigger(); });
+    connect(m_binder, &BinderPanel::openRequested, this, [this] {
+        if (!m_project)
+            return;
+        EditorPane *target = binderTarget();
+        if (!target)
+            target = m_active;
+        const QList<BinderItem *> items = m_binder->selectedItems();
+        if (!target || items.isEmpty())
+            return;
+        // 0.94.0 (item 67): a document that stands for an Object opens the Object
+        if (items.size() == 1) {
+            const QString oid = sheetObjectOf(items.first());
+            if (!oid.isEmpty()) {
+                if (ObjectsWindow *ow = ObjectsWindow::open(m_project.get(), oid, this))
+                    ow->activateWindow();
+                return;
+            }
+        }
+        if (items != target->items())
+            loadInPane(target, items);
+        target->focusEditor();
+    });
     connect(m_binder, &BinderPanel::newFolderRequested, this, [this] { a[QStringLiteral("newFolder")]->trigger(); });
     connect(m_binder, &BinderPanel::trashRequested, this, [this] { a[QStringLiteral("trash")]->trigger(); });
     connect(m_binder, &BinderPanel::quickReferenceRequested, this, [this] {
@@ -539,8 +575,16 @@ MainWindow::MainWindow()
         m_barDock = new BarDock(this, gripBars, {rowOne, rowTwo});
         m_barDock->load();
     }
-    if (!s.contains(QStringLiteral("window/geometry")))
+    if (!s.contains(QStringLiteral("window/geometry"))) {
         resize(1300, 820);
+        // 0.94.0 (item 89): the first time, on a screen narrower than 1600 px, the window opens maximized
+        if (QScreen *sc = QGuiApplication::primaryScreen(); sc && sc->availableGeometry().width() < 1600)
+            setWindowState(windowState() | Qt::WindowMaximized);
+    }
+    m_windowPlaceTimer = new QTimer(this);
+    m_windowPlaceTimer->setSingleShot(true);
+    m_windowPlaceTimer->setInterval(800);
+    connect(m_windowPlaceTimer, &QTimer::timeout, this, &MainWindow::saveWindowPlace);
     loadPaneSettings(s); // 0.93.0: the places and sizes of both shapes; arranged for the window's shape
     a[QStringLiteral("showInspector")]->setChecked(s.value(QStringLiteral("window/inspector"), true).toBool());
     a[QStringLiteral("showBinder")]->setChecked(s.value(QStringLiteral("window/binder"), true).toBool());
@@ -626,7 +670,21 @@ void MainWindow::clearStatusNote()
         m_panes[0]->footerStatus()->clearNote();
 }
 
+MessageLine *MainWindow::messageLine() const { return m_binder ? m_binder->messageLine() : nullptr; }
+
+void MainWindow::showMessage(const QString &text, int ms, const QString &linkText, std::function<void()> action, const QString &tip)
+{
+    if (m_binder && m_binder->messageLine())
+        m_binder->messageLine()->post(text, ms, linkText, std::move(action), tip);
+}
+
 QString MainWindow::statusNote() const { return m_panes[0] ? m_panes[0]->footerStatus()->noteText() : QString(); }
+
+void MainWindow::showStatusNote(const QString &text, int ms, const QString &actionText, std::function<void()> action)
+{
+    if (m_panes[0])
+        m_panes[0]->footerStatus()->showNote(text, ms, actionText, std::move(action));
+}
 
 void MainWindow::updateSaveState()
 {
@@ -876,6 +934,7 @@ void MainWindow::connectPane(EditorPane *p)
         updateFormatBar();
         refreshInspector();
     });
+    connect(p, &EditorPane::targetsRequested, this, [this] { a[QStringLiteral("targets")]->trigger(); });
     connect(p, &EditorPane::splitButtonClicked, this, [this](EditorPane *, bool alt) {
         if (isSplit())
             setSplit(m_editorSplit->orientation(), false);
@@ -1050,7 +1109,7 @@ void MainWindow::createActions()
     connect(act(QStringLiteral("importWebPage"), tr("Import &Web Page…"), QStringLiteral("text-html")),
             &QAction::triggered, this, withProject([this] { importWebPage(); }));
     connect(act(QStringLiteral("importSplit"), tr("Import and &Split…")), &QAction::triggered, this, withProject([this] {
-        ImportSplitDialog dlg(this);
+        ImportSplitDialog dlg(m_project.get(), this);
         if (dlg.exec() != QDialog::Accepted || dlg.file().isEmpty())
             return;
         int row = -1;
@@ -1059,8 +1118,12 @@ void MainWindow::createActions()
             parent = m_project->draft();
         QString err;
         QStringList warnings;
-        const auto items = importer::importAndSplit(m_project.get(), dlg.file(), dlg.separator(), dlg.firstLineIsTitle(),
-                                                    parent, row, &err, &warnings);
+        importer::HeadingSplitOptions ho;
+        ho.heading2Folder = dlg.heading2Folder();
+        ho.firstLineIsTitle = dlg.firstLineIsTitle();
+        const auto items = dlg.atHeadings() ? importer::importAtHeadings(m_project.get(), dlg.file(), ho, parent, row, &err, &warnings)
+                                            : importer::importAndSplit(m_project.get(), dlg.file(), dlg.separator(),
+                                                                       dlg.firstLineIsTitle(), parent, row, &err, &warnings);
         if (items.isEmpty()) {
             QMessageBox::warning(this, tr("Import and Split"), err.isEmpty() ? tr("Nothing was imported.") : err);
         } else {
@@ -1127,10 +1190,21 @@ void MainWindow::createActions()
                 lineFn(le);
         };
     };
-    connect(act(QStringLiteral("undo"), tr("&Undo"), QStringLiteral("edit-undo"), QKeySequence::Undo), &QAction::triggered,
-            this, route([](QTextEdit *e) { e->undo(); }, [](QPlainTextEdit *e) { e->undo(); }, [](QLineEdit *e) { e->undo(); }));
-    connect(act(QStringLiteral("redo"), tr("&Redo"), QStringLiteral("edit-redo"), QKeySequence::Redo), &QAction::triggered,
-            this, route([](QTextEdit *e) { e->redo(); }, [](QPlainTextEdit *e) { e->redo(); }, [](QLineEdit *e) { e->redo(); }));
+    // 0.94.0: with the keyboard in the binder, Undo and Redo work on the binder's own steps (Group, Sheet to Object)
+    connect(act(QStringLiteral("undo"), tr("&Undo"), QStringLiteral("edit-undo"), QKeySequence::Undo), &QAction::triggered, this,
+            [this, text = route([](QTextEdit *e) { e->undo(); }, [](QPlainTextEdit *e) { e->undo(); }, [](QLineEdit *e) { e->undo(); })] {
+                if (binderHasKeyboard())
+                    binderUndo();
+                else
+                    text();
+            });
+    connect(act(QStringLiteral("redo"), tr("&Redo"), QStringLiteral("edit-redo"), QKeySequence::Redo), &QAction::triggered, this,
+            [this, text = route([](QTextEdit *e) { e->redo(); }, [](QPlainTextEdit *e) { e->redo(); }, [](QLineEdit *e) { e->redo(); })] {
+                if (binderHasKeyboard())
+                    binderRedo();
+                else
+                    text();
+            });
     connect(act(QStringLiteral("cut"), tr("Cu&t"), QStringLiteral("edit-cut"), QKeySequence::Cut), &QAction::triggered, this,
             route([](QTextEdit *e) { e->cut(); }, [](QPlainTextEdit *e) { e->cut(); }, [](QLineEdit *e) { e->cut(); }));
     connect(act(QStringLiteral("copy"), tr("&Copy"), QStringLiteral("edit-copy"), QKeySequence::Copy), &QAction::triggered,
@@ -1294,6 +1368,16 @@ void MainWindow::createActions()
     sb->setCheckable(true);
     sb->setChecked(true);
     connect(sb, &QAction::toggled, m_binder, &QWidget::setVisible);
+    // 0.94.0: the keys of the binder (Return makes a new document, Space opens a Quick Reference window)
+    QAction *sk = act(QStringLiteral("binderScrivenerKeys"), tr("Quick-Add &Keys in the Binder"));
+    sk->setCheckable(true);
+    sk->setChecked(AppSettings::instance().binderScrivenerKeys); // (the setting's key keeps its old name)
+    sk->setToolTip(tr("Return adds a new document below; Space opens a Quick Reference window"));
+    sk->setStatusTip(tr("Return adds a new document below; Space opens a Quick Reference window"));
+    connect(sk, &QAction::triggered, this, [](bool on) {
+        AppSettings::instance().binderScrivenerKeys = on;
+        AppSettings::instance().save();
+    });
     QAction *si = act(QStringLiteral("showInspector"), tr("Show &Inspector"), QStringLiteral("dialog-information"),
                       QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_I));
     si->setCheckable(true);
@@ -1519,7 +1603,7 @@ void MainWindow::createActions()
                 }
                 m_project->model()->moveToTrash(items);
                 for (EditorPane *p : m_panes)
-                    p->refresh();
+                    p->refresh(items);
             }));
     connect(act(QStringLiteral("split"), tr("&Split at Selection"), QString(), QKeySequence(Qt::CTRL | Qt::Key_K)),
             &QAction::triggered, this, [this] { splitDocument(false); });
@@ -1535,6 +1619,15 @@ void MainWindow::createActions()
                         m_project->model()->setItemType(it, ItemType::Folder);
                 updateActions();
             }));
+    // 0.94.0 (item 76): the selected items into a new folder at the place of the first one (one undo step)
+    connect(act(QStringLiteral("group"), tr("&Group"), QStringLiteral("folder-new"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_J)),
+            &QAction::triggered, this, withProject([this] { groupItems(actionItems()); }));
+    a[QStringLiteral("group")]->setToolTip(tr("Put the selected documents into a new folder, at the place of the first one"));
+    // 0.94.0 (item 67): a sheet document (a character or place sheet) becomes an Object; the binder item then shows it
+    connect(act(QStringLiteral("sheetToObject"), tr("&Sheet to Object"), QStringLiteral("user-identity")), &QAction::triggered, this,
+            withProject([this] { sheetsToObjects(actionItems()); }));
+    a[QStringLiteral("sheetToObject")]->setToolTip(
+        tr("Make an Object (Window > Objects) of the selected sheet documents: the title is the name, the text goes into Other, a picture becomes the picture. The binder item then shows the Object; the document keeps its text."));
     connect(act(QStringLiteral("toText"), tr("Convert to F&ile"), QStringLiteral("text-x-generic")),
             &QAction::triggered, this, withProject([this] {
                 for (BinderItem *it : actionItems())
@@ -1866,7 +1959,13 @@ void MainWindow::createActions()
 
     // ---- help
     connect(act(QStringLiteral("manual"), tr("&User Manual"), QStringLiteral("help-contents"), QKeySequence::HelpContents),
-            &QAction::triggered, this, [this] { showManual(this); });
+            &QAction::triggered, this, [this] {
+                // (from a dialog: the manual's window is a child of that dialog, so that its modality does not block it)
+                QWidget *aw = QApplication::activeWindow();
+                QWidget *parent = aw && aw != this && aw->window() != this && !qobject_cast<ManualWindow *>(aw) ? aw : this;
+                showManual(parent, manualSection());
+            });
+    manualhelp::installF1(a[QStringLiteral("manual")], this); // (F1 in a dialog: the section of that dialog)
     connect(act(QStringLiteral("quickStart"), tr("&Quick Start Guide")), &QAction::triggered, this,
             [this] { showQuickStartGuide(this); });
     a[QStringLiteral("quickStart")]->setToolTip(tr("Where the important settings are, and what %1 can do")
@@ -1886,7 +1985,19 @@ void MainWindow::createActions()
         QDesktopServices::openUrl(QUrl::fromLocalFile(d));
     });
     QAction *integrate = act(QStringLiteral("integrate"), tr("Add to &Application Menu"));
-    connect(integrate, &QAction::triggered, this, [this] { integrateDesktop(false); });
+    connect(integrate, &QAction::triggered, this, [this] {
+        if (appmenu::hasEntry()) {
+            removeFromApplicationMenu();
+        } else if (appmenu::canMove()) {
+            askApplicationMenu(tr("Add to Application Menu"),
+                               tr("Add %1 to the application menu, so that you can start it like any other program and open "
+                                  "projects by double-clicking them?")
+                                   .arg(QLatin1String(QB_APP_NAME)),
+                               false);
+        } else {
+            addToApplicationMenu(false, false);
+        }
+    });
 #ifdef Q_OS_WIN
     // Linux desktop files mean nothing on Windows; the installer registers the program there (port, W4)
     integrate->setVisible(false);
@@ -2044,13 +2155,22 @@ void MainWindow::createActions()
         connect(ac, &QAction::triggered, this, [this, mode] { setBinderAffects(mode); });
     }
     {
-        const QList<QPair<Inspector::Tab, QString>> tabs = {{Inspector::Notes, tr("&Notes")},
-                                                           {Inspector::Bookmarks, tr("&Bookmarks")},
-                                                           {Inspector::Metadata, tr("&Metadata")},
-                                                           {Inspector::Snapshots, tr("&Snapshots")},
-                                                           {Inspector::Comments, tr("&Comments and Footnotes")},
-                                                           {Inspector::MindMap, tr("Mind &Map")},
-                                                           {Inspector::Objects, tr("&Objects")}};
+        // 0.94.0: each tab under the name of its tooltip (the mnemonic is the letter given here)
+        auto named = [](Inspector::Tab tab, QChar letter) {
+            QString name = Inspector::tabToolTip(tab);
+            int i = int(name.indexOf(letter, 0, Qt::CaseInsensitive));
+            if (i < 0)
+                i = 0; // (the translation has no such letter: its first one; a clash in the menu is repaired when it opens)
+            name.insert(i, QLatin1Char('&'));
+            return name;
+        };
+        const QList<QPair<Inspector::Tab, QString>> tabs = {{Inspector::Notes, named(Inspector::Notes, QLatin1Char('s'))},
+                                                           {Inspector::Bookmarks, named(Inspector::Bookmarks, QLatin1Char('b'))},
+                                                           {Inspector::Metadata, named(Inspector::Metadata, QLatin1Char('e'))},
+                                                           {Inspector::Snapshots, named(Inspector::Snapshots, QLatin1Char('h'))},
+                                                           {Inspector::Comments, named(Inspector::Comments, QLatin1Char('c'))},
+                                                           {Inspector::MindMap, named(Inspector::MindMap, QLatin1Char('m'))},
+                                                           {Inspector::Objects, named(Inspector::Objects, QLatin1Char('o'))}};
         for (const auto &t : tabs) {
             const Inspector::Tab tab = t.first;
             connect(act(QStringLiteral("inspect%1").arg(int(tab)), t.second), &QAction::triggered, this, [this, tab] {
@@ -2288,7 +2408,7 @@ void MainWindow::updateActions()
                           "compile", "closeProject", "newText", "newFolder", "projectSettings", "settingsExport", "settingsImport", "targets", "keywords",
                           "statistics", "history", "emptyTrash", "deleteSnapshots", "showProjectFolder", "projectSearch", "projectReplace", "findFormat",
                           "findFormatNext", "findFormatPrev", "trash", "duplicate",
-                          "rename", "openOther", "quickRef", "split", "splitTitle", "merge", "toFolder", "toText",
+                          "rename", "openOther", "quickRef", "split", "splitTitle", "merge", "toFolder", "toText", "group", "sheetToObject",
                           "includeCompile", "snapshot", "snapshotTitle", "bookmark", "reveal", "lock", "composition",
                           "viewText", "viewCork", "viewOutline", "moveUp", "moveDown", "moveLeft", "moveRight", "docLink",
                           "back", "forward", "prevDoc", "nextDoc", "printSettings", "openInEditor", "closeQuickRefs",
@@ -2329,6 +2449,18 @@ void MainWindow::updateActions()
         anyText = anyText || it->type == ItemType::Text;
         anyFolder = anyFolder || it->type == ItemType::Folder;
         allInclude = allInclude && it->includeInCompile;
+    }
+    {
+        bool canGroup = false, canSheet = false;
+        for (BinderItem *it : items) {
+            if (it->isRootFolder() || m_project->isInTrash(it))
+                continue;
+            canGroup = true;
+            if (it->type == ItemType::Text && sheetObjectOf(it).isEmpty())
+                canSheet = true;
+        }
+        a[QStringLiteral("group")]->setEnabled(canGroup);
+        a[QStringLiteral("sheetToObject")]->setEnabled(canSheet && !m_project->objects()->schema().categories.isEmpty());
     }
     a[QStringLiteral("toFolder")]->setEnabled(anyText);
     a[QStringLiteral("toText")]->setEnabled(anyFolder);
@@ -2736,27 +2868,39 @@ void MainWindow::updateWindowTitle()
 
 void MainWindow::updateTargetsDisplay()
 {
+    if (!m_quickSearch)
+        return;
+    auto footers = [this](int session, int sessionTarget, bool sessionChars, int draft, int draftTarget, bool draftChars) {
+        for (EditorPane *pane : m_panes)
+            if (pane)
+                pane->setWritingProgress(session, sessionTarget, sessionChars, draft, draftTarget, draftChars);
+    };
     if (!m_project) {
         m_quickSearch->draft = m_quickSearch->session = -1;
         m_quickSearch->update();
+        footers(0, 0, false, 0, 0, false);
         return;
     }
     const Targets &t = m_project->targets;
     const int draft = t.draftChars ? m_project->draftCharCount() : m_project->draftWordCount();
     const int session = t.sessionChars ? m_project->sessionChars() : m_project->sessionWords();
     const int st = m_project->sessionTargetToday();
-    m_quickSearch->draft = t.draftTarget > 0 ? double(draft) / t.draftTarget : -1;
-    m_quickSearch->session = st > 0 ? double(session) / st : -1;
+    // 0.94.0 (item 74): the two thin lines under the search field are an option (on at first)
+    const bool lines = AppSettings::instance().progressUnderSearch;
+    m_quickSearch->draft = lines && t.draftTarget > 0 ? double(draft) / t.draftTarget : -1;
+    m_quickSearch->session = lines && st > 0 ? double(session) / st : -1;
     QLocale loc;
     m_quickSearch->setToolTip(tr("Draft: %1 words · This session: %2 words%3")
                                   .arg(loc.toString(m_project->draftWordCount()), loc.toString(m_project->sessionWords()),
                                        t.draftTarget > 0 ? tr(" · Target: %1").arg(loc.toString(t.draftTarget)) : QString()));
     m_quickSearch->update();
+    footers(session, st, t.sessionChars, draft, t.draftTarget, t.draftChars);
 }
 
 void MainWindow::applySettings()
 {
     theme::apply();
+    updateTargetsDisplay();
     const AppSettings &s = AppSettings::instance();
     SpellChecker::setEnabled(s.spellCheck);
     SpellChecker::setDisplay({s.spellIgnoreNumbers,
@@ -2969,7 +3113,7 @@ bool MainWindow::openProject(const QString &path)
         QMessageBox box(QMessageBox::Warning, tr("Open Project"),
                         tr("This project was saved by a newer version of %1. It uses things that version %2 does not know "
                            "(it needs version %3 or later).\n\nIf you work on it here, parts of it can be lost when it is "
-                           "saved. Better switch to the newer version first (Help > Add-on Manager), or work on a copy of "
+                           "saved. Better switch to the newer version first (Help > Add-ons and Updates > Add-on Manager), or work on a copy of "
                            "the project.")
                             .arg(QStringLiteral(QB_APP_NAME), QStringLiteral(QB_APP_VERSION), needs),
                         QMessageBox::NoButton, this);
@@ -3252,6 +3396,7 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
     connect(proj->model(), &QAbstractItemModel::rowsRemoved, this, structural);
     connect(proj->model(), &QAbstractItemModel::rowsInserted, this, structural);
 
+    clearBinderSteps();
     AppSettings::instance().addRecent(proj->displayFile());
     AppSettings::instance().lastProjectDir = QFileInfo(proj->displayFolder()).absolutePath();
     AppSettings::instance().save();
@@ -3434,6 +3579,7 @@ bool MainWindow::closeProject()
     palette::setProject(nullptr);
     look::activate(nullptr); // the areas show the look for new projects again
     settingslayer::activate(QString()); // the program's own settings again (0.62)
+    clearBinderSteps();
     m_project.reset();
     crash::setSessionProject(QString());
     crash::note(QStringLiteral("project closed"));
@@ -3694,6 +3840,24 @@ void MainWindow::closeEvent(QCloseEvent *e)
     e->accept();
 }
 
+// 0.94.0 (item 89): the window's place, size and state are saved when they change, not only at the end (a crash
+// lost them)
+void MainWindow::windowPlaceChanged()
+{
+    if (m_windowPlaceTimer && isVisible())
+        m_windowPlaceTimer->start();
+}
+
+void MainWindow::saveWindowPlace()
+{
+    if (!isVisible() || isMinimized() || isFullScreen())
+        return;
+    QSettings s;
+    s.setValue(QStringLiteral("window/geometry"), saveGeometry());
+    s.setValue(QStringLiteral("window/state"), saveState());
+    s.sync();
+}
+
 void MainWindow::saveForTermination()
 {
     // SIGTERM, SIGINT or SIGHUP (log out, shutdown, a kill command): everything saved
@@ -3794,7 +3958,15 @@ void MainWindow::changeEvent(QEvent *e)
         if (!ok && toOtherProgram)
             emit m_project->saveFailed(err);
     }
+    if (e->type() == QEvent::WindowStateChange)
+        windowPlaceChanged();
     QMainWindow::changeEvent(e);
+}
+
+void MainWindow::moveEvent(QMoveEvent *e)
+{
+    QMainWindow::moveEvent(e);
+    windowPlaceChanged();
 }
 
 // ------------------------------------------------------------------ item operations
@@ -4349,10 +4521,12 @@ void MainWindow::fillItemMenu(QMenu *menu)
     menu->addSeparator();
     menu->addAction(a[QStringLiteral("rename")]);
     menu->addAction(a[QStringLiteral("duplicate")]);
+    menu->addAction(a[QStringLiteral("group")]);
     menu->addAction(a[QStringLiteral("trash")]);
     menu->addSeparator();
     menu->addAction(a[QStringLiteral("toFolder")]);
     menu->addAction(a[QStringLiteral("toText")]);
+    menu->addAction(a[QStringLiteral("sheetToObject")]);
     menu->addMenu(m_labelMenu);
     menu->addMenu(m_statusMenu);
     menu->addAction(a[QStringLiteral("includeCompile")]);
@@ -4568,9 +4742,13 @@ void MainWindow::backupNow(bool chooseLocation)
         QMessageBox::warning(this, tr("Back Up"), tr("Backup saved:\n%1\n\n%2").arg(out, err) + left);
     else if (ok && !left.isEmpty())
         QMessageBox::warning(this, tr("Back Up"), tr("Backup saved:\n%1").arg(out) + left);
-    else if (ok)
-        QMessageBox::information(this, tr("Back Up"), tr("Backup saved:\n%1").arg(out));
-    else
+    else if (ok) {
+        // 0.94.0 (item 85): no box that waits for OK; the line under the binder says so, the link shows the folder and
+        // the tooltip names the file
+        const QString folder = QFileInfo(out).absolutePath();
+        showMessage(tr("Backup saved."), 10000, tr("Show Folder"), [folder] { QDesktopServices::openUrl(QUrl::fromLocalFile(folder)); },
+                    QDir::toNativeSeparators(out));
+    } else
         QMessageBox::warning(this, tr("Back Up"), err);
 }
 
@@ -5023,11 +5201,13 @@ void MainWindow::showStartNotice()
         QMessageBox::warning(this, tr("Program Update"), notice);
 }
 
+// 0.94.0: the question about the application menu is part of the first start's page (FirstStartDialog); this is the
+// one for a program that was started before and has not answered it yet
 void MainWindow::offerDesktopIntegration()
 {
-    const QString appimage = qEnvironmentVariable("APPIMAGE");
-    if (appimage.isEmpty())
+    if (!appmenu::runsFromAppImage())
         return;
+    const QString appimage = appmenu::appImagePath();
     QSettings s;
     const QString done = s.value(QStringLiteral("app/integrated")).toString();
     if (done == appimage) {
@@ -5036,92 +5216,105 @@ void MainWindow::offerDesktopIntegration()
     }
     if (s.value(QStringLiteral("app/integrationDeclined")).toString() == appimage)
         return;
-    const auto r = QMessageBox::question(
-        this, tr("Application Menu"),
-        tr("Add %1 to the application menu so you can start it like any other program and open "
-           "projects by double-clicking them?\n\nYou can do this later with Help > Add to Application Menu.")
-            .arg(QLatin1String(QB_APP_NAME)),
-        QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-    if (r == QMessageBox::Yes)
-        integrateDesktop(false);
-    else
-        s.setValue(QStringLiteral("app/integrationDeclined"), appimage);
+    askApplicationMenu(tr("Application Menu"),
+                       tr("Add %1 to the application menu so you can start it like any other program and open "
+                          "projects by double-clicking them?\n\nYou can do this later with Help > Add to Application Menu.")
+                           .arg(QLatin1String(QB_APP_NAME)),
+                       true);
 }
 
-void MainWindow::integrateDesktop(bool quiet)
+// The question with the check box for the move to ~/Applications; yes: the entry is made.
+void MainWindow::askApplicationMenu(const QString &title, const QString &text, bool canDecline)
 {
-    const QString appimage = qEnvironmentVariable("APPIMAGE");
-    const QString exec = appimage.isEmpty() ? QCoreApplication::applicationFilePath() : appimage;
-    const QString data = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-    QDir().mkpath(data + QLatin1String("/applications"));
-    QDir().mkpath(data + QLatin1String("/icons/hicolor/scalable/apps"));
-    QDir().mkpath(data + QLatin1String("/mime/packages"));
-    const QString icon = data + QLatin1String("/icons/hicolor/scalable/apps/" QB_APP_ID ".svg");
-    QFile::remove(icon);
-    // 0.93.0: a failed copy is told below (the menu entry works without the icon)
-    const bool iconCopied = QFile::copy(QStringLiteral(":/app/quillbinder.svg"), icon);
-    QFile::setPermissions(icon, QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ReadOther | QFileDevice::ReadGroup);
-    // writing tools that run on their own (the scratch pad) become actions of the
-    // menu entry; the desktop can give them a shortcut that works in every program
-    QStringList actionIds;
-    QString actionSections;
+    QMessageBox box(QMessageBox::Question, title, text, QMessageBox::NoButton, this);
+    QCheckBox *move = nullptr;
+    if (appmenu::canMove()) {
+        move = new QCheckBox(tr("Move the AppImage to %1 (a moved file cannot be started from the menu)")
+                                 .arg(QDir::toNativeSeparators(appmenu::applicationsFolder())),
+                             &box);
+        move->setObjectName(QStringLiteral("moveAppImage"));
+        move->setChecked(true);
+        box.setCheckBox(move);
+    }
+    QPushButton *yes = box.addButton(tr("Add to Application Menu"), QMessageBox::AcceptRole);
+    box.addButton(canDecline ? tr("Not Now") : tr("Cancel"), QMessageBox::RejectRole);
+    box.setDefaultButton(yes);
+    box.exec();
+    if (box.clickedButton() == yes)
+        addToApplicationMenu(move && move->isChecked(), false);
+    else if (canDecline)
+        QSettings().setValue(QStringLiteral("app/integrationDeclined"), appmenu::appImagePath());
+}
+
+void MainWindow::applyFirstStartMenuChoice(bool add, bool moveAppImage)
+{
+    if (!appmenu::runsFromAppImage())
+        return;
+    if (add)
+        addToApplicationMenu(moveAppImage, true); // no box when it worked
+    else
+        QSettings().setValue(QStringLiteral("app/integrationDeclined"), appmenu::appImagePath());
+}
+
+void MainWindow::integrateDesktop(bool quiet) { addToApplicationMenu(false, quiet); }
+
+// Makes the entry (and moves the AppImage first when asked). A failure gets a message; success only a note in the
+// footer, none when quiet.
+void MainWindow::addToApplicationMenu(bool moveAppImage, bool quiet)
+{
+    QList<appmenu::ToolAction> tools;
+    // writing tools that run on their own (the scratch pad) become actions of the menu entry; the desktop can
+    // give them a shortcut that works in every program
     for (const tools::Command &c : toolhost::host().allCommands()) {
         if (!c.standalone)
             continue;
-        QString id = c.key;
-        id.replace(QLatin1Char('.'), QLatin1Char('-'));
-        QString name = c.text;
-        name.remove(QLatin1Char('&'));
-        if (name.endsWith(QChar(0x2026)))
-            name.chop(1);
-        actionIds << id;
-        actionSections += QStringLiteral("\n[Desktop Action %1]\nName=%2\nExec=\"%3\" --tool %4\n").arg(id, name, exec, c.key);
+        appmenu::ToolAction t;
+        t.id = c.key;
+        t.id.replace(QLatin1Char('.'), QLatin1Char('-'));
+        t.name = c.text;
+        t.name.remove(QLatin1Char('&'));
+        if (t.name.endsWith(QChar(0x2026)))
+            t.name.chop(1);
+        t.key = c.key;
+        tools << t;
     }
-    QFile desktop(data + QLatin1String("/applications/" QB_APP_ID ".desktop"));
-    if (desktop.open(QIODevice::WriteOnly)) {
-        desktop.write(QStringLiteral("[Desktop Entry]\nType=Application\nName=%1\nGenericName=Writing Studio\n"
-                                     "Comment=Write, organize and compile long texts\nExec=\"%2\" %f\nIcon=%3\n"
-                                     "Categories=Office;WordProcessor;\nMimeType=application/x-%3-project;application/x-%3-package;\nTerminal=false\n"
-                                     "StartupWMClass=%3\n")
-                          .arg(QLatin1String(QB_APP_NAME), exec, QLatin1String(QB_APP_ID))
-                          .toUtf8());
-        if (!actionIds.isEmpty())
-            desktop.write((QStringLiteral("Actions=") + actionIds.join(QLatin1Char(';')) + QStringLiteral(";\n") + actionSections).toUtf8());
-        desktop.close();
+    const appmenu::Result r = appmenu::add(moveAppImage, tools);
+    updateApplicationMenuAction();
+    if (!r.ok) {
+        QMessageBox::warning(this, tr("Application Menu"), tr("The menu entry could not be made.\n\n%1").arg(r.error));
+        return;
     }
-    QFile mime(data + QLatin1String("/mime/packages/" QB_APP_ID ".xml"));
-    if (mime.open(QIODevice::WriteOnly)) {
-        mime.write(QStringLiteral("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                                  "<mime-info xmlns=\"http://www.freedesktop.org/standards/shared-mime-info\">\n"
-                                  "  <mime-type type=\"application/x-%1-project\">\n"
-                                  "    <comment>%2 project</comment>\n"
-                                  "    <icon name=\"%1\"/>\n"
-                                  "    <glob pattern=\"*%3\"/>\n"
-                                  "  </mime-type>\n"
-                                  "  <mime-type type=\"application/x-%1-package\">\n"
-                                  "    <comment>%2 update or add-on</comment>\n"
-                                  "    <icon name=\"%1\"/>\n"
-                                  "    <glob pattern=\"*.qbpkg\"/>\n"
-                                  "  </mime-type>\n</mime-info>\n")
-                       .arg(QLatin1String(QB_APP_ID), QLatin1String(QB_APP_NAME), QLatin1String(QB_PROJECT_FILE_SUFFIX))
-                       .toUtf8());
-        mime.close();
+    QStringList problems;
+    if (!r.moveError.isEmpty())
+        problems << tr("The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the "
+                       "file yourself, choose Help > Remove from Application Menu and then Add to Application Menu again.")
+                        .arg(QDir::toNativeSeparators(appmenu::applicationsFolder()), r.moveError);
+    if (!r.iconCopied)
+        problems << tr("The program's icon could not be copied, so the menu entry shows no icon.");
+    if (!problems.isEmpty())
+        QMessageBox::warning(this, tr("Application Menu"), problems.join(QStringLiteral("\n\n")));
+    else if (!quiet)
+        showStatusNote(tr("%1 is in the application menu now (%2).").arg(QLatin1String(QB_APP_NAME), QDir::toNativeSeparators(r.exec)), 8000);
+}
+
+void MainWindow::removeFromApplicationMenu()
+{
+    QString err;
+    if (!appmenu::remove(&err)) {
+        QMessageBox::warning(this, tr("Application Menu"), tr("The menu entry could not be removed.\n\n%1").arg(err));
+        return;
     }
-    QProcess::startDetached(QStringLiteral("update-mime-database"), {data + QLatin1String("/mime")});
-    QProcess::startDetached(QStringLiteral("update-desktop-database"), {data + QLatin1String("/applications")});
-    QProcess::startDetached(QStringLiteral("kbuildsycoca5"), {});
-    QProcess::startDetached(QStringLiteral("kbuildsycoca6"), {});
-    QSettings().setValue(QStringLiteral("app/integrated"), exec);
-    if (!quiet)
-        QMessageBox::information(this, tr("Application Menu"),
-                                 tr("%1 now appears in the application menu, and double-clicking a project file (*%2) "
-                                    "opens it.\n\nIf you move the AppImage, choose this menu entry again.")
-                                         .arg(QLatin1String(QB_APP_NAME), QLatin1String(QB_PROJECT_FILE_SUFFIX))
-                                     + (iconCopied ? QString()
-                                                   : QStringLiteral("\n\n")
-                                                         + tr("The program's icon could not be copied to %1, so the menu entry "
-                                                              "shows no icon.")
-                                                               .arg(QDir::toNativeSeparators(icon))));
+    updateApplicationMenuAction();
+    showStatusNote(tr("%1 is no longer in the application menu.").arg(QLatin1String(QB_APP_NAME)), 8000);
+}
+
+// Help > Add to Application Menu / Remove from Application Menu follows the state of the entry
+void MainWindow::updateApplicationMenuAction()
+{
+    QAction *ac = a.value(QStringLiteral("integrate"));
+    if (!ac)
+        return;
+    ac->setText(appmenu::hasEntry() ? tr("Remove from &Application Menu") : tr("Add to &Application Menu"));
 }
 
 // ------------------------------------------------------------------ options carried out here (0.21)

@@ -90,6 +90,13 @@ void settingsChecks()
               QStringLiteral("Options: \"Settings for\" shows This project when chosen"), title);
         if (auto *qs = combo(&dlg, "optQuoteStyle"))
             qs->setCurrentIndex(qs->findData(QStringLiteral("de")));
+        // 0.94.0: push the program's settings file out of Qt's cache of settings files, as after a restart
+        {
+            QTemporaryDir scratch;
+            QSettings big(scratch.path() + QStringLiteral("/big.ini"), QSettings::IniFormat);
+            for (int i = 0; i < 340; ++i)
+                big.setValue(QStringLiteral("k/%1").arg(i), i);
+        }
         dlg.apply();
         countAfter = OptionsDialog::projectValueCount();
         shot(&dlg, QStringLiteral("v062-options-this-project"));

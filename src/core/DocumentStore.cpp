@@ -55,7 +55,7 @@ DocumentStore::DocumentStore(Project *project) : QObject(project), m_project(pro
         const QSet<QString> ids = m_countPending;
         m_countPending.clear();
         for (const QString &id : ids)
-            recount(id);
+            recount(id, true);
     });
     m_unloadTimer.setSingleShot(true);
     m_unloadTimer.setInterval(1500);
@@ -895,7 +895,7 @@ bool DocumentStore::saveDirty(QString *error)
         const QSet<QString> ids = m_countPending;
         m_countPending.clear();
         for (const QString &id : ids)
-            recount(id);
+            recount(id, true);
     }
     return ok;
 }
@@ -1519,7 +1519,18 @@ QStringList DocumentStore::textsNotArrived() const
     return out;
 }
 
-void DocumentStore::recount(const QString &id)
+void DocumentStore::flushCounts()
+{
+    if (m_countPending.isEmpty())
+        return;
+    m_countTimer.stop();
+    const QSet<QString> ids = m_countPending;
+    m_countPending.clear();
+    for (const QString &id : ids)
+        recount(id);
+}
+
+void DocumentStore::recount(const QString &id, bool typed)
 {
     BinderItem *it = m_project->item(id);
     if (!it || m_missing.contains(id))
@@ -1527,6 +1538,8 @@ void DocumentStore::recount(const QString &id)
     const text::Counts c = text::count(plainText(id));
     const bool changed = c.words != it->wordCount || c.chars != it->charCount;
     const bool hadText = it->charCount > 0;
+    if (typed && changed && c.words - it->wordCount > 200 && m_project->m_sessionExcludeDepth == 0)
+        m_project->excludeFromSession(it, c.words - it->wordCount, c.chars - it->charCount);
     it->wordCount = c.words;
     it->charCount = c.chars;
     if (changed) {

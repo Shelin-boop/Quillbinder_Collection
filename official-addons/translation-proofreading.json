@@ -2,13 +2,13 @@
   "format": 1,
   "id": "translation-proofreading",
   "name": "Translation and Proofreading",
-  "version": "1.3",
+  "version": "1.4",
   "repository": "Shelin-boop/Quillbinder_Collection",
-  "commit": "f090213c445689b0142534281eaba073268a8732",
+  "commit": "532bb3cb80c5230aa78f089e38b2465f177e1792",
   "folder": "addons/translation-proofreading/source",
   "author": "The Quillbinder project",
   "license": "Apache License 2.0",
-  "reviewed": "2026-11-24",
+  "reviewed": "2026-11-25",
   "summary": "Checks English text for spelling and grammar and translates German text into English and English into German, on your own computer; once a model is downloaded, it works without any connection.",
   "nonCommercialData": [
     {

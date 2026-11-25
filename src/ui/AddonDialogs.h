@@ -22,8 +22,10 @@ bool relaunchApplication();
 
 // Readable description of a package for the install window (HTML).
 QString describePackage(const addons::PackageInfo &info);
+// 0.94.0: the technical lines of the package's add-ons (collapsed under "Details" in the install window), empty when none
+QString describeDetails(const addons::PackageInfo &info);
 
-// Help > Add-on Manager
+// Help > Add-ons and Updates > Add-on Manager
 class AddonManagerDialog : public QDialog
 {
     Q_OBJECT

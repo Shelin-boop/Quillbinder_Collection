@@ -1,5 +1,7 @@
 #include "Logic.h"
 
+#include "Dictionary.h"
+
 #include <QFile>
 #include <QRegularExpression>
 #include <QTextStream>
@@ -850,7 +852,14 @@ QStringList baseFormsIn(const QString &word, const std::function<bool(const QStr
         {QStringLiteral("ied"), QStringLiteral("y")}, {QStringLiteral("ier"), QStringLiteral("y")},
         {QStringLiteral("iest"), QStringLiteral("y")}, {QStringLiteral("ly"), QString()},
     };
+    // 1.4: the rules for adjectives (-er, -est ...) read a noun such as "number" as "numb": they are skipped for a word
+    // that is an entry itself (the exceptions list above still leads "better" to "good")
+    const bool entry = has(w) || isWordNetEntry(w);
+    static const QStringList adjectiveRules = {QStringLiteral("er"), QStringLiteral("est"), QStringLiteral("ier"),
+                                               QStringLiteral("iest")};
     for (const auto &r : rules) {
+        if (entry && adjectiveRules.contains(r.first))
+            continue;
         if (w.size() > r.first.size() + 1 && w.endsWith(r.first)) {
             const QString stem = w.left(w.size() - r.first.size());
             add(stem + r.second);

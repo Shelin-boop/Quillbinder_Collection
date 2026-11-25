@@ -42,7 +42,7 @@ bool start(QString *error)
         if (error)
             *error = QApplication::translate("playback",
                                              "Playing audio and video inside the program needs the add-on \"Media Playback\" "
-                                             "(File > Install Update or Add-on; Help > Add-on Manager).");
+                                             "(Help > Add-ons and Updates > Install Update or Add-on; Help > Add-ons and Updates > Add-on Manager).");
         return false;
     }
     if (!s_tried) {

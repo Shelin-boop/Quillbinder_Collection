@@ -1,6 +1,7 @@
-// Additions of 0.17 to the main window: Navigate > Fonts, Documents > Change
+// Additions of 0.17 to the main window: Format > Font, Documents > Change
 // Icon (the whole icon set, recent icons, Icon from Text, Manage Icons), the
-// icon bar, the two color buttons of the format bar, Help > Developer Guide.
+// icon bar, the two color buttons of the format bar, Help > Troubleshooting and Development > Developer Guide.
+#include "ui/ManualWindow.h"
 #include "ui/GripBar.h"
 #include "ui/MenuClear.h"
 #include "ui/ObjectsUi.h"
@@ -15,6 +16,7 @@
 #include "ui/AppSettings.h"
 #include "ui/ColorPickButton.h"
 #include "ui/EditorPane.h"
+#include "ui/CommandFinder.h"
 #include "ui/FontInstall.h"
 #include "ui/IconDialogs.h"
 #include "ui/MainWindow.h"
@@ -60,7 +62,7 @@ void MainWindow::createExtraActions()
         addAction(ac);
         return ac;
     };
-    // ---- Navigate > Fonts
+    // ---- Format > Font (0.94.0; before: Format > Font)
     connect(act(QStringLiteral("installFonts"), tr("&Install Font Files…"), QStringLiteral("font")), &QAction::triggered, this,
             [this] { installFonts(); });
     connect(act(QStringLiteral("fontFolder"), tr("Open &Font Folder"), QStringLiteral("folder-open")), &QAction::triggered, this, [] {
@@ -73,7 +75,7 @@ void MainWindow::createExtraActions()
                     QMessageBox::information(this, tr("Font Manager"),
                                              tr("No font manager was found on this computer (KDE: System Settings > Text & Fonts > "
                                                 "Font Management; or the package “font-manager”).\n\nFonts can be installed here with "
-                                                "Navigate > Fonts > Install Font Files, or by copying them into:\n%1")
+                                                "Format > Font > Install Font Files, or by copying them into:\n%1")
                                                  .arg(fontinstall::userFontDir()));
             });
     connect(act(QStringLiteral("reloadFonts"), tr("&Reload Font List"), QStringLiteral("view-refresh")), &QAction::triggered, this, [this] {
@@ -141,16 +143,21 @@ void MainWindow::createExtraActions()
         connect(act(QStringLiteral("updateCheckNow"), tr("Check for Updates Now")), &QAction::triggered, this,
                 [this] { m_updates->checkNow(); });
     }
+    // 0.94.0: Help > Find Command (no shortcut: Ctrl+Shift+P is the mind map's Page Setup)
+    connect(act(QStringLiteral("findCommand"), tr("Find &Command…"), QStringLiteral("edit-find")), &QAction::triggered, this, [this] {
+        auto *dlg = new CommandFinder(menuBar(), this);
+        dlg->setAttribute(Qt::WA_DeleteOnClose);
+        dlg->open();
+    });
     connect(act(QStringLiteral("developerGuide"), tr("&Developer Guide: Updates and Add-ons"), QStringLiteral("help-about")),
             &QAction::triggered, this, [this] { showDeveloperGuide(); });
 }
 
 // ------------------------------------------------------------------ fonts
 
-void MainWindow::createFontMenu(QMenu *nav)
+void MainWindow::createFontMenu(QMenu *fonts)
 {
-    QMenu *fonts = nav->addMenu(icons::action(QStringLiteral("font")), tr("&Fonts"));
-    fonts->setObjectName(QStringLiteral("fontsMenu"));
+    fonts->addSeparator();
     for (const char *k : {"installFonts", "fontFolder", "fontManager", "", "reloadFonts"}) {
         if (!*k)
             fonts->addSeparator();
@@ -391,8 +398,11 @@ void MainWindow::showDeveloperGuide()
         QString text = QString::fromUtf8(f.readAll());
         text.replace(QLatin1String("{{APP}}"), QLatin1String(QB_APP_NAME))
             .replace(QLatin1String("{{VERSION}}"), QLatin1String(QB_APP_VERSION))
-            .replace(QLatin1String("{{RUNTIME}}"), QLatin1String(QB_RUNTIME_ID));
-        tb->setMarkdown(text);
+            .replace(QLatin1String("{{RUNTIME}}"), QLatin1String(QB_RUNTIME_ID))
+            .replace(QLatin1String("{{SUFFIX}}"), QLatin1String(QB_PROJECT_SUFFIX)) // (0.94.0: the moved part of the manual uses them)
+            .replace(QLatin1String("{{FILE}}"), QLatin1String(QB_PROJECT_FILE_SUFFIX))
+            .replace(QLatin1String("{{LABEL}}"), QLatin1String(QB_APP_VERSION_LABEL));
+        tb->setMarkdown(escapePlaceholders(text));
         l->addWidget(tb);
     }
     win->show();

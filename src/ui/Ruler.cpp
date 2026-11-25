@@ -1,6 +1,7 @@
 #include "ui/Ruler.h"
 
 #include "ui/AppSettings.h"
+#include "ui/Theme.h"
 #include "ui/TextEditor.h"
 
 #include <QContextMenuEvent>
@@ -138,6 +139,11 @@ void Ruler::apply(const direct::ParaSpec &s)
     update();
 }
 
+QColor Ruler::numberColor() const
+{
+    return theme::withContrast(palette().color(QPalette::WindowText), palette().color(QPalette::Window), 4.5);
+}
+
 void Ruler::paintEvent(QPaintEvent *)
 {
     QPainter p(this);
@@ -162,8 +168,8 @@ void Ruler::paintEvent(QPaintEvent *)
     const int subdivisions = units::metric() ? 4 : 8;
     const double st = unit / subdivisions;
     const int cy = band.center().y();
-    QColor num = pal.color(QPalette::WindowText);
-    num.setAlpha(170);
+    // the numbers: at least 4.5:1 on the bar (0.94.0; they were the text color at 170/255, about 2.5:1)
+    const QColor num = numberColor();
     for (int i = 1; x0 + i * st < x0 + w - 1; ++i) {
         const int x = x0 + qRound(i * st);
         if (i % subdivisions == 0) {

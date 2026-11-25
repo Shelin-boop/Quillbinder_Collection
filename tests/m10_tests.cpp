@@ -386,11 +386,11 @@ int main(int argc, char **argv)
         for (const QStringList &pl : QList<QStringList>{{"Edit", "Writing Tools", "Name Generator…"},
                                                         {"Window", "Scratch Pad"},
                                                         {"Project", "Text Statistics…"},
-                                                        {"Edit", "Writing Tools", "Add-on Manager…"}})
+                                                        {"Help", "Add-ons and Updates", "Add-on Manager…"}})
             if (!menuPath(&w, pl))
                 missing << pl.join(QLatin1String(" > "));
         check(missing.isEmpty() && ngAction && spAction && tsAction,
-              QStringLiteral("Edit > Writing Tools > Name Generator, Window > Scratch Pad, Project > Text Statistics (as in the tutorial)"),
+              QStringLiteral("Edit > Writing Tools > Name Generator, Window > Scratch Pad, Project > Text Statistics (as in the tutorial), Help > Add-ons and Updates > Add-on Manager"),
               missing.join(QLatin1String("; ")));
         QMenu *projMenu = menuPath(&w, {"Project"})->menu();
         const QList<QAction *> pa = projMenu->actions();

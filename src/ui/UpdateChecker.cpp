@@ -69,6 +69,15 @@ void UpdateChecker::setEnabled(bool on)
     st.save();
 }
 
+void UpdateChecker::firstStartAnswered(bool on)
+{
+    updates::State st = updates::State::load();
+    st.noteShown = true;
+    st.enabled = on;
+    st.save();
+    emit enabledChanged(on);
+}
+
 QDialog *UpdateChecker::window() const { return m_offerWindow; }
 
 QString UpdateChecker::ownAppImage()
@@ -158,8 +167,8 @@ void UpdateChecker::startAutomatic()
         auto *box = new QMessageBox(QMessageBox::Information, tr("Check for Updates"),
                                     tr("%1 looks for updates when it starts. Nothing about you is sent.\n\nIt fetches one small "
                                        "file, at most once a day, and tells you when a newer version of the program or of an "
-                                       "installed add-on is there. You can switch this off or on at any time with Help > Check "
-                                       "for Updates at Startup.")
+                                       "installed add-on is there. You can switch this off or on at any time with Help > Add-ons and "
+                                       "Updates > Check for Updates at Startup.")
                                         .arg(QStringLiteral(QB_APP_NAME)),
                                     QMessageBox::NoButton, m_window);
         box->setObjectName(QStringLiteral("updateFirstNote"));
@@ -456,7 +465,7 @@ void UpdateChecker::offer(const updates::Shown &shown)
                      .arg(wait);
     else if (shown.lastReminder)
         notes += tr("You have delayed this four times. This is the last reminder: Delay now ends the reminders for this "
-                    "version. Help > Check for Updates Now still shows it.");
+                    "version. Help > Add-ons and Updates > Check for Updates Now still shows it.");
     else
         notes += tr("Delay: you are reminded again in %1. Each further delay waits longer (1 day, 1 week, 2 weeks, 4 weeks); "
                     "after that there is one last reminder, and then the reminders for this version end.")

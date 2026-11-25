@@ -538,9 +538,9 @@ int main(int argc, char **argv)
                   && byKey(&w, QStringLiteral("mediaForward"))->shortcut() == QKeySequence(QStringLiteral("Ctrl+Alt+."))
                   && byKey(&w, QStringLiteral("mediaTimestamp"))->shortcut() == QKeySequence(QStringLiteral("Ctrl+Shift+Return")),
               QStringLiteral("Skip Back Ctrl+Alt+, / Skip Forward Ctrl+Alt+. / Insert Timestamp Ctrl+Shift+Return"));
-        QAction *ins = menuPath(&w, {QStringLiteral("Insert"), QStringLiteral("Media Timestamp")});
+        QAction *ins = menuPath(&w, {QStringLiteral("Insert"), QStringLiteral("Insert Media Timestamp")});
         check(ins && qvariant_cast<QObject *>(ins->property("qbAliasOf")) == byKey(&w, QStringLiteral("mediaTimestamp")),
-              QStringLiteral("Insert > Media Timestamp is the same command"));
+              QStringLiteral("Insert > Insert Media Timestamp is the same command"));
         QHash<QString, QString> used;
         QStringList twice;
         for (QAction *a : w.findChildren<QAction *>()) {

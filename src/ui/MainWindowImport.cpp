@@ -25,7 +25,7 @@ void MainWindow::explainWebImportAddon()
     QMessageBox box(QMessageBox::Information, tr("Import Web Page"),
                     tr("Web pages are imported by the add-on “Web Page Import”, which is not installed or is switched off."),
                     QMessageBox::Close, this);
-    box.setInformativeText(tr("Install it with File > Install Update or Add-on; Help > Add-on Manager switches add-ons on and off."));
+    box.setInformativeText(tr("Install it with Help > Add-ons and Updates > Install Update or Add-on; Help > Add-ons and Updates > Add-on Manager switches add-ons on and off."));
     QPushButton *manager = box.addButton(tr("Add-on Manager…"), QMessageBox::ActionRole);
     box.exec();
     if (box.clickedButton() == manager)

@@ -113,6 +113,7 @@ public:
 
     // ---- for the panel and the options
     qb::tools::ToolHost *host() const { return m_host; }
+    static QString unloadMessage();   // 0.94.0: "Model unloaded, RAM usage minimal"
     QVariant setting(const QString &key, const QVariant &def = QVariant()) const;
     void setSetting(const QString &key, const QVariant &value);
     QString folder() const;                 // the transcriptions

@@ -38,6 +38,7 @@ public:
 
     // general
     QString forename, surname;
+    bool authorAsked = false;   // 0.94.0: the first compile with a title page asked for the author's name (kept with it)
     int autosaveSeconds = 2;
     bool openLastProject = true;
     QString language = QStringLiteral("en"); // 0.70.0: "en" or "de"; takes effect at the next start (ui/Language.h)
@@ -104,6 +105,7 @@ public:
     // behaviour
     QString linkOpens = QStringLiteral("other"); // other | current | window
     bool startWithCorkboard = true;               // folders open in corkboard
+    bool binderScrivenerKeys = false;             // 0.94.0: Return in the binder makes a document and Space opens a Quick Reference window
     bool floatQuickRef = false;                   // Quick Reference windows stay above the main window
     bool reopenQuickRefs = true;                  // Quick Reference panels come back with their project
     // dragging and dropping
@@ -179,6 +181,7 @@ public:
     bool returnCreatesItem = false;               // Return on a selected card or outliner row makes a new one
     bool snapshotNotify = false;                  // a message in the status bar when snapshots are taken
     // Appearance
+    bool progressUnderSearch = true;              // 0.94.0: the draft and session lines under the quick search field (the progress is in the footer as well)
     bool showFullPath = false;                    // the project's whole path in the title bar
     // Sharing
     bool importCommentsInline = false;            // comments of imported files become inline annotations

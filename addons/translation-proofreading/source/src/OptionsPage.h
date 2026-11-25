@@ -50,7 +50,7 @@ private:
     QCheckBox *m_noDash = nullptr, *m_american = nullptr, *m_curly = nullptr, *m_ellipsis = nullptr, *m_careful = nullptr;
     QPlainTextEdit *m_replacements = nullptr;
     QLabel *m_replacementErrors = nullptr;
-    QSpinBox *m_threads = nullptr;
+    QSpinBox *m_threads = nullptr, *m_unload = nullptr;
 };
 
 } // namespace tp

@@ -44,6 +44,7 @@ struct Format;
 
 class BarDock;
 class BinderPanel;
+class MessageLine;
 class UpdateChecker;
 class StylesPanel;
 class FormatFindWindow;
@@ -61,6 +62,9 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
+    // 0.94.0: the section of the user manual for what is on the screen now (F1): the view of the active pane, the
+    // binder, the inspector's tab; empty: the start of the manual
+    QString manualSection() const;
     MainWindow();
     ~MainWindow() override;
 
@@ -108,6 +112,8 @@ public:
     void showStartDialog(bool recentFirst);
     // First start from an AppImage: offer to add the program to the application menu.
     void offerDesktopIntegration();
+    // 0.94.0: what the page of the first start chose about the application menu (Linux AppImage)
+    void applyFirstStartMenuChoice(bool add, bool moveAppImage);
     // Install a .qbpkg file (program update, add-on or bundle).
     void installPackage(const QString &file);
     // Message from the start-up loader (an update was switched off).
@@ -154,7 +160,7 @@ public:
     static QString welcomeName();        // "Welcome to Quillbinder"
     static QString welcomeFolder();      // where the welcome project is (or would be) made
 
-    // Window layouts (Window > Layouts); the state is described in Layouts.h.
+    // Window layouts (View > Layout); the state is described in Layouts.h.
     QVariantMap captureLayout(bool withWindowSize = false) const;
     void applyLayout(const QVariantMap &state);
     bool applyLayoutById(const QString &id);
@@ -197,6 +203,8 @@ public:
     void toolShowInspectorTab(const QString &key);
     void toolSetCommandState(const QString &commandKey, bool checked, const QString &icon, const QString &toolTip);
     void toolShowOptions(const QString &toolId);
+    // 0.94.0 (item 59): the notice for a writing tool whose add-on is not installed (with a button to the Add-on Manager)
+    void explainMissingAddon(const QString &addonId);
     static QIcon toolIcon(const QString &icon);   // a theme name or a file (tools' icons)
 
     // ---- import (MainWindowImport.cpp)
@@ -229,6 +237,7 @@ protected:
     void closeEvent(QCloseEvent *e) override;
     void changeEvent(QEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;
+    void moveEvent(QMoveEvent *e) override;
 
 private:
     // File > Project Format (MainWindowFormat.cpp)
@@ -263,14 +272,32 @@ public:
     QString fixedMindMapId() const { return m_fixedMindMapId; }
     // 0.92.0 (the shown lock): reads what other devices say they work on and marks those rows (also by a timer)
     void readWorkMarks();
-    // 0.92.0: the check for updates (Help > Check for Updates at Startup, Check for Updates Now)
+    // 0.92.0: the check for updates (Help > Add-ons and Updates > Check for Updates at Startup, Check for Updates Now)
     UpdateChecker *updateChecker() const { return m_updates; }
     // 0.92.0: a small text in the status bar that fades in and out twice and is gone (no window, no sound)
     void showFadingNote(const QString &text);
     // 0.93.0: a short message of the program in the first editor's footer bar (it was the status bar's)
     void showStatusNote(const QString &text, int ms = 0);
+    void showStatusNote(const QString &text, int ms, const QString &actionText, std::function<void()> action);
     void clearStatusNote();
     QString statusNote() const;
+    // 0.94.0: a message in the line under the binder (MessageLine): one at a time, 5 seconds (10 with a link), the rest wait
+    void showMessage(const QString &text, int ms = 0, const QString &linkText = QString(), std::function<void()> action = nullptr,
+                     const QString &tip = QString());
+    MessageLine *messageLine() const;
+    // 0.94.0 (items 76, 67): commands of the binder with an undo step of their own (Edit > Undo with the keyboard in the binder)
+    // Documents > Group: the selected items into a new folder at the place of the first one; the folder's title is ready to type
+    BinderItem *groupItems(const QList<BinderItem *> &items);
+    // Documents > Convert > Sheet to Object: an Object for each sheet document (its title as the name, its text in "Other", its
+    // picture); the binder item then shows the Object. `category` empty: from the folder's name, else asked. Returns the ids.
+    QStringList sheetsToObjects(const QList<BinderItem *> &items, const QString &category = QString());
+    int binderUndoSteps() const { return m_binderDone; }
+    int binderRedoSteps() const { return int(m_binderSteps.size()) - m_binderDone; }
+    bool binderUndo();
+    bool binderRedo();
+    bool binderHasKeyboard() const;
+    // the Object a binder item stands for ("" = none)
+    QString sheetObjectOf(const BinderItem *item) const;
     // 0.92.0: the notice "Other Versions Kept" turned off until the program quits (its button; the tests set it back)
     static bool conflictNoticeOff();
     static void setConflictNoticeOff(bool off);
@@ -456,6 +483,10 @@ private:
     void showPrintSettings();
     bool canPrint() const;
     void integrateDesktop(bool quiet);
+    void addToApplicationMenu(bool moveAppImage, bool quiet);
+    void removeFromApplicationMenu();
+    void updateApplicationMenuAction();
+    void askApplicationMenu(const QString &title, const QString &text, bool canDecline);
     void restartApplication();
     // Windows 0.92.0 (the check for updates hands over to the setup program): closes the project as a restart does,
     // then calls run. When run succeeded the program ends; else the project is opened again and the program stays.
@@ -544,6 +575,9 @@ private:
     QString m_lastChangeKeptAside;
     bool m_backupFolderAsked = false;
     QTimer *m_saveStateTimer = nullptr;
+    QTimer *m_windowPlaceTimer = nullptr; // saves the window's place and state a moment after it changed (0.94.0)
+    void saveWindowPlace();
+    void windowPlaceChanged();
     QTimer *m_saveRetry = nullptr;
     QDateTime m_saveFailedSince;
     QDateTime m_saveNoticeShown;
@@ -552,6 +586,15 @@ private:
     QString m_lastRestored;
     QString m_lastDueBackup;
     QList<QAction *> m_toolActions;
+    struct BinderStep {
+        QString name;
+        std::function<void()> undo, redo;
+    };
+    QList<BinderStep> m_binderSteps;
+    int m_binderDone = 0;   // the steps before this one are done (the others can be redone)
+    void pushBinderStep(const QString &name, std::function<void()> undo, std::function<void()> redo);
+    void clearBinderSteps();
+    QString sheetToObject(BinderItem *item, const QString &categoryId);
     QHash<QString, QPointer<QMenu>> m_toolMenus;   // menus beside tool buttons, by command key (0.61)
 
     // toolbars

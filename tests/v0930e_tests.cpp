@@ -327,7 +327,7 @@ static void designChecks()
     QString who = doc.toLower();
     check(!who.contains(QLatin1String("claude")) && !who.contains(QRegularExpression(QStringLiteral("\\bchats?\\b"))),
           QStringLiteral("no names of chats or people in it"));
-    for (const char *f : {"/README.md", "/SECURITY.md", "/docs/manual.md"})
+    for (const char *f : {"/README.md", "/SECURITY.md", "/docs/developer-guide.md"})
         check(readText(kRoot + QLatin1String(f)).contains(QLatin1String("design-decisions.md")), QStringLiteral("%1 links the document").arg(QLatin1String(f)));
     // the code's comments at the places of entries 1 to 4 and 10
     QSet<int> found;

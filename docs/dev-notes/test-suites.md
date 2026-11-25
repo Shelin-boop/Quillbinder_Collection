@@ -2,6 +2,14 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## v0940b (0.94.0)
+
+`qb_v0940b_tests`: the menus' places (View > Layout, Split Editor, Format > Font, Insert links, Help > Add-ons and Updates,
+Troubleshooting and Development), Find Command (filter, Return, double-click, grayed commands), the first start's page,
+Help > Add to / Remove from Application Menu with a fake AppImage in a temporary HOME (move, failure, `$APPIMAGE`, the
+updater's `.before-update` copy), the full AppImage's window and `quillbinder --install-folder` (with and without display,
+needs `build/quillbinder`), the start script and the download page's size note.
+
 ## The suites
 
     QB_SUITES="v040 m13" QB_SAMPLE=10 tools/run-all-tests.sh build/test-results-x11 x11   # the default run

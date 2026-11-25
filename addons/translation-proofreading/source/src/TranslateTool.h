@@ -69,7 +69,11 @@ public:
 #endif
     // The engine (loaded on first use); null with *error when it cannot be loaded.
     EngineInterface *engine(QString *error);
-    void touchEngine();            // after work: the models are freed after a while without work
+    void touchEngine();            // after work: the models are freed after a while without work (1.4: 15 minutes, a setting)
+    int unloadMinutes() const;     // 1.4: 0 = never
+    int unloadIntervalMs() const;
+    static QString unloadMessage();   // 1.4: "Model unloaded, RAM usage minimal"
+    bool unloadTimerActive() const { return m_unloadTimer.isActive(); }
     QString addonDir() const;      // the add-on's folder "translation-proofreading"
     QString iconPath() const;
     void showOptions();
@@ -81,6 +85,8 @@ public:
 
 signals:
     void settingsChangedSignal();
+    // 1.4: a loaded model was freed after the waiting time: the text and how long the program should show it (ms)
+    void modelsUnloaded(const QString &message, int milliseconds);
 
 private:
     void openWindow();

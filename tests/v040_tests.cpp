@@ -348,6 +348,9 @@ int main(int argc, char **argv)
             for (QAction *a : help->actions())
                 if (!a->isSeparator())
                     entries << menuText(a->text());
+        // 0.94.0: Help starts with Find Command
+        if (entries.value(0) == QLatin1String("Find Command"))
+            entries.removeFirst();
         check(entries.value(0) == QLatin1String("User Manual") && entries.value(1) == QLatin1String("Quick Start Guide")
                   && entries.value(2) == QLatin1String("Welcome Project") && entries.contains(QLatin1String("Third-Party Licenses"))
                   && entries.last() == QStringLiteral("About %1").arg(appName),
@@ -383,7 +386,7 @@ int main(int argc, char **argv)
                     tb = t;
         const QString text = tb ? tb->toPlainText() : QString();
         check(tb && tb->window()->isVisible() && text.contains(QStringLiteral("%1 Quick Start Guide").arg(appName))
-                  && text.contains(QLatin1String("Dark mode")) && text.contains(QLatin1String("Window > Themes"))
+                  && text.contains(QLatin1String("Dark mode")) && text.contains(QLatin1String("View > Themes"))
                   && text.contains(QLatin1String("Import Scrivener Project")) && text.contains(QLatin1String("Work in Scrivener Format"))
                   && text.contains(QLatin1String("Markdown")) && !text.contains(QLatin1String("{{")),
               QStringLiteral("Help > Quick Start Guide opens the guide: settings (dark mode ...) and capabilities (Scrivener, own format ...)"),

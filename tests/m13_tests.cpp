@@ -1121,13 +1121,13 @@ int main(int argc, char **argv)
         static const QStringList allowed = {
             QStringLiteral("File > New Project"), QStringLiteral("File > Open Project"), QStringLiteral("File > Open Recent > "),
             QStringLiteral("File > Back Up > Show Backup Folder"), QStringLiteral("File > Import > Scrivener Project"),
-            QStringLiteral("File > Convert Markdown"), QStringLiteral("File > Install Update or Add-on"), QStringLiteral("File > Options"),
+            QStringLiteral("File > Convert Markdown"), QStringLiteral("Help > Add-ons and Updates > Install Update or Add-on"), QStringLiteral("File > Options"),
             QStringLiteral("File > Exit"), QStringLiteral("Edit > Undo"), QStringLiteral("Edit > Redo"), QStringLiteral("Edit > Cut"),
             QStringLiteral("Edit > Copy"), QStringLiteral("Edit > Paste"), QStringLiteral("Edit > Select All"),
             QStringLiteral("Edit > Writing Tools > "), QStringLiteral("View > Show Binder"), QStringLiteral("View > Show Collections"),
-            QStringLiteral("View > Show Inspector"), QStringLiteral("View > Layout > "), QStringLiteral("View > Toolbars > "), QStringLiteral("View > Text Editing > "),
+            QStringLiteral("View > Show Inspector"), QStringLiteral("View > Quick-Add Keys in the Binder"), QStringLiteral("View > Layout > "), QStringLiteral("View > Toolbars > "), QStringLiteral("View > Text Editing > "),
             QStringLiteral("View > Corkboard Options > Status Stamps"), QStringLiteral("View > Use Label Color In > "),
-            QStringLiteral("View > Full Screen"), QStringLiteral("View > Zoom Inspector Tabs Separately"), QStringLiteral("Window > Themes > "), QStringLiteral("Window > Layouts > "),
+            QStringLiteral("View > Full Screen"), QStringLiteral("View > Zoom Inspector Tabs Separately"), QStringLiteral("View > Themes > "), QStringLiteral("View > Layout > "),
             QStringLiteral("Window > Scratch Pad"), QStringLiteral("Window > Float Quick Reference Panels"), QStringLiteral("Help > ")};
         QStringList onWithout, wrongWithout;
         for (const MenuEntry &e : entriesNo)

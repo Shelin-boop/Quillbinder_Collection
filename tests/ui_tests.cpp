@@ -1742,11 +1742,11 @@ int main(int argc, char **argv)
                 {"File", "Back Up", "Back Up To…"}, {"File", "Compile…"}, {"File", "Print Current Document…"},
                 {"File", "Show Project in File Manager"}, {"File", "Options…"}, {"File", "Exit"},
                 {"Edit", "Find", "Find…"}, {"Edit", "Find", "Project Search…"}, {"Edit", "Move", "Move Left (out of the folder)"},
-                {"Edit", "Link to Document…"}, {"Edit", "Select", "Select Annotation or Note"},
+                {"Insert", "Link to Document…"}, {"Edit", "Select", "Select Annotation or Note"},
                 {"Insert", "Image From File…"}, {"Insert", "Comment"}, {"Insert", "Footnote"}, {"Insert", "Inline Footnote"},
                 {"Insert", "Inline Annotation"}, {"Insert", "Auto Number"},
-                {"View", "Corkboard"}, {"View", "Outliner"}, {"View", "Editor Layout", "Split Horizontally"},
-                {"View", "Editor Layout", "Split Vertically"}, {"View", "Text Editing", "Page View"}, {"View", "Text Editing", "Typewriter Scrolling"},
+                {"View", "Corkboard"}, {"View", "Outliner"}, {"View", "Split Editor", "Split Horizontally"},
+                {"View", "Split Editor", "Split Vertically"}, {"View", "Text Editing", "Page View"}, {"View", "Text Editing", "Typewriter Scrolling"},
                 {"View", "Text Editing", "Show Titles in Combined Text"}, {"View", "Corkboard Options", "Status Stamps"},
                 {"View", "Corkboard Options", "Freeform"}, {"View", "Corkboard Options", "Arrange by Label"},
                 {"View", "Outliner Options", "Show Synopses"}, {"View", "Use Label Color In", "Index Cards"},
@@ -1763,8 +1763,8 @@ int main(int argc, char **argv)
                 {"Documents", "Add to Project Bookmarks"},
                 {"Format", "Font", "Show Fonts…"}, {"Format", "Style", "New Style From Selection…"},
                 {"Format", "Style", "Styles Panel"}, {"Format", "Revision Mode"},
-                {"Window", "Themes", "Manage Themes…"}, {"Window", "Layouts", "Manage Layouts…"},
-                {"Window", "Layouts", "Save Current Layout…"}, {"Window", "Float Quick Reference Panels"},
+                {"View", "Themes", "Manage Themes…"}, {"View", "Layout", "Manage Layouts…"},
+                {"View", "Layout", "Save Current Layout…"}, {"Window", "Float Quick Reference Panels"},
                 {"Help", "User Manual"}, {"Help", "Keyboard Shortcuts…"}};
             QStringList missing;
             for (const QStringList &path : paths)
@@ -2020,7 +2020,7 @@ int main(int argc, char **argv)
                 for (QAction *a : viewBtn->menu()->actions())
                     viewEntries << (a->menu() ? menuText(a->menu()->title()) : a->objectName());
             check(viewEntries.contains(QStringLiteral("showBinder")) && viewEntries.contains(QStringLiteral("showCollections"))
-                      && viewEntries.contains(QStringLiteral("showInspector")) && viewEntries.contains(QStringLiteral("Layouts")),
+                      && viewEntries.contains(QStringLiteral("showInspector")) && viewEntries.contains(QStringLiteral("Layout")),
                   QStringLiteral("the View button offers binder, collections, inspector and the layouts"), viewEntries.join(QLatin1Char(' ')));
 
             ToolbarDialog td(&w);
@@ -2206,9 +2206,9 @@ int main(int argc, char **argv)
                       && ldel->isEnabled() && QFile::exists(layouts::userDir() + QLatin1String("/research-desk.json")),
                   QStringLiteral("Manage Layouts: built-in layouts are fixed; Save Current adds a layout of one's own"), lerr);
             shot(&ld, QStringLiteral("51-manage-layouts"));
-            QAction *mineAction = menuPath(&w, {QStringLiteral("Window"), QStringLiteral("Layouts"), QStringLiteral("Research Desk")});
+            QAction *mineAction = menuPath(&w, {QStringLiteral("View"), QStringLiteral("Layout"), QStringLiteral("Research Desk")});
             check(mineAction && mineAction == byKey(&w, QStringLiteral("layout:") + myId) && commands::find(QStringLiteral("layout:") + myId),
-                  QStringLiteral("the new layout is in Window > Layouts and in the list of commands"));
+                  QStringLiteral("the new layout is in View > Layout and in the list of commands"));
 
             ld.select(QStringLiteral("default"));
             ld.useSelected();

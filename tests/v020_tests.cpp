@@ -854,7 +854,7 @@ static void uiChecks()
     EditorPane *pane = mainPane(&w);
     check(pane && pane->currentItem() == market, QStringLiteral("a click on “The Market” in Shelin's form opens it in the editor"));
 
-    // Edit > Link to Object... in the text of a document, and a click on that link
+    // Insert > Link to Object... in the text of a document, and a click on that link
     TextEditor *ed = pane ? pane->currentEditor() : nullptr;
     if (ed) {
         QApplication::setActiveWindow(&w);
@@ -872,7 +872,7 @@ static void uiChecks()
         w.findChild<QAction *>(QStringLiteral("objectLink"))->trigger();
         settle(300);
         check(linkHrefIn(p->docs()->text(market->id)) == linkTo(fens) && ed->toPlainText().contains(QLatin1String("Misty Fens")),
-              QStringLiteral("Edit > Link to Object: the document text gets “Misty Fens” linked to the object"));
+              QStringLiteral("Insert > Link to Object: the document text gets “Misty Fens” linked to the object"));
         inspector->showTab(Inspector::Notes);
         settle(150);
         QTest::mouseClick(ed->viewport(), Qt::LeftButton, {}, linkPoint(ed));

@@ -7,15 +7,15 @@ cmake_minimum_required(VERSION 3.16)
 # ---------------------------------------------------------------------------
 set(APP_NAME "Quillbinder")
 set(APP_ID   "quillbinder")
-set(APP_VERSION "0.93.1")
+set(APP_VERSION "0.94.0")
 # 0.93.0: a version line per system (working rules, section 8). The first two numbers (the functional level) are the same
 # on every system; the last number counts each system's own fixes, so that a system is released as soon as its own
 # tests pass. "APP_VERSION" is the Linux line (the AppImage, the update package; every script that reads it for
 # Linux keeps reading it); the Windows and the Android builds use their own line below: the build takes it as
 # APP_VERSION, so that the program, the packages and AppInfo.h see one number. Scripts of those systems read
 # APP_VERSION_WINDOWS / APP_VERSION_ANDROID from this file (the Python tools take --system). Raise the last number of a system's line when that system gets a delivery of its own.
-set(APP_VERSION_WINDOWS "0.93.1")
-set(APP_VERSION_ANDROID "0.93.2")
+set(APP_VERSION_WINDOWS "0.94.0")
+set(APP_VERSION_ANDROID "0.94.0")
 if(WIN32)
   set(APP_VERSION "${APP_VERSION_WINDOWS}")
 elseif(ANDROID OR CMAKE_SYSTEM_NAME STREQUAL "Android" OR CMAKE_TOOLCHAIN_FILE MATCHES "/android_[^/]+/lib/cmake/Qt6/")

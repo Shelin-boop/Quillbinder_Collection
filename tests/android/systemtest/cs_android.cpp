@@ -111,7 +111,7 @@ void caseAF01()
     if (onTablet()) {
         check(action(w, QStringLiteral("filesOnTablet")) != nullptr, QStringLiteral("File > Files on This Tablet is there"));
         check(action(w, QStringLiteral("installPackage")) && action(w, QStringLiteral("installPackage"))->isVisible(),
-              QStringLiteral("File > Install Update or Add-on is offered (add-ons, 0.91.3)"));
+              QStringLiteral("Help > Add-ons and Updates > Install Update or Add-on is offered (add-ons, 0.91.3)"));
         // a backup by the command lands in the shared backup folder
         const QStringList before = QDir(s.backupDir).entryList(QDir::Files);
         answerBoxLater(800, QMessageBox::Ok);

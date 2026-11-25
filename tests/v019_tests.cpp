@@ -1,6 +1,6 @@
 // Version 0.19: the Page Down / Page Up crash, crash reports with a snapshot of the
 // program and the system, sessions that ended unexpectedly, saving on SIGTERM, and
-// Help > System Information / Crash Reports. Saves screenshots into the folder
+// Help > Troubleshooting and Development > System Information / Crash Reports. Saves screenshots into the folder
 // given as first argument. Exit code = number of failed checks.
 //
 //   QT_QPA_PLATFORM=offscreen ./qb_v019_tests /tmp/shots
@@ -702,9 +702,18 @@ int main(int argc, char **argv)
         for (QAction *a : help->actions())
             if (!a->isSeparator())
                 entries << a->text().remove(QLatin1Char('&'));
-    check(entries.contains(QStringLiteral("System Information…")) && entries.contains(QStringLiteral("Crash Reports…"))
-              && entries.indexOf(QStringLiteral("Crash Reports…")) < entries.indexOf(QStringLiteral("About Quillbinder")),
-          QStringLiteral("Help menu: System Information… and Crash Reports… (before About)"), entries.join(QLatin1String(" | ")));
+    // 0.94.0: they are in the submenu Troubleshooting and Development, which comes before About
+    QStringList trouble;
+    if (help)
+        for (QAction *a : help->actions())
+            if (a->menu() && a->text().remove(QLatin1Char('&')) == QLatin1String("Troubleshooting and Development"))
+                for (QAction *t : a->menu()->actions())
+                    if (!t->isSeparator())
+                        trouble << t->text().remove(QLatin1Char('&'));
+    check(trouble.contains(QStringLiteral("System Information…")) && trouble.contains(QStringLiteral("Crash Reports…"))
+              && entries.indexOf(QStringLiteral("Troubleshooting and Development")) < entries.indexOf(QStringLiteral("About Quillbinder")),
+          QStringLiteral("Help menu: Troubleshooting and Development with System Information… and Crash Reports… (before About)"),
+          entries.join(QLatin1String(" | ")));
 
     // ---- System Information
     {
@@ -725,7 +734,7 @@ int main(int argc, char **argv)
                   && text.contains(QLatin1String("Processor: ")) && text.contains(QLatin1String("Memory: "))
                   && text.contains(QLatin1String("Lighthouse")) && text.contains(QLatin1String("Save automatically after"))
                   && text.contains(QLatin1String("Environment variables")),
-              QStringLiteral("Help > System Information: program, runtime, system, screens, processor, memory, settings, project"),
+              QStringLiteral("Help > Troubleshooting and Development > System Information: program, runtime, system, screens, processor, memory, settings, project"),
               text.left(2500));
         check(!text.contains(QDir::homePath() + QLatin1Char('/')) || QDir::homePath() == QLatin1String("/"),
               QStringLiteral("... the home folder is written as ~"));
@@ -816,7 +825,7 @@ int main(int argc, char **argv)
         w.findChild<QAction *>(QStringLiteral("crashReports"))->trigger();
         settle(200);
         check(count == 2 && shown.contains(QLatin1String("SIGSEGV")) && shown.contains(QLatin1String("QEventLoop::exec(")),
-              QStringLiteral("Help > Crash Reports lists the two reports and shows one with readable names"),
+              QStringLiteral("Help > Troubleshooting and Development > Crash Reports lists the two reports and shows one with readable names"),
               QStringLiteral("%1 report(s); %2").arg(count).arg(shown.section(QLatin1String("== Backtrace"), 1, 1).left(800)));
         check(deleted, QStringLiteral("... Delete removes the report shown"));
         // Delete All asks first
@@ -872,7 +881,7 @@ int main(int argc, char **argv)
                 m->reject();
         });
         const bool skipped = showPreviousEnds(&w, {e}, true);
-        check(text.contains(QLatin1String("ended because of an error on ")) && text.contains(QLatin1String("Help > Crash Reports"))
+        check(text.contains(QLatin1String("ended because of an error on ")) && text.contains(QLatin1String("Help > Troubleshooting and Development > Crash Reports"))
                   && text.contains(QLatin1String("snapshots")) && text.contains(QLatin1String("backup")),
               QStringLiteral("notice after a crash: what happened, where the report is, where to look for lost work"), text);
         check(hasSkip && skipped,
@@ -922,7 +931,7 @@ int main(int argc, char **argv)
         const auto m = after.match(t);
         check(m.hasMatch() && m.captured(1).toInt() >= 4 && m.captured(1).toInt() <= 8 && fr.recovered,
               QStringLiteral("... when it answers again, the report says after how long (about 5 s)"), t.right(300));
-        // listed in Help > Crash Reports
+        // listed in Help > Troubleshooting and Development > Crash Reports
         QStringList items;
         withModal<CrashReportsDialog>(400, [&](CrashReportsDialog *d) {
             for (QListWidget *l : d->findChildren<QListWidget *>())
@@ -936,7 +945,7 @@ int main(int argc, char **argv)
         w.findChild<QAction *>(QStringLiteral("crashReports"))->trigger();
         settle(200);
         check(items.join(QLatin1Char('|')).contains(QLatin1String("freeze (recovered)")),
-              QStringLiteral("... Help > Crash Reports lists it as \"freeze (recovered)\""), items.join(QLatin1String(" | ")));
+              QStringLiteral("... Help > Troubleshooting and Development > Crash Reports lists it as \"freeze (recovered)\""), items.join(QLatin1String(" | ")));
         // a freeze the program did not come out of (it was ended from outside): the next start says so
         const QString stuck = crash::reportDir() + QStringLiteral("/freeze-%1-4343.txt").arg(QDateTime::currentSecsSinceEpoch() - 100);
         {

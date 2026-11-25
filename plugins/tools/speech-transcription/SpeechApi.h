@@ -52,6 +52,8 @@ struct EngineSettings {
     // 0.64, "Transcribe now" for a recording: the WAV file is read as fast as the model takes
     // its pieces (not in real time)
     bool fileAsFast = false;
+    // 0.94.0: minutes without use after which the model is freed (0: never); 15 at first
+    int unloadMinutes = 15;
 };
 
 struct TestResult {
@@ -81,13 +83,15 @@ public:
     std::function<void(const QString &state)> onState; // "loading", "listening", "recording" (record only),
                                                        // "transcribing <n>", "reading <percent>", "finished"
     std::function<void(const QString &message)> onError;
+    // 0.94.0: the model was loaded and the engine freed it after the time without use (not when unloadModel() was called)
+    std::function<void()> onModelUnloaded;
     virtual bool start(const EngineSettings &settings, QString *error, const QString &wavFile = QString()) = 0;
     // Stops the microphone; the pieces waiting are still written, then onState("finished").
     virtual void stop() = 0;
     virtual bool isRecording() const = 0;
     virtual bool isBusy() const = 0;     // recording or still transcribing
     virtual int waiting() const = 0;     // pieces not transcribed yet
-    // Frees the model (it is kept a few minutes after a recording).
+    // Frees the model (it is kept after a recording for EngineSettings::unloadMinutes).
     virtual void unloadModel() = 0;
     virtual QString version() const = 0; // whisper.cpp's version
 };

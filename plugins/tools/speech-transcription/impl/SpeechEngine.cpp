@@ -299,12 +299,14 @@ public slots:
         emit done(text, newParagraph);
     }
 
-    void unload()
+    bool unload()   // true: a model was loaded
     {
+        const bool had = m_ctx != nullptr;
         if (m_ctx)
             whisper_free(m_ctx);
         m_ctx = nullptr;
         m_file.clear();
+        return had;
     }
 
 signals:
@@ -358,8 +360,11 @@ public:
         m_thread.setObjectName(QStringLiteral("speech-transcription"));
         m_thread.start();
         m_idle.setSingleShot(true);
-        m_idle.setInterval(5 * 60 * 1000); // the model stays loaded 5 minutes after a recording
-        connect(&m_idle, &QTimer::timeout, this, [this] { unloadModel(); });
+        m_idle.setInterval(15 * 60 * 1000); // the model stays loaded 15 minutes after a recording (EngineSettings::unloadMinutes)
+        connect(&m_idle, &QTimer::timeout, this, [this] {
+            if (unloadNow() && onModelUnloaded)
+                onModelUnloaded();
+        });
         m_feedTimer.setInterval(100);
         connect(&m_feedTimer, &QTimer::timeout, this, &Engine::feedFromFile);
     }
@@ -499,11 +504,14 @@ public:
     bool isBusy() const override { return m_busy; }
     int waiting() const override { return m_waiting; }
 
-    void unloadModel() override
+    void unloadModel() override { unloadNow(); }
+    bool unloadNow()
     {
         if (m_busy)
-            return;
-        QMetaObject::invokeMethod(m_worker, "unload", Qt::BlockingQueuedConnection);
+            return false;
+        bool had = false;
+        QMetaObject::invokeMethod(m_worker, "unload", Qt::BlockingQueuedConnection, Q_RETURN_ARG(bool, had));
+        return had;
     }
 
     QString version() const override { return QStringLiteral("1.9.5"); }
@@ -688,7 +696,12 @@ private:
         m_fileFast = false;
         m_lastPct = -1;
         m_busy = false;
-        m_idle.start();
+        // (tests: QB_SPEECH_TEST_UNLOAD_MS shortens the time)
+        const int testMs = qEnvironmentVariableIntValue("QB_SPEECH_TEST_UNLOAD_MS");
+        if (testMs > 0 || m_s.unloadMinutes > 0) {
+            m_idle.setInterval(testMs > 0 ? testMs : m_s.unloadMinutes * 60 * 1000);
+            m_idle.start();
+        }
         report(QStringLiteral("finished"));
     }
 

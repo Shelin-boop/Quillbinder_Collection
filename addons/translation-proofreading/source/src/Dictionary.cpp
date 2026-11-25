@@ -9,6 +9,7 @@
 #include <QSet>
 
 #include <algorithm>
+#include <tuple>
 #include <vector>
 
 namespace tp {
@@ -43,6 +44,11 @@ const Glosses &glosses()
 }
 
 } // namespace
+
+bool isWordNetEntry(const QString &word)
+{
+    return glosses().words.contains(word);
+}
 
 void loadGlosses(const QString &file)
 {
@@ -269,6 +275,144 @@ QList<GermanEntry> lookupGerman(const QString &word)
         const int rb = (b.pos == QLatin1String("noun")) == capital ? 0 : 1;
         return ra < rb;
     });
+    return out;
+}
+
+bool ensureGermanDictionary(const QString &file, QString *error)
+{
+    static QString loadedFrom;
+    static QMutex m;
+    QMutexLocker lock(&m);
+    if (germanDictionaryLoaded() && loadedFrom == file)
+        return true;
+    if (!loadGermanDictionary(file, error))
+        return false;
+    loadedFrom = file;
+    return true;
+}
+
+QList<GermanReverse> reverseLookupGerman(const QStringList &english, const QString &pos, int max)
+{
+    struct Hit {
+        QString headword, pos;
+        int rank, sense;
+    };
+    QList<Hit> hits;
+    QMutexLocker lock(&g_deMutex);
+    if (!g_de.loaded || english.isEmpty())
+        return {};
+    QHash<QByteArray, int> rankOf;   // the bare lower-case word, its rank
+    for (int i = 0; i < english.size(); ++i) {
+        QString w = english.at(i).trimmed().toLower();
+        if (w.startsWith(QLatin1String("to ")))
+            w = w.mid(3);
+        if (!w.isEmpty() && !rankOf.contains(w.toUtf8()))
+            rankOf.insert(w.toUtf8(), i);
+    }
+    const QByteArray wantPos = pos.toUtf8();
+    for (size_t i = 0; i < g_de.lines.size(); ++i) {
+        const QByteArray line = lineAt(g_de, i);
+        const QList<QByteArray> f = line.split('\t');
+        if (f.size() < 6 || f.at(1) != "L" || (!wantPos.isEmpty() && f.at(3) != wantPos))
+            continue;
+        const QList<QByteArray> senses = f.at(5).split('|');
+        int bestRank = -1, bestSense = 0;
+        for (int s = 0; s < senses.size() && bestRank != 0; ++s) {
+            const QByteArray &m = senses.at(s);
+            const int caret = m.indexOf('^');
+            for (const QByteArray &x : (caret < 0 ? m : m.left(caret)).split(';')) {
+                QByteArray w = x.trimmed().toLower();
+                if (w.startsWith("to "))
+                    w = w.mid(3);
+                const auto it = rankOf.constFind(w);
+                if (it != rankOf.constEnd() && (bestRank < 0 || it.value() < bestRank || (it.value() == bestRank && s < bestSense))) {
+                    bestRank = it.value();
+                    bestSense = s;
+                }
+            }
+        }
+        if (bestRank >= 0)
+            hits.push_back({text(f.at(2)), text(f.at(3)), bestRank, bestSense});
+    }
+    std::stable_sort(hits.begin(), hits.end(), [](const Hit &a, const Hit &b) {
+        return std::tie(a.rank, a.sense, a.headword) < std::tie(b.rank, b.sense, b.headword);
+    });
+    QList<GermanReverse> out;
+    QSet<QString> seen;
+    for (const Hit &h : hits) {
+        const QString key = h.headword + QLatin1Char('\x1f') + h.pos;
+        if (seen.contains(key))
+            continue;
+        seen.insert(key);
+        out << GermanReverse{h.headword, h.pos, h.rank};
+        if (out.size() >= max)
+            break;
+    }
+    return out;
+}
+
+QString correctGermanCapitals(const QString &text)
+{
+    if (!germanDictionaryLoaded())
+        return text;
+    static const QSet<QString> articles = {QStringLiteral("der"), QStringLiteral("die"), QStringLiteral("das"), QStringLiteral("des"),
+        QStringLiteral("dem"), QStringLiteral("den"), QStringLiteral("ein"), QStringLiteral("eine"), QStringLiteral("einer"),
+        QStringLiteral("eines"), QStringLiteral("einem"), QStringLiteral("einen"), QStringLiteral("im"), QStringLiteral("am"),
+        QStringLiteral("zum"), QStringLiteral("zur"), QStringLiteral("vom"), QStringLiteral("beim"), QStringLiteral("ins"),
+        QStringLiteral("ans")};
+    struct Tok {
+        int start, len;
+        bool lower;         // starts with a lower-case letter
+        bool nounOnly = false, nounToo = false, hyphen = false;
+        bool capital = false;   // a capital letter at the end (typed or given)
+    };
+    QList<Tok> toks;
+    for (int i = 0; i < text.size();) {
+        if (!text.at(i).isLetter()) {
+            ++i;
+            continue;
+        }
+        int j = i;
+        while (j < text.size() && text.at(j).isLetter())
+            ++j;
+        Tok t;
+        t.start = i;
+        t.len = j - i;
+        t.lower = text.at(i).isLower();
+        t.capital = text.at(i).isUpper();
+        t.hyphen = (i > 0 && text.at(i - 1) == QLatin1Char('-')) || (j < text.size() && text.at(j) == QLatin1Char('-'));
+        if (t.lower && t.len > 1 && !t.hyphen) {
+            const QList<GermanEntry> entries = lookupGerman(text.mid(i, t.len));
+            bool allNouns = !entries.isEmpty();
+            for (const GermanEntry &e : entries) {
+                const bool noun = (e.pos == QLatin1String("noun") || e.pos == QLatin1String("name")) && !e.headword.isEmpty()
+                                  && e.headword.at(0).isUpper();
+                allNouns = allNouns && noun;
+                t.nounToo = t.nounToo || noun;
+            }
+            t.nounOnly = allNouns;
+            t.capital = allNouns;
+        }
+        toks << t;
+        i = j;
+    }
+    auto gapIsSpace = [&](int a, int b) {   // between token a and b only blanks
+        const int from = toks.at(a).start + toks.at(a).len, to = toks.at(b).start;
+        return text.mid(from, to - from).trimmed().isEmpty() && to > from;
+    };
+    QString out = text;
+    for (int k = 0; k < toks.size(); ++k) {
+        const Tok &t = toks.at(k);
+        bool up = t.lower && t.nounOnly;
+        if (t.lower && !t.nounOnly && t.nounToo && k > 0 && gapIsSpace(k - 1, k)
+            && articles.contains(text.mid(toks.at(k - 1).start, toks.at(k - 1).len).toLower())) {
+            // "der alte Mann": the next word is a noun, so this one is an adjective
+            const bool nounNext = k + 1 < toks.size() && gapIsSpace(k, k + 1) && toks.at(k + 1).capital;
+            up = !nounNext;
+        }
+        if (up)
+            out[t.start] = out.at(t.start).toUpper();
+    }
     return out;
 }
 

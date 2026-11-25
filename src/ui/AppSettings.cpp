@@ -104,6 +104,7 @@ void AppSettings::load()
     s.beginGroup(QStringLiteral("app")); // not "general": QSettings reserves [General] in INI files
     forename = s.value(QStringLiteral("forename")).toString();
     surname = s.value(QStringLiteral("surname")).toString();
+    authorAsked = s.value(QStringLiteral("authorAsked"), false).toBool();
     autosaveSeconds = s.value(QStringLiteral("autosave"), 2).toInt();
     openLastProject = s.value(QStringLiteral("openLast"), true).toBool();
     language = s.value(QStringLiteral("language"), QStringLiteral("en")).toString() == QLatin1String("de") ? QStringLiteral("de") : QStringLiteral("en");
@@ -244,6 +245,7 @@ void AppSettings::load()
     linkOpens = s.value(QStringLiteral("linkOpens"), linkOpens).toString();
     startWithCorkboard = s.value(QStringLiteral("folderCorkboard"), startWithCorkboard).toBool();
     floatQuickRef = s.value(QStringLiteral("floatQuickRef"), floatQuickRef).toBool();
+    binderScrivenerKeys = s.value(QStringLiteral("binderScrivenerKeys"), binderScrivenerKeys).toBool();
     reopenQuickRefs = s.value(QStringLiteral("reopenQuickRefs"), reopenQuickRefs).toBool();
     dropOnTextDocuments = s.value(QStringLiteral("dropOnTextDocuments"), dropOnTextDocuments).toBool();
     dragExportFormat = s.value(QStringLiteral("dragExportFormat"), dragExportFormat).toString();
@@ -333,6 +335,7 @@ void AppSettings::load()
     s.endGroup();
     s.beginGroup(QStringLiteral("appearance"));
     showFullPath = s.value(QStringLiteral("showFullPath"), showFullPath).toBool();
+    progressUnderSearch = s.value(QStringLiteral("progressUnderSearch"), progressUnderSearch).toBool();
     s.endGroup();
     s.beginGroup(QStringLiteral("sharing"));
     importCommentsInline = s.value(QStringLiteral("commentsInline"), importCommentsInline).toBool();
@@ -404,6 +407,13 @@ void AppSettings::load()
             toolbarList(int(b)) = s.value(QLatin1String("bar-") + toolbars::barKey(b)).toStringList();
         toolbarHidden = s.value(QStringLiteral("hidden")).toStringList();
     }
+    // 0.94.0: the Themes toolbar (one button with a menu now) is off at first, also for those who had it shown: once
+    if (!s.value(QStringLiteral("themesOff0940")).toBool()) {
+        if (!toolbarHidden.contains(QStringLiteral("themes")))
+            toolbarHidden << QStringLiteral("themes");
+        s.setValue(QStringLiteral("themesOff0940"), true);
+        s.setValue(QStringLiteral("hidden"), toolbarHidden);
+    }
     toolbarIconSize = qBound(16, s.value(QStringLiteral("iconSize"), toolbarIconSize).toInt(), 48);
     toolbarStyle = s.value(QStringLiteral("style"), toolbarStyle).toString();
     s.endGroup();
@@ -438,6 +448,7 @@ void AppSettings::save()
     s.beginGroup(QStringLiteral("app")); // not "general": QSettings reserves [General] in INI files
     s.setValue(QStringLiteral("forename"), forename);
     s.setValue(QStringLiteral("surname"), surname);
+    s.setValue(QStringLiteral("authorAsked"), authorAsked);
     s.setValue(QStringLiteral("autosave"), autosaveSeconds);
     s.setValue(QStringLiteral("openLast"), openLastProject);
     s.setValue(QStringLiteral("language"), language);
@@ -526,6 +537,7 @@ void AppSettings::save()
     s.setValue(QStringLiteral("linkOpens"), linkOpens);
     s.setValue(QStringLiteral("folderCorkboard"), startWithCorkboard);
     s.setValue(QStringLiteral("floatQuickRef"), floatQuickRef);
+    s.setValue(QStringLiteral("binderScrivenerKeys"), binderScrivenerKeys);
     s.setValue(QStringLiteral("reopenQuickRefs"), reopenQuickRefs);
     s.setValue(QStringLiteral("dropOnTextDocuments"), dropOnTextDocuments);
     s.setValue(QStringLiteral("dragExportFormat"), dragExportFormat);
@@ -606,6 +618,7 @@ void AppSettings::save()
     s.endGroup();
     s.beginGroup(QStringLiteral("appearance"));
     s.setValue(QStringLiteral("showFullPath"), showFullPath);
+    s.setValue(QStringLiteral("progressUnderSearch"), progressUnderSearch);
     s.endGroup();
     s.beginGroup(QStringLiteral("sharing"));
     s.setValue(QStringLiteral("commentsInline"), importCommentsInline);

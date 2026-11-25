@@ -133,14 +133,13 @@ Inspector::Inspector(QWidget *parent) : QWidget(parent)
     tl->addStretch(1);
     // in the order of the Tab numbers; the mind map (0.17) and the objects (0.20) are shown
     // between Bookmarks and Metadata
-    const QList<QPair<QString, QString>> defs = {{QStringLiteral("view-pim-notes"), tr("Synopsis and notes")},
-                                                 {QStringLiteral("bookmarks"), tr("Bookmarks")},
-                                                 {QStringLiteral("tag"), tr("Metadata")},
-                                                 {QStringLiteral("camera-photo"), tr("Snapshots")},
-                                                 {QStringLiteral("edit-comment"), tr("Comments and footnotes")},
-                                                 {QStringLiteral("qb-mindmap"), tr("Mind map of this document or folder")},
-                                                 {QStringLiteral("qb-objects"),
-                                                  tr("Objects of the project: characters, locations, environments, ...")}};
+    const QList<QPair<QString, QString>> defs = {{QStringLiteral("view-pim-notes"), tabToolTip(Notes)},
+                                                 {QStringLiteral("bookmarks"), tabToolTip(Bookmarks)},
+                                                 {QStringLiteral("tag"), tabToolTip(Metadata)},
+                                                 {QStringLiteral("camera-photo"), tabToolTip(Snapshots)},
+                                                 {QStringLiteral("edit-comment"), tabToolTip(Comments)},
+                                                 {QStringLiteral("qb-mindmap"), tabToolTip(MindMap)},
+                                                 {QStringLiteral("qb-objects"), tabToolTip(Objects)}};
     auto *group = new QButtonGroup(this);
     m_tabGroup = group;
     for (int i = 0; i < defs.size(); ++i) {
@@ -1924,6 +1923,27 @@ bool Inspector::focusNotes()
     window()->activateWindow();
     m_notes->setFocus(Qt::ShortcutFocusReason);
     return true;
+}
+
+// The one name of a tab: the tab button's tooltip and the entry of Navigate > Inspect (0.94.0)
+QString Inspector::tabToolTip(Tab t)
+{
+    switch (t) {
+    case Notes: return tr("Synopsis and notes");
+    case Bookmarks: return tr("Bookmarks");
+    case Metadata: return tr("Metadata");
+    case Snapshots: return tr("Snapshots");
+    case Comments: return tr("Comments and footnotes");
+    case MindMap: return tr("Mind map of this document or folder");
+    case Objects: return tr("Objects of the project: characters, locations, environments, ...");
+    }
+    return {};
+}
+
+QString Inspector::extraTabToolTip(const QString &key) const
+{
+    const int i = int(m_extraKeys.indexOf(key));
+    return i >= 0 && i < m_extraButtons.size() ? m_extraButtons[i]->toolTip() : QString();
 }
 
 void Inspector::showTab(Tab t)

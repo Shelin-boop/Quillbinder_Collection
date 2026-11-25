@@ -25,19 +25,19 @@ add-ons. The files, sorted by system:
 
 ### Linux
 
-**Quillbinder 0.93.1 beta for Linux (x86_64):**
+**Quillbinder 0.94.0 beta for Linux (x86_64):**
 
-- **[Quillbinder-0.93.1-beta-x86_64.AppImage](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-beta/Quillbinder-0.93.1-beta-x86_64.AppImage)**: the program
-- **[quillbinder-0.93.1-update.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-beta/quillbinder-0.93.1-update.qbpkg)**: the program update, for a Quillbinder you already have (0.80.0 or later; **File > Install Update or Add-on**)
-- **[media-all-formats.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-beta/media-all-formats.qbpkg)**: the commonly used audio and video formats (an add-on; optional)
-- **[Quillbinder-0.93.1-full-beta-x86_64.AppImage](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-beta/Quillbinder-0.93.1-full-beta-x86_64.AppImage)**:
+- **[Quillbinder-0.94.0-beta-x86_64.AppImage](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-beta/Quillbinder-0.94.0-beta-x86_64.AppImage)**: the program
+- **[quillbinder-0.94.0-update.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-beta/quillbinder-0.94.0-update.qbpkg)**: the program update, for a Quillbinder you already have (0.80.0 or later; **Help > Add-ons and Updates > Install Update or Add-on**)
+- **[media-all-formats.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-beta/media-all-formats.qbpkg)**: the commonly used audio and video formats (an add-on; optional)
+- **[Quillbinder-0.94.0-full-beta-x86_64.AppImage](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-beta/Quillbinder-0.94.0-full-beta-x86_64.AppImage)**:
   **the full version**: the program with all add-ons and all the libraries they need included (the commonly
   used audio and video formats, extra themes, project templates, the scriptwriting pack, the writing tools with offline speech recognition, the
   importers of web pages and old Word files). They are installed at the first start: one download, nothing
   else to install.
-- **Translation and Proofreading** (English proofreading and German-to-English translation on your computer) is one
-  of Quillbinder's own add-ons since 0.92.0: version 1.3 is inside the full version, and
-  [translation-proofreading.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-beta/translation-proofreading.qbpkg)
+- **Translation and Proofreading** (English proofreading and translation between German and English on your computer) is one
+  of Quillbinder's own add-ons since 0.92.0: version 1.4 is inside the full version, and
+  [translation-proofreading.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-beta/translation-proofreading.qbpkg)
   is beside it for a Quillbinder you already have. It downloads the language models you choose; one of them (CoEdIT
   Large) may be used for non-commercial purposes only, and the add-on says so. For Windows it is inside the full
   version too since Windows 0.92.0, and for Android tablets inside the app since Android 0.92.0
@@ -67,7 +67,7 @@ version); program updates of 0.70.0 and earlier do not fit.
 
 To start, make the AppImage executable (right-click > Properties > Permissions > *Is executable*, or
 `chmod +x`) and double-click it; **Help > Add to Application Menu** puts it into the menu of the desktop.
-Add-ons are installed with **File > Install Update or Add-on**.
+Add-ons are installed with **Help > Add-ons and Updates > Install Update or Add-on** (before 0.94.0: **File > Install Update or Add-on**).
 
 ### Windows
 

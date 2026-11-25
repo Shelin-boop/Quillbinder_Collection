@@ -1,4 +1,7 @@
 #include "ui/ObjectsUi.h"
+
+#include <algorithm>
+#include "ui/MenuGuard.h"
 #include "ui/Ask.h"
 #include "ui/TextEditor.h"
 #include "ui/Zoom.h"
@@ -177,7 +180,14 @@ ObjectChooser::ObjectChooser(Project *project, Mode mode, const QStringList &tar
     l->addWidget(m_search);
     m_list = new QListWidget(this);
     m_list->setObjectName(QStringLiteral("chooserList"));
+    if (mode == Documents)
+        m_list->setSelectionMode(QAbstractItemView::ExtendedSelection);   // 0.94.0: several documents at once (Ctrl, Shift)
     l->addWidget(m_list, 1);
+    if (mode == Documents) {
+        auto *hint = new QLabel(tr("Ctrl or Shift chooses several documents."), this);
+        hint->setObjectName(QStringLiteral("chooserHint"));
+        l->addWidget(hint);
+    }
     auto *bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
     l->addWidget(bb);
     connect(bb, &QDialogButtonBox::accepted, this, &ObjectChooser::accept);
@@ -242,11 +252,25 @@ void ObjectChooser::accept()
     QListWidgetItem *it = m_list->currentItem();
     if (!it || !m_project)
         return;
+    if (m_mode == Documents) {
+        QList<QListWidgetItem *> sel = m_list->selectedItems();
+        if (sel.isEmpty())
+            sel << it;
+        // in the order of the list
+        std::sort(sel.begin(), sel.end(), [this](QListWidgetItem *a, QListWidgetItem *b) { return m_list->row(a) < m_list->row(b); });
+        m_chosenMany.clear();
+        for (QListWidgetItem *s : std::as_const(sel))
+            m_chosenMany << s->data(Qt::UserRole).toString();
+        m_chosen = m_chosenMany.first();
+        QDialog::accept();
+        return;
+    }
     const QString id = it->data(Qt::UserRole).toString();
     if (id.startsWith(QLatin1String("new:")))
         m_chosen = m_project->objects()->create(id.mid(4), QString(), m_search->text().trimmed());
     else
         m_chosen = id;
+    m_chosenMany = QStringList{m_chosen};
     QDialog::accept();
 }
 
@@ -256,6 +280,14 @@ QString ObjectChooser::choose(Project *project, Mode mode, const QStringList &ta
     ObjectChooser dlg(project, mode, targets, exclude, parent);
     dlg.setWindowTitle(title);
     return dlg.exec() == QDialog::Accepted ? dlg.chosenId() : QString();
+}
+
+QStringList ObjectChooser::chooseMany(Project *project, Mode mode, const QStringList &targets, const QStringList &exclude, QWidget *parent,
+                                      const QString &title)
+{
+    ObjectChooser dlg(project, mode, targets, exclude, parent);
+    dlg.setWindowTitle(title);
+    return dlg.exec() == QDialog::Accepted ? dlg.chosenIds() : QStringList();
 }
 
 // ---------------------------------------------------------------- long text with links
@@ -607,7 +639,7 @@ void ObjectTextEdit::contextMenuEvent(QContextMenuEvent *e)
             removeLinkAtCursor();
         });
     }
-    menu->exec(e->globalPos());
+    qb::execGuarded(*menu, e->globalPos(), this);
     delete menu;
 }
 
@@ -623,7 +655,10 @@ ChipList::ChipList(bool addButton, QWidget *parent) : QWidget(parent)
         m_add->setObjectName(QStringLiteral("chipAdd"));
         m_add->setText(QStringLiteral("+"));
         m_add->setToolTip(tr("Add a link…"));
-        m_add->setAutoRaise(true);
+        // 0.94.0: a framed button of normal size (it was a frameless one of about 12 px)
+        m_add->setAutoRaise(false);
+        m_add->setMinimumSize(28, 26);
+        m_add->setFocusPolicy(Qt::StrongFocus);
         connect(m_add, &QToolButton::clicked, this, &ChipList::addRequested);
         m_flow->addWidget(m_add);
     }
@@ -650,7 +685,7 @@ void ChipList::setChips(const QList<Chip> &chips)
             m.addAction(tr("Open"), this, [this, id] { emit activated(id); });
             if (m_add)
                 m.addAction(tr("Remove the Link"), this, [this, id] { emit removeRequested(id); });
-            m.exec(b->mapToGlobal(p));
+            qb::execGuarded(m, b->mapToGlobal(p), this);
         });
         m_flow->addWidget(b);
         m_buttons << b;
@@ -710,7 +745,7 @@ protected:
                 onRemove();
         });
         rm->setEnabled(pixmap().isNull() == false);
-        m.exec(e->globalPos());
+        qb::execGuarded(m, e->globalPos(), this);
     }
     void dragEnterEvent(QDragEnterEvent *e) override
     {
@@ -940,6 +975,26 @@ void ObjectForm::rebuild()
             col->addWidget(ed);
         }
     }
+    // 0.94.0: Tab from the name goes to the first field (Full name), then through the fields in their order
+    QWidget *prev = m_name;
+    for (const FieldDef &f : c->fields) {
+        QWidget *w = m_fields.value(f.id);
+        if (!w)
+            continue;
+        QWidget *target = nullptr;
+        if (w->focusPolicy() & Qt::TabFocus)
+            target = w;
+        else
+            for (QWidget *k : w->findChildren<QWidget *>())
+                if (k->focusPolicy() & Qt::TabFocus) {
+                    target = k;
+                    break;
+                }
+        if (!target)
+            continue;
+        QWidget::setTabOrder(prev, target);
+        prev = target;
+    }
 }
 
 QWidget *ObjectForm::makeEditor(const FieldDef &f)
@@ -1013,8 +1068,16 @@ QWidget *ObjectForm::makeEditor(const FieldDef &f)
         const bool docs = f.type == FieldType::Documents;
         const QStringList targets = f.targets;
         connect(e, &ChipList::addRequested, this, [this, fid, docs, targets] {
-            const QString id = ObjectChooser::choose(m_project, docs ? ObjectChooser::Documents : ObjectChooser::Objects, targets,
-                                                     m_obj.ids(fid) << m_id, this, docs ? tr("Link to Document") : tr("Link to Object"));
+            if (docs) {
+                // 0.94.0: several documents at once
+                const QStringList ids = ObjectChooser::chooseMany(m_project, ObjectChooser::Documents, targets, m_obj.ids(fid) << m_id, this,
+                                                                  tr("Link to Documents"));
+                for (const QString &id : ids)
+                    addLink(fid, id);
+                return;
+            }
+            const QString id = ObjectChooser::choose(m_project, ObjectChooser::Objects, targets, m_obj.ids(fid) << m_id, this,
+                                                     tr("Link to Object"));
             if (!id.isEmpty())
                 addLink(fid, id);
         });
@@ -1471,7 +1534,7 @@ void ObjectsPanel::rebuildCategories()
                 setCategory(id);
                 editTemplates();
             });
-            m.exec(b->mapToGlobal(p));
+            qb::execGuarded(m, b->mapToGlobal(p), this);
         });
         m_categoryFlow->addWidget(b);
         m_categoryButtons << b;
@@ -1742,7 +1805,7 @@ void ObjectsPanel::treeContextMenu(const QPoint &pos)
         }
         m.addAction(tr("Delete…"), this, [this] { deleteSelected(true); });
     }
-    m.exec(m_tree->viewport()->mapToGlobal(pos));
+    qb::execGuarded(m, m_tree->viewport()->mapToGlobal(pos), this);
 }
 
 void ObjectsPanel::moveByDrop(QTreeWidgetItem *dragged, QTreeWidgetItem *target)

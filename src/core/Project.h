@@ -7,6 +7,7 @@
 #include <QElapsedTimer>
 #include <QHash>
 #include <QObject>
+#include <QPointer>
 #include <QTimer>
 #include <QVariantMap>
 #include <functional>
@@ -213,6 +214,16 @@ public:
     int totalWordCount() const;
     int totalCharCount() const;
     void startSession(bool force);
+    // 0.94.0 (item 73): words that came in by import, by a paste of more than 200 words or at the first opening of a
+    // project are not words written in the session: the session's start counts move up by what came in
+    struct CountSnapshot { int draftW = 0, totalW = 0, draftC = 0, totalC = 0; };
+    CountSnapshot countSnapshot() const;
+    void excludeFromSession(const CountSnapshot &before);
+    // the counts of one document that changed by `dWords` / `dChars` (a paste past the limit)
+    void excludeFromSession(const BinderItem *item, int dWords, int dChars);
+    CountSnapshot beginSessionExclusion();
+    void endSessionExclusion(const CountSnapshot &before);
+    int m_sessionExcludeDepth = 0;
     int sessionWords() const;
     int sessionChars() const;
     int sessionTargetToday() const; // may be derived from the deadline
@@ -307,6 +318,28 @@ private:
     bool saveImpl(QString *error, bool quick);
 
     friend class ProjectIO;
+};
+
+// While one exists (outermost one counts), what comes into the project is not counted as written in this session.
+class SessionExclusion
+{
+public:
+    explicit SessionExclusion(Project *p) : m_p(p)
+    {
+        if (m_p)
+            m_before = m_p->beginSessionExclusion();
+    }
+    ~SessionExclusion()
+    {
+        if (m_p)
+            m_p->endSessionExclusion(m_before);
+    }
+    SessionExclusion(const SessionExclusion &) = delete;
+    SessionExclusion &operator=(const SessionExclusion &) = delete;
+
+private:
+    QPointer<Project> m_p;
+    Project::CountSnapshot m_before;
 };
 
 } // namespace qb

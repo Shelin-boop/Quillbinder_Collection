@@ -5,7 +5,7 @@
 // (key app/firstStartDone), also by an installation older than 0.62.
 // Windows (W4b, the portable program): also the guide: where the program keeps everything, warnings for a folder in a
 // sync service or with a long path, no standard backup folder, the place of notes and transcriptions, the Start menu
-// entry, the desktop shortcut and the project file types (ui/PortableSetup.h). Help > This Computer shows it again.
+// entry, the desktop shortcut and the project file types (ui/PortableSetup.h). Help > Troubleshooting and Development > This Computer shows it again.
 #include <QDialog>
 
 class QCheckBox;
@@ -31,11 +31,22 @@ public:
     static bool due();
     static void markDone();
 
+    // 0.94.0: the one page also asks about the application menu (Linux, from an AppImage) and takes the place of the
+    // note about the check for updates; the main window carries these two out after take()
+    bool hasMenuQuestion() const { return m_menuAdd != nullptr; }
+    bool addToMenu() const;
+    bool moveAppImage() const;
+    bool hasUpdateQuestion() const { return m_updates != nullptr; }
+    bool checkForUpdates() const;
+
 private:
     QCheckBox *m_backup;
     QSpinBox *m_keep;
     QLineEdit *m_folder;
     PortableSetup *m_setup = nullptr;
+    QCheckBox *m_menuAdd = nullptr;
+    QCheckBox *m_menuMove = nullptr;
+    QCheckBox *m_updates = nullptr;
 };
 
 } // namespace qb

@@ -62,7 +62,7 @@ for dir in "$ROOT"/addons/*/; do
 done
 rm -rf "$OUT/.stage"
 # One package for the commonly used audio and video formats (0.60): a bundle of "Media Playback" and
-# "Extra Video and Audio Formats", installed in one step with File > Install Update or Add-on.
+# "Extra Video and Audio Formats", installed in one step with Help > Add-ons and Updates > Install Update or Add-on.
 # The two add-ons stay separate inside it, so the patent-licensed formats can still be switched
 # off or removed on their own in the Add-on Manager.
 if [ -f "$OUT/media-playback.qbpkg" ] && [ -f "$OUT/media-extra-formats.qbpkg" ]; then

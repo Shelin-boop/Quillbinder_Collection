@@ -32,6 +32,7 @@ class Ruler;
 class Copyholder;
 class FilterBar;
 class FooterStatus;
+class WritingProgress;
 
 enum class ViewMode { Single = 0, Combined = 1, Corkboard = 2, Outliner = 3, Media = 4, Empty = 5 };
 
@@ -110,10 +111,17 @@ public:
     bool canGoToEnclosingGroup() const;
     void goToEnclosingGroup();
     void refresh();         // after structural changes
+    // after documents were moved to the Trash: a corkboard or outliner that shows several documents as they are
+    // (not a folder's content) lets them go (0.94.0, item 88)
+    void refresh(const QList<qb::BinderItem *> &movedToTrash);
     void refreshHeader();
     void updateFooter();
     // 0.93.0: the save text, the warning link and the short messages of the window (only the first editor's is filled)
     FooterStatus *footerStatus() const { return m_status; }
+    // 0.94.0 (item 74): session and draft progress beside the word count (a target <= 0 hides that part); a click on it
+    // sends targetsRequested()
+    WritingProgress *writingProgress() const { return m_progress; }
+    void setWritingProgress(int session, int sessionTarget, bool sessionChars, int draft, int draftTarget, bool draftChars);
     // "Folder: 1,234 words": the total of the folder (or the items) shown; empty when none is (0.60.1)
     QString folderCountText() const;
     // The details of the folder total (words, characters, characters without spaces,
@@ -145,6 +153,7 @@ signals:
     void currentItemChanged(qb::EditorPane *pane);
     void viewChanged(qb::EditorPane *pane);
     void splitButtonClicked(qb::EditorPane *pane, bool alternate);
+    void targetsRequested();   // the writing progress in the footer was clicked (0.94.0)
     void linkActivated(qb::EditorPane *pane, const QString &href);
     void noteClicked(const QString &noteId);
     void itemContextMenuRequested(qb::EditorPane *pane, const QPoint &globalPos);
@@ -233,6 +242,7 @@ private:
     // footer
     QStackedWidget *m_footer;
     FooterStatus *m_status = nullptr;
+    WritingProgress *m_progress = nullptr;
     struct StatusPlace { QHBoxLayout *layout = nullptr; int index = 0; };
     StatusPlace m_statusPlaces[6]; // text, corkboard, outliner, picture, player, nothing
     QComboBox *m_zoom;

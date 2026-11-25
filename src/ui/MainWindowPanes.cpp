@@ -221,6 +221,7 @@ void MainWindow::followWindowShape()
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
     QMainWindow::resizeEvent(e);
+    windowPlaceChanged();
     if (wantsUpright() != m_upright && !m_shapeCheckQueued) {
         m_shapeCheckQueued = true;
         QTimer::singleShot(0, this, [this] {

@@ -1,4 +1,5 @@
 #include "ui/BinderPanel.h"
+#include "ui/MessageLine.h"
 #include "ui/Ask.h"
 #include "ui/Zoom.h"
 #include "core/BinderModel.h"
@@ -198,15 +199,21 @@ void BinderTree::resizeEvent(QResizeEvent *e)
 void BinderTree::keyPressEvent(QKeyEvent *e)
 {
     if (state() != QAbstractItemView::EditingState) {
+        // 0.94.0: "Quick-Add Keys in the Binder" (View): off, Return opens the document in the editor and Space is left to
+        // the type-ahead search; on, Return makes a new document and Space opens a Quick Reference window
+        const bool scrivenerKeys = AppSettings::instance().binderScrivenerKeys;
         if ((e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) && e->modifiers() == Qt::NoModifier) {
-            emit enterPressed();
+            if (scrivenerKeys)
+                emit enterPressed();
+            else
+                emit openPressed();
             return;
         }
         if (e->key() == Qt::Key_Delete) {
             emit deletePressed();
             return;
         }
-        if (e->key() == Qt::Key_Space && e->modifiers() == Qt::NoModifier) {
+        if (e->key() == Qt::Key_Space && e->modifiers() == Qt::NoModifier && scrivenerKeys) {
             emit spacePressed();
             return;
         }
@@ -640,7 +647,7 @@ void ItemListWidget::dropEvent(QDropEvent *e)
 void ItemListWidget::keyPressEvent(QKeyEvent *e)
 {
     if (e->modifiers() == Qt::NoModifier) {
-        if (e->key() == Qt::Key_Space) {
+        if (e->key() == Qt::Key_Space && AppSettings::instance().binderScrivenerKeys) {
             emit spacePressed();
             return;
         }
@@ -849,6 +856,10 @@ BinderPanel::BinderPanel(QWidget *parent) : QWidget(parent)
             emit fixMindMapRequested(it);
     });
 
+    // 0.94.0: the message line (no height while it is empty)
+    m_messages = new MessageLine(this);
+    lay->addWidget(m_messages);
+
     // footer
     auto *footer = new QWidget(this);
     auto *fl = new QHBoxLayout(footer);
@@ -876,6 +887,7 @@ BinderPanel::BinderPanel(QWidget *parent) : QWidget(parent)
     connect(m_addButton, &QToolButton::clicked, this, &BinderPanel::newDocumentRequested);
     connect(m_folderButton, &QToolButton::clicked, this, &BinderPanel::newFolderRequested);
     connect(m_tree, &BinderTree::enterPressed, this, &BinderPanel::newDocumentRequested);
+    connect(m_tree, &BinderTree::openPressed, this, &BinderPanel::openRequested);
     connect(m_tree, &BinderTree::deletePressed, this, &BinderPanel::trashRequested);
     connect(m_tree, &BinderTree::spacePressed, this, &BinderPanel::quickReferenceRequested);
     // 0.90.1 (the usability review of 0.90.0, UR-14): empty space below the items offers what makes something new

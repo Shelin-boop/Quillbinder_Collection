@@ -611,7 +611,7 @@ void caseSV09()
     // the built-in layouts
     for (const QString &id : {QStringLiteral("binder-editor"), QStringLiteral("editor-only"), QStringLiteral("outliner-editor"), QStringLiteral("corkboard-editor"),
                               QStringLiteral("two-editors"), QStringLiteral("planning"), QStringLiteral("default")}) {
-        check(chooseByMenu(w, QStringLiteral("layout:") + id), QStringLiteral("Window > Layouts > %1").arg(id));
+        check(chooseByMenu(w, QStringLiteral("layout:") + id), QStringLiteral("View > Layout > %1").arg(id));
         settle(300);
         shot(w, QStringLiteral("layout-") + id);
     }
@@ -628,7 +628,7 @@ void caseSV09()
         settle(300);
     }
     for (int i = 1; i <= 3; ++i)
-        menuPath(w, QStringLiteral("Window > Layouts > Own layout %1").arg(i));
+        menuPath(w, QStringLiteral("View > Layout > Own layout %1").arg(i));
     withModal<QDialog>(400, [](QDialog *d) {
         shot(d, QStringLiteral("manage-layouts"));
         if (auto *lw = d->findChild<QListWidget *>()) {
@@ -650,7 +650,7 @@ void caseSV09()
     settle(300);
     int kept = 0;
     for (int i = 1; i <= 2; ++i)
-        if (menuPath(w2, QStringLiteral("Window > Layouts > Own layout %1").arg(i)))
+        if (menuPath(w2, QStringLiteral("View > Layout > Own layout %1").arg(i)))
             ++kept;
     check(kept == 2, QStringLiteral("the own layouts are kept after a restart"), QString::number(kept));
     dropWindow(w2);

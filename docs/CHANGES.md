@@ -3,6 +3,177 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.94.0 beta (2026-11-25)
+
+New functions and fixes (a program update for 0.93.x; the AppImage stays on the runtime `u2404-qt6.12-r2`).
+
+- **A Quick Reference window no longer crashes when it is closed while its menu is open**. The menu of the document
+  icon in the window's header (Reveal in Binder, Open in the Editor, Project Bookmarks) kept the window from being
+  deleted safely: a close request from the window manager while the menu was open ended the program with a "double
+  free" error. The close request is now held until the menu has ended and then carried out. The same holds for the
+  menus of the mind map windows, the Objects window and the media player of a panel.
+- **A new mind map note gets the keyboard**. After **New Note** in the inspector's mind map (button, menu or a
+  double-click) the note showed its text selected, but the keys went to the part that had the focus before, often the
+  binder. The note's editor now takes the focus.
+- **Documents moved to the Trash leave the corkboard at once**. Three documents chosen in the binder and moved to the
+  Trash with **Delete** stayed on the corkboard ("3 documents") until another item was chosen. A corkboard or outliner
+  that shows several chosen documents lets those go that were moved to the Trash.
+- **The inspector shows the document chosen in the binder**. When the editor already showed the chosen document while
+  the inspector showed another one, a click in the binder left the inspector where it was (found by a check that
+  failed on Windows only). After a choice in the binder the inspector always shows the chosen document.
+- **Imported text and pastes are no session words**. After **Import and Split** of a long text the Project Targets
+  counted all imported words as written in the session; the first opening of a project counted its words too; and
+  after **Reset Session Now** the tooltip of the quick-search field kept the old number until the next change. One
+  rule now: imported text, the words a project holds when it is opened the first time, and a paste of more than 200
+  words do not count as session words; the tooltip follows **Reset Session Now** at once.
+- **Back Up Now tells its success under the binder**. The box "Backup saved" that waited for OK (and on Android blocked
+  later steps when it was left open) is gone. The message line under the binder says "Backup saved." with a link **Show Folder**
+  (the path is in the tooltip; a message with a link stays 10 seconds); boxes come only for failures and for a backup that is incomplete.
+- **Small layout points**. The Project Targets window keeps the room of its progress bars from the start, so its
+  fields no longer move under the mouse when a target is set. On a screen narrower than 1600 px the window opens
+  maximized the first time (when no saved state exists). The window's size, place and state are saved a moment after
+  each change, not only when the program ends (they were lost after a crash).
+- **Translation and Proofreading 1.4**. A single word, German to English or English to German, shows the
+  translation of each word class (a German word that is a verb in lower case and a noun with a capital gets both),
+  then similar translations (from English to German: similar German words from the German dictionary), then the short
+  description, instead of repeating the word. **Automatic** translates a lone German word instead of proofreading it
+  (with the German dictionary installed). German typed in lower case translates better: the dictionary puts the
+  capitals of nouns right in the copy the model gets (the writer's text stays as it is); without the dictionary a
+  note says that German nouns need capitals. A notice at the top of the add-on's pane names what is missing (a
+  translation model, the German dictionary) with a button to the add-on's options. Models are unloaded after 15
+  minutes without use (File > Options > Proofreading > Speed). Fixes: no alternatives that differ only in capitals,
+  no "Spelling" line for words of the result, "number" is no longer read as "numb", and the hints in the empty fields
+  wrap.
+- **One place per topic in the menus, and Find Command**. "Layout" stood in three menus; fonts under Navigate; the
+  add-on commands in File, Edit and Help; the link commands in Edit while images, tables and notes were in Insert.
+  Now **View > Layout** holds the positions of the binder, editor and inspector, the saved layouts, **Save Current
+  Layout...** and **Manage Layouts...** (Window > Layouts is gone); **View > Editor Layout** is **View > Split
+  Editor**; the font commands moved from Navigate > Fonts to **Format > Font**; **Link to Document...**, **Link to
+  Object...** and **Insert Web Link...** moved from Edit to **Insert**; **Help > Add-ons and Updates** holds the
+  Add-on Manager, Install Update or Add-on (out of File), Check for Updates Now and Check for Updates at Startup
+  (Edit > Writing Tools holds the tools only). **Help > Find Command...** opens a window with a search field and the
+  list of all menu commands with their menu and shortcut: typing narrows the list, Return or a double-click runs the
+  chosen command, and a command that is off is shown grayed and does not run. It has no shortcut (Ctrl+Shift+P is the
+  mind map's Page Setup). The commands keep their internal names, so saved shortcuts and toolbars are not affected.
+- **Help has 13 entries instead of 18**. **Open Plugin Folder**, **Developer Guide**, **Crash Reports**, **This
+  Computer** and **System Information** are in the submenu **Help > Troubleshooting and Development**.
+- **The first start is one page**. The window with the backup settings, the question about the application menu (Linux
+  AppImage), its confirmation box and the note about the check for updates are one page with one **OK**: the backups,
+  the application menu (with a line that **Help > Add to Application Menu** or **Remove from Application Menu**
+  changes it later) and the tick box for the check for updates. No box confirms the menu entry (a failure is still
+  told), and the welcome project opens without an empty main window showing first. On Linux, **Help > Add to
+  Application Menu** turns into **Remove from Application Menu** while the entry exists and takes away what adding made
+  (the entry file, the icon and the file types).
+- **The AppImage can move to ~/Applications with the menu entry** (Linux). Adding the entry, on the first-start page and
+  with the Help command, offers to move the AppImage to *~/Applications* (a check box, ticked at first when it is not
+  there yet), so that the entry points to a place where the file stays; before, an AppImage in Downloads that was moved
+  or deleted could not be started from the menu. After the move, program updates, the *.before-update* copy and System
+  Information use the new place at once. A move that fails (another file of that name, no room) loses nothing: the
+  file stays, the entry points there, and a message says why.
+- **The full AppImage shows its first start**. It unpacked its add-ons (13, about 159 MB) without any sign for 10 s or
+  more. Now a window with the program's logo, a progress bar and "Installing 13 add-ons (159 MB)..." shows during the
+  installation (one call of the program for the folder of packages, `quillbinder --install-folder <folder>`, instead
+  of one call per package; the marker file and its rules stay: once per version, a removed add-on stays removed, no
+  marker when a package fails). Without a display it runs without the window. The download page can name the space of
+  the add-ons beside the full version's button when the release gives the number (a file `full-addons-size`).
+
+- **One name and one key per command**. Ctrl+Shift+Return, **Insert > Media Timestamp** and **Navigate > Media >
+  Insert Timestamp** were one command under two names; it is now **Insert Media Timestamp** in both places (the entry in
+  Insert only shows the key of the one command), and the Alt letter of the Insert menu's entries (Alt+T was given to
+  Table and to the timestamp) is its own. **Navigate > Inspect** listed 7 of the inspector's 9 tabs and called the first
+  one "Notes" while its tooltip says "Synopsis and notes": it now lists every tab, also those of the writing tools
+  (Speech Transcription, Translation and Proofreading), under the name of the tab's tooltip. A new check walks all
+  menus: no two commands share a shortcut and no menu has two entries with the same Alt letter.
+- **Return and Space in the binder: a menu option, off at first**. Return made a new empty document and Space opened a
+  Quick Reference window (the quick-add keys); a file manager opens the item with Return, and a phrase with a space
+  typed to find a title opened a window for each space. The new entry **View > Quick-Add Keys in the Binder** is
+  unchecked (also after an update): Return opens the selected document in the editor and puts the keyboard there,
+  Space belongs to the binder's type-ahead search (this also holds for the list of a collection or a search). Checked,
+  the keys are as before.
+- **Shortcuts follow the keyboard layout**. The menus showed Ctrl+{, Ctrl+|, Ctrl+} (align), Ctrl+[ and Ctrl+] (back,
+  forward), Ctrl+\\ (list of script elements) and Ctrl+= (subscript); on a German keyboard these need AltGr, and with
+  the German layout on X11 Ctrl+AltGr+7, < and 0 triggered the alignment as chords the labels did not show. At the
+  very first start (no shortcut settings, no earlier start) the program asks the system for the keyboard layout and keeps
+  the answer: a German or Austrian layout gets a set without AltGr (Alt+Shift+L, E, R to align, Alt+Shift+B and F for
+  back and forward, Ctrl+Shift+O for the list of script elements, Ctrl+Shift+D for subscript; in the mind map also
+  Alt+Shift+J, Ctrl+Shift+PageUp and PageDown), every other layout the set as before. A program that was used before,
+  and every shortcut changed in **File > Options > Keyboard**, stays as it is. Linux asks the keyboard settings of the
+  desktop (KDE, GNOME), the X server or the system's default; Windows the language of the keyboard layout; Android the
+  language of the keyboard (this last way is not tried on a device).
+- **Composition mode: the bar is readable in light themes**. After the theme "Light" the buttons Inspector, Exit (Esc),
+  the one beside them and the zoom box of the bottom bar were light gray on light gray (1.2:1). The bar is dark in
+  every theme now and its buttons, box and texts have their own colors; a check measures the contrast of the bar for
+  every built-in theme (at least 4.5:1, as WCAG 2.2 asks for text).
+- **Card text and ruler numbers are readable**. The text of an index card that is taken from the document (a card
+  without a synopsis) was 3.1:1 on the card and the numbers of the ruler 2.5:1 in the default theme. Both have at
+  least 4.5:1 in every built-in theme now (the text of a synopsis too); a check measures them.
+- **One theme button instead of four buttons and a list**. Bright, Dark, U1, U2 and the theme list took 333 px of the
+  toolbar. Now one button, **Theme**, has a menu: **Light**, **Dark**, **My Look 1**, **My Look 2**, then every theme
+  (the one in use checked) and at the end **Save the Current Look as My Look 1** and **...as My Look 2**. Light shows
+  the theme Light (it showed the theme that follows the desktop for some), an empty My Look says so in the menu and
+  explains itself in its tool tip. U1 and U2 are called My Look 1 and My Look 2 in the menus, tool tips and the manual
+  (the saved themes keep their file names). The button is in the Themes toolbar, which is off at first, also for those
+  who had it shown (once; **View > Toolbars > Themes** shows it again). The theme choices moved from the Window menu to **View > Themes** (the same commands; Window has no Themes entry).
+- **The manual has a contents list and a search**. F1 opened one long text without a contents list, a search or jumps.
+  The window now has the headings of the manual on the left (a click jumps to one) and a search field (**Ctrl+F**;
+  **Return** and **Shift+Return**, or the buttons Next and Previous, show the next and the previous hit; the line
+  beside the field says which hit of how many is shown, and all hits are marked). **F1 opens the part that fits**: the
+  document, the corkboard, the outliner, Combined Text, the binder, the tab of the inspector with the keyboard, and the
+  open dialog (compile, options, project settings, themes, add-ons, styles and the other main dialogs); a dialog
+  without a part of its own opens the start. What is meant for people who build the program (the design decisions, the
+  environment variables, plugins and packages, the project folder's files) moved from the manual to the developer guide
+  (**Help > Troubleshooting and Development > Developer Guide**); the manual's sections after section 19 are renumbered
+  (troubleshooting is section 20).
+- **The first compile with a title page asks for the author's name**. The title page of the project templates reads
+  "by" and the author's name; a compile to Word gave "by" and nothing after it because the name is asked nowhere. The
+  first compile that writes a title page now asks (first and last name, kept with the author information in **File >
+  Options > General**), once. If the name is left empty, the "by" line is left out, in every format.
+- **The add-on install window names what the add-on does**. The window of Speech Transcription began with whisper.cpp,
+  Vulkan, Qt Multimedia 6.12.1, a TLS plugin and the runtime name. It now begins with what the add-on does for a writer;
+  the technical lines are under **Details**, which is folded (a new optional field "details" of the add-on's
+  manifest). The window of the full AppImage that shows the add-ons being installed names each one by its name from the
+  manifest ("Media Playback"), not by its id.
+- **The download page lists the add-ons and warns about the question of the desktop**. Under each system's other
+  downloads the page lists the add-ons of the release (name, one line and size). The Linux steps say that the desktop
+  (KDE Plasma) may ask whether to execute the file after the double-click. The release workflow writes the installed
+  size of the full version's add-ons (**tools/full-addons-size.py**) for the line about disk space, which the page
+  already read.
+
+- **System test (Linux): S-P03 and S-T03 follow the Android copy**. S-P03 saves before its second Save As (since 0.93.0
+  Save As writes nothing more into the original); a right click in S-T03 brings the place into sight in a scroll area
+  around the editor. The system test runs only when asked.
+- **A message line under the binder, and tool interface 1.2**. Short messages of the program and of add-ons appear in a
+  small line under the binder: one at a time, each for 5 seconds (10 seconds with a link) or until it is clicked; the
+  others wait. The tool interface has a new host call, `showMessage(text, milliseconds)` (add-ons call it only when the program
+  says 1.2 or later; older add-ons keep working). Translation and Proofreading 1.4 and Speech Transcription 1.9 free their models
+  after 15 minutes without use (the time can be changed in their options; Speech Transcription has a new field "Free the model
+  after") and say "Model unloaded, RAM usage minimal" in this line. **Help > Troubleshooting and Development > System
+  Information** names the memory the program holds (resident size).
+- **Writing progress in the footer**. With a session or draft target set, the footer shows a small bar and "83 / 1,000 today"
+  and "12,400 / 80,000 draft" beside the word count; a click opens **Project Targets**. The two thin lines under the quick search
+  field stay as an option (**File > Options > Appearance > General Interface**, on at first).
+- **Import and Split at headings**. For .docx, .odt and .md files: Heading 1 becomes a folder, Heading 2 a folder or a document
+  (chosen in the window), the text between headings becomes documents, lower headings stay in the text. The window shows the
+  resulting binder as a tree before anything is imported. The title of a document that no heading names follows one rule,
+  stated in the window and the same in every mode: the first line of its text that is not empty (shortened to 120 characters
+  when longer), otherwise "<file name> <number>"; before, most documents got the file name whenever the first line was empty
+  or long.
+- **Documents > Group**. The selected items move into a new folder at the place of the first one; its title is ready for
+  typing; one undo step (**Edit > Undo** with the keyboard in the binder; Ctrl+Shift+J).
+- **Objects: small points**. Tab from the name of an object goes to Full name; the dialog for "Appears in" takes several
+  documents at once (Ctrl or Shift); the "+" buttons beside the link fields are framed buttons of normal size.
+- **Characters and places as Objects**. **Documents > Convert > Sheet to Object** (also in the binder's context menu) makes an
+  Object of each selected sheet document: the title is the name, the text goes into Other, a picture becomes the picture; the
+  folder's name (Characters, Places) chooses the kind. The binder item stays and from then on shows the Object when it is
+  selected and opens it with Return. The document keeps its text, in a Scrivener project too; the link is kept in the project's
+  own Objects data. One undo step.
+- **A notice for a missing add-on**. **Edit > Writing Tools** keeps "Translate and Proofread" and "Speech Transcription" while
+  the add-on is not installed (or switched off); they show a notice with a button to **Help > Add-ons and Updates > Add-on
+  Manager**. Before, nothing in the program led to them.
+- **"This project" keeps only the changed option**. Options set for "This project" could take the toolbar lists, the hidden
+  toolbars and the revision colors along with the one changed option (a fault of earlier versions too, shown by a new key
+  count; it depended on the size of the settings files). Only what was changed goes into the project now.
+
 ## 0.93.1 beta (2026-11-24)
 
 Fixes and small changes (a program update for 0.93.0; the AppImage stays on the runtime `u2404-qt6.12-r2`).

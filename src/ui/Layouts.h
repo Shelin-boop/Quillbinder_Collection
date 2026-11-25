@@ -12,7 +12,7 @@ class QPushButton;
 
 namespace qb {
 
-// Window layouts (Window > Layouts): which parts of the main window are
+// Window layouts (View > Layout): which parts of the main window are
 // shown, how the editor is split and which view each editor uses. A layout
 // says nothing about documents, so it works in every project.
 //
@@ -83,7 +83,7 @@ private:
     QVariantMap m_state;
 };
 
-// Window > Layouts > Manage Layouts
+// View > Layout > Manage Layouts
 class LayoutsDialog : public QDialog
 {
     Q_OBJECT

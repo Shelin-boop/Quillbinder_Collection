@@ -1,7 +1,7 @@
 #pragma once
 // 0.92.0: the check for updates, the part with the network and the windows (the rules: core/UpdateCheck.h).
 // Nothing here runs, and no network object is made, unless the check is switched on (Help > Check for Updates at
-// Startup, on by default, after the first start's note) or asked for (Help > Check for Updates Now).
+// Startup, on by default, after the first start's note) or asked for (Help > Add-ons and Updates > Check for Updates Now).
 #include "core/UpdateCheck.h"
 
 #include <QObject>
@@ -23,9 +23,11 @@ public:
     explicit UpdateChecker(MainWindow *window);
     bool isEnabled() const;
     void setEnabled(bool on);
+    // 0.94.0: the first start's page asked (the note of the first look is not shown then)
+    void firstStartAnswered(bool on);
     // The program's start: the first start's note, then a look when the last one is a day old or more.
     void startAutomatic();
-    // Help > Check for Updates Now: looks whatever the switch says, and shows what there is.
+    // Help > Add-ons and Updates > Check for Updates Now: looks whatever the switch says, and shows what there is.
     void checkNow();
     bool isBusy() const { return m_busy; }
     int requests() const { return m_requests; }   // how many requests left the program (for the tests)

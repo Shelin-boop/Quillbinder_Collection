@@ -5,6 +5,7 @@
 #pragma once
 
 #include <QString>
+#include <functional>
 #include <QWidget>
 
 class QLabel;
@@ -24,6 +25,9 @@ public:
 
     // a short message for its seconds (0 = until clearNote), then the save text returns
     void showNote(const QString &text, int ms);
+    // the same with a link after the text (0.94.0: "Show Folder" after a backup); `action` runs when it is clicked
+    void showNote(const QString &text, int ms, const QString &actionText, std::function<void()> action);
+    QLabel *noteActionLabel() const { return m_noteAction; }
     void clearNote();
     QString noteText() const { return m_note; }
 
@@ -42,11 +46,14 @@ public:
 
 protected:
     void resizeEvent(QResizeEvent *e) override;
+    void mousePressEvent(QMouseEvent *e) override; // the mark of a note with a link runs the link
     void changeEvent(QEvent *e) override;
 
 private:
     void render();
-    QLabel *m_text, *m_link;
+    QLabel *m_text, *m_link, *m_noteAction;
+    QString m_noteActionText;
+    std::function<void()> m_noteFn;
     QTimer *m_noteTimer;
     QString m_saveText, m_saveTip, m_note, m_linkHtml, m_linkTip;
     Kind m_kind = Saved;

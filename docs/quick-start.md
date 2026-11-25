@@ -1,6 +1,6 @@
 # {{APP}} Quick Start Guide
 
-{{APP}} is a writing program for long texts. If you have worked with other binder-based writing programs, most of it will feel familiar: a binder on the left, the editor in the middle, an inspector on the right, and Compile at the end. This guide shows where the important settings are and sums up what {{APP}} can do. The full manual is under **Help > User Manual** (**F1**); a short tour of the features you may not know yet is in **Help > Welcome Project**.
+{{APP}} is a writing program for long texts. If you have worked with other binder-based writing programs, most of it will feel familiar: a binder on the left, the editor in the middle, an inspector on the right, and Compile at the end. This guide shows where the important settings are and sums up what {{APP}} can do. The full manual is under **Help > User Manual** (**F1**; it has a contents list and a search); a short tour of the features you may not know yet is in **Help > Welcome Project**.
 
 ---
 
@@ -16,9 +16,9 @@
 
 | What you want | Where |
 |---------------|-------|
-| **Dark mode** or another color theme | **Window > Themes**: Dark Mode, Midnight, Sepia, Slate, Ocean, High Contrast, Light, or Default (follows your desktop). The change takes effect at once. |
-| Colors and fonts of each part of the window | **File > Options > Appearance** (or **Window > Themes > Colors and Fonts…**), or a right-click on the part (**Appearance**). Every project keeps its own look; the list at the top chooses this project or new projects. |
-| Your own theme | **Window > Themes > Save Current Look as Theme…**; **Manage Themes…** exports and imports *.qbtheme* files. |
+| **Dark mode** or another color theme | **View > Themes**: Dark Mode, Midnight, Sepia, Slate, Ocean, High Contrast, Light, or Default (follows your desktop). The change takes effect at once. |
+| Colors and fonts of each part of the window | **File > Options > Appearance** (or **View > Themes > Colors and Fonts…**), or a right-click on the part (**Appearance**). Every project keeps its own look; the list at the top chooses this project or new projects. |
+| Your own theme | **View > Themes > Save Current Look as Theme…**; **Manage Themes…** exports and imports *.qbtheme* files. |
 | Interface font, toolbar icon size, the full path in the title bar | **File > Options > Appearance > General Interface** |
 | The text column: fixed width, paper color, width, border beside the text | **File > Options > Appearance > Main Editor**, or a right-click on the paper |
 | The project's settings in a file, and back into this or another project | **Project > Save Project Settings to File…** / **Load Project Settings from File…** |
@@ -28,7 +28,8 @@
 | Toolbars | **View > Toolbars > Customize Toolbars…** (or right-click a bar) |
 | The icon bar | **View > Toolbars > Icon Bar**; **Choose Icons for the Icon Bar…** |
 | Keyboard shortcuts | **File > Options > Keyboard** (search, press new keys, export and import); **Help > Keyboard Shortcuts…** lists them |
-| Window layouts | **Window > Layouts** (seven built in; save your own) |
+| Find a command in the menus | **Help > Find Command…** (type part of its name; Return runs it) |
+| Window layouts | **View > Layout** (seven built in; save your own) |
 | Autosave, recent projects, author information | **File > Options > General** |
 | Backups | **File > Options > Backup** (when, how many, where); **File > Back Up** makes one now |
 | Spelling and corrections while typing | **File > Options > Corrections** |
@@ -59,7 +60,7 @@
 
 ### Getting text in and out
 
-- **Import**: Word (*.docx*), LibreOffice (*.odt*), RTF, plain text, Markdown, Fountain and Final Draft scripts, pictures, PDF files, audio and video. **Import and Split…** cuts a long file into documents.
+- **Import**: Word (*.docx*), LibreOffice (*.odt*), RTF, plain text, Markdown, Fountain and Final Draft scripts, pictures, PDF files, audio and video. **Import and Split…** cuts a long file into documents, also at its headings (.docx, .odt, .md) with a preview of the binder it makes. **Documents > Group** puts the selected items into a new folder.
 - **Compile** (**Ctrl+Shift+E**): Word, PDF, and e-book built in; Fountain and Final Draft for scripts; LibreOffice, Pandoc, and Markdown formats as plugins. Compile formats, section types, front and back matter, replacements, and a preview.
 - **Compare and Transfer** (**File > Compare and Transfer**): when a manuscript comes back from an editor as a Word or LibreOffice file, {{APP}} shows what differs and takes over the side you choose, chapter by chapter or change by change. The project gets snapshots first; a Word copy gets tracked changes.
 - **Export** documents as files, and **print** texts, index cards, and the outline.
@@ -72,18 +73,18 @@
 - **The icon bar**: up to ten document icons, one click each. **Documents > Change Icon** also makes icons from text or from your own pictures.
 - **Zoom per part**: binder, editors, inspector parts, corkboard, outliner, and mind maps each keep their own zoom.
 - **Places kept**: every document opens where you left the cursor, also after reopening the project.
-- **Fonts**: **Navigate > Fonts > Install Font Files…** adds fonts without leaving the program.
-- **Safety**: autosave also while you type on, backups, a spare copy of the project file, crash and freeze reports (**Help > Crash Reports…**), and **Help > System Information…**.
+- **Fonts**: **Format > Font > Install Font Files…** adds fonts without leaving the program.
+- **Safety**: autosave also while you type on, backups, a spare copy of the project file, crash and freeze reports (**Help > Troubleshooting and Development > Crash Reports…**), and **Help > Troubleshooting and Development > System Information…**.
 
 ### Updates and add-ons
 
-The **full version** of the AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) has every add-on inside and installs them at its first start. Updates and extensions come as small package files (*.qbpkg*), on the Releases page of the project page (https://github.com/Shelin-boop/Quillbinder_Collection/releases) next to the AppImage. Install them with **File > Install Update or Add-on…** (or double-click the file). **Help > Add-on Manager…** switches add-ons on and off and goes back to an earlier program version if an update does not suit you. Add-ons include extra themes, project templates, compile formats, the Name Generator, the Scratch Pad, Text Statistics, audio and video playback (one package for the commonly used formats, *media-all-formats.qbpkg*; or *media-playback.qbpkg* for the free formats only), and the import of web pages and old Word files.
+The **full version** of the AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) has every add-on inside and installs them at its first start. Updates and extensions come as small package files (*.qbpkg*), on the Releases page of the project page (https://github.com/Shelin-boop/Quillbinder_Collection/releases) next to the AppImage. Install them with **Help > Add-ons and Updates > Install Update or Add-on…** (or double-click the file). **Help > Add-ons and Updates > Add-on Manager…** switches add-ons on and off and goes back to an earlier program version if an update does not suit you. Add-ons include extra themes, project templates, compile formats, the Name Generator, the Scratch Pad, Text Statistics, audio and video playback (one package for the commonly used formats, *media-all-formats.qbpkg*; or *media-playback.qbpkg* for the free formats only), and the import of web pages and old Word files.
 
 ---
 
 ## Help
 
-- **Help > User Manual** (**F1**): every function, with the menu paths.
+- **Help > User Manual** (**F1**): every function, with the menu paths; F1 opens the part that fits what you are looking at, and **Ctrl+F** in its window searches the text.
 - **Help > Welcome Project**: a short project that shows the features listed under "Beyond the usual" and lets you try them.
 - **Help > Mind Map Help**: notes, lines, arrows, and shapes, with pictures and a practice board.
 - **Help > List of All Placeholders** and **Help > Keyboard Shortcuts…**

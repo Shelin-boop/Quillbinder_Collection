@@ -68,6 +68,31 @@ QList<BinderItem *> importFiles(Project *p, const QStringList &paths, BinderItem
 QList<BinderItem *> importAndSplit(Project *p, const QString &path, const QString &separator, bool firstLineIsTitle,
                                    BinderItem *parent, int row, QString *error, QStringList *warnings = nullptr);
 
+// 0.94.0 (to-do item 75): split at headings (.docx, .odt, .md). Heading 1 becomes a folder; Heading 2 becomes a folder or
+// a document; the text between headings becomes documents; headings of lower levels stay in the text. The title rule is
+// the same for every document that is not named by a heading (here and in importAndSplit): with `firstLineIsTitle` the first
+// line of the text that is not empty (shortened to 120 characters at a word, with "..." when longer; a line that was
+// shortened stays in the text), otherwise (and for a text without lines) "<file name> <number>".
+struct HeadingSplitOptions {
+    bool heading2Folder = true;   // false: a Heading 2 and its text make one document
+    bool firstLineIsTitle = true;
+};
+// One entry of the plan (the preview shows it as a tree, the import makes the binder from it).
+struct SplitNode {
+    QString title;
+    bool folder = false;
+    int first = -1, last = -1;    // the text: block numbers of the file's document (first > last: no text)
+    QList<SplitNode> children;
+};
+bool canSplitAtHeadings(const QString &path);   // .docx, .odt, .md, .markdown
+// Reads the file and plans the split without changing the project (null project: the standard formatting).
+bool planHeadingSplit(Project *p, const QString &path, const HeadingSplitOptions &o, QList<SplitNode> *plan, QString *error,
+                      QStringList *warnings = nullptr);
+QList<BinderItem *> importAtHeadings(Project *p, const QString &path, const HeadingSplitOptions &o, BinderItem *parent, int row,
+                                     QString *error, QStringList *warnings = nullptr);
+// the number of documents and folders in a plan
+int splitNodeCount(const QList<SplitNode> &plan);
+
 // A fetched web page (add-on "Web Page Import"): a text document, or a web
 // page document with its pictures; the page's address becomes a document
 // bookmark, its description the synopsis, address, author and date the notes.

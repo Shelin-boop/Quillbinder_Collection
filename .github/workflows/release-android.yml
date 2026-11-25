@@ -705,7 +705,7 @@ jobs:
             echo "2. At the first start Quillbinder asks for access to the tablet's files: it keeps projects, backups and exports in"
             echo "   **Documents/Quillbinder**, where other apps and your computer can reach them. The button opens Android's page"
             echo "   \"All files access\": switch it on for Quillbinder and go back."
-            echo "3. Add-ons for Android are installed with **File > Install Update or Add-on**; a new version of the app always"
+            echo "3. Add-ons for Android are installed with **Help > Add-ons and Updates > Install Update or Add-on**; a new version of the app always"
             echo "   comes as a new APK, which installs over the old one and keeps your settings. **Help > Check for Updates Now**"
             echo "   tells you when there is one and opens its download in the browser."
             echo "4. Translation and Proofreading comes with the app (installed at its first start); it downloads a language model"
@@ -717,7 +717,7 @@ jobs:
             for f in ./*.qbpkg; do
               [ -f "$f" ] || continue
               f=${f#./}
-              echo "| $f | Translation and Proofreading on its own (the app carries it already): for **File > Install Update or Add-on** |"
+              echo "| $f | Translation and Proofreading on its own (the app carries it already): for **Help > Add-ons and Updates > Install Update or Add-on** |"
             done
             echo
             echo "Not in the Android version yet: Speech Transcription, audio and video in the editor, crash reports."

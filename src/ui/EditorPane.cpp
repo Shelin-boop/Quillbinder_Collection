@@ -1,5 +1,6 @@
 #include "ui/EditorPane.h"
 #include "ui/FooterStatus.h"
+#include "ui/WritingProgress.h"
 #include <cmath>
 #include "ui/Zoom.h"
 #include "core/Search.h"
@@ -481,6 +482,10 @@ void EditorPane::buildFooter()
     m_countButton->setAutoRaise(true);
     m_countButton->setToolTip(tr("Click for details"));
     tl->addWidget(m_countButton);
+    // 0.94.0 (item 74): the progress toward the targets, beside the word count
+    m_progress = new WritingProgress(tf);
+    connect(m_progress, &WritingProgress::clicked, this, &EditorPane::targetsRequested);
+    tl->addWidget(m_progress);
     // a folder (or a text with subdocuments) shown alone: the total of everything in it (0.60.1)
     auto folderButton = [this](QWidget *parent, const QString &name) {
         auto *b = new QToolButton(parent);
@@ -1124,6 +1129,21 @@ void EditorPane::updateRuler()
     m_ruler->update();
 }
 
+void EditorPane::refresh(const QList<BinderItem *> &movedToTrash)
+{
+    if (m_project && (m_mode == ViewMode::Corkboard || m_mode == ViewMode::Outliner) && m_items.size() > 1) {
+        QList<BinderItem *> kept;
+        for (BinderItem *it : m_items)
+            if (!movedToTrash.contains(it))
+                kept << it;
+        if (kept.size() != m_items.size()) {
+            m_items = kept;
+            applyMode();
+        }
+    }
+    refresh();
+}
+
 void EditorPane::refresh()
 {
     if (!m_project)
@@ -1492,6 +1512,12 @@ void EditorPane::updateCounts()
     }
     m_countButton->setText(chars ? tr("Characters: %1").arg(loc.toString(cs)) : tr("Words: %1").arg(loc.toString(words)));
     updatePageLabel();
+}
+
+void EditorPane::setWritingProgress(int session, int sessionTarget, bool sessionChars, int draft, int draftTarget, bool draftChars)
+{
+    if (m_progress)
+        m_progress->setProgress(session, sessionTarget, sessionChars, draft, draftTarget, draftChars);
 }
 
 void EditorPane::updateFooter()

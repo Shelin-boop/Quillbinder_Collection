@@ -328,8 +328,11 @@ speech::EngineSettings SpeechTool::engineSettings() const
     s.pauseMs = qBound(300, setting(QStringLiteral("pauseMs"), 700).toInt(), 3000);
     s.paragraphMs = qBound(0, setting(QStringLiteral("paragraphMs"), 3000).toInt(), 30000);
     s.audioInput = setting(QStringLiteral("audioInput")).toByteArray();
+    s.unloadMinutes = qBound(0, setting(QStringLiteral("unloadMinutes"), 15).toInt(), 24 * 60);   // 0.94.0
     return s;
 }
+
+QString SpeechTool::unloadMessage() { return tr("Model unloaded, RAM usage minimal"); }
 
 speech::EngineInterface *SpeechTool::engine(QString *error)
 {
@@ -376,6 +379,11 @@ speech::EngineInterface *SpeechTool::engine(QString *error)
     m_engine->onLevel = [this](float l) {
         if (m_panel)
             m_panel->setLevel(l);
+    };
+    // 0.94.0: the model freed after the time without use: the program says so under the binder (tool interface 1.2)
+    m_engine->onModelUnloaded = [this] {
+        if (m_host && m_host->apiVersion() >= 120)
+            m_host->showMessage(unloadMessage(), 5000);
     };
     m_engine->onError = [this](const QString &m) {
         m_lastError = m;
@@ -1416,7 +1424,7 @@ private:
     QLineEdit *m_otherAddress, *m_folder;
     QProgressBar *m_progress;
     QWidget *m_progressRow;
-    QSpinBox *m_threads;
+    QSpinBox *m_threads, *m_unload;
     QDoubleSpinBox *m_pause, *m_paragraph;
     QCheckBox *m_keepOriginal, *m_guard, *m_context, *m_deleteAfter;
     QRadioButton *m_live, *m_recordOnly;
@@ -1508,6 +1516,13 @@ SpeechOptions::SpeechOptions(SpeechTool *tool, QWidget *parent) : QObject(nullpt
     m_threads->setRange(1, ideal);
     pf->addRow(tr("Processor threads:"), m_threads);
     pf->addRow(QString(), note(tr("One less than the processor has keeps typing smooth while a piece is written.")));
+    m_unload = new QSpinBox(procBox);
+    m_unload->setObjectName(QStringLiteral("speechUnload"));
+    m_unload->setRange(0, 24 * 60);
+    m_unload->setSpecialValueText(tr("never"));
+    m_unload->setSuffix(tr(" minutes"));
+    pf->addRow(tr("Free the model after:"), m_unload);
+    pf->addRow(QString(), note(tr("The model takes memory while it is loaded; after this time without use it is freed and the program says so. It loads again at the next recording.")));
     m_accuracy = new QComboBox(procBox);
     m_accuracy->setObjectName(QStringLiteral("speechAccuracy"));
     m_accuracy->addItem(tr("Fast"));
@@ -1628,6 +1643,7 @@ SpeechOptions::SpeechOptions(SpeechTool *tool, QWidget *parent) : QObject(nullpt
     m_otherAddress->setText(m_tool->setting(QStringLiteral("otherAddress")).toString());
     const speech::EngineSettings s = m_tool->engineSettings();
     m_threads->setValue(s.threads);
+    m_unload->setValue(s.unloadMinutes);
     m_accuracy->setCurrentIndex(s.careful ? 1 : 0);
     m_main->setCurrentIndex(qMax(0, m_main->findData(s.mainLanguage)));
     m_fallback->setCurrentIndex(qMax(0, m_fallback->findData(s.fallbackLanguage)));
@@ -1835,6 +1851,7 @@ void SpeechOptions::apply()
     m_tool->setSetting(QStringLiteral("otherAddress"), m_otherAddress->text().trimmed());
     m_tool->setSetting(QStringLiteral("gpu"), m_device->currentData().toInt());
     m_tool->setSetting(QStringLiteral("threads"), m_threads->value());
+    m_tool->setSetting(QStringLiteral("unloadMinutes"), m_unload->value());
     m_tool->setSetting(QStringLiteral("careful"), m_accuracy->currentIndex() == 1);
     m_tool->setSetting(QStringLiteral("main"), m_main->currentData().toString());
     m_tool->setSetting(QStringLiteral("fallback"), m_fallback->currentData().toString());

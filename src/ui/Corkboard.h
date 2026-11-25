@@ -25,6 +25,9 @@ public:
     QRectF titleRect() const;
     QRectF iconRect() const;
     QRectF bodyRect() const;
+    // 0.94.0: the color of the card's text on the paper (the card's tint included): the theme's card text, at least 4.5:1;
+    // fromDocument: the text of the document shown for a card without a synopsis, a little fainter, still at least 4.5:1
+    static QColor bodyTextColor(const QColor &paper, const QColor &cardText, bool fromDocument);
 
 protected:
     QVariant itemChange(GraphicsItemChange change, const QVariant &value) override;

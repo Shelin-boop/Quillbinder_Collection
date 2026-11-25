@@ -1589,7 +1589,7 @@ int main(int argc, char **argv)
         waitFor([&] { return upd->window() != nullptr; }, 8000);
         win = upd->window();
         check(ignoredQuiet && win && win->isVisible(),
-              QStringLiteral("\"Ignore This Version\": no window any more at the start; Help > Check for Updates Now still shows it"));
+              QStringLiteral("\"Ignore This Version\": no window any more at the start; Help > Add-ons and Updates > Check for Updates Now still shows it"));
         if (win)
             win->close();
         settle(200);
@@ -1653,7 +1653,7 @@ int main(int argc, char **argv)
         lookAndWait(true);
         waitFor([&] { return !upToDate.isEmpty(); }, 5000);
         check(upToDate.contains(QLatin1String("up to date")) && !upd->window(),
-              QStringLiteral("Help > Check for Updates Now with nothing new says that everything is up to date"), upToDate);
+              QStringLiteral("Help > Add-ons and Updates > Check for Updates Now with nothing new says that everything is up to date"), upToDate);
         // a file that is not the one the signed list names is not installed
         const QString pkg13 = addonPackage(W, QStringLiteral("test-state"), QStringLiteral("1.3"), themeNew);
         server.files.insert(QStringLiteral("/files/test-state-1.2.qbpkg"), readAll(pkg13));
@@ -1837,9 +1837,9 @@ int main(int argc, char **argv)
         const QByteArray store = readAll(addon + QStringLiteral("/source/src/ModelStore.cpp"));
         const QByteArray cmake = readAll(addon + QStringLiteral("/source/CMakeLists.txt"));
         check(!top.isEmpty() && top == inner && m.value(QStringLiteral("id")).toString() == QLatin1String("translation-proofreading")
-                  && m.value(QStringLiteral("version")).toString() == QLatin1String("1.3") && cmake.contains("set(TP_VERSION \"1.3\")")
+                  && m.value(QStringLiteral("version")).toString() == QLatin1String("1.4") && cmake.contains("set(TP_VERSION \"1.4\")")
                   && m.value(QStringLiteral("minApp")).toString() == QLatin1String(QB_RUNTIME_SINCE),
-              QStringLiteral("Translation and Proofreading 1.3 is in addons/ with its source; its two manifests and its build agree on the version"),
+              QStringLiteral("Translation and Proofreading 1.4 is in addons/ with its source; its two manifests and its build agree on the version"),
               m.value(QStringLiteral("version")).toString());
         check(store.contains("https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/")
                   && !store.contains("Quillbinder_Translation_Addon")

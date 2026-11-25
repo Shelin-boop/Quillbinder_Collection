@@ -31,7 +31,6 @@ UPDATE=${2:?update package, or - for the AppImage alone}
 [ "$UPDATE" != "-" ] && UPDATE=$(readlink -f "$UPDATE")
 ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 E=$(mkdir -p "${3:-$ROOT/build/e2e}" && cd "${3:-$ROOT/build/e2e}" && pwd)
-chmod +x "$APPIMAGE"
 if [ ${#E} -gt 70 ]; then
     echo "The work dir path is too long (${#E} characters, at most 70): the instance socket in it would"
     echo "exceed the 107-byte limit of socket paths. Give a shorter work dir as the third argument."; exit 2
@@ -39,6 +38,12 @@ fi
 rm -rf "$E/home" "$E/run" "$E/work" "$E/shots"
 mkdir -p "$E/home" "$E/run" "$E/work" "$E/shots"
 chmod 700 "$E/run"
+# 0.94.0: the first start moves the AppImage it runs from into ~/Applications. The run works on a copy in its
+# work dir, so that the given file never moves; after the first start APPIMAGE names the new place.
+GIVEN=$APPIMAGE
+cp -- "$GIVEN" "$E/work/$(basename "$GIVEN")"
+APPIMAGE=$E/work/$(basename "$GIVEN")
+chmod +x "$APPIMAGE"
 export HOME=$E/home XDG_CONFIG_HOME=$E/home/.config XDG_DATA_HOME=$E/home/.local/share XDG_RUNTIME_DIR=$E/run
 # 0.70.0 (audit A U-07): from 0.70.0 on the launcher starts an unsigned (development) update only with this set
 export QB_ALLOW_UNSIGNED_CORE=1
@@ -136,6 +141,14 @@ fi
 W=$(timeout 60 xdotool search --sync --onlyvisible --name "Quillbinder" | head -1)
 sleep 3
 import -window root "$E/shots/1-start.png"
+# 0.94.0: the one first-start page moves the AppImage to ~/Applications and writes the menu entry
+if [ "$(printf '%s\n' "$NEW" "0.94.0" | sort -V | head -1)" = "0.94.0" ]; then
+    MOVED=$E/home/Applications/$(basename "$APPIMAGE")
+    expect '[ -f "$MOVED" ] && [ ! -e "$APPIMAGE" ]' "the AppImage moved to ~/Applications"
+    expect 'grep -qs "^Exec=\"$MOVED\"" "$XDG_DATA_HOME"/applications/*.desktop' \
+        "the menu entry's Exec line points to the moved AppImage"
+    [ -f "$MOVED" ] && APPIMAGE=$MOVED
+fi
 expect '[ -n "$W" ]' "a window \"$(xdotool getwindowname "$W" 2>/dev/null)\""
 WP=$(ls -d "$E/home/Documents/Welcome to Quillbinder".* 2>/dev/null | head -1)
 expect 'xdotool getwindowname "$W" 2>/dev/null | grep -q "Welcome to Quillbinder" && [ -n "$WP" ]' \

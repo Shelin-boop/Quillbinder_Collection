@@ -2,6 +2,16 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.94.0: the full AppImage's installation window
+
+- `quillbinder --install-folder <folder>` (`FullInstallWindow.*`, `runInstallFolder`, called from the first loop of
+  `main()`): `addons::installBundled(dir, log, error, progress)` runs in a thread beside a window (logo, bar in kB, message
+  "Installing N add-ons (M MB)..."); without `DISPLAY`/`WAYLAND_DISPLAY` (or with `QB_NO_DIALOGS`) it runs without the window.
+  `addons::installBundledDue()` says whether anything is left (marker `full-addons-installed-<version>`). The AppRun that
+  `packaging/linux/build-full-appimage.sh` writes makes this one call and keeps the marker rules.
+- `tools/download-page.py`: a file `full-addons-size` (bytes) in the folder of the release's names adds "about N MB of disk
+  space" to the Linux card; the release workflow does not write that file yet (the script has only file names).
+
 ## 0.93.1: Qt PDF's own source, the official entry's folder, the generic font names
 
 - **Qt PDF** is, since Qt 6.12, a Qt Extensions module released with Qt WebEngine under a version of its own

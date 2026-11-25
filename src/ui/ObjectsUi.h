@@ -47,6 +47,10 @@ public:
     // targets: categories that can be chosen (empty: all); exclude: ids not offered
     ObjectChooser(Project *project, Mode mode, const QStringList &targets, const QStringList &exclude, QWidget *parent = nullptr);
     QString chosenId() const { return m_chosen; }
+    // 0.94.0: documents are chosen several at a time (Ctrl or Shift); the first one is chosenId()
+    QStringList chosenIds() const { return m_chosenMany; }
+    static QStringList chooseMany(Project *project, Mode mode, const QStringList &targets, const QStringList &exclude, QWidget *parent,
+                                  const QString &title);
     QLineEdit *searchField() const { return m_search; }
     QListWidget *list() const { return m_list; }
     // convenience: shows the window, returns the chosen id ("" when canceled)
@@ -62,6 +66,7 @@ private:
     QLineEdit *m_search = nullptr;
     QListWidget *m_list = nullptr;
     QString m_chosen;
+    QStringList m_chosenMany;
 };
 
 // A long text field: formatted text with links to objects, documents and web pages.

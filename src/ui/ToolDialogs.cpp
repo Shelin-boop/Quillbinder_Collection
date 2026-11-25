@@ -16,6 +16,7 @@
 #include "text/RtfIO.h"
 #include "text/TextUtil.h"
 #include "ui/AppSettings.h"
+#include "ui/ManualWindow.h"
 
 #include <QApplication>
 #include <QTimer>
@@ -69,6 +70,12 @@ TargetsDialog::TargetsDialog(Project *p, QWidget *parent) : QDialog(parent), m_p
     auto *dl = new QVBoxLayout(draft);
     m_draftBar = new QProgressBar(draft);
     m_draftLabel = new QLabel(draft);
+    {
+        // the bar keeps its room while hidden: the fields below do not move when a target is set (0.94.0, item 89)
+        QSizePolicy sp = m_draftBar->sizePolicy();
+        sp.setRetainSizeWhenHidden(true);
+        m_draftBar->setSizePolicy(sp);
+    }
     dl->addWidget(m_draftBar);
     dl->addWidget(m_draftLabel);
     auto *dr = new QHBoxLayout;
@@ -95,6 +102,11 @@ TargetsDialog::TargetsDialog(Project *p, QWidget *parent) : QDialog(parent), m_p
     auto *sl = new QVBoxLayout(session);
     m_sessionBar = new QProgressBar(session);
     m_sessionLabel = new QLabel(session);
+    {
+        QSizePolicy sp = m_sessionBar->sizePolicy();
+        sp.setRetainSizeWhenHidden(true);
+        m_sessionBar->setSizePolicy(sp);
+    }
     sl->addWidget(m_sessionBar);
     sl->addWidget(m_sessionLabel);
     auto *sr = new QHBoxLayout;
@@ -520,12 +532,16 @@ StatisticsDialog::StatisticsDialog(Project *p, QWidget *parent) : QDialog(parent
 
 // ------------------------------------------------------------------ import and split
 
-ImportSplitDialog::ImportSplitDialog(QWidget *parent) : QDialog(parent)
+ImportSplitDialog::ImportSplitDialog(Project *p, QWidget *parent) : QDialog(parent), m_project(p)
 {
     setWindowTitle(tr("Import and Split"));
-    auto *f = new QFormLayout(this);
+    setObjectName(QStringLiteral("importSplitDialog"));
+    auto *outer = new QVBoxLayout(this);
+    auto *f = new QFormLayout;
+    outer->addLayout(f);
     auto *row = new QHBoxLayout;
     m_file = new QLineEdit(this);
+    m_file->setObjectName(QStringLiteral("splitFile"));
     auto *browse = new QPushButton(tr("Browse…"), this);
     row->addWidget(m_file, 1);
     row->addWidget(browse);
@@ -534,27 +550,118 @@ ImportSplitDialog::ImportSplitDialog(QWidget *parent) : QDialog(parent)
     m_mode->addItem(tr("Two empty lines"));
     m_mode->addItem(tr("A line containing only this text:"));
     m_mode->addItem(tr("Scene headings (scripts: .fountain, .fdx)"));
+    m_mode->addItem(tr("Headings (.docx, .odt, .md): Heading 1 makes a folder"));
     m_mode->setObjectName(QStringLiteral("splitMode"));
     f->addRow(tr("Sections are separated by:"), m_mode);
     m_sep = new QLineEdit(QStringLiteral("#"), this);
     m_sep->setEnabled(false);
     f->addRow(tr("Separator text:"), m_sep);
+    m_h2 = new QComboBox(this);
+    m_h2->setObjectName(QStringLiteral("splitHeading2"));
+    m_h2->addItem(tr("a folder (its text becomes a document inside)"));
+    m_h2->addItem(tr("a document (with the text under it)"));
+    f->addRow(tr("Heading 2 makes:"), m_h2);
     m_title = new QCheckBox(tr("Use the first line of each section as its title"), this);
     m_title->setChecked(true);
+    m_title->setObjectName(QStringLiteral("splitFirstLine"));
     f->addRow(QString(), m_title);
+    m_rule = new QLabel(this);
+    m_rule->setObjectName(QStringLiteral("splitTitleRule"));
+    m_rule->setWordWrap(true);
+    outer->addWidget(m_rule);
+    m_previewNote = new QLabel(this);
+    m_previewNote->setObjectName(QStringLiteral("splitPreviewNote"));
+    outer->addWidget(m_previewNote);
+    m_preview = new QTreeWidget(this);
+    m_preview->setObjectName(QStringLiteral("splitPreview"));
+    m_preview->setHeaderHidden(true);
+    m_preview->setMinimumHeight(180);
+    outer->addWidget(m_preview, 1);
     auto *bb = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, this);
-    f->addRow(bb);
+    outer->addWidget(bb);
     connect(bb, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(bb, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(m_mode, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int i) { m_sep->setEnabled(i == 1); });
+    connect(m_mode, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) { updateState(); });
+    connect(m_h2, qOverload<int>(&QComboBox::currentIndexChanged), this, [this](int) { updatePreview(); });
+    connect(m_title, &QCheckBox::toggled, this, [this](bool) {
+        updateState();
+        updatePreview();
+    });
+    connect(m_file, &QLineEdit::textChanged, this, [this](const QString &) { updatePreview(); });
     connect(browse, &QPushButton::clicked, this, [this] {
         const QString f = QFileDialog::getOpenFileName(this, tr("Import and Split"), QDir::homePath(),
                                                        importer::textFileFilters().join(QStringLiteral(";;")));
-        if (!f.isEmpty())
-            m_file->setText(f);
+        if (f.isEmpty())
+            return;
+        m_file->setText(f);
         if (importer::isScriptFile(f))
             m_mode->setCurrentIndex(2);
+        else if (importer::canSplitAtHeadings(f) && m_mode->currentIndex() == 0)
+            m_mode->setCurrentIndex(3);
     });
+    resize(560, 560);
+    updateState();
+}
+
+void ImportSplitDialog::updateState()
+{
+    const int mode = m_mode->currentIndex();
+    m_sep->setEnabled(mode == 1);
+    m_h2->setEnabled(mode == 3);
+    m_title->setEnabled(mode != 2);
+    // the rule for the title of a document, the same for every document that no heading names
+    QString rule = mode == 2 ? tr("Title of a document: the scene heading.")
+                 : m_title->isChecked()
+                     ? tr("Title of a document: the first line of its text that is not empty (a line longer than 120 characters is "
+                          "shortened and stays in the text); a section without a line is called “<file name> <number>”.")
+                     : tr("Title of a document: “<file name> <number>”.");
+    if (mode == 3)
+        rule += QLatin1Char(' ') + tr("Headings name the folders and, for Heading 2 as a document, the document. Lower headings stay in the text.");
+    m_rule->setText(rule);
+    m_preview->setVisible(mode == 3);
+    m_previewNote->setVisible(mode == 3);
+    updatePreview();
+}
+
+static void fillPreview(QTreeWidget *tree, QTreeWidgetItem *parent, const QList<importer::SplitNode> &nodes)
+{
+    for (const importer::SplitNode &n : nodes) {
+        auto *it = parent ? new QTreeWidgetItem(parent) : new QTreeWidgetItem(tree);
+        it->setText(0, n.title);
+        it->setIcon(0, QIcon::fromTheme(n.folder ? QStringLiteral("folder") : QStringLiteral("text-x-generic")));
+        it->setData(0, Qt::UserRole, n.folder);
+        fillPreview(tree, it, n.children);
+    }
+}
+
+void ImportSplitDialog::updatePreview()
+{
+    m_preview->clear();
+    if (m_mode->currentIndex() != 3)
+        return;
+    const QString path = m_file->text().trimmed();
+    if (path.isEmpty() || !QFileInfo::exists(path)) {
+        m_previewNote->setText(tr("Choose a file to see the binder it makes."));
+        return;
+    }
+    if (!importer::canSplitAtHeadings(path)) {
+        m_previewNote->setText(tr("Splitting at headings works for .docx, .odt and .md files."));
+        return;
+    }
+    importer::HeadingSplitOptions o;
+    o.heading2Folder = heading2Folder();
+    o.firstLineIsTitle = firstLineIsTitle();
+    QList<importer::SplitNode> plan;
+    QString err;
+    if (!importer::planHeadingSplit(m_project, path, o, &plan, &err)) {
+        m_previewNote->setText(err.isEmpty() ? tr("The file could not be read.") : err);
+        return;
+    }
+    fillPreview(m_preview, nullptr, plan);
+    m_preview->expandAll();
+    const int n = importer::splitNodeCount(plan);
+    m_previewNote->setText(n == 0 ? tr("Nothing to import: the file has no text.")
+                                  : tr("The binder after the import (%n item(s)):", nullptr, n));
 }
 
 QString ImportSplitDialog::file() const { return m_file->text(); }
@@ -565,6 +672,11 @@ QString ImportSplitDialog::separator() const
     return m_mode->currentIndex() == 0 ? QString() : m_sep->text();
 }
 bool ImportSplitDialog::firstLineIsTitle() const { return m_title->isChecked(); }
+bool ImportSplitDialog::atHeadings() const { return m_mode->currentIndex() == 3; }
+bool ImportSplitDialog::heading2Folder() const { return m_h2->currentIndex() == 0; }
+void ImportSplitDialog::setFile(const QString &path) { m_file->setText(path); }
+void ImportSplitDialog::setMode(int index) { m_mode->setCurrentIndex(index); }
+void ImportSplitDialog::setHeading2Folder(bool folder) { m_h2->setCurrentIndex(folder ? 0 : 1); }
 
 // ------------------------------------------------------------------ export files
 
@@ -837,7 +949,7 @@ static QDialog *helpWindow(QPointer<QDialog> &win, QWidget *parent, const QStrin
             .replace(QLatin1String("{{LABEL}}"), QLatin1String(QB_APP_VERSION_LABEL)) // 0.93.0: "beta"; the documents never go stale
             .replace(QLatin1String("{{SUFFIX}}"), QLatin1String(QB_PROJECT_SUFFIX))
             .replace(QLatin1String("{{FILE}}"), QLatin1String(QB_PROJECT_FILE_SUFFIX));
-        tb->setMarkdown(text);
+        tb->setMarkdown(escapePlaceholders(text));
         l->addWidget(tb);
     }
     win->show();
@@ -847,12 +959,7 @@ static QDialog *helpWindow(QPointer<QDialog> &win, QWidget *parent, const QStrin
 
 void showManual(QWidget *parent, const QString &anchor)
 {
-    static QPointer<QDialog> win;
-    helpWindow(win, parent, QStringLiteral(":/docs/manual.md"), QObject::tr("User Manual"), QStringLiteral("manual"),
-               QSize(820, 760));
-    if (!anchor.isEmpty())
-        if (auto *tb = win->findChild<QTextBrowser *>(QStringLiteral("manual")))
-            tb->find(anchor);
+    showManualAt(parent, anchor); // (0.94.0: the window with its contents list and search, ui/ManualWindow.h)
 }
 
 void showQuickStartGuide(QWidget *parent)

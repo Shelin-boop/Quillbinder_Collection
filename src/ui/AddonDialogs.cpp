@@ -18,6 +18,7 @@
 #include <QProcess>
 #include <QPushButton>
 #include <QTextBrowser>
+#include <QToolButton>
 #include <QTreeWidget>
 #include <QUrl>
 #include <QVBoxLayout>
@@ -72,6 +73,26 @@ QString describePackage(const PackageInfo &info)
     QString h = describeOne(info, false);
     for (const PackageInfo &n : info.nested)
         h += QLatin1String("<hr>") + describeOne(n, true);
+    return h;
+}
+
+// 0.94.0: the technical lines of the add-ons in the package (their manifests' "details"), for the collapsed part of the window
+QString describeDetails(const PackageInfo &info)
+{
+    QString h;
+    auto one = [&h](const PackageInfo &pi, bool heading) {
+        if (pi.manifest.details.isEmpty())
+            return;
+        if (heading)
+            h += QStringLiteral("<p><b>%1</b></p>").arg(pi.manifest.name.toHtmlEscaped());
+        h += QLatin1String("<ul>");
+        for (const QString &d : pi.manifest.details)
+            h += QStringLiteral("<li>%1</li>").arg(d.toHtmlEscaped());
+        h += QLatin1String("</ul>");
+    };
+    one(info, !info.nested.isEmpty());
+    for (const PackageInfo &n : info.nested)
+        one(n, true);
     return h;
 }
 
@@ -170,6 +191,28 @@ bool runInstallPackage(QWidget *parent, const QString &file, bool *restart)
     auto *text = new QTextBrowser(&dlg);
     text->setHtml(describePackage(info));
     lay->addWidget(text, 1);
+    // the technical lines (libraries, runtime) stay under "Details", collapsed (0.94.0)
+    const QString detailsHtml = describeDetails(info);
+    if (!detailsHtml.isEmpty()) {
+        auto *toggle = new QToolButton(&dlg);
+        toggle->setObjectName(QStringLiteral("addonDetailsToggle"));
+        toggle->setText(QObject::tr("Details"));
+        toggle->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        toggle->setArrowType(Qt::RightArrow);
+        toggle->setCheckable(true);
+        toggle->setAutoRaise(true);
+        lay->addWidget(toggle);
+        auto *details = new QTextBrowser(&dlg);
+        details->setObjectName(QStringLiteral("addonDetails"));
+        details->setHtml(detailsHtml);
+        details->setMaximumHeight(150);
+        details->hide();
+        lay->addWidget(details);
+        QObject::connect(toggle, &QToolButton::toggled, details, [toggle, details](bool on) {
+            details->setVisible(on);
+            toggle->setArrowType(on ? Qt::DownArrow : Qt::RightArrow);
+        });
+    }
     bool hasCode = false;
     // 0.64.1 (audit X-3): also versioned libraries ("libavcodec.so.60"), everything under plugins/
     // (command plugins start programs during compile), templates (archives unpacked into new projects),

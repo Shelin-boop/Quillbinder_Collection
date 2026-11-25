@@ -521,8 +521,10 @@ bool readDocx(const QString &path, QTextDocument *doc, const Formatting &f, QStr
     bool prevList = false;
     for (const DPara &p : paras) {
         QString style;
-        if (p.style.startsWith(QLatin1String("heading "))) {
-            style = styles::forHeadingLevel(p.style.mid(8).toInt());
+        static const QRegularExpression headingName(QStringLiteral("^heading ?([1-9])$"));
+        const QRegularExpressionMatch hm = headingName.match(p.style);
+        if (hm.hasMatch()) {   // 0.94.0: also "heading1" (a file without a style table names the style by its id)
+            style = styles::forHeadingLevel(hm.captured(1).toInt());
         } else if (p.style == QLatin1String("title")) {
             style = QStringLiteral("Title");
         } else if (p.style == QLatin1String("subtitle")) {
@@ -965,6 +967,7 @@ bool readTextFile(const QString &path, QTextDocument *doc, const Formatting &f, 
 
 BinderItem *importMedia(Project *p, const QString &path, BinderItem *parent, int row, QStringList *warnings)
 {
+    SessionExclusion keepSession(p); // imported text is not written in the session (0.94.0, item 73)
     const QFileInfo fi(path);
     ItemType t = ItemType::File;
     switch (classify(path)) {
@@ -1007,6 +1010,7 @@ static bool copyTree(const QString &from, const QString &to)
 
 BinderItem *addWebPage(Project *p, const importers::WebPage &page, BinderItem *parent, int row, QStringList *warnings)
 {
+    SessionExclusion keepSession(p); // imported text is not written in the session (0.94.0, item 73)
     if (!parent || p->isInTrash(parent))
         parent = p->research();
     QString title = page.title.simplified();
@@ -1083,6 +1087,7 @@ BinderItem *addWebPage(Project *p, const importers::WebPage &page, BinderItem *p
 
 QList<BinderItem *> importFiles(Project *p, const QStringList &paths, BinderItem *parent, int row, QStringList *warnings)
 {
+    SessionExclusion keepSession(p); // imported text is not written in the session (0.94.0, item 73)
     QList<BinderItem *> out;
     if (!parent)
         parent = p->research();
@@ -1125,7 +1130,7 @@ QList<BinderItem *> importFiles(Project *p, const QStringList &paths, BinderItem
         } else {
             if (isLegacyWordSuffix(fi.suffix()) && warnings)
                 warnings->append(QObject::tr("%1: Word 97–2003 files become text with the add-on “Word 97–2003 Import” "
-                                             "(Help > Add-on Manager); the file was added as it is.")
+                                             "(Help > Add-ons and Updates > Add-on Manager); the file was added as it is.")
                                      .arg(fi.fileName()));
             if (p->isInDraft(parent)) {
                 if (warnings)
@@ -1146,9 +1151,64 @@ QList<BinderItem *> importFiles(Project *p, const QStringList &paths, BinderItem
     return out;
 }
 
+// ------------------------------------------------------------------ title rule and parts (0.94.0)
+
+// The blocks first..last of `whole` as a document of their own (a fragment does not bring the paragraph format of its first
+// paragraph along). first > last: an empty document.
+static void fillPart(QTextDocument *part, const QTextDocument &whole, int first, int last)
+{
+    if (first > last || first >= whole.blockCount())
+        return;
+    const QTextBlock b1 = whole.findBlockByNumber(first);
+    const QTextBlock b2 = whole.findBlockByNumber(qMin(last, whole.blockCount() - 1));
+    QTextCursor c(const_cast<QTextDocument *>(&whole));
+    c.setPosition(b1.position());
+    c.setPosition(b2.position() + b2.length() - 1, QTextCursor::KeepAnchor);
+    QTextCursor pc(part);
+    pc.insertFragment(QTextDocumentFragment(c));
+    QTextCursor fc(part->begin());
+    fc.setBlockFormat(b1.blockFormat());
+    fc.setBlockCharFormat(b1.charFormat());
+}
+
+static bool blockIsBlank(const QTextBlock &b)
+{
+    const QString t = b.text();
+    for (const QChar ch : t)
+        if (!ch.isSpace() && ch != QChar(0xFFFC))
+            return false;
+    return b.length() <= 1 || t.trimmed().isEmpty();
+}
+
+// The one rule for the title of a document that no heading names. Leading empty paragraphs are left out (*first moves);
+// with firstLineIsTitle the first line is the title and leaves the text (when it is not longer than 120 characters; a
+// longer one is shortened at a word with "..." and stays in the text); else "<base> <n>".
+static QString titleByRule(const QTextDocument &whole, int *first, int last, bool firstLineIsTitle, const QString &base, int n)
+{
+    int f = *first;
+    while (f <= last && blockIsBlank(whole.findBlockByNumber(f)))
+        ++f;
+    *first = f;
+    const QString fallback = base + QStringLiteral(" %1").arg(n);
+    if (!firstLineIsTitle || f > last)
+        return fallback;
+    const QString line = whole.findBlockByNumber(f).text().simplified();
+    if (line.isEmpty())
+        return fallback;
+    if (line.size() <= 120) {
+        *first = f + 1;
+        return line;
+    }
+    int cut = int(line.lastIndexOf(QLatin1Char(' '), 117));
+    if (cut < 40)
+        cut = 117;
+    return line.left(cut).trimmed() + QStringLiteral("...");
+}
+
 QList<BinderItem *> importAndSplit(Project *p, const QString &path, const QString &separator, bool firstLineIsTitle,
                                    BinderItem *parent, int row, QString *error, QStringList *warnings)
 {
+    SessionExclusion keepSession(p); // imported text is not written in the session (0.94.0, item 73)
     QList<BinderItem *> out;
     QTextDocument whole;
     if (!readTextFile(path, &whole, p->formatting, p->storage == StorageFormat::Rtf, error, nullptr, warnings))
@@ -1201,42 +1261,24 @@ QList<BinderItem *> importAndSplit(Project *p, const QString &path, const QStrin
     if (start < blocks)
         ranges.append({start, blocks - 1});
     int n = 1;
+    const QString base = QFileInfo(path).completeBaseName();
     for (const auto &r : ranges) {
-        QTextCursor c(&whole);
-        const QTextBlock b1 = whole.findBlockByNumber(r.first);
-        const QTextBlock b2 = whole.findBlockByNumber(r.second);
-        c.setPosition(b1.position());
-        c.setPosition(b2.position() + b2.length() - 1, QTextCursor::KeepAnchor);
-        QString title = QFileInfo(path).completeBaseName() + QStringLiteral(" %1").arg(n++);
-        QTextDocumentFragment frag(c);
-        QTextDocument part;
-        QTextCursor pc(&part);
-        pc.insertFragment(frag);
-        {
-            // a fragment does not bring the paragraph format of its first paragraph along
-            QTextCursor fc(part.begin());
-            fc.setBlockFormat(b1.blockFormat());
-            fc.setBlockCharFormat(b1.charFormat());
-        }
-        if (atScenes && part.blockCount() > 0) {
+        int first = r.first, last = r.second;
+        QString title;
+        if (atScenes) {
             // the heading names the document and stays in its text
-            QString t = part.begin().text().trimmed();
-            const script::Element *el = script::element(p->formatting, b1.blockFormat().stringProperty(props::Style));
+            const QTextBlock hb = whole.findBlockByNumber(first);
+            QString t = hb.text().trimmed();
+            const script::Element *el = script::element(p->formatting, hb.blockFormat().stringProperty(props::Style));
             if (el && el->allCaps)
                 t = t.toUpper();
-            if (!t.isEmpty())
-                title = t.left(120);
+            title = t.isEmpty() ? base + QStringLiteral(" %1").arg(n) : t.left(120);
+        } else {
+            title = titleByRule(whole, &first, last, firstLineIsTitle, base, n);
         }
-        if (firstLineIsTitle && part.blockCount() > 0) {
-            const QString t = part.begin().text().trimmed();
-            if (!t.isEmpty() && t.size() < 120) {
-                title = t;
-                QTextCursor del(part.begin());
-                del.select(QTextCursor::BlockUnderCursor);
-                del.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-                del.removeSelectedText();
-            }
-        }
+        ++n;
+        QTextDocument part;
+        fillPart(&part, whole, first, last);
         BinderItem *it = p->model()->createItem(parent, row, ItemType::Text, title);
         if (row >= 0)
             ++row;
@@ -1247,6 +1289,141 @@ QList<BinderItem *> importAndSplit(Project *p, const QString &path, const QStrin
         }
         out << it;
     }
+    return out;
+}
+
+// ------------------------------------------------------------------ split at headings (0.94.0, item 75)
+
+bool canSplitAtHeadings(const QString &path)
+{
+    const QString ext = QFileInfo(path).suffix().toLower();
+    return ext == QLatin1String("docx") || ext == QLatin1String("odt") || ext == QLatin1String("md")
+           || ext == QLatin1String("markdown");
+}
+
+static int headingLevelOf(const QTextBlock &b)
+{
+    const QString style = b.blockFormat().stringProperty(props::Style);
+    if (styles::isHeadingName(style))
+        return style.at(8).digitValue();
+    return b.blockFormat().headingLevel();
+}
+
+static void planFromDocument(const QTextDocument &whole, const QString &base, const HeadingSplitOptions &o, QList<SplitNode> *plan)
+{
+    const int blocks = whole.blockCount();
+    int number = 0;   // the documents named by the rule
+    int h1 = -1;      // the open Heading 1 folder (index in *plan)
+    int h2 = -1;      // the open Heading 2 node (index in h1's children, or in *plan without a Heading 1)
+    auto level = [&]() -> QList<SplitNode> & { return h1 >= 0 ? (*plan)[h1].children : *plan; };
+    auto looseDoc = [&](int first, int last) {
+        // text between headings: a document in the open folder (or at the top)
+        int f = first;
+        while (f <= last && blockIsBlank(whole.findBlockByNumber(f)))
+            ++f;
+        if (f > last)
+            return;
+        ++number;
+        SplitNode d;
+        d.title = titleByRule(whole, &first, last, o.firstLineIsTitle, base, number);
+        d.first = first;
+        d.last = last;
+        if (h2 >= 0 && level().at(h2).folder)
+            level()[h2].children << d;
+        else
+            level() << d;
+    };
+    int segStart = 0;
+    auto closeSegment = [&](int last) {
+        if (h2 >= 0 && !level().at(h2).folder) {
+            // a Heading 2 that is a document: the text under it is its own
+            SplitNode &d = level()[h2];
+            d.first = segStart;
+            d.last = last;
+            while (d.first <= d.last && blockIsBlank(whole.findBlockByNumber(d.first)))
+                ++d.first;
+        } else {
+            looseDoc(segStart, last);
+        }
+    };
+    for (int i = 0; i < blocks; ++i) {
+        const QTextBlock b = whole.findBlockByNumber(i);
+        const int lvl = headingLevelOf(b);
+        if (lvl != 1 && lvl != 2)
+            continue;
+        const QString t = b.text().simplified();
+        if (t.isEmpty())
+            continue;   // an empty heading paragraph is no heading
+        closeSegment(i - 1);
+        segStart = i + 1;
+        SplitNode n;
+        n.title = t.left(120);
+        if (lvl == 1) {
+            n.folder = true;
+            plan->append(n);
+            h1 = int(plan->size()) - 1;
+            h2 = -1;
+        } else {
+            n.folder = o.heading2Folder;
+            level().append(n);
+            h2 = int(level().size()) - 1;
+        }
+    }
+    closeSegment(blocks - 1);
+}
+
+bool planHeadingSplit(Project *p, const QString &path, const HeadingSplitOptions &o, QList<SplitNode> *plan, QString *error,
+                      QStringList *warnings)
+{
+    if (!plan)
+        return false;
+    plan->clear();
+    QTextDocument whole;
+    const Formatting fmt = p ? p->formatting : Formatting();
+    if (!readTextFile(path, &whole, fmt, p ? p->storage == StorageFormat::Rtf : false, error, nullptr, warnings))
+        return false;
+    planFromDocument(whole, QFileInfo(path).completeBaseName(), o, plan);
+    return true;
+}
+
+int splitNodeCount(const QList<SplitNode> &plan)
+{
+    int n = 0;
+    for (const SplitNode &s : plan)
+        n += 1 + splitNodeCount(s.children);
+    return n;
+}
+
+static void makeNodes(Project *p, const QTextDocument &whole, const QList<SplitNode> &plan, BinderItem *parent, int *row,
+                      QList<BinderItem *> *top, bool atTop)
+{
+    for (const SplitNode &s : plan) {
+        BinderItem *it = p->model()->createItem(parent, *row, s.folder ? ItemType::Folder : ItemType::Text, s.title);
+        if (*row >= 0)
+            ++*row;
+        if (atTop)
+            *top << it;
+        if (!s.folder) {
+            QTextDocument part;
+            fillPart(&part, whole, s.first, s.last);
+            p->docs()->setContent(it->id, &part);
+        }
+        int childRow = -1;
+        makeNodes(p, whole, s.children, it, &childRow, top, false);
+    }
+}
+
+QList<BinderItem *> importAtHeadings(Project *p, const QString &path, const HeadingSplitOptions &o, BinderItem *parent, int row,
+                                     QString *error, QStringList *warnings)
+{
+    SessionExclusion keepSession(p);
+    QList<BinderItem *> out;
+    QList<SplitNode> plan;
+    QTextDocument whole;
+    if (!readTextFile(path, &whole, p->formatting, p->storage == StorageFormat::Rtf, error, nullptr, warnings))
+        return out;
+    planFromDocument(whole, QFileInfo(path).completeBaseName(), o, &plan);
+    makeNodes(p, whole, plan, parent, &row, &out, true);
     return out;
 }
 
