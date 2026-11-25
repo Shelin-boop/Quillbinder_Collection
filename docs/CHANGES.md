@@ -361,7 +361,8 @@ check had failed on Windows only). What is Windows' own:
 
 - **The first-start page has no part about the application menu**: Windows has none of the Linux desktop's, and
   Help shows no "Add to Application Menu" there; the setup program and the portable program's guide make the Start
-  menu entry, as before.
+  menu entry, as before. Its first line names **Help > Troubleshooting and Development > This Computer** (it named
+  the place of 0.93.x).
 - **The shortcuts that follow the keyboard layout** read Windows' own layout at the first start (German: the set
   without Ctrl+Alt, which is AltGr on a German keyboard).
 
