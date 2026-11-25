@@ -98,6 +98,13 @@ OptionsPage::OptionsPage(TranslateTool *tool, QWidget *parent)
     m_threads->setToolTip(tr("One core is left free by default, so that the computer stays responsive; the work runs "
                              "at a low priority."));
     sf->addRow(tr("Processor threads:"), m_threads);
+    m_unload = new QSpinBox(speed);
+    m_unload->setRange(0, 24 * 60);
+    m_unload->setSuffix(tr(" minutes"));
+    m_unload->setSpecialValueText(tr("never"));
+    m_unload->setToolTip(tr("A model that was not used for this long is unloaded, so that it takes no memory. The next work "
+                            "loads it again."));
+    sf->addRow(tr("Unload models after:"), m_unload);
     m_careful = new QCheckBox(tr("Careful: the model weighs even more possibilities (slower, now and then better)"), speed);
     sf->addRow(m_careful);
     l->addWidget(speed);
@@ -125,6 +132,7 @@ OptionsPage::OptionsPage(TranslateTool *tool, QWidget *parent)
     m_replacements->setPlainText(m_tool->setting(QStringLiteral("replacements")).toString());
     m_threads->setValue(m_tool->threads());
     m_careful->setChecked(m_tool->setting(QStringLiteral("careful"), false).toBool());
+    m_unload->setValue(m_tool->unloadMinutes());
 
     connect(m_tool->store(), &ModelStore::progress, this, [this](const QString &id, qint64 done, qint64 total) {
         for (const Row &r : m_rows.values(id)) {
@@ -310,6 +318,7 @@ void OptionsPage::apply()
     m_tool->setSetting(QStringLiteral("replacements"), m_replacements->toPlainText());
     m_tool->setSetting(QStringLiteral("threads"), m_threads->value());
     m_tool->setSetting(QStringLiteral("careful"), m_careful->isChecked());
+    m_tool->setSetting(QStringLiteral("unloadMinutes"), m_unload->value());
     m_tool->settingsApplied();
 }
 

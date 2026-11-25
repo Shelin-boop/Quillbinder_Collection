@@ -181,6 +181,13 @@ public:
     bool variantsPending() const { return m_variantsPending; }
     // the output pane's text of the lists under a single word, for the checks: see output()->toPlainText()
 
+    // ---- 1.4
+    // the notice at the top: what is missing (a model, the German dictionary) and a button to the add-on's options
+    QWidget *notice() const { return m_notice; }
+    QLabel *noticeLabel() const { return m_noticeText; }
+    QPushButton *noticeButton() const { return m_noticeButton; }
+    QStringList missingParts() const;      // "a translation model (German to English)", "the German dictionary" ...
+
 public slots:
     void swapDirection();    // German to English becomes English to German and back; the result moves into the input
     void translateBack();    // the result translated back into the language of the input, shown under it
@@ -220,6 +227,7 @@ private:
     void buildWindowLayout();
     void updateModelBox();
     void updateModeUi();
+    void updateNotice();
     void runSingleTranslation(const QString &word);
     void finishSingleTranslation(const SingleWord &w, const QString &error);
     void requestChatMeaning();
@@ -229,7 +237,7 @@ private:
     QString kindOf(Direction d) const;
     QString workKey() const;           // "correct", "formal", "translate" or "translate-de"
     Rules rulesForRun() const;
-    static Direction directionFor(const QString &task, const QString &text);
+    Direction directionFor(const QString &task, const QString &text) const;   // 1.4: not static (a lone word asks the dictionary)
     void setBusy(bool busy);
     void setStatus(const QString &text);
     void finishRun(const QStringList &results, const QString &error, double seconds, bool stopped);
@@ -252,7 +260,9 @@ private:
     QComboBox *m_task = nullptr, *m_style = nullptr, *m_model = nullptr;
     QPushButton *m_go = nullptr;
     QToolButton *m_from = nullptr, *m_into = nullptr, *m_copy = nullptr, *m_stop = nullptr, *m_models = nullptr;
-    QLabel *m_status = nullptr, *m_notes = nullptr;
+    QLabel *m_status = nullptr, *m_notes = nullptr, *m_noticeText = nullptr;
+    QWidget *m_notice = nullptr;
+    QPushButton *m_noticeButton = nullptr;
     QProgressBar *m_progress = nullptr;
     QSplitter *m_split = nullptr;
     QTextBrowser *m_info = nullptr;
