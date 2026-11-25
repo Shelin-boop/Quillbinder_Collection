@@ -1224,7 +1224,11 @@ QMimeData *TextEditor::createMimeDataFromSelection() const
     // plain text without annotation bubbles is more useful elsewhere
     md->setText(textCursor().selection().toPlainText());
 #ifdef Q_OS_ANDROID
-    keepOwnCopy(md);
+    // Android 0.93.2 (to-do item 35, S-T03): after a cut the program's copy was replaced by one of nothing (the
+    // paste's log: "own copy: ... text 0 characters"), asked for with no selection left; the clipboard's text then
+    // differed from it, and Android's text and HTML were pasted without the figure. Only a selection is kept.
+    if (textCursor().hasSelection())
+        keepOwnCopy(md);
 #endif
     return md;
 }

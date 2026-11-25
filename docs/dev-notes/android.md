@@ -36,6 +36,10 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   entries since 1.3), Help > Report a Problem (U-05: the browser puts the app away and Qt stops its event loop, the
   case hung). The start check's step K left the "Backup saved" window open (at the top left with no on-screen
   keyboard), which took P's typing and the File menu steps; K closes it by its OK.
+- **S-T03, a figure cut and pasted** (the paste's new log line): the own copy at the paste had "text 0 characters";
+  `createMimeDataFromSelection()` was asked again with no selection after the cut and replaced it with a copy of
+  nothing. Only a copy with a selection is kept now. S-T03's right click went to a picture 2000 px below the
+  screen (the editor stood in a scroll area of its own); the harness brings the place into sight there first.
 - **Show Project in File Manager on Android 9**: DocumentsUI of API 28 ends itself on a `document/` address
   (`DocumentsContract.getRootId`: "Invalid URI"); below API 29 `MobileOpen.cpp` sends the storage root
   (`root/primary`, `vnd.android.document/root`).

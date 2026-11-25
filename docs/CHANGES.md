@@ -210,6 +210,9 @@ Help > Third-Party Licenses. What is Android's own:
   while a physical keyboard is in use.
 - **Built with the Android NDK that Qt 6.12 is built with** (r30 instead of r27c); the C++ runtime inside the APK is
   r30's. The app still runs from Android 9 on.
+- **A picture or figure cut and pasted inside the program comes back with it.** After a cut the program's own copy
+  (with the picture) was replaced by an empty one, so the paste took Android's clipboard, which keeps only text and
+  HTML, and the figure was gone.
 - **File > Show Project in File Manager on Android 9**: the Files app of Android 9 could not open a folder's address
   and closed itself; before Android 10 it now opens at the top of the tablet's shared storage.
 - **Help > Third-Party Licenses** names Qt PDF 6.140.0 as a part of its own with its source (the Qt Project's archive

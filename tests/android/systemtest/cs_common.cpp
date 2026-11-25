@@ -43,6 +43,7 @@
 #include <QJsonDocument>
 #include <QKeyEvent>
 #include <QMenu>
+#include <QScrollArea>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QPushButton>
@@ -1221,6 +1222,14 @@ bool rightClickChoose(TextEditor *e, int position, const QString &entry, QString
     settle(50);
     const QRect cr = e->cursorRect(e->textCursor());
     const QPoint pos(cr.left() + 1, cr.center().y());
+    // Android 0.93.2 (run 45566476666, S-T03): the editor can stand in a scroll area of its own (its viewport 3834 px
+    // tall): the place is brought into sight there too, or the menu would be asked for far below the screen
+    for (QWidget *up = e->parentWidget(); up; up = up->parentWidget())
+        if (auto *sa = qobject_cast<QScrollArea *>(up); sa && sa->widget() && sa->widget()->isAncestorOf(e)) {
+            const QPoint in = e->viewport()->mapTo(sa->widget(), pos);
+            sa->ensureVisible(in.x(), in.y(), 40, 80);
+            settle(50);
+        }
     // a real right click: the press gives that editor (and its pane) the keyboard first; the menu's
     // commands act on the active editor (first run: the second pane's menu split the first pane's text)
     // without a window manager the window must be active, or setFocus does not move the
