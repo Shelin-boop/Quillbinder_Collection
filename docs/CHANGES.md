@@ -26,7 +26,7 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
   after **Reset Session Now** the tooltip of the quick-search field kept the old number until the next change. One
   rule now: imported text, the words a project holds when it is opened the first time, and a paste of more than 200
   words do not count as session words; the tooltip follows **Reset Session Now** at once.
-- **Back Up Now tells its success in the footer**. The box "Backup saved" that waited for OK (and on Android blocked
+- **Back Up Now tells its success under the binder**. The box "Backup saved" that waited for OK (and on Android blocked
   later steps when it was left open) is gone. The message line under the binder says "Backup saved." with a link **Show Folder**
   (the path is in the tooltip; a message with a link stays 10 seconds); boxes come only for failures and for a backup that is incomplete.
 - **Small layout points**. The Project Targets window keeps the room of its progress bars from the start, so its
@@ -138,9 +138,7 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
   (KDE Plasma) may ask whether to execute the file after the double-click. The release workflow writes the installed
   size of the full version's add-ons (**tools/full-addons-size.py**) for the line about disk space, which the page
   already read.
-- **The binder option is called "Quick-Add Keys in the Binder"**. It was **Scrivener Keys in the Binder** (**View**);
-  the word Scrivener is kept for the file format and the import. The setting keeps its key; status tip and tool tip
-  say "Return adds a new document below; Space opens a Quick Reference window".
+
 - **System test (Linux): S-P03 and S-T03 follow the Android copy**. S-P03 saves before its second Save As (since 0.93.0
   Save As writes nothing more into the original); a right click in S-T03 brings the place into sight in a scroll area
   around the editor. The system test runs only when asked.
