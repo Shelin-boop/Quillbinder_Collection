@@ -1,8 +1,8 @@
-state: running
-system: windows
-job: the run 0.94.0, Windows part (Windows 0.94.0 experimental)
-branch: win/0.94.0
-chat: started 2026-11-25 20:53
-started: 2026-11-25 21:00
+state: free
+system:
+job:
+branch:
+chat:
+started:
 paused:
-note: Linux 0.94.0 beta released (v0.94.0-beta, main 839b5a7). This job: Windows 0.94.0, then the Android part.
+note: last job: the run 0.94.0, Windows part: Windows 0.94.0 experimental released (v0.94.0-windows-experimental, 2026-11-25, main 1838a7c, #25), page and update file published. Next: the run 0.94.0, Android part.
