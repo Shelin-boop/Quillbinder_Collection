@@ -1,4 +1,5 @@
 #include "ui/ObjectsUi.h"
+#include "ui/MenuGuard.h"
 #include "ui/Ask.h"
 #include "ui/TextEditor.h"
 #include "ui/Zoom.h"
@@ -607,7 +608,7 @@ void ObjectTextEdit::contextMenuEvent(QContextMenuEvent *e)
             removeLinkAtCursor();
         });
     }
-    menu->exec(e->globalPos());
+    qb::execGuarded(*menu, e->globalPos(), this);
     delete menu;
 }
 
@@ -650,7 +651,7 @@ void ChipList::setChips(const QList<Chip> &chips)
             m.addAction(tr("Open"), this, [this, id] { emit activated(id); });
             if (m_add)
                 m.addAction(tr("Remove the Link"), this, [this, id] { emit removeRequested(id); });
-            m.exec(b->mapToGlobal(p));
+            qb::execGuarded(m, b->mapToGlobal(p), this);
         });
         m_flow->addWidget(b);
         m_buttons << b;
@@ -710,7 +711,7 @@ protected:
                 onRemove();
         });
         rm->setEnabled(pixmap().isNull() == false);
-        m.exec(e->globalPos());
+        qb::execGuarded(m, e->globalPos(), this);
     }
     void dragEnterEvent(QDragEnterEvent *e) override
     {
@@ -1471,7 +1472,7 @@ void ObjectsPanel::rebuildCategories()
                 setCategory(id);
                 editTemplates();
             });
-            m.exec(b->mapToGlobal(p));
+            qb::execGuarded(m, b->mapToGlobal(p), this);
         });
         m_categoryFlow->addWidget(b);
         m_categoryButtons << b;
@@ -1742,7 +1743,7 @@ void ObjectsPanel::treeContextMenu(const QPoint &pos)
         }
         m.addAction(tr("Delete…"), this, [this] { deleteSelected(true); });
     }
-    m.exec(m_tree->viewport()->mapToGlobal(pos));
+    qb::execGuarded(m, m_tree->viewport()->mapToGlobal(pos), this);
 }
 
 void ObjectsPanel::moveByDrop(QTreeWidgetItem *dragged, QTreeWidgetItem *target)

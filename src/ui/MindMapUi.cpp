@@ -1,4 +1,5 @@
 #include "ui/MindMapUi.h"
+#include "ui/MenuGuard.h"
 #include "ui/MenuClear.h"
 #include "ui/RowMarks.h"
 #include "ui/ColorPalette.h"
@@ -67,7 +68,7 @@ ColorWell::ColorWell(const QString &noColorText, QWidget *parent) : QToolButton(
             setColor(c);
             emit colorChosen(c);
         }, this, noColorText);
-        m.exec(mapToGlobal(QPoint(0, height())));
+        qb::execGuarded(m, mapToGlobal(QPoint(0, height())), this);
     });
     setIconSize(QSize(28, 14));
     refresh();

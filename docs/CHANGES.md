@@ -7,6 +7,12 @@ Manual in the program) describes every function.
 
 New functions and fixes (a program update for 0.93.x; the AppImage stays on the runtime `u2404-qt6.12-r2`).
 
+- **A Quick Reference window no longer crashes when it is closed while its menu is open**. The menu of the document
+  icon in the window's header (Reveal in Binder, Open in the Editor, Project Bookmarks) kept the window from being
+  deleted safely: a close request from the window manager while the menu was open ended the program with a "double
+  free" error. The close request is now held until the menu has ended and then carried out. The same holds for the
+  menus of the mind map windows, the Objects window and the media player of a panel.
+
 ## 0.93.1 beta (2026-11-24)
 
 Fixes and small changes (a program update for 0.93.0; the AppImage stays on the runtime `u2404-qt6.12-r2`).

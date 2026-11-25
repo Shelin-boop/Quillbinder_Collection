@@ -1,4 +1,5 @@
 #include "ui/MediaView.h"
+#include "ui/MenuGuard.h"
 #include "ui/LinkOpen.h"
 #include "core/WebArchive.h"
 #include "ui/ViewMemory.h"
@@ -240,7 +241,7 @@ MediaView::MediaView(QWidget *parent) : QWidget(parent)
         menu.addAction(tr("Go to the Start"), this, [this] { seek(0); })->setEnabled(isPlayable());
         menu.addSeparator();
         menu.addAction(tr("Open with Default Application"), this, openExternally);
-        menu.exec(m_playerPage->mapToGlobal(pos));
+        qb::execGuarded(menu, m_playerPage->mapToGlobal(pos), this);
     });
 
     connect(&playback::hub(), &playback::Hub::settingsChanged, this, [this] {

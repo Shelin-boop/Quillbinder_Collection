@@ -8,6 +8,7 @@
 #include "ui/BookmarkList.h"
 #include "ui/DragDrop.h"
 #include "ui/MediaView.h"
+#include "ui/MenuGuard.h"
 #include "ui/TextColumnView.h"
 #include "ui/TextEditor.h"
 
@@ -755,7 +756,7 @@ void QuickRefWindow::headerMenu()
             m_project->projectBookmarks.removeAt(at);
             m_project->notifyBookmarksChanged();
         });
-    menu.exec(m_icon->mapToGlobal(QPoint(0, m_icon->height())));
+    qb::execGuarded(menu, m_icon->mapToGlobal(QPoint(0, m_icon->height())), this);
 }
 
 bool QuickRefWindow::eventFilter(QObject *o, QEvent *e)

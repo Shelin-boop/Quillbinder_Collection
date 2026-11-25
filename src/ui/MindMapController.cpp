@@ -14,6 +14,7 @@
 #include "import/FileImporter.h"
 #include "text/RtfIO.h"
 #include "ui/MindMapDoc.h"
+#include "ui/MenuGuard.h"
 #include "ui/MindMapOverview.h"
 #include "ui/MindMapScene.h"
 #include "ui/MindMapUi.h"
@@ -84,7 +85,7 @@ MindMapController::MindMapController(MindMapDoc *doc, MindMapView *view, QWidget
             fillLineMenu(&menu, line.first, line.second);
         else
             fillContextMenu(&menu);
-        menu.exec(g);
+        qb::execGuarded(menu, g, m_view);
     });
     updateActions();
 }
