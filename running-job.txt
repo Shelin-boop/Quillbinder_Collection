@@ -1,8 +1,8 @@
-state: running
-system: windows
-job: the run 0.93.1, Windows part (Windows 0.93.1, fixes)
-branch: win/0.93.1
-chat: 2026-11-25 03:59
-started: 2026-11-25 04:01 Berlin
+state: free
+system:
+job:
+branch:
+chat:
+started:
 paused:
-note: the run 0.93.1: Linux 0.93.1 released; this job builds, tests and releases Windows 0.93.1. Next: Android 0.93.2.
+note: last job: the run 0.93.1, Windows part: Windows 0.93.1 released (v0.93.1-windows-experimental, 2026-11-25), page and update file published. Next: the run's Android part (Android 0.93.2).
