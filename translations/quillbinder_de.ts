@@ -7144,8 +7144,8 @@ In die Ordner von Windows und in die Registrierung wird nichts geschrieben, auß
         <translation>Dieser Computer</translation>
     </message>
     <message>
-        <source>Before you start: where Quillbinder keeps its files on this computer and how your projects are backed up. OK keeps what is filled in; you can change all of it later in File &gt; Options (General &gt; This Computer, Backup) or with Help &gt; This Computer.</source>
-        <translation>Bevor Sie beginnen: wo Quillbinder seine Dateien auf diesem Computer aufbewahrt und wie Ihre Projekte gesichert werden. OK übernimmt, was ausgefüllt ist; Sie können alles später unter Datei &gt; Einstellungen (Allgemein &gt; Dieser Computer, Sicherung) oder mit Hilfe &gt; Dieser Computer ändern.</translation>
+        <source>Before you start: where Quillbinder keeps its files on this computer and how your projects are backed up. OK keeps what is filled in; you can change all of it later in File &gt; Options (General &gt; This Computer, Backup) or with Help &gt; Troubleshooting and Development &gt; This Computer.</source>
+        <translation>Bevor Sie beginnen: wo Quillbinder seine Dateien auf diesem Computer aufbewahrt und wie Ihre Projekte gesichert werden. OK übernimmt, was ausgefüllt ist; Sie können alles später unter Datei &gt; Einstellungen (Allgemein &gt; Dieser Computer, Sicherung) oder mit Hilfe &gt; Fehlersuche und Entwicklung &gt; Dieser Computer ändern.</translation>
     </message>
     <message>
         <source>Application Menu</source>

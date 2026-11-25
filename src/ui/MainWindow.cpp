@@ -578,7 +578,16 @@ MainWindow::MainWindow()
     if (!s.contains(QStringLiteral("window/geometry"))) {
         resize(1300, 820);
         // 0.94.0 (item 89): the first time, on a screen narrower than 1600 px, the window opens maximized
+        bool maximize = false;
         if (QScreen *sc = QGuiApplication::primaryScreen(); sc && sc->availableGeometry().width() < 1600)
+            maximize = true;
+#ifdef Q_OS_WIN
+        // Windows 0.94.0: not on Qt's offscreen platform (the program checks of the Windows build; its screen is 800 px
+        // wide), where showing the maximized window ended the program inside Qt's toolbar layout
+        if (QGuiApplication::platformName() == QLatin1String("offscreen"))
+            maximize = false;
+#endif
+        if (maximize)
             setWindowState(windowState() | Qt::WindowMaximized);
     }
     m_windowPlaceTimer = new QTimer(this);

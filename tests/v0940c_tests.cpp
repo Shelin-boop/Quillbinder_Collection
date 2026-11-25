@@ -419,6 +419,10 @@ static QStringList runChild(const QString &home, const QString &layout, const QS
     env.insert(QStringLiteral("XDG_CONFIG_HOME"), home + QStringLiteral("/config"));
     env.insert(QStringLiteral("XDG_DATA_HOME"), home + QStringLiteral("/data"));
     env.insert(QStringLiteral("QB_KEYBOARD_LAYOUT"), layout);
+#ifdef Q_OS_WIN
+    // Windows: the data folder (QB_DATA_DIR; the runner sets one for the whole suite) is the child's own too
+    env.insert(QStringLiteral("QB_DATA_DIR"), home + QStringLiteral("/data"));
+#endif
     env.insert(QStringLiteral("QB_NO_WELCOME"), QStringLiteral("1"));
     env.insert(QStringLiteral("QB_NO_DIALOGS"), QStringLiteral("1"));
     p.setProcessEnvironment(env);
@@ -426,9 +430,12 @@ static QStringList runChild(const QString &home, const QString &layout, const QS
     p.start(QCoreApplication::applicationFilePath(), QStringList{QStringLiteral("--child"), outDir} + extra);
     p.waitForFinished(120000);
     QStringList lines;
-    for (const QString &l : QString::fromUtf8(p.readAllStandardOutput()).split(QLatin1Char('\n')))
+    for (QString l : QString::fromUtf8(p.readAllStandardOutput()).split(QLatin1Char('\n'))) {
+        if (l.endsWith(QLatin1Char('\r'))) // Windows' text output
+            l.chop(1);
         if (l.startsWith(QLatin1String("R ")))
             lines << l.mid(2);
+    }
     return lines;
 }
 
@@ -604,6 +611,11 @@ int main(int argc, char **argv)
         qputenv("XDG_DATA_HOME", (home.path() + QLatin1String("/data")).toUtf8());
         qputenv("QB_KEYBOARD_LAYOUT", "us");
     }
+#ifdef Q_OS_WIN
+    // Windows: Qt keeps the settings file in the user's roaming application data, whatever XDG_CONFIG_HOME says; here it
+    // follows XDG_CONFIG_HOME as on Linux, so that every child run has settings of its own
+    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, qEnvironmentVariable("XDG_CONFIG_HOME"));
+#endif
     qputenv("QB_NO_DIALOGS", "1");
     QCoreApplication::setOrganizationName(QStringLiteral("QuillbinderV0940cTest"));
     QCoreApplication::setApplicationName(QStringLiteral("QuillbinderV0940cTest"));

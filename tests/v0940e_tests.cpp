@@ -214,7 +214,7 @@ static void backupMessage(MainWindow &w, const QString &work)
     check(ml->linkLabel()->isVisible() && ml->linkLabel()->text().contains(QStringLiteral("Show Folder")),
           QStringLiteral("... with the link \"Show Folder\""), ml->linkLabel()->text());
     check(ml->shownMs() == 10000, QStringLiteral("... for 10 seconds, as a message with a link"));
-    check(ml->textLabel()->toolTip().contains(dir), QStringLiteral("... the path is in the tooltip"), ml->textLabel()->toolTip());
+    check(ml->textLabel()->toolTip().contains(QDir::toNativeSeparators(dir)), QStringLiteral("... the path is in the tooltip"), ml->textLabel()->toolTip());
     check(w.statusNote().isEmpty(), QStringLiteral("the footer has no note of it (in a narrow footer it was only a dot)"), w.statusNote());
     check(!QDir(dir).entryList(QDir::NoDotAndDotDot | QDir::AllEntries).isEmpty(), QStringLiteral("... and the backup is there"));
     shot(&w, QStringLiteral("v0940e-backup-message"));

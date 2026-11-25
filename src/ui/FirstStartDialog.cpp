@@ -58,8 +58,8 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
     // stays in File > Options > General > Startup
     auto *intro = new QLabel(portable ? tr("Before you start: where Quillbinder keeps its files on this computer and how your "
                                            "projects are backed up. OK keeps what is filled in; you can change all of it "
-                                           "later in File > Options (General > This Computer, Backup) or with Help > This "
-                                           "Computer.")
+                                           "later in File > Options (General > This Computer, Backup) or with Help > Troubleshooting "
+                                           "and Development > This Computer.")
                                       : tr("Before you start: how your projects are backed up. Everything is filled in already: OK "
                                            "keeps it as it is. You can change all of it later in File > Options."),
                              body);

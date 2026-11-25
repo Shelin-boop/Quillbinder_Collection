@@ -350,6 +350,29 @@ and need 0.93.0 (the check for updates and **File > Install Update or Add-on** t
   they cannot say "alpha" again; `docs/design-decisions.md` gives the reasons behind choices that can look like faults
   (README, SECURITY.md and the manual's introduction link to it).
 
+## Windows 0.94.0 experimental (2026-11-25)
+
+The functions of 0.94.0 for Windows (a program update for Windows 0.93.x; the libraries stay those of 0.93.0).
+Everything in 0.94.0 above is in it: Help > Find Command, the menus with one place per topic (Help > Add-ons and
+Updates, View > Layout, View > Themes and its one theme button, Format > Font), the message line under the binder, the
+manual's section of the current view with F1, Documents > Group, the writing progress in the footer, Translation and
+Proofreading 1.4, Speech Transcription 1.9, and the inspector that always shows the document chosen in the binder (its
+check had failed on Windows only). What is Windows' own:
+
+- **The first-start page has no part about the application menu**: Windows has none of the Linux desktop's, and
+  Help shows no "Add to Application Menu" there; the setup program and the portable program's guide make the Start
+  menu entry, as before. Its first line names **Help > Troubleshooting and Development > This Computer** (it named
+  the place of 0.93.x).
+- **The shortcuts that follow the keyboard layout** read Windows' own layout at the first start (German: the set
+  without Ctrl+Alt, which is AltGr on a German keyboard).
+
+For developers (nothing changes in the program): the suites of 0.94.0 run on Windows (v0940b leaves out the AppImage's
+move and the Linux application menu) and v017 counts again; on Qt's offscreen platform, where the Windows build's
+program checks start the program on a screen 800 px wide, the first window does not open maximized (showing it
+maximized there ended the program inside Qt's toolbar layout); the official add-on entry's Windows block names the 1.4
+source and fetches the models of models-3 for its tests, as the Linux block does; the download page names Help >
+Add-ons and Updates > Install Update or Add-on.
+
 ## Windows 0.93.1 experimental (2026-11-25)
 
 Fixes and small changes of Windows 0.93.0 (a program update for it; the libraries stay those of 0.93.0). Everything in

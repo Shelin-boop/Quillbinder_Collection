@@ -71,19 +71,19 @@ Add-ons are installed with **Help > Add-ons and Updates > Install Update or Add-
 
 ### Windows
 
-**Quillbinder 0.93.1 for Windows 11 (64-bit), experimental:** the same functions as Linux 0.93.1 (each system counts
+**Quillbinder 0.94.0 for Windows 11 (64-bit), experimental:** the same functions as Linux 0.94.0 (each system counts
 its own fixes in the last number), with Translation and Proofreading inside the full version and the check for
-updates. All Windows files: [the release 0.93.1 for Windows](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.93.1-windows-experimental).
+updates. All Windows files: [the release 0.94.0 for Windows](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.94.0-windows-experimental).
 
-- **[Quillbinder-0.93.1-full-experimental-windows-x64-setup.exe](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-windows-experimental/Quillbinder-0.93.1-full-experimental-windows-x64-setup.exe)**:
+- **[Quillbinder-0.94.0-full-experimental-windows-x64-setup.exe](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-windows-experimental/Quillbinder-0.94.0-full-experimental-windows-x64-setup.exe)**:
   **the full version** (the program with all add-ons) as a setup program. It asks for a folder (for example
   `C:\Users\<your name>\Quillbinder`, not Program Files) and only unpacks into it: no admin rights, no installation,
   nothing in the registry. The same files as a zip:
-  [Quillbinder-0.93.1-full-experimental-windows-x64.zip](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-windows-experimental/Quillbinder-0.93.1-full-experimental-windows-x64.zip).
-- The program alone: [setup program](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-windows-experimental/Quillbinder-0.93.1-experimental-windows-x64-setup.exe),
-  [zip](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-windows-experimental/Quillbinder-0.93.1-experimental-windows-x64.zip). For a Quillbinder you already have:
-  [quillbinder-0.93.1-experimental-windows-update.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.93.1-windows-experimental/quillbinder-0.93.1-experimental-windows-update.qbpkg)
-  (**File > Install Update or Add-on**; the program update and every add-on in one package), or run the new setup
+  [Quillbinder-0.94.0-full-experimental-windows-x64.zip](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-windows-experimental/Quillbinder-0.94.0-full-experimental-windows-x64.zip).
+- The program alone: [setup program](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-windows-experimental/Quillbinder-0.94.0-experimental-windows-x64-setup.exe),
+  [zip](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-windows-experimental/Quillbinder-0.94.0-experimental-windows-x64.zip). For a Quillbinder you already have:
+  [quillbinder-0.94.0-experimental-windows-update.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-windows-experimental/quillbinder-0.94.0-experimental-windows-update.qbpkg)
+  (**Help > Add-ons and Updates > Install Update or Add-on**; the program update and every add-on in one package), or run the new setup
   program into the same folder: it keeps your settings. The release also has the program update alone and each
   add-on as a package of its own.
 - From 0.92.0 on Quillbinder for Windows looks for updates itself, as on Linux. A later version that needs the whole
@@ -128,8 +128,8 @@ How to check a download yourself: the user manual, section 17.
 automatic backups are set under **File > Options > Backup**), and keep a copy of your manuscripts outside
 the program.
 
-Audio and video: download **`media-all-formats.qbpkg`** and install it with **File > Install Update or
-Add-on**: one package for the commonly used formats. It installs the add-on "Media Playback" (free formats: MP3, Ogg Vorbis,
+Audio and video: download **`media-all-formats.qbpkg`** and install it with **Help > Add-ons and Updates >
+Install Update or Add-on**: one package for the commonly used formats. It installs the add-on "Media Playback" (free formats: MP3, Ogg Vorbis,
 Opus, FLAC, WAV, WebM with VP8 or VP9 ...) together with "Extra Video and Audio Formats" (H.264, H.265, AAC and
 the other formats licensed under patents). Who wants the free formats only installs `media-playback.qbpkg`
 alone. Whether a patent license is needed to use the other formats depends on the country.
