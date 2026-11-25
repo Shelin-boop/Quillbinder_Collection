@@ -38,10 +38,8 @@ jobs:
       # Hunspell and OpenSSL as packs (D1; packaging/android/android-deps-pack.sh): the same pins as android.yml,
       # which publishes a pack when it has none; without a pin the build makes them (a few minutes)
       QB_ANDROID_PACKS: |
-        hunspell-arm64-v8a c1f589f9a870d0e1390021b3657e4f8c903ff4d433b40050e303e1cb825057be hunspell-arm64-v8a-android-c1f589f9a870d0e1.tar.xz d6045c811367c60b83a910511c166b50aa15f40185e3cb5ff01d091e35840161
-        hunspell-x86_64 8745189cfe1943140ee55dfb74962503bb62aeac73b4d6dc2d788400e77c8e41 hunspell-x86_64-android-8745189cfe194314.tar.xz 746f543a69f4ed91099d1c696b57b2eca8fb06c0e7e67b7b5e728cefaeea662f
-        openssl-arm64-v8a bc6606200989542a5dd1d18106987d9c8e17f9795100940fd6259df518cda75e openssl-arm64-v8a-android-bc6606200989542a.tar.xz cecf78a899c157b919e77f3f1d50975f23def05288bdac40c62cf99ea1af2985
-        openssl-x86_64 105e0006344b014b217417327e3485f9252b908bfe7c8de4cece2da9c448e9b3 openssl-x86_64-android-105e0006344b014b.tar.xz 70c043801ea90be0e6bc66e6bee9ad64048d6995cedcacf0b49e2c3e4b7b5cb9
+        hunspell-arm64-v8a 4bc5e476088b297d707b67f08a58439a657c09dc1c29a25bdaa86ebeafc354a1 hunspell-arm64-v8a-android-4bc5e476088b297d.tar.xz 6828dffe2b47d9afbc823eaf61b2862a92ffbf9c5183c546dfa749101cfbbc21
+        openssl-arm64-v8a 3620641cd0876ef45655cdaa4301611dab0072e72eff4b325d87b46c045b2603 openssl-arm64-v8a-android-3620641cd0876ef4.tar.xz eeea7569edfc7aa93f807e85aaa44080e045ae742d3e1dcf17a6510d5f7ebeb2
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
 

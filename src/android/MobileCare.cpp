@@ -481,8 +481,9 @@ std::function<KeyboardState()> &keyboardSource()
 
 } // namespace
 
-KeyboardState keyboardState()
+KeyboardState keyboardState(bool withSetting)
 {
+    Q_UNUSED(withSetting) // (Android only)
     if (keyboardSource())
         return keyboardSource()();
     KeyboardState k;
@@ -500,7 +501,8 @@ KeyboardState keyboardState()
     k.keyboard = config.getField<jint>("keyboard");
     k.hidden = config.getField<jint>("hardKeyboardHidden");
     // (a hidden setting: newer Androids may refuse it to an app; then it stays "not known")
-    const QJniObject resolver = context.callObjectMethod("getContentResolver", "()Landroid/content/ContentResolver;");
+    const QJniObject resolver = withSetting ? context.callObjectMethod("getContentResolver", "()Landroid/content/ContentResolver;")
+                                            : QJniObject();
     if (resolver.isValid()) {
         const QJniObject value = QJniObject::callStaticObjectMethod(
             "android/provider/Settings$Secure", "getString",

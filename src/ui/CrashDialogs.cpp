@@ -548,7 +548,7 @@ QString text(const Project *project)
 #ifdef Q_OS_ANDROID
     // Android 0.93.2 (to-do item 34): Android's keyboard configuration and whether the program asks for the
     // on-screen keyboard (android/MobileCare.cpp)
-    t << QStringLiteral("  Keyboard: %1").arg(mobile::keyboardText(mobile::keyboardState()));
+    t << QStringLiteral("  Keyboard: %1").arg(mobile::keyboardText(mobile::keyboardState(true)));
 #endif
     t << QStringLiteral("  Language: %1 (%2), time zone %3")
              .arg(QLocale::system().name(), QLocale::system().uiLanguages().mid(0, 4).join(QLatin1String(", ")),

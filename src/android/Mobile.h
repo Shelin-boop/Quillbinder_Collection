@@ -58,7 +58,8 @@ struct KeyboardState
     // Android's own rule (InputMethodService::onEvaluateInputViewShown): keys, and not hidden
     bool physical() const { return known && keyboard > 1 && hidden != 2; }
 };
-KeyboardState keyboardState();
+// withSetting: also Android's setting (a call into Android's settings; only for System Information, not on every key)
+KeyboardState keyboardState(bool withSetting = false);
 // The preview test's stand-in for Android's answer (an empty function: Android's own, or "not known" on a desktop).
 void setKeyboardStateSource(std::function<KeyboardState()> source);
 // Brings QApplication::autoSipEnabled() in line with the keyboard: off while a physical keyboard is in use.
