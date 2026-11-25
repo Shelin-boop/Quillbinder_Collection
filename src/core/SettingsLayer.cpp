@@ -72,11 +72,23 @@ void ensureInit()
     setPaths(s.usable ? s.realDir : QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation));
 }
 
+// 0.94.0: Qt keeps a settings file it has written in a small cache of its own (about 100 units, 10 + keys/4 per
+// file) with the values as set, and reads the file anew once the cache has dropped it: an empty list then comes
+// back as no value, a list of one item as its text. Values are taken in the form the file gives back, so that the
+// same list does not count as changed (it put the toolbar lists into a project's own settings).
+QVariant asRead(const QVariant &v)
+{
+    if (v.typeId() != QMetaType::QStringList)
+        return v;
+    const QStringList l = v.toStringList();
+    return l.isEmpty() ? QVariant() : l.size() == 1 ? QVariant(l.first()) : v;
+}
+
 QVariantMap snapshot(QSettings &s)
 {
     QVariantMap m;
     for (const QString &k : s.allKeys())
-        m.insert(k, s.value(k));
+        m.insert(k, asRead(s.value(k)));
     return m;
 }
 
@@ -154,7 +166,8 @@ bool programOnly(const QString &key)
         QStringLiteral("appearance/recentIcons"),
         // markers of one-time changes
         QStringLiteral("toolbars/paraButtons0604"), QStringLiteral("toolbars/toolButtonsPlaced"),
-        QStringLiteral("toolbars/split0910")}; // 0.91.0: the two toolbars' lists split over the seven bars
+        QStringLiteral("toolbars/split0910"), // 0.91.0: the two toolbars' lists split over the seven bars
+        QStringLiteral("toolbars/themesOff0940")}; // 0.94.0: the Themes toolbar off at first, once
     if (keys.contains(key))
         return true;
     // 0.64.1 (the external audit of 2026-11-09, X-2, D-2, D-4): an allow list. A project (its

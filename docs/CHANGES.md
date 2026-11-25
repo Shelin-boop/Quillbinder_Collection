@@ -170,6 +170,9 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
 - **A notice for a missing add-on**. **Edit > Writing Tools** keeps "Translate and Proofread" and "Speech Transcription" while
   the add-on is not installed (or switched off); they show a notice with a button to **Help > Add-ons and Updates > Add-on
   Manager**. Before, nothing in the program led to them.
+- **"This project" keeps only the changed option**. Options set for "This project" could take the toolbar lists, the hidden
+  toolbars and the revision colors along with the one changed option (a fault of earlier versions too, shown by a new key
+  count; it depended on the size of the settings files). Only what was changed goes into the project now.
 
 ## 0.93.1 beta (2026-11-24)
 
