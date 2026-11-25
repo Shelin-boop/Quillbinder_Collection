@@ -1733,6 +1733,7 @@
     <file alias="licenses/texts/qt-opengl-headers.txt">licenses-windows/texts/qt-opengl-headers.txt</file>
     <file alias="licenses/texts/qt-pcre2-sljit.txt">licenses-windows/texts/qt-pcre2-sljit.txt</file>
     <file alias="licenses/texts/qt-pcre2.txt">licenses-windows/texts/qt-pcre2.txt</file>
+    <file alias="licenses/texts/qt-pdf.txt">licenses-windows/texts/qt-pdf.txt</file>
     <file alias="licenses/texts/qt-psl-data.txt">licenses-windows/texts/qt-psl-data.txt</file>
     <file alias="licenses/texts/qt-rfc6234.txt">licenses-windows/texts/qt-rfc6234.txt</file>
     <file alias="licenses/texts/qt-rhi-miniengine-d3d12-mipmap.txt">licenses-windows/texts/qt-rhi-miniengine-d3d12-mipmap.txt</file>

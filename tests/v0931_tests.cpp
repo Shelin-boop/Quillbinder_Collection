@@ -19,6 +19,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFont>
+#include <QFontDatabase>
 #include <QFontInfo>
 #include <QPlainTextEdit>
 #include <QRegularExpression>
@@ -90,6 +91,7 @@ static void genericFonts()
               && fontfaces::genericHint(QStringLiteral("Courier New")) == QFont::AnyStyle,
           QStringLiteral("each generic name has its style hint, other names none"));
 
+#ifndef Q_OS_WIN
     // Linux shows nothing new: fontconfig knows the names, so the start maps none of them
     const QStringList before = QFont::substitutes(QStringLiteral("monospace")) + QFont::substitutes(QStringLiteral("serif"))
                                + QFont::substitutes(QStringLiteral("sans-serif"));
@@ -104,6 +106,27 @@ static void genericFonts()
     check(QFontInfo(hinted).family() == mono.family(),
           QStringLiteral("the style hint that the Word and e-book export now give changes nothing on Linux"),
           QFontInfo(hinted).family() + QStringLiteral(" / ") + mono.family());
+#else
+    // Windows 0.93.1 (to-do item 56): Qt's Windows font database may not know the generic names either; then the start
+    // maps "monospace" to the fixed font of its style hint, and the style Code Span shows and is written in that font
+    fontfaces::mapGenericFamilies();
+    const QStringList mapped = QFont::substitutes(QStringLiteral("monospace")) + QFont::substitutes(QStringLiteral("serif"))
+                               + QFont::substitutes(QStringLiteral("sans-serif"));
+    const QFontInfo mono{QFont(QStringLiteral("monospace"))};
+    check(mono.fixedPitch(), QStringLiteral("on Windows \"monospace\" gives a fixed-pitch font (%1)").arg(mono.family()),
+          QStringLiteral("mapped: ") + mapped.join(QLatin1String(", ")));
+    QFont hinted(QStringLiteral("monospace"));
+    hinted.setStyleHint(fontfaces::genericHint(QStringLiteral("monospace")));
+    const QString written = QFontInfo(hinted).family();
+    check(!written.isEmpty() && QFontInfo(QFont(written)).fixedPitch(),
+          QStringLiteral("on Windows the Word and e-book export write a fixed-pitch family for \"monospace\" (%1)").arg(written));
+    QStringList unknown;
+    for (const QString &f : mapped)
+        if (!QFontDatabase::hasFamily(f))
+            unknown << f;
+    check(unknown.isEmpty(), QStringLiteral("on Windows each name the start maps to is a family Windows has (%1)").arg(mapped.join(QLatin1String(", "))),
+          unknown.join(QLatin1String(", ")));
+#endif
 }
 
 // ---------------------------------------------------------------- item 45: the plain texts kept are bounded

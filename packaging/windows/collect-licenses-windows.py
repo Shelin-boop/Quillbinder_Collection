@@ -8,13 +8,14 @@ dictionaries. The list has the format of resources/licenses/index.json (tools/co
 into the Windows program under the same resource names (resources/resources-windows.qrc, tools/gen-resources.py).
 
 It is made in a Claude session from these checkouts (the cloud session cannot reach download.qt.io; GitHub works):
-  <lic>/qtbase, <lic>/qtsvg,          git clone https://github.com/qt/<repo> at tag v6.12.1, sparse: every
-  <lic>/qtimageformats                qt_attribution.json, /LICENSES/, and the files they name (tools/get-qt-licenses.sh
-                                      makes them for the Linux list: build/qt-licenses)
-  <lic>/chromium                      https://github.com/qt/qtwebengine-chromium at 71a2fa55e2e2 (the submodule
-                                      commit of qtwebengine's branch 6.12, d4735ce2f841, which builds Qt PDF; the GitHub
-                                      mirror has no tag v6.12.0): license files of PDFium and the parts Qt names in
-                                      "Qt PDF Licensing" (doc.qt.io/qt-6/qtpdf-licensing.html)
+  <lic>/qtbase, <lic>/qtsvg,          tools/get-qt-licenses.sh <lic> (the checkouts of the Linux list): Qt's repositories
+  <lic>/qtimageformats                at the tag of QB_QT_VERSION (CMakeLists.txt), sparse: every qt_attribution.json,
+                                      /LICENSES/, and the files they name
+  <lic>/chromium                      the same script: https://github.com/qt/qtwebengine-chromium at the commit that
+                                      qtwebengine's tag v<QB_QTPDF_VERSION> builds (Windows 0.93.1: v6.140.0,
+                                      e2b413ea3e2d): license files of PDFium and the parts Qt names in "Qt PDF Licensing"
+                                      (doc.qt.io/qt-6/qtpdf-licensing.html). Since Qt 6.12 Qt PDF is a Qt Extensions
+                                      release of its own (Qt WebEngine's source), listed apart from Qt (to-do item 48)
   <lic>/hunspell                      https://github.com/hunspell/hunspell at v1.7.5 (the version vcpkg builds)
   <lic>/zlib                          https://github.com/madler/zlib at v1.4 (vcpkg's port, packaging/windows/win-vcpkg.sh)
   <dict>                              https://github.com/LibreOffice/dictionaries at libreoffice-25.8.7.3 (en/, de/)
@@ -31,7 +32,18 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 OUT = os.path.join(ROOT, "resources", "licenses-windows")
 LINUX_TEXTS = os.path.join(ROOT, "resources", "licenses", "texts")
 LIC, DICT = sys.argv[1], sys.argv[2]
-QT_VERSION = "6.12.1"
+
+
+def cmake_var(name):
+    with open(os.path.join(ROOT, "CMakeLists.txt"), encoding="utf-8") as f:
+        m = re.search(r'^set\(%s\s+"([^"]+)"\)' % name, f.read(), re.M)
+    if not m:
+        sys.exit("collect-licenses-windows.py: %s is not in CMakeLists.txt" % name)
+    return m.group(1)
+
+
+QT_VERSION = cmake_var("QB_QT_VERSION")
+QTPDF_VERSION = cmake_var("QB_QTPDF_VERSION")
 SOURCES = "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources"
 
 QT_MODULES = {
@@ -74,7 +86,10 @@ def qt_attributions():
     out = {}
     for repo in ("qtbase", "qtsvg", "qtimageformats"):
         base = os.path.join(LIC, repo)
-        for dirpath, _, files in os.walk(base):
+        for dirpath, dirs, files in os.walk(base):
+            # (Windows 0.93.1, as tools/collect-licenses.py since Linux 0.93.1: the attribution files of Qt's own tests
+            # name made-up parts; none of them is in the program)
+            dirs[:] = [d for d in dirs if d not in (".git", "tests")]
             if "qt_attribution.json" not in files:
                 continue
             data = json.loads(read(os.path.join(dirpath, "qt_attribution.json")), strict=False)
@@ -143,8 +158,8 @@ def main():
     # ---- Qt
     qtsrc = f"qt-everywhere-src-{QT_VERSION}.tar.xz"
     comp(f"Qt {QT_VERSION}", QT_VERSION, "LGPL-3.0-only",
-         "Qt6Core, Qt6Gui, Qt6Widgets, Qt6Network, Qt6Xml, Qt6Svg, Qt6PrintSupport, Qt6Pdf, Qt6PdfWidgets (DLLs beside "
-         "the program) and Qt's plugins (platforms, styles, imageformats, iconengines, tls, networkinformation, generic). "
+         "Qt6Core, Qt6Gui, Qt6Widgets, Qt6Network, Qt6Xml, Qt6Svg, Qt6PrintSupport (DLLs beside the program) and Qt's "
+         "plugins (platforms, styles, imageformats, iconengines, tls, networkinformation, generic). "
          "The DLLs are The Qt Company's own build for Windows (MSVC 2022, 64 bit), unchanged; each can be replaced "
          "by another build of the same version.",
          add_text("qt.txt", "Qt " + QT_VERSION + "\nCopyright (C) The Qt Company Ltd. and other contributors.\n"
@@ -153,6 +168,23 @@ def main():
                   "licenses.\n\n" + read(os.path.join(LIC, "qtbase", "LICENSES", "LGPL-3.0-only.txt"))),
          f"{SOURCES}, file {qtsrc} (the Qt Project's source release; also https://download.qt.io/official_releases/"
          f"qt/{QT_VERSION.rsplit('.', 1)[0]}/{QT_VERSION}/single/ and the tag v{QT_VERSION} of https://code.qt.io)", qtsrc)
+
+    # Qt PDF (Windows 0.93.1, to-do item 48): since Qt 6.12 a Qt Extensions release with a version of its own, built
+    # from Qt WebEngine's source, which qt-everywhere-src no longer holds
+    pdfsrc = f"qtwebengine-everywhere-src-{QTPDF_VERSION}.tar.xz"
+    comp("Qt PDF", QTPDF_VERSION, "LGPL-3.0-only",
+         "Qt6Pdf.dll, Qt6PdfWidgets.dll (beside the program) and the image plugin qpdf.dll",
+         add_text("qt-pdf.txt", "Qt PDF " + QTPDF_VERSION + "\nCopyright (C) The Qt Company Ltd. and other contributors.\n"
+                  "https://www.qt.io\n\nThe DLLs are The Qt Company's own build of Qt PDF " + QTPDF_VERSION + ", the Qt "
+                  "Extensions release for Qt " + QT_VERSION.rsplit(".", 1)[0] + ", for Windows (MSVC 2022, 64 bit), "
+                  "unchanged; each can be replaced by another build of the same version. Since Qt 6.12 Qt PDF is "
+                  "released with Qt WebEngine, apart from Qt itself; its source is Qt WebEngine's. Qt PDF is used under "
+                  "the GNU Lesser General Public License version 3 (below); the parts inside it (PDFium and the parts of "
+                  "Chromium it uses) are listed under their own licenses.\n\n"
+                  + read(os.path.join(LIC, "qtbase", "LICENSES", "LGPL-3.0-only.txt"))),
+         f"{SOURCES}, file {pdfsrc} (the Qt Project's source release of Qt WebEngine and Qt PDF; also "
+         f"https://download.qt.io/official_releases/qtwebengine/{QTPDF_VERSION.rsplit('.', 1)[0]}/{QTPDF_VERSION}/src/ "
+         f"and the tag v{QTPDF_VERSION} of https://code.qt.io/qt/qtwebengine)", pdfsrc)
 
     attr = qt_attributions()
     for pid in QT_PARTS:
@@ -170,7 +202,8 @@ def main():
     def pdf(name, version, license, files, header=""):
         body = header + "".join(read(os.path.join(ch, f)) + "\n" for f in files)
         key = "qtpdf-" + re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-") + ".txt"
-        comp(f"{name} (in Qt PDF)", version, license, pdf_where, add_text(key, body), f"the Qt source, file {qtsrc}", qtsrc)
+        comp(f"{name} (in Qt PDF)", version, license, pdf_where, add_text(key, body),
+             f"the source of Qt WebEngine and Qt PDF, file {pdfsrc}", pdfsrc)
 
     pdf("PDFium", "", "BSD-3-Clause", ["third_party/pdfium/LICENSE"])
     pdf("The Chromium Project", "", "BSD-3-Clause", ["LICENSE"])
@@ -252,7 +285,7 @@ def main():
 
     index = {
         "note": "Made by packaging/windows/collect-licenses-windows.py from Qt " + QT_VERSION + "'s attribution files, the license files of "
-                "Qt PDF's parts, Hunspell 1.7.5, zlib 1.4 and LibreOffice's dictionaries (sources pinned in the script).",
+                "Qt PDF " + QTPDF_VERSION + "'s parts, Hunspell 1.7.5, zlib 1.4 and LibreOffice's dictionaries (sources pinned in the script).",
         "components": components,
         "commonLicenses": common,
     }

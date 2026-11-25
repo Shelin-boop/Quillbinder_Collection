@@ -187,12 +187,17 @@ jobs:
           path: ${{ steps.cache.outputs.paths }}
           key: ${{ steps.cache.outputs.key }}
 
-      # the add-on's commands run in Git Bash (QB_BASH) inside MSVC's environment
+      # the add-on's commands run in Git Bash (QB_BASH) inside MSVC's environment. Git takes long paths (Windows 0.93.1):
+      # since the entry names the add-on's folder in this repository, its setup clones CTranslate2 with its submodules
+      # under addon-src\addons\translation-proofreading\source\deps, and the documentation files of CUTLASS and Thrust
+      # there pass Windows' 260 characters ("Filename too long", run 45537944632); the program's own build
+      # (packaging/windows/win-ci.sh) builds the same libraries in a short folder
       - name: The add-on's setup (when the kept folders are missing)
         id: setup
         if: steps.deps.outputs.cache-hit != 'true'
         shell: cmd
         run: |
+          git config --global core.longpaths true || exit /b 1
           call "%VSDIR%\VC\Auxiliary\Build\vcvars64.bat" || exit /b 1
           python -I tools\addon-entry.py run "%ENTRY%" setup "%SRC%" --windows
 

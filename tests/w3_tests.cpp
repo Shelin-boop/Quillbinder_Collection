@@ -182,7 +182,9 @@ int main(int argc, char **argv)
           missing.join(QLatin1String(", ")));
 #ifdef Q_OS_WIN
     const QStringList want = {QStringLiteral("Qt " QT_VERSION_STR), QStringLiteral("Hunspell 1.7.5"), QStringLiteral("Microsoft Visual C++ Runtime"),
-                              QStringLiteral("German (Germany, Austria, Switzerland) spelling dictionaries"), QStringLiteral("PDFium (in Qt PDF)")};
+                              QStringLiteral("German (Germany, Austria, Switzerland) spelling dictionaries"), QStringLiteral("PDFium (in Qt PDF)"),
+                              // (Windows 0.93.1: Qt PDF is a part of its own, the Qt Extensions release of Qt WebEngine's source)
+                              QStringLiteral("Qt PDF 6.")};
     const bool other = names.join(QLatin1Char('\n')).contains(QLatin1String("qt6-base"));
 #else
     const QStringList want = {QStringLiteral("Qt " QT_VERSION_STR), QStringLiteral("hunspell")};

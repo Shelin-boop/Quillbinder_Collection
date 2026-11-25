@@ -97,8 +97,8 @@
     ]
   },
   "windows": {
-    "commit": "f090213c445689b0142534281eaba073268a8732",
-    "reviewed": "2026-11-24",
+    "commit": "76a903a3e47f9d0c10ddfe6db0fc21d431e64bdc",
+    "reviewed": "2026-11-25",
     "build": {
       "cachePaths": [
         "deps/install",

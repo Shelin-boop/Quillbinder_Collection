@@ -179,6 +179,23 @@ and need 0.93.0 (the check for updates and **File > Install Update or Add-on** t
   they cannot say "alpha" again; `docs/design-decisions.md` gives the reasons behind choices that can look like faults
   (README, SECURITY.md and the manual's introduction link to it).
 
+## Windows 0.93.1 experimental (2026-11-25)
+
+Fixes and small changes of Windows 0.93.0 (a program update for it; the libraries stay those of 0.93.0). Everything in
+0.93.1 above is in it: fonts named by their kind, search and the counts keeping less in memory, the new lines of
+Help > System Information, and Qt PDF named with its own source in Help > Third-Party Licenses. What is Windows' own:
+
+- **The list of the Windows files' third-party sources names Qt PDF** (`THIRD-PARTY-SOURCES-windows.txt`), with its
+  source `qtwebengine-everywhere-src-6.140.0.tar.xz` in the release "Third-party source code", as Help > Third-Party
+  Licenses now does. The parts Qt carries inside itself were already listed in the versions of Qt 6.12.1 on Windows.
+
+For developers (nothing changes in the program): the description of the script that builds FFmpeg for "Extra Video and
+Audio Formats" says how MSVC's environment reaches MSYS2 (the same FFmpeg 9.1 and configuration; its pack was built
+anew); the official add-on workflow for Windows lets Git take long paths, which the add-on's folder in this repository
+needs, and the entry's Windows block names a commit of its own (one of the add-on's own checks now waits for the
+other translations it asks for in the background, which GitHub's Windows machine gave late); the Windows build's early pick of its own version line is checked (a build with another Linux line names the
+Windows line); the generic font names are checked on Windows too.
+
 ## Android 0.93.1 experimental (2026-11-24)
 
 A fix of Android 0.93.0 alone; everything of Android 0.93.0 below is in it.
