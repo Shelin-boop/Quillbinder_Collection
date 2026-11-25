@@ -67,6 +67,7 @@ struct Object {
     QString folder; // "" = the category itself
     QString name;
     QColor color;   // invalid: the category's color
+    QString sheet;  // 0.94.0: the id of the binder document this object stands for (Documents > Convert > Sheet to Object); "" = none
     QDateTime created, modified;
     QVariantMap values; // field id -> QString (texts), bool (yes/no), QStringList (objects, documents)
     QString text(const QString &fieldId) const;
@@ -130,6 +131,8 @@ public:
 
     QList<const Object *> objects(const QString &category = QString()) const; // sorted by name
     const Object *object(const QString &id) const;
+    // 0.94.0: the object that stands for a binder document (nullptr = none)
+    const Object *objectForSheet(const QString &documentId) const;
     int count() const { return m_objects.size(); }
     // a new object (name may be empty: "New <category>")
     QString create(const QString &category, const QString &folder = QString(), const QString &name = QString());

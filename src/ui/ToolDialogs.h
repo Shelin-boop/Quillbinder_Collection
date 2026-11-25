@@ -76,15 +76,29 @@ class ImportSplitDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ImportSplitDialog(QWidget *parent = nullptr);
+    explicit ImportSplitDialog(Project *p, QWidget *parent = nullptr);
     QString file() const;
     QString separator() const;
     bool firstLineIsTitle() const;
+    // 0.94.0 (item 75): "Split at headings": Heading 1 = folder, Heading 2 = folder or document, a preview of the binder
+    bool atHeadings() const;
+    bool heading2Folder() const;
+    void setFile(const QString &path);
+    void setMode(int index);          // 0 two empty lines, 1 a line of this text, 2 scene headings, 3 headings
+    void setHeading2Folder(bool folder);
+    QTreeWidget *preview() const { return m_preview; }
+    QLabel *ruleLabel() const { return m_rule; }
+    QLabel *previewNote() const { return m_previewNote; }
 
 private:
+    void updateState();
+    void updatePreview();
+    Project *m_project;
     QLineEdit *m_file, *m_sep;
     QCheckBox *m_title;
-    QComboBox *m_mode;
+    QComboBox *m_mode, *m_h2;
+    QLabel *m_rule, *m_previewNote;
+    QTreeWidget *m_preview;
 };
 
 // File ▸ Export ▸ Files

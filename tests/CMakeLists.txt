@@ -381,6 +381,11 @@ target_compile_definitions(qb_v0940b_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_S
 add_executable(qb_v0940c_tests v0940c_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0940c_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0940c_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.94.0: the message line and tool interface 1.2 (items 72, 85), the notice for a missing add-on (59), the writing progress in the
+# footer (74), Import and Split at headings (75), Documents > Group (76), the Objects form (77), Sheet to Object (67)
+# (xvfb-run -a ./qb_v0940e_tests /tmp/shots)
+add_executable(qb_v0940e_tests v0940e_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0940e_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0900_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # The readers against damaged input (0.80.0, the external audit of 2026-11-09, ST-5): fixed-seed damage of small
 # valid inputs of RTF, Markdown, XML, ZIP, DOCX, ODT, Word 97 and .scrivx, each read in this process

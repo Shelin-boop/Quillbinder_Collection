@@ -67,7 +67,7 @@ public:
     void notifySettingsChanged() { emit settingsChanged(); }
 
     // ---- tools::ToolHost
-    int apiVersion() const override { return 110; }   // 1.1 (0.61)
+    int apiVersion() const override { return 120; }   // 1.2 (0.94.0)
     QString appName() const override;
     QString appVersion() const override;
     QWidget *window() const override;
@@ -92,6 +92,8 @@ public:
     void showInspectorTab(const QString &key) override;
     void setCommandState(const QString &commandKey, bool checked, const QString &icon, const QString &toolTip) override;
     void showOptions(const QString &toolId) override;
+    // 1.2
+    void showMessage(const QString &text, int milliseconds) override;
 
     // The 1.1 side of a tool (inspector tabs, toolbar buttons, an options section); null for 1.0 tools.
     static tools::ToolExtension *extension(tools::ToolInterface *tool);

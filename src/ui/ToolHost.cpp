@@ -243,6 +243,14 @@ void Host::showOptions(const QString &toolId)
         m_window->toolShowOptions(toolId);
 }
 
+// ------------------------------------------------------------------ 1.2 (0.94.0)
+
+void Host::showMessage(const QString &text, int milliseconds)
+{
+    if (m_window)
+        m_window->showMessage(text, milliseconds);
+}
+
 tools::ToolExtension *Host::extension(tools::ToolInterface *tool)
 {
     // the plugin object answers for the interfaces it declares (Q_INTERFACES); a tool built

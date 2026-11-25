@@ -203,7 +203,7 @@ private:
     // Appearance
     QComboBox *m_theme;
     QCheckBox *m_fixedWidth, *m_titles, *m_typewriter, *m_stamps, *m_tint, *m_labelBinder;
-    QCheckBox *m_labelIcons = nullptr, *m_fullPath = nullptr;
+    QCheckBox *m_labelIcons = nullptr, *m_fullPath = nullptr, *m_progressLines = nullptr;
     QSpinBox *m_binderIndent = nullptr, *m_editorWidth = nullptr, *m_cardWidth = nullptr;
     QSpinBox *m_textBorder = nullptr;
     QComboBox *m_lookScope = nullptr;

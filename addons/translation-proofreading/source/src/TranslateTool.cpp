@@ -96,10 +96,13 @@ TranslateTool::TranslateTool()
                 m_engine->unload(slot);
                 any = true;
             }
-        // the program is to show this under the binder for 5 seconds; the tool interface 1.1 has no call for a message
-        // (see DEVELOPING.md, 1.4), so far the signal only says it
-        if (any)
+        // the program shows this under the binder for 5 seconds (tool interface 1.2: ToolHost::showMessage; a program
+        // with 1.1 has no such call, there the signal only says it)
+        if (any) {
+            if (m_host && m_host->apiVersion() >= 120)
+                m_host->showMessage(unloadMessage(), 5000);
             emit modelsUnloaded(unloadMessage(), 5000);
+        }
     });
     connect(this, &TranslateTool::settingsChangedSignal, this, &TranslateTool::updateCommandState);
 }

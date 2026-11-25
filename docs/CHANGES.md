@@ -27,8 +27,8 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
   rule now: imported text, the words a project holds when it is opened the first time, and a paste of more than 200
   words do not count as session words; the tooltip follows **Reset Session Now** at once.
 - **Back Up Now tells its success in the footer**. The box "Backup saved" that waited for OK (and on Android blocked
-  later steps when it was left open) is gone. The footer says "Backup saved: ..." with a link **Show Folder**; boxes
-  come only for failures and for a backup that is incomplete.
+  later steps when it was left open) is gone. The message line under the binder says "Backup saved." with a link **Show Folder**
+  (the path is in the tooltip; a message with a link stays 10 seconds); boxes come only for failures and for a backup that is incomplete.
 - **Small layout points**. The Project Targets window keeps the room of its progress bars from the start, so its
   fields no longer move under the mouse when a target is set. On a screen narrower than 1600 px the window opens
   maximized the first time (when no saved state exists). The window's size, place and state are saved a moment after
@@ -100,6 +100,34 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
   and every shortcut changed in **File > Options > Keyboard**, stays as it is. Linux asks the keyboard settings of the
   desktop (KDE, GNOME), the X server or the system's default; Windows the language of the keyboard layout; Android the
   language of the keyboard (this last way is not tried on a device).
+- **A message line under the binder, and tool interface 1.2**. Short messages of the program and of add-ons appear in a
+  small line under the binder: one at a time, each for 5 seconds (10 seconds with a link) or until it is clicked; the
+  others wait. The tool interface has a new host call, `showMessage(text, milliseconds)` (add-ons call it only when the program
+  says 1.2 or later; older add-ons keep working). Translation and Proofreading 1.4 and Speech Transcription free their models
+  after 15 minutes without use (the time can be changed in their options; Speech Transcription has a new field "Free the model
+  after") and say "Model unloaded, RAM usage minimal" in this line. **Help > Troubleshooting and Development > System
+  Information** names the memory the program holds (resident size).
+- **Writing progress in the footer**. With a session or draft target set, the footer shows a small bar and "83 / 1,000 today"
+  and "12,400 / 80,000 draft" beside the word count; a click opens **Project Targets**. The two thin lines under the quick search
+  field stay as an option (**File > Options > Appearance > General Interface**, on at first).
+- **Import and Split at headings**. For .docx, .odt and .md files: Heading 1 becomes a folder, Heading 2 a folder or a document
+  (chosen in the window), the text between headings becomes documents, lower headings stay in the text. The window shows the
+  resulting binder as a tree before anything is imported. The title of a document that no heading names follows one rule,
+  stated in the window and the same in every mode: the first line of its text that is not empty (shortened to 120 characters
+  when longer), otherwise "<file name> <number>"; before, most documents got the file name whenever the first line was empty
+  or long.
+- **Documents > Group**. The selected items move into a new folder at the place of the first one; its title is ready for
+  typing; one undo step (**Edit > Undo** with the keyboard in the binder; Ctrl+Shift+J).
+- **Objects: small points**. Tab from the name of an object goes to Full name; the dialog for "Appears in" takes several
+  documents at once (Ctrl or Shift); the "+" buttons beside the link fields are framed buttons of normal size.
+- **Characters and places as Objects**. **Documents > Convert > Sheet to Object** (also in the binder's context menu) makes an
+  Object of each selected sheet document: the title is the name, the text goes into Other, a picture becomes the picture; the
+  folder's name (Characters, Places) chooses the kind. The binder item stays and from then on shows the Object when it is
+  selected and opens it with Return. The document keeps its text, in a Scrivener project too; the link is kept in the project's
+  own Objects data. One undo step.
+- **A notice for a missing add-on**. **Edit > Writing Tools** keeps "Translate and Proofread" and "Speech Transcription" while
+  the add-on is not installed (or switched off); they show a notice with a button to **Help > Add-ons and Updates > Add-on
+  Manager**. Before, nothing in the program led to them.
 
 ## 0.93.1 beta (2026-11-24)
 

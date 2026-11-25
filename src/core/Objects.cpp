@@ -172,6 +172,8 @@ QJsonObject Object::toJson() const
         o.insert(QStringLiteral("folder"), folder);
     if (color.isValid())
         o.insert(QStringLiteral("color"), color.name());
+    if (!sheet.isEmpty())
+        o.insert(QStringLiteral("sheet"), sheet);
     o.insert(QStringLiteral("created"), created.toString(Qt::ISODate));
     o.insert(QStringLiteral("modified"), modified.toString(Qt::ISODate));
     o.insert(QStringLiteral("fields"), QJsonObject::fromVariantMap(values));
@@ -185,6 +187,7 @@ Object Object::fromJson(const QJsonObject &o)
     x.category = o.value(QStringLiteral("category")).toString();
     x.name = o.value(QStringLiteral("name")).toString();
     x.folder = o.value(QStringLiteral("folder")).toString();
+    x.sheet = o.value(QStringLiteral("sheet")).toString();
     const QString col = o.value(QStringLiteral("color")).toString();
     if (!col.isEmpty())
         x.color = QColor(col);
@@ -654,6 +657,16 @@ const Object *Store::object(const QString &id) const
     return it == m_objects.constEnd() ? nullptr : &*it;
 }
 
+const Object *Store::objectForSheet(const QString &documentId) const
+{
+    if (documentId.isEmpty())
+        return nullptr;
+    for (auto it = m_objects.constBegin(); it != m_objects.constEnd(); ++it)
+        if (it->sheet == documentId)
+            return &it.value();
+    return nullptr;
+}
+
 QString Store::create(const QString &category, const QString &folder, const QString &name)
 {
     const Category *c = m_schema.category(category);
@@ -746,6 +759,7 @@ QString Store::duplicate(const QString &id)
     Object o = *src;
     o.id = newId();
     o.name = tr("%1 (copy)").arg(src->name);
+    o.sheet.clear();   // the binder document stands for the original
     o.created = o.modified = QDateTime::currentDateTime();
     // pictures are files of their own
     if (const Category *c = m_schema.category(o.category))

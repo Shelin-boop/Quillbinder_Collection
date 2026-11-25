@@ -334,6 +334,7 @@ void AppSettings::load()
     s.endGroup();
     s.beginGroup(QStringLiteral("appearance"));
     showFullPath = s.value(QStringLiteral("showFullPath"), showFullPath).toBool();
+    progressUnderSearch = s.value(QStringLiteral("progressUnderSearch"), progressUnderSearch).toBool();
     s.endGroup();
     s.beginGroup(QStringLiteral("sharing"));
     importCommentsInline = s.value(QStringLiteral("commentsInline"), importCommentsInline).toBool();
@@ -608,6 +609,7 @@ void AppSettings::save()
     s.endGroup();
     s.beginGroup(QStringLiteral("appearance"));
     s.setValue(QStringLiteral("showFullPath"), showFullPath);
+    s.setValue(QStringLiteral("progressUnderSearch"), progressUnderSearch);
     s.endGroup();
     s.beginGroup(QStringLiteral("sharing"));
     s.setValue(QStringLiteral("commentsInline"), importCommentsInline);

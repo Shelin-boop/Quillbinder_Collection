@@ -4027,6 +4027,18 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
         <source>whisper translates only into English: with %1 as the main language, what you say in %2 stays in %2.</source>
         <translation>whisper übersetzt nur ins Englische: Mit %1 als Hauptsprache bleibt, was Sie in %2 sagen, in %2.</translation>
     </message>
+    <message>
+        <source>Free the model after:</source>
+        <translation>Modell freigeben nach:</translation>
+    </message>
+    <message>
+        <source> minutes</source>
+        <translation> Minuten</translation>
+    </message>
+    <message>
+        <source>The model takes memory while it is loaded; after this time without use it is freed and the program says so. It loads again at the next recording.</source>
+        <translation>Das Modell belegt Speicher, solange es geladen ist; nach dieser Zeit ohne Nutzung wird es freigegeben, und das Programm sagt es. Bei der nächsten Aufnahme wird es wieder geladen.</translation>
+    </message>
 </context>
 <context>
     <name>SpeechTool</name>
@@ -4209,6 +4221,10 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
     <message>
         <source>Cannot load %1: %2</source>
         <translation>%1 kann nicht geladen werden: %2</translation>
+    </message>
+    <message>
+        <source>Model unloaded, RAM usage minimal</source>
+        <translation>Modell entladen, minimaler RAM-Verbrauch</translation>
     </message>
 </context>
 <context>
@@ -8126,6 +8142,61 @@ In die Ordner von Windows und in die Registrierung wird nichts geschrieben, auß
     <message>
         <source>Use the first line of each section as its title</source>
         <translation>Erste Zeile jedes Abschnitts als Titel verwenden</translation>
+    </message>
+    <message>
+        <source>Headings (.docx, .odt, .md): Heading 1 makes a folder</source>
+        <translation>Überschriften (.docx, .odt, .md): Überschrift 1 wird ein Ordner</translation>
+    </message>
+    <message>
+        <source>Heading 2 makes:</source>
+        <translation>Überschrift 2 wird:</translation>
+    </message>
+    <message>
+        <source>a folder (its text becomes a document inside)</source>
+        <translation>ein Ordner (sein Text wird ein Dokument darin)</translation>
+    </message>
+    <message>
+        <source>a document (with the text under it)</source>
+        <translation>ein Dokument (mit dem Text darunter)</translation>
+    </message>
+    <message>
+        <source>Title of a document: the scene heading.</source>
+        <translation>Titel eines Dokuments: die Szenenüberschrift.</translation>
+    </message>
+    <message>
+        <source>Title of a document: the first line of its text that is not empty (a line longer than 120 characters is shortened and stays in the text); a section without a line is called “&lt;file name&gt; &lt;number&gt;”.</source>
+        <translation>Titel eines Dokuments: die erste nicht leere Zeile seines Textes (eine Zeile über 120 Zeichen wird gekürzt und bleibt im Text); ein Abschnitt ohne Zeile heißt „&lt;Dateiname&gt; &lt;Nummer&gt;“.</translation>
+    </message>
+    <message>
+        <source>Title of a document: “&lt;file name&gt; &lt;number&gt;”.</source>
+        <translation>Titel eines Dokuments: „&lt;Dateiname&gt; &lt;Nummer&gt;“.</translation>
+    </message>
+    <message>
+        <source>Headings name the folders and, for Heading 2 as a document, the document. Lower headings stay in the text.</source>
+        <translation>Überschriften benennen die Ordner und, bei Überschrift 2 als Dokument, das Dokument. Tiefere Überschriften bleiben im Text.</translation>
+    </message>
+    <message>
+        <source>Choose a file to see the binder it makes.</source>
+        <translation>Wählen Sie eine Datei, um den daraus entstehenden Binder zu sehen.</translation>
+    </message>
+    <message>
+        <source>Splitting at headings works for .docx, .odt and .md files.</source>
+        <translation>Das Teilen an Überschriften gilt für .docx-, .odt- und .md-Dateien.</translation>
+    </message>
+    <message>
+        <source>The file could not be read.</source>
+        <translation>Die Datei konnte nicht gelesen werden.</translation>
+    </message>
+    <message>
+        <source>Nothing to import: the file has no text.</source>
+        <translation>Nichts zu importieren: Die Datei enthält keinen Text.</translation>
+    </message>
+    <message numerus="yes">
+        <source>The binder after the import (%n item(s)):</source>
+        <translation>
+            <numerusform>Der Binder nach dem Import (%n Eintrag):</numerusform>
+            <numerusform>Der Binder nach dem Import (%n Einträge):</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -12940,6 +13011,97 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
 
 %1</translation>
     </message>
+    <message>
+        <source>Backup saved.</source>
+        <translation>Sicherung gespeichert.</translation>
+    </message>
+    <message>
+        <source>&amp;Translate and Proofread…</source>
+        <translation>&amp;Übersetzen und Korrekturlesen…</translation>
+    </message>
+    <message>
+        <source>Proofread English text or translate German text into English (the add-on is not installed)</source>
+        <translation>Englischen Text korrigieren oder deutschen Text ins Englische übersetzen (die Erweiterung ist nicht installiert)</translation>
+    </message>
+    <message>
+        <source>Speech &amp;Transcription…</source>
+        <translation>&amp;Sprachtranskription…</translation>
+    </message>
+    <message>
+        <source>Turn speech into text (the add-on is not installed)</source>
+        <translation>Sprache in Text umwandeln (die Erweiterung ist nicht installiert)</translation>
+    </message>
+    <message>
+        <source>Speech Transcription</source>
+        <translation>Sprachtranskription</translation>
+    </message>
+    <message>
+        <source>Translation and Proofreading</source>
+        <translation>Übersetzung und Korrektur</translation>
+    </message>
+    <message>
+        <source>is not installed</source>
+        <translation>ist nicht installiert</translation>
+    </message>
+    <message>
+        <source>is switched off</source>
+        <translation>ist ausgeschaltet</translation>
+    </message>
+    <message>
+        <source>does not fit this program version</source>
+        <translation>passt nicht zu dieser Programmversion</translation>
+    </message>
+    <message>
+        <source>could not be loaded</source>
+        <translation>konnte nicht geladen werden</translation>
+    </message>
+    <message>
+        <source>The add-on “%1” %2.</source>
+        <translation>Die Erweiterung „%1“ %2.</translation>
+    </message>
+    <message>
+        <source>It turns speech into text. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>Sie wandelt Sprache in Text um. Installieren Sie sie mit Hilfe &gt; Erweiterungen und Updates &gt; Update oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung zeigt die Erweiterungen und schaltet sie ein und aus.</translation>
+    </message>
+    <message>
+        <source>It proofreads English text and translates German text into English. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>Sie korrigiert englischen Text und übersetzt deutschen Text ins Englische. Installieren Sie sie mit Hilfe &gt; Erweiterungen und Updates &gt; Update oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung zeigt die Erweiterungen und schaltet sie ein und aus.</translation>
+    </message>
+    <message>
+        <source>Open Add-on Manager</source>
+        <translation>Erweiterungsverwaltung öffnen</translation>
+    </message>
+    <message>
+        <source>&amp;Group</source>
+        <translation>&amp;Gruppieren</translation>
+    </message>
+    <message>
+        <source>Put the selected documents into a new folder, at the place of the first one</source>
+        <translation>Die gewählten Dokumente in einen neuen Ordner legen, an die Stelle des ersten</translation>
+    </message>
+    <message>
+        <source>&amp;Sheet to Object</source>
+        <translation>&amp;Blatt in Objekt umwandeln</translation>
+    </message>
+    <message>
+        <source>Make an Object (Window &gt; Objects) of the selected sheet documents: the title is the name, the text goes into Other, a picture becomes the picture. The binder item then shows the Object; the document keeps its text.</source>
+        <translation>Aus den gewählten Blatt-Dokumenten Objekte machen (Fenster &gt; Objekte): der Titel ist der Name, der Text kommt in „Sonstiges“, ein Bild wird das Bild. Der Eintrag im Binder zeigt dann das Objekt; das Dokument behält seinen Text.</translation>
+    </message>
+    <message>
+        <source>Group</source>
+        <translation>Gruppe</translation>
+    </message>
+    <message>
+        <source>Sheet to Object</source>
+        <translation>Blatt in Objekt umwandeln</translation>
+    </message>
+    <message numerus="yes">
+        <source>Which kind of object should %n sheet(s) become?</source>
+        <translation>
+            <numerusform>Welche Art Objekt soll aus %n Blatt werden?</numerusform>
+            <numerusform>Welche Art Objekt soll aus %n Blättern werden?</numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>qb::ManageIconsDialog</name>
@@ -14846,6 +15008,10 @@ Der Inhalt wird so weit angezeigt, wie er gelesen werden konnte, und lässt sich
         <source>New in %1: “%2”</source>
         <translation>Neu in %1: „%2“</translation>
     </message>
+    <message>
+        <source>Ctrl or Shift chooses several documents.</source>
+        <translation>Mit Strg oder Umschalt wählen Sie mehrere Dokumente.</translation>
+    </message>
 </context>
 <context>
     <name>qb::ObjectForm</name>
@@ -14912,6 +15078,10 @@ Der Inhalt wird so weit angezeigt, wie er gelesen werden konnte, und lässt sich
     <message>
         <source>Picture</source>
         <translation>Bild</translation>
+    </message>
+    <message>
+        <source>Link to Documents</source>
+        <translation>Mit Dokumenten verknüpfen</translation>
     </message>
 </context>
 <context>
@@ -16748,6 +16918,10 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
     <message>
         <source>Reports stay on this computer; Help &gt; Troubleshooting and Development &gt; Crash Reports shows them. Fewer reports to keep take effect at the next start.</source>
         <translation>Berichte bleiben auf diesem Computer; Hilfe &gt; Fehlersuche und Entwicklung &gt; Absturzberichte zeigt sie an. Eine kleinere Anzahl zu behaltender Berichte gilt ab dem nächsten Start.</translation>
+    </message>
+    <message>
+        <source>Show the draft and session progress as two thin lines under the quick search field (the footer shows it as well)</source>
+        <translation>Fortschritt von Entwurf und Sitzung als zwei dünne Linien unter dem Schnellsuchfeld zeigen (die Fußzeile zeigt ihn ebenfalls)</translation>
     </message>
 </context>
 <context>
@@ -21339,6 +21513,33 @@ Sie wird von hier aus nicht geöffnet. Wenn Sie ihr vertrauen, öffnen Sie sie s
 %1</source>
         <translation>Diese Dateien konnten nicht entfernt werden:
 %1</translation>
+    </message>
+</context>
+<context>
+    <name>qb::WritingProgress</name>
+    <message>
+        <source>%1 / %2 today</source>
+        <translation>%1 / %2 heute</translation>
+    </message>
+    <message>
+        <source>%1 / %2 draft</source>
+        <translation>%1 / %2 Entwurf</translation>
+    </message>
+    <message>
+        <source>Today's writing: %1 of %2 %3 (click for Project Targets)</source>
+        <translation>Heute geschrieben: %1 von %2 %3 (Klick öffnet die Projektziele)</translation>
+    </message>
+    <message>
+        <source>The draft: %1 of %2 %3 (click for Project Targets)</source>
+        <translation>Der Entwurf: %1 von %2 %3 (Klick öffnet die Projektziele)</translation>
+    </message>
+    <message>
+        <source>characters</source>
+        <translation>Zeichen</translation>
+    </message>
+    <message>
+        <source>words</source>
+        <translation>Wörter</translation>
     </message>
 </context>
 </TS>

@@ -130,6 +130,7 @@
 #include <QPrintDialog>
 #include <QPrintPreviewDialog>
 #include "ui/FooterStatus.h"
+#include "ui/MessageLine.h"
 #include <QPrinter>
 #include <QProcess>
 #include <QPushButton>
@@ -334,6 +335,12 @@ MainWindow::MainWindow()
             // active pane): after a choice in the binder the inspector shows the chosen document (0.94.0, item 32)
             m_inspector->setItem(items.first());
         }
+        // 0.94.0 (item 67): a document that stands for an Object shows the Object
+        if (items.size() == 1) {
+            const QString oid = sheetObjectOf(items.first());
+            if (!oid.isEmpty())
+                showObject(oid);
+        }
         updateActions();
         updateMindMapActions();
     });
@@ -351,6 +358,15 @@ MainWindow::MainWindow()
         const QList<BinderItem *> items = m_binder->selectedItems();
         if (!target || items.isEmpty())
             return;
+        // 0.94.0 (item 67): a document that stands for an Object opens the Object
+        if (items.size() == 1) {
+            const QString oid = sheetObjectOf(items.first());
+            if (!oid.isEmpty()) {
+                if (ObjectsWindow *ow = ObjectsWindow::open(m_project.get(), oid, this))
+                    ow->activateWindow();
+                return;
+            }
+        }
         if (items != target->items())
             loadInPane(target, items);
         target->focusEditor();
@@ -653,6 +669,14 @@ void MainWindow::clearStatusNote()
         m_panes[0]->footerStatus()->clearNote();
 }
 
+MessageLine *MainWindow::messageLine() const { return m_binder ? m_binder->messageLine() : nullptr; }
+
+void MainWindow::showMessage(const QString &text, int ms, const QString &linkText, std::function<void()> action, const QString &tip)
+{
+    if (m_binder && m_binder->messageLine())
+        m_binder->messageLine()->post(text, ms, linkText, std::move(action), tip);
+}
+
 QString MainWindow::statusNote() const { return m_panes[0] ? m_panes[0]->footerStatus()->noteText() : QString(); }
 
 void MainWindow::showStatusNote(const QString &text, int ms, const QString &actionText, std::function<void()> action)
@@ -909,6 +933,7 @@ void MainWindow::connectPane(EditorPane *p)
         updateFormatBar();
         refreshInspector();
     });
+    connect(p, &EditorPane::targetsRequested, this, [this] { a[QStringLiteral("targets")]->trigger(); });
     connect(p, &EditorPane::splitButtonClicked, this, [this](EditorPane *, bool alt) {
         if (isSplit())
             setSplit(m_editorSplit->orientation(), false);
@@ -1083,7 +1108,7 @@ void MainWindow::createActions()
     connect(act(QStringLiteral("importWebPage"), tr("Import &Web Page…"), QStringLiteral("text-html")),
             &QAction::triggered, this, withProject([this] { importWebPage(); }));
     connect(act(QStringLiteral("importSplit"), tr("Import and &Split…")), &QAction::triggered, this, withProject([this] {
-        ImportSplitDialog dlg(this);
+        ImportSplitDialog dlg(m_project.get(), this);
         if (dlg.exec() != QDialog::Accepted || dlg.file().isEmpty())
             return;
         int row = -1;
@@ -1092,8 +1117,12 @@ void MainWindow::createActions()
             parent = m_project->draft();
         QString err;
         QStringList warnings;
-        const auto items = importer::importAndSplit(m_project.get(), dlg.file(), dlg.separator(), dlg.firstLineIsTitle(),
-                                                    parent, row, &err, &warnings);
+        importer::HeadingSplitOptions ho;
+        ho.heading2Folder = dlg.heading2Folder();
+        ho.firstLineIsTitle = dlg.firstLineIsTitle();
+        const auto items = dlg.atHeadings() ? importer::importAtHeadings(m_project.get(), dlg.file(), ho, parent, row, &err, &warnings)
+                                            : importer::importAndSplit(m_project.get(), dlg.file(), dlg.separator(),
+                                                                       dlg.firstLineIsTitle(), parent, row, &err, &warnings);
         if (items.isEmpty()) {
             QMessageBox::warning(this, tr("Import and Split"), err.isEmpty() ? tr("Nothing was imported.") : err);
         } else {
@@ -1160,10 +1189,21 @@ void MainWindow::createActions()
                 lineFn(le);
         };
     };
-    connect(act(QStringLiteral("undo"), tr("&Undo"), QStringLiteral("edit-undo"), QKeySequence::Undo), &QAction::triggered,
-            this, route([](QTextEdit *e) { e->undo(); }, [](QPlainTextEdit *e) { e->undo(); }, [](QLineEdit *e) { e->undo(); }));
-    connect(act(QStringLiteral("redo"), tr("&Redo"), QStringLiteral("edit-redo"), QKeySequence::Redo), &QAction::triggered,
-            this, route([](QTextEdit *e) { e->redo(); }, [](QPlainTextEdit *e) { e->redo(); }, [](QLineEdit *e) { e->redo(); }));
+    // 0.94.0: with the keyboard in the binder, Undo and Redo work on the binder's own steps (Group, Sheet to Object)
+    connect(act(QStringLiteral("undo"), tr("&Undo"), QStringLiteral("edit-undo"), QKeySequence::Undo), &QAction::triggered, this,
+            [this, text = route([](QTextEdit *e) { e->undo(); }, [](QPlainTextEdit *e) { e->undo(); }, [](QLineEdit *e) { e->undo(); })] {
+                if (binderHasKeyboard())
+                    binderUndo();
+                else
+                    text();
+            });
+    connect(act(QStringLiteral("redo"), tr("&Redo"), QStringLiteral("edit-redo"), QKeySequence::Redo), &QAction::triggered, this,
+            [this, text = route([](QTextEdit *e) { e->redo(); }, [](QPlainTextEdit *e) { e->redo(); }, [](QLineEdit *e) { e->redo(); })] {
+                if (binderHasKeyboard())
+                    binderRedo();
+                else
+                    text();
+            });
     connect(act(QStringLiteral("cut"), tr("Cu&t"), QStringLiteral("edit-cut"), QKeySequence::Cut), &QAction::triggered, this,
             route([](QTextEdit *e) { e->cut(); }, [](QPlainTextEdit *e) { e->cut(); }, [](QLineEdit *e) { e->cut(); }));
     connect(act(QStringLiteral("copy"), tr("&Copy"), QStringLiteral("edit-copy"), QKeySequence::Copy), &QAction::triggered,
@@ -1578,6 +1618,15 @@ void MainWindow::createActions()
                         m_project->model()->setItemType(it, ItemType::Folder);
                 updateActions();
             }));
+    // 0.94.0 (item 76): the selected items into a new folder at the place of the first one (one undo step)
+    connect(act(QStringLiteral("group"), tr("&Group"), QStringLiteral("folder-new"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_J)),
+            &QAction::triggered, this, withProject([this] { groupItems(actionItems()); }));
+    a[QStringLiteral("group")]->setToolTip(tr("Put the selected documents into a new folder, at the place of the first one"));
+    // 0.94.0 (item 67): a sheet document (a character or place sheet) becomes an Object; the binder item then shows it
+    connect(act(QStringLiteral("sheetToObject"), tr("&Sheet to Object"), QStringLiteral("user-identity")), &QAction::triggered, this,
+            withProject([this] { sheetsToObjects(actionItems()); }));
+    a[QStringLiteral("sheetToObject")]->setToolTip(
+        tr("Make an Object (Window > Objects) of the selected sheet documents: the title is the name, the text goes into Other, a picture becomes the picture. The binder item then shows the Object; the document keeps its text."));
     connect(act(QStringLiteral("toText"), tr("Convert to F&ile"), QStringLiteral("text-x-generic")),
             &QAction::triggered, this, withProject([this] {
                 for (BinderItem *it : actionItems())
@@ -2352,7 +2401,7 @@ void MainWindow::updateActions()
                           "compile", "closeProject", "newText", "newFolder", "projectSettings", "settingsExport", "settingsImport", "targets", "keywords",
                           "statistics", "history", "emptyTrash", "deleteSnapshots", "showProjectFolder", "projectSearch", "projectReplace", "findFormat",
                           "findFormatNext", "findFormatPrev", "trash", "duplicate",
-                          "rename", "openOther", "quickRef", "split", "splitTitle", "merge", "toFolder", "toText",
+                          "rename", "openOther", "quickRef", "split", "splitTitle", "merge", "toFolder", "toText", "group", "sheetToObject",
                           "includeCompile", "snapshot", "snapshotTitle", "bookmark", "reveal", "lock", "composition",
                           "viewText", "viewCork", "viewOutline", "moveUp", "moveDown", "moveLeft", "moveRight", "docLink",
                           "back", "forward", "prevDoc", "nextDoc", "printSettings", "openInEditor", "closeQuickRefs",
@@ -2393,6 +2442,18 @@ void MainWindow::updateActions()
         anyText = anyText || it->type == ItemType::Text;
         anyFolder = anyFolder || it->type == ItemType::Folder;
         allInclude = allInclude && it->includeInCompile;
+    }
+    {
+        bool canGroup = false, canSheet = false;
+        for (BinderItem *it : items) {
+            if (it->isRootFolder() || m_project->isInTrash(it))
+                continue;
+            canGroup = true;
+            if (it->type == ItemType::Text && sheetObjectOf(it).isEmpty())
+                canSheet = true;
+        }
+        a[QStringLiteral("group")]->setEnabled(canGroup);
+        a[QStringLiteral("sheetToObject")]->setEnabled(canSheet && !m_project->objects()->schema().categories.isEmpty());
     }
     a[QStringLiteral("toFolder")]->setEnabled(anyText);
     a[QStringLiteral("toText")]->setEnabled(anyFolder);
@@ -2800,27 +2861,39 @@ void MainWindow::updateWindowTitle()
 
 void MainWindow::updateTargetsDisplay()
 {
+    if (!m_quickSearch)
+        return;
+    auto footers = [this](int session, int sessionTarget, bool sessionChars, int draft, int draftTarget, bool draftChars) {
+        for (EditorPane *pane : m_panes)
+            if (pane)
+                pane->setWritingProgress(session, sessionTarget, sessionChars, draft, draftTarget, draftChars);
+    };
     if (!m_project) {
         m_quickSearch->draft = m_quickSearch->session = -1;
         m_quickSearch->update();
+        footers(0, 0, false, 0, 0, false);
         return;
     }
     const Targets &t = m_project->targets;
     const int draft = t.draftChars ? m_project->draftCharCount() : m_project->draftWordCount();
     const int session = t.sessionChars ? m_project->sessionChars() : m_project->sessionWords();
     const int st = m_project->sessionTargetToday();
-    m_quickSearch->draft = t.draftTarget > 0 ? double(draft) / t.draftTarget : -1;
-    m_quickSearch->session = st > 0 ? double(session) / st : -1;
+    // 0.94.0 (item 74): the two thin lines under the search field are an option (on at first)
+    const bool lines = AppSettings::instance().progressUnderSearch;
+    m_quickSearch->draft = lines && t.draftTarget > 0 ? double(draft) / t.draftTarget : -1;
+    m_quickSearch->session = lines && st > 0 ? double(session) / st : -1;
     QLocale loc;
     m_quickSearch->setToolTip(tr("Draft: %1 words · This session: %2 words%3")
                                   .arg(loc.toString(m_project->draftWordCount()), loc.toString(m_project->sessionWords()),
                                        t.draftTarget > 0 ? tr(" · Target: %1").arg(loc.toString(t.draftTarget)) : QString()));
     m_quickSearch->update();
+    footers(session, st, t.sessionChars, draft, t.draftTarget, t.draftChars);
 }
 
 void MainWindow::applySettings()
 {
     theme::apply();
+    updateTargetsDisplay();
     const AppSettings &s = AppSettings::instance();
     SpellChecker::setEnabled(s.spellCheck);
     SpellChecker::setDisplay({s.spellIgnoreNumbers,
@@ -3316,6 +3389,7 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
     connect(proj->model(), &QAbstractItemModel::rowsRemoved, this, structural);
     connect(proj->model(), &QAbstractItemModel::rowsInserted, this, structural);
 
+    clearBinderSteps();
     AppSettings::instance().addRecent(proj->displayFile());
     AppSettings::instance().lastProjectDir = QFileInfo(proj->displayFolder()).absolutePath();
     AppSettings::instance().save();
@@ -3498,6 +3572,7 @@ bool MainWindow::closeProject()
     palette::setProject(nullptr);
     look::activate(nullptr); // the areas show the look for new projects again
     settingslayer::activate(QString()); // the program's own settings again (0.62)
+    clearBinderSteps();
     m_project.reset();
     crash::setSessionProject(QString());
     crash::note(QStringLiteral("project closed"));
@@ -4439,10 +4514,12 @@ void MainWindow::fillItemMenu(QMenu *menu)
     menu->addSeparator();
     menu->addAction(a[QStringLiteral("rename")]);
     menu->addAction(a[QStringLiteral("duplicate")]);
+    menu->addAction(a[QStringLiteral("group")]);
     menu->addAction(a[QStringLiteral("trash")]);
     menu->addSeparator();
     menu->addAction(a[QStringLiteral("toFolder")]);
     menu->addAction(a[QStringLiteral("toText")]);
+    menu->addAction(a[QStringLiteral("sheetToObject")]);
     menu->addMenu(m_labelMenu);
     menu->addMenu(m_statusMenu);
     menu->addAction(a[QStringLiteral("includeCompile")]);
@@ -4659,10 +4736,11 @@ void MainWindow::backupNow(bool chooseLocation)
     else if (ok && !left.isEmpty())
         QMessageBox::warning(this, tr("Back Up"), tr("Backup saved:\n%1").arg(out) + left);
     else if (ok) {
-        // 0.94.0 (item 85): no box that waits for OK; the note in the footer names the file, a link shows its folder
+        // 0.94.0 (item 85): no box that waits for OK; the line under the binder says so, the link shows the folder and
+        // the tooltip names the file
         const QString folder = QFileInfo(out).absolutePath();
-        showStatusNote(tr("Backup saved: %1").arg(QDir::toNativeSeparators(out)), 20000, tr("Show Folder"),
-                       [folder] { QDesktopServices::openUrl(QUrl::fromLocalFile(folder)); });
+        showMessage(tr("Backup saved."), 10000, tr("Show Folder"), [folder] { QDesktopServices::openUrl(QUrl::fromLocalFile(folder)); },
+                    QDir::toNativeSeparators(out));
     } else
         QMessageBox::warning(this, tr("Back Up"), err);
 }

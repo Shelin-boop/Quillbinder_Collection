@@ -476,6 +476,8 @@ QString text(const Project *project)
     t << QStringLiteral("  Add-ons: %1").arg(ads.isEmpty() ? QStringLiteral("none") : ads.join(QLatin1String("; ")));
     t << QStringLiteral("  Started: %1").arg(g_started.toString(QStringLiteral("yyyy-MM-dd HH:mm:ss")));
     t << QStringLiteral("  Process: %1").arg(QCoreApplication::applicationPid());
+    // 0.94.0: the memory the program holds now (its resident size; the add-ons' models are freed after a while without use)
+    t << QStringLiteral("  Program memory (resident size): %1").arg(gb(memory().own));
 
     // ---- system
     t << QString() << QStringLiteral("System");

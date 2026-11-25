@@ -60,7 +60,7 @@
 
 ### Getting text in and out
 
-- **Import**: Word (*.docx*), LibreOffice (*.odt*), RTF, plain text, Markdown, Fountain and Final Draft scripts, pictures, PDF files, audio and video. **Import and Split…** cuts a long file into documents.
+- **Import**: Word (*.docx*), LibreOffice (*.odt*), RTF, plain text, Markdown, Fountain and Final Draft scripts, pictures, PDF files, audio and video. **Import and Split…** cuts a long file into documents, also at its headings (.docx, .odt, .md) with a preview of the binder it makes. **Documents > Group** puts the selected items into a new folder.
 - **Compile** (**Ctrl+Shift+E**): Word, PDF, and e-book built in; Fountain and Final Draft for scripts; LibreOffice, Pandoc, and Markdown formats as plugins. Compile formats, section types, front and back matter, replacements, and a preview.
 - **Compare and Transfer** (**File > Compare and Transfer**): when a manuscript comes back from an editor as a Word or LibreOffice file, {{APP}} shows what differs and takes over the side you choose, chapter by chapter or change by change. The project gets snapshots first; a Word copy gets tracked changes.
 - **Export** documents as files, and **print** texts, index cards, and the outline.

@@ -1,5 +1,5 @@
 #pragma once
-// A stand-in for Quillbinder in the checks: it implements the tool interface's ToolHost (1.1) with a main window
+// A stand-in for Quillbinder in the checks: it implements the tool interface's ToolHost (1.2) with a main window
 // that holds one text editor, settings in memory, and records of what the tool asked for.
 #include "ToolApi.h"
 
@@ -40,7 +40,9 @@ public:
     QStringList shownTabs, shownOptions;
     QHash<QString, QPair<bool, QString>> states;   // command -> (checked, icon)
 
-    int apiVersion() const override { return 110; }
+    int version = 120;                       // what apiVersion() says (a test sets 110 for a program with interface 1.1)
+    QList<QPair<QString, int>> messages;     // showMessage() calls
+    int apiVersion() const override { return version; }
     QString appName() const override { return QStringLiteral("Quillbinder"); }
     QString appVersion() const override { return QStringLiteral("0.91.1"); }
     QWidget *window() const override { return main; }
@@ -88,6 +90,7 @@ public:
         states.insert(commandKey, {checked, icon});
     }
     void showOptions(const QString &toolId) override { shownOptions << toolId; }
+    void showMessage(const QString &text, int milliseconds) override { messages.append({text, milliseconds}); }
 
 private:
     QString m_addonDir, m_dataRoot;

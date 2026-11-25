@@ -1,5 +1,5 @@
 #pragma once
-// Interface between the program and writing tools (version 1.1; 1.0 since 0.11, 1.1 since 0.61).
+// Interface between the program and writing tools (version 1.2; 1.0 since 0.11, 1.1 since 0.61, 1.2 since 0.94.0).
 //
 // A writing tool is a Qt plugin (a MODULE library, *.so) that implements
 // qb::tools::ToolInterface. It is delivered as an add-on: the library goes
@@ -29,6 +29,8 @@
 //    ToolExtension (its own IID), which the program asks the plugin object
 //    for: tabs in the inspector, buttons of the main toolbar with a menu
 //    beside them, a section of its own in File > Options.
+// Version 1.2 (0.94.0) adds one more function at the end of ToolHost (showMessage: a short message in the line under
+// the binder). A tool calls it only when host->apiVersion() >= 120.
 // Nothing of 1.0 may change: the program reads the structs and calls the
 // functions of tools built years earlier.
 
@@ -147,6 +149,11 @@ public:
     virtual void setCommandState(const QString &commandKey, bool checked, const QString &icon, const QString &toolTip) = 0;
     // File > Options, at the tool's section (ToolInterface::optionsPage() "Section").
     virtual void showOptions(const QString &toolId) = 0;
+
+    // ---- 1.2 (program 0.94.0): only when apiVersion() >= 120
+    // A short message in the line under the binder: one at a time, each for `milliseconds` (<= 0: 5 seconds) or until it
+    // is clicked; other messages wait until it is gone. No window, no sound.
+    virtual void showMessage(const QString &text, int milliseconds) = 0;
 };
 
 // A section a tool adds to File > Options (ToolInterface::optionsPage).
