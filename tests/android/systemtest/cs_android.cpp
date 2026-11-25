@@ -222,10 +222,19 @@ void caseAA01()
                 panel = p;
         check(panel != nullptr, QStringLiteral("the add-on's window opens"));
         if (panel) {
-            if (auto *task = panel->findChild<QComboBox *>(QStringLiteral("tpTask")))
+            // (Android 0.93.2: since 1.3 the add-on translates both ways; the model given is German to English, and
+            // the last "Translate ..." entry, English to German, had none: run 45557268944)
+            if (auto *task = panel->findChild<QComboBox *>(QStringLiteral("tpTask"))) {
+                int pick = -1;
                 for (int i = 0; i < task->count(); ++i)
+                    if (task->itemText(i).contains(QLatin1String("German to English")))
+                        pick = i;
+                for (int i = 0; pick < 0 && i < task->count(); ++i)
                     if (task->itemText(i).contains(QLatin1String("ranslat")))
-                        task->setCurrentIndex(i);
+                        pick = i;
+                if (pick >= 0)
+                    task->setCurrentIndex(pick);
+            }
             auto *in = panel->findChild<QPlainTextEdit *>(QStringLiteral("tpInput"));
             auto *out = panel->findChild<QTextEdit *>(QStringLiteral("tpOutput"));
             auto *go = panel->findChild<QAbstractButton *>(QStringLiteral("tpGo"));

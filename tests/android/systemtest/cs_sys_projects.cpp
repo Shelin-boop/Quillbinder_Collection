@@ -305,6 +305,7 @@ void caseSP03()
     if (e)
         typeInto(e, QStringLiteral(" Written before the switch."));
     const QString scriv = ctx().work + QStringLiteral("/Switched.scriv");
+    formatQuestionLater(300, scriv);
     fileDialogLater(400, scriv);
     chooseByMenu(w, QStringLiteral("saveAs"));
     settle(1500);
@@ -315,6 +316,7 @@ void caseSP03()
         typeInto(e, QStringLiteral(" Written in Scrivener format."));
     const QString backParent = ctx().work + QStringLiteral("/back");
     QDir().mkpath(backParent);
+    formatQuestionLater(300, backParent + QStringLiteral("/Back.qbx"));
     fileDialogLater(400, backParent + QStringLiteral("/Back.qbx"));
     chooseByMenu(w, QStringLiteral("saveAs"));
     settle(1500);

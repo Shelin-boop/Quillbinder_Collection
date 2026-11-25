@@ -1275,6 +1275,7 @@ void caseST04()
         QAction *toScriv = action(w, QStringLiteral("saveAs"));
         const QString target = ctx().work + QStringLiteral("/switched.scriv");
         bool asked = false;
+        formatQuestionLater(300, target);
         withModal<QFileDialog>(400, [&](QFileDialog *fd) {
             asked = true;
             fd->selectFile(target);
@@ -1291,6 +1292,7 @@ void caseST04()
             // back: File > Save As (.qbx)
             const QString backParent = ctx().work + QStringLiteral("/back");
             QDir().mkpath(backParent);
+            formatQuestionLater(300, backParent + QStringLiteral("/Back.qbx"));
             withModal<QFileDialog>(400, [backParent](QFileDialog *fd) {
                 fd->setDirectory(backParent);
                 fd->selectFile(backParent + QStringLiteral("/Back.qbx"));

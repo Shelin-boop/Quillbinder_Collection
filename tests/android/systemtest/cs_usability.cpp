@@ -387,6 +387,11 @@ void caseU05()
             continue;
         if (e.name == QLatin1String("newProject") || e.name == QLatin1String("openProject") || e.name == QLatin1String("installPackage") || e.name.startsWith(QLatin1String("import")))
             continue;
+        // Android 0.93.2: Help > Report a Problem (0.93.0) opens the issue page in Android's browser; the app is put
+        // away, Qt stops its event loop until it comes back, and the case waited until its time ran out (run
+        // 45557268944): a command that hands over to another app is not opened here
+        if (e.name == QLatin1String("reportProblem"))
+            continue;
         QString row;
         ScopedWaiter waiter(QDialog::staticMetaObject.className());
         withModal<QDialog>(500, [&row, screen, e](QDialog *d) {

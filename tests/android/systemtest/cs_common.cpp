@@ -1241,8 +1241,24 @@ bool rightClickChoose(TextEditor *e, int position, const QString &entry, QString
         m = qobject_cast<QMenu *>(QApplication::activePopupWidget());
         return m && m->isVisible();
     }, 1500);
-    if (!m)
-        return false;
+    if (!m) {
+        // Android 0.93.2 (run 45557268944, S-T03: no menu on a picture, while 60 right clicks of S-W15 had one): a
+        // second, longer wait, and what was there when no menu came
+        waitFor([&m] {
+            m = qobject_cast<QMenu *>(QApplication::activePopupWidget());
+            return m && m->isVisible();
+        }, 5000);
+        QWidget *popup = QApplication::activePopupWidget();
+        QWidget *modal = QApplication::activeModalWidget();
+        note(QStringLiteral("(right click at %1,%2 in a viewport of %3 x %4: %5; popup %6, window in front %7, focus %8)")
+                 .arg(pos.x()).arg(pos.y()).arg(e->viewport()->width()).arg(e->viewport()->height())
+                 .arg(m ? QStringLiteral("the menu came late") : QStringLiteral("no menu"),
+                      popup ? QString::fromLatin1(popup->metaObject()->className()) : QStringLiteral("none"),
+                      modal ? QString::fromLatin1(modal->metaObject()->className()) : QStringLiteral("none"),
+                      QApplication::focusWidget() ? QString::fromLatin1(QApplication::focusWidget()->metaObject()->className()) : QStringLiteral("none")));
+        if (!m)
+            return false;
+    }
     settle(80);
     if (entries) {
         entries->clear();

@@ -303,6 +303,10 @@ run_case() {
   EXTRA_ENV=()
   mkdir -p "$OUT/st-logs/$name"
   for f in case.log verify.log facts.json subcases.txt; do "$ADB" pull "$DEV/results/$name/$f" "$OUT/st-logs/$name/$f" > /dev/null 2>&1; done
+  # Android 0.93.2 (to-do item 35): the program's own log lines of the case (the paste's "clipboard: ...", the
+  # keyboard's "keyboard: ...", the tablet's "qb.tablet" lines), as Android's log has them
+  "$ADB" logcat -d -v time 2>/dev/null | grep -E "clipboard: |keyboard: |qb\.tablet|files: |handles: " | tail -60 | cut -c1-400 > "$OUT/st-logs/$name/program-log.txt"
+  [ -s "$OUT/st-logs/$name/program-log.txt" ] || rm -f "$OUT/st-logs/$name/program-log.txt"
   ran=$((ran + 1))
   local log="$OUT/st-logs/$name/case.log" vlog="$OUT/st-logs/$name/verify.log" pass fail vfail end vend
   pass=$(grep -c '^PASS' "$log" 2>/dev/null); fail=$(grep -c '^FAIL' "$log" 2>/dev/null)

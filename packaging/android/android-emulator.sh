@@ -378,7 +378,10 @@ if [ -n "$pid" ]; then
   "$ADB" shell input keycombination 113 59 30 > /dev/null 2>&1; sleep 8; shot "k1-backup"
   "$ADB" shell ls -la /sdcard/Documents/Quillbinder/Backups > "$OUT/emu-backups.txt" 2>&1
   step "K" "Back Up Now: zip files in the tablet's Documents/Quillbinder/Backups: $(grep -c '\.zip' "$OUT/emu-backups.txt")"
-  tap 927 236; sleep 2; key 111; sleep 1; shot "k2-closed"
+  # Android 0.93.2: with the keyboard attached (no on-screen keyboard) the window stands at the top left, its OK at
+  # 459,133 (run 45563156002's pictures: left open, it took the later steps' keys and touches); 927,236 was its OK
+  # with the on-screen keyboard up. A new window on Android does not get the keys, so it is closed by its button.
+  tap 459 133; sleep 2; tap 927 236; sleep 2; key 111; sleep 1; shot "k2-closed"
   # P: put away by Android. A word is typed and Home pressed at once (before the program's own autosave, which
   # waits for a pause of two seconds): the word must be in the project's files on the shared storage.
   tap "$TX" "$TY"; sleep 2
