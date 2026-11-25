@@ -270,6 +270,7 @@ public:
     // 0.93.0: a short message of the program in the first editor's footer bar (it was the status bar's)
     void showStatusNote(const QString &text, int ms = 0);
     void clearStatusNote();
+    void showStatusNote(const QString &text, int ms, const QString &actionText, std::function<void()> action);
     QString statusNote() const;
     // 0.92.0: the notice "Other Versions Kept" turned off until the program quits (its button; the tests set it back)
     static bool conflictNoticeOff();

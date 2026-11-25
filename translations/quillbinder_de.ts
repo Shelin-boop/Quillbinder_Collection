@@ -10578,6 +10578,10 @@ Das Projekt bleibt geöffnet.</translation>
 %1</translation>
     </message>
     <message>
+        <source>Backup saved: %1</source>
+        <translation>Sicherung gespeichert: %1</translation>
+    </message>
+    <message>
         <source>Restore From Backup</source>
         <translation>Aus Sicherung wiederherstellen</translation>
     </message>

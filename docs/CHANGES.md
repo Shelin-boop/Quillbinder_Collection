@@ -26,6 +26,9 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
   after **Reset Session Now** the tooltip of the quick-search field kept the old number until the next change. One
   rule now: imported text, the words a project holds when it is opened the first time, and a paste of more than 200
   words do not count as session words; the tooltip follows **Reset Session Now** at once.
+- **Back Up Now tells its success in the footer**. The box "Backup saved" that waited for OK (and on Android blocked
+  later steps when it was left open) is gone. The footer says "Backup saved: ..." with a link **Show Folder**; boxes
+  come only for failures and for a backup that is incomplete.
 
 ## 0.93.1 beta (2026-11-24)
 

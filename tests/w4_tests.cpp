@@ -423,12 +423,7 @@ static void windowChecks(const QString &W)
     // "Choose Folder" takes the folder and makes the backup
     whenModal([](QWidget *m) {
         if (auto *box = qobject_cast<QMessageBox *>(m)) {
-            box->defaultButton()->click();
-            // then the message "Backup saved"
-            whenModal([](QWidget *m2) {
-                if (auto *b2 = qobject_cast<QMessageBox *>(m2))
-                    b2->accept();
-            });
+            box->defaultButton()->click(); // (the backup's success is a note in the footer; no box follows, 0.94.0)
         }
     });
     if (now)

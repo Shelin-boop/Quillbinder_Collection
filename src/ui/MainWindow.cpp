@@ -632,6 +632,12 @@ void MainWindow::clearStatusNote()
 
 QString MainWindow::statusNote() const { return m_panes[0] ? m_panes[0]->footerStatus()->noteText() : QString(); }
 
+void MainWindow::showStatusNote(const QString &text, int ms, const QString &actionText, std::function<void()> action)
+{
+    if (m_panes[0])
+        m_panes[0]->footerStatus()->showNote(text, ms, actionText, std::move(action));
+}
+
 void MainWindow::updateSaveState()
 {
     if (!m_panes[0])
@@ -4572,9 +4578,12 @@ void MainWindow::backupNow(bool chooseLocation)
         QMessageBox::warning(this, tr("Back Up"), tr("Backup saved:\n%1\n\n%2").arg(out, err) + left);
     else if (ok && !left.isEmpty())
         QMessageBox::warning(this, tr("Back Up"), tr("Backup saved:\n%1").arg(out) + left);
-    else if (ok)
-        QMessageBox::information(this, tr("Back Up"), tr("Backup saved:\n%1").arg(out));
-    else
+    else if (ok) {
+        // 0.94.0 (item 85): no box that waits for OK; the note in the footer names the file, a link shows its folder
+        const QString folder = QFileInfo(out).absolutePath();
+        showStatusNote(tr("Backup saved: %1").arg(QDir::toNativeSeparators(out)), 20000, tr("Show Folder"),
+                       [folder] { QDesktopServices::openUrl(QUrl::fromLocalFile(folder)); });
+    } else
         QMessageBox::warning(this, tr("Back Up"), err);
 }
 

@@ -4,6 +4,7 @@
 #include <QFontMetrics>
 #include <QGraphicsOpacityEffect>
 #include <QLabel>
+#include <QMouseEvent>
 #include <QPalette>
 #include <QPropertyAnimation>
 #include <QRegularExpression>
@@ -39,6 +40,15 @@ FooterStatus::FooterStatus(QWidget *parent) : QWidget(parent)
     m_link->setContentsMargins(6, 0, 6, 0);
     m_link->setTextFormat(Qt::RichText);
     m_link->hide();
+    m_noteAction = new QLabel(this);
+    m_noteAction->setObjectName(QStringLiteral("noteAction"));
+    m_noteAction->setTextFormat(Qt::RichText);
+    m_noteAction->setContentsMargins(0, 0, 6, 0);
+    m_noteAction->hide();
+    connect(m_noteAction, &QLabel::linkActivated, this, [this] {
+        if (m_noteFn)
+            m_noteFn();
+    });
     m_noteTimer = new QTimer(this);
     m_noteTimer->setSingleShot(true);
     connect(m_noteTimer, &QTimer::timeout, this, &FooterStatus::clearNote);
@@ -59,8 +69,22 @@ void FooterStatus::clearSave()
     setSave(QString(), QString(), Saved);
 }
 
+void FooterStatus::showNote(const QString &text, int ms, const QString &actionText, std::function<void()> action)
+{
+    m_noteActionText = actionText;
+    m_noteFn = std::move(action);
+    m_note = text;
+    if (text.isEmpty() || ms <= 0)
+        m_noteTimer->stop();
+    else
+        m_noteTimer->start(ms);
+    render();
+}
+
 void FooterStatus::showNote(const QString &text, int ms)
 {
+    m_noteActionText.clear();
+    m_noteFn = nullptr;
     m_note = text;
     if (text.isEmpty() || ms <= 0)
         m_noteTimer->stop();
@@ -74,6 +98,8 @@ void FooterStatus::clearNote()
     m_noteTimer->stop();
     if (!m_note.isEmpty()) {
         m_note.clear();
+        m_noteActionText.clear();
+        m_noteFn = nullptr;
         render();
     }
 }
@@ -129,6 +155,8 @@ QSize FooterStatus::sizeHint() const
 {
     const QString shown = m_note.isEmpty() ? m_saveText : m_note;
     int w = shown.isEmpty() ? 0 : m_text->fontMetrics().horizontalAdvance(shown) + 12 + 12;
+    if (!m_note.isEmpty() && !m_noteActionText.isEmpty())
+        w += m_text->fontMetrics().horizontalAdvance(m_noteActionText) + 12 + kGap;
     if (m_linkVisible)
         w += m_link->fontMetrics().horizontalAdvance(plainOf(m_linkHtml)) + 12 + kGap;
     return QSize(qMin(w, 420), qMax(m_text->fontMetrics().height() + 2, 18));
@@ -143,6 +171,16 @@ void FooterStatus::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
     render();
+}
+
+void FooterStatus::mousePressEvent(QMouseEvent *e)
+{
+    if (m_mark && !m_note.isEmpty() && m_noteFn && e->button() == Qt::LeftButton) {
+        m_noteFn();
+        e->accept();
+        return;
+    }
+    QWidget::mousePressEvent(e);
 }
 
 void FooterStatus::changeEvent(QEvent *e)
@@ -172,7 +210,9 @@ void FooterStatus::render()
         linkMark = avail < full + (shown.isEmpty() ? 0 : 24) + kGap;
         linkW = linkMark ? m_link->fontMetrics().horizontalAdvance(QStringLiteral("!")) + 12 : full;
     }
-    const int textAvail = avail - (linkW ? linkW + kGap : 0);
+    const int actionW = (noteOn && !fading && !m_noteActionText.isEmpty()) ? fm.horizontalAdvance(m_noteActionText) + 12 + kGap : 0;
+    const int textAvail = avail - (linkW ? linkW + kGap : 0) - actionW;
+    m_noteAction->hide();
 
     if (shown.isEmpty() || fading) {
         m_text->hide();
@@ -193,7 +233,7 @@ void FooterStatus::render()
             } else {
                 m_mark = true;
                 text = kMark;
-                tip = shown;
+                tip = m_noteActionText.isEmpty() ? shown : shown + QLatin1Char('\n') + m_noteActionText;
                 style = QStringLiteral("QLabel { color: %1; }").arg(QApplication::palette(this).color(QPalette::Highlight).name());
             }
         } else {
@@ -218,6 +258,14 @@ void FooterStatus::render()
         m_text->setGeometry(x, (h - m_text->sizeHint().height()) / 2, w, m_text->sizeHint().height());
         m_text->show();
         x += w + kGap;
+        if (actionW && !m_mark) {
+            m_noteAction->setText(QStringLiteral("<a href=\"#\">%1</a>").arg(m_noteActionText.toHtmlEscaped()));
+            m_noteAction->adjustSize();
+            m_noteAction->setGeometry(x, (h - m_noteAction->sizeHint().height()) / 2, m_noteAction->sizeHint().width(),
+                                      m_noteAction->sizeHint().height());
+            m_noteAction->show();
+            x += m_noteAction->width() + kGap;
+        }
     }
     // the fading note sits where the text is
     if (m_fading > 0) {
