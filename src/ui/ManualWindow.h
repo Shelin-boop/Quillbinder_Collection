@@ -21,6 +21,10 @@ class QTreeWidgetItem;
 
 namespace qb {
 
+// Words in angle brackets that stand for something ("<computer>") are written as text, so that Qt's Markdown reader does
+// not take them for HTML tags and cut the text off (the manual, the developer guide and the quick start use it)
+QString escapePlaceholders(const QString &md);
+
 class ManualWindow : public QDialog
 {
     Q_OBJECT

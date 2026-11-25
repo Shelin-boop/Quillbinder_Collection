@@ -386,7 +386,7 @@ int main(int argc, char **argv)
                     tb = t;
         const QString text = tb ? tb->toPlainText() : QString();
         check(tb && tb->window()->isVisible() && text.contains(QStringLiteral("%1 Quick Start Guide").arg(appName))
-                  && text.contains(QLatin1String("Dark mode")) && text.contains(QLatin1String("Window > Themes"))
+                  && text.contains(QLatin1String("Dark mode")) && text.contains(QLatin1String("View > Themes"))
                   && text.contains(QLatin1String("Import Scrivener Project")) && text.contains(QLatin1String("Work in Scrivener Format"))
                   && text.contains(QLatin1String("Markdown")) && !text.contains(QLatin1String("{{")),
               QStringLiteral("Help > Quick Start Guide opens the guide: settings (dark mode ...) and capabilities (Scrivener, own format ...)"),

@@ -74,7 +74,7 @@ Installed add-ons live in `<data>/addons/<id>/`. They can be switched off (they 
 
 | Folder | Content | Used by |
 |--------|---------|---------|
-| `themes/*.json` | color themes | Window > Themes |
+| `themes/*.json` | color themes | View > Themes |
 | `layouts/*.json` | window layouts | View > Layout |
 | `scripts/*.json` | script formats | Format > Scriptwriting |
 | `templates/*.zip` | project templates | New Project |

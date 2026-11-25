@@ -949,7 +949,7 @@ static QDialog *helpWindow(QPointer<QDialog> &win, QWidget *parent, const QStrin
             .replace(QLatin1String("{{LABEL}}"), QLatin1String(QB_APP_VERSION_LABEL)) // 0.93.0: "beta"; the documents never go stale
             .replace(QLatin1String("{{SUFFIX}}"), QLatin1String(QB_PROJECT_SUFFIX))
             .replace(QLatin1String("{{FILE}}"), QLatin1String(QB_PROJECT_FILE_SUFFIX));
-        tb->setMarkdown(text);
+        tb->setMarkdown(escapePlaceholders(text));
         l->addWidget(tb);
     }
     win->show();

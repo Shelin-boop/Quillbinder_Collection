@@ -48,7 +48,7 @@ QString withoutNumber(QString t)
 // Qt's Markdown reader takes "<computer>" for an HTML tag and swallows the text up to a closing tag that never comes
 // (the manual was cut off after its first section). Words in angle brackets that stand for something the reader fills
 // in are written as text, outside code spans and code blocks.
-QString escapePlaceholders(const QString &md)
+QString escapePlaceholdersImpl(const QString &md)
 {
     static const QRegularExpression re(QStringLiteral("<((?:computer|ID|id|UUID|your name|version|title|file|date|name|number)[^<>\\n]{0,12})>"));
     QStringList out;
@@ -77,6 +77,8 @@ QString escapePlaceholders(const QString &md)
 }
 
 } // namespace
+
+QString escapePlaceholders(const QString &md) { return escapePlaceholdersImpl(md); }
 
 ManualWindow::ManualWindow(const QString &markdown, const QString &title, const QString &objectName, QSize size, QWidget *parent)
     : QDialog(parent)

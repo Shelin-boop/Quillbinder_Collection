@@ -322,7 +322,7 @@ as an experimental test build).
   searchMenu`; `AppSettings::load` adds it once to an arranged main toolbar, key `toolbars/themePicker0902`):
   `QButtonGroup` of `themeFilterBright/Dark/Both` (setting `window/themeFilter`, program-only by its group), the combo
   `themeCombo` filled again in `showPopup` and on `theme::Notifier::changed`; a choice runs `themeui::choose(window(),
-  id)` (as Window > Themes). `theme::brightnessOf(id)`: by the resolved Window color; `followDesktop` = Either (in both
+  id)` (as View > Themes). `theme::brightnessOf(id)`: by the resolved Window color; `followDesktop` = Either (in both
   lists). `ThemePicker::giveWay(bar, action, quickSearch)` (a filter on the main toolbar): when the quick search would go
   into the overflow menu, the list's action is hidden; shown again when the bar is `need` wider (and at every
   `rebuildToolBars`).
@@ -454,7 +454,7 @@ as an experimental test build).
   hands it to `theme::setAreaLook` before `theme::apply()`. `AppSettings::theme / ownColors / ownFonts / editorWidth /
   textBorder` are the look for **new projects** (and the program's menus and panels). Never change a built-in theme's
   colors in an update: `tests/v0402_tests.cpp` keeps a digest of them; a new look goes into a new theme or into the
-  look for new projects. File > Options > Appearance has `optLookScope` (this project / new projects); Window > Themes
+  look for new projects. File > Options > Appearance has `optLookScope` (this project / new projects); View > Themes
   (`themeui::choose`) sets both.
 - **Right-click "Appearance"** (`src/ui/LookMenu.*`, `lookmenu::add / popup`, parts Editor, HeaderBar, Binder,
   Corkboard, Outliner, Inspector, Composition): changes go through `look::change` (the open project's look).

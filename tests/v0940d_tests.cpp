@@ -379,7 +379,7 @@ static void themeButton(MainWindow &w)
     for (const theme::Entry &e : theme::available())
         if (e.id == QLatin1String("user:User_1"))
             listedAsMyLook = e.name == QLatin1String("My Look 1");
-    check(listedAsMyLook, QStringLiteral("in the list of all themes (and Window > Themes) the saved look is named \"My Look 1\""));
+    check(listedAsMyLook, QStringLiteral("in the list of all themes (and View > Themes) the saved look is named \"My Look 1\""));
     // an entry of the list
     emit menu->aboutToShow();
     QAction *sepia = nullptr;
@@ -402,6 +402,41 @@ static void themeButton(MainWindow &w)
 }
 
 // ---------------------------------------------------------------- item 66
+
+// Item "placeholders in the other help windows": the Quick Start and the Developer Guide reach their last heading, and the
+// View menu has the themes (Window has none).
+static void helpWindows(MainWindow &w)
+{
+    std::printf("== the Quick Start and Developer Guide windows; View > Themes\n");
+    for (const char *key : {"quickStart", "developerGuide"}) {
+        QFile f(QLatin1String(std::strcmp(key, "quickStart") == 0 ? ":/docs/quick-start.md" : ":/docs/developer-guide.md"));
+        f.open(QIODevice::ReadOnly);
+        QString last;
+        for (const QString &line : QString::fromUtf8(f.readAll()).split(QLatin1Char('\n')))
+            if (line.startsWith(QLatin1String("#")))
+                last = line.mid(line.indexOf(QLatin1Char(' ')) + 1).trimmed();
+        w.findChild<QAction *>(QLatin1String(key))->trigger();
+        settle(500);
+        QTextBrowser *tb = nullptr;
+        for (QWidget *top : QApplication::topLevelWidgets())
+            if (auto *t = top->findChild<QTextBrowser *>(QLatin1String(key)))
+                tb = t;
+        const QString text = tb ? tb->toPlainText() : QString();
+        check(tb && !last.isEmpty() && text.contains(last), QStringLiteral("the %1 window shows the text up to its last heading").arg(QLatin1String(key)), last);
+        if (tb)
+            tb->window()->close();
+    }
+    check(escapePlaceholders(QStringLiteral("a <computer> b `<computer>`")).contains(QLatin1String("&lt;computer&gt; b `<computer>`")),
+          QStringLiteral("placeholders are escaped outside code spans only"));
+    auto *view = w.menuBar()->findChild<QMenu *>(QStringLiteral("themeMenu"));
+    check(view && qobject_cast<QMenu *>(view->parent()) && qobject_cast<QMenu *>(view->parent())->title().remove(QLatin1Char('&')) == QLatin1String("View"),
+          QStringLiteral("the themes are in the View menu"));
+    bool inWindow = false;
+    if (auto *wm = w.findChild<QMenu *>(QStringLiteral("windowMenu")))
+        for (QAction *a : wm->actions())
+            inWindow = inWindow || a->text().remove(QLatin1Char('&')) == QLatin1String("Themes");
+    check(!inWindow, QStringLiteral("the Window menu has no Themes entry"));
+}
 
 static void manual(MainWindow &w, Project *p, BinderItem *doc)
 {
@@ -917,6 +952,7 @@ int main(int argc, char **argv)
     contrasts(w, p, doc);
     themeButton(w);
     manual(w, p, doc);
+    helpWindows(w);
     authorName(w, p);
     addonWindow(w, work.path());
     downloadPage(work.path());

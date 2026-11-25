@@ -321,6 +321,28 @@ void MainWindow::createMenus()
     add(bars, {"showToolbar", "showFormatBar", "showIconBar", "", "showBarMain", "showBarThemes", "showBarSearch", "showBarTools",
                "showBarStyle", "showBarCharacter", "showBarParagraph", "", "resetToolbarPlaces", "", "customizeToolbars",
                "customizeIconBar"});
+    QMenu *themes = view->addMenu(tr("&Themes")); // 0.94.0: before, under Window;
+    themes->setObjectName(QStringLiteral("themeMenu"));
+    // filled when opened: add-ons and the theme list can add and remove themes at any time
+    auto fillThemes = [this, themes] {
+        themes->clear();
+        theme::Kind last = theme::Kind::BuiltIn;
+        for (const theme::Entry &entry : theme::available()) {
+            if (entry.kind != last)
+                themes->addSeparator();
+            last = entry.kind;
+            QAction *ta = themes->addAction(entry.name);
+            ta->setCheckable(true);
+            ta->setChecked(look::active().theme == entry.id); // the open project's theme (0.40.2)
+            const QString id = entry.id;
+            connect(ta, &QAction::triggered, this, [this, id] { themeui::choose(this, id); });
+        }
+        themes->addSeparator();
+        for (const char *k : {"themeSave", "themeImport", "themeManage", "themeCustomize"})
+            themes->addAction(a[QLatin1String(k)]);
+    };
+    fillThemes();
+    connect(themes, &QMenu::aboutToShow, this, fillThemes);
     QMenu *te = view->addMenu(tr("&Text Editing"));
     add(te, {"pageView", "pageSetup", "", "showRuler", "showInvisibles", "typewriter", "scrivTitles", "fixedWidth"});
     QMenu *cork = view->addMenu(tr("&Corkboard Options"));
@@ -591,28 +613,6 @@ void MainWindow::createMenus()
     // ---- Window
     QMenu *window = mb->addMenu(tr("&Window"));
     window->setObjectName(QStringLiteral("windowMenu"));
-    QMenu *themes = window->addMenu(tr("&Themes"));
-    themes->setObjectName(QStringLiteral("themeMenu"));
-    // filled when opened: add-ons and the theme list can add and remove themes at any time
-    auto fillThemes = [this, themes] {
-        themes->clear();
-        theme::Kind last = theme::Kind::BuiltIn;
-        for (const theme::Entry &entry : theme::available()) {
-            if (entry.kind != last)
-                themes->addSeparator();
-            last = entry.kind;
-            QAction *ta = themes->addAction(entry.name);
-            ta->setCheckable(true);
-            ta->setChecked(look::active().theme == entry.id); // the open project's theme (0.40.2)
-            const QString id = entry.id;
-            connect(ta, &QAction::triggered, this, [this, id] { themeui::choose(this, id); });
-        }
-        themes->addSeparator();
-        for (const char *k : {"themeSave", "themeImport", "themeManage", "themeCustomize"})
-            themes->addAction(a[QLatin1String(k)]);
-    };
-    fillThemes();
-    connect(themes, &QMenu::aboutToShow, this, fillThemes);
     const QList<QAction *> windowTools = toolActionsAt(QStringLiteral("window"));
     if (!windowTools.isEmpty()) {
         window->addSeparator();

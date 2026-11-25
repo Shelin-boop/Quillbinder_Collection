@@ -201,8 +201,8 @@ static void menus(MainWindow &w)
               && lt.contains(QStringLiteral("Manage Layouts")),
           QStringLiteral("... and the saved layouts, Save Current Layout and Manage Layouts"), lt.join(QStringLiteral(" | ")));
     QMenu *window = topMenu(w, QStringLiteral("Window"));
-    check(window && !subMenu(window, QStringLiteral("Layouts")) && subMenu(window, QStringLiteral("Themes")),
-          QStringLiteral("Window has no Layouts any more"));
+    check(window && !subMenu(window, QStringLiteral("Layouts")) && !subMenu(window, QStringLiteral("Themes")) && subMenu(topMenu(w, QStringLiteral("View")), QStringLiteral("Themes")),
+          QStringLiteral("Window has no Layouts and no Themes any more (View has Themes)"));
     for (const char *k : {"layoutSave", "layoutManage", "layoutReset", "layoutBinderLeft"})
         check(w.findChild<QAction *>(QLatin1String(k)) != nullptr, QStringLiteral("the action's object name stays: %1").arg(QLatin1String(k)));
 

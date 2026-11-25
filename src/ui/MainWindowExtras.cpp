@@ -1,6 +1,7 @@
 // Additions of 0.17 to the main window: Format > Font, Documents > Change
 // Icon (the whole icon set, recent icons, Icon from Text, Manage Icons), the
 // icon bar, the two color buttons of the format bar, Help > Troubleshooting and Development > Developer Guide.
+#include "ui/ManualWindow.h"
 #include "ui/GripBar.h"
 #include "ui/MenuClear.h"
 #include "ui/ObjectsUi.h"
@@ -401,7 +402,7 @@ void MainWindow::showDeveloperGuide()
             .replace(QLatin1String("{{SUFFIX}}"), QLatin1String(QB_PROJECT_SUFFIX)) // (0.94.0: the moved part of the manual uses them)
             .replace(QLatin1String("{{FILE}}"), QLatin1String(QB_PROJECT_FILE_SUFFIX))
             .replace(QLatin1String("{{LABEL}}"), QLatin1String(QB_APP_VERSION_LABEL));
-        tb->setMarkdown(text);
+        tb->setMarkdown(escapePlaceholders(text));
         l->addWidget(tb);
     }
     win->show();

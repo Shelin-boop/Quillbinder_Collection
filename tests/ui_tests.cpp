@@ -1763,7 +1763,7 @@ int main(int argc, char **argv)
                 {"Documents", "Add to Project Bookmarks"},
                 {"Format", "Font", "Show Fonts…"}, {"Format", "Style", "New Style From Selection…"},
                 {"Format", "Style", "Styles Panel"}, {"Format", "Revision Mode"},
-                {"Window", "Themes", "Manage Themes…"}, {"View", "Layout", "Manage Layouts…"},
+                {"View", "Themes", "Manage Themes…"}, {"View", "Layout", "Manage Layouts…"},
                 {"View", "Layout", "Save Current Layout…"}, {"Window", "Float Quick Reference Panels"},
                 {"Help", "User Manual"}, {"Help", "Keyboard Shortcuts…"}};
             QStringList missing;

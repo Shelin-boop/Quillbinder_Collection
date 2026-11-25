@@ -16,9 +16,9 @@
 
 | What you want | Where |
 |---------------|-------|
-| **Dark mode** or another color theme | **Window > Themes**: Dark Mode, Midnight, Sepia, Slate, Ocean, High Contrast, Light, or Default (follows your desktop). The change takes effect at once. |
-| Colors and fonts of each part of the window | **File > Options > Appearance** (or **Window > Themes > Colors and Fonts…**), or a right-click on the part (**Appearance**). Every project keeps its own look; the list at the top chooses this project or new projects. |
-| Your own theme | **Window > Themes > Save Current Look as Theme…**; **Manage Themes…** exports and imports *.qbtheme* files. |
+| **Dark mode** or another color theme | **View > Themes**: Dark Mode, Midnight, Sepia, Slate, Ocean, High Contrast, Light, or Default (follows your desktop). The change takes effect at once. |
+| Colors and fonts of each part of the window | **File > Options > Appearance** (or **View > Themes > Colors and Fonts…**), or a right-click on the part (**Appearance**). Every project keeps its own look; the list at the top chooses this project or new projects. |
+| Your own theme | **View > Themes > Save Current Look as Theme…**; **Manage Themes…** exports and imports *.qbtheme* files. |
 | Interface font, toolbar icon size, the full path in the title bar | **File > Options > Appearance > General Interface** |
 | The text column: fixed width, paper color, width, border beside the text | **File > Options > Appearance > Main Editor**, or a right-click on the paper |
 | The project's settings in a file, and back into this or another project | **Project > Save Project Settings to File…** / **Load Project Settings from File…** |

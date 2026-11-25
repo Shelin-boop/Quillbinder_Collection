@@ -113,7 +113,7 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
   the theme Light (it showed the theme that follows the desktop for some), an empty My Look says so in the menu and
   explains itself in its tool tip. U1 and U2 are called My Look 1 and My Look 2 in the menus, tool tips and the manual
   (the saved themes keep their file names). The button is in the Themes toolbar, which is off at first, also for those
-  who had it shown (once; **View > Toolbars > Themes** shows it again). The themes stay under **Window > Themes**.
+  who had it shown (once; **View > Toolbars > Themes** shows it again). The theme choices moved from the Window menu to **View > Themes** (the same commands; Window has no Themes entry).
 - **The manual has a contents list and a search**. F1 opened one long text without a contents list, a search or jumps.
   The window now has the headings of the manual on the left (a click jumps to one) and a search field (**Ctrl+F**;
   **Return** and **Shift+Return**, or the buttons Next and Previous, show the next and the previous hit; the line
