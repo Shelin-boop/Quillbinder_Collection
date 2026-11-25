@@ -89,7 +89,7 @@ def addon_rows(dist, files):
     out = []
     for f in files:
         name, ver, _system = addon_info(os.path.join(dist, f))
-        out.append("| %s | Add-on \"%s\" %s (File > Install Update or Add-on).%s |" % (f, name, ver, addon_note(f)))
+        out.append("| %s | Add-on \"%s\" %s (Help > Add-ons and Updates > Install Update or Add-on).%s |" % (f, name, ver, addon_note(f)))
     return out
 
 
@@ -160,10 +160,10 @@ def main(dist, test=False):
         out.append("3. Double-click it. Help > Add to Application Menu puts it into the menu of the desktop.")
         if any(f.startswith("media-all-formats") for f in linux_addons + common):
             out.append("4. For audio and video in the editor, download **media-all-formats.qbpkg** and install it with "
-                       "File > Install Update or Add-on: one package for the commonly used formats. (The full version has it already.)")
+                       "Help > Add-ons and Updates > Install Update or Add-on: one package for the commonly used formats. (The full version has it already.)")
         out.append("")
         out.append("Already have an AppImage of Quillbinder? Replace the file with this one; settings, add-ons and "
-                   "projects stay. Or install the program update with File > Install Update or Add-on.")
+                   "projects stay. Or install the program update with Help > Add-ons and Updates > Install Update or Add-on.")
         out.append("")
         out.append("| File | What it is |")
         out.append("|------|------------|")
@@ -176,7 +176,7 @@ def main(dist, test=False):
                        "importers. They are installed at the first start; nothing else to download. |" % f)
         for f in update:
             out.append("| %s | Program update for an AppImage of Quillbinder you already have "
-                       "(File > Install Update or Add-on) |" % f)
+                       "(Help > Add-ons and Updates > Install Update or Add-on) |" % f)
         out.extend(addon_rows(dist, linux_addons))
         for f in files:
             if f.endswith("-symbols.xz"):
@@ -226,7 +226,7 @@ def main(dist, test=False):
                        "start |" % f)
         for f in win_update:
             out.append("| %s | Program update and all add-ons for a Quillbinder for Windows you already have "
-                       "(File > Install Update or Add-on) |" % f)
+                       "(Help > Add-ons and Updates > Install Update or Add-on) |" % f)
         out.extend(addon_rows(dist, win_addons))
         for f in win_symbols:
             out.append("| %s | The program's debug symbols, to read crash reports (developers) |" % f)

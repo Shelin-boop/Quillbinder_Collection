@@ -313,7 +313,7 @@ protected:
         }
         if (!urls.isEmpty())
             dialog->setSidebarUrls(urls);
-        // packages (File > Install Update or Add-on, 0.91.3) come from the browser: the Download folder
+        // packages (Help > Add-ons and Updates > Install Update or Add-on, 0.91.3) come from the browser: the Download folder
         if (dialog->nameFilters().join(QLatin1Char(' ')).contains(QLatin1String(".qbpkg"))) {
             for (const QString &dir : m_side) {
                 if (QFileInfo(dir).fileName() == QLatin1String("Download") && QFileInfo(dir).isDir()) {

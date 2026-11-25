@@ -8,6 +8,8 @@ repository's GitHub Pages (job download-page of .github/workflows/release.yml).
     tools/download-page.py <folder with the release's files (their names are enough)> <tag> <out dir>
         [--also <folder> <tag>]...
 
+A file "full-addons-size" in the folder (the add-ons' installed size in bytes) adds the space to the Linux card.
+
 Since 0.91.2 each system can have a last number of its own (working rules, section 8), so a new Linux release may
 come before the Windows files of its number: a system without a file in the release is taken from the "--also"
 release that has one (give them newest first), and its card names that version. Since 0.93.0 (a version line per
@@ -136,7 +138,16 @@ def shown_of(tag):
     return tag[1:].replace("-", " ") if tag.startswith("v") else tag
 
 
-def page(files, tag, also=()):
+def space_note(addon_bytes):
+    """The space the full version's add-ons take beside its button (0.94.0); nothing when the release gives no number."""
+    if addon_bytes <= 0:
+        return ""
+    mb = max(1, int(round(addon_bytes / 1e6)))
+    return ('\n      <p class="small">The add-ons inside take about %d MB of disk space once they are unpacked (at the first start); '
+            'a window shows the progress.</p>' % mb)
+
+
+def page(files, tag, also=(), addon_bytes=0):
     """also: [(files, tag)] of older releases, newest first (0.91.2): a system the release has no file for is taken
     from the first of them that has one."""
     home = cmake_var("APP_HOMEPAGE") or "https://github.com/Shelin-boop/Quillbinder_Collection"
@@ -191,8 +202,9 @@ def page(files, tag, also=()):
             detail += ", version %s" % shown_of(tag_of[key])
         if f:
             body = ('<a class="button" href="%s">Download for %s</a>\n'
-                    '      <p class="file">%s</p>\n      <ol>%s</ol>'
+                    '      <p class="file">%s</p>%s\n      <ol>%s</ol>'
                     % (html.escape(url(key, f)), html.escape(name), html.escape(f),
+                       space_note(addon_bytes) if key == "linux" and tag_of[key] == tag else "",
                        "".join("<li>%s</li>" % s for s in steps)))
         else:
             body = '<p class="later">Comes later.</p>'
@@ -279,10 +291,21 @@ def main(argv):
         print(__doc__, file=sys.stderr)
         return 2
     files = sorted(os.listdir(argv[1]))
+    # 0.94.0: a file "full-addons-size" in the folder (the installed size of the full version's add-ons in bytes, written
+    # by the job that builds them) lets the Linux card name the disk space; without it nothing is said
+    addon_bytes = 0
+    size_file = os.path.join(argv[1], "full-addons-size")
+    if "full-addons-size" in files:
+        files.remove("full-addons-size")
+        try:
+            with open(size_file, encoding="utf-8") as f:
+                addon_bytes = int(f.read().strip() or 0)
+        except (OSError, ValueError):
+            addon_bytes = 0
     also = [(sorted(os.listdir(rest[i + 1])), rest[i + 2]) for i in range(0, len(rest), 3)]
     os.makedirs(argv[3], exist_ok=True)
     with open(os.path.join(argv[3], "index.html"), "w", encoding="utf-8") as f:
-        f.write(page(files, argv[2], also))
+        f.write(page(files, argv[2], also, addon_bytes))
     return 0
 
 

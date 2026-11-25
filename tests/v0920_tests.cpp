@@ -1589,7 +1589,7 @@ int main(int argc, char **argv)
         waitFor([&] { return upd->window() != nullptr; }, 8000);
         win = upd->window();
         check(ignoredQuiet && win && win->isVisible(),
-              QStringLiteral("\"Ignore This Version\": no window any more at the start; Help > Check for Updates Now still shows it"));
+              QStringLiteral("\"Ignore This Version\": no window any more at the start; Help > Add-ons and Updates > Check for Updates Now still shows it"));
         if (win)
             win->close();
         settle(200);
@@ -1653,7 +1653,7 @@ int main(int argc, char **argv)
         lookAndWait(true);
         waitFor([&] { return !upToDate.isEmpty(); }, 5000);
         check(upToDate.contains(QLatin1String("up to date")) && !upd->window(),
-              QStringLiteral("Help > Check for Updates Now with nothing new says that everything is up to date"), upToDate);
+              QStringLiteral("Help > Add-ons and Updates > Check for Updates Now with nothing new says that everything is up to date"), upToDate);
         // a file that is not the one the signed list names is not installed
         const QString pkg13 = addonPackage(W, QStringLiteral("test-state"), QStringLiteral("1.3"), themeNew);
         server.files.insert(QStringLiteral("/files/test-state-1.2.qbpkg"), readAll(pkg13));

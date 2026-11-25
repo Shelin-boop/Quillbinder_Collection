@@ -2,6 +2,28 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.94.0 beta: one place per topic in the menus, Find Command, the first start's page, the application menu entry
+
+- **Menus** (`MainWindowBars.cpp`, `createMenus`): `m_layoutMenu` is now View > Layout (`paneLayoutMenu`): the positions
+  (sections "Upright window", "Wide window"), the section "Saved layouts" and Save Current Layout / Manage Layouts;
+  `rebuildLayoutActions()` fills all of it (it is also called inside `createMenus`, so that the commands are in the menu
+  before `commands::addFromMenuBar`). The toolbar's View and Layouts buttons use the same menu. Window has no Layouts.
+  Navigate > Fonts is in Format > Font (`createFontMenu(QMenu *fontMenu)`); the link commands are in Insert; Help has
+  the submenus `addonsMenu` (Add-on Manager, Install Update or Add-on, the check for updates) and `troubleMenu`. The
+  actions' object names did not change (saved shortcuts, toolbars and the suites use them).
+- **Find Command** (`CommandFinder.*`, action `findCommand`, no shortcut: Ctrl+Shift+P is the mind map's Page Setup):
+  `collect(menuBar)` walks the menus as they are (lists filled when a menu opens are not in it), `matching()` takes the
+  words of the text in any order against the label and the menu path. A disabled command (or one in a disabled menu) is
+  listed grayed and `runRow` refuses it.
+- **The application menu** (`AppMenuEntry.*`, namespace `appmenu`): `add(moveAppImage, tools)`, `remove()`,
+  `moveToApplications()`. A move sets `$APPIMAGE` (and `QB_TEST_APPIMAGE` when it named the old file) to the new path
+  with `qputenv`: everything that reads the variable later (`UpdateChecker::ownAppImage`, `Launcher::startProgram`,
+  `Host::commandLine`, System Information) follows. `app/integrated` and `app/integrationDeclined` are renamed too.
+  Help > Add to / Remove from Application Menu: `updateApplicationMenuAction()` on opening Help.
+- **The first start** (`FirstStartDialog`, `main.cpp`): one page; `main.cpp` carries out the answers after `take()`
+  (`UpdateChecker::firstStartAnswered`, `MainWindow::applyFirstStartMenuChoice`). `w.show()` waits (`windowLater`) when
+  the first-start page or the welcome project is due and is done when the project is open (`QB_NO_DIALOGS` keeps the old order).
+
 ## 0.93.0 beta (2026-11-24): the save text in the first editor's footer bar, no status bar row (item 11)
 
 - **`FooterStatus`** (`src/ui/FooterStatus.*`, no Q_OBJECT): one in each `EditorPane` (`footerStatus()`, `MainWindow::editorPane(i)`),

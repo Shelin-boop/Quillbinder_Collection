@@ -1,7 +1,7 @@
 #!/bin/bash
 # Builds the full version of the AppImage (0.60): the AppImage of packaging/linux/build-appimage.sh with every
 # add-on package inside. At the first start of this version the add-ons are installed (as with
-# File > Install Update or Add-on), so the program comes with the commonly used audio and video formats, the
+# Help > Add-ons and Updates > Install Update or Add-on), so the program comes with the commonly used audio and video formats, the
 # themes, templates, writing tools and importers, and all the libraries they need.
 #
 #   packaging/linux/build-full-appimage.sh [AppImage build dir] [add-on packages dir]
@@ -48,9 +48,9 @@ This AppImage is $APP_NAME with all its add-ons and the libraries they need incl
 video in the commonly used formats (Media Playback with Qt Multimedia and FFmpeg, also the formats licensed under
 patents), the extra themes, the project templates, the compile format, the scriptwriting pack, the
 writing tools (Name Generator, Scratch Pad, Text Statistics) and the importers of web pages and old
-Word files. They are installed at the first start of this version, as File > Install Update or
-Add-on would install them, and can be switched off or removed in Help > Add-on Manager like any
-other add-on. Whether a patent license is needed to use some video and audio formats depends on the
+Word files. They are installed at the first start of this version (a window shows the progress), as
+Help > Add-ons and Updates > Install Update or Add-on would install them, and can be switched off or
+removed in Help > Add-ons and Updates > Add-on Manager like any other add-on. Whether a patent license is needed to use some video and audio formats depends on the
 country. The licenses of every part: Help > Third-Party Licenses and the add-ons' own license files.
 TEXT
 # the start script: install the packages once per version, then start the program as before
@@ -63,12 +63,10 @@ HERE=\$(dirname "\$(readlink -f "\$0")")
 BIN="\$HERE/usr/bin/$APP_ID"
 MARK="\${XDG_DATA_HOME:-\$HOME/.local/share}/$APP_NAME/full-addons-installed-$VERSION"
 if [ ! -e "\$MARK" ]; then
-    ok=1
-    for p in "\$HERE"/usr/share/$APP_ID/full-addons/*.qbpkg; do
-        "\$BIN" --install "\$p" --allow-unsigned > /dev/null 2>&1 || ok=0 # part of this AppImage (0.65.0)
-    done
-    if [ \$ok = 1 ]; then
-        mkdir -p "\$(dirname "\$MARK")" && : > "\$MARK"
+    # one call installs every package of the folder (0.94.0): with a window (the logo, a progress bar and what is
+    # going on) when there is a display, else without; the marker is written when every package installed
+    if "\$BIN" --install-folder "\$HERE/usr/share/$APP_ID/full-addons" > /dev/null 2>&1; then # part of this AppImage (0.65.0)
+        [ -e "\$MARK" ] || { mkdir -p "\$(dirname "\$MARK")" && : > "\$MARK"; }
     fi
 fi
 exec "\$BIN" "\$@"

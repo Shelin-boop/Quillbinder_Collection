@@ -23,7 +23,7 @@ bool relaunchApplication();
 // Readable description of a package for the install window (HTML).
 QString describePackage(const addons::PackageInfo &info);
 
-// Help > Add-on Manager
+// Help > Add-ons and Updates > Add-on Manager
 class AddonManagerDialog : public QDialog
 {
     Q_OBJECT

@@ -754,7 +754,7 @@ int main(int argc, char **argv)
             const QString aText = QString::fromUtf8(readAll(aNotes));
             check(s1 == 0 && QFile::exists(aFiles + QStringLiteral("/check-official-2.1-android-source.tar.gz"))
                       && sourcesTxt.contains(QLatin1String("A runtime of the toolchain")) && sourcesTxt.contains(QLatin1String("Quillbinder for Android brings Qt"))
-                      && s2 == 0 && aText.contains(QLatin1String("Check Official 2.1 for Android")) && aText.contains(QLatin1String("File > Install Update or Add-on"))
+                      && s2 == 0 && aText.contains(QLatin1String("Check Official 2.1 for Android")) && aText.contains(QLatin1String("Help > Add-ons and Updates > Install Update or Add-on"))
                       && aText.contains(QStringLiteral("Quillbinder for Android %1 or later").arg(neededProgram())),
                   QStringLiteral("addon-entry.py sources/notes --android: the Android source archive, the toolchain's libraries and where Qt "
                                  "comes from in SOURCES.txt; the release text tells how to install on the tablet"),

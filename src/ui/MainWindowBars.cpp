@@ -239,7 +239,7 @@ void MainWindow::createMenus()
     QMenu *cmp = file->addMenu(tr("Compare and &Transfer"));
     cmp->setObjectName(QStringLiteral("compareMenu"));
     add(cmp, {"compareFile", "", "compareByChapter", "compareStepByStep"});
-    add(file, {"compile", "", "printSettings", "printPreview", "print", "", "showProjectFolder", "convertFile", "", "installPackage",
+    add(file, {"compile", "", "printSettings", "printPreview", "print", "", "showProjectFolder", "convertFile", "",
                "options", "", "quit"});
 
     // ---- Edit
@@ -258,12 +258,11 @@ void MainWindow::createMenus()
     QMenu *writing = edit->addMenu(icons::action(QStringLiteral("tools-wizard")), tr("&Writing Tools"));
     writing->setObjectName(QStringLiteral("writingToolsMenu"));
     fillWritingToolsMenu(writing);
-    add(edit, {"", "docLink", "objectLink", "hyperlink"});
 
     // ---- Insert
     QMenu *insert = mb->addMenu(tr("&Insert"));
     insert->setProperty("qbNeedsProject", true);
-    add(insert, {"image", "insertTable", "", "comment", "footnote", "annotation", "inlineFootnote", ""});
+    add(insert, {"image", "insertTable", "", "docLink", "objectLink", "hyperlink", "", "comment", "footnote", "annotation", "inlineFootnote", ""});
     menuAlias(insert, QStringLiteral("mediaTimestamp"), tr("Media &Timestamp"));
     insert->addSeparator();
     QMenu *autoNum = insert->addMenu(tr("Auto &Number"));
@@ -309,16 +308,13 @@ void MainWindow::createMenus()
     // ---- View
     QMenu *view = mb->addMenu(tr("&View"));
     add(view, {"viewText", "viewCork", "viewOutline", ""});
-    QMenu *layout = view->addMenu(tr("Editor &Layout"));
+    QMenu *layout = view->addMenu(tr("&Split Editor")); // 0.94.0: "Layout" is the name of the one menu below
     add(layout, {"noSplit", "splitH", "splitV"});
-    // 0.93.0: where the binder, the editor and the inspector sit, by the window's shape
-    QMenu *panes = view->addMenu(tr("La&yout"));
-    panes->setObjectName(QStringLiteral("paneLayoutMenu"));
-    panes->addSection(tr("Upright window"));
-    add(panes, {"layoutEditorMiddle", "layoutEditorBottom", "", "layoutBinderLeft", "layoutBinderRight"});
-    panes->addSection(tr("Wide window"));
-    add(panes, {"layoutOrderBEI", "layoutOrderBIE", "layoutOrderEBI", "layoutOrderEIB", "layoutOrderIBE", "layoutOrderIEB",
-                "", "layoutReset"});
+    // 0.93.0: where the binder, the editor and the inspector sit, by the window's shape. 0.94.0: also the saved layouts
+    // (before: Window > Layouts); filled by rebuildLayoutActions()
+    m_layoutMenu = view->addMenu(icons::action(QStringLiteral("view-split-left-right")), tr("La&yout"));
+    m_layoutMenu->setObjectName(QStringLiteral("paneLayoutMenu"));
+    rebuildLayoutActions(); // (the commands are in the menu before the list of commands is made; made again after the toolbars)
     add(view, {"", "showBinder", "showCollections", "showInspector", ""});
     QMenu *bars = view->addMenu(tr("Tool&bars"));
     // 0.91.0: the rows' switches, a switch per toolbar, the standard places
@@ -429,8 +425,7 @@ void MainWindow::createMenus()
         a[QStringLiteral("goSynopsis")]->setEnabled(item);
         a[QStringLiteral("goNotes")]->setEnabled(item);
     });
-    add(nav, {"", "focusBinder", ""});
-    createFontMenu(nav);
+    add(nav, {"", "focusBinder"});
 
     // ---- Project
     QMenu *proj = mb->addMenu(tr("&Project"));
@@ -558,6 +553,7 @@ void MainWindow::createMenus()
     QMenu *fontMenu = format->addMenu(icons::action(QStringLiteral("font")), tr("&Font"));
     add(fontMenu, {"showFonts", "", "bold", "italic", "underline", "strike", "superscript", "subscript", "", "fontBigger",
                    "fontSmaller", "", "textColor", "textColorAuto"});
+    createFontMenu(fontMenu); // 0.94.0: the commands for fonts that are not on the computer yet (before: Navigate > Fonts)
     QMenu *paraMenu = format->addMenu(tr("&Paragraph"));
     add(paraMenu, {"paragraph", "", "alignLeft", "alignCenter", "alignRight", "alignJustify", ""});
     QMenu *lineMenu = paraMenu->addMenu(tr("&Line Spacing"));
@@ -608,9 +604,6 @@ void MainWindow::createMenus()
     };
     fillThemes();
     connect(themes, &QMenu::aboutToShow, this, fillThemes);
-    m_layoutMenu = window->addMenu(icons::action(QStringLiteral("view-split-left-right")), tr("&Layouts"));
-    m_layoutMenu->setObjectName(QStringLiteral("layoutMenu"));
-    add(m_layoutMenu, {"layoutSave", "layoutManage"}); // rebuilt with the list of layouts
     const QList<QAction *> windowTools = toolActionsAt(QStringLiteral("window"));
     if (!windowTools.isEmpty()) {
         window->addSeparator();
@@ -647,9 +640,19 @@ void MainWindow::createMenus()
 
     // ---- Help
     QMenu *help = mb->addMenu(tr("&Help"));
-    add(help, {"manual", "quickStart", "welcome", "placeholders", "keyboardShortcuts", "", "addonManager", "pluginFolder",
-               "integrate", "thisComputer", "", "updateCheckAuto", "updateCheckNow", "", "mindMapHelp", "developerGuide", "", "systemInfo",
-               "crashReports", "reportProblem", "", "licenses", "about"});
+    // 0.94.0: one place per topic: the add-ons and the check for updates, the program's own files and the developer's
+    // help in submenus; Find Command searches all menus
+    add(help, {"findCommand", "", "manual", "quickStart", "welcome", "placeholders", "keyboardShortcuts", "", "mindMapHelp", ""});
+    QMenu *addons = help->addMenu(icons::action(QStringLiteral("preferences-plugin")), tr("&Add-ons and Updates"));
+    addons->setObjectName(QStringLiteral("addonsMenu"));
+    add(addons, {"addonManager", "installPackage", "", "updateCheckNow", "updateCheckAuto"});
+    add(help, {"integrate"});
+    connect(help, &QMenu::aboutToShow, this, &MainWindow::updateApplicationMenuAction);
+    updateApplicationMenuAction();
+    QMenu *trouble = help->addMenu(icons::action(QStringLiteral("dialog-information")), tr("&Troubleshooting and Development"));
+    trouble->setObjectName(QStringLiteral("troubleMenu"));
+    add(trouble, {"systemInfo", "thisComputer", "crashReports", "", "pluginFolder", "developerGuide"});
+    add(help, {"", "reportProblem", "", "licenses", "about"});
 
     // binder footer menus
     m_addMenu = new QMenu(this);
@@ -1366,8 +1369,26 @@ void MainWindow::rebuildLayoutActions()
     }
     m_layoutActions.clear();
     commands::removeDynamic(QStringLiteral("layout:"));
-    if (m_layoutMenu)
+    if (m_layoutMenu) {
         m_layoutMenu->clear();
+        // 0.93.0: where the binder, the editor and the inspector sit, by the window's shape
+        m_layoutMenu->addSection(tr("Upright window"));
+        for (const char *k : {"layoutEditorMiddle", "layoutEditorBottom", "", "layoutBinderLeft", "layoutBinderRight"}) {
+            if (!*k)
+                m_layoutMenu->addSeparator();
+            else
+                m_layoutMenu->addAction(a[QLatin1String(k)]);
+        }
+        m_layoutMenu->addSection(tr("Wide window"));
+        for (const char *k : {"layoutOrderBEI", "layoutOrderBIE", "layoutOrderEBI", "layoutOrderEIB", "layoutOrderIBE", "layoutOrderIEB",
+                              "", "layoutReset"}) {
+            if (!*k)
+                m_layoutMenu->addSeparator();
+            else
+                m_layoutMenu->addAction(a[QLatin1String(k)]);
+        }
+        m_layoutMenu->addSection(tr("Saved layouts")); // 0.94.0 (before: Window > Layouts)
+    }
     layouts::Kind last = layouts::Kind::BuiltIn;
     for (const layouts::Layout &l : layouts::available()) {
         auto *ac = new QAction(QString(l.name).replace(QLatin1Char('&'), QLatin1String("&&")), this);

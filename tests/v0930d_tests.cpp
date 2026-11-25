@@ -459,7 +459,11 @@ static void menuChecks(MainWindow &w)
                 check(a->isEnabled(), QStringLiteral("%1 is enabled (both groups always available)").arg(a->objectName()));
             }
         }
-        check(sections == 2 && names.size() == 11, QStringLiteral("two groups, eleven commands"), names.join(QLatin1Char(' ')));
+        // 0.94.0: View > Layout also holds the saved layouts (before: Window > Layouts) after the two groups
+        check(sections == 3 && names.size() >= 13 && names.mid(0, 11).join(QLatin1Char(' ')).startsWith(QLatin1String("layoutEditorMiddle"))
+                  && !names.mid(0, 11).join(QLatin1Char(' ')).contains(QLatin1String("layout:"))
+                  && names.contains(QStringLiteral("layoutSave")) && names.contains(QStringLiteral("layoutManage")),
+              QStringLiteral("two groups, eleven commands, then the saved layouts"), names.join(QLatin1Char(' ')));
         shot(&w, QStringLiteral("window"));
     }
     // upright and wide at the sizes the writer named (736 px wide: a phone-sized tablet window)

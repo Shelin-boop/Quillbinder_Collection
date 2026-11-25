@@ -1,6 +1,6 @@
 #pragma once
 // Crash reports and the system snapshot in the window (0.19): Help > System
-// Information, Help > Crash Reports, the notice after an unexpected end, and the
+// Information, Help > Troubleshooting and Development > Crash Reports, the notice after an unexpected end, and the
 // recorder of recent actions for the reports (core/CrashGuard.h does the rest).
 #include "core/CrashGuard.h"
 

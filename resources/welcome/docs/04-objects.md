@@ -3,5 +3,5 @@
 - **+** makes a new object in the chosen category; the folder button makes a folder for sorting, for example "Villages".
 - **Window > Objects…** shows the same objects in a large window.
 - **Project > Object Templates and Colors…** changes the fields and colors and adds categories of your own: factions, ships, spells ...
-- In a text, **Edit > Link to Object…** links words to an object. The document below, "A Scene in Ashvale", has such links; open it, and the Objects tab of the inspector lists the objects that appear in it.
+- In a text, **Insert > Link to Object…** links words to an object. The document below, "A Scene in Ashvale", has such links; open it, and the Objects tab of the inspector lists the objects that appear in it.
 - **Compile** can add a sheet for each object as back matter.

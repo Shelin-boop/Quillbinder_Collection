@@ -281,7 +281,7 @@ void caseSA05()
     MainWindow *w = openWindow(fixtureCopy(QStringLiteral("fx1-qb")));
     if (!w->project())
         return;
-    // a planted crash report for Help > Crash Reports
+    // a planted crash report for Help > Troubleshooting and Development > Crash Reports
     QDir().mkpath(crash::reportDir());
     writeText(crash::reportDir() + QStringLiteral("/crash-2026-11-09-10-00-00-1234.txt"), "Quillbinder crash report (planted by the system test)\nsignal 11\n");
     QStringList seen;

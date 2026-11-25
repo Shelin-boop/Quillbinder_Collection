@@ -1,5 +1,5 @@
 #pragma once
-// Navigate > Fonts (0.17): adding fonts without leaving the program.
+// Format > Font (0.17): adding fonts without leaving the program.
 //
 // Fonts are installed for the current user, as KDE's font manager does it for
 // "Personal" fonts: copied into ~/.local/share/fonts, which fontconfig reads at

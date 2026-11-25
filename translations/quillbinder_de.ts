@@ -300,6 +300,10 @@ Die Vornamen dieser Liste sind nicht in weiblich und männlich unterteilt.</tran
             <numerusform>Liste „%1“ mit %n Namen.</numerusform>
         </translation>
     </message>
+    <message>
+        <source>No name lists found. They come with the add-on “Name Generator” (Help &gt; Add-ons and Updates &gt; Add-on Manager).</source>
+        <translation>Keine Namenslisten gefunden. Sie gehören zur Erweiterung „Namensgenerator“ (Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung).</translation>
+    </message>
 </context>
 <context>
     <name>OptionsDialog</name>
@@ -3524,6 +3528,10 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
 %1</numerusform>
         </translation>
     </message>
+    <message>
+        <source>%1: Word 97–2003 files become text with the add-on “Word 97–2003 Import” (Help &gt; Add-ons and Updates &gt; Add-on Manager); the file was added as it is.</source>
+        <translation>%1: Word-97–2003-Dateien werden mit der Erweiterung „Word 97–2003 Import“ (Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung) zu Text; die Datei wurde unverändert hinzugefügt.</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>
@@ -4807,6 +4815,10 @@ Verschieben Sie den ganzen Quillbinder-Ordner an einen eigenen Ort, zum Beispiel
     <message>
         <source>: starts with the first audio or video file.</source>
         <translation>: beginnt mit der ersten Audio- oder Videodatei.</translation>
+    </message>
+    <message>
+        <source>Playing audio and video inside the program needs the add-on &quot;Media Playback&quot; (Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager).</source>
+        <translation>Das Abspielen von Audio und Video im Programm braucht die Erweiterung „Media Playback“ (Hilfe &gt; Erweiterungen und Updates &gt; Programmaktualisierung oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung).</translation>
     </message>
 </context>
 <context>
@@ -6335,6 +6347,14 @@ Dies kann nicht als Ganzes rückgängig gemacht werden.%3</translation>
         <source>When %1 ends because of an error, or does not respond for 30 seconds, it writes a report on this computer. Nothing is sent anywhere. To report the problem, copy the report into a message (or send the file). It names files, folders and the commands used before the error, but holds no text of your documents. Names of files and folders (and project titles) can contain personal names: look the report over before you send it.</source>
         <translation>Wenn %1 wegen eines Fehlers endet oder 30 Sekunden lang nicht reagiert, schreibt es einen Bericht auf diesem Computer. Nichts wird irgendwohin gesendet. Um das Problem zu melden, kopieren Sie den Bericht in eine Nachricht (oder senden Sie die Datei). Er nennt Dateien, Ordner und die Befehle, die vor dem Fehler verwendet wurden, enthält aber keinen Text Ihrer Dokumente. Namen von Dateien und Ordnern (und Projekttitel) können Personennamen enthalten: Sehen Sie den Bericht durch, bevor Sie ihn senden.</translation>
     </message>
+    <message>
+        <source>A freeze report was saved on this computer. It shows where the program was stuck: Help &gt; Troubleshooting and Development &gt; Crash Reports shows it, and you can copy it from there into a message. It holds no text of your documents.</source>
+        <translation>Ein Hängerbericht wurde auf diesem Computer gespeichert. Er zeigt, wo das Programm hängen blieb: Unter Hilfe &gt; Fehlersuche und Entwicklung &gt; Absturzberichte können Sie ihn ansehen und von dort in eine Nachricht kopieren. Er enthält keinen Text Ihrer Dokumente.</translation>
+    </message>
+    <message>
+        <source>A crash report was saved on this computer. It helps to find the cause: Help &gt; Troubleshooting and Development &gt; Crash Reports shows it, and you can copy it from there into a message. It holds no text of your documents.</source>
+        <translation>Ein Absturzbericht wurde auf diesem Computer gespeichert. Er hilft, die Ursache zu finden: Unter Hilfe &gt; Fehlersuche und Entwicklung &gt; Absturzberichte können Sie ihn ansehen und von dort in eine Nachricht kopieren. Er enthält keinen Text Ihrer Dokumente.</translation>
+    </message>
 </context>
 <context>
     <name>qb::DefaultFormattingDialog</name>
@@ -7078,6 +7098,34 @@ In die Ordner von Windows und in die Registrierung wird nichts geschrieben, auß
     <message>
         <source>Before you start: where Quillbinder keeps its files on this computer and how your projects are backed up. OK keeps what is filled in; you can change all of it later in File &gt; Options (General &gt; This Computer, Backup) or with Help &gt; This Computer.</source>
         <translation>Bevor Sie beginnen: wo Quillbinder seine Dateien auf diesem Computer aufbewahrt und wie Ihre Projekte gesichert werden. OK übernimmt, was ausgefüllt ist; Sie können alles später unter Datei &gt; Einstellungen (Allgemein &gt; Dieser Computer, Sicherung) oder mit Hilfe &gt; Dieser Computer ändern.</translation>
+    </message>
+    <message>
+        <source>Application Menu</source>
+        <translation>Anwendungsmenü</translation>
+    </message>
+    <message>
+        <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them</source>
+        <translation>%1 zum Anwendungsmenü hinzufügen, damit Sie es wie jedes andere Programm starten und Projekte per Doppelklick öffnen können</translation>
+    </message>
+    <message>
+        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
+        <translation>AppImage nach %1 verschieben (eine verschobene Datei lässt sich nicht mehr aus dem Menü starten)</translation>
+    </message>
+    <message>
+        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later.</source>
+        <translation>Mit Hilfe &gt; Zum Anwendungsmenü hinzufügen oder Aus dem Anwendungsmenü entfernen ändern Sie das später.</translation>
+    </message>
+    <message>
+        <source>Check for Updates</source>
+        <translation>Nach Updates suchen</translation>
+    </message>
+    <message>
+        <source>Look for updates when the program starts</source>
+        <translation>Beim Programmstart nach Updates suchen</translation>
+    </message>
+    <message>
+        <source>%1 fetches one small file, at most once a day, and tells you when a newer version of the program or of an installed add-on is there. Nothing about you is sent. You can switch this off or on at any time with Help &gt; Add-ons and Updates &gt; Check for Updates at Startup.</source>
+        <translation>%1 ruft höchstens einmal am Tag eine kleine Datei ab und sagt Ihnen Bescheid, wenn es eine neuere Version des Programms oder einer installierten Erweiterung gibt. Über Sie wird nichts gesendet. Sie können das jederzeit mit Hilfe &gt; Erweiterungen und Updates &gt; Beim Start nach Updates suchen aus- oder einschalten.</translation>
     </message>
 </context>
 <context>
@@ -12794,6 +12842,96 @@ Die Schriften sind sofort nutzbar. Sie bleiben im Ordner des Programms: Andere P
         <source>The journal of an earlier save is in the way and could not be moved aside; nothing was written. The message below names the file.</source>
         <translation>Das Journal eines früheren Speicherns ist im Weg und ließ sich nicht beiseite legen; es wurde nichts geschrieben. Die Meldung unten nennt die Datei.</translation>
     </message>
+    <message>
+        <source>This project was saved by a newer version of %1. It uses things that version %2 does not know (it needs version %3 or later).
+
+If you work on it here, parts of it can be lost when it is saved. Better switch to the newer version first (Help &gt; Add-ons and Updates &gt; Add-on Manager), or work on a copy of the project.</source>
+        <translation>Dieses Projekt wurde von einer neueren Version von %1 gespeichert. Es verwendet Dinge, die Version %2 nicht kennt (es benötigt Version %3 oder neuer).
+
+Wenn Sie hier daran arbeiten, können beim Speichern Teile davon verloren gehen. Wechseln Sie besser zuerst zur neueren Version (Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung) oder arbeiten Sie an einer Kopie des Projekts.</translation>
+    </message>
+    <message>
+        <source>No font manager was found on this computer (KDE: System Settings &gt; Text &amp; Fonts &gt; Font Management; or the package “font-manager”).
+
+Fonts can be installed here with Format &gt; Font &gt; Install Font Files, or by copying them into:
+%1</source>
+        <translation>Auf diesem Computer wurde keine Schriftenverwaltung gefunden (KDE: Systemeinstellungen &gt; Text &amp; Schriften &gt; Schriftverwaltung; oder das Paket „font-manager“).
+
+Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren eingerichtet werden oder indem Sie sie in diesen Ordner kopieren:
+%1</translation>
+    </message>
+    <message>
+        <source>Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager switches add-ons on and off.</source>
+        <translation>Installieren Sie sie mit Hilfe &gt; Erweiterungen und Updates &gt; Aktualisierung oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung schaltet Erweiterungen ein und aus.</translation>
+    </message>
+    <message>
+        <source>&amp;Split Editor</source>
+        <translation>Editor &amp;teilen</translation>
+    </message>
+    <message>
+        <source>&amp;Add-ons and Updates</source>
+        <translation>&amp;Erweiterungen und Updates</translation>
+    </message>
+    <message>
+        <source>&amp;Troubleshooting and Development</source>
+        <translation>&amp;Fehlersuche und Entwicklung</translation>
+    </message>
+    <message>
+        <source>Find &amp;Command…</source>
+        <translation>&amp;Befehl suchen…</translation>
+    </message>
+    <message>
+        <source>Saved layouts</source>
+        <translation>Gespeicherte Layouts</translation>
+    </message>
+    <message>
+        <source>Remove from &amp;Application Menu</source>
+        <translation>Aus dem &amp;Anwendungsmenü entfernen</translation>
+    </message>
+    <message>
+        <source>Add to Application Menu</source>
+        <translation>Zum Anwendungsmenü hinzufügen</translation>
+    </message>
+    <message>
+        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
+        <translation>AppImage nach %1 verschieben (eine verschobene Datei lässt sich nicht mehr aus dem Menü starten)</translation>
+    </message>
+    <message>
+        <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them?</source>
+        <translation>%1 zum Anwendungsmenü hinzufügen, damit Sie es wie jedes andere Programm starten und Projekte per Doppelklick öffnen können?</translation>
+    </message>
+    <message>
+        <source>The menu entry could not be made.
+
+%1</source>
+        <translation>Der Menüeintrag konnte nicht angelegt werden.
+
+%1</translation>
+    </message>
+    <message>
+        <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove from Application Menu and then Add to Application Menu again.</source>
+        <translation>Die AppImage-Datei konnte nicht nach %1 verschoben werden (%2). Der Menüeintrag startet sie dort, wo sie ist; wenn Sie die Datei selbst verschieben, wählen Sie Hilfe &gt; Aus dem Anwendungsmenü entfernen und danach erneut Zum Anwendungsmenü hinzufügen.</translation>
+    </message>
+    <message>
+        <source>The program's icon could not be copied, so the menu entry shows no icon.</source>
+        <translation>Das Programmsymbol konnte nicht kopiert werden, der Menüeintrag zeigt daher kein Symbol.</translation>
+    </message>
+    <message>
+        <source>%1 is in the application menu now (%2).</source>
+        <translation>%1 ist jetzt im Anwendungsmenü (%2).</translation>
+    </message>
+    <message>
+        <source>%1 is no longer in the application menu.</source>
+        <translation>%1 ist nicht mehr im Anwendungsmenü.</translation>
+    </message>
+    <message>
+        <source>The menu entry could not be removed.
+
+%1</source>
+        <translation>Der Menüeintrag konnte nicht entfernt werden.
+
+%1</translation>
+    </message>
 </context>
 <context>
     <name>qb::ManageIconsDialog</name>
@@ -16591,6 +16729,18 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
         <source>Backups are ZIP files of the whole project folder. The backups of all projects are in this folder, each named after its project with the date and time. To restore one, use File &gt; Back Up &gt; Restore From Backup, or unpack it and open the project inside.</source>
         <translation>Sicherungen sind ZIP-Dateien des gesamten Projektordners. Die Sicherungen aller Projekte liegen in diesem Ordner, jede nach ihrem Projekt benannt, mit Datum und Uhrzeit. Zum Wiederherstellen verwenden Sie Datei &gt; Sichern &gt; Aus Sicherung wiederherstellen, oder Sie entpacken eine Sicherung und öffnen das darin enthaltene Projekt.</translation>
     </message>
+    <message>
+        <source>The Scratch Pad (Window &gt; Scratch Pad) comes with the add-on &quot;Scratch Pad&quot;; once it is installed (Help &gt; Add-ons and Updates &gt; Add-on Manager), its folder and the kind of new notes are set here.</source>
+        <translation>Der Notizblock (Fenster &gt; Notizblock) gehört zur Erweiterung „Notizblock“; sobald sie installiert ist (Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung), werden hier sein Ordner und die Art neuer Notizen festgelegt.</translation>
+    </message>
+    <message>
+        <source>Add-ons are installed with Help &gt; Add-ons and Updates &gt; Install Update or Add-on and switched on and off in Help &gt; Add-ons and Updates &gt; Add-on Manager.</source>
+        <translation>Erweiterungen werden mit Hilfe &gt; Erweiterungen und Updates &gt; Aktualisierung oder Erweiterung installieren installiert und unter Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung ein- und ausgeschaltet.</translation>
+    </message>
+    <message>
+        <source>Reports stay on this computer; Help &gt; Troubleshooting and Development &gt; Crash Reports shows them. Fewer reports to keep take effect at the next start.</source>
+        <translation>Berichte bleiben auf diesem Computer; Hilfe &gt; Fehlersuche und Entwicklung &gt; Absturzberichte zeigt sie an. Eine kleinere Anzahl zu behaltender Berichte gilt ab dem nächsten Start.</translation>
+    </message>
 </context>
 <context>
     <name>qb::Outliner</name>
@@ -20131,6 +20281,18 @@ Oder laden Sie die aktuelle Version von der Seite des Projekts herunter.</transl
         <source>%1 %2: the browser could not be opened. The file is %3</source>
         <translation>%1 %2: Der Browser konnte nicht geöffnet werden. Die Datei ist %3</translation>
     </message>
+    <message>
+        <source>%1 looks for updates when it starts. Nothing about you is sent.
+
+It fetches one small file, at most once a day, and tells you when a newer version of the program or of an installed add-on is there. You can switch this off or on at any time with Help &gt; Add-ons and Updates &gt; Check for Updates at Startup.</source>
+        <translation>%1 sucht beim Start nach Updates. Über Sie wird nichts gesendet.
+
+Es wird höchstens einmal am Tag eine kleine Datei abgerufen, und Sie erfahren, wenn es eine neuere Version des Programms oder einer installierten Erweiterung gibt. Sie können das jederzeit mit Hilfe &gt; Erweiterungen und Updates &gt; Beim Start nach Updates suchen aus- oder einschalten.</translation>
+    </message>
+    <message>
+        <source>You have delayed this four times. This is the last reminder: Delay now ends the reminders for this version. Help &gt; Add-ons and Updates &gt; Check for Updates Now still shows it.</source>
+        <translation>Sie haben dies viermal verschoben. Das ist die letzte Erinnerung: „Später“ beendet jetzt die Erinnerungen an diese Version. Hilfe &gt; Erweiterungen und Updates &gt; Jetzt nach Updates suchen zeigt sie weiterhin.</translation>
+    </message>
 </context>
 <context>
     <name>qb::addons</name>
@@ -21094,6 +21256,81 @@ Sie wird von hier aus nicht geöffnet. Wenn Sie ihr vertrauen, öffnen Sie sie s
     <message>
         <source>The page builds its text with a script: the text comes from the page&apos;s data.</source>
         <translation>Die Seite baut ihren Text mit einem Skript auf: Der Text stammt aus den Daten der Seite.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::CommandFinder</name>
+    <message>
+        <source>Find Command</source>
+        <translation>Befehl suchen</translation>
+    </message>
+    <message>
+        <source>Type part of a command's name or of its menu. Return or a double-click runs it.</source>
+        <translation>Geben Sie einen Teil des Befehlsnamens oder seines Menüs ein. Eingabetaste oder Doppelklick führt ihn aus.</translation>
+    </message>
+    <message>
+        <source>Command</source>
+        <translation>Befehl</translation>
+    </message>
+</context>
+<context>
+    <name>qb::FullInstallWindow</name>
+    <message>
+        <source>Installing %1 (%2 MB)...</source>
+        <translation>%1 werden installiert (%2 MB)...</translation>
+    </message>
+    <message>
+        <source>add-on</source>
+        <translation>Erweiterung</translation>
+    </message>
+    <message>
+        <source>add-ons</source>
+        <translation>Erweiterungen</translation>
+    </message>
+    <message>
+        <source>%1 of %2: %3</source>
+        <translation>%1 von %2: %3</translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation>Fertig</translation>
+    </message>
+</context>
+<context>
+    <name>qb::appmenu</name>
+    <message>
+        <source>The program does not run from an AppImage file.</source>
+        <translation>Das Programm läuft nicht aus einer AppImage-Datei.</translation>
+    </message>
+    <message>
+        <source>The folder %1 could not be made.</source>
+        <translation>Der Ordner %1 konnte nicht angelegt werden.</translation>
+    </message>
+    <message>
+        <source>There is a file with this name in %1 already.</source>
+        <translation>In %1 gibt es bereits eine Datei mit diesem Namen.</translation>
+    </message>
+    <message>
+        <source>The file could not be copied to %1.</source>
+        <translation>Die Datei konnte nicht nach %1 kopiert werden.</translation>
+    </message>
+    <message>
+        <source>The copy in %1 is not complete.</source>
+        <translation>Die Kopie in %1 ist nicht vollständig.</translation>
+    </message>
+    <message>
+        <source>The old file could not be removed after the copy.</source>
+        <translation>Die alte Datei konnte nach dem Kopieren nicht entfernt werden.</translation>
+    </message>
+    <message>
+        <source>The file %1 could not be written.</source>
+        <translation>Die Datei %1 konnte nicht geschrieben werden.</translation>
+    </message>
+    <message>
+        <source>These files could not be removed:
+%1</source>
+        <translation>Diese Dateien konnten nicht entfernt werden:
+%1</translation>
     </message>
 </context>
 </TS>

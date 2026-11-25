@@ -44,6 +44,38 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
   minutes without use (File > Options > Proofreading > Speed). Fixes: no alternatives that differ only in capitals,
   no "Spelling" line for words of the result, "number" is no longer read as "numb", and the hints in the empty fields
   wrap.
+- **One place per topic in the menus, and Find Command**. "Layout" stood in three menus; fonts under Navigate; the
+  add-on commands in File, Edit and Help; the link commands in Edit while images, tables and notes were in Insert.
+  Now **View > Layout** holds the positions of the binder, editor and inspector, the saved layouts, **Save Current
+  Layout...** and **Manage Layouts...** (Window > Layouts is gone); **View > Editor Layout** is **View > Split
+  Editor**; the font commands moved from Navigate > Fonts to **Format > Font**; **Link to Document...**, **Link to
+  Object...** and **Insert Web Link...** moved from Edit to **Insert**; **Help > Add-ons and Updates** holds the
+  Add-on Manager, Install Update or Add-on (out of File), Check for Updates Now and Check for Updates at Startup
+  (Edit > Writing Tools holds the tools only). **Help > Find Command...** opens a window with a search field and the
+  list of all menu commands with their menu and shortcut: typing narrows the list, Return or a double-click runs the
+  chosen command, and a command that is off is shown grayed and does not run. It has no shortcut (Ctrl+Shift+P is the
+  mind map's Page Setup). The commands keep their internal names, so saved shortcuts and toolbars are not affected.
+- **Help has 13 entries instead of 18**. **Open Plugin Folder**, **Developer Guide**, **Crash Reports**, **This
+  Computer** and **System Information** are in the submenu **Help > Troubleshooting and Development**.
+- **The first start is one page**. The window with the backup settings, the question about the application menu (Linux
+  AppImage), its confirmation box and the note about the check for updates are one page with one **OK**: the backups,
+  the application menu (with a line that **Help > Add to Application Menu** or **Remove from Application Menu**
+  changes it later) and the tick box for the check for updates. No box confirms the menu entry (a failure is still
+  told), and the welcome project opens without an empty main window showing first. On Linux, **Help > Add to
+  Application Menu** turns into **Remove from Application Menu** while the entry exists and takes away what adding made
+  (the entry file, the icon and the file types).
+- **The AppImage can move to ~/Applications with the menu entry** (Linux). Adding the entry, on the first-start page and
+  with the Help command, offers to move the AppImage to *~/Applications* (a check box, ticked at first when it is not
+  there yet), so that the entry points to a place where the file stays; before, an AppImage in Downloads that was moved
+  or deleted could not be started from the menu. After the move, program updates, the *.before-update* copy and System
+  Information use the new place at once. A move that fails (another file of that name, no room) loses nothing: the
+  file stays, the entry points there, and a message says why.
+- **The full AppImage shows its first start**. It unpacked its add-ons (13, about 159 MB) without any sign for 10 s or
+  more. Now a window with the program's logo, a progress bar and "Installing 13 add-ons (159 MB)..." shows during the
+  installation (one call of the program for the folder of packages, `quillbinder --install-folder <folder>`, instead
+  of one call per package; the marker file and its rules stay: once per version, a removed add-on stays removed, no
+  marker when a package fails). Without a display it runs without the window. The download page can name the space of
+  the add-ons beside the full version's button when the release gives the number (a file `full-addons-size`).
 
 ## 0.93.1 beta (2026-11-24)
 

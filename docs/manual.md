@@ -25,7 +25,7 @@ When {{APP}} starts without a project, the **start window** opens:
 
 {{APP}} reopens the last project when it starts (you can switch this off under **File > Options > General**).
 
-**The very first start** asks about backups in a small window, everything already filled in (**OK** keeps it): whether a project is backed up when it is closed, how many backups to keep and where. All of it can be changed later in **File > Options**; there, under **General > Startup**, is also the choice which settings come first, a project's own or always the program's (section 16, *Settings for one project*; since 0.81 no longer asked at the first start).
+**The very first start** shows one page with everything already filled in (**OK** keeps it): the backups (whether a project is backed up when it is closed, how many backups to keep and where), from a Linux AppImage the question whether to add {{APP}} to the application menu (and whether to move the AppImage to *~/Applications*), and the note about the check for updates with its switch. The welcome project opens when you press **OK**; no empty program window shows before it. All of it can be changed later in **File > Options**; there, under **General > Startup**, is also the choice which settings come first, a project's own or always the program's (section 16, *Settings for one project*; since 0.81 no longer asked at the first start).
 
 ### The welcome project and the Quick Start Guide
 
@@ -94,35 +94,37 @@ What others can see of your work:
 
 ### Adding {{APP}} to the application menu
 
-The first time you start the program file ({{APP}}.AppImage), {{APP}} offers to add itself to the application menu. After that you can start it like any other program, and double-clicking a project opens it. If you move the program file to another folder, choose **Help > Add to Application Menu** again.
+The first time you start the program file ({{APP}}.AppImage), the page of the first start offers to add {{APP}} to the application menu. After that you can start it like any other program, and double-clicking a project opens it. No box confirms the entry; a failure is told. The same page (and **Help > Add to Application Menu**) offers to **move the AppImage to ~/Applications** (ticked at first when the file is not there yet), so that the menu entry points to a place where the file stays; if the move fails (a full disk, a file of that name already there), nothing is lost: the file stays where it was, the entry points there, and a message says why. After a move, program updates, the *.before-update* copy and **Help > Troubleshooting and Development > System Information** use the new place at once.
+
+The Help menu's one command, **Help > Add to Application Menu**, follows the state of the entry: it adds the entry while there is none and, once there is one, is called *Remove from Application Menu* and takes away what adding made (the entry file, the icon and the file types) and leaves the AppImage where it is. If you move the program file yourself, remove the entry and add it again.
 
 ### On Windows: everything in one folder
 
-The Windows version of {{APP}} (experimental, published since 0.91.1) is a folder you unpack wherever you like, for example *C:\Users\<your name>\Quillbinder*; it needs no installation and no administrator rights. It keeps its settings, add-ons, program updates, installed fonts, and crash reports in the folder *data* inside that folder, and nothing in Windows' own folders or the registry. The whole folder can be moved or copied (to a USB stick or another computer); deleting it removes the program. A folder the program cannot write to (such as *Program Files*) is refused with a message that says where to put it instead. Program updates are installed with **File > Install Update or Add-on**; to move to a version you downloaded anew, unpack it and copy the folder *data* into the new folder. Your projects stay wherever you keep them.
+The Windows version of {{APP}} (experimental, published since 0.91.1) is a folder you unpack wherever you like, for example *C:\Users\<your name>\Quillbinder*; it needs no installation and no administrator rights. It keeps its settings, add-ons, program updates, installed fonts, and crash reports in the folder *data* inside that folder, and nothing in Windows' own folders or the registry. The whole folder can be moved or copied (to a USB stick or another computer); deleting it removes the program. A folder the program cannot write to (such as *Program Files*) is refused with a message that says where to put it instead. Program updates are installed with **Help > Add-ons and Updates > Install Update or Add-on**; to move to a version you downloaded anew, unpack it and copy the folder *data* into the new folder. Your projects stay wherever you keep them.
 
 There are two ways to get that folder (0.90.4). The **setup program** (*...-setup.exe*) asks for a folder and unpacks {{APP}} into it; it needs no administrator rights and changes nothing else on the computer: no entry under Apps, nothing in the registry, no Start menu entry (the guide described below offers those). Unpacking a newer version into the same folder keeps *data*, that is, your settings and add-ons. The **zip file** holds the same folder: unpack it completely. Windows may warn about either file because it is not signed (SmartScreen: *More info*, then *Run anyway*).
 
 Two things differ from Linux because of Windows itself (0.90.4). The **AltGr** key types its character, as you expect: on a German keyboard AltGr+7, 8, 9, 0 and < give { [ ] } and |, although {{APP}} has commands on Ctrl+Alt with these keys; press the left Ctrl and Alt keys for the commands. And files that are needed only for a moment (a saved web page unpacked for viewing, or its copy for the browser) are kept in Windows' temporary folder and removed when {{APP}} closes. Speech Transcription uses the processor on Windows, not the graphics card.
 
-At the first start a guide says where the program keeps its files and warns when its folder lies inside a sync service's folder (OneDrive, Dropbox, Google Drive ...) or has a long path. It also asks for these, which **Help > This Computer** and **File > Options > General > This Computer** show again:
+At the first start a guide says where the program keeps its files and warns when its folder lies inside a sync service's folder (OneDrive, Dropbox, Google Drive ...) or has a long path. It also asks for these, which **Help > Troubleshooting and Development > This Computer** and **File > Options > General > This Computer** show again:
 
 - **Backups**: there is no standard backup folder. Until you choose one, no automatic backup is made; the footer bar of the first editor shows **No backups** beside the save text (click it to choose the folder), and the first backup that would run asks for a folder. Best is another drive.
 - **Scratch Pad notes and transcriptions**: in Documents (the standard), in the program's folder, or in a folder of your own. A change gives both tools the new place; what they wrote before stays where it is.
 - **Windows**: an entry in the Start menu, a shortcut on the desktop, and the project file types (*.qbx* files open with {{APP}}, and it is offered under **Open with** for Scrivener's *.scrivx* files). These are the only things the program puts outside its folder, each only when you add it, and each with **Remove**. Remove them before you delete or move the folder.
 
-Fonts installed with **Navigate > Fonts > Install Font Files** stay in the program's folder and are {{APP}}'s only; other programs do not see them.
+Fonts installed with **Format > Font > Install Font Files** stay in the program's folder and are {{APP}}'s only; other programs do not see them.
 
 The add-ons with program code have their own Windows versions (their file names end in *-windows*): **Media Playback** plays what Windows itself plays, **Extra Video and Audio Formats** adds FFmpeg, and **Speech Transcription** writes down speech on the processor (graphics cards are not used on Windows yet). **Translation and Proofreading** is part of the full version on Windows too (0.92.0). The add-ons without program code (themes, templates, compile formats) are the same files on every system.
 
 ### On Android tablets
 
-The Android version of {{APP}} (experimental, published since 0.91.3) is an app for tablets with Android 9 or later (64-bit ARM). It has the same windows as on a computer, made for fingers: a finger scrolls and taps, two fingers zoom, a finger that rests half a second on something opens its right-click menu (in a text, a tap on selected text does), and the toolbars fold into as many rows as the screen needs. Download the APK file on the tablet and open it; Android asks whether the browser or the Files app may install apps, which you allow for this install. A new version comes as a new APK and installs over the old one, keeping your settings and add-ons; **Help > Check for Updates Now** tells you when there is one and opens its download in the browser (newer add-ons are installed inside {{APP}}).
+The Android version of {{APP}} (experimental, published since 0.91.3) is an app for tablets with Android 9 or later (64-bit ARM). It has the same windows as on a computer, made for fingers: a finger scrolls and taps, two fingers zoom, a finger that rests half a second on something opens its right-click menu (in a text, a tap on selected text does), and the toolbars fold into as many rows as the screen needs. Download the APK file on the tablet and open it; Android asks whether the browser or the Files app may install apps, which you allow for this install. A new version comes as a new APK and installs over the old one, keeping your settings and add-ons; **Help > Add-ons and Updates > Check for Updates Now** tells you when there is one and opens its download in the browser (newer add-ons are installed inside {{APP}}).
 
 With an external keyboard and mouse (since 0.92.0): Ctrl + mouse wheel zooms, and Ctrl + click or Shift + click chooses several documents, as on a computer. The line between two panes shows a grip; a mouse pressed a few pixels beside it takes it along. Android's **Back** closes the menu, the tip or the window in front; every window has a button that closes it, and a window larger than the screen scrolls. On a tablet the pin of the fixed mind map shows on the selected binder row (click it, or use the row's right-click menu: *Fix the Mind Map of This Item*, *Release the Fixed Mind Map*), and a tap on a row's padlock shows who works on it. A finger on the mind map's overview works as the mouse does: a tap moves the view there, a finger drags the rectangle of the part shown, and the grip in its corner changes its size. **File > Save As…** asks for the format first on a tablet, then opens the file window.
 
 At the first start {{APP}} asks for access to the tablet's files. With it, projects go to *Documents/Quillbinder*, backups to *Documents/Quillbinder/Backups*, exports to *Documents/Quillbinder/Exports* and Scratch Pad notes to *Documents/Quillbinder/Scratch Pad*, where other apps, a sync app, and a computer connected by cable can reach them; the button opens Android's page *All files access*, where you switch it on for {{APP}}. Without it, everything stays in the app's own folder, which no other app sees and which Android deletes with the app; *File > Files on This Tablet* asks again and says where things are. When Android puts the app away (the Home button, another app), {{APP}} saves at once.
 
-The spelling dictionaries (English and German), the writing tools, the importers of web pages and old Word files, and (since 0.92.0) Translation and Proofreading are part of the app; Translation and Proofreading is installed at the first start of a version and downloads a language model only when you choose one. Add-ons for Android (their file names end in *-android-arm64*) are installed with **File > Install Update or Add-on**; the file window opens in the Download folder, and {{APP}} starts again when the add-on needs it. Packages made for Linux or Windows and program updates are refused with the reason: the app itself is only updated by a new APK. Not in the Android version yet: Speech Transcription, audio and video in the editor, and crash reports. Text copied inside {{APP}} keeps its formatting when you paste it; Android's clipboard carries plain text only, so text copied to other apps arrives plain.
+The spelling dictionaries (English and German), the writing tools, the importers of web pages and old Word files, and (since 0.92.0) Translation and Proofreading are part of the app; Translation and Proofreading is installed at the first start of a version and downloads a language model only when you choose one. Add-ons for Android (their file names end in *-android-arm64*) are installed with **Help > Add-ons and Updates > Install Update or Add-on**; the file window opens in the Download folder, and {{APP}} starts again when the add-on needs it. Packages made for Linux or Windows and program updates are refused with the reason: the app itself is only updated by a new APK. Not in the Android version yet: Speech Transcription, audio and video in the editor, and crash reports. Text copied inside {{APP}} keeps its formatting when you paste it; Android's clipboard carries plain text only, so text copied to other apps arrives plain.
 
 ---
 
@@ -152,16 +154,18 @@ The **footer** of each editor shows the word and character count (select text to
 
 | Menu | What it holds |
 |------|---------------|
-| **File** | Projects, saving, the project format ({{APP}} or Scrivener), backups, import and export, compare and transfer with a Word or LibreOffice file, compile, printing, file conversion, updates and add-ons, options |
-| **Edit** | Undo, clipboard, selecting, finding and replacing (in the text, in the project, by formatting), moving documents in the binder, writing tools, links |
-| **Insert** | Images, comments, footnotes, media timestamps, auto numbers, placeholders, special characters, date and time |
-| **View** | The three view modes, the split editor, binder, collections and inspector, toolbars, text editing options (page view, ruler, typewriter scrolling), corkboard and outliner options, label colors, zoom, composition mode, full screen |
+| **File** | Projects, saving, the project format ({{APP}} or Scrivener), backups, import and export, compare and transfer with a Word or LibreOffice file, compile, printing, file conversion, options |
+| **Edit** | Undo, clipboard, selecting, finding and replacing (in the text, in the project, by formatting), moving documents in the binder, writing tools |
+| **Insert** | Images, tables, links to documents and objects, web links, comments, footnotes, media timestamps, auto numbers, placeholders, special characters, date and time |
+| **View** | The three view modes, the split editor (**Split Editor**), the places of binder, editor and inspector and the saved layouts (**Layout**), binder, collections and inspector, toolbars, text editing options (page view, ruler, typewriter scrolling), corkboard and outliner options, label colors, zoom, composition mode, full screen |
 | **Navigate** | Back and forward, previous and next document, opening documents in the other editor, in the copyholder, or as quick reference, the editor lock, which editor the binder loads into, the inspector tabs |
 | **Project** | New documents, project settings (also saved to and loaded from a file), targets, keywords, statistics, writing history, trash, deleting old snapshots |
 | **Documents** | Snapshots, renaming, duplicating, splitting, merging, converting, icon, label, status, bookmarks |
-| **Format** | Font, paragraph, style, lists, highlight, copying formatting, revision mode |
-| **Window** | Themes, layouts, scratch pad, quick reference windows |
-| **Help** | This manual, the Quick Start Guide, the welcome project, the help for mind maps, the list of all placeholders, the list of keyboard shortcuts, the Add-on Manager, the check for updates (the switch and "now"), the developer guide, adding {{APP}} to the application menu, system information and crash reports, the third-party licenses, About |
+| **Format** | Font (with installing fonts), paragraph, style, lists, highlight, copying formatting, revision mode |
+| **Window** | Themes, scratch pad, quick reference windows |
+| **Help** | **Find Command**, this manual, the Quick Start Guide, the welcome project, the list of all placeholders, the list of keyboard shortcuts, the help for mind maps, the submenu **Add-ons and Updates** (Add-on Manager, Install Update or Add-on, the check for updates), adding {{APP}} to the application menu (and taking it away), the submenu **Troubleshooting and Development** (system information, This Computer, crash reports, Open Plugin Folder, the developer guide), Report a Problem, the third-party licenses, About |
+
+**Find Command** (**Help > Find Command…**) opens a window with a search field and the list of all commands of the menus, each with its menu and its shortcut. Type part of a name (several words narrow it down, in any order); **Return** or a double-click runs the chosen command. A command that is off at the moment is grayed and does not run. It has no shortcut of its own.
 
 A submenu shows short names: **File > Import > Files**, **Documents > Split > at Selection**, **Navigate > Open > as Quick Reference**. The shortcut of a command is shown next to it and can be changed (section 19). Every entry of a menu has a letter of its own (underlined when you hold **Alt**), so **Alt** and the letters reach every command.
 
@@ -173,7 +177,7 @@ The window arranges the binder, the editor, and the inspector by its shape, and 
 
 - **Wide window** (wider than tall, or square): three columns. Choose their order under **View > Layout > Wide window**: any of the six orders of binder, editor, and inspector. The widths are set by the lines between the columns.
 - **Upright window** (taller than wide): two rows below the toolbars. One row is the editor, in the full width of the window; the other holds the binder and the inspector beside each other. Under **View > Layout > Upright window**, **Editor in the Middle** puts the editor's row above the other one, **Editor at the Bottom** below it; **Binder Left** and **Binder Right** choose the side of the binder (the inspector takes the other). The heights of the two rows and the widths of the binder and the inspector are set by the lines between them. With the on-screen keyboard showing (Android), the row of the binder and the inspector keeps its height; move the line if you want it different.
-- A hidden binder or inspector leaves its room to the other one in the upright row, at full width; with both hidden, the editor has the whole window. Two editors (**View > Editor Layout**) stay inside the editor's place.
+- A hidden binder or inspector leaves its room to the other one in the upright row, at full width; with both hidden, the editor has the whole window. Two editors (**View > Split Editor**) stay inside the editor's place.
 - **View > Layout > Reset Layout** puts the shape the window has now back to its start values: binder, editor, inspector in a wide window; the editor in the middle and the binder left in an upright one.
 
 Both groups are always in the menu; each takes effect when the window has that shape, and each shape comes back as you left it (places and sizes). The choices belong to this computer or tablet and are kept in the program's settings, never in a project: a project that you share between computers keeps each device's arrangement, and nothing about it is written into the project's files.
@@ -182,7 +186,7 @@ Both groups are always in the menu; each takes effect when the window has that s
 
 A layout remembers how the window is arranged: whether binder, collections, inspector, toolbar, and format bar are shown, how wide the columns are, how the editor is split, which view each editor uses, and which editor the binder loads into. It says nothing about documents, so every layout works in every project.
 
-Choose a layout under **Window > Layouts** or from the **View** button of the toolbar. Seven layouts are built in:
+Choose a layout under **View > Layout** or from the **View** button of the toolbar. Seven layouts are built in:
 
 | Layout | Arrangement |
 |--------|-------------|
@@ -194,7 +198,7 @@ Choose a layout under **Window > Layouts** or from the **View** button of the to
 | **Two Editors** | Two texts side by side |
 | **Planning** | Binder, corkboard, and the inspector with synopsis and notes |
 
-**Window > Layouts > Save Current Layout** stores the window as it is now under a name of your choice; tick "Also remember the size of the window" if the layout should resize the window. **Manage Layouts** shows all layouts with a small picture and lets you use, update (replace with the current window), rename, delete, export, and import your own layouts. Built-in layouts cannot be changed; save a changed window under a new name instead. Every layout can have a keyboard shortcut (section 19, group "Layouts").
+**View > Layout > Save Current Layout** stores the window as it is now under a name of your choice; tick "Also remember the size of the window" if the layout should resize the window. **Manage Layouts** shows all layouts with a small picture and lets you use, update (replace with the current window), rename, delete, export, and import your own layouts. Built-in layouts cannot be changed; save a changed window under a new name instead. Every layout can have a keyboard shortcut (section 19, group "Layouts").
 
 ### The toolbars and their places
 
@@ -349,7 +353,7 @@ Choosing the project's own font or size is stored as "no font of its own": such 
 
 **Fonts with several designs.** Some fonts keep several designs of one typeface under one name: Sitka of Windows 11, for example, holds the optical sizes Small, Text, Subheading, Heading, Display, and Banner (each drawn for its own range of sizes, the larger ones narrower and with smaller lowercase letters), and some fonts hold condensed or wide versions in the same way. {{APP}} lists each design as a font of its own (for example **Sitka Small**, **Sitka Text**, **Sitka Banner**), with only that design's typefaces, so that bold and italic stay within the design you chose; before 0.40.1, bold text could come out in another design and look smaller and narrower. The font files are not changed. The font with the original name keeps its own design, so text set in it earlier keeps its look.
 
-**Installing fonts.** **Navigate > Fonts** has the commands for fonts that are not on your computer yet:
+**Installing fonts.** **Format > Font** has the commands for fonts that are not on your computer yet:
 
 - **Install Font Files…**: choose font files (TTF, OTF, TTC, PFB, WOFF, or a ZIP file that holds them). They are copied into your own font folder (*~/.local/share/fonts*), and the font lists of {{APP}} know them at once; other programs see them after their next start. No password is needed, and the fonts are for your user only.
 - **Open Font Folder**: opens that folder in the file manager; fonts you put there yourself are found after **Reload Font List**.
@@ -460,8 +464,8 @@ A click on commented text opens the inspector with that comment. **Alt+click** o
 ### Images and links
 
 - **Insert > Image From File…** puts a picture into the text; you can also drag a picture into the text or paste one. Right-click the picture and choose **Image Size…** to change how large it appears.
-- **Edit > Link to Document…** (**Ctrl+L**) links the selected text to another document in the project. Clicking the link opens that document (in the other editor, the same editor, its copyholder, or a Quick Reference panel; see **File > Options > Behaviors**).
-- **Edit > Insert Web Link…** links to a web page.
+- **Insert > Link to Document…** (**Ctrl+L**) links the selected text to another document in the project. Clicking the link opens that document (in the other editor, the same editor, its copyholder, or a Quick Reference panel; see **File > Options > Behaviors**).
+- **Insert > Insert Web Link…** links to a web page.
 - Web and mail links (*http*, *https*, *mailto*) open at once. Any other target of a link, in a text, a mind map, a bookmark or an imported web page (a file, a folder, a network address, another program's kind of link), is shown in full first and opened only when you click **Open**; such links can come with a project, a web page or a Word file of someone else. For a file or folder on your computer the question names its kind (for example "plain text document (.txt)"), its whole name and its folder; a long name wraps, so its ending can be read, and a file that is not there is said to be missing. Links to programs, scripts, shortcuts and installers are never opened; open those yourself from your file manager if you trust them.
 
 ### Tables
@@ -630,7 +634,7 @@ Dragging cards still reorders the documents: a card dropped between two cards yo
 
 ### Split editor
 
-Click the split button at the right of the editor header to show a second editor. Alt+click splits in the other direction. **View > Editor Layout** offers the same choices. **F6** jumps between the editors. Clicking in the binder shows the document in the editor you used last; **Navigate > Binder Selection Affects** changes that to the left or top editor, the right or bottom editor, or the other editor, whichever one you are writing in.
+Click the split button at the right of the editor header to show a second editor. Alt+click splits in the other direction. **View > Split Editor** offers the same choices. **F6** jumps between the editors. Clicking in the binder shows the document in the editor you used last; **Navigate > Binder Selection Affects** changes that to the left or top editor, the right or bottom editor, or the other editor, whichever one you are writing in.
 
 In a corkboard or outliner, the footer button **Selection affects the other editor** (also in **View > Corkboard Options** and **Outliner Options**) makes the other editor show the card you click. This is a quick way to browse scenes while keeping the chapter overview.
 
@@ -736,7 +740,7 @@ The commands act on the file you opened or used last (in either editor, a copyho
 
 **What plays.** The add-on *Media Playback* (2.0) plays formats that are free to use: MP3, Ogg Vorbis, Opus, FLAC, ALAC, WAV, AIFF and WavPack audio; WebM, MKV and Ogg video with VP8, VP9 or Theora pictures (also MJPEG and other free formats). The add-on brings everything it needs.
 
-**More formats.** H.264, H.265 (HEVC), AAC (M4A), AC-3, E-AC-3, DTS, MPEG-1/2/4 video, VC-1 and WMV, WMA and AMR are licensed under patents in some countries; they come with the separate add-on **Extra Video and Audio Formats**. The simplest way to get both is the one package **media-all-formats.qbpkg** on the Releases page: installed like every add-on (section 17), it installs *Media Playback* and *Extra Video and Audio Formats* together. Both then show in **Help > Add-on Manager**, where the extra formats can be switched off or removed on their own. Whether a patent license is needed to use these formats depends on the country. While it is installed and switched on, *Media Playback* uses it, and MP4/M4V/MOV, AVI, MPEG, WMV, FLV and 3GP files play as well (not WMA Pro and WMV 9). Without it, such a file shows a message under the player that names its formats and this add-on; everything else works as before. AV1 video does not play with the built-in decoding.
+**More formats.** H.264, H.265 (HEVC), AAC (M4A), AC-3, E-AC-3, DTS, MPEG-1/2/4 video, VC-1 and WMV, WMA and AMR are licensed under patents in some countries; they come with the separate add-on **Extra Video and Audio Formats**. The simplest way to get both is the one package **media-all-formats.qbpkg** on the Releases page: installed like every add-on (section 17), it installs *Media Playback* and *Extra Video and Audio Formats* together. Both then show in **Help > Add-ons and Updates > Add-on Manager**, where the extra formats can be switched off or removed on their own. Whether a patent license is needed to use these formats depends on the country. While it is installed and switched on, *Media Playback* uses it, and MP4/M4V/MOV, AVI, MPEG, WMV, FLV and 3GP files play as well (not WMA Pro and WMV 9). Without it, such a file shows a message under the player that names its formats and this add-on; everything else works as before. AV1 video does not play with the built-in decoding.
 
 Since 0.80.0 the player always decodes with its own FFmpeg: the Qt that {{APP}} uses since then (The Qt Company's own build of Qt 6.12) has no way to play through the **GStreamer** of the system, so **File > Options > Behaviors > Playback > Decoding** shows that choice as not available.
 
@@ -851,7 +855,7 @@ Click the **Objects** button of the inspector (right of the **Mind Map** button)
 
 **Color button.** The **Color** button of the stripe gives an object a color of its own (or back the category's color), for example to mark the main characters.
 
-**Links inside long texts.** In a long text field, select a word and choose **Link to Object…** (or **Link to Document…**) in its right-click menu; without a selection the name of the object is put in as a link. A click on the link follows it; **Remove Link** in the right-click menu takes it away again. In the text of a document, **Edit > Link to Object…** puts a link to an object into the text; a click on it shows the object in the inspector. When the manuscript is compiled, these links become ordinary words.
+**Links inside long texts.** In a long text field, select a word and choose **Link to Object…** (or **Link to Document…**) in its right-click menu; without a selection the name of the object is put in as a link. A click on the link follows it; **Remove Link** in the right-click menu takes it away again. In the text of a document, **Insert > Link to Object…** puts a link to an object into the text; a click on it shows the object in the inspector. When the manuscript is compiled, these links become ordinary words.
 
 **Going back and forth.** **‹** and **›** in the tab's bar go back and forward through the objects you looked at, like a web browser.
 
@@ -975,7 +979,7 @@ Formatting stays as it is: the new text takes over the formatting of the text it
 - **Project > Project Statistics**: words and characters in the Draft, in the compiled text, and in the whole project, plus an estimate of the page count. In a large project the counting takes a moment; the busy pointer shows it.
 - **Project > Writing History**: how many words you wrote on each day.
 
-The writing tools below are add-ons (section 17): **Name Generator**, **Scratch Pad** and **Text Statistics** (they came with update 0.11 as one package) and **Speech Transcription** (0.61); each can be switched off or removed in **Help > Add-on Manager**. Without them, **Edit > Writing Tools** says so and leads to the Add-on Manager.
+The writing tools below are add-ons (section 17): **Name Generator**, **Scratch Pad** and **Text Statistics** (they came with update 0.11 as one package) and **Speech Transcription** (0.61); each can be switched off or removed in **Help > Add-ons and Updates > Add-on Manager**. Without them, **Edit > Writing Tools** says so; the Add-on Manager is in the Help menu.
 
 ### Text Statistics
 
@@ -1405,7 +1409,7 @@ Since 0.70 the window opens for **All projects** (the program's settings); choos
 
 Other windows of the program can open the options at a page, for example the Playback page from the media player.
 
-Updates and add-ons have their own windows: **File > Install Update or Add-on…** and **Help > Add-on Manager…** (section 17).
+Updates and add-ons have their own windows: **Help > Add-ons and Updates > Install Update or Add-on…** and **Help > Add-ons and Updates > Add-on Manager…** (section 17).
 
 Project-specific settings (labels, status, section types, the look of the text, custom metadata, special folders, title and author for compiling) are under **Project > Project Settings**.
 
@@ -1485,7 +1489,7 @@ Links in your text are stored with one blue; on dark paper they are shown in a l
 
 ## 17. Updates and add-ons
 
-**Help > Developer Guide: Updates and Add-ons** explains, for people who build {{APP}} or write add-ons, how updates and add-ons work and which tools make them.
+**Help > Troubleshooting and Development > Developer Guide: Updates and Add-ons** explains, for people who build {{APP}} or write add-ons, how updates and add-ons work and which tools make them.
 
 {{APP}} is one program file (the AppImage). Updates and extensions come as small package files ending in **.qbpkg**. There are three kinds, and all are installed the same way:
 
@@ -1499,11 +1503,11 @@ Program updates and add-ons are on the **Releases** page of the project page (se
 
 Since 0.92.0 {{APP}} can look for updates itself. It is the only thing for which the program contacts the internet on its own, and you can switch it off.
 
-- **Help > Check for Updates at Startup** is the switch (on at first). **Help > Check for Updates Now** looks at once, whatever the switch says.
-- **The first start** shows a note before anything is contacted: *{{APP}} looks for updates when it starts. Nothing about you is sent.*, with **OK** and **Turn Off**.
+- **Help > Add-ons and Updates > Check for Updates at Startup** is the switch (on at first). **Help > Add-ons and Updates > Check for Updates Now** looks at once, whatever the switch says.
+- **The first start** tells it on its page, before anything is contacted: a tick box *Look for updates when the program starts* (ticked) with the note that nothing about you is sent; one **OK** ends the page. A program that was started before 0.94.0 and has not seen the note shows it as a box with **OK** and **Turn Off**.
 - **What happens**: a few seconds after the start, at most once a day, the program fetches one small file from the project's page (*shelin-boop.github.io/Quillbinder_Collection/updates-1.json*) and that file's signature. The request names the program ("{{APP}}") and nothing else: no version, no system, no identifier, no cookie. As with every connection, the server (GitHub) sees your internet address and the time. The file lists the newest version of the program and of the project's add-ons; your program compares that with what is installed, on your computer. The file counts only when it carries the signature of the project's release key, and a file older than one already seen is ignored.
 - **When there is an update**, a window names it: the program or the add-on, your version and the new one, what is new, and its kind. A **functional** update has three buttons: **Download and Install**, **Ignore This Version** (no more reminders for that version) and **Delay**. Delay waits longer each time: 1 day, 1 week, 2 weeks, 4 weeks; then there is one last reminder, and after it the reminders for that version end. A **recommended (security)** update has two buttons only, **Download and Install** and **Delay**: it cannot be ignored, and after the fourth delay it comes back every 4 weeks. When both kinds are there, one window lists them and follows the security rules. The window comes beside your work and does not take the keyboard.
-- **Download and Install** fetches the files the list names, checks each against the size and checksum in the signed list and installs it: an add-on or a program update like **File > Install Update or Add-on** does (only packages with the project's signature). Then it offers to start the program again.
+- **Download and Install** fetches the files the list names, checks each against the size and checksum in the signed list and installs it: an add-on or a program update like **Help > Add-ons and Updates > Install Update or Add-on** does (only packages with the project's signature). Then it offers to start the program again.
 - **When the new version needs a new AppImage** (other libraries than your AppImage has), {{APP}} downloads it, puts it in the place of the AppImage you started, wherever that is and under the same file name, keeps the one you had beside it as *…AppImage.before-update*, and starts again. Delete the kept file when the new version works for you. If the folder of your AppImage cannot be written, the new file goes into your Downloads folder and a message says what to do.
 - **On Windows** (0.92.0) such a version comes as its setup program. {{APP}} downloads it into its own folder (*data\update-setup*), checks it against the project's signed list, and asks. With **Close and Update Now** {{APP}} closes, and the setup program unpacks the new version into the folder you use, without its pages, and starts it; your settings, add-ons and everything else in *data* stay. With **Later** nothing changes and the update is offered again. If Windows does not start the setup program (it carries no code-signing certificate), a message names the file, and you can also download the current version from the project's page.
 - **When the address cannot be reached**, the program tries twice, 5 seconds apart, and then shows a small text in the footer bar of the first editor, in the place of the save text, that fades in and out twice. No window, and at most once a day. (**Check for Updates Now** answers with a message instead.)
@@ -1513,7 +1517,7 @@ Since 0.92.0 {{APP}} can look for updates itself. It is the only thing for which
 
 ### Installing a package
 
-1. Choose **File > Install Update or Add-on…** and select the .qbpkg file, or double-click the file in your file manager.
+1. Choose **Help > Add-ons and Updates > Install Update or Add-on…** and select the .qbpkg file, or double-click the file in your file manager.
 2. {{APP}} shows what the package contains and what is new. Click **Install**.
 3. If the package contains a program update, {{APP}} asks to restart. Your open project is saved and reopened.
 
@@ -1541,7 +1545,7 @@ The first command answers *Signature Verified Successfully*, the second *OK* for
 
 ### The Add-on Manager
 
-**Help > Add-on Manager…** shows what is installed.
+**Help > Add-ons and Updates > Add-on Manager…** shows what is installed.
 
 - **Program version**: the version built into your AppImage and every installed update. The one marked *running now* is in use. To go back to an earlier version, select it and click **Use This Version**, then restart. Installed updates you no longer need can be removed.
 - **Add-ons**: untick an add-on to switch it off without removing it; **Remove Add-on** deletes it. Themes, templates, and compile formats of an add-on appear in the usual places: **Window > Themes**, the **New Project** window, and the **Compile** window.
@@ -1559,7 +1563,7 @@ Program updates run on the libraries inside your AppImage. From time to time a l
 
 0.93.0 is another (Linux): its AppImage carries Qt 6.12.1, whose built-in libraries (zlib, HarfBuzz, PCRE2, libpng, libjpeg-turbo, FreeType and others) are newer and have safety fixes. A program update cannot bring them, so the check for updates offers the new AppImage. The add-ons with program code of the earlier AppImage (the ones listed above) are installed again in their versions for 0.93.0 in the same way, and the media add-ons now carry FFmpeg 9.1.
 
-A new AppImage also brings a new program version of its own (for example the AppImage 0.20.0). It starts that version, even if you installed updates into the old AppImage before: older updates are switched off and stay listed under **Help > Add-on Manager…**, where you can remove them. If the new file has another name or lies in another folder than the old one, choose **Help > Add to Application Menu** once, so that the menu entry and double-clicked projects use the new file.
+A new AppImage also brings a new program version of its own (for example the AppImage 0.20.0). It starts that version, even if you installed updates into the old AppImage before: older updates are switched off and stay listed under **Help > Add-ons and Updates > Add-on Manager…**, where you can remove them. If the new file has another name or lies in another folder than the old one, choose **Help > Add to Application Menu** once, so that the menu entry and double-clicked projects use the new file.
 
 ---
 
@@ -1766,9 +1770,9 @@ A project in Scrivener format has a working copy of this kind in a folder of its
 
 If {{APP}} ends because of an error, it writes a **crash report** on your computer before it closes. If its window does not respond for 30 seconds (it hangs; the time is set under **File > Options > Extras > Crash Reports**), it writes a **freeze report** that shows where it is stuck; if it recovers, the report says after how long. Nothing is sent anywhere. The next time you start {{APP}} after a crash, or after you had to end a frozen {{APP}}, a message tells you what happened. If it ended within a minute of starting, the message offers **Start Without the Last Project**, in case the project is the cause.
 
-- **Help > Crash Reports…** lists the crash and freeze reports with their date and kind of error ("freeze (recovered)" when {{APP}} went on working). **Copy to Clipboard** copies the selected one, so you can paste it into a message to whoever looks after {{APP}} for you; **Open Folder** shows the files; **Delete** and **Delete All…** remove them. The newest 20 reports are kept (**File > Options > Extras > Crash Reports** changes the number).
+- **Help > Troubleshooting and Development > Crash Reports…** lists the crash and freeze reports with their date and kind of error ("freeze (recovered)" when {{APP}} went on working). **Copy to Clipboard** copies the selected one, so you can paste it into a message to whoever looks after {{APP}} for you; **Open Folder** shows the files; **Delete** and **Delete All…** remove them. The newest 20 reports are kept (**File > Options > Extras > Crash Reports** changes the number).
 - **File > Options > General > Warnings > Show Internal Log Console** shows the messages of the program and of Qt since it was started (the last 1000), with new ones as they come; useful when something does not work and no message says why.
-- **Help > System Information…** shows the same snapshot of the program and the computer that a report carries. It starts with **Things to look at**: what may cause trouble soon, such as a nearly full or read-only drive, a project on a network folder, a backup drive with less free space than the project needs, little free memory, a long automatic-save time, automatic backups switched off, or recent crash and freeze reports. Then come the program version, the runtime (the set of libraries inside the AppImage, with the release day of its Qt and how old it is: an old runtime means a newer AppImage may bring security fixes) and installed updates and add-ons, the operating system, desktop, screens (since 0.93.1 with the area a window can use on each), the input devices (keyboard, mouse, touch screen, pen) and whether the on-screen keyboard is shown (0.93.1), processor and memory, the folders with their free space, the settings for saving and backups, and the open project. Use **Copy to Clipboard** or **Save As…** when you report a problem that is not a crash.
+- **Help > Troubleshooting and Development > System Information…** shows the same snapshot of the program and the computer that a report carries. It starts with **Things to look at**: what may cause trouble soon, such as a nearly full or read-only drive, a project on a network folder, a backup drive with less free space than the project needs, little free memory, a long automatic-save time, automatic backups switched off, or recent crash and freeze reports. Then come the program version, the runtime (the set of libraries inside the AppImage, with the release day of its Qt and how old it is: an old runtime means a newer AppImage may bring security fixes) and installed updates and add-ons, the operating system, desktop, screens (since 0.93.1 with the area a window can use on each), the input devices (keyboard, mouse, touch screen, pen) and whether the on-screen keyboard is shown (0.93.1), processor and memory, the folders with their free space, the settings for saving and backups, and the open project. Use **Copy to Clipboard** or **Save As…** when you report a problem that is not a crash.
 
 A report names files, folders and documents, and the commands and keys used shortly before the error (typed letters are only counted, never recorded). It holds no text of your documents. Your home folder is written as **~**.
 
@@ -1800,15 +1804,15 @@ If {{APP}} was stopped from outside or the computer was switched off without clo
 
 **Alt+drag does not open a copyholder.** Some desktops use Alt+drag for something of their own, such as moving windows. Use **Navigate > Open > in Copyholder** or the right-click menu of the document instead, or change the key in the desktop's window settings.
 
-**After going back to an older program version, a script is plain text without its layout.** Versions before 0.10 do not know script elements and save a script they have shown as ordinary text. Switch to the current version again (**Help > Add-on Manager**). The text is all there; to get the layout back, restore the document from a snapshot or a backup made before (sections 11 and 15), or give the paragraphs their elements again with the pop-up menu in the footer.
+**After going back to an older program version, a script is plain text without its layout.** Versions before 0.10 do not know script elements and save a script they have shown as ordinary text. Switch to the current version again (**Help > Add-ons and Updates > Add-on Manager**). The text is all there; to get the layout back, restore the document from a snapshot or a backup made before (sections 11 and 15), or give the paragraphs their elements again with the pop-up menu in the footer.
 
 **The scratch pad shortcut does nothing in other programs.** Shortcuts set in **File > Options > Keyboard** work only inside {{APP}}. For other programs, the desktop must start the command (section 10, *From every program*). If you move the AppImage, enter the command again (it names the AppImage's place).
 
 **The scratch pad's camera says it cannot read the screen.** Under Wayland only the desktop's own screenshot program may do that. Install *Spectacle* (`sudo apt install kde-spectacle`) and try again.
 
-**Edit > Writing Tools says "No writing tools installed".** The tools are add-ons: install the package of update 0.11 or switch them on in **Help > Add-on Manager**.
+**Edit > Writing Tools says "No writing tools installed".** The tools are add-ons: install the package of update 0.11 or switch them on in **Help > Add-ons and Updates > Add-on Manager**.
 
-**An audio or video file only offers "Open with Default Application".** Playing inside {{APP}} needs the add-on *Media Playback* (in the package of update 0.12); install it, or switch it on in **Help > Add-on Manager**. The line below the button says what is missing.
+**An audio or video file only offers "Open with Default Application".** Playing inside {{APP}} needs the add-on *Media Playback* (in the package of update 0.12); install it, or switch it on in **Help > Add-ons and Updates > Add-on Manager**. The line below the button says what is missing.
 
 **A video plays but there is no sound, or an audio file says "No sound output was found".** {{APP}} plays sound through the desktop's sound server (PipeWire or PulseAudio). Check that sound works in other programs and that the right output is chosen in the desktop's audio settings; {{APP}} follows a change of the output at once.
 
@@ -1816,7 +1820,7 @@ If {{APP}} was stopped from outside or the computer was switched off without clo
 
 **A file does not play, or plays without picture.** Some kinds are not part of the built-in decoding (AV1 video, WMA Pro, WMV 9). Open the file with another program (right-click the player: **Open with Default Application**), or convert it into another format.
 
-**A .doc file is added as a file, not as text.** The add-on **Word 97–2003 Import** is not installed or is switched off (**Help > Add-on Manager**); after installing it, restart {{APP}}. A message after the import names what the add-on left out. Word 6.0 and 95 files need LibreOffice (`sudo apt install libreoffice-writer`).
+**A .doc file is added as a file, not as text.** The add-on **Word 97–2003 Import** is not installed or is switched off (**Help > Add-ons and Updates > Add-on Manager**); after installing it, restart {{APP}}. A message after the import names what the add-on left out. Word 6.0 and 95 files need LibreOffice (`sudo apt install libreoffice-writer`).
 
 **A web page comes in empty or with the wrong part.** Untick **Only the article** in the Web Page window to take the whole page and delete what you do not need. Pages that need a login or are built entirely by scripts cannot be read without a browser: open the page in your browser, select the text, and drag it into the binder (it becomes a new document). "Secure web pages cannot be fetched" means OpenSSL 3 is missing (`sudo apt install libssl3`, part of every Ubuntu) or the add-on is damaged (install it again).
 
@@ -1830,7 +1834,7 @@ If {{APP}} was stopped from outside or the computer was switched off without clo
 
 **The menus Insert, Navigate, Project, Documents, and Format are gray.** No project is open. Open or create one (File menu).
 
-**Where to report a problem.** **Help > Report a Problem…** opens the project's issue page (https://github.com/Shelin-boop/Quillbinder_Collection/issues/new/choose) in your browser, with a form for a problem and one for a wish; you need a GitHub account, and you can write in English or German. Issues are public: do not attach your manuscript or your project; **Help > System Information…** (**Copy to Clipboard**) holds what a report needs about the program and the computer. A **security problem** is not reported there but privately, as described in *SECURITY.md* of the project (the repository's Security tab, **Report a vulnerability**).
+**Where to report a problem.** **Help > Report a Problem…** opens the project's issue page (https://github.com/Shelin-boop/Quillbinder_Collection/issues/new/choose) in your browser, with a form for a problem and one for a wish; you need a GitHub account, and you can write in English or German. Issues are public: do not attach your manuscript or your project; **Help > Troubleshooting and Development > System Information…** (**Copy to Clipboard**) holds what a report needs about the program and the computer. A **security problem** is not reported there but privately, as described in *SECURITY.md* of the project (the repository's Security tab, **Report a vulnerability**).
 
 **The table of contents of a Word file has no page numbers.** The page numbers are filled in by the word processor when it updates the field; update it there.
 

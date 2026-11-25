@@ -843,8 +843,8 @@ jobs:
             [ -n "$main_setup" ] && echo "| $main_setup | the program alone (setup program) |"
             [ -n "$full_zip" ] && echo "| $full_zip | the program with every add-on, as a folder to unpack |"
             [ -n "$main_zip" ] && echo "| $main_zip | the program alone, as a folder to unpack |"
-            [ -n "$update" ] && echo "| $update | for a Quillbinder for Windows you already have: the program update and every add-on in one package (File > Install Update or Add-on) |"
-            [ -n "$program" ] && echo "| $program | the program update alone (the check for updates takes it; File > Install Update or Add-on) |"
+            [ -n "$update" ] && echo "| $update | for a Quillbinder for Windows you already have: the program update and every add-on in one package (Help > Add-ons and Updates > Install Update or Add-on) |"
+            [ -n "$program" ] && echo "| $program | the program update alone (the check for updates takes it; Help > Add-ons and Updates > Install Update or Add-on) |"
             [ -f media-all-formats-windows.qbpkg ] && echo "| media-all-formats-windows.qbpkg | audio and video in the editor, every format, in one package |"
             for f in *.qbpkg; do
               case "$f" in "$update"|"$program"|media-all-formats-windows.qbpkg) ;; *) echo "| $f | an add-on on its own |" ;; esac

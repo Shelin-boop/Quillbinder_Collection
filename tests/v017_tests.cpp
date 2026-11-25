@@ -1,8 +1,8 @@
 // Scripted run for version 0.17: the binder (narrower steps, horizontal
-// scroll bar), Navigate > Fonts, the color buttons of the format bar, the
+// scroll bar), Format > Font, the color buttons of the format bar, the
 // icon set of Documents > Change Icon (label tint, Scrivener names, own
 // icons), the icon bar, comments and footnotes of a folder, the mind maps
-// (Scapple functions, file, Scrivener format) and Help > Developer Guide.
+// (Scapple functions, file, Scrivener format) and Help > Troubleshooting and Development > Developer Guide.
 // Saves screenshots into the folder given as first argument.
 // Exit code = number of failed checks.
 //
@@ -334,11 +334,12 @@ int main(int argc, char **argv)
 
     // ============================================================ 2. fonts
     {
-        QMenu *nav = menuBarMenu(w.menuBar(), QStringLiteral("Navigate"));
-        QMenu *fonts = nav ? subMenu(nav, QStringLiteral("Fonts")) : nullptr;
-        check(fonts && menuTexts(fonts) == QStringList({QStringLiteral("Install Font Files…"), QStringLiteral("Open Font Folder"),
-                                                         QStringLiteral("Open Font Manager of the Desktop"), QStringLiteral("Reload Font List")}),
-              QStringLiteral("Navigate > Fonts: Install Font Files, Open Font Folder, Open Font Manager, Reload Font List"),
+        QMenu *fmt = menuBarMenu(w.menuBar(), QStringLiteral("Format"));
+        QMenu *fonts = fmt ? subMenu(fmt, QStringLiteral("Font")) : nullptr;
+        const QStringList fontTexts = fonts ? menuTexts(fonts) : QStringList();
+        check(fonts && fontTexts.contains(QStringLiteral("Install Font Files…")) && fontTexts.contains(QStringLiteral("Open Font Folder"))
+                  && fontTexts.contains(QStringLiteral("Open Font Manager of the Desktop")) && fontTexts.contains(QStringLiteral("Reload Font List")),
+              QStringLiteral("Format > Font: Install Font Files, Open Font Folder, Open Font Manager, Reload Font List"),
               fonts ? menuTexts(fonts).join(QStringLiteral(" | ")) : QStringLiteral("no menu"));
         const QString src = someFontFile();
         if (src.isEmpty()) {
@@ -385,7 +386,7 @@ int main(int argc, char **argv)
             byKey(&w, QStringLiteral("installFonts"))->trigger();
             settle(300);
             check(QFile::exists(outDir + QStringLiteral("/v017-03-fonts-installed.png")),
-                  QStringLiteral("Fonts: Navigate > Fonts > Install Font Files asks for the files and reports what was installed"));
+                  QStringLiteral("Fonts: Format > Font > Install Font Files asks for the files and reports what was installed"));
             // no font manager on this machine: a message with the folder instead
             QString msg;
             withModal<QMessageBox>(300, [&](QMessageBox *mb) {
@@ -1331,11 +1332,12 @@ int main(int argc, char **argv)
         settle(300);
     }
 
-    // ============================================================ 8. Help > Developer Guide
+    // ============================================================ 8. Help > Troubleshooting and Development > Developer Guide
     {
         QMenu *help = menuBarMenu(w.menuBar(), QStringLiteral("Help"));
-        check(help && menuTexts(help).contains(QStringLiteral("Developer Guide: Updates and Add-ons")),
-              QStringLiteral("Help > Developer Guide: Updates and Add-ons"));
+        QMenu *trouble = help ? subMenu(help, QStringLiteral("Troubleshooting and Development")) : nullptr;
+        check(trouble && menuTexts(trouble).contains(QStringLiteral("Developer Guide: Updates and Add-ons")),
+              QStringLiteral("Help > Troubleshooting and Development > Developer Guide: Updates and Add-ons"));
         byKey(&w, QStringLiteral("developerGuide"))->trigger();
         settle(300);
         auto *tb = qApp->findChild<QTextBrowser *>(QStringLiteral("developerGuide"));

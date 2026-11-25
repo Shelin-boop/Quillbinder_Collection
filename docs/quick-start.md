@@ -28,7 +28,8 @@
 | Toolbars | **View > Toolbars > Customize Toolbars…** (or right-click a bar) |
 | The icon bar | **View > Toolbars > Icon Bar**; **Choose Icons for the Icon Bar…** |
 | Keyboard shortcuts | **File > Options > Keyboard** (search, press new keys, export and import); **Help > Keyboard Shortcuts…** lists them |
-| Window layouts | **Window > Layouts** (seven built in; save your own) |
+| Find a command in the menus | **Help > Find Command…** (type part of its name; Return runs it) |
+| Window layouts | **View > Layout** (seven built in; save your own) |
 | Autosave, recent projects, author information | **File > Options > General** |
 | Backups | **File > Options > Backup** (when, how many, where); **File > Back Up** makes one now |
 | Spelling and corrections while typing | **File > Options > Corrections** |
@@ -72,12 +73,12 @@
 - **The icon bar**: up to ten document icons, one click each. **Documents > Change Icon** also makes icons from text or from your own pictures.
 - **Zoom per part**: binder, editors, inspector parts, corkboard, outliner, and mind maps each keep their own zoom.
 - **Places kept**: every document opens where you left the cursor, also after reopening the project.
-- **Fonts**: **Navigate > Fonts > Install Font Files…** adds fonts without leaving the program.
-- **Safety**: autosave also while you type on, backups, a spare copy of the project file, crash and freeze reports (**Help > Crash Reports…**), and **Help > System Information…**.
+- **Fonts**: **Format > Font > Install Font Files…** adds fonts without leaving the program.
+- **Safety**: autosave also while you type on, backups, a spare copy of the project file, crash and freeze reports (**Help > Troubleshooting and Development > Crash Reports…**), and **Help > Troubleshooting and Development > System Information…**.
 
 ### Updates and add-ons
 
-The **full version** of the AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) has every add-on inside and installs them at its first start. Updates and extensions come as small package files (*.qbpkg*), on the Releases page of the project page (https://github.com/Shelin-boop/Quillbinder_Collection/releases) next to the AppImage. Install them with **File > Install Update or Add-on…** (or double-click the file). **Help > Add-on Manager…** switches add-ons on and off and goes back to an earlier program version if an update does not suit you. Add-ons include extra themes, project templates, compile formats, the Name Generator, the Scratch Pad, Text Statistics, audio and video playback (one package for the commonly used formats, *media-all-formats.qbpkg*; or *media-playback.qbpkg* for the free formats only), and the import of web pages and old Word files.
+The **full version** of the AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) has every add-on inside and installs them at its first start. Updates and extensions come as small package files (*.qbpkg*), on the Releases page of the project page (https://github.com/Shelin-boop/Quillbinder_Collection/releases) next to the AppImage. Install them with **Help > Add-ons and Updates > Install Update or Add-on…** (or double-click the file). **Help > Add-ons and Updates > Add-on Manager…** switches add-ons on and off and goes back to an earlier program version if an update does not suit you. Add-ons include extra themes, project templates, compile formats, the Name Generator, the Scratch Pad, Text Statistics, audio and video playback (one package for the commonly used formats, *media-all-formats.qbpkg*; or *media-playback.qbpkg* for the free formats only), and the import of web pages and old Word files.
 
 ---
 

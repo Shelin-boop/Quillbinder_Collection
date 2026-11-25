@@ -783,14 +783,33 @@ PackageInfo inspect(const QString &file)
     return inspect(f.readAll());
 }
 
-bool installBundled(const QString &dir, QStringList *log, QString *error)
+bool installBundledDue(const QString &dir, int *count, qint64 *bytes)
+{
+    const QFileInfoList packages = QDir(dir).entryInfoList({QStringLiteral("*.qbpkg")}, QDir::Files, QDir::Name);
+    const QString marker = dataDir() + QStringLiteral("/full-addons-installed-" QB_APP_VERSION);
+    qint64 total = 0;
+    for (const QFileInfo &fi : packages)
+        total += fi.size();
+    if (count)
+        *count = int(packages.size());
+    if (bytes)
+        *bytes = total;
+    return !packages.isEmpty() && !QFile::exists(marker);
+}
+
+bool installBundled(const QString &dir, QStringList *log, QString *error,
+                    const std::function<void(int, int, const QString &, qint64)> &progress)
 {
     const QFileInfoList packages = QDir(dir).entryInfoList({QStringLiteral("*.qbpkg")}, QDir::Files, QDir::Name);
     const QString marker = dataDir() + QStringLiteral("/full-addons-installed-" QB_APP_VERSION);
     if (packages.isEmpty() || QFile::exists(marker))
         return true;
     bool ok = true;
+    qint64 doneBytes = 0;
+    int done = 0;
     for (const QFileInfo &fi : packages) {
+        if (progress)
+            progress(done, int(packages.size()), fi.fileName(), doneBytes);
         QString err;
         bool restart = false;
         if (!install(fi.absoluteFilePath(), log, &err, &restart, Unsigned::AllowAll)) {
@@ -798,7 +817,11 @@ bool installBundled(const QString &dir, QStringList *log, QString *error)
             if (error)
                 *error += (error->isEmpty() ? QString() : QStringLiteral("\n")) + fi.fileName() + QStringLiteral(": ") + err;
         }
+        doneBytes += fi.size();
+        ++done;
     }
+    if (progress)
+        progress(done, int(packages.size()), QString(), doneBytes);
     if (ok) {
         QDir().mkpath(dataDir());
         QFile m(marker);

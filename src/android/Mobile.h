@@ -64,7 +64,7 @@ KeyboardState keyboardState(bool withSetting = false);
 void setKeyboardStateSource(std::function<KeyboardState()> source);
 // Brings QApplication::autoSipEnabled() in line with the keyboard: off while a physical keyboard is in use.
 void followKeyboard();
-// One line for Help > System Information ("physical keyboard in use (Android: keyboard qwerty, ...)").
+// One line for Help > Troubleshooting and Development > System Information ("physical keyboard in use (Android: keyboard qwerty, ...)").
 QString keyboardText(const KeyboardState &k);
 
 // Toolbars that fit the window's width (android/MobileBars.cpp). Call once for the main window, after it is shown.

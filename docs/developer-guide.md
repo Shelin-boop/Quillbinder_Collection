@@ -1,6 +1,6 @@
 # Developer Guide: Updates and Add-ons
 
-This guide is for people who build {{APP}} or write extensions for it. It explains how program updates and add-ons work, how they are made and checked, and which tools in the source tree do the work. Writers do not need it: they install packages with **File > Install Update or Add-on** (manual, section 17).
+This guide is for people who build {{APP}} or write extensions for it. It explains how program updates and add-ons work, how they are made and checked, and which tools in the source tree do the work. Writers do not need it: they install packages with **Help > Add-ons and Updates > Install Update or Add-on** (manual, section 17).
 
 This copy belongs to program version {{VERSION}}, runtime `{{RUNTIME}}`. The source tree has the same text in `docs/developer-guide.md`; what each version brought is in `docs/CHANGES.md`.
 
@@ -63,7 +63,7 @@ The AppImage cannot be changed, so the program built into it acts as a **loader*
 1. At start it reads `state.json`. If a newer program version is active and was built for the same runtime, it starts that binary in its place (`exec`), with the AppImage's libraries and plugins.
 2. Every such start is counted in `attempts`. The new version calls `launcher::confirmStart()` once its window is up, which sets the counter back to 0.
 3. After **two starts in a row** that did not get that far, the loader switches the update off and the built-in version runs again, with a message for the user. Nothing in the projects changes.
-4. **Help > Add-on Manager** lists every program version (`addons::coreVersions()`); the user can go back to an earlier one or remove one. `quillbinder --versions` prints the same list.
+4. **Help > Add-ons and Updates > Add-on Manager** lists every program version (`addons::coreVersions()`); the user can go back to an earlier one or remove one. `quillbinder --versions` prints the same list.
 
 ---
 
@@ -74,7 +74,7 @@ Installed add-ons live in `<data>/addons/<id>/`. They can be switched off (they 
 | Folder | Content | Used by |
 |--------|---------|---------|
 | `themes/*.json` | color themes | Window > Themes |
-| `layouts/*.json` | window layouts | Window > Layouts |
+| `layouts/*.json` | window layouts | View > Layout |
 | `scripts/*.json` | script formats | Format > Scriptwriting |
 | `templates/*.zip` | project templates | New Project |
 | `compile-formats/*.json` | compile formats | Compile |
@@ -91,7 +91,7 @@ An add-on folder in the source tree (`addons/<id>/`) holds `manifest.json` and `
 
 ## 6. Plugins
 
-Plugins are Qt plugins (`QPluginLoader`) found in `plugins/` folders: of the AppImage, of every enabled add-on, of `<data>/plugins` (**Help > Open Plugin Folder**) and of `QB_PLUGIN_PATH` (colon-separated, for developers; since 0.64.1 only in builds with the tests, `-DQB_TEST_SWITCHES=ON`). They talk to the program only through **interface headers of pure virtual classes**; nothing is linked against the program. A plugin built for another interface version is not loaded.
+Plugins are Qt plugins (`QPluginLoader`) found in `plugins/` folders: of the AppImage, of every enabled add-on, of `<data>/plugins` (**Help > Troubleshooting and Development > Open Plugin Folder**) and of `QB_PLUGIN_PATH` (colon-separated, for developers; since 0.64.1 only in builds with the tests, `-DQB_TEST_SWITCHES=ON`). They talk to the program only through **interface headers of pure virtual classes**; nothing is linked against the program. A plugin built for another interface version is not loaded.
 
 | Interface | Header | IID | Examples |
 |-----------|--------|-----|----------|
@@ -187,18 +187,18 @@ Example: a bundle of a program update and an add-on
 3. Build the update package (`packaging/linux/build-update.sh`).
 4. Run the end-to-end check with the real AppImage (`packaging/linux/e2e-appimage.sh`; the AppImage 0.40.0 alpha and earlier packages are on the branch `assets` of the repository; `packaging/linux/e2e-old-version.sh` checks that an older AppImage keeps the objects of a project).
 5. Commit on a branch, open a pull request, merge it; put the package on the branch `assets` as well.
-6. The user installs the package with **File > Install Update or Add-on**.
+6. The user installs the package with **Help > Add-ons and Updates > Install Update or Add-on**.
 7. A release (0.50): merge the version's pull request into `main`; a version on `main` that has no release yet (or a tag `v<version>-<label>` pushed from a computer, for example `v0.50.0-alpha`) starts `.github/workflows/release.yml`, which builds everything on GitHub in a clean Ubuntu 24.04, checks the AppImage, collects the third-party source code and publishes the release with the AppImage, the program update, the add-ons, the checksums and the list of source files; the source files go into the release "Third-party source code" (added once, never removed). Releases and tags cannot be made from a Claude Code session; the workflow makes both with GitHub's own token.
 
 ---
 
 ## 10. Reading a crash or freeze report
 
-Since 0.19 the program writes a report into `~/.local/share/Quillbinder/CrashReports` when it ends with a fatal signal (`crash-<unix time>-<pid>.txt`) or when its main thread does not answer for 30 s (`freeze-...`). The user copies it from **Help > Crash Reports**. The code is `src/core/CrashGuard.*` (signal handlers, watchdog, session markers) and `src/ui/CrashDialogs.*` (snapshot, dialogs, recorder of recent actions).
+Since 0.19 the program writes a report into `~/.local/share/Quillbinder/CrashReports` when it ends with a fatal signal (`crash-<unix time>-<pid>.txt`) or when its main thread does not answer for 30 s (`freeze-...`). The user copies it from **Help > Troubleshooting and Development > Crash Reports**. The code is `src/core/CrashGuard.*` (signal handlers, watchdog, session markers) and `src/ui/CrashDialogs.*` (snapshot, dialogs, recorder of recent actions).
 
-A report has these parts: the header (signal, version, process, time), **Program and system** (the text of Help > System Information, prepared before the crash, with "Things to look at" first), **Process** (memory, threads), **Recent actions** (commands, shortcuts, buttons, windows, keys; typing is only counted), **Recent warnings** (Qt messages), the **Backtrace** (crash) or **Where the main thread is** (freeze), and **Program files in memory**.
+A report has these parts: the header (signal, version, process, time), **Program and system** (the text of Help > Troubleshooting and Development > System Information, prepared before the crash, with "Things to look at" first), **Process** (memory, threads), **Recent actions** (commands, shortcuts, buttons, windows, keys; typing is only counted), **Recent warnings** (Qt messages), the **Backtrace** (crash) or **Where the main thread is** (freeze), and **Program files in memory**.
 
-Backtrace lines look like `quillbinder(_ZN2qb14TextColumnView4pageEPNS_10TextEditorEb+0x1e)[0x5621a16d853d]`. The program exports its symbols (`ENABLE_EXPORTS`), so most functions are named even in the stripped program of an update; Help > Crash Reports shows the names readable (`qb::TextColumnView::page(qb::TextEditor*, bool)`). A line without a name, such as `quillbinder(+0x55253d)`, is a static function: take the program file of that version with symbols (`dist/quillbinder-<version>-symbols.xz`, kept on the branch `assets` since 0.19; its build ID is the one in the report) and run
+Backtrace lines look like `quillbinder(_ZN2qb14TextColumnView4pageEPNS_10TextEditorEb+0x1e)[0x5621a16d853d]`. The program exports its symbols (`ENABLE_EXPORTS`), so most functions are named even in the stripped program of an update; Help > Troubleshooting and Development > Crash Reports shows the names readable (`qb::TextColumnView::page(qb::TextEditor*, bool)`). A line without a name, such as `quillbinder(+0x55253d)`, is a static function: take the program file of that version with symbols (`dist/quillbinder-<version>-symbols.xz`, kept on the branch `assets` since 0.19; its build ID is the one in the report) and run
 
     xz -dc quillbinder-0.19.0-symbols.xz > quillbinder-symbols
     addr2line -f -C -e quillbinder-symbols 0x55253d

@@ -4,6 +4,7 @@
 #include "compile/PluginManager.h"
 #include "core/SettingsLayer.h"
 #include "ui/FirstStartDialog.h"
+#include "ui/FullInstallWindow.h"
 #include "core/Addons.h"
 #include "core/CrashGuard.h"
 #include "core/Launcher.h"
@@ -80,6 +81,7 @@ int main(int argc, char **argv)
                         "  package.qbpkg      update or add-on to install\n"
                         "  --no-restore       do not reopen the last project\n"
                         "  --install <file>   install a package without opening a window\n"
+                        "  --install-folder <folder>  install the packages of a folder once per version (the full AppImage)\n"
                         "  --allow-unsigned   with --install: also a package not signed by the project\n"
                         "  --versions         list the installed program versions\n"
                         "  --tool <key>       run a command of a writing tool without the main window\n"
@@ -105,6 +107,11 @@ int main(int argc, char **argv)
             if (!ok)
                 std::fprintf(stderr, "%s\n", qPrintable(error));
             return ok ? 0 : 1;
+        }
+        if (a == "--install-folder" && i + 1 < argc) {
+            // 0.94.0: the full AppImage's start script: every package of a folder, once per version, with a window
+            qb::launcher::confirmStart();
+            return qb::runInstallFolder(argc, argv, QString::fromLocal8Bit(argv[i + 1]));
         }
         if (a == "--versions") {
             if (qEnvironmentVariableIsSet("QB_DEBUG_ENV")) // developer check: nothing of the loader leaks to child processes
@@ -301,7 +308,7 @@ int main(int argc, char **argv)
         if (!standalone) {
             const QString msg = host.toolFor(toolKey)
                 ? QStringLiteral("The command %1 needs the main window.").arg(toolKey)
-                : QStringLiteral("No writing tool with the command %1 is installed and switched on (Help > Add-on Manager).").arg(toolKey);
+                : QStringLiteral("No writing tool with the command %1 is installed and switched on (Help > Add-ons and Updates > Add-on Manager).").arg(toolKey);
             std::fprintf(stderr, "%s\n", qPrintable(msg));
             if (!QB_TEST_ENV_SET("QB_NO_DIALOGS"))
                 QMessageBox::warning(nullptr, QStringLiteral(QB_APP_NAME), msg);
@@ -391,7 +398,17 @@ int main(int argc, char **argv)
     const QList<qb::crash::PreviousEnd> previous = qb::crash::beginSession();
     // log out, shutdown or a kill command: save first, then end
     qb::crash::onTermination([&w] { w.saveForTermination(); });
-    w.show();
+    // 0.94.0: the first start shows its page and makes the welcome project without an empty main window behind or before
+    // them (the window comes when the project is open)
+    bool windowLater = false;
+#ifndef Q_OS_ANDROID
+    windowLater = parser.positionalArguments().isEmpty() && !QB_TEST_ENV_SET("QB_NO_DIALOGS")
+                  && (qb::FirstStartDialog::due()
+                      || (!qb::AppSettings::instance().welcomeShown && !QB_TEST_ENV_SET("QB_NO_WELCOME")
+                          && qb::AppSettings::instance().recentProjects.isEmpty()));
+#endif
+    if (!windowLater)
+        w.show();
 #ifdef Q_OS_ANDROID
     qb::mobile::installTouch();  // (again: before the filters the window made)
     qb::mobile::fitToolbars(&w); // toolbar rows that follow the screen's width (android/MobileBars.cpp)
@@ -430,9 +447,19 @@ int main(int argc, char **argv)
             qb::FirstStartDialog first(&w);
             first.exec();
             first.take();
+            // 0.94.0: the application menu and the check for updates were asked on the same page
+            if (first.hasUpdateQuestion() && w.updateChecker())
+                w.updateChecker()->firstStartAnswered(first.checkForUpdates());
+            if (first.hasMenuQuestion())
+                w.applyFirstStartMenuChoice(first.addToMenu(), first.moveAppImage());
+            else
+                w.offerDesktopIntegration();
+        } else {
+            w.offerDesktopIntegration();
         }
-        w.offerDesktopIntegration();
         if (!toInstall.isEmpty()) {
+            if (!w.isVisible())
+                w.show();
             w.installPackage(toInstall);
             if (w.isClosing())
                 return; // restarting to finish the installation
@@ -440,9 +467,13 @@ int main(int argc, char **argv)
         // The first start (also the first start of 0.40 after an older version) opens the
         // welcome project, unless a project file was given; the last project comes back next time.
         if (!(toOpen.isEmpty() || reopening) || !w.openWelcomeOnFirstStart()) {
+            if (!w.isVisible())
+                w.show();
             if (toOpen.isEmpty() || !w.openProject(toOpen))
                 w.showStartDialog(false);
         }
+        if (!w.isVisible())
+            w.show(); // (the welcome project is open)
         if (!w.project())
             w.close(); // start window cancelled: nothing to show
     });

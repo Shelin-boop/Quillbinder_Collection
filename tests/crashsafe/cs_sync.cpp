@@ -830,7 +830,7 @@ void caseSA06()
     QString err;
     const bool removed = addons::removeAddon(QStringLiteral("speech-transcription"), &err);
     fact(QStringLiteral("S-A06 the add-on removed while its tab is shown"), removed ? QStringLiteral("removed (restart pending)") : err);
-    menuPath(w, QStringLiteral("Window > Layouts > With speech tab"));
+    menuPath(w, QStringLiteral("View > Layout > With speech tab"));
     settle(400);
     checkCleanWindows(w);
     finishProject(w);

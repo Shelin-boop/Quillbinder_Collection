@@ -1128,7 +1128,7 @@ QList<BinderItem *> importFiles(Project *p, const QStringList &paths, BinderItem
         } else {
             if (isLegacyWordSuffix(fi.suffix()) && warnings)
                 warnings->append(QObject::tr("%1: Word 97–2003 files become text with the add-on “Word 97–2003 Import” "
-                                             "(Help > Add-on Manager); the file was added as it is.")
+                                             "(Help > Add-ons and Updates > Add-on Manager); the file was added as it is.")
                                      .arg(fi.fileName()));
             if (p->isInDraft(parent)) {
                 if (warnings)

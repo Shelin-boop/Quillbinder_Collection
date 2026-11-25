@@ -5,6 +5,8 @@
 #include "core/Backup.h"
 #include "core/Portable.h"
 #include "core/SettingsLayer.h"
+#include "core/UpdateCheck.h"
+#include "ui/AppMenuEntry.h"
 #include "ui/AppSettings.h"
 #include "ui/HintLabel.h"
 #include "ui/PortableSetup.h"
@@ -74,7 +76,7 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
                                    "folder \"data\" inside its own folder:\n%1\n\nNothing is written into Windows' own "
                                    "folders or the registry, unless you ask for it below. The whole folder can be moved or "
                                    "copied, to a USB stick or another computer, and deleting it removes the program. Program "
-                                   "updates are installed with File > Install Update or Add-on; to move to a version you "
+                                   "updates are installed with Help > Add-ons and Updates > Install Update or Add-on; to move to a version you "
                                    "downloaded anew, unpack it and copy the folder \"data\" into it. Your projects stay "
                                    "wherever you keep them.")
                                     .arg(PortableSetup::shownPath(folder)),
@@ -149,6 +151,53 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
     enable(m_backup->isChecked());
     v->addWidget(backups);
 
+    // 0.94.0: the application menu (the AppImage on Linux) and the check for updates, on this page too, so that the
+    // first start has one window and one OK
+    if (!again && appmenu::runsFromAppImage()) {
+        auto *menu = new QGroupBox(tr("Application Menu"), body);
+        auto *mv = new QVBoxLayout(menu);
+        m_menuAdd = new QCheckBox(tr("Add %1 to the application menu, so that you can start it like any other program and "
+                                     "open projects by double-clicking them")
+                                      .arg(QLatin1String(QB_APP_NAME)),
+                                  menu);
+        m_menuAdd->setObjectName(QStringLiteral("firstMenuAdd"));
+        m_menuAdd->setChecked(true);
+        mv->addWidget(m_menuAdd);
+        if (appmenu::canMove()) {
+            m_menuMove = new QCheckBox(tr("Move the AppImage to %1 (a moved file cannot be started from the menu)")
+                                           .arg(QDir::toNativeSeparators(appmenu::applicationsFolder())),
+                                       menu);
+            m_menuMove->setObjectName(QStringLiteral("firstMenuMove"));
+            m_menuMove->setChecked(true);
+            mv->addWidget(m_menuMove);
+            connect(m_menuAdd, &QCheckBox::toggled, m_menuMove, &QWidget::setEnabled);
+        }
+        auto *later = new QLabel(tr("Help > Add to Application Menu or Remove from Application Menu changes this later."), menu);
+        later->setObjectName(QStringLiteral("firstMenuHint"));
+        later->setWordWrap(true);
+        hintlabel::style(later);
+        mv->addWidget(later);
+        v->addWidget(menu);
+    }
+    if (!again && !qEnvironmentVariableIsSet("QB_NO_UPDATE_CHECK") && !updates::State::load().noteShown) {
+        auto *upd = new QGroupBox(tr("Check for Updates"), body);
+        auto *uv = new QVBoxLayout(upd);
+        m_updates = new QCheckBox(tr("Look for updates when the program starts"), upd);
+        m_updates->setObjectName(QStringLiteral("firstUpdates"));
+        m_updates->setChecked(true);
+        uv->addWidget(m_updates);
+        auto *note = new QLabel(tr("%1 fetches one small file, at most once a day, and tells you when a newer version of the "
+                                   "program or of an installed add-on is there. Nothing about you is sent. You can switch this "
+                                   "off or on at any time with Help > Add-ons and Updates > Check for Updates at Startup.")
+                                    .arg(QLatin1String(QB_APP_NAME)),
+                                upd);
+        note->setObjectName(QStringLiteral("firstUpdatesNote"));
+        note->setWordWrap(true);
+        hintlabel::style(note);
+        uv->addWidget(note);
+        v->addWidget(upd);
+    }
+
     if (portable) {
         m_setup = new PortableSetup(body);
         v->addWidget(m_setup);
@@ -189,6 +238,12 @@ void FirstStartDialog::take()
     s.save();
     markDone();
 }
+
+bool FirstStartDialog::addToMenu() const { return m_menuAdd && m_menuAdd->isChecked(); }
+
+bool FirstStartDialog::moveAppImage() const { return addToMenu() && m_menuMove && m_menuMove->isChecked(); }
+
+bool FirstStartDialog::checkForUpdates() const { return m_updates && m_updates->isChecked(); }
 
 bool FirstStartDialog::due()
 {

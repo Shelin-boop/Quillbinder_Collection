@@ -51,6 +51,7 @@
 #include "core/CrashGuard.h"
 #include "core/Launcher.h"
 #include "ui/AddonDialogs.h"
+#include "ui/AppMenuEntry.h"
 #include "ui/AppSettings.h"
 #include "ui/BinderPanel.h"
 #include "ui/BookmarkList.h"
@@ -113,6 +114,7 @@
 #include <QLabel>
 #include <QPropertyAnimation>
 #include <QSequentialAnimationGroup>
+#include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QTreeWidget>
 #include <QElapsedTimer>
@@ -1904,7 +1906,19 @@ void MainWindow::createActions()
         QDesktopServices::openUrl(QUrl::fromLocalFile(d));
     });
     QAction *integrate = act(QStringLiteral("integrate"), tr("Add to &Application Menu"));
-    connect(integrate, &QAction::triggered, this, [this] { integrateDesktop(false); });
+    connect(integrate, &QAction::triggered, this, [this] {
+        if (appmenu::hasEntry()) {
+            removeFromApplicationMenu();
+        } else if (appmenu::canMove()) {
+            askApplicationMenu(tr("Add to Application Menu"),
+                               tr("Add %1 to the application menu, so that you can start it like any other program and open "
+                                  "projects by double-clicking them?")
+                                   .arg(QLatin1String(QB_APP_NAME)),
+                               false);
+        } else {
+            addToApplicationMenu(false, false);
+        }
+    });
 #ifdef Q_OS_WIN
     // Linux desktop files mean nothing on Windows; the installer registers the program there (port, W4)
     integrate->setVisible(false);
@@ -2987,7 +3001,7 @@ bool MainWindow::openProject(const QString &path)
         QMessageBox box(QMessageBox::Warning, tr("Open Project"),
                         tr("This project was saved by a newer version of %1. It uses things that version %2 does not know "
                            "(it needs version %3 or later).\n\nIf you work on it here, parts of it can be lost when it is "
-                           "saved. Better switch to the newer version first (Help > Add-on Manager), or work on a copy of "
+                           "saved. Better switch to the newer version first (Help > Add-ons and Updates > Add-on Manager), or work on a copy of "
                            "the project.")
                             .arg(QStringLiteral(QB_APP_NAME), QStringLiteral(QB_APP_VERSION), needs),
                         QMessageBox::NoButton, this);
@@ -5070,11 +5084,13 @@ void MainWindow::showStartNotice()
         QMessageBox::warning(this, tr("Program Update"), notice);
 }
 
+// 0.94.0: the question about the application menu is part of the first start's page (FirstStartDialog); this is the
+// one for a program that was started before and has not answered it yet
 void MainWindow::offerDesktopIntegration()
 {
-    const QString appimage = qEnvironmentVariable("APPIMAGE");
-    if (appimage.isEmpty())
+    if (!appmenu::runsFromAppImage())
         return;
+    const QString appimage = appmenu::appImagePath();
     QSettings s;
     const QString done = s.value(QStringLiteral("app/integrated")).toString();
     if (done == appimage) {
@@ -5083,92 +5099,105 @@ void MainWindow::offerDesktopIntegration()
     }
     if (s.value(QStringLiteral("app/integrationDeclined")).toString() == appimage)
         return;
-    const auto r = QMessageBox::question(
-        this, tr("Application Menu"),
-        tr("Add %1 to the application menu so you can start it like any other program and open "
-           "projects by double-clicking them?\n\nYou can do this later with Help > Add to Application Menu.")
-            .arg(QLatin1String(QB_APP_NAME)),
-        QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-    if (r == QMessageBox::Yes)
-        integrateDesktop(false);
-    else
-        s.setValue(QStringLiteral("app/integrationDeclined"), appimage);
+    askApplicationMenu(tr("Application Menu"),
+                       tr("Add %1 to the application menu so you can start it like any other program and open "
+                          "projects by double-clicking them?\n\nYou can do this later with Help > Add to Application Menu.")
+                           .arg(QLatin1String(QB_APP_NAME)),
+                       true);
 }
 
-void MainWindow::integrateDesktop(bool quiet)
+// The question with the check box for the move to ~/Applications; yes: the entry is made.
+void MainWindow::askApplicationMenu(const QString &title, const QString &text, bool canDecline)
 {
-    const QString appimage = qEnvironmentVariable("APPIMAGE");
-    const QString exec = appimage.isEmpty() ? QCoreApplication::applicationFilePath() : appimage;
-    const QString data = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-    QDir().mkpath(data + QLatin1String("/applications"));
-    QDir().mkpath(data + QLatin1String("/icons/hicolor/scalable/apps"));
-    QDir().mkpath(data + QLatin1String("/mime/packages"));
-    const QString icon = data + QLatin1String("/icons/hicolor/scalable/apps/" QB_APP_ID ".svg");
-    QFile::remove(icon);
-    // 0.93.0: a failed copy is told below (the menu entry works without the icon)
-    const bool iconCopied = QFile::copy(QStringLiteral(":/app/quillbinder.svg"), icon);
-    QFile::setPermissions(icon, QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ReadOther | QFileDevice::ReadGroup);
-    // writing tools that run on their own (the scratch pad) become actions of the
-    // menu entry; the desktop can give them a shortcut that works in every program
-    QStringList actionIds;
-    QString actionSections;
+    QMessageBox box(QMessageBox::Question, title, text, QMessageBox::NoButton, this);
+    QCheckBox *move = nullptr;
+    if (appmenu::canMove()) {
+        move = new QCheckBox(tr("Move the AppImage to %1 (a moved file cannot be started from the menu)")
+                                 .arg(QDir::toNativeSeparators(appmenu::applicationsFolder())),
+                             &box);
+        move->setObjectName(QStringLiteral("moveAppImage"));
+        move->setChecked(true);
+        box.setCheckBox(move);
+    }
+    QPushButton *yes = box.addButton(tr("Add to Application Menu"), QMessageBox::AcceptRole);
+    box.addButton(canDecline ? tr("Not Now") : tr("Cancel"), QMessageBox::RejectRole);
+    box.setDefaultButton(yes);
+    box.exec();
+    if (box.clickedButton() == yes)
+        addToApplicationMenu(move && move->isChecked(), false);
+    else if (canDecline)
+        QSettings().setValue(QStringLiteral("app/integrationDeclined"), appmenu::appImagePath());
+}
+
+void MainWindow::applyFirstStartMenuChoice(bool add, bool moveAppImage)
+{
+    if (!appmenu::runsFromAppImage())
+        return;
+    if (add)
+        addToApplicationMenu(moveAppImage, true); // no box when it worked
+    else
+        QSettings().setValue(QStringLiteral("app/integrationDeclined"), appmenu::appImagePath());
+}
+
+void MainWindow::integrateDesktop(bool quiet) { addToApplicationMenu(false, quiet); }
+
+// Makes the entry (and moves the AppImage first when asked). A failure gets a message; success only a note in the
+// footer, none when quiet.
+void MainWindow::addToApplicationMenu(bool moveAppImage, bool quiet)
+{
+    QList<appmenu::ToolAction> tools;
+    // writing tools that run on their own (the scratch pad) become actions of the menu entry; the desktop can
+    // give them a shortcut that works in every program
     for (const tools::Command &c : toolhost::host().allCommands()) {
         if (!c.standalone)
             continue;
-        QString id = c.key;
-        id.replace(QLatin1Char('.'), QLatin1Char('-'));
-        QString name = c.text;
-        name.remove(QLatin1Char('&'));
-        if (name.endsWith(QChar(0x2026)))
-            name.chop(1);
-        actionIds << id;
-        actionSections += QStringLiteral("\n[Desktop Action %1]\nName=%2\nExec=\"%3\" --tool %4\n").arg(id, name, exec, c.key);
+        appmenu::ToolAction t;
+        t.id = c.key;
+        t.id.replace(QLatin1Char('.'), QLatin1Char('-'));
+        t.name = c.text;
+        t.name.remove(QLatin1Char('&'));
+        if (t.name.endsWith(QChar(0x2026)))
+            t.name.chop(1);
+        t.key = c.key;
+        tools << t;
     }
-    QFile desktop(data + QLatin1String("/applications/" QB_APP_ID ".desktop"));
-    if (desktop.open(QIODevice::WriteOnly)) {
-        desktop.write(QStringLiteral("[Desktop Entry]\nType=Application\nName=%1\nGenericName=Writing Studio\n"
-                                     "Comment=Write, organize and compile long texts\nExec=\"%2\" %f\nIcon=%3\n"
-                                     "Categories=Office;WordProcessor;\nMimeType=application/x-%3-project;application/x-%3-package;\nTerminal=false\n"
-                                     "StartupWMClass=%3\n")
-                          .arg(QLatin1String(QB_APP_NAME), exec, QLatin1String(QB_APP_ID))
-                          .toUtf8());
-        if (!actionIds.isEmpty())
-            desktop.write((QStringLiteral("Actions=") + actionIds.join(QLatin1Char(';')) + QStringLiteral(";\n") + actionSections).toUtf8());
-        desktop.close();
+    const appmenu::Result r = appmenu::add(moveAppImage, tools);
+    updateApplicationMenuAction();
+    if (!r.ok) {
+        QMessageBox::warning(this, tr("Application Menu"), tr("The menu entry could not be made.\n\n%1").arg(r.error));
+        return;
     }
-    QFile mime(data + QLatin1String("/mime/packages/" QB_APP_ID ".xml"));
-    if (mime.open(QIODevice::WriteOnly)) {
-        mime.write(QStringLiteral("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-                                  "<mime-info xmlns=\"http://www.freedesktop.org/standards/shared-mime-info\">\n"
-                                  "  <mime-type type=\"application/x-%1-project\">\n"
-                                  "    <comment>%2 project</comment>\n"
-                                  "    <icon name=\"%1\"/>\n"
-                                  "    <glob pattern=\"*%3\"/>\n"
-                                  "  </mime-type>\n"
-                                  "  <mime-type type=\"application/x-%1-package\">\n"
-                                  "    <comment>%2 update or add-on</comment>\n"
-                                  "    <icon name=\"%1\"/>\n"
-                                  "    <glob pattern=\"*.qbpkg\"/>\n"
-                                  "  </mime-type>\n</mime-info>\n")
-                       .arg(QLatin1String(QB_APP_ID), QLatin1String(QB_APP_NAME), QLatin1String(QB_PROJECT_FILE_SUFFIX))
-                       .toUtf8());
-        mime.close();
+    QStringList problems;
+    if (!r.moveError.isEmpty())
+        problems << tr("The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the "
+                       "file yourself, choose Help > Remove from Application Menu and then Add to Application Menu again.")
+                        .arg(QDir::toNativeSeparators(appmenu::applicationsFolder()), r.moveError);
+    if (!r.iconCopied)
+        problems << tr("The program's icon could not be copied, so the menu entry shows no icon.");
+    if (!problems.isEmpty())
+        QMessageBox::warning(this, tr("Application Menu"), problems.join(QStringLiteral("\n\n")));
+    else if (!quiet)
+        showStatusNote(tr("%1 is in the application menu now (%2).").arg(QLatin1String(QB_APP_NAME), QDir::toNativeSeparators(r.exec)), 8000);
+}
+
+void MainWindow::removeFromApplicationMenu()
+{
+    QString err;
+    if (!appmenu::remove(&err)) {
+        QMessageBox::warning(this, tr("Application Menu"), tr("The menu entry could not be removed.\n\n%1").arg(err));
+        return;
     }
-    QProcess::startDetached(QStringLiteral("update-mime-database"), {data + QLatin1String("/mime")});
-    QProcess::startDetached(QStringLiteral("update-desktop-database"), {data + QLatin1String("/applications")});
-    QProcess::startDetached(QStringLiteral("kbuildsycoca5"), {});
-    QProcess::startDetached(QStringLiteral("kbuildsycoca6"), {});
-    QSettings().setValue(QStringLiteral("app/integrated"), exec);
-    if (!quiet)
-        QMessageBox::information(this, tr("Application Menu"),
-                                 tr("%1 now appears in the application menu, and double-clicking a project file (*%2) "
-                                    "opens it.\n\nIf you move the AppImage, choose this menu entry again.")
-                                         .arg(QLatin1String(QB_APP_NAME), QLatin1String(QB_PROJECT_FILE_SUFFIX))
-                                     + (iconCopied ? QString()
-                                                   : QStringLiteral("\n\n")
-                                                         + tr("The program's icon could not be copied to %1, so the menu entry "
-                                                              "shows no icon.")
-                                                               .arg(QDir::toNativeSeparators(icon))));
+    updateApplicationMenuAction();
+    showStatusNote(tr("%1 is no longer in the application menu.").arg(QLatin1String(QB_APP_NAME)), 8000);
+}
+
+// Help > Add to Application Menu / Remove from Application Menu follows the state of the entry
+void MainWindow::updateApplicationMenuAction()
+{
+    QAction *ac = a.value(QStringLiteral("integrate"));
+    if (!ac)
+        return;
+    ac->setText(appmenu::hasEntry() ? tr("Remove from &Application Menu") : tr("Add to &Application Menu"));
 }
 
 // ------------------------------------------------------------------ options carried out here (0.21)

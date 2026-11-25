@@ -683,7 +683,7 @@ QWidget *OptionsDialog::generalSection()
     if (!scratch) {
         QWidget *sp = page(&f);
         f->addRow(hint(tr("The Scratch Pad (Window > Scratch Pad) comes with the add-on \"Scratch Pad\"; once it is "
-                          "installed (Help > Add-on Manager), its folder and the kind of new notes are set here."),
+                          "installed (Help > Add-ons and Updates > Add-on Manager), its folder and the kind of new notes are set here."),
                        sp));
         pages.append({tr("Scratch Pad"), sp});
     }
@@ -2313,7 +2313,7 @@ QWidget *OptionsDialog::extrasSection()
         row->addWidget(open);
         row->addStretch(1);
         l->addLayout(row);
-        l->addWidget(hint(tr("Add-ons are installed with File > Install Update or Add-on and switched on and off in Help > Add-on Manager."), w));
+        l->addWidget(hint(tr("Add-ons are installed with Help > Add-ons and Updates > Install Update or Add-on and switched on and off in Help > Add-ons and Updates > Add-on Manager."), w));
         connect(open, &QPushButton::clicked, this, [] {
             const QString d = compile::PluginManager::instance().userPluginDir();
             QDir().mkpath(d);
@@ -2341,7 +2341,7 @@ QWidget *OptionsDialog::extrasSection()
         QDesktopServices::openUrl(QUrl::fromLocalFile(crash::reportDir()));
     });
     f->addRow(openReports);
-    f->addRow(hint(tr("Reports stay on this computer; Help > Crash Reports shows them. Fewer reports to keep take effect at the next start."), cr));
+    f->addRow(hint(tr("Reports stay on this computer; Help > Troubleshooting and Development > Crash Reports shows them. Fewer reports to keep take effect at the next start."), cr));
     pages.append({tr("Crash Reports"), cr});
     return subPages(SExtras, pages, QStringLiteral("optExtrasPages"));
 }

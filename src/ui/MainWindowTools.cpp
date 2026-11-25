@@ -187,8 +187,7 @@ void MainWindow::fillWritingToolsMenu(QMenu *menu)
         QAction *none = menu->addAction(tr("No writing tools installed"));
         none->setEnabled(false);
     }
-    menu->addSeparator();
-    menuAlias(menu, QStringLiteral("addonManager"), tr("Add-on &Manager…"));
+    // 0.94.0: the Add-on Manager is in Help > Add-ons and Updates (this menu holds the tools only)
 }
 
 void MainWindow::updateToolActions()

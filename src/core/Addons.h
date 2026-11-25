@@ -23,6 +23,7 @@
 #include <QJsonObject>
 #include <QList>
 #include <QString>
+#include <functional>
 #include <QStringList>
 
 namespace qb {
@@ -97,7 +98,11 @@ bool install(const QString &file, QStringList *log, QString *error, bool *restar
 // version, as the start script of the full AppImage does on Linux. The marker
 // <data>/full-addons-installed-<version> is written when all of them installed. Returns false when
 // one failed (error names it); true when all installed, the marker existed or dir holds none.
-bool installBundled(const QString &dir, QStringList *log, QString *error);
+// 0.94.0: progress (done packages, all packages, the name of the one that begins; bytes of the finished ones) for the
+// window of the Linux full AppImage; installBundledDue() tells whether there is anything to do (and how much).
+bool installBundled(const QString &dir, QStringList *log, QString *error,
+                    const std::function<void(int done, int total, const QString &name, qint64 doneBytes)> &progress = nullptr);
+bool installBundledDue(const QString &dir, int *count = nullptr, qint64 *bytes = nullptr);
 
 // Windows 0.92.0: moves the folder of a newly unpacked version into its place. Windows refuses to move a folder
 // while a file in it is still open: a program update was just started from it for its self-test and may not be

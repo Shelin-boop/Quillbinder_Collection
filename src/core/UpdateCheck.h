@@ -87,7 +87,7 @@ void clearSetupDownload();
 
 // ---- what was decided per version, and when the program looked last (<data>/updates-state.json)
 struct State {
-    bool enabled = true;        // Help > Check for Updates at Startup
+    bool enabled = true;        // Help > Add-ons and Updates > Check for Updates at Startup
     bool noteShown = false;     // the first start's note was seen (no contact before it)
     QDateTime lastCheck;        // UTC: the last automatic look that got an answer
     QDateTime feedDate;         // UTC: the date of the newest file accepted

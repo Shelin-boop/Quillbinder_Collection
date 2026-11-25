@@ -4,7 +4,7 @@
 //    on Linux, which knows the names, nothing is mapped;
 //  - item 45: the plain texts kept for search and the counts are bounded (the texts asked for past the bound are read
 //    from their files and not kept; a changed text frees its part);
-//  - item 34 (test idea C): Help > System Information names each screen's usable area, the input devices and whether
+//  - item 34 (test idea C): Help > Troubleshooting and Development > System Information names each screen's usable area, the input devices and whether
 //    the on-screen keyboard is shown.
 //
 //   xvfb-run -a ./qb_v0931_tests /tmp/shots
@@ -201,7 +201,7 @@ static void plainCache(const QString &W)
 // ---------------------------------------------------------------- item 34, test idea C: System Information
 static void systemInfo()
 {
-    std::printf("== Help > System Information: usable area, input devices, on-screen keyboard (item 34)\n");
+    std::printf("== Help > Troubleshooting and Development > System Information: usable area, input devices, on-screen keyboard (item 34)\n");
     const QString t = sysinfo::text(nullptr);
     QStringList lines;
     for (const QString &l : t.split(QLatin1Char('\n')))

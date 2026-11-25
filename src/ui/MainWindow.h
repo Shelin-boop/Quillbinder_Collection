@@ -108,6 +108,8 @@ public:
     void showStartDialog(bool recentFirst);
     // First start from an AppImage: offer to add the program to the application menu.
     void offerDesktopIntegration();
+    // 0.94.0: what the page of the first start chose about the application menu (Linux AppImage)
+    void applyFirstStartMenuChoice(bool add, bool moveAppImage);
     // Install a .qbpkg file (program update, add-on or bundle).
     void installPackage(const QString &file);
     // Message from the start-up loader (an update was switched off).
@@ -154,7 +156,7 @@ public:
     static QString welcomeName();        // "Welcome to Quillbinder"
     static QString welcomeFolder();      // where the welcome project is (or would be) made
 
-    // Window layouts (Window > Layouts); the state is described in Layouts.h.
+    // Window layouts (View > Layout); the state is described in Layouts.h.
     QVariantMap captureLayout(bool withWindowSize = false) const;
     void applyLayout(const QVariantMap &state);
     bool applyLayoutById(const QString &id);
@@ -264,7 +266,7 @@ public:
     QString fixedMindMapId() const { return m_fixedMindMapId; }
     // 0.92.0 (the shown lock): reads what other devices say they work on and marks those rows (also by a timer)
     void readWorkMarks();
-    // 0.92.0: the check for updates (Help > Check for Updates at Startup, Check for Updates Now)
+    // 0.92.0: the check for updates (Help > Add-ons and Updates > Check for Updates at Startup, Check for Updates Now)
     UpdateChecker *updateChecker() const { return m_updates; }
     // 0.92.0: a small text in the status bar that fades in and out twice and is gone (no window, no sound)
     void showFadingNote(const QString &text);
@@ -458,6 +460,10 @@ private:
     void showPrintSettings();
     bool canPrint() const;
     void integrateDesktop(bool quiet);
+    void addToApplicationMenu(bool moveAppImage, bool quiet);
+    void removeFromApplicationMenu();
+    void updateApplicationMenuAction();
+    void askApplicationMenu(const QString &title, const QString &text, bool canDecline);
     void restartApplication();
     // Windows 0.92.0 (the check for updates hands over to the setup program): closes the project as a restart does,
     // then calls run. When run succeeded the program ends; else the project is opened again and the program stays.
