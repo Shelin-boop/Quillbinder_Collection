@@ -314,6 +314,11 @@ void caseSP03()
     BinderItem *again = p ? itemByTitle(p, title) : nullptr;
     if ((e = showDoc(w, again)))
         typeInto(e, QStringLiteral(" Written in Scrivener format."));
+    // Android 0.93.2: since 0.93.0 Save As writes nothing more into the original (what is not saved yet goes into
+    // the new project only), so the sentence typed in Scrivener format is saved first: Switched.scriv has it too
+    // (run 45566476666: three of the four had it)
+    chooseByMenu(w, QStringLiteral("save"));
+    settle(800);
     const QString backParent = ctx().work + QStringLiteral("/back");
     QDir().mkpath(backParent);
     formatQuestionLater(300, backParent + QStringLiteral("/Back.qbx"));
