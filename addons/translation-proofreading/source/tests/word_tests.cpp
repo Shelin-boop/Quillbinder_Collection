@@ -384,7 +384,10 @@ private slots:
         QVERIFY(runPanel(p, QStringLiteral("Das ist ein Haus")));
         QTRY_VERIFY(!p.isBusy());
         QCOMPARE(modelsCalled().last(), QStringLiteral("opus-mt-big-de-en"));
-        // switching the model with a translation on show translates again with it
+        // switching the model with a translation on show translates again with it. (The other translations of a short
+        // text are asked for in the background after it, at a lower priority: wait for them, so that their call is not
+        // taken for the new translation's; on GitHub's Windows machine it came after the calls were cleared.)
+        QTRY_VERIFY(!p.variantsPending());
         m_engine.clearCalls();
         const int small = p.modelBox()->findData(QStringLiteral("opus-mt-de-en"));
         p.modelBox()->setCurrentIndex(small);
