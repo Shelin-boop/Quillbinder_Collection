@@ -841,7 +841,8 @@ static void downloadPage(const QString &work)
     const QString sl = run({QStringLiteral("-I"), kRoot + QStringLiteral("/tools/full-addons-size.py"), pk, sizeOut, addonsDir}, &rc);
     check(rc == 0 && readText(sizeOut).trimmed() == QLatin1String("2000"), QStringLiteral("tools/full-addons-size.py: the unpacked size of the add-on packages"), sl + readText(sizeOut));
     // the workflow
-    const QString flow = readText(kRoot + QStringLiteral("/.github/workflows/release.yml"));
+    QString flow = readText(kRoot + QStringLiteral("/.github/workflows/release.yml"));
+    flow.remove(QLatin1Char('\r')); // a Windows checkout has CRLF line ends
     const qsizetype fullStep = flow.indexOf(QStringLiteral("- name: Full version (the AppImage with all signed add-ons inside)"));
     const qsizetype nextStep = flow.indexOf(QStringLiteral("- name: Check the full version"));
     const QString step = fullStep >= 0 && nextStep > fullStep ? flow.mid(fullStep, nextStep - fullStep) : QString();

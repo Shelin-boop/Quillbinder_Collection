@@ -366,7 +366,9 @@ check had failed on Windows only). What is Windows' own:
   without Ctrl+Alt, which is AltGr on a German keyboard).
 
 For developers (nothing changes in the program): the suites of 0.94.0 run on Windows (v0940b leaves out the AppImage's
-move and the Linux application menu) and v017 counts again; the official add-on entry's Windows block names the 1.4
+move and the Linux application menu) and v017 counts again; on Qt's offscreen platform, where the Windows build's
+program checks start the program on a screen 800 px wide, the first window does not open maximized (showing it
+maximized there ended the program inside Qt's toolbar layout); the official add-on entry's Windows block names the 1.4
 source and fetches the models of models-3 for its tests, as the Linux block does; the download page names Help >
 Add-ons and Updates > Install Update or Add-on.
 
