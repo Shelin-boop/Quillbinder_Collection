@@ -372,7 +372,7 @@ jobs:
             dist/*.qbpkg dist/SHA256SUMS-windows.txt
 
   # Android (2026-11-16): the same add-on for Quillbinder for Android (not published yet; its version 0.91.3 is the
-  # first that installs add-ons), built with the Android NDK r27c against The Qt Company's Qt 6.12.0 for Android
+  # first that installs add-ons), built with the Android NDK r30 (r27c before Quillbinder for Android 0.93.2) against The Qt Company's Qt 6.12 for Android
   # (Quillbinder for Android's runtime, "android-qt6.12-r2" since Android 0.93.0), for tablets (arm64-v8a) and for the emulated tablets of
   # Quillbinder's checks (x86_64). The engine computes with Ruy instead of oneDNN. The checks of the logic run in the
   # Linux job (the same code); here: the libraries' symbols, what they need, their 16 KB pages. A work branch puts the
@@ -382,7 +382,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     env:
-      NDK_VERSION: "27.2.12479018"
+      NDK_VERSION: "30.0.16248370"
       QT_BASE: /opt/qt
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0

@@ -100,7 +100,8 @@ loads in a newer one), but releases come only from the workflow "Build" (Qt 6.12
   processor's package with its reason. `packaging/make-addon-android.sh <build> <out> <abi> <ndk>` writes the package.
 - Every Android change sits in `if(ANDROID)` / `#ifdef Q_OS_ANDROID`; the Linux and Windows builds stay as they were.
 - `packaging/build-deps-android.sh`: CTranslate2 4.9.0 with Ruy (oneDNN is for x86 only), SentencePiece 0.2.1, with the
-  NDK (r27c, API 28), 16 KB pages. The engine links LLVM's OpenMP statically (`-static-openmp`; CMake's OpenMP target
+  NDK (r30, 30.0.16248370, the NDK Qt 6.12 is built with, since Quillbinder for Android 0.93.2; r27c before; API 28),
+  16 KB pages. The engine links LLVM's OpenMP statically (`-static-openmp`; CMake's OpenMP target
   named `libomp.so`, which Android does not have: its link libraries are cleared). Android's toolchain looks only in
   the NDK's system folder: `CMAKE_FIND_ROOT_PATH_MODE_INCLUDE/LIBRARY BOTH`. The plugin keeps a plain `.so` name
   (`SUFFIX ".so"`) and may need Qt's graphics libraries (libGLESv2.so is the system's).
