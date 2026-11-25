@@ -122,6 +122,13 @@ void MainWindow::updateUndoNames()
         u = canUndo ? tr("Typing") : QString();
         r = canRedo ? tr("Typing") : QString();
     }
+    if (!target && binderHasKeyboard()) {
+        // 0.94.0: the binder's own steps (Group, Sheet to Object)
+        canUndo = m_binderDone > 0;
+        canRedo = m_binderDone < int(m_binderSteps.size());
+        u = canUndo ? m_binderSteps.at(m_binderDone - 1).name : QString();
+        r = canRedo ? m_binderSteps.at(m_binderDone).name : QString();
+    }
     const QString undoText = u.isEmpty() ? tr("&Undo") : tr("&Undo %1").arg(u);
     const QString redoText = r.isEmpty() ? tr("&Redo") : tr("&Redo %1").arg(r);
     // the toolbar's buttons keep their short label (a label that changed with every step would move the toolbar)
@@ -144,6 +151,27 @@ void MainWindow::fillUndoList(QMenu *menu, bool undo)
     clearMenu(menu);
     QPointer<QWidget> target = undoTarget();
     QStringList steps;
+    if (!target && binderHasKeyboard()) {
+        // 0.94.0: the binder's own steps, the next one first
+        if (undo)
+            for (int i = m_binderDone - 1; i >= 0; --i)
+                steps << m_binderSteps.at(i).name;
+        else
+            for (int i = m_binderDone; i < int(m_binderSteps.size()); ++i)
+                steps << m_binderSteps.at(i).name;
+        for (int i = 0; i < steps.size() && i < kListedSteps; ++i) {
+            QAction *ac = menu->addAction(QStringLiteral("%1  %2").arg(i + 1).arg(steps.at(i)));
+            ac->setObjectName(QStringLiteral("%1Step%2").arg(undo ? QStringLiteral("undo") : QStringLiteral("redo")).arg(i + 1));
+            connect(ac, &QAction::triggered, this, [this, undo, i] {
+                for (int k = 0; k <= i; ++k)
+                    if (!(undo ? binderUndo() : binderRedo()))
+                        break;
+            });
+        }
+        if (steps.isEmpty())
+            menu->addAction(undo ? tr("Nothing to undo") : tr("Nothing to redo"))->setEnabled(false);
+        return;
+    }
     if (QTextDocument *doc = documentOf(target))
         steps = undo ? undonames::undoSteps(doc) : undonames::redoSteps(doc);
     else if (auto *le = qobject_cast<QLineEdit *>(target); le && !le->isReadOnly()

@@ -471,13 +471,13 @@ void MainWindow::createMenus()
     docs->setProperty("qbNeedsProject", true);
     QMenu *snaps = docs->addMenu(icons::action(QStringLiteral("camera-photo")), tr("S&napshots"));
     add(snaps, {"snapshot", "snapshotTitle", "showSnapshots"});
-    add(docs, {"", "rename", "duplicate", "trash", ""});
+    add(docs, {"", "rename", "duplicate", "group", "trash", ""});
     QMenu *splitMenu = docs->addMenu(tr("S&plit"));
     menuAlias(splitMenu, QStringLiteral("split"), tr("at &Selection"));
     menuAlias(splitMenu, QStringLiteral("splitTitle"), tr("with Selection as &Title"));
     menuAlias(docs, QStringLiteral("merge"), tr("&Merge"));
     QMenu *convert = docs->addMenu(tr("Con&vert"));
-    add(convert, {"toFolder", "toText", "", "defaultFormatting"});
+    add(convert, {"toFolder", "toText", "sheetToObject", "", "defaultFormatting"});
     docs->addSeparator();
     m_iconMenu = docs->addMenu(icons::action(QStringLiteral("preferences-desktop-icons")), tr("Change &Icon"));
     m_defaultTemplateMenu = docs->addMenu(tr("Default &Template for Subdocuments"));

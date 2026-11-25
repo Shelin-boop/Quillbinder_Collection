@@ -675,10 +675,21 @@ private slots:
         QTRY_COMPARE(spy.count(), 1);
         QCOMPARE(spy.first().at(0).toString(), QStringLiteral("Model unloaded, RAM usage minimal"));
         QCOMPARE(spy.first().at(1).toInt(), 5000);
+        // 1.2: the host shows the message under the binder
+        QCOMPARE(m_host->messages.size(), 1);
+        QCOMPARE(m_host->messages.first().first, QStringLiteral("Model unloaded, RAM usage minimal"));
+        QCOMPARE(m_host->messages.first().second, 5000);
         QVERIFY(m_engine.loaded(QStringLiteral("translator")).isEmpty());
         // nothing loaded: nothing to say
         QTest::qWait(300);
         QCOMPARE(spy.count(), 1);
+        // a program with interface 1.1 has no such call: the add-on does not call it
+        m_host->version = 110;
+        QVERIFY(runPanel(p, QStringLiteral("Das Haus ist alt")));
+        QTRY_VERIFY(!p.isBusy());
+        QTRY_COMPARE(spy.count(), 2);
+        QCOMPARE(m_host->messages.size(), 1);
+        m_host->version = 120;
         qunsetenv("TP_TEST_UNLOAD_MS");
     }
 

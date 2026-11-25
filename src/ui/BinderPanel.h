@@ -20,6 +20,7 @@ class QMenu;
 
 namespace qb {
 
+class MessageLine;
 
 class BinderTree : public QTreeView
 {
@@ -156,6 +157,8 @@ public:
     explicit BinderPanel(QWidget *parent = nullptr);
     void setProject(Project *p);
     BinderTree *tree() const { return m_tree; }
+    // 0.94.0: the message line under the binder (MessageLine)
+    MessageLine *messageLine() const { return m_messages; }
 
     QList<BinderItem *> selectedItems() const;
     BinderItem *currentItem() const;
@@ -246,6 +249,7 @@ private:
     QToolButton *m_folderButton = nullptr;
     QToolButton *m_gearButton = nullptr;
     QWidget *m_fixedBar = nullptr;      // 0.92.0
+    MessageLine *m_messages = nullptr;  // 0.94.0
     QLabel *m_fixedLabel = nullptr;
     QString m_fixedTitle;
     SearchQuery m_query;

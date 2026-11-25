@@ -69,6 +69,7 @@ void OptionsDialog::markStorage()
     optstore::mark(m_forename, QStringLiteral("app/forename"));
     optstore::mark(m_freezeSeconds, QStringLiteral("app/freezeSeconds"));
     optstore::mark(m_fullPath, QStringLiteral("appearance/showFullPath"));
+    optstore::mark(m_progressLines, QStringLiteral("appearance/progressUnderSearch"));
     optstore::mark(m_htmlAsText, QStringLiteral("sharing/htmlAsText"));
     optstore::mark(m_importComments, QStringLiteral("sharing/commentsInline"));
     optstore::mark(m_importFootnotes, QStringLiteral("sharing/footnotesInline"));

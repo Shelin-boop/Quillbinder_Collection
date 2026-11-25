@@ -6,7 +6,7 @@
 //  - item 32: after a choice in the binder the inspector shows the chosen document;
 //  - item 73: imported text, a paste of more than 200 words and the first opening of a project are no session words;
 //    Reset Session Now refreshes the tooltip of the quick search field at once;
-//  - item 85: Back Up Now says it in the footer with a link to the folder, in no box that waits for OK;
+//  - item 85: (moved to qb_v0940e_tests: Back Up Now's message in the message line);
 //  - item 89: Project Targets keeps the room of its bars; a small screen opens the window maximized the first time;
 //    the window's place is saved when it changes.
 //
@@ -402,57 +402,7 @@ static void firstOpening(const QString &work)
 }
 
 // ---------------------------------------------------------------- item 85
-static void backupNote(MainWindow &w, const QString &work)
-{
-    std::printf("== Back Up Now (item 85)\n");
-    AppSettings &s = AppSettings::instance();
-    const QString dir = work + QStringLiteral("/backups");
-    QDir().mkpath(dir);
-    s.backupDir = dir;
-    bool modal = false;
-    auto *t = new QTimer(&w);
-    t->setInterval(50);
-    QObject::connect(t, &QTimer::timeout, [&modal] {
-        if (QWidget *m = QApplication::activeModalWidget()) {
-            modal = true;
-            m->close();
-        }
-    });
-    t->start();
-    QAction *now = byKey(&w, QStringLiteral("backupNow"));
-    check(now && now->isEnabled(), QStringLiteral("(Back Up Now is enabled)"));
-    if (!now)
-        return;
-    now->trigger();
-    settle(500);
-    t->stop();
-    check(!modal, QStringLiteral("Back Up Now opens no box that waits for OK"));
-    check(w.statusNote().startsWith(QStringLiteral("Backup saved: ")), QStringLiteral("... the footer says where the backup is"),
-          w.statusNote());
-    FooterStatus *fs = w.editorPane(0)->footerStatus();
-    // the footer's stretch is narrow beside binder and inspector: the note is then a mark whose tooltip names the link
-    check(fs->isMark() && fs->textLabel()->toolTip().contains(QStringLiteral("Show Folder")),
-          QStringLiteral("... in a narrow footer the mark's tooltip names the link \"Show Folder\""), fs->textLabel()->toolTip());
-    shot(&w, QStringLiteral("v0940a-backup-note-narrow"));
-    // with room: the text and the link
-    fs->clearNote();
-    byKey(&w, QStringLiteral("showBinder"))->setChecked(false);
-    byKey(&w, QStringLiteral("showInspector"))->setChecked(false);
-    settle(300);
-    now->trigger();
-    settle(500);
-    QLabel *link = fs->noteActionLabel();
-    check(link && link->isVisible() && link->text().contains(QStringLiteral("Show Folder")),
-          QStringLiteral("... with room: the note and a link \"Show Folder\""), link ? link->text() : QString());
-    shot(&w, QStringLiteral("v0940a-backup-note"));
-    byKey(&w, QStringLiteral("showBinder"))->setChecked(true);
-    byKey(&w, QStringLiteral("showInspector"))->setChecked(true);
-    settle(300);
-    check(!QDir(dir).entryList(QDir::NoDotAndDotDot | QDir::AllEntries).isEmpty(), QStringLiteral("... and the backup is there"));
-    w.editorPane(0)->footerStatus()->clearNote();
-    settle(100);
-    check(!w.editorPane(0)->footerStatus()->noteActionLabel()->isVisible(), QStringLiteral("the link goes with the note"));
-}
+// (0.94.0, reworked: Back Up Now's message is in the message line under the binder; qb_v0940e_tests checks it)
 
 // ---------------------------------------------------------------- item 89
 static void targetsLayout(MainWindow &w, Project *p)
@@ -578,7 +528,6 @@ int main(int argc, char **argv)
     inspectorFollows(w, binder, inspector, d1, d2, d3);
     sessionWords(w, p, d1, work.path());
     firstOpening(work.path() + QStringLiteral("/second"));
-    backupNote(w, work.path());
     targetsLayout(w, p);
     corkboardTrash(w, p, binder, d2, d3, e1, ch2);
 

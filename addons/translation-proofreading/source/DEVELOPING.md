@@ -12,7 +12,7 @@ systems are released from this repository.
 
 ## Facts the add-on depends on (from the public Quillbinder source)
 
-- Tool interface 1.1: `third_party/quillbinder/ToolApi.h` (copied unchanged; see its README for the commit). Never
+- Tool interface 1.2 (since 0.94.0; 1.1 before): `third_party/quillbinder/ToolApi.h` (copied unchanged; see its README). Never
   change it; a new Quillbinder interface version would be copied in as a whole.
 - Package format and install: Quillbinder's `docs/developer-guide.md`, sections 2, 3, 5, 6 (`packaging/make-package.py`
   writes it). Add-ons with Linux libraries carry `runtime` = `u2404-qt6.12-r1` and `minApp` >= `0.80.0`.
@@ -187,8 +187,9 @@ loads in a newer one), but releases come only from the workflow "Build" (Qt 6.12
   button is `TranslateTool::showOptions` (the host's `showOptions`, which opens the add-on's page).
 - **Unloading** (`TranslateTool::touchEngine`): the timer is `unloadMinutes` (setting, 15 at first, 0 = never; in the options
   under Speed); it unloads only the slots that are loaded and then emits `modelsUnloaded(message, 5000)` with the text
-  "Model unloaded, RAM usage minimal". The tool interface 1.1 has no call for a short message (see the report to the lead):
-  nothing shows it yet. Test builds: `TP_TEST_UNLOAD_MS` sets the waiting time.
+  "Model unloaded, RAM usage minimal". With tool interface 1.2 (Quillbinder 0.94.0; `third_party/quillbinder/ToolApi.h`
+  is the program's header of that version) it also calls `ToolHost::showMessage(message, 5000)` when `apiVersion() >= 120`
+  (the program shows it under the binder); in a program with 1.1 only the signal says it. Test builds: `TP_TEST_UNLOAD_MS` sets the waiting time.
 - **Placeholders**: Qt's placeholder text of the three fields was replaced by a word-wrapping label over the viewport
   (`WrappedPlaceholder`); the panel's width cannot go below its layout's minimum (about 390 px in the inspector), the label
   wraps at whatever the field has.

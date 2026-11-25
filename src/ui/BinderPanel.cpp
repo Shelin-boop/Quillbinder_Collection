@@ -1,4 +1,5 @@
 #include "ui/BinderPanel.h"
+#include "ui/MessageLine.h"
 #include "ui/Ask.h"
 #include "ui/Zoom.h"
 #include "core/BinderModel.h"
@@ -854,6 +855,10 @@ BinderPanel::BinderPanel(QWidget *parent) : QWidget(parent)
         else if (BinderItem *it = m_project->item(id))
             emit fixMindMapRequested(it);
     });
+
+    // 0.94.0: the message line (no height while it is empty)
+    m_messages = new MessageLine(this);
+    lay->addWidget(m_messages);
 
     // footer
     auto *footer = new QWidget(this);

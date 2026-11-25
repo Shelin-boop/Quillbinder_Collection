@@ -1441,6 +1441,8 @@ QWidget *OptionsDialog::appearancePage(int which)
                                    "of the theme; \"Save as Theme\" turns the result into a theme of your own."),
                                 page));
         check(m_fullPath, tr("Show the full project path in the title bar"), s.showFullPath, "optFullPath");
+        check(m_progressLines, tr("Show the draft and session progress as two thin lines under the quick search field (the footer shows it as well)"),
+              s.progressUnderSearch, "optProgressLines");
         auto *row = new QHBoxLayout;
         row->addWidget(new QLabel(tr("Main toolbar icon size:"), page));
         m_toolbarIcons = new QComboBox(page);
@@ -2644,6 +2646,7 @@ void OptionsDialog::apply()
         look::setForNewProjects(nv); // theme, the areas' colors and fonts, width, border
     }
     s.showFullPath = m_fullPath->isChecked();
+    s.progressUnderSearch = m_progressLines->isChecked();
     s.toolbarIconSize = m_toolbarIcons->currentData().toInt();
     s.labelColorInBinder = m_labelBinder->isChecked();
     s.labelColorInIcons = m_labelIcons->isChecked();
