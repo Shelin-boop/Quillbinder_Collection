@@ -29,6 +29,10 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
 - **Back Up Now tells its success in the footer**. The box "Backup saved" that waited for OK (and on Android blocked
   later steps when it was left open) is gone. The footer says "Backup saved: ..." with a link **Show Folder**; boxes
   come only for failures and for a backup that is incomplete.
+- **Small layout points**. The Project Targets window keeps the room of its progress bars from the start, so its
+  fields no longer move under the mouse when a target is set. On a screen narrower than 1600 px the window opens
+  maximized the first time (when no saved state exists). The window's size, place and state are saved a moment after
+  each change, not only when the program ends (they were lost after a crash).
 
 ## 0.93.1 beta (2026-11-24)
 

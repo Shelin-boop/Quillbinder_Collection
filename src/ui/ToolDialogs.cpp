@@ -69,6 +69,12 @@ TargetsDialog::TargetsDialog(Project *p, QWidget *parent) : QDialog(parent), m_p
     auto *dl = new QVBoxLayout(draft);
     m_draftBar = new QProgressBar(draft);
     m_draftLabel = new QLabel(draft);
+    {
+        // the bar keeps its room while hidden: the fields below do not move when a target is set (0.94.0, item 89)
+        QSizePolicy sp = m_draftBar->sizePolicy();
+        sp.setRetainSizeWhenHidden(true);
+        m_draftBar->setSizePolicy(sp);
+    }
     dl->addWidget(m_draftBar);
     dl->addWidget(m_draftLabel);
     auto *dr = new QHBoxLayout;
@@ -95,6 +101,11 @@ TargetsDialog::TargetsDialog(Project *p, QWidget *parent) : QDialog(parent), m_p
     auto *sl = new QVBoxLayout(session);
     m_sessionBar = new QProgressBar(session);
     m_sessionLabel = new QLabel(session);
+    {
+        QSizePolicy sp = m_sessionBar->sizePolicy();
+        sp.setRetainSizeWhenHidden(true);
+        m_sessionBar->setSizePolicy(sp);
+    }
     sl->addWidget(m_sessionBar);
     sl->addWidget(m_sessionLabel);
     auto *sr = new QHBoxLayout;

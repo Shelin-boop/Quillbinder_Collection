@@ -543,8 +543,16 @@ MainWindow::MainWindow()
         m_barDock = new BarDock(this, gripBars, {rowOne, rowTwo});
         m_barDock->load();
     }
-    if (!s.contains(QStringLiteral("window/geometry")))
+    if (!s.contains(QStringLiteral("window/geometry"))) {
         resize(1300, 820);
+        // 0.94.0 (item 89): the first time, on a screen narrower than 1600 px, the window opens maximized
+        if (QScreen *sc = QGuiApplication::primaryScreen(); sc && sc->availableGeometry().width() < 1600)
+            setWindowState(windowState() | Qt::WindowMaximized);
+    }
+    m_windowPlaceTimer = new QTimer(this);
+    m_windowPlaceTimer->setSingleShot(true);
+    m_windowPlaceTimer->setInterval(800);
+    connect(m_windowPlaceTimer, &QTimer::timeout, this, &MainWindow::saveWindowPlace);
     loadPaneSettings(s); // 0.93.0: the places and sizes of both shapes; arranged for the window's shape
     a[QStringLiteral("showInspector")]->setChecked(s.value(QStringLiteral("window/inspector"), true).toBool());
     a[QStringLiteral("showBinder")]->setChecked(s.value(QStringLiteral("window/binder"), true).toBool());
@@ -3704,6 +3712,24 @@ void MainWindow::closeEvent(QCloseEvent *e)
     e->accept();
 }
 
+// 0.94.0 (item 89): the window's place, size and state are saved when they change, not only at the end (a crash
+// lost them)
+void MainWindow::windowPlaceChanged()
+{
+    if (m_windowPlaceTimer && isVisible())
+        m_windowPlaceTimer->start();
+}
+
+void MainWindow::saveWindowPlace()
+{
+    if (!isVisible() || isMinimized() || isFullScreen())
+        return;
+    QSettings s;
+    s.setValue(QStringLiteral("window/geometry"), saveGeometry());
+    s.setValue(QStringLiteral("window/state"), saveState());
+    s.sync();
+}
+
 void MainWindow::saveForTermination()
 {
     // SIGTERM, SIGINT or SIGHUP (log out, shutdown, a kill command): everything saved
@@ -3804,7 +3830,15 @@ void MainWindow::changeEvent(QEvent *e)
         if (!ok && toOtherProgram)
             emit m_project->saveFailed(err);
     }
+    if (e->type() == QEvent::WindowStateChange)
+        windowPlaceChanged();
     QMainWindow::changeEvent(e);
+}
+
+void MainWindow::moveEvent(QMoveEvent *e)
+{
+    QMainWindow::moveEvent(e);
+    windowPlaceChanged();
 }
 
 // ------------------------------------------------------------------ item operations

@@ -229,6 +229,7 @@ protected:
     void closeEvent(QCloseEvent *e) override;
     void changeEvent(QEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;
+    void moveEvent(QMoveEvent *e) override;
 
 private:
     // File > Project Format (MainWindowFormat.cpp)
@@ -269,8 +270,8 @@ public:
     void showFadingNote(const QString &text);
     // 0.93.0: a short message of the program in the first editor's footer bar (it was the status bar's)
     void showStatusNote(const QString &text, int ms = 0);
-    void clearStatusNote();
     void showStatusNote(const QString &text, int ms, const QString &actionText, std::function<void()> action);
+    void clearStatusNote();
     QString statusNote() const;
     // 0.92.0: the notice "Other Versions Kept" turned off until the program quits (its button; the tests set it back)
     static bool conflictNoticeOff();
@@ -545,6 +546,9 @@ private:
     QString m_lastChangeKeptAside;
     bool m_backupFolderAsked = false;
     QTimer *m_saveStateTimer = nullptr;
+    QTimer *m_windowPlaceTimer = nullptr; // saves the window's place and state a moment after it changed (0.94.0)
+    void saveWindowPlace();
+    void windowPlaceChanged();
     QTimer *m_saveRetry = nullptr;
     QDateTime m_saveFailedSince;
     QDateTime m_saveNoticeShown;
