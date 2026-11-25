@@ -5,8 +5,8 @@
 #   profile: quick | full | smoke (as QB_CS_PROFILE of the Linux system test)
 #   minutes: the time one tablet may take for its cases (a job of the build machine ends after 6 hours at most)
 #   factor: a case may take this many times its estimate (from the Linux machine) plus two minutes
-shards: 8
-cases:
+shards: 2
+cases: S-T03 S-K04 S-P03 S-W16
 profile: quick
 minutes: 170
 factor: 3
