@@ -16,6 +16,7 @@
 #include "text/RtfIO.h"
 #include "text/TextUtil.h"
 #include "ui/AppSettings.h"
+#include "ui/ManualWindow.h"
 
 #include <QApplication>
 #include <QTimer>
@@ -858,12 +859,7 @@ static QDialog *helpWindow(QPointer<QDialog> &win, QWidget *parent, const QStrin
 
 void showManual(QWidget *parent, const QString &anchor)
 {
-    static QPointer<QDialog> win;
-    helpWindow(win, parent, QStringLiteral(":/docs/manual.md"), QObject::tr("User Manual"), QStringLiteral("manual"),
-               QSize(820, 760));
-    if (!anchor.isEmpty())
-        if (auto *tb = win->findChild<QTextBrowser *>(QStringLiteral("manual")))
-            tb->find(anchor);
+    showManualAt(parent, anchor); // (0.94.0: the window with its contents list and search, ui/ManualWindow.h)
 }
 
 void showQuickStartGuide(QWidget *parent)

@@ -35,6 +35,7 @@ A `.qbpkg` is a ZIP archive:
 | `name`, `version`, `description`, `author` | shown in the install window and the Add-on Manager; versions are `1.2` or `1.2.3` |
 | `kind` | `addon`, `core` or `bundle` |
 | `whatsNew` | list of lines, shown before installing |
+| `details` | optional (0.94.0): list of technical lines (libraries, engines, the runtime), shown under **Details** (folded) in the install window; `description` is for writers |
 | `minApp` | add-on: the lowest program version that can use it |
 | `runtime` | program update: the runtime (library set) it was built for |
 | `binary` | program update: the name of the program file inside `payload/` |
@@ -167,7 +168,8 @@ Work branches are named after the system they are for: `linux/...`, `win/...`, `
 | `tools/collect-licenses.py` | the license texts of every library the AppImage carries (`resources/licenses`, Help > Third-Party Licenses) with the name of each library's source file; `--refresh` (versions of the build system and the runtime's commit) and `--check` (same versions as the AppDir) are run by `packaging/linux/build-appimage.sh` |
 | `tools/collect-sources.py <out>` | the source code of every third-party part of the AppImage and the add-ons, one `.src.tar` per part, for the release "Third-party source code" (needs `tools/enable-deb-src.sh`) |
 | `tools/release-notes.py`, `tools/publish-release.sh` | the text of a release (the files sorted by system under a short headline each) and its publication on the project page (run by `.github/workflows/release.yml`) |
-| `tools/download-page.py` | the download page of a release (GitHub Pages; job `download-page` of the release workflow) |
+| `tools/download-page.py` | the download page of a release (GitHub Pages; job `download-page` of the release workflow); lists the add-on packages of each system (name and one line from `addons/<id>/manifest.json`, size from the release) and reads the file `full-addons-size` |
+| `tools/full-addons-size.py` | the installed size of the full version's add-ons in bytes (0.94.0; the step of `release.yml` that builds the full AppImage writes it, the page job reads it) |
 | `tools/make-item-icons.py` | draws the document icons of Documents > Change Icon (0.17) |
 | `tools/gen-resources.py`, `tools/update-icon-index.sh` | the resource list after adding icons or documents |
 
@@ -226,3 +228,116 @@ Nothing is written until the first object is made or a template is changed. File
 ## 12. Working with Claude Code
 
 The repository holds a `CLAUDE.md` with the rules above and the user's preferences (a short index; the notes per topic are in `docs/dev-notes/`), so that a Claude Code session (or a person) can take over: set up a fresh Ubuntu 24.04 with `tools/cloud-setup.sh`, build, run the tests, build the package, check it with the real AppImage, and hand it over as described in section 9.
+
+---
+
+## 13. Plugins, packages, and the project folder (moved here from the user manual)
+
+This part is for the technically minded: it was section 20 of the user manual until 0.94.0.
+
+### Media engines
+
+Audio and video are played by a plugin of the add-on *Media Playback* that implements `src/media/MediaApi.h` of the source (Qt Multimedia 6.12 with a decoding-only FFmpeg 9.1, see `addons/media-playback` and `tools/build-ffmpeg.sh`). The add-on keeps its libraries in its own folder (`media/lib`), with the parts of Qt its decoding needs that the AppImage does not carry (Qt Quick and Qt QML). Its FFmpeg decodes free formats only; the add-on *Extra Video and Audio Formats* brings a full FFmpeg of the same version in `media-extra/lib`, which *Media Playback* loads instead while that add-on is installed and switched on. **File > Options > Plugins** lists the engine.
+
+### Adding compile formats
+
+**File > Options > Plugins > Open My Plugin Folder** opens *~/.local/share/{{APP}}/plugins*. Two kinds of plugins go there (or into the `plugins` folder of an add-on package):
+
+- **Command plugins**: a small `.json` file that tells {{APP}} to run a converter program (such as LibreOffice or Pandoc) on the Word file it has just written. Copy one of the bundled examples and change the program and arguments. The keys are `id`, `name`, `extension`, `input` (`docx` or `md`), `program` or `programs`, `arguments` (with `{input}`, `{inputbase}`, `{outdir}`, `{output}`, `{tmpdir}`, `{title}`, `{author}`), `output`, and `timeout`.
+- **Qt plugins**: a shared library (`.so`) built against Qt 6 that implements the `ExporterInterface` from the header *ExporterApi.h* in the source code. It receives the compiled manuscript as a simple model of paragraphs, formatted runs, footnotes, and comments. The Markdown exporter in the source code is a complete example. Version 0.3 extended the model with fonts and paragraph formatting (interface 1.1); a plugin built for an earlier version is not loaded until it is built again.
+
+Restart {{APP}} after adding a plugin.
+
+### Package files (.qbpkg)
+
+A package is a ZIP file with a `manifest.json` (id, name, version, kind, description, what's new, required versions, and a list of files with SHA-256 checksums) and a `payload` folder. In an add-on, the payload uses these folders: `themes` (color themes as JSON), `layouts` (window layouts as JSON), `scripts` (script formats as JSON), `templates` (project templates as ZIP), `compile-formats` (JSON), `plugins` (command plugins and Qt plugins), and `dictionaries` (Hunspell files). The source code contains the tool *tools/make-package.py*, which writes the manifest and builds the file, and example add-ons in the *addons* folder.
+
+Installed add-ons are stored in *~/.local/share/{{APP}}/addons*, program updates in *~/.local/share/{{APP}}/core*.
+
+### Theme files
+
+A theme is a small JSON file: in an add-on as *themes/name.json*, your own themes in *~/.local/share/{{APP}}/themes*, exported themes with the ending *.qbtheme*.
+
+```
+{ "name": "Northern Night",
+  "colors": { "window": "#2b303b", "text": "#e3e7ee", "highlight": "#5e81ac", "cardPaper": "#434c5e" },
+  "fonts":  { "binder": { "family": "Noto Sans", "size": 10.5, "bold": false, "italic": false } } }
+```
+
+Only `window` and `text` are required; every other color is derived when it is missing. The color names, in the order of the options: `window`, `windowText`, `base`, `inspectorFields` (Inspector Background), `alternateBase`, `text`, `button`, `buttonText`, `highlight`, `highlightedText`, `link`, `toolTipBase`, `toolTipText`, `mid`, `dark`, `light`, `disabledText`, `targetSession`, `targetDraft`, `targetReached`; `binderBackground`, `binderText`; `editorPaper`, `editorText`, `editorMargin`, `editorLink`, `searchHit`, `spellingError`, `headerBar`, `headerBarText`, `headerBarActive`, `headerBarLocked`; `corkboardBackground`, `cardPaper`, `cardTitle`, `cardText`, `cardTitleLine`, `cardLines`, `statusStamp`; `outlinerBackground`, `outlinerAlternate`, `outlinerText`; `inspectorBackground`, `inspectorText`, `synopsisPaper`, `synopsisText`, `notesPaper`, `notesText`; `compositionBackground`, `compositionPaper`, `compositionText`. Font names: `interface`, `binder`, `headerTitle`, `combinedTitle` (written `scriveningsTitle` before 0.40; still read), `cardTitle`, `cardText`, `outliner`, `synopsis`; in a font, leave out what should stay as it is. `"followDesktop": true` takes the window colors from the desktop. Theme files written for versions before 0.5 work unchanged, and versions before 0.5 read the window colors of newer files and ignore the rest.
+
+### Layout and shortcut files
+
+A layout is a JSON file: in an add-on as *layouts/name.json*, your own layouts in *~/.local/share/{{APP}}/layouts*, exported layouts with the ending *.qblayout*.
+
+```
+{ "format": "qblayout", "version": 1, "name": "Research Desk",
+  "state": { "binder": true, "inspector": false, "toolbar": true, "formatBar": true,
+             "binderShare": 0.17, "split": "vertical", "splitShare": 0.42,
+             "panes": [ { "view": "outliner", "affectsOther": true }, { "view": "text" } ],
+             "binderAffects": "first", "active": 1 } }
+```
+
+`split` is `none`, `horizontal` (one editor above the other), or `vertical` (side by side). `view` is `text`, `corkboard`, `outliner`, or `keep`; a corkboard can add `"cork": "grid"`, `"freeform"`, or `"labels"`. `binderShare`, `inspectorShare`, and `splitShare` are shares of the width (or height), so a layout fits small and large screens. `binderAffects` is `current`, `first`, `second`, or `other`. Optional: `collections`, `ruler`, `inspectorTab` (0 to 4), and `"window": { "width": 1400, "height": 900, "maximized": false }`.
+
+A shortcut file (*.qbkeys*) lists only the changes: `{ "format": "qbkeys", "version": 1, "shortcuts": { "merge": "Ctrl+Alt+M", "split": "" } }`. The names are those of the commands in the program (an empty text means "no shortcut"); styles are written as `style:Name`, layouts as `layout:id`. The contents of the toolbars and your shortcuts are stored with the other options in *~/.config/{{APP}}/{{APP}}.conf*.
+
+### Script format files
+
+A script format is a JSON file: in an add-on as *scripts/name.json*, your own formats in *~/.local/share/{{APP}}/scripts*, saved formats with the ending *.qbscript*. The quickest way to make one is **Format > Scriptwriting > Script Settings… > Manage > Save to File…**.
+
+```
+{ "name": "Radio Play", "description": "...", "font": "", "size": 12, "unit": "in", "first": "Scene Heading",
+  "elements": [
+    { "name": "Character", "role": "character", "key": "C", "caps": true, "align": "left",
+      "left": 55.9, "right": 0, "firstLine": 0, "linesBefore": 1, "lineSpacing": 1, "keepWithNext": true,
+      "enter": "Dialogue", "tabEmpty": "Transition", "tabEnd": "Parenthetical", "completeFromScript": true },
+    { "name": "Parenthetical", "role": "parenthetical", "key": "P", "left": 40.6, "right": 50.8,
+      "linesBefore": 0, "prefix": "(", "suffix": ")", "enter": "Dialogue", "tabEmpty": "Dialogue" } ] }
+```
+
+Lengths are millimeters from the text margins (`unit` only says what the settings window shows). `role` is `scene`, `action`, `character`, `parenthetical`, `dialogue`, `transition`, `shot`, `lyrics`, `centered`, or `section`. `enter`, `tabEmpty`, and `tabEnd` name the element that follows; `tabInserts` is a text that Tab types instead. `completions` are offered at the start of the paragraph, `tabCompletions` after the text typed by Tab; with `completeFromScript` the texts of the same element elsewhere in the document are offered too. Also possible: `bold`, `italic`, `underline`, `color`. The name of an element may not contain `:` or `>`.
+
+### Inside a project folder
+
+```
+MyNovel{{SUFFIX}}/
+  MyNovel{{FILE}}          the binder and all settings (XML)
+  content/<ID>/text.md     the text of a document (or text.rtf)
+  content/<ID>/notes.md    its notes
+  content/<ID>/images/     pictures used in the text
+  content/<ID>/file.pdf    an imported file (pictures, PDFs …)
+  content/<ID>/mindmap.scap  the mind map of a document or folder
+  icons/                   the project's own icons
+  objects/schema.json      categories, templates, colors, and folders of the objects
+  objects/<category>/<ID>.json  one object (a character, a location ...)
+  objects/images/          pictures of objects
+  snapshots/<ID>/          snapshots of a document
+  settings/                window layout and other preferences
+  settings/spare-copy{{FILE}}  the project file as it was when the project was last opened
+  settings/spare-copy-2{{FILE}}, spare-copy-3{{FILE}}  the project file as it was at the two openings before (0.81)
+  settings/look.json       the project's look: theme, colors, fonts, column width, border (0.40.2)
+  settings/options.ini     the project's own options (File > Options, "This project"; 0.62)
+  settings/settings-before-loading-<date>.qbsettings  the settings before Load Project Settings
+```
+
+A project in Scrivener format has a working copy of this kind in a folder of its own under *~/.local/share/{{APP}}/ScrivenerProjects/*; its *settings/scrivener-sync.json* records what was written into the *.scriv* the last time. Deleting the working copy is safe: the next opening asks the first-time question again and reads the *.scriv* anew (what only {{APP}} knew, such as styles and compile settings, is then lost).
+
+---
+
+## 14. Environment variables
+
+{{APP}} reads a few environment variables at its start. You never need them; they are listed so that nothing changes its behavior without being written down (0.81). Since 0.81 the switches that only the test suites use (for example to answer every warning window by itself, or to make two "computers" on one machine) are not part of the released program at all.
+
+- `QB_LANGUAGE=de` or `en`: the language of the interface for this start (instead of the one chosen in **File > Options**).
+- `QB_KEEP_FONT_FAMILIES=1`: font families with several designs (such as Sitka) are left as the system lists them.
+- `QB_NO_UPDATES=1`: the AppImage starts its own version, without an installed program update (a way back when an update does not start).
+- `QB_ALLOW_UNSIGNED_CORE=1`: an installed program update without a valid signature is started anyway. Only for checks of builds that were never signed; do not set it otherwise.
+- `QB_TIMING=1`, `QB_DEBUG_ENV=1`, `QB_DEBUG_LINK=1`, `QB_DEBUG_SHORTCUTS=1`, `QB_ZOOM_DEBUG=1`, `QB_MIRROR_DEBUG=1`, `QB_SPEECH_DEBUG=1`: messages for finding a fault, on the error output.
+- Set by the program itself for its own parts (never set them by hand): `QB_CORE_ACTIVE`, `QB_CORE_BASE`, `QB_CORE_APPDIR`, `QB_ORIG_PATH`, `QB_ORIG_LD_LIBRARY_PATH`, `QB_MEDIA_DIR`, `QB_MEDIA_EXTRA_DIR`, `QB_MEDIA_FFMPEG_SET`, `QB_SPEECH_DIR`, `QB_SPEECH_GGML_DIR`, `QB_TOOL_DATA`.
+
+---
+
+## 15. Why some choices look like faults
+
+The reasons behind some deliberate choices that can look like faults (a lock that warns and does not block, a drive that cannot confirm a write, projects that are not encrypted) are written down in [design-decisions.md](https://github.com/Shelin-boop/Quillbinder_Collection/blob/main/docs/design-decisions.md).

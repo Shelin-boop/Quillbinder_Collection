@@ -10,7 +10,10 @@
 #include "text/TextUtil.h"
 #include "ui/AppSettings.h"
 #include "ui/BinderPanel.h"
+#include "ui/EditorPane.h"
+#include "ui/Inspector.h"
 #include "ui/LicensesDialog.h"
+#include "ui/ManualWindow.h"
 #include "ui/WindowCare.h"
 
 #include "AppInfo.h"
@@ -40,6 +43,38 @@
 #include <QVBoxLayout>
 
 namespace qb {
+
+// F1 (0.94.0): the manual's section for what is on the screen. Where the keyboard is decides first (the binder, the
+// inspector and its tab); else the view of the active pane.
+QString MainWindow::manualSection() const
+{
+    // a dialog or window of the program has the keyboard (the main window's shortcut F1 reaches it too): its section
+    QWidget *aw = QApplication::activeWindow();
+    if (aw && aw != this && aw->window() != this && !qobject_cast<ManualWindow *>(aw)) {
+        for (QWidget *p = aw; p; p = p->parentWidget()) {
+            const QString s = manualhelp::sectionForWindow(p);
+            if (!s.isEmpty())
+                return s;
+        }
+        return {};
+    }
+    QWidget *focus = QApplication::focusWidget();
+    if (focus && m_inspector && m_inspector->isAncestorOf(focus))
+        return manualhelp::sectionForInspectorTab(m_inspector->currentTab(), m_inspector->currentExtraTab());
+    if (focus && m_binder && m_binder->isAncestorOf(focus))
+        return QStringLiteral("The binder");
+    if (!m_active)
+        return {};
+    switch (m_active->mode()) {
+    case ViewMode::Combined: return QStringLiteral("Combined Text");
+    case ViewMode::Corkboard: return QStringLiteral("Corkboard");
+    case ViewMode::Outliner: return QStringLiteral("Outliner");
+    case ViewMode::Media: return QStringLiteral("Audio and video");
+    case ViewMode::Single: return QStringLiteral("Writing");
+    case ViewMode::Empty: return {};
+    }
+    return {};
+}
 
 QString MainWindow::welcomeName() { return tr("Welcome to %1").arg(QLatin1String(QB_APP_NAME)); }
 

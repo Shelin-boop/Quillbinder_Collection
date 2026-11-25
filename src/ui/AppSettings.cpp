@@ -104,6 +104,7 @@ void AppSettings::load()
     s.beginGroup(QStringLiteral("app")); // not "general": QSettings reserves [General] in INI files
     forename = s.value(QStringLiteral("forename")).toString();
     surname = s.value(QStringLiteral("surname")).toString();
+    authorAsked = s.value(QStringLiteral("authorAsked"), false).toBool();
     autosaveSeconds = s.value(QStringLiteral("autosave"), 2).toInt();
     openLastProject = s.value(QStringLiteral("openLast"), true).toBool();
     language = s.value(QStringLiteral("language"), QStringLiteral("en")).toString() == QLatin1String("de") ? QStringLiteral("de") : QStringLiteral("en");
@@ -405,6 +406,13 @@ void AppSettings::load()
             toolbarList(int(b)) = s.value(QLatin1String("bar-") + toolbars::barKey(b)).toStringList();
         toolbarHidden = s.value(QStringLiteral("hidden")).toStringList();
     }
+    // 0.94.0: the Themes toolbar (one button with a menu now) is off at first, also for those who had it shown: once
+    if (!s.value(QStringLiteral("themesOff0940")).toBool()) {
+        if (!toolbarHidden.contains(QStringLiteral("themes")))
+            toolbarHidden << QStringLiteral("themes");
+        s.setValue(QStringLiteral("themesOff0940"), true);
+        s.setValue(QStringLiteral("hidden"), toolbarHidden);
+    }
     toolbarIconSize = qBound(16, s.value(QStringLiteral("iconSize"), toolbarIconSize).toInt(), 48);
     toolbarStyle = s.value(QStringLiteral("style"), toolbarStyle).toString();
     s.endGroup();
@@ -439,6 +447,7 @@ void AppSettings::save()
     s.beginGroup(QStringLiteral("app")); // not "general": QSettings reserves [General] in INI files
     s.setValue(QStringLiteral("forename"), forename);
     s.setValue(QStringLiteral("surname"), surname);
+    s.setValue(QStringLiteral("authorAsked"), authorAsked);
     s.setValue(QStringLiteral("autosave"), autosaveSeconds);
     s.setValue(QStringLiteral("openLast"), openLastProject);
     s.setValue(QStringLiteral("language"), language);

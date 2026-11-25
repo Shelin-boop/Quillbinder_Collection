@@ -85,8 +85,8 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
   (Speech Transcription, Translation and Proofreading), under the name of the tab's tooltip. A new check walks all
   menus: no two commands share a shortcut and no menu has two entries with the same Alt letter.
 - **Return and Space in the binder: a menu option, off at first**. Return made a new empty document and Space opened a
-  Quick Reference window (the keys of Scrivener); a file manager opens the item with Return, and a phrase with a space
-  typed to find a title opened a window for each space. The new entry **View > Scrivener Keys in the Binder** is
+  Quick Reference window (the quick-add keys); a file manager opens the item with Return, and a phrase with a space
+  typed to find a title opened a window for each space. The new entry **View > Quick-Add Keys in the Binder** is
   unchecked (also after an update): Return opens the selected document in the editor and puts the keyboard there,
   Space belongs to the binder's type-ahead search (this also holds for the list of a collection or a search). Checked,
   the keys are as before.
@@ -100,6 +100,50 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
   and every shortcut changed in **File > Options > Keyboard**, stays as it is. Linux asks the keyboard settings of the
   desktop (KDE, GNOME), the X server or the system's default; Windows the language of the keyboard layout; Android the
   language of the keyboard (this last way is not tried on a device).
+- **Composition mode: the bar is readable in light themes**. After the theme "Light" the buttons Inspector, Exit (Esc),
+  the one beside them and the zoom box of the bottom bar were light gray on light gray (1.2:1). The bar is dark in
+  every theme now and its buttons, box and texts have their own colors; a check measures the contrast of the bar for
+  every built-in theme (at least 4.5:1, as WCAG 2.2 asks for text).
+- **Card text and ruler numbers are readable**. The text of an index card that is taken from the document (a card
+  without a synopsis) was 3.1:1 on the card and the numbers of the ruler 2.5:1 in the default theme. Both have at
+  least 4.5:1 in every built-in theme now (the text of a synopsis too); a check measures them.
+- **One theme button instead of four buttons and a list**. Bright, Dark, U1, U2 and the theme list took 333 px of the
+  toolbar. Now one button, **Theme**, has a menu: **Light**, **Dark**, **My Look 1**, **My Look 2**, then every theme
+  (the one in use checked) and at the end **Save the Current Look as My Look 1** and **...as My Look 2**. Light shows
+  the theme Light (it showed the theme that follows the desktop for some), an empty My Look says so in the menu and
+  explains itself in its tool tip. U1 and U2 are called My Look 1 and My Look 2 in the menus, tool tips and the manual
+  (the saved themes keep their file names). The button is in the Themes toolbar, which is off at first, also for those
+  who had it shown (once; **View > Toolbars > Themes** shows it again). The themes stay under **Window > Themes**.
+- **The manual has a contents list and a search**. F1 opened one long text without a contents list, a search or jumps.
+  The window now has the headings of the manual on the left (a click jumps to one) and a search field (**Ctrl+F**;
+  **Return** and **Shift+Return**, or the buttons Next and Previous, show the next and the previous hit; the line
+  beside the field says which hit of how many is shown, and all hits are marked). **F1 opens the part that fits**: the
+  document, the corkboard, the outliner, Combined Text, the binder, the tab of the inspector with the keyboard, and the
+  open dialog (compile, options, project settings, themes, add-ons, styles and the other main dialogs); a dialog
+  without a part of its own opens the start. What is meant for people who build the program (the design decisions, the
+  environment variables, plugins and packages, the project folder's files) moved from the manual to the developer guide
+  (**Help > Troubleshooting and Development > Developer Guide**); the manual's sections after section 19 are renumbered
+  (troubleshooting is section 20).
+- **The first compile with a title page asks for the author's name**. The title page of the project templates reads
+  "by" and the author's name; a compile to Word gave "by" and nothing after it because the name is asked nowhere. The
+  first compile that writes a title page now asks (first and last name, kept with the author information in **File >
+  Options > General**), once. If the name is left empty, the "by" line is left out, in every format.
+- **The add-on install window names what the add-on does**. The window of Speech Transcription began with whisper.cpp,
+  Vulkan, Qt Multimedia 6.12.1, a TLS plugin and the runtime name. It now begins with what the add-on does for a writer;
+  the technical lines are under **Details**, which is folded (a new optional field "details" of the add-on's
+  manifest). The window of the full AppImage that shows the add-ons being installed names each one by its name from the
+  manifest ("Media Playback"), not by its id.
+- **The download page lists the add-ons and warns about the question of the desktop**. Under each system's other
+  downloads the page lists the add-ons of the release (name, one line and size). The Linux steps say that the desktop
+  (KDE Plasma) may ask whether to execute the file after the double-click. The release workflow writes the installed
+  size of the full version's add-ons (**tools/full-addons-size.py**) for the line about disk space, which the page
+  already read.
+- **The binder option is called "Quick-Add Keys in the Binder"**. It was **Scrivener Keys in the Binder** (**View**);
+  the word Scrivener is kept for the file format and the import. The setting keeps its key; status tip and tool tip
+  say "Return adds a new document below; Space opens a Quick Reference window".
+- **System test (Linux): S-P03 and S-T03 follow the Android copy**. S-P03 saves before its second Save As (since 0.93.0
+  Save As writes nothing more into the original); a right click in S-T03 brings the place into sight in a scroll area
+  around the editor. The system test runs only when asked.
 
 ## 0.93.1 beta (2026-11-24)
 

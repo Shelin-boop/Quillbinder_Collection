@@ -3,6 +3,7 @@
 #include "ui/Ask.h"
 #include "ui/LinkOpen.h"
 #include "ui/MainWindow.h"
+#include "ui/ManualWindow.h"
 #ifdef Q_OS_ANDROID
 #include "ui/Language.h" // (the Android program's About text: English or German, see aboutText())
 #endif
@@ -1328,11 +1329,11 @@ void MainWindow::createActions()
     sb->setChecked(true);
     connect(sb, &QAction::toggled, m_binder, &QWidget::setVisible);
     // 0.94.0: the keys of the binder (Return makes a new document, Space opens a Quick Reference window)
-    QAction *sk = act(QStringLiteral("binderScrivenerKeys"), tr("Scrivener &Keys in the Binder"));
+    QAction *sk = act(QStringLiteral("binderScrivenerKeys"), tr("Quick-Add &Keys in the Binder"));
     sk->setCheckable(true);
-    sk->setChecked(AppSettings::instance().binderScrivenerKeys);
-    sk->setToolTip(tr("Off: Return opens the document in the editor and Space belongs to typing a name to jump to it. "
-                      "On: Return makes a new document below and Space opens a Quick Reference window."));
+    sk->setChecked(AppSettings::instance().binderScrivenerKeys); // (the setting's key keeps its old name)
+    sk->setToolTip(tr("Return adds a new document below; Space opens a Quick Reference window"));
+    sk->setStatusTip(tr("Return adds a new document below; Space opens a Quick Reference window"));
     connect(sk, &QAction::triggered, this, [](bool on) {
         AppSettings::instance().binderScrivenerKeys = on;
         AppSettings::instance().save();
@@ -1909,7 +1910,13 @@ void MainWindow::createActions()
 
     // ---- help
     connect(act(QStringLiteral("manual"), tr("&User Manual"), QStringLiteral("help-contents"), QKeySequence::HelpContents),
-            &QAction::triggered, this, [this] { showManual(this); });
+            &QAction::triggered, this, [this] {
+                // (from a dialog: the manual's window is a child of that dialog, so that its modality does not block it)
+                QWidget *aw = QApplication::activeWindow();
+                QWidget *parent = aw && aw != this && aw->window() != this && !qobject_cast<ManualWindow *>(aw) ? aw : this;
+                showManual(parent, manualSection());
+            });
+    manualhelp::installF1(a[QStringLiteral("manual")], this); // (F1 in a dialog: the section of that dialog)
     connect(act(QStringLiteral("quickStart"), tr("&Quick Start Guide")), &QAction::triggered, this,
             [this] { showQuickStartGuide(this); });
     a[QStringLiteral("quickStart")]->setToolTip(tr("Where the important settings are, and what %1 can do")

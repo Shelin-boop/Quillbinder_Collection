@@ -2,7 +2,7 @@
 //  - item 87: one name and one key per command (Navigate > Inspect lists every inspector tab under its tooltip's name, the
 //    timestamp command has one name in both menus), and a check over all menus: no shortcut twice, no Alt letter twice in
 //    one menu;
-//  - item 84: View > Scrivener Keys in the Binder (off at first: Return opens the document, Space is the type-ahead's);
+//  - item 84: View > Quick-Add Keys in the Binder (off at first: Return opens the document, Space is the type-ahead's);
 //  - item 79: the shortcuts out of the box follow the keyboard layout (US set, German set without AltGr), chosen at the
 //    first start and kept; a changed shortcut stays.
 //
@@ -323,12 +323,12 @@ static void closeQuickRefs()
 
 static void binderKeys(MainWindow &w, Project *p)
 {
-    std::printf("== View > Scrivener Keys in the Binder (item 84)\n");
+    std::printf("== View > Quick-Add Keys in the Binder (item 84)\n");
     QMenu *view = topMenu(w, QStringLiteral("View"));
     QAction *opt = w.findChild<QAction *>(QStringLiteral("binderScrivenerKeys"));
     check(opt && opt->isCheckable() && !opt->isChecked() && !AppSettings::instance().binderScrivenerKeys && view && view->actions().contains(opt),
-          QStringLiteral("View > Scrivener Keys in the Binder is a checkable entry, unchecked by default"));
-    check(opt && plain(opt->text()) == QStringLiteral("Scrivener Keys in the Binder"), QStringLiteral("... under that name"));
+          QStringLiteral("View > Quick-Add Keys in the Binder is a checkable entry, unchecked by default"));
+    check(opt && plain(opt->text()) == QStringLiteral("Quick-Add Keys in the Binder"), QStringLiteral("... under that name"));
 
     auto *binder = w.findChild<BinderPanel *>();
     BinderTree *tree = binder->tree();

@@ -1,6 +1,6 @@
 # {{APP}} Quick Start Guide
 
-{{APP}} is a writing program for long texts. If you have worked with other binder-based writing programs, most of it will feel familiar: a binder on the left, the editor in the middle, an inspector on the right, and Compile at the end. This guide shows where the important settings are and sums up what {{APP}} can do. The full manual is under **Help > User Manual** (**F1**); a short tour of the features you may not know yet is in **Help > Welcome Project**.
+{{APP}} is a writing program for long texts. If you have worked with other binder-based writing programs, most of it will feel familiar: a binder on the left, the editor in the middle, an inspector on the right, and Compile at the end. This guide shows where the important settings are and sums up what {{APP}} can do. The full manual is under **Help > User Manual** (**F1**; it has a contents list and a search); a short tour of the features you may not know yet is in **Help > Welcome Project**.
 
 ---
 
@@ -84,7 +84,7 @@ The **full version** of the AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) has 
 
 ## Help
 
-- **Help > User Manual** (**F1**): every function, with the menu paths.
+- **Help > User Manual** (**F1**): every function, with the menu paths; F1 opens the part that fits what you are looking at, and **Ctrl+F** in its window searches the text.
 - **Help > Welcome Project**: a short project that shows the features listed under "Beyond the usual" and lets you try them.
 - **Help > Mind Map Help**: notes, lines, arrows, and shapes, with pictures and a practice board.
 - **Help > List of All Placeholders** and **Help > Keyboard Shortcuts…**

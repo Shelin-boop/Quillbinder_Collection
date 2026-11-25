@@ -67,8 +67,7 @@ FullInstallWindow::FullInstallWindow(int count, qint64 bytes, QWidget *parent) :
 void FullInstallWindow::setProgress(int done, int total, const QString &name, qint64 doneBytes)
 {
     m_bar->setValue(int(qMin<qint64>(m_bar->maximum(), doneBytes / 1000)));
-    QString n = name;
-    n.remove(QLatin1String(".qbpkg"));
+    QString n = name; // (the add-on's name from its manifest, 0.94.0; before, the package's file name)
     m_current->setText(n.isEmpty() ? tr("Done") : tr("%1 of %2: %3").arg(done + 1).arg(total).arg(n));
 }
 

@@ -61,6 +61,9 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 public:
+    // 0.94.0: the section of the user manual for what is on the screen now (F1): the view of the active pane, the
+    // binder, the inspector's tab; empty: the start of the manual
+    QString manualSection() const;
     MainWindow();
     ~MainWindow() override;
 

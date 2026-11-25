@@ -316,6 +316,10 @@ static void windowChecks(MainWindow &w)
         icons->trigger();
         settle(300);
     }
+    if (QAction *themesOn = w.findChild<QAction *>(QStringLiteral("showBarThemes")); themesOn && !themesOn->isChecked()) {
+        themesOn->trigger(); // (0.94.0: the Themes bar is off by default)
+        settle(300);
+    }
     GripBar *mainBar = b.all[0], *themes = b.all[1], *search = b.all[2], *tools = b.all[3], *style = b.all[4], *character = b.all[5],
             *paragraph = b.all[6], *iconBar = b.all[7];
     QAction *reset = w.findChild<QAction *>(QStringLiteral("resetToolbarPlaces"));

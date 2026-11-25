@@ -87,8 +87,8 @@ QList<Special> specials(Bar bar)
             {QStringLiteral("bookmarks"), QObject::tr("Project Bookmarks"), QStringLiteral("bookmarks")},
             {QStringLiteral("notes"), QObject::tr("Comments and Footnotes"), QStringLiteral("edit-comment")},
             {QStringLiteral("layoutsButton"), QObject::tr("Layouts"), QStringLiteral("view-split-left-right")},
-            // 0.90.2: the theme list; 0.91.0: with the buttons Bright, Dark, U1 and U2
-            {QStringLiteral("themePicker"), QObject::tr("Themes (Bright, Dark, U1, U2 and the list)"), QStringLiteral("format-text-color")},
+            // 0.90.2: the theme list; 0.91.0: with the buttons Bright, Dark, U1 and U2; 0.94.0: one button with a menu
+            {QStringLiteral("themePicker"), QObject::tr("Theme button (Light, Dark, My Look 1, My Look 2 and all themes)"), QStringLiteral("format-text-color")},
         };
     return {
         {QStringLiteral("styleCombo"), QObject::tr("Style list"), QStringLiteral("format-text-bold")},

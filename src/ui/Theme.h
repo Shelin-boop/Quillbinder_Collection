@@ -187,6 +187,11 @@ void panelFields(QWidget *w);
 // as the theme's lists, else a light or a dark gray.
 QColor readableOn(const QColor &background);
 
+// WCAG 2.2 contrast ratio of two colors (1 to 21; text needs at least 4.5), and the color nearest to fg that keeps at
+// least minRatio on bg (fg is moved toward black or white, whichever reaches the ratio sooner; 0.94.0).
+double contrastRatio(const QColor &a, const QColor &b);
+QColor withContrast(const QColor &fg, const QColor &bg, double minRatio = 4.5);
+
 // Emits changed() at the end of apply(); widgets that paint with theme
 // colors connect to it.
 class Notifier : public QObject

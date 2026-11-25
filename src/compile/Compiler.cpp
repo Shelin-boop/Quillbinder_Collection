@@ -850,6 +850,34 @@ void Compiler::appendDocument(Manuscript &m, QTextDocument *doc, const QString &
     m.tables << newTables;
 }
 
+bool Compiler::hasTitlePage() const
+{
+    for (const CompileEntry &e : entries())
+        if (e.included && e.item && e.item->hasText() && layoutNameFor(e) == QLatin1String("Title Page"))
+            return true;
+    return false;
+}
+
+// 0.94.0: a title page of a writer who gave no name keeps no "by" line (the template's title page reads "by <$author>";
+// the line is a paragraph of its own that holds only that word, in the program's language or English)
+static void dropByLine(Manuscript &m, int from)
+{
+    static const QStringList words = {QStringLiteral("by"), QObject::tr("by")};
+    for (int i = int(m.paragraphs.size()) - 1; i >= from; --i) {
+        QString t;
+        for (const Run &r : m.paragraphs[i].runs)
+            t += r.text;
+        t = t.trimmed();
+        if (t.endsWith(QLatin1Char(':')))
+            t.chop(1);
+        for (const QString &w : words)
+            if (!w.isEmpty() && t.compare(w, Qt::CaseInsensitive) == 0) {
+                m.paragraphs.removeAt(i);
+                break;
+            }
+    }
+}
+
 Manuscript Compiler::build()
 {
     Manuscript m;
@@ -1001,6 +1029,8 @@ Manuscript Compiler::build()
             m_docBaseLevel = layout->includeTitle ? e.level : qMax(0, e.level - 1);
             progress::tick();
             appendDocument(m, doc, item->id, layout->noIndentFirstParagraph || layout->includeTitle, false);
+            if (layout->name == QLatin1String("Title Page") && m.author.trimmed().isEmpty())
+                dropByLine(m, beforeText); // (0.94.0: without an author there is nothing to follow "by")
             hadText = m.paragraphs.size() > beforeText;
         }
         if (breakHere && m.paragraphs.size() > before)

@@ -498,3 +498,9 @@ target_link_libraries(qb_mmoverview_tests PRIVATE qbui Qt6::Test)
 # 0.93.0 (item 24): the notes start as plain text, pasting into them is plain (xvfb-run -a ./qb_notesplain_tests /tmp/shots)
 add_executable(qb_notesplain_tests notesplain_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_notesplain_tests PRIVATE qbui Qt6::Test)
+# 0.94.0, fourth part: the composition bar, card text and ruler contrast (items 65, 81), the theme button (item 80), the
+# manual's window (item 66), the author's name (item 82), the add-on window (item 90), the download page (item 83), the
+# system test's harness (item 61) (xvfb-run -a ./qb_v0940d_tests /tmp/shots)
+add_executable(qb_v0940d_tests v0940d_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0940d_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0940d_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")

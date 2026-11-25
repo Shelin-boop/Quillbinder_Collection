@@ -631,6 +631,17 @@ bool installData(const QByteArray &data, const PackageInfo &info, QStringList *l
 
 } // namespace
 
+QString packageDisplayName(const QString &file)
+{
+    QString fallback = QFileInfo(file).fileName();
+    fallback.remove(QLatin1String(".qbpkg"));
+    ZipReader zr(file);
+    if (!zr.isValid())
+        return fallback;
+    const Manifest m = Manifest::fromJson(QJsonDocument::fromJson(zr.fileData(QStringLiteral("manifest.json"))).object());
+    return m.name.isEmpty() ? fallback : m.name;
+}
+
 // ------------------------------------------------------------------ manifest
 
 QJsonObject Manifest::toJson() const
@@ -647,6 +658,8 @@ QJsonObject Manifest::toJson() const
         o.insert(QStringLiteral("author"), author);
     if (!whatsNew.isEmpty())
         o.insert(QStringLiteral("whatsNew"), QJsonArray::fromStringList(whatsNew));
+    if (!details.isEmpty())
+        o.insert(QStringLiteral("details"), QJsonArray::fromStringList(details));
     if (!minApp.isEmpty())
         o.insert(QStringLiteral("minApp"), minApp);
     if (!runtime.isEmpty())
@@ -684,6 +697,8 @@ Manifest Manifest::fromJson(const QJsonObject &o)
     m.author = o.value(QStringLiteral("author")).toString();
     for (const QJsonValue &v : o.value(QStringLiteral("whatsNew")).toArray())
         m.whatsNew << v.toString();
+    for (const QJsonValue &v : o.value(QStringLiteral("details")).toArray())
+        m.details << v.toString();
     m.minApp = o.value(QStringLiteral("minApp")).toString();
     m.runtime = o.value(QStringLiteral("runtime")).toString();
     m.binary = o.value(QStringLiteral("binary")).toString();
@@ -809,7 +824,7 @@ bool installBundled(const QString &dir, QStringList *log, QString *error,
     int done = 0;
     for (const QFileInfo &fi : packages) {
         if (progress)
-            progress(done, int(packages.size()), fi.fileName(), doneBytes);
+            progress(done, int(packages.size()), packageDisplayName(fi.absoluteFilePath()), doneBytes);
         QString err;
         bool restart = false;
         if (!install(fi.absoluteFilePath(), log, &err, &restart, Unsigned::AllowAll)) {

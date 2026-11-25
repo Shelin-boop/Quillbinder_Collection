@@ -1125,7 +1125,7 @@ int main(int argc, char **argv)
             QStringLiteral("File > Exit"), QStringLiteral("Edit > Undo"), QStringLiteral("Edit > Redo"), QStringLiteral("Edit > Cut"),
             QStringLiteral("Edit > Copy"), QStringLiteral("Edit > Paste"), QStringLiteral("Edit > Select All"),
             QStringLiteral("Edit > Writing Tools > "), QStringLiteral("View > Show Binder"), QStringLiteral("View > Show Collections"),
-            QStringLiteral("View > Show Inspector"), QStringLiteral("View > Scrivener Keys in the Binder"), QStringLiteral("View > Layout > "), QStringLiteral("View > Toolbars > "), QStringLiteral("View > Text Editing > "),
+            QStringLiteral("View > Show Inspector"), QStringLiteral("View > Quick-Add Keys in the Binder"), QStringLiteral("View > Layout > "), QStringLiteral("View > Toolbars > "), QStringLiteral("View > Text Editing > "),
             QStringLiteral("View > Corkboard Options > Status Stamps"), QStringLiteral("View > Use Label Color In > "),
             QStringLiteral("View > Full Screen"), QStringLiteral("View > Zoom Inspector Tabs Separately"), QStringLiteral("Window > Themes > "), QStringLiteral("View > Layout > "),
             QStringLiteral("Window > Scratch Pad"), QStringLiteral("Window > Float Quick Reference Panels"), QStringLiteral("Help > ")};

@@ -2,7 +2,7 @@
 
 {{APP}} is a writing studio for long texts: novels, screenplays, plays, comic scripts, theses, and nonfiction books. You write in small pieces (scenes, sections, notes), arrange them freely, and at the end *compile* them into one manuscript.
 
-This manual covers version {{VERSION}}. Press **F1** at any time to open it. The reasons behind some deliberate choices that can look like faults (a lock that warns and does not block, a drive that cannot confirm a write, projects that are not encrypted) are written down in [design-decisions.md](https://github.com/Shelin-boop/Quillbinder_Collection/blob/main/docs/design-decisions.md).
+This manual covers version {{VERSION}}. Press **F1** at any time to open it, and it opens at the part that fits what you are looking at: the document, the corkboard, the outliner or Combined Text, the binder, the tab of the inspector that has the keyboard, or the dialog that is open (a dialog that has no part of its own opens the start). The window has a **contents list** on the left (a click on a heading jumps to it) and a **search field** above the text: press **Ctrl+F** to go to it, type a word, and **Return** shows the next hit, **Shift+Return** the previous one (the **Next** and **Previous** buttons do the same); the line beside the field says which hit of how many is shown, and every hit is marked in the text. What is meant for people who build {{APP}} (plugins, packages, the project's folder in detail, environment variables) is in the developer guide, **Help > Troubleshooting and Development > Developer Guide: Updates and Add-ons**.
 
 ---
 
@@ -25,7 +25,7 @@ When {{APP}} starts without a project, the **start window** opens:
 
 {{APP}} reopens the last project when it starts (you can switch this off under **File > Options > General**).
 
-**The very first start** shows one page with everything already filled in (**OK** keeps it): the backups (whether a project is backed up when it is closed, how many backups to keep and where), from a Linux AppImage the question whether to add {{APP}} to the application menu (and whether to move the AppImage to *~/Applications*), and the note about the check for updates with its switch. The welcome project opens when you press **OK**; no empty program window shows before it. All of it can be changed later in **File > Options**; there, under **General > Startup**, is also the choice which settings come first, a project's own or always the program's (section 16, *Settings for one project*; since 0.81 no longer asked at the first start).
+**The very first start** shows one page with everything already filled in (**OK** keeps it): the backups (whether a project is backed up when it is closed, how many backups to keep and where), from a Linux AppImage the question whether to add {{APP}} to the application menu (and whether to move the AppImage to *~/Applications*), and the note about the check for updates with its switch. The welcome project opens when you press **OK**; no empty program window shows before it. All of it can be changed later in **File > Options**; there, under **General > Startup**, is also the choice which settings come first, a project's own or always the program's (section 16, *Settings for one project*).
 
 ### The welcome project and the Quick Start Guide
 
@@ -49,7 +49,7 @@ Every file is written under a temporary name first and replaces the old one only
 
 **A save lands as a whole** (0.65). When one save writes several files (a new document's text and the project file, a text and its pictures, the Objects sheet), all of them are first written beside their places, then listed in a small journal (*settings/journal.json*), and only then put in place together. If the program or the computer stops in the middle, the next opening finishes that save from the journal, or, if the journal was not complete yet, leaves the project as it was at the save before; a notice says which. A journal that cannot be read (a disk fault) is never taken for an empty one: it and the files of its save are kept in a folder in *settings/conflicts*, nothing is put in place or deleted, and the notice says so (0.81.1). In a sync folder, the journal of a save of the other computer is left alone for 15 minutes (that save may still be running there, or its files still arriving): this computer does not save the project meanwhile and tries again by itself, and if the other computer stopped during that save, this one finishes it after those 15 minutes (0.81.1). If one file of a save cannot be written, none of them replaces anything, and your changes stay in the window for the next try. Since 0.93.0 a drive that reports an error when a folder is synced after the files were put in place (a real error, not a file system that cannot sync) makes the save count as failed: the journal stays, the message says that the drive reported an error, and the next save or opening finishes the save from the journal. While a journal that cannot be read could not be moved aside (the folder *settings/conflicts* cannot be written), no save writes a new journal over it: the save waits, its message names the file, and the program saves by itself once the file can be set aside. A temporary file of an earlier save that is in the way is moved aside, never written over. A folder sync that fails before anything is replaced is a clean failure: nothing was changed. When the error comes after the files are in place, the program notes what is on disk (so the retries do not report false "changed elsewhere" conflicts and write no pictures twice), and it syncs the folder again with every save: "Saved" always follows a folder sync that was checked. A file system that answers a folder sync with an error already when the project is opened is remembered as one that cannot sync folders, and its saves are not told as failed.
 
-If you log out or shut the computer down while {{APP}} is open, it saves everything before it ends (no backup is made then). If that save fails (a full disk, a drive that is gone), the texts and notes that were not saved (and, since 0.93.0, the project file as it is in memory) are written as RTF files into an emergency folder, *~/.local/share/{{APP}}/Emergency*, and the next start says where they are, and how many of the files were written (the notice says "incomplete" and names what is missing when a file could not be written). If it ends unexpectedly, the next start tells you so (section 21, *Crash reports*).
+If you log out or shut the computer down while {{APP}} is open, it saves everything before it ends (no backup is made then). If that save fails (a full disk, a drive that is gone), the texts and notes that were not saved (and, since 0.93.0, the project file as it is in memory) are written as RTF files into an emergency folder, *~/.local/share/{{APP}}/Emergency*, and the next start says where they are, and how many of the files were written (the notice says "incomplete" and names what is missing when a file could not be written). If it ends unexpectedly, the next start tells you so (section 20, *Crash reports*).
 
 **Closing a project that cannot be saved** asks what to do; **Keep Open** is the default. **Save Texts Elsewhere…** writes the texts and notes not yet saved as RTF files into a folder you choose (another drive, a USB stick), and the project stays open. Since 0.93.0 this emergency copy also holds the project file as it is in the window (the binder, titles and labels), the mind map boards and the changed objects, and it is made when only the binder or the Objects changed too. The message says how many files were written, as "n of m", and names the files that are missing and why; a copy that lacks files is headed **incomplete** (with a warning sign) and never looks like a finished one. A folder that is there is never used again: a second copy in the same second gets a number. The project file in the copy is named like the project file with ".copy" added (so that the folder is not taken for a project by mistake); the README in the copy says how to put it back: close the project, rename the project file in the project folder (it stays as it was), copy the file of the emergency copy there, rename it to the project file's name and open the project again. For a project in Scrivener format the README says the file belongs to the working copy and gives no way back. When nothing was unsaved after all (a retry worked meanwhile), the message says everything is saved and no copy was needed. **Close Without Saving** closes it and loses those changes.
 
@@ -90,7 +90,7 @@ What others can see of your work:
 - **Author Information** (name, address, phone, e-mail in **File > Options**) stays in the program's settings on this computer; it never goes into a project's own settings. It reaches a manuscript only where the compile format uses the placeholders (<$author>, <$address> ...).
 - **Deleted text is not gone everywhere**: snapshots keep earlier versions of a document (**Project > Delete Old Snapshots** removes them), and backups keep the whole project as it was (section 15). Backups are ordinary ZIP files without a password; a backup folder inside a synced folder is uploaded by the sync program.
 - **Your files are not encrypted by {{APP}}** (0.65): texts, notes, the project's settings and backups are ordinary files, readable by anyone who can read the folder they are in. To keep a manuscript private, keep the project and its backups on an encrypted disk (Kubuntu's installer offers to encrypt the whole disk; for a USB stick or an external drive, KDE's Plasma Vaults or a LUKS-encrypted drive), and keep the backup folder out of shared folders you do not control.
-- **Crash reports** stay on this computer until you copy or send one yourself (section 21). They describe the program's state and name the open project and its folder. On Windows a memory dump is kept beside each report; it can hold text you were writing, and the report says so.
+- **Crash reports** stay on this computer until you copy or send one yourself (section 20). They describe the program's state and name the open project and its folder. On Windows a memory dump is kept beside each report; it can hold text you were writing, and the report says so.
 
 ### Adding {{APP}} to the application menu
 
@@ -157,7 +157,7 @@ The **footer** of each editor shows the word and character count (select text to
 | **File** | Projects, saving, the project format ({{APP}} or Scrivener), backups, import and export, compare and transfer with a Word or LibreOffice file, compile, printing, file conversion, options |
 | **Edit** | Undo, clipboard, selecting, finding and replacing (in the text, in the project, by formatting), moving documents in the binder, writing tools |
 | **Insert** | Images, tables, links to documents and objects, web links, comments, footnotes, media timestamps, auto numbers, placeholders, special characters, date and time |
-| **View** | The three view modes, the split editor (**Split Editor**), the places of binder, editor and inspector and the saved layouts (**Layout**), binder, collections and inspector (and **Scrivener Keys in the Binder**), toolbars, text editing options (page view, ruler, typewriter scrolling), corkboard and outliner options, label colors, zoom, composition mode, full screen |
+| **View** | The three view modes, the split editor (**Split Editor**), the places of binder, editor and inspector and the saved layouts (**Layout**), binder, collections and inspector (and **Quick-Add Keys in the Binder**), toolbars, text editing options (page view, ruler, typewriter scrolling), corkboard and outliner options, label colors, zoom, composition mode, full screen |
 | **Navigate** | Back and forward, previous and next document, opening documents in the other editor, in the copyholder, or as quick reference, the editor lock, which editor the binder loads into, the inspector tabs (all of them, under the names of their tooltips: **Synopsis and notes**, **Bookmarks**, **Metadata**, **Snapshots**, **Comments and footnotes**, the mind map, the objects and the tabs of writing tools) |
 | **Project** | New documents, project settings (also saved to and loaded from a file), targets, keywords, statistics, writing history, trash, deleting old snapshots |
 | **Documents** | Snapshots, renaming, duplicating, splitting, merging, converting, icon, label, status, bookmarks |
@@ -202,7 +202,7 @@ Choose a layout under **View > Layout** or from the **View** button of the toolb
 
 ### The toolbars and their places
 
-Since 0.91 the window has eight toolbars in two rows. The first row holds **Main** (View, new text, new folder, trash, Undo, Redo), **Themes** (the theme buttons and the theme list), **Search** (the search button, the quick search field, the view modes) and **Tools** (bookmarks, Quick Reference, comments, Compile, Show Invisibles, Composition Mode, the buttons of writing tools, the inspector). The second row holds **Style and Font**, **Character and Alignment**, **Paragraph and Insert** and the **icon bar**.
+Since 0.91 the window has eight toolbars in two rows. The first row holds **Main** (View, new text, new folder, trash, Undo, Redo), **Themes** (the theme button, off at first), **Search** (the search button, the quick search field, the view modes) and **Tools** (bookmarks, Quick Reference, comments, Compile, Show Invisibles, Composition Mode, the buttons of writing tools, the inspector). The second row holds **Style and Font**, **Character and Alignment**, **Paragraph and Insert** and the **icon bar**.
 
 - **Moving a toolbar.** Every toolbar has a grip at its front (two columns of dots; the pointer turns into a cross with arrows over it). Drag the grip, and the toolbar goes where you take it:
   - **Along its row.** While the pointer stays between the middles of the two neighboring toolbars, the toolbar follows it at once. The free space before a toolbar is as wide as you make it. Moving right, the toolbar first takes the free space after it; when it reaches the next toolbar it pushes that one along, as far as the toolbars after it can stand together at the row's end. Moving left, it stops where the toolbar before it ends, and the toolbars after it stay where they are (drag them up to it if you want them together again). The first toolbar of a row stays at the window's edge.
@@ -222,7 +222,7 @@ Since 0.91 the window has eight toolbars in two rows. The first row holds **Main
 - Add a command with the arrow button or a double-click. Every command of the menus is available, also those of writing tools (Edit > Writing Tools); the search field above the list finds it.
 - Remove a button with the other arrow or a double-click, and move it with the up and down buttons or by dragging.
 - **Separator** and **Flexible Space** can be used as often as you like. A flexible space pushes what follows to the right; two of them center what stands between them.
-- Some entries are more than one command: **View**, **Add**, **Search**, the **Quick Search field**, **View Mode**, **Project Bookmarks**, **Comments and Footnotes**, **Layouts**, and **Themes** (the theme buttons Bright, Dark, U1, U2 with the theme list) for the four toolbars of the first row; the style, font, size, and line spacing lists and the four paragraph buttons for the three format toolbars. Such a control exists once: added to a toolbar, it moves there from the toolbar that had it. A control of the first row cannot go onto a format toolbar, nor the other way round.
+- Some entries are more than one command: **View**, **Add**, **Search**, the **Quick Search field**, **View Mode**, **Project Bookmarks**, **Comments and Footnotes**, **Layouts**, and **Themes** (the theme button with its menu) for the four toolbars of the first row; the style, font, size, and line spacing lists and the four paragraph buttons for the three format toolbars. Such a control exists once: added to a toolbar, it moves there from the toolbar that had it. A control of the first row cannot go onto a format toolbar, nor the other way round.
 - Below the lists you choose small, medium, or large icons and whether the toolbars of the first row show text beside or under the icons.
 - **Standard Set** puts the buttons the program came with back into the bar.
 
@@ -260,7 +260,7 @@ Every project has three special folders:
 
 A document can have subdocuments, just like a folder. Folders and documents behave the same way; folders simply look different and open as a corkboard by default.
 
-**The binder's keys (0.94.0).** With the keyboard in the binder, **Return** opens the selected document in the editor and puts the keyboard there (as a file manager does), and the arrow keys move through the list. **Space** is part of typing a name: type the first letters of a title, spaces too ("Chapter t"), and the selection jumps to the first title that begins so. The entry **View > Scrivener Keys in the Binder** is off at first (also after an update). Switched on, the binder has the keys of Scrivener: **Return** makes a new empty document below the selected one and **Space** opens the selected documents as Quick Reference panels (and in the list of a collection or a search).
+**The binder's keys (0.94.0).** With the keyboard in the binder, **Return** opens the selected document in the editor and puts the keyboard there (as a file manager does), and the arrow keys move through the list. **Space** is part of typing a name: type the first letters of a title, spaces too ("Chapter t"), and the selection jumps to the first title that begins so. The entry **View > Quick-Add Keys in the Binder** is off at first (also after an update). Switched on, the binder has the quick-add keys: **Return** makes a new empty document below the selected one and **Space** opens the selected documents as Quick Reference panels (and in the list of a collection or a search).
 
 A click in the binder loads the document into the editor. After **Back**, a document link, or with a locked editor, the editor can show another document than the one selected in the binder: a **gray bar** then marks the editor's document in the binder. **Navigate > Reveal in Binder** (**Ctrl+Shift+R**) selects it.
 
@@ -693,7 +693,7 @@ A Quick Reference panel is a document in a window of its own, for example to kee
 **To open panels:**
 
 - **Navigate > Open > as Quick Reference**, or the Quick Reference button of the toolbar, for the selected documents.
-- Press **Space** on the corkboard or in the outliner, or in the binder and in a collection or search result list when **View > Scrivener Keys in the Binder** is on (see section 2, the binder's keys). Without that option, Space in the binder belongs to typing a name to jump to it.
+- Press **Space** on the corkboard or in the outliner, or in the binder and in a collection or search result list when **View > Quick-Add Keys in the Binder** is on (see section 2, the binder's keys). Without that option, Space in the binder belongs to typing a name to jump to it.
 - Drag documents onto the **Quick Reference button** of the toolbar: each one opens in a panel of its own, and the editor keeps its document.
 - **Navigate > Open Quick Reference** shows the whole binder as a menu, so you can open a document without selecting it first.
 
@@ -1086,7 +1086,7 @@ A snapshot is a saved copy of a document at a certain moment. Take one before a 
 
 **File > Options > Behaviors > Composition Mode** chooses the screen it opens on (the current one, the primary one, or one by name), whether the main window gets out of the way (minimized while composition mode is open), and whether **Esc** closes it (**F11** always does).
 
-The colors of text, paper, and background come from the theme. To change them, for example to black on white or green on black, go to **File > Options > Appearance > Composition Mode**; the change shows at once, even while composition mode is open. A background picture can be set per project under **Project Settings > Special Folders**.
+The control bar is dark in every theme, so its buttons, the zoom list and their texts stay readable in light themes too (0.94.0). The colors of text, paper, and background come from the theme. To change them, for example to black on white or green on black, go to **File > Options > Appearance > Composition Mode**; the change shows at once, even while composition mode is open. A background picture can be set per project under **Project Settings > Special Folders**.
 
 ---
 
@@ -1101,7 +1101,7 @@ The compile window has **Compile For** at the top, the formats on the left, the 
 1. **Compile For**: the output format. Built in, with no other program needed: **Word Document (.docx)**, **PDF (.pdf)**, **E-book (.epub)**, and for scripts **Fountain** and **Final Draft**. PDF and OpenDocument through LibreOffice, EPUB through Pandoc, and Markdown appear as well if the matching plugin and program are installed (see below). Beside it: how many documents and about how many words will be compiled.
 2. **Formats** (left), under **My Formats** and **Built-in Formats**: the compile format decides how the manuscript looks: fonts, line spacing, page size, margins, headers and footers, how chapters and scenes look, how styles, notes, and quotes come out. The built-in formats (*Manuscript (Times)*, *Manuscript (Courier)*, *Modern*, *Paperback (6 x 9 in)*, *E-book*, *Default (Editor Formatting)*, and *Outline (Synopses)*) cannot be changed. The buttons below the list: **+** (duplicate the selected format to make your own version and edit it), the pencil (edit your own format), **-** (delete it), **Import...** and **Export...** (a *.qbformat* file to use on another computer or to give away; an imported format whose name is taken gets a number).
 3. **Section Layouts** (middle): **Font** sets one font for the whole manuscript, or leaves it to the layouts ("Determined by Section Layout"). The table lists every section type of your project with the layout it gets in this format; choose another one in the list. Below the table, a small picture shows how a section with the selected layout begins. **Assign Section Layouts...** opens a larger window with the section types on the left and pictures of all layouts of the format on the right. The built-in formats know the usual names of section types: in *Manuscript (Courier)*, for example, *Part* gets **Part Title**, *Chapter* gets **Chapter Heading**, and *Scene* or *Section* gets **Section Text**.
-4. **Contents** (first tab): what is compiled, with the section type of each document and its layout. Choose a folder to compile only part of the Draft (for example one chapter), add front matter (title page) and back matter (acknowledgments). Untick a document to leave it out; this switches off its **Include in Compile** setting. **Add object sheets** puts a sheet for each object of the Objects tab (section 7) after the back matter: a heading per category (Characters, Locations ...), then each object with its fields; the button beside it chooses the categories. It is off at first.
+4. **Contents** (first tab): what is compiled, with the section type of each document and its layout. Choose a folder to compile only part of the Draft (for example one chapter), add front matter (title page) and back matter (acknowledgments). **The author's name** (0.94.0): the title page of the project templates reads "by" and the author's name. The first compile that writes a title page asks for that name (first and last name; it is kept with the Author Information in **File > Options > General**, so it is asked once); if you leave it empty, the "by" line is left out of the title page, in every format. The Author field of the compile window's Metadata tab, if it holds a name, is used for the compiled file instead. Untick a document to leave it out; this switches off its **Include in Compile** setting. **Add object sheets** puts a sheet for each object of the Objects tab (section 7) after the back matter: a heading per category (Characters, Locations ...), then each object with its fields; the button beside it chooses the categories. It is off at first.
 5. **Metadata** (second tab): title, subtitle, author, language (for example *en-US*), subject, keywords, publisher, date, description, the cover of an e-book (a picture of the binder), and the book identifier. Empty fields take the project title, your name, and today's date. The details go into the PDF's document properties, the e-book, and the Word file; placeholders such as `<$projecttitle>` work here too.
 6. **Options** (third tab): whether the text of folders is compiled.
 7. **Replacements** (fourth tab): replacements of this project, made after those of the format, for example a name spelled one way in your drafts and another in the book. Each row can be switched on and off, and can be a regular expression, match case, or whole words only.
@@ -1430,7 +1430,7 @@ A few settings belong to the program only and are not shown for a project: the r
 
 ### Themes, colors, and fonts
 
-A theme sets the colors, and if it wants the fonts, of every area of the window. Choose one under **Window > Themes**, or with the buttons and the list of the Themes toolbar; the change takes effect at once, without a restart. Eight themes are built in:
+A theme sets the colors, and if it wants the fonts, of every area of the window. Choose one under **Window > Themes**, or with the theme button of the Themes toolbar (switch the toolbar on under **View > Toolbars**); the change takes effect at once, without a restart. Eight themes are built in:
 
 | Theme | Look |
 |-------|------|
@@ -1445,15 +1445,14 @@ A theme sets the colors, and if it wants the fonts, of every area of the window.
 
 Add-ons can bring more themes (the add-on "Extra themes" has Northern Night, Forest, Graphite, Warm Paper, and Rose Dawn).
 
-**The Themes toolbar** (0.90.2, changed in 0.91). Four buttons and a list of all themes.
+**The theme button** (0.90.2, changed in 0.91 and 0.94). One button, **Theme**, on the Themes toolbar, which is off at first (**View > Toolbars > Themes** shows it; before 0.94 four buttons and a list took a third of the main toolbar). Its menu lists:
 
-- **Bright** and **Dark** are switches: a click shows the theme of the button at once, as it is. At first these are *Light* and *Dark Mode*; a right-click on the button lists the bright (or dark) themes, also those of add-ons and your own, and the one you choose there is the button's theme from then on.
-- **U1** and **U2** keep two looks of your own. A click on an empty button saves the look you see now (the theme with every color and font you changed on top of it) in that button; a click on a filled button brings its look back. A right-click offers **Save the Current Look Here** (it asks before it replaces a look) and **Show This Look**. The two looks are ordinary themes named *User_1* and *User_2*: they are in the list and under **Window > Themes**, where they can also be exported or deleted (a deleted one leaves its button empty).
-- **Your own look is never lost by a click.** A button shows its theme as it is, so what you see really changes. If colors or fonts of your own lie on top of the theme shown, they would be lost by that, so they are saved first: into an empty U button without a question (the status bar says where), and when both hold a look, {{APP}} asks whether to save in U1, in U2, or to switch without saving.
-- The button of the theme shown is pressed and bold.
-- **The list** shows every theme. Choosing one there does what **Window > Themes** does: the open project and new projects use it, and the question whether to keep your own changes on top comes as before.
+- **Light** and **Dark**: a click shows that theme at once, as it is.
+- **My Look 1** and **My Look 2** keep two looks of your own. Choosing an empty one (it says *empty* in the menu) saves the look you see now (the theme with every color and font you changed on top of it) in it; choosing a filled one brings its look back. **Save the Current Look as My Look 1** and **...as My Look 2**, at the end of the menu, save the look you see now there (they ask before they replace a look). The two looks are ordinary themes: they are in the list below and under **Window > Themes**, where they can also be exported or deleted (a deleted one leaves its entry empty).
+- **All themes**, below, the one in use checked. Choosing one does what **Window > Themes** does: the open project and new projects use it, and the question whether to keep your own changes on top comes as before.
+- **Your own look is never lost by a choice.** The menu shows a theme as it is, so what you see really changes. If colors or fonts of your own lie on top of the theme shown, they would be lost by that, so they are saved first: into an empty My Look without a question (the status bar says where), and when both hold a look, {{APP}} asks whether to save in My Look 1, in My Look 2, or to switch without saving.
 
-Like every toolbar control, the theme control can be moved or taken away under **View > Toolbars > Customize Toolbars**, and the whole Themes toolbar can be switched off under **View > Toolbars**.
+Like every toolbar control, the theme button can be moved or taken away under **View > Toolbars > Customize Toolbars**, and the whole Themes toolbar can be switched on or off under **View > Toolbars**.
 
 **The page in dark themes** (0.70). The standard page of {{APP}} is a light olive paper beside a gray desk. With a dark theme, the page is a very dark gray with white text instead (or the theme's own dark page, if it has one), so a dark theme does not leave a bright page in a dark frame. A page color you chose yourself (right-click > Appearance, or File > Options > Appearance) stays in every theme.
 
@@ -1491,7 +1490,7 @@ Links in your text are stored with one blue; on dark paper they are shown in a l
 
 ## 17. Updates and add-ons
 
-**Help > Troubleshooting and Development > Developer Guide: Updates and Add-ons** explains, for people who build {{APP}} or write add-ons, how updates and add-ons work and which tools make them.
+**Help > Troubleshooting and Development > Developer Guide: Updates and Add-ons** explains, for people who build {{APP}} or write add-ons, how updates and add-ons work and which tools make them; it also holds what a technically minded friend needs to set things up (media engines, compile format plugins, package, theme, layout and script format files, the files inside a project folder) and the environment variables the program reads.
 
 {{APP}} is one program file (the AppImage). Updates and extensions come as small package files ending in **.qbpkg**. There are three kinds, and all are installed the same way:
 
@@ -1537,6 +1536,8 @@ Since 0.92.0 {{APP}} can look for updates itself. It is the only thing for which
 - An add-on key that the project does not vouch for counts as no signature: the add-on is installed only after the warning.
 - Add-ons signed with the project's own key, as all of them were up to 0.91.2, stay trusted. From 0.91.3 on, the project's own add-ons are signed with the add-on key too.
 - Versions up to 0.91.2 do not know add-on keys and warn before installing an add-on signed with one: install the program update first (it is signed with the project's own key), then the add-ons.
+
+**The window that asks before an add-on is installed** (0.94.0) says first, in a sentence or two, what the add-on does. The technical lines (the libraries it brings, the speech or graphics engine, the runtime it was built for) are under **Details**, which is folded until you open it.
 
 **Checking a download yourself.** Each release also holds *SHA256SUMS.txt* (the checksum of every file), its signature *SHA256SUMS.txt.sig*, and the public key *quillbinder-signing-public.pem*. In a terminal, in the folder with the downloads:
 
@@ -1592,7 +1593,7 @@ You do not need to know this to use {{APP}}; the editor shows formatted text. It
 - Versions before 0.62 show tables and figures as lines of text (`:::table` ...). If you go back to an older version, do not edit documents with tables or pictures beside the text.
 - Version 0.2 shows both markers as plain text. If you go back to version 0.2 with the Add-on Manager, do not edit documents that contain them.
 - Versions before 0.4 do not know your own styles: they show `<span class=…>` as plain text and treat paragraphs of your own styles as body text. If you go back to an older version, do not edit documents that use your own styles.
-- Versions before 0.10 treat script elements as body text, and they remove the names of the elements from a script as soon as it has been shown in the editor and the project is saved. If you go back to an older version, do not open your scripts there (see section 21).
+- Versions before 0.10 treat script elements as body text, and they remove the names of the elements from a script as soon as it has been shown in the editor and the project is saved. If you go back to an older version, do not open your scripts there (see section 20).
 - A backslash makes the next character ordinary text: `\*` is a star, not italic.
 - Notes follow the CriticMarkup convention:
   - `{>>inline annotation<<}`
@@ -1687,101 +1688,7 @@ The menus show every key as the layout names it. A program that was used before 
 
 ---
 
-## 20. For helpers: plugins, packages, and the project folder
-
-This section is for a technically minded friend who helps you set things up.
-
-### Media engines
-
-Audio and video are played by a plugin of the add-on *Media Playback* that implements `src/media/MediaApi.h` of the source (Qt Multimedia 6.12 with a decoding-only FFmpeg 9.1, see `addons/media-playback` and `tools/build-ffmpeg.sh`). The add-on keeps its libraries in its own folder (`media/lib`), with the parts of Qt its decoding needs that the AppImage does not carry (Qt Quick and Qt QML). Its FFmpeg decodes free formats only; the add-on *Extra Video and Audio Formats* brings a full FFmpeg of the same version in `media-extra/lib`, which *Media Playback* loads instead while that add-on is installed and switched on. **File > Options > Plugins** lists the engine.
-
-### Adding compile formats
-
-**File > Options > Plugins > Open My Plugin Folder** opens *~/.local/share/{{APP}}/plugins*. Two kinds of plugins go there (or into the `plugins` folder of an add-on package):
-
-- **Command plugins**: a small `.json` file that tells {{APP}} to run a converter program (such as LibreOffice or Pandoc) on the Word file it has just written. Copy one of the bundled examples and change the program and arguments. The keys are `id`, `name`, `extension`, `input` (`docx` or `md`), `program` or `programs`, `arguments` (with `{input}`, `{inputbase}`, `{outdir}`, `{output}`, `{tmpdir}`, `{title}`, `{author}`), `output`, and `timeout`.
-- **Qt plugins**: a shared library (`.so`) built against Qt 6 that implements the `ExporterInterface` from the header *ExporterApi.h* in the source code. It receives the compiled manuscript as a simple model of paragraphs, formatted runs, footnotes, and comments. The Markdown exporter in the source code is a complete example. Version 0.3 extended the model with fonts and paragraph formatting (interface 1.1); a plugin built for an earlier version is not loaded until it is built again.
-
-Restart {{APP}} after adding a plugin.
-
-### Package files (.qbpkg)
-
-A package is a ZIP file with a `manifest.json` (id, name, version, kind, description, what's new, required versions, and a list of files with SHA-256 checksums) and a `payload` folder. In an add-on, the payload uses these folders: `themes` (color themes as JSON), `layouts` (window layouts as JSON), `scripts` (script formats as JSON), `templates` (project templates as ZIP), `compile-formats` (JSON), `plugins` (command plugins and Qt plugins), and `dictionaries` (Hunspell files). The source code contains the tool *tools/make-package.py*, which writes the manifest and builds the file, and example add-ons in the *addons* folder.
-
-Installed add-ons are stored in *~/.local/share/{{APP}}/addons*, program updates in *~/.local/share/{{APP}}/core*.
-
-### Theme files
-
-A theme is a small JSON file: in an add-on as *themes/name.json*, your own themes in *~/.local/share/{{APP}}/themes*, exported themes with the ending *.qbtheme*.
-
-```
-{ "name": "Northern Night",
-  "colors": { "window": "#2b303b", "text": "#e3e7ee", "highlight": "#5e81ac", "cardPaper": "#434c5e" },
-  "fonts":  { "binder": { "family": "Noto Sans", "size": 10.5, "bold": false, "italic": false } } }
-```
-
-Only `window` and `text` are required; every other color is derived when it is missing. The color names, in the order of the options: `window`, `windowText`, `base`, `inspectorFields` (Inspector Background), `alternateBase`, `text`, `button`, `buttonText`, `highlight`, `highlightedText`, `link`, `toolTipBase`, `toolTipText`, `mid`, `dark`, `light`, `disabledText`, `targetSession`, `targetDraft`, `targetReached`; `binderBackground`, `binderText`; `editorPaper`, `editorText`, `editorMargin`, `editorLink`, `searchHit`, `spellingError`, `headerBar`, `headerBarText`, `headerBarActive`, `headerBarLocked`; `corkboardBackground`, `cardPaper`, `cardTitle`, `cardText`, `cardTitleLine`, `cardLines`, `statusStamp`; `outlinerBackground`, `outlinerAlternate`, `outlinerText`; `inspectorBackground`, `inspectorText`, `synopsisPaper`, `synopsisText`, `notesPaper`, `notesText`; `compositionBackground`, `compositionPaper`, `compositionText`. Font names: `interface`, `binder`, `headerTitle`, `combinedTitle` (written `scriveningsTitle` before 0.40; still read), `cardTitle`, `cardText`, `outliner`, `synopsis`; in a font, leave out what should stay as it is. `"followDesktop": true` takes the window colors from the desktop. Theme files written for versions before 0.5 work unchanged, and versions before 0.5 read the window colors of newer files and ignore the rest.
-
-### Layout and shortcut files
-
-A layout is a JSON file: in an add-on as *layouts/name.json*, your own layouts in *~/.local/share/{{APP}}/layouts*, exported layouts with the ending *.qblayout*.
-
-```
-{ "format": "qblayout", "version": 1, "name": "Research Desk",
-  "state": { "binder": true, "inspector": false, "toolbar": true, "formatBar": true,
-             "binderShare": 0.17, "split": "vertical", "splitShare": 0.42,
-             "panes": [ { "view": "outliner", "affectsOther": true }, { "view": "text" } ],
-             "binderAffects": "first", "active": 1 } }
-```
-
-`split` is `none`, `horizontal` (one editor above the other), or `vertical` (side by side). `view` is `text`, `corkboard`, `outliner`, or `keep`; a corkboard can add `"cork": "grid"`, `"freeform"`, or `"labels"`. `binderShare`, `inspectorShare`, and `splitShare` are shares of the width (or height), so a layout fits small and large screens. `binderAffects` is `current`, `first`, `second`, or `other`. Optional: `collections`, `ruler`, `inspectorTab` (0 to 4), and `"window": { "width": 1400, "height": 900, "maximized": false }`.
-
-A shortcut file (*.qbkeys*) lists only the changes: `{ "format": "qbkeys", "version": 1, "shortcuts": { "merge": "Ctrl+Alt+M", "split": "" } }`. The names are those of the commands in the program (an empty text means "no shortcut"); styles are written as `style:Name`, layouts as `layout:id`. The contents of the toolbars and your shortcuts are stored with the other options in *~/.config/{{APP}}/{{APP}}.conf*.
-
-### Script format files
-
-A script format is a JSON file: in an add-on as *scripts/name.json*, your own formats in *~/.local/share/{{APP}}/scripts*, saved formats with the ending *.qbscript*. The quickest way to make one is **Format > Scriptwriting > Script Settings… > Manage > Save to File…**.
-
-```
-{ "name": "Radio Play", "description": "...", "font": "", "size": 12, "unit": "in", "first": "Scene Heading",
-  "elements": [
-    { "name": "Character", "role": "character", "key": "C", "caps": true, "align": "left",
-      "left": 55.9, "right": 0, "firstLine": 0, "linesBefore": 1, "lineSpacing": 1, "keepWithNext": true,
-      "enter": "Dialogue", "tabEmpty": "Transition", "tabEnd": "Parenthetical", "completeFromScript": true },
-    { "name": "Parenthetical", "role": "parenthetical", "key": "P", "left": 40.6, "right": 50.8,
-      "linesBefore": 0, "prefix": "(", "suffix": ")", "enter": "Dialogue", "tabEmpty": "Dialogue" } ] }
-```
-
-Lengths are millimeters from the text margins (`unit` only says what the settings window shows). `role` is `scene`, `action`, `character`, `parenthetical`, `dialogue`, `transition`, `shot`, `lyrics`, `centered`, or `section`. `enter`, `tabEmpty`, and `tabEnd` name the element that follows; `tabInserts` is a text that Tab types instead. `completions` are offered at the start of the paragraph, `tabCompletions` after the text typed by Tab; with `completeFromScript` the texts of the same element elsewhere in the document are offered too. Also possible: `bold`, `italic`, `underline`, `color`. The name of an element may not contain `:` or `>`.
-
-### Inside a project folder
-
-```
-MyNovel{{SUFFIX}}/
-  MyNovel{{FILE}}          the binder and all settings (XML)
-  content/<ID>/text.md     the text of a document (or text.rtf)
-  content/<ID>/notes.md    its notes
-  content/<ID>/images/     pictures used in the text
-  content/<ID>/file.pdf    an imported file (pictures, PDFs …)
-  content/<ID>/mindmap.scap  the mind map of a document or folder
-  icons/                   the project's own icons
-  objects/schema.json      categories, templates, colors, and folders of the objects
-  objects/<category>/<ID>.json  one object (a character, a location ...)
-  objects/images/          pictures of objects
-  snapshots/<ID>/          snapshots of a document
-  settings/                window layout and other preferences
-  settings/spare-copy{{FILE}}  the project file as it was when the project was last opened
-  settings/spare-copy-2{{FILE}}, spare-copy-3{{FILE}}  the project file as it was at the two openings before (0.81)
-  settings/look.json       the project's look: theme, colors, fonts, column width, border (0.40.2)
-  settings/options.ini     the project's own options (File > Options, "This project"; 0.62)
-  settings/settings-before-loading-<date>.qbsettings  the settings before Load Project Settings
-```
-
-A project in Scrivener format has a working copy of this kind in a folder of its own under *~/.local/share/{{APP}}/ScrivenerProjects/*; its *settings/scrivener-sync.json* records what was written into the *.scriv* the last time. Deleting the working copy is safe: the next opening asks the first-time question again and reads the *.scriv* anew (what only {{APP}} knew, such as styles and compile settings, is then lost).
-
----
-
-## 21. Troubleshooting
+## 20. Troubleshooting
 
 ### Crash reports and system information
 
@@ -1856,17 +1763,6 @@ If {{APP}} was stopped from outside or the computer was switched off without clo
 **The table of contents of a Word file has no page numbers.** The page numbers are filled in by the word processor when it updates the field; update it there.
 
 **Something went wrong with a document.** Look in the inspector's snapshot tab, or restore a backup (section 15).
-
-## Appendix: environment variables
-
-{{APP}} reads a few environment variables at its start. You never need them; they are listed so that nothing changes its behavior without being written down (0.81). Since 0.81 the switches that only the test suites use (for example to answer every warning window by itself, or to make two "computers" on one machine) are not part of the released program at all.
-
-- `QB_LANGUAGE=de` or `en`: the language of the interface for this start (instead of the one chosen in **File > Options**).
-- `QB_KEEP_FONT_FAMILIES=1`: font families with several designs (such as Sitka) are left as the system lists them.
-- `QB_NO_UPDATES=1`: the AppImage starts its own version, without an installed program update (a way back when an update does not start).
-- `QB_ALLOW_UNSIGNED_CORE=1`: an installed program update without a valid signature is started anyway. Only for checks of builds that were never signed; do not set it otherwise.
-- `QB_TIMING=1`, `QB_DEBUG_ENV=1`, `QB_DEBUG_LINK=1`, `QB_DEBUG_SHORTCUTS=1`, `QB_ZOOM_DEBUG=1`, `QB_MIRROR_DEBUG=1`, `QB_SPEECH_DEBUG=1`: messages for finding a fault, on the error output.
-- Set by the program itself for its own parts (never set them by hand): `QB_CORE_ACTIVE`, `QB_CORE_BASE`, `QB_CORE_APPDIR`, `QB_ORIG_PATH`, `QB_ORIG_LD_LIBRARY_PATH`, `QB_MEDIA_DIR`, `QB_MEDIA_EXTRA_DIR`, `QB_MEDIA_FFMPEG_SET`, `QB_SPEECH_DIR`, `QB_SPEECH_GGML_DIR`, `QB_TOOL_DATA`.
 
 ## Credits and license
 

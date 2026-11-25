@@ -397,7 +397,10 @@ void MainWindow::showDeveloperGuide()
         QString text = QString::fromUtf8(f.readAll());
         text.replace(QLatin1String("{{APP}}"), QLatin1String(QB_APP_NAME))
             .replace(QLatin1String("{{VERSION}}"), QLatin1String(QB_APP_VERSION))
-            .replace(QLatin1String("{{RUNTIME}}"), QLatin1String(QB_RUNTIME_ID));
+            .replace(QLatin1String("{{RUNTIME}}"), QLatin1String(QB_RUNTIME_ID))
+            .replace(QLatin1String("{{SUFFIX}}"), QLatin1String(QB_PROJECT_SUFFIX)) // (0.94.0: the moved part of the manual uses them)
+            .replace(QLatin1String("{{FILE}}"), QLatin1String(QB_PROJECT_FILE_SUFFIX))
+            .replace(QLatin1String("{{LABEL}}"), QLatin1String(QB_APP_VERSION_LABEL));
         tb->setMarkdown(text);
         l->addWidget(tb);
     }

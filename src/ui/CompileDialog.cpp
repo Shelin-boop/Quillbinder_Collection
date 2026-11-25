@@ -1,5 +1,6 @@
 #include "core/DocumentStore.h"
 #include "ui/CompileDialog.h"
+#include "core/TestSwitches.h"
 #include "ui/HintLabel.h"
 #include "ui/Ask.h"
 #include "compile/Compiler.h"
@@ -1000,6 +1001,7 @@ void CompileDialog::compileNow()
     QString dir = m_settings.lastOutputDir;
     if (dir.isEmpty() || !QDir(dir).exists())
         dir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    askAuthorIfNeeded(this, m_project, currentFormat(), m_project->compile); // (0.94.0)
     const QString title = m_settings.titleOverride.isEmpty() ? m_project->title() : m_settings.titleOverride;
     const QString suggested = QDir(dir).filePath(text::safeFileName(title) + QLatin1Char('.') + exp->fileExtension());
     const QString path = QFileDialog::getSaveFileName(this, tr("Compile to"), suggested,
@@ -1044,9 +1046,78 @@ void CompileDialog::compileNow()
     accept();
 }
 
+namespace {
+bool s_authorHook = false, s_authorAccept = true;
+QString s_authorFirst, s_authorLast;
+} // namespace
+
+void CompileDialog::setAuthorAnswerForTests(const QString &first, const QString &last, bool accept)
+{
+    s_authorHook = true;
+    s_authorFirst = first;
+    s_authorLast = last;
+    s_authorAccept = accept;
+}
+
+bool CompileDialog::askAuthorIfNeeded(QWidget *parent, Project *project, const compile::Format &format, const CompileProjectSettings &settings)
+{
+    AppSettings &as = AppSettings::instance();
+    if (as.authorAsked || !as.forename.trimmed().isEmpty() || !as.surname.trimmed().isEmpty()
+        || !settings.authorOverride.trimmed().isEmpty())
+        return false;
+    AuthorInfo none;
+    Compiler c(project, format, settings, none);
+    if (!c.hasTitlePage())
+        return false;
+    QString first, last;
+    bool accepted = false;
+    if (s_authorHook) {
+        first = s_authorFirst;
+        last = s_authorLast;
+        accepted = s_authorAccept;
+    } else if (QB_TEST_ENV_SET("QB_NO_DIALOGS")) {
+        return false;
+    } else {
+        QDialog d(parent);
+        d.setObjectName(QStringLiteral("authorNameDialog"));
+        d.setWindowTitle(tr("Author's Name"));
+        auto *lay = new QVBoxLayout(&d);
+        auto *text = new QLabel(tr("The title page names the author. Who is the author? The name is kept with the author "
+                                   "information in File > Options > General. Left empty, the title page has no \"by\" line."),
+                                &d);
+        text->setWordWrap(true);
+        lay->addWidget(text);
+        auto *form = new QFormLayout;
+        auto *f = new QLineEdit(&d);
+        f->setObjectName(QStringLiteral("authorFirstName"));
+        auto *l = new QLineEdit(&d);
+        l->setObjectName(QStringLiteral("authorLastName"));
+        form->addRow(tr("First name:"), f);
+        form->addRow(tr("Last name:"), l);
+        lay->addLayout(form);
+        auto *box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel, &d);
+        connect(box, &QDialogButtonBox::accepted, &d, &QDialog::accept);
+        connect(box, &QDialogButtonBox::rejected, &d, &QDialog::reject);
+        lay->addWidget(box);
+        d.setMinimumWidth(420);
+        f->setFocus();
+        accepted = d.exec() == QDialog::Accepted;
+        first = f->text();
+        last = l->text();
+    }
+    if (!accepted)
+        return true; // asked again the next time
+    as.forename = first.trimmed();
+    as.surname = last.trimmed();
+    as.authorAsked = true;
+    as.save();
+    return true;
+}
+
 Manuscript CompileDialog::manuscript()
 {
     saveSettings();
+    askAuthorIfNeeded(this, m_project, currentFormat(), m_project->compile);
     AuthorInfo author{AppSettings::instance().forename, AppSettings::instance().surname};
     Compiler c(m_project, currentFormat(), m_project->compile, author);
     return c.build();

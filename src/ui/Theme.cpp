@@ -5,6 +5,7 @@
 #include "core/ItemIcons.h"
 #include "ui/AppSettings.h"
 
+#include <cmath>
 #include <QApplication>
 #include <QStyleHints>
 #include <QDir>
@@ -381,7 +382,13 @@ QList<Entry> available()
         Theme t;
         if (!readThemeFile(fi.absoluteFilePath(), &t))
             continue;
-        own << Entry{QStringLiteral("user:") + fi.completeBaseName(), t.name, Kind::User, fi.absoluteFilePath()};
+        // the two looks of the theme button (0.94.0: "U1" and "U2" are called My Look 1 and My Look 2; the files keep their names)
+        QString shown = t.name;
+        if (fi.completeBaseName() == QLatin1String("User_1") && (shown == QLatin1String("User_1") || shown == QLatin1String("My Look 1")))
+            shown = QObject::tr("My Look 1");
+        else if (fi.completeBaseName() == QLatin1String("User_2") && (shown == QLatin1String("User_2") || shown == QLatin1String("My Look 2")))
+            shown = QObject::tr("My Look 2");
+        own << Entry{QStringLiteral("user:") + fi.completeBaseName(), shown, Kind::User, fi.absoluteFilePath()};
     }
     std::sort(own.begin(), own.end(),
               [](const Entry &a, const Entry &b) { return a.name.localeAwareCompare(b.name) < 0; });
@@ -954,6 +961,33 @@ QColor readableOn(const QColor &background)
     if (darkColor(background) == darkColor(color(Role::Base)))
         return color(Role::Text);
     return darkColor(background) ? QColor(235, 235, 235) : QColor(35, 38, 41);
+}
+
+static double relLuminance(const QColor &c)
+{
+    auto lin = [](double v) { return v <= 0.04045 ? v / 12.92 : std::pow((v + 0.055) / 1.055, 2.4); };
+    return 0.2126 * lin(c.redF()) + 0.7152 * lin(c.greenF()) + 0.0722 * lin(c.blueF());
+}
+
+double contrastRatio(const QColor &a, const QColor &b)
+{
+    const double la = relLuminance(a), lb = relLuminance(b);
+    return (qMax(la, lb) + 0.05) / (qMin(la, lb) + 0.05);
+}
+
+QColor withContrast(const QColor &fg, const QColor &bg, double minRatio)
+{
+    QColor f(fg.red(), fg.green(), fg.blue());
+    if (contrastRatio(f, bg) >= minRatio)
+        return f;
+    // away from the background: dark text on a light background goes toward black, and the reverse
+    const QColor target = relLuminance(bg) > 0.18 ? QColor(0, 0, 0) : QColor(255, 255, 255);
+    for (int i = 1; i <= 100; ++i) {
+        const QColor c = mix(f, target, i / 100.0);
+        if (contrastRatio(c, bg) >= minRatio)
+            return c;
+    }
+    return target;
 }
 
 // Only the roles set here are the widget's own (an empty QPalette has none), so everything else

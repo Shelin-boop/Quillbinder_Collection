@@ -38,6 +38,7 @@ public:
 
     // general
     QString forename, surname;
+    bool authorAsked = false;   // 0.94.0: the first compile with a title page asked for the author's name (kept with it)
     int autosaveSeconds = 2;
     bool openLastProject = true;
     QString language = QStringLiteral("en"); // 0.70.0: "en" or "de"; takes effect at the next start (ui/Language.h)

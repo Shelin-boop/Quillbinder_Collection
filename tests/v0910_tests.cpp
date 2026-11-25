@@ -193,6 +193,11 @@ static void toolbarChecks(MainWindow &w)
         icons->trigger();
         settle(300);
     }
+    // (0.94.0: the Themes toolbar is off at first; the checks below are about the seven toolbars as shown)
+    if (QAction *themesOn = w.findChild<QAction *>(QStringLiteral("showBarThemes")); themesOn && !themesOn->isChecked()) {
+        themesOn->trigger();
+        settle(300);
+    }
     bool there = all.size() == 7 && iconBar != nullptr, grips = true;
     for (QToolBar *bar : std::as_const(bars)) {
         there = there && bar != nullptr;

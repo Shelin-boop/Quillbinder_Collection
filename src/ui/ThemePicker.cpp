@@ -1,5 +1,6 @@
 #include "ui/ThemePicker.h"
 
+#include "core/ItemIcons.h"
 #include "text/TextUtil.h"
 #include "ui/Ask.h"
 #include "ui/MainWindow.h"
@@ -28,31 +29,7 @@ const char *kBrightKey = "window/themeBright";
 const char *kDarkKey = "window/themeDark";
 int s_answerForTests = -3;
 
-// the list is filled again just before it opens: add-ons and the theme manager add and remove themes at any time
-class ThemeCombo : public QComboBox
-{
-public:
-    explicit ThemeCombo(ThemePicker *owner) : QComboBox(owner), m_owner(owner) {}
-    void showPopup() override
-    {
-        m_owner->refill();
-        QComboBox::showPopup();
-    }
-
-private:
-    ThemePicker *m_owner;
-};
-
-QString buttonLabel(ThemePicker::Button b)
-{
-    switch (b) {
-    case ThemePicker::Bright: return ThemePicker::tr("Bright");
-    case ThemePicker::Dark: return ThemePicker::tr("Dark");
-    case ThemePicker::User1: return ThemePicker::tr("U1");
-    case ThemePicker::User2: return ThemePicker::tr("U2");
-    }
-    return QString();
-}
+QString buttonLabel(ThemePicker::Button b) { return ThemePicker::lookName(b); }
 
 QString themeName(const QString &id)
 {
@@ -135,6 +112,17 @@ void ThemePicker::setAnswerForTests(int answer) { s_answerForTests = answer; }
 
 QString ThemePicker::userThemeName(Button b) { return b == User2 ? QStringLiteral("User_2") : QStringLiteral("User_1"); }
 
+QString ThemePicker::lookName(Button b)
+{
+    switch (b) {
+    case Bright: return tr("Light");
+    case Dark: return tr("Dark");
+    case User1: return tr("My Look 1");
+    case User2: return tr("My Look 2");
+    }
+    return QString();
+}
+
 QString ThemePicker::userThemeId(Button b) { return QLatin1String("user:") + userThemeName(b); }
 
 ThemePicker::ThemePicker(QWidget *parent) : QWidget(parent)
@@ -143,38 +131,21 @@ ThemePicker::ThemePicker(QWidget *parent) : QWidget(parent)
     auto *h = new QHBoxLayout(this);
     h->setContentsMargins(0, 0, 0, 0);
     h->setSpacing(0);
-    const char *names[] = {"themeBright", "themeDark", "themeUser1", "themeUser2"};
-    for (Button b : {Bright, Dark, User1, User2}) {
-        auto *t = new QToolButton(this);
-        t->setObjectName(QLatin1String(names[int(b)]));
-        t->setText(buttonLabel(b));
-        t->setCheckable(true); // checked (and bold) while its theme is the one shown
-        t->setToolButtonStyle(Qt::ToolButtonTextOnly);
-        t->setContextMenuPolicy(Qt::CustomContextMenu);
-        connect(t, &QToolButton::clicked, this, [this, b] {
-            press(b);
-            updateButtons(); // (a click toggles the button; what it shows is decided here)
-        });
-        connect(t, &QWidget::customContextMenuRequested, this, [this, b, t](const QPoint &pos) {
-            QMenu menu;
-            menu.setObjectName(QStringLiteral("themeButtonMenu"));
-            fillButtonMenu(&menu, b);
-            menu.exec(t->mapToGlobal(pos));
-        });
-        m_buttons[int(b)] = t;
-        h->addWidget(t);
-    }
-    h->addSpacing(6);
-    m_combo = new ThemeCombo(this);
-    m_combo->setObjectName(QStringLiteral("themeCombo"));
-    m_combo->setToolTip(tr("The theme of the open project and of new projects (as Window > Themes)"));
-    m_combo->setAccessibleName(tr("Theme"));
-    m_combo->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
-    m_combo->setMinimumContentsLength(14);
-    m_combo->setPlaceholderText(tr("Choose a theme"));
-    h->addWidget(m_combo);
+    m_button = new QToolButton(this);
+    m_button->setObjectName(QStringLiteral("themeButton"));
+    m_button->setText(tr("Theme"));
+    m_button->setIcon(icons::action(QStringLiteral("format-text-color")));
+    m_button->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    m_button->setPopupMode(QToolButton::InstantPopup);
+    m_button->setAccessibleName(tr("Theme"));
+    m_menu = new QMenu(m_button);
+    m_menu->setObjectName(QStringLiteral("themeButtonMenu"));
+    m_menu->setToolTipsVisible(true);
+    // filled when opened: add-ons and the theme manager add and remove themes at any time
+    connect(m_menu, &QMenu::aboutToShow, this, [this] { fillMenu(m_menu); });
+    m_button->setMenu(m_menu);
+    h->addWidget(m_button);
 
-    connect(m_combo, qOverload<int>(&QComboBox::activated), this, &ThemePicker::picked);
     connect(&theme::Notifier::instance(), &theme::Notifier::changed, this, &ThemePicker::refill);
     refill();
 }
@@ -235,14 +206,14 @@ bool ThemePicker::keepOwnLook()
     int answer = s_answerForTests;
     if (answer == -3) {
         QMessageBox box(QMessageBox::Question, tr("Change Theme"),
-                        tr("The look you see has %1 of your own that are not saved in U1 or U2.")
+                        tr("The look you see has %1 of your own that are not saved in My Look 1 or My Look 2.")
                             .arg(text::plural(own, tr("color or font"), tr("colors and fonts"))),
                         QMessageBox::NoButton, window());
         box.setObjectName(QStringLiteral("themeKeepQuestion"));
-        box.setInformativeText(tr("Save the look in U1 or U2 first (it replaces the look saved there), or switch without "
+        box.setInformativeText(tr("Save the look in My Look 1 or My Look 2 first (it replaces the look saved there), or switch without "
                                   "saving it?"));
-        QPushButton *u1 = box.addButton(tr("Save in U1"), QMessageBox::ActionRole);
-        QPushButton *u2 = box.addButton(tr("Save in U2"), QMessageBox::ActionRole);
+        QPushButton *u1 = box.addButton(tr("Save in My Look 1"), QMessageBox::ActionRole);
+        QPushButton *u2 = box.addButton(tr("Save in My Look 2"), QMessageBox::ActionRole);
         QPushButton *drop = box.addButton(tr("Switch Without Saving"), QMessageBox::DestructiveRole);
         QPushButton *cancel = box.addButton(QMessageBox::Cancel);
         // the look came from a U button and was changed since: back into that button; else nothing happens on Enter
@@ -304,91 +275,84 @@ bool ThemePicker::press(Button b)
     return ok;
 }
 
-void ThemePicker::fillButtonMenu(QMenu *menu, Button b)
+void ThemePicker::fillMenu(QMenu *menu)
 {
-    if (b == User1 || b == User2) {
-        QAction *save = menu->addAction(tr("Save the Current Look Here"), this, [this, b] { saveLookIn(b); });
-        save->setObjectName(QStringLiteral("themeSaveHere"));
-        QAction *show = menu->addAction(tr("Show This Look"), this, [this, b] { press(b); });
-        show->setObjectName(QStringLiteral("themeShowThis"));
-        show->setEnabled(!themeOf(b).isEmpty());
-        return;
-    }
-    QAction *head = menu->addAction(b == Bright ? tr("Theme of the Button Bright") : tr("Theme of the Button Dark"));
-    head->setEnabled(false);
-    menu->addSeparator();
+    menu->clear();
+    const QString now = look::active().theme;
     auto *group = new QActionGroup(menu);
-    const QString assigned = themeOf(b);
-    for (const theme::Entry &e : theme::available()) {
-        const theme::Brightness kind = theme::brightnessOf(e.id);
-        // a bright theme for Bright, a dark one for Dark; a theme that follows the desktop fits both
-        if ((b == Bright && kind == theme::Brightness::Dark) || (b == Dark && kind == theme::Brightness::Bright))
-            continue;
-        QAction *one = menu->addAction(e.name, this, [this, b, id = e.id] { assign(b, id); });
+    for (Button b : {Bright, Dark, User1, User2}) {
+        const QString id = themeOf(b);
+        const bool mine = b == User1 || b == User2;
+        QAction *one = menu->addAction(mine && id.isEmpty() ? tr("%1 (empty)").arg(lookName(b)) : lookName(b));
+        one->setObjectName(QLatin1String(b == Bright ? "themeBright" : b == Dark ? "themeDark" : b == User1 ? "themeUser1" : "themeUser2"));
         one->setCheckable(true);
-        one->setChecked(e.id == assigned);
+        one->setChecked(!id.isEmpty() && id == now);
+        one->setData(id);
+        group->addAction(one);
+        if (mine) {
+            const QString tip = id.isEmpty() ? tr("Empty: choosing it saves the look you see now as %1").arg(lookName(b))
+                                             : tr("Your own look saved as %1; it brings back the colors and fonts saved there").arg(lookName(b));
+            one->setToolTip(tip);
+            one->setStatusTip(tip);
+        } else {
+            one->setToolTip(tr("Show the theme “%1”").arg(themeName(id)));
+        }
+        connect(one, &QAction::triggered, this, [this, b] {
+            press(b);
+            updateButtons();
+        });
+    }
+    menu->addSeparator();
+    theme::Kind last = theme::Kind::BuiltIn;
+    for (const theme::Entry &e : theme::available()) {
+        if (e.kind != last) {
+            menu->addSeparator();
+            last = e.kind;
+        }
+        QAction *one = menu->addAction(e.name);
+        one->setObjectName(QStringLiteral("themeEntry"));
+        one->setCheckable(true);
+        one->setChecked(e.id == now);
         one->setData(e.id);
         group->addAction(one);
+        connect(one, &QAction::triggered, this, [this, id = e.id] {
+            if (id != look::active().theme)
+                themeui::choose(window(), id);
+            refill();
+        });
+    }
+    menu->addSeparator();
+    for (Button b : {User1, User2}) {
+        QAction *save = menu->addAction(tr("Save the Current Look as %1").arg(lookName(b)));
+        save->setObjectName(b == User1 ? QStringLiteral("themeSaveHere1") : QStringLiteral("themeSaveHere2"));
+        connect(save, &QAction::triggered, this, [this, b] { saveLookIn(b); });
     }
 }
 
 void ThemePicker::updateButtons()
 {
     const QString now = look::active().theme;
-    for (Button b : {Bright, Dark, User1, User2}) {
-        QToolButton *t = m_buttons[int(b)];
-        if (!t)
-            continue;
-        const QString id = themeOf(b);
-        const bool on = !id.isEmpty() && id == now;
-        t->setChecked(on);
-        // the one shown in bold: a checked button alone is hard to see in some dark themes
-        QFont f = t->font();
-        f.setBold(on);
-        t->setFont(f);
-        if (b == User1 || b == User2)
-            t->setToolTip(id.isEmpty() ? tr("Save the look you see now in %1 (the button is empty)").arg(buttonLabel(b))
-                                       : tr("Show your look saved in %1 (right-click: save the look you see now here)")
-                                             .arg(buttonLabel(b)));
-        else
-            t->setToolTip(tr("Show the theme “%1” (right-click: choose the theme of this button)").arg(themeName(id)));
-    }
+    QString what = themeName(now);
+    for (Button b : {Bright, Dark, User1, User2})
+        if (!themeOf(b).isEmpty() && themeOf(b) == now)
+            what = lookName(b);
+    m_button->setToolTip(tr("Theme: %1 (click for the list of themes, Light, Dark and your own looks)").arg(what));
 }
 
 QStringList ThemePicker::shownIds() const
 {
+    QMenu m;
+    const_cast<ThemePicker *>(this)->fillMenu(&m);
     QStringList out;
-    for (int i = 0; i < m_combo->count(); ++i)
-        out << m_combo->itemData(i).toString();
+    for (QAction *a : m.actions())
+        if (a->objectName() == QLatin1String("themeEntry"))
+            out << a->data().toString();
     return out;
 }
 
 void ThemePicker::refill()
 {
-    if (m_filling)
-        return;
-    m_filling = true;
-    const QString current = look::active().theme;
-    m_combo->clear();
-    theme::Kind last = theme::Kind::BuiltIn;
-    for (const theme::Entry &e : theme::available()) {
-        if (e.kind != last && m_combo->count() > 0)
-            m_combo->insertSeparator(m_combo->count());
-        last = e.kind;
-        m_combo->addItem(e.name, e.id);
-    }
-    m_combo->setCurrentIndex(m_combo->findData(current));
-    m_filling = false;
     updateButtons();
-}
-
-void ThemePicker::picked(int index)
-{
-    const QString id = m_combo->itemData(index).toString();
-    if (id.isEmpty() || id == look::active().theme)
-        return;
-    themeui::choose(window(), id);
-    refill(); // also when the question was cancelled: the list shows the theme in use again
 }
 
 } // namespace qb

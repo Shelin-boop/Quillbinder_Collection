@@ -3532,6 +3532,22 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
         <source>%1: Word 97–2003 files become text with the add-on “Word 97–2003 Import” (Help &gt; Add-ons and Updates &gt; Add-on Manager); the file was added as it is.</source>
         <translation>%1: Word-97–2003-Dateien werden mit der Erweiterung „Word 97–2003 Import“ (Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung) zu Text; die Datei wurde unverändert hinzugefügt.</translation>
     </message>
+    <message>
+        <source>My Look 1</source>
+        <translation>Mein Aussehen 1</translation>
+    </message>
+    <message>
+        <source>My Look 2</source>
+        <translation>Mein Aussehen 2</translation>
+    </message>
+    <message>
+        <source>Details</source>
+        <translation>Details</translation>
+    </message>
+    <message>
+        <source>Theme button (Light, Dark, My Look 1, My Look 2 and all themes)</source>
+        <translation>Design-Schaltfläche (Hell, Dunkel, Mein Aussehen 1, Mein Aussehen 2 und alle Designs)</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>
@@ -5919,6 +5935,22 @@ Verschieben Sie den ganzen Quillbinder-Ordner an einen eigenen Ort, zum Beispiel
     <message>
         <source>Preview — %1 (%2 pages)</source>
         <translation>Vorschau — %1 (%2 Seiten)</translation>
+    </message>
+    <message>
+        <source>Author's Name</source>
+        <translation>Name der Autorin oder des Autors</translation>
+    </message>
+    <message>
+        <source>The title page names the author. Who is the author? The name is kept with the author information in File &gt; Options &gt; General. Left empty, the title page has no "by" line.</source>
+        <translation>Die Titelseite nennt die Autorin oder den Autor. Wie lautet der Name? Er wird bei den Angaben zur Autorin oder zum Autor in Datei &gt; Optionen &gt; Allgemein gespeichert. Bleibt das Feld leer, hat die Titelseite keine „von“-Zeile.</translation>
+    </message>
+    <message>
+        <source>First name:</source>
+        <translation>Vorname:</translation>
+    </message>
+    <message>
+        <source>Last name:</source>
+        <translation>Nachname:</translation>
     </message>
 </context>
 <context>
@@ -10172,12 +10204,12 @@ Die Versionen 0.70.0 bis 0.90.4 haben sie dort abgelegt. In den Sicherungsordner
         <translation>Layouts &amp;verwalten…</translation>
     </message>
     <message>
-        <source>Scrivener &amp;Keys in the Binder</source>
-        <translation>&amp;Scrivener-Tasten im Binder</translation>
+        <source>Quick-Add &amp;Keys in the Binder</source>
+        <translation>&amp;Schnellanlege-Tasten im Binder</translation>
     </message>
     <message>
-        <source>Off: Return opens the document in the editor and Space belongs to typing a name to jump to it. On: Return makes a new document below and Space opens a Quick Reference window.</source>
-        <translation>Aus: Die Eingabetaste öffnet das Dokument im Editor, und die Leertaste gehört zur Eingabe eines Namens, zu dem gesprungen wird. An: Die Eingabetaste legt ein neues Dokument darunter an, und die Leertaste öffnet ein Schnellansicht-Fenster.</translation>
+        <source>Return adds a new document below; Space opens a Quick Reference window</source>
+        <translation>Die Eingabetaste legt ein neues Dokument darunter an; die Leertaste öffnet ein Schnellansicht-Fenster</translation>
     </message>
     <message>
         <source>&amp;Float Quick Reference Panels</source>
@@ -19787,32 +19819,12 @@ Strg+Klick zum Öffnen</translation>
 <context>
     <name>qb::ThemePicker</name>
     <message>
-        <source>Bright</source>
-        <translation>Hell</translation>
-    </message>
-    <message>
         <source>Dark</source>
         <translation>Dunkel</translation>
     </message>
     <message>
-        <source>The theme of the open project and of new projects (as Window &gt; Themes)</source>
-        <translation>Das Design des geöffneten Projekts und neuer Projekte (wie Fenster &gt; Designs)</translation>
-    </message>
-    <message>
         <source>Theme</source>
         <translation>Design</translation>
-    </message>
-    <message>
-        <source>Choose a theme</source>
-        <translation>Ein Design wählen</translation>
-    </message>
-    <message>
-        <source>U1</source>
-        <translation>U1</translation>
-    </message>
-    <message>
-        <source>U2</source>
-        <translation>U2</translation>
     </message>
     <message>
         <source>Themes</source>
@@ -19831,28 +19843,12 @@ Strg+Klick zum Öffnen</translation>
         <translation>Design wechseln</translation>
     </message>
     <message>
-        <source>The look you see has %1 of your own that are not saved in U1 or U2.</source>
-        <translation>Das Aussehen, das Sie sehen, enthält %1 von Ihnen, die weder in U1 noch in U2 gespeichert sind.</translation>
-    </message>
-    <message>
         <source>color or font</source>
         <translation>eine Farbe oder Schrift</translation>
     </message>
     <message>
         <source>colors and fonts</source>
         <translation>Farben und Schriften</translation>
-    </message>
-    <message>
-        <source>Save the look in U1 or U2 first (it replaces the look saved there), or switch without saving it?</source>
-        <translation>Das Aussehen zuerst in U1 oder U2 speichern (es ersetzt das dort gespeicherte Aussehen) oder wechseln, ohne es zu speichern?</translation>
-    </message>
-    <message>
-        <source>Save in U1</source>
-        <translation>In U1 speichern</translation>
-    </message>
-    <message>
-        <source>Save in U2</source>
-        <translation>In U2 speichern</translation>
     </message>
     <message>
         <source>Switch Without Saving</source>
@@ -19875,32 +19871,56 @@ Strg+Klick zum Öffnen</translation>
         <translation>Das Aussehen, das Sie sehen, ist in %1 gespeichert. Ein Klick auf %1 holt es zurück.</translation>
     </message>
     <message>
-        <source>Save the Current Look Here</source>
-        <translation>Aktuelles Aussehen hier speichern</translation>
+        <source>Light</source>
+        <translation>Hell</translation>
     </message>
     <message>
-        <source>Show This Look</source>
-        <translation>Dieses Aussehen zeigen</translation>
+        <source>My Look 1</source>
+        <translation>Mein Aussehen 1</translation>
     </message>
     <message>
-        <source>Theme of the Button Bright</source>
-        <translation>Design der Schaltfläche Hell</translation>
+        <source>My Look 2</source>
+        <translation>Mein Aussehen 2</translation>
     </message>
     <message>
-        <source>Theme of the Button Dark</source>
-        <translation>Design der Schaltfläche Dunkel</translation>
+        <source>%1 (empty)</source>
+        <translation>%1 (leer)</translation>
     </message>
     <message>
-        <source>Save the look you see now in %1 (the button is empty)</source>
-        <translation>Das Aussehen, das Sie jetzt sehen, in %1 speichern (die Schaltfläche ist leer)</translation>
+        <source>Empty: choosing it saves the look you see now as %1</source>
+        <translation>Leer: Der Eintrag speichert das Aussehen, das Sie jetzt sehen, als %1</translation>
     </message>
     <message>
-        <source>Show your look saved in %1 (right-click: save the look you see now here)</source>
-        <translation>Ihr in %1 gespeichertes Aussehen zeigen (Rechtsklick: das Aussehen, das Sie jetzt sehen, hier speichern)</translation>
+        <source>Your own look saved as %1; it brings back the colors and fonts saved there</source>
+        <translation>Ihr eigenes Aussehen, gespeichert als %1; es holt die dort gespeicherten Farben und Schriften zurück</translation>
     </message>
     <message>
-        <source>Show the theme “%1” (right-click: choose the theme of this button)</source>
-        <translation>Das Design „%1“ zeigen (Rechtsklick: das Design dieser Schaltfläche wählen)</translation>
+        <source>Show the theme “%1”</source>
+        <translation>Das Design „%1“ zeigen</translation>
+    </message>
+    <message>
+        <source>Save the Current Look as %1</source>
+        <translation>Aktuelles Aussehen als %1 speichern</translation>
+    </message>
+    <message>
+        <source>Theme: %1 (click for the list of themes, Light, Dark and your own looks)</source>
+        <translation>Design: %1 (ein Klick zeigt die Liste der Designs, Hell, Dunkel und Ihre eigenen Aussehen)</translation>
+    </message>
+    <message>
+        <source>The look you see has %1 of your own that are not saved in My Look 1 or My Look 2.</source>
+        <translation>Das Aussehen, das Sie sehen, enthält %1 von Ihnen, die weder in Mein Aussehen 1 noch in Mein Aussehen 2 gespeichert sind.</translation>
+    </message>
+    <message>
+        <source>Save the look in My Look 1 or My Look 2 first (it replaces the look saved there), or switch without saving it?</source>
+        <translation>Das Aussehen zuerst in Mein Aussehen 1 oder Mein Aussehen 2 speichern (es ersetzt das dort gespeicherte Aussehen) oder wechseln, ohne es zu speichern?</translation>
+    </message>
+    <message>
+        <source>Save in My Look 1</source>
+        <translation>In Mein Aussehen 1 speichern</translation>
+    </message>
+    <message>
+        <source>Save in My Look 2</source>
+        <translation>In Mein Aussehen 2 speichern</translation>
     </message>
 </context>
 <context>
@@ -21339,6 +21359,49 @@ Sie wird von hier aus nicht geöffnet. Wenn Sie ihr vertrauen, öffnen Sie sie s
 %1</source>
         <translation>Diese Dateien konnten nicht entfernt werden:
 %1</translation>
+    </message>
+</context>
+<context>
+    <name>qb::ManualWindow</name>
+    <message>
+        <source>Search the manual (Ctrl+F)</source>
+        <translation>Im Handbuch suchen (Strg+F)</translation>
+    </message>
+    <message>
+        <source>Search the manual</source>
+        <translation>Im Handbuch suchen</translation>
+    </message>
+    <message>
+        <source>Previous</source>
+        <translation>Zurück</translation>
+    </message>
+    <message>
+        <source>The previous hit (Shift+Return)</source>
+        <translation>Der vorige Treffer (Umschalt+Eingabe)</translation>
+    </message>
+    <message>
+        <source>Next</source>
+        <translation>Weiter</translation>
+    </message>
+    <message>
+        <source>The next hit (Return)</source>
+        <translation>Der nächste Treffer (Eingabe)</translation>
+    </message>
+    <message>
+        <source>No hits</source>
+        <translation>Keine Treffer</translation>
+    </message>
+    <message>
+        <source>%1 of %2</source>
+        <translation>%1 von %2</translation>
+    </message>
+    <message>
+        <source>Contents</source>
+        <translation>Inhalt</translation>
+    </message>
+    <message>
+        <source>Contents of the manual</source>
+        <translation>Inhaltsverzeichnis des Handbuchs</translation>
     </message>
 </context>
 </TS>

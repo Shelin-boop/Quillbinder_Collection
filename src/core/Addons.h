@@ -45,6 +45,7 @@ struct Manifest {
     QString description;
     QString author;
     QStringList whatsNew;
+    QStringList details; // 0.94.0: the technical lines (libraries, runtime), shown under "Details" (collapsed) in the install window
     QString minApp;      // add-on: lowest program version that can use it
     QString runtime;     // core: runtime (library set) it was built for
     QString binary;      // core: name of the program file inside payload/
@@ -86,6 +87,9 @@ enum class Unsigned {
 // "" when the package may be installed under the policy; else why not (for the writer)
 QString trustProblem(const PackageInfo &info, Unsigned policy);
 
+// 0.94.0: the add-on's name from its manifest ("Media Playback"), read without unpacking the package; the file's
+// name without ".qbpkg" when the manifest cannot be read
+QString packageDisplayName(const QString &file);
 PackageInfo inspect(const QString &file);
 PackageInfo inspect(const QByteArray &data);
 

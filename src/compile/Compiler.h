@@ -73,6 +73,8 @@ public:
     QList<CompileEntry> entries() const;
     QString layoutNameFor(const CompileEntry &e) const;
     Manuscript build();
+    // 0.94.0: whether the compile writes a title page (an included document that takes the layout "Title Page" and has text)
+    bool hasTitlePage() const;
     // The texts of these documents with every style as it looks in the editor
     // (the compile format gives notes, highlights and the page).
     Manuscript buildPrint(const QList<PrintPart> &parts, const PrintOptions &options);

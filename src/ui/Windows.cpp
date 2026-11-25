@@ -112,6 +112,22 @@ CompositionWindow::CompositionWindow(Project *p, const QList<BinderItem *> &item
     bp.setColor(QPalette::Window, QColor(20, 22, 26, 235));
     bp.setColor(QPalette::WindowText, QColor(220, 220, 220));
     bp.setColor(QPalette::ButtonText, QColor(220, 220, 220));
+    // The buttons and the zoom box are drawn from the same palette as the texts: the bar is dark in every theme, so the
+    // button face, the box and the marks are set here and do not follow the theme's light buttons (0.94.0).
+    bp.setColor(QPalette::Button, QColor(52, 56, 64));
+    bp.setColor(QPalette::Base, QColor(36, 39, 45));
+    bp.setColor(QPalette::Text, QColor(220, 220, 220));
+    bp.setColor(QPalette::Light, QColor(78, 84, 96));
+    bp.setColor(QPalette::Midlight, QColor(65, 70, 80));
+    bp.setColor(QPalette::Mid, QColor(40, 43, 50));
+    bp.setColor(QPalette::Dark, QColor(14, 15, 18));
+    bp.setColor(QPalette::Highlight, QColor(70, 110, 170));
+    bp.setColor(QPalette::HighlightedText, QColor(255, 255, 255));
+    for (auto g : {QPalette::Active, QPalette::Inactive, QPalette::Disabled}) {
+        bp.setColor(g, QPalette::ButtonText, g == QPalette::Disabled ? QColor(170, 170, 170) : QColor(220, 220, 220));
+        bp.setColor(g, QPalette::WindowText, g == QPalette::Disabled ? QColor(170, 170, 170) : QColor(220, 220, 220));
+        bp.setColor(g, QPalette::Text, g == QPalette::Disabled ? QColor(170, 170, 170) : QColor(220, 220, 220));
+    }
     m_bar->setPalette(bp);
     auto *bl = new QHBoxLayout(m_bar);
     bl->setContentsMargins(12, 6, 12, 6);

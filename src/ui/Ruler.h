@@ -27,6 +27,8 @@ public:
     int markerX(Marker m, int tabIndex = -1) const;
 
     QSize sizeHint() const override;
+    // the color of the numbers: at least 4.5:1 on the ruler's background (0.94.0; they were 2.5:1)
+    QColor numberColor() const;
 
 signals:
     void paragraphDialogRequested();

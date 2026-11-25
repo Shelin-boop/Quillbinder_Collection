@@ -198,7 +198,7 @@ void BinderTree::resizeEvent(QResizeEvent *e)
 void BinderTree::keyPressEvent(QKeyEvent *e)
 {
     if (state() != QAbstractItemView::EditingState) {
-        // 0.94.0: "Scrivener Keys in the Binder" (View): off, Return opens the document in the editor and Space is left to
+        // 0.94.0: "Quick-Add Keys in the Binder" (View): off, Return opens the document in the editor and Space is left to
         // the type-ahead search; on, Return makes a new document and Space opens a Quick Reference window
         const bool scrivenerKeys = AppSettings::instance().binderScrivenerKeys;
         if ((e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter) && e->modifiers() == Qt::NoModifier) {
