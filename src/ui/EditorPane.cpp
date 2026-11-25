@@ -1124,6 +1124,21 @@ void EditorPane::updateRuler()
     m_ruler->update();
 }
 
+void EditorPane::refresh(const QList<BinderItem *> &movedToTrash)
+{
+    if (m_project && (m_mode == ViewMode::Corkboard || m_mode == ViewMode::Outliner) && m_items.size() > 1) {
+        QList<BinderItem *> kept;
+        for (BinderItem *it : m_items)
+            if (!movedToTrash.contains(it))
+                kept << it;
+        if (kept.size() != m_items.size()) {
+            m_items = kept;
+            applyMode();
+        }
+    }
+    refresh();
+}
+
 void EditorPane::refresh()
 {
     if (!m_project)

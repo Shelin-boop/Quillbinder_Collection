@@ -15,6 +15,9 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
 - **A new mind map note gets the keyboard**. After **New Note** in the inspector's mind map (button, menu or a
   double-click) the note showed its text selected, but the keys went to the part that had the focus before, often the
   binder. The note's editor now takes the focus.
+- **Documents moved to the Trash leave the corkboard at once**. Three documents chosen in the binder and moved to the
+  Trash with **Delete** stayed on the corkboard ("3 documents") until another item was chosen. A corkboard or outliner
+  that shows several chosen documents lets those go that were moved to the Trash.
 
 ## 0.93.1 beta (2026-11-24)
 

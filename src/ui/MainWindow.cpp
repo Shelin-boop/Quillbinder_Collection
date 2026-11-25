@@ -1519,7 +1519,7 @@ void MainWindow::createActions()
                 }
                 m_project->model()->moveToTrash(items);
                 for (EditorPane *p : m_panes)
-                    p->refresh();
+                    p->refresh(items);
             }));
     connect(act(QStringLiteral("split"), tr("&Split at Selection"), QString(), QKeySequence(Qt::CTRL | Qt::Key_K)),
             &QAction::triggered, this, [this] { splitDocument(false); });

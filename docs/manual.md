@@ -247,7 +247,7 @@ Every project has three special folders:
 - **Rename**: **F2**, or double-click slowly on the title.
 - **Move**: drag items with the mouse, or use **Ctrl+Alt+Arrow keys**: Up and Down move within the folder; Left moves out of the folder; Right moves into the item above. Dropped *between* two items, a document goes there; dropped *onto* an item, it becomes its subdocument. If you nest documents by accident, switch off dropping onto text documents under **File > Options > Behaviors** (folders always take drops).
 - **Open or close a whole branch**: hold **Alt** and click the arrow of a folder or group.
-- **Delete**: press **Delete**. The item goes to the Trash.
+- **Delete**: press **Delete**. The item goes to the Trash; a corkboard or outliner that showed it as one of several chosen documents lets it go at once (0.94.0).
 - **Duplicate**: **Ctrl+D**.
 - **Split and merge**: **Documents > Split > at Selection** (**Ctrl+K**) cuts the document at the cursor into two; it does not work inside a table or a picture's caption (put the cursor before or after it). **Documents > Merge** (**Ctrl+Shift+M**) joins the selected documents into the first one, with their synopses, keywords, and notes; the others go to the Trash.
 - **Change the icon**: right-click > **Change Icon** (or **Documents > Change Icon**), or the icon bar (section 2). See "Icons" below.

@@ -110,6 +110,9 @@ public:
     bool canGoToEnclosingGroup() const;
     void goToEnclosingGroup();
     void refresh();         // after structural changes
+    // after documents were moved to the Trash: a corkboard or outliner that shows several documents as they are
+    // (not a folder's content) lets them go (0.94.0, item 88)
+    void refresh(const QList<qb::BinderItem *> &movedToTrash);
     void refreshHeader();
     void updateFooter();
     // 0.93.0: the save text, the warning link and the short messages of the window (only the first editor's is filled)
