@@ -327,6 +327,10 @@ MainWindow::MainWindow()
         }
         if (!items.isEmpty() && (!target || target == nullptr)) {
             m_inspector->setItem(items.size() == 1 ? items.first() : nullptr);
+        } else if (target && items.size() == 1 && m_inspector->item() != items.first()) {
+            // the pane may show the chosen document already while the inspector shows another one (it follows the
+            // active pane): after a choice in the binder the inspector shows the chosen document (0.94.0, item 32)
+            m_inspector->setItem(items.first());
         }
         updateActions();
         updateMindMapActions();

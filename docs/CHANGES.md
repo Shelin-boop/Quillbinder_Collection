@@ -18,6 +18,9 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
 - **Documents moved to the Trash leave the corkboard at once**. Three documents chosen in the binder and moved to the
   Trash with **Delete** stayed on the corkboard ("3 documents") until another item was chosen. A corkboard or outliner
   that shows several chosen documents lets those go that were moved to the Trash.
+- **The inspector shows the document chosen in the binder**. When the editor already showed the chosen document while
+  the inspector showed another one, a click in the binder left the inspector where it was (found by a check that
+  failed on Windows only). After a choice in the binder the inspector always shows the chosen document.
 
 ## 0.93.1 beta (2026-11-24)
 
