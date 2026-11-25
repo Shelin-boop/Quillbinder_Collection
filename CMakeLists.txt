@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.16)
 # ---------------------------------------------------------------------------
 set(APP_NAME "Quillbinder")
 set(APP_ID   "quillbinder")
-set(APP_VERSION "0.93.1")
+set(APP_VERSION "0.94.0")
 # 0.93.0: a version line per system (working rules, section 8). The first two numbers (the functional level) are the same
 # on every system; the last number counts each system's own fixes, so that a system is released as soon as its own
 # tests pass. "APP_VERSION" is the Linux line (the AppImage, the update package; every script that reads it for

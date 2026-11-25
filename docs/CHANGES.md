@@ -3,6 +3,10 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.94.0 beta (2026-11-25)
+
+New functions and fixes (a program update for 0.93.x; the AppImage stays on the runtime `u2404-qt6.12-r2`).
+
 ## 0.93.1 beta (2026-11-24)
 
 Fixes and small changes (a program update for 0.93.0; the AppImage stays on the runtime `u2404-qt6.12-r2`).
