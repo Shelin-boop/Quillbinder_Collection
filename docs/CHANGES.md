@@ -192,7 +192,8 @@ Help > System Information, and Qt PDF named with its own source in Help > Third-
 For developers (nothing changes in the program): the description of the script that builds FFmpeg for "Extra Video and
 Audio Formats" says how MSVC's environment reaches MSYS2 (the same FFmpeg 9.1 and configuration; its pack was built
 anew); the official add-on workflow for Windows lets Git take long paths, which the add-on's folder in this repository
-needs; the Windows build's early pick of its own version line is checked (a build with another Linux line names the
+needs, and the entry's Windows block names a commit of its own (one of the add-on's own checks now waits for the
+other translations it asks for in the background, which GitHub's Windows machine gave late); the Windows build's early pick of its own version line is checked (a build with another Linux line names the
 Windows line); the generic font names are checked on Windows too.
 
 ## Android 0.93.1 experimental (2026-11-24)
