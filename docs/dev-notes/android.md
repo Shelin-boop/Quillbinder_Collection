@@ -31,6 +31,14 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   (the other cases' desktop programs: `touch` and `chmod` are in Android's toybox, `mount` is refused and the case
   says so, `java` and `soffice` are asked for only where they exist). S-T03: a paste logs what Android's clipboard gave
   and whether the program's own copy was taken (`clipboard: paste; ...` in logcat).
+- **The quick system test on NDK r30** (run 45557268944, 8 tablets): 184 cases, 178 clean. Harness faults fixed: Save
+  As's format question (S-P03, S-T04: `formatQuestionLater`), the translator's direction (A-A01: two "Translate"
+  entries since 1.3), Help > Report a Problem (U-05: the browser puts the app away and Qt stops its event loop, the
+  case hung). The start check's step K left the "Backup saved" window open (at the top left with no on-screen
+  keyboard), which took P's typing and the File menu steps; K closes it by its OK.
+- **Show Project in File Manager on Android 9**: DocumentsUI of API 28 ends itself on a `document/` address
+  (`DocumentsContract.getRootId`: "Invalid URI"); below API 29 `MobileOpen.cpp` sends the storage root
+  (`root/primary`, `vnd.android.document/root`).
 - **Licenses**: `collect-licenses-android.py` takes Qt PDF 6.140.0 from the Windows list as a part of its own (its
   parts with Qt WebEngine's source), libc++'s text from LLVM 21.1.0 (the same text as 18.1.8's); `release-android.yml`
   fetches Qt PDF's archive when `third-party-sources` lacks it (MD5 as the Qt Project publishes) and names it in

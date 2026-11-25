@@ -375,6 +375,8 @@ if [ -n "$pid" ]; then
   fi
   # K: a backup (Ctrl+Shift+B is File > Back Up > Back Up Now): it must arrive in Documents/Quillbinder/Backups.
   # The program tells where it saved it (a window with OK: run 21 left it open, and it took every later touch).
+  # (adb's "input keycombination" exists from Android 13 on: on an older tablet K makes no backup and says so)
+  [ "$API" -ge 33 ] || say "  K: Android $API has no key combinations from adb: no backup is asked for"
   "$ADB" shell input keycombination 113 59 30 > /dev/null 2>&1; sleep 8; shot "k1-backup"
   "$ADB" shell ls -la /sdcard/Documents/Quillbinder/Backups > "$OUT/emu-backups.txt" 2>&1
   step "K" "Back Up Now: zip files in the tablet's Documents/Quillbinder/Backups: $(grep -c '\.zip' "$OUT/emu-backups.txt")"

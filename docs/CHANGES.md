@@ -210,13 +210,17 @@ Help > Third-Party Licenses. What is Android's own:
   while a physical keyboard is in use.
 - **Built with the Android NDK that Qt 6.12 is built with** (r30 instead of r27c); the C++ runtime inside the APK is
   r30's. The app still runs from Android 9 on.
+- **File > Show Project in File Manager on Android 9**: the Files app of Android 9 could not open a folder's address
+  and closed itself; before Android 10 it now opens at the top of the tablet's shared storage.
 - **Help > Third-Party Licenses** names Qt PDF 6.140.0 as a part of its own with its source (the Qt Project's archive
   of Qt WebEngine and Qt PDF) and the C++ runtime of NDK r30; `THIRD-PARTY-SOURCES-android.txt` names Qt PDF's source.
 
 For developers (nothing changes in the program): the Android system test app starts again (its Qt Test library needs
 NDK r30's C++ runtime); a system test run without cases fails, and lines of the emulated graphics driver are no longer
-read as cases; its checks of a Word file's fixed-width font and of an e-book's tables work on a tablet; a paste on
-Android writes to the log what the clipboard gave and whether the program's own copy was used. The start check runs a
+read as cases; its checks of a Word file's fixed-width font and of an e-book's tables work on a tablet, it answers the format question
+of File > Save As, translates in the direction of the model it gives, leaves out Help > Report a Problem (Android's
+browser puts the app away) and keeps the program's own log lines of each case; a paste on Android writes to the log
+what the clipboard gave and whether the program's own copy was used. The start check runs a
 second tablet with Android 9 and no keyboard attached in the last run before a merge, checks that the on-screen
 keyboard stays down while a keyboard is attached, closes the text's popup before its File menu steps and reaches the
 File menu's last command with the keys. The translator's Android libraries are built with NDK r30 too (the official
