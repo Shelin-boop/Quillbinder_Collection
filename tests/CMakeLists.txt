@@ -365,6 +365,11 @@ target_link_libraries(qb_v0930f_tests PRIVATE qbui Qt6::Test)
 # (item 45), the usable area and the input devices in System Information (item 34) (xvfb-run -a ./qb_v0931_tests /tmp/shots)
 add_executable(qb_v0931_tests v0931_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0931_tests PRIVATE qbui Qt6::Test)
+# 0.94.0: a window is not deleted under its own menu (item 63), the focus of a new mind map note (item 64), the corkboard
+# after the Trash (item 88), the inspector after a choice in the binder (item 32), session words (item 73), the backup
+# note (item 85), the targets window and the window's place (item 89) (xvfb-run -a ./qb_v0940a_tests /tmp/shots)
+add_executable(qb_v0940a_tests v0940a_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0940a_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0900_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # The readers against damaged input (0.80.0, the external audit of 2026-11-09, ST-5): fixed-seed damage of small
 # valid inputs of RTF, Markdown, XML, ZIP, DOCX, ODT, Word 97 and .scrivx, each read in this process
