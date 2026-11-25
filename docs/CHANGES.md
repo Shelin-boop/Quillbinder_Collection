@@ -12,6 +12,9 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
   deleted safely: a close request from the window manager while the menu was open ended the program with a "double
   free" error. The close request is now held until the menu has ended and then carried out. The same holds for the
   menus of the mind map windows, the Objects window and the media player of a panel.
+- **A new mind map note gets the keyboard**. After **New Note** in the inspector's mind map (button, menu or a
+  double-click) the note showed its text selected, but the keys went to the part that had the focus before, often the
+  binder. The note's editor now takes the focus.
 
 ## 0.93.1 beta (2026-11-24)
 

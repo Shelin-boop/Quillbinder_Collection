@@ -4,6 +4,7 @@
 #include "ui/SpellChecker.h"
 
 #include <QFocusEvent>
+#include <QGraphicsView>
 #include <QGraphicsSceneMouseEvent>
 #include <QKeyEvent>
 #include <QPainter>
@@ -716,6 +717,13 @@ void MindMapScene::startEditing(int id, bool selectAll)
         endEditing();
     selectIds({id});
     n->startEditing(selectAll);
+    // the note's editor shows its text selected: the keys must go there, also when the focus was in another part
+    // of the window (a new note made by a button or menu of the inspector; 0.94.0, item 64)
+    for (QGraphicsView *v : views())
+        if (v->isVisible() && !v->hasFocus() && !v->viewport()->hasFocus()) {
+            v->setFocus(Qt::OtherFocusReason);
+            break;
+        }
     emit editingChanged(true);
 }
 
