@@ -850,10 +850,18 @@ static void downloadPage(const QString &work)
     check(flow.contains(QStringLiteral("            full-addons-size\n")) && flow.contains(QStringLiteral("cp assembled/full-addons-size release/full-addons-size"))
               && flow.contains(QStringLiteral("release-files/full-addons-size release-names/full-addons-size")),
           QStringLiteral("... it travels with the artifacts to the page job, which puts it beside the names"));
+    // GitHub's runner of the release workflow has no PyYAML: parse with it where it is installed, else look for
+    // the job's line in the text
+    int hasYaml = 0;
+    run({QStringLiteral("-I"), QStringLiteral("-c"), QStringLiteral("import yaml")}, &hasYaml);
     int yrc = 0;
-    run({QStringLiteral("-I"), QStringLiteral("-c"), QStringLiteral("import yaml,sys; d = yaml.safe_load(open(sys.argv[1])); assert 'jobs' in d and 'download-page' in d['jobs']"),
-         kRoot + QStringLiteral("/.github/workflows/release.yml")}, &yrc);
-    check(yrc == 0, QStringLiteral("the workflow is valid YAML and has its download-page job"));
+    if (hasYaml == 0)
+        run({QStringLiteral("-I"), QStringLiteral("-c"), QStringLiteral("import yaml,sys; d = yaml.safe_load(open(sys.argv[1])); assert 'jobs' in d and 'download-page' in d['jobs']"),
+             kRoot + QStringLiteral("/.github/workflows/release.yml")}, &yrc);
+    else
+        yrc = flow.contains(QStringLiteral("\njobs:\n")) && flow.contains(QStringLiteral("\n  download-page:\n")) ? 0 : 1;
+    check(yrc == 0, hasYaml == 0 ? QStringLiteral("the workflow is valid YAML and has its download-page job")
+                                 : QStringLiteral("the workflow has its download-page job (no PyYAML here: the text is read)"));
 }
 
 // ---------------------------------------------------------------- item 61 and the rename and the translations
