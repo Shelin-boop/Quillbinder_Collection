@@ -19,6 +19,7 @@ public:
     };
     std::function<QString(const QString &model, const QString &text)> answer;
     QStringList variantList;
+    QList<tp::Alternative> alternativeList;   // 1.4: what `alternatives` answers
 
     QList<Call> calls() const
     {
@@ -60,7 +61,7 @@ public:
     QList<tp::Alternative> alternatives(const QString &, const QString &, const QString &, int, const tp::RunOptions &,
                                         int, QString *) override
     {
-        return {};
+        return alternativeList;
     }
     QStringList variants(const QString &slot, const QString &text, const tp::RunOptions &, int, QString *) override
     {

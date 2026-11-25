@@ -10,6 +10,7 @@
 #include <QComboBox>
 #include <QContextMenuEvent>
 #include <QElapsedTimer>
+#include <QFrame>
 #include <QFile>
 #include <QFileInfo>
 #include <QGridLayout>
@@ -66,6 +67,43 @@ QToolButton *toolButton(const QString &icon, const QString &text, const QString 
     return b;
 }
 
+// 1.4: the hint in an empty text field. Qt's own placeholder text was cut off at a narrow width; this label wraps its
+// words over the whole viewport and goes away with the first text.
+class WrappedPlaceholder : public QLabel
+{
+public:
+    WrappedPlaceholder(QAbstractScrollArea *area, QTextDocument *doc, const QString &text)
+        : QLabel(text, area->viewport())
+        , m_doc(doc)
+    {
+        setObjectName(QStringLiteral("tpPlaceholder"));
+        setWordWrap(true);
+        setAlignment(Qt::AlignTop | Qt::AlignLeft);
+        setMargin(4);
+        setAttribute(Qt::WA_TransparentForMouseEvents);
+        QPalette p = palette();
+        p.setColor(QPalette::WindowText, p.color(QPalette::PlaceholderText));
+        setPalette(p);
+        area->viewport()->installEventFilter(this);
+        connect(doc, &QTextDocument::contentsChanged, this, [this] { refresh(); });
+        refresh();
+    }
+    bool eventFilter(QObject *o, QEvent *e) override
+    {
+        if (e->type() == QEvent::Resize)
+            refresh();
+        return QLabel::eventFilter(o, e);
+    }
+    void refresh()
+    {
+        setGeometry(parentWidget()->rect());
+        setVisible(m_doc->isEmpty());
+    }
+
+private:
+    QTextDocument *m_doc;
+};
+
 } // namespace
 
 // ---------------------------------------------------------------- InputEdit
@@ -75,8 +113,9 @@ InputEdit::InputEdit(tp::Panel *panel, QWidget *parent)
     , m_panel(panel)
 {
     setObjectName(QStringLiteral("tpInput"));
-    setPlaceholderText(tr("Type or paste text here, or take the selected text from the editor. English text is "
-                          "checked for spelling and grammar, German text is translated into English."));
+    new WrappedPlaceholder(this, document(),
+                           tr("Type or paste text here, or take the selected text from the editor. English text is "
+                              "checked for spelling and grammar, German text is translated into English."));
 }
 
 void InputEdit::contextMenuEvent(QContextMenuEvent *e)
@@ -119,9 +158,10 @@ OutputView::OutputView(QWidget *parent)
 {
     setObjectName(QStringLiteral("tpOutput"));
     setOpenLinks(false);
-    setPlaceholderText(tr("The result. Marked words were changed: click one to keep the original or to choose "
-                          "another word. Every other word can be clicked for other words, too; a double click shows a "
-                          "word's suggestions at the bottom."));
+    new WrappedPlaceholder(this, document(),
+                           tr("The result. Marked words were changed: click one to keep the original or to choose "
+                              "another word. Every other word can be clicked for other words, too; a double click shows a "
+                              "word's suggestions at the bottom."));
     viewport()->setCursor(Qt::PointingHandCursor);
     connect(this, &QTextBrowser::anchorClicked, this, [this](const QUrl &url) { emit linkClicked(url.toString()); });
     m_clickTimer.setSingleShot(true);
@@ -197,8 +237,9 @@ Panel::Panel(TranslateTool *tool, Place place, QWidget *parent)
     m_info = new QTextBrowser(this);
     m_info->setObjectName(QStringLiteral("tpInfo"));
     m_info->setOpenLinks(false);
-    m_info->setPlaceholderText(tr("Double-click a word in the text or in the result: its spelling suggestions, words of "
-                                  "a similar meaning appear here."));
+    new WrappedPlaceholder(m_info, m_info->document(),
+                           tr("Double-click a word in the text or in the result: its spelling suggestions, words of "
+                              "a similar meaning appear here."));
     m_info->setMinimumHeight(m_info->fontMetrics().lineSpacing() * 3);
     m_live = toolButton(QStringLiteral("view-refresh"), tr("Live"),
                         tr("Live: about a second after you stop typing, the changed sentences are worked on again"), this);
@@ -301,6 +342,22 @@ Panel::Panel(TranslateTool *tool, Place place, QWidget *parent)
     m_status->setObjectName(QStringLiteral("tpStatus"));
     m_status->setWordWrap(true);
     m_status->setTextInteractionFlags(Qt::TextSelectableByMouse);
+    // 1.4: the notice about missing parts
+    m_notice = new QFrame(this);
+    m_notice->setObjectName(QStringLiteral("tpNotice"));
+    static_cast<QFrame *>(m_notice)->setFrameShape(QFrame::StyledPanel);
+    auto *nl = new QHBoxLayout(m_notice);
+    nl->setContentsMargins(6, 4, 6, 4);
+    m_noticeText = new QLabel(m_notice);
+    m_noticeText->setObjectName(QStringLiteral("tpNoticeText"));
+    m_noticeText->setWordWrap(true);
+    m_noticeButton = new QPushButton(tr("Open the Options"), m_notice);
+    m_noticeButton->setObjectName(QStringLiteral("tpNoticeButton"));
+    m_noticeButton->setToolTip(tr("File > Options > Proofreading: choose and download the models and the German dictionary"));
+    connect(m_noticeButton, &QPushButton::clicked, m_tool, &TranslateTool::showOptions);
+    nl->addWidget(m_noticeText, 1);
+    nl->addWidget(m_noticeButton, 0, Qt::AlignTop);
+    m_notice->setVisible(false);
     m_notes = new QLabel(this);
     m_notes->setObjectName(QStringLiteral("tpNotes"));
     m_notes->setWordWrap(true);
@@ -341,7 +398,7 @@ QString Panel::kindOf(Direction d) const
                                     : QStringLiteral("corrector");
 }
 
-Panel::Direction Panel::directionFor(const QString &task, const QString &text)
+Panel::Direction Panel::directionFor(const QString &task, const QString &text) const
 {
     if (task == QLatin1String("translate"))
         return Direction::DeToEn;
@@ -349,8 +406,19 @@ Panel::Direction Panel::directionFor(const QString &task, const QString &text)
         return Direction::EnToDe;
     if (task == QLatin1String("proofread"))
         return Direction::Proofread;
-    return !text.trimmed().isEmpty() && detectLanguage(text) == QLatin1String("de") ? Direction::DeToEn
-                                                                                      : Direction::Proofread;
+    if (text.trimmed().isEmpty())
+        return Direction::Proofread;
+    if (detectLanguage(text) == QLatin1String("de"))
+        return Direction::DeToEn;
+    // 1.4: a lone word the short word list does not know ("Automatic" ran it as Correct with a proofreading model): a word
+    // that is no English word but is one of the German dictionary is German
+    QString word;
+    if (isSingleWord(text, &word) && !knownWord(word)) {
+        const QString file = m_tool->dictionaryFile();
+        if (!file.isEmpty() && ensureGermanDictionary(file) && !lookupGerman(word).isEmpty())
+            return Direction::DeToEn;
+    }
+    return Direction::Proofread;
 }
 
 Panel::Direction Panel::directionNow() const
@@ -422,6 +490,7 @@ void Panel::buildInspectorLayout()
     m_split->setStretchFactor(3, 1);
     auto *l = new QVBoxLayout(this);
     l->setContentsMargins(2, 2, 2, 2);
+    l->addWidget(m_notice);
     l->addWidget(m_split);
 }
 
@@ -477,6 +546,7 @@ void Panel::buildWindowLayout()
     outer->setStretchFactor(1, 1);
     auto *l = new QVBoxLayout(this);
     l->setContentsMargins(6, 6, 6, 6);
+    l->addWidget(m_notice);
     l->addLayout(top);
     l->addWidget(outer, 1);
     l->addWidget(m_progress);
@@ -498,6 +568,43 @@ void Panel::showEvent(QShowEvent *e)
 void Panel::reloadSettings()
 {
     updateModelBox();
+    updateNotice();
+}
+
+QStringList Panel::missingParts() const
+{
+    QStringList missing;
+    const Direction d = directionNow();
+    if (d == Direction::Proofread) {
+        // "Automatic" with no text yet: a writer who only translates is not told about the proofreading model
+        const bool anyModel = !m_tool->chosenModel(QStringLiteral("corrector")).isEmpty()
+                              || !m_tool->chosenModel(QStringLiteral("translator")).isEmpty()
+                              || !m_tool->chosenModel(QStringLiteral("translator-en")).isEmpty();
+        if (currentTask() == QLatin1String("auto") && inputText().trimmed().isEmpty()) {
+            if (!anyModel)
+                missing << tr("a proofreading or translation model");
+        } else if (m_tool->chosenModel(QStringLiteral("corrector")).isEmpty()) {
+            missing << tr("a proofreading model");
+        }
+        return missing;
+    }
+    if (m_tool->chosenModel(kindOf(d)).isEmpty())
+        missing << (d == Direction::DeToEn ? tr("a translation model (German to English)")
+                                           : tr("a translation model (English to German)"));
+    if (m_tool->dictionaryFile().isEmpty())
+        missing << tr("the German dictionary");
+    return missing;
+}
+
+void Panel::updateNotice()
+{
+    if (!m_notice)
+        return;
+    const QStringList missing = missingParts();
+    m_notice->setVisible(!missing.isEmpty());
+    if (!missing.isEmpty())
+        m_noticeText->setText(tr("Missing: %1. Download %2 in the add-on's options (File > Options > Proofreading).")
+                                  .arg(missing.join(tr(" and ")), missing.size() > 1 ? tr("them") : tr("it")));
 }
 
 void Panel::updateModelBox()
@@ -536,6 +643,7 @@ void Panel::updateModeUi()
     // the buttons: Swap always; Translate back after a translation
     m_swap->setEnabled(!m_busy);
     m_backButton->setEnabled(!m_busy && m_dir != Direction::Proofread && !m_units.isEmpty());
+    updateNotice();
 }
 
 QString Panel::currentTask() const
@@ -759,11 +867,23 @@ void Panel::runNow(bool live)
     m_noteList.clear();
     m_single = SingleWord();
     int dashes = 0;
+    // 1.4: the translation model learned German with capitals: with the dictionary the nouns of the copy it gets are
+    // capitalized (the writer's text stays as it is); without it a note says so
+    bool capitals = false;
+    if (m_dir == Direction::DeToEn) {
+        const QString dict = m_tool->dictionaryFile();
+        capitals = !dict.isEmpty() && ensureGermanDictionary(dict);
+        if (!capitals)
+            m_noteList << tr("German nouns need capital letters for a good translation. The German dictionary (File > Options > "
+                             "Proofreading, Models...) sets them in the copy the model gets; it is not available.");
+    }
     for (const QString &u : std::as_const(m_plan.units)) {
         Unit unit;
         unit.original = u;
         int n = 0;
         unit.modelInput = toPlainQuotes(beforeModel(u, rules, &n));
+        if (capitals)
+            unit.modelInput = correctGermanCapitals(unit.modelInput);
         dashes += n;
         m_units << unit;
     }
@@ -1280,9 +1400,12 @@ bool Panel::outputJob(int unit, int word, AltJob *job, QString *error)
 QList<Alternative> Panel::filterAlternatives(const QList<Alternative> &alts, const QString &currentWord) const
 {
     QList<Alternative> out;
+    QSet<QString> seen;
+    seen.insert(currentWord.toLower());   // 1.4: also the main translation; capitals do not make another word
     for (const Alternative &a : alts) {
-        if (a.word == currentWord || !realWord(a.word))
+        if (a.word == currentWord || !realWord(a.word) || seen.contains(a.word.toLower()))
             continue;
+        seen.insert(a.word.toLower());
         out << a;
         if (out.size() >= 6)
             break;
@@ -1552,8 +1675,6 @@ struct SingleJob {
     QString modelNote;      // why the small model cannot be used
 };
 
-QString g_loadedDictionary;   // the file the German dictionary was read from (read again when it changes)
-
 // The work behind a single word, away from the window: the dictionary, then the small model for what the dictionary
 // does not say. (Order of the writer's settlement: 1. base form, classes, meanings; 2. English words of a meaning;
 // 3. class and meaning but no English word: the small model, in a frame for the class, with the warning; 4. not in the
@@ -1571,13 +1692,9 @@ Panel::SingleWord computeSingle(const SingleJob &j, QString *error)
     QList<int> targets;   // the class a frame is for; -1: the word alone
     if (toEn) {
         if (!j.dictFile.isEmpty()) {
-            if (!germanDictionaryLoaded() || g_loadedDictionary != j.dictFile) {
-                QString e;
-                if (loadGermanDictionary(j.dictFile, &e))
-                    g_loadedDictionary = j.dictFile;
-                else
-                    w.note = QObject::tr("The German dictionary cannot be read (%1): download it again in File > Options > Proofreading.").arg(e);
-            }
+            QString e;
+            if (!ensureGermanDictionary(j.dictFile, &e))
+                w.note = QObject::tr("The German dictionary cannot be read (%1): download it again in File > Options > Proofreading.").arg(e);
             for (const GermanEntry &e : lookupGerman(j.word)) {
                 DictClass dc;
                 dc.headword = e.headword;
@@ -1602,8 +1719,16 @@ Panel::SingleWord computeSingle(const SingleJob &j, QString *error)
             }
         }
         if (w.classes.isEmpty()) {
-            frames << j.word;
+            // 1.4: the model learned German with capitals: a word it knows nothing about is translated in both forms
+            // (a verb or adjective in lower case, a noun with a capital)
+            QString otherForm = j.word;
+            otherForm[0] = j.word.at(0).isUpper() ? j.word.at(0).toLower() : j.word.at(0).toUpper();
+            frames << j.word;   // the form as typed first
             targets << -1;
+            if (otherForm != j.word) {
+                frames << otherForm;
+                targets << -2;
+            }
         }
     } else {
         QString base;
@@ -1621,7 +1746,7 @@ Panel::SingleWord computeSingle(const SingleJob &j, QString *error)
             targets << -1;
         }
     }
-    QString bare;
+    QString bare, bareUpper;
     if (!frames.isEmpty()) {
         if (!j.modelOk) {
             w.note = w.note.isEmpty() ? j.modelNote : w.note + QLatin1Char(' ') + j.modelNote;
@@ -1641,6 +1766,8 @@ Panel::SingleWord computeSingle(const SingleJob &j, QString *error)
                 for (int i = 0; i < answers.size(); ++i) {
                     if (targets.at(i) >= 0)
                         w.classes[targets.at(i)].modelWord = unframe(to, w.classes.at(targets.at(i)).pos, answers.at(i));
+                    else if (targets.at(i) == -2)
+                        bareUpper = unframe(to, QString(), answers.at(i)).trimmed();
                     else
                     {
                         bare = unframe(to, QString(), answers.at(i));
@@ -1669,8 +1796,77 @@ Panel::SingleWord computeSingle(const SingleJob &j, QString *error)
     }
     if (w.result.isEmpty())
         w.result = bare;
-    if (toEn && !w.result.isEmpty())
+    // 1.4: the word in the other form: a second translation, as a class of its own (no dictionary entry told the class)
+    if (!bareUpper.isEmpty() && bareUpper.compare(bare, Qt::CaseInsensitive) != 0) {
+        DictClass dc;
+        dc.headword = j.word.at(0).isUpper() ? j.word.at(0).toLower() + j.word.mid(1) : j.word.at(0).toUpper() + j.word.mid(1);
+        dc.modelWord = bareUpper;
+        w.classes << dc;
+        if (w.result.isEmpty())
+            w.result = bareUpper;
+    }
+    if (toEn && !w.result.isEmpty()) {
         w.similar = similarWords(bareVerb(w.result), &w.base, w.resultPos);
+        // 1.4: similar translations of every class, not only of the first
+        QSet<QString> shownPos;
+        for (const Similar &s : std::as_const(w.similar))
+            shownPos.insert(s.pos);
+        for (const DictClass &dc : std::as_const(w.classes)) {
+            if (dc.pos.isEmpty() || dc.pos == w.resultPos)
+                continue;
+            QString first = dc.modelWord;
+            for (const Panel::DictSense &sn : dc.senses)
+                if (first.isEmpty() && !sn.english.isEmpty())
+                    first = sn.english.first();
+            if (first.isEmpty())
+                continue;
+            for (const Similar &s : similarWords(bareVerb(first), nullptr, dc.pos))
+                if (!shownPos.contains(s.pos)) {
+                    shownPos.insert(s.pos);
+                    w.similar << s;
+                }
+        }
+    }
+    if (!toEn) {
+        // 1.4: similar German words: the German words whose meanings name the English word or one of its synonyms
+        if (j.dictFile.isEmpty()) {
+            w.note = w.note.isEmpty() ? QObject::tr("Similar German words need the German dictionary: download it in File > Options > Proofreading (Models...).")
+                                      : w.note;
+        } else if (ensureGermanDictionary(j.dictFile)) {
+            QSet<QString> taken;
+            auto bareGerman = [](QString g) {   // "der Fluch" and "zu fluchen" are the words Fluch and fluchen
+                g = g.toLower();
+                for (const QString &a : {QStringLiteral("der "), QStringLiteral("die "), QStringLiteral("das "), QStringLiteral("zu ")})
+                    if (g.startsWith(a))
+                        return g.mid(a.size());
+                return g;
+            };
+            taken.insert(bareGerman(w.result));
+            for (const DictClass &dc : std::as_const(w.classes))
+                taken.insert(bareGerman(dc.modelWord));
+            QSet<QString> doneClass;
+            for (const DictClass &dc : std::as_const(w.classes)) {
+                if (doneClass.contains(dc.pos))
+                    continue;
+                doneClass.insert(dc.pos);
+                QStringList english{dc.headword};
+                for (const Similar &s : similarWords(dc.headword, nullptr, dc.pos))
+                    english << s.words;
+                english.removeDuplicates();
+                while (english.size() > 25)
+                    english.removeLast();
+                Similar sim;
+                sim.pos = dc.pos;
+                for (const GermanReverse &r : reverseLookupGerman(english, dc.pos, 20))
+                    if (!taken.contains(r.headword.toLower())) {
+                        taken.insert(r.headword.toLower());
+                        sim.words << r.headword;
+                    }
+                if (!sim.words.isEmpty())
+                    w.similar << sim;
+            }
+        }
+    }
     return w;
 }
 
@@ -1682,7 +1878,7 @@ void Panel::runSingleTranslation(const QString &word)
     job.dir = m_dir;
     job.word = word;
     job.slot = slot();
-    job.dictFile = m_dir == Direction::DeToEn ? m_tool->dictionaryFile() : QString();
+    job.dictFile = m_tool->dictionaryFile();   // 1.4: also for English to German (the similar German words)
     const QString modelId = m_tool->wordModel(slot());
     job.modelOk = false;
     if (modelId.isEmpty()) {
@@ -1890,12 +2086,12 @@ void Panel::requestVariants()
             self->m_tool->touchEngine();
             self->m_variantsPending = false;
             self->m_variants.clear();
-            QStringList seen{current};
+            QStringList seen{current.toLower()};   // 1.4: capitals do not make another translation; the first (higher ranked) stays
             for (const QString &f : found) {
                 const QString shown = tidyPunctuation(afterModel(f, rules));
-                if (seen.contains(shown) || (self->m_dir == Direction::DeToEn && hasStrangeName(shown, source)))
+                if (seen.contains(shown.toLower()) || (self->m_dir == Direction::DeToEn && hasStrangeName(shown, source)))
                     continue;
-                seen << shown;
+                seen << shown.toLower();
                 self->m_variants << shown;
             }
             self->render();
@@ -2052,7 +2248,7 @@ void Panel::renderSingle(QTextCursor &c, const QTextCharFormat &plain)
     for (int k = 0; k < m_single.classes.size(); ++k) {
         const DictClass &dc = m_single.classes.at(k);
         c.insertBlock();
-        c.insertText(QStringLiteral("%1 (%2)").arg(dc.headword, dc.pos), head);
+        c.insertText(dc.pos.isEmpty() ? dc.headword : QStringLiteral("%1 (%2)").arg(dc.headword, dc.pos), head);
         const QString key = QStringLiteral("c%1").arg(k);
         int shownCount = 0;
         bool anyEnglish = false;
@@ -2119,11 +2315,18 @@ void Panel::renderSingle(QTextCursor &c, const QTextCharFormat &plain)
             small(m_single.meaningNote, true);
         }
     }
-    for (const Similar &sim : std::as_const(m_single.similar))
-        list(tr("Similar (%1%2):").arg(sim.pos, m_single.base.isEmpty() || m_single.base == m_single.result.toLower()
-                                                    ? QString()
-                                                    : tr(", for “%1”").arg(m_single.base)),
-             sim.words);
+    for (const Similar &sim : std::as_const(m_single.similar)) {
+        const QString forBase = m_single.base.isEmpty() || m_single.base == m_single.result.toLower()
+                                    ? QString()
+                                    : tr(", for “%1”").arg(m_single.base);
+        // 1.4: a translated word has similar translations (English: the thesaurus of the meaning; German: the dictionary's words)
+        if (m_single.kind == QLatin1String("de-en"))
+            list(tr("Similar translations (%1%2):").arg(sim.pos, forBase), sim.words);
+        else if (m_single.kind == QLatin1String("en-de"))
+            list(tr("Similar German words (%1):").arg(sim.pos), sim.words);
+        else
+            list(tr("Similar (%1%2):").arg(sim.pos, forBase), sim.words);
+    }
     if (proof) {
         if (!m_single.modelWords.isEmpty())
             list(tr("The model’s other words:"), m_single.modelWords);
@@ -2189,7 +2392,9 @@ void Panel::fillInfo()
     if (!base.isEmpty() && base != w.toLower())
         html += tr(" (from “%1”)").arg(base.toHtmlEscaped());
     html += QStringLiteral("</p>");
-    if (knownWord(w)) {
+    if (m_infoContext == QLatin1String("output")) {
+        // 1.4: the words of the result are the program's own: no line about their spelling
+    } else if (knownWord(w)) {
         html += QStringLiteral("<p>") + tr("Spelling: correct.") + QStringLiteral("</p>");
     } else {
         const QStringList sp = spellingSuggestions(w, 10);

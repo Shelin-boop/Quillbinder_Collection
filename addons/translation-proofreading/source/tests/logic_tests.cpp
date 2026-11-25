@@ -255,6 +255,87 @@ private slots:
         unloadGermanDictionary();
     }
 
+    // ---- 1.4
+    // WordNet's suffix rules for adjectives (-er, -est) read a noun such as "number" as "numb": not for a word that is an
+    // entry itself; the exception list (better, good) and the words that are no entry still work
+    void adjectiveRulesSkipEntries()
+    {
+        const QStringList nouns = {QStringLiteral("number"), QStringLiteral("water"), QStringLiteral("summer"), QStringLiteral("finger"),
+                                   QStringLiteral("silver"), QStringLiteral("border"), QStringLiteral("member"), QStringLiteral("order"),
+                                   QStringLiteral("player"), QStringLiteral("letter"), QStringLiteral("father"), QStringLiteral("hunter"),
+                                   QStringLiteral("answer"), QStringLiteral("paper"), QStringLiteral("danger"), QStringLiteral("river"),
+                                   QStringLiteral("mother"), QStringLiteral("power"), QStringLiteral("corner"), QStringLiteral("winter")};
+        for (const QString &w : nouns) {
+            // (the thesaurus lists words that have synonyms only: a word without any gives no base form at all)
+            const QStringList b = baseForms(w);
+            QVERIFY2(b.isEmpty() || b == QStringList{w}, qPrintable(w + ": " + b.join(QLatin1Char(' '))));
+            QString base;
+            similarWords(w, &base);
+            QVERIFY2(base.isEmpty() || base == w, qPrintable(w + ": " + base));
+        }
+        // the old fault: "number" gave the similar words of "numb" (asleep, insensible ...)
+        QString base;
+        const QList<Similar> sim = similarWords(QStringLiteral("number"), &base);
+        for (const Similar &s : sim)
+            QVERIFY2(!s.words.contains(QStringLiteral("insensible")), "words of numb");
+        QVERIFY(baseForms(QStringLiteral("better")).contains(QStringLiteral("good")));
+        QVERIFY(baseForms(QStringLiteral("taller")).contains(QStringLiteral("tall")));      // no entry: the rule works
+        QVERIFY(baseForms(QStringLiteral("tallest")).contains(QStringLiteral("tall")));
+        QVERIFY(baseForms(QStringLiteral("easier")).contains(QStringLiteral("easy")));
+    }
+
+    void germanReverseAndCapitals()
+    {
+        QTemporaryDir dir;
+        const QByteArray text = "#qb-de-dictionary 1\n"
+                                "alt\tL\talt\tadjective\t\told^aged\n"
+                                "alte\tL\tAlte\tnoun\tm\told man^x\n"
+                                "alte\tF\talt\tadjective\n"
+                                "fluchen\tL\tfluchen\tverb\t\tto curse; to swear^x\n"
+                                "essen\tL\tessen\tverb\t\tto eat^x\n"
+                                "essen\tL\tEssen\tnoun\tn\tfood; meal^x\n"
+                                "eid\tL\tEid\tnoun\tm\toath; curse^x\n"
+                                "fluch\tL\tFluch\tnoun\tm\tCurse^x\n"
+                                "haus\tL\tHaus\tnoun\tn\thouse^x\n"
+                                "mann\tL\tMann\tnoun\tm\tman^x\n"
+                                "schimpfen\tL\tschimpfen\tverb\t\tto swear; to scold^x\n";
+        QFile f(dir.path() + QStringLiteral("/d.txt"));
+        QVERIFY(f.open(QIODevice::WriteOnly));
+        f.write(text);
+        f.close();
+        unloadGermanDictionary();
+        // not loaded: the text stays
+        QCOMPARE(correctGermanCapitals(QStringLiteral("das haus")), QStringLiteral("das haus"));
+        QVERIFY(ensureGermanDictionary(f.fileName()));
+        QVERIFY(ensureGermanDictionary(f.fileName()));   // the same file is not read again
+        // reverse lookup: the word first (rank 0), then its synonyms; "to " and capitals do not matter; by class
+        QList<GermanReverse> r = reverseLookupGerman({QStringLiteral("curse"), QStringLiteral("swear")}, QString());
+        QStringList heads;
+        for (const GermanReverse &g : r)
+            heads << g.headword;
+        QCOMPARE(heads, (QStringList{QStringLiteral("Eid"), QStringLiteral("Fluch"), QStringLiteral("fluchen"), QStringLiteral("schimpfen")}));
+        QCOMPARE(r.first().rank, 0);
+        QCOMPARE(r.last().rank, 1);
+        r = reverseLookupGerman({QStringLiteral("curse"), QStringLiteral("swear")}, QStringLiteral("verb"));
+        QCOMPARE(r.size(), 2);
+        QCOMPARE(r.first().headword, QStringLiteral("fluchen"));
+        QCOMPARE(reverseLookupGerman({QStringLiteral("curse"), QStringLiteral("swear")}, QString(), 1).size(), 1);
+        QVERIFY(reverseLookupGerman({QStringLiteral("xqzt")}, QString()).isEmpty());
+        // capitals: a noun only gets its capital, a word known both ways keeps the typed form except after an article
+        QCOMPARE(correctGermanCapitals(QStringLiteral("ich sehe fluch und haus")), QStringLiteral("ich sehe Fluch und Haus"));
+        QCOMPARE(correctGermanCapitals(QStringLiteral("wir wollen essen gehen")), QStringLiteral("wir wollen essen gehen"));
+        QCOMPARE(correctGermanCapitals(QStringLiteral("wir mögen das essen")), QStringLiteral("wir mögen das Essen"));
+        QCOMPARE(correctGermanCapitals(QStringLiteral("nach dem essen, im essen")), QStringLiteral("nach dem Essen, im Essen"));
+        QCOMPARE(correctGermanCapitals(QStringLiteral("beim essen und ans essen")), QStringLiteral("beim Essen und ans Essen"));
+        // an adjective after an article before a noun stays: "der alte mann"
+        QCOMPARE(correctGermanCapitals(QStringLiteral("der alte mann")), QStringLiteral("der alte Mann"));
+        QCOMPARE(correctGermanCapitals(QStringLiteral("der alte kam")), QStringLiteral("der Alte kam"));
+        // unknown words, names and capitals as typed stay; a sentence start too
+        QCOMPARE(correctGermanCapitals(QStringLiteral("Mara sagt xyz zu Haus")), QStringLiteral("Mara sagt xyz zu Haus"));
+        QCOMPARE(correctGermanCapitals(QStringLiteral("haus. fluchen")), QStringLiteral("Haus. fluchen"));
+        unloadGermanDictionary();
+    }
+
     // the extract the tool makes (tools/make-de-dictionary.py --selftest, run by ctest before) is read as the download is
     void dictionaryTool()
     {

@@ -35,6 +35,9 @@ model is downloaded, it works without any internet connection.
   are translated by the small model (in a frame for the class: "zu fluchen", "das Fluchen"), with a warning. A click
   on an English word makes it the result; "Similar" follows it and its word class. English to German does the same
   for one English word, with WordNet's classes and OPUS-MT English to German (small).
+- **A word on its own, in both directions** (1.4). The translations of each word class (a lower-case German word that is a verb and a noun gets both; a word the dictionary lacks is translated in both forms), "Similar translations" (English: the thesaurus of the result; English to German: "Similar German words", a reverse lookup in the German dictionary of the word and its WordNet synonyms), then the short description. "Automatic" translates a single German word the English word list does not know when the German dictionary is installed.
+- **German capitals** (1.4). Before German is translated, the German dictionary puts the capital letters of nouns right in the copy the model gets (the text stays as written); without the dictionary a note says that nouns need capitals.
+- **A notice for missing parts** (1.4): a translation model or the German dictionary that is missing is named at the top, with a button to the options. Models are unloaded after 15 minutes without work (a setting).
 - **Swap and Translate back** (1.3). Swap turns German to English into English to German and back; Translate back
   shows what the result says in the language of your text, until you change the text. OPUS-MT English to German
   (small) (CC BY 4.0, about 79 MB) is the model for the way back and for English to German; it is offered for download

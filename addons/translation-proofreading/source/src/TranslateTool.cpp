@@ -79,9 +79,9 @@ private:
 
 TranslateTool::TranslateTool()
 {
-    // the models are freed after ten minutes without work (they take memory)
+    // the models are freed after a while without work (1.4: 15 minutes at first, the writer's setting "unloadMinutes";
+    // before 10 minutes), because they take memory
     m_unloadTimer.setSingleShot(true);
-    m_unloadTimer.setInterval(10 * 60 * 1000);
     connect(&m_unloadTimer, &QTimer::timeout, this, [this] {
         if (!m_engine)
             return;
@@ -90,9 +90,16 @@ TranslateTool::TranslateTool()
                 m_unloadTimer.start();
                 return;
             }
-        m_engine->unload(QStringLiteral("corrector"));
-        m_engine->unload(QStringLiteral("translator"));
-        m_engine->unload(QStringLiteral("translator-en"));
+        bool any = false;
+        for (const QString &slot : {QStringLiteral("corrector"), QStringLiteral("translator"), QStringLiteral("translator-en")})
+            if (!m_engine->loaded(slot).isEmpty()) {
+                m_engine->unload(slot);
+                any = true;
+            }
+        // the program is to show this under the binder for 5 seconds; the tool interface 1.1 has no call for a message
+        // (see DEVELOPING.md, 1.4), so far the signal only says it
+        if (any)
+            emit modelsUnloaded(unloadMessage(), 5000);
     });
     connect(this, &TranslateTool::settingsChangedSignal, this, &TranslateTool::updateCommandState);
 }
@@ -385,9 +392,32 @@ EngineInterface *TranslateTool::engine(QString *error)
     return m_engine;
 }
 
+QString TranslateTool::unloadMessage()
+{
+    return tr("Model unloaded, RAM usage minimal");
+}
+
+int TranslateTool::unloadMinutes() const
+{
+    return qBound(0, setting(QStringLiteral("unloadMinutes"), 15).toInt(), 24 * 60);
+}
+
+int TranslateTool::unloadIntervalMs() const
+{
+#ifdef TP_TEST_SWITCHES
+    if (qEnvironmentVariableIsSet("TP_TEST_UNLOAD_MS"))
+        return qEnvironmentVariableIntValue("TP_TEST_UNLOAD_MS");
+#endif
+    return unloadMinutes() * 60 * 1000;
+}
+
 void TranslateTool::touchEngine()
 {
-    m_unloadTimer.start();
+    // 0 minutes: the models stay loaded
+    if (unloadIntervalMs() > 0)
+        m_unloadTimer.start(unloadIntervalMs());
+    else
+        m_unloadTimer.stop();
 }
 
 void TranslateTool::showOptions()
@@ -398,6 +428,8 @@ void TranslateTool::showOptions()
 
 void TranslateTool::settingsApplied()
 {
+    if (m_unloadTimer.isActive())
+        touchEngine();   // the new waiting time counts from now
     for (const QPointer<Panel> &p : m_panels)
         if (p)
             p->reloadSettings();

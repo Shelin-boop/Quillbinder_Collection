@@ -15,6 +15,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QLabel>
 #include <QPushButton>
 #include <QSignalSpy>
 #include <QTemporaryDir>
@@ -43,11 +44,14 @@ void write(const QString &path, const QByteArray &data)
 
 const QByteArray kGermanDictionary =
     "#qb-de-dictionary 1\n"
+    "eid\tL\tEid\tnoun\tm\toath^a solemn promise\n"
     "fluch\tL\tFluch\tnoun\tm\tcurse; swear word^a profane word|spell^a magical curse\n"
     "fluchen\tL\tfluchen\tverb\t\tto curse; to swear^to use offensive language|to curse^to wish evil on someone\n"
     "fluchte\tF\tfluchen\tverb\n"
     "haus\tL\thausen\tverb\t\tto dwell^to live somewhere\n"
     "haus\tL\tHaus\tnoun\tn\thouse; home^a building to live in|building^a structure|a1; a2^x|b1^x|c1^x|d1^x|e1^x|f1^x\n"
+    "kraftausdruck\tL\tKraftausdruck\tnoun\tm\texpletive^a strong word\n"
+    "lästern\tL\tlästern\tverb\t\tto blaspheme^to speak against\n"
     "zwirbel\tL\tZwirbel\tnoun\tm\t^something with no English word listed\n";
 
 // WordNet's definitions in the form of resources/en-glosses.tsv: "curse" has a noun and verb meanings, "zork" none
@@ -55,7 +59,7 @@ const QByteArray kGlosses =
     "# test\n=0\tan expression of a wish that evil may befall someone\n=1\tto utter a curse\n=2\tto use offensive language\n"
     "curse\tn:0|v:1,2\n";
 
-const QByteArray kWords = "curse\nzork\nwalk\nhouse\nold\nthe\nis\nbeautiful\nhandsome\n";
+const QByteArray kWords = "curse\nzork\nwalk\nhouse\nold\nthe\nis\nbeautiful\nhandsome\nhome\ndomicile\nnumber\n";
 
 } // namespace
 
@@ -223,7 +227,7 @@ private slots:
         QVERIFY2(o.contains(QStringLiteral("1. to curse, to swear")), qPrintable(o));
         QVERIFY(o.contains(QStringLiteral("From the Wiktionary (CC BY-SA 4.0)")));
         QCOMPARE(p.resultText(), QStringLiteral("to curse"));
-        QVERIFY2(o.contains(QStringLiteral("Similar (verb")) && !o.contains(QStringLiteral("Similar (noun")), qPrintable(o));
+        QVERIFY2(o.contains(QStringLiteral("Similar translations (verb")) && !o.contains(QStringLiteral("Similar translations (noun")), qPrintable(o));
         QVERIFY(!o.contains(QStringLiteral("Other translations")));
         QVERIFY(!o.contains(QStringLiteral("Warning")));
         QVERIFY(m_engine.calls().isEmpty());
@@ -263,8 +267,10 @@ private slots:
         QVERIFY(runPanel(p, QStringLiteral("Quatschkopf")));
         QTRY_VERIFY(!p.isBusy());
         QCOMPARE(m_engine.calls().size(), 1);
-        QCOMPARE(m_engine.calls().first().texts, QStringList{QStringLiteral("Quatschkopf")});
+        // 1.4: a word the dictionary lacks is translated in both forms (the form as typed first)
+        QCOMPARE(m_engine.calls().first().texts, (QStringList{QStringLiteral("Quatschkopf"), QStringLiteral("quatschkopf")}));
         QVERIFY2(out(p).contains(QStringLiteral("blabbermouth")), qPrintable(p.status() + "|" + out(p)));
+        QCOMPARE(p.resultText(), QStringLiteral("blabbermouth"));
         QVERIFY2(out(p).contains(QStringLiteral("may be inaccurate")), qPrintable(out(p)));
         QVERIFY(!out(p).contains(QStringLiteral("Other translations")));
         // without the dictionary the writer is told where to get it
@@ -463,6 +469,240 @@ private slots:
         QVERIFY(hasStrangeName(QStringLiteral("He met Eriksson there."), QStringLiteral("Er traf ihn dort.")));
         QVERIFY(!hasStrangeName(QStringLiteral("He met Mara there."), QStringLiteral("Er traf Mara dort.")));
         QVERIFY(!hasStrangeName(QStringLiteral("Water, he said."), QStringLiteral("Wasser, sagte er.")));
+    }
+
+    // ---- 1.4
+
+    // 57: a single lower-case German word with "Automatic" is translated (it ran as Correct before); the typed form gives
+    // both of its classes
+    void automaticSingleGermanWord()
+    {
+        install(QStringLiteral("wiktionary-de"));
+        install(QStringLiteral("opus-mt-de-en"));
+        install(QStringLiteral("qwen3-1.7b"));   // a proofreading model is there, too: it must not be taken
+        Panel p(m_tool, Panel::Place::Inspector, nullptr);
+        p.resize(380, 800);
+        p.show();
+        QCOMPARE(p.taskBox()->currentData().toString(), QStringLiteral("auto"));
+        QVERIFY(runPanel(p, QStringLiteral("zwirbel")));
+        QTRY_VERIFY(!p.isBusy());
+        QCOMPARE(p.direction(), Panel::Direction::DeToEn);
+        QVERIFY2(out(p).contains(QStringLiteral("Zwirbel (noun)")), qPrintable(out(p)));
+        QVERIFY(!out(p).contains(QStringLiteral("Spelling:")));
+        for (const QString &m : modelsCalled())
+            QVERIFY2(m != QStringLiteral("qwen3-1.7b"), "the proofreading model was used");
+        // a lower-case word that is a verb and a noun with a capital gives both classes
+        QVERIFY(runPanel(p, QStringLiteral("haus")));
+        QTRY_VERIFY(!p.isBusy());
+        QVERIFY2(out(p).contains(QStringLiteral("hausen (verb)")) && out(p).contains(QStringLiteral("Haus (noun)")), qPrintable(out(p)));
+        // an English word of the word list stays English, also when the dictionary is there
+        QVERIFY(runPanel(p, QStringLiteral("house")));
+        QCOMPARE(p.direction(), Panel::Direction::Proofread);
+        // without the dictionary nothing says it is German: proofreading as before
+        uninstall(QStringLiteral("wiktionary-de"));
+        QVERIFY(runPanel(p, QStringLiteral("zwirbel")));
+        QCOMPARE(p.direction(), Panel::Direction::Proofread);
+        shot(&p, QStringLiteral("word-automatic-german"));
+    }
+
+    // 57: English to German: the similar German words come from the dictionary's meanings (a reverse lookup of the word and
+    // its WordNet synonyms); without the dictionary one line says where to get it
+    void similarGermanWords()
+    {
+        install(QStringLiteral("opus-mt-en-de"));
+        Panel p(m_tool, Panel::Place::Inspector, nullptr);
+        p.resize(380, 900);
+        p.show();
+        select(p, QStringLiteral("translateEn"));
+        QVERIFY(runPanel(p, QStringLiteral("curse")));
+        QTRY_VERIFY(!p.isBusy());
+        QVERIFY2(out(p).contains(QStringLiteral("German dictionary")) && out(p).contains(QStringLiteral("File > Options > Proofreading")),
+                 qPrintable(out(p)));
+        QVERIFY(!out(p).contains(QStringLiteral("Similar German words (")));
+        install(QStringLiteral("wiktionary-de"));
+        QVERIFY(runPanel(p, QStringLiteral("curse")));
+        QTRY_VERIFY(!p.isBusy());
+        const QString o = out(p);
+        QVERIFY2(o.contains(QStringLiteral("Similar German words (noun):")), qPrintable(o));
+        QVERIFY(o.contains(QStringLiteral("Eid")) && o.contains(QStringLiteral("Kraftausdruck")));   // "oath", "expletive": synonyms
+        QVERIFY2(o.contains(QStringLiteral("Similar German words (verb):")) && o.contains(QStringLiteral("lästern")), qPrintable(o));
+        // the translation itself ("der Fluch") is not a similar word of itself
+        const int at = o.indexOf(QStringLiteral("Similar German words (noun):"));
+        QVERIFY(!o.mid(at, o.indexOf(QLatin1Char('\n'), at) - at).contains(QStringLiteral("Fluch")));
+        shot(&p, QStringLiteral("word-similar-german"));
+    }
+
+    // 58: German capitals are put right in the copy the model gets, not in the writer's text
+    void germanCapitals()
+    {
+        install(QStringLiteral("wiktionary-de"));
+        install(QStringLiteral("opus-mt-de-en"));
+        Panel p(m_tool, Panel::Place::Inspector, nullptr);
+        p.resize(380, 800);
+        p.show();
+        select(p, QStringLiteral("translate"));
+        const QString text = QStringLiteral("das haus ist alt und ich sage fluch");
+        QVERIFY(runPanel(p, text));
+        QTRY_VERIFY(!p.isBusy());
+        QCOMPARE(m_engine.calls().first().texts, QStringList{QStringLiteral("das Haus ist alt und ich sage Fluch")});
+        QCOMPARE(p.inputText(), text);
+        QVERIFY(!p.notes().contains(QStringLiteral("capital")));
+        QTRY_VERIFY(!p.variantsPending());
+        // without the dictionary: the text goes as it is, and a note says that nouns need capitals
+        uninstall(QStringLiteral("wiktionary-de"));
+        m_engine.clearCalls();
+        QVERIFY(runPanel(p, QStringLiteral("das haus ist alt und ich sage fluch")));
+        QTRY_VERIFY(!p.isBusy());
+        QCOMPARE(m_engine.calls().first().texts, QStringList{text});
+        QVERIFY2(p.notes().contains(QStringLiteral("German nouns need capital letters")), qPrintable(p.notes()));
+        shot(&p, QStringLiteral("word-capitals-note"));
+    }
+
+    // 78: the notice names what is missing and its button opens the options
+    void missingPartsNotice()
+    {
+        Panel p(m_tool, Panel::Place::Inspector, nullptr);
+        p.resize(380, 800);
+        p.show();
+        // nothing yet, "Automatic" and no text: a model of some kind
+        QVERIFY(!p.notice()->isHidden());
+        QVERIFY2(p.noticeLabel()->text().contains(QStringLiteral("proofreading or translation model")), qPrintable(p.noticeLabel()->text()));
+        shot(&p, QStringLiteral("notice-nothing"));
+        select(p, QStringLiteral("translate"));
+        QVERIFY2(p.noticeLabel()->text().contains(QStringLiteral("translation model (German to English)"))
+                     && p.noticeLabel()->text().contains(QStringLiteral("German dictionary")),
+                 qPrintable(p.noticeLabel()->text()));
+        m_host->shownOptions.clear();
+        p.noticeButton()->click();
+        QVERIFY(!m_host->shownOptions.isEmpty());
+        // the model is there, the dictionary not
+        install(QStringLiteral("opus-mt-de-en"));
+        p.reloadSettings();
+        QVERIFY2(!p.notice()->isHidden() && !p.noticeLabel()->text().contains(QStringLiteral("translation model"))
+                     && p.noticeLabel()->text().contains(QStringLiteral("German dictionary")),
+                 qPrintable(p.noticeLabel()->text()));
+        install(QStringLiteral("wiktionary-de"));
+        p.reloadSettings();
+        QVERIFY(p.notice()->isHidden());
+        // English to German needs its own model
+        select(p, QStringLiteral("translateEn"));
+        QVERIFY(p.noticeLabel()->text().contains(QStringLiteral("(English to German)")));
+        // proofreading
+        select(p, QStringLiteral("proofread"));
+        QVERIFY(p.noticeLabel()->text().contains(QStringLiteral("a proofreading model")));
+        install(QStringLiteral("qwen3-1.7b"));
+        p.reloadSettings();
+        QVERIFY(p.notice()->isHidden());
+        // the plugin's own window too
+        Panel w(m_tool, Panel::Place::Window, nullptr);
+        w.resize(900, 500);
+        w.show();
+        select(w, QStringLiteral("translateEn"));
+        QVERIFY(!w.notice()->isHidden());
+        shot(&w, QStringLiteral("notice-window"));
+    }
+
+    // 57: no alternative that differs from another only in capitals (also not from the main translation); the higher one stays
+    void noDuplicateAlternatives()
+    {
+        install(QStringLiteral("opus-mt-de-en"));
+        Panel p(m_tool, Panel::Place::Inspector, nullptr);
+        p.resize(380, 800);
+        p.show();
+        select(p, QStringLiteral("translate"));
+        m_engine.variantList = {QStringLiteral("The house is old"), QStringLiteral("The House is old"),
+                                QStringLiteral("The home is old"), QStringLiteral("The Home is old"), QStringLiteral("The domicile is old")};
+        QVERIFY(runPanel(p, QStringLiteral("Das Haus ist alt")));
+        QTRY_VERIFY(!p.variantsPending());
+        QCOMPARE(p.otherTranslations(), (QStringList{QStringLiteral("The home is old"), QStringLiteral("The domicile is old")}));
+        // the words of the model for one place
+        m_engine.alternativeList = {{QStringLiteral("House"), QStringLiteral("The House is old")}, {QStringLiteral("home"), QStringLiteral("The home is old")},
+                                    {QStringLiteral("Home"), QStringLiteral("The Home is old")}, {QStringLiteral("house"), QStringLiteral("x")},
+                                    {QStringLiteral("Domicile"), QStringLiteral("The Domicile is old")}};
+        QString error;
+        QStringList words;
+        for (const Alternative &a : p.outputAlternatives(0, 1, &error))
+            words << a.word;
+        QCOMPARE(words, (QStringList{QStringLiteral("home"), QStringLiteral("Domicile")}));
+    }
+
+    // 57: the word pane has no Spelling line for a word of the output; a word clicked in the input keeps it
+    void wordPaneOutputNoSpelling()
+    {
+        install(QStringLiteral("opus-mt-de-en"));
+        Panel p(m_tool, Panel::Place::Inspector, nullptr);
+        p.resize(380, 900);
+        p.show();
+        select(p, QStringLiteral("translate"));
+        QVERIFY(runPanel(p, QStringLiteral("Das Haus ist alt")));
+        QTRY_VERIFY(!p.isBusy());
+        p.showInfoForOutput(out(p).indexOf(QStringLiteral("house")) + 2);
+        QVERIFY(p.info()->toPlainText().contains(QStringLiteral("house")));
+        QVERIFY2(!p.info()->toPlainText().contains(QStringLiteral("Spelling")), qPrintable(p.info()->toPlainText()));
+        // an unknown word of the output, too
+        select(p, QStringLiteral("proofread"));
+        QVERIFY(runPanel(p, QStringLiteral("She sees a zork there.")));
+        QTRY_VERIFY(!p.isBusy());
+        p.showInfoForOutput(out(p).indexOf(QStringLiteral("zork")) + 1);
+        QVERIFY2(!p.info()->toPlainText().contains(QStringLiteral("Spelling")), qPrintable(p.info()->toPlainText()));
+        p.showInfoForInput(p.inputText().indexOf(QStringLiteral("zork")) + 1);
+        QVERIFY(p.info()->toPlainText().contains(QStringLiteral("Spelling")));
+    }
+
+    // 72: a model is unloaded after the waiting time (15 minutes at first, a setting), and the tool says so
+    void modelUnloading()
+    {
+        QCOMPARE(m_tool->unloadMinutes(), 15);
+        QCOMPARE(m_tool->unloadIntervalMs(), 15 * 60 * 1000);
+        m_host->settings.insert(QStringLiteral("translation-proofreading/unloadMinutes"), 30);
+        QCOMPARE(m_tool->unloadIntervalMs(), 30 * 60 * 1000);
+        m_host->settings.insert(QStringLiteral("translation-proofreading/unloadMinutes"), 0);   // never
+        m_tool->touchEngine();
+        QVERIFY(!m_tool->unloadTimerActive());
+        m_host->settings.remove(QStringLiteral("translation-proofreading/unloadMinutes"));
+        QCOMPARE(QString::fromLatin1("Model unloaded, RAM usage minimal"), TranslateTool::unloadMessage());
+
+        install(QStringLiteral("opus-mt-de-en"));
+        qputenv("TP_TEST_UNLOAD_MS", "80");
+        Panel p(m_tool, Panel::Place::Inspector, nullptr);
+        p.resize(380, 800);
+        p.show();
+        select(p, QStringLiteral("translate"));
+        QSignalSpy spy(m_tool, &TranslateTool::modelsUnloaded);
+        QVERIFY(runPanel(p, QStringLiteral("Das Haus ist alt")));
+        QTRY_VERIFY(!p.isBusy());
+        QVERIFY(!m_engine.loaded(QStringLiteral("translator")).isEmpty());
+        QTRY_COMPARE(spy.count(), 1);
+        QCOMPARE(spy.first().at(0).toString(), QStringLiteral("Model unloaded, RAM usage minimal"));
+        QCOMPARE(spy.first().at(1).toInt(), 5000);
+        QVERIFY(m_engine.loaded(QStringLiteral("translator")).isEmpty());
+        // nothing loaded: nothing to say
+        QTest::qWait(300);
+        QCOMPARE(spy.count(), 1);
+        qunsetenv("TP_TEST_UNLOAD_MS");
+    }
+
+    // 89: the hints in the empty fields wrap at a narrow width (they were cut off at 300 px)
+    void placeholdersWrap()
+    {
+        Panel p(m_tool, Panel::Place::Inspector, nullptr);
+        p.resize(300, 800);
+        p.show();
+        QTest::qWait(50);
+        const QList<QAbstractScrollArea *> areas = {p.input(), p.output(), p.info()};
+        for (QAbstractScrollArea *a : areas) {
+            auto *label = a->viewport()->findChild<QLabel *>(QStringLiteral("tpPlaceholder"));
+            QVERIFY(label);
+            QVERIFY(!label->isHidden());
+            QVERIFY(label->wordWrap());
+            QVERIFY2(label->width() <= a->viewport()->width() && label->width() > 100, qPrintable(QString::number(label->width())));
+            // several lines: more than the one line of an unwrapped text
+            QVERIFY2(label->heightForWidth(label->width()) > 2 * label->fontMetrics().lineSpacing(),
+                     qPrintable(QString::number(label->heightForWidth(label->width()))));
+        }
+        shot(&p, QStringLiteral("placeholders-300"));
+        p.setInput(QStringLiteral("x"));
+        QVERIFY(p.input()->viewport()->findChild<QLabel *>(QStringLiteral("tpPlaceholder"))->isHidden());
     }
 };
 
