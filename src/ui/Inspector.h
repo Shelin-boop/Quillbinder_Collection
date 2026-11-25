@@ -63,6 +63,8 @@ public:
     bool showExtraTab(const QString &key);
     QString currentExtraTab() const;     // key of the tool tab shown; empty when a tab of the program is shown
     QStringList extraTabs() const { return m_extraKeys; }
+    static QString tabToolTip(Tab t);                  // the one name of a tab (tooltip and Navigate > Inspect)
+    QString extraTabToolTip(const QString &key) const;
     void focusNote(const QString &noteId);
     void addLinkedNote(bool footnote);
     void takeSnapshot(bool askTitle);

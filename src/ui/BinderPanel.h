@@ -54,6 +54,7 @@ public:
 signals:
     void mindMapPinClicked(const QString &itemId);
     void enterPressed();
+    void openPressed(); // Return with the binder keys of the file manager (0.94.0)
     void deletePressed();
     void spacePressed();
     void selectionChangedByUser();
@@ -210,6 +211,7 @@ signals:
     void fixMindMapRequested(qb::BinderItem *item);   // 0.92.0: the pin of a row
     void releaseMindMapRequested();                   // 0.92.0: the pin of the fixed row, or the bar's button
     void newDocumentRequested();
+    void openRequested();   // Return: show the selected document in the editor and put the keyboard there (0.94.0)
     void newFolderRequested();
     void trashRequested();
     void quickReferenceRequested();

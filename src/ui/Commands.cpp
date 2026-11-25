@@ -1,5 +1,7 @@
 #include "ui/Commands.h"
 #include "AppInfo.h"
+#include "ui/AppSettings.h"
+#include "ui/KeyboardLayout.h"
 
 #include <QAction>
 #include <QCoreApplication>
@@ -21,6 +23,7 @@ struct Registry {
     QList<Command> list;
     QHash<QString, int> index;
     QMap<QString, QString> custom;
+    QString layoutSet = QStringLiteral("us"); // 0.94.0: "us" or "de": the set of the shortcuts out of the box (item 79)
     bool loaded = false;
 
     void reindex()
@@ -35,6 +38,9 @@ struct Registry {
             return;
         loaded = true;
         QSettings s;
+        // the first start: no shortcut settings and no earlier start (the welcome project was never opened)
+        const bool firstStart = !s.contains(QStringLiteral("keyboard/shortcuts")) && !AppSettings::instance().welcomeShown;
+        layoutSet = keyboardlayout::chosenSet(firstStart);
         const QJsonObject o = QJsonDocument::fromJson(s.value(QStringLiteral("keyboard/shortcuts")).toByteArray()).object();
         for (auto it = o.begin(); it != o.end(); ++it)
             custom.insert(it.key(), it.value().toString());
@@ -100,7 +106,7 @@ void add(QAction *action, const QString &category, const QString &path, bool dyn
     c.key = action->objectName();
     c.category = category;
     c.path = path;
-    c.standard = action->shortcut();
+    c.standard = keyboardlayout::standardFor(c.key, action->shortcut(), r.layoutSet);
     c.action = action;
     c.dynamic = dynamic;
     const auto it = r.index.constFind(c.key);
@@ -167,6 +173,8 @@ QIcon listIcon(const QString &key)
 }
 
 QMap<QString, QString> custom() { return reg().custom; }
+
+QString layoutSet() { return reg().layoutSet; }
 
 QKeySequence effective(const Command &c, const QMap<QString, QString> &changes)
 {

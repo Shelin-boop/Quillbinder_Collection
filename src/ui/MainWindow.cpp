@@ -342,6 +342,19 @@ MainWindow::MainWindow()
             [this](const QPoint &pos) { showItemContextMenu(pos, int(lookmenu::Part::Binder)); });
     connect(m_binder, &BinderPanel::backgroundMenuRequested, this, &MainWindow::showBinderBackgroundMenu);
     connect(m_binder, &BinderPanel::newDocumentRequested, this, [this] { a[QStringLiteral("newText")]->trigger(); });
+    connect(m_binder, &BinderPanel::openRequested, this, [this] {
+        if (!m_project)
+            return;
+        EditorPane *target = binderTarget();
+        if (!target)
+            target = m_active;
+        const QList<BinderItem *> items = m_binder->selectedItems();
+        if (!target || items.isEmpty())
+            return;
+        if (items != target->items())
+            loadInPane(target, items);
+        target->focusEditor();
+    });
     connect(m_binder, &BinderPanel::newFolderRequested, this, [this] { a[QStringLiteral("newFolder")]->trigger(); });
     connect(m_binder, &BinderPanel::trashRequested, this, [this] { a[QStringLiteral("trash")]->trigger(); });
     connect(m_binder, &BinderPanel::quickReferenceRequested, this, [this] {
@@ -1314,6 +1327,16 @@ void MainWindow::createActions()
     sb->setCheckable(true);
     sb->setChecked(true);
     connect(sb, &QAction::toggled, m_binder, &QWidget::setVisible);
+    // 0.94.0: the keys of the binder (Return makes a new document, Space opens a Quick Reference window)
+    QAction *sk = act(QStringLiteral("binderScrivenerKeys"), tr("Scrivener &Keys in the Binder"));
+    sk->setCheckable(true);
+    sk->setChecked(AppSettings::instance().binderScrivenerKeys);
+    sk->setToolTip(tr("Off: Return opens the document in the editor and Space belongs to typing a name to jump to it. "
+                      "On: Return makes a new document below and Space opens a Quick Reference window."));
+    connect(sk, &QAction::triggered, this, [](bool on) {
+        AppSettings::instance().binderScrivenerKeys = on;
+        AppSettings::instance().save();
+    });
     QAction *si = act(QStringLiteral("showInspector"), tr("Show &Inspector"), QStringLiteral("dialog-information"),
                       QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_I));
     si->setCheckable(true);
@@ -2076,13 +2099,22 @@ void MainWindow::createActions()
         connect(ac, &QAction::triggered, this, [this, mode] { setBinderAffects(mode); });
     }
     {
-        const QList<QPair<Inspector::Tab, QString>> tabs = {{Inspector::Notes, tr("&Notes")},
-                                                           {Inspector::Bookmarks, tr("&Bookmarks")},
-                                                           {Inspector::Metadata, tr("&Metadata")},
-                                                           {Inspector::Snapshots, tr("&Snapshots")},
-                                                           {Inspector::Comments, tr("&Comments and Footnotes")},
-                                                           {Inspector::MindMap, tr("Mind &Map")},
-                                                           {Inspector::Objects, tr("&Objects")}};
+        // 0.94.0: each tab under the name of its tooltip (the mnemonic is the letter given here)
+        auto named = [](Inspector::Tab tab, QChar letter) {
+            QString name = Inspector::tabToolTip(tab);
+            int i = int(name.indexOf(letter, 0, Qt::CaseInsensitive));
+            if (i < 0)
+                i = 0; // (the translation has no such letter: its first one; a clash in the menu is repaired when it opens)
+            name.insert(i, QLatin1Char('&'));
+            return name;
+        };
+        const QList<QPair<Inspector::Tab, QString>> tabs = {{Inspector::Notes, named(Inspector::Notes, QLatin1Char('s'))},
+                                                           {Inspector::Bookmarks, named(Inspector::Bookmarks, QLatin1Char('b'))},
+                                                           {Inspector::Metadata, named(Inspector::Metadata, QLatin1Char('e'))},
+                                                           {Inspector::Snapshots, named(Inspector::Snapshots, QLatin1Char('h'))},
+                                                           {Inspector::Comments, named(Inspector::Comments, QLatin1Char('c'))},
+                                                           {Inspector::MindMap, named(Inspector::MindMap, QLatin1Char('m'))},
+                                                           {Inspector::Objects, named(Inspector::Objects, QLatin1Char('o'))}};
         for (const auto &t : tabs) {
             const Inspector::Tab tab = t.first;
             connect(act(QStringLiteral("inspect%1").arg(int(tab)), t.second), &QAction::triggered, this, [this, tab] {

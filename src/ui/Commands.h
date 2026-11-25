@@ -48,6 +48,7 @@ QIcon listIcon(const QString &key);
 // The writer's changes: key -> shortcut as portable text; an empty string
 // means "no shortcut". Commands without an entry use their default.
 QMap<QString, QString> custom();
+QString layoutSet();                                 // "us" or "de": the set of the shortcuts out of the box (0.94.0)
 void setCustom(const QMap<QString, QString> &map);   // stores and applies
 void apply();                                        // puts the shortcuts on the actions
 void reload();                                       // reads the shortcuts from the settings again (0.62: project settings)

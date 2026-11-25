@@ -77,6 +77,30 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
   marker when a package fails). Without a display it runs without the window. The download page can name the space of
   the add-ons beside the full version's button when the release gives the number (a file `full-addons-size`).
 
+- **One name and one key per command**. Ctrl+Shift+Return, **Insert > Media Timestamp** and **Navigate > Media >
+  Insert Timestamp** were one command under two names; it is now **Insert Media Timestamp** in both places (the entry in
+  Insert only shows the key of the one command), and the Alt letter of the Insert menu's entries (Alt+T was given to
+  Table and to the timestamp) is its own. **Navigate > Inspect** listed 7 of the inspector's 9 tabs and called the first
+  one "Notes" while its tooltip says "Synopsis and notes": it now lists every tab, also those of the writing tools
+  (Speech Transcription, Translation and Proofreading), under the name of the tab's tooltip. A new check walks all
+  menus: no two commands share a shortcut and no menu has two entries with the same Alt letter.
+- **Return and Space in the binder: a menu option, off at first**. Return made a new empty document and Space opened a
+  Quick Reference window (the keys of Scrivener); a file manager opens the item with Return, and a phrase with a space
+  typed to find a title opened a window for each space. The new entry **View > Scrivener Keys in the Binder** is
+  unchecked (also after an update): Return opens the selected document in the editor and puts the keyboard there,
+  Space belongs to the binder's type-ahead search (this also holds for the list of a collection or a search). Checked,
+  the keys are as before.
+- **Shortcuts follow the keyboard layout**. The menus showed Ctrl+{, Ctrl+|, Ctrl+} (align), Ctrl+[ and Ctrl+] (back,
+  forward), Ctrl+\\ (list of script elements) and Ctrl+= (subscript); on a German keyboard these need AltGr, and with
+  the German layout on X11 Ctrl+AltGr+7, < and 0 triggered the alignment as chords the labels did not show. At the
+  very first start (no shortcut settings, no earlier start) the program asks the system for the keyboard layout and keeps
+  the answer: a German or Austrian layout gets a set without AltGr (Alt+Shift+L, E, R to align, Alt+Shift+B and F for
+  back and forward, Ctrl+Shift+O for the list of script elements, Ctrl+Shift+D for subscript; in the mind map also
+  Alt+Shift+J, Ctrl+Shift+PageUp and PageDown), every other layout the set as before. A program that was used before,
+  and every shortcut changed in **File > Options > Keyboard**, stays as it is. Linux asks the keyboard settings of the
+  desktop (KDE, GNOME), the X server or the system's default; Windows the language of the keyboard layout; Android the
+  language of the keyboard (this last way is not tried on a device).
+
 ## 0.93.1 beta (2026-11-24)
 
 Fixes and small changes (a program update for 0.93.0; the AppImage stays on the runtime `u2404-qt6.12-r2`).

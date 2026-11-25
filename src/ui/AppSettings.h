@@ -104,6 +104,7 @@ public:
     // behaviour
     QString linkOpens = QStringLiteral("other"); // other | current | window
     bool startWithCorkboard = true;               // folders open in corkboard
+    bool binderScrivenerKeys = false;             // 0.94.0: Return in the binder makes a document and Space opens a Quick Reference window
     bool floatQuickRef = false;                   // Quick Reference windows stay above the main window
     bool reopenQuickRefs = true;                  // Quick Reference panels come back with their project
     // dragging and dropping

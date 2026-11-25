@@ -573,8 +573,10 @@ int main(int argc, char **argv)
         list->setCurrentRow(1);
         list->item(1)->setSelected(true);
         settle(100);
+        AppSettings::instance().binderScrivenerKeys = true; // 0.94.0: Space opens a Quick Reference window only with these keys
         QTest::keyClick(list, Qt::Key_Space);
         settle(300);
+        AppSettings::instance().binderScrivenerKeys = false;
         const bool spaceOpens = quickRefs().size() == 1 && quickRefs().first()->item() == tides;
         closeQuickRefs();
         list->setFocus();

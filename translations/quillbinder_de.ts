@@ -10172,6 +10172,14 @@ Die Versionen 0.70.0 bis 0.90.4 haben sie dort abgelegt. In den Sicherungsordner
         <translation>Layouts &amp;verwalten…</translation>
     </message>
     <message>
+        <source>Scrivener &amp;Keys in the Binder</source>
+        <translation>&amp;Scrivener-Tasten im Binder</translation>
+    </message>
+    <message>
+        <source>Off: Return opens the document in the editor and Space belongs to typing a name to jump to it. On: Return makes a new document below and Space opens a Quick Reference window.</source>
+        <translation>Aus: Die Eingabetaste öffnet das Dokument im Editor, und die Leertaste gehört zur Eingabe eines Namens, zu dem gesprungen wird. An: Die Eingabetaste legt ein neues Dokument darunter an, und die Leertaste öffnet ein Schnellansicht-Fenster.</translation>
+    </message>
+    <message>
         <source>&amp;Float Quick Reference Panels</source>
         <translation>Schnellansicht-Bereiche &amp;abdocken</translation>
     </message>
@@ -10906,8 +10914,8 @@ Wenn Sie das AppImage verschieben, wählen Sie diesen Menüeintrag erneut.</tran
         <translation>&amp;Einfügen</translation>
     </message>
     <message>
-        <source>Media &amp;Timestamp</source>
-        <translation>Medien-&amp;Zeitmarke</translation>
+        <source>Insert &amp;Media Timestamp</source>
+        <translation>&amp;Medien-Zeitmarke einfügen</translation>
     </message>
     <message>
         <source>Auto &amp;Number</source>
@@ -11992,8 +12000,8 @@ Das Projekt, an dem Sie arbeiten, bleibt, wo es ist.</translation>
         <translation>&amp;Stummschalten</translation>
     </message>
     <message>
-        <source>Insert &amp;Timestamp</source>
-        <translation>&amp;Zeitmarke einfügen</translation>
+        <source>&amp;Insert Media Timestamp</source>
+        <translation>Medien-&amp;Zeitmarke einfügen</translation>
     </message>
     <message>
         <source>&amp;Go to Timestamp at Cursor</source>

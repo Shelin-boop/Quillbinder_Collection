@@ -263,7 +263,7 @@ void MainWindow::createMenus()
     QMenu *insert = mb->addMenu(tr("&Insert"));
     insert->setProperty("qbNeedsProject", true);
     add(insert, {"image", "insertTable", "", "docLink", "objectLink", "hyperlink", "", "comment", "footnote", "annotation", "inlineFootnote", ""});
-    menuAlias(insert, QStringLiteral("mediaTimestamp"), tr("Media &Timestamp"));
+    menuAlias(insert, QStringLiteral("mediaTimestamp"), tr("Insert &Media Timestamp"));
     insert->addSeparator();
     QMenu *autoNum = insert->addMenu(tr("Auto &Number"));
     const QList<QPair<QString, QString>> numbers = {{tr("1, 2, 3 …"), QStringLiteral("<$n>")},
@@ -315,7 +315,7 @@ void MainWindow::createMenus()
     m_layoutMenu = view->addMenu(icons::action(QStringLiteral("view-split-left-right")), tr("La&yout"));
     m_layoutMenu->setObjectName(QStringLiteral("paneLayoutMenu"));
     rebuildLayoutActions(); // (the commands are in the menu before the list of commands is made; made again after the toolbars)
-    add(view, {"", "showBinder", "showCollections", "showInspector", ""});
+    add(view, {"", "showBinder", "showCollections", "showInspector", "binderScrivenerKeys", ""});
     QMenu *bars = view->addMenu(tr("Tool&bars"));
     // 0.91.0: the rows' switches, a switch per toolbar, the standard places
     add(bars, {"showToolbar", "showFormatBar", "showIconBar", "", "showBarMain", "showBarThemes", "showBarSearch", "showBarTools",
@@ -418,8 +418,17 @@ void MainWindow::createMenus()
     for (QAction *ac : m_affectsGroup->actions())
         affects->addAction(ac);
     QMenu *inspect = nav->addMenu(tr("&Inspect"));
-    add(inspect, {"goSynopsis", "goNotes", "", "inspect0", "inspect1", "inspect5", "inspect6", "inspect2", "inspect3", "inspect4", "",
-                  "fixMindMap", "releaseMindMap"});
+    add(inspect, {"goSynopsis", "goNotes", "", "inspect0", "inspect1", "inspect5", "inspect6", "inspect2", "inspect3", "inspect4"});
+    // 0.94.0: the tabs of the writing tools (speech, translator) are in the list as well, under their tooltips
+    if (m_inspector)
+        for (const QString &key : m_inspector->extraTabs()) {
+            QAction *ac = inspect->addAction(m_inspector->extraTabToolTip(key));
+            connect(ac, &QAction::triggered, this, [this, key] {
+                a[QStringLiteral("showInspector")]->setChecked(true);
+                m_inspector->showExtraTab(key);
+            });
+        }
+    add(inspect, {"", "fixMindMap", "releaseMindMap"});
     connect(inspect, &QMenu::aboutToShow, this, [this] {
         const bool item = m_project && m_inspector->item();
         a[QStringLiteral("goSynopsis")]->setEnabled(item);

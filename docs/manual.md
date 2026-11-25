@@ -157,8 +157,8 @@ The **footer** of each editor shows the word and character count (select text to
 | **File** | Projects, saving, the project format ({{APP}} or Scrivener), backups, import and export, compare and transfer with a Word or LibreOffice file, compile, printing, file conversion, options |
 | **Edit** | Undo, clipboard, selecting, finding and replacing (in the text, in the project, by formatting), moving documents in the binder, writing tools |
 | **Insert** | Images, tables, links to documents and objects, web links, comments, footnotes, media timestamps, auto numbers, placeholders, special characters, date and time |
-| **View** | The three view modes, the split editor (**Split Editor**), the places of binder, editor and inspector and the saved layouts (**Layout**), binder, collections and inspector, toolbars, text editing options (page view, ruler, typewriter scrolling), corkboard and outliner options, label colors, zoom, composition mode, full screen |
-| **Navigate** | Back and forward, previous and next document, opening documents in the other editor, in the copyholder, or as quick reference, the editor lock, which editor the binder loads into, the inspector tabs |
+| **View** | The three view modes, the split editor (**Split Editor**), the places of binder, editor and inspector and the saved layouts (**Layout**), binder, collections and inspector (and **Scrivener Keys in the Binder**), toolbars, text editing options (page view, ruler, typewriter scrolling), corkboard and outliner options, label colors, zoom, composition mode, full screen |
+| **Navigate** | Back and forward, previous and next document, opening documents in the other editor, in the copyholder, or as quick reference, the editor lock, which editor the binder loads into, the inspector tabs (all of them, under the names of their tooltips: **Synopsis and notes**, **Bookmarks**, **Metadata**, **Snapshots**, **Comments and footnotes**, the mind map, the objects and the tabs of writing tools) |
 | **Project** | New documents, project settings (also saved to and loaded from a file), targets, keywords, statistics, writing history, trash, deleting old snapshots |
 | **Documents** | Snapshots, renaming, duplicating, splitting, merging, converting, icon, label, status, bookmarks |
 | **Format** | Font (with installing fonts), paragraph, style, lists, highlight, copying formatting, revision mode |
@@ -260,6 +260,8 @@ Every project has three special folders:
 
 A document can have subdocuments, just like a folder. Folders and documents behave the same way; folders simply look different and open as a corkboard by default.
 
+**The binder's keys (0.94.0).** With the keyboard in the binder, **Return** opens the selected document in the editor and puts the keyboard there (as a file manager does), and the arrow keys move through the list. **Space** is part of typing a name: type the first letters of a title, spaces too ("Chapter t"), and the selection jumps to the first title that begins so. The entry **View > Scrivener Keys in the Binder** is off at first (also after an update). Switched on, the binder has the keys of Scrivener: **Return** makes a new empty document below the selected one and **Space** opens the selected documents as Quick Reference panels (and in the list of a collection or a search).
+
 A click in the binder loads the document into the editor. After **Back**, a document link, or with a locked editor, the editor can show another document than the one selected in the binder: a **gray bar** then marks the editor's document in the binder. **Navigate > Reveal in Binder** (**Ctrl+Shift+R**) selects it.
 
 **Narrow binder, deep folders.** Each level of folders is indented by 12 px (half of what it used to be; change it under **File > Options > Appearance > Binder > Indentation per level**). When titles are longer than the binder is wide, a scroll bar appears at the bottom of the binder, so you can read the end of long titles without widening the binder.
@@ -307,8 +309,8 @@ Collections are extra lists of documents, for example "Needs research" or "Scene
 |--------|----------|
 | Bold / italic / underline | Ctrl+B / Ctrl+I / Ctrl+U |
 | Highlight | Ctrl+Shift+H |
-| Superscript / subscript | Ctrl+Shift++ / Ctrl+= |
-| Align left / center / right | Ctrl+{ / Ctrl+\| / Ctrl+} |
+| Superscript / subscript | Ctrl+Shift++ / Ctrl+= (German layout: Ctrl+Shift+D for subscript, see "Shortcuts and the keyboard layout" below) |
+| Align left / center / right | Ctrl+{ / Ctrl+\| / Ctrl+} (German layout: Alt+Shift+L / Alt+Shift+E / Alt+Shift+R) |
 | Fonts window | Ctrl+T |
 | Font size bigger / smaller | Ctrl+> / Ctrl+< |
 | Paragraph window | Ctrl+Alt+P |
@@ -691,7 +693,7 @@ A Quick Reference panel is a document in a window of its own, for example to kee
 **To open panels:**
 
 - **Navigate > Open > as Quick Reference**, or the Quick Reference button of the toolbar, for the selected documents.
-- Press **Space** in the binder, in a collection or search result list, on the corkboard, or in the outliner.
+- Press **Space** on the corkboard or in the outliner, or in the binder and in a collection or search result list when **View > Scrivener Keys in the Binder** is on (see section 2, the binder's keys). Without that option, Space in the binder belongs to typing a name to jump to it.
 - Drag documents onto the **Quick Reference button** of the toolbar: each one opens in a panel of its own, and the editor keeps its document.
 - **Navigate > Open Quick Reference** shows the whole binder as a menu, so you can open a document without selecting it first.
 
@@ -725,14 +727,14 @@ A click on the picture of a video plays or pauses it; a right-click offers **Ope
 |---------|----------|
 | Play / Pause | Ctrl+Return |
 | Skip Back / Skip Forward (5 seconds) | Ctrl+Alt+, / Ctrl+Alt+. |
-| Insert Timestamp (also **Insert > Media Timestamp**) | Ctrl+Shift+Return |
+| Insert Media Timestamp (also **Insert > Insert Media Timestamp**: the same command, shown in both menus) | Ctrl+Shift+Return |
 | Stop, Go to the Start, Pause and Rewind, Faster, Slower, Normal Speed, Volume Up, Volume Down, Mute, Go to Timestamp at Cursor | no shortcut (give them one under **File > Options > Keyboard**) |
 
 The commands act on the file you opened or used last (in either editor, a copyholder, or a Quick Reference panel).
 
 **Pause and rewind.** Switched on (the button looks pressed), every pause goes back a little, by 2 seconds unless you set another value under **File > Options > Behaviors > Playback**. When you press Ctrl+Return to type what you heard, you hear the last words again when you go on.
 
-**Timestamps.** **Insert Timestamp** types the time of the player at the cursor, such as `[03:07]` (with hours from one hour on: `[1:02:03]`). **Go to Timestamp at Cursor** does the opposite: it takes the timestamp in the line of the cursor (the nearest one before or around it) and moves the player there. Timestamps are ordinary text; they can be written by hand as well (`3:07`, `[03:07]`, `1:02:03.5`).
+**Timestamps.** **Insert Media Timestamp** types the time of the player at the cursor, such as `[03:07]` (with hours from one hour on: `[1:02:03]`). **Go to Timestamp at Cursor** does the opposite: it takes the timestamp in the line of the cursor (the nearest one before or around it) and moves the player there. Timestamps are ordinary text; they can be written by hand as well (`3:07`, `[03:07]`, `1:02:03.5`).
 
 **In a copyholder or a Quick Reference panel** the player has its play controls at its bottom. An audio file in the copyholder of the transcript's editor is a good arrangement for one editor only.
 
@@ -836,7 +838,7 @@ The icons, line colors, and line icons are {{APP}}'s own additions; they are kep
 
 **Objects** are the people, places, and things of your story, each with a sheet of fields: a character with race, height, eye color, traits, and background story; a place with its kind, its environment, and its weather; and so on. They belong to the whole project, not to one document, and are kept apart from the binder. Links connect them, so you can click your way through a background: the character sheet, the village where she lives, the landscape around it, its weather.
 
-Click the **Objects** button of the inspector (right of the **Mind Map** button), or choose **Navigate > Inspect > Objects**. **Window > Objects…** (or the window button in the tab's bar) shows the same objects in a large window of their own, with the list on the left and the sheet on the right. Changes in one place show at once in the other.
+Click the **Objects** button of the inspector (right of the **Mind Map** button), or choose **Navigate > Inspect > Objects of the project: characters, locations, environments, ...**. **Window > Objects…** (or the window button in the tab's bar) shows the same objects in a large window of their own, with the list on the left and the sheet on the right. Changes in one place show at once in the other.
 
 **Categories.** The colored buttons at the top are the categories: **Characters**, **Locations**, **Environments**, **Points of Interest**, and **Weather** to start with. Click one to see its objects. You can rename them, give them other colors, change their order, remove them, and add categories of your own (factions, spells, ships ...): see *Templates and colors* below.
 
@@ -1617,6 +1619,21 @@ You do not need to know this to use {{APP}}; the editor shows formatted text. It
 
 Shortcuts of styles belong to the name of the style: "Block Quote" has its shortcut in every project that has a style of that name.
 
+### Shortcuts and the keyboard layout
+
+A few of the standard shortcuts are keys that need **AltGr** on a German keyboard: **Ctrl+{**, **Ctrl+|** and **Ctrl+}** (align left, center, right), **Ctrl+[** and **Ctrl+]** (back and forward), **Ctrl+\\** (the list of script elements), and **Ctrl+=** (subscript). Since 0.94.0 the program looks at the keyboard layout of the system **at the very first start** (when no shortcut settings and no earlier start exist) and keeps the answer. With a **US layout**, or any layout other than German, the usual set above stays. With a **German (or Austrian) layout** these commands get keys that need no AltGr:
+
+| Command | German set |
+|---------|------------|
+| Align left / center / right (also in the mind map) | Alt+Shift+L / Alt+Shift+E / Alt+Shift+R |
+| Justify (mind map) | Alt+Shift+J |
+| Back / forward | Alt+Shift+B / Alt+Shift+F |
+| List of script elements | Ctrl+Shift+O |
+| Subscript | Ctrl+Shift+D |
+| Bring to front / send to back (mind map) | Ctrl+Shift+PageUp / Ctrl+Shift+PageDown |
+
+The menus show every key as the layout names it. A program that was used before 0.94.0 keeps its shortcuts as they were (nothing changes by itself), and so does every shortcut you set yourself under **File > Options > Keyboard**: a stored shortcut is never replaced. Where the system does not tell its layout, the usual set is used. (Linux: the keyboard settings of the desktop or the X server; Windows: the language of the keyboard layout; Android: the language of the keyboard.)
+
 ### The standard shortcuts
 
 | Action | Shortcut |
@@ -1632,7 +1649,7 @@ Shortcuts of styles belong to the name of the style: "Block Quote" has its short
 | Show or hide binder / inspector | Ctrl+Alt+B / Ctrl+Alt+I |
 | Composition mode / full screen | F11 / Ctrl+Shift+F11 |
 | Focus binder / focus editor / other editor | Alt+1 / Alt+2 / F6 |
-| Back / forward | Ctrl+[ / Ctrl+] |
+| Back / forward | Ctrl+[ / Ctrl+] (German layout: Alt+Shift+B / Alt+Shift+F) |
 | Previous / next document | Alt+Shift+Up / Alt+Shift+Down |
 | Reveal in binder | Ctrl+Shift+R |
 | Find / replace / next / previous | Ctrl+F / Ctrl+H / F3 / Shift+F3 |
@@ -1659,7 +1676,7 @@ Shortcuts of styles belong to the name of the style: "Block Quote" has its short
 | The next six styles of the style list (Format > Style > Customize Style List) | Ctrl+Alt+4 ... Ctrl+Alt+9 |
 | Go to the synopsis / go to the document notes (Navigate > Inspect) | Ctrl+Alt+Y / Ctrl+Alt+N |
 | Back up now | Ctrl+Shift+B |
-| Script mode / list of script elements | Ctrl+8 / Ctrl+\\ |
+| Script mode / list of script elements | Ctrl+8 / Ctrl+\\ (German layout: Ctrl+8 / Ctrl+Shift+O) |
 | In a script: next element / change element | Enter / Tab (see section 4, Scriptwriting) |
 | Zoom in / zoom out / reset zoom | Ctrl++ / Ctrl+- / Ctrl+0 |
 | Zoom the area under the mouse | Ctrl+mouse wheel |

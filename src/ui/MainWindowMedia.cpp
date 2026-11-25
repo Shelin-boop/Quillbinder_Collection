@@ -106,7 +106,7 @@ void MainWindow::createMediaActions()
             setVolume(m_mediaVolumeBeforeMute > 0 ? m_mediaVolumeBeforeMute : 1.0);
         }
     });
-    connect(act(QStringLiteral("mediaTimestamp"), tr("Insert &Timestamp"), QStringLiteral("chronometer-lap"),
+    connect(act(QStringLiteral("mediaTimestamp"), tr("&Insert Media Timestamp"), QStringLiteral("chronometer-lap"),
                 QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_Return)),
             &QAction::triggered, this, [this] { insertMediaTimestamp(); });
     connect(act(QStringLiteral("mediaGoToTimestamp"), tr("&Go to Timestamp at Cursor")), &QAction::triggered, this,

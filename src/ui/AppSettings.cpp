@@ -244,6 +244,7 @@ void AppSettings::load()
     linkOpens = s.value(QStringLiteral("linkOpens"), linkOpens).toString();
     startWithCorkboard = s.value(QStringLiteral("folderCorkboard"), startWithCorkboard).toBool();
     floatQuickRef = s.value(QStringLiteral("floatQuickRef"), floatQuickRef).toBool();
+    binderScrivenerKeys = s.value(QStringLiteral("binderScrivenerKeys"), binderScrivenerKeys).toBool();
     reopenQuickRefs = s.value(QStringLiteral("reopenQuickRefs"), reopenQuickRefs).toBool();
     dropOnTextDocuments = s.value(QStringLiteral("dropOnTextDocuments"), dropOnTextDocuments).toBool();
     dragExportFormat = s.value(QStringLiteral("dragExportFormat"), dragExportFormat).toString();
@@ -526,6 +527,7 @@ void AppSettings::save()
     s.setValue(QStringLiteral("linkOpens"), linkOpens);
     s.setValue(QStringLiteral("folderCorkboard"), startWithCorkboard);
     s.setValue(QStringLiteral("floatQuickRef"), floatQuickRef);
+    s.setValue(QStringLiteral("binderScrivenerKeys"), binderScrivenerKeys);
     s.setValue(QStringLiteral("reopenQuickRefs"), reopenQuickRefs);
     s.setValue(QStringLiteral("dropOnTextDocuments"), dropOnTextDocuments);
     s.setValue(QStringLiteral("dragExportFormat"), dragExportFormat);

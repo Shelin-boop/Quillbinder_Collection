@@ -1,4 +1,6 @@
 #include "ui/MindMapController.h"
+#include "ui/Commands.h"
+#include "ui/KeyboardLayout.h"
 #include "ui/WindowCare.h"
 #include "ui/Ask.h"
 #include "core/SafeSave.h"
@@ -98,7 +100,7 @@ QAction *MindMapController::add(const QString &key, const QString &text, const Q
     auto *a = new QAction(text, this);
     a->setObjectName(key);
     if (!ks.isEmpty())
-        a->setShortcut(ks);
+        a->setShortcut(keyboardlayout::standardFor(key, ks, commands::layoutSet())); // 0.94.0: by the keyboard layout
     if (!icon.isEmpty())
         a->setIcon(icons::action(icon));
     // in the window the shortcuts work as usual; in the inspector the view hands the keys on
