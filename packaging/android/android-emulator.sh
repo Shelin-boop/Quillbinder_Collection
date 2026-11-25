@@ -30,21 +30,28 @@ PKG=io.github.shelin_boop.quillbinder.trial
 W=${QB_EMU_WIDTH:-1472}; H=${QB_EMU_HEIGHT:-920}; DPI=${QB_EMU_DPI:-160}
 
 # ---- the program for the emulator's ABI
-bash packaging/android/android-ci.sh "$OUT/x86_64" x86_64 > "$OUT/emu-build-steps.txt" 2>&1
-for f in summary.txt errors.txt errors-context.txt; do
-  [ -s "$OUT/x86_64/$f" ] && cp "$OUT/x86_64/$f" "$OUT/emu-build-$f"
-done
-[ -f "$OUT/x86_64/build.log" ] && tail -c 400000 "$OUT/x86_64/build.log" > "$OUT/emu-build.log"
-[ -f "$OUT/x86_64/apk.log" ] && tail -c 200000 "$OUT/x86_64/apk.log" > "$OUT/emu-apk.log"
-APK=$(ls "$OUT"/x86_64/*.apk 2>/dev/null | head -1)
-bres=$(grep '^result:' "$OUT/x86_64/summary.txt" 2>/dev/null | tail -1)
-say "x86_64 build: ${bres:-no result} ($(mins))"
+# QB_EMU_APK (Android 0.93.2): a tablet after the first takes the first one's APK (the same program); the first run
+# removes the NDKs for room on the disk, so a second build in the same job has no compiler (run 45560633787)
+if [ -n "${QB_EMU_APK:-}" ] && [ -f "$QB_EMU_APK" ]; then
+  APK=$QB_EMU_APK
+  say "x86_64 build: the APK of the tablet before ($(basename "$APK"))"
+else
+  bash packaging/android/android-ci.sh "$OUT/x86_64" x86_64 > "$OUT/emu-build-steps.txt" 2>&1
+  for f in summary.txt errors.txt errors-context.txt; do
+    [ -s "$OUT/x86_64/$f" ] && cp "$OUT/x86_64/$f" "$OUT/emu-build-$f"
+  done
+  [ -f "$OUT/x86_64/build.log" ] && tail -c 400000 "$OUT/x86_64/build.log" > "$OUT/emu-build.log"
+  [ -f "$OUT/x86_64/apk.log" ] && tail -c 200000 "$OUT/x86_64/apk.log" > "$OUT/emu-apk.log"
+  APK=$(ls "$OUT"/x86_64/*.apk 2>/dev/null | head -1)
+  bres=$(grep '^result:' "$OUT/x86_64/summary.txt" 2>/dev/null | tail -1)
+  say "x86_64 build: ${bres:-no result} ($(mins))"
+fi
 if [ -z "$APK" ]; then
   rm -rf "$OUT/x86_64"
   say "emulator: not started (no APK for x86_64)"
   exit 0
 fi
-cp "$APK" /tmp/quillbinder-emu.apk
+[ "$APK" = /tmp/quillbinder-emu.apk ] || cp "$APK" /tmp/quillbinder-emu.apk
 rm -rf "$OUT/x86_64"
 # room on the disk: the emulator refuses to start with little free space (run 4: "not enough disk space to run
 # avd"). The build folders are no longer needed, nor are the NDKs and other large tools GitHub's runner carries.

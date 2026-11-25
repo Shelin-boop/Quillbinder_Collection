@@ -220,6 +220,8 @@ jobs:
         env:
           QB_ANDROID_BUILD: ${{ github.run_number }}
           QB_EMU_API: '28'
+          # (the first tablet's APK: the NDKs are gone after its build)
+          QB_EMU_APK: /tmp/quillbinder-emu.apk
         run: |
           rc=0
           bash packaging/android/android-emulator.sh results28 || rc=$?
