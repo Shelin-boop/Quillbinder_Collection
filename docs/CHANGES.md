@@ -33,6 +33,17 @@ New functions and fixes (a program update for 0.93.x; the AppImage stays on the 
   fields no longer move under the mouse when a target is set. On a screen narrower than 1600 px the window opens
   maximized the first time (when no saved state exists). The window's size, place and state are saved a moment after
   each change, not only when the program ends (they were lost after a crash).
+- **Translation and Proofreading 1.4**. A single word, German to English or English to German, shows the
+  translation of each word class (a German word that is a verb in lower case and a noun with a capital gets both),
+  then similar translations (from English to German: similar German words from the German dictionary), then the short
+  description, instead of repeating the word. **Automatic** translates a lone German word instead of proofreading it
+  (with the German dictionary installed). German typed in lower case translates better: the dictionary puts the
+  capitals of nouns right in the copy the model gets (the writer's text stays as it is); without the dictionary a
+  note says that German nouns need capitals. A notice at the top of the add-on's pane names what is missing (a
+  translation model, the German dictionary) with a button to the add-on's options. Models are unloaded after 15
+  minutes without use (File > Options > Proofreading > Speed). Fixes: no alternatives that differ only in capitals,
+  no "Spelling" line for words of the result, "number" is no longer read as "numb", and the hints in the empty fields
+  wrap.
 
 ## 0.93.1 beta (2026-11-24)
 
