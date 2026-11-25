@@ -110,7 +110,7 @@ jobs:
     timeout-minutes: 180
     env:
       ID: ${{ needs.prepare.outputs.id }}
-      QB_NDK: 27.2.12479018
+      QB_NDK: 30.0.16248370
     defaults:
       run:
         shell: bash

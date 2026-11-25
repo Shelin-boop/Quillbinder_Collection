@@ -43,6 +43,7 @@
 #include <QJsonDocument>
 #include <QKeyEvent>
 #include <QMenu>
+#include <QScrollArea>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QPushButton>
@@ -1221,6 +1222,14 @@ bool rightClickChoose(TextEditor *e, int position, const QString &entry, QString
     settle(50);
     const QRect cr = e->cursorRect(e->textCursor());
     const QPoint pos(cr.left() + 1, cr.center().y());
+    // Android 0.93.2 (run 45566476666, S-T03): the editor can stand in a scroll area of its own (its viewport 3834 px
+    // tall): the place is brought into sight there too, or the menu would be asked for far below the screen
+    for (QWidget *up = e->parentWidget(); up; up = up->parentWidget())
+        if (auto *sa = qobject_cast<QScrollArea *>(up); sa && sa->widget() && sa->widget()->isAncestorOf(e)) {
+            const QPoint in = e->viewport()->mapTo(sa->widget(), pos);
+            sa->ensureVisible(in.x(), in.y(), 40, 80);
+            settle(50);
+        }
     // a real right click: the press gives that editor (and its pane) the keyboard first; the menu's
     // commands act on the active editor (first run: the second pane's menu split the first pane's text)
     // without a window manager the window must be active, or setFocus does not move the
@@ -1241,8 +1250,24 @@ bool rightClickChoose(TextEditor *e, int position, const QString &entry, QString
         m = qobject_cast<QMenu *>(QApplication::activePopupWidget());
         return m && m->isVisible();
     }, 1500);
-    if (!m)
-        return false;
+    if (!m) {
+        // Android 0.93.2 (run 45557268944, S-T03: no menu on a picture, while 60 right clicks of S-W15 had one): a
+        // second, longer wait, and what was there when no menu came
+        waitFor([&m] {
+            m = qobject_cast<QMenu *>(QApplication::activePopupWidget());
+            return m && m->isVisible();
+        }, 5000);
+        QWidget *popup = QApplication::activePopupWidget();
+        QWidget *modal = QApplication::activeModalWidget();
+        note(QStringLiteral("(right click at %1,%2 in a viewport of %3 x %4: %5; popup %6, window in front %7, focus %8)")
+                 .arg(pos.x()).arg(pos.y()).arg(e->viewport()->width()).arg(e->viewport()->height())
+                 .arg(m ? QStringLiteral("the menu came late") : QStringLiteral("no menu"),
+                      popup ? QString::fromLatin1(popup->metaObject()->className()) : QStringLiteral("none"),
+                      modal ? QString::fromLatin1(modal->metaObject()->className()) : QStringLiteral("none"),
+                      QApplication::focusWidget() ? QString::fromLatin1(QApplication::focusWidget()->metaObject()->className()) : QStringLiteral("none")));
+        if (!m)
+            return false;
+    }
     settle(80);
     if (entries) {
         entries->clear();

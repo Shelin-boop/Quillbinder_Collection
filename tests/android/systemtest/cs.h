@@ -218,6 +218,10 @@ bool menuPath(MainWindow *w, const QString &path);          // "Documents > Conv
 void clickLater(int ms, const QString &buttonText, int tries = 40);   // a button of the next window, by its text
 void answerBoxLater(int ms, QMessageBox::StandardButton button, BoxText *text = nullptr);
 void fileDialogLater(int ms, const QString &path, bool *asked = nullptr);
+// Android 0.93.2: File > Save As on a tablet asks the format first (MainWindowFormat.cpp, chooseSaveAs, since Android
+// 0.93.0): the question is answered with the format of `path` (".scriv": Scrivener 3, else the program's own), before
+// the file window that fileDialogLater answers
+void formatQuestionLater(int ms, const QString &path);
 void closeDialogsLater(int ms);                             // rejects every open dialog
 BinderPanel *binderOf(MainWindow *w);
 void selectItems(MainWindow *w, const QList<BinderItem *> &items);

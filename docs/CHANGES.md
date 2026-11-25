@@ -196,6 +196,39 @@ needs, and the entry's Windows block names a commit of its own (one of the add-o
 other translations it asks for in the background, which GitHub's Windows machine gave late); the Windows build's early pick of its own version line is checked (a build with another Linux line names the
 Windows line); the generic font names are checked on Windows too.
 
+## Android 0.93.2 experimental (2026-11-25)
+
+Fixes of Android 0.93.1 (a new APK, as always on Android). Everything in 0.93.1 above is in it: fonts named by their
+kind (on a tablet the style Code Span now reaches Word, e-book and PDF files in a fixed-width font), search and the
+counts keeping less in memory, the new lines of Help > System Information, and Qt PDF named with its own source in
+Help > Third-Party Licenses. What is Android's own:
+
+- **No on-screen keyboard while a keyboard is attached**: Qt's text fields asked for the on-screen keyboard after every
+  key typed and every click, so with a keyboard attached to the tablet it kept coming up while you typed. The program
+  now asks for it only while Android reports no physical keyboard in use (a keyboard folded away counts as none).
+  Help > System Information names the keyboard Android reports and Android's own setting for the on-screen keyboard
+  while a physical keyboard is in use.
+- **Built with the Android NDK that Qt 6.12 is built with** (r30 instead of r27c); the C++ runtime inside the APK is
+  r30's. The app still runs from Android 9 on.
+- **A picture or figure cut and pasted inside the program comes back with it.** After a cut the program's own copy
+  (with the picture) was replaced by an empty one, so the paste took Android's clipboard, which keeps only text and
+  HTML, and the figure was gone.
+- **File > Show Project in File Manager on Android 9**: the Files app of Android 9 could not open a folder's address
+  and closed itself; before Android 10 it now opens at the top of the tablet's shared storage.
+- **Help > Third-Party Licenses** names Qt PDF 6.140.0 as a part of its own with its source (the Qt Project's archive
+  of Qt WebEngine and Qt PDF) and the C++ runtime of NDK r30; `THIRD-PARTY-SOURCES-android.txt` names Qt PDF's source.
+
+For developers (nothing changes in the program): the Android system test app starts again (its Qt Test library needs
+NDK r30's C++ runtime); a system test run without cases fails, and lines of the emulated graphics driver are no longer
+read as cases; its checks of a Word file's fixed-width font and of an e-book's tables work on a tablet, it answers the format question
+of File > Save As, translates in the direction of the model it gives, leaves out Help > Report a Problem (Android's
+browser puts the app away) and keeps the program's own log lines of each case; a paste on Android writes to the log
+what the clipboard gave and whether the program's own copy was used. The start check runs a
+second tablet with Android 9 and no keyboard attached in the last run before a merge, checks that the on-screen
+keyboard stays down while a keyboard is attached, closes the text's popup before its File menu steps and reaches the
+File menu's last command with the keys. The translator's Android libraries are built with NDK r30 too (the official
+entry's Android block names the add-on's commit with that note).
+
 ## Android 0.93.1 experimental (2026-11-24)
 
 A fix of Android 0.93.0 alone; everything of Android 0.93.0 below is in it.

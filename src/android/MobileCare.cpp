@@ -38,6 +38,11 @@
 #include <QToolBar>
 #include <QToolTip>
 #include <QWheelEvent>
+#ifdef Q_OS_ANDROID
+#include <QJniEnvironment>
+#include <QJniObject>
+#include <QtCore/qcoreapplication_platform.h>
+#endif
 
 Q_LOGGING_CATEGORY(lcCare, "qb.tablet")
 
@@ -282,11 +287,15 @@ public:
     bool eventFilter(QObject *o, QEvent *e) override
     {
         switch (e->type()) {
-        case QEvent::KeyPress:
         case QEvent::KeyRelease:
+            followKeyboard(); // (before Qt's text widgets ask for the on-screen keyboard: item 34)
+            [[fallthrough]];
+        case QEvent::KeyPress:
             return key(static_cast<QKeyEvent *>(e));
-        case QEvent::MouseButtonPress:
         case QEvent::MouseButtonRelease:
+            followKeyboard();
+            [[fallthrough]];
+        case QEvent::MouseButtonPress:
         case QEvent::MouseButtonDblClick:
         case QEvent::MouseMove:
             if (o->isWidgetType())
@@ -464,7 +473,82 @@ private:
     bool m_delivering = false;
 };
 
+std::function<KeyboardState()> &keyboardSource()
+{
+    static std::function<KeyboardState()> source;
+    return source;
+}
+
 } // namespace
+
+KeyboardState keyboardState(bool withSetting)
+{
+    Q_UNUSED(withSetting) // (Android only)
+    if (keyboardSource())
+        return keyboardSource()();
+    KeyboardState k;
+#ifdef Q_OS_ANDROID
+    const QJniObject context = QNativeInterface::QAndroidApplication::context();
+    if (!context.isValid())
+        return k;
+    const QJniObject resources = context.callObjectMethod("getResources", "()Landroid/content/res/Resources;");
+    const QJniObject config = resources.isValid()
+                                  ? resources.callObjectMethod("getConfiguration", "()Landroid/content/res/Configuration;")
+                                  : QJniObject();
+    if (!config.isValid())
+        return k;
+    k.known = true;
+    k.keyboard = config.getField<jint>("keyboard");
+    k.hidden = config.getField<jint>("hardKeyboardHidden");
+    // (a hidden setting: newer Androids may refuse it to an app; then it stays "not known")
+    const QJniObject resolver = withSetting ? context.callObjectMethod("getContentResolver", "()Landroid/content/ContentResolver;")
+                                            : QJniObject();
+    if (resolver.isValid()) {
+        const QJniObject value = QJniObject::callStaticObjectMethod(
+            "android/provider/Settings$Secure", "getString",
+            "(Landroid/content/ContentResolver;Ljava/lang/String;)Ljava/lang/String;", resolver.object(),
+            QJniObject::fromString(QStringLiteral("show_ime_with_hard_keyboard")).object<jstring>());
+        QJniEnvironment env;
+        env.checkAndClearExceptions(QJniEnvironment::OutputMode::Silent);
+        if (value.isValid())
+            k.showWithKeyboard = value.toString().trimmed() == QLatin1String("1") ? 1 : 0;
+    }
+#endif
+    return k;
+}
+
+void setKeyboardStateSource(std::function<KeyboardState()> source) { keyboardSource() = std::move(source); }
+
+void followKeyboard()
+{
+    if (!qApp)
+        return;
+    const KeyboardState k = keyboardState();
+    if (!k.known)
+        return; // (nothing to go by: Qt's own way stays)
+    const bool ask = !k.physical();
+    if (qApp->autoSipEnabled() == ask)
+        return;
+    qApp->setAutoSipEnabled(ask);
+    qCInfo(lcCare).noquote() << QStringLiteral("keyboard: %1").arg(keyboardText(k));
+}
+
+QString keyboardText(const KeyboardState &k)
+{
+    if (!k.known)
+        return QStringLiteral("not known");
+    static const char *const kinds[] = {"undefined", "no keys", "qwerty", "twelve keys"};
+    static const char *const hidden[] = {"undefined", "no", "yes"};
+    const QString kind = k.keyboard >= 0 && k.keyboard <= 3 ? QString::fromLatin1(kinds[k.keyboard]) : QString::number(k.keyboard);
+    const QString hid = k.hidden >= 0 && k.hidden <= 2 ? QString::fromLatin1(hidden[k.hidden]) : QString::number(k.hidden);
+    const QString setting = k.showWithKeyboard < 0 ? QStringLiteral("not known")
+                                                   : (k.showWithKeyboard ? QStringLiteral("on") : QStringLiteral("off"));
+    return QStringLiteral("%1 (Android: keyboard %2, hardKeyboardHidden %3; Android's setting for the on-screen keyboard "
+                          "while a physical keyboard is in use: %4)")
+        .arg(k.physical() ? QStringLiteral("physical keyboard in use, the program does not ask for the on-screen keyboard")
+                          : QStringLiteral("no physical keyboard in use"),
+             kind, hid, setting);
+}
 
 void installCare()
 {

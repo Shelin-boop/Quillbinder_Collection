@@ -41,9 +41,9 @@ under the same license as the rest of Quillbinder's own files), made with
 `rsvg-convert -w <size> -h <size>` at 48, 72, 96, 144 and 192 px.
 
 To build by hand (Linux, with Qt 6.12.1 for Android and for the build machine side by side in one folder, the
-Android SDK with NDK 27.2.12479018, and JDK 21):
+Android SDK with NDK 30.0.16248370 (since Android 0.93.2), and JDK 21):
 
-    QT_ANDROID_BASE=~/Qt ANDROID_SDK_ROOT=<sdk> ANDROID_NDK_ROOT=<sdk>/ndk/27.2.12479018 JAVA_HOME=<jdk 21> \
+    QT_ANDROID_BASE=~/Qt ANDROID_SDK_ROOT=<sdk> ANDROID_NDK_ROOT=<sdk>/ndk/30.0.16248370 JAVA_HOME=<jdk 21> \
       packaging/android/android-ci.sh results arm64-v8a
 
 **The public APK** (since 0.91.3, 2026-11-16): `.github/workflows/release-android.yml`, started

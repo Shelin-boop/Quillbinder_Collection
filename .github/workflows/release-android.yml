@@ -99,8 +99,9 @@ jobs:
         shell: bash
     env:
       SCCACHE_GHA_ENABLED: 'true'
-      # Qt 6.12's documentation (Qt for Android, checked 2026-11-14): NDK r27c, JDK 21, SDK platform 36, build tools 36.0.0
-      QB_NDK: 27.2.12479018
+      # Qt 6.12's documentation (Qt for Android, checked 2026-11-25): Qt is built with NDK r30 (30.0.16248370, Clang
+      # 21) and apps should use the same; JDK 21; Android 9 to 17 (API 28 to 37). SDK platform 36, build tools 36.0.0
+      QB_NDK: 30.0.16248370
       QB_SDK_PLATFORM: android-36
       QB_BUILD_TOOLS: 36.0.0
     steps:
@@ -483,6 +484,16 @@ jobs:
                 curl -fsSL --retry 5 -o "sources/$n" "https://github.com/openssl/openssl/releases/download/openssl-$v/$n"
                 echo "$want  sources/$n" | sha256sum -c --quiet
                 echo "fetched and checked: $n" ;;
+              qtwebengine-everywhere-src-*)
+                # Qt PDF's source (Android 0.93.2, to-do item 48; as release-windows.yml): Qt WebEngine's archive, which
+                # the Linux release puts on third-party-sources; else from the Qt Project, checked with its MD5 list
+                pv=${n#qtwebengine-everywhere-src-}; pv=${pv%.tar.xz}
+                url="https://download.qt.io/official_releases/qtwebengine/${pv%.*}/$pv/src/$n"
+                curl -fsSL --retry 10 --retry-delay 15 --retry-all-errors -o "sources/$n" "$url"
+                want=$(curl -fsSL --retry 5 "${url%/*}/md5sums.txt" | awk -v f="$n" '{m = $NF; sub(/^\*/, "", m); if (m == f) print tolower($1)}' | head -1)
+                [ -n "$want" ] || { echo "::error::the Qt Project's md5sums.txt names no sum for $n"; exit 1; }
+                echo "$want  sources/$n" | md5sum -c --quiet
+                echo "fetched and checked (MD5 as published): $n" ;;
               *)
                 echo "::error::the license list names $n, which is not on third-party-sources and not fetched here"
                 exit 1 ;;
@@ -497,6 +508,7 @@ jobs:
             for n in $names; do
               case "$n" in
                 qt-everywhere-src-*) echo "$n"; echo "    Qt 6, as The Qt Company built it for Android (the Qt Project's source release)" ;;
+                qtwebengine-everywhere-src-*) echo "$n"; echo "    Qt PDF, as The Qt Company built it for Android (the Qt Project's source release of Qt WebEngine and Qt PDF)" ;;
                 hunspell-*) echo "$n"; echo "    Hunspell, the version the program is linked with" ;;
                 openssl-*) echo "$n"; echo "    OpenSSL, for https (File > Import > Web Page); how it is built: packaging/android/android-openssl.sh" ;;
                 libreoffice-dictionaries-*) echo "$n"; echo "    the German spelling dictionaries (the English ones are their own source)" ;;

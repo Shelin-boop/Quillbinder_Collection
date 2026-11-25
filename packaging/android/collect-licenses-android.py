@@ -7,13 +7,15 @@ the C++ runtime of Android's NDK, the Java libraries Qt's Android part needs, an
 has the format of resources/licenses/index.json and is compiled into the Android program under the same resource
 names (packaging/android/android-resources.py writes the resource file at build time).
 
-It is made from the Windows list (resources/licenses-windows, the same Qt version: the texts of Qt's parts, of Qt
-PDF's parts, of Hunspell, Monocypher and the dictionaries are the same files) and from a folder with the texts only
+It is made from the Windows list (resources/licenses-windows, the same Qt version and the same Qt PDF 6.140.0, a part
+of its own with the source of Qt WebEngine since Windows 0.93.1: the texts of Qt's parts, of Qt PDF's parts, of
+Hunspell, Monocypher and the dictionaries are the same files) and from a folder with the texts only
 the Android build needs:
 
   <extra>/forkfd/qt_attribution.json, LICENSE      qtbase v6.12.1, src/3rdparty/forkfd
   <extra>/libtiff/qt_attribution.json, COPYRIGHT   qtimageformats v6.12.1, src/3rdparty/libtiff
-  <extra>/libcxx/LICENSE.TXT                       llvm-project llvmorg-18.1.8, libcxx (NDK r27c's C++ runtime is LLVM 18)
+  <extra>/libcxx/LICENSE.TXT                       llvm-project llvmorg-21.1.0, libcxx (NDK r30's C++ runtime is LLVM 21;
+                                                   the text is the same as 18.1.8's of NDK r27c)
   <extra>/openssl/LICENSE.txt                      openssl openssl-3.5.9
   (all from raw.githubusercontent.com/<project>/<repository>/<tag>/<path>)
 
@@ -56,6 +58,9 @@ WHERE = {  # the Windows list's places -> the APK's
     "Qt6Svg.dll, qsvg.dll, qsvgicon.dll": "libQt6Svg and the SVG plugins (inside the APK)",
     "the image plugin qwebp.dll": "the image plugin for WebP (inside the APK)",
     "Qt6Pdf.dll (showing PDF files)": "libQt6Pdf (inside the APK; showing PDF files)",
+    # Android 0.93.2 (to-do item 48): Qt PDF 6.140.0 is a part of its own since Linux and Windows 0.93.1
+    "Qt6Pdf.dll, Qt6PdfWidgets.dll (beside the program) and the image plugin qpdf.dll":
+        "libQt6Pdf, libQt6PdfWidgets and the image plugin for PDF (libraries inside the APK)",
     "spelling (linked into quillbinder.exe)": "spelling (linked into the program's library)",
     "the check of package signatures (Ed25519), compiled into quillbinder.exe":
         "the check of package signatures (Ed25519), compiled into the program's library",
@@ -93,8 +98,8 @@ def main():
             continue
         c = dict(c)
         if c["text"] == "qt.txt":
-            c["where"] = ("libQt6Core, libQt6Gui, libQt6Widgets, libQt6Network, libQt6Xml, libQt6Svg, libQt6PrintSupport, "
-                          "libQt6Pdf, libQt6PdfWidgets (libraries inside the APK), Qt's plugins (the Android platform "
+            c["where"] = ("libQt6Core, libQt6Gui, libQt6Widgets, libQt6Network, libQt6Xml, libQt6Svg, libQt6PrintSupport "
+                          "(libraries inside the APK; Qt PDF: below), Qt's plugins (the Android platform "
                           "plugin, styles, image formats, icon engine, TLS, network information) and Qt's Java part (in "
                           "the APK's classes). The libraries are The Qt Company's own build for Android, unchanged; each "
                           "can be replaced by another build of the same version (an APK is a ZIP archive: the library "
@@ -104,7 +109,7 @@ def main():
         elif any(word in c.get("where", "") for word in (".dll", ".exe", "Windows")):
             sys.exit(f"a place of the Windows list has no Android wording: {c['name']}: {c['where']}")
         win_text(c["text"])
-        if c["text"].startswith("qt-"):
+        if c["text"].startswith("qt-") and c["text"] != "qt-pdf.txt":  # (Qt PDF itself is a module, not a part of Qt's)
             have.add(c["text"][3:-4])
         components.append(c)
 
@@ -146,10 +151,10 @@ def main():
                   + read(os.path.join(EXTRA, "openssl", "LICENSE.txt"))),
          f"{SOURCES}, file openssl-3.5.9.tar.gz (also https://github.com/openssl/openssl, tag openssl-3.5.9)",
          "openssl-3.5.9.tar.gz")
-    comp("openssl.txt", "LLVM libc++ (the C++ runtime of Android's NDK)", "NDK r27c (LLVM 18)",
+    comp("openssl.txt", "LLVM libc++ (the C++ runtime of Android's NDK)", "NDK r30 (LLVM 21)",
          "Apache-2.0 WITH LLVM-exception (older parts: University of Illinois/NCSA Open Source License, MIT License)",
          "libc++_shared.so inside the APK, unchanged from the NDK",
-         add_text("libcxx.txt", "libc++ of the LLVM Project, as it comes with Android's NDK r27c\nhttps://libcxx.llvm.org\n\n"
+         add_text("libcxx.txt", "libc++ of the LLVM Project, as it comes with Android's NDK r30\nhttps://libcxx.llvm.org\n\n"
                   + read(os.path.join(EXTRA, "libcxx", "LICENSE.TXT"))),
          "https://android.googlesource.com/toolchain/llvm-project (the NDK's LLVM); https://github.com/llvm/llvm-project")
     apache = ("\n\nLicensed under the Apache License, Version 2.0 (the full text is listed under the full texts of "

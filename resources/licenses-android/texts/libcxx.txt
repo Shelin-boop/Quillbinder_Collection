@@ -1,4 +1,4 @@
-libc++ of the LLVM Project, as it comes with Android's NDK r27c
+libc++ of the LLVM Project, as it comes with Android's NDK r30
 https://libcxx.llvm.org
 
 ==============================================================================

@@ -303,6 +303,10 @@ run_case() {
   EXTRA_ENV=()
   mkdir -p "$OUT/st-logs/$name"
   for f in case.log verify.log facts.json subcases.txt; do "$ADB" pull "$DEV/results/$name/$f" "$OUT/st-logs/$name/$f" > /dev/null 2>&1; done
+  # Android 0.93.2 (to-do item 35): the program's own log lines of the case (the paste's "clipboard: ...", the
+  # keyboard's "keyboard: ...", the tablet's "qb.tablet" lines), as Android's log has them
+  "$ADB" logcat -d -v time 2>/dev/null | grep -E "clipboard: |keyboard: |qb\.tablet|files: |handles: " | tail -60 | cut -c1-400 > "$OUT/st-logs/$name/program-log.txt"
+  [ -s "$OUT/st-logs/$name/program-log.txt" ] || rm -f "$OUT/st-logs/$name/program-log.txt"
   ran=$((ran + 1))
   local log="$OUT/st-logs/$name/case.log" vlog="$OUT/st-logs/$name/verify.log" pass fail vfail end vend
   pass=$(grep -c '^PASS' "$log" 2>/dev/null); fail=$(grep -c '^FAIL' "$log" 2>/dev/null)
@@ -348,14 +352,24 @@ for d in tests/import tests/media tests/fonts; do [ -d "$d" ] && "$ADB" push "$d
 fresh
 r=$(run_app 120 "$DEV/list.txt" --list)
 "$ADB" pull "$DEV/list.txt" "$OUT/st-list.txt" > /dev/null 2>&1
-total=$(grep -c . "$OUT/st-list.txt" 2>/dev/null)
+# Android 0.93.2 (to-do item 35): lines that are no case (the emulated graphics driver writes lines such as
+# "s_glBindAttribLocation: ..." into the program's output) are counted out: a case's line is "<id> <quick> <full>
+# <needs> <title>", its minutes as numbers
+if [ -s "$OUT/st-list.txt" ]; then
+  awk 'NF >= 5 && $2 ~ /^[0-9]+$/ && $3 ~ /^[0-9]+$/' "$OUT/st-list.txt" > "$OUT/st-list-cases.txt"
+  other=$(( $(grep -c . "$OUT/st-list.txt") - $(grep -c . "$OUT/st-list-cases.txt") ))
+  [ "$other" -gt 0 ] && say "the list of cases: $other lines that are no case counted out (st-list.txt keeps them)"
+  cp "$OUT/st-list-cases.txt" "$OUT/st-list-run.txt"; rm -f "$OUT/st-list-cases.txt"
+fi
+total=$(grep -c . "$OUT/st-list-run.txt" 2>/dev/null)
 say "the list of cases: $r, ${total:-0} cases ($(mins))"
 if [ "${total:-0}" -lt 10 ]; then
   "$ADB" exec-out screencap -p > "$OUT/st-shots/list-failed.png" 2>/dev/null
   "$ADB" logcat -d -v time 2>/dev/null | grep -E "$PKG|AndroidRuntime|FATAL|Fatal signal|libqb|Qt" | tail -120 | cut -c1-300 > "$OUT/st-logcat-list.txt"
   cat /tmp/qbst-start.txt >> "$SUM"
   say "result: the test program did not give its list of cases"
-  "$ADB" emu kill > /dev/null 2>&1; exit 0
+  # (Android 0.93.2, to-do item 51: a run without cases is a failure; the workflow still uploads what there is)
+  "$ADB" emu kill > /dev/null 2>&1; exit 3
 fi
 fresh
 r=$(run_app 1500 "$DEV/fixtures.log" --fixtures "$DEV/fixtures")
@@ -395,7 +409,7 @@ while read -r id quick full needs title <&3; do
       run_case "$id" "$title" "$limit" "$needs" "${sub[0]}" "$keep" "${sub[@]:1}"
     done 4< "$OUT/st-logs/$id/subcases.txt"
   fi
-done 3< "$OUT/st-list.txt"
+done 3< "$OUT/st-list-run.txt"
 say "cases of this run: $ran run, $clean clean, $failed with failed checks, $hung stopped at their time limit, $broke ended early, $skipped skipped, $left left over ($(mins))"
 tar -C "$OUT" -czf "$OUT/st-logs.tar.gz" st-logs 2>/dev/null
 rm -rf "$OUT/st-logs"

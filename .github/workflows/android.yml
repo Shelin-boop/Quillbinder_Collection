@@ -35,19 +35,21 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
       SCCACHE_GHA_ENABLED: 'true'
-      # Qt 6.12's documentation (Qt for Android, checked 2026-11-14): NDK r27c, JDK 21, SDK platform 36, build tools
-      # 36.0.0; Gradle and the Android Gradle plugin come from Qt's own templates.
-      QB_NDK: 27.2.12479018
+      # Qt 6.12's documentation (Qt for Android, checked 2026-11-25): Qt is built with NDK r30 (30.0.16248370, Clang
+      # 21) and apps should use the same (with r27c the system test's Qt Test library did not load: to-do 51); JDK 21;
+      # Android 9 to 17 (API 28 to 37). SDK platform 36, build tools 36.0.0; Gradle and the Android Gradle plugin come
+      # from Qt's own templates.
+      QB_NDK: 30.0.16248370
       QB_SDK_PLATFORM: android-36
       QB_BUILD_TOOLS: 36.0.0
       # D1 (0.91.3): the packs, one line each: <name> <recipe hash> <file> <SHA-256 of the file>
       # (packaging/android/android-deps-pack.sh; a recipe without a line is built and its pack published: summary.txt
       # shows its "pin:" line, which goes here)
       QB_ANDROID_PACKS: |
-        hunspell-arm64-v8a c1f589f9a870d0e1390021b3657e4f8c903ff4d433b40050e303e1cb825057be hunspell-arm64-v8a-android-c1f589f9a870d0e1.tar.xz d6045c811367c60b83a910511c166b50aa15f40185e3cb5ff01d091e35840161
-        hunspell-x86_64 8745189cfe1943140ee55dfb74962503bb62aeac73b4d6dc2d788400e77c8e41 hunspell-x86_64-android-8745189cfe194314.tar.xz 746f543a69f4ed91099d1c696b57b2eca8fb06c0e7e67b7b5e728cefaeea662f
-        openssl-arm64-v8a bc6606200989542a5dd1d18106987d9c8e17f9795100940fd6259df518cda75e openssl-arm64-v8a-android-bc6606200989542a.tar.xz cecf78a899c157b919e77f3f1d50975f23def05288bdac40c62cf99ea1af2985
-        openssl-x86_64 105e0006344b014b217417327e3485f9252b908bfe7c8de4cece2da9c448e9b3 openssl-x86_64-android-105e0006344b014b.tar.xz 70c043801ea90be0e6bc66e6bee9ad64048d6995cedcacf0b49e2c3e4b7b5cb9
+        hunspell-arm64-v8a 4bc5e476088b297d707b67f08a58439a657c09dc1c29a25bdaa86ebeafc354a1 hunspell-arm64-v8a-android-4bc5e476088b297d.tar.xz 6828dffe2b47d9afbc823eaf61b2862a92ffbf9c5183c546dfa749101cfbbc21
+        openssl-arm64-v8a 3620641cd0876ef45655cdaa4301611dab0072e72eff4b325d87b46c045b2603 openssl-arm64-v8a-android-3620641cd0876ef4.tar.xz eeea7569edfc7aa93f807e85aaa44080e045ae742d3e1dcf17a6510d5f7ebeb2
+        hunspell-x86_64 631a8687a57d2fc51e23ff05f1f7d44ab9688ce6636a2f48c526a804716d110a hunspell-x86_64-android-631a8687a57d2fc5.tar.xz ec8d5a4c8d611d5607899818be6d604bdb1e481c69c0c157568bfbfcc5e719a0
+        openssl-x86_64 c945ae8fc3df0200f5f8b3e26a61ffda33574c6a80b1b67271649cdc393a2e33 openssl-x86_64-android-c945ae8fc3df0200.tar.xz 13df03330487c4d1768fb98fa75f471eebb399e6d1e935398d5c0298884d2a8e
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0 (pinned as in windows.yml)
 
@@ -209,6 +211,26 @@ jobs:
           QB_ANDROID_BUILD: ${{ github.run_number }}
         run: bash packaging/android/android-emulator.sh results
 
+      # Android 0.93.2 (to-do item 35): one more tablet with Android 9 (API 28, the app's lowest) and no keyboard
+      # attached (the on-screen keyboard in play), for the last run before a merge: "[emu-api28]" on a line of the
+      # commit message. Its files are named emu28-... beside the first tablet's.
+      - name: Start check on an emulated tablet with Android 9 (x86_64, [emu-api28])
+        id: emulator28
+        if: always() && steps.first.outputs.emu == 'yes' && contains(github.event.head_commit.message, '[emu-api28]')
+        env:
+          QB_ANDROID_BUILD: ${{ github.run_number }}
+          QB_EMU_API: '28'
+          # (the first tablet's APK: the NDKs are gone after its build)
+          QB_EMU_APK: /tmp/quillbinder-emu.apk
+        run: |
+          rc=0
+          bash packaging/android/android-emulator.sh results28 || rc=$?
+          mkdir -p results
+          for f in results28/emu-*; do
+            [ -f "$f" ] && mv "$f" "results/emu28-$(basename "$f" | sed 's/^emu-//')"
+          done
+          exit $rc
+
       - name: Put the last results on the pre-release android-ci
         if: always() && github.ref != 'refs/heads/main'
         run: |
@@ -217,7 +239,8 @@ jobs:
           [ -n "$result" ] || result="stopped before the build"
           emures="not run"
           [ -f results/emu-summary.txt ] && emures=$(grep -E '^emulator( result)?:' results/emu-summary.txt | tail -1 | sed 's/^emulator[^:]*: //')
-          echo "job: ${{ job.status }}; emulator step: ${{ steps.emulator.outcome }}" >> results/emu-job.txt
+          [ -f results/emu28-summary.txt ] && emures="$emures; API 28: $(grep -E '^emulator( result)?:' results/emu28-summary.txt | tail -1 | sed 's/^emulator[^:]*: //')"
+          echo "job: ${{ job.status }}; emulator step: ${{ steps.emulator.outcome }}; API 28: ${{ steps.emulator28.outcome }}" >> results/emu-job.txt
           find results -type f -empty -delete
           failed=0
           for f in $(find results -maxdepth 1 -type f | sort); do

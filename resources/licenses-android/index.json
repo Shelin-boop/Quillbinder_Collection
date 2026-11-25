@@ -21,10 +21,19 @@
    "name": "Qt 6.12.1",
    "version": "6.12.1",
    "license": "LGPL-3.0-only",
-   "where": "libQt6Core, libQt6Gui, libQt6Widgets, libQt6Network, libQt6Xml, libQt6Svg, libQt6PrintSupport, libQt6Pdf, libQt6PdfWidgets (libraries inside the APK), Qt's plugins (the Android platform plugin, styles, image formats, icon engine, TLS, network information) and Qt's Java part (in the APK's classes). The libraries are The Qt Company's own build for Android, unchanged; each can be replaced by another build of the same version (an APK is a ZIP archive: the library replaced, the archive aligned and signed again), or the APK built anew from the source.",
+   "where": "libQt6Core, libQt6Gui, libQt6Widgets, libQt6Network, libQt6Xml, libQt6Svg, libQt6PrintSupport (libraries inside the APK; Qt PDF: below), Qt's plugins (the Android platform plugin, styles, image formats, icon engine, TLS, network information) and Qt's Java part (in the APK's classes). The libraries are The Qt Company's own build for Android, unchanged; each can be replaced by another build of the same version (an APK is a ZIP archive: the library replaced, the archive aligned and signed again), or the APK built anew from the source.",
    "text": "qt.txt",
    "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file qt-everywhere-src-6.12.1.tar.xz (the Qt Project's source release; also https://download.qt.io/official_releases/qt/6.12/6.12.1/single/ and the tag v6.12.1 of https://code.qt.io)",
    "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+  },
+  {
+   "name": "Qt PDF",
+   "version": "6.140.0",
+   "license": "LGPL-3.0-only",
+   "where": "libQt6Pdf, libQt6PdfWidgets and the image plugin for PDF (libraries inside the APK)",
+   "text": "qt-pdf.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file qtwebengine-everywhere-src-6.140.0.tar.xz (the Qt Project's source release of Qt WebEngine and Qt PDF; also https://download.qt.io/official_releases/qtwebengine/6.140/6.140.0/src/ and the tag v6.140.0 of https://code.qt.io/qt/qtwebengine)",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "BLAKE2 (reference implementation) (in Qt)",
@@ -419,8 +428,8 @@
    "license": "BSD-3-Clause",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-pdfium.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "The Chromium Project (in Qt PDF)",
@@ -428,8 +437,8 @@
    "license": "BSD-3-Clause",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-the-chromium-project.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "Abseil (in Qt PDF)",
@@ -437,8 +446,8 @@
    "license": "Apache-2.0",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-abseil.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "FreeType (in Qt PDF)",
@@ -446,8 +455,8 @@
    "license": "FTL (FreeType License)",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-freetype.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "ICU (in Qt PDF)",
@@ -455,8 +464,8 @@
    "license": "Unicode-3.0 (ICU License)",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-icu.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "libjpeg-turbo (in Qt PDF)",
@@ -464,8 +473,8 @@
    "license": "IJG, BSD-3-Clause, Zlib",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-libjpeg-turbo.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "libpng (in Qt PDF)",
@@ -473,8 +482,8 @@
    "license": "Libpng-2.0, Libpng",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-libpng.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "zlib (in Qt PDF)",
@@ -482,8 +491,8 @@
    "license": "Zlib",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-zlib.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "OpenJPEG (in Qt PDF)",
@@ -491,8 +500,8 @@
    "license": "BSD-2-Clause",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-openjpeg.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "Little CMS (in Qt PDF)",
@@ -500,8 +509,8 @@
    "license": "MIT",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-little-cms.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "Anti-Grain Geometry (in Qt PDF)",
@@ -509,8 +518,8 @@
    "license": "MIT-like (permission notice below)",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-anti-grain-geometry.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "BigInt (in Qt PDF)",
@@ -518,8 +527,8 @@
    "license": "Public domain (notice below)",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-bigint.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "FP16 (in Qt PDF)",
@@ -527,8 +536,8 @@
    "license": "MIT",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-fp16.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "fast_float (in Qt PDF)",
@@ -536,8 +545,8 @@
    "license": "MIT",
    "where": "libQt6Pdf (inside the APK; showing PDF files)",
    "text": "qtpdf-fast-float.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "Hunspell",
@@ -559,7 +568,7 @@
   },
   {
    "name": "LLVM libc++ (the C++ runtime of Android's NDK)",
-   "version": "NDK r27c (LLVM 18)",
+   "version": "NDK r30 (LLVM 21)",
    "license": "Apache-2.0 WITH LLVM-exception (older parts: University of Illinois/NCSA Open Source License, MIT License)",
    "where": "libc++_shared.so inside the APK, unchanged from the NDK",
    "text": "libcxx.txt",

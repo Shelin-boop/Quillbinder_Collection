@@ -1,5 +1,6 @@
 // The system test, stage 1: tables and pictures (C-28, S-T01 to S-T05).
 #include "cs.h"
+#include "core/Zip.h"
 
 #include "compile/CompileFormat.h"
 #include "compile/Compiler.h"
@@ -1227,7 +1228,9 @@ void caseST04()
         DocxExporter ex;
         const QString docx = out + QStringLiteral("/compiled.docx");
         const bool ok = ex.exportManuscript(m, docx, &err);
-        const QString xml = runTool(QStringLiteral("unzip"), {QStringLiteral("-p"), docx, QStringLiteral("word/document.xml")});
+        // Android 0.93.2 (to-do item 35): the archives are read with the program's ZipReader, not with the program
+        // unzip, which an app cannot count on on a tablet (S-T04 found the e-book empty)
+        const QString xml = QString::fromUtf8(zipFile(docx, QStringLiteral("word/document.xml")));
         check(ok && xml.count(QLatin1String("<w:tbl>")) + xml.count(QLatin1String("<w:tbl ")) >= 3 && xml.contains(QLatin1String("descr=")),
               QStringLiteral("Word: tables are w:tbl, figures carry their description"), err);
         check(xml.contains(QLatin1String("w:tblpPr")), QStringLiteral("Word: a figure or table beside the text floats (w:tblpPr)"));
@@ -1240,9 +1243,10 @@ void caseST04()
         const QString epub = out + QStringLiteral("/compiled.epub");
         const bool ok = ex.exportManuscript(m, epub, &err);
         QString all;
-        for (const QString &fn : runTool(QStringLiteral("unzip"), {QStringLiteral("-Z1"), epub}).split(QLatin1Char('\n'), Qt::SkipEmptyParts))
+        const ZipReader zip(epub);
+        for (const QString &fn : zip.fileNames())
             if (fn.endsWith(QLatin1String("html")))
-                all += runTool(QStringLiteral("unzip"), {QStringLiteral("-p"), epub, fn});
+                all += QString::fromUtf8(zip.fileData(fn));
         check(ok && all.contains(QLatin1String("<table")) && all.contains(QLatin1String("<figure")) && all.contains(QLatin1String("<figcaption"))
                   && all.contains(QLatin1String("alt=\"A drawing number")),
               QStringLiteral("e-book: tables, figures with captions and alt text"), err);
@@ -1271,6 +1275,7 @@ void caseST04()
         QAction *toScriv = action(w, QStringLiteral("saveAs"));
         const QString target = ctx().work + QStringLiteral("/switched.scriv");
         bool asked = false;
+        formatQuestionLater(300, target);
         withModal<QFileDialog>(400, [&](QFileDialog *fd) {
             asked = true;
             fd->selectFile(target);
@@ -1287,6 +1292,7 @@ void caseST04()
             // back: File > Save As (.qbx)
             const QString backParent = ctx().work + QStringLiteral("/back");
             QDir().mkpath(backParent);
+            formatQuestionLater(300, backParent + QStringLiteral("/Back.qbx"));
             withModal<QFileDialog>(400, [backParent](QFileDialog *fd) {
                 fd->setDirectory(backParent);
                 fd->selectFile(backParent + QStringLiteral("/Back.qbx"));

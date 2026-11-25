@@ -1109,6 +1109,7 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *e)
 // ------------------------------------------------------------------ clipboard
 
 #ifdef Q_OS_ANDROID
+#include <QDebug>
 // Android (0.91.3, 2026-11-16): the system's clipboard keeps only plain text and HTML (Qt for Android hands it nothing
 // else), so a text copied inside the program lost its RTF on the way, and with it pictures, tables and figures (the
 // system test, S-T03). The program keeps its own last copy and pastes that one while the clipboard still holds its
@@ -1137,13 +1138,32 @@ void keepOwnCopy(const QMimeData *md)
     delete ownCopy();
     ownCopy() = c;
 }
-const QMimeData *withOwnCopy(const QMimeData *source)
+const QMimeData *withOwnCopy(const QMimeData *source, bool atPaste = false)
 {
     const QMimeData *own = ownCopy();
-    if (own && source && source != own && !source->hasFormat(QStringLiteral("application/x-quillbinder-text"))
-        && (source->hasText() || source->hasHtml()) && clipText(source) == clipText(own))
-        return own;
-    return source;
+    const bool take = own && source && source != own && !source->hasFormat(QStringLiteral("application/x-quillbinder-text"))
+                      && (source->hasText() || source->hasHtml()) && clipText(source) == clipText(own);
+    if (atPaste) {
+        // Android 0.93.2 (to-do item 35, S-T03: a figure cut and pasted did not come back): what Android's clipboard
+        // gave at the paste and whether the program's own copy was taken, for the system test's log (logcat)
+        auto about = [](const QMimeData *m) {
+            if (!m)
+                return QStringLiteral("none");
+            QString t = m->text();
+            const int all = int(t.size());
+            t.remove(QChar(0xFFFC));
+            return QStringLiteral("formats [%1], text %2 characters (%3 without U+FFFC), html %4 characters")
+                .arg(m->formats().join(QStringLiteral(", ")))
+                .arg(all)
+                .arg(t.size())
+                .arg(m->hasHtml() ? m->html().size() : 0);
+        };
+        qInfo().noquote() << QStringLiteral("clipboard: paste; Android's: %1; own copy: %2; %3")
+                                 .arg(about(source), about(own),
+                                      take ? QStringLiteral("the own copy is pasted")
+                                           : QStringLiteral("the clipboard's content is pasted"));
+    }
+    return take ? own : source;
 }
 } // namespace
 #endif
@@ -1204,7 +1224,11 @@ QMimeData *TextEditor::createMimeDataFromSelection() const
     // plain text without annotation bubbles is more useful elsewhere
     md->setText(textCursor().selection().toPlainText());
 #ifdef Q_OS_ANDROID
-    keepOwnCopy(md);
+    // Android 0.93.2 (to-do item 35, S-T03): after a cut the program's copy was replaced by one of nothing (the
+    // paste's log: "own copy: ... text 0 characters"), asked for with no selection left; the clipboard's text then
+    // differed from it, and Android's text and HTML were pasted without the figure. Only a selection is kept.
+    if (textCursor().hasSelection())
+        keepOwnCopy(md);
 #endif
     return md;
 }
@@ -1288,7 +1312,7 @@ void TextEditor::pasteKeepingFormatting()
 void TextEditor::insertFromMimeData(const QMimeData *source)
 {
 #ifdef Q_OS_ANDROID
-    source = withOwnCopy(source);
+    source = withOwnCopy(source, true);
 #endif
     QTextCursor c = textCursor();
     const Formatting f = m_project ? m_project->formatting : Formatting();

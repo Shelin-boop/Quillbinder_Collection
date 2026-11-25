@@ -163,7 +163,7 @@
     }
   },
   "android": {
-    "commit": "f090213c445689b0142534281eaba073268a8732",
+    "commit": "5ed4640a28693eba93742d393d17f836c17406f0",
     "reviewed": "2026-11-24",
     "build": {
       "cachePaths": [
@@ -196,7 +196,7 @@
       ],
       "toolchainLibraries": [
         {
-          "name": "LLVM's OpenMP runtime (libomp.a of the Android NDK 27.2.12479018), linked into the engine",
+          "name": "LLVM's OpenMP runtime (libomp.a of the Android NDK 30.0.16248370), linked into the engine",
           "source": "https://github.com/llvm/llvm-project (the NDK's toolchain; Apache-2.0 WITH LLVM-exception, its license text is inside the add-on)"
         }
       ]

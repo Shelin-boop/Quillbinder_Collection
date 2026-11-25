@@ -21,27 +21,37 @@ t0=$(date +%s)
 mins() { echo "$(( ($(date +%s) - t0) / 60 )) min"; }
 SDK=${ANDROID_SDK_ROOT:?}
 API=${QB_EMU_API:-34}                       # Android 14, as the tablet the trial is for
+# A keyboard attached to the tablet (Android 0.93.2, to-do item 34): Android 14's tablet has one (yes), as the
+# writer's tablets do; Android 9's (QB_EMU_API=28, to-do item 35) has none, so the on-screen keyboard is in play there
+KBD=${QB_EMU_KEYBOARD:-$([ "$API" -ge 30 ] && echo yes || echo no)}
 IMAGE="system-images;android-$API;default;x86_64"
 PKG=io.github.shelin_boop.quillbinder.trial
 # the tablet's screen (2944 x 1840 at about 2x) in its own units: the same layout with a quarter of the pixels
 W=${QB_EMU_WIDTH:-1472}; H=${QB_EMU_HEIGHT:-920}; DPI=${QB_EMU_DPI:-160}
 
 # ---- the program for the emulator's ABI
-bash packaging/android/android-ci.sh "$OUT/x86_64" x86_64 > "$OUT/emu-build-steps.txt" 2>&1
-for f in summary.txt errors.txt errors-context.txt; do
-  [ -s "$OUT/x86_64/$f" ] && cp "$OUT/x86_64/$f" "$OUT/emu-build-$f"
-done
-[ -f "$OUT/x86_64/build.log" ] && tail -c 400000 "$OUT/x86_64/build.log" > "$OUT/emu-build.log"
-[ -f "$OUT/x86_64/apk.log" ] && tail -c 200000 "$OUT/x86_64/apk.log" > "$OUT/emu-apk.log"
-APK=$(ls "$OUT"/x86_64/*.apk 2>/dev/null | head -1)
-bres=$(grep '^result:' "$OUT/x86_64/summary.txt" 2>/dev/null | tail -1)
-say "x86_64 build: ${bres:-no result} ($(mins))"
+# QB_EMU_APK (Android 0.93.2): a tablet after the first takes the first one's APK (the same program); the first run
+# removes the NDKs for room on the disk, so a second build in the same job has no compiler (run 45560633787)
+if [ -n "${QB_EMU_APK:-}" ] && [ -f "$QB_EMU_APK" ]; then
+  APK=$QB_EMU_APK
+  say "x86_64 build: the APK of the tablet before ($(basename "$APK"))"
+else
+  bash packaging/android/android-ci.sh "$OUT/x86_64" x86_64 > "$OUT/emu-build-steps.txt" 2>&1
+  for f in summary.txt errors.txt errors-context.txt; do
+    [ -s "$OUT/x86_64/$f" ] && cp "$OUT/x86_64/$f" "$OUT/emu-build-$f"
+  done
+  [ -f "$OUT/x86_64/build.log" ] && tail -c 400000 "$OUT/x86_64/build.log" > "$OUT/emu-build.log"
+  [ -f "$OUT/x86_64/apk.log" ] && tail -c 200000 "$OUT/x86_64/apk.log" > "$OUT/emu-apk.log"
+  APK=$(ls "$OUT"/x86_64/*.apk 2>/dev/null | head -1)
+  bres=$(grep '^result:' "$OUT/x86_64/summary.txt" 2>/dev/null | tail -1)
+  say "x86_64 build: ${bres:-no result} ($(mins))"
+fi
 if [ -z "$APK" ]; then
   rm -rf "$OUT/x86_64"
   say "emulator: not started (no APK for x86_64)"
   exit 0
 fi
-cp "$APK" /tmp/quillbinder-emu.apk
+[ "$APK" = /tmp/quillbinder-emu.apk ] || cp "$APK" /tmp/quillbinder-emu.apk
 rm -rf "$OUT/x86_64"
 # room on the disk: the emulator refuses to start with little free space (run 4: "not enough disk space to run
 # avd"). The build folders are no longer needed, nor are the NDKs and other large tools GitHub's runner carries.
@@ -74,7 +84,7 @@ fi
 sed -i -E '/^(hw\.lcd\.(width|height|density)|hw\.initialOrientation|hw\.keyboard|hw\.ramSize|disk\.dataPartition\.size|hw\.gpu\.(enabled|mode)|showDeviceFrame)[ ]*=/d' "$CFG"
 {
   echo "hw.lcd.width=$W"; echo "hw.lcd.height=$H"; echo "hw.lcd.density=$DPI"
-  echo "hw.initialOrientation=landscape"; echo "hw.keyboard=yes"; echo "hw.ramSize=3072"; echo "disk.dataPartition.size=2G"
+  echo "hw.initialOrientation=landscape"; echo "hw.keyboard=$KBD"; echo "hw.ramSize=3072"; echo "disk.dataPartition.size=2G"
   echo "hw.gpu.enabled=yes"; echo "hw.gpu.mode=swiftshader_indirect"; echo "showDeviceFrame=no"
 } >> "$CFG"
 ADB="$SDK/platform-tools/adb"
@@ -156,15 +166,38 @@ if [ -n "$pid" ]; then
   tap 725 510; sleep 6; shot "a2-android-page"
   fr=$(front)
   say "  A: in front after a tap on the window's first button: $fr"
-  "$ADB" shell appops set --uid "$PKG" MANAGE_EXTERNAL_STORAGE allow > /dev/null 2>&1
-  sleep 1
-  case "$fr" in *"$PKG/"*) say "  A: ANDROID'S PAGE DID NOT COME; the access was given from here all the same" ;; *) key 4 ;; esac
+  if [ "$API" -ge 30 ]; then
+    "$ADB" shell appops set --uid "$PKG" MANAGE_EXTERNAL_STORAGE allow > /dev/null 2>&1
+    sleep 1
+    case "$fr" in *"$PKG/"*) say "  A: ANDROID'S PAGE DID NOT COME; the access was given from here all the same" ;; *) key 4 ;; esac
+  else
+    # Android 9 and 10 (Android 0.93.2, to-do item 35): no page for all files; the program asks Android's own question
+    # about the storage. Its Allow button is found by its id or text in the screen's description and tapped.
+    "$ADB" shell uiautomator dump /sdcard/qb-ui.xml > /dev/null 2>&1
+    allow=$("$ADB" shell cat /sdcard/qb-ui.xml 2>/dev/null | tr '>' '\n' \
+      | grep -iE 'permission_allow_button|text="allow"' | grep -oE 'bounds="\[[0-9]+,[0-9]+\]\[[0-9]+,[0-9]+\]"' | head -1 \
+      | sed -E 's/bounds="\[([0-9]+),([0-9]+)\]\[([0-9]+),([0-9]+)\]"/\1 \2 \3 \4/')
+    if [ -n "$allow" ]; then
+      set -- $allow
+      tap $(( ($1 + $3) / 2 )) $(( ($2 + $4) / 2 ))
+      say "  A: Android's question about the storage: Allow tapped at $(( ($1 + $3) / 2 )),$(( ($2 + $4) / 2 ))"
+    else
+      "$ADB" shell pm grant "$PKG" android.permission.READ_EXTERNAL_STORAGE > /dev/null 2>&1
+      "$ADB" shell pm grant "$PKG" android.permission.WRITE_EXTERNAL_STORAGE > /dev/null 2>&1
+      say "  A: ANDROID'S QUESTION WAS NOT FOUND; the access was given from here all the same"
+      case "$fr" in *"$PKG/"*) ;; *) key 4 ;; esac
+    fi
+  fi
   sleep 7; shot "a3-back"
   if ! "$ADB" logcat -d 2>/dev/null | grep -q 'files (the first question)'; then
     say "  A: THE WINDOW DID NOT CLOSE BY ITSELF; its button (now OK) is tapped"
     tap 725 422; sleep 4; shot "a4-ok"
   fi
-  step "A" "the question about the shared folders, allowed on Android's page (appops: $("$ADB" shell appops get "$PKG" MANAGE_EXTERNAL_STORAGE 2>/dev/null | tr -d '\r' | head -1)); in front: $(front)"
+  if [ "$API" -ge 30 ]; then
+    step "A" "the question about the shared folders, allowed on Android's page (appops: $("$ADB" shell appops get "$PKG" MANAGE_EXTERNAL_STORAGE 2>/dev/null | tr -d '\r' | head -1)); in front: $(front)"
+  else
+    step "A" "the question about the shared folders, allowed in Android's question (storage: $("$ADB" shell dumpsys package "$PKG" 2>/dev/null | tr -d '\r' | grep -oE 'WRITE_EXTERNAL_STORAGE: granted=[a-z]+' | head -1)); in front: $(front)"
+  fi
   # the first start's windows: Enter presses the default button of each
   for s in 1 2; do key 66; sleep 8; step "enter-$s" "Enter in the first start's windows"; done
   shot "s0-project"
@@ -282,11 +315,19 @@ if [ -n "$pid" ]; then
   back_to_text; shot "s1-text"
   # S2: typed text, as a hardware keyboard sends it
   "$ADB" shell input text 'Android%s' > /dev/null 2>&1
-  sleep 3; shot "s2-typed"; step "S2" "a typed word"
+  sleep 3; shot "s2-typed"
+  # Android 0.93.2 (to-do item 34): with a keyboard attached the program does not ask for the on-screen keyboard
+  # (Qt's text widgets asked after every key); without one it does
+  kb=$(shown)
+  say "  S2: keyboard attached: $KBD; on-screen keyboard after typing: $kb"
+  case "$KBD:$kb" in
+    yes:mInputShown=true) say "  S2: THE ON-SCREEN KEYBOARD CAME UP although a keyboard is attached" ;;
+  esac
+  step "S2" "a typed word (keyboard attached: $KBD, $kb)"
   # S3: the menu while the on-screen keyboard is up
   for s in 1 2; do
     tap "$MX" "$MY"; sleep 2; [ $s = 1 ] && shot "s3-menu"
-    step "S3.$s" "the File menu while the on-screen keyboard is up"
+    step "S3.$s" "the File menu with the cursor in the text (keyboard attached: $KBD, $(shown))"
     back_to_text
   done
   # S7: every menu of the menu bar once while the on-screen keyboard is up: ten windows drawn for the first time
@@ -294,7 +335,7 @@ if [ -n "$pid" ]; then
   for item in "Edit:54" "Insert:96" "View:141" "Navigate:197" "Project:259" "Documents:330" "Format:400" "Window:460" "Help:511"; do
     tap "${item##*:}" "$MY"; sleep 2
     [ "${item%%:*}" = Format ] && shot "s7-format-menu"
-    step "S7 ${item%%:*}" "the ${item%%:*} menu while the on-screen keyboard is up"
+    step "S7 ${item%%:*}" "the ${item%%:*} menu with the cursor in the text (keyboard attached: $KBD)"
     back_to_text
   done
   # S4: a long press on a word (a selection with handles), then the menu
@@ -334,10 +375,15 @@ if [ -n "$pid" ]; then
   fi
   # K: a backup (Ctrl+Shift+B is File > Back Up > Back Up Now): it must arrive in Documents/Quillbinder/Backups.
   # The program tells where it saved it (a window with OK: run 21 left it open, and it took every later touch).
+  # (adb's "input keycombination" exists from Android 13 on: on an older tablet K makes no backup and says so)
+  [ "$API" -ge 33 ] || say "  K: Android $API has no key combinations from adb: no backup is asked for"
   "$ADB" shell input keycombination 113 59 30 > /dev/null 2>&1; sleep 8; shot "k1-backup"
   "$ADB" shell ls -la /sdcard/Documents/Quillbinder/Backups > "$OUT/emu-backups.txt" 2>&1
   step "K" "Back Up Now: zip files in the tablet's Documents/Quillbinder/Backups: $(grep -c '\.zip' "$OUT/emu-backups.txt")"
-  tap 927 236; sleep 2; key 111; sleep 1; shot "k2-closed"
+  # Android 0.93.2: with the keyboard attached (no on-screen keyboard) the window stands at the top left, its OK at
+  # 459,133 (run 45563156002's pictures: left open, it took the later steps' keys and touches); 927,236 was its OK
+  # with the on-screen keyboard up. A new window on Android does not get the keys, so it is closed by its button.
+  tap 459 133; sleep 2; tap 927 236; sleep 2; key 111; sleep 1; shot "k2-closed"
   # P: put away by Android. A word is typed and Home pressed at once (before the program's own autosave, which
   # waits for a pause of two seconds): the word must be in the project's files on the shared storage.
   tap "$TX" "$TY"; sleep 2
@@ -358,16 +404,35 @@ if [ -n "$pid" ]; then
   # Places in the menu as on the 1472 x 920 screen, read from the run's picture of the File menu (0.93.0: New Project
   # at 62, then 27 px a row, a line between groups; the places of 0.92.0 were a row too high and opened New Project,
   # Compare and Transfer and Compile): Open Project 89, Save As 199, Compile 363, Print Settings 392.
-  for item in "Open Project:89" "Save As:199" "Compile:363" "Print Settings:392"; do
-    tap "$MX" "$MY"; sleep 2; tap 100 "${item##*:}"; sleep 4
+  # Android 0.93.2 (to-do item 54): in run 45432275744 the text's Cut/Copy/Select all popup, left from an earlier step,
+  # took the Open Project tap: the selection goes first (a tap in the text, Esc, a tap again), and the steps count the
+  # app's popup windows (Android's PopupWindow) before the File menu.
+  popups() { "$ADB" shell dumpsys window windows 2>/dev/null | grep -c "PopupWindow" | tr -d '\r'; }
+  back_to_text; key 111; sleep 1; tap "$TX" "$TY"; sleep 2
+  say "  S6: popup windows before the File menu steps: $(popups)"
+  # Android 0.93.2 run 45557251539: the "Backup saved" notice and the update check's notice lay at the top left over
+  # the File menu's rows, and the taps at these places opened nothing (picture s6-open-project). The menu is opened
+  # with a tap on its title (above the notices) and its row is chosen with the keys, which reach the open menu
+  # whatever lies over it: Down from no row takes the first row (New Project), separators are passed over.
+  # Rows: New Project 1, Open Project 2, ..., Save As 6, ..., Compile 12, Print Settings 13.
+  for item in "Open Project:2" "Save As:6" "Compile:12" "Print Settings:13"; do
+    tap "$MX" "$MY"; sleep 2
+    for _ in $(seq 1 "${item##*:}"); do key 20; done
+    sleep 1; key 66; sleep 4
     shot "s6-$(echo "${item%%:*}" | tr 'A-Z ' 'a-z-')"
     step "S6 ${item%%:*}" "File > ${item%%:*} with the cursor in the text"
     key 111; sleep 2
     back_to_text
   done
   # O: File > Show Project in File Manager (android/MobileOpen.cpp): the tablet's Files app at the project's folder.
-  # The last step (0.93.0: 475, below Print Current Document and a line; 452 was Print Current Document).
-  tap "$MX" "$MY"; sleep 2; shot "o0-file-menu"; tap 100 475; sleep 5; shot "o1-files-app"
+  # With the on-screen keyboard up the menu scrolls and its last rows are below the screen's edge (run 45432275744's
+  # picture ends at Print Current Document and the scroll arrow), so the tap at 475 of 0.93.0 missed (Android 0.93.2,
+  # to-do item 54). Reached with the keys: Up with no row chosen takes the menu's last row (Exit) and scrolls to it,
+  # five more go up through Options, Files on This Tablet, Install Update or Add-on, Convert Markdown to the step;
+  # Enter starts it.
+  tap "$MX" "$MY"; sleep 2
+  for _ in 1 2 3 4 5 6; do key 19; done
+  sleep 1; shot "o0-file-menu"; key 66; sleep 5; shot "o1-files-app"
   fr=$(front)
   say "  O: File > Show Project in File Manager: in front: $fr"
   case "$fr" in *"$PKG/"*) key 111; sleep 1 ;; *) key 4; sleep 3 ;; esac

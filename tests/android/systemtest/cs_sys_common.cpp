@@ -1,5 +1,6 @@
 // The system test, stage 2: helpers shared by the system, usability and whole-program cases.
 #include "cs.h"
+#include <QInputDialog>
 #include <QPdfDocument>
 #include <QPdfSelection>
 
@@ -71,6 +72,19 @@ void answerBoxLater(int ms, QMessageBox::StandardButton button, BoxText *text)
         else
             b->accept();
     }, 100, alive);
+}
+
+void formatQuestionLater(int ms, const QString &path)
+{
+    const bool scriv = path.endsWith(QLatin1String(".scriv"));
+    withModal<QInputDialog>(ms, [scriv](QInputDialog *d) {
+        for (const QString &item : d->comboBoxItems())
+            if (item.contains(QLatin1String("(*.scriv)")) == scriv) {
+                d->setTextValue(item);
+                break;
+            }
+        d->accept();
+    });
 }
 
 void fileDialogLater(int ms, const QString &path, bool *asked)

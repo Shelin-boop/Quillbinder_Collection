@@ -85,6 +85,12 @@ bool showInFilesApp(const QString &folder)
     const QString inside = folder.mid(root.size() + 1);
     if (inside.startsWith(QLatin1String("Android/")))
         return false;
+    // Android 0.93.2: the Files app of Android 9 takes no folder's address (it ended itself: "Invalid URI" in
+    // DocumentsContract.getRootId, the start check's tablet with Android 9); before Android 10 it is shown at the
+    // shared storage's top instead
+    if (QNativeInterface::QAndroidApplication::sdkVersion() < 29)
+        return startView(QStringLiteral("content://com.android.externalstorage.documents/root/primary"),
+                         QStringLiteral("vnd.android.document/root"));
     const QString address = QStringLiteral("content://com.android.externalstorage.documents/document/primary%3A")
                             + QString::fromLatin1(QUrl::toPercentEncoding(inside));
     return startView(address, QStringLiteral("vnd.android.document/directory"));
