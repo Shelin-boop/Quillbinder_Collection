@@ -14,7 +14,7 @@ set(APP_VERSION "0.93.1")
 # Linux keeps reading it); the Windows and the Android builds use their own line below: the build takes it as
 # APP_VERSION, so that the program, the packages and AppInfo.h see one number. Scripts of those systems read
 # APP_VERSION_WINDOWS / APP_VERSION_ANDROID from this file (the Python tools take --system). Raise the last number of a system's line when that system gets a delivery of its own.
-set(APP_VERSION_WINDOWS "0.93.0")
+set(APP_VERSION_WINDOWS "0.93.1")
 set(APP_VERSION_ANDROID "0.93.1")
 if(WIN32)
   set(APP_VERSION "${APP_VERSION_WINDOWS}")

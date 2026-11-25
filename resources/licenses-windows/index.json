@@ -1,5 +1,5 @@
 {
- "note": "Made by packaging/windows/collect-licenses-windows.py from Qt 6.12.1's attribution files, the license files of Qt PDF's parts, Hunspell 1.7.5, zlib 1.4 and LibreOffice's dictionaries (sources pinned in the script).",
+ "note": "Made by packaging/windows/collect-licenses-windows.py from Qt 6.12.1's attribution files, the license files of Qt PDF 6.140.0's parts, Hunspell 1.7.5, zlib 1.4 and LibreOffice's dictionaries (sources pinned in the script).",
  "components": [
   {
    "name": "Quillbinder",
@@ -21,10 +21,19 @@
    "name": "Qt 6.12.1",
    "version": "6.12.1",
    "license": "LGPL-3.0-only",
-   "where": "Qt6Core, Qt6Gui, Qt6Widgets, Qt6Network, Qt6Xml, Qt6Svg, Qt6PrintSupport, Qt6Pdf, Qt6PdfWidgets (DLLs beside the program) and Qt's plugins (platforms, styles, imageformats, iconengines, tls, networkinformation, generic). The DLLs are The Qt Company's own build for Windows (MSVC 2022, 64 bit), unchanged; each can be replaced by another build of the same version.",
+   "where": "Qt6Core, Qt6Gui, Qt6Widgets, Qt6Network, Qt6Xml, Qt6Svg, Qt6PrintSupport (DLLs beside the program) and Qt's plugins (platforms, styles, imageformats, iconengines, tls, networkinformation, generic). The DLLs are The Qt Company's own build for Windows (MSVC 2022, 64 bit), unchanged; each can be replaced by another build of the same version.",
    "text": "qt.txt",
    "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file qt-everywhere-src-6.12.1.tar.xz (the Qt Project's source release; also https://download.qt.io/official_releases/qt/6.12/6.12.1/single/ and the tag v6.12.1 of https://code.qt.io)",
    "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+  },
+  {
+   "name": "Qt PDF",
+   "version": "6.140.0",
+   "license": "LGPL-3.0-only",
+   "where": "Qt6Pdf.dll, Qt6PdfWidgets.dll (beside the program) and the image plugin qpdf.dll",
+   "text": "qt-pdf.txt",
+   "source": "https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources, file qtwebengine-everywhere-src-6.140.0.tar.xz (the Qt Project's source release of Qt WebEngine and Qt PDF; also https://download.qt.io/official_releases/qtwebengine/6.140/6.140.0/src/ and the tag v6.140.0 of https://code.qt.io/qt/qtwebengine)",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "BLAKE2 (reference implementation) (in Qt)",
@@ -428,8 +437,8 @@
    "license": "BSD-3-Clause",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-pdfium.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "The Chromium Project (in Qt PDF)",
@@ -437,8 +446,8 @@
    "license": "BSD-3-Clause",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-the-chromium-project.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "Abseil (in Qt PDF)",
@@ -446,8 +455,8 @@
    "license": "Apache-2.0",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-abseil.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "FreeType (in Qt PDF)",
@@ -455,8 +464,8 @@
    "license": "FTL (FreeType License)",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-freetype.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "ICU (in Qt PDF)",
@@ -464,8 +473,8 @@
    "license": "Unicode-3.0 (ICU License)",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-icu.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "libjpeg-turbo (in Qt PDF)",
@@ -473,8 +482,8 @@
    "license": "IJG, BSD-3-Clause, Zlib",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-libjpeg-turbo.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "libpng (in Qt PDF)",
@@ -482,8 +491,8 @@
    "license": "Libpng-2.0, Libpng",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-libpng.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "zlib (in Qt PDF)",
@@ -491,8 +500,8 @@
    "license": "Zlib",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-zlib.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "OpenJPEG (in Qt PDF)",
@@ -500,8 +509,8 @@
    "license": "BSD-2-Clause",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-openjpeg.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "Little CMS (in Qt PDF)",
@@ -509,8 +518,8 @@
    "license": "MIT",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-little-cms.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "Anti-Grain Geometry (in Qt PDF)",
@@ -518,8 +527,8 @@
    "license": "MIT-like (permission notice below)",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-anti-grain-geometry.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "BigInt (in Qt PDF)",
@@ -527,8 +536,8 @@
    "license": "Public domain (notice below)",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-bigint.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "FP16 (in Qt PDF)",
@@ -536,8 +545,8 @@
    "license": "MIT",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-fp16.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "fast_float (in Qt PDF)",
@@ -545,8 +554,8 @@
    "license": "MIT",
    "where": "Qt6Pdf.dll (showing PDF files)",
    "text": "qtpdf-fast-float.txt",
-   "source": "the Qt source, file qt-everywhere-src-6.12.1.tar.xz",
-   "sourceFile": "qt-everywhere-src-6.12.1.tar.xz"
+   "source": "the source of Qt WebEngine and Qt PDF, file qtwebengine-everywhere-src-6.140.0.tar.xz",
+   "sourceFile": "qtwebengine-everywhere-src-6.140.0.tar.xz"
   },
   {
    "name": "Hunspell",
