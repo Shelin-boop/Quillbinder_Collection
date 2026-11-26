@@ -5,7 +5,7 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 ## Windows 0.95.0 (2026-11-26): the dictionary add-ons, the suites of 0.95.0, Translation Helper 1.5
 
 - **The nine dictionary add-ons** (`addons/dictionary-<code>`, Linux 0.95.0) are built by `packaging/windows/win-addons.sh`
-  too, without a platform (`<id>.qbpkg`, the same content as Linux's): each add-on's `stage.sh` runs
+  too, without a platform (the same content as Linux's; the release names them `<id>-windows.qbpkg`): each add-on's `stage.sh` runs
   `tools/stage-dictionary.sh`, which fetches LibreOffice's files from raw.githubusercontent.com (GitHub's runner reaches
   it) and checks them against `sources.txt`. The Windows checkout has CRLF line ends: that script reads `sources.txt`
   through `tr -d '\r'` (on Linux nothing changes). The spell checker finds them through `addons::contentDirs` on

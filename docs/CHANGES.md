@@ -471,7 +471,7 @@ Appearance > Standard Colors, File > Options > Keyboard > Use the Set of My Keyb
 highlights drawn as picked, the Bookmarks tab's zoom per part and its sizes kept, 25 backups at first, and Translation
 Helper 1.5. What is Windows' own:
 
-- **The spelling dictionaries of the nine new languages are add-ons, as on Linux**: `dictionary-<code>.qbpkg` in the
+- **The spelling dictionaries of the nine new languages are add-ons, as on Linux**: `dictionary-<code>-windows.qbpkg` in the
   release and inside the full version (English and German still come with the program). Install the one you need
   with Help > Add-ons and Updates > Install Update or Add-on, restart, then choose it in File > Options > Editing. The
   update with all add-ons leaves the dictionaries out, so that it does not install nine languages at once.

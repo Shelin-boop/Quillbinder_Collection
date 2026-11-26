@@ -87,7 +87,7 @@ updates. All Windows files: [the release 0.95.0 for Windows](https://github.com/
   (**Help > Add-ons and Updates > Install Update or Add-on**; the program update and every add-on in one package), or run the new setup
   program into the same folder: it keeps your settings. The release also has the program update alone and each
   add-on as a package of its own, among them the spelling dictionaries of the nine new languages
-  (`dictionary-<code>.qbpkg`; English and German come with the program).
+  (`dictionary-<code>-windows.qbpkg`; English and German come with the program).
 - From 0.92.0 on Quillbinder for Windows looks for updates itself, as on Linux. A later version that needs the whole
   program anew is downloaded as its setup program, checked against the project's signed list, and unpacked into the
   folder you use; your settings and add-ons stay.
