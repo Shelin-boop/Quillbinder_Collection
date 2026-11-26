@@ -1,8 +1,8 @@
-state: running
-system: Android
-job: the run 0.94.0, Android part (Android 0.94.0 experimental)
-branch: android/0.94.0
-chat: 2026-11-26 03:39
-started: 2026-11-26 03:41
+state: free
+system:
+job:
+branch:
+chat:
+started:
 paused:
-note: Linux 0.94.0 and Windows 0.94.0 are released; this job pulls Android to main and releases Android 0.94.0.
+note: last job: the run 0.94.0, Android part: Android 0.94.0 experimental released (v0.94.0-android-experimental, 2026-11-26, main d6468b0, #26), page and update file published. The run 0.94.0 is complete. Next: the run 0.95.0 (to-do items 91 to 104), not started.
