@@ -263,6 +263,10 @@ Schema Schema::fromJson(const QJsonObject &o)
 
 namespace {
 
+// the texts of the built-in templates are looked up with tr() through a variable: this marks them for lupdate (context
+// "QObject", where QObject::tr() looks them up), so that they get translations like every other text (0.95.0, item 102)
+#define OT(text) QT_TRANSLATE_NOOP("QObject", text)
+
 FieldDef fd(const char *id, const char *label, FieldType t, const char *unit = "", QStringList extra = {})
 {
     FieldDef f;
@@ -297,100 +301,100 @@ Schema builtInSchema()
     c.id = QStringLiteral("characters");
     c.name = QObject::tr("Characters");
     c.color = QColor(QStringLiteral("#9c2a9c"));
-    c.fields = {fd("fullName", "Full name", T::Text),
-                fd("aliases", "Also known as", T::Text),
-                fd("role", "Role in the story", T::Choice, "", list({"Protagonist", "Antagonist", "Supporting", "Minor", "Mentioned only"})),
-                fd("race", "Race / species", T::Text),
-                fd("gender", "Gender", T::Text),
-                fd("age", "Age", T::Number, "years"),
-                fd("born", "Born", T::Date),
-                fd("height", "Height", T::Number, "cm"),
-                fd("build", "Build", T::Text),
-                fd("eyes", "Eye color", T::Text),
-                fd("hair", "Hair", T::Text),
-                fd("features", "Distinguishing features", T::LongText),
-                fd("attributes", "Attributes", T::LongText),
-                fd("traits", "Traits", T::LongText),
-                fd("occupation", "Occupation", T::Text),
-                fd("livesIn", "Lives in", T::Objects, "", locs),
-                fd("origin", "Comes from", T::Objects, "", locs),
-                fd("relations", "Family and relationships", T::Objects, "", chars),
-                fd("goals", "Goals and motives", T::LongText),
-                fd("fears", "Fears and weaknesses", T::LongText),
-                fd("background", "Background story", T::LongText),
-                fd("scenes", "Appears in", T::Documents),
-                fd("picture", "Picture", T::Picture),
-                fd("other", "Other", T::LongText)};
+    c.fields = {fd("fullName", OT("Full name"), T::Text),
+                fd("aliases", OT("Also known as"), T::Text),
+                fd("role", OT("Role in the story"), T::Choice, "", list({OT("Protagonist"), OT("Antagonist"), OT("Supporting"), OT("Minor"), OT("Mentioned only")})),
+                fd("race", OT("Race / species"), T::Text),
+                fd("gender", OT("Gender"), T::Text),
+                fd("age", OT("Age"), T::Number, "years"),
+                fd("born", OT("Born"), T::Date),
+                fd("height", OT("Height"), T::Number, "cm"),
+                fd("build", OT("Build"), T::Text),
+                fd("eyes", OT("Eye color"), T::Text),
+                fd("hair", OT("Hair"), T::Text),
+                fd("features", OT("Distinguishing features"), T::LongText),
+                fd("attributes", OT("Attributes"), T::LongText),
+                fd("traits", OT("Traits"), T::LongText),
+                fd("occupation", OT("Occupation"), T::Text),
+                fd("livesIn", OT("Lives in"), T::Objects, "", locs),
+                fd("origin", OT("Comes from"), T::Objects, "", locs),
+                fd("relations", OT("Family and relationships"), T::Objects, "", chars),
+                fd("goals", OT("Goals and motives"), T::LongText),
+                fd("fears", OT("Fears and weaknesses"), T::LongText),
+                fd("background", OT("Background story"), T::LongText),
+                fd("scenes", OT("Appears in"), T::Documents),
+                fd("picture", OT("Picture"), T::Picture),
+                fd("other", OT("Other"), T::LongText)};
     s.categories << c;
     c = Category();
     c.id = QStringLiteral("locations");
     c.name = QObject::tr("Locations");
     c.color = QColor(QStringLiteral("#1a9fd9"));
-    c.fields = {fd("kind", "Kind", T::Choice, "",
-                   list({"Continent", "Country", "Region", "City", "Town", "Village", "District", "Building", "Room", "Other"})),
-                fd("partOf", "Part of", T::Objects, "", locs),
-                fd("environment", "Environment", T::Objects, "", envs),
-                fd("weather", "Climate and weather", T::Objects, "", wx),
-                fd("population", "Population", T::Number, "inhabitants"),
-                fd("rule", "Ruled by", T::Text),
-                fd("inhabitants", "Notable inhabitants", T::Objects, "", chars),
-                fd("places", "Points of interest", T::Objects, "", pois),
-                fd("description", "Description", T::LongText),
-                fd("history", "History", T::LongText),
-                fd("scenes", "Scenes set here", T::Documents),
-                fd("picture", "Map or picture", T::Picture),
-                fd("other", "Other", T::LongText)};
+    c.fields = {fd("kind", OT("Kind"), T::Choice, "",
+                   list({OT("Continent"), OT("Country"), OT("Region"), OT("City"), OT("Town"), OT("Village"), OT("District"), OT("Building"), OT("Room"), OT("Other")})),
+                fd("partOf", OT("Part of"), T::Objects, "", locs),
+                fd("environment", OT("Environment"), T::Objects, "", envs),
+                fd("weather", OT("Climate and weather"), T::Objects, "", wx),
+                fd("population", OT("Population"), T::Number, "inhabitants"),
+                fd("rule", OT("Ruled by"), T::Text),
+                fd("inhabitants", OT("Notable inhabitants"), T::Objects, "", chars),
+                fd("places", OT("Points of interest"), T::Objects, "", pois),
+                fd("description", OT("Description"), T::LongText),
+                fd("history", OT("History"), T::LongText),
+                fd("scenes", OT("Scenes set here"), T::Documents),
+                fd("picture", OT("Map or picture"), T::Picture),
+                fd("other", OT("Other"), T::LongText)};
     s.categories << c;
     c = Category();
     c.id = QStringLiteral("environments");
     c.name = QObject::tr("Environments");
     c.color = QColor(QStringLiteral("#4ea72e"));
-    c.fields = {fd("kind", "Kind of landscape", T::Choice, "",
-                   list({"Forest", "Mountains", "Hills", "Plains", "Desert", "Coast", "Sea", "River", "Lake", "Swamp", "Tundra",
-                         "Jungle", "Underground", "City", "Other"})),
-                fd("terrain", "Terrain", T::LongText),
-                fd("flora", "Plants", T::LongText),
-                fd("fauna", "Animals", T::LongText),
-                fd("resources", "Resources", T::Text),
-                fd("dangers", "Dangers", T::LongText),
-                fd("weather", "Typical weather", T::Objects, "", wx),
-                fd("senses", "Sounds, smells and light", T::LongText),
-                fd("locations", "Places with this environment", T::Objects, "", locs),
-                fd("description", "Description", T::LongText),
-                fd("picture", "Picture", T::Picture),
-                fd("other", "Other", T::LongText)};
+    c.fields = {fd("kind", OT("Kind of landscape"), T::Choice, "",
+                   list({OT("Forest"), OT("Mountains"), OT("Hills"), OT("Plains"), OT("Desert"), OT("Coast"), OT("Sea"), OT("River"), OT("Lake"), OT("Swamp"), OT("Tundra"),
+                         OT("Jungle"), OT("Underground"), OT("City"), OT("Other")})),
+                fd("terrain", OT("Terrain"), T::LongText),
+                fd("flora", OT("Plants"), T::LongText),
+                fd("fauna", OT("Animals"), T::LongText),
+                fd("resources", OT("Resources"), T::Text),
+                fd("dangers", OT("Dangers"), T::LongText),
+                fd("weather", OT("Typical weather"), T::Objects, "", wx),
+                fd("senses", OT("Sounds, smells and light"), T::LongText),
+                fd("locations", OT("Places with this environment"), T::Objects, "", locs),
+                fd("description", OT("Description"), T::LongText),
+                fd("picture", OT("Picture"), T::Picture),
+                fd("other", OT("Other"), T::LongText)};
     s.categories << c;
     c = Category();
     c.id = QStringLiteral("pois");
     c.name = QObject::tr("Points of Interest");
     c.color = QColor(QStringLiteral("#e8722e"));
-    c.fields = {fd("kind", "Kind", T::Choice, "",
-                   list({"Building", "Landmark", "Ruin", "Shop", "Inn or tavern", "Temple", "Castle", "Natural feature", "Other"})),
-                fd("locatedIn", "Located in", T::Objects, "", locs),
-                fd("keeper", "Owner or keeper", T::Objects, "", chars),
-                fd("significance", "Significance for the story", T::LongText),
-                fd("access", "How to get there", T::LongText),
-                fd("secrets", "Secrets", T::LongText),
-                fd("description", "Description", T::LongText),
-                fd("scenes", "Scenes set here", T::Documents),
-                fd("picture", "Picture", T::Picture),
-                fd("other", "Other", T::LongText)};
+    c.fields = {fd("kind", OT("Kind"), T::Choice, "",
+                   list({OT("Building"), OT("Landmark"), OT("Ruin"), OT("Shop"), OT("Inn or tavern"), OT("Temple"), OT("Castle"), OT("Natural feature"), OT("Other")})),
+                fd("locatedIn", OT("Located in"), T::Objects, "", locs),
+                fd("keeper", OT("Owner or keeper"), T::Objects, "", chars),
+                fd("significance", OT("Significance for the story"), T::LongText),
+                fd("access", OT("How to get there"), T::LongText),
+                fd("secrets", OT("Secrets"), T::LongText),
+                fd("description", OT("Description"), T::LongText),
+                fd("scenes", OT("Scenes set here"), T::Documents),
+                fd("picture", OT("Picture"), T::Picture),
+                fd("other", OT("Other"), T::LongText)};
     s.categories << c;
     c = Category();
     c.id = QStringLiteral("weather");
     c.name = QObject::tr("Weather");
     c.color = QColor(QStringLiteral("#5b7f95"));
-    c.fields = {fd("season", "Season", T::Choice, "",
-                   list({"Spring", "Summer", "Autumn", "Winter", "Rainy season", "Dry season", "All year"})),
-                fd("temperature", "Temperature", T::Number, "°C"),
-                fd("precipitation", "Precipitation", T::Choice, "", list({"None", "Drizzle", "Rain", "Heavy rain", "Snow", "Hail", "Fog"})),
-                fd("wind", "Wind", T::Text),
-                fd("sky", "Sky and light", T::Text),
-                fd("phenomena", "Special phenomena", T::LongText),
-                fd("effects", "Effects on people and travel", T::LongText),
-                fd("where", "Where it occurs", T::Objects, "", locs + envs),
-                fd("description", "Description", T::LongText),
-                fd("other", "Other", T::LongText)};
+    c.fields = {fd("season", OT("Season"), T::Choice, "",
+                   list({OT("Spring"), OT("Summer"), OT("Autumn"), OT("Winter"), OT("Rainy season"), OT("Dry season"), OT("All year")})),
+                fd("temperature", OT("Temperature"), T::Number, "°C"),
+                fd("precipitation", OT("Precipitation"), T::Choice, "", list({OT("None"), OT("Drizzle"), OT("Rain"), OT("Heavy rain"), OT("Snow"), OT("Hail"), OT("Fog")})),
+                fd("wind", OT("Wind"), T::Text),
+                fd("sky", OT("Sky and light"), T::Text),
+                fd("phenomena", OT("Special phenomena"), T::LongText),
+                fd("effects", OT("Effects on people and travel"), T::LongText),
+                fd("where", OT("Where it occurs"), T::Objects, "", locs + envs),
+                fd("description", OT("Description"), T::LongText),
+                fd("other", OT("Other"), T::LongText)};
     s.categories << c;
     return s;
 }

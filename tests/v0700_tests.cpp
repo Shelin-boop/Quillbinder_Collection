@@ -912,7 +912,8 @@ static void dialogsAndSettings(const QString &W, const QString &src)
         OptionsDialog dlg(&w);
         check(dlg.optionScope() == OptionsDialog::AllProjects, QStringLiteral("File > Options opens for all projects with a project open"));
         auto *lang = dlg.findChild<QComboBox *>(QStringLiteral("optLanguage"));
-        check(lang && lang->count() == 2 && lang->findData(QStringLiteral("de")) >= 0, QStringLiteral("File > Options > General > Startup offers English and German"));
+        check(lang && lang->count() == 11 && lang->findData(QStringLiteral("de")) >= 0 && lang->findData(QStringLiteral("en")) == 0,
+              QStringLiteral("File > Options > General > Startup offers English, German and the nine languages of 0.95.0"));
         dlg.reject();
         w.closeProject();
         settle(200);

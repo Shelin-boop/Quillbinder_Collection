@@ -1,0 +1,9 @@
+# the files of this add-on: LibreOffice's dictionaries at the tag libreoffice-25.8.7.3
+# <path in https://github.com/LibreOffice/dictionaries>  <sha256>  <name in the package, in dictionaries/>
+tag libreoffice-25.8.7.3
+es/es_ES.aff  e73a9bf8e1383f4986a5dc9e2fbed49371c0c61f511c626d15586bd433c1cad9  es_ES.aff
+es/es_ES.dic  6975dddec3d5d2c676069537bc67b4b5f786c65c5d4cf6703a82acf779ac9ec1  es_ES.dic
+es/LICENSE.md  2b70fd5cb8d3b34cc6ae322c969557a2270b99017594addb2531ef5ffd9e1b17  LICENSE-es.md
+es/LGPLv3.txt  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  LGPL-3.0.txt
+es/MPL-1.1.txt  53692a2ed6c6a2c6ec9b32dd0b820dfae91e0a1fcdf625ca9ed0bdf8705fcc4f  MPL-1.1.txt
+es/README_hunspell_es.txt  0b5c39a863ecb61f5c5631ec1cd977667ef9bda6da6f90e80e9fc0edcbfadd97  README-es_ES.txt

@@ -566,16 +566,18 @@ QWidget *OptionsDialog::generalSection()
                       "they apply while it is open. Unticked, the program's settings apply to every project, also its look; "
                       "what projects keep stays in them for later."),
                    startup));
-    // 0.70.0: the program's language (English or German)
+    // 0.70.0: the program's language (0.95.0: one of the eleven; the ones made by machine are marked)
     m_language = new QComboBox(startup);
     m_language->setObjectName(QStringLiteral("optLanguage"));
     for (const QString &code : language::available())
-        m_language->addItem(language::displayName(code), code);
+        m_language->addItem(language::listLabel(code), code);
     m_language->setCurrentIndex(qMax(0, m_language->findData(s.language)));
     m_language->setEnabled(m_optScope == AllProjects);
     f->addRow(tr("Language:"), m_language);
-    f->addRow(hint(tr("The language of menus, windows and messages; it changes at the next start of the program. The "
-                      "manual and the welcome project stay in English."),
+    f->addRow(hint(tr("The language of menus, windows and messages, of the manual, the quick start guide and the welcome project; "
+                      "it changes at the next start of the program. A language marked as a machine translation has not "
+                      "been checked by a speaker yet. Spelling dictionaries for other languages are add-ons "
+                      "(Help > Add-ons and Updates)."),
                    startup));
     // 0.90.1 (UR-18): large numbers with their digits grouped, as the language writes them
     m_groupDigits = new QCheckBox(tr("Group the digits of large numbers (%1)").arg(language::numberExample()), startup);

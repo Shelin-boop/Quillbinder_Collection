@@ -3552,6 +3552,30 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
         <source>Theme button (Light, Dark, My Look 1, My Look 2 and all themes)</source>
         <translation>Design-Schaltfläche (Hell, Dunkel, Mein Aussehen 1, Mein Aussehen 2 und alle Designs)</translation>
     </message>
+    <message>
+        <source>Protagonist</source>
+        <translation>Hauptfigur</translation>
+    </message>
+    <message>
+        <source>Supporting</source>
+        <translation>Nebenfigur</translation>
+    </message>
+    <message>
+        <source>Village</source>
+        <translation>Dorf</translation>
+    </message>
+    <message>
+        <source>Forest</source>
+        <translation>Wald</translation>
+    </message>
+    <message>
+        <source>Autumn</source>
+        <translation>Herbst</translation>
+    </message>
+    <message>
+        <source>Fog</source>
+        <translation>Nebel</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>
@@ -6549,6 +6573,10 @@ Dies kann nicht als Ganzes rückgängig gemacht werden.%3</translation>
         <source>The damaged file of &quot;%1&quot; could not be kept as a copy in %2, so it was not replaced. Check that the project folder is writable and the disk is not full.</source>
         <translation>Die beschädigte Datei von „%1“ konnte nicht als Kopie in %2 aufbewahrt werden, darum wurde sie nicht ersetzt. Prüfen Sie, ob der Projektordner beschreibbar und der Datenträger nicht voll ist.</translation>
     </message>
+    <message>
+        <source>Cannot write %1</source>
+        <translation>%1 kann nicht geschrieben werden</translation>
+    </message>
 </context>
 <context>
     <name>qb::EditorPane</name>
@@ -7121,11 +7149,11 @@ Seiten (250 Wörter): %5</translation>
         <source>Quillbinder keeps its settings, add-ons, program updates, fonts and crash reports in the folder &quot;data&quot; inside its own folder:
 %1
 
-Nothing is written into Windows&apos; own folders or the registry, unless you ask for it below. The whole folder can be moved or copied, to a USB stick or another computer, and deleting it removes the program. Program updates are installed with File &gt; Install Update or Add-on; to move to a version you downloaded anew, unpack it and copy the folder &quot;data&quot; into it. Your projects stay wherever you keep them.</source>
+Nothing is written into Windows&apos; own folders or the registry, unless you ask for it below. The whole folder can be moved or copied, to a USB stick or another computer, and deleting it removes the program. Program updates are installed with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; to move to a version you downloaded anew, unpack it and copy the folder &quot;data&quot; into it. Your projects stay wherever you keep them.</source>
         <translation>Quillbinder bewahrt seine Einstellungen, Erweiterungen, Programmaktualisierungen, Schriften und Absturzberichte im Ordner „data“ in seinem eigenen Ordner auf:
 %1
 
-In die Ordner von Windows und in die Registrierung wird nichts geschrieben, außer Sie wünschen es unten. Der ganze Ordner lässt sich verschieben oder kopieren, auf einen USB-Stick oder einen anderen Computer, und wer ihn löscht, entfernt das Programm. Programmaktualisierungen werden mit Datei &gt; Aktualisierung oder Erweiterung installieren eingespielt; um zu einer neu heruntergeladenen Version zu wechseln, entpacken Sie sie und kopieren den Ordner „data“ hinein. Ihre Projekte bleiben, wo Sie sie aufbewahren.</translation>
+In die Ordner von Windows und in die Registrierung wird nichts geschrieben, außer Sie wünschen es unten. Der ganze Ordner lässt sich verschieben oder kopieren, auf einen USB-Stick oder einen anderen Computer, und wer ihn löscht, entfernt das Programm. Programmaktualisierungen werden mit Hilfe &gt; Erweiterungen und Updates &gt; Programmaktualisierung oder Erweiterung installieren eingespielt; um zu einer neu heruntergeladenen Version zu wechseln, entpacken Sie sie und kopieren den Ordner „data“ hinein. Ihre Projekte bleiben, wo Sie sie aufbewahren.</translation>
     </message>
     <message>
         <source>The program&apos;s folder is inside your %1 folder. That works, but the sync service copies the program&apos;s own files back and forth and may keep them only online. Better: the program&apos;s folder outside it (for example C:\Users\&lt;your name&gt;\Quillbinder), your projects inside it.</source>
@@ -7178,6 +7206,18 @@ In die Ordner von Windows und in die Registrierung wird nichts geschrieben, auß
     <message>
         <source>%1 fetches one small file, at most once a day, and tells you when a newer version of the program or of an installed add-on is there. Nothing about you is sent. You can switch this off or on at any time with Help &gt; Add-ons and Updates &gt; Check for Updates at Startup.</source>
         <translation>%1 ruft höchstens einmal am Tag eine kleine Datei ab und sagt Ihnen Bescheid, wenn es eine neuere Version des Programms oder einer installierten Erweiterung gibt. Über Sie wird nichts gesendet. Sie können das jederzeit mit Hilfe &gt; Erweiterungen und Updates &gt; Beim Start nach Updates suchen aus- oder einschalten.</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Sprache</translation>
+    </message>
+    <message>
+        <source>Language of the program:</source>
+        <translation>Sprache des Programms:</translation>
+    </message>
+    <message>
+        <source>A language you choose here is used from the next start of the program.</source>
+        <translation>Eine Sprache, die Sie hier wählen, gilt ab dem nächsten Start des Programms.</translation>
     </message>
 </context>
 <context>
@@ -8760,6 +8800,10 @@ The text of the snapshot &quot;%2&quot; is now the document&apos;s text; it can 
 %1
 
 Der Text des Schnappschusses „%2“ ist jetzt der Text des Dokuments; er kann wieder bearbeitet werden und wird beim nächsten Speichern gespeichert.</translation>
+    </message>
+    <message>
+        <source>Lists</source>
+        <translation>Listen</translation>
     </message>
 </context>
 <context>
@@ -16912,8 +16956,8 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
         <translation>Sprache:</translation>
     </message>
     <message>
-        <source>The language of menus, windows and messages; it changes at the next start of the program. The manual and the welcome project stay in English.</source>
-        <translation>Die Sprache der Menüs, Fenster und Meldungen; sie wechselt beim nächsten Start des Programms. Das Handbuch und das Willkommensprojekt bleiben auf Englisch.</translation>
+        <source>The language of menus, windows and messages, of the manual, the quick start guide and the welcome project; it changes at the next start of the program. A language marked as a machine translation has not been checked by a speaker yet. Spelling dictionaries for other languages are add-ons (Help &gt; Add-ons and Updates).</source>
+        <translation>Die Sprache der Menüs, Fenster und Meldungen, des Handbuchs, der Kurzanleitung und des Willkommensprojekts; sie wechselt beim nächsten Start des Programms. Eine als maschinelle Übersetzung gekennzeichnete Sprache hat noch kein Muttersprachler geprüft. Rechtschreibwörterbücher für weitere Sprachen sind Erweiterungen (Hilfe &gt; Erweiterungen und Updates).</translation>
     </message>
     <message>
         <source>Language</source>
@@ -21611,6 +21655,13 @@ Sie wird von hier aus nicht geöffnet. Wenn Sie ihr vertrauen, öffnen Sie sie s
     <message>
         <source>words</source>
         <translation>Wörter</translation>
+    </message>
+</context>
+<context>
+    <name>qb::language</name>
+    <message>
+        <source>%1 (machine translation)</source>
+        <translation>%1 (maschinelle Übersetzung)</translation>
     </message>
 </context>
 </TS>

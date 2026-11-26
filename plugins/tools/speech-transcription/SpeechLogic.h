@@ -62,6 +62,10 @@ struct Language {
     QString name;   // "English"
 };
 QList<Language> languages();
+// 0.95.0 (item 102): the languages the program speaks (en, de, es, fr, pt, it, ru, id, tr, pl, nl): the drop-down lists of
+// the main and the fallback language hold these (whisper.cpp's multilingual models know them all; a language stored before
+// that is not on the list stays selectable)
+QList<Language> supportedLanguages();
 QString languageName(const QString &code);
 
 // What whisper is asked to do with a piece: the language it is spoken in and whether to

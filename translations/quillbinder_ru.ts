@@ -3551,6 +3551,30 @@ Source: %1</source>
         <source>very difficult</source>
         <translation>очень трудный</translation>
     </message>
+    <message>
+        <source>Protagonist</source>
+        <translation>Главная героиня</translation>
+    </message>
+    <message>
+        <source>Supporting</source>
+        <translation>Второстепенный</translation>
+    </message>
+    <message>
+        <source>Village</source>
+        <translation>Деревня</translation>
+    </message>
+    <message>
+        <source>Forest</source>
+        <translation>Лес</translation>
+    </message>
+    <message>
+        <source>Autumn</source>
+        <translation>Осень</translation>
+    </message>
+    <message>
+        <source>Fog</source>
+        <translation>Туман</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>

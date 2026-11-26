@@ -3,6 +3,8 @@
 #include "ui/Ask.h"
 #include "ui/LinkOpen.h"
 #include "ui/MainWindow.h"
+#include <memory>
+#include <QSet>
 #include "ui/ManualWindow.h"
 #ifdef Q_OS_ANDROID
 #include "ui/Language.h" // (the Android program's About text: English or German, see aboutText())
@@ -2165,11 +2167,26 @@ void MainWindow::createActions()
     }
     {
         // 0.94.0: each tab under the name of its tooltip (the mnemonic is the letter given here)
-        auto named = [](Inspector::Tab tab, QChar letter) {
+        // 0.95.0 (item 102): the letter given is the English one; a translated name that lacks it gets the first letter
+        // (a word start first) that no tab before it has, in any script (the menu repairs a clash when it opens)
+        auto used = std::make_shared<QSet<QChar>>();
+        auto named = [used](Inspector::Tab tab, QChar letter) {
             QString name = Inspector::tabToolTip(tab);
-            int i = int(name.indexOf(letter, 0, Qt::CaseInsensitive));
+            int i = -1;
+            const int at = int(name.indexOf(letter, 0, Qt::CaseInsensitive));
+            if (at >= 0 && !used->contains(name.at(at).toLower()))
+                i = at;
+            for (int pass = 0; pass < 2 && i < 0; ++pass)
+                for (int k = 0; k < name.size() && i < 0; ++k) {
+                    if (!name.at(k).isLetter() || used->contains(name.at(k).toLower()))
+                        continue;
+                    if (pass == 0 && k > 0 && name.at(k - 1).isLetterOrNumber())
+                        continue;
+                    i = k;
+                }
             if (i < 0)
-                i = 0; // (the translation has no such letter: its first one; a clash in the menu is repaired when it opens)
+                return name; // (every letter is taken: no mnemonic)
+            used->insert(name.at(i).toLower());
             name.insert(i, QLatin1Char('&'));
             return name;
         };

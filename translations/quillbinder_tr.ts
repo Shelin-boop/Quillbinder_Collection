@@ -3513,6 +3513,30 @@ Kaynak: %1</translation>
         <source>very difficult</source>
         <translation>çok zor</translation>
     </message>
+    <message>
+        <source>Protagonist</source>
+        <translation>Başkahraman</translation>
+    </message>
+    <message>
+        <source>Supporting</source>
+        <translation>Yardımcı Karakter</translation>
+    </message>
+    <message>
+        <source>Village</source>
+        <translation>Köy</translation>
+    </message>
+    <message>
+        <source>Forest</source>
+        <translation>Orman</translation>
+    </message>
+    <message>
+        <source>Autumn</source>
+        <translation>Sonbahar</translation>
+    </message>
+    <message>
+        <source>Fog</source>
+        <translation>Sis</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>

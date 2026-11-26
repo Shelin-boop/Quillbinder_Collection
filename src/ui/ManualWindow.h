@@ -34,7 +34,13 @@ public:
 
     // Scrolls to the first heading whose text (without its number) is `section` (exactly, else starting with it, else
     // containing it; any case); false when there is none (the start is shown then)
+    // 0.95.0 (item 102): a translated manual has the headings of docs/manual.md in the same number, level and order; the
+    // section names the program asks for are English, so with the English Markdown given here a section is found by its
+    // place in the English list of headings and shown in this text
     bool showSection(const QString &section);
+    void setEnglishSource(const QString &englishMarkdown) { m_english = englishMarkdown; }
+    // the headings of a Markdown text as the window lists them (level 1 to 3), for the checks too
+    static QStringList headingsOf(const QString &markdown);
     // the headings in the contents list, as text (for the checks)
     QStringList headings() const;
     // the search (for the checks): puts the text into the field and marks the hits; returns their number
@@ -65,6 +71,7 @@ private:
         int position = 0;
     };
     QList<Heading> m_headings;
+    QString m_english; // the English manual when this one is a translation
     QList<QTextCursor> m_hits;
     int m_current = -1;
 };

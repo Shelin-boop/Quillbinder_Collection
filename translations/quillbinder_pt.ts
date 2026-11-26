@@ -3532,6 +3532,30 @@ Código-fonte: %1</translation>
         <source>very difficult</source>
         <translation>muito difícil</translation>
     </message>
+    <message>
+        <source>Protagonist</source>
+        <translation>Protagonista</translation>
+    </message>
+    <message>
+        <source>Supporting</source>
+        <translation>Coadjuvante</translation>
+    </message>
+    <message>
+        <source>Village</source>
+        <translation>Vila</translation>
+    </message>
+    <message>
+        <source>Forest</source>
+        <translation>Floresta</translation>
+    </message>
+    <message>
+        <source>Autumn</source>
+        <translation>Outono</translation>
+    </message>
+    <message>
+        <source>Fog</source>
+        <translation>Neblina</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>

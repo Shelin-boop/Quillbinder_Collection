@@ -2,6 +2,22 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## v0950f and v0950g (0.95.0, item 102: eleven languages)
+
+`qb_v0950f_tests`: the language list (codes, own names, the machine-translation mark in the interface's language, the
+locales), the language of a first start (`QB_SYSTEM_LANGUAGE` names the system's language; a child process `--child-first`
+starts with no settings, and with the settings of an earlier version), the settings keeping each language, every
+`translations/quillbinder_<code>.ts` (nothing unfinished, empty or missing against the German file, placeholders kept) and
+its `.qm` and Qt's `qt_<code>.qm` (the compiled texts equal the .ts), the manuals (same headings as `docs/manual.md`: count,
+level, order, numbers), quick start guides and welcome projects as files and resources, the objects' Choice values (the
+welcome project's values are in the program's lists in that language), plural forms, the first-start page's and Options'
+drop-down lists. `qb_v0950g_tests`: each language in a child process (`--child <code>`, `QB_LANGUAGE`): the manual opens at
+the section asked for by its English name, the welcome project is made, the menu places its texts and the quick start guide
+name are in that language's menus, F1 in the corkboard view, one Alt letter per inspector tab entry; the nine dictionary
+packages (`tools/stage-dictionary.sh` fetches them from raw.githubusercontent.com into `~/.cache/quillbinder-dictionaries`,
+so the suite needs the network once; license, install, found, words checked); the speech tool's language lists; the keyboard
+sets "lt" and "pl".
+
 ## v0940b (0.94.0)
 
 `qb_v0940b_tests`: the menus' places (View > Layout, Split Editor, Format > Font, Insert links, Help > Add-ons and Updates,

@@ -486,9 +486,9 @@ static void layoutSets(MainWindow &w)
     check(kl::systemLayout().isEmpty(), QStringLiteral("... \"none\": the system does not tell"));
     qputenv("QB_KEYBOARD_LAYOUT", "us");
     check(kl::setForLayout(QStringLiteral("de")) == QLatin1String("de") && kl::setForLayout(QStringLiteral("at")) == QLatin1String("de")
-              && kl::setForLayout(QStringLiteral("us")) == QLatin1String("us") && kl::setForLayout(QStringLiteral("fr")) == QLatin1String("us")
+              && kl::setForLayout(QStringLiteral("us")) == QLatin1String("us") && kl::setForLayout(QStringLiteral("ru")) == QLatin1String("us")
               && kl::setForLayout(QString()) == QLatin1String("us") && kl::setForLayout(QStringLiteral("ch")) == QLatin1String("us"),
-          QStringLiteral("German-language layouts (de, at) get the German set, every other layout and an unknown one the usual set"));
+          QStringLiteral("German-language layouts (de, at) get the German set (0.95.0: French, Spanish ... have sets of their own, see v0950g), a Russian layout and an unknown one the usual set"));
     // the German set needs no AltGr (no { | } [ ] \ = ~ @ < > |, no Ctrl+Alt) and clashes with nothing
     const QMap<QString, QString> german = kl::germanSet();
     QStringList altGr, bad;
@@ -561,7 +561,7 @@ static void layoutSets(MainWindow &w)
     check(val(us, QStringLiteral("set")) == QLatin1String("us") && val(us, QStringLiteral("alignLeft")) == QLatin1String("Ctrl+{")
               && val(us, QStringLiteral("back")) == QLatin1String("Ctrl+[") && val(us, QStringLiteral("subscript")) == QLatin1String("Ctrl+="),
           QStringLiteral("first start with a US layout: the usual set"), us.join(QStringLiteral(" ")));
-    for (const char *other : {"fr", "none", "ru"}) {
+    for (const char *other : {"none", "ru", "id"}) {
         const QStringList o = runChild(fresh(QLatin1String("o-") + QLatin1String(other)), QLatin1String(other));
         check(val(o, QStringLiteral("set")) == QLatin1String("us") && val(o, QStringLiteral("alignRight")) == QLatin1String("Ctrl+}"),
               QStringLiteral("first start with layout \"%1\": the usual set").arg(QLatin1String(other)), o.join(QStringLiteral(" ")));

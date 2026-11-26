@@ -3481,6 +3481,30 @@ Sumber: %1</translation>
         <source>very difficult</source>
         <translation>sangat sulit</translation>
     </message>
+    <message>
+        <source>Protagonist</source>
+        <translation>Tokoh utama</translation>
+    </message>
+    <message>
+        <source>Supporting</source>
+        <translation>Pendukung</translation>
+    </message>
+    <message>
+        <source>Village</source>
+        <translation>Desa</translation>
+    </message>
+    <message>
+        <source>Forest</source>
+        <translation>Hutan</translation>
+    </message>
+    <message>
+        <source>Autumn</source>
+        <translation>Musim gugur</translation>
+    </message>
+    <message>
+        <source>Fog</source>
+        <translation>Kabut</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>
