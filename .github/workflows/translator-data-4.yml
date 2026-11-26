@@ -7,7 +7,7 @@
 # What it does: the job "models" downloads the originals on GitHub's runner (from huggingface.co at the pinned revisions,
 # their files checked against the pins in addons/translation-proofreading/source/models/convert.py) and converts them; one
 # job "dictionaries" for each language downloads kaikki.org's file of it, prints its size and SHA-256 (put the SHA-256 into
-# KAIKKI_SHA256 below to pin it) and makes the extract with tools/make-dictionary.py; a language whose job fails has no
+# KAIKKI_SHA256 below to pin it; pinned 2026-11-26 from run 45774648616) and makes the extract with tools/make-dictionary.py; a language whose job fails has no
 # dictionary (the models' translations only; the other jobs go on); the job "catalog" writes the catalog of all of them
 # (sizes and SHA-256 sums of every file); the job "publish" uploads everything to the release "models-4", a pre-release
 # "not for downloading" (the add-on fetches what it needs), as models-1 to models-3 are. It does nothing when that release
@@ -127,15 +127,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - {code: es, name: Spanish, sha256: ''}
-          - {code: fr, name: French, sha256: ''}
-          - {code: pt, name: Portuguese, sha256: ''}
-          - {code: it, name: Italian, sha256: ''}
-          - {code: ru, name: Russian, sha256: ''}
-          - {code: id, name: Indonesian, sha256: ''}
-          - {code: tr, name: Turkish, sha256: ''}
-          - {code: pl, name: Polish, sha256: ''}
-          - {code: nl, name: Dutch, sha256: ''}
+          - {code: es, name: Spanish, sha256: '336903d1290968d77bd361c620d7d799ad7a7a9bc6ad353ec35954f2e15fbe6f'}
+          - {code: fr, name: French, sha256: '9053b1845fb3e045fa1fbe3f749122fa43e21b49bfa741cadd50255ae6ca0126'}
+          - {code: pt, name: Portuguese, sha256: 'eae83ef2e7a683d60e4171514704b462be08b706381c4065a326f4dfa3614a64'}
+          - {code: it, name: Italian, sha256: 'f112deb9747b7f33f4247da4999dfba0aa739bb4aaff9dd42fdf0615918a9c11'}
+          - {code: ru, name: Russian, sha256: '9078947aa21ed33ccfe9ada814fa70605c282a26bc0b7d60e388865da17984b7'}
+          - {code: id, name: Indonesian, sha256: '3ebda79fc5ed7abd1995e2a46294362f3f9282bcf74b892b4d9588d76bdc97f5'}
+          - {code: tr, name: Turkish, sha256: '4adb303b621cdc2d52c7748b137508a946fee7c5f51ffabf404f266f19ee6109'}
+          - {code: pl, name: Polish, sha256: 'fa8ff82900842346181c9eb121f512fe9cde64e3fd03d75c6468363cadb8365e'}
+          - {code: nl, name: Dutch, sha256: '6e3335a4bcf9739cae0a7490beb1f31d8e8dcec61475fc701a6cfe63cdd65438'}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
