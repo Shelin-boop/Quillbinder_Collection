@@ -3,6 +3,15 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.95.0 (in work)
+
+New functions and fixes.
+
+- **The Bookmarks tab keeps the sizes of its three parts**. The heights of the two lists and of the text below them
+  were lost after a restart or a program update when no bookmark was chosen at that moment (the text part, being
+  hidden, was written as size 0) or when the inspector was hidden. The sizes you gave are kept as they were and come
+  back, also for the Synopsis and Snapshots tabs.
+
 ## 0.94.0 beta (2026-11-25)
 
 New functions and fixes (a program update for 0.93.x; the AppImage stays on the runtime `u2404-qt6.12-r2`).

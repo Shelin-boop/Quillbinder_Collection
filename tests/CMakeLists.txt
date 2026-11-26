@@ -509,3 +509,8 @@ target_link_libraries(qb_notesplain_tests PRIVATE qbui Qt6::Test)
 add_executable(qb_v0940d_tests v0940d_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0940d_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0940d_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+
+# 0.95.0, first part: the sizes of the Bookmarks tab's three parts (item 94) (xvfb-run -a ./qb_v0950a_tests /tmp/shots)
+add_executable(qb_v0950a_tests v0950a_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0950a_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0950a_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
