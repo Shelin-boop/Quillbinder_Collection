@@ -614,6 +614,11 @@ int main(int argc, char **argv)
         qunsetenv("QB_LANGUAGE");
         qunsetenv("QB_SYSTEM_LANGUAGE");
     }
+#ifdef Q_OS_WIN
+    // (Windows 0.95.0) Qt keeps the settings file in the user's roaming application data, whatever XDG_CONFIG_HOME says;
+    // here it follows XDG_CONFIG_HOME as on Linux, so that every child start has settings of its own (as in v0940c)
+    QSettings::setPath(QSettings::IniFormat, QSettings::UserScope, qEnvironmentVariable("XDG_CONFIG_HOME"));
+#endif
     qputenv("QB_NO_DIALOGS", "1");
     QCoreApplication::setOrganizationName(QStringLiteral("QuillbinderV0950fTest"));
     QCoreApplication::setApplicationName(QStringLiteral("QuillbinderV0950fTest"));
