@@ -1,0 +1,5 @@
+{{APP}} membaca dan menulis proyek Scrivener 3, sehingga Anda dapat berpindah antarprogram.
+- **Impor**: **Berkas > Impor > Proyek Scrivener…** membuat proyek {{APP}} dari proyek Scrivener 3 atau 2. Binder, teks, sinopsis, catatan, label, status, kata kunci, snapshot, komentar, catatan kaki, berkas riset, dan koleksi ikut terbawa. Proyek Scrivener hanya dibaca.
+- **Bekerja dalam format Scrivener**: buka berkas *.scrivx* di dalam folder *.scriv* dengan **Berkas > Buka Proyek…** dan pilih **Bekerja dalam Format Scrivener**. {{APP}} lalu menyimpan langsung ke *.scriv*, sehingga Anda dapat melanjutkan di Scrivener nanti, misalnya di komputer lain. Tutup proyek di satu program sebelum membukanya di program lain.
+- **Berkas > Simpan Sebagai…** menyimpan proyek dalam format lain (atau dengan nama lain), dan **Berkas > Ekspor** menyimpan salinan tanpa mengubah proyek yang Anda kerjakan.
+- Proyek {{APP}} sendiri menyimpan setiap dokumen sebagai berkas teks biasa (Markdown, atau RTF jika Anda lebih suka), yang dapat dibaca dengan editor apa pun.
