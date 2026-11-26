@@ -1,0 +1,5 @@
+{{APP}} leest en schrijft Scrivener 3-projecten, zodat je tussen de programma's kunt wisselen.
+- **Importeren**: **Bestand > Importeren > Scrivener-project…** maakt een {{APP}}-project van een Scrivener 3- of 2-project. De Binder, teksten, samenvattingen, notities, labels, status, trefwoorden, momentopnamen, opmerkingen, voetnoten, onderzoeksbestanden en verzamelingen komen mee. Het Scrivener-project wordt alleen gelezen.
+- **Werken in Scrivener-formaat**: open het *.scrivx*-bestand in een *.scriv*-map met **Bestand > Project openen…** en kies **In Scrivener-formaat werken**. {{APP}} slaat dan zelf op in de *.scriv*, zodat je later in Scrivener verder kunt, bijvoorbeeld op een andere computer. Sluit het project in het ene programma voordat je het in het andere opent.
+- **Bestand > Opslaan als…** slaat een project op in het andere formaat (of onder een andere naam), en **Bestand > Exporteren** slaat een kopie op die het project waaraan je werkt laat zoals het is.
+- Een eigen {{APP}}-project bewaart elk document als een gewoon tekstbestand (Markdown, of RTF als je dat liever hebt), leesbaar met elke editor.
