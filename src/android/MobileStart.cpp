@@ -5,6 +5,7 @@
 #include "core/Paths.h"
 #include "core/Project.h"
 #include "ui/AppSettings.h"
+#include "ui/KeyboardLayout.h"
 #include "ui/MainWindow.h"
 #include "ui/MindMapDoc.h"
 #include "ui/SpellChecker.h"
@@ -14,6 +15,8 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QGuiApplication>
+#include <QInputMethod>
 #include <QLocale>
 #include <QLoggingCategory>
 #include <QSettings>
@@ -193,6 +196,12 @@ void startTablet(QMainWindow *window)
     });
     for (const QString &line : compile::PluginManager::instance().messages())
         qCInfo(lcStart, "tablet: plug-ins: %s", qPrintable(line));
+    // Android 0.94.0 (to-do item 79): the shortcuts by the keyboard's layout, read from the input method's language at
+    // the first start (src/ui/KeyboardLayoutSystem.cpp); the start check shows what a tablet reports
+    qCInfo(lcStart, "tablet: keyboard layout from the input method: %s (language %s); the shortcut set kept: %s",
+           qPrintable(keyboardlayout::systemLayout().isEmpty() ? QStringLiteral("none") : keyboardlayout::systemLayout()),
+           qPrintable(QGuiApplication::inputMethod() ? QGuiApplication::inputMethod()->locale().name() : QStringLiteral("?")),
+           qPrintable(QSettings().value(QStringLiteral("keyboard/layoutSet")).toString()));
 #ifdef Q_OS_ANDROID
     // https needs OpenSSL's libraries out of the APK (File > Import > Web Page)
     qCInfo(lcStart, "tablet: secure connections (https) %s (%s)", QSslSocket::supportsSsl() ? "work" : "DO NOT WORK",

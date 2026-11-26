@@ -242,6 +242,12 @@ static void barChecks(MainWindow &w)
     QAction *showIcons = w.findChild<QAction *>(QStringLiteral("showIconBar"));
     if (showIcons && !showIcons->isChecked())
         showIcons->trigger();
+    // 0.94.0 (to-do items 65, 81): the Themes toolbar is off at first (View > Themes holds the themes). The writer
+    // switches it on here, so that its part in fitting the rows is checked as before.
+    check(showThemes && !showThemes->isChecked() && themes && themes->isHidden(),
+          QStringLiteral("0.94.0: the Themes toolbar is off at first"));
+    if (showThemes && !showThemes->isChecked())
+        showThemes->trigger();
     w.resize(1900, 950);
     settle(300);
     const QString standard = b.seen();

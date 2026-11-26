@@ -804,17 +804,23 @@ static void downloadPage(const QString &work)
     check(rc == 0 && !page.isEmpty(), QStringLiteral("tools/download-page.py writes the page"), log);
     check(page.contains(QStringLiteral("Execute")) && page.contains(QStringLiteral("KDE Plasma")) && page.contains(QStringLiteral("may ask whether to execute the file")),
           QStringLiteral("the Linux steps say that the desktop may ask whether to execute the file"));
-    check(page.contains(QStringLiteral("data-addon-file=\"speech-transcription.qbpkg\"")) && page.contains(QStringLiteral("Speech Transcription"))
-              && page.contains(QStringLiteral("12 MB")) && page.contains(QStringLiteral("data-addon-file=\"themes-extra.qbpkg\"")),
-          QStringLiteral("the add-ons of the release are listed on the Linux card with name, one line and size"));
-    const int linuxAt = int(page.indexOf(QStringLiteral("data-system=\"linux\"")));
-    const int winAt = int(page.indexOf(QStringLiteral("data-system=\"windows\"")));
-    const int speechAt = int(page.indexOf(QStringLiteral("data-addon-file=\"speech-transcription.qbpkg\"")));
-    const int memoirAt = int(page.indexOf(QStringLiteral("data-addon-file=\"template-memoir-windows.qbpkg\"")));
-    check(speechAt > linuxAt && memoirAt > winAt && linuxAt >= 0 && winAt >= 0,
+    // Android 0.94.0 (to-do item 91): the add-ons are on the add-ons page (the site's folder addons/), the cards link to it
+    const QString addons = readText(site + QStringLiteral("/addons/index.html"));
+    check(addons.contains(QStringLiteral("data-addon-file=\"speech-transcription.qbpkg\"")) && addons.contains(QStringLiteral("Speech Transcription"))
+              && addons.contains(QStringLiteral("12 MB")) && addons.contains(QStringLiteral("data-addon-file=\"themes-extra.qbpkg\""))
+              && !page.contains(QStringLiteral("data-addon-file=")) && page.contains(QStringLiteral("href=\"addons/#linux\"")),
+          QStringLiteral("the add-ons of the release are listed on the add-ons page with name, one line and size; the Linux card links to it"));
+    const int linuxAt = int(addons.indexOf(QStringLiteral("data-system=\"linux\"")));
+    const int winAt = int(addons.indexOf(QStringLiteral("data-system=\"windows\"")));
+    const int speechAt = int(addons.indexOf(QStringLiteral("data-addon-file=\"speech-transcription.qbpkg\"")));
+    const int memoirAt = int(addons.indexOf(QStringLiteral("data-addon-file=\"template-memoir-windows.qbpkg\"")));
+    // (the add-ons page lists Windows, then Linux, as the download page does without script)
+    check(speechAt > linuxAt && memoirAt > winAt && memoirAt < linuxAt && linuxAt >= 0 && winAt >= 0,
           QStringLiteral("each add-on is listed under its own system (a package with \"windows\" in its name under Windows)"), QStringLiteral("%1 %2 %3 %4").arg(linuxAt).arg(winAt).arg(speechAt).arg(memoirAt));
     check(page.contains(QStringLiteral("250 MB")), QStringLiteral("the page reads full-addons-size (250 MB)"));
-    check(!page.contains(QStringLiteral("data-addon-file=\"media-all-formats.qbpkg\"")), QStringLiteral("the audio and video package keeps its own line"));
+    check(!addons.contains(QStringLiteral("data-addon-file=\"media-all-formats.qbpkg\"")) && addons.contains(QStringLiteral("Audio and video add-ons"))
+              && !page.contains(QStringLiteral("media-all-formats.qbpkg")),
+          QStringLiteral("the audio and video package keeps its own line, on the add-ons page"));
     // the size tool
     const QString pk = work + QStringLiteral("/pk");
     QDir().mkpath(pk);

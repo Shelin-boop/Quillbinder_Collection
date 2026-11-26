@@ -77,6 +77,27 @@ public:
         return QProxyStyle::pixelMetric(m, option, widget);
     }
 
+    // Android 0.94.0: a menu of the menu bar that fits the screen but not the room below its title. Qt moves it up
+    // over the bar without scrolling, and keepBelowBar() below puts it back under its title, as high as the room
+    // there: its last entries were then out of reach (the View menu of 0.94.0 at 960 x 540, the preview test). Said
+    // to be taller than the screen, it gets Qt's scrolling, and keepBelowBar() still puts it under its title.
+    QSize sizeFromContents(ContentsType type, const QStyleOption *option, const QSize &size, const QWidget *widget) const override
+    {
+        QSize s = QProxyStyle::sizeFromContents(type, option, size, widget);
+        const auto *menu = type == CT_Menu ? qobject_cast<const QMenu *>(widget) : nullptr;
+        const auto *bar = menu ? qobject_cast<const QMenuBar *>(menu->parentWidget()) : nullptr;
+        if (!bar || !bar->isVisible())
+            return s;
+        const QRect at = bar->actionGeometry(menu->menuAction());
+        const QRect area = windowcare::usableArea(bar);
+        if (!at.isValid() || !area.isValid())
+            return s;
+        const int room = area.bottom() - bar->mapToGlobal(at.bottomLeft()).y();
+        if (room >= 80 && s.height() > room && s.height() <= area.height())
+            s.setHeight(area.height() + 1);
+        return s;
+    }
+
     void drawControl(ControlElement ce, const QStyleOption *option, QPainter *p, const QWidget *widget) const override
     {
         QProxyStyle::drawControl(ce, option, p, widget);
@@ -279,6 +300,41 @@ void care(QWidget *w)
     windowcare::fitInto(w, area);
 }
 
+QString nameOf(const QWidget *w)
+{
+    if (!w)
+        return QStringLiteral("none");
+    return w->objectName().isEmpty() ? QString::fromLatin1(w->metaObject()->className()) : w->objectName();
+}
+
+// ---- to-do item 62 (Android 0.94.0): a new window stood at the top left of the screen with a keyboard attached
+// (Android places no window; run 45563156002, the "Backup saved" box) and did not get the keys: Enter and Esc went to
+// the main window (known since 0.92.0). The first time a window is shown it is put in the middle of the usable area,
+// and once it is on the screen it is made the active window, which is the one Qt sends the keys to.
+const char *kPlaced = "qbTabletPlaced";
+
+void bringForward(QWidget *w)
+{
+    QPointer<QWidget> p(w);
+    QTimer::singleShot(0, w, [p] {
+        if (!p || !p->isVisible() || isMainWindow(p))
+            return;
+        const QRect area = windowcare::usableArea(p);
+        if (!p->property(kPlaced).toBool() && area.isValid()) {
+            p->setProperty(kPlaced, true);
+            const QRect frame = p->frameGeometry();
+            QRect wanted = frame;
+            wanted.moveCenter(area.center());
+            p->move(p->pos() + (wanted.topLeft() - frame.topLeft()));
+            windowcare::fitInto(p, area);
+        }
+        p->raise();
+        p->activateWindow();
+        qCInfo(lcCare, "windows: %s shown at %d,%d (%d x %d); the active window: %s", qPrintable(nameOf(p)), p->x(), p->y(),
+               p->width(), p->height(), qPrintable(nameOf(QApplication::activeWindow())));
+    });
+}
+
 class Filter : public QObject
 {
 public:
@@ -291,7 +347,7 @@ public:
             followKeyboard(); // (before Qt's text widgets ask for the on-screen keyboard: item 34)
             [[fallthrough]];
         case QEvent::KeyPress:
-            return key(static_cast<QKeyEvent *>(e));
+            return key(o, static_cast<QKeyEvent *>(e));
         case QEvent::MouseButtonRelease:
             followKeyboard();
             [[fallthrough]];
@@ -310,8 +366,10 @@ public:
                 auto *w = static_cast<QWidget *>(o);
                 care(w);
                 const Qt::WindowType t = w->windowType();
-                if (!isMainWindow(w) && (t == Qt::Dialog || t == Qt::Window || t == Qt::Sheet))
+                if (!isMainWindow(w) && (t == Qt::Dialog || t == Qt::Window || t == Qt::Sheet)) {
                     noteShown(w);
+                    bringForward(w);
+                }
             }
             break;
         default: break;
@@ -330,9 +388,17 @@ public:
 private:
     // ---- the keys (Android 0.93.0: Qt 6.12.1 for Android sends mouse and wheel events with Ctrl, Shift, Alt and Meta;
     // Qt 6.12.0 sent them without, and the program kept the keys for the mouse until then)
-    bool key(QKeyEvent *k)
+    bool key(QObject *o, QKeyEvent *k)
     {
         const bool down = k->type() == QEvent::KeyPress;
+        // item 62: which window Enter and Esc reach (once per key: the filter sees the key again for each parent)
+        if (down && !k->isAutoRepeat() && (k->key() == Qt::Key_Escape || k->key() == Qt::Key_Return || k->key() == Qt::Key_Enter)
+            && k->timestamp() != m_loggedKey) {
+            m_loggedKey = k->timestamp();
+            const QWidget *to = o && o->isWidgetType() ? static_cast<QWidget *>(o)->window() : nullptr;
+            qCInfo(lcCare, "windows: %s for %s (the active window: %s)", k->key() == Qt::Key_Escape ? "Esc" : "Enter",
+                   qPrintable(nameOf(to)), qPrintable(nameOf(QApplication::activeWindow())));
+        }
         if (k->key() == Qt::Key_Back) {
             if (down && !k->isAutoRepeat()) {
                 m_backTaken = closeTop();
@@ -469,6 +535,7 @@ private:
     }
 
     bool m_backTaken = false;
+    quint64 m_loggedKey = 0;
     QPointer<QSplitterHandle> m_line;
     bool m_delivering = false;
 };

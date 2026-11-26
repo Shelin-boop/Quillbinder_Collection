@@ -364,13 +364,16 @@ int main(int argc, char **argv)
                   && page.contains(QLatin1String("data-system=\"android\"")),
               QStringLiteral("the download page: a button for each system's full version in the release, \"Comes later\" for the others"),
               page.left(1500));
-        // 0.93.0: the page lists the official add-ons (from official-addons/*.json)
-        check(page.contains(QLatin1String("id=\"official-addons\"")) && page.contains(QLatin1String("data-addon=\"translation-proofreading\""))
-                  && page.contains(QLatin1String("<b>Translation and Proofreading</b>")) && page.contains(QLatin1String("for Linux, Windows, Android"))
-                  && page.contains(QLatin1String("must not be sold")) && page.contains(QLatin1String("CC BY-NC 4.0"))
-                  && page.contains(QLatin1String("blob/main/official-addons/translation-proofreading.json")),
-              QStringLiteral("the download page lists the official add-ons: name, one line, the systems, the license note for data, a link to the entry"),
-              page.mid(page.indexOf(QLatin1String("official-addons")), 800));
+        // 0.93.0: the page lists the official add-ons (from official-addons/*.json); since Android 0.94.0 (to-do item 91)
+        // on the add-ons page (the site's folder addons/), which the download page links to
+        const QString addonsPage = QString::fromUtf8(readAll(site.path() + QStringLiteral("/addons/index.html")));
+        check(page.contains(QLatin1String("href=\"addons/\"")) && !page.contains(QLatin1String("id=\"official-addons\""))
+                  && addonsPage.contains(QLatin1String("id=\"official-addons\"")) && addonsPage.contains(QLatin1String("data-addon=\"translation-proofreading\""))
+                  && addonsPage.contains(QLatin1String("<b>Translation and Proofreading</b>")) && addonsPage.contains(QLatin1String("for Linux, Windows, Android"))
+                  && addonsPage.contains(QLatin1String("must not be sold")) && addonsPage.contains(QLatin1String("CC BY-NC 4.0"))
+                  && addonsPage.contains(QLatin1String("blob/main/official-addons/translation-proofreading.json")),
+              QStringLiteral("the add-ons page lists the official add-ons: name, one line, the systems, the license note for data, a link to the entry"),
+              addonsPage.mid(addonsPage.indexOf(QLatin1String("official-addons")), 800));
         const QString wf = QString::fromUtf8(readAll(kSource + QStringLiteral("/.github/workflows/release.yml")));
         const qsizetype job = wf.indexOf(QLatin1String("\n  download-page:\n"));
         const QString pageJob = job > 0 ? wf.mid(job) : QString();

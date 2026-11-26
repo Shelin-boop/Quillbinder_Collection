@@ -614,17 +614,24 @@ static void downloadPageChecks()
     };
     const int linuxAt = int(page.indexOf(QLatin1String("data-system=\"linux\"")));
     const QString linuxCard = cardOf("linux");
+    // Android 0.94.0 (to-do item 91): the card has the full version, the small AppImage and the update, and a link to
+    // the add-ons page (the site's folder addons/), which has the audio and video add-ons
+    QFile af(dir.path() + QStringLiteral("/site/addons/index.html"));
+    const QString addonsPage = af.open(QIODevice::ReadOnly) ? QString::fromUtf8(af.readAll()) : QString();
+    const int linuxOnAddons = int(addonsPage.indexOf(QLatin1String("data-system=\"linux\"")));
+    const QString linuxAddons = linuxOnAddons < 0 ? QString() : addonsPage.mid(linuxOnAddons, addonsPage.indexOf(QLatin1String("</section>"), linuxOnAddons) - linuxOnAddons);
     QStringList missing;
     for (const QString &n : linuxFiles)
-        if (!linuxCard.contains(QStringLiteral("releases/download/v0.90.2-beta/") + n))
+        if (!(n.startsWith(QLatin1String("media-")) ? linuxAddons : linuxCard).contains(QStringLiteral("releases/download/v0.90.2-beta/") + n))
             missing << n;
     check(linuxAt >= 0 && missing.isEmpty() && linuxCard.contains(QLatin1String("Other downloads"))
               && linuxCard.contains(QLatin1String("The program alone")) && linuxCard.contains(QLatin1String("Program update"))
-              && linuxCard.contains(QLatin1String("Audio and video add-ons")),
-          QStringLiteral("Linux: the full version and the small AppImage, the update and the audio and video add-ons"),
+              && linuxCard.contains(QLatin1String("href=\"addons/#linux\"")) && !linuxCard.contains(QLatin1String("media-all-formats"))
+              && linuxAddons.contains(QLatin1String("Audio and video add-ons")),
+          QStringLiteral("Linux: the full version, the small AppImage and the update; the audio and video add-ons on the add-ons page"),
           missing.join(QLatin1Char(' ')));
     check(!linuxCard.contains(QLatin1String("symbols")),
-          QStringLiteral("the symbols stay on the release's page (0.94.0: the add-ons are listed on the card, with name and size)"));
+          QStringLiteral("the symbols stay on the release's page (Android 0.94.0: the add-ons are on the add-ons page)"));
     const QString windowsCard = cardOf("windows");
     check(windowsCard.contains(QLatin1String("Comes later")) && !windowsCard.contains(QLatin1String("Other downloads")),
           QStringLiteral("Windows without files: \"Comes later\", no list"));

@@ -521,11 +521,17 @@ static void downloadTexts(const QString &W)
         check(card.contains(QLatin1String("needs no admin rights")) && card.contains(QLatin1String("Choose a folder of your own"))
                   && !card.contains(QLatin1String("Unpack the zip file completely")),
               L + QStringLiteral("its steps describe the setup program: a folder of one's own, no admin rights"), card.left(1500));
-        check(card.contains(QLatin1String("/Quillbinder-0.90.4-full-windows-x64.zip")) && card.contains(QLatin1String("/Quillbinder-0.90.4-windows-x64-setup.exe"))
-                  && card.contains(QLatin1String("/Quillbinder-0.90.4-windows-x64.zip")) && card.contains(QLatin1String("/quillbinder-0.90.4-windows-update.qbpkg"))
-                  && !card.contains(QLatin1String("symbols")),
-              L + QStringLiteral("the other Windows downloads: the full zip, the program alone as setup and as zip, the update"),
-              card.mid(card.indexOf(QLatin1String("Other downloads"))).left(1500));
+        // Android 0.94.0 (to-do item 91): the card has the program alone (setup) and the update; the zip files are on
+        // the add-ons page (the site's folder addons/)
+        const QString addons = QString::fromUtf8(readAll(W + QLatin1String("/site/addons/index.html")));
+        const int wat = addons.indexOf(QLatin1String("data-system=\"windows\""));
+        const QString wAddons = wat < 0 ? QString() : addons.mid(wat, addons.indexOf(QLatin1String("</section>"), wat) - wat);
+        check(card.contains(QLatin1String("/Quillbinder-0.90.4-windows-x64-setup.exe")) && card.contains(QLatin1String("/quillbinder-0.90.4-windows-update.qbpkg"))
+                  && !card.contains(QLatin1String(".zip")) && !card.contains(QLatin1String("symbols")) && card.contains(QLatin1String("href=\"addons/#windows\""))
+                  && wAddons.contains(QLatin1String("/Quillbinder-0.90.4-full-windows-x64.zip")) && wAddons.contains(QLatin1String("/Quillbinder-0.90.4-windows-x64.zip"))
+                  && !wAddons.contains(QLatin1String("symbols")),
+              L + QStringLiteral("the other Windows downloads: the program alone (setup) and the update on the card, the zip files on the add-ons page"),
+              card.mid(card.indexOf(QLatin1String("Other downloads"))).left(1000) + QLatin1String(" | ") + wAddons.left(800));
     }
     // without setup programs the page is as before: the zip on the button, its steps about unpacking
     const QString dist2 = W + QLatin1String("/dist-zip-only");
