@@ -1,0 +1,352 @@
+{
+ "name": "Willkommen bei {{APP}}",
+ "description": "Eine kurze Tour durch das, was {{APP}} über das Übliche hinaus bietet",
+ "draftTitle": "Funktionstour",
+ "objectTemplates": "standard",
+ "rootFirst": [
+  {
+   "title": "Willkommen",
+   "icon": "qb-information",
+   "textFile": "docs/00-welcome.md",
+   "synopsis": "Was dieses Projekt ist und welche Stationen die Tour hat."
+  }
+ ],
+ "draft": [
+  {
+   "title": "Die Icon-Leiste",
+   "icon": "qb-flag-red",
+   "textFile": "docs/01-icon-bar.md",
+   "synopsis": "Zehn Dokumentsymbole, je einen Klick entfernt; Symbole aus Text und aus Ihren eigenen Bildern."
+  },
+  {
+   "title": "Zoomen, wo Sie hinzeigen",
+   "icon": "qb-magnifier",
+   "textFile": "docs/02-zoom.md",
+   "synopsis": "Ctrl+Mausrad über einem beliebigen Fensterbereich; jeder Bereich behält seinen eigenen Zoom."
+  },
+  {
+   "title": "Mindmaps",
+   "icon": "qb-mindmap",
+   "textFile": "docs/03-mind-maps.md",
+   "synopsis": "Eine Fläche mit Notizen, Linien und Pfeilen für jedes Dokument. Dieses hat eine: Öffnen Sie die Registerkarte Mindmap.",
+   "mindmap": {
+    "notes": [
+     {
+      "id": 1,
+      "text": "Was eine Mindmap kann",
+      "x": 290,
+      "y": 245,
+      "width": 170,
+      "fontSize": 15,
+      "bold": true,
+      "align": "center",
+      "fill": "#fff2a8",
+      "border": 2,
+      "shape": "cloud"
+     },
+     {
+      "id": 2,
+      "text": "Notizen: auf eine leere Stelle doppelklicken. Ctrl+Enter erzeugt eine neue Notiz unterhalb der ausgewählten.",
+      "x": 20,
+      "y": 30,
+      "width": 200,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 3,
+      "text": "Linien: eine Notiz auf eine andere ziehen. Noch einmal dorthin ziehen, um die Linie zu entfernen.",
+      "x": 280,
+      "y": 30,
+      "width": 190,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 4,
+      "text": "Pfeile: beim Loslassen Alt gedrückt halten. Ctrl+Alt: ein Pfeil zurück. Ctrl+Alt+Shift: beide Enden.",
+      "x": 530,
+      "y": 30,
+      "width": 210,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 5,
+      "text": "Farben, Formen und Rahmen: Rechtsklick auf eine Notiz.",
+      "x": 560,
+      "y": 250,
+      "width": 180,
+      "fill": "#ffd6d6",
+      "border": 1,
+      "shape": "jagged"
+     },
+     {
+      "id": 6,
+      "text": "Symbole an den Ecken und Seiten einer Notiz und in der Mitte einer Linie.",
+      "x": 540,
+      "y": 420,
+      "width": 200,
+      "fill": "#e3f6d8",
+      "border": 1,
+      "icons": {
+       "topLeft": "qb-flag-red",
+       "topRight": "qb-light-bulb",
+       "bottomRight": "qb-checked"
+      }
+     },
+     {
+      "id": 7,
+      "text": "Hintergrundformen fassen Notizen zusammen. Eine magnetische Form nimmt ihre Notizen mit.",
+      "x": 290,
+      "y": 455,
+      "width": 170
+     },
+     {
+      "id": 8,
+      "text": "Menü > Notizen > Notizen zum Binder hinzufügen macht aus Notizen Dokumente.",
+      "x": 20,
+      "y": 430,
+      "width": 200,
+      "fill": "#f0e6ff",
+      "border": 1,
+      "shape": "square"
+     },
+     {
+      "id": 9,
+      "text": "Export als PDF, PNG, Text, OPML oder Scapple-Datei; Scapple-Dateien lassen sich einlesen.",
+      "x": 20,
+      "y": 245,
+      "width": 200,
+      "fill": "#f0e6ff",
+      "border": 1
+     }
+    ],
+    "shapes": [
+     {
+      "id": 20,
+      "x": 270,
+      "y": 435,
+      "w": 210,
+      "h": 150,
+      "fill": "#fde3b8",
+      "magnetic": true
+     }
+    ],
+    "lines": [
+     {
+      "from": 1,
+      "to": 2,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 3,
+      "arrow": "to",
+      "label": "ziehen"
+     },
+     {
+      "from": 1,
+      "to": 4,
+      "arrow": "to",
+      "color": "#c0392b"
+     },
+     {
+      "from": 1,
+      "to": 5,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 6,
+      "arrow": "to",
+      "icon": "qb-pencil"
+     },
+     {
+      "from": 1,
+      "to": 7,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 8
+     },
+     {
+      "from": 1,
+      "to": 9,
+      "arrow": "to",
+      "color": "#2f6fbf"
+     }
+    ]
+   }
+  },
+  {
+   "title": "Objektblätter",
+   "icon": "qb-character-sheet",
+   "textFile": "docs/04-objects.md",
+   "synopsis": "Menschen, Orte und Dinge einer Geschichte, jeweils auf einem Datenblatt aus Feldern und miteinander verknüpft.",
+   "children": [
+    {
+     "title": "Eine Szene in Ashvale",
+     "icon": "qb-location-house",
+     "textFile": "docs/04a-scene.md",
+     "synopsis": "Eine kurze Szene mit Verknüpfungen zu den Objekten. Die Registerkarte Objekte listet auf, wer und was darin vorkommt."
+    }
+   ]
+  },
+  {
+   "title": "Kommentare eines ganzen Ordners",
+   "icon": "qb-speech-bubble",
+   "textFile": "docs/05-folder-comments.md",
+   "synopsis": "Die Kommentare und Fußnoten jedes Dokuments eines Ordners in einer Liste."
+  },
+  {
+   "title": "Ein Kapitel mit Kommentaren",
+   "type": "folder",
+   "synopsis": "Wählen Sie es aus und öffnen Sie die Registerkarte Kommentare und Fußnoten des Inspektors.",
+   "children": [
+    {
+     "title": "Das Fährbuch",
+     "textFile": "docs/05a-scene-one.md",
+     "synopsis": "Eine Szene mit einem Kommentar."
+    },
+    {
+     "title": "Abend",
+     "textFile": "docs/05b-scene-two.md",
+     "synopsis": "Eine Szene mit einer Fußnote und einer Anmerkung im Text."
+    }
+   ]
+  },
+  {
+   "title": "Vergleichen und übertragen",
+   "icon": "qb-reviewer",
+   "textFile": "docs/06-compare.md",
+   "synopsis": "Ein Manuskript, das aus Word oder LibreOffice zurückkommt: Unterschiede ansehen und eine der beiden Seiten übernehmen."
+  },
+  {
+   "title": "Scrivener-Projekte",
+   "icon": "qb-sync-folder",
+   "textFile": "docs/07-scrivener.md",
+   "synopsis": "Ein Scrivener-Projekt importieren oder direkt darin arbeiten und später in Scrivener weitermachen."
+  },
+  {
+   "title": "Designs, Farben und Schriften",
+   "icon": "qb-eye",
+   "textFile": "docs/08-themes.md",
+   "synopsis": "Dunkelmodus und andere Designs sofort; die Farbpalette der Formatleiste; Schriften installieren."
+  },
+  {
+   "title": "Updates und Erweiterungen",
+   "icon": "qb-cog",
+   "textFile": "docs/09-updates.md",
+   "synopsis": "Kleine Paketdateien, die Erweiterungsverwaltung und ein Weg zurück zu einer früheren Version."
+  },
+  {
+   "title": "Sicherheitsnetze",
+   "icon": "qb-checked",
+   "textFile": "docs/10-safety.md",
+   "synopsis": "Automatisches Speichern, Sicherungen, Momentaufnahmen, die Ersatz-Projektdatei, Absturz- und Hängerberichte."
+  },
+  {
+   "title": "Wie geht es weiter?",
+   "icon": "qb-pass",
+   "textFile": "docs/11-where-next.md",
+   "synopsis": "Die Schnellstartanleitung, das Handbuch und ein eigenes Projekt."
+  }
+ ],
+ "projectBookmarks": [
+  "Willkommen"
+ ],
+ "objects": [
+  {
+   "category": "characters",
+   "name": "Mara Fenn",
+   "values": {
+    "role": "Hauptfigur",
+    "age": "34",
+    "eyes": "Grau",
+    "occupation": "Fährfrau",
+    "livesIn": [
+     "Ashvale"
+    ],
+    "relations": [
+     "Tobias Quill"
+    ],
+    "traits": "Geduldig, starrsinnig, hält jedes Versprechen, das sie gibt.",
+    "background": "Sie hat die Fähre von ihrer Mutter übernommen. [Tobias Quill](qbobj-name:Tobias Quill) hat den Namen ihrer Mutter im alten Fährbuch gefunden.",
+    "scenes": [
+     "Eine Szene in Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "characters",
+   "name": "Tobias Quill",
+   "values": {
+    "role": "Nebenfigur",
+    "age": "29",
+    "occupation": "Dorfarchivar",
+    "livesIn": [
+     "Ashvale"
+    ],
+    "relations": [
+     "Mara Fenn"
+    ],
+    "goals": "Möchte wissen, wer die ersten Seiten des Fährbuchs geschrieben hat.",
+    "scenes": [
+     "Eine Szene in Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "locations",
+   "name": "Ashvale",
+   "values": {
+    "kind": "Dorf",
+    "environment": [
+     "Fenwood"
+    ],
+    "weather": [
+     "Herbstnebel"
+    ],
+    "population": "212",
+    "inhabitants": [
+     "Mara Fenn",
+     "Tobias Quill"
+    ],
+    "description": "Vierzig Häuser an einem trägen Fluss, eine Fähre und ein Kirchturm, der von [Fenwood](qbobj-name:Fenwood) aus zu sehen ist.",
+    "scenes": [
+     "Eine Szene in Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "environments",
+   "name": "Fenwood",
+   "values": {
+    "kind": "Wald",
+    "flora": "Birken und Erlen; Schilf am Fluss.",
+    "weather": [
+     "Herbstnebel"
+    ],
+    "locations": [
+     "Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "weather",
+   "name": "Herbstnebel",
+   "values": {
+    "season": "Herbst",
+    "temperature": "8",
+    "precipitation": "Nebel",
+    "effects": "Die Fähre fährt nicht, wenn das andere Ufer nicht zu sehen ist.",
+    "where": [
+     "Ashvale",
+     "Fenwood"
+    ]
+   }
+  }
+ ]
+}
