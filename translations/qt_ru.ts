@@ -5,1046 +5,1057 @@
         <name>QAbstractSpinBox</name>
         <message>
             <source>Step &amp;down</source>
-            <translation type="unfinished"></translation>
+            <translation>Шаг &amp;вниз</translation>
         </message>
         <message>
             <source>&amp;Step up</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Шаг вверх</translation>
         </message>
         <message>
             <source>&amp;Select All</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Выделить всё</translation>
         </message>
     </context>
     <context>
         <name>QColorDialog</name>
         <message>
             <source>&amp;Red:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Красный:</translation>
         </message>
         <message>
             <source>&amp;Sat:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Нас:</translation>
         </message>
         <message>
             <source>&amp;Val:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Ярк:</translation>
         </message>
         <message>
             <source>Hu&amp;e:</source>
-            <translation type="unfinished"></translation>
+            <translation>От&amp;тенок:</translation>
         </message>
         <message>
             <source>&amp;HTML:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;HTML:</translation>
         </message>
         <message>
             <source>Select Color</source>
-            <translation type="unfinished"></translation>
+            <translation>Выбор цвета</translation>
         </message>
         <message>
             <source>&amp;Add to Custom Colors</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Добавить в мои цвета</translation>
         </message>
         <message>
             <source>Bl&amp;ue:</source>
-            <translation type="unfinished"></translation>
+            <translation>С&amp;иний:</translation>
         </message>
         <message>
             <source>&amp;Pick Screen Color</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Взять цвет с экрана</translation>
         </message>
         <message>
             <source>Cursor at %1, %2
 Press ESC to cancel</source>
-            <translation type="unfinished"></translation>
+            <translation>Курсор в точке %1, %2
+Нажмите ESC для отмены</translation>
         </message>
         <message>
             <source>&amp;Green:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Зелёный:</translation>
         </message>
         <message>
             <source>&amp;Basic colors</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Основные цвета</translation>
         </message>
         <message>
             <source>&amp;Custom colors</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Мои цвета</translation>
         </message>
         <message>
             <source>A&amp;lpha channel:</source>
-            <translation type="unfinished"></translation>
+            <translation>Альфа-к&amp;анал:</translation>
         </message>
     </context>
     <context>
         <name>QDialogButtonBox</name>
         <message>
             <source>OK</source>
-            <translation type="unfinished"></translation>
+            <translation>OK</translation>
         </message>
     </context>
     <context>
         <name>QFileDialog</name>
         <message>
             <source>Back</source>
-            <translation type="unfinished"></translation>
+            <translation>Назад</translation>
         </message>
         <message>
             <source>Open</source>
-            <translation type="unfinished"></translation>
+            <translation>Открыть</translation>
         </message>
         <message>
             <source>&amp;Open</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Открыть</translation>
         </message>
         <message>
             <source>&amp;Save</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Сохранить</translation>
         </message>
         <message>
             <source>Files</source>
-            <translation type="unfinished"></translation>
+            <translation>Файлы</translation>
         </message>
         <message>
             <source>Show </source>
-            <translation type="unfinished"></translation>
+            <translation>Показывать </translation>
         </message>
         <message>
             <source>'%1' is write protected.
 Do you want to delete it anyway?</source>
-            <translation type="unfinished"></translation>
+            <translation>«%1» защищён от записи.
+Всё равно удалить?</translation>
         </message>
         <message>
             <source>Are you sure you want to delete '%1'?</source>
-            <translation type="unfinished"></translation>
+            <translation>Удалить «%1»?</translation>
         </message>
         <message>
             <source>List of places and bookmarks</source>
-            <translation type="unfinished"></translation>
+            <translation>Список мест и закладок</translation>
         </message>
         <message>
             <source>File &amp;name:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Имя файла:</translation>
         </message>
         <message>
             <source>Alt+Left</source>
-            <translation type="unfinished"></translation>
+            <translation>Alt+Left</translation>
         </message>
         <message>
             <source>Alt+Up</source>
-            <translation type="unfinished"></translation>
+            <translation>Alt+Up</translation>
         </message>
         <message>
             <source>Delete</source>
-            <translation type="unfinished"></translation>
+            <translation>Удалить</translation>
         </message>
         <message>
             <source>New Folder</source>
-            <translation type="unfinished"></translation>
+            <translation>Новая папка</translation>
         </message>
         <message>
             <source>Parent Directory</source>
-            <translation type="unfinished"></translation>
+            <translation>Родительская папка</translation>
         </message>
         <message>
             <source>&amp;New Folder</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Новая папка</translation>
         </message>
         <message>
             <source>Remove</source>
-            <translation type="unfinished"></translation>
+            <translation>Убрать</translation>
         </message>
         <message>
             <source>Look in:</source>
-            <translation type="unfinished"></translation>
+            <translation>Папка:</translation>
         </message>
         <message>
             <source>Alt+Right</source>
-            <translation type="unfinished"></translation>
+            <translation>Alt+Right</translation>
         </message>
         <message>
             <source>Create a New Folder</source>
-            <translation type="unfinished"></translation>
+            <translation>Создать новую папку</translation>
         </message>
         <message>
             <source>Files of type:</source>
-            <translation type="unfinished"></translation>
+            <translation>Тип файлов:</translation>
         </message>
         <message>
             <source>Find Directory</source>
-            <translation type="unfinished"></translation>
+            <translation>Поиск папки</translation>
         </message>
         <message>
             <source>Show &amp;hidden files</source>
-            <translation type="unfinished"></translation>
+            <translation>Показывать &amp;скрытые файлы</translation>
         </message>
         <message>
             <source>Save As</source>
-            <translation type="unfinished"></translation>
+            <translation>Сохранить как</translation>
         </message>
         <message>
             <source>%1
 Directory not found.
 Please verify the correct directory name was given.</source>
-            <translation type="unfinished"></translation>
+            <translation>%1
+Папка не найдена.
+Проверьте, правильно ли указано имя папки.</translation>
         </message>
         <message>
             <source>Sidebar</source>
-            <translation type="unfinished"></translation>
+            <translation>Боковая панель</translation>
         </message>
         <message>
             <source>List View</source>
-            <translation type="unfinished"></translation>
+            <translation>Список</translation>
         </message>
         <message>
             <source>&amp;Choose</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Выбрать</translation>
         </message>
         <message>
             <source>&amp;Delete</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Удалить</translation>
         </message>
         <message>
             <source>All files (*)</source>
-            <translation type="unfinished"></translation>
+            <translation>Все файлы (*)</translation>
         </message>
         <message>
             <source>All Files (*)</source>
-            <translation type="unfinished"></translation>
+            <translation>Все файлы (*)</translation>
         </message>
         <message>
             <source>Directories</source>
-            <translation type="unfinished"></translation>
+            <translation>Папки</translation>
         </message>
         <message>
             <source>&amp;Rename</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Переименовать</translation>
         </message>
         <message>
             <source>Could not delete directory.</source>
-            <translation type="unfinished"></translation>
+            <translation>Не удалось удалить папку.</translation>
         </message>
         <message>
             <source>Directory:</source>
-            <translation type="unfinished"></translation>
+            <translation>Папка:</translation>
         </message>
         <message>
             <source>%1 already exists.
 Do you want to replace it?</source>
-            <translation type="unfinished"></translation>
+            <translation>%1 уже существует.
+Заменить?</translation>
         </message>
         <message>
             <source>Forward</source>
-            <translation type="unfinished"></translation>
+            <translation>Вперёд</translation>
         </message>
         <message>
             <source>Go forward</source>
-            <translation type="unfinished"></translation>
+            <translation>Перейти вперёд</translation>
         </message>
         <message>
             <source>Go to the parent directory</source>
-            <translation type="unfinished"></translation>
+            <translation>Перейти в родительскую папку</translation>
         </message>
         <message>
             <source>Recent Places</source>
-            <translation type="unfinished"></translation>
+            <translation>Недавние места</translation>
         </message>
         <message>
             <source>Go back</source>
-            <translation type="unfinished"></translation>
+            <translation>Перейти назад</translation>
         </message>
         <message>
             <source>Change to detail view mode</source>
-            <translation type="unfinished"></translation>
+            <translation>Переключить на подробный вид</translation>
         </message>
         <message>
             <source>Create New Folder</source>
-            <translation type="unfinished"></translation>
+            <translation>Создать новую папку</translation>
         </message>
         <message>
             <source>Detail View</source>
-            <translation type="unfinished"></translation>
+            <translation>Подробно</translation>
         </message>
         <message>
             <source>%1
 File not found.
 Please verify the correct file name was given.</source>
-            <translation type="unfinished"></translation>
+            <translation>%1
+Файл не найден.
+Проверьте, правильно ли указано имя файла.</translation>
         </message>
         <message>
             <source>Change to list view mode</source>
-            <translation type="unfinished"></translation>
+            <translation>Переключить на вид списком</translation>
         </message>
     </context>
     <context>
         <name>QFileSystemModel</name>
         <message>
             <source>Kind</source>
-            <translation type="unfinished"></translation>
+            <translation>Вид</translation>
         </message>
         <message>
             <source>Name</source>
-            <translation type="unfinished"></translation>
+            <translation>Имя</translation>
         </message>
         <message>
             <source>Size</source>
-            <translation type="unfinished"></translation>
+            <translation>Размер</translation>
         </message>
         <message>
             <source>Type</source>
-            <translation type="unfinished"></translation>
+            <translation>Тип</translation>
         </message>
         <message>
             <source>My Computer</source>
-            <translation type="unfinished"></translation>
+            <translation>Мой компьютер</translation>
         </message>
         <message>
             <source>Computer</source>
-            <translation type="unfinished"></translation>
+            <translation>Компьютер</translation>
         </message>
         <message>
             <source>Date Modified</source>
-            <translation type="unfinished"></translation>
+            <translation>Дата изменения</translation>
         </message>
     </context>
     <context>
         <name>QFontDialog</name>
         <message>
             <source>&amp;Font</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Шрифт</translation>
         </message>
         <message>
             <source>&amp;Size</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Размер</translation>
         </message>
         <message>
             <source>Sample</source>
-            <translation type="unfinished"></translation>
+            <translation>Образец</translation>
         </message>
         <message>
             <source>Font st&amp;yle</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Начертание</translation>
         </message>
         <message>
             <source>Wr&amp;iting System</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Система письма</translation>
         </message>
         <message>
             <source>Select Font</source>
-            <translation type="unfinished"></translation>
+            <translation>Выбор шрифта</translation>
         </message>
         <message>
             <source>&amp;Underline</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Подчёркивание</translation>
         </message>
         <message>
             <source>Effects</source>
-            <translation type="unfinished"></translation>
+            <translation>Эффекты</translation>
         </message>
         <message>
             <source>Stri&amp;keout</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Зачёркивание</translation>
         </message>
     </context>
     <context>
         <name>QInputDialog</name>
         <message>
             <source>Enter a value:</source>
-            <translation type="unfinished"></translation>
+            <translation>Введите значение:</translation>
         </message>
     </context>
     <context>
         <name>QLineEdit</name>
         <message>
             <source>Cu&amp;t</source>
-            <translation type="unfinished"></translation>
+            <translation>Вы&amp;резать</translation>
         </message>
         <message>
             <source>&amp;Copy</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Копировать</translation>
         </message>
         <message>
             <source>&amp;Redo</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Повторить</translation>
         </message>
         <message>
             <source>&amp;Undo</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Отменить</translation>
         </message>
         <message>
             <source>&amp;Paste</source>
-            <translation type="unfinished"></translation>
+            <translation>Вс&amp;тавить</translation>
         </message>
         <message>
             <source>Delete</source>
-            <translation type="unfinished"></translation>
+            <translation>Удалить</translation>
         </message>
         <message>
             <source>Select All</source>
-            <translation type="unfinished"></translation>
+            <translation>Выделить всё</translation>
         </message>
     </context>
     <context>
         <name>QMessageBox</name>
         <message>
             <source>Show Details...</source>
-            <translation type="unfinished"></translation>
+            <translation>Показать подробности...</translation>
         </message>
         <message>
             <source>About Qt</source>
-            <translation type="unfinished"></translation>
+            <translation>О Qt</translation>
         </message>
         <message>
             <source>Hide Details...</source>
-            <translation type="unfinished"></translation>
+            <translation>Скрыть подробности...</translation>
         </message>
         <message>
             <source>&lt;h3&gt;About Qt&lt;/h3&gt;&lt;p&gt;This program uses Qt version %1.&lt;/p&gt;</source>
-            <translation type="unfinished"></translation>
+            <translation>&lt;h3&gt;О Qt&lt;/h3&gt;&lt;p&gt;Эта программа использует Qt версии %1.&lt;/p&gt;</translation>
         </message>
         <message>
             <source>&lt;p&gt;Qt is a C++ toolkit for cross-platform application development.&lt;/p&gt;&lt;p&gt;Qt provides single-source portability across all major desktop operating systems. It is also available for embedded Linux and other embedded and mobile operating systems.&lt;/p&gt;&lt;p&gt;Qt is available under multiple licensing options designed to accommodate the needs of our various users.&lt;/p&gt;&lt;p&gt;Qt licensed under our commercial license agreement is appropriate for development of proprietary/commercial software where you do not want to share any source code with third parties or otherwise cannot comply with the terms of GNU (L)GPL.&lt;/p&gt;&lt;p&gt;Qt licensed under GNU (L)GPL is appropriate for the development of Qt&amp;nbsp;applications provided you can comply with the terms and conditions of the respective licenses.&lt;/p&gt;&lt;p&gt;Please see &lt;a href="http://%2/"&gt;%2&lt;/a&gt; for an overview of Qt licensing.&lt;/p&gt;&lt;p&gt;Copyright (C) %1 The Qt Company Ltd and other contributors.&lt;/p&gt;&lt;p&gt;Qt and the Qt logo are trademarks of The Qt Company Ltd.&lt;/p&gt;&lt;p&gt;Qt is The Qt Company Ltd product developed as an open source project. See &lt;a href="http://%3/"&gt;%3&lt;/a&gt; for more information.&lt;/p&gt;</source>
-            <translation type="unfinished"></translation>
+            <translation>&lt;p&gt;Qt — это инструментарий C++ для разработки кроссплатформенных приложений.&lt;/p&gt;&lt;p&gt;Qt обеспечивает переносимость единого исходного кода между всеми основными настольными операционными системами. Он также доступен для встраиваемого Linux и других встраиваемых и мобильных операционных систем.&lt;/p&gt;&lt;p&gt;Qt доступен на нескольких вариантах лицензирования, рассчитанных на потребности разных пользователей.&lt;/p&gt;&lt;p&gt;Qt по нашему коммерческому лицензионному соглашению подходит для разработки проприетарного или коммерческого программного обеспечения, когда вы не хотите делиться исходным кодом с третьими лицами или иначе не можете соблюдать условия GNU (L)GPL.&lt;/p&gt;&lt;p&gt;Qt по лицензии GNU (L)GPL подходит для разработки приложений Qt&amp;nbsp;при условии, что вы можете соблюдать положения соответствующих лицензий.&lt;/p&gt;&lt;p&gt;Обзор лицензирования Qt см. на странице &lt;a href="http://%2/"&gt;%2&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Copyright (C) %1 The Qt Company Ltd и другие участники.&lt;/p&gt;&lt;p&gt;Qt и логотип Qt являются товарными знаками The Qt Company Ltd.&lt;/p&gt;&lt;p&gt;Qt — продукт The Qt Company Ltd, разрабатываемый как проект с открытым исходным кодом. Дополнительные сведения см. на странице &lt;a href="http://%3/"&gt;%3&lt;/a&gt;.&lt;/p&gt;</translation>
         </message>
     </context>
     <context>
         <name>QPageSetupWidget</name>
         <message>
             <source>CC</source>
-            <translation type="unfinished"></translation>
+            <translation>CC</translation>
         </message>
         <message>
             <source>DD</source>
-            <translation type="unfinished"></translation>
+            <translation>DD</translation>
         </message>
         <message>
             <source>in</source>
-            <translation type="unfinished"></translation>
+            <translation>дюйм</translation>
         </message>
         <message>
             <source>mm</source>
-            <translation type="unfinished"></translation>
+            <translation>мм</translation>
         </message>
         <message>
             <source>pt</source>
-            <translation type="unfinished"></translation>
+            <translation>пт</translation>
         </message>
         <message>
             <source>P̸</source>
-            <translation type="unfinished"></translation>
+            <translation>P̸</translation>
         </message>
         <message>
             <source>Form</source>
-            <translation type="unfinished"></translation>
+            <translation>Форма</translation>
         </message>
         <message>
             <source>bottom margin</source>
-            <translation type="unfinished"></translation>
+            <translation>нижнее поле</translation>
         </message>
         <message>
             <source>Paper</source>
-            <translation type="unfinished"></translation>
+            <translation>Бумага</translation>
         </message>
         <message>
             <source>Paper source:</source>
-            <translation type="unfinished"></translation>
+            <translation>Источник бумаги:</translation>
         </message>
         <message>
             <source>right margin</source>
-            <translation type="unfinished"></translation>
+            <translation>правое поле</translation>
         </message>
         <message>
             <source>Pica (P̸)</source>
-            <translation type="unfinished"></translation>
+            <translation>Пика (P̸)</translation>
         </message>
         <message>
             <source>Margins</source>
-            <translation type="unfinished"></translation>
+            <translation>Поля</translation>
         </message>
         <message>
             <source>Custom</source>
-            <translation type="unfinished"></translation>
+            <translation>Другой</translation>
         </message>
         <message>
             <source>Landscape</source>
-            <translation type="unfinished"></translation>
+            <translation>Альбомная</translation>
         </message>
         <message>
             <source>Page Layout</source>
-            <translation type="unfinished"></translation>
+            <translation>Макет страницы</translation>
         </message>
         <message>
             <source>Width:</source>
-            <translation type="unfinished"></translation>
+            <translation>Ширина:</translation>
         </message>
         <message>
             <source>Orientation</source>
-            <translation type="unfinished"></translation>
+            <translation>Ориентация</translation>
         </message>
         <message>
             <source>Didot (DD)</source>
-            <translation type="unfinished"></translation>
+            <translation>Дидо (DD)</translation>
         </message>
         <message>
             <source>Portrait</source>
-            <translation type="unfinished"></translation>
+            <translation>Книжная</translation>
         </message>
         <message>
             <source>Page order:</source>
-            <translation type="unfinished"></translation>
+            <translation>Порядок страниц:</translation>
         </message>
         <message>
             <source>top margin</source>
-            <translation type="unfinished"></translation>
+            <translation>верхнее поле</translation>
         </message>
         <message>
             <source>left margin</source>
-            <translation type="unfinished"></translation>
+            <translation>левое поле</translation>
         </message>
         <message>
             <source>Page size:</source>
-            <translation type="unfinished"></translation>
+            <translation>Размер страницы:</translation>
         </message>
         <message>
             <source>Cicero (CC)</source>
-            <translation type="unfinished"></translation>
+            <translation>Цицеро (CC)</translation>
         </message>
         <message>
             <source>Reverse portrait</source>
-            <translation type="unfinished"></translation>
+            <translation>Перевёрнутая книжная</translation>
         </message>
         <message>
             <source>Millimeters (mm)</source>
-            <translation type="unfinished"></translation>
+            <translation>Миллиметры (мм)</translation>
         </message>
         <message>
             <source>Points (pt)</source>
-            <translation type="unfinished"></translation>
+            <translation>Пункты (пт)</translation>
         </message>
         <message>
             <source>Pages per sheet:</source>
-            <translation type="unfinished"></translation>
+            <translation>Страниц на листе:</translation>
         </message>
         <message>
             <source>Inches (in)</source>
-            <translation type="unfinished"></translation>
+            <translation>Дюймы (дюйм)</translation>
         </message>
         <message>
             <source>Reverse landscape</source>
-            <translation type="unfinished"></translation>
+            <translation>Перевёрнутая альбомная</translation>
         </message>
         <message>
             <source>Height:</source>
-            <translation type="unfinished"></translation>
+            <translation>Высота:</translation>
         </message>
     </context>
     <context>
         <name>QPlatformTheme</name>
         <message>
             <source>OK</source>
-            <translation type="unfinished"></translation>
+            <translation>OK</translation>
         </message>
         <message>
             <source>&amp;No</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Нет</translation>
         </message>
         <message>
             <source>&amp;Yes</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Да</translation>
         </message>
         <message>
             <source>Help</source>
-            <translation type="unfinished"></translation>
+            <translation>Справка</translation>
         </message>
         <message>
             <source>Open</source>
-            <translation type="unfinished"></translation>
+            <translation>Открыть</translation>
         </message>
         <message>
             <source>Save</source>
-            <translation type="unfinished"></translation>
+            <translation>Сохранить</translation>
         </message>
         <message>
             <source>Abort</source>
-            <translation type="unfinished"></translation>
+            <translation>Прервать</translation>
         </message>
         <message>
             <source>Apply</source>
-            <translation type="unfinished"></translation>
+            <translation>Применить</translation>
         </message>
         <message>
             <source>Close</source>
-            <translation type="unfinished"></translation>
+            <translation>Закрыть</translation>
         </message>
         <message>
             <source>Reset</source>
-            <translation type="unfinished"></translation>
+            <translation>Сбросить</translation>
         </message>
         <message>
             <source>Retry</source>
-            <translation type="unfinished"></translation>
+            <translation>Повторить</translation>
         </message>
         <message>
             <source>Restore Defaults</source>
-            <translation type="unfinished"></translation>
+            <translation>Восстановить значения по умолчанию</translation>
         </message>
         <message>
             <source>Cancel</source>
-            <translation type="unfinished"></translation>
+            <translation>Отмена</translation>
         </message>
         <message>
             <source>Ignore</source>
-            <translation type="unfinished"></translation>
+            <translation>Игнорировать</translation>
         </message>
         <message>
             <source>N&amp;o to All</source>
-            <translation type="unfinished"></translation>
+            <translation>Н&amp;ет для всех</translation>
         </message>
         <message>
             <source>Save All</source>
-            <translation type="unfinished"></translation>
+            <translation>Сохранить все</translation>
         </message>
         <message>
             <source>Discard</source>
-            <translation type="unfinished"></translation>
+            <translation>Не сохранять</translation>
         </message>
         <message>
             <source>Yes to &amp;All</source>
-            <translation type="unfinished"></translation>
+            <translation>Да для &amp;всех</translation>
         </message>
     </context>
     <context>
         <name>QPrintDialog</name>
         <message>
             <source>Even Pages</source>
-            <translation type="unfinished"></translation>
+            <translation>Чётные страницы</translation>
         </message>
         <message>
             <source>Print</source>
-            <translation type="unfinished"></translation>
+            <translation>Печать</translation>
         </message>
         <message>
             <source>&amp;Options &lt;&lt;</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Параметры &lt;&lt;</translation>
         </message>
         <message>
             <source>&amp;Options &gt;&gt;</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Параметры &gt;&gt;</translation>
         </message>
         <message>
             <source>Left to Right, Top to Bottom</source>
-            <translation type="unfinished"></translation>
+            <translation>Слева направо, сверху вниз</translation>
         </message>
         <message>
             <source>Right to Left, Bottom to Top</source>
-            <translation type="unfinished"></translation>
+            <translation>Справа налево, снизу вверх</translation>
         </message>
         <message>
             <source>Write PDF file</source>
-            <translation type="unfinished"></translation>
+            <translation>Записать файл PDF</translation>
         </message>
         <message>
             <source>&amp;Print</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Печать</translation>
         </message>
         <message>
             <source>1 (1x1)</source>
-            <translation type="unfinished"></translation>
+            <translation>1 (1x1)</translation>
         </message>
         <message>
             <source>Options 'Pages Per Sheet' and 'Page Set' cannot be used together.
 Please turn one of those options off.</source>
-            <translation type="unfinished"></translation>
+            <translation>Параметры «Страниц на листе» и «Набор страниц» нельзя использовать вместе.
+Отключите один из них.</translation>
         </message>
         <message>
             <source>%1 already exists.
 Do you want to overwrite it?</source>
-            <translation type="unfinished"></translation>
+            <translation>%1 уже существует.
+Перезаписать?</translation>
         </message>
         <message>
             <source>2 (2x1)</source>
-            <translation type="unfinished"></translation>
+            <translation>2 (2x1)</translation>
         </message>
         <message>
             <source>Left to Right, Bottom to Top</source>
-            <translation type="unfinished"></translation>
+            <translation>Слева направо, снизу вверх</translation>
         </message>
         <message>
             <source>4 (2x2)</source>
-            <translation type="unfinished"></translation>
+            <translation>4 (2x2)</translation>
         </message>
         <message>
             <source>Odd Pages</source>
-            <translation type="unfinished"></translation>
+            <translation>Нечётные страницы</translation>
         </message>
         <message>
             <source>Local file</source>
-            <translation type="unfinished"></translation>
+            <translation>Локальный файл</translation>
         </message>
         <message>
             <source>6 (2x3)</source>
-            <translation type="unfinished"></translation>
+            <translation>6 (2x3)</translation>
         </message>
         <message>
             <source>16 (4x4)</source>
-            <translation type="unfinished"></translation>
+            <translation>16 (4x4)</translation>
         </message>
         <message>
             <source>There are conflicts in duplex settings. Do you want to fix them?</source>
-            <translation type="unfinished"></translation>
+            <translation>В настройках двусторонней печати есть конфликты. Исправить их?</translation>
         </message>
         <message>
             <source>Print to File (PDF)</source>
-            <translation type="unfinished"></translation>
+            <translation>Печать в файл (PDF)</translation>
         </message>
         <message>
             <source>Print To File ...</source>
-            <translation type="unfinished"></translation>
+            <translation>Печать в файл ...</translation>
         </message>
         <message>
             <source>Invalid Pages Definition</source>
-            <translation type="unfinished"></translation>
+            <translation>Недопустимое определение страниц</translation>
         </message>
         <message>
             <source>%1 does not follow the correct syntax. Please use ',' to separate ranges and pages, '-' to define ranges and make sure ranges do not intersect with each other.</source>
-            <translation type="unfinished"></translation>
+            <translation>%1 не соответствует правильному синтаксису. Используйте «,» для разделения диапазонов и страниц, «-» для задания диапазонов и следите, чтобы диапазоны не пересекались.</translation>
         </message>
         <message>
             <source>9 (3x3)</source>
-            <translation type="unfinished"></translation>
+            <translation>9 (3x3)</translation>
         </message>
         <message>
             <source>Right to Left, Top to Bottom</source>
-            <translation type="unfinished"></translation>
+            <translation>Справа налево, сверху вниз</translation>
         </message>
         <message>
             <source>Bottom to Top, Left to Right</source>
-            <translation type="unfinished"></translation>
+            <translation>Снизу вверх, слева направо</translation>
         </message>
         <message>
             <source>The 'From' value cannot be greater than the 'To' value.</source>
-            <translation type="unfinished"></translation>
+            <translation>Значение «От» не может быть больше значения «До».</translation>
         </message>
         <message>
             <source>All Pages</source>
-            <translation type="unfinished"></translation>
+            <translation>Все страницы</translation>
         </message>
         <message>
             <source>Duplex Settings Conflicts</source>
-            <translation type="unfinished"></translation>
+            <translation>Конфликты настроек двусторонней печати</translation>
         </message>
         <message>
             <source>%1 is a directory.
 Please choose a different file name.</source>
-            <translation type="unfinished"></translation>
+            <translation>%1 — это папка.
+Выберите другое имя файла.</translation>
         </message>
         <message>
             <source>File %1 is not writable.
 Please choose a different file name.</source>
-            <translation type="unfinished"></translation>
+            <translation>Файл %1 недоступен для записи.
+Выберите другое имя файла.</translation>
         </message>
         <message>
             <source>Bottom to Top, Right to Left</source>
-            <translation type="unfinished"></translation>
+            <translation>Снизу вверх, справа налево</translation>
         </message>
         <message>
             <source>Top to Bottom, Left to Right</source>
-            <translation type="unfinished"></translation>
+            <translation>Сверху вниз, слева направо</translation>
         </message>
         <message>
             <source>Top to Bottom, Right to Left</source>
-            <translation type="unfinished"></translation>
+            <translation>Сверху вниз, справа налево</translation>
         </message>
     </context>
     <context>
         <name>QPrintPreviewDialog</name>
         <message>
             <source>%1%</source>
-            <translation type="unfinished"></translation>
+            <translation>%1%</translation>
         </message>
         <message>
             <source>Print Preview</source>
-            <translation type="unfinished"></translation>
+            <translation>Предпросмотр печати</translation>
         </message>
         <message>
             <source>Print</source>
-            <translation type="unfinished"></translation>
+            <translation>Печать</translation>
         </message>
         <message>
             <source>Fit page</source>
-            <translation type="unfinished"></translation>
+            <translation>По размеру страницы</translation>
         </message>
         <message>
             <source>Zoom in</source>
-            <translation type="unfinished"></translation>
+            <translation>Увеличить</translation>
         </message>
         <message>
             <source>Landscape</source>
-            <translation type="unfinished"></translation>
+            <translation>Альбомная</translation>
         </message>
         <message>
             <source>Zoom out</source>
-            <translation type="unfinished"></translation>
+            <translation>Уменьшить</translation>
         </message>
         <message>
             <source>Fit width</source>
-            <translation type="unfinished"></translation>
+            <translation>По ширине</translation>
         </message>
         <message>
             <source>Portrait</source>
-            <translation type="unfinished"></translation>
+            <translation>Книжная</translation>
         </message>
         <message>
             <source>Page Setup</source>
-            <translation type="unfinished"></translation>
+            <translation>Параметры страницы</translation>
         </message>
         <message>
             <source>Page setup</source>
-            <translation type="unfinished"></translation>
+            <translation>Параметры страницы</translation>
         </message>
         <message>
             <source>Show overview of all pages</source>
-            <translation type="unfinished"></translation>
+            <translation>Показать обзор всех страниц</translation>
         </message>
         <message>
             <source>First page</source>
-            <translation type="unfinished"></translation>
+            <translation>Первая страница</translation>
         </message>
         <message>
             <source>Last page</source>
-            <translation type="unfinished"></translation>
+            <translation>Последняя страница</translation>
         </message>
         <message>
             <source>Show single page</source>
-            <translation type="unfinished"></translation>
+            <translation>Показать одну страницу</translation>
         </message>
         <message>
             <source>Export to PDF</source>
-            <translation type="unfinished"></translation>
+            <translation>Экспорт в PDF</translation>
         </message>
         <message>
             <source>Previous page</source>
-            <translation type="unfinished"></translation>
+            <translation>Предыдущая страница</translation>
         </message>
         <message>
             <source>Next page</source>
-            <translation type="unfinished"></translation>
+            <translation>Следующая страница</translation>
         </message>
         <message>
             <source>Show facing pages</source>
-            <translation type="unfinished"></translation>
+            <translation>Показать разворот</translation>
         </message>
     </context>
     <context>
         <name>QProgressDialog</name>
         <message>
             <source>Cancel</source>
-            <translation type="unfinished"></translation>
+            <translation>Отмена</translation>
         </message>
     </context>
     <context>
         <name>QShortcut</name>
         <message>
             <source>Up</source>
-            <translation type="unfinished"></translation>
+            <translation>Up</translation>
         </message>
         <message>
             <source>Alt</source>
-            <translation type="unfinished"></translation>
+            <translation>Alt</translation>
         </message>
         <message>
             <source>F%1</source>
-            <translation type="unfinished"></translation>
+            <translation>F%1</translation>
         </message>
         <message>
             <source>Del</source>
-            <translation type="unfinished"></translation>
+            <translation>Del</translation>
         </message>
         <message>
             <source>End</source>
-            <translation type="unfinished"></translation>
+            <translation>End</translation>
         </message>
         <message>
             <source>Esc</source>
-            <translation type="unfinished"></translation>
+            <translation>Esc</translation>
         </message>
         <message>
             <source>Ins</source>
-            <translation type="unfinished"></translation>
+            <translation>Ins</translation>
         </message>
         <message>
             <source>Num</source>
-            <translation type="unfinished"></translation>
+            <translation>Num</translation>
         </message>
         <message>
             <source>Tab</source>
-            <translation type="unfinished"></translation>
+            <translation>Tab</translation>
         </message>
         <message>
             <source>Ctrl</source>
-            <translation type="unfinished"></translation>
+            <translation>Ctrl</translation>
         </message>
         <message>
             <source>Down</source>
-            <translation type="unfinished"></translation>
+            <translation>Down</translation>
         </message>
         <message>
             <source>Home</source>
-            <translation type="unfinished"></translation>
+            <translation>Home</translation>
         </message>
         <message>
             <source>Left</source>
-            <translation type="unfinished"></translation>
+            <translation>Left</translation>
         </message>
         <message>
             <source>Menu</source>
-            <translation type="unfinished"></translation>
+            <translation>Menu</translation>
         </message>
         <message>
             <source>Meta</source>
-            <translation type="unfinished"></translation>
+            <translation>Meta</translation>
         </message>
         <message>
             <source>PgUp</source>
-            <translation type="unfinished"></translation>
+            <translation>PgUp</translation>
         </message>
         <message>
             <source>Enter</source>
-            <translation type="unfinished"></translation>
+            <translation>Enter</translation>
         </message>
         <message>
             <source>Pause</source>
-            <translation type="unfinished"></translation>
+            <translation>Pause</translation>
         </message>
         <message>
             <source>Print</source>
-            <translation type="unfinished"></translation>
+            <translation>Print</translation>
         </message>
         <message>
             <source>Right</source>
-            <translation type="unfinished"></translation>
+            <translation>Right</translation>
         </message>
         <message>
             <source>Shift</source>
-            <translation type="unfinished"></translation>
+            <translation>Shift</translation>
         </message>
         <message>
             <source>Space</source>
-            <translation type="unfinished"></translation>
+            <translation>Space</translation>
         </message>
         <message>
             <source>PgDown</source>
-            <translation type="unfinished"></translation>
+            <translation>PgDown</translation>
         </message>
         <message>
             <source>Return</source>
-            <translation type="unfinished"></translation>
+            <translation>Return</translation>
         </message>
         <message>
             <source>Backtab</source>
-            <translation type="unfinished"></translation>
+            <translation>Backtab</translation>
         </message>
         <message>
             <source>Backspace</source>
-            <translation type="unfinished"></translation>
+            <translation>Backspace</translation>
         </message>
     </context>
     <context>
         <name>QUnicodeControlCharacterMenu</name>
         <message>
             <source>RLE Start of right-to-left embedding</source>
-            <translation type="unfinished"></translation>
+            <translation>RLE Начало вложения справа налево</translation>
         </message>
         <message>
             <source>ZWSP Zero width space</source>
-            <translation type="unfinished"></translation>
+            <translation>ZWSP Пробел нулевой ширины</translation>
         </message>
         <message>
             <source>LRI Left-to-right isolate</source>
-            <translation type="unfinished"></translation>
+            <translation>LRI Изолят слева направо</translation>
         </message>
         <message>
             <source>Insert Unicode control character</source>
-            <translation type="unfinished"></translation>
+            <translation>Вставить управляющий символ Unicode</translation>
         </message>
         <message>
             <source>LRO Start of left-to-right override</source>
-            <translation type="unfinished"></translation>
+            <translation>LRO Начало принудительного порядка слева направо</translation>
         </message>
         <message>
             <source>LRE Start of left-to-right embedding</source>
-            <translation type="unfinished"></translation>
+            <translation>LRE Начало вложения слева направо</translation>
         </message>
         <message>
             <source>RLI Right-to-left isolate</source>
-            <translation type="unfinished"></translation>
+            <translation>RLI Изолят справа налево</translation>
         </message>
         <message>
             <source>RLM Right-to-left mark</source>
-            <translation type="unfinished"></translation>
+            <translation>RLM Метка справа налево</translation>
         </message>
         <message>
             <source>PDF Pop directional formatting</source>
-            <translation type="unfinished"></translation>
+            <translation>PDF Завершение направленного форматирования</translation>
         </message>
         <message>
             <source>ZWNJ Zero width non-joiner</source>
-            <translation type="unfinished"></translation>
+            <translation>ZWNJ Нерасцепляющий символ нулевой ширины</translation>
         </message>
         <message>
             <source>RLO Start of right-to-left override</source>
-            <translation type="unfinished"></translation>
+            <translation>RLO Начало принудительного порядка справа налево</translation>
         </message>
         <message>
             <source>PDI Pop directional isolate</source>
-            <translation type="unfinished"></translation>
+            <translation>PDI Завершение направленного изолята</translation>
         </message>
         <message>
             <source>ZWJ Zero width joiner</source>
-            <translation type="unfinished"></translation>
+            <translation>ZWJ Соединитель нулевой ширины</translation>
         </message>
         <message>
             <source>LRM Left-to-right mark</source>
-            <translation type="unfinished"></translation>
+            <translation>LRM Метка слева направо</translation>
         </message>
         <message>
             <source>FSI First strong isolate</source>
-            <translation type="unfinished"></translation>
+            <translation>FSI Изолят с первым сильным символом</translation>
         </message>
     </context>
     <context>
         <name>QWidgetTextControl</name>
         <message>
             <source>Cu&amp;t</source>
-            <translation type="unfinished"></translation>
+            <translation>Вы&amp;резать</translation>
         </message>
         <message>
             <source>&amp;Copy</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Копировать</translation>
         </message>
         <message>
             <source>&amp;Redo</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Повторить</translation>
         </message>
         <message>
             <source>&amp;Undo</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Отменить</translation>
         </message>
         <message>
             <source>&amp;Paste</source>
-            <translation type="unfinished"></translation>
+            <translation>Вс&amp;тавить</translation>
         </message>
         <message>
             <source>Delete</source>
-            <translation type="unfinished"></translation>
+            <translation>Удалить</translation>
         </message>
         <message>
             <source>Select All</source>
-            <translation type="unfinished"></translation>
+            <translation>Выделить всё</translation>
         </message>
         <message>
             <source>Copy &amp;Link Location</source>
-            <translation type="unfinished"></translation>
+            <translation>Копировать &amp;адрес ссылки</translation>
         </message>
     </context>
 </TS>
