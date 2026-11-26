@@ -210,9 +210,12 @@ jobs:
           fi
           mkdir -p unsigned
           mv results/Quillbinder-*-android-*.apk unsigned/
-          # the translator's package as it went into the APK, for the job "sign-packages"
+          # the translator's package as it went into the APK, and (Android 0.95.0, to-do item 102) the nine spelling
+          # dictionaries as add-ons, for the job "sign-packages"
           mkdir -p unsigned-packages
           cp results/addons/translation-proofreading-android-arm64.qbpkg unsigned-packages/
+          cp results/addons/dictionary-*-android.qbpkg unsigned-packages/
+          [ "$(ls unsigned-packages/dictionary-*-android.qbpkg | wc -l)" = 9 ] || { echo "::error::not nine dictionary add-ons"; exit 1; }
           ls -la unsigned unsigned-packages
 
       - name: Hand the unsigned APK to the job "sign-apk"
@@ -617,6 +620,11 @@ jobs:
               sys.exit("the update file's Android block is not right: %r" % sorted(prog))
           if "translation-proofreading" not in ids:
               sys.exit("the update file's Android block lacks the translator")
+          # (Android 0.95.0) the nine spelling dictionaries, from this release's own packages
+          dicts = [a for a in blk.get("addons") or [] if str(a.get("id", "")).startswith("dictionary-")]
+          if len(dicts) != 9 or any("-android.qbpkg" not in str((a.get("file") or {}).get("url", "")) for a in dicts):
+              sys.exit("the update file's Android block does not name the nine dictionaries of this release: %r"
+                       % [(a.get("id"), (a.get("file") or {}).get("url")) for a in dicts])
           if os.path.isfile(sys.argv[2]):
               old = json.load(open(sys.argv[2], encoding="utf-8"))
               for name, block in (old.get("systems") or {}).items():
@@ -713,11 +721,17 @@ jobs:
             echo
             echo "| File | What it is |"
             echo "|------|------------|"
-            echo "| $apk | the app for Android tablets (arm64), with the spelling dictionaries, the writing tools, the importers and Translation Helper |"
+            echo "| $apk | the app for Android tablets (arm64), with the English and German spelling dictionaries, the writing tools, the importers and Translation Helper |"
             for f in ./*.qbpkg; do
               [ -f "$f" ] || continue
               f=${f#./}
-              echo "| $f | Translation Helper on its own (the app carries it already): for **Help > Add-ons and Updates > Install Update or Add-on** |"
+              case "$f" in
+                dictionary-*)
+                  lang=$(unzip -p "$f" manifest.json | python3 -c 'import json,sys; print(json.load(sys.stdin).get("name",""))')
+                  echo "| $f | $lang, an add-on: install it with **Help > Add-ons and Updates > Install Update or Add-on**, restart, then choose it in File > Options > Editing |" ;;
+                *)
+                  echo "| $f | Translation Helper on its own (the app carries it already): for **Help > Add-ons and Updates > Install Update or Add-on** |" ;;
+              esac
             done
             echo
             echo "Not in the Android version yet: Speech Transcription, audio and video in the editor, crash reports."

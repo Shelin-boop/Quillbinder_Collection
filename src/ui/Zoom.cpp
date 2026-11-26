@@ -293,8 +293,13 @@ bool Filter::eventFilter(QObject *o, QEvent *e)
     m_rest += d.y() != 0 ? d.y() : d.x();
     const int steps = m_rest / 120;
     m_rest -= steps * 120;
-    if (steps != 0)
+    if (steps != 0) {
         fn(steps);
+#ifdef Q_OS_ANDROID
+        // (Android 0.95.0, to-do item 34) the start check's virtual mouse reads this line in the tablet's log
+        qInfo("zoom: Ctrl + wheel, %d step(s) on %s", steps, target->metaObject()->className());
+#endif
+    }
     we->accept();
     return true; // the widget itself does not see it (QTextEdit would change its font)
 }

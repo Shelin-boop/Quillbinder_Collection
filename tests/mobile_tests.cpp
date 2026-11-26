@@ -32,6 +32,10 @@
 #include "ui/MindMapUi.h"
 #include "ui/MindMapView.h"
 #include "ui/MainWindow.h"
+#include "ui/Profiles.h"
+#include "ui/SpellChecker.h"
+#include "core/Addons.h"
+#include <QMessageBox>
 #include "ui/TextColumnView.h"
 #include "ui/TextEditor.h"
 #include "ui/Theme.h"
@@ -1932,6 +1936,168 @@ static void feedChecks()
           QStringLiteral("... and Linux's block stays as it was"));
 }
 
+// ------------------------------------------------------------------ 0.95.0 on the tablet (Android 0.95.0)
+
+// A question that comes up meanwhile (a profile that lowers the number of backups asks first) is answered with yes.
+static int answerQuestions(int ms)
+{
+    // (a timer, not this loop: a question opened from the switch runs its own event loop, inside which only timers come)
+    int answered = 0;
+    QTimer timer;
+    timer.setInterval(100);
+    QObject::connect(&timer, &QTimer::timeout, [&answered] {
+        if (auto *box = qobject_cast<QMessageBox *>(QApplication::activeModalWidget())) {
+            QAbstractButton *yes = nullptr;
+            for (QAbstractButton *b : box->buttons())
+                if (box->buttonRole(b) == QMessageBox::YesRole || box->buttonRole(b) == QMessageBox::AcceptRole)
+                    yes = b;
+            info(QStringLiteral("(answered: %1)").arg(box->text().left(120)));
+            if (yes)
+                yes->click();
+            else
+                box->reject();
+            ++answered;
+        } else if (auto *d = qobject_cast<QDialog *>(QApplication::activeModalWidget())) {
+            info(QStringLiteral("(a window came up: %1 [%2]; accepted)").arg(d->windowTitle(), QString::fromLatin1(d->metaObject()->className())));
+            d->accept();
+            ++answered;
+        }
+    });
+    timer.start();
+    QElapsedTimer t;
+    t.start();
+    while (t.elapsed() < ms)
+        settle(50);
+    timer.stop();
+    return answered;
+}
+
+static void v0950Checks(MainWindow &w)
+{
+    std::printf("== 0.95.0 on the tablet: the Profiles and Labels toolbars, a profile's sizes, a dictionary add-on\n");
+    mobile::fitToolbars(&w);
+    QAction *showProfiles = w.findChild<QAction *>(QStringLiteral("showBarProfiles"));
+    QAction *showLabels = w.findChild<QAction *>(QStringLiteral("showBarLabels"));
+    auto *profilesBar = w.findChild<GripBar *>(QStringLiteral("profilesBar"));
+    auto *labelsBar = w.findChild<GripBar *>(QStringLiteral("labelsBar"));
+    check(showProfiles && showLabels && profilesBar && labelsBar && profilesBar->isHidden() && labelsBar->isHidden(),
+          QStringLiteral("(item 95, 97) the Profiles and Labels toolbars are there and off at first"));
+    if (!showProfiles || !showLabels || !profilesBar || !labelsBar)
+        return;
+    Bars b;
+    b.w = &w;
+    b.dock = w.findChild<BarDock *>();
+    for (GripBar *g : w.findChildren<GripBar *>())
+        if (g->window() == &w)
+            b.all << g;
+    showProfiles->trigger();
+    showLabels->trigger();
+    settle(300);
+    // (item 97) the Labels toolbar and (item 95) the Profiles toolbar switched on: the rows still fit the tablet's widths
+    for (int width : {1472, 1280, 960, 800}) {
+        w.resize(width, width > 1000 ? 800 : 1100);
+        settle(450);
+        QString why;
+        const bool shown = profilesBar->isVisible() && labelsBar->isVisible();
+        check(b.inside(&why) && shown,
+              QStringLiteral("(items 95, 97) %1 px wide with the Profiles and Labels toolbars on: no toolbar runs over the edge (%2 rows)")
+                  .arg(w.width()).arg(b.rows().size()),
+              QStringLiteral("%1 | shown %2 | %3").arg(b.seen()).arg(shown).arg(why));
+        shot(&w, QStringLiteral("v0950-bars-%1").arg(w.width()));
+    }
+
+    // (items 95, 104) the built-in profile on an 11" tablet: its window and its three columns fitted to the screen
+    w.resize(1280, 800);
+    settle(400);
+    const QString before = profiles::active();
+    bool switched = false;
+    QTimer::singleShot(0, &w, [&] { switched = w.switchProfile(profiles::builtInName()); });
+    const int asked = answerQuestions(2500);
+    settle(500);
+    auto *split = w.findChild<QSplitter *>(QStringLiteral("mainSplit"));
+    QList<int> sizes = split ? split->sizes() : QList<int>();
+    int sum = 0, shownCols = 0;
+    bool sidesOk = true;
+    for (int i = 0; i < sizes.size(); ++i) {
+        sum += sizes[i];
+        if (sizes[i] > 0 && split->widget(i)->isVisible())
+            ++shownCols;
+    }
+    if (sizes.size() >= 3) {
+        for (int i : {0, 2})
+            if (sizes[i] > 0 && split->widget(i)->isVisible() && (sizes[i] < 100 || sizes[i] > split->width() * 45 / 100))
+                sidesOk = false;
+    }
+    const bool centerOk = sizes.size() >= 3 && sizes[1] >= 320;
+    QString why;
+    check(switched && profiles::active() == profiles::builtInName() && split && sum <= split->width() && sidesOk && centerOk
+              && w.frameGeometry().width() <= 1280 + 40 && b.inside(&why),
+          QStringLiteral("(items 95, 104) the profile \"%1\" on a 1280 px tablet: the columns fit (%2), the editor keeps its room, no toolbar runs over the edge")
+              .arg(profiles::builtInName(), [&] { QStringList t; for (int v : sizes) t << QString::number(v); return t.join(QLatin1Char('/')); }()),
+          QStringLiteral("switched %1, active %2, asked %3, split width %4, window %5 | %6")
+              .arg(switched).arg(profiles::active()).arg(asked).arg(split ? split->width() : -1).arg(w.width()).arg(why));
+    shot(&w, QStringLiteral("v0950-profile-shelins-1280"));
+    // ... and back
+    bool back = false;
+    QTimer::singleShot(0, &w, [&] { back = w.switchProfile(before.isEmpty() ? profiles::defaultName() : before); });
+    const int askedBack = answerQuestions(3500);
+    settle(400);
+    check(back && profiles::active() != profiles::builtInName(), QStringLiteral("(item 95) back to the profile of before"),
+          QStringLiteral("active %1, asked %2").arg(profiles::active()).arg(askedBack));
+    if (showProfiles->isChecked())
+        showProfiles->trigger();
+    if (showLabels->isChecked())
+        showLabels->trigger();
+    settle(200);
+
+    // (item 102) a spelling dictionary add-on of the nine other languages installs on the tablet (no platform, no
+    // libraries) and the spell checker finds its language
+    QTemporaryDir src, out;
+    QDir().mkpath(src.filePath(QStringLiteral("payload/dictionaries")));
+    {
+        QFile m(src.filePath(QStringLiteral("manifest.json")));
+        if (m.open(QIODevice::WriteOnly))
+            m.write("{\"id\": \"dictionary-es\", \"name\": \"Spanish spelling dictionary\", \"version\": \"1.0\", "
+                    "\"description\": \"a small one for the check\", \"author\": \"Quillbinder\", \"minApp\": \"0.95.0\"}");
+        QFile aff(src.filePath(QStringLiteral("payload/dictionaries/es_ES.aff")));
+        if (aff.open(QIODevice::WriteOnly))
+            aff.write("SET UTF-8\n");
+        QFile dic(src.filePath(QStringLiteral("payload/dictionaries/es_ES.dic")));
+        if (dic.open(QIODevice::WriteOnly))
+            dic.write("2\npuerto\nniebla\n");
+    }
+    QProcess mk;
+    const QString pkg = out.filePath(QStringLiteral("dictionary-es-android.qbpkg"));
+    mk.start(QStringLiteral("python3"), {QStringLiteral("-I"), QStringLiteral(QB_SOURCE_DIR "/tools/make-package.py"), QStringLiteral("addon"),
+                                          src.path(), pkg});
+    mk.waitForFinished(60000);
+    check(mk.exitCode() == 0 && QFileInfo::exists(pkg), QStringLiteral("(a dictionary package made for the check)"),
+          QString::fromLocal8Bit(mk.readAllStandardError()));
+    QStringList log;
+    QString err;
+    bool restart = false;
+    const addons::PackageInfo pinfo = addons::inspect(pkg);
+    const bool installed = addons::install(pkg, &log, &err, &restart);
+    const QStringList langs = SpellChecker::instance().availableLanguages();
+    check(pinfo.error.isEmpty() && installed && langs.contains(QStringLiteral("es_ES")),
+          QStringLiteral("(item 102) a dictionary add-on installs on the tablet and the spell checker offers its language"),
+          QStringLiteral("inspect '%1', installed %2 '%3', languages %4").arg(pinfo.error).arg(installed).arg(err, langs.join(QLatin1Char(' '))));
+    if (SpellChecker::instance().isAvailable() || SpellChecker::instance().setLanguage(QStringLiteral("es_ES"))) {
+        const QString old = SpellChecker::instance().language();
+        const bool set = SpellChecker::instance().setLanguage(QStringLiteral("es_ES"));
+        const bool good = SpellChecker::instance().isCorrect(QStringLiteral("niebla"));
+        const bool badWord = !SpellChecker::instance().isCorrect(QStringLiteral("nieblx"));
+        check(set && good && badWord, QStringLiteral("(item 102) the add-on's dictionary checks the words of its language"),
+              QStringLiteral("set %1, niebla %2, nieblx wrong %3").arg(set).arg(good).arg(badWord));
+        if (!old.isEmpty())
+            SpellChecker::instance().setLanguage(old);
+    } else {
+        info(QStringLiteral("(no Hunspell in this build: the words are not checked here)"));
+    }
+    w.resize(1900, 950);
+    settle(300);
+}
+
 int main(int argc, char **argv)
 {
     QTemporaryDir home;
@@ -2001,6 +2167,7 @@ int main(int argc, char **argv)
     widgetChecks();
     menuChecks(w, longDoc);
     tabletChecks(w, longDoc);
+    v0950Checks(w);
     overviewChecks(w);
 
     w.close();

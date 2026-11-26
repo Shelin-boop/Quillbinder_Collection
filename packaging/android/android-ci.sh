@@ -138,6 +138,25 @@ else
   [ $rc -ne 0 ] && { echo "---- translator.log (end)"; tail -30 "$OUT/translator.log"; } >> "$OUT/errors.txt"
 fi
 
+# ---- the spelling dictionaries of the nine other languages (Android 0.95.0, to-do item 102): the add-ons of Linux and
+# Windows (addons/dictionary-*, LibreOffice's files at a pinned tag, checked against sources.txt by their stage.sh),
+# without a platform and without libraries, so the same content installs on the tablet. Not in the APK (English and
+# German are its assets): a writer installs the one language. The release names them <id>-android.qbpkg.
+mkdir -p "$OUT/addons"
+dmade=0; dfailed=""
+for dir in addons/dictionary-*/; do
+  id=$(basename "$dir"); st="$OUT/stage/$id"
+  rm -rf "$st"; mkdir -p "$st/payload"; cp "$dir/manifest.json" "$st/"
+  if bash "$dir/stage.sh" "$OUT" "$st" >> "$OUT/dictionary-addons.log" 2>&1 \
+     && python3 -I tools/make-package.py addon "$st" "$OUT/addons/$id-android.qbpkg" >> "$OUT/dictionary-addons.log" 2>&1; then
+    dmade=$((dmade + 1))
+  else
+    dfailed="$dfailed $id"
+  fi
+done
+say "dictionary add-ons: $dmade made${dfailed:+, failed:$dfailed} ($(mins))"
+[ -n "$dfailed" ] && { echo "---- dictionary-addons.log (end)"; tail -20 "$OUT/dictionary-addons.log"; } >> "$OUT/errors.txt"
+
 # ---- configure: the program, and what the Linux program gets as add-on packages or beside it: the writing tools
 # (Name Generator, Scratch Pad, Text Statistics), the Word 97-2003 importer and the Markdown exporter go into the
 # APK as libraries. No tests, no developer tools. The APK is signed with the key for trial builds.
@@ -276,6 +295,33 @@ done
 [ -z "$missing" ] && ok "the spelling dictionaries are in the APK (English and German)" || bad "dictionaries missing in the APK:$missing"
 grep -q "assets/full-addons/translation-proofreading-android-$short.qbpkg" "$OUT/apk-files.txt" \
   && ok "Translation and Proofreading is in the APK (assets/full-addons)" || bad "the translator's package is missing in the APK"
+# (Android 0.95.0) the nine dictionary add-ons: no platform, no runtime, no libraries, a .dic and an .aff each, and a
+# program version they need that this APK has
+dcheck=$(python3 -I - "$OUT/addons" "$ver" <<'PY'
+import glob, json, os, sys, zipfile
+def key(v): return [int(x) for x in str(v).split(".") if x.isdigit()]
+bad = []
+pkgs = sorted(glob.glob(os.path.join(sys.argv[1], "dictionary-*-android.qbpkg")))
+for p in pkgs:
+    try:
+        with zipfile.ZipFile(p) as z:
+            m = json.loads(z.read("manifest.json"))
+            names = z.namelist()
+    except Exception as e:
+        bad.append("%s: %s" % (os.path.basename(p), e)); continue
+    paths = [f.get("path", "") for f in m.get("files") or []]
+    if m.get("platform") or m.get("runtime") or any(x.endswith(".so") for x in paths):
+        bad.append("%s: platform/runtime/libraries" % m.get("id"))
+    if not any(x.endswith(".dic") for x in paths) or not any(x.endswith(".aff") for x in paths):
+        bad.append("%s: no .dic/.aff" % m.get("id"))
+    if key(m.get("minApp") or "0") > key(sys.argv[2]):
+        bad.append("%s: needs %s" % (m.get("id"), m.get("minApp")))
+print("%d %s" % (len(pkgs), "; ".join(bad)))
+PY
+)
+dn=${dcheck%% *}; dbad=${dcheck#* }; [ "$dbad" = "$dcheck" ] && dbad=""
+[ "$dn" = 9 ] && [ -z "$dbad" ] && ok "the nine spelling dictionaries as add-ons (no platform, no libraries, for this version)" \
+  || bad "dictionary add-ons: $dn packages${dbad:+; $dbad}"
 if [ "$RELEASE" = 1 ]; then
   # unsigned here: the job "sign-apk" of the release workflow aligns and signs it with the project's Android key and
   # checks the result (signer, schemes, 16 KB borders)

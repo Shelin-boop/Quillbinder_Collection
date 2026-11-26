@@ -401,7 +401,10 @@ def addons_page(files, tag, also=()):
     url = lambda key, f: "%s/releases/download/%s/%s" % (home, tag_of[key], f)
     how = {"linux": "The full version has them all. With the program alone, install one with %s." % INSTALL,
            "windows": "The full version has them all. With the program alone, install one with %s." % INSTALL,
-           "android": "The app has them already; a package on its own is for an app that lacks it (%s)." % INSTALL}
+           # (Android 0.95.0) the spelling dictionaries of the nine other languages are add-ons there too
+           "android": "Translation Helper and the writing tools are in the app already (a package on its own is for an app "
+                      "that lacks it). English and German spelling come with the app; install another language's dictionary "
+                      "with %s, restart, and choose it in File &gt; Options &gt; Editing." % INSTALL}
     sections = []
     for key, name, detail in SYSTEMS:
         if tag_of[key] != tag:

@@ -420,6 +420,21 @@ if [ -n "$pid" ]; then
   # took the Open Project tap: the selection goes first (a tap in the text, Esc, a tap again), and the steps count the
   # app's popup windows (Android's PopupWindow) before the File menu.
   popups() { "$ADB" shell dumpsys window windows 2>/dev/null | grep -c "PopupWindow" | tr -d '\r'; }
+  # Android 0.95.0 (to-do item 107): in run 45746500924 (the Android 9 tablet, the on-screen keyboard up) each row
+  # chosen with the keys was one short: the first key came before the menu was open. The program logs "tablet: menu
+  # open: <title>" (android/MobileCare.cpp) when a menu of the menu bar shows: the keys wait for that line (at most
+  # 6 s), then half a second more.
+  menus_open() { "$ADB" logcat -d 2>/dev/null | grep -c 'tablet: menu open:' | tr -d '\r'; }
+  open_menu() { # <x> <y>
+    local before; before=$(menus_open)
+    tap "$1" "$2"
+    for _ in $(seq 1 12); do
+      sleep 0.5
+      [ "$(menus_open)" -gt "$before" ] && { sleep 0.5; return 0; }
+    done
+    say "  (no \"menu open\" line within 6 s of the tap at $1,$2)"
+    return 1
+  }
   back_to_text; key 111; sleep 1; tap "$TX" "$TY"; sleep 2
   say "  S6: popup windows before the File menu steps: $(popups)"
   # Android 0.93.2 run 45557251539: the "Backup saved" notice and the update check's notice lay at the top left over
@@ -428,7 +443,7 @@ if [ -n "$pid" ]; then
   # whatever lies over it: Down from no row takes the first row (New Project), separators are passed over.
   # Rows: New Project 1, Open Project 2, ..., Save As 6, ..., Compile 12, Print Settings 13.
   for item in "Open Project:2" "Save As:6" "Compile:12" "Print Settings:13"; do
-    tap "$MX" "$MY"; sleep 2
+    open_menu "$MX" "$MY" || sleep 2
     for _ in $(seq 1 "${item##*:}"); do key 20; done
     sleep 1; key 66; sleep 4
     shot "s6-$(echo "${item%%:*}" | tr 'A-Z ' 'a-z-')"
@@ -444,13 +459,45 @@ if [ -n "$pid" ]; then
   # to-do item 54). Reached with the keys: Up with no row chosen takes the menu's last row (Exit) and scrolls to it,
   # four more go up through Options, Files on This Tablet, Convert Markdown to the step; Enter starts it. (0.94.0:
   # Install Update or Add-on moved to Help > Add-ons and Updates: one row fewer than in 0.93.x.)
-  tap "$MX" "$MY"; sleep 2
+  open_menu "$MX" "$MY" || sleep 2
   for _ in 1 2 3 4 5; do key 19; done
   sleep 1; shot "o0-file-menu"; key 66; sleep 5; shot "o1-files-app"
   fr=$(front)
   say "  O: File > Show Project in File Manager: in front: $fr"
   case "$fr" in *"$PKG/"*) key 111; sleep 1 ;; *) key 4; sleep 3 ;; esac
   step "O" "back from the Files app: in front: $(front)"
+  # V: a virtual mouse and keyboard (Android 0.95.0, to-do item 34). Android 14's "uinput" command makes an input
+  # device of the keys and axes it is given (frameworks/base/cmds/uinput); Android 9 has no such command, so the step is
+  # left out there. The device is gone when its file ends. The pointer of a new mouse stands in the middle of the
+  # screen, over the text. The program's answers are read from its log ("zoom: Ctrl + wheel" of ui/Zoom.cpp and
+  # "tablet: menu open:" of android/MobileCare.cpp, both written only on Android) and from the pictures. A report, not
+  # a gate: the harness is new.
+  if [ -n "$("$ADB" shell 'command -v uinput' 2>/dev/null | tr -d '\r')" ]; then
+    reg='{"id":1,"command":"register","name":"QB virtual mouse and keyboard","vid":4660,"pid":22136,"bus":"usb","configuration":[{"type":100,"data":[1,2]},{"type":101,"data":[1,29,42,56,33,272,273,274]},{"type":102,"data":[0,1,8]}]}'
+    ev() { printf '{"id":1,"command":"inject","events":[%s,0,0,0]}\n{"id":1,"command":"delay","duration":%s}\n' "$1" "$2"; }
+    { echo "$reg"; printf '{"id":1,"command":"delay","duration":2500}\n'
+      ev "1,29,1" 300; ev "2,8,1" 250; ev "2,8,1" 250; ev "2,8,1" 250; ev "1,29,0" 1000; } > "$OUT/uinput-zoom.txt"
+    { echo "$reg"; printf '{"id":1,"command":"delay","duration":2500}\n'
+      ev "1,56,1" 200; ev "1,33,1" 100; ev "1,33,0" 100; ev "1,56,0" 1500; } > "$OUT/uinput-altf.txt"
+    back_to_text
+    zooms() { "$ADB" logcat -d 2>/dev/null | grep -c 'zoom: Ctrl + wheel' | tr -d '\r'; }
+    z0=$(zooms); "$ADB" push "$OUT/uinput-zoom.txt" /data/local/tmp/qb-uinput-zoom.txt > /dev/null 2>&1
+    shot "v0-before-zoom"
+    "$ADB" shell uinput /data/local/tmp/qb-uinput-zoom.txt > "$OUT/uinput-zoom.log" 2>&1
+    sleep 2; shot "v1-ctrl-wheel"
+    z1=$(zooms)
+    say "  V: a virtual mouse: Ctrl + wheel over the text: the program zoomed $((z1 - z0)) time(s) ($("$ADB" logcat -d 2>/dev/null | grep 'zoom: Ctrl + wheel' | tail -1 | sed 's/.*zoom: /zoom: /' | tr -d '\r'))"
+    step "V1" "Ctrl held on a virtual keyboard + the wheel of a virtual mouse over the text"
+    m0=$(menus_open); "$ADB" push "$OUT/uinput-altf.txt" /data/local/tmp/qb-uinput-altf.txt > /dev/null 2>&1
+    "$ADB" shell uinput /data/local/tmp/qb-uinput-altf.txt > "$OUT/uinput-altf.log" 2>&1
+    sleep 1; shot "v2-alt-f"
+    m1=$(menus_open)
+    say "  V: Alt + F on a virtual keyboard: menus opened $((m1 - m0)) ($("$ADB" logcat -d 2>/dev/null | grep 'tablet: menu open:' | tail -1 | sed 's/.*tablet: //' | tr -d '\r'))"
+    key 111; sleep 1; key 111; sleep 1
+    step "V2" "Alt + F on a virtual keyboard opens the File menu"
+  else
+    say "  V: no uinput command on this tablet (Android 9): the virtual mouse is left out"
+  fi
   shot "end"
   say "the program ended $died times in these steps; now: process $(alive); in front: $(front)"
 fi
