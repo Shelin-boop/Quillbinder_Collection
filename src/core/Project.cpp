@@ -611,14 +611,15 @@ int Project::sessionWords() const
 {
     const int now = targets.countAnywhere ? totalWordCount() : draftWordCount();
     const int start = targets.countAnywhere ? targets.sessionStartTotal : targets.sessionStartDraft;
-    return qMax(0, now - start);
+    // 0.95.0: with a negative (cutting) session target the count is net, below 0 when words were removed
+    return sessionTargetToday() < 0 ? now - start : qMax(0, now - start);
 }
 
 int Project::sessionChars() const
 {
     const int now = targets.countAnywhere ? totalCharCount() : draftCharCount();
     const int start = targets.countAnywhere ? targets.sessionStartTotalChars : targets.sessionStartDraftChars;
-    return qMax(0, now - start);
+    return sessionTargetToday() < 0 ? now - start : qMax(0, now - start);
 }
 
 int Project::sessionTargetToday() const
@@ -1408,7 +1409,7 @@ static void writeItem(QDomDocument &dom, QDomElement &parent, const BinderItem *
         e.setAttribute(QStringLiteral("url"), it->sourceUrl); // 0.81.3
     if (!it->synopsisImage.isEmpty())
         e.setAttribute(QStringLiteral("synopsisImage"), it->synopsisImage);
-    if (it->target > 0) {
+    if (it->target != 0) {
         e.setAttribute(QStringLiteral("target"), it->target);
         if (it->targetChars)
             e.setAttribute(QStringLiteral("targetChars"), 1);

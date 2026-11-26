@@ -1,4 +1,5 @@
 #include "ui/LicensesDialog.h"
+#include "core/TargetMath.h"
 #include "core/TestSwitches.h"
 #include "ui/Ask.h"
 #include "ui/LinkOpen.h"
@@ -2896,12 +2897,12 @@ void MainWindow::updateTargetsDisplay()
     const int st = m_project->sessionTargetToday();
     // 0.94.0 (item 74): the two thin lines under the search field are an option (on at first)
     const bool lines = AppSettings::instance().progressUnderSearch;
-    m_quickSearch->draft = lines && t.draftTarget > 0 ? double(draft) / t.draftTarget : -1;
-    m_quickSearch->session = lines && st > 0 ? double(session) / st : -1;
+    m_quickSearch->draft = lines && t.draftTarget != 0 ? targetmath::fill(draft, t.draftTarget) : -1;
+    m_quickSearch->session = lines && st != 0 ? targetmath::sessionFill(session, st) : -1;
     QLocale loc;
     m_quickSearch->setToolTip(tr("Draft: %1 words · This session: %2 words%3")
                                   .arg(loc.toString(m_project->draftWordCount()), loc.toString(m_project->sessionWords()),
-                                       t.draftTarget > 0 ? tr(" · Target: %1").arg(loc.toString(t.draftTarget)) : QString()));
+                                       t.draftTarget != 0 ? tr(" · Target: %1").arg(loc.toString(t.draftTarget)) : QString()));
     m_quickSearch->update();
     footers(session, st, t.sessionChars, draft, t.draftTarget, t.draftChars);
 }

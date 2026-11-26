@@ -1,3 +1,4 @@
+#include "core/TargetMath.h"
 #include "core/PathSafety.h"
 #include "core/BinderModel.h"
 #include "core/DocumentStore.h"
@@ -93,10 +94,8 @@ QVariant BinderModel::data(const QModelIndex &index, int role) const
         return text::previewText(m_project->docs()->plainText(it->id), 400);
     }
     case ProgressRole: {
-        if (it->target <= 0)
-            return -1.0;
         const int cur = it->targetChars ? it->charCount : it->wordCount;
-        return qMin(1.0, double(cur) / it->target);
+        return targetmath::fill(cur, it->target);
     }
     default: break;
     }
@@ -175,15 +174,13 @@ QVariant BinderModel::data(const QModelIndex &index, int role) const
         break;
     case ColTarget:
         if (role == Qt::DisplayRole || role == Qt::EditRole)
-            return it->target > 0 ? QVariant(it->target) : QVariant(QString());
+            return it->target != 0 ? QVariant(it->target) : QVariant(QString());
         if (role == SortRole)
             return it->target;
         break;
     case ColProgress:
         if (role == SortRole) {
-            if (it->target <= 0)
-                return -1.0;
-            return double(it->targetChars ? it->charCount : it->wordCount) / it->target;
+            return targetmath::fill(it->targetChars ? it->charCount : it->wordCount, it->target);
         }
         break;
     case ColCreated:
@@ -275,7 +272,7 @@ bool BinderModel::setData(const QModelIndex &index, const QVariant &value, int r
         return true;
     }
     if (col == ColTarget && role == Qt::EditRole) {
-        it->target = qMax(0, value.toInt());
+        it->target = qBound(-10000000, value.toInt(), 10000000);
         m_project->notifyItemChanged(it, false);
         return true;
     }

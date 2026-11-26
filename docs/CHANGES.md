@@ -17,6 +17,13 @@ New functions and fixes.
   Zoom Inspector Tabs Separately** on or off it is the same. The zoom you had for both lists is taken for both at first;
   **File > Options > Editing** lists the three parts, and the zoom list in the inspector names the one you zoomed last.
 
+- **Cutting targets**. The target fields for the Draft, the session and a document take negative numbers (there is no
+  option to switch on). A negative target is a cutting target ("cut 2,000 words today", "bring this chapter down to
+  4,000 words"): its bar fills as the count falls, and a negative number is shown in red. With a negative session target
+  today's count is net and goes below 0, in red, where more words were cut than written; with a positive one it stays as
+  it was. In a project in Scrivener format the .scriv holds "no target" for a negative one (Scrivener has no such target)
+  and the working copy keeps the number, also when the .scriv is read again.
+
 - **Highlights are drawn exactly as picked**. A highlight was drawn about one third transparent, so a light green over a
   dark field or on a yellowish page showed as another color. It is drawn fully now. Where the text on it would fall below
   a contrast of 4.5 : 1, the text is shown dark or light on the screen only; the stored colors, the saved file and the

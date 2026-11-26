@@ -3,11 +3,21 @@
 //    current place (a fresh home, an older entry that is replaced and not doubled, a file moved by hand).
 #include "AppInfo.h"
 #include "compile/PluginManager.h"
+#include "core/TargetMath.h"
 #include "text/RtfIO.h"
 #include "text/MarkdownIO.h"
 #include "text/TextProps.h"
 #include "text/TextUtil.h"
 #include "text/Styles.h"
+#include "core/BinderModel.h"
+#include "core/DocumentStore.h"
+#include "core/Project.h"
+#include "import/ScrivenerFormat.h"
+#include "ui/EditorPane.h"
+#include "ui/MainWindow.h"
+#include "ui/TargetSpinBox.h"
+#include "ui/ToolDialogs.h"
+#include "ui/WritingProgress.h"
 #include "ui/AppMenuEntry.h"
 #include "ui/SpellChecker.h"
 #include "ui/AppSettings.h"
@@ -21,6 +31,10 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QLabel>
+#include <QProgressBar>
+#include <QLineEdit>
+#include <QRegularExpression>
+#include <QDomDocument>
 #include <QSettings>
 #include <QTextBlock>
 #include <QTextDocument>
@@ -221,6 +235,173 @@ static void highlights()
     theme::apply();
 }
 
+// ---- item 100
+static void negativeTargets(const QString &dir)
+{
+    QString err;
+    auto proj = Project::create(dir, QStringLiteral("Cuts"), &err);
+    check(proj != nullptr, QStringLiteral("(project made)"), err);
+    if (!proj)
+        return;
+    Project *p = proj.get();
+    BinderItem *ch = p->model()->createItem(p->draft(), -1, ItemType::Text, QStringLiteral("Chapter"));
+    {
+        QTextCursor c(p->docs()->text(ch->id));
+        c.insertText(QStringLiteral("Ships came in at dawn and the harbor woke."));
+    }
+    p->docs()->recountAll();
+    ch->wordCount = 6000;
+    // the field: negative numbers, "no target" for 0, red for a negative number
+    {
+        TargetSpinBox f;
+        f.setNoTargetText(QStringLiteral("no target"));
+        f.setValue(0);
+        check(f.text() == QLatin1String("no target"), QStringLiteral("the field reads \"no target\" for 0"), f.text());
+        f.setValue(-2000);
+        check(f.value() == -2000 && f.minimum() < 0, QStringLiteral("the field takes a negative number"), f.text());
+        check(f.palette().color(QPalette::Text).red() > 150 && f.palette().color(QPalette::Text).green() < 90,
+              QStringLiteral("a negative number is shown in red"));
+        f.setValue(500);
+        check(f.palette().color(QPalette::Text) == QPalette().color(QPalette::Text), QStringLiteral("a positive number is not red"));
+        f.findChild<QLineEdit *>()->setText(QStringLiteral("-750"));
+        f.interpretText();
+        check(f.value() == -750, QStringLiteral("a typed negative number is taken"), QString::number(f.value()));
+    }
+    // a document target: the bar fills as the count falls
+    ch->target = -4000;
+    const auto prog = [&](int count) {
+        ch->wordCount = count;
+        return p->model()->indexFor(ch, BinderModel::ColProgress).data(BinderModel::SortRole).toDouble();
+    };
+    check(qFuzzyCompare(prog(8000), 0.5) && qFuzzyCompare(prog(4000), 1.0) && qFuzzyCompare(prog(3000), 1.0),
+          QStringLiteral("document target -4,000: half full at 8,000 words, full at 4,000 and below"));
+    check(p->model()->indexFor(ch, BinderModel::ColTarget).data(Qt::DisplayRole).toInt() == -4000,
+          QStringLiteral("the outliner's Target column shows the negative number"));
+    ch->target = 4000;
+    check(qFuzzyCompare(prog(1000), 0.25), QStringLiteral("a positive document target works as before"));
+    // the session count and the footer
+    ch->target = 0;
+    p->targets.countAnywhere = false;
+    p->targets.sessionTarget = 0;
+    p->targets.draftTarget = 0;
+    ch->wordCount = 1000;
+    p->startSession(true);
+    ch->wordCount = 600; // 400 words cut
+    p->targets.sessionTarget = 500;
+    check(p->sessionWords() == 0, QStringLiteral("a positive target: today's count never goes below 0"), QString::number(p->sessionWords()));
+    p->targets.sessionTarget = -2000;
+    check(p->sessionWords() == -400, QStringLiteral("a negative target: today's count is net, 400 words cut = -400"), QString::number(p->sessionWords()));
+    check(qFuzzyCompare(targetmath::sessionFill(-400, -2000), 0.2) && qFuzzyCompare(targetmath::sessionFill(300, -2000) + 1.0, 1.0),
+          QStringLiteral("the session bar fills as words are cut (400 of 2,000 = 20 %), not as they are added"));
+    auto *w = new MainWindow;
+    w->resize(1300, 800);
+    w->show();
+    w->activateWindow();
+    (void)QTest::qWaitForWindowActive(w, 2000);
+    w->adoptProject(std::move(proj));
+    settle(300);
+    p->targets.draftTarget = -80000;
+    ch->wordCount = 600;
+    Q_EMIT p->countsChanged();
+    settle(300);
+    WritingProgress *wp = w->editorPane(0)->writingProgress();
+    check(wp && wp->isVisible() && wp->sessionText().contains(QStringLiteral("-400")) && wp->sessionText().contains(QStringLiteral("-2,000"))
+              && wp->sessionText().contains(QStringLiteral("color:")),
+          QStringLiteral("the footer shows a negative target and count in red"), wp ? wp->sessionText() : QString());
+    check(wp && wp->sessionBar()->value() == 400 && wp->sessionBar()->maximum() == 2000, QStringLiteral("... and its bar is 400 of 2,000"));
+    check(wp && wp->draftBar()->value() == 1000, QStringLiteral("a negative draft target of 80,000 with 600 words: the bar is full"),
+          wp ? QString::number(wp->draftBar()->value()) : QString());
+    if (wp)
+        shot(w, QStringLiteral("100-footer"));
+    // the project targets window
+    {
+        auto *dlg = new TargetsDialog(p, w);
+        dlg->show();
+        settle(300);
+        auto *sf = dlg->findChild<TargetSpinBox *>(QStringLiteral("sessionTargetField"));
+        check(sf && sf->value() == -2000 && sf->minimum() < 0, QStringLiteral("Project Targets: the session field holds -2,000"));
+        if (sf)
+            sf->setValue(-1500);
+        settle(100);
+        check(p->targets.sessionTarget == -1500, QStringLiteral("Project Targets: a negative session target is stored"), QString::number(p->targets.sessionTarget));
+        shot(dlg, QStringLiteral("100-targets"));
+        dlg->close();
+    }
+    p->targets.sessionTarget = -1500;
+    // saved and opened again: the numbers stay
+    ch->target = -3000;
+    p->markIndexDirty();
+    p->save(&err);
+    const QString folder = p->displayFile();
+    const QString chId = ch->id;
+    w->close();
+    delete w;
+    {
+        QString e2;
+        auto back = Project::open(folder, &e2);
+        BinderItem *c2 = back ? back->item(chId) : nullptr;
+        check(back && c2 && c2->target == -3000 && back->targets.sessionTarget == -1500 && back->targets.draftTarget == -80000,
+              QStringLiteral("a saved project keeps negative targets"),
+              e2 + (c2 ? QString::number(c2->target) : QStringLiteral("noitem")) + QLatin1Char(' ') + (back ? QString::number(back->targets.sessionTarget) + QLatin1Char(' ') + QString::number(back->targets.draftTarget) : QString()));
+    }
+}
+
+static void negativeTargetsInScrivener(const QString &dir)
+{
+    // Scrivener does not take a negative target: the .scriv holds 0 ("no target"); the working copy keeps the number
+    QString err;
+    auto proj = Project::create(dir, QStringLiteral("CutsS"), &err);
+    if (!proj)
+        return;
+    BinderItem *ch = proj->model()->createItem(proj->draft(), -1, ItemType::Text, QStringLiteral("Chapter"));
+    {
+        QTextCursor c(proj->docs()->text(ch->id));
+        c.insertText(QStringLiteral("Ships came in at dawn."));
+    }
+    proj->save(&err);
+    const QString id = ch->id;
+    const QString scriv = dir + QLatin1String("/CutsS.scriv");
+    auto wc = scrivener::convertToScrivener(proj.get(), scriv, &err);
+    check(wc != nullptr, QStringLiteral("(project converted to Scrivener format)"), err);
+    if (!wc)
+        return;
+    wc.reset();
+    scrivener::OpenResult r = scrivener::open(scriv, &err);
+    check(r.project != nullptr, QStringLiteral("(working copy opened)"), err);
+    if (!r.project)
+        return;
+    Project *p = r.project.get();
+    p->item(id)->target = -3000;
+    p->targets.draftTarget = -80000;
+    p->targets.sessionTarget = -1500;
+    p->markIndexDirty();
+    check(scrivener::sync(p, &err), QStringLiteral("(written to the .scriv)"), err);
+    QFile f(scrivener::scrivxIn(scriv));
+    QByteArray x = f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray();
+    f.close();
+    QDomDocument dom;
+    dom.setContent(x);
+    const QDomElement tg = dom.documentElement().firstChildElement(QStringLiteral("ProjectTargets"));
+    check(tg.firstChildElement(QStringLiteral("DraftTarget")).text() == QLatin1String("0")
+              && tg.firstChildElement(QStringLiteral("SessionTarget")).text() == QLatin1String("0"),
+          QStringLiteral("the .scriv holds 0 for negative project targets"), tg.firstChildElement(QStringLiteral("DraftTarget")).text());
+    check(!QString::fromUtf8(x).contains(QStringLiteral(">-")) || !QString::fromUtf8(x).contains(QRegularExpression(QStringLiteral("<Target[^>]*>-"))),
+          QStringLiteral("... and no negative document target"));
+    // changed in Scrivener meanwhile: the .scriv is read again; the cutting targets stay in the working copy
+    p->save(&err);
+    r.project.reset();
+    {
+        QFile rtf(scriv + QLatin1String("/Files/Data/") + id + QLatin1String("/content.rtf"));
+        if (rtf.open(QIODevice::WriteOnly))
+            rtf.write("{\\rtf1\\ansi\\cocoartf2864\n{\\fonttbl\\f0\\fswiss\\fcharset0 Helvetica;}\n\\f0\\fs24 Rewritten in Scrivener.}");
+    }
+    scrivener::OpenResult r3 = scrivener::open(scriv, &err);
+    check(r3.project && r3.reread && r3.project->item(id) && r3.project->item(id)->target == -3000 && r3.project->targets.draftTarget == -80000
+              && r3.project->targets.sessionTarget == -1500,
+          QStringLiteral("a .scriv read again keeps the cutting targets of the working copy"),
+          r3.project && r3.project->item(id) ? QString::number(r3.project->item(id)->target) : err);
+}
+
 // @@FUNCTIONS@@
 
 // ---- main
@@ -253,6 +434,9 @@ int main(int argc, char **argv)
 
     appImageMove(home.path());
     highlights();
+    QTemporaryDir work;
+    negativeTargets(work.path() + QStringLiteral("/a"));
+    negativeTargetsInScrivener(work.path() + QStringLiteral("/b"));
     // @@SECTIONS@@
 
     std::printf("%d failure(s)\n", failures);

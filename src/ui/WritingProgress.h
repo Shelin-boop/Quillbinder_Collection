@@ -15,7 +15,7 @@ class WritingProgress : public QWidget
     Q_OBJECT
 public:
     explicit WritingProgress(QWidget *parent = nullptr);
-    // target <= 0: that part is hidden. `chars`: the numbers count characters, not words (for the tooltip).
+    // target 0: that part is hidden (0.95.0: a negative target is a cutting target). `chars`: the numbers count characters, not words (for the tooltip).
     void setProgress(int session, int sessionTarget, bool sessionChars, int draft, int draftTarget, bool draftChars);
     QString sessionText() const;
     QString draftText() const;
