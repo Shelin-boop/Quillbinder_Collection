@@ -1,8 +1,8 @@
-state: free
-system:
-job:
-branch:
-chat:
-started:
+state: running
+system: android
+job: item 112, the handwriting add-on for Android (an add-on only, no new program version): feasibility of the recognizer and the add-on interface first
+branch: android/handwriting
+chat: started 2026-11-26 20:01 Berlin
+started: 2026-11-26 20:31 Berlin
 paused:
-note: last job: the run 0.95.0, Android part: Android 0.95.0 experimental released (v0.95.0-android-experimental, 2026-11-26, main 7ccc805, #30; texts 346e2f5), page and update file published. The run 0.95.0 is complete on all three systems.
+note: last job: the run 0.95.0, Android part: Android 0.95.0 experimental released (v0.95.0-android-experimental, 2026-11-26, main 7ccc805, #30; texts 346e2f5). The run 0.95.0 is complete on all three systems.
