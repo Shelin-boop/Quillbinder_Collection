@@ -1845,6 +1845,7 @@
     <file alias="welcome/i18n/de/docs/06-compare.md">welcome/i18n/de/docs/06-compare.md</file>
     <file alias="welcome/i18n/de/docs/07-scrivener.md">welcome/i18n/de/docs/07-scrivener.md</file>
     <file alias="welcome/i18n/de/docs/08-themes.md">welcome/i18n/de/docs/08-themes.md</file>
+    <file alias="welcome/i18n/de/docs/08a-profiles.md">welcome/i18n/de/docs/08a-profiles.md</file>
     <file alias="welcome/i18n/de/docs/09-updates.md">welcome/i18n/de/docs/09-updates.md</file>
     <file alias="welcome/i18n/de/docs/10-safety.md">welcome/i18n/de/docs/10-safety.md</file>
     <file alias="welcome/i18n/de/docs/11-where-next.md">welcome/i18n/de/docs/11-where-next.md</file>
@@ -1861,6 +1862,7 @@
     <file alias="welcome/i18n/es/docs/06-compare.md">welcome/i18n/es/docs/06-compare.md</file>
     <file alias="welcome/i18n/es/docs/07-scrivener.md">welcome/i18n/es/docs/07-scrivener.md</file>
     <file alias="welcome/i18n/es/docs/08-themes.md">welcome/i18n/es/docs/08-themes.md</file>
+    <file alias="welcome/i18n/es/docs/08a-profiles.md">welcome/i18n/es/docs/08a-profiles.md</file>
     <file alias="welcome/i18n/es/docs/09-updates.md">welcome/i18n/es/docs/09-updates.md</file>
     <file alias="welcome/i18n/es/docs/10-safety.md">welcome/i18n/es/docs/10-safety.md</file>
     <file alias="welcome/i18n/es/docs/11-where-next.md">welcome/i18n/es/docs/11-where-next.md</file>
@@ -1877,6 +1879,7 @@
     <file alias="welcome/i18n/fr/docs/06-compare.md">welcome/i18n/fr/docs/06-compare.md</file>
     <file alias="welcome/i18n/fr/docs/07-scrivener.md">welcome/i18n/fr/docs/07-scrivener.md</file>
     <file alias="welcome/i18n/fr/docs/08-themes.md">welcome/i18n/fr/docs/08-themes.md</file>
+    <file alias="welcome/i18n/fr/docs/08a-profiles.md">welcome/i18n/fr/docs/08a-profiles.md</file>
     <file alias="welcome/i18n/fr/docs/09-updates.md">welcome/i18n/fr/docs/09-updates.md</file>
     <file alias="welcome/i18n/fr/docs/10-safety.md">welcome/i18n/fr/docs/10-safety.md</file>
     <file alias="welcome/i18n/fr/docs/11-where-next.md">welcome/i18n/fr/docs/11-where-next.md</file>
@@ -1893,6 +1896,7 @@
     <file alias="welcome/i18n/id/docs/06-compare.md">welcome/i18n/id/docs/06-compare.md</file>
     <file alias="welcome/i18n/id/docs/07-scrivener.md">welcome/i18n/id/docs/07-scrivener.md</file>
     <file alias="welcome/i18n/id/docs/08-themes.md">welcome/i18n/id/docs/08-themes.md</file>
+    <file alias="welcome/i18n/id/docs/08a-profiles.md">welcome/i18n/id/docs/08a-profiles.md</file>
     <file alias="welcome/i18n/id/docs/09-updates.md">welcome/i18n/id/docs/09-updates.md</file>
     <file alias="welcome/i18n/id/docs/10-safety.md">welcome/i18n/id/docs/10-safety.md</file>
     <file alias="welcome/i18n/id/docs/11-where-next.md">welcome/i18n/id/docs/11-where-next.md</file>
@@ -1909,6 +1913,7 @@
     <file alias="welcome/i18n/it/docs/06-compare.md">welcome/i18n/it/docs/06-compare.md</file>
     <file alias="welcome/i18n/it/docs/07-scrivener.md">welcome/i18n/it/docs/07-scrivener.md</file>
     <file alias="welcome/i18n/it/docs/08-themes.md">welcome/i18n/it/docs/08-themes.md</file>
+    <file alias="welcome/i18n/it/docs/08a-profiles.md">welcome/i18n/it/docs/08a-profiles.md</file>
     <file alias="welcome/i18n/it/docs/09-updates.md">welcome/i18n/it/docs/09-updates.md</file>
     <file alias="welcome/i18n/it/docs/10-safety.md">welcome/i18n/it/docs/10-safety.md</file>
     <file alias="welcome/i18n/it/docs/11-where-next.md">welcome/i18n/it/docs/11-where-next.md</file>
@@ -1925,6 +1930,7 @@
     <file alias="welcome/i18n/nl/docs/06-compare.md">welcome/i18n/nl/docs/06-compare.md</file>
     <file alias="welcome/i18n/nl/docs/07-scrivener.md">welcome/i18n/nl/docs/07-scrivener.md</file>
     <file alias="welcome/i18n/nl/docs/08-themes.md">welcome/i18n/nl/docs/08-themes.md</file>
+    <file alias="welcome/i18n/nl/docs/08a-profiles.md">welcome/i18n/nl/docs/08a-profiles.md</file>
     <file alias="welcome/i18n/nl/docs/09-updates.md">welcome/i18n/nl/docs/09-updates.md</file>
     <file alias="welcome/i18n/nl/docs/10-safety.md">welcome/i18n/nl/docs/10-safety.md</file>
     <file alias="welcome/i18n/nl/docs/11-where-next.md">welcome/i18n/nl/docs/11-where-next.md</file>
@@ -1941,6 +1947,7 @@
     <file alias="welcome/i18n/pl/docs/06-compare.md">welcome/i18n/pl/docs/06-compare.md</file>
     <file alias="welcome/i18n/pl/docs/07-scrivener.md">welcome/i18n/pl/docs/07-scrivener.md</file>
     <file alias="welcome/i18n/pl/docs/08-themes.md">welcome/i18n/pl/docs/08-themes.md</file>
+    <file alias="welcome/i18n/pl/docs/08a-profiles.md">welcome/i18n/pl/docs/08a-profiles.md</file>
     <file alias="welcome/i18n/pl/docs/09-updates.md">welcome/i18n/pl/docs/09-updates.md</file>
     <file alias="welcome/i18n/pl/docs/10-safety.md">welcome/i18n/pl/docs/10-safety.md</file>
     <file alias="welcome/i18n/pl/docs/11-where-next.md">welcome/i18n/pl/docs/11-where-next.md</file>
@@ -1957,6 +1964,7 @@
     <file alias="welcome/i18n/pt/docs/06-compare.md">welcome/i18n/pt/docs/06-compare.md</file>
     <file alias="welcome/i18n/pt/docs/07-scrivener.md">welcome/i18n/pt/docs/07-scrivener.md</file>
     <file alias="welcome/i18n/pt/docs/08-themes.md">welcome/i18n/pt/docs/08-themes.md</file>
+    <file alias="welcome/i18n/pt/docs/08a-profiles.md">welcome/i18n/pt/docs/08a-profiles.md</file>
     <file alias="welcome/i18n/pt/docs/09-updates.md">welcome/i18n/pt/docs/09-updates.md</file>
     <file alias="welcome/i18n/pt/docs/10-safety.md">welcome/i18n/pt/docs/10-safety.md</file>
     <file alias="welcome/i18n/pt/docs/11-where-next.md">welcome/i18n/pt/docs/11-where-next.md</file>
@@ -1973,6 +1981,7 @@
     <file alias="welcome/i18n/ru/docs/06-compare.md">welcome/i18n/ru/docs/06-compare.md</file>
     <file alias="welcome/i18n/ru/docs/07-scrivener.md">welcome/i18n/ru/docs/07-scrivener.md</file>
     <file alias="welcome/i18n/ru/docs/08-themes.md">welcome/i18n/ru/docs/08-themes.md</file>
+    <file alias="welcome/i18n/ru/docs/08a-profiles.md">welcome/i18n/ru/docs/08a-profiles.md</file>
     <file alias="welcome/i18n/ru/docs/09-updates.md">welcome/i18n/ru/docs/09-updates.md</file>
     <file alias="welcome/i18n/ru/docs/10-safety.md">welcome/i18n/ru/docs/10-safety.md</file>
     <file alias="welcome/i18n/ru/docs/11-where-next.md">welcome/i18n/ru/docs/11-where-next.md</file>
@@ -1989,6 +1998,7 @@
     <file alias="welcome/i18n/tr/docs/06-compare.md">welcome/i18n/tr/docs/06-compare.md</file>
     <file alias="welcome/i18n/tr/docs/07-scrivener.md">welcome/i18n/tr/docs/07-scrivener.md</file>
     <file alias="welcome/i18n/tr/docs/08-themes.md">welcome/i18n/tr/docs/08-themes.md</file>
+    <file alias="welcome/i18n/tr/docs/08a-profiles.md">welcome/i18n/tr/docs/08a-profiles.md</file>
     <file alias="welcome/i18n/tr/docs/09-updates.md">welcome/i18n/tr/docs/09-updates.md</file>
     <file alias="welcome/i18n/tr/docs/10-safety.md">welcome/i18n/tr/docs/10-safety.md</file>
     <file alias="welcome/i18n/tr/docs/11-where-next.md">welcome/i18n/tr/docs/11-where-next.md</file>

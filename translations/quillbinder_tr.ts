@@ -3947,7 +3947,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>Switch Profile</source>
-        <translation type="unfinished">Profil Değiştir</translation>
+        <translation>Profil Değiştir</translation>
     </message>
     <message>
         <source>The profile “%1” was not saved by this program on this computer. It also names programs, folders, files or addresses (a folder may not exist on this computer):
@@ -3955,15 +3955,19 @@ Kaynak: %1</translation>
 %2
 
 Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
-        <translation type="unfinished"></translation>
+        <translation>“%1” profili bu program tarafından bu bilgisayarda kaydedilmemiş. Ayrıca programları, klasörleri, dosyaları veya adresleri de belirtiyor (bir klasör bu bilgisayarda bulunmayabilir):
+
+%2
+
+Bunlar da alınsın mı? Bunları yalnızca dosyayı kendiniz hazırladıysanız veya geldiği yere güveniyorsanız alın.</translation>
     </message>
     <message>
         <source>all</source>
-        <translation type="unfinished">tümü</translation>
+        <translation>tümü</translation>
     </message>
     <message>
         <source>The profile “%1” keeps %2 backups of a project, the settings now keep %3. Backups beyond the smaller number are deleted at the next backup. Switch anyway?</source>
-        <translation type="unfinished"></translation>
+        <translation>“%1” profili bir projenin %2 yedeğini tutuyor, şimdiki ayarlar ise %3 yedek tutuyor. Küçük sayıyı aşan yedekler bir sonraki yedeklemede silinir. Yine de geçilsin mi?</translation>
     </message>
     <message>
         <source>Import Profile</source>
@@ -4007,11 +4011,11 @@ Bunlar da alınsın mı? Bunları yalnızca dosyayı kendiniz hazırladıysanız
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Seçenekler Bu Proje için açık. Onları kapatın veya Tüm Projeler’i seçin, sonra profili dışa aktarın.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>Profilin ayarları tamamen yazılamadı. Ayar dosyasının klasörünü kontrol edin.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4031,7 +4035,7 @@ Bunlar da alınsın mı? Bunları yalnızca dosyayı kendiniz hazırladıysanız
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>Profilin düzenleri uygulanamadı; sahip olduğunuz düzenler korundu.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>

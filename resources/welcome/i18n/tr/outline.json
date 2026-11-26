@@ -1,358 +1,358 @@
 {
- "name": "{{APP}}'e Hoş Geldiniz",
- "description": "{{APP}}'in alışılmışın ötesinde sunduklarına kısa bir tur",
- "draftTitle": "Özellik Turu",
- "objectTemplates": "standard",
- "rootFirst": [
-  {
-   "title": "Hoş Geldiniz",
-   "icon": "qb-information",
-   "textFile": "docs/00-welcome.md",
-   "synopsis": "Bu projenin ne olduğu ve turun durakları."
-  }
- ],
- "draft": [
-  {
-   "title": "Simge Çubuğu",
-   "icon": "qb-flag-red",
-   "textFile": "docs/01-icon-bar.md",
-   "synopsis": "Tek tıkla uygulanan on belge simgesi; metinden ve kendi resimlerinizden yapılan simgeler."
-  },
-  {
-   "title": "İşaret Ettiğiniz Yeri Yakınlaştırın",
-   "icon": "qb-magnifier",
-   "textFile": "docs/02-zoom.md",
-   "synopsis": "Pencerenin herhangi bir bölümünün üzerinde Ctrl+fare tekerleği; her bölüm kendi yakınlaştırmasını saklar."
-  },
-  {
-   "title": "Zihin Haritaları",
-   "icon": "qb-mindmap",
-   "textFile": "docs/03-mind-maps.md",
-   "synopsis": "Her belge için notlardan, çizgilerden ve oklardan oluşan bir pano. Bunun bir panosu var: Zihin Haritası sekmesini açın.",
-   "mindmap": {
-    "notes": [
-     {
-      "id": 1,
-      "text": "Bir zihin haritası neler yapabilir",
-      "x": 290,
-      "y": 245,
-      "width": 170,
-      "fontSize": 15,
-      "bold": true,
-      "align": "center",
-      "fill": "#fff2a8",
-      "border": 2,
-      "shape": "cloud"
-     },
-     {
-      "id": 2,
-      "text": "Notlar: boş bir yere çift tıklayın. Ctrl+Enter, seçili notun altına yeni bir not ekler.",
-      "x": 20,
-      "y": 30,
-      "width": 200,
-      "fill": "#dcecff",
-      "border": 1
-     },
-     {
-      "id": 3,
-      "text": "Çizgiler: bir notu başka birinin üzerine sürükleyin. Çizgiyi kaldırmak için yeniden oraya sürükleyin.",
-      "x": 280,
-      "y": 30,
-      "width": 190,
-      "fill": "#dcecff",
-      "border": 1
-     },
-     {
-      "id": 4,
-      "text": "Oklar: bırakırken Alt tuşunu basılı tutun. Ctrl+Alt: geriye bir ok. Ctrl+Alt+Shift: iki uçta da.",
-      "x": 530,
-      "y": 30,
-      "width": 210,
-      "fill": "#dcecff",
-      "border": 1
-     },
-     {
-      "id": 5,
-      "text": "Renkler, şekiller ve kenarlıklar: bir nota sağ tıklayın.",
-      "x": 560,
-      "y": 250,
-      "width": 180,
-      "fill": "#ffd6d6",
-      "border": 1,
-      "shape": "jagged"
-     },
-     {
-      "id": 6,
-      "text": "Bir notun köşelerinde ve kenarlarında, bir çizginin ortasında simgeler.",
-      "x": 540,
-      "y": 420,
-      "width": 200,
-      "fill": "#e3f6d8",
-      "border": 1,
-      "icons": {
-       "topLeft": "qb-flag-red",
-       "topRight": "qb-light-bulb",
-       "bottomRight": "qb-checked"
-      }
-     },
-     {
-      "id": 7,
-      "text": "Arka plan şekilleri notları gruplar. Mıknatıslı bir şekil notlarını da birlikte götürür.",
-      "x": 290,
-      "y": 455,
-      "width": 170
-     },
-     {
-      "id": 8,
-      "text": "Menü > Notlar > Notları Binder'a Ekle, notları belgelere dönüştürür.",
-      "x": 20,
-      "y": 430,
-      "width": 200,
-      "fill": "#f0e6ff",
-      "border": 1,
-      "shape": "square"
-     },
-     {
-      "id": 9,
-      "text": "PDF, PNG, metin, OPML veya Scapple dosyası olarak dışa aktarın; Scapple dosyaları okunabilir.",
-      "x": 20,
-      "y": 245,
-      "width": 200,
-      "fill": "#f0e6ff",
-      "border": 1
-     }
-    ],
-    "shapes": [
-     {
-      "id": 20,
-      "x": 270,
-      "y": 435,
-      "w": 210,
-      "h": 150,
-      "fill": "#fde3b8",
-      "magnetic": true
-     }
-    ],
-    "lines": [
-     {
-      "from": 1,
-      "to": 2,
-      "arrow": "to"
-     },
-     {
-      "from": 1,
-      "to": 3,
-      "arrow": "to",
-      "label": "sürükle"
-     },
-     {
-      "from": 1,
-      "to": 4,
-      "arrow": "to",
-      "color": "#c0392b"
-     },
-     {
-      "from": 1,
-      "to": 5,
-      "arrow": "to"
-     },
-     {
-      "from": 1,
-      "to": 6,
-      "arrow": "to",
-      "icon": "qb-pencil"
-     },
-     {
-      "from": 1,
-      "to": 7,
-      "arrow": "to"
-     },
-     {
-      "from": 1,
-      "to": 8
-     },
-     {
-      "from": 1,
-      "to": 9,
-      "arrow": "to",
-      "color": "#2f6fbf"
-     }
-    ]
-   }
-  },
-  {
-   "title": "Nesne Sayfaları",
-   "icon": "qb-character-sheet",
-   "textFile": "docs/04-objects.md",
-   "synopsis": "Bir hikâyenin kişileri, yerleri ve şeyleri; her biri bir alan sayfasında ve birbirine bağlı.",
-   "children": [
+  "name": "{{APP}}'e Hoş Geldiniz",
+  "description": "{{APP}}'in alışılmışın ötesinde sunduklarına kısa bir tur",
+  "draftTitle": "Özellik Turu",
+  "objectTemplates": "standard",
+  "rootFirst": [
     {
-     "title": "Ashvale'de Bir Sahne",
-     "icon": "qb-location-house",
-     "textFile": "docs/04a-scene.md",
-     "synopsis": "Nesnelere bağlantıları olan kısa bir sahne. Nesneler sekmesi, onda kimin ve neyin geçtiğini listeler."
+      "title": "Hoş Geldiniz",
+      "icon": "qb-information",
+      "textFile": "docs/00-welcome.md",
+      "synopsis": "Bu projenin ne olduğu ve turun durakları."
     }
-   ]
-  },
-  {
-   "title": "Bir Klasörün Tüm Yorumları",
-   "icon": "qb-speech-bubble",
-   "textFile": "docs/05-folder-comments.md",
-   "synopsis": "Bir klasördeki her belgenin yorumları ve dipnotları, tek bir listede."
-  },
-  {
-   "title": "Yorumlu Bir Bölüm",
-   "type": "folder",
-   "synopsis": "Bunu seçin ve denetçinin Yorumlar ve dipnotlar sekmesini açın.",
-   "children": [
+  ],
+  "draft": [
     {
-     "title": "Feribot Defteri",
-     "textFile": "docs/05a-scene-one.md",
-     "synopsis": "Yorumlu bir sahne."
+      "title": "Simge Çubuğu",
+      "icon": "qb-flag-red",
+      "textFile": "docs/01-icon-bar.md",
+      "synopsis": "Tek tıkla uygulanan on belge simgesi; metinden ve kendi resimlerinizden yapılan simgeler."
     },
     {
-     "title": "Akşam",
-     "textFile": "docs/05b-scene-two.md",
-     "synopsis": "Dipnotlu ve satır içi açıklamalı bir sahne."
+      "title": "İşaret Ettiğiniz Yeri Yakınlaştırın",
+      "icon": "qb-magnifier",
+      "textFile": "docs/02-zoom.md",
+      "synopsis": "Pencerenin herhangi bir bölümünün üzerinde Ctrl+fare tekerleği; her bölüm kendi yakınlaştırmasını saklar."
+    },
+    {
+      "title": "Zihin Haritaları",
+      "icon": "qb-mindmap",
+      "textFile": "docs/03-mind-maps.md",
+      "synopsis": "Her belge için notlardan, çizgilerden ve oklardan oluşan bir pano. Bunun bir panosu var: Zihin Haritası sekmesini açın.",
+      "mindmap": {
+        "notes": [
+          {
+            "id": 1,
+            "text": "Bir zihin haritası neler yapabilir",
+            "x": 290,
+            "y": 245,
+            "width": 170,
+            "fontSize": 15,
+            "bold": true,
+            "align": "center",
+            "fill": "#fff2a8",
+            "border": 2,
+            "shape": "cloud"
+          },
+          {
+            "id": 2,
+            "text": "Notlar: boş bir yere çift tıklayın. Ctrl+Enter, seçili notun altına yeni bir not ekler.",
+            "x": 20,
+            "y": 30,
+            "width": 200,
+            "fill": "#dcecff",
+            "border": 1
+          },
+          {
+            "id": 3,
+            "text": "Çizgiler: bir notu başka birinin üzerine sürükleyin. Çizgiyi kaldırmak için yeniden oraya sürükleyin.",
+            "x": 280,
+            "y": 30,
+            "width": 190,
+            "fill": "#dcecff",
+            "border": 1
+          },
+          {
+            "id": 4,
+            "text": "Oklar: bırakırken Alt tuşunu basılı tutun. Ctrl+Alt: geriye bir ok. Ctrl+Alt+Shift: iki uçta da.",
+            "x": 530,
+            "y": 30,
+            "width": 210,
+            "fill": "#dcecff",
+            "border": 1
+          },
+          {
+            "id": 5,
+            "text": "Renkler, şekiller ve kenarlıklar: bir nota sağ tıklayın.",
+            "x": 560,
+            "y": 250,
+            "width": 180,
+            "fill": "#ffd6d6",
+            "border": 1,
+            "shape": "jagged"
+          },
+          {
+            "id": 6,
+            "text": "Bir notun köşelerinde ve kenarlarında, bir çizginin ortasında simgeler.",
+            "x": 540,
+            "y": 420,
+            "width": 200,
+            "fill": "#e3f6d8",
+            "border": 1,
+            "icons": {
+              "topLeft": "qb-flag-red",
+              "topRight": "qb-light-bulb",
+              "bottomRight": "qb-checked"
+            }
+          },
+          {
+            "id": 7,
+            "text": "Arka plan şekilleri notları gruplar. Mıknatıslı bir şekil notlarını da birlikte götürür.",
+            "x": 290,
+            "y": 455,
+            "width": 170
+          },
+          {
+            "id": 8,
+            "text": "Menü > Notlar > Notları Binder'a Ekle, notları belgelere dönüştürür.",
+            "x": 20,
+            "y": 430,
+            "width": 200,
+            "fill": "#f0e6ff",
+            "border": 1,
+            "shape": "square"
+          },
+          {
+            "id": 9,
+            "text": "PDF, PNG, metin, OPML veya Scapple dosyası olarak dışa aktarın; Scapple dosyaları okunabilir.",
+            "x": 20,
+            "y": 245,
+            "width": 200,
+            "fill": "#f0e6ff",
+            "border": 1
+          }
+        ],
+        "shapes": [
+          {
+            "id": 20,
+            "x": 270,
+            "y": 435,
+            "w": 210,
+            "h": 150,
+            "fill": "#fde3b8",
+            "magnetic": true
+          }
+        ],
+        "lines": [
+          {
+            "from": 1,
+            "to": 2,
+            "arrow": "to"
+          },
+          {
+            "from": 1,
+            "to": 3,
+            "arrow": "to",
+            "label": "sürükle"
+          },
+          {
+            "from": 1,
+            "to": 4,
+            "arrow": "to",
+            "color": "#c0392b"
+          },
+          {
+            "from": 1,
+            "to": 5,
+            "arrow": "to"
+          },
+          {
+            "from": 1,
+            "to": 6,
+            "arrow": "to",
+            "icon": "qb-pencil"
+          },
+          {
+            "from": 1,
+            "to": 7,
+            "arrow": "to"
+          },
+          {
+            "from": 1,
+            "to": 8
+          },
+          {
+            "from": 1,
+            "to": 9,
+            "arrow": "to",
+            "color": "#2f6fbf"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Nesne Sayfaları",
+      "icon": "qb-character-sheet",
+      "textFile": "docs/04-objects.md",
+      "synopsis": "Bir hikâyenin kişileri, yerleri ve şeyleri; her biri bir alan sayfasında ve birbirine bağlı.",
+      "children": [
+        {
+          "title": "Ashvale'de Bir Sahne",
+          "icon": "qb-location-house",
+          "textFile": "docs/04a-scene.md",
+          "synopsis": "Nesnelere bağlantıları olan kısa bir sahne. Nesneler sekmesi, onda kimin ve neyin geçtiğini listeler."
+        }
+      ]
+    },
+    {
+      "title": "Bir Klasörün Tüm Yorumları",
+      "icon": "qb-speech-bubble",
+      "textFile": "docs/05-folder-comments.md",
+      "synopsis": "Bir klasördeki her belgenin yorumları ve dipnotları, tek bir listede."
+    },
+    {
+      "title": "Yorumlu Bir Bölüm",
+      "type": "folder",
+      "synopsis": "Bunu seçin ve denetçinin Yorumlar ve dipnotlar sekmesini açın.",
+      "children": [
+        {
+          "title": "Feribot Defteri",
+          "textFile": "docs/05a-scene-one.md",
+          "synopsis": "Yorumlu bir sahne."
+        },
+        {
+          "title": "Akşam",
+          "textFile": "docs/05b-scene-two.md",
+          "synopsis": "Dipnotlu ve satır içi açıklamalı bir sahne."
+        }
+      ]
+    },
+    {
+      "title": "Karşılaştır ve Aktar",
+      "icon": "qb-reviewer",
+      "textFile": "docs/06-compare.md",
+      "synopsis": "Word veya LibreOffice'ten geri gelen bir el yazması: nelerin farklı olduğunu görün ve iki taraftan birini alın."
+    },
+    {
+      "title": "Scrivener Projeleri",
+      "icon": "qb-sync-folder",
+      "textFile": "docs/07-scrivener.md",
+      "synopsis": "Bir Scrivener projesini içe aktarın ya da doğrudan onda çalışın ve sonra Scrivener'da devam edin."
+    },
+    {
+      "title": "Temalar, Renkler ve Yazı Tipleri",
+      "icon": "qb-eye",
+      "textFile": "docs/08-themes.md",
+      "synopsis": "Koyu mod ve diğer temalar hemen; biçim çubuğunun renk paleti; yazı tipi kurma."
+    },
+    {
+      "title": "Temalar ve Profiller",
+      "icon": "qb-cog",
+      "textFile": "docs/08a-profiles.md",
+      "synopsis": "Tema görünümdür; profil seçeneklerinizi, araç çubuklarınızı, pencerenizi ve temanızı bir arada tutar ve hepsini bir anda değiştirir."
+    },
+    {
+      "title": "Güncellemeler ve Eklentiler",
+      "icon": "qb-cog",
+      "textFile": "docs/09-updates.md",
+      "synopsis": "Küçük paket dosyaları, Eklenti Yöneticisi ve önceki bir sürüme dönüş yolu."
+    },
+    {
+      "title": "Güvenlik Ağları",
+      "icon": "qb-checked",
+      "textFile": "docs/10-safety.md",
+      "synopsis": "Otomatik kaydetme, yedekler, anlık görüntüler, yedek proje dosyası, çökme ve donma raporları."
+    },
+    {
+      "title": "Sırada Ne Var",
+      "icon": "qb-pass",
+      "textFile": "docs/11-where-next.md",
+      "synopsis": "Hızlı Başlangıç Kılavuzu, kullanım kılavuzu ve kendi projeniz."
     }
-   ]
-  },
-  {
-   "title": "Karşılaştır ve Aktar",
-   "icon": "qb-reviewer",
-   "textFile": "docs/06-compare.md",
-   "synopsis": "Word veya LibreOffice'ten geri gelen bir el yazması: nelerin farklı olduğunu görün ve iki taraftan birini alın."
-  },
-  {
-   "title": "Scrivener Projeleri",
-   "icon": "qb-sync-folder",
-   "textFile": "docs/07-scrivener.md",
-   "synopsis": "Bir Scrivener projesini içe aktarın ya da doğrudan onda çalışın ve sonra Scrivener'da devam edin."
-  },
-  {
-   "title": "Temalar, Renkler ve Yazı Tipleri",
-   "icon": "qb-eye",
-   "textFile": "docs/08-themes.md",
-   "synopsis": "Koyu mod ve diğer temalar hemen; biçim çubuğunun renk paleti; yazı tipi kurma."
-  },
-  {
-   "title": "Temalar ve Profiller",
-   "icon": "qb-cog",
-   "textFile": "docs/08a-profiles.md",
-   "synopsis": "Tema görünümdür; profil seçeneklerinizi, araç çubuklarınızı, pencerenizi ve temanızı bir arada tutar ve hepsini bir anda değiştirir."
-  },
-  {
-   "title": "Güncellemeler ve Eklentiler",
-   "icon": "qb-cog",
-   "textFile": "docs/09-updates.md",
-   "synopsis": "Küçük paket dosyaları, Eklenti Yöneticisi ve önceki bir sürüme dönüş yolu."
-  },
-  {
-   "title": "Güvenlik Ağları",
-   "icon": "qb-checked",
-   "textFile": "docs/10-safety.md",
-   "synopsis": "Otomatik kaydetme, yedekler, anlık görüntüler, yedek proje dosyası, çökme ve donma raporları."
-  },
-  {
-   "title": "Sırada Ne Var",
-   "icon": "qb-pass",
-   "textFile": "docs/11-where-next.md",
-   "synopsis": "Hızlı Başlangıç Kılavuzu, kullanım kılavuzu ve kendi projeniz."
-  }
- ],
- "projectBookmarks": [
-  "Hoş Geldiniz"
- ],
- "objects": [
-  {
-   "category": "characters",
-   "name": "Mara Fenn",
-   "values": {
-    "role": "Başkahraman",
-    "age": "34",
-    "eyes": "Gri",
-    "occupation": "Feribotçu",
-    "livesIn": [
-     "Ashvale"
-    ],
-    "relations": [
-     "Tobias Quill"
-    ],
-    "traits": "Sabırlı, inatçı, verdiği her sözü tutar.",
-    "background": "Feribotu annesinden devraldı. [Tobias Quill](qbobj-name:Tobias Quill), annesinin adını eski feribot defterinde buldu.",
-    "scenes": [
-     "Ashvale'de Bir Sahne"
-    ]
-   }
-  },
-  {
-   "category": "characters",
-   "name": "Tobias Quill",
-   "values": {
-    "role": "Yardımcı Karakter",
-    "age": "29",
-    "occupation": "Köyün arşivcisi",
-    "livesIn": [
-     "Ashvale"
-    ],
-    "relations": [
-     "Mara Fenn"
-    ],
-    "goals": "Feribot defterinin ilk sayfalarını kimin yazdığını öğrenmek istiyor.",
-    "scenes": [
-     "Ashvale'de Bir Sahne"
-    ]
-   }
-  },
-  {
-   "category": "locations",
-   "name": "Ashvale",
-   "values": {
-    "kind": "Köy",
-    "environment": [
-     "Fenwood"
-    ],
-    "weather": [
-     "Sonbahar Sisi"
-    ],
-    "population": "212",
-    "inhabitants": [
-     "Mara Fenn",
-     "Tobias Quill"
-    ],
-    "description": "Yavaş akan bir nehir boyunca kırk ev, bir feribot ve [Fenwood](qbobj-name:Fenwood)'dan görülebilen bir kilise kulesi.",
-    "scenes": [
-     "Ashvale'de Bir Sahne"
-    ]
-   }
-  },
-  {
-   "category": "environments",
-   "name": "Fenwood",
-   "values": {
-    "kind": "Orman",
-    "flora": "Huş ve kızılağaç ağaçları; nehir boyunca kamışlar.",
-    "weather": [
-     "Sonbahar Sisi"
-    ],
-    "locations": [
-     "Ashvale"
-    ]
-   }
-  },
-  {
-   "category": "weather",
-   "name": "Sonbahar Sisi",
-   "values": {
-    "season": "Sonbahar",
-    "temperature": "8",
-    "precipitation": "Sis",
-    "effects": "Karşı kıyı görülemediğinde feribot durur.",
-    "where": [
-     "Ashvale",
-     "Fenwood"
-    ]
-   }
-  }
- ]
+  ],
+  "projectBookmarks": [
+    "Hoş Geldiniz"
+  ],
+  "objects": [
+    {
+      "category": "characters",
+      "name": "Mara Fenn",
+      "values": {
+        "role": "Başkahraman",
+        "age": "34",
+        "eyes": "Gri",
+        "occupation": "Feribotçu",
+        "livesIn": [
+          "Ashvale"
+        ],
+        "relations": [
+          "Tobias Quill"
+        ],
+        "traits": "Sabırlı, inatçı, verdiği her sözü tutar.",
+        "background": "Feribotu annesinden devraldı. [Tobias Quill](qbobj-name:Tobias Quill), annesinin adını eski feribot defterinde buldu.",
+        "scenes": [
+          "Ashvale'de Bir Sahne"
+        ]
+      }
+    },
+    {
+      "category": "characters",
+      "name": "Tobias Quill",
+      "values": {
+        "role": "Yardımcı karakter",
+        "age": "29",
+        "occupation": "Köyün arşivcisi",
+        "livesIn": [
+          "Ashvale"
+        ],
+        "relations": [
+          "Mara Fenn"
+        ],
+        "goals": "Feribot defterinin ilk sayfalarını kimin yazdığını öğrenmek istiyor.",
+        "scenes": [
+          "Ashvale'de Bir Sahne"
+        ]
+      }
+    },
+    {
+      "category": "locations",
+      "name": "Ashvale",
+      "values": {
+        "kind": "Köy",
+        "environment": [
+          "Fenwood"
+        ],
+        "weather": [
+          "Sonbahar Sisi"
+        ],
+        "population": "212",
+        "inhabitants": [
+          "Mara Fenn",
+          "Tobias Quill"
+        ],
+        "description": "Yavaş akan bir nehir boyunca kırk ev, bir feribot ve [Fenwood](qbobj-name:Fenwood)'dan görülebilen bir kilise kulesi.",
+        "scenes": [
+          "Ashvale'de Bir Sahne"
+        ]
+      }
+    },
+    {
+      "category": "environments",
+      "name": "Fenwood",
+      "values": {
+        "kind": "Orman",
+        "flora": "Huş ve kızılağaç ağaçları; nehir boyunca kamışlar.",
+        "weather": [
+          "Sonbahar Sisi"
+        ],
+        "locations": [
+          "Ashvale"
+        ]
+      }
+    },
+    {
+      "category": "weather",
+      "name": "Sonbahar Sisi",
+      "values": {
+        "season": "Sonbahar",
+        "temperature": "8",
+        "precipitation": "Sis",
+        "effects": "Karşı kıyı görülemediğinde feribot durur.",
+        "where": [
+          "Ashvale",
+          "Fenwood"
+        ]
+      }
+    }
+  ]
 }

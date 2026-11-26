@@ -3947,7 +3947,7 @@ Sumber: %1</translation>
     </message>
     <message>
         <source>Switch Profile</source>
-        <translation type="unfinished">Beralih Profil</translation>
+        <translation>Beralih Profil</translation>
     </message>
     <message>
         <source>The profile “%1” was not saved by this program on this computer. It also names programs, folders, files or addresses (a folder may not exist on this computer):
@@ -3955,15 +3955,19 @@ Sumber: %1</translation>
 %2
 
 Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil “%1” tidak disimpan oleh program ini di komputer ini. Profil ini juga menyebutkan program, folder, berkas, atau alamat (mungkin ada folder yang tidak ada di komputer ini):
+
+%2
+
+Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau memercayai asalnya.</translation>
     </message>
     <message>
         <source>all</source>
-        <translation type="unfinished">semua</translation>
+        <translation>semua</translation>
     </message>
     <message>
         <source>The profile “%1” keeps %2 backups of a project, the settings now keep %3. Backups beyond the smaller number are deleted at the next backup. Switch anyway?</source>
-        <translation type="unfinished"></translation>
+        <translation>Profil “%1” menyimpan %2 cadangan sebuah proyek, sedangkan pengaturan saat ini menyimpan %3. Cadangan di luar jumlah yang lebih kecil dihapus pada pencadangan berikutnya. Tetap beralih?</translation>
     </message>
     <message>
         <source>Import Profile</source>
@@ -4007,11 +4011,11 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Opsi sedang terbuka untuk Proyek Ini. Tutup opsi tersebut atau pilih Semua Proyek, lalu ekspor profilnya.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pengaturan profil tidak dapat ditulis seluruhnya. Periksa folder berkas pengaturan.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4031,7 +4035,7 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tata letak profil tidak dapat diterapkan; tata letak yang Anda miliki tetap dipertahankan.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>

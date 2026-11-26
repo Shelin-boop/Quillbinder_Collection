@@ -3966,7 +3966,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Switch Profile</source>
-        <translation type="unfinished">Van profiel wisselen</translation>
+        <translation>Van profiel wisselen</translation>
     </message>
     <message>
         <source>The profile “%1” was not saved by this program on this computer. It also names programs, folders, files or addresses (a folder may not exist on this computer):
@@ -3974,15 +3974,19 @@ Bron: %1</translation>
 %2
 
 Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het profiel “%1” is niet door dit programma op deze computer opgeslagen. Het noemt ook programma&apos;s, mappen, bestanden of adressen (een map bestaat misschien niet op deze computer):
+
+%2
+
+Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of de herkomst vertrouwt.</translation>
     </message>
     <message>
         <source>all</source>
-        <translation type="unfinished">alle</translation>
+        <translation>alle</translation>
     </message>
     <message>
         <source>The profile “%1” keeps %2 backups of a project, the settings now keep %3. Backups beyond the smaller number are deleted at the next backup. Switch anyway?</source>
-        <translation type="unfinished"></translation>
+        <translation>Het profiel “%1” bewaart %2 back-ups van een project, de huidige instellingen bewaren er %3. Back-ups boven het kleinere aantal worden bij de volgende back-up verwijderd. Toch wisselen?</translation>
     </message>
     <message>
         <source>Import Profile</source>
@@ -4026,11 +4030,11 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation type="unfinished"></translation>
+        <translation>De opties zijn geopend voor dit project. Sluit ze of kies alle projecten en exporteer daarna het profiel.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>De instellingen van het profiel konden niet volledig worden geschreven. Controleer de map van het instellingenbestand.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4050,7 +4054,7 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>De indelingen van het profiel konden niet worden toegepast; de indelingen die je had blijven behouden.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>

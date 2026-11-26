@@ -3966,7 +3966,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Switch Profile</source>
-        <translation type="unfinished">Cambia profilo</translation>
+        <translation>Cambia profilo</translation>
     </message>
     <message>
         <source>The profile “%1” was not saved by this program on this computer. It also names programs, folders, files or addresses (a folder may not exist on this computer):
@@ -3974,15 +3974,19 @@ Sorgente: %1</translation>
 %2
 
 Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il profilo “%1” non è stato salvato da questo programma su questo computer. Nomina anche programmi, cartelle, file o indirizzi (una cartella potrebbe non esistere su questo computer):
+
+%2
+
+Accettarli anche? Accettali solo se hai creato tu il file o ti fidi della sua provenienza.</translation>
     </message>
     <message>
         <source>all</source>
-        <translation type="unfinished">tutti</translation>
+        <translation>tutti</translation>
     </message>
     <message>
         <source>The profile “%1” keeps %2 backups of a project, the settings now keep %3. Backups beyond the smaller number are deleted at the next backup. Switch anyway?</source>
-        <translation type="unfinished"></translation>
+        <translation>Il profilo “%1” conserva %2 backup di un progetto, mentre le impostazioni attuali ne conservano %3. I backup oltre il numero minore vengono eliminati al prossimo backup. Cambiare comunque?</translation>
     </message>
     <message>
         <source>Import Profile</source>
@@ -4026,11 +4030,11 @@ Accettarli anche? Accettali solo se hai creato tu il file o ti fidi della sua pr
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le opzioni sono aperte per questo progetto. Chiudile o scegli tutti i progetti, poi esporta il profilo.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>Non è stato possibile scrivere completamente le impostazioni del profilo. Controlla la cartella del file delle impostazioni.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4050,7 +4054,7 @@ Accettarli anche? Accettali solo se hai creato tu il file o ti fidi della sua pr
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>Non è stato possibile applicare i layout del profilo; i layout che avevi vengono mantenuti.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>

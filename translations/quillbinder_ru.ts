@@ -3985,7 +3985,7 @@ Source: %1</source>
     </message>
     <message>
         <source>Switch Profile</source>
-        <translation type="unfinished">Переключить профиль</translation>
+        <translation>Переключить профиль</translation>
     </message>
     <message>
         <source>The profile “%1” was not saved by this program on this computer. It also names programs, folders, files or addresses (a folder may not exist on this computer):
@@ -3993,15 +3993,19 @@ Source: %1</source>
 %2
 
 Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
-        <translation type="unfinished"></translation>
+        <translation>Профиль «%1» не был сохранён этой программой на этом компьютере. В нём также указаны программы, папки, файлы или адреса (папки может не быть на этом компьютере):
+
+%2
+
+Принять и их? Принимайте их, только если вы сами создали файл или доверяете его источнику.</translation>
     </message>
     <message>
         <source>all</source>
-        <translation type="unfinished">все</translation>
+        <translation>все</translation>
     </message>
     <message>
         <source>The profile “%1” keeps %2 backups of a project, the settings now keep %3. Backups beyond the smaller number are deleted at the next backup. Switch anyway?</source>
-        <translation type="unfinished"></translation>
+        <translation>Профиль «%1» хранит резервных копий проекта: %2, текущие настройки: %3. Копии сверх меньшего числа будут удалены при следующем резервном копировании. Всё равно переключить?</translation>
     </message>
     <message>
         <source>Import Profile</source>
@@ -4045,11 +4049,11 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры открыты для этого проекта. Закройте их или выберите все проекты, затем экспортируйте профиль.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>Настройки профиля не удалось записать полностью. Проверьте папку файла настроек.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4069,7 +4073,7 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось применить раскладки профиля; прежние раскладки сохранены.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>

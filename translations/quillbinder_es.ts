@@ -3966,7 +3966,7 @@ Código fuente: %1</translation>
     </message>
     <message>
         <source>Switch Profile</source>
-        <translation type="unfinished">Cambiar de perfil</translation>
+        <translation>Cambiar de perfil</translation>
     </message>
     <message>
         <source>The profile “%1” was not saved by this program on this computer. It also names programs, folders, files or addresses (a folder may not exist on this computer):
@@ -3974,15 +3974,19 @@ Código fuente: %1</translation>
 %2
 
 Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
-        <translation type="unfinished"></translation>
+        <translation>El perfil «%1» no fue guardado por este programa en este equipo. También nombra programas, carpetas, archivos o direcciones (puede que alguna carpeta no exista en este equipo):
+
+%2
+
+¿Quieres adoptarlos también? Hazlo solo si creaste el archivo tú mismo o confías en su procedencia.</translation>
     </message>
     <message>
         <source>all</source>
-        <translation type="unfinished">todas</translation>
+        <translation>todas</translation>
     </message>
     <message>
         <source>The profile “%1” keeps %2 backups of a project, the settings now keep %3. Backups beyond the smaller number are deleted at the next backup. Switch anyway?</source>
-        <translation type="unfinished"></translation>
+        <translation>El perfil «%1» conserva %2 copias de seguridad de un proyecto y los ajustes actuales conservan %3. Las copias que superen el número menor se eliminan en la próxima copia de seguridad. ¿Cambiar de todos modos?</translation>
     </message>
     <message>
         <source>Import Profile</source>
@@ -4026,11 +4030,11 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Las opciones están abiertas para este proyecto. Ciérralas o elige todos los proyectos y después exporta el perfil.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se pudieron escribir por completo los ajustes del perfil. Comprueba la carpeta del archivo de ajustes.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4050,7 +4054,7 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation type="unfinished"></translation>
+        <translation>No se pudieron aplicar los diseños del perfil; se conservan los diseños que tenías.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>
