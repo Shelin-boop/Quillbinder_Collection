@@ -133,6 +133,14 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - **TLS**: the AppImage carries `plugins/tls/libqopensslbackend.so` since 0.92.0 (`build-appimage.sh`); OpenSSL 3 is
   the system's. A program update that runs on an AppImage before 0.92.0 has no TLS part: `QSslSocket::supportsSsl()`
   is false, the automatic look stays quiet and "Check for Updates Now" says why.
+- **Translation Helper 1.5** (0.95.0, to-do items 101 and 102; details in the add-on's `source/DEVELOPING.md`, "1.5"): the
+  add-on is renamed (id unchanged), translates between any two of eleven languages (two OPUS-MT models per language, a pair
+  without English goes through English) and has a dictionary per language from kaikki.org. The data are on the release
+  `models-4`, made by `.github/workflows/translator-data-4.yml` on GitHub's runner (push of a `linux/0.95.0*` branch that
+  changes it, or by hand); `resources/catalog.json` holds placeholders until the run: the sizes and sums of the artifact's
+  `catalog.json` are copied in, and the kaikki SHA-256 sums the run prints are pinned in the workflow. The official entry
+  keeps the commit of 1.4 until 1.5 is released (name and summary are the new ones). Its own texts are compiled in
+  (`translations/tp_<code>.ts`).
 - **Translation and Proofreading 1.3** (0.93.0, to-do item 23; details in the add-on's own `source/DEVELOPING.md`, "1.3"):
   a word on its own (WordNet meanings built in as `resources/en-glosses.tsv`, made with the thesaurus by
   `tools/make-thesaurus.py`; the German dictionary, a data download "wiktionary-de" made by

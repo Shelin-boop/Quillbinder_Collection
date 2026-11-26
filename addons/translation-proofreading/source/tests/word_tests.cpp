@@ -87,7 +87,14 @@ private:
     void uninstall(const QString &id) { QDir(m_tool->store()->modelsDir() + QLatin1Char('/') + id).removeRecursively(); }
     void select(Panel &p, const QString &task)
     {
-        p.taskBox()->setCurrentIndex(p.taskBox()->findData(task));
+        // 1.5: "Translate" with two language lists (the tasks "translate" and "translateEn" of 1.4 are German to English and
+        // English to German)
+        if (task == QLatin1String("translate"))
+            p.setLanguages(QStringLiteral("de"), QStringLiteral("en"));
+        else if (task == QLatin1String("translateEn"))
+            p.setLanguages(QStringLiteral("en"), QStringLiteral("de"));
+        else
+            p.taskBox()->setCurrentIndex(p.taskBox()->findData(task));
         p.reloadSettings();
     }
     bool runPanel(Panel &p, const QString &text)
@@ -348,7 +355,8 @@ private slots:
         QSignalSpy done(&p, &Panel::finished);
         p.swapButton()->click();
         QTRY_VERIFY(done.count() > 0);
-        QCOMPARE(p.taskBox()->currentData().toString(), QStringLiteral("translateEn"));
+        QCOMPARE(p.fromLanguageBox()->currentData().toString(), QStringLiteral("en"));
+        QCOMPARE(p.toLanguageBox()->currentData().toString(), QStringLiteral("de"));
         QCOMPARE(p.inputText(), QStringLiteral("The house is old"));
         QTRY_COMPARE(p.resultText(), QStringLiteral("Das Haus ist alt"));
         QVERIFY(modelsCalled().contains(QStringLiteral("opus-mt-en-de")));
@@ -516,7 +524,7 @@ private slots:
         select(p, QStringLiteral("translateEn"));
         QVERIFY(runPanel(p, QStringLiteral("curse")));
         QTRY_VERIFY(!p.isBusy());
-        QVERIFY2(out(p).contains(QStringLiteral("German dictionary")) && out(p).contains(QStringLiteral("File > Options > Proofreading")),
+        QVERIFY2(out(p).contains(QStringLiteral("German dictionary")) && out(p).contains(QStringLiteral("File > Options > Translation Helper")),
                  qPrintable(out(p)));
         QVERIFY(!out(p).contains(QStringLiteral("Similar German words (")));
         install(QStringLiteral("wiktionary-de"));

@@ -1,14 +1,14 @@
 {
   "id": "translation-proofreading",
-  "name": "Translation and Proofreading",
-  "version": "1.4",
-  "description": "English text is checked for spelling and grammar, German text is translated into English and English into German, on this computer only. In the inspector (its own tab) or in a window of its own: the text goes in, the result comes out with every change marked, live while you type; a click on a word keeps the original or offers other words, a double click shows its spelling suggestions and words of a similar meaning. A single word gets what it means (English words: WordNet; German words: an optional dictionary download), its word classes and its suggestions. Swap turns the direction around, Translate back shows what the translation says. Dialogue keeps its quotation marks as written. Rules: no em-dashes, American spelling, curly quotes, three periods instead of the ellipsis character, and your own replacements. The models are chosen and downloaded once under File > Options > Proofreading (CoEdIT, Qwen3 1.7B and 4B, OPUS-MT), checked, and then used without any connection; models too large for the computer are not offered. Engine: CTranslate2 with oneDNN and SentencePiece. Brings Qt's TLS plugin for the download.",
+  "name": "Translation Helper",
+  "version": "1.5",
+  "description": "This tool gives suggestions only. Its translations are not precise: check each one, which needs a working knowledge of both languages. The Translation Helper translates between any two of eleven languages (English, German, Spanish, French, Portuguese (Brazil), Italian, Russian, Indonesian, Turkish, Polish, Dutch) and checks English text for spelling and grammar, on this computer only. A pair without English goes through English. In the inspector (its own tab) or in a window of its own: the text goes in, the result comes out with every change marked, live while you type; a click on a word keeps the original or offers other words, a double click shows its spelling suggestions and words of a similar meaning. A single word gets what it means (English words: WordNet; words of the other languages: an optional dictionary download from the Wiktionary), its word classes and its suggestions. Swap turns the direction around, Translate back shows what the translation says. Dialogue keeps its quotation marks as written. Rules: no em-dashes, American spelling, curly quotes, three periods instead of the ellipsis character, and your own replacements. The models are chosen and downloaded once under File > Options > Translation Helper (CoEdIT, Qwen3 1.7B and 4B, OPUS-MT), checked, and then used without any connection; models too large for the computer are not offered. The add-on's own texts come in the eleven languages of the program. Engine: CTranslate2 with oneDNN and SentencePiece. Brings Qt's TLS plugin for the download.",
   "author": "Quillbinder",
   "minApp": "0.93.0",
   "whatsNew": [
-    "A single word, German to English or English to German, shows the translation of each word class, similar translations (English to German: similar German words from the German dictionary) and a short description",
-    "German in lower case translates better: the German dictionary puts the capitals of nouns right in the copy the model gets (your text stays as it is)",
-    "A notice names a missing model or the German dictionary and opens the options; models are unloaded after 15 minutes without use (a setting)",
-    "No duplicate alternatives that differ only in capitals, no Spelling line for words of the result, \"number\" is no longer read as \"numb\", the hints in the empty fields wrap"
+    "Renamed Translation Helper: it gives suggestions only, and says so in its window (its translations are not precise: check each one, which needs a working knowledge of both languages)",
+    "Translate between any two of eleven languages, chosen in two drop-down lists; a pair without English goes through English (two OPUS-MT models)",
+    "A dictionary per language from the Wiktionary (CC BY-SA 4.0, a separate download whose license is shown first) for single words",
+    "The add-on's own texts are in the eleven languages of the program; the German dictionary and the 1.4 settings keep working"
   ]
 }

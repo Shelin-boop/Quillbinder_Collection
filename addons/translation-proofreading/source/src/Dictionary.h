@@ -56,6 +56,18 @@ QList<GermanEntry> lookupGerman(const QString &word);
 // share it); false with *error when it cannot be read.
 bool ensureGermanDictionary(const QString &file, QString *error = nullptr);
 
+// 1.5: the same for the other languages: a dictionary per language ("de", "es", "fr", "pt", "it", "ru", "id", "tr", "pl", "nl"),
+// each in a file of the same form (the first line is "#qb-<code>-dictionary 1", made by tools/make-dictionary.py); the
+// German functions above are these with "de". Several dictionaries are loaded at the same time. The capital letter of a word
+// is a hint for German nouns only.
+using DictEntry = GermanEntry;
+using DictMeaning = GermanMeaning;
+bool loadDictionary(const QString &lang, const QString &file, QString *error = nullptr);
+bool ensureDictionary(const QString &lang, const QString &file, QString *error = nullptr);
+bool dictionaryLoaded(const QString &lang);
+void unloadDictionary(const QString &lang);
+QList<GermanEntry> lookupWord(const QString &lang, const QString &word);
+
 // 1.4: the German words whose meanings name one of the English words (a reverse lookup; the German similar words of an
 // English word: the word itself, then its WordNet synonyms). `english` is ordered: rank 0 is the first (the word itself).
 // "to " before a verb's meaning is ignored, the case too. `pos` keeps one class ("noun" ...; empty: all). Sorted by rank, then
@@ -65,6 +77,8 @@ struct GermanReverse {
     int rank = 0;
 };
 QList<GermanReverse> reverseLookupGerman(const QStringList &english, const QString &pos, int max = 20);
+// 1.5: the same in the dictionary of any language ("the Spanish words whose meanings name one of the English words")
+QList<GermanReverse> reverseLookup(const QString &lang, const QStringList &english, const QString &pos, int max = 20);
 
 // 1.4: the capital letters of German nouns put right in a copy of the text that goes to the translation model (OPUS-MT
 // learned from German with capitals; a text in lower case is translated in pieces). A word the dictionary knows only as a

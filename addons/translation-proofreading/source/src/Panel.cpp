@@ -114,8 +114,9 @@ InputEdit::InputEdit(tp::Panel *panel, QWidget *parent)
 {
     setObjectName(QStringLiteral("tpInput"));
     new WrappedPlaceholder(this, document(),
-                           tr("Type or paste text here, or take the selected text from the editor. English text is "
-                              "checked for spelling and grammar, German text is translated into English."));
+                           tr("Type or paste text here, or take the selected text from the editor. With Translate, choose the "
+                              "language of your text and the language of the translation; English text can also be "
+                              "checked for spelling and grammar."));
 }
 
 void InputEdit::contextMenuEvent(QContextMenuEvent *e)
@@ -268,9 +269,40 @@ Panel::Panel(TranslateTool *tool, Place place, QWidget *parent)
     m_task->setObjectName(QStringLiteral("tpTask"));
     m_task->addItem(tr("Automatic"), QStringLiteral("auto"));
     m_task->addItem(tr("Proofread English"), QStringLiteral("proofread"));
-    m_task->addItem(tr("Translate German to English"), QStringLiteral("translate"));
-    m_task->addItem(tr("Translate English to German"), QStringLiteral("translateEn"));
-    m_task->setToolTip(tr("Automatic: German text is translated into English, English text is proofread."));
+    m_task->addItem(tr("Translate"), QStringLiteral("translate"));
+    m_task->setToolTip(tr("Automatic: German text is translated into English, English text is proofread. Translate: choose "
+                          "the language of your text and the language of the translation."));
+    // 1.5: the two languages of "Translate", as drop-down lists (the choice is kept in the add-on's settings)
+    m_langFrom = new QComboBox(this);
+    m_langFrom->setObjectName(QStringLiteral("tpFromLanguage"));
+    m_langTo = new QComboBox(this);
+    m_langTo->setObjectName(QStringLiteral("tpToLanguage"));
+    for (const Language &l : languages())
+        for (QComboBox *b : {m_langFrom, m_langTo})
+            b->addItem(languageLabel(l.code), l.code);
+    m_langFrom->setToolTip(tr("The language of your text"));
+    m_langTo->setToolTip(tr("The language of the translation. A pair without English in it is translated through English "
+                            "(two models)."));
+    for (QComboBox *b : {m_langFrom, m_langTo})
+        b->setSizeAdjustPolicy(QComboBox::AdjustToMinimumContentsLengthWithIcon);
+    m_langArrow = new QLabel(QStringLiteral("→"), this);
+    m_langArrow->setObjectName(QStringLiteral("tpLanguageArrow"));
+    syncLanguageBoxes();
+    connect(m_langFrom, &QComboBox::currentIndexChanged, this, [this] { saveLanguages(); updateModeUi(); });
+    connect(m_langTo, &QComboBox::currentIndexChanged, this, [this] { saveLanguages(); updateModeUi(); });
+    // 1.5: a fixed line (not a box to close): the tool only suggests
+    m_suggestions = new QLabel(tr("This tool gives suggestions only. Its translations are not precise: check each one, which "
+                                  "needs a working knowledge of both languages."),
+                               this);
+    m_suggestions->setObjectName(QStringLiteral("tpSuggestions"));
+    m_suggestions->setWordWrap(true);
+    {
+        QFont f = m_suggestions->font();
+        f.setItalic(true);
+        f.setPointSizeF(f.pointSizeF() * 0.95);
+        m_suggestions->setFont(f);
+        m_suggestions->setContentsMargins(2, 0, 2, 2);
+    }
     m_style = new QComboBox(this);
     m_style->setObjectName(QStringLiteral("tpStyle"));
     m_style->addItem(tr("Correct"), QStringLiteral("correct"));
@@ -353,7 +385,7 @@ Panel::Panel(TranslateTool *tool, Place place, QWidget *parent)
     m_noticeText->setWordWrap(true);
     m_noticeButton = new QPushButton(tr("Open the Options"), m_notice);
     m_noticeButton->setObjectName(QStringLiteral("tpNoticeButton"));
-    m_noticeButton->setToolTip(tr("File > Options > Proofreading: choose and download the models and the German dictionary"));
+    m_noticeButton->setToolTip(tr("File > Options > Translation Helper: choose and download the models and the German dictionary"));
     connect(m_noticeButton, &QPushButton::clicked, m_tool, &TranslateTool::showOptions);
     nl->addWidget(m_noticeText, 1);
     nl->addWidget(m_noticeButton, 0, Qt::AlignTop);
@@ -378,13 +410,15 @@ Panel::Panel(TranslateTool *tool, Place place, QWidget *parent)
 QString Panel::workKey() const
 {
     return m_dir == Direction::Proofread ? m_styleId : m_dir == Direction::DeToEn ? QStringLiteral("translate")
-                                                                                    : QStringLiteral("translate-de");
+                                                                                    : m_dir == Direction::Pair ? QStringLiteral("translate-pair")
+                                                                                                               : QStringLiteral("translate-de");
 }
 
 Rules Panel::rulesForRun() const
 {
     Rules r = m_tool->rules();
-    if (m_dir == Direction::EnToDe) {   // the American spellings and curly quotes are English rules
+    if (m_dir == Direction::EnToDe || (m_dir == Direction::Pair && m_tgtLang != QLatin1String("en"))) {
+        // the American spellings and curly quotes are English rules
         r.american = false;
         r.curlyQuotes = false;
     }
@@ -395,15 +429,18 @@ QString Panel::kindOf(Direction d) const
 {
     return d == Direction::DeToEn ? QStringLiteral("translator")
            : d == Direction::EnToDe ? QStringLiteral("translator-en")
-                                    : QStringLiteral("corrector");
+           : d == Direction::Pair ? QStringLiteral("translator-pair")
+                                  : QStringLiteral("corrector");
 }
 
 Panel::Direction Panel::directionFor(const QString &task, const QString &text) const
 {
-    if (task == QLatin1String("translate"))
-        return Direction::DeToEn;
-    if (task == QLatin1String("translateEn"))
-        return Direction::EnToDe;
+    if (task == QLatin1String("translate")) {
+        const QString f = m_langFrom->currentData().toString(), t = m_langTo->currentData().toString();
+        return f == QLatin1String("de") && t == QLatin1String("en")   ? Direction::DeToEn
+               : f == QLatin1String("en") && t == QLatin1String("de") ? Direction::EnToDe
+                                                                       : Direction::Pair;
+    }
     if (task == QLatin1String("proofread"))
         return Direction::Proofread;
     if (text.trimmed().isEmpty())
@@ -443,8 +480,14 @@ void Panel::buildInspectorLayout()
     g->setVerticalSpacing(3);
     m_controls = g;
     g->addWidget(m_task, 0, 0, 1, 2);
-    g->addWidget(m_style, 1, 0);
-    g->addWidget(m_model, 1, 1);
+    auto *langs = new QHBoxLayout;
+    langs->setSpacing(4);
+    langs->addWidget(m_langFrom, 1);
+    langs->addWidget(m_langArrow);
+    langs->addWidget(m_langTo, 1);
+    g->addLayout(langs, 1, 0, 1, 2);
+    g->addWidget(m_style, 2, 0);
+    g->addWidget(m_model, 2, 1);
     auto *buttons = new QHBoxLayout;
     buttons->setSpacing(2);
     buttons->addWidget(m_go);
@@ -458,13 +501,13 @@ void Panel::buildInspectorLayout()
     for (QToolButton *b : {m_from, m_into, m_copy, m_models})
         if (!b->icon().isNull())   // without the program's icons the words stay
             b->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    g->addLayout(buttons, 2, 0, 1, 2);
+    g->addLayout(buttons, 3, 0, 1, 2);
     auto *pair = new QHBoxLayout;
     pair->addWidget(m_swap);
     pair->addWidget(m_backButton);
-    g->addLayout(pair, 3, 0, 1, 2);
-    g->addWidget(m_progress, 4, 0, 1, 2);
-    g->addWidget(m_status, 5, 0, 1, 2);
+    g->addLayout(pair, 4, 0, 1, 2);
+    g->addWidget(m_progress, 5, 0, 1, 2);
+    g->addWidget(m_status, 6, 0, 1, 2);
     // room for two lines of status: the splitter must not cut the second one off
     m_status->setMinimumHeight(2 * m_status->fontMetrics().lineSpacing() + 2);
     m_status->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -491,6 +534,7 @@ void Panel::buildInspectorLayout()
     auto *l = new QVBoxLayout(this);
     l->setContentsMargins(2, 2, 2, 2);
     l->addWidget(m_notice);
+    l->addWidget(m_suggestions);
     l->addWidget(m_split);
 }
 
@@ -502,6 +546,9 @@ void Panel::buildWindowLayout()
     m_go->setFixedSize(56, 48);
     auto *top = new QHBoxLayout;
     top->addWidget(m_task);
+    top->addWidget(m_langFrom);
+    top->addWidget(m_langArrow);
+    top->addWidget(m_langTo);
     top->addWidget(m_style);
     top->addWidget(m_model);
     top->addWidget(m_models);
@@ -547,6 +594,7 @@ void Panel::buildWindowLayout()
     auto *l = new QVBoxLayout(this);
     l->setContentsMargins(6, 6, 6, 6);
     l->addWidget(m_notice);
+    l->addWidget(m_suggestions);
     l->addLayout(top);
     l->addWidget(outer, 1);
     l->addWidget(m_progress);
@@ -567,8 +615,77 @@ void Panel::showEvent(QShowEvent *e)
 
 void Panel::reloadSettings()
 {
+    syncLanguageBoxes();
     updateModelBox();
     updateNotice();
+}
+
+// ---------------------------------------------------------------- 1.5: the eleven languages
+
+void Panel::syncLanguageBoxes()
+{
+    // the choice of the two lists is the add-on's setting (the inspector and the window share it)
+    const QString from = m_tool->setting(QStringLiteral("langFrom"), QStringLiteral("de")).toString();
+    const QString to = m_tool->setting(QStringLiteral("langTo"), QStringLiteral("en")).toString();
+    for (auto [box, code] : {std::pair<QComboBox *, QString>{m_langFrom, from}, std::pair<QComboBox *, QString>{m_langTo, to}}) {
+        const QSignalBlocker block(box);
+        box->setCurrentIndex(qMax(0, box->findData(isLanguage(code) ? code : QStringLiteral("en"))));
+    }
+}
+
+void Panel::saveLanguages()
+{
+    m_tool->setSetting(QStringLiteral("langFrom"), m_langFrom->currentData().toString());
+    m_tool->setSetting(QStringLiteral("langTo"), m_langTo->currentData().toString());
+}
+
+void Panel::setLanguages(const QString &from, const QString &to)
+{
+    m_task->setCurrentIndex(qMax(0, m_task->findData(QStringLiteral("translate"))));
+    m_langFrom->setCurrentIndex(qMax(0, m_langFrom->findData(from)));
+    m_langTo->setCurrentIndex(qMax(0, m_langTo->findData(to)));
+    saveLanguages();
+    updateModeUi();
+}
+
+void Panel::updateLanguageUi()
+{
+    const bool on = currentTask() == QLatin1String("translate");
+    for (QWidget *w : {static_cast<QWidget *>(m_langFrom), static_cast<QWidget *>(m_langTo), static_cast<QWidget *>(m_langArrow)})
+        w->setVisible(on);
+}
+
+QString Panel::fromLanguage() const
+{
+    switch (directionNow()) {
+    case Direction::DeToEn: return QStringLiteral("de");
+    case Direction::Pair: return m_langFrom->currentData().toString();
+    default: return QStringLiteral("en");
+    }
+}
+
+QString Panel::toLanguage() const
+{
+    switch (directionNow()) {
+    case Direction::EnToDe: return QStringLiteral("de");
+    case Direction::Pair: return m_langTo->currentData().toString();
+    default: return QStringLiteral("en");
+    }
+}
+
+QStringList Panel::pairModelIds(const QString &from, const QString &to, QStringList *missing) const
+{
+    QStringList ids;
+    for (const Step &step : stepsFor(from, to)) {
+        const QString id = m_tool->stepModel(step);
+        if (id.isEmpty()) {
+            if (missing)
+                *missing << modelIdFor(step);
+        } else {
+            ids << id;
+        }
+    }
+    return ids;
 }
 
 QStringList Panel::missingParts() const
@@ -588,6 +705,18 @@ QStringList Panel::missingParts() const
         }
         return missing;
     }
+    if (d == Direction::Pair) {
+        const QString from = fromLanguage(), to = toLanguage();
+        for (const Step &step : stepsFor(from, to))
+            if (m_tool->stepModel(step).isEmpty())
+                missing << tr("a translation model (%1 to %2)").arg(languageName(step.from), languageName(step.to));
+        // a single word is looked up in the dictionary of its language first
+        QString word;
+        if (from != QLatin1String("en") && isSingleWord(inputText(), &word) && m_tool->store()->model(dictionaryIdFor(from))
+            && m_tool->dictionaryFile(from).isEmpty())
+            missing << tr("the %1 dictionary").arg(languageName(from));
+        return missing;
+    }
     if (m_tool->chosenModel(kindOf(d)).isEmpty())
         missing << (d == Direction::DeToEn ? tr("a translation model (German to English)")
                                            : tr("a translation model (English to German)"));
@@ -603,7 +732,7 @@ void Panel::updateNotice()
     const QStringList missing = missingParts();
     m_notice->setVisible(!missing.isEmpty());
     if (!missing.isEmpty())
-        m_noticeText->setText(tr("Missing: %1. Download %2 in the add-on's options (File > Options > Proofreading).")
+        m_noticeText->setText(tr("Missing: %1. Download %2 in the add-on's options (File > Options > Translation Helper).")
                                   .arg(missing.join(tr(" and ")), missing.size() > 1 ? tr("them") : tr("it")));
 }
 
@@ -613,6 +742,21 @@ void Panel::updateModelBox()
     m_modeKind = kindOf(d);
     const bool translating = d != Direction::Proofread;
     m_model->clear();
+    if (d == Direction::Pair) {
+        // the models of the pair, one after the other (a pair through English: two); nothing to choose
+        QStringList names;
+        for (const Step &step : stepsFor(fromLanguage(), toLanguage())) {
+            const CatalogModel *c = m_tool->catalogModelFor(step);
+            const QString id = m_tool->stepModel(step);
+            const CatalogModel *used = id.isEmpty() ? c : m_tool->store()->model(id);
+            names << (used ? used->title : tr("OPUS-MT %1 to %2").arg(languageName(step.from), languageName(step.to)));
+        }
+        m_model->addItem(names.isEmpty() ? tr("Choose two different languages") : names.join(QStringLiteral(" + ")), QString());
+        m_model->setEnabled(false);
+        m_model->setToolTip(tr("The translation models of the pair (a pair without English goes through English: two models); "
+                               "download them in the options"));
+        return;
+    }
     const QString chosen = m_tool->chosenModel(m_modeKind);
     for (const CatalogModel &m : m_tool->store()->models(m_modeKind))
         if (m_tool->store()->isInstalled(m.id))
@@ -636,9 +780,10 @@ void Panel::updateModeUi()
     m_style->setVisible(!translating);
     if (m_controls) {
         m_controls->removeWidget(m_model);
-        m_controls->addWidget(m_model, 1, translating ? 0 : 1, 1, translating ? 2 : 1);
+        m_controls->addWidget(m_model, 2, translating ? 0 : 1, 1, translating ? 2 : 1);
     }
-    if (kindOf(d) != m_modeKind)
+    updateLanguageUi();
+    if (kindOf(d) != m_modeKind || d == Direction::Pair)
         updateModelBox();
     // the buttons: Swap always; Translate back after a translation
     m_swap->setEnabled(!m_busy);
@@ -689,6 +834,8 @@ void Panel::setBusy(bool busy)
     m_stop->setVisible(busy);
     m_progress->setVisible(busy);
     m_task->setEnabled(!busy);
+    m_langFrom->setEnabled(!busy);
+    m_langTo->setEnabled(!busy);
     m_style->setEnabled(!busy);
     m_from->setEnabled(!busy);
     m_swap->setEnabled(!busy);
@@ -800,6 +947,12 @@ void Panel::runNow(bool live)
         return;
     }
     m_dir = directionFor(currentTask(), text);
+    m_srcLang = m_dir == Direction::DeToEn ? QStringLiteral("de")
+                : m_dir == Direction::Pair ? m_langFrom->currentData().toString()
+                                           : QStringLiteral("en");
+    m_tgtLang = m_dir == Direction::EnToDe ? QStringLiteral("de")
+                : m_dir == Direction::Pair ? m_langTo->currentData().toString()
+                                           : QStringLiteral("en");
     m_styleId = m_style->currentData().toString();
     const QString kind = slot();
     const Rules rules = rulesForRun();
@@ -831,20 +984,25 @@ void Panel::runNow(bool live)
         runSingleTranslation(single);
         return;
     }
+    // 1.5: any other pair of the eleven languages (the models are OPUS-MT, through English when English is neither)
+    if (m_dir == Direction::Pair) {
+        runPair(text, previous);
+        return;
+    }
     // 1.3: up to three words never go to the large model
     const bool shortText = !proofreading() && text.split(QRegularExpression(QStringLiteral("\\s+")), Qt::SkipEmptyParts).size() <= 3;
     const QString modelId = shortText ? m_tool->wordModel(kind) : m_tool->chosenModel(kind);
     if (modelId.isEmpty()) {
         if (shortText && !m_tool->chosenModel(kind).isEmpty())
             setStatus(tr("A word or a short text is translated by the small model, never by the large one, and the small "
-                         "model is not downloaded: choose %1 with Models... (File > Options > Proofreading).")
+                         "model is not downloaded: choose %1 with Models... (File > Options > Translation Helper).")
                           .arg(kind == QLatin1String("translator") ? tr("OPUS-MT German to English")
                                                                    : tr("OPUS-MT English to German (small)")));
         else
             setStatus(!proofreading() ? tr("No translation model is downloaded yet. Choose one with Models... (File > "
-                                           "Options > Proofreading).")
+                                           "Options > Translation Helper).")
                                       : tr("No proofreading model is downloaded yet. Choose one with Models... (File > "
-                                           "Options > Proofreading)."));
+                                           "Options > Translation Helper)."));
         emit finished();
         return;
     }
@@ -875,7 +1033,7 @@ void Panel::runNow(bool live)
         capitals = !dict.isEmpty() && ensureGermanDictionary(dict);
         if (!capitals)
             m_noteList << tr("German nouns need capital letters for a good translation. The German dictionary (File > Options > "
-                             "Proofreading, Models...) sets them in the copy the model gets; it is not available.");
+                             "Translation Helper, Models...) sets them in the copy the model gets; it is not available.");
     }
     for (const QString &u : std::as_const(m_plan.units)) {
         Unit unit;
@@ -967,6 +1125,172 @@ void Panel::runNow(bool live)
     t->start();
 }
 
+namespace {
+// What one model of a pair does: its slot in the engine, its files and how it is run.
+struct PairStep {
+    QString slot;
+    ModelFiles files;
+    RunOptions options;
+};
+} // namespace
+
+// 1.5: a text in any of the eleven languages into any other. One OPUS-MT model when English is one of the two, else two
+// (through English: the first one's sentences go to the second one). The units, the cache, the marks and the clicks on
+// words are those of every translation; only the work in the thread has a step more.
+void Panel::runPair(const QString &text, const QHash<QString, QList<Segment>> &previous)
+{
+    const QList<Step> steps = stepsFor(m_srcLang, m_tgtLang);
+    m_pairModels.clear();
+    if (steps.isEmpty()) {
+        setStatus(tr("Choose two different languages."));
+        updateModeUi();
+        emit finished();
+        return;
+    }
+    QStringList ids, missing;
+    for (const Step &step : steps) {
+        const QString id = m_tool->stepModel(step);
+        if (id.isEmpty())
+            missing << tr("OPUS-MT %1 to %2").arg(languageName(step.from), languageName(step.to));
+        else
+            ids << id;
+    }
+    if (!missing.isEmpty()) {
+        setStatus(tr("No translation model is downloaded yet for %1 to %2: %3. Choose it with Models... (File > Options > "
+                     "Translation Helper).")
+                      .arg(languageName(m_srcLang), languageName(m_tgtLang), missing.join(tr(" and "))));
+        updateNotice();
+        emit finished();
+        return;
+    }
+    QString error;
+    EngineInterface *engine = m_tool->engine(&error);
+    if (!engine) {
+        setStatus(tr("The engine cannot be used: %1").arg(error));
+        emit finished();
+        return;
+    }
+    // 1.1: never a model the computer has no room for; the second model of a pair is loaded beside the first
+    for (int i = 0; i < ids.size(); ++i) {
+        const QString memory = m_tool->loadProblem(TranslateTool::pairSlot(i), ids.at(i));
+        if (!memory.isEmpty()) {
+            setStatus(memory);
+            emit finished();
+            return;
+        }
+    }
+    const Rules rules = rulesForRun();
+    m_plan = makePlan(text, true);
+    m_units.clear();
+    m_noteList.clear();
+    m_single = SingleWord();
+    // German nouns need their capitals for a good translation (the dictionary puts them right in the copy the model gets)
+    bool capitals = false;
+    if (m_srcLang == QLatin1String("de")) {
+        const QString dict = m_tool->dictionaryFile();
+        capitals = !dict.isEmpty() && ensureGermanDictionary(dict);
+        if (!capitals)
+            m_noteList << tr("German nouns need capital letters for a good translation. The German dictionary (File > Options > "
+                             "Translation Helper, Models...) sets them in the copy the model gets; it is not available.");
+    }
+    int dashes = 0;
+    for (const QString &u : std::as_const(m_plan.units)) {
+        Unit unit;
+        unit.original = u;
+        int n = 0;
+        unit.modelInput = toPlainQuotes(beforeModel(u, rules, &n));
+        if (capitals)
+            unit.modelInput = correctGermanCapitals(unit.modelInput);
+        dashes += n;
+        m_units << unit;
+    }
+    for (Unit &u : m_units)
+        if (previous.contains(u.original))
+            u.segments = previous.value(u.original);
+    if (dashes)
+        m_noteList << (dashes == 1 ? tr("1 dash replaced by a comma (rule: no em-dashes): click it to keep the dash.")
+                                   : tr("%1 dashes replaced (rule: no em-dashes): click one to keep the dash.").arg(dashes));
+    if (steps.size() > 1)
+        m_noteList << tr("Translated through English (%1 to English to %2): two steps, so a mistake of the first one is carried "
+                         "into the second.")
+                          .arg(languageName(m_srcLang), languageName(m_tgtLang));
+
+    QList<PairStep> work;
+    const int beam = m_tool->setting(QStringLiteral("careful"), false).toBool() ? 6 : 4;
+    for (int i = 0; i < ids.size(); ++i) {
+        PairStep ps;
+        ps.slot = TranslateTool::pairSlot(i);
+        ps.files = m_tool->store()->files(ids.at(i));
+        ps.options.beam = beam;
+        ps.options.banDashes = rules.noEmDash;
+        ps.options.batch = 8;
+        work << ps;
+    }
+    m_pairModels = ids;
+    m_runKey = ids.join(QLatin1Char('>')) + QLatin1Char('\x1f') + QString::number(beam) + (rules.noEmDash ? u'1' : u'0');
+    m_sent.clear();
+    QStringList modelTexts;
+    for (int i = 0; i < m_units.size(); ++i)
+        if (!m_cache.contains(m_runKey + QLatin1Char('\x1f') + m_units.at(i).modelInput)) {
+            m_sent << i;
+            modelTexts << m_units.at(i).modelInput;
+        }
+    if (modelTexts.isEmpty()) {
+        finishRun({}, QString(), 0.0, false);
+        return;
+    }
+    const int threads = m_tool->threads();
+    m_cancel = std::make_shared<std::atomic_bool>(false);
+    auto cancel = m_cancel;
+    setBusy(true);
+    m_progress->setRange(0, 0);
+    setStatus(tr("Loading the models..."));
+    QPointer<Panel> self(this);
+    QThread *t = QThread::create([self, engine, work, threads, modelTexts, cancel] {
+        TranslateTool::lowerPriority();
+        QElapsedTimer clock;
+        clock.start();
+        QString error;
+        QStringList results = modelTexts, pivots;
+        for (int i = 0; i < work.size() && error.isEmpty() && !cancel->load(); ++i) {
+            const PairStep &ps = work.at(i);
+            if (i == work.size() - 1)
+                pivots = results;   // what the last model gets (English in a pair through English; else the text itself)
+            if (!engine->load(ps.slot, ps.files, threads, &error))
+                break;
+            RunOptions opts = ps.options;
+            opts.cancel = cancel.get();
+            const int step = i + 1, steps = int(work.size());
+            results = engine->run(ps.slot, results, opts,
+                                  [self, cancel, step, steps](int done, int total) {
+                                      if (self)
+                                          QMetaObject::invokeMethod(self.data(), [self, done, total, step, steps] {
+                                              if (!self)
+                                                  return;
+                                              self->m_progress->setRange(0, total);
+                                              self->m_progress->setValue(done);
+                                              self->setStatus(steps > 1 ? tr("Working (step %1 of %2): %3 of %4 sentences...")
+                                                                              .arg(step).arg(steps).arg(done).arg(total)
+                                                                        : tr("Working: %1 of %2 sentences...").arg(done).arg(total));
+                                          }, Qt::QueuedConnection);
+                                      return !cancel->load();
+                                  },
+                                  &error);
+        }
+        const double seconds = clock.elapsed() / 1000.0;
+        const bool stopped = cancel->load();
+        if (self)
+            QMetaObject::invokeMethod(self.data(), [self, results, pivots, error, seconds, stopped] {
+                if (!self)
+                    return;
+                self->m_pendingPivots = pivots;
+                self->finishRun(results, error, seconds, stopped);
+            }, Qt::QueuedConnection);
+    });
+    connect(t, &QThread::finished, t, &QObject::deleteLater);
+    t->start();
+}
+
 void Panel::stop()
 {
     m_rerun = false;
@@ -993,9 +1317,17 @@ void Panel::finishRun(const QStringList &sentResults, const QString &error, doub
     for (int k = 0; k < m_sent.size(); ++k) {
         const QString &r = sentResults.at(k);
         results[m_sent.at(k)] = r;
-        if (!r.isEmpty())
-            m_cache.insert(m_runKey + QLatin1Char('\x1f') + m_units.at(m_sent.at(k)).modelInput, r);
+        if (!r.isEmpty()) {
+            const QString key = m_runKey + QLatin1Char('\x1f') + m_units.at(m_sent.at(k)).modelInput;
+            m_cache.insert(key, r);
+            if (m_dir == Direction::Pair && k < m_pendingPivots.size())
+                m_cache.insert(key + QStringLiteral("\x1fpivot"), m_pendingPivots.at(k));
+        }
     }
+    m_pendingPivots.clear();
+    if (m_dir == Direction::Pair)
+        for (Unit &u : m_units)
+            u.pivot = m_cache.value(m_runKey + QLatin1Char('\x1f') + u.modelInput + QStringLiteral("\x1fpivot"));
     if (m_cache.size() > 5000)
         m_cache.clear();
     const Rules rules = rulesForRun();
@@ -1095,7 +1427,7 @@ void Panel::finishSingle()
     else if (m_single.spelling.isEmpty())
         setStatus(tr("“%1” is not in the dictionary, and no word near it is.").arg(word));
     else
-        setStatus(tr("“%1” is not in the dictionary: “%2” is the nearest word. Below: the other suggestions.")
+        setStatus(tr("Suggestion: “%2” is the nearest word to “%1”, which is not in the dictionary. Check it. Below: the other suggestions.")
                       .arg(word, m_single.result));
     requestChatMeaning();
     render();
@@ -1368,6 +1700,34 @@ bool Panel::outputJob(int unit, int word, AltJob *job, QString *error)
 {
     if (unit < 0 || unit >= m_units.size() || word < 0)
         return false;
+    if (m_dir == Direction::Pair) {
+        // 1.5: other words for the target language: the last model of the pair, with the text it got (English in a pair
+        // through English)
+        const QList<Step> steps = stepsFor(m_srcLang, m_tgtLang);
+        const QString id = steps.isEmpty() ? QString() : m_tool->stepModel(steps.last());
+        if (id.isEmpty()) {
+            if (error)
+                *error = tr("no model downloaded");
+            return false;
+        }
+        job->engine = m_tool->engine(error);
+        if (!job->engine)
+            return false;
+        const QString slotName = TranslateTool::pairSlot(int(steps.size()) - 1);
+        if (const QString memory = m_tool->loadProblem(slotName, id); !memory.isEmpty()) {
+            if (error)
+                *error = memory;
+            return false;
+        }
+        job->slot = slotName;
+        job->files = m_tool->store()->files(id);
+        job->threads = m_tool->threads();
+        job->source = steps.size() > 1 && !m_units.at(unit).pivot.isEmpty() ? m_units.at(unit).pivot : m_units.at(unit).modelInput;
+        job->current = toPlainQuotes(unitText(unit));
+        job->word = word;
+        job->options.banDashes = m_tool->rules().noEmDash;
+        return true;
+    }
     const QString modelId = m_tool->chosenModel(slot());
     if (modelId.isEmpty()) {
         if (error)
@@ -1673,7 +2033,101 @@ struct SingleJob {
     RunOptions options;
     bool modelOk = false;
     QString modelNote;      // why the small model cannot be used
+    // 1.5: a pair of the eleven languages: the languages, and the models one after the other (a pair through English: two)
+    QString srcLang, tgtLang;
+    bool dictionaryOffered = false;   // the catalog has a dictionary of the language (downloaded or not)
+    QStringList stepSlots;
+    QList<ModelFiles> stepFiles;
 };
+
+// 1.5: a single word from one of the eleven languages into another. The dictionary of the word's language (when it is
+// downloaded; English: WordNet) says what the word is and what it means; the translation is the small model's, through
+// English when English is neither language. Into English, the English words of the dictionary come first, as for German.
+Panel::SingleWord computePairSingle(const SingleJob &j, QString *error)
+{
+    using DictClass = Panel::DictClass;
+    Panel::SingleWord w;
+    w.on = true;
+    w.word = j.word;
+    w.lang = j.srcLang;
+    const bool toEn = j.tgtLang == QLatin1String("en");
+    w.kind = toEn ? QStringLiteral("pair-en") : QStringLiteral("pair");
+    if (j.srcLang == QLatin1String("en")) {
+        QString base;
+        w.meanings = englishMeanings(j.word, &base);
+        for (const EnglishClass &ec : std::as_const(w.meanings)) {
+            DictClass dc;
+            dc.headword = base.isEmpty() ? j.word : base;
+            dc.pos = ec.pos;
+            w.classes << dc;
+        }
+    } else if (!j.dictFile.isEmpty()) {
+        QString e;
+        if (!ensureDictionary(j.srcLang, j.dictFile, &e))
+            w.note = QObject::tr("The %1 dictionary cannot be read (%2): download it again in File > Options > Translation Helper.")
+                         .arg(languageName(j.srcLang), e);
+        for (const GermanEntry &en : lookupWord(j.srcLang, j.word)) {
+            DictClass dc;
+            dc.headword = en.headword;
+            dc.pos = en.pos;
+            dc.gender = en.gender;
+            for (const GermanMeaning &m : en.meanings)
+                dc.senses << Panel::DictSense{m.english, m.definition};
+            w.classes << dc;
+        }
+        w.fromDictionary = !w.classes.isEmpty();
+    } else if (j.dictionaryOffered) {
+        w.note = QObject::tr("The %1 dictionary is not downloaded (File > Options > Translation Helper): it gives the word classes "
+                             "and meanings of a %1 word.")
+                     .arg(languageName(j.srcLang));
+    } else {
+        w.note = QObject::tr("There is no dictionary of %1 for the add-on: the translation is the model's.").arg(languageName(j.srcLang));
+    }
+    // the model's translation of the word alone, through every step
+    QString bare;
+    if (!j.modelOk) {
+        w.note = w.note.isEmpty() ? j.modelNote : w.note + QLatin1Char(' ') + j.modelNote;
+    } else if (!j.engine) {
+        if (error)
+            *error = QObject::tr("The engine cannot be used.");
+    } else {
+        QString e;
+        QStringList texts{j.word};
+        for (int i = 0; i < j.stepSlots.size() && e.isEmpty(); ++i) {
+            if (!j.engine->load(j.stepSlots.at(i), j.stepFiles.at(i), j.threads, &e))
+                break;
+            texts = j.engine->run(j.stepSlots.at(i), texts, j.options, nullptr, &e);
+        }
+        if (texts.size() != 1 || !e.isEmpty()) {
+            if (error)
+                *error = e.isEmpty() ? QObject::tr("no result") : e;
+        } else {
+            bare = unframe(j.tgtLang, QString(), texts.first()).trimmed();
+            // a capital letter of the source (a German noun, a sentence start) is not the target word's
+            if (!j.word.isEmpty() && j.word.at(0).isUpper() && bare != j.word && bare.size() > 1 && bare.at(0).isUpper()
+                && bare.at(1).isLower() && (j.srcLang == QLatin1String("de") || toEn))
+                bare[0] = bare.at(0).toLower();
+            w.fromModel = !bare.isEmpty();
+        }
+    }
+    // into English: the first English word of the first class that has one; else the model's word
+    if (toEn)
+        for (const DictClass &dc : std::as_const(w.classes)) {
+            for (const Panel::DictSense &sn : dc.senses)
+                if (w.result.isEmpty() && !sn.english.isEmpty()) {
+                    w.result = sn.english.first();
+                    w.resultPos = dc.pos;
+                }
+            if (!w.result.isEmpty())
+                break;
+        }
+    if (w.result.isEmpty())
+        w.result = bare;
+    if (toEn && !w.result.isEmpty())
+        w.similar = similarWords(bareVerb(w.result), &w.base, w.resultPos);
+    w.fromModel = !bare.isEmpty() && w.result == bare;
+    return w;
+}
 
 // The work behind a single word, away from the window: the dictionary, then the small model for what the dictionary
 // does not say. (Order of the writer's settlement: 1. base form, classes, meanings; 2. English words of a meaning;
@@ -1681,6 +2135,8 @@ struct SingleJob {
 // dictionary: the small model alone, with the warning.)
 Panel::SingleWord computeSingle(const SingleJob &j, QString *error)
 {
+    if (j.dir == Panel::Direction::Pair)
+        return computePairSingle(j, error);
     using DictClass = Panel::DictClass;
     Panel::SingleWord w;
     w.on = true;
@@ -1688,13 +2144,14 @@ Panel::SingleWord computeSingle(const SingleJob &j, QString *error)
     const bool toEn = j.dir == Panel::Direction::DeToEn;
     w.kind = toEn ? QStringLiteral("de-en") : QStringLiteral("en-de");
     const QString from = toEn ? QStringLiteral("de") : QStringLiteral("en"), to = toEn ? QStringLiteral("en") : QStringLiteral("de");
+    w.lang = from;
     QStringList frames;
     QList<int> targets;   // the class a frame is for; -1: the word alone
     if (toEn) {
         if (!j.dictFile.isEmpty()) {
             QString e;
             if (!ensureGermanDictionary(j.dictFile, &e))
-                w.note = QObject::tr("The German dictionary cannot be read (%1): download it again in File > Options > Proofreading.").arg(e);
+                w.note = QObject::tr("The German dictionary cannot be read (%1): download it again in File > Options > Translation Helper.").arg(e);
             for (const GermanEntry &e : lookupGerman(j.word)) {
                 DictClass dc;
                 dc.headword = e.headword;
@@ -1706,7 +2163,7 @@ Panel::SingleWord computeSingle(const SingleJob &j, QString *error)
             }
             w.fromDictionary = !w.classes.isEmpty();
         } else {
-            w.note = QObject::tr("The German dictionary is not downloaded (File > Options > Proofreading): it gives the word classes "
+            w.note = QObject::tr("The German dictionary is not downloaded (File > Options > Translation Helper): it gives the word classes "
                                  "and meanings of a German word.");
         }
         for (int i = 0; i < w.classes.size(); ++i) {
@@ -1830,7 +2287,7 @@ Panel::SingleWord computeSingle(const SingleJob &j, QString *error)
     if (!toEn) {
         // 1.4: similar German words: the German words whose meanings name the English word or one of its synonyms
         if (j.dictFile.isEmpty()) {
-            w.note = w.note.isEmpty() ? QObject::tr("Similar German words need the German dictionary: download it in File > Options > Proofreading (Models...).")
+            w.note = w.note.isEmpty() ? QObject::tr("Similar German words need the German dictionary: download it in File > Options > Translation Helper (Models...).")
                                       : w.note;
         } else if (ensureGermanDictionary(j.dictFile)) {
             QSet<QString> taken;
@@ -1879,13 +2336,63 @@ void Panel::runSingleTranslation(const QString &word)
     job.word = word;
     job.slot = slot();
     job.dictFile = m_tool->dictionaryFile();   // 1.4: also for English to German (the similar German words)
-    const QString modelId = m_tool->wordModel(slot());
-    job.modelOk = false;
-    if (modelId.isEmpty()) {
+    if (m_dir == Direction::Pair) {
+        // 1.5: the small model of each step (a single word never goes to a large one), the dictionary of its language
+        job.srcLang = m_srcLang;
+        job.tgtLang = m_tgtLang;
+        job.dictFile = m_tool->dictionaryFile(m_srcLang);
+        job.dictionaryOffered = m_tool->store()->model(dictionaryIdFor(m_srcLang)) != nullptr;
+        QStringList missing;
+        QString error;
+        const QList<Step> steps = stepsFor(m_srcLang, m_tgtLang);
+        for (int i = 0; i < steps.size(); ++i) {
+            QString id = m_tool->stepModel(steps.at(i));
+            if (const CatalogModel *c = m_tool->store()->model(id); c && !c->forWords) {
+                id = modelIdFor(steps.at(i));   // the large one: its small model
+                if (!m_tool->store()->isInstalled(id))
+                    id.clear();
+            }
+            if (id.isEmpty()) {
+                missing << tr("OPUS-MT %1 to %2").arg(languageName(steps.at(i).from), languageName(steps.at(i).to));
+                continue;
+            }
+            job.stepSlots << TranslateTool::pairSlot(i);
+            job.stepFiles << m_tool->store()->files(id);
+        }
+        if (steps.isEmpty()) {
+            job.modelNote = tr("Choose two different languages.");
+        } else if (!missing.isEmpty()) {
+            job.modelNote = tr("No translation model is downloaded yet for %1 to %2: %3. Choose it with Models... (File > Options > "
+                               "Translation Helper).")
+                                .arg(languageName(m_srcLang), languageName(m_tgtLang), missing.join(tr(" and ")));
+        } else {
+            job.engine = m_tool->engine(&error);
+            QString memory = job.engine ? QString() : error;
+            for (int i = 0; job.engine && i < job.stepFiles.size() && memory.isEmpty(); ++i)
+                memory = m_tool->loadProblem(job.stepSlots.at(i), job.stepFiles.at(i).id);
+            if (!job.engine || !memory.isEmpty()) {
+                job.modelNote = job.engine ? memory : tr("The engine cannot be used: %1").arg(error);
+            } else {
+                job.modelOk = true;
+                job.threads = m_tool->threads();
+                job.options.beam = 4;
+                job.options.banDashes = m_tool->rules().noEmDash;
+                job.options.batch = 4;
+            }
+        }
+        m_pairModels.clear();
+        for (const ModelFiles &f : std::as_const(job.stepFiles))
+            m_pairModels << f.id;
+    }
+    const QString modelId = m_dir == Direction::Pair ? QString() : m_tool->wordModel(slot());
+    job.modelOk = m_dir == Direction::Pair ? job.modelOk : false;
+    if (m_dir == Direction::Pair) {
+        // set up above
+    } else if (modelId.isEmpty()) {
         job.modelNote = m_tool->chosenModel(slot()).isEmpty()
-                            ? tr("No translation model is downloaded yet. Choose one with Models... (File > Options > Proofreading).")
+                            ? tr("No translation model is downloaded yet. Choose one with Models... (File > Options > Translation Helper).")
                             : tr("A single word is translated by the small model, never by the large one, and the small model is not "
-                                 "downloaded: choose %1 with Models... (File > Options > Proofreading).")
+                                 "downloaded: choose %1 with Models... (File > Options > Translation Helper).")
                                   .arg(m_dir == Direction::DeToEn ? tr("OPUS-MT German to English") : tr("OPUS-MT English to German (small)"));
     } else {
         QString error;
@@ -1950,7 +2457,7 @@ void Panel::finishSingleTranslation(const SingleWord &w, const QString &error)
     Segment s;
     s.before = s.after = words(w.result);
     u.segments = {s};
-    if (m_single.kind == QLatin1String("en-de")) {
+    if (m_single.kind == QLatin1String("en-de") || (m_single.kind.startsWith(QLatin1String("pair")) && m_single.lang == QLatin1String("en"))) {
         requestChatMeaning();   // when WordNet has nothing
     }
     render();
@@ -1972,7 +2479,7 @@ void Panel::pickWord(const QString &word, const QString &pos)
         return;
     m_single.result = word;
     m_single.resultPos = pos;
-    if (m_single.kind == QLatin1String("de-en"))
+    if (m_single.kind == QLatin1String("de-en") || m_single.kind == QLatin1String("pair-en"))
         m_single.similar = similarWords(bareVerb(word), &m_single.base, pos);
     Unit &u = m_units[0];
     u.raw = toPlainQuotes(word);
@@ -2004,7 +2511,7 @@ void Panel::requestChatMeaning()
     const QString modelId = chatMeaningModel(m_tool);
     if (modelId.isEmpty()) {
         m_single.meaningNote = tr("WordNet has no entry for “%1”, so there is no meaning to show. A model can write one: download "
-                                  "Qwen3 1.7B or Qwen3 4B in File > Options > Proofreading.")
+                                  "Qwen3 1.7B or Qwen3 4B in File > Options > Translation Helper.")
                                    .arg(word);
         return;
     }
@@ -2053,7 +2560,7 @@ void Panel::requestChatMeaning()
 void Panel::requestVariants()
 {
     // other complete translations of a short text: one run of the model with several hypotheses, names dropped
-    if (m_units.size() != 1)
+    if (m_units.size() != 1 || m_dir == Direction::Pair)
         return;
     const QString modelId = words(m_units.at(0).original).size() <= 3 ? m_tool->wordModel(slot()) : m_tool->chosenModel(slot());
     if (modelId.isEmpty() || chatModel(modelId))
@@ -2107,8 +2614,12 @@ void Panel::swapDirection()
         return;
     const Direction now = m_units.isEmpty() ? directionNow() : m_dir;
     const QString result = m_units.isEmpty() ? QString() : resultText();
-    const QString task = now == Direction::DeToEn ? QStringLiteral("translateEn") : QStringLiteral("translate");
-    m_task->setCurrentIndex(qMax(0, m_task->findData(task)));
+    // 1.5: the two lists change places (a text that was proofread: German to English, as before)
+    const QString from = m_units.isEmpty() ? fromLanguage() : m_srcLang, to = m_units.isEmpty() ? toLanguage() : m_tgtLang;
+    if (now == Direction::Proofread)
+        setLanguages(QStringLiteral("de"), QStringLiteral("en"));
+    else
+        setLanguages(to, from);
     if (result.trimmed().isEmpty()) {
         updateModeUi();
         return;
@@ -2123,10 +2634,97 @@ void Panel::showBack(const QString &html)
     m_back->setVisible(true);
 }
 
+// 1.5: the result of a pair translated back into the language of the text (the steps the other way round)
+void Panel::translateBackPair()
+{
+    const QString text = resultText();
+    if (text.trimmed().isEmpty())
+        return;
+    const bool shortText = text.split(QRegularExpression(QStringLiteral("\\s+")), Qt::SkipEmptyParts).size() <= 3;
+    const QList<Step> steps = stepsFor(m_tgtLang, m_srcLang);
+    QList<PairStep> work;
+    QStringList offer;
+    for (int i = 0; i < steps.size(); ++i) {
+        QString id = m_tool->stepModel(steps.at(i));
+        if (const CatalogModel *c = m_tool->store()->model(id); c && !c->forWords && shortText) {
+            id = modelIdFor(steps.at(i));
+            if (!m_tool->store()->isInstalled(id))
+                id.clear();
+        }
+        if (id.isEmpty()) {
+            const CatalogModel *c = m_tool->catalogModelFor(steps.at(i));
+            offer << (c ? tr("%1 (%2 MB). <a href=\"tp-download:%3\">Download it</a>").arg(c->title.toHtmlEscaped()).arg(c->sizeMB).arg(c->id)
+                        : tr("There is no model for the way back."));
+            continue;
+        }
+        PairStep ps;
+        ps.slot = TranslateTool::pairSlot(i);
+        ps.files = m_tool->store()->files(id);
+        ps.options.beam = 4;
+        ps.options.banDashes = m_tool->rules().noEmDash;
+        work << ps;
+    }
+    if (!offer.isEmpty()) {
+        showBack(tr("The model for the way back is not downloaded: %1").arg(offer.join(QStringLiteral("; "))));
+        return;
+    }
+    QString error;
+    EngineInterface *engine = m_tool->engine(&error);
+    QString memory = engine ? QString() : error;
+    for (int i = 0; engine && i < work.size() && memory.isEmpty(); ++i)
+        memory = m_tool->loadProblem(work.at(i).slot, work.at(i).files.id);
+    if (!engine || !memory.isEmpty()) {
+        showBack(memory.toHtmlEscaped());
+        return;
+    }
+    m_pairModels.clear();
+    for (const PairStep &ps : std::as_const(work))
+        m_pairModels << ps.files.id;
+    Rules rules = m_tool->rules();
+    if (m_srcLang != QLatin1String("en")) {
+        rules.american = false;
+        rules.curlyQuotes = false;
+    }
+    setBusy(true);
+    setStatus(tr("Translating back..."));
+    const QString sent = toPlainQuotes(text);
+    const QString input = inputText();
+    const int threads = m_tool->threads();
+    QPointer<Panel> self(this);
+    QThread *t = QThread::create([self, engine, work, threads, sent, rules, input] {
+        TranslateTool::lowerPriority();
+        QString e;
+        QStringList texts{sent};
+        for (int i = 0; i < work.size() && e.isEmpty(); ++i) {
+            if (!engine->load(work.at(i).slot, work.at(i).files, threads, &e))
+                break;
+            texts = engine->run(work.at(i).slot, texts, work.at(i).options, nullptr, &e);
+        }
+        const QString out = texts.value(0);
+        QMetaObject::invokeMethod(qApp, [self, out, e, rules, input] {
+            if (!self)
+                return;
+            self->setBusy(false);
+            self->m_tool->touchEngine();
+            if (self->inputText() == input)
+                self->showBack(out.isEmpty() ? tr("The way back failed: %1").arg(e.toHtmlEscaped())
+                                             : tr("<i>Back:</i> %1").arg(tidyPunctuation(afterModel(out, rules)).toHtmlEscaped()));
+            self->setStatus(tr("Translated back."));
+            emit self->finished();
+        }, Qt::QueuedConnection);
+    });
+    connect(t, &QThread::finished, t, &QObject::deleteLater);
+    t->start();
+}
+
 void Panel::translateBack()
 {
     if (m_busy || m_units.isEmpty() || m_dir == Direction::Proofread)
         return;
+    if (m_dir == Direction::Pair) {
+        translateBackPair();
+        return;
+    }
     const Direction back = m_dir == Direction::DeToEn ? Direction::EnToDe : Direction::DeToEn;
     const QString kind = kindOf(back);
     const QString text = resultText();
@@ -2241,9 +2839,14 @@ void Panel::renderSingle(QTextCursor &c, const QTextCharFormat &plain)
         c.insertText(tr("more (%1)").arg(total - kFirstMeanings), l);
     };
     c.insertBlock();
-    if (proof)
+    if (proof) {
         list(tr("Spelling:"), m_single.spelling);
+        if (!m_single.spelling.isEmpty())
+            small(tr("The correction and these words are suggestions: check them."), true);
+    }
 
+    // 1.5: into a language other than English the dictionary's English words only explain (a click would put English into the result)
+    const bool pickable = m_single.kind != QLatin1String("pair");
     // the German dictionary's classes (German to English), or the German words of an English word's classes
     for (int k = 0; k < m_single.classes.size(); ++k) {
         const DictClass &dc = m_single.classes.at(k);
@@ -2266,8 +2869,11 @@ void Panel::renderSingle(QTextCursor &c, const QTextCharFormat &plain)
                 for (int w = 0; w < s.english.size(); ++w) {
                     if (w > 0)
                         c.insertText(QStringLiteral(", "), plain);
-                    c.insertText(s.english.at(w),
-                                 linkFor(s.english.at(w), QStringLiteral("tp-pick:%1:%2").arg(dc.pos, QString::fromUtf8(QUrl::toPercentEncoding(s.english.at(w))))));
+                    if (pickable)
+                        c.insertText(s.english.at(w),
+                                     linkFor(s.english.at(w), QStringLiteral("tp-pick:%1:%2").arg(dc.pos, QString::fromUtf8(QUrl::toPercentEncoding(s.english.at(w))))));
+                    else
+                        c.insertText(s.english.at(w), plain);
                 }
             }
             ++shownCount;
@@ -2279,14 +2885,15 @@ void Panel::renderSingle(QTextCursor &c, const QTextCharFormat &plain)
         more(key, int(dc.senses.size()));
     }
     if (m_single.fromDictionary)
-        small(tr("From the Wiktionary (CC BY-SA 4.0), the German dictionary you downloaded."));
+        small(tr("From the Wiktionary (CC BY-SA 4.0), the %1 dictionary you downloaded.")
+                  .arg(languageName(m_single.lang.isEmpty() ? QStringLiteral("de") : m_single.lang)));
     if (m_single.fromModel)
         small(tr("Warning: some of these words come from the small translation model. It may be inaccurate."), true);
     if (!m_single.note.isEmpty())
         small(m_single.note, true);
 
     // what an English word means (WordNet), or a model's words, or why there is none
-    if (proof || m_single.kind == QLatin1String("en-de")) {
+    if (proof || m_single.kind == QLatin1String("en-de") || (m_single.kind.startsWith(QLatin1String("pair")) && m_single.lang == QLatin1String("en"))) {
         for (const EnglishClass &ec : std::as_const(m_single.meanings)) {
             const QString key = QStringLiteral("m:") + ec.pos;
             c.insertBlock();
@@ -2320,7 +2927,7 @@ void Panel::renderSingle(QTextCursor &c, const QTextCharFormat &plain)
                                     ? QString()
                                     : tr(", for “%1”").arg(m_single.base);
         // 1.4: a translated word has similar translations (English: the thesaurus of the meaning; German: the dictionary's words)
-        if (m_single.kind == QLatin1String("de-en"))
+        if (m_single.kind == QLatin1String("de-en") || m_single.kind == QLatin1String("pair-en"))
             list(tr("Similar translations (%1%2):").arg(sim.pos, forBase), sim.words);
         else if (m_single.kind == QLatin1String("en-de"))
             list(tr("Similar German words (%1):").arg(sim.pos), sim.words);
@@ -2349,7 +2956,7 @@ void Panel::showInfoForOutput(int position)
         core = w.text;
     m_infoWord = core;
     m_infoContext = QStringLiteral("output");
-    m_infoEnglish = m_dir != Direction::EnToDe;   // the result is English, unless it was translated into German
+    m_infoEnglish = m_tgtLang == QLatin1String("en");   // the result is English, unless it was translated into another language
     fillInfo();
 }
 

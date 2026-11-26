@@ -1,7 +1,7 @@
 {
   "format": 1,
   "id": "translation-proofreading",
-  "name": "Translation and Proofreading",
+  "name": "Translation Helper",
   "version": "1.4",
   "repository": "Shelin-boop/Quillbinder_Collection",
   "commit": "532bb3cb80c5230aa78f089e38b2465f177e1792",
@@ -9,7 +9,7 @@
   "author": "The Quillbinder project",
   "license": "Apache License 2.0",
   "reviewed": "2026-11-25",
-  "summary": "Checks English text for spelling and grammar and translates German text into English and English into German, on your own computer; once a model is downloaded, it works without any connection.",
+  "summary": "Gives suggestions for translating between eleven languages and for checking English spelling and grammar, on your own computer; once a model is downloaded, it works without any connection. Its translations are not precise: check each one, which needs a working knowledge of both languages.",
   "nonCommercialData": [
     {
       "name": "CoEdIT Large (Grammarly), a proofreading model",

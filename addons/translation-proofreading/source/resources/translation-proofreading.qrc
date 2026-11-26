@@ -5,5 +5,15 @@
     <file>en-words.txt</file>
     <file>en-thesaurus.tsv</file>
     <file>en-glosses.tsv</file>
+    <file alias="translations/tp_de.qm">../translations/tp_de.qm</file>
+    <file alias="translations/tp_es.qm">../translations/tp_es.qm</file>
+    <file alias="translations/tp_fr.qm">../translations/tp_fr.qm</file>
+    <file alias="translations/tp_pt.qm">../translations/tp_pt.qm</file>
+    <file alias="translations/tp_it.qm">../translations/tp_it.qm</file>
+    <file alias="translations/tp_ru.qm">../translations/tp_ru.qm</file>
+    <file alias="translations/tp_id.qm">../translations/tp_id.qm</file>
+    <file alias="translations/tp_tr.qm">../translations/tp_tr.qm</file>
+    <file alias="translations/tp_pl.qm">../translations/tp_pl.qm</file>
+    <file alias="translations/tp_nl.qm">../translations/tp_nl.qm</file>
   </qresource>
 </RCC>
