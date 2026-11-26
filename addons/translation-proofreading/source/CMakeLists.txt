@@ -10,7 +10,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(QuillbinderTranslationAddon LANGUAGES CXX)
 
-set(TP_VERSION "1.4")
+set(TP_VERSION "1.5")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
@@ -32,7 +32,7 @@ add_library(qb-translation-proofreading MODULE
   src/OptionsPage.cpp src/OptionsPage.h
   src/ModelStore.cpp src/ModelStore.h
   src/Logic.cpp src/Logic.h
-  src/Dictionary.cpp src/Dictionary.h
+  src/Dictionary.cpp src/Dictionary.h src/Languages.cpp src/Languages.h
   src/EngineApi.h
   third_party/quillbinder/ToolApi.h
   resources/translation-proofreading.qrc)
@@ -160,7 +160,7 @@ if(TP_TEST_SWITCHES)
   enable_testing()
   find_package(Qt6 REQUIRED COMPONENTS Test)
   # the text logic and the chat models' tokenizer (Qt Core only)
-  add_executable(tp_logic_tests tests/logic_tests.cpp src/Logic.cpp src/Logic.h src/Dictionary.cpp src/Dictionary.h src/engine/Bpe.cpp src/engine/Bpe.h
+  add_executable(tp_logic_tests tests/logic_tests.cpp src/Logic.cpp src/Logic.h src/Dictionary.cpp src/Dictionary.h src/Languages.cpp src/Languages.h src/engine/Bpe.cpp src/engine/Bpe.h
     resources/translation-proofreading.qrc)
   target_include_directories(tp_logic_tests PRIVATE src src/engine)
   target_link_libraries(tp_logic_tests PRIVATE Qt6::Core Qt6::Test)
@@ -175,7 +175,7 @@ if(TP_TEST_SWITCHES)
   # real models: the tool's sources are compiled in, so the checks can look inside
   add_executable(tp_ui_tests tests/ui_tests.cpp tests/FakeHost.h
     src/TranslateTool.cpp src/TranslateTool.h src/Panel.cpp src/Panel.h src/OptionsPage.cpp src/OptionsPage.h
-    src/ModelStore.cpp src/ModelStore.h src/Logic.cpp src/Logic.h src/Dictionary.cpp src/Dictionary.h src/EngineApi.h
+    src/ModelStore.cpp src/ModelStore.h src/Logic.cpp src/Logic.h src/Dictionary.cpp src/Dictionary.h src/Languages.cpp src/Languages.h src/EngineApi.h
     third_party/quillbinder/ToolApi.h resources/translation-proofreading.qrc)
   target_include_directories(tp_ui_tests PRIVATE src third_party/quillbinder tests)
   target_link_libraries(tp_ui_tests PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::Test ${CMAKE_DL_LIBS})
@@ -191,7 +191,7 @@ if(TP_TEST_SWITCHES)
   # (no downloaded models needed)
   add_executable(tp_word_tests tests/word_tests.cpp tests/FakeHost.h tests/FakeEngine.h
     src/TranslateTool.cpp src/TranslateTool.h src/Panel.cpp src/Panel.h src/OptionsPage.cpp src/OptionsPage.h
-    src/ModelStore.cpp src/ModelStore.h src/Logic.cpp src/Logic.h src/Dictionary.cpp src/Dictionary.h src/EngineApi.h
+    src/ModelStore.cpp src/ModelStore.h src/Logic.cpp src/Logic.h src/Dictionary.cpp src/Dictionary.h src/Languages.cpp src/Languages.h src/EngineApi.h
     third_party/quillbinder/ToolApi.h resources/translation-proofreading.qrc)
   target_include_directories(tp_word_tests PRIVATE src third_party/quillbinder tests)
   target_link_libraries(tp_word_tests PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::Test ${CMAKE_DL_LIBS})
@@ -200,6 +200,21 @@ if(TP_TEST_SWITCHES)
     add_test(NAME words COMMAND tp_word_tests -o ${CMAKE_BINARY_DIR}/test-words.txt,txt)
   else()
     add_test(NAME words COMMAND tp_word_tests)
+  endif()
+
+  # 1.5: the Translation Helper: the eleven languages, pairs through English, the drop-down lists, the dictionaries of the
+  # other languages, the fixed line, the new name and the add-on's own texts in the eleven languages
+  add_executable(tp_lang_tests tests/lang_tests.cpp tests/FakeHost.h tests/FakeEngine.h
+    src/TranslateTool.cpp src/TranslateTool.h src/Panel.cpp src/Panel.h src/OptionsPage.cpp src/OptionsPage.h
+    src/ModelStore.cpp src/ModelStore.h src/Logic.cpp src/Logic.h src/Dictionary.cpp src/Dictionary.h src/Languages.cpp src/Languages.h src/EngineApi.h
+    third_party/quillbinder/ToolApi.h resources/translation-proofreading.qrc)
+  target_include_directories(tp_lang_tests PRIVATE src third_party/quillbinder tests)
+  target_link_libraries(tp_lang_tests PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Network Qt6::Test ${CMAKE_DL_LIBS})
+  target_compile_definitions(tp_lang_tests PRIVATE TP_BUILD_DIR="${CMAKE_BINARY_DIR}" TP_SOURCE_DIR="${CMAKE_SOURCE_DIR}" TP_VERSION="${TP_VERSION}" TP_TEST_SWITCHES)
+  if(WIN32)
+    add_test(NAME languages COMMAND tp_lang_tests -o ${CMAKE_BINARY_DIR}/test-languages.txt,txt)
+  else()
+    add_test(NAME languages COMMAND tp_lang_tests)
   endif()
 
   # 1.3: the tool that makes the German dictionary extract, and the add-on's reader on what it made
