@@ -51,7 +51,8 @@ extern const char *const kObjects;     // the Objects window: the upper part and
 extern const char *const kObjectsSheet;     // the Objects window: the sheet
 extern const char *const kInspSynopsis;     // inspector, Notes tab: title and synopsis card
 extern const char *const kInspNotes;        // inspector, Notes tab: the notes
-extern const char *const kInspBookmarks;    // inspector, Bookmarks tab: the two lists
+extern const char *const kInspBookmarks;    // inspector, Bookmarks tab: the list of the document's bookmarks (the key of both lists until 0.94)
+extern const char *const kInspProjectBookmarks; // inspector, Bookmarks tab: the list of the project's bookmarks (0.95.0)
 extern const char *const kInspPreview;      // inspector, Bookmarks tab: the text of the bookmarked document
 extern const char *const kInspSnapList;     // inspector, Snapshots tab: the list
 extern const char *const kInspSnapText;     // inspector, Snapshots tab: the text of a snapshot
@@ -84,6 +85,7 @@ QString inspectorKey(const QString &tab);         // kInspector or "inspector/<t
 // Since 0.21.1: the zooms of the parts start from the zoom they had as part of
 // the whole inspector (or the Objects window) before; called once by install().
 void migrateParts();
+void migrateProjectList(); // 0.95.0: the project bookmark list starts at the zoom both lists had
 
 // Notes the change of a factor (also of the inspector mode).
 class Notifier : public QObject

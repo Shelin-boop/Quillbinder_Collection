@@ -26,6 +26,7 @@ const char *const kObjectsSheet = "objects.sheet";
 const char *const kInspSynopsis = "inspector.synopsis";
 const char *const kInspNotes = "inspector.notes";
 const char *const kInspBookmarks = "inspector.bookmarkLists";
+const char *const kInspProjectBookmarks = "inspector.bookmarkProjectList";
 const char *const kInspPreview = "inspector.bookmarkPreview";
 const char *const kInspSnapList = "inspector.snapshotList";
 const char *const kInspSnapText = "inspector.snapshotText";
@@ -310,7 +311,7 @@ void reapply(const QString &key)
 QStringList areas()
 {
     QStringList l;
-    for (const char *k : {kEditor, kInspector, kInspSynopsis, kInspNotes, kInspBookmarks, kInspPreview, kInspSnapList, kInspSnapText,
+    for (const char *k : {kEditor, kInspector, kInspSynopsis, kInspNotes, kInspBookmarks, kInspProjectBookmarks, kInspPreview, kInspSnapList, kInspSnapText,
                           kInspObjectList, kInspObjectSheet, kBinder, kOutliner, kCorkboard, kComposition, kMindMap, kObjects, kObjectsSheet})
         l << QLatin1String(k);
     return l;
@@ -331,7 +332,7 @@ static QString partTab(const QString &key)
 {
     if (key == QLatin1String(kInspSynopsis) || key == QLatin1String(kInspNotes))
         return QStringLiteral("notes");
-    if (key == QLatin1String(kInspBookmarks) || key == QLatin1String(kInspPreview))
+    if (key == QLatin1String(kInspBookmarks) || key == QLatin1String(kInspProjectBookmarks) || key == QLatin1String(kInspPreview))
         return QStringLiteral("bookmarks");
     if (key == QLatin1String(kInspSnapList) || key == QLatin1String(kInspSnapText))
         return QStringLiteral("snapshots");
@@ -360,6 +361,20 @@ void migrateParts()
     st->setValue(QStringLiteral("zoomPartsMigrated"), true);
 }
 
+// 0.95.0: the two bookmark lists had one zoom; the project list now has its own, and starts at what both had
+void migrateProjectList()
+{
+    Store st = store();
+    if (st->value(QStringLiteral("zoomProjectListMigrated")).toBool())
+        return;
+    for (const QString prefix : {QStringLiteral("zoom/"), QStringLiteral("zoomDefault/")}) {
+        const QString from = prefix + QLatin1String(kInspBookmarks), to = prefix + QLatin1String(kInspProjectBookmarks);
+        if (st->contains(from) && !st->contains(to))
+            st->setValue(to, st->value(from));
+    }
+    st->setValue(QStringLiteral("zoomProjectListMigrated"), true);
+}
+
 QString areaName(const QString &key)
 {
     if (key == QLatin1String(kEditor))
@@ -385,7 +400,9 @@ QString areaName(const QString &key)
     if (key == QLatin1String(kInspNotes))
         return QObject::tr("Inspector: Notes");
     if (key == QLatin1String(kInspBookmarks))
-        return QObject::tr("Inspector: Bookmark Lists");
+        return QObject::tr("Inspector: Document Bookmarks");
+    if (key == QLatin1String(kInspProjectBookmarks))
+        return QObject::tr("Inspector: Project Bookmarks");
     if (key == QLatin1String(kInspPreview))
         return QObject::tr("Inspector: Bookmarked Text");
     if (key == QLatin1String(kInspSnapList))
@@ -469,6 +486,7 @@ void install()
     if (f || !qApp)
         return;
     migrateParts();
+    migrateProjectList();
     f = new Filter;
     f->setParent(qApp);
     qApp->installEventFilter(f);

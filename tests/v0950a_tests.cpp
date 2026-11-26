@@ -1,6 +1,8 @@
 // Scripted run for version 0.95.0, first part (Linux):
 //  - item 94: the sizes of the three parts of the Bookmarks tab are kept (also while the preview is hidden or the
 //    inspector is not shown) and come back after a restart.
+//  - item 93: Ctrl+wheel zooms each of the three parts of the Bookmarks tab on its own, with the zoom of the inspector's
+//    tabs separate or not; the old common zoom of the two lists is taken for both.
 //
 //   xvfb-run -a ./qb_v0950a_tests /tmp/shots
 #include "compile/PluginManager.h"
@@ -28,6 +30,7 @@
 #include "ui/Theme.h"
 #include "ui/ToolDialogs.h"
 #include "ui/ViewMemory.h"
+#include "ui/Zoom.h"
 
 #include <QAction>
 #include <QApplication>
@@ -43,6 +46,7 @@
 #include <QSettings>
 #include <QSpinBox>
 #include <QSplitter>
+#include <QWheelEvent>
 #include <QStyleFactory>
 #include <QTemporaryDir>
 #include <QTest>
@@ -202,6 +206,99 @@ static void bookmarkSizes(const QString &dir)
     delete w2;
 }
 
+// ---- item 93
+static void wheel(QWidget *target, int steps)
+{
+    const QPoint pos = target->rect().center();
+    QWheelEvent ev(QPointF(pos), QPointF(target->mapToGlobal(pos)), QPoint(), QPoint(0, 120 * steps), Qt::NoButton, Qt::ControlModifier,
+                   Qt::NoScrollPhase, false);
+    QApplication::sendEvent(target, &ev);
+    settle(80);
+}
+
+static void bookmarkZoom(const QString &dir)
+{
+    QString err;
+    templates::Info novel;
+    for (const auto &t : templates::all())
+        if (t.id == QLatin1String("novel"))
+            novel = t;
+    auto proj = templates::createProject(novel, dir, QStringLiteral("Zoom"), &err);
+    if (!proj)
+        return;
+    Project *p = proj.get();
+    BinderItem *d1 = p->model()->createItem(p->draft(), -1, ItemType::Text, QStringLiteral("One"));
+    BinderItem *d2 = p->model()->createItem(p->draft(), -1, ItemType::Text, QStringLiteral("Two"));
+    for (BinderItem *it : {d1, d2}) {
+        QTextCursor c(p->docs()->text(it->id));
+        c.insertText(QStringLiteral("The wind rose in the night and the sea came up over the rocks."));
+    }
+    d1->bookmarks.append({d2->title, QStringLiteral("qb://") + d2->id});
+    p->projectBookmarks.append({d2->title, QStringLiteral("qb://") + d2->id});
+    auto *w = new MainWindow;
+    w->resize(1400, 860);
+    w->show();
+    w->activateWindow();
+    (void)QTest::qWaitForWindowActive(w, 2000);
+    w->adoptProject(std::move(proj));
+    settle(400);
+    auto *binder = w->findChild<BinderPanel *>();
+    auto *insp = w->findChild<Inspector *>();
+    if (!binder || !insp)
+        return;
+    binder->select({d1}, true);
+    settle(200);
+    insp->showTab(Inspector::Bookmarks);
+    settle(200);
+    for (bool separately : {false, true}) {
+        const QString tag = separately ? QStringLiteral(" (tabs zoomed separately)") : QStringLiteral(" (one zoom for the tabs)");
+        zoom::setPerTab(separately);
+        for (const char *k : {zoom::kInspBookmarks, zoom::kInspProjectBookmarks, zoom::kInspPreview})
+            zoom::reset(QLatin1String(k));
+        insp->bookmarkList()->setCurrentRow(0);
+        settle(150);
+        auto f = [&](QWidget *x) { return x->font().pointSizeF(); };
+        auto pv = [&] { return insp->bookmarkPreview()->document()->defaultFont().pointSizeF(); };
+        const double doc0 = f(insp->bookmarkList()), proj0 = f(insp->projectBookmarkList()), pv0 = pv();
+        wheel(insp->bookmarkList()->viewport(), 2);
+        check(f(insp->bookmarkList()) > doc0 * 1.15 && qFuzzyCompare(f(insp->projectBookmarkList()), proj0) && qFuzzyCompare(pv(), pv0),
+              QStringLiteral("Ctrl+wheel over the document bookmarks: only that list grows") + tag);
+        const double doc1 = f(insp->bookmarkList());
+        wheel(insp->projectBookmarkList()->viewport(), 3);
+        check(f(insp->projectBookmarkList()) > proj0 * 1.2 && qFuzzyCompare(f(insp->bookmarkList()), doc1) && qFuzzyCompare(pv(), pv0),
+              QStringLiteral("Ctrl+wheel over the project bookmarks: only that list grows") + tag);
+        const double proj1 = f(insp->projectBookmarkList());
+        wheel(insp->bookmarkPreview()->viewport(), 2);
+        check(pv() > pv0 * 1.15 && qFuzzyCompare(f(insp->bookmarkList()), doc1) && qFuzzyCompare(f(insp->projectBookmarkList()), proj1),
+              QStringLiteral("Ctrl+wheel over the preview: only the preview grows") + tag);
+        check(!qFuzzyCompare(zoom::factor(QLatin1String(zoom::kInspBookmarks)), zoom::factor(QLatin1String(zoom::kInspProjectBookmarks))),
+              QStringLiteral("the two lists keep a zoom each") + tag);
+        if (separately)
+            shot(w, QStringLiteral("93-three-zooms"));
+    }
+    zoom::setPerTab(false);
+    // the zoom list names the part zoomed last
+    wheel(insp->projectBookmarkList()->viewport(), 1);
+    QLabel *title = nullptr;
+    for (QLabel *l : insp->findChildren<QLabel *>())
+        if (l->text().startsWith(QLatin1String("Zoom:")))
+            title = l;
+    check(title && title->text().contains(QLatin1String("Project")), QStringLiteral("the zoom list says which part it zooms: the project list"),
+          title ? title->text() : QString());
+    w->closeProject();
+    delete w;
+
+    // an older settings file: one zoom for both lists is taken for both
+    QSettings s;
+    s.remove(QStringLiteral("zoom/inspector.bookmarkProjectList"));
+    s.remove(QStringLiteral("zoomProjectListMigrated"));
+    s.setValue(QStringLiteral("zoom/inspector.bookmarkLists"), 1.5);
+    zoom::migrateProjectList();
+    check(qFuzzyCompare(zoom::factor(QLatin1String(zoom::kInspProjectBookmarks)), 1.5)
+              && qFuzzyCompare(zoom::factor(QLatin1String(zoom::kInspBookmarks)), 1.5),
+          QStringLiteral("an older zoom of both lists is taken for both"));
+}
+
 // ---- main
 int main(int argc, char **argv)
 {
@@ -228,9 +325,11 @@ int main(int argc, char **argv)
     as.save();
     theme::apply();
     compile::PluginManager::instance().load();
+    zoom::install(); // Ctrl + mouse wheel zooms the part under the mouse, as in the program
 
     QTemporaryDir work;
     bookmarkSizes(work.path());
+    bookmarkZoom(work.path() + QStringLiteral("/z"));
     // @@SECTIONS@@
 
     std::printf("%d failure(s)\n", failures);

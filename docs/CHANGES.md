@@ -12,6 +12,11 @@ New functions and fixes.
   hidden, was written as size 0) or when the inspector was hidden. The sizes you gave are kept as they were and come
   back, also for the Synopsis and Snapshots tabs.
 
+- **Each part of the Bookmarks tab zooms on its own**. Ctrl + mouse wheel over Document Bookmarks, over Project Bookmarks
+  and over the bookmarked text below them changes only that part (before, the two lists zoomed together). With **View >
+  Zoom Inspector Tabs Separately** on or off it is the same. The zoom you had for both lists is taken for both at first;
+  **File > Options > Editing** lists the three parts, and the zoom list in the inspector names the one you zoomed last.
+
 ## 0.94.0 beta (2026-11-25)
 
 New functions and fixes (a program update for 0.93.x; the AppImage stays on the runtime `u2404-qt6.12-r2`).

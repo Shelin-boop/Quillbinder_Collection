@@ -247,6 +247,7 @@ Inspector::Inspector(QWidget *parent) : QWidget(parent)
         static const QHash<QString, int> tabOf = {{QLatin1String(zoom::kInspSynopsis), int(Notes)},
                                                   {QLatin1String(zoom::kInspNotes), int(Notes)},
                                                   {QLatin1String(zoom::kInspBookmarks), int(Bookmarks)},
+                                                  {QLatin1String(zoom::kInspProjectBookmarks), int(Bookmarks)},
                                                   {QLatin1String(zoom::kInspPreview), int(Bookmarks)},
                                                   {QLatin1String(zoom::kInspSnapList), int(Snapshots)},
                                                   {QLatin1String(zoom::kInspSnapText), int(Snapshots)},
@@ -575,6 +576,11 @@ QWidget *Inspector::buildBookmarksTab()
         list->setObjectName(project ? QStringLiteral("inspectorProjectBookmarks") : QStringLiteral("inspectorBookmarks"));
         bl->addWidget(list, 1);
         (project ? m_projectBookmarks : m_bookmarks) = list;
+        if (project) {
+            // 0.95.0: each of the three parts zooms on its own (the document list has the page's key, below)
+            zoom::mark(box, QLatin1String(zoom::kInspProjectBookmarks));
+            zoom::attachFonts(box, QLatin1String(zoom::kInspProjectBookmarks));
+        }
 
         auto *menu = new QMenu(add);
         menu->addAction(tr("Internal Document…"), this, [this, project] {
@@ -662,7 +668,7 @@ QWidget *Inspector::buildBookmarksTab()
     m_bookmarkSplit = split;
     split->setObjectName(QStringLiteral("inspectorBookmarkSplit"));
     connect(split, &QSplitter::splitterMoved, this, [this, split] { keepSizes(split, true); });
-    // two parts with a zoom each (0.21.1): the lists, and the text shown below them
+    // three parts with a zoom each (0.21.1; the two lists one each since 0.95.0): the lists, and the text shown below them
     // (a copy of the document at a zoom of its own, see showBookmarkPreview)
     zoom::mark(w, QLatin1String(zoom::kInspBookmarks));
     zoom::attachFonts(w, QLatin1String(zoom::kInspBookmarks));
@@ -2183,7 +2189,8 @@ void Inspector::refreshZoomBox()
         // which part the list shows: a short name above it (the row is narrow), the full one as its tip
         static const QHash<QString, const char *> shortNames = {
             {QLatin1String(zoom::kInspSynopsis), QT_TR_NOOP("Synopsis")}, {QLatin1String(zoom::kInspNotes), QT_TR_NOOP("Notes")},
-            {QLatin1String(zoom::kInspBookmarks), QT_TR_NOOP("Lists")},    {QLatin1String(zoom::kInspPreview), QT_TR_NOOP("Text")},
+            {QLatin1String(zoom::kInspBookmarks), QT_TR_NOOP("Document")}, {QLatin1String(zoom::kInspProjectBookmarks), QT_TR_NOOP("Project")},
+            {QLatin1String(zoom::kInspPreview), QT_TR_NOOP("Text")},
             {QLatin1String(zoom::kInspSnapList), QT_TR_NOOP("List")},      {QLatin1String(zoom::kInspSnapText), QT_TR_NOOP("Text")},
             {QLatin1String(zoom::kInspObjectList), QT_TR_NOOP("List")},    {QLatin1String(zoom::kInspObjectSheet), QT_TR_NOOP("Sheet")},
             {QStringLiteral("board"), QT_TR_NOOP("Map")}};

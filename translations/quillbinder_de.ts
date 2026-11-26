@@ -2988,8 +2988,12 @@ Quelle: %1</translation>
         <translation>Inspektor: Notizen</translation>
     </message>
     <message>
-        <source>Inspector: Bookmark Lists</source>
-        <translation>Inspektor: Lesezeichenlisten</translation>
+        <source>Inspector: Document Bookmarks</source>
+        <translation>Inspektor: Lesezeichen des Dokuments</translation>
+    </message>
+    <message>
+        <source>Inspector: Project Bookmarks</source>
+        <translation>Inspektor: Lesezeichen des Projekts</translation>
     </message>
     <message>
         <source>Inspector: Bookmarked Text</source>
@@ -8704,8 +8708,12 @@ Der aktuelle Text wurde nicht geändert.</translation>
         <translation>Notizen</translation>
     </message>
     <message>
-        <source>Lists</source>
-        <translation>Listen</translation>
+        <source>Document</source>
+        <translation>Dokument</translation>
+    </message>
+    <message>
+        <source>Project</source>
+        <translation>Projekt</translation>
     </message>
     <message>
         <source>Text</source>
