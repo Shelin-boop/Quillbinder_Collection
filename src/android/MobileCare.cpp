@@ -395,7 +395,9 @@ private:
         if (down && !k->isAutoRepeat() && (k->key() == Qt::Key_Escape || k->key() == Qt::Key_Return || k->key() == Qt::Key_Enter)
             && k->timestamp() != m_loggedKey) {
             m_loggedKey = k->timestamp();
-            const QWidget *to = o && o->isWidgetType() ? static_cast<QWidget *>(o)->window() : nullptr;
+            // (the filter sees the key first for the window's QWindow, then for the widget that has the focus)
+            const QWidget *focus = QApplication::focusWidget();
+            const QWidget *to = o && o->isWidgetType() ? static_cast<QWidget *>(o)->window() : (focus ? focus->window() : nullptr);
             qCInfo(lcCare, "windows: %s for %s (the active window: %s)", k->key() == Qt::Key_Escape ? "Esc" : "Enter",
                    qPrintable(nameOf(to)), qPrintable(nameOf(QApplication::activeWindow())));
         }

@@ -350,6 +350,32 @@ and need 0.93.0 (the check for updates and **File > Install Update or Add-on** t
   they cannot say "alpha" again; `docs/design-decisions.md` gives the reasons behind choices that can look like faults
   (README, SECURITY.md and the manual's introduction link to it).
 
+## Android 0.94.0 experimental (2026-11-26)
+
+The functions of 0.94.0 for Android tablets (a new APK, as always on Android; it installs over Android 0.93.x and keeps
+the settings). Everything in 0.94.0 above that a tablet has is in it: Help > Find Command, the menus with one place per
+topic (Help > Add-ons and Updates, View > Layout, View > Themes and its one theme button, Format > Font), the message
+line under the binder (Back Up Now says there where the backup went; the window with OK that, left open, took the
+keys and touches is gone), Documents > Group, the writing progress in the footer, and Translation and Proofreading 1.4,
+which frees its model after 15 minutes without use. What is Android's own:
+
+- **A new window comes up in the middle of the screen and gets the keys**: Enter and Esc reach it (they went to the
+  main window), and with a keyboard attached it no longer stands at the top left under the menu bar.
+- **A long menu of the menu bar scrolls on a small screen**: the View menu, longer in 0.94.0, fits a screen of 960 x
+  540 but not the room below its title; it was cut there and its last entries could not be reached. It now scrolls,
+  as the menus taller than the screen do.
+- **The shortcuts that follow the keyboard layout** take the language of the tablet's input method at the first start
+  (German: the set without AltGr). Help has no "Add to Application Menu" on a tablet.
+
+For developers (nothing changes in the program): the start check follows the menus of 0.94.0 (File no longer has
+Install Update or Add-on; Back Up Now's message line needs no closing), takes a picture after Esc in each window it
+opens, measures whether an open menu stands still, and lists the layout the input method reports, which window each
+new window and each Enter and Esc reached, and the emulator's input devices with its uinput tool; the preview test
+switches the Themes toolbar on before it checks how the toolbars fit (it is off at first since 0.94.0); the official
+add-on entry's Android block names the 1.4 source. The download page has, per system, the full version, the program
+alone and the program update, and links to a page of its own (`addons/`) with every add-on on its own, the audio and
+video add-ons, the Windows zip files and the official add-ons.
+
 ## Windows 0.94.0 experimental (2026-11-25)
 
 The functions of 0.94.0 for Windows (a program update for Windows 0.93.x; the libraries stay those of 0.93.0).
