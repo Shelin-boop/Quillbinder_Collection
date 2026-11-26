@@ -1,0 +1,5 @@
+{{APP}} tient dans un seul fichier de programme. Les mises à jour et les extensions se présentent sous forme de petits fichiers de paquet dont le nom se termine par *.qbpkg*.
+- Installez-en un avec **Aide > Modules et mises à jour > Installer une mise à jour ou un module…**, ou double-cliquez sur le fichier. {{APP}} vérifie le paquet, montre les nouveautés et teste une mise à jour du programme une fois avant son utilisation.
+- **Aide > Modules et mises à jour > Gestionnaire de modules…** active et désactive les modules, les supprime, et revient à une version antérieure du programme avec **Utiliser cette version**.
+- Si une mise à jour ne démarre pas deux fois de suite, {{APP}} revient de lui-même à la version intégrée au fichier de programme.
+- Les modules apportent des thèmes supplémentaires, des modèles de projet, des formats de compilation, des outils d'écriture (Générateur de noms, Bloc-notes, Statistiques du texte), la lecture audio et vidéo, et l'import de pages web et d'anciens fichiers Word.
