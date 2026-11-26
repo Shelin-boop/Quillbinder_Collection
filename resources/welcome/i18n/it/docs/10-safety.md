@@ -1,0 +1,5 @@
+- **Salvataggio automatico**: qualche secondo dopo che smetti di scrivere; mentre continui a scrivere, nella prima breve pausa dopo 5 secondi e al più tardi dopo 30 secondi.
+- **Backup**: quando un progetto viene chiuso (e, se vuoi, quando si apre o a ogni **Ctrl+S**); si impostano in **File > Opzioni > Backup**. **File > Backup** ne esegue uno subito.
+- **Istantanee**: **Documenti > Istantanee > Crea istantanea** (**Ctrl+5**) conserva la versione di un documento prima di una grande modifica; **Confronta** mostra cosa è cambiato da allora.
+- **Una copia di riserva del file di progetto**: se il file di progetto si danneggia, per esempio per un arresto del computer durante il salvataggio, {{APP}} offre la copia che conserva dall'ultima apertura.
+- **Rapporti di arresto anomalo e di blocco**: se il programma termina a causa di un errore o smette di rispondere, scrive un rapporto. **Aiuto > Risoluzione problemi e sviluppo > Rapporti di arresto anomalo…** li elenca, **Aiuto > Risoluzione problemi e sviluppo > Informazioni di sistema…** mostra ciò che potrebbe presto causare problemi, come un disco quasi pieno.

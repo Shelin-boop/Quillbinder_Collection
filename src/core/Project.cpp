@@ -310,11 +310,26 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
     return p;
 }
 
+static QList<Label> &standardLabelList()
+{
+    static QList<Label> list;
+    return list;
+}
+
+QList<Label> Project::builtInLabels()
+{
+    return {{0, tr("Red"), QColor(214, 69, 65)},     {1, tr("Orange"), QColor(235, 140, 50)},
+            {2, tr("Yellow"), QColor(230, 200, 40)}, {3, tr("Green"), QColor(80, 170, 80)},
+            {4, tr("Blue"), QColor(70, 130, 210)},   {5, tr("Purple"), QColor(150, 90, 190)}};
+}
+
+void Project::setStandardLabels(const QList<Label> &labels) { standardLabelList() = labels; }
+
+QList<Label> Project::standardLabels() { return standardLabelList().isEmpty() ? builtInLabels() : standardLabelList(); }
+
 void Project::setupDefaults()
 {
-    labels = {{0, tr("Red"), QColor(214, 69, 65)},     {1, tr("Orange"), QColor(235, 140, 50)},
-              {2, tr("Yellow"), QColor(230, 200, 40)}, {3, tr("Green"), QColor(80, 170, 80)},
-              {4, tr("Blue"), QColor(70, 130, 210)},   {5, tr("Purple"), QColor(150, 90, 190)}};
+    labels = standardLabels();
     statuses = {{0, tr("To Do")},         {1, tr("In Progress")}, {2, tr("First Draft")},
                 {3, tr("Revised Draft")}, {4, tr("Final Draft")}, {5, tr("Done")}};
     const QString heading = newId();
@@ -611,14 +626,15 @@ int Project::sessionWords() const
 {
     const int now = targets.countAnywhere ? totalWordCount() : draftWordCount();
     const int start = targets.countAnywhere ? targets.sessionStartTotal : targets.sessionStartDraft;
-    return qMax(0, now - start);
+    // 0.95.0: with a negative (cutting) session target the count is net, below 0 when words were removed
+    return sessionTargetToday() < 0 ? now - start : qMax(0, now - start);
 }
 
 int Project::sessionChars() const
 {
     const int now = targets.countAnywhere ? totalCharCount() : draftCharCount();
     const int start = targets.countAnywhere ? targets.sessionStartTotalChars : targets.sessionStartDraftChars;
-    return qMax(0, now - start);
+    return sessionTargetToday() < 0 ? now - start : qMax(0, now - start);
 }
 
 int Project::sessionTargetToday() const
@@ -1408,7 +1424,7 @@ static void writeItem(QDomDocument &dom, QDomElement &parent, const BinderItem *
         e.setAttribute(QStringLiteral("url"), it->sourceUrl); // 0.81.3
     if (!it->synopsisImage.isEmpty())
         e.setAttribute(QStringLiteral("synopsisImage"), it->synopsisImage);
-    if (it->target > 0) {
+    if (it->target != 0) {
         e.setAttribute(QStringLiteral("target"), it->target);
         if (it->targetChars)
             e.setAttribute(QStringLiteral("targetChars"), 1);

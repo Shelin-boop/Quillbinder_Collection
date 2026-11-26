@@ -1,0 +1,358 @@
+{
+  "name": "Bienvenue dans {{APP}}",
+  "description": "Une courte visite de ce que {{APP}} offre au-delà de l'ordinaire",
+  "draftTitle": "Visite des fonctions",
+  "objectTemplates": "standard",
+  "rootFirst": [
+    {
+      "title": "Bienvenue",
+      "icon": "qb-information",
+      "textFile": "docs/00-welcome.md",
+      "synopsis": "Ce qu'est ce projet, et les étapes de la visite."
+    }
+  ],
+  "draft": [
+    {
+      "title": "La barre d'icônes",
+      "icon": "qb-flag-red",
+      "textFile": "docs/01-icon-bar.md",
+      "synopsis": "Dix icônes de documents, un clic chacune ; des icônes à partir de texte et de vos propres images."
+    },
+    {
+      "title": "Zoomer là où vous pointez",
+      "icon": "qb-magnifier",
+      "textFile": "docs/02-zoom.md",
+      "synopsis": "Ctrl+molette de la souris sur n'importe quelle partie de la fenêtre ; chaque partie garde son propre zoom."
+    },
+    {
+      "title": "Cartes mentales",
+      "icon": "qb-mindmap",
+      "textFile": "docs/03-mind-maps.md",
+      "synopsis": "Un tableau de notes, de lignes et de flèches pour chaque document. Celui-ci en a un : ouvrez l'onglet Carte mentale.",
+      "mindmap": {
+        "notes": [
+          {
+            "id": 1,
+            "text": "Ce que peut faire une carte mentale",
+            "x": 290,
+            "y": 245,
+            "width": 170,
+            "fontSize": 15,
+            "bold": true,
+            "align": "center",
+            "fill": "#fff2a8",
+            "border": 2,
+            "shape": "cloud"
+          },
+          {
+            "id": 2,
+            "text": "Notes : double-cliquez sur un endroit vide. Ctrl+Enter crée une nouvelle note sous la note sélectionnée.",
+            "x": 20,
+            "y": 30,
+            "width": 200,
+            "fill": "#dcecff",
+            "border": 1
+          },
+          {
+            "id": 3,
+            "text": "Lignes : faites glisser une note sur une autre. Faites-l'y glisser de nouveau pour supprimer la ligne.",
+            "x": 280,
+            "y": 30,
+            "width": 190,
+            "fill": "#dcecff",
+            "border": 1
+          },
+          {
+            "id": 4,
+            "text": "Flèches : maintenez Alt en relâchant. Ctrl+Alt : une flèche en sens inverse. Ctrl+Alt+Shift : aux deux extrémités.",
+            "x": 530,
+            "y": 30,
+            "width": 210,
+            "fill": "#dcecff",
+            "border": 1
+          },
+          {
+            "id": 5,
+            "text": "Couleurs, formes et bordures : clic droit sur une note.",
+            "x": 560,
+            "y": 250,
+            "width": 180,
+            "fill": "#ffd6d6",
+            "border": 1,
+            "shape": "jagged"
+          },
+          {
+            "id": 6,
+            "text": "Des icônes aux coins et sur les côtés d'une note, et au milieu d'une ligne.",
+            "x": 540,
+            "y": 420,
+            "width": 200,
+            "fill": "#e3f6d8",
+            "border": 1,
+            "icons": {
+              "topLeft": "qb-flag-red",
+              "topRight": "qb-light-bulb",
+              "bottomRight": "qb-checked"
+            }
+          },
+          {
+            "id": 7,
+            "text": "Les formes d'arrière-plan regroupent des notes. Une forme magnétique emporte ses notes avec elle.",
+            "x": 290,
+            "y": 455,
+            "width": 170
+          },
+          {
+            "id": 8,
+            "text": "Menu > Notes > Ajouter les notes au classeur transforme les notes en documents.",
+            "x": 20,
+            "y": 430,
+            "width": 200,
+            "fill": "#f0e6ff",
+            "border": 1,
+            "shape": "square"
+          },
+          {
+            "id": 9,
+            "text": "Export en PDF, PNG, texte, OPML ou fichier Scapple ; les fichiers Scapple peuvent être lus.",
+            "x": 20,
+            "y": 245,
+            "width": 200,
+            "fill": "#f0e6ff",
+            "border": 1
+          }
+        ],
+        "shapes": [
+          {
+            "id": 20,
+            "x": 270,
+            "y": 435,
+            "w": 210,
+            "h": 150,
+            "fill": "#fde3b8",
+            "magnetic": true
+          }
+        ],
+        "lines": [
+          {
+            "from": 1,
+            "to": 2,
+            "arrow": "to"
+          },
+          {
+            "from": 1,
+            "to": 3,
+            "arrow": "to",
+            "label": "glisser"
+          },
+          {
+            "from": 1,
+            "to": 4,
+            "arrow": "to",
+            "color": "#c0392b"
+          },
+          {
+            "from": 1,
+            "to": 5,
+            "arrow": "to"
+          },
+          {
+            "from": 1,
+            "to": 6,
+            "arrow": "to",
+            "icon": "qb-pencil"
+          },
+          {
+            "from": 1,
+            "to": 7,
+            "arrow": "to"
+          },
+          {
+            "from": 1,
+            "to": 8
+          },
+          {
+            "from": 1,
+            "to": 9,
+            "arrow": "to",
+            "color": "#2f6fbf"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Fiches d'objets",
+      "icon": "qb-character-sheet",
+      "textFile": "docs/04-objects.md",
+      "synopsis": "Les personnes, les lieux et les choses d'une histoire, chacun sur une fiche de champs, reliés entre eux.",
+      "children": [
+        {
+          "title": "Une scène à Ashvale",
+          "icon": "qb-location-house",
+          "textFile": "docs/04a-scene.md",
+          "synopsis": "Une courte scène avec des liens vers les objets. L'onglet Objets indique qui et quoi y apparaît."
+        }
+      ]
+    },
+    {
+      "title": "Les commentaires d'un dossier entier",
+      "icon": "qb-speech-bubble",
+      "textFile": "docs/05-folder-comments.md",
+      "synopsis": "Les commentaires et les notes de bas de page de chaque document d'un dossier, dans une seule liste."
+    },
+    {
+      "title": "Un chapitre avec des commentaires",
+      "type": "folder",
+      "synopsis": "Sélectionnez-le et ouvrez l'onglet Commentaires et notes de bas de page de l'inspecteur.",
+      "children": [
+        {
+          "title": "Le registre du bac",
+          "textFile": "docs/05a-scene-one.md",
+          "synopsis": "Une scène avec un commentaire."
+        },
+        {
+          "title": "Soir",
+          "textFile": "docs/05b-scene-two.md",
+          "synopsis": "Une scène avec une note de bas de page et une annotation en ligne."
+        }
+      ]
+    },
+    {
+      "title": "Comparer et transférer",
+      "icon": "qb-reviewer",
+      "textFile": "docs/06-compare.md",
+      "synopsis": "Un manuscrit revenu de Word ou de LibreOffice : voyez ce qui diffère et reprenez l'un ou l'autre côté."
+    },
+    {
+      "title": "Projets Scrivener",
+      "icon": "qb-sync-folder",
+      "textFile": "docs/07-scrivener.md",
+      "synopsis": "Importez un projet Scrivener, ou travaillez-y directement et poursuivez plus tard dans Scrivener."
+    },
+    {
+      "title": "Thèmes, couleurs et polices",
+      "icon": "qb-eye",
+      "textFile": "docs/08-themes.md",
+      "synopsis": "Le mode sombre et d'autres thèmes en un instant ; la palette de couleurs de la barre de format ; l'installation de polices."
+    },
+    {
+      "title": "Thèmes et profils",
+      "icon": "qb-cog",
+      "textFile": "docs/08a-profiles.md",
+      "synopsis": "Un thème est l'aspect ; un profil conserve ensemble vos options, vos barres d'outils, votre fenêtre et votre thème, et les change d'un coup."
+    },
+    {
+      "title": "Mises à jour et modules",
+      "icon": "qb-cog",
+      "textFile": "docs/09-updates.md",
+      "synopsis": "De petits fichiers de paquet, le Gestionnaire de modules, et un retour à une version antérieure."
+    },
+    {
+      "title": "Filets de sécurité",
+      "icon": "qb-checked",
+      "textFile": "docs/10-safety.md",
+      "synopsis": "Enregistrement automatique, sauvegardes, instantanés, copie de secours du fichier de projet, rapports de plantage et de blocage."
+    },
+    {
+      "title": "Et ensuite",
+      "icon": "qb-pass",
+      "textFile": "docs/11-where-next.md",
+      "synopsis": "Le Guide de démarrage rapide, le manuel et un projet bien à vous."
+    }
+  ],
+  "projectBookmarks": [
+    "Bienvenue"
+  ],
+  "objects": [
+    {
+      "category": "characters",
+      "name": "Mara Fenn",
+      "values": {
+        "role": "Protagoniste",
+        "age": "34",
+        "eyes": "Gris",
+        "occupation": "Passeuse",
+        "livesIn": [
+          "Ashvale"
+        ],
+        "relations": [
+          "Tobias Quill"
+        ],
+        "traits": "Patiente, têtue, elle tient toutes les promesses qu'elle fait.",
+        "background": "Elle a repris le bac de sa mère. [Tobias Quill](qbobj-name:Tobias Quill) a trouvé le nom de sa mère dans le vieux registre du bac.",
+        "scenes": [
+          "Une scène à Ashvale"
+        ]
+      }
+    },
+    {
+      "category": "characters",
+      "name": "Tobias Quill",
+      "values": {
+        "role": "Personnage secondaire",
+        "age": "29",
+        "occupation": "Archiviste du village",
+        "livesIn": [
+          "Ashvale"
+        ],
+        "relations": [
+          "Mara Fenn"
+        ],
+        "goals": "Veut savoir qui a écrit les premières pages du registre du bac.",
+        "scenes": [
+          "Une scène à Ashvale"
+        ]
+      }
+    },
+    {
+      "category": "locations",
+      "name": "Ashvale",
+      "values": {
+        "kind": "Village",
+        "environment": [
+          "Fenwood"
+        ],
+        "weather": [
+          "Brouillard d'automne"
+        ],
+        "population": "212",
+        "inhabitants": [
+          "Mara Fenn",
+          "Tobias Quill"
+        ],
+        "description": "Quarante maisons le long d'une rivière lente, un bac, et un clocher d'église que l'on voit depuis [Fenwood](qbobj-name:Fenwood).",
+        "scenes": [
+          "Une scène à Ashvale"
+        ]
+      }
+    },
+    {
+      "category": "environments",
+      "name": "Fenwood",
+      "values": {
+        "kind": "Forêt",
+        "flora": "Bouleaux et aulnes ; roseaux le long de la rivière.",
+        "weather": [
+          "Brouillard d'automne"
+        ],
+        "locations": [
+          "Ashvale"
+        ]
+      }
+    },
+    {
+      "category": "weather",
+      "name": "Brouillard d'automne",
+      "values": {
+        "season": "Automne",
+        "temperature": "8",
+        "precipitation": "Brouillard",
+        "effects": "Le bac s'arrête quand on ne voit plus l'autre rive.",
+        "where": [
+          "Ashvale",
+          "Fenwood"
+        ]
+      }
+    }
+  ]
+}

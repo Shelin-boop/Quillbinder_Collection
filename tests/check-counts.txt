@@ -1,5 +1,5 @@
 # Checks per suite on X11, written by tools/run-all-tests.sh after a full X11 run.
-# 2026-11-25, APP_VERSION 0.94.0
+# 2026-11-26, APP_VERSION 0.95.0
 qb_tests 393
 ui 181
 m6 53
@@ -63,7 +63,13 @@ v0940a 38
 v0940b 88
 v0940c 46
 v0940d 100
+v0950f 132
+v0950g 144
 v0940e 88
+v0950a 24
+v0950b 42
+v0950c 124
+v0950d 73
 notesplain 22
 mmoverview 53
 audit1 61

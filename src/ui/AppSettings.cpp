@@ -9,6 +9,9 @@
 #include "core/ItemIcons.h"
 #include "core/PageSetup.h"
 #include "core/PrintSettings.h"
+#include "core/Project.h"
+#include "ui/ColorPalette.h"
+#include "ui/Profiles.h"
 #include "core/ProjectTemplates.h"
 #include "import/FileImporter.h"
 #include "import/ScrivenerImporter.h"
@@ -19,6 +22,7 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QLocale>
@@ -91,6 +95,38 @@ void AppSettings::pushToModules()
     nf.align = newAlign;
     ScrivenerImporter::setNewProjectFormatting(nf);
     ScrivenerImporter::setCardWidth(cardWidth);   // 0.90.0: places of cards on a freely arranged corkboard
+    Project::setStandardLabels(standardLabels);   // 0.95.0: the labels new projects start with
+}
+
+QList<QColor> AppSettings::standardSwatches()
+{
+    QList<QColor> out;
+    for (const palette::Entry &e : palette::standard())
+        out << e.color;
+    return out;
+}
+
+QList<QColor> AppSettings::textSwatchColors() const { return textSwatches.size() == 6 ? textSwatches : standardSwatches(); }
+QList<QColor> AppSettings::highlightSwatchColors() const { return highlightSwatches.size() == 6 ? highlightSwatches : standardSwatches(); }
+
+void AppSettings::resetStandardColors()
+{
+    standardLabels.clear();
+    textSwatches.clear();
+    highlightSwatches.clear();
+    barTextColor = QColor(200, 30, 30);
+    barHighlightColor = QColor(255, 230, 0);
+    pushToModules();
+}
+
+void AppSettings::reloadAll()
+{
+    {
+        AppSettings fresh; // the members' standard values, then what the file has
+        fresh.load();
+        fresh.save();
+    }
+    load();
 }
 
 QMap<QString, QColor> AppSettings::standardOwnColors()
@@ -107,7 +143,11 @@ void AppSettings::load()
     authorAsked = s.value(QStringLiteral("authorAsked"), false).toBool();
     autosaveSeconds = s.value(QStringLiteral("autosave"), 2).toInt();
     openLastProject = s.value(QStringLiteral("openLast"), true).toBool();
-    language = s.value(QStringLiteral("language"), QStringLiteral("en")).toString() == QLatin1String("de") ? QStringLiteral("de") : QStringLiteral("en");
+    // 0.95.0 (item 102): one of the 11 languages; none stored: the system's language at a true first start, else English
+    {
+        const QString stored = s.value(QStringLiteral("language")).toString();
+        language = language::available().contains(stored) ? stored : language::configured();
+    }
     groupDigits = s.value(QStringLiteral("groupDigits"), true).toBool();
     recentProjects = s.value(QStringLiteral("recent")).toStringList();
     welcomeFolder = s.value(QStringLiteral("welcomeFolder")).toString();
@@ -116,8 +156,16 @@ void AppSettings::load()
     useDesktopPortal = s.value(QStringLiteral("portal"), true).toBool();
     s.endGroup();
 
+    // 0.95.0 (item 95): a program that was never started before (no theme and no mark of an earlier version) starts with
+    // the light or the dark theme, whichever the system is set to where the system tells (the profile "Default")
+    const bool freshInstall = !s.contains(QStringLiteral("appearance/theme")) && !s.contains(QLatin1String(kStandardKey));
     s.beginGroup(QStringLiteral("appearance"));
     theme = s.value(QStringLiteral("theme"), theme).toString();
+    if (freshInstall) {
+        const QString fromSystem = profiles::systemThemeId();
+        if (!fromSystem.isEmpty())
+            theme = fromSystem;
+    }
     fixedWidth = s.value(QStringLiteral("fixedWidth"), fixedWidth).toBool();
     editorWidth = s.value(QStringLiteral("editorWidth"), editorWidth).toInt();
     textBorder = qBound(0, s.value(QStringLiteral("textBorder"), textBorder).toInt(), 200);
@@ -361,6 +409,33 @@ void AppSettings::load()
         for (auto it = colors.cbegin(); it != colors.cend(); ++it)
             ownColors.insert(it.key(), it.value());
     }
+    // 0.95.0 (item 98): Standard Colors
+    standardLabels.clear();
+    textSwatches.clear();
+    highlightSwatches.clear();
+    {
+        const QJsonArray arr = QJsonDocument::fromJson(s.value(QStringLiteral("standardColors/labels")).toString().toUtf8()).array();
+        int id = 0;
+        for (const QJsonValue &v : arr) {
+            const QJsonObject o = v.toObject();
+            const QColor c(o.value(QStringLiteral("color")).toString());
+            const QString name = o.value(QStringLiteral("name")).toString();
+            if (c.isValid() && !name.trimmed().isEmpty())
+                standardLabels.append({id++, name, c});
+        }
+        if (standardLabels.size() != arr.size())
+            standardLabels.clear(); // a damaged list: the built-in labels
+        for (auto [key, list] : {std::pair<const char *, QList<QColor> *>{"standardColors/textSwatches", &textSwatches},
+                                 {"standardColors/highlightSwatches", &highlightSwatches}}) {
+            const QStringList names = s.value(QLatin1String(key)).toStringList();
+            QList<QColor> out;
+            for (const QString &n : names)
+                if (const QColor c(n); c.isValid())
+                    out << c;
+            if (out.size() == 6)
+                *list = out;
+        }
+    }
     pushToModules();
 
     s.beginGroup(QStringLiteral("toolbars"));
@@ -414,6 +489,7 @@ void AppSettings::load()
         s.setValue(QStringLiteral("themesOff0940"), true);
         s.setValue(QStringLiteral("hidden"), toolbarHidden);
     }
+    toolbarExtraShown = s.value(QStringLiteral("extraShown")).toStringList();
     toolbarIconSize = qBound(16, s.value(QStringLiteral("iconSize"), toolbarIconSize).toInt(), 48);
     toolbarStyle = s.value(QStringLiteral("style"), toolbarStyle).toString();
     s.endGroup();
@@ -638,10 +714,40 @@ void AppSettings::save()
     for (toolbars::Bar b : toolbars::allBars())
         s.setValue(QLatin1String("bar-") + toolbars::barKey(b), toolbarList(int(b)));
     s.setValue(QStringLiteral("hidden"), toolbarHidden);
+    if (toolbarExtraShown.isEmpty())
+        s.remove(QStringLiteral("extraShown"));
+    else
+        s.setValue(QStringLiteral("extraShown"), toolbarExtraShown);
     s.setValue(QStringLiteral("split0910"), true);
     s.setValue(QStringLiteral("iconSize"), toolbarIconSize);
     s.setValue(QStringLiteral("style"), toolbarStyle);
     s.endGroup();
+    // 0.95.0 (item 98): only what differs from the standard is written
+    {
+        QJsonArray arr;
+        const QList<Label> builtIn = Project::builtInLabels();
+        bool same = standardLabels.size() == builtIn.size();
+        for (int i = 0; same && i < builtIn.size(); ++i)
+            same = standardLabels[i].name == builtIn[i].name && standardLabels[i].color == builtIn[i].color;
+        if (!standardLabels.isEmpty() && !same) {
+            for (const Label &l : standardLabels)
+                arr.append(QJsonObject{{QStringLiteral("name"), l.name}, {QStringLiteral("color"), l.color.name(QColor::HexRgb)}});
+            s.setValue(QStringLiteral("standardColors/labels"), QString::fromUtf8(QJsonDocument(arr).toJson(QJsonDocument::Compact)));
+        } else {
+            s.remove(QStringLiteral("standardColors/labels"));
+        }
+        for (auto [key, list] : {std::pair<const char *, const QList<QColor> *>{"standardColors/textSwatches", &textSwatches},
+                                 {"standardColors/highlightSwatches", &highlightSwatches}}) {
+            if (list->size() == 6 && *list != standardSwatches()) {
+                QStringList names;
+                for (const QColor &c : *list)
+                    names << c.name(QColor::HexRgb);
+                s.setValue(QLatin1String(key), names);
+            } else {
+                s.remove(QLatin1String(key));
+            }
+        }
+    }
     s.sync();
     // 0.62: with a project's settings in use, what changed goes to the project or the program
     settingslayer::sync();
@@ -688,7 +794,7 @@ void AppSettings::resetToDefaults()
     for (const char *k : {"appearance/recentIcons", "appearance/iconBar"})
         if (s.contains(QLatin1String(k)))
             kept.insert(QLatin1String(k), s.value(QLatin1String(k)));
-    for (const char *g : {"app", "appearance", "editing", "backup", "behaviour", "playback", "sharing", "mindmap", "zoom", "zoomDefault"})
+    for (const char *g : {"app", "appearance", "editing", "backup", "behaviour", "playback", "sharing", "mindmap", "zoom", "zoomDefault", "standardColors"})
         s.remove(QLatin1String(g));
     s.remove(QStringLiteral("zoomInspectorPerTab"));
     for (auto it = kept.cbegin(); it != kept.cend(); ++it)

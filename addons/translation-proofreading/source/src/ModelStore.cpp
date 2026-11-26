@@ -138,6 +138,9 @@ void ModelStore::loadCatalog()
         m.memoryMB = o.value(QStringLiteral("memoryMB")).toInt();
         m.sizeMB = o.value(QStringLiteral("sizeMB")).toInt();
         m.sourceToken = o.value(QStringLiteral("sourceToken")).toString();
+        m.from = o.value(QStringLiteral("from")).toString();
+        m.to = o.value(QStringLiteral("to")).toString();
+        m.language = o.value(QStringLiteral("language")).toString();
         m.thinkTags = o.value(QStringLiteral("chat")).toObject().value(QStringLiteral("thinkTags")).toBool();
         const QJsonObject t = o.value(QStringLiteral("tokenizer")).toObject();
         m.tokenizer = t.value(QStringLiteral("type")).toString();

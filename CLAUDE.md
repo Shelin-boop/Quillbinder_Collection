@@ -187,9 +187,9 @@ short index (under about 20 KB), so that it costs little when it is loaded.
   job `sign-checksums` signs it and `download-page` publishes it; every workflow that publishes the page carries it
   along (`tools/keep-update-feed.sh`); a security update is marked in `packaging/update-feed/security.json` in the
   commit that raises the version. The address is built into the program and must never change.
-- **Translation and Proofreading** (0.92.0) is one of the project's own add-ons (`addons/translation-proofreading`, a
+- **Translation Helper** (0.92.0 as Translation and Proofreading; 1.5 since 0.95.0) is one of the project's own add-ons (`addons/translation-proofreading`, a
   project of its own in `source/`); its engine libraries come from `tools/get-translator-deps.sh`, its models are on
-  the releases `models-1` and `models-2`.
+  the releases `models-1` to `models-4` (`models-4`: the eleven languages, built by `translator-data-4.yml`).
 - **The security watch** (2026-11-21): `.github/workflows/security-watch.yml` checks the parts in
   `tools/security-watch.json` daily and opens an issue (label `security`) only for High or Critical findings; a
   new version of a part goes into that list in the same commit (suite `secwatch`). `docs/dev-notes/runtime-and-addons.md`.

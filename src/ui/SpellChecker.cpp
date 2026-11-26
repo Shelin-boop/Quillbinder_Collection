@@ -66,9 +66,25 @@ static QByteArray hunspellPath(const QString &file)
 #endif
 }
 
+// ISO 8859-2 (the Polish dictionary of LibreOffice): the characters 0xA0 to 0xFF (0.95.0)
+static const ushort kLatin2[96] = {
+    0x00A0, 0x0104, 0x02D8, 0x0141, 0x00A4, 0x013D, 0x015A, 0x00A7,
+    0x00A8, 0x0160, 0x015E, 0x0164, 0x0179, 0x00AD, 0x017D, 0x017B,
+    0x00B0, 0x0105, 0x02DB, 0x0142, 0x00B4, 0x013E, 0x015B, 0x02C7,
+    0x00B8, 0x0161, 0x015F, 0x0165, 0x017A, 0x02DD, 0x017E, 0x017C,
+    0x0154, 0x00C1, 0x00C2, 0x0102, 0x00C4, 0x0139, 0x0106, 0x00C7,
+    0x010C, 0x00C9, 0x0118, 0x00CB, 0x011A, 0x00CD, 0x00CE, 0x010E,
+    0x0110, 0x0143, 0x0147, 0x00D3, 0x00D4, 0x0150, 0x00D6, 0x00D7,
+    0x0158, 0x016E, 0x00DA, 0x0170, 0x00DC, 0x00DD, 0x0162, 0x00DF,
+    0x0155, 0x00E1, 0x00E2, 0x0103, 0x00E4, 0x013A, 0x0107, 0x00E7,
+    0x010D, 0x00E9, 0x0119, 0x00EB, 0x011B, 0x00ED, 0x00EE, 0x010F,
+    0x0111, 0x0144, 0x0148, 0x00F3, 0x00F4, 0x0151, 0x00F6, 0x00F7,
+    0x0159, 0x016F, 0x00FA, 0x0171, 0x00FC, 0x00FD, 0x0163, 0x02D9,
+};
+
 // Hunspell wants words in the encoding of the loaded dictionary ("SET" in its .aff file): the
 // German dictionaries of LibreOffice and Ubuntu are ISO 8859-1, so words with umlauts or ß passed
-// as UTF-8 were never found (W3, 2026-11-08). 0 UTF-8, 1 ISO 8859-1, 2 ISO 8859-15; other
+// as UTF-8 were never found (W3, 2026-11-08). 0 UTF-8, 1 ISO 8859-1, 2 ISO 8859-15, 3 ISO 8859-2 (Polish, 0.95.0); other
 // encodings are handed over as UTF-8, as before.
 static int s_encoding = 0;
 
@@ -76,7 +92,7 @@ static void takeEncoding(void *handle)
 {
 #ifdef QB_HAVE_HUNSPELL
     const QByteArray e = QByteArray(Hunspell_get_dic_encoding(static_cast<Hunhandle *>(handle))).toUpper().replace('-', "");
-    s_encoding = (e == "ISO88591" || e == "LATIN1") ? 1 : e == "ISO885915" ? 2 : 0;
+    s_encoding = (e == "ISO88591" || e == "LATIN1") ? 1 : e == "ISO885915" ? 2 : (e == "ISO88592" || e == "LATIN2") ? 3 : 0;
 #else
     Q_UNUSED(handle);
 #endif
@@ -94,6 +110,19 @@ static QByteArray toDictionary(const QString &word)
     out.reserve(word.size());
     for (const QChar c : word) {
         ushort u = c.unicode();
+        if (s_encoding == 3) {
+            if (u >= 0xA0) {
+                int at = -1;
+                for (int k = 0; k < 96; ++k)
+                    if (kLatin2[k] == u) {
+                        at = k;
+                        break;
+                    }
+                u = at < 0 ? ushort('?') : ushort(0xA0 + at);
+            }
+            out.append(u < 0x100 ? char(u) : '?');
+            continue;
+        }
         if (s_encoding == 2) {
             bool mapped = false;
             for (const auto &m : kLatin9) {
@@ -115,6 +144,12 @@ static QString fromDictionary(const char *text)
     if (s_encoding == 0)
         return QString::fromUtf8(text);
     QString out = QString::fromLatin1(text);
+    if (s_encoding == 3) {
+        for (QChar &c : out)
+            if (c.unicode() >= 0xA0 && c.unicode() < 0x100)
+                c = QChar(kLatin2[c.unicode() - 0xA0]);
+        return out;
+    }
     if (s_encoding == 2)
         for (QChar &c : out)
             for (const auto &m : kLatin9)
@@ -418,7 +453,12 @@ void SpellHighlighter::highlightBlock(const QString &text)
     const QColor link = theme::color(theme::Role::EditorLink);
     const bool recolor = link.isValid() && link.rgb() != storedLink.rgb();
     const bool plainNotes = s_display.plainAnnotations;
-    if (scale || recolor || plainNotes) {
+    // 0.95.0: a highlight is drawn exactly as picked; where the text on it would be below 4.5 : 1, the text is drawn dark
+    // or light on screen only (its stored color stays)
+    bool highlighted = false;
+    for (auto fit = block.begin(); !fit.atEnd() && !highlighted; ++fit)
+        highlighted = fit.fragment().isValid() && fit.fragment().charFormat().property(props::Highlight).toBool();
+    if (scale || recolor || plainNotes || highlighted) {
         for (auto fit = block.begin(); !fit.atEnd(); ++fit) {
             const QTextFragment f = fit.fragment();
             if (!f.isValid())
@@ -432,6 +472,19 @@ void SpellHighlighter::highlightBlock(const QString &text)
                 shown.setForeground(link);
             if (plainNotes && NoteKind(cf.intProperty(props::NoteKind)) == NoteKind::InlineAnnotation)
                 shown.setForeground(theme::color(theme::Role::EditorText));
+            if (highlighted && cf.property(props::Highlight).toBool() && cf.background().style() == Qt::SolidPattern) {
+                QColor bg = cf.background().color();
+                bg.setAlpha(255);
+                if (cf.background().color().alpha() != 255)
+                    shown.setBackground(bg);
+                const QColor fg = cf.foreground().style() == Qt::SolidPattern && cf.hasProperty(QTextFormat::ForegroundBrush)
+                                      ? cf.foreground().color()
+                                      : theme::color(theme::Role::EditorText);
+                if (theme::contrastRatio(fg, bg) < 4.5) {
+                    const QColor dark(20, 20, 20), light(250, 250, 250);
+                    shown.setForeground(theme::contrastRatio(dark, bg) >= theme::contrastRatio(light, bg) ? dark : light);
+                }
+            }
             if (!shown.isEmpty())
                 setFormat(f.position() - block.position(), f.length(), shown);
         }

@@ -1,0 +1,6 @@
+Un **tema** es solo un aspecto: colores y fuentes. Un **perfil** conserva todo lo demás: tus opciones, barras de herramientas, tamaño y posición de la ventana, paneles, conjunto de teclado, ajustes de copias de seguridad, colores estándar y disposiciones guardadas, y nombra su tema. Al cambiar de perfil, todo eso cambia a la vez.
+**Pruébalo:** elige **Ver > Perfiles > Guardar los ajustes como perfil nuevo…**, ponle un nombre, cambia unas cuantas cosas (un tema, una barra de herramientas) y vuelve a **Predeterminado** en **Ver > Perfiles**.
+- El perfil **Predeterminado** es donde se guardan tus ajustes al principio. No se puede eliminar; los demás perfiles sí.
+- **Ver > Perfiles > Gestionar perfiles…** renombra, copia, elimina, exporta e importa perfiles. Un perfil exportado es un solo archivo que puedes llevar a otro equipo; si contiene carpetas que allí no existen, se te pregunta.
+- **Ver > Barras de herramientas > Perfiles** muestra una pequeña barra con el perfil en uso. **Ver > Barras de herramientas > Etiquetas** muestra los colores de etiqueta del proyecto abierto, a un clic cada uno.
+- **Archivo > Opciones > Apariencia > Colores estándar** establece las etiquetas con las que empiezan los proyectos nuevos y los colores de las paletas del color de texto y del resaltado. Pertenecen al perfil.

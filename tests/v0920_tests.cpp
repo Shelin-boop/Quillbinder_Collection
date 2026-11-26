@@ -1837,9 +1837,9 @@ int main(int argc, char **argv)
         const QByteArray store = readAll(addon + QStringLiteral("/source/src/ModelStore.cpp"));
         const QByteArray cmake = readAll(addon + QStringLiteral("/source/CMakeLists.txt"));
         check(!top.isEmpty() && top == inner && m.value(QStringLiteral("id")).toString() == QLatin1String("translation-proofreading")
-                  && m.value(QStringLiteral("version")).toString() == QLatin1String("1.4") && cmake.contains("set(TP_VERSION \"1.4\")")
+                  && m.value(QStringLiteral("version")).toString() == QLatin1String("1.5") && cmake.contains("set(TP_VERSION \"1.5\")")
                   && m.value(QStringLiteral("minApp")).toString() == QLatin1String(QB_RUNTIME_SINCE),
-              QStringLiteral("Translation and Proofreading 1.4 is in addons/ with its source; its two manifests and its build agree on the version"),
+              QStringLiteral("Translation Helper 1.5 is in addons/ with its source; its two manifests and its build agree on the version"),
               m.value(QStringLiteral("version")).toString());
         check(store.contains("https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/")
                   && !store.contains("Quillbinder_Translation_Addon")

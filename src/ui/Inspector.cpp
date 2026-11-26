@@ -247,6 +247,7 @@ Inspector::Inspector(QWidget *parent) : QWidget(parent)
         static const QHash<QString, int> tabOf = {{QLatin1String(zoom::kInspSynopsis), int(Notes)},
                                                   {QLatin1String(zoom::kInspNotes), int(Notes)},
                                                   {QLatin1String(zoom::kInspBookmarks), int(Bookmarks)},
+                                                  {QLatin1String(zoom::kInspProjectBookmarks), int(Bookmarks)},
                                                   {QLatin1String(zoom::kInspPreview), int(Bookmarks)},
                                                   {QLatin1String(zoom::kInspSnapList), int(Snapshots)},
                                                   {QLatin1String(zoom::kInspSnapText), int(Snapshots)},
@@ -394,6 +395,7 @@ QWidget *Inspector::buildNotesTab()
     l->addWidget(split);
     m_notesSplit = split;
     split->setObjectName(QStringLiteral("inspectorNotesSplit"));
+    connect(split, &QSplitter::splitterMoved, this, [this, split] { keepSizes(split, true); });
     // two parts with a zoom each (0.21.1): the card (and the rest of the page) and the notes
     zoom::mark(w, QLatin1String(zoom::kInspSynopsis));
     zoom::attachFonts(w, QLatin1String(zoom::kInspSynopsis));
@@ -574,6 +576,11 @@ QWidget *Inspector::buildBookmarksTab()
         list->setObjectName(project ? QStringLiteral("inspectorProjectBookmarks") : QStringLiteral("inspectorBookmarks"));
         bl->addWidget(list, 1);
         (project ? m_projectBookmarks : m_bookmarks) = list;
+        if (project) {
+            // 0.95.0: each of the three parts zooms on its own (the document list has the page's key, below)
+            zoom::mark(box, QLatin1String(zoom::kInspProjectBookmarks));
+            zoom::attachFonts(box, QLatin1String(zoom::kInspProjectBookmarks));
+        }
 
         auto *menu = new QMenu(add);
         menu->addAction(tr("Internal Document…"), this, [this, project] {
@@ -660,7 +667,8 @@ QWidget *Inspector::buildBookmarksTab()
     l->addWidget(split, 1);
     m_bookmarkSplit = split;
     split->setObjectName(QStringLiteral("inspectorBookmarkSplit"));
-    // two parts with a zoom each (0.21.1): the lists, and the text shown below them
+    connect(split, &QSplitter::splitterMoved, this, [this, split] { keepSizes(split, true); });
+    // three parts with a zoom each (0.21.1; the two lists one each since 0.95.0): the lists, and the text shown below them
     // (a copy of the document at a zoom of its own, see showBookmarkPreview)
     zoom::mark(w, QLatin1String(zoom::kInspBookmarks));
     zoom::attachFonts(w, QLatin1String(zoom::kInspBookmarks));
@@ -683,7 +691,7 @@ void Inspector::showBookmarkPreview(BinderItem *it)
         return;
     }
     if (m_previewMirror && m_previewMirror->source() == doc && m_previewCopy && m_previewItemId == it->id) {
-        m_bookmarkPreview->show();
+        showPreviewWidget();
         return;
     }
     stopPreview();
@@ -709,7 +717,72 @@ void Inspector::showBookmarkPreview(BinderItem *it)
     applyPreviewZoom();
     m_bookmarkPreview->setToolTip(tr("The bookmarked document: what you write or format here is written into the document "
                                      "(and shows in every editor at once). Double-click the bookmark to open it."));
+    showPreviewWidget();
+}
+
+void Inspector::showPreviewWidget()
+{
+    // 0.95.0: the preview comes back at the size the writer gave it (a divider with a hidden part keeps a 0 for it)
+    const bool wasHidden = m_bookmarkPreview->isHidden();
     m_bookmarkPreview->show();
+    const QList<int> kept = m_keptSizes.value(m_bookmarkSplit);
+    if (wasHidden && kept.size() == 3 && kept[2] > 0)
+        QTimer::singleShot(0, this, [this, kept] {
+            if (m_bookmarkSplit && m_bookmarkPreview->isVisible())
+                m_bookmarkSplit->setSizes(kept);
+        });
+}
+
+void Inspector::keepSizes(QSplitter *sp, bool moved)
+{
+    if (!sp || sp->width() < 20 || sp->height() < 20)
+        return;
+    const QList<int> now = sp->sizes();
+    QList<int> kept = m_keptSizes.value(sp);
+    bool allShown = true;
+    for (int i = 0; i < now.size(); ++i)
+        allShown = allShown && sp->widget(i)->isVisibleTo(sp) && now[i] > 0;
+    if (allShown) {
+        m_keptSizes[sp] = now; // one moment's sizes together
+    } else if (moved && kept.size() == now.size()) {
+        // a part is hidden (the preview with no bookmark): the writer moved the others, the hidden one keeps its size
+        int shownNow = 0, keptTotal = 0, keptHidden = 0;
+        for (int i = 0; i < now.size(); ++i) {
+            keptTotal += kept[i];
+            if (sp->widget(i)->isVisibleTo(sp))
+                shownNow += now[i];
+            else
+                keptHidden += kept[i];
+        }
+        if (shownNow > 0 && keptTotal > keptHidden)
+            for (int i = 0; i < now.size(); ++i)
+                if (sp->widget(i)->isVisibleTo(sp))
+                    kept[i] = int(double(now[i]) / shownNow * (keptTotal - keptHidden));
+        m_keptSizes[sp] = kept;
+    }
+}
+
+void Inspector::keepAllSizes()
+{
+    for (QSplitter *sp : {m_notesSplit, m_bookmarkSplit, m_snapSplit})
+        keepSizes(sp);
+}
+
+QList<int> Inspector::sizesToSave(QSplitter *sp)
+{
+    if (!sp)
+        return {};
+    keepSizes(sp);
+    QList<int> out = sp->sizes();
+    const QList<int> kept = m_keptSizes.value(sp);
+    // a part that is hidden or has no room now (the preview, the inspector itself): the sizes seen while all were
+    // shown; nothing seen yet: what the divider says
+    bool zero = false;
+    for (int v : out)
+        zero = zero || v <= 0;
+    if (zero && kept.size() == out.size())
+        out = kept;
+    return out;
 }
 
 void Inspector::stopPreview()
@@ -718,6 +791,8 @@ void Inspector::stopPreview()
     m_previewMirror = nullptr;
     m_previewItemId.clear();
     if (m_bookmarkPreview) {
+        if (m_bookmarkPreview->isVisible())
+            keepSizes(m_bookmarkSplit); // 0.95.0: the size the writer gave it, before the part is hidden
         m_bookmarkPreview->hide();
         m_bookmarkPreview->detachDocument();
     }
@@ -1073,6 +1148,7 @@ QWidget *Inspector::buildSnapshotsTab()
     l->addWidget(split, 1);
     m_snapSplit = split;
     split->setObjectName(QStringLiteral("inspectorSnapshotSplit"));
+    connect(split, &QSplitter::splitterMoved, this, [this, split] { keepSizes(split, true); });
     // two parts with a zoom each (0.21.1): the list (and buttons), the text of the
     // snapshot (shown in the project's font at its own zoom, see showSnapshot)
     zoom::mark(w, QLatin1String(zoom::kInspSnapList));
@@ -2113,7 +2189,8 @@ void Inspector::refreshZoomBox()
         // which part the list shows: a short name above it (the row is narrow), the full one as its tip
         static const QHash<QString, const char *> shortNames = {
             {QLatin1String(zoom::kInspSynopsis), QT_TR_NOOP("Synopsis")}, {QLatin1String(zoom::kInspNotes), QT_TR_NOOP("Notes")},
-            {QLatin1String(zoom::kInspBookmarks), QT_TR_NOOP("Lists")},    {QLatin1String(zoom::kInspPreview), QT_TR_NOOP("Text")},
+            {QLatin1String(zoom::kInspBookmarks), QT_TR_NOOP("Document")}, {QLatin1String(zoom::kInspProjectBookmarks), QT_TR_NOOP("Project")},
+            {QLatin1String(zoom::kInspPreview), QT_TR_NOOP("Text")},
             {QLatin1String(zoom::kInspSnapList), QT_TR_NOOP("List")},      {QLatin1String(zoom::kInspSnapText), QT_TR_NOOP("Text")},
             {QLatin1String(zoom::kInspObjectList), QT_TR_NOOP("List")},    {QLatin1String(zoom::kInspObjectSheet), QT_TR_NOOP("Sheet")},
             {QStringLiteral("board"), QT_TR_NOOP("Map")}};
@@ -2147,11 +2224,10 @@ QVariantMap Inspector::saveState()
     // a tool's tab by its key: the numbers of those tabs depend on the add-ons there (0.61)
     if (!currentExtraTab().isEmpty())
         m[QStringLiteral("tab")] = int(Notes), m[QStringLiteral("toolTab")] = currentExtraTab();
-    auto sizes = [](QSplitter *sp) {
+    auto sizes = [this](QSplitter *sp) {
         QVariantList l;
-        if (sp)
-            for (int v : sp->sizes())
-                l << v;
+        for (int v : sizesToSave(sp))
+            l << v;
         return l;
     };
     m[QStringLiteral("notesSplit")] = sizes(m_notesSplit);
@@ -2172,7 +2248,7 @@ void Inspector::restoreState(const QVariantMap &m)
 {
     if (m.isEmpty())
         return;
-    auto setSizes = [](QSplitter *sp, const QVariant &v) {
+    auto setSizes = [this](QSplitter *sp, const QVariant &v) {
         const QVariantList l = v.toList();
         if (!sp || l.size() != sp->count())
             return;
@@ -2182,8 +2258,10 @@ void Inspector::restoreState(const QVariantMap &m)
             sizes << qMax(0, x.toInt());
             total += sizes.last();
         }
-        if (total > 0)
+        if (total > 0) {
             sp->setSizes(sizes);
+            m_keptSizes[sp] = sizes; // 0.95.0: also when the inspector is not shown yet
+        }
     };
     setSizes(m_notesSplit, m.value(QStringLiteral("notesSplit")));
     setSizes(m_bookmarkSplit, m.value(QStringLiteral("bookmarkSplit")));

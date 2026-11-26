@@ -387,6 +387,14 @@ target_compile_definitions(qb_v0940c_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_S
 add_executable(qb_v0940e_tests v0940e_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0940e_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0900_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.95.0: user profiles, the built-in theme and profile of the writer's look, the standard colors and the set of the keyboard
+# layout (items 95, 96, 98, 103, 104; no window) (xvfb-run -a ./qb_v0950c_tests /tmp/shots)
+add_executable(qb_v0950c_tests v0950c_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0950c_tests PRIVATE qbui Qt6::Test)
+# 0.95.0: profiles in the main window, the Profiles and Labels toolbars, the Standard Colors page, the keyboard button
+# (items 95, 97, 98, 103) (xvfb-run -a ./qb_v0950d_tests /tmp/shots)
+add_executable(qb_v0950d_tests v0950d_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0950d_tests PRIVATE qbui Qt6::Test)
 # The readers against damaged input (0.80.0, the external audit of 2026-11-09, ST-5): fixed-seed damage of small
 # valid inputs of RTF, Markdown, XML, ZIP, DOCX, ODT, Word 97 and .scrivx, each read in this process
 # (xvfb-run -a ./qb_fuzz_tests /tmp/shots; QB_FUZZ_SEED, QB_FUZZ_ROUNDS). tests/fuzz/README.md: longer runs.
@@ -509,3 +517,24 @@ target_link_libraries(qb_notesplain_tests PRIVATE qbui Qt6::Test)
 add_executable(qb_v0940d_tests v0940d_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0940d_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0940d_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+
+# 0.95.0, first part: the sizes of the Bookmarks tab's three parts (item 94) (xvfb-run -a ./qb_v0950a_tests /tmp/shots)
+add_executable(qb_v0950a_tests v0950a_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0950a_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0950a_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+
+# 0.95.0, second part: the move of the AppImage, highlights drawn as picked, negative word targets (xvfb-run -a ./qb_v0950b_tests /tmp/shots)
+add_executable(qb_v0950b_tests v0950b_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0950b_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0950b_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.95.0, item 102 (part 1): the language list and its marks, the first start's language, the interface texts of every language, the manuals as files, the Choice values, plural forms, the drop-down lists (xvfb-run -a ./qb_v0950f_tests /tmp/shots)
+add_executable(qb_v0950f_tests v0950f_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_SOURCE_DIR}/translations/translations.qrc)
+target_link_libraries(qb_v0950f_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0950f_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+
+# 0.95.0, item 102 (part 2): every language started in a program of its own (F1, the welcome project, the menu places the texts name, the mnemonics), the dictionary packages, the speech tool's lists, the keyboard sets of the new layouts (xvfb-run -a ./qb_v0950g_tests /tmp/shots)
+add_executable(qb_v0950g_tests v0950g_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_SOURCE_DIR}/translations/translations.qrc
+  ${CMAKE_SOURCE_DIR}/plugins/tools/speech-transcription/SpeechLogic.cpp)
+target_include_directories(qb_v0950g_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins/tools)
+target_link_libraries(qb_v0950g_tests PRIVATE qbui Qt6::Test Qt6::Network)
+target_compile_definitions(qb_v0950g_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")

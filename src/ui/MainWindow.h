@@ -172,6 +172,15 @@ public:
     // Wide window (not taller than wide): three columns in a chosen order ("BEI" = binder, editor, inspector; the six
     // orders). Upright window: the editor's row and a row with the binder and the inspector beside each other.
     bool isUpright() const { return m_upright; }
+    // 0.95.0 (item 95): switches to a profile at once (saves the profile in use first); false when it cannot
+    bool switchProfile(const QString &name);
+    void manageProfiles();
+    void refreshProfileUi();                 // the Profiles toolbar's button after the list or the profile in use changed
+    void setLabelFor(int id);                // the label of the selected documents (-1: none), as Documents > Label
+    void fitWindowToScreen();                // the window within the screen's usable area
+    void fitPanesToScreen();                 // the columns' widths as the window has room now (a smaller screen, a tablet)
+    QToolBar *profileBar() const { return m_profileBar; }
+    QToolBar *labelBar() const { return m_labelBar; }
     QString wideOrder() const { return m_wideOrder; }
     bool uprightEditorFirst() const { return m_uprightEditorFirst; }
     bool uprightBinderLeft() const { return m_uprightBinderLeft; }
@@ -319,6 +328,13 @@ private:
     QStringList iconBarIcons() const;
     void createIconBar();
     void rebuildIconBar();
+    // 0.95.0 (items 95 and 97, MainWindowProfiles.cpp): profiles, the Profiles toolbar and the Labels toolbar
+    void createProfileActions();
+    void createProfileBars();
+    void rebuildLabelBar();
+    void fillProfilesMenu(QMenu *menu);
+    void saveWindowSettings();
+    void reloadFromProfile(bool languageChanged);
     void chooseIconBar();
     void createColorButtons();
     void showDeveloperGuide();
@@ -604,6 +620,9 @@ private:
     QToolBar *m_toolbar = nullptr;
     QToolBar *m_formatBar = nullptr;
     QToolBar *m_iconBar = nullptr;
+    QToolBar *m_profileBar = nullptr;   // 0.95.0: Profiles (after Themes), off at first
+    QToolBar *m_labelBar = nullptr;     // 0.95.0: Labels (after the icon bar), off at first
+    QToolButton *m_profileButton = nullptr;
     bool m_applyingBars = false;
     BarDock *m_barDock = nullptr; // 0.91.1: the toolbars' places and the drag by their grips (ui/BarDock.*)
     ColorPickButton *m_textColorBtn = nullptr;

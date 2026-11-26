@@ -4,6 +4,7 @@
 // other; in the add-on's window side by side (input left, output right) with the controls above and between.
 #include "Dictionary.h"
 #include "EngineApi.h"
+#include "Languages.h"
 #include "Logic.h"
 
 #include <QHash>
@@ -143,7 +144,8 @@ public:
     };
     struct SingleWord {
         bool on = false;
-        QString kind;           // "proofread", "de-en" (German word to English), "en-de"
+        QString kind;           // "proofread", "de-en" (German word to English), "en-de"; 1.5: "pair-en", "pair"
+        QString lang;           // 1.5: the language of the word (the dictionary it came from)
         QString word;           // as typed
         QString result;         // as it should be
         QString resultPos;      // the word class of the chosen word (translations), empty: not known
@@ -168,7 +170,8 @@ public:
     int cachedSentences() const { return int(m_cache.size()); }
 
     // ---- 1.3
-    enum class Direction { Proofread, DeToEn, EnToDe };
+    // 1.5: Pair is every other pair of the eleven languages (one model, or two through English)
+    enum class Direction { Proofread, DeToEn, EnToDe, Pair };
     Direction direction() const { return m_dir; }          // of the last run (or of the settings, before the first)
     Direction directionNow() const;                        // of the settings and the text now
     QComboBox *modelBox() const { return m_model; }
@@ -187,6 +190,23 @@ public:
     QLabel *noticeLabel() const { return m_noticeText; }
     QPushButton *noticeButton() const { return m_noticeButton; }
     QStringList missingParts() const;      // "a translation model (German to English)", "the German dictionary" ...
+
+    // ---- 1.5: the Translation Helper
+    // the two language lists (drop-downs) of the task "Translate", and the fixed line that says the tool only suggests
+    QComboBox *fromLanguageBox() const { return m_langFrom; }
+    QComboBox *toLanguageBox() const { return m_langTo; }
+    QLabel *suggestionsLabel() const { return m_suggestions; }
+    QLabel *languageArrow() const { return m_langArrow; }
+    QString fromLanguage() const;          // the language of the text now ("de" ... ; Proofread: "en")
+    QString toLanguage() const;            // the language of the result now
+    void setLanguages(const QString &from, const QString &to);   // sets the task "Translate" and the two lists
+    // the models a pair of languages needs and the first of them that is not downloaded (catalog ids); `steps` is empty
+    // for two equal languages
+    QStringList pairModelIds(const QString &from, const QString &to, QStringList *missing = nullptr) const;
+    // the models the engine used for the last pair translation, in order (for the checks)
+    QStringList lastPairModels() const { return m_pairModels; }
+    // the text the last step of a pair translation got (English in a pair through English), for the checks
+    QString pivotText(int unit = 0) const { return m_units.value(unit).pivot; }
 
 public slots:
     void swapDirection();    // German to English becomes English to German and back; the result moves into the input
@@ -211,6 +231,7 @@ private:
         QString raw;         // what the model wrote
         QList<Segment> segments;
         QString flag;        // why the original was kept
+        QString pivot;       // 1.5: a pair through English: what the first model wrote (the second one's input)
     };
     QString currentTask() const;          // "auto", "proofread", "translate"
     QString stylePrefix() const;
@@ -229,6 +250,11 @@ private:
     void updateModeUi();
     void updateNotice();
     void runSingleTranslation(const QString &word);
+    void runPair(const QString &text, const QHash<QString, QList<Segment>> &previous);
+    void translateBackPair();
+    void updateLanguageUi();
+    void syncLanguageBoxes();
+    void saveLanguages();
     void finishSingleTranslation(const SingleWord &w, const QString &error);
     void requestChatMeaning();
     void requestVariants();
@@ -257,7 +283,8 @@ private:
     Place m_place;
     InputEdit *m_input = nullptr;
     OutputView *m_output = nullptr;
-    QComboBox *m_task = nullptr, *m_style = nullptr, *m_model = nullptr;
+    QComboBox *m_task = nullptr, *m_style = nullptr, *m_model = nullptr, *m_langFrom = nullptr, *m_langTo = nullptr;
+    QLabel *m_suggestions = nullptr, *m_langArrow = nullptr;
     QPushButton *m_go = nullptr;
     QToolButton *m_from = nullptr, *m_into = nullptr, *m_copy = nullptr, *m_stop = nullptr, *m_models = nullptr;
     QLabel *m_status = nullptr, *m_notes = nullptr, *m_noticeText = nullptr;
@@ -279,6 +306,8 @@ private:
     int m_singleTranslationRequest = 0;
 
     QString m_lang = QStringLiteral("en");
+    QString m_srcLang = QStringLiteral("de"), m_tgtLang = QStringLiteral("en");   // 1.5: of the last run
+    QStringList m_pairModels, m_pendingPivots;
     QString m_styleId;
     Plan m_plan;
     QList<Unit> m_units;

@@ -1,6 +1,6 @@
 {
   "format": 2,
-  "release": "models-3",
+  "release": "models-4",
   "engine": "CTranslate2 4.9.0",
   "models": [
     {
@@ -473,6 +473,1475 @@
         }
       ],
       "sizeMB": 4
+    },
+    {
+      "id": "opus-mt-es-en",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT Spanish to English (University of Helsinki)",
+      "summary": "Translates Spanish into English; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-es-en by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-es-en, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "es",
+      "to": "en",
+      "release": "models-4",
+      "memoryMB": 259,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-es-en/tree/c96e2c5399ebfae4fc43d9669556b9afa74bb69d",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-es-en--MODEL-LICENSE.txt",
+          "size": 467,
+          "sha256": "ca64dd0cd1d80806f3e1151f0e3e12e8130af62a103d4fe2c3e5e5c9c7c62490"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-es-en--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-es-en--model.bin",
+          "size": 79567635,
+          "sha256": "44c5adc2c680f27c14c991e5ab7f74f38b41597153f7123bc8f6455f09a3b38b"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-es-en--shared_vocabulary.json",
+          "size": 1276136,
+          "sha256": "040e48c9d00734f48506e052695837720bd1f6aa01c70636cde83038362baf19"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-es-en--source.spm",
+          "size": 825924,
+          "sha256": "e236ee6d866b635c0142114f8647f39831f9d92534aa2aad75c942f6a78ad0e3"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-es-en--target.spm",
+          "size": 801636,
+          "sha256": "4dd547c24816a335e7b0b2e63376a8f1b3cbfc671eda5ab808dd44fdadaa8791"
+        }
+      ],
+      "sizeMB": 82
+    },
+    {
+      "id": "opus-mt-en-es",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT English to Spanish (University of Helsinki)",
+      "summary": "Translates English into Spanish; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-en-es by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-en-es, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "en",
+      "to": "es",
+      "release": "models-4",
+      "memoryMB": 259,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-en-es/tree/5bc4493d463cf000c1f0b50f8d56886a392ed4ab",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-en-es--MODEL-LICENSE.txt",
+          "size": 467,
+          "sha256": "31fca89c1695407e03365e923c732be95e87efed7b59b995b8654d92248d0e6a"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-en-es--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-en-es--model.bin",
+          "size": 79567635,
+          "sha256": "30c5c2de08329c61860777fbe471e2dd413f64adbde543b2848b5ac3b5d6f865"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-en-es--shared_vocabulary.json",
+          "size": 1276136,
+          "sha256": "040e48c9d00734f48506e052695837720bd1f6aa01c70636cde83038362baf19"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-en-es--source.spm",
+          "size": 801636,
+          "sha256": "4dd547c24816a335e7b0b2e63376a8f1b3cbfc671eda5ab808dd44fdadaa8791"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-en-es--target.spm",
+          "size": 825924,
+          "sha256": "e236ee6d866b635c0142114f8647f39831f9d92534aa2aad75c942f6a78ad0e3"
+        }
+      ],
+      "sizeMB": 82
+    },
+    {
+      "id": "opus-mt-fr-en",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT French to English (University of Helsinki)",
+      "summary": "Translates French into English; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-fr-en by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-fr-en, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "fr",
+      "to": "en",
+      "release": "models-4",
+      "memoryMB": 253,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-fr-en/tree/c4aed37b318c763fd177aa449b44e3b783cc6c02",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-fr-en--MODEL-LICENSE.txt",
+          "size": 466,
+          "sha256": "a2d0ffa8c7221180f1742031ef2b5b72429f3a7464b135f2d5b55a4c0bb081f6"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-fr-en--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-fr-en--model.bin",
+          "size": 76714395,
+          "sha256": "8c070c110a94dca4693be7c93ecbfdd09bce99eefbf902b1e7b45cbea2a10fd4"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-fr-en--shared_vocabulary.json",
+          "size": 1052697,
+          "sha256": "a157eb51a42817dd1ae4bc46cecf66e591ab32641df936da292bd09f2728631b"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-fr-en--source.spm",
+          "size": 802397,
+          "sha256": "78d0e717c77053f1c4b856d8661d9cb87c64f083a35418c087b9146300e4f585"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-fr-en--target.spm",
+          "size": 778395,
+          "sha256": "173e9f493a668fe396d599e28d414a201193094e6ffd7a4678e5aab0f6d3d838"
+        }
+      ],
+      "sizeMB": 79
+    },
+    {
+      "id": "opus-mt-en-fr",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT English to French (University of Helsinki)",
+      "summary": "Translates English into French; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-en-fr by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-en-fr, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "en",
+      "to": "fr",
+      "release": "models-4",
+      "memoryMB": 253,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-en-fr/tree/dd7f6540a7a48a7f4db59e5c0b9c42c8eea67f18",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-en-fr--MODEL-LICENSE.txt",
+          "size": 466,
+          "sha256": "0140a738c726330ba457062ec50543fabe5f80c17e958039aefc015c73ce64f4"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-en-fr--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-en-fr--model.bin",
+          "size": 76714395,
+          "sha256": "236b63e3029611a328693d704067ebdd75b800e5b3011cdec3dad4287fd29a36"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-en-fr--shared_vocabulary.json",
+          "size": 1052697,
+          "sha256": "a157eb51a42817dd1ae4bc46cecf66e591ab32641df936da292bd09f2728631b"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-en-fr--source.spm",
+          "size": 778395,
+          "sha256": "173e9f493a668fe396d599e28d414a201193094e6ffd7a4678e5aab0f6d3d838"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-en-fr--target.spm",
+          "size": 802397,
+          "sha256": "78d0e717c77053f1c4b856d8661d9cb87c64f083a35418c087b9146300e4f585"
+        }
+      ],
+      "sizeMB": 79
+    },
+    {
+      "id": "opus-mt-it-en",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT Italian to English (University of Helsinki)",
+      "summary": "Translates Italian into English; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-it-en by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-it-en, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "it",
+      "to": "en",
+      "release": "models-4",
+      "memoryMB": 275,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-it-en/tree/42556a0848fc726f4d27399f20b19ff6f01afe11",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-it-en--MODEL-LICENSE.txt",
+          "size": 467,
+          "sha256": "7d1403992a652e19ff9667f28ef71d8feae18c3b352186bf257c74f0a4e7a04b"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-it-en--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-it-en--model.bin",
+          "size": 87564195,
+          "sha256": "a9e2a6f326679be7f1ed1cebfa070bbc2e78cca6930c12480d82f2e6ca0a7fb2"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-it-en--shared_vocabulary.json",
+          "size": 1979039,
+          "sha256": "493ed8b6729325acf56272e0fd96fc2e5db6a098e85b5240e08b6288c5d1d1d4"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-it-en--source.spm",
+          "size": 813709,
+          "sha256": "1bd307e2756991d470e4b40172147f7889b46a323b1a9a2150e66274825b1f21"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-it-en--target.spm",
+          "size": 789549,
+          "sha256": "5d0ea845f1daa59c379e797de366607b75594935f7c6d476c933e527bf25e0a8"
+        }
+      ],
+      "sizeMB": 91
+    },
+    {
+      "id": "opus-mt-en-it",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT English to Italian (University of Helsinki)",
+      "summary": "Translates English into Italian; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-en-it by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-en-it, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "en",
+      "to": "it",
+      "release": "models-4",
+      "memoryMB": 274,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-en-it/tree/be5a254d936f1a8c8da080406ca582a6615e6658",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-en-it--MODEL-LICENSE.txt",
+          "size": 467,
+          "sha256": "6892426b2b7703b538f0d02dce70ab7da282faf9e85a674b962bf609f1c15a64"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-en-it--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-en-it--model.bin",
+          "size": 87385315,
+          "sha256": "6d6e83c47a455568bbe89d10184dc8093b6761d7b13545c2cd07ec080e42b68e"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-en-it--shared_vocabulary.json",
+          "size": 1962501,
+          "sha256": "7b6e620b328335c4ed0e1d923fa2374f4caf004425008502aab3bf336deecc47"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-en-it--source.spm",
+          "size": 789468,
+          "sha256": "2efff2c37e51842c2817a6770280979b5dd803cebbe2928e576d42a888f89537"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-en-it--target.spm",
+          "size": 813725,
+          "sha256": "ef5b179cd5933782af78595099807b5c0156bd67665e4c3af425c7aec6d02d34"
+        }
+      ],
+      "sizeMB": 91
+    },
+    {
+      "id": "opus-mt-ru-en",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT Russian to English (University of Helsinki)",
+      "summary": "Translates Russian into English; a pair without English goes through English (two models). Free for any use with credit (CC BY 4.0).",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "nonCommercial": false,
+      "credit": "opus-mt-ru-en by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-ru-en, licensed under CC BY 4.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "ru",
+      "to": "en",
+      "release": "models-4",
+      "memoryMB": 256,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-ru-en/tree/fbd6dc73284f95536648512cc21d57f19191961a",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-ru-en--MODEL-LICENSE.txt",
+          "size": 466,
+          "sha256": "858d7a04ebddd78af10b9f1a8051ffca59a3a8b9e466eda38e428f6225e5b4ee"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-ru-en--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-ru-en--model.bin",
+          "size": 78276475,
+          "sha256": "0efde44155f1d73b07d81bae640d9cca79657c6ade8e338d0862e34c30ffeee9"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-ru-en--shared_vocabulary.json",
+          "size": 2300269,
+          "sha256": "bf1812383ed402163a2ed1b553e175e7db96a54ed68b6c15566018fdf945ed99"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-ru-en--source.spm",
+          "size": 1080169,
+          "sha256": "745998e51ba5b058e38b7ac7765c25c43ed5c1c39cc92b27163b9b2e323c9d7c"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-ru-en--target.spm",
+          "size": 802781,
+          "sha256": "16bebef1389a0b8ab452772c4e35b9e605e5713f8ac7baa71ca701394eaa086d"
+        }
+      ],
+      "sizeMB": 82
+    },
+    {
+      "id": "opus-mt-en-ru",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT English to Russian (University of Helsinki)",
+      "summary": "Translates English into Russian; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-en-ru by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-en-ru, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "en",
+      "to": "ru",
+      "release": "models-4",
+      "memoryMB": 256,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-en-ru/tree/bb09c99d180016eac6819df3dae68edb1690fdee",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-en-ru--MODEL-LICENSE.txt",
+          "size": 467,
+          "sha256": "8b5e29483c6279c28b8a5ef0561ece4bd029e12a96b02e92dced037d85c79b0d"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-en-ru--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-en-ru--model.bin",
+          "size": 78276475,
+          "sha256": "f5ae1da30bcb61e877c549be8fb5a434193893eb97509ccd0b954465f9a8f80c"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-en-ru--shared_vocabulary.json",
+          "size": 2300269,
+          "sha256": "bf1812383ed402163a2ed1b553e175e7db96a54ed68b6c15566018fdf945ed99"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-en-ru--source.spm",
+          "size": 802781,
+          "sha256": "16bebef1389a0b8ab452772c4e35b9e605e5713f8ac7baa71ca701394eaa086d"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-en-ru--target.spm",
+          "size": 1080169,
+          "sha256": "745998e51ba5b058e38b7ac7765c25c43ed5c1c39cc92b27163b9b2e323c9d7c"
+        }
+      ],
+      "sizeMB": 82
+    },
+    {
+      "id": "opus-mt-id-en",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT Indonesian to English (University of Helsinki)",
+      "summary": "Translates Indonesian into English; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-id-en by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-id-en, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "id",
+      "to": "en",
+      "release": "models-4",
+      "memoryMB": 248,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-id-en/tree/9a7f1b0d0dfe0a92ba691030b01d6f23f966e7ec",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-id-en--MODEL-LICENSE.txt",
+          "size": 470,
+          "sha256": "775aabfeb55ab9366d05cc2f2bb759db7e0ae397ad369b1ad49e2a930f6f7db7"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-id-en--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-id-en--model.bin",
+          "size": 74261035,
+          "sha256": "0ccbb875f6544b2b17d76646902cf0e84915a0ecd7b3de0e115f63de19205c44"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-id-en--shared_vocabulary.json",
+          "size": 994511,
+          "sha256": "847ee565009741a6334e25486f5d17606505d387ab8f631a2c3752e165433c96"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-id-en--source.spm",
+          "size": 800687,
+          "sha256": "2a8fefe71c7f26cb0c6aa1b9f0cc0f8d18006b20fe41c547af7f25b9c8333465"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-id-en--target.spm",
+          "size": 795925,
+          "sha256": "e88300911c2c573ec5526777a1e84bae698d20925b82dcef9c7248bb0e537ed0"
+        }
+      ],
+      "sizeMB": 77
+    },
+    {
+      "id": "opus-mt-en-id",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT English to Indonesian (University of Helsinki)",
+      "summary": "Translates English into Indonesian; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-en-id by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-en-id, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "en",
+      "to": "id",
+      "release": "models-4",
+      "memoryMB": 248,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-en-id/tree/6e4c52d61a6b16fe3509b0267cbfec65011b860b",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-en-id--MODEL-LICENSE.txt",
+          "size": 470,
+          "sha256": "c988dd01b51a17de895de932693a9b3b26d3bdb1c469035d0bb5317b4f573f33"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-en-id--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-en-id--model.bin",
+          "size": 74261035,
+          "sha256": "2b9dc8ce6b00b40a9f1b08457fe0c8abe83b116eb88be5049d26242a41624a1b"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-en-id--shared_vocabulary.json",
+          "size": 994511,
+          "sha256": "847ee565009741a6334e25486f5d17606505d387ab8f631a2c3752e165433c96"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-en-id--source.spm",
+          "size": 795925,
+          "sha256": "e88300911c2c573ec5526777a1e84bae698d20925b82dcef9c7248bb0e537ed0"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-en-id--target.spm",
+          "size": 800687,
+          "sha256": "2a8fefe71c7f26cb0c6aa1b9f0cc0f8d18006b20fe41c547af7f25b9c8333465"
+        }
+      ],
+      "sizeMB": 77
+    },
+    {
+      "id": "opus-mt-nl-en",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT Dutch to English (University of Helsinki)",
+      "summary": "Translates Dutch into English; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-nl-en by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-nl-en, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "nl",
+      "to": "en",
+      "release": "models-4",
+      "memoryMB": 261,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-nl-en/tree/48af999f2c59b10c05ca6e008dcedc07677a9b15",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-nl-en--MODEL-LICENSE.txt",
+          "size": 465,
+          "sha256": "ff9bc21018d62fc3850beb8811d43ca89578d355c5aacc759ddba04a37d086a1"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-nl-en--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-nl-en--model.bin",
+          "size": 80621675,
+          "sha256": "999d3c51fa30cb198ec609521b907984fc7df3c6c024404ab0a70dccffdf0cd0"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-nl-en--shared_vocabulary.json",
+          "size": 1336177,
+          "sha256": "78c1ea4f71b7d582051c7250032d2d959e60c5d42078f5d540951153ad836774"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-nl-en--source.spm",
+          "size": 813866,
+          "sha256": "f538d23d4b30641cd97c608d2a83890d503aa1286a5560f19ef949404a786e94"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-nl-en--target.spm",
+          "size": 789525,
+          "sha256": "d05781fde84b8793191528a7a176e1b17f96265388f602379ee6ae3139f59141"
+        }
+      ],
+      "sizeMB": 84
+    },
+    {
+      "id": "opus-mt-en-nl",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT English to Dutch (University of Helsinki)",
+      "summary": "Translates English into Dutch; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-en-nl by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-en-nl, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "en",
+      "to": "nl",
+      "release": "models-4",
+      "memoryMB": 261,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-en-nl/tree/8aad73b34ff36c090e7fc8a2eb7e2e7cca235d31",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-en-nl--MODEL-LICENSE.txt",
+          "size": 465,
+          "sha256": "304803f003699bc0ff84fe6978b753c1e757516ac6f87c69f7a1ffa9c3dafebb"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-en-nl--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-en-nl--model.bin",
+          "size": 80621675,
+          "sha256": "6399213f6bf2144d766438c6703e03126eaec562e91ed5d3be31e26180bd830c"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-en-nl--shared_vocabulary.json",
+          "size": 1336177,
+          "sha256": "78c1ea4f71b7d582051c7250032d2d959e60c5d42078f5d540951153ad836774"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-en-nl--source.spm",
+          "size": 789525,
+          "sha256": "d05781fde84b8793191528a7a176e1b17f96265388f602379ee6ae3139f59141"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-en-nl--target.spm",
+          "size": 813866,
+          "sha256": "f538d23d4b30641cd97c608d2a83890d503aa1286a5560f19ef949404a786e94"
+        }
+      ],
+      "sizeMB": 84
+    },
+    {
+      "id": "opus-mt-pl-en",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT Polish to English (University of Helsinki)",
+      "summary": "Translates Polish into English; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-pl-en by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-pl-en, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "pl",
+      "to": "en",
+      "release": "models-4",
+      "memoryMB": 257,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-pl-en/tree/7f2bb874fdfb6139f9842b91a9b75c4a6c93401c",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-pl-en--MODEL-LICENSE.txt",
+          "size": 466,
+          "sha256": "2adb5c52b5a8f18a5cde0ebbbe466de67d0caf1ef3423a180f8d9d3f6d3d9912"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-pl-en--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-pl-en--model.bin",
+          "size": 78750715,
+          "sha256": "be07a3d22b868de11b4ce7d911b4be6753fb19417ab4227acfea07206c30398e"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-pl-en--shared_vocabulary.json",
+          "size": 1209200,
+          "sha256": "1978718a092ba2db2765ca6db1118c6443a4429c33e725337dc06ecb96c3afc3"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-pl-en--source.spm",
+          "size": 834921,
+          "sha256": "86b3b5f9de4f5ed9c46321bab1f865e3aa9ddf63094e89b49dd515aeafa79ce4"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-pl-en--target.spm",
+          "size": 785212,
+          "sha256": "9afaf3a45161adc40b0880d61f6f81f6ca352d68f881bc5d8da2b195023be1e0"
+        }
+      ],
+      "sizeMB": 82
+    },
+    {
+      "id": "opus-mt-en-pl",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT English to Polish (University of Helsinki)",
+      "summary": "Translates English into Polish; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0). It is the model for the West Slavic languages; here it is told to write Polish (>>pol<<).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-en-zlw by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-en-zlw, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "en",
+      "to": "pl",
+      "release": "models-4",
+      "memoryMB": 251,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-en-zlw/tree/92ffd5aa936924688bd715b26d6bb75393082c03",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "sourceToken": ">>pol<<",
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-en-pl--MODEL-LICENSE.txt",
+          "size": 469,
+          "sha256": "c3db3cf77d9dfb719480efefd42fd14b2f675f19e0286e48ef1136e21eec37f2"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-en-pl--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-en-pl--model.bin",
+          "size": 75954155,
+          "sha256": "e6f4f7677d85babbca409dd04ba823440be0c4ba9964d40fa959bb6da98d4f54"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-en-pl--shared_vocabulary.json",
+          "size": 1093037,
+          "sha256": "0ef0eae2cabf63016cbaf109e053be898e5bf941429f5cfd06cdf35bc6fa1d3e"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-en-pl--source.spm",
+          "size": 788226,
+          "sha256": "3140fe2eddedc897ca27aa2b539b8064f667f82298eb95b2701ee490bde33388"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-en-pl--target.spm",
+          "size": 815306,
+          "sha256": "ef8d9b0da062c863241e0d61af5108a53e1fb335c9c7712eeeb4498b2dd55782"
+        }
+      ],
+      "sizeMB": 79
+    },
+    {
+      "id": "opus-mt-tr-en",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT Turkish to English (University of Helsinki)",
+      "summary": "Translates Turkish into English; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0).",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-tr-en by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-tr-en, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "tr",
+      "to": "en",
+      "release": "models-4",
+      "memoryMB": 256,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-tr-en/tree/19c65427cc2af5f191337d4899e0348c4af25902",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-tr-en--MODEL-LICENSE.txt",
+          "size": 467,
+          "sha256": "ada8b484ec509007db0f95cff0ff9de6d16615bf2e05021a1cd5812bd9e7781c"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-tr-en--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-tr-en--model.bin",
+          "size": 78209395,
+          "sha256": "cd59fd05d819d94315b56692c9934732565cf6925594f494fdb182c7534036dc"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-tr-en--shared_vocabulary.json",
+          "size": 1263120,
+          "sha256": "b18703ef326b780864b2fbfb66d9168b4bc6a0ec0490a7422262647967ecff79"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-tr-en--source.spm",
+          "size": 839750,
+          "sha256": "4a6356e3ee892f2896dbf0b5cabeb51fdf16e03c70b0702cefc8b847e504241c"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-tr-en--target.spm",
+          "size": 796647,
+          "sha256": "4cc15427e50b80e53b7dcf5f4d8a52edfe219b8d8e290c031f5578f5760b335f"
+        }
+      ],
+      "sizeMB": 81
+    },
+    {
+      "id": "opus-mt-en-tr",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT English to Turkish (University of Helsinki)",
+      "summary": "Translates English into Turkish; a pair without English goes through English (two models). Free for any use with credit (CC BY 4.0). The larger OPUS-MT model for this pair.",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "nonCommercial": false,
+      "credit": "opus-mt-tc-big-en-tr by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-tr, licensed under CC BY 4.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "en",
+      "to": "tr",
+      "release": "models-4",
+      "memoryMB": 575,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-tr/tree/e539fc16a8a1a0ea5950eb339b595bfcce990e90",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-en-tr--MODEL-LICENSE.txt",
+          "size": 487,
+          "sha256": "648a8316ff5a528c28610e6b615deb3b78b2b95dedcf2ce4984b29ccb70cd907"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-en-tr--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-en-tr--model.bin",
+          "size": 237977893,
+          "sha256": "a5a148aae553f2573fd1f9ba735a03385f050437f98e51f8b5c4e4f9c4de3719"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-en-tr--shared_vocabulary.json",
+          "size": 1112966,
+          "sha256": "19bb107d0d72fde62e5c28378da7eb1bb379a2203b9957890618d3df18ba2bb3"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-en-tr--source.spm",
+          "size": 796953,
+          "sha256": "180d3f94ddfee5585d78b702290ded0f4f9bd40f299349c8383b32a579fefad4"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-en-tr--target.spm",
+          "size": 833391,
+          "sha256": "cd0c475692178b6c626aadaef01bd8f98d8053946938e4e67005fc1e4811d797"
+        }
+      ],
+      "sizeMB": 241
+    },
+    {
+      "id": "opus-mt-pt-en",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT Portuguese (Brazil) to English (University of Helsinki)",
+      "summary": "Translates Portuguese (Brazil) into English; a pair without English goes through English (two models). Free for any use with credit (Apache-2.0). It is the model for the Romance languages; here it is used for Portuguese.",
+      "license": "Apache-2.0",
+      "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+      "nonCommercial": false,
+      "credit": "opus-mt-ROMANCE-en by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-ROMANCE-en, licensed under Apache-2.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "pt",
+      "to": "en",
+      "release": "models-4",
+      "memoryMB": 259,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-ROMANCE-en/tree/e9ca9975e3972afd80732f08ce01d3a1339f47f8",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-pt-en--MODEL-LICENSE.txt",
+          "size": 494,
+          "sha256": "84926bd210979936962f4db046162ab40d41ebf895b06fb1eefe0f5bdaee29eb"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-pt-en--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-pt-en--model.bin",
+          "size": 79567635,
+          "sha256": "a272e9946142e12dc7eb52050977bd480b19e47381f6024eee995f3df05b0412"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-pt-en--shared_vocabulary.json",
+          "size": 1146400,
+          "sha256": "c48177ccac49fd66ede777976c372d5c0cbae351c5b6676c5ae7957f59e9d646"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-pt-en--source.spm",
+          "size": 800087,
+          "sha256": "baeab21ec00d0b490382b82499ef0348235c5a8e75de28aec8290adf62b007c4"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-pt-en--target.spm",
+          "size": 779494,
+          "sha256": "121d4e0a20cda2052945d790d335f421f7bea7fa6b0ff7fbc9112eed5f12036f"
+        }
+      ],
+      "sizeMB": 82
+    },
+    {
+      "id": "opus-mt-en-pt",
+      "kinds": [
+        "translator-pair"
+      ],
+      "type": "seq2seq",
+      "title": "OPUS-MT English to Portuguese (Brazil) (University of Helsinki)",
+      "summary": "Translates English into Portuguese (Brazil); a pair without English goes through English (two models). Free for any use with credit (CC BY 4.0). The larger OPUS-MT model for this pair.",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+      "nonCommercial": false,
+      "credit": "opus-mt-tc-big-en-pt by the Language Technology Research Group at the University of Helsinki (Helsinki-NLP), https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-pt, licensed under CC BY 4.0. Changed: converted to CTranslate2 with 8-bit weights.",
+      "from": "en",
+      "to": "pt",
+      "release": "models-4",
+      "memoryMB": 571,
+      "source": "https://huggingface.co/Helsinki-NLP/opus-mt-tc-big-en-pt/tree/9f2863d807ecf91a374bdbecb8d01e402e90622e",
+      "tokenizer": {
+        "type": "marian",
+        "source": "source.spm",
+        "target": "target.spm"
+      },
+      "sourceToken": ">>pob<<",
+      "files": [
+        {
+          "name": "MODEL-LICENSE.txt",
+          "asset": "opus-mt-en-pt--MODEL-LICENSE.txt",
+          "size": 499,
+          "sha256": "f787df3d02e8d3e3ab3cc274bc3b41fbd2018bb35a7527338025bc12a1111d4c"
+        },
+        {
+          "name": "config.json",
+          "asset": "opus-mt-en-pt--config.json",
+          "size": 223,
+          "sha256": "8f6496adfc930cbfecbe8281112197705c488fab47d34b4829b06d7f478909af"
+        },
+        {
+          "name": "model.bin",
+          "asset": "opus-mt-en-pt--model.bin",
+          "size": 235625373,
+          "sha256": "5c2b607d9f0c00e935a00a497aa4c523225288697fbca57ddb7f9ee96fe80006"
+        },
+        {
+          "name": "shared_vocabulary.json",
+          "asset": "opus-mt-en-pt--shared_vocabulary.json",
+          "size": 1008431,
+          "sha256": "9dcef92228c074bd608459f25472da586e2d15ca1ff1af0956d17573d35b9d1b"
+        },
+        {
+          "name": "source.spm",
+          "asset": "opus-mt-en-pt--source.spm",
+          "size": 802741,
+          "sha256": "7a7fcf812cf03a5785daa35d4932bbbe69e7e605c0fe56fce5a3f731d6c355aa"
+        },
+        {
+          "name": "target.spm",
+          "asset": "opus-mt-en-pt--target.spm",
+          "size": 824855,
+          "sha256": "b3cf20ccd4e48a89882cfdba157c05fa1cd71a6b69517dfc80e3a34d387ea91f"
+        }
+      ],
+      "sizeMB": 238
+    },
+    {
+      "id": "wiktionary-es",
+      "kinds": [
+        "dictionary-es"
+      ],
+      "type": "data",
+      "language": "es",
+      "title": "Spanish dictionary (extract of the Wiktionary)",
+      "summary": "Word classes, meanings and English words for Spanish words; used first when you translate a single Spanish word. Licensed under CC BY-SA 4.0: the license is shown before the download.",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "nonCommercial": false,
+      "askLicense": true,
+      "credit": "Dictionary data from the English Wiktionary (en.wiktionary.org) by its contributors, taken from the extract of kaikki.org (made with wiktextract), licensed under CC BY-SA 4.0. Changed: reduced to word classes, English words and definitions, and inflected forms (Spanish entries).",
+      "release": "models-4",
+      "memoryMB": 0,
+      "source": "https://kaikki.org/dictionary/Spanish/",
+      "files": [
+        {
+          "name": "DICTIONARY-LICENSE.txt",
+          "asset": "wiktionary-es--DICTIONARY-LICENSE.txt",
+          "size": 1145,
+          "sha256": "2cfec05fd7fc065dc6217bcd56fe863ac5b17383541fbd9140caeda753b41e1b"
+        },
+        {
+          "name": "LICENSE-CC-BY-SA-4.0.txt",
+          "asset": "wiktionary-es--LICENSE-CC-BY-SA-4.0.txt",
+          "size": 20138,
+          "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
+        },
+        {
+          "name": "es-dictionary.qz",
+          "asset": "wiktionary-es--es-dictionary.qz",
+          "size": 5511921,
+          "sha256": "3a3ba2e1d9a4832ab33509a0698b904b154d4a9602262d96bed1f3d48ee402f5"
+        }
+      ],
+      "sizeMB": 6
+    },
+    {
+      "id": "wiktionary-fr",
+      "kinds": [
+        "dictionary-fr"
+      ],
+      "type": "data",
+      "language": "fr",
+      "title": "French dictionary (extract of the Wiktionary)",
+      "summary": "Word classes, meanings and English words for French words; used first when you translate a single French word. Licensed under CC BY-SA 4.0: the license is shown before the download.",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "nonCommercial": false,
+      "askLicense": true,
+      "credit": "Dictionary data from the English Wiktionary (en.wiktionary.org) by its contributors, taken from the extract of kaikki.org (made with wiktextract), licensed under CC BY-SA 4.0. Changed: reduced to word classes, English words and definitions, and inflected forms (French entries).",
+      "release": "models-4",
+      "memoryMB": 0,
+      "source": "https://kaikki.org/dictionary/French/",
+      "files": [
+        {
+          "name": "DICTIONARY-LICENSE.txt",
+          "asset": "wiktionary-fr--DICTIONARY-LICENSE.txt",
+          "size": 1141,
+          "sha256": "56fcdaed28cfd1802c6dc5aa140a1f329b1000af73b5c1412e2448fdcc136c39"
+        },
+        {
+          "name": "LICENSE-CC-BY-SA-4.0.txt",
+          "asset": "wiktionary-fr--LICENSE-CC-BY-SA-4.0.txt",
+          "size": 20138,
+          "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
+        },
+        {
+          "name": "fr-dictionary.qz",
+          "asset": "wiktionary-fr--fr-dictionary.qz",
+          "size": 3116443,
+          "sha256": "0209df37aaa285857363ccf7881a2f6be63def30460d270329726fd2d6bea102"
+        }
+      ],
+      "sizeMB": 3
+    },
+    {
+      "id": "wiktionary-pt",
+      "kinds": [
+        "dictionary-pt"
+      ],
+      "type": "data",
+      "language": "pt",
+      "title": "Portuguese (Brazil) dictionary (extract of the Wiktionary)",
+      "summary": "Word classes, meanings and English words for Portuguese (Brazil) words; used first when you translate a single Portuguese (Brazil) word. Licensed under CC BY-SA 4.0: the license is shown before the download.",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "nonCommercial": false,
+      "askLicense": true,
+      "credit": "Dictionary data from the English Wiktionary (en.wiktionary.org) by its contributors, taken from the extract of kaikki.org (made with wiktextract), licensed under CC BY-SA 4.0. Changed: reduced to word classes, English words and definitions, and inflected forms (Portuguese (Brazil) entries).",
+      "release": "models-4",
+      "memoryMB": 0,
+      "source": "https://kaikki.org/dictionary/Portuguese/",
+      "files": [
+        {
+          "name": "DICTIONARY-LICENSE.txt",
+          "asset": "wiktionary-pt--DICTIONARY-LICENSE.txt",
+          "size": 1157,
+          "sha256": "378d8d7c8496d9e48fcac6b7b58c754891cfb5744e03a406eea1f8707907e92c"
+        },
+        {
+          "name": "LICENSE-CC-BY-SA-4.0.txt",
+          "asset": "wiktionary-pt--LICENSE-CC-BY-SA-4.0.txt",
+          "size": 20138,
+          "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
+        },
+        {
+          "name": "pt-dictionary.qz",
+          "asset": "wiktionary-pt--pt-dictionary.qz",
+          "size": 3374946,
+          "sha256": "bc9a2c0e0422397d9751c03d0655e797a22b83ddeb98f7091dc09be3f13a6f93"
+        }
+      ],
+      "sizeMB": 3
+    },
+    {
+      "id": "wiktionary-it",
+      "kinds": [
+        "dictionary-it"
+      ],
+      "type": "data",
+      "language": "it",
+      "title": "Italian dictionary (extract of the Wiktionary)",
+      "summary": "Word classes, meanings and English words for Italian words; used first when you translate a single Italian word. Licensed under CC BY-SA 4.0: the license is shown before the download.",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "nonCommercial": false,
+      "askLicense": true,
+      "credit": "Dictionary data from the English Wiktionary (en.wiktionary.org) by its contributors, taken from the extract of kaikki.org (made with wiktextract), licensed under CC BY-SA 4.0. Changed: reduced to word classes, English words and definitions, and inflected forms (Italian entries).",
+      "release": "models-4",
+      "memoryMB": 0,
+      "source": "https://kaikki.org/dictionary/Italian/",
+      "files": [
+        {
+          "name": "DICTIONARY-LICENSE.txt",
+          "asset": "wiktionary-it--DICTIONARY-LICENSE.txt",
+          "size": 1145,
+          "sha256": "1fdbb55200af602722d0bbecb570adab3483def4654e5d12a52071b825963115"
+        },
+        {
+          "name": "LICENSE-CC-BY-SA-4.0.txt",
+          "asset": "wiktionary-it--LICENSE-CC-BY-SA-4.0.txt",
+          "size": 20138,
+          "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
+        },
+        {
+          "name": "it-dictionary.qz",
+          "asset": "wiktionary-it--it-dictionary.qz",
+          "size": 5972086,
+          "sha256": "03c2ea89b4513a5036117ce3dd9d84b31b73a40b76ad20d483821297fa7cfa44"
+        }
+      ],
+      "sizeMB": 6
+    },
+    {
+      "id": "wiktionary-ru",
+      "kinds": [
+        "dictionary-ru"
+      ],
+      "type": "data",
+      "language": "ru",
+      "title": "Russian dictionary (extract of the Wiktionary)",
+      "summary": "Word classes, meanings and English words for Russian words; used first when you translate a single Russian word. Licensed under CC BY-SA 4.0: the license is shown before the download.",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "nonCommercial": false,
+      "askLicense": true,
+      "credit": "Dictionary data from the English Wiktionary (en.wiktionary.org) by its contributors, taken from the extract of kaikki.org (made with wiktextract), licensed under CC BY-SA 4.0. Changed: reduced to word classes, English words and definitions, and inflected forms (Russian entries).",
+      "release": "models-4",
+      "memoryMB": 0,
+      "source": "https://kaikki.org/dictionary/Russian/",
+      "files": [
+        {
+          "name": "DICTIONARY-LICENSE.txt",
+          "asset": "wiktionary-ru--DICTIONARY-LICENSE.txt",
+          "size": 1145,
+          "sha256": "b5a30abc3034e82f4cf735e96421109302034e4bb7068132577ff968df0ed3b4"
+        },
+        {
+          "name": "LICENSE-CC-BY-SA-4.0.txt",
+          "asset": "wiktionary-ru--LICENSE-CC-BY-SA-4.0.txt",
+          "size": 20138,
+          "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
+        },
+        {
+          "name": "ru-dictionary.qz",
+          "asset": "wiktionary-ru--ru-dictionary.qz",
+          "size": 4417337,
+          "sha256": "7d00f04c75c3a7ecbf4ca0d4c048f8f5b718a62a45f0236a72af6379777dc287"
+        }
+      ],
+      "sizeMB": 4
+    },
+    {
+      "id": "wiktionary-id",
+      "kinds": [
+        "dictionary-id"
+      ],
+      "type": "data",
+      "language": "id",
+      "title": "Indonesian dictionary (extract of the Wiktionary)",
+      "summary": "Word classes, meanings and English words for Indonesian words; used first when you translate a single Indonesian word. Licensed under CC BY-SA 4.0: the license is shown before the download.",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "nonCommercial": false,
+      "askLicense": true,
+      "credit": "Dictionary data from the English Wiktionary (en.wiktionary.org) by its contributors, taken from the extract of kaikki.org (made with wiktextract), licensed under CC BY-SA 4.0. Changed: reduced to word classes, English words and definitions, and inflected forms (Indonesian entries).",
+      "release": "models-4",
+      "memoryMB": 0,
+      "source": "https://kaikki.org/dictionary/Indonesian/",
+      "files": [
+        {
+          "name": "DICTIONARY-LICENSE.txt",
+          "asset": "wiktionary-id--DICTIONARY-LICENSE.txt",
+          "size": 1157,
+          "sha256": "ae04eca3e35791f80016e7e528ca96d2114e4d079f084a6cf010ab52b6d441b0"
+        },
+        {
+          "name": "LICENSE-CC-BY-SA-4.0.txt",
+          "asset": "wiktionary-id--LICENSE-CC-BY-SA-4.0.txt",
+          "size": 20138,
+          "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
+        },
+        {
+          "name": "id-dictionary.qz",
+          "asset": "wiktionary-id--id-dictionary.qz",
+          "size": 1078442,
+          "sha256": "b9da05e917d87883124eff509758c9638b0823c54e6fe80720b0604cc4c25783"
+        }
+      ],
+      "sizeMB": 1
+    },
+    {
+      "id": "wiktionary-tr",
+      "kinds": [
+        "dictionary-tr"
+      ],
+      "type": "data",
+      "language": "tr",
+      "title": "Turkish dictionary (extract of the Wiktionary)",
+      "summary": "Word classes, meanings and English words for Turkish words; used first when you translate a single Turkish word. Licensed under CC BY-SA 4.0: the license is shown before the download.",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "nonCommercial": false,
+      "askLicense": true,
+      "credit": "Dictionary data from the English Wiktionary (en.wiktionary.org) by its contributors, taken from the extract of kaikki.org (made with wiktextract), licensed under CC BY-SA 4.0. Changed: reduced to word classes, English words and definitions, and inflected forms (Turkish entries).",
+      "release": "models-4",
+      "memoryMB": 0,
+      "source": "https://kaikki.org/dictionary/Turkish/",
+      "files": [
+        {
+          "name": "DICTIONARY-LICENSE.txt",
+          "asset": "wiktionary-tr--DICTIONARY-LICENSE.txt",
+          "size": 1145,
+          "sha256": "24e72d41af95b117734c991008487d5b55f94bc058fe5c4e672c598366656551"
+        },
+        {
+          "name": "LICENSE-CC-BY-SA-4.0.txt",
+          "asset": "wiktionary-tr--LICENSE-CC-BY-SA-4.0.txt",
+          "size": 20138,
+          "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
+        },
+        {
+          "name": "tr-dictionary.qz",
+          "asset": "wiktionary-tr--tr-dictionary.qz",
+          "size": 6367352,
+          "sha256": "f1b2dcbfd2f87ea32ebbfcd60580f200c166bf0c766658e929c294c3af47e9a7"
+        }
+      ],
+      "sizeMB": 6
+    },
+    {
+      "id": "wiktionary-pl",
+      "kinds": [
+        "dictionary-pl"
+      ],
+      "type": "data",
+      "language": "pl",
+      "title": "Polish dictionary (extract of the Wiktionary)",
+      "summary": "Word classes, meanings and English words for Polish words; used first when you translate a single Polish word. Licensed under CC BY-SA 4.0: the license is shown before the download.",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "nonCommercial": false,
+      "askLicense": true,
+      "credit": "Dictionary data from the English Wiktionary (en.wiktionary.org) by its contributors, taken from the extract of kaikki.org (made with wiktextract), licensed under CC BY-SA 4.0. Changed: reduced to word classes, English words and definitions, and inflected forms (Polish entries).",
+      "release": "models-4",
+      "memoryMB": 0,
+      "source": "https://kaikki.org/dictionary/Polish/",
+      "files": [
+        {
+          "name": "DICTIONARY-LICENSE.txt",
+          "asset": "wiktionary-pl--DICTIONARY-LICENSE.txt",
+          "size": 1141,
+          "sha256": "63d07a7133c79536d03ba91463280b318fb6977f2b7f2b45e468fb2089c4001f"
+        },
+        {
+          "name": "LICENSE-CC-BY-SA-4.0.txt",
+          "asset": "wiktionary-pl--LICENSE-CC-BY-SA-4.0.txt",
+          "size": 20138,
+          "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
+        },
+        {
+          "name": "pl-dictionary.qz",
+          "asset": "wiktionary-pl--pl-dictionary.qz",
+          "size": 6403076,
+          "sha256": "3f4414de7507084fd9300d1a4289758bf07abae876eb64660c50a0a72e0fd9e1"
+        }
+      ],
+      "sizeMB": 6
+    },
+    {
+      "id": "wiktionary-nl",
+      "kinds": [
+        "dictionary-nl"
+      ],
+      "type": "data",
+      "language": "nl",
+      "title": "Dutch dictionary (extract of the Wiktionary)",
+      "summary": "Word classes, meanings and English words for Dutch words; used first when you translate a single Dutch word. Licensed under CC BY-SA 4.0: the license is shown before the download.",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "nonCommercial": false,
+      "askLicense": true,
+      "credit": "Dictionary data from the English Wiktionary (en.wiktionary.org) by its contributors, taken from the extract of kaikki.org (made with wiktextract), licensed under CC BY-SA 4.0. Changed: reduced to word classes, English words and definitions, and inflected forms (Dutch entries).",
+      "release": "models-4",
+      "memoryMB": 0,
+      "source": "https://kaikki.org/dictionary/Dutch/",
+      "files": [
+        {
+          "name": "DICTIONARY-LICENSE.txt",
+          "asset": "wiktionary-nl--DICTIONARY-LICENSE.txt",
+          "size": 1137,
+          "sha256": "e3297110e0795c67cfab33f371620476d9d94e082ef0997987f9fc66556aab90"
+        },
+        {
+          "name": "LICENSE-CC-BY-SA-4.0.txt",
+          "asset": "wiktionary-nl--LICENSE-CC-BY-SA-4.0.txt",
+          "size": 20138,
+          "sha256": "28a9529c7d0bb4dc51f4bf5c116a3d16ef247a052f7591466768ddf563fd1cf5"
+        },
+        {
+          "name": "nl-dictionary.qz",
+          "asset": "wiktionary-nl--nl-dictionary.qz",
+          "size": 2353164,
+          "sha256": "96c8045b84894cc26482fc950a650a8df7e926fa4acd5f9c4d1e07e1febd9047"
+        }
+      ],
+      "sizeMB": 2
     }
   ]
 }

@@ -1,4 +1,6 @@
 #include "WritingProgress.h"
+#include "core/TargetMath.h"
+#include "ui/TargetSpinBox.h"
 
 #include <QHBoxLayout>
 #include <QLabel>
@@ -45,21 +47,35 @@ WritingProgress::WritingProgress(QWidget *parent) : QWidget(parent)
 void WritingProgress::setProgress(int session, int sessionTarget, bool sessionChars, int draft, int draftTarget, bool draftChars)
 {
     const QLocale loc;
-    const bool s = sessionTarget > 0, d = draftTarget > 0;
+    // 0.95.0: a negative target is a cutting target (its bar fills as the count falls; negative numbers are red)
+    const bool s = sessionTarget != 0, d = draftTarget != 0;
+    const QColor back = palette().color(QPalette::Window);
     m_sessionBox->setVisible(s);
     m_draftBox->setVisible(d);
+    m_sessionLabel->setTextFormat(Qt::RichText);
+    m_draftLabel->setTextFormat(Qt::RichText);
     if (s) {
-        m_sessionBar->setRange(0, sessionTarget);
-        m_sessionBar->setValue(qBound(0, session, sessionTarget));
-        m_sessionLabel->setText(tr("%1 / %2 today").arg(loc.toString(session), loc.toString(sessionTarget)));
+        if (sessionTarget < 0) {
+            m_sessionBar->setRange(0, -sessionTarget);
+            m_sessionBar->setValue(qBound(0, -session, -sessionTarget));
+        } else {
+            m_sessionBar->setRange(0, sessionTarget);
+            m_sessionBar->setValue(qBound(0, session, sessionTarget));
+        }
+        m_sessionLabel->setText(tr("%1 / %2 today").arg(targettext::numberHtml(session, back), targettext::numberHtml(sessionTarget, back)));
         m_sessionBox->setToolTip(tr("Today's writing: %1 of %2 %3 (click for Project Targets)")
                                      .arg(loc.toString(session), loc.toString(sessionTarget),
                                           sessionChars ? tr("characters") : tr("words")));
     }
     if (d) {
-        m_draftBar->setRange(0, draftTarget);
-        m_draftBar->setValue(qBound(0, draft, draftTarget));
-        m_draftLabel->setText(tr("%1 / %2 draft").arg(loc.toString(draft), loc.toString(draftTarget)));
+        if (draftTarget < 0) {
+            m_draftBar->setRange(0, 1000);
+            m_draftBar->setValue(int(targetmath::fill(draft, draftTarget) * 1000));
+        } else {
+            m_draftBar->setRange(0, draftTarget);
+            m_draftBar->setValue(qBound(0, draft, draftTarget));
+        }
+        m_draftLabel->setText(tr("%1 / %2 draft").arg(loc.toString(draft), targettext::numberHtml(draftTarget, back)));
         m_draftBox->setToolTip(tr("The draft: %1 of %2 %3 (click for Project Targets)")
                                    .arg(loc.toString(draft), loc.toString(draftTarget), draftChars ? tr("characters") : tr("words")));
     }

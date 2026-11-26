@@ -3,6 +3,118 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.95.0 beta (2026-11-26)
+
+New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
+
+- **Quillbinder speaks eleven languages**. Besides English and German: Spanish, French, Portuguese (Brazil), Italian,
+  Russian, Indonesian, Turkish, Polish and Dutch. Each is shown by its own name in the language list; the nine new ones are
+  machine translations and are marked so ("(machine translation)", in the language of the program) until a speaker has
+  checked them. The list is on the first-start page and in **File > Options > General > Startup**; a new language is used
+  from the next start. At a true first start the program takes the language of the system when it is one of the eleven
+  (else English); an installation that is updated keeps what it had. Numbers, dates and units follow the language.
+- **The manual, the quick start guide and the welcome project follow the language** (English where a language has none).
+  F1 and the links between sections find the right place in a translated manual by its place in the list of headings, so a
+  translated manual has the same headings as the English one. The note in the options that they stay in English is gone.
+- **Spelling dictionaries for the nine new languages as add-ons**, one per language (Spanish es_ES, French fr_FR, Portuguese
+  pt_BR, Italian it_IT, Russian ru_RU, Indonesian id_ID, Turkish tr_TR, Polish pl_PL, Dutch nl_NL), unchanged from
+  LibreOffice's dictionaries (tag libreoffice-25.8.7.3), each with its license and source; the download page lists them. The
+  spell checker now reads the Polish dictionary's encoding (ISO 8859-2).
+- **Speech Transcription**: the main and the fallback language are chosen from the eleven languages (a language stored
+  earlier stays selectable).
+- **Keyboard sets for more layouts** (0.94.0): French, Belgian, Spanish, Italian, Portuguese, Turkish and Dutch keyboards
+  get the keys without AltGr at the first start, as German keyboards do; the Polish programmer's layout and the others that
+  use AltGr for letters also move four commands that sat on Ctrl+Alt+letter (copy and paste formatting, go to notes, show
+  ruler). Russian and Indonesian keep the usual keys.
+- **Plural forms** follow the language: Russian and Polish have a third form for 2 to 4, French and Portuguese call 0
+  singular, Indonesian and Turkish have no plural after a number.
+- **The inspector's menu entries** (Navigate > Inspect) get their Alt letters from the translated names.
+- **The object lists' values** (role, kind, season, precipitation) are marked for translation like every other text, and the
+  welcome project of each language stores the values the program's list shows in that language (`tools/align-welcome-choices.py`).
+
+- **Themes and profiles.** A theme is only the look; a profile keeps everything else: the language, all options, the
+  toolbars and their places, the window's size and place, the panels, the keyboard set, the backups and the backup
+  folder, the checks for updates, the standard colors and the saved layouts, and it names its theme. **View > Profiles**
+  switches at once (the language needs a restart; the program says so). **Manage Profiles** saves the settings as a
+  new profile, renames, copies, deletes, exports and imports profiles (a file that names folders or programs asks
+  first). A program that has been used before takes its settings as the profile **Default** at the update; a new
+  installation starts with the standard settings, in the light or dark theme as the system is set. A profile made on a
+  large screen fits a smaller screen or a tablet. The old **Save Options to File** and **Load Options from File** are
+  replaced by exporting and importing a profile (an old options file can be imported as a profile). A **Profiles**
+  toolbar (off at first) shows the profile in use. The welcome project has a page about themes and profiles.
+- **Shelin's Dark Theme** is a new built-in theme, at the top of the theme list. It can be deleted and then stays
+  away after updates.
+- **Shelin's** is a built-in profile, at the top of the profile list. It uses the new theme. It can be deleted and
+  then stays away after updates.
+- **Profiles, fixes found in a review.** Switching profiles while a project with its own settings is open no longer
+  mixes the project's values into the profile that is left or writes the profile's values into the project (the export
+  is refused while Options edit This Project). Renaming a profile by case only ("work" to "Work") keeps it. The marks
+  of things done once (the first-start page, the placed tool buttons) are no profile settings, so a switch does not
+  bring the first-start page back. Every non-empty value of a program, folder, file or address setting in an imported
+  profile is asked about, and so are the places of a profile file that another computer wrote (a file copied into
+  the profiles folder) at the switch. A switch to a profile that keeps fewer backups asks first; a failed write of
+  the settings is told; layouts that cannot all be set leave the old ones; an own theme's name with a backslash or two
+  dots is refused.
+- **A Labels toolbar** (off at first, **View > Toolbars > Labels**): the label colors of the open project side by
+  side, a click sets the label of the selected documents, and a button takes the label away.
+- **Standard Colors** in **File > Options > Appearance**: the labels new projects start with (existing projects keep
+  theirs), the six colors of the text color and highlight palettes, and the colors the two buttons start with. They
+  belong to the profile. **Defaults** gives the program's standard back.
+- **File > Options > Keyboard: Use the Set of My Keyboard Layout.** The keyboard set of 0.94.0 was chosen only
+  at the first start, so a writer who had updated kept keys that need AltGr. The new button applies the set that fits
+  the layout in use now, after listing what changes; shortcuts you set yourself are kept.
+
+- **The Bookmarks tab keeps the sizes of its three parts**. The heights of the two lists and of the text below them
+  were lost after a restart or a program update when no bookmark was chosen at that moment (the text part, being
+  hidden, was written as size 0) or when the inspector was hidden. The sizes you gave are kept as they were and come
+  back, also for the Synopsis and Snapshots tabs.
+
+- **Each part of the Bookmarks tab zooms on its own**. Ctrl + mouse wheel over Document Bookmarks, over Project Bookmarks
+  and over the bookmarked text below them changes only that part (before, the two lists zoomed together). With **View >
+  Zoom Inspector Tabs Separately** on or off it is the same. The zoom you had for both lists is taken for both at first;
+  **File > Options > Editing** lists the three parts, and the zoom list in the inspector names the one you zoomed last.
+
+- **Cutting targets**. The target fields for the Draft, the session and a document take negative numbers (there is no
+  option to switch on). A negative target is a cutting target ("cut 2,000 words today", "bring this chapter down to
+  4,000 words"): its bar fills as the count falls, and a negative number is shown in red. With a negative session target
+  today's count is net and goes below 0, in red, where more words were cut than written; with a positive one it stays as
+  it was. In a project in Scrivener format the .scriv holds "no target" for a negative one (Scrivener has no such target)
+  and the working copy keeps the number, also when the .scriv is read again.
+
+- **Highlights are drawn exactly as picked**. A highlight was drawn about one third transparent, so a light green over a
+  dark field or on a yellowish page showed as another color. It is drawn fully now. Where the text on it would fall below
+  a contrast of 4.5 : 1, the text is shown dark or light on the screen only; the stored colors, the saved file and the
+  compiled file keep what you picked.
+
+- **The first-start page says plainly what moving the AppImage does**. The checkbox reads "Move the AppImage to
+  ~/Applications, a fixed place the menu entry starts it from" (the bracket that sounded as if the move broke the entry is
+  gone), and the grey line adds that an AppImage you move yourself has to be added to the menu again. Add to Application
+  Menu always writes the file's current place and replaces an older entry.
+
+- **25 backups are kept at first**. A new installation keeps the newest 25 backups of each project (it was 5); a number
+  already saved stays. On the first-start page and in **File > Options > Backup** the field holds only the number and the
+  words stand around it: "Keep the newest [25] backups of each project".
+
+- **Translation Helper 1.5: eleven languages**. The add-on Translation and Proofreading is now called **Translation
+  Helper** (Edit > Writing Tools, the Add-on Manager, the notice of a missing add-on, File > Options > Translation
+  Helper) and says in its window, its description and the manual: "This tool gives suggestions only. Its translations
+  are not precise: check each one, which needs a working knowledge of both languages." It translates between any two
+  of English, German, Spanish, French, Portuguese (Brazil), Italian, Russian, Indonesian, Turkish, Polish and Dutch,
+  chosen in two drop-down lists. Each language has two small OPUS-MT models (to and from English, Apache-2.0 or CC BY 4.0,
+  pinned by revision and checksum, in the new release *models-4*); a pair without English goes through English, and a
+  note under the result says so. A dictionary per language from the Wiktionary (CC BY-SA 4.0, a separate download
+  with its license shown first) gives the word classes and meanings of a single word; a language without a usable
+  extract gets the model's translations only. A single word keeps its correction, shown as a suggestion. The
+  add-on's own texts come in the eleven languages of the program. The 1.4 settings keep working (German to English is
+  the first choice, the German dictionary and downloaded models stay). The options page showed "%5</a>%6" for the
+  download line of a dictionary (a model without a memory need); fixed.
+- **Program**: the command in Edit > Writing Tools and the notice for an add-on that is not installed carry the new
+  name (German: Übersetzungshelfer).
+
+For developers: *models/convert.py* pins the revisions of the models of *models-4* and builds its catalog
+(`--placeholders`, `--assemble`); the workflow *translator-data-4.yml* builds the release (models and dictionaries) on
+GitHub's runner and writes the catalog; *tools/make-dictionary.py* builds the dictionary of any of the nine languages.
+
 ## 0.94.0 beta (2026-11-25)
 
 New functions and fixes (a program update for 0.93.x; the AppImage stays on the runtime `u2404-qt6.12-r2`).

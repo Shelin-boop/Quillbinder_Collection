@@ -28,7 +28,8 @@ public:
     ColorPickPopup *popup() const { return m_popup; }
     void showPopup();
     void hidePopup();
-    static QList<QPair<QString, QColor>> palette();
+    // the six colors of the popup (0.95.0: File > Options > Appearance > Standard Colors; the standard ones at first)
+    static QList<QPair<QString, QColor>> palette(Kind kind = TextColor);
 
 signals:
     void applyColor(const QColor &c);       // invalid: automatic text color / no highlight

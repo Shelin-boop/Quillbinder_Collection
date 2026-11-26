@@ -1,0 +1,3 @@
+Saat sebuah folder ditampilkan sebagai papan gabus atau kerangka, tab **Komentar dan catatan kaki** di inspektor mencantumkan komentar dan catatan kaki setiap dokumen di dalamnya, di bawah judul masing-masing dokumen.
+**Cobalah:** di binder, pilih folder **Bab dengan Komentar** di bawah dokumen ini. Folder itu terbuka sebagai papan gabus. Lalu buka tab **Komentar dan catatan kaki** di inspektor (tombol terakhir di bagian atasnya). Klik pada sebuah komentar membuka dokumennya di tempat itu, dan Anda dapat mengubah teks komentar langsung di sana.
+Hal yang sama berlaku di **Teks Gabungan** (**Ctrl+1**), tempat semua dokumen folder ditampilkan sebagai satu teks: tab itu mencantumkan catatan dari semuanya.

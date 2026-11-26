@@ -38,7 +38,8 @@ private:
         QProgressBar *bar = nullptr;
         QPushButton *download = nullptr, *remove = nullptr, *folder = nullptr;
     };
-    QWidget *modelGroup(const QString &kind, const QString &title, const QString &intro);
+    // kind: the models of that kind, one to choose (a radio button each); ids (1.5): exactly these models, nothing to choose
+    QWidget *modelGroup(const QString &kind, const QString &title, const QString &intro, const QStringList &ids = QStringList());
     void refresh();
     void startDownload(const QString &id);
     void fromFolder(const QString &id);

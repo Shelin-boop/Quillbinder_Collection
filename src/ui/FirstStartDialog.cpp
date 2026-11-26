@@ -9,9 +9,11 @@
 #include "ui/AppMenuEntry.h"
 #include "ui/AppSettings.h"
 #include "ui/HintLabel.h"
+#include "ui/Language.h"
 #include "ui/PortableSetup.h"
 
 #include <QCheckBox>
+#include <QComboBox>
 #include <QDialogButtonBox>
 #include <QDir>
 #include <QFileDialog>
@@ -67,6 +69,24 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
     intro->setWordWrap(true);
     v->addWidget(intro);
 
+    // 0.95.0 (item 102): the language, taken from the system when it is one the program speaks
+    {
+        auto *lang = new QGroupBox(tr("Language"), body);
+        auto *lf = new QFormLayout(lang);
+        m_language = new QComboBox(lang);
+        m_language->setObjectName(QStringLiteral("firstLanguage"));
+        for (const QString &code : language::available())
+            m_language->addItem(language::listLabel(code), code);
+        m_language->setCurrentIndex(qMax(0, m_language->findData(s.language)));
+        lf->addRow(tr("Language of the program:"), m_language);
+        auto *langHint = new QLabel(tr("A language you choose here is used from the next start of the program."), lang);
+        langHint->setObjectName(QStringLiteral("firstLanguageHint"));
+        langHint->setWordWrap(true);
+        hintlabel::style(langHint);
+        lf->addRow(langHint);
+        v->addWidget(lang);
+    }
+
     if (portable) {
         // W4b: the portable program, said once in plain words
         const QString folder = portable::programFolder();
@@ -117,8 +137,21 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
     m_keep->setObjectName(QStringLiteral("firstBackupKeep"));
     m_keep->setRange(1, 100);
     m_keep->setValue(s.backupKeep);
-    m_keep->setSuffix(tr(" backups of each project"));
-    bf->addRow(tr("Keep the newest:"), m_keep);
+    // 0.95.0: the field holds only the number; the words stand before and after it
+    auto *keepRow = new QWidget(backups);
+    keepRow->setObjectName(QStringLiteral("firstBackupKeepRow"));
+    auto *kl = new QHBoxLayout(keepRow);
+    kl->setContentsMargins(0, 0, 0, 0);
+    auto *keepBefore = new QLabel(tr("Keep the newest"), keepRow);
+    keepBefore->setBuddy(m_keep);
+    keepBefore->setObjectName(QStringLiteral("firstBackupKeepBefore"));
+    auto *keepAfter = new QLabel(tr("backups of each project"), keepRow);
+    keepAfter->setObjectName(QStringLiteral("firstBackupKeepAfter"));
+    kl->addWidget(keepBefore);
+    kl->addWidget(m_keep);
+    kl->addWidget(keepAfter);
+    kl->addStretch(1);
+    bf->addRow(keepRow);
     auto *row = new QHBoxLayout;
     // W4b: the portable program has no standard backup folder (the writer's answer 4b of 2026-11-11)
     m_folder = new QLineEdit(s.backupDir.isEmpty() && !portable ? backup::defaultDirectory() : QDir::toNativeSeparators(s.backupDir),
@@ -164,7 +197,7 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
         m_menuAdd->setChecked(true);
         mv->addWidget(m_menuAdd);
         if (appmenu::canMove()) {
-            m_menuMove = new QCheckBox(tr("Move the AppImage to %1 (a moved file cannot be started from the menu)")
+            m_menuMove = new QCheckBox(tr("Move the AppImage to %1, a fixed place the menu entry starts it from")
                                            .arg(QDir::toNativeSeparators(appmenu::applicationsFolder())),
                                        menu);
             m_menuMove->setObjectName(QStringLiteral("firstMenuMove"));
@@ -172,7 +205,8 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
             mv->addWidget(m_menuMove);
             connect(m_menuAdd, &QCheckBox::toggled, m_menuMove, &QWidget::setEnabled);
         }
-        auto *later = new QLabel(tr("Help > Add to Application Menu or Remove from Application Menu changes this later."), menu);
+        auto *later = new QLabel(tr("Help > Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage "
+                                "yourself, add it to the menu again."), menu);
         later->setObjectName(QStringLiteral("firstMenuHint"));
         later->setWordWrap(true);
         hintlabel::style(later);
@@ -222,6 +256,8 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
 void FirstStartDialog::take()
 {
     AppSettings &s = AppSettings::instance();
+    if (m_language && language::available().contains(m_language->currentData().toString()))
+        s.language = m_language->currentData().toString();
     s.backupOnClose = m_backup->isChecked();
     s.backupKeep = m_keep->value();
     const QString folder = QDir::fromNativeSeparators(m_folder->text().trimmed());

@@ -99,6 +99,19 @@ QString windowsLayout()
         return sub == 3 ? QStringLiteral("at") : sub == 1 ? QStringLiteral("de") : QStringLiteral("de-other");
     if (primary == 0x09)
         return QStringLiteral("en");
+    // 0.95.0 (item 102): the other languages of the program (the layout is the language's usual one)
+    switch (primary) {
+    case 0x0C: return QStringLiteral("fr");
+    case 0x0A: return QStringLiteral("es");
+    case 0x10: return QStringLiteral("it");
+    case 0x16: return sub == 1 ? QStringLiteral("br") : QStringLiteral("pt");
+    case 0x1F: return QStringLiteral("tr");
+    case 0x13: return QStringLiteral("nl");
+    case 0x15: return QStringLiteral("pl");
+    case 0x19: return QStringLiteral("ru");
+    case 0x21: return QStringLiteral("id");
+    default: break;
+    }
     return QStringLiteral("other");
 }
 #endif
@@ -121,7 +134,19 @@ QString systemLayout()
             const QLocale l = im->locale();
             if (l.language() == QLocale::German)
                 return l.territory() == QLocale::Austria ? QStringLiteral("at") : QStringLiteral("de");
-            return QStringLiteral("other");
+            // 0.95.0: the other languages of the program (the input method's language)
+            switch (l.language()) {
+            case QLocale::French: return QStringLiteral("fr");
+            case QLocale::Spanish: return QStringLiteral("es");
+            case QLocale::Italian: return QStringLiteral("it");
+            case QLocale::Portuguese: return l.territory() == QLocale::Brazil ? QStringLiteral("br") : QStringLiteral("pt");
+            case QLocale::Turkish: return QStringLiteral("tr");
+            case QLocale::Dutch: return QStringLiteral("nl");
+            case QLocale::Polish: return QStringLiteral("pl");
+            case QLocale::Russian: return QStringLiteral("ru");
+            case QLocale::Indonesian: return QStringLiteral("id");
+            default: return QStringLiteral("other");
+            }
         }
     return {};
 #elif defined(Q_OS_LINUX)

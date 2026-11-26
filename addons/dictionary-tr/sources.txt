@@ -1,0 +1,7 @@
+# the files of this add-on: LibreOffice's dictionaries at the tag libreoffice-25.8.7.3
+# <path in https://github.com/LibreOffice/dictionaries>  <sha256>  <name in the package, in dictionaries/>
+tag libreoffice-25.8.7.3
+tr_TR/tr_TR.aff  a04a227b2ee45574000b876a1afa982e3436d49ebb97a7a796ddc5ec0cc8191b  tr_TR.aff
+tr_TR/tr_TR.dic  48e5352c5770956b24f355265aef7649b25bcb4d933c0b254ea8b419c241f4bd  tr_TR.dic
+tr_TR/LICENSE  3f3d9e0024b1921b067d6f7f88deb4a60cbe7a78e76c64e3f1d7fc3b779b9d04  MPL-2.0.txt
+tr_TR/README.txt  18750c09a1e666a6d34854b92dfdc0353c3bfe39008b412d539f52821ecdbdec  README-tr_TR.txt

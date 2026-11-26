@@ -34,6 +34,8 @@ struct CatalogModel {
     bool forWords = true;        // 1.3: may translate single words and short texts (false: the large translation model)
     int memoryMB = 0, sizeMB = 0;
     QString tokenizer, spm, spmSource, spmTarget, sourceToken;
+    QString from, to;            // 1.5: a translation model of a language pair ("es" to "en"); empty for the others
+    QString language;            // 1.5: a dictionary: the language of its words ("de", "es" ...)
     bool thinkTags = false;
     QList<CatalogFile> files;
     bool is(const QString &kind) const { return kinds.contains(kind); }

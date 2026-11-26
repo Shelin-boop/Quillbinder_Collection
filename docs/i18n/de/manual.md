@@ -1,0 +1,1799 @@
+# {{APP}} Benutzerhandbuch
+
+Dieses Handbuch wurde maschinell übersetzt und noch nicht von einer deutschsprachigen Person geprüft. Wo etwas unklar ist, gilt das englische Handbuch als Referenz.
+
+{{APP}} ist ein Schreibstudio für lange Texte: Romane, Drehbücher, Theaterstücke, Comic-Skripte, Abschlussarbeiten und Sachbücher. Sie schreiben in kleinen Stücken (Szenen, Abschnitte, Notizen), ordnen sie frei an und *kompilieren* sie am Ende zu einem Manuskript.
+
+Dieses Handbuch beschreibt Version {{VERSION}}. Drücken Sie jederzeit **F1**, um es zu öffnen; es öffnet sich an der Stelle, die zu dem passt, was Sie gerade vor sich haben: das Dokument, die Pinnwand, die Gliederung oder der Gesamttext, der Binder, der Reiter des Inspektors, der die Tastatur hat, oder der geöffnete Dialog (ein Dialog ohne eigenen Abschnitt öffnet den Anfang). Das Fenster hat links ein **Inhaltsverzeichnis** (ein Klick auf eine Überschrift springt dorthin) und über dem Text ein **Suchfeld**: Drücken Sie **Ctrl+F**, um dorthin zu gelangen, geben Sie ein Wort ein; **Return** zeigt den nächsten Treffer, **Shift+Return** den vorherigen (die Schaltflächen **Weiter** und **Zurück** tun dasselbe); die Zeile neben dem Feld sagt, der wievielte von wie vielen Treffern angezeigt wird, und jeder Treffer ist im Text markiert. Was sich an Menschen richtet, die {{APP}} weiterentwickeln (Plugins, Pakete, der Projektordner im Einzelnen, Umgebungsvariablen), steht im Entwicklerhandbuch, **Hilfe > Fehlersuche und Entwicklung > Entwicklerhandbuch: Aktualisierungen und Erweiterungen**.
+
+---
+
+## 1. Erste Schritte
+
+### Das Programm beschaffen
+
+{{APP}} wird von der Seite **Releases** der Projektseite heruntergeladen, https://github.com/Shelin-boop/Quillbinder_Collection/releases. Jedes Release enthält das Programm als eine Datei (*{{APP}}-&lt;version&gt;-x86_64.AppImage*), ein Programm-Update für alle, die schon ein AppImage von {{APP}} haben (Abschnitt 17), und die Erweiterungen (*.qbpkg*-Dateien, Abschnitt 17). Machen Sie das AppImage ausführbar (Rechtsklick > **Eigenschaften** > **Zugriffsrechte** > *Ist ausführbar*, oder `chmod +x` in einem Terminal) und doppelklicken Sie darauf; **Hilfe > Zum Anwendungsmenü hinzufügen** legt es in das Menü Ihres Desktops. Die Datei *SHA256SUMS.txt* jedes Releases listet die Prüfsummen seiner Dateien auf.
+
+**{{APP}} ist {{LABEL}}-Software.** Legen Sie Sicherungen Ihrer Projekte an (Abschnitt 15) und bewahren Sie eine Kopie Ihrer Manuskripte außerhalb des Programms auf.
+
+### Ein Projekt beginnen
+
+Wenn {{APP}} ohne Projekt startet, öffnet sich das **Startfenster**:
+
+- **Neues Projekt**: Wählen Sie eine Kategorie und eine Vorlage (zum Beispiel Leer, Roman, Roman mit Teilen oder Kurzgeschichte), geben Sie einen Namen ein, wählen Sie den Speicherort und klicken Sie auf **Erstellen**. **Format** legt fest, wie das Projekt gespeichert wird: als {{APP}}-Projekt (der Standard) oder als Scrivener-3-Projekt (*.scriv*), sodass Sie es auch in Scrivener öffnen können (Abschnitt 14, *Im Scrivener-Format arbeiten*).
+- **Zuletzt verwendete Projekte**: Doppelklicken Sie auf ein Projekt, an dem Sie zuvor gearbeitet haben.
+- **Anderes öffnen…**: Suchen Sie ein Projekt auf Ihrer Festplatte.
+- **Scrivener-Projekt importieren…**: Erstellen Sie aus einem Scrivener-Projekt ein {{APP}}-Projekt (siehe Abschnitt 14). Um am Scrivener-Projekt selbst weiterzuarbeiten, öffnen Sie stattdessen dessen *.scrivx*-Datei mit **Anderes öffnen…**.
+
+{{APP}} öffnet beim Start das zuletzt verwendete Projekt wieder (das können Sie unter **Datei > Einstellungen > Allgemein** ausschalten).
+
+**Der allererste Start** zeigt eine Seite, auf der schon alles ausgefüllt ist (**OK** übernimmt es): die Sicherungen (ob ein Projekt beim Schließen gesichert wird, wie viele Sicherungen aufbewahrt werden, zunächst 25, und wo), bei einem Linux-AppImage die Frage, ob {{APP}} dem Anwendungsmenü hinzugefügt werden soll (und ob das AppImage nach *~/Applications* verschoben werden soll), und der Hinweis auf die Suche nach Updates mit ihrem Schalter. Das Willkommensprojekt öffnet sich, sobald Sie auf **OK** drücken; davor erscheint kein leeres Programmfenster. Alles lässt sich später unter **Datei > Einstellungen** ändern; dort, unter **Allgemein > Start**, steht auch die Wahl, welche Einstellungen Vorrang haben, die eines Projekts oder immer die des Programms (Abschnitt 16, *Einstellungen für ein Projekt*).
+
+### Das Willkommensprojekt und die Schnellstartanleitung
+
+Beim ersten Start öffnet {{APP}} das **Willkommensprojekt**: ein kurzes Projekt, das in je einem Dokument zeigt, was {{APP}} über das Übliche hinaus bietet (die Icon-Leiste, einen Zoom für jeden Teil des Fensters, Mindmaps, Objektblätter, die Kommentare eines ganzen Ordners, Vergleichen und übertragen, Scrivener-Projekte, Designs, Updates und Erweiterungen und was Ihren Text schützt). Beginnen Sie mit dem Dokument **Welcome** ganz oben im Binder; seine Links führen zu jeder Station der Tour. Nichts, was Sie im Willkommensprojekt tun, kann Ihren eigenen Projekten schaden. (Ein auf der Kommandozeile angegebenes Projekt oder eine doppelgeklickte Projektdatei öffnet sich stattdessen; das Willkommensprojekt kommt dann beim nächsten Start.)
+
+Das Willkommensprojekt wird als „Welcome to {{APP}}“ in Ihrem Ordner *Dokumente* gespeichert. **Hilfe > Willkommensprojekt…** öffnet es wieder so, wie Sie es verlassen haben, oder legt eine frische Kopie an, um von vorn zu beginnen (**Frische Kopie anlegen**; die alte Kopie kommt in den Papierkorb des Desktops). Löschen Sie es jederzeit; der Befehl legt ein neues an.
+
+**Hilfe > Schnellstartanleitung** zeigt auf einer Seite, wo die wichtigen Einstellungen sind (Designs und dunkler Modus, Farben und Schriften, Formatierung, Zoom, Symbolleisten, Tastenkürzel, Sicherungen ...), und fasst zusammen, was {{APP}} kann.
+
+### Speichern
+
+Sie müssen nie von Hand speichern. {{APP}} speichert automatisch einige Sekunden, nachdem Sie aufgehört haben zu tippen, wenn Sie zu einem anderen Programm wechseln und wenn Sie das Projekt schließen. Tippen Sie weiter, speichert es in der ersten kurzen Pause (einem Atemzug zwischen zwei Wörtern), sobald 5 Sekunden vergangen sind, und spätestens nach 10 Sekunden auch ohne Pause. **Ctrl+S** speichert sofort, wenn Sie sichergehen wollen.
+
+Jede Datei wird zuerst unter einem vorläufigen Namen geschrieben und ersetzt die alte erst, wenn sie vollständig geschrieben ist und der Computer sie auf die Platte gebracht hat. Ist die Platte voll oder fällt das Laufwerk beim Speichern aus, bleibt die alte Datei, wie sie war, und Ihre Änderungen bleiben im Fenster, bis das Speichern wieder funktioniert.
+
+**Der Speicherstand ist immer auf dem Bildschirm** (0.70). Die Fußleiste des ersten Editors (der freie Streifen zwischen der Summe des Ordners und der Wortzahl, oder links in den anderen Fußleisten) zeigt **Gespeichert**, **Noch nicht gespeichert** (einige Sekunden nach dem Tippen) oder, auf rotem Grund, **Nicht gespeichert: Das letzte Speichern ist um 14:03 fehlgeschlagen**; solange das Speichern scheitert, trägt auch der Titel des Fensters eine Markierung. Ein fehlgeschlagenes Speichern zeigt außerdem eine Meldung, die die nicht gespeicherten Dokumente nennt und **Texte anderswo speichern…** anbietet; sie nimmt nie die Tastatur in Beschlag, sodass die nächste Taste, die Sie drücken, weiter in Ihren Text geht. Das Programm versucht es von selbst erneut (zuerst alle 15 Sekunden, dann jede Minute), die Meldung kommt nach fünf Minuten Fehlschlagen wieder, und das rote Zeichen bleibt, bis ein Speichern gelungen ist. Mindmaps werden auf dieselbe Weise gespeichert und geprüft: Eine Tafel, die nicht gespeichert werden kann, bleibt im Fenster erhalten, zählt beim Schließen des Projekts als nicht gespeichert und kommt in die Notfallkopie.
+
+**Kurze Meldungen** (0.93.0). Unten im Fenster gibt es keine Statuszeile. Die Meldungen, die dort früher erschienen („Saved again: all changes are on the disk.“, das Ergebnis einer Sicherung und dergleichen), erscheinen für ihre Sekunden an derselben Stelle wie der Speichertext, in der Fußleiste des ersten Editors (bei zwei Editoren der linke oder obere), und danach kommt der Speichertext zurück. Eine Meldung, die für die Stelle zu lang ist, wird gekürzt; ruhen Sie mit dem Mauszeiger darauf, um sie ganz zu lesen. In einem sehr schmalen Editor wird der Text durch eine kleine farbige Markierung ersetzt (grün gespeichert, gelb noch nicht gespeichert, rot fehlgeschlagen), der Text steht dann als Kurzinfo daneben. Im Schreibmodus und solange kein Projekt geöffnet ist, wird nichts angezeigt.
+
+**Dateien, die {{APP}} nicht überschreibt** (0.70). Eine beschädigte Textdatei (eine RTF-Datei mit zerstörtem Anfang oder eine abgeschnittene) oder eine, die ein anderes Programm in einer anderen Zeichenkodierung gespeichert hat (zum Beispiel eine Markdown-Datei als Windows-1252 oder UTF-16, etwa nach dem Bearbeiten außerhalb des Programms), wird so weit angezeigt, wie sie lesbar ist, und lässt sich nicht bearbeiten; eine Meldung sagt das, und die Datei wird nie verändert. Kopieren Sie ihren Text in ein neues Dokument, um weiterzumachen, oder speichern Sie die Datei in dem Programm, das sie geschrieben hat, als UTF-8, und schließen und öffnen Sie dann das Projekt neu; oder setzen Sie sie auf eine ihrer Momentaufnahmen zurück (seit 0.81.1): Die beschädigte Datei wird zuerst als Kopie in *settings/conflicts* des Projektordners aufbewahrt, und der Text der Momentaufnahme wird zum Text des Dokuments, das sich bearbeiten lässt und wieder gespeichert wird. Dokumente zusammenführen und Teilen lehnen ein solches Dokument mit Begründung ab, und Projekt ersetzen, Anführungszeichen umwandeln und Änderungen von Formatvorlagen lassen es unverändert und nennen es. Verändert ein Befehl es dennoch, geht der geänderte Text nicht verloren: Er wird als RTF-Datei in *settings/conflicts* aufbewahrt, und eine Meldung sagt, wo (0.81.1). Eine Mindmap-Datei, die nicht gelesen werden kann, wird ebenso behandelt. Zeichen, die sich nicht speichern lassen (Steuerzeichen aus eingefügten Daten), werden wie bisher weggelassen; eine kurze Meldung in der Fußleiste sagt das jetzt einmal pro Dokument.
+
+**Ein Speichern kommt als Ganzes an** (0.65). Schreibt ein Speichern mehrere Dateien (den Text eines neuen Dokuments und die Projektdatei, einen Text und seine Bilder, das Objektblatt), werden alle zuerst neben ihren Plätzen geschrieben, dann in einem kleinen Journal aufgelistet (*settings/journal.json*) und erst danach gemeinsam an ihren Platz gebracht. Bleiben das Programm oder der Computer mittendrin stehen, schließt die nächste Öffnung dieses Speichern anhand des Journals ab oder, wenn das Journal noch nicht vollständig war, lässt das Projekt, wie es beim vorigen Speichern war; ein Hinweis sagt, was geschehen ist. Ein Journal, das sich nicht lesen lässt (ein Plattenfehler), wird nie für ein leeres gehalten: Es und die Dateien seines Speicherns werden in einem Ordner in *settings/conflicts* aufbewahrt, nichts wird an seinen Platz gebracht oder gelöscht, und der Hinweis sagt das (0.81.1). In einem Sync-Ordner bleibt das Journal eines Speicherns des anderen Computers 15 Minuten lang unberührt (dieses Speichern läuft dort vielleicht noch, oder seine Dateien treffen erst ein): Dieser Computer speichert das Projekt in der Zeit nicht und versucht es von selbst erneut, und ist der andere Computer während dieses Speicherns stehen geblieben, schließt dieser es nach diesen 15 Minuten ab (0.81.1). Lässt sich eine Datei eines Speicherns nicht schreiben, ersetzt keine von ihnen etwas, und Ihre Änderungen bleiben für den nächsten Versuch im Fenster. Seit 0.93.0 gilt ein Laufwerk, das einen Fehler meldet, wenn ein Ordner synchronisiert wird, nachdem die Dateien an ihren Platz gebracht wurden (ein echter Fehler, nicht ein Dateisystem, das nicht synchronisieren kann), das Speichern als fehlgeschlagen: Das Journal bleibt, die Meldung sagt, dass das Laufwerk einen Fehler gemeldet hat, und das nächste Speichern oder Öffnen schließt das Speichern anhand des Journals ab. Solange ein Journal, das sich nicht lesen lässt, nicht beiseitegelegt werden konnte (der Ordner *settings/conflicts* lässt sich nicht beschreiben), schreibt kein Speichern ein neues Journal darüber: Das Speichern wartet, seine Meldung nennt die Datei, und das Programm speichert von selbst, sobald die Datei beiseitegelegt werden kann. Eine vorläufige Datei eines früheren Speicherns, die im Weg ist, wird beiseitegelegt, nie überschrieben. Ein Ordner-Sync, der scheitert, bevor etwas ersetzt wird, ist ein sauberer Fehlschlag: Nichts wurde verändert. Kommt der Fehler, wenn die Dateien schon an ihrem Platz sind, vermerkt das Programm, was auf der Platte steht (damit die Wiederholungen keine falschen „anderswo geändert“-Konflikte melden und keine Bilder doppelt schreiben), und es synchronisiert den Ordner bei jedem Speichern erneut: „Gespeichert“ folgt immer auf einen geprüften Ordner-Sync. Ein Dateisystem, das schon beim Öffnen des Projekts auf einen Ordner-Sync mit einem Fehler antwortet, wird als eines gemerkt, das Ordner nicht synchronisieren kann, und seine Speichervorgänge werden nicht als fehlgeschlagen gemeldet.
+
+Melden Sie sich ab oder fahren Sie den Computer herunter, während {{APP}} geöffnet ist, speichert es alles, bevor es endet (dabei wird keine Sicherung angelegt). Schlägt dieses Speichern fehl (volle Platte, ein Laufwerk, das nicht mehr da ist), werden die nicht gespeicherten Texte und Notizen (und seit 0.93.0 die Projektdatei, wie sie im Speicher steht) als RTF-Dateien in einen Notfallordner geschrieben, *~/.local/share/{{APP}}/Emergency*, und der nächste Start sagt, wo sie liegen und wie viele der Dateien geschrieben wurden (der Hinweis sagt „unvollständig“ und nennt, was fehlt, wenn eine Datei nicht geschrieben werden konnte). Endet es unerwartet, sagt Ihnen das der nächste Start (Abschnitt 20, *Absturzberichte*).
+
+**Ein Projekt schließen, das sich nicht speichern lässt**, fragt, was zu tun ist; **Geöffnet lassen** ist die Vorgabe. **Texte anderswo speichern…** schreibt die noch nicht gespeicherten Texte und Notizen als RTF-Dateien in einen Ordner Ihrer Wahl (ein anderes Laufwerk, einen USB-Stick), und das Projekt bleibt geöffnet. Seit 0.93.0 enthält diese Notfallkopie auch die Projektdatei, wie sie im Fenster steht (den Binder, Titel und Etiketten), die Mindmap-Tafeln und die geänderten Objekte, und sie wird auch angelegt, wenn sich nur der Binder oder die Objekte geändert haben. Die Meldung sagt, wie viele Dateien geschrieben wurden, als „n von m“, und nennt die fehlenden Dateien und den Grund; eine Kopie, der Dateien fehlen, trägt die Überschrift **unvollständig** (mit einem Warnzeichen) und sieht nie wie eine fertige aus. Ein Ordner, der schon da ist, wird nie wieder verwendet: Eine zweite Kopie in derselben Sekunde bekommt eine Nummer. Die Projektdatei in der Kopie heißt wie die Projektdatei mit angehängtem „.copy“ (damit der Ordner nicht versehentlich für ein Projekt gehalten wird); die README in der Kopie sagt, wie man sie zurückspielt: Schließen Sie das Projekt, benennen Sie die Projektdatei im Projektordner um (sie bleibt, wie sie war), kopieren Sie die Datei der Notfallkopie dorthin, benennen Sie sie in den Namen der Projektdatei um und öffnen Sie das Projekt erneut. Bei einem Projekt im Scrivener-Format sagt die README, die Datei gehöre zur Arbeitskopie, und nennt keinen Weg zurück. War am Ende doch nichts ungespeichert (ein Wiederholungsversuch hat inzwischen geklappt), sagt die Meldung, dass alles gespeichert ist und keine Kopie nötig war. **Ohne Speichern schließen** schließt es und verliert diese Änderungen.
+
+### Wo Ihre Arbeit liegt
+
+Ein Projekt ist ein Ordner namens *IhrTitel*{{SUFFIX}}. Darin ist jedes Dokument eine gewöhnliche Textdatei, sodass Ihr Geschriebenes auch ohne {{APP}} lesbar bleibt. Doppelklicken Sie auf die Datei *IhrTitel*{{FILE}} im Ordner, um das Projekt zu öffnen. Benennen Sie Dateien im Projektordner nicht von Hand um und verschieben Sie sie nicht.
+
+Um die Datei eines Dokuments außerhalb von {{APP}} zu finden, öffnen Sie *contents-by-title.txt* im Projektordner (0.65): Sie listet jedes Dokument des Binders mit seinem Titel auf, nach seiner Stelle eingerückt, und die Dateien, die seinen Text, seine Notizen oder Medien enthalten (zum Beispiel *content/<id>/text.md*). {{APP}} schreibt sie bei jedem Speichern, das den Binder ändert, und liest sie selbst nie. (Ein Projekt im Scrivener-Format hat keine solche Liste; die *.scrivx*-Datei von Scrivener nennt seine Dokumente.)
+
+Ein Projekt sollte immer nur in einem Fenster geöffnet sein. Ist es schon in einem anderen Fenster oder auf einem anderen Computer geöffnet (zum Beispiel über einen synchronisierten Ordner), warnt {{APP}} Sie vor dem Öffnen. Starten Sie {{APP}} erneut mit einem Projekt, das in einem Fenster des Programms geöffnet ist (aus dem Dateimanager oder über eine Desktopverknüpfung), holt es stattdessen dieses Fenster nach vorn, statt das Projekt zweimal zu öffnen; ein anderes Projekt öffnet sich in einem eigenen Fenster.
+
+**Ein Projekt in einem synchronisierten Ordner** (OneDrive, Dropbox, Nextcloud, Syncthing oder ein anderes Sync-Programm) lässt sich auf mehreren Computern verwenden, jeweils auf einem. Schließen Sie es auf einem Computer und lassen Sie das Sync-Programm fertig werden, bevor Sie es auf dem anderen öffnen. {{APP}} hilft dabei auf der Ebene der Dateien, gleich welches Sync-Programm es ist:
+
+- Solange ein Projekt geöffnet ist, nennt eine kleine Sperrdatei darin den Computer und wird alle paar Minuten erneuert. Sie enthält den Namen des Computers, Ihren Benutzernamen darauf, die Version und die Prozessnummer des Programms, wann das Projekt geöffnet und wann die Sperre zuletzt erneuert wurde, und einen Code, der Computer unterscheidet (einen Hash, nicht als Name lesbar). Das kann jeder sehen, der Zugriff auf den geteilten Ordner hat. Unter **Datei > Einstellungen > Allgemein > Speichern** legt **Name dieses Computers in geteilten Ordnern** einen eigenen Namen fest („Laptop“); er wird statt des Namens des Computers in Sperrdateien, in den Namen aufbewahrter Versionen und in *settings/ui-<computer>.json* verwendet, und Ihr Benutzername bleibt dann weg. Auf einem anderen Computer zeigt das Öffnen des Projekts dann den Namen jenes Computers, seit wann er das Projekt geöffnet hat und sein letztes Lebenszeichen; **Trotzdem öffnen** oder **Abbrechen**. Eine Sperre, die länger als 15 Minuten nicht erneuert wurde (das Projekt wurde dort nicht geschlossen, oder jener Computer ist aus), wird als übrig geblieben angezeigt, und **Öffnen** ist die Vorgabe.
+- Wird das Projekt auf einem anderen Computer geöffnet, während es hier geöffnet ist, sagt das ein Hinweis und bietet an, es hier zu schließen.
+- Wurde eine Datei des Projekts anderswo geändert (auf einem anderen Computer über das Sync-Programm oder von einem anderen Programm), nachdem {{APP}} sie gelesen hat, und wurde sie auch hier geändert, wird die andere Version aufbewahrt, bevor Ihre gespeichert wird: als **Momentaufnahme** des Dokuments (vergleichen Sie sie im Reiter Momentaufnahmen des Inspektors) und als Kopie im Ordner *settings/conflicts* des Projekts. Ein Hinweis sagt, welche Dokumente. Lässt sich die andere Version nicht aufbewahren (zum Beispiel weil die Platte voll ist oder *settings/conflicts* sich nicht beschreiben lässt), wird Ihre nicht darüber gespeichert: Das Speichern schlägt mit einer Meldung fehl, die die Datei nennt, und Ihre Änderungen bleiben ungespeichert, bis die andere Version aufbewahrt werden kann. Ein Dokument, das Sie hier nur angesehen haben, wird nie über eine neuere Version von anderswo gespeichert.
+- Das Öffnen und Schließen eines Projekts ohne Änderung ändert keine seiner Dateien; das Fensterlayout und die Stellen, an denen Sie in jedem Dokument waren, werden pro Computer aufbewahrt (*settings/ui-<computer>.json*). Im Scrivener-Format wird auch die *.scriv* nicht angerührt, und sie bekommt eine Sperrdatei von {{APP}} (*quillbinder.lock*), solange sie geöffnet ist; Scrivener liest sie nicht. Vor jedem Speichern in die *.scriv* sucht {{APP}} nach der eigenen Sperre von Scrivener: Hat Scrivener das Projekt nach {{APP}} geöffnet, wird nichts mehr in die *.scriv* geschrieben (ein Hinweis sagt das einmal, danach eine kurze Meldung in der Fußleiste); Ihre Änderungen bleiben in der Arbeitskopie von {{APP}}. Schließen Sie das Projekt in Scrivener und speichern Sie erneut (**Datei > Speichern**). Schließen Sie das Projekt zuerst hier, gehen die Änderungen beim nächsten Öffnen hier in die *.scriv*; wo Scrivener inzwischen etwas geändert hat, wird dessen Version gelesen.
+- Führt das Projekt Text für ein Dokument auf, dessen Datei auf diesem Computer noch nicht angekommen ist (das Sync-Programm ist nicht fertig), nennt es ein Hinweis nach dem Öffnen; dieses Dokument wird leer angezeigt, lässt sich nicht bearbeiten, und an seiner Stelle wird nichts gespeichert. Schließen Sie das Projekt, warten Sie, bis das Sync-Programm fertig ist, und öffnen Sie es erneut. Dasselbe gilt für einen Text, der nur zum Teil gelesen werden konnte (0.65).
+- Eine anderswo geänderte Datei wird auch bemerkt, wenn sie Größe und Zeit behalten hat (manche Sync-Programme setzen die Zeit selbst): {{APP}} vergleicht ihren Inhalt mit dem, was es gelesen oder geschrieben hat (0.65).
+- Der Inhalt entscheidet auch in der Gegenrichtung (0.92.0): Eine Datei, bei der sich **nur die Zeit** geändert hat, ist keine andere Version. Manche Sync-Programme setzen die Zeit einer Datei einige Sekunden, nachdem {{APP}} sie geschrieben hat, noch einmal, wenn ihr Hochladen fertig ist; dafür wird nichts aufbewahrt, kein Hinweis kommt, und die Datei wird nicht erneut geschrieben. Eine Projektdatei, die schon enthält, was ein Speichern schreiben würde, bleibt ebenfalls unberührt, sodass ein Speichern, das nichts ändert, dem Sync-Programm nichts zum Transportieren gibt.
+- Der Hinweis **Andere Versionen aufbewahrt** hat die Schaltfläche **Bis zum Beenden von {{APP}} nicht mehr anzeigen**. Die anderen Versionen werden weiterhin als Momentaufnahmen und als Kopien in *settings/conflicts* aufbewahrt; nur der Hinweis bleibt aus, bis Sie das Programm beenden. Der nächste Start zeigt ihn wieder.
+- **Ein Vorhängeschloss an dem, woran ein anderes Gerät arbeitet (0.92.0).** Solange ein Projekt geöffnet ist, vermerkt jedes Gerät neben der Sperrdatei auch, welche Dokumente es in einem Editor geöffnet hat oder seit dem Öffnen des Projekts geändert hat. Öffnet ein zweites Gerät das Projekt, zeigt sein Binder ein kleines Vorhängeschloss am rechten Ende der Zeilen dieser Dokumente und der Ordner darum herum. Zeigen Sie auf das Schloss: Die Kurzinfo nennt das Gerät und wann es das Projekt geöffnet hat. Es ist ein Hinweis, keine Sperre: Nichts wird blockiert, und Sie können das Dokument weiter bearbeiten. Die Markierung reist durch Ihr Sync-Programm und kann daher einige Minuten alt sein; sie setzt 0.92.0 oder neuer auf beiden Geräten voraus (Scrivener kündigt nichts an). Eine Liste, deren Gerät seit mehr als 15 Minuten kein Lebenszeichen gezeigt hat, wird nicht angezeigt. Der Vermerk ist eine kleine Datei pro Gerät (*settings/lock-work-…json*; bei einem Projekt im Scrivener-Format *quillbinder.lock-work-…json* in der *.scriv*); sie enthält den Namen des Geräts wie in der Sperrdatei, die Zeit und die internen Nummern der Dokumente, keine Titel und keinen Text. Sie wird nur geschrieben, wenn sich die Liste ändert, nie pro Tastendruck, sie wird entfernt, wenn das Projekt geschlossen wird, und sie bleibt aus Sicherungen heraus.
+- **Scrivener-Format, zwei Computer** (0.65): Dokumente, die der *.scriv* anderswo hinzugefügt werden (Scrivener auf einem anderen Computer), während das Projekt hier geöffnet ist, bleiben erhalten, und der Binder, der sie nennt, wird nicht ersetzt; ein Hinweis bittet Sie, das Projekt zu schließen und erneut zu öffnen, was dann deren und Ihre Dokumente zeigt. Bilder, PDFs, Audio- und Videodateien und Mindmaps, die in der *.scriv* anderswo geändert wurden, bleiben, wie sie sind (früher wurde die Version von hier darüberkopiert); wurde eine auf beiden Seiten geändert, wird die andere Version zuerst in *settings/conflicts* aufbewahrt.
+
+Ein Projekt im **Scrivener-Format** ist stattdessen ein Ordner *IhrTitel.scriv*; öffnen Sie es mit seiner *.scrivx*-Datei. {{APP}} speichert Ihre Änderungen darin, sodass das Projekt ein Scrivener-Projekt bleibt. **Datei > Speichern unter…** speichert ein Projekt unter einem anderen Namen oder an einem anderen Ort, in beiden Formaten (Abschnitt 14).
+
+### Datenschutz: was Ihren Computer verlässt
+
+{{APP}} nimmt nur für eine Sache Kontakt zum Internet auf: um nach Updates zu suchen. Es holt eine kleine Datei, sendet nichts über Sie, und Sie können es im Menü Hilfe ausschalten. (Abschnitt 17, *Nach Updates suchen*, sagt genau, was wann geholt wird. Vor 0.92.0 suchte das Programm überhaupt nicht nach Updates.) Es gibt keine Nutzungsstatistiken und keine Absturzberichte. Drei weitere Dinge gehen ins Internet, und nur, wenn Sie sie starten:
+
+- **Datei > Importieren > Webseite…** holt die Seite, die Sie nennen, und ihre Bilder von dieser Site. Wie ein Browser sendet es den Namen eines gängigen Browsers (Firefox unter Linux), die Sprachen Ihres Systems (für die Sprache der Seite) und, wie jede Verbindung, die Internetadresse Ihres Computers.
+- **Ein Sprachmodell herunterladen** für die Erweiterung Übersetzungshelfer (Abschnitt 10) holt es von den Releases des Repositorys von {{APP}} auf GitHub. Es sendet den Namen der Erweiterung („Quillbinder-Translation-Addon“) und, wie jede Verbindung, Ihre Internetadresse.
+- **Ein Sprachmodell zur Spracherkennung herunterladen** (die Erweiterung Speech Transcription, Abschnitt 10) holt das Modell von Hugging Face (huggingface.co, einem Unternehmen in den USA) oder von der Adresse, die Sie in ihren Optionen festlegen. Es sendet „{{APP}}/<version>“ als Namen des Programms und, wie jede Verbindung, Ihre Internetadresse. Ein Modell wird nur installiert, wenn seine Prüfsumme die bekannte ist; eine Datei von einer anderen Adresse oder eine, die Sie selbst heruntergeladen haben, wird erst verwendet, nachdem Sie zugestimmt haben.
+
+Was andere von Ihrer Arbeit sehen können:
+
+- **Projekte in geteilten Ordnern** tragen eine Sperrdatei, solange sie geöffnet sind (siehe oben): Computername, Benutzername und Zeiten. Legen Sie unter **Datei > Einstellungen > Allgemein > Speichern** einen eigenen Namen fest, um diese wegzulassen.
+- **Autorendaten** (Name, Adresse, Telefon, E-Mail unter **Datei > Einstellungen**) bleiben in den Einstellungen des Programms auf diesem Computer; sie gehen nie in die eigenen Einstellungen eines Projekts. Sie gelangen nur dorthin in ein Manuskript, wo das Kompilierformat die Platzhalter verwendet (<$author>, <$address> ...).
+- **Gelöschter Text ist nicht überall weg**: Momentaufnahmen bewahren frühere Versionen eines Dokuments auf (**Projekt > Alte Momentaufnahmen löschen** entfernt sie), und Sicherungen bewahren das ganze Projekt, wie es war (Abschnitt 15). Sicherungen sind gewöhnliche ZIP-Dateien ohne Passwort; ein Sicherungsordner in einem synchronisierten Ordner wird vom Sync-Programm hochgeladen.
+- **Ihre Dateien werden von {{APP}} nicht verschlüsselt** (0.65): Texte, Notizen, die Einstellungen des Projekts und Sicherungen sind gewöhnliche Dateien, lesbar für jeden, der den Ordner lesen kann, in dem sie liegen. Um ein Manuskript privat zu halten, bewahren Sie das Projekt und seine Sicherungen auf einer verschlüsselten Platte auf (das Installationsprogramm von Kubuntu bietet an, die ganze Platte zu verschlüsseln; für einen USB-Stick oder ein externes Laufwerk die Plasma Vaults von KDE oder ein LUKS-verschlüsseltes Laufwerk) und halten Sie den Sicherungsordner aus geteilten Ordnern heraus, die Sie nicht kontrollieren.
+- **Absturzberichte** bleiben auf diesem Computer, bis Sie einen selbst kopieren oder senden (Abschnitt 20). Sie beschreiben den Zustand des Programms und nennen das geöffnete Projekt und seinen Ordner. Unter Windows wird neben jedem Bericht ein Speicherabbild aufbewahrt; es kann Text enthalten, den Sie gerade geschrieben haben, und der Bericht sagt das.
+
+### {{APP}} dem Anwendungsmenü hinzufügen
+
+Beim ersten Start der Programmdatei ({{APP}}.AppImage) bietet die Seite des ersten Starts an, {{APP}} dem Anwendungsmenü hinzuzufügen. Danach können Sie es wie jedes andere Programm starten, und ein Doppelklick auf ein Projekt öffnet es. Kein Feld bestätigt den Eintrag; ein Fehler wird gemeldet. Dieselbe Seite (und **Hilfe > Zum Anwendungsmenü hinzufügen**) bietet an, **das AppImage nach ~/Applications zu verschieben** (zunächst angekreuzt, wenn die Datei dort noch nicht liegt), damit der Menüeintrag sie von einem festen Ort startet, an dem die Datei bleibt (das Kontrollkästchen sagt das mit diesen Worten, ohne Klammer); schlägt das Verschieben fehl (volle Platte, dort schon eine Datei dieses Namens), geht nichts verloren: Die Datei bleibt, wo sie war, der Eintrag zeigt dorthin, und eine Meldung sagt, warum. Wenn Sie das AppImage später selbst verschieben, nennt der Eintrag weiter den alten Ort: Verwenden Sie noch einmal **Hilfe > Zum Anwendungsmenü hinzufügen**, das den aktuellen Ort der Datei einträgt (ein älterer Eintrag wird ersetzt, nicht verdoppelt). Nach einem Verschieben verwenden Programm-Updates, die *.before-update*-Kopie und **Hilfe > Fehlersuche und Entwicklung > Systeminformationen** sofort den neuen Ort.
+
+Der eine Befehl des Hilfemenüs, **Hilfe > Zum Anwendungsmenü hinzufügen**, folgt dem Zustand des Eintrags: Er fügt den Eintrag hinzu, solange es keinen gibt, und heißt, sobald es einen gibt, *Aus dem Anwendungsmenü entfernen* und nimmt weg, was das Hinzufügen gemacht hat (die Eintragsdatei, das Symbol und die Dateitypen), und lässt das AppImage, wo es ist. Verschieben Sie die Programmdatei selbst, entfernen Sie den Eintrag und fügen Sie ihn erneut hinzu.
+
+### Unter Windows: alles in einem Ordner
+
+Die Windows-Version von {{APP}} (experimentell, seit 0.91.1 veröffentlicht) ist ein Ordner, den Sie an beliebiger Stelle entpacken, zum Beispiel *C:\Users\<Ihr Name>\Quillbinder*; sie braucht keine Installation und keine Administratorrechte. Sie hält ihre Einstellungen, Erweiterungen, Programm-Updates, installierten Schriften und Absturzberichte im Ordner *data* innerhalb dieses Ordners und nichts in den eigenen Ordnern von Windows oder in der Registry. Der ganze Ordner lässt sich verschieben oder kopieren (auf einen USB-Stick oder einen anderen Computer); sein Löschen entfernt das Programm. Ein Ordner, in den das Programm nicht schreiben kann (wie *Program Files*), wird mit einer Meldung abgelehnt, die sagt, wohin er stattdessen gehört. Programm-Updates werden mit **Hilfe > Erweiterungen und Updates > Aktualisierung oder Erweiterung installieren** installiert; um auf eine neu heruntergeladene Version zu wechseln, entpacken Sie sie und kopieren den Ordner *data* in den neuen Ordner. Ihre Projekte bleiben, wo Sie sie aufbewahren.
+
+Es gibt zwei Wege, diesen Ordner zu bekommen (0.90.4). Das **Setup-Programm** (*...-setup.exe*) fragt nach einem Ordner und entpackt {{APP}} dorthin; es braucht keine Administratorrechte und ändert sonst nichts am Computer: keinen Eintrag unter Apps, nichts in der Registry, keinen Eintrag im Startmenü (die unten beschriebene Anleitung bietet diese an). Das Entpacken einer neueren Version in denselben Ordner behält *data*, also Ihre Einstellungen und Erweiterungen. Die **Zip-Datei** enthält denselben Ordner: Entpacken Sie sie vollständig. Windows warnt bei beiden Dateien möglicherweise, weil sie nicht signiert sind (SmartScreen: *Weitere Informationen*, dann *Trotzdem ausführen*).
+
+Zwei Dinge unterscheiden sich von Linux, bedingt durch Windows selbst (0.90.4). Die Taste **AltGr** tippt ihr Zeichen, wie Sie es erwarten: Auf einer deutschen Tastatur ergeben AltGr+7, 8, 9, 0 und < die Zeichen { [ ] } und |, obwohl {{APP}} Befehle auf Ctrl+Alt mit diesen Tasten hat; drücken Sie für die Befehle die linke Ctrl- und die Alt-Taste. Und Dateien, die nur für einen Moment gebraucht werden (eine gespeicherte Webseite, entpackt zum Ansehen, oder ihre Kopie für den Browser), liegen im temporären Ordner von Windows und werden entfernt, wenn {{APP}} geschlossen wird. Speech Transcription verwendet unter Windows den Prozessor, nicht die Grafikkarte.
+
+Beim ersten Start sagt eine Anleitung, wo das Programm seine Dateien aufbewahrt, und warnt, wenn sein Ordner im Ordner eines Sync-Dienstes liegt (OneDrive, Dropbox, Google Drive ...) oder einen langen Pfad hat. Sie fragt auch nach diesen Dingen, die **Hilfe > Fehlersuche und Entwicklung > Dieser Computer** und **Datei > Einstellungen > Allgemein > Dieser Computer** erneut zeigen:
+
+- **Sicherungen**: Es gibt keinen Standard-Sicherungsordner. Bis Sie einen wählen, wird keine automatische Sicherung angelegt; die Fußleiste des ersten Editors zeigt neben dem Speichertext **Keine Sicherungen** (klicken Sie darauf, um den Ordner zu wählen), und die erste Sicherung, die laufen würde, fragt nach einem Ordner. Am besten ist ein anderes Laufwerk.
+- **Notizen des Notizblocks und Transkriptionen**: in Dokumente (der Standard), im Ordner des Programms oder in einem Ordner Ihrer Wahl. Eine Änderung gibt beiden Werkzeugen den neuen Ort; was sie zuvor geschrieben haben, bleibt, wo es ist.
+- **Windows**: ein Eintrag im Startmenü, eine Verknüpfung auf dem Desktop und die Projektdateitypen (*.qbx*-Dateien öffnen sich mit {{APP}}, und es wird unter **Öffnen mit** für die *.scrivx*-Dateien von Scrivener angeboten). Das sind die einzigen Dinge, die das Programm außerhalb seines Ordners ablegt, jedes nur, wenn Sie es hinzufügen, und jedes mit **Entfernen**. Entfernen Sie sie, bevor Sie den Ordner löschen oder verschieben.
+
+Schriften, die mit **Format > Schrift > Schriftdateien installieren** installiert werden, bleiben im Ordner des Programms und gehören nur {{APP}}; andere Programme sehen sie nicht.
+
+Die Erweiterungen mit Programmcode haben eigene Windows-Versionen (ihre Dateinamen enden auf *-windows*): **Media Playback** spielt ab, was Windows selbst abspielt, **Extra Video and Audio Formats** fügt FFmpeg hinzu, und **Speech Transcription** schreibt Sprache auf dem Prozessor nieder (Grafikkarten werden unter Windows noch nicht verwendet). **Übersetzungshelfer** gehört unter Windows ebenfalls zur vollen Version (0.92.0). Die Erweiterungen ohne Programmcode (Designs, Vorlagen, Kompilierformate) sind auf jedem System dieselben Dateien.
+
+### Auf Android-Tablets
+
+Die Android-Version von {{APP}} (experimentell, seit 0.91.3 veröffentlicht) ist eine App für Tablets mit Android 9 oder neuer (64-Bit-ARM). Sie hat dieselben Fenster wie auf einem Computer, gemacht für Finger: Ein Finger scrollt und tippt, zwei Finger zoomen, ein Finger, der eine halbe Sekunde auf etwas ruht, öffnet dessen Rechtsklick-Menü (in einem Text tut das ein Tippen auf markierten Text), und die Symbolleisten falten sich in so viele Zeilen, wie der Bildschirm braucht. Laden Sie die APK-Datei auf dem Tablet herunter und öffnen Sie sie; Android fragt, ob der Browser oder die Dateien-App Apps installieren darf, was Sie für diese Installation erlauben. Eine neue Version kommt als neue APK und wird über die alte installiert, wobei Ihre Einstellungen und Erweiterungen erhalten bleiben; **Hilfe > Erweiterungen und Updates > Jetzt nach Updates suchen** sagt Ihnen, wenn es eine gibt, und öffnet ihren Download im Browser (neuere Erweiterungen werden innerhalb von {{APP}} installiert).
+
+Mit externer Tastatur und Maus (seit 0.92.0): Ctrl + Mausrad zoomt, und Ctrl + Klick oder Shift + Klick wählt mehrere Dokumente aus, wie auf einem Computer. Die Linie zwischen zwei Bereichen zeigt einen Griff; eine Maus, die ein paar Pixel daneben gedrückt wird, nimmt ihn mit. **Zurück** von Android schließt das Menü, die Kurzinfo oder das Fenster davor; jedes Fenster hat eine Schaltfläche, die es schließt, und ein Fenster, das größer als der Bildschirm ist, scrollt. Auf einem Tablet zeigt sich die Stecknadel der angehefteten Mindmap an der ausgewählten Binder-Zeile (klicken Sie darauf oder verwenden Sie das Rechtsklick-Menü der Zeile: *Mindmap dieses Elements anheften*, *Angeheftete Mindmap lösen*), und ein Tippen auf das Vorhängeschloss einer Zeile zeigt, wer daran arbeitet. Ein Finger auf der Übersicht der Mindmap funktioniert wie die Maus: Ein Tippen bewegt die Ansicht dorthin, ein Finger zieht das Rechteck des gezeigten Teils, und der Griff in seiner Ecke ändert seine Größe. **Datei > Speichern unter…** fragt auf einem Tablet zuerst nach dem Format und öffnet dann das Dateifenster.
+
+Beim ersten Start bittet {{APP}} um Zugriff auf die Dateien des Tablets. Damit liegen Projekte in *Documents/Quillbinder*, Sicherungen in *Documents/Quillbinder/Backups*, Exporte in *Documents/Quillbinder/Exports* und Notizen des Notizblocks in *Documents/Quillbinder/Scratch Pad*, wo andere Apps, eine Sync-App und ein per Kabel verbundener Computer sie erreichen können; die Schaltfläche öffnet die Seite *Zugriff auf alle Dateien* von Android, auf der Sie ihn für {{APP}} einschalten. Ohne ihn bleibt alles im eigenen Ordner der App, den keine andere App sieht und den Android mit der App löscht; *Datei > Dateien auf diesem Tablet* fragt erneut und sagt, wo die Dinge sind. Wenn Android die App wegräumt (die Home-Taste, eine andere App), speichert {{APP}} sofort.
+
+Die Rechtschreibwörterbücher (Englisch und Deutsch; die anderen Sprachen sind Erweiterungen, siehe Abschnitt 4), die Schreibwerkzeuge, die Importer für Webseiten und alte Word-Dateien und (seit 0.92.0) der Übersetzungshelfer sind Teil der App; der Übersetzungshelfer wird beim ersten Start einer Version installiert und lädt nur dann ein Sprachmodell herunter, wenn Sie eines wählen. Erweiterungen für Android (ihre Dateinamen enden auf *-android-arm64*) werden mit **Hilfe > Erweiterungen und Updates > Aktualisierung oder Erweiterung installieren** installiert; das Dateifenster öffnet sich im Ordner Download, und {{APP}} startet neu, wenn die Erweiterung es braucht. Für Linux oder Windows gemachte Pakete und Programm-Updates werden mit Begründung abgelehnt: Die App selbst wird nur durch eine neue APK aktualisiert. In der Android-Version noch nicht enthalten: Speech Transcription, Audio und Video im Editor und Absturzberichte. Innerhalb von {{APP}} kopierter Text behält beim Einfügen seine Formatierung; die Zwischenablage von Android trägt nur reinen Text, sodass in andere Apps kopierter Text unformatiert ankommt.
+
+---
+
+## 2. Das Hauptfenster
+
+Das Fenster hat drei Spalten:
+
+| Bereich | Was er tut |
+|---------|------------|
+| **Binder** (links) | Das Inhaltsverzeichnis Ihres ganzen Projekts: jedes Dokument und jeder Ordner. |
+| **Editor** (Mitte) | Zeigt, was Sie im Binder ausgewählt haben: Text, eine Pinnwand mit Karteikarten oder eine Gliederung. |
+| **Inspektor** (rechts) | Informationen zum aktuellen Dokument: Synopse, Notizen, Lesezeichen, Metadaten, Momentaufnahmen und Kommentare. |
+
+Beim ersten Start von {{APP}} auf einem Bildschirm, der schmaler als 1600 px ist, öffnet sich das Fenster maximiert. Größe, Ort und Zustand des Fensters (maximiert oder nicht) werden einen Moment nach jeder Änderung gespeichert, sodass ein Absturz sie nicht verliert. Blenden Sie den Binder mit **Ctrl+Alt+B** und den Inspektor mit **Ctrl+Alt+I** aus, um mehr Platz zu bekommen. So ist das Fenster, solange es breiter als hoch ist; ein Fenster, das höher als breit ist, ordnet dieselben drei Bereiche anders an (nächster Abschnitt). Die Farben und Schriften aller drei sowie der Pinnwand, der Gliederung und des Schreibmodus kommen vom Design (**Ansicht > Designs**) und lassen sich Bereich für Bereich ändern (Abschnitt 16), auch mit einem Rechtsklick auf den Bereich (**Erscheinungsbild**). Jedes Projekt behält sein eigenes Aussehen.
+
+Die **Symbolleiste** oben enthält von links nach rechts: die Schaltfläche **Ansicht** (Binder, Sammlungen, Inspektor, Layouts), neues Dokument (mit einem Menü für Ordner, Vorlagen und Import), neuer Ordner, Papierkorb, **Rückgängig** und **Wiederherstellen**, die Schaltfläche **Suche** (Projektsuche; der Pfeil daneben listet die anderen Suchwerkzeuge auf: Im Dokument suchen, Projekt ersetzen, Nach Formatierung suchen), das Feld **Schnellsuche**, die drei Ansichtsschaltflächen (Text, Pinnwand, Gliederung), Projektlesezeichen, Schnellansicht, Kommentare und Fußnoten, Kompilieren, Schreibmodus, das **Mikrofon** von Speech Transcription (wenn diese Erweiterung installiert ist) und die Schaltfläche des Inspektors. Was sie enthält, bestimmen Sie selbst (siehe „Eigene Symbolleisten“ unten).
+
+Die **Formatleiste** darunter enthält die Formatvorlage, die Schrift, die Größe, den Zeilenabstand, die Standard-Textformatierung, das Schriftenfenster, Fett, Kursiv, Unterstrichen, Durchgestrichen, Hervorheben, Textfarbe, Ausrichtung, Listen, den Abstand vor und nach dem Absatz, den Einzug der ersten Zeile und des ganzen Absatzes, Kommentare, Fußnoten, Anmerkungen im Text und Bilder. Blenden Sie die beiden Leisten mit **Ansicht > Symbolleisten** ein oder aus.
+
+**Dialoge.** Ein Fenster, das das Programm öffnet (Einstellungen, Kompilieren, Projektziele ...), ist nie größer als der Bildschirm ohne die Leisten des Desktops: Auf einem kleinen Laptop-Bildschirm scrollt sein Inhalt oder wird kleiner, und seine Schaltflächen bleiben sichtbar. Wenn es sich schließt, geht die Tastatur dorthin zurück, wo sie war, meist in den Text, sodass Sie sofort weitertippen können.
+
+**Wo bin ich?** Doppelklicken Sie auf den Platz neben dem Text (das Papier neben der Spalte oder die Fläche darum): Der Binder wählt das Dokument neben dem Klick aus, öffnet die Ordner darüber und lässt seine Zeile zweimal orange aufblinken. Der Editor behält, was er zeigt. **Navigieren > Im Binder anzeigen** (**Ctrl+Shift+R**) tut dasselbe für das Dokument am Cursor.
+
+Die **Fußleiste** jedes Editors zeigt die Wort- und Zeichenzahl (markieren Sie Text, um nur die Auswahl zu zählen) und das Ziel für das Dokument. Klicken Sie auf die Zahl für Einzelheiten. Zeigt der Editor einen Ordner (oder ein Dokument mit Unterdokumenten), zeigt die Fußleiste auch die **Summe** des Ordners: die Wörter seines eigenen Textes und alles darin, zum Beispiel „Folder: 12,345 words“. Die Pinnwand und die Gliederung zeigen dieselbe Summe in der Mitte ihrer Fußleiste; bei mehreren angezeigten Elementen ist es die Summe aller. Ein Klick auf eine Summe zeigt ihre Einzelheiten (Wörter, Zeichen, Zeichen ohne Leerzeichen, Absätze und Seiten), wie es die Zahl eines Textes tut. Der Inspektor zeigt sie unter **Summe** in den Metadaten eines Ordners, und ruht die Maus auf einem Ordner im Binder, zeigt sie sie ebenfalls (mit den eigenen Wörtern des Ordners, wenn er einen eigenen Text hat).
+
+### Die Menüs
+
+| Menü | Was es enthält |
+|------|----------------|
+| **Datei** | Projekte, Speichern, das Projektformat ({{APP}} oder Scrivener), Sicherungen, Import und Export, Vergleichen und Übertragen mit einer Word- oder LibreOffice-Datei, Kompilieren, Drucken, Dateikonvertierung, Einstellungen |
+| **Bearbeiten** | Rückgängig, Zwischenablage, Auswählen, Suchen und Ersetzen (im Text, im Projekt, nach Formatierung), Dokumente im Binder verschieben, Schreibwerkzeuge |
+| **Einfügen** | Bilder, Tabellen, Verknüpfungen mit Dokumenten und Objekten, Weblinks, Kommentare, Fußnoten, Medien-Zeitmarken, automatische Nummern, Platzhalter, Sonderzeichen, Datum und Uhrzeit |
+| **Ansicht** | Die drei Ansichtsarten, der geteilte Editor (**Editor teilen**), die Plätze von Binder, Editor und Inspektor und die gespeicherten Layouts (**Layout**), die Farbdesigns (**Designs**), Binder, Sammlungen und Inspektor (und **Schnellanlege-Tasten im Binder**), Symbolleisten, Optionen der Textbearbeitung (Seitenansicht, Lineal, Schreibmaschinen-Scrollen), Optionen für Pinnwand und Gliederung, Etikettenfarben, Zoom, Schreibmodus, Vollbild |
+| **Navigieren** | Zurück und vorwärts, voriges und nächstes Dokument, Dokumente im anderen Editor, im Manuskripthalter oder als Schnellansicht öffnen, die Editorsperre, in welchen Editor der Binder lädt, die Reiter des Inspektors (alle, unter den Namen ihrer Kurzinfos: **Synopse und Notizen**, **Lesezeichen**, **Metadaten**, **Momentaufnahmen**, **Kommentare und Fußnoten**, die Mindmap, die Objekte und die Reiter der Schreibwerkzeuge) |
+| **Projekt** | Neue Dokumente, Projekteinstellungen (auch in eine Datei gespeichert und aus ihr geladen), Ziele, Stichwörter, Statistik, Schreibverlauf, Papierkorb, alte Momentaufnahmen löschen |
+| **Dokumente** | Momentaufnahmen, Umbenennen, Duplizieren, Teilen, Zusammenführen, Umwandeln, Symbol, Etikett, Status, Lesezeichen |
+| **Format** | Schrift (mit Schriften installieren), Absatz, Formatvorlage, Listen, Hervorheben, Formatierung kopieren, Überarbeitungsmodus |
+| **Fenster** | Notizblock, Schnellansicht-Fenster |
+| **Hilfe** | **Befehl suchen**, dieses Handbuch, die Schnellstartanleitung, das Willkommensprojekt, die Liste aller Platzhalter, die Liste der Tastenkürzel, die Hilfe zu Mindmaps, das Untermenü **Erweiterungen und Updates** (Erweiterungsverwaltung, Aktualisierung oder Erweiterung installieren, die Suche nach Updates), {{APP}} dem Anwendungsmenü hinzufügen (und wieder entfernen), das Untermenü **Fehlersuche und Entwicklung** (Systeminformationen, Dieser Computer, Absturzberichte, Plugin-Ordner öffnen, das Entwicklerhandbuch), Problem melden, die Lizenzen von Drittanbietern, Über |
+
+**Befehl suchen** (**Hilfe > Befehl suchen…**) öffnet ein Fenster mit einem Suchfeld und der Liste aller Befehle der Menüs, jeweils mit ihrem Menü und ihrem Tastenkürzel. Geben Sie einen Teil eines Namens ein (mehrere Wörter grenzen ein, in beliebiger Reihenfolge); **Return** oder ein Doppelklick führt den gewählten Befehl aus. Ein Befehl, der im Moment aus ist, wird ausgegraut und läuft nicht. Er hat kein eigenes Tastenkürzel.
+
+Ein Untermenü zeigt kurze Namen: **Datei > Importieren > Dateien**, **Dokumente > Teilen > an der Auswahl**, **Navigieren > Öffnen > als Schnellansicht**. Das Tastenkürzel eines Befehls steht daneben und lässt sich ändern (Abschnitt 19). Jeder Eintrag eines Menüs hat einen eigenen Buchstaben (unterstrichen, wenn Sie **Alt** gedrückt halten), sodass **Alt** und die Buchstaben jeden Befehl erreichen.
+
+Ohne geöffnetes Projekt sind die Menüs **Einfügen**, **Navigieren**, **Projekt**, **Dokumente** und **Format** ausgegraut, ebenso die Befehle der anderen Menüs, die einen Text oder einen Binder brauchen (Suchen, Zoom, das Editorlayout, Fokus auf Binder ...). Ohne Projekt funktionieren: Projekte anlegen, öffnen und importieren, Dateien konvertieren, Updates und Erweiterungen installieren, die Einstellungen, Designs und Layouts, die Schreibwerkzeuge, die kein Projekt brauchen, und die Hilfe.
+
+### Die Bereiche nach der Form des Fensters
+
+Das Fenster ordnet Binder, Editor und Inspektor nach seiner Form an und ändert das von selbst, wenn sich die Form ändert (Sie ziehen das Fenster höher als breit, oder Sie drehen ein Tablet). Ein quadratisches Fenster zählt als breit.
+
+- **Breites Fenster** (breiter als hoch, oder quadratisch): drei Spalten. Ihre Reihenfolge wählen Sie unter **Ansicht > Layout > Breites Fenster**: eine der sechs Reihenfolgen von Binder, Editor und Inspektor. Die Breiten werden durch die Linien zwischen den Spalten bestimmt.
+- **Hochformat-Fenster** (höher als breit): zwei Zeilen unter den Symbolleisten. Eine Zeile ist der Editor, in der vollen Breite des Fensters; die andere enthält Binder und Inspektor nebeneinander. Unter **Ansicht > Layout > Hochformat-Fenster** setzt **Editor in der Mitte** die Zeile des Editors über die andere, **Editor unten** darunter; **Binder links** und **Binder rechts** wählen die Seite des Binders (der Inspektor nimmt die andere). Die Höhen der beiden Zeilen und die Breiten von Binder und Inspektor werden durch die Linien zwischen ihnen bestimmt. Ist die Bildschirmtastatur sichtbar (Android), behält die Zeile von Binder und Inspektor ihre Höhe; verschieben Sie die Linie, wenn Sie es anders wollen.
+- Ein ausgeblendeter Binder oder Inspektor überlässt seinen Platz in der Hochformat-Zeile dem anderen, in voller Breite; sind beide ausgeblendet, hat der Editor das ganze Fenster. Zwei Editoren (**Ansicht > Editor teilen**) bleiben innerhalb des Platzes des Editors.
+- **Ansicht > Layout > Layout zurücksetzen** setzt die Form, die das Fenster gerade hat, auf ihre Startwerte zurück: Binder, Editor, Inspektor in einem breiten Fenster; der Editor in der Mitte und der Binder links in einem Hochformat-Fenster.
+
+Beide Gruppen sind immer im Menü; jede wirkt, wenn das Fenster diese Form hat, und jede Form kommt so zurück, wie Sie sie verlassen haben (Plätze und Größen). Die Auswahl gehört zu diesem Computer oder Tablet und wird in den Einstellungen des Programms aufbewahrt, nie in einem Projekt: Ein Projekt, das Sie zwischen Computern teilen, behält die Anordnung jedes Geräts, und nichts davon wird in die Dateien des Projekts geschrieben.
+
+### Layouts
+
+Ein Layout merkt sich, wie das Fenster angeordnet ist: ob Binder, Sammlungen, Inspektor, Symbolleiste und Formatleiste angezeigt werden, wie breit die Spalten sind, wie der Editor geteilt ist, welche Ansicht jeder Editor verwendet und in welchen Editor der Binder lädt. Es sagt nichts über Dokumente, sodass jedes Layout in jedem Projekt funktioniert.
+
+Wählen Sie ein Layout unter **Ansicht > Layout** oder über die Schaltfläche **Ansicht** der Symbolleiste. Sieben Layouts sind eingebaut:
+
+| Layout | Anordnung |
+|--------|-----------|
+| **Standard** | Binder, ein Editor, Inspektor |
+| **Binder und Editor** | Binder und Text, kein Inspektor |
+| **Nur Editor** | Nur der Text mit den beiden Leisten |
+| **Gliederung und Editor** | Gliederung links, Text rechts. Der Binder lädt Gruppen in die Gliederung; ein Klick auf eine Zeile öffnet dieses Dokument rechts |
+| **Pinnwand und Editor** | Pinnwand oben, Text unten, auf dieselbe Weise verbunden |
+| **Zwei Editoren** | Zwei Texte nebeneinander |
+| **Planung** | Binder, Pinnwand und der Inspektor mit Synopse und Notizen |
+
+**Ansicht > Layout > Aktuelles Layout speichern** legt das Fenster, wie es jetzt ist, unter einem Namen Ihrer Wahl ab; haken Sie „Auch die Fenstergröße merken“ an, wenn das Layout die Größe des Fensters ändern soll. **Layouts verwalten** zeigt alle Layouts mit einem kleinen Bild und lässt Sie Ihre eigenen Layouts verwenden, aktualisieren (durch das aktuelle Fenster ersetzen), umbenennen, löschen, exportieren und importieren. Eingebaute Layouts lassen sich nicht ändern; speichern Sie stattdessen ein geändertes Fenster unter einem neuen Namen. Jedes Layout kann ein Tastenkürzel haben (Abschnitt 19, Gruppe „Layouts“).
+
+### Die Symbolleisten und ihre Plätze
+
+Seit 0.91 hat das Fenster acht Symbolleisten in zwei Zeilen (seit 0.95 zehn, davon zwei, die zunächst aus sind). Die erste Zeile enthält **Hauptleiste** (Ansicht, neuer Text, neuer Ordner, Papierkorb, Rückgängig, Wiederherstellen), **Designs** (die Design-Schaltfläche, zunächst aus), **Profile** (das verwendete Profil und ein Menü zum Wechseln, zunächst aus; seit 0.95), **Suche** (die Suchschaltfläche, das Schnellsuchfeld, die Ansichtsarten) und **Werkzeuge** (Lesezeichen, Schnellansicht, Kommentare, Kompilieren, Unsichtbare Zeichen anzeigen, Schreibmodus, die Schaltflächen der Schreibwerkzeuge, der Inspektor). Die zweite Zeile enthält **Formatvorlage und Schrift**, **Zeichen und Ausrichtung**, **Absatz und Einfügen**, die **Icon-Leiste** und **Etiketten** (eine Schaltfläche je Etikettenfarbe des geöffneten Projekts und **Kein Etikett**; zunächst aus; seit 0.95).
+
+- **Eine Symbolleiste verschieben.** Jede Symbolleiste hat vorn einen Griff (zwei Punktspalten; der Zeiger wird darüber zu einem Kreuz mit Pfeilen). Ziehen Sie am Griff, und die Symbolleiste geht dorthin, wohin Sie sie nehmen:
+  - **Entlang ihrer Zeile.** Solange der Zeiger zwischen den Mitten der beiden benachbarten Symbolleisten bleibt, folgt die Symbolleiste ihm sofort. Der freie Platz vor einer Symbolleiste ist so breit, wie Sie ihn machen. Beim Bewegen nach rechts nimmt die Symbolleiste zuerst den freien Platz hinter sich; erreicht sie die nächste Symbolleiste, schiebt sie diese mit, so weit die Symbolleisten dahinter am Ende der Zeile zusammenstehen können. Beim Bewegen nach links hält sie dort an, wo die Symbolleiste davor endet, und die Symbolleisten dahinter bleiben, wo sie sind (ziehen Sie sie heran, wenn Sie sie wieder zusammen haben wollen). Die erste Symbolleiste einer Zeile bleibt am Rand des Fensters.
+  - **An einen anderen Platz in der Reihenfolge.** Führen Sie den Zeiger über die Mitte einer benachbarten Symbolleiste hinaus oder auf eine beliebige andere Symbolleiste der Zeile. Die Symbolleiste bleibt vorerst, wo sie ist, und eine Linie in der Hervorhebungsfarbe zeigt, wo sie stehen wird; lassen Sie die Maustaste los, um sie dorthin zu setzen. So ist jede Reihenfolge möglich, auch für die erste und die letzte Symbolleiste einer Zeile.
+  - **In eine andere Zeile.** Führen Sie den Zeiger in die andere Zeile: Die Linie zeigt dort den Platz. Jede Symbolleiste kann in jeder Zeile stehen, eine Format-Symbolleiste neben der Hauptleiste oder die Suchleiste unter den Format-Symbolleisten.
+  - **In eine eigene Zeile oder an den unteren Rand.** Führen Sie den Zeiger knapp unter die Symbolleistenzeilen (eine Linie quer durch das Fenster erscheint), um eine neue Zeile zu öffnen, oder auf den unteren Rand des Fensters, um die Symbolleiste dorthin zu setzen. Der untere Rand nimmt Symbolleisten nebeneinander und in Zeilen auf, wie der obere.
+  - **Esc**, oder ein Loslassen dort, wo keine Linie erscheint (zum Beispiel in der Mitte des Fensters), lässt alles, wie es war.
+
+  Die Symbolleisten hinter dem alten Platz rücken zusammen, und freier Platz, der vor der Symbolleiste war, bleibt in ihrer Zeile; an ihrem neuen Platz steht die Symbolleiste unmittelbar hinter der Symbolleiste davor, und Sie können sie von dort weiter nach rechts ziehen. In einem Fenster, das für den freien Platz, den Sie gelassen haben, zu schmal ist, schrumpft der Platz, bevor eine Symbolleiste Schaltflächen verliert; er kommt zurück, wenn das Fenster wieder breit ist. Eine ausgeschaltete Symbolleiste behält ihren Platz. Eine Symbolleiste kann nicht an den Seiten stehen oder als eigenes Fenster schweben. {{APP}} merkt sich die Zeilen, die Reihenfolge und die Abstände.
+- **Eine Symbolleiste ausschalten.** **Ansicht > Symbolleisten** hat für jede Symbolleiste einen Schalter; dieselbe Liste kommt mit einem Rechtsklick auf eine Symbolleiste oder auf den freien Platz neben den Symbolleisten. **Symbolleiste anzeigen** und **Formatleiste anzeigen** schalten wie bisher eine ganze Zeile um (die vier Leisten der ersten Zeile, die drei Format-Symbolleisten), und die Layouts verwenden diese beiden; der Schalter einer einzelnen Leiste ist gesperrt, solange ihre Zeile ausgeschaltet ist.
+- **Ansicht > Symbolleisten > Plätze der Symbolleisten zurücksetzen** bringt alle Symbolleisten an ihre Standardplätze zurück (die beiden Zeilen in ihrer Standardreihenfolge, nichts am unteren Rand) und schließt die Lücken dazwischen.
+
+### Eigene Symbolleisten
+
+**Ansicht > Symbolleisten > Symbolleisten anpassen** (oder ein Rechtsklick auf eine Leiste) öffnet ein Fenster mit zwei Listen: links die verfügbaren Befehle, rechts der Inhalt der Leiste. Wählen Sie oben die Symbolleiste.
+
+- Fügen Sie einen Befehl mit der Pfeilschaltfläche oder einem Doppelklick hinzu. Jeder Befehl der Menüs ist verfügbar, auch die der Schreibwerkzeuge (Bearbeiten > Schreibwerkzeuge); das Suchfeld über der Liste findet ihn.
+- Entfernen Sie eine Schaltfläche mit dem anderen Pfeil oder einem Doppelklick, und verschieben Sie sie mit den Schaltflächen Nach oben und Nach unten oder durch Ziehen.
+- **Trennlinie** und **Flexibler Abstand** lassen sich beliebig oft verwenden. Ein flexibler Abstand schiebt, was danach folgt, nach rechts; zwei davon zentrieren, was zwischen ihnen steht.
+- Manche Einträge sind mehr als ein Befehl: **Ansicht**, **Hinzufügen**, **Suche**, das **Schnellsuchfeld**, **Ansichtsart**, **Projektlesezeichen**, **Kommentare und Fußnoten**, **Layouts** und **Designs** (die Design-Schaltfläche mit ihrem Menü) für die vier Symbolleisten der ersten Zeile; die Listen für Formatvorlage, Schrift, Größe und Zeilenabstand und die vier Absatzschaltflächen für die drei Format-Symbolleisten. Ein solches Bedienelement gibt es nur einmal: Zu einer Symbolleiste hinzugefügt, wandert es dorthin von der Symbolleiste, die es hatte. Ein Bedienelement der ersten Zeile kann nicht auf eine Format-Symbolleiste, und umgekehrt auch nicht.
+- Unter den Listen wählen Sie kleine, mittlere oder große Symbole und ob die Symbolleisten der ersten Zeile Text neben oder unter den Symbolen zeigen.
+- **Standardsatz** setzt die Schaltflächen, mit denen das Programm kam, wieder in die Leiste.
+
+Enthält eine Leiste mehr, als ins Fenster passt, öffnet ein Pfeil an ihrem Ende den Rest. Eine Symbolleiste ohne jede Schaltfläche wird ausgeschaltet; unter **Ansicht > Symbolleisten** wieder eingeschaltet, hat sie ihren Standardsatz. Eine Symbolleiste, die Sie in einer Version vor 0.91 angeordnet haben, wurde auf die neuen Symbolleisten verteilt: Jede Schaltfläche ging zu der Symbolleiste, die sie in den Standardsätzen enthält, und was Sie entfernt hatten, bleibt entfernt.
+
+### Die Icon-Leiste
+
+Die **Icon-Leiste** enthält bis zu zehn Dokumentsymbole, die Sie oft verwenden. Ein Klick auf eines davon gibt dieses Symbol den ausgewählten Dokumenten und Ordnern (im Binder oder in der Pinnwand oder Gliederung, in der Sie arbeiten); die Schaltfläche **↺** dahinter gibt ihnen ihr Standardsymbol zurück, und die letzte Schaltfläche wählt die Symbole der Leiste. Blenden Sie die Leiste mit **Ansicht > Symbolleisten > Symbolleiste** ein oder aus.
+
+**Ansicht > Symbolleisten > Symbole für die Symbolleiste wählen…** (auch im Rechtsklick-Menü der Leiste) öffnet ein Fenster mit allen Symbolen links, einschließlich Ihrer eigenen Projektsymbole, und den Symbolen der Leiste rechts. Fügen Sie mit **Hinzufügen →** oder einem Doppelklick hinzu, entfernen Sie mit **← Entfernen** oder einem Doppelklick, und ändern Sie die Reihenfolge mit **Nach oben** und **Nach unten**. **Standardsatz** setzt die zehn Symbole zurück, mit denen das Programm kam (Grünes Buch, Korrekturgelesen, Abgehakt, Nicht abgehakt, Fragezeichen, Rote Fahne, Gelber Notizblock, Figurenblatt, Ortsblatt, Warnung).
+
+---
+
+## 3. Der Binder
+
+Jedes Projekt hat drei besondere Ordner:
+
+- **Entwurf** (in manchen Vorlagen *Manuskript*): alles, was einmal Ihr Buch wird. Nur was im Entwurf liegt, wird kompiliert.
+- **Recherche**: Notizen, Figurenblätter, Bilder, PDFs und alles andere, was Sie sammeln.
+- **Papierkorb**: Gelöschte Elemente warten hier, bis Sie **Projekt > Papierkorb leeren** wählen. Seine Frage nennt, wie jede Frage vor etwas, das sich nicht rückgängig machen lässt, den Schritt auf ihrer Schaltfläche und hat **Abbrechen** als Vorgabe, sodass die Eingabetaste nie etwas löscht (0.70).
+
+### Mit Elementen arbeiten
+
+- **Neues Dokument**: **Ctrl+N** (oder die Schaltfläche ➕). Es wird unter dem ausgewählten Element hinzugefügt. Ein Dokument namens „Untitled“ (oder ohne Titel) übernimmt, sobald Sie schreiben, die erste Zeile seines Textes als Titel: höchstens 60 Zeichen, an einem Wort abgeschnitten, ohne Anmerkungen im Text, Fußnoten im Text und Bilder. Der Titel folgt der ersten Zeile, bis Sie das Dokument selbst umbenennen; ein Dokument, dessen Text Sie löschen, heißt wieder „Untitled“. Dokumente namens „Untitled“, die schon Text haben, bekommen ihren Namen, wenn das Projekt geöffnet wird. Der Titel ist ein gewöhnlicher Titel: Er wird gespeichert, kompiliert (wenn Titel kompiliert werden, erscheint eine erste Zeile, die eine Überschrift ist, zweimal) und in Scrivener-Projekte geschrieben.
+- **Neuer Ordner**: **Alt+Shift+N**.
+- **Umbenennen**: **F2**, oder langsam auf den Titel doppelklicken.
+- **Verschieben**: Ziehen Sie Elemente mit der Maus, oder verwenden Sie **Ctrl+Alt+Pfeiltasten**: Nach oben und unten verschiebt innerhalb des Ordners; nach links aus dem Ordner heraus; nach rechts in das Element darüber. Wird ein Dokument *zwischen* zwei Elemente abgelegt, kommt es dorthin; wird es *auf* ein Element abgelegt, wird es dessen Unterdokument. Wenn Sie Dokumente versehentlich verschachteln, schalten Sie unter **Datei > Einstellungen > Verhalten** das Ablegen auf Textdokumente aus (Ordner nehmen immer Ablagen an).
+- **Einen ganzen Zweig öffnen oder schließen**: Halten Sie **Alt** gedrückt und klicken Sie auf den Pfeil eines Ordners oder einer Gruppe.
+- **Löschen**: Drücken Sie **Entf**. Das Element kommt in den Papierkorb; eine Pinnwand oder Gliederung, die es als eines von mehreren ausgewählten Dokumenten gezeigt hat, lässt es sofort los (0.94.0).
+- **Duplizieren**: **Ctrl+D**.
+- **Teilen und zusammenführen**: **Dokumente > Teilen > an der Auswahl** (**Ctrl+K**) schneidet das Dokument am Cursor in zwei; das geht nicht innerhalb einer Tabelle oder der Bildunterschrift eines Bildes (setzen Sie den Cursor davor oder dahinter). **Dokumente > Zusammenführen** (**Ctrl+Shift+M**) fügt die ausgewählten Dokumente mit ihren Synopsen, Stichwörtern und Notizen im ersten zusammen; die anderen kommen in den Papierkorb.
+- **Das Symbol ändern**: Rechtsklick > **Symbol ändern** (oder **Dokumente > Symbol ändern**), oder die Icon-Leiste (Abschnitt 2). Siehe „Symbole“ unten.
+
+**Rechtsklick.** Auf einem Dokument enthält das Rechtsklick-Menü die Befehle für die ausgewählten Dokumente (Umbenennen, Duplizieren, In den Papierkorb verschieben, Momentaufnahmen, Etikett, Status und mehr). Auf dem leeren Platz unter den Dokumenten bietet es nur an, was etwas Neues anlegt: **Neuer Text**, **Neuer Ordner**, **Neu aus Vorlage** und das **Erscheinungsbild** des Binders.
+
+Ein Dokument kann Unterdokumente haben, genau wie ein Ordner. Ordner und Dokumente verhalten sich gleich; Ordner sehen nur anders aus und öffnen sich standardmäßig als Pinnwand.
+
+**Die Tasten des Binders (0.94.0).** Hat der Binder die Tastatur, öffnet **Return** das ausgewählte Dokument im Editor und legt die Tastatur dorthin (wie ein Dateimanager), und die Pfeiltasten bewegen sich durch die Liste. Die **Leertaste** gehört zum Tippen eines Namens: Tippen Sie die ersten Buchstaben eines Titels, auch Leerzeichen („Kapitel t“), und die Auswahl springt zum ersten Titel, der so beginnt. Der Eintrag **Ansicht > Schnellanlege-Tasten im Binder** ist zunächst aus (auch nach einem Update). Eingeschaltet hat der Binder die Schnellanlege-Tasten: **Return** legt unter dem ausgewählten Dokument ein neues leeres Dokument an, und die **Leertaste** öffnet die ausgewählten Dokumente als Schnellansicht-Bereiche (auch in der Liste einer Sammlung oder einer Suche).
+
+Ein Klick im Binder lädt das Dokument in den Editor. Nach **Zurück**, einem Dokumentlink oder bei einem gesperrten Editor kann der Editor ein anderes Dokument zeigen als das im Binder ausgewählte: Ein **grauer Balken** markiert dann im Binder das Dokument des Editors. **Navigieren > Im Binder anzeigen** (**Ctrl+Shift+R**) wählt es aus.
+
+**Schmaler Binder, tiefe Ordner.** Jede Ebene von Ordnern wird um 12 px eingerückt (halb so viel wie früher; ändern Sie das unter **Datei > Einstellungen > Erscheinungsbild > Binder > Einzug pro Ebene**). Sind Titel länger, als der Binder breit ist, erscheint unten im Binder eine Bildlaufleiste, sodass Sie das Ende langer Titel lesen können, ohne den Binder zu verbreitern.
+
+### Symbole
+
+**Dokumente > Symbol ändern** (auch im Rechtsklick-Menü des Binders, der Pinnwand und der Gliederung) ist wie das Symbolmenü von Scrivener 3 für Windows aufgebaut:
+
+- **Symbol auf Standard zurücksetzen**: Das Standardsymbol eines Dokuments, Ordners oder einer Datei kommt zurück.
+- **Symbol aus Text…**: Erstellt ein Symbol aus bis zu drei Zeichen (zum Beispiel *PR*, *Ch1* oder *A*). Wählen Sie die Farbe des Kastens, der Buchstaben und des Rands; das kleine Bild zeigt das Ergebnis. Das Symbol wird im Projekt aufbewahrt und sofort den ausgewählten Dokumenten gegeben.
+- **Symbole verwalten…**: die Symbole dieses Projekts. **Bild hinzufügen…** macht aus Bildern (PNG, SVG, JPEG und andere) Symbole, **Aus Text…** ist dasselbe wie oben, **Umbenennen…** und **Löschen** ändern die Liste (Dokumente mit einem gelöschten Symbol bekommen ihr Standardsymbol zurück), **Für ausgewählte Dokumente verwenden** gibt das gewählte Symbol den ausgewählten Dokumenten. Die Symbole werden im Projekt gespeichert (Ordner *icons*), sodass sie mit ihm reisen.
+- **Zuletzt verwendet**: die letzten fünf Symbole, die Sie gewählt haben.
+- **Buch**, **Figuren**, **Flagge**, **Orte**, **Notizen**, **Aufgaben**, **Fernsehen**, **Zwischenstation**: Untermenüs mit den Symbolen jeder Gruppe in mehreren Farben (zum Beispiel blaues, grünes, rotes und gelbes Buch; sieben Flaggen; fünf Notizblöcke; Abgehakt und Nicht abgehakt, Bestanden, Nicht bestanden und Unklar unter Aufgaben).
+- Dann die einzelnen Symbole: Anhang, Tafel, Kalender, Filmklappe, Uhr, Zahnrad, Auge, Zahlen und Diagramme, Aktenschrank, Vorspann, Information, Rednerpult, Glühbirne, Lupe, Musik, Noten, Gliederung, Bleistift, Korrekturgelesen, Fragezeichen, Gutachterkommentare, Schere, Sprechblase, Anführungszeichen, Statistik, Sync-Ordner, Tabellen, Reagenzglas, Gedankenblase und Warnung.
+- **Projektsymbole**: Ihre eigenen Symbole (wenn das Projekt welche hat), und **Weitere Symbole (Desktop)**: die Symbole des Desktop-Designs, die frühere Versionen anboten.
+
+**Etikettenfarbe in Symbolen.** Die weißen Teile vieler Symbole (die Seiten eines Notizblocks, das Tuch einer weißen Flagge, das Papier eines Blatts, der Kasten eines aus Text gemachten Symbols) nehmen die Etikettenfarbe des Dokuments an. Schalten Sie das mit **Ansicht > Etikettenfarbe verwenden in > Symbole** ein oder aus (oder unter **Datei > Einstellungen > Erscheinungsbild > Binder**).
+
+**Symbole und Scrivener.** Die Symbole von {{APP}} sind neu gezeichnet, aber jedes trägt den Namen des Scrivener-Symbols, für das es steht. Ein Projekt im Scrivener-Format (Abschnitt 14) behält diese Namen, sodass Scrivener dafür sein eigenes Symbol zeigt; in Scrivener gemachte Symbole kommen hier als passendes Symbol zurück. Ihre eigenen Symbole kommen in den Ordner *Icons* der *.scriv*. Ein Symbol, für das dieses Programm kein Bild hat, behält seinen Namen und wird hier als das nächstliegende Symbol gezeigt.
+
+### Etiketten, Status und „In Kompilierung einbeziehen“
+
+Klicken Sie ein Element mit der rechten Maustaste an, um sein **Etikett** (eine Farbe, zum Beispiel für die Perspektivfigur) und seinen **Status** (zum Beispiel *Erster Entwurf* oder *Fertig*) festzulegen. Ändern Sie die Listen unter **Projekt > Projekteinstellungen**.
+
+Ein Dokument oder Ordner mit einem Etikett zeigt seine Farbe auch im Inspektor: Die Synopsenkarte und die Dokumentnotizen nehmen einen hellen Farbton der Etikettenfarbe an (15 % ihrer Sättigung), sodass Sie auf einen Blick sehen, welches Etikett das Element hat. Elemente ohne Etikett oder mit einem grauen behalten die normale Kartenfarbe.
+
+Die Symbolleiste **Etiketten** (**Ansicht > Symbolleisten > Etiketten**, zunächst aus) zeigt alle Etikettenfarben des geöffneten Projekts nebeneinander, dazu eine Schaltfläche für kein Etikett. Ein Klick setzt das Etikett der ausgewählten Dokumente sofort, wie **Dokumente > Etikett**; der Tooltipp jeder Farbe nennt das Etikett. Die Etiketten, mit denen ein neues Projekt beginnt, legen Sie unter **Datei > Einstellungen > Erscheinungsbild > Standardfarben** fest.
+
+Elemente, bei denen **In Kompilierung einbeziehen** ausgeschaltet ist, bleiben im Entwurf, werden aber beim Kompilieren weggelassen.
+
+### Sammlungen
+
+Sammlungen sind zusätzliche Listen von Dokumenten, zum Beispiel „Needs research“ oder „Scenes with Anna“. Zeigen Sie sie mit der Schaltfläche **Sammlungen** an. Verwenden Sie die Schaltfläche ➕ über dem Binder, um aus den ausgewählten Dokumenten eine Sammlung anzulegen, oder klicken Sie Dokumente mit der rechten Maustaste an und wählen Sie **Zur Sammlung hinzufügen**. Ein Dokument aus einer Sammlung zu entfernen löscht es nicht. Gespeicherte Suchen (Abschnitt 9) sind ebenfalls Sammlungen; sie aktualisieren sich selbst.
+
+- **Dokumente hinzufügen**: Ziehen Sie sie aus dem Binder (oder vom Kopfsymbol eines Editors, einer Pinnwand, einer Gliederung) auf den Reiter der Sammlung.
+- **In der Liste** einer Sammlung ziehen Sie Dokumente in die gewünschte Reihenfolge (die Reihenfolge im Binder ändert sich nicht), legen Dokumente an einer Stelle ab und drücken **Entf**, um die ausgewählten Dokumente aus der Sammlung zu nehmen. Suchsammlungen lassen sich so nicht ändern.
+- **Ziehen Sie die Reiter**, um die Sammlungen in eine andere Reihenfolge zu bringen.
+- Dokumente in der Liste lassen sich ziehen wie die im Binder, und die **Leertaste** öffnet die ausgewählten als Schnellansicht-Bereiche.
+
+---
+
+## 4. Schreiben
+
+### Textformatierung
+
+| Aktion | Tastenkürzel |
+|--------|--------------|
+| Fett / kursiv / unterstrichen | Ctrl+B / Ctrl+I / Ctrl+U |
+| Hervorheben | Ctrl+Shift+H |
+| Hochgestellt / tiefgestellt | Ctrl+Shift++ / Ctrl+= (deutsches Layout: Ctrl+Shift+D für tiefgestellt, siehe „Tastenkürzel und das Tastaturlayout“ unten) |
+| Linksbündig / zentriert / rechtsbündig | Ctrl+{ / Ctrl+\| / Ctrl+} (deutsches Layout: Alt+Shift+L / Alt+Shift+E / Alt+Shift+R) |
+| Schriftenfenster | Ctrl+T |
+| Schriftgröße größer / kleiner | Ctrl+> / Ctrl+< |
+| Absatzfenster | Ctrl+Alt+P |
+| Formatierung kopieren / Formatierung einfügen | Ctrl+Alt+C / Ctrl+Alt+V |
+| Vergrößern / verkleinern / Zoom zurücksetzen | Ctrl++ / Ctrl+- / Ctrl+0 |
+| Den Bereich unter der Maus zoomen | Ctrl+Mausrad |
+| Lineal ein- oder ausblenden | Ctrl+Alt+R |
+| Ohne Formatierung einfügen | Ctrl+Shift+V |
+| Mit Formatierung einfügen (aus anderen Programmen) | Ctrl+Alt+Shift+V |
+| Rückgängig / wiederherstellen | Ctrl+Z / Ctrl+Shift+Z (siehe „Rückgängig und Wiederherstellen“ unten) |
+
+Fett, kursiv, hochgestellt und dergleichen wirken auf die Auswahl. Ohne Auswahl ändern sie innerhalb eines Wortes das ganze Wort; am Ende eines Wortes (oder wenn nichts um den Cursor steht) ändern sie, was Sie als Nächstes tippen: Tippen Sie „H“, drücken Sie Ctrl+=, tippen Sie „2“, drücken Sie noch einmal Ctrl+= und tippen Sie „O“ für H₂O.
+
+**Formatvorlagen** (Überschrift 1–6, Titel, Untertitel, Zitatblock und Ihre eigenen) wählen Sie in der Liste links in der Formatleiste. Formatvorlagen sagen dem Kompilieren, was ein Absatz ist; verwenden Sie sie, statt Text von Hand groß und fett zu machen. Siehe „Formatvorlagen“ unten.
+
+**Was die Formatleiste zeigt.** Die Leiste zeigt den Text, wie Sie ihn sehen, für die ganze Auswahl. **Fett**, **Kursiv**, **Unterstrichen**, **Durchgestrichen**, hochgestellt und tiefgestellt sind an, wenn der ganze ausgewählte Text so aussieht, auch wenn seine Formatvorlage ihn so macht (das Fett einer Überschrift). Ein Klick schaltet um, was Sie sehen: **Fett** bei einer fetten Überschrift macht sie nicht fett, und sie bleibt nicht fett, wenn das Projekt gespeichert und wieder geöffnet wird. Die Schrift, die Größe, der Zeilenabstand, die Ausrichtungsschaltflächen und die Liste der Formatvorlagen zeigen ebenfalls die Auswahl; enthält die Auswahl zwei Schriften, zwei Größen, zwei Ausrichtungen oder Absätze zweier Formatvorlagen, bleibt dieses Feld leer (keine Ausrichtungsschaltfläche ist an). Eine in das leere Feld getippte Größe gibt der ganzen Auswahl diese Größe.
+
+**Listen**: Verwenden Sie die Listenschaltflächen, oder tippen Sie „- “ oder „1. “ am Anfang eines Absatzes.
+
+**Intelligente Typografie**: Gerade Anführungszeichen werden zu typografischen, und zwei Bindestriche werden beim Tippen zu einem Geviertstrich. Schalten Sie das unter **Datei > Einstellungen > Bearbeitung** aus.
+
+**Überarbeitungsmodus** (**Format > Überarbeitungsmodus**): Alles, was Sie tippen, wird mit einer von fünf Überarbeitungsfarben eingefärbt, sodass Sie sehen, was sich in einer Überarbeitungsrunde geändert hat. Wählen Sie **Aus**, um aufzuhören.
+
+**Abstände und Einzüge in der Formatleiste.** Vier Schaltflächen hinter den Listenschaltflächen legen für die Absätze fest, die den Cursor oder die Auswahl enthalten: den **Abstand davor** und den **Abstand danach** (0, 3, 6, 9, 12 oder 18 pt), den **Einzug der ersten Zeile** und den **Einzug des ganzen Absatzes** (in Zentimetern oder Zoll, wie das Lineal sie zeigt). Der Wert des Absatzes am Cursor ist angehakt; **Andere...** fragt nach einem beliebigen Wert. **Bearbeiten > Rückgängig** nimmt eine Änderung zurück. Eine Formatleiste, die Sie selbst angeordnet haben, bekommt die vier Schaltflächen einmal, hinter den Listenschaltflächen; **Ansicht > Symbolleisten > Symbolleisten anpassen** verschiebt oder entfernt sie.
+
+**Rückgängig und Wiederherstellen.** **Bearbeiten > Rückgängig** und **Bearbeiten > Wiederherstellen** wirken in dem Textfeld, das die Tastatur hat (der Editor, die Synopse, die Notizen, ein Titel), und sagen, was sie zurücknehmen werden: „Rückgängig: Tippen“, „Rückgängig: Einfügen“, „Rückgängig: Fett“, „Wiederherstellen: Löschen“. Hat die Tastatur einen anderen Ort, zum Beispiel im Binder, sind sie ausgegraut: Dokumente in den Papierkorb verschieben, den Papierkorb leeren und Momentaufnahmen löschen lässt sich so nicht rückgängig machen (ein Dokument im Papierkorb kommt zurück, indem man es herauszieht; zu Momentaufnahmen siehe Abschnitt 11). Der Pfeil neben den Schaltflächen **Rückgängig** und **Wiederherstellen** der Symbolleiste listet die Schritte auf, den nächsten zuerst; die Wahl eines Schritts nimmt diesen und jeden Schritt davor in der Liste zurück (oder stellt ihn wieder her). Jeder Befehl des Menüs Format ist ein Schritt.
+
+**Textfarbe und Hervorhebung in der Formatleiste.** Die beiden Schaltflächen mit einem farbigen Balken (ein Stift zum Hervorheben, ein Buchstabe *T* für die Textfarbe) funktionieren wie die von Scrivener und Word: Ein Klick wendet die im Balken gezeigte Farbe auf den ausgewählten Text an oder, ohne Auswahl, auf das, was Sie als Nächstes tippen. Ruht die Maus einen Moment auf einer Schaltfläche, öffnet sich darunter ein kleines Fenster mit **Rot, Blau, Gelb, Grün, Weiß und Schwarz**, dazu **Keine Hervorhebung** (oder **Automatisch** bei der Textfarbe) und **…** für jede andere Farbe. Ein Klick auf eine Farbe wendet sie an und macht sie zur Farbe der Schaltfläche, die sie für den nächsten Klick behält (auch nach einem Neustart). Eine Hervorhebung wird genau in der gewählten Farbe gezeichnet, auf einer hellen wie auf einer dunklen Seite. Wo der Text darauf schwer lesbar wäre (unter einem Kontrast von 4,5 : 1), wird er nur auf dem Bildschirm dunkel oder hell dargestellt; seine gespeicherte Farbe und die Hervorhebung in gespeicherten und kompilierten Dateien bleiben, wie gewählt.
+
+### Schriften
+
+Aller Text eines Projekts hat ein Aussehen: die **Standardformatierung** (siehe unten). Darüber können Sie jedem Textstück eine eigene Schrift geben.
+
+- **Formatleiste**: Die Schriftliste und das Größenfeld ändern den ausgewählten Text sofort. Ohne Auswahl ändern sie den **ganzen Absatz**, der den Cursor enthält (und was Sie dort als Nächstes tippen). Die Pfeile des Größenfelds ändern den Text bei jedem Klick; eine getippte Größe wird mit der **Eingabetaste** wirksam. Die Formatleiste, das Menü Format und ihre Tastenkürzel wirken auf den Text, in dem der Cursor zuletzt war: ein Editor, die Notizen im Inspektor, der mit Lesezeichen versehene Text im Inspektor oder ein langes Textfeld eines Objekts (dort: Fett, Kursiv, Unterstrichen, Durchgestrichen, Textfarbe und Hervorhebung). Ein Klick in das Größenfeld ändert daran nichts.
+- Nach einer Änderung in der Formatleiste bietet eine Leiste über dem Editor dasselbe für das ganze Projekt an: In einem Absatz mit einer Formatvorlage (zum Beispiel einer Überschrift) gibt **Formatvorlage „Überschrift 1“ ändern** der Formatvorlage die neue Schrift oder Größe, und aller Text dieser Formatvorlage in jedem Dokument folgt; in einem Absatz ohne Formatvorlage macht **Für den gesamten Text verwenden** sie zur Projektschrift oder -größe (siehe „Standardformatierung“ unten). Klicken Sie auf **×** oder schreiben Sie einfach woanders weiter, um die Änderung zu belassen, wo sie ist. Jedes Dokument, das sich ändert, bekommt zuvor eine Momentaufnahme.
+- **Format > Schrift > Schriften anzeigen…** (**Ctrl+T**) öffnet das Schriftenfenster: Schrift, Schriftschnitt (leicht, normal, fett, kursiv und was die Schrift sonst bietet), Größe, Unterstreichen, Durchstreichen, Großbuchstaben (Kapitälchen oder Versalien), Zeichenabstand in Prozent und Textfarbe. Nur was Sie im Fenster ändern, wird angewendet, sodass eine Auswahl mit fetten und normalen Wörtern sie behält. **Projektschrift** bringt den Text auf Schrift, Größe und Farbe des Projekts zurück.
+- **Fett, Kursiv, Unterstrichen, Durchgestrichen**: Eine Schaltfläche ist an, wenn *der ganze* ausgewählte Text dieses Format hat, wie auch immer Sie ihn ausgewählt haben (auch von rechts nach links). Eine nur teilweise fette Auswahl zeigt Fett aus, und **Fett** macht dann alles fett; ein zweiter Klick macht alles normal. Im Schriftenfenster wird ein gewählter Schriftschnitt ebenso für die ganze Auswahl gesetzt.
+- **Format > Schrift > Größer / Kleiner** (**Ctrl+>** / **Ctrl+<**) ändern die Größe um einen Punkt; jeder Teil der Auswahl behält seine eigene Größe und wächst oder schrumpft.
+- **Format > Schrift > Textfarbe…** und **Automatische Textfarbe**.
+
+Die Wahl der eigenen Schrift oder Größe des Projekts wird als „keine eigene Schrift“ gespeichert: Ein solcher Text folgt dem Projekt, wenn Sie die Standardformatierung später ändern.
+
+**Schriften mit mehreren Designs.** Manche Schriften halten mehrere Designs einer Schriftfamilie unter einem Namen: Sitka von Windows 11 zum Beispiel enthält die optischen Größen Small, Text, Subheading, Heading, Display und Banner (jede für ihren eigenen Größenbereich gezeichnet, die größeren schmaler und mit kleineren Kleinbuchstaben), und manche Schriften enthalten schmale oder breite Versionen auf dieselbe Weise. {{APP}} listet jedes Design als eigene Schrift (zum Beispiel **Sitka Small**, **Sitka Text**, **Sitka Banner**), nur mit den Schriftschnitten dieses Designs, sodass Fett und Kursiv im gewählten Design bleiben; vor 0.40.1 konnte fetter Text in einem anderen Design erscheinen und kleiner und schmaler aussehen. Die Schriftdateien werden nicht verändert. Die Schrift mit dem ursprünglichen Namen behält ihr eigenes Design, sodass früher damit gesetzter Text sein Aussehen behält.
+
+**Schriften installieren.** **Format > Schrift** hat die Befehle für Schriften, die noch nicht auf Ihrem Computer sind:
+
+- **Schriftdateien installieren…**: Wählen Sie Schriftdateien (TTF, OTF, TTC, PFB, WOFF oder eine ZIP-Datei, die sie enthält). Sie werden in Ihren eigenen Schriftordner kopiert (*~/.local/share/fonts*), und die Schriftlisten von {{APP}} kennen sie sofort; andere Programme sehen sie nach ihrem nächsten Start. Es wird kein Passwort gebraucht, und die Schriften gelten nur für Ihren Benutzer.
+- **Schriftordner öffnen**: öffnet diesen Ordner im Dateimanager; Schriften, die Sie selbst dorthin legen, werden nach **Schriftliste neu laden** gefunden.
+- **Schriftenverwaltung des Desktops öffnen**: öffnet die Schriftenverwaltung von KDE (Systemeinstellungen > Text & Schriften > Schriftenverwaltung) oder das Schriftprogramm eines anderen Desktops, wo Sie auch Schriften für alle Benutzer installieren und Schriften entfernen können.
+- **Schriftliste neu laden**: sucht nach neuen Schriften und macht sie bekannt.
+
+### Absatzformatierung
+
+**Format > Absatz > Absatz…** (**Ctrl+Alt+P**) legt für die Absätze, die den Cursor oder die Auswahl enthalten, fest: Ausrichtung, linken und rechten Einzug, Einzug der ersten Zeile (ein negativer Wert ergibt einen hängenden Einzug), Abstand davor und danach, Zeilenabstand (ein Vielfaches der Zeilenhöhe, eine genaue Höhe oder eine Mindesthöhe) und Tabulatoren (links, zentriert, rechts, Dezimalpunkt). Nur was Sie ändern, wird angewendet. **Auf Standard zurücksetzen** entfernt die von Hand gesetzte Formatierung; der Absatz folgt wieder seiner Formatvorlage und dem Projekt.
+
+Schnelle Wege: die Ausrichtungsschaltflächen, die Liste für den Zeilenabstand in der Formatleiste, **Format > Absatz > Zeilenabstand** und **Einzug vergrößern / Einzug verkleinern**.
+
+Das Anwenden einer Absatzformatvorlage ersetzt die von Hand gesetzte Formatierung in den Absätzen, die sie erreicht: Einzüge, Abstände, Ausrichtung und Tabulatoren sowie die Schriften, Größen, Farben, Zeichenabstände und Großbuchstaben des Textes darin. Fett, Kursiv, Unterstreichung, Durchstreichung, Hervorhebungen und Zeichenformatvorlagen bleiben. Markieren Sie Text über mehrere Absätze, um allen die Formatvorlage zu geben, und zwar jedem ganz; eine Auswahl, die genau am Anfang eines Absatzes endet (zum Beispiel nach **Shift+Nach unten**), lässt diesen Absatz in Ruhe.
+
+**Format > Formatierung kopieren** (**Ctrl+Alt+C**) merkt sich die Schrift- und Absatzformatierung am Cursor; **Formatierung einfügen** (**Ctrl+Alt+V**) wendet sie auf die Auswahl an oder, wenn nichts ausgewählt ist, auf den ganzen Absatz.
+
+### Unsichtbare Zeichen
+
+**Ansicht > Textbearbeitung > Unsichtbare Zeichen anzeigen** (auch die Schaltfläche ¶ der Symbolleiste) zeigt die Zeichen, die Sie nicht sehen: einen Punkt für jedes Leerzeichen, einen Pfeil für einen Tabulator, einen kleinen Kreis für ein geschütztes Leerzeichen, einen geknickten Pfeil für einen Zeilenumbruch (**Shift+Enter**) und ¶ am Ende jedes Absatzes. Sie werden nur auf dem Bildschirm gezeichnet, im Haupttext jedes Editors; sie sind nie Teil des Textes, eines Ausdrucks oder des Kompilierens. Die Wahl bleibt erhalten. Ihre Farbe ist die des Textes, ins Papier verblasst; eine eigene Farbe legen Sie unter **Datei > Einstellungen > Erscheinungsbild > Textmarkierungen** fest (oder Rechtsklick auf den Text > **Erscheinungsbild**), und sie gehört wie das Papier und der Text zum Aussehen des Projekts (der Schreibmodus behält die verblasste Textfarbe).
+
+### Das Lineal
+
+**Ansicht > Textbearbeitung > Lineal anzeigen** (**Ctrl+Alt+R**) zeigt über dem Text ein Lineal. Es gehört zu dem Absatz, der den Cursor enthält.
+
+- Die Marke oben ist der **Einzug der ersten Zeile**, die Marken unten sind der **linke Einzug** und der **rechte Einzug**. Ziehen Sie sie. Der linke Einzug nimmt die erste Zeile mit.
+- **Klicken** Sie in die untere Hälfte des Lineals, um einen Tabulator hinzuzufügen. Ziehen Sie einen Tabulator, um ihn zu verschieben; ziehen Sie ihn nach oben oder unten vom Lineal herunter, um ihn zu entfernen. Mit einem **Rechtsklick** auf einen Tabulator machen Sie ihn linksbündig, zentriert, rechtsbündig oder dezimal.
+- Die Marken rasten auf Viertelzentimetern ein (Sechzehntelzoll); halten Sie **Shift** gedrückt, um sie frei zu setzen.
+- Ein **Doppelklick** auf das Lineal öffnet das Absatzfenster. Das Rechtsklick-Menü schaltet zwischen Zentimetern und Zoll um (auch unter **Datei > Einstellungen > Bearbeitung**).
+
+Tabulatoren werden vom Anfang der ersten Zeile des Absatzes aus gemessen. Ohne eigene Tabulatoren hat ein Absatz alle 2,1 cm eine Tabulatorposition.
+
+Das Lineal zeigt wirkliche Längen. Der Zoom vergrößert die Buchstaben auf dem Bildschirm, nicht aber Einzüge und Tabulatoren; vergleichen Sie Abstände daher bei 100 %.
+
+### Standardformatierung
+
+- **Dieses Projekt**: **Projekt > Projekteinstellungen > Formatierung** (auch die Schaltfläche mit den Reglern in der Formatleiste) legt Schrift, Größe, Zeilenabstand, Einzug der ersten Zeile, Abstand nach Absätzen und die Ausrichtung des Textes des ganzen Projekts fest (vier Schaltflächen: linksbündig, zentriert, rechtsbündig, Blocksatz). Im Formatvorlagen-Bereich übernimmt **Keine Formatvorlage** > **Aus Auswahl neu definieren** diese Werte aus dem Absatz am Cursor (siehe „Formatvorlagen“ unten). **Anwenden** ändert alle Dokumente auf einmal und lässt das Fenster offen, sodass Sie das Ergebnis dahinter sehen; **OK** tut dasselbe und schließt das Fenster. **Aktuelle verwenden** übernimmt die Werte aus dem Absatz, der den Cursor enthält.
+  - Mit **Auch Text mit eigener Schrift, Größe oder eigenem Abstand ändern** (standardmäßig an) folgt auch Text, der von Hand formatiert wurde oder mit einer eigenen Schrift aus einem Import kam, solange er die Hauptschrift, -größe und den Hauptabstand seines Dokuments hat. Was sich vom Haupttext unterscheidet, bleibt, wie es ist: eine größere Überschriftenzeile, eine Passage in einer anderen Schrift, ein Absatz ohne Einzug. Schalten Sie das Feld aus, um allen von Hand formatierten Text in Ruhe zu lassen.
+  - Jedes Dokument, das sich ändert, bekommt zuvor eine Momentaufnahme (Inspektor, Reiter Momentaufnahmen, „Before the project formatting changed“), sodass Sie zurückgehen können. Drehbuchdokumente behalten ihr eigenes Format.
+- **Neue Projekte**: **Datei > Einstellungen > Bearbeitung > Formatierung neuer Projekte**, mit denselben vier Ausrichtungsschaltflächen und **Formatierung des aktuellen Editors verwenden**. Bestehende Projekte behalten ihre Formatierung. Der Standard ist 11,0 pt, Zeilenabstand 1,09, kein Einzug der ersten Zeile und 6 pt nach Absätzen. Aus Scrivener importierte Projekte beginnen ebenfalls mit diesen Werten (mit der Schrift, die im Scrivener-Projekt am häufigsten verwendet wird).
+- **Zurück zum Standard**: Wählen Sie Dokumente im Binder aus und wählen Sie **Dokumente > Umwandeln > Text auf Standardformatierung…**. Sie entscheiden, ob Schriften und Farben, Einzüge und Abstände, Ausrichtung und Tabulatoren entfernt werden. Fett, Kursiv, Formatvorlagen, Notizen und Links bleiben immer. Zuvor wird von jedem Dokument eine Momentaufnahme gemacht (Inspektor, Reiter Momentaufnahmen), sodass Sie zurückgehen können.
+
+### Formatvorlagen
+
+Eine Formatvorlage speichert Formatierung unter einem Namen. Der Text merkt sich den Namen; ändern Sie die Formatvorlage, ändert sich also aller Text, der sie verwendet, im ganzen Projekt mit.
+
+Es gibt zwei Arten:
+
+- **Absatzformatvorlagen** gelten für ganze Absätze. Sie enthalten Absatzformatierung (Ausrichtung, Einzüge, Abstände, Zeilenabstand, Tabulatoren) und, wenn Sie wollen, Zeichenformatierung für den Absatz (Schrift, Größe, Fett, Kursiv, Farbe). In Listen sind sie mit „¶“ markiert oder mit „¶a“, wenn sie Zeichenformatierung enthalten.
+- **Zeichenformatvorlagen** gelten für den ausgewählten Text oder für das Wort am Cursor. Sie enthalten nur Zeichenformatierung. Sie sind mit „a“ markiert.
+
+Lassen Sie Fließtext bei **Keine Formatvorlage**. Er folgt der Standardformatierung des Projekts, und das Kompilieren kann ihm jedes Aussehen geben. Verwenden Sie Formatvorlagen nur für Text, der anders als Fließtext aussehen soll.
+
+**Eine Formatvorlage anwenden**: Wählen Sie sie in der Liste links in der Formatleiste, unter **Format > Formatvorlage**, im Menü eines Rechtsklicks auf den Text oder im **Formatvorlagen-Bereich** (**Format > Formatvorlage > Formatvorlagen-Bereich**), einem kleinen Fenster, das neben dem Text geöffnet bleibt; ein Doppelklick auf eine Zeile wendet die Formatvorlage an. **Keine Formatvorlage** entfernt eine Zeichenformatvorlage aus der Auswahl; wo es keine gibt, entfernt es die Absatzformatvorlage. Fenster und Fragen, die der Formatvorlagen-Bereich öffnet, erscheinen über dem Bereich.
+
+**Die Formatvorlagenliste** der Formatleiste und des Rechtsklick-Menüs (**Formatvorlage**) zeigt die Formatvorlagen, die Sie auswählen, in der Reihenfolge, die Sie wählen: **Formatvorlagenliste anpassen…** (unten in der Liste und unter **Format > Formatvorlage**) listet alle Einträge auf; entfernen Sie das Häkchen bei denen, die Sie nicht brauchen, ziehen Sie sie in eine andere Reihenfolge oder verwenden Sie die Pfeile, und **Alle, in der Reihenfolge der Formatvorlagen** bringt die vollständige Liste zurück. Bei mehr als zehn Einträgen zeigt die Liste zehn und scrollt. Darunter, immer sichtbar: **Neue Formatvorlage aus Auswahl…**, **Formatvorlage aus Auswahl neu definieren…**, **Formatvorlagen-Bereich** und **Formatvorlagenliste anpassen…**. Eine Formatvorlage, die nicht in der Liste steht, wird in der Formatleiste dennoch genannt, wenn der Text sie verwendet; **Format > Formatvorlage** listet immer alle Formatvorlagen auf. Die Auswahl gehört zum Projekt (eine neue Formatvorlage erscheint am Ende der Liste) und ist Teil der Formatvorlagen in Projekteinstellungsdateien.
+
+**Keine Formatvorlage ist die Formatvorlage des Haupttextes.** Klicken Sie im Formatvorlagen-Bereich mit der rechten Maustaste auf **Keine Formatvorlage** (oder wählen Sie sie aus und verwenden Sie die Schaltfläche „Neu definieren“) und wählen Sie **Aus Auswahl neu definieren…**: Schrift, Größe, Zeilenabstand, Einzug der ersten Zeile, Abstand nach Absätzen und Ausrichtung des Absatzes am Cursor werden zur Formatvorlage des Haupttextes des Projekts (die Werte von **Projekt > Projekteinstellungen > Formatierung**). Eine Frage zeigt zuerst die Werte. Aller Text ohne Formatvorlage im ganzen Projekt folgt, auch Text mit eigener Schrift, Größe oder eigenem Abstand; Text mit Formatvorlage behält, was seine Formatvorlage festlegt. Jedes Dokument, das sich ändert, bekommt zuvor eine Momentaufnahme.
+
+**Eine Formatvorlage anlegen**:
+
+1. Formatieren Sie etwas Text so, wie die Formatvorlage aussehen soll, und klicken Sie hinein oder markieren Sie einen Teil davon.
+2. Wählen Sie **Format > Formatvorlage > Neue Formatvorlage aus Auswahl…** (oder die Plus-Schaltfläche des Formatvorlagen-Bereichs).
+3. Geben Sie einen Namen ein und wählen Sie, was gespeichert werden soll: die gesamte Formatierung (eine Absatzformatvorlage mit Zeichenformatierung), nur die Absatzformatierung oder die Zeichenattribute (eine Zeichenformatvorlage).
+4. Entscheiden Sie, ob die Schrift und die Schriftgröße Teil der Formatvorlage sind. Ohne sie behält die Formatvorlage die Schrift des umgebenden Textes.
+5. Wählen Sie bei Absatzformatvorlagen, welche Formatvorlage der nächste Absatz bekommt, wenn Sie am Ende die Eingabetaste drücken.
+
+Eine Absatzformatvorlage speichert nur, was sich vom Fließtext unterscheidet. Alles andere folgt weiter der Formatierung des Projekts, sodass eine neue Standardschrift auch Text mit Formatvorlage erreicht.
+
+**Eine Formatvorlage ändern**:
+
+- **Format > Formatvorlage > Formatvorlage aus Auswahl neu definieren…** übernimmt die Formatierung des Textes am Cursor, wie oben. Eine Absatzformatvorlage bleibt eine Absatzformatvorlage, eine Zeichenformatvorlage eine Zeichenformatvorlage.
+- **Format > Formatvorlage > Formatvorlage bearbeiten** (oder die Stift-Schaltfläche des Formatvorlagen-Bereichs) öffnet ein Fenster mit dem Namen, **Schrift…**, **Absatz…** und der Formatvorlage des folgenden Absatzes. Eine Vorschau zeigt das Ergebnis.
+
+Danach geht {{APP}} das ganze Projekt durch und aktualisiert den Text, in geöffneten Dokumenten und in den Dateien der anderen. Was die Änderung berührt (Schrift, Größe, Fett, Kursiv, Farbe, Zeichenabstand, Großbuchstaben, Ausrichtung, Einzüge, Abstände, Zeilenabstand, Tabulatoren), erreicht **allen** Text der Formatvorlage, auch dort, wo dieser Text einen eigenen Wert hatte: von Hand gesetzt oder durch einen Import mitgebracht (importierte Überschriften nennen meist in jedem Absatz ihre Schrift, Größe und ihren Abstand). Formatierung, die die Änderung nicht berührt, bleibt, wie sie ist, zum Beispiel ein von Hand gefärbtes Wort in einer Überschrift, wenn sich nur die Größe der Überschrift geändert hat. Jedes Dokument, das sich ändert, bekommt zuvor eine Momentaufnahme („Before the style ... changed“). Das lässt sich mit **Bearbeiten > Rückgängig** nicht rückgängig machen; stellen Sie eine Momentaufnahme wieder her, definieren Sie die Formatvorlage erneut oder verwenden Sie bei einer eingebauten Formatvorlage **Auf die eingebaute Definition zurücksetzen** im Formatvorlagen-Bereich.
+
+**Umbenennen und löschen**: Benennen Sie eine Formatvorlage in **Formatvorlage bearbeiten** um. Die Überschriften, Titel, Untertitel, Zitatblock, Zentriert und Bildunterschrift behalten ihre Namen, weil das Kompilieren und die Markdown-Dateien sie beim Namen kennen. Löschen Sie eine Formatvorlage (**Format > Formatvorlage > Formatvorlage löschen**), behält Text, der sie verwendet hat, sein Aussehen als von Hand gesetzte Formatierung.
+
+**Andere Projekte**: **Format > Formatvorlage > Formatvorlagen importieren…** liest die Formatvorlagen eines anderen Projekts. **Diese Formatvorlagen in neuen Projekten verwenden** macht die Formatvorlagen des geöffneten Projekts zum Ausgangssatz jedes neuen Projekts; **Datei > Einstellungen > Bearbeitung** geht zu den eingebauten Formatvorlagen zurück.
+
+Im Formatvorlagen-Bereich ändern die Pfeilschaltflächen die Reihenfolge der Formatvorlagen in allen Listen.
+
+### Markdown oder RTF: wie Dokumente gespeichert werden
+
+Jedes Projekt speichert seine Dokumente in einem von zwei Formaten. Sie wählen beim Anlegen oder Importieren eines Projekts und können später unter **Projekt > Projekteinstellungen > Formatierung** wechseln.
+
+- **Markdown** (empfohlen): einfache Textdateien, die jedes Programm öffnen kann, heute und in fünfzig Jahren. Das Aussehen des Textes kommt von der Standardformatierung. Schriften und Absatzformatierung, die Sie von Hand setzen, werden als kleine Markierungen in den Text geschrieben, nur dort, wo Sie sie verwendet haben (Abschnitt 18); alles andere bleibt schlicht.
+- **RTF**: Rich-Text-Dateien wie in einem Textverarbeitungsprogramm. Jeder Absatz trägt seine vollständige Formatierung, sodass eine Änderung der Standardformatierung bestehenden Text nicht erreicht.
+
+Das Wechseln wandelt jedes Dokument um. Von RTF nach Markdown bleiben Schriften, Farben, Ausrichtung, linke und rechte Einzüge und Tabulatoren erhalten. Zeilenabstand, Einzug der ersten Zeile und Absatzabstand von Text, der aus anderen Programmen kam, folgen danach dem Projekt. Legen Sie zuerst eine Sicherung an (**Datei > Sichern > Jetzt sichern**).
+
+In ein Markdown-Projekt aus anderen Programmen eingefügter Text nimmt das Aussehen des umgebenden Textes an (Fett, Kursiv und Links bleiben). Innerhalb von {{APP}} kopierter Text behält seine Schriften. **Bearbeiten > Mit Formatierung einfügen** (**Ctrl+Alt+Shift+V**) behält das Aussehen von Text aus einer Textverarbeitung oder einer Webseite ebenfalls: Schriften, Größen, Farben sowie Ausrichtung, Einzüge und Abstände seiner Absätze (der erste eingefügte Absatz bringt seine Absatzformatierung nur in einen leeren Absatz mit). **Bearbeiten > Einfügen und Stil anpassen** (**Ctrl+Shift+V**) tut das Gegenteil und fügt einfachen Text ein. Das Rechtsklick-Menü des Textes bietet alle drei untereinander an: **Einfügen**, **Einfügen und Stil anpassen** und **Mit Formatierung einfügen**.
+
+Um eine einzelne Datei außerhalb eines Projekts zu konvertieren, verwenden Sie **Datei > Markdown ⇄ RTF-Datei konvertieren…**.
+
+### Kommentare und Fußnoten
+
+- **Kommentar** (**Shift+F2**): Markieren Sie Text und fügen Sie einen Kommentar hinzu. Der Text wird hervorgehoben, und der Kommentar erscheint im Inspektor.
+- **Fußnote** (**Ctrl+Shift+F2**): Markieren Sie das Wort, zu dem die Fußnote gehört; schreiben Sie die Fußnote im Inspektor.
+- **Anmerkung im Text** (**Ctrl+Shift+A**): eine direkt im Text geschriebene Notiz, farbig in einer Sprechblase gezeigt. Anmerkungen werden beim Kompilieren entfernt (außer Sie wählen, sie als Kommentare zu exportieren).
+- **Fußnote im Text** (**Ctrl+Alt+F**): eine direkt im Text geschriebene Fußnote.
+
+Um die Farbe einer Anmerkung im Text zu ändern, wählen Sie sie aus (**Bearbeiten > Auswählen > Anmerkung oder Notiz auswählen** wählt die ganze Notiz am Cursor aus) und wählen Sie eine Textfarbe; die Anmerkung behält diese Farbe. **Format > Schrift > Automatische Textfarbe** gibt ihr wieder das übliche Rot.
+
+Klicken Sie im Inspektor auf einen Kommentar, um dorthin zu springen. Klicken Sie ihn mit der rechten Maustaste an, um seine Farbe zu ändern, ihn in eine andere Art Notiz umzuwandeln oder ihn zu löschen.
+
+Ein Klick auf kommentierten Text öffnet den Inspektor mit diesem Kommentar. **Alt+Klick** öffnet stattdessen den Kommentar oder die Fußnote in einem kleinen Fenster an der Maus, wo Sie ihn ohne den Inspektor lesen und ändern können; klicken Sie woanders hin oder drücken Sie **Esc**, um es zu schließen.
+
+### Bilder und Links
+
+- **Einfügen > Bild aus Datei…** setzt ein Bild in den Text; Sie können ein Bild auch in den Text ziehen oder eines einfügen. Klicken Sie das Bild mit der rechten Maustaste an und wählen Sie **Bildgröße…**, um zu ändern, wie groß es erscheint.
+- **Einfügen > Mit Dokument verknüpfen…** (**Ctrl+L**) verknüpft den ausgewählten Text mit einem anderen Dokument im Projekt. Ein Klick auf den Link öffnet dieses Dokument (im anderen Editor, im selben Editor, im Manuskripthalter oder in einem Schnellansicht-Bereich; siehe **Datei > Einstellungen > Verhalten**).
+- **Einfügen > Weblink einfügen…** verknüpft mit einer Webseite.
+- Web- und Mail-Links (*http*, *https*, *mailto*) öffnen sich sofort. Jedes andere Ziel eines Links, in einem Text, einer Mindmap, einem Lesezeichen oder einer importierten Webseite (eine Datei, ein Ordner, eine Netzwerkadresse, die Linkart eines anderen Programms), wird zuerst vollständig angezeigt und erst geöffnet, wenn Sie auf **Öffnen** klicken; solche Links können mit einem Projekt, einer Webseite oder einer Word-Datei von jemand anderem kommen. Bei einer Datei oder einem Ordner auf Ihrem Computer nennt die Frage ihre Art (zum Beispiel „Textdokument (.txt)“), ihren ganzen Namen und ihren Ordner; ein langer Name wird umgebrochen, sodass sein Ende lesbar ist, und bei einer Datei, die nicht da ist, steht, dass sie fehlt. Links zu Programmen, Skripten, Verknüpfungen und Installationsprogrammen werden nie geöffnet; öffnen Sie diese selbst im Dateimanager, wenn Sie ihnen vertrauen.
+
+### Tabellen
+
+**Einfügen > Tabelle…** fragt nach der Zahl der Zeilen und Spalten und nach dem Design und setzt die Tabelle an den Cursor. In einer Tabelle geht **Tab** zur nächsten Zelle (in der letzten Zelle fügt er eine Zeile hinzu) und **Shift+Tab** zurück. **Format > Tabelle**, auch im Rechtsklick-Menü in einer Tabelle, hat den Rest:
+
+- **Zeile oberhalb / unterhalb einfügen**, **Spalte links / rechts einfügen**.
+- **Zeilen löschen** und **Spalten löschen** (die der ausgewählten Zellen oder der Zelle mit dem Cursor), **Tabelle löschen**.
+- **Zellen zusammenführen** verbindet die ausgewählten Zellen zu einer; **Zelle teilen** teilt eine verbundene Zelle wieder.
+- **Zellenfarbe…** gibt den ausgewählten Zellen einen eigenen Hintergrund; **Zellenfarbe des Designs** nimmt ihn wieder weg.
+- **Tabelleneigenschaften…** ändert das Design.
+
+**Das Design.** Fünf Designs sind vorgefertigt: **Gitter**, **Gitter mit Kopfzeile**, **Gestreifte Zeilen**, **Linien zwischen den Zeilen** und **Keine Linien**. Wählen Sie eines und ändern Sie, was Sie wollen; das Design ist dann **Eigenes**:
+
+- **Linien**: Breite (0: keine Linien), Farbe und **Nur zwischen den Zeilen** (keine Linien an den Seiten).
+- **Zellen**: der Abstand innerhalb einer Zelle und der Abstand zwischen Zellen (0: benachbarte Zellen teilen sich eine Linie).
+- **Kopfzeilen**: wie viele Zeilen oben Überschriften sind, mit ihrer Farbe. Drucken und Kompilieren wiederholen sie oben auf jeder Seite, auf die eine lange Tabelle weitergeht. **Jede zweite Zeile** bekommt eine eigene Farbe, wenn Sie eine wählen.
+- **Platz im Text**: die Breite (ein Anteil der Textbreite oder so breit wie ihr Inhalt), die Spaltenbreiten (alle gleich oder Anteile wie „30, 70“), die Ausrichtung und wo sie steht: **In eigenen Zeilen** oder **Links** oder **Rechts**, wobei der Text daneben fließt.
+
+Später hinzugefügte Zeilen und Spalten behalten das Design (die Streifen gehen weiter). Der Text in Tabellenzellen wird nicht im Blocksatz gesetzt, auch wenn es der Fließtext ist (eine schmale Zelle würde ihre Wörter auseinanderziehen); eine Ausrichtung, die Sie einem Absatz in einer Zelle geben, bleibt. Tabellen werden in beiden Speicherformaten und im Scrivener-Format aufbewahrt; auch Tabellen in RTF-Dateien aus anderen Programmen (zum Beispiel eine als RTF gespeicherte Word-Datei) werden zu Tabellen.
+
+### Bilder neben dem Text, Bildunterschriften und Beschreibungen
+
+Klicken Sie ein Bild mit der rechten Maustaste an und wählen Sie **Bild…** (oder setzen Sie den Cursor daneben und wählen Sie **Format > Bild…**):
+
+- **Breite auf dem Bildschirm**: Die Höhe folgt; **Originalgröße** geht zur eigenen Größe des Bildes zurück.
+- **Position**: **In der Zeile, wie ein Buchstabe** (wie bisher), **Links** oder **Rechts**, wobei der Text darum herumfließt, oder **Zentriert in eigenen Zeilen**.
+- **Bildunterschrift**: wird unter dem Bild gezeigt und mit ihm kompiliert. Ein Bild in der Zeile hat keine Bildunterschrift; geben Sie ihm zuerst eine Position.
+- **Beschreibung**: was das Bild zeigt, in einem oder zwei Sätzen. Sie wird im Text nicht angezeigt. E-Books, Word-Dateien und Markdown bewahren sie beim Bild auf (als seinen „Alternativtext“), und Screenreader lesen sie Menschen vor, die das Bild nicht sehen können.
+
+Das Bild mit seiner Bildunterschrift bewegt sich als ein Stück; tippen Sie die Bildunterschrift wie jeden anderen Text unter das Bild (sie hat die Formatvorlage **Bildunterschrift**).
+
+### Suchen und Ersetzen
+
+- **Ctrl+F** (**Bearbeiten > Suchen > Suchen**) öffnet die Suchleiste über dem Text. Sie zeigt, wie viele Treffer es gibt, und hebt sie hervor; **F3** und **Shift+F3** gehen zum nächsten und vorherigen Treffer. **Groß-/Kleinschreibung beachten** und **Ganze Wörter** grenzen die Suche ein.
+- **Ctrl+H** fügt die Zeile zum Ersetzen hinzu: **Ersetzen** ändert den ausgewählten Treffer und geht zum nächsten, **Alle ersetzen** ändert jeden Treffer im Text, den Sie sehen (ein Schritt für **Rückgängig**). Der neue Text übernimmt die Formatierung des Textes, den er ersetzt, und Kommentare bleiben angehängt.
+- **Ctrl+E** (**Auswahl für Suche verwenden**) setzt den ausgewählten Text in die Suchleiste.
+- Im Gesamttext funktionieren Suchen und Ersetzen über alle gezeigten Dokumente.
+- Steht die Tastatur in einem **Manuskripthalter**, durchsucht Ctrl+F das Dokument des Manuskripthalters.
+- **Ctrl+Shift+F** durchsucht das ganze Projekt, **Bearbeiten > Suchen > Projekt ersetzen** ersetzt im ganzen Projekt, und **Bearbeiten > Suchen > Nach Formatierung suchen** sucht nach Hervorhebungen, Kommentaren, Farben und Formatvorlagen (alles in Abschnitt 9).
+- Auf der Pinnwand und in der Gliederung öffnet Ctrl+F stattdessen die **Filterleiste** (Abschnitt 5).
+
+### Rechtschreibung
+
+Falsch geschriebene Wörter bekommen eine rote Wellenlinie; klicken Sie irgendwo auf das unterstrichene Wort mit der rechten Maustaste, um Vorschläge zu sehen oder das Wort Ihrem Wörterbuch hinzuzufügen (auch bei Wörtern mit Apostroph, wie „Kayel's“ oder „D'Nersun“: Das Menü bietet immer das ganze unterstrichene Wort an). Bei einem falsch geschriebenen Wort ist das Menü kurz, damit es direkt an der Maus aufgeht: die Vorschläge, **Zum Wörterbuch hinzufügen „...“**, **„...“ ignorieren** und **Weitere Befehle** mit allem, was das Menü sonst enthält (Ausschneiden, Kopieren, Einfügen, Formatvorlage, Kommentare, Erscheinungsbild ...). Der eigene Name des Programms und seine Begriffe ({{APP}}, Gliederung, Unterdokument, Manuskripthalter) gelten immer als richtig. Wählen Sie die Sprache unter **Datei > Einstellungen > Korrekturen** (Seite Rechtschreibung); die Wörterbücher, die Sie als Erweiterungen installiert haben (eines je Sprache des Programms, jedes mit seiner Lizenz), stehen in dieser Liste; dort wählen Sie auch die Unterstreichung (Wellen, Punkte oder eine gerade Linie) und ob Wörter mit Zahlen („Route66“) geprüft werden, und **Persönliche Wortliste anzeigen...** zeigt die Wörter, die Sie hinzugefügt haben, und entfernt die, die Sie versehentlich hinzugefügt haben. Die Wörterbücher kommen von Ihrem System und aus Erweiterungen. Unter Ubuntu und Kubuntu ist Englisch installiert; installieren Sie für andere Sprachen das passende *hunspell*-Paket in Discover (zum Beispiel „hunspell-de-de“ für Deutsch).
+
+### Besondere Einfügungen
+
+Das Menü **Einfügen** bietet auch das aktuelle Datum und die Uhrzeit, Sonderzeichen (Geviertstrich, Halbgeviertstrich, Auslassungspunkte, geschütztes Leerzeichen, Paragraphenzeichen, Aufzählungspunkt), **automatische Nummern** und **Platzhalter** an, die das Kompilieren ersetzt (Abschnitt 13).
+
+### Korrekturen beim Tippen
+
+**Datei > Einstellungen > Korrekturen** legt fest, was beim Tippen korrigiert wird. Ein Wort wird korrigiert, wenn Sie es beenden, also wenn Sie danach ein Leerzeichen, ein Return oder ein Satzzeichen tippen; **Ctrl+Z** unmittelbar danach nimmt allein die Korrektur zurück.
+
+- **Satzanfänge großschreiben**: Das erste Wort eines Satzes bekommt einen Großbuchstaben (nicht nach Abkürzungen wie „Dr.“ oder „e.g.“). **„i“ großschreiben**: „i“ und „i'm“ werden zu „I“ und „I'm“. Beide sind zunächst aus.
+- **Intelligente Anführungszeichen** im Stil Ihrer Wahl (“Englisch”, „Deutsch“, »Deutsch«, «Französisch», ”Schwedisch”); ein Apostroph innerhalb eines Wortes ist immer ’. Wo das schließende einfache Zeichen nicht der Apostroph ist (deutsch ‚…‘, französisch ‹…›), schließt ein ', das direkt nach einem Wort getippt wird, ein im Absatz offenes einfaches Zeichen; tippen Sie danach weiter Buchstaben („geht's“), wird es wieder zum Apostroph. Zwei Bindestriche werden zu einem Geviertstrich (—); drei Punkte können zu einem Auslassungszeichen werden (zunächst aus). Im Drehbuchmodus lassen sich diese ausschalten.
+- **Anführungszeichen, die schon im Projekt stehen** (seit 0.61.1): Unter **Intelligente Anführungszeichen** macht **In typografische Anführungszeichen umwandeln…** aus den geraden " und ' des Projekts die Zeichen des Stils, der neben **Intelligente Anführungszeichen verwenden** gewählt ist, und **In gerade Anführungszeichen umwandeln…** macht aus jedem typografischen Anführungszeichen und Apostroph wieder " und '. Ein Fenster wie Projekt ersetzen (Abschnitt 9) öffnet sich: noch einmal die Richtung und der Stil, wo umgewandelt wird (Titel, Text, Notizen, Synopsen, eigene Metadaten, Kommentare und Fußnoten), der Umfang (das gesamte Projekt oder die im Binder ausgewählten Dokumente, der Papierkorb nur, wenn Sie ihn ankreuzen) und eine Momentaufnahme jedes Textes, bevor er sich ändert (zunächst angekreuzt). **Zählen** zeigt, wie viele Zeichen sich ändern würden; **Umwandeln** fragt noch einmal und tut es. Die Formatierung bleibt (ein fettes Anführungszeichen bleibt fett). Ein Zeichen öffnet nach nichts, einem Leerzeichen, einer Klammer, einem Gedankenstrich oder einem öffnenden Zeichen und schließt sonst; ein Apostroph innerhalb eines Wortes oder vor einer Zahl ('90s) wird zu ’. Ein gerades Zeichen mit einem Leerzeichen auf beiden Seiten bleibt, wie es ist, und ein Apostroph am Wortanfang ('tis) wird zu einem öffnenden Zeichen: Sehen Sie sich diese danach an. Suchen und Ersetzen kann das nicht, weil aus einem Zeichen je nach seinen Nachbarn ein öffnendes oder ein schließendes werden muss.
+- **Datenerkennung**: Eine getippte Webadresse wird zu einem Link; **[[Titel]]** wird zu einem Link auf das Dokument mit diesem Titel, und gibt es keines, wird neben dem Text ein neues leeres Dokument dieses Namens angelegt (die „Dokumentlinks“ von Scrivener).
+- **Zusätzliche Ersetzungen**: eine Liste dessen, was Sie tippen, und dessen, was daraus wird, zum Beispiel „(c)“ und ©, „->“ und →. **Ersetzungen bearbeiten...** ändert die Liste; **Standardersetzungen** bringt die Liste zurück, mit der das Programm kommt.
+- **Automatische Vervollständigung**: im Drehbuchmodus die Liste der Figurennamen und Szenenüberschriften, die beim Tippen angeboten wird.
+
+### Zoom, Schreibmaschinen-Scrollen und feste Breite
+
+- **Ctrl+Mausrad** zoomt den Bereich unter der Maus, wo auch immer er ist: die Editoren, den Binder, den Inspektor, die Gliederung, die Pinnwand (Karten und ihr Text zusammen), eine Mindmap, den Schreibmodus und eigene Fenster (Schnellansicht, die Schreibwerkzeuge); die Tastatur kann woanders sein. Jeder Bereich behält seinen Zoom, bis Sie ihn wieder ändern.
+- **Ctrl++ / Ctrl+-** oder das Zoomfeld in der Fußleiste vergrößern den Text auf dem Bildschirm, ohne die Schriftgröße zu ändern. **Ansicht > Zoom zurücksetzen** (**Ctrl+0**) geht zum Standard-Textzoom zurück.
+- **Datei > Einstellungen > Bearbeitung** legt den Zoom fest, mit dem jeder Bereich beginnt („Standard-Textzoom“, für jeden Bereich des Fensters und jeden Teil mit eigenem Zoom: die Synopse, die Notizen, die Lesezeichenlisten, der mit Lesezeichen versehene Text, die Liste und der Text der Momentaufnahmen, die Objektliste und das Objektblatt im Inspektor und im Objektefenster, neue Mindmaps) und ob die Editoren mit dem zuletzt gehabten Zoom wieder öffnen („Zuletzt gewählten Zoom der Haupteditoren wiederherstellen“).
+- **Wo Sie waren.** {{APP}} merkt sich mit dem Projekt für jedes Dokument die Stelle des Cursors und den Teil des Textes auf dem Bildschirm: Wird ein Dokument wieder gezeigt (aus dem Binder, über einen Link, mit Zurück und Vorwärts, im Manuskripthalter, in einem Schnellansicht-Bereich oder nach dem erneuten Öffnen des Projekts), öffnet es sich dort, wo Sie es verlassen haben. Ein Ordner im Gesamttext merkt sich, welches seiner Dokumente den Cursor hatte. Ein Suchergebnis oder ein Link, der auf eine bestimmte Stelle zeigt, geht stattdessen dorthin. Bilder behalten ihren Zoom und PDF-Dateien ihren Zoom und ihre Seite.
+- **Schreibmaschinen-Scrollen** (**Ansicht > Textbearbeitung**) hält die Zeile, in die Sie tippen, in der Mitte des Bildschirms.
+- Der **Editor mit fester Breite** zeigt den Text als zentrierte Spalte von angenehmer Breite (500 px bei 100 %, wenn Sie es nicht ändern), wie breit das Fenster auch ist. Schalten Sie ihn aus oder ändern Sie die Breite unter **Datei > Einstellungen > Erscheinungsbild > Haupteditor** („Editor mit fester Breite verwenden“, „Breite der Textspalte“) oder mit einem Rechtsklick auf das Papier (**Erscheinungsbild > Breite der Textspalte**). Das Papier der Spalte ist standardmäßig #d1d495 und der Bereich daneben #999999 („Papier“ und „Neben der Textspalte“ unter den Farben des Haupteditors); sie bleiben gleich, wenn Sie ein anderes Design wählen, bis Sie sie ändern oder zurücksetzen.
+- **Rand neben dem Text.** Links und rechts vom Text hat das Papier einen Rand in seiner eigenen Farbe, damit der Text nicht an den Rand des Papiers stößt: 10 px bei 100 % für neue Projekte, und er wächst mit dem Zoom. Er liegt außerhalb der Textspalte, sodass die Zeilen dort umbrechen, wo sie es vorher taten. Ändern Sie ihn unter **Datei > Einstellungen > Erscheinungsbild > Haupteditor** („Rand neben dem Text“, 0 bis 100 px) oder mit einem Rechtsklick auf das Papier (**Erscheinungsbild > Rand neben dem Text**). Projekte, die vor 0.40.2 angelegt wurden, behalten ihr Aussehen ohne Rand, bis Sie ihnen einen geben. Ein Klick auf den Rand setzt den Cursor an den Anfang oder das Ende der Zeile daneben.
+- **Klicken und Rechtsklicken** bewegen die Ansicht nie: Der Cursor geht dorthin, wo Sie klicken, und der Text bleibt dort, wo er auf dem Bildschirm ist (vor 0.40.2 konnte ein Klick oder Rechtsklick nahe am oberen oder unteren Rand oder ein Rechtsklick neben dem Text den Text springen lassen).
+
+### Seitenansicht
+
+**Ansicht > Textbearbeitung > Seitenansicht** (auch im Menü der Symbolleistenschaltfläche **Ansicht**) zeigt Ihren Text auf Papierbögen statt in einer endlosen Spalte. Die Fußleiste zeigt dann die Seite des Cursors und die Zahl der Seiten, zum Beispiel „Page 3 of 12“. Wählen Sie den Befehl erneut, um zur Spalte zurückzukehren. Die Farbe des Schreibtischs um die Seiten steht unter **Datei > Einstellungen > Erscheinungsbild > Haupteditor** (oder Rechtsklick > **Erscheinungsbild**, während die Seiten gezeigt werden).
+
+Die Seiten sind eine Art, Ihren Text zu betrachten, nichts weiter. Sie zeigen nicht, wie ein kompiliertes oder gedrucktes Manuskript aussehen wird: Sie schreiben in Stücken, und Titel, Schriften und Seitengröße werden beim Kompilieren festgelegt (Abschnitt 13). Nichts über die Seiten wird in Ihren Dokumenten gespeichert.
+
+- **Ansicht > Textbearbeitung > Seitengröße und Ränder…** legt das Papier fest (A4, A5, US Letter und andere oder eine eigene Größe), Hoch- oder Querformat und die vier Ränder. Die Einstellung gehört zum Projekt; haken Sie **Diese Seite auch für neue Projekte verwenden** an, um sie zu Ihrem Standard zu machen.
+- Der Zoom vergrößert Bögen, Ränder und Buchstaben zusammen. Ein Bogen, der breiter als der Editor ist, lässt sich seitwärts scrollen. Wie in der Spaltenansicht behalten Einzüge und Tabulatoren ihre wirkliche Länge, sodass Zeilenumbrüche zwischen Zoomstufen ein wenig abweichen können.
+- Im Gesamttext beginnt jedes Dokument auf einem eigenen Bogen, und sein letzter Bogen endet knapp unter dem Text, sodass kurze Dokumente den Bildschirm nicht mit leerem Papier füllen.
+- Die Seitenansicht gilt für alles, was Ihre Texte im Hauptfenster und in Schnellansicht-Fenstern zeigt: beide Editoren und die Manuskripthalter. Notizen behalten ihr schlichtes Aussehen, und der Schreibmodus hat sein eigenes Papier.
+- Die Farbe um die Bögen ist **Um die Seiten (Seitenansicht)** unter **Datei > Einstellungen > Erscheinungsbild > Haupteditor**.
+
+### Drehbuchschreiben
+
+Drehbücher, Theaterstücke und Comic-Skripte werden im **Drehbuchmodus** geschrieben. Ein Drehbuch besteht aus *Elementen*: Szenenüberschrift, Handlung, Figur, Regieanweisung in Klammern, Dialog, Übergang und so weiter. Jedes Element hat seinen Platz auf der Seite, und im Drehbuchmodus bringen die Tasten **Tab** und **Enter** Sie von einem Element zum nächsten, sodass Sie nie einen Einzug von Hand setzen.
+
+**Einschalten.** Klicken Sie in ein Dokument und wählen Sie **Format > Drehbuchschreiben > Drehbuchmodus** (**Ctrl+8**). Der Menüeintrag nennt das Drehbuchformat des Projekts, zum Beispiel *Drehbuchmodus - Filmdrehbuch*. Der Drehbuchmodus gehört zum Dokument: Drehbücher und gewöhnliche Texte leben nebeneinander in einem Projekt, und Drehbücher haben im Binder ein **gelbes Symbol**. Wählen Sie den Befehl erneut, um ihn auszuschalten; der Text behält sein Aussehen. Ein neues Dokument, das unter Drehbüchern angelegt wird (in einem Ordner, dessen Texte alle Drehbücher sind), ist ebenfalls ein Drehbuch.
+
+**Die Fußleiste.** In einem Drehbuch zeigt die Fußleiste des Editors anstelle der Wortzahl, was **Tab** und **Enter** am Cursor tun werden, und rechts ein Aufklappmenü mit dem Element des aktuellen Absatzes. Wählen Sie in diesem Menü ein anderes Element, und der Absatz wird neu formatiert. Text, der kein Element des Drehbuchs ist, wird als **Allgemeiner Text** gezeigt.
+
+**Tab und Enter.**
+
+- **Enter** am Ende eines Absatzes beginnt das Element, das üblicherweise folgt: Handlung nach einer Szenenüberschrift, Dialog nach einem Figurennamen und so weiter.
+- **Enter** in einer leeren Zeile öffnet die Liste der Elemente am Cursor; drücken Sie den in der Liste unterstrichenen Buchstaben (S für Szenenüberschrift, C für Figur ...). **Format > Drehbuchschreiben > Elementliste anzeigen** (**Ctrl+\\**) öffnet dieselbe Liste jederzeit.
+- **Tab** in einer leeren Zeile ändert die Zeile in ein anderes Element; drücken Sie ihn noch einmal für das nächste, **Shift+Tab**, um zurückzugehen.
+- **Tab** am Ende eines Absatzes tut, was zum Element passt: Nach einem Figurennamen oder einer Dialogzeile beginnt er eine Regieanweisung in Klammern, und in einer Szenenüberschrift tippt er „ - “, bereit für die Tageszeit.
+- **Enter** in der Mitte eines Absatzes teilt ihn; beide Hälften behalten das Element. **Shift+Enter** ist ein Zeilenumbruch innerhalb des Absatzes.
+- Elemente, die in Großbuchstaben geschrieben werden (Szenenüberschriften, Figurennamen, Übergänge), machen aus dem, was Sie tippen, Großbuchstaben. Klammern und Präfixe wie „SFX: “ werden für Sie getippt.
+
+**Automatische Vervollständigung.** Beim Tippen bietet eine kleine Liste an, was zum Element passt: INT. und EXT. am Anfang einer Szenenüberschrift, die Tageszeiten nach ihrem „ - “, die im Dokument schon verwendeten Orte und Figurennamen und gängige Übergänge wie CUT TO:. **Enter** oder **Tab** übernimmt den markierten Eintrag, die Pfeiltasten wählen einen anderen, **Esc** schließt die Liste.
+
+**Elemente ändern.** **Format > Drehbuchschreiben > Element ändern in** ändert den Absatz mit dem Cursor oder alle ausgewählten Absätze. Wählen Sie dort in einem gewöhnlichen Dokument ein Element, wird das Dokument zu einem Drehbuch. Jedes Element ist ein Befehl, sodass Sie Ihren Favoriten unter **Datei > Einstellungen > Tastatur** ein Tastenkürzel geben können.
+
+**Drehbuchformate.** Ein Projekt verwendet ein Drehbuchformat für alle seine Drehbücher. **Format > Drehbuchschreiben > Drehbuchformat** listet *Filmdrehbuch*, *Theaterstück* und *Comic-Skript*, die Formate von Erweiterungen und Ihre eigenen auf. Wählen Sie ein anderes Format, bekommen die Drehbücher des Projekts das neue Layout: Jedes Element wird zum Element derselben Art im neuen Format (Handlung wird zum Beispiel zu einer Bühnenanweisung). Ein Element ohne Gegenstück wird zu allgemeinem Text, der sein Aussehen behält; die Frage vor der Änderung nennt diese Elemente.
+
+**Drehbuch-Einstellungen.** **Format > Drehbuchschreiben > Drehbuch-Einstellungen…** ändert das Format des Projekts oder baut ein neues:
+
+- den Namen des Formats, seine Schrift (standardmäßig die Schreibmaschinenschrift Ihres Systems: Courier Prime, Courier New oder eine ähnliche Schrift) und Größe und ob Längen in Zoll oder Zentimetern angegeben werden;
+- die Liste der Elemente: hinzufügen, entfernen und umordnen (die Reihenfolge ist die der Elementliste und die von **Tab** in einer leeren Zeile);
+- für jedes Element: Name, Art (was es für andere Programme ist: Szenenüberschrift, Handlung, Figur ...) und sein Buchstabe in der Liste; Fett, Kursiv, Unterstrichen, Großbuchstaben und Farbe; Ausrichtung, Einzüge von beiden Rändern, Leerzeilen davor und Zeilenabstand; was **Enter** und **Tab** tun; ein Text, der vor und nach dem Absatz getippt wird; und die Listen für die automatische Vervollständigung;
+- eine Vorschau aller Elemente.
+
+Ein umbenanntes Element behält seine Absätze in jedem Drehbuch des Projekts. Die Schaltfläche **Verwalten** beginnt bei einem anderen Format, lädt oder speichert eine Formatdatei (*.qbscript*) und speichert das Format zur Verwendung in anderen Projekten.
+
+**Gut zu wissen.**
+
+- Die Tasten und die Listen funktionieren gleich im Gesamttext, im zweiten Editor, in Manuskripthaltern, in Schnellansicht-Bereichen und im Schreibmodus. Nur die Editoren des Hauptfensters haben die Fußleiste mit den Hinweisen; anderswo zeigt **Ctrl+\\** die Liste der Elemente.
+- Die Seitenansicht (oben) zeigt ein Drehbuch auf Bögen; mit der üblichen Schreibmaschinenschrift in 12 Punkt ist eine Seite eines Filmdrehbuchs ungefähr eine Filmminute, aber die Seiten auf dem Bildschirm sind nicht die Seiten der kompilierten Datei.
+- Die Schrift und die Einzüge der Elemente gehören zum Drehbuchformat, nicht zum Dokument. Die Dateien Ihrer Drehbücher enthalten nur die Namen der Elemente (Abschnitt 18).
+- Drehbücher hinein- und herausbekommen, in den Formaten anderer Drehbuchprogramme: Abschnitt 14. Ein ganzes Drehbuch kompilieren: Abschnitt 13.
+- Drehbücher brauchen Version 0.10 oder neuer. Ein Projekt, das Drehbücher enthält, sagt das in seiner Projektdatei, und ab dieser Version fragt {{APP}}, bevor es ein Projekt öffnet, das eine neuere Version braucht als die laufende. Die Versionen 0.9 und älter fragen nicht: Sie zeigen Drehbücher als gewöhnlichen Text und verlieren die Elemente jedes Drehbuchs, das Sie dort ansehen.
+
+---
+
+## 5. Drei Arten, Ihr Projekt zu betrachten
+
+Wählen Sie die Ansicht mit den drei Symbolleistenschaltflächen oder mit **Ctrl+1**, **Ctrl+2** und **Ctrl+3**.
+
+### Gesamttext (Ctrl+1): viele Dokumente als ein Text
+
+Wählen Sie im Binder mehrere Dokumente (Ctrl+Klick oder Shift+Klick) oder einen Ordner aus und drücken Sie **Ctrl+1**. Alle Texte erscheinen hintereinander, getrennt durch eine dünne gestrichelte Linie, und Sie können in allen schreiben, als wären sie ein Dokument. Änderungen gehen automatisch in die richtigen Dokumente. Zeigen Sie die Dokumenttitel dazwischen mit **Ansicht > Textbearbeitung > Titel im Gesamttext anzeigen**.
+
+### Pinnwand (Ctrl+2): Karteikarten
+
+Jedes Dokument ist eine Karteikarte, die seinen Titel und seine Synopse zeigt; ein Dokument ohne Synopse zeigt stattdessen die ersten Zeilen seines Textes (verblasst, kursiv). Die Karte eines Bildes zeigt das Bild, und ebenso die Karte eines Dokuments, dessen Synopse ein Bild ist (Abschnitt 7). Ziehen Sie Karten, um die Dokumente umzuordnen. Doppelklicken Sie auf eine Karte, um ihren Titel oder ihre Synopse zu bearbeiten. Drücken Sie **Enter**, um die ausgewählten Karten als Text zu öffnen.
+
+In der Fußleiste der Pinnwand:
+
+- **Raster** oder **Freiform**: Im Freiformmodus können Sie Karten überall platzieren, wie auf einer echten Pinnwand. **Anordnung übernehmen** ordnet dann die Dokumente im Binder so an, wie die Karten von links nach rechts und von oben nach unten liegen. Die Anordnung, die Sie für einen Ordner wählen, wird mit diesem Ordner gemerkt (seit 0.90.0): Beim nächsten Anzeigen ist seine Pinnwand genauso angeordnet. Ein Ordner, für den Sie nie eine Anordnung gewählt haben, behält die, die der Editor zeigt.
+- **Nach Etikett anordnen**: ordnet die Karten in Zeilen nach Etikett an.
+- **Kartengröße** der Karten, mit dem Regler, den Pfeiltasten oder dem Mausrad darüber; sie wird sofort gemerkt (**Ctrl+Mausrad** über der Pinnwand zoomt die Karten und ihren Text zusammen, wie die anderen Bereiche, siehe Abschnitt 4).
+
+Ein Doppelklick auf eine leere Stelle der Pinnwand legt eine neue Karte an (**Datei > Einstellungen > Verhalten > Doppelklick**). Wenn Sie auf einer Karte eine Synopse bearbeiten, beendet **Return** das Bearbeiten und **Shift+Return** macht eine neue Zeile (**Datei > Einstellungen > Verhalten > Eingabetaste**, wo Return auch so eingestellt werden kann, dass es nach der Auswahl eine neue Karte oder Gliederungszeile anlegt).
+
+Statusstempel, Freiformmodus und die Anordnung nach Etikett stehen auch unter **Ansicht > Pinnwand-Optionen**; Etikettentönungen für Karten und Binder unter **Ansicht > Etikettenfarbe verwenden in**. Die Spalten der Gliederung sind ebenfalls unter **Ansicht > Gliederungsoptionen** aufgeführt.
+
+### Gliederung (Ctrl+3): eine Tabelle
+
+Zeigt die Dokumente als Tabelle mit Titel, Synopse, Etikett, Status, Wortzahlen, Zielen, Daten und Ihren eigenen Metadaten. Klicken Sie auf die Spaltenschaltfläche in der Fußleiste, um Spalten zu wählen. Klicken Sie auf eine Spaltenüberschrift, um zu sortieren (nur für die Ansicht; die Reihenfolge im Binder ändert sich nicht). Ziehen Sie Zeilen, um Dokumente umzuordnen.
+
+### Pinnwand und Gliederung filtern
+
+Hat die Pinnwand oder die Gliederung die Tastatur, öffnet **Ctrl+F** (**Bearbeiten > Suchen > Suchen**) oben im Editor eine **Filterleiste**. Beim Tippen bleiben nur die passenden Karten oder Zeilen; die Leiste sagt, wie viele („2 of 9“). In der Gliederung bleiben die Gruppen passender Dokumente, damit Sie sehen, wohin sie gehören.
+
+- Klicken Sie auf das **Dreieck** links vom Feld für die Optionen: wo gesucht wird (**Titel**, **Synopsen**, **Stichwörter**, **Text**), ein **Etikett**, ein **Status**, ein **Stichwort**, ob das Dokument **in die Kompilierung einbezogen** ist, und **Nicht Passendes anzeigen**. Mehrere Auswahlen zusammen grenzen die Liste weiter ein.
+- Der Filter bleibt, während Sie andere Ordner öffnen, sodass Sie durch das Projekt gehen und zum Beispiel nur die Szenen einer Figur ansehen können.
+- **Fertig** entfernt den Filter und zeigt wieder alles.
+
+Das Ziehen von Karten ordnet die Dokumente weiterhin um: Eine Karte, die zwischen zwei sichtbaren Karten abgelegt wird, landet im Binder neben ihnen. **Anordnung übernehmen** der Freiform-Pinnwand ist ausgeschaltet, solange ein Filter Karten verbirgt.
+
+---
+
+## 6. Zwei Editoren, Lesezeichen und Schnellansicht
+
+### Geteilter Editor
+
+Klicken Sie auf die Teilen-Schaltfläche rechts in der Kopfzeile des Editors, um einen zweiten Editor zu zeigen. Alt+Klick teilt in die andere Richtung. **Ansicht > Editor teilen** bietet dieselben Möglichkeiten. **F6** springt zwischen den Editoren. Ein Klick im Binder zeigt das Dokument in dem Editor, den Sie zuletzt benutzt haben; **Navigieren > Binder-Auswahl wirkt auf** ändert das auf den linken oder oberen Editor, den rechten oder unteren Editor oder den anderen Editor, je nachdem, in welchem Sie schreiben.
+
+In einer Pinnwand oder Gliederung lässt die Fußleisten-Schaltfläche **Auswahl wirkt auf anderen Editor** (auch in **Ansicht > Pinnwand-Optionen** und **Gliederungsoptionen**) den anderen Editor die Karte zeigen, auf die Sie klicken. Das ist ein schneller Weg, Szenen durchzusehen und dabei die Kapitelübersicht zu behalten.
+
+**Navigieren > Editor > An Ort und Stelle sperren** hält einen Editor bei seinem Dokument, auch wenn Sie im Binder woanders klicken.
+
+### Manuskripthalter
+
+Jeder Editor hat einen **Manuskripthalter**: eine zweite, schlichte Ansicht im Editor, die ein anderes Dokument zum Nachschlagen hält, etwa Notizen oder ein Figurenblatt. Mit zwei Editoren und ihren Manuskripthaltern sehen Sie vier Dokumente auf einmal.
+- **Öffnen**: Halten Sie **Alt** gedrückt und ziehen Sie ein Dokument aus dem Binder, einer Pinnwand oder einer Gliederung auf die Kopfleiste des Editors. Ohne Alt lädt das Ablegen das Dokument in den Editor selbst. **Navigieren > Öffnen > im Manuskripthalter** und das Rechtsklick-Menü eines Dokuments tun dasselbe für das ausgewählte Dokument.
+- Der Manuskripthalter hat eine schmale Kopfleiste mit dem Titel und keine Fußleiste. Er zeigt den Text eines Dokuments (oder ein Bild oder PDF); er hat keine Pinnwand, Gliederung oder keinen Gesamttext. Sie können darin schreiben und formatieren wie in jedem Editor.
+- **Verschieben**: Klicken Sie seine Kopfleiste mit der rechten Maustaste an und wählen Sie links, rechts, oben oder unten. Beim ersten Mal öffnet er sich neben einem breiten Editor und unter einem schmalen; danach dort, wo Sie ihn zuletzt hingesetzt haben. Ziehen Sie die Linie zwischen Editor und Manuskripthalter, um ihre Größen zu ändern.
+- **Ein anderes Dokument zeigen**: Legen Sie es auf der Kopfleiste des Manuskripthalters ab, oder ziehen Sie es mit Alt erneut auf die Kopfleiste des Editors.
+- **Schließen**: Klicken Sie auf das **X** rechts in seiner Kopfleiste oder wählen Sie **Navigieren > Editor > Manuskripthalter schließen**. Die Schaltfläche links vom X schließt ihn und öffnet das Dokument stattdessen als Schnellansicht-Fenster.
+
+**Mit einem Manuskripthalter navigieren.** Zeigt ein Editor eine Pinnwand oder eine Gliederung und hat seinen Manuskripthalter geöffnet, hat die Schaltfläche **Auswahl wirkt auf** in der Fußleiste drei Stellungen. Der erste Klick lässt Ihre Auswahl wie üblich im anderen Editor öffnen. Der zweite Klick dreht den Pfeil so, dass er in das Feld zeigt: Nun öffnet die Karte oder Zeile, auf die Sie klicken, im Manuskripthalter. Ein dritter Klick schaltet es aus. Eine nützliche Anordnung: das Manuskript im linken Editor, eine Gliederung Ihrer Recherche im rechten Editor mit seinem Manuskripthalter darunter, und **Navigieren > Binder-Auswahl wirkt auf > Linker oder oberer Editor**. Der Binder steuert dann das Manuskript, und die Gliederung steuert den Manuskripthalter.
+
+Der Manuskripthalter, sein Platz und sein Dokument werden mit dem Projekt gemerkt.
+
+### Die Kopfleiste des Editors
+
+Die Kopfleiste über jedem Editor zeigt den Dokumenttitel und enthält die Schaltflächen **Zurück** und **Vorwärts** (**Ctrl+[** und **Ctrl+]**), ein Menü der Abschnitte des Dokuments und Schaltflächen für das vorherige und das nächste Dokument (**Alt+Shift+Nach oben / Nach unten**).
+
+- **Verlauf**: Jeder Editor merkt sich die Dokumente, die er gezeigt hat. Halten Sie die Schaltfläche Zurück oder Vorwärts gedrückt (oder klicken Sie sie mit der rechten Maustaste an), um eine Liste zu sehen, und wählen Sie ein Dokument, um direkt dorthin zu gehen; **Navigieren > Zurück zu** und **Vorwärts zu** zeigen dieselben Listen. Der Verlauf wird mit dem Projekt aufbewahrt.
+- **Das Symbol** neben dem Titel steht für das Dokument. Klicken Sie darauf für ein Menü (An Ort und Stelle sperren, Im Binder anzeigen ...). Ziehen Sie es wie ein Dokument im Binder: auf die Kopfleiste des anderen Editors, in den Binder, auf einen Sammlungsreiter, auf die Schaltfläche Schnellansicht oder Lesezeichen der Symbolleiste oder auf Text, um einen Link anzulegen.
+- **Dokumente > Gruppieren** (**Ctrl+Shift+J**, auch im Kontextmenü des Binders) verschiebt die ausgewählten Elemente an die Stelle des ersten in einen neuen Ordner; sein Titel ist bereit zum Tippen. Steht die Tastatur im Binder, nimmt **Bearbeiten > Rückgängig** den ganzen Schritt zurück.
+- **Dokumente > Umwandeln > Blatt in Objekt umwandeln** (auch im Kontextmenü des Binders) macht aus jedem ausgewählten Blattdokument, zum Beispiel einem Figuren- oder Ortsblatt, ein Objekt (Abschnitt über Objekte): Der Titel ist der Name, der Text kommt in **Sonstiges**, ein Bild im Text wird zum Bild. Der Name des Ordners (Figuren, Orte) bestimmt die Art; bei einem anderen Ordner werden Sie gefragt. Das Binder-Element bleibt: Wählen Sie es aus, zeigt der Inspektor das Objekt, und Return öffnet es im Objektefenster. Das Dokument behält seinen Text (ein Scrivener-Projekt sieht ein normales Dokument); die Verknüpfung wird in den eigenen Objektdaten des Projekts aufbewahrt. **Bearbeiten > Rückgängig** bei Tastatur im Binder nimmt es zurück.
+- **Navigieren > Gehe zu** listet den ganzen Binder als Menü auf und lädt das gewählte Dokument in den aktiven Editor. **Navigieren > Übergeordnete Gruppe** zeigt den Ordner oder die Gruppe, zu der das Dokument gehört, mit dem dort ausgewählten Dokument.
+- Ein **Doppelklick auf den Teiler** zwischen zwei Editoren macht sie gleich groß.
+
+### Ziehen und Ablegen auf einen Blick
+
+| Ziehen Sie ... | auf ... | und ... |
+|---|---|---|
+| ein Dokument (Binder, Sammlung, Pinnwand, Gliederung, Kopfsymbol, Lesezeichen) | die Kopfleiste eines Editors | es wird in diesem Editor gezeigt; mit **Alt**: in seinem Manuskripthalter |
+| | Text in einem Editor | ein Link auf das Dokument; auf markiertem Text wird dieser Text zum Link |
+| | Text, bei gehaltener **Alt**-Taste | der Text des Dokuments wird eingefügt |
+| ein Bild aus dem Binder | Text in einem Editor | das Bild wird eingefügt |
+| ein Dokument | die Schaltfläche **Schnellansicht** der Symbolleiste | jedes Dokument öffnet sich in einem eigenen Bereich |
+| | die Schaltfläche **Lesezeichen** der Symbolleiste | es wird den Projektlesezeichen hinzugefügt |
+| | einen Sammlungsreiter, eine Lesezeichenliste | es wird hinzugefügt |
+| | die Kopfleiste eines Schnellansicht-Bereichs | es wird in diesem Bereich gezeigt |
+| | den Dateimanager oder den Desktop | es wird dort als Datei gespeichert (siehe „Dokumente exportieren“) |
+| markierter Text | den Binder | ein neues Dokument mit diesem Text; der Text bleibt, wo er war |
+| Dateien aus dem Dateimanager | den Binder oder eine Pinnwand | sie werden importiert |
+| ein Weblink aus einem Browser | einen Ordner im Binder, die Pinnwand, die Gliederung | die Seite wird importiert (Erweiterung Web Page Import, Abschnitt 14) |
+| eine Bilddatei oder ein Bild aus dem Binder | die Karteikarte im Inspektor (Bildmodus) | es wird zum Bild der Karte |
+| Stichwörter aus **Projekt > Projektstichwörter** | ein Dokument im Binder, eine Sammlung, die Pinnwand, die Gliederung; die Stichwortliste des Inspektors | sie werden zugewiesen; mit **Alt**: zusammen mit der Gruppe, zu der sie gehören |
+
+Manche Desktops verwenden Alt+Ziehen, um Fenster zu verschieben. Kommt Alt+Ziehen im Programm nicht an, ändern Sie die Modifikatortaste zum Verschieben von Fenstern in den Einstellungen Ihres Desktops (KDE: Systemeinstellungen, Fensterverhalten; die genaue Stelle unterscheidet sich zwischen den Versionen) oder verwenden Sie stattdessen die Menübefehle (**Navigieren > Öffnen > im Manuskripthalter**, **Projekt > Projektstichwörter > Ausgewählten Dokumenten zuweisen**).
+
+### Schnellansicht-Bereiche
+
+Ein Schnellansicht-Bereich ist ein Dokument in einem eigenen Fenster, zum Beispiel um ein Figurenblatt im Blick zu behalten, während Sie schreiben. Text in einem Bereich lässt sich bearbeiten und formatieren wie im Editor (die Tastenkürzel der Menüs Format und Einfügen funktionieren dort).
+
+**Bereiche öffnen:**
+
+- **Navigieren > Öffnen > als Schnellansicht** oder die Schaltfläche Schnellansicht der Symbolleiste, für die ausgewählten Dokumente.
+- Drücken Sie die **Leertaste** auf der Pinnwand oder in der Gliederung oder, wenn **Ansicht > Schnellanlege-Tasten im Binder** an ist, im Binder und in einer Liste einer Sammlung oder eines Suchergebnisses (siehe Abschnitt 2, die Tasten des Binders). Ohne diese Option gehört die Leertaste im Binder zum Tippen eines Namens, zu dem gesprungen wird.
+- Ziehen Sie Dokumente auf die **Schaltfläche Schnellansicht** der Symbolleiste: Jedes öffnet sich in einem eigenen Bereich, und der Editor behält sein Dokument.
+- **Navigieren > Schnellansicht öffnen** zeigt den ganzen Binder als Menü, sodass Sie ein Dokument öffnen können, ohne es zuerst auszuwählen.
+
+**In einem Bereich:**
+
+- Der **Titel** in der Kopfleiste lässt sich bearbeiten (er benennt das Dokument um). Das **Symbol** daneben öffnet ein Menü (Im Binder anzeigen, Im Editor öffnen, zu den Projektlesezeichen hinzufügen oder daraus entfernen) und lässt sich wie das Dokument selbst ziehen. Legen Sie ein Dokument auf der Kopfleiste ab, um es in diesem Bereich zu zeigen.
+- Die Schaltfläche **oben rechts** zeigt die **Synopse**, die **Notizen**, die **Stichwörter** oder die **Metadaten** des Dokuments unter seinem Text. Was Sie dort ändern, ändert das Dokument.
+- Die **Fußleiste** zeigt die Wortzahl und lässt Sie **Etikett** und **Status** festlegen.
+- Die **Lesezeichen-Schaltfläche** links in der Fußleiste öffnet die **Projektlesezeichen** neben dem Dokument. Ein Klick auf ein Dokument mit Lesezeichen zeigt es im Bereich, sodass ein Bereich genügt, um zwischen Ihren Notizen zu wechseln. Ziehen Sie Lesezeichen in eine andere Reihenfolge, legen Sie Dokumente darin ab und entfernen Sie ein Lesezeichen mit der Schaltfläche ➖ (das Dokument bleibt im Binder). Dateien und Weblinks öffnen sich mit einem Doppelklick.
+- Die Schaltfläche ➕ unter den Lesezeichen legt ein **neues Dokument** an und versieht es mit einem Lesezeichen. Beim ersten Mal werden Sie nach dem Ordner gefragt (zum Beispiel ein Ordner „Notes“ in Recherche); haken Sie **Nicht mehr fragen** an, um fortan diesen Ordner zu verwenden. Ändern Sie ihn unter **Projekt > Projekteinstellungen > Spezielle Ordner**.
+- Die Schaltfläche **Abdocken** hält den Bereich über dem Hauptfenster; **Fenster > Schnellansicht-Bereiche abdocken** tut das für alle.
+
+Das Menü Fenster listet die geöffneten Bereiche auf und schließt sie alle auf einmal. Die Bereiche, die beim Schließen eines Projekts geöffnet sind, kommen beim erneuten Öffnen zurück, mit ihrem Platz, ihrer Größe, ihrem unteren Teil und ihrer Seitenleiste (schalten Sie das unter **Datei > Einstellungen > Verhalten** aus).
+
+### Audio und Video
+
+Audio- und Videodateien im Binder (zum Beispiel Interviews im Ordner Recherche) werden in {{APP}} abgespielt, wenn die Erweiterung **Media Playback** installiert ist (Abschnitt 17; sie kam mit Update 0.12). Ohne sie zeigt eine solche Datei wie bisher **Mit Standardanwendung öffnen**.
+
+**Abspielen.** Klicken Sie im Binder auf die Datei. Ein Video zeigt sein Bild; eine Audiodatei zeigt ihren Titel, Interpreten und ihre Länge. Die **Fußleiste** des Editors hat die Wiedergabesteuerung:
+
+- die Schaltfläche **Pause und zurückspulen** links (siehe unten),
+- **zum Anfang gehen**, **zurückspringen**, **Wiedergabe / Pause**, **vorspringen**,
+- die **Position**: Ziehen Sie den Regler oder klicken Sie neben seinen Griff,
+- die Zeit, die **Geschwindigkeit** (0,5× bis 2×; langsamere Sprache lässt sich leichter abtippen; die Stimme wird mit der Geschwindigkeit tiefer oder höher, wie bei einem Tonband) und die **Lautstärke** (Klick: stummschalten; der Pfeil: ein Regler).
+
+Ein Klick auf das Bild eines Videos spielt es ab oder hält es an; ein Rechtsklick bietet auch **Mit Standardanwendung öffnen** an. Mit der Tastatur im Player: Die **Leertaste** spielt ab oder hält an, die **Pfeiltasten links** und **rechts** springen, **Pos1** geht zum Anfang.
+
+**Transkribieren.** Teilen Sie den Editor, zeigen Sie die Audiodatei in einem Editor und Ihr Transkript im anderen und tippen Sie weiter: Die Befehle von **Navigieren > Medien** funktionieren, wo auch immer die Tastatur ist, auch in Schnellansicht-Bereichen und im Schreibmodus.
+
+| Befehl | Tastenkürzel |
+|--------|--------------|
+| Wiedergabe / Pause | Ctrl+Return |
+| Zurückspringen / Vorspringen (5 Sekunden) | Ctrl+Alt+, / Ctrl+Alt+. |
+| Medien-Zeitmarke einfügen (auch **Einfügen > Medien-Zeitmarke einfügen**: derselbe Befehl, in beiden Menüs gezeigt) | Ctrl+Shift+Return |
+| Stopp, Zum Anfang, Pause und zurückspulen, Schneller, Langsamer, Normale Geschwindigkeit, Lauter, Leiser, Stummschalten, Zur Zeitmarke am Cursor gehen | kein Tastenkürzel (geben Sie ihnen eines unter **Datei > Einstellungen > Tastatur**) |
+
+Die Befehle wirken auf die Datei, die Sie zuletzt geöffnet oder verwendet haben (in einem der beiden Editoren, einem Manuskripthalter oder einem Schnellansicht-Bereich).
+
+**Pause und zurückspulen.** Eingeschaltet (die Schaltfläche sieht gedrückt aus), geht jede Pause ein Stück zurück, um 2 Sekunden, wenn Sie nicht unter **Datei > Einstellungen > Verhalten > Wiedergabe** einen anderen Wert festlegen. Wenn Sie Ctrl+Return drücken, um das Gehörte zu tippen, hören Sie beim Weitermachen die letzten Wörter noch einmal.
+
+**Zeitmarken.** **Medien-Zeitmarke einfügen** tippt die Zeit des Players am Cursor, etwa `[03:07]` (ab einer Stunde mit Stunden: `[1:02:03]`). **Zur Zeitmarke am Cursor gehen** tut das Gegenteil: Es nimmt die Zeitmarke in der Zeile des Cursors (die nächste davor oder darum) und bewegt den Player dorthin. Zeitmarken sind gewöhnlicher Text; sie lassen sich auch von Hand schreiben (`3:07`, `[03:07]`, `1:02:03.5`).
+
+**In einem Manuskripthalter oder einem Schnellansicht-Bereich** hat der Player seine Wiedergabesteuerung unten. Eine Audiodatei im Manuskripthalter des Editors des Transkripts ist eine gute Anordnung für nur einen Editor.
+
+**Wo es war.** Öffnen Sie eine Audio- oder Videodatei erneut, macht sie dort weiter, wo Sie sie angehalten haben (schalten Sie das unter **Datei > Einstellungen > Verhalten > Wiedergabe** aus). Zeigt der Editor ein anderes Dokument, stoppt die Datei.
+
+**Was abgespielt wird.** Die Erweiterung *Media Playback* (2.0) spielt Formate, die frei verwendet werden dürfen: MP3-, Ogg-Vorbis-, Opus-, FLAC-, ALAC-, WAV-, AIFF- und WavPack-Audio; WebM-, MKV- und Ogg-Video mit VP8-, VP9- oder Theora-Bildern (auch MJPEG und andere freie Formate). Die Erweiterung bringt alles mit, was sie braucht.
+
+**Weitere Formate.** H.264, H.265 (HEVC), AAC (M4A), AC-3, E-AC-3, DTS, MPEG-1/2/4-Video, VC-1 und WMV, WMA und AMR sind in manchen Ländern durch Patente lizenziert; sie kommen mit der separaten Erweiterung **Extra Video and Audio Formats**. Der einfachste Weg, beide zu bekommen, ist das eine Paket **media-all-formats.qbpkg** auf der Seite Releases: Wie jede Erweiterung installiert (Abschnitt 17), installiert es *Media Playback* und *Extra Video and Audio Formats* zusammen. Beide erscheinen dann unter **Hilfe > Erweiterungen und Updates > Erweiterungsverwaltung**, wo die zusätzlichen Formate für sich ausgeschaltet oder entfernt werden können. Ob für die Verwendung dieser Formate eine Patentlizenz nötig ist, hängt vom Land ab. Solange sie installiert und eingeschaltet ist, verwendet *Media Playback* sie, und auch MP4/M4V/MOV-, AVI-, MPEG-, WMV-, FLV- und 3GP-Dateien werden abgespielt (nicht WMA Pro und WMV 9). Ohne sie zeigt eine solche Datei unter dem Player eine Meldung, die ihre Formate und diese Erweiterung nennt; alles andere funktioniert wie bisher. AV1-Video wird mit der eingebauten Dekodierung nicht abgespielt.
+
+Seit 0.80.0 dekodiert der Player immer mit seinem eigenen FFmpeg: Das Qt, das {{APP}} seitdem verwendet (die eigene Qt-6.12-Version von The Qt Company), kann nicht über das **GStreamer** des Systems abspielen, sodass **Datei > Einstellungen > Verhalten > Wiedergabe > Dekodierung** diese Wahl als nicht verfügbar zeigt.
+
+### Lesezeichen
+
+**Dokumentlesezeichen** (Inspektor, Reiter Lesezeichen) verknüpfen ein Dokument mit anderen Dokumenten, Dateien auf Ihrer Festplatte oder Webseiten. **Projektlesezeichen** sind von jedem Dokument aus verfügbar, über die Lesezeichen-Schaltfläche in der Symbolleiste und über die Seitenleiste der Schnellansicht-Bereiche. Der Reiter Lesezeichen des Inspektors zeigt beide Listen, eine über der anderen: **Dokumentlesezeichen** und **Projektlesezeichen**, jede mit eigenen Schaltflächen ➕ und ➖. Ein Klick auf ein Lesezeichen zeigt das Dokument unter den Listen; ein Dokument, das der Editor schon zeigt, erscheint dort als schreibgeschützte Kopie (schreiben Sie im Editor), damit der Editor seine Zeilenbreite behält. Ein Doppelklick öffnet das Lesezeichen. Ziehen Sie Dokumente, Dateien oder Weblinks in die Lesezeichenliste oder verwenden Sie die Schaltfläche ➕; ein aus einem Webbrowser gezogener Link behält den Titel der Seite. Ziehen Sie ein Lesezeichen nach oben oder unten, um die Reihenfolge zu ändern. Die Trennlinien zwischen den beiden Listen und dem Text darunter lassen sich verschieben; die Größen, die Sie ihnen geben, werden mit dem Projekt gespeichert und kommen nach einem Neustart oder einem Programm-Update wieder, auch wenn in diesem Moment kein Lesezeichen gewählt ist. Dokumente, die auf der **Schaltfläche Lesezeichen** der Symbolleiste abgelegt werden, werden zu Projektlesezeichen; ebenso die ausgewählten Dokumente mit **Dokumente > Zu Projektlesezeichen hinzufügen**; der Inspektor zeigt dann seinen Reiter Lesezeichen mit dem neuen ausgewählten Eintrag.
+
+---
+
+## 7. Der Inspektor
+
+Die Schaltflächen oben im Inspektor schalten um zwischen:
+
+- **Synopse und Notizen**: Die Synopse ist eine kurze Zusammenfassung, die auf der Karteikarte erscheint. Sie können statt Text ein Bild verwenden: Klicken Sie auf die Bildschaltfläche der Karte und legen Sie eine Bilddatei oder ein Bild aus dem Binder auf der grauen Fläche ab (oder doppelklicken Sie auf die Fläche, um eine Datei zu wählen; Rechtsklick, um das Bild zu entfernen). Darunter stehen die **Dokumentnotizen** (oder, mit dem kleinen Menü umgeschaltet, die **Projektnotizen**, die dem ganzen Projekt gemeinsam sind). **Navigieren > Inspizieren > Zur Synopse** (**Ctrl+Alt+Y**) und **Zu den Dokumentnotizen** (**Ctrl+Alt+N**) legen die Tastatur vom Text aus dorthin; **Alt+2** geht zurück zum Editor. Seit 0.93.0 beginnen die Notizen (Dokument- und Projektnotizen) als einfacher Text: keine Schrift, Größe, kein Einzug der ersten Zeile, Absatzabstand oder keine Formatvorlage aus der Textformatierung des Projekts, in der Schrift der Programmoberfläche beim Zoom der Notizen. Formatierung erscheint nur, wenn Sie sie selbst anwenden (die Formatleiste, die Menüs, Tastenkürzel), und bleibt dann. Notizen, die schon Text haben, behalten ihr Aussehen. In die Notizen eingefügter Text ist unformatiert; **Bearbeiten > Mit Formatierung einfügen** (**Ctrl+Alt+Shift+V**) behält die Formatierung, die er mitbringt.
+- **Lesezeichen**: die Lesezeichen des Dokuments und die des Projekts. Ein Klick auf ein Lesezeichen eines Dokuments des Projekts zeigt seinen Text unter den Listen. Sie können dort schreiben und formatieren wie in einem Editor (die Formatleiste, das Menü Format und ihre Tastenkürzel wirken darauf, solange der Cursor darin ist): Alles geht sofort in das Dokument und seine Datei, und ein Editor, der dasselbe Dokument zeigt, zeigt die Änderung sofort. Der Text dort hat einen eigenen Zoom.
+- **Mindmap**: eine Tafel mit Notizen für das Dokument oder den Ordner (siehe „Mindmaps“ unten).
+- **Objekte**: die Figuren, Orte, Schauplätze, Sehenswürdigkeiten, das Wetter und andere Dinge Ihrer Geschichte, jedes mit einem eigenen Blatt und Verknüpfungen untereinander (siehe „Objekte“ unten).
+- **Metadaten**: Etikett, Status, Abschnittstyp, in Kompilierung einbeziehen, Erstellungs- und Änderungsdatum, **eigene Metadaten** und **Stichwörter**.
+- **Momentaufnahmen** (Abschnitt 11).
+- **Kommentare und Fußnoten**.
+
+Schreibwerkzeuge von Erweiterungen können eigene Reiter hinzufügen; ihre Schaltflächen stehen in der Reihe zuerst, zum Beispiel **Transkriptionen** von Speech Transcription (Abschnitt 10).
+
+**Der eigene Zoom des Inspektors.** **Ctrl+Mausrad** über einem Teil des Inspektors macht diesen Teil größer oder kleiner, ohne die Editoren zu ändern. Die Reiter mit zwei Teilen haben für jeden einen Zoom: **Synopse und Notizen** (die Karte, die Notizen), **Lesezeichen** (die Liste der Lesezeichen des Dokuments, die Liste der Lesezeichen des Projekts, der Text mit Lesezeichen darunter: drei Zooms), **Momentaufnahmen** (die Liste, der Text der Momentaufnahme), **Objekte** (die Kategorieschaltflächen mit der Liste, das Blatt). Die Liste **Zoom** unten zeigt und setzt den Zoom des Teils mit der Tastatur oder des Teils, den Sie zuletzt gezoomt haben; ihr Titel nennt den Teil („Zoom: Notizen“), und auf dem Reiter Mindmap ist es der Zoom der Tafel. Die anderen Reiter (Metadaten, Kommentare) und die Schaltflächenreihen oben und unten teilen sich einen Zoom; mit **Ansicht > Zoom der Inspektor-Reiter getrennt** (auch im Rechtsklick-Menü der Zoom-Liste) behalten Metadaten und Kommentare je einen.
+
+**Der Inspektor merkt sich** mit dem Projekt, welcher Reiter geöffnet war, wohin Sie die Teiler in den Reitern gesetzt haben, das gezeigte Lesezeichen und das auf dem Reiter Objekte gezeigte Objekt.
+
+**Kommentare eines Ordners.** Ist ein Ordner im Editor (als Pinnwand oder Gliederung), listet der Reiter Kommentare und Fußnoten die Kommentare und Fußnoten jedes Dokuments im Ordner und seinen Unterordnern auf, nach Dokument gruppiert. Ein Klick auf den Namen eines Dokuments öffnet es; ein Klick auf **Kommentar ▸** (oder **Fußnote ▸**) öffnet das Dokument und zeigt diese Stelle; der Text eines Kommentars oder einer Fußnote lässt sich gleich dort ändern. Im Gesamttext (mehrere Dokumente als ein Text) listet der Reiter die Notizen aller gezeigten Dokumente auf.
+
+### Mindmaps
+
+Jedes Dokument und jeder Ordner kann eine **Mindmap** haben: eine Tafel, auf der Sie Notizen beliebig platzieren, mit Linien und Pfeilen verbinden, einfärben und auf Hintergrundformen gruppieren. Tafeln lassen sich als Scapple-Dateien speichern, und Scapple-Dateien lassen sich lesen (siehe *Dateien und Scapple* unten). Klicken Sie auf die Schaltfläche **Mindmap** des Inspektors (zwischen Lesezeichen und Metadaten). Die Schaltfläche ist unterstrichen, wenn das Dokument eine Mindmap hat.
+
+**Eine angeheftete Mindmap (0.92.0).** Normalerweise zeigt der Reiter die Mindmap des Dokuments oder Ordners, den Sie ausgewählt haben. Sie können sie stattdessen an ein Element anheften: Der Reiter zeigt dann weiter die Mindmap dieses Elements, was auch immer Sie im Binder auswählen oder im Editor öffnen. Das ist für eine Tafel gedacht, die Sie beim Schreiben neben sich haben wollen, etwa eine Handlungskarte, die an einem Ordner hängt. Drei Stellen tun dasselbe:
+
+- **Im Binder**: Bewegen Sie die Maus über eine Zeile: Nahe ihrem rechten Ende erscheint eine kleine Stecknadel. Klicken Sie darauf, und dieses Element ist angeheftet; seine Nadel bleibt und ist gefüllt. Ein Klick auf die gefüllte Nadel löst es. Ein Klick auf eine Nadel wählt nichts aus.
+- **Im Reiter Mindmap** heftet die Nadel-Schaltfläche rechts in der kleinen Leiste die Tafel an, die der Reiter zeigt, und löst sie wieder. Solange eine Tafel angeheftet ist, nennt die Leiste ihr Element (*Angeheftet: Plot*, gleich nach der Übersichtsschaltfläche; ein langer Titel wird gekürzt, und der ganze Titel erscheint, wenn Sie die Maus darauf ruhen lassen), damit klar ist, dass die Tafel nicht zum ausgewählten Dokument gehört.
+- **In den Menüs**: **Navigieren > Inspizieren > Mindmap dieses Elements anheften** und **Navigieren > Inspizieren > Angeheftete Mindmap lösen** (sie haben zunächst keine Tastenkürzel; geben Sie ihnen in den Einstellungen welche, wenn Sie möchten).
+
+Solange ein Element angeheftet ist, sagt eine schmale Leiste unten im Binder *Mindmap angeheftet:* mit seinem Titel und hat die Schaltfläche **Lösen**. Höchstens ein Element eines Projekts ist angeheftet; wird ein anderes angeheftet, wandert das Anheften. Auch ein Element ohne Mindmap lässt sich anheften: Der Reiter zeigt eine leere Tafel zum Anfangen. Nur der Reiter Mindmap wird angeheftet; die anderen Reiter des Inspektors folgen wie immer dem ausgewählten Dokument, und eine in einem großen Fenster geöffnete Tafel bleibt, was sie ist. Das Anheften wird mit dem Projekt auf diesem Computer aufbewahrt, wenn Sie es schließen, und es wird gelöst, wenn das Element in den Papierkorb kommt.
+
+**Im Inspektor** füllt die Tafel den Reiter. Die kleine Leiste darüber hat **Neue Notiz**, **Neue Hintergrundform**, **Auf Fenstergröße zoomen**, **Menü** (alle Befehle: Datei, Bearbeiten, Ansicht, Notizen, Format), die Schaltfläche **Übersicht** (siehe *Umsehen*) und **Im Fenster öffnen**. Die Leiste darunter zählt die Notizen und hat den Zoomregler. **Im Fenster öffnen** zeigt dieselbe Tafel in einem großen Fenster mit denselben Menüs in seiner Menüleiste und einem Inspektor rechts (**Notizformat**, **Notizstile**, **Dokumenteinstellungen**); Änderungen an einer Stelle erscheinen sofort an der anderen. Ein Rechtsklick auf die Tafel öffnet die Befehle für das, was unter der Maus ist. Eine neue Notiz (Schaltfläche, Menü oder ein Doppelklick) nimmt sofort die Tastatur, auch wenn sie vorher im Binder war: Was Sie tippen, ersetzt ihren ausgewählten Text (0.94.0).
+
+Die Befehle einer Mindmap stehen in diesen eigenen Menüs, nicht in den Menüs des Hauptfensters. Unten bedeutet **Menü > Notizen > Verbinden**: die Schaltfläche **Menü** der Tafel im Inspektor, dann **Notizen**, dann **Verbinden** (im großen Fenster: **Notizen > Verbinden** seiner Menüleiste). Hat die Tafel die Tastatur, kommen ihre Tasten zuerst: **Ctrl+Z** macht eine Änderung der Tafel rückgängig, **Ctrl+F** sucht in ihren Notizen, **Ctrl+P** druckt sie.
+
+**Hilfe für Mindmaps.** **Hilfe > Mindmap-Hilfe** (auch die Schaltfläche **?** am rechten Ende der Leiste der Tafel und **Menü > Hilfe** der Tafel) zeigt eine kurze Anleitung mit Bildern: wie man Notizen macht, wie man eine Linie zieht (eine Notiz auf eine andere ziehen), wie man einen Pfeil zieht (beim Loslassen **Alt** halten; **Ctrl+Alt** für einen Pfeil zurück, **Ctrl+Alt+Shift** für beide Enden), Wörter auf einer Linie und Hintergrundformen. Ihre Schaltfläche **Beispieltafel öffnen** (auch **Menü > Hilfe > Beispieltafel öffnen**) öffnet in einem eigenen Fenster eine Übungstafel mit Notizen zum Aufeinanderziehen und fertigen Beispielen für Linien und Pfeile. Nichts auf der Beispieltafel gehört zu Ihrem Projekt, und sie wird nicht gespeichert.
+
+**Notizen.**
+
+- **Doppelklicken** Sie auf eine leere Stelle: eine neue Notiz, bereit zum Tippen. **Ctrl+Enter** macht unter der ausgewählten Notiz eine neue (gestapelt). Mit **Ctrl** beim Doppelklick wird die neue Notiz mit den ausgewählten Notizen verbunden; mit **Alt** durch einen Pfeil zu ihr hin; mit **Ctrl+Alt** durch einen Pfeil zurück.
+- **Doppelklicken** Sie auf eine Notiz, um ihren Text zu ändern; **Esc** oder ein Klick außerhalb beendet das Bearbeiten. Eine kurze Notiz wird so schmal wie ihr Text; eine lange bricht bei der Breite neuer Notizen um (beides unter **Menü > Datei > Mindmap-Optionen…**).
+- **Ziehen** Sie Notizen, um sie zu verschieben; mit **Ctrl** beim Ablegen werden sie kopiert. Die **Pfeiltasten** verschieben die ausgewählten Notizen, wenn **Menü > Bearbeiten > Pfeiltasten verschieben Notizen** (**M**) an ist (mit **Shift** um 10 px); sonst wählen sie die nächste Notiz in dieser Richtung aus. **Enter** oder **F2** bearbeitet die ausgewählte Notiz, **Entf** entfernt die ausgewählten Notizen.
+- **Ziehen Sie eine Notiz auf eine andere**, um beide mit einer Linie zu verbinden; noch einmal, um die Linie zu entfernen. Mit **Alt** bekommt die Linie einen Pfeil zu der Notiz, auf die abgelegt wurde; mit **Ctrl+Alt** einen Pfeil zurück; mit **Ctrl+Alt+Shift** Pfeile an beiden Enden.
+- **Doppelklicken Sie auf eine Linie**, um eine neue Notiz hineinzusetzen, oder auf die Beschriftung einer Linie, um sie zu ändern (**Menü > Notizen > Verbindungsbeschriftung…**).
+- **Menü > Notizen > Verbinden** (**Ctrl+.**), **Mit Pfeil verbinden** (**Ctrl+Alt+.**), **Pfeile entfernen** (**Ctrl+,**) und **Verbindung trennen** wirken auf die ausgewählten Notizen: Die erste, die Sie ausgewählt haben, ist die Mitte.
+- **Menü > Notizen > Neue verbundene Notiz** macht links von, rechts von, über oder unter der ausgewählten Notiz eine Notiz, mit ihr verbunden (mit oder ohne Pfeil).
+- **Menü > Notizen > Teilen** (**Ctrl+Shift+K**) teilt eine Notiz am Cursor; **Zusammenführen** verbindet die ausgewählten Notizen.
+- **Menü > Notizen > Stapeln** (**Ctrl+'**), **Ausrichten**, **Verteilen**, **Gleiche Breite / Höhe**, **Automatisch anpassen**, **In den Vordergrund**, **In den Hintergrund**.
+- **Menü > Bearbeiten > Link hinzufügen…** (**Ctrl+K**) verknüpft Text einer Notiz mit einer Webseite oder einer Datei; aus dem Binder auf die Tafel gezogene Dokumente werden zu Notizen mit Links darauf. Ein Klick auf einen Link öffnet ihn: Ein Dokument öffnet sich so, wie es Dokumentlinks im Text tun (**Datei > Einstellungen > Verhalten**).
+- **Menü > Notizen > Notizen zum Binder hinzufügen** macht aus den ausgewählten Notizen Dokumente innerhalb des Dokuments oder Ordners, zu dem die Tafel gehört, in der Leserichtung der Tafel.
+
+**Hintergrundformen** (**Menü > Notizen > Neue Hintergrundform**, **Ctrl+Shift+G**) sind farbige Flächen hinter Notizen. Mit ausgewählten Notizen angelegt, umgibt die Form sie. Eine **magnetische** Form (**Menü > Notizen > Magnetisch**, **Ctrl+Shift+M**) nimmt die Notizen darauf mit, wenn sie verschoben wird. Eine neue Form beginnt mittelgrau (#808080) und nicht magnetisch; **Datei > Einstellungen > Extras > Mindmap** (und **Menü > Datei > Mindmap-Optionen…**) legt die Füllung, den Rahmen und **Magnetisch** fest, mit denen neue Formen beginnen. (Vor 0.93.0 war eine neue Form hellgrau und magnetisch; eine Farbe, die Sie dort gewählt hatten, bleibt, und ein gespeichertes **Magnetisch** wurde einmal ausgeschaltet.)
+
+**Das Rechtsklick-Menü einer Notiz** (oder einer Hintergrundform) ändert die ausgewählten Notizen: **Füllfarbe**, **Textfarbe** und **Rahmenfarbe** bieten die Farben der Etiketten Ihres Projekts, die sechs Farben der Formatleiste (Rot, Blau, Gelb, Grün, Weiß, Schwarz) und **Andere...** für jede Farbe, dieselbe Auswahl überall in {{APP}}; **Form** ist **Rechteck**, **Abgerundetes Rechteck**, **Wolke** oder **Gezackt** (eine Notiz ohne Rahmen bekommt einen dünnen, damit die Form sichtbar wird); **Rahmen** legt die Dicke fest; **Symbole** setzt bis zu acht Symbole auf eine Notiz, eines an jeder Ecke und eines in der Mitte jeder Seite, gewählt aus den Symbolen des Binders (**Dokumente > Symbol ändern**), Ihre eigenen Symbole eingeschlossen. Klicken Sie nahe an der Stelle eines Symbols mit der rechten Maustaste, um nur dieses zu entfernen; **Alle Symbole entfernen** leert sie.
+
+**Das Rechtsklick-Menü einer Linie** gehört nur zu dieser Linie, damit andere Linien derselben Notizen nicht geändert werden: ihre Pfeile (**Keine Pfeile**, ein Pfeil zu einer der beiden Notizen oder **Pfeile an beiden Enden**), **Linienfarbe**, **Symbol in der Mitte** (ein Symbol, das in der Mitte der Linie gezeichnet wird), die Beschriftung, **Notiz auf der Linie einfügen** und **Verbindung trennen**. Jede Änderung lässt sich für sich rückgängig machen.
+
+Die Symbole, Linienfarben und Liniensymbole sind eigene Ergänzungen von {{APP}}; sie werden in der Tafeldatei in Elementen aufbewahrt, die Scapple nicht liest (eine als Scapple-Datei exportierte Tafel hat die Notizen, Linien und Pfeile ohne sie). **Datei > Einstellungen > Extras > Mindmap** legt die Größe der Symbole und die Form neuer Notizen fest.
+
+**Aussehen.** **Menü > Format** hat Fett, Kursiv, Unterstrichen, Durchgestrichen, Größer und Kleiner (**Ctrl+Shift+>** und **Ctrl+Shift+<**), Text-, Füll- und Rahmenfarben, Rahmendicke (keine, 1 bis 5 px) und Stil (abgerundet, eckig, gezackt, Wolke), Schatten und **Verblassen** (**Ctrl+Shift+F**, die Notiz wird blass gezeigt). **Notizstile** speichern ein Aussehen unter einem Namen; **Menü > Format > Notizstil** wendet einen an (**Ctrl+Alt+1** bis **9**, **Ctrl+Alt+0** für Standard), macht einen aus der ausgewählten Notiz oder kopiert und fügt das Aussehen einer Notiz ein (**Alt+Shift+C** / **Alt+Shift+V**). Die **Dokumenteinstellungen** im Inspektor des Fensters legen den Hintergrund, die Textfarbe, die Schrift und die Schreibrichtung der Tafel fest (und **Als Standard festlegen** für neue Tafeln).
+
+**Hintergrund.** Ein Rechtsklick auf eine leere Stelle der Tafel (im Inspektor oder im Fenster), **Menü > Format > Hintergrundfarbe** oder die Hintergrundschaltfläche der **Dokumenteinstellungen** bietet die Farben der Etiketten Ihres Projekts, die sechs Farben der Formatleiste, den Standard (**Standard für helle Designs** oder **Standard für dunkle Designs** in den Menüs, **Standard verwenden** in den Dokumenteinstellungen) und **Andere...** an. Eine Tafel hat einen eigenen Hintergrund für helle Designs und einen für dunkle: Die gewählte Farbe wird für die Art des verwendeten Designs aufbewahrt, und die andere Art behält ihre eigene. Eine Tafel ohne eigene Farbe zeigt den Standard von **Datei > Einstellungen > Extras > Mindmap** („Hintergrund der Tafeln“, einer für helle und einer für dunkle Designs) und folgt ihm, wenn Sie ihn ändern. **Als Standard festlegen** in den Dokumenteinstellungen macht den Hintergrund der Tafel zum Standard der Art des verwendeten Designs. Eine Tafel behält ihre Hintergrundfarbe auch, wenn noch nichts darauf steht.
+
+**Zoom und Stelle.** Jede Tafel merkt sich mit dem Projekt ihren Zoom und den Teil von ihr auf dem Bildschirm, einen für den Inspektor und einen für das große Fenster. Eine Tafel, die Sie nie gezoomt haben, öffnet sich mit dem Standardzoom der Mindmaps (**Datei > Einstellungen > Bearbeitung**, „Standard-Textzoom“).
+
+**Auswählen.** Klicken, mit **Shift+Klick** oder **Ctrl+Klick** hinzufügen, einen Rahmen um Notizen ziehen, **Ctrl+A**. **Menü > Bearbeiten > Auswählen** hat darunter gestapelte Notizen, Notizen auf den ausgewählten Formen (**Alt+A**), verbundene Notizen (**Ctrl+Shift+A**) und ganze verbundene Gruppen; darunter stehen **Auswahl umkehren** (**Alt+Shift+I**) und **Auswahl aufheben** (**Ctrl+D**).
+
+**Umsehen.** Zoomen Sie mit **Ctrl+Mausrad**, **Ctrl++** und **Ctrl+-**, **Tatsächliche Größe** (**Ctrl+0**), **Auf Fenstergröße zoomen** (**Ctrl+9**), **Auf Auswahl zoomen** (**Ctrl+Shift+8**) und **Auf Zufälliges zoomen** (**Ctrl+Shift+R**). Halten Sie die **Leertaste** gedrückt und ziehen Sie, um die Tafel zu bewegen; halten Sie **Z** gedrückt, um die ganze Tafel einen Moment zu sehen. **Menü > Bearbeiten > Suchen** (**Ctrl+F**) sucht und ersetzt Text in den Notizen. **Menü > Ansicht > Seitenhilfslinien** zeigt, wo beim Drucken die Seiten enden.
+
+**Die Übersicht (0.93.0).** Eine kleine Karte in der linken oberen Ecke der Tafel zeigt die ganze Tafel verkleinert und einen Rahmen für den Teil, den Sie gerade sehen; der Rahmen bewegt sich und ändert seine Größe, wenn Sie scrollen und zoomen. Notizen, Hintergrundformen und Linien werden in ihren Farben gezeichnet; der Text einer Notiz wird nur dort gezeigt, wo er in dieser Größe noch lesbar ist, sonst ist die Notiz ihr farbiger Rahmen. Klicken Sie in die Übersicht, um die Ansicht zu dieser Stelle zu bewegen; ziehen Sie den Rahmen, um die Ansicht mitzubewegen. Der Zoom bleibt, und auch eine gesperrte Tafel (**Bearbeitung verhindern**) lässt sich bewegen. Das Mausrad über der Übersicht funktioniert wie über der Tafel (**Ctrl+Rad** zoomt). Ziehen Sie den Griff in ihrer unteren rechten Ecke, um ihre Breite zu ändern (sie beginnt bei einem Fünftel der Breite der Ansicht, mindestens 80 px, und ist nie breiter als die Hälfte der Ansicht); die Höhe folgt der Form dessen, was sie zeigt, nie mehr als die Hälfte der Ansicht, und die Breite schrumpft mit, wenn die Höhe sonst darüber käme. Die Übersicht gehört nur zur Ansicht: Sie ist nicht in Exporten, Ausdrucken oder dem Bild der Tafel. Sie ist zunächst **automatisch**: Sie wird angezeigt, wenn ein Teil der Tafel außerhalb der Ansicht liegt, und verschwindet, wenn alles hineinpasst (mit einem kleinen Spielraum, damit sie am Rand nicht flackert). Die Schaltfläche **Übersicht** in der Leiste der Tafel im Inspektor (gleich nach **Menü**) schaltet zwischen **automatisch** und **immer angezeigt** um (die Schaltfläche ist gedrückt); derselbe Schalter ist der Eintrag **Übersicht immer anzeigen** im Menü Ansicht der Tafel (im Inspektor: die Schaltfläche **Menü**, dann **Ansicht**; im großen Fenster: seine Menüleiste). Die Wahl und die Größen werden auf diesem Computer in den Einstellungen des Programms aufbewahrt (eine Wahl für alle Tafeln; die Größe der Übersicht des Inspektors und die des großen Fensters getrennt); nichts geht in das Projekt.
+
+**Text, Bilder und Dateien.** Fügen Sie Text ein oder legen Sie ihn ab, um eine Notiz zu machen (Text mit Leerzeilen kann mehrere Notizen ergeben), legen Sie ein Bild für eine Bildnotiz ab und legen Sie eine Textdatei ab, um aus ihren Absätzen Notizen zu machen.
+
+**Dateien und Scapple.** **Menü > Datei > Exportieren** schreibt die Tafel als PDF (**Ctrl+Shift+E**), PNG-Bild, einfachen Text, Textliste, RTF, OPML-Gliederung, ihre Bilder oder eine Scapple-Datei (*.scap*); **Menü > Datei > Mindmap- oder Scapple-Datei importieren…** liest eine *.scap*-Datei in die Tafel. **Drucken** und **Druckvorschau** drucken sie. **Menü > Datei > Bearbeitung verhindern** sperrt die Tafel.
+
+**Mindmap-Optionen** (**Menü > Datei > Mindmap-Optionen…** und dasselbe unter **Datei > Einstellungen > Extras > Mindmap** des Hauptfensters): ob **Enter** das Bearbeiten einer Notiz beendet (dann macht **Shift+Enter** eine neue Zeile), ob **Enter** auf einer ausgewählten Notiz eine neue macht, ob neue Notizen das Aussehen der ausgewählten Notiz übernehmen, gestrichelte Linien ohne Pfeile, schmale Notizen für kurze Texte, wie blass verblasste Notizen sind, und Größe, Breite, Farbe und Rahmen neuer Notizen und Formen.
+
+**Wo die Tafel aufbewahrt wird.** Eine Tafel wird von selbst gespeichert, als Datei im Aufbau von Scapple-Dateien (*content/<ID>/mindmap.scap* im Projektordner; *Files/Data/<UUID>/quillbinder-mindmap.scap* in einem Scrivener-Projekt, neben den eigenen Dateien des Dokuments). Ein Dokument bekommt die Datei erst, wenn etwas auf seine Tafel gelegt wird. Rückgängig (**Ctrl+Z**) funktioniert für jede Tafel für sich.
+
+{{APP}} liest Scapple-Dateien so, wie Scapple 1.x sie schreibt, soweit ihr Aufbau bekannt ist; sie mit Scapple selbst zu testen war nicht möglich (siehe die Notizen zu Version 0.17.0 in der Statusdatei).
+
+### Objekte: Figuren, Orte und mehr
+
+**Objekte** sind die Menschen, Orte und Dinge Ihrer Geschichte, jedes mit einem Blatt voller Felder: eine Figur mit Volk, Größe, Augenfarbe, Eigenschaften und Hintergrundgeschichte; ein Ort mit seiner Art, seinem Schauplatz und seinem Wetter; und so weiter. Sie gehören zum ganzen Projekt, nicht zu einem Dokument, und werden getrennt vom Binder aufbewahrt. Links verbinden sie, sodass Sie sich durch einen Hintergrund klicken können: das Figurenblatt, das Dorf, in dem sie lebt, die Landschaft darum, ihr Wetter.
+
+Klicken Sie auf die Schaltfläche **Objekte** des Inspektors (rechts von der Schaltfläche **Mindmap**) oder wählen Sie **Navigieren > Inspizieren > Objekte des Projekts: Figuren, Orte, Schauplätze, ...**. **Fenster > Objekte…** (oder die Fensterschaltfläche in der Leiste des Reiters) zeigt dieselben Objekte in einem großen eigenen Fenster, mit der Liste links und dem Blatt rechts. Änderungen an einer Stelle erscheinen sofort an der anderen.
+
+**Kategorien.** Die farbigen Schaltflächen oben sind die Kategorien: zu Anfang **Figuren**, **Orte**, **Schauplätze**, **Sehenswürdigkeiten** und **Wetter**. Klicken Sie auf eine, um ihre Objekte zu sehen. Sie können sie umbenennen, ihnen andere Farben geben, ihre Reihenfolge ändern, sie entfernen und eigene Kategorien hinzufügen (Fraktionen, Zaubersprüche, Schiffe ...): siehe *Vorlagen und Farben* unten.
+
+**Objekte anlegen.** **+** in der Leiste des Reiters legt ein neues Objekt in der gewählten Kategorie an (im Ordner des ausgewählten Objekts); tippen Sie seinen Namen oben auf dem Blatt. Die Schaltfläche mit dem Ordner legt einen **Ordner** zum Sortieren an, zum Beispiel „Dörfer“ in Orte; Ordner können Ordner enthalten. Ziehen Sie Objekte und Ordner in der Liste, um sie zu verschieben. **F2** oder ein Rechtsklick benennt um, und das Rechtsklick-Menü hat auch **Duplizieren** und **Löschen…** (auch im Menü **≡** der Leiste). Das Feld **Filter** zeigt nur die Objekte, deren Name oder Text enthält, was Sie tippen.
+
+**Das Blatt.** Unter dem farbigen Streifen mit der Kategorie und dem Namen stehen die Felder der Vorlage der Kategorie. Alles, was Sie tippen, wird von selbst gespeichert, wie Ihre Dokumente. Die Arten von Feldern sind:
+
+- **Kurztext** (eine Zeile) und **Datum** (in jeder gewünschten Form, etwa „Frühling 1203“ oder „der dritte Winter“).
+- **Zahl** mit einer Einheit (cm, Jahre, °C ...).
+- **Langtext**, der Links (siehe unten) und **fette**, *kursive*, unterstrichene, durchgestrichene, farbige und hervorgehobene Wörter enthalten kann: Steht der Cursor im Feld, wirken die Formatleiste, das Menü Format und ihre Tastenkürzel (**Ctrl+B**, **Ctrl+I**, **Ctrl+U**; auch im Objektefenster) darauf. Die Versionen 0.20 und 0.21 von {{APP}} zeigen diese ebenfalls.
+- **Auswahl**: eine Liste zum Auswählen; Sie können auch etwas anderes tippen.
+- **Ja / Nein**.
+- **Bild**: Klicken Sie auf die Fläche (oder legen Sie ein Bild darauf ab), um eines zu wählen; es wird in das Projekt kopiert und verkleinert, wenn es größer als 1600 Pixel ist. Ein Rechtsklick entfernt es.
+- **Link zu Objekten**: Die verknüpften Objekte werden als farbige Schaltflächen gezeigt. **+** fügt eines hinzu: Tippen Sie, um zu suchen, und wählen Sie dann ein Objekt oder wählen Sie **Neu in Orte: „Ashvale“**, um ein neues Objekt mit diesem Namen anzulegen und sofort zu verknüpfen. Ein Klick auf ein verknüpftes Objekt zeigt sein Blatt; ein Rechtsklick entfernt den Link.
+- **Link zu Dokumenten**: Dokumente des Binders, die zum Objekt gehören, etwa „Kommt vor in“ bei einer Figur oder „Szenen an diesem Ort“ bei einem Ort. Ein Klick öffnet das Dokument im Editor.
+
+**Farbschaltfläche.** Die Schaltfläche **Farbe** des Streifens gibt einem Objekt eine eigene Farbe (oder ihm die Farbe der Kategorie zurück), zum Beispiel um die Hauptfiguren zu markieren.
+
+**Links in langen Texten.** Markieren Sie in einem Langtextfeld ein Wort und wählen Sie in seinem Rechtsklick-Menü **Mit Objekt verknüpfen…** (oder **Mit Dokument verknüpfen…**); ohne Auswahl wird der Name des Objekts als Link eingesetzt. Ein Klick auf den Link folgt ihm; **Link entfernen** im Rechtsklick-Menü nimmt ihn wieder weg. Im Text eines Dokuments setzt **Einfügen > Mit Objekt verknüpfen…** einen Link auf ein Objekt in den Text; ein Klick darauf zeigt das Objekt im Inspektor. Wenn das Manuskript kompiliert wird, werden diese Links zu gewöhnlichen Wörtern.
+
+**Hin und zurück.** **‹** und **›** in der Leiste des Reiters gehen durch die Objekte, die Sie angesehen haben, zurück und vorwärts, wie ein Webbrowser.
+
+**Verlinkt von.** Unten auf jedem Blatt listet **Verlinkt von** die Objekte auf, die auf dieses verweisen (in einem Linkfeld oder in einem Text), sodass das Dorf zeigt, wer darin wohnt. Ein Klick geht dorthin.
+
+**In diesem Dokument.** Ist das Dokument im Editor mit Objekten verknüpft (über ein Dokument-Linkfeld, zum Beispiel „Kommt vor in“), zeigt der Reiter **In diesem Dokument:** mit diesen Objekten, und die Schaltfläche **Objekte** ist wie andere Reiter mit Inhalt unterstrichen.
+
+**Löschen.** Das Löschen eines Objekts fragt zuerst. Links darauf werden aus den anderen Objekten entfernt (in Texten bleibt das verknüpfte Wort als einfacher Text). Ein Link darauf in einem Dokument sagt beim Anklicken, dass das Objekt nicht mehr existiert. Das Löschen eines Ordners behält seine Objekte; sie rücken eine Ebene nach oben.
+
+**Vorlagen und Farben.** **Projekt > Objektvorlagen und Farben…** (auch im Menü **≡** des Reiters und im Rechtsklick-Menü einer Kategorieschaltfläche) bearbeitet die Kategorien und ihre Felder:
+
+- Links die Kategorien: **Hinzufügen**, **Entfernen** und die Pfeile für die Reihenfolge. Das Entfernen einer Kategorie, die Objekte hat, fragt, ob sie auch gelöscht werden sollen; **Nein** ändert nichts.
+- Rechts der Name und die **Farbe** der Kategorie und ihre Felder: **Feld hinzufügen**, **Entfernen**, **Nach oben**, **Nach unten**. Für jedes Feld sein Name und seine Art; eine Zahl kann eine Einheit haben, eine Auswahl ihre Liste von Möglichkeiten (eine pro Zeile) und ein Linkfeld die Kategorien, mit denen es verknüpfen kann (keine angekreuzt: alle).
+- **Für neue Projekte verwenden** behält diese Kategorien und Vorlagen für Projekte, die Sie von jetzt an anlegen. **Standardvorlagen** setzt eine Kategorie auf die Vorlage zurück, mit der sie kam, oder fügt die Standardkategorien hinzu, die Sie entfernt haben.
+- Das Entfernen eines Feldes aus einer Vorlage verbirgt, was die Objekte darin haben, löscht es aber nicht aus ihren Dateien. Bei einem Standardfeld bringt **Standardvorlagen > Diese Kategorie auf Standard zurücksetzen** es mit seinem Inhalt zurück; ein eigenes Feld kommt nicht zurück, benennen Sie ein Feld also lieber um, als es zu entfernen, wenn Sie seinen Inhalt vielleicht wieder brauchen.
+
+**Wo Objekte aufbewahrt werden.** Im Projektordner, in einem Ordner *objects*: eine kleine Datei pro Objekt (*objects/characters/<ID>.json* und so weiter), die Vorlagen, Farben und Ordner in *objects/schema.json* und die Bilder in *objects/images*. Die Projektdatei selbst wird nicht geändert, sodass ältere Versionen von {{APP}} das Projekt wie zuvor öffnen und die Objekte in Ruhe lassen. Ein Projekt im Scrivener-Format bewahrt seine Objekte in seiner Arbeitskopie auf (Abschnitt 14); Scrivener kennt sie nicht. Sicherungen enthalten sie.
+
+---
+
+## 8. Ihr Projekt organisieren
+
+### Stichwörter
+Stichwörter sind Schlagwörter, zum Beispiel die Figuren oder Orte in einer Szene. Fügen Sie sie im Inspektor hinzu oder verwalten Sie alle mit **Projekt > Projektstichwörter** (**Ctrl+Alt+K**); dort können Sie ihnen Farben geben, sie den ausgewählten Dokumenten zuweisen und alle Dokumente mit einem Stichwort finden. Sie können Stichwörter auch aus diesem Fenster **ziehen**, auf Dokumente im Binder, in einer Sammlung, auf der Pinnwand oder in der Gliederung (ist das Dokument eines von mehreren ausgewählten, bekommen alle die Stichwörter), oder in die Stichwortliste des Inspektors oder eines Schnellansicht-Bereichs. Halten Sie beim Ablegen **Alt** gedrückt, um auch die Gruppe eines Stichworts zuzuweisen. Ziehen Sie im Fenster ein Stichwort auf ein anderes, um es in diese Gruppe zu setzen. Stichwortfarben erscheinen auf Karteikarten.
+
+### Eigene Metadaten
+
+Unter **Projekt > Projekteinstellungen > Eigene Metadaten** können Sie eigene Felder hinzufügen: Text, Kontrollkästchen, Liste (eine feste Menge von Auswahlmöglichkeiten) oder Datum, zum Beispiel *Perspektive*, *Ort* oder *Handlungstag*. Sie erscheinen im Inspektor und als Spalten der Gliederung.
+
+### Die Einstellungen des Projekts in eine Datei speichern
+
+**Projekt > Projekteinstellungen in Datei speichern…** schreibt die Einstellungen des geöffneten Projekts in eine eigene Datei (*.qbsettings*): Etiketten, Status, Abschnittstypen, eigene Metadaten, Stichwörter, die Standardformatierung, die Formatvorlagen, das Drehbuchformat, die Ziele, die Kompiliereinstellungen, Seitenansicht und Seitengröße, die Druckeinstellungen, das Aussehen (Design, Farben, Schriften, Spaltenbreite, Rand), die eigenen Optionen des Projekts (Datei > Einstellungen mit „Dieses Projekt“) und die Vorlagen und Farben des Objektblatts. Der Text Ihrer Dokumente gehört nicht dazu. Etiketten, Abschnittstypen und die Ordner, die die Kompiliereinstellungen nennen, werden mit ihren Namen gespeichert, sodass die Datei in ein anderes Projekt eingelesen werden kann.
+
+**Projekt > Projekteinstellungen aus Datei laden…** liest eine solche Datei in das geöffnete Projekt ein. Sind die Einstellungen des Projekts dieselben wie in der Datei, sagt es das und ändert nichts. Weichen sie ab, listet ein Fenster jeden Abschnitt mit dem auf, was abweicht (zum Beispiel „nur in der Datei: Idee; nur im Projekt: Überarbeiten“), und lässt Sie für jeden Abschnitt wählen:
+
+- **Aus der Datei übernehmen**: die Einstellungen der Datei für diesen Abschnitt.
+- **Die des Projekts behalten**: Der Abschnitt bleibt, wie er ist.
+- **Quillbinder-Standard**: was ein neues Projekt bekommt (die Einstellungen für neue Projekte unter **Datei > Einstellungen**, die Standard-Etiketten und -Status ...).
+
+**Alles aus der Datei übernehmen** und **Alles des Projekts behalten** setzen jeden Abschnitt auf einmal. Was auch immer Sie wählen, nichts, was Ihre Dokumente verwenden, geht verloren: Ein Etikett, Status, Abschnittstyp, Stichwort, eigenes Metadatenfeld, eine Objektkategorie oder Formatvorlage, die Dokumente noch verwenden, bleibt im Projekt, auch wenn die Datei sie nicht hat, und die Meldung am Ende nennt, was behalten wurde. Ändert sich die Formatierung oder eine Formatvorlage, folgt der Text aller Dokumente, wie wenn Sie sie selbst ändern. Vor dem Laden bewahrt {{APP}} die Einstellungen, wie sie waren, in einer Datei im Ordner *settings* des Projekts auf („settings-before-loading-*date*.qbsettings“); laden Sie diese Datei, um zurückzugehen.
+
+### Abschnittstypen
+
+Abschnittstypen sagen dem Kompilieren, was jedes Dokument ist: *Teil*, *Kapitel*, *Szene*, *Abschnitt* und so weiter. Legen Sie sie pro Dokument im Inspektor fest oder lassen Sie {{APP}} nach der Position entscheiden (**Projekteinstellungen > Abschnittstypen**, „Standardtypen nach Struktur“), zum Beispiel: Ordner auf der ersten Ebene sind Kapitel, Textdokumente darin sind Szenen.
+
+### Dokumentvorlagen
+
+Legen Sie Vorlagendokumente (zum Beispiel ein Figurenblatt) in einen Ordner und wählen Sie diesen Ordner dann unter **Projekteinstellungen > Spezielle Ordner**. Die Vorlagen erscheinen unter **Projekt > Neu aus Vorlage**. Unter **Dokumente > Standardvorlage für Unterdokumente** können Sie einen Ordner für jedes neue Dokument, das Sie darin anlegen, eine Vorlage verwenden lassen.
+
+### Projektvorlagen
+
+**Datei > Als Vorlage speichern…** speichert das aktuelle Projekt (Struktur, Einstellungen und alle Beispieldokumente) als Vorlage für neue Projekte.
+
+---
+
+## 9. Suchen
+
+### Schnellsuche
+
+Tippen Sie ein paar Buchstaben in das Feld in der Symbolleiste. Eine Liste zeigt die Dokumente, deren **Titel**, **Synopse** oder **Text** sie enthält, bis zu zehn jeder Art unter einer eigenen Überschrift. Wählen Sie eines aus, um es zu öffnen: Die Stellen im Text, die enthalten, was Sie getippt haben, sind **markiert**, und die erste ist ausgewählt und in den sichtbaren Bereich gescrollt. Die Markierungen verschwinden, wenn Sie im Binder ein anderes Dokument wählen. Das ist der schnellste Weg zu einem Dokument, dessen Namen Sie kennen.
+
+### Projektsuche
+
+**Ctrl+Shift+F** oder die Lupe in der Symbolleiste zeigt über dem Binder ein Suchfeld. Tippen Sie, und der Binder wird durch die violette Ergebnisliste ersetzt.
+
+- Klicken Sie auf ein Ergebnis, um es zu öffnen. **Die Treffer sind im Text hervorgehoben**, der erste ist ausgewählt und in den sichtbaren Bereich gescrollt, und **F3** / **Shift+F3** springen von einem zum nächsten. **Ctrl+F** öffnet die Suchleiste, schon mit Ihrem Suchbegriff gefüllt.
+- Das **X** in der Kopfzeile der Ergebnisse kehrt zum Binder zurück; der Editor behält das Dokument, das er zeigt. Klicken Sie noch einmal auf die Lupe in der Symbolleiste, um das Suchfeld auszublenden.
+- Sind die Sammlungen angezeigt, führt der Reiter **Suchergebnisse** Ihre letzte Suche erneut aus. Die letzte Suche wird mit dem Projekt aufbewahrt.
+
+Die Lupe links vom Suchfeld öffnet die Optionen:
+
+| Gruppe | Einträge |
+|--------|----------|
+| **Suchen in** | **Alle** oder eines von: Titel, Text, Synopse, Notizen, Stichwörter, Etikett, Status, Eigene Metadaten. Ein Klick wählt diesen einen Ort. Halten Sie **Alt** gedrückt, während Sie klicken (oder das Menü öffnen), um mehrere Orte zu wählen. |
+| **Operator** | **Alle Wörter** (jedes Wort muss vorkommen, in beliebiger Reihenfolge), **Beliebiges Wort**, **Genaue Wortfolge**, **Regulärer Ausdruck** |
+| **Optionen** | Ganze Wörter, Groß-/Kleinschreibung, Ergebnisse umkehren (die Dokumente, die *nicht* passen), Nur im Entwurf suchen, Nur in der Binder-Auswahl suchen (die im Binder ausgewählten Dokumente und alles darin), In „einbezogenen“ Dokumenten suchen / In „ausgeschlossenen“ Dokumenten suchen (nach **In Kompilierung einbeziehen**), Papierkorb einbeziehen |
+
+Beispiel: Um alles zu sehen, was noch den Status „To Do“ hat, suchen Sie nach `To Do` und wählen Sie unter Suchen in **Status**.
+
+**Suche als Sammlung speichern…** unten im Menü bewahrt die Suche mit ihren Optionen als Sammlung auf, die bei jedem Öffnen erneut läuft.
+
+### Projekt ersetzen
+
+**Bearbeiten > Suchen > Projekt ersetzen** ersetzt einen Text im ganzen Projekt auf einmal.
+
+1. Geben Sie den Text ein, der **ersetzt** werden soll, und den Text, der an seine Stelle kommt (**Durch**). Lassen Sie „Durch“ leer, um den Text zu entfernen.
+2. Wählen Sie **Groß-/Kleinschreibung beachten**, **Nur ganze Wörter** oder **Regulärer Ausdruck** (dann darf „Durch“ `\1` bis `\9` für die Gruppen des Ausdrucks verwenden).
+3. Haken Sie an, wo ersetzt werden soll: **Titel**, **Text**, **Notizen**, **Synopsen**, **Eigene Metadaten** (Textfelder), **Kommentare und Fußnoten** (die im Inspektor gezeigten Texte).
+4. Wählen Sie **Gesamtes Projekt** oder **Nur ausgewählte Dokumente** (die im Binder ausgewählten Dokumente mit dem, was darin ist). Der Papierkorb bleibt unberührt, wenn Sie ihn nicht ankreuzen.
+5. **Zählen** sagt Ihnen, wie viele Vorkommen sich ändern würden und wo. **Alle ersetzen** fragt noch einmal und tut es dann.
+
+Projekt ersetzen lässt sich nicht als Ganzes rückgängig machen. Lassen Sie **Vor dem Ändern von jedem Text eine Momentaufnahme erstellen** angekreuzt: Jeder geänderte Text hat dann eine Momentaufnahme namens „Before replacing …“, auf die man zurückgehen kann (Abschnitt 11). Titel und Synopsen haben keine Momentaufnahmen; legen Sie bei einer großen Änderung zuerst mit **Datei > Sichern > Jetzt sichern** eine Sicherung an. Ein Text, der in einem Editor geöffnet ist, lässt sich dort auch mit **Bearbeiten > Rückgängig** zurücknehmen.
+
+Die Formatierung bleibt, wie sie ist: Der neue Text übernimmt die Formatierung des Textes, den er ersetzt. Ein Text, der in keinem Editor geöffnet ist, wird in seiner Datei geändert, sodass **Bearbeiten > Rückgängig** diese Änderung nicht zurücknimmt (die zuerst gemachte Momentaufnahme tut es); dasselbe gilt für Anführungszeichen umwandeln, Kommentarkarten und Vergleichen und übertragen.
+
+### Nach Formatierung suchen
+
+**Bearbeiten > Suchen > Nach Formatierung suchen** (**Ctrl+F3**) öffnet ein kleines Fenster, das offen bleibt, während Sie arbeiten. Wählen Sie, wonach gesucht werden soll:
+
+| Suche nach | Findet | Zusatzauswahl |
+|------------|--------|---------------|
+| Hervorgehobener Text | Text, der mit dem Textmarker markiert ist | auf eine Farbe beschränken |
+| Kommentare und Fußnoten | Text mit angehängtem Kommentar oder Fußnote (Inspektor) | auf eine Kommentarfarbe beschränken |
+| Anmerkungen im Text, Fußnoten im Text | in den Text getippte Notizen | Anmerkungsfarbe |
+| Überarbeitungsfarbe | im Überarbeitungsmodus getippter Text | welche Überarbeitung |
+| Farbiger Text | Text, dessen Farbe Sie von Hand gesetzt haben | auf eine Farbe beschränken |
+| Links | Weblinks und Links auf Dokumente | |
+| Zeichenformat | fetter, kursiver, unterstrichener, durchgestrichener Text (von Hand gesetzt, nicht durch eine Formatvorlage) | welche davon |
+| Formatvorlage | Text mit einer Absatz- oder Zeichenformatvorlage | welche Formatvorlage |
+| Bilder | Bilder im Text | |
+
+**Enthaltender Text** grenzt die Suche auf Stellen ein, die ein Wort enthalten (bei Kommentaren und Fußnoten zählt auch der eigene Text der Notiz). **Weiter** und **Zurück** wählen die nächste Stelle aus. Mit **Suchen in: Alle Dokumente** setzt sich die Suche in den folgenden Dokumenten des Binders fort und öffnet sie; mit **Nur der aktuelle Editor** bleibt sie dort, wo Sie sind. **Ctrl+G** und **Ctrl+Shift+G** wiederholen die Suche ohne das Fenster. **Schließen** (oder **Esc**) schließt das Fenster.
+
+---
+## 10. Ziele, Statistik und Schreibwerkzeuge
+
+- **Projekt > Projektziele** (**Ctrl+Shift+T**): Legen Sie ein Wort- oder Zeichenziel für den Entwurf und für jede Schreibsitzung fest, wahlweise auch einen Abgabetermin und Ihre Schreibtage. {{APP}} kann dann berechnen, wie viel Sie pro Sitzung schreiben müssen. Die Fußzeile zeigt Ihren Fortschritt neben der Wortzahl (seit 0.94.0): einen kleinen Balken und zum Beispiel „83 / 1.000 heute“ für die Sitzung und „12.400 / 80.000 Entwurf“ für den Entwurf, jeweils nur solange das Ziel gesetzt ist; ein Klick darauf öffnet dieses Fenster. Die zwei dünnen Balken unter dem Schnellsuchfeld (blau: Entwurf; orange: Sitzung) bleiben bestehen, und unter **Datei > Einstellungen > Erscheinungsbild > Allgemeine Oberfläche** lassen sie sich ausschalten. Wörter, die in einem Schritt ins Projekt kommen, zählen nicht als in der Sitzung geschrieben (0.94.0): importierter Text (**Datei > Importieren**, **Importieren und teilen**, hineingezogene Dateien, Webseiten), eingefügte Texte von mehr als 200 Wörtern und die Wörter, die ein Projekt beim ersten Öffnen schon enthält. **Sitzung jetzt zurücksetzen** beginnt die Zählung bei 0, und der Tooltip des Schnellsuchfelds zeigt das sofort an. Das Fenster der Ziele reserviert den Platz für seine Balken, sodass die Felder sich nicht verschieben, wenn Sie ein Ziel setzen.
+- **Dokumentziele**: Klicken Sie in der Fußzeile des Editors auf das Ziel.
+- **Kürzungsziele** (0.95.0): Ein Ziel darf eine negative Zahl sein, in jedem Zielfeld (der Entwurf, die Sitzung und ein Dokument). Es ist dann ein Ziel zum Kürzen: „-2,000“ für eine Sitzung heißt, heute 2.000 Wörter zu streichen, „-4,000“ für ein Dokument heißt, es auf 4.000 Wörter zu bringen. Sein Balken füllt sich, während die Zahl sinkt (ein Sitzungsbalken nach den gestrichenen Wörtern, ein Dokument- oder Entwurfsbalken, bis die Zahl bis auf den Wert gesunken ist), und eine negative Zahl wird rot gezeigt. Bei einem negativen Sitzungsziel ist die heutige Zahl netto: Sie zählt die gestrichenen Wörter als Zahl unter 0, rot; bei einem positiven Ziel bleibt es wie bisher, und sie sinkt nie unter 0. Scrivener kennt keine negativen Ziele: Ein negatives Ziel wird nur in der eigenen Kopie von {{APP}} eines Projekts im Scrivener-Format behalten; die *.scriv* erhält dafür 0 („kein Ziel“).
+- **Projekt > Projektstatistik**: Wörter und Zeichen im Entwurf, im kompilierten Text und im gesamten Projekt sowie eine Schätzung der Seitenzahl. In einem großen Projekt dauert das Zählen einen Moment; der Wartezeiger zeigt das an.
+- **Projekt > Schreibverlauf**: wie viele Wörter Sie an jedem Tag geschrieben haben.
+
+Die folgenden Schreibwerkzeuge sind Erweiterungen (Abschnitt 17): **Namensgenerator**, **Notizblock** und **Textstatistik** (sie kamen mit dem Update 0.11 als ein Paket) sowie **Sprachtranskription** (0.61); jede lässt sich unter **Hilfe > Erweiterungen und Updates > Erweiterungsverwaltung** ausschalten oder entfernen. Fehlen sie, sagt **Bearbeiten > Schreibwerkzeuge** das; die Erweiterungsverwaltung finden Sie im Menü „Hilfe“.
+
+### Textstatistik
+
+**Projekt > Textstatistik…** zählt einen Teil Ihres Projekts. Wählen Sie oben, welcher Text gemeint ist:
+
+- **Ausgewählter Text** (gilt, wenn Sie das Fenster mit markiertem Text öffnen),
+- **Text im Editor** (im Gesamttext: alle angezeigten Dokumente),
+- **Im Binder ausgewählte Dokumente**, einschließlich der darin enthaltenen Dokumente,
+- **Entwurf (in Kompilierung einbezogen)** oder das **Gesamte Projekt** (ohne den Papierkorb).
+
+Das Fenster hat vier Reiter:
+
+- **Übersicht**: Wörter (genau wie in der Fußzeile und bei den Zielen gezählt), Zeichen mit und ohne Leerzeichen, Absätze, Sätze, verschiedene Wörter, Seiten zu 250 Wörtern, Lesezeit bei 230 Wörtern pro Minute sowie Durchschnittswerte (Buchstaben pro Wort, Wörter pro Satz und pro Absatz, der längste Satz; zeigen Sie darauf, um ihn zu lesen).
+- **Lesbarkeit (Schätzwerte)**, ebenfalls auf dem ersten Reiter. Für Englisch: der *Flesch Reading Ease* (0 bis 100, höher ist leichter; 60 bis 70 gilt als einfaches Englisch) und der *Flesch-Kincaid Grade Level* (die US-Schulstufe, die man braucht, um den Text zu verstehen). Für Deutsch: der *Flesch-Index nach Amstad* (dieselbe Skala) und die *Wiener Sachtextformel* (ungefähr die Schulstufe, 4 leicht bis 15 sehr schwer). Für jede Sprache: der *LIX* (Wörter pro Satz plus Anteil der Wörter mit mehr als sechs Buchstaben; unter 30 sehr leicht, über 60 sehr schwer). Die Sprache wird selbst erkannt oder oben gewählt. Diese Werte sind Richtwerte, keine Urteile: Silben und Sätze werden nach Faustregeln gefunden, und die Formeln wurden für Sachtexte entwickelt, nicht für Dialoge oder Gedichte.
+- **Worthäufigkeit**: jedes Wort mit Anzahl und Anteil, das häufigste zuerst. **Häufige Wörter ausblenden** lässt Artikel, Pronomen, Präpositionen und Ähnliches weg (Englisch und Deutsch). Legen Sie eine Mindestlänge fest, suchen Sie nach einem Wort oder zählen Sie Großbuchstaben getrennt. Ein Doppelklick auf ein Wort durchsucht das Projekt danach.
+- **Wiederholte Wendungen**: Gruppen von zwei bis sechs Wörtern, die Sie innerhalb von Sätzen mehr als einmal verwendet haben, etwa eine Beschreibung, die Sie zweimal gegeben haben. Wendungen, die nur aus häufigen Wörtern bestehen, werden weggelassen. Ein Doppelklick durchsucht das Projekt.
+- **Dokumente**: eine Tabelle der Dokumente mit Wörtern, Zeichen, Sätzen, Wörtern pro Satz und ihrem Anteil am Ganzen. Ein Klick auf eine Spaltenüberschrift sortiert; ein Doppelklick auf ein Dokument öffnet es.
+
+**Tabelle exportieren…** speichert die Tabelle des aktuellen Reiters als CSV-Datei für eine Tabellenkalkulation.
+
+### Namensgenerator
+
+**Bearbeiten > Schreibwerkzeuge > Namensgenerator…** erzeugt Namen für Figuren.
+
+1. Haken Sie die Listen für die **Vornamen** an (62 Herkünfte aus Europa, Amerika, Asien und Afrika, zum Beispiel Englisch, Amerikanisch, Irisch und Irisch-Gälisch, Deutsch, Österreichisch, Schweizerisch, Niederländisch, Französisch, Französisch-Kanadisch, Italienisch, Spanisch, Mexikanisch, Portugiesisch, Brasilianisch, Dänisch, Schwedisch, Norwegisch, Finnisch, Isländisch, Polnisch, Tschechisch, Ungarisch, Russisch, Griechisch, Türkisch, Hebräisch, Arabisch, Persisch, Indisch, Japanisch, Chinesisch, Koreanisch, Yoruba, Suaheli und Zulu; schottische oder walisische Listen gibt es noch nicht). Die **Nachnamen** stammen aus derselben Liste wie der Vorname; oder Sie nehmen den Haken bei **Die Liste des Vornamens** weg und wählen andere Listen (ein italienischer Vorname mit einem irischen Nachnamen).
+2. Wählen Sie **Geschlecht**, **Anzahl der Namen** und was **Angezeigt** werden soll (vollständiger Name, nur Vorname, nur Nachname, Initialen und Nachname). **Mit zweitem Vornamen** fügt einen zweiten Vornamen hinzu.
+3. **Feineinstellung**: **häufig ↔ selten** wählt aus den häufigsten Namen (links) oder den seltenen (rechts); das funktioniert mit den Listen, die mit *nach Häufigkeit* gekennzeichnet sind (zum Beispiel Amerikanisch, Schwedisch, Ungarisch, Hebräisch) und die angeben, wie oft jeder Name vorkommt. **Alliteration** gibt diesem Anteil der Namen einen Nachnamen mit dem Anfangsbuchstaben des Vornamens (Peter Parker); **Doppelte Nachnamen** verbindet zwei Nachnamen mit einem Bindestrich. **Vorname beginnt mit** / **Nachname beginnt mit** beschränken die Namen auf solche, die mit diesen Buchstaben anfangen.
+4. Klicken Sie auf **Namen erzeugen**. Wählen Sie Namen aus und klicken Sie auf **Kopieren** (alle Namen, wenn keiner ausgewählt ist) oder auf **In Text einfügen** (auch per Doppelklick), um sie an der Schreibmarke des Editors einzufügen.
+
+Frauen erhalten die weibliche Form eines Nachnamens, wo eine Sprache eine kennt (polnisch *Kowalska*, tschechisch *Nováková*, russisch *Иванова*). Japanische, chinesische, koreanische, ungarische und vietnamesische Namen zeigen den Familiennamen zuerst. Einige Listen stehen in ihrer eigenen Schrift (Russisch, Griechisch, Hebräisch, Arabisch und andere); der Listenname sagt, welche.
+
+**Eigene Liste hinzufügen…** macht aus einer Textdatei mit einem Namen pro Zeile eine eigene Liste (Vornamen, weibliche oder männliche Vornamen oder Nachnamen). Wählen Sie die Liste und klicken Sie auf **Eigene Liste entfernen**, um sie zu löschen. Die Namenslisten stammen aus dem Open-Source-Projekt *Faker* (MIT-Lizenz); es sind Listen gebräuchlicher Namen, keine geprüften historischen Namenslisten.
+
+### Notizblock
+
+Der Notizblock enthält Notizen außerhalb jedes Projekts: Ideen, während ein anderes Projekt geöffnet ist, von einer Webseite kopierte Zitate, ein Bild von einem Teil des Bildschirms. Öffnen Sie ihn mit **Fenster > Notizblock** (**Alt+Shift+Return**).
+
+- **+** beginnt eine Notiz (der Pfeil daneben: formatierter Text oder reiner Text). Der Titel über dem Text ist der Name der Notiz. **−** löscht die ausgewählte Notiz.
+- Formatierte Notizen nehmen **Fett**, *Kursiv* und Unterstreichung (Schaltflächen oder **Ctrl+B / I / U**) und Bilder an: Fügen Sie ein Bild ein oder klicken Sie auf die **Kamera**, um ein Bild von einem Teil des Bildschirms aufzunehmen. Die Kamera gibt es nur für formatierte Notizen.
+- Alles wird beim Tippen selbsttätig gespeichert. Lässt sich eine Notiz nicht speichern (volle Festplatte, ein Notizordner, der nicht mehr da ist), sagt die Statuszeile das, und die Notiz bleibt mit ihrem Text geöffnet: Eine andere Notiz, eine neue Notiz oder ein anderer Notizordner wird erst geöffnet, wenn sie gespeichert ist, und ein Fenster bietet **Text kopieren** und **Erneut versuchen** an. Endet das Programm, während eine Notiz nicht gespeichert werden kann, kommt ihr Text in den Notfallordner *~/.local/share/{{APP}}/Emergency* (0.65).
+- **An Projekt senden** listet jedes geöffnete Projekt auf, auch die in anderen {{APP}}-Fenstern geöffneten. Für jedes: **Neues Dokument im Recherche-Ordner**, **Neues Dokument in** einem Ordner Ihrer Wahl oder **Am Ende anfügen an** ein Textdokument. Formatierung und Bilder werden mitgenommen. Die Notiz bleibt im Notizblock, bis Sie sie löschen.
+
+Die Notizen sind gewöhnliche Dateien in einem Ordner, normalerweise *Documents/{{APP}} Scratch Pad* (reiner Text als .txt, formatierte Notizen als .html, ihre Bilder im versteckten Unterordner *.images*). Einen anderen Ordner, die Art neuer Notizen und ob der Notizblock über anderen Fenstern bleibt, wählen Sie unter **Datei > Einstellungen > Allgemein > Notizblock**. Anderswo geänderte Notizen (ein anderes {{APP}}-Fenster, ein synchronisierter Ordner) erscheinen sofort.
+
+**Aus jedem Programm.** Das Tastenkürzel im Programm funktioniert, solange {{APP}} die Tastatur hat. Um den Notizblock aus einem beliebigen Programm zu öffnen, lassen Sie den Desktop {{APP}} mit `--scratch-pad` starten: Geben Sie in KDE unter **Systemeinstellungen > Tastatur > Kürzel > Neu hinzufügen > Befehl oder Skript** den Befehl ein, der unter **Datei > Einstellungen > Tastatur** angezeigt wird (Schaltfläche **Befehl kopieren**), und drücken Sie die gewünschten Tasten. Der Notizblock öffnet sich dann von selbst, ohne Projektfenster, und sendet Notizen an die gerade geöffneten Projekte. Wurde {{APP}} zum Anwendungsmenü hinzugefügt (**Hilfe > Zum Anwendungsmenü hinzufügen**), hat der Menüeintrag auch die Aktion **Notizblock**.
+
+**Die Kamera** nimmt das Bild mit KDEs Screenshot-Programm *Spectacle* auf, wenn es installiert ist (nötig unter Wayland, wo Programme den Bildschirm nicht selbst lesen dürfen): Ziehen Sie über den gewünschten Teil. Ohne Spectacle zeigt {{APP}} unter X11 den Bildschirm, und Sie ziehen über den Teil; **Esc** bricht ab, **Enter** nimmt den ganzen Bildschirm.
+
+### Sprachtranskription
+
+Sprechen statt Tippen: Die Erweiterung **Sprachtranskription** (Version 0.61 oder neuer) schreibt auf, was Sie sagen. Alles geschieht auf diesem Computer; während Sie sprechen, wird nichts irgendwohin gesendet.
+
+**Vor der ersten Aufnahme: ein Modell wählen.** Die Spracherkennung braucht ein Modell, das einmal heruntergeladen wird. Öffnen Sie **Datei > Einstellungen > Sprache** (oder den Pfeil neben der Mikrofon-Schaltfläche, **Optionen der Sprachtranskription…**), wählen Sie ein Modell und drücken Sie **Herunterladen und verwenden**:
+
+- **Small**: 190 MB Download, schnell; gut für deutliche Sprache, Übersetzung nur grob.
+- **Medium** (empfohlen): 539 MB; hält mit der Sprache auf den meisten Prozessoren der letzten Jahre Schritt; gute Erkennung und Übersetzung.
+- **Large v3**: etwa 1,1 GB; das beste, aber auf einem Prozessor oft langsamer als die Sprache, sodass der Text bei langen Passagen zurückfällt. Eine Grafikkarte hilft.
+- **Large v3 Turbo**: 574 MB; nah an Large v3 und schneller, kann aber nicht übersetzen.
+
+Die Modelle stammen aus den Modelldateien von whisper.cpp auf Hugging Face. Unter **Quelle** können Sie stattdessen eine andere Adresse angeben oder mit **Heruntergeladene Datei verwenden…** eine Modelldatei nehmen, die Sie selbst geholt haben. Bevor ein Modell benutzt wird, wird es geprüft: zuerst seine Prüfsumme (SHA-256), dann die Beschreibung des Modells in der Datei und eine kurze Test-Transkription. Nur wenn alles in Ordnung ist, ersetzt es das benutzte Modell, das dann gelöscht wird. Ein Modell aus der offiziellen Quelle muss die bekannte Prüfsumme haben; sonst wird es nicht installiert (der Download kann beschädigt sein). Eine Datei von einer anderen Adresse oder eine selbst heruntergeladene, deren Prüfsumme nicht die bekannte ist, wird erst gelesen, nachdem Sie zugestimmt haben, weil die Spracherkennung sie lesen muss. Andere Adressen müssen mit *https://* beginnen. Ein unterbrochener Download wird beim nächsten Mal dort fortgesetzt, wo er stehen blieb. **Geschwindigkeitstest** zeigt, wie lange dieser Computer mit dem gewählten Modell und Gerät für eine kurze Aufnahme braucht.
+
+**Aufnehmen.** Drücken Sie die Mikrofon-Schaltfläche in der Symbolleiste „Werkzeuge“ (oder **Bearbeiten > Schreibwerkzeuge > Sprachtranskription**). Der Inspektor öffnet sich auf dem Reiter **Transkriptionen** (das Mikrofon, das erste in der Schaltflächenreihe des Inspektors), und eine neue Transkription beginnt, benannt nach Datum und Uhrzeit. Sprechen Sie; eine kurze Pause beendet ein Stück, und sein Text erscheint einige Sekunden später. Eine längere Pause (3 s, wenn Sie sie nicht ändern) beginnt einen neuen Absatz. Drücken Sie die Schaltfläche erneut, um zu beenden: Die noch wartenden Stücke werden geschrieben, danach lässt sich der Text bearbeiten. Der Pfeil neben der Schaltfläche wählt das Mikrofon.
+
+**Die Transkriptionen** sind reine Textdateien in einem eigenen Ordner außerhalb jedes Projekts (normalerweise *Documents/{{APP}} Transcriptions*), sodass Ihre Projekte unberührt bleiben. Auf dem Reiter können Sie eine Transkription bearbeiten (wird selbsttätig gespeichert), umbenennen, den ganzen Text kopieren, um ihn an beliebiger Stelle einzufügen, sie löschen (sie kommt in den Papierkorb des Desktops) oder den Ordner öffnen. Solange eine Aufnahme geschrieben wird, ist ihr Text schreibgeschützt. Lässt sich eine bearbeitete Transkription nicht speichern, bleibt sie geöffnet (die Statuszeile nennt den Grund); beginnt währenddessen eine Aufnahme oder endet das Programm, kommt ihr Text in den Notfallordner *~/.local/share/{{APP}}/Emergency* (0.65).
+
+**Jetzt aufnehmen, den Text später schreiben** (0.64). Das Schreiben des Textes kostet viel Rechenleistung; auf einem Laptop im Akkubetrieb (oder einem Telefon) können Sie nur aufnehmen und den Text später schreiben lassen. Wählen Sie dazu **Nur aufnehmen** unter **Datei > Einstellungen > Sprache** (*Wenn das Mikrofon startet*; unter Android ist es die Voreinstellung). Die Mikrofon-Schaltfläche nimmt dann nur auf: Nichts anderes läuft, kein Modell wird geladen. Die Aufnahme wird als Audiodatei (WAV, etwa 1,9 MB pro Minute) neben den Transkriptionen aufbewahrt, mit gleichartigem Namen, und erscheint in der Liste des Reiters mit einer Schaltfläche **Transkribieren** in ihrer Zeile; **Alle transkribieren** schreibt nacheinander den Text jeder Aufnahme, die noch keinen hat. Der Text erscheint dann wie bei einer Live-Aufnahme und lässt sich bearbeiten. Eine Aufnahme bleibt nach dem Schreiben ihres Textes erhalten, es sei denn, Sie haken **Aufnahme löschen, sobald ihr Text geschrieben ist** an; Umbenennen oder Löschen einer Transkription nimmt ihre Aufnahme mit. Um den Text auf einem anderen Computer zu schreiben, wählen Sie einen Transkriptionsordner, den Ihr Synchronisationsprogramm auf beiden gleich hält. Wird eine Aufnahme angehalten, während ihr Text geschrieben wird (oder endet das Programm), behält sie ihre Schaltfläche **Transkribieren** und kann erneut laufen.
+
+**Sprachen.** Die **Hauptsprache** ist die Sprache des Textes; die **Ausweichsprache** ist eine andere Sprache, die Sie auch sprechen (beide werden aus den elf Sprachen des Programms gewählt: Englisch, Deutsch, Spanisch, Französisch, Portugiesisch, Italienisch, Russisch, Indonesisch, Türkisch, Polnisch und Niederländisch). Ist Englisch die Hauptsprache, wird, was Sie in der Ausweichsprache sagen, auf Englisch geschrieben (Whisper übersetzt nur ins Englische). Wörter der Ausweichsprache innerhalb englischer Sätze können falsch verstanden werden (in einem Test wurde „Bahnhof“ zu „Bon Huff“); tragen Sie die, die Sie benutzen, unter **Hinweiswörter** ein, dann werden sie so geschrieben, wie Sie sie sagen („Bahnhof“, „Brötchen“). Bei einer anderen Hauptsprache oder mit Large v3 Turbo bleibt die Sprache so, wie sie gesprochen wurde. **Gesagtes neben einer Übersetzung behalten** fügt hinter einem übersetzten Stück das Original in Klammern an (es dauert länger). **Hinweiswörter**: Namen und Wörter, die Sie benutzen, damit sie so geschrieben werden, wie Sie es wollen.
+
+**Weitere Optionen.** **Berechnen auf**: dem Prozessor oder einer Grafikkarte, die whisper.cpp über Vulkan nutzen kann (wird angezeigt, wenn eine gefunden wird; Karten mit zu wenig Speicher für das Modell werden aufgelistet, lassen sich aber nicht wählen). Unter Windows nutzt die Erweiterung vorerst nur den Prozessor: Small oder Medium halten dort am besten Schritt. **Prozessor-Threads**: einer weniger, als der Prozessor hat, hält das Tippen flüssig. **Genauigkeit**: *Sorgfältig* wägt mehrere mögliche Texte ab und ermittelt zuerst die Sprache jedes Stücks: besser, aber langsamer. **Mikrofon**, **Empfindlichkeit** (niedrig für einen lauten Raum, hoch für eine leise Stimme), **Eine Pause, die ein Stück beendet**, **Neuer Absatz nach einer Pause von** (*nie* schaltet es aus), der **Ordner** und unter **Erweitert**: Text bei Stille und Rauschen weglassen (Whisper erfindet dort manchmal eine Zeile wie „Thank you for watching“) und den vorherigen Text als Kontext für das nächste Stück verwenden.
+
+---
+
+### Übersetzungshelfer
+
+Seit 0.92.0 ist die Erweiterung **Übersetzungshelfer** (Version 1.5; bis 1.4 hieß sie Translation and Proofreading) eine der eigenen Erweiterungen von {{APP}} und in der Vollversion enthalten; für ein bereits vorhandenes {{APP}} gibt es sie als eigenes Paket auf der Seite „Releases“ (Abschnitt 17). Sie übersetzt zwischen je zwei von elf Sprachen und prüft englischen Text auf Rechtschreibung und Grammatik, auf Ihrem eigenen Computer: Ein Text verlässt ihn nie. {{APP}} selbst hat keine KI-Funktionen; diese Erweiterung arbeitet mit Sprachmodellen und lässt sich in der Erweiterungsverwaltung wie jede andere ausschalten oder entfernen.
+
+- **Dieses Werkzeug macht nur Vorschläge. Seine Übersetzungen sind nicht genau: Prüfen Sie jede, wozu Sie gute Kenntnisse beider Sprachen brauchen.** Derselbe Satz steht im Fenster der Erweiterung und in ihrer Beschreibung.
+- Sie hat einen eigenen Reiter im Inspektor und ein eigenes Fenster (ihr Befehl steht im Untermenü „Schreibwerkzeuge“ des Menüs „Bearbeiten“, und es gibt eine Schaltfläche in der Symbolleiste). Der Text geht hinein, das Ergebnis kommt heraus, jede Änderung markiert, laufend während Sie tippen; ein Klick auf ein Wort behält das Original oder bietet andere Wörter an.
+- Sie braucht ein Modell, das Sie einmal in den Optionen der Erweiterung wählen und herunterladen (einige hundert Megabyte bis mehrere Gigabyte; ein für den Computer zu großes Modell wird nicht angeboten). Die Modelle werden aus den Releases *models-1*, *models-2*, *models-3* und *models-4* des Repositorys von {{APP}} geholt, jedes wird nur installiert, wenn seine Prüfsumme die bekannte ist, und danach arbeitet die Erweiterung ohne jede Verbindung. Ein Modell, CoEdIT Large, darf nur für nicht kommerzielle Zwecke verwendet werden; die Erweiterung sagt das, bevor es heruntergeladen wird.
+- **Ein einzelnes Wort** (1.3). Ein englisches Wort: Das Ergebnis ist das Wort, wie es sein soll, und darunter, was es bedeutet (die Bedeutungen stammen aus dem Wörterbuch WordNet 3.0, das in die Erweiterung eingebaut ist; zu einem Wort, das es nicht hat, schreibt das heruntergeladene Qwen3-Modell eine Bedeutung, mit dem Hinweis, dass sie ungenau sein kann, und ohne ein solches Modell sagt die Erweiterung, was Sie herunterladen können), seine Rechtschreibvorschläge und Wörter mit ähnlicher Bedeutung. Ein deutsches Wort: Die Erweiterung schlägt es zuerst im **Deutschen Wörterbuch** nach, einem Auszug aus dem Wiktionary, den Sie in den Optionen der Erweiterung gesondert herunterladen (seine Lizenz, CC BY-SA 4.0, wird vor dem Download angezeigt): die Grundform, die Wortarten, die Bedeutungen und die englischen Wörter zu jeder Bedeutung. Die ersten fünf Bedeutungen einer Wortart werden gezeigt, der Rest steht hinter „mehr“; ein Klick auf ein englisches Wort macht es zum Ergebnis, und „Ähnliche“ folgt dann diesem Wort und seiner Wortart. Für das, was das Wörterbuch nicht sagt, und für ein Wort, das es nicht hat, übersetzt das kleine Modell das Wort, und die Ausgabe warnt, dass es ungenau sein kann. Englisch nach Deutsch funktioniert ebenso für ein einzelnes englisches Wort, nach den Wortarten, die WordNet kennt.
+- **Tauschen und Zurückübersetzen** (1.3). **Tauschen** macht aus Deutsch nach Englisch ein Englisch nach Deutsch und zurück: Das Ergebnis wandert in den Text und wird in die andere Richtung übersetzt. **Zurückübersetzen** übersetzt das Ergebnis zurück in die Sprache Ihres Textes und zeigt es unter dem Ergebnis an, bis Sie den Text ändern; es braucht das Modell für den Rückweg (OPUS-MT Englisch nach Deutsch (klein) für einen deutschen Text) und bietet an, es herunterzuladen, wenn es fehlt. Beim Übersetzen zeigt die zweite Reihe der Bedienelemente das Übersetzungsmodell (die Wahl eines anderen ändert die Einstellung und die Übersetzung), und die Liste der Stile ist ausgeblendet.
+- **Kurze Texte** (1.3). Ein einzelnes Wort und ein Text von bis zu drei Wörtern werden nie dem großen Übersetzungsmodell gegeben (es ist für ganze Sätze besser und für einzelne Wörter unzuverlässig): zuerst das Wörterbuch, sonst das kleine Modell, auch wenn das große gewählt ist. Bei einem kurzen Text aus mehreren Wörtern listet „Andere Übersetzungen:“ die besten vollständigen Übersetzungen des Modells auf, ohne von ihm erfundene Namen.
+- **Version 1.4.** Ein einzelnes Wort zeigt in beiden Richtungen jetzt unter dem Ergebnis die Übersetzungen jeder Wortart, die es hat (ein deutsches Wort, das kleingeschrieben ein Verb und großgeschrieben ein Substantiv ist, bekommt beide; ein Wort, das das Wörterbuch nicht hat, wird in beiden Formen übersetzt), dann „Ähnliche Übersetzungen“ (Wörter mit ähnlicher Bedeutung wie das englische Ergebnis) oder, von Englisch nach Deutsch, „Ähnliche deutsche Wörter“: die deutschen Wörter, deren Bedeutungen das englische Wort oder eines seiner Synonyme nennen (das braucht das Deutsche Wörterbuch; ohne es sagt eine Zeile das), dann die Kurzbeschreibung. Mit „Automatisch“ wird ein einzelnes deutsches Wort, das kein englisches Wort ist, als Deutsch erkannt, wenn das Deutsche Wörterbuch installiert ist. Bevor Deutsch übersetzt wird, werden die Großbuchstaben deutscher Substantive in der Kopie, die an das Modell geht, richtiggestellt (Ihr Text bleibt, wie er ist): Ein Wort, das das Wörterbuch nur als Substantiv kennt, bekommt seinen Großbuchstaben, ein Wort, das in beiden Formen bekannt ist („essen“), behält die Form, die Sie getippt haben, außer direkt nach einem Artikel oder einer Präposition mit Artikel („das Essen“, „im Essen“); ohne das Wörterbuch sagt ein Hinweis unter der Übersetzung, dass deutsche Substantive Großbuchstaben brauchen. Alternativen, die sich voneinander oder von der Übersetzung nur in der Groß- und Kleinschreibung unterscheiden, werden nur einmal gezeigt. Der Wortbereich zeigt keine Zeile „Rechtschreibung“ mehr für Wörter des Ergebnisses (Wörter, die Sie in Ihrem eigenen Text anklicken, behalten sie), und die Endungsregeln der ähnlichen Wörter lesen „number“ nicht mehr als „numb“. Fehlt etwas (ein Übersetzungsmodell, das Deutsche Wörterbuch), nennt es ein Hinweis oben im Reiter und im Fenster der Erweiterung, mit einer Schaltfläche, die die Optionen der Erweiterung öffnet. Ein Modell, das 15 Minuten nicht benutzt wurde, wird entladen, um Speicher freizugeben (**Datei > Einstellungen > Korrektur > Geschwindigkeit > Modelle entladen nach**; „nie“ lässt es geladen). Die Hinweise in den leeren Feldern werden bei schmaler Breite umbrochen.
+- **Version 1.5: elf Sprachen.** Die Erweiterung übersetzt zwischen je zwei von Englisch, Deutsch, Spanisch, Französisch, Portugiesisch (Brasilien), Italienisch, Russisch, Indonesisch, Türkisch, Polnisch und Niederländisch: Bei gewähltem **Übersetzen** nennen zwei Auswahllisten die Sprache Ihres Textes und die Sprache der Übersetzung. Jede Sprache hat zwei kleine OPUS-MT-Modelle, von und nach Englisch (ihre Lizenzen, Apache-2.0 oder CC BY 4.0, werden vor einem Download in den Optionen gezeigt); ein Paar ohne Englisch (zum Beispiel Spanisch nach Russisch) läuft mit beiden Modellen über Englisch, und ein Hinweis unter dem Ergebnis sagt das, weil ein Fehler des ersten Schritts in den zweiten mitgenommen wird. Jede Sprache außer Englisch hat außerdem ein optionales **Wörterbuch** aus dem Wiktionary (CC BY-SA 4.0, ein gesonderter Download, dessen Lizenz zuerst gezeigt wird), das für ein einzelnes Wort dieser Sprache so verwendet wird wie das Deutsche Wörterbuch. Eine Sprache ohne brauchbares Wörterbuch bekommt nur die Übersetzungen des Modells. Ein einzelnes Wort wird weiterhin als Vorschlag korrigiert: Die Rechtschreibzeile und die Wörter darunter sagen, dass es Vorschläge sind, die zu prüfen sind. Die eigenen Texte der Erweiterung gibt es in den elf Sprachen des Programms (der Sprache, die Sie für {{APP}} gewählt haben; Englisch, wo ein Text nicht übersetzt ist). Die Einstellungen von 1.4 gelten weiter: Das Deutsche Wörterbuch und die Modelle, die Sie heruntergeladen haben, bleiben, und Deutsch nach Englisch ist die erste Wahl. Ihre Optionen stehen jetzt unter **Datei > Einstellungen > Übersetzungshelfer**.
+- Modelle, die Sie mit Version 1.1 heruntergeladen haben, bleiben, wie sie sind. Version 1.1 holte Modelle aus dem früheren Repository der Erweiterung; 1.2 kennt den neuen Ort.
+- Die eigene Beschreibung der Erweiterung, mit ihren Regeln für die Korrektur (amerikanische Schreibweise, geschwungene Anführungszeichen, keine Geviertstriche) und was jedes Modell gut kann, ist *addons/translation-proofreading/source/README.md* im Quelltext von {{APP}}.
+
+## 11. Momentaufnahmen
+
+Eine Momentaufnahme ist eine gespeicherte Kopie eines Dokuments zu einem bestimmten Zeitpunkt. Erstellen Sie eine vor einer größeren Überarbeitung:
+
+- Ein Dokument mit mindestens einer Momentaufnahme zeigt im Binder oben rechts an seinem Symbol eine umgeknickte Ecke (hell und grau).
+- **Ctrl+5** erstellt eine Momentaufnahme; **Ctrl+Shift+5** fragt nach einem Titel.
+- Mit **Datei > Einstellungen > Allgemein > Speichern** legt **Datei > Speichern** (**Ctrl+S**) von jedem Text, den Sie seit dem letzten Datei > Speichern geändert haben, eine Momentaufnahme an (Titel „Saved“); **Datei > Einstellungen > Verhalten > Momentaufnahmen** zeigt in der Statusleiste eine kurze Meldung, wenn Momentaufnahmen erstellt werden.
+- Auf dem Reiter „Momentaufnahmen“ des Inspektors können Sie eine Momentaufnahme mit dem aktuellen Text **vergleichen** (Ergänzungen werden farbig gezeigt, Löschungen durchgestrichen; wählen Sie, ob Wörter, Sätze, Absätze oder Zeichen verglichen werden) und **zu ihr zurückkehren**. Vor dem Zurückkehren kann {{APP}} eine Momentaufnahme des aktuellen Textes anlegen, damit nichts verloren geht. Die Momentaufnahme wird zuerst gelesen (0.65): Eine, die sich nicht ganz lesen lässt, lässt den aktuellen Text, wie er ist; eine ohne Text ersetzt ihn erst nach einer zweiten Rückfrage; und wenn die Momentaufnahme des aktuellen Textes verlangt war, sich aber nicht anlegen lässt, wird nichts zurückgesetzt. Das Zurückkehren ist auch der Weg, ein Dokument zu reparieren, dessen Datei beschädigt oder in einer anderen Zeichenkodierung ist (es wird schreibgeschützt angezeigt): Die beschädigte Datei wird zuvor als Kopie in *settings/conflicts* aufbewahrt, und der Inspektor sagt, wo (0.81.1).
+- **Projekt > Alte Momentaufnahmen löschen…** (seit 0.61.1, unter „Papierkorb leeren“) löscht jede Momentaufnahme des Projekts, auch die von Dokumenten im Papierkorb, um das Projekt wieder kleiner zu machen. Die Texte bleiben, wie sie jetzt sind; nur ihre früheren Fassungen verschwinden. Eine Rückfrage nennt zuerst, wie viele Momentaufnahmen es gibt, von wie vielen Dokumenten und wie viel Platz sie belegen; das lässt sich nicht rückgängig machen, legen Sie also vorher eine Sicherung an (**Datei > Sichern**). Der Befehl ist ausgeschaltet, solange das Projekt keine Momentaufnahmen hat. In einem Projekt im Scrivener-Format verschwinden die Momentaufnahmen auch aus der *.scriv* (mit dem sofort folgenden Speichern); seit 0.61.1 gilt das auch für eine einzelne Momentaufnahme, die Sie im Inspektor löschen.
+
+---
+
+## 12. Schreibmodus
+
+**F11** füllt den Bildschirm mit nichts als Ihrem Text auf einem Blatt Papier. Bewegen Sie die Maus an den unteren Rand, um die Steuerleiste zu zeigen: Zoom, Papierbreite, Hintergrund-Abblendung, Schreibmaschinen-Scrollen, Wortzahl und ein kleiner Inspektor mit Synopse und Notizen. **Alt+Shift+Up / Down** wechselt zum vorherigen oder nächsten Dokument, **Ctrl+[** und **Ctrl+]** gehen in den bereits angesehenen Dokumenten zurück und vor. Die Tastenkürzel der Menüs „Format“ und „Einfügen“ (Fett, Formatvorlagen, Kommentare ...) funktionieren auch hier. **Esc** oder **F11** kehrt zum Hauptfenster zurück.
+
+**Datei > Einstellungen > Verhalten > Schreibmodus** wählt den Bildschirm, auf dem er sich öffnet (den aktuellen, den primären oder einen nach Namen), ob das Hauptfenster aus dem Weg geht (minimiert, solange der Schreibmodus geöffnet ist) und ob **Esc** ihn schließt (**F11** tut es immer).
+
+Die Steuerleiste ist in jedem Design dunkel, sodass ihre Schaltflächen, die Zoomliste und ihre Texte auch in hellen Designs lesbar bleiben (0.94.0). Die Farben von Text, Papier und Hintergrund kommen aus dem Design. Um sie zu ändern, zum Beispiel auf Schwarz auf Weiß oder Grün auf Schwarz, gehen Sie zu **Datei > Einstellungen > Erscheinungsbild > Schreibmodus**; die Änderung zeigt sich sofort, auch bei geöffnetem Schreibmodus. Ein Hintergrundbild lässt sich pro Projekt unter **Projekt > Projekteinstellungen > Spezialordner** festlegen.
+
+---
+
+## 13. Kompilieren: das Manuskript erstellen
+
+**Datei > Kompilieren…** (**Ctrl+Shift+E**) setzt alles im Entwurf zu einer Datei zusammen.
+
+### Das Kompilierungsfenster
+
+Das Kompilierungsfenster hat oben **Kompilieren für**, links die Formate, in der Mitte die Abschnittslayouts und rechts Inhalt, Metadaten, Optionen und Ersetzungen (vier Reiter mit Symbolen; halten Sie die Maus über einen Reiter, um seinen Namen zu sehen). Die Spalte „Formate“ ist mindestens so breit wie ihr längster Name; ziehen Sie an den Linien zwischen den drei Spalten, um eine breiter zu machen, und das Fenster behält die Breiten für das nächste Mal.
+
+1. **Kompilieren für**: das Ausgabeformat. Eingebaut, ohne ein weiteres Programm: **Word-Dokument (.docx)**, **PDF (.pdf)**, **E-Book (.epub)** und für Drehbücher **Fountain** und **Final Draft**. PDF und OpenDocument über LibreOffice, EPUB über Pandoc und Markdown erscheinen ebenfalls, wenn das passende Plugin und Programm installiert sind (siehe unten). Daneben: wie viele Dokumente und etwa wie viele Wörter kompiliert werden.
+2. **Formate** (links), unter **Meine Formate** und **Eingebaute Formate**: Das Kompilierungsformat bestimmt, wie das Manuskript aussieht: Schriften, Zeilenabstand, Seitengröße, Ränder, Kopf- und Fußzeilen, wie Kapitel und Szenen aussehen, wie Formatvorlagen, Notizen und Zitate ausgegeben werden. Die eingebauten Formate (*Manuscript (Times)*, *Manuscript (Courier)*, *Modern*, *Paperback (6 x 9 in)*, *E-book*, *Default (Editor Formatting)* und *Outline (Synopses)*) lassen sich nicht ändern. Die Schaltflächen unter der Liste: **+** (das ausgewählte Format duplizieren, um eine eigene Version zu erstellen und zu bearbeiten), der Stift (ein eigenes Format bearbeiten), **-** (es löschen), **Importieren...** und **Exportieren...** (eine *.qbformat*-Datei zur Verwendung auf einem anderen Computer oder zum Weitergeben; ein importiertes Format, dessen Name schon vergeben ist, bekommt eine Nummer).
+3. **Abschnittslayouts** (Mitte): **Schrift** legt eine Schrift für das ganze Manuskript fest oder überlässt sie den Layouts („Vom Abschnittslayout bestimmt“). Die Tabelle listet jeden Abschnittstyp Ihres Projekts mit dem Layout auf, das er in diesem Format bekommt; wählen Sie in der Liste ein anderes. Unter der Tabelle zeigt ein kleines Bild, wie ein Abschnitt mit dem ausgewählten Layout beginnt. **Abschnittslayouts zuweisen...** öffnet ein größeres Fenster mit den Abschnittstypen links und Bildern aller Layouts des Formats rechts. Die eingebauten Formate kennen die üblichen Namen von Abschnittstypen: In *Manuscript (Courier)* bekommt zum Beispiel *Part* das Layout **Part Title**, *Chapter* das Layout **Chapter Heading** und *Scene* oder *Section* das Layout **Section Text**.
+4. **Inhalt** (erster Reiter): was kompiliert wird, mit dem Abschnittstyp jedes Dokuments und seinem Layout. Wählen Sie einen Ordner, um nur einen Teil des Entwurfs zu kompilieren (zum Beispiel ein Kapitel), und fügen Sie Vorspann (Titelseite) und Nachspann (Danksagungen) hinzu. **Der Name des Autors** (0.94.0): Die Titelseite der Projektvorlagen lautet „von“ und der Name des Autors. Die erste Kompilierung, die eine Titelseite schreibt, fragt nach diesem Namen (Vor- und Nachname; er wird mit den Autorenangaben unter **Datei > Einstellungen > Allgemein** aufbewahrt, sodass nur einmal gefragt wird); lassen Sie ihn leer, entfällt die „von“-Zeile der Titelseite, in jedem Format. Das Feld „Autor“ auf dem Reiter „Metadaten“ des Kompilierungsfensters wird, wenn es einen Namen enthält, stattdessen für die kompilierte Datei verwendet. Nehmen Sie bei einem Dokument den Haken weg, um es auszulassen; das schaltet seine Einstellung **In Kompilierung einbeziehen** aus. **Objektblätter hinzufügen** setzt für jedes Objekt des Reiters „Objekte“ (Abschnitt 7) ein Blatt nach dem Nachspann: eine Überschrift pro Kategorie (Figuren, Orte ...), dann jedes Objekt mit seinen Feldern; die Schaltfläche daneben wählt die Kategorien. Anfangs ist es aus.
+5. **Metadaten** (zweiter Reiter): Titel, Untertitel, Autor, Sprache (zum Beispiel *en-US*), Thema, Stichwörter, Verlag, Datum, Beschreibung, das Cover eines E-Books (ein Bild aus dem Binder) und die Buchkennung. Leere Felder übernehmen den Projekttitel, Ihren Namen und das heutige Datum. Die Angaben gehen in die Dokumenteigenschaften des PDFs, das E-Book und die Word-Datei; Platzhalter wie `<$projecttitle>` funktionieren auch hier.
+6. **Optionen** (dritter Reiter): ob der Text von Ordnern kompiliert wird.
+7. **Ersetzungen** (vierter Reiter): Ersetzungen dieses Projekts, die nach denen des Formats ausgeführt werden, zum Beispiel ein Name, der in Ihren Entwürfen so und im Buch anders geschrieben wird. Jede Zeile lässt sich ein- und ausschalten und kann ein regulärer Ausdruck sein, Groß-/Kleinschreibung beachten oder nur ganze Wörter betreffen.
+8. **Vorschau** zeigt die Seiten des Manuskripts als PDF in einem eigenen Fenster, mit dem gewählten Format und Inhalt, bevor etwas gespeichert wird.
+
+Die Schrift, die Ersetzungen und die Objektblätter werden wie die übrigen Einstellungen mit dem Projekt gespeichert (ältere Versionen von {{APP}} ignorieren sie).
+
+Klicken Sie auf **Kompilieren…**, wählen Sie, wo gespeichert wird, und die fertige Datei öffnet sich, wenn Sie möchten, in Ihrer Textverarbeitung oder Ihrem Lesegerät. **Einstellungen speichern** behält die Auswahl, ohne zu kompilieren.
+
+**Von Hand gesetzte Schriften und Absatzformatierung.** Beim Format *Default (Editor Formatting)* behält die kompilierte Datei alles: Schriften, Größen, Farben, Großbuchstaben, Zeichenabstand, Einzüge, Abstände, Zeilenabstand und Tabulatoren. Jedes andere Format hat ein eigenes Aussehen: Es ersetzt Schrift, Größe, Einzüge und Abstände und behält Textfarbe, Großbuchstaben, Zeichenabstand, Ausrichtung und Tabulatoren.
+
+### Ein Kompilierungsformat bearbeiten
+
+**Duplizieren & Bearbeiten…** und **Bearbeiten…** öffnen den Formateditor. Die Liste links enthält seine Seiten:
+
+- **Text**: Schrift, Größe, Zeilenabstand, Einzug der ersten Zeile, Abstand nach Absätzen, Blocksatz, Schrift und Größe der Überschriften, fette Überschriften. **Formatierung des Projekteditors verwenden** behält stattdessen das Aussehen des Editors.
+- **Abschnittslayouts**: die Layouts des Formats (hinzufügen, duplizieren, entfernen) mit Überschrift, Präfix und Suffix (`Chapter <$W:chapter>`), Überschriftstil und Ausrichtung, Großbuchstaben, Leerzeilen vor der Überschrift, Text, Synopse und Notizen, eine neue Seite, das Trennzeichen vor dem Abschnitt, kein Einzug beim ersten Absatz. Die Vorschau zeigt, wie ein Abschnitt mit diesem Layout beginnt.
+- **Zuweisungen**: welches Layout jeder Abschnittstyp in diesem Format bekommt.
+- **Formatvorlagen**: wie eine Formatvorlage Ihres Projekts in diesem Format ausgegeben wird. **Formatvorlage hinzufügen…**, dann wählen Sie: **Aussehen beibehalten**, **Aussehen ändern** (Schrift, Größe, fett, kursiv, unterstrichen, Kapitälchen oder Großbuchstaben, Farbe, Ausrichtung, Einzüge, Abstand davor und danach, Zeilenabstand, Text davor und danach, Großbuchstaben, auf neuer Seite beginnen; ein Kästchen, das halb angehakt oder „unverändert“ ist, lässt die Formatvorlage, wie sie ist), **Zu Fließtext machen** oder **Text weglassen** (zum Beispiel Notizen an sich selbst in einer eigenen Formatvorlage).
+- **Seite**: Papiergröße und Ränder, gespiegelte Ränder für Bücher (innen und außen), Kopf- und Fußzeilen (links, Mitte, rechts; Platzhalter wie `<$p>` für die Seitenzahl und `<$title>`), Doppelseiten (linke Texte auf linken Seiten, rechte Texte auf rechten Seiten), Kopf- und Fußzeile auf der ersten Seite und auf Seiten, auf denen ein Kapitel beginnt, Kapitel auf einer rechten Seite, die erste Seitenzahl und ihr Stil (1, 2, 3 / i, ii, iii / I, II, III), die Größe von Kopf- und Fußzeilen.
+- **Fußnoten und Kommentare**: Fußnoten am Seitenende (in E-Books: aufklappende Notizen), am Ende jedes Kapitels oder am Ende des Textes (PDF und E-Books; eine Word-Datei hat ihre Fußnoten immer am Seitenende), mit dem Titel der Notizen und ihrer Größe; Anmerkungen im Text als Kommentare oder entfernt; verknüpfte Kommentare als Kommentare der Word-Datei; Hervorhebungen entfernt.
+- **Ersetzungen**: Text, der nur in der kompilierten Datei ersetzt wird (Ihr Projekt bleibt, wie es ist): ein oder aus, Groß-/Kleinschreibung, ganze Wörter, reguläre Ausdrücke (`\1` bis `\9` im Feld „Durch“).
+- **Umwandlungen**: gerade oder typografische Anführungszeichen, Gedankenstriche als Bindestriche, Kursivschrift als Unterstreichung (die Manuskriptkonvention), mehrere Leerzeichen als eins, keine Leerzeichen am Absatzende, reiner Text ohne Fett, Kursiv, Schriften oder Farben.
+- **Inhaltsverzeichnis, PDF und E-Book**: ein Inhaltsverzeichnis (sein Titel und wie viele Überschriftenebenen), PDF-Lesezeichen für die Überschriften, anklickbare Weblinks im PDF, in einem E-Book eine Datei pro Abschnitt, der auf einer neuen Seite beginnt, und das Inhaltsverzeichnis auch als Seite des E-Books.
+
+Ihre Formate werden in *~/.local/share/{{APP}}/CompileFormats* aufbewahrt und stehen in jedem Projekt zur Verfügung.
+
+### PDF
+
+Die eingebaute PDF-Ausgabe setzt die Seiten selbst: Fußnoten am Seitenende dort, wo auf sie verwiesen wird (eine lange läuft auf der nächsten Seite weiter), Kopf- und Fußzeilen, Kapitel auf rechten Seiten, wenn das Format es verlangt, Überschriften zusammen mit dem folgenden Text, keine einzelnen Zeilen oben oder unten auf einer Seite, ein Inhaltsverzeichnis mit anklickbaren Seitenzahlen, Lesezeichen für die Überschriften im Seitenbereich des Lesegeräts und anklickbare Links. Schriften werden eingebettet. Bilder behalten die Größe, die sie im Text haben; ein Bild, das größer als der Textbereich ist, wird zum Einpassen verkleinert. Bilder und Tabellen neben dem Text werden vom Text umflossen, wie im Editor. Eine Tabelle läuft über so viele Seiten, wie sie braucht, Zeile für Zeile, mit ihren Kopfzeilen oben auf jeder Seite.
+
+### E-Books
+
+Die eingebaute E-Book-Ausgabe schreibt EPUB 3 (auch mit einem Inhaltsverzeichnis für ältere Lesegeräte): eine Datei pro Kapitel, die Überschriften im Inhaltsverzeichnis des Lesegeräts, Fußnoten als aufklappende Notizen (oder am Ende jedes Kapitels oder des Buchs), Bilder und das Cover aus den **Metadaten…**. Tabellen behalten ihr Aussehen; ein Bild mit Bildunterschrift ist eine Abbildung (neben dem Text, wenn es im Editor dort steht), und seine Beschreibung ist der Alternativtext des Bildes, den Screenreader vorlesen. Das Buch bekommt beim ersten Kompilieren eine Kennung; sie bleibt beim Projekt, sodass ein Lesegerät eine neue Fassung als dasselbe Buch behandelt. Lesegeräte wählen ihre eigenen Schriften und Seitengrößen, daher gelten Seiteneinstellungen, Kopf- und Fußzeilen nicht.
+
+### Word
+
+Die Word-Datei verwendet benannte Formatvorlagen (Title, Subtitle, Heading 1 bis 3, Quote, Centered, Caption sowie Ihre eigenen Absatz- und Zeichenformatvorlagen), sodass ihre Überschriften im Navigationsbereich von Word erscheinen. Mit **Inhaltsverzeichnis einfügen** wird am Anfang ein Inhaltsverzeichnisfeld gesetzt, und die Datei bittet die Textverarbeitung, beim Öffnen ihre Felder zu aktualisieren, wodurch die Seitenzahlen eingetragen werden; tut eine Textverarbeitung das nicht, aktualisieren Sie das Feld dort selbst. Kopfzeilen für Doppelseiten, die erste Seite und die erste Seitenzahl kommen aus den **Seiten**-Einstellungen des Formats. Tabellen sind Word-Tabellen mit ihren Linien, Farben, verbundenen Zellen und Kopfzeilen (in Word auf jeder Seite wiederholt). Ein Bild neben dem Text kommt zusammen mit seiner Bildunterschrift in eine einzellige Tabelle ohne Linien, damit Word und LibreOffice den Text um beide fließen lassen; die Beschreibung eines Bildes ist sein Alternativtext.
+
+### Überschriften und Platzhalter
+
+In einem Abschnittslayout kann die Überschrift Platzhalter enthalten, die beim Kompilieren ersetzt werden:
+
+| Platzhalter | Ergebnis |
+|-------------|--------|
+| `<$n>` | 1, 2, 3 … |
+| `<$w>` / `<$W>` / `<$WW>` | one, two … / One, Two … / ONE, TWO … (englische Zahlwörter) |
+| `<$R>` / `<$r>` | I, II, III … / i, ii, iii … |
+| `<$L>` / `<$l>` | A, B, C … / a, b, c … |
+| `<$n:name>` | ein eigener Zähler namens *name* (funktioniert mit jedem Zahlenstil oben) |
+| `<$title>` | der Dokumenttitel |
+| `<$projecttitle>` / `<$shorttitle>` | der Projekttitel / seine ersten drei Wörter in Großbuchstaben |
+| `<$author>`, `<$forename>`, `<$surname>` | Ihr Name aus **Datei > Einstellungen** oder den Projekteinstellungen |
+| `<$wc>` / `<$wc100>` / `<$wc1000>` | die Wortzahl, genau oder gerundet |
+| `<$date>` / `<$year>` | das heutige Datum (jjjj-mm-tt) / das Jahr |
+| `<$p>` | die Seitenzahl (nur in Kopf- und Fußzeilen) |
+| `<$pages>` | die Seitenanzahl (Kopf- und Fußzeilen von PDF-Dateien und Ausdrucken) |
+
+Beispiel: Die Überschrift `Chapter <$W:chapter>` wird zu *Chapter One*, *Chapter Two* und so weiter.
+
+Platzhalter lassen sich auch in den Text selbst tippen (**Einfügen > Automatische Nummer** und **Einfügen > Platzhalter**). **Hilfe > Liste aller Platzhalter…** listet sie alle auf; wählen Sie Zeilen aus und drücken Sie **Ctrl+C**, um sie zu kopieren.
+
+### Formatvorlagen beim Kompilieren
+
+Die Überschriften, Title, Subtitle, Block Quote, Centered und Caption bekommen ihr Aussehen vom Kompilierungsformat. Jede andere Formatvorlage bringt ihre eigene Formatierung mit (Einzüge, Abstände, Ausrichtung, Schrift, Farbe), in jedem Kompilierungsformat. Mit **Default (Editor Formatting)** werden auch Änderungen übernommen, die Sie an den eingebauten Formatvorlagen vorgenommen haben. Die Seite **Formatvorlagen** eines Formats ändert das für jede einzelne Formatvorlage (siehe *Ein Kompilierungsformat bearbeiten*).
+
+### Notizen beim Kompilieren
+
+Auf der Seite **Fußnoten und Kommentare** eines Kompilierungsformats wählen Sie, wohin Fußnoten in einem PDF oder E-Book kommen (Seitenende, Ende jedes Kapitels, Ende des Textes), ob Anmerkungen im Text in der Word-Datei zu Kommentaren werden oder entfernt werden, ob verknüpfte Kommentare behalten werden und ob Hervorhebungen entfernt werden. In einer Word-Datei sind Fußnoten immer echte Fußnoten am Seitenende.
+
+### Weitere Ausgabeformate (Plugins)
+
+{{APP}} bringt auch diese Formate mit. Jedes braucht ein gesondert installiertes Programm; PDF und EPUB über LibreOffice und Pandoc sind eine Alternative zu den eingebauten (sie gehen von der Word-Datei aus und sehen wie sie aus):
+
+| Format | Benötigt |
+|--------|-------|
+| PDF (über LibreOffice) | LibreOffice (auf den meisten Ubuntu- und Kubuntu-Systemen installiert) |
+| OpenDocument-Text (.odt, über LibreOffice) | LibreOffice |
+| E-Book (.epub, über Pandoc) | Pandoc („pandoc“ in Discover installieren) |
+| Markdown (.md) | nichts |
+
+**Datei > Einstellungen > Plugins** zeigt, welche Formate bereit sind und bei welchen ein Programm fehlt. Weitere Formate lassen sich als Erweiterungen installieren (Abschnitt 17).
+
+### Drehbücher kompilieren
+
+Für Drehbücher entstehen zwei Ausgaben, die kein weiteres Programm brauchen:
+
+- **Fountain-Drehbuch (.fountain)**: eine reine Textdatei, die Highland, Fade In, Beat, Trelby und andere Drehbuchprogramme lesen.
+- **Final Draft (.fdx)**: das Dateiformat von Final Draft, das die meisten Drehbuchprogramme ebenfalls öffnen können.
+
+In beiden behält jeder Absatz, was er ist (Szenenüberschrift, Handlung, Figur, Anweisung in Klammern, Dialog, Übergang, Einstellung); das andere Programm setzt das Drehbuch auf seine eigene Weise. Titel von Ordnern und Dokumenten, die das Kompilierungsformat hinzufügt, werden zu Abschnitten (Fountain) oder Akt-Überschriften (Final Draft); Text, der kein Drehbuchelement ist, wird zu Handlung. Der Projekttitel und Ihr Name (Datei > Einstellungen) bilden die Titelseite. Anmerkungen im Text werden in einer Fountain-Datei zu Notizen und in einer Final-Draft-Datei weggelassen.
+
+Wählen Sie für Word oder PDF das Kompilierungsformat **Default (Editor Formatting)**: Es behält Einzüge, Großbuchstaben und Schrift der Elemente, wie Sie sie im Editor sehen. Die anderen Kompilierungsformate ersetzen Schrift und Größe, behalten aber die Einzüge.
+
+---
+
+## 14. Import und Export
+
+### Dateien importieren
+
+**Datei > Importieren > Dateien…** (**Ctrl+Shift+I**) fügt dem Binder Textdateien (.txt, .md, .rtf, .docx, .odt; alte Word-Dateien .doc mit der unten genannten Erweiterung), Drehbücher (.fountain, .fdx), Bilder, PDFs, Audio und Video und andere Dateien hinzu. Sie können Dateien auch aus dem Dateimanager in den Binder ziehen. Textdateien werden zu bearbeitbaren Dokumenten; Bilder und PDFs werden im Editor angezeigt; Audio und Video werden dort mit der Erweiterung Media Playback abgespielt (Abschnitt 6). Eine Datei, die sich nicht ins Projekt kopieren lässt (eine volle Festplatte, eine Datei, die nicht gelesen werden kann), wird in einer Meldung genannt und nicht hinzugefügt, sodass kein leeres Element zurückbleibt (0.92.0).
+
+Wie Dateien gelesen werden, legen Sie unter **Datei > Einstellungen > Freigabe > Importieren** fest: ob Kommentare von Word-, LibreOffice- und RTF-Dateien zu Anmerkungen im Text werden (sonst bleiben sie Kommentare neben dem Text), ob Fußnoten zu Fußnoten im Text (die Voreinstellung) oder zu verknüpften Fußnoten werden, ob die Absatz- und Zeichenformatvorlagen der Dateien weggelassen werden (der Text bekommt das Aussehen Ihres Projekts; Fett, Kursiv, Notizen und Links bleiben), die Kodierung von reinen Textdateien (automatisch: UTF-8, sonst Windows-Westeuropäisch) und ob *.html*-Dateien zu Textdokumenten statt zu Webseiten-Dokumenten werden.
+
+Wohin die Dateien kommen: Wählen Sie einen Ordner im Binder aus, um in ihn zu importieren (die Dateien kommen ans Ende), oder ein Dokument, um sie direkt darunter einzufügen. Der Entwurf nimmt nur Text auf; andere Dateien, die dort abgelegt werden, kommen in die Recherche.
+
+**Importieren und teilen…** liest eine lange Datei und zerlegt sie in viele Dokumente, zum Beispiel bei jeder Zeile, die nur `#` enthält, oder bei jeder doppelten Leerzeile. Seit 0.94.0 kann es auch eine .docx-, .odt- oder .md-Datei **an ihren Überschriften** zerlegen: Überschrift 1 wird zu einem Ordner, Überschrift 2 zu einem Ordner oder einem Dokument (Sie wählen im Fenster), der Text zwischen den Überschriften wird zu Dokumenten, und tiefere Überschriften bleiben im Text. Das Fenster zeigt den Binder, der entstehen würde, vor dem Import als Baum. Der Titel eines Dokuments, das keine Überschrift benennt, folgt einer Regel, die im Fenster steht: die erste nicht leere Zeile seines Textes (auf 120 Zeichen gekürzt, wenn sie länger ist) oder „<Dateiname> <Nummer>“, wenn **Erste Zeile jedes Abschnitts als Titel verwenden** ausgeschaltet ist.
+
+### Alte Word-Dateien (.doc)
+
+Word 97 bis 2003 speicherte Dokumente als *.doc* (Vorlagen *.dot*). Sie werden mit der Erweiterung **Word 97–2003 Import** (Abschnitt 17) zu Textdokumenten; ohne sie wird eine .doc-Datei unverändert dem Binder hinzugefügt, und Sie erfahren, welche Erweiterung sie liest. Die Erweiterung braucht kein weiteres Programm. Sie behält:
+
+- den Text, einschließlich Griechisch, Kyrillisch, asiatischer Schriften und dergleichen;
+- Überschriften (Überschrift 1 bis 6), Titel, Untertitel, Zitate und Bildunterschriften, die die Formatvorlagen Ihres Projekts bekommen; eine Absatzformatvorlage des Dokuments, die auch Ihr Projekt hat (gleicher Name), bekommt diese Formatvorlage;
+- Fett, Kursiv, Unterstreichung, Durchstreichung, Kapitälchen und Großbuchstaben, Hoch- und Tiefstellung, Hervorhebung; zentrierte, rechtsbündige und im Blocksatz gesetzte Absätze;
+- Aufzählungen und nummerierte Listen mit ihren Ebenen (die Nummern selbst erzeugt {{APP}}, daher wird eine „Kapitel 1“-Nummerierung von Überschriften nicht übernommen);
+- Tabellen, als eine Zeile pro Tabellenzeile mit durch Tabulatoren getrennten Zellen;
+- Fußnoten und Endnoten (als Fußnoten), Kommentare mit den kommentierten Wörtern (der Name des Autors steht zuerst im Kommentar);
+- Links, das Ergebnis von Feldern (Daten, Seitenzahlen, wie sie zuletzt angezeigt wurden), Seiten- und Abschnittswechsel, Zeilenumbrüche;
+- Bilder im Text (JPEG, PNG, BMP, TIFF);
+- in RTF-Projekten auch von Hand gesetzte Schriften, Größen, Farben und Einzüge (Markdown-Projekte behalten das Aussehen des Projekts, wie bei jedem Import).
+
+Weggelassen werden: Kopf- und Fußzeilen, schwebende Bilder und Zeichnungen, Bilder in den alten Metadateiformaten (WMF, EMF), eingebettete Objekte, versteckter Text und Text, der mit nachverfolgten Änderungen gelöscht wurde (eingefügter Text bleibt). Der Text von Textfeldern wird am Ende des Dokuments hinzugefügt. Nach dem Import nennt eine Meldung, was weggelassen wurde.
+
+**Datei > Einstellungen > Freigabe > Konvertierung** kann LibreOffice zur ersten Wahl für *.doc*-Dateien machen (es liest auch Kopfzeilen, Zeichnungen und Dateien von Word 6/95); scheitert der gewählte Weg, wird der andere versucht. Dateien von Word 6.0 und Word 95 sowie Dateien, die die Erweiterung nicht lesen kann, werden mit LibreOffice konvertiert, wenn es installiert ist (unter Ubuntu: `sudo apt install libreoffice-writer`); sonst sagt die Meldung das. Passwortgeschützte Dateien müssen zuerst ohne das Passwort geöffnet und gespeichert werden. Eine *.doc*-Datei, die in Wirklichkeit eine RTF-Datei, eine Word-2007-Datei (.docx) oder eine Webseite ist, wie manche Programme sie gespeichert haben, wird als das gelesen, was sie ist, auch ohne die Erweiterung.
+
+### Webseiten importieren
+
+**Datei > Importieren > Webseite…** holt eine Seite aus dem Web in Ihr Projekt. Die Erweiterung **Web Page Import** (Abschnitt 17) erledigt die Arbeit; ohne sie sagt der Befehl das.
+
+1. Wählen Sie den Ordner aus, der die Seite aufnehmen soll (sonst kommt sie in die **Recherche**).
+2. Wählen Sie **Datei > Importieren > Webseite…**. Enthält die Zwischenablage eine Webadresse, ist sie schon eingetragen; sonst tippen oder fügen Sie eine ein.
+3. Klicken Sie auf **Laden** (oder drücken Sie Enter). Die Seite und ihre Bilder werden geholt, und das Fenster zeigt, was importiert wird, mit der Zahl der Wörter und Bilder, dem Autor, der Website und dem Datum.
+4. Korrigieren Sie bei Bedarf den **Titel**, prüfen Sie die Auswahl darunter und klicken Sie auf **Importieren**.
+
+**Nur der Artikel** behält den Text, wegen dem Sie gekommen sind, und lässt Menüs, Werbung, Cookie-Hinweise, Teilen-Schaltflächen, Kommentarbereiche und Listen anderer Artikel weg. {{APP}} findet den Artikel so, wie Lesewerkzeuge es tun (der Text mit den meisten Sätzen und Kommas und den wenigsten Links gewinnt; Namen wie „article“ oder „sidebar“ in der Seite sprechen für oder gegen einen Teil). Fehlt etwas, nehmen Sie den Haken weg, um die ganze Seite zu nehmen. **Bilder** holt die Bilder des Artikels (sehr große werden auf 1600 Pixel Breite verkleinert). Bei einer Seite aus dem Internet werden Bilder nur von öffentlichen Adressen geholt: Eines, das auf Ihrem eigenen Computer oder in einem privaten Netzwerk liegt (auch über eine Weiterleitung), wird weggelassen, und das Ergebnis nennt, wie viele. Eine Seite, die selbst von Ihrem eigenen Computer oder Netzwerk stammt, wird mit allen ihren Bildern geholt.
+
+**Importieren als**:
+
+- **Textdokument** (die Voreinstellung): Überschriften, Absätze, Zitate, Listen, Tabellen (eine Zeile pro Tabellenzeile), Programmcode, Bildunterschriften, Fett, Kursiv und Links werden zu einem gewöhnlichen Dokument, das Sie bearbeiten, mit Anmerkungen versehen, teilen und kompilieren können.
+- **Webseiten-Dokument**: eine schreibgeschützte Kopie des Artikels mit seinen Bildern, zum Nachschlagen. Es wird weder gezählt noch kompiliert.
+
+**Ein Webseiten-Dokument ansehen** (0.81.3). Der Editor zeigt die Seite als einfachen formatierten Text, mit ihrer Adresse und zwei Schaltflächen darüber. **Gespeicherte Seite im Browser öffnen** zeigt die Seite, wie sie gespeichert wurde, in Ihrem Webbrowser: {{APP}} legt eine Kopie davon in Ihren Ordner „Downloads“ (*Quillbinder web pages/<Titel>*), weil ein als Sandbox-Paket installierter Browser (zum Beispiel Firefox unter Kubuntu) die eigenen Ordner von {{APP}} nicht lesen kann; die Zeile unter den Schaltflächen sagt, wo die Kopie liegt, und der nächste Klick ersetzt sie. Unter Windows wird die Kopie stattdessen in einem temporären Ordner angelegt und entfernt, wenn {{APP}} geschlossen wird, damit nichts außerhalb des Programmordners geschrieben wird. **Originaladresse öffnen** öffnet die Adresse der Seite, sodass Sie die Seite sehen, wie sie heute ist; die Schaltfläche ist ausgeschaltet, wenn die Seite keine Adresse hat. Webseiten, die Scrivener gespeichert hat (je eine *.mht*-Datei), werden genauso angezeigt; ein Browser wie Firefox kann *.mht*-Dateien nicht selbst öffnen, daher ist die Kopie reines HTML mit den Bildern daneben.
+
+In beiden Fällen wird die Adresse der Seite zu einem **Lesezeichen** des Dokuments (Inspektor, Lesezeichen), die Kurzbeschreibung der Seite wird zu seiner **Synopse**, und die **Notizen** halten Adresse, Website, Autor, Veröffentlichungsdatum und den Zeitpunkt fest, an dem Sie die Seite geholt haben.
+
+**Einen Link ziehen** aus einem Webbrowser auf einen Ordner im Binder, auf die Pinnwand oder in die Gliederung importiert die Seite direkt, mit der Auswahl, die Sie beim letzten Mal im Fenster getroffen haben.
+
+Gut zu wissen: Die Seite wird so geholt, wie ein Browser es täte, aber ohne ihre Skripte auszuführen. Seiten, die ihren Text mit einem Skript aufbauen, tragen ihn oft trotzdem in ihren Daten, und der wird dann verwendet (ohne Formatierung und Bilder; eine Meldung sagt das). Seiten hinter einer Anmeldung oder einer Bezahlschranke liefern, was sie einem nicht angemeldeten Besucher zeigen. Sichere Seiten (https) brauchen OpenSSL 3 auf Ihrem System (Teil jedes Ubuntu). Eine Webadresse, die zu einer PDF-Datei führt, wird auf diesem Weg nicht importiert: Laden Sie die Datei herunter und verwenden Sie **Datei > Importieren > Dateien…**.
+
+**Drehbücher.** Fountain-Dateien (*.fountain*) und Final-Draft-Dateien (*.fdx*) werden als Drehbücher importiert: Die Absätze bekommen die Elemente des Drehbuchformats Ihres Projekts, das Dokument ist im Drehbuchmodus, und die Titelseite der Datei kommt in die Notizen des Dokuments. Fett, kursiver und unterstrichener Text, Notizen und erzwungene Seitenumbrüche bleiben erhalten; Szenennummern, Revisionsmarken und die zweispaltige Darstellung von parallelem Dialog nicht (die beiden Reden folgen aufeinander). **Importieren und teilen…** mit **Szenenüberschriften** zerlegt ein Drehbuch in ein Dokument pro Szene, benannt nach ihrer Überschrift.
+
+### Ein Scrivener-Projekt importieren
+
+**Datei > Importieren > Scrivener-Projekt…** liest ein Scrivener-3- oder -2-Projekt (den *.scriv*-Ordner; wählen Sie die *.scrivx*-Datei darin) und erstellt daraus ein neues {{APP}}-Projekt. Das Projekt von Scrivener wird nur gelesen, nie verändert. Seit 0.92.0 nennt der Bericht nach dem Import auch jede Datei, die nicht kopiert werden konnte (ein Bild, ein PDF, eine Audiodatei, das Bild einer Karteikarte, eine Mindmap), und eine solche Datei zählt nicht als importiert; früher wurde sie kommentarlos weggelassen.
+
+Der Import übernimmt: die Struktur des Binders, Texte, Synopsen, Notizen, Etiketten, Status, Stichwörter, eigene Metadaten, Abschnittstypen, die Markierungen „In Kompilierung einbeziehen“, Momentaufnahmen, Kommentare und Fußnoten, Anmerkungen im Text, Recherchedateien (Bilder, PDFs und andere), Sammlungen, Projektlesezeichen und Ziele. Kompilierungseinstellungen werden nicht importiert; richten Sie sie einmal im Kompilierungsfenster ein. Wählen Sie, ob das neue Projekt seinen Text als Markdown oder RTF speichert.
+
+Überschriften und Formatvorlagen: Scrivener kennzeichnet formatierten Text in seinen Dateien mit Codes wie `<$Scr_Ps::0><$Scr_H::2>`. Sie sind kein Text; {{APP}} entfernt sie. Eine Überschrift bekommt **Überschrift 1** bis **Überschrift 6**, und ein Absatz mit einer der Absatzformatvorlagen von Scrivener bekommt die gleichnamige Formatvorlage Ihres Projekts (**Title**, **Block Quote**; Scriveners **Centered Text** wird zu **Centered**). Seit 0.81.3 bekommt Text mit einer der Zeichenformatvorlagen von Scrivener die gleichnamige Zeichenformatvorlage Ihres Projekts, und eine Formatvorlage von Scrivener, für die Ihr Projekt keine gleichnamige hat, wird zu einer Formatvorlage des Projekts, mit dem Aussehen, das Scrivener ihr gibt. Projekte, die mit Versionen vor 0.14 importiert wurden, behielten die Codes als Text; {{APP}} entfernt sie, wenn ein solches Projekt geöffnet wird, und sagt das in der Statusleiste. Projektlesezeichen wurden vor 0.14 nicht importiert; um sie zu bekommen, importieren Sie das Scrivener-Projekt erneut.
+
+Ist etwas nicht richtig herübergekommen, ist das Originalprojekt unberührt, und Sie können Text direkt aus Scrivener kopieren.
+
+### Im Scrivener-Format arbeiten
+
+Statt eine Kopie anzulegen, kann {{APP}} auch selbst an einem Scrivener-3-Projekt arbeiten, sodass Sie später (zum Beispiel auf einem anderen Computer) in Scrivener weitermachen können.
+
+- **Öffnen**: **Datei > Projekt öffnen…** (**Andere öffnen…** im Startfenster) und wählen Sie die *.scrivx*-Datei im *.scriv*-Ordner. Beim ersten Mal fragt {{APP}}: **Im Scrivener-Format arbeiten** (Ihre Änderungen werden in die *.scriv* gespeichert), **Konvertieren…** (daraus wird ein eigenes {{APP}}-Projekt, wie beim Import oben) oder **Abbrechen**. Danach öffnet sich das Projekt ohne die Frage, auch über **Datei > Zuletzt geöffnet**.
+- **Neue Projekte**: Wählen Sie im Fenster „Neues Projekt“ **Format: Scrivener-3-Projekt (.scriv)**.
+- **Speichern**: Jedes Speichern (auch das automatische) schreibt in die *.scriv*. Nur was Sie geändert haben, wird geschrieben; Dokumente, die Sie nicht angerührt haben, behalten die Dateien, die Scrivener geschrieben hat. Der Fenstertitel sagt *(Scrivener-Format)*, und **Datei > Projekt im Dateimanager anzeigen** und die Sicherungen nehmen den *.scriv*-Ordner.
+- **Große Projekte** (seit 0.60.5): Das automatische Speichern während des Schreibens legt nur die Texte, Notizen und Synopsen, die Sie geändert haben, in die *.scriv* (und den Binder, wenn er sich geändert hat), sodass es auch bei Hunderttausenden Wörtern kurz bleibt. Alles andere, etwa Scriveners Suchindex, Momentaufnahmen und Bilder, folgt, wenn Sie zu einem anderen Programm wechseln, **Datei > Speichern** (**Ctrl+S**) verwenden oder das Projekt schließen; bevor Sie das Projekt in Scrivener öffnen, schließen Sie es also hier oder wechseln zuerst zu einem anderen Programm.
+- **Ein Programm nach dem anderen**: Hat Scrivener das Projekt geöffnet (oder wurde es nicht ordnungsgemäß geschlossen), sagt {{APP}} das und fragt, bevor es geöffnet wird. Schließen Sie das Projekt in einem Programm, bevor Sie es im anderen öffnen. Wurde das Projekt in Scrivener (oder von einem Synchronisationsdienst) geändert, seit Sie es zuletzt hier geöffnet hatten, liest {{APP}} es neu ein und sagt Ihnen in der Statusleiste, wie viele Dokumente sich geändert haben; ein Dokument, das inzwischen in Scrivener geändert wurde, wird nie mit einem älteren Text überschrieben.
+
+Was in die *.scriv* kommt: der Binder, Texte (als RTF, mit ihren Bildern), Synopsen, Notizen (auch von Bildern, PDFs, Audio und Video, seit 0.81.3), Etiketten, Status, Abschnittstypen, **In Kompilierung einbeziehen**, Lesezeichen (des Projekts und jedes Dokuments, auch zu Webadressen und Dateien), Projektziele mit dem Abgabetermin, Dokumentziele, der Schreibverlauf, die Pinnwand (die Anordnung jedes Ordners und die Plätze frei platzierter Karten), Titel, Autor und Sprache der kompilierten Datei (in Scriveners Kompilierungseinstellungen), Momentaufnahmen, Kommentare und Fußnoten, Anmerkungen und Fußnoten im Text, Absatz- und Zeichenformatvorlagen, Stichwörter, eigene Metadatenfelder und ihre Werte, Sammlungen, gespeicherte Suchen (Suchsammlungen, seit 0.90.0), die Bilder von Karteikarten (seit 0.90.0), Bilder, PDFs, Audio und Video, Webseiten, Symbole (mit den Namen von Scrivener; Ihre eigenen Symbole in seinem Ordner *Icons*) und Mindmaps (als zusätzliche Datei neben den Dateien des Dokuments, die Scrivener in Ruhe lässt). Alles wird in der Form geschrieben, die Scrivener 3 für Windows verwendet:
+
+- Stichwörter, eigene Metadaten und Sammlungen behalten die Nummern und Namen von Scrivener (seit 0.81.2), sodass sie in beiden Programmen gleich sind.
+- Formatvorlagen (seit 0.81.3): Die Formatvorlagen eines Textes, den Sie ändern, werden darin so markiert, wie Scrivener sie markiert, sodass Scrivener dieselben Formatvorlagen zeigt. Eine Formatvorlage, die Sie in {{APP}} angelegt haben, wird den Formatvorlagen des Scrivener-Projekts hinzugefügt, wenn ein Text sie zum ersten Mal verwendet, mit ihrem Aussehen.
+- Anmerkungen und Fußnoten im Text (seit 0.81.3) bleiben im Text, die Anmerkungen in ihrer Farbe (früher gab ein geänderter Text sie an Scrivener als verknüpfte Kommentare und Fußnoten weiter).
+- Webseiten (seit 0.81.3): Eine Seite, die Sie in {{APP}} gespeichert haben, kommt als Scriveners eigene gespeicherte Webseite hinein (eine *.mht*-Datei mit ihren Bildern) und behält ihre Adresse. Andere Dateien, für die Scrivener keine Art hat, kommen als Textdokumente hinein, die die Datei nennen, mit der Datei daneben; {{APP}} liest sie so zurück, wie sie waren.
+- Audio, Video und Webseiten, die Versionen vor 0.81.2 zu solchen Textdokumenten gemacht haben, werden mit dem nächsten Speichern wieder zu Scriveners eigenen Audio-, Video- oder Webseiten-Dokumenten.
+- Texte (seit 0.90.0) werden mit allem zurückgeschrieben, was Scrivener in ihnen aufbewahrt: rechte Einzüge unter null, Listen mit ihrer Nummerierung, die Unterstreichung von Links, mit einer Datei verknüpfte Bilder, nach ihrer Schriftart benannte Schriften (etwa *Cambria-BoldItalic*) und der Platz eines Bildes, dessen Daten fehlen. Kommentare und Fußnoten behalten ihre IDs, ob ihr Kasten eingeklappt ist, und ihre eigene Formatierung, solange Sie sie nicht ändern.
+- Die Pinnwand (seit 0.90.0): Frei platzierte Karten behalten ihre Plätze in beiden Programmen. Scrivener speichert einen Platz in Kartenbreiten; {{APP}} rechnet ihn in seine eigene Kartengröße um, sodass die Anordnung gleich bleibt, in welcher Größe jedes Programm die Karten auch zeigt. Jeder Ordner behält seine Anordnung (frei platziert oder im Raster), wie in Scrivener: Die Wahl von **Freiform** oder des Rasters für die Pinnwand eines Ordners wird für diesen Ordner gemerkt.
+- Etiketten und Status (seit 0.90.0): das Standardetikett und der Standardstatus neuer Dokumente und die Namen, die Scrivener „No Label“ und „No Status“ gibt, bleiben, wie das Projekt sie hat.
+- Gespeicherte Suchen (seit 0.90.0): Eine gespeicherte Suche von Scrivener ist in {{APP}} eine Suchsammlung, und eine Suchsammlung, die Sie anlegen oder ändern, kommt als gespeicherte Suche in die *.scriv*. Scriveners Liste der letzten Suchergebnisse bleibt Scriveners eigene. Geprüft wurde mit einer gespeicherten Suche nach beliebigen der Wörter; wie Scrivener die anderen Arten nennt (alle Wörter, die genaue Wendung, ein regulärer Ausdruck, nur Dokumente, die in die Kompilierung einbezogen oder davon ausgenommen sind), wurde in einem echten Projekt noch nicht gesehen, daher kann eine gespeicherte Suche dieser Arten in Scrivener als Suche nach allen Wörtern erscheinen. Wo in den Dokumenten eine Suche sucht, gehört nicht zu dem, was übergeht: Eine aus Scrivener gelesene gespeicherte Suche sucht überall.
+- Das Bild einer Karteikarte (seit 0.90.0): Eine Karte, die statt ihrer Synopse ein Bild zeigt, behält es in beiden Programmen; es in {{APP}} zu entfernen oder anzubringen, erreicht Scrivener.
+
+Was nur auf der Seite von {{APP}} bleibt (in einer Arbeitskopie in *~/.local/share/{{APP}}/ScrivenerProjects*): Drehbuchformate, Kompilierungseinstellungen (außer Titel, Autor und Sprache), Objekte (Abschnitt 7) und das Fensterlayout; was die *.scriv* davon schon hat, bleibt in ihr, wie es ist.
+
+Beim ersten Öffnen oder Importieren eines Scrivener-Projekts zeigt sein Binder die Ordner, die in Scrivener geöffnet waren, und die dort ausgewählten Dokumente (0.90.0; {{APP}} schreibt nie Scriveners eigene Fenstereinstellungen). Beim ersten Öffnen eines Projekts im Scrivener-Format mit 0.81.2 oder neuer liest {{APP}} die *.scriv* erneut und führt die Stichwörter, eigenen Metadaten und Sammlungen seiner Arbeitskopie mit denen des Projekts zusammen, sodass nichts verloren geht, was Sie mit einer älteren Version angelegt haben; das nächste Speichern bringt sie in die *.scriv*. Das erste Öffnen mit 0.90.0 oder neuer tut dasselbe für Lesezeichen, Dokumentziele, den Abgabetermin, den Schreibverlauf und die Pinnwand.
+
+Wurde ein Speichern in die *.scriv* abgebrochen (ein Absturz, eine volle Festplatte), nachdem neue Dokumente in die Arbeitskopie geschrieben wurden, behält das nächste Öffnen diese Dokumente und sagt das; das nächste Speichern bringt sie in die *.scriv*. In Scrivener gelöschte Dokumente bleiben gelöscht.
+
+**Datei > Speichern unter…** (**Ctrl+Shift+S**) speichert das geöffnete Projekt unter einem anderen Namen oder an einem anderen Ort, und so wechselt ein Projekt sein Format. Geben Sie im Dialog den Namen ein und wählen Sie den Ort; der **Dateityp** bestimmt das Format: *Scrivener-3-Projekt (\*.scriv)* oder *{{APP}}-Projekt (\*.qbx)* (ein Name, der auf *.scriv* oder *.qbx* endet, bestimmt es von selbst). Ein Projekt ist ein Ordner: Das Programm erstellt ihn aus dem Namen (*Name.scriv* oder *Name.quillbinder* mit *Name.qbx* darin). Ein Name, den es schon gibt, wird abgelehnt.
+
+- Von da an arbeitet das Fenster am neuen Projekt, und jedes spätere Speichern geht dorthin. Der Titel des Projekts ist der Name, den Sie eingegeben haben. Änderungen, die Sie noch nicht gespeichert hatten, gehen nur in das neue Projekt.
+- Das Original bleibt auf der Festplatte, wie es in diesem Moment war (behalten Sie es als Kopie oder löschen Sie es); es steht auch in **Datei > Zuletzt geöffnet**, unter dem neuen Projekt. Seine Sperrdatei wird entfernt, wenn das Fenster es verlässt, und das neue Projekt bekommt seine eigene.
+- Das neue Projekt ist ein eigenes Projekt mit eigenen **Sicherungen**: Es beginnt eine neue Reihe, und die bisher angelegten Sicherungen bleiben beim Original (Abschnitt 15, Sicherungen). Ein Projekt im Scrivener-Format bekommt dafür eine neue Kennung in seiner *.scrivx*.
+- „Speichern unter“ funktioniert gleich von einem Format in dasselbe Format (ein neuer Name oder Ort) und in das andere (der Wechsel, den das Menü „Projektformat“ bis 0.92 vornahm).
+
+**Datei > Exportieren > Scrivener-Projekt…** schreibt eine **Kopie** im Scrivener-Format, und der Eintrag darunter im selben Menü, **{{APP}}-Projekt…**, eine Kopie im eigenen Format von {{APP}}; beide lassen das Fenster auf dem Original: Am Projekt, an dem Sie arbeiten, ändert sich nichts (vor 0.93.0 hießen diese im Menü „Projektformat“ „Kopie speichern als ...“).
+
+### Dokumente exportieren
+
+**Datei > Exportieren > Dateien…** speichert die ausgewählten Dokumente für andere Programme. Verwenden Sie „Kompilieren“ für ein fertiges Manuskript; verwenden Sie „Exportieren“, um einzelne Dokumente jemandem zu geben oder eine Kopie außerhalb von {{APP}} aufzubewahren.
+
+1. Wählen Sie im Binder die Dokumente und Ordner aus, die exportiert werden sollen.
+2. Wählen Sie **Datei > Exportieren > Dateien…**.
+3. **Textdateien exportieren als**: Rich Text (.rtf), Word (.docx), Markdown (.md), reiner Text (.txt), Fountain oder Final Draft (für Drehbücher ist Fountain vorgewählt). Bilder, PDF-Dateien, Webseiten, Audio und Video werden unverändert exportiert; das Format gilt dann nur für ihre Notizen.
+4. **Metadaten**: **Metadaten exportieren** schreibt neben jedes Dokument eine Textdatei „*Name* (metadata).txt“ mit seinem Titel, seiner Art, seinem Etikett, Status, seinen Stichwörtern, „In Kompilierung einbeziehen“, Abschnittstyp, seiner Wortzahl, seinem Ziel, den Daten von Erstellung und Änderung, eigenen Metadaten und Lesezeichen. **Synopsen exportieren** fügt die Synopse hinzu (oder schreibt „*Name* (synopsis).txt“, wenn die Metadaten nicht exportiert werden).
+5. **Optionen**: **Unterdokumente einbeziehen** (Ordner werden zu Ordnern), **Notizen exportieren** („*Name* (notes)“ im Format aus Schritt 3; reiner Text bei Drehbüchern), **Kommentare und Anmerkungen im Text exportieren** (Haken wegnehmen, um den sauberen Text zu übergeben; die kommentierten Wörter bleiben, Fußnoten bleiben immer), **Momentaufnahmen exportieren** (ein Ordner „*Name* (snapshots)“ mit einer Datei pro Momentaufnahme, benannt nach Datum und Titel).
+6. **Ort**: der Ordner, in den gespeichert wird. Sind mehrere Dokumente ausgewählt, kommen sie in einen neuen Ordner, dessen Namen Sie angeben (der Projekttitel wird vorgeschlagen; gibt es den Ordner schon, wird eine Nummer angehängt).
+7. Klicken Sie auf **Exportieren**. Der Ordner öffnet sich im Dateimanager.
+
+Die Auswahl wird für den nächsten Export gemerkt.
+
+Der schnelle Weg: **Dokumente aus dem Binder ziehen**, in den Dateimanager oder auf den Desktop. Textdokumente werden als RTF-Dateien gespeichert (oder Word, Markdown oder reiner Text: **Datei > Einstellungen > Verhalten**), Bilder und andere Dateien unverändert, und ein Ordner wird zu einem Ordner mit seinen Dokumenten darin. Fragt der Dateimanager, ob verschoben oder kopiert werden soll, ist beides in Ordnung: Die Dokumente bleiben in Ihrem Projekt.
+
+### Vergleichen und übertragen: eine Word- oder LibreOffice-Datei und das Projekt
+
+Kommt ein Manuskript von einem Lektor zurück, oder haben Sie in Word oder LibreOffice daran weitergearbeitet, findet **Datei > Vergleichen und übertragen > Mit Datei vergleichen…**, was sich zwischen dieser Datei und Ihrem Projekt unterscheidet, und übernimmt die Seite, die Sie wählen.
+
+1. Wählen Sie die Datei: eine Word-Datei (*.docx*) oder eine LibreOffice-Datei (*.odt*). Alte Word-Dateien (*.doc*), RTF, reiner Text und Markdown-Dateien lassen sich ebenfalls vergleichen, werden aber nur gelesen: Ihr Text kann ins Projekt übernommen werden; die Datei selbst kann nicht geändert werden.
+2. {{APP}} vergleicht die Datei mit **dem, was „Kompilieren“ aus dem Projekt macht**, nicht mit dem ganzen Projekt: den Dokumenten der Kompilierungsgruppe (der Entwurf, sofern im Kompilierungsfenster keine andere Gruppe gewählt ist), die **In Kompilierung einbeziehen** haben, in der Reihenfolge des Binders. Vorspann, Nachspann, der Recherche-Ordner und von der Kompilierung ausgenommene Dokumente zählen nicht. Wird weniger als 65 % des Textes der Datei darin gefunden, sagt {{APP}} das und fragt, ob trotzdem verglichen werden soll (**Trotzdem vergleichen**); die Datei kann zu einem anderen Projekt gehören, oder die Kompilierung lässt weg, was die Datei hat. Ein Wort gilt als gefunden, wenn es in einer Folge von vier Wörtern liegt, die auch der kompilierte Text hat, sodass ein paar geänderte Wörter eine Datei nicht fremd machen.
+3. Das Fenster **Vergleichen und übertragen** zeigt die Unterschiede. Wählen Sie die Seite, die aktualisiert wird:
+   - **Das Projekt aus der Datei aktualisieren**: Die Änderungen werden in Ihren Dokumenten vorgenommen. Zuvor bekommt jedes geänderte Dokument eine Momentaufnahme, „Before Compare and Transfer (*Dateiname*)“ (**Dokumente > Momentaufnahmen**), sodass Sie jederzeit zurückgehen können. Text, der nur in der Datei steht, wird zu einem neuen Dokument (benannt nach seiner Überschrift in der Datei), das nach dem Dokument davor eingefügt wird.
+   - **Die Datei aus dem Projekt aktualisieren**: Die gewählte Datei bleibt, wie sie ist. {{APP}} schreibt daneben eine Kopie, „*Name* (Quillbinder).docx“ (mit einer Nummer, wenn der Name vergeben ist). In einer Word-Datei ist jede Änderung eine **nachverfolgte Änderung** des Autors „Quillbinder“: Öffnen Sie die Kopie in Word oder LibreOffice und nehmen Sie jede Änderung dort an oder lehnen Sie sie ab (in Word auf dem Reiter „Überprüfen“; in LibreOffice mit Bearbeiten, Änderungen verfolgen, Verwalten). Eine LibreOffice-Kopie (*.odt*) bekommt die Änderungen direkt, ohne Markierungen.
+4. In der Ansicht kommt **grüner** Text hinzu, **roter** durchgestrichener Text fällt weg, und **blauer** Text bekommt Fett, Kursiv oder Unterstreichung der anderen Seite. Graue Absätze sind unveränderter Text um eine Änderung herum, der zeigt, wo sie ist. Jede Stelle hat einen Link **übernehmen** oder **überspringen**; ein Klick schaltet um.
+5. Klicken Sie auf **... in das Projekt übertragen** oder **... in eine Kopie der Datei schreiben**. Eine Meldung sagt, was getan wurde; bei der Datei öffnet **Datei öffnen** die Kopie.
+
+**Nach Kapitel** (**Datei > Vergleichen und übertragen > Nach Kapitel**, auch ein Kästchen im Fenster) listet die Dokumente links auf, jedes mit einem Kästchen und dem, was sich unterscheidet („2 Stelle(n)“, „nur in der Datei“, „nicht in der Datei“). Nehmen Sie bei einem Dokument den Haken weg, um es unverändert zu lassen; ein Klick zeigt seine Änderungen rechts. Ohne „Nach Kapitel“ werden alle Änderungen untereinander gezeigt.
+
+**Schritt für Schritt** (**Datei > Vergleichen und übertragen > Schritt für Schritt**, auch im Fenster) zeigt jeweils eine Änderung: **Übernehmen** oder **Überspringen** Sie sie, oder gehen Sie **Zurück**. Am Ende sagt das Fenster, wie viele Änderungen übernommen werden; klicken Sie dann auf „Übertragen“. Beide Einstellungen werden für das nächste Mal gemerkt.
+
+Was verglichen wird: die Wörter sowie Fett, Kursiv und Unterstreichung. Jeder Absatz der Datei wird dem Dokument zugeordnet, das seine Wörter hat, sodass eine Szene auch dort gefunden wird, wo sie in der Datei verschoben wurde (sie wird dann mit „an anderer Stelle in der Datei“ markiert; die Reihenfolge des Binders wird nicht geändert). Überschriften der Datei, die kein Text eines Dokuments sind, etwa die von „Kompilieren“ erzeugten Kapitelüberschriften, werden nicht verglichen.
+
+Was zunächst angehakt ist: jede Änderung innerhalb eines Dokuments. Text, der nur auf einer Seite steht, ist angehakt, wenn er mindestens 100 Wörter hat (ein neues Kapitel der Datei wird zu einem neuen Dokument; eine Szene, die in der Datei fehlt, wird der Kopie hinzugefügt). Ein ganzes Dokument wird nie in den Papierkorb verschoben und ein ganzer Teil nie aus der Datei genommen, es sei denn, Sie haken es an.
+
+Grenzen: Neue Absätze übernehmen das Aussehen des Absatzes neben ihnen. Text in Tabellen wird wie andere Absätze verglichen (eine Tabelle selbst wird nie entfernt), und Felder zählen mit dem Text, den sie zeigen. Kopf- und Fußzeilen, Textfelder und der Text der Fußnoten und Kommentare der Datei werden nicht verglichen und bleiben, wie sie sind; Kommentare und Fußnoten des Projekts bleiben im Projekt und werden nicht in die Datei geschrieben. Wurde die Datei nach dem Vergleich geändert, wird die Kopie nicht geschrieben; vergleichen Sie erneut.
+
+### Drucken
+
+**Datei > Aktuelles Dokument drucken…** (**Ctrl+P**) druckt, was der aktuelle Editor zeigt:
+
+- **Ein Text** (ein Dokument oder mehrere im Gesamttext): der Text mit seiner Formatierung und seinen Bildern, der Titel jedes Dokuments über seinem Text und Fußnoten am Seitenende. Hat der Manuskripthalter die Tastatur, wird das Dokument des Manuskripthalters gedruckt.
+- **Die Pinnwand**: die Karteikarten in der gezeigten Reihenfolge, so viele auf einem Blatt, wie passen (mit Linien zum Ausschneiden), oder eine Karte pro Blatt für Karteikartenpapier.
+- **Die Gliederung**: die Zeilen und Spalten, wie die Gliederung sie zeigt, mit den Spaltentiteln oben auf jeder Seite.
+- **Ein Bild** (so groß, wie die Seite es zulässt), **eine PDF-Datei** (ihre Seiten) oder **eine Webseite** (ihr Text).
+
+Das Druckfenster wählt den Drucker, die Seiten und die Anzahl der Kopien. **Auswahl** druckt nur den ausgewählten Text oder nur die ausgewählten Karteikarten oder Gliederungszeilen. Um den Ausdruck stattdessen als PDF-Datei zu speichern, wählen Sie als Drucker **In Datei drucken (PDF)**.
+
+**Datei > Druckvorschau…** zeigt zuerst die Seiten; die Drucker-Schaltfläche der Vorschau druckt sie, **Schließen** (oder **Esc**) schließt die Vorschau.
+
+**Datei > Druckeinstellungen…** bestimmt, wie die Dinge aufs Papier kommen. Das Fenster öffnet sich auf dem Reiter für das, was der Editor zeigt; **Vorschau…** zeigt das Ergebnis, bevor Sie auf **OK** klicken. Die Einstellungen gehören zum Projekt; haken Sie **Diese Einstellungen auch für neue Projekte verwenden** an, um sie zur Voreinstellung für neue Projekte zu machen.
+
+- **Seite**: die Papiergröße und -ausrichtung (die Schaltfläche **Papier der Seitenansicht** übernimmt Papier und Ränder von **Ansicht > Textbearbeitung > Seitengröße und Ränder…**), die Ränder sowie Kopf- und Fußzeile, jeweils mit einem linken, einem mittleren und einem rechten Teil. Platzhalter: `<$title>` (was gedruckt wird), `<$projecttitle>`, `<$author>`, `<$date>`, `<$p>` (die Seitenzahl) und `<$pages>` (die Seitenanzahl). Nehmen Sie den Haken bei **Kopf- und Fußzeile auch auf der ersten Seite** weg für eine saubere erste Seite.
+- **Text**: was mit dem Text gedruckt wird (der Titel jedes Dokuments, die Synopse darunter, die Dokumentnotizen nach dem Text, Kommentare und Anmerkungen im Text als Notizen am Seitenende, Fußnoten am Ende des Textes statt am Ende jeder Seite, Hervorhebungen); die Schriften (wie im Editor oder **Eine Schrift** Ihrer Wahl); und der Zeilenabstand (wie im Editor, einfach, 1,5 Zeilen oder doppelt, mit Platz für Korrekturen). Drehbuchdokumente behalten ihr Drehbuchlayout.
+- **Karteikarten**: die Kartengröße (3 x 5 in, 4 x 6 in, 5 x 8 in, A7, A6 oder eine eigene Größe), so viele Karten auf einem Blatt, wie passen, oder eine Karte pro Blatt, was jede Karte zeigt (Titel, Synopse, die ersten Zeilen des Textes, wenn es keine Synopse gibt, Bilder, die Etikettenfarbe als Streifen oben, Status, Stichwörter, die Linien einer Karteikarte, eine Linie um jede Karte) und die Schrift.
+- **Gliederung**: die Synopsen (wie die Gliederung sie zeigt, immer oder nie), auch die Zeilen in geschlossenen Gruppen, die Spaltentitel oben auf jeder Seite, eine Linie zwischen den Zeilen, ein Punkt in der Etikettenfarbe und die Schrift. Bei vielen Spalten gibt **Querformat** auf dem Reiter **Seite** ihnen mehr Platz.
+
+„Aktuelles Dokument drucken“ druckt ein Dokument, wie Sie daran arbeiten. Für ein fertiges Manuskript mit dem Aussehen eines Kompilierungsformats kompilieren Sie es (Abschnitt 13) und drucken die PDF- oder Word-Datei.
+
+---
+
+## 15. Sicherungen
+
+{{APP}} legt jedes Mal, wenn Sie ein Projekt schließen, eine Sicherung an (eine ZIP-Datei des ganzen Projekts) und behält pro Projekt die letzten fünf. Ändern Sie das unter **Datei > Einstellungen > Sicherung**, wo Sie auch den Sicherungsordner wählen können (am besten auf einem anderen Laufwerk oder in einem Ordner, den Ihr Synchronisationsprogramm kopiert).
+
+Seit 0.91 liegen die Sicherungen aller Projekte direkt im Sicherungsordner, jede benannt nach ihrem Projekt mit Datum und Uhrzeit. Seit 0.92.0 trägt der Name auch die **ID** des Projekts, fünf Zeichen nach einem „#“ (*My Novel #K7T2M bak 2026-11-20 15-40-00.zip*). Die ID gehört zum Projekt, nicht zum Computer: Sie ist auf jedem Computer gleich, auf dem das Projekt geöffnet wird, und bleibt, wenn Sie das Projekt umbenennen oder seinen Ordner verschieben. Die Sicherungen eines Projekts sind die Dateien, die seinen Titel und seine ID tragen, und nur sie werden für es gezählt und aufgeräumt, sodass zwei Projekte mit demselben Titel ihre eigenen Sicherungen und ihre eigene Anzahl behalten. Eine Kopie oder ein neues Projekt, das das Programm selbst anlegt, ist ein eigenes Projekt mit eigener ID: **Datei > Speichern unter…** und der Eintrag {{APP}}-Projekt von **Datei > Exportieren**, ein mit **Aus Sicherung wiederherstellen** wiederhergestelltes Projekt (es bekommt auch einen eigenen Titel) und ein Projekt, das aus einer eigenen Vorlage entstand. Eine Kopie, die außerhalb des Programms entstand (ein von Hand kopierter Ordner, eine von Hand entpackte Sicherung), hat die ID ihres Originals: Geben Sie einer solchen Kopie einen eigenen Titel. Ein Projekt im Scrivener-Format nimmt seine ID aus der Kennung, die Scrivener in der *.scrivx* aufbewahrt. Liegt Ihr Sicherungsordner im OneDrive einer Organisation, kann deren Administrator „#“ in Dateinamen verboten haben; OneDrive für privat erlaubt es. Sicherungen, die eine Version vor 0.92.0 angelegt hat, haben keine ID im Namen: Sie werden vom Aufräumen nie gelöscht, **Aus Sicherung wiederherstellen** listet sie weiterhin auf, und Sie löschen sie selbst, wenn Sie sie nicht mehr brauchen. Ändern Sie den Titel eines Projekts, bleiben die unter dem alten Titel angelegten Sicherungen, bis Sie sie löschen. Die Versionen 0.70 bis 0.90 bewahrten die Sicherungen jedes Projekts in einem eigenen Ordner im Sicherungsordner auf (*My Novel 1a2b3c4d*); ein solcher Ordner bleibt, wie er ist, es wird dort nichts mehr hinzugefügt oder gelöscht, und **Aus Sicherung wiederherstellen** listet seine Sicherungen weiterhin auf. Eine Sicherung läuft neben dem Fenster: Nach einem Moment zeigt ein Fortschrittsfenster, wie weit sie ist, und kann sie abbrechen. Wer das Projekt geöffnet hat (die Sperrdatei mit dem Namen des Computers und der Anmeldung), ist nicht in der Sicherung.
+
+- Mit **Bei jedem manuellen Speichern sichern** (**Datei > Einstellungen > Sicherung**) legt jedes **Datei > Speichern** (**Ctrl+S**) auch eine Sicherung an. Zwei Sicherungen innerhalb derselben Sekunde bekommen eine Nummer („... (2)“). Lässt sich diese Sicherung nicht anlegen, ist sie unvollständig oder muss außerhalb des Sicherungsordners warten, sagt ein Hinweis neben dem Text das (0.92.0; früher tat es nur die Statusleiste, für ein paar Sekunden). Ihr Text wird in jedem Fall gespeichert. Der Hinweis kommt einmal pro Ursache, bis Sie das Programm beenden; die Statusleiste sagt es bei jedem Speichern.
+- **Die Meldungszeile** unter dem Binder zeigt kurze Meldungen eine nach der anderen, 5 Sekunden lang (10 mit einem Link) oder bis Sie sie anklicken; andere warten. Erweiterungen nutzen sie ebenfalls (zum Beispiel „Model unloaded, RAM usage minimal“, wenn Übersetzungshelfer oder Sprachtranskription sein Modell nach 15 Minuten ohne Benutzung freigegeben hat; die Zeit steht in deren Optionen). **Hilfe > Fehlersuche und Entwicklung > Systeminformationen** nennt den Speicher, den das Programm belegt.
+- **Nicht installierte Erweiterungen.** **Bearbeiten > Schreibwerkzeuge** listet „Übersetzungshelfer“ und „Speech Transcription“, solange die Erweiterung fehlt oder ausgeschaltet ist; jede zeigt einen Hinweis mit einer Schaltfläche, die **Hilfe > Erweiterungen und Updates > Erweiterungsverwaltung** öffnet.
+- **Datei > Sichern > Jetzt sichern** legt sofort eine Sicherung an. Seit 0.94.0 wird der Erfolg in der Meldungszeile unter dem Binder gemeldet („Backup saved.“ mit dem Link **Ordner anzeigen**, der den Ordner der Sicherung öffnet; der Tooltip nennt die Datei; eine Meldung mit Link bleibt 10 Sekunden); kein Kasten wartet auf OK. Ein Kasten kommt nur, wenn etwas fehlgeschlagen ist oder wenn die Sicherung angelegt wurde, aber einige Dateien nicht gelesen oder eine ältere Sicherung nicht gelöscht werden konnte.
+- **Eine Sicherung, die ein Herunterfahren oder ein Kill-Befehl verhindert hat**, wird vermerkt und beim nächsten Öffnen angelegt (0.81). Seit 0.93.0 bleibt der Vermerk, bis diese Sicherung angelegt ist (im Sicherungsordner oder daneben wartend wie oben beschrieben): Ein Öffnen, dessen Sicherung fehlschlägt, lässt den Vermerk für das nächste Öffnen stehen. **Eine ältere Sicherung, die das Aufräumen nicht löschen kann** (eine gesperrte oder geschützte Datei), bleibt, und eine Meldung nennt einmal die Datei und den Grund; löschen Sie sie von Hand. Während Sie weiterschreiben, ist diese Meldung ein kleiner Hinweis neben dem Text, der keine Tasten beansprucht.
+- **Sichern nach…** speichert eine Sicherung, wohin Sie möchten, zum Beispiel auf einen USB-Stick.
+- **Aus Sicherung wiederherstellen…** (0.70) listet die Sicherungen des geöffneten Projekts mit Datum, Größe und Angabe, ob sie vollständig sind; wählen Sie eine und **Wiederherstellen und öffnen**: Sie wird in einen neuen Ordner neben dem Projekt entpackt, *… (restored 2026-11-10 14-03)*, sein Titel sagt „(restored …)“, und es öffnet sich dort. Das Projekt, das Sie geöffnet hatten, wird nicht verändert. Die Liste enthält die Sicherungen mit der ID dieses Projekts, die ohne ID (vor 0.92.0 angelegt) und die eines anderen Projekts mit demselben Titel; der Dateiname in der Liste zeigt, welche welche ist, sodass nichts außer Reichweite gerät. Seit 0.93.0 listet sie auch die Sicherungen, die im eigenen Arbeitsordner des Programms warten (angelegt, während der Sicherungsordner nicht erreichbar war; die nächste Sicherung in den Sicherungsordner legt sie dorthin): Sie sind mit „wartend (noch nicht im Sicherungsordner)“ markiert und werden auf dieselbe Weise wiederhergestellt. Seit 0.81 funktioniert eine Wiederherstellung jeder Größe (Sicherungen von 2 GB und mehr, Dateien von mehr als 1 GB wie Videos, mehr als 65.535 Dateien), jede Datei wird beim Schreiben geprüft, eine Wiederherstellung, die nicht aufs Laufwerk passt, wird nicht gestartet, ein Fortschrittsfenster kann sie abbrechen, und wenn Dateien nicht wiederhergestellt werden können, nennt die Meldung jede von ihnen mit dem Grund (eine volle Festplatte, ein beschädigter Eintrag). Seit 0.93.0 hat die Meldung drei Formen: **wiederhergestellt** (alles ist da), **unvollständig wiederhergestellt** (so überschrieben, mit einem Warnzeichen, die fehlenden Dateien mit Grund genannt: Sehen Sie sich das wiederhergestellte Projekt an, bevor Sie sich darauf verlassen) und **nicht wiederhergestellt**; und wenn der Titel des wiederhergestellten Projekts nicht mit „(restored …)“ gekennzeichnet werden konnte, sagt die Meldung das.
+- **Alte Sicherungen in den Sicherungsordner verschieben…** (0.93) verschiebt die Sicherungen, die die Versionen 0.70 bis 0.90 in einem eigenen Ordner im Sicherungsordner aufbewahrten (*My Novel 1a2b3c4d*), unter ihren Namen in den Sicherungsordner selbst, sodass sie bei den anderen liegen. Der Befehl ist nur an, solange das geöffnete Projekt einen solchen Ordner mit Sicherungen hat. Er fragt zuerst und sagt, wie viele es sind; eine Sicherung, deren Name im Sicherungsordner schon vorhanden ist, wird nie überschrieben und bleibt, wo sie war; der Bericht sagt, was verschoben und was belassen wurde (mit dem Grund), und der alte Ordner wird entfernt, wenn nichts mehr darin ist. Diese Sicherungen haben keine ID im Namen, sodass das Aufräumen sie wie bisher nie zählt oder löscht; **Aus Sicherung wiederherstellen** listet sie an beiden Orten auf.
+- **Sicherungsordner anzeigen** öffnet den Sicherungsordner.
+
+**Wo eine Sicherung zusammengesetzt wird (seit 0.90.3).** Eine Sicherung wird in einem eigenen Ordner des Programms gepackt und geprüft, *~/.local/share/{{APP}}/backup-work* (unter Windows *data\backup-work* im Programmordner), und nur die fertige Datei kommt in einem Schritt und unter ihrem endgültigen Namen in den Sicherungsordner: dorthin verschoben, wenn beide Ordner auf demselben Laufwerk liegen, sonst direkt unter ihrem endgültigen Namen kopiert und mit dem Original verglichen. So enthält ein Sicherungsordner, den ein Synchronisationsprogramm beobachtet oder der auf einem USB-Stick oder einem Netzlaufwerk liegt, nie eine halb geschriebene Sicherung oder eine temporäre Datei, und eine abgebrochene Sicherung sieht nie wie eine fertige aus. (Vor 0.90.3 wurde die Sicherung als *… .zip.part* im Sicherungsordner geschrieben und dort umbenannt.) Der Arbeitsordner ist zwischen den Sicherungen leer, abgesehen von einem kleinen Vermerk über den Sicherungsordner, dem er dient.
+
+**Wenn der Sicherungsordner nicht erreichbar ist** (ein Laufwerk, das nicht angeschlossen ist, ein Ordner, der sich nicht anlegen oder beschreiben lässt, kein Platz), wird die Sicherung trotzdem angelegt und wartet im Arbeitsordner. Eine Meldung sagt das und nennt beide Ordner, und die nächste Sicherung des Projekts legt die wartenden Sicherungen vor ihrer eigenen an ihren Platz. Es warten so viele, wie Sicherungen aufbewahrt werden. **Sichern nach…** in einen Ordner, der sich nicht beschreiben lässt, sagt das nur mit dem Grund; wählen Sie einen anderen Ordner.
+
+**Von einem Synchronisationsprogramm angelegte Kopien.** Nur Dateien, die so benannt sind, wie {{APP}} seine Sicherungen benennt (*Titel #K7T2M bak 2026-11-20 07-56-13.zip*, mit „(2)“ oder „(incomplete)“, wo es zutrifft), zählen als Sicherungen und können vom Aufräumen gelöscht werden. Andere Dateien im Sicherungsordner eines Projekts bleiben unberührt und zählen nicht: zum Beispiel die Kopien, die ein Synchronisationsprogramm anlegt, wenn es mit einer Datei Probleme hat (*… -MyComputer-safeBackup-0001.zip*, *… (conflicted copy).zip*), oder eine Kopie, die Sie von Hand gemacht haben. (Vor 0.90.3 zählten solche Kopien als Sicherungen ihres Datums, und mehrere von ihnen konnten die echten älteren Sicherungen verdrängen.) **Aus Sicherung wiederherstellen…** listet sie weiterhin auf, sodass Sie aus einer Kopie wiederherstellen können; löschen Sie Kopien, die Sie nicht brauchen, selbst.
+
+Große Projekte (mehr als 4 GB, zum Beispiel mit Audio und Video) werden ebenfalls korrekt gesichert (seit Version 0.20). Eine Datei, die sich nicht lesen lässt (zum Beispiel wegen ihrer Berechtigungen oder eine Datei eines synchronisierten Ordners, die noch nicht auf diesem Computer ist), wird weggelassen; die Sicherung wird trotzdem angelegt, heißt aber *… (incomplete).zip*, eine Meldung nennt die fehlenden Dateien (auch bei den automatischen Sicherungen beim Öffnen oder Schließen eines Projekts, 0.65), und dafür wird keine ältere Sicherung gelöscht: Die Anzahl der aufzubewahrenden Sicherungen zählt nur vollständige Sicherungen. Welche Sicherungen die ältesten sind, sagen Datum und Uhrzeit in ihren Namen, sodass das Umbenennen des Projekts nichts daran ändert, welche behalten werden (0.81; früher ließ ein neuer Titel, der vor dem alten einsortiert wird, jede neue Sicherung als älteste zählen, und sie wurde sofort gelöscht). Nach dem Aufräumen prüft das Programm, dass die neue Sicherung noch da ist. Von den unvollständigen Sicherungen bleiben die neuesten bis zur aufzubewahrenden Anzahl (0.81). Ein Ordner im Projekt, der ein Link auf einen Ordner anderswo ist, wird mit seinen Dateien gesichert (0.81); ein Link, der ins Leere oder zurück ins Projekt zeigt, macht die Sicherung unvollständig. Wird das Programm durch ein Signal beendet (ein Herunterfahren, das nicht wartet, ein Kill-Befehl), während **Beim Schließen eines Projekts sichern** an ist, bleibt keine Zeit für die Sicherung; beim nächsten Öffnen des Projekts wird die Sicherung angelegt, und die Statusleiste sagt das (0.81). Das Projekt wird vor jeder Sicherung gespeichert; schlägt dieses Speichern fehl (eine volle Festplatte, ein Ordner, der sich nicht beschreiben lässt), wird keine Sicherung angelegt und eine Meldung sagt, warum, sodass einer Sicherung nie Ihre neuesten Änderungen fehlen, ohne dass Sie es wissen. Die Sicherung eines Projekts im Scrivener-Format enthält die *.scriv* und daneben die Arbeitskopie von {{APP}} (*… - working copy of {{APP}}*), mit den Stichwörtern, Formatvorlagen, Objekten und anderem, was nur {{APP}} kennt.
+
+**Eine Sicherung von Hand wiederherstellen** (zum Beispiel auf einem anderen Computer): Öffnen Sie den Sicherungsordner, entpacken Sie die ZIP-Datei (Rechtsklick > Extrahieren) und öffnen Sie das Projekt darin mit **Datei > Projekt öffnen**.
+
+---
+
+## 16. Einstellungen
+
+**Datei > Einstellungen** (**Ctrl+,**) hat oben eine Reihe von Symbolen für die Bereiche, links eine Liste der Seiten (oder Reiter), rechts die Einstellungen. Nichts ändert sich, bis Sie auf **OK** oder **Übernehmen** klicken. Unten links exportiert **Verwalten** das verwendete Profil in eine Datei und importiert eines (**Profil exportieren...**, **Profil importieren...**, zum Beispiel um Ihre Einstellungen auf einen anderen Computer mitzunehmen; eine ältere Einstellungsdatei (*.qboptions*) lässt sich als Profil importieren; siehe „Profile“ unten), öffnet **Profile verwalten...**, speichert das aktuelle Aussehen als Design-Datei (eine vorhandene Datei wird nur ersetzt, wenn die neue vollständig geschrieben wurde; schlägt das Schreiben fehl, bleibt die alte Datei, wie sie war, und die Meldung sagt das) und listet die Designs auf; **Standard** setzt jede Einstellung auf den Standardwert zurück (Ihre zuletzt geöffneten Projekte, eigenen Designs, Layouts, Symbolleisten und Tastenkürzel bleiben).
+
+**Wo jede Einstellung gespeichert wird.** Zeigen Sie auf eine Einstellung, um zu sehen, wo ihr Wert gespeichert wird: Ihr Tooltip sagt, ob das geöffnete Projekt sie behält oder das Programm sie für alle Projekte behält und ob dieser Ort **fest** ist (eine Einstellung, die nur das Programm halten kann, etwa die Sprache) oder **von der Einstellung** **Einstellungen für** oben abhängt (und, auf der Seite „Erscheinungsbild“, von **Aussehen anzeigen und ändern für**). (0.90.1 zeigte vor jeder Einstellung ein grünes P oder ein blaues A; 0.90.2 überlässt das dem Tooltip.) Auf einem kleinen Bildschirm scrollen die Seiten, sodass OK, Abbrechen und Übernehmen sichtbar bleiben.
+
+Seit 0.70 öffnet sich das Fenster für **Alle Projekte** (die Einstellungen des Programms); wählen Sie oben **Dieses Projekt**, um etwas nur für das geöffnete Projekt einzustellen. Die eigenen Einstellungen eines Projekts können das Speichern sicherer machen, aber nie unsicherer: Die kürzere Verzögerung beim automatischen Speichern gilt, eine Sicherung, die das Programm anlegt, bleibt an, die größere Anzahl von Sicherungen wird behalten, und das automatische Beenden gehört allein dem Programm. Das letzte Speichern kommt höchstens 10 Sekunden nach einer Änderung, gleich welche Verzögerung für das automatische Speichern eingestellt ist.
+
+- **Allgemein**: **Start** (das letzte Projekt wieder öffnen, die Dateidialoge des Desktops, die **Sprache** des Programms, ab dem nächsten Start: English, Deutsch, Español, Français, Português (Brasil), Italiano, Русский, Bahasa Indonesia, Türkçe, Polski oder Nederlands (die neun neuen sind maschinelle Übersetzungen und in der Liste so gekennzeichnet, bis ein Muttersprachler sie geprüft hat; das Handbuch, die Schnellstartanleitung und das Willkommensprojekt folgen der Sprache, auf Englisch, wo eine Sprache keines hat; der erste Start übernimmt die Sprache des Systems, wenn sie eine davon ist, und die Seite des ersten Starts bietet dieselbe Liste an); **Ziffern großer Zahlen gruppieren**: Wortzahlen, Ziele und Statistiken mit einem Trennzeichen zwischen den Tausendern, wie Ihr System Zahlen schreibt (44,825 oder 44.825), oder 44825, wenn der Haken fehlt); **Speichern** (Intervall des automatischen Speicherns, die Anzahl zuletzt geöffneter Projekte, Momentaufnahmen bei jedem Datei > Speichern); **Autorenangaben** (Ihr Name, Ihre Adresse, Telefonnummer und E-Mail für Titelseiten, verwendet von den Platzhaltern `<$author>`, `<$street>`, `<$city>`, `<$state>`, `<$zip>`, `<$country>`, `<$phone>`, `<$email>`, `<$address>`); die Einstellungen der Schreibwerkzeuge (**Notizblock**); **Gemeinsame Vorlagen** (ein weiterer Ordner mit Projektvorlagen, zum Beispiel einer, der zwischen Ihren Computern synchronisiert wird; seine Vorlagen erscheinen in Datei > Neues Projekt); **Zitate** (das Programm, das **Format > Literaturverzeichnis/Zitate...** startet, zum Beispiel Zotero oder JabRef); **Trennzeichen** (was zwischen zusammengeführten Dokumenten und zwischen Notizblock-Notizen steht, die einem Dokument hinzugefügt werden: ein einzelner Zeilenumbruch, eine Leerzeile, ein Seitenumbruch, nichts oder Ihr eigener Text); **Automatisches Beenden** (speichern und schließen nach einer Anzahl von Minuten ohne Tasten- oder Mauseingabe); **Warnungen** (**Internes Protokoll anzeigen** zeigt die Meldungen des Programms in dieser Sitzung, **Alle Warnungen zurücksetzen** fragt erneut die Fragen, die mit „Nicht mehr fragen“ beantwortet wurden).
+- **Bearbeitung**: **Optionen** (den letzten Zoom der Editoren wieder laden, den Standard-Textzoom jedes Bereichs, Zentimeter oder Zoll und die Schrittweite des Lineals, die Einfügen-Taste für den Überschreibmodus, ein eigenes Datumsformat für Einfügen > Aktuelles Datum, was die Live-Zählung zeigt, Anmerkungen im Text ohne Farbe, Kommentare und Fußnoten, die vor der Interpunktion enden, eine blockförmige Schreibmarke); **Formatierung** (die Formatierung und Formatvorlagen neuer Projekte); **Revisionen** (die fünf Farben von Format > Überarbeitungsmodus, aus der gemeinsamen Palette).
+- **Verhalten**: **Schreibmodus** (Bildschirm, Hauptfenster aus dem Weg, Esc); **Dokumentlinks** (wo Dokumentlinks sich öffnen, Rückverweise); **Doppelklick** (ein Doppelklick auf die Pinnwand legt eine Karte an); **Ziehen und Ablegen** (auf Textdokumente abgelegte Dokumente, das Format von Text, der zu anderen Programmen gezogen wird); **Ordner und Dateien** (Ordner öffnen sich als Pinnwand; ein Text mit Unterdokumenten öffnet sich wie ein Ordner); **Wiedergabe** von Audio und Video (Abschnitt 6); **Schnellansicht** (Bereiche öffnen sich mit ihrem Projekt wieder); **Return-Taste** (Return beendet das Bearbeiten einer Synopse; Return legt eine neue Karte oder Zeile an); **Momentaufnahmen** (eine Meldung, wenn Momentaufnahmen erstellt werden).
+- **Erscheinungsbild**: das Design und elf Teile des Fensters (Allgemeine Oberfläche, Binder, Schreibmodus, Pinnwand, Karteikarten, Inspektor & Notizen, Haupteditor, Gliederung, Gesamttext, Zielfortschrittsbalken, Textmarkierungen), jeweils mit ihren Optionen, Schriften und Farben, und **Standardfarben** (seit 0.95: die sechs Etiketten, mit denen neue Projekte beginnen, die sechs Farben der Textfarbenpalette und der Hervorhebungspalette und die Farben, mit denen die beiden Schaltflächen beginnen; **Standard** gibt die Standardwerte des Programms zurück; bestehende Projekte behalten ihre Etiketten). Siehe „Designs, Farben und Schriften“ unten. **Allgemeine Oberfläche** hat außerdem den vollständigen Pfad des Projekts in der Titelleiste und die Größe der Symbolleisten-Symbole.
+- **Korrekturen**: Korrekturen beim Tippen (Abschnitt 4) und **Rechtschreibung** (das Wörterbuch, Wörter mit Zahlen, die Unterstreichung, die persönliche Wortliste).
+- **Tastatur**: das Tastenkürzel jedes Befehls (Abschnitt 19).
+- **Freigabe**: **Importieren** (Kommentare, Fußnoten, Formatvorlagen, die Kodierung von reinem Text, HTML-Dateien; Abschnitt 14), **Exportieren** (das Dateiformat und die Notizen von Datei > Exportieren > Dateien), **Konvertierung** (wie *.doc*-Dateien gelesen werden).
+- **Sicherung**: wann gesichert wird (beim Öffnen, beim Schließen, bei jedem Datei > Speichern), wie viele Sicherungen behalten werden (eine neue Installation beginnt mit den neuesten 25; das Feld enthält nur die Zahl, die Wörter stehen darum herum: „Die neuesten [25] Sicherungen jedes Projekts behalten“) und wo.
+- **Extras**, für die eigenen Ergänzungen von {{APP}}: **Mindmap** (die Einstellungen der Tafeln, die Form und das Aussehen neuer Notizen, der Hintergrund von Tafeln ohne eigene Farbe in hellen und dunklen Designs, die Größe der Symbole an Notizen und Linien), **Objekte** (ob neue Projekte Ihre eigenen Objektvorlagen oder die Standardvorlagen bekommen), **Erweiterungen und Plugins** (die installierten Kompilierungsformate und Schreibwerkzeuge, die Plugin-Ordner), **Absturzberichte** (nach wie vielen Sekunden ohne Antwort ein Freeze-Bericht geschrieben wird, wie viele Berichte behalten werden).
+- **Sprache** (mit der Erweiterung Sprachtranskription): das Modell, das Gerät, Sprachen, Mikrofon und Pausen (siehe Abschnitt 10, *Sprachtranskription*). Schreibwerkzeuge späterer Erweiterungen können ebenfalls einen eigenen Bereich mitbringen.
+
+Andere Fenster des Programms können die Einstellungen auf einer Seite öffnen, zum Beispiel die Seite „Wiedergabe“ vom Mediaplayer aus.
+
+Updates und Erweiterungen haben eigene Fenster: **Hilfe > Erweiterungen und Updates > Aktualisierung oder Erweiterung installieren…** und **Hilfe > Erweiterungen und Updates > Erweiterungsverwaltung…** (Abschnitt 17).
+
+Projektspezifische Einstellungen (Etiketten, Status, Abschnittstypen, das Aussehen des Textes, eigene Metadaten, Spezialordner, Titel und Autor für das Kompilieren) stehen unter **Projekt > Projekteinstellungen**.
+
+### Einstellungen für ein Projekt
+
+Oben in **Datei > Einstellungen** wählt **Einstellungen für:**, wo das, was Sie ändern, gespeichert wird:
+
+- **Alle Projekte (das Programm)**: die Einstellungen des Programms, für jedes Projekt. Hier öffnet sich das Fenster.
+- **Dieses Projekt**: Das geöffnete Projekt behält, was Sie hier ändern, als eigene Einstellung (in *settings/options.ini* seines Ordners). Sie gilt, solange dieses Projekt geöffnet ist; was das Projekt nicht festlegt, kommt aus den Einstellungen des Programms. Der Titel des Fensters lautet „Einstellungen: Dieses Projekt“, und die Zeile unter der Auswahl sagt, wie viele eigene Einstellungen das Projekt hat (klicken Sie auf die Zahl, um sie zu sehen). **Programmeinstellungen verwenden** entfernt sie alle; die Einstellungen des Programms gelten für das Projekt wieder. Eine Änderung außerhalb der Einstellungen, zum Beispiel ein im Tastaturfenster geändertes Tastenkürzel oder eine angeordnete Symbolleiste, geht ins Projekt, wenn das Projekt dafür schon einen eigenen Wert hat, sonst ins Programm.
+
+Einige Einstellungen gehören nur zum Programm und werden für ein Projekt nicht gezeigt: die zuletzt geöffneten Projekte, das Wiederöffnen des letzten Projekts, die Dateidialoge des Desktops, die Positionen der Fenster und die Layouts, die Zeiten der Absturzberichte und das Aussehen für neue Projekte. Das Aussehen eines Projekts war schon immer sein eigenes: Die Seite **Erscheinungsbild** zeigt das Aussehen des geöffneten Projekts oder das Aussehen für neue Projekte (**Aussehen anzeigen und ändern für** oben auf der Seite); ist oben **Dieses Projekt** gewählt, zeigt sie nur das Aussehen des Projekts. **Standard** und **Verwalten > Profil importieren…** wirken nur auf die Einstellungen des Programms; wählen Sie dafür also **Alle Projekte**.
+
+**Welche Einstellungen Vorrang haben** (**Allgemein > Start**, für alle Projekte): Ist es angehakt (die Voreinstellung), haben die eigenen Einstellungen eines Projekts Vorrang, und das Programm füllt den Rest auf. Ist es nicht angehakt, gelten immer die Einstellungen des Programms: Die eigenen Einstellungen von Projekten werden nicht verwendet (sie bleiben für später in den Projekten), und jedes Projekt zeigt das Aussehen für neue Projekte.
+
+**Projekt > Projekteinstellungen in Datei speichern…** enthält die eigenen Einstellungen des Projekts (den Bereich **Einstellungen dieses Projekts**), sodass sie in ein anderes Projekt mitgenommen werden können.
+
+### Designs, Farben und Schriften
+
+Ein Design legt die Farben und, wenn es will, die Schriften jedes Bereichs des Fensters fest. Wählen Sie eines unter **Ansicht > Designs** oder mit der Design-Schaltfläche der Symbolleiste „Designs“ (schalten Sie die Symbolleiste unter **Ansicht > Symbolleisten** ein); die Änderung wirkt sofort, ohne Neustart. Neun Designs sind eingebaut:
+
+| Design | Aussehen |
+|--------|------|
+| Shelin's Dark Theme | dunkles Fenster und dunkler Binder, ein warmes Papier mit schwarzem Text, Cinzel für die Titel des Gesamttexts (seit 0.95; steht ganz oben in der Liste und lässt sich unter „Designs verwalten“ löschen; es bleibt dann nach Updates weg) |
+| Default (Follow the Desktop) | die Farben Ihres Desktops (das KDE-Farbschema) |
+| Light | hellgraues Fenster, weißes Papier |
+| Dark Mode | dunkelgrau, mit dunklen Karteikarten |
+| Sepia | warmes Creme und Braun |
+| Slate | graues Fenster, weißes Papier auf grauem Schreibtisch |
+| Midnight | dunkelblau mit einem Bernstein-Akzent |
+| Ocean | helles Blaugrün |
+| High Contrast | weiß und gelb auf schwarz |
+
+Erweiterungen können weitere Designs mitbringen (die Erweiterung „Extra themes“ hat Northern Night, Forest, Graphite, Warm Paper und Rose Dawn).
+
+**Die Design-Schaltfläche** (0.90.2, geändert in 0.91 und 0.94). Eine Schaltfläche, **Design**, in der Symbolleiste „Designs“, die anfangs aus ist (**Ansicht > Symbolleisten > Designs** zeigt sie; vor 0.94 nahmen vier Schaltflächen und eine Liste ein Drittel der Hauptleiste ein). Ihr Menü listet:
+
+- **Light** und **Dark**: Ein Klick zeigt dieses Design sofort, so wie es ist.
+- **Mein Look 1** und **Mein Look 2** bewahren zwei eigene Looks auf. Wählen Sie einen leeren (im Menü steht *leer*), speichert er den Look, den Sie gerade sehen (das Design mit jeder Farbe und Schrift, die Sie darauf geändert haben); wählen Sie einen gefüllten, kommt sein Look zurück. **Aktuellen Look als Mein Look 1 speichern** und **...als Mein Look 2**, am Ende des Menüs, speichern den Look, den Sie gerade sehen, dort (sie fragen, bevor sie einen Look ersetzen). Die beiden Looks sind gewöhnliche Designs: Sie stehen in der Liste darunter und unter **Ansicht > Designs**, wo sie auch exportiert oder gelöscht werden können (ein gelöschter lässt seinen Eintrag leer).
+- **Alle Designs**, darunter, das benutzte mit Haken. Die Wahl eines Designs tut, was **Ansicht > Designs** tut: Das geöffnete Projekt und neue Projekte verwenden es, und die Frage, ob Ihre eigenen Änderungen darüber behalten werden, kommt wie zuvor.
+- **Ihr eigener Look geht durch eine Wahl nie verloren.** Das Menü zeigt ein Design, wie es ist, sodass sich wirklich ändert, was Sie sehen. Liegen eigene Farben oder Schriften über dem gezeigten Design, gingen sie dadurch verloren, daher werden sie zuerst gespeichert: in einem leeren Mein Look ohne Rückfrage (die Statusleiste sagt, wo), und wenn beide einen Look enthalten, fragt {{APP}}, ob in Mein Look 1, in Mein Look 2 gespeichert oder ohne Speichern gewechselt werden soll.
+
+Wie jedes Element einer Symbolleiste lässt sich die Design-Schaltfläche unter **Ansicht > Symbolleisten > Symbolleisten anpassen** verschieben oder entfernen, und die ganze Symbolleiste „Designs“ lässt sich unter **Ansicht > Symbolleisten** ein- oder ausschalten.
+
+**Die Seite in dunklen Designs** (0.70). Die Standardseite von {{APP}} ist ein helles olivfarbenes Papier neben einem grauen Schreibtisch. Bei einem dunklen Design ist die Seite stattdessen ein sehr dunkles Grau mit weißem Text (oder die eigene dunkle Seite des Designs, wenn es eine hat), sodass ein dunkles Design keine helle Seite in einem dunklen Rahmen hinterlässt. Eine Seitenfarbe, die Sie selbst gewählt haben (Rechtsklick > Aussehen oder Datei > Einstellungen > Erscheinungsbild), bleibt in jedem Design.
+
+**Farben und Schriften ändern.** **Datei > Einstellungen > Erscheinungsbild** (oder **Ansicht > Designs > Farben und Schriften…**) listet links die Teile des Fensters auf. Jeder zeigt seine Einstellungen, seine Schriften und seine Farben (ein Klick auf eine Farbe zeigt die gemeinsame Palette: die Etikettenfarben, die sechs Standardfarben und **Andere...**):
+
+| Teil | Schriften | Farben |
+|------|-------|--------|
+| Allgemeine Oberfläche | Menüs, Schaltflächen und Bereiche | Fenster, Inspektor-Hintergrund (die Listen und Textfelder des Inspektors), abwechselnde Zeilen, Text, Schaltflächen, Auswahl, Links, Tooltips, Rahmen, ausgegrauter Text |
+| Binder | Binder | Hintergrund, Titel |
+| Schreibmodus | (keine) | Hintergrund, Papier, Text |
+| Pinnwand | (keine) | Pinnwand, Statusstempel |
+| Karteikarten | Kartentitel, Kartentext | Karteikarte, Titel, Text, Linie unter dem Titel, Linierung |
+| Inspektor & Notizen | Synopse | Inspektor-Streifen (die Reiterreihe, die Überschriften, die Zeile für Etikett und Status), Etiketten, Synopsenkarte und -text, Notizen und ihr Text |
+| Haupteditor | Titel der Kopfleiste | Papier, Text, der Raum neben der Textspalte, der Schreibtisch um die Seiten (nur in der Seitenansicht gezeigt), die Kopfleiste (normal, aktiver Editor, an Ort und Stelle gesperrt) |
+| Gliederung | Gliederung | Hintergrund, abwechselnde Zeilen, Text |
+| Gesamttext | Titel im Gesamttext | (keine) |
+| Zielfortschrittsbalken | (keine) | Sitzung, Entwurf, Ziel erreicht |
+| Textmarkierungen | (keine) | Links im Text, Suchtreffer, Rechtschreib-Unterstreichung, die Markierungen von „Unsichtbare Zeichen anzeigen“ |
+
+**Jedes Projekt behält sein eigenes Aussehen.** Das Design von Binder, Editor, Pinnwand, Gliederung, Inspektor und Schreibmodus, Ihre eigenen Farben und Schriften dafür, die Breite der Textspalte und der Rand neben dem Text gehören zum Projekt: Sie in einem Projekt zu ändern, lässt die anderen, wie sie sind, und ein Update von {{APP}} ändert nie, wie ein bestehendes Projekt aussieht. Die Liste **Aussehen anzeigen und ändern für** oben unter **Datei > Einstellungen > Erscheinungsbild** wählt, wessen Aussehen die Seite zeigt und ändert: **Dieses Projekt** (das geöffnete; zuerst gewählt) oder **Neue Projekte** (das Aussehen, mit dem ein neues Projekt beginnt). Das Umschalten zwischen beiden behält, was Sie in jedem geändert haben, bis Sie **Übernehmen** oder **OK** drücken. Die Farben der Menüs und Bereiche (**Allgemeine Oberfläche**) und die Schrift der Menüs, Schaltflächen und Bereiche sind in jedem Projekt gleich. Ein Projekt, das zum ersten Mal von Version 0.40.2 oder neuer geöffnet wird, behält das Aussehen, das es bis dahin hatte. **Ansicht > Designs** legt das Design des geöffneten Projekts und neuer Projekte auf einmal fest.
+
+**Rechtsklick-Menüs.** Wo immer Sie mit der rechten Maustaste klicken, hat das Menü ein Untermenü **Aussehen** mit den Farben und Schriften dessen, was unter der Maus liegt: beim Text und beim Papier daneben das Papier, der Text, der Raum neben der Spalte, Links, Suchtreffer, die Rechtschreib-Unterstreichung, die Spaltenbreite und der Rand; bei der Kopfleiste über einem Editor ihre Farben und Schrift; im Binder sein Hintergrund, Titel, Schrift, Einrückung und Etikettenfarben; auf der Pinnwand die Korkfläche, die Karteikarten und ihre Schriften, Statusstempel, die Kartenbreite; in der Gliederung ihr Hintergrund, die Zeilen, der Text und die Schrift; im Inspektor und seinen Notizen die Streifen, Etiketten, die Synopsenkarte und die Notizen sowie der Inspektor-Hintergrund, der in jedem Projekt gleich ist; im Schreibmodus sein Hintergrund, Papier und Text. Eine Farbe zeigt die gemeinsame Palette und **Die Farbe des Designs**; **Aussehen-Einstellungen...** öffnet diese Seite der Einstellungen. Wie die Einstellungen ändern diese Menüs das Aussehen des geöffneten Projekts (die erste Zeile des Untermenüs sagt das) oder, ohne Projekt, das Aussehen neuer Projekte.
+
+Klicken Sie auf eine Farbe, um sie zu ändern, auf eine Schrift-Schaltfläche, um eine Schrift zu wählen. Das kleine Bild oben zeigt das Ergebnis, bevor Sie **Übernehmen** oder **OK** drücken. Ihre Änderungen liegen über dem Design: Ein geänderter Eintrag wird fett gezeigt, die Schaltfläche **↺** daneben gibt ihn an das Design zurück, und **Farben und Schriften auf das Design zurücksetzen** tut das für alle. Eine Farbe, die Sie nicht geändert haben und die das Design nicht festlegt, folgt den anderen; zum Beispiel verwendet der Binder die Farbe der Listen, bis Sie ihm eine eigene geben. Der **Inspektor-Hintergrund** färbt nur die Listen und Textfelder des Inspektors; die Felder in den Symbolleisten, das Lineal und die Listen der Einstellungen haben die Farbe des Fensters und der Menüs.
+
+Schrift und Größe des Textes, den Sie schreiben, gehören nicht zum Design: Sie gehören zum Projekt (**Projekt > Projekteinstellungen > Formatierung**, Abschnitt 4).
+
+**Eigene Designs.** **Als Design speichern…** in den Einstellungen (oder **Ansicht > Designs > Aktuelles Aussehen als Design speichern…**) speichert das Design zusammen mit Ihren Änderungen unter einem neuen Namen. Es erscheint dann wie die anderen in **Ansicht > Designs**. **Ansicht > Designs > Designs verwalten…** listet alle Designs auf: **Dieses Design verwenden**, **Duplizieren…** (auch für eingebaute Designs, um einen eigenen Ausgangspunkt zu bekommen), **Umbenennen…** und **Löschen** (nur eigene Designs), **Exportieren…** (schreibt eine *.qbtheme*-Datei, die Sie weitergeben können) und **Importieren…** (fügt eine solche Datei hinzu).
+
+Wählen Sie ein anderes Design, während Sie eigene Änderungen haben, fragt {{APP}}, ob sie mit dem neuen Design behalten oder ob das Design so verwendet werden soll, wie es ist.
+
+Links in Ihrem Text werden mit einem Blau gespeichert; auf dunklem Papier werden sie in einem helleren Blau gezeigt (**Haupteditor > Links im Text**). Text, den Sie selbst eingefärbt haben, behält seine Farbe in jedem Design.
+
+### Profile
+
+Ein Design ist nur ein Aussehen: Farben und Schriften. Ein **Profil** (seit 0.95) behält alles andere der Einstellungen des Programms: die Sprache, alle Einstellungen, die Symbolleisten und ihre Plätze, Größe und Position des Fensters, die gezeigten Bereiche, die Trennlinien, den Tastatursatz und Ihre Tastenkürzel, die Sicherungen und den Sicherungsordner, die Suche nach Updates, die Standardfarben, die gespeicherten Layouts unter **Ansicht > Layout**, und es nennt sein Design, sodass der Wechsel des Profils auch das Aussehen wechselt. Ihr Name und Ihre Adresse, der Name dieses Computers, die zuletzt geöffneten Projekte und die Plätze des Willkommensprojekts gehören nicht zu einem Profil.
+
+- **Wechseln.** **Ansicht > Profile** listet die Profile auf; ein Klick wechselt sofort, ohne Neustart (nur die Sprache braucht einen Neustart; das Programm sagt es). Das Profil, das Sie verlassen, wird zuerst gespeichert. Die Symbolleiste **Profile** (**Ansicht > Symbolleisten > Profile**, zunächst aus) zeigt das verwendete Profil; ein Klick auf ihre Schaltfläche listet die Profile auf. Die eigenen Einstellungen eines Projekts (**Einstellungen für: Dieses Projekt**) liegen weiter über dem Profil. Das geöffnete Projekt zeigt das Aussehen des neuen Profils, wie wenn Sie unter **Ansicht > Designs** ein Design wählen.
+- **Standard.** Ein Programm, das schon benutzt wurde, übernimmt seine Einstellungen beim Update auf 0.95 als Profil **Standard**, sodass nichts verloren geht. Eine neue Installation beginnt mit den Standardeinstellungen des Programms, im hellen oder dunklen Design, je nachdem, wie Ihr System eingestellt ist, wo das System es mitteilt. Die Seite des ersten Starts füllt **Standard** ein. **Standard** lässt sich nicht löschen.
+- **Ein neues Profil** aus den Einstellungen, wie sie jetzt sind: **Ansicht > Profile > Einstellungen als neues Profil speichern…** (oder **Profile verwalten… > Einstellungen als neues Profil speichern…**). Das neue Profil wird zum verwendeten. **Profile verwalten…** benennt Profile auch um, kopiert und löscht sie (das verwendete Profil lässt sich nicht löschen; wechseln Sie zuerst).
+- **Shelin's** ist ein Profil, das mit dem Programm kommt. Es steht ganz oben in der Liste, setzt Sitka für neuen Text und sein eigenes Design und lässt sich löschen; es bleibt dann nach Updates weg. Schriften, die es nennt und die nicht installiert sind (Cinzel, Sitka), werden durch andere ersetzt. Seine Wahl der Wiedergabe-Engine braucht die Erweiterung Extra Video and Audio Formats; die Modellwahl der Schreibwerkzeuge gilt nur dort, wo diese Erweiterungen und Modelle installiert sind.
+- **Größen auf einem anderen Bildschirm.** Die Breiten von Binder, Editor und Inspektor werden als Anteile des Fensters behalten; ein Profil, das auf einem großen Bildschirm entstand, zeigt dieselben Anteile auf einem kleineren Bildschirm oder einem Tablet (die seitlichen Spalten behalten eine lesbare Breite), und das Fenster wird in den Bildschirm geholt.
+- **Exportieren und Importieren.** **Profile verwalten… > Exportieren…** (oder **Datei > Einstellungen > Verwalten > Profil exportieren…**) schreibt das Profil mit seinen Layouts und, wenn es eines Ihrer eigenen ist, seinem Design in eine Datei (*.qbprofile*). **Importieren…** fügt eine solche Datei als neues Profil hinzu (es wird nicht gewechselt). Eine Datei kann Programme, Ordner, Dateien oder Adressen nennen; wie bei anderen Dateien, die von jemand anderem kommen, werden Sie gefragt, bevor sie übernommen werden (ein Ordner, den es auf diesem Computer nicht gibt, wäre nutzlos). Ein Profil, das nicht von diesem Programm auf diesem Computer gespeichert wurde (eine in den Profilordner kopierte oder synchronisierte Datei), fragt beim Wechseln auf dieselbe Weise nach seinen Programmen, Ordnern, Dateien und Adressen. Eine ältere Einstellungsdatei (*.qboptions*) lässt sich ebenfalls als Profil importieren.
+
+**Projekt > Projekteinstellungen in Datei speichern…** bleibt, wie es war.
+
+---
+
+## 17. Updates und Erweiterungen
+
+**Hilfe > Fehlersuche und Entwicklung > Entwicklerhandbuch: Aktualisierungen und Erweiterungen** erklärt für Menschen, die {{APP}} bauen oder Erweiterungen schreiben, wie Updates und Erweiterungen funktionieren und welche Werkzeuge sie erzeugen; es enthält auch, was ein technisch versierter Freund zum Einrichten braucht (Medien-Engines, Plugins für Kompilierungsformate, Dateien für Pakete, Designs, Layouts und Drehbuchformate, die Dateien in einem Projektordner) und die Umgebungsvariablen, die das Programm liest.
+
+{{APP}} ist eine Programmdatei (das AppImage). Updates und Erweiterungen kommen als kleine Paketdateien mit der Endung **.qbpkg**. Es gibt drei Arten, und alle werden auf dieselbe Weise installiert:
+
+- **Programm-Update**: eine neuere Version von {{APP}} selbst.
+- **Erweiterung**: eine Ergänzung, die Sie ein- und ausschalten können, etwa Farbdesigns, Projektvorlagen, Kompilierungsformate, Wörterbücher, Schreibwerkzeuge (Abschnitt 10), die Wiedergabe von Audio und Video und ihre zusätzlichen Formate (Abschnitt 6), Importer für alte Word-Dateien und Webseiten (Abschnitt 14).
+
+Programm-Updates und Erweiterungen stehen auf der Seite **Releases** der Projektseite (Abschnitt 1), neben dem AppImage.
+- **Update-Bündel**: eine Datei, die ein Programm-Update und mehrere Erweiterungen enthält und gemeinsam installiert wird.
+
+### Nach Updates suchen
+
+Seit 0.92.0 kann {{APP}} selbst nach Updates suchen. Es ist das Einzige, wofür das Programm von sich aus das Internet kontaktiert, und Sie können es ausschalten.
+
+- **Hilfe > Erweiterungen und Updates > Beim Start nach Updates suchen** ist der Schalter (anfangs an). **Hilfe > Erweiterungen und Updates > Jetzt nach Updates suchen** sucht sofort, was auch immer der Schalter sagt.
+- **Der erste Start** sagt es auf einer eigenen Seite, bevor etwas kontaktiert wird: ein Kästchen *Beim Programmstart nach Updates suchen* (angehakt) mit dem Hinweis, dass nichts über Sie gesendet wird; ein **OK** beendet die Seite. Ein Programm, das vor 0.94.0 gestartet wurde und den Hinweis noch nicht gesehen hat, zeigt ihn als Kasten mit **OK** und **Ausschalten**.
+- **Was geschieht**: Wenige Sekunden nach dem Start, höchstens einmal am Tag, holt das Programm eine kleine Datei von der Seite des Projekts (*shelin-boop.github.io/Quillbinder_Collection/updates-1.json*) und die Signatur dieser Datei. Die Anfrage nennt das Programm („{{APP}}“) und sonst nichts: keine Version, kein System, keine Kennung, kein Cookie. Wie bei jeder Verbindung sieht der Server (GitHub) Ihre Internetadresse und die Uhrzeit. Die Datei listet die neueste Version des Programms und der Erweiterungen des Projekts auf; Ihr Programm vergleicht das auf Ihrem Computer mit dem, was installiert ist. Die Datei zählt nur, wenn sie die Signatur des Release-Schlüssels des Projekts trägt, und eine Datei, die älter ist als eine schon gesehene, wird ignoriert.
+- **Gibt es ein Update**, nennt es ein Fenster: das Programm oder die Erweiterung, Ihre Version und die neue, was neu ist, und seine Art. Ein **funktionales** Update hat drei Schaltflächen: **Herunterladen und installieren**, **Diese Version ignorieren** (keine Erinnerungen mehr für diese Version) und **Verschieben**. „Verschieben“ wartet jedes Mal länger: 1 Tag, 1 Woche, 2 Wochen, 4 Wochen; dann gibt es eine letzte Erinnerung, und danach enden die Erinnerungen für diese Version. Ein **empfohlenes (Sicherheits-)Update** hat nur zwei Schaltflächen, **Herunterladen und installieren** und **Verschieben**: Es lässt sich nicht ignorieren und kommt nach dem vierten Verschieben alle 4 Wochen wieder. Sind beide Arten da, listet ein Fenster sie auf und folgt den Sicherheitsregeln. Das Fenster erscheint neben Ihrer Arbeit und nimmt nicht die Tastatur.
+- **Herunterladen und installieren** holt die Dateien, die die Liste nennt, prüft jede gegen die Größe und Prüfsumme in der signierten Liste und installiert sie: eine Erweiterung oder ein Programm-Update, wie es **Hilfe > Erweiterungen und Updates > Aktualisierung oder Erweiterung installieren** tut (nur Pakete mit der Signatur des Projekts). Danach bietet es an, das Programm neu zu starten.
+- **Braucht die neue Version ein neues AppImage** (andere Bibliotheken, als Ihr AppImage hat), lädt {{APP}} es herunter, legt es an die Stelle des AppImage, das Sie gestartet haben, wo immer das ist und unter demselben Dateinamen, behält das bisherige daneben als *…AppImage.before-update* und startet neu. Löschen Sie die behaltene Datei, wenn die neue Version für Sie funktioniert. Lässt sich der Ordner Ihres AppImage nicht beschreiben, kommt die neue Datei in Ihren Ordner „Downloads“, und eine Meldung sagt, was zu tun ist.
+- **Unter Windows** (0.92.0) kommt eine solche Version als ihr Setup-Programm. {{APP}} lädt es in seinen eigenen Ordner (*data\update-setup*), prüft es gegen die signierte Liste des Projekts und fragt. Mit **Schließen und jetzt aktualisieren** schließt sich {{APP}}, und das Setup-Programm entpackt die neue Version ohne seine Seiten in den Ordner, den Sie verwenden, und startet sie; Ihre Einstellungen, Erweiterungen und alles andere in *data* bleiben. Mit **Später** ändert sich nichts, und das Update wird erneut angeboten. Startet Windows das Setup-Programm nicht (es trägt kein Code-Signing-Zertifikat), nennt eine Meldung die Datei, und Sie können die aktuelle Version auch von der Seite des Projekts herunterladen.
+- **Ist die Adresse nicht erreichbar**, versucht es das Programm zweimal im Abstand von 5 Sekunden und zeigt dann einen kleinen Text in der Fußzeile des ersten Editors, an der Stelle des Speichertextes, der zweimal ein- und ausblendet. Kein Fenster, und höchstens einmal am Tag. (**Jetzt nach Updates suchen** antwortet stattdessen mit einer Meldung.)
+- **Ausgeschaltet** kontaktiert das Programm nichts, wie vor 0.92.0. Für Computer, die für andere eingerichtet werden, verhindert die Umgebungsvariable `QB_NO_UPDATE_CHECK=1`, dass die automatische Suche läuft, was auch immer der Schalter sagt.
+- Ein AppImage einer Version vor 0.92.0, das ein neueres Programm-Update ausführt, kann keine sicheren Verbindungen herstellen; dort sagt die Suche das, wenn Sie danach fragen, und bleibt sonst still. Laden Sie einmal das aktuelle AppImage herunter.
+- Was sich das Programm hierzu merkt (der Schalter, der Zeitpunkt der letzten Suche, was Sie ignoriert oder verschoben haben), steht in *updates-state.json* im Datenordner des Programms.
+
+### Ein Paket installieren
+
+1. Wählen Sie **Hilfe > Erweiterungen und Updates > Aktualisierung oder Erweiterung installieren…** und wählen Sie die .qbpkg-Datei aus, oder doppelklicken Sie die Datei in Ihrem Dateimanager.
+2. {{APP}} zeigt, was das Paket enthält und was neu ist. Klicken Sie auf **Installieren**.
+3. Enthält das Paket ein Programm-Update, bittet {{APP}} um einen Neustart. Ihr geöffnetes Projekt wird gespeichert und wieder geöffnet.
+
+{{APP}} prüft jedes Paket vor der Installation: Beschädigte Dateien und Pakete, die für eine andere Version gemacht wurden, werden abgelehnt. Ein Programm-Update wird einmal unsichtbar zur Probe gestartet; läuft es auf Ihrem Computer nicht, wird es nicht installiert. Die Teile eines Bündels werden zusammen installiert: Lässt sich einer nicht installieren, wird keiner installiert (0.65).
+
+**Signaturen** (0.65). Jedes Paket auf der Release-Seite des Projekts ist mit dem Schlüssel des Projekts signiert, und {{APP}} trägt die öffentliche Hälfte dieses Schlüssels. Das Installationsfenster sagt bei einem solchen Paket **Signiert vom Quillbinder-Projekt**: Es ist das Paket, das das Projekt veröffentlicht hat, unverändert.
+
+- Ein Paket, dessen Signatur nicht passt (nach dem Signieren geändert oder beschädigt), wird nie installiert.
+- Ein **Programm-Update** wird nur mit der Signatur des Projekts installiert.
+- Eine **Erweiterung** ohne sie (eine, die Sie oder ein anderer gemacht haben) wird nur nach einer deutlichen Warnung installiert, mit **Abbrechen** als Voreinstellung. Auf der Befehlszeile (`--install <file>`) wird ein Paket ohne die Signatur des Projekts nur installiert, wenn Sie `--allow-unsigned` hinzufügen.
+
+**Erweiterungsschlüssel** (0.91.3). Offizielle Erweiterungen, auch solche anderer Autoren, können statt mit dem Schlüssel des Projekts mit einem eigenen Schlüssel signiert werden. Das Projekt bürgt für einen solchen Schlüssel mit seinem eigenen Schlüssel, in einem Zertifikat, das im Paket mitkommt und dem Schlüssel erlaubt, Erweiterungen zu signieren und sonst nichts. Das Installationsfenster nennt dann den Schlüssel: *Signiert mit dem Erweiterungsschlüssel „Quillbinder official add-ons“, für den das Quillbinder-Projekt bürgt*.
+
+- Ein **Programm-Update**, das mit einem Erweiterungsschlüssel signiert ist, wird wie ein unsigniertes abgelehnt: Programm-Updates brauchen den eigenen Schlüssel des Projekts.
+- Ein Erweiterungsschlüssel, für den das Projekt nicht bürgt, zählt als keine Signatur: Die Erweiterung wird nur nach der Warnung installiert.
+- Erweiterungen, die mit dem eigenen Schlüssel des Projekts signiert sind, wie es alle bis 0.91.2 waren, bleiben vertrauenswürdig. Ab 0.91.3 werden auch die eigenen Erweiterungen des Projekts mit dem Erweiterungsschlüssel signiert.
+- Versionen bis 0.91.2 kennen keine Erweiterungsschlüssel und warnen vor der Installation einer damit signierten Erweiterung: Installieren Sie zuerst das Programm-Update (es ist mit dem eigenen Schlüssel des Projekts signiert), dann die Erweiterungen.
+
+**Das Fenster, das vor der Installation einer Erweiterung fragt** (0.94.0), sagt zuerst in ein bis zwei Sätzen, was die Erweiterung tut. Die technischen Zeilen (die Bibliotheken, die sie mitbringt, die Sprach- oder Grafik-Engine, die Laufzeit, für die sie gebaut wurde) stehen unter **Details**, das zugeklappt ist, bis Sie es öffnen.
+
+**Einen Download selbst prüfen.** Jedes Release enthält auch *SHA256SUMS.txt* (die Prüfsumme jeder Datei), ihre Signatur *SHA256SUMS.txt.sig* und den öffentlichen Schlüssel *quillbinder-signing-public.pem*. In einem Terminal, im Ordner mit den Downloads:
+
+    openssl pkeyutl -verify -pubin -inkey quillbinder-signing-public.pem -rawin -in SHA256SUMS.txt -sigfile SHA256SUMS.txt.sig
+    sha256sum -c --ignore-missing SHA256SUMS.txt
+
+Der erste Befehl antwortet *Signature Verified Successfully*, der zweite *OK* für jede Datei, die Sie heruntergeladen haben. Um sicher zu sein, dass die Schlüsseldatei selbst die des Projekts ist, vergleichen Sie ihre 32 Bytes (`openssl pkey -pubin -in quillbinder-signing-public.pem -outform DER | tail -c 32 | od -An -tx1`) mit dem Schlüssel im Quelltext des Programms (*src/core/Signing.cpp* und *packaging/quillbinder-signing-public.pem*): Sie beginnen mit *bc 3c 58 00 08 3f 66 e6*.
+
+### Die Erweiterungsverwaltung
+
+**Hilfe > Erweiterungen und Updates > Erweiterungsverwaltung…** zeigt, was installiert ist.
+
+- **Programmversion**: die in Ihr AppImage eingebaute Version und jedes installierte Update. Die mit *läuft gerade* markierte ist in Benutzung. Um zu einer früheren Version zurückzugehen, wählen Sie sie aus und klicken auf **Diese Version verwenden**, dann starten Sie neu. Installierte Updates, die Sie nicht mehr brauchen, lassen sich entfernen.
+- **Erweiterungen**: Nehmen Sie bei einer Erweiterung den Haken weg, um sie auszuschalten, ohne sie zu entfernen; **Erweiterung entfernen** löscht sie. Designs, Vorlagen und Kompilierungsformate einer Erweiterung erscheinen an den üblichen Stellen: **Ansicht > Designs**, im Fenster **Neues Projekt** und im Fenster **Kompilieren**.
+- Lässt sich eine hier getroffene Wahl nicht schreiben (eine volle Festplatte, ein Ordner, der sich nicht beschreiben lässt), sagt eine Meldung das mit dem Namen der Datei (0.92.0). Früher zeigte das Fenster die Wahl als getroffen, und sie wurde beim nächsten Start kommentarlos rückgängig gemacht. Dasselbe gilt für eine Installation: Eine Erweiterung oder Programmversion, deren Eintrag nicht geschrieben werden konnte, wird als nicht installiert gemeldet, mit dem, was zu tun ist. Scheitert eine Installation auf halbem Weg und lässt sich die zuvor installierte Version nicht zurücksetzen, nennt die Meldung den Ordner, in dem sie liegt, und den Namen, den Sie diesem Ordner geben müssen.
+
+### Wenn ein Update nicht startet
+
+Startet ein Programm-Update zweimal hintereinander nicht, schaltet {{APP}} es selbst aus und startet die in das AppImage eingebaute Version, mit einer Meldung, die Ihnen das sagt. Ihre Projekte sind davon nicht betroffen.
+
+### Wenn ein neues AppImage nötig ist
+
+Programm-Updates laufen auf den Bibliotheken in Ihrem AppImage. Von Zeit zu Zeit braucht ein größeres Update ein neues AppImage; das Installationsfenster sagt Ihnen, wenn ein Paket nicht zu Ihrem passt. Ersetzen Sie die alte AppImage-Datei durch die neue; Ihre Einstellungen, Erweiterungen und Projekte bleiben, wie sie sind.
+
+0.80.0 ist eine solche Version: Ihr AppImage trägt ein neues Qt (den eigenen Build von Qt 6.12 von The Qt Company statt Ubuntus Qt 6.4.2). Erweiterungen mit Programmcode (*Media Playback*, *Extra Video and Audio Formats*, *Speech Transcription*, die Schreibwerkzeuge und die Importer) müssen in ihren Versionen für 0.80.0 neu installiert werden (das Bündel und **media-all-formats.qbpkg** auf der Seite „Releases“ bringen alle); bis dahin markiert die Erweiterungsverwaltung die alten als für ein älteres Programm gebaut, und ihr Code wird nicht geladen. Die Vollversion von 0.80.0 bringt jede Erweiterung mit.
+
+0.93.0 ist eine weitere (Linux): Ihr AppImage trägt Qt 6.12.1, dessen eingebaute Bibliotheken (zlib, HarfBuzz, PCRE2, libpng, libjpeg-turbo, FreeType und andere) neuer sind und Sicherheitskorrekturen haben. Ein Programm-Update kann sie nicht mitbringen, daher bietet die Suche nach Updates das neue AppImage an. Die Erweiterungen mit Programmcode des früheren AppImage (die oben aufgeführten) werden auf dieselbe Weise in ihren Versionen für 0.93.0 neu installiert, und die Medien-Erweiterungen tragen jetzt FFmpeg 9.1.
+
+Ein neues AppImage bringt auch eine eigene neue Programmversion mit (zum Beispiel das AppImage 0.20.0). Es startet diese Version, auch wenn Sie Updates in das alte AppImage installiert hatten: Ältere Updates werden ausgeschaltet und bleiben unter **Hilfe > Erweiterungen und Updates > Erweiterungsverwaltung…** aufgelistet, wo Sie sie entfernen können. Hat die neue Datei einen anderen Namen oder liegt in einem anderen Ordner als die alte, wählen Sie einmal **Hilfe > Zum Anwendungsmenü hinzufügen**, damit der Menüeintrag und per Doppelklick geöffnete Projekte die neue Datei verwenden.
+
+---
+
+## 18. Der Markdown-Dialekt
+
+Sie müssen das nicht wissen, um {{APP}} zu benutzen; der Editor zeigt formatierten Text. Es ist nur wichtig, wenn Sie die Textdateien mit einem anderen Programm öffnen. {{APP}} schreibt Markdown nach diesen Regeln:
+
+- **Jede Zeile ist ein Absatz**, wie in einer Textverarbeitung. Eine leere Zeile ist ein leerer Absatz.
+- Überschriften: `# ` bis `###### ` am Zeilenanfang.
+- Zitatblock: `> `. Zentrierter Absatz: `->text<-`. Jede andere Absatzformatvorlage: `::Style Name:: text`.
+- Zeichenformatvorlagen (ab Version 0.4): `<span class="Style Name">text</span>`. Nur die Namen der Formatvorlagen werden in den Text geschrieben. Wie eine Formatvorlage aussieht, wird einmal in der Projektdatei gespeichert, sodass eine geänderte Formatvorlage keine Änderung in den Dokumenten braucht.
+- Listen: `- ` und `1. `; zwei Leerzeichen pro Verschachtelungsebene.
+- `**bold**`, `*italic*`, `~~strikethrough~~`, `==highlight==`, `<u>underline</u>`, `<sup>superscript</sup>`, `<sub>subscript</sub>`.
+- Revisionsfarben: `<rev1>…</rev1>` bis `<rev5>…</rev5>`.
+- Links: `[text](https://example.com)`; Links auf Dokumente im Projekt: `[text](qb://ID)`.
+- Bilder: `![](images/picture.png){width=300}` (die Bilder werden im Ordner des Dokuments gespeichert). Die Beschreibung eines Bildes (0.62) ist der Text in den eckigen Klammern: `![A brass lamp](images/lamp.png){width=300}`.
+- Tabellen (0.62): eine Zeile `:::table` mit dem Entwurf in geschweiften Klammern (JSON), eine Zeile pro Tabellenzeile mit den Zellen zwischen `|` (die Absätze einer Zelle durch `<p/>` getrennt, eine von einer verbundenen Zelle überdeckte Zelle leer gelassen, ein `|` im Text als `\|` geschrieben) und am Ende eine Zeile `:::`.
+- Ein Bild neben dem Text oder zentriert (0.62): `:::figure {"pos":1,"width":168}` (1 links, 2 rechts, 3 zentriert), die Zeile des Bildes, die Zeilen der Bildunterschrift und `:::`.
+- Ein Zeilenumbruch innerhalb eines Absatzes: `<br>`.
+- Von Hand gesetzte Schriften (ab Version 0.3): `<span style="font-family:'DejaVu Sans'; font-size:14pt; color:#aa0000">text</span>`. Die Angaben sind gewöhnliches CSS, sodass andere Markdown-Programme, die HTML zulassen, sie ebenfalls zeigen. Mögliche Einträge: `font-family`, `font-size` (pt), `font-weight` (100 bis 900), `color`, `letter-spacing` (em), `font-variant:small-caps`, `text-transform:uppercase`.
+- Von Hand gesetzte Absatzformatierung (ab Version 0.3): eine Liste in geschweiften Klammern am Zeilenanfang, vor jedem anderen Präfix: `{: align=right left=10mm right=5mm first=0mm before=6pt after=12pt line=1.5 tabs=20mm,50mmR} text`. `line` ist ein Vielfaches (`1.5`), eine genaue Höhe (`14pt`) oder ein Minimum (`14pt+`). Tabulatoren enden mit `R` (rechts), `C` (zentriert) oder `D` (Dezimalpunkt); kein Buchstabe bedeutet links. Nur die Einträge, die Sie gesetzt haben, werden geschrieben.
+- Drehbuchelemente (ab Version 0.10) sind Absatzformatvorlagen, die nach dem Element benannt sind: `::Script > Scene Heading:: INT. LIGHTHOUSE - NIGHT`. Wie ein Element aussieht, wird einmal in der Projektdatei zusammen mit dem Drehbuchformat gespeichert.
+- Ein Seitenumbruch vor einem Absatz (aus importierten Drehbüchern und RTF-Dateien, ab Version 0.10): `{: page=before} text`.
+- Versionen vor 0.62 zeigen Tabellen und Abbildungen als Textzeilen (`:::table` ...). Gehen Sie zu einer älteren Version zurück, bearbeiten Sie keine Dokumente mit Tabellen oder Bildern neben dem Text.
+- Version 0.2 zeigt beide Markierungen als reinen Text. Gehen Sie mit der Erweiterungsverwaltung zu Version 0.2 zurück, bearbeiten Sie keine Dokumente, die sie enthalten.
+- Versionen vor 0.4 kennen Ihre eigenen Formatvorlagen nicht: Sie zeigen `<span class=…>` als reinen Text und behandeln Absätze Ihrer eigenen Formatvorlagen als Fließtext. Gehen Sie zu einer älteren Version zurück, bearbeiten Sie keine Dokumente, die Ihre eigenen Formatvorlagen verwenden.
+- Versionen vor 0.10 behandeln Drehbuchelemente als Fließtext und entfernen die Namen der Elemente aus einem Drehbuch, sobald es im Editor gezeigt und das Projekt gespeichert wurde. Gehen Sie zu einer älteren Version zurück, öffnen Sie Ihre Drehbücher dort nicht (siehe Abschnitt 20).
+- Ein Backslash macht das nächste Zeichen zu gewöhnlichem Text: `\*` ist ein Stern, nicht kursiv.
+- Notizen folgen der CriticMarkup-Konvention:
+  - `{>>inline annotation<<}`
+  - `^[inline footnote]`
+  - `{==text==}{>>linked comment<<}`
+  - `{==text==}^[linked footnote]`
+  - Ein Kommentar kann mit einer Farbe beginnen: `{>>@#ff8800 text<<}`.
+
+**Datei > Markdown ⇄ RTF-Datei konvertieren…** liest sowohl diesen Dialekt als auch Standard-Markdown (bei dem Absätze durch Leerzeilen getrennt sind) und fragt beim Schreiben von Markdown, welchen der beiden Sie möchten.
+
+---
+
+## 19. Tastenkürzel
+
+### Tastenkürzel ändern
+
+**Datei > Einstellungen > Tastatur** (oder **Hilfe > Tastenkürzel**) listet jeden Befehl, nach Menü gruppiert, mit seinem Tastenkürzel und dem Standardkürzel, mit dem das Programm kam. Die Formatvorlagen des geöffneten Projekts und die Layouts werden ebenfalls aufgeführt, sodass eine Formatvorlage oder ein Layout ein eigenes Tastenkürzel haben kann.
+
+1. Finden Sie den Befehl: Scrollen Sie, oder tippen Sie einen Teil seines Namens oder ein Tastenkürzel wie „Ctrl+K“ in das Suchfeld.
+2. Klicken Sie den Befehl an, klicken Sie in das Kürzelfeld unter der Liste und drücken Sie die neuen Tasten.
+3. Hat ein anderer Befehl dieses Kürzel, werden Sie gefragt, ob es ihm weggenommen werden soll. Der andere Befehl hat dann kein Kürzel, bis Sie ihm ein neues geben.
+
+**Kein Kürzel** entfernt das Kürzel des ausgewählten Befehls, **Standard** gibt ihm das zurück, mit dem er kam, und **Alle auf Standard** macht alle Ihre Änderungen rückgängig. Ihre Änderungen werden fett gezeigt. Ein Kürzel braucht Ctrl, Alt oder Meta oder muss eine Funktionstaste sein, weil einfache Buchstaben zum Schreiben gebraucht werden. **Exportieren** und **Importieren** speichern Ihren Satz von Kürzeln als Datei (*.qbkeys*) und laden einen, zum Beispiel um ihn auf einen anderen Computer mitzunehmen.
+
+Kürzel von Formatvorlagen gehören zum Namen der Formatvorlage: „Block Quote“ hat sein Kürzel in jedem Projekt, das eine Formatvorlage dieses Namens hat.
+
+### Kürzel und Tastaturbelegung
+
+Einige der Standardkürzel sind Tasten, die auf einer deutschen Tastatur **AltGr** brauchen: **Ctrl+{**, **Ctrl+|** und **Ctrl+}** (linksbündig, zentriert, rechtsbündig), **Ctrl+[** und **Ctrl+]** (zurück und vor), **Ctrl+\\** (die Liste der Drehbuchelemente) und **Ctrl+=** (tiefgestellt). Seit 0.94.0 sieht das Programm **beim allerersten Start** (wenn es weder Kürzeleinstellungen noch einen früheren Start gibt) die Tastaturbelegung des Systems an und behält die Antwort. Bei einer **US-Belegung** oder jeder anderen Belegung als Deutsch bleibt der übliche Satz von oben. Bei einer **deutschen (oder österreichischen) Belegung** bekommen diese Befehle Tasten, die kein AltGr brauchen (derselbe Satz bei einer **französischen, belgischen, spanischen, italienischen, portugiesischen, türkischen oder niederländischen Belegung**, deren Klammern und geschweifte Klammern ebenfalls AltGr brauchen; die polnische Programmiererbelegung, deren AltGr-Buchstaben ć und ń mit Ctrl+Alt+C und Ctrl+Alt+N zusammenstoßen, verschiebt nur die vier Befehle unter der Tabelle):
+
+| Befehl | Deutscher Satz |
+|---------|------------|
+| Linksbündig / zentriert / rechtsbündig (auch in der Mindmap) | Alt+Shift+L / Alt+Shift+E / Alt+Shift+R |
+| Blocksatz (Mindmap) | Alt+Shift+J |
+| Zurück / vor | Alt+Shift+B / Alt+Shift+F |
+| Liste der Drehbuchelemente | Ctrl+Shift+O |
+| Tiefgestellt | Ctrl+Shift+D |
+| In den Vordergrund / in den Hintergrund (Mindmap) | Ctrl+Shift+PageUp / Ctrl+Shift+PageDown |
+
+Die Belegungen, die AltGr für Buchstaben verwenden (Polnisch, Brasilianisch und die anderen oben), verschieben außerdem vier Befehle von Ctrl+Alt+Buchstabe weg, das Windows als AltGr liest: Formatierung kopieren Ctrl+Shift+Y, Formatierung einfügen Ctrl+Shift+U, zu den Dokumentnotizen gehen Ctrl+Shift+X und (nicht bei der polnischen Belegung) Lineal anzeigen Ctrl+Shift+W. Russische und indonesische Tastaturen behalten den üblichen Satz.
+
+Die Menüs zeigen jede Taste so, wie die Belegung sie nennt. Ein Programm, das vor 0.94.0 benutzt wurde, behält seine Kürzel, wie sie waren (nichts ändert sich von selbst), und ebenso jedes Kürzel, das Sie selbst unter **Datei > Einstellungen > Tastatur** festgelegt haben: Ein gespeichertes Kürzel wird nie ersetzt. Seit 0.95 wendet die Schaltfläche **Den Satz für meine Tastaturbelegung verwenden…** unten unter **Datei > Einstellungen > Tastatur** den Satz an, der zur jetzt verwendeten Tastaturbelegung passt (für eine deutsche Tastatur die Tasten oben). Sie listet zuerst auf, welche Standardkürzel sich ändern; die Kürzel, die Sie selbst festgelegt haben, bleiben. Der Satz gehört zu Ihrem Profil. Sagt das System seine Belegung nicht, wird der übliche Satz verwendet. (Linux: die Tastatureinstellungen des Desktops oder des X-Servers; Windows: die Sprache der Tastaturbelegung; Android: die Sprache der Tastatur.)
+
+### Die Standardkürzel
+
+| Aktion | Kürzel |
+|--------|----------|
+| Neues Projekt / Projekt öffnen | Ctrl+Shift+N / Ctrl+O |
+| Speichern / Projekt schließen / Beenden | Ctrl+S / Ctrl+W / Ctrl+Q |
+| Neues Dokument / neuer Ordner | Ctrl+N / Alt+Shift+N |
+| Umbenennen / duplizieren | F2 / Ctrl+D |
+| Element nach oben / unten / heraus / hinein verschieben | Ctrl+Alt+Up / Down / Left / Right |
+| An der Auswahl teilen / mit Auswahl als Titel | Ctrl+K / Ctrl+Shift+K |
+| Dokumente zusammenführen | Ctrl+Shift+M |
+| Gesamttext / Pinnwand / Gliederung | Ctrl+1 / Ctrl+2 / Ctrl+3 |
+| Binder / Inspektor ein- oder ausblenden | Ctrl+Alt+B / Ctrl+Alt+I |
+| Schreibmodus / Vollbild | F11 / Ctrl+Shift+F11 |
+| Fokus auf Binder / Fokus auf Editor / anderer Editor | Alt+1 / Alt+2 / F6 |
+| Zurück / vor | Ctrl+[ / Ctrl+] (deutsche Belegung: Alt+Shift+B / Alt+Shift+F) |
+| Vorheriges / nächstes Dokument | Alt+Shift+Up / Alt+Shift+Down |
+| Im Binder anzeigen | Ctrl+Shift+R |
+| Suchen / ersetzen / weitersuchen / rückwärts suchen | Ctrl+F / Ctrl+H / F3 / Shift+F3 |
+| Projektsuche | Ctrl+Shift+F |
+| Auswahl für Suche verwenden | Ctrl+E |
+| Nach Formatierung suchen / nächste / vorherige | Ctrl+F3 / Ctrl+G / Ctrl+Shift+G |
+| Notizblock (Erweiterung) | Alt+Shift+Return; aus jedem Programm: siehe Abschnitt 10 |
+| Audio und Video (Erweiterung): Wiedergabe / Pause | Ctrl+Return |
+| Audio und Video: zurückspringen / vorspringen | Ctrl+Alt+, / Ctrl+Alt+. |
+| Audio und Video: Zeitmarke einfügen | Ctrl+Shift+Return |
+| Pinnwand oder Gliederung filtern | Ctrl+F (solange eine von beiden die Tastatur hat) |
+| Mit Dokument verknüpfen | Ctrl+L |
+| Kommentar / Fußnote | Shift+F2 / Ctrl+Shift+F2 |
+| Anmerkung im Text / Fußnote im Text | Ctrl+Shift+A / Ctrl+Alt+F |
+| Momentaufnahme erstellen / mit Titel | Ctrl+5 / Ctrl+Shift+5 |
+| Projektziele / Projektstichwörter | Ctrl+Shift+T / Ctrl+Alt+K |
+| Dateien importieren / kompilieren | Ctrl+Shift+I / Ctrl+Shift+E |
+| Aktuelles Dokument drucken | Ctrl+P |
+| Schriftenfenster / Absatzfenster | Ctrl+T / Ctrl+Alt+P |
+| Schrift größer / kleiner | Ctrl+> / Ctrl+< |
+| Formatierung kopieren / Formatierung einfügen | Ctrl+Alt+C / Ctrl+Alt+V |
+| Mit Formatierung einfügen / einfügen und Stil anpassen | Ctrl+Alt+Shift+V / Ctrl+Shift+V |
+| No Style / Heading 1 / Heading 2 / Heading 3 | Ctrl+Alt+0 / Ctrl+Alt+1 / Ctrl+Alt+2 / Ctrl+Alt+3 |
+| Die nächsten sechs Formatvorlagen der Formatvorlagenliste (Format > Formatvorlage > Formatvorlagenliste anpassen) | Ctrl+Alt+4 ... Ctrl+Alt+9 |
+| Zur Synopse / zu den Dokumentnotizen (Navigieren > Inspizieren) | Ctrl+Alt+Y / Ctrl+Alt+N |
+| Jetzt sichern | Ctrl+Shift+B |
+| Drehbuchmodus / Liste der Drehbuchelemente | Ctrl+8 / Ctrl+\\ (deutsche Belegung: Ctrl+8 / Ctrl+Shift+O) |
+| In einem Drehbuch: nächstes Element / Element ändern | Enter / Tab (siehe Abschnitt 4, Drehbuchschreiben) |
+| Vergrößern / verkleinern / Zoom zurücksetzen | Ctrl++ / Ctrl+- / Ctrl+0 |
+| Den Bereich unter der Maus zoomen | Ctrl+Mausrad |
+| Lineal ein- oder ausblenden | Ctrl+Alt+R |
+| Schreibmaschinen-Scrollen | Meta+Ctrl+T |
+| Einstellungen | Ctrl+, |
+| Dieses Handbuch | F1 |
+
+---
+
+## 20. Fehlersuche
+
+### Absturzberichte und Systeminformationen
+
+Endet {{APP}} wegen eines Fehlers, schreibt es auf Ihrem Computer einen **Absturzbericht**, bevor es sich schließt. Reagiert sein Fenster 30 Sekunden lang nicht (es hängt; die Zeit stellen Sie unter **Datei > Einstellungen > Extras > Absturzberichte** ein), schreibt es einen **Freeze-Bericht**, der zeigt, wo es feststeckt; erholt es sich, sagt der Bericht, nach welcher Zeit. Nichts wird irgendwohin gesendet. Beim nächsten Start von {{APP}} nach einem Absturz, oder nachdem Sie ein eingefrorenes {{APP}} beenden mussten, sagt Ihnen eine Meldung, was geschehen ist. Endete es innerhalb einer Minute nach dem Start, bietet die Meldung **Ohne das letzte Projekt starten** an, falls das Projekt die Ursache ist.
+
+- **Hilfe > Fehlersuche und Entwicklung > Absturzberichte…** listet die Absturz- und Freeze-Berichte mit Datum und Art des Fehlers auf („freeze (recovered)“, wenn {{APP}} weiterarbeitete). **In die Zwischenablage kopieren** kopiert den ausgewählten, sodass Sie ihn in eine Nachricht an den einfügen können, der sich für Sie um {{APP}} kümmert; **Ordner öffnen** zeigt die Dateien; **Löschen** und **Alle löschen…** entfernen sie. Die neuesten 20 Berichte werden behalten (**Datei > Einstellungen > Extras > Absturzberichte** ändert die Anzahl).
+- **Datei > Einstellungen > Allgemein > Warnungen > Internes Protokoll anzeigen** zeigt die Meldungen des Programms und von Qt seit seinem Start (die letzten 1000), mit neuen, sobald sie kommen; nützlich, wenn etwas nicht funktioniert und keine Meldung sagt, warum.
+- **Hilfe > Fehlersuche und Entwicklung > Systeminformationen…** zeigt dieselbe Momentaufnahme des Programms und des Computers, die ein Bericht enthält. Sie beginnt mit **Worauf Sie achten sollten**: was bald Ärger machen kann, etwa ein fast volles oder schreibgeschütztes Laufwerk, ein Projekt in einem Netzwerkordner, ein Sicherungslaufwerk mit weniger freiem Platz, als das Projekt braucht, wenig freier Speicher, eine lange Zeit für das automatische Speichern, ausgeschaltete automatische Sicherungen oder kürzliche Absturz- und Freeze-Berichte. Dann kommen die Programmversion, die Laufzeit (der Satz von Bibliotheken im AppImage, mit dem Veröffentlichungstag seines Qt und wie alt es ist: Eine alte Laufzeit bedeutet, dass ein neueres AppImage Sicherheitskorrekturen bringen kann) und die installierten Updates und Erweiterungen, das Betriebssystem, der Desktop, die Bildschirme (seit 0.93.1 mit der Fläche, die ein Fenster auf jedem nutzen kann), die Eingabegeräte (Tastatur, Maus, Touchscreen, Stift) und ob die Bildschirmtastatur angezeigt wird (0.93.1), Prozessor und Speicher, die Ordner mit ihrem freien Platz, die Einstellungen für Speichern und Sicherungen und das geöffnete Projekt. Verwenden Sie **In die Zwischenablage kopieren** oder **Speichern unter…**, wenn Sie ein Problem melden, das kein Absturz ist.
+
+Ein Bericht nennt Dateien, Ordner und Dokumente sowie die Befehle und Tasten, die kurz vor dem Fehler benutzt wurden (getippte Buchstaben werden nur gezählt, nie aufgezeichnet). Er enthält keinen Text Ihrer Dokumente. Ihr Home-Ordner wird als **~** geschrieben.
+
+Wurde {{APP}} von außen beendet oder der Computer ausgeschaltet, ohne es zu schließen, gibt es keinen Bericht, aber der nächste Start sagt es Ihnen ebenfalls. In beiden Fällen ist Ihre Arbeit bis zum letzten automatischen Speichern gesichert, einige Sekunden vor dem Ende; sehen Sie bei den Momentaufnahmen des Dokuments oder in der neuesten Sicherung nach, wenn etwas fehlt (Abschnitte 11 und 15).
+
+**„Die Projektdatei kann nicht gelesen werden.“** Ist die Projektdatei (*IhrTitel*{{FILE}}) beschädigt, zum Beispiel durch einen Absturz des Computers während des Speicherns, bietet {{APP}} die Kopie an, die es davon aufbewahrt (vom letzten Öffnen des Projekts): **Die Kopie verwenden**. Die beschädigte Datei bleibt daneben (*… .damaged-<Datum>*). Änderungen am Binder seit damals (Titel, Reihenfolge, Etiketten) fehlen; die Texte sind alle da, und Dokumente, die seither entstanden sind, kommen in den Ordner **Recovered Documents** in der Recherche, benannt nach ihrer ersten Zeile.
+
+**„Die Projektdatei enthielt Zeichen, die darin nicht erlaubt sind.“** Versionen vor 0.20 konnten unsichtbare Steuerzeichen speichern (aus anderen Programmen in einen Titel oder eine Synopse eingefügt), wonach sich das Projekt nicht mehr öffnen ließ. {{APP}} entfernt sie beim Öffnen des Projekts und sagt Ihnen das; sonst wird nichts geändert. Seit 0.20 werden sie nie gespeichert.
+
+**Ein Dokument wird leer angezeigt, mit dem Hinweis „Die Datei dieses Dokuments kann nicht gelesen werden“.** Seine Textdatei ist da, kann aber nicht gelesen werden (ihre Berechtigungen wurden geändert, oder das Laufwerk, auf dem sie liegt, ist verschwunden). {{APP}} zeigt es leer an und lässt Sie es nicht bearbeiten, damit die Datei nie überschrieben wird. Prüfen Sie die Berechtigungen der Datei oder das Laufwerk, dann schließen Sie das Projekt und öffnen es erneut.
+
+**Das Drücken von Bild-ab oder Bild-auf hat das Programm geschlossen.** Das war ein Fehler in Versionen vor 0.19; aktualisieren Sie auf 0.19 oder neuer. Bis dahin scrollen Sie mit der Maus oder der Bildlaufleiste.
+
+**Das Programm startet nicht, wenn ich es doppelklicke.** Klicken Sie die Datei mit der rechten Maustaste > Eigenschaften > Berechtigungen und haken Sie „Ist ausführbar“ an (in Dolphin: „Datei als Programm ausführen erlauben“). Dann doppelklicken Sie sie erneut.
+
+**Die Dateidialoge sehen anders aus als in anderen KDE-Programmen.** Schalten Sie **Dateidialoge des Desktops verwenden** unter **Datei > Einstellungen > Allgemein** ein und starten Sie {{APP}} neu.
+
+**Symbolleisten-Symbole sind in einem dunklen oder hellen Design schwer zu erkennen.** {{APP}} wählt den hellen oder dunklen Satz der Symbole Ihres Desktops passend zum Design. Hat der Desktop keinen passenden Satz, verwendet es seine eigenen Symbole. Passen einzelne Symbole trotzdem nicht, wählen Sie **Default (Follow the Desktop)** unter **Ansicht > Designs** und stellen Sie die Farben in den eigenen Einstellungen des Desktops ein.
+
+**Ich habe Farben geändert und möchte die des Designs zurück.** **Datei > Einstellungen > Erscheinungsbild > Farben und Schriften auf das Design zurücksetzen** oder die Schaltfläche **↺** neben einer einzelnen Farbe oder Schrift.
+
+**Ein Programm-Update ist nicht gestartet.** {{APP}} schaltet ein fehlschlagendes Update selbst aus (Abschnitt 17). Sie können versuchen, es erneut zu installieren, oder die eingebaute Version weiter verwenden.
+
+**Ein Kompilierungsformat fehlt.** Prüfen Sie **Datei > Einstellungen > Plugins**: Es listet auf, welches Programm das Format braucht. Installieren Sie es in Discover und starten Sie {{APP}} neu.
+
+**Die Rechtschreibprüfung kennt meine Sprache nicht.** Installieren Sie für Spanisch, Französisch, brasilianisches Portugiesisch, Italienisch, Russisch, Indonesisch, Türkisch, Polnisch und Niederländisch die Erweiterung „Rechtschreibwörterbuch <Sprache>“ (**Hilfe > Erweiterungen und Updates > Aktualisierung oder Erweiterung installieren**; die Download-Seite listet sie auf), starten Sie {{APP}} neu und wählen Sie die Sprache unter **Datei > Einstellungen > Korrekturen** (Seite Rechtschreibung). Für eine andere Sprache installieren Sie das passende *hunspell*-Wörterbuchpaket in Discover.
+
+**Das Projekt „scheint in einem anderen Fenster oder auf einem anderen Computer geöffnet zu sein“.** Das passiert, wenn das Projekt in einem synchronisierten Ordner liegt, der anderswo geöffnet ist, oder nach einem Absturz auf einem anderen Computer. Sind Sie sicher, dass es nirgends sonst geöffnet ist, wählen Sie **Ja**.
+
+**Alt+Ziehen öffnet keinen Manuskripthalter.** Einige Desktops verwenden Alt+Ziehen für etwas Eigenes, etwa zum Verschieben von Fenstern. Verwenden Sie stattdessen **Navigieren > Öffnen > im Manuskripthalter** oder das Rechtsklick-Menü des Dokuments, oder ändern Sie die Taste in den Fenstereinstellungen des Desktops.
+
+**Nach der Rückkehr zu einer älteren Programmversion ist ein Drehbuch reiner Text ohne sein Layout.** Versionen vor 0.10 kennen keine Drehbuchelemente und speichern ein Drehbuch, das sie angezeigt haben, als gewöhnlichen Text. Wechseln Sie wieder zur aktuellen Version (**Hilfe > Erweiterungen und Updates > Erweiterungsverwaltung**). Der Text ist ganz da; um das Layout zurückzubekommen, stellen Sie das Dokument aus einer Momentaufnahme oder einer zuvor angelegten Sicherung wieder her (Abschnitte 11 und 15) oder geben Sie den Absätzen ihre Elemente mit dem Aufklappmenü in der Fußzeile erneut.
+
+**Das Tastenkürzel des Notizblocks tut in anderen Programmen nichts.** Unter **Datei > Einstellungen > Tastatur** festgelegte Kürzel funktionieren nur innerhalb von {{APP}}. Für andere Programme muss der Desktop den Befehl starten (Abschnitt 10, *Aus jedem Programm*). Verschieben Sie das AppImage, geben Sie den Befehl erneut ein (er nennt den Ort des AppImage).
+
+**Die Kamera des Notizblocks sagt, sie könne den Bildschirm nicht lesen.** Unter Wayland darf das nur das Screenshot-Programm des Desktops. Installieren Sie *Spectacle* (`sudo apt install kde-spectacle`) und versuchen Sie es erneut.
+
+**Bearbeiten > Schreibwerkzeuge sagt „Keine Schreibwerkzeuge installiert“.** Die Werkzeuge sind Erweiterungen: Installieren Sie das Paket von Update 0.11 oder schalten Sie sie in **Hilfe > Erweiterungen und Updates > Erweiterungsverwaltung** ein.
+
+**Eine Audio- oder Videodatei bietet nur „Mit Standardanwendung öffnen“ an.** Das Abspielen in {{APP}} braucht die Erweiterung *Media Playback* (im Paket von Update 0.12); installieren Sie sie oder schalten Sie sie in **Hilfe > Erweiterungen und Updates > Erweiterungsverwaltung** ein. Die Zeile unter der Schaltfläche sagt, was fehlt.
+
+**Ein Video läuft, aber es gibt keinen Ton, oder eine Audiodatei sagt „Kein Tonausgang gefunden“.** {{APP}} gibt Ton über den Soundserver des Desktops aus (PipeWire oder PulseAudio). Prüfen Sie, dass der Ton in anderen Programmen funktioniert und dass in den Audioeinstellungen des Desktops der richtige Ausgang gewählt ist; {{APP}} folgt einer Änderung des Ausgangs sofort.
+
+**„Diese Datei kann hier nicht abgespielt werden: Sie verwendet H.264 und AAC ...“** Die Datei hat ein durch Patente lizenziertes Format, das *Media Playback* weglässt. Installieren Sie die Erweiterung **Extra Video and Audio Formats** oder das Paket **media-all-formats.qbpkg**, das sie zusammen mit *Media Playback* bringt (beide auf der Seite „Releases“ der Projektseite, Abschnitt 1), und starten Sie {{APP}} neu.
+
+**Eine Datei lässt sich nicht abspielen oder läuft ohne Bild.** Einige Arten gehören nicht zur eingebauten Dekodierung (AV1-Video, WMA Pro, WMV 9). Öffnen Sie die Datei mit einem anderen Programm (Rechtsklick auf den Player: **Mit Standardanwendung öffnen**) oder konvertieren Sie sie in ein anderes Format.
+
+**Eine .doc-Datei wird als Datei hinzugefügt, nicht als Text.** Die Erweiterung **Word 97–2003 Import** ist nicht installiert oder ausgeschaltet (**Hilfe > Erweiterungen und Updates > Erweiterungsverwaltung**); starten Sie {{APP}} nach der Installation neu. Eine Meldung nach dem Import nennt, was die Erweiterung weggelassen hat. Dateien von Word 6.0 und 95 brauchen LibreOffice (`sudo apt install libreoffice-writer`).
+
+**Eine Webseite kommt leer oder mit dem falschen Teil herein.** Nehmen Sie im Webseiten-Fenster den Haken bei **Nur der Artikel** weg, um die ganze Seite zu nehmen, und löschen Sie, was Sie nicht brauchen. Seiten, die eine Anmeldung brauchen oder vollständig von Skripten aufgebaut werden, lassen sich ohne Browser nicht lesen: Öffnen Sie die Seite in Ihrem Browser, wählen Sie den Text aus und ziehen Sie ihn in den Binder (er wird zu einem neuen Dokument). „Sichere Webseiten können nicht geholt werden“ bedeutet, dass OpenSSL 3 fehlt (`sudo apt install libssl3`, Teil jedes Ubuntu) oder dass die Erweiterung beschädigt ist (installieren Sie sie erneut).
+
+**Die erste Sekunde einer Datei ist still, oder die Zeit steht zu Beginn still.** Der Tonausgang braucht einen Moment zum Starten; bei manchen Soundservern mehr als eine Sekunde. Spulen Sie ein Stück zurück (Ctrl+Alt+,), wenn Sie den Anfang verpasst haben.
+
+**Die Seiten in der Seitenansicht stimmen nicht mit meinem gedruckten Manuskript überein.** Das sollen sie nicht: Die Seitenansicht zeigt Ihren Text beim Schreiben auf Blättern. Das Kompilierungsformat bestimmt die Seiten der fertigen Datei (Abschnitt 13).
+
+**„Scrivener hat dieses Projekt geöffnet.“** Scrivener lässt eine Sperrdatei in der *.scriv*, solange es das Projekt geöffnet hat, und nach einem Absturz. Schließen Sie das Projekt in Scrivener (auf jedem Computer) und öffnen Sie es hier erneut; läuft Scrivener nirgends, wählen Sie **Ja**.
+
+**Ein Projekt im Scrivener-Format zeigt meine letzten Änderungen aus Scrivener nicht.** {{APP}} liest die *.scriv* nur beim Öffnen des Projekts neu. Schließen Sie es hier (**Datei > Projekt schließen**), lassen Sie Scrivener oder den Synchronisationsdienst fertig werden und öffnen Sie es erneut.
+
+**Die Menüs Einfügen, Navigieren, Projekt, Dokumente und Format sind grau.** Es ist kein Projekt geöffnet. Öffnen oder erstellen Sie eines (Menü „Datei“).
+
+**Wo ein Problem gemeldet wird.** **Hilfe > Problem melden…** öffnet die Issue-Seite des Projekts (https://github.com/Shelin-boop/Quillbinder_Collection/issues/new/choose) in Ihrem Browser, mit einem Formular für ein Problem und einem für einen Wunsch; Sie brauchen ein GitHub-Konto, und Sie können auf Englisch oder Deutsch schreiben. Issues sind öffentlich: Hängen Sie weder Ihr Manuskript noch Ihr Projekt an; **Hilfe > Fehlersuche und Entwicklung > Systeminformationen…** (**In die Zwischenablage kopieren**) enthält, was ein Bericht über das Programm und den Computer braucht. Ein **Sicherheitsproblem** wird dort nicht gemeldet, sondern privat, wie in *SECURITY.md* des Projekts beschrieben (der Reiter „Security“ des Repositorys, **Report a vulnerability**).
+
+**Das Inhaltsverzeichnis einer Word-Datei hat keine Seitenzahlen.** Die Seitenzahlen werden von der Textverarbeitung eingetragen, wenn sie das Feld aktualisiert; aktualisieren Sie es dort.
+
+**Mit einem Dokument ist etwas schiefgegangen.** Sehen Sie auf dem Reiter „Momentaufnahmen“ des Inspektors nach oder stellen Sie eine Sicherung wieder her (Abschnitt 15).
+
+## Danksagung und Lizenz
+
+- Hauptentwickler: Claude.AI w. Opus 5.5 Extra
+
+{{APP}} ist freie Software unter der Apache License 2.0: Jeder darf sie verwenden, kopieren, ändern und weitergeben, mit oder ohne Entgelt, unter Beibehaltung der Lizenz und der NOTICE-Datei, die das Projekt und seinen Quelltext nennt; ohne Gewährleistung. Versionen bis 0.70.0 wurden unter der Zero-Clause-BSD-Lizenz (0BSD) veröffentlicht. Das Fenster „Über“ (im Menü „Hilfe“) zeigt die Version und die Lizenz.
+
+{{APP}} verwendet Teile anderer Projekte (Qt, Hunspell, ICU, die Breeze-Symbole und die übrigen Bibliotheken im AppImage), jeweils unter ihrer eigenen Lizenz. **Hilfe > Lizenzen von Drittanbietern…** (auch eine Schaltfläche des Fensters „Über“) listet sie mit ihren vollständigen Lizenztexten auf; dieselben Texte liegen im AppImage, in *usr/share/doc/quillbinder/licenses*. Der Quelltext jedes Teils, genau in der verwendeten Version, steht im Release **Third-party source code** der Projektseite (https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources); das Fenster nennt die Datei für jede Bibliothek, und die Lizenzhinweise der Erweiterungen tun dasselbe für ihre.
+
+Scrivener und Scapple sind Namen von Produkten von Literature & Latte. {{APP}} ist ein unabhängiges Programm, nicht von Literature & Latte hergestellt und nicht mit ihm verbunden; es liest und schreibt ihre Dateiformate, damit Ihre Projekte zwischen den Programmen wechseln können.

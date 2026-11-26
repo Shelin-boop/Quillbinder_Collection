@@ -650,10 +650,12 @@ static void partsChecks()
     settle(200);
     const double listBefore = f.insp->projectBookmarkList()->font().pointSizeF();
     const double textBefore = f.insp->bookmarkPreview()->document()->defaultFont().pointSizeF();
+    const double docListBefore = f.insp->bookmarkList()->font().pointSizeF();
     wheel(f.insp->projectBookmarkList()->viewport(), 2);
     check(f.insp->projectBookmarkList()->font().pointSizeF() > listBefore * 1.15
+              && qFuzzyCompare(f.insp->bookmarkList()->font().pointSizeF(), docListBefore)
               && qFuzzyCompare(f.insp->bookmarkPreview()->document()->defaultFont().pointSizeF(), textBefore),
-          QStringLiteral("over the bookmark lists: the lists grow, the bookmarked text stays"));
+          QStringLiteral("over the project bookmark list: it grows, the document list and the bookmarked text stay (0.95.0)"));
 
     // snapshots: the list and the text
     setText(p, f.b, QStringLiteral("A snapshot of the lighthouse text."));
@@ -750,7 +752,7 @@ static void partsChecks()
         od.showSection(OptionsDialog::SEditing, QStringLiteral("Options"));
         auto *area = od.findChild<QComboBox *>(QStringLiteral("optZoomArea"));
         QStringList missing;
-        for (const char *k : {zoom::kInspSynopsis, zoom::kInspNotes, zoom::kInspBookmarks, zoom::kInspPreview, zoom::kInspSnapList,
+        for (const char *k : {zoom::kInspSynopsis, zoom::kInspNotes, zoom::kInspBookmarks, zoom::kInspProjectBookmarks, zoom::kInspPreview, zoom::kInspSnapList,
                               zoom::kInspSnapText, zoom::kInspObjectList, zoom::kInspObjectSheet, zoom::kObjects, zoom::kObjectsSheet, zoom::kMindMap})
             if (!area || area->findData(QLatin1String(k)) < 0)
                 missing << QLatin1String(k);

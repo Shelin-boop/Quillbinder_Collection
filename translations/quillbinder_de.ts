@@ -241,10 +241,6 @@
         <translation>Ein Name pro Zeile; eine zweite Spalte nach Komma oder Tabulator wird ignoriert. Zeilen, die mit # beginnen, sind Kommentare.</translation>
     </message>
     <message>
-        <source>No name lists found. They come with the add-on “Name Generator” (Help &gt; Add-on Manager).</source>
-        <translation>Keine Namenslisten gefunden. Sie gehören zur Erweiterung „Namensgenerator“ (Hilfe &gt; Erweiterungsverwaltung).</translation>
-    </message>
-    <message>
         <source> (by frequency)</source>
         <translation> (nach Häufigkeit)</translation>
     </message>
@@ -350,6 +346,10 @@ Die Vornamen dieser Liste sind nicht in weiblich und männlich unterteilt.</tran
     <message>
         <source>Textual Marks</source>
         <translation>Textmarken</translation>
+    </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>Standardfarben</translation>
     </message>
 </context>
 <context>
@@ -795,6 +795,50 @@ Die Vornamen dieser Liste sind nicht in weiblich und männlich unterteilt.</tran
     <message>
         <source>Weather</source>
         <translation>Wetter</translation>
+    </message>
+    <message>
+        <source>Precipitation</source>
+        <translation>Niederschlag</translation>
+    </message>
+    <message>
+        <source>Drizzle</source>
+        <translation>Nieselregen</translation>
+    </message>
+    <message>
+        <source>Rain</source>
+        <translation>Regen</translation>
+    </message>
+    <message>
+        <source>Heavy rain</source>
+        <translation>Starkregen</translation>
+    </message>
+    <message>
+        <source>Snow</source>
+        <translation>Schnee</translation>
+    </message>
+    <message>
+        <source>Hail</source>
+        <translation>Hagel</translation>
+    </message>
+    <message>
+        <source>Wind</source>
+        <translation>Wind</translation>
+    </message>
+    <message>
+        <source>Sky and light</source>
+        <translation>Himmel und Licht</translation>
+    </message>
+    <message>
+        <source>Special phenomena</source>
+        <translation>Besondere Phänomene</translation>
+    </message>
+    <message>
+        <source>Effects on people and travel</source>
+        <translation>Auswirkungen auf Menschen und Reisen</translation>
+    </message>
+    <message>
+        <source>Where it occurs</source>
+        <translation>Wo es vorkommt</translation>
     </message>
     <message>
         <source>Objects</source>
@@ -1373,10 +1417,6 @@ Die Vornamen dieser Liste sind nicht in weiblich und männlich unterteilt.</tran
     <message>
         <source>Retrieved: %1</source>
         <translation>Abgerufen: %1</translation>
-    </message>
-    <message>
-        <source>%1: Word 97–2003 files become text with the add-on “Word 97–2003 Import” (Help &gt; Add-on Manager); the file was added as it is.</source>
-        <translation>%1: Word-97–2003-Dateien werden mit der Erweiterung „Word 97–2003 Import“ (Hilfe &gt; Erweiterungsverwaltung) zu Text; die Datei wurde unverändert hinzugefügt.</translation>
     </message>
     <message>
         <source>%1: only text can be placed in the Draft; it was added to Research instead.</source>
@@ -2988,8 +3028,12 @@ Quelle: %1</translation>
         <translation>Inspektor: Notizen</translation>
     </message>
     <message>
-        <source>Inspector: Bookmark Lists</source>
-        <translation>Inspektor: Lesezeichenlisten</translation>
+        <source>Inspector: Document Bookmarks</source>
+        <translation>Inspektor: Lesezeichen des Dokuments</translation>
+    </message>
+    <message>
+        <source>Inspector: Project Bookmarks</source>
+        <translation>Inspektor: Lesezeichen des Projekts</translation>
     </message>
     <message>
         <source>Inspector: Bookmarked Text</source>
@@ -3368,10 +3412,6 @@ Quelle: %1</translation>
         <source>The last save of this project was cut off, and its journal (the list of the files that save was putting in place) cannot be read: %1. So it is not known which of its files were already in place; none of them was put in place or deleted now.</source>
         <translation>Das letzte Speichern dieses Projekts wurde abgebrochen, und sein Protokoll (die Liste der Dateien, die dieses Speichern an ihren Platz bringen wollte) kann nicht gelesen werden: %1. Darum ist nicht bekannt, welche seiner Dateien schon an ihrem Platz waren; keine von ihnen wurde jetzt an ihren Platz gebracht oder gelöscht.</translation>
     </message>
-    <message>
-        <source>The journal and the files of that save could not be moved aside; they are left in the project folder (their names end in .qbstage).</source>
-        <translation>Das Protokoll und die Dateien dieses Speicherns konnten nicht beiseitegelegt werden; sie bleiben im Projektordner (ihre Namen enden auf .qbstage).</translation>
-    </message>
     <message numerus="yes">
         <source>The journal and the %n file(s) that save had written beside their targets are kept in:
 %1</source>
@@ -3483,10 +3523,6 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
         <translation>Absatz und Einfügen</translation>
     </message>
     <message>
-        <source>Themes (Bright, Dark, U1, U2 and the list)</source>
-        <translation>Designs (Hell, Dunkel, U1, U2 und die Liste)</translation>
-    </message>
-    <message>
         <source>The drive reported an error when the folder %1 was synced (%2). The files of this save may not have reached the disk safely.%3</source>
         <translation>Das Laufwerk hat beim Abgleichen des Ordners %1 einen Fehler gemeldet (%2). Die Dateien dieses Speicherns sind möglicherweise nicht sicher auf den Datenträger gelangt.%3</translation>
     </message>
@@ -3547,6 +3583,482 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
     <message>
         <source>Theme button (Light, Dark, My Look 1, My Look 2 and all themes)</source>
         <translation>Design-Schaltfläche (Hell, Dunkel, Mein Aussehen 1, Mein Aussehen 2 und alle Designs)</translation>
+    </message>
+    <message>
+        <source>Name of the profile:</source>
+        <translation>Name des Profils:</translation>
+    </message>
+    <message>
+        <source>There is already a profile named “%1”. Choose another name.</source>
+        <translation>Es gibt bereits ein Profil namens „%1“. Wählen Sie einen anderen Namen.</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Profil importieren</translation>
+    </message>
+    <message>
+        <source>The profile also names programs, folders, files or addresses (a folder may not exist on this computer):
+
+%1
+
+Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
+        <translation>Das Profil nennt auch Programme, Ordner, Dateien oder Adressen (ein Ordner ist auf diesem Computer vielleicht nicht vorhanden):
+
+%1
+
+Sollen diese mit übernommen werden? Übernehmen Sie sie nur, wenn Sie die Datei selbst erstellt haben oder ihrer Herkunft vertrauen.</translation>
+    </message>
+    <message>
+        <source>A temporary file could not be made.</source>
+        <translation>Es konnte keine temporäre Datei erstellt werden.</translation>
+    </message>
+    <message>
+        <source>Nothing to write.</source>
+        <translation>Es gibt nichts zu schreiben.</translation>
+    </message>
+    <message>
+        <source>The file could not be written (%1). The file that was there is unchanged.</source>
+        <translation>Die Datei konnte nicht geschrieben werden (%1). Die vorhandene Datei ist unverändert.</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Mein Profil</translation>
+    </message>
+    <message>
+        <source>The profile “%1” could not be read.</source>
+        <translation>Das Profil „%1“ konnte nicht gelesen werden.</translation>
+    </message>
+    <message>
+        <source>There is no profile “%1”.</source>
+        <translation>Es gibt kein Profil „%1“.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be deleted.</source>
+        <translation>Das Profil „%1“ kann nicht gelöscht werden.</translation>
+    </message>
+    <message>
+        <source>The profile in use cannot be deleted. Switch to another profile first.</source>
+        <translation>Das verwendete Profil kann nicht gelöscht werden. Wechseln Sie zuerst zu einem anderen Profil.</translation>
+    </message>
+    <message>
+        <source>The file of the profile could not be deleted.</source>
+        <translation>Die Datei des Profils konnte nicht gelöscht werden.</translation>
+    </message>
+    <message>
+        <source>Switch Profile</source>
+        <translation>Profil wechseln</translation>
+    </message>
+    <message>
+        <source>The profile “%1” was not saved by this program on this computer. It also names programs, folders, files or addresses (a folder may not exist on this computer):
+
+%2
+
+Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
+        <translation>Das Profil „%1“ wurde nicht von diesem Programm auf diesem Computer gespeichert. Es nennt auch Programme, Ordner, Dateien oder Adressen (ein Ordner ist auf diesem Computer vielleicht nicht vorhanden):
+
+%2
+
+Sollen diese mit übernommen werden? Übernehmen Sie sie nur, wenn Sie die Datei selbst erstellt haben oder ihrer Herkunft vertrauen.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” keeps %2 backups of a project, the settings now keep %3. Backups beyond the smaller number are deleted at the next backup. Switch anyway?</source>
+        <translation>Das Profil „%1“ behält %2 Sicherungen eines Projekts, die Einstellungen behalten jetzt %3. Sicherungen über die kleinere Zahl hinaus werden bei der nächsten Sicherung gelöscht. Trotzdem wechseln?</translation>
+    </message>
+    <message>
+        <source>all</source>
+        <translation>alle</translation>
+    </message>
+    <message>
+        <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
+        <translation>Die Einstellungen sind für Dieses Projekt geöffnet. Schließen Sie sie oder wählen Sie Alle Projekte und exportieren Sie das Profil dann.</translation>
+    </message>
+    <message>
+        <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
+        <translation>Die Einstellungen des Profils konnten nicht vollständig geschrieben werden. Prüfen Sie den Ordner der Einstellungsdatei.</translation>
+    </message>
+    <message>
+        <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
+        <translation>Die Layouts des Profils konnten nicht gesetzt werden; Ihre bisherigen Layouts bleiben erhalten.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be renamed.</source>
+        <translation>Das Profil „%1“ kann nicht umbenannt werden.</translation>
+    </message>
+    <message>
+        <source>This is not a file of a profile or of options saved by Quillbinder.</source>
+        <translation>Das ist keine Datei mit einem Profil oder mit Einstellungen, die Quillbinder gespeichert hat.</translation>
+    </message>
+    <message>
+        <source>Full name</source>
+        <translation>Vollständiger Name</translation>
+    </message>
+    <message>
+        <source>Also known as</source>
+        <translation>Auch bekannt als</translation>
+    </message>
+    <message>
+        <source>Protagonist</source>
+        <translation>Hauptfigur</translation>
+    </message>
+    <message>
+        <source>Supporting</source>
+        <translation>Nebenfigur</translation>
+    </message>
+    <message>
+        <source>Role in the story</source>
+        <translation>Rolle in der Geschichte</translation>
+    </message>
+    <message>
+        <source>Antagonist</source>
+        <translation>Antagonist</translation>
+    </message>
+    <message>
+        <source>Minor</source>
+        <translation>Randfigur</translation>
+    </message>
+    <message>
+        <source>Mentioned only</source>
+        <translation>Nur erwähnt</translation>
+    </message>
+    <message>
+        <source>Race / species</source>
+        <translation>Rasse / Art</translation>
+    </message>
+    <message>
+        <source>Gender</source>
+        <translation>Geschlecht</translation>
+    </message>
+    <message>
+        <source>Age</source>
+        <translation>Alter</translation>
+    </message>
+    <message>
+        <source>Born</source>
+        <translation>Geboren</translation>
+    </message>
+    <message>
+        <source>Height</source>
+        <translation>Körpergröße</translation>
+    </message>
+    <message>
+        <source>Build</source>
+        <translation>Statur</translation>
+    </message>
+    <message>
+        <source>Eye color</source>
+        <translation>Augenfarbe</translation>
+    </message>
+    <message>
+        <source>Hair</source>
+        <translation>Haare</translation>
+    </message>
+    <message>
+        <source>Distinguishing features</source>
+        <translation>Besondere Merkmale</translation>
+    </message>
+    <message>
+        <source>Attributes</source>
+        <translation>Eigenschaften</translation>
+    </message>
+    <message>
+        <source>Traits</source>
+        <translation>Charakterzüge</translation>
+    </message>
+    <message>
+        <source>Occupation</source>
+        <translation>Beruf</translation>
+    </message>
+    <message>
+        <source>Lives in</source>
+        <translation>Wohnort</translation>
+    </message>
+    <message>
+        <source>Comes from</source>
+        <translation>Herkunft</translation>
+    </message>
+    <message>
+        <source>Family and relationships</source>
+        <translation>Familie und Beziehungen</translation>
+    </message>
+    <message>
+        <source>Goals and motives</source>
+        <translation>Ziele und Motive</translation>
+    </message>
+    <message>
+        <source>Fears and weaknesses</source>
+        <translation>Ängste und Schwächen</translation>
+    </message>
+    <message>
+        <source>Background story</source>
+        <translation>Hintergrundgeschichte</translation>
+    </message>
+    <message>
+        <source>Appears in</source>
+        <translation>Kommt vor in</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Sonstiges</translation>
+    </message>
+    <message>
+        <source>Kind</source>
+        <translation>Art</translation>
+    </message>
+    <message>
+        <source>Village</source>
+        <translation>Dorf</translation>
+    </message>
+    <message>
+        <source>Continent</source>
+        <translation>Kontinent</translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation>Land</translation>
+    </message>
+    <message>
+        <source>Region</source>
+        <translation>Region</translation>
+    </message>
+    <message>
+        <source>City</source>
+        <translation>Stadt</translation>
+    </message>
+    <message>
+        <source>Town</source>
+        <translation>Kleinstadt</translation>
+    </message>
+    <message>
+        <source>District</source>
+        <translation>Stadtteil</translation>
+    </message>
+    <message>
+        <source>Building</source>
+        <translation>Gebäude</translation>
+    </message>
+    <message>
+        <source>Room</source>
+        <translation>Raum</translation>
+    </message>
+    <message>
+        <source>Part of</source>
+        <translation>Teil von</translation>
+    </message>
+    <message>
+        <source>Environment</source>
+        <translation>Umgebung</translation>
+    </message>
+    <message>
+        <source>Climate and weather</source>
+        <translation>Klima und Wetter</translation>
+    </message>
+    <message>
+        <source>Population</source>
+        <translation>Einwohnerzahl</translation>
+    </message>
+    <message>
+        <source>Ruled by</source>
+        <translation>Regiert von</translation>
+    </message>
+    <message>
+        <source>Notable inhabitants</source>
+        <translation>Bekannte Einwohner</translation>
+    </message>
+    <message>
+        <source>Points of interest</source>
+        <translation>Sehenswürdigkeiten</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation>Beschreibung</translation>
+    </message>
+    <message>
+        <source>History</source>
+        <translation>Geschichte</translation>
+    </message>
+    <message>
+        <source>Scenes set here</source>
+        <translation>Szenen an diesem Ort</translation>
+    </message>
+    <message>
+        <source>Map or picture</source>
+        <translation>Karte oder Bild</translation>
+    </message>
+    <message>
+        <source>Kind of landscape</source>
+        <translation>Art der Landschaft</translation>
+    </message>
+    <message>
+        <source>Forest</source>
+        <translation>Wald</translation>
+    </message>
+    <message>
+        <source>Mountains</source>
+        <translation>Gebirge</translation>
+    </message>
+    <message>
+        <source>Hills</source>
+        <translation>Hügel</translation>
+    </message>
+    <message>
+        <source>Plains</source>
+        <translation>Ebenen</translation>
+    </message>
+    <message>
+        <source>Desert</source>
+        <translation>Wüste</translation>
+    </message>
+    <message>
+        <source>Coast</source>
+        <translation>Küste</translation>
+    </message>
+    <message>
+        <source>Sea</source>
+        <translation>Meer</translation>
+    </message>
+    <message>
+        <source>River</source>
+        <translation>Fluss</translation>
+    </message>
+    <message>
+        <source>Lake</source>
+        <translation>See</translation>
+    </message>
+    <message>
+        <source>Swamp</source>
+        <translation>Sumpf</translation>
+    </message>
+    <message>
+        <source>Tundra</source>
+        <translation>Tundra</translation>
+    </message>
+    <message>
+        <source>Jungle</source>
+        <translation>Dschungel</translation>
+    </message>
+    <message>
+        <source>Underground</source>
+        <translation>Unterirdisch</translation>
+    </message>
+    <message>
+        <source>Terrain</source>
+        <translation>Gelände</translation>
+    </message>
+    <message>
+        <source>Plants</source>
+        <translation>Pflanzen</translation>
+    </message>
+    <message>
+        <source>Animals</source>
+        <translation>Tiere</translation>
+    </message>
+    <message>
+        <source>Resources</source>
+        <translation>Ressourcen</translation>
+    </message>
+    <message>
+        <source>Dangers</source>
+        <translation>Gefahren</translation>
+    </message>
+    <message>
+        <source>Typical weather</source>
+        <translation>Typisches Wetter</translation>
+    </message>
+    <message>
+        <source>Sounds, smells and light</source>
+        <translation>Geräusche, Gerüche und Licht</translation>
+    </message>
+    <message>
+        <source>Places with this environment</source>
+        <translation>Orte mit dieser Umgebung</translation>
+    </message>
+    <message>
+        <source>Landmark</source>
+        <translation>Wahrzeichen</translation>
+    </message>
+    <message>
+        <source>Ruin</source>
+        <translation>Ruine</translation>
+    </message>
+    <message>
+        <source>Shop</source>
+        <translation>Laden</translation>
+    </message>
+    <message>
+        <source>Inn or tavern</source>
+        <translation>Gasthaus oder Taverne</translation>
+    </message>
+    <message>
+        <source>Temple</source>
+        <translation>Tempel</translation>
+    </message>
+    <message>
+        <source>Castle</source>
+        <translation>Burg</translation>
+    </message>
+    <message>
+        <source>Natural feature</source>
+        <translation>Naturdenkmal</translation>
+    </message>
+    <message>
+        <source>Located in</source>
+        <translation>Liegt in</translation>
+    </message>
+    <message>
+        <source>Owner or keeper</source>
+        <translation>Besitzer oder Hüter</translation>
+    </message>
+    <message>
+        <source>Significance for the story</source>
+        <translation>Bedeutung für die Geschichte</translation>
+    </message>
+    <message>
+        <source>How to get there</source>
+        <translation>Wie man dorthin kommt</translation>
+    </message>
+    <message>
+        <source>Secrets</source>
+        <translation>Geheimnisse</translation>
+    </message>
+    <message>
+        <source>Season</source>
+        <translation>Jahreszeit</translation>
+    </message>
+    <message>
+        <source>Autumn</source>
+        <translation>Herbst</translation>
+    </message>
+    <message>
+        <source>Spring</source>
+        <translation>Frühling</translation>
+    </message>
+    <message>
+        <source>Summer</source>
+        <translation>Sommer</translation>
+    </message>
+    <message>
+        <source>Winter</source>
+        <translation>Winter</translation>
+    </message>
+    <message>
+        <source>Rainy season</source>
+        <translation>Regenzeit</translation>
+    </message>
+    <message>
+        <source>Dry season</source>
+        <translation>Trockenzeit</translation>
+    </message>
+    <message>
+        <source>All year</source>
+        <translation>Ganzjährig</translation>
+    </message>
+    <message>
+        <source>Temperature</source>
+        <translation>Temperatur</translation>
+    </message>
+    <message>
+        <source>Fog</source>
+        <translation>Nebel</translation>
     </message>
 </context>
 <context>
@@ -4165,10 +4677,6 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
     <message>
         <source>Copying %1 ...</source>
         <translation>Kopiere %1 ...</translation>
-    </message>
-    <message>
-        <source>The file could not be copied to %1.</source>
-        <translation>Die Datei konnte nicht nach %1 kopiert werden.</translation>
     </message>
     <message>
         <source>The file could not be copied to %1 (the disk may be full).</source>
@@ -4829,10 +5337,6 @@ Verschieben Sie den ganzen Quillbinder-Ordner an einen eigenen Ort, zum Beispiel
 <context>
     <name>playback</name>
     <message>
-        <source>Playing audio and video inside the program needs the add-on &quot;Media Playback&quot; (File &gt; Install Update or Add-on; Help &gt; Add-on Manager).</source>
-        <translation>Das Abspielen von Audio und Video im Programm braucht die Erweiterung „Media Playback“ (Datei &gt; Programmaktualisierung oder Erweiterung installieren; Hilfe &gt; Erweiterungsverwaltung).</translation>
-    </message>
-    <message>
         <source>Audio and video cannot be played here: %1</source>
         <translation>Audio und Video können hier nicht abgespielt werden: %1</translation>
     </message>
@@ -5341,6 +5845,21 @@ Verschieben Sie den ganzen Quillbinder-Ordner an einen eigenen Ort, zum Beispiel
     <message>
         <source>Other color...</source>
         <translation>Andere Farbe...</translation>
+    </message>
+</context>
+<context>
+    <name>qb::CommandFinder</name>
+    <message>
+        <source>Find Command</source>
+        <translation>Befehl suchen</translation>
+    </message>
+    <message>
+        <source>Type part of a command&apos;s name or of its menu. Return or a double-click runs it.</source>
+        <translation>Geben Sie einen Teil des Befehlsnamens oder seines Menüs ein. Eingabetaste oder Doppelklick führt ihn aus.</translation>
+    </message>
+    <message>
+        <source>Command</source>
+        <translation>Befehl</translation>
     </message>
 </context>
 <context>
@@ -5953,11 +6472,11 @@ Verschieben Sie den ganzen Quillbinder-Ordner an einen eigenen Ort, zum Beispiel
         <translation>Vorschau — %1 (%2 Seiten)</translation>
     </message>
     <message>
-        <source>Author's Name</source>
+        <source>Author&apos;s Name</source>
         <translation>Name der Autorin oder des Autors</translation>
     </message>
     <message>
-        <source>The title page names the author. Who is the author? The name is kept with the author information in File &gt; Options &gt; General. Left empty, the title page has no "by" line.</source>
+        <source>The title page names the author. Who is the author? The name is kept with the author information in File &gt; Options &gt; General. Left empty, the title page has no &quot;by&quot; line.</source>
         <translation>Die Titelseite nennt die Autorin oder den Autor. Wie lautet der Name? Er wird bei den Angaben zur Autorin oder zum Autor in Datei &gt; Optionen &gt; Allgemein gespeichert. Bleibt das Feld leer, hat die Titelseite keine „von“-Zeile.</translation>
     </message>
     <message>
@@ -6352,16 +6871,8 @@ Dies kann nicht als Ganzes rückgängig gemacht werden.%3</translation>
         <translation>%1 reagierte am %2 nicht mehr (Version %3) und wurde dann von außen beendet.</translation>
     </message>
     <message>
-        <source>A freeze report was saved on this computer. It shows where the program was stuck: Help &gt; Crash Reports shows it, and you can copy it from there into a message. It holds no text of your documents.</source>
-        <translation>Ein Hängerbericht wurde auf diesem Computer gespeichert. Er zeigt, wo das Programm hängen blieb: Unter Hilfe &gt; Absturzberichte können Sie ihn ansehen und von dort in eine Nachricht kopieren. Er enthält keinen Text Ihrer Dokumente.</translation>
-    </message>
-    <message>
         <source>%1 ended because of an error on %2 (version %3, %4).</source>
         <translation>%1 wurde am %2 wegen eines Fehlers beendet (Version %3, %4).</translation>
-    </message>
-    <message>
-        <source>A crash report was saved on this computer. It helps to find the cause: Help &gt; Crash Reports shows it, and you can copy it from there into a message. It holds no text of your documents.</source>
-        <translation>Ein Absturzbericht wurde auf diesem Computer gespeichert. Er hilft, die Ursache zu finden: Unter Hilfe &gt; Absturzberichte können Sie ihn ansehen und von dort in eine Nachricht kopieren. Er enthält keinen Text Ihrer Dokumente.</translation>
     </message>
     <message>
         <source>The last session of %1 (started %2) did not end normally. It was probably stopped from outside, or the computer was switched off without closing %1 first. No crash report was written.</source>
@@ -6544,6 +7055,10 @@ Dies kann nicht als Ganzes rückgängig gemacht werden.%3</translation>
     <message>
         <source>The damaged file of &quot;%1&quot; could not be kept as a copy in %2, so it was not replaced. Check that the project folder is writable and the disk is not full.</source>
         <translation>Die beschädigte Datei von „%1“ konnte nicht als Kopie in %2 aufbewahrt werden, darum wurde sie nicht ersetzt. Prüfen Sie, ob der Projektordner beschreibbar und der Datenträger nicht voll ist.</translation>
+    </message>
+    <message>
+        <source>Cannot write %1</source>
+        <translation>%1 kann nicht geschrieben werden</translation>
     </message>
 </context>
 <context>
@@ -7078,12 +7593,12 @@ Seiten (250 Wörter): %5</translation>
         <translation>Beim Schließen eines Projekts automatisch eine Sicherung erstellen</translation>
     </message>
     <message>
-        <source> backups of each project</source>
-        <translation> Sicherungen je Projekt</translation>
+        <source>Keep the newest</source>
+        <translation>Die neuesten</translation>
     </message>
     <message>
-        <source>Keep the newest:</source>
-        <translation>Die neuesten behalten:</translation>
+        <source>backups of each project</source>
+        <translation>Sicherungen je Projekt</translation>
     </message>
     <message>
         <source>Choose…</source>
@@ -7117,11 +7632,11 @@ Seiten (250 Wörter): %5</translation>
         <source>Quillbinder keeps its settings, add-ons, program updates, fonts and crash reports in the folder &quot;data&quot; inside its own folder:
 %1
 
-Nothing is written into Windows&apos; own folders or the registry, unless you ask for it below. The whole folder can be moved or copied, to a USB stick or another computer, and deleting it removes the program. Program updates are installed with File &gt; Install Update or Add-on; to move to a version you downloaded anew, unpack it and copy the folder &quot;data&quot; into it. Your projects stay wherever you keep them.</source>
+Nothing is written into Windows&apos; own folders or the registry, unless you ask for it below. The whole folder can be moved or copied, to a USB stick or another computer, and deleting it removes the program. Program updates are installed with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; to move to a version you downloaded anew, unpack it and copy the folder &quot;data&quot; into it. Your projects stay wherever you keep them.</source>
         <translation>Quillbinder bewahrt seine Einstellungen, Erweiterungen, Programmaktualisierungen, Schriften und Absturzberichte im Ordner „data“ in seinem eigenen Ordner auf:
 %1
 
-In die Ordner von Windows und in die Registrierung wird nichts geschrieben, außer Sie wünschen es unten. Der ganze Ordner lässt sich verschieben oder kopieren, auf einen USB-Stick oder einen anderen Computer, und wer ihn löscht, entfernt das Programm. Programmaktualisierungen werden mit Datei &gt; Aktualisierung oder Erweiterung installieren eingespielt; um zu einer neu heruntergeladenen Version zu wechseln, entpacken Sie sie und kopieren den Ordner „data“ hinein. Ihre Projekte bleiben, wo Sie sie aufbewahren.</translation>
+In die Ordner von Windows und in die Registrierung wird nichts geschrieben, außer Sie wünschen es unten. Der ganze Ordner lässt sich verschieben oder kopieren, auf einen USB-Stick oder einen anderen Computer, und wer ihn löscht, entfernt das Programm. Programmaktualisierungen werden mit Hilfe &gt; Erweiterungen und Updates &gt; Programmaktualisierung oder Erweiterung installieren eingespielt; um zu einer neu heruntergeladenen Version zu wechseln, entpacken Sie sie und kopieren den Ordner „data“ hinein. Ihre Projekte bleiben, wo Sie sie aufbewahren.</translation>
     </message>
     <message>
         <source>The program&apos;s folder is inside your %1 folder. That works, but the sync service copies the program&apos;s own files back and forth and may keep them only online. Better: the program&apos;s folder outside it (for example C:\Users\&lt;your name&gt;\Quillbinder), your projects inside it.</source>
@@ -7156,12 +7671,12 @@ In die Ordner von Windows und in die Registrierung wird nichts geschrieben, auß
         <translation>%1 zum Anwendungsmenü hinzufügen, damit Sie es wie jedes andere Programm starten und Projekte per Doppelklick öffnen können</translation>
     </message>
     <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>AppImage nach %1 verschieben (eine verschobene Datei lässt sich nicht mehr aus dem Menü starten)</translation>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>AppImage nach %1 verschieben, einen festen Ort, von dem aus der Menüeintrag es startet</translation>
     </message>
     <message>
-        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later.</source>
-        <translation>Mit Hilfe &gt; Zum Anwendungsmenü hinzufügen oder Aus dem Anwendungsmenü entfernen ändern Sie das später.</translation>
+        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
+        <translation>Mit Hilfe &gt; Zum Anwendungsmenü hinzufügen oder Aus dem Anwendungsmenü entfernen ändern Sie das später. Wenn Sie das AppImage selbst verschieben, fügen Sie es dem Menü erneut hinzu.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -7174,6 +7689,18 @@ In die Ordner von Windows und in die Registrierung wird nichts geschrieben, auß
     <message>
         <source>%1 fetches one small file, at most once a day, and tells you when a newer version of the program or of an installed add-on is there. Nothing about you is sent. You can switch this off or on at any time with Help &gt; Add-ons and Updates &gt; Check for Updates at Startup.</source>
         <translation>%1 ruft höchstens einmal am Tag eine kleine Datei ab und sagt Ihnen Bescheid, wenn es eine neuere Version des Programms oder einer installierten Erweiterung gibt. Über Sie wird nichts gesendet. Sie können das jederzeit mit Hilfe &gt; Erweiterungen und Updates &gt; Beim Start nach Updates suchen aus- oder einschalten.</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Sprache</translation>
+    </message>
+    <message>
+        <source>Language of the program:</source>
+        <translation>Sprache des Programms:</translation>
+    </message>
+    <message>
+        <source>A language you choose here is used from the next start of the program.</source>
+        <translation>Eine Sprache, die Sie hier wählen, gilt ab dem nächsten Start des Programms.</translation>
     </message>
 </context>
 <context>
@@ -8005,6 +8532,29 @@ In die Ordner von Windows und in die Registrierung wird nichts geschrieben, auß
     </message>
 </context>
 <context>
+    <name>qb::FullInstallWindow</name>
+    <message>
+        <source>Installing %1 (%2 MB)...</source>
+        <translation>%1 werden installiert (%2 MB)...</translation>
+    </message>
+    <message>
+        <source>add-on</source>
+        <translation>Erweiterung</translation>
+    </message>
+    <message>
+        <source>add-ons</source>
+        <translation>Erweiterungen</translation>
+    </message>
+    <message>
+        <source>%1 of %2: %3</source>
+        <translation>%1 von %2: %3</translation>
+    </message>
+    <message>
+        <source>Done</source>
+        <translation>Fertig</translation>
+    </message>
+</context>
+<context>
     <name>qb::HistoryDialog</name>
     <message>
         <source>Writing History</source>
@@ -8704,8 +9254,12 @@ Der aktuelle Text wurde nicht geändert.</translation>
         <translation>Notizen</translation>
     </message>
     <message>
-        <source>Lists</source>
-        <translation>Listen</translation>
+        <source>Document</source>
+        <translation>Dokument</translation>
+    </message>
+    <message>
+        <source>Project</source>
+        <translation>Projekt</translation>
     </message>
     <message>
         <source>Text</source>
@@ -8867,6 +9421,38 @@ Stattdessen „%4“ zuweisen? „%2“ hat dann kein Tastenkürzel mehr.</trans
     <message>
         <source>shortcuts</source>
         <translation>Tastenkürzel</translation>
+    </message>
+    <message>
+        <source>Use the Set of My Keyboard Layout…</source>
+        <translation>Den Satz für meine Tastaturbelegung verwenden…</translation>
+    </message>
+    <message>
+        <source>Take the shortcuts that fit the keyboard layout in use now (a German keyboard gets keys that need no AltGr). Shortcuts you set yourself stay as they are.</source>
+        <translation>Die Tastenkürzel übernehmen, die zur jetzt verwendeten Tastaturbelegung passen (eine deutsche Tastatur bekommt Tasten, die kein AltGr brauchen). Tastenkürzel, die Sie selbst festgelegt haben, bleiben unverändert.</translation>
+    </message>
+    <message>
+        <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
+        <translation>Das System teilt nicht mit, welche Tastaturbelegung verwendet wird, daher kann das Programm keinen Satz wählen. Einzelne Tastenkürzel können Sie unten trotzdem ändern.</translation>
+    </message>
+    <message>
+        <source>The shortcuts already come from the set for your keyboard layout (%1).</source>
+        <translation>Die Tastenkürzel stammen bereits aus dem Satz für Ihre Tastaturbelegung (%1).</translation>
+    </message>
+    <message>
+        <source> (you set another shortcut: it stays)</source>
+        <translation> (Sie haben ein anderes Tastenkürzel festgelegt: es bleibt)</translation>
+    </message>
+    <message>
+        <source>Use the set of shortcuts for your keyboard layout (%1)? These standard shortcuts change at once:
+
+%2
+
+Shortcuts you set yourself stay as they are.</source>
+        <translation>Den Satz der Tastenkürzel für Ihre Tastaturbelegung (%1) verwenden? Diese Standard-Tastenkürzel ändern sich sofort:
+
+%2
+
+Tastenkürzel, die Sie selbst festgelegt haben, bleiben unverändert.</translation>
     </message>
 </context>
 <context>
@@ -9136,16 +9722,6 @@ Stattdessen „%4“ zuweisen? „%2“ hat dann kein Tastenkürzel mehr.</trans
         <translation>nichts zu schreiben</translation>
     </message>
     <message>
-        <source>The texts not saved are in:
-%1
-
-The project stays open; the program keeps trying to save it in its own folder.</source>
-        <translation>Die nicht gespeicherten Texte befinden sich in:
-%1
-
-Das Projekt bleibt geöffnet; das Programm versucht weiter, es in seinem eigenen Ordner zu speichern.</translation>
-    </message>
-    <message>
         <source>&amp;New Project…</source>
         <translation>&amp;Neues Projekt…</translation>
     </message>
@@ -9160,22 +9736,6 @@ Das Projekt bleibt geöffnet; das Programm versucht weiter, es in seinem eigenen
     <message>
         <source>Import &amp;Scrivener Project…</source>
         <translation>&amp;Scrivener-Projekt importieren…</translation>
-    </message>
-    <message>
-        <source>&amp;%1 Project</source>
-        <translation>&amp;%1-Projekt</translation>
-    </message>
-    <message>
-        <source>&amp;Scrivener 3 Project (.scriv)</source>
-        <translation>&amp;Scrivener-3-Projekt (.scriv)</translation>
-    </message>
-    <message>
-        <source>Save the project in %1&apos;s own format</source>
-        <translation>Das Projekt im eigenen Format von %1 speichern</translation>
-    </message>
-    <message>
-        <source>Save the project in the format of Scrivener 3, so that Scrivener can open it too</source>
-        <translation>Das Projekt im Format von Scrivener 3 speichern, sodass auch Scrivener es öffnen kann</translation>
     </message>
     <message>
         <source>Save a Copy as Scrivener Project…</source>
@@ -9315,10 +9875,6 @@ Die Versionen 0.70.0 bis 0.90.4 haben sie dort abgelegt. In den Sicherungsordner
     <message>
         <source>The old folder is empty and was removed.</source>
         <translation>Der alte Ordner ist leer und wurde entfernt.</translation>
-    </message>
-    <message>
-        <source>The program's icon could not be copied to %1, so the menu entry shows no icon.</source>
-        <translation>Das Symbol des Programms konnte nicht nach %1 kopiert werden; der Menüeintrag zeigt deshalb kein Symbol.</translation>
     </message>
     <message>
         <source>Import &amp;Files…</source>
@@ -10231,34 +10787,6 @@ Die Versionen 0.70.0 bis 0.90.4 haben sie dort abgelegt. In den Sicherungsordner
         <translation>&amp;Anderer Editor</translation>
     </message>
     <message>
-        <source>&amp;Notes</source>
-        <translation>&amp;Notizen</translation>
-    </message>
-    <message>
-        <source>&amp;Bookmarks</source>
-        <translation>&amp;Lesezeichen</translation>
-    </message>
-    <message>
-        <source>&amp;Metadata</source>
-        <translation>&amp;Metadaten</translation>
-    </message>
-    <message>
-        <source>&amp;Snapshots</source>
-        <translation>&amp;Momentaufnahmen</translation>
-    </message>
-    <message>
-        <source>&amp;Comments and Footnotes</source>
-        <translation>&amp;Kommentare und Fußnoten</translation>
-    </message>
-    <message>
-        <source>Mind &amp;Map</source>
-        <translation>Mind&amp;map</translation>
-    </message>
-    <message>
-        <source>&amp;Objects</source>
-        <translation>&amp;Objekte</translation>
-    </message>
-    <message>
         <source>&amp;Fix the Mind Map of This Item</source>
         <translation>Mindmap dieses Elements an&amp;heften</translation>
     </message>
@@ -10415,14 +10943,6 @@ Die Versionen 0.70.0 bis 0.90.4 haben sie dort abgelegt. In den Sicherungsordner
 %1</translation>
     </message>
     <message>
-        <source>This project was saved by a newer version of %1. It uses things that version %2 does not know (it needs version %3 or later).
-
-If you work on it here, parts of it can be lost when it is saved. Better switch to the newer version first (Help &gt; Add-on Manager), or work on a copy of the project.</source>
-        <translation>Dieses Projekt wurde von einer neueren Version von %1 gespeichert. Es verwendet Dinge, die Version %2 nicht kennt (es benötigt Version %3 oder neuer).
-
-Wenn Sie hier daran arbeiten, können beim Speichern Teile davon verloren gehen. Wechseln Sie besser zuerst zur neueren Version (Hilfe &gt; Erweiterungsverwaltung) oder arbeiten Sie an einer Kopie des Projekts.</translation>
-    </message>
-    <message>
         <source>Open Anyway</source>
         <translation>Trotzdem öffnen</translation>
     </message>
@@ -10577,16 +11097,6 @@ Halten Sie es geöffnet und versuchen Sie es erneut, nachdem die Ursache behoben
         <translation>Ohne Speichern schließen</translation>
     </message>
     <message>
-        <source>The texts not saved are in:
-%1
-
-The project stays open.</source>
-        <translation>Die nicht gespeicherten Texte befinden sich in:
-%1
-
-Das Projekt bleibt geöffnet.</translation>
-    </message>
-    <message>
         <source>when the project closed</source>
         <translation>beim Schließen des Projekts</translation>
     </message>
@@ -10611,12 +11121,6 @@ Das Projekt bleibt geöffnet.</translation>
     <message>
         <source>When the program was ended (by logging out, shutting down or a command), the project &quot;%1&quot; could not be saved: %2</source>
         <translation>Beim Beenden des Programms (durch Abmelden, Herunterfahren oder einen Befehl) konnte das Projekt „%1“ nicht gespeichert werden: %2</translation>
-    </message>
-    <message>
-        <source>The texts and notes that were not saved are in:
-%1</source>
-        <translation>Die nicht gespeicherten Texte und Notizen befinden sich in:
-%1</translation>
     </message>
     <message>
         <source>No copy of the texts could be written either.</source>
@@ -10737,10 +11241,6 @@ Das Projekt bleibt geöffnet.</translation>
 %1</translation>
     </message>
     <message>
-        <source>Backup saved: %1</source>
-        <translation>Sicherung gespeichert: %1</translation>
-    </message>
-    <message>
         <source>Restore From Backup</source>
         <translation>Aus Sicherung wiederherstellen</translation>
     </message>
@@ -10787,16 +11287,6 @@ Das Projekt bleibt geöffnet.</translation>
     <message>
         <source>%1 (restored %2)</source>
         <translation>%1 (wiederhergestellt %2)</translation>
-    </message>
-    <message>
-        <source>The backup was restored into:
-%1%2
-
-Open it now? The project open now is closed first (it stays as it is).</source>
-        <translation>Die Sicherung wurde wiederhergestellt in:
-%1%2
-
-Jetzt öffnen? Das jetzt geöffnete Projekt wird zuerst geschlossen (es bleibt unverändert).</translation>
     </message>
     <message>
         <source>Open Restored Project</source>
@@ -10913,14 +11403,6 @@ You can do this later with Help &gt; Add to Application Menu.</source>
 Sie können dies später mit Hilfe &gt; Zum Anwendungsmenü hinzufügen nachholen.</translation>
     </message>
     <message>
-        <source>%1 now appears in the application menu, and double-clicking a project file (*%2) opens it.
-
-If you move the AppImage, choose this menu entry again.</source>
-        <translation>%1 erscheint jetzt im Anwendungsmenü, und ein Doppelklick auf eine Projektdatei (*%2) öffnet sie.
-
-Wenn Sie das AppImage verschieben, wählen Sie diesen Menüeintrag erneut.</translation>
-    </message>
-    <message>
         <source>Save</source>
         <translation>Speichern</translation>
     </message>
@@ -10955,10 +11437,6 @@ Wenn Sie das AppImage verschieben, wählen Sie diesen Menüeintrag erneut.</tran
     <message>
         <source>Open &amp;Recent</source>
         <translation>Zuletzt &amp;geöffnet</translation>
-    </message>
-    <message>
-        <source>Project &amp;Format</source>
-        <translation>Projekt&amp;format</translation>
     </message>
     <message>
         <source>&amp;Back Up</source>
@@ -11107,10 +11585,6 @@ Wenn Sie das AppImage verschieben, wählen Sie diesen Menüeintrag erneut.</tran
     <message>
         <source>&amp;View</source>
         <translation>&amp;Ansicht</translation>
-    </message>
-    <message>
-        <source>Editor &amp;Layout</source>
-        <translation>Editor-&amp;Layout</translation>
     </message>
     <message>
         <source>La&amp;yout</source>
@@ -11373,10 +11847,6 @@ Wenn Sie das AppImage verschieben, wählen Sie diesen Menüeintrag erneut.</tran
         <translation>&amp;Designs</translation>
     </message>
     <message>
-        <source>&amp;Layouts</source>
-        <translation>&amp;Layouts</translation>
-    </message>
-    <message>
         <source>&amp;Help</source>
         <translation>&amp;Hilfe</translation>
     </message>
@@ -11517,16 +11987,6 @@ Wenn Sie das AppImage verschieben, wählen Sie diesen Menüeintrag erneut.</tran
         <translation>Schriftenverwaltung</translation>
     </message>
     <message>
-        <source>No font manager was found on this computer (KDE: System Settings &gt; Text &amp; Fonts &gt; Font Management; or the package “font-manager”).
-
-Fonts can be installed here with Navigate &gt; Fonts &gt; Install Font Files, or by copying them into:
-%1</source>
-        <translation>Auf diesem Computer wurde keine Schriftenverwaltung gefunden (KDE: Systemeinstellungen &gt; Text &amp; Schriften &gt; Schriftverwaltung; oder das Paket „font-manager“).
-
-Schriften können hier mit Navigieren &gt; Schriften &gt; Schriftdateien installieren eingerichtet werden oder indem Sie sie in diesen Ordner kopieren:
-%1</translation>
-    </message>
-    <message>
         <source>&amp;Reload Font List</source>
         <translation>Schriftliste &amp;neu laden</translation>
     </message>
@@ -11601,10 +12061,6 @@ Schriften können hier mit Navigieren &gt; Schriften &gt; Schriftdateien install
     <message>
         <source>&amp;Developer Guide: Updates and Add-ons</source>
         <translation>&amp;Entwicklerhandbuch: Aktualisierungen und Erweiterungen</translation>
-    </message>
-    <message>
-        <source>&amp;Fonts</source>
-        <translation>&amp;Schriften</translation>
     </message>
     <message>
         <source>Install Font Files</source>
@@ -11811,44 +12267,6 @@ Wenn beide Programme gleichzeitig daran arbeiten, gehen Änderungen verloren. Tr
         <translation>%1 Dokumente wurden seit dem letzten Mal außerhalb von %2 geändert; ihr neuer Text wurde gelesen.</translation>
     </message>
     <message>
-        <source>Save the Project in Scrivener Format</source>
-        <translation>Projekt im Scrivener-Format speichern</translation>
-    </message>
-    <message>
-        <source>Project Format</source>
-        <translation>Projektformat</translation>
-    </message>
-    <message>
-        <source>From now on the project is saved in Scrivener format:
-%1
-
-The project folder in %2&apos;s own format stays as it was at this moment:
-%3
-You can keep it as a copy or delete it.</source>
-        <translation>Ab jetzt wird das Projekt im Scrivener-Format gespeichert:
-%1
-
-Der Projektordner im eigenen Format von %2 bleibt in seinem jetzigen Zustand:
-%3
-Sie können ihn als Kopie behalten oder löschen.</translation>
-    </message>
-    <message>
-        <source>Where Should the Project in %1 Format Be Saved?</source>
-        <translation>Wo soll das Projekt im Format von %1 gespeichert werden?</translation>
-    </message>
-    <message>
-        <source>From now on the project is saved in %1&apos;s own format:
-%2
-
-The Scrivener project stays as it was at this moment:
-%3</source>
-        <translation>Ab jetzt wird das Projekt im eigenen Format von %1 gespeichert:
-%2
-
-Das Scrivener-Projekt bleibt in seinem jetzigen Zustand:
-%3</translation>
-    </message>
-    <message>
         <source>Save a Copy as Scrivener Project</source>
         <translation>Kopie als Scrivener-Projekt speichern</translation>
     </message>
@@ -12037,10 +12455,6 @@ Das Projekt, an dem Sie arbeiten, bleibt, wo es ist.</translation>
     <message>
         <source>Web pages are imported by the add-on “Web Page Import”, which is not installed or is switched off.</source>
         <translation>Webseiten werden von der Erweiterung „Webseiten-Import“ importiert, die nicht installiert oder ausgeschaltet ist.</translation>
-    </message>
-    <message>
-        <source>Install it with File &gt; Install Update or Add-on; Help &gt; Add-on Manager switches add-ons on and off.</source>
-        <translation>Installieren Sie sie mit Datei &gt; Aktualisierung oder Erweiterung installieren; Hilfe &gt; Erweiterungsverwaltung schaltet Erweiterungen ein und aus.</translation>
     </message>
     <message>
         <source>Add-on Manager…</source>
@@ -12918,12 +13332,12 @@ Die Schriften sind sofort nutzbar. Sie bleiben im Ordner des Programms: Andere P
         <translation>Sicherung wiederherstellen: nicht wiederhergestellt</translation>
     </message>
     <message>
-        <source>The title of the restored project could not be marked "(restored ...)", so it has the title of the project it was made from: %1</source>
-        <translation>Der Titel des wiederhergestellten Projekts konnte nicht mit "(wiederhergestellt ...)" gekennzeichnet werden und ist der Titel des Projekts, aus dem es entstand: %1</translation>
+        <source>The title of the restored project could not be marked &quot;(restored ...)&quot;, so it has the title of the project it was made from: %1</source>
+        <translation>Der Titel des wiederhergestellten Projekts konnte nicht mit &quot;(wiederhergestellt ...)&quot; gekennzeichnet werden und ist der Titel des Projekts, aus dem es entstand: %1</translation>
     </message>
     <message>
-        <source>The restored project could not be opened to mark its title "(restored ...)": %1</source>
-        <translation>Das wiederhergestellte Projekt ließ sich nicht öffnen, um seinen Titel mit "(wiederhergestellt ...)" zu kennzeichnen: %1</translation>
+        <source>The restored project could not be opened to mark its title &quot;(restored ...)&quot;: %1</source>
+        <translation>Das wiederhergestellte Projekt ließ sich nicht öffnen, um seinen Titel mit &quot;(wiederhergestellt ...)&quot; zu kennzeichnen: %1</translation>
     </message>
     <message>
         <source>The backup was restored INCOMPLETELY into:
@@ -13004,8 +13418,8 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
         <translation>Zum Anwendungsmenü hinzufügen</translation>
     </message>
     <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>AppImage nach %1 verschieben (eine verschobene Datei lässt sich nicht mehr aus dem Menü starten)</translation>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>AppImage nach %1 verschieben, einen festen Ort, von dem aus der Menüeintrag es startet</translation>
     </message>
     <message>
         <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them?</source>
@@ -13024,7 +13438,7 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
         <translation>Die AppImage-Datei konnte nicht nach %1 verschoben werden (%2). Der Menüeintrag startet sie dort, wo sie ist; wenn Sie die Datei selbst verschieben, wählen Sie Hilfe &gt; Aus dem Anwendungsmenü entfernen und danach erneut Zum Anwendungsmenü hinzufügen.</translation>
     </message>
     <message>
-        <source>The program's icon could not be copied, so the menu entry shows no icon.</source>
+        <source>The program&apos;s icon could not be copied, so the menu entry shows no icon.</source>
         <translation>Das Programmsymbol konnte nicht kopiert werden, der Menüeintrag zeigt daher kein Symbol.</translation>
     </message>
     <message>
@@ -13048,12 +13462,12 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
         <translation>Sicherung gespeichert.</translation>
     </message>
     <message>
-        <source>&amp;Translate and Proofread…</source>
-        <translation>&amp;Übersetzen und Korrekturlesen…</translation>
+        <source>&amp;Translation Helper…</source>
+        <translation>&amp;Übersetzungshelfer…</translation>
     </message>
     <message>
-        <source>Proofread English text or translate German text into English (the add-on is not installed)</source>
-        <translation>Englischen Text korrigieren oder deutschen Text ins Englische übersetzen (die Erweiterung ist nicht installiert)</translation>
+        <source>Suggestions for translating between eleven languages and for English spelling (the add-on is not installed)</source>
+        <translation>Vorschläge zum Übersetzen zwischen elf Sprachen und für die englische Rechtschreibung (die Erweiterung ist nicht installiert)</translation>
     </message>
     <message>
         <source>Speech &amp;Transcription…</source>
@@ -13068,8 +13482,8 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
         <translation>Sprachtranskription</translation>
     </message>
     <message>
-        <source>Translation and Proofreading</source>
-        <translation>Übersetzung und Korrektur</translation>
+        <source>Translation Helper</source>
+        <translation>Übersetzungshelfer</translation>
     </message>
     <message>
         <source>is not installed</source>
@@ -13096,8 +13510,8 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
         <translation>Sie wandelt Sprache in Text um. Installieren Sie sie mit Hilfe &gt; Erweiterungen und Updates &gt; Update oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung zeigt die Erweiterungen und schaltet sie ein und aus.</translation>
     </message>
     <message>
-        <source>It proofreads English text and translates German text into English. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
-        <translation>Sie korrigiert englischen Text und übersetzt deutschen Text ins Englische. Installieren Sie sie mit Hilfe &gt; Erweiterungen und Updates &gt; Update oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung zeigt die Erweiterungen und schaltet sie ein und aus.</translation>
+        <source>It gives suggestions for translating between eleven languages and for English spelling and grammar. Its translations are not precise: check each one, which needs a working knowledge of both languages. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>Sie macht Vorschläge zum Übersetzen zwischen elf Sprachen und für die englische Rechtschreibung und Grammatik. Ihre Übersetzungen sind nicht genau; prüfen Sie jede einzelne, wozu Sie beide Sprachen gut kennen müssen. Installieren Sie sie mit Hilfe &gt; Erweiterungen und Updates &gt; Update oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung zeigt die Erweiterungen und schaltet sie ein und aus.</translation>
     </message>
     <message>
         <source>Open Add-on Manager</source>
@@ -13133,6 +13547,66 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
             <numerusform>Welche Art Objekt soll aus %n Blatt werden?</numerusform>
             <numerusform>Welche Art Objekt soll aus %n Blättern werden?</numerusform>
         </translation>
+    </message>
+    <message>
+        <source>&amp;Profiles</source>
+        <translation>&amp;Profile</translation>
+    </message>
+    <message>
+        <source>&amp;Manage Profiles…</source>
+        <translation>Profile &amp;verwalten…</translation>
+    </message>
+    <message>
+        <source>Use, save, rename, copy, delete, export and import profiles</source>
+        <translation>Profile verwenden, speichern, umbenennen, kopieren, löschen, exportieren und importieren</translation>
+    </message>
+    <message>
+        <source>&amp;Save Settings as New Profile…</source>
+        <translation>Einstellungen als neues Profil &amp;speichern…</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Einstellungen als neues Profil speichern</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Mein Profil</translation>
+    </message>
+    <message>
+        <source>Keep the options, toolbars, window and theme as they are now in a new profile</source>
+        <translation>Die Einstellungen, Werkzeugleisten, das Fenster und das Design so, wie sie jetzt sind, in einem neuen Profil behalten</translation>
+    </message>
+    <message>
+        <source>Profiles</source>
+        <translation>Profile</translation>
+    </message>
+    <message>
+        <source>Labels</source>
+        <translation>Etiketten</translation>
+    </message>
+    <message>
+        <source>Profile:</source>
+        <translation>Profil:</translation>
+    </message>
+    <message>
+        <source>The profile in use: %1. A click lists the profiles.</source>
+        <translation>Das verwendete Profil: %1. Ein Klick zeigt die Profile.</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Etikett</translation>
+    </message>
+    <message>
+        <source>No Label</source>
+        <translation>Kein Etikett</translation>
+    </message>
+    <message>
+        <source>Switch Profile</source>
+        <translation>Profil wechseln</translation>
+    </message>
+    <message>
+        <source>The profile sets another language; it takes effect when the program is started again.</source>
+        <translation>Das Profil legt eine andere Sprache fest; sie wird wirksam, wenn das Programm neu gestartet wird.</translation>
     </message>
 </context>
 <context>
@@ -13203,6 +13677,49 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
     <message>
         <source>%1 is not a picture the program can read.</source>
         <translation>%1 ist kein Bild, das das Programm lesen kann.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::ManualWindow</name>
+    <message>
+        <source>Search the manual (Ctrl+F)</source>
+        <translation>Im Handbuch suchen (Strg+F)</translation>
+    </message>
+    <message>
+        <source>Search the manual</source>
+        <translation>Im Handbuch suchen</translation>
+    </message>
+    <message>
+        <source>Previous</source>
+        <translation>Zurück</translation>
+    </message>
+    <message>
+        <source>The previous hit (Shift+Return)</source>
+        <translation>Der vorige Treffer (Umschalt+Eingabe)</translation>
+    </message>
+    <message>
+        <source>Next</source>
+        <translation>Weiter</translation>
+    </message>
+    <message>
+        <source>The next hit (Return)</source>
+        <translation>Der nächste Treffer (Eingabe)</translation>
+    </message>
+    <message>
+        <source>No hits</source>
+        <translation>Keine Treffer</translation>
+    </message>
+    <message>
+        <source>%1 of %2</source>
+        <translation>%1 von %2</translation>
+    </message>
+    <message>
+        <source>Contents</source>
+        <translation>Inhalt</translation>
+    </message>
+    <message>
+        <source>Contents of the manual</source>
+        <translation>Inhaltsverzeichnis des Handbuchs</translation>
     </message>
 </context>
 <context>
@@ -15080,10 +15597,6 @@ Der Inhalt wird so weit angezeigt, wie er gelesen werden konnte, und lässt sich
         <translation>ja</translation>
     </message>
     <message>
-        <source>Link to Document</source>
-        <translation>Mit Dokument verknüpfen</translation>
-    </message>
-    <message>
         <source>Link to Object</source>
         <translation>Mit Objekt verknüpfen</translation>
     </message>
@@ -15644,10 +16157,6 @@ Fortfahren?</translation>
     <message>
         <source>Scratch Pad</source>
         <translation>Notizblock</translation>
-    </message>
-    <message>
-        <source>The Scratch Pad (Window &gt; Scratch Pad) comes with the add-on &quot;Scratch Pad&quot;; once it is installed (Help &gt; Add-on Manager), its folder and the kind of new notes are set here.</source>
-        <translation>Der Notizblock (Fenster &gt; Notizblock) gehört zur Erweiterung „Notizblock“; sobald sie installiert ist (Hilfe &gt; Erweiterungsverwaltung), werden hier sein Ordner und die Art neuer Notizen festgelegt.</translation>
     </message>
     <message>
         <source>No folder chosen</source>
@@ -16602,8 +17111,12 @@ Fortfahren?</translation>
         <translation>alle</translation>
     </message>
     <message>
-        <source>Retain backup files per project:</source>
-        <translation>Sicherungsdateien pro Projekt aufbewahren:</translation>
+        <source>Keep the newest</source>
+        <translation>Die neuesten</translation>
+    </message>
+    <message>
+        <source>backups of each project</source>
+        <translation>Sicherungen je Projekt</translation>
     </message>
     <message>
         <source>Open Backup Folder...</source>
@@ -16782,10 +17295,6 @@ Fortfahren?</translation>
         <translation>Meinen Plugin-Ordner öffnen</translation>
     </message>
     <message>
-        <source>Add-ons are installed with File &gt; Install Update or Add-on and switched on and off in Help &gt; Add-on Manager.</source>
-        <translation>Erweiterungen werden mit Datei &gt; Aktualisierung oder Erweiterung installieren installiert und unter Hilfe &gt; Erweiterungsverwaltung ein- und ausgeschaltet.</translation>
-    </message>
-    <message>
         <source>Write a freeze report when the program does not answer for:</source>
         <translation>Hängerbericht schreiben, wenn das Programm nicht reagiert für:</translation>
     </message>
@@ -16798,32 +17307,12 @@ Fortfahren?</translation>
         <translation>Berichtsordner öffnen</translation>
     </message>
     <message>
-        <source>Reports stay on this computer; Help &gt; Crash Reports shows them. Fewer reports to keep take effect at the next start.</source>
-        <translation>Berichte bleiben auf diesem Computer; Hilfe &gt; Absturzberichte zeigt sie an. Eine kleinere Anzahl zu behaltender Berichte gilt ab dem nächsten Start.</translation>
-    </message>
-    <message>
         <source>Crash Reports</source>
         <translation>Absturzberichte</translation>
     </message>
     <message>
-        <source>Load Options from File...</source>
-        <translation>Einstellungen aus Datei laden...</translation>
-    </message>
-    <message>
         <source>Load Options</source>
         <translation>Einstellungen laden</translation>
-    </message>
-    <message>
-        <source>Options (*.qboptions)</source>
-        <translation>Einstellungen (*.qboptions)</translation>
-    </message>
-    <message>
-        <source>Save Options to File...</source>
-        <translation>Einstellungen in Datei speichern...</translation>
-    </message>
-    <message>
-        <source>Save Options</source>
-        <translation>Einstellungen speichern</translation>
     </message>
     <message>
         <source>Save Theme Options to File...</source>
@@ -16904,8 +17393,8 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
         <translation>Sprache:</translation>
     </message>
     <message>
-        <source>The language of menus, windows and messages; it changes at the next start of the program. The manual and the welcome project stay in English.</source>
-        <translation>Die Sprache der Menüs, Fenster und Meldungen; sie wechselt beim nächsten Start des Programms. Das Handbuch und das Willkommensprojekt bleiben auf Englisch.</translation>
+        <source>The language of menus, windows and messages, of the manual, the quick start guide and the welcome project; it changes at the next start of the program. A language marked as a machine translation has not been checked by a speaker yet. Spelling dictionaries for other languages are add-ons (Help &gt; Add-ons and Updates).</source>
+        <translation>Die Sprache der Menüs, Fenster und Meldungen, des Handbuchs, der Kurzanleitung und des Willkommensprojekts; sie wechselt beim nächsten Start des Programms. Eine als maschinelle Übersetzung gekennzeichnete Sprache hat noch kein Muttersprachler geprüft. Rechtschreibwörterbücher für weitere Sprachen sind Erweiterungen (Hilfe &gt; Erweiterungen und Updates).</translation>
     </message>
     <message>
         <source>Language</source>
@@ -16954,6 +17443,98 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
     <message>
         <source>Show the draft and session progress as two thin lines under the quick search field (the footer shows it as well)</source>
         <translation>Fortschritt von Entwurf und Sitzung als zwei dünne Linien unter dem Schnellsuchfeld zeigen (die Fußzeile zeigt ihn ebenfalls)</translation>
+    </message>
+    <message>
+        <source>The colors new things start with. They belong to your profile. Projects that exist keep their own labels.</source>
+        <translation>Die Farben, mit denen Neues beginnt. Sie gehören zu Ihrem Profil. Bestehende Projekte behalten ihre eigenen Etiketten.</translation>
+    </message>
+    <message>
+        <source>Standard Color</source>
+        <translation>Standardfarbe</translation>
+    </message>
+    <message>
+        <source>Labels of new projects</source>
+        <translation>Etiketten neuer Projekte</translation>
+    </message>
+    <message>
+        <source>Color of this label</source>
+        <translation>Farbe dieses Etiketts</translation>
+    </message>
+    <message>
+        <source>Colors of the popups</source>
+        <translation>Farben der Auswahlfenster</translation>
+    </message>
+    <message>
+        <source>Text color:</source>
+        <translation>Textfarbe:</translation>
+    </message>
+    <message>
+        <source>Highlight:</source>
+        <translation>Hervorhebung:</translation>
+    </message>
+    <message>
+        <source>A color of the text color popup</source>
+        <translation>Eine Farbe des Textfarben-Auswahlfensters</translation>
+    </message>
+    <message>
+        <source>A color of the highlight popup</source>
+        <translation>Eine Farbe des Hervorhebungs-Auswahlfensters</translation>
+    </message>
+    <message>
+        <source>The color each button starts with</source>
+        <translation>Die Farbe, mit der jede Schaltfläche beginnt</translation>
+    </message>
+    <message>
+        <source>Text color button:</source>
+        <translation>Textfarben-Schaltfläche:</translation>
+    </message>
+    <message>
+        <source>The color of the text color button when the program starts</source>
+        <translation>Die Farbe der Textfarben-Schaltfläche beim Start des Programms</translation>
+    </message>
+    <message>
+        <source>Highlight button:</source>
+        <translation>Hervorhebungs-Schaltfläche:</translation>
+    </message>
+    <message>
+        <source>The color of the highlight button when the program starts</source>
+        <translation>Die Farbe der Hervorhebungs-Schaltfläche beim Start des Programms</translation>
+    </message>
+    <message>
+        <source>Back to the program&apos;s standard labels and colors</source>
+        <translation>Zurück zu den Standard-Etiketten und -Farben des Programms</translation>
+    </message>
+    <message>
+        <source>Export Profile...</source>
+        <translation>Profil exportieren...</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Profil exportieren</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profile (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile...</source>
+        <translation>Profil importieren...</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Profil importieren</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profile und Einstellungen (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>The profile “%1” was imported. Switch to it under View &gt; Profiles.</source>
+        <translation>Das Profil „%1“ wurde importiert. Wechseln Sie unter Ansicht &gt; Profile dorthin.</translation>
+    </message>
+    <message>
+        <source>Manage Profiles...</source>
+        <translation>Profile verwalten...</translation>
     </message>
 </context>
 <context>
@@ -17631,6 +18212,105 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
     </message>
 </context>
 <context>
+    <name>qb::ProfileManagerDialog</name>
+    <message>
+        <source>Manage Profiles</source>
+        <translation>Profile verwalten</translation>
+    </message>
+    <message>
+        <source>A profile holds your options, toolbars, window places and sizes, keyboard set, backup settings, standard colors, layouts and the theme. The profile in use is saved when you switch away from it and when the program ends.</source>
+        <translation>Ein Profil enthält Ihre Einstellungen, Werkzeugleisten, Plätze und Größen im Fenster, den Tastatursatz, die Sicherungseinstellungen, Standardfarben, Layouts und das Design. Das verwendete Profil wird gespeichert, wenn Sie davon wegwechseln und wenn das Programm beendet wird.</translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <translation>Verwenden</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile...</source>
+        <translation>Einstellungen als neues Profil speichern...</translation>
+    </message>
+    <message>
+        <source>Rename...</source>
+        <translation>Umbenennen...</translation>
+    </message>
+    <message>
+        <source>Copy...</source>
+        <translation>Kopieren...</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Löschen</translation>
+    </message>
+    <message>
+        <source>Export...</source>
+        <translation>Exportieren...</translation>
+    </message>
+    <message>
+        <source>Import...</source>
+        <translation>Importieren...</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Einstellungen als neues Profil speichern</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Mein Profil</translation>
+    </message>
+    <message>
+        <source>Rename Profile</source>
+        <translation>Profil umbenennen</translation>
+    </message>
+    <message>
+        <source>Copy Profile</source>
+        <translation>Profil kopieren</translation>
+    </message>
+    <message>
+        <source>%1 (Copy)</source>
+        <translation>%1 (Kopie)</translation>
+    </message>
+    <message>
+        <source>Delete Profile</source>
+        <translation>Profil löschen</translation>
+    </message>
+    <message>
+        <source>Delete the profile “%1”? This cannot be undone.</source>
+        <translation>Das Profil „%1“ löschen? Das kann nicht rückgängig gemacht werden.</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Profil exportieren</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profile (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Profil importieren</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profile und Einstellungen (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>%1 (in use)</source>
+        <translation>%1 (in Verwendung)</translation>
+    </message>
+    <message>
+        <source>Theme: %1.</source>
+        <translation>Design: %1.</translation>
+    </message>
+    <message>
+        <source>Built-in profile; it can be deleted.</source>
+        <translation>Eingebautes Profil; es kann gelöscht werden.</translation>
+    </message>
+    <message>
+        <source>The profile every program starts with.</source>
+        <translation>Das Profil, mit dem jedes Programm beginnt.</translation>
+    </message>
+</context>
+<context>
     <name>qb::Project</name>
     <message>
         <source>This project&apos;s folder holds other project files beside &quot;%1&quot;, which was opened: %2. A sync program may have made them (a copy from another computer kept beside yours). Compare them before you go on, and open another one with File &gt; Open Project if it holds your latest work.</source>
@@ -17717,16 +18397,6 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
         <translation>(unbenannt)</translation>
     </message>
     <message>
-        <source>Cannot create %1</source>
-        <translation>%1 kann nicht erstellt werden</translation>
-    </message>
-    <message>
-        <source>The project &quot;%1&quot; (%2) could not be saved. These are its texts and notes that were not saved yet, as RTF files (Word, LibreOffice and %3 open them). Copy what you need back into the project.
-</source>
-        <translation>Das Projekt „%1“ (%2) konnte nicht gespeichert werden. Dies sind seine noch nicht gespeicherten Texte und Notizen als RTF-Dateien (Word, LibreOffice und %3 öffnen sie). Kopieren Sie zurück ins Projekt, was Sie brauchen.
-</translation>
-    </message>
-    <message>
         <source>The project folder is no longer at %1 (renamed, moved, or its drive is not connected). Nothing was written; your changes are kept while the project stays open. Put the folder back and save again.</source>
         <translation>Der Projektordner befindet sich nicht mehr unter %1 (umbenannt, verschoben oder sein Laufwerk ist nicht verbunden). Es wurde nichts geschrieben; Ihre Änderungen bleiben erhalten, solange das Projekt geöffnet ist. Stellen Sie den Ordner wieder her und speichern Sie erneut.</translation>
     </message>
@@ -17808,22 +18478,6 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
         <translation>In %1 kann kein Ordner erstellt werden</translation>
     </message>
     <message>
-        <source>The project "%1" (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder "objects") and the project file %4 as it was in memory (the binder, titles and labels). Copy what you need back into the project.
-
-</source>
-        <translation>Das Projekt "%1" (%2) konnte nicht gespeichert werden. Dieser Ordner enthält, was noch nicht gespeichert war: Texte und Notizen als RTF-Dateien (Word, LibreOffice und %3 öffnen sie), Mind-Map-Tafeln, geänderte Objekte (im Ordner "objects") und die Projektdatei %4 so, wie sie im Speicher war (Gliederung, Titel und Farbmarken). Kopieren Sie, was Sie brauchen, zurück ins Projekt.
-
-</translation>
-    </message>
-    <message>
-        <source>To put the project file back: close the project, rename the project file %1 in the project folder %2 (so that it is kept), and copy the file %1 of this folder there. Then open the project again.
-
-</source>
-        <translation>So spielen Sie die Projektdatei zurück: Schließen Sie das Projekt, benennen Sie die Projektdatei %1 im Projektordner %2 um (damit sie erhalten bleibt) und kopieren Sie die Datei %1 dieses Ordners dorthin. Öffnen Sie danach das Projekt wieder.
-
-</translation>
-    </message>
-    <message>
         <source>This copy is complete: all %1 files were written.
 </source>
         <translation>Diese Kopie ist vollständig: Alle %1 Dateien wurden geschrieben.
@@ -17844,16 +18498,6 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
         <translation>Es konnte keine Kopie geschrieben werden: %1</translation>
     </message>
     <message>
-        <source>The texts not saved are in:
-%1
-
-The copy is complete: %2 of %2 files were written, with the project file as it is in memory (the README in that folder says how to put it back).</source>
-        <translation>Die nicht gespeicherten Texte liegen in:
-%1
-
-Die Kopie ist vollständig: %2 von %2 Dateien wurden geschrieben, mit der Projektdatei, wie sie im Speicher ist (die README in diesem Ordner sagt, wie sie zurückgespielt wird).</translation>
-    </message>
-    <message>
         <source>This copy is INCOMPLETE: %1 of %2 files were written, in:
 %3
 
@@ -17866,10 +18510,6 @@ Nicht geschrieben:
 %4</translation>
     </message>
     <message>
-        <source>Not saved yet: the journal of an earlier save, %1, cannot be read and could not be moved aside, so this save would overwrite it. Nothing was written; your changes are kept while the project stays open. Check that the folder %2 can be written, or move that file away by hand; the program then saves by itself.</source>
-        <translation>Noch nicht gespeichert: Das Journal eines früheren Speicherns, %1, kann nicht gelesen werden und ließ sich nicht beiseite legen; dieses Speichern würde es überschreiben. Es wurde nichts geschrieben; Ihre Änderungen bleiben erhalten, solange das Projekt offen ist. Prüfen Sie, ob der Ordner %2 beschreibbar ist, oder verschieben Sie die Datei von Hand; danach speichert das Programm von selbst.</translation>
-    </message>
-    <message>
         <source>Not saved yet: the drive reported an error. %1 The journal of the last save is kept and the program tries again by itself.</source>
         <translation>Noch nicht gespeichert: Das Laufwerk hat einen Fehler gemeldet. %1 Das Journal des letzten Speicherns bleibt erhalten, und das Programm versucht es von selbst erneut.</translation>
     </message>
@@ -17878,15 +18518,15 @@ Nicht geschrieben:
         <translation>Noch nicht gespeichert: Das Journal eines früheren Speicherns, %1, kann nicht gelesen werden und ließ sich nicht beiseite legen; dieses Speichern würde es überschreiben. Es wurde nichts geschrieben; Ihre Änderungen bleiben erhalten, solange das Projekt offen ist. Machen Sie den Ordner %2 beschreibbar (die Dateien dieses Speicherns, im Projektordner als *.qbstage benannt, bleiben unverändert); das Programm legt das Journal dann beiseite und speichert von selbst.</translation>
     </message>
     <message>
-        <source>The project "%1" (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder "objects") and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
+        <source>The project &quot;%1&quot; (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
 
 </source>
-        <translation>Das Projekt "%1" (%2) konnte nicht gespeichert werden. Dieser Ordner enthält, was noch nicht gespeichert war: Texte und Notizen als RTF-Dateien (Word, LibreOffice und %3 öffnen sie), Mind-Map-Tafeln, geänderte Objekte (im Ordner "objects") und die Projektdatei, wie sie im Speicher war (Gliederung, Titel und Farbmarken), als %4. Kopieren Sie, was Sie brauchen, zurück ins Projekt.
+        <translation>Das Projekt &quot;%1&quot; (%2) konnte nicht gespeichert werden. Dieser Ordner enthält, was noch nicht gespeichert war: Texte und Notizen als RTF-Dateien (Word, LibreOffice und %3 öffnen sie), Mind-Map-Tafeln, geänderte Objekte (im Ordner &quot;objects&quot;) und die Projektdatei, wie sie im Speicher war (Gliederung, Titel und Farbmarken), als %4. Kopieren Sie, was Sie brauchen, zurück ins Projekt.
 
 </translation>
     </message>
     <message>
-        <source>To put the project file back: close the project, rename the project file %1 in the project folder %2 (so that it is kept), copy the file %3 of this folder there and rename it to %1. Then open the project again. (The copy's name ends in .copy so that this folder is not taken for a project.)
+        <source>To put the project file back: close the project, rename the project file %1 in the project folder %2 (so that it is kept), copy the file %3 of this folder there and rename it to %1. Then open the project again. (The copy&apos;s name ends in .copy so that this folder is not taken for a project.)
 
 </source>
         <translation>So spielen Sie die Projektdatei zurück: Schließen Sie das Projekt, benennen Sie die Projektdatei %1 im Projektordner %2 um (damit sie erhalten bleibt), kopieren Sie die Datei %3 dieses Ordners dorthin und benennen Sie sie in %1 um. Öffnen Sie danach das Projekt wieder. (Der Name der Kopie endet auf .copy, damit dieser Ordner nicht für ein Projekt gehalten wird.)
@@ -17902,10 +18542,6 @@ Nicht geschrieben:
 </translation>
     </message>
     <message>
-        <source>Everything is saved: no copy was needed.</source>
-        <translation>Alles ist gespeichert: Es war keine Kopie nötig.</translation>
-    </message>
-    <message>
         <source>The texts not saved are in:
 %1
 
@@ -17916,7 +18552,7 @@ The copy is complete: %2 of %2 files were written, with the project file as it i
 Die Kopie ist vollständig: %2 von %2 Dateien wurden geschrieben, mit der Projektdatei, wie sie im Speicher ist, als *.copy benannt (die README in diesem Ordner sagt, wie sie zurückgespielt wird).</translation>
     </message>
     <message>
-        <source>No copy was needed: nothing was waiting to be written into the project's own folder.</source>
+        <source>No copy was needed: nothing was waiting to be written into the project&apos;s own folder.</source>
         <translation>Es war keine Kopie nötig: Nichts wartete darauf, in den eigenen Ordner des Projekts geschrieben zu werden.</translation>
     </message>
     <message>
@@ -20250,14 +20886,6 @@ Strg+Klick zum Öffnen</translation>
         <translation>Nach Updates suchen</translation>
     </message>
     <message>
-        <source>%1 looks for updates when it starts. Nothing about you is sent.
-
-It fetches one small file, at most once a day, and tells you when a newer version of the program or of an installed add-on is there. You can switch this off or on at any time with Help &gt; Check for Updates at Startup.</source>
-        <translation>%1 sucht beim Start nach Updates. Über Sie wird nichts gesendet.
-
-Es wird höchstens einmal am Tag eine kleine Datei abgerufen, und Sie erfahren, wenn es eine neuere Version des Programms oder einer installierten Erweiterung gibt. Sie können das jederzeit mit Hilfe &gt; Beim Start nach Updates suchen aus- oder einschalten.</translation>
-    </message>
-    <message>
         <source>Turn Off</source>
         <translation>Ausschalten</translation>
     </message>
@@ -20348,10 +20976,6 @@ Es wird höchstens einmal am Tag eine kleine Datei abgerufen, und Sie erfahren, 
     <message>
         <source>Delay: you are reminded again in %1. Each further delay waits longer (1 day, 1 week, 2 weeks, then every 4 weeks). A security update cannot be ignored, and its reminders do not end.</source>
         <translation>Später: Sie werden in %1 wieder erinnert. Jedes weitere Verschieben wartet länger (1 Tag, 1 Woche, 2 Wochen, dann alle 4 Wochen). Ein Sicherheitsupdate kann nicht ignoriert werden, und seine Erinnerungen enden nicht.</translation>
-    </message>
-    <message>
-        <source>You have delayed this four times. This is the last reminder: Delay now ends the reminders for this version. Help &gt; Check for Updates Now still shows it.</source>
-        <translation>Sie haben dies viermal verschoben. Das ist die letzte Erinnerung: „Später“ beendet jetzt die Erinnerungen an diese Version. Hilfe &gt; Jetzt nach Updates suchen zeigt sie weiterhin.</translation>
     </message>
     <message>
         <source>Delay: you are reminded again in %1. Each further delay waits longer (1 day, 1 week, 2 weeks, 4 weeks); after that there is one last reminder, and then the reminders for this version end.</source>
@@ -20494,6 +21118,33 @@ Es wird höchstens einmal am Tag eine kleine Datei abgerufen, und Sie erfahren, 
     <message>
         <source>You have delayed this four times. This is the last reminder: Delay now ends the reminders for this version. Help &gt; Add-ons and Updates &gt; Check for Updates Now still shows it.</source>
         <translation>Sie haben dies viermal verschoben. Das ist die letzte Erinnerung: „Später“ beendet jetzt die Erinnerungen an diese Version. Hilfe &gt; Erweiterungen und Updates &gt; Jetzt nach Updates suchen zeigt sie weiterhin.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::WritingProgress</name>
+    <message>
+        <source>%1 / %2 today</source>
+        <translation>%1 / %2 heute</translation>
+    </message>
+    <message>
+        <source>%1 / %2 draft</source>
+        <translation>%1 / %2 Entwurf</translation>
+    </message>
+    <message>
+        <source>Today&apos;s writing: %1 of %2 %3 (click for Project Targets)</source>
+        <translation>Heute geschrieben: %1 von %2 %3 (Klick öffnet die Projektziele)</translation>
+    </message>
+    <message>
+        <source>The draft: %1 of %2 %3 (click for Project Targets)</source>
+        <translation>Der Entwurf: %1 von %2 %3 (Klick öffnet die Projektziele)</translation>
+    </message>
+    <message>
+        <source>characters</source>
+        <translation>Zeichen</translation>
+    </message>
+    <message>
+        <source>words</source>
+        <translation>Wörter</translation>
     </message>
 </context>
 <context>
@@ -20788,6 +21439,43 @@ Es wird höchstens einmal am Tag eine kleine Datei abgerufen, und Sie erfahren, 
     </message>
 </context>
 <context>
+    <name>qb::appmenu</name>
+    <message>
+        <source>The program does not run from an AppImage file.</source>
+        <translation>Das Programm läuft nicht aus einer AppImage-Datei.</translation>
+    </message>
+    <message>
+        <source>The folder %1 could not be made.</source>
+        <translation>Der Ordner %1 konnte nicht angelegt werden.</translation>
+    </message>
+    <message>
+        <source>There is a file with this name in %1 already.</source>
+        <translation>In %1 gibt es bereits eine Datei mit diesem Namen.</translation>
+    </message>
+    <message>
+        <source>The file could not be copied to %1.</source>
+        <translation>Die Datei konnte nicht nach %1 kopiert werden.</translation>
+    </message>
+    <message>
+        <source>The copy in %1 is not complete.</source>
+        <translation>Die Kopie in %1 ist nicht vollständig.</translation>
+    </message>
+    <message>
+        <source>The old file could not be removed after the copy.</source>
+        <translation>Die alte Datei konnte nach dem Kopieren nicht entfernt werden.</translation>
+    </message>
+    <message>
+        <source>The file %1 could not be written.</source>
+        <translation>Die Datei %1 konnte nicht geschrieben werden.</translation>
+    </message>
+    <message>
+        <source>These files could not be removed:
+%1</source>
+        <translation>Diese Dateien konnten nicht entfernt werden:
+%1</translation>
+    </message>
+</context>
+<context>
     <name>qb::ask</name>
     <message>
         <source>Cancel</source>
@@ -20846,6 +21534,13 @@ Es wird höchstens einmal am Tag eine kleine Datei abgerufen, und Sie erfahren, 
     <message>
         <source>PDF (.pdf)</source>
         <translation>PDF (.pdf)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::language</name>
+    <message>
+        <source>%1 (machine translation)</source>
+        <translation>%1 (maschinelle Übersetzung)</translation>
     </message>
 </context>
 <context>
@@ -21458,151 +22153,6 @@ Sie wird von hier aus nicht geöffnet. Wenn Sie ihr vertrauen, öffnen Sie sie s
     <message>
         <source>The page builds its text with a script: the text comes from the page&apos;s data.</source>
         <translation>Die Seite baut ihren Text mit einem Skript auf: Der Text stammt aus den Daten der Seite.</translation>
-    </message>
-</context>
-<context>
-    <name>qb::CommandFinder</name>
-    <message>
-        <source>Find Command</source>
-        <translation>Befehl suchen</translation>
-    </message>
-    <message>
-        <source>Type part of a command's name or of its menu. Return or a double-click runs it.</source>
-        <translation>Geben Sie einen Teil des Befehlsnamens oder seines Menüs ein. Eingabetaste oder Doppelklick führt ihn aus.</translation>
-    </message>
-    <message>
-        <source>Command</source>
-        <translation>Befehl</translation>
-    </message>
-</context>
-<context>
-    <name>qb::FullInstallWindow</name>
-    <message>
-        <source>Installing %1 (%2 MB)...</source>
-        <translation>%1 werden installiert (%2 MB)...</translation>
-    </message>
-    <message>
-        <source>add-on</source>
-        <translation>Erweiterung</translation>
-    </message>
-    <message>
-        <source>add-ons</source>
-        <translation>Erweiterungen</translation>
-    </message>
-    <message>
-        <source>%1 of %2: %3</source>
-        <translation>%1 von %2: %3</translation>
-    </message>
-    <message>
-        <source>Done</source>
-        <translation>Fertig</translation>
-    </message>
-</context>
-<context>
-    <name>qb::appmenu</name>
-    <message>
-        <source>The program does not run from an AppImage file.</source>
-        <translation>Das Programm läuft nicht aus einer AppImage-Datei.</translation>
-    </message>
-    <message>
-        <source>The folder %1 could not be made.</source>
-        <translation>Der Ordner %1 konnte nicht angelegt werden.</translation>
-    </message>
-    <message>
-        <source>There is a file with this name in %1 already.</source>
-        <translation>In %1 gibt es bereits eine Datei mit diesem Namen.</translation>
-    </message>
-    <message>
-        <source>The file could not be copied to %1.</source>
-        <translation>Die Datei konnte nicht nach %1 kopiert werden.</translation>
-    </message>
-    <message>
-        <source>The copy in %1 is not complete.</source>
-        <translation>Die Kopie in %1 ist nicht vollständig.</translation>
-    </message>
-    <message>
-        <source>The old file could not be removed after the copy.</source>
-        <translation>Die alte Datei konnte nach dem Kopieren nicht entfernt werden.</translation>
-    </message>
-    <message>
-        <source>The file %1 could not be written.</source>
-        <translation>Die Datei %1 konnte nicht geschrieben werden.</translation>
-    </message>
-    <message>
-        <source>These files could not be removed:
-%1</source>
-        <translation>Diese Dateien konnten nicht entfernt werden:
-%1</translation>
-    </message>
-</context>
-<context>
-    <name>qb::ManualWindow</name>
-    <message>
-        <source>Search the manual (Ctrl+F)</source>
-        <translation>Im Handbuch suchen (Strg+F)</translation>
-    </message>
-    <message>
-        <source>Search the manual</source>
-        <translation>Im Handbuch suchen</translation>
-    </message>
-    <message>
-        <source>Previous</source>
-        <translation>Zurück</translation>
-    </message>
-    <message>
-        <source>The previous hit (Shift+Return)</source>
-        <translation>Der vorige Treffer (Umschalt+Eingabe)</translation>
-    </message>
-    <message>
-        <source>Next</source>
-        <translation>Weiter</translation>
-    </message>
-    <message>
-        <source>The next hit (Return)</source>
-        <translation>Der nächste Treffer (Eingabe)</translation>
-    </message>
-    <message>
-        <source>No hits</source>
-        <translation>Keine Treffer</translation>
-    </message>
-    <message>
-        <source>%1 of %2</source>
-        <translation>%1 von %2</translation>
-    </message>
-    <message>
-        <source>Contents</source>
-        <translation>Inhalt</translation>
-    </message>
-    <message>
-        <source>Contents of the manual</source>
-        <translation>Inhaltsverzeichnis des Handbuchs</translation>
-    </message>
-</context>
-<context>
-    <name>qb::WritingProgress</name>
-    <message>
-        <source>%1 / %2 today</source>
-        <translation>%1 / %2 heute</translation>
-    </message>
-    <message>
-        <source>%1 / %2 draft</source>
-        <translation>%1 / %2 Entwurf</translation>
-    </message>
-    <message>
-        <source>Today's writing: %1 of %2 %3 (click for Project Targets)</source>
-        <translation>Heute geschrieben: %1 von %2 %3 (Klick öffnet die Projektziele)</translation>
-    </message>
-    <message>
-        <source>The draft: %1 of %2 %3 (click for Project Targets)</source>
-        <translation>Der Entwurf: %1 von %2 %3 (Klick öffnet die Projektziele)</translation>
-    </message>
-    <message>
-        <source>characters</source>
-        <translation>Zeichen</translation>
-    </message>
-    <message>
-        <source>words</source>
-        <translation>Wörter</translation>
     </message>
 </context>
 </TS>

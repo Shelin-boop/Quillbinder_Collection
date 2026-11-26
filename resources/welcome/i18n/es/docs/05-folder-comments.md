@@ -1,0 +1,3 @@
+Cuando una carpeta se muestra como corcho o como esquema, la pestaña **Comentarios y notas al pie** del inspector enumera los comentarios y las notas al pie de todos los documentos que contiene, bajo el título de cada documento.
+**Pruébalo:** en el archivador, selecciona la carpeta **Un capítulo con comentarios**, que está debajo de este documento. Se abre como corcho. Después abre la pestaña **Comentarios y notas al pie** del inspector (el último botón de su parte superior). Un clic en un comentario abre su documento en ese lugar, y puedes cambiar el texto del comentario ahí mismo.
+Lo mismo funciona en **Texto combinado** (**Ctrl+1**), donde todos los documentos de la carpeta se muestran como un solo texto: la pestaña enumera las notas de todos ellos.

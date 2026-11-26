@@ -5,6 +5,9 @@
 
 #include <QCloseEvent>
 #include <QCoreApplication>
+#include <QLocale>
+#include <QSettings>
+#include <QTranslator>
 #include <QDir>
 #include <QFileInfo>
 #include <QMenu>
@@ -79,6 +82,8 @@ private:
 
 TranslateTool::TranslateTool()
 {
+    // 1.5: the add-on's own texts in the program's language (before the commands are asked for their texts)
+    installTranslations();
     // the models are freed after a while without work (1.4: 15 minutes at first, the writer's setting "unloadMinutes";
     // before 10 minutes), because they take memory
     m_unloadTimer.setSingleShot(true);
@@ -91,7 +96,8 @@ TranslateTool::TranslateTool()
                 return;
             }
         bool any = false;
-        for (const QString &slot : {QStringLiteral("corrector"), QStringLiteral("translator"), QStringLiteral("translator-en")})
+        for (const QString &slot : {QStringLiteral("corrector"), QStringLiteral("translator"), QStringLiteral("translator-en"),
+                                    pairSlot(0), pairSlot(1)})
             if (!m_engine->loaded(slot).isEmpty()) {
                 m_engine->unload(slot);
                 any = true;
@@ -107,7 +113,34 @@ TranslateTool::TranslateTool()
     connect(this, &TranslateTool::settingsChangedSignal, this, &TranslateTool::updateCommandState);
 }
 
-TranslateTool::~TranslateTool() = default;
+TranslateTool::~TranslateTool()
+{
+    if (m_translator && QCoreApplication::instance())
+        QCoreApplication::removeTranslator(m_translator);
+}
+
+// 1.5: the tool interface does not tell the add-on the program's language (ToolHost has no such call), so it reads what the
+// program reads: QB_LANGUAGE, then the setting "app/language" in the program's own settings (the add-on runs in the program's
+// process), then the system's language. The texts are in tp_<code>.qm, compiled into the add-on (resources/translations);
+// English is the source text, and a language the add-on has no file for stays English.
+void TranslateTool::installTranslations()
+{
+    QString setting;
+    if (!QCoreApplication::organizationName().isEmpty() || !QCoreApplication::applicationName().isEmpty()) {
+        const QSettings s;
+        setting = s.value(QStringLiteral("app/language")).toString();
+    }
+    m_language = languageFromSettings(qEnvironmentVariable("QB_LANGUAGE"), setting, QLocale::system().name());
+    if (m_language == QLatin1String("en"))
+        return;
+    auto *t = new QTranslator(this);
+    if (t->load(QStringLiteral(":/translation-proofreading/translations/tp_%1.qm").arg(m_language))) {
+        QCoreApplication::installTranslator(t);
+        m_translator = t;
+    } else {
+        delete t;
+    }
+}
 
 QString TranslateTool::version() const
 {
@@ -118,13 +151,13 @@ QList<Command> TranslateTool::commands() const
 {
     Command window;
     window.key = kWindow;
-    window.text = tr("&Translate and Proofread...");
+    window.text = tr("&Translation Helper...");
     window.place = QStringLiteral("edit/writing-tools");
     window.icon = QStringLiteral("applications-education-language");
-    window.toolTip = tr("Proofread English text or translate German text into English, in a window of its own");
+    window.toolTip = tr("Suggestions for translating between eleven languages, and for English spelling, in a window of its own");
     Command inspector;
     inspector.key = kInspector;
-    inspector.text = tr("Translate and Proofread in the &Inspector");
+    inspector.text = tr("Translation Helper in the &Inspector");
     inspector.place = QStringLiteral("edit/writing-tools");
     inspector.icon = QStringLiteral("applications-education-language");
     inspector.toolTip = tr("The same in the inspector, beside the editor");
@@ -224,7 +257,7 @@ int TranslateTool::openWindows() const
 
 QList<InspectorTab> TranslateTool::inspectorTabs() const
 {
-    return {InspectorTab{kTab, iconPath(), tr("Translate and proofread")}};
+    return {InspectorTab{kTab, iconPath(), tr("Translation Helper")}};
 }
 
 QWidget *TranslateTool::createInspectorTab(const QString &key, QWidget *parent)
@@ -265,7 +298,8 @@ void TranslateTool::setSetting(const QString &key, const QVariant &value)
 {
     if (m_host)
         m_host->setSetting(id(), key, value);
-    if (key == QLatin1String("corrector") || key == QLatin1String("translator") || key == QLatin1String("translator-en"))
+    if (key == QLatin1String("corrector") || key == QLatin1String("translator") || key == QLatin1String("translator-en")
+        || key == QLatin1String("langFrom") || key == QLatin1String("langTo"))
         for (const QPointer<Panel> &p : m_panels)
             if (p)
                 p->reloadSettings();
@@ -293,7 +327,8 @@ QString TranslateTool::loadProblem(const QString &slot, const QString &modelId)
     const CatalogModel *m = m_store.model(modelId);
     if (!m)
         return QString();
-    const QStringList allSlots{QStringLiteral("corrector"), QStringLiteral("translator"), QStringLiteral("translator-en")};
+    const QStringList allSlots{QStringLiteral("corrector"), QStringLiteral("translator"), QStringLiteral("translator-en"),
+                               pairSlot(0), pairSlot(1)};
     if (m_engine)
         for (const QString &s : allSlots)
             if (m_engine->loaded(s) == modelId)
@@ -354,6 +389,38 @@ QString TranslateTool::dictionaryFile() const
 {
     const QString id = chosenModel(QStringLiteral("dictionary"));
     return id.isEmpty() ? QString() : m_store.filePath(id, QStringLiteral("de-dictionary.qz"));
+}
+
+QString TranslateTool::dictionaryFile(const QString &lang) const
+{
+    const QString id = dictionaryIdFor(lang);
+    if (lang == QLatin1String("de"))
+        return dictionaryFile();
+    if (!m_store.model(id) || !m_store.isInstalled(id))
+        return QString();
+    return m_store.filePath(id, lang + QStringLiteral("-dictionary.qz"));
+}
+
+const CatalogModel *TranslateTool::catalogModelFor(const Step &step) const
+{
+    return m_store.model(modelIdFor(step));
+}
+
+QString TranslateTool::stepModel(const Step &step) const
+{
+    // German to English and English to German keep the writer's choice (the large model, or the small one), but never a
+    // chat model: a pair is translated by OPUS-MT, which has the language token and the tokenizer for it
+    if (step.from == QLatin1String("de") && step.to == QLatin1String("en")) {
+        const QString chosen = chosenModel(QStringLiteral("translator"));
+        if (const CatalogModel *c = m_store.model(chosen); c && c->type != QLatin1String("chat"))
+            return chosen;
+    } else if (step.from == QLatin1String("en") && step.to == QLatin1String("de")) {
+        const QString chosen = chosenModel(QStringLiteral("translator-en"));
+        if (const CatalogModel *c = m_store.model(chosen); c && c->type != QLatin1String("chat"))
+            return chosen;
+    }
+    const QString id = modelIdFor(step);
+    return m_store.model(id) && m_store.isInstalled(id) ? id : QString();
 }
 
 EngineInterface *TranslateTool::engine(QString *error)

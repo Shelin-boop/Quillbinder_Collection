@@ -1,5 +1,6 @@
 #include "OptionsPage.h"
 
+#include "Languages.h"
 #include "TranslateTool.h"
 
 #include <QButtonGroup>
@@ -18,6 +19,8 @@
 #include <QThread>
 #include <QVBoxLayout>
 
+#include <algorithm>
+
 namespace tp {
 
 OptionsPage::OptionsPage(TranslateTool *tool, QWidget *parent)
@@ -26,10 +29,10 @@ OptionsPage::OptionsPage(TranslateTool *tool, QWidget *parent)
     m_w = new QWidget(parent);
     m_w->setObjectName(QStringLiteral("tpOptions"));
     auto *l = new QVBoxLayout(m_w);
-    auto *intro = new QLabel(tr("English text is proofread and German text is translated into English (and English into "
-                                "German), on this computer. "
-                                "Choose a model for each and download it once (it is checked, then used without any "
-                                "connection)."),
+    auto *intro = new QLabel(tr("The Translation Helper gives suggestions: it translates between eleven languages and "
+                                "proofreads English text, on this computer. Its translations are not precise; check each "
+                                "one, which needs a working knowledge of both languages. Choose a model for each task and "
+                                "download it once (it is checked, then used without any connection)."),
                              m_w);
     intro->setWordWrap(true);
     l->addWidget(intro);
@@ -59,6 +62,23 @@ OptionsPage::OptionsPage(TranslateTool *tool, QWidget *parent)
                             tr("What a single German word means: its word classes, meanings and English words. Used first "
                                "when you translate one German word; it is not needed for sentences. A separate download "
                                "under its own license, which is shown first.")));
+    // 1.5: the other languages: the two OPUS-MT models between the language and English, and its dictionary (when there is one)
+    for (const Language &lang : languages()) {
+        if (lang.code == QLatin1String("en") || lang.code == QLatin1String("de"))
+            continue;
+        QStringList ids{modelIdFor(Step{lang.code, QStringLiteral("en")}), modelIdFor(Step{QStringLiteral("en"), lang.code}),
+                        dictionaryIdFor(lang.code)};
+        ids.erase(std::remove_if(ids.begin(), ids.end(), [this](const QString &id) { return !m_tool->store()->model(id); }), ids.end());
+        if (ids.isEmpty())
+            continue;
+        auto *g = modelGroup(QString(), tr("%1: translation to and from English").arg(languageLabel(lang.code)),
+                             tr("Both models are needed to translate between %1 and any other language (a pair without English goes "
+                                "through English). The dictionary gives the word classes and meanings of a single word.")
+                                 .arg(languageName(lang.code)),
+                             ids);
+        g->setObjectName(QStringLiteral("tpLanguage:") + lang.code);
+        l->addWidget(g);
+    }
 
     auto *rules = new QGroupBox(tr("Rules for the result"), m_w);
     auto *rl = new QVBoxLayout(rules);
@@ -114,7 +134,7 @@ OptionsPage::OptionsPage(TranslateTool *tool, QWidget *parent)
         credits << QStringLiteral("<li>%1</li>").arg(m.credit.toHtmlEscaped());
     auto *about = new QLabel(tr("<b>Models</b><ul>%1</ul>The engine: CTranslate2 (MIT), oneDNN (Apache-2.0), "
                                 "SentencePiece (Apache-2.0); the American spellings from SCOWL by Kevin Atkinson; the "
-                                "words of a similar meaning from Princeton WordNet 3.0 (also its meanings); the German dictionary from the Wiktionary. Details in the add-on's licenses "
+                                "words of a similar meaning from Princeton WordNet 3.0 (also its meanings); the dictionaries from the Wiktionary. Details in the add-on's licenses "
                                 "folder. Add-on %2.")
                                  .arg(credits.join(QString()), m_tool->version()),
                              m_w);
@@ -151,7 +171,7 @@ OptionsPage::OptionsPage(TranslateTool *tool, QWidget *parent)
     refresh();
 }
 
-QWidget *OptionsPage::modelGroup(const QString &kind, const QString &title, const QString &intro)
+QWidget *OptionsPage::modelGroup(const QString &kind, const QString &title, const QString &intro, const QStringList &ids)
 {
     auto *box = new QGroupBox(title, m_w);
     auto *g = new QGridLayout(box);
@@ -161,25 +181,53 @@ QWidget *OptionsPage::modelGroup(const QString &kind, const QString &title, cons
         i->setWordWrap(true);
         g->addWidget(i, row++, 0, 1, 4);
     }
+    const bool choosable = ids.isEmpty();
     auto *group = new QButtonGroup(box);
-    m_groups.insert(kind, group);
-    const QString chosen = m_tool->setting(kind).toString();
-    for (const CatalogModel &m : m_tool->store()->models(kind)) {
+    if (choosable)
+        m_groups.insert(kind, group);
+    const QString chosen = choosable ? m_tool->setting(kind).toString() : QString();
+    QList<CatalogModel> list;
+    if (choosable) {
+        list = m_tool->store()->models(kind);
+    } else {
+        for (const QString &id : ids)
+            if (const CatalogModel *c = m_tool->store()->model(id))
+                list << *c;
+    }
+    QLabel *plainTitle = nullptr;
+    for (const CatalogModel &m : list) {
         Row r;
-        r.choose = new QRadioButton(m.title, box);
-        r.choose->setObjectName(QStringLiteral("tpChoose:") + m.id);
-        r.choose->setProperty("modelId", m.id);
-        group->addButton(r.choose);
-        r.choose->setChecked(m.id == chosen);
-        auto *info = new QLabel((m.memoryMB > 0 ? tr("%1<br>%2 MB to download, about %3 MB of memory while working. License: "
-                                                     "<a href=\"%4\">%5</a>%6.")
-                                                : tr("%1<br>%2 MB to download. License: <a href=\"%4\">%5</a>%6."))
-                                    .arg(m.summary.toHtmlEscaped())
-                                    .arg(m.sizeMB)
-                                    .arg(m.memoryMB)
-                                    .arg(m.licenseUrl.toHtmlEscaped(), m.license.toHtmlEscaped(),
-                                         m.nonCommercial ? tr(" (non-commercial use only)") : QString()),
-                                box);
+        QWidget *titleWidget = nullptr;
+        if (choosable) {
+            r.choose = new QRadioButton(m.title, box);
+            r.choose->setObjectName(QStringLiteral("tpChoose:") + m.id);
+            r.choose->setProperty("modelId", m.id);
+            group->addButton(r.choose);
+            r.choose->setChecked(m.id == chosen);
+            titleWidget = r.choose;
+        } else {
+            plainTitle = new QLabel(QStringLiteral("<b>%1</b>").arg(m.title.toHtmlEscaped()), box);
+            plainTitle->setObjectName(QStringLiteral("tpTitle:") + m.id);
+            titleWidget = plainTitle;
+        }
+        // (a model without a memory need has no %3: the numbering skips it, so the arguments are given by number)
+        QString infoText = m.memoryMB > 0 ? tr("%1<br>%2 MB to download, about %3 MB of memory while working. License: "
+                                               "<a href=\"%4\">%5</a>%6.")
+                                          : tr("%1<br>%2 MB to download. License: <a href=\"%4\">%5</a>%6.");
+        const QStringList values{m.summary.toHtmlEscaped(), QString::number(m.sizeMB), QString::number(m.memoryMB),
+                                 m.licenseUrl.toHtmlEscaped(), m.license.toHtmlEscaped(),
+                                 m.nonCommercial ? tr(" (non-commercial use only)") : QString()};
+        QString filled;   // one pass: what was put in is not looked at again
+        for (int i = 0; i < infoText.size(); ++i) {
+            const QChar c = infoText.at(i);
+            if (c == QLatin1Char('%') && i + 1 < infoText.size() && infoText.at(i + 1) >= QLatin1Char('1') && infoText.at(i + 1) <= QLatin1Char('6')) {
+                filled += values.at(infoText.at(i + 1).unicode() - '1');
+                ++i;
+            } else {
+                filled += c;
+            }
+        }
+        auto *info = new QLabel(filled, box);
         info->setWordWrap(true);
         info->setTextFormat(Qt::RichText);
         info->setOpenExternalLinks(true);
@@ -205,7 +253,7 @@ QWidget *OptionsPage::modelGroup(const QString &kind, const QString &title, cons
                 m_tool->store()->cancel();
             } else {
                 startDownload(id);
-                if (m_tool->store()->busyWith() == id)
+                if (choose && m_tool->store()->busyWith() == id)
                     choose->setChecked(true);   // chosen in the group where the writer clicked
             }
         });
@@ -216,7 +264,7 @@ QWidget *OptionsPage::modelGroup(const QString &kind, const QString &title, cons
             refresh();
         });
         connect(r.folder, &QPushButton::clicked, this, [this, id] { fromFolder(id); });
-        g->addWidget(r.choose, row, 0, 1, 1);
+        g->addWidget(titleWidget, row, 0, 1, 1);
         g->addWidget(r.download, row, 1);
         g->addWidget(r.folder, row, 2);
         g->addWidget(r.remove, row, 3);

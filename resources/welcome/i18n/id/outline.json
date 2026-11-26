@@ -1,0 +1,358 @@
+{
+ "name": "Selamat Datang di {{APP}}",
+ "description": "Tur singkat tentang apa yang dimiliki {{APP}} di luar yang biasa",
+ "draftTitle": "Tur Fitur",
+ "objectTemplates": "standard",
+ "rootFirst": [
+  {
+   "title": "Selamat Datang",
+   "icon": "qb-information",
+   "textFile": "docs/00-welcome.md",
+   "synopsis": "Apa proyek ini, dan perhentian dalam tur."
+  }
+ ],
+ "draft": [
+  {
+   "title": "Bilah Ikon",
+   "icon": "qb-flag-red",
+   "textFile": "docs/01-icon-bar.md",
+   "synopsis": "Sepuluh ikon dokumen, satu klik masing-masing; ikon dari teks dan dari gambar Anda sendiri."
+  },
+  {
+   "title": "Zoom di Tempat Anda Mengarah",
+   "icon": "qb-magnifier",
+   "textFile": "docs/02-zoom.md",
+   "synopsis": "Ctrl+roda mouse di atas bagian mana pun dari jendela; setiap bagian menyimpan zoomnya sendiri."
+  },
+  {
+   "title": "Peta Pikiran",
+   "icon": "qb-mindmap",
+   "textFile": "docs/03-mind-maps.md",
+   "synopsis": "Papan berisi catatan, garis, dan panah untuk setiap dokumen. Dokumen ini memiliki papan: buka tab Peta Pikiran.",
+   "mindmap": {
+    "notes": [
+     {
+      "id": 1,
+      "text": "Apa yang dapat dilakukan peta pikiran",
+      "x": 290,
+      "y": 245,
+      "width": 170,
+      "fontSize": 15,
+      "bold": true,
+      "align": "center",
+      "fill": "#fff2a8",
+      "border": 2,
+      "shape": "cloud"
+     },
+     {
+      "id": 2,
+      "text": "Catatan: klik ganda pada tempat kosong. Ctrl+Enter membuat catatan baru di bawah catatan yang dipilih.",
+      "x": 20,
+      "y": 30,
+      "width": 200,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 3,
+      "text": "Garis: seret satu catatan ke catatan lain. Seret ke sana lagi untuk menghapus garisnya.",
+      "x": 280,
+      "y": 30,
+      "width": 190,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 4,
+      "text": "Panah: tahan Alt saat melepaskan. Ctrl+Alt: panah balik. Ctrl+Alt+Shift: kedua ujung.",
+      "x": 530,
+      "y": 30,
+      "width": 210,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 5,
+      "text": "Warna, bentuk, dan bingkai: klik kanan sebuah catatan.",
+      "x": 560,
+      "y": 250,
+      "width": 180,
+      "fill": "#ffd6d6",
+      "border": 1,
+      "shape": "jagged"
+     },
+     {
+      "id": 6,
+      "text": "Ikon di sudut dan sisi sebuah catatan, dan di tengah sebuah garis.",
+      "x": 540,
+      "y": 420,
+      "width": 200,
+      "fill": "#e3f6d8",
+      "border": 1,
+      "icons": {
+       "topLeft": "qb-flag-red",
+       "topRight": "qb-light-bulb",
+       "bottomRight": "qb-checked"
+      }
+     },
+     {
+      "id": 7,
+      "text": "Bentuk latar mengelompokkan catatan. Bentuk magnetis membawa serta catatannya.",
+      "x": 290,
+      "y": 455,
+      "width": 170
+     },
+     {
+      "id": 8,
+      "text": "Menu > Catatan > Tambahkan Catatan ke Binder mengubah catatan menjadi dokumen.",
+      "x": 20,
+      "y": 430,
+      "width": 200,
+      "fill": "#f0e6ff",
+      "border": 1,
+      "shape": "square"
+     },
+     {
+      "id": 9,
+      "text": "Ekspor sebagai PDF, PNG, teks, OPML, atau berkas Scapple; berkas Scapple dapat dibaca.",
+      "x": 20,
+      "y": 245,
+      "width": 200,
+      "fill": "#f0e6ff",
+      "border": 1
+     }
+    ],
+    "shapes": [
+     {
+      "id": 20,
+      "x": 270,
+      "y": 435,
+      "w": 210,
+      "h": 150,
+      "fill": "#fde3b8",
+      "magnetic": true
+     }
+    ],
+    "lines": [
+     {
+      "from": 1,
+      "to": 2,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 3,
+      "arrow": "to",
+      "label": "seret"
+     },
+     {
+      "from": 1,
+      "to": 4,
+      "arrow": "to",
+      "color": "#c0392b"
+     },
+     {
+      "from": 1,
+      "to": 5,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 6,
+      "arrow": "to",
+      "icon": "qb-pencil"
+     },
+     {
+      "from": 1,
+      "to": 7,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 8
+     },
+     {
+      "from": 1,
+      "to": 9,
+      "arrow": "to",
+      "color": "#2f6fbf"
+     }
+    ]
+   }
+  },
+  {
+   "title": "Lembar Objek",
+   "icon": "qb-character-sheet",
+   "textFile": "docs/04-objects.md",
+   "synopsis": "Orang, tempat, dan benda dalam sebuah cerita, masing-masing pada selembar kolom, saling tertaut.",
+   "children": [
+    {
+     "title": "Satu Adegan di Ashvale",
+     "icon": "qb-location-house",
+     "textFile": "docs/04a-scene.md",
+     "synopsis": "Adegan singkat dengan tautan ke objek. Tab Objek mencantumkan siapa dan apa yang muncul di dalamnya."
+    }
+   ]
+  },
+  {
+   "title": "Komentar Seluruh Folder",
+   "icon": "qb-speech-bubble",
+   "textFile": "docs/05-folder-comments.md",
+   "synopsis": "Komentar dan catatan kaki setiap dokumen dalam sebuah folder, dalam satu daftar."
+  },
+  {
+   "title": "Bab dengan Komentar",
+   "type": "folder",
+   "synopsis": "Pilih folder ini dan buka tab Komentar dan catatan kaki di inspektor.",
+   "children": [
+    {
+     "title": "Buku Feri",
+     "textFile": "docs/05a-scene-one.md",
+     "synopsis": "Adegan dengan sebuah komentar."
+    },
+    {
+     "title": "Malam",
+     "textFile": "docs/05b-scene-two.md",
+     "synopsis": "Adegan dengan sebuah catatan kaki dan anotasi sebaris."
+    }
+   ]
+  },
+  {
+   "title": "Bandingkan dan Transfer",
+   "icon": "qb-reviewer",
+   "textFile": "docs/06-compare.md",
+   "synopsis": "Naskah yang kembali dari Word atau LibreOffice: lihat apa yang berbeda dan ambil salah satu sisinya."
+  },
+  {
+   "title": "Proyek Scrivener",
+   "icon": "qb-sync-folder",
+   "textFile": "docs/07-scrivener.md",
+   "synopsis": "Impor proyek Scrivener, atau bekerja langsung di dalamnya dan lanjutkan di Scrivener nanti."
+  },
+  {
+   "title": "Tema, Warna, dan Font",
+   "icon": "qb-eye",
+   "textFile": "docs/08-themes.md",
+   "synopsis": "Mode gelap dan tema lain seketika; palet warna bilah format; menginstal font."
+  },
+  {
+   "title": "Tema dan Profil",
+   "icon": "qb-cog",
+   "textFile": "docs/08a-profiles.md",
+   "synopsis": "Tema adalah tampilan; profil menyimpan opsi, bilah alat, jendela, dan tema Anda bersama-sama dan mengalihkannya sekaligus."
+  },
+  {
+   "title": "Pembaruan dan Pengaya",
+   "icon": "qb-cog",
+   "textFile": "docs/09-updates.md",
+   "synopsis": "Berkas paket kecil, Pengelola Pengaya, dan jalan kembali ke versi sebelumnya."
+  },
+  {
+   "title": "Jaring Pengaman",
+   "icon": "qb-checked",
+   "textFile": "docs/10-safety.md",
+   "synopsis": "Simpan otomatis, cadangan, snapshot, berkas proyek cadangan, laporan crash dan macet."
+  },
+  {
+   "title": "Langkah Berikutnya",
+   "icon": "qb-pass",
+   "textFile": "docs/11-where-next.md",
+   "synopsis": "Panduan Mulai Cepat, panduan pengguna, dan proyek Anda sendiri."
+  }
+ ],
+ "projectBookmarks": [
+  "Selamat Datang"
+ ],
+ "objects": [
+  {
+   "category": "characters",
+   "name": "Mara Fenn",
+   "values": {
+    "role": "Tokoh utama",
+    "age": "34",
+    "eyes": "Abu-abu",
+    "occupation": "Penambang feri",
+    "livesIn": [
+     "Ashvale"
+    ],
+    "relations": [
+     "Tobias Quill"
+    ],
+    "traits": "Sabar, keras kepala, menepati setiap janji yang ia buat.",
+    "background": "Ia mengambil alih feri dari ibunya. [Tobias Quill](qbobj-name:Tobias Quill) menemukan nama ibunya di buku feri yang tua.",
+    "scenes": [
+     "Satu Adegan di Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "characters",
+   "name": "Tobias Quill",
+   "values": {
+    "role": "Pendukung",
+    "age": "29",
+    "occupation": "Arsiparis desa",
+    "livesIn": [
+     "Ashvale"
+    ],
+    "relations": [
+     "Mara Fenn"
+    ],
+    "goals": "Ingin tahu siapa yang menulis halaman-halaman pertama buku feri.",
+    "scenes": [
+     "Satu Adegan di Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "locations",
+   "name": "Ashvale",
+   "values": {
+    "kind": "Desa",
+    "environment": [
+     "Fenwood"
+    ],
+    "weather": [
+     "Kabut Musim Gugur"
+    ],
+    "population": "212",
+    "inhabitants": [
+     "Mara Fenn",
+     "Tobias Quill"
+    ],
+    "description": "Empat puluh rumah di sepanjang sungai yang tenang, sebuah feri, dan menara gereja yang terlihat dari [Fenwood](qbobj-name:Fenwood).",
+    "scenes": [
+     "Satu Adegan di Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "environments",
+   "name": "Fenwood",
+   "values": {
+    "kind": "Hutan",
+    "flora": "Pohon birch dan alder; alang-alang di sepanjang sungai.",
+    "weather": [
+     "Kabut Musim Gugur"
+    ],
+    "locations": [
+     "Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "weather",
+   "name": "Kabut Musim Gugur",
+   "values": {
+    "season": "Musim gugur",
+    "temperature": "8",
+    "precipitation": "Kabut",
+    "effects": "Feri berhenti ketika tepi seberang tidak terlihat.",
+    "where": [
+     "Ashvale",
+     "Fenwood"
+    ]
+   }
+  }
+ ]
+}

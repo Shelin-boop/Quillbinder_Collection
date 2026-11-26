@@ -168,7 +168,9 @@ Theme currentLook();
 QString userThemeDir();
 // Writes the theme; returns its id ("user:<file>") or an empty string.
 QString saveUserTheme(const Theme &t, QString *error);
-bool removeUserTheme(const QString &id, QString *error);
+bool removeUserTheme(const QString &id, QString *error);   // 0.95.0: also the built-in "Shelin's Dark Theme" (it stays away after updates)
+bool isRemovableBuiltIn(const QString &id);
+bool removeBuiltIn(const QString &id);
 bool renameUserTheme(const QString &id, const QString &newName, QString *newId, QString *error);
 // Copies a theme file into the own themes; returns the new id.
 QString importTheme(const QString &file, QString *error);

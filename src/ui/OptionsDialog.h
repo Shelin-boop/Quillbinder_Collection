@@ -29,6 +29,7 @@
 #include "ui/Theme.h"
 
 #include <QColor>
+#include "core/ProjectTypes.h"
 #include <QDialog>
 #include <QHash>
 #include <QPointer>
@@ -115,6 +116,15 @@ public:
     bool loadOptionsFromFile(const QString &file, QString *error = nullptr);
     // Defaults: every option back to the standard (asks first when "ask" is true)
     bool restoreDefaults(bool ask);
+
+    // 0.95.0 (item 98): Appearance > Standard Colors (also used by the tests). `which`: "label0" ... "label5" (the color of the
+    // label), "text0" ... "text5" (the text color popup), "highlight0" ... "highlight5", "textStart", "highlightStart".
+    void setStandardColor(const QString &which, const QColor &color);
+    void setStandardLabelName(int index, const QString &name);
+    QColor standardColor(const QString &which) const;
+    void resetStandardColors();   // the Defaults button (OK or Apply keeps it)
+    // 0.95.0 (item 95): Manage > Profiles (the window and the file questions are the main window's)
+    bool exportProfileToFile(const QString &file, QString *error = nullptr);
 
 private:
     // building blocks
@@ -244,6 +254,15 @@ private:
     QList<QPair<QString, QString>> m_substitutions;
     QCheckBox *m_spell, *m_spellNumbers;
     QComboBox *m_spellLang, *m_spellUnderline;
+
+    // Appearance > Standard Colors (0.95.0)
+    QWidget *standardColorsPage();
+    void refreshStandardColors();
+    QList<Label> m_stdLabels;
+    QList<QColor> m_stdText, m_stdHighlight;
+    QColor m_stdTextStart, m_stdHighlightStart;
+    QMap<QString, QPushButton *> m_stdButtons;
+    QList<QLineEdit *> m_stdLabelNames;
 
     // Sharing
     QCheckBox *m_importComments, *m_importFootnotes, *m_importIgnoreStyles, *m_htmlAsText;

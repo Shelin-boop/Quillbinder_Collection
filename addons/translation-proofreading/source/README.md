@@ -1,4 +1,4 @@
-# Translation and Proofreading (a Quillbinder add-on)
+# Translation Helper (a Quillbinder add-on; called Translation and Proofreading up to 1.4)
 
 **Since version 1.2 this add-on is one of Quillbinder's own.** It comes inside the full version of Quillbinder 0.92.0
 and later, its source is this folder of Quillbinder's repository, and its models are on that repository's releases.
@@ -7,15 +7,26 @@ package by hand, the full version has done that for you.
 
 An add-on for [Quillbinder](https://github.com/Shelin-boop/Quillbinder_Collection) (Linux, version 0.80.0 or later, and
 since 2026-11-16 Windows 11, Quillbinder for Windows 0.91.1 or later) that
-checks English text for spelling and grammar and translates German text into English, on your own computer. Once a
+translates between any two of eleven languages (1.5) and checks English text for spelling and grammar, on your own computer. Once a
 model is downloaded, it works without any internet connection.
+
+**This tool gives suggestions only. Its translations are not precise: check each one, which needs a working knowledge of both languages.**
 
 ## What it does
 
 - **Two places to work.** A tab of its own in the inspector (its icon is the first in the row: the text goes in at
   the top, the result comes out at the bottom, the controls are between them) and a window of its own (the text left,
   the result right, the controls above and between). Open the window with the add-on's button on the toolbar or with
-  **Edit > Writing Tools > Translate and Proofread...**.
+  **Edit > Writing Tools > Translation Helper...**.
+- **Eleven languages** (1.5). With **Translate**, two drop-down lists name the language of your text and the language of the
+  translation, any two of English, German, Spanish, French, Portuguese (Brazil), Italian, Russian, Indonesian, Turkish,
+  Polish and Dutch. Every language has two OPUS-MT models (to and from English); a pair without English goes through
+  English (two steps, so a mistake of the first is carried into the second, which the output says). A dictionary per
+  language except English (an extract of the Wiktionary, CC BY-SA 4.0, a separate download whose license is shown first)
+  gives the word classes and meanings of a single word; a language without a dictionary gets the model's translations
+  only. A single word keeps its correction, shown as a suggestion. The add-on's own texts are in the eleven languages
+  of the program (the add-on reads the program's language; English where there is no translation). The line above
+  stands in the window under the controls.
 - **English text is proofread, German text is translated.** With **Automatic** the add-on tells the two apart by
   itself; you can also choose **Proofread English** or **Translate German to English**. **More Formal** lets the model
   also rewrite for a more formal tone.
@@ -54,7 +65,7 @@ model is downloaded, it works without any internet connection.
 - **Your rules.** No em-dashes (the models may not write one; a dash you wrote becomes a comma, which you can click to
   keep the dash), American spelling (colour to color, realise to realize, towards to toward, about 2,800 words),
   curly quotes and apostrophes, three periods instead of the ellipsis character, and your own replacements
-  (`OK => okay`). All in **File > Options > Proofreading**.
+  (`OK => okay`). All in **File > Options > Translation Helper**.
 - **From and into the editor.** **From Editor** takes the text selected in Quillbinder's editor and works on it;
   **Into Editor** puts the result in its place (one step to undo there); **Copy** copies it.
 - **Safety checks.** When the model rewrites a sentence too much or doubles a word, your sentence is kept, with a note.
@@ -69,7 +80,7 @@ model is downloaded, it works without any internet connection.
 2. In Quillbinder (0.91.3 or later): **File > Install Update or Add-on**, choose the file. The official add-on is shown
    as signed with the project's add-on key; a test build is not signed, and Quillbinder warns before installing it.
    Restart Quillbinder.
-3. **File > Options > Proofreading**: download a proofreading model and the translation model (see below). They are
+3. **File > Options > Translation Helper**: download a proofreading model and the translation model (see below). They are
    checked (size and checksum of every file) and then used without any connection.
 
 ## Models and licenses
@@ -86,6 +97,12 @@ The models are not part of the add-on. You choose which ones to download:
 | OPUS-MT Big, German to English (University of Helsinki) | translation (1.1): better for whole sentences, unreliable for single words (those always go to the small model) | 218 MB | about 0.5 GB | CC BY 4.0 |
 | OPUS-MT English to German, small (University of Helsinki) | translation (1.3): English to German, the way back | about 79 MB (set from the release models-3) | about 0.3 GB | CC BY 4.0 |
 | German dictionary (extract of the Wiktionary) | a single German word (1.3): classes, meanings, English words | set from the release models-3 | small | CC BY-SA 4.0 (shown before the download) |
+| OPUS-MT Spanish, French, Italian, Indonesian, Dutch, Turkish and Polish to English, and English to Spanish, French, Italian, Russian, Indonesian and Dutch (University of Helsinki) | translation (1.5), release models-4 | set from the release | about 0.3 GB | Apache-2.0 |
+| OPUS-MT Russian to English (University of Helsinki) | translation (1.5) | set from the release | about 0.3 GB | CC BY 4.0 |
+| OPUS-MT English to Polish: the West Slavic model (University of Helsinki), told to write Polish | translation (1.5) | set from the release | about 0.3 GB | Apache-2.0 |
+| OPUS-MT Portuguese (Brazil) to English: the Romance model (University of Helsinki) | translation (1.5) | set from the release | about 0.3 GB | Apache-2.0 |
+| OPUS-MT English to Turkish and English to Portuguese (Brazil): the larger tc-big models (University of Helsinki) | translation (1.5) | set from the release | about 0.35 GB | CC BY 4.0 |
+| Dictionaries of Spanish, French, Portuguese, Italian, Russian, Indonesian, Turkish, Polish and Dutch (extracts of the Wiktionary, by kaikki.org) | a single word of that language (1.5) | set from the release models-4 | small | CC BY-SA 4.0 (shown before the download) |
 
 The Qwen models are general models told what to do: fix only real errors and leave your words, style and dialogue
 alone, or translate. One downloaded Qwen model does both and is loaded once.
@@ -99,7 +116,7 @@ Before CoEdIT Large is downloaded, the add-on asks you to accept its license. Wh
 your decision; this project gives no legal advice. The models are the originals from Hugging Face (fixed revisions),
 converted for the engine with 8-bit weights; the converted files are on the pre-releases
 [models-1](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/models-1) and
-[models-2](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/models-2) (1.1; the release [models-3](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/models-3) holds the 1.3 downloads; the 4B model's
+[models-2](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/models-2) (1.1; the release [models-4](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/models-4) holds the 1.5 downloads, made by `.github/workflows/translator-data-4.yml`; the release [models-3](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/models-3) holds the 1.3 downloads; the 4B model's
 large file in three parts, joined after the download), made by the workflow "Models" (`models/convert.py`). On a computer without internet, **From Folder...** takes the files of that release from
 a folder.
 

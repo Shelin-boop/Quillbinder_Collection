@@ -119,8 +119,16 @@ struct GermanDict {
     std::vector<int> lines;   // start of each line (after the header), sorted by key
     bool loaded = false;
 };
-GermanDict g_de;
+// 1.5: one dictionary per language ("de", "es" ...), each read from its own file; German is "de"
+QHash<QString, GermanDict> g_dicts;
+QHash<QString, QString> g_dictFiles;
 QMutex g_deMutex;
+const GermanDict &dictOf(const QString &lang)
+{
+    static const GermanDict none;
+    const auto it = g_dicts.constFind(lang);
+    return it == g_dicts.constEnd() ? none : it.value();
+}
 
 QByteArray keyOf(const QByteArray &line)
 {
@@ -161,10 +169,12 @@ QString text(const QByteArray &b)
 
 } // namespace
 
-bool loadGermanDictionary(const QString &file, QString *error)
+bool loadDictionary(const QString &lang, const QString &file, QString *error)
 {
     QMutexLocker lock(&g_deMutex);
-    g_de = GermanDict();
+    g_dicts.remove(lang);
+    g_dictFiles.remove(lang);
+    GermanDict d;
     QFile f(file);
     if (!f.open(QIODevice::ReadOnly)) {
         if (error)
@@ -180,51 +190,74 @@ bool loadGermanDictionary(const QString &file, QString *error)
             return false;
         }
     }
-    if (!raw.startsWith("#qb-de-dictionary 1")) {
+    if (!raw.startsWith("#qb-" + lang.toLatin1() + "-dictionary 1")) {
         if (error)
             *error = QStringLiteral("not a dictionary file of this version");
         return false;
     }
-    g_de.data = raw;
+    d.data = raw;
     int pos = 0;
     while (pos < raw.size()) {
         const int end = raw.indexOf('\n', pos);
         if (raw.at(pos) != '#' && end != pos)
-            g_de.lines.push_back(pos);
+            d.lines.push_back(pos);
         if (end < 0)
             break;
         pos = end + 1;
     }
     // sorted by key (the file is made so; a file that is not is sorted here)
-    if (!std::is_sorted(g_de.lines.begin(), g_de.lines.end(), [](int a, int b) {
-            return QByteArray::fromRawData(g_de.data.constData() + a, g_de.data.indexOf('\t', a) - a)
-                   < QByteArray::fromRawData(g_de.data.constData() + b, g_de.data.indexOf('\t', b) - b);
-        }))
-        std::stable_sort(g_de.lines.begin(), g_de.lines.end(), [](int a, int b) {
-            return QByteArray::fromRawData(g_de.data.constData() + a, g_de.data.indexOf('\t', a) - a)
-                   < QByteArray::fromRawData(g_de.data.constData() + b, g_de.data.indexOf('\t', b) - b);
-        });
-    g_de.loaded = true;
+    const QByteArray &data = d.data;
+    auto less = [&data](int a, int b) {
+        return QByteArray::fromRawData(data.constData() + a, data.indexOf('\t', a) - a)
+               < QByteArray::fromRawData(data.constData() + b, data.indexOf('\t', b) - b);
+    };
+    if (!std::is_sorted(d.lines.begin(), d.lines.end(), less))
+        std::stable_sort(d.lines.begin(), d.lines.end(), less);
+    d.loaded = true;
+    g_dicts.insert(lang, d);
+    g_dictFiles.insert(lang, file);
     return true;
+}
+
+bool loadGermanDictionary(const QString &file, QString *error)
+{
+    return loadDictionary(QStringLiteral("de"), file, error);
+}
+
+void unloadDictionary(const QString &lang)
+{
+    QMutexLocker lock(&g_deMutex);
+    g_dicts.remove(lang);
+    g_dictFiles.remove(lang);
 }
 
 void unloadGermanDictionary()
 {
+    unloadDictionary(QStringLiteral("de"));
+}
+
+bool dictionaryLoaded(const QString &lang)
+{
     QMutexLocker lock(&g_deMutex);
-    g_de = GermanDict();
+    return g_dicts.value(lang).loaded;
 }
 
 bool germanDictionaryLoaded()
 {
-    QMutexLocker lock(&g_deMutex);
-    return g_de.loaded;
+    return dictionaryLoaded(QStringLiteral("de"));
 }
 
 QList<GermanEntry> lookupGerman(const QString &word)
 {
+    return lookupWord(QStringLiteral("de"), word);
+}
+
+QList<GermanEntry> lookupWord(const QString &lang, const QString &word)
+{
     QMutexLocker lock(&g_deMutex);
     QList<GermanEntry> out;
-    if (!g_de.loaded)
+    const GermanDict &dict = dictOf(lang);
+    if (!dict.loaded)
         return out;
     const QString w = word.trimmed();
     auto addLemma = [&](const QByteArray &line, bool viaForm) {
@@ -254,7 +287,7 @@ QList<GermanEntry> lookupGerman(const QString &word)
         }
         out << e;
     };
-    const QList<QByteArray> hits = linesFor(g_de, w.toLower().toUtf8());
+    const QList<QByteArray> hits = linesFor(dict, w.toLower().toUtf8());
     for (const QByteArray &l : hits)
         addLemma(l, false);
     for (const QByteArray &l : hits) {
@@ -262,36 +295,46 @@ QList<GermanEntry> lookupGerman(const QString &word)
         if (f.size() < 4 || f.at(1) != "F")
             continue;
         // the headword's own lines: the one with that headword and class
-        for (const QByteArray &hl : linesFor(g_de, text(f.at(2)).toLower().toUtf8())) {
+        for (const QByteArray &hl : linesFor(dict, text(f.at(2)).toLower().toUtf8())) {
             const QList<QByteArray> hf = hl.split('\t');
             if (hf.size() >= 6 && hf.at(1) == "L" && hf.at(2) == f.at(2) && hf.at(3) == f.at(3))
                 addLemma(hl, true);
         }
     }
-    // the capital letter is a hint (German nouns), not the rule
+    // the capital letter is a hint (German nouns), not the rule; other languages: the order of the file
     const bool capital = !w.isEmpty() && w.at(0).isUpper();
-    std::stable_sort(out.begin(), out.end(), [capital](const GermanEntry &a, const GermanEntry &b) {
-        const int ra = (a.pos == QLatin1String("noun")) == capital ? 0 : 1;
-        const int rb = (b.pos == QLatin1String("noun")) == capital ? 0 : 1;
-        return ra < rb;
-    });
+    if (lang == QLatin1String("de"))
+        std::stable_sort(out.begin(), out.end(), [capital](const GermanEntry &a, const GermanEntry &b) {
+            const int ra = (a.pos == QLatin1String("noun")) == capital ? 0 : 1;
+            const int rb = (b.pos == QLatin1String("noun")) == capital ? 0 : 1;
+            return ra < rb;
+        });
     return out;
+}
+
+bool ensureDictionary(const QString &lang, const QString &file, QString *error)
+{
+    static QMutex m;
+    QMutexLocker lock(&m);
+    {
+        QMutexLocker inner(&g_deMutex);
+        if (g_dicts.value(lang).loaded && g_dictFiles.value(lang) == file)
+            return true;
+    }
+    return loadDictionary(lang, file, error);
 }
 
 bool ensureGermanDictionary(const QString &file, QString *error)
 {
-    static QString loadedFrom;
-    static QMutex m;
-    QMutexLocker lock(&m);
-    if (germanDictionaryLoaded() && loadedFrom == file)
-        return true;
-    if (!loadGermanDictionary(file, error))
-        return false;
-    loadedFrom = file;
-    return true;
+    return ensureDictionary(QStringLiteral("de"), file, error);
 }
 
 QList<GermanReverse> reverseLookupGerman(const QStringList &english, const QString &pos, int max)
+{
+    return reverseLookup(QStringLiteral("de"), english, pos, max);
+}
+
+QList<GermanReverse> reverseLookup(const QString &lang, const QStringList &english, const QString &pos, int max)
 {
     struct Hit {
         QString headword, pos;
@@ -299,7 +342,8 @@ QList<GermanReverse> reverseLookupGerman(const QStringList &english, const QStri
     };
     QList<Hit> hits;
     QMutexLocker lock(&g_deMutex);
-    if (!g_de.loaded || english.isEmpty())
+    const GermanDict &dict = dictOf(lang);
+    if (!dict.loaded || english.isEmpty())
         return {};
     QHash<QByteArray, int> rankOf;   // the bare lower-case word, its rank
     for (int i = 0; i < english.size(); ++i) {
@@ -310,8 +354,8 @@ QList<GermanReverse> reverseLookupGerman(const QStringList &english, const QStri
             rankOf.insert(w.toUtf8(), i);
     }
     const QByteArray wantPos = pos.toUtf8();
-    for (size_t i = 0; i < g_de.lines.size(); ++i) {
-        const QByteArray line = lineAt(g_de, i);
+    for (size_t i = 0; i < dict.lines.size(); ++i) {
+        const QByteArray line = lineAt(dict, i);
         const QList<QByteArray> f = line.split('\t');
         if (f.size() < 6 || f.at(1) != "L" || (!wantPos.isEmpty() && f.at(3) != wantPos))
             continue;

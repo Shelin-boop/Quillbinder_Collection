@@ -1,4 +1,6 @@
 #include "ui/ToolDialogs.h"
+#include "ui/TargetSpinBox.h"
+#include "core/TargetMath.h"
 #include "core/TestSwitches.h"
 #include "ui/Ask.h"
 
@@ -16,6 +18,7 @@
 #include "text/RtfIO.h"
 #include "text/TextUtil.h"
 #include "ui/AppSettings.h"
+#include "ui/Language.h"
 #include "ui/ManualWindow.h"
 
 #include <QApplication>
@@ -79,10 +82,12 @@ TargetsDialog::TargetsDialog(Project *p, QWidget *parent) : QDialog(parent), m_p
     dl->addWidget(m_draftBar);
     dl->addWidget(m_draftLabel);
     auto *dr = new QHBoxLayout;
-    m_draftTarget = new QSpinBox(draft);
-    m_draftTarget->setRange(0, 10000000);
-    m_draftTarget->setSingleStep(1000);
-    m_draftTarget->setSpecialValueText(tr("no target"));
+    // 0.95.0: a negative number is a cutting target ("bring the draft down to 80,000 words"); shown in red
+    auto *draftField = new TargetSpinBox(draft);
+    draftField->setObjectName(QStringLiteral("draftTargetField"));
+    draftField->setSingleStep(1000);
+    draftField->setNoTargetText(tr("no target"));
+    m_draftTarget = draftField;
     m_draftType = new QComboBox(draft);
     m_draftType->addItems({tr("words"), tr("characters")});
     dr->addWidget(m_draftTarget, 1);
@@ -110,10 +115,11 @@ TargetsDialog::TargetsDialog(Project *p, QWidget *parent) : QDialog(parent), m_p
     sl->addWidget(m_sessionBar);
     sl->addWidget(m_sessionLabel);
     auto *sr = new QHBoxLayout;
-    m_sessionTarget = new QSpinBox(session);
-    m_sessionTarget->setRange(0, 1000000);
-    m_sessionTarget->setSingleStep(100);
-    m_sessionTarget->setSpecialValueText(tr("no target"));
+    auto *sessionField = new TargetSpinBox(session);
+    sessionField->setObjectName(QStringLiteral("sessionTargetField"));
+    sessionField->setSingleStep(100);
+    sessionField->setNoTargetText(tr("no target"));
+    m_sessionTarget = sessionField;
     m_sessionType = new QComboBox(session);
     m_sessionType->addItems({tr("words"), tr("characters")});
     sr->addWidget(m_sessionTarget, 1);
@@ -209,19 +215,32 @@ void TargetsDialog::refresh()
     const Targets &t = m_project->targets;
     QLocale loc;
     const int draft = t.draftChars ? m_project->draftCharCount() : m_project->draftWordCount();
-    m_draftBar->setMaximum(qMax(1, t.draftTarget));
-    m_draftBar->setValue(qMin(draft, qMax(1, t.draftTarget)));
-    m_draftBar->setVisible(t.draftTarget > 0);
-    m_draftLabel->setText(t.draftTarget > 0 ? tr("%1 of %2 %3").arg(loc.toString(draft), loc.toString(t.draftTarget),
-                                                                     t.draftChars ? tr("characters") : tr("words"))
-                                            : tr("%1 %2 in the Draft").arg(loc.toString(draft), t.draftChars ? tr("characters") : tr("words")));
+    const QColor back = palette().color(QPalette::Window);
+    m_draftLabel->setTextFormat(Qt::RichText);
+    m_sessionLabel->setTextFormat(Qt::RichText);
+    if (t.draftTarget < 0) { // a cutting target: the bar fills as the count falls to the number
+        m_draftBar->setRange(0, 1000);
+        m_draftBar->setValue(int(targetmath::fill(draft, t.draftTarget) * 1000));
+    } else {
+        m_draftBar->setMaximum(qMax(1, t.draftTarget));
+        m_draftBar->setValue(qMin(draft, qMax(1, t.draftTarget)));
+    }
+    m_draftBar->setVisible(t.draftTarget != 0);
+    m_draftLabel->setText(t.draftTarget != 0 ? tr("%1 of %2 %3").arg(loc.toString(draft), targettext::numberHtml(t.draftTarget, back),
+                                                                      t.draftChars ? tr("characters") : tr("words"))
+                                             : tr("%1 %2 in the Draft").arg(loc.toString(draft), t.draftChars ? tr("characters") : tr("words")));
     const int session = t.sessionChars ? m_project->sessionChars() : m_project->sessionWords();
     const int target = m_project->sessionTargetToday();
-    m_sessionBar->setMaximum(qMax(1, target));
-    m_sessionBar->setValue(qMin(session, qMax(1, target)));
-    m_sessionBar->setVisible(target > 0);
-    m_sessionLabel->setText(target > 0 ? tr("%1 of %2 this session").arg(loc.toString(session), loc.toString(target))
-                                       : tr("%1 this session").arg(loc.toString(session)));
+    if (target < 0) { // today's count is net: below 0 where more words were cut than written
+        m_sessionBar->setRange(0, -target);
+        m_sessionBar->setValue(qBound(0, -session, -target));
+    } else {
+        m_sessionBar->setMaximum(qMax(1, target));
+        m_sessionBar->setValue(qMin(session, qMax(1, target)));
+    }
+    m_sessionBar->setVisible(target != 0);
+    m_sessionLabel->setText(target != 0 ? tr("%1 of %2 this session").arg(targettext::numberHtml(session, back), targettext::numberHtml(target, back))
+                                        : tr("%1 this session").arg(loc.toString(session)));
     m_sessionTarget->setEnabled(!t.autoFromDeadline);
 }
 
@@ -965,7 +984,7 @@ void showManual(QWidget *parent, const QString &anchor)
 void showQuickStartGuide(QWidget *parent)
 {
     static QPointer<QDialog> win;
-    helpWindow(win, parent, QStringLiteral(":/docs/quick-start.md"), QObject::tr("Quick Start Guide"),
+    helpWindow(win, parent, language::docResource(QStringLiteral("quick-start.md")), QObject::tr("Quick Start Guide"),
                QStringLiteral("quickStart"), QSize(760, 720));
 }
 

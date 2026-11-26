@@ -708,16 +708,16 @@ jobs:
             echo "3. Add-ons for Android are installed with **Help > Add-ons and Updates > Install Update or Add-on**; a new version of the app always"
             echo "   comes as a new APK, which installs over the old one and keeps your settings. **Help > Check for Updates Now**"
             echo "   tells you when there is one and opens its download in the browser."
-            echo "4. Translation and Proofreading comes with the app (installed at its first start); it downloads a language model"
+            echo "4. Translation Helper comes with the app (installed at its first start); it downloads a language model"
             echo "   only when you choose one in the add-on."
             echo
             echo "| File | What it is |"
             echo "|------|------------|"
-            echo "| $apk | the app for Android tablets (arm64), with the spelling dictionaries, the writing tools, the importers and Translation and Proofreading |"
+            echo "| $apk | the app for Android tablets (arm64), with the spelling dictionaries, the writing tools, the importers and Translation Helper |"
             for f in ./*.qbpkg; do
               [ -f "$f" ] || continue
               f=${f#./}
-              echo "| $f | Translation and Proofreading on its own (the app carries it already): for **Help > Add-ons and Updates > Install Update or Add-on** |"
+              echo "| $f | Translation Helper on its own (the app carries it already): for **Help > Add-ons and Updates > Install Update or Add-on** |"
             done
             echo
             echo "Not in the Android version yet: Speech Transcription, audio and video in the editor, crash reports."

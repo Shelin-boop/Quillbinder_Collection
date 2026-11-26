@@ -4,6 +4,7 @@
 // right), a menu entry and a toolbar button, and a section in File > Options where the writer chooses and downloads
 // the models.
 #include "EngineApi.h"
+#include "Languages.h"
 #include "Logic.h"
 #include "ModelStore.h"
 #include "ToolApi.h"
@@ -14,6 +15,7 @@
 #include <QTimer>
 
 class QMenu;
+class QTranslator;
 class QWidget;
 
 namespace tp {
@@ -31,7 +33,7 @@ public:
 
     // ToolInterface 1.0
     QString id() const override { return QStringLiteral("translation-proofreading"); }
-    QString name() const override { return tr("Translation and Proofreading"); }
+    QString name() const override { return tr("Translation Helper"); }
     QString version() const override;
     QList<qb::tools::Command> commands() const override;
     void setHost(qb::tools::ToolHost *host) override;
@@ -47,7 +49,7 @@ public:
     QList<qb::tools::ToolbarButton> toolbarButtons() const override;
     QMenu *commandMenu(const QString &commandKey) override;
     // short: it stands under an icon in the row of File > Options (the full name is its tool tip)
-    QString optionsTitle() const override { return tr("Proofreading"); }
+    QString optionsTitle() const override { return tr("Translation Helper"); }
     QString optionsIcon() const override { return iconPath(); }
 
     // ---- for the panel and the options
@@ -64,6 +66,19 @@ public:
     // 1.3: the model that translates single words and short texts (never the large one); empty: none is installed
     QString wordModel(const QString &kind) const;
     QString dictionaryFile() const;   // the downloaded German dictionary, or empty
+    // ---- 1.5: the Translation Helper's eleven languages
+    // The language of the program (QB_LANGUAGE, else its setting "app/language", else the system's): the language of the
+    // add-on's own texts; English when it has no translation.
+    QString language() const { return m_language; }
+    // The installed model that makes a step of a translation between two languages (German to English and English to
+    // German: the chosen one, a chat model not counted), or empty.
+    QString stepModel(const Step &step) const;
+    // The dictionary file of a language ("de", "es" ...), or empty when it is not downloaded (English has none: WordNet)
+    QString dictionaryFile(const QString &lang) const;
+    // The catalog model of a step (installed or not), or null
+    const CatalogModel *catalogModelFor(const Step &step) const;
+    // Slots of the engine a translation between two languages uses ("pair-1", "pair-2")
+    static QString pairSlot(int index) { return QStringLiteral("pair-") + QString::number(index + 1); }
 #ifdef TP_TEST_SWITCHES
     void setEngineForTest(EngineInterface *engine) { m_engine = engine; }   // a stand-in for the checks
 #endif
@@ -90,6 +105,7 @@ signals:
 
 private:
     void openWindow();
+    void installTranslations();
 
     qb::tools::ToolHost *m_host = nullptr;
     ModelStore m_store;
@@ -99,6 +115,8 @@ private:
     QList<QPointer<Panel>> m_panels;
     QPointer<QWidget> m_window;
     QPointer<QMenu> m_menu;
+    QString m_language = QStringLiteral("en");
+    QTranslator *m_translator = nullptr;
 };
 
 } // namespace tp

@@ -1,4 +1,5 @@
 #include "ui/ColorPickButton.h"
+#include "ui/AppSettings.h"
 #include "core/ItemIcons.h"
 #include "ui/ColorPalette.h"
 
@@ -12,12 +13,16 @@
 
 namespace qb {
 
-QList<QPair<QString, QColor>> ColorPickButton::palette()
+QList<QPair<QString, QColor>> ColorPickButton::palette(Kind kind)
 {
-    // the six fixed colors of the shared palette (ColorPalette.h), in their order of 0.17
+    // the six fixed colors of the shared palette (ColorPalette.h), in their order of 0.17; 0.95.0: or those chosen in
+    // Options > Appearance > Standard Colors (a color that is not the standard one is named by its code)
+    const AppSettings &s = AppSettings::instance();
+    const QList<QColor> chosen = kind == Highlight ? s.highlightSwatchColors() : s.textSwatchColors();
+    const QList<palette::Entry> standard = palette::standard();
     QList<QPair<QString, QColor>> out;
-    for (const palette::Entry &e : palette::standard())
-        out.append({e.name, e.color});
+    for (int i = 0; i < standard.size() && i < chosen.size(); ++i)
+        out.append({chosen[i] == standard[i].color ? standard[i].name : chosen[i].name(QColor::HexRgb), chosen[i]});
     return out;
 }
 
@@ -175,7 +180,7 @@ ColorPickPopup::ColorPickPopup(ColorPickButton *owner)
         m_swatches << b;
         return b;
     };
-    for (const auto &e : ColorPickButton::palette())
+    for (const auto &e : ColorPickButton::palette(owner->kind()))
         swatch(e.first, e.second, lay);
     swatch(owner->kind() == ColorPickButton::TextColor ? tr("Automatic") : tr("No Highlight"), QColor(), lay);
     auto *other = new QToolButton(this);

@@ -1182,7 +1182,7 @@ int main(int argc, char **argv)
             fromAddon += te.kind == theme::Kind::Addon;
             darkMode = darkMode || (te.id == QLatin1String("dark") && te.name == QLatin1String("Dark Mode"));
         }
-        check(builtIn == 8 && darkMode, QStringLiteral("eight built-in themes including Dark Mode"), QString::number(builtIn));
+        check(builtIn == 9 && darkMode, QStringLiteral("nine built-in themes including Dark Mode (0.95.0: Shelin's Dark Theme)"), QString::number(builtIn));
         check(fromAddon == 5 || !QFile::exists(QStringLiteral(QB_TEST_PLUGIN_DIR "/../addons-dist/themes-extra.qbpkg")),
               QStringLiteral("the add-on \"Extra themes\" 2.0 offers five themes"), QString::number(fromAddon));
 
@@ -1431,8 +1431,8 @@ int main(int argc, char **argv)
             settle(200);
             auto *areas = od.findChild<QListWidget *>(QStringLiteral("appearanceAreas"));
             auto *combo = od.findChild<QComboBox *>(QStringLiteral("themeCombo"));
-            check(areas && areas->count() == 11 && combo && combo->currentData().toString() == QLatin1String("sepia"),
-                  QStringLiteral("Appearance: the eleven areas (0.90.2: Page View's color in Main Editor), the theme in use is selected"));
+            check(areas && areas->count() == 12 && combo && combo->currentData().toString() == QLatin1String("sepia"),
+                  QStringLiteral("Appearance: the twelve areas (0.90.2: Page View's color in Main Editor; 0.95.0: Standard Colors), the theme in use is selected"));
             auto *paperBtn = od.findChild<QPushButton *>(QStringLiteral("color_editorPaper"));
             auto *paperReset = od.findChild<QToolButton *>(QStringLiteral("colorReset_editorPaper"));
             check(paperBtn && paperReset && !paperReset->isEnabled() && od.shownColor(QStringLiteral("editorPaper")) == QColor(0xfa, 0xf3, 0xe4)

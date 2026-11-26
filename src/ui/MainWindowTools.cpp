@@ -70,15 +70,15 @@ void MainWindow::createToolActions()
         m_toolActions << ac;
     }
 
-    // 0.94.0 (to-do item 59): the places that lead to the add-ons Translation and Proofreading and Speech Transcription
+    // 0.94.0 (to-do item 59): the places that lead to the add-ons Translation Helper (Translation and Proofreading before 1.5) and Speech Transcription
     // stay in Edit > Writing Tools when the add-on is not there: they say so and lead to the Add-on Manager
     struct Missing {
         QString id, key, text, icon, tip;
     };
     QList<Missing> missing;
-    missing << Missing{QStringLiteral("translation-proofreading"), QStringLiteral("missingTranslator"), tr("&Translate and Proofread…"),
+    missing << Missing{QStringLiteral("translation-proofreading"), QStringLiteral("missingTranslator"), tr("&Translation Helper…"),
                        QStringLiteral("applications-education-language"),
-                       tr("Proofread English text or translate German text into English (the add-on is not installed)")};
+                       tr("Suggestions for translating between eleven languages and for English spelling (the add-on is not installed)")};
 #ifndef Q_OS_ANDROID
     missing << Missing{QStringLiteral("speech-transcription"), QStringLiteral("missingSpeech"), tr("Speech &Transcription…"),
                        QStringLiteral("audio-input-microphone"), tr("Turn speech into text (the add-on is not installed)")};
@@ -208,7 +208,7 @@ void MainWindow::toolSetCommandState(const QString &commandKey, bool checked, co
 void MainWindow::explainMissingAddon(const QString &addonId)
 {
     const bool speech = addonId == QLatin1String("speech-transcription");
-    const QString name = speech ? tr("Speech Transcription") : tr("Translation and Proofreading");
+    const QString name = speech ? tr("Speech Transcription") : tr("Translation Helper");
     QString state = tr("is not installed");
     for (const addons::Installed &in : addons::installedAddons())
         if (in.manifest.id == addonId)
@@ -217,9 +217,10 @@ void MainWindow::explainMissingAddon(const QString &addonId)
     box.setObjectName(QStringLiteral("missingAddonNotice"));
     box.setInformativeText(speech ? tr("It turns speech into text. Install it with Help > Add-ons and Updates > Install Update or Add-on; "
                                        "Help > Add-ons and Updates > Add-on Manager shows the add-ons and switches them on and off.")
-                                  : tr("It proofreads English text and translates German text into English. Install it with Help > Add-ons and "
-                                       "Updates > Install Update or Add-on; Help > Add-ons and Updates > Add-on Manager shows the add-ons "
-                                       "and switches them on and off."));
+                                  : tr("It gives suggestions for translating between eleven languages and for English spelling and grammar. Its "
+                                       "translations are not precise: check each one, which needs a working knowledge of both languages. Install "
+                                       "it with Help > Add-ons and Updates > Install Update or Add-on; Help > Add-ons and Updates > Add-on "
+                                       "Manager shows the add-ons and switches them on and off."));
     QPushButton *manager = box.addButton(tr("Open Add-on Manager"), QMessageBox::ActionRole);
     manager->setObjectName(QStringLiteral("openAddonManager"));
     box.exec();

@@ -13,6 +13,7 @@
 #include "ui/EditorPane.h"
 #include "ui/Inspector.h"
 #include "ui/LicensesDialog.h"
+#include "ui/Language.h"
 #include "ui/ManualWindow.h"
 #include "ui/WindowCare.h"
 
@@ -152,9 +153,9 @@ void MainWindow::openWelcomeProject(bool firstStart)
         }
     }
     QString err;
-    const QJsonObject o = outline::read(QStringLiteral(":/welcome/outline.json"), &err);
+    const QJsonObject o = outline::read(language::welcomeRoot() + QStringLiteral("/outline.json"), &err);
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    outline::Result r = o.isEmpty() ? outline::Result() : outline::build(o, QStringLiteral(":/welcome"), parent, name);
+    outline::Result r = o.isEmpty() ? outline::Result() : outline::build(o, language::welcomeRoot(), parent, name);
     QApplication::restoreOverrideCursor();
     if (!r.project) {
         if (!err.isEmpty())

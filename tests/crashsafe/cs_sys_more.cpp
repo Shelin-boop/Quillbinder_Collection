@@ -877,7 +877,7 @@ void caseSL01()
     chooseByMenu(w, QStringLiteral("inspect5"));
     for (const QString &t : {QStringLiteral("Default (Follow the Desktop)"), QStringLiteral("Light"), QStringLiteral("Dark Mode"), QStringLiteral("Sepia"), QStringLiteral("Slate"),
                              QStringLiteral("Midnight"), QStringLiteral("Ocean"), QStringLiteral("High Contrast")}) {
-        check(menuPath(w, QStringLiteral("Window > Themes > ") + t), QStringLiteral("Window > Themes > %1").arg(t));
+        check(menuPath(w, QStringLiteral("View > Themes > ") + t), QStringLiteral("View > Themes > %1").arg(t));
         settle(300);
         shot(w, QStringLiteral("theme-") + QString(t).replace(QLatin1Char(' '), QLatin1Char('-')));
     }
@@ -904,7 +904,7 @@ void caseSL01()
         chooseByMenu(w, a);
         settle(400);
     }
-    menuPath(w, QStringLiteral("Window > Themes > Light"));
+    menuPath(w, QStringLiteral("View > Themes > Light"));
     checkCleanWindows(w);
     finishProject(w);
     delete w;

@@ -66,6 +66,7 @@
 #include <QWidgetAction>
 #include <cmath>
 #include <functional>
+#include <tuple>
 
 namespace qb {
 
@@ -132,10 +133,11 @@ void fixMnemonics(QMenu *m)
         const QString rest = tab < 0 ? QString() : text.mid(tab);
         const QString label = unescapeMnemonic(main);
         int best = -1;
-        for (int pass = 0; pass < 2 && best < 0; ++pass)
+        // (0.95.0: pass 2 takes a letter of any script: Russian names have no ASCII letter)
+        for (int pass = 0; pass < 3 && best < 0; ++pass)
             for (int i = 0; i < label.size(); ++i) {
                 const QChar c = label.at(i);
-                if (!c.isLetterOrNumber() || c.unicode() > 127 || used.contains(c.toLower()))
+                if (!c.isLetterOrNumber() || (pass < 2 && c.unicode() > 127) || used.contains(c.toLower()))
                     continue;
                 if (pass == 0 && i > 0 && label.at(i - 1).isLetterOrNumber())
                     continue;
@@ -318,9 +320,9 @@ void MainWindow::createMenus()
     add(view, {"", "showBinder", "showCollections", "showInspector", "binderScrivenerKeys", ""});
     QMenu *bars = view->addMenu(tr("Tool&bars"));
     // 0.91.0: the rows' switches, a switch per toolbar, the standard places
-    add(bars, {"showToolbar", "showFormatBar", "showIconBar", "", "showBarMain", "showBarThemes", "showBarSearch", "showBarTools",
-               "showBarStyle", "showBarCharacter", "showBarParagraph", "", "resetToolbarPlaces", "", "customizeToolbars",
-               "customizeIconBar"});
+    add(bars, {"showToolbar", "showFormatBar", "showIconBar", "", "showBarMain", "showBarThemes", "showBarProfiles", "showBarSearch",
+               "showBarTools", "showBarStyle", "showBarCharacter", "showBarParagraph", "showBarLabels", "", "resetToolbarPlaces", "",
+               "customizeToolbars", "customizeIconBar"});
     QMenu *themes = view->addMenu(tr("&Themes")); // 0.94.0: before, under Window;
     themes->setObjectName(QStringLiteral("themeMenu"));
     // filled when opened: add-ons and the theme list can add and remove themes at any time
@@ -343,6 +345,11 @@ void MainWindow::createMenus()
     };
     fillThemes();
     connect(themes, &QMenu::aboutToShow, this, fillThemes);
+    // 0.95.0 (item 95): the profiles, filled when opened
+    QMenu *profilesMenu = view->addMenu(tr("&Profiles"));
+    profilesMenu->setObjectName(QStringLiteral("profileMenu"));
+    connect(profilesMenu, &QMenu::aboutToShow, this, [this, profilesMenu] { fillProfilesMenu(profilesMenu); });
+    fillProfilesMenu(profilesMenu);
     QMenu *te = view->addMenu(tr("&Text Editing"));
     add(te, {"pageView", "pageSetup", "", "showRuler", "showInvisibles", "typewriter", "scrivTitles", "fixedWidth"});
     QMenu *cork = view->addMenu(tr("&Corkboard Options"));
@@ -1146,9 +1153,12 @@ void MainWindow::rebuildToolBars()
 void MainWindow::placeToolBars()
 {
     QList<QToolBar *> all;
-    for (toolbars::Bar b : toolbars::allBars())
+    for (toolbars::Bar b : toolbars::allBars()) {
         all << m_bars[int(b)];
-    all << m_iconBar;
+        if (b == toolbars::Bar::Themes)
+            all << m_profileBar;
+    }
+    all << m_iconBar << m_labelBar;
     // (the icon bar shows or not as it did: its switch is not set before the window's state was read)
     const bool iconBarShown = m_iconBar && !m_iconBar->isHidden();
     for (QToolBar *bar : std::as_const(all))
@@ -1197,6 +1207,18 @@ void MainWindow::applyBarVisibility()
         if (QToolBar *bar = m_bars[int(b)])
             bar->setVisible(row && own);
     }
+    // 0.95.0: the Profiles toolbar (first row) and the Labels toolbar (second row, as the icon bar: its own switch)
+    for (auto [key, command, bar, inRow] :
+         {std::tuple<QString, QString, QToolBar *, bool>{QStringLiteral("profiles"), QStringLiteral("showBarProfiles"), m_profileBar, mainRow},
+          {QStringLiteral("labels"), QStringLiteral("showBarLabels"), m_labelBar, true}}) {
+        const bool own = s.toolbarExtraShown.contains(key);
+        if (QAction *one = a.value(command)) {
+            one->setChecked(own);
+            one->setEnabled(inRow);
+        }
+        if (bar)
+            bar->setVisible(inRow && own);
+    }
     m_applyingBars = false;
 }
 
@@ -1207,8 +1229,12 @@ void MainWindow::fillBarsMenu(QMenu *menu, int bar)
     menu->addAction(a[QStringLiteral("showFormatBar")]);
     menu->addAction(a[QStringLiteral("showIconBar")]);
     menu->addSeparator();
-    for (toolbars::Bar b : toolbars::allBars())
+    for (toolbars::Bar b : toolbars::allBars()) {
         menu->addAction(a[toolbars::barCommand(b)]);
+        if (b == toolbars::Bar::Themes)
+            menu->addAction(a[QStringLiteral("showBarProfiles")]);
+    }
+    menu->addAction(a[QStringLiteral("showBarLabels")]);
     menu->addSeparator();
     menu->addAction(a[QStringLiteral("resetToolbarPlaces")]);
     menu->addSeparator();

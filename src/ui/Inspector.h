@@ -188,6 +188,7 @@ private:
     class DocMirror *m_previewMirror = nullptr;
     QString m_previewItemId;
     void applyPreviewZoom();
+    void showPreviewWidget();
     void stopPreview();
     void refreshMindMapZoom();
     // the place in the notes, per document (and the project's notes), 0.21.1
@@ -196,6 +197,12 @@ private:
     void restoreNotesPlace();
     // dividers inside the tabs (kept with the project, 0.21.1)
     QSplitter *m_notesSplit = nullptr, *m_bookmarkSplit = nullptr, *m_snapSplit = nullptr;
+    // 0.95.0: the last sizes of each divider seen while its parts were shown; a hidden part (the bookmark preview
+    // with no bookmark chosen) or a hidden inspector no longer writes a 0 over what the writer set
+    QHash<QSplitter *, QList<int>> m_keptSizes;
+    void keepSizes(QSplitter *sp, bool moved = false);
+    void keepAllSizes();
+    QList<int> sizesToSave(QSplitter *sp);
     // the part of each tab zoomed last (0.21.1)
     QHash<int, QString> m_lastZoomPart;
     QWidget *m_tabsRow = nullptr, *m_bottomRow = nullptr;

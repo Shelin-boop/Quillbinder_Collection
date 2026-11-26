@@ -2085,10 +2085,10 @@ QByteArray buildScrivx(Project *p, const QByteArray &existing, const QString &id
         } else if (dt.hasAttribute(QStringLiteral("Deadline"))) {
             dt.setAttribute(QStringLiteral("IgnoreDeadline"), QStringLiteral("Yes"));
         }
-        setText(dt, QString::number(p->targets.draftTarget));
+        setText(dt, QString::number(qMax(0, p->targets.draftTarget))); // 0.95.0: Scrivener takes no negative target
         QDomElement st = child(tg, QStringLiteral("SessionTarget"), true);
         st.setAttribute(QStringLiteral("Type"), p->targets.sessionChars ? QStringLiteral("Characters") : QStringLiteral("Words"));
-        setText(st, QString::number(p->targets.sessionTarget));
+        setText(st, QString::number(qMax(0, p->targets.sessionTarget)));
         // 0.90.0: whether only the draft counts, and the target from the deadline (written where they differ, so a file
         // without them stays without them while they are this program's standard)
         const bool draftOnly = !p->targets.countAnywhere;
@@ -3415,6 +3415,16 @@ static int mergeFromOld(Project *np, Project *op, const QString &scrivDir, const
             added = true;
         }
     }
+    // 0.95.0: a cutting (negative) target is only in the working copy: the .scriv holds 0 for it ("no target"), so it is
+    // taken over where the .scriv has no target of its own now
+    if (np->targets.draftTarget == 0 && op->targets.draftTarget < 0) {
+        np->targets.draftTarget = op->targets.draftTarget;
+        np->targets.draftChars = op->targets.draftChars;
+    }
+    if (np->targets.sessionTarget == 0 && op->targets.sessionTarget < 0) {
+        np->targets.sessionTarget = op->targets.sessionTarget;
+        np->targets.sessionChars = op->targets.sessionChars;
+    }
     {
         // the working copy's formatting and styles count; styles the reader made from Scrivener's (0.81.3) that it
         // lacks are added, so the texts just read keep theirs
@@ -3510,6 +3520,10 @@ static int mergeFromOld(Project *np, Project *op, const QString &scrivDir, const
                 it->targetChars = old->targetChars;
                 added = true;
             }
+        }
+        if (it->target == 0 && old->target < 0) { // 0.95.0: a cutting target is only in the working copy
+            it->target = old->target;
+            it->targetChars = old->targetChars;
         }
         it->defaultTemplate = old->defaultTemplate;
         // 0.90.0: the places of cards and the corkboard's arrangement are in the .scriv; a working copy of an older

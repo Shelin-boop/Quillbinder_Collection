@@ -1,4 +1,6 @@
 #include "ui/EditorPane.h"
+#include "core/TargetMath.h"
+#include "ui/TargetSpinBox.h"
 #include "ui/FooterStatus.h"
 #include "ui/WritingProgress.h"
 #include <cmath>
@@ -1524,10 +1526,15 @@ void EditorPane::updateFooter()
 {
     updateCounts();
     BinderItem *it = m_mode == ViewMode::Single ? (m_items.isEmpty() ? nullptr : m_items.first()) : m_text->activeItem();
-    if (it && it->target > 0) {
+    if (it && it->target != 0) {
         const int cur = it->targetChars ? it->charCount : it->wordCount;
-        m_targetBar->setMaximum(it->target);
-        m_targetBar->setValue(qMin(cur, it->target));
+        if (it->target < 0) { // a cutting target: the bar fills as the count falls to the number
+            m_targetBar->setRange(0, 1000);
+            m_targetBar->setValue(int(targetmath::fill(cur, it->target) * 1000));
+        } else {
+            m_targetBar->setMaximum(it->target);
+            m_targetBar->setValue(qMin(cur, it->target));
+        }
         m_targetBar->setToolTip(tr("%1 of %2 %3 (click to edit)")
                                     .arg(cur)
                                     .arg(it->target)
@@ -1550,10 +1557,11 @@ void EditorPane::editTarget()
     QDialog dlg(this);
     dlg.setWindowTitle(tr("Document Target"));
     auto *form = new QFormLayout(&dlg);
-    auto *spin = new QSpinBox(&dlg);
-    spin->setRange(0, 10000000);
+    // 0.95.0: a negative number is a cutting target ("bring this chapter down to 4,000 words"); shown in red
+    auto *spin = new TargetSpinBox(&dlg);
+    spin->setObjectName(QStringLiteral("documentTargetField"));
+    spin->setNoTargetText(tr("No target"));
     spin->setValue(it->target);
-    spin->setSpecialValueText(tr("No target"));
     auto *type = new QComboBox(&dlg);
     type->addItems({tr("words"), tr("characters")});
     type->setCurrentIndex(it->targetChars ? 1 : 0);

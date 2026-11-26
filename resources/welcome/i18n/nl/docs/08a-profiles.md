@@ -1,0 +1,6 @@
+Een **thema** is alleen een uiterlijk: kleuren en lettertypen. Een **profiel** bewaart al het andere: je opties, werkbalken, de grootte en plaats van het venster, panelen, toetsenbordset, back-upinstellingen, standaardkleuren en opgeslagen lay-outs, en het noemt zijn thema. Als je van profiel wisselt, verandert dat alles in één keer.
+**Probeer het:** kies **Weergave > Profielen > Instellingen opslaan als nieuw profiel…**, geef het een naam, wijzig een paar dingen (een thema, een werkbalk) en wissel terug naar **Default** onder **Weergave > Profielen**.
+- Het profiel **Default** is waar je instellingen eerst worden bewaard. Het kan niet worden verwijderd; de andere profielen wel.
+- **Weergave > Profielen > Profielen beheren…** hernoemt, kopieert, verwijdert, exporteert en importeert profielen. Een geëxporteerd profiel is één bestand dat je naar een andere computer kunt meenemen; naar mappen erin die daar niet bestaan, wordt gevraagd.
+- **Weergave > Werkbalken > Profielen** toont een kleine balk met het profiel dat in gebruik is. **Weergave > Werkbalken > Labels** toont de labelkleuren van het geopende project, elk met één klik.
+- **Bestand > Opties > Uiterlijk > Standaardkleuren** stelt de labels in waarmee nieuwe projecten beginnen en de kleuren van de paletten voor tekstkleur en markering. Ze horen bij het profiel.

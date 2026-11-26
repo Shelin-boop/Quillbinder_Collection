@@ -168,7 +168,7 @@ jobs:
           import json, sys
           m = json.load(open("packaging/manifest.json"))
           print("Install with Quillbinder's **File > Install Update or Add-on** (Quillbinder 0.80.0 or later, Linux), "
-                "then restart Quillbinder. The models are chosen and downloaded in **File > Options > Proofreading**.\n")
+                "then restart Quillbinder. The models are chosen and downloaded in **File > Options > Translation Helper**.\n")
           print("What is new:\n")
           for line in m["whatsNew"]:
               print(f"- {line}")
@@ -363,7 +363,7 @@ jobs:
           import json, sys
           m = json.load(open("packaging/manifest.json"))
           print("For Quillbinder for Windows (0.91.1 or later): install with **File > Install Update or Add-on**, then "
-                "restart Quillbinder. The models are chosen and downloaded in **File > Options > Proofreading**.\n")
+                "restart Quillbinder. The models are chosen and downloaded in **File > Options > Translation Helper**.\n")
           print("What is new:\n")
           for line in m["whatsNew"]:
               print(f"- {line}")

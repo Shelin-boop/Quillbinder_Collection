@@ -1,8 +1,11 @@
 #include "ui/LicensesDialog.h"
+#include "core/TargetMath.h"
 #include "core/TestSwitches.h"
 #include "ui/Ask.h"
 #include "ui/LinkOpen.h"
 #include "ui/MainWindow.h"
+#include <memory>
+#include <QSet>
 #include "ui/ManualWindow.h"
 #ifdef Q_OS_ANDROID
 #include "ui/Language.h" // (the Android program's About text: English or German, see aboutText())
@@ -81,6 +84,7 @@
 #include "ui/ThemeDialogs.h"
 #include "ui/Outliner.h"
 #include "ui/ProjectSettingsDialog.h"
+#include "ui/Profiles.h"
 #include "ui/SpellChecker.h"
 #include "ui/StartDialog.h"
 #include "ui/StyleDialogs.h"
@@ -298,11 +302,14 @@ MainWindow::MainWindow()
     createToolBars();
     createFormatBar();
     createIconBar();
+    createProfileBars(); // 0.95.0
     // the fields on the toolbars (quick search, style, font, size ...) in the color of the
     // menus and toolbars, not of lists (0.60.3)
     for (QToolBar *bar : m_bars)
         theme::panelFields(bar);
     theme::panelFields(m_iconBar);
+    theme::panelFields(m_profileBar);
+    theme::panelFields(m_labelBar);
     rebuildStyleActions();
     rebuildScriptActions();
     rebuildLayoutActions();
@@ -563,12 +570,22 @@ MainWindow::MainWindow()
     {
         QList<GripBar *> gripBars;
         QStringList rowOne, rowTwo;
-        for (toolbars::Bar b : toolbars::allBars())
+        for (toolbars::Bar b : toolbars::allBars()) {
             if (auto *bar = qobject_cast<GripBar *>(m_bars[int(b)])) {
                 gripBars << bar;
                 (toolbars::isFormatBar(b) ? rowTwo : rowOne) << bar->objectName();
             }
+            if (b == toolbars::Bar::Themes)
+                if (auto *bar = qobject_cast<GripBar *>(m_profileBar)) { // 0.95.0: the Profiles toolbar stands after Themes
+                    gripBars << bar;
+                    rowOne << bar->objectName();
+                }
+        }
         if (auto *bar = qobject_cast<GripBar *>(m_iconBar)) {
+            gripBars << bar;
+            rowTwo << bar->objectName();
+        }
+        if (auto *bar = qobject_cast<GripBar *>(m_labelBar)) { // 0.95.0: the Labels toolbar after the icon bar
             gripBars << bar;
             rowTwo << bar->objectName();
         }
@@ -2165,11 +2182,26 @@ void MainWindow::createActions()
     }
     {
         // 0.94.0: each tab under the name of its tooltip (the mnemonic is the letter given here)
-        auto named = [](Inspector::Tab tab, QChar letter) {
+        // 0.95.0 (item 102): the letter given is the English one; a translated name that lacks it gets the first letter
+        // (a word start first) that no tab before it has, in any script (the menu repairs a clash when it opens)
+        auto used = std::make_shared<QSet<QChar>>();
+        auto named = [used](Inspector::Tab tab, QChar letter) {
             QString name = Inspector::tabToolTip(tab);
-            int i = int(name.indexOf(letter, 0, Qt::CaseInsensitive));
+            int i = -1;
+            const int at = int(name.indexOf(letter, 0, Qt::CaseInsensitive));
+            if (at >= 0 && !used->contains(name.at(at).toLower()))
+                i = at;
+            for (int pass = 0; pass < 2 && i < 0; ++pass)
+                for (int k = 0; k < name.size() && i < 0; ++k) {
+                    if (!name.at(k).isLetter() || used->contains(name.at(k).toLower()))
+                        continue;
+                    if (pass == 0 && k > 0 && name.at(k - 1).isLetterOrNumber())
+                        continue;
+                    i = k;
+                }
             if (i < 0)
-                i = 0; // (the translation has no such letter: its first one; a clash in the menu is repaired when it opens)
+                return name; // (every letter is taken: no mnemonic)
+            used->insert(name.at(i).toLower());
             name.insert(i, QLatin1Char('&'));
             return name;
         };
@@ -2896,12 +2928,12 @@ void MainWindow::updateTargetsDisplay()
     const int st = m_project->sessionTargetToday();
     // 0.94.0 (item 74): the two thin lines under the search field are an option (on at first)
     const bool lines = AppSettings::instance().progressUnderSearch;
-    m_quickSearch->draft = lines && t.draftTarget > 0 ? double(draft) / t.draftTarget : -1;
-    m_quickSearch->session = lines && st > 0 ? double(session) / st : -1;
+    m_quickSearch->draft = lines && t.draftTarget != 0 ? targetmath::fill(draft, t.draftTarget) : -1;
+    m_quickSearch->session = lines && st != 0 ? targetmath::sessionFill(session, st) : -1;
     QLocale loc;
     m_quickSearch->setToolTip(tr("Draft: %1 words · This session: %2 words%3")
                                   .arg(loc.toString(m_project->draftWordCount()), loc.toString(m_project->sessionWords()),
-                                       t.draftTarget > 0 ? tr(" · Target: %1").arg(loc.toString(t.draftTarget)) : QString()));
+                                       t.draftTarget != 0 ? tr(" · Target: %1").arg(loc.toString(t.draftTarget)) : QString()));
     m_quickSearch->update();
     footers(session, st, t.sessionChars, draft, t.draftTarget, t.draftChars);
 }
@@ -3251,8 +3283,10 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
         pane->setProject(proj);
     m_inspector->setProject(proj);
     rebuildIconBar(); // the project may have icons of its own in the bar
+    rebuildLabelBar(); // ... and its own labels
     connect(proj, &Project::countsChanged, this, &MainWindow::updateTargetsDisplay);
     connect(proj, &Project::settingsChanged, this, [this] {
+        rebuildLabelBar();
         updateTargetsDisplay();
         updateActions();
         m_binder->refreshCollections();
@@ -3597,6 +3631,7 @@ bool MainWindow::closeProject()
     updateWindowTitle();
     updateTargetsDisplay();
     updateActions();
+    rebuildLabelBar();
     toolhost::host().notifyProjectChanged();
     return true;
 }
@@ -3838,14 +3873,8 @@ void MainWindow::closeEvent(QCloseEvent *e)
         return;
     }
     toolhost::host().shutdownTools(); // tools save their work (scratch pad notes)
-    QSettings s;
-    s.setValue(QStringLiteral("window/geometry"), saveGeometry());
-    s.setValue(QStringLiteral("window/state"), saveState());
-    savePaneSettings(); // 0.93.0: the places and sizes (both shapes, per device)
-    s.setValue(QStringLiteral("window/inspector"), a[QStringLiteral("showInspector")]->isChecked());
-    s.setValue(QStringLiteral("window/binder"), a[QStringLiteral("showBinder")]->isChecked());
-    s.setValue(QStringLiteral("window/toolbar"), a[QStringLiteral("showToolbar")]->isChecked());
-    s.setValue(QStringLiteral("window/formatBar"), a[QStringLiteral("showFormatBar")]->isChecked());
+    saveWindowSettings();
+    profiles::saveActive(); // 0.95.0: the profile in use keeps what the program has now
     e->accept();
 }
 
@@ -5238,7 +5267,7 @@ void MainWindow::askApplicationMenu(const QString &title, const QString &text, b
     QMessageBox box(QMessageBox::Question, title, text, QMessageBox::NoButton, this);
     QCheckBox *move = nullptr;
     if (appmenu::canMove()) {
-        move = new QCheckBox(tr("Move the AppImage to %1 (a moved file cannot be started from the menu)")
+        move = new QCheckBox(tr("Move the AppImage to %1, a fixed place the menu entry starts it from")
                                  .arg(QDir::toNativeSeparators(appmenu::applicationsFolder())),
                              &box);
         move->setObjectName(QStringLiteral("moveAppImage"));

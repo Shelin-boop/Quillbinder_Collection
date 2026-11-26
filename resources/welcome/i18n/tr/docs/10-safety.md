@@ -1,0 +1,5 @@
+- **Otomatik kaydetme**: yazmayı bıraktıktan birkaç saniye sonra; siz yazmaya devam ederken, 5 saniye sonraki ilk kısa molada ve en geç 30 saniye sonra.
+- **Yedekler**: bir proje kapatıldığında (ve isterseniz açıldığında ya da her **Ctrl+S** ile); bunları **Dosya > Seçenekler > Yedekleme** altında ayarlayın. **Dosya > Yedekle** hemen bir yedek alır.
+- **Anlık görüntüler**: **Belgeler > Anlık Görüntüler > Anlık Görüntü Al** (**Ctrl+5**) büyük bir değişiklikten önce bir belgenin sürümünü saklar; **Karşılaştır** o zamandan beri nelerin değiştiğini gösterir.
+- **Proje dosyasının yedek bir kopyası**: proje dosyası bir gün bozulursa, örneğin kaydedilirken bilgisayarın çökmesiyle, {{APP}} son açılıştan sakladığı kopyayı sunar.
+- **Çökme ve donma raporları**: program bir hata yüzünden sonlanırsa veya yanıt vermeyi bırakırsa bir rapor yazar. **Yardım > Sorun Giderme ve Geliştirme > Çökme Raporları…** bunları listeler, **Yardım > Sorun Giderme ve Geliştirme > Sistem Bilgisi…** yakında sorun çıkarabilecekleri, örneğin neredeyse dolu bir diski, gösterir.

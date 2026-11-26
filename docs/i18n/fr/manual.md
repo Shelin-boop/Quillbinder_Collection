@@ -1,0 +1,1802 @@
+# Manuel d'utilisation de {{APP}}
+
+Ce manuel a été traduit automatiquement et n'a pas encore été relu par un francophone. En cas de doute, le manuel anglais fait foi.
+
+{{APP}} est un studio d'écriture pour les textes longs : romans, scénarios, pièces de théâtre, scénarios de bandes dessinées, thèses et ouvrages documentaires. Vous écrivez par petits morceaux (scènes, sections, notes), vous les organisez librement et, à la fin, vous les *compilez* en un seul manuscrit.
+
+Ce manuel concerne la version {{VERSION}}. Appuyez sur **F1** à tout moment pour l'ouvrir ; il s'ouvre à la partie qui correspond à ce que vous avez sous les yeux : le document, le tableau en liège, le plan ou le texte combiné, le classeur, l'onglet de l'inspecteur qui a le clavier, ou la boîte de dialogue ouverte (une boîte de dialogue qui n'a pas de partie propre ouvre le début). La fenêtre comporte à gauche une **table des matières** (un clic sur un titre y mène) et, au-dessus du texte, un **champ de recherche** : appuyez sur **Ctrl+F** pour y accéder, tapez un mot, puis **Return** affiche le résultat suivant et **Shift+Return** le précédent (les boutons **Suivant** et **Précédent** font de même) ; la ligne à côté du champ indique quel résultat est affiché et combien il y en a, et chaque résultat est marqué dans le texte. Ce qui s'adresse aux personnes qui développent {{APP}} (plugins, paquets, détail du dossier du projet, variables d'environnement) se trouve dans le guide du développeur, **Aide > Dépannage et développement > Guide du développeur : mises à jour et modules complémentaires**.
+
+---
+
+## 1. Premiers pas
+
+### Obtenir le programme
+
+{{APP}} se télécharge depuis la page **Releases** de sa page de projet, https://github.com/Shelin-boop/Quillbinder_Collection/releases. Chaque version propose le programme sous la forme d'un seul fichier (*{{APP}}-&lt;version&gt;-x86_64.AppImage*), une mise à jour du programme pour les personnes qui possèdent déjà un AppImage de {{APP}} (section 17) et les modules complémentaires (fichiers *.qbpkg*, section 17). Rendez l'AppImage exécutable (clic droit > **Propriétés** > **Permissions** > *Est exécutable*, ou `chmod +x` dans un terminal), puis double-cliquez dessus ; **Aide > Ajouter au menu des applications** l'ajoute au menu de votre bureau. Le fichier *SHA256SUMS.txt* de chaque version indique les sommes de contrôle de ses fichiers.
+
+**{{APP}} est un logiciel {{LABEL}}.** Faites des sauvegardes de vos projets (section 15) et gardez une copie de vos manuscrits en dehors du programme.
+
+### Démarrer un projet
+
+Quand {{APP}} démarre sans projet, la **fenêtre de démarrage** s'ouvre :
+
+- **Nouveau projet** : choisissez une catégorie et un modèle (par exemple Vierge, Roman, Roman en parties ou Nouvelle), saisissez un nom, choisissez l'emplacement d'enregistrement, puis cliquez sur **Créer**. **Format** détermine la manière dont le projet est stocké : comme projet {{APP}} (le choix standard) ou comme projet Scrivener 3 (*.scriv*), afin que vous puissiez aussi l'ouvrir dans Scrivener (section 14, *Travailler au format Scrivener*).
+- **Projets récents** : double-cliquez sur un projet sur lequel vous avez déjà travaillé.
+- **Ouvrir un autre projet…** : cherchez un projet sur votre disque.
+- **Importer un projet Scrivener…** : créez un projet {{APP}} à partir d'un projet Scrivener (voir la section 14). Pour continuer à travailler sur le projet Scrivener lui-même, ouvrez plutôt son fichier *.scrivx* avec **Ouvrir un autre projet…**.
+
+{{APP}} rouvre le dernier projet au démarrage (vous pouvez le désactiver sous **Fichier > Options > Général**).
+
+**Le tout premier démarrage** affiche une page où tout est déjà rempli (**OK** la valide) : les sauvegardes (faut-il sauvegarder un projet à sa fermeture, combien de sauvegardes conserver, 25 au départ, et où), pour un AppImage Linux la question de savoir s'il faut ajouter {{APP}} au menu des applications (et déplacer l'AppImage dans *~/Applications*), et la note sur la recherche de mises à jour avec son interrupteur. Le projet de bienvenue s'ouvre quand vous appuyez sur **OK** ; aucune fenêtre vide du programme n'apparaît avant lui. Tout cela peut être modifié plus tard sous **Fichier > Options** ; vous y trouverez aussi, sous **Général > Démarrage**, le choix des réglages prioritaires : ceux du projet ou toujours ceux du programme (section 16, *Réglages propres à un projet*).
+
+### Le projet de bienvenue et le guide de démarrage rapide
+
+Au premier démarrage de {{APP}}, le **projet de bienvenue** s'ouvre : un court projet qui présente, un document par sujet, ce que {{APP}} offre de plus que l'ordinaire (la barre d'icônes, un zoom pour chaque partie de la fenêtre, les cartes mentales, les fiches d'objets, les commentaires d'un dossier entier, Comparer et transférer, les projets Scrivener, les thèmes, les mises à jour et modules complémentaires, et ce qui protège votre texte). Commencez par le document **Welcome** en haut du classeur ; ses liens mènent à chaque étape de la visite. Rien de ce que vous faites dans le projet de bienvenue ne peut nuire à vos propres projets. (Un projet indiqué sur la ligne de commande, ou un fichier de projet ouvert par double-clic, s'ouvre à sa place ; le projet de bienvenue vient alors au démarrage suivant.)
+
+Le projet de bienvenue est enregistré sous le nom « Welcome to {{APP}} » dans votre dossier *Documents*. **Aide > Projet de bienvenue…** le rouvre tel que vous l'avez laissé, ou en crée une copie neuve pour repartir de zéro (**Faire une copie neuve** ; l'ancienne copie va dans la corbeille du bureau). Supprimez-le quand vous voulez ; la commande en crée un nouveau.
+
+**Aide > Guide de démarrage rapide** montre sur une seule page où se trouvent les réglages importants (thèmes et mode sombre, couleurs et polices, mise en forme, zoom, barres d'outils, raccourcis, sauvegardes ...) et résume ce que {{APP}} sait faire.
+
+### Enregistrement
+
+Vous n'avez jamais besoin d'enregistrer à la main. {{APP}} enregistre automatiquement quelques secondes après que vous avez cessé de taper, quand vous passez à un autre programme et quand vous fermez le projet. Si vous continuez à taper, il enregistre à la première courte pause (un souffle entre deux mots) une fois 5 secondes écoulées, et au plus tard après 10 secondes, même sans pause. **Ctrl+S** enregistre immédiatement si vous voulez en être sûr.
+
+Chaque fichier est d'abord écrit sous un nom temporaire et ne remplace l'ancien que lorsqu'il a été écrit en entier et que l'ordinateur l'a inscrit sur le disque. Si le disque est plein ou si le lecteur tombe en panne pendant l'enregistrement, l'ancien fichier reste tel quel et vos modifications restent dans la fenêtre jusqu'à ce que l'enregistrement fonctionne de nouveau.
+
+**L'état de l'enregistrement est toujours visible à l'écran** (0.70). La barre de pied du premier éditeur (l'espace vide entre le total du dossier et le nombre de mots, ou à gauche des autres barres de pied) indique **Enregistré**, **Pas encore enregistré** (quelques secondes après la frappe) ou, sur fond rouge, **Non enregistré : le dernier enregistrement a échoué à 14:03** ; tant que les enregistrements échouent, le titre de la fenêtre porte lui aussi une marque. Un enregistrement qui échoue affiche aussi un message qui nomme les documents non enregistrés et propose **Enregistrer les textes ailleurs…** ; il ne prend jamais le clavier, donc la prochaine touche que vous tapez va toujours dans votre texte. Le programme réessaie de lui-même (toutes les 15 secondes au début, puis chaque minute), le message revient après cinq minutes d'échecs, et le signal rouge reste jusqu'à ce qu'un enregistrement ait réussi. Les cartes mentales sont enregistrées et vérifiées de la même façon : un tableau qui ne peut pas être enregistré est conservé dans la fenêtre, compté comme non enregistré à la fermeture du projet, et placé dans la copie de secours.
+
+**Messages courts** (0.93.0). Il n'y a plus de ligne de barre d'état en bas de la fenêtre. Les messages qui s'y affichaient autrefois (« Enregistré de nouveau : toutes les modifications sont sur le disque. », le résultat d'une sauvegarde, etc.) apparaissent pendant quelques secondes au même endroit que le texte d'enregistrement, dans la barre de pied du premier éditeur (celui de gauche ou du haut quand il y en a deux), puis le texte d'enregistrement revient. Un message trop long pour la place est raccourci ; posez le pointeur dessus pour le lire en entier. Dans un éditeur très étroit, le texte est remplacé par une petite marque colorée (vert : enregistré, jaune : pas encore enregistré, rouge : échec) dont l'info-bulle contient le texte. En mode composition, et tant qu'aucun projet n'est ouvert, rien n'est affiché.
+
+**Fichiers que {{APP}} n'écrasera pas** (0.70). Un fichier texte endommagé (un fichier RTF dont le début est corrompu ou qui est tronqué) ou qu'un autre programme a enregistré dans un autre codage de caractères (un fichier Markdown enregistré en Windows-1252 ou en UTF-16, par exemple après l'avoir modifié en dehors du programme) est affiché dans la mesure où il peut être lu et ne peut pas être modifié ; un message l'indique, et le fichier n'est jamais changé. Copiez son texte dans un nouveau document pour continuer, ou enregistrez le fichier en UTF-8 dans le programme qui l'a écrit, puis fermez et rouvrez le projet ; ou ramenez-le à l'un de ses instantanés (depuis 0.81.1) : le fichier endommagé est d'abord conservé comme copie dans *settings/conflicts* du dossier du projet, et le texte de l'instantané devient le texte du document, qui peut être modifié et est de nouveau enregistré. Fusionner les documents et Diviser refusent un tel document en donnant la raison, et Remplacer dans le projet, la conversion des guillemets et les changements de style le laissent tel quel et le nomment. Si une commande le modifie malgré tout, le texte modifié n'est pas perdu : il est conservé sous forme de fichier RTF dans *settings/conflicts*, et un message indique où (0.81.1). Un fichier de carte mentale qui ne peut pas être lu est traité de la même façon. Les caractères qui ne peuvent pas être stockés (caractères de contrôle venant de données collées) sont omis comme auparavant ; un court message dans la barre de pied l'indique désormais une fois par document.
+
+**Un enregistrement aboutit en entier** (0.65). Quand un enregistrement écrit plusieurs fichiers (le texte d'un nouveau document et le fichier du projet, un texte et ses images, la fiche des objets), tous sont d'abord écrits à côté de leur emplacement, puis inscrits dans un petit journal (*settings/journal.json*), et seulement ensuite mis en place ensemble. Si le programme ou l'ordinateur s'arrête en plein milieu, la prochaine ouverture termine cet enregistrement à partir du journal ou, si le journal n'était pas encore complet, laisse le projet tel qu'il était à l'enregistrement précédent ; un avis indique lequel. Un journal illisible (défaut du disque) n'est jamais pris pour un journal vide : lui et les fichiers de son enregistrement sont conservés dans un dossier de *settings/conflicts*, rien n'est mis en place ni supprimé, et l'avis le dit (0.81.1). Dans un dossier synchronisé, le journal d'un enregistrement de l'autre ordinateur est laissé tranquille pendant 15 minutes (cet enregistrement peut encore être en cours là-bas, ou ses fichiers encore en route) : cet ordinateur n'enregistre pas le projet entre-temps et réessaie de lui-même, et si l'autre ordinateur s'est arrêté pendant cet enregistrement, celui-ci le termine après ces 15 minutes (0.81.1). Si un fichier d'un enregistrement ne peut pas être écrit, aucun ne remplace quoi que ce soit, et vos modifications restent dans la fenêtre pour le prochain essai. Depuis 0.93.0, un lecteur qui signale une erreur quand un dossier est synchronisé après la mise en place des fichiers (une vraie erreur, pas un système de fichiers incapable de synchroniser) fait considérer l'enregistrement comme échoué : le journal reste, le message indique que le lecteur a signalé une erreur, et le prochain enregistrement ou la prochaine ouverture termine l'enregistrement à partir du journal. Tant qu'un journal illisible n'a pas pu être mis de côté (le dossier *settings/conflicts* ne peut pas être écrit), aucun enregistrement n'écrit de nouveau journal par-dessus : l'enregistrement attend, son message nomme le fichier, et le programme enregistre de lui-même dès que le fichier peut être écarté. Un fichier temporaire d'un enregistrement antérieur qui gêne est mis de côté, jamais écrasé. Une synchronisation de dossier qui échoue avant que quoi que ce soit ne soit remplacé est un échec net : rien n'a été modifié. Quand l'erreur survient après la mise en place des fichiers, le programme note ce qui se trouve sur le disque (pour que les nouvelles tentatives ne signalent pas de faux conflits « modifié ailleurs » et n'écrivent pas deux fois les images), et il synchronise de nouveau le dossier à chaque enregistrement : « Enregistré » suit toujours une synchronisation de dossier vérifiée. Un système de fichiers qui répond par une erreur à une synchronisation de dossier dès l'ouverture du projet est mémorisé comme incapable de synchroniser les dossiers, et ses enregistrements ne sont pas annoncés comme échoués.
+
+Si vous fermez la session ou éteignez l'ordinateur pendant que {{APP}} est ouvert, il enregistre tout avant de se terminer (aucune sauvegarde n'est alors faite). Si cet enregistrement échoue (disque plein, lecteur disparu), les textes et notes non enregistrés (et, depuis 0.93.0, le fichier du projet tel qu'il est en mémoire) sont écrits sous forme de fichiers RTF dans un dossier de secours, *~/.local/share/{{APP}}/Emergency*, et le démarrage suivant indique où il se trouve et combien de fichiers ont été écrits (l'avis dit « incomplet » et nomme ce qui manque quand un fichier n'a pas pu être écrit). S'il se termine de façon inattendue, le démarrage suivant vous le signale (section 20, *Rapports de plantage*).
+
+**Fermer un projet qui ne peut pas être enregistré** demande ce qu'il faut faire ; **Garder ouvert** est le choix par défaut. **Enregistrer les textes ailleurs…** écrit les textes et notes pas encore enregistrés sous forme de fichiers RTF dans un dossier de votre choix (un autre disque, une clé USB), et le projet reste ouvert. Depuis 0.93.0, cette copie de secours contient aussi le fichier du projet tel qu'il est dans la fenêtre (le classeur, les titres et les libellés), les tableaux de cartes mentales et les objets modifiés, et elle est faite même quand seuls le classeur ou les objets ont changé. Le message indique combien de fichiers ont été écrits, sous la forme « n sur m », et nomme les fichiers manquants et la raison ; une copie à laquelle il manque des fichiers porte l'en-tête **incomplète** (avec un signe d'avertissement) et ne ressemble jamais à une copie terminée. Un dossier déjà présent n'est jamais réutilisé : une deuxième copie dans la même seconde reçoit un numéro. Le fichier du projet dans la copie porte le nom du fichier du projet auquel s'ajoute « .copy » (pour que le dossier ne soit pas pris pour un projet par erreur) ; le README de la copie explique comment la remettre en place : fermez le projet, renommez le fichier du projet dans le dossier du projet (il reste tel qu'il était), copiez-y le fichier de la copie de secours, renommez-le avec le nom du fichier du projet et rouvrez le projet. Pour un projet au format Scrivener, le README dit que le fichier appartient à la copie de travail et n'indique aucun moyen de revenir en arrière. Quand rien n'était finalement non enregistré (une nouvelle tentative a réussi entre-temps), le message dit que tout est enregistré et qu'aucune copie n'était nécessaire. **Fermer sans enregistrer** le ferme et perd ces modifications.
+
+### Où se trouve votre travail
+
+Un projet est un dossier nommé *VotreTitre*{{SUFFIX}}. À l'intérieur, chaque document est un fichier texte ordinaire, si bien que votre écriture reste lisible même sans {{APP}}. Double-cliquez sur le fichier *VotreTitre*{{FILE}} dans le dossier pour ouvrir le projet. Ne renommez pas et ne déplacez pas à la main les fichiers à l'intérieur du dossier du projet.
+
+Pour trouver le fichier d'un document en dehors de {{APP}}, ouvrez *contents-by-title.txt* dans le dossier du projet (0.65) : il liste chaque document du classeur avec son titre, en retrait selon sa place, ainsi que les fichiers qui contiennent son texte, ses notes ou ses médias (par exemple *content/<id>/text.md*). {{APP}} l'écrit à chaque enregistrement qui modifie le classeur et ne le lit jamais lui-même. (Un projet au format Scrivener n'a pas de telle liste ; le fichier *.scrivx* de Scrivener nomme ses documents.)
+
+Un projet ne devrait être ouvert que dans une seule fenêtre à la fois. S'il est déjà ouvert dans une autre fenêtre ou sur un autre ordinateur (par exemple par un dossier synchronisé), {{APP}} vous avertit avant de l'ouvrir. Si vous relancez {{APP}} avec un projet déjà ouvert dans une fenêtre du programme (depuis le gestionnaire de fichiers ou un raccourci du bureau), cette fenêtre passe au premier plan au lieu que le projet soit ouvert deux fois ; un autre projet s'ouvre dans une fenêtre à part.
+
+**Un projet dans un dossier synchronisé** (OneDrive, Dropbox, Nextcloud, Syncthing ou tout autre programme de synchronisation) peut être utilisé sur plusieurs ordinateurs, un à la fois. Fermez-le sur un ordinateur et laissez le programme de synchronisation terminer avant de l'ouvrir sur l'autre. {{APP}} vous aide pour cela au niveau des fichiers, quel que soit le programme de synchronisation :
+
+- Tant qu'un projet est ouvert, un petit fichier de verrou qu'il contient nomme l'ordinateur et est renouvelé toutes les quelques minutes. Il contient le nom de l'ordinateur, votre nom d'utilisateur sur celui-ci, la version et le numéro de processus du programme, le moment où le projet a été ouvert et celui où le verrou a été renouvelé pour la dernière fois, ainsi qu'un code qui distingue les ordinateurs (une empreinte, non lisible comme un nom). Toute personne ayant accès au dossier partagé peut voir ces informations. Sous **Fichier > Options > Général > Enregistrement**, **Nom de cet ordinateur dans les dossiers partagés** définit un nom de votre choix (« Portable ») ; il est utilisé à la place du nom de l'ordinateur dans les fichiers de verrou, dans les noms des versions conservées et dans *settings/ui-<computer>.json*, et votre nom d'utilisateur est alors omis. Sur un autre ordinateur, l'ouverture du projet affiche alors le nom de cet ordinateur, depuis quand il a le projet ouvert et son dernier signe de vie ; **Ouvrir quand même** ou **Annuler**. Un verrou qui n'a pas été renouvelé depuis plus de 15 minutes (le projet n'a pas été fermé là-bas, ou cet ordinateur est éteint) est présenté comme périmé, et **Ouvrir** est le choix par défaut.
+- Si le projet est ouvert sur un autre ordinateur alors qu'il est ouvert ici, un avis le signale et propose de le fermer ici.
+- Si un fichier du projet a été modifié ailleurs (sur un autre ordinateur par le programme de synchronisation, ou par un autre programme) après que {{APP}} l'a lu, et qu'il a aussi été modifié ici, l'autre version est conservée avant l'enregistrement de la vôtre : comme **instantané** du document (comparez-le dans l'onglet Instantanés de l'inspecteur) et comme copie dans le dossier *settings/conflicts* du projet. Un avis indique quels documents. Si l'autre version ne peut pas être conservée (par exemple parce que le disque est plein ou que *settings/conflicts* ne peut pas être écrit), la vôtre n'est pas enregistrée par-dessus : l'enregistrement échoue avec un message qui nomme le fichier, et vos modifications restent non enregistrées jusqu'à ce que l'autre version puisse être conservée. Un document que vous avez seulement consulté ici n'est jamais enregistré par-dessus une version plus récente venue d'ailleurs.
+- Ouvrir et fermer un projet sans rien modifier ne change aucun de ses fichiers ; la disposition des fenêtres et les endroits où vous étiez dans chaque document sont conservés par ordinateur (*settings/ui-<computer>.json*). Au format Scrivener, le *.scriv* n'est pas touché non plus, et il reçoit un fichier de verrou de {{APP}} (*quillbinder.lock*) tant qu'il est ouvert ; Scrivener ne le lit pas. Avant chaque enregistrement dans le *.scriv*, {{APP}} cherche le propre verrou de Scrivener : si Scrivener a ouvert le projet après {{APP}}, plus rien n'est écrit dans le *.scriv* (un avis le dit une fois, puis un court message dans la barre de pied) ; vos modifications restent dans la copie de travail de {{APP}}. Fermez le projet dans Scrivener et enregistrez de nouveau (**Fichier > Enregistrer**). Si vous fermez d'abord le projet ici, les modifications vont dans le *.scriv* à la prochaine ouverture ici ; là où Scrivener a modifié quelque chose entre-temps, sa version est lue.
+- Si le projet liste du texte pour un document dont le fichier n'est pas encore arrivé sur cet ordinateur (le programme de synchronisation n'a pas terminé), un avis le nomme après l'ouverture ; ce document est affiché vide, ne peut pas être modifié, et rien n'est enregistré à sa place. Fermez le projet, attendez que le programme de synchronisation ait fini et rouvrez-le. Il en va de même pour un texte qui n'a pu être lu qu'en partie (0.65).
+- Un fichier modifié ailleurs est aussi repéré lorsqu'il a gardé sa taille et son horodatage (certains programmes de synchronisation fixent eux-mêmes l'heure) : {{APP}} compare son contenu avec ce qu'il a lu ou écrit (0.65).
+- Le contenu tranche aussi dans l'autre sens (0.92.0) : un fichier dont **seule l'heure** a changé n'est pas une autre version. Certains programmes de synchronisation redéfinissent l'heure d'un fichier quelques secondes après que {{APP}} l'a écrit, quand leur envoi est terminé ; rien n'est conservé pour cela, aucun avis n'apparaît et le fichier n'est pas réécrit. Un fichier de projet qui contient déjà ce qu'un enregistrement écrirait est lui aussi laissé tranquille, de sorte qu'un enregistrement qui ne change rien ne donne rien à transporter au programme de synchronisation.
+- L'avis **Autres versions conservées** a le bouton **Ne plus afficher avant la fermeture de {{APP}}**. Les autres versions sont toujours conservées comme instantanés et comme copies dans *settings/conflicts* ; seul l'avis reste absent jusqu'à ce que vous quittiez le programme. Le démarrage suivant l'affiche de nouveau.
+- **Un cadenas sur ce qu'un autre appareil est en train de travailler (0.92.0).** Tant qu'un projet est ouvert, chaque appareil note aussi, à côté du fichier de verrou, quels documents il a ouverts dans un éditeur ou modifiés depuis l'ouverture du projet. Quand un deuxième appareil ouvre le projet, son classeur affiche un petit cadenas à l'extrémité droite des lignes de ces documents, et sur les dossiers qui les contiennent. Pointez le cadenas : l'info-bulle nomme l'appareil et le moment où il a ouvert le projet. C'est une indication, pas une protection : rien n'est bloqué, et vous pouvez toujours modifier le document. La marque voyage par votre programme de synchronisation, elle peut donc dater de quelques minutes ; elle exige 0.92.0 ou plus récent sur les deux appareils (Scrivener n'annonce rien). Une liste dont l'appareil n'a donné aucun signe de vie depuis plus de 15 minutes n'est pas affichée. La note est un petit fichier par appareil (*settings/lock-work-…json* ; pour un projet au format Scrivener, *quillbinder.lock-work-…json* dans le *.scriv*) ; il contient le nom de l'appareil comme dans le fichier de verrou, l'heure et les numéros internes des documents, ni titres ni texte. Il n'est écrit que quand la liste change, jamais à chaque frappe, il est supprimé à la fermeture du projet, et il n'est pas inclus dans les sauvegardes.
+- **Format Scrivener, deux ordinateurs** (0.65) : les documents ajoutés au *.scriv* ailleurs (Scrivener sur un autre ordinateur) pendant que le projet est ouvert ici sont conservés, et le classeur qui les nomme n'est pas remplacé ; un avis vous demande de fermer le projet et de le rouvrir, ce qui affiche à la fois leurs documents et les vôtres. Les images, PDF, fichiers audio et vidéo et cartes mentales modifiés ailleurs dans le *.scriv* sont conservés tels quels (auparavant, la version d'ici était copiée par-dessus) ; quand l'un a été modifié des deux côtés, l'autre version est d'abord conservée dans *settings/conflicts*.
+
+Un projet au **format Scrivener** est à la place un dossier *VotreTitre.scriv* ; ouvrez-le avec son fichier *.scrivx*. {{APP}} y enregistre vos modifications, si bien que le projet reste un projet Scrivener. **Fichier > Enregistrer sous…** enregistre un projet sous un autre nom ou à un autre endroit, dans l'un ou l'autre format (section 14).
+
+### Confidentialité : ce qui quitte votre ordinateur
+
+{{APP}} contacte Internet pour une seule chose : chercher des mises à jour. Il récupère un petit fichier, n'envoie rien à votre sujet, et vous pouvez le désactiver dans le menu Aide. (La section 17, *Recherche de mises à jour*, dit exactement ce qui est récupéré et quand. Avant 0.92.0, le programme ne cherchait pas du tout de mises à jour.) Il n'y a ni statistiques d'utilisation ni rapports de plantage envoyés. Trois autres choses passent par Internet, et seulement quand vous les lancez :
+
+- **Fichier > Importer > Page web…** récupère la page que vous indiquez et ses images depuis ce site. Comme un navigateur, il envoie le nom d'un navigateur courant (Firefox sous Linux), les langues de votre système (pour la langue de la page) et, comme toute connexion, l'adresse Internet de votre ordinateur.
+- **Le téléchargement d'un modèle de langue** pour le module Translation Helper (section 10) le récupère depuis les versions du dépôt de {{APP}} sur GitHub. Il envoie le nom du module (« Quillbinder-Translation-Addon ») et, comme toute connexion, votre adresse Internet.
+- **Le téléchargement d'un modèle vocal** (le module Speech Transcription, section 10) récupère le modèle sur Hugging Face (huggingface.co, une société des États-Unis) ou à l'adresse que vous indiquez dans ses options. Il envoie « {{APP}}/<version> » comme nom du programme et, comme toute connexion, votre adresse Internet. Un modèle n'est installé que si sa somme de contrôle est celle connue ; un fichier provenant d'une autre adresse ou que vous avez téléchargé vous-même n'est utilisé qu'après votre accord.
+
+Ce que d'autres peuvent voir de votre travail :
+
+- **Les projets dans des dossiers partagés** portent un fichier de verrou tant qu'ils sont ouverts (voir plus haut) : nom de l'ordinateur, nom d'utilisateur et heures. Définissez un nom de votre choix sous **Fichier > Options > Général > Enregistrement** pour les omettre.
+- **Les informations sur l'auteur** (nom, adresse, téléphone, e-mail sous **Fichier > Options**) restent dans les réglages du programme sur cet ordinateur ; elles n'entrent jamais dans les réglages propres d'un projet. Elles n'atteignent un manuscrit que là où le format de compilation utilise les espaces réservés (<$author>, <$address> ...).
+- **Le texte supprimé n'a pas disparu partout** : les instantanés conservent les versions antérieures d'un document (**Projet > Supprimer les anciens instantanés…** les supprime), et les sauvegardes conservent le projet entier tel qu'il était (section 15). Les sauvegardes sont des fichiers ZIP ordinaires sans mot de passe ; un dossier de sauvegarde situé dans un dossier synchronisé est envoyé par le programme de synchronisation.
+- **{{APP}} ne chiffre pas vos fichiers** (0.65) : les textes, les notes, les réglages du projet et les sauvegardes sont des fichiers ordinaires, lisibles par toute personne qui peut lire le dossier où ils se trouvent. Pour garder un manuscrit privé, conservez le projet et ses sauvegardes sur un disque chiffré (l'installateur de Kubuntu propose de chiffrer tout le disque ; pour une clé USB ou un disque externe, les coffres-forts Plasma de KDE ou un disque chiffré avec LUKS), et gardez le dossier de sauvegarde hors des dossiers partagés que vous ne contrôlez pas.
+- **Les rapports de plantage** restent sur cet ordinateur jusqu'à ce que vous en copiiez ou en envoyiez un vous-même (section 20). Ils décrivent l'état du programme et nomment le projet ouvert et son dossier. Sous Windows, un vidage de la mémoire est conservé à côté de chaque rapport ; il peut contenir du texte que vous étiez en train d'écrire, et le rapport le dit.
+
+### Ajouter {{APP}} au menu des applications
+
+La première fois que vous lancez le fichier du programme ({{APP}}.AppImage), la page du premier démarrage propose d'ajouter {{APP}} au menu des applications. Ensuite, vous pouvez le lancer comme n'importe quel autre programme, et un double-clic sur un projet l'ouvre. Aucune boîte ne confirme l'entrée ; un échec est signalé. La même page (et **Aide > Ajouter au menu des applications**) propose de **déplacer l'AppImage dans ~/Applications** (coché au départ quand le fichier ne s'y trouve pas encore), afin que l'entrée de menu le lance depuis un endroit fixe où le fichier reste (la case à cocher le dit avec ces mots, sans parenthèse) ; si le déplacement échoue (disque plein, fichier du même nom déjà présent), rien n'est perdu : le fichier reste où il était, l'entrée pointe vers lui, et un message en donne la raison. Si vous déplacez vous-même l'AppImage plus tard, l'entrée désigne toujours l'ancien emplacement : utilisez de nouveau **Aide > Ajouter au menu des applications**, qui écrit l'emplacement actuel du fichier (une ancienne entrée est remplacée, pas doublée). Après un déplacement, les mises à jour du programme, la copie *.before-update* et **Aide > Dépannage et développement > Informations système…** utilisent aussitôt le nouvel emplacement.
+
+L'unique commande du menu Aide, **Aide > Ajouter au menu des applications**, suit l'état de l'entrée : elle ajoute l'entrée tant qu'il n'y en a pas et, une fois qu'il y en a une, s'appelle *Retirer du menu des applications* et supprime ce que l'ajout a créé (le fichier d'entrée, l'icône et les types de fichiers) et laisse l'AppImage où elle est. Si vous déplacez vous-même le fichier du programme, retirez l'entrée et ajoutez-la de nouveau.
+
+### Sous Windows : tout dans un seul dossier
+
+La version Windows de {{APP}} (expérimentale, publiée depuis 0.91.1) est un dossier que vous décompressez où vous voulez, par exemple *C:\Users\<votre nom>\Quillbinder* ; elle ne demande aucune installation et aucun droit d'administrateur. Elle conserve ses réglages, ses modules complémentaires, ses mises à jour du programme, les polices installées et les rapports de plantage dans le dossier *data* à l'intérieur de ce dossier, et rien dans les dossiers propres de Windows ni dans le registre. Le dossier entier peut être déplacé ou copié (sur une clé USB ou un autre ordinateur) ; le supprimer désinstalle le programme. Un dossier dans lequel le programme ne peut pas écrire (comme *Program Files*) est refusé avec un message qui indique où le placer à la place. Les mises à jour du programme s'installent avec **Aide > Modules et mises à jour > Installer une mise à jour ou un module…** ; pour passer à une version que vous avez téléchargée de nouveau, décompressez-la et copiez le dossier *data* dans le nouveau dossier. Vos projets restent là où vous les conservez.
+
+Il y a deux manières d'obtenir ce dossier (0.90.4). Le **programme d'installation** (*...-setup.exe*) demande un dossier et y décompresse {{APP}} ; il ne demande aucun droit d'administrateur et ne modifie rien d'autre sur l'ordinateur : aucune entrée sous Applications, rien dans le registre, aucune entrée dans le menu Démarrer (le guide décrit plus bas en propose). Décompresser une version plus récente dans le même dossier conserve *data*, c'est-à-dire vos réglages et modules complémentaires. Le **fichier zip** contient le même dossier : décompressez-le complètement. Windows peut avertir à propos de l'un ou l'autre fichier parce qu'il n'est pas signé (SmartScreen : *Informations complémentaires*, puis *Exécuter quand même*).
+
+Deux choses diffèrent de Linux à cause de Windows lui-même (0.90.4). La touche **AltGr** tape son caractère, comme on s'y attend : sur un clavier allemand, AltGr+7, 8, 9, 0 et < donnent { [ ] } et |, bien que {{APP}} ait des commandes sur Ctrl+Alt avec ces touches ; appuyez sur les touches Ctrl et Alt de gauche pour les commandes. Et les fichiers qui ne sont nécessaires que pour un instant (une page web enregistrée décompressée pour l'affichage, ou sa copie pour le navigateur) sont conservés dans le dossier temporaire de Windows et supprimés à la fermeture de {{APP}}. Speech Transcription utilise le processeur sous Windows, pas la carte graphique.
+
+Au premier démarrage, un guide indique où le programme conserve ses fichiers et avertit quand son dossier se trouve à l'intérieur du dossier d'un service de synchronisation (OneDrive, Dropbox, Google Drive ...) ou a un chemin trop long. Il demande aussi ce qui suit, que **Aide > Dépannage et développement > Cet ordinateur…** et **Fichier > Options > Général > Cet ordinateur** affichent de nouveau :
+
+- **Sauvegardes** : il n'y a pas de dossier de sauvegarde standard. Tant que vous n'en avez pas choisi un, aucune sauvegarde automatique n'est faite ; la barre de pied du premier éditeur affiche **Aucune sauvegarde** à côté du texte d'enregistrement (cliquez dessus pour choisir le dossier), et la première sauvegarde qui devrait avoir lieu demande un dossier. Le mieux est un autre disque.
+- **Notes du bloc-notes et transcriptions** : dans Documents (le choix standard), dans le dossier du programme ou dans un dossier de votre choix. Un changement donne aux deux outils le nouvel emplacement ; ce qu'ils ont écrit auparavant reste où c'est.
+- **Windows** : une entrée dans le menu Démarrer, un raccourci sur le bureau et les types de fichiers de projet (les fichiers *.qbx* s'ouvrent avec {{APP}}, qui est proposé sous **Ouvrir avec** pour les fichiers *.scrivx* de Scrivener). Ce sont les seules choses que le programme place en dehors de son dossier, chacune seulement quand vous l'ajoutez, et chacune avec **Retirer**. Retirez-les avant de supprimer ou de déplacer le dossier.
+
+Les polices installées avec **Format > Police > Installer des fichiers de police…** restent dans le dossier du programme et ne sont utilisables que par {{APP}} ; les autres programmes ne les voient pas.
+
+Les modules complémentaires contenant du code de programme ont leurs propres versions Windows (leurs noms de fichier se terminent par *-windows*) : **Media Playback** lit ce que Windows lit lui-même, **Extra Video and Audio Formats** ajoute FFmpeg, et **Speech Transcription** transcrit la parole sur le processeur (les cartes graphiques ne sont pas encore utilisées sous Windows). **Translation Helper** fait aussi partie de la version complète sous Windows (0.92.0). Les modules sans code de programme (thèmes, modèles, formats de compilation) sont les mêmes fichiers sur tous les systèmes.
+
+### Sur les tablettes Android
+
+La version Android de {{APP}} (expérimentale, publiée depuis 0.91.3) est une application pour tablettes sous Android 9 ou plus récent (ARM 64 bits). Elle a les mêmes fenêtres que sur un ordinateur, adaptées aux doigts : un doigt fait défiler et touche, deux doigts zooment, un doigt qui reste une demi-seconde sur un élément ouvre son menu contextuel (dans un texte, il suffit de toucher le texte sélectionné), et les barres d'outils se replient sur autant de lignes que l'écran en demande. Téléchargez le fichier APK sur la tablette et ouvrez-le ; Android demande si le navigateur ou l'application Fichiers peut installer des applications, ce que vous autorisez pour cette installation. Une nouvelle version arrive sous forme d'un nouvel APK et s'installe par-dessus l'ancien en conservant vos réglages et modules complémentaires ; **Aide > Modules et mises à jour > Rechercher des mises à jour maintenant** vous dit quand il y en a une et ouvre son téléchargement dans le navigateur (les modules plus récents s'installent dans {{APP}}).
+
+Avec un clavier et une souris externes (depuis 0.92.0) : Ctrl + molette de la souris zoome, et Ctrl + clic ou Shift + clic sélectionne plusieurs documents, comme sur un ordinateur. La ligne entre deux volets montre une poignée ; une souris pressée à quelques pixels à côté l'entraîne. Le bouton **Retour** d'Android ferme le menu, l'info-bulle ou la fenêtre au premier plan ; chaque fenêtre a un bouton qui la ferme, et une fenêtre plus grande que l'écran défile. Sur une tablette, l'épingle de la carte mentale fixée apparaît sur la ligne sélectionnée du classeur (cliquez dessus, ou utilisez le menu contextuel de la ligne : *Fixer la carte mentale de cet élément*, *Libérer la carte mentale fixée*), et un toucher sur le cadenas d'une ligne montre qui y travaille. Un doigt sur l'aperçu de la carte mentale agit comme la souris : un toucher y déplace la vue, un doigt fait glisser le rectangle de la partie affichée, et la poignée dans son coin en change la taille. **Fichier > Enregistrer sous…** demande d'abord le format sur une tablette, puis ouvre la fenêtre de fichiers.
+
+Au premier démarrage, {{APP}} demande l'accès aux fichiers de la tablette. Avec lui, les projets vont dans *Documents/Quillbinder*, les sauvegardes dans *Documents/Quillbinder/Backups*, les exports dans *Documents/Quillbinder/Exports* et les notes du bloc-notes dans *Documents/Quillbinder/Scratch Pad*, où d'autres applications, une application de synchronisation et un ordinateur relié par câble peuvent y accéder ; le bouton ouvre la page d'Android *Accès à tous les fichiers*, où vous l'activez pour {{APP}}. Sans cet accès, tout reste dans le dossier propre de l'application, que nulle autre application ne voit et qu'Android supprime avec l'application ; *Fichier > Fichiers sur cette tablette* le redemande et indique où se trouvent les choses. Quand Android met l'application de côté (touche Accueil, autre application), {{APP}} enregistre aussitôt.
+
+Les dictionnaires orthographiques (anglais et allemand ; les autres langues sont des modules, voir la section 4), les outils d'écriture, les importeurs de pages web et d'anciens fichiers Word et (depuis 0.92.0) Translation Helper font partie de l'application ; Translation Helper est installé au premier démarrage d'une version et ne télécharge un modèle de langue que lorsque vous en choisissez un. Les modules pour Android (leurs noms de fichier se terminent par *-android-arm64*) s'installent avec **Aide > Modules et mises à jour > Installer une mise à jour ou un module…** ; la fenêtre de fichiers s'ouvre dans le dossier Téléchargements, et {{APP}} redémarre quand le module en a besoin. Les paquets conçus pour Linux ou Windows et les mises à jour du programme sont refusés avec la raison : l'application elle-même ne se met à jour que par un nouvel APK. Pas encore dans la version Android : Speech Transcription, l'audio et la vidéo dans l'éditeur, et les rapports de plantage. Le texte copié à l'intérieur de {{APP}} garde sa mise en forme quand vous le collez ; le presse-papiers d'Android ne porte que du texte brut, si bien que le texte copié vers d'autres applications arrive sans mise en forme.
+
+---
+
+## 2. La fenêtre principale
+
+La fenêtre comporte trois colonnes :
+
+| Zone | Rôle |
+|------|--------------|
+| **Classeur** (à gauche) | La table des matières de tout votre projet : chaque document et chaque dossier. |
+| **Éditeur** (au milieu) | Affiche ce que vous avez sélectionné dans le classeur : un texte, un tableau en liège de fiches, ou un plan. |
+| **Inspecteur** (à droite) | Informations sur le document actuel : synopsis, notes, signets, métadonnées, instantanés et commentaires. |
+
+La première fois que {{APP}} démarre sur un écran de moins de 1600 px de large, la fenêtre s'ouvre agrandie. La taille, l'emplacement et l'état (agrandie ou non) de la fenêtre sont enregistrés un instant après chaque changement, de sorte qu'un plantage ne les perd pas. Masquez le classeur avec **Ctrl+Alt+B** et l'inspecteur avec **Ctrl+Alt+I** pour gagner de la place. Cela vaut pour une fenêtre plus large que haute ; une fenêtre plus haute que large dispose les trois mêmes zones autrement (section suivante). Les couleurs et les polices des trois zones, ainsi que celles du tableau en liège, du plan et du mode composition, proviennent du thème (**Affichage > Thèmes**) et peuvent être modifiées zone par zone (section 16), aussi par un clic droit sur la zone (**Apparence**). Chaque projet conserve son propre aspect.
+
+La **barre d'outils** en haut contient, de gauche à droite : le bouton **Affichage** (classeur, collections, inspecteur, dispositions), nouveau document (avec un menu pour les dossiers, les modèles et l'importation), nouveau dossier, corbeille, **annuler** et **rétablir**, le bouton de **recherche** (recherche dans le projet ; la flèche à côté liste les autres outils de recherche : Rechercher dans le document, Remplacer dans le projet, Rechercher par mise en forme), le champ de **recherche rapide**, les trois boutons d'affichage (texte, tableau en liège, plan), les signets du projet, la référence rapide, les commentaires et notes de bas de page, la compilation, le mode composition, le **microphone** de Speech Transcription (quand ce module est installé) et le bouton de l'inspecteur. Vous décidez de ce qu'elle contient (voir « Vos propres barres d'outils » plus bas).
+
+La **barre de format** située en dessous contient le style, la police, la taille, l'interligne, la mise en forme par défaut du texte, la fenêtre des polices, gras, italique, souligné, barré, surligner, la couleur du texte, l'alignement, les listes, l'espace avant et après le paragraphe, le retrait de la première ligne et de tout le paragraphe, les commentaires, les notes de bas de page, les annotations en ligne et les images. Affichez ou masquez les deux barres avec **Affichage > Barres d'outils**.
+
+**Boîtes de dialogue.** Une fenêtre ouverte par le programme (Options, Compiler, Objectifs du projet ...) n'est jamais plus grande que l'écran privé des panneaux du bureau : sur un petit écran de portable, son contenu défile ou rétrécit, et ses boutons restent visibles. Quand elle se ferme, le clavier revient là où il était, généralement dans le texte, de sorte que vous pouvez continuer à taper tout de suite.
+
+**Où suis-je ?** Double-cliquez sur l'espace à côté du texte (le papier à côté de la colonne ou la zone qui l'entoure) : le classeur sélectionne le document situé à côté du clic, ouvre les dossiers au-dessus de lui et fait clignoter deux fois sa ligne en orange. L'éditeur garde ce qu'il affiche. **Navigation > Afficher dans le classeur** (**Ctrl+Shift+R**) fait de même pour le document où se trouve le curseur.
+
+Le **pied de page** de chaque éditeur affiche le nombre de mots et de caractères (sélectionnez du texte pour ne compter que la sélection) et l'objectif du document. Cliquez sur le compte pour les détails. Quand l'éditeur affiche un dossier (ou un document avec des sous-documents), le pied de page affiche aussi le **total** du dossier : les mots de son propre texte et de tout ce qu'il contient, par exemple « Dossier : 12 345 mots ». Le tableau en liège et le plan affichent le même total au milieu de leur pied de page ; quand plusieurs éléments sont affichés, c'est le total de tous. Un clic sur un total en montre le détail (mots, caractères, caractères sans espaces, paragraphes et pages), comme le compte d'un texte. L'inspecteur l'affiche sous **Total** dans les métadonnées d'un dossier, et poser la souris sur un dossier dans le classeur l'affiche aussi (avec les mots propres du dossier quand il a un texte à lui).
+
+### Les menus
+
+| Menu | Contenu |
+|------|---------------|
+| **Fichier** | Projets, enregistrement, format du projet ({{APP}} ou Scrivener), sauvegardes, importation et exportation, comparer et transférer avec un fichier Word ou LibreOffice, compilation, impression, conversion de fichiers, options |
+| **Édition** | Annuler, presse-papiers, sélection, recherche et remplacement (dans le texte, dans le projet, par mise en forme), déplacement de documents dans le classeur, outils d'écriture |
+| **Insertion** | Images, tableaux, liens vers des documents et des objets, liens web, commentaires, notes de bas de page, horodatages de médias, numérotations automatiques, espaces réservés, caractères spéciaux, date et heure |
+| **Affichage** | Les trois modes d'affichage, l'éditeur divisé (**Diviser l'éditeur**), les emplacements du classeur, de l'éditeur et de l'inspecteur et les dispositions enregistrées (**Disposition**), les thèmes de couleurs (**Thèmes**), classeur, collections et inspecteur (et **Touches d'ajout rapide dans le classeur**), barres d'outils, options d'édition du texte (vue page, règle, défilement machine à écrire), options du tableau en liège et du plan, couleurs des libellés, zoom, mode composition, plein écran |
+| **Navigation** | Reculer et avancer, document précédent et suivant, ouverture de documents dans l'autre éditeur, dans le support de copie ou comme référence rapide, le verrouillage de l'éditeur, l'éditeur dans lequel le classeur charge, les onglets de l'inspecteur (tous, sous les noms de leurs info-bulles : **Synopsis et notes**, **Signets**, **Métadonnées**, **Instantanés**, **Commentaires et notes de bas de page**, la carte mentale, les objets et les onglets des outils d'écriture) |
+| **Projet** | Nouveaux documents, paramètres du projet (aussi enregistrés dans un fichier et chargés depuis un fichier), objectifs, mots-clés, statistiques, historique d'écriture, corbeille, suppression des anciens instantanés |
+| **Documents** | Instantanés, renommer, dupliquer, diviser, fusionner, convertir, icône, libellé, statut, signets |
+| **Format** | Police (avec installation de polices), paragraphe, style, listes, surligner, copier la mise en forme, mode révision |
+| **Fenêtre** | Bloc-notes, fenêtres de référence rapide |
+| **Aide** | **Rechercher une commande**, ce manuel, le guide de démarrage rapide, le projet de bienvenue, la liste de tous les espaces réservés, la liste des raccourcis clavier, l'aide sur les cartes mentales, le sous-menu **Modules et mises à jour** (gestionnaire de modules, installer une mise à jour ou un module, la recherche de mises à jour), l'ajout de {{APP}} au menu des applications (et son retrait), le sous-menu **Dépannage et développement** (informations système, cet ordinateur, rapports de plantage, ouvrir le dossier des plugins, le guide du développeur), signaler un problème, les licences des composants tiers, À propos de |
+
+**Rechercher une commande** (**Aide > Rechercher une commande…**) ouvre une fenêtre avec un champ de recherche et la liste de toutes les commandes des menus, chacune avec son menu et son raccourci. Tapez une partie d'un nom (plusieurs mots affinent la recherche, dans n'importe quel ordre) ; **Return** ou un double-clic exécute la commande choisie. Une commande désactivée à ce moment est grisée et ne s'exécute pas. Elle n'a pas de raccourci propre.
+
+Un sous-menu affiche des noms courts : **Fichier > Importer > Fichiers…**, **Documents > Diviser > à la sélection**, **Navigation > Ouvrir > comme référence rapide**. Le raccourci d'une commande est affiché à côté d'elle et peut être modifié (section 19). Chaque entrée d'un menu a sa propre lettre (soulignée quand vous maintenez **Alt**), si bien que **Alt** et les lettres donnent accès à toutes les commandes.
+
+Sans projet ouvert, les menus **Insertion**, **Navigation**, **Projet**, **Documents** et **Format** sont grisés, de même que les commandes des autres menus qui ont besoin d'un texte ou d'un classeur (Rechercher, Zoom, la disposition de l'éditeur, Activer le classeur ...). Ce qui fonctionne sans projet : créer, ouvrir et importer des projets, convertir des fichiers, installer des mises à jour et des modules, les options, les thèmes et les dispositions, les outils d'écriture qui n'ont pas besoin d'un projet, et l'Aide.
+
+### Les volets selon la forme de la fenêtre
+
+La fenêtre dispose le classeur, l'éditeur et l'inspecteur selon sa forme, et change d'elle-même quand la forme change (vous étirez la fenêtre en hauteur, ou vous tournez une tablette). Une fenêtre carrée compte comme large.
+
+- **Fenêtre large** (plus large que haute, ou carrée) : trois colonnes. Choisissez leur ordre sous **Affichage > Disposition > Fenêtre large** : n'importe lequel des six ordres du classeur, de l'éditeur et de l'inspecteur. Les largeurs sont fixées par les lignes entre les colonnes.
+- **Fenêtre haute** (plus haute que large) : deux rangées sous les barres d'outils. Une rangée est l'éditeur, sur toute la largeur de la fenêtre ; l'autre contient le classeur et l'inspecteur côte à côte. Sous **Affichage > Disposition > Fenêtre haute**, **Éditeur au milieu** place la rangée de l'éditeur au-dessus de l'autre, **Éditeur en bas** en dessous ; **Classeur à gauche** et **Classeur à droite** choisissent le côté du classeur (l'inspecteur prend l'autre). Les hauteurs des deux rangées et les largeurs du classeur et de l'inspecteur sont fixées par les lignes qui les séparent. Quand le clavier à l'écran est affiché (Android), la rangée du classeur et de l'inspecteur garde sa hauteur ; déplacez la ligne si vous la voulez différente.
+- Un classeur ou un inspecteur masqué laisse sa place à l'autre dans la rangée de la fenêtre haute, sur toute la largeur ; quand les deux sont masqués, l'éditeur a toute la fenêtre. Deux éditeurs (**Affichage > Diviser l'éditeur**) restent à l'intérieur de la place de l'éditeur.
+- **Affichage > Disposition > Réinitialiser la disposition** ramène la forme qu'a la fenêtre en ce moment à ses valeurs de départ : classeur, éditeur, inspecteur dans une fenêtre large ; l'éditeur au milieu et le classeur à gauche dans une fenêtre haute.
+
+Les deux groupes sont toujours dans le menu ; chacun prend effet quand la fenêtre a cette forme, et chaque forme revient comme vous l'avez laissée (emplacements et tailles). Les choix appartiennent à cet ordinateur ou à cette tablette et sont conservés dans les réglages du programme, jamais dans un projet : un projet que vous partagez entre ordinateurs conserve la disposition de chaque appareil, et rien à ce sujet n'est écrit dans les fichiers du projet.
+
+### Dispositions
+
+Une disposition mémorise la façon dont la fenêtre est organisée : si le classeur, les collections, l'inspecteur, la barre d'outils et la barre de format sont affichés, la largeur des colonnes, la manière dont l'éditeur est divisé, quel affichage chaque éditeur utilise et dans quel éditeur le classeur charge. Elle ne dit rien des documents, donc chaque disposition fonctionne dans tous les projets.
+
+Choisissez une disposition sous **Affichage > Disposition** ou depuis le bouton **Affichage** de la barre d'outils. Sept dispositions sont intégrées :
+
+| Disposition | Agencement |
+|--------|-------------|
+| **Par défaut** | Classeur, un éditeur, inspecteur |
+| **Classeur et éditeur** | Classeur et texte, sans inspecteur |
+| **Éditeur seul** | Seulement le texte avec les deux barres |
+| **Plan et éditeur** | Plan à gauche, texte à droite. Le classeur charge les groupes dans le plan ; un clic sur une ligne ouvre ce document à droite |
+| **Tableau en liège et éditeur** | Tableau en liège au-dessus, texte en dessous, reliés de la même façon |
+| **Deux éditeurs** | Deux textes côte à côte |
+| **Planification** | Classeur, tableau en liège et inspecteur avec synopsis et notes |
+
+**Affichage > Disposition > Enregistrer la disposition actuelle…** enregistre la fenêtre telle qu'elle est maintenant sous un nom de votre choix ; cochez « Mémoriser aussi la taille de la fenêtre » si la disposition doit redimensionner la fenêtre. **Gérer les dispositions…** affiche toutes les dispositions avec une petite image et permet d'utiliser, de mettre à jour (remplacer par la fenêtre actuelle), de renommer, de supprimer, d'exporter et d'importer vos propres dispositions. Les dispositions intégrées ne peuvent pas être modifiées ; enregistrez plutôt une fenêtre modifiée sous un nouveau nom. Chaque disposition peut avoir un raccourci clavier (section 19, groupe « Dispositions »).
+
+### Les barres d'outils et leurs emplacements
+
+Depuis 0.91, la fenêtre a huit barres d'outils sur deux rangées (dix depuis 0.95, dont deux désactivées au départ). La première rangée contient **Principale** (Affichage, nouveau texte, nouveau dossier, corbeille, Annuler, Rétablir), **Thèmes** (le bouton des thèmes, désactivé au départ), **Profils** (le profil en cours et un menu pour en changer, désactivée au départ ; depuis 0.95), **Recherche** (le bouton de recherche, le champ de recherche rapide, les modes d'affichage) et **Outils** (signets, référence rapide, commentaires, Compiler, Afficher les caractères invisibles, Mode composition, les boutons des outils d'écriture, l'inspecteur). La deuxième rangée contient **Style et police**, **Caractère et alignement**, **Paragraphe et insertion**, la **barre d'icônes** et **Libellés** (un bouton par couleur de libellé du projet ouvert et **Aucun libellé** ; désactivée au départ ; depuis 0.95).
+
+- **Déplacer une barre d'outils.** Chaque barre d'outils a une poignée à son début (deux colonnes de points ; le pointeur devient une croix fléchée au-dessus). Faites glisser la poignée, et la barre d'outils va où vous l'emmenez :
+  - **Le long de sa rangée.** Tant que le pointeur reste entre les milieux des deux barres voisines, la barre d'outils le suit aussitôt. L'espace libre devant une barre d'outils a la largeur que vous lui donnez. En allant vers la droite, la barre d'outils prend d'abord l'espace libre après elle ; quand elle atteint la barre suivante, elle la pousse, aussi loin que les barres suivantes peuvent tenir ensemble à la fin de la rangée. En allant vers la gauche, elle s'arrête là où la barre précédente se termine, et les barres suivantes restent où elles sont (faites-les glisser jusqu'à elle si vous voulez les rassembler de nouveau). La première barre d'outils d'une rangée reste au bord de la fenêtre.
+  - **À un autre endroit de l'ordre.** Amenez le pointeur au-delà du milieu d'une barre voisine, ou sur n'importe quelle autre barre de la rangée. La barre d'outils reste pour le moment où elle est, et une ligne de la couleur de surbrillance montre où elle se placera ; relâchez le bouton de la souris pour l'y mettre. N'importe quel ordre est donc possible, aussi pour la première et la dernière barre d'une rangée.
+  - **Dans une autre rangée.** Amenez le pointeur dans l'autre rangée : la ligne y montre l'emplacement. N'importe quelle barre d'outils peut se placer dans n'importe quelle rangée, une barre de format à côté de la barre principale ou la barre de recherche parmi les barres de format.
+  - **Dans une rangée à part, ou sur le bord inférieur.** Amenez le pointeur juste sous les rangées de barres d'outils (une ligne en travers de la fenêtre apparaît) pour ouvrir une nouvelle rangée, ou sur le bord inférieur de la fenêtre pour y placer la barre d'outils. Le bord inférieur accepte des barres d'outils côte à côte et en rangées, comme le haut.
+  - **Esc**, ou un relâchement là où aucune ligne n'apparaît (au milieu de la fenêtre, par exemple), laisse tout comme avant.
+
+  Les barres d'outils situées après l'ancien emplacement se rapprochent, et l'espace libre qui se trouvait devant la barre d'outils reste dans sa rangée ; à son nouvel emplacement, la barre d'outils se place juste après la barre précédente, et vous pouvez la tirer plus à droite à partir de là. Dans une fenêtre trop étroite pour l'espace libre que vous avez laissé, l'espace rétrécit avant qu'une barre d'outils ne perde des boutons ; il revient quand la fenêtre est de nouveau large. Une barre d'outils désactivée garde sa place. Une barre d'outils ne peut pas se placer sur les côtés ni flotter comme une fenêtre à part. {{APP}} mémorise les rangées, l'ordre et les espaces.
+- **Désactiver une barre d'outils.** **Affichage > Barres d'outils** a un interrupteur pour chaque barre d'outils ; la même liste s'obtient par un clic droit sur une barre d'outils ou sur l'espace libre à côté des barres d'outils. **Afficher la barre d'outils** et **Afficher la barre de format** activent ou désactivent toute une rangée comme avant (les quatre barres de la première rangée, les trois barres de format), et les dispositions utilisent ces deux commandes ; l'interrupteur d'une barre isolée est inaccessible tant que sa rangée est désactivée.
+- **Affichage > Barres d'outils > Réinitialiser les emplacements des barres d'outils** remet toutes les barres d'outils à leurs emplacements standard (les deux rangées dans leur ordre standard, rien sur le bord inférieur) et referme les espaces entre elles.
+
+### Vos propres barres d'outils
+
+**Affichage > Barres d'outils > Personnaliser les barres d'outils…** (ou un clic droit sur une barre) ouvre une fenêtre avec deux listes : les commandes disponibles à gauche, le contenu de la barre à droite. Choisissez la barre d'outils en haut.
+
+- Ajoutez une commande avec le bouton fléché ou par un double-clic. Chaque commande des menus est disponible, y compris celles des outils d'écriture (Édition > Outils d'écriture) ; le champ de recherche au-dessus de la liste la trouve.
+- Retirez un bouton avec l'autre flèche ou par un double-clic, et déplacez-le avec les boutons haut et bas ou en le faisant glisser.
+- **Séparateur** et **Espace flexible** peuvent être utilisés autant de fois que vous le voulez. Un espace flexible pousse ce qui suit vers la droite ; deux d'entre eux centrent ce qui se trouve entre eux.
+- Certaines entrées sont plus d'une commande : **Affichage**, **Ajouter**, **Recherche**, le **champ de recherche rapide**, **Mode d'affichage**, **Signets du projet**, **Commentaires et notes de bas de page**, **Dispositions** et **Thèmes** (le bouton des thèmes avec son menu) pour les quatre barres d'outils de la première rangée ; les listes de style, de police, de taille et d'interligne et les quatre boutons de paragraphe pour les trois barres d'outils de format. Un tel contrôle n'existe qu'une fois : ajouté à une barre d'outils, il s'y déplace depuis la barre qui l'avait. Un contrôle de la première rangée ne peut pas aller sur une barre d'outils de format, ni l'inverse.
+- Sous les listes, vous choisissez des icônes petites, moyennes ou grandes et si les barres d'outils de la première rangée affichent le texte à côté ou sous les icônes.
+- **Jeu standard** remet dans la barre les boutons livrés avec le programme.
+
+Si une barre contient plus que ce qui tient dans la fenêtre, une flèche à son extrémité ouvre le reste. Une barre d'outils laissée sans aucun bouton est désactivée ; réactivée sous **Affichage > Barres d'outils**, elle a son jeu standard. Une barre d'outils que vous aviez organisée dans une version antérieure à 0.91 a été répartie sur les nouvelles barres d'outils : chaque bouton est allé à la barre d'outils qui le contient dans les jeux standard, et ce que vous aviez retiré reste retiré.
+
+### La barre d'icônes
+
+La **barre d'icônes** contient jusqu'à dix icônes de documents que vous utilisez souvent. Un clic sur l'une d'elles donne cette icône aux documents et dossiers sélectionnés (dans le classeur, ou dans le tableau en liège ou le plan où vous travaillez) ; le bouton **↺** après elles leur rend leur icône standard, et le dernier bouton choisit les icônes de la barre. Affichez ou masquez la barre avec **Affichage > Barres d'outils > Barre d'icônes**.
+
+**Affichage > Barres d'outils > Choisir les icônes de la barre d'icônes…** (aussi dans le menu contextuel de la barre) ouvre une fenêtre avec toutes les icônes à gauche, y compris les icônes de projet qui sont les vôtres, et les icônes de la barre à droite. Ajoutez avec **Ajouter →** ou par un double-clic, retirez avec **← Retirer** ou par un double-clic, et changez l'ordre avec **Monter** et **Descendre**. **Jeu standard** remet les dix icônes livrées avec le programme (Livre vert, Relecture, Coché, Non coché, Point d'interrogation, Drapeau rouge, Bloc-notes jaune, Fiche personnage, Fiche lieu, Avertissement).
+
+---
+
+## 3. Le classeur
+
+Chaque projet comporte trois dossiers spéciaux :
+
+- **Brouillon** (dans certains modèles *Manuscrit*) : tout ce qui deviendra votre livre. Seul ce qui se trouve dans le Brouillon est compilé.
+- **Recherche** : notes, fiches de personnages, images, PDF et tout ce que vous rassemblez d'autre.
+- **Corbeille** : les éléments supprimés y attendent jusqu'à ce que vous choisissiez **Projet > Vider la corbeille…**. Sa question, comme toute question avant quelque chose d'irréversible, nomme l'action sur son bouton et a **Annuler** pour choix par défaut, si bien que la touche Entrée ne supprime jamais rien (0.70).
+
+### Travailler avec les éléments
+
+- **Nouveau document** : **Ctrl+N** (ou le bouton ➕). Il est ajouté sous l'élément sélectionné. Un document appelé « Sans titre » (ou sans titre) prend la première ligne de son texte comme titre dès que vous écrivez : 60 caractères au plus, coupés à la fin d'un mot, sans annotations en ligne, notes de bas de page en ligne et images. Le titre suit la première ligne jusqu'à ce que vous renommiez vous-même le document ; un document dont vous supprimez le texte redevient « Sans titre ». Les documents « Sans titre » qui ont déjà du texte reçoivent leur nom à l'ouverture du projet. Le titre est un titre ordinaire : il est enregistré, compilé (quand les titres sont compilés, une première ligne qui est un titre apparaît deux fois) et écrit dans les projets Scrivener.
+- **Nouveau dossier** : **Alt+Shift+N**.
+- **Renommer** : **F2**, ou double-clic lent sur le titre.
+- **Déplacer** : faites glisser les éléments avec la souris, ou utilisez **Ctrl+Alt+touches fléchées** : Haut et Bas déplacent dans le dossier ; Gauche sort du dossier ; Droite place dans l'élément au-dessus. Déposé *entre* deux éléments, un document se place là ; déposé *sur* un élément, il devient son sous-document. Si vous imbriquez des documents par accident, désactivez le dépôt sur les documents texte sous **Fichier > Options > Comportements** (les dossiers acceptent toujours les dépôts).
+- **Ouvrir ou fermer toute une branche** : maintenez **Alt** et cliquez sur la flèche d'un dossier ou d'un groupe.
+- **Supprimer** : appuyez sur **Delete**. L'élément va à la corbeille ; un tableau en liège ou un plan qui l'affichait parmi plusieurs documents choisis le laisse partir aussitôt (0.94.0).
+- **Dupliquer** : **Ctrl+D**.
+- **Diviser et fusionner** : **Documents > Diviser > à la sélection** (**Ctrl+K**) coupe le document en deux au niveau du curseur ; cela ne fonctionne pas à l'intérieur d'un tableau ou de la légende d'une image (placez le curseur avant ou après). **Documents > Fusionner** (**Ctrl+Shift+M**) réunit les documents sélectionnés dans le premier, avec leurs synopsis, mots-clés et notes ; les autres vont à la corbeille.
+- **Changer l'icône** : clic droit > **Changer l'icône** (ou **Documents > Changer l'icône**), ou la barre d'icônes (section 2). Voir « Icônes » plus bas.
+
+**Clic droit.** Sur un document, le menu contextuel contient les commandes pour les documents sélectionnés (renommer, dupliquer, mettre à la corbeille, instantanés, libellé, statut, et plus encore). Sur l'espace vide sous les documents, il ne propose que ce qui crée quelque chose de nouveau : **Nouveau texte**, **Nouveau dossier**, **Nouveau à partir d'un modèle** et l'**Apparence** du classeur.
+
+Un document peut avoir des sous-documents, tout comme un dossier. Les dossiers et les documents se comportent de la même façon ; les dossiers ont simplement un aspect différent et s'ouvrent par défaut comme un tableau en liège.
+
+**Les touches du classeur (0.94.0).** Quand le clavier est dans le classeur, **Return** ouvre le document sélectionné dans l'éditeur et y place le clavier (comme le fait un gestionnaire de fichiers), et les touches fléchées parcourent la liste. **Espace** fait partie de la saisie d'un nom : tapez les premières lettres d'un titre, espaces compris (« Chapitre t »), et la sélection saute au premier titre qui commence ainsi. L'entrée **Affichage > Touches d'ajout rapide dans le classeur** est désactivée au départ (aussi après une mise à jour). Une fois activée, le classeur a les touches d'ajout rapide : **Return** crée un nouveau document vide sous celui qui est sélectionné et **Espace** ouvre les documents sélectionnés comme panneaux de référence rapide (et dans la liste d'une collection ou d'une recherche).
+
+Un clic dans le classeur charge le document dans l'éditeur. Après **Reculer**, un lien de document, ou avec un éditeur verrouillé, l'éditeur peut afficher un autre document que celui qui est sélectionné dans le classeur : une **barre grise** marque alors dans le classeur le document de l'éditeur. **Navigation > Afficher dans le classeur** (**Ctrl+Shift+R**) le sélectionne.
+
+**Classeur étroit, dossiers profonds.** Chaque niveau de dossiers est mis en retrait de 12 px (la moitié de ce qu'il était ; changez cela sous **Fichier > Options > Apparence > Classeur > Retrait par niveau**). Quand les titres sont plus longs que le classeur n'est large, une barre de défilement apparaît au bas du classeur, de sorte que vous pouvez lire la fin des longs titres sans élargir le classeur.
+
+### Icônes
+
+**Documents > Changer l'icône** (aussi dans le menu contextuel du classeur, du tableau en liège et du plan) est conçu comme le menu d'icônes de Scrivener 3 pour Windows :
+
+- **Rétablir l'icône par défaut** : l'icône standard d'un document, d'un dossier ou d'un fichier revient.
+- **Icône à partir de texte…** : crée une icône d'au plus trois caractères (par exemple *PR*, *Ch1* ou *A*). Choisissez la couleur de la case, des lettres et de la bordure ; la petite image montre le résultat. L'icône est conservée dans le projet et donnée aussitôt aux documents sélectionnés.
+- **Gérer les icônes…** : les icônes de ce projet. **Ajouter une image…** transforme des images (PNG, SVG, JPEG et d'autres) en icônes, **À partir de texte…** est identique à ce qui précède, **Renommer…** et **Supprimer** modifient la liste (les documents dont l'icône est supprimée retrouvent leur icône standard), **Utiliser pour les documents sélectionnés** donne l'icône choisie aux documents sélectionnés. Les icônes sont stockées dans le projet (dossier *icons*), si bien qu'elles le suivent.
+- **Récentes** : les cinq dernières icônes que vous avez choisies.
+- **Livre**, **Personnages**, **Drapeau**, **Lieux**, **Notes**, **À faire**, **TV**, **Étape** : des sous-menus avec les icônes de chaque groupe en plusieurs couleurs (par exemple livre bleu, vert, rouge et jaune ; sept drapeaux ; cinq blocs-notes ; Coché et Non coché, Réussi, Échec et Incertain dans À faire).
+- Puis les icônes isolées : Fin d'ouvrage, Tableau noir, Calendrier, Clap, Horloge, Roue dentée, Œil, Chiffres et graphiques, Classeur à tiroirs, Début d'ouvrage, Information, Pupitre, Ampoule, Loupe, Musique, Notes de musique, Plan, Crayon, Relecture, Point d'interrogation, Commentaires de relecteur, Ciseaux, Bulle de parole, Guillemets, Statistiques, Dossier synchronisé, Tableaux, Éprouvette, Bulle de pensée et Avertissement.
+- **Icônes du projet** : vos propres icônes (quand le projet en a), et **Autres icônes (bureau)** : les icônes du thème du bureau que les versions antérieures proposaient.
+
+**Couleur du libellé dans les icônes.** Les parties blanches de nombreuses icônes (les pages d'un bloc-notes, l'étoffe d'un drapeau blanc, le papier d'une fiche, la case d'une icône créée à partir de texte) prennent la couleur du libellé du document. Activez ou désactivez cela avec **Affichage > Utiliser la couleur du libellé dans > Couleur du libellé dans les icônes** (ou **Fichier > Options > Apparence > Classeur**).
+
+**Icônes et Scrivener.** Les icônes de {{APP}} sont redessinées, mais chacune porte le nom de l'icône Scrivener qu'elle représente. Un projet au format Scrivener (section 14) conserve ces noms, si bien que Scrivener affiche sa propre icône pour elles ; les icônes créées dans Scrivener reviennent ici comme l'icône correspondante. Vos propres icônes vont dans le dossier *Icons* du *.scriv*. Une icône pour laquelle ce programme n'a pas d'image garde son nom et est affichée ici comme l'icône la plus proche.
+
+### Libellés, statut et « Inclure dans la compilation »
+
+Faites un clic droit sur un élément pour définir son **libellé** (une couleur, par exemple pour le personnage du point de vue) et son **statut** (par exemple *Premier jet* ou *Terminé*). Modifiez les listes sous **Projet > Paramètres du projet**.
+
+Un document ou un dossier avec un libellé montre aussi sa couleur dans l'inspecteur : la fiche de synopsis et les notes du document prennent une légère teinte de la couleur du libellé (15 % de sa saturation), de sorte que vous voyez d'un coup d'œil quel libellé a l'élément. Les éléments sans libellé, ou avec un libellé gris, gardent la couleur normale de la fiche.
+
+La barre d'outils **Libellés** (**Affichage > Barres d'outils > Libellés**, désactivée au départ) montre côte à côte toutes les couleurs de libellé du projet ouvert, avec un bouton pour aucun libellé. Un clic définit aussitôt le libellé des documents sélectionnés, comme le fait **Documents > Libellé** ; l'info-bulle de chaque couleur nomme le libellé. Les libellés avec lesquels démarre un nouveau projet se définissent sous **Fichier > Options > Apparence > Couleurs standard**.
+
+Les éléments dont **Inclure dans la compilation** est désactivé restent dans le Brouillon mais sont laissés de côté à la compilation.
+
+### Collections
+
+Les collections sont des listes supplémentaires de documents, par exemple « À documenter » ou « Scènes avec Anna ». Affichez-les avec le bouton **Collections**. Utilisez le bouton ➕ au-dessus du classeur pour créer une collection à partir des documents sélectionnés, ou faites un clic droit sur des documents et choisissez **Ajouter à la collection**. Retirer un document d'une collection ne le supprime pas. Les recherches enregistrées (section 9) sont aussi des collections ; elles se mettent à jour d'elles-mêmes.
+
+- **Ajoutez des documents** en les faisant glisser depuis le classeur (ou depuis l'icône d'en-tête d'un éditeur, un tableau en liège, un plan) sur l'onglet de la collection.
+- **Dans la liste** d'une collection, faites glisser les documents dans l'ordre que vous voulez (l'ordre du classeur ne change pas), déposez des documents à un endroit, et appuyez sur **Delete** pour retirer les documents sélectionnés de la collection. Les collections de recherche ne peuvent pas être modifiées ainsi.
+- **Faites glisser les onglets** pour mettre les collections dans un autre ordre.
+- Les documents de la liste peuvent être glissés comme ceux du classeur, et **Espace** ouvre les documents sélectionnés comme panneaux de référence rapide.
+
+---
+
+## 4. Écrire
+
+### Mise en forme du texte
+
+| Action | Raccourci |
+|--------|----------|
+| Gras / italique / souligné | Ctrl+B / Ctrl+I / Ctrl+U |
+| Surligner | Ctrl+Shift+H |
+| Exposant / indice | Ctrl+Shift++ / Ctrl+= (disposition allemande : Ctrl+Shift+D pour l'indice, voir « Raccourcis et disposition du clavier » plus bas) |
+| Aligner à gauche / centrer / aligner à droite | Ctrl+{ / Ctrl+\| / Ctrl+} (disposition allemande : Alt+Shift+L / Alt+Shift+E / Alt+Shift+R) |
+| Fenêtre des polices | Ctrl+T |
+| Taille de police plus grande / plus petite | Ctrl+> / Ctrl+< |
+| Fenêtre Paragraphe | Ctrl+Alt+P |
+| Copier la mise en forme / coller la mise en forme | Ctrl+Alt+C / Ctrl+Alt+V |
+| Zoom avant / zoom arrière / réinitialiser le zoom | Ctrl++ / Ctrl+- / Ctrl+0 |
+| Zoomer la zone sous la souris | Ctrl+molette de la souris |
+| Afficher ou masquer la règle | Ctrl+Alt+R |
+| Coller sans mise en forme | Ctrl+Shift+V |
+| Coller avec la mise en forme (depuis d'autres programmes) | Ctrl+Alt+Shift+V |
+| Annuler / rétablir | Ctrl+Z / Ctrl+Shift+Z (voir « Annuler et rétablir » plus bas) |
+
+Gras, italique, exposant et autres agissent sur la sélection. Sans sélection, à l'intérieur d'un mot ils modifient le mot entier ; à la fin d'un mot (ou avec rien autour du curseur) ils modifient ce que vous tapez ensuite : tapez « H », appuyez sur Ctrl+=, tapez « 2 », appuyez de nouveau sur Ctrl+= et tapez « O » pour obtenir H₂O.
+
+Les **styles** (Titre 1 à 6, Titre, Sous-titre, Citation et les vôtres) se choisissent dans la liste à gauche de la barre de format. Les styles indiquent à Compiler ce qu'est un paragraphe ; utilisez-les donc plutôt que d'agrandir et de mettre en gras le texte à la main. Voir « Styles » plus bas.
+
+**Ce qu'affiche la barre de format.** La barre montre le texte tel que vous le voyez, pour toute la sélection. **Gras**, **Italique**, **Souligné**, **Barré**, exposant et indice sont actifs quand tout le texte sélectionné a cet aspect, aussi quand son style le lui donne (le gras d'un titre). Un clic change ce que vous voyez : **Gras** sur un titre en gras le rend non gras, et il reste non gras quand le projet est enregistré puis rouvert. La police, la taille, l'interligne, les boutons d'alignement et la liste des styles montrent aussi la sélection ; quand la sélection contient deux polices, deux tailles, deux alignements ou des paragraphes de deux styles, ce champ reste vide (aucun bouton d'alignement n'est actif). Une taille saisie dans le champ vide donne cette taille à toute la sélection.
+
+**Listes** : utilisez les boutons de liste, ou tapez « - » ou « 1. » au début d'un paragraphe.
+
+**Typographie intelligente** : les guillemets droits deviennent des guillemets typographiques, et deux traits d'union deviennent un tiret cadratin pendant la frappe. Désactivez cela sous **Fichier > Options > Édition**.
+
+**Mode révision** (**Format > Mode révision**) : tout ce que vous tapez est coloré avec l'une des cinq couleurs de révision, de sorte que vous voyez ce qui a changé lors d'un tour de modifications. Choisissez **Désactivé** pour arrêter.
+
+**Espacement et retraits dans la barre de format.** Quatre boutons après les boutons de liste règlent les paragraphes qui contiennent le curseur ou la sélection : l'**espace avant** et l'**espace après** le paragraphe (0, 3, 6, 9, 12 ou 18 pt), le **retrait de la première ligne** et le **retrait du paragraphe entier** (en centimètres ou en pouces, comme la règle les affiche). La valeur du paragraphe au niveau du curseur est cochée ; **Autre…** demande une valeur quelconque. **Édition > Annuler** annule un changement. Une barre de format que vous avez organisée vous-même reçoit les quatre boutons une fois, après les boutons de liste ; **Affichage > Barres d'outils > Personnaliser les barres d'outils…** les déplace ou les retire.
+
+**Annuler et rétablir.** **Édition > Annuler** et **Édition > Rétablir** fonctionnent dans le champ de texte qui a le clavier (l'éditeur, le synopsis, les notes, un titre) et disent ce qu'ils vont annuler : « Annuler la frappe », « Annuler le collage », « Annuler Gras », « Rétablir la suppression ». Avec le clavier ailleurs, par exemple dans le classeur, ils sont grisés : mettre des documents à la corbeille, vider la corbeille et supprimer des instantanés ne peuvent pas être annulés ainsi (un document dans la corbeille revient en le faisant glisser dehors ; voir la section 11 pour les instantanés). La flèche à côté des boutons **Annuler** et **Rétablir** de la barre d'outils liste les étapes, la prochaine en premier ; en choisir une annule (ou rétablit) cette étape et toutes celles qui la précèdent dans la liste. Chaque commande du menu Format est une étape.
+
+**Couleur du texte et surlignage dans la barre de format.** Les deux boutons avec une barre colorée (un stylo pour le surlignage, une lettre *T* pour la couleur du texte) fonctionnent comme ceux de Scrivener et de Word : un clic applique la couleur montrée dans la barre au texte sélectionné ou, sans sélection, à ce que vous tapez ensuite. Laissez la souris un instant sur un bouton et une petite fenêtre avec **rouge, bleu, jaune, vert, blanc et noir** s'ouvre en dessous, plus **Aucun surlignage** (ou **Automatique** pour la couleur du texte) et **…** pour toute autre couleur. Un clic sur une couleur l'applique et en fait la couleur du bouton, qui la garde pour le clic suivant (aussi après un redémarrage). Un surlignage est dessiné exactement dans la couleur choisie, sur une page claire comme sur une page sombre. Lorsque le texte qui s'y trouve serait difficile à lire (sous un contraste de 4,5 : 1), le texte est affiché sombre ou clair à l'écran seulement ; sa couleur enregistrée, et le surlignage dans les fichiers enregistrés et compilés, restent tels que choisis.
+
+### Polices
+
+Tout le texte d'un projet a un seul aspect : la **mise en forme par défaut** (voir plus bas). Par-dessus, vous pouvez donner à n'importe quel morceau de texte une police qui lui est propre.
+
+- **Barre de format** : la liste des polices et le champ de taille modifient aussitôt le texte sélectionné. Sans sélection, ils modifient le **paragraphe entier** qui contient le curseur (et ce que vous tapez ensuite à cet endroit). Les flèches du champ de taille modifient le texte à chaque clic ; une taille que vous tapez prend effet avec **Enter**. La barre de format, le menu Format et leurs raccourcis agissent sur le texte où se trouvait le curseur en dernier : un éditeur, les notes de l'inspecteur, le texte des signets de l'inspecteur, ou un long champ de texte d'un objet (là : gras, italique, souligné, barré, couleur du texte et surlignage). Un clic dans le champ de taille ne change pas cela.
+- Après un changement dans la barre de format, une barre au-dessus de l'éditeur propose la même chose pour tout le projet : dans un paragraphe avec un style (un titre, par exemple), **Modifier le style « Titre 1 »** donne au style la nouvelle police ou taille, et tout le texte de ce style dans chaque document suit ; dans un paragraphe sans style, **Utiliser pour tout le texte** en fait la police ou la taille du projet (voir « Mise en forme par défaut » plus bas). Cliquez sur **×**, ou continuez simplement à écrire ailleurs, pour garder le changement là où il est. Chaque document qui change reçoit d'abord un instantané.
+- **Format > Police > Afficher les polices…** (**Ctrl+T**) ouvre la fenêtre des polices : police, graisse (fine, normale, gras, italique et tout ce que la police offre d'autre), taille, souligné, barré, capitales (petites capitales ou toutes en capitales), espacement des lettres en pourcentage, et couleur du texte. Seul ce que vous changez dans la fenêtre est appliqué, si bien qu'une sélection avec des mots en gras et d'autres normaux les conserve. **Police du projet** ramène le texte à la police, à la taille et à la couleur du projet.
+- **Gras, Italique, Souligné, Barré** : un bouton est actif quand *tout* le texte sélectionné a ce format, quelle que soit la manière dont vous l'avez sélectionné (aussi de droite à gauche). Une sélection seulement en partie en gras montre Gras désactivé, et **Gras** met alors tout en gras ; un deuxième clic remet tout en normal. Dans la fenêtre des polices, une graisse que vous choisissez est de même appliquée à toute la sélection.
+- **Format > Police > Agrandir / Réduire** (**Ctrl+>** / **Ctrl+<**) changent la taille d'un point ; chaque partie de la sélection garde sa propre taille et grandit ou rétrécit.
+- **Format > Police > Couleur du texte…** et **Couleur de texte automatique**.
+
+Choisir la police ou la taille propre au projet est stocké comme « pas de police propre » : un tel texte suit le projet quand vous modifiez plus tard la mise en forme par défaut.
+
+**Polices à plusieurs dessins.** Certaines polices regroupent sous un seul nom plusieurs dessins d'une même famille : Sitka de Windows 11, par exemple, contient les tailles optiques Small, Text, Subheading, Heading, Display et Banner (chacune dessinée pour sa propre plage de tailles, les plus grandes plus étroites et avec des minuscules plus petites), et certaines polices contiennent de la même façon des versions condensées ou larges. {{APP}} liste chaque dessin comme une police à part (par exemple **Sitka Small**, **Sitka Text**, **Sitka Banner**), avec seulement les graisses de ce dessin, de sorte que le gras et l'italique restent dans le dessin que vous avez choisi ; avant 0.40.1, le texte en gras pouvait sortir dans un autre dessin et paraître plus petit et plus étroit. Les fichiers de polices ne sont pas modifiés. La police portant le nom d'origine garde son propre dessin, si bien que le texte composé avec elle auparavant garde son aspect.
+
+**Installer des polices.** **Format > Police** contient les commandes pour les polices qui ne sont pas encore sur votre ordinateur :
+
+- **Installer des fichiers de police…** : choisissez des fichiers de police (TTF, OTF, TTC, PFB, WOFF, ou un fichier ZIP qui en contient). Ils sont copiés dans votre propre dossier de polices (*~/.local/share/fonts*), et les listes de polices de {{APP}} les connaissent aussitôt ; les autres programmes les voient après leur prochain démarrage. Aucun mot de passe n'est nécessaire, et les polices ne sont que pour votre utilisateur.
+- **Ouvrir le dossier des polices** : ouvre ce dossier dans le gestionnaire de fichiers ; les polices que vous y placez vous-même sont trouvées après **Recharger la liste des polices**.
+- **Ouvrir le gestionnaire de polices du bureau** : ouvre le gestionnaire de polices de KDE (Configuration du système > Texte et polices > Gestion des polices) ou le programme de polices d'un autre bureau, où vous pouvez aussi installer des polices pour tous les utilisateurs et en supprimer.
+- **Recharger la liste des polices** : cherche les nouvelles polices et les nomme.
+
+### Mise en forme des paragraphes
+
+**Format > Paragraphe > Paragraphe…** (**Ctrl+Alt+P**) règle, pour les paragraphes qui contiennent le curseur ou la sélection : l'alignement, le retrait gauche et droit, le retrait de première ligne (une valeur négative donne un retrait suspendu), l'espace avant et après, l'interligne (un multiple de la hauteur de ligne, une hauteur exacte ou une hauteur minimale) et les taquets de tabulation (gauche, centré, droit, virgule décimale). Seul ce que vous changez est appliqué. **Rétablir les valeurs par défaut** supprime la mise en forme que vous avez définie à la main ; le paragraphe suit de nouveau son style et le projet.
+
+Moyens rapides : les boutons d'alignement, la liste d'interligne dans la barre de format, **Format > Paragraphe > Interligne** et **Augmenter le retrait / Diminuer le retrait**.
+
+Appliquer un style de paragraphe remplace la mise en forme définie à la main dans les paragraphes qu'il atteint : retraits, espacement, alignement et taquets de tabulation, ainsi que les polices, tailles, couleurs, espacement des lettres et capitales de leur texte. Le gras, l'italique, le soulignement, le barré, les surlignages et les styles de caractères restent. Sélectionnez du texte sur plusieurs paragraphes pour leur donner à tous le style, chaque paragraphe en entier ; une sélection qui se termine juste au début d'un paragraphe (par exemple après **Shift+Down**) laisse ce paragraphe tranquille.
+
+**Format > Copier la mise en forme** (**Ctrl+Alt+C**) mémorise la mise en forme de la police et du paragraphe au niveau du curseur ; **Coller la mise en forme** (**Ctrl+Alt+V**) l'applique à la sélection, ou au paragraphe entier quand rien n'est sélectionné.
+
+### Caractères invisibles
+
+**Affichage > Édition du texte > Afficher les caractères invisibles** (aussi le bouton ¶ de la barre d'outils) montre les caractères que vous ne voyez pas : un point pour chaque espace, une flèche pour une tabulation, un petit cercle pour une espace insécable, une flèche coudée pour un saut de ligne (**Shift+Enter**) et ¶ à la fin de chaque paragraphe. Ils ne sont dessinés qu'à l'écran, dans le texte principal de chaque éditeur ; ils ne font jamais partie du texte, d'une impression ou de la compilation. Le choix est conservé. Leur couleur est celle du texte, atténuée vers le papier ; une couleur propre se définit sous **Fichier > Options > Apparence > Marques de texte** (ou clic droit sur le texte > **Apparence**), et elle fait partie de l'aspect du projet comme le papier et le texte (le mode composition garde la couleur de texte atténuée).
+
+### La règle
+
+**Affichage > Édition du texte > Afficher la règle** (**Ctrl+Alt+R**) affiche une règle au-dessus du texte. Elle appartient au paragraphe qui contient le curseur.
+
+- Le repère du haut est le **retrait de première ligne**, les repères du bas sont le **retrait gauche** et le **retrait droit**. Faites-les glisser. Le retrait gauche entraîne la première ligne avec lui.
+- **Cliquez** dans la moitié inférieure de la règle pour ajouter un taquet de tabulation. Faites glisser un taquet pour le déplacer ; faites-le glisser vers le haut ou vers le bas hors de la règle pour le supprimer. Faites un **clic droit** sur un taquet pour le rendre gauche, centré, droit ou décimal.
+- Les repères s'alignent sur des quarts de centimètre (seizièmes de pouce) ; maintenez **Shift** pour les placer librement.
+- Un **double-clic** sur la règle ouvre la fenêtre Paragraphe. Le menu contextuel permet de passer des centimètres aux pouces (aussi sous **Fichier > Options > Édition**).
+
+Les taquets de tabulation se mesurent à partir du début de la première ligne du paragraphe. Sans taquets propres, un paragraphe a une position de tabulation tous les 2,1 cm.
+
+La règle montre de vraies longueurs. Le zoom agrandit les lettres à l'écran mais pas les retraits ni les taquets de tabulation ; comparez donc les distances à 100 %.
+
+### Mise en forme par défaut
+
+- **Ce projet** : **Projet > Paramètres du projet > Mise en forme** (aussi le bouton à curseurs de la barre de format) définit la police, la taille, l'interligne, le retrait de première ligne, l'espace après les paragraphes et l'alignement du texte de tout le projet (quatre boutons : gauche, centré, droite, justifié). Dans le Panneau des styles, **Aucun style** > **Redéfinir à partir de la sélection** reprend ces valeurs du paragraphe au niveau du curseur (voir « Styles » plus bas). **Appliquer** modifie tous les documents d'un coup et laisse la fenêtre ouverte, de sorte que vous voyez le résultat derrière elle ; **OK** fait la même chose et ferme la fenêtre. **Utiliser l'actuel** reprend les valeurs du paragraphe qui contient le curseur.
+  - Avec **Modifier aussi le texte ayant une police, une taille ou un espacement propres** (activé par défaut), le texte mis en forme à la main ou arrivé avec sa propre police lors d'une importation suit lui aussi, tant qu'il a la police, la taille et l'espacement principaux de son document. Ce qui diffère du texte principal reste tel quel : une ligne de titre plus grande, un passage dans une autre police, un paragraphe sans retrait. Désactivez la case pour laisser tranquille tout le texte mis en forme à la main.
+  - Chaque document qui change reçoit d'abord un instantané (inspecteur, onglet Instantanés, « Avant le changement de mise en forme du projet »), de sorte que vous pouvez revenir en arrière. Les documents de script gardent leur propre format.
+- **Nouveaux projets** : **Fichier > Options > Édition > Mise en forme des nouveaux projets**, avec les mêmes quatre boutons d'alignement et **Utiliser la mise en forme de l'éditeur actuel**. Les projets existants gardent leur mise en forme. Le réglage standard est 11,0 pt, interligne 1,09, pas de retrait de première ligne et 6 pt après les paragraphes. Les projets importés de Scrivener démarrent eux aussi avec ces valeurs (avec la police la plus utilisée dans le projet Scrivener).
+- **Revenir au réglage par défaut** : sélectionnez des documents dans le classeur et choisissez **Documents > Convertir > Texte vers la mise en forme par défaut…**. Vous décidez si les polices et couleurs, les retraits et espacements, l'alignement et les taquets de tabulation sont supprimés. Le gras, l'italique, les styles, les notes et les liens restent toujours. Un instantané de chaque document est d'abord pris (inspecteur, onglet Instantanés), de sorte que vous pouvez revenir en arrière.
+
+### Styles
+
+Un style enregistre une mise en forme sous un nom. Le texte retient le nom ; quand vous changez le style, tout le texte qui l'utilise change avec lui, dans tout le projet.
+
+Il y en a deux sortes :
+
+- Les **styles de paragraphe** s'appliquent à des paragraphes entiers. Ils contiennent la mise en forme du paragraphe (alignement, retraits, espacement, interligne, taquets de tabulation) et, si vous le voulez, la mise en forme des caractères du paragraphe (police, taille, gras, italique, couleur). Dans les listes, ils sont marqués « ¶ », ou « ¶a » quand ils comprennent une mise en forme de caractères.
+- Les **styles de caractère** s'appliquent au texte sélectionné, ou au mot au niveau du curseur. Ils ne contiennent que la mise en forme des caractères. Ils sont marqués « a ».
+
+Laissez le corps du texte à **Aucun style**. Il suit la mise en forme par défaut du projet, et Compiler peut lui donner n'importe quel aspect. N'utilisez des styles que pour le texte qui doit avoir un aspect différent du corps du texte.
+
+**Appliquer un style** : choisissez-le dans la liste à gauche de la barre de format, sous **Format > Style**, dans le menu contextuel du texte, ou dans le **Panneau des styles** (**Format > Style > Panneau des styles**), une petite fenêtre qui reste ouverte à côté du texte ; un double-clic sur une ligne applique le style. **Aucun style** retire un style de caractère de la sélection ; s'il n'y en a pas, il retire le style de paragraphe. Les fenêtres et les questions que le Panneau des styles ouvre apparaissent au-dessus du panneau.
+
+**La liste des styles** de la barre de format et du menu contextuel (**Style**) montre les styles que vous choisissez, dans l'ordre que vous choisissez : **Personnaliser la liste des styles…** (au bas de la liste, et sous **Format > Style**) liste toutes les entrées ; décochez celles dont vous n'avez pas besoin, faites-les glisser dans un autre ordre ou utilisez les flèches, et **Tous, dans l'ordre des styles** ramène la liste complète. Avec plus de dix entrées, la liste en montre dix et défile. En dessous, toujours visibles : **Nouveau style à partir de la sélection…**, **Redéfinir le style à partir de la sélection…**, **Panneau des styles** et **Personnaliser la liste des styles…**. Un style qui n'est pas dans la liste est quand même nommé dans la barre de format quand le texte l'utilise ; **Format > Style** liste toujours tous les styles. Le choix appartient au projet (un nouveau style apparaît à la fin de la liste) et fait partie des styles des fichiers de paramètres du projet.
+
+**Aucun style est le style du texte principal.** Dans le Panneau des styles, faites un clic droit sur **Aucun style** (ou sélectionnez-le et utilisez le bouton Redéfinir) et choisissez **Redéfinir à partir de la sélection…** : la police, la taille, l'interligne, le retrait de première ligne, l'espace après les paragraphes et l'alignement du paragraphe au niveau du curseur deviennent le style du texte principal du projet (les valeurs de **Projet > Paramètres du projet > Mise en forme**). Une question montre d'abord les valeurs. Tout le texte sans style dans l'ensemble du projet suit, aussi le texte ayant une police, une taille ou un espacement propres ; le texte avec style garde ce que son style définit. Chaque document qui change reçoit d'abord un instantané.
+
+**Créer un style** :
+
+1. Mettez en forme un texte comme le style doit apparaître, puis cliquez dedans ou sélectionnez-en une partie.
+2. Choisissez **Format > Style > Nouveau style à partir de la sélection…** (ou le bouton plus du Panneau des styles).
+3. Saisissez un nom et choisissez ce qu'il faut enregistrer : toute la mise en forme (un style de paragraphe avec mise en forme de caractères), la mise en forme du paragraphe seulement, ou les attributs de caractère (un style de caractère).
+4. Décidez si la police et la taille de police font partie du style. Sans elles, le style garde la police du texte qui l'entoure.
+5. Pour les styles de paragraphe, choisissez quel style reçoit le paragraphe suivant quand vous appuyez sur Enter à la fin.
+
+Un style de paragraphe ne stocke que ce qui diffère du corps du texte. Tout le reste continue de suivre la mise en forme du projet, si bien qu'une nouvelle police par défaut atteint aussi le texte avec style.
+
+**Modifier un style** :
+
+- **Format > Style > Redéfinir le style à partir de la sélection…** reprend la mise en forme du texte au niveau du curseur, comme ci-dessus. Un style de paragraphe reste un style de paragraphe, un style de caractère un style de caractère.
+- **Format > Style > Modifier le style** (ou le bouton crayon du Panneau des styles) ouvre une fenêtre avec le nom, **Police…**, **Paragraphe…** et le style du paragraphe suivant. Un aperçu montre le résultat.
+
+Ensuite, {{APP}} parcourt tout le projet et met le texte à jour, dans les documents ouverts et dans les fichiers des autres. Ce que le changement touche (police, taille, gras, italique, couleur, espacement des lettres, capitales, alignement, retraits, espacement, interligne, taquets de tabulation) atteint **tout** le texte du style, aussi là où ce texte avait une valeur propre : définie à la main, ou apportée par une importation (les titres importés nomment généralement leur police, leur taille et leur espacement dans chaque paragraphe). La mise en forme que le changement ne touche pas reste telle quelle, par exemple un mot coloré à la main dans un titre quand seule la taille du titre a changé. Chaque document qui change reçoit d'abord un instantané (« Avant la modification du style ... »). Cela ne peut pas être annulé avec **Édition > Annuler** ; restaurez un instantané, redéfinissez de nouveau le style, ou utilisez **Rétablir la définition intégrée** dans le Panneau des styles pour un style intégré.
+
+**Renommer et supprimer** : renommez un style dans **Modifier le style**. Les titres, Titre, Sous-titre, Citation, Centré et Légende gardent leurs noms, parce que Compiler et les fichiers Markdown les connaissent par leur nom. Quand vous supprimez un style (**Format > Style > Supprimer le style**), le texte qui l'utilisait garde son aspect sous forme de mise en forme définie à la main.
+
+**Autres projets** : **Format > Style > Importer des styles…** lit les styles d'un autre projet. **Utiliser ces styles dans les nouveaux projets** fait des styles du projet ouvert l'ensemble de départ de chaque nouveau projet ; **Fichier > Options > Édition** revient aux styles intégrés.
+
+Dans le Panneau des styles, les boutons fléchés changent l'ordre des styles dans toutes les listes.
+
+### Markdown ou RTF : comment les documents sont stockés
+
+Chaque projet stocke ses documents dans l'un de deux formats. Vous choisissez à la création ou à l'importation d'un projet, et vous pouvez changer plus tard sous **Projet > Paramètres du projet > Mise en forme**.
+
+- **Markdown** (recommandé) : des fichiers texte brut que n'importe quel programme peut ouvrir, aujourd'hui et dans cinquante ans. L'aspect du texte vient de la mise en forme par défaut. Les polices et la mise en forme de paragraphe que vous définissez à la main sont écrites dans le texte sous forme de petits repères, seulement là où vous les avez utilisées (section 18) ; tout le reste reste du texte brut.
+- **RTF** : des fichiers de texte enrichi comme dans un traitement de texte. Chaque paragraphe porte sa mise en forme complète, si bien qu'un changement de la mise en forme par défaut n'atteint pas le texte existant.
+
+Le changement convertit chaque document. De RTF à Markdown, les polices, couleurs, alignement, retraits gauche et droit et taquets de tabulation sont conservés. L'interligne, le retrait de première ligne et l'espacement des paragraphes d'un texte venu d'autres programmes suivent ensuite le projet. Faites d'abord une sauvegarde (**Fichier > Sauvegarde > Sauvegarder maintenant**).
+
+Le texte collé depuis d'autres programmes dans un projet Markdown prend l'aspect du texte qui l'entoure (le gras, l'italique et les liens restent). Le texte copié à l'intérieur de {{APP}} garde ses polices. **Édition > Coller avec la mise en forme** (**Ctrl+Alt+Shift+V**) conserve aussi l'aspect d'un texte venant d'un traitement de texte ou d'une page web : polices, tailles, couleurs, ainsi que l'alignement, les retraits et l'espacement de ses paragraphes (le premier paragraphe collé n'apporte sa mise en forme de paragraphe que dans un paragraphe vide). **Édition > Coller en adaptant le style** (**Ctrl+Shift+V**) fait l'inverse et colle du texte brut. Le menu contextuel du texte propose les trois, l'un sous l'autre : **Coller**, **Coller en adaptant le style** et **Coller avec la mise en forme**.
+
+Pour convertir un seul fichier en dehors d'un projet, utilisez **Fichier > Convertir un fichier Markdown ⇄ RTF…**.
+
+### Commentaires et notes de bas de page
+
+- **Commentaire** (**Shift+F2**) : sélectionnez du texte et ajoutez un commentaire. Le texte est surligné et le commentaire apparaît dans l'inspecteur.
+- **Note de bas de page** (**Ctrl+Shift+F2**) : sélectionnez le mot auquel la note se rapporte ; écrivez la note dans l'inspecteur.
+- **Annotation en ligne** (**Ctrl+Shift+A**) : une note écrite directement dans le texte, affichée en couleur dans une bulle. Les annotations sont supprimées à la compilation (sauf si vous choisissez de les exporter comme commentaires).
+- **Note de bas de page en ligne** (**Ctrl+Alt+F**) : une note de bas de page écrite directement dans le texte.
+
+Pour changer la couleur d'une annotation en ligne, sélectionnez-la (**Édition > Sélectionner > Sélectionner l'annotation ou la note** sélectionne toute la note au niveau du curseur) et choisissez une couleur de texte ; l'annotation garde cette couleur. **Format > Police > Couleur de texte automatique** lui redonne le rouge habituel.
+
+Cliquez sur un commentaire dans l'inspecteur pour y aller. Faites un clic droit dessus pour changer sa couleur, le convertir en un autre type de note ou le supprimer.
+
+Un clic sur du texte commenté ouvre l'inspecteur sur ce commentaire. **Alt+clic** ouvre à la place le commentaire ou la note de bas de page dans une petite fenêtre à l'endroit de la souris, où vous pouvez le lire et le modifier sans l'inspecteur ; cliquez ailleurs ou appuyez sur **Esc** pour la fermer.
+
+### Images et liens
+
+- **Insertion > Image à partir d'un fichier…** place une image dans le texte ; vous pouvez aussi faire glisser une image dans le texte ou en coller une. Faites un clic droit sur l'image et choisissez **Taille de l'image…** pour changer sa taille d'affichage.
+- **Insertion > Lien vers un document…** (**Ctrl+L**) relie le texte sélectionné à un autre document du projet. Un clic sur le lien ouvre ce document (dans l'autre éditeur, le même éditeur, son support de copie ou un panneau de référence rapide ; voir **Fichier > Options > Comportements**).
+- **Insertion > Insérer un lien web…** crée un lien vers une page web.
+- Les liens web et de messagerie (*http*, *https*, *mailto*) s'ouvrent aussitôt. Toute autre cible d'un lien, dans un texte, une carte mentale, un signet ou une page web importée (un fichier, un dossier, une adresse réseau, un lien propre à un autre programme), est d'abord affichée en entier et n'est ouverte que lorsque vous cliquez sur **Ouvrir** ; de tels liens peuvent venir avec un projet, une page web ou un fichier Word de quelqu'un d'autre. Pour un fichier ou un dossier de votre ordinateur, la question nomme son genre (par exemple « document texte brut (.txt) »), son nom complet et son dossier ; un nom long passe à la ligne, de sorte que sa fin peut se lire, et un fichier qui n'existe pas est signalé comme manquant. Les liens vers des programmes, des scripts, des raccourcis et des installateurs ne sont jamais ouverts ; ouvrez-les vous-même depuis votre gestionnaire de fichiers si vous leur faites confiance.
+
+### Tableaux
+
+**Insertion > Tableau…** demande le nombre de lignes et de colonnes et le modèle, et place le tableau au niveau du curseur. Dans un tableau, **Tab** passe à la cellule suivante (dans la dernière cellule, il ajoute une ligne) et **Shift+Tab** revient en arrière. **Format > Tableau**, aussi dans le menu contextuel à l'intérieur d'un tableau, contient le reste :
+
+- **Insérer une ligne au-dessus / en dessous**, **Insérer une colonne à gauche / à droite**.
+- **Supprimer les lignes** et **Supprimer les colonnes** (celles des cellules sélectionnées, ou de la cellule où se trouve le curseur), **Supprimer le tableau**.
+- **Fusionner les cellules** réunit les cellules sélectionnées en une seule ; **Fractionner la cellule** divise de nouveau une cellule fusionnée.
+- **Couleur de la cellule…** donne aux cellules sélectionnées un fond qui leur est propre ; **Couleur de cellule du thème** le retire de nouveau.
+- **Propriétés du tableau…** change le modèle.
+
+**Le modèle.** Cinq modèles sont prêts à l'emploi : **Grille**, **Grille avec ligne d'en-tête**, **Lignes alternées**, **Traits entre les lignes** et **Sans traits**. Choisissez-en un et modifiez ce que vous voulez ; le modèle devient alors **Personnalisé** :
+
+- **Traits** : épaisseur (0 : pas de traits), couleur, et **Seulement entre les lignes** (pas de traits sur les côtés).
+- **Cellules** : l'espace à l'intérieur d'une cellule, et l'espace entre les cellules (0 : les cellules voisines partagent un trait).
+- **Lignes d'en-tête** : combien de lignes en haut sont des en-têtes, avec leur couleur. L'impression et la compilation les répètent en haut de chaque page où se poursuit un long tableau. **Une ligne sur deux** reçoit une couleur propre si vous en choisissez une.
+- **Place dans le texte** : la largeur (une part de la largeur du texte, ou aussi large que son contenu), la largeur des colonnes (toutes identiques, ou des parts comme « 30, 70 »), l'alignement, et l'endroit où il se trouve : **Sur ses propres lignes**, ou **À gauche** ou **À droite** avec le texte qui s'écoule à côté.
+
+Les lignes et colonnes que vous ajoutez plus tard gardent le modèle (les rayures se poursuivent). Le texte des cellules de tableau n'est pas justifié, même quand le corps du texte l'est (une cellule étroite étirerait ses mots) ; un alignement que vous donnez à un paragraphe dans une cellule reste. Les tableaux sont conservés dans les deux formats de stockage et au format Scrivener ; les tableaux des fichiers RTF d'autres programmes (par exemple un fichier Word enregistré en RTF) deviennent aussi des tableaux.
+
+### Images à côté du texte, légendes et descriptions
+
+Faites un clic droit sur une image et choisissez **Image…** (ou placez le curseur à côté d'elle et choisissez **Format > Image…**) :
+
+- **Largeur à l'écran** : la hauteur suit ; **Taille d'origine** revient à la taille propre de l'image.
+- **Position** : **Dans la ligne, comme une lettre** (comme auparavant), **À gauche** ou **À droite** avec le texte qui l'entoure, ou **Centrée sur ses propres lignes**.
+- **Légende** : affichée sous l'image et compilée avec elle. Une image dans la ligne n'a pas de légende ; donnez-lui d'abord une position.
+- **Description** : ce que montre l'image, en une phrase ou deux. Elle n'est pas affichée dans le texte. Les livres électroniques, les fichiers Word et Markdown la conservent avec l'image (comme son « texte alternatif »), et les lecteurs d'écran la lisent aux personnes qui ne peuvent pas voir l'image.
+
+L'image avec sa légende se déplace d'un seul bloc ; tapez la légende sous l'image comme n'importe quel autre texte (elle a le style **Légende**).
+
+### Rechercher et remplacer
+
+- **Ctrl+F** (**Édition > Rechercher > Rechercher**) ouvre la barre de recherche au-dessus du texte. Elle indique combien il y a de correspondances et les met en surbrillance ; **F3** et **Shift+F3** vont à la correspondance suivante et précédente. **Respecter la casse** et **Mots entiers** restreignent la recherche.
+- **Ctrl+H** ajoute la ligne de remplacement : **Remplacer** modifie la correspondance sélectionnée et passe à la suivante, **Tout remplacer** modifie chaque correspondance dans le texte que vous voyez (une seule étape pour **Annuler**). Le nouveau texte reprend la mise en forme du texte qu'il remplace, et les commentaires restent attachés.
+- **Ctrl+E** (**Utiliser la sélection pour la recherche**) place le texte sélectionné dans la barre de recherche.
+- Dans le texte combiné, la recherche et le remplacement fonctionnent dans tous les documents affichés.
+- Quand le clavier est dans un **support de copie**, Ctrl+F recherche dans le document du support de copie.
+- **Ctrl+Shift+F** recherche dans tout le projet, **Édition > Rechercher > Remplacer dans le projet…** remplace dans tout le projet et **Édition > Rechercher > Rechercher par mise en forme…** cherche les surlignages, commentaires, couleurs et styles (le tout dans la section 9).
+- Dans le tableau en liège et dans le plan, Ctrl+F ouvre à la place la **barre de filtre** (section 5).
+
+### Orthographe
+
+Les mots mal orthographiés reçoivent un soulignement rouge ondulé ; faites un clic droit n'importe où sur le mot souligné pour obtenir des suggestions ou ajouter le mot à votre dictionnaire (aussi sur les mots avec une apostrophe, comme « Kayel's » ou « D'Nersun » : le menu propose toujours le mot entier qui est souligné). Sur un mot mal orthographié, le menu est court, afin de s'ouvrir tout près de la souris : les suggestions, **Ajouter « ... » au dictionnaire**, **Ignorer « ... »** et **Autres commandes** avec tout ce que le menu contient ailleurs (Couper, Copier, Coller, Style, commentaires, Apparence ...). Le nom du programme et ses termes ({{APP}}, plan, sous-document, support de copie) comptent toujours comme corrects. Choisissez la langue sous **Fichier > Options > Corrections** (page Orthographe) ; les dictionnaires que vous avez installés comme modules (un par langue du programme, chacun avec sa licence) figurent dans cette liste ; vous y choisissez aussi le soulignement (ondulé, pointillé ou ligne droite), si les mots contenant des chiffres (« Route66 ») sont vérifiés, et **Afficher la liste de mots personnelle...** montre les mots que vous avez ajoutés et supprime ceux que vous avez ajoutés par erreur. Les dictionnaires viennent de votre système et des modules. Sous Ubuntu et Kubuntu, l'anglais est installé ; pour d'autres langues, installez le paquet *hunspell* correspondant dans Discover (par exemple « hunspell-fr » pour le français).
+
+### Insertions spéciales
+
+Le menu **Insertion** propose aussi la date et l'heure actuelles, les caractères spéciaux (tiret cadratin, tiret demi-cadratin, points de suspension, espace insécable, signe paragraphe, puce), les **numérotations automatiques** et les **espaces réservés**, que Compiler remplace (section 13).
+
+### Corrections pendant la frappe
+
+**Fichier > Options > Corrections** définit ce qui est corrigé pendant que vous tapez. Un mot est corrigé quand vous le terminez, c'est-à-dire quand vous tapez après lui une espace, un Return ou un signe de ponctuation ; **Ctrl+Z** juste après annule la correction seule.
+
+- **Mettre une majuscule en début de phrase** : le premier mot d'une phrase reçoit une majuscule (pas après des abréviations comme « Dr. » ou « e.g. »). **Mettre « i » en majuscule** : « i » et « i'm » deviennent « I » et « I'm ». Les deux sont désactivés au départ.
+- **Guillemets typographiques** dans le style que vous choisissez (“anglais”, „allemand“, »allemand«, «français», ”suédois”) ; une apostrophe à l'intérieur d'un mot est toujours ’. Là où la marque simple fermante n'est pas l'apostrophe (allemand ‚…‘, français ‹…›), un ' tapé juste après un mot ferme une marque simple ouverte dans le paragraphe ; si vous continuez ensuite à taper des lettres (« geht's »), il redevient l'apostrophe. Deux traits d'union deviennent un tiret cadratin (—) ; trois points peuvent devenir un seul caractère de points de suspension (désactivé au départ). En mode script, ces corrections peuvent être désactivées.
+- **Guillemets déjà présents dans le projet** (depuis 0.61.1) : sous **Guillemets typographiques**, **Convertir en guillemets typographiques…** transforme les " et ' droits du projet en marques du style choisi à côté de **Utiliser les guillemets typographiques**, et **Convertir en guillemets droits…** retransforme chaque guillemet typographique et chaque apostrophe en " et '. Une fenêtre comme Remplacer dans le projet (section 9) s'ouvre : le sens et de nouveau le style, où convertir (titres, texte, notes, synopsis, métadonnées personnalisées, commentaires et notes de bas de page), l'étendue (le projet entier ou les documents sélectionnés dans le classeur, la corbeille seulement si vous la cochez), et un instantané de chaque texte avant qu'il ne change (coché au départ). **Compter** montre combien de marques changeraient ; **Convertir** demande encore une fois et le fait. La mise en forme reste (un guillemet en gras reste en gras). Une marque s'ouvre après rien, une espace, une parenthèse, un tiret ou une marque ouvrante, et se ferme dans les autres cas ; une apostrophe à l'intérieur d'un mot ou avant un nombre ('90s) devient ’. Une marque droite avec une espace des deux côtés reste telle quelle, et une apostrophe au début d'un mot ('tis) devient une marque ouvrante : regardez-les ensuite. Rechercher et remplacer ne peut pas faire cela, parce qu'une même marque doit devenir ouvrante ou fermante selon ses voisines.
+- **Détection de données** : une adresse web tapée devient un lien ; **[[Titre]]** devient un lien vers le document portant ce titre et, s'il n'y en a pas, un nouveau document vide de ce nom est créé à côté du texte (les « liens de documents » de Scrivener).
+- **Substitutions supplémentaires** : une liste de ce que vous tapez et de ce que cela devient, par exemple « (c) » et ©, « -> » et →. **Modifier les substitutions...** change la liste ; **Substitutions standard** ramène la liste livrée avec le programme.
+- **Saisie semi-automatique** : en mode script, la liste des noms de personnages et des intitulés de scène proposée pendant la frappe.
+
+### Zoom, défilement machine à écrire et largeur fixe
+
+- **Ctrl+molette de la souris** zoome la zone sous la souris, où qu'elle soit : les éditeurs, le classeur, l'inspecteur, le plan, le tableau en liège (fiches et leur texte ensemble), une carte mentale, le mode composition et les fenêtres à part (Référence rapide, les outils d'écriture) ; le clavier peut être ailleurs. Chaque zone garde son zoom jusqu'à ce que vous le changiez de nouveau.
+- **Ctrl++ / Ctrl+-** ou la zone de zoom dans le pied de page agrandissent le texte à l'écran sans changer la taille de la police. **Affichage > Réinitialiser le zoom** (**Ctrl+0**) revient au zoom de texte par défaut.
+- **Fichier > Options > Édition** définit le zoom avec lequel chaque zone démarre (« Zoom du texte par défaut », pour chaque zone de la fenêtre et chaque partie ayant un zoom propre : le synopsis, les notes, les listes de signets, le texte des signets, la liste et le texte des instantanés, la liste et la fiche des objets dans l'inspecteur et dans la fenêtre Objets, les nouvelles cartes mentales) et si les éditeurs se rouvrent avec le zoom qu'ils avaient en dernier (« Recharger le dernier zoom choisi des éditeurs principaux »).
+- **Où vous en étiez.** {{APP}} mémorise avec le projet, pour chaque document, la position du curseur et la partie du texte à l'écran : affiché de nouveau (depuis le classeur, un lien, Reculer et Avancer, dans le support de copie, un panneau de référence rapide, ou après la réouverture du projet), un document s'ouvre là où vous l'avez laissé. Un dossier dans le texte combiné mémorise lequel de ses documents avait le curseur. Un résultat de recherche ou un lien qui pointe vers un endroit précis va à cet endroit à la place. Les images gardent leur zoom et les fichiers PDF leur zoom et leur page.
+- Le **défilement machine à écrire** (**Affichage > Édition du texte**) garde la ligne que vous tapez au milieu de l'écran.
+- L'**éditeur à largeur fixe** affiche le texte sous forme d'une colonne centrée de largeur confortable (500 px à 100 % sauf si vous la changez), quelle que soit la largeur de la fenêtre. Désactivez-le, ou changez la largeur, sous **Fichier > Options > Apparence > Éditeur principal** (« Utiliser l'éditeur à largeur fixe », « Largeur de la colonne de texte »), ou par un clic droit sur le papier (**Apparence > Largeur de la colonne de texte**). Le papier de la colonne est #d1d495 et la zone à côté #999999 par défaut (« Papier » et « À côté de la colonne de texte » parmi les couleurs de l'Éditeur principal) ; ils restent les mêmes quand vous choisissez un autre thème, jusqu'à ce que vous les changiez ou les réinitialisiez.
+- **Bordure à côté du texte.** À gauche et à droite du texte, le papier a une bordure de sa propre couleur, pour que le texte ne touche pas le bord du papier : 10 px à 100 % pour les nouveaux projets, et elle grandit avec le zoom. Elle se trouve en dehors de la colonne de texte, si bien que les lignes se coupent où elles se coupaient. Changez-la sous **Fichier > Options > Apparence > Éditeur principal** (« Bordure à côté du texte », de 0 à 100 px) ou par un clic droit sur le papier (**Apparence > Bordure à côté du texte**). Les projets créés avant 0.40.2 gardent l'aspect qu'ils avaient, sans bordure, jusqu'à ce que vous leur en donniez une. Un clic sur la bordure place le curseur au début ou à la fin de la ligne à côté.
+- **Cliquer et faire un clic droit** ne déplacent jamais la vue : le curseur va où vous cliquez, et le texte reste où il est à l'écran (avant 0.40.2, un clic ou un clic droit près du bord supérieur ou inférieur, ou un clic droit à côté du texte, pouvait faire sauter le texte).
+
+### Vue page
+
+**Affichage > Édition du texte > Vue page** (aussi dans le menu du bouton **Affichage** de la barre d'outils) affiche votre texte sur des feuilles de papier au lieu d'une colonne sans fin. Le pied de page affiche alors la page du curseur et le nombre de pages, par exemple « Page 3 sur 12 ». Choisissez de nouveau la commande pour revenir à la colonne. La couleur du bureau autour des pages se trouve sous **Fichier > Options > Apparence > Éditeur principal** (ou clic droit > **Apparence** pendant que les pages sont affichées).
+
+Les pages sont une façon de regarder votre texte, rien de plus. Elles ne montrent pas à quoi ressemblera un manuscrit compilé ou imprimé : vous écrivez par morceaux, et les titres, les polices et la taille de page se décident à la compilation (section 13). Rien à propos des pages n'est stocké dans vos documents.
+
+- **Affichage > Édition du texte > Taille de page et marges…** définit le papier (A4, A5, US Letter et autres, ou une taille personnalisée), portrait ou paysage, et les quatre marges. Le réglage appartient au projet ; cochez **Utiliser cette page aussi pour les nouveaux projets** pour en faire votre réglage standard.
+- Le zoom agrandit ensemble les feuilles, les marges et les lettres. Une feuille plus large que l'éditeur peut défiler latéralement. Comme dans l'affichage en colonne, les retraits et les taquets de tabulation gardent leur longueur réelle, de sorte que les sauts de ligne peuvent différer un peu selon les niveaux de zoom.
+- Dans le texte combiné, chaque document commence sur une feuille à lui, et sa dernière feuille se termine juste sous le texte, si bien que les documents courts ne remplissent pas l'écran de papier vide.
+- La vue page s'applique à tout ce qui affiche vos textes dans la fenêtre principale et dans les fenêtres de référence rapide : les deux éditeurs et les supports de copie. Les notes gardent leur aspect simple, et le mode composition a son propre papier.
+- La couleur autour des feuilles est **Autour des pages (vue page)** sous **Fichier > Options > Apparence > Éditeur principal**.
+
+### Scénario
+
+Les scénarios de film, les pièces de théâtre et les scénarios de bandes dessinées s'écrivent en **mode script**. Un script est composé d'*éléments* : intitulé de scène, action, personnage, indication entre parenthèses, dialogue, transition, etc. Chaque élément a sa place sur la page, et en mode script les touches **Tab** et **Enter** vous font passer d'un élément au suivant, si bien que vous ne définissez jamais un retrait à la main.
+
+**L'activer.** Cliquez dans un document et choisissez **Format > Scénario > Mode script** (**Ctrl+8**). L'entrée de menu nomme le format de script du projet, par exemple *Mode script - Scénario de film*. Le mode script appartient au document : scripts et textes ordinaires cohabitent dans un même projet, et les scripts ont une **icône jaune** dans le classeur. Choisissez de nouveau la commande pour le désactiver ; le texte garde son aspect. Un nouveau document créé parmi des scripts (dans un dossier dont tous les textes sont des scripts) est lui aussi un script.
+
+**Le pied de page.** Dans un script, le pied de page de l'éditeur montre, à la place du nombre de mots, ce que **Tab** et **Enter** feront au niveau du curseur, et à droite un menu déroulant avec l'élément du paragraphe actuel. Choisissez un autre élément dans ce menu et le paragraphe est remis en forme. Le texte qui n'est pas un élément du script est affiché comme **Texte général**.
+
+**Tab et Enter.**
+
+- **Enter** à la fin d'un paragraphe commence l'élément qui suit habituellement : action après un intitulé de scène, dialogue après un nom de personnage, etc.
+- **Enter** sur une ligne vide ouvre la liste des éléments au niveau du curseur ; appuyez sur la lettre soulignée dans la liste (S pour intitulé de scène, C pour personnage ...). **Format > Scénario > Afficher la liste des éléments** (**Ctrl+\\**) ouvre la même liste à tout moment.
+- **Tab** sur une ligne vide change la ligne en un autre élément ; appuyez de nouveau pour le suivant, **Shift+Tab** pour revenir en arrière.
+- **Tab** à la fin d'un paragraphe fait ce qui convient à l'élément : après un nom de personnage ou une ligne de dialogue, il commence une indication entre parenthèses, et dans un intitulé de scène il tape « - », prêt pour le moment de la journée.
+- **Enter** au milieu d'un paragraphe le divise ; les deux moitiés gardent l'élément. **Shift+Enter** est un saut de ligne à l'intérieur du paragraphe.
+- Les éléments écrits en capitales (intitulés de scène, noms de personnages, transitions) transforment en capitales ce que vous tapez. Les parenthèses et les préfixes comme « SFX: » sont tapés pour vous.
+
+**Saisie semi-automatique.** Pendant que vous tapez, une petite liste propose ce qui convient à l'élément : INT. et EXT. au début d'un intitulé de scène, les moments de la journée après son « - », les lieux et noms de personnages déjà utilisés dans le document, et des transitions courantes comme CUT TO:. **Enter** ou **Tab** prend l'entrée marquée, les touches fléchées en choisissent une autre, **Esc** ferme la liste.
+
+**Changer d'élément.** **Format > Scénario > Changer l'élément en** modifie le paragraphe contenant le curseur, ou tous les paragraphes sélectionnés. Choisir un élément là dans un document ordinaire fait du document un script. Chaque élément est une commande, si bien que vous pouvez donner un raccourci à vos préférés sous **Fichier > Options > Clavier**.
+
+**Formats de script.** Un projet utilise un seul format de script pour tous ses scripts. **Format > Scénario > Format de script** liste *Scénario de film*, *Pièce de théâtre* et *Scénario de bande dessinée*, les formats des modules complémentaires et les vôtres. Quand vous choisissez un autre format, les scripts du projet reçoivent la nouvelle mise en page : chaque élément devient l'élément du même genre dans le nouveau format (l'action devient une indication scénique, par exemple). Un élément sans équivalent devient du texte général qui garde son aspect ; la question précédant le changement nomme ces éléments.
+
+**Paramètres du script.** **Format > Scénario > Paramètres du script…** modifie le format du projet ou en construit un nouveau :
+
+- le nom du format, sa police (par défaut la police machine à écrire de votre système : Courier Prime, Courier New ou une police semblable) et sa taille, et si les longueurs sont en pouces ou en centimètres ;
+- la liste des éléments : ajoutez, retirez et réordonnez (l'ordre est celui de la liste des éléments et de **Tab** sur une ligne vide) ;
+- pour chaque élément : nom, genre (ce qu'il est pour d'autres programmes : intitulé de scène, action, personnage ...) et sa lettre dans la liste ; gras, italique, souligné, capitales et couleur ; alignement, retraits depuis les deux marges, lignes vides avant lui et interligne ; ce que font **Enter** et **Tab** ; un texte tapé avant et après le paragraphe ; et les listes pour la saisie semi-automatique ;
+- un aperçu de tous les éléments.
+
+Un élément renommé garde ses paragraphes dans chaque script du projet. Le bouton **Gérer** part d'un autre format, charge ou enregistre un fichier de format (*.qbscript*) et enregistre le format pour l'utiliser dans d'autres projets.
+
+**Bon à savoir.**
+
+- Les touches et les listes fonctionnent de la même façon dans le texte combiné, dans le deuxième éditeur, dans les supports de copie, dans les panneaux de référence rapide et en mode composition. Seuls les éditeurs de la fenêtre principale ont le pied de page avec les indications ; ailleurs, **Ctrl+\\** affiche la liste des éléments.
+- La vue page (ci-dessus) montre un script sur des feuilles ; avec la police machine à écrire habituelle à 12 points, une page de scénario de film dure à peu près une minute de film, mais les pages à l'écran ne sont pas les pages du fichier compilé.
+- La police et les retraits des éléments appartiennent au format de script, pas au document. Les fichiers de vos scripts ne contiennent que les noms des éléments (section 18).
+- Faire entrer et sortir des scripts, dans les formats d'autres programmes de scénarisation : section 14. Compiler un script entier : section 13.
+- Les scripts demandent la version 0.10 ou plus récente. Un projet qui contient des scripts l'indique dans son fichier de projet, et à partir de cette version {{APP}} demande avant d'ouvrir un projet qui exige une version plus récente que celle qui tourne. Les versions 0.9 et antérieures ne demandent pas : elles affichent les scripts comme du texte ordinaire et perdent les éléments de chaque script que vous y regardez.
+
+---
+
+## 5. Trois façons de regarder votre projet
+
+Choisissez l'affichage avec les trois boutons de la barre d'outils ou avec **Ctrl+1**, **Ctrl+2** et **Ctrl+3**.
+
+### Texte combiné (Ctrl+1) : plusieurs documents comme un seul texte
+
+Sélectionnez plusieurs documents dans le classeur (Ctrl+clic ou Shift+clic) ou un dossier, et appuyez sur **Ctrl+1**. Tous les textes apparaissent les uns après les autres, séparés par un fin trait en pointillés, et vous pouvez écrire dans tous comme s'ils formaient un seul document. Les modifications vont automatiquement dans les bons documents. Affichez les titres des documents entre eux avec **Affichage > Édition du texte > Afficher les titres dans le texte combiné**.
+
+### Tableau en liège (Ctrl+2) : des fiches
+
+Chaque document est une fiche qui montre son titre et son synopsis ; un document sans synopsis montre à la place les premières lignes de son texte (atténuées, en italique). La fiche d'une image montre l'image, de même que la fiche d'un document dont le synopsis est une image (section 7). Faites glisser les fiches pour réordonner les documents. Double-cliquez sur une fiche pour modifier son titre ou son synopsis. Appuyez sur **Enter** pour ouvrir les fiches sélectionnées comme texte.
+
+Dans le pied de page du tableau en liège :
+
+- **Grille** ou **libre** : en mode libre, vous pouvez placer les fiches n'importe où, comme sur un vrai tableau en liège. **Valider l'ordre libre** réordonne ensuite les documents du classeur pour qu'ils correspondent aux fiches, de gauche à droite et de haut en bas. La disposition que vous choisissez pour un dossier est mémorisée avec ce dossier (depuis 0.90.0) : la prochaine fois que vous l'affichez, son tableau en liège est disposé de la même façon. Un dossier pour lequel vous n'avez jamais choisi de disposition garde celle que montre l'éditeur.
+- **Fils par libellé** : dispose les fiches en rangées par libellé.
+- **Taille des fiches**, avec le curseur, les touches fléchées ou la molette de la souris au-dessus ; elle est conservée aussitôt (**Ctrl+molette de la souris** au-dessus du tableau en liège zoome les fiches et leur texte ensemble, comme les autres zones, voir la section 4).
+
+Un double-clic sur un endroit vide du tableau en liège crée une nouvelle fiche (**Fichier > Options > Comportements > Double-clic**). Quand vous modifiez un synopsis sur une fiche, **Return** termine la modification et **Shift+Return** crée une nouvelle ligne (**Fichier > Options > Comportements > Touche Return**, où Return peut aussi être réglé pour créer une nouvelle fiche ou ligne de plan après celle qui est sélectionnée).
+
+Les tampons de statut, le mode libre et la disposition par libellé se trouvent aussi sous **Affichage > Options du tableau en liège** ; les teintes de libellé pour les fiches et le classeur sous **Affichage > Utiliser la couleur du libellé dans**. Les colonnes du plan sont aussi listées sous **Affichage > Options du plan**.
+
+### Plan (Ctrl+3) : un tableau
+
+Affiche les documents sous forme de tableau avec titre, synopsis, libellé, statut, nombres de mots, objectifs, dates et vos métadonnées personnalisées. Cliquez sur le bouton des colonnes dans le pied de page pour choisir les colonnes. Cliquez sur un en-tête de colonne pour trier (pour l'affichage seulement ; l'ordre du classeur ne change pas). Faites glisser les lignes pour réordonner les documents.
+
+### Filtrer le tableau en liège et le plan
+
+Quand le tableau en liège ou le plan a le clavier, **Ctrl+F** (**Édition > Rechercher > Rechercher**) ouvre une **barre de filtre** en haut de l'éditeur. Pendant que vous tapez, seules les fiches ou lignes correspondantes restent ; la barre indique combien (« 2 sur 9 »). Dans le plan, les groupes des documents correspondants restent, afin que vous voyiez à quoi ils appartiennent.
+
+- Cliquez sur le **triangle** à gauche du champ pour les options : où chercher (**Titres**, **Synopsis**, **Mots-clés**, **Texte**), un **libellé**, un **statut**, un **mot-clé**, si le document est **inclus dans la compilation**, et **Afficher ce qui ne correspond pas**. Plusieurs choix ensemble restreignent davantage la liste.
+- Le filtre reste pendant que vous ouvrez d'autres dossiers, si bien que vous pouvez parcourir le projet en ne regardant, par exemple, que les scènes d'un personnage.
+- **Terminé** supprime le filtre et affiche de nouveau tout.
+
+Faire glisser des fiches réordonne toujours les documents : une fiche déposée entre deux fiches visibles atterrit à côté d'elles dans le classeur. **Valider l'ordre libre** du tableau en liège libre est désactivé tant qu'un filtre masque des fiches.
+
+---
+
+## 6. Deux éditeurs, signets et référence rapide
+
+### Éditeur divisé
+
+Cliquez sur le bouton de division à droite de l'en-tête de l'éditeur pour afficher un deuxième éditeur. Alt+clic divise dans l'autre direction. **Affichage > Diviser l'éditeur** propose les mêmes choix. **F6** saute d'un éditeur à l'autre. Un clic dans le classeur affiche le document dans l'éditeur que vous avez utilisé en dernier ; **Navigation > La sélection du classeur agit sur** change cela en l'éditeur de gauche ou du haut, l'éditeur de droite ou du bas, ou l'autre éditeur, selon celui dans lequel vous écrivez.
+
+Dans un tableau en liège ou un plan, le bouton de pied de page **La sélection agit sur l'autre éditeur** (aussi dans **Affichage > Options du tableau en liège** et **Options du plan**) fait afficher par l'autre éditeur la fiche sur laquelle vous cliquez. C'est un moyen rapide de parcourir les scènes tout en gardant la vue d'ensemble du chapitre.
+
+**Navigation > Éditeur > Verrouiller sur place** garde un éditeur sur son document, même si vous cliquez ailleurs dans le classeur.
+
+### Supports de copie
+
+Chaque éditeur a un **support de copie** : une seconde vue simple à l'intérieur de l'éditeur qui contient un autre document de référence, comme des notes ou une fiche de personnage. Avec deux éditeurs et leurs supports de copie, vous pouvez voir quatre documents à la fois.
+
+- **Pour l'ouvrir**, maintenez **Alt** et faites glisser un document depuis le classeur, un tableau en liège ou un plan sur la barre d'en-tête de l'éditeur. Sans Alt, le dépôt charge le document dans l'éditeur lui-même. **Navigation > Ouvrir > dans le support de copie** et le menu contextuel d'un document font de même pour le document sélectionné.
+- Le support de copie a une barre d'en-tête étroite avec le titre et pas de pied de page. Il affiche le texte d'un document (ou une image ou un PDF) ; il n'a ni tableau en liège, ni plan, ni texte combiné. Vous pouvez y écrire et mettre en forme comme dans n'importe quel éditeur.
+- **Pour le déplacer**, faites un clic droit sur sa barre d'en-tête et choisissez gauche, droite, haut ou bas. La première fois, il s'ouvre à côté d'un éditeur large et en dessous d'un éditeur étroit ; ensuite, là où vous l'avez placé en dernier. Faites glisser la ligne entre l'éditeur et le support de copie pour changer leurs tailles.
+- **Pour afficher un autre document**, déposez-le sur la barre d'en-tête du support de copie, ou faites de nouveau Alt+glisser sur la barre d'en-tête de l'éditeur.
+- **Pour le fermer**, cliquez sur le **X** à droite de sa barre d'en-tête, ou choisissez **Navigation > Éditeur > Fermer le support de copie**. Le bouton à gauche du X le ferme et ouvre à la place le document dans une fenêtre de référence rapide.
+
+**Naviguer avec un support de copie.** Quand un éditeur affiche un tableau en liège ou un plan et que son support de copie est ouvert, le bouton **La sélection agit sur** du pied de page a trois positions. Le premier clic fait ouvrir votre sélection dans l'autre éditeur, comme d'habitude. Le deuxième clic tourne la flèche pour qu'elle pointe vers l'intérieur de la case : maintenant la fiche ou la ligne sur laquelle vous cliquez s'ouvre dans le support de copie. Un troisième clic le désactive. Un agencement utile : le manuscrit dans l'éditeur de gauche, un plan de votre recherche dans l'éditeur de droite avec son support de copie en dessous, et **Navigation > La sélection du classeur agit sur > Éditeur de gauche ou du haut**. Le classeur commande alors le manuscrit, et le plan commande le support de copie.
+
+Le support de copie, sa place et son document sont mémorisés avec le projet.
+
+### L'en-tête de l'éditeur
+
+L'en-tête au-dessus de chaque éditeur montre le titre du document et contient les boutons **reculer** et **avancer** (**Ctrl+[** et **Ctrl+]**), un menu des sections du document et les boutons du document précédent et suivant (**Alt+Shift+Haut / Bas**).
+
+- **Historique** : chaque éditeur mémorise les documents qu'il a affichés. Maintenez enfoncé le bouton reculer ou avancer (ou faites un clic droit dessus) pour obtenir une liste et choisissez un document pour y aller directement ; **Navigation > Reculer vers** et **Avancer vers** montrent les mêmes listes. L'historique est conservé avec le projet.
+- **L'icône** à côté du titre représente le document. Cliquez dessus pour un menu (Verrouiller sur place, Afficher dans le classeur ...). Faites-la glisser comme un document du classeur : sur la barre d'en-tête de l'autre éditeur, dans le classeur, sur un onglet de collection, sur le bouton Référence rapide ou Signets de la barre d'outils, ou sur du texte pour créer un lien.
+- **Documents > Grouper** (**Ctrl+Shift+J**, aussi dans le menu contextuel du classeur) déplace les éléments sélectionnés dans un nouveau dossier à la place du premier ; son titre est prêt à être saisi. Avec le clavier dans le classeur, **Édition > Annuler** annule toute l'étape.
+- **Documents > Convertir > Fiche en objet** (aussi dans le menu contextuel du classeur) crée un Objet (section sur les Objets) à partir de chaque document fiche sélectionné, par exemple une fiche de personnage ou de lieu : le titre devient le nom, le texte va dans **Autre**, une image dans le texte devient l'image. Le nom du dossier (Personnages, Lieux) détermine le genre ; pour un autre dossier, on vous le demande. L'élément du classeur reste : le sélectionner affiche l'Objet dans l'inspecteur, et Return l'ouvre dans la fenêtre Objets. Le document garde son texte (un projet Scrivener voit un document normal) ; le lien est conservé dans les données Objets propres au projet. **Édition > Annuler** avec le clavier dans le classeur l'annule.
+- **Navigation > Aller à** liste tout le classeur sous forme de menu et charge le document choisi dans l'éditeur actif. **Navigation > Groupe parent** montre le dossier ou le groupe auquel appartient le document, avec le document sélectionné à l'intérieur.
+- Un **double-clic sur le séparateur** entre deux éditeurs les met à la même taille.
+
+### Glisser-déposer en un coup d'œil
+
+| Faire glisser ... | sur ... | et ... |
+|---|---|---|
+| un document (classeur, collection, tableau en liège, plan, icône d'en-tête, signet) | la barre d'en-tête d'un éditeur | il est affiché dans cet éditeur ; avec **Alt** : dans son support de copie |
+| | du texte dans un éditeur | un lien vers le document ; sur du texte sélectionné, ce texte devient le lien |
+| | du texte, avec **Alt** maintenu | le texte du document est inséré |
+| une image du classeur | du texte dans un éditeur | l'image est insérée |
+| un document | le bouton **Référence rapide** de la barre d'outils | chaque document s'ouvre dans un panneau à part |
+| | le bouton **Signets** de la barre d'outils | il est ajouté aux signets du projet |
+| | un onglet de collection, une liste de signets | il y est ajouté |
+| | la barre d'en-tête d'un panneau de référence rapide | il est affiché dans ce panneau |
+| | le gestionnaire de fichiers ou le bureau | il y est enregistré comme fichier (voir « Exporter des documents ») |
+| du texte sélectionné | le classeur | un nouveau document avec ce texte ; le texte reste où il était |
+| des fichiers du gestionnaire de fichiers | le classeur ou un tableau en liège | ils sont importés |
+| un lien web d'un navigateur | un dossier du classeur, le tableau en liège, le plan | la page est importée (module Web Page Import, section 14) |
+| un fichier image, ou une image du classeur | la fiche de l'inspecteur (mode image) | elle devient l'image de la fiche |
+| des mots-clés de **Projet > Mots-clés du projet** | un document du classeur, une collection, le tableau en liège, le plan ; la liste de mots-clés de l'inspecteur | ils sont affectés ; avec **Alt** : avec le groupe auquel ils appartiennent |
+
+Certains bureaux utilisent Alt+glisser pour déplacer les fenêtres. Si Alt+glisser n'arrive pas dans le programme, changez la touche de modification pour déplacer les fenêtres dans les réglages de votre bureau (KDE : Configuration du système, comportement des fenêtres ; l'endroit exact diffère selon les versions), ou utilisez à la place les commandes de menu (**Navigation > Ouvrir > dans le support de copie**, **Projet > Mots-clés du projet > Affecter aux documents sélectionnés**).
+
+### Panneaux de référence rapide
+
+Un panneau de référence rapide est un document dans une fenêtre à part, par exemple pour garder une fiche de personnage sous les yeux pendant que vous écrivez. Le texte d'un panneau peut être modifié et mis en forme comme dans l'éditeur (les raccourcis des menus Format et Insertion y fonctionnent).
+
+**Pour ouvrir des panneaux :**
+
+- **Navigation > Ouvrir > comme référence rapide**, ou le bouton Référence rapide de la barre d'outils, pour les documents sélectionnés.
+- Appuyez sur **Espace** dans le tableau en liège ou dans le plan, ou dans le classeur et dans une liste de collection ou de résultats de recherche quand **Affichage > Touches d'ajout rapide dans le classeur** est activé (voir la section 2, les touches du classeur). Sans cette option, Espace dans le classeur sert à taper un nom pour y sauter.
+- Faites glisser des documents sur le **bouton Référence rapide** de la barre d'outils : chacun s'ouvre dans un panneau à part, et l'éditeur garde son document.
+- **Navigation > Ouvrir une référence rapide** affiche tout le classeur sous forme de menu, de sorte que vous pouvez ouvrir un document sans le sélectionner d'abord.
+
+**Dans un panneau :**
+
+- Le **titre** dans la barre d'en-tête peut être modifié (cela renomme le document). L'**icône** à côté ouvre un menu (Afficher dans le classeur, Ouvrir dans l'éditeur, ajouter aux signets du projet ou en retirer) et peut être glissée comme le document lui-même. Déposez un document sur la barre d'en-tête pour l'afficher dans ce panneau.
+- Le bouton en **haut à droite** affiche le **synopsis**, les **notes**, les **mots-clés** ou les **métadonnées** du document sous son texte. Ce que vous changez là change le document.
+- La **barre de pied** affiche le nombre de mots et permet de définir le **libellé** et le **statut**.
+- Le **bouton des signets** à gauche de la barre de pied ouvre les **signets du projet** à côté du document. Un clic sur un document en signet l'affiche dans le panneau, si bien qu'un seul panneau suffit pour circuler entre vos notes. Faites glisser les signets dans un autre ordre, déposez-y des documents et retirez un signet avec le bouton ➖ (le document reste dans le classeur). Les fichiers et les liens web s'ouvrent par un double-clic.
+- Le bouton ➕ sous les signets crée un **nouveau document** et le met en signet. La première fois, on vous demande le dossier (par exemple un dossier « Notes » dans Recherche) ; cochez **Ne plus demander** pour utiliser ensuite ce dossier. Changez-le sous **Projet > Paramètres du projet > Dossiers spéciaux**.
+- Le bouton **Détacher** garde le panneau au-dessus de la fenêtre principale ; **Fenêtre > Détacher les panneaux de référence rapide** le fait pour tous.
+
+Le menu Fenêtre liste les panneaux ouverts et les ferme tous d'un coup. Les panneaux qui sont ouverts quand vous fermez un projet reviennent quand vous le rouvrez, avec leur place, leur taille, leur volet inférieur et leur barre latérale (désactivez cela sous **Fichier > Options > Comportements**).
+
+### Audio et vidéo
+
+Les fichiers audio et vidéo du classeur (par exemple des entretiens dans le dossier Recherche) se lisent à l'intérieur de {{APP}} quand le module **Media Playback** est installé (section 17 ; il vient avec la mise à jour 0.12). Sans lui, un tel fichier affiche **Ouvrir avec l'application par défaut**, comme avant.
+
+**Lecture.** Cliquez sur le fichier dans le classeur. Une vidéo montre son image ; un fichier audio montre son titre, son artiste et sa durée. La **barre de pied** de l'éditeur contient les commandes de lecture :
+
+- le bouton **pause et retour en arrière** à gauche (voir plus bas),
+- **aller au début**, **sauter en arrière**, **lecture / pause**, **sauter en avant**,
+- la **position** : faites glisser le curseur, ou cliquez à côté de sa poignée,
+- l'heure, la **vitesse** (0,5× à 2× ; une parole plus lente est plus facile à taper ; la voix devient plus grave ou plus aiguë avec la vitesse, comme sur une bande magnétique) et le **volume** (clic : couper le son ; la flèche : un curseur).
+
+Un clic sur l'image d'une vidéo la lit ou la met en pause ; un clic droit propose aussi **Ouvrir avec l'application par défaut**. Avec le clavier dans le lecteur : **Espace** lit ou met en pause, les **flèches gauche** et **droite** sautent, **Home** va au début.
+
+**Transcrire.** Divisez l'éditeur, affichez le fichier audio dans un éditeur et votre transcription dans l'autre, et continuez à taper : les commandes de **Navigation > Média** fonctionnent où que soit le clavier, aussi dans les panneaux de référence rapide et en mode composition.
+
+| Commande | Raccourci |
+|---------|----------|
+| Lecture / Pause | Ctrl+Return |
+| Sauter en arrière / Sauter en avant (5 secondes) | Ctrl+Alt+, / Ctrl+Alt+. |
+| Insérer l'horodatage du média (aussi **Insertion > Insérer l'horodatage du média** : la même commande, affichée dans les deux menus) | Ctrl+Shift+Return |
+| Arrêter, Aller au début, Pause et retour en arrière, Plus rapide, Plus lent, Vitesse normale, Augmenter le volume, Baisser le volume, Couper le son, Aller à l'horodatage du curseur | pas de raccourci (donnez-leur-en un sous **Fichier > Options > Clavier**) |
+
+Les commandes agissent sur le fichier que vous avez ouvert ou utilisé en dernier (dans l'un ou l'autre éditeur, un support de copie ou un panneau de référence rapide).
+
+**Pause et retour en arrière.** Une fois activé (le bouton paraît enfoncé), chaque pause revient un peu en arrière, de 2 secondes sauf si vous définissez une autre valeur sous **Fichier > Options > Comportements > Lecture**. Quand vous appuyez sur Ctrl+Return pour taper ce que vous avez entendu, vous réentendez les derniers mots quand vous continuez.
+
+**Horodatages.** **Insérer l'horodatage du média** tape l'heure du lecteur au niveau du curseur, comme `[03:07]` (avec les heures à partir d'une heure : `[1:02:03]`). **Aller à l'horodatage du curseur** fait l'inverse : il prend l'horodatage de la ligne du curseur (le plus proche avant ou autour de lui) et y déplace le lecteur. Les horodatages sont du texte ordinaire ; on peut aussi les écrire à la main (`3:07`, `[03:07]`, `1:02:03.5`).
+
+**Dans un support de copie ou un panneau de référence rapide**, le lecteur a ses commandes de lecture en bas. Un fichier audio dans le support de copie de l'éditeur de la transcription est un bon agencement pour un seul éditeur.
+
+**Où il en était.** Quand vous rouvrez un fichier audio ou vidéo, il reprend là où vous l'aviez mis en pause (désactivez cela sous **Fichier > Options > Comportements > Lecture**). Afficher un autre document dans l'éditeur arrête le fichier.
+
+**Ce qui se lit.** Le module *Media Playback* (2.0) lit les formats libres d'utilisation : audio MP3, Ogg Vorbis, Opus, FLAC, ALAC, WAV, AIFF et WavPack ; vidéo WebM, MKV et Ogg avec images VP8, VP9 ou Theora (aussi MJPEG et d'autres formats libres). Le module apporte tout ce dont il a besoin.
+
+**Plus de formats.** H.264, H.265 (HEVC), AAC (M4A), AC-3, E-AC-3, DTS, vidéo MPEG-1/2/4, VC-1 et WMV, WMA et AMR sont soumis à des brevets dans certains pays ; ils viennent avec le module séparé **Extra Video and Audio Formats**. Le plus simple pour obtenir les deux est le paquet unique **media-all-formats.qbpkg** de la page Releases : installé comme tout module (section 17), il installe ensemble *Media Playback* et *Extra Video and Audio Formats*. Les deux apparaissent alors dans **Aide > Modules et mises à jour > Gestionnaire de modules…**, où les formats supplémentaires peuvent être désactivés ou supprimés séparément. La nécessité d'une licence de brevet pour utiliser ces formats dépend du pays. Tant qu'il est installé et activé, *Media Playback* l'utilise, et les fichiers MP4/M4V/MOV, AVI, MPEG, WMV, FLV et 3GP sont lus aussi (pas WMA Pro ni WMV 9). Sans lui, un tel fichier affiche sous le lecteur un message qui nomme ses formats et ce module ; tout le reste fonctionne comme avant. La vidéo AV1 n'est pas lue avec le décodage intégré.
+
+Depuis 0.80.0, le lecteur décode toujours avec son propre FFmpeg : le Qt que {{APP}} utilise depuis lors (la version de Qt 6.12 propre à The Qt Company) n'a aucun moyen de lire par le **GStreamer** du système, si bien que **Fichier > Options > Comportements > Lecture > Décodage** indique ce choix comme non disponible.
+
+### Signets
+
+Les **signets de document** (inspecteur, onglet des signets) relient un document à d'autres documents, à des fichiers de votre disque ou à des pages web. Les **signets du projet** sont disponibles depuis chaque document, depuis le bouton des signets de la barre d'outils et depuis la barre latérale des panneaux de référence rapide. L'onglet des signets de l'inspecteur montre les deux listes, l'une au-dessus de l'autre : **Signets du document** et **Signets du projet**, chacune avec ses propres boutons ➕ et ➖. Un clic sur un signet affiche le document sous les listes ; un document que l'éditeur affiche déjà y apparaît comme copie en lecture seule (écrivez dans l'éditeur), de sorte que l'éditeur garde sa largeur de ligne. Un double-clic ouvre le signet. Faites glisser des documents, des fichiers ou des liens web dans la liste des signets, ou utilisez le bouton ➕ ; un lien glissé depuis un navigateur web garde le titre de la page. Faites glisser un signet vers le haut ou vers le bas pour changer l'ordre. Les séparateurs entre les deux listes et le texte en dessous peuvent être déplacés ; les tailles que vous leur donnez sont conservées avec le projet et reviennent après un redémarrage ou une mise à jour du programme, même si aucun signet n'est choisi à ce moment-là. Les documents déposés sur le **bouton Signets** de la barre d'outils deviennent des signets du projet ; il en va de même pour les documents sélectionnés avec **Documents > Ajouter aux signets du projet** ; l'inspecteur affiche alors son onglet des signets avec la nouvelle entrée sélectionnée.
+
+---
+
+## 7. L'inspecteur
+
+Les boutons en haut de l'inspecteur permettent de passer entre :
+
+- **Synopsis et notes** : le synopsis est un court résumé qui apparaît sur la fiche. Vous pouvez utiliser une image à la place du texte : cliquez sur le bouton image de la fiche et déposez un fichier image ou une image du classeur sur la zone grise (ou double-cliquez sur la zone pour choisir un fichier ; clic droit pour supprimer l'image). En dessous se trouvent les **notes du document** (ou, en changeant avec le petit menu, les **notes du projet**, partagées par tout le projet). **Navigation > Inspecter > Aller au synopsis** (**Ctrl+Alt+Y**) et **Aller aux notes du document** (**Ctrl+Alt+N**) placent le clavier là depuis le texte ; **Alt+2** revient à l'éditeur. Depuis 0.93.0, les notes (notes du document et du projet) commencent en texte brut : sans police, taille, retrait de première ligne, espacement de paragraphe ni style issus de la mise en forme du texte du projet, dans la police de l'interface du programme au zoom des notes. La mise en forme n'apparaît que lorsque vous l'appliquez vous-même (barre de format, menus, raccourcis) et reste alors. Les notes qui ont déjà du texte gardent l'aspect qu'elles avaient. Le texte collé dans les notes est brut ; **Édition > Coller avec la mise en forme** (**Ctrl+Alt+Shift+V**) conserve la mise en forme qu'il apporte.
+- **Signets** : les signets du document et ceux du projet. Un clic sur un signet d'un document du projet affiche son texte sous les listes. Vous pouvez y écrire et mettre en forme comme dans un éditeur (la barre de format, le menu Format et leurs raccourcis agissent dessus tant que le curseur y est) : tout va aussitôt dans le document et son fichier, et un éditeur qui affiche le même document montre aussitôt la modification. Le texte y a un zoom propre.
+- **Carte mentale** : un tableau de notes pour le document ou le dossier (voir « Cartes mentales » plus bas).
+- **Objets** : les personnages, lieux, environnements, points d'intérêt, la météo et les autres éléments de votre histoire, chacun avec une fiche propre et des liens entre eux (voir « Objets » plus bas).
+- **Métadonnées** : libellé, statut, type de section, inclure dans la compilation, dates de création et de modification, **métadonnées personnalisées** et **mots-clés**.
+- **Instantanés** (section 11).
+- **Commentaires et notes de bas de page**.
+
+Les outils d'écriture des modules complémentaires peuvent ajouter des onglets propres ; leurs boutons viennent en premier dans la rangée, par exemple **Transcriptions** de Speech Transcription (section 10).
+
+**Le zoom propre de l'inspecteur.** **Ctrl+molette de la souris** au-dessus d'une partie de l'inspecteur agrandit ou réduit cette partie, sans changer les éditeurs. Les onglets à deux parties ont un zoom pour chacune : **Synopsis et notes** (la fiche, les notes), **Signets** (la liste des signets du document, la liste des signets du projet, le texte du signet en dessous : trois zooms), **Instantanés** (la liste, le texte de l'instantané), **Objets** (les boutons de catégorie avec la liste, la fiche). La liste **Zoom** en bas montre et règle le zoom de la partie qui a le clavier, ou de la partie que vous avez zoomée en dernier ; son titre nomme la partie (« Zoom : Notes »), et sur l'onglet Carte mentale, c'est le zoom du tableau. Les autres onglets (Métadonnées, Commentaires) et les rangées de boutons du haut et du bas partagent un seul zoom ; avec **Affichage > Zoomer les onglets de l'inspecteur séparément** (aussi dans le menu contextuel de la liste Zoom), Métadonnées et Commentaires en gardent un chacun.
+
+**L'inspecteur mémorise** avec le projet quel onglet était ouvert, où vous avez placé les séparateurs à l'intérieur des onglets, le signet affiché et l'objet affiché dans l'onglet Objets.
+
+**Commentaires d'un dossier.** Avec un dossier dans l'éditeur (sous forme de tableau en liège ou de plan), l'onglet des commentaires et notes de bas de page liste les commentaires et notes de bas de page de chaque document à l'intérieur du dossier et de ses sous-dossiers, groupés par document. Un clic sur le nom d'un document l'ouvre ; un clic sur **Commentaire ▸** (ou **Note de bas de page ▸**) ouvre le document et montre cet endroit ; le texte d'un commentaire ou d'une note de bas de page peut être modifié sur place. Dans le texte combiné (plusieurs documents comme un seul texte), l'onglet liste les notes de tous les documents affichés.
+
+### Cartes mentales
+
+Chaque document et chaque dossier peut avoir une **carte mentale** : un tableau sur lequel vous placez des notes n'importe où, les reliez par des traits et des flèches, les colorez et les regroupez sur des formes d'arrière-plan. Les tableaux peuvent être enregistrés comme fichiers Scapple, et les fichiers Scapple peuvent être lus (voir *Fichiers et Scapple* plus bas). Cliquez sur le bouton **Carte mentale** de l'inspecteur (entre Signets et Métadonnées). Le bouton est souligné quand le document a une carte mentale.
+
+**Une carte mentale fixée (0.92.0).** Normalement, l'onglet montre la carte mentale du document ou du dossier que vous avez sélectionné. Vous pouvez à la place la fixer sur un élément : l'onglet continue alors d'afficher la carte mentale de cet élément, quoi que vous sélectionniez dans le classeur ou ouvriez dans l'éditeur. C'est pour un tableau que vous voulez avoir à côté de vous pendant que vous écrivez, comme une carte de l'intrigue conservée sur un dossier. Trois endroits font la même chose :
+
+- **Dans le classeur**, passez la souris sur une ligne : une petite épingle apparaît près de son extrémité droite. Cliquez dessus, et cet élément est fixé ; son épingle reste, remplie. Un clic sur l'épingle remplie la libère. Cliquer sur une épingle ne sélectionne rien.
+- **Dans l'onglet Carte mentale**, le bouton épingle à droite de la petite barre fixe le tableau que l'onglet affiche et le libère de nouveau. Tant qu'un tableau est fixé, la barre nomme son élément (*Fixée : Intrigue*, juste après le bouton d'aperçu ; un long titre est raccourci, et le titre entier s'affiche quand vous posez la souris dessus), pour qu'il soit clair que le tableau n'appartient pas au document sélectionné.
+- **Dans les menus**, **Navigation > Inspecter > Fixer la carte mentale de cet élément** et **Navigation > Inspecter > Libérer la carte mentale fixée** (ils n'ont pas de raccourci au départ ; donnez-leur-en un dans les options si vous le souhaitez).
+
+Tant qu'un élément est fixé, une fine barre au bas du classeur dit *Carte mentale fixée :* avec son titre et comporte le bouton **Libérer**. Au plus un élément d'un projet est fixé ; en fixer un autre déplace la fixation. Un élément sans carte mentale peut aussi être fixé : l'onglet montre un tableau vide pour commencer. Seul l'onglet Carte mentale est fixé ; les autres onglets de l'inspecteur suivent le document sélectionné comme toujours, et un tableau ouvert dans une grande fenêtre reste ce qu'il est. La fixation est conservée avec le projet sur cet ordinateur quand vous le fermez, et elle est libérée quand l'élément va à la corbeille.
+
+**Dans l'inspecteur**, le tableau remplit l'onglet. La petite barre au-dessus contient **Nouvelle note**, **Nouvelle forme d'arrière-plan**, **Ajuster le zoom**, **Menu** (toutes les commandes : Fichier, Édition, Affichage, Notes, Format), le bouton d'**aperçu** (voir *Regarder autour de soi*) et **Ouvrir dans une fenêtre**. La barre en dessous compte les notes et contient le curseur de zoom. **Ouvrir dans une fenêtre** montre le même tableau dans une grande fenêtre avec les mêmes menus dans sa barre de menus et un inspecteur à droite (**Format de la note**, **Styles de note**, **Paramètres du document**) ; les changements faits à un endroit apparaissent aussitôt à l'autre. Un clic droit sur le tableau ouvre les commandes de ce qui se trouve sous la souris. Une nouvelle note (bouton, menu ou double-clic) prend aussitôt le clavier, même quand il était dans le classeur auparavant : ce que vous tapez remplace son texte sélectionné (0.94.0).
+
+Les commandes d'une carte mentale se trouvent dans ces menus qui lui sont propres, pas dans les menus de la fenêtre principale. Plus bas, **Menu > Notes > Connecter** signifie : le bouton **Menu** du tableau de l'inspecteur, puis **Notes**, puis **Connecter** (dans la grande fenêtre : **Notes > Connecter** de sa barre de menus). Tant que le tableau a le clavier, ses touches passent en premier : **Ctrl+Z** annule une modification du tableau, **Ctrl+F** recherche dans ses notes, **Ctrl+P** l'imprime.
+
+**Aide sur les cartes mentales.** **Aide > Aide sur les cartes mentales** (aussi le bouton **?** à l'extrémité droite de la barre du tableau, et **Menu > Aide** du tableau) affiche un court guide avec des images : comment créer des notes, comment tracer un trait (faites glisser une note sur une autre), comment tracer une flèche (maintenez **Alt** en relâchant ; **Ctrl+Alt** pour une flèche dans l'autre sens, **Ctrl+Alt+Shift** pour les deux extrémités), les mots sur un trait et les formes d'arrière-plan. Son bouton **Ouvrir un tableau d'exemple** (aussi **Menu > Aide > Ouvrir un tableau d'exemple**) ouvre un tableau d'entraînement dans une fenêtre à part, avec des notes à faire glisser les unes sur les autres et des exemples achevés de traits et de flèches. Rien sur le tableau d'exemple n'appartient à votre projet, et il n'est pas enregistré.
+
+**Notes.**
+
+- **Double-clic** sur un endroit vide : une nouvelle note, prête à la saisie. **Ctrl+Enter** crée une nouvelle note sous celle qui est sélectionnée (empilée). Avec **Ctrl** lors du double-clic, la nouvelle note est connectée aux notes sélectionnées ; avec **Alt**, par une flèche vers elle ; avec **Ctrl+Alt**, par une flèche dans l'autre sens.
+- **Double-cliquez** sur une note pour modifier son texte ; **Esc** ou un clic à l'extérieur termine la modification. Une note courte devient aussi étroite que son texte ; une note longue passe à la ligne à la largeur des nouvelles notes (les deux dans **Menu > Fichier > Options de la carte mentale…**).
+- **Faites glisser** des notes pour les déplacer ; avec **Ctrl** lors du dépôt, elles sont copiées. Les **touches fléchées** déplacent les notes sélectionnées quand **Menu > Édition > Les flèches déplacent les notes** (**M**) est activé (avec **Shift** de 10 px) ; sinon elles sélectionnent la note suivante dans cette direction. **Enter** ou **F2** modifie la note sélectionnée, **Delete** supprime les notes sélectionnées.
+- **Faites glisser une note sur une autre** pour connecter les deux par un trait ; recommencez pour supprimer le trait. Avec **Alt**, le trait reçoit une flèche vers la note sur laquelle on a déposé ; avec **Ctrl+Alt**, une flèche dans l'autre sens ; avec **Ctrl+Alt+Shift**, des flèches aux deux extrémités.
+- **Double-cliquez sur un trait** pour y mettre une nouvelle note, ou sur le libellé d'un trait pour le modifier (**Menu > Notes > Libellé de la connexion…**).
+- **Menu > Notes > Connecter** (**Ctrl+.**), **Connecter avec une flèche** (**Ctrl+Alt+.**), **Retirer les flèches** (**Ctrl+,**) et **Déconnecter** agissent sur les notes sélectionnées : la première que vous avez sélectionnée est le centre.
+- **Menu > Notes > Nouvelle note connectée** crée une note à gauche, à droite, au-dessus ou en dessous de celle qui est sélectionnée, connectée à elle (avec ou sans flèche).
+- **Menu > Notes > Diviser** (**Ctrl+Shift+K**) divise une note au niveau du curseur ; **Fusionner** réunit les notes sélectionnées.
+- **Menu > Notes > Empiler** (**Ctrl+'**), **Aligner**, **Répartir**, **Même largeur / hauteur**, **Ajustement automatique**, **Premier plan**, **Arrière-plan**.
+- **Menu > Édition > Ajouter un lien…** (**Ctrl+K**) relie le texte d'une note à une page web ou à un fichier ; les documents glissés du classeur sur le tableau deviennent des notes avec des liens vers eux. Un clic sur un lien l'ouvre : un document s'ouvre comme le font les liens de documents dans le texte (**Fichier > Options > Comportements**).
+- **Menu > Notes > Ajouter les notes au classeur** transforme les notes sélectionnées en documents à l'intérieur du document ou du dossier auquel appartient le tableau, dans l'ordre de lecture du tableau.
+
+Les **formes d'arrière-plan** (**Menu > Notes > Nouvelle forme d'arrière-plan**, **Ctrl+Shift+G**) sont des zones colorées derrière les notes. Créée avec des notes sélectionnées, la forme les entoure. Une forme **magnétique** (**Menu > Notes > Magnétique**, **Ctrl+Shift+M**) emporte avec elle les notes qui sont dessus quand on la déplace. Une nouvelle forme commence gris moyen (#808080) et non magnétique ; **Fichier > Options > Extras > Carte mentale** (et **Menu > Fichier > Options de la carte mentale…**) définit le remplissage, la bordure et **Magnétique** avec lesquels les nouvelles formes commencent. (Avant 0.93.0, une nouvelle forme était gris pâle et magnétique ; une couleur que vous aviez choisie là reste, et un réglage **Magnétique** enregistré a été désactivé une fois.)
+
+**Le menu contextuel d'une note** (ou d'une forme d'arrière-plan) modifie les notes sélectionnées : **Couleur de remplissage**, **Couleur du texte** et **Couleur de la bordure** proposent les couleurs des libellés de votre projet, les six couleurs de la barre de format (rouge, bleu, jaune, vert, blanc, noir) et **Autre...** pour n'importe quelle couleur, le même choix partout dans {{APP}} ; **Forme** est **Rectangle**, **Rectangle arrondi**, **Nuage** ou **Dentelé** (une note sans bordure en reçoit une fine, pour que la forme se voie) ; **Bordure** définit l'épaisseur ; **Icônes** place jusqu'à huit icônes sur une note, une à chaque coin et une au milieu de chaque côté, choisies parmi les icônes du classeur (**Documents > Changer l'icône**), vos propres icônes comprises. Faites un clic droit près de l'emplacement d'une icône pour supprimer seulement celle-là ; **Supprimer toutes les icônes** les efface.
+
+**Le menu contextuel d'un trait** n'appartient qu'à ce trait, afin que les autres traits des mêmes notes ne soient pas modifiés : ses flèches (**Aucune flèche**, une flèche vers l'une ou l'autre note, ou **Flèches aux deux extrémités**), **Couleur du trait**, **Icône au milieu** (une icône dessinée au milieu du trait), le libellé, **Insérer une note sur le trait** et **Déconnecter**. Chaque modification peut être annulée séparément.
+
+Les icônes, les couleurs de trait et les icônes de trait sont des ajouts propres à {{APP}} ; ils sont conservés dans le fichier du tableau dans des éléments que Scapple ne lit pas (un tableau exporté comme fichier Scapple contient les notes, les traits et les flèches sans eux). **Fichier > Options > Extras > Carte mentale** définit la taille des icônes et la forme des nouvelles notes.
+
+**Aspect.** **Menu > Format** contient gras, italique, souligné, barré, agrandir et réduire (**Ctrl+Shift+>** et **Ctrl+Shift+<**), les couleurs du texte, du remplissage et de la bordure, l'épaisseur de bordure (aucune, de 1 à 5 px) et le style (arrondi, carré, dentelé, nuage), l'ombre et **Atténuer** (**Ctrl+Shift+F**, la note est affichée en pâle). Les **Styles de note** conservent un aspect sous un nom ; **Menu > Format > Style de note** en applique un (**Ctrl+Alt+1** à **9**, **Ctrl+Alt+0** pour Par défaut), en crée un à partir de la note sélectionnée, ou copie et colle l'aspect d'une note (**Alt+Shift+C** / **Alt+Shift+V**). Les **Paramètres du document** dans l'inspecteur de la fenêtre définissent l'arrière-plan, la couleur du texte, la police et le sens de l'écriture du tableau (et **Définir comme valeurs par défaut** pour les nouveaux tableaux).
+
+**Arrière-plan.** Un clic droit sur un endroit vide du tableau (dans l'inspecteur ou dans la fenêtre), **Menu > Format > Couleur d'arrière-plan** ou le bouton d'arrière-plan des **Paramètres du document** proposent les couleurs des libellés de votre projet, les six couleurs de la barre de format, la valeur par défaut (**Par défaut pour les thèmes clairs** ou **Par défaut pour les thèmes sombres** dans les menus, **Utiliser la valeur par défaut** dans les Paramètres du document) et **Autre...**. Un tableau a un arrière-plan propre pour les thèmes clairs et un pour les thèmes sombres : la couleur que vous choisissez est conservée pour le type de thème utilisé, et l'autre type garde la sienne. Un tableau sans couleur propre affiche la valeur par défaut de **Fichier > Options > Extras > Carte mentale** (« Arrière-plan des tableaux », une pour les thèmes clairs et une pour les sombres) et la suit quand vous la changez. **Définir comme valeurs par défaut** dans les Paramètres du document fait de l'arrière-plan du tableau la valeur par défaut du type de thème utilisé. Un tableau garde sa couleur d'arrière-plan même quand il n'y a encore rien dessus.
+
+**Zoom et position.** Chaque tableau mémorise avec le projet son zoom et la partie affichée à l'écran, un pour l'inspecteur et un pour la grande fenêtre. Un tableau que vous n'avez jamais zoomé s'ouvre au zoom par défaut des cartes mentales (**Fichier > Options > Édition**, « Zoom du texte par défaut »).
+
+**Sélection.** Cliquez, **Shift+clic** ou **Ctrl+clic** pour ajouter, faites glisser un cadre autour de notes, **Ctrl+A**. **Menu > Édition > Sélectionner** propose les notes empilées en dessous, les notes sur les formes sélectionnées (**Alt+A**), les notes connectées (**Ctrl+Shift+A**) et les groupes connectés entiers ; en dessous se trouvent **Inverser la sélection** (**Alt+Shift+I**) et **Désélectionner** (**Ctrl+D**).
+
+**Regarder autour de soi.** Zoomez avec **Ctrl+molette de la souris**, **Ctrl++** et **Ctrl+-**, **Taille réelle** (**Ctrl+0**), **Ajuster le zoom** (**Ctrl+9**), **Zoom sur la sélection** (**Ctrl+Shift+8**) et **Zoom aléatoire** (**Ctrl+Shift+R**). Maintenez **Espace** et faites glisser pour déplacer le tableau ; maintenez **Z** pour voir un instant tout le tableau. **Menu > Édition > Rechercher** (**Ctrl+F**) recherche et remplace du texte dans les notes. **Menu > Affichage > Repères de page** montre où les pages se terminent à l'impression.
+
+**L'aperçu (0.93.0).** Une petite carte dans le coin supérieur gauche du tableau montre tout le tableau en petit, et un cadre pour la partie que vous voyez maintenant ; le cadre bouge et change de taille quand vous faites défiler et zoomez. Les notes, formes d'arrière-plan et traits sont dessinés dans leurs couleurs ; le texte d'une note n'est affiché que là où il reste lisible à cette taille, sinon la note est son cadre coloré. Cliquez dans l'aperçu pour déplacer la vue à cet endroit ; faites glisser le cadre pour déplacer la vue avec lui. Le zoom reste, et un tableau verrouillé (**Empêcher la modification**) peut aussi être parcouru. La molette de la souris au-dessus de l'aperçu agit comme au-dessus du tableau (**Ctrl+molette** zoome). Faites glisser la poignée dans son coin inférieur droit pour changer sa largeur (elle commence à un cinquième de la largeur de la vue, au moins 80 px, et n'est jamais plus large que la moitié de la vue) ; la hauteur suit la forme de ce qu'il montre, jamais plus que la moitié de la vue, et la largeur diminue avec elle quand la hauteur dépasserait cela. L'aperçu n'appartient qu'à la vue : il n'est ni dans les exports, ni dans les impressions, ni dans l'image du tableau. Il est **automatique** au départ : il s'affiche quand une partie du tableau se trouve hors de la vue, et se masque quand tout y tient (avec une petite marge, pour qu'il ne clignote pas au bord). Le bouton d'**aperçu** dans la barre du tableau de l'inspecteur (juste après **Menu**) bascule entre **automatique** et **toujours affiché** (le bouton est enfoncé) ; le même interrupteur est l'entrée **Aperçu toujours affiché** du menu Affichage du tableau (dans l'inspecteur : le bouton **Menu**, puis **Affichage** ; dans la grande fenêtre : sa barre de menus). Le choix et les tailles sont conservés sur cet ordinateur, dans les réglages du programme (un seul choix pour tous les tableaux ; la taille de l'aperçu de l'inspecteur et celle de la grande fenêtre à part) ; rien n'est écrit dans le projet.
+
+**Texte, images et fichiers.** Collez ou déposez du texte pour créer une note (un texte avec des lignes vides peut devenir plusieurs notes), déposez une image pour une note image, et déposez un fichier texte pour faire des notes de ses paragraphes.
+
+**Fichiers et Scapple.** **Menu > Fichier > Exporter** écrit le tableau en PDF (**Ctrl+Shift+E**), image PNG, texte brut, liste de texte, RTF, plan OPML, ses images ou un fichier Scapple (*.scap*) ; **Menu > Fichier > Importer une carte mentale ou un fichier Scapple…** lit un fichier *.scap* dans le tableau. **Imprimer** et **Aperçu avant impression** l'impriment. **Menu > Fichier > Empêcher la modification** verrouille le tableau.
+
+**Options de la carte mentale** (**Menu > Fichier > Options de la carte mentale…**, et la même chose dans **Fichier > Options > Extras > Carte mentale** de la fenêtre principale) : si **Enter** termine la modification d'une note (alors **Shift+Enter** crée une nouvelle ligne), si **Enter** sur une note sélectionnée en crée une nouvelle, si les nouvelles notes prennent l'aspect de la note sélectionnée, des traits en pointillés sans flèches, des notes étroites pour les textes courts, le degré de pâleur des notes atténuées, ainsi que la taille, la largeur, la couleur et la bordure des nouvelles notes et formes.
+
+**Où le tableau est conservé.** Un tableau est enregistré tout seul, comme fichier dans la structure des fichiers Scapple (*content/<ID>/mindmap.scap* dans le dossier du projet ; *Files/Data/<UUID>/quillbinder-mindmap.scap* dans un projet Scrivener, à côté des fichiers propres du document). Un document ne reçoit le fichier que lorsque quelque chose est placé sur son tableau. Annuler (**Ctrl+Z**) fonctionne pour chaque tableau séparément.
+
+{{APP}} lit les fichiers Scapple tels que Scapple 1.x les écrit, dans la mesure où leur structure est connue ; il n'a pas été possible de les tester avec Scapple lui-même (voir les notes de la version 0.17.0 dans le fichier d'état).
+
+### Objets : personnages, lieux et plus encore
+
+Les **objets** sont les personnes, les lieux et les choses de votre histoire, chacun avec une fiche de champs : un personnage avec sa race, sa taille, la couleur de ses yeux, ses traits et son histoire ; un lieu avec son genre, son environnement et sa météo ; et ainsi de suite. Ils appartiennent à tout le projet, pas à un seul document, et sont conservés à part du classeur. Des liens les relient, de sorte que vous pouvez cheminer par clics à travers un arrière-plan : la fiche du personnage, le village où elle vit, le paysage autour de lui, sa météo.
+
+Cliquez sur le bouton **Objets** de l'inspecteur (à droite du bouton **Carte mentale**), ou choisissez **Navigation > Inspecter > Objets du projet : personnages, lieux, environnements, ...**. **Fenêtre > Objets…** (ou le bouton de fenêtre dans la barre de l'onglet) affiche les mêmes objets dans une grande fenêtre à part, avec la liste à gauche et la fiche à droite. Les changements faits à un endroit apparaissent aussitôt à l'autre.
+
+**Catégories.** Les boutons colorés en haut sont les catégories : **Personnages**, **Lieux**, **Environnements**, **Points d'intérêt** et **Météo** au départ. Cliquez sur l'un pour voir ses objets. Vous pouvez les renommer, leur donner d'autres couleurs, changer leur ordre, les supprimer et ajouter vos propres catégories (factions, sorts, navires ...) : voir *Modèles et couleurs* plus bas.
+
+**Créer des objets.** **+** dans la barre de l'onglet crée un nouvel objet dans la catégorie choisie (dans le dossier de l'objet sélectionné) ; tapez son nom en haut de la fiche. Le bouton avec le dossier crée un **dossier** pour trier, par exemple « Villages » dans Lieux ; les dossiers peuvent contenir des dossiers. Faites glisser les objets et les dossiers dans la liste pour les déplacer. **F2** ou un clic droit renomme, et le menu contextuel propose aussi **Dupliquer** et **Supprimer…** (aussi dans le menu **≡** de la barre). Le champ **Filtre** n'affiche que les objets dont le nom ou le texte contient ce que vous tapez.
+
+**La fiche.** Sous la bande colorée avec la catégorie et le nom se trouvent les champs du modèle de la catégorie. Tout ce que vous tapez est enregistré tout seul, comme vos documents. Les genres de champs sont :
+
+- **Texte court** (une ligne) et **Date** (sous la forme que vous voulez, comme « printemps 1203 » ou « le troisième hiver »).
+- **Nombre** avec une unité (cm, années, °C ...).
+- **Texte long**, qui peut contenir des liens (voir plus bas), et des mots en **gras**, en *italique*, soulignés, barrés, colorés et surlignés : avec le curseur dans le champ, la barre de format, le menu Format et leurs raccourcis (**Ctrl+B**, **Ctrl+I**, **Ctrl+U** ; aussi dans la fenêtre Objets) agissent dessus. Les versions 0.20 et 0.21 de {{APP}} les affichent aussi.
+- **Choix** : une liste dans laquelle choisir ; vous pouvez aussi taper autre chose.
+- **Oui / non**.
+- **Image** : cliquez sur la zone (ou déposez une image dessus) pour en choisir une ; elle est copiée dans le projet, réduite si elle dépasse 1600 pixels. Un clic droit la supprime.
+- **Lien vers des objets** : les objets liés sont affichés comme des boutons colorés. **+** en ajoute un : tapez pour chercher, puis choisissez un objet, ou choisissez **Nouveau dans Lieux : « Ashvale »** pour créer un nouvel objet avec ce nom et le lier aussitôt. Un clic sur un objet lié affiche sa fiche ; un clic droit supprime le lien.
+- **Lien vers des documents** : des documents du classeur qui appartiennent à l'objet, comme « Apparaît dans » d'un personnage ou « Scènes se déroulant ici » d'un lieu. Un clic ouvre le document dans l'éditeur.
+
+**Bouton de couleur.** Le bouton **Couleur** de la bande donne à un objet une couleur propre (ou lui rend celle de la catégorie), par exemple pour marquer les personnages principaux.
+
+**Liens dans les textes longs.** Dans un champ de texte long, sélectionnez un mot et choisissez **Lien vers un objet…** (ou **Lien vers un document…**) dans son menu contextuel ; sans sélection, le nom de l'objet est mis comme lien. Un clic sur le lien le suit ; **Supprimer le lien** dans le menu contextuel le retire de nouveau. Dans le texte d'un document, **Insertion > Lien vers un objet…** place dans le texte un lien vers un objet ; un clic dessus affiche l'objet dans l'inspecteur. Quand le manuscrit est compilé, ces liens deviennent des mots ordinaires.
+
+**Aller et venir.** **‹** et **›** dans la barre de l'onglet reculent et avancent parmi les objets que vous avez regardés, comme dans un navigateur web.
+
+**Lié depuis.** Au bas de chaque fiche, **Lié depuis** liste les objets qui renvoient à celui-ci (dans un champ de lien ou dans un texte), si bien que le village montre qui y habite. Un clic y mène.
+
+**Dans ce document.** Quand le document de l'éditeur est lié à des objets (par un champ de lien vers des documents, par exemple « Apparaît dans »), l'onglet affiche **Dans ce document :** avec ces objets, et le bouton **Objets** est souligné comme les autres onglets qui ont du contenu.
+
+**Suppression.** Supprimer un objet demande d'abord confirmation. Les liens vers lui sont retirés des autres objets (dans les textes, le mot lié reste, en texte brut). Un lien vers lui dans un document dit que l'objet n'existe plus quand vous cliquez dessus. Supprimer un dossier conserve ses objets ; ils remontent d'un niveau.
+
+**Modèles et couleurs.** **Projet > Modèles d'objets et couleurs…** (aussi dans le menu **≡** de l'onglet, et dans le menu contextuel d'un bouton de catégorie) modifie les catégories et leurs champs :
+
+- À gauche, les catégories : **Ajouter**, **Retirer** et les flèches pour l'ordre. Retirer une catégorie qui a des objets demande s'il faut aussi les supprimer ; **Non** ne change rien.
+- À droite, le nom et la **Couleur** de la catégorie, et ses champs : **Ajouter un champ**, **Retirer**, **Monter**, **Descendre**. Pour chaque champ, son nom et son genre ; un nombre peut avoir une unité, un choix sa liste de choix (un par ligne), et un champ de lien les catégories vers lesquelles il peut renvoyer (aucune cochée : toutes).
+- **Utiliser pour les nouveaux projets** conserve ces catégories et modèles pour les projets que vous créerez désormais. **Modèles standard** rétablit une catégorie au modèle avec lequel elle est arrivée, ou ajoute les catégories standard que vous avez retirées.
+- Retirer un champ d'un modèle masque ce que les objets y ont mis, mais ne le supprime pas de leurs fichiers. Pour un champ standard, **Modèles standard > Rétablir cette catégorie au standard** le ramène avec son contenu ; un champ qui vous est propre ne revient pas, donc renommez un champ plutôt que de le retirer si vous pouvez vouloir retrouver son contenu.
+
+**Où les objets sont conservés.** Dans le dossier du projet, dans un dossier *objects* : un petit fichier par objet (*objects/characters/<ID>.json* et ainsi de suite), les modèles, les couleurs et les dossiers dans *objects/schema.json*, et les images dans *objects/images*. Le fichier du projet lui-même n'est pas modifié, si bien que les anciennes versions de {{APP}} ouvrent le projet comme avant et laissent les objets tranquilles. Un projet au format Scrivener conserve ses objets dans sa copie de travail (section 14) ; Scrivener ne les connaît pas. Les sauvegardes les incluent.
+
+---
+
+## 8. Organiser votre projet
+
+### Mots-clés
+
+Les mots-clés sont des étiquettes, par exemple les personnages ou les lieux d'une scène. Ajoutez-les dans l'inspecteur ou gérez-les tous avec **Projet > Mots-clés du projet…** (**Ctrl+Alt+K**), où vous pouvez leur donner des couleurs, les affecter aux documents sélectionnés et trouver tous les documents ayant un mot-clé. Vous pouvez aussi **faire glisser des mots-clés** depuis cette fenêtre sur des documents du classeur, d'une collection, du tableau en liège ou du plan (si le document fait partie de plusieurs documents sélectionnés, tous reçoivent les mots-clés), ou dans la liste de mots-clés de l'inspecteur ou d'un panneau de référence rapide. Maintenez **Alt** en déposant pour affecter aussi le groupe d'un mot-clé. Dans la fenêtre, faites glisser un mot-clé sur un autre pour le placer dans ce groupe. Les couleurs des mots-clés apparaissent sur les fiches.
+
+### Métadonnées personnalisées
+
+Sous **Projet > Paramètres du projet > Métadonnées personnalisées**, vous pouvez ajouter vos propres champs : texte, case à cocher, liste (un ensemble fixe de choix) ou date, par exemple *Point de vue*, *Lieu* ou *Jour de l'histoire*. Ils apparaissent dans l'inspecteur et comme colonnes du plan.
+
+### Enregistrer les paramètres du projet dans un fichier
+
+**Projet > Enregistrer les paramètres du projet dans un fichier…** écrit les paramètres du projet ouvert dans un fichier à part (*.qbsettings*) : libellés, statuts, types de section, métadonnées personnalisées, mots-clés, mise en forme par défaut, styles, format de script, objectifs, paramètres de compilation, vue page et taille de page, paramètres d'impression, aspect (thème, couleurs, polices, largeur de colonne, bordure), les options propres au projet (Fichier > Options avec « Ce projet ») et les modèles et couleurs de la fiche Objets. Le texte de vos documents n'en fait pas partie. Les libellés, les types de section et les dossiers que nomment les paramètres de compilation sont stockés par leur nom, de sorte que le fichier peut être lu dans un autre projet.
+
+**Projet > Charger les paramètres du projet depuis un fichier…** lit un tel fichier dans le projet ouvert. Quand les paramètres du projet sont identiques à ceux du fichier, il le dit et ne change rien. Quand ils diffèrent, une fenêtre liste chaque section avec ce qui diffère (par exemple « seulement dans le fichier : Idée ; seulement dans le projet : Réviser ») et vous laisse choisir pour chaque section :
+
+- **Reprendre du fichier** : les paramètres du fichier pour cette section.
+- **Conserver ceux du projet** : la section reste telle qu'elle est.
+- **Valeur par défaut de Quillbinder** : ce que reçoit un nouveau projet (les paramètres pour nouveaux projets de **Fichier > Options**, les libellés et statuts standard ...).
+
+**Tout reprendre du fichier** et **Tout conserver du projet** définissent chaque section d'un coup. Quel que soit votre choix, rien de ce que vos documents utilisent n'est perdu : un libellé, un statut, un type de section, un mot-clé, un champ de métadonnées personnalisées, une catégorie d'objets ou un style que des documents utilisent encore reste dans le projet même quand le fichier ne l'a pas, et le message final nomme ce qui a été conservé. Quand la mise en forme ou un style change, le texte de tous les documents suit, comme quand vous le changez vous-même. Avant le chargement, {{APP}} conserve les paramètres tels qu'ils étaient dans un fichier du dossier *settings* du projet (« settings-before-loading-*date*.qbsettings ») ; chargez ce fichier pour revenir en arrière.
+
+### Types de section
+
+Les types de section indiquent à Compiler ce qu'est chaque document : *Partie*, *Chapitre*, *Scène*, *Section*, etc. Définissez-les par document dans l'inspecteur, ou laissez {{APP}} décider d'après la position (**Paramètres du projet > Types de section**, « Types par défaut selon la structure »), par exemple : les dossiers du premier niveau sont des chapitres, les documents texte qu'ils contiennent sont des scènes.
+
+### Modèles de document
+
+Placez des documents modèles (par exemple une fiche de personnage) dans un dossier, puis choisissez ce dossier sous **Paramètres du projet > Dossiers spéciaux**. Les modèles apparaissent sous **Projet > Nouveau à partir d'un modèle**. Sous **Documents > Modèle par défaut des sous-documents**, vous pouvez faire utiliser un modèle à un dossier pour chaque nouveau document que vous créez à l'intérieur.
+
+### Modèles de projet
+
+**Fichier > Enregistrer comme modèle…** enregistre le projet actuel (structure, paramètres et éventuels documents d'exemple) comme modèle pour de nouveaux projets.
+
+---
+
+## 9. Rechercher
+
+### Recherche rapide
+
+Tapez quelques lettres dans le champ de la barre d'outils. Une liste montre les documents dont le **titre**, le **synopsis** ou le **texte** les contient, jusqu'à dix de chaque sorte sous son propre intitulé. Choisissez-en un pour l'ouvrir : les endroits du texte qui contiennent ce que vous avez tapé sont **marqués**, et le premier est sélectionné et amené à l'écran. Les marques disparaissent quand vous choisissez un autre document dans le classeur. C'est le chemin le plus rapide vers un document dont vous connaissez le nom.
+
+### Recherche dans le projet
+
+**Ctrl+Shift+F**, ou la loupe de la barre d'outils, affiche un champ de recherche au-dessus du classeur. Tapez, et le classeur est remplacé par la liste violette des résultats.
+
+- Cliquez sur un résultat pour l'ouvrir. **Les correspondances sont surlignées dans le texte**, la première est sélectionnée et amenée à l'écran, et **F3** / **Shift+F3** sautent de l'une à l'autre. **Ctrl+F** ouvre la barre de recherche déjà remplie avec votre terme de recherche.
+- Le **X** dans l'en-tête des résultats ramène au classeur ; l'éditeur garde le document qu'il affiche. Cliquez de nouveau sur la loupe de la barre d'outils pour masquer le champ de recherche.
+- Quand les collections sont affichées, l'onglet **Résultats de recherche** relance votre dernière recherche. La dernière recherche est conservée avec le projet.
+
+La loupe à gauche du champ de recherche ouvre les options :
+
+| Groupe | Entrées |
+|-------|---------|
+| **Rechercher dans** | **Tout**, ou l'un de : Titre, Texte, Synopsis, Notes, Mots-clés, Libellé, Statut, Métadonnées personnalisées. Un clic choisit cet endroit seul. Maintenez **Alt** en cliquant (ou en ouvrant le menu) pour choisir plusieurs endroits. |
+| **Opérateur** | **Tous les mots** (chaque mot doit apparaître, dans n'importe quel ordre), **Un des mots**, **Expression exacte**, **Expression régulière** |
+| **Options** | Mots entiers, Respecter la casse, Inverser les résultats (les documents qui ne correspondent *pas*), Rechercher dans le brouillon seulement, Rechercher dans la sélection du classeur seulement (les documents sélectionnés dans le classeur et tout ce qu'ils contiennent), Rechercher dans les documents « inclus » / Rechercher dans les documents « exclus » (selon **Inclure dans la compilation**), Inclure la corbeille |
+
+Exemple : pour voir tout ce qui a encore le statut « To Do », cherchez `To Do` et choisissez **Statut** sous Rechercher dans.
+
+**Enregistrer la recherche comme collection…** au bas du menu conserve la recherche, avec ses options, comme une collection qui s'exécute de nouveau à chaque ouverture.
+
+### Remplacer dans le projet
+
+**Édition > Rechercher > Remplacer dans le projet…** remplace un texte dans tout le projet d'un coup.
+
+1. Saisissez le texte à **Remplacer** et le texte à mettre à sa place (**Par**). Laissez « Par » vide pour supprimer le texte.
+2. Choisissez **Respecter la casse**, **Mots entiers seulement** ou **Expression régulière** (alors « Par » peut utiliser `\1` à `\9` pour les groupes de l'expression).
+3. Cochez où remplacer : **Titres**, **Texte**, **Notes**, **Synopsis**, **Métadonnées personnalisées** (champs de texte), **Commentaires et notes de bas de page** (les textes affichés dans l'inspecteur).
+4. Choisissez **Projet entier** ou **Documents sélectionnés seulement** (les documents sélectionnés dans le classeur, avec ce qu'ils contiennent). La corbeille est laissée tranquille sauf si vous la cochez.
+5. **Compter** vous dit combien d'occurrences changeraient et où. **Tout remplacer** demande encore une fois, puis le fait.
+
+Remplacer dans le projet ne peut pas être annulé en bloc. Laissez coché **Prendre un instantané de chaque texte avant sa modification** : chaque texte modifié a alors un instantané nommé « Avant le remplacement … » auquel revenir (section 11). Les titres et les synopsis n'ont pas d'instantanés ; pour un changement important, faites d'abord une sauvegarde avec **Fichier > Sauvegarde > Sauvegarder maintenant**. Un texte ouvert dans un éditeur peut aussi y être rétabli avec **Édition > Annuler**.
+
+La mise en forme reste telle qu'elle est : le nouveau texte reprend la mise en forme du texte qu'il remplace. Un texte qui n'est pas ouvert dans un éditeur est modifié dans son fichier, si bien que **Édition > Annuler** n'annule pas ce changement (l'instantané pris d'abord, si) ; il en va de même pour la conversion des guillemets, les fiches de commentaires et Comparer et transférer.
+
+### Rechercher par mise en forme
+
+**Édition > Rechercher > Rechercher par mise en forme…** (**Ctrl+F3**) ouvre une petite fenêtre qui reste ouverte pendant que vous travaillez. Choisissez ce qu'il faut chercher :
+
+| Rechercher | Trouve | Choix supplémentaire |
+|------|-------|--------------|
+| Texte surligné | le texte marqué au surligneur | limiter à une couleur |
+| Commentaires et notes de bas de page | le texte auquel un commentaire ou une note de bas de page est attaché (inspecteur) | limiter à une couleur de commentaire |
+| Annotations en ligne, notes de bas de page en ligne | les notes tapées dans le texte | couleur d'annotation |
+| Couleur de révision | le texte tapé en mode révision | quelle révision |
+| Texte coloré | le texte dont vous avez défini la couleur à la main | limiter à une couleur |
+| Liens | les liens web et les liens vers des documents | |
+| Format des caractères | le texte en gras, en italique, souligné, barré (défini à la main, pas par un style) | lesquels |
+| Style | le texte avec un style de paragraphe ou de caractère | quel style |
+| Images | les images dans le texte | |
+
+**Contenant le texte** restreint la recherche aux endroits qui contiennent un mot (pour les commentaires et les notes de bas de page, le texte propre de la note compte aussi). **Suivant** et **Précédent** sélectionnent l'endroit suivant. Avec **Rechercher dans : Tous les documents**, la recherche se poursuit dans les documents suivants du classeur et les ouvre ; avec **L'éditeur actuel seulement**, elle reste là où vous êtes. **Ctrl+G** et **Ctrl+Shift+G** répètent la recherche sans la fenêtre. **Fermer** (ou **Esc**) ferme la fenêtre.
+
+---
+
+## 10. Objectifs, statistiques et outils d'écriture
+
+- **Projet > Objectifs du projet** (**Ctrl+Shift+T**) : fixez un objectif en mots ou en caractères pour le Brouillon et pour chaque séance d'écriture, et, si vous le souhaitez, une échéance et vos jours d'écriture. {{APP}} peut alors calculer ce que vous devez écrire à chaque séance. Le pied de page affiche votre progression à côté du nombre de mots (depuis la version 0.94.0) : une petite barre et, par exemple, « 83 / 1 000 aujourd'hui » pour la séance et « 12 400 / 80 000 brouillon » pour le Brouillon, chacune uniquement lorsque son objectif est défini ; un clic dessus ouvre cette fenêtre. Les deux fines barres sous le champ de recherche rapide (bleue : Brouillon ; orange : séance) restent en place, et **Fichier > Options > Apparence > Interface générale** permet de les désactiver. Les mots qui arrivent dans le projet en une seule opération ne sont pas comptés comme écrits pendant la séance (0.94.0) : texte importé (**Fichier > Importer**, **Importer et diviser**, fichiers déposés, pages web), collage de plus de 200 mots, et mots que contient déjà un projet lorsque vous l'ouvrez pour la première fois. **Réinitialiser la session maintenant** remet le compteur à 0, et l'info-bulle du champ de recherche rapide l'affiche aussitôt. La fenêtre des objectifs réserve la place de ses barres, de sorte que les champs ne bougent pas lorsque vous définissez un objectif.
+- **Objectifs de document** : cliquez sur l'objectif dans le pied de page de l'éditeur.
+- **Objectifs de réduction** (0.95.0) : un objectif peut être un nombre négatif, dans chaque champ d'objectif (le Brouillon, la séance et un document). C'est un objectif de réduction : « -2 000 » pour une séance signifie couper 2 000 mots aujourd'hui, « -4 000 » pour un document signifie le ramener à 4 000 mots. Sa barre se remplit à mesure que le nombre baisse (une barre de séance selon les mots retirés, une barre de document ou de Brouillon jusqu'à ce que le nombre soit ramené au chiffre visé), et un nombre négatif s'affiche en rouge. Avec un objectif de séance négatif, le compte du jour est net : il compte les mots retirés comme un nombre inférieur à 0, en rouge ; avec un objectif positif, il reste comme avant et ne descend jamais sous 0. Scrivener n'accepte pas les objectifs négatifs : un objectif négatif n'est conservé que dans la copie propre de {{APP}} d'un projet au format Scrivener ; le *.scriv* reçoit 0 (« aucun objectif ») à la place.
+- **Projet > Statistiques du projet** : mots et caractères dans le Brouillon, dans le texte compilé et dans l'ensemble du projet, ainsi qu'une estimation du nombre de pages. Dans un grand projet, le comptage prend un moment ; le pointeur d'attente l'indique.
+- **Projet > Historique d'écriture** : nombre de mots écrits chaque jour.
+
+Les outils d'écriture ci-dessous sont des modules complémentaires (section 17) : **Générateur de noms**, **Bloc-notes** et **Statistiques du texte** (livrés avec la mise à jour 0.11 sous la forme d'un seul paquet) ainsi que **Transcription vocale** (0.61) ; chacun peut être désactivé ou supprimé dans **Aide > Modules et mises à jour > Gestionnaire de modules…**. Sans eux, **Édition > Outils d'écriture** l'indique ; le Gestionnaire de modules se trouve dans le menu Aide.
+
+### Statistiques du texte
+
+**Projet > Statistiques du texte…** compte une partie de votre projet. Choisissez en haut quel texte analyser :
+
+- **Texte sélectionné** (choisi à l'ouverture de la fenêtre lorsqu'un texte est sélectionné),
+- **Texte dans l'éditeur** (en texte combiné : tous les documents affichés),
+- **Documents sélectionnés dans le classeur**, avec les documents qu'ils contiennent,
+- **Brouillon (inclus dans la compilation)**, ou **Projet entier** (sans la corbeille).
+
+La fenêtre comporte quatre onglets :
+
+- **Vue d'ensemble** : mots (comptés exactement comme dans la barre du pied de page et dans les objectifs), caractères avec et sans espaces, paragraphes, phrases, mots différents, pages de 250 mots, durée de lecture à 230 mots par minute, et moyennes (lettres par mot, mots par phrase et par paragraphe, phrase la plus longue ; pointez-la pour la lire).
+- **Lisibilité (estimations)**, également sur le premier onglet. Pour l'anglais : le *Flesch Reading Ease* (de 0 à 100, plus le chiffre est élevé, plus le texte est facile ; 60 à 70 correspond à un anglais courant) et le *Flesch-Kincaid Grade Level* (le niveau scolaire américain nécessaire pour suivre le texte). Pour l'allemand : l'*indice de Flesch d'Amstad* (même échelle) et la *Wiener Sachtextformel* (à peu près le niveau scolaire, de 4 pour très facile à 15 pour très difficile). Pour toutes les langues : le *LIX* (mots par phrase plus part des mots de plus de six lettres ; en dessous de 30 très facile, au-dessus de 60 très difficile). La langue est détectée automatiquement ou choisie en haut. Ces valeurs sont des repères, pas des verdicts : les syllabes et les phrases sont repérées par des règles empiriques, et les formules ont été conçues pour la prose informative, pas pour les dialogues ni la poésie.
+- **Fréquence des mots** : chaque mot avec son nombre d'occurrences et sa part, du plus fréquent au moins fréquent. **Masquer les mots courants** écarte les articles, les pronoms, les prépositions et autres mots semblables (anglais et allemand). Définissez une longueur minimale, cherchez un mot, ou comptez les majuscules séparément. Double-cliquez sur un mot pour le rechercher dans le projet.
+- **Expressions répétées** : groupes de deux à six mots que vous avez employés plus d'une fois à l'intérieur de phrases, comme une description donnée deux fois. Les expressions composées uniquement de mots courants sont écartées. Double-cliquez pour effectuer une recherche dans le projet.
+- **Documents** : un tableau des documents avec mots, caractères, phrases, mots par phrase et leur part dans l'ensemble. Cliquez sur l'en-tête d'une colonne pour trier ; double-cliquez sur un document pour l'ouvrir.
+
+**Exporter le tableau…** enregistre le tableau de l'onglet actuel sous forme de fichier CSV destiné à un tableur.
+
+### Générateur de noms
+
+**Édition > Outils d'écriture > Générateur de noms…** produit des noms de personnages.
+
+1. Cochez les listes de **prénoms** (62 origines d'Europe, des Amériques, d'Asie et d'Afrique, par exemple anglais, américain, irlandais et gaélique irlandais, allemand, autrichien, suisse, néerlandais, français, canadien-français, italien, espagnol, mexicain, portugais, brésilien, danois, suédois, norvégien, finnois, islandais, polonais, tchèque, hongrois, russe, grec, turc, hébreu, arabe, persan, indien, japonais, chinois, coréen, yoruba, swahili et zoulou ; il n'existe pas encore de listes écossaise ou galloise). Les **noms de famille** proviennent de la même liste que le prénom, ou décochez **La liste du prénom** et choisissez d'autres listes (un prénom italien avec un nom de famille irlandais).
+2. Choisissez le **Genre**, le **Nombre de noms** et ce qu'il faut **Afficher** (nom complet, prénom seul, nom de famille seul, initiales et nom de famille). **Avec un deuxième prénom** ajoute un second prénom.
+3. **Réglages précis** : **courant ↔ rare** puise parmi les noms les plus courants (à gauche) ou parmi les plus rares (à droite) ; cela fonctionne avec les listes marquées *par fréquence* (par exemple américaine, suédoise, hongroise, hébraïque), qui indiquent la fréquence de chaque nom. **Allitération** donne cette proportion de noms dont le nom de famille commence par la même lettre que le prénom (Peter Parker) ; **Noms de famille doubles** relie deux noms de famille par un trait d'union. **Le prénom commence par** / **Le nom de famille commence par** limitent les noms à ceux qui commencent par ces lettres.
+4. Cliquez sur **Générer les noms**. Sélectionnez des noms et cliquez sur **Copier** (tous les noms si aucun n'est sélectionné) ou sur **Insérer dans le texte** (également par double-clic) pour les placer au curseur de l'éditeur.
+
+Les femmes reçoivent la forme féminine d'un nom de famille lorsque la langue en possède une (polonais *Kowalska*, tchèque *Nováková*, russe *Иванова*). Les noms japonais, chinois, coréens, hongrois et vietnamiens affichent le nom de famille en premier. Certaines listes sont dans leur propre écriture (russe, grec, hébreu, arabe et d'autres) ; leurs noms dans la liste l'indiquent.
+
+**Ajouter une liste personnelle…** transforme un fichier texte contenant un nom par ligne en une liste à vous (prénoms, prénoms féminins ou masculins, ou noms de famille). Choisissez la liste et cliquez sur **Supprimer la liste personnelle** pour l'effacer. Les listes de noms proviennent du projet open source *Faker* (licence MIT) ; ce sont des listes de noms en usage, et non des listes historiques vérifiées.
+
+### Bloc-notes
+
+Le bloc-notes contient des notes indépendantes de tout projet : idées qui surgissent pendant qu'un autre projet est ouvert, citations copiées d'une page web, image d'une partie de l'écran. Ouvrez-le avec **Fenêtre > Bloc-notes** (**Alt+Shift+Return**).
+
+- **+** crée une note (la flèche à côté : texte mis en forme ou texte brut). Le titre au-dessus du texte est le nom de la note. **−** supprime la note sélectionnée.
+- Les notes mises en forme acceptent le **gras**, l'*italique* et le soulignement (boutons ou **Ctrl+B / I / U**) ainsi que les images : collez une image, ou cliquez sur l'**appareil photo** pour capturer une partie de l'écran. L'appareil photo n'existe que pour les notes mises en forme.
+- Tout est enregistré automatiquement pendant la saisie. Si une note ne peut pas être enregistrée (disque plein, dossier de notes disparu), la ligne d'état l'indique et la note reste ouverte avec son texte : une autre note, une nouvelle note ou un autre dossier de notes ne s'ouvre qu'une fois la note enregistrée, et une fenêtre propose **Copier le texte** et **Réessayer**. Si le programme se termine alors qu'une note ne peut pas être enregistrée, son texte est placé dans le dossier de secours *~/.local/share/{{APP}}/Emergency* (0.65).
+- **Envoyer vers le projet** liste tous les projets ouverts, y compris ceux ouverts dans d'autres fenêtres de {{APP}}. Pour chacun : **Nouveau document dans le dossier Recherche**, **Nouveau document dans** un dossier de votre choix, ou **Ajouter à la fin de** un document texte. La mise en forme et les images suivent. La note reste dans le bloc-notes jusqu'à ce que vous la supprimiez.
+
+Les notes sont de simples fichiers dans un dossier, normalement *Documents/{{APP}} Scratch Pad* (texte brut en .txt, notes mises en forme en .html avec leurs images dans le sous-dossier caché *.images*). Choisissez un autre dossier, le type des nouvelles notes, et si le bloc-notes reste au-dessus des autres fenêtres sous **Fichier > Options > Général > Bloc-notes**. Les notes modifiées ailleurs (une autre fenêtre de {{APP}}, un dossier synchronisé) apparaissent aussitôt.
+
+**Depuis n'importe quel programme.** Le raccourci du programme fonctionne tant que {{APP}} a le clavier. Pour ouvrir le bloc-notes depuis n'importe quel programme, faites lancer {{APP}} par le bureau avec `--scratch-pad` : dans KDE, **Configuration du système > Clavier > Raccourcis > Ajouter > Commande ou script**, saisissez la commande affichée sous **Fichier > Options > Clavier** (bouton **Copier la commande**) et appuyez sur les touches souhaitées. Le bloc-notes s'ouvre alors seul, sans fenêtre de projet, et envoie les notes vers les projets ouverts. Si {{APP}} a été ajouté au menu des applications (**Aide > Ajouter au menu des applications**), l'entrée du menu propose aussi l'action **Bloc-notes**.
+
+**L'appareil photo** réalise la capture avec le programme de capture d'écran de KDE, *Spectacle*, lorsqu'il est installé (indispensable sous Wayland, où les programmes n'ont pas le droit de lire l'écran eux-mêmes) : faites glisser la souris sur la partie souhaitée. Sans Spectacle, sous X11, {{APP}} affiche l'écran et vous faites glisser la souris sur la partie voulue ; **Esc** annule, **Enter** capture tout l'écran.
+
+### Transcription vocale
+
+Parlez au lieu de taper : le module **Transcription vocale** (version 0.61 ou ultérieure) écrit ce que vous dites. Tout se passe sur cet ordinateur ; rien n'est envoyé nulle part pendant que vous parlez.
+
+**Avant le premier enregistrement : choisir un modèle.** La reconnaissance vocale a besoin d'un modèle, téléchargé une seule fois. Ouvrez **Fichier > Options > Voix** (ou la flèche à côté du bouton du microphone, **Options de la transcription vocale…**), choisissez un modèle et appuyez sur **Télécharger et utiliser** :
+
+- **Small** : téléchargement de 190 Mo, rapide ; convient à une voix claire, traduction seulement approximative.
+- **Medium** (recommandé) : 539 Mo ; suit la parole sur la plupart des processeurs de ces dernières années ; bonne reconnaissance et bonne traduction.
+- **Large v3** : environ 1,1 Go ; le meilleur, mais sur un processeur souvent plus lent que la parole, si bien que sur de longues durées le texte prend du retard. Une carte graphique aide.
+- **Large v3 Turbo** : 574 Mo ; proche de Large v3 et plus rapide, mais il ne sait pas traduire.
+
+Les modèles proviennent des fichiers de modèles de whisper.cpp sur Hugging Face. Sous **Source**, vous pouvez indiquer une autre adresse, ou utiliser **Utiliser un fichier téléchargé…** pour un fichier de modèle que vous avez récupéré vous-même. Avant d'être utilisé, un modèle est vérifié : d'abord sa somme de contrôle (SHA-256), puis la description du modèle contenue dans le fichier, puis une courte transcription d'essai. Ce n'est que si tout est en ordre qu'il remplace le modèle en cours d'utilisation, lequel est alors supprimé. Un modèle provenant de la source officielle doit avoir la somme de contrôle connue ; sinon il n'est pas installé (le téléchargement est peut-être endommagé). Un fichier provenant d'une autre adresse, ou un fichier que vous avez téléchargé vous-même, dont la somme de contrôle n'est pas la somme connue, n'est lu qu'avec votre accord, car le moteur de reconnaissance vocale doit le lire. Les autres adresses doivent commencer par *https://*. Un téléchargement interrompu reprend là où il s'était arrêté la fois suivante. **Test de vitesse** indique le temps que met cet ordinateur pour un court enregistrement avec le modèle et le périphérique choisis.
+
+**Enregistrement.** Appuyez sur le bouton du microphone de la barre d'outils Outils (ou sur **Édition > Outils d'écriture > Transcription vocale**). L'inspecteur s'ouvre sur son onglet **Transcriptions** (le microphone, premier dans la rangée de boutons de l'inspecteur) et une nouvelle transcription démarre, nommée d'après la date et l'heure. Parlez ; une courte pause termine un morceau, et son texte apparaît quelques secondes plus tard. Une pause plus longue (3 s, sauf si vous la modifiez) commence un nouveau paragraphe. Appuyez de nouveau sur le bouton pour arrêter : les morceaux encore en attente sont écrits, puis le texte peut être modifié. La flèche à côté du bouton permet de choisir le microphone.
+
+**Les transcriptions** sont de simples fichiers texte dans un dossier à part, en dehors de tout projet (normalement *Documents/{{APP}} Transcriptions*), de sorte que vos projets restent tels quels. Dans l'onglet, vous pouvez modifier une transcription (enregistrée automatiquement), la renommer, copier tout le texte pour le coller où vous voulez, la supprimer (elle va dans la corbeille du bureau) ou ouvrir le dossier. Tant qu'un enregistrement est en cours d'écriture, son texte est en lecture seule. Si une transcription modifiée ne peut pas être enregistrée, elle reste ouverte (la ligne d'état en donne la raison) ; si un enregistrement démarre ou si le programme se termine entre-temps, son texte est placé dans le dossier de secours *~/.local/share/{{APP}}/Emergency* (0.65).
+
+**Enregistrer maintenant, écrire le texte plus tard** (0.64). L'écriture du texte demande beaucoup de puissance de calcul ; sur un portable sur batterie (ou un téléphone), vous pouvez vous contenter d'enregistrer et laisser le texte s'écrire plus tard. Choisissez **Enregistrer seulement** sous **Fichier > Options > Voix** (*Au démarrage du microphone* ; sur Android, c'est le réglage par défaut). Le bouton du microphone se contente alors d'enregistrer : rien d'autre ne s'exécute, aucun modèle n'est chargé. L'enregistrement est conservé sous forme de fichier audio (WAV, environ 1,9 Mo par minute) à côté des transcriptions, avec un nom du même genre, et apparaît dans la liste de l'onglet avec un bouton **Transcrire** sur sa ligne ; **Tout transcrire** écrit le texte de tous les enregistrements qui n'en ont pas encore, l'un après l'autre. Le texte apparaît ensuite comme avec un enregistrement en direct et peut être modifié. Un enregistrement est conservé une fois son texte écrit, sauf si vous cochez **Supprimer un enregistrement une fois son texte écrit** ; renommer ou supprimer une transcription emporte son enregistrement avec elle. Pour écrire le texte sur un autre ordinateur, choisissez un dossier de transcriptions que votre programme de synchronisation maintient identique sur les deux machines. Si un enregistrement est interrompu pendant l'écriture de son texte (ou si le programme se termine), il conserve son bouton **Transcrire** et peut être relancé.
+
+**Langues.** La **langue principale** est la langue du texte ; la **langue de repli** est une autre langue que vous parlez aussi (les deux se choisissent parmi les onze langues du programme : anglais, allemand, espagnol, français, portugais, italien, russe, indonésien, turc, polonais et néerlandais). Lorsque l'anglais est la langue principale, ce que vous dites dans la langue de repli est écrit en anglais (whisper ne traduit que vers l'anglais). Les mots de la langue de repli placés dans des phrases anglaises peuvent être mal compris (lors d'un essai, « Bahnhof » est devenu « Bon Huff ») ; indiquez ceux que vous employez sous **Mots indicateurs**, et ils seront écrits comme vous les prononcez (« Bahnhof », « Brötchen »). Avec une autre langue principale, ou avec Large v3 Turbo, la parole reste dans la langue dans laquelle elle a été prononcée. **Garder ce qui a été dit à côté d'une traduction** ajoute l'original entre parenthèses après un morceau traduit (cela prend plus de temps). **Mots indicateurs** : noms et mots que vous employez, afin qu'ils soient orthographiés à votre façon.
+
+**Autres options.** **Calculer sur** : le processeur, ou une carte graphique que whisper.cpp peut utiliser via Vulkan (affichée lorsqu'on en trouve une ; les cartes dont la mémoire est insuffisante pour le modèle sont listées mais ne peuvent pas être choisies). Sous Windows, le module n'utilise pour l'instant que le processeur : Small ou Medium y suivent le mieux. **Threads du processeur** : un de moins que le nombre de threads du processeur garde la saisie fluide. **Précision** : *Soigneuse* pèse plusieurs textes possibles et détecte d'abord la langue de chaque morceau : meilleur, mais plus lent. **Microphone**, **Sensibilité** (basse pour une pièce bruyante, haute pour une voix faible), **Pause qui termine un morceau**, **Nouveau paragraphe après une pause de** (*jamais* le désactive), le **dossier**, et sous **Avancé** : suppression du texte dans le silence et le bruit (whisper invente parfois une phrase comme « Merci d'avoir regardé » dans ces moments), et utilisation du texte précédent comme contexte du morceau suivant.
+
+---
+
+### Assistant de traduction
+
+Depuis la version 0.92.0, le module **Assistant de traduction** (version 1.5 ; il s'appelait Traduction et relecture jusqu'à la 1.4) fait partie des modules propres à {{APP}} et est inclus dans la version complète ; pour un {{APP}} que vous possédez déjà, c'est un paquet distinct sur la page des publications (section 17). Il traduit entre deux langues quelconques parmi onze et vérifie l'orthographe et la grammaire d'un texte anglais, sur votre propre ordinateur : un texte ne le quitte jamais. {{APP}} lui-même n'a aucune fonction d'IA ; ce module fonctionne avec des modèles de langage et peut être désactivé ou supprimé dans le Gestionnaire de modules comme n'importe quel autre.
+
+- **Cet outil ne donne que des suggestions. Ses traductions ne sont pas précises : vérifiez-les une à une, ce qui demande une bonne connaissance des deux langues.** La même phrase figure dans la fenêtre du module et dans sa description.
+- Il dispose d'un onglet propre dans l'inspecteur et d'une fenêtre propre (sa commande se trouve dans le sous-menu Outils d'écriture du menu Édition, et il a un bouton de barre d'outils). Le texte entre, le résultat sort avec chaque modification signalée, en direct pendant la saisie ; un clic sur un mot conserve l'original ou propose d'autres mots.
+- Il a besoin d'un modèle, que vous choisissez et téléchargez une fois dans les options du module (de quelques centaines de mégaoctets à plusieurs gigaoctets ; un modèle trop volumineux pour l'ordinateur n'est pas proposé). Les modèles sont récupérés sur les publications *models-1*, *models-2*, *models-3* et *models-4* du dépôt de {{APP}}, chacun n'est installé que si sa somme de contrôle est celle qui est connue, et le module fonctionne ensuite sans aucune connexion. L'un des modèles, CoEdIT Large, ne peut être utilisé qu'à des fins non commerciales ; le module le signale avant son téléchargement.
+- **Un mot isolé** (1.3). Un seul mot anglais : le résultat est le mot tel qu'il doit être, et en dessous ce qu'il signifie (les sens proviennent du dictionnaire WordNet 3.0, intégré au module ; un mot qu'il ne contient pas reçoit un sens écrit par le modèle Qwen3 que vous avez téléchargé, avec un avertissement indiquant qu'il peut être inexact, et sans un tel modèle le module indique ce que vous pouvez télécharger), ses suggestions d'orthographe et des mots de sens proche. Un seul mot allemand : le module le cherche d'abord dans le **dictionnaire allemand**, un extrait du Wiktionnaire que vous téléchargez séparément dans les options du module (sa licence, CC BY-SA 4.0, est affichée avant le téléchargement) : la forme de base, les classes de mots, les sens et les mots anglais de chaque sens. Les cinq premiers sens d'une classe sont affichés, le reste se trouve derrière « plus » ; un clic sur un mot anglais en fait le résultat, et « Similaires » suit alors ce mot et sa classe de mots. Pour ce que le dictionnaire ne dit pas, et pour un mot qu'il ne contient pas, le petit modèle traduit le mot, et la sortie avertit qu'il peut être inexact. De l'anglais vers l'allemand, cela fonctionne de la même façon pour un seul mot anglais, par les classes de mots que connaît WordNet.
+- **Inverser et Retraduire** (1.3). **Inverser** transforme allemand vers anglais en anglais vers allemand et inversement : le résultat passe dans le texte et est traduit dans l'autre sens. **Retraduire** traduit le résultat dans la langue de votre texte et l'affiche sous le résultat, jusqu'à ce que vous modifiiez le texte ; il a besoin du modèle pour le trajet retour (OPUS-MT anglais vers allemand (petit) pour un texte allemand) et propose de le télécharger lorsqu'il manque. Pendant la traduction, la deuxième rangée de commandes affiche le modèle de traduction (en choisir un autre modifie le réglage et la traduction), et la liste des styles est masquée.
+- **Textes courts** (1.3). Un mot isolé et un texte de trois mots au plus ne sont jamais confiés au grand modèle de traduction (il est meilleur pour des phrases entières et peu fiable pour des mots isolés) : d'abord le dictionnaire, sinon le petit modèle, même lorsque le grand est choisi. Pour un texte court de plusieurs mots, « Autres traductions : » liste les meilleures traductions complètes du modèle, sans noms inventés par lui.
+- **Version 1.4.** Un mot isolé, dans l'un ou l'autre sens, affiche désormais sous le résultat les traductions de chaque classe de mots qu'il possède (un mot allemand qui est un verbe en minuscules et un nom avec une majuscule reçoit les deux ; un mot que le dictionnaire ne contient pas est traduit sous les deux formes), puis « Traductions similaires » (mots de sens proche du résultat anglais) ou, de l'anglais vers l'allemand, « Mots allemands similaires » : les mots allemands dont les sens nomment le mot anglais ou l'un de ses synonymes (cela nécessite le dictionnaire allemand ; sans lui, une ligne l'indique), puis la brève description. Avec « Automatique », un mot allemand isolé qui n'est pas un mot anglais est reconnu comme allemand lorsque le dictionnaire allemand est installé. Avant la traduction de l'allemand, les majuscules des noms allemands sont rétablies dans la copie envoyée au modèle (votre texte reste tel quel) : un mot que le dictionnaire ne connaît que comme nom reçoit sa majuscule, un mot connu dans les deux emplois (« essen ») garde la forme que vous avez saisie, sauf juste après un article ou une préposition avec article (« das Essen », « im Essen ») ; sans le dictionnaire, une remarque sous la traduction indique que les noms allemands nécessitent des majuscules. Les variantes qui ne diffèrent l'une de l'autre ou de la traduction que par les majuscules ne sont affichées qu'une fois. La zone de mot n'affiche plus de ligne « Orthographe » pour les mots du résultat (les mots sur lesquels vous cliquez dans votre propre texte la conservent), et les règles de suffixes des mots similaires ne lisent plus « number » comme « numb ». Lorsque quelque chose manque (un modèle de traduction, le dictionnaire allemand), un avis en haut de l'onglet et de la fenêtre du module le nomme et comporte un bouton qui ouvre les options du module. Un modèle qui n'a pas été utilisé pendant 15 minutes est déchargé pour libérer de la mémoire (**Fichier > Options > Relecture > Vitesse > Décharger les modèles après** ; « jamais » le garde chargé). Les indications des champs vides passent à la ligne lorsque la largeur est étroite.
+- **Version 1.5 : onze langues.** Le module traduit entre deux langues quelconques parmi l'anglais, l'allemand, l'espagnol, le français, le portugais (Brésil), l'italien, le russe, l'indonésien, le turc, le polonais et le néerlandais : avec **Traduire** choisi, deux listes déroulantes nomment la langue de votre texte et la langue de la traduction. Chaque langue dispose de deux petits modèles OPUS-MT, vers l'anglais et depuis l'anglais (leurs licences, Apache-2.0 ou CC BY 4.0, sont affichées dans les options avant un téléchargement) ; une paire sans l'anglais (de l'espagnol vers le russe, par exemple) passe par l'anglais avec les deux modèles, et une note sous le résultat l'indique, car une erreur de la première étape est reportée dans la seconde. Chaque langue sauf l'anglais dispose aussi d'un **dictionnaire** facultatif issu du Wiktionnaire (CC BY-SA 4.0, un téléchargement séparé dont la licence est affichée d'abord), utilisé pour un mot isolé de cette langue comme l'était le dictionnaire allemand. Une langue sans dictionnaire utilisable n'a que les traductions du modèle. Un mot isolé est toujours corrigé à titre de suggestion : la ligne d'orthographe et les mots en dessous précisent que ce sont des suggestions à vérifier. Les textes propres du module existent dans les onze langues du programme (la langue que vous avez choisie pour {{APP}} ; l'anglais là où un texte n'est pas traduit). Les réglages de la 1.4 continuent de fonctionner : le dictionnaire allemand et les modèles que vous avez téléchargés restent, et l'allemand vers l'anglais est le premier choix. Ses options se trouvent désormais sous **Fichier > Options > Assistant de traduction**.
+- Les modèles que vous avez téléchargés avec la version 1.1 restent tels quels. La version 1.1 récupérait les modèles dans l'ancien dépôt du module ; la 1.2 connaît le nouvel emplacement.
+- La description propre du module, avec ses règles de relecture (orthographe américaine, guillemets typographiques, pas de tirets cadratins) et ce que chaque modèle sait bien faire, se trouve dans *addons/translation-proofreading/source/README.md* dans les sources de {{APP}}.
+
+## 11. Instantanés
+
+Un instantané est une copie enregistrée d'un document à un moment donné. Faites-en un avant une grande réécriture :
+
+- Un document qui possède au moins un instantané affiche un coin replié (clair et gris) en haut à droite de son icône dans le classeur.
+- **Ctrl+5** prend un instantané ; **Ctrl+Shift+5** demande un titre.
+- Avec **Fichier > Options > Général > Enregistrement**, **Fichier > Enregistrer** (**Ctrl+S**) prend un instantané de chaque texte modifié depuis le dernier Fichier > Enregistrer (intitulé « Enregistré ») ; **Fichier > Options > Comportements > Instantanés** affiche un court message dans la barre d'état lorsque des instantanés sont pris.
+- Dans l'onglet des instantanés de l'inspecteur, vous pouvez **comparer** un instantané avec le texte actuel (les ajouts sont affichés en couleur, les suppressions barrées ; choisissez de comparer les mots, les phrases, les paragraphes ou les caractères) et **revenir** à cet instantané. Avant la restauration, {{APP}} peut prendre un instantané du texte actuel, afin que rien ne soit perdu. L'instantané est d'abord lu (0.65) : un instantané qui ne peut pas être lu en entier laisse le texte actuel tel quel, un instantané qui ne contient aucun texte ne le remplace qu'après une seconde question, et lorsque l'instantané du texte actuel a été demandé mais ne peut pas être pris, rien n'est restauré. Revenir à un instantané est aussi le moyen de réparer un document dont le fichier est endommagé ou dans un autre codage de caractères (il est affiché en lecture seule) : le fichier endommagé est d'abord conservé comme copie dans *settings/conflicts*, et l'inspecteur indique où (0.81.1).
+- **Projet > Supprimer les anciens instantanés…** (depuis 0.61.1, sous Vider la corbeille…) supprime tous les instantanés du projet, y compris ceux des documents de la corbeille, pour alléger de nouveau le projet. Les textes restent tels qu'ils sont maintenant ; seules leurs versions antérieures disparaissent. Une question indique d'abord combien il y a d'instantanés, de combien de documents, et la place qu'ils occupent ; cette opération est irréversible, faites donc d'abord une sauvegarde (**Fichier > Sauvegarde**). La commande est désactivée tant que le projet n'a pas d'instantanés. Dans un projet au format Scrivener, les instantanés quittent aussi le *.scriv* (avec l'enregistrement qui suit aussitôt) ; depuis 0.61.1, il en va de même pour un instantané isolé que vous supprimez dans l'inspecteur.
+
+---
+
+## 12. Mode composition
+
+**F11** remplit l'écran avec votre seul texte sur une feuille de papier. Déplacez la souris vers le bord inférieur pour afficher la barre de contrôle : zoom, largeur du papier, fondu de l'arrière-plan, défilement machine à écrire, nombre de mots, et un petit inspecteur avec synopsis et notes. **Alt+Shift+Up / Down** passe au document précédent ou suivant, **Ctrl+[** et **Ctrl+]** reculent et avancent parmi les documents que vous avez consultés. Les raccourcis des menus Format et Insertion (gras, styles, commentaires ...) fonctionnent également ici. **Esc** ou **F11** ramène à la fenêtre principale.
+
+**Fichier > Options > Comportements > Mode composition** choisit l'écran sur lequel il s'ouvre (l'écran actuel, l'écran principal, ou un écran désigné par son nom), si la fenêtre principale s'efface (réduite pendant que le mode composition est ouvert), et si **Esc** le ferme (**F11** le fait toujours).
+
+La barre de contrôle est sombre dans tous les thèmes, de sorte que ses boutons, la liste de zoom et leurs textes restent lisibles aussi dans les thèmes clairs (0.94.0). Les couleurs du texte, du papier et de l'arrière-plan proviennent du thème. Pour les modifier, par exemple en noir sur blanc ou en vert sur noir, allez dans **Fichier > Options > Apparence > Mode composition** ; la modification s'affiche aussitôt, même lorsque le mode composition est ouvert. Une image d'arrière-plan peut être définie par projet sous **Paramètres du projet… > Dossiers spéciaux**.
+
+---
+
+## 13. Compilation : produire le manuscrit
+
+**Fichier > Compiler…** (**Ctrl+Shift+E**) assemble tout le contenu du Brouillon en un seul fichier.
+
+### La fenêtre de compilation
+
+La fenêtre de compilation comporte **Compiler pour** en haut, les formats à gauche, les dispositions de section au milieu, et le contenu, les métadonnées, les options et les remplacements à droite (quatre onglets avec des icônes ; maintenez la souris sur un onglet pour voir son nom). La colonne Formats est au moins aussi large que son nom le plus long ; faites glisser les lignes entre les trois colonnes pour en élargir une, et la fenêtre conserve les largeurs pour la fois suivante.
+
+1. **Compiler pour** : le format de sortie. Intégrés, sans autre programme nécessaire : **Document Word (.docx)**, **PDF (.pdf)**, **Livre numérique (.epub)**, et pour les scénarios **Fountain** et **Final Draft**. PDF et OpenDocument via LibreOffice, EPUB via Pandoc, et Markdown apparaissent aussi si le plugin et le programme correspondants sont installés (voir plus bas). À côté : combien de documents et environ combien de mots seront compilés.
+2. **Formats** (à gauche), sous **Mes formats** et **Formats intégrés** : le format de compilation détermine l'apparence du manuscrit : polices, interligne, taille de page, marges, en-têtes et pieds de page, aspect des chapitres et des scènes, rendu des styles, des notes et des citations. Les formats intégrés (*Manuscript (Times)*, *Manuscript (Courier)*, *Modern*, *Paperback (6 x 9 in)*, *E-book*, *Default (Editor Formatting)* et *Outline (Synopses)*) ne peuvent pas être modifiés. Les boutons sous la liste : **+** (dupliquer le format sélectionné pour créer votre propre version et la modifier), le crayon (modifier votre propre format), **-** (le supprimer), **Importer...** et **Exporter...** (un fichier *.qbformat* à utiliser sur un autre ordinateur ou à donner ; un format importé dont le nom est déjà pris reçoit un numéro).
+3. **Dispositions de section** (au milieu) : **Police** définit une police pour tout le manuscrit, ou laisse décider les dispositions (« Déterminée par la disposition de section »). Le tableau liste chaque type de section de votre projet avec la disposition qu'il reçoit dans ce format ; choisissez-en une autre dans la liste. Sous le tableau, une petite image montre comment commence une section dotée de la disposition sélectionnée. **Attribuer des dispositions de section...** ouvre une fenêtre plus grande avec les types de section à gauche et des images de toutes les dispositions du format à droite. Les formats intégrés connaissent les noms usuels des types de section : dans *Manuscript (Courier)*, par exemple, *Part* reçoit **Part Title**, *Chapter* reçoit **Chapter Heading**, et *Scene* ou *Section* reçoit **Section Text**.
+4. **Contenu** (premier onglet) : ce qui est compilé, avec le type de section de chaque document et sa disposition. Choisissez un dossier pour ne compiler qu'une partie du Brouillon (par exemple un chapitre), ajoutez des pages liminaires (page de titre) et des pages finales (remerciements). **Le nom de l'auteur** (0.94.0) : la page de titre des modèles de projet affiche « par » suivi du nom de l'auteur. La première compilation qui écrit une page de titre demande ce nom (prénom et nom ; il est conservé avec les informations sur l'auteur dans **Fichier > Options > Général**, il n'est donc demandé qu'une fois) ; si vous le laissez vide, la ligne « par » est omise de la page de titre, dans tous les formats. Le champ Auteur de l'onglet Métadonnées de la fenêtre de compilation, s'il contient un nom, est utilisé à la place pour le fichier compilé. Décochez un document pour l'exclure ; cela désactive son réglage **Inclure dans la compilation**. **Ajouter les fiches d'objets** place une fiche pour chaque objet de l'onglet Objets (section 7) après les pages finales : un titre par catégorie (Personnages, Lieux ...), puis chaque objet avec ses champs ; le bouton à côté choisit les catégories. C'est désactivé au départ.
+5. **Métadonnées** (deuxième onglet) : titre, sous-titre, auteur, langue (par exemple *en-US*), sujet, mots-clés, éditeur, date, description, la couverture d'un livre numérique (une image du classeur) et l'identifiant du livre. Les champs vides reprennent le titre du projet, votre nom et la date du jour. Les informations vont dans les propriétés du document PDF, dans le livre numérique et dans le fichier Word ; les espaces réservés tels que `<$projecttitle>` fonctionnent aussi ici.
+6. **Options** (troisième onglet) : si le texte des dossiers est compilé.
+7. **Remplacements** (quatrième onglet) : remplacements propres à ce projet, effectués après ceux du format, par exemple un nom orthographié d'une façon dans vos brouillons et d'une autre dans le livre. Chaque ligne peut être activée ou désactivée, et peut être une expression régulière, respecter la casse ou ne porter que sur des mots entiers.
+8. **Aperçu** affiche les pages du manuscrit sous forme de PDF dans une fenêtre à part, avec le format et le contenu choisis, avant que quoi que ce soit ne soit enregistré.
+
+La police, les remplacements et les fiches d'objets sont conservés avec le projet comme les autres choix (les versions plus anciennes de {{APP}} les ignorent).
+
+Cliquez sur **Compiler…**, choisissez où enregistrer, et le fichier terminé s'ouvre dans votre traitement de texte ou votre liseuse si vous le souhaitez. **Enregistrer les paramètres** conserve les choix sans compiler.
+
+**Polices et mise en forme des paragraphes définies à la main.** Avec le format *Default (Editor Formatting)*, le fichier compilé les conserve toutes : polices, tailles, couleurs, majuscules, espacement des lettres, retraits, espacement, interligne et taquets de tabulation. Tout autre format a son propre aspect : il remplace la police, la taille, les retraits et l'espacement, et conserve la couleur du texte, les majuscules, l'espacement des lettres, l'alignement et les taquets de tabulation.
+
+### Modifier un format de compilation
+
+**Dupliquer et modifier…** et **Modifier…** ouvrent l'éditeur de format. La liste de gauche contient ses pages :
+
+- **Texte** : police, taille, interligne, retrait de première ligne, espace après les paragraphes, texte justifié, police et taille des titres, titres en gras. **Utiliser la mise en forme de l'éditeur du projet** conserve plutôt l'aspect de l'éditeur.
+- **Dispositions de section** : les dispositions du format (ajouter, dupliquer, supprimer) avec titre, préfixe et suffixe (`Chapter <$W:chapter>`), style et alignement du titre, majuscules, lignes vides avant le titre, le texte, le synopsis et les notes, une nouvelle page, le séparateur avant la section, pas de retrait au premier paragraphe. L'aperçu montre comment commence une section dotée de cette disposition.
+- **Attributions** : la disposition que reçoit chaque type de section dans ce format.
+- **Styles** : le rendu d'un style de votre projet dans ce format. **Ajouter un style…**, puis choisissez : **Conserver son aspect**, **Modifier son aspect** (police, taille, gras, italique, souligné, petites ou grandes capitales, couleur, alignement, retraits, espace avant et après, interligne, texte avant et après, majuscules, commencer sur une nouvelle page ; une case à moitié cochée, ou « inchangé », laisse le style tel quel), **En faire du corps de texte**, ou **Omettre le texte** (par exemple des notes personnelles dans un style à part).
+- **Page** : format du papier et marges, marges en miroir pour les livres (intérieure et extérieure), en-têtes et pieds de page (gauche, centre, droite ; espaces réservés tels que `<$p>` pour le numéro de page et `<$title>`), pages en regard (textes de gauche sur les pages de gauche, textes de droite sur les pages de droite), en-tête et pied de page sur la première page et sur les pages où commence un chapitre, chapitres sur une page de droite, numéro de la première page et son style (1, 2, 3 / i, ii, iii / I, II, III), taille des en-têtes et des pieds de page.
+- **Notes de bas de page et commentaires** : notes de bas de page en bas de la page (dans les livres numériques : notes qui s'affichent en fenêtre contextuelle), à la fin de chaque chapitre, ou à la fin du texte (PDF et livres numériques ; un fichier Word a toujours ses notes de bas de page en bas de la page), avec le titre des notes et leur taille ; annotations en ligne converties en commentaires ou supprimées ; commentaires liés convertis en commentaires du fichier Word ; surlignages supprimés.
+- **Remplacements** : texte remplacé uniquement dans le fichier compilé (votre projet reste tel quel) : activé ou non, casse, mots entiers, expressions régulières (`\1` à `\9` dans « Par »).
+- **Transformations** : guillemets droits ou typographiques, tirets remplacés par des traits d'union, italique remplacé par du soulignement (la convention des manuscrits), plusieurs espaces ramenés à un seul, pas d'espaces en fin de paragraphe, texte brut sans gras, italique, polices ni couleurs.
+- **Table des matières, PDF et livre numérique** : une table des matières (son titre et le nombre de niveaux de titres), des signets PDF pour les titres, des liens web cliquables dans le PDF, un fichier par section qui commence sur une nouvelle page dans un livre numérique, et la table des matières également sous forme de page du livre numérique.
+
+Vos formats sont conservés dans *~/.local/share/{{APP}}/CompileFormats* et sont disponibles dans tous les projets.
+
+### PDF
+
+La sortie PDF intégrée compose elle-même les pages : notes de bas de page en bas de la page où elles sont appelées (une note longue se poursuit sur la page suivante), en-têtes et pieds de page, chapitres sur les pages de droite si le format le demande, titres maintenus avec le texte qui suit, pas de ligne isolée en haut ou en bas de page, une table des matières avec des numéros de page cliquables, des signets pour les titres dans le panneau latéral du lecteur, et des liens cliquables. Les polices sont incorporées. Les images gardent la taille qu'elles ont dans le texte ; une image plus grande que la zone de texte est réduite pour y tenir. Pour les images et les tableaux placés à côté du texte, le texte les contourne, comme dans l'éditeur. Un tableau se poursuit sur autant de pages que nécessaire, ligne par ligne, avec ses lignes d'en-tête en haut de chaque page.
+
+### Livres numériques
+
+La sortie de livre numérique intégrée écrit de l'EPUB 3 (avec aussi une table des matières pour les anciennes liseuses) : un fichier par chapitre, les titres dans la table des matières de la liseuse, des notes de bas de page sous forme de notes contextuelles (ou à la fin de chaque chapitre ou du livre), des images, et la couverture provenant de **Métadonnées…**. Les tableaux conservent leur mise en forme ; une image avec légende est une figure (à côté du texte si elle l'est dans l'éditeur), et sa description est le texte alternatif de l'image, que lisent les lecteurs d'écran. Le livre reçoit un identifiant à la première compilation ; il reste attaché au projet, de sorte qu'une liseuse considère une nouvelle version comme le même livre. Les lecteurs choisissent leurs propres polices et leur propre taille de page, si bien que les réglages de page, les en-têtes et les pieds de page ne s'appliquent pas.
+
+### Word
+
+Le fichier Word utilise des styles nommés (Titre, Sous-titre, Titre 1 à 3, Citation, Centré, Légende et vos propres styles de paragraphe et de caractère), de sorte que ses titres apparaissent dans le volet de navigation de Word. Avec **Inclure une table des matières**, un champ de table des matières est placé au début, et le fichier demande au traitement de texte de mettre à jour ses champs à l'ouverture, ce qui renseigne les numéros de page ; si un traitement de texte ne le fait pas, mettez le champ à jour vous-même. Les en-têtes de pages en regard, la première page et le numéro de la première page proviennent des réglages **Page** du format. Les tableaux sont des tableaux Word avec leurs traits, leurs couleurs, leurs cellules fusionnées et leurs lignes d'en-tête (répétées sur chaque page dans Word). Une image à côté du texte est placée dans un tableau d'une seule cellule sans traits, avec sa légende, afin que Word et LibreOffice laissent le texte les contourner toutes deux ; la description d'une image est son texte alternatif.
+
+### Titres et espaces réservés
+
+Dans une disposition de section, le titre peut contenir des espaces réservés que la compilation remplace :
+
+| Espace réservé | Résultat |
+|-------------|--------|
+| `<$n>` | 1, 2, 3 … |
+| `<$w>` / `<$W>` / `<$WW>` | un, deux … / Un, Deux … / UN, DEUX … |
+| `<$R>` / `<$r>` | I, II, III … / i, ii, iii … |
+| `<$L>` / `<$l>` | A, B, C … / a, b, c … |
+| `<$n:name>` | un compteur séparé appelé *name* (fonctionne avec tous les styles de numérotation ci-dessus) |
+| `<$title>` | le titre du document |
+| `<$projecttitle>` / `<$shorttitle>` | le titre du projet / ses trois premiers mots en capitales |
+| `<$author>`, `<$forename>`, `<$surname>` | votre nom, tiré de **Fichier > Options** ou des paramètres du projet |
+| `<$wc>` / `<$wc100>` / `<$wc1000>` | le nombre de mots, exact ou arrondi |
+| `<$date>` / `<$year>` | la date du jour (aaaa-mm-jj) / l'année |
+| `<$p>` | le numéro de page (uniquement dans les en-têtes et pieds de page) |
+| `<$pages>` | le nombre de pages (en-têtes et pieds de page des fichiers PDF et des impressions) |
+
+Exemple : le titre `Chapter <$W:chapter>` devient *Chapter One*, *Chapter Two*, et ainsi de suite.
+
+Les espaces réservés peuvent aussi être saisis dans le texte lui-même (**Insertion > Numérotation automatique** et **Insertion > Espaces réservés**). **Aide > Liste de tous les espaces réservés…** les liste tous ; sélectionnez des lignes et appuyez sur **Ctrl+C** pour les copier.
+
+### Styles à la compilation
+
+Les titres, Titre, Sous-titre, Citation en bloc, Centré et Légende reçoivent leur aspect du format de compilation. Tout autre style apporte avec lui sa propre mise en forme (retraits, espacement, alignement, police, couleur), dans tous les formats de compilation. Avec **Default (Editor Formatting)**, les modifications que vous avez apportées aux styles intégrés sont également reprises. La page **Styles** d'un format modifie cela pour chaque style (voir *Modifier un format de compilation*).
+
+### Notes à la compilation
+
+Sur la page **Notes de bas de page et commentaires** d'un format de compilation, vous choisissez où vont les notes de bas de page dans un PDF ou un livre numérique (bas de page, fin de chaque chapitre, fin du texte), si les annotations en ligne deviennent des commentaires dans le fichier Word ou sont supprimées, si les commentaires liés sont conservés, et si les surlignages sont supprimés. Dans un fichier Word, les notes de bas de page sont toujours de véritables notes de bas de page en bas de la page.
+
+### Autres formats de sortie (plugins)
+
+{{APP}} est aussi livré avec ces formats. Chacun nécessite un programme installé séparément ; PDF et EPUB via LibreOffice et Pandoc sont une alternative aux formats intégrés (ils partent du fichier Word et lui ressemblent) :
+
+| Format | Nécessite |
+|--------|-------|
+| PDF (via LibreOffice) | LibreOffice (installé sur la plupart des systèmes Ubuntu et Kubuntu) |
+| OpenDocument Text (.odt, via LibreOffice) | LibreOffice |
+| Livre numérique (.epub, via Pandoc) | Pandoc (installez « pandoc » dans Discover) |
+| Markdown (.md) | rien |
+
+**Fichier > Options > Plugins** indique quels formats sont prêts et lesquels manquent d'un programme. D'autres formats peuvent être installés sous forme de modules complémentaires (section 17).
+
+### Compiler des scénarios
+
+Deux sorties sont prévues pour les scénarios et ne nécessitent aucun autre programme :
+
+- **Scénario Fountain (.fountain)** : un fichier texte brut que lisent Highland, Fade In, Beat, Trelby et d'autres programmes d'écriture de scénarios.
+- **Final Draft (.fdx)** : le format de fichier de Final Draft, que la plupart des programmes d'écriture de scénarios savent aussi ouvrir.
+
+Dans les deux cas, chaque paragraphe conserve sa nature (intitulé de scène, action, personnage, indication de jeu, dialogue, transition, plan) ; l'autre programme met le scénario en page à sa façon. Les titres de dossiers et de documents que le format de compilation ajoute deviennent des sections (Fountain) ou des intitulés d'acte (Final Draft) ; un texte qui n'est pas un élément de scénario devient de l'action. Le titre du projet et votre nom (Fichier > Options) forment la page de titre. Les annotations en ligne deviennent des notes dans un fichier Fountain et sont omises d'un fichier Final Draft.
+
+Pour Word ou PDF, choisissez le format de compilation **Default (Editor Formatting)** : il conserve les retraits, les majuscules et la police des éléments tels que vous les voyez dans l'éditeur. Les autres formats de compilation remplacent la police et la taille mais conservent les retraits.
+
+---
+
+## 14. Importation et exportation
+
+### Importer des fichiers
+
+**Fichier > Importer > Fichiers…** (**Ctrl+Shift+I**) ajoute au classeur des fichiers texte (.txt, .md, .rtf, .docx, .odt ; les anciens fichiers Word .doc avec le module ci-dessous), des scénarios (.fountain, .fdx), des images, des PDF, de l'audio et de la vidéo, et d'autres fichiers. Vous pouvez aussi faire glisser des fichiers du gestionnaire de fichiers vers le classeur. Les fichiers texte deviennent des documents modifiables ; les images et les PDF s'affichent dans l'éditeur ; l'audio et la vidéo s'y lisent avec le module Lecture multimédia (section 6). Un fichier qui ne peut pas être copié dans le projet (disque plein, fichier illisible) est nommé dans un message et n'est pas ajouté, de sorte qu'aucun élément vide ne subsiste (0.92.0).
+
+La façon dont les fichiers sont lus se règle sous **Fichier > Options > Partage > Importer** : si les commentaires des fichiers Word, LibreOffice et RTF deviennent des annotations en ligne (sinon ils restent des commentaires à côté du texte), si les notes de bas de page deviennent des notes de bas de page en ligne (le réglage par défaut) ou des notes de bas de page liées, si les styles de paragraphe et de caractère des fichiers sont écartés (le texte reçoit l'aspect de votre projet ; gras, italique, notes et liens sont conservés), le codage des fichiers texte brut (automatique : UTF-8, sinon Windows Western), et si les fichiers *.html* deviennent des documents texte plutôt que des documents de page web.
+
+Où vont les fichiers : sélectionnez un dossier dans le classeur pour y importer (les fichiers viennent en dernier), ou un document pour les placer juste en dessous. Le Brouillon n'accepte que du texte ; les autres fichiers déposés là vont dans Recherche.
+
+**Importer et diviser…** lit un long fichier et le découpe en de nombreux documents, par exemple à chaque ligne qui ne contient que `#`, ou à chaque double ligne vide. Depuis 0.94.0, il peut aussi découper un fichier .docx, .odt ou .md **selon ses titres** : le Titre 1 devient un dossier, le Titre 2 un dossier ou un document (vous choisissez dans la fenêtre), le texte entre les titres devient des documents, et les titres de niveau inférieur restent dans le texte. La fenêtre affiche sous forme d'arborescence le classeur qui en résulterait avant l'importation. Le titre d'un document qu'aucun titre ne nomme suit une règle, énoncée dans la fenêtre : la première ligne non vide de son texte (raccourcie à 120 caractères si elle est plus longue), ou « <nom du fichier> <numéro> » lorsque **Utiliser la première ligne de chaque section comme titre** est désactivé.
+
+### Anciens fichiers Word (.doc)
+
+Word 97 à 2003 enregistrait les documents en *.doc* (modèles *.dot*). Ils deviennent des documents texte avec le module **Importation Word 97–2003** (section 17) ; sans lui, un fichier .doc est ajouté au classeur tel quel, et un message vous indique quel module le lit. Le module n'a besoin d'aucun autre programme. Il conserve :
+
+- le texte, y compris le grec, le cyrillique, les écritures asiatiques et ainsi de suite ;
+- les titres (Titre 1 à 6), titre, sous-titre, citations et légendes, qui reçoivent les styles de votre projet ; un style de paragraphe du document que votre projet possède aussi (même nom) reçoit ce style ;
+- gras, italique, souligné, barré, petites et grandes capitales, exposant et indice, surlignage ; paragraphes centrés, alignés à droite et justifiés ;
+- les listes à puces et numérotées avec leurs niveaux (les numéros eux-mêmes sont produits par {{APP}}, de sorte que la numérotation « Chapitre 1 » des titres n'est pas reprise) ;
+- les tableaux, sous forme d'une ligne par rangée avec les cellules séparées par des tabulations ;
+- les notes de bas de page et notes de fin (sous forme de notes de bas de page), les commentaires avec les mots commentés (le nom de l'auteur vient en premier dans le commentaire) ;
+- les liens, le résultat des champs (dates, numéros de page tels qu'ils ont été affichés en dernier), les sauts de page et de section, les sauts de ligne ;
+- les images dans le texte (JPEG, PNG, BMP, TIFF) ;
+- dans les projets RTF, aussi les polices, tailles, couleurs et retraits définis à la main (les projets Markdown conservent l'aspect du projet, comme pour toute importation).
+
+Ne sont pas repris : en-têtes et pieds de page, images et dessins flottants, images aux anciens formats de métafichier (WMF, EMF), objets incorporés, texte masqué et texte supprimé avec le suivi des modifications (le texte inséré est conservé). Le texte des zones de texte est ajouté à la fin du document. Après l'importation, un message indique ce qui n'a pas été repris.
+
+**Fichier > Options > Partage > Conversion** peut faire de LibreOffice le premier choix pour les fichiers *.doc* (il lit aussi les en-têtes, les dessins et les fichiers Word 6/95) ; lorsque la méthode choisie échoue, l'autre est essayée. Les fichiers Word 6.0 et Word 95, ainsi que les fichiers que le module ne sait pas lire, sont convertis avec LibreOffice lorsqu'il est installé (sous Ubuntu : `sudo apt install libreoffice-writer`) ; sinon le message l'indique. Les fichiers protégés par un mot de passe doivent d'abord être ouverts et enregistrés sans mot de passe. Un fichier *.doc* qui est en réalité un fichier RTF, un fichier Word 2007 (.docx) ou une page web, comme certains programmes les enregistraient, est lu pour ce qu'il est, même sans le module.
+
+### Importer des pages web
+
+**Fichier > Importer > Page web…** amène une page du web dans votre projet. Le module **Importation de pages web** (section 17) fait le travail ; sans lui, la commande vous le dit.
+
+1. Sélectionnez le dossier qui doit recevoir la page (sinon elle va dans **Recherche**).
+2. Choisissez **Fichier > Importer > Page web…**. Si le presse-papiers contient une adresse web, elle est déjà saisie ; sinon tapez-en une ou collez-la.
+3. Cliquez sur **Charger** (ou appuyez sur Enter). La page et ses images sont récupérées, et la fenêtre montre ce qui sera importé, avec le nombre de mots et d'images, l'auteur, le site et la date.
+4. Corrigez le **Titre** si vous le souhaitez, vérifiez les choix ci-dessous, puis cliquez sur **Importer**.
+
+**Seulement l'article** conserve le texte qui vous intéresse et écarte les menus, les publicités, les avis sur les cookies, les boutons de partage, les sections de commentaires et les listes d'autres articles. {{APP}} repère l'article comme le font les outils de lecture (le texte qui compte le plus de phrases et de virgules et le moins de liens l'emporte ; des noms comme « article » ou « sidebar » dans la page comptent pour ou contre une partie). Si quelque chose manque, décochez cette option pour prendre la page entière. **Images** récupère les images de l'article (les très grandes sont ramenées à 1 600 pixels de large). Pour une page provenant d'Internet, les images ne sont récupérées qu'à partir d'adresses publiques : une image située sur votre propre ordinateur ou sur un réseau privé (même par une redirection) est écartée, et le résultat indique combien. Une page qui provient elle-même de votre propre ordinateur ou réseau est récupérée avec toutes ses images.
+
+**Importer comme** :
+
+- **Document texte** (le réglage par défaut) : titres, paragraphes, citations, listes, tableaux (une ligne par rangée), code informatique, légendes, gras, italique et liens deviennent un document ordinaire que vous pouvez modifier, annoter, diviser et compiler.
+- **Document de page web** : une copie en lecture seule de l'article avec ses images, à titre de référence. Elle n'est ni comptée ni compilée.
+
+**Afficher un document de page web** (0.81.3). L'éditeur montre la page sous forme de texte mis en forme simplement, avec son adresse et deux boutons au-dessus. **Ouvrir la page enregistrée dans le navigateur** affiche la page telle qu'elle a été enregistrée, dans votre navigateur web : {{APP}} en place une copie dans votre dossier Téléchargements (*Quillbinder web pages/<title>*), car un navigateur installé sous forme de paquet isolé (Firefox sous Kubuntu, par exemple) ne peut pas lire les dossiers propres de {{APP}} ; la ligne sous les boutons indique où se trouve la copie, et le clic suivant la remplace. Sous Windows, la copie est faite à la place dans un dossier temporaire et supprimée à la fermeture de {{APP}}, de sorte que rien n'est écrit en dehors du dossier du programme. **Ouvrir l'adresse d'origine** ouvre l'adresse de la page, pour que vous voyiez la page telle qu'elle est aujourd'hui ; le bouton est désactivé lorsque la page n'a pas d'adresse. Les pages web enregistrées par Scrivener (un fichier *.mht* chacune) s'affichent de la même façon ; un navigateur comme Firefox ne sait pas ouvrir lui-même les fichiers *.mht*, la copie est donc du HTML simple avec ses images à côté.
+
+Dans les deux cas, l'adresse de la page devient un **signet** du document (inspecteur, Signets), la courte description de la page devient son **synopsis**, et les **notes** consignent l'adresse, le site, l'auteur, la date de publication et le moment où vous l'avez récupérée.
+
+**Faire glisser un lien** depuis un navigateur web vers un dossier du classeur, vers le tableau en liège ou dans le plan importe directement la page, avec les choix faits la dernière fois dans la fenêtre.
+
+Bon à savoir : la page est récupérée comme le ferait un navigateur, mais sans exécuter ses scripts. Les pages qui construisent leur texte avec un script le contiennent souvent encore dans leurs données, lesquelles sont alors utilisées (sans mise en forme ni images ; un message l'indique). Les pages protégées par une connexion ou un accès payant donnent ce qu'elles montrent à un visiteur non connecté. Les pages sécurisées (https) nécessitent OpenSSL 3 sur votre système (inclus dans tout Ubuntu). Une adresse web qui mène à un fichier PDF n'est pas importée de cette façon : téléchargez le fichier et utilisez **Fichier > Importer > Fichiers…**.
+
+**Scénarios.** Les fichiers Fountain (*.fountain*) et Final Draft (*.fdx*) sont importés comme scénarios : les paragraphes reçoivent les éléments du format de script de votre projet, le document est en mode script, et la page de titre du fichier va dans les notes du document. Le texte en gras, en italique et souligné, les notes et les sauts de page forcés sont conservés ; les numéros de scène, les marques de révision et l'aspect en deux colonnes des dialogues simultanés ne le sont pas (les deux répliques se suivent). **Importer et diviser…** avec **Intitulés de scène** découpe un scénario en un document par scène, nommé d'après son intitulé.
+
+### Importer un projet Scrivener
+
+**Fichier > Importer > Projet Scrivener…** lit un projet Scrivener 3 ou 2 (le dossier *.scriv* ; choisissez le fichier *.scrivx* qu'il contient) et crée à partir de lui un nouveau projet {{APP}}. Le projet de Scrivener est seulement lu, jamais modifié. Depuis 0.92.0, le rapport qui suit l'importation nomme aussi chaque fichier qui n'a pas pu être copié (une image, un PDF, un fichier audio, l'image d'une fiche, une carte mentale), et un tel fichier n'est pas compté comme importé ; auparavant, il était omis sans un mot.
+
+L'importation reprend : la structure du classeur, les textes, les synopsis, les notes, les libellés, les statuts, les mots-clés, les métadonnées personnalisées, les types de section, les indicateurs d'inclusion dans la compilation, les instantanés, les commentaires et les notes de bas de page, les annotations en ligne, les fichiers de recherche (images, PDF et autres), les collections, les signets du projet et les objectifs. Les paramètres de compilation ne sont pas importés ; définissez-les une fois dans la fenêtre de compilation. Choisissez si le nouveau projet conserve son texte en Markdown ou en RTF.
+
+Titres et styles : Scrivener marque le texte stylé dans ses fichiers avec des codes tels que `<$Scr_Ps::0><$Scr_H::2>`. Ce n'est pas du texte ; {{APP}} les retire. Un titre reçoit **Titre 1** à **Titre 6**, et un paragraphe doté de l'un des styles de paragraphe de Scrivener reçoit le style de même nom de votre projet (**Titre**, **Citation en bloc** ; le **Centered Text** de Scrivener devient **Centré**). Depuis 0.81.3, un texte doté de l'un des styles de caractère de Scrivener reçoit le style de caractère de même nom de votre projet, et un style de Scrivener pour lequel votre projet n'a pas de style de ce nom devient un style du projet, avec l'aspect que Scrivener lui donne. Les projets importés par des versions antérieures à 0.14 conservaient les codes sous forme de texte ; {{APP}} les retire à l'ouverture d'un tel projet et le signale dans la barre d'état. Les signets du projet n'étaient pas importés avant 0.14 ; pour les obtenir, importez de nouveau le projet Scrivener.
+
+Si quelque chose n'a pas été transféré correctement, le projet d'origine est intact et vous pouvez copier le texte directement depuis Scrivener.
+
+### Travailler au format Scrivener
+
+Au lieu de faire une copie, {{APP}} peut aussi travailler directement sur un projet Scrivener 3, afin que vous puissiez poursuivre plus tard dans Scrivener (par exemple sur un autre ordinateur).
+
+- **Ouverture** : **Fichier > Ouvrir un projet…** (**Ouvrir autre…** dans la fenêtre de démarrage) et choisissez le fichier *.scrivx* dans le dossier *.scriv*. La première fois, {{APP}} demande : **Travailler au format Scrivener** (vos modifications sont enregistrées dans le *.scriv*), **Convertir…** (un projet {{APP}} propre est créé à partir de lui, comme avec l'importation ci-dessus), ou **Annuler**. Ensuite, le projet s'ouvre sans cette question, également depuis **Fichier > Ouvrir un projet récent**.
+- **Nouveaux projets** : choisissez **Format : Projet Scrivener 3 (.scriv)** dans la fenêtre Nouveau projet.
+- **Enregistrement** : chaque enregistrement (y compris l'enregistrement automatique) écrit dans le *.scriv*. Seul ce que vous avez modifié est écrit ; les documents que vous n'avez pas touchés conservent les fichiers écrits par Scrivener. Le titre de la fenêtre indique *(format Scrivener)*, et **Fichier > Afficher le projet dans le gestionnaire de fichiers** ainsi que les sauvegardes prennent le dossier *.scriv*.
+- **Grands projets** (depuis 0.60.5) : l'enregistrement automatique pendant l'écriture ne place dans le *.scriv* que les textes, notes et synopsis que vous avez modifiés (et le classeur, s'il a changé), si bien qu'il reste bref même avec des centaines de milliers de mots. Tout le reste, comme l'index de recherche de Scrivener, les instantanés et les images, suit lorsque vous passez à un autre programme, utilisez **Fichier > Enregistrer** (**Ctrl+S**) ou fermez le projet ; avant d'ouvrir le projet dans Scrivener, fermez-le donc ici ou passez d'abord à un autre programme.
+- **Un seul programme à la fois** : si Scrivener a le projet ouvert (ou ne l'a pas fermé correctement), {{APP}} le signale et demande avant de l'ouvrir. Fermez le projet dans un programme avant de l'ouvrir dans l'autre. Lorsque le projet a été modifié dans Scrivener (ou par un service de synchronisation) depuis sa dernière ouverture ici, {{APP}} le relit et vous indique dans la barre d'état combien de documents ont changé ; un document modifié entre-temps dans Scrivener n'est jamais écrasé par un texte plus ancien.
+
+Ce qui va dans le *.scriv* : le classeur, les textes (en RTF, avec leurs images), les synopsis, les notes (également celles des images, PDF, audio et vidéo, depuis 0.81.3), les libellés, les statuts, les types de section, **Inclure dans la compilation**, les signets (du projet et de chaque document, y compris vers des adresses web et des fichiers), les objectifs du projet avec l'échéance, les objectifs de document, l'historique d'écriture, le tableau en liège (l'arrangement de chaque dossier et les emplacements des fiches placées librement), le titre, l'auteur et la langue du fichier compilé (dans les paramètres de compilation de Scrivener), les instantanés, les commentaires et les notes de bas de page, les annotations et les notes de bas de page en ligne, les styles de paragraphe et de caractère, les mots-clés, les champs de métadonnées personnalisées et leurs valeurs, les collections, les recherches enregistrées (collections de recherche, depuis 0.90.0), les images des fiches (depuis 0.90.0), les images, les PDF, l'audio et la vidéo, les pages web, les icônes (par les noms de Scrivener ; vos propres icônes dans son dossier *Icons*), et les cartes mentales (sous forme de fichier supplémentaire à côté des fichiers du document, que Scrivener laisse tranquille). Tout est écrit sous la forme qu'utilise Scrivener 3 pour Windows :
+
+- Les mots-clés, les métadonnées personnalisées et les collections conservent les numéros et les noms de Scrivener (depuis 0.81.2), ils sont donc identiques dans les deux programmes.
+- Styles (depuis 0.81.3) : les styles d'un texte que vous modifiez y sont marqués comme Scrivener les marque, de sorte que Scrivener affiche les mêmes styles. Un style créé dans {{APP}} est ajouté aux styles du projet Scrivener la première fois qu'un texte l'utilise, avec son aspect.
+- Les annotations et notes de bas de page en ligne (depuis 0.81.3) restent en ligne, les annotations dans leur couleur (auparavant, un texte que vous aviez modifié les transmettait à Scrivener sous forme de commentaires et de notes de bas de page liés).
+- Pages web (depuis 0.81.3) : une page enregistrée dans {{APP}} entre comme page web enregistrée propre à Scrivener (un fichier *.mht* avec ses images) et garde son adresse. Les autres fichiers pour lesquels Scrivener n'a pas de type entrent comme documents texte qui nomment le fichier, avec le fichier à côté ; {{APP}} les relit tels qu'ils étaient.
+- L'audio, la vidéo et les pages web que les versions antérieures à 0.81.2 avaient transformés en tels documents texte redeviennent des documents audio, vidéo ou page web propres à Scrivener à l'enregistrement suivant.
+- Les textes (depuis 0.90.0) sont réécrits avec tout ce que Scrivener y conserve : retraits droits inférieurs à zéro, listes avec leur numérotation, soulignement des liens, images liées à un fichier, polices nommées par leur graisse (comme *Cambria-BoldItalic*), et emplacement d'une image dont les données manquent. Les commentaires et les notes de bas de page conservent leurs identifiants, l'état replié ou non de leur zone et leur propre mise en forme tant que vous ne les modifiez pas.
+- Le tableau en liège (depuis 0.90.0) : les fiches que vous placez librement conservent leur emplacement dans les deux programmes. Scrivener conserve un emplacement en largeurs de fiche ; {{APP}} le convertit en sa propre taille de fiche, de sorte que l'arrangement reste le même quelle que soit la taille de fiche que chaque programme affiche. Chaque dossier conserve son arrangement (libre ou en grille), comme dans Scrivener : choisir **Libre** ou la grille pour le tableau en liège d'un dossier est mémorisé pour ce dossier.
+- Libellés et statuts (depuis 0.90.0) : le libellé et le statut par défaut des nouveaux documents, ainsi que les noms que Scrivener donne à « No Label » et « No Status », restent tels que le projet les a.
+- Recherches enregistrées (depuis 0.90.0) : une recherche enregistrée de Scrivener est une collection de recherche dans {{APP}}, et une collection de recherche que vous créez ou modifiez entre dans le *.scriv* comme recherche enregistrée. La liste des résultats de recherche récents de Scrivener reste propre à Scrivener. Vérifié avec une recherche enregistrée portant sur l'un quelconque des mots ; la façon dont Scrivener nomme les autres types (tous les mots, l'expression exacte, une expression régulière, seulement les documents inclus dans la compilation ou exclus de celle-ci) n'a pas encore été vue dans un vrai projet, de sorte qu'une recherche enregistrée de ces types peut ressortir dans Scrivener comme une recherche de tous les mots. L'endroit des documents où une recherche porte ne fait pas partie de ce qui est transféré : une recherche enregistrée lue depuis Scrivener porte partout.
+- L'image d'une fiche (depuis 0.90.0) : une fiche qui montre une image au lieu de son synopsis la conserve dans les deux programmes ; la retirer ou en mettre une dans {{APP}} atteint Scrivener.
+
+Ce qui reste uniquement du côté de {{APP}} (dans une copie de travail dans *~/.local/share/{{APP}}/ScrivenerProjects*) : formats de script, paramètres de compilation (sauf le titre, l'auteur et la langue), objets (section 7) et disposition des fenêtres ; ce que le *.scriv* possède déjà de tout cela y reste tel quel.
+
+La première fois qu'un projet Scrivener est ouvert ou importé, son classeur montre les dossiers qui étaient ouverts dans Scrivener et les documents qui y étaient sélectionnés (0.90.0 ; {{APP}} n'écrit jamais les propres paramètres de fenêtre de Scrivener). La première fois que vous ouvrez un projet au format Scrivener avec 0.81.2 ou ultérieur, {{APP}} relit le *.scriv* et fusionne les mots-clés, les métadonnées personnalisées et les collections de sa copie de travail avec ceux du projet, afin que rien de ce que vous avez créé avec une version plus ancienne ne soit perdu ; l'enregistrement suivant les place dans le *.scriv*. La première ouverture avec 0.90.0 ou ultérieur fait de même pour les signets, les objectifs de document, l'échéance, l'historique d'écriture et le tableau en liège.
+
+Si un enregistrement dans le *.scriv* a été interrompu (plantage, disque plein) après que de nouveaux documents ont été écrits dans la copie de travail, l'ouverture suivante conserve ces documents et le signale ; l'enregistrement suivant les place dans le *.scriv*. Les documents supprimés dans Scrivener restent supprimés.
+
+**Fichier > Enregistrer sous…** (**Ctrl+Shift+S**) enregistre le projet ouvert sous un autre nom ou à un autre endroit, et c'est ainsi qu'un projet change de format. Dans la boîte de dialogue, tapez le nom et choisissez l'emplacement ; le **type de fichier** détermine le format : *Projet Scrivener 3 (\*.scriv)* ou *Projet {{APP}} (\*.qbx)* (un nom qui se termine par *.scriv* ou *.qbx* décide de lui-même). Un projet est un dossier : le programme le crée à partir du nom (*Name.scriv*, ou *Name.quillbinder* contenant *Name.qbx*). Un nom qui existe déjà est refusé.
+
+- À partir de là, la fenêtre travaille sur le nouveau projet, et chaque enregistrement ultérieur y va. Le titre du projet est le nom que vous avez tapé. Les modifications que vous n'aviez pas encore enregistrées vont uniquement dans le nouveau projet.
+- L'original reste sur le disque tel qu'il était à ce moment (conservez-le comme copie ou supprimez-le) ; il figure aussi dans **Fichier > Ouvrir un projet récent**, sous le nouveau projet. Son fichier de verrouillage est supprimé lorsque la fenêtre le quitte, et le nouveau projet reçoit le sien.
+- Le nouveau projet est un projet à part entière, avec ses propres **sauvegardes** : il commence une nouvelle série, et les sauvegardes faites jusqu'ici restent avec l'original (section 14, Sauvegardes). Un projet au format Scrivener reçoit pour cela un nouvel identifiant dans son *.scrivx*.
+- Enregistrer sous fonctionne de la même façon d'un format vers le même format (nouveau nom ou nouvel emplacement) et vers l'autre (le changement qu'effectuait jusqu'à 0.92 le menu « Format du projet »).
+
+**Fichier > Exporter > Projet Scrivener…** écrit une **copie** au format Scrivener, et l'entrée qui se trouve en dessous dans le même menu, **Projet {{APP}}…**, une copie au format propre à {{APP}} ; les deux laissent la fenêtre sur l'original : rien ne change dans le projet sur lequel vous travaillez (avant 0.93.0, c'étaient « Enregistrer une copie sous ... » dans le menu « Format du projet »).
+
+### Exporter des documents
+
+**Fichier > Exporter > Fichiers…** enregistre les documents sélectionnés pour d'autres programmes. Utilisez la compilation pour un manuscrit terminé ; utilisez l'exportation pour remettre des documents isolés à quelqu'un, ou pour conserver une copie en dehors de {{APP}}.
+
+1. Dans le classeur, sélectionnez les documents et dossiers à exporter.
+2. Choisissez **Fichier > Exporter > Fichiers…**.
+3. **Exporter les fichiers texte en** : Rich Text (.rtf), Word (.docx), Markdown (.md), texte brut (.txt), Fountain ou Final Draft (pour les scénarios, Fountain est présélectionné). Les images, fichiers PDF, pages web, audio et vidéo sont exportés tels quels ; le format ne vaut alors que pour leurs notes.
+4. **Métadonnées** : **Exporter les métadonnées** écrit un fichier texte à côté de chaque document, « *name* (metadata).txt », avec son titre, son genre, son libellé, son statut, ses mots-clés, l'inclusion dans la compilation, le type de section, le nombre de mots, l'objectif, les dates de création et de modification, les métadonnées personnalisées et les signets. **Exporter les synopsis** y ajoute le synopsis (ou écrit « *name* (synopsis).txt » lorsque les métadonnées ne sont pas exportées).
+5. **Options** : **Inclure les sous-documents** (les dossiers deviennent des dossiers), **Exporter les notes** (« *name* (notes) » dans le format de l'étape 3 ; texte brut pour les scénarios), **Exporter les commentaires et les annotations en ligne** (décochez pour remettre le texte propre ; les mots commentés restent, les notes de bas de page restent toujours), **Exporter les instantanés** (un dossier « *name* (snapshots) » avec un fichier par instantané, nommé d'après la date et le titre).
+6. **Emplacement** : le dossier où enregistrer. Lorsque plusieurs documents sont sélectionnés, ils vont dans un nouveau dossier dont vous donnez le nom (le titre du projet est proposé ; si le dossier existe, un numéro est ajouté).
+7. Cliquez sur **Exporter**. Le dossier s'ouvre dans le gestionnaire de fichiers.
+
+Les choix sont mémorisés pour l'exportation suivante.
+
+La méthode rapide : **faire glisser des documents hors du classeur** vers le gestionnaire de fichiers ou le bureau. Les documents texte sont enregistrés sous forme de fichiers RTF (ou Word, Markdown ou texte brut : **Fichier > Options > Comportements**), les images et autres fichiers tels quels, et un dossier devient un dossier avec ses documents à l'intérieur. Si le gestionnaire de fichiers demande s'il faut déplacer ou copier, l'un comme l'autre convient : les documents restent dans votre projet.
+
+### Comparer et transférer : un fichier Word ou LibreOffice et le projet
+
+Lorsqu'un manuscrit revient d'un éditeur, ou que vous avez continué à travailler dessus dans Word ou LibreOffice, **Fichier > Comparer et transférer > Comparer avec un fichier…** trouve ce qui diffère entre ce fichier et votre projet et reprend le côté que vous choisissez.
+
+1. Choisissez le fichier : un fichier Word (*.docx*) ou un fichier LibreOffice (*.odt*). Les anciens fichiers Word (*.doc*), RTF, texte brut et Markdown peuvent aussi être comparés, mais seulement lus : leur texte peut aller dans le projet ; le fichier lui-même ne peut pas être modifié.
+2. {{APP}} compare le fichier avec **ce que la compilation produit à partir du projet**, et non avec l'ensemble du projet : les documents du groupe de compilation (le Brouillon, sauf si un autre groupe est choisi dans la fenêtre de compilation) pour lesquels **Inclure dans la compilation** est actif, dans l'ordre du classeur. Les pages liminaires et finales, le dossier Recherche et les documents exclus de la compilation ne comptent pas. Si moins de 65 % du texte du fichier y est retrouvé, {{APP}} le signale et demande s'il faut comparer quand même (**Comparer quand même**) ; le fichier appartient peut-être à un autre projet, ou la compilation omet ce que contient le fichier. Un mot compte comme retrouvé lorsqu'il se trouve dans une suite de quatre mots que le texte compilé possède aussi, de sorte que quelques mots modifiés ne rendent pas un fichier étranger.
+3. La fenêtre **Comparer et transférer** montre les différences. Choisissez le côté qui est mis à jour :
+   - **Mettre à jour le projet à partir du fichier** : les modifications sont faites dans vos documents. Auparavant, chaque document modifié reçoit un instantané, « Avant Comparer et transférer (*nom du fichier*) » (**Documents > Instantanés**), afin que vous puissiez toujours revenir en arrière. Le texte qui n'existe que dans le fichier devient un nouveau document (nommé d'après son titre dans le fichier), placé après le document qui le précède.
+   - **Mettre à jour le fichier à partir du projet** : le fichier que vous avez choisi reste tel quel. {{APP}} écrit une copie à côté, « *name* (Quillbinder).docx » (avec un numéro si ce nom est pris). Dans un fichier Word, chaque modification est une **modification suivie** de l'auteur « Quillbinder » : ouvrez la copie dans Word ou LibreOffice et acceptez ou refusez chaque modification là-bas (dans Word sous l'onglet Révision ; dans LibreOffice avec Édition, Suivi des modifications, Gérer). Une copie LibreOffice (*.odt*) reçoit les modifications directement, sans marques.
+4. Dans l'affichage, le texte **vert** entre, le texte **rouge** barré sort, et le texte **bleu** reçoit le gras, l'italique ou le soulignement de l'autre côté. Les paragraphes gris sont du texte inchangé autour d'une modification, pour montrer où elle se trouve. Chaque endroit comporte un lien **reprendre** ou **ignorer** ; un clic le fait basculer.
+5. Cliquez sur **Transférer ... dans le projet** ou **Écrire ... dans une copie du fichier**. Un message indique ce qui a été fait ; pour le fichier, **Ouvrir le fichier** ouvre la copie.
+
+**Par chapitre** (**Fichier > Comparer et transférer > Par chapitre**, également une case à cocher dans la fenêtre) liste les documents à gauche, chacun avec une case à cocher et ce qui diffère (« 2 endroit(s) », « seulement dans le fichier », « absent du fichier »). Décochez un document pour le laisser tel quel ; un clic affiche ses modifications à droite. Sans Par chapitre, toutes les modifications sont affichées les unes sous les autres.
+
+**Étape par étape** (**Fichier > Comparer et transférer > Étape par étape**, également dans la fenêtre) montre une modification à la fois : **Reprendre** ou **Ignorer**, ou revenez en **Arrière**. À la fin, la fenêtre indique combien de modifications seront reprises ; cliquez alors sur Transférer. Les deux choix sont mémorisés pour la fois suivante.
+
+Ce qui est comparé : les mots, ainsi que le gras, l'italique et le soulignement. Chaque paragraphe du fichier est associé au document qui possède ses mots, si bien qu'une scène est retrouvée même là où elle a été déplacée dans le fichier (elle est alors marquée « à un autre endroit du fichier » ; l'ordre du classeur n'est pas modifié). Les titres du fichier qui ne sont pas du texte d'un document, comme les titres de chapitre produits par la compilation, ne sont pas comparés.
+
+Ce qui est coché au départ : chaque modification à l'intérieur d'un document. Le texte qui n'existe que d'un côté est coché lorsqu'il compte au moins 100 mots (un nouveau chapitre du fichier devient un nouveau document ; une scène absente du fichier est ajoutée à la copie). Un document entier n'est jamais mis à la corbeille, et une partie entière n'est jamais retirée du fichier, sauf si vous la cochez.
+
+Limites : les nouveaux paragraphes prennent l'aspect du paragraphe voisin. Le texte des tableaux est comparé comme les autres paragraphes (un tableau lui-même n'est jamais retiré), et les champs comptent avec le texte qu'ils affichent. Les en-têtes et pieds de page, les zones de texte, ainsi que le texte des notes de bas de page et des commentaires du fichier ne sont pas comparés et restent tels quels ; les commentaires et notes de bas de page du projet restent dans le projet et ne sont pas écrits dans le fichier. Si le fichier a été modifié après la comparaison, la copie n'est pas écrite ; comparez de nouveau.
+
+### Impression
+
+**Fichier > Imprimer le document actuel…** (**Ctrl+P**) imprime ce que montre l'éditeur actuel :
+
+- **Un texte** (un document, ou plusieurs dans le texte combiné) : le texte avec sa mise en forme et ses images, le titre de chaque document au-dessus de son texte, et les notes de bas de page en bas de la page. Lorsque le clavier est dans un support de copie, c'est le document du support de copie qui est imprimé.
+- **Le tableau en liège** : les fiches dans l'ordre affiché, autant par feuille qu'il peut en tenir (avec des lignes de découpe), ou une fiche par feuille pour du papier cartonné de fiches.
+- **Le plan** : les lignes et les colonnes telles que le plan les montre, avec les titres des colonnes en haut de chaque page.
+- **Une image** (aussi grande que la page le permet), **un fichier PDF** (ses pages) ou **une page web** (son texte).
+
+La fenêtre d'impression permet de choisir l'imprimante, les pages et le nombre de copies. **Sélection** n'imprime que le texte sélectionné, ou seulement les fiches ou les lignes du plan sélectionnées. Pour enregistrer l'impression sous forme de fichier PDF à la place, choisissez **Imprimer dans un fichier (PDF)** comme imprimante.
+
+**Fichier > Aperçu avant impression…** montre d'abord les pages ; le bouton d'imprimante de l'aperçu les imprime, **Fermer** (ou **Esc**) ferme l'aperçu.
+
+**Fichier > Paramètres d'impression…** décide de la façon dont les choses passent sur le papier. La fenêtre s'ouvre sur l'onglet correspondant à ce que montre l'éditeur ; **Aperçu…** montre le résultat avant que vous ne cliquiez sur **OK**. Les paramètres appartiennent au projet ; cochez **Utiliser ces paramètres aussi pour les nouveaux projets** pour en faire le réglage par défaut des nouveaux projets.
+
+- **Page** : le format et l'orientation du papier (le bouton **Papier de la vue page** reprend le papier et les marges de **Affichage > Édition du texte > Taille de page et marges…**), les marges, ainsi que l'en-tête et le pied de page, chacun avec une partie gauche, une partie centrale et une partie droite. Espaces réservés : `<$title>` (ce qui est imprimé), `<$projecttitle>`, `<$author>`, `<$date>`, `<$p>` (le numéro de page) et `<$pages>` (le nombre de pages). Décochez **En-tête et pied de page aussi sur la première page** pour une première page nette.
+- **Texte** : ce qui est imprimé avec le texte (le titre de chaque document, le synopsis en dessous, les notes du document après le texte, les commentaires et les annotations en ligne sous forme de notes en bas de page, les notes de bas de page à la fin du texte au lieu du bas de chaque page, les surlignages) ; les polices (comme dans l'éditeur, ou **Une seule police** de votre choix) ; et l'interligne (comme dans l'éditeur, simple, 1,5 ligne ou double, avec de la place pour les corrections). Les documents de script conservent leur mise en page de script.
+- **Fiches** : la taille des fiches (3 x 5 po, 4 x 6 po, 5 x 8 po, A7, A6 ou une taille personnalisée), autant de fiches par feuille qu'il peut en tenir ou une fiche par feuille, ce que montre chaque fiche (titre, synopsis, premières lignes du texte lorsqu'il n'y a pas de synopsis, images, couleur du libellé sous forme de bande en haut, statut, mots-clés, les lignes d'une fiche, un trait autour de chaque fiche) et la police.
+- **Plan** : les synopsis (comme le plan les montre, toujours ou jamais), aussi les lignes à l'intérieur des groupes fermés, les titres de colonnes en haut de chaque page, un trait entre les lignes, un point de la couleur du libellé et la police. Avec beaucoup de colonnes, **Paysage** sur l'onglet **Page** leur donne plus de place.
+
+Imprimer le document actuel imprime un document tel que vous travaillez dessus. Pour un manuscrit terminé avec l'aspect d'un format de compilation, compilez-le (section 13) et imprimez le fichier PDF ou Word.
+
+---
+
+## 15. Sauvegardes
+
+{{APP}} fait une sauvegarde (un fichier ZIP de tout le projet) chaque fois que vous fermez un projet, et conserve les cinq dernières par projet. Modifiez cela sous **Fichier > Options > Sauvegarde**, où vous pouvez aussi choisir le dossier de sauvegarde (de préférence sur un autre disque, ou un dossier que votre programme de synchronisation copie).
+
+Depuis 0.91, les sauvegardes de tous les projets se trouvent directement dans le dossier de sauvegarde, chacune nommée d'après son projet avec la date et l'heure. Depuis 0.92.0, le nom porte aussi l'**ID** du projet, cinq caractères après un « # » (*My Novel #K7T2M bak 2026-11-20 15-40-00.zip*). L'ID appartient au projet, pas à l'ordinateur : il est identique sur chaque ordinateur où le projet est ouvert, et il reste lorsque vous renommez le projet ou déplacez son dossier. Les sauvegardes d'un projet sont les fichiers qui portent son titre et son ID, et seuls ceux-ci sont comptés et nettoyés pour lui, de sorte que deux projets de même titre conservent chacun leurs sauvegardes et leur propre nombre conservé. Une copie ou un nouveau projet que le programme crée lui-même est un projet à part entière avec son propre ID : **Fichier > Enregistrer sous…** et l'entrée Projet {{APP}} de **Fichier > Exporter**, un projet restauré avec **Restaurer une sauvegarde…** (il reçoit aussi un titre propre), et un projet créé à partir d'un modèle à vous. Une copie faite en dehors du programme (un dossier copié à la main, une sauvegarde décompressée à la main) a l'ID de son original : donnez à une telle copie un titre propre. Un projet au format Scrivener tire son ID de l'identifiant que Scrivener conserve dans le *.scrivx*. Si votre dossier de sauvegarde se trouve dans le OneDrive d'une organisation, son administrateur a peut-être interdit « # » dans les noms de fichiers ; OneDrive pour la maison l'autorise. Les sauvegardes faites par une version antérieure à 0.92.0 n'ont pas d'ID dans leur nom : elles ne sont jamais supprimées par le nettoyage, **Restaurer une sauvegarde…** les liste toujours, et vous les supprimez vous-même lorsque vous n'en avez plus besoin. Lorsque vous changez le titre d'un projet, les sauvegardes faites sous l'ancien titre restent jusqu'à ce que vous les supprimiez. Les versions 0.70 à 0.90 conservaient les sauvegardes de chaque projet dans un dossier à part à l'intérieur du dossier de sauvegarde (*My Novel 1a2b3c4d*) ; un tel dossier est laissé tel quel, plus rien n'y est ajouté ni supprimé, et **Restaurer une sauvegarde…** liste toujours ses sauvegardes. Une sauvegarde s'exécute à côté de la fenêtre : au bout d'un moment, une fenêtre de progression montre où elle en est et peut l'annuler. Qui a le projet ouvert (le fichier de verrouillage avec le nom de l'ordinateur et de la session) ne figure pas dans la sauvegarde.
+
+- Avec **Sauvegarder à chaque enregistrement manuel** (**Fichier > Options > Sauvegarde**), chaque **Fichier > Enregistrer** (**Ctrl+S**) fait aussi une sauvegarde. Deux sauvegardes dans la même seconde reçoivent un numéro (« ... (2) »). Lorsque cette sauvegarde ne peut pas être faite, est incomplète ou doit attendre en dehors du dossier de sauvegarde, un avis à côté du texte l'indique (0.92.0 ; auparavant, seule la barre d'état le faisait, pendant quelques secondes). Votre texte est enregistré dans tous les cas. L'avis ne vient qu'une fois par cause jusqu'à ce que vous quittiez le programme ; la barre d'état l'indique à chaque enregistrement.
+- **La ligne de messages** sous le classeur affiche de courts messages un par un, pendant 5 secondes (10 avec un lien) ou jusqu'à ce que vous cliquiez dessus ; les autres attendent. Les modules complémentaires l'utilisent aussi (par exemple « Modèle déchargé, utilisation de la RAM minimale » lorsque Assistant de traduction ou Transcription vocale a libéré son modèle après 15 minutes sans utilisation ; la durée figure dans leurs options). **Aide > Dépannage et développement > Informations système** indique la mémoire que le programme occupe.
+- **Modules complémentaires non installés.** **Édition > Outils d'écriture** liste « Assistant de traduction » et « Transcription vocale » tant que le module manque ou est désactivé ; chacun affiche un avis avec un bouton qui ouvre **Aide > Modules et mises à jour > Gestionnaire de modules…**.
+- **Fichier > Sauvegarde** fait une sauvegarde immédiatement. Depuis 0.94.0, la réussite est signalée dans la ligne de messages sous le classeur (« Sauvegarde enregistrée. » avec le lien **Afficher le dossier**, qui ouvre le dossier de la sauvegarde ; l'info-bulle nomme le fichier ; un message avec un lien reste 10 secondes) ; aucune boîte n'attend un clic sur OK. Une boîte n'apparaît que lorsque quelque chose a échoué, ou lorsque la sauvegarde est faite mais que certains fichiers n'ont pas pu être lus ou qu'une sauvegarde plus ancienne n'a pas pu être supprimée.
+- **Une sauvegarde qu'un arrêt de l'ordinateur ou une commande kill a empêché de faire** est notée et faite à l'ouverture suivante (0.81). Depuis 0.93.0, la note reste jusqu'à ce que cette sauvegarde soit faite (dans le dossier de sauvegarde, ou en attente à côté comme décrit plus haut) : une ouverture dont la sauvegarde échoue laisse la note pour l'ouverture suivante. **Une ancienne sauvegarde que le nettoyage ne peut pas supprimer** (un fichier verrouillé ou protégé) reste, et un message nomme le fichier et la raison une fois ; supprimez-la à la main. Pendant que vous continuez à écrire, ce message est un petit avis à côté du texte qui ne prend aucune touche.
+- **Sauvegarder vers…** enregistre une sauvegarde où vous voulez, par exemple sur une clé USB.
+- **Restaurer une sauvegarde…** (0.70) liste les sauvegardes du projet ouvert avec leur date, leur taille et leur état complet ou non ; choisissez-en une et **Restaurer et ouvrir** : elle est décompressée dans un nouveau dossier à côté du projet, *… (restored 2026-11-10 14-03)*, son titre indique « (restored …) », et elle s'ouvre là. Le projet que vous aviez ouvert n'est pas modifié. La liste contient les sauvegardes portant l'ID de ce projet, celles sans ID (faites avant 0.92.0) et celles d'un autre projet de même titre ; le nom de fichier dans la liste montre laquelle est laquelle, de sorte que rien ne devient inaccessible. Depuis 0.93.0, elle liste aussi les sauvegardes qui attendent dans le dossier de travail propre du programme (faites alors que le dossier de sauvegarde était inaccessible ; la sauvegarde suivante dans le dossier de sauvegarde les y place) : elles sont marquées « en attente (pas encore dans le dossier de sauvegarde) » et se restaurent de la même façon. Depuis 0.81, une restauration de n'importe quelle taille fonctionne (sauvegardes de 2 Go et plus, fichiers de plus de 1 Go comme des vidéos, plus de 65 535 fichiers), chaque fichier est vérifié au moment où il est écrit, une restauration qui ne tient pas sur le disque n'est pas lancée, une fenêtre de progression permet de l'annuler, et lorsque des fichiers ne peuvent pas être restaurés, le message nomme chacun d'eux avec la raison (disque plein, entrée endommagée). Depuis 0.93.0, le message a trois formes : **restauré** (tout est là), **restauré de façon incomplète** (intitulé ainsi, avec un signe d'avertissement, les fichiers manquants nommés avec la raison : examinez le projet restauré avant de vous y fier) et **non restauré** ; et lorsque le titre du projet restauré n'a pas pu être marqué « (restored …) », le message le signale.
+- **Déplacer les anciennes sauvegardes dans le dossier de sauvegarde…** (0.93) déplace les sauvegardes que les versions 0.70 à 0.90 conservaient dans un dossier à part à l'intérieur du dossier de sauvegarde (*My Novel 1a2b3c4d*) vers le dossier de sauvegarde lui-même, sous leurs noms, afin qu'elles se trouvent avec les autres. La commande n'est active que lorsque le projet ouvert possède un tel dossier contenant des sauvegardes. Elle demande d'abord et indique combien il y en a ; une sauvegarde dont le nom existe déjà dans le dossier de sauvegarde n'est jamais écrasée et reste où elle était ; le rapport indique ce qui a été déplacé et ce qui a été laissé (avec la raison), et l'ancien dossier est supprimé lorsqu'il n'y reste plus rien. Ces sauvegardes n'ont pas d'ID dans leur nom, de sorte que le nettoyage ne les compte ni ne les supprime jamais, comme avant ; **Restaurer une sauvegarde…** les liste aux deux endroits.
+- **Afficher le dossier de sauvegarde** ouvre le dossier de sauvegarde.
+
+**Où une sauvegarde est assemblée (depuis 0.90.3).** Une sauvegarde est empaquetée et vérifiée dans un dossier propre au programme, *~/.local/share/{{APP}}/backup-work* (sous Windows *data\backup-work* dans le dossier du programme), et seul le fichier terminé est placé dans le dossier de sauvegarde, en une seule opération et sous son nom définitif : déplacé là lorsque les deux dossiers se trouvent sur le même disque, sinon copié directement sous son nom définitif et comparé à l'original. Ainsi, un dossier de sauvegarde qu'un programme de synchronisation surveille, ou qui se trouve sur une clé USB ou un disque réseau, ne contient jamais une sauvegarde à moitié écrite ni un fichier temporaire, et une sauvegarde interrompue n'a jamais l'air d'une sauvegarde terminée. (Avant 0.90.3, la sauvegarde était écrite dans le dossier de sauvegarde sous le nom *… .zip.part* puis renommée sur place.) Le dossier de travail est vide entre les sauvegardes, à part une petite note du dossier de sauvegarde qu'il dessert.
+
+**Lorsque le dossier de sauvegarde est inaccessible** (un disque qui n'est pas branché, un dossier qui ne peut pas être créé ni écrit, plus de place), la sauvegarde est faite quand même et attend dans le dossier de travail. Un message l'indique et nomme les deux dossiers, et la sauvegarde suivante du projet met en place les sauvegardes en attente avant la sienne. Il en attend autant qu'il y a de sauvegardes conservées. **Sauvegarder vers…** dans un dossier où l'on ne peut pas écrire le dit simplement avec la raison ; choisissez un autre dossier.
+
+**Copies faites par un programme de synchronisation.** Seuls les fichiers nommés comme {{APP}} nomme ses sauvegardes (*Title #K7T2M bak 2026-11-20 07-56-13.zip*, avec « (2) » ou « (incomplete) » le cas échéant) comptent comme sauvegardes et peuvent être supprimés par le nettoyage. Les autres fichiers du dossier de sauvegarde d'un projet sont laissés tranquilles et ne comptent pas : par exemple les copies qu'un programme de synchronisation fait lorsqu'il a un problème avec un fichier (*… -MyComputer-safeBackup-0001.zip*, *… (conflicted copy).zip*), ou une copie que vous avez faite à la main. (Avant 0.90.3, de telles copies comptaient comme sauvegardes de leur date, et plusieurs d'entre elles pouvaient chasser les vraies sauvegardes plus anciennes.) **Restaurer une sauvegarde…** les liste toujours, afin que vous puissiez restaurer à partir d'une copie ; supprimez vous-même les copies dont vous n'avez pas besoin.
+
+Les grands projets (plus de 4 Go, par exemple avec de l'audio et de la vidéo) sont eux aussi sauvegardés correctement (depuis la version 0.20). Un fichier qui ne peut pas être lu (par exemple à cause de ses droits d'accès, ou un fichier d'un dossier synchronisé qui n'est pas encore sur cet ordinateur) est omis ; la sauvegarde est tout de même faite, mais elle est nommée *… (incomplete).zip*, un message nomme les fichiers manquants (également pour les sauvegardes automatiques à l'ouverture ou à la fermeture d'un projet, 0.65), et aucune sauvegarde plus ancienne n'est supprimée à cause d'elle : le nombre de sauvegardes à conserver ne compte que les sauvegardes complètes. Les sauvegardes les plus anciennes sont déterminées par la date et l'heure de leurs noms, de sorte que renommer le projet ne change rien aux sauvegardes conservées (0.81 ; auparavant, un nouveau titre qui se classait avant l'ancien faisait compter chaque nouvelle sauvegarde comme la plus ancienne, et elle était supprimée aussitôt). Après le nettoyage, le programme vérifie que la nouvelle sauvegarde est toujours là. Parmi les sauvegardes incomplètes, les plus récentes jusqu'au nombre à conserver restent (0.81). Un dossier du projet qui est un lien vers un dossier situé ailleurs est sauvegardé avec ses fichiers (0.81) ; un lien qui ne mène nulle part, ou qui revient dans le projet, rend la sauvegarde incomplète. Si le programme est arrêté par un signal (un arrêt de l'ordinateur qui n'attend pas, une commande kill) alors que **Faire une sauvegarde à la fermeture d'un projet** est activé, il n'y a pas le temps de faire la sauvegarde ; à la prochaine ouverture du projet, la sauvegarde est faite et la barre d'état l'indique (0.81). Le projet est enregistré avant chaque sauvegarde ; si cet enregistrement échoue (disque plein, dossier où l'on ne peut pas écrire), aucune sauvegarde n'est faite et un message en donne la raison, de sorte qu'une sauvegarde ne manque jamais de vos dernières modifications sans que vous le sachiez. La sauvegarde d'un projet au format Scrivener contient le *.scriv* et, à côté, la copie de travail de {{APP}} (*… - working copy of {{APP}}*), avec les mots-clés, les styles, les objets et autres choses que seul {{APP}} connaît.
+
+**Pour restaurer une sauvegarde à la main** (par exemple sur un autre ordinateur) : ouvrez le dossier de sauvegarde, décompressez le fichier ZIP (clic droit > Extraire), et ouvrez le projet qu'il contient avec **Fichier > Ouvrir un projet**.
+
+---
+
+## 16. Options
+
+**Fichier > Options** (**Ctrl+,**) comporte en haut une rangée d'icônes pour les sections, une liste de pages (ou d'onglets) à gauche et les options à droite. Rien ne change tant que vous n'avez pas cliqué sur **OK** ou **Appliquer**. En bas à gauche, **Gérer** exporte le profil en cours dans un fichier et en importe un (**Exporter le profil...**, **Importer un profil...**, par exemple pour emporter vos réglages sur un autre ordinateur ; un ancien fichier d'options (*.qboptions*) peut être importé comme profil ; voir « Profils » plus bas), ouvre **Gérer les profils...**, enregistre l'apparence actuelle comme fichier de thème (un fichier existant n'est remplacé que lorsque le nouveau a été écrit entièrement ; si l'écriture échoue, l'ancien fichier reste tel quel et le message le dit) et liste les thèmes ; **Valeurs par défaut** remet chaque option au réglage standard (vos projets récents, vos propres thèmes, dispositions, barres d'outils et raccourcis restent).
+
+**Où chaque option est conservée.** Pointez une option pour voir où sa valeur est conservée : son info-bulle indique si le projet ouvert la conserve ou si le programme la conserve pour tous les projets, et si cet endroit est **fixe** (un réglage que seul le programme peut conserver, comme la langue) ou **dépend du réglage** **Paramètres pour** en haut (et, sur la page Apparence, **Afficher et modifier l'apparence de**). (0.90.1 affichait un P vert ou un A bleu devant chaque option ; 0.90.2 laisse cela à l'info-bulle.) Sur un petit écran, les pages défilent, de sorte que OK, Annuler et Appliquer restent visibles.
+
+Depuis 0.70, la fenêtre s'ouvre pour **Tous les projets** (les paramètres du programme) ; choisissez **Ce projet** en haut pour régler quelque chose uniquement pour le projet ouvert. Les paramètres propres à un projet peuvent rendre l'enregistrement plus sûr mais jamais moins sûr : le délai d'enregistrement automatique le plus court l'emporte, une sauvegarde que le programme fait reste activée, le plus grand nombre de sauvegardes est conservé, et la fermeture automatique relève du seul programme. Le dernier enregistrement a lieu 10 secondes au plus après une modification, quel que soit le délai d'enregistrement automatique.
+
+- **Général** : **Démarrage** (rouvrir le dernier projet, les boîtes de dialogue de fichiers du bureau, la **Langue** du programme, à partir du prochain démarrage : English, Deutsch, Español, Français, Português (Brasil), Italiano, Русский, Bahasa Indonesia, Türkçe, Polski ou Nederlands (les neuf nouvelles sont des traductions automatiques, signalées comme telles dans la liste tant qu'un locuteur ne les a pas vérifiées ; le manuel, le guide de démarrage rapide et le projet de bienvenue suivent la langue, en anglais lorsqu'une langue n'en a pas ; le premier démarrage prend la langue du système lorsque c'en est une, et la page du premier démarrage propose la même liste) ; **Grouper les chiffres des grands nombres** : nombres de mots, objectifs et statistiques avec un séparateur entre les milliers, comme votre système écrit les nombres (44,825 ou 44.825), ou 44825 lorsque l'option est décochée) ; **Enregistrement** (intervalle d'enregistrement automatique, nombre de projets récents, instantanés à chaque Fichier > Enregistrer) ; **Informations sur l'auteur** (votre nom, adresse, téléphone et e-mail pour les pages de titre, utilisés par les espaces réservés `<$author>`, `<$street>`, `<$city>`, `<$state>`, `<$zip>`, `<$country>`, `<$phone>`, `<$email>`, `<$address>`) ; les options des outils d'écriture (**Bloc-notes**) ; **Modèles partagés** (un dossier supplémentaire de modèles de projet, par exemple un dossier synchronisé entre vos ordinateurs ; ses modèles apparaissent dans Fichier > Nouveau projet…) ; **Citations** (le programme que lance **Format > Bibliographie/citations...**, par exemple Zotero ou JabRef) ; **Séparateurs** (ce qui se place entre les documents fusionnés et entre les notes du bloc-notes ajoutées à un document : un simple retour, une ligne vide, un saut de page, rien, ou votre propre texte) ; **Fermeture automatique** (enregistrer et fermer après un nombre de minutes sans saisie au clavier ni à la souris) ; **Avertissements** (**Afficher la console du journal interne** montre les messages du programme pour cette session, **Réinitialiser tous les avertissements** repose les questions auxquelles vous avez répondu par « Ne plus demander »).
+- **Édition** : **Options** (recharger le dernier zoom des éditeurs, le zoom de texte par défaut de chaque zone, centimètres ou pouces et pas de la règle, la touche Insert pour le mode écrasement, un format de date personnalisé pour Insertion > Date actuelle, ce que montre le compteur en direct, annotations en ligne sans couleur, commentaires et notes de bas de page qui s'arrêtent avant la ponctuation, un point d'insertion en bloc) ; **Mise en forme** (la mise en forme et les styles des nouveaux projets) ; **Révisions** (les cinq couleurs de Format > Mode révision, tirées de la palette partagée).
+- **Comportements** : **Mode composition** (écran, fenêtre principale mise à l'écart, Esc) ; **Liens de document** (où s'ouvrent les liens de document, liens retour) ; **Double-clic** (un double-clic sur le tableau en liège crée une fiche) ; **Glisser-déposer** (documents déposés sur des documents texte, format du texte glissé vers d'autres programmes) ; **Dossiers et fichiers** (les dossiers s'ouvrent comme un tableau en liège ; un texte avec des sous-documents s'ouvre comme un dossier) ; **Lecture** de l'audio et de la vidéo (section 6) ; **Référence rapide** (les panneaux se rouvrent avec leur projet) ; **Touche Entrée** (Return termine la modification d'un synopsis ; Return crée une nouvelle fiche ou une nouvelle ligne) ; **Instantanés** (un message lorsque des instantanés sont pris).
+- **Apparence** : le thème, et onze parties de la fenêtre (Interface générale, Classeur, Mode composition, Tableau en liège, Fiches, Inspecteur et notes, Éditeur principal, Plan, Texte combiné, Barres de progression des objectifs, Marques textuelles), chacune avec ses options, ses polices et ses couleurs, et **Couleurs standard** (depuis 0.95 : les six libellés avec lesquels démarrent les nouveaux projets, les six couleurs de la palette de couleur du texte et de celle du surlignage, et les couleurs avec lesquelles démarrent les deux boutons ; **Valeurs par défaut** rend le réglage standard du programme ; les projets existants conservent leurs libellés). Voir « Thèmes, couleurs et polices » plus bas. **Interface générale** comporte aussi le chemin complet du projet dans la barre de titre et la taille des icônes des barres d'outils.
+- **Corrections** : corrections pendant la saisie (section 4) et **Orthographe** (le dictionnaire, les mots avec des chiffres, le soulignement, la liste de mots personnelle).
+- **Clavier** : le raccourci de chaque commande (section 19).
+- **Partage** : **Importer** (commentaires, notes de bas de page, styles, codage du texte brut, fichiers HTML ; section 14), **Exporter** (le format de fichier et les notes de Fichier > Exporter > Fichiers), **Conversion** (la façon dont les fichiers *.doc* sont lus).
+- **Sauvegarde** : quand sauvegarder (à l'ouverture, à la fermeture, à chaque Fichier > Enregistrer), combien de sauvegardes conserver (une nouvelle installation commence avec les 25 plus récentes ; le champ ne contient que le nombre, les mots l'entourent : « Conserver les [25] sauvegardes les plus récentes de chaque projet »), et où.
+- **Extras**, pour les ajouts propres à {{APP}} : **Carte mentale** (les options des tableaux, la forme et l'aspect des nouvelles notes, l'arrière-plan des tableaux sans couleur propre dans les thèmes clairs et sombres, la taille des icônes sur les notes et les lignes), **Objets** (si les nouveaux projets reçoivent vos propres modèles d'objets ou ceux par défaut), **Modules et plugins** (les formats de compilation et les outils d'écriture installés, les dossiers de plugins), **Rapports de plantage** (après combien de secondes sans réponse un rapport de blocage est écrit, combien de rapports sont conservés).
+- **Voix** (avec le module Transcription vocale) : le modèle, le périphérique, les langues, le microphone et les pauses (voir section 10, *Transcription vocale*). Les outils d'écriture de modules ultérieurs peuvent aussi apporter une section propre.
+
+D'autres fenêtres du programme peuvent ouvrir les options sur une page, par exemple la page Lecture depuis le lecteur multimédia.
+
+Les mises à jour et les modules ont leurs propres fenêtres : **Aide > Modules et mises à jour > Installer une mise à jour ou un module…** et **Aide > Modules et mises à jour > Gestionnaire de modules…** (section 17).
+
+Les paramètres propres à un projet (libellés, statut, types de section, aspect du texte, métadonnées personnalisées, dossiers spéciaux, titre et auteur pour la compilation) se trouvent sous **Projet > Paramètres du projet…**.
+
+### Paramètres pour un projet
+
+En haut de **Fichier > Options**, **Paramètres pour :** choisit où ce que vous modifiez est conservé :
+
+- **Tous les projets (le programme)** : les paramètres du programme, pour chaque projet. C'est là que s'ouvre la fenêtre.
+- **Ce projet** : le projet ouvert conserve ce que vous modifiez ici comme paramètre propre (dans *settings/options.ini* de son dossier). Il s'applique tant que ce projet est ouvert ; ce que le projet ne définit pas provient des paramètres du programme. Le titre de la fenêtre indique « Options : ce projet », et la ligne sous le choix indique combien de paramètres propres le projet possède (cliquez sur le nombre pour les voir). **Utiliser les paramètres du programme** les supprime tous ; les paramètres du programme s'appliquent de nouveau au projet. Une modification faite en dehors des options, par exemple un raccourci modifié dans la fenêtre du clavier ou une barre d'outils réarrangée, va au projet lorsque celui-ci possède déjà sa propre valeur pour cela, et au programme sinon.
+
+Quelques paramètres appartiennent uniquement au programme et ne sont pas affichés pour un projet : les projets récents, la réouverture du dernier projet, les boîtes de dialogue de fichiers du bureau, les emplacements des fenêtres et les dispositions, les durées des rapports de plantage, et l'apparence des nouveaux projets. L'apparence d'un projet a toujours été la sienne : la page **Apparence** montre l'apparence du projet ouvert ou l'apparence des nouveaux projets (**Afficher et modifier l'apparence de** en haut) ; avec **Ce projet** choisi plus haut, elle ne montre que l'apparence du projet. **Valeurs par défaut** et **Gérer > Importer un profil…** n'agissent que sur les paramètres du programme, choisissez donc **Tous les projets** pour eux.
+
+**Quels paramètres l'emportent** (**Général > Démarrage**, pour tous les projets) : lorsque l'option est cochée (le réglage par défaut), les paramètres propres d'un projet l'emportent et le programme complète le reste. Décochée, les paramètres du programme s'appliquent toujours : les paramètres propres des projets ne sont pas utilisés (ils restent dans les projets pour plus tard), et chaque projet affiche l'apparence des nouveaux projets.
+
+**Projet > Enregistrer les paramètres du projet dans un fichier…** inclut les options propres du projet (la section **Options de ce projet**), afin de pouvoir les emporter dans un autre projet.
+
+### Thèmes, couleurs et polices
+
+Un thème définit les couleurs, et si besoin les polices, de chaque zone de la fenêtre. Choisissez-en un sous **Affichage > Thèmes**, ou avec le bouton de thème de la barre d'outils Thèmes (activez la barre d'outils sous **Affichage > Barres d'outils**) ; la modification prend effet aussitôt, sans redémarrage. Neuf thèmes sont intégrés :
+
+| Thème | Aspect |
+|-------|------|
+| Thème sombre de Shelin | fenêtre et classeur sombres, un papier chaud avec du texte noir, Cinzel pour les titres du texte combiné (depuis 0.95 ; figure en tête de la liste et peut être supprimé dans Gérer les thèmes ; il ne revient alors pas après les mises à jour) |
+| Par défaut (suivre le bureau) | les couleurs de votre bureau (le jeu de couleurs KDE) |
+| Clair | fenêtre gris clair, papier blanc |
+| Mode sombre | gris foncé, avec des fiches sombres |
+| Sépia | crème chaud et brun |
+| Ardoise | fenêtre grise, papier blanc sur un bureau gris |
+| Minuit | bleu foncé avec un accent ambré |
+| Océan | bleu-vert clair |
+| Contraste élevé | blanc et jaune sur noir |
+
+Des modules complémentaires peuvent apporter d'autres thèmes (le module « Thèmes supplémentaires » comporte Nuit nordique, Forêt, Graphite, Papier chaud et Aube rose).
+
+**Le bouton de thème** (0.90.2, modifié en 0.91 et 0.94). Un seul bouton, **Thème**, dans la barre d'outils Thèmes, qui est désactivée au départ (**Affichage > Barres d'outils > Thèmes** l'affiche ; avant 0.94, quatre boutons et une liste occupaient un tiers de la barre d'outils principale). Son menu liste :
+
+- **Clair** et **Sombre** : un clic affiche aussitôt ce thème, tel quel.
+- **Mon apparence 1** et **Mon apparence 2** conservent deux apparences à vous. Choisir une apparence vide (le menu indique *vide*) y enregistre l'apparence que vous voyez maintenant (le thème avec toutes les couleurs et polices que vous avez modifiées par-dessus) ; choisir une apparence remplie rétablit son apparence. **Enregistrer l'apparence actuelle comme Mon apparence 1** et **...comme Mon apparence 2**, à la fin du menu, y enregistrent l'apparence que vous voyez maintenant (ils demandent avant de remplacer une apparence). Les deux apparences sont des thèmes ordinaires : elles figurent dans la liste ci-dessous et sous **Affichage > Thèmes**, où elles peuvent aussi être exportées ou supprimées (une apparence supprimée laisse son entrée vide).
+- **Tous les thèmes**, en dessous, celui qui est utilisé étant coché. En choisir un fait ce que fait **Affichage > Thèmes** : le projet ouvert et les nouveaux projets l'utilisent, et la question de savoir s'il faut conserver vos modifications par-dessus se pose comme avant.
+- **Votre propre apparence n'est jamais perdue par un choix.** Le menu montre un thème tel qu'il est, de sorte que ce que vous voyez change réellement. Si des couleurs ou des polices à vous recouvrent le thème affiché, elles seraient perdues par ce choix, elles sont donc d'abord enregistrées : dans une Mon apparence vide sans poser de question (la barre d'état indique où), et lorsque les deux contiennent une apparence, {{APP}} demande s'il faut enregistrer dans Mon apparence 1, dans Mon apparence 2, ou changer sans enregistrer.
+
+Comme tout contrôle de barre d'outils, le bouton de thème peut être déplacé ou retiré sous **Affichage > Barres d'outils > Personnaliser les barres d'outils…**, et toute la barre d'outils Thèmes peut être activée ou désactivée sous **Affichage > Barres d'outils**.
+
+**La page dans les thèmes sombres** (0.70). La page standard de {{APP}} est un papier olive clair à côté d'un bureau gris. Avec un thème sombre, la page est à la place d'un gris très foncé avec du texte blanc (ou la page sombre propre au thème, s'il en a une), de sorte qu'un thème sombre ne laisse pas une page lumineuse dans un cadre sombre. Une couleur de page que vous avez choisie vous-même reste dans tous les thèmes.
+
+**Modifier les couleurs et les polices.** **Fichier > Options > Apparence** (ou **Affichage > Thèmes > Couleurs et polices…**) liste les parties de la fenêtre à gauche. Chacune montre ses options, ses polices et ses couleurs (un clic sur une couleur affiche la palette partagée : les couleurs des libellés, les six couleurs standard et **Autre...**) :
+
+| Partie | Polices | Couleurs |
+|------|-------|--------|
+| Interface générale | menus, boutons et panneaux | fenêtre, Arrière-plan de l'inspecteur (les listes et champs de texte de l'inspecteur), lignes alternées, texte, boutons, sélection, liens, info-bulles, bordures, texte grisé |
+| Classeur | classeur | arrière-plan, titres |
+| Mode composition | (aucune) | arrière-plan, papier, texte |
+| Tableau en liège | (aucune) | tableau en liège, tampon de statut |
+| Fiches | titres des fiches, texte des fiches | fiche, titre, texte, ligne sous le titre, lignes de réglure |
+| Inspecteur et notes | synopsis | Bandeaux de l'inspecteur (la rangée d'onglets, les titres, la ligne Libellé et Statut), libellés, fiche et texte du synopsis, notes et leur texte |
+| Éditeur principal | titre de la barre d'en-tête | papier, texte, l'espace à côté de la colonne de texte, le bureau autour des pages (affiché uniquement en vue page), la barre d'en-tête (normale, éditeur actif, verrouillé sur place) |
+| Plan | plan | arrière-plan, lignes alternées, texte |
+| Texte combiné | titres dans le texte combiné | (aucune) |
+| Barres de progression des objectifs | (aucune) | séance, brouillon, objectif atteint |
+| Marques textuelles | (aucune) | liens dans le texte, résultats de recherche, soulignement orthographique, les marques de Afficher les caractères invisibles |
+
+**Chaque projet conserve sa propre apparence.** Le thème du classeur, de l'éditeur, du tableau en liège, du plan, de l'inspecteur et du mode composition, vos propres couleurs et polices pour ces éléments, la largeur de la colonne de texte et la bordure à côté du texte appartiennent au projet : les modifier dans un projet laisse les autres tels quels, et une mise à jour de {{APP}} ne change jamais l'apparence d'un projet existant. La liste **Afficher et modifier l'apparence de** en haut de **Fichier > Options > Apparence** choisit l'apparence que la page montre et modifie : **Ce projet** (le projet ouvert ; choisi en premier) ou **Nouveaux projets** (l'apparence avec laquelle démarre un nouveau projet). Passer de l'un à l'autre conserve ce que vous avez modifié dans chacun jusqu'à ce que vous appuyiez sur **Appliquer** ou **OK**. Les couleurs des menus et des panneaux (**Interface générale**) et la police des menus, des boutons et des panneaux sont les mêmes dans chaque projet. Un projet ouvert pour la première fois par la version 0.40.2 ou ultérieure conserve l'apparence qu'il avait jusque-là. **Affichage > Thèmes** définit le thème du projet ouvert et des nouveaux projets à la fois.
+
+**Menus du clic droit.** Partout où vous faites un clic droit, le menu comporte un sous-menu **Apparence** avec les couleurs et les polices de ce qui se trouve sous la souris : sur le texte et sur le papier à côté, le papier, le texte, l'espace à côté de la colonne, les liens, les résultats de recherche, le soulignement orthographique, la largeur de colonne et la bordure ; sur la barre d'en-tête au-dessus d'un éditeur, ses couleurs et sa police ; dans le classeur, son arrière-plan, ses titres, sa police, son retrait et les couleurs des libellés ; sur le tableau en liège, le liège, les fiches et leurs polices, les tampons de statut, la largeur des fiches ; dans le plan, son arrière-plan, ses lignes, son texte et sa police ; dans l'inspecteur et ses notes, les bandeaux, les libellés, la fiche de synopsis et les notes, ainsi que l'Arrière-plan de l'inspecteur, qui est le même dans chaque projet ; dans le mode composition, son arrière-plan, son papier et son texte. Une couleur affiche la palette partagée et **Couleur du thème** ; **Options d'apparence...** ouvre cette page des options. Comme les options, ces menus modifient l'apparence du projet ouvert (la première ligne du sous-menu l'indique) ou, sans projet, l'apparence des nouveaux projets.
+
+Cliquez sur une couleur pour la modifier, sur un bouton de police pour choisir une police. La petite image en haut montre le résultat avant que vous n'appuyiez sur **Appliquer** ou **OK**. Vos modifications se placent par-dessus le thème : une entrée modifiée est affichée en gras, le bouton **↺** à côté la rend au thème, et **Réinitialiser les couleurs et polices du thème** le fait pour toutes. Une couleur que vous n'avez pas modifiée et que le thème ne définit pas suit les autres ; par exemple, le classeur utilise la couleur des listes tant que vous ne lui en donnez pas une propre. L'**Arrière-plan de l'inspecteur** ne colore que les listes et les champs de texte de l'inspecteur ; les champs des barres d'outils, la règle et les listes des options ont la couleur de la fenêtre et des menus.
+
+La police et la taille du texte que vous écrivez ne font pas partie du thème : elles appartiennent au projet (**Projet > Paramètres du projet… > Mise en forme**, section 4).
+
+**Vos propres thèmes.** **Enregistrer comme thème…** dans les options (ou **Affichage > Thèmes > Enregistrer l'apparence actuelle comme thème…**) enregistre le thème avec vos modifications sous un nouveau nom. Il apparaît alors dans **Affichage > Thèmes** comme les autres. **Affichage > Thèmes > Gérer les thèmes…** liste tous les thèmes : **Utiliser ce thème**, **Dupliquer…** (également pour les thèmes intégrés, afin d'obtenir un point de départ à vous), **Renommer…** et **Supprimer** (uniquement vos propres thèmes), **Exporter…** (écrit un fichier *.qbtheme* que vous pouvez transmettre) et **Importer…** (ajoute un tel fichier).
+
+Lorsque vous choisissez un autre thème alors que vous avez des modifications à vous, {{APP}} demande s'il faut les conserver avec le nouveau thème ou utiliser le thème tel quel.
+
+Les liens dans votre texte sont enregistrés avec un seul bleu ; sur un papier sombre, ils s'affichent dans un bleu plus clair (**Éditeur principal > Liens dans le texte**). Le texte que vous avez coloré vous-même garde sa couleur dans tous les thèmes.
+
+### Profils
+
+Un thème n'est qu'un aspect : des couleurs et des polices. Un **profil** (depuis 0.95) conserve tout le reste des paramètres du programme : la langue, toutes les options, les barres d'outils et leurs emplacements, la taille et l'emplacement de la fenêtre, les panneaux affichés, les séparateurs, le jeu de raccourcis clavier et vos raccourcis, les sauvegardes et le dossier de sauvegarde, les recherches de mises à jour, les couleurs standard, les dispositions enregistrées de **Affichage > Disposition**, et il nomme son thème : changer de profil change donc aussi l'aspect. Votre nom et votre adresse, le nom de cet ordinateur, les projets récents et les emplacements du projet de bienvenue ne font pas partie d'un profil.
+
+- **Changer.** **Affichage > Profils** liste les profils ; un clic change aussitôt, sans redémarrage (la langue est la seule chose qui demande un redémarrage ; le programme le dit). Le profil que vous quittez est d'abord enregistré. La barre d'outils **Profils** (**Affichage > Barres d'outils > Profils**, désactivée au départ) montre le profil en cours ; un clic sur son bouton liste les profils. Les paramètres propres d'un projet (**Paramètres pour : Ce projet**) l'emportent toujours sur le profil. Le projet ouvert affiche l'aspect du nouveau profil, comme lorsque vous choisissez un thème sous **Affichage > Thèmes**.
+- **Default.** Un programme déjà utilisé auparavant prend ses paramètres comme profil **Default** lors de la mise à jour vers 0.95, de sorte que rien n'est perdu. Une nouvelle installation démarre avec les paramètres standard du programme, dans le thème clair ou sombre selon le réglage de votre système lorsque celui-ci l'indique. La page du premier démarrage remplit **Default**. **Default** ne peut pas être supprimé.
+- **Un nouveau profil** à partir des paramètres tels qu'ils sont maintenant : **Affichage > Profils > Enregistrer les paramètres comme nouveau profil…** (ou **Gérer les profils… > Enregistrer les paramètres comme nouveau profil…**). Le nouveau profil devient celui en cours. **Gérer les profils…** renomme, copie et supprime aussi des profils (le profil en cours ne peut pas être supprimé ; changez d'abord de profil).
+- **Shelin** est un profil livré avec le programme. Il figure en tête de la liste, définit Sitka pour le nouveau texte et son propre thème, et peut être supprimé ; il ne revient alors pas après les mises à jour. Les polices qu'il nomme et qui ne sont pas installées (Cinzel, Sitka) sont remplacées par d'autres. Son choix du moteur de lecture nécessite le module Extra Video and Audio Formats ; les choix de modèles des outils d'écriture ne s'appliquent que là où ces modules et ces modèles sont installés.
+- **Tailles sur un autre écran.** Les largeurs du classeur, de l'éditeur et de l'inspecteur sont conservées en proportions de la fenêtre ; un profil créé sur un grand écran montre les mêmes proportions sur un écran plus petit ou une tablette (les colonnes latérales gardent une largeur lisible), et la fenêtre est ramenée dans l'écran.
+- **Exporter et importer.** **Gérer les profils… > Exporter…** (ou **Fichier > Options > Gérer > Exporter le profil…**) écrit le profil dans un seul fichier (*.qbprofile*) avec ses dispositions et, s'il s'agit d'un des vôtres, son thème. **Importer…** ajoute un tel fichier comme nouveau profil (on n'y passe pas). Un fichier peut nommer des programmes, des dossiers, des fichiers ou des adresses ; comme pour les autres fichiers venant de quelqu'un d'autre, on vous demande avant qu'ils soient repris (un dossier qui n'existe pas sur cet ordinateur ne servirait à rien). Un profil qui n'a pas été enregistré par ce programme sur cet ordinateur (un fichier copié ou synchronisé dans le dossier des profils) pose la même question sur ses programmes, dossiers, fichiers et adresses lorsque vous y passez. Un ancien fichier d'options (*.qboptions*) peut lui aussi être importé comme profil.
+
+**Projet > Enregistrer les paramètres du projet dans un fichier…** reste comme avant.
+
+---
+
+## 17. Mises à jour et modules complémentaires
+
+**Aide > Dépannage et développement > Guide du développeur : mises à jour et modules complémentaires** explique, pour les personnes qui compilent {{APP}} ou écrivent des modules complémentaires, comment fonctionnent les mises à jour et les modules complémentaires et quels outils les produisent ; il contient aussi ce dont un ami féru de technique a besoin pour tout configurer (moteurs multimédias, plugins de formats de compilation, fichiers de paquet, de thème, de disposition et de format de script, les fichiers à l'intérieur d'un dossier de projet) ainsi que les variables d'environnement que lit le programme.
+
+{{APP}} est un seul fichier de programme (l'AppImage). Les mises à jour et les extensions se présentent sous forme de petits fichiers de paquet se terminant par **.qbpkg**. Il en existe trois sortes, toutes installées de la même façon :
+
+- **Mise à jour du programme** : une version plus récente de {{APP}} lui-même.
+- **Module complémentaire** : une extension que vous pouvez activer et désactiver, comme des thèmes de couleurs, des modèles de projet, des formats de compilation, des dictionnaires, des outils d'écriture (section 10), la lecture de l'audio et de la vidéo et ses formats supplémentaires (section 6), des importateurs pour les anciens fichiers Word et les pages web (section 14).
+
+Les mises à jour du programme et les modules complémentaires se trouvent sur la page **Releases** de la page du projet (section 1), à côté de l'AppImage.
+- **Lot de mise à jour** : un seul fichier qui contient une mise à jour du programme et plusieurs modules complémentaires, installés ensemble.
+
+### Rechercher des mises à jour
+
+Depuis 0.92.0, {{APP}} peut rechercher lui-même les mises à jour. C'est la seule chose pour laquelle le programme contacte Internet de sa propre initiative, et vous pouvez la désactiver.
+
+- **Aide > Modules et mises à jour > Rechercher des mises à jour au démarrage** est l'interrupteur (activé au départ). **Aide > Modules et mises à jour > Rechercher des mises à jour maintenant** effectue la recherche aussitôt, quel que soit l'état de l'interrupteur.
+- **Le premier démarrage** l'explique sur sa page, avant que quoi que ce soit ne soit contacté : une case à cocher *Rechercher des mises à jour au démarrage du programme* (cochée) avec la remarque qu'aucune information vous concernant n'est envoyée ; un seul **OK** ferme la page. Un programme démarré avant 0.94.0 qui n'a pas vu cette remarque l'affiche sous forme de boîte avec **OK** et **Désactiver**.
+- **Ce qui se passe** : quelques secondes après le démarrage, au plus une fois par jour, le programme récupère un petit fichier sur la page du projet (*shelin-boop.github.io/Quillbinder_Collection/updates-1.json*) ainsi que la signature de ce fichier. La requête nomme le programme (« {{APP}} ») et rien d'autre : ni version, ni système, ni identifiant, ni cookie. Comme pour toute connexion, le serveur (GitHub) voit votre adresse Internet et l'heure. Le fichier liste la version la plus récente du programme et des modules complémentaires du projet ; votre programme la compare, sur votre ordinateur, avec ce qui est installé. Le fichier ne compte que s'il porte la signature de la clé de publication du projet, et un fichier plus ancien qu'un fichier déjà vu est ignoré.
+- **Lorsqu'il existe une mise à jour**, une fenêtre la nomme : le programme ou le module, votre version et la nouvelle, les nouveautés et sa nature. Une mise à jour **fonctionnelle** comporte trois boutons : **Télécharger et installer**, **Ignorer cette version** (plus de rappels pour cette version) et **Reporter**. Le report attend plus longtemps à chaque fois : 1 jour, 1 semaine, 2 semaines, 4 semaines ; puis il y a un dernier rappel, après quoi les rappels pour cette version s'arrêtent. Une mise à jour **recommandée (sécurité)** n'a que deux boutons, **Télécharger et installer** et **Reporter** : on ne peut pas l'ignorer, et après le quatrième report, elle revient toutes les 4 semaines. Lorsque les deux sortes sont présentes, une seule fenêtre les liste et suit les règles de sécurité. La fenêtre apparaît à côté de votre travail et ne prend pas le clavier.
+- **Télécharger et installer** récupère les fichiers que nomme la liste, vérifie chacun d'eux par rapport à la taille et à la somme de contrôle de la liste signée et l'installe : un module complémentaire ou une mise à jour du programme comme le fait **Aide > Modules et mises à jour > Installer une mise à jour ou un module…** (uniquement les paquets portant la signature du projet). Il propose ensuite de redémarrer le programme.
+- **Lorsque la nouvelle version nécessite une nouvelle AppImage** (d'autres bibliothèques que celles de votre AppImage), {{APP}} la télécharge, la place à l'endroit de l'AppImage que vous avez lancée, où qu'il soit et sous le même nom de fichier, conserve celle que vous aviez à côté sous le nom *…AppImage.before-update*, puis redémarre. Supprimez le fichier conservé lorsque la nouvelle version vous convient. Si l'on ne peut pas écrire dans le dossier de votre AppImage, le nouveau fichier va dans votre dossier Téléchargements et un message indique ce qu'il faut faire.
+- **Sous Windows** (0.92.0), une telle version se présente sous la forme de son programme d'installation. {{APP}} le télécharge dans son propre dossier (*data\update-setup*), le vérifie par rapport à la liste signée du projet et demande confirmation. Avec **Fermer et mettre à jour maintenant**, {{APP}} se ferme, et le programme d'installation décompresse la nouvelle version dans le dossier que vous utilisez, sans ses pages, et la lance ; vos paramètres, vos modules complémentaires et tout le reste de *data* demeurent. Avec **Plus tard**, rien ne change et la mise à jour est de nouveau proposée. Si Windows ne lance pas le programme d'installation (il ne porte pas de certificat de signature de code), un message nomme le fichier, et vous pouvez aussi télécharger la version actuelle depuis la page du projet.
+- **Lorsque l'adresse est inaccessible**, le programme essaie deux fois, à 5 secondes d'intervalle, puis affiche un petit texte dans la barre du pied de page du premier éditeur, à la place du texte d'enregistrement, qui apparaît et disparaît deux fois en fondu. Aucune fenêtre, et au plus une fois par jour. (**Rechercher des mises à jour maintenant** répond par un message à la place.)
+- **Désactivé**, le programme ne contacte rien, comme avant 0.92.0. Pour les ordinateurs configurés pour d'autres personnes, la variable d'environnement `QB_NO_UPDATE_CHECK=1` empêche la recherche automatique de s'exécuter quel que soit l'état de l'interrupteur.
+- Une AppImage d'une version antérieure à 0.92.0 qui exécute une mise à jour plus récente du programme ne peut pas établir de connexions sécurisées ; la recherche le signale alors lorsque vous la demandez, et reste silencieuse sinon. Téléchargez une fois l'AppImage actuelle.
+- Ce que le programme retient à ce sujet (l'interrupteur, l'heure de la dernière recherche, ce que vous avez ignoré ou reporté) se trouve dans *updates-state.json* dans le dossier de données du programme.
+
+### Installer un paquet
+
+1. Choisissez **Aide > Modules et mises à jour > Installer une mise à jour ou un module…** et sélectionnez le fichier .qbpkg, ou double-cliquez sur le fichier dans votre gestionnaire de fichiers.
+2. {{APP}} montre ce que contient le paquet et ce qui est nouveau. Cliquez sur **Installer**.
+3. Si le paquet contient une mise à jour du programme, {{APP}} demande à redémarrer. Votre projet ouvert est enregistré puis rouvert.
+
+{{APP}} vérifie chaque paquet avant de l'installer : les fichiers endommagés et les paquets conçus pour une autre version sont refusés. Une mise à jour du programme est lancée une fois, de façon invisible, à titre d'essai ; si elle ne fonctionne pas sur votre ordinateur, elle n'est pas installée. Les éléments d'un lot sont installés ensemble : lorsque l'un d'eux ne peut pas être installé, aucun ne l'est (0.65).
+
+**Signatures** (0.65). Chaque paquet de la page Releases du projet est signé avec la clé du projet, et {{APP}} possède la moitié publique de cette clé. La fenêtre d'installation affiche **Signé par le projet Quillbinder** pour un tel paquet : c'est le paquet que le projet a publié, inchangé.
+
+- Un paquet dont la signature ne correspond pas (modifié après sa signature, ou endommagé) n'est jamais installé.
+- Une **mise à jour du programme** n'est installée qu'avec la signature du projet.
+- Un **module complémentaire** sans cette signature (un module que vous ou une autre personne avez créé) n'est installé qu'après un avertissement clair, avec **Annuler** comme choix par défaut. En ligne de commande (`--install <file>`), un paquet sans la signature du projet n'est installé que si vous ajoutez `--allow-unsigned`.
+
+**Clés de modules** (0.91.3). Les modules officiels, y compris ceux écrits par d'autres auteurs, peuvent être signés avec une clé qui leur est propre au lieu de la clé du projet. Le projet se porte garant d'une telle clé avec sa propre clé, au moyen d'un certificat qui se trouve dans le paquet et qui autorise la clé à signer des modules et rien d'autre. La fenêtre d'installation nomme alors la clé : *Signé avec la clé de module « Quillbinder official add-ons », dont le projet Quillbinder se porte garant*.
+
+- Une **mise à jour du programme** signée avec une clé de module est refusée comme une mise à jour non signée : les mises à jour du programme exigent la clé propre du projet.
+- Une clé de module dont le projet ne se porte pas garant compte comme une absence de signature : le module n'est installé qu'après l'avertissement.
+- Les modules signés avec la clé propre du projet, comme tous l'étaient jusqu'à 0.91.2, restent dignes de confiance. À partir de 0.91.3, les modules propres du projet sont aussi signés avec la clé de module.
+- Les versions jusqu'à 0.91.2 ne connaissent pas les clés de modules et avertissent avant d'installer un module signé avec l'une d'elles : installez d'abord la mise à jour du programme (elle est signée avec la clé propre du projet), puis les modules.
+
+**La fenêtre qui demande confirmation avant l'installation d'un module** (0.94.0) indique d'abord, en une phrase ou deux, ce que fait le module. Les lignes techniques (les bibliothèques qu'il apporte, le moteur de reconnaissance vocale ou graphique, l'environnement d'exécution pour lequel il a été conçu) se trouvent sous **Détails**, qui reste replié tant que vous ne l'ouvrez pas.
+
+**Vérifier vous-même un téléchargement.** Chaque publication contient aussi *SHA256SUMS.txt* (la somme de contrôle de chaque fichier), sa signature *SHA256SUMS.txt.sig* et la clé publique *quillbinder-signing-public.pem*. Dans un terminal, dans le dossier contenant les téléchargements :
+
+    openssl pkeyutl -verify -pubin -inkey quillbinder-signing-public.pem -rawin -in SHA256SUMS.txt -sigfile SHA256SUMS.txt.sig
+    sha256sum -c --ignore-missing SHA256SUMS.txt
+
+La première commande répond *Signature Verified Successfully*, la seconde *OK* pour chaque fichier que vous avez téléchargé. Pour être sûr que le fichier de clé lui-même est celui du projet, comparez ses 32 octets (`openssl pkey -pubin -in quillbinder-signing-public.pem -outform DER | tail -c 32 | od -An -tx1`) avec la clé figurant dans les sources du programme (*src/core/Signing.cpp*, et *packaging/quillbinder-signing-public.pem*) : ils commencent par *bc 3c 58 00 08 3f 66 e6*.
+
+### Le Gestionnaire de modules
+
+**Aide > Modules et mises à jour > Gestionnaire de modules…** montre ce qui est installé.
+
+- **Version du programme** : la version intégrée à votre AppImage et chaque mise à jour installée. Celle qui est marquée *en cours d'utilisation* est celle qui est utilisée. Pour revenir à une version antérieure, sélectionnez-la et cliquez sur **Utiliser cette version**, puis redémarrez. Les mises à jour installées dont vous n'avez plus besoin peuvent être supprimées.
+- **Modules complémentaires** : décochez un module pour le désactiver sans le supprimer ; **Supprimer le module** l'efface. Les thèmes, modèles et formats de compilation d'un module apparaissent aux endroits habituels : **Affichage > Thèmes**, la fenêtre **Nouveau projet** et la fenêtre **Compiler**.
+- Lorsqu'un choix fait ici ne peut pas être écrit (disque plein, dossier où l'on ne peut pas écrire), un message l'indique avec le nom du fichier (0.92.0). Auparavant, la fenêtre montrait le choix comme effectué et il était annulé au démarrage suivant sans un mot. Il en va de même pour une installation : un module ou une version du programme dont l'entrée n'a pas pu être écrite est signalé comme non installé, avec la marche à suivre. Lorsqu'une installation échoue à mi-chemin et que la version installée auparavant ne peut pas être remise en place, le message nomme le dossier où elle se trouve et le nom à donner à ce dossier.
+
+### Si une mise à jour ne démarre pas
+
+Si une mise à jour du programme ne démarre pas deux fois de suite, {{APP}} la désactive de lui-même et démarre la version intégrée à l'AppImage, avec un message qui vous l'indique. Rien dans vos projets n'en est affecté.
+
+### Lorsqu'une nouvelle AppImage est nécessaire
+
+Les mises à jour du programme s'exécutent avec les bibliothèques contenues dans votre AppImage. De temps en temps, une mise à jour plus importante nécessite une nouvelle AppImage ; la fenêtre d'installation vous indique lorsqu'un paquet ne convient pas à la vôtre. Remplacez l'ancien fichier AppImage par le nouveau ; vos paramètres, vos modules complémentaires et vos projets restent tels quels.
+
+0.80.0 est une telle version : son AppImage embarque un nouveau Qt (la version propre de The Qt Company de Qt 6.12 au lieu du Qt 6.4.2 d'Ubuntu). Les modules complémentaires contenant du code de programme (*Lecture multimédia*, *Formats vidéo et audio supplémentaires*, *Transcription vocale*, les outils d'écriture et les importateurs) doivent être réinstallés dans leurs versions pour 0.80.0 (le lot et **media-all-formats.qbpkg** sur la page Releases les apportent tous) ; d'ici là, le Gestionnaire de modules marque les anciens comme conçus pour un programme plus ancien, et leur code n'est pas chargé. La version complète de 0.80.0 apporte tous les modules.
+
+0.93.0 en est une autre (Linux) : son AppImage embarque Qt 6.12.1, dont les bibliothèques intégrées (zlib, HarfBuzz, PCRE2, libpng, libjpeg-turbo, FreeType et d'autres) sont plus récentes et comportent des correctifs de sécurité. Une mise à jour du programme ne peut pas les apporter, la recherche de mises à jour propose donc la nouvelle AppImage. Les modules complémentaires contenant du code de programme de l'AppImage précédente (ceux listés plus haut) sont réinstallés de la même façon dans leurs versions pour 0.93.0, et les modules multimédias embarquent désormais FFmpeg 9.1.
+
+Une nouvelle AppImage apporte aussi une nouvelle version du programme qui lui est propre (par exemple l'AppImage 0.20.0). Elle démarre cette version, même si vous aviez installé des mises à jour dans l'ancienne AppImage : les mises à jour plus anciennes sont désactivées et restent listées sous **Aide > Modules et mises à jour > Gestionnaire de modules…**, où vous pouvez les supprimer. Si le nouveau fichier porte un autre nom ou se trouve dans un autre dossier que l'ancien, choisissez une fois **Aide > Ajouter au menu des applications**, afin que l'entrée de menu et les projets ouverts par double-clic utilisent le nouveau fichier.
+
+---
+
+## 18. Le dialecte Markdown
+
+Vous n'avez pas besoin de le connaître pour utiliser {{APP}} ; l'éditeur affiche du texte mis en forme. Cela ne compte que si vous ouvrez les fichiers texte avec un autre programme. {{APP}} écrit du Markdown avec ces règles :
+
+- **Chaque ligne est un paragraphe**, comme dans un traitement de texte. Une ligne vide est un paragraphe vide.
+- Titres : de `# ` à `###### ` au début de la ligne.
+- Citation en bloc : `> `. Paragraphe centré : `->text<-`. Tout autre style de paragraphe : `::Style Name:: text`.
+- Styles de caractère (depuis la version 0.4) : `<span class="Style Name">text</span>`. Seuls les noms des styles sont écrits dans le texte. L'aspect d'un style est enregistré une seule fois, dans le fichier du projet, de sorte qu'un style modifié n'exige aucun changement dans les documents.
+- Listes : `- ` et `1. ` ; deux espaces par niveau d'imbrication.
+- `**bold**`, `*italic*`, `~~strikethrough~~`, `==highlight==`, `<u>underline</u>`, `<sup>superscript</sup>`, `<sub>subscript</sub>`.
+- Couleurs de révision : `<rev1>…</rev1>` à `<rev5>…</rev5>`.
+- Liens : `[text](https://example.com)` ; liens vers des documents du projet : `[text](qb://ID)`.
+- Images : `![](images/picture.png){width=300}` (les images sont stockées dans le dossier du document). La description d'une image (0.62) est le texte entre les crochets : `![A brass lamp](images/lamp.png){width=300}`.
+- Tableaux (0.62) : une ligne `:::table` avec la conception entre accolades (JSON), une ligne par rangée avec les cellules entre `|` (les paragraphes d'une cellule séparés par `<p/>`, une cellule recouverte par une cellule fusionnée laissée vide, un `|` dans le texte écrit `\|`), et une ligne `:::` à la fin.
+- Une image à côté du texte ou centrée (0.62) : `:::figure {"pos":1,"width":168}` (1 à gauche, 2 à droite, 3 centrée), la ligne de l'image, les lignes de la légende, et `:::`.
+- Un saut de ligne à l'intérieur d'un paragraphe : `<br>`.
+- Polices définies à la main (depuis la version 0.3) : `<span style="font-family:'DejaVu Sans'; font-size:14pt; color:#aa0000">text</span>`. Les déclarations sont du CSS ordinaire, de sorte que d'autres programmes Markdown qui admettent le HTML les affichent aussi. Entrées possibles : `font-family`, `font-size` (pt), `font-weight` (100 à 900), `color`, `letter-spacing` (em), `font-variant:small-caps`, `text-transform:uppercase`.
+- Mise en forme de paragraphe définie à la main (depuis la version 0.3) : une liste entre accolades au début de la ligne, avant tout autre préfixe : `{: align=right left=10mm right=5mm first=0mm before=6pt after=12pt line=1.5 tabs=20mm,50mmR} text`. `line` est un multiple (`1.5`), une hauteur exacte (`14pt`) ou un minimum (`14pt+`). Les taquets de tabulation se terminent par `R` (droite), `C` (centré) ou `D` (virgule décimale) ; l'absence de lettre signifie gauche. Seules les entrées que vous avez définies sont écrites.
+- Les éléments de script (depuis la version 0.10) sont des styles de paragraphe nommés d'après l'élément : `::Script > Scene Heading:: INT. LIGHTHOUSE - NIGHT`. L'aspect d'un élément est enregistré une seule fois, dans le fichier du projet, avec le format de script.
+- Un saut de page avant un paragraphe (provenant de scénarios et de fichiers RTF importés, depuis la version 0.10) : `{: page=before} text`.
+- Les versions antérieures à 0.62 affichent les tableaux et les figures sous forme de lignes de texte (`:::table` ...). Si vous revenez à une version plus ancienne, ne modifiez pas les documents contenant des tableaux ou des images à côté du texte.
+- La version 0.2 affiche les deux marqueurs sous forme de texte brut. Si vous revenez à la version 0.2 avec le Gestionnaire de modules, ne modifiez pas les documents qui les contiennent.
+- Les versions antérieures à 0.4 ne connaissent pas vos propres styles : elles affichent `<span class=…>` sous forme de texte brut et traitent les paragraphes de vos propres styles comme du corps de texte. Si vous revenez à une version plus ancienne, ne modifiez pas les documents qui utilisent vos propres styles.
+- Les versions antérieures à 0.10 traitent les éléments de script comme du corps de texte, et elles suppriment les noms des éléments d'un script dès qu'il a été affiché dans l'éditeur et que le projet est enregistré. Si vous revenez à une version plus ancienne, n'y ouvrez pas vos scripts (voir section 20).
+- Une barre oblique inverse fait du caractère suivant du texte ordinaire : `\*` est une étoile, pas de l'italique.
+- Les notes suivent la convention CriticMarkup :
+  - `{>>inline annotation<<}`
+  - `^[inline footnote]`
+  - `{==text==}{>>linked comment<<}`
+  - `{==text==}^[linked footnote]`
+  - Un commentaire peut commencer par une couleur : `{>>@#ff8800 text<<}`.
+
+**Fichier > Convertir un fichier Markdown ⇄ RTF…** lit à la fois ce dialecte et le Markdown standard (où les paragraphes sont séparés par des lignes vides), et lorsqu'il écrit du Markdown, il demande lequel des deux vous souhaitez.
+
+---
+
+## 19. Raccourcis clavier
+
+### Modifier les raccourcis
+
+**Fichier > Options > Clavier** (ou **Aide > Raccourcis clavier**) liste chaque commande, regroupée par menu, avec son raccourci et le raccourci standard avec lequel le programme est livré. Les styles du projet ouvert et les dispositions sont également listés, de sorte qu'un style ou une disposition peut avoir un raccourci propre.
+
+1. Trouvez la commande : faites défiler, ou saisissez une partie de son nom ou un raccourci tel que « Ctrl+K » dans le champ de recherche.
+2. Cliquez sur la commande, cliquez dans le champ de raccourci sous la liste, puis appuyez sur les nouvelles touches.
+3. Si une autre commande possède ce raccourci, on vous demande s'il faut le lui retirer. L'autre commande n'a alors plus de raccourci tant que vous ne lui en donnez pas un nouveau.
+
+**Aucun raccourci** retire le raccourci de la commande sélectionnée, **Standard** lui rend celui avec lequel elle est livrée, et **Tout en standard** annule toutes vos modifications. Vos modifications sont affichées en gras. Un raccourci nécessite Ctrl, Alt ou Meta, ou doit être une touche de fonction, car les lettres seules sont nécessaires pour écrire. **Exporter** et **Importer** enregistrent votre jeu de raccourcis dans un fichier (*.qbkeys*) et en chargent un, par exemple pour l'emporter sur un autre ordinateur.
+
+Les raccourcis des styles appartiennent au nom du style : « Citation en bloc » a son raccourci dans chaque projet qui possède un style de ce nom.
+
+### Raccourcis et disposition du clavier
+
+Quelques-uns des raccourcis standard sont des touches qui nécessitent **AltGr** sur un clavier allemand : **Ctrl+{**, **Ctrl+|** et **Ctrl+}** (aligner à gauche, centrer, aligner à droite), **Ctrl+[** et **Ctrl+]** (reculer et avancer), **Ctrl+\\** (la liste des éléments de script) et **Ctrl+=** (indice). Depuis 0.94.0, le programme examine la disposition du clavier du système **au tout premier démarrage** (lorsqu'il n'existe aucun paramètre de raccourcis ni démarrage antérieur) et conserve la réponse. Avec une **disposition américaine**, ou toute disposition autre qu'allemande, le jeu habituel ci-dessus reste en place. Avec une **disposition allemande (ou autrichienne)**, ces commandes reçoivent des touches qui ne nécessitent pas AltGr (le même jeu avec une **disposition française, belge, espagnole, italienne, portugaise, turque ou néerlandaise**, dont les crochets et les accolades nécessitent aussi AltGr ; la disposition polonaise de programmeur, dont les lettres AltGr ć et ń entrent en collision avec Ctrl+Alt+C et Ctrl+Alt+N, ne déplace que les quatre commandes nommées sous le tableau) :
+
+| Commande | Jeu allemand |
+|---------|------------|
+| Aligner à gauche / centrer / aligner à droite (aussi dans la carte mentale) | Alt+Shift+L / Alt+Shift+E / Alt+Shift+R |
+| Justifier (carte mentale) | Alt+Shift+J |
+| Reculer / avancer | Alt+Shift+B / Alt+Shift+F |
+| Liste des éléments de script | Ctrl+Shift+O |
+| Indice | Ctrl+Shift+D |
+| Premier plan / arrière-plan (carte mentale) | Ctrl+Shift+PageUp / Ctrl+Shift+PageDown |
+
+Les dispositions qui utilisent AltGr pour des lettres (polonaise, brésilienne et les autres ci-dessus) déplacent aussi quatre commandes hors de Ctrl+Alt+lettre, que Windows lit comme AltGr : copier la mise en forme Ctrl+Shift+Y, coller la mise en forme Ctrl+Shift+U, aller aux notes du document Ctrl+Shift+X et (pas sur la disposition polonaise) afficher la règle Ctrl+Shift+W. Les claviers russe et indonésien gardent le jeu habituel.
+
+Les menus affichent chaque touche telle que la disposition la nomme. Un programme utilisé avant 0.94.0 conserve ses raccourcis tels qu'ils étaient (rien ne change de soi-même), tout comme chaque raccourci que vous avez défini vous-même sous **Fichier > Options > Clavier** : un raccourci enregistré n'est jamais remplacé. Depuis 0.95, le bouton **Utiliser le jeu correspondant à ma disposition de clavier…** en bas de **Fichier > Options > Clavier** applique le jeu qui convient à la disposition de clavier utilisée maintenant (pour un clavier allemand, les touches ci-dessus). Il liste d'abord les raccourcis standard qui changent ; les raccourcis que vous avez définis vous-même restent. Le jeu appartient à votre profil. Lorsque le système n'indique pas sa disposition, le jeu habituel est utilisé. (Linux : les paramètres de clavier du bureau ou du serveur X ; Windows : la langue de la disposition du clavier ; Android : la langue du clavier.)
+
+### Les raccourcis standard
+
+| Action | Raccourci |
+|--------|----------|
+| Nouveau projet / ouvrir un projet | Ctrl+Shift+N / Ctrl+O |
+| Enregistrer / fermer le projet / quitter | Ctrl+S / Ctrl+W / Ctrl+Q |
+| Nouveau document / nouveau dossier | Ctrl+N / Alt+Shift+N |
+| Renommer / dupliquer | F2 / Ctrl+D |
+| Déplacer l'élément vers le haut / le bas / hors du dossier / dans l'élément | Ctrl+Alt+Up / Down / Left / Right |
+| Diviser à la sélection / avec la sélection comme titre | Ctrl+K / Ctrl+Shift+K |
+| Fusionner des documents | Ctrl+Shift+M |
+| Texte combiné / tableau en liège / plan | Ctrl+1 / Ctrl+2 / Ctrl+3 |
+| Afficher ou masquer le classeur / l'inspecteur | Ctrl+Alt+B / Ctrl+Alt+I |
+| Mode composition / plein écran | F11 / Ctrl+Shift+F11 |
+| Activer le classeur / activer l'éditeur / autre éditeur | Alt+1 / Alt+2 / F6 |
+| Reculer / avancer | Ctrl+[ / Ctrl+] (disposition allemande : Alt+Shift+B / Alt+Shift+F) |
+| Document précédent / suivant | Alt+Shift+Up / Alt+Shift+Down |
+| Afficher dans le classeur | Ctrl+Shift+R |
+| Rechercher / remplacer / suivant / précédent | Ctrl+F / Ctrl+H / F3 / Shift+F3 |
+| Recherche dans le projet | Ctrl+Shift+F |
+| Utiliser la sélection pour la recherche | Ctrl+E |
+| Rechercher par mise en forme / suivante / précédente | Ctrl+F3 / Ctrl+G / Ctrl+Shift+G |
+| Bloc-notes (module) | Alt+Shift+Return ; depuis n'importe quel programme : voir section 10 |
+| Audio et vidéo (module) : lecture / pause | Ctrl+Return |
+| Audio et vidéo : sauter en arrière / sauter en avant | Ctrl+Alt+, / Ctrl+Alt+. |
+| Audio et vidéo : insérer l'horodatage | Ctrl+Shift+Return |
+| Filtrer le tableau en liège ou le plan | Ctrl+F (lorsque l'un d'eux a le clavier) |
+| Lien vers un document | Ctrl+L |
+| Commentaire / note de bas de page | Shift+F2 / Ctrl+Shift+F2 |
+| Annotation en ligne / note de bas de page en ligne | Ctrl+Shift+A / Ctrl+Alt+F |
+| Prendre un instantané / avec un titre | Ctrl+5 / Ctrl+Shift+5 |
+| Objectifs du projet / mots-clés du projet | Ctrl+Shift+T / Ctrl+Alt+K |
+| Importer des fichiers / compiler | Ctrl+Shift+I / Ctrl+Shift+E |
+| Imprimer le document actuel | Ctrl+P |
+| Fenêtre des polices / fenêtre de paragraphe | Ctrl+T / Ctrl+Alt+P |
+| Agrandir / réduire la taille de police | Ctrl+> / Ctrl+< |
+| Copier la mise en forme / coller la mise en forme | Ctrl+Alt+C / Ctrl+Alt+V |
+| Coller avec la mise en forme / coller en adaptant le style | Ctrl+Alt+Shift+V / Ctrl+Shift+V |
+| Aucun style / Titre 1 / Titre 2 / Titre 3 | Ctrl+Alt+0 / Ctrl+Alt+1 / Ctrl+Alt+2 / Ctrl+Alt+3 |
+| Les six styles suivants de la liste de styles (Format > Style > Personnaliser la liste de styles) | Ctrl+Alt+4 ... Ctrl+Alt+9 |
+| Aller au synopsis / aller aux notes du document (Navigation > Inspecter) | Ctrl+Alt+Y / Ctrl+Alt+N |
+| Sauvegarder maintenant | Ctrl+Shift+B |
+| Mode script / liste des éléments de script | Ctrl+8 / Ctrl+\\ (disposition allemande : Ctrl+8 / Ctrl+Shift+O) |
+| Dans un script : élément suivant / changer d'élément | Enter / Tab (voir section 4, Scénario) |
+| Zoom avant / zoom arrière / réinitialiser le zoom | Ctrl++ / Ctrl+- / Ctrl+0 |
+| Zoomer la zone sous la souris | Ctrl+molette de la souris |
+| Afficher ou masquer la règle | Ctrl+Alt+R |
+| Défilement machine à écrire | Meta+Ctrl+T |
+| Options | Ctrl+, |
+| Ce manuel | F1 |
+
+---
+
+## 20. Dépannage
+
+### Rapports de plantage et informations système
+
+Si {{APP}} se termine à cause d'une erreur, il écrit un **rapport de plantage** sur votre ordinateur avant de se fermer. Si sa fenêtre ne répond plus pendant 30 secondes (il se bloque ; la durée se règle sous **Fichier > Options > Extras > Rapports de plantage**), il écrit un **rapport de blocage** qui montre où il est coincé ; s'il se rétablit, le rapport indique au bout de combien de temps. Rien n'est envoyé nulle part. La prochaine fois que vous démarrez {{APP}} après un plantage, ou après que vous avez dû terminer un {{APP}} bloqué, un message vous indique ce qui s'est passé. S'il s'est terminé moins d'une minute après son démarrage, le message propose **Démarrer sans le dernier projet**, au cas où le projet serait en cause.
+
+- **Aide > Dépannage et développement > Rapports de plantage…** liste les rapports de plantage et de blocage avec leur date et leur type d'erreur (« blocage (rétabli) » lorsque {{APP}} a continué à fonctionner). **Copier dans le presse-papiers** copie le rapport sélectionné, afin que vous puissiez le coller dans un message à la personne qui s'occupe de {{APP}} pour vous ; **Ouvrir le dossier** montre les fichiers ; **Supprimer** et **Tout supprimer…** les effacent. Les 20 rapports les plus récents sont conservés (**Fichier > Options > Extras > Rapports de plantage** modifie ce nombre).
+- **Fichier > Options > Général > Avertissements > Afficher la console du journal interne** montre les messages du programme et de Qt depuis son démarrage (les 1000 derniers), avec les nouveaux au fur et à mesure ; utile lorsque quelque chose ne fonctionne pas et qu'aucun message n'en donne la raison.
+- **Aide > Dépannage et développement > Informations système…** montre le même instantané du programme et de l'ordinateur que celui que contient un rapport. Il commence par **Points à examiner** : ce qui peut causer des problèmes prochainement, comme un disque presque plein ou en lecture seule, un projet dans un dossier réseau, un disque de sauvegarde avec moins d'espace libre que le projet n'en demande, peu de mémoire libre, un long délai d'enregistrement automatique, des sauvegardes automatiques désactivées, ou des rapports de plantage et de blocage récents. Viennent ensuite la version du programme, l'environnement d'exécution (l'ensemble des bibliothèques contenues dans l'AppImage, avec la date de publication de son Qt et son ancienneté : un environnement ancien signifie qu'une AppImage plus récente peut apporter des correctifs de sécurité) et les mises à jour et modules complémentaires installés, le système d'exploitation, le bureau, les écrans (depuis 0.93.1 avec la zone qu'une fenêtre peut utiliser sur chacun), les périphériques d'entrée (clavier, souris, écran tactile, stylet) et si le clavier à l'écran est affiché (0.93.1), le processeur et la mémoire, les dossiers avec leur espace libre, les paramètres d'enregistrement et de sauvegarde, et le projet ouvert. Utilisez **Copier dans le presse-papiers** ou **Enregistrer sous…** lorsque vous signalez un problème qui n'est pas un plantage.
+
+Un rapport nomme des fichiers, des dossiers et des documents, ainsi que les commandes et les touches utilisées peu avant l'erreur (les lettres saisies sont seulement comptées, jamais enregistrées). Il ne contient aucun texte de vos documents. Votre dossier personnel y est écrit **~**.
+
+Si {{APP}} a été arrêté de l'extérieur ou si l'ordinateur a été éteint sans le fermer, il n'y a pas de rapport, mais le démarrage suivant vous l'indique également. Dans les deux cas, votre travail est enregistré jusqu'au dernier enregistrement automatique, quelques secondes avant la fin ; consultez les instantanés du document ou la sauvegarde la plus récente si quelque chose manque (sections 11 et 15).
+
+**« Le fichier du projet ne peut pas être lu. »** Si le fichier du projet (*YourTitle*{{FILE}}) est endommagé, par exemple par un plantage de l'ordinateur pendant son enregistrement, {{APP}} propose la copie qu'il en conserve (de la dernière ouverture du projet) : **Utiliser la copie**. Le fichier endommagé est conservé à côté (*… .damaged-<date>*). Les modifications du classeur depuis lors (titres, ordre, libellés) manquent ; les textes sont tous là, et les documents créés depuis sont placés dans le dossier **Documents récupérés** de Recherche, nommés d'après leur première ligne.
+
+**« Le fichier du projet contenait des caractères qui n'y sont pas autorisés. »** Les versions antérieures à 0.20 pouvaient enregistrer des caractères de contrôle invisibles (collés depuis d'autres programmes dans un titre ou un synopsis), après quoi le projet ne s'ouvrait plus. {{APP}} les supprime à l'ouverture du projet et vous le signale ; rien d'autre n'est modifié. Depuis 0.20, ils ne sont plus jamais enregistrés.
+
+**Un document est affiché vide, avec la remarque « Le fichier de ce document ne peut pas être lu ».** Son fichier texte est là mais ne peut pas être lu (ses droits d'accès ont été modifiés, ou le disque sur lequel il se trouve a disparu). {{APP}} l'affiche vide et ne vous laisse pas le modifier, afin que le fichier ne soit jamais écrasé. Vérifiez les droits d'accès du fichier ou le disque, puis fermez et rouvrez le projet.
+
+**Appuyer sur Page Down ou Page Up fermait le programme.** C'était une erreur des versions antérieures à 0.19 ; passez à 0.19 ou ultérieur. D'ici là, faites défiler avec la souris ou la barre de défilement.
+
+**Le programme ne démarre pas lorsque je double-clique dessus.** Faites un clic droit sur le fichier > Propriétés > Permissions et cochez « Est exécutable » (dans Dolphin : « Autoriser l'exécution du fichier comme programme »). Double-cliquez ensuite de nouveau dessus.
+
+**Les boîtes de dialogue de fichiers ont un aspect différent de celui des autres programmes KDE.** Activez **Utiliser les boîtes de dialogue de fichiers du bureau** sous **Fichier > Options > Général** et redémarrez {{APP}}.
+
+**Les icônes de la barre d'outils sont difficiles à voir dans un thème sombre ou clair.** {{APP}} choisit le jeu d'icônes clair ou sombre de votre bureau pour l'adapter au thème. Si le bureau n'a pas de jeu adapté, il utilise ses propres icônes. Si certaines icônes ne conviennent toujours pas, choisissez **Par défaut (suivre le bureau)** sous **Affichage > Thèmes** et définissez les couleurs dans les paramètres propres du bureau.
+
+**J'ai modifié des couleurs et je veux retrouver celles du thème.** **Fichier > Options > Apparence > Réinitialiser les couleurs et polices du thème**, ou le bouton **↺** à côté d'une couleur ou d'une police isolée.
+
+**Une mise à jour du programme n'a pas démarré.** {{APP}} désactive de lui-même une mise à jour défaillante (section 17). Vous pouvez essayer de la réinstaller, ou continuer à utiliser la version intégrée.
+
+**Un format de compilation manque.** Vérifiez **Fichier > Options > Plugins** : la page indique de quel programme le format a besoin. Installez-le dans Discover et redémarrez {{APP}}.
+
+**Le correcteur orthographique ne connaît pas ma langue.** Pour l'espagnol, le français, le portugais brésilien, l'italien, le russe, l'indonésien, le turc, le polonais et le néerlandais, installez le module « dictionnaire orthographique <langue> » (**Aide > Modules et mises à jour > Installer une mise à jour ou un module** ; la page de téléchargement les liste), redémarrez {{APP}} et choisissez la langue sous **Fichier > Options > Corrections** (page Orthographe). Pour une autre langue, installez le paquet de dictionnaire *hunspell* correspondant dans Discover.
+
+**Le projet « semble être ouvert dans une autre fenêtre ou sur un autre ordinateur ».** Cela se produit lorsque le projet se trouve dans un dossier synchronisé qui est ouvert ailleurs, ou après un plantage sur un autre ordinateur. Si vous êtes sûr qu'il n'est ouvert nulle part ailleurs, choisissez **Oui**.
+
+**Alt+glisser n'ouvre pas de support de copie.** Certains bureaux utilisent Alt+glisser pour autre chose, par exemple pour déplacer les fenêtres. Utilisez plutôt **Navigation > Ouvrir > dans le support de copie** ou le menu du clic droit du document, ou modifiez la touche dans les paramètres de fenêtres du bureau.
+
+**Après être revenu à une version plus ancienne du programme, un script est du texte brut sans sa mise en page.** Les versions antérieures à 0.10 ne connaissent pas les éléments de script et enregistrent un script qu'elles ont affiché comme du texte ordinaire. Repassez à la version actuelle (**Aide > Modules et mises à jour > Gestionnaire de modules…**). Le texte est entièrement là ; pour retrouver la mise en page, restaurez le document à partir d'un instantané ou d'une sauvegarde faite auparavant (sections 11 et 15), ou redonnez leurs éléments aux paragraphes avec le menu contextuel du pied de page.
+
+**Le raccourci du bloc-notes ne fait rien dans les autres programmes.** Les raccourcis définis sous **Fichier > Options > Clavier** ne fonctionnent qu'à l'intérieur de {{APP}}. Pour les autres programmes, c'est le bureau qui doit lancer la commande (section 10, *Depuis n'importe quel programme*). Si vous déplacez l'AppImage, saisissez de nouveau la commande (elle nomme l'emplacement de l'AppImage).
+
+**L'appareil photo du bloc-notes dit qu'il ne peut pas lire l'écran.** Sous Wayland, seul le programme de capture d'écran du bureau peut le faire. Installez *Spectacle* (`sudo apt install kde-spectacle`) et réessayez.
+
+**Édition > Outils d'écriture indique « Aucun outil d'écriture installé ».** Les outils sont des modules complémentaires : installez le paquet de la mise à jour 0.11 ou activez-les dans **Aide > Modules et mises à jour > Gestionnaire de modules…**.
+
+**Un fichier audio ou vidéo ne propose que « Ouvrir avec l'application par défaut ».** La lecture dans {{APP}} nécessite le module *Lecture multimédia* (dans le paquet de la mise à jour 0.12) ; installez-le, ou activez-le dans **Aide > Modules et mises à jour > Gestionnaire de modules…**. La ligne sous le bouton indique ce qui manque.
+
+**Une vidéo se lit mais il n'y a pas de son, ou un fichier audio indique « Aucune sortie audio n'a été trouvée ».** {{APP}} lit le son par l'intermédiaire du serveur de son du bureau (PipeWire ou PulseAudio). Vérifiez que le son fonctionne dans d'autres programmes et que la bonne sortie est choisie dans les paramètres audio du bureau ; {{APP}} suit aussitôt un changement de sortie.
+
+**« Ce fichier ne peut pas être lu ici : il utilise H.264 et AAC ... »** Le fichier est dans un format soumis à des brevets, que *Lecture multimédia* laisse de côté. Installez le module **Formats vidéo et audio supplémentaires**, ou le paquet **media-all-formats.qbpkg**, qui l'apporte avec *Lecture multimédia* (tous deux sur la page Releases de la page du projet, section 1), puis redémarrez {{APP}}.
+
+**Un fichier ne se lit pas, ou se lit sans image.** Certains types ne font pas partie du décodage intégré (vidéo AV1, WMA Pro, WMV 9). Ouvrez le fichier avec un autre programme (clic droit sur le lecteur : **Ouvrir avec l'application par défaut**), ou convertissez-le dans un autre format.
+
+**Un fichier .doc est ajouté comme fichier, et non comme texte.** Le module **Importation Word 97–2003** n'est pas installé ou est désactivé (**Aide > Modules et mises à jour > Gestionnaire de modules…**) ; après l'avoir installé, redémarrez {{APP}}. Un message après l'importation nomme ce que le module a laissé de côté. Les fichiers Word 6.0 et 95 nécessitent LibreOffice (`sudo apt install libreoffice-writer`).
+
+**Une page web arrive vide ou avec la mauvaise partie.** Décochez **Seulement l'article** dans la fenêtre Page web pour prendre la page entière et supprimer ce dont vous n'avez pas besoin. Les pages qui nécessitent une connexion ou qui sont entièrement construites par des scripts ne peuvent pas être lues sans navigateur : ouvrez la page dans votre navigateur, sélectionnez le texte et faites-le glisser dans le classeur (il devient un nouveau document). « Les pages web sécurisées ne peuvent pas être récupérées » signifie qu'OpenSSL 3 est absent (`sudo apt install libssl3`, inclus dans tout Ubuntu) ou que le module est endommagé (installez-le de nouveau).
+
+**La première seconde d'un fichier est silencieuse ou le temps reste figé au début.** La sortie audio a besoin d'un instant pour démarrer ; avec certains serveurs de son, plus d'une seconde. Revenez un peu en arrière (Ctrl+Alt+,) si vous avez manqué le début.
+
+**Les pages de la vue page ne correspondent pas à mon manuscrit imprimé.** Elles ne sont pas faites pour cela : la vue page montre votre texte sur des feuilles pendant que vous écrivez. C'est le format de compilation qui décide des pages du fichier final (section 13).
+
+**« Scrivener a ce projet ouvert. »** Scrivener laisse un fichier de verrouillage dans le *.scriv* tant qu'il a le projet ouvert, et après un plantage. Fermez le projet dans Scrivener (sur chaque ordinateur) et rouvrez-le ici ; si Scrivener ne s'exécute nulle part, choisissez **Oui**.
+
+**Un projet au format Scrivener n'affiche pas mes dernières modifications faites dans Scrivener.** {{APP}} ne relit le *.scriv* que lorsque le projet est ouvert. Fermez-le ici (**Fichier > Fermer le projet**), laissez Scrivener ou le service de synchronisation terminer, puis rouvrez-le.
+
+**Les menus Insertion, Navigation, Projet, Documents et Format sont grisés.** Aucun projet n'est ouvert. Ouvrez-en un ou créez-en un (menu Fichier).
+
+**Où signaler un problème.** **Aide > Signaler un problème…** ouvre dans votre navigateur la page des signalements du projet (https://github.com/Shelin-boop/Quillbinder_Collection/issues/new/choose), avec un formulaire pour un problème et un pour un souhait ; il vous faut un compte GitHub, et vous pouvez écrire en anglais ou en allemand. Les signalements sont publics : ne joignez pas votre manuscrit ni votre projet ; **Aide > Dépannage et développement > Informations système…** (**Copier dans le presse-papiers**) contient ce dont un signalement a besoin à propos du programme et de l'ordinateur. Un **problème de sécurité** ne se signale pas là mais en privé, comme décrit dans *SECURITY.md* du projet (l'onglet Security du dépôt, **Report a vulnerability**).
+
+**La table des matières d'un fichier Word n'a pas de numéros de page.** Les numéros de page sont renseignés par le traitement de texte lorsqu'il met à jour le champ ; mettez-le à jour là-bas.
+
+**Quelque chose s'est mal passé avec un document.** Regardez dans l'onglet des instantanés de l'inspecteur, ou restaurez une sauvegarde (section 15).
+
+## Crédits et licence
+
+- Développeur principal : Claude.AI w. Opus 5.5 Extra
+
+{{APP}} est un logiciel libre sous licence Apache 2.0 : chacun peut l'utiliser, le copier, le modifier et le transmettre, avec ou sans contrepartie, en conservant la licence et le fichier NOTICE, qui nomme le projet et ses sources ; sans garantie. Les versions jusqu'à 0.70.0 étaient publiées sous la licence Zero-Clause BSD (0BSD). La fenêtre À propos (dans le menu Aide) affiche la version et la licence.
+
+{{APP}} utilise des éléments d'autres projets (Qt, Hunspell, ICU, les icônes Breeze et les autres bibliothèques contenues dans l'AppImage), chacun sous sa propre licence. **Aide > Licences des composants tiers…** (également un bouton de la fenêtre À propos) les liste avec leurs textes de licence complets ; ces mêmes textes se trouvent dans l'AppImage, dans *usr/share/doc/quillbinder/licenses*. Le code source de chacun, exactement dans la version utilisée, se trouve dans la publication **Third-party source code** de la page du projet (https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources) ; la fenêtre nomme le fichier de chaque bibliothèque, et les notes de licence des modules complémentaires font de même pour les leurs.
+
+Scrivener et Scapple sont des noms de produits de Literature & Latte. {{APP}} est un programme indépendant, non créé par Literature & Latte ni lié à cette société ; il lit et écrit leurs formats de fichier afin que vos projets puissent passer d'un programme à l'autre.

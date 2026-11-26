@@ -1,0 +1,3 @@
+Quando una cartella è mostrata come bacheca o come struttura, la scheda **Commenti e note a piè di pagina** dell'ispettore elenca i commenti e le note a piè di pagina di ogni documento al suo interno, sotto il titolo di ciascun documento.
+**Prova:** nel raccoglitore, seleziona la cartella **Un capitolo con commenti** sotto questo documento. Si apre come bacheca. Poi apri la scheda **Commenti e note a piè di pagina** dell'ispettore (l'ultimo pulsante in alto). Un clic su un commento apre il suo documento in quel punto, e puoi modificare lì stesso il testo del commento.
+Lo stesso vale nel **Testo combinato** (**Ctrl+1**), dove tutti i documenti della cartella sono mostrati come un unico testo: la scheda elenca le note di tutti.

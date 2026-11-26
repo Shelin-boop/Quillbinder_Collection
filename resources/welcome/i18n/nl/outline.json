@@ -1,0 +1,358 @@
+{
+ "name": "Welkom bij {{APP}}",
+ "description": "Een korte rondleiding langs wat {{APP}} meer heeft dan gebruikelijk",
+ "draftTitle": "Rondleiding",
+ "objectTemplates": "standard",
+ "rootFirst": [
+  {
+   "title": "Welkom",
+   "icon": "qb-information",
+   "textFile": "docs/00-welcome.md",
+   "synopsis": "Wat dit project is, en de haltes van de rondleiding."
+  }
+ ],
+ "draft": [
+  {
+   "title": "De pictogrammenbalk",
+   "icon": "qb-flag-red",
+   "textFile": "docs/01-icon-bar.md",
+   "synopsis": "Tien documentpictogrammen, elk met één klik; pictogrammen uit tekst en uit je eigen afbeeldingen."
+  },
+  {
+   "title": "Zoomen waar je wijst",
+   "icon": "qb-magnifier",
+   "textFile": "docs/02-zoom.md",
+   "synopsis": "Ctrl+muiswiel boven een deel van het venster; elk deel bewaart zijn eigen zoom."
+  },
+  {
+   "title": "Mindmaps",
+   "icon": "qb-mindmap",
+   "textFile": "docs/03-mind-maps.md",
+   "synopsis": "Een bord met notities, lijnen en pijlen voor elk document. Dit document heeft een bord: open het tabblad Mindmap.",
+   "mindmap": {
+    "notes": [
+     {
+      "id": 1,
+      "text": "Wat een mindmap kan",
+      "x": 290,
+      "y": 245,
+      "width": 170,
+      "fontSize": 15,
+      "bold": true,
+      "align": "center",
+      "fill": "#fff2a8",
+      "border": 2,
+      "shape": "cloud"
+     },
+     {
+      "id": 2,
+      "text": "Notities: dubbelklik op een lege plek. Ctrl+Enter maakt een nieuwe notitie onder de geselecteerde.",
+      "x": 20,
+      "y": 30,
+      "width": 200,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 3,
+      "text": "Lijnen: sleep een notitie naar een andere. Sleep hem er nogmaals heen om de lijn te verwijderen.",
+      "x": 280,
+      "y": 30,
+      "width": 190,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 4,
+      "text": "Pijlen: houd Alt ingedrukt terwijl je loslaat. Ctrl+Alt: een pijl terug. Ctrl+Alt+Shift: beide kanten.",
+      "x": 530,
+      "y": 30,
+      "width": 210,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 5,
+      "text": "Kleuren, vormen en randen: klik met de rechtermuisknop op een notitie.",
+      "x": 560,
+      "y": 250,
+      "width": 180,
+      "fill": "#ffd6d6",
+      "border": 1,
+      "shape": "jagged"
+     },
+     {
+      "id": 6,
+      "text": "Pictogrammen op de hoeken en zijden van een notitie, en in het midden van een lijn.",
+      "x": 540,
+      "y": 420,
+      "width": 200,
+      "fill": "#e3f6d8",
+      "border": 1,
+      "icons": {
+       "topLeft": "qb-flag-red",
+       "topRight": "qb-light-bulb",
+       "bottomRight": "qb-checked"
+      }
+     },
+     {
+      "id": 7,
+      "text": "Achtergrondvormen groeperen notities. Een magnetische vorm neemt zijn notities mee.",
+      "x": 290,
+      "y": 455,
+      "width": 170
+     },
+     {
+      "id": 8,
+      "text": "Menu > Notities > Notities aan de Binder toevoegen zet notities om in documenten.",
+      "x": 20,
+      "y": 430,
+      "width": 200,
+      "fill": "#f0e6ff",
+      "border": 1,
+      "shape": "square"
+     },
+     {
+      "id": 9,
+      "text": "Exporteren als pdf, PNG, tekst, OPML of Scapple-bestand; Scapple-bestanden kunnen worden gelezen.",
+      "x": 20,
+      "y": 245,
+      "width": 200,
+      "fill": "#f0e6ff",
+      "border": 1
+     }
+    ],
+    "shapes": [
+     {
+      "id": 20,
+      "x": 270,
+      "y": 435,
+      "w": 210,
+      "h": 150,
+      "fill": "#fde3b8",
+      "magnetic": true
+     }
+    ],
+    "lines": [
+     {
+      "from": 1,
+      "to": 2,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 3,
+      "arrow": "to",
+      "label": "sleep"
+     },
+     {
+      "from": 1,
+      "to": 4,
+      "arrow": "to",
+      "color": "#c0392b"
+     },
+     {
+      "from": 1,
+      "to": 5,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 6,
+      "arrow": "to",
+      "icon": "qb-pencil"
+     },
+     {
+      "from": 1,
+      "to": 7,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 8
+     },
+     {
+      "from": 1,
+      "to": 9,
+      "arrow": "to",
+      "color": "#2f6fbf"
+     }
+    ]
+   }
+  },
+  {
+   "title": "Objectbladen",
+   "icon": "qb-character-sheet",
+   "textFile": "docs/04-objects.md",
+   "synopsis": "Mensen, plaatsen en dingen van een verhaal, elk op een blad met velden, aan elkaar gekoppeld.",
+   "children": [
+    {
+     "title": "Een scène in Ashvale",
+     "icon": "qb-location-house",
+     "textFile": "docs/04a-scene.md",
+     "synopsis": "Een korte scène met koppelingen naar de objecten. Het tabblad Objecten toont wie en wat erin voorkomt."
+    }
+   ]
+  },
+  {
+   "title": "Opmerkingen van een hele map",
+   "icon": "qb-speech-bubble",
+   "textFile": "docs/05-folder-comments.md",
+   "synopsis": "De opmerkingen en voetnoten van elk document in een map, in één lijst."
+  },
+  {
+   "title": "Een hoofdstuk met opmerkingen",
+   "type": "folder",
+   "synopsis": "Selecteer het en open het tabblad Opmerkingen en voetnoten van de Inspector.",
+   "children": [
+    {
+     "title": "Het veerboek",
+     "textFile": "docs/05a-scene-one.md",
+     "synopsis": "Een scène met een opmerking."
+    },
+    {
+     "title": "Avond",
+     "textFile": "docs/05b-scene-two.md",
+     "synopsis": "Een scène met een voetnoot en een inline-aantekening."
+    }
+   ]
+  },
+  {
+   "title": "Vergelijken en overbrengen",
+   "icon": "qb-reviewer",
+   "textFile": "docs/06-compare.md",
+   "synopsis": "Een manuscript terug uit Word of LibreOffice: zie wat er verschilt en neem een van beide kanten over."
+  },
+  {
+   "title": "Scrivener-projecten",
+   "icon": "qb-sync-folder",
+   "textFile": "docs/07-scrivener.md",
+   "synopsis": "Importeer een Scrivener-project, of werk er direct in en ga later verder in Scrivener."
+  },
+  {
+   "title": "Thema's, kleuren en lettertypen",
+   "icon": "qb-eye",
+   "textFile": "docs/08-themes.md",
+   "synopsis": "Donkere modus en andere thema's meteen; het kleurenpalet van de opmaakbalk; lettertypen installeren."
+  },
+  {
+   "title": "Thema's en profielen",
+   "icon": "qb-cog",
+   "textFile": "docs/08a-profiles.md",
+   "synopsis": "Een thema is het uiterlijk; een profiel bewaart je opties, werkbalken, venster en thema samen en wisselt ze in één keer."
+  },
+  {
+   "title": "Updates en add-ons",
+   "icon": "qb-cog",
+   "textFile": "docs/09-updates.md",
+   "synopsis": "Kleine pakketbestanden, het Add-onbeheer en een weg terug naar een eerdere versie."
+  },
+  {
+   "title": "Vangnetten",
+   "icon": "qb-checked",
+   "textFile": "docs/10-safety.md",
+   "synopsis": "Automatisch opslaan, back-ups, momentopnamen, het reserveprojectbestand, crash- en vastloperrapporten."
+  },
+  {
+   "title": "Hoe nu verder",
+   "icon": "qb-pass",
+   "textFile": "docs/11-where-next.md",
+   "synopsis": "De Snelstartgids, de handleiding en een eigen project."
+  }
+ ],
+ "projectBookmarks": [
+  "Welkom"
+ ],
+ "objects": [
+  {
+   "category": "characters",
+   "name": "Mara Fenn",
+   "values": {
+    "role": "Hoofdpersoon",
+    "age": "34",
+    "eyes": "Grijs",
+    "occupation": "Veervrouw",
+    "livesIn": [
+     "Ashvale"
+    ],
+    "relations": [
+     "Tobias Quill"
+    ],
+    "traits": "Geduldig, koppig, houdt elke belofte die ze doet.",
+    "background": "Ze nam de veerpont over van haar moeder. [Tobias Quill](qbobj-name:Tobias Quill) vond de naam van haar moeder in het oude veerboek.",
+    "scenes": [
+     "Een scène in Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "characters",
+   "name": "Tobias Quill",
+   "values": {
+    "role": "Bijrol",
+    "age": "29",
+    "occupation": "Dorpsarchivaris",
+    "livesIn": [
+     "Ashvale"
+    ],
+    "relations": [
+     "Mara Fenn"
+    ],
+    "goals": "Wil weten wie de eerste bladzijden van het veerboek heeft geschreven.",
+    "scenes": [
+     "Een scène in Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "locations",
+   "name": "Ashvale",
+   "values": {
+    "kind": "Dorp",
+    "environment": [
+     "Fenwood"
+    ],
+    "weather": [
+     "Herfstmist"
+    ],
+    "population": "212",
+    "inhabitants": [
+     "Mara Fenn",
+     "Tobias Quill"
+    ],
+    "description": "Veertig huizen langs een trage rivier, een veerpont en een kerktoren die te zien is vanuit [Fenwood](qbobj-name:Fenwood).",
+    "scenes": [
+     "Een scène in Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "environments",
+   "name": "Fenwood",
+   "values": {
+    "kind": "Bos",
+    "flora": "Berken en elzen; riet langs de rivier.",
+    "weather": [
+     "Herfstmist"
+    ],
+    "locations": [
+     "Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "weather",
+   "name": "Herfstmist",
+   "values": {
+    "season": "Herfst",
+    "temperature": "8",
+    "precipitation": "Mist",
+    "effects": "De veerpont stopt wanneer de overkant niet meer te zien is.",
+    "where": [
+     "Ashvale",
+     "Fenwood"
+    ]
+   }
+  }
+ ]
+}

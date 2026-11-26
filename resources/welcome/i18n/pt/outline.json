@@ -1,0 +1,358 @@
+{
+  "name": "Boas-vindas ao {{APP}}",
+  "description": "Um passeio rápido pelo que o {{APP}} tem além do comum",
+  "draftTitle": "Passeio pelos recursos",
+  "objectTemplates": "standard",
+  "rootFirst": [
+    {
+      "title": "Boas-vindas",
+      "icon": "qb-information",
+      "textFile": "docs/00-welcome.md",
+      "synopsis": "O que é este projeto e as paradas do passeio."
+    }
+  ],
+  "draft": [
+    {
+      "title": "A barra de ícones",
+      "icon": "qb-flag-red",
+      "textFile": "docs/01-icon-bar.md",
+      "synopsis": "Dez ícones de documento, um clique para cada; ícones feitos de texto e das suas próprias imagens."
+    },
+    {
+      "title": "Zoom onde você aponta",
+      "icon": "qb-magnifier",
+      "textFile": "docs/02-zoom.md",
+      "synopsis": "Ctrl+roda do mouse sobre qualquer parte da janela; cada parte guarda o seu próprio zoom."
+    },
+    {
+      "title": "Mapas mentais",
+      "icon": "qb-mindmap",
+      "textFile": "docs/03-mind-maps.md",
+      "synopsis": "Um quadro de notas, linhas e setas para cada documento. Este tem um quadro: abra a aba Mapa mental.",
+      "mindmap": {
+        "notes": [
+          {
+            "id": 1,
+            "text": "O que um mapa mental pode fazer",
+            "x": 290,
+            "y": 245,
+            "width": 170,
+            "fontSize": 15,
+            "bold": true,
+            "align": "center",
+            "fill": "#fff2a8",
+            "border": 2,
+            "shape": "cloud"
+          },
+          {
+            "id": 2,
+            "text": "Notas: clique duas vezes em um lugar vazio. Ctrl+Enter cria uma nova nota abaixo da selecionada.",
+            "x": 20,
+            "y": 30,
+            "width": 200,
+            "fill": "#dcecff",
+            "border": 1
+          },
+          {
+            "id": 3,
+            "text": "Linhas: arraste uma nota sobre outra. Arraste de novo para remover a linha.",
+            "x": 280,
+            "y": 30,
+            "width": 190,
+            "fill": "#dcecff",
+            "border": 1
+          },
+          {
+            "id": 4,
+            "text": "Setas: segure Alt ao soltar. Ctrl+Alt: uma seta de volta. Ctrl+Alt+Shift: as duas pontas.",
+            "x": 530,
+            "y": 30,
+            "width": 210,
+            "fill": "#dcecff",
+            "border": 1
+          },
+          {
+            "id": 5,
+            "text": "Cores, formas e bordas: clique com o botão direito em uma nota.",
+            "x": 560,
+            "y": 250,
+            "width": 180,
+            "fill": "#ffd6d6",
+            "border": 1,
+            "shape": "jagged"
+          },
+          {
+            "id": 6,
+            "text": "Ícones nos cantos e nos lados de uma nota, e no meio de uma linha.",
+            "x": 540,
+            "y": 420,
+            "width": 200,
+            "fill": "#e3f6d8",
+            "border": 1,
+            "icons": {
+              "topLeft": "qb-flag-red",
+              "topRight": "qb-light-bulb",
+              "bottomRight": "qb-checked"
+            }
+          },
+          {
+            "id": 7,
+            "text": "Formas de fundo agrupam notas. Uma forma magnética leva as suas notas junto.",
+            "x": 290,
+            "y": 455,
+            "width": 170
+          },
+          {
+            "id": 8,
+            "text": "Menu > Notas > Adicionar notas ao Fichário transforma notas em documentos.",
+            "x": 20,
+            "y": 430,
+            "width": 200,
+            "fill": "#f0e6ff",
+            "border": 1,
+            "shape": "square"
+          },
+          {
+            "id": 9,
+            "text": "Exporte como PDF, PNG, texto, OPML ou arquivo do Scapple; arquivos do Scapple podem ser lidos.",
+            "x": 20,
+            "y": 245,
+            "width": 200,
+            "fill": "#f0e6ff",
+            "border": 1
+          }
+        ],
+        "shapes": [
+          {
+            "id": 20,
+            "x": 270,
+            "y": 435,
+            "w": 210,
+            "h": 150,
+            "fill": "#fde3b8",
+            "magnetic": true
+          }
+        ],
+        "lines": [
+          {
+            "from": 1,
+            "to": 2,
+            "arrow": "to"
+          },
+          {
+            "from": 1,
+            "to": 3,
+            "arrow": "to",
+            "label": "arrastar"
+          },
+          {
+            "from": 1,
+            "to": 4,
+            "arrow": "to",
+            "color": "#c0392b"
+          },
+          {
+            "from": 1,
+            "to": 5,
+            "arrow": "to"
+          },
+          {
+            "from": 1,
+            "to": 6,
+            "arrow": "to",
+            "icon": "qb-pencil"
+          },
+          {
+            "from": 1,
+            "to": 7,
+            "arrow": "to"
+          },
+          {
+            "from": 1,
+            "to": 8
+          },
+          {
+            "from": 1,
+            "to": 9,
+            "arrow": "to",
+            "color": "#2f6fbf"
+          }
+        ]
+      }
+    },
+    {
+      "title": "Fichas de objetos",
+      "icon": "qb-character-sheet",
+      "textFile": "docs/04-objects.md",
+      "synopsis": "Pessoas, lugares e coisas de uma história, cada um em uma ficha de campos, ligados entre si.",
+      "children": [
+        {
+          "title": "Uma cena em Ashvale",
+          "icon": "qb-location-house",
+          "textFile": "docs/04a-scene.md",
+          "synopsis": "Uma cena curta com links para os objetos. A aba Objetos lista quem e o que aparece nela."
+        }
+      ]
+    },
+    {
+      "title": "Comentários de uma pasta inteira",
+      "icon": "qb-speech-bubble",
+      "textFile": "docs/05-folder-comments.md",
+      "synopsis": "Os comentários e as notas de rodapé de todos os documentos de uma pasta, em uma só lista."
+    },
+    {
+      "title": "Um capítulo com comentários",
+      "type": "folder",
+      "synopsis": "Selecione-o e abra a aba Comentários e notas de rodapé do inspetor.",
+      "children": [
+        {
+          "title": "O livro da balsa",
+          "textFile": "docs/05a-scene-one.md",
+          "synopsis": "Uma cena com um comentário."
+        },
+        {
+          "title": "Entardecer",
+          "textFile": "docs/05b-scene-two.md",
+          "synopsis": "Uma cena com uma nota de rodapé e uma anotação no texto."
+        }
+      ]
+    },
+    {
+      "title": "Comparar e transferir",
+      "icon": "qb-reviewer",
+      "textFile": "docs/06-compare.md",
+      "synopsis": "Um manuscrito que voltou do Word ou do LibreOffice: veja o que difere e assuma qualquer um dos lados."
+    },
+    {
+      "title": "Projetos do Scrivener",
+      "icon": "qb-sync-folder",
+      "textFile": "docs/07-scrivener.md",
+      "synopsis": "Importe um projeto do Scrivener, ou trabalhe nele diretamente e continue no Scrivener depois."
+    },
+    {
+      "title": "Temas, cores e fontes",
+      "icon": "qb-eye",
+      "textFile": "docs/08-themes.md",
+      "synopsis": "Modo escuro e outros temas na hora; a paleta de cores da barra de formatação; instalação de fontes."
+    },
+    {
+      "title": "Temas e perfis",
+      "icon": "qb-cog",
+      "textFile": "docs/08a-profiles.md",
+      "synopsis": "Um tema é a aparência; um perfil guarda juntos as suas opções, barras de ferramentas, janela e tema e os troca de uma só vez."
+    },
+    {
+      "title": "Atualizações e complementos",
+      "icon": "qb-cog",
+      "textFile": "docs/09-updates.md",
+      "synopsis": "Pequenos arquivos de pacote, o Gerenciador de complementos e um caminho de volta para uma versão anterior."
+    },
+    {
+      "title": "Redes de segurança",
+      "icon": "qb-checked",
+      "textFile": "docs/10-safety.md",
+      "synopsis": "Salvamento automático, backups, instantâneos, o arquivo reserva do projeto, relatórios de falhas e de travamentos."
+    },
+    {
+      "title": "E agora?",
+      "icon": "qb-pass",
+      "textFile": "docs/11-where-next.md",
+      "synopsis": "O Guia de início rápido, o manual e um projeto seu."
+    }
+  ],
+  "projectBookmarks": [
+    "Boas-vindas"
+  ],
+  "objects": [
+    {
+      "category": "characters",
+      "name": "Mara Fenn",
+      "values": {
+        "role": "Protagonista",
+        "age": "34",
+        "eyes": "Cinza",
+        "occupation": "Balseira",
+        "livesIn": [
+          "Ashvale"
+        ],
+        "relations": [
+          "Tobias Quill"
+        ],
+        "traits": "Paciente, teimosa, cumpre toda promessa que faz.",
+        "background": "Ela assumiu a balsa da mãe. [Tobias Quill](qbobj-name:Tobias Quill) encontrou o nome da mãe dela no antigo livro da balsa.",
+        "scenes": [
+          "Uma cena em Ashvale"
+        ]
+      }
+    },
+    {
+      "category": "characters",
+      "name": "Tobias Quill",
+      "values": {
+        "role": "Coadjuvante",
+        "age": "29",
+        "occupation": "Arquivista da vila",
+        "livesIn": [
+          "Ashvale"
+        ],
+        "relations": [
+          "Mara Fenn"
+        ],
+        "goals": "Quer saber quem escreveu as primeiras páginas do livro da balsa.",
+        "scenes": [
+          "Uma cena em Ashvale"
+        ]
+      }
+    },
+    {
+      "category": "locations",
+      "name": "Ashvale",
+      "values": {
+        "kind": "Aldeia",
+        "environment": [
+          "Fenwood"
+        ],
+        "weather": [
+          "Névoa de outono"
+        ],
+        "population": "212",
+        "inhabitants": [
+          "Mara Fenn",
+          "Tobias Quill"
+        ],
+        "description": "Quarenta casas ao longo de um rio lento, uma balsa e uma torre de igreja que se vê de [Fenwood](qbobj-name:Fenwood).",
+        "scenes": [
+          "Uma cena em Ashvale"
+        ]
+      }
+    },
+    {
+      "category": "environments",
+      "name": "Fenwood",
+      "values": {
+        "kind": "Floresta",
+        "flora": "Bétulas e amieiros; juncos ao longo do rio.",
+        "weather": [
+          "Névoa de outono"
+        ],
+        "locations": [
+          "Ashvale"
+        ]
+      }
+    },
+    {
+      "category": "weather",
+      "name": "Névoa de outono",
+      "values": {
+        "season": "Outono",
+        "temperature": "8",
+        "precipitation": "Neblina",
+        "effects": "A balsa para quando não se vê a outra margem.",
+        "where": [
+          "Ashvale",
+          "Fenwood"
+        ]
+      }
+    }
+  ]
+}
