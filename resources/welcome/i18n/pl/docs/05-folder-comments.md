@@ -1,0 +1,3 @@
+Gdy folder jest pokazany jako tablica korkowa lub konspekt, karta **Komentarze i przypisy** w inspektorze wymienia komentarze i przypisy każdego dokumentu w nim, pod tytułem każdego dokumentu.
+**Wypróbuj:** zaznacz w segregatorze folder **Rozdział z komentarzami** poniżej tego dokumentu. Otworzy się jako tablica korkowa. Potem otwórz kartę **Komentarze i przypisy** w inspektorze (ostatni przycisk u jego góry). Kliknięcie komentarza otwiera jego dokument w tym miejscu, a tekst komentarza możesz zmienić od razu na miejscu.
+To samo działa w **Tekście połączonym** (**Ctrl+1**), gdzie wszystkie dokumenty folderu są pokazane jako jeden tekst: karta wymienia notatki ze wszystkich.
