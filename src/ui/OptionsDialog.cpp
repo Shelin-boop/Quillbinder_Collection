@@ -2108,7 +2108,20 @@ QWidget *OptionsDialog::backupSection()
     m_backupKeep->setRange(0, 100);
     m_backupKeep->setSpecialValueText(tr("all"));
     m_backupKeep->setValue(s.backupKeep);
-    f->addRow(tr("Retain backup files per project:"), m_backupKeep);
+    m_backupKeep->setObjectName(QStringLiteral("optBackupKeep"));
+    {
+        // 0.95.0: the field holds only the number; the words stand before and after it (as on the first-start page)
+        auto *keepRow = new QWidget(w);
+        auto *kl = new QHBoxLayout(keepRow);
+        kl->setContentsMargins(0, 0, 0, 0);
+        auto *keepBefore = new QLabel(tr("Keep the newest"), keepRow);
+        keepBefore->setBuddy(m_backupKeep);
+        kl->addWidget(keepBefore);
+        kl->addWidget(m_backupKeep);
+        kl->addWidget(new QLabel(tr("backups of each project"), keepRow));
+        kl->addStretch(1);
+        f->addRow(keepRow);
+    }
     auto *row = new QHBoxLayout;
     // W4b: the portable program (Windows) shows an empty field until a folder is chosen (no automatic backups then)
     m_backupDir = new QLineEdit(s.backupDir.isEmpty() && !portable::active() ? backup::defaultDirectory() : s.backupDir, w);

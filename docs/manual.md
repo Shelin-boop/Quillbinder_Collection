@@ -25,7 +25,7 @@ When {{APP}} starts without a project, the **start window** opens:
 
 {{APP}} reopens the last project when it starts (you can switch this off under **File > Options > General**).
 
-**The very first start** shows one page with everything already filled in (**OK** keeps it): the backups (whether a project is backed up when it is closed, how many backups to keep and where), from a Linux AppImage the question whether to add {{APP}} to the application menu (and whether to move the AppImage to *~/Applications*), and the note about the check for updates with its switch. The welcome project opens when you press **OK**; no empty program window shows before it. All of it can be changed later in **File > Options**; there, under **General > Startup**, is also the choice which settings come first, a project's own or always the program's (section 16, *Settings for one project*).
+**The very first start** shows one page with everything already filled in (**OK** keeps it): the backups (whether a project is backed up when it is closed, how many backups to keep, 25 at first, and where), from a Linux AppImage the question whether to add {{APP}} to the application menu (and whether to move the AppImage to *~/Applications*), and the note about the check for updates with its switch. The welcome project opens when you press **OK**; no empty program window shows before it. All of it can be changed later in **File > Options**; there, under **General > Startup**, is also the choice which settings come first, a project's own or always the program's (section 16, *Settings for one project*).
 
 ### The welcome project and the Quick Start Guide
 
@@ -1409,7 +1409,7 @@ Since 0.70 the window opens for **All projects** (the program's settings); choos
 - **Corrections**: corrections while typing (section 4) and **Spelling** (the dictionary, words with numbers, the underline, the personal word list).
 - **Keyboard**: the shortcut of every command (section 19).
 - **Sharing**: **Import** (comments, footnotes, styles, the encoding of plain text, HTML files; section 14), **Export** (the file format and notes of File > Export > Files), **Conversion** (how *.doc* files are read).
-- **Backup**: when to back up (on opening, on closing, with each File > Save), how many backups to keep, and where.
+- **Backup**: when to back up (on opening, on closing, with each File > Save), how many backups to keep (a new installation starts with the newest 25; the field holds only the number, the words stand around it: "Keep the newest [25] backups of each project"), and where.
 - **Extras**, for {{APP}}'s own additions: **Mind Map** (the options of the boards, the shape and look of new notes, the background of boards without a color of their own in light and in dark themes, the size of icons on notes and lines), **Objects** (whether new projects get your own object templates or the standard ones), **Add-ons and Plugins** (the compile formats and writing tools installed, the plugin folders), **Crash Reports** (after how many seconds without an answer a freeze report is written, how many reports are kept).
 - **Speech** (with the add-on Speech Transcription): the model, the device, languages, microphone and pauses (see section 10, *Speech Transcription*). Writing tools of later add-ons may bring a section of their own as well.
 

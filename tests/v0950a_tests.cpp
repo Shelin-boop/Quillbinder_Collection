@@ -3,6 +3,8 @@
 //    inspector is not shown) and come back after a restart.
 //  - item 93: Ctrl+wheel zooms each of the three parts of the Bookmarks tab on its own, with the zoom of the inspector's
 //    tabs separate or not; the old common zoom of the two lists is taken for both.
+//  - item 91: 25 backups are kept at first; the field holds only the number, the words stand around it, on the
+//    first-start page and in File > Options.
 //
 //   xvfb-run -a ./qb_v0950a_tests /tmp/shots
 #include "compile/PluginManager.h"
@@ -31,6 +33,8 @@
 #include "ui/ToolDialogs.h"
 #include "ui/ViewMemory.h"
 #include "ui/Zoom.h"
+#include "ui/FirstStartDialog.h"
+#include "ui/OptionsDialog.h"
 
 #include <QAction>
 #include <QApplication>
@@ -299,6 +303,49 @@ static void bookmarkZoom(const QString &dir)
           QStringLiteral("an older zoom of both lists is taken for both"));
 }
 
+// ---- item 91
+static void backupField()
+{
+    AppSettings &as = AppSettings::instance();
+    check(as.backupKeep == 25, QStringLiteral("a new installation keeps 25 backups"), QString::number(as.backupKeep));
+    {
+        FirstStartDialog d;
+        d.show();
+        settle(200);
+        auto *keep = d.findChild<QSpinBox *>(QStringLiteral("firstBackupKeep"));
+        auto *before = d.findChild<QLabel *>(QStringLiteral("firstBackupKeepBefore"));
+        auto *after = d.findChild<QLabel *>(QStringLiteral("firstBackupKeepAfter"));
+        check(keep && keep->value() == 25 && keep->suffix().isEmpty() && keep->prefix().isEmpty(),
+              QStringLiteral("first start: the field holds only the number 25"));
+        check(before && after && before->text() == QLatin1String("Keep the newest") && after->text() == QLatin1String("backups of each project")
+                  && keep && before->geometry().right() <= keep->geometry().left() + 20 && keep->geometry().right() <= after->geometry().left() + 20,
+              QStringLiteral("first start: \"Keep the newest [25] backups of each project\" in this order"));
+        shot(&d, QStringLiteral("91-first-start"));
+    }
+    as.backupKeep = 12; // a number already saved stays
+    {
+        FirstStartDialog d;
+        auto *keep = d.findChild<QSpinBox *>(QStringLiteral("firstBackupKeep"));
+        check(keep && keep->value() == 12, QStringLiteral("first start: a saved number stays"));
+    }
+    as.backupKeep = 25;
+    {
+        OptionsDialog od(nullptr, 0);
+        od.showSection(OptionsDialog::SBackup, QStringLiteral("Options"));
+        od.show();
+        settle(200);
+        auto *keep = od.findChild<QSpinBox *>(QStringLiteral("optBackupKeep"));
+        bool words = false;
+        for (QLabel *l : od.findChildren<QLabel *>())
+            if (l->text() == QLatin1String("backups of each project") && l->isVisible())
+                words = true;
+        check(keep && keep->value() == 25 && keep->suffix().isEmpty() && words,
+              QStringLiteral("File > Options: the same field, only the number, the words around it"));
+        shot(&od, QStringLiteral("91-options"));
+        od.reject();
+    }
+}
+
 // ---- main
 int main(int argc, char **argv)
 {
@@ -328,6 +375,7 @@ int main(int argc, char **argv)
     zoom::install(); // Ctrl + mouse wheel zooms the part under the mouse, as in the program
 
     QTemporaryDir work;
+    backupField();
     bookmarkSizes(work.path());
     bookmarkZoom(work.path() + QStringLiteral("/z"));
     // @@SECTIONS@@

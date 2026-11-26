@@ -117,8 +117,21 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
     m_keep->setObjectName(QStringLiteral("firstBackupKeep"));
     m_keep->setRange(1, 100);
     m_keep->setValue(s.backupKeep);
-    m_keep->setSuffix(tr(" backups of each project"));
-    bf->addRow(tr("Keep the newest:"), m_keep);
+    // 0.95.0: the field holds only the number; the words stand before and after it
+    auto *keepRow = new QWidget(backups);
+    keepRow->setObjectName(QStringLiteral("firstBackupKeepRow"));
+    auto *kl = new QHBoxLayout(keepRow);
+    kl->setContentsMargins(0, 0, 0, 0);
+    auto *keepBefore = new QLabel(tr("Keep the newest"), keepRow);
+    keepBefore->setBuddy(m_keep);
+    keepBefore->setObjectName(QStringLiteral("firstBackupKeepBefore"));
+    auto *keepAfter = new QLabel(tr("backups of each project"), keepRow);
+    keepAfter->setObjectName(QStringLiteral("firstBackupKeepAfter"));
+    kl->addWidget(keepBefore);
+    kl->addWidget(m_keep);
+    kl->addWidget(keepAfter);
+    kl->addStretch(1);
+    bf->addRow(keepRow);
     auto *row = new QHBoxLayout;
     // W4b: the portable program has no standard backup folder (the writer's answer 4b of 2026-11-11)
     m_folder = new QLineEdit(s.backupDir.isEmpty() && !portable ? backup::defaultDirectory() : QDir::toNativeSeparators(s.backupDir),

@@ -99,7 +99,7 @@ public:
     // backup
     bool backupOnClose = true;
     bool backupOnOpen = false;
-    int backupKeep = 5;
+    int backupKeep = 25; // 0.95.0: 25 for a new installation (5 before); a saved number stays
     QString backupDir;
 
     // behaviour

@@ -7082,12 +7082,12 @@ Seiten (250 Wörter): %5</translation>
         <translation>Beim Schließen eines Projekts automatisch eine Sicherung erstellen</translation>
     </message>
     <message>
-        <source> backups of each project</source>
-        <translation> Sicherungen je Projekt</translation>
+        <source>Keep the newest</source>
+        <translation>Die neuesten</translation>
     </message>
     <message>
-        <source>Keep the newest:</source>
-        <translation>Die neuesten behalten:</translation>
+        <source>backups of each project</source>
+        <translation>Sicherungen je Projekt</translation>
     </message>
     <message>
         <source>Choose…</source>
@@ -16610,8 +16610,12 @@ Fortfahren?</translation>
         <translation>alle</translation>
     </message>
     <message>
-        <source>Retain backup files per project:</source>
-        <translation>Sicherungsdateien pro Projekt aufbewahren:</translation>
+        <source>Keep the newest</source>
+        <translation>Die neuesten</translation>
+    </message>
+    <message>
+        <source>backups of each project</source>
+        <translation>Sicherungen je Projekt</translation>
     </message>
     <message>
         <source>Open Backup Folder...</source>

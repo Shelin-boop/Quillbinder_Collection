@@ -17,6 +17,10 @@ New functions and fixes.
   Zoom Inspector Tabs Separately** on or off it is the same. The zoom you had for both lists is taken for both at first;
   **File > Options > Editing** lists the three parts, and the zoom list in the inspector names the one you zoomed last.
 
+- **25 backups are kept at first**. A new installation keeps the newest 25 backups of each project (it was 5); a number
+  already saved stays. On the first-start page and in **File > Options > Backup** the field holds only the number and the
+  words stand around it: "Keep the newest [25] backups of each project".
+
 ## 0.94.0 beta (2026-11-25)
 
 New functions and fixes (a program update for 0.93.x; the AppImage stays on the runtime `u2404-qt6.12-r2`).
