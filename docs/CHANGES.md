@@ -7,6 +7,31 @@ Manual in the program) describes every function.
 
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
 
+- **Quillbinder speaks eleven languages**. Besides English and German: Spanish, French, Portuguese (Brazil), Italian,
+  Russian, Indonesian, Turkish, Polish and Dutch. Each is shown by its own name in the language list; the nine new ones are
+  machine translations and are marked so ("(machine translation)", in the language of the program) until a speaker has
+  checked them. The list is on the first-start page and in **File > Options > General > Startup**; a new language is used
+  from the next start. At a true first start the program takes the language of the system when it is one of the eleven
+  (else English); an installation that is updated keeps what it had. Numbers, dates and units follow the language.
+- **The manual, the quick start guide and the welcome project follow the language** (English where a language has none).
+  F1 and the links between sections find the right place in a translated manual by its place in the list of headings, so a
+  translated manual has the same headings as the English one. The note in the options that they stay in English is gone.
+- **Spelling dictionaries for the nine new languages as add-ons**, one per language (Spanish es_ES, French fr_FR, Portuguese
+  pt_BR, Italian it_IT, Russian ru_RU, Indonesian id_ID, Turkish tr_TR, Polish pl_PL, Dutch nl_NL), unchanged from
+  LibreOffice's dictionaries (tag libreoffice-25.8.7.3), each with its license and source; the download page lists them. The
+  spell checker now reads the Polish dictionary's encoding (ISO 8859-2).
+- **Speech Transcription**: the main and the fallback language are chosen from the eleven languages (a language stored
+  earlier stays selectable).
+- **Keyboard sets for more layouts** (0.94.0): French, Belgian, Spanish, Italian, Portuguese, Turkish and Dutch keyboards
+  get the keys without AltGr at the first start, as German keyboards do; the Polish programmer's layout and the others that
+  use AltGr for letters also move four commands that sat on Ctrl+Alt+letter (copy and paste formatting, go to notes, show
+  ruler). Russian and Indonesian keep the usual keys.
+- **Plural forms** follow the language: Russian and Polish have a third form for 2 to 4, French and Portuguese call 0
+  singular, Indonesian and Turkish have no plural after a number.
+- **The inspector's menu entries** (Navigate > Inspect) get their Alt letters from the translated names.
+- **The object lists' values** (role, kind, season, precipitation) are marked for translation like every other text, and the
+  welcome project of each language stores the values the program's list shows in that language (`tools/align-welcome-choices.py`).
+
 - **Themes and profiles.** A theme is only the look; a profile keeps everything else: the language, all options, the
   toolbars and their places, the window's size and place, the panels, the keyboard set, the backups and the backup
   folder, the checks for updates, the standard colors and the saved layouts, and it names its theme. **View > Profiles**
@@ -26,34 +51,9 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
 - **Standard Colors** in **File > Options > Appearance**: the labels new projects start with (existing projects keep
   theirs), the six colors of the text color and highlight palettes, and the colors the two buttons start with. They
   belong to the profile. **Defaults** gives the program's standard back.
-- **File > Options > Keyboard: Use the Set of My Keyboard Layout.** The keyboard set (item of 0.94.0) was chosen only
+- **File > Options > Keyboard: Use the Set of My Keyboard Layout.** The keyboard set of 0.94.0 was chosen only
   at the first start, so a writer who had updated kept keys that need AltGr. The new button applies the set that fits
   the layout in use now, after listing what changes; shortcuts you set yourself are kept.
-
-- **Quillbinder speaks eleven languages**. Besides English and German: Spanish, French, Portuguese (Brazil), Italian,
-  Russian, Indonesian, Turkish, Polish and Dutch. Each is shown by its own name in the language list; the nine new ones are
-  machine translations and are marked so ("(machine translation)", in the language of the program) until a speaker has
-  checked them. The list is on the first-start page and in **File > Options > General > Startup**; a new language is used
-  from the next start. At a true first start the program takes the language of the system when it is one of the eleven
-  (else English); an installation that is updated keeps what it had. Numbers, dates and units follow the language.
-- **The manual, the quick start guide and the welcome project follow the language** (English where a language has none).
-  F1 and the links between sections find the right place in a translated manual by its place in the list of headings, so a
-  translated manual has the same headings as the English one. The note in the options that they stay in English is gone.
-- **Spelling dictionaries for the nine new languages as add-ons**, one per language (Spanish es_ES, French fr_FR, Portuguese
-  pt_BR, Italian it_IT, Russian ru_RU, Indonesian id_ID, Turkish tr_TR, Polish pl_PL, Dutch nl_NL), unchanged from
-  LibreOffice's dictionaries (tag libreoffice-25.8.7.3), each with its license and source; the download page lists them. The
-  spell checker now reads the Polish dictionary's encoding (ISO 8859-2).
-- **Speech Transcription**: the main and the fallback language are chosen from the eleven languages (a language stored
-  earlier stays selectable).
-- **Keyboard sets for more layouts** (item 79): French, Belgian, Spanish, Italian, Portuguese, Turkish and Dutch keyboards
-  get the keys without AltGr at the first start, as German keyboards do; the Polish programmer's layout and the others that
-  use AltGr for letters also move four commands that sat on Ctrl+Alt+letter (copy and paste formatting, go to notes, show
-  ruler). Russian and Indonesian keep the usual keys.
-- **Plural forms** follow the language: Russian and Polish have a third form for 2 to 4, French and Portuguese call 0
-  singular, Indonesian and Turkish have no plural after a number.
-- **The inspector's menu entries** (Navigate > Inspect) get their Alt letters from the translated names.
-- **The object lists' values** (role, kind, season, precipitation) are marked for translation like every other text, and the
-  welcome project of each language stores the values the program's list shows in that language (`tools/align-welcome-choices.py`).
 
 - **The Bookmarks tab keeps the sizes of its three parts**. The heights of the two lists and of the text below them
   were lost after a restart or a program update when no bookmark was chosen at that moment (the text part, being
