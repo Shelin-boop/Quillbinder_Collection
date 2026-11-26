@@ -225,8 +225,8 @@ def main(dist, test=False):
             out.append("| %s | **The full version** for Windows: the program with every add-on, installed at its first "
                        "start |" % f)
         for f in win_update:
-            out.append("| %s | Program update and all add-ons for a Quillbinder for Windows you already have "
-                       "(Help > Add-ons and Updates > Install Update or Add-on) |" % f)
+            out.append("| %s | Program update and all add-ons but the spelling dictionaries (each comes on its own) for a "
+                       "Quillbinder for Windows you already have (Help > Add-ons and Updates > Install Update or Add-on) |" % f)
         out.extend(addon_rows(dist, win_addons))
         for f in win_symbols:
             out.append("| %s | The program's debug symbols, to read crash reports (developers) |" % f)

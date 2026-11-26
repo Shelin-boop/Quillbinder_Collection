@@ -15,7 +15,7 @@ DIST=$(cd "$3" && pwd)
 OUT=$4
 mkdir -p "$OUT/tests"
 # the suites for Windows; more join as they are made to work here
-SUITES="qb_tests qb_ui_tests qb_fixes_tests qb_w2_tests qb_w3_tests qb_w4_tests qb_w4c_tests qb_v0602_tests qb_v0601_tests qb_v0650_tests qb_v0604_tests qb_v0700_tests qb_fuzz_tests qb_v0811_tests qb_v064_tests qb_v0611_tests qb_v0603_tests qb_v0812_tests qb_v0813_tests qb_v0900_tests qb_v0901_tests qb_v0902_tests qb_v0903_tests qb_v0904_tests qb_m7_tests qb_m8_tests qb_m9_tests qb_v018_tests qb_v0212_tests qb_v0402_tests qb_v0403_tests qb_v0605_tests qb_v0642_tests qb_v0910_tests qb_v0911_tests qb_v0913_tests qb_v0920_tests qb_m10_tests qb_v0930_tests qb_v0930b_tests qb_v0930c_tests qb_v0930d_tests qb_v0930e_tests qb_v0930f_tests qb_saveas_tests qb_notesplain_tests qb_mmoverview_tests qb_v0931_tests qb_v017_tests qb_v0940a_tests qb_v0940b_tests qb_v0940c_tests qb_v0940d_tests qb_v0940e_tests"
+SUITES="qb_tests qb_ui_tests qb_fixes_tests qb_w2_tests qb_w3_tests qb_w4_tests qb_w4c_tests qb_v0602_tests qb_v0601_tests qb_v0650_tests qb_v0604_tests qb_v0700_tests qb_fuzz_tests qb_v0811_tests qb_v064_tests qb_v0611_tests qb_v0603_tests qb_v0812_tests qb_v0813_tests qb_v0900_tests qb_v0901_tests qb_v0902_tests qb_v0903_tests qb_v0904_tests qb_m7_tests qb_m8_tests qb_m9_tests qb_v018_tests qb_v0212_tests qb_v0402_tests qb_v0403_tests qb_v0605_tests qb_v0642_tests qb_v0910_tests qb_v0911_tests qb_v0913_tests qb_v0920_tests qb_m10_tests qb_v0930_tests qb_v0930b_tests qb_v0930c_tests qb_v0930d_tests qb_v0930e_tests qb_v0930f_tests qb_saveas_tests qb_notesplain_tests qb_mmoverview_tests qb_v0931_tests qb_v017_tests qb_v0940a_tests qb_v0940b_tests qb_v0940c_tests qb_v0940d_tests qb_v0940e_tests qb_v0950a_tests qb_v0950b_tests qb_v0950c_tests qb_v0950d_tests qb_v0950f_tests qb_v0950g_tests"
 # W4a (2026-11-11): suites written for Linux after W3, run to see where they stand on Windows; their failures are
 # reported ("explore") but do not count for the result until they are made to work here and move up to SUITES
 # (v0810 is left out: it needs the Linux fault shim, tests/faultshim.cpp, an LD_PRELOAD library)
@@ -69,6 +69,8 @@ SUITES="qb_tests qb_ui_tests qb_fixes_tests qb_w2_tests qb_w3_tests qb_w4_tests 
 # Windows 0.94.0: v017 counted again (to-do item 32: the inspector follows the binder's choice; fixed in shared code in
 # 0.94.0); the suites of Linux 0.94.0 counted from their first run here: v0940a to v0940e (v0940b leaves out the
 # AppImage's move and the application menu of the Linux desktop: Windows has neither).
+# Windows 0.95.0: the suites of Linux 0.95.0 counted from their first run here: v0950a to v0950d, v0950f, v0950g (v0950b
+# leaves out the AppImage's move and menu entry; v0950g stages and installs the nine dictionary add-ons here too).
 EXPLORE=""
 # D2 (Windows 0.91.3): QB_WIN_SUITES (packaging/windows/win-ci.sh, from "[suites: ...]" in a commit message) runs only
 # the suites it names, as the runner prints them (qb_tests, ui, v0913 ...); a name of no suite fails the run

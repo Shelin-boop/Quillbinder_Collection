@@ -23,6 +23,8 @@ run() { # <folder> <seconds> <output file> <args...>
 }
 count_addons() { ls -d "$ADDONS"/*/ 2>/dev/null | wc -l; }
 expected=$(ls "$FULL/full-addons"/*.qbpkg | wc -l)
+# (Windows 0.95.0) the update bundle carries every add-on but the spelling dictionaries (packaging/windows/win-ci.sh)
+bundled=$(ls "$FULL/full-addons"/*.qbpkg | grep -vc '/dictionary-')
 
 # ---- main: dictionaries, nothing that is not needed, no add-ons
 dics=$(ls "$MAIN/dictionaries"/*.dic 2>/dev/null | wc -l)
@@ -36,10 +38,10 @@ rm -rf "$DATA"
 run "$MAIN" 300 "$OUT/c-layout-update.txt" --install "$(cygpath -w "$UPDATE")" --allow-unsigned
 rc=$?
 log=$(tr -d '\r' < "$OUT/c-layout-update.txt")
-if [ $rc -eq 0 ] && grep -q 'already there' <<< "$log" && [ "$(count_addons)" -eq "$expected" ] && [ ! -d "$DATA/core" -o -z "$(ls "$DATA/core" 2>/dev/null | grep -v state.json)" ]; then
+if [ $rc -eq 0 ] && grep -q 'already there' <<< "$log" && [ "$(count_addons)" -eq "$bundled" ] && [ ! -d "$DATA/core" -o -z "$(ls "$DATA/core" 2>/dev/null | grep -v state.json)" ]; then
     pass update-bundle-on-main
 else
-    fail update-bundle-on-main "rc=$rc add-ons $(count_addons) of $expected; $(head -c 400 <<< "$log")"
+    fail update-bundle-on-main "rc=$rc add-ons $(count_addons) of $bundled; $(head -c 400 <<< "$log")"
 fi
 
 # ---- the full version: its first start installs every add-on once, a second start nothing

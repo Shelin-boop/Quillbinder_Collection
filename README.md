@@ -72,21 +72,22 @@ Add-ons are installed with **Help > Add-ons and Updates > Install Update or Add-
 
 ### Windows
 
-**Quillbinder 0.94.0 for Windows 11 (64-bit), experimental:** the same functions as Linux 0.94.0 (each system counts
+**Quillbinder 0.95.0 for Windows 11 (64-bit), experimental:** the same functions as Linux 0.95.0 (each system counts
 its own fixes in the last number), with Translation Helper inside the full version and the check for
-updates. All Windows files: [the release 0.94.0 for Windows](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.94.0-windows-experimental).
+updates. All Windows files: [the release 0.95.0 for Windows](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.95.0-windows-experimental).
 
-- **[Quillbinder-0.94.0-full-experimental-windows-x64-setup.exe](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-windows-experimental/Quillbinder-0.94.0-full-experimental-windows-x64-setup.exe)**:
+- **[Quillbinder-0.95.0-full-experimental-windows-x64-setup.exe](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.95.0-windows-experimental/Quillbinder-0.95.0-full-experimental-windows-x64-setup.exe)**:
   **the full version** (the program with all add-ons) as a setup program. It asks for a folder (for example
   `C:\Users\<your name>\Quillbinder`, not Program Files) and only unpacks into it: no admin rights, no installation,
   nothing in the registry. The same files as a zip:
-  [Quillbinder-0.94.0-full-experimental-windows-x64.zip](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-windows-experimental/Quillbinder-0.94.0-full-experimental-windows-x64.zip).
-- The program alone: [setup program](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-windows-experimental/Quillbinder-0.94.0-experimental-windows-x64-setup.exe),
-  [zip](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-windows-experimental/Quillbinder-0.94.0-experimental-windows-x64.zip). For a Quillbinder you already have:
-  [quillbinder-0.94.0-experimental-windows-update.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-windows-experimental/quillbinder-0.94.0-experimental-windows-update.qbpkg)
+  [Quillbinder-0.95.0-full-experimental-windows-x64.zip](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.95.0-windows-experimental/Quillbinder-0.95.0-full-experimental-windows-x64.zip).
+- The program alone: [setup program](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.95.0-windows-experimental/Quillbinder-0.95.0-experimental-windows-x64-setup.exe),
+  [zip](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.95.0-windows-experimental/Quillbinder-0.95.0-experimental-windows-x64.zip). For a Quillbinder you already have:
+  [quillbinder-0.95.0-experimental-windows-update.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.95.0-windows-experimental/quillbinder-0.95.0-experimental-windows-update.qbpkg)
   (**Help > Add-ons and Updates > Install Update or Add-on**; the program update and every add-on in one package), or run the new setup
   program into the same folder: it keeps your settings. The release also has the program update alone and each
-  add-on as a package of its own.
+  add-on as a package of its own, among them the spelling dictionaries of the nine new languages
+  (`dictionary-<code>.qbpkg`; English and German come with the program).
 - From 0.92.0 on Quillbinder for Windows looks for updates itself, as on Linux. A later version that needs the whole
   program anew is downloaded as its setup program, checked against the project's signed list, and unpacked into the
   folder you use; your settings and add-ons stay.

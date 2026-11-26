@@ -247,11 +247,13 @@ say "addons: rc=$? $(ls "$OUT/addons" | grep -c '\.qbpkg$') packages ($(mins))"
 grep -E '^translation-proofreading: ' "$OUT/addons.log" >> "$SUM"
 
 # the program update and every add-on in one bundle (needs $singles)
+# (Windows 0.95.0) the nine spelling dictionaries stay out of the bundle: a writer installs the one of their language
+# (they are in the full version and in the release, each on its own), and the bundle would more than double
 make_bundle() {
   "$PY" tools/make-package.py bundle --id quillbinder-update --name "Quillbinder $ver for Windows, with all add-ons" \
-    --version "$ver" --description "The program update to $ver and every add-on in one package. Parts that are already there in the same version are left out." \
+    --version "$ver" --description "The program update to $ver and every add-on in one package (the spelling dictionaries come on their own). Parts that are already there in the same version are left out." \
     --whats-new "Program update and all add-ons" \
-    $(for p in "$OUT/core.qbpkg" $singles; do cygpath -w "$p"; done) "$(cygpath -w "$OUT/quillbinder-$ver-windows-update.qbpkg")" > /dev/null
+    $(for p in "$OUT/core.qbpkg" $singles; do case "$p" in */dictionary-*) continue ;; esac; cygpath -w "$p"; done) "$(cygpath -w "$OUT/quillbinder-$ver-windows-update.qbpkg")" > /dev/null
 }
 
 # ---- the release stage ends here: everything the signing job and packaging/windows/win-release.sh need, in <results>/stage
