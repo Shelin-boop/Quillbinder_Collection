@@ -1,0 +1,3 @@
+Quando uma pasta é mostrada como quadro de cortiça ou como estrutura de tópicos, a aba **Comentários e notas de rodapé** do inspetor lista os comentários e as notas de rodapé de todos os documentos dentro dela, sob o título de cada documento.
+**Experimente:** no Fichário, selecione a pasta **Um capítulo com comentários** abaixo deste documento. Ela abre como quadro de cortiça. Depois abra a aba **Comentários e notas de rodapé** do inspetor (o último botão no alto dele). Um clique em um comentário abre o documento dele naquele ponto, e você pode mudar o texto do comentário ali mesmo.
+O mesmo vale no **Texto combinado** (**Ctrl+1**), em que todos os documentos da pasta aparecem como um só texto: a aba lista as notas de todos eles.

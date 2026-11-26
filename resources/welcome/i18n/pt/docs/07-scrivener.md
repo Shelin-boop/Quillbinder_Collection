@@ -1,0 +1,5 @@
+O {{APP}} lê e grava projetos do Scrivener 3, para que você possa passar de um programa para o outro.
+- **Importar**: **Arquivo > Importar > Projeto do Scrivener…** cria um projeto do {{APP}} a partir de um projeto do Scrivener 3 ou 2. O Fichário, os textos, as sinopses, as notas, as etiquetas, o status, as palavras-chave, os instantâneos, os comentários, as notas de rodapé, os arquivos de pesquisa e as coleções vêm junto. O projeto do Scrivener só é lido.
+- **Trabalhar no formato do Scrivener**: abra o arquivo *.scrivx* dentro de uma pasta *.scriv* com **Arquivo > Abrir projeto…** e escolha **Trabalhar no formato do Scrivener**. O {{APP}} passa a salvar na própria pasta *.scriv*, de modo que você pode continuar no Scrivener depois, por exemplo em outro computador. Feche o projeto em um programa antes de abri-lo no outro.
+- **Arquivo > Salvar como…** salva um projeto no outro formato (ou com outro nome), e **Arquivo > Exportar** salva uma cópia que deixa o projeto em que você trabalha como está.
+- Um projeto próprio do {{APP}} guarda cada documento como um arquivo de texto simples (Markdown, ou RTF se você preferir), que qualquer editor consegue ler.
