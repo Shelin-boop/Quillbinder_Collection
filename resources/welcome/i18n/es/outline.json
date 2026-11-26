@@ -1,0 +1,352 @@
+{
+ "name": "Te damos la bienvenida a {{APP}}",
+ "description": "Un breve recorrido por lo que {{APP}} ofrece más allá de lo habitual",
+ "draftTitle": "Recorrido por las funciones",
+ "objectTemplates": "standard",
+ "rootFirst": [
+  {
+   "title": "Bienvenida",
+   "icon": "qb-information",
+   "textFile": "docs/00-welcome.md",
+   "synopsis": "Qué es este proyecto y las paradas del recorrido."
+  }
+ ],
+ "draft": [
+  {
+   "title": "La barra de iconos",
+   "icon": "qb-flag-red",
+   "textFile": "docs/01-icon-bar.md",
+   "synopsis": "Diez iconos de documento, un clic para cada uno; iconos a partir de texto y de tus propias imágenes."
+  },
+  {
+   "title": "Zoom donde apuntas",
+   "icon": "qb-magnifier",
+   "textFile": "docs/02-zoom.md",
+   "synopsis": "Ctrl+rueda del ratón sobre cualquier parte de la ventana; cada parte conserva su propio zoom."
+  },
+  {
+   "title": "Mapas mentales",
+   "icon": "qb-mindmap",
+   "textFile": "docs/03-mind-maps.md",
+   "synopsis": "Un tablero de notas, líneas y flechas para cada documento. Este tiene un tablero: abre la pestaña Mapa mental.",
+   "mindmap": {
+    "notes": [
+     {
+      "id": 1,
+      "text": "Qué puede hacer un mapa mental",
+      "x": 290,
+      "y": 245,
+      "width": 170,
+      "fontSize": 15,
+      "bold": true,
+      "align": "center",
+      "fill": "#fff2a8",
+      "border": 2,
+      "shape": "cloud"
+     },
+     {
+      "id": 2,
+      "text": "Notas: doble clic en un lugar vacío. Ctrl+Intro crea una nota nueva debajo de la seleccionada.",
+      "x": 20,
+      "y": 30,
+      "width": 200,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 3,
+      "text": "Líneas: arrastra una nota sobre otra. Arrástrala de nuevo ahí para quitar la línea.",
+      "x": 280,
+      "y": 30,
+      "width": 190,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 4,
+      "text": "Flechas: mantén pulsada Alt al soltar. Ctrl+Alt: una flecha de vuelta. Ctrl+Alt+Mayús: ambos extremos.",
+      "x": 530,
+      "y": 30,
+      "width": 210,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 5,
+      "text": "Colores, formas y bordes: clic derecho en una nota.",
+      "x": 560,
+      "y": 250,
+      "width": 180,
+      "fill": "#ffd6d6",
+      "border": 1,
+      "shape": "jagged"
+     },
+     {
+      "id": 6,
+      "text": "Iconos en las esquinas y los lados de una nota, y en el medio de una línea.",
+      "x": 540,
+      "y": 420,
+      "width": 200,
+      "fill": "#e3f6d8",
+      "border": 1,
+      "icons": {
+       "topLeft": "qb-flag-red",
+       "topRight": "qb-light-bulb",
+       "bottomRight": "qb-checked"
+      }
+     },
+     {
+      "id": 7,
+      "text": "Las formas de fondo agrupan notas. Una forma magnética arrastra sus notas.",
+      "x": 290,
+      "y": 455,
+      "width": 170
+     },
+     {
+      "id": 8,
+      "text": "Menú > Notas > Añadir las notas al archivador convierte las notas en documentos.",
+      "x": 20,
+      "y": 430,
+      "width": 200,
+      "fill": "#f0e6ff",
+      "border": 1,
+      "shape": "square"
+     },
+     {
+      "id": 9,
+      "text": "Exporta como PDF, PNG, texto, OPML o archivo de Scapple; los archivos de Scapple se pueden leer.",
+      "x": 20,
+      "y": 245,
+      "width": 200,
+      "fill": "#f0e6ff",
+      "border": 1
+     }
+    ],
+    "shapes": [
+     {
+      "id": 20,
+      "x": 270,
+      "y": 435,
+      "w": 210,
+      "h": 150,
+      "fill": "#fde3b8",
+      "magnetic": true
+     }
+    ],
+    "lines": [
+     {
+      "from": 1,
+      "to": 2,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 3,
+      "arrow": "to",
+      "label": "arrastrar"
+     },
+     {
+      "from": 1,
+      "to": 4,
+      "arrow": "to",
+      "color": "#c0392b"
+     },
+     {
+      "from": 1,
+      "to": 5,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 6,
+      "arrow": "to",
+      "icon": "qb-pencil"
+     },
+     {
+      "from": 1,
+      "to": 7,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 8
+     },
+     {
+      "from": 1,
+      "to": 9,
+      "arrow": "to",
+      "color": "#2f6fbf"
+     }
+    ]
+   }
+  },
+  {
+   "title": "Fichas de objetos",
+   "icon": "qb-character-sheet",
+   "textFile": "docs/04-objects.md",
+   "synopsis": "Personas, lugares y cosas de una historia, cada uno en una ficha de campos, enlazados entre sí.",
+   "children": [
+    {
+     "title": "Una escena en Ashvale",
+     "icon": "qb-location-house",
+     "textFile": "docs/04a-scene.md",
+     "synopsis": "Una escena breve con enlaces a los objetos. La pestaña Objetos enumera quién y qué aparece en ella."
+    }
+   ]
+  },
+  {
+   "title": "Comentarios de toda una carpeta",
+   "icon": "qb-speech-bubble",
+   "textFile": "docs/05-folder-comments.md",
+   "synopsis": "Los comentarios y las notas al pie de todos los documentos de una carpeta, en una sola lista."
+  },
+  {
+   "title": "Un capítulo con comentarios",
+   "type": "folder",
+   "synopsis": "Selecciónalo y abre la pestaña Comentarios y notas al pie del inspector.",
+   "children": [
+    {
+     "title": "El libro del transbordador",
+     "textFile": "docs/05a-scene-one.md",
+     "synopsis": "Una escena con un comentario."
+    },
+    {
+     "title": "Atardecer",
+     "textFile": "docs/05b-scene-two.md",
+     "synopsis": "Una escena con una nota al pie y una anotación en línea."
+    }
+   ]
+  },
+  {
+   "title": "Comparar y transferir",
+   "icon": "qb-reviewer",
+   "textFile": "docs/06-compare.md",
+   "synopsis": "Un manuscrito que vuelve de Word o LibreOffice: mira qué difiere y quédate con cualquiera de los dos lados."
+  },
+  {
+   "title": "Proyectos de Scrivener",
+   "icon": "qb-sync-folder",
+   "textFile": "docs/07-scrivener.md",
+   "synopsis": "Importa un proyecto de Scrivener, o trabaja en él directamente y sigue más tarde en Scrivener."
+  },
+  {
+   "title": "Temas, colores y fuentes",
+   "icon": "qb-eye",
+   "textFile": "docs/08-themes.md",
+   "synopsis": "Modo oscuro y otros temas al instante; la paleta de colores de la barra de formato; instalar fuentes."
+  },
+  {
+   "title": "Actualizaciones y complementos",
+   "icon": "qb-cog",
+   "textFile": "docs/09-updates.md",
+   "synopsis": "Pequeños archivos de paquete, el Gestor de complementos y un camino de vuelta a una versión anterior."
+  },
+  {
+   "title": "Redes de seguridad",
+   "icon": "qb-checked",
+   "textFile": "docs/10-safety.md",
+   "synopsis": "Guardado automático, copias de seguridad, instantáneas, la copia de reserva del archivo del proyecto, informes de fallos y bloqueos."
+  },
+  {
+   "title": "Qué sigue",
+   "icon": "qb-pass",
+   "textFile": "docs/11-where-next.md",
+   "synopsis": "La Guía de inicio rápido, el manual y un proyecto propio."
+  }
+ ],
+ "projectBookmarks": [
+  "Bienvenida"
+ ],
+ "objects": [
+  {
+   "category": "characters",
+   "name": "Mara Fenn",
+   "values": {
+    "role": "Protagonist",
+    "age": "34",
+    "eyes": "Grises",
+    "occupation": "Barquera",
+    "livesIn": [
+     "Ashvale"
+    ],
+    "relations": [
+     "Tobias Quill"
+    ],
+    "traits": "Paciente, terca, cumple cada promesa que hace.",
+    "background": "Se hizo cargo del transbordador de su madre. [Tobias Quill](qbobj-name:Tobias Quill) encontró el nombre de su madre en el viejo libro del transbordador.",
+    "scenes": [
+     "Una escena en Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "characters",
+   "name": "Tobias Quill",
+   "values": {
+    "role": "Supporting",
+    "age": "29",
+    "occupation": "Archivista del pueblo",
+    "livesIn": [
+     "Ashvale"
+    ],
+    "relations": [
+     "Mara Fenn"
+    ],
+    "goals": "Quiere saber quién escribió las primeras páginas del libro del transbordador.",
+    "scenes": [
+     "Una escena en Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "locations",
+   "name": "Ashvale",
+   "values": {
+    "kind": "Village",
+    "environment": [
+     "Fenwood"
+    ],
+    "weather": [
+     "Niebla de otoño"
+    ],
+    "population": "212",
+    "inhabitants": [
+     "Mara Fenn",
+     "Tobias Quill"
+    ],
+    "description": "Cuarenta casas a lo largo de un río lento, un transbordador y una torre de iglesia que se ve desde [Fenwood](qbobj-name:Fenwood).",
+    "scenes": [
+     "Una escena en Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "environments",
+   "name": "Fenwood",
+   "values": {
+    "kind": "Forest",
+    "flora": "Abedules y alisos; juncos a lo largo del río.",
+    "weather": [
+     "Niebla de otoño"
+    ],
+    "locations": [
+     "Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "weather",
+   "name": "Niebla de otoño",
+   "values": {
+    "season": "Autumn",
+    "temperature": "8",
+    "precipitation": "Fog",
+    "effects": "El transbordador se detiene cuando no se ve la otra orilla.",
+    "where": [
+     "Ashvale",
+     "Fenwood"
+    ]
+   }
+  }
+ ]
+}
