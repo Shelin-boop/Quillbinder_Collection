@@ -71,6 +71,12 @@ public:
     // A message for the writer after opening (the project file was repaired ...); "" = none.
     QString openNotice;
     // The copy of the project file kept when the project last opened (settings/spare-copy.qbx).
+    // 0.95.0 (item 98): the labels new projects start with (File > Options > Appearance > Standard Colors). The built-in six
+    // are the starting values; a list set here (empty = the built-in ones) is used by every project made from now on;
+    // existing projects keep theirs.
+    static QList<Label> builtInLabels();
+    static void setStandardLabels(const QList<Label> &labels);
+    static QList<Label> standardLabels();
     static QString spareCopyOf(const QString &projectFile);
     // Puts the spare copy in place of a damaged project file, which is kept as
     // "<name>.qbx.damaged-<time>" (keptAs).

@@ -1,4 +1,6 @@
 #include "ui/OptionsDialog.h"
+#include "ui/ProfileDialogs.h"
+#include "ui/Profiles.h"
 #include "ui/OptionStorage.h"
 #include "core/TestSwitches.h"
 #include "ui/HintLabel.h"
@@ -13,6 +15,7 @@
 #include "core/CrashGuard.h"
 #include "core/ItemIcons.h"
 #include "core/Objects.h"
+#include "core/Project.h"
 #include "media/MediaApi.h"
 #include "text/DirectFormat.h"
 #include "text/TextUtil.h"
@@ -106,7 +109,7 @@ struct LookPage {
     QStringList colors;
     QStringList fonts;
 };
-enum LookPageId { LGeneral, LBinder, LComposition, LCorkboard, LCards, LInspector, LEditor, LOutliner, LCombined, LTargets, LMarks };
+enum LookPageId { LGeneral, LBinder, LComposition, LCorkboard, LCards, LInspector, LEditor, LOutliner, LCombined, LTargets, LMarks, LStandard };
 
 QList<LookPage> lookPages()
 {
@@ -134,7 +137,9 @@ QList<LookPage> lookPages()
             {QT_TRANSLATE_NOOP("OptionsDialog", "Outliner"), l({"outlinerBackground", "outlinerAlternate", "outlinerText"}), l({"outliner"})},
             {QT_TRANSLATE_NOOP("OptionsDialog", "Combined Text"), {}, l({"combinedTitle"})},
             {QT_TRANSLATE_NOOP("OptionsDialog", "Target Progress Bars"), l({"targetSession", "targetDraft", "targetReached"}), {}},
-            {QT_TRANSLATE_NOOP("OptionsDialog", "Textual Marks"), l({"editorLink", "searchHit", "spellingError", "invisibles"}), {}}};
+            {QT_TRANSLATE_NOOP("OptionsDialog", "Textual Marks"), l({"editorLink", "searchHit", "spellingError", "invisibles"}), {}},
+            // 0.95.0 (item 98): the labels of new projects and the swatches of the color popups (no theme colors)
+            {QT_TRANSLATE_NOOP("OptionsDialog", "Standard Colors"), {}, {}}};
 }
 
 const theme::RoleInfo *lookRoleInfo(const QString &key)
@@ -1409,6 +1414,8 @@ QWidget *OptionsDialog::appearanceSection()
 // One part of the window: its options, fonts and colors.
 QWidget *OptionsDialog::appearancePage(int which)
 {
+    if (which == LStandard)
+        return standardColorsPage();
     const AppSettings &s = AppSettings::instance();
     const LookPage lp = lookPages().value(which);
     auto *page = new QWidget;
@@ -2348,31 +2355,191 @@ QWidget *OptionsDialog::extrasSection()
     return subPages(SExtras, pages, QStringLiteral("optExtrasPages"));
 }
 
+// ---- Appearance > Standard Colors (0.95.0, item 98)
+
+namespace {
+QIcon colorIcon(const QColor &c) { return palette::swatch(c, 18); }
+}
+
+QWidget *OptionsDialog::standardColorsPage()
+{
+    const AppSettings &s = AppSettings::instance();
+    m_stdLabels = s.standardLabels.isEmpty() ? Project::builtInLabels() : s.standardLabels;
+    m_stdText = s.textSwatchColors();
+    m_stdHighlight = s.highlightSwatchColors();
+    m_stdTextStart = s.barTextColor;
+    m_stdHighlightStart = s.barHighlightColor;
+    m_stdButtons.clear();
+    m_stdLabelNames.clear();
+    auto *page = new QWidget;
+    auto *v = new QVBoxLayout(page);
+    v->setContentsMargins(8, 0, 4, 0);
+    v->addWidget(hint(tr("The colors new things start with. They belong to your profile. Projects that exist keep their own labels."), page));
+    auto button = [&](const QString &key, const QString &tip) {
+        auto *b = new QPushButton(page);
+        b->setObjectName(QStringLiteral("std_") + key);
+        b->setIconSize(QSize(18, 18));
+        b->setFixedWidth(44);
+        b->setToolTip(tip);
+        m_stdButtons.insert(key, b);
+        connect(b, &QPushButton::clicked, this, [this, key, b] {
+            const QColor now = standardColor(key);
+            const QColor c = QColorDialog::getColor(now.isValid() ? now : QColor(Qt::white), this, tr("Standard Color"));
+            if (c.isValid())
+                setStandardColor(key, c);
+            Q_UNUSED(b);
+        });
+        optstore::mark(b, QStringLiteral("standardColors/*"));
+        return b;
+    };
+    auto *labels = new QGroupBox(tr("Labels of new projects"), page);
+    auto *lg = new QGridLayout(labels);
+    for (int i = 0; i < 6; ++i) {
+        auto *name = new QLineEdit(m_stdLabels.value(i).name, labels);
+        name->setObjectName(QStringLiteral("std_labelName%1").arg(i));
+        m_stdLabelNames << name;
+        optstore::mark(name, QStringLiteral("standardColors/*"));
+        connect(name, &QLineEdit::textEdited, this, [this, i](const QString &t) {
+            if (i < m_stdLabels.size())
+                m_stdLabels[i].name = t;
+        });
+        lg->addWidget(button(QStringLiteral("label%1").arg(i), tr("Color of this label")), i, 0);
+        lg->addWidget(name, i, 1);
+    }
+    lg->setColumnStretch(1, 1);
+    v->addWidget(labels);
+    auto *swatches = new QGroupBox(tr("Colors of the popups"), page);
+    auto *sg = new QGridLayout(swatches);
+    sg->addWidget(new QLabel(tr("Text color:"), swatches), 0, 0);
+    sg->addWidget(new QLabel(tr("Highlight:"), swatches), 1, 0);
+    for (int i = 0; i < 6; ++i) {
+        sg->addWidget(button(QStringLiteral("text%1").arg(i), tr("A color of the text color popup")), 0, i + 1);
+        sg->addWidget(button(QStringLiteral("highlight%1").arg(i), tr("A color of the highlight popup")), 1, i + 1);
+    }
+    sg->setColumnStretch(7, 1);
+    v->addWidget(swatches);
+    auto *starts = new QGroupBox(tr("The color each button starts with"), page);
+    auto *tg = new QGridLayout(starts);
+    tg->addWidget(new QLabel(tr("Text color button:"), starts), 0, 0);
+    tg->addWidget(button(QStringLiteral("textStart"), tr("The color of the text color button when the program starts")), 0, 1);
+    tg->addWidget(new QLabel(tr("Highlight button:"), starts), 1, 0);
+    tg->addWidget(button(QStringLiteral("highlightStart"), tr("The color of the highlight button when the program starts")), 1, 1);
+    tg->setColumnStretch(2, 1);
+    v->addWidget(starts);
+    auto *defaults = new QPushButton(tr("Defaults"), page);
+    defaults->setObjectName(QStringLiteral("stdDefaults"));
+    defaults->setToolTip(tr("Back to the program's standard labels and colors"));
+    connect(defaults, &QPushButton::clicked, this, [this] { resetStandardColors(); });
+    v->addWidget(defaults, 0, Qt::AlignLeft);
+    v->addStretch(1);
+    refreshStandardColors();
+    return page;
+}
+
+void OptionsDialog::refreshStandardColors()
+{
+    for (auto it = m_stdButtons.cbegin(); it != m_stdButtons.cend(); ++it)
+        it.value()->setIcon(colorIcon(standardColor(it.key())));
+    for (int i = 0; i < m_stdLabelNames.size(); ++i)
+        if (i < m_stdLabels.size() && m_stdLabelNames[i]->text() != m_stdLabels[i].name)
+            m_stdLabelNames[i]->setText(m_stdLabels[i].name);
+}
+
+QColor OptionsDialog::standardColor(const QString &which) const
+{
+    auto index = [&which](const QString &prefix) { return which.startsWith(prefix) ? which.mid(prefix.size()).toInt() : -1; };
+    if (which == QLatin1String("textStart"))
+        return m_stdTextStart;
+    if (which == QLatin1String("highlightStart"))
+        return m_stdHighlightStart;
+    if (const int i = index(QStringLiteral("label")); i >= 0 && i < m_stdLabels.size())
+        return m_stdLabels[i].color;
+    if (const int i = index(QStringLiteral("text")); i >= 0 && i < m_stdText.size())
+        return m_stdText[i];
+    if (const int i = index(QStringLiteral("highlight")); i >= 0 && i < m_stdHighlight.size())
+        return m_stdHighlight[i];
+    return QColor();
+}
+
+void OptionsDialog::setStandardColor(const QString &which, const QColor &color)
+{
+    auto index = [&which](const QString &prefix) { return which.startsWith(prefix) ? which.mid(prefix.size()).toInt() : -1; };
+    if (which == QLatin1String("textStart"))
+        m_stdTextStart = color;
+    else if (which == QLatin1String("highlightStart"))
+        m_stdHighlightStart = color;
+    else if (const int i = index(QStringLiteral("label")); i >= 0 && i < m_stdLabels.size())
+        m_stdLabels[i].color = color;
+    else if (const int i = index(QStringLiteral("text")); i >= 0 && i < m_stdText.size())
+        m_stdText[i] = color;
+    else if (const int i = index(QStringLiteral("highlight")); i >= 0 && i < m_stdHighlight.size())
+        m_stdHighlight[i] = color;
+    refreshStandardColors();
+}
+
+void OptionsDialog::setStandardLabelName(int index, const QString &name)
+{
+    if (index >= 0 && index < m_stdLabels.size())
+        m_stdLabels[index].name = name;
+    refreshStandardColors();
+}
+
+void OptionsDialog::resetStandardColors()
+{
+    m_stdLabels = Project::builtInLabels();
+    m_stdText = AppSettings::standardSwatches();
+    m_stdHighlight = AppSettings::standardSwatches();
+    m_stdTextStart = QColor(200, 30, 30);
+    m_stdHighlightStart = QColor(255, 230, 0);
+    refreshStandardColors();
+}
+
+bool OptionsDialog::exportProfileToFile(const QString &file, QString *error)
+{
+    apply();
+    return profiles::exportTo(profiles::active(), file, error);
+}
+
 // ==================================================================== Manage, Defaults
 
 void OptionsDialog::fillManageMenu()
 {
     m_manageMenu->clear();
-    QAction *load = m_manageMenu->addAction(tr("Load Options from File..."), this, [this] {
-        const QString file = QFileDialog::getOpenFileName(this, tr("Load Options"), QDir::homePath(), tr("Options (*.qboptions)"));
+    // 0.95.0 (item 95): profiles replace the files of options (Save Options to File, Load Options from File)
+    auto *window = qobject_cast<MainWindow *>(parentWidget());
+    m_manageMenu->addAction(tr("Export Profile..."), this, [this] {
+        apply();
+        const QString name = profiles::active();
+        QString file = QFileDialog::getSaveFileName(this, tr("Export Profile"), QDir::homePath() + QLatin1Char('/') + name + QLatin1String(".qbprofile"),
+                                                    tr("Profiles (*.qbprofile)"));
+        if (file.isEmpty())
+            return;
+        if (QFileInfo(file).suffix().isEmpty())
+            file += QLatin1String(".qbprofile");
+        QString err;
+        if (!profiles::exportTo(name, file, &err))
+            QMessageBox::warning(this, tr("Export Profile"), err);
+    })->setObjectName(QStringLiteral("manageSave"));
+    QAction *load = m_manageMenu->addAction(tr("Import Profile..."), this, [this] {
+        const QString file = QFileDialog::getOpenFileName(this, tr("Import Profile"), QDir::homePath(),
+                                                          tr("Profiles and options (*.qbprofile *.qboptions)"));
         if (file.isEmpty())
             return;
         QString err;
-        if (!loadOptionsFromFile(file, &err))
-            QMessageBox::warning(this, tr("Load Options"), err);
+        const QString name = profileui::importWithQuestion(this, file, &err);
+        if (name.isEmpty())
+            QMessageBox::warning(this, tr("Import Profile"), err);
+        else
+            QMessageBox::information(this, tr("Import Profile"),
+                                     tr("The profile “%1” was imported. Switch to it under View > Profiles.").arg(name));
     });
     load->setObjectName(QStringLiteral("manageLoad"));
-    load->setEnabled(m_optScope == AllProjects); // a file of options is the program's (0.62)
-    m_manageMenu->addAction(tr("Save Options to File..."), this, [this] {
-        apply();
-        const QString file = QFileDialog::getSaveFileName(this, tr("Save Options"), QDir::home().filePath(QStringLiteral("Quillbinder.qboptions")),
-                                                          tr("Options (*.qboptions)"));
-        if (file.isEmpty())
-            return;
-        QString err;
-        if (!saveOptionsToFile(file, &err))
-            QMessageBox::warning(this, tr("Save Options"), err);
-    })->setObjectName(QStringLiteral("manageSave"));
+    load->setEnabled(m_optScope == AllProjects); // a profile is the program's (0.62)
+    if (window)
+        m_manageMenu->addAction(tr("Manage Profiles..."), this, [this, window] {
+            reject();
+            QTimer::singleShot(0, window, [window] { window->manageProfiles(); });
+        })->setObjectName(QStringLiteral("manageProfiles"));
     m_manageMenu->addAction(tr("Save Theme Options to File..."), this, [this] {
         // the theme as shown here, with the changes made on top of it
         theme::Theme look = shownTheme();
@@ -2544,6 +2711,19 @@ void OptionsDialog::apply()
         sec->apply();
     QTimer::singleShot(0, &toolhost::host(), [] { toolhost::host().notifySettingsChanged(); });
     AppSettings &s = AppSettings::instance();
+    // Appearance > Standard Colors (0.95.0)
+    if (!m_stdLabels.isEmpty()) {
+        s.standardLabels = m_stdLabels;
+        for (int i = 0; i < s.standardLabels.size(); ++i) {
+            s.standardLabels[i].id = i;
+            if (s.standardLabels[i].name.trimmed().isEmpty())
+                s.standardLabels[i].name = Project::builtInLabels().value(i).name;
+        }
+        s.textSwatches = m_stdText;
+        s.highlightSwatches = m_stdHighlight;
+        s.barTextColor = m_stdTextStart;
+        s.barHighlightColor = m_stdHighlightStart;
+    }
     // General
     s.openLastProject = m_openLast->isChecked();
     s.groupDigits = m_groupDigits->isChecked();

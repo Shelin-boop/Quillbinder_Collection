@@ -151,7 +151,10 @@ bool programOnly(const QString &key)
         QStringLiteral("window/"),          // window places and panels shown
         QStringLiteral("layouts/"),         // saved layouts are the writer's, for every project
         QStringLiteral("appearance/colors/"), QStringLiteral("appearance/fonts/"), // the look: settings/look.json
-        QStringLiteral("quillbinderOptions/")};
+        QStringLiteral("quillbinderOptions/"),
+        QStringLiteral("profile/"),         // 0.95.0: the profile in use and the built-in profile deleted
+        QStringLiteral("standardColors/"),  // 0.95.0: part of the user profile, never a project's
+        QStringLiteral("themes/")};         // 0.95.0: built-in themes the writer deleted
     for (const QString &p : prefixes)
         if (key.startsWith(p))
             return true;
@@ -167,7 +170,7 @@ bool programOnly(const QString &key)
         // markers of one-time changes
         QStringLiteral("toolbars/paraButtons0604"), QStringLiteral("toolbars/toolButtonsPlaced"),
         QStringLiteral("toolbars/split0910"), // 0.91.0: the two toolbars' lists split over the seven bars
-        QStringLiteral("toolbars/themesOff0940")}; // 0.94.0: the Themes toolbar off at first, once
+        QStringLiteral("toolbars/themesOff0940"), QStringLiteral("toolbars/extraShown")}; // 0.94.0: the Themes toolbar off at first, once
     if (keys.contains(key))
         return true;
     // 0.64.1 (the external audit of 2026-11-09, X-2, D-2, D-4): an allow list. A project (its

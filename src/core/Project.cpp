@@ -310,11 +310,26 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
     return p;
 }
 
+static QList<Label> &standardLabelList()
+{
+    static QList<Label> list;
+    return list;
+}
+
+QList<Label> Project::builtInLabels()
+{
+    return {{0, tr("Red"), QColor(214, 69, 65)},     {1, tr("Orange"), QColor(235, 140, 50)},
+            {2, tr("Yellow"), QColor(230, 200, 40)}, {3, tr("Green"), QColor(80, 170, 80)},
+            {4, tr("Blue"), QColor(70, 130, 210)},   {5, tr("Purple"), QColor(150, 90, 190)}};
+}
+
+void Project::setStandardLabels(const QList<Label> &labels) { standardLabelList() = labels; }
+
+QList<Label> Project::standardLabels() { return standardLabelList().isEmpty() ? builtInLabels() : standardLabelList(); }
+
 void Project::setupDefaults()
 {
-    labels = {{0, tr("Red"), QColor(214, 69, 65)},     {1, tr("Orange"), QColor(235, 140, 50)},
-              {2, tr("Yellow"), QColor(230, 200, 40)}, {3, tr("Green"), QColor(80, 170, 80)},
-              {4, tr("Blue"), QColor(70, 130, 210)},   {5, tr("Purple"), QColor(150, 90, 190)}};
+    labels = standardLabels();
     statuses = {{0, tr("To Do")},         {1, tr("In Progress")}, {2, tr("First Draft")},
                 {3, tr("Revised Draft")}, {4, tr("Final Draft")}, {5, tr("Done")}};
     const QString heading = newId();

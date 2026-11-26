@@ -81,6 +81,7 @@
 #include "ui/ThemeDialogs.h"
 #include "ui/Outliner.h"
 #include "ui/ProjectSettingsDialog.h"
+#include "ui/Profiles.h"
 #include "ui/SpellChecker.h"
 #include "ui/StartDialog.h"
 #include "ui/StyleDialogs.h"
@@ -298,11 +299,14 @@ MainWindow::MainWindow()
     createToolBars();
     createFormatBar();
     createIconBar();
+    createProfileBars(); // 0.95.0
     // the fields on the toolbars (quick search, style, font, size ...) in the color of the
     // menus and toolbars, not of lists (0.60.3)
     for (QToolBar *bar : m_bars)
         theme::panelFields(bar);
     theme::panelFields(m_iconBar);
+    theme::panelFields(m_profileBar);
+    theme::panelFields(m_labelBar);
     rebuildStyleActions();
     rebuildScriptActions();
     rebuildLayoutActions();
@@ -563,12 +567,22 @@ MainWindow::MainWindow()
     {
         QList<GripBar *> gripBars;
         QStringList rowOne, rowTwo;
-        for (toolbars::Bar b : toolbars::allBars())
+        for (toolbars::Bar b : toolbars::allBars()) {
             if (auto *bar = qobject_cast<GripBar *>(m_bars[int(b)])) {
                 gripBars << bar;
                 (toolbars::isFormatBar(b) ? rowTwo : rowOne) << bar->objectName();
             }
+            if (b == toolbars::Bar::Themes)
+                if (auto *bar = qobject_cast<GripBar *>(m_profileBar)) { // 0.95.0: the Profiles toolbar stands after Themes
+                    gripBars << bar;
+                    rowOne << bar->objectName();
+                }
+        }
         if (auto *bar = qobject_cast<GripBar *>(m_iconBar)) {
+            gripBars << bar;
+            rowTwo << bar->objectName();
+        }
+        if (auto *bar = qobject_cast<GripBar *>(m_labelBar)) { // 0.95.0: the Labels toolbar after the icon bar
             gripBars << bar;
             rowTwo << bar->objectName();
         }
@@ -3251,8 +3265,10 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
         pane->setProject(proj);
     m_inspector->setProject(proj);
     rebuildIconBar(); // the project may have icons of its own in the bar
+    rebuildLabelBar(); // ... and its own labels
     connect(proj, &Project::countsChanged, this, &MainWindow::updateTargetsDisplay);
     connect(proj, &Project::settingsChanged, this, [this] {
+        rebuildLabelBar();
         updateTargetsDisplay();
         updateActions();
         m_binder->refreshCollections();
@@ -3597,6 +3613,7 @@ bool MainWindow::closeProject()
     updateWindowTitle();
     updateTargetsDisplay();
     updateActions();
+    rebuildLabelBar();
     toolhost::host().notifyProjectChanged();
     return true;
 }
@@ -3838,14 +3855,8 @@ void MainWindow::closeEvent(QCloseEvent *e)
         return;
     }
     toolhost::host().shutdownTools(); // tools save their work (scratch pad notes)
-    QSettings s;
-    s.setValue(QStringLiteral("window/geometry"), saveGeometry());
-    s.setValue(QStringLiteral("window/state"), saveState());
-    savePaneSettings(); // 0.93.0: the places and sizes (both shapes, per device)
-    s.setValue(QStringLiteral("window/inspector"), a[QStringLiteral("showInspector")]->isChecked());
-    s.setValue(QStringLiteral("window/binder"), a[QStringLiteral("showBinder")]->isChecked());
-    s.setValue(QStringLiteral("window/toolbar"), a[QStringLiteral("showToolbar")]->isChecked());
-    s.setValue(QStringLiteral("window/formatBar"), a[QStringLiteral("showFormatBar")]->isChecked());
+    saveWindowSettings();
+    profiles::saveActive(); // 0.95.0: the profile in use keeps what the program has now
     e->accept();
 }
 

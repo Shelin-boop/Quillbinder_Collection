@@ -101,6 +101,7 @@ void MainWindow::createExtraActions()
         if (dlg.exec() == QDialog::Accepted && !dlg.chosen().isEmpty())
             setIconFor(dlg.chosen());
     });
+    createProfileActions(); // 0.95.0: View > Profiles and the switches of the Profiles and Labels toolbars
     // ---- icon bar
     QAction *showBar = act(QStringLiteral("showIconBar"), tr("&Icon Bar"));
     showBar->setCheckable(true);

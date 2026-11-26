@@ -1,4 +1,5 @@
 #pragma once
+#include "core/ProjectTypes.h"
 #include "ui/Theme.h"
 
 #include <QColor>
@@ -196,6 +197,21 @@ public:
     int freezeSeconds = 30;
     int keepReports = 20;
 
+    // 0.95.0 (item 98, File > Options > Appearance > Standard Colors; part of the user profile): the labels new projects
+    // start with (empty = the built-in six), the six swatches of the text color and of the highlight popup (empty = the
+    // standard colors; the color each button starts with is barTextColor / barHighlightColor above)
+    QList<Label> standardLabels;
+    QList<QColor> textSwatches, highlightSwatches;
+    static QList<QColor> standardSwatches();      // red, blue, yellow, green, white, black
+    // the lists in use (the standard ones where nothing was chosen), always six swatches
+    QList<QColor> textSwatchColors() const;
+    QList<QColor> highlightSwatchColors() const;
+    // Standard Colors > Defaults
+    void resetStandardColors();
+    // 0.95.0 (item 95): the whole settings read anew from the program's settings file, a value that is not there
+    // taking the program's standard (a switch of profile; load() alone would keep the member's old value)
+    void reloadAll();
+
     // toolbars (View > Customize Toolbars); an empty list means the standard set
     // 0.91.0: seven toolbars (toolbars::Bar in ToolbarConfig.h). toolbarMain and toolbarFormat are the lists of the
     // bars Main and Format (style and font) now; toolbarList(bar) reaches every list by the bar's number.
@@ -205,6 +221,8 @@ public:
     const QStringList &toolbarList(int bar) const;
     // the bars switched off one by one (toolbars::barKey); Show Toolbar and Show Format Bar switch whole rows besides
     QStringList toolbarHidden;
+    // 0.95.0: the Profiles ("profiles") and Labels ("labels") toolbars that are switched on; both are off at first (toolbars/extraShown)
+    QStringList toolbarExtraShown;
     int toolbarIconSize = 22;                     // main toolbar: 16 | 22 | 32
     QString toolbarStyle = QStringLiteral("icons"); // icons | beside | under
 

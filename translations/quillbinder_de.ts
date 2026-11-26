@@ -351,6 +351,10 @@ Die Vornamen dieser Liste sind nicht in weiblich und männlich unterteilt.</tran
         <source>Textual Marks</source>
         <translation>Textmarken</translation>
     </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>Standardfarben</translation>
+    </message>
 </context>
 <context>
     <name>Portable</name>
@@ -3547,6 +3551,74 @@ Sie liegt in %3, und die nächste Sicherung bringt sie an ihren Platz.</translat
     <message>
         <source>Theme button (Light, Dark, My Look 1, My Look 2 and all themes)</source>
         <translation>Design-Schaltfläche (Hell, Dunkel, Mein Aussehen 1, Mein Aussehen 2 und alle Designs)</translation>
+    </message>
+    <message>
+        <source>Name of the profile:</source>
+        <translation>Name des Profils:</translation>
+    </message>
+    <message>
+        <source>There is already a profile named “%1”. Choose another name.</source>
+        <translation>Es gibt bereits ein Profil namens „%1“. Wählen Sie einen anderen Namen.</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Profil importieren</translation>
+    </message>
+    <message>
+        <source>The profile also names programs, folders, files or addresses (a folder may not exist on this computer):
+
+%1
+
+Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
+        <translation>Das Profil nennt auch Programme, Ordner, Dateien oder Adressen (ein Ordner ist auf diesem Computer vielleicht nicht vorhanden):
+
+%1
+
+Sollen diese mit übernommen werden? Übernehmen Sie sie nur, wenn Sie die Datei selbst erstellt haben oder ihrer Herkunft vertrauen.</translation>
+    </message>
+    <message>
+        <source>A temporary file could not be made.</source>
+        <translation>Es konnte keine temporäre Datei erstellt werden.</translation>
+    </message>
+    <message>
+        <source>Nothing to write.</source>
+        <translation>Es gibt nichts zu schreiben.</translation>
+    </message>
+    <message>
+        <source>The file could not be written (%1). The file that was there is unchanged.</source>
+        <translation>Die Datei konnte nicht geschrieben werden (%1). Die vorhandene Datei ist unverändert.</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Mein Profil</translation>
+    </message>
+    <message>
+        <source>The profile “%1” could not be read.</source>
+        <translation>Das Profil „%1“ konnte nicht gelesen werden.</translation>
+    </message>
+    <message>
+        <source>There is no profile “%1”.</source>
+        <translation>Es gibt kein Profil „%1“.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be deleted.</source>
+        <translation>Das Profil „%1“ kann nicht gelöscht werden.</translation>
+    </message>
+    <message>
+        <source>The profile in use cannot be deleted. Switch to another profile first.</source>
+        <translation>Das verwendete Profil kann nicht gelöscht werden. Wechseln Sie zuerst zu einem anderen Profil.</translation>
+    </message>
+    <message>
+        <source>The file of the profile could not be deleted.</source>
+        <translation>Die Datei des Profils konnte nicht gelöscht werden.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be renamed.</source>
+        <translation>Das Profil „%1“ kann nicht umbenannt werden.</translation>
+    </message>
+    <message>
+        <source>This is not a file of a profile or of options saved by Quillbinder.</source>
+        <translation>Das ist keine Datei mit einem Profil oder mit Einstellungen, die Quillbinder gespeichert hat.</translation>
     </message>
 </context>
 <context>
@@ -8868,6 +8940,38 @@ Stattdessen „%4“ zuweisen? „%2“ hat dann kein Tastenkürzel mehr.</trans
         <source>shortcuts</source>
         <translation>Tastenkürzel</translation>
     </message>
+    <message>
+        <source>Use the Set of My Keyboard Layout…</source>
+        <translation>Den Satz für meine Tastaturbelegung verwenden…</translation>
+    </message>
+    <message>
+        <source>Take the shortcuts that fit the keyboard layout in use now (a German keyboard gets keys that need no AltGr). Shortcuts you set yourself stay as they are.</source>
+        <translation>Die Tastenkürzel übernehmen, die zur jetzt verwendeten Tastaturbelegung passen (eine deutsche Tastatur bekommt Tasten, die kein AltGr brauchen). Tastenkürzel, die Sie selbst festgelegt haben, bleiben unverändert.</translation>
+    </message>
+    <message>
+        <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
+        <translation>Das System teilt nicht mit, welche Tastaturbelegung verwendet wird, daher kann das Programm keinen Satz wählen. Einzelne Tastenkürzel können Sie unten trotzdem ändern.</translation>
+    </message>
+    <message>
+        <source>The shortcuts already come from the set for your keyboard layout (%1).</source>
+        <translation>Die Tastenkürzel stammen bereits aus dem Satz für Ihre Tastaturbelegung (%1).</translation>
+    </message>
+    <message>
+        <source> (you set another shortcut: it stays)</source>
+        <translation> (Sie haben ein anderes Tastenkürzel festgelegt: es bleibt)</translation>
+    </message>
+    <message>
+        <source>Use the set of shortcuts for your keyboard layout (%1)? These standard shortcuts change at once:
+
+%2
+
+Shortcuts you set yourself stay as they are.</source>
+        <translation>Den Satz der Tastenkürzel für Ihre Tastaturbelegung (%1) verwenden? Diese Standard-Tastenkürzel ändern sich sofort:
+
+%2
+
+Tastenkürzel, die Sie selbst festgelegt haben, bleiben unverändert.</translation>
+    </message>
 </context>
 <context>
     <name>qb::KeywordsDialog</name>
@@ -13134,6 +13238,66 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
             <numerusform>Welche Art Objekt soll aus %n Blättern werden?</numerusform>
         </translation>
     </message>
+    <message>
+        <source>&amp;Profiles</source>
+        <translation>&amp;Profile</translation>
+    </message>
+    <message>
+        <source>&amp;Manage Profiles…</source>
+        <translation>Profile &amp;verwalten…</translation>
+    </message>
+    <message>
+        <source>Use, save, rename, copy, delete, export and import profiles</source>
+        <translation>Profile verwenden, speichern, umbenennen, kopieren, löschen, exportieren und importieren</translation>
+    </message>
+    <message>
+        <source>&amp;Save Settings as New Profile…</source>
+        <translation>Einstellungen als neues Profil &amp;speichern…</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Einstellungen als neues Profil speichern</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Mein Profil</translation>
+    </message>
+    <message>
+        <source>Keep the options, toolbars, window and theme as they are now in a new profile</source>
+        <translation>Die Einstellungen, Werkzeugleisten, das Fenster und das Design so, wie sie jetzt sind, in einem neuen Profil behalten</translation>
+    </message>
+    <message>
+        <source>Profiles</source>
+        <translation>Profile</translation>
+    </message>
+    <message>
+        <source>Labels</source>
+        <translation>Etiketten</translation>
+    </message>
+    <message>
+        <source>Profile:</source>
+        <translation>Profil:</translation>
+    </message>
+    <message>
+        <source>The profile in use: %1. A click lists the profiles.</source>
+        <translation>Das verwendete Profil: %1. Ein Klick zeigt die Profile.</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Etikett</translation>
+    </message>
+    <message>
+        <source>No Label</source>
+        <translation>Kein Etikett</translation>
+    </message>
+    <message>
+        <source>Switch Profile</source>
+        <translation>Profil wechseln</translation>
+    </message>
+    <message>
+        <source>The profile sets another language; it takes effect when the program is started again.</source>
+        <translation>Das Profil legt eine andere Sprache fest; sie wird wirksam, wenn das Programm neu gestartet wird.</translation>
+    </message>
 </context>
 <context>
     <name>qb::ManageIconsDialog</name>
@@ -16954,6 +17118,98 @@ Ihre zuletzt verwendeten Projekte, eigene Designs, Layouts, Symbolleisten und Ta
     <message>
         <source>Show the draft and session progress as two thin lines under the quick search field (the footer shows it as well)</source>
         <translation>Fortschritt von Entwurf und Sitzung als zwei dünne Linien unter dem Schnellsuchfeld zeigen (die Fußzeile zeigt ihn ebenfalls)</translation>
+    </message>
+    <message>
+        <source>The colors new things start with. They belong to your profile. Projects that exist keep their own labels.</source>
+        <translation>Die Farben, mit denen Neues beginnt. Sie gehören zu Ihrem Profil. Bestehende Projekte behalten ihre eigenen Etiketten.</translation>
+    </message>
+    <message>
+        <source>Standard Color</source>
+        <translation>Standardfarbe</translation>
+    </message>
+    <message>
+        <source>Labels of new projects</source>
+        <translation>Etiketten neuer Projekte</translation>
+    </message>
+    <message>
+        <source>Color of this label</source>
+        <translation>Farbe dieses Etiketts</translation>
+    </message>
+    <message>
+        <source>Colors of the popups</source>
+        <translation>Farben der Auswahlfenster</translation>
+    </message>
+    <message>
+        <source>Text color:</source>
+        <translation>Textfarbe:</translation>
+    </message>
+    <message>
+        <source>Highlight:</source>
+        <translation>Hervorhebung:</translation>
+    </message>
+    <message>
+        <source>A color of the text color popup</source>
+        <translation>Eine Farbe des Textfarben-Auswahlfensters</translation>
+    </message>
+    <message>
+        <source>A color of the highlight popup</source>
+        <translation>Eine Farbe des Hervorhebungs-Auswahlfensters</translation>
+    </message>
+    <message>
+        <source>The color each button starts with</source>
+        <translation>Die Farbe, mit der jede Schaltfläche beginnt</translation>
+    </message>
+    <message>
+        <source>Text color button:</source>
+        <translation>Textfarben-Schaltfläche:</translation>
+    </message>
+    <message>
+        <source>The color of the text color button when the program starts</source>
+        <translation>Die Farbe der Textfarben-Schaltfläche beim Start des Programms</translation>
+    </message>
+    <message>
+        <source>Highlight button:</source>
+        <translation>Hervorhebungs-Schaltfläche:</translation>
+    </message>
+    <message>
+        <source>The color of the highlight button when the program starts</source>
+        <translation>Die Farbe der Hervorhebungs-Schaltfläche beim Start des Programms</translation>
+    </message>
+    <message>
+        <source>Back to the program&apos;s standard labels and colors</source>
+        <translation>Zurück zu den Standard-Etiketten und -Farben des Programms</translation>
+    </message>
+    <message>
+        <source>Export Profile...</source>
+        <translation>Profil exportieren...</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Profil exportieren</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profile (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile...</source>
+        <translation>Profil importieren...</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Profil importieren</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profile und Einstellungen (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>The profile “%1” was imported. Switch to it under View &gt; Profiles.</source>
+        <translation>Das Profil „%1“ wurde importiert. Wechseln Sie unter Ansicht &gt; Profile dorthin.</translation>
+    </message>
+    <message>
+        <source>Manage Profiles...</source>
+        <translation>Profile verwalten...</translation>
     </message>
 </context>
 <context>
@@ -21603,6 +21859,105 @@ Sie wird von hier aus nicht geöffnet. Wenn Sie ihr vertrauen, öffnen Sie sie s
     <message>
         <source>words</source>
         <translation>Wörter</translation>
+    </message>
+</context>
+<context>
+    <name>qb::ProfileManagerDialog</name>
+    <message>
+        <source>Manage Profiles</source>
+        <translation>Profile verwalten</translation>
+    </message>
+    <message>
+        <source>A profile holds your options, toolbars, window places and sizes, keyboard set, backup settings, standard colors, layouts and the theme. The profile in use is saved when you switch away from it and when the program ends.</source>
+        <translation>Ein Profil enthält Ihre Einstellungen, Werkzeugleisten, Plätze und Größen im Fenster, den Tastatursatz, die Sicherungseinstellungen, Standardfarben, Layouts und das Design. Das verwendete Profil wird gespeichert, wenn Sie davon wegwechseln und wenn das Programm beendet wird.</translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <translation>Verwenden</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile...</source>
+        <translation>Einstellungen als neues Profil speichern...</translation>
+    </message>
+    <message>
+        <source>Rename...</source>
+        <translation>Umbenennen...</translation>
+    </message>
+    <message>
+        <source>Copy...</source>
+        <translation>Kopieren...</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Löschen</translation>
+    </message>
+    <message>
+        <source>Export...</source>
+        <translation>Exportieren...</translation>
+    </message>
+    <message>
+        <source>Import...</source>
+        <translation>Importieren...</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Einstellungen als neues Profil speichern</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Mein Profil</translation>
+    </message>
+    <message>
+        <source>Rename Profile</source>
+        <translation>Profil umbenennen</translation>
+    </message>
+    <message>
+        <source>Copy Profile</source>
+        <translation>Profil kopieren</translation>
+    </message>
+    <message>
+        <source>%1 (Copy)</source>
+        <translation>%1 (Kopie)</translation>
+    </message>
+    <message>
+        <source>Delete Profile</source>
+        <translation>Profil löschen</translation>
+    </message>
+    <message>
+        <source>Delete the profile “%1”? This cannot be undone.</source>
+        <translation>Das Profil „%1“ löschen? Das kann nicht rückgängig gemacht werden.</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Profil exportieren</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profile (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Profil importieren</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profile und Einstellungen (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>%1 (in use)</source>
+        <translation>%1 (in Verwendung)</translation>
+    </message>
+    <message>
+        <source>Theme: %1.</source>
+        <translation>Design: %1.</translation>
+    </message>
+    <message>
+        <source>Built-in profile; it can be deleted.</source>
+        <translation>Eingebautes Profil; es kann gelöscht werden.</translation>
+    </message>
+    <message>
+        <source>The profile every program starts with.</source>
+        <translation>Das Profil, mit dem jedes Programm beginnt.</translation>
     </message>
 </context>
 </TS>
