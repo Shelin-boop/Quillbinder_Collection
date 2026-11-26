@@ -1,0 +1,5 @@
+{{APP}} es un único archivo de programa. Las actualizaciones y las extensiones llegan como pequeños archivos de paquete que terminan en *.qbpkg*.
+- Instala uno con **Ayuda > Complementos y actualizaciones > Instalar actualización o complemento…**, o haz doble clic en el archivo. {{APP}} comprueba el paquete, muestra las novedades y prueba una actualización del programa una vez antes de usarla.
+- **Ayuda > Complementos y actualizaciones > Gestor de complementos…** activa y desactiva complementos, los elimina y vuelve a una versión anterior del programa con **Usar esta versión**.
+- Si una actualización no arranca dos veces seguidas, {{APP}} vuelve por sí solo a la versión integrada en el archivo del programa.
+- Los complementos aportan temas adicionales, plantillas de proyecto, formatos de compilación, herramientas de escritura (Generador de nombres, Bloc de notas rápidas, Estadísticas de texto), reproducción de audio y vídeo, y la importación de páginas web y de archivos antiguos de Word.
