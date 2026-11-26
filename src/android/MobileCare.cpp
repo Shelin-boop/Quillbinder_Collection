@@ -360,8 +360,20 @@ public:
         case QEvent::Show:
             if (auto *stack = qobject_cast<QStackedWidget *>(o))
                 slimStack(stack);
-            if (auto *menu = qobject_cast<QMenu *>(o))
+            if (auto *menu = qobject_cast<QMenu *>(o)) {
                 keepBelowBar(menu);
+                // (Android 0.95.0, to-do item 107) the start check waits for this line before it sends keys to the menu,
+                // and chooses a row by the name the second line gives (a key can be lost; a count of keys is not enough)
+                if (qobject_cast<QMenuBar *>(menu->parentWidget())) {
+                    qCInfo(lcCare, "tablet: menu open: %s", qPrintable(menu->menuAction()->text()));
+                    if (!menu->property("qbRowsLogged").toBool()) {
+                        menu->setProperty("qbRowsLogged", true);
+                        QObject::connect(menu, &QMenu::hovered, menu, [](QAction *row) {
+                            qCInfo(lcCare, "tablet: menu row: %s", qPrintable(row->text()));
+                        });
+                    }
+                }
+            }
             if (o->isWidgetType() && static_cast<QWidget *>(o)->isWindow()) {
                 auto *w = static_cast<QWidget *>(o);
                 care(w);

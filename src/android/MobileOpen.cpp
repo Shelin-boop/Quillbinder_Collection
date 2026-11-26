@@ -1,6 +1,5 @@
 #include "android/Mobile.h"
 
-#include "ui/Language.h"
 
 #include <QApplication>
 #include <QDesktopServices>
@@ -27,11 +26,6 @@ namespace mobile {
 namespace {
 
 Q_LOGGING_CATEGORY(lcOpen, "qb.open", QtInfoMsg)
-
-QString say(const char *english, const char *germanText)
-{
-    return language::active() == QLatin1String("de") ? QString::fromUtf8(germanText) : QString::fromUtf8(english);
-}
 
 // the tablet's shared storage ("/storage/emulated/0")
 QString sharedRoot()
@@ -111,9 +105,8 @@ public slots:
             const bool shown = showInFilesApp(path);
             qCInfo(lcOpen, "open: the folder %s %s", qPrintable(path), shown ? "is shown by the tablet's Files app" : "COULD NOT BE SHOWN");
             if (!shown)
-                QMessageBox::information(QApplication::activeWindow(), say("Folder", "Ordner"),
-                                         say("The tablet's Files app cannot show this folder from here. It is:\n\n%1",
-                                             "Die Dateien-App des Tablets kann diesen Ordner von hier aus nicht zeigen. Er ist:\n\n%1")
+                QMessageBox::information(QApplication::activeWindow(), QCoreApplication::translate("Mobile", "Folder"),
+                                         QCoreApplication::translate("Mobile", "The tablet's Files app cannot show this folder from here. It is:\n\n%1")
                                              .arg(shownPlace(path)));
             return;
         }
@@ -121,9 +114,8 @@ public slots:
         const bool opened = QDesktopServices::openUrl(url);
         qCInfo(lcOpen, "open: the file %s %s", qPrintable(path), opened ? "was handed to Android" : "COULD NOT BE OPENED");
         if (!opened)
-            QMessageBox::information(QApplication::activeWindow(), say("File", "Datei"),
-                                     say("No app on this tablet opened this file. It is:\n\n%1",
-                                         "Keine App auf diesem Tablet hat diese Datei geöffnet. Sie ist:\n\n%1")
+            QMessageBox::information(QApplication::activeWindow(), QCoreApplication::translate("Mobile", "File"),
+                                     QCoreApplication::translate("Mobile", "No app on this tablet opened this file. It is:\n\n%1")
                                          .arg(shownPlace(path)));
     }
 };

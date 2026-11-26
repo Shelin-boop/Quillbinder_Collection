@@ -3,7 +3,6 @@
 #include "core/Backup.h"
 #include "core/Paths.h"
 #include "ui/AppSettings.h"
-#include "ui/Language.h"
 
 #include <QAction>
 #include <QApplication>
@@ -54,14 +53,6 @@ namespace mobile {
 namespace {
 
 Q_LOGGING_CATEGORY(lcFiles, "qb.files", QtInfoMsg)
-
-bool german() { return language::active() == QLatin1String("de"); }
-
-// English and German side by side (not through the translation file, which Linux and Windows share)
-QString say(const char *english, const char *germanText)
-{
-    return german() ? QString::fromUtf8(germanText) : QString::fromUtf8(english);
-}
 
 QString clean(const QString &path) { return path.isEmpty() ? QString() : QDir::cleanPath(path); }
 
@@ -139,7 +130,7 @@ public:
         , m_system(system)
     {
         setObjectName(QStringLiteral("filesOnTablet"));
-        setWindowTitle(say("Where Your Work Is Kept", "Wo Ihre Arbeit liegt"));
+        setWindowTitle(QCoreApplication::translate("Mobile", "Where Your Work Is Kept"));
         auto *box = new QVBoxLayout(this);
         box->setContentsMargins(20, 18, 20, 16);
         box->setSpacing(14);
@@ -216,40 +207,29 @@ private:
         const Folders f = foldersIn(m_system.documents);
         const QString where = QStringLiteral("<p style=\"margin-left:18px\"><b>%1</b><br><b>%2</b></p>")
                                   .arg(shown(f.projects).toHtmlEscaped(), shown(f.backups).toHtmlEscaped());
-        QString text = say("<p>Quillbinder keeps your projects and their backups in this tablet's Documents folder:</p>",
-                           "<p>Quillbinder legt Ihre Projekte und deren Sicherungen im Ordner „Dokumente“ dieses Tablets ab:</p>")
+        QString text = QCoreApplication::translate("Mobile", "<p>Quillbinder keeps your projects and their backups in this tablet's Documents folder:</p>")
                        + where
-                       + say("<p>There they stay when the app is removed, and the tablet's Files app, other apps and a "
-                             "computer can reach them.</p>",
-                             "<p>Dort bleiben sie erhalten, wenn die App entfernt wird, und die Dateien-App des Tablets, "
-                             "andere Apps und ein Computer erreichen sie.</p>");
+                       + QCoreApplication::translate("Mobile", "<p>There they stay when the app is removed, and the tablet's Files app, other apps and a "
+                             "computer can reach them.</p>");
         if (allowed) {
-            text += say("<p>Android allows Quillbinder to use this folder.</p>",
-                        "<p>Android erlaubt Quillbinder, diesen Ordner zu benutzen.</p>");
+            text += QCoreApplication::translate("Mobile", "<p>Android allows Quillbinder to use this folder.</p>");
         } else if (m_system.settingsPage) {
-            text += say("<p>For this, Android has to allow Quillbinder access to all files. Tap the first button, switch "
-                        "on <b>Allow access to manage all files</b> on the page that opens, and come back.</p>",
-                        "<p>Dafür muss Android Quillbinder den Zugriff auf alle Dateien erlauben. Tippen Sie auf die "
-                        "erste Schaltfläche, schalten Sie auf der Seite, die sich öffnet, <b>Zugriff zum Verwalten "
-                        "aller Dateien zulassen</b> ein und kommen Sie zurück.</p>");
+            text += QCoreApplication::translate("Mobile", "<p>For this, Android has to allow Quillbinder access to all files. Tap the first button, switch "
+                        "on <b>Allow access to manage all files</b> on the page that opens, and come back.</p>");
         } else {
-            text += say("<p>For this, Android has to allow Quillbinder access to files. Tap the first button and "
-                        "answer Android's question with <b>Allow</b>.</p>",
-                        "<p>Dafür muss Android Quillbinder den Zugriff auf Dateien erlauben. Tippen Sie auf die erste "
-                        "Schaltfläche und beantworten Sie Androids Frage mit <b>Zulassen</b>.</p>");
+            text += QCoreApplication::translate("Mobile", "<p>For this, Android has to allow Quillbinder access to files. Tap the first button and "
+                        "answer Android's question with <b>Allow</b>.</p>");
         }
         if (!allowed)
-            text += say("<p>Without it, everything stays inside the app: no other app shows these files, and Android "
-                        "deletes them when the app is removed.</p>",
-                        "<p>Ohne diese Erlaubnis bleibt alles in der App: Keine andere App zeigt diese Dateien, und "
-                        "Android löscht sie, wenn die App entfernt wird.</p>");
+            text += QCoreApplication::translate("Mobile", "<p>Without it, everything stays inside the app: no other app shows these files, and Android "
+                        "deletes them when the app is removed.</p>");
         m_text->setText(text);
         m_state->setVisible(m_asked && !allowed);
-        m_state->setText(say("Android has not allowed the access yet.", "Android hat den Zugriff noch nicht erlaubt."));
-        m_allow->setText(allowed ? say("OK", "OK")
-                                 : (m_system.settingsPage ? say("Allow in Android's Settings", "In Androids Einstellungen erlauben")
-                                                          : say("Allow", "Erlauben")));
-        m_keep->setText(say("Keep Everything Inside the App", "Alles in der App behalten"));
+        m_state->setText(QCoreApplication::translate("Mobile", "Android has not allowed the access yet."));
+        m_allow->setText(allowed ? QCoreApplication::translate("Mobile", "OK")
+                                 : (m_system.settingsPage ? QCoreApplication::translate("Mobile", "Allow in Android's Settings")
+                                                          : QCoreApplication::translate("Mobile", "Allow")));
+        m_keep->setText(QCoreApplication::translate("Mobile", "Keep Everything Inside the App"));
         m_keep->setVisible(!allowed);
         adjustSize();
     }
@@ -549,7 +529,7 @@ void filesAfterWindow(QMainWindow *window)
             QMenu *menu = top->menu();
             if (!menu || !menu->actions().contains(options))
                 continue;
-            auto *entry = new QAction(say("Files on This &Tablet…", "Dateien auf diesem &Tablet…"), window);
+            auto *entry = new QAction(QCoreApplication::translate("Mobile", "Files on This &Tablet…"), window);
             entry->setObjectName(QStringLiteral("filesOnTablet"));
             QObject::connect(entry, &QAction::triggered, window, [window] { filesWindow(window, false); });
             menu->insertAction(options, entry);

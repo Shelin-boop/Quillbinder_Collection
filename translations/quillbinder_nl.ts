@@ -44,6 +44,85 @@
     </message>
 </context>
 <context>
+    <name>Mobile</name>
+    <message>
+        <source>Folder</source>
+        <translation>Map</translation>
+    </message>
+    <message>
+        <source>The tablet&apos;s Files app cannot show this folder from here. It is:
+
+%1</source>
+        <translation>De app Bestanden van de tablet kan deze map vanaf hier niet tonen. De locatie is:
+
+%1</translation>
+    </message>
+    <message>
+        <source>File</source>
+        <translation>Bestand</translation>
+    </message>
+    <message>
+        <source>No app on this tablet opened this file. It is:
+
+%1</source>
+        <translation>Geen enkele app op deze tablet heeft dit bestand geopend. De locatie is:
+
+%1</translation>
+    </message>
+    <message>
+        <source>Where Your Work Is Kept</source>
+        <translation>Waar je werk wordt bewaard</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Quillbinder keeps your projects and their backups in this tablet&apos;s Documents folder:&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Quillbinder bewaart je projecten en hun back-ups in de map Documenten van deze tablet:&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;There they stay when the app is removed, and the tablet&apos;s Files app, other apps and a computer can reach them.&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Daar blijven ze staan als de app wordt verwijderd, en de app Bestanden van de tablet, andere apps en een computer kunnen erbij.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Android allows Quillbinder to use this folder.&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Android staat Quillbinder toe deze map te gebruiken.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;For this, Android has to allow Quillbinder access to all files. Tap the first button, switch on &lt;b&gt;Allow access to manage all files&lt;/b&gt; on the page that opens, and come back.&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Daarvoor moet Android Quillbinder toegang tot alle bestanden geven. Tik op de eerste knop, zet op de pagina die opent &lt;b&gt;Toegang tot het beheren van alle bestanden toestaan&lt;/b&gt; aan en kom terug.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;For this, Android has to allow Quillbinder access to files. Tap the first button and answer Android&apos;s question with &lt;b&gt;Allow&lt;/b&gt;.&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Daarvoor moet Android Quillbinder toegang tot bestanden geven. Tik op de eerste knop en beantwoord de vraag van Android met &lt;b&gt;Toestaan&lt;/b&gt;.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Without it, everything stays inside the app: no other app shows these files, and Android deletes them when the app is removed.&lt;/p&gt;</source>
+        <translation>&lt;p&gt;Zonder dit blijft alles binnen de app: geen enkele andere app toont deze bestanden, en Android verwijdert ze wanneer de app wordt verwijderd.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>Android has not allowed the access yet.</source>
+        <translation>Android heeft de toegang nog niet toegestaan.</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <source>Allow in Android&apos;s Settings</source>
+        <translation>Toestaan in de instellingen van Android</translation>
+    </message>
+    <message>
+        <source>Allow</source>
+        <translation>Toestaan</translation>
+    </message>
+    <message>
+        <source>Keep Everything Inside the App</source>
+        <translation>Alles binnen de app houden</translation>
+    </message>
+    <message>
+        <source>Files on This &amp;Tablet…</source>
+        <translation>Bestanden op deze &amp;tablet…</translation>
+    </message>
+</context>
+<context>
     <name>NameGeneratorTool</name>
     <message>
         <source>&amp;Name Generator…</source>
@@ -10861,6 +10940,10 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     <message>
         <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;A writing studio for long texts: binder, corkboard, outliner, combined text, snapshots, mind maps, objects and compile.&lt;/p&gt;&lt;p&gt;Built with Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Main Developer: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;License&lt;/b&gt;&lt;br&gt;%1 is free software under the Apache License 2.0: anyone may use, copy, change and pass it on, with or without fee, keeping the license and the NOTICE file, which names the project and its source. Without warranty.&lt;/p&gt;&lt;p&gt;The program uses parts of other projects, each under its own license; &lt;b&gt;Third-Party Licenses…&lt;/b&gt; below (also in the Help menu) lists them with their full texts:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, The Qt Company&apos;s own build for Windows, under the GNU LGPL version 3. Its libraries are the separate Qt6*.dll files and plugin folders beside the program; each can be replaced by another build of the same version.&lt;/li&gt;&lt;li&gt;Hunspell (spelling, used under the Mozilla Public License 1.1) and zlib, built into the program.&lt;/li&gt;&lt;li&gt;The spelling dictionaries for English and German from LibreOffice, unchanged: the German ones under the GNU GPL version 2 or 3, British English under the GNU LGPL, American English under the SCOWL license.&lt;/li&gt;&lt;li&gt;Microsoft&apos;s Visual C++ runtime files, passed on unchanged under Microsoft&apos;s terms for redistributable code.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;The add-ons for audio and video bring Qt Multimedia (GNU LGPL version 3). The add-on &quot;Extra Video and Audio Formats&quot; also brings the FFmpeg libraries as built by The Qt Company for Qt Multimedia (avcodec, avformat, avutil, swresample, swscale), licensed under the GNU LGPL 2.1 or later and replaceable as separate DLL files; its notes name the version and how it was built. Whether a patent license is needed to play some of its formats depends on the country.&lt;/p&gt;&lt;p&gt;The source code of these parts, as used, is in the release &quot;Third-party source code&quot; of %4.&lt;/p&gt;&lt;p&gt;Scrivener and Scapple are products of Literature &amp;amp; Latte. %1 is an independent program, not made by or connected with Literature &amp;amp; Latte; it reads and writes their file formats so that your projects can move between the programs.&lt;/p&gt;</source>
         <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Een schrijfstudio voor lange teksten: Binder, prikbord, overzicht, gecombineerde tekst, momentopnamen, mindmaps, objecten en samenstellen.&lt;/p&gt;&lt;p&gt;Gebouwd met Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Hoofdontwikkelaar: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Licentie&lt;/b&gt;&lt;br&gt;%1 is vrije software onder de Apache License 2.0: iedereen mag het gebruiken, kopiëren, wijzigen en doorgeven, met of zonder vergoeding, met behoud van de licentie en het NOTICE-bestand, dat het project en de bron noemt. Zonder garantie.&lt;/p&gt;&lt;p&gt;Het programma gebruikt onderdelen van andere projecten, elk onder een eigen licentie; &lt;b&gt;Licenties van derden…&lt;/b&gt; hieronder (ook in het menu Help) toont ze met hun volledige teksten:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, de eigen build van The Qt Company voor Windows, onder de GNU LGPL versie 3. De bibliotheken zijn de losse Qt6*.dll-bestanden en pluginmappen naast het programma; elk kan worden vervangen door een andere build van dezelfde versie.&lt;/li&gt;&lt;li&gt;Hunspell (spelling, gebruikt onder de Mozilla Public License 1.1) en zlib, ingebouwd in het programma.&lt;/li&gt;&lt;li&gt;De spellingwoordenboeken voor Engels en Duits van LibreOffice, ongewijzigd: de Duitse onder de GNU GPL versie 2 of 3, Brits Engels onder de GNU LGPL, Amerikaans Engels onder de SCOWL-licentie.&lt;/li&gt;&lt;li&gt;De runtimebestanden van Microsoft Visual C++, ongewijzigd doorgegeven onder de voorwaarden van Microsoft voor herdistribueerbare code.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;De add-ons voor audio en video brengen Qt Multimedia mee (GNU LGPL versie 3). De add-on &quot;Extra Video and Audio Formats&quot; brengt ook de FFmpeg-bibliotheken mee zoals gebouwd door The Qt Company voor Qt Multimedia (avcodec, avformat, avutil, swresample, swscale), onder de GNU LGPL 2.1 of later en vervangbaar als losse dll-bestanden; de notities ervan noemen de versie en hoe ze is gebouwd. Of voor sommige van de indelingen een patentlicentie nodig is om ze af te spelen, hangt af van het land.&lt;/p&gt;&lt;p&gt;De broncode van deze onderdelen, zoals gebruikt, staat in de release &quot;Third-party source code&quot; van %4.&lt;/p&gt;&lt;p&gt;Scrivener en Scapple zijn producten van Literature &amp;amp; Latte. %1 is een onafhankelijk programma, niet gemaakt door of verbonden met Literature &amp;amp; Latte; het leest en schrijft hun bestandsindelingen zodat je projecten tussen de programma&apos;s kunnen verhuizen.&lt;/p&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;A writing studio for long texts: binder, corkboard, outliner, combined text, snapshots, mind maps, objects and compile.&lt;/p&gt;&lt;p&gt;Built with Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Main Developer: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;License&lt;/b&gt;&lt;br&gt;%1 is free software under the Apache License 2.0: anyone may use, copy, change and pass it on, with or without fee, keeping the license and the NOTICE file, which names the project and its source. Without warranty.&lt;/p&gt;&lt;p&gt;The program uses parts of other projects, each under its own license; &lt;b&gt;Third-Party Licenses…&lt;/b&gt; below (also in the Help menu) lists them with their full texts:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, The Qt Company&apos;s own build for Android, under the GNU LGPL version 3. Its libraries are separate files inside the APK; each can be replaced by another build of the same version, or the APK built anew from the source.&lt;/li&gt;&lt;li&gt;Hunspell (spelling, used under the Mozilla Public License 1.1), built into the program.&lt;/li&gt;&lt;li&gt;OpenSSL (secure connections for the import of web pages) under the Apache License 2.0.&lt;/li&gt;&lt;li&gt;The spelling dictionaries for English and German from LibreOffice, unchanged: the German ones under the GNU GPL version 2 or 3, British English under the GNU LGPL, American English under the SCOWL license.&lt;/li&gt;&lt;li&gt;The C++ runtime of Android&apos;s NDK (LLVM) and the AndroidX and Kotlin libraries of the app&apos;s Java part, under the Apache License 2.0.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;The source code of these parts, as used, is in the release &quot;Third-party source code&quot; of %4.&lt;/p&gt;&lt;p&gt;Scrivener and Scapple are products of Literature &amp;amp; Latte. %1 is an independent program, not made by or connected with Literature &amp;amp; Latte; it reads and writes their file formats so that your projects can move between the programs.&lt;/p&gt;</source>
+        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Een schrijfstudio voor lange teksten: Binder, prikbord, overzicht, gecombineerde tekst, momentopnamen, mindmaps, objecten en samenstellen.&lt;/p&gt;&lt;p&gt;Gebouwd met Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Hoofdontwikkelaar: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Licentie&lt;/b&gt;&lt;br&gt;%1 is vrije software onder de Apache License 2.0: iedereen mag het gebruiken, kopiëren, wijzigen en doorgeven, met of zonder vergoeding, met behoud van de licentie en het NOTICE-bestand, dat het project en de bron noemt. Zonder garantie.&lt;/p&gt;&lt;p&gt;Het programma gebruikt onderdelen van andere projecten, elk onder een eigen licentie; &lt;b&gt;Licenties van derden…&lt;/b&gt; hieronder (ook in het menu Help) toont ze met hun volledige teksten:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, de eigen build van The Qt Company voor Android, onder de GNU LGPL versie 3. De bibliotheken zijn losse bestanden in de APK; elk kan worden vervangen door een andere build van dezelfde versie, of de APK kan opnieuw uit de broncode worden gebouwd.&lt;/li&gt;&lt;li&gt;Hunspell (spelling, gebruikt onder de Mozilla Public License 1.1), ingebouwd in het programma.&lt;/li&gt;&lt;li&gt;OpenSSL (beveiligde verbindingen voor het importeren van webpagina&apos;s) onder de Apache License 2.0.&lt;/li&gt;&lt;li&gt;De spellingwoordenboeken voor Engels en Duits van LibreOffice, ongewijzigd: de Duitse onder de GNU GPL versie 2 of 3, Brits Engels onder de GNU LGPL, Amerikaans Engels onder de SCOWL-licentie.&lt;/li&gt;&lt;li&gt;De C++-runtime van Android&apos;s NDK (LLVM) en de AndroidX- en Kotlin-bibliotheken in het Java-deel van de app, onder de Apache License 2.0.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;De broncode van deze onderdelen, zoals gebruikt, staat in de release &quot;Third-party source code&quot; van %4.&lt;/p&gt;&lt;p&gt;Scrivener en Scapple zijn producten van Literature &amp;amp; Latte. %1 is een onafhankelijk programma, niet gemaakt door of verbonden met Literature &amp;amp; Latte; het leest en schrijft hun bestandsindelingen zodat je projecten tussen de programma&apos;s kunnen verhuizen.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;A writing studio for long texts: binder, corkboard, outliner, combined text, snapshots, mind maps, objects and compile.&lt;/p&gt;&lt;p&gt;Built with Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Main Developer: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;License&lt;/b&gt;&lt;br&gt;%1 is free software under the Apache License 2.0: anyone may use, copy, change and pass it on, with or without fee, keeping the license and the NOTICE file, which names the project and its source. Without warranty.&lt;/p&gt;&lt;p&gt;The program uses parts of other projects (Qt, Hunspell, ICU, the Breeze icons and more), each under its own license. &lt;b&gt;Third-Party Licenses…&lt;/b&gt; below (also in the Help menu) lists them with their full texts.&lt;/p&gt;&lt;p&gt;The add-ons for audio and video use code of FFmpeg, licensed under the GNU LGPL 2.1 or later; its source code, as used, is in the release &quot;Third-party source code&quot; of %4.&lt;/p&gt;&lt;p&gt;Scrivener and Scapple are products of Literature &amp;amp; Latte. %1 is an independent program, not made by or connected with Literature &amp;amp; Latte; it reads and writes their file formats so that your projects can move between the programs.&lt;/p&gt;</source>

@@ -482,6 +482,29 @@ For developers (nothing changes in the program): the suites of 0.95.0 run on Win
 move and its menu entry); the dictionary add-ons' build script ignores the carriage returns of the Windows checkout;
 the official add-on entry's Windows block names the source of Translation Helper 1.5.
 
+## Android 0.95.0 experimental (2026-11-26)
+
+The functions of 0.95.0 for Android tablets (a new APK, as always on Android; it installs over Android 0.94.x and keeps
+the settings). Everything in 0.95.0 above that a tablet has is in it: eleven interface languages with their manuals
+and welcome projects, themes and user profiles (View > Profiles), "Shelin's Dark Theme" and the profile "Shelin's", the
+Labels toolbar, File > Options > Appearance > Standard Colors, File > Options > Keyboard > Use the Set of My Keyboard
+Layout, cutting targets in red, highlights drawn as picked, the Bookmarks tab's zoom per part and its sizes kept, 25
+backups at first, and Translation Helper 1.5. What is Android's own:
+
+- **The tablet's own texts in every language**: the window "Where Your Work Is Kept", the messages when a file or
+  folder cannot be opened, and Help > About were in English or German only; they now follow the interface language.
+- **The spelling dictionaries of the nine new languages are add-ons, as on Linux and Windows**:
+  `dictionary-<code>-android.qbpkg` in the release (English and German still come with the app). Install the one you
+  need with Help > Add-ons and Updates > Install Update or Add-on, restart, then choose it in File > Options > Editing.
+- **"Default" follows Android's own light or dark setting**, and a profile's sizes are fitted to the tablet's screen
+  when it is applied.
+
+For developers (nothing changes in the program): the preview tests check the Profiles and Labels toolbars at the
+tablet widths, the built-in profile's columns on a 1280 px tablet and a dictionary add-on installed on a tablet; the
+start check waits for the program's line "menu open" and chooses a File menu row by the name the program logs for it, and on the
+Android 14 tablet tries a virtual mouse and keyboard (Ctrl + wheel over the text, Alt + F); the official add-on entry's
+Android block names the source of Translation Helper 1.5.
+
 ## Android 0.94.0 experimental (2026-11-26)
 
 The functions of 0.94.0 for Android tablets (a new APK, as always on Android; it installs over Android 0.93.x and keeps
