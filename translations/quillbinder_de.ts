@@ -13048,12 +13048,12 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
         <translation>Sicherung gespeichert.</translation>
     </message>
     <message>
-        <source>&amp;Translate and Proofread…</source>
-        <translation>&amp;Übersetzen und Korrekturlesen…</translation>
+        <source>&amp;Translation Helper…</source>
+        <translation>&amp;Übersetzungshelfer…</translation>
     </message>
     <message>
-        <source>Proofread English text or translate German text into English (the add-on is not installed)</source>
-        <translation>Englischen Text korrigieren oder deutschen Text ins Englische übersetzen (die Erweiterung ist nicht installiert)</translation>
+        <source>Suggestions for translating between eleven languages and for English spelling (the add-on is not installed)</source>
+        <translation>Vorschläge zum Übersetzen zwischen elf Sprachen und für die englische Rechtschreibung (die Erweiterung ist nicht installiert)</translation>
     </message>
     <message>
         <source>Speech &amp;Transcription…</source>
@@ -13068,8 +13068,8 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
         <translation>Sprachtranskription</translation>
     </message>
     <message>
-        <source>Translation and Proofreading</source>
-        <translation>Übersetzung und Korrektur</translation>
+        <source>Translation Helper</source>
+        <translation>Übersetzungshelfer</translation>
     </message>
     <message>
         <source>is not installed</source>
@@ -13096,8 +13096,8 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
         <translation>Sie wandelt Sprache in Text um. Installieren Sie sie mit Hilfe &gt; Erweiterungen und Updates &gt; Update oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung zeigt die Erweiterungen und schaltet sie ein und aus.</translation>
     </message>
     <message>
-        <source>It proofreads English text and translates German text into English. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
-        <translation>Sie korrigiert englischen Text und übersetzt deutschen Text ins Englische. Installieren Sie sie mit Hilfe &gt; Erweiterungen und Updates &gt; Update oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung zeigt die Erweiterungen und schaltet sie ein und aus.</translation>
+        <source>It gives suggestions for translating between eleven languages and for English spelling and grammar. Its translations are not precise: check each one, which needs a working knowledge of both languages. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>Sie macht Vorschläge zum Übersetzen zwischen elf Sprachen und für die englische Rechtschreibung und Grammatik. Ihre Übersetzungen sind nicht genau; prüfen Sie jede einzelne, wozu Sie beide Sprachen gut kennen müssen. Installieren Sie sie mit Hilfe &gt; Erweiterungen und Updates &gt; Update oder Erweiterung installieren; Hilfe &gt; Erweiterungen und Updates &gt; Erweiterungsverwaltung zeigt die Erweiterungen und schaltet sie ein und aus.</translation>
     </message>
     <message>
         <source>Open Add-on Manager</source>

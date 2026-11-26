@@ -369,7 +369,7 @@ int main(int argc, char **argv)
         const QString addonsPage = QString::fromUtf8(readAll(site.path() + QStringLiteral("/addons/index.html")));
         check(page.contains(QLatin1String("href=\"addons/\"")) && !page.contains(QLatin1String("id=\"official-addons\""))
                   && addonsPage.contains(QLatin1String("id=\"official-addons\"")) && addonsPage.contains(QLatin1String("data-addon=\"translation-proofreading\""))
-                  && addonsPage.contains(QLatin1String("<b>Translation and Proofreading</b>")) && addonsPage.contains(QLatin1String("for Linux, Windows, Android"))
+                  && addonsPage.contains(QLatin1String("<b>Translation Helper</b>")) && addonsPage.contains(QLatin1String("for Linux, Windows, Android"))
                   && addonsPage.contains(QLatin1String("must not be sold")) && addonsPage.contains(QLatin1String("CC BY-NC 4.0"))
                   && addonsPage.contains(QLatin1String("blob/main/official-addons/translation-proofreading.json")),
               QStringLiteral("the add-ons page lists the official add-ons: name, one line, the systems, the license note for data, a link to the entry"),

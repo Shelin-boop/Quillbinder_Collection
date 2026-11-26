@@ -226,7 +226,7 @@ static void missingAddons(MainWindow &w)
 {
     std::printf("== a notice for an add-on that is not installed (item 59)\n");
     QAction *tr = byKey(&w, QStringLiteral("missingTranslator"));
-    check(tr != nullptr && tr->isEnabled(), QStringLiteral("Edit > Writing Tools has \"Translate and Proofread\" while that add-on is not there"));
+    check(tr != nullptr && tr->isEnabled(), QStringLiteral("Edit > Writing Tools has \"Translation Helper\" while that add-on is not there"));
     QMenu *writing = w.findChild<QMenu *>(QStringLiteral("writingToolsMenu"));
     check(writing && writing->actions().contains(tr), QStringLiteral("... it is in the menu"));
     if (!tr)
@@ -256,7 +256,7 @@ static void missingAddons(MainWindow &w)
     tr->trigger();
     settle(300);
     timer->stop();
-    check(boxSeen && text.contains(QStringLiteral("Translation and Proofreading")) && text.contains(QStringLiteral("not installed")),
+    check(boxSeen && text.contains(QStringLiteral("Translation Helper")) && text.contains(QStringLiteral("not installed")),
           QStringLiteral("it shows a notice that the add-on is not installed"), text);
     check(managerSeen, QStringLiteral("... and its button opens the Add-on Manager"));
     // Speech Transcription: the notice only where the add-on is not loaded

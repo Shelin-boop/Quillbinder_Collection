@@ -3,6 +3,30 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.95.0 beta (2026-11-26)
+
+New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
+
+- **Translation Helper 1.5: eleven languages**. The add-on Translation and Proofreading is now called **Translation
+  Helper** (Edit > Writing Tools, the Add-on Manager, the notice of a missing add-on, File > Options > Translation
+  Helper) and says in its window, its description and the manual: "This tool gives suggestions only. Its translations
+  are not precise: check each one, which needs a working knowledge of both languages." It translates between any two
+  of English, German, Spanish, French, Portuguese (Brazil), Italian, Russian, Indonesian, Turkish, Polish and Dutch,
+  chosen in two drop-down lists. Each language has two small OPUS-MT models (to and from English, Apache-2.0 or CC BY 4.0,
+  pinned by revision and checksum, in the new release *models-4*); a pair without English goes through English, and a
+  note under the result says so. A dictionary per language from the Wiktionary (CC BY-SA 4.0, a separate download
+  with its license shown first) gives the word classes and meanings of a single word; a language without a usable
+  extract gets the model's translations only. A single word keeps its correction, shown as a suggestion. The
+  add-on's own texts come in the eleven languages of the program. The 1.4 settings keep working (German to English is
+  the first choice, the German dictionary and downloaded models stay). The options page showed "%5</a>%6" for the
+  download line of a dictionary (a model without a memory need); fixed.
+- **Program**: the command in Edit > Writing Tools and the notice for an add-on that is not installed carry the new
+  name (German: Übersetzungshelfer).
+
+For developers: *models/convert.py* pins the revisions of the models of *models-4* and builds its catalog
+(`--placeholders`, `--assemble`); the workflow *translator-data-4.yml* builds the release (models and dictionaries) on
+GitHub's runner and writes the catalog; *tools/make-dictionary.py* builds the dictionary of any of the nine languages.
+
 ## 0.94.0 beta (2026-11-25)
 
 New functions and fixes (a program update for 0.93.x; the AppImage stays on the runtime `u2404-qt6.12-r2`).

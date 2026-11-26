@@ -199,6 +199,38 @@ loads in a newer one), but releases come only from the workflow "Build" (Qt 6.12
 - The add-on's texts have no German translation file (they are English only; Quillbinder's quillbinder_de.ts has none of
   them), so none was added.
 
+## 1.5: Translation Helper, eleven languages (2026-11-26, to-do items 101, 102)
+
+- **Name and notice.** The add-on is called Translation Helper (the id stays `translation-proofreading`); the window
+  carries a fixed line (a label under the controls): "This tool gives suggestions only. Its translations are not
+  precise: check each one, which needs a working knowledge of both languages." The same sentence is in the manifest's
+  description and the manual. The correction of a single word is shown as a suggestion.
+- **Languages.** `src/Languages.*`: the eleven languages (code, English name through `tp::Languages`, native name),
+  `stepsFor(from, to)` (one step to or from English, two for a pair without English), `modelIdFor(step)` =
+  `opus-mt-<from>-<to>`, `dictionaryIdFor(code)` = `wiktionary-<code>`. The panel's task "Translate" has two drop-down
+  lists (objectNames `tpFromLanguage`, `tpToLanguage`; the choice is the settings `langFrom`, `langTo`, German to
+  English at first, so 1.4 keeps working). A pair runs its steps in one worker thread; the middle text is cached.
+- **Models.** `models/convert.py` `PAIRS_4`: 18 OPUS-MT models (to and from English for nine languages) with the
+  Hugging Face revision, the license from the model card and the pins (SHA-256 of the LFS files, the git blob id of the
+  small ones). Polish from English uses the West Slavic model with the token `>>pol<<`, Portuguese to English the
+  Romance model, English to Portuguese and to Turkish the tc-big models (`>>pob<<` for Portuguese). The catalog entries
+  (`resources/catalog.json`) are placeholders (size 0, sha256 `PLACEHOLDER-...`, "not published yet") until the workflow
+  has run: it writes the catalog of the release (`convert.py --assemble`) and the sizes and sums are copied from its
+  artifact.
+- **Dictionaries.** `tools/make-dictionary.py <code> <jsonl> <legal> <out>` builds the dictionary of a language from the
+  kaikki.org extract (header `#qb-<code>-dictionary 1`, the same L/F lines as the German one, which `make-de-dictionary.py`
+  still builds). `src/Dictionary.*` keeps one dictionary per language. Release `models-4` is built by
+  `.github/workflows/translator-data-4.yml` (push to `linux/0.95.0*` changing it, or by hand); a language whose extract
+  cannot be fetched is left out and gets the model's translations only.
+- **Texts.** `translations/tp_<code>.ts` (ten languages) are compiled into the add-on (`tp_<code>.qm` in the qrc). The
+  tool interface has no language call, so `installTranslations()` reads `QB_LANGUAGE`, then the program's setting
+  `app/language`, then the system language; English needs none. After a change of a text: `lupdate src -ts
+  translations/tp_<code>.ts -locations none`, translate, `lrelease` (the check `languages` fails on an unfinished text or
+  a lost placeholder).
+- **Checks.** `tests/lang_tests.cpp` (suite `languages`): the eleven languages, steps and the pivot, the drop-down
+  lists, the real catalog, the notice line, the new name, the translation files, the language switch.
+  The options text of a model without a memory need showed "%5</a>%6" (the numbering skips %3); fixed.
+
 ## Things learned (2026-11-15, 1.1)
 
 - Chat models (Qwen3): CTranslate2's `Generator`, the prompt in ChatML (`<|im_start|>system ...`), the system message as

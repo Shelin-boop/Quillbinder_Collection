@@ -172,17 +172,18 @@ with tempfile.TemporaryDirectory() as tmp:
                                                                               ", with the unsigned warning" if warn else ""),
               rc == 0 and want in notes and ("does not know add-on keys" in notes) == warn, msg + notes[:600])
 
-# ---------------------------------------------------------------- item 23 (1.4 since 0.94.0): the real entry describes the manifest's version
+# ---------------------------------------------------------------- item 23 (1.5 since 0.95.0): the real entry describes the manifest's version
 real_path = os.path.join(ROOT, "official-addons", "translation-proofreading.json")
 real = json.load(open(real_path, encoding="utf-8"))
 tp = os.path.join(ROOT, real.get("folder", "-"))
 manifest = json.load(open(os.path.join(ROOT, "addons", "translation-proofreading", "source", "packaging", "manifest.json"), encoding="utf-8"))
-check("the official entry describes the version the add-on's manifest has (%s)" % manifest["version"],
-      real["version"] == manifest["version"] == "1.4", "%s / %s" % (real["version"], manifest["version"]))
+check("the official entry describes the version the add-on's manifest has (%s), or the last published one" % manifest["version"],
+      manifest["version"] == "1.5" and real["version"] in ("1.4", "1.5"),   # the entry follows the release (its commit is set after the merge)
+      "%s / %s" % (real["version"], manifest["version"]))
 check("the official entry names the add-on's folder in this repository", real.get("folder") == "addons/translation-proofreading/source"
       and os.path.isdir(tp), real.get("folder", ""))
 rc, out = tool("check", real_path)
-check("addon-entry.py accepts the real entry (Linux)", rc == 0 and "version=1.4" in out, out)
+check("addon-entry.py accepts the real entry (Linux)", rc == 0 and ("version=%s" % real["version"]) in out, out)
 for flag in ("--windows", "--android"):
     rc, out = tool("check", real_path, flag)
     check("addon-entry.py accepts the real entry (%s)" % flag[2:], rc == 0 and "folder=addons/translation-proofreading/source" in out, out)
