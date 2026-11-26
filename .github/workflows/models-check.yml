@@ -1,5 +1,5 @@
 # 0.93.0: checks the language models of the add-on "Translation and Proofreading" (version 1.2 and later download them
-# from the releases models-1, models-2 and models-3 (1.3) of this repository). Reads the add-on's catalog
+# from the releases models-1, models-2, models-3 (1.3) and models-4 (1.5) of this repository). Reads the add-on's catalog
 # (addons/translation-proofreading/source/resources/catalog.json) and compares every file it names, with its size,
 # against the files of those releases. (It replaced "models-mirror.yml", which copied the releases from the
 # add-on's former repository in 0.92.0; the copy is done, and nothing here needs that repository any more.)
@@ -28,15 +28,16 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          for tag in models-1 models-2 models-3; do
-            gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" --jq '.assets[] | "\(.name) \(.size)"' | sort > "here-$tag.txt"
+          for tag in models-1 models-2 models-3 models-4; do
+            # models-4 exists after the run of translator-data-4.yml (a missing release is an empty list)
+            { gh api "repos/$GITHUB_REPOSITORY/releases/tags/$tag" --jq '.assets[] | "\(.name) \(.size)"' 2>/dev/null || true; } | sort > "here-$tag.txt"
             echo "$tag: $(wc -l < "here-$tag.txt") file(s), $(awk '{s+=$2} END {printf "%.0f", s/1048576}' "here-$tag.txt") MB"
           done
           python3 -I - addons/translation-proofreading/source/resources/catalog.json <<'PY'
           import json, sys
           catalog = json.load(open(sys.argv[1], encoding="utf-8"))
           have = {}
-          for tag in ("models-1", "models-2", "models-3"):
+          for tag in ("models-1", "models-2", "models-3", "models-4"):
               for line in open("here-%s.txt" % tag, encoding="utf-8"):
                   name, size = line.rsplit(" ", 1)
                   have[(tag, name)] = int(size)
@@ -44,6 +45,8 @@ jobs:
           for model in catalog["models"]:
               tag = model.get("release") or catalog["release"]
               for f in model["files"]:
+                  if f["sha256"].startswith("PLACEHOLDER"):
+                      continue   # the files of models-4 before the run of translator-data-4.yml
                   for part in (f.get("parts") or [f]):
                       if have.get((tag, part["asset"])) != part["size"]:
                           bad.append("%s: %s (%d bytes) is not on %s" % (model["id"], part["asset"], part["size"], tag))
