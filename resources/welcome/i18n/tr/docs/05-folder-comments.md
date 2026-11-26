@@ -1,0 +1,3 @@
+Bir klasör mantar pano veya anahat olarak gösterildiğinde, denetçinin **Yorumlar ve dipnotlar** sekmesi içindeki her belgenin yorumlarını ve dipnotlarını, her belgenin başlığı altında listeler.
+**Deneyin:** binder'da bu belgenin altındaki **Yorumlu Bir Bölüm** klasörünü seçin. Mantar pano olarak açılır. Sonra denetçinin **Yorumlar ve dipnotlar** sekmesini açın (üstündeki son düğme). Bir yoruma tıklamak belgesini o yerde açar ve yorumun metnini orada değiştirebilirsiniz.
+Aynısı, klasörün tüm belgelerinin tek bir metin olarak gösterildiği **Birleşik Metin**'de (**Ctrl+1**) de geçerlidir: sekme hepsinin notlarını listeler.

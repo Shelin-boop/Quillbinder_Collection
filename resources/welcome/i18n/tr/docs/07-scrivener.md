@@ -1,0 +1,5 @@
+{{APP}}, Scrivener 3 projelerini okur ve yazar; böylece programlar arasında geçiş yapabilirsiniz.
+- **İçe aktarma**: **Dosya > İçe Aktar > Scrivener Projesi…** bir Scrivener 3 veya 2 projesinden bir {{APP}} projesi oluşturur. Binder, metinler, özetler, notlar, etiketler, durum, anahtar sözcükler, anlık görüntüler, yorumlar, dipnotlar, araştırma dosyaları ve koleksiyonlar birlikte gelir. Scrivener projesi yalnızca okunur.
+- **Scrivener biçiminde çalışma**: bir *.scriv* klasörünün içindeki *.scrivx* dosyasını **Dosya > Proje Aç…** ile açın ve **Scrivener Biçiminde Çalış**'ı seçin. {{APP}} bu durumda doğrudan *.scriv* içine kaydeder, böylece daha sonra, örneğin başka bir bilgisayarda, Scrivener'da devam edebilirsiniz. Projeyi öteki programda açmadan önce birinde kapatın.
+- **Dosya > Farklı Kaydet…** bir projeyi diğer biçimde (veya başka bir adla) kaydeder; **Dosya > Dışa Aktar** ise üzerinde çalıştığınız projeyi olduğu gibi bırakan bir kopya kaydeder.
+- Kendi {{APP}} projesi her belgeyi düz bir metin dosyası olarak (Markdown, ya da isterseniz RTF) saklar; herhangi bir düzenleyiciyle okunabilir.
