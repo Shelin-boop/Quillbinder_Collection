@@ -1106,7 +1106,8 @@ static void builtInThemesUnchanged()
 {
     QStringList lines;
     for (const theme::Entry &te : theme::available()) {
-        if (te.kind != theme::Kind::BuiltIn || te.id == QLatin1String("system"))
+        if (te.kind != theme::Kind::BuiltIn || te.id == QLatin1String("system")
+            || te.id == QLatin1String("shelins-dark")) // new in 0.95.0: not part of the 0.40.1 record
             continue;
         theme::Theme t;
         if (!theme::load(te.id, &t))
