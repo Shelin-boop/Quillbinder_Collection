@@ -2,13 +2,13 @@
   "format": 1,
   "id": "translation-proofreading",
   "name": "Translation Helper",
-  "version": "1.4",
+  "version": "1.5",
   "repository": "Shelin-boop/Quillbinder_Collection",
-  "commit": "532bb3cb80c5230aa78f089e38b2465f177e1792",
+  "commit": "99439897f6c0a99096e07b810e69d826a82626c9",
   "folder": "addons/translation-proofreading/source",
   "author": "The Quillbinder project",
   "license": "Apache License 2.0",
-  "reviewed": "2026-11-25",
+  "reviewed": "2026-11-26",
   "summary": "Gives suggestions for translating between eleven languages and for checking English spelling and grammar, on your own computer; once a model is downloaded, it works without any connection. Its translations are not precise: check each one, which needs a working knowledge of both languages.",
   "nonCommercialData": [
     {
