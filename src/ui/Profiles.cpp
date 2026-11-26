@@ -15,6 +15,9 @@
 #include <QSaveFile>
 #include <QSettings>
 #include <QStyleHints>
+#ifdef Q_OS_WIN
+#include <QTemporaryDir>
+#endif
 #include <QTemporaryFile>
 #include <QUuid>
 
@@ -127,6 +130,18 @@ QString ownThemeText(const QString &id)
 // the INI text of a content (a file with name, keys, layouts and the theme)
 QByteArray iniOf(const QString &name, const Content &c, QString *error)
 {
+#ifdef Q_OS_WIN
+    // (Windows 0.95.0) QTemporaryFile keeps its file open after close() (Qt's engine only goes back to the start), and on
+    // Windows it is opened without delete sharing: QSettings, which writes through QSaveFile, cannot replace it there
+    // ("The file could not be written."). A fresh name in a temporary folder of its own instead.
+    QTemporaryDir tmpDir(QDir::tempPath() + QLatin1String("/qbprofile-XXXXXX"));
+    if (!tmpDir.isValid()) {
+        if (error)
+            *error = QObject::tr("A temporary file could not be made.");
+        return {};
+    }
+    const QString path = tmpDir.filePath(QStringLiteral("profile.ini"));
+#else
     QTemporaryFile tmp(QDir::tempPath() + QLatin1String("/qbprofile-XXXXXX.ini"));
     if (!tmp.open()) {
         if (error)
@@ -135,6 +150,7 @@ QByteArray iniOf(const QString &name, const Content &c, QString *error)
     }
     const QString path = tmp.fileName();
     tmp.close();
+#endif
     QByteArray bytes;
     {
         QSettings to(path, QSettings::IniFormat);

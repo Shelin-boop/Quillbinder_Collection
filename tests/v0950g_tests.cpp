@@ -28,6 +28,7 @@
 #include <QMenu>
 #include <QMenuBar>
 #include <QProcess>
+#include <QStandardPaths>
 #include <QRegularExpression>
 #include <QSet>
 #include <QSettings>
@@ -339,7 +340,14 @@ static void dictionaries(const QString &src)
         QDir().mkpath(stage);
         QFile::copy(folder + QStringLiteral("/manifest.json"), stage + QStringLiteral("/manifest.json"));
         QProcess st;
-        st.start(QStringLiteral("bash"), {folder + QStringLiteral("/stage.sh"), QStringLiteral("x"), stage});
+#ifdef Q_OS_WIN
+        // (Windows 0.95.0) Windows looks for a bare "bash" in System32 before the PATH and finds WSL's starter there; the
+        // Git Bash that runs the suites is the first one on the PATH
+        const QString bash = QStandardPaths::findExecutable(QStringLiteral("bash"));
+#else
+        const QString bash = QStringLiteral("bash");
+#endif
+        st.start(bash, {folder + QStringLiteral("/stage.sh"), QStringLiteral("x"), stage});
         st.waitForFinished(300000);
         const QString dictDir = stage + QStringLiteral("/payload/dictionaries");
         const QStringList files = QDir(dictDir).entryList(QDir::Files);

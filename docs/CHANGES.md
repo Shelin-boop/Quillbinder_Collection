@@ -462,6 +462,26 @@ and need 0.93.0 (the check for updates and **File > Install Update or Add-on** t
   they cannot say "alpha" again; `docs/design-decisions.md` gives the reasons behind choices that can look like faults
   (README, SECURITY.md and the manual's introduction link to it).
 
+## Windows 0.95.0 experimental (2026-11-26)
+
+The functions of 0.95.0 for Windows (a program update for Windows 0.94.x; the libraries stay those of 0.93.0).
+Everything in 0.95.0 above is in it: eleven interface languages with their manuals and welcome projects, themes and
+user profiles (View > Profiles), "Shelin's Dark Theme" and the profile "Shelin's", the Labels toolbar, File > Options >
+Appearance > Standard Colors, File > Options > Keyboard > Use the Set of My Keyboard Layout, cutting targets in red,
+highlights drawn as picked, the Bookmarks tab's zoom per part and its sizes kept, 25 backups at first, and Translation
+Helper 1.5. What is Windows' own:
+
+- **The spelling dictionaries of the nine new languages are add-ons, as on Linux**: `dictionary-<code>.qbpkg` in the
+  release and inside the full version (English and German still come with the program). Install the one you need
+  with Help > Add-ons and Updates > Install Update or Add-on, restart, then choose it in File > Options > Editing. The
+  update with all add-ons leaves the dictionaries out, so that it does not install nine languages at once.
+- **"Default" follows Windows' own light or dark setting**, and the profiles are kept in the portable folder's data
+  folder (`data\profiles`), with everything else of the program.
+
+For developers (nothing changes in the program): the suites of 0.95.0 run on Windows (v0950b leaves out the AppImage's
+move and its menu entry); the dictionary add-ons' build script ignores the carriage returns of the Windows checkout;
+the official add-on entry's Windows block names the source of Translation Helper 1.5.
+
 ## Android 0.94.0 experimental (2026-11-26)
 
 The functions of 0.94.0 for Android tablets (a new APK, as always on Android; it installs over Android 0.93.x and keeps

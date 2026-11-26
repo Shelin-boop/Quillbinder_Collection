@@ -11,7 +11,8 @@ STAGE=$2
 CACHE=${QB_DICT_CACHE:-$HOME/.cache/quillbinder-dictionaries}
 OUT=$STAGE/payload/dictionaries
 mkdir -p "$OUT" "$CACHE"
-TAG=$(awk '$1=="tag"{print $2}' "$DIR/sources.txt")
+# (Windows 0.95.0) the Windows checkout has CRLF line ends: the carriage returns are left out of every line read here
+TAG=$(tr -d '\r' < "$DIR/sources.txt" | awk '$1=="tag"{print $2}')
 [ -n "$TAG" ] || { echo "$DIR/sources.txt names no tag" >&2; exit 1; }
 while read -r path sum name; do
     case "$path" in ''|'#'*|tag) continue ;; esac
@@ -27,4 +28,4 @@ while read -r path sum name; do
         mv "$cached.part" "$cached"
     fi
     cp "$cached" "$OUT/$name"
-done < "$DIR/sources.txt"
+done < <(tr -d '\r' < "$DIR/sources.txt")

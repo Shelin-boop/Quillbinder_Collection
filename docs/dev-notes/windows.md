@@ -2,6 +2,32 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## Windows 0.95.0 (2026-11-26): the dictionary add-ons, the suites of 0.95.0, Translation Helper 1.5
+
+- **The nine dictionary add-ons** (`addons/dictionary-<code>`, Linux 0.95.0) are built by `packaging/windows/win-addons.sh`
+  too, without a platform (`<id>.qbpkg`, the same content as Linux's): each add-on's `stage.sh` runs
+  `tools/stage-dictionary.sh`, which fetches LibreOffice's files from raw.githubusercontent.com (GitHub's runner reaches
+  it) and checks them against `sources.txt`. The Windows checkout has CRLF line ends: that script reads `sources.txt`
+  through `tr -d '\r'` (on Linux nothing changes). The spell checker finds them through `addons::contentDirs` on
+  Windows as on Linux (`SpellChecker.cpp` `dictionaryDirs()`); English and German stay in the program folder
+  (`win-dictionaries.sh`). They go into the full version and the release; **the update bundle leaves them out**
+  (`win-ci.sh` `make_bundle`; `win-check-layout.sh` counts the bundle's add-ons without them), so that installing the
+  bundle does not put nine languages into every program. The update file's Windows block names them (an add-on without
+  platform or runtime, `tools/update-feed.py`).
+- **The suites of Linux 0.95.0** are counted in `win-tests.sh` from their first run: v0950a to v0950d, v0950f, v0950g
+  (v0950b leaves out the AppImage's move and menu entry by `Q_OS_LINUX`; v0950g stages, packs and installs the nine
+  dictionaries with `bash` and `python3` of the runner).
+- **Translation Helper 1.5**: `win-addons.sh` builds it from `addons/translation-proofreading/source` of the commit, as
+  before; the official entry's Windows block names the 1.5 source (99439897), checked by a dry run of
+  `addon-release-windows.yml` on the work branch.
+- **Keyboard sets (to-do item 111)**: Windows' own layouts (kbdlayout.info, read from its tables, not tried on a PC)
+  have AltGr letters on Q, W, E, C (Brazilian ABNT2) and A, E, I, Q, S, T (Turkish Q); of the program's Ctrl+Alt+letter
+  commands only C (Brazilian) and I (Turkish, Show Inspector) meet them. Since 0.90.4 the AltGr key itself is
+  `Qt::GroupSwitchModifier` (`platform::qpaWithAltGr`), so it types and runs no command; a clash is left only when the
+  letter is typed with the left Ctrl and Alt. No change. On a Cyrillic layout Qt 6.12.1 takes a shortcut's letter from
+  the key's virtual-key code (Windows, `qwindowskeymapper.cpp`, the fall-back key) or from the Latin group (Linux,
+  `QXkbCommon::lookupLatinKeysym`): the "us" set fits Russian.
+
 ## Windows 0.93.0 (2026-11-24): Qt 6.12.1, zlib 1.4, FFmpeg 9.1 of the project, the mind map's shapes
 
 - **Qt 6.12.1** through `packaging/windows/win-qt.sh` (one place for `windows.yml` and both Qt steps of

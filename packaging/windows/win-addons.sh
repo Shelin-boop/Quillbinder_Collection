@@ -319,6 +319,18 @@ else
     echo "$id: left out (its engine libraries are missing: QB_TRANSLATOR_DEPS)"
 fi
 
+# ---- the spelling dictionaries (Windows 0.95.0, to-do item 102): the same add-ons as on Linux, without a platform
+# (Windows has no system dictionaries; English and German come with the program, packaging/windows/win-dictionaries.sh).
+# Each add-on's stage.sh (tools/stage-dictionary.sh) fetches LibreOffice's files at the pinned tag and checks their
+# SHA-256 sums; a file that changed stops the build, as on Linux.
+for dir in "$ROOT"/addons/dictionary-*/; do
+    id=$(basename "$dir")
+    stage="$STAGES/$id"
+    stage_copy "$dir" "$stage"
+    bash "$dir/stage.sh" "$BUILD" "$stage"
+    "$PY" "$ROOT/tools/make-package.py" addon "$stage" "$OUT/$id.qbpkg"
+done
+
 # ---- add-ons without libraries (W3): as packaging/linux/build-addons.sh makes them on Linux
 for dir in "$ROOT"/addons/*/; do
     id=$(basename "$dir")
