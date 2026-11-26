@@ -1,0 +1,352 @@
+{
+ "name": "Witamy w programie {{APP}}",
+ "description": "Krótki przegląd tego, co {{APP}} ma ponad zwykły zakres",
+ "draftTitle": "Przegląd funkcji",
+ "objectTemplates": "standard",
+ "rootFirst": [
+  {
+   "title": "Powitanie",
+   "icon": "qb-information",
+   "textFile": "docs/00-welcome.md",
+   "synopsis": "Czym jest ten projekt i przystanki przeglądu."
+  }
+ ],
+ "draft": [
+  {
+   "title": "Pasek ikon",
+   "icon": "qb-flag-red",
+   "textFile": "docs/01-icon-bar.md",
+   "synopsis": "Dziesięć ikon dokumentów, każda jednym kliknięciem; ikony z tekstu i z własnych obrazów."
+  },
+  {
+   "title": "Powiększaj tam, gdzie wskazujesz",
+   "icon": "qb-magnifier",
+   "textFile": "docs/02-zoom.md",
+   "synopsis": "Ctrl+kółko myszy nad dowolną częścią okna; każda część ma własne powiększenie."
+  },
+  {
+   "title": "Mapy myśli",
+   "icon": "qb-mindmap",
+   "textFile": "docs/03-mind-maps.md",
+   "synopsis": "Tablica notatek, linii i strzałek dla każdego dokumentu. Ten ma tablicę: otwórz kartę Mapa myśli.",
+   "mindmap": {
+    "notes": [
+     {
+      "id": 1,
+      "text": "Co potrafi mapa myśli",
+      "x": 290,
+      "y": 245,
+      "width": 170,
+      "fontSize": 15,
+      "bold": true,
+      "align": "center",
+      "fill": "#fff2a8",
+      "border": 2,
+      "shape": "cloud"
+     },
+     {
+      "id": 2,
+      "text": "Notatki: kliknij dwukrotnie puste miejsce. Ctrl+Enter tworzy nową notatkę pod zaznaczoną.",
+      "x": 20,
+      "y": 30,
+      "width": 200,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 3,
+      "text": "Linie: przeciągnij notatkę na inną. Przeciągnij ją tam ponownie, aby usunąć linię.",
+      "x": 280,
+      "y": 30,
+      "width": 190,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 4,
+      "text": "Strzałki: przytrzymaj Alt przy puszczaniu. Ctrl+Alt: strzałka wstecz. Ctrl+Alt+Shift: oba końce.",
+      "x": 530,
+      "y": 30,
+      "width": 210,
+      "fill": "#dcecff",
+      "border": 1
+     },
+     {
+      "id": 5,
+      "text": "Kolory, kształty i obramowania: kliknij notatkę prawym przyciskiem myszy.",
+      "x": 560,
+      "y": 250,
+      "width": 180,
+      "fill": "#ffd6d6",
+      "border": 1,
+      "shape": "jagged"
+     },
+     {
+      "id": 6,
+      "text": "Ikony w rogach i po bokach notatki oraz pośrodku linii.",
+      "x": 540,
+      "y": 420,
+      "width": 200,
+      "fill": "#e3f6d8",
+      "border": 1,
+      "icons": {
+       "topLeft": "qb-flag-red",
+       "topRight": "qb-light-bulb",
+       "bottomRight": "qb-checked"
+      }
+     },
+     {
+      "id": 7,
+      "text": "Kształty w tle grupują notatki. Magnetyczny kształt zabiera swoje notatki ze sobą.",
+      "x": 290,
+      "y": 455,
+      "width": 170
+     },
+     {
+      "id": 8,
+      "text": "Menu > Notatki > Dodaj notatki do segregatora zmienia notatki w dokumenty.",
+      "x": 20,
+      "y": 430,
+      "width": 200,
+      "fill": "#f0e6ff",
+      "border": 1,
+      "shape": "square"
+     },
+     {
+      "id": 9,
+      "text": "Eksport jako PDF, PNG, tekst, OPML lub plik Scapple; pliki Scapple można wczytać.",
+      "x": 20,
+      "y": 245,
+      "width": 200,
+      "fill": "#f0e6ff",
+      "border": 1
+     }
+    ],
+    "shapes": [
+     {
+      "id": 20,
+      "x": 270,
+      "y": 435,
+      "w": 210,
+      "h": 150,
+      "fill": "#fde3b8",
+      "magnetic": true
+     }
+    ],
+    "lines": [
+     {
+      "from": 1,
+      "to": 2,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 3,
+      "arrow": "to",
+      "label": "przeciągnij"
+     },
+     {
+      "from": 1,
+      "to": 4,
+      "arrow": "to",
+      "color": "#c0392b"
+     },
+     {
+      "from": 1,
+      "to": 5,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 6,
+      "arrow": "to",
+      "icon": "qb-pencil"
+     },
+     {
+      "from": 1,
+      "to": 7,
+      "arrow": "to"
+     },
+     {
+      "from": 1,
+      "to": 8
+     },
+     {
+      "from": 1,
+      "to": 9,
+      "arrow": "to",
+      "color": "#2f6fbf"
+     }
+    ]
+   }
+  },
+  {
+   "title": "Karty obiektów",
+   "icon": "qb-character-sheet",
+   "textFile": "docs/04-objects.md",
+   "synopsis": "Ludzie, miejsca i rzeczy opowieści, każdy na karcie pól, powiązane ze sobą.",
+   "children": [
+    {
+     "title": "Scena w Ashvale",
+     "icon": "qb-location-house",
+     "textFile": "docs/04a-scene.md",
+     "synopsis": "Krótka scena z odnośnikami do obiektów. Karta Obiekty wymienia, kto i co się w niej pojawia."
+    }
+   ]
+  },
+  {
+   "title": "Komentarze całego folderu",
+   "icon": "qb-speech-bubble",
+   "textFile": "docs/05-folder-comments.md",
+   "synopsis": "Komentarze i przypisy każdego dokumentu w folderze, na jednej liście."
+  },
+  {
+   "title": "Rozdział z komentarzami",
+   "type": "folder",
+   "synopsis": "Zaznacz go i otwórz kartę Komentarze i przypisy w inspektorze.",
+   "children": [
+    {
+     "title": "Księga promu",
+     "textFile": "docs/05a-scene-one.md",
+     "synopsis": "Scena z komentarzem."
+    },
+    {
+     "title": "Wieczór",
+     "textFile": "docs/05b-scene-two.md",
+     "synopsis": "Scena z przypisem i adnotacją śródtekstową."
+    }
+   ]
+  },
+  {
+   "title": "Porównaj i przenieś",
+   "icon": "qb-reviewer",
+   "textFile": "docs/06-compare.md",
+   "synopsis": "Maszynopis wraca z Worda lub LibreOffice: zobacz, co się różni, i przejmij którąkolwiek stronę."
+  },
+  {
+   "title": "Projekty Scrivener",
+   "icon": "qb-sync-folder",
+   "textFile": "docs/07-scrivener.md",
+   "synopsis": "Zaimportuj projekt Scrivener albo pracuj w nim bezpośrednio i kontynuuj później w Scrivenerze."
+  },
+  {
+   "title": "Motywy, kolory i czcionki",
+   "icon": "qb-eye",
+   "textFile": "docs/08-themes.md",
+   "synopsis": "Tryb ciemny i inne motywy od razu; paleta kolorów paska formatowania; instalowanie czcionek."
+  },
+  {
+   "title": "Aktualizacje i dodatki",
+   "icon": "qb-cog",
+   "textFile": "docs/09-updates.md",
+   "synopsis": "Małe pliki pakietów, Menedżer dodatków i droga powrotna do wcześniejszej wersji."
+  },
+  {
+   "title": "Zabezpieczenia",
+   "icon": "qb-checked",
+   "textFile": "docs/10-safety.md",
+   "synopsis": "Autozapis, kopie zapasowe, migawki, zapasowy plik projektu, raporty o awariach i zawieszeniach."
+  },
+  {
+   "title": "Co dalej",
+   "icon": "qb-pass",
+   "textFile": "docs/11-where-next.md",
+   "synopsis": "Przewodnik szybkiego startu, podręcznik i twój własny projekt."
+  }
+ ],
+ "projectBookmarks": [
+  "Powitanie"
+ ],
+ "objects": [
+  {
+   "category": "characters",
+   "name": "Mara Fenn",
+   "values": {
+    "role": "Bohaterka główna",
+    "age": "34",
+    "eyes": "Szare",
+    "occupation": "Przewoźniczka",
+    "livesIn": [
+     "Ashvale"
+    ],
+    "relations": [
+     "Tobias Quill"
+    ],
+    "traits": "Cierpliwa, uparta, dotrzymuje każdej obietnicy.",
+    "background": "Przejęła prom po matce. [Tobias Quill](qbobj-name:Tobias Quill) znalazł imię jej matki w starej księdze promu.",
+    "scenes": [
+     "Scena w Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "characters",
+   "name": "Tobias Quill",
+   "values": {
+    "role": "Drugoplanowy",
+    "age": "29",
+    "occupation": "Wiejski archiwista",
+    "livesIn": [
+     "Ashvale"
+    ],
+    "relations": [
+     "Mara Fenn"
+    ],
+    "goals": "Chce wiedzieć, kto napisał pierwsze strony księgi promu.",
+    "scenes": [
+     "Scena w Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "locations",
+   "name": "Ashvale",
+   "values": {
+    "kind": "Wieś",
+    "environment": [
+     "Fenwood"
+    ],
+    "weather": [
+     "Jesienna mgła"
+    ],
+    "population": "212",
+    "inhabitants": [
+     "Mara Fenn",
+     "Tobias Quill"
+    ],
+    "description": "Czterdzieści domów nad leniwą rzeką, prom i wieża kościoła, którą widać z [Fenwood](qbobj-name:Fenwood).",
+    "scenes": [
+     "Scena w Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "environments",
+   "name": "Fenwood",
+   "values": {
+    "kind": "Las",
+    "flora": "Brzozy i olchy; trzciny wzdłuż rzeki.",
+    "weather": [
+     "Jesienna mgła"
+    ],
+    "locations": [
+     "Ashvale"
+    ]
+   }
+  },
+  {
+   "category": "weather",
+   "name": "Jesienna mgła",
+   "values": {
+    "season": "Jesień",
+    "temperature": "8",
+    "precipitation": "Mgła",
+    "effects": "Prom staje, gdy nie widać drugiego brzegu.",
+    "where": [
+     "Ashvale",
+     "Fenwood"
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,5 @@
+- **Autozapis**: kilka sekund po tym, jak przestaniesz pisać; gdy piszesz dalej, w pierwszej krótkiej przerwie po 5 sekundach i najpóźniej po 30 sekundach.
+- **Kopie zapasowe**: przy zamykaniu projektu (i, jeśli chcesz, przy otwieraniu lub przy każdym **Ctrl+S**); ustawisz je w **Plik > Opcje > Kopia zapasowa**. **Plik > Kopia zapasowa** tworzy kopię od razu.
+- **Migawki**: **Dokumenty > Migawki > Wykonaj migawkę** (**Ctrl+5**) zachowuje wersję dokumentu sprzed dużej zmiany; **Porównaj** pokazuje, co zmieniło się od tamtej pory.
+- **Zapasowa kopia pliku projektu**: jeśli plik projektu zostanie kiedyś uszkodzony, na przykład przez awarię komputera w trakcie zapisu, {{APP}} proponuje kopię, którą trzyma z ostatniego otwarcia.
+- **Raporty o awariach i zawieszeniach**: jeśli program kończy pracę z powodu błędu albo przestaje odpowiadać, zapisuje raport. **Pomoc > Rozwiązywanie problemów i programowanie > Raporty o awariach…** je wymienia, a **Pomoc > Rozwiązywanie problemów i programowanie > Informacje o systemie…** pokazuje, co wkrótce może sprawić kłopot, na przykład prawie pełny dysk.
