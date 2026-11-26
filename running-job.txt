@@ -1,8 +1,8 @@
-state: running
-system: Windows
-job: the run 0.95.0, Windows part (Windows 0.95.0 experimental)
-branch: win/0.95.0
-chat: started 2026-11-26 14:12 Berlin
-started: 2026-11-26 14:15 Berlin
+state: free
+system:
+job:
+branch:
+chat:
+started:
 paused:
-note: Linux 0.95.0 beta released (main 0877537, #27); this job pulls Windows to that source, then Android follows.
+note: last job: the run 0.95.0, Windows part: Windows 0.95.0 experimental released (v0.95.0-windows-experimental, 2026-11-26, main 1544af5, #28 and #29; texts 700a170), page and update file published. Next: the run 0.95.0's Android part.
