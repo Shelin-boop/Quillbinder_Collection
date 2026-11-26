@@ -1,8 +1,8 @@
-state: free
-system:
-job:
-branch:
-chat:
-started:
+state: running
+system: linux
+job: the run 0.95.0 (function), Linux part: to-do items 91 to 104 and 106
+branch: linux/0.95.0
+chat: started 2026-11-26 07:24 Berlin
+started: 2026-11-26 07:25
 paused:
-note: last job: the run 0.94.0, Android part: Android 0.94.0 experimental released (v0.94.0-android-experimental, 2026-11-26, main d6468b0, #26), page and update file published. The run 0.94.0 is complete. Next: the run 0.95.0 (to-do items 91 to 104), not started.
+note: Windows and Android parts follow in their own chats.
