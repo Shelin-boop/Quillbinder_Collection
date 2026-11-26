@@ -1,0 +1,5 @@
+- **Automatisch opslaan**: een paar seconden nadat je ophoudt met typen; terwijl je doortypt, in de eerste korte pauze na 5 seconden, en uiterlijk na 30 seconden.
+- **Back-ups**: wanneer een project wordt gesloten (en, als je wilt, wanneer het wordt geopend of bij elke **Ctrl+S**); stel ze in onder **Bestand > Opties > Back-up**. **Bestand > Back-up** maakt er nu een.
+- **Momentopnamen**: **Documenten > Momentopnamen > Momentopname maken** (**Ctrl+5**) bewaart de versie van een document vóór een grote wijziging; **Vergelijken** toont wat er sindsdien is gewijzigd.
+- **Een reservekopie van het projectbestand**: als het projectbestand ooit beschadigd raakt, bijvoorbeeld door een crash van de computer terwijl het werd opgeslagen, biedt {{APP}} de kopie aan die het van de laatste keer openen bewaart.
+- **Crash- en vastloperrapporten**: als het programma door een fout eindigt of niet meer reageert, schrijft het een rapport. **Help > Probleemoplossing en ontwikkeling > Crashrapporten…** toont ze, **Help > Probleemoplossing en ontwikkeling > Systeeminformatie…** toont wat binnenkort voor problemen kan zorgen, zoals een bijna volle schijf.

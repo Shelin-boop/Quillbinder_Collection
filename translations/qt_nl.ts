@@ -5,1046 +5,1057 @@
         <name>QAbstractSpinBox</name>
         <message>
             <source>Step &amp;down</source>
-            <translation type="unfinished"></translation>
+            <translation>Stap om&amp;laag</translation>
         </message>
         <message>
             <source>&amp;Step up</source>
-            <translation type="unfinished"></translation>
+            <translation>Stap om&amp;hoog</translation>
         </message>
         <message>
             <source>&amp;Select All</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Alles selecteren</translation>
         </message>
     </context>
     <context>
         <name>QColorDialog</name>
         <message>
             <source>&amp;Red:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Rood:</translation>
         </message>
         <message>
             <source>&amp;Sat:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Verz:</translation>
         </message>
         <message>
             <source>&amp;Val:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Waarde:</translation>
         </message>
         <message>
             <source>Hu&amp;e:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Tint:</translation>
         </message>
         <message>
             <source>&amp;HTML:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;HTML:</translation>
         </message>
         <message>
             <source>Select Color</source>
-            <translation type="unfinished"></translation>
+            <translation>Kleur selecteren</translation>
         </message>
         <message>
             <source>&amp;Add to Custom Colors</source>
-            <translation type="unfinished"></translation>
+            <translation>Toevoegen aan &amp;aangepaste kleuren</translation>
         </message>
         <message>
             <source>Bl&amp;ue:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Blauw:</translation>
         </message>
         <message>
             <source>&amp;Pick Screen Color</source>
-            <translation type="unfinished"></translation>
+            <translation>Schermkleur &amp;kiezen</translation>
         </message>
         <message>
             <source>Cursor at %1, %2
 Press ESC to cancel</source>
-            <translation type="unfinished"></translation>
+            <translation>Cursor op %1, %2
+Druk op ESC om te annuleren</translation>
         </message>
         <message>
             <source>&amp;Green:</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Groen:</translation>
         </message>
         <message>
             <source>&amp;Basic colors</source>
-            <translation type="unfinished"></translation>
+            <translation>Basis&amp;kleuren</translation>
         </message>
         <message>
             <source>&amp;Custom colors</source>
-            <translation type="unfinished"></translation>
+            <translation>Aan&amp;gepaste kleuren</translation>
         </message>
         <message>
             <source>A&amp;lpha channel:</source>
-            <translation type="unfinished"></translation>
+            <translation>A&amp;lfakanaal:</translation>
         </message>
     </context>
     <context>
         <name>QDialogButtonBox</name>
         <message>
             <source>OK</source>
-            <translation type="unfinished"></translation>
+            <translation>OK</translation>
         </message>
     </context>
     <context>
         <name>QFileDialog</name>
         <message>
             <source>Back</source>
-            <translation type="unfinished"></translation>
+            <translation>Terug</translation>
         </message>
         <message>
             <source>Open</source>
-            <translation type="unfinished"></translation>
+            <translation>Openen</translation>
         </message>
         <message>
             <source>&amp;Open</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Openen</translation>
         </message>
         <message>
             <source>&amp;Save</source>
-            <translation type="unfinished"></translation>
+            <translation>Op&amp;slaan</translation>
         </message>
         <message>
             <source>Files</source>
-            <translation type="unfinished"></translation>
+            <translation>Bestanden</translation>
         </message>
         <message>
             <source>Show </source>
-            <translation type="unfinished"></translation>
+            <translation>Tonen </translation>
         </message>
         <message>
             <source>'%1' is write protected.
 Do you want to delete it anyway?</source>
-            <translation type="unfinished"></translation>
+            <translation>'%1' is beveiligd tegen schrijven.
+Wil je het toch verwijderen?</translation>
         </message>
         <message>
             <source>Are you sure you want to delete '%1'?</source>
-            <translation type="unfinished"></translation>
+            <translation>Weet je zeker dat je '%1' wilt verwijderen?</translation>
         </message>
         <message>
             <source>List of places and bookmarks</source>
-            <translation type="unfinished"></translation>
+            <translation>Lijst met plaatsen en bladwijzers</translation>
         </message>
         <message>
             <source>File &amp;name:</source>
-            <translation type="unfinished"></translation>
+            <translation>Bestands&amp;naam:</translation>
         </message>
         <message>
             <source>Alt+Left</source>
-            <translation type="unfinished"></translation>
+            <translation>Alt+Left</translation>
         </message>
         <message>
             <source>Alt+Up</source>
-            <translation type="unfinished"></translation>
+            <translation>Alt+Up</translation>
         </message>
         <message>
             <source>Delete</source>
-            <translation type="unfinished"></translation>
+            <translation>Verwijderen</translation>
         </message>
         <message>
             <source>New Folder</source>
-            <translation type="unfinished"></translation>
+            <translation>Nieuwe map</translation>
         </message>
         <message>
             <source>Parent Directory</source>
-            <translation type="unfinished"></translation>
+            <translation>Bovenliggende map</translation>
         </message>
         <message>
             <source>&amp;New Folder</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Nieuwe map</translation>
         </message>
         <message>
             <source>Remove</source>
-            <translation type="unfinished"></translation>
+            <translation>Verwijderen</translation>
         </message>
         <message>
             <source>Look in:</source>
-            <translation type="unfinished"></translation>
+            <translation>Zoeken in:</translation>
         </message>
         <message>
             <source>Alt+Right</source>
-            <translation type="unfinished"></translation>
+            <translation>Alt+Right</translation>
         </message>
         <message>
             <source>Create a New Folder</source>
-            <translation type="unfinished"></translation>
+            <translation>Een nieuwe map maken</translation>
         </message>
         <message>
             <source>Files of type:</source>
-            <translation type="unfinished"></translation>
+            <translation>Bestanden van het type:</translation>
         </message>
         <message>
             <source>Find Directory</source>
-            <translation type="unfinished"></translation>
+            <translation>Map zoeken</translation>
         </message>
         <message>
             <source>Show &amp;hidden files</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Verborgen bestanden tonen</translation>
         </message>
         <message>
             <source>Save As</source>
-            <translation type="unfinished"></translation>
+            <translation>Opslaan als</translation>
         </message>
         <message>
             <source>%1
 Directory not found.
 Please verify the correct directory name was given.</source>
-            <translation type="unfinished"></translation>
+            <translation>%1
+Map niet gevonden.
+Controleer of de juiste mapnaam is opgegeven.</translation>
         </message>
         <message>
             <source>Sidebar</source>
-            <translation type="unfinished"></translation>
+            <translation>Zijbalk</translation>
         </message>
         <message>
             <source>List View</source>
-            <translation type="unfinished"></translation>
+            <translation>Lijstweergave</translation>
         </message>
         <message>
             <source>&amp;Choose</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Kiezen</translation>
         </message>
         <message>
             <source>&amp;Delete</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Verwijderen</translation>
         </message>
         <message>
             <source>All files (*)</source>
-            <translation type="unfinished"></translation>
+            <translation>Alle bestanden (*)</translation>
         </message>
         <message>
             <source>All Files (*)</source>
-            <translation type="unfinished"></translation>
+            <translation>Alle bestanden (*)</translation>
         </message>
         <message>
             <source>Directories</source>
-            <translation type="unfinished"></translation>
+            <translation>Mappen</translation>
         </message>
         <message>
             <source>&amp;Rename</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Hernoemen</translation>
         </message>
         <message>
             <source>Could not delete directory.</source>
-            <translation type="unfinished"></translation>
+            <translation>Kon de map niet verwijderen.</translation>
         </message>
         <message>
             <source>Directory:</source>
-            <translation type="unfinished"></translation>
+            <translation>Map:</translation>
         </message>
         <message>
             <source>%1 already exists.
 Do you want to replace it?</source>
-            <translation type="unfinished"></translation>
+            <translation>%1 bestaat al.
+Wil je het vervangen?</translation>
         </message>
         <message>
             <source>Forward</source>
-            <translation type="unfinished"></translation>
+            <translation>Vooruit</translation>
         </message>
         <message>
             <source>Go forward</source>
-            <translation type="unfinished"></translation>
+            <translation>Vooruit gaan</translation>
         </message>
         <message>
             <source>Go to the parent directory</source>
-            <translation type="unfinished"></translation>
+            <translation>Naar de bovenliggende map gaan</translation>
         </message>
         <message>
             <source>Recent Places</source>
-            <translation type="unfinished"></translation>
+            <translation>Recente plaatsen</translation>
         </message>
         <message>
             <source>Go back</source>
-            <translation type="unfinished"></translation>
+            <translation>Terug gaan</translation>
         </message>
         <message>
             <source>Change to detail view mode</source>
-            <translation type="unfinished"></translation>
+            <translation>Overschakelen naar detailweergave</translation>
         </message>
         <message>
             <source>Create New Folder</source>
-            <translation type="unfinished"></translation>
+            <translation>Nieuwe map maken</translation>
         </message>
         <message>
             <source>Detail View</source>
-            <translation type="unfinished"></translation>
+            <translation>Detailweergave</translation>
         </message>
         <message>
             <source>%1
 File not found.
 Please verify the correct file name was given.</source>
-            <translation type="unfinished"></translation>
+            <translation>%1
+Bestand niet gevonden.
+Controleer of de juiste bestandsnaam is opgegeven.</translation>
         </message>
         <message>
             <source>Change to list view mode</source>
-            <translation type="unfinished"></translation>
+            <translation>Overschakelen naar lijstweergave</translation>
         </message>
     </context>
     <context>
         <name>QFileSystemModel</name>
         <message>
             <source>Kind</source>
-            <translation type="unfinished"></translation>
+            <translation>Soort</translation>
         </message>
         <message>
             <source>Name</source>
-            <translation type="unfinished"></translation>
+            <translation>Naam</translation>
         </message>
         <message>
             <source>Size</source>
-            <translation type="unfinished"></translation>
+            <translation>Grootte</translation>
         </message>
         <message>
             <source>Type</source>
-            <translation type="unfinished"></translation>
+            <translation>Type</translation>
         </message>
         <message>
             <source>My Computer</source>
-            <translation type="unfinished"></translation>
+            <translation>Mijn computer</translation>
         </message>
         <message>
             <source>Computer</source>
-            <translation type="unfinished"></translation>
+            <translation>Computer</translation>
         </message>
         <message>
             <source>Date Modified</source>
-            <translation type="unfinished"></translation>
+            <translation>Laatst gewijzigd</translation>
         </message>
     </context>
     <context>
         <name>QFontDialog</name>
         <message>
             <source>&amp;Font</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Lettertype</translation>
         </message>
         <message>
             <source>&amp;Size</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Grootte</translation>
         </message>
         <message>
             <source>Sample</source>
-            <translation type="unfinished"></translation>
+            <translation>Voorbeeld</translation>
         </message>
         <message>
             <source>Font st&amp;yle</source>
-            <translation type="unfinished"></translation>
+            <translation>Lettertype&amp;stijl</translation>
         </message>
         <message>
             <source>Wr&amp;iting System</source>
-            <translation type="unfinished"></translation>
+            <translation>Schri&amp;ftsysteem</translation>
         </message>
         <message>
             <source>Select Font</source>
-            <translation type="unfinished"></translation>
+            <translation>Lettertype selecteren</translation>
         </message>
         <message>
             <source>&amp;Underline</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Onderstrepen</translation>
         </message>
         <message>
             <source>Effects</source>
-            <translation type="unfinished"></translation>
+            <translation>Effecten</translation>
         </message>
         <message>
             <source>Stri&amp;keout</source>
-            <translation type="unfinished"></translation>
+            <translation>Door&amp;halen</translation>
         </message>
     </context>
     <context>
         <name>QInputDialog</name>
         <message>
             <source>Enter a value:</source>
-            <translation type="unfinished"></translation>
+            <translation>Voer een waarde in:</translation>
         </message>
     </context>
     <context>
         <name>QLineEdit</name>
         <message>
             <source>Cu&amp;t</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Knippen</translation>
         </message>
         <message>
             <source>&amp;Copy</source>
-            <translation type="unfinished"></translation>
+            <translation>K&amp;opiëren</translation>
         </message>
         <message>
             <source>&amp;Redo</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Opnieuw</translation>
         </message>
         <message>
             <source>&amp;Undo</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Ongedaan maken</translation>
         </message>
         <message>
             <source>&amp;Paste</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Plakken</translation>
         </message>
         <message>
             <source>Delete</source>
-            <translation type="unfinished"></translation>
+            <translation>Verwijderen</translation>
         </message>
         <message>
             <source>Select All</source>
-            <translation type="unfinished"></translation>
+            <translation>Alles selecteren</translation>
         </message>
     </context>
     <context>
         <name>QMessageBox</name>
         <message>
             <source>Show Details...</source>
-            <translation type="unfinished"></translation>
+            <translation>Details tonen...</translation>
         </message>
         <message>
             <source>About Qt</source>
-            <translation type="unfinished"></translation>
+            <translation>Over Qt</translation>
         </message>
         <message>
             <source>Hide Details...</source>
-            <translation type="unfinished"></translation>
+            <translation>Details verbergen...</translation>
         </message>
         <message>
             <source>&lt;h3&gt;About Qt&lt;/h3&gt;&lt;p&gt;This program uses Qt version %1.&lt;/p&gt;</source>
-            <translation type="unfinished"></translation>
+            <translation>&lt;h3&gt;Over Qt&lt;/h3&gt;&lt;p&gt;Dit programma gebruikt Qt versie %1.&lt;/p&gt;</translation>
         </message>
         <message>
             <source>&lt;p&gt;Qt is a C++ toolkit for cross-platform application development.&lt;/p&gt;&lt;p&gt;Qt provides single-source portability across all major desktop operating systems. It is also available for embedded Linux and other embedded and mobile operating systems.&lt;/p&gt;&lt;p&gt;Qt is available under multiple licensing options designed to accommodate the needs of our various users.&lt;/p&gt;&lt;p&gt;Qt licensed under our commercial license agreement is appropriate for development of proprietary/commercial software where you do not want to share any source code with third parties or otherwise cannot comply with the terms of GNU (L)GPL.&lt;/p&gt;&lt;p&gt;Qt licensed under GNU (L)GPL is appropriate for the development of Qt&amp;nbsp;applications provided you can comply with the terms and conditions of the respective licenses.&lt;/p&gt;&lt;p&gt;Please see &lt;a href="http://%2/"&gt;%2&lt;/a&gt; for an overview of Qt licensing.&lt;/p&gt;&lt;p&gt;Copyright (C) %1 The Qt Company Ltd and other contributors.&lt;/p&gt;&lt;p&gt;Qt and the Qt logo are trademarks of The Qt Company Ltd.&lt;/p&gt;&lt;p&gt;Qt is The Qt Company Ltd product developed as an open source project. See &lt;a href="http://%3/"&gt;%3&lt;/a&gt; for more information.&lt;/p&gt;</source>
-            <translation type="unfinished"></translation>
+            <translation>&lt;p&gt;Qt is een C++-toolkit voor platformonafhankelijke applicatieontwikkeling.&lt;/p&gt;&lt;p&gt;Qt biedt overdraagbaarheid vanuit één bron over alle grote desktopbesturingssystemen. Het is ook beschikbaar voor embedded Linux en andere embedded en mobiele besturingssystemen.&lt;/p&gt;&lt;p&gt;Qt is beschikbaar onder meerdere licentieopties, bedoeld om aan de behoeften van onze uiteenlopende gebruikers te voldoen.&lt;/p&gt;&lt;p&gt;Qt onder onze commerciële licentieovereenkomst is geschikt voor de ontwikkeling van propriëtaire/commerciële software waarbij je geen broncode met derden wilt delen of anderszins niet kunt voldoen aan de voorwaarden van de GNU (L)GPL.&lt;/p&gt;&lt;p&gt;Qt onder de GNU (L)GPL is geschikt voor de ontwikkeling van Qt&amp;nbsp;-applicaties, mits je kunt voldoen aan de voorwaarden van de betreffende licenties.&lt;/p&gt;&lt;p&gt;Zie &lt;a href="http://%2/"&gt;%2&lt;/a&gt; voor een overzicht van de licentieverlening van Qt.&lt;/p&gt;&lt;p&gt;Copyright (C) %1 The Qt Company Ltd en andere bijdragers.&lt;/p&gt;&lt;p&gt;Qt en het Qt-logo zijn handelsmerken van The Qt Company Ltd.&lt;/p&gt;&lt;p&gt;Qt is een product van The Qt Company Ltd, ontwikkeld als open-sourceproject. Zie &lt;a href="http://%3/"&gt;%3&lt;/a&gt; voor meer informatie.&lt;/p&gt;</translation>
         </message>
     </context>
     <context>
         <name>QPageSetupWidget</name>
         <message>
             <source>CC</source>
-            <translation type="unfinished"></translation>
+            <translation>CC</translation>
         </message>
         <message>
             <source>DD</source>
-            <translation type="unfinished"></translation>
+            <translation>DD</translation>
         </message>
         <message>
             <source>in</source>
-            <translation type="unfinished"></translation>
+            <translation>in</translation>
         </message>
         <message>
             <source>mm</source>
-            <translation type="unfinished"></translation>
+            <translation>mm</translation>
         </message>
         <message>
             <source>pt</source>
-            <translation type="unfinished"></translation>
+            <translation>pt</translation>
         </message>
         <message>
             <source>P̸</source>
-            <translation type="unfinished"></translation>
+            <translation>P̸</translation>
         </message>
         <message>
             <source>Form</source>
-            <translation type="unfinished"></translation>
+            <translation>Formulier</translation>
         </message>
         <message>
             <source>bottom margin</source>
-            <translation type="unfinished"></translation>
+            <translation>ondermarge</translation>
         </message>
         <message>
             <source>Paper</source>
-            <translation type="unfinished"></translation>
+            <translation>Papier</translation>
         </message>
         <message>
             <source>Paper source:</source>
-            <translation type="unfinished"></translation>
+            <translation>Papierbron:</translation>
         </message>
         <message>
             <source>right margin</source>
-            <translation type="unfinished"></translation>
+            <translation>rechtermarge</translation>
         </message>
         <message>
             <source>Pica (P̸)</source>
-            <translation type="unfinished"></translation>
+            <translation>Pica (P̸)</translation>
         </message>
         <message>
             <source>Margins</source>
-            <translation type="unfinished"></translation>
+            <translation>Marges</translation>
         </message>
         <message>
             <source>Custom</source>
-            <translation type="unfinished"></translation>
+            <translation>Aangepast</translation>
         </message>
         <message>
             <source>Landscape</source>
-            <translation type="unfinished"></translation>
+            <translation>Liggend</translation>
         </message>
         <message>
             <source>Page Layout</source>
-            <translation type="unfinished"></translation>
+            <translation>Paginalay-out</translation>
         </message>
         <message>
             <source>Width:</source>
-            <translation type="unfinished"></translation>
+            <translation>Breedte:</translation>
         </message>
         <message>
             <source>Orientation</source>
-            <translation type="unfinished"></translation>
+            <translation>Afdrukstand</translation>
         </message>
         <message>
             <source>Didot (DD)</source>
-            <translation type="unfinished"></translation>
+            <translation>Didot (DD)</translation>
         </message>
         <message>
             <source>Portrait</source>
-            <translation type="unfinished"></translation>
+            <translation>Staand</translation>
         </message>
         <message>
             <source>Page order:</source>
-            <translation type="unfinished"></translation>
+            <translation>Paginavolgorde:</translation>
         </message>
         <message>
             <source>top margin</source>
-            <translation type="unfinished"></translation>
+            <translation>bovenmarge</translation>
         </message>
         <message>
             <source>left margin</source>
-            <translation type="unfinished"></translation>
+            <translation>linkermarge</translation>
         </message>
         <message>
             <source>Page size:</source>
-            <translation type="unfinished"></translation>
+            <translation>Paginaformaat:</translation>
         </message>
         <message>
             <source>Cicero (CC)</source>
-            <translation type="unfinished"></translation>
+            <translation>Cicero (CC)</translation>
         </message>
         <message>
             <source>Reverse portrait</source>
-            <translation type="unfinished"></translation>
+            <translation>Omgekeerd staand</translation>
         </message>
         <message>
             <source>Millimeters (mm)</source>
-            <translation type="unfinished"></translation>
+            <translation>Millimeters (mm)</translation>
         </message>
         <message>
             <source>Points (pt)</source>
-            <translation type="unfinished"></translation>
+            <translation>Punten (pt)</translation>
         </message>
         <message>
             <source>Pages per sheet:</source>
-            <translation type="unfinished"></translation>
+            <translation>Pagina's per vel:</translation>
         </message>
         <message>
             <source>Inches (in)</source>
-            <translation type="unfinished"></translation>
+            <translation>Inches (in)</translation>
         </message>
         <message>
             <source>Reverse landscape</source>
-            <translation type="unfinished"></translation>
+            <translation>Omgekeerd liggend</translation>
         </message>
         <message>
             <source>Height:</source>
-            <translation type="unfinished"></translation>
+            <translation>Hoogte:</translation>
         </message>
     </context>
     <context>
         <name>QPlatformTheme</name>
         <message>
             <source>OK</source>
-            <translation type="unfinished"></translation>
+            <translation>OK</translation>
         </message>
         <message>
             <source>&amp;No</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Nee</translation>
         </message>
         <message>
             <source>&amp;Yes</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Ja</translation>
         </message>
         <message>
             <source>Help</source>
-            <translation type="unfinished"></translation>
+            <translation>Help</translation>
         </message>
         <message>
             <source>Open</source>
-            <translation type="unfinished"></translation>
+            <translation>Openen</translation>
         </message>
         <message>
             <source>Save</source>
-            <translation type="unfinished"></translation>
+            <translation>Opslaan</translation>
         </message>
         <message>
             <source>Abort</source>
-            <translation type="unfinished"></translation>
+            <translation>Afbreken</translation>
         </message>
         <message>
             <source>Apply</source>
-            <translation type="unfinished"></translation>
+            <translation>Toepassen</translation>
         </message>
         <message>
             <source>Close</source>
-            <translation type="unfinished"></translation>
+            <translation>Sluiten</translation>
         </message>
         <message>
             <source>Reset</source>
-            <translation type="unfinished"></translation>
+            <translation>Herstellen</translation>
         </message>
         <message>
             <source>Retry</source>
-            <translation type="unfinished"></translation>
+            <translation>Opnieuw proberen</translation>
         </message>
         <message>
             <source>Restore Defaults</source>
-            <translation type="unfinished"></translation>
+            <translation>Standaardwaarden herstellen</translation>
         </message>
         <message>
             <source>Cancel</source>
-            <translation type="unfinished"></translation>
+            <translation>Annuleren</translation>
         </message>
         <message>
             <source>Ignore</source>
-            <translation type="unfinished"></translation>
+            <translation>Negeren</translation>
         </message>
         <message>
             <source>N&amp;o to All</source>
-            <translation type="unfinished"></translation>
+            <translation>N&amp;ee op alles</translation>
         </message>
         <message>
             <source>Save All</source>
-            <translation type="unfinished"></translation>
+            <translation>Alles opslaan</translation>
         </message>
         <message>
             <source>Discard</source>
-            <translation type="unfinished"></translation>
+            <translation>Verwerpen</translation>
         </message>
         <message>
             <source>Yes to &amp;All</source>
-            <translation type="unfinished"></translation>
+            <translation>Ja op &amp;alles</translation>
         </message>
     </context>
     <context>
         <name>QPrintDialog</name>
         <message>
             <source>Even Pages</source>
-            <translation type="unfinished"></translation>
+            <translation>Even pagina's</translation>
         </message>
         <message>
             <source>Print</source>
-            <translation type="unfinished"></translation>
+            <translation>Afdrukken</translation>
         </message>
         <message>
             <source>&amp;Options &lt;&lt;</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Opties &lt;&lt;</translation>
         </message>
         <message>
             <source>&amp;Options &gt;&gt;</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Opties &gt;&gt;</translation>
         </message>
         <message>
             <source>Left to Right, Top to Bottom</source>
-            <translation type="unfinished"></translation>
+            <translation>Van links naar rechts, van boven naar beneden</translation>
         </message>
         <message>
             <source>Right to Left, Bottom to Top</source>
-            <translation type="unfinished"></translation>
+            <translation>Van rechts naar links, van onder naar boven</translation>
         </message>
         <message>
             <source>Write PDF file</source>
-            <translation type="unfinished"></translation>
+            <translation>Pdf-bestand schrijven</translation>
         </message>
         <message>
             <source>&amp;Print</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Afdrukken</translation>
         </message>
         <message>
             <source>1 (1x1)</source>
-            <translation type="unfinished"></translation>
+            <translation>1 (1x1)</translation>
         </message>
         <message>
             <source>Options 'Pages Per Sheet' and 'Page Set' cannot be used together.
 Please turn one of those options off.</source>
-            <translation type="unfinished"></translation>
+            <translation>De opties 'Pagina's per vel' en 'Paginaset' kunnen niet samen worden gebruikt.
+Schakel een van die opties uit.</translation>
         </message>
         <message>
             <source>%1 already exists.
 Do you want to overwrite it?</source>
-            <translation type="unfinished"></translation>
+            <translation>%1 bestaat al.
+Wil je het overschrijven?</translation>
         </message>
         <message>
             <source>2 (2x1)</source>
-            <translation type="unfinished"></translation>
+            <translation>2 (2x1)</translation>
         </message>
         <message>
             <source>Left to Right, Bottom to Top</source>
-            <translation type="unfinished"></translation>
+            <translation>Van links naar rechts, van onder naar boven</translation>
         </message>
         <message>
             <source>4 (2x2)</source>
-            <translation type="unfinished"></translation>
+            <translation>4 (2x2)</translation>
         </message>
         <message>
             <source>Odd Pages</source>
-            <translation type="unfinished"></translation>
+            <translation>Oneven pagina's</translation>
         </message>
         <message>
             <source>Local file</source>
-            <translation type="unfinished"></translation>
+            <translation>Lokaal bestand</translation>
         </message>
         <message>
             <source>6 (2x3)</source>
-            <translation type="unfinished"></translation>
+            <translation>6 (2x3)</translation>
         </message>
         <message>
             <source>16 (4x4)</source>
-            <translation type="unfinished"></translation>
+            <translation>16 (4x4)</translation>
         </message>
         <message>
             <source>There are conflicts in duplex settings. Do you want to fix them?</source>
-            <translation type="unfinished"></translation>
+            <translation>Er zijn conflicten in de duplexinstellingen. Wil je ze oplossen?</translation>
         </message>
         <message>
             <source>Print to File (PDF)</source>
-            <translation type="unfinished"></translation>
+            <translation>Afdrukken naar bestand (PDF)</translation>
         </message>
         <message>
             <source>Print To File ...</source>
-            <translation type="unfinished"></translation>
+            <translation>Afdrukken naar bestand ...</translation>
         </message>
         <message>
             <source>Invalid Pages Definition</source>
-            <translation type="unfinished"></translation>
+            <translation>Ongeldige paginadefinitie</translation>
         </message>
         <message>
             <source>%1 does not follow the correct syntax. Please use ',' to separate ranges and pages, '-' to define ranges and make sure ranges do not intersect with each other.</source>
-            <translation type="unfinished"></translation>
+            <translation>%1 volgt niet de juiste syntaxis. Gebruik ',' om reeksen en pagina's te scheiden, '-' om reeksen te definiëren en zorg dat reeksen elkaar niet overlappen.</translation>
         </message>
         <message>
             <source>9 (3x3)</source>
-            <translation type="unfinished"></translation>
+            <translation>9 (3x3)</translation>
         </message>
         <message>
             <source>Right to Left, Top to Bottom</source>
-            <translation type="unfinished"></translation>
+            <translation>Van rechts naar links, van boven naar beneden</translation>
         </message>
         <message>
             <source>Bottom to Top, Left to Right</source>
-            <translation type="unfinished"></translation>
+            <translation>Van onder naar boven, van links naar rechts</translation>
         </message>
         <message>
             <source>The 'From' value cannot be greater than the 'To' value.</source>
-            <translation type="unfinished"></translation>
+            <translation>De waarde 'Van' mag niet groter zijn dan de waarde 'Tot'.</translation>
         </message>
         <message>
             <source>All Pages</source>
-            <translation type="unfinished"></translation>
+            <translation>Alle pagina's</translation>
         </message>
         <message>
             <source>Duplex Settings Conflicts</source>
-            <translation type="unfinished"></translation>
+            <translation>Conflicten in duplexinstellingen</translation>
         </message>
         <message>
             <source>%1 is a directory.
 Please choose a different file name.</source>
-            <translation type="unfinished"></translation>
+            <translation>%1 is een map.
+Kies een andere bestandsnaam.</translation>
         </message>
         <message>
             <source>File %1 is not writable.
 Please choose a different file name.</source>
-            <translation type="unfinished"></translation>
+            <translation>Bestand %1 is niet beschrijfbaar.
+Kies een andere bestandsnaam.</translation>
         </message>
         <message>
             <source>Bottom to Top, Right to Left</source>
-            <translation type="unfinished"></translation>
+            <translation>Van onder naar boven, van rechts naar links</translation>
         </message>
         <message>
             <source>Top to Bottom, Left to Right</source>
-            <translation type="unfinished"></translation>
+            <translation>Van boven naar beneden, van links naar rechts</translation>
         </message>
         <message>
             <source>Top to Bottom, Right to Left</source>
-            <translation type="unfinished"></translation>
+            <translation>Van boven naar beneden, van rechts naar links</translation>
         </message>
     </context>
     <context>
         <name>QPrintPreviewDialog</name>
         <message>
             <source>%1%</source>
-            <translation type="unfinished"></translation>
+            <translation>%1%</translation>
         </message>
         <message>
             <source>Print Preview</source>
-            <translation type="unfinished"></translation>
+            <translation>Afdrukvoorbeeld</translation>
         </message>
         <message>
             <source>Print</source>
-            <translation type="unfinished"></translation>
+            <translation>Afdrukken</translation>
         </message>
         <message>
             <source>Fit page</source>
-            <translation type="unfinished"></translation>
+            <translation>Pagina passend maken</translation>
         </message>
         <message>
             <source>Zoom in</source>
-            <translation type="unfinished"></translation>
+            <translation>Inzoomen</translation>
         </message>
         <message>
             <source>Landscape</source>
-            <translation type="unfinished"></translation>
+            <translation>Liggend</translation>
         </message>
         <message>
             <source>Zoom out</source>
-            <translation type="unfinished"></translation>
+            <translation>Uitzoomen</translation>
         </message>
         <message>
             <source>Fit width</source>
-            <translation type="unfinished"></translation>
+            <translation>Breedte passend maken</translation>
         </message>
         <message>
             <source>Portrait</source>
-            <translation type="unfinished"></translation>
+            <translation>Staand</translation>
         </message>
         <message>
             <source>Page Setup</source>
-            <translation type="unfinished"></translation>
+            <translation>Pagina-instelling</translation>
         </message>
         <message>
             <source>Page setup</source>
-            <translation type="unfinished"></translation>
+            <translation>Pagina-instelling</translation>
         </message>
         <message>
             <source>Show overview of all pages</source>
-            <translation type="unfinished"></translation>
+            <translation>Overzicht van alle pagina's tonen</translation>
         </message>
         <message>
             <source>First page</source>
-            <translation type="unfinished"></translation>
+            <translation>Eerste pagina</translation>
         </message>
         <message>
             <source>Last page</source>
-            <translation type="unfinished"></translation>
+            <translation>Laatste pagina</translation>
         </message>
         <message>
             <source>Show single page</source>
-            <translation type="unfinished"></translation>
+            <translation>Enkele pagina tonen</translation>
         </message>
         <message>
             <source>Export to PDF</source>
-            <translation type="unfinished"></translation>
+            <translation>Exporteren naar pdf</translation>
         </message>
         <message>
             <source>Previous page</source>
-            <translation type="unfinished"></translation>
+            <translation>Vorige pagina</translation>
         </message>
         <message>
             <source>Next page</source>
-            <translation type="unfinished"></translation>
+            <translation>Volgende pagina</translation>
         </message>
         <message>
             <source>Show facing pages</source>
-            <translation type="unfinished"></translation>
+            <translation>Tegenover elkaar liggende pagina's tonen</translation>
         </message>
     </context>
     <context>
         <name>QProgressDialog</name>
         <message>
             <source>Cancel</source>
-            <translation type="unfinished"></translation>
+            <translation>Annuleren</translation>
         </message>
     </context>
     <context>
         <name>QShortcut</name>
         <message>
             <source>Up</source>
-            <translation type="unfinished"></translation>
+            <translation>Up</translation>
         </message>
         <message>
             <source>Alt</source>
-            <translation type="unfinished"></translation>
+            <translation>Alt</translation>
         </message>
         <message>
             <source>F%1</source>
-            <translation type="unfinished"></translation>
+            <translation>F%1</translation>
         </message>
         <message>
             <source>Del</source>
-            <translation type="unfinished"></translation>
+            <translation>Del</translation>
         </message>
         <message>
             <source>End</source>
-            <translation type="unfinished"></translation>
+            <translation>End</translation>
         </message>
         <message>
             <source>Esc</source>
-            <translation type="unfinished"></translation>
+            <translation>Esc</translation>
         </message>
         <message>
             <source>Ins</source>
-            <translation type="unfinished"></translation>
+            <translation>Ins</translation>
         </message>
         <message>
             <source>Num</source>
-            <translation type="unfinished"></translation>
+            <translation>Num</translation>
         </message>
         <message>
             <source>Tab</source>
-            <translation type="unfinished"></translation>
+            <translation>Tab</translation>
         </message>
         <message>
             <source>Ctrl</source>
-            <translation type="unfinished"></translation>
+            <translation>Ctrl</translation>
         </message>
         <message>
             <source>Down</source>
-            <translation type="unfinished"></translation>
+            <translation>Down</translation>
         </message>
         <message>
             <source>Home</source>
-            <translation type="unfinished"></translation>
+            <translation>Home</translation>
         </message>
         <message>
             <source>Left</source>
-            <translation type="unfinished"></translation>
+            <translation>Left</translation>
         </message>
         <message>
             <source>Menu</source>
-            <translation type="unfinished"></translation>
+            <translation>Menu</translation>
         </message>
         <message>
             <source>Meta</source>
-            <translation type="unfinished"></translation>
+            <translation>Meta</translation>
         </message>
         <message>
             <source>PgUp</source>
-            <translation type="unfinished"></translation>
+            <translation>PgUp</translation>
         </message>
         <message>
             <source>Enter</source>
-            <translation type="unfinished"></translation>
+            <translation>Enter</translation>
         </message>
         <message>
             <source>Pause</source>
-            <translation type="unfinished"></translation>
+            <translation>Pause</translation>
         </message>
         <message>
             <source>Print</source>
-            <translation type="unfinished"></translation>
+            <translation>Print</translation>
         </message>
         <message>
             <source>Right</source>
-            <translation type="unfinished"></translation>
+            <translation>Right</translation>
         </message>
         <message>
             <source>Shift</source>
-            <translation type="unfinished"></translation>
+            <translation>Shift</translation>
         </message>
         <message>
             <source>Space</source>
-            <translation type="unfinished"></translation>
+            <translation>Space</translation>
         </message>
         <message>
             <source>PgDown</source>
-            <translation type="unfinished"></translation>
+            <translation>PgDown</translation>
         </message>
         <message>
             <source>Return</source>
-            <translation type="unfinished"></translation>
+            <translation>Return</translation>
         </message>
         <message>
             <source>Backtab</source>
-            <translation type="unfinished"></translation>
+            <translation>Backtab</translation>
         </message>
         <message>
             <source>Backspace</source>
-            <translation type="unfinished"></translation>
+            <translation>Backspace</translation>
         </message>
     </context>
     <context>
         <name>QUnicodeControlCharacterMenu</name>
         <message>
             <source>RLE Start of right-to-left embedding</source>
-            <translation type="unfinished"></translation>
+            <translation>RLE Begin van rechts-naar-links-inbedding</translation>
         </message>
         <message>
             <source>ZWSP Zero width space</source>
-            <translation type="unfinished"></translation>
+            <translation>ZWSP Spatie met breedte nul</translation>
         </message>
         <message>
             <source>LRI Left-to-right isolate</source>
-            <translation type="unfinished"></translation>
+            <translation>LRI Links-naar-rechts-isolatie</translation>
         </message>
         <message>
             <source>Insert Unicode control character</source>
-            <translation type="unfinished"></translation>
+            <translation>Unicode-besturingsteken invoegen</translation>
         </message>
         <message>
             <source>LRO Start of left-to-right override</source>
-            <translation type="unfinished"></translation>
+            <translation>LRO Begin van links-naar-rechts-overschrijving</translation>
         </message>
         <message>
             <source>LRE Start of left-to-right embedding</source>
-            <translation type="unfinished"></translation>
+            <translation>LRE Begin van links-naar-rechts-inbedding</translation>
         </message>
         <message>
             <source>RLI Right-to-left isolate</source>
-            <translation type="unfinished"></translation>
+            <translation>RLI Rechts-naar-links-isolatie</translation>
         </message>
         <message>
             <source>RLM Right-to-left mark</source>
-            <translation type="unfinished"></translation>
+            <translation>RLM Rechts-naar-links-markering</translation>
         </message>
         <message>
             <source>PDF Pop directional formatting</source>
-            <translation type="unfinished"></translation>
+            <translation>PDF Richtingsopmaak afsluiten</translation>
         </message>
         <message>
             <source>ZWNJ Zero width non-joiner</source>
-            <translation type="unfinished"></translation>
+            <translation>ZWNJ Niet-verbindend teken met breedte nul</translation>
         </message>
         <message>
             <source>RLO Start of right-to-left override</source>
-            <translation type="unfinished"></translation>
+            <translation>RLO Begin van rechts-naar-links-overschrijving</translation>
         </message>
         <message>
             <source>PDI Pop directional isolate</source>
-            <translation type="unfinished"></translation>
+            <translation>PDI Richtingsisolatie afsluiten</translation>
         </message>
         <message>
             <source>ZWJ Zero width joiner</source>
-            <translation type="unfinished"></translation>
+            <translation>ZWJ Verbindend teken met breedte nul</translation>
         </message>
         <message>
             <source>LRM Left-to-right mark</source>
-            <translation type="unfinished"></translation>
+            <translation>LRM Links-naar-rechts-markering</translation>
         </message>
         <message>
             <source>FSI First strong isolate</source>
-            <translation type="unfinished"></translation>
+            <translation>FSI Eerste sterke isolatie</translation>
         </message>
     </context>
     <context>
         <name>QWidgetTextControl</name>
         <message>
             <source>Cu&amp;t</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Knippen</translation>
         </message>
         <message>
             <source>&amp;Copy</source>
-            <translation type="unfinished"></translation>
+            <translation>K&amp;opiëren</translation>
         </message>
         <message>
             <source>&amp;Redo</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Opnieuw</translation>
         </message>
         <message>
             <source>&amp;Undo</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Ongedaan maken</translation>
         </message>
         <message>
             <source>&amp;Paste</source>
-            <translation type="unfinished"></translation>
+            <translation>&amp;Plakken</translation>
         </message>
         <message>
             <source>Delete</source>
-            <translation type="unfinished"></translation>
+            <translation>Verwijderen</translation>
         </message>
         <message>
             <source>Select All</source>
-            <translation type="unfinished"></translation>
+            <translation>Alles selecteren</translation>
         </message>
         <message>
             <source>Copy &amp;Link Location</source>
-            <translation type="unfinished"></translation>
+            <translation>Koppelingsadres &amp;kopiëren</translation>
         </message>
     </context>
 </TS>

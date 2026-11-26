@@ -1,0 +1,3 @@
+Wanneer een map als prikbord of overzicht wordt getoond, toont het tabblad **Opmerkingen en voetnoten** van de Inspector de opmerkingen en voetnoten van elk document erin, onder de titel van elk document.
+**Probeer het:** selecteer in de Binder de map **Een hoofdstuk met opmerkingen** onder dit document. Ze opent als prikbord. Open dan het tabblad **Opmerkingen en voetnoten** van de Inspector (de laatste knop bovenaan). Een klik op een opmerking opent het document op die plek, en je kunt de tekst van de opmerking daar meteen wijzigen.
+Hetzelfde werkt in **Gecombineerde tekst** (**Ctrl+1**), waar alle documenten van de map als één tekst worden getoond: het tabblad toont de notities van alle documenten.
