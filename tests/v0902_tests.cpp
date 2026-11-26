@@ -614,7 +614,7 @@ static void downloadPageChecks()
     };
     const int linuxAt = int(page.indexOf(QLatin1String("data-system=\"linux\"")));
     const QString linuxCard = cardOf("linux");
-    // Android 0.94.0 (to-do item 91): the card has the full version, the small AppImage and the update, and a link to
+    // Android 0.94.0 (to-do item 105): the card has the full version, the small AppImage and the update, and a link to
     // the add-ons page (the site's folder addons/), which has the audio and video add-ons
     QFile af(dir.path() + QStringLiteral("/site/addons/index.html"));
     const QString addonsPage = af.open(QIODevice::ReadOnly) ? QString::fromUtf8(af.readAll()) : QString();

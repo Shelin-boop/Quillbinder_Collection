@@ -802,7 +802,7 @@ jobs:
           fi
           [ -f updates/updates-1.json ] || new=
           tools/keep-update-feed.sh site $new
-          # Android 0.94.0 (to-do item 91): the download page and its add-ons page (the site's folder addons/)
+          # Android 0.94.0 (to-do item 105): the download page and its add-ons page (the site's folder addons/)
           grep -o 'releases/download/[^/]*/[^"]*' site/index.html | sort -u
           echo "the add-ons page:"
           grep -o 'releases/download/[^/]*/[^"]*' site/addons/index.html | sort -u

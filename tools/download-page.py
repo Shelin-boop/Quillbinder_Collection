@@ -3,7 +3,7 @@
 all add-ons), the steps to start it, and links to the files. The release workflows publish it on the repository's
 GitHub Pages (job download-page of .github/workflows/release.yml, release-windows.yml and release-android.yml).
 
-Since Android 0.94.0 (to-do item 91) the page is two pages:
+Since Android 0.94.0 (to-do item 105) the page is two pages:
   - index.html: each system's card has the button for the full version, then the program alone and the program
     update (Android has neither: a new version is a new APK), and one link to the add-ons page;
   - addons/index.html (the folder addons/ of the site): every add-on of each system on its own (name, one line,
@@ -54,7 +54,7 @@ def pick(files):
 
 
 def others(files):
-    """The two other downloads on each system's card (item 91): the program alone, then the program update;
+    """The two other downloads on each system's card (item 105): the program alone, then the program update;
     [(file, what it is, how to use it)], only those the release has. Android has neither."""
     win = lambda f: "windows" in f.lower()
     first = lambda test: next((f for f in files if test(f)), "")
@@ -77,7 +77,7 @@ def others(files):
 
 
 def extras(files):
-    """The other files of each system for the add-ons page (item 91): [(file, what it is, how to use it)]."""
+    """The other files of each system for the add-ons page (item 105): [(file, what it is, how to use it)]."""
     win = lambda f: "windows" in f.lower()
     first = lambda test: next((f for f in files if test(f)), "")
     media = "sound and video in all common formats (%s)" % INSTALL
@@ -371,7 +371,7 @@ def page(files, tag, also=(), addon_bytes=0):
                        "".join("<li>%s</li>" % s for s in steps_of[key])))
             if more[key]:
                 body += '\n      <h3>Other downloads</h3>\n      <ul class="others">%s\n      </ul>' % rows_html(key, more[key], url)
-            # item 91: the add-ons and the other files of the system are on the add-ons page (the site's folder addons/)
+            # item 105: the add-ons and the other files of the system are on the add-ons page (the site's folder addons/)
             body += ('\n      <p class="folder"><a href="addons/#%s">Add-ons and other files for %s</a></p>'
                      % (key, html.escape(name)))
         else:
@@ -393,7 +393,7 @@ def page(files, tag, also=(), addon_bytes=0):
 
 
 def addons_page(files, tag, also=()):
-    """The add-ons page (addons/index.html, item 91): per system each add-on on its own and the other files, then the
+    """The add-ons page (addons/index.html, item 105): per system each add-on on its own and the other files, then the
     official add-ons."""
     home = cmake_var("APP_HOMEPAGE") or "https://github.com/Shelin-boop/Quillbinder_Collection"
     shown = shown_of(tag)

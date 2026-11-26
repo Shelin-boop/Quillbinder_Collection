@@ -364,7 +364,7 @@ int main(int argc, char **argv)
                   && page.contains(QLatin1String("data-system=\"android\"")),
               QStringLiteral("the download page: a button for each system's full version in the release, \"Comes later\" for the others"),
               page.left(1500));
-        // 0.93.0: the page lists the official add-ons (from official-addons/*.json); since Android 0.94.0 (to-do item 91)
+        // 0.93.0: the page lists the official add-ons (from official-addons/*.json); since Android 0.94.0 (to-do item 105)
         // on the add-ons page (the site's folder addons/), which the download page links to
         const QString addonsPage = QString::fromUtf8(readAll(site.path() + QStringLiteral("/addons/index.html")));
         check(page.contains(QLatin1String("href=\"addons/\"")) && !page.contains(QLatin1String("id=\"official-addons\""))

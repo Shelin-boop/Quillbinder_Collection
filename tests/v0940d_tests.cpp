@@ -804,7 +804,7 @@ static void downloadPage(const QString &work)
     check(rc == 0 && !page.isEmpty(), QStringLiteral("tools/download-page.py writes the page"), log);
     check(page.contains(QStringLiteral("Execute")) && page.contains(QStringLiteral("KDE Plasma")) && page.contains(QStringLiteral("may ask whether to execute the file")),
           QStringLiteral("the Linux steps say that the desktop may ask whether to execute the file"));
-    // Android 0.94.0 (to-do item 91): the add-ons are on the add-ons page (the site's folder addons/), the cards link to it
+    // Android 0.94.0 (to-do item 105): the add-ons are on the add-ons page (the site's folder addons/), the cards link to it
     const QString addons = readText(site + QStringLiteral("/addons/index.html"));
     check(addons.contains(QStringLiteral("data-addon-file=\"speech-transcription.qbpkg\"")) && addons.contains(QStringLiteral("Speech Transcription"))
               && addons.contains(QStringLiteral("12 MB")) && addons.contains(QStringLiteral("data-addon-file=\"themes-extra.qbpkg\""))

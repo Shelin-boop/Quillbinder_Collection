@@ -521,7 +521,7 @@ static void downloadTexts(const QString &W)
         check(card.contains(QLatin1String("needs no admin rights")) && card.contains(QLatin1String("Choose a folder of your own"))
                   && !card.contains(QLatin1String("Unpack the zip file completely")),
               L + QStringLiteral("its steps describe the setup program: a folder of one's own, no admin rights"), card.left(1500));
-        // Android 0.94.0 (to-do item 91): the card has the program alone (setup) and the update; the zip files are on
+        // Android 0.94.0 (to-do item 105): the card has the program alone (setup) and the update; the zip files are on
         // the add-ons page (the site's folder addons/)
         const QString addons = QString::fromUtf8(readAll(W + QLatin1String("/site/addons/index.html")));
         const int wat = addons.indexOf(QLatin1String("data-system=\"windows\""));
