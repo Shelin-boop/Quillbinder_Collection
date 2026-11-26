@@ -100,19 +100,25 @@ processor). A later version for Linux can be out before its Windows files are.
 
 ### Android
 
-**Quillbinder 0.94.0 for Android tablets, experimental:** the same functions as Linux 0.94.0, made for a tablet with
+**Quillbinder 0.95.0 for Android tablets, experimental:** the same functions as Linux 0.95.0, made for a tablet with
 an external keyboard and mouse and for fingers (Android 9 or later, 64-bit ARM). All Android files:
-[the release 0.94.0 for Android](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.94.0-android-experimental).
+[the release 0.95.0 for Android](https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/v0.95.0-android-experimental).
 
-- **[Quillbinder-0.94.0-experimental-android-arm64.apk](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-android-experimental/Quillbinder-0.94.0-experimental-android-arm64.apk)**:
-  the app, with the spelling dictionaries, the writing tools, the importers and Translation Helper. Open it
-  on the tablet; Android asks whether the browser or the Files app may install apps. At the first start Quillbinder
-  asks for "All files access": with it, projects, backups and exports are kept in *Documents/Quillbinder*, where other
-  apps and your computer can reach them. A new version comes as a new APK, which installs over the old one and keeps
-  your settings; **Help > Add-ons and Updates > Check for Updates Now** tells you when there is one.
-- [translation-proofreading-android-arm64.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.94.0-android-experimental/translation-proofreading-android-arm64.qbpkg):
+- **[Quillbinder-0.95.0-experimental-android-arm64.apk](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.95.0-android-experimental/Quillbinder-0.95.0-experimental-android-arm64.apk)**:
+  the app, with the English and German spelling dictionaries, the writing tools, the importers and Translation
+  Helper. Open it on the tablet; Android asks whether the browser or the Files app may install apps. At the first
+  start Quillbinder asks for "All files access": with it, projects, backups and exports are kept in
+  *Documents/Quillbinder*, where other apps and your computer can reach them. A new version comes as a new APK, which
+  installs over the old one and keeps your settings; **Help > Add-ons and Updates > Check for Updates Now** tells you
+  when there is one.
+- The spelling dictionaries of the nine other languages, each an add-on of its own
+  (`dictionary-<code>-android.qbpkg` in the release, for example
+  [dictionary-es-android.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.95.0-android-experimental/dictionary-es-android.qbpkg)
+  for Spanish): install one with **Help > Add-ons and Updates > Install Update or Add-on**, restart, and choose it in
+  File > Options > Editing.
+- [translation-proofreading-android-arm64.qbpkg](https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/v0.95.0-android-experimental/translation-proofreading-android-arm64.qbpkg):
   Translation Helper 1.5 on its own (the app has it already), for **Help > Add-ons and Updates > Install
-  Update or Add-on** (before 0.94.0: **File > Install Update or Add-on**).
+  Update or Add-on**.
 
 The APK is signed with the project's Android key (its certificate's SHA-256 is in `packaging/android/release-key.txt`);
 the checksums of the Android files are in `SHA256SUMS-android.txt` (signed, `SHA256SUMS-android.txt.sig`). Not in the

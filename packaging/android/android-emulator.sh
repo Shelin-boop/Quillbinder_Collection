@@ -435,6 +435,21 @@ if [ -n "$pid" ]; then
     say "  (no \"menu open\" line within 6 s of the tap at $1,$2)"
     return 1
   }
+  # ... and a key can still be lost (run 45866598342, the Android 9 tablet: Open Project and Save As one row short with
+  # the menu open): the row is chosen by its name. The program logs "tablet: menu row: <text>" for each row the keys
+  # reach (QMenu::hovered); the keys go on until that line names the row (without its "&" and its "..."), 20 at most.
+  menu_rows() { "$ADB" logcat -d 2>/dev/null | grep 'tablet: menu row:' | tr -d '\r'; }
+  choose_row() { # <the row's name> <key: 20 Down, 19 Up>
+    local want=$1 k=$2 n i got=""
+    n=$(menu_rows | wc -l)
+    for i in $(seq 1 20); do
+      key "$k"; sleep 0.4
+      got=$(menu_rows | tail -n +$((n + 1)) | tail -1 | sed -e 's/.*menu row: //' -e 's/&//g' -e 's/\xe2\x80\xa6$//' -e 's/\.\.\.$//')
+      [ "$got" = "$want" ] && return 0
+    done
+    say "  (the row \"$want\" was not reached: the last row the keys reached was \"$got\")"
+    return 1
+  }
   back_to_text; key 111; sleep 1; tap "$TX" "$TY"; sleep 2
   say "  S6: popup windows before the File menu steps: $(popups)"
   # Android 0.93.2 run 45557251539: the "Backup saved" notice and the update check's notice lay at the top left over
@@ -444,7 +459,7 @@ if [ -n "$pid" ]; then
   # Rows: New Project 1, Open Project 2, ..., Save As 6, ..., Compile 12, Print Settings 13.
   for item in "Open Project:2" "Save As:6" "Compile:12" "Print Settings:13"; do
     open_menu "$MX" "$MY" || sleep 2
-    for _ in $(seq 1 "${item##*:}"); do key 20; done
+    choose_row "${item%%:*}" 20 || { for _ in $(seq 1 "${item##*:}"); do key 20; done; }
     sleep 1; key 66; sleep 4
     shot "s6-$(echo "${item%%:*}" | tr 'A-Z ' 'a-z-')"
     step "S6 ${item%%:*}" "File > ${item%%:*} with the cursor in the text"
@@ -460,7 +475,7 @@ if [ -n "$pid" ]; then
   # four more go up through Options, Files on This Tablet, Convert Markdown to the step; Enter starts it. (0.94.0:
   # Install Update or Add-on moved to Help > Add-ons and Updates: one row fewer than in 0.93.x.)
   open_menu "$MX" "$MY" || sleep 2
-  for _ in 1 2 3 4 5; do key 19; done
+  choose_row "Show Project in File Manager" 19 || { for _ in 1 2 3 4 5; do key 19; done; }
   sleep 1; shot "o0-file-menu"; key 66; sleep 5; shot "o1-files-app"
   fr=$(front)
   say "  O: File > Show Project in File Manager: in front: $fr"
@@ -479,6 +494,9 @@ if [ -n "$pid" ]; then
       ev "1,29,1" 300; ev "2,8,1" 250; ev "2,8,1" 250; ev "2,8,1" 250; ev "1,29,0" 1000; } > "$OUT/uinput-zoom.txt"
     { echo "$reg"; printf '{"id":1,"command":"delay","duration":2500}\n'
       ev "1,56,1" 200; ev "1,33,1" 100; ev "1,33,0" 100; ev "1,56,0" 1500; } > "$OUT/uinput-altf.txt"
+    # (the Files app of step O can still be in front: the app first)
+    "$ADB" shell monkey -p "$PKG" -c android.intent.category.LAUNCHER 1 > /dev/null 2>&1; sleep 5
+    say "  V: in front: $(front)"
     back_to_text
     zooms() { "$ADB" logcat -d 2>/dev/null | grep -c 'zoom: Ctrl + wheel' | tr -d '\r'; }
     z0=$(zooms); "$ADB" push "$OUT/uinput-zoom.txt" /data/local/tmp/qb-uinput-zoom.txt > /dev/null 2>&1
