@@ -1017,6 +1017,7 @@ void caseSL06()
     const QString first = p->indexPath();
     const QString ini = settingslayer::fileFor(p->settingsDir());
     const int ownBefore = OptionsDialog::projectValueCount();
+    const QVariantMap valuesBefore = settingslayer::projectValues();
     AppSettings &as = AppSettings::instance();
     const QString programQuote = as.quoteStyle;
     // File > Options in "This project": ten settings on different pages
@@ -1064,7 +1065,20 @@ void caseSL06()
     settle(300);
     const int ownAfter = OptionsDialog::projectValueCount();
     note(QStringLiteral("changed: %1; own values %2 -> %3").arg(touched.join(QLatin1String(", "))).arg(ownBefore).arg(ownAfter));
-    check(ownAfter >= ownBefore + 8, QStringLiteral("the changed settings are kept with the project"), QStringLiteral("%1 -> %2").arg(ownBefore).arg(ownAfter));
+    const QVariantMap valuesAfter = settingslayer::projectValues();
+    QStringList newOrChanged, before;
+    for (auto it = valuesAfter.cbegin(); it != valuesAfter.cend(); ++it)
+        if (!valuesBefore.contains(it.key()) || valuesBefore.value(it.key()) != it.value())
+            newOrChanged << it.key();
+    for (auto it = valuesBefore.cbegin(); it != valuesBefore.cend(); ++it)
+        before << QStringLiteral("%1=%2").arg(it.key(), it.value().toString());
+    note(QStringLiteral("the project's values before: %1; new or changed: %2").arg(before.join(QLatin1String(", ")), newOrChanged.join(QLatin1String(", "))));
+    // 0.95.0 (as the Android copy since 0.94.0): the values that are new or changed in the project, not their number: two
+    // of the ten settings were the project's own before (the fixture's), and since 0.94.0 Options for "This project" no
+    // longer adds the toolbar lists and revision colors, which had made the number reach the old "+ 8" (the program-only
+    // freeze time and one more may stay out, as before)
+    check(newOrChanged.size() >= touched.size() - 2, QStringLiteral("the changed settings are kept with the project"),
+          QStringLiteral("%1 of %2 new or changed; %3 -> %4").arg(newOrChanged.size()).arg(touched.size()).arg(ownBefore).arg(ownAfter));
     {
         QSettings s(ini, QSettings::IniFormat);
         QStringList programKeys;
