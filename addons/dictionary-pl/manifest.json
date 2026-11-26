@@ -4,5 +4,5 @@
   "version": "1.0",
   "description": "The Polish spelling dictionary (pl_PL) for the spell checker, from LibreOffice's dictionaries (libreoffice-25.8.7.3), unchanged. Install it, restart the program, then choose it in File > Options > Editing (spelling language).",
   "author": "Quillbinder",
-  "minApp": "0.94.0"
+  "minApp": "0.95.0"
 }
