@@ -2,6 +2,7 @@
 
 #include "AppInfo.h"
 #include "ui/Inspector.h"
+#include "ui/Language.h"
 
 #include <QAbstractTextDocumentLayout>
 #include <QAction>
@@ -50,7 +51,11 @@ QString withoutNumber(QString t)
 // in are written as text, outside code spans and code blocks.
 QString escapePlaceholdersImpl(const QString &md)
 {
-    static const QRegularExpression re(QStringLiteral("<((?:computer|ID|id|UUID|your name|version|title|file|date|name|number)[^<>\\n]{0,12})>"));
+    // 0.95.0 (item 102): every word in angle brackets that is no HTML tag or web address (translated manuals write "<Ihr Name>",
+    // "<имя файла>"; the English ones "<your name>")
+    static const QRegularExpression re(QStringLiteral(
+        "<(?!/?(?:a|b|i|u|s|em|strong|br|hr|p|img|code|sup|sub|span|kbd|div|table|tr|td|th|ul|ol|li|h[1-6]|pre|small|del|ins)[\\s/>])"
+        "(?!(?:https?|mailto|ftp):)([^<>\\n/][^<>\\n]{0,40})>"));
     QStringList out;
     bool fence = false;
     for (const QString &line : md.split(QLatin1Char('\n'))) {
@@ -228,6 +233,19 @@ QString ManualWindow::topHeading() const
     return found;
 }
 
+QStringList ManualWindow::headingsOf(const QString &markdown)
+{
+    QTextDocument doc;
+    doc.setMarkdown(escapePlaceholders(markdown));
+    QStringList out;
+    for (QTextBlock b = doc.begin(); b.isValid(); b = b.next()) {
+        const int level = b.blockFormat().headingLevel();
+        if (level > 0 && level <= 3 && !b.text().trimmed().isEmpty())
+            out << b.text().trimmed();
+    }
+    return out;
+}
+
 bool ManualWindow::showSection(const QString &section)
 {
     const QString want = withoutNumber(section).toLower();
@@ -236,13 +254,15 @@ bool ManualWindow::showSection(const QString &section)
         return false;
     }
     const Heading *hit = nullptr;
+    // a translated manual: the place of the heading in the English list is the place in this one
+    const QStringList english = m_english.isEmpty() ? QStringList() : headingsOf(m_english);
+    const bool mapped = !english.isEmpty() && english.size() == m_headings.size();
+    const QStringList &names = mapped ? english : QStringList();
     for (int pass = 0; pass < 3 && !hit; ++pass)
-        for (const Heading &h : m_headings) {
-            const QString t = withoutNumber(h.text).toLower();
-            if ((pass == 0 && t == want) || (pass == 1 && t.startsWith(want)) || (pass == 2 && t.contains(want))) {
-                hit = &h;
-                break;
-            }
+        for (int i = 0; i < (mapped ? int(names.size()) : int(m_headings.size())) && !hit; ++i) {
+            const QString t = withoutNumber(mapped ? names.at(i) : m_headings.at(i).text).toLower();
+            if ((pass == 0 && t == want) || (pass == 1 && t.startsWith(want)) || (pass == 2 && t.contains(want)))
+                hit = &m_headings.at(i);
         }
     if (!hit) {
         m_text->verticalScrollBar()->setValue(0);
@@ -359,7 +379,8 @@ ManualWindow *manualWindow() { return s_window; }
 void showManualAt(QWidget *parent, const QString &section)
 {
     if (!s_window) {
-        QFile f(QStringLiteral(":/docs/manual.md"));
+        const QString resource = language::docResource(QStringLiteral("manual.md")); // 0.95.0: in the program's language
+        QFile f(resource);
         f.open(QIODevice::ReadOnly);
         QString text = QString::fromUtf8(f.readAll());
         text.replace(QLatin1String("{{APP}}"), QLatin1String(QB_APP_NAME))
@@ -368,6 +389,12 @@ void showManualAt(QWidget *parent, const QString &section)
             .replace(QLatin1String("{{SUFFIX}}"), QLatin1String(QB_PROJECT_SUFFIX))
             .replace(QLatin1String("{{FILE}}"), QLatin1String(QB_PROJECT_FILE_SUFFIX));
         s_window = new ManualWindow(text, QObject::tr("User Manual"), QStringLiteral("manual"), QSize(980, 760), parent);
+        if (resource != QLatin1String(":/docs/manual.md")) {
+            // a translation: sections are found by their place in the English list of headings
+            QFile en(QStringLiteral(":/docs/manual.md"));
+            en.open(QIODevice::ReadOnly);
+            s_window->setEnglishSource(QString::fromUtf8(en.readAll()));
+        }
     } else if (parent && s_window->parentWidget() != parent) {
         // a question from a dialog: the window is a child of that dialog, so that the dialog's modality does not block it
         s_window->setParent(parent, s_window->windowFlags());

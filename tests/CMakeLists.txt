@@ -527,3 +527,14 @@ target_compile_definitions(qb_v0950a_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_S
 add_executable(qb_v0950b_tests v0950b_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0950b_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0950b_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.95.0, item 102 (part 1): the language list and its marks, the first start's language, the interface texts of every language, the manuals as files, the Choice values, plural forms, the drop-down lists (xvfb-run -a ./qb_v0950f_tests /tmp/shots)
+add_executable(qb_v0950f_tests v0950f_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_SOURCE_DIR}/translations/translations.qrc)
+target_link_libraries(qb_v0950f_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0950f_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+
+# 0.95.0, item 102 (part 2): every language started in a program of its own (F1, the welcome project, the menu places the texts name, the mnemonics), the dictionary packages, the speech tool's lists, the keyboard sets of the new layouts (xvfb-run -a ./qb_v0950g_tests /tmp/shots)
+add_executable(qb_v0950g_tests v0950g_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_SOURCE_DIR}/translations/translations.qrc
+  ${CMAKE_SOURCE_DIR}/plugins/tools/speech-transcription/SpeechLogic.cpp)
+target_include_directories(qb_v0950g_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins/tools)
+target_link_libraries(qb_v0950g_tests PRIVATE qbui Qt6::Test Qt6::Network)
+target_compile_definitions(qb_v0950g_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")

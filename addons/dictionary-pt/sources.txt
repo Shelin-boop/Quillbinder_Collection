@@ -1,0 +1,8 @@
+# the files of this add-on: LibreOffice's dictionaries at the tag libreoffice-25.8.7.3
+# <path in https://github.com/LibreOffice/dictionaries>  <sha256>  <name in the package, in dictionaries/>
+tag libreoffice-25.8.7.3
+pt_BR/pt_BR.aff  21d8ad2a769a60e17e2b5ea4ef11d4d593a58b9e2a82d642ef82d6a4c5523865  pt_BR.aff
+pt_BR/pt_BR.dic  a38bfb26b68ece2834e79fe83e48d5792652970ace12db89d1b9674bf9933183  pt_BR.dic
+es/LGPLv3.txt  a853c2ffec17057872340eee242ae4d96cbf2b520ae27d903e1b2fef1a5f9d1c  LGPL-3.0.txt
+pt_BR/README_pt_BR.txt  9974ce691fdc1fe731717d7a2dc668244405fdc2bf9bf3367eb9b29e85177c88  README-pt_BR.txt
+pt_BR/README_en.txt  bb064f3db7ba5f5536da7d079773f692c5f928822e8aebc3d78259ff6cceb9e5  README-pt_BR-en.txt

@@ -143,7 +143,11 @@ void AppSettings::load()
     authorAsked = s.value(QStringLiteral("authorAsked"), false).toBool();
     autosaveSeconds = s.value(QStringLiteral("autosave"), 2).toInt();
     openLastProject = s.value(QStringLiteral("openLast"), true).toBool();
-    language = s.value(QStringLiteral("language"), QStringLiteral("en")).toString() == QLatin1String("de") ? QStringLiteral("de") : QStringLiteral("en");
+    // 0.95.0 (item 102): one of the 11 languages; none stored: the system's language at a true first start, else English
+    {
+        const QString stored = s.value(QStringLiteral("language")).toString();
+        language = language::available().contains(stored) ? stored : language::configured();
+    }
     groupDigits = s.value(QStringLiteral("groupDigits"), true).toBool();
     recentProjects = s.value(QStringLiteral("recent")).toStringList();
     welcomeFolder = s.value(QStringLiteral("welcomeFolder")).toString();

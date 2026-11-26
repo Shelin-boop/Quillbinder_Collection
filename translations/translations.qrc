@@ -1,7 +1,25 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
 <qresource prefix="/translations">
-    <file>quillbinder_de.qm</file>
     <file>qt_de.qm</file>
+    <file>qt_es.qm</file>
+    <file>qt_fr.qm</file>
+    <file>qt_id.qm</file>
+    <file>qt_it.qm</file>
+    <file>qt_nl.qm</file>
+    <file>qt_pl.qm</file>
+    <file>qt_pt.qm</file>
+    <file>qt_ru.qm</file>
+    <file>qt_tr.qm</file>
+    <file>quillbinder_de.qm</file>
+    <file>quillbinder_es.qm</file>
+    <file>quillbinder_fr.qm</file>
+    <file>quillbinder_id.qm</file>
+    <file>quillbinder_it.qm</file>
+    <file>quillbinder_nl.qm</file>
+    <file>quillbinder_pl.qm</file>
+    <file>quillbinder_pt.qm</file>
+    <file>quillbinder_ru.qm</file>
+    <file>quillbinder_tr.qm</file>
 </qresource>
 </RCC>

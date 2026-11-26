@@ -3532,6 +3532,30 @@ Bron: %1</translation>
         <source>very difficult</source>
         <translation>heel moeilijk</translation>
     </message>
+    <message>
+        <source>Protagonist</source>
+        <translation>Hoofdpersoon</translation>
+    </message>
+    <message>
+        <source>Supporting</source>
+        <translation>Bijrol</translation>
+    </message>
+    <message>
+        <source>Village</source>
+        <translation>Dorp</translation>
+    </message>
+    <message>
+        <source>Forest</source>
+        <translation>Bos</translation>
+    </message>
+    <message>
+        <source>Autumn</source>
+        <translation>Herfst</translation>
+    </message>
+    <message>
+        <source>Fog</source>
+        <translation>Mist</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>

@@ -13,10 +13,47 @@ class QTextCursor;
 namespace qb {
 namespace text {
 
-// "1 theme" / "3 themes" (the interface is English only, so no translation files)
+// "1 theme" / "3 themes". 0.95.0 (item 102): the form of the word follows the language of the program (set by ui/Language.cpp): French and Portuguese call 0 and 1 singular; Indonesian and Turkish have no plural after a
+// number (the singular is used); Russian and Polish have a third form for 2 to 4 (22, 23 ... too): the translation of the
+// plural word may then carry two forms, "few|many" (Russian: "документа|документов"); with one form it is used for both.
+// the language code of the program ("en", "ru" ...), set by ui/Language.cpp: the rules follow it, not the system's locale
+inline QString &pluralLanguage()
+{
+    static QString code = QStringLiteral("en");
+    return code;
+}
+
+inline QString pluralForm(int n, const QString &one, const QString &many)
+{
+    const QString code = pluralLanguage();
+    const QLocale::Language lang = code == QLatin1String("id") ? QLocale::Indonesian
+        : code == QLatin1String("tr") ? QLocale::Turkish : code == QLatin1String("fr") ? QLocale::French
+        : code == QLatin1String("pt") ? QLocale::Portuguese : code == QLatin1String("ru") ? QLocale::Russian
+        : code == QLatin1String("pl") ? QLocale::Polish : QLocale::English;
+    const int a = n < 0 ? -n : n;
+    switch (lang) {
+    case QLocale::Indonesian:
+    case QLocale::Turkish:
+        return one;
+    case QLocale::French:
+    case QLocale::Portuguese:
+        return a <= 1 ? one : many.section(QLatin1Char('|'), -1);
+    case QLocale::Russian:
+    case QLocale::Polish: {
+        if (lang == QLocale::Russian ? (a % 10 == 1 && a % 100 != 11) : a == 1)
+            return one;
+        const bool few = a % 10 >= 2 && a % 10 <= 4 && !(a % 100 >= 12 && a % 100 <= 14);
+        const QStringList forms = many.split(QLatin1Char('|'));
+        return few ? forms.constFirst() : forms.constLast();
+    }
+    default:
+        return n == 1 ? one : many.section(QLatin1Char('|'), -1);
+    }
+}
+
 inline QString plural(int n, const QString &one, const QString &many)
 {
-    return QLocale().toString(n) + QLatin1Char(' ') + (n == 1 ? one : many); // 0.90.1: digits grouped (UR-18)
+    return QLocale().toString(n) + QLatin1Char(' ') + pluralForm(n, one, many); // 0.90.1: digits grouped (UR-18)
 }
 
 // Visual + semantic format for a note run.

@@ -9,6 +9,7 @@
 #include <QDialog>
 
 class QCheckBox;
+class QComboBox;
 class QLineEdit;
 class QRadioButton;
 class QSpinBox;
@@ -40,6 +41,7 @@ public:
     bool checkForUpdates() const;
 
 private:
+    QComboBox *m_language = nullptr; // 0.95.0: the program's language (item 102)
     QCheckBox *m_backup;
     QSpinBox *m_keep;
     QLineEdit *m_folder;

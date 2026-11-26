@@ -206,6 +206,14 @@ QList<Language> languages()
     return out;
 }
 
+QList<Language> supportedLanguages()
+{
+    QList<Language> out;
+    for (const char *c : {"en", "de", "es", "fr", "pt", "it", "ru", "id", "tr", "pl", "nl"})
+        out << Language{QString::fromLatin1(c), languageName(QString::fromLatin1(c))};
+    return out;
+}
+
 QString languageName(const QString &code)
 {
     // a few codes QLocale does not know (or knows by another name)

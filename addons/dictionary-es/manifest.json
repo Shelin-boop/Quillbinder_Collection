@@ -1,0 +1,8 @@
+{
+  "id": "dictionary-es",
+  "name": "Spanish spelling dictionary",
+  "version": "1.0",
+  "description": "The Spanish spelling dictionary (es_ES) for the spell checker, from LibreOffice's dictionaries (libreoffice-25.8.7.3), unchanged. Install it, restart the program, then choose it in File > Options > Editing (spelling language).",
+  "author": "Quillbinder",
+  "minApp": "0.94.0"
+}

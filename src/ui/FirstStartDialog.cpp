@@ -9,9 +9,11 @@
 #include "ui/AppMenuEntry.h"
 #include "ui/AppSettings.h"
 #include "ui/HintLabel.h"
+#include "ui/Language.h"
 #include "ui/PortableSetup.h"
 
 #include <QCheckBox>
+#include <QComboBox>
 #include <QDialogButtonBox>
 #include <QDir>
 #include <QFileDialog>
@@ -66,6 +68,24 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
     intro->setObjectName(QStringLiteral("firstStartIntro"));
     intro->setWordWrap(true);
     v->addWidget(intro);
+
+    // 0.95.0 (item 102): the language, taken from the system when it is one the program speaks
+    {
+        auto *lang = new QGroupBox(tr("Language"), body);
+        auto *lf = new QFormLayout(lang);
+        m_language = new QComboBox(lang);
+        m_language->setObjectName(QStringLiteral("firstLanguage"));
+        for (const QString &code : language::available())
+            m_language->addItem(language::listLabel(code), code);
+        m_language->setCurrentIndex(qMax(0, m_language->findData(s.language)));
+        lf->addRow(tr("Language of the program:"), m_language);
+        auto *langHint = new QLabel(tr("A language you choose here is used from the next start of the program."), lang);
+        langHint->setObjectName(QStringLiteral("firstLanguageHint"));
+        langHint->setWordWrap(true);
+        hintlabel::style(langHint);
+        lf->addRow(langHint);
+        v->addWidget(lang);
+    }
 
     if (portable) {
         // W4b: the portable program, said once in plain words
@@ -236,6 +256,8 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
 void FirstStartDialog::take()
 {
     AppSettings &s = AppSettings::instance();
+    if (m_language && language::available().contains(m_language->currentData().toString()))
+        s.language = m_language->currentData().toString();
     s.backupOnClose = m_backup->isChecked();
     s.backupKeep = m_keep->value();
     const QString folder = QDir::fromNativeSeparators(m_folder->text().trimmed());

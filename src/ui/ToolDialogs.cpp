@@ -18,6 +18,7 @@
 #include "text/RtfIO.h"
 #include "text/TextUtil.h"
 #include "ui/AppSettings.h"
+#include "ui/Language.h"
 #include "ui/ManualWindow.h"
 
 #include <QApplication>
@@ -983,7 +984,7 @@ void showManual(QWidget *parent, const QString &anchor)
 void showQuickStartGuide(QWidget *parent)
 {
     static QPointer<QDialog> win;
-    helpWindow(win, parent, QStringLiteral(":/docs/quick-start.md"), QObject::tr("Quick Start Guide"),
+    helpWindow(win, parent, language::docResource(QStringLiteral("quick-start.md")), QObject::tr("Quick Start Guide"),
                QStringLiteral("quickStart"), QSize(760, 720));
 }
 

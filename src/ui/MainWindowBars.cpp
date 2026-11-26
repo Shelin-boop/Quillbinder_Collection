@@ -133,10 +133,11 @@ void fixMnemonics(QMenu *m)
         const QString rest = tab < 0 ? QString() : text.mid(tab);
         const QString label = unescapeMnemonic(main);
         int best = -1;
-        for (int pass = 0; pass < 2 && best < 0; ++pass)
+        // (0.95.0: pass 2 takes a letter of any script: Russian names have no ASCII letter)
+        for (int pass = 0; pass < 3 && best < 0; ++pass)
             for (int i = 0; i < label.size(); ++i) {
                 const QChar c = label.at(i);
-                if (!c.isLetterOrNumber() || c.unicode() > 127 || used.contains(c.toLower()))
+                if (!c.isLetterOrNumber() || (pass < 2 && c.unicode() > 127) || used.contains(c.toLower()))
                     continue;
                 if (pass == 0 && i > 0 && label.at(i - 1).isLetterOrNumber())
                     continue;

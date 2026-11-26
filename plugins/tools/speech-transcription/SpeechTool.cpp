@@ -1546,7 +1546,7 @@ SpeechOptions::SpeechOptions(SpeechTool *tool, QWidget *parent) : QObject(nullpt
     m_fallback = new QComboBox(langBox);
     m_fallback->setObjectName(QStringLiteral("speechFallback"));
     m_fallback->addItem(tr("(none)"), QString());
-    QList<speech::Language> langs = speech::languages();
+    QList<speech::Language> langs = speech::supportedLanguages(); // 0.95.0: the 11 languages of the program
     std::sort(langs.begin(), langs.end(), [](const speech::Language &a, const speech::Language &b) { return a.name < b.name; });
     for (const speech::Language &l : langs) {
         m_main->addItem(l.name, l.code);
@@ -1645,6 +1645,12 @@ SpeechOptions::SpeechOptions(SpeechTool *tool, QWidget *parent) : QObject(nullpt
     m_threads->setValue(s.threads);
     m_unload->setValue(s.unloadMinutes);
     m_accuracy->setCurrentIndex(s.careful ? 1 : 0);
+    // a language stored by an older version that is not one of the 11 stays selectable
+    for (QComboBox *box : {m_main, m_fallback}) {
+        const QString stored = box == m_main ? s.mainLanguage : s.fallbackLanguage;
+        if (!stored.isEmpty() && box->findData(stored) < 0)
+            box->addItem(speech::languageName(stored), stored);
+    }
     m_main->setCurrentIndex(qMax(0, m_main->findData(s.mainLanguage)));
     m_fallback->setCurrentIndex(qMax(0, m_fallback->findData(s.fallbackLanguage)));
     m_keepOriginal->setChecked(s.keepOriginal);
