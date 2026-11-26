@@ -6,6 +6,7 @@
 #include <QGuiApplication>
 #include "AppInfo.h"
 #include "ui/Commands.h"
+#include "ui/KeyboardLayout.h"
 #include "text/TextUtil.h"
 
 #include <QAction>
@@ -125,6 +126,12 @@ KeyboardPage::KeyboardPage(QWidget *parent) : QWidget(parent), m_changes(command
     auto *imp = new QPushButton(tr("Import…"), this);
     auto *exp = new QPushButton(tr("Export…"), this);
     bottom->addWidget(m_resetAll);
+    auto *useLayout = new QPushButton(tr("Use the Set of My Keyboard Layout…"), this);
+    useLayout->setObjectName(QStringLiteral("shortcutUseLayout"));
+    useLayout->setToolTip(tr("Take the shortcuts that fit the keyboard layout in use now (a German keyboard gets keys that need no "
+                             "AltGr). Shortcuts you set yourself stay as they are."));
+    bottom->addWidget(useLayout);
+    connect(useLayout, &QPushButton::clicked, this, [this] { useLayoutSet(true); });
     bottom->addStretch(1);
     bottom->addWidget(imp);
     bottom->addWidget(exp);
@@ -385,6 +392,50 @@ int KeyboardPage::visibleCommands() const
         for (int i = 0; i < m_tree->topLevelItem(g)->childCount(); ++i)
             n += !m_tree->topLevelItem(g)->child(i)->isHidden();
     return n;
+}
+
+bool KeyboardPage::useLayoutSet(bool ask)
+{
+    const QString layout = keyboardlayout::systemLayout();
+    if (layout.isEmpty()) {
+        if (ask)
+            QMessageBox::information(this, tr("Keyboard Shortcuts"),
+                                     tr("The system does not tell which keyboard layout is in use, so the program cannot choose a set. "
+                                        "You can still change single shortcuts below."));
+        return false;
+    }
+    const QString set = keyboardlayout::setForLayout(layout);
+    const auto changes = commands::layoutSetChanges(set);
+    if (changes.isEmpty()) {
+        if (ask)
+            QMessageBox::information(this, tr("Keyboard Shortcuts"),
+                                     tr("The shortcuts already come from the set for your keyboard layout (%1).").arg(layout));
+        return false;
+    }
+    if (ask) {
+        QStringList lines;
+        int kept = 0;
+        for (auto it = changes.cbegin(); it != changes.cend(); ++it) {
+            const commands::Command *c = commands::find(it.key());
+            const bool own = m_changes.contains(it.key());
+            kept += own;
+            lines << QStringLiteral("%1: %2 → %3%4")
+                         .arg(c ? c->label() : it.key(), native(it.value().first), native(it.value().second),
+                              own ? tr(" (you set another shortcut: it stays)") : QString());
+        }
+        QMessageBox box(QMessageBox::Question, tr("Keyboard Shortcuts"),
+                        tr("Use the set of shortcuts for your keyboard layout (%1)? These standard shortcuts change at once:\n\n%2\n\n"
+                           "Shortcuts you set yourself stay as they are.")
+                            .arg(layout, lines.join(QLatin1Char('\n'))),
+                        QMessageBox::Yes | QMessageBox::No, this);
+        box.setObjectName(QStringLiteral("useLayoutSetQuestion"));
+        box.setDefaultButton(QMessageBox::No);
+        if (box.exec() != QMessageBox::Yes)
+            return false;
+    }
+    commands::setLayoutSet(set);
+    rebuild();
+    return true;
 }
 
 bool KeyboardPage::exportTo(const QString &file, QString *error) const

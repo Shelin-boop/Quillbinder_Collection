@@ -11,6 +11,7 @@ Where the settings are, and a summary of everything the program can do: **Help >
 - [Compare and Transfer](qb-title:Compare and Transfer): a manuscript back from Word or LibreOffice
 - [Scrivener Projects](qb-title:Scrivener Projects): import them, or work in them directly
 - [Themes, Colors, and Fonts](qb-title:Themes, Colors, and Fonts): dark mode and more, at once
+- [Themes and Profiles](qb-title:Themes and Profiles): keep your options, toolbars and look together
 - [Updates and Add-ons](qb-title:Updates and Add-ons): small packages, and a way back
 - [Safety Nets](qb-title:Safety Nets): what protects your text
 - [Where Next](qb-title:Where Next)

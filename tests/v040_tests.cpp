@@ -525,7 +525,7 @@ int main(int argc, char **argv)
         const QStringList tour = {QStringLiteral("The Icon Bar"), QStringLiteral("Zoom Where You Point"), QStringLiteral("Mind Maps"),
                                   QStringLiteral("Object Sheets"), QStringLiteral("Comments of a Whole Folder"),
                                   QStringLiteral("A Chapter with Comments"), QStringLiteral("Compare and Transfer"),
-                                  QStringLiteral("Scrivener Projects"), QStringLiteral("Themes, Colors, and Fonts"),
+                                  QStringLiteral("Scrivener Projects"), QStringLiteral("Themes, Colors, and Fonts"), QStringLiteral("Themes and Profiles"),
                                   QStringLiteral("Updates and Add-ons"), QStringLiteral("Safety Nets"), QStringLiteral("Where Next")};
         QStringList titles;
         for (BinderItem *it : p->draft()->children)
@@ -549,7 +549,7 @@ int main(int argc, char **argv)
         }
         check(emptyOrRaw.isEmpty(), QStringLiteral("every text is filled in (program name, links), none says \"Scrivenings\""),
               emptyOrRaw.join(QLatin1String(", ")));
-        check(longOnes.isEmpty() && words < 2200, QStringLiteral("... and short: %1 words in all, no text over 260 words").arg(words),
+        check(longOnes.isEmpty() && words < 2400, QStringLiteral("... and short: %1 words in all, no text over 260 words").arg(words),
               longOnes.join(QLatin1String(", ")));
         // the Welcome document links to every stop of the tour
         BinderItem *welcome = find(p, QStringLiteral("Welcome"));
@@ -561,7 +561,7 @@ int main(int argc, char **argv)
         for (const QString &t : tour)
             if (t != QLatin1String("A Chapter with Comments") && !linked.contains(t))
                 notLinked << t;
-        check(notLinked.isEmpty() && linked.size() == 11, QStringLiteral("\"Welcome\" links to every stop of the tour (%1 links)").arg(linked.size()),
+        check(notLinked.isEmpty() && linked.size() == 12, QStringLiteral("\"Welcome\" links to every stop of the tour (%1 links)").arg(linked.size()),
               notLinked.join(QLatin1String(", ")));
         check(p->projectBookmarks.size() == 1 && p->projectBookmarks.first().internalId() == welcome->id,
               QStringLiteral("... and is the project bookmark"));

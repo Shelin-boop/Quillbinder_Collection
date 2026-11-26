@@ -387,6 +387,14 @@ target_compile_definitions(qb_v0940c_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_S
 add_executable(qb_v0940e_tests v0940e_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0940e_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0900_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.95.0: user profiles, the built-in theme and profile of the writer's look, the standard colors and the set of the keyboard
+# layout (items 95, 96, 98, 103, 104; no window) (xvfb-run -a ./qb_v0950c_tests /tmp/shots)
+add_executable(qb_v0950c_tests v0950c_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0950c_tests PRIVATE qbui Qt6::Test)
+# 0.95.0: profiles in the main window, the Profiles and Labels toolbars, the Standard Colors page, the keyboard button
+# (items 95, 97, 98, 103) (xvfb-run -a ./qb_v0950d_tests /tmp/shots)
+add_executable(qb_v0950d_tests v0950d_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0950d_tests PRIVATE qbui Qt6::Test)
 # The readers against damaged input (0.80.0, the external audit of 2026-11-09, ST-5): fixed-seed damage of small
 # valid inputs of RTF, Markdown, XML, ZIP, DOCX, ODT, Word 97 and .scrivx, each read in this process
 # (xvfb-run -a ./qb_fuzz_tests /tmp/shots; QB_FUZZ_SEED, QB_FUZZ_ROUNDS). tests/fuzz/README.md: longer runs.

@@ -487,7 +487,7 @@ void ThemeManagerDialog::updateButtons()
     m_duplicate->setEnabled(any);
     m_export->setEnabled(any);
     m_rename->setEnabled(own);
-    m_delete->setEnabled(own);
+    m_delete->setEnabled(own || (any && theme::isRemovableBuiltIn(selectedId()))); // 0.95.0: also "Shelin's Dark Theme"
     theme::Theme t;
     if (any && theme::load(selectedId(), &t)) {
         m_preview->setColors(theme::resolvedColors(t, {}));

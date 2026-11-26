@@ -15,6 +15,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QRegularExpression>
+#include <QSettings>
 #include <QEvent>
 #include <QSaveFile>
 #include <QTimer>
@@ -287,6 +288,17 @@ bool Theme::fromJson(const QJsonObject &o, Theme *out)
 // ------------------------------------------------------------------ built-in themes
 
 static const char *kBuiltIn[][2] = {
+    // 0.95.0 (item 96): the writer's dark look; the window's other colors are those of "Dark Mode". Built in, but it can
+    // be deleted from the theme list (removeBuiltIn): it then stays away after updates. At the top of the list.
+    {"shelins-dark", R"json({ "name": "Shelin's Dark Theme", "colors": {
+        "window": "#2a2e32", "windowText": "#ebebeb", "base": "#1f2225", "alternateBase": "#262a2e",
+        "text": "#e6e6e6", "button": "#31363b", "buttonText": "#ebebeb", "highlight": "#3daee9",
+        "highlightedText": "#ffffff", "link": "#6eb4f0", "toolTipBase": "#31363b", "toolTipText": "#ebebeb",
+        "mid": "#464b50", "dark": "#191c1e", "light": "#50565c", "disabledText": "#787878",
+        "binderBackground": "#2a2a2a", "binderText": "#ffffff", "editorLink": "#1f64c8", "editorMargin": "#6f6f6f",
+        "editorPaper": "#fee4a6", "editorText": "#000000", "inspectorBackground": "#4c4431", "inspectorFields": "#1c1f22",
+        "notesPaper": "#222222", "synopsisPaper": "#576e78" },
+        "fonts": { "combinedTitle": { "family": "Cinzel", "size": 11 } } })json"},
     {"system", R"json({ "name": "Default (Follow the Desktop)", "followDesktop": true, "colors": {} })json"},
     {"light", R"json({ "name": "Light", "colors": {
         "window": "#eff0f1", "windowText": "#232629", "base": "#fcfcfc", "alternateBase": "#eff0f1",
@@ -357,10 +369,29 @@ QString userThemeDir()
     return QFileInfo(addons::addonsRoot()).absolutePath() + QLatin1String("/themes");
 }
 
+// 0.95.0: built-in themes the writer deleted (kept in the program's settings: they stay away after updates)
+static bool removableBuiltIn(const QString &id) { return id == QLatin1String("shelins-dark"); }
+bool isRemovableBuiltIn(const QString &id) { return removableBuiltIn(id); }
+static QStringList removedBuiltIns() { return QSettings().value(QStringLiteral("themes/removed")).toStringList(); }
+bool removeBuiltIn(const QString &id)
+{
+    if (!removableBuiltIn(id))
+        return false;
+    QStringList l = removedBuiltIns();
+    if (!l.contains(id))
+        l << id;
+    QSettings s;
+    s.setValue(QStringLiteral("themes/removed"), l);
+    return true;
+}
+
 QList<Entry> available()
 {
     QList<Entry> l;
+    const QStringList removed = removedBuiltIns();
     for (const auto &b : kBuiltIn) {
+        if (removed.contains(QLatin1String(b[0])))
+            continue;
         const QJsonObject o = QJsonDocument::fromJson(QByteArray(b[1])).object();
         l << Entry{QLatin1String(b[0]), o.value(QStringLiteral("name")).toString(), Kind::BuiltIn, QString()};
     }
@@ -1072,6 +1103,8 @@ QString saveUserTheme(const Theme &t, QString *error)
 
 bool removeUserTheme(const QString &id, QString *error)
 {
+    if (removeBuiltIn(id))
+        return true;
     if (!id.startsWith(QLatin1String("user:")) || id.contains(QLatin1Char('/'))) {
         if (error)
             *error = QObject::tr("Only your own themes can be deleted.");

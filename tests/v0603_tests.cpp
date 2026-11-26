@@ -181,7 +181,7 @@ int main(int argc, char **argv)
         QStringList differ;
         for (const theme::Entry &te : theme::available()) {
             theme::Theme t;
-            if (te.kind != theme::Kind::BuiltIn || !theme::load(te.id, &t))
+            if (te.kind != theme::Kind::BuiltIn || te.id == QLatin1String("shelins-dark") /* 0.95.0: its own inspector colors */ || !theme::load(te.id, &t))
                 continue;
             const QMap<theme::Role, QColor> c = theme::resolvedColors(t, {});
             if (c.value(theme::Role::InspectorFields) != c.value(theme::Role::Base)

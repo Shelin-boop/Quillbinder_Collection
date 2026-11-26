@@ -106,10 +106,12 @@ void add(QAction *action, const QString &category, const QString &path, bool dyn
     c.key = action->objectName();
     c.category = category;
     c.path = path;
-    c.standard = keyboardlayout::standardFor(c.key, action->shortcut(), r.layoutSet);
     c.action = action;
     c.dynamic = dynamic;
     const auto it = r.index.constFind(c.key);
+    // the shortcut the action was made with (0.95.0): kept when the same action is registered again
+    c.usual = it != r.index.constEnd() && r.list[*it].action == action ? r.list[*it].usual : action->shortcut();
+    c.standard = keyboardlayout::standardFor(c.key, c.usual, r.layoutSet);
     if (it != r.index.constEnd()) {
         r.list[*it] = c;
     } else {
@@ -198,7 +200,33 @@ void reload()
     r.loaded = false;
     r.custom.clear();
     r.load();
+    for (Command &c : r.list) // the set may be another one now (a profile)
+        c.standard = keyboardlayout::standardFor(c.key, c.usual, r.layoutSet);
     apply();
+}
+
+void setLayoutSet(const QString &set)
+{
+    Registry &r = reg();
+    r.layoutSet = set == QLatin1String("de") ? QStringLiteral("de") : QStringLiteral("us");
+    QSettings s;
+    s.setValue(QStringLiteral("keyboard/layoutSet"), r.layoutSet);
+    s.sync();
+    for (Command &c : r.list)
+        c.standard = keyboardlayout::standardFor(c.key, c.usual, r.layoutSet);
+    apply();
+    emit Notifier::instance().changed();
+}
+
+QMap<QString, QPair<QKeySequence, QKeySequence>> layoutSetChanges(const QString &set)
+{
+    QMap<QString, QPair<QKeySequence, QKeySequence>> out;
+    for (const Command &c : reg().list) {
+        const QKeySequence there = keyboardlayout::standardFor(c.key, c.usual, set);
+        if (there != c.standard)
+            out.insert(c.key, {c.standard, there});
+    }
+    return out;
 }
 
 void setCustom(const QMap<QString, QString> &map)

@@ -7,6 +7,29 @@ Manual in the program) describes every function.
 
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
 
+- **Themes and profiles.** A theme is only the look; a profile keeps everything else: the language, all options, the
+  toolbars and their places, the window's size and place, the panels, the keyboard set, the backups and the backup
+  folder, the checks for updates, the standard colors and the saved layouts, and it names its theme. **View > Profiles**
+  switches at once (the language needs a restart; the program says so). **Manage Profiles** saves the settings as a
+  new profile, renames, copies, deletes, exports and imports profiles (a file that names folders or programs asks
+  first). A program that has been used before takes its settings as the profile **Default** at the update; a new
+  installation starts with the standard settings, in the light or dark theme as the system is set. A profile made on a
+  large screen fits a smaller screen or a tablet. The old **Save Options to File** and **Load Options from File** are
+  replaced by exporting and importing a profile (an old options file can be imported as a profile). A **Profiles**
+  toolbar (off at first) shows the profile in use. The welcome project has a page about themes and profiles.
+- **Shelin's Dark Theme** is a new built-in theme, at the top of the theme list. It can be deleted and then stays
+  away after updates.
+- **Shelin's** is a built-in profile, at the top of the profile list. It uses the new theme. It can be deleted and
+  then stays away after updates.
+- **A Labels toolbar** (off at first, **View > Toolbars > Labels**): the label colors of the open project side by
+  side, a click sets the label of the selected documents, and a button takes the label away.
+- **Standard Colors** in **File > Options > Appearance**: the labels new projects start with (existing projects keep
+  theirs), the six colors of the text color and highlight palettes, and the colors the two buttons start with. They
+  belong to the profile. **Defaults** gives the program's standard back.
+- **File > Options > Keyboard: Use the Set of My Keyboard Layout.** The keyboard set (item of 0.94.0) was chosen only
+  at the first start, so a writer who had updated kept keys that need AltGr. The new button applies the set that fits
+  the layout in use now, after listing what changes; shortcuts you set yourself are kept.
+
 - **The Bookmarks tab keeps the sizes of its three parts**. The heights of the two lists and of the text below them
   were lost after a restart or a program update when no bookmark was chosen at that moment (the text part, being
   hidden, was written as size 0) or when the inspector was hidden. The sizes you gave are kept as they were and come

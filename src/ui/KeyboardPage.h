@@ -32,6 +32,9 @@ public:
     void select(const QString &key);
     void setFilter(const QString &text);
     int visibleCommands() const;
+    // 0.95.0 (item 103): the set that fits the keyboard layout in use now; asks first what changes (ask = false: no question).
+    // Returns true when the set was changed.
+    bool useLayoutSet(bool ask = true);
     bool exportTo(const QString &file, QString *error) const;
     bool importFrom(const QString &file, QString *error);
 

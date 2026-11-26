@@ -236,6 +236,12 @@
    "synopsis": "Dark mode and other themes at once; the color palette of the format bar; installing fonts."
   },
   {
+   "title": "Themes and Profiles",
+   "icon": "qb-cog",
+   "textFile": "docs/08a-profiles.md",
+   "synopsis": "A theme is the look; a profile keeps your options, toolbars, window and theme together and switches them at once."
+  },
+  {
    "title": "Updates and Add-ons",
    "icon": "qb-cog",
    "textFile": "docs/09-updates.md",

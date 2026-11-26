@@ -24,6 +24,7 @@ struct Command {
     QString category;   // menu the command lives in ("File", "Styles" ...)
     QString path;       // submenu inside it ("Find"), may be empty
     QKeySequence standard;
+    QKeySequence usual;   // 0.95.0: the shortcut the command was made with (the standard of the set "us")
     QPointer<QAction> action;
     bool dynamic = false;
     QString label() const;      // text without "&" and "…"
@@ -50,6 +51,11 @@ QIcon listIcon(const QString &key);
 QMap<QString, QString> custom();
 QString layoutSet();                                 // "us" or "de": the set of the shortcuts out of the box (0.94.0)
 void setCustom(const QMap<QString, QString> &map);   // stores and applies
+// 0.95.0 (item 103): the set of shortcuts out of the box ("us" or "de") changed; the commands' standard shortcuts follow it,
+// the shortcuts the writer set stay. The settings keep the choice (keyboard/layoutSet).
+void setLayoutSet(const QString &set);
+// the commands whose standard shortcut differs in the set: key -> (standard now, standard in the set)
+QMap<QString, QPair<QKeySequence, QKeySequence>> layoutSetChanges(const QString &set);
 void apply();                                        // puts the shortcuts on the actions
 void reload();                                       // reads the shortcuts from the settings again (0.62: project settings)
 QKeySequence shortcutOf(const QString &key);         // with the changes
