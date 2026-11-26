@@ -301,100 +301,100 @@ Schema builtInSchema()
     c.id = QStringLiteral("characters");
     c.name = QObject::tr("Characters");
     c.color = QColor(QStringLiteral("#9c2a9c"));
-    c.fields = {fd("fullName", OT("Full name"), T::Text),
-                fd("aliases", OT("Also known as"), T::Text),
-                fd("role", OT("Role in the story"), T::Choice, "", list({OT("Protagonist"), OT("Antagonist"), OT("Supporting"), OT("Minor"), OT("Mentioned only")})),
-                fd("race", OT("Race / species"), T::Text),
-                fd("gender", OT("Gender"), T::Text),
-                fd("age", OT("Age"), T::Number, "years"),
-                fd("born", OT("Born"), T::Date),
-                fd("height", OT("Height"), T::Number, "cm"),
-                fd("build", OT("Build"), T::Text),
-                fd("eyes", OT("Eye color"), T::Text),
-                fd("hair", OT("Hair"), T::Text),
-                fd("features", OT("Distinguishing features"), T::LongText),
-                fd("attributes", OT("Attributes"), T::LongText),
-                fd("traits", OT("Traits"), T::LongText),
-                fd("occupation", OT("Occupation"), T::Text),
-                fd("livesIn", OT("Lives in"), T::Objects, "", locs),
-                fd("origin", OT("Comes from"), T::Objects, "", locs),
-                fd("relations", OT("Family and relationships"), T::Objects, "", chars),
-                fd("goals", OT("Goals and motives"), T::LongText),
-                fd("fears", OT("Fears and weaknesses"), T::LongText),
-                fd("background", OT("Background story"), T::LongText),
-                fd("scenes", OT("Appears in"), T::Documents),
-                fd("picture", OT("Picture"), T::Picture),
-                fd("other", OT("Other"), T::LongText)};
+    c.fields = {fd("fullName", QT_TRANSLATE_NOOP("QObject", "Full name"), T::Text),
+                fd("aliases", QT_TRANSLATE_NOOP("QObject", "Also known as"), T::Text),
+                fd("role", QT_TRANSLATE_NOOP("QObject", "Role in the story"), T::Choice, "", list({QT_TRANSLATE_NOOP("QObject", "Protagonist"), QT_TRANSLATE_NOOP("QObject", "Antagonist"), QT_TRANSLATE_NOOP("QObject", "Supporting"), QT_TRANSLATE_NOOP("QObject", "Minor"), QT_TRANSLATE_NOOP("QObject", "Mentioned only")})),
+                fd("race", QT_TRANSLATE_NOOP("QObject", "Race / species"), T::Text),
+                fd("gender", QT_TRANSLATE_NOOP("QObject", "Gender"), T::Text),
+                fd("age", QT_TRANSLATE_NOOP("QObject", "Age"), T::Number, "years"),
+                fd("born", QT_TRANSLATE_NOOP("QObject", "Born"), T::Date),
+                fd("height", QT_TRANSLATE_NOOP("QObject", "Height"), T::Number, "cm"),
+                fd("build", QT_TRANSLATE_NOOP("QObject", "Build"), T::Text),
+                fd("eyes", QT_TRANSLATE_NOOP("QObject", "Eye color"), T::Text),
+                fd("hair", QT_TRANSLATE_NOOP("QObject", "Hair"), T::Text),
+                fd("features", QT_TRANSLATE_NOOP("QObject", "Distinguishing features"), T::LongText),
+                fd("attributes", QT_TRANSLATE_NOOP("QObject", "Attributes"), T::LongText),
+                fd("traits", QT_TRANSLATE_NOOP("QObject", "Traits"), T::LongText),
+                fd("occupation", QT_TRANSLATE_NOOP("QObject", "Occupation"), T::Text),
+                fd("livesIn", QT_TRANSLATE_NOOP("QObject", "Lives in"), T::Objects, "", locs),
+                fd("origin", QT_TRANSLATE_NOOP("QObject", "Comes from"), T::Objects, "", locs),
+                fd("relations", QT_TRANSLATE_NOOP("QObject", "Family and relationships"), T::Objects, "", chars),
+                fd("goals", QT_TRANSLATE_NOOP("QObject", "Goals and motives"), T::LongText),
+                fd("fears", QT_TRANSLATE_NOOP("QObject", "Fears and weaknesses"), T::LongText),
+                fd("background", QT_TRANSLATE_NOOP("QObject", "Background story"), T::LongText),
+                fd("scenes", QT_TRANSLATE_NOOP("QObject", "Appears in"), T::Documents),
+                fd("picture", QT_TRANSLATE_NOOP("QObject", "Picture"), T::Picture),
+                fd("other", QT_TRANSLATE_NOOP("QObject", "Other"), T::LongText)};
     s.categories << c;
     c = Category();
     c.id = QStringLiteral("locations");
     c.name = QObject::tr("Locations");
     c.color = QColor(QStringLiteral("#1a9fd9"));
-    c.fields = {fd("kind", OT("Kind"), T::Choice, "",
-                   list({OT("Continent"), OT("Country"), OT("Region"), OT("City"), OT("Town"), OT("Village"), OT("District"), OT("Building"), OT("Room"), OT("Other")})),
-                fd("partOf", OT("Part of"), T::Objects, "", locs),
-                fd("environment", OT("Environment"), T::Objects, "", envs),
-                fd("weather", OT("Climate and weather"), T::Objects, "", wx),
-                fd("population", OT("Population"), T::Number, "inhabitants"),
-                fd("rule", OT("Ruled by"), T::Text),
-                fd("inhabitants", OT("Notable inhabitants"), T::Objects, "", chars),
-                fd("places", OT("Points of interest"), T::Objects, "", pois),
-                fd("description", OT("Description"), T::LongText),
-                fd("history", OT("History"), T::LongText),
-                fd("scenes", OT("Scenes set here"), T::Documents),
-                fd("picture", OT("Map or picture"), T::Picture),
-                fd("other", OT("Other"), T::LongText)};
+    c.fields = {fd("kind", QT_TRANSLATE_NOOP("QObject", "Kind"), T::Choice, "",
+                   list({QT_TRANSLATE_NOOP("QObject", "Continent"), QT_TRANSLATE_NOOP("QObject", "Country"), QT_TRANSLATE_NOOP("QObject", "Region"), QT_TRANSLATE_NOOP("QObject", "City"), QT_TRANSLATE_NOOP("QObject", "Town"), QT_TRANSLATE_NOOP("QObject", "Village"), QT_TRANSLATE_NOOP("QObject", "District"), QT_TRANSLATE_NOOP("QObject", "Building"), QT_TRANSLATE_NOOP("QObject", "Room"), QT_TRANSLATE_NOOP("QObject", "Other")})),
+                fd("partOf", QT_TRANSLATE_NOOP("QObject", "Part of"), T::Objects, "", locs),
+                fd("environment", QT_TRANSLATE_NOOP("QObject", "Environment"), T::Objects, "", envs),
+                fd("weather", QT_TRANSLATE_NOOP("QObject", "Climate and weather"), T::Objects, "", wx),
+                fd("population", QT_TRANSLATE_NOOP("QObject", "Population"), T::Number, "inhabitants"),
+                fd("rule", QT_TRANSLATE_NOOP("QObject", "Ruled by"), T::Text),
+                fd("inhabitants", QT_TRANSLATE_NOOP("QObject", "Notable inhabitants"), T::Objects, "", chars),
+                fd("places", QT_TRANSLATE_NOOP("QObject", "Points of interest"), T::Objects, "", pois),
+                fd("description", QT_TRANSLATE_NOOP("QObject", "Description"), T::LongText),
+                fd("history", QT_TRANSLATE_NOOP("QObject", "History"), T::LongText),
+                fd("scenes", QT_TRANSLATE_NOOP("QObject", "Scenes set here"), T::Documents),
+                fd("picture", QT_TRANSLATE_NOOP("QObject", "Map or picture"), T::Picture),
+                fd("other", QT_TRANSLATE_NOOP("QObject", "Other"), T::LongText)};
     s.categories << c;
     c = Category();
     c.id = QStringLiteral("environments");
     c.name = QObject::tr("Environments");
     c.color = QColor(QStringLiteral("#4ea72e"));
-    c.fields = {fd("kind", OT("Kind of landscape"), T::Choice, "",
-                   list({OT("Forest"), OT("Mountains"), OT("Hills"), OT("Plains"), OT("Desert"), OT("Coast"), OT("Sea"), OT("River"), OT("Lake"), OT("Swamp"), OT("Tundra"),
-                         OT("Jungle"), OT("Underground"), OT("City"), OT("Other")})),
-                fd("terrain", OT("Terrain"), T::LongText),
-                fd("flora", OT("Plants"), T::LongText),
-                fd("fauna", OT("Animals"), T::LongText),
-                fd("resources", OT("Resources"), T::Text),
-                fd("dangers", OT("Dangers"), T::LongText),
-                fd("weather", OT("Typical weather"), T::Objects, "", wx),
-                fd("senses", OT("Sounds, smells and light"), T::LongText),
-                fd("locations", OT("Places with this environment"), T::Objects, "", locs),
-                fd("description", OT("Description"), T::LongText),
-                fd("picture", OT("Picture"), T::Picture),
-                fd("other", OT("Other"), T::LongText)};
+    c.fields = {fd("kind", QT_TRANSLATE_NOOP("QObject", "Kind of landscape"), T::Choice, "",
+                   list({QT_TRANSLATE_NOOP("QObject", "Forest"), QT_TRANSLATE_NOOP("QObject", "Mountains"), QT_TRANSLATE_NOOP("QObject", "Hills"), QT_TRANSLATE_NOOP("QObject", "Plains"), QT_TRANSLATE_NOOP("QObject", "Desert"), QT_TRANSLATE_NOOP("QObject", "Coast"), QT_TRANSLATE_NOOP("QObject", "Sea"), QT_TRANSLATE_NOOP("QObject", "River"), QT_TRANSLATE_NOOP("QObject", "Lake"), QT_TRANSLATE_NOOP("QObject", "Swamp"), QT_TRANSLATE_NOOP("QObject", "Tundra"),
+                         QT_TRANSLATE_NOOP("QObject", "Jungle"), QT_TRANSLATE_NOOP("QObject", "Underground"), QT_TRANSLATE_NOOP("QObject", "City"), QT_TRANSLATE_NOOP("QObject", "Other")})),
+                fd("terrain", QT_TRANSLATE_NOOP("QObject", "Terrain"), T::LongText),
+                fd("flora", QT_TRANSLATE_NOOP("QObject", "Plants"), T::LongText),
+                fd("fauna", QT_TRANSLATE_NOOP("QObject", "Animals"), T::LongText),
+                fd("resources", QT_TRANSLATE_NOOP("QObject", "Resources"), T::Text),
+                fd("dangers", QT_TRANSLATE_NOOP("QObject", "Dangers"), T::LongText),
+                fd("weather", QT_TRANSLATE_NOOP("QObject", "Typical weather"), T::Objects, "", wx),
+                fd("senses", QT_TRANSLATE_NOOP("QObject", "Sounds, smells and light"), T::LongText),
+                fd("locations", QT_TRANSLATE_NOOP("QObject", "Places with this environment"), T::Objects, "", locs),
+                fd("description", QT_TRANSLATE_NOOP("QObject", "Description"), T::LongText),
+                fd("picture", QT_TRANSLATE_NOOP("QObject", "Picture"), T::Picture),
+                fd("other", QT_TRANSLATE_NOOP("QObject", "Other"), T::LongText)};
     s.categories << c;
     c = Category();
     c.id = QStringLiteral("pois");
     c.name = QObject::tr("Points of Interest");
     c.color = QColor(QStringLiteral("#e8722e"));
-    c.fields = {fd("kind", OT("Kind"), T::Choice, "",
-                   list({OT("Building"), OT("Landmark"), OT("Ruin"), OT("Shop"), OT("Inn or tavern"), OT("Temple"), OT("Castle"), OT("Natural feature"), OT("Other")})),
-                fd("locatedIn", OT("Located in"), T::Objects, "", locs),
-                fd("keeper", OT("Owner or keeper"), T::Objects, "", chars),
-                fd("significance", OT("Significance for the story"), T::LongText),
-                fd("access", OT("How to get there"), T::LongText),
-                fd("secrets", OT("Secrets"), T::LongText),
-                fd("description", OT("Description"), T::LongText),
-                fd("scenes", OT("Scenes set here"), T::Documents),
-                fd("picture", OT("Picture"), T::Picture),
-                fd("other", OT("Other"), T::LongText)};
+    c.fields = {fd("kind", QT_TRANSLATE_NOOP("QObject", "Kind"), T::Choice, "",
+                   list({QT_TRANSLATE_NOOP("QObject", "Building"), QT_TRANSLATE_NOOP("QObject", "Landmark"), QT_TRANSLATE_NOOP("QObject", "Ruin"), QT_TRANSLATE_NOOP("QObject", "Shop"), QT_TRANSLATE_NOOP("QObject", "Inn or tavern"), QT_TRANSLATE_NOOP("QObject", "Temple"), QT_TRANSLATE_NOOP("QObject", "Castle"), QT_TRANSLATE_NOOP("QObject", "Natural feature"), QT_TRANSLATE_NOOP("QObject", "Other")})),
+                fd("locatedIn", QT_TRANSLATE_NOOP("QObject", "Located in"), T::Objects, "", locs),
+                fd("keeper", QT_TRANSLATE_NOOP("QObject", "Owner or keeper"), T::Objects, "", chars),
+                fd("significance", QT_TRANSLATE_NOOP("QObject", "Significance for the story"), T::LongText),
+                fd("access", QT_TRANSLATE_NOOP("QObject", "How to get there"), T::LongText),
+                fd("secrets", QT_TRANSLATE_NOOP("QObject", "Secrets"), T::LongText),
+                fd("description", QT_TRANSLATE_NOOP("QObject", "Description"), T::LongText),
+                fd("scenes", QT_TRANSLATE_NOOP("QObject", "Scenes set here"), T::Documents),
+                fd("picture", QT_TRANSLATE_NOOP("QObject", "Picture"), T::Picture),
+                fd("other", QT_TRANSLATE_NOOP("QObject", "Other"), T::LongText)};
     s.categories << c;
     c = Category();
     c.id = QStringLiteral("weather");
     c.name = QObject::tr("Weather");
     c.color = QColor(QStringLiteral("#5b7f95"));
-    c.fields = {fd("season", OT("Season"), T::Choice, "",
-                   list({OT("Spring"), OT("Summer"), OT("Autumn"), OT("Winter"), OT("Rainy season"), OT("Dry season"), OT("All year")})),
-                fd("temperature", OT("Temperature"), T::Number, "°C"),
-                fd("precipitation", OT("Precipitation"), T::Choice, "", list({OT("None"), OT("Drizzle"), OT("Rain"), OT("Heavy rain"), OT("Snow"), OT("Hail"), OT("Fog")})),
-                fd("wind", OT("Wind"), T::Text),
-                fd("sky", OT("Sky and light"), T::Text),
-                fd("phenomena", OT("Special phenomena"), T::LongText),
-                fd("effects", OT("Effects on people and travel"), T::LongText),
-                fd("where", OT("Where it occurs"), T::Objects, "", locs + envs),
-                fd("description", OT("Description"), T::LongText),
-                fd("other", OT("Other"), T::LongText)};
+    c.fields = {fd("season", QT_TRANSLATE_NOOP("QObject", "Season"), T::Choice, "",
+                   list({QT_TRANSLATE_NOOP("QObject", "Spring"), QT_TRANSLATE_NOOP("QObject", "Summer"), QT_TRANSLATE_NOOP("QObject", "Autumn"), QT_TRANSLATE_NOOP("QObject", "Winter"), QT_TRANSLATE_NOOP("QObject", "Rainy season"), QT_TRANSLATE_NOOP("QObject", "Dry season"), QT_TRANSLATE_NOOP("QObject", "All year")})),
+                fd("temperature", QT_TRANSLATE_NOOP("QObject", "Temperature"), T::Number, "°C"),
+                fd("precipitation", QT_TRANSLATE_NOOP("QObject", "Precipitation"), T::Choice, "", list({QT_TRANSLATE_NOOP("QObject", "None"), QT_TRANSLATE_NOOP("QObject", "Drizzle"), QT_TRANSLATE_NOOP("QObject", "Rain"), QT_TRANSLATE_NOOP("QObject", "Heavy rain"), QT_TRANSLATE_NOOP("QObject", "Snow"), QT_TRANSLATE_NOOP("QObject", "Hail"), QT_TRANSLATE_NOOP("QObject", "Fog")})),
+                fd("wind", QT_TRANSLATE_NOOP("QObject", "Wind"), T::Text),
+                fd("sky", QT_TRANSLATE_NOOP("QObject", "Sky and light"), T::Text),
+                fd("phenomena", QT_TRANSLATE_NOOP("QObject", "Special phenomena"), T::LongText),
+                fd("effects", QT_TRANSLATE_NOOP("QObject", "Effects on people and travel"), T::LongText),
+                fd("where", QT_TRANSLATE_NOOP("QObject", "Where it occurs"), T::Objects, "", locs + envs),
+                fd("description", QT_TRANSLATE_NOOP("QObject", "Description"), T::LongText),
+                fd("other", QT_TRANSLATE_NOOP("QObject", "Other"), T::LongText)};
     s.categories << c;
     return s;
 }

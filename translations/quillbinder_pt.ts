@@ -836,20 +836,436 @@ Ele está guardado em %3, e o próximo backup o colocará no lugar.</translation
         <translation>Não é possível remover %1</translation>
     </message>
     <message>
+        <source>Full name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Also known as</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Role in the story</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protagonist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Antagonist</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Supporting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Minor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mentioned only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Race / species</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Gender</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Age</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Born</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Height</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Build</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Eye color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hair</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Distinguishing features</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Attributes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Traits</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Occupation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lives in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comes from</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Family and relationships</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Goals and motives</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fears and weaknesses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Background story</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Appears in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="unfinished">Outro</translation>
+    </message>
+    <message>
         <source>Locations</source>
         <translation>Locais</translation>
+    </message>
+    <message>
+        <source>Kind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Continent</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Region</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>City</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Town</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Village</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>District</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Building</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Room</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Part of</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Environment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Climate and weather</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Population</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ruled by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Notable inhabitants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Points of interest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation type="unfinished">Descrição</translation>
+    </message>
+    <message>
+        <source>History</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scenes set here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Map or picture</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Environments</source>
         <translation>Ambientes</translation>
     </message>
     <message>
+        <source>Kind of landscape</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Mountains</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hills</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plains</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Desert</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Coast</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sea</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>River</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Lake</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Swamp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Tundra</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Jungle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Underground</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Terrain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Plants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Animals</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Resources</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dangers</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Typical weather</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sounds, smells and light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Places with this environment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Points of Interest</source>
         <translation>Pontos de interesse</translation>
     </message>
     <message>
+        <source>Landmark</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ruin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Shop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inn or tavern</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temple</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Castle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Natural feature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Located in</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Owner or keeper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Significance for the story</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>How to get there</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Secrets</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Weather</source>
         <translation>Clima</translation>
+    </message>
+    <message>
+        <source>Season</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Spring</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Summer</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Autumn</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Winter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rainy season</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dry season</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>All year</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Temperature</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Precipitation</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Drizzle</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Rain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Heavy rain</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Snow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Hail</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Wind</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Sky and light</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Special phenomena</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Effects on people and travel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Where it occurs</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Objects</source>
