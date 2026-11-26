@@ -1,0 +1,5 @@
+{{APP}} legge e scrive progetti Scrivener 3, così puoi passare da un programma all'altro.
+- **Importazione**: **File > Importa > Progetto Scrivener…** crea un progetto {{APP}} da un progetto Scrivener 3 o 2. Il raccoglitore, i testi, le sinossi, le note, le etichette, lo stato, le parole chiave, le istantanee, i commenti, le note a piè di pagina, i file di ricerca e le raccolte vengono con esso. Il progetto Scrivener viene solo letto.
+- **Lavorare in formato Scrivener**: apri il file *.scrivx* all'interno di una cartella *.scriv* con **File > Apri progetto…** e scegli **Lavora in formato Scrivener**. {{APP}} salva poi direttamente nel *.scriv*, così puoi proseguire in Scrivener più tardi, per esempio su un altro computer. Chiudi il progetto in un programma prima di aprirlo nell'altro.
+- **File > Salva con nome…** salva un progetto nell'altro formato (o con un altro nome) e **File > Esporta** salva una copia che lascia com'è il progetto su cui lavori.
+- Un progetto {{APP}} vero e proprio conserva ogni documento come file di testo semplice (Markdown, oppure RTF se preferisci), leggibile con qualsiasi editor.

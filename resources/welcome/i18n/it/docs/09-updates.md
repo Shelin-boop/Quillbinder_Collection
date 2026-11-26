@@ -1,0 +1,5 @@
+{{APP}} è un unico file di programma. Aggiornamenti ed estensioni arrivano come piccoli file di pacchetto che terminano con *.qbpkg*.
+- Installane uno con **Aiuto > Componenti aggiuntivi e aggiornamenti > Installa aggiornamento o componente aggiuntivo…**, oppure fai doppio clic sul file. {{APP}} controlla il pacchetto, mostra le novità e mette alla prova un aggiornamento del programma una volta prima di usarlo.
+- **Aiuto > Componenti aggiuntivi e aggiornamenti > Gestione componenti aggiuntivi…** attiva e disattiva i componenti aggiuntivi, li rimuove e torna a una versione precedente del programma con **Usa questa versione**.
+- Se un aggiornamento non si avvia due volte di seguito, {{APP}} torna da solo alla versione integrata nel file del programma.
+- I componenti aggiuntivi portano temi extra, modelli di progetto, formati di compilazione, strumenti di scrittura (Generatore di nomi, Blocco appunti, Statistiche del testo), la riproduzione di audio e video e l'importazione di pagine web e di vecchi file Word.
