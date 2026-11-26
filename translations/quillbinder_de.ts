@@ -7160,12 +7160,12 @@ In die Ordner von Windows und in die Registrierung wird nichts geschrieben, auß
         <translation>%1 zum Anwendungsmenü hinzufügen, damit Sie es wie jedes andere Programm starten und Projekte per Doppelklick öffnen können</translation>
     </message>
     <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>AppImage nach %1 verschieben (eine verschobene Datei lässt sich nicht mehr aus dem Menü starten)</translation>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>AppImage nach %1 verschieben, einen festen Ort, von dem aus der Menüeintrag es startet</translation>
     </message>
     <message>
-        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later.</source>
-        <translation>Mit Hilfe &gt; Zum Anwendungsmenü hinzufügen oder Aus dem Anwendungsmenü entfernen ändern Sie das später.</translation>
+        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
+        <translation>Mit Hilfe &gt; Zum Anwendungsmenü hinzufügen oder Aus dem Anwendungsmenü entfernen ändern Sie das später. Wenn Sie das AppImage selbst verschieben, fügen Sie es dem Menü erneut hinzu.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -13012,8 +13012,8 @@ Schriften können hier mit Format &gt; Schrift &gt; Schriftdateien installieren 
         <translation>Zum Anwendungsmenü hinzufügen</translation>
     </message>
     <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>AppImage nach %1 verschieben (eine verschobene Datei lässt sich nicht mehr aus dem Menü starten)</translation>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>AppImage nach %1 verschieben, einen festen Ort, von dem aus der Menüeintrag es startet</translation>
     </message>
     <message>
         <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them?</source>

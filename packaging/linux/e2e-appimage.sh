@@ -174,6 +174,28 @@ expect '[ -n "$W" ] && ! xdotool search --onlyvisible --name "Welcome to Quillbi
     "the start window, not the welcome project (\"$(xdotool getwindowname "$W" 2>/dev/null)\")"
 stop_app
 
+# 0.95.0: a home with an older menu entry (it may start an old AppImage): the first-start page replaces it, it is
+# not doubled, and the entry starts the AppImage in ~/Applications
+if [ "$(printf '%s\n' "$NEW" "0.95.0" | sort -V | head -1)" = "0.95.0" ] && [ -f "$APPIMAGE" ]; then
+    step "GUI: an older menu entry is replaced at the first start, not doubled"
+    DESK=$(ls "$XDG_DATA_HOME"/applications/*.desktop 2>/dev/null | head -1)
+    if [ -n "$DESK" ]; then
+        sed -i "s|^Exec=.*|Exec=\"/nonexistent/Old-0.1.0.AppImage\" %f|" "$DESK"
+        CFG=$(grep -rl "firstStartDone=true" "$XDG_CONFIG_HOME" 2>/dev/null | head -1)
+        [ -n "$CFG" ] && sed -i "/firstStartDone=true/d" "$CFG"
+        start_app "$E/work/app-start3.log" --no-restore
+        answer_dialogs "Projects|Welcome to Quillbinder" > "$E/work/dialogs-3.txt"
+        sleep 3
+        import -window root "$E/shots/5-older-entry.png"
+        stop_app
+        expect '[ "$(ls "$XDG_DATA_HOME"/applications/*.desktop | wc -l)" = 1 ]' "there is still one menu entry file"
+        expect 'grep -qs "^Exec=\"$APPIMAGE\"" "$DESK" && ! grep -qs "Old-0.1.0" "$DESK"' \
+            "the older entry was replaced: it starts the AppImage in ~/Applications"
+    else
+        echo "(no menu entry file to start from; this check is skipped)"
+    fi
+fi
+
 if [ -n "${QB_SCRIV_SAMPLE:-}" ]; then
     step "GUI: a Scrivener 3 project in Scrivener format"
     cp -r "$QB_SCRIV_SAMPLE" "$E/work/Sample.scriv"

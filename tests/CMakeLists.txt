@@ -514,3 +514,8 @@ target_compile_definitions(qb_v0940d_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_S
 add_executable(qb_v0950a_tests v0950a_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0950a_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0950a_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+
+# 0.95.0, second part: the move of the AppImage, highlights drawn as picked, negative word targets (xvfb-run -a ./qb_v0950b_tests /tmp/shots)
+add_executable(qb_v0950b_tests v0950b_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0950b_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0950b_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")

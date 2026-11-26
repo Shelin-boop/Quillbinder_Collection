@@ -17,6 +17,11 @@ New functions and fixes.
   Zoom Inspector Tabs Separately** on or off it is the same. The zoom you had for both lists is taken for both at first;
   **File > Options > Editing** lists the three parts, and the zoom list in the inspector names the one you zoomed last.
 
+- **The first-start page says plainly what moving the AppImage does**. The checkbox reads "Move the AppImage to
+  ~/Applications, a fixed place the menu entry starts it from" (the bracket that sounded as if the move broke the entry is
+  gone), and the grey line adds that an AppImage you move yourself has to be added to the menu again. Add to Application
+  Menu always writes the file's current place and replaces an older entry.
+
 - **25 backups are kept at first**. A new installation keeps the newest 25 backups of each project (it was 5); a number
   already saved stays. On the first-start page and in **File > Options > Backup** the field holds only the number and the
   words stand around it: "Keep the newest [25] backups of each project".

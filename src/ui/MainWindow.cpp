@@ -5238,7 +5238,7 @@ void MainWindow::askApplicationMenu(const QString &title, const QString &text, b
     QMessageBox box(QMessageBox::Question, title, text, QMessageBox::NoButton, this);
     QCheckBox *move = nullptr;
     if (appmenu::canMove()) {
-        move = new QCheckBox(tr("Move the AppImage to %1 (a moved file cannot be started from the menu)")
+        move = new QCheckBox(tr("Move the AppImage to %1, a fixed place the menu entry starts it from")
                                  .arg(QDir::toNativeSeparators(appmenu::applicationsFolder())),
                              &box);
         move->setObjectName(QStringLiteral("moveAppImage"));

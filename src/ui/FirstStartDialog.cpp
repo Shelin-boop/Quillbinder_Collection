@@ -177,7 +177,7 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
         m_menuAdd->setChecked(true);
         mv->addWidget(m_menuAdd);
         if (appmenu::canMove()) {
-            m_menuMove = new QCheckBox(tr("Move the AppImage to %1 (a moved file cannot be started from the menu)")
+            m_menuMove = new QCheckBox(tr("Move the AppImage to %1, a fixed place the menu entry starts it from")
                                            .arg(QDir::toNativeSeparators(appmenu::applicationsFolder())),
                                        menu);
             m_menuMove->setObjectName(QStringLiteral("firstMenuMove"));
@@ -185,7 +185,8 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
             mv->addWidget(m_menuMove);
             connect(m_menuAdd, &QCheckBox::toggled, m_menuMove, &QWidget::setEnabled);
         }
-        auto *later = new QLabel(tr("Help > Add to Application Menu or Remove from Application Menu changes this later."), menu);
+        auto *later = new QLabel(tr("Help > Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage "
+                                "yourself, add it to the menu again."), menu);
         later->setObjectName(QStringLiteral("firstMenuHint"));
         later->setWordWrap(true);
         hintlabel::style(later);
