@@ -837,115 +837,115 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     </message>
     <message>
         <source>Full name</source>
-        <translation type="unfinished"></translation>
+        <translation>Volledige naam</translation>
     </message>
     <message>
         <source>Also known as</source>
-        <translation type="unfinished"></translation>
+        <translation>Ook bekend als</translation>
     </message>
     <message>
         <source>Role in the story</source>
-        <translation type="unfinished"></translation>
+        <translation>Rol in het verhaal</translation>
     </message>
     <message>
         <source>Protagonist</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoofdpersoon</translation>
     </message>
     <message>
         <source>Antagonist</source>
-        <translation type="unfinished"></translation>
+        <translation>Antagonist</translation>
     </message>
     <message>
         <source>Supporting</source>
-        <translation type="unfinished"></translation>
+        <translation>Bijrol</translation>
     </message>
     <message>
         <source>Minor</source>
-        <translation type="unfinished"></translation>
+        <translation>Figurant</translation>
     </message>
     <message>
         <source>Mentioned only</source>
-        <translation type="unfinished"></translation>
+        <translation>Alleen genoemd</translation>
     </message>
     <message>
         <source>Race / species</source>
-        <translation type="unfinished"></translation>
+        <translation>Ras / soort</translation>
     </message>
     <message>
         <source>Gender</source>
-        <translation type="unfinished"></translation>
+        <translation>Geslacht</translation>
     </message>
     <message>
         <source>Age</source>
-        <translation type="unfinished"></translation>
+        <translation>Leeftijd</translation>
     </message>
     <message>
         <source>Born</source>
-        <translation type="unfinished"></translation>
+        <translation>Geboren</translation>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Lengte</translation>
     </message>
     <message>
         <source>Build</source>
-        <translation type="unfinished"></translation>
+        <translation>Lichaamsbouw</translation>
     </message>
     <message>
         <source>Eye color</source>
-        <translation type="unfinished"></translation>
+        <translation>Oogkleur</translation>
     </message>
     <message>
         <source>Hair</source>
-        <translation type="unfinished"></translation>
+        <translation>Haar</translation>
     </message>
     <message>
         <source>Distinguishing features</source>
-        <translation type="unfinished"></translation>
+        <translation>Onderscheidende kenmerken</translation>
     </message>
     <message>
         <source>Attributes</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenschappen</translation>
     </message>
     <message>
         <source>Traits</source>
-        <translation type="unfinished"></translation>
+        <translation>Karaktertrekken</translation>
     </message>
     <message>
         <source>Occupation</source>
-        <translation type="unfinished"></translation>
+        <translation>Beroep</translation>
     </message>
     <message>
         <source>Lives in</source>
-        <translation type="unfinished"></translation>
+        <translation>Woont in</translation>
     </message>
     <message>
         <source>Comes from</source>
-        <translation type="unfinished"></translation>
+        <translation>Komt uit</translation>
     </message>
     <message>
         <source>Family and relationships</source>
-        <translation type="unfinished"></translation>
+        <translation>Familie en relaties</translation>
     </message>
     <message>
         <source>Goals and motives</source>
-        <translation type="unfinished"></translation>
+        <translation>Doelen en motieven</translation>
     </message>
     <message>
         <source>Fears and weaknesses</source>
-        <translation type="unfinished"></translation>
+        <translation>Angsten en zwakheden</translation>
     </message>
     <message>
         <source>Background story</source>
-        <translation type="unfinished"></translation>
+        <translation>Achtergrondverhaal</translation>
     </message>
     <message>
         <source>Appears in</source>
-        <translation type="unfinished"></translation>
+        <translation>Komt voor in</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Overig</translation>
+        <translation>Overig</translation>
     </message>
     <message>
         <source>Locations</source>
@@ -953,87 +953,87 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     </message>
     <message>
         <source>Kind</source>
-        <translation type="unfinished"></translation>
+        <translation>Soort</translation>
     </message>
     <message>
         <source>Continent</source>
-        <translation type="unfinished"></translation>
+        <translation>Continent</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished"></translation>
+        <translation>Land</translation>
     </message>
     <message>
         <source>Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Regio</translation>
     </message>
     <message>
         <source>City</source>
-        <translation type="unfinished"></translation>
+        <translation>Stad</translation>
     </message>
     <message>
         <source>Town</source>
-        <translation type="unfinished"></translation>
+        <translation>Stadje</translation>
     </message>
     <message>
         <source>Village</source>
-        <translation type="unfinished"></translation>
+        <translation>Dorp</translation>
     </message>
     <message>
         <source>District</source>
-        <translation type="unfinished"></translation>
+        <translation>Wijk</translation>
     </message>
     <message>
         <source>Building</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebouw</translation>
     </message>
     <message>
         <source>Room</source>
-        <translation type="unfinished"></translation>
+        <translation>Kamer</translation>
     </message>
     <message>
         <source>Part of</source>
-        <translation type="unfinished"></translation>
+        <translation>Maakt deel uit van</translation>
     </message>
     <message>
         <source>Environment</source>
-        <translation type="unfinished"></translation>
+        <translation>Omgeving</translation>
     </message>
     <message>
         <source>Climate and weather</source>
-        <translation type="unfinished"></translation>
+        <translation>Klimaat en weer</translation>
     </message>
     <message>
         <source>Population</source>
-        <translation type="unfinished"></translation>
+        <translation>Bevolking</translation>
     </message>
     <message>
         <source>Ruled by</source>
-        <translation type="unfinished"></translation>
+        <translation>Bestuurd door</translation>
     </message>
     <message>
         <source>Notable inhabitants</source>
-        <translation type="unfinished"></translation>
+        <translation>Opmerkelijke inwoners</translation>
     </message>
     <message>
         <source>Points of interest</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezienswaardigheden</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished">Beschrijving</translation>
+        <translation>Beschrijving</translation>
     </message>
     <message>
         <source>History</source>
-        <translation type="unfinished"></translation>
+        <translation>Geschiedenis</translation>
     </message>
     <message>
         <source>Scenes set here</source>
-        <translation type="unfinished"></translation>
+        <translation>Scènes die hier spelen</translation>
     </message>
     <message>
         <source>Map or picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaart of afbeelding</translation>
     </message>
     <message>
         <source>Environments</source>
@@ -1041,91 +1041,91 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     </message>
     <message>
         <source>Kind of landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Soort landschap</translation>
     </message>
     <message>
         <source>Forest</source>
-        <translation type="unfinished"></translation>
+        <translation>Bos</translation>
     </message>
     <message>
         <source>Mountains</source>
-        <translation type="unfinished"></translation>
+        <translation>Bergen</translation>
     </message>
     <message>
         <source>Hills</source>
-        <translation type="unfinished"></translation>
+        <translation>Heuvels</translation>
     </message>
     <message>
         <source>Plains</source>
-        <translation type="unfinished"></translation>
+        <translation>Vlakten</translation>
     </message>
     <message>
         <source>Desert</source>
-        <translation type="unfinished"></translation>
+        <translation>Woestijn</translation>
     </message>
     <message>
         <source>Coast</source>
-        <translation type="unfinished"></translation>
+        <translation>Kust</translation>
     </message>
     <message>
         <source>Sea</source>
-        <translation type="unfinished"></translation>
+        <translation>Zee</translation>
     </message>
     <message>
         <source>River</source>
-        <translation type="unfinished"></translation>
+        <translation>Rivier</translation>
     </message>
     <message>
         <source>Lake</source>
-        <translation type="unfinished"></translation>
+        <translation>Meer</translation>
     </message>
     <message>
         <source>Swamp</source>
-        <translation type="unfinished"></translation>
+        <translation>Moeras</translation>
     </message>
     <message>
         <source>Tundra</source>
-        <translation type="unfinished"></translation>
+        <translation>Toendra</translation>
     </message>
     <message>
         <source>Jungle</source>
-        <translation type="unfinished"></translation>
+        <translation>Jungle</translation>
     </message>
     <message>
         <source>Underground</source>
-        <translation type="unfinished"></translation>
+        <translation>Ondergronds</translation>
     </message>
     <message>
         <source>Terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Terrein</translation>
     </message>
     <message>
         <source>Plants</source>
-        <translation type="unfinished"></translation>
+        <translation>Planten</translation>
     </message>
     <message>
         <source>Animals</source>
-        <translation type="unfinished"></translation>
+        <translation>Dieren</translation>
     </message>
     <message>
         <source>Resources</source>
-        <translation type="unfinished"></translation>
+        <translation>Hulpbronnen</translation>
     </message>
     <message>
         <source>Dangers</source>
-        <translation type="unfinished"></translation>
+        <translation>Gevaren</translation>
     </message>
     <message>
         <source>Typical weather</source>
-        <translation type="unfinished"></translation>
+        <translation>Typisch weer</translation>
     </message>
     <message>
         <source>Sounds, smells and light</source>
-        <translation type="unfinished"></translation>
+        <translation>Geluiden, geuren en licht</translation>
     </message>
     <message>
         <source>Places with this environment</source>
-        <translation type="unfinished"></translation>
+        <translation>Plaatsen met deze omgeving</translation>
     </message>
     <message>
         <source>Points of Interest</source>
@@ -1133,51 +1133,51 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     </message>
     <message>
         <source>Landmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Herkenningspunt</translation>
     </message>
     <message>
         <source>Ruin</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruïne</translation>
     </message>
     <message>
         <source>Shop</source>
-        <translation type="unfinished"></translation>
+        <translation>Winkel</translation>
     </message>
     <message>
         <source>Inn or tavern</source>
-        <translation type="unfinished"></translation>
+        <translation>Herberg of taverne</translation>
     </message>
     <message>
         <source>Temple</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempel</translation>
     </message>
     <message>
         <source>Castle</source>
-        <translation type="unfinished"></translation>
+        <translation>Kasteel</translation>
     </message>
     <message>
         <source>Natural feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Natuurlijk kenmerk</translation>
     </message>
     <message>
         <source>Located in</source>
-        <translation type="unfinished"></translation>
+        <translation>Gelegen in</translation>
     </message>
     <message>
         <source>Owner or keeper</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenaar of bewaker</translation>
     </message>
     <message>
         <source>Significance for the story</source>
-        <translation type="unfinished"></translation>
+        <translation>Betekenis voor het verhaal</translation>
     </message>
     <message>
         <source>How to get there</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoe er te komen</translation>
     </message>
     <message>
         <source>Secrets</source>
-        <translation type="unfinished"></translation>
+        <translation>Geheimen</translation>
     </message>
     <message>
         <source>Weather</source>
@@ -1185,87 +1185,87 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     </message>
     <message>
         <source>Season</source>
-        <translation type="unfinished"></translation>
+        <translation>Seizoen</translation>
     </message>
     <message>
         <source>Spring</source>
-        <translation type="unfinished"></translation>
+        <translation>Lente</translation>
     </message>
     <message>
         <source>Summer</source>
-        <translation type="unfinished"></translation>
+        <translation>Zomer</translation>
     </message>
     <message>
         <source>Autumn</source>
-        <translation type="unfinished"></translation>
+        <translation>Herfst</translation>
     </message>
     <message>
         <source>Winter</source>
-        <translation type="unfinished"></translation>
+        <translation>Winter</translation>
     </message>
     <message>
         <source>Rainy season</source>
-        <translation type="unfinished"></translation>
+        <translation>Regentijd</translation>
     </message>
     <message>
         <source>Dry season</source>
-        <translation type="unfinished"></translation>
+        <translation>Droge tijd</translation>
     </message>
     <message>
         <source>All year</source>
-        <translation type="unfinished"></translation>
+        <translation>Het hele jaar</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatuur</translation>
     </message>
     <message>
         <source>Precipitation</source>
-        <translation type="unfinished"></translation>
+        <translation>Neerslag</translation>
     </message>
     <message>
         <source>Drizzle</source>
-        <translation type="unfinished"></translation>
+        <translation>Motregen</translation>
     </message>
     <message>
         <source>Rain</source>
-        <translation type="unfinished"></translation>
+        <translation>Regen</translation>
     </message>
     <message>
         <source>Heavy rain</source>
-        <translation type="unfinished"></translation>
+        <translation>Zware regen</translation>
     </message>
     <message>
         <source>Snow</source>
-        <translation type="unfinished"></translation>
+        <translation>Sneeuw</translation>
     </message>
     <message>
         <source>Hail</source>
-        <translation type="unfinished"></translation>
+        <translation>Hagel</translation>
     </message>
     <message>
         <source>Fog</source>
-        <translation type="unfinished"></translation>
+        <translation>Mist</translation>
     </message>
     <message>
         <source>Wind</source>
-        <translation type="unfinished"></translation>
+        <translation>Wind</translation>
     </message>
     <message>
         <source>Sky and light</source>
-        <translation type="unfinished"></translation>
+        <translation>Lucht en licht</translation>
     </message>
     <message>
         <source>Special phenomena</source>
-        <translation type="unfinished"></translation>
+        <translation>Bijzondere verschijnselen</translation>
     </message>
     <message>
         <source>Effects on people and travel</source>
-        <translation type="unfinished"></translation>
+        <translation>Gevolgen voor mensen en reizen</translation>
     </message>
     <message>
         <source>Where it occurs</source>
-        <translation type="unfinished"></translation>
+        <translation>Waar het voorkomt</translation>
     </message>
     <message>
         <source>Objects</source>

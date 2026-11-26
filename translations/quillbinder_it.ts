@@ -837,115 +837,115 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Full name</source>
-        <translation type="unfinished"></translation>
+        <translation>Nome completo</translation>
     </message>
     <message>
         <source>Also known as</source>
-        <translation type="unfinished"></translation>
+        <translation>Noto anche come</translation>
     </message>
     <message>
         <source>Role in the story</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruolo nella storia</translation>
     </message>
     <message>
         <source>Protagonist</source>
-        <translation type="unfinished"></translation>
+        <translation>Protagonista</translation>
     </message>
     <message>
         <source>Antagonist</source>
-        <translation type="unfinished"></translation>
+        <translation>Antagonista</translation>
     </message>
     <message>
         <source>Supporting</source>
-        <translation type="unfinished"></translation>
+        <translation>Secondario</translation>
     </message>
     <message>
         <source>Minor</source>
-        <translation type="unfinished"></translation>
+        <translation>Minore</translation>
     </message>
     <message>
         <source>Mentioned only</source>
-        <translation type="unfinished"></translation>
+        <translation>Solo menzionato</translation>
     </message>
     <message>
         <source>Race / species</source>
-        <translation type="unfinished"></translation>
+        <translation>Razza / specie</translation>
     </message>
     <message>
         <source>Gender</source>
-        <translation type="unfinished"></translation>
+        <translation>Genere</translation>
     </message>
     <message>
         <source>Age</source>
-        <translation type="unfinished"></translation>
+        <translation>Età</translation>
     </message>
     <message>
         <source>Born</source>
-        <translation type="unfinished"></translation>
+        <translation>Nascita</translation>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Altezza</translation>
     </message>
     <message>
         <source>Build</source>
-        <translation type="unfinished"></translation>
+        <translation>Corporatura</translation>
     </message>
     <message>
         <source>Eye color</source>
-        <translation type="unfinished"></translation>
+        <translation>Colore degli occhi</translation>
     </message>
     <message>
         <source>Hair</source>
-        <translation type="unfinished"></translation>
+        <translation>Capelli</translation>
     </message>
     <message>
         <source>Distinguishing features</source>
-        <translation type="unfinished"></translation>
+        <translation>Segni particolari</translation>
     </message>
     <message>
         <source>Attributes</source>
-        <translation type="unfinished"></translation>
+        <translation>Attributi</translation>
     </message>
     <message>
         <source>Traits</source>
-        <translation type="unfinished"></translation>
+        <translation>Tratti caratteriali</translation>
     </message>
     <message>
         <source>Occupation</source>
-        <translation type="unfinished"></translation>
+        <translation>Occupazione</translation>
     </message>
     <message>
         <source>Lives in</source>
-        <translation type="unfinished"></translation>
+        <translation>Vive a</translation>
     </message>
     <message>
         <source>Comes from</source>
-        <translation type="unfinished"></translation>
+        <translation>Proviene da</translation>
     </message>
     <message>
         <source>Family and relationships</source>
-        <translation type="unfinished"></translation>
+        <translation>Famiglia e relazioni</translation>
     </message>
     <message>
         <source>Goals and motives</source>
-        <translation type="unfinished"></translation>
+        <translation>Obiettivi e motivazioni</translation>
     </message>
     <message>
         <source>Fears and weaknesses</source>
-        <translation type="unfinished"></translation>
+        <translation>Paure e debolezze</translation>
     </message>
     <message>
         <source>Background story</source>
-        <translation type="unfinished"></translation>
+        <translation>Storia personale</translation>
     </message>
     <message>
         <source>Appears in</source>
-        <translation type="unfinished"></translation>
+        <translation>Compare in</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Altro</translation>
+        <translation>Altro</translation>
     </message>
     <message>
         <source>Locations</source>
@@ -953,87 +953,87 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Kind</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo</translation>
     </message>
     <message>
         <source>Continent</source>
-        <translation type="unfinished"></translation>
+        <translation>Continente</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished"></translation>
+        <translation>Paese</translation>
     </message>
     <message>
         <source>Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Regione</translation>
     </message>
     <message>
         <source>City</source>
-        <translation type="unfinished"></translation>
+        <translation>Città</translation>
     </message>
     <message>
         <source>Town</source>
-        <translation type="unfinished"></translation>
+        <translation>Cittadina</translation>
     </message>
     <message>
         <source>Village</source>
-        <translation type="unfinished"></translation>
+        <translation>Villaggio</translation>
     </message>
     <message>
         <source>District</source>
-        <translation type="unfinished"></translation>
+        <translation>Quartiere</translation>
     </message>
     <message>
         <source>Building</source>
-        <translation type="unfinished"></translation>
+        <translation>Edificio</translation>
     </message>
     <message>
         <source>Room</source>
-        <translation type="unfinished"></translation>
+        <translation>Stanza</translation>
     </message>
     <message>
         <source>Part of</source>
-        <translation type="unfinished"></translation>
+        <translation>Parte di</translation>
     </message>
     <message>
         <source>Environment</source>
-        <translation type="unfinished"></translation>
+        <translation>Ambiente</translation>
     </message>
     <message>
         <source>Climate and weather</source>
-        <translation type="unfinished"></translation>
+        <translation>Clima e meteo</translation>
     </message>
     <message>
         <source>Population</source>
-        <translation type="unfinished"></translation>
+        <translation>Popolazione</translation>
     </message>
     <message>
         <source>Ruled by</source>
-        <translation type="unfinished"></translation>
+        <translation>Governato da</translation>
     </message>
     <message>
         <source>Notable inhabitants</source>
-        <translation type="unfinished"></translation>
+        <translation>Abitanti di rilievo</translation>
     </message>
     <message>
         <source>Points of interest</source>
-        <translation type="unfinished"></translation>
+        <translation>Luoghi di interesse</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished">Descrizione</translation>
+        <translation>Descrizione</translation>
     </message>
     <message>
         <source>History</source>
-        <translation type="unfinished"></translation>
+        <translation>Storia</translation>
     </message>
     <message>
         <source>Scenes set here</source>
-        <translation type="unfinished"></translation>
+        <translation>Scene ambientate qui</translation>
     </message>
     <message>
         <source>Map or picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Mappa o immagine</translation>
     </message>
     <message>
         <source>Environments</source>
@@ -1041,91 +1041,91 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Kind of landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipo di paesaggio</translation>
     </message>
     <message>
         <source>Forest</source>
-        <translation type="unfinished"></translation>
+        <translation>Foresta</translation>
     </message>
     <message>
         <source>Mountains</source>
-        <translation type="unfinished"></translation>
+        <translation>Montagne</translation>
     </message>
     <message>
         <source>Hills</source>
-        <translation type="unfinished"></translation>
+        <translation>Colline</translation>
     </message>
     <message>
         <source>Plains</source>
-        <translation type="unfinished"></translation>
+        <translation>Pianure</translation>
     </message>
     <message>
         <source>Desert</source>
-        <translation type="unfinished"></translation>
+        <translation>Deserto</translation>
     </message>
     <message>
         <source>Coast</source>
-        <translation type="unfinished"></translation>
+        <translation>Costa</translation>
     </message>
     <message>
         <source>Sea</source>
-        <translation type="unfinished"></translation>
+        <translation>Mare</translation>
     </message>
     <message>
         <source>River</source>
-        <translation type="unfinished"></translation>
+        <translation>Fiume</translation>
     </message>
     <message>
         <source>Lake</source>
-        <translation type="unfinished"></translation>
+        <translation>Lago</translation>
     </message>
     <message>
         <source>Swamp</source>
-        <translation type="unfinished"></translation>
+        <translation>Palude</translation>
     </message>
     <message>
         <source>Tundra</source>
-        <translation type="unfinished"></translation>
+        <translation>Tundra</translation>
     </message>
     <message>
         <source>Jungle</source>
-        <translation type="unfinished"></translation>
+        <translation>Giungla</translation>
     </message>
     <message>
         <source>Underground</source>
-        <translation type="unfinished"></translation>
+        <translation>Sotterraneo</translation>
     </message>
     <message>
         <source>Terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Terreno</translation>
     </message>
     <message>
         <source>Plants</source>
-        <translation type="unfinished"></translation>
+        <translation>Piante</translation>
     </message>
     <message>
         <source>Animals</source>
-        <translation type="unfinished"></translation>
+        <translation>Animali</translation>
     </message>
     <message>
         <source>Resources</source>
-        <translation type="unfinished"></translation>
+        <translation>Risorse</translation>
     </message>
     <message>
         <source>Dangers</source>
-        <translation type="unfinished"></translation>
+        <translation>Pericoli</translation>
     </message>
     <message>
         <source>Typical weather</source>
-        <translation type="unfinished"></translation>
+        <translation>Meteo tipico</translation>
     </message>
     <message>
         <source>Sounds, smells and light</source>
-        <translation type="unfinished"></translation>
+        <translation>Suoni, odori e luce</translation>
     </message>
     <message>
         <source>Places with this environment</source>
-        <translation type="unfinished"></translation>
+        <translation>Luoghi con questo ambiente</translation>
     </message>
     <message>
         <source>Points of Interest</source>
@@ -1133,51 +1133,51 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Landmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Punto di riferimento</translation>
     </message>
     <message>
         <source>Ruin</source>
-        <translation type="unfinished"></translation>
+        <translation>Rovina</translation>
     </message>
     <message>
         <source>Shop</source>
-        <translation type="unfinished"></translation>
+        <translation>Negozio</translation>
     </message>
     <message>
         <source>Inn or tavern</source>
-        <translation type="unfinished"></translation>
+        <translation>Locanda o taverna</translation>
     </message>
     <message>
         <source>Temple</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempio</translation>
     </message>
     <message>
         <source>Castle</source>
-        <translation type="unfinished"></translation>
+        <translation>Castello</translation>
     </message>
     <message>
         <source>Natural feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Elemento naturale</translation>
     </message>
     <message>
         <source>Located in</source>
-        <translation type="unfinished"></translation>
+        <translation>Si trova in</translation>
     </message>
     <message>
         <source>Owner or keeper</source>
-        <translation type="unfinished"></translation>
+        <translation>Proprietario o custode</translation>
     </message>
     <message>
         <source>Significance for the story</source>
-        <translation type="unfinished"></translation>
+        <translation>Importanza per la storia</translation>
     </message>
     <message>
         <source>How to get there</source>
-        <translation type="unfinished"></translation>
+        <translation>Come arrivarci</translation>
     </message>
     <message>
         <source>Secrets</source>
-        <translation type="unfinished"></translation>
+        <translation>Segreti</translation>
     </message>
     <message>
         <source>Weather</source>
@@ -1185,87 +1185,87 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Season</source>
-        <translation type="unfinished"></translation>
+        <translation>Stagione</translation>
     </message>
     <message>
         <source>Spring</source>
-        <translation type="unfinished"></translation>
+        <translation>Primavera</translation>
     </message>
     <message>
         <source>Summer</source>
-        <translation type="unfinished"></translation>
+        <translation>Estate</translation>
     </message>
     <message>
         <source>Autumn</source>
-        <translation type="unfinished"></translation>
+        <translation>Autunno</translation>
     </message>
     <message>
         <source>Winter</source>
-        <translation type="unfinished"></translation>
+        <translation>Inverno</translation>
     </message>
     <message>
         <source>Rainy season</source>
-        <translation type="unfinished"></translation>
+        <translation>Stagione delle piogge</translation>
     </message>
     <message>
         <source>Dry season</source>
-        <translation type="unfinished"></translation>
+        <translation>Stagione secca</translation>
     </message>
     <message>
         <source>All year</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutto l&apos;anno</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Temperatura</translation>
     </message>
     <message>
         <source>Precipitation</source>
-        <translation type="unfinished"></translation>
+        <translation>Precipitazioni</translation>
     </message>
     <message>
         <source>Drizzle</source>
-        <translation type="unfinished"></translation>
+        <translation>Pioggerella</translation>
     </message>
     <message>
         <source>Rain</source>
-        <translation type="unfinished"></translation>
+        <translation>Pioggia</translation>
     </message>
     <message>
         <source>Heavy rain</source>
-        <translation type="unfinished"></translation>
+        <translation>Pioggia intensa</translation>
     </message>
     <message>
         <source>Snow</source>
-        <translation type="unfinished"></translation>
+        <translation>Neve</translation>
     </message>
     <message>
         <source>Hail</source>
-        <translation type="unfinished"></translation>
+        <translation>Grandine</translation>
     </message>
     <message>
         <source>Fog</source>
-        <translation type="unfinished"></translation>
+        <translation>Nebbia</translation>
     </message>
     <message>
         <source>Wind</source>
-        <translation type="unfinished"></translation>
+        <translation>Vento</translation>
     </message>
     <message>
         <source>Sky and light</source>
-        <translation type="unfinished"></translation>
+        <translation>Cielo e luce</translation>
     </message>
     <message>
         <source>Special phenomena</source>
-        <translation type="unfinished"></translation>
+        <translation>Fenomeni particolari</translation>
     </message>
     <message>
         <source>Effects on people and travel</source>
-        <translation type="unfinished"></translation>
+        <translation>Effetti sulle persone e sui viaggi</translation>
     </message>
     <message>
         <source>Where it occurs</source>
-        <translation type="unfinished"></translation>
+        <translation>Dove si verifica</translation>
     </message>
     <message>
         <source>Objects</source>

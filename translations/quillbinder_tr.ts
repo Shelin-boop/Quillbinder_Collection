@@ -831,115 +831,115 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Full name</source>
-        <translation type="unfinished"></translation>
+        <translation>Tam ad</translation>
     </message>
     <message>
         <source>Also known as</source>
-        <translation type="unfinished"></translation>
+        <translation>Diğer adı</translation>
     </message>
     <message>
         <source>Role in the story</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikâyedeki rolü</translation>
     </message>
     <message>
         <source>Protagonist</source>
-        <translation type="unfinished"></translation>
+        <translation>Başkahraman</translation>
     </message>
     <message>
         <source>Antagonist</source>
-        <translation type="unfinished"></translation>
+        <translation>Karşı karakter</translation>
     </message>
     <message>
         <source>Supporting</source>
-        <translation type="unfinished"></translation>
+        <translation>Yardımcı karakter</translation>
     </message>
     <message>
         <source>Minor</source>
-        <translation type="unfinished"></translation>
+        <translation>Küçük rol</translation>
     </message>
     <message>
         <source>Mentioned only</source>
-        <translation type="unfinished"></translation>
+        <translation>Yalnızca anılan</translation>
     </message>
     <message>
         <source>Race / species</source>
-        <translation type="unfinished"></translation>
+        <translation>Irk / tür</translation>
     </message>
     <message>
         <source>Gender</source>
-        <translation type="unfinished"></translation>
+        <translation>Cinsiyet</translation>
     </message>
     <message>
         <source>Age</source>
-        <translation type="unfinished"></translation>
+        <translation>Yaş</translation>
     </message>
     <message>
         <source>Born</source>
-        <translation type="unfinished"></translation>
+        <translation>Doğum</translation>
     </message>
     <message>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Boy</translation>
     </message>
     <message>
         <source>Build</source>
-        <translation type="unfinished"></translation>
+        <translation>Beden yapısı</translation>
     </message>
     <message>
         <source>Eye color</source>
-        <translation type="unfinished"></translation>
+        <translation>Göz rengi</translation>
     </message>
     <message>
         <source>Hair</source>
-        <translation type="unfinished"></translation>
+        <translation>Saç</translation>
     </message>
     <message>
         <source>Distinguishing features</source>
-        <translation type="unfinished"></translation>
+        <translation>Ayırt edici özellikler</translation>
     </message>
     <message>
         <source>Attributes</source>
-        <translation type="unfinished"></translation>
+        <translation>Nitelikler</translation>
     </message>
     <message>
         <source>Traits</source>
-        <translation type="unfinished"></translation>
+        <translation>Karakter özellikleri</translation>
     </message>
     <message>
         <source>Occupation</source>
-        <translation type="unfinished"></translation>
+        <translation>Meslek</translation>
     </message>
     <message>
         <source>Lives in</source>
-        <translation type="unfinished"></translation>
+        <translation>Yaşadığı yer</translation>
     </message>
     <message>
         <source>Comes from</source>
-        <translation type="unfinished"></translation>
+        <translation>Geldiği yer</translation>
     </message>
     <message>
         <source>Family and relationships</source>
-        <translation type="unfinished"></translation>
+        <translation>Aile ve ilişkiler</translation>
     </message>
     <message>
         <source>Goals and motives</source>
-        <translation type="unfinished"></translation>
+        <translation>Hedefler ve güdüler</translation>
     </message>
     <message>
         <source>Fears and weaknesses</source>
-        <translation type="unfinished"></translation>
+        <translation>Korkular ve zayıflıklar</translation>
     </message>
     <message>
         <source>Background story</source>
-        <translation type="unfinished"></translation>
+        <translation>Geçmiş hikâye</translation>
     </message>
     <message>
         <source>Appears in</source>
-        <translation type="unfinished"></translation>
+        <translation>Göründüğü yerler</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Diğer</translation>
+        <translation>Diğer</translation>
     </message>
     <message>
         <source>Locations</source>
@@ -947,87 +947,87 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Kind</source>
-        <translation type="unfinished"></translation>
+        <translation>Tür</translation>
     </message>
     <message>
         <source>Continent</source>
-        <translation type="unfinished"></translation>
+        <translation>Kıta</translation>
     </message>
     <message>
         <source>Country</source>
-        <translation type="unfinished"></translation>
+        <translation>Ülke</translation>
     </message>
     <message>
         <source>Region</source>
-        <translation type="unfinished"></translation>
+        <translation>Bölge</translation>
     </message>
     <message>
         <source>City</source>
-        <translation type="unfinished"></translation>
+        <translation>Şehir</translation>
     </message>
     <message>
         <source>Town</source>
-        <translation type="unfinished"></translation>
+        <translation>Kasaba</translation>
     </message>
     <message>
         <source>Village</source>
-        <translation type="unfinished"></translation>
+        <translation>Köy</translation>
     </message>
     <message>
         <source>District</source>
-        <translation type="unfinished"></translation>
+        <translation>Semt</translation>
     </message>
     <message>
         <source>Building</source>
-        <translation type="unfinished"></translation>
+        <translation>Bina</translation>
     </message>
     <message>
         <source>Room</source>
-        <translation type="unfinished"></translation>
+        <translation>Oda</translation>
     </message>
     <message>
         <source>Part of</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlı olduğu yer</translation>
     </message>
     <message>
         <source>Environment</source>
-        <translation type="unfinished"></translation>
+        <translation>Çevre</translation>
     </message>
     <message>
         <source>Climate and weather</source>
-        <translation type="unfinished"></translation>
+        <translation>İklim ve hava durumu</translation>
     </message>
     <message>
         <source>Population</source>
-        <translation type="unfinished"></translation>
+        <translation>Nüfus</translation>
     </message>
     <message>
         <source>Ruled by</source>
-        <translation type="unfinished"></translation>
+        <translation>Yöneten</translation>
     </message>
     <message>
         <source>Notable inhabitants</source>
-        <translation type="unfinished"></translation>
+        <translation>Önemli sakinler</translation>
     </message>
     <message>
         <source>Points of interest</source>
-        <translation type="unfinished"></translation>
+        <translation>Görülecek yerler</translation>
     </message>
     <message>
         <source>Description</source>
-        <translation type="unfinished">Açıklama</translation>
+        <translation>Açıklama</translation>
     </message>
     <message>
         <source>History</source>
-        <translation type="unfinished"></translation>
+        <translation>Tarih</translation>
     </message>
     <message>
         <source>Scenes set here</source>
-        <translation type="unfinished"></translation>
+        <translation>Burada geçen sahneler</translation>
     </message>
     <message>
         <source>Map or picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Harita veya resim</translation>
     </message>
     <message>
         <source>Environments</source>
@@ -1035,91 +1035,91 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Kind of landscape</source>
-        <translation type="unfinished"></translation>
+        <translation>Manzara türü</translation>
     </message>
     <message>
         <source>Forest</source>
-        <translation type="unfinished"></translation>
+        <translation>Orman</translation>
     </message>
     <message>
         <source>Mountains</source>
-        <translation type="unfinished"></translation>
+        <translation>Dağlar</translation>
     </message>
     <message>
         <source>Hills</source>
-        <translation type="unfinished"></translation>
+        <translation>Tepeler</translation>
     </message>
     <message>
         <source>Plains</source>
-        <translation type="unfinished"></translation>
+        <translation>Ovalar</translation>
     </message>
     <message>
         <source>Desert</source>
-        <translation type="unfinished"></translation>
+        <translation>Çöl</translation>
     </message>
     <message>
         <source>Coast</source>
-        <translation type="unfinished"></translation>
+        <translation>Kıyı</translation>
     </message>
     <message>
         <source>Sea</source>
-        <translation type="unfinished"></translation>
+        <translation>Deniz</translation>
     </message>
     <message>
         <source>River</source>
-        <translation type="unfinished"></translation>
+        <translation>Nehir</translation>
     </message>
     <message>
         <source>Lake</source>
-        <translation type="unfinished"></translation>
+        <translation>Göl</translation>
     </message>
     <message>
         <source>Swamp</source>
-        <translation type="unfinished"></translation>
+        <translation>Bataklık</translation>
     </message>
     <message>
         <source>Tundra</source>
-        <translation type="unfinished"></translation>
+        <translation>Tundra</translation>
     </message>
     <message>
         <source>Jungle</source>
-        <translation type="unfinished"></translation>
+        <translation>Cangıl</translation>
     </message>
     <message>
         <source>Underground</source>
-        <translation type="unfinished"></translation>
+        <translation>Yeraltı</translation>
     </message>
     <message>
         <source>Terrain</source>
-        <translation type="unfinished"></translation>
+        <translation>Arazi</translation>
     </message>
     <message>
         <source>Plants</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitkiler</translation>
     </message>
     <message>
         <source>Animals</source>
-        <translation type="unfinished"></translation>
+        <translation>Hayvanlar</translation>
     </message>
     <message>
         <source>Resources</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaynaklar</translation>
     </message>
     <message>
         <source>Dangers</source>
-        <translation type="unfinished"></translation>
+        <translation>Tehlikeler</translation>
     </message>
     <message>
         <source>Typical weather</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipik hava durumu</translation>
     </message>
     <message>
         <source>Sounds, smells and light</source>
-        <translation type="unfinished"></translation>
+        <translation>Sesler, kokular ve ışık</translation>
     </message>
     <message>
         <source>Places with this environment</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu çevreye sahip yerler</translation>
     </message>
     <message>
         <source>Points of Interest</source>
@@ -1127,51 +1127,51 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Landmark</source>
-        <translation type="unfinished"></translation>
+        <translation>Simge yapı</translation>
     </message>
     <message>
         <source>Ruin</source>
-        <translation type="unfinished"></translation>
+        <translation>Harabe</translation>
     </message>
     <message>
         <source>Shop</source>
-        <translation type="unfinished"></translation>
+        <translation>Dükkân</translation>
     </message>
     <message>
         <source>Inn or tavern</source>
-        <translation type="unfinished"></translation>
+        <translation>Han veya taverna</translation>
     </message>
     <message>
         <source>Temple</source>
-        <translation type="unfinished"></translation>
+        <translation>Tapınak</translation>
     </message>
     <message>
         <source>Castle</source>
-        <translation type="unfinished"></translation>
+        <translation>Kale</translation>
     </message>
     <message>
         <source>Natural feature</source>
-        <translation type="unfinished"></translation>
+        <translation>Doğal oluşum</translation>
     </message>
     <message>
         <source>Located in</source>
-        <translation type="unfinished"></translation>
+        <translation>Bulunduğu yer</translation>
     </message>
     <message>
         <source>Owner or keeper</source>
-        <translation type="unfinished"></translation>
+        <translation>Sahibi veya bekçisi</translation>
     </message>
     <message>
         <source>Significance for the story</source>
-        <translation type="unfinished"></translation>
+        <translation>Hikâye için önemi</translation>
     </message>
     <message>
         <source>How to get there</source>
-        <translation type="unfinished"></translation>
+        <translation>Oraya nasıl gidilir</translation>
     </message>
     <message>
         <source>Secrets</source>
-        <translation type="unfinished"></translation>
+        <translation>Sırlar</translation>
     </message>
     <message>
         <source>Weather</source>
@@ -1179,87 +1179,87 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Season</source>
-        <translation type="unfinished"></translation>
+        <translation>Mevsim</translation>
     </message>
     <message>
         <source>Spring</source>
-        <translation type="unfinished"></translation>
+        <translation>İlkbahar</translation>
     </message>
     <message>
         <source>Summer</source>
-        <translation type="unfinished"></translation>
+        <translation>Yaz</translation>
     </message>
     <message>
         <source>Autumn</source>
-        <translation type="unfinished"></translation>
+        <translation>Sonbahar</translation>
     </message>
     <message>
         <source>Winter</source>
-        <translation type="unfinished"></translation>
+        <translation>Kış</translation>
     </message>
     <message>
         <source>Rainy season</source>
-        <translation type="unfinished"></translation>
+        <translation>Yağmur mevsimi</translation>
     </message>
     <message>
         <source>Dry season</source>
-        <translation type="unfinished"></translation>
+        <translation>Kurak mevsim</translation>
     </message>
     <message>
         <source>All year</source>
-        <translation type="unfinished"></translation>
+        <translation>Yıl boyunca</translation>
     </message>
     <message>
         <source>Temperature</source>
-        <translation type="unfinished"></translation>
+        <translation>Sıcaklık</translation>
     </message>
     <message>
         <source>Precipitation</source>
-        <translation type="unfinished"></translation>
+        <translation>Yağış</translation>
     </message>
     <message>
         <source>Drizzle</source>
-        <translation type="unfinished"></translation>
+        <translation>Çiseleme</translation>
     </message>
     <message>
         <source>Rain</source>
-        <translation type="unfinished"></translation>
+        <translation>Yağmur</translation>
     </message>
     <message>
         <source>Heavy rain</source>
-        <translation type="unfinished"></translation>
+        <translation>Sağanak</translation>
     </message>
     <message>
         <source>Snow</source>
-        <translation type="unfinished"></translation>
+        <translation>Kar</translation>
     </message>
     <message>
         <source>Hail</source>
-        <translation type="unfinished"></translation>
+        <translation>Dolu</translation>
     </message>
     <message>
         <source>Fog</source>
-        <translation type="unfinished"></translation>
+        <translation>Sis</translation>
     </message>
     <message>
         <source>Wind</source>
-        <translation type="unfinished"></translation>
+        <translation>Rüzgâr</translation>
     </message>
     <message>
         <source>Sky and light</source>
-        <translation type="unfinished"></translation>
+        <translation>Gökyüzü ve ışık</translation>
     </message>
     <message>
         <source>Special phenomena</source>
-        <translation type="unfinished"></translation>
+        <translation>Özel olaylar</translation>
     </message>
     <message>
         <source>Effects on people and travel</source>
-        <translation type="unfinished"></translation>
+        <translation>İnsanlara ve yolculuğa etkileri</translation>
     </message>
     <message>
         <source>Where it occurs</source>
-        <translation type="unfinished"></translation>
+        <translation>Nerede görülür</translation>
     </message>
     <message>
         <source>Objects</source>
