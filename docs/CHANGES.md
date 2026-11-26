@@ -46,6 +46,15 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   away after updates.
 - **Shelin's** is a built-in profile, at the top of the profile list. It uses the new theme. It can be deleted and
   then stays away after updates.
+- **Profiles, fixes found in a review.** Switching profiles while a project with its own settings is open no longer
+  mixes the project's values into the profile that is left or writes the profile's values into the project (the export
+  is refused while Options edit This Project). Renaming a profile by case only ("work" to "Work") keeps it. The marks
+  of things done once (the first-start page, the placed tool buttons) are no profile settings, so a switch does not
+  bring the first-start page back. Every non-empty value of a program, folder, file or address setting in an imported
+  profile is asked about, and so are the places of a profile file that another computer wrote (a file copied into
+  the profiles folder) at the switch. A switch to a profile that keeps fewer backups asks first; a failed write of
+  the settings is told; layouts that cannot all be set leave the old ones; an own theme's name with a backslash or two
+  dots is refused.
 - **A Labels toolbar** (off at first, **View > Toolbars > Labels**): the label colors of the open project side by
   side, a click sets the label of the selected documents, and a button takes the label away.
 - **Standard Colors** in **File > Options > Appearance**: the labels new projects start with (existing projects keep

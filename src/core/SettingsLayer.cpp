@@ -143,6 +143,17 @@ QString fileFor(const QString &projectSettingsDir)
     return projectSettingsDir.isEmpty() ? QString() : projectSettingsDir + QLatin1String("/options.ini");
 }
 
+// 0.95.0: marks of something done once (first start, updates' one-time changes); a user profile never holds them
+bool onceMarker(const QString &key)
+{
+    if (!key.contains(QLatin1Char('/')))
+        return true; // markers of migrations ("zoomPartsMigrated")
+    static const QSet<QString> marks = {
+        QStringLiteral("app/firstStartDone"),      QStringLiteral("app/standard0212"),       QStringLiteral("toolbars/paraButtons0604"),
+        QStringLiteral("toolbars/toolButtonsPlaced"), QStringLiteral("toolbars/split0910"), QStringLiteral("toolbars/themesOff0940")};
+    return marks.contains(key);
+}
+
 bool programOnly(const QString &key)
 {
     if (!key.contains(QLatin1Char('/')))
@@ -326,6 +337,7 @@ void resume()
 }
 
 bool suspended() { return st().suspended; }
+bool projectEditing() { return st().editing; }
 
 void beginProjectEdit()
 {

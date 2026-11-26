@@ -26,6 +26,9 @@ namespace settingslayer {
 QString fileFor(const QString &projectSettingsDir);
 
 bool programOnly(const QString &key);
+// 0.95.0: a mark of something done once (the first start, an update's one-time change, a migration): a user profile
+// never holds it, so that a switch of profile does not do the thing again
+bool onceMarker(const QString &key);
 // 0.64.1: a setting that names a program the program starts, a folder, a file or an address (the
 // citations program, the backup folder, the folder of voice recordings ...): never taken from a
 // project, and taken from an options file only after the writer has seen it and agreed
@@ -53,6 +56,8 @@ void sync();
 void suspend();
 void resume();
 bool suspended();
+// File > Options is open in "This project" (between beginProjectEdit() and endProjectEdit()).
+bool projectEditing();
 
 // File > Options in "This project": from begin to end nothing is synced (the dialog writes every
 // option into the merged copy; takeProjectValues() sorts them out).

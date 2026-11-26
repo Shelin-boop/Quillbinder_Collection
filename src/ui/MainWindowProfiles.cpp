@@ -230,13 +230,18 @@ bool MainWindow::switchProfile(const QString &name)
 {
     if (name.compare(profiles::active(), Qt::CaseInsensitive) == 0)
         return true;
+    if (!profileui::confirmLowerBackupKeep(this, name))
+        return false;
+    const QStringList refused = profileui::askPlacesAtSwitch(this, name); // a profile another computer wrote
     saveWindowSettings(); // what the window is now goes into the profile that is left
-    const profiles::SwitchReport r = profiles::switchTo(name);
+    const profiles::SwitchReport r = profiles::switchTo(name, refused);
     if (!r.ok) {
         QMessageBox::warning(this, tr("Switch Profile"), r.error);
         return false;
     }
     reloadFromProfile(r.languageChanged);
+    if (!r.warning.isEmpty())
+        QMessageBox::warning(this, tr("Switch Profile"), r.warning);
     return true;
 }
 

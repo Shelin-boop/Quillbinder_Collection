@@ -6,9 +6,11 @@
 //   xvfb-run -a ./qb_v0950c_tests /tmp/shots
 #include "core/Project.h"
 #include "core/ProjectTemplates.h"
+#include "core/SettingsLayer.h"
 #include "ui/AppSettings.h"
 #include "ui/ColorPickButton.h"
 #include "ui/Commands.h"
+#include "ui/FirstStartDialog.h"
 #include "ui/KeyboardLayout.h"
 #include "ui/Layouts.h"
 #include "ui/Profiles.h"
@@ -334,8 +336,10 @@ int main(int argc, char **argv)
         const QStringList places = profiles::placesIn(file);
         check(places.contains(QStringLiteral("backup/dir")) && places.contains(QStringLiteral("app/citationsApp")),
               QStringLiteral("the folders and programs it names are found (they are asked about)"), places.join(QLatin1Char(',')));
-        check(!places.contains(QStringLiteral("sharing/docConverter")) && !places.contains(QStringLiteral("app/forename")),
-              QStringLiteral("a plain word and the person's name are no places"));
+        check(!places.contains(QStringLiteral("app/forename")),
+              QStringLiteral("the person's name is no place"));
+        check(places.contains(QStringLiteral("sharing/docConverter")),
+              QStringLiteral("0.95.0 review: every non-empty value of a place key is asked about, a plain word too (as the options were)"));
         QSettings text(file, QSettings::IniFormat);
         check(!text.contains(QStringLiteral("app/forename")), QStringLiteral("the person's name is not in the file"));
         // import without the places
@@ -499,6 +503,160 @@ int main(int argc, char **argv)
         commands::clear();
         delete align;
         delete plain;
+    }
+
+    // ============================================================ 0.95.0 review: the faults found in profiles
+    {
+        QString err;
+        // ---- 1c: one-time marks are no profile settings
+        {
+            clearSettings();
+            QDir(profiles::userDir()).removeRecursively();
+            QSettings s;
+            s.setValue(QStringLiteral("app/firstStartDone"), true);
+            s.setValue(QStringLiteral("toolbars/toolButtonsPlaced"), QStringList{QStringLiteral("tool:a.b"), QStringLiteral("tool:c.d")});
+            s.setValue(QStringLiteral("toolbars/paraButtons0604"), true);
+            s.setValue(QStringLiteral("zoomPartsMigrated"), true);
+            s.sync();
+            check(!profiles::ownsKey(QStringLiteral("app/firstStartDone")) && !profiles::ownsKey(QStringLiteral("toolbars/toolButtonsPlaced"))
+                      && !profiles::ownsKey(QStringLiteral("toolbars/paraButtons0604")) && !profiles::ownsKey(QStringLiteral("zoomPartsMigrated"))
+                      && profiles::ownsKey(QStringLiteral("toolbars/extraShown")),
+                  QStringLiteral("review 1c: the first-start mark and the tool buttons' mark are no profile settings"));
+            check(!FirstStartDialog::due(), QStringLiteral("(the first start is done)"));
+            const profiles::SwitchReport r = profiles::switchTo(QStringLiteral("Shelin's"));
+            QSettings after;
+            after.sync();
+            check(r.ok && !FirstStartDialog::due() && after.contains(QStringLiteral("toolbars/toolButtonsPlaced"))
+                      && after.value(QStringLiteral("toolbars/paraButtons0604")).toBool(),
+                  QStringLiteral("review 1c: a switch to the built-in profile keeps the marks (no first-start page, no tool buttons placed again)"), r.error);
+            profiles::switchTo(QStringLiteral("Default"));
+        }
+        // ---- 1b: a rename by case only keeps the profile
+        {
+            check(profiles::duplicate(QStringLiteral("Default"), QStringLiteral("work"), &err), QStringLiteral("(a profile 'work')"), err);
+            const QString before = QDir(profiles::userDir()).entryList({QStringLiteral("*.qbprofile")}, QDir::Files).join(QLatin1Char(','));
+            check(profiles::rename(QStringLiteral("work"), QStringLiteral("Work"), &err), QStringLiteral("review 1b: a rename by case only is accepted"), err);
+            const QStringList files = QDir(profiles::userDir()).entryList({QStringLiteral("*.qbprofile")}, QDir::Files);
+            check(profiles::exists(QStringLiteral("Work")) && profiles::names().contains(QStringLiteral("Work")) && files.join(QLatin1Char(',')) == before
+                      && QFile::exists(profiles::userDir() + QLatin1Char('/') + QStringLiteral("work.qbprofile")),
+                  QStringLiteral("review 1b: the profile and its file are still there afterwards"), files.join(QLatin1Char(',')) + QStringLiteral(" | ") + before);
+            check(profiles::rename(QStringLiteral("Work"), QStringLiteral("Office"), &err) && !profiles::exists(QStringLiteral("Work"))
+                      && profiles::exists(QStringLiteral("Office")) && QDir(profiles::userDir()).entryList({QStringLiteral("*.qbprofile")}, QDir::Files).size() == files.size(),
+                  QStringLiteral("(a real rename still moves the file)"), err);
+            profiles::remove(QStringLiteral("Office"));
+        }
+        // ---- 1a: a project with its own settings is open during a switch
+        {
+            clearSettings();
+            QSettings prog;
+            prog.setValue(QStringLiteral("editing/spellLanguage"), QStringLiteral("Y"));
+            prog.setValue(QStringLiteral("app/projectFirst"), true);
+            prog.sync();
+            profiles::Content b;
+            b.values.insert(QStringLiteral("editing/spellLanguage"), QStringLiteral("Z"));
+            b.computer = profiles::computerId();
+            check(profiles::write(QStringLiteral("B"), b, &err), QStringLiteral("(a profile B with Z)"), err);
+            const QString ini = work.path() + QLatin1String("/proj/settings/options.ini");
+            QDir().mkpath(QFileInfo(ini).absolutePath());
+            {
+                QSettings o(ini, QSettings::IniFormat);
+                o.setValue(QStringLiteral("editing/spellLanguage"), QStringLiteral("X"));
+                o.sync();
+            }
+            settingslayer::setProjectFirst(true);
+            settingslayer::activate(ini);
+            check(settingslayer::active() && QSettings().value(QStringLiteral("editing/spellLanguage")).toString() == QLatin1String("X"),
+                  QStringLiteral("(the project's own value X is what the program reads)"));
+            const profiles::SwitchReport r = profiles::switchTo(QStringLiteral("B"));
+            check(r.ok && settingslayer::active() && !settingslayer::suspended(), QStringLiteral("review 1a: the switch ends with the project's values on again"), r.error);
+            auto fileValue = [](const QString &file) { return QSettings(file, QSettings::IniFormat).value(QStringLiteral("editing/spellLanguage")).toString(); };
+            check(fileValue(ini) == QLatin1String("X"), QStringLiteral("review 1a: the project's own settings are not overwritten by the profile's"), fileValue(ini));
+            check(fileValue(settingslayer::programFile()) == QLatin1String("Z"), QStringLiteral("... the program's own value is the profile's"), fileValue(settingslayer::programFile()));
+            const profiles::SwitchReport back = profiles::switchTo(QStringLiteral("Default"));
+            check(back.ok && fileValue(ini) == QLatin1String("X") && fileValue(settingslayer::programFile()) == QLatin1String("Y"),
+                  QStringLiteral("review 1a: and back: the project X, the program Y"), fileValue(ini) + fileValue(settingslayer::programFile()));
+            profiles::Content d, bb;
+            profiles::read(QStringLiteral("Default"), &d);
+            profiles::read(QStringLiteral("B"), &bb);
+            check(d.values.value(QStringLiteral("editing/spellLanguage")).toString() == QLatin1String("Y")
+                      && bb.values.value(QStringLiteral("editing/spellLanguage")).toString() == QLatin1String("Z"),
+                  QStringLiteral("review 1a: the profile left holds the program's value, not the project's (Default Y, B Z)"),
+                  d.values.value(QStringLiteral("editing/spellLanguage")).toString());
+            // an export while Options edit "This project" is refused
+            settingslayer::beginProjectEdit();
+            check(!profiles::exportTo(QStringLiteral("Default"), work.path() + QLatin1String("/edit.qbprofile"), &err) && !err.isEmpty(),
+                  QStringLiteral("review 1a: an export while Options edit This Project is refused"), err);
+            settingslayer::endProjectEdit();
+            check(profiles::exportTo(QStringLiteral("Default"), work.path() + QLatin1String("/edit.qbprofile"), &err)
+                      && QSettings(work.path() + QLatin1String("/edit.qbprofile"), QSettings::IniFormat).value(QStringLiteral("editing/spellLanguage")).toString() == QLatin1String("Y"),
+                  QStringLiteral("(otherwise it exports the program's values)"), err);
+            settingslayer::activate(QString());
+            profiles::remove(QStringLiteral("B"));
+        }
+        // ---- 1d: places and programs from another computer
+        {
+            clearSettings();
+            const QString cmd = writeText(work.path() + QLatin1String("/cmd.qbprofile"),
+                                          "[profile]\nversion=1\nname=Cmd\n[app]\ncitationsApp=sh -c x\n[editing]\nspellLanguage=en_GB\n");
+            check(profiles::placesIn(cmd).contains(QStringLiteral("app/citationsApp")),
+                  QStringLiteral("review 1d: a command without a slash is in the question at an import"), profiles::placesIn(cmd).join(QLatin1Char(',')));
+            // a file put into the profiles folder by hand (copied or synced)
+            writeText(profiles::userDir() + QLatin1String("/Foreign.qbprofile"),
+                      "[profile]\nversion=1\nname=Foreign\n[backup]\ndir=/somewhere/else\n[app]\ncitationsApp=sh -c x\n[editing]\nspellLanguage=fr_FR\n");
+            check(profiles::exists(QStringLiteral("Foreign")), QStringLiteral("(a foreign file in the folder is listed)"));
+            const QStringList ask = profiles::placesAsked(QStringLiteral("Foreign"));
+            check(ask.contains(QStringLiteral("backup/dir")) && ask.contains(QStringLiteral("app/citationsApp")),
+                  QStringLiteral("review 1d: a profile file of another computer asks about its places at the switch"), ask.join(QLatin1Char(',')));
+            check(profiles::createFromCurrent(QStringLiteral("Mine"), &err) && profiles::placesAsked(QStringLiteral("Mine")).isEmpty()
+                      && profiles::placesAsked(QStringLiteral("Default")).isEmpty(),
+                  QStringLiteral("review 1d: a profile this program wrote asks nothing"), err);
+            check(profiles::duplicate(QStringLiteral("Foreign"), QStringLiteral("Foreign copy"), &err)
+                      && !profiles::placesAsked(QStringLiteral("Foreign copy")).isEmpty(),
+                  QStringLiteral("review 1d: a copy of a foreign profile is still foreign"), err);
+            const profiles::SwitchReport r = profiles::switchTo(QStringLiteral("Foreign"), ask);
+            QSettings after;
+            after.sync();
+            check(r.ok && !after.contains(QStringLiteral("backup/dir")) && !after.contains(QStringLiteral("app/citationsApp"))
+                      && after.value(QStringLiteral("editing/spellLanguage")).toString() == QLatin1String("fr_FR") && r.places.size() == ask.size(),
+                  QStringLiteral("review 1d: refused places are not taken at the switch, the rest is"), r.error);
+            profiles::switchTo(QStringLiteral("Default"));
+            QString e2;
+            const QString id = profiles::importFrom(cmd, {}, &e2);
+            check(!id.isEmpty() && profiles::placesAsked(id).isEmpty(), QStringLiteral("(a profile imported with the writer's answer is the program's)"), e2);
+        }
+        // ---- 1e: smaller things
+        {
+            clearSettings();
+            profiles::Content low;
+            low.values.insert(QStringLiteral("backup/keep"), 3);
+            profiles::write(QStringLiteral("Low"), low);
+            QSettings().setValue(QStringLiteral("backup/keep"), 20);
+            int now = 0, then = 0;
+            check(profiles::lowersBackupKeep(QStringLiteral("Low"), &now, &then) && now == 20 && then == 3,
+                  QStringLiteral("review 1e: a profile that keeps fewer backups is noticed before the switch"), QStringLiteral("%1 %2").arg(now).arg(then));
+            check(!profiles::lowersBackupKeep(QStringLiteral("Default"), &now, &then) || then == 25,
+                  QStringLiteral("(a profile without the number gives the standard)"));
+            // layouts that cannot be written leave the old ones
+            const QString lay = layouts::userDir();
+            writeText(lay + QLatin1String("/Old.json"), R"({"name":"Old"})");
+            profiles::Content bad;
+            bad.hasLayouts = true;
+            bad.layouts.insert(QStringLiteral("Fine"), QByteArray(R"({"name":"Fine"})"));
+            bad.layouts.insert(QString(300, QLatin1Char('x')), QByteArray("{}"));
+            profiles::write(QStringLiteral("BadLayouts"), bad);
+            QSettings().setValue(QStringLiteral("backup/keep"), 3);
+            const profiles::SwitchReport r = profiles::switchTo(QStringLiteral("BadLayouts"));
+            check(r.ok && !r.warning.isEmpty() && QFile::exists(lay + QLatin1String("/Old.json")) && !QFile::exists(lay + QLatin1String("/Fine.json")),
+                  QStringLiteral("review 1e: layouts that cannot all be set keep the old ones, and the switch says so"), r.warning);
+            profiles::switchTo(QStringLiteral("Default"));
+            // an own theme named with a backslash or two dots is not written
+            const QString evil = writeText(work.path() + QLatin1String("/evil.qbprofile"),
+                                           "[profile]\nversion=1\nname=Evil\nthemeJson={}\n[appearance]\ntheme=user:..\\\\x\n");
+            profiles::importFrom(evil, {}, &err);
+            check(QDir(theme::userThemeDir()).entryList(QDir::Files).filter(QStringLiteral("\\")).isEmpty()
+                      && !QFile::exists(QFileInfo(theme::userThemeDir()).absolutePath() + QLatin1String("/x.json")),
+                  QStringLiteral("review 1e: an own theme's name with a backslash is refused"));
+        }
     }
 
     std::printf("\n%d failure(s)\n", failures);

@@ -16,6 +16,7 @@
 #include <QSettings>
 #include <QStyleHints>
 #include <QTemporaryFile>
+#include <QUuid>
 
 #include <algorithm>
 
@@ -29,6 +30,8 @@ constexpr const char *kSuffix = ".qbprofile";
 // the keys a profile never holds (the person's, the computer's, once-only marks)
 bool excluded(const QString &key)
 {
+    if (settingslayer::onceMarker(key))
+        return true; // the first start, an update's one-time change, a migration (0.95.0: a switch must not do them again)
     static const QStringList prefixes = {QStringLiteral("profile/"), QStringLiteral("quillbinderOptions/"), QStringLiteral("layouts/"),
                                          QStringLiteral("themes/removed"), QStringLiteral("window/mobile")};
     for (const QString &p : prefixes)
@@ -73,11 +76,28 @@ QVariantMap valuesOf(QSettings &s)
     return out;
 }
 
-bool looksLikePlace(const QVariant &v)
+// While a project's own settings are in use, QSettings() reads a merged copy of the program's and the project's values; a
+// profile holds the program's own. Within the scope the project layer is put aside (and put on again after).
+struct LayerPause
 {
-    const QString t = v.toString();
-    return t.contains(QLatin1Char('/')) || t.contains(QLatin1Char('\\')) || t.contains(QLatin1Char(':'));
-}
+    bool did = false;
+    LayerPause()
+    {
+        if (settingslayer::active() && !settingslayer::suspended() && !settingslayer::projectEditing()) {
+            settingslayer::suspend();
+            did = true;
+        }
+    }
+    ~LayerPause()
+    {
+        if (did)
+            settingslayer::resume();
+    }
+    LayerPause(const LayerPause &) = delete;
+    LayerPause &operator=(const LayerPause &) = delete;
+};
+
+bool badName(const QString &n) { return n.contains(QLatin1Char('/')) || n.contains(QLatin1Char('\\')) || n.contains(QLatin1String("..")); }
 
 Content contentOf(QSettings &s)
 {
@@ -85,6 +105,7 @@ Content contentOf(QSettings &s)
     c.values = valuesOf(s);
     c.themeId = c.values.value(QStringLiteral("appearance/theme")).toString();
     c.themeJson = s.value(QStringLiteral("profile/themeJson")).toString();
+    c.computer = s.value(QStringLiteral("profile/computer")).toString();
     if (s.value(QStringLiteral("profile/layouts")).toBool()) {
         c.hasLayouts = true;
         s.beginGroup(QStringLiteral("layouts"));
@@ -97,7 +118,7 @@ Content contentOf(QSettings &s)
 
 QString ownThemeText(const QString &id)
 {
-    if (!id.startsWith(QLatin1String("user:")) || id.contains(QLatin1Char('/')))
+    if (!id.startsWith(QLatin1String("user:")) || badName(id))
         return QString();
     QFile f(theme::userThemeDir() + QLatin1Char('/') + id.mid(5) + QLatin1String(".json"));
     return f.open(QIODevice::ReadOnly) ? QString::fromUtf8(f.readAll()) : QString();
@@ -119,6 +140,8 @@ QByteArray iniOf(const QString &name, const Content &c, QString *error)
         QSettings to(path, QSettings::IniFormat);
         to.setValue(QStringLiteral("profile/version"), 1);
         to.setValue(QStringLiteral("profile/name"), name);
+        if (!c.computer.isEmpty())
+            to.setValue(QStringLiteral("profile/computer"), c.computer);
         for (auto it = c.values.cbegin(); it != c.values.cend(); ++it)
             to.setValue(it.key(), it.value());
         if (c.hasLayouts) {
@@ -214,24 +237,41 @@ bool builtInContent(Content *out)
     return !out->values.isEmpty();
 }
 
+// The new layouts are written beside the old ones first; the old ones are replaced only when all of them could be written
 bool setLayouts(const Content &c)
 {
     QDir dir(layouts::userDir());
     dir.mkpath(QStringLiteral("."));
+    const QString stage = dir.filePath(QStringLiteral(".staging"));
+    QDir(stage).removeRecursively();
+    QDir().mkpath(stage);
+    bool ok = true;
+    QStringList staged;
+    for (auto it = c.layouts.cbegin(); it != c.layouts.cend() && ok; ++it) {
+        if (badName(it.key()))
+            continue;
+        ok = safesave::writeFile(stage + QLatin1Char('/') + it.key() + QLatin1String(".json"), it.value());
+        staged << it.key();
+    }
+    if (!ok) {
+        QDir(stage).removeRecursively();
+        return false; // the layouts there were stay as they are
+    }
     for (const QFileInfo &fi : dir.entryInfoList({QStringLiteral("*.json")}, QDir::Files))
         QFile::remove(fi.absoluteFilePath());
-    bool ok = true;
-    for (auto it = c.layouts.cbegin(); it != c.layouts.cend(); ++it) {
-        if (it.key().contains(QLatin1Char('/')) || it.key().contains(QLatin1String("..")))
-            continue;
-        ok = safesave::writeFile(dir.filePath(it.key() + QLatin1String(".json")), it.value()) && ok;
+    for (const QString &k : staged) {
+        const QString to = dir.filePath(k + QLatin1String(".json"));
+        const QString from = stage + QLatin1Char('/') + k + QLatin1String(".json");
+        if (!QFile::rename(from, to) && !QFile::copy(from, to))
+            ok = false;
     }
+    QDir(stage).removeRecursively();
     return ok;
 }
 
 void putOwnTheme(const Content &c)
 {
-    if (c.themeJson.isEmpty() || !c.themeId.startsWith(QLatin1String("user:")) || c.themeId.contains(QLatin1Char('/')))
+    if (c.themeJson.isEmpty() || !c.themeId.startsWith(QLatin1String("user:")) || badName(c.themeId))
         return;
     const QString file = theme::userThemeDir() + QLatin1Char('/') + c.themeId.mid(5) + QLatin1String(".json");
     if (QFile::exists(file))
@@ -326,8 +366,22 @@ void setActive(const QString &name)
     s.sync();
 }
 
+QString computerId()
+{
+    LayerPause pause; // the id is the program's own, not the project's
+    QSettings s;
+    QString id = s.value(QStringLiteral("profile/computerId")).toString();
+    if (id.isEmpty()) {
+        id = QUuid::createUuid().toString(QUuid::WithoutBraces);
+        s.setValue(QStringLiteral("profile/computerId"), id);
+        s.sync();
+    }
+    return id;
+}
+
 Content captureCurrent()
 {
+    LayerPause pause;
     QSettings s;
     s.sync();
     Content c;
@@ -340,6 +394,7 @@ Content captureCurrent()
             c.layouts.insert(fi.completeBaseName(), f.readAll());
     }
     c.themeJson = ownThemeText(c.themeId);
+    c.computer = computerId();
     return c;
 }
 
@@ -372,10 +427,15 @@ bool write(const QString &name, const Content &content, QString *error)
     return writeFileFor(file, name, content, error);
 }
 
-bool saveActive(QString *error) { return write(active(), captureCurrent(), error); }
+bool saveActive(QString *error)
+{
+    LayerPause pause;
+    return write(active(), captureCurrent(), error);
+}
 
 SwitchReport switchTo(const QString &name, const QStringList &refusedPlaces)
 {
+    LayerPause pause; // the program's own values are read and written, not the merged copy of an open project's
     SwitchReport r;
     r.from = active();
     r.to = name;
@@ -401,11 +461,15 @@ SwitchReport switchTo(const QString &name, const QStringList &refusedPlaces)
         s.setValue(it.key(), it.value());
     }
     s.sync();
+    if (s.status() != QSettings::NoError)
+        r.warning = QObject::tr("The settings of the profile could not be written completely. Check the folder of the settings file.");
     const QString newLanguage = s.value(QStringLiteral("app/language"), QStringLiteral("en")).toString();
     r.languageChanged = oldLanguage != newLanguage;
     putOwnTheme(target);
-    if (target.hasLayouts)
-        setLayouts(target);
+    if (target.hasLayouts && !setLayouts(target)) {
+        const QString w = QObject::tr("The layouts of the profile could not be set; the layouts you had are kept.");
+        r.warning = r.warning.isEmpty() ? w : r.warning + QLatin1Char(' ') + w;
+    }
     setActive(name);
     r.ok = true;
     return r;
@@ -413,6 +477,7 @@ SwitchReport switchTo(const QString &name, const QStringList &refusedPlaces)
 
 bool createFromCurrent(const QString &name, QString *error)
 {
+    LayerPause pause;
     const QString n = name.trimmed();
     if (n.isEmpty() || nameInUse(n)) {
         if (error)
@@ -477,7 +542,9 @@ bool rename(const QString &name, const QString &newName, QString *error)
     const QString old = fileOf(name);
     if (!write(n, c, error))
         return false;
-    if (!old.isEmpty())
+    // a change of case only ("work" to "Work") writes the very file that was there: it must stay
+    const QString now = fileOf(n);
+    if (!old.isEmpty() && (now.isEmpty() || QFileInfo(old).canonicalFilePath() != QFileInfo(now).canonicalFilePath()))
         QFile::remove(old);
     if (wasActive)
         setActive(n);
@@ -502,6 +569,12 @@ bool duplicate(const QString &name, const QString &newName, QString *error)
 
 bool exportTo(const QString &name, const QString &file, QString *error)
 {
+    if (settingslayer::projectEditing()) {
+        if (error)
+            *error = QObject::tr("Options are open for This Project. Close them or choose All Projects, then export the profile.");
+        return false;
+    }
+    LayerPause pause;
     Content c;
     if (name.compare(active(), Qt::CaseInsensitive) == 0)
         c = captureCurrent();
@@ -524,10 +597,38 @@ QStringList placesIn(const QString &file)
     QSettings from(file, QSettings::IniFormat);
     QStringList out;
     for (const QString &k : from.allKeys())
-        if (ownsKey(k) && settingslayer::namesProgramOrPlace(k) && !from.value(k).toString().trimmed().isEmpty()
-            && looksLikePlace(from.value(k)))
-            out << k;
+        if (ownsKey(k) && settingslayer::namesProgramOrPlace(k) && !from.value(k).toString().trimmed().isEmpty())
+            out << k; // every value, as the files of options were asked about (a command has no slash)
     return out;
+}
+
+QStringList placesAsked(const QString &name)
+{
+    Content c;
+    const QString file = fileOf(name);
+    if (file.isEmpty() || !read(name, &c) || c.computer == computerId())
+        return {};
+    QStringList out;
+    for (auto it = c.values.cbegin(); it != c.values.cend(); ++it)
+        if (settingslayer::namesProgramOrPlace(it.key()) && !it.value().toString().trimmed().isEmpty())
+            out << it.key();
+    return out;
+}
+
+bool lowersBackupKeep(const QString &name, int *now, int *then)
+{
+    Content c;
+    if (!read(name, &c))
+        return false;
+    LayerPause pause;
+    const int def = 25; // AppSettings::backupKeep's value without a saved one
+    const int cur = QSettings().value(QStringLiteral("backup/keep"), def).toInt();
+    const int next = c.values.contains(QStringLiteral("backup/keep")) ? c.values.value(QStringLiteral("backup/keep")).toInt() : def;
+    if (now)
+        *now = cur;
+    if (then)
+        *then = next;
+    return next != 0 && (cur == 0 || next < cur);
 }
 
 QString importFrom(const QString &file, const QStringList &refusedPlaces, QString *error)
@@ -545,6 +646,7 @@ QString importFrom(const QString &file, const QStringList &refusedPlaces, QStrin
         wanted = QFileInfo(file).completeBaseName();
     for (const QString &k : refusedPlaces)
         c.values.remove(k);
+    c.computer = computerId(); // the writer was asked about the places; what is taken is theirs now
     if (!isProfile)
         c.hasLayouts = false; // an options file knows no layouts
     const QString name = uniqueName(wanted);

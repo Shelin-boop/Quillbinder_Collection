@@ -26,7 +26,10 @@ namespace profileui {
 
 namespace {
 int s_placesAnswer = -1;
+int s_keepAnswer = -1;
 }
+
+void setKeepAnswerForTests(int answer) { s_keepAnswer = answer; }
 
 void setPlacesAnswerForTests(int answer) { s_placesAnswer = answer; }
 
@@ -44,6 +47,51 @@ QString askName(QWidget *parent, const QString &title, const QString &suggestion
             return name;
         QMessageBox::information(parent, title, QObject::tr("There is already a profile named “%1”. Choose another name.").arg(name));
     }
+}
+
+QStringList askPlacesAtSwitch(QWidget *parent, const QString &name)
+{
+    const QStringList places = profiles::placesAsked(name);
+    if (places.isEmpty())
+        return {};
+    profiles::Content c;
+    profiles::read(name, &c);
+    QStringList shown;
+    for (const QString &k : places)
+        shown << QStringLiteral("%1 = %2").arg(k, c.values.value(k).toString().left(200));
+    bool take = false;
+    if (s_placesAnswer >= 0) {
+        take = s_placesAnswer == 1;
+    } else {
+        QMessageBox ask(QMessageBox::Question, QObject::tr("Switch Profile"),
+                        QObject::tr("The profile “%1” was not saved by this program on this computer. It also names programs, folders, "
+                                    "files or addresses (a folder may not exist on this computer):\n\n%2\n\nTake these too? Take "
+                                    "them only if you made the file yourself or trust where it comes from.")
+                            .arg(name, shown.join(QLatin1Char('\n'))),
+                        QMessageBox::Yes | QMessageBox::No, parent);
+        ask.setObjectName(QStringLiteral("switchProfilePlaces"));
+        ask.setDefaultButton(QMessageBox::No);
+        take = ask.exec() == QMessageBox::Yes;
+    }
+    return take ? QStringList() : places;
+}
+
+bool confirmLowerBackupKeep(QWidget *parent, const QString &name)
+{
+    int now = 0, then = 0;
+    if (!profiles::lowersBackupKeep(name, &now, &then))
+        return true;
+    if (s_keepAnswer >= 0)
+        return s_keepAnswer == 1;
+    const QString nowText = now == 0 ? QObject::tr("all") : QString::number(now);
+    QMessageBox ask(QMessageBox::Question, QObject::tr("Switch Profile"),
+                    QObject::tr("The profile “%1” keeps %2 backups of a project, the settings now keep %3. Backups beyond the "
+                                "smaller number are deleted at the next backup. Switch anyway?")
+                        .arg(name, QString::number(then), nowText),
+                    QMessageBox::Yes | QMessageBox::No, parent);
+    ask.setObjectName(QStringLiteral("switchProfileKeep"));
+    ask.setDefaultButton(QMessageBox::No);
+    return ask.exec() == QMessageBox::Yes;
 }
 
 QString importWithQuestion(QWidget *parent, const QString &file, QString *error)

@@ -39,8 +39,14 @@ QString askName(QWidget *parent, const QString &title, const QString &suggestion
 // Import with the question about programs, folders and addresses in the file (as Load Options from File asks). Returns the
 // new profile's name or an empty string; `error` is set for a file that is no profile.
 QString importWithQuestion(QWidget *parent, const QString &file, QString *error);
+// The same question at a switch to a profile that another computer wrote (a file copied or synced into the profiles
+// folder): the keys that were refused (all of them, or none). Empty when the profile has nothing to ask about.
+QStringList askPlacesAtSwitch(QWidget *parent, const QString &name);
+// A switch to a profile that keeps fewer backups: false when the writer says no.
+bool confirmLowerBackupKeep(QWidget *parent, const QString &name);
 // Test hook: the answer to the question about places (true = take them); unset: ask.
 void setPlacesAnswerForTests(int answer);   // -1 ask, 0 no, 1 yes
+void setKeepAnswerForTests(int answer);     // the question about fewer backups: -1 ask, 0 no, 1 yes
 } // namespace profileui
 
 } // namespace qb

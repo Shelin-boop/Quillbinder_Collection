@@ -128,6 +128,7 @@ int main(int argc, char **argv)
     QCoreApplication::setApplicationName(QStringLiteral("QuillbinderV0950dTest"));
     QApplication app(argc, argv);
     QApplication::setStyle(QStyleFactory::create(QStringLiteral("Fusion")));
+    profileui::setKeepAnswerForTests(1); // a switch to fewer backups: yes (the review's question has its own checks below)
     QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << QStringLiteral(":/icons"));
     QIcon::setThemeName(QStringLiteral("qbicons"));
     QIcon::setFallbackThemeName(QStringLiteral("qbicons"));
@@ -352,6 +353,25 @@ int main(int argc, char **argv)
             if (a->text() == QLatin1String("Shelin's"))
                 shelins = a;
         check(shelins && shelins->isChecked(), QStringLiteral("View > Profiles ticks it"));
+        // review 1e: a switch that lowers the number of backups to keep asks first (Shelin's keeps 50, Default 25)
+        profileui::setKeepAnswerForTests(0);
+        check(!w.switchProfile(QStringLiteral("Default")) && profiles::active() == QLatin1String("Shelin's"),
+              QStringLiteral("review 1e: a switch to a profile that keeps fewer backups is not made when the writer says no"), profiles::active());
+        profileui::setKeepAnswerForTests(1);
+        // review 1d: a profile file of another computer asks about its places at the switch (the window passes the answer on)
+        {
+            QFile f(profiles::userDir() + QLatin1String("/Elsewhere.qbprofile"));
+            if (f.open(QIODevice::WriteOnly))
+                f.write("[profile]\nversion=1\nname=Elsewhere\n[app]\ncitationsApp=sh -c x\n[backup]\nkeep=60\n");
+            f.close();
+            profileui::setPlacesAnswerForTests(0);
+            check(w.switchProfile(QStringLiteral("Elsewhere")) && QSettings().value(QStringLiteral("app/citationsApp")).toString().isEmpty()
+                      && QSettings().value(QStringLiteral("backup/keep")).toInt() == 60,
+                  QStringLiteral("review 1d: the window asks about the places of a foreign profile; refused, they are not taken (the rest is)"));
+            profileui::setPlacesAnswerForTests(-1);
+            w.switchProfile(QStringLiteral("Shelin's"));
+            profiles::remove(QStringLiteral("Elsewhere"));
+        }
         // delete it from the manager: it goes from the list and stays away
         w.switchProfile(QStringLiteral("Default"));
         check(as.theme == before, QStringLiteral("back to the theme before"), as.theme);

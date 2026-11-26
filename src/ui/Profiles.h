@@ -53,7 +53,11 @@ struct Content
     bool hasLayouts = false;               // false: the layouts on this computer stay as they are
     QString themeId;                       // appearance/theme, for the list
     QString themeJson;                     // an own theme the profile names ("user:..."), so that an export carries it
+    QString computer;                      // the installation that wrote the file (empty: not known); see computerId()
 };
+// An id of this installation, made at the first need and kept in the program's settings. A profile file carries the id of
+// the program that wrote it: a file that carries another id (copied, synced, or without one) comes from another computer.
+QString computerId();
 // Is the settings key part of a profile?
 bool ownsKey(const QString &key);
 // The program's settings as a profile now (the layouts and the own theme included).
@@ -72,12 +76,19 @@ struct SwitchReport
     QString from, to;
     bool languageChanged = false;   // takes effect at the next start
     QStringList places;             // keys the profile gave that were not taken (a place that was refused)
+    QString warning;                // something that did not go as it should, though the switch was made (a write failed)
 };
 // Saves the active profile, then makes the settings those of `name`: every key that belongs to profiles is replaced (a
 // key the profile lacks goes back to the standard), the layouts are replaced when the profile has layouts, and the
 // profile is marked active. The window is not touched: MainWindow::switchProfile reads everything anew afterwards.
 // `refusedPlaces`: keys of the profile whose value names a program, folder or address that the writer did not agree to.
 SwitchReport switchTo(const QString &name, const QStringList &refusedPlaces = QStringList());
+// The keys of a profile that name a program, folder, file or address, when the profile was not written by this installation
+// (a file copied or synced into the profiles folder): the writer is asked about them before the switch. Empty for a
+// profile of this computer.
+QStringList placesAsked(const QString &name);
+// The numbers of backup/keep now and in the profile, when the profile keeps fewer backups (0 = all); false when it does not.
+bool lowersBackupKeep(const QString &name, int *now, int *then);
 // A new profile with the settings as they are now; it becomes the active one (the profile left keeps its own state).
 bool createFromCurrent(const QString &name, QString *error = nullptr);
 bool remove(const QString &name, QString *error = nullptr);   // not the active profile, not "Default"
