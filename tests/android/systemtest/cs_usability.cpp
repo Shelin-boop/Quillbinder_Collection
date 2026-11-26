@@ -473,7 +473,7 @@ void caseU07()
     const QList<Change> changes = {
         {QStringLiteral("View > Show Ruler"), [w] { chooseByMenu(w, QStringLiteral("showRuler")); }},
         {QStringLiteral("View > Page View"), [w] { chooseByMenu(w, QStringLiteral("pageView")); }},
-        {QStringLiteral("Window > Themes > Sepia"), [w] { menuPath(w, QStringLiteral("Window > Themes > Sepia")); }},
+        {QStringLiteral("View > Themes > Sepia"), [w] { menuPath(w, QStringLiteral("View > Themes > Sepia")); }},
         {QStringLiteral("View > Zoom In"), [w] { chooseByMenu(w, QStringLiteral("zoomIn")); }},
         {QStringLiteral("spelling language"), [] { AppSettings::instance().spellLanguage = QStringLiteral("de_DE"); AppSettings::instance().save(); }},
         {QStringLiteral("quote style"), [] { AppSettings::instance().quoteStyle = QStringLiteral("de"); AppSettings::instance().save(); }},
@@ -495,7 +495,7 @@ void caseU07()
         rows << row;
     }
     writeTable(QStringLiteral("u07-settings.tsv"), rows);
-    menuPath(w, QStringLiteral("Window > Themes > Light"));
+    menuPath(w, QStringLiteral("View > Themes > Light"));
     finishProject(w);
     dropWindow(w);
 }
@@ -682,7 +682,7 @@ void caseU12()
     int low = 0;
     for (const QString &t : {QStringLiteral("Light"), QStringLiteral("Dark Mode"), QStringLiteral("Sepia"), QStringLiteral("Slate"), QStringLiteral("Midnight"), QStringLiteral("Ocean"),
                              QStringLiteral("High Contrast")}) {
-        menuPath(w, QStringLiteral("Window > Themes > ") + t);
+        menuPath(w, QStringLiteral("View > Themes > ") + t);
         settle(300);
         shot(w, QStringLiteral("legibility-") + QString(t).replace(QLatin1Char(' '), QLatin1Char('-')));
         for (const auto &pr : pairs) {
@@ -698,7 +698,7 @@ void caseU12()
     }
     writeTable(QStringLiteral("u12-contrast.tsv"), rows);
     fact(QStringLiteral("U-12 areas below 4.5 : 1"), low);
-    menuPath(w, QStringLiteral("Window > Themes > Light"));
+    menuPath(w, QStringLiteral("View > Themes > Light"));
     finishProject(w);
     dropWindow(w);
 }

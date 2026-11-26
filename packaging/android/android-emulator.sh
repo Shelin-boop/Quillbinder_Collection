@@ -228,6 +228,9 @@ if [ -n "$pid" ]; then
   shown() { "$ADB" shell dumpsys input_method 2>/dev/null | grep -o 'mInputShown=[a-z]*' | head -1 | tr -d '\r'; }
   "$ADB" root > /dev/null 2>&1; sleep 4; "$ADB" wait-for-device > /dev/null 2>&1; sleep 2
   "$ADB" shell getevent -pl > "$OUT/emu-input-devices.txt" 2>&1
+  # Android 0.94.0 (to-do item 34): what a virtual mouse and keyboard could be made with (Ctrl + wheel, Ctrl / Shift +
+  # click, Alt + letter): Android's uinput tool, and the input devices the emulator has (their names)
+  say "  virtual input (item 34): uinput tool: $("$ADB" shell 'command -v uinput || echo none' 2>/dev/null | tr -d '\r'); input devices: $(grep -E '^add device|^  name:' "$OUT/emu-input-devices.txt" | grep -o '"[^"]*"' | tr '\n' ' ')"
   # (the emulator has eleven touch devices, one per display it could have: the first display's is ..._touch_1)
   tdev=$(tr -d '\r' < "$OUT/emu-input-devices.txt" | awk '/^add device/ {d=$NF} /name:/ && /"virtio_input_multi_touch_1"/ {print d; exit}')
   tmax() { tr -d '\r' < "$OUT/emu-input-devices.txt" | awk -v d="$tdev" -v k="$1" '/^add device/ {cur=$NF}
@@ -334,8 +337,17 @@ if [ -n "$pid" ]; then
   # while Android's keyboard program is at work (places as on the 1472 x 920 screen)
   for item in "Edit:54" "Insert:96" "View:141" "Navigate:197" "Project:259" "Documents:330" "Format:400" "Window:460" "Help:511"; do
     tap "${item##*:}" "$MY"; sleep 2
-    [ "${item%%:*}" = Format ] && shot "s7-format-menu"
-    step "S7 ${item%%:*}" "the ${item%%:*} menu with the cursor in the text (keyboard attached: $KBD)"
+    jit=""
+    if [ "${item%%:*}" = Format ]; then
+      # Android 0.94.0 (to-do item 34, finding 6 of 2026-11-16: menus that jitter): a second picture 1.5 s later; an
+      # open menu that stands still differs in no pixel of its part of the screen
+      shot "s7-format-menu"; sleep 1.5; shot "s7-format-menu-later"
+      if command -v compare > /dev/null 2>&1; then
+        jit=$(compare -metric AE -fuzz 8% "$OUT/emu-s7-format-menu.png[420x600+380+40]" "$OUT/emu-s7-format-menu-later.png[420x600+380+40]" null: 2>&1 | awk '{print int($1)}')
+        jit="; pixels of the menu's part that changed in 1.5 s (jitter, item 34): ${jit:-?}"
+      fi
+    fi
+    step "S7 ${item%%:*}" "the ${item%%:*} menu with the cursor in the text (keyboard attached: $KBD)$jit"
     back_to_text
   done
   # S4: a long press on a word (a selection with handles), then the menu
@@ -374,16 +386,16 @@ if [ -n "$pid" ]; then
     close_menu
   fi
   # K: a backup (Ctrl+Shift+B is File > Back Up > Back Up Now): it must arrive in Documents/Quillbinder/Backups.
-  # The program tells where it saved it (a window with OK: run 21 left it open, and it took every later touch).
+  # Since 0.94.0 (to-do item 85) the program tells where it saved it in the message line under the binder, which
+  # closes by itself (before: a window with OK, which, left open, took every later touch and key: run 45563156002).
   # (adb's "input keycombination" exists from Android 13 on: on an older tablet K makes no backup and says so)
   [ "$API" -ge 33 ] || say "  K: Android $API has no key combinations from adb: no backup is asked for"
-  "$ADB" shell input keycombination 113 59 30 > /dev/null 2>&1; sleep 8; shot "k1-backup"
-  "$ADB" shell ls -la /sdcard/Documents/Quillbinder/Backups > "$OUT/emu-backups.txt" 2>&1
+  # (the picture k1 after 3 seconds shows the message line; the list of the folder is read once it has gone)
+  "$ADB" shell input keycombination 113 59 30 > /dev/null 2>&1; sleep 3; shot "k1-backup"
+  sleep 6; "$ADB" shell ls -la /sdcard/Documents/Quillbinder/Backups > "$OUT/emu-backups.txt" 2>&1
   step "K" "Back Up Now: zip files in the tablet's Documents/Quillbinder/Backups: $(grep -c '\.zip' "$OUT/emu-backups.txt")"
-  # Android 0.93.2: with the keyboard attached (no on-screen keyboard) the window stands at the top left, its OK at
-  # 459,133 (run 45563156002's pictures: left open, it took the later steps' keys and touches); 927,236 was its OK
-  # with the on-screen keyboard up. A new window on Android does not get the keys, so it is closed by its button.
-  tap 459 133; sleep 2; tap 927 236; sleep 2; key 111; sleep 1; shot "k2-closed"
+  # nothing to close (Esc only in case a window of an error stands open)
+  key 111; sleep 1; shot "k2-closed"
   # P: put away by Android. A word is typed and Home pressed at once (before the program's own autosave, which
   # waits for a pause of two seconds): the word must be in the project's files on the shared storage.
   tap "$TX" "$TY"; sleep 2
@@ -421,17 +433,19 @@ if [ -n "$pid" ]; then
     sleep 1; key 66; sleep 4
     shot "s6-$(echo "${item%%:*}" | tr 'A-Z ' 'a-z-')"
     step "S6 ${item%%:*}" "File > ${item%%:*} with the cursor in the text"
-    key 111; sleep 2
+    # Android 0.94.0 (to-do item 62): the new window is made the active one, so Esc must close it (the program logs
+    # which window each Esc reached: "windows: Esc for ..."); the picture after Esc shows whether it did
+    key 111; sleep 2; shot "s6-$(echo "${item%%:*}" | tr 'A-Z ' 'a-z-')-esc"
     back_to_text
   done
   # O: File > Show Project in File Manager (android/MobileOpen.cpp): the tablet's Files app at the project's folder.
   # With the on-screen keyboard up the menu scrolls and its last rows are below the screen's edge (run 45432275744's
   # picture ends at Print Current Document and the scroll arrow), so the tap at 475 of 0.93.0 missed (Android 0.93.2,
   # to-do item 54). Reached with the keys: Up with no row chosen takes the menu's last row (Exit) and scrolls to it,
-  # five more go up through Options, Files on This Tablet, Install Update or Add-on, Convert Markdown to the step;
-  # Enter starts it.
+  # four more go up through Options, Files on This Tablet, Convert Markdown to the step; Enter starts it. (0.94.0:
+  # Install Update or Add-on moved to Help > Add-ons and Updates: one row fewer than in 0.93.x.)
   tap "$MX" "$MY"; sleep 2
-  for _ in 1 2 3 4 5 6; do key 19; done
+  for _ in 1 2 3 4 5; do key 19; done
   sleep 1; shot "o0-file-menu"; key 66; sleep 5; shot "o1-files-app"
   fr=$(front)
   say "  O: File > Show Project in File Manager: in front: $fr"
@@ -463,6 +477,12 @@ grep -nE "fingers:|files: |files \(|tablet: |open: |windows: (surface|no context
   # (Qt draws once more while Android takes the app's surfaces away; seen in run 19 at the Home key, harmless there)
   echo "pictures Qt could not draw (\"Failed to make context current\"; expected only when the app is put away): $(grep -c 'Failed to make context current' /tmp/emu-logcat-all.txt)"
   grep -E 'Failed to make context current|put away by Android' /tmp/emu-logcat-all.txt | sed -E 's/^[0-9-]+ ([0-9:.]+) .*: /  \1 /' | cut -c1-120 | head -8
+  # Android 0.94.0 (to-do item 62): where each new window was put, which window was the active one, and which window
+  # Enter and Esc reached
+  # Android 0.94.0 (to-do item 79): the layout the input method reports and the shortcut set the first start chose
+  echo "the keyboard's layout (item 79): $(grep -o 'keyboard layout from the input method: .*' /tmp/emu-logcat-all.txt | head -1 | cut -c1-200)"
+  echo "new windows and the keys (android/MobileCare.cpp, item 62):"
+  grep 'windows: ' /tmp/emu-logcat-all.txt | grep -vE 'windows: (surface|no context)' | sed -E 's/^[0-9-]+ ([0-9:.]+) .*windows: /  \1 /' | cut -c1-200 | head -40
   echo "the cursor's handle, as android/MobileHandles.cpp allowed it:"
   grep 'handles: the cursor' /tmp/emu-logcat-all.txt | sed -E 's/^[0-9-]+ ([0-9:.]+) .*handles: /  \1 /' | tail -16
 } >> "$SUM"

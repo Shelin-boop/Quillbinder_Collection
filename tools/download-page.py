@@ -1,16 +1,21 @@
 #!/usr/bin/env python3
 """Writes the download page of a release (2026-11-12): one button per system for the full version (the program with
-all add-ons), the steps to start it, and links to all files of the release. Since 0.90.2 (the writer's wish) each
-system also lists its other downloads: the program alone (the small AppImage), the program update and the audio and
-video add-ons. The release workflow publishes it on the
-repository's GitHub Pages (job download-page of .github/workflows/release.yml).
+all add-ons), the steps to start it, and links to the files. The release workflows publish it on the repository's
+GitHub Pages (job download-page of .github/workflows/release.yml, release-windows.yml and release-android.yml).
+
+Since Android 0.94.0 (to-do item 91) the page is two pages:
+  - index.html: each system's card has the button for the full version, then the program alone and the program
+    update (Android has neither: a new version is a new APK), and one link to the add-ons page;
+  - addons/index.html (the folder addons/ of the site): every add-on of each system on its own (name, one line,
+    size), the other files (the audio and video package, the Windows zip files) and the official add-ons.
+(From 0.90.2 to 0.94.0 the cards listed all of it.)
 
     tools/download-page.py <folder with the release's files (their names are enough)> <tag> <out dir>
         [--also <folder> <tag>]...
 
 A file "full-addons-size" in the folder (the add-ons' installed size in bytes) adds the space to the Linux card.
-A file of the folder may hold its own size in bytes (the release workflow writes it so); the page names the size of
-the add-on packages it lists under each system's other downloads (name, one line, size; 0.94.0).
+A file of the folder may hold its own size in bytes (the release workflow writes it so); the add-ons page names the
+size of each add-on package (0.94.0).
 
 Since 0.91.2 each system can have a last number of its own (working rules, section 8), so a new Linux release may
 come before the Windows files of its number: a system without a file in the release is taken from the "--also"
@@ -27,6 +32,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+INSTALL = "Help &gt; Add-ons and Updates &gt; Install Update or Add-on"
 
 
 def cmake_var(name):
@@ -47,38 +54,44 @@ def pick(files):
 
 
 def others(files):
-    """The other downloads of each system (0.90.2): [(file, what it is, how to use it)], only those the release has."""
+    """The two other downloads on each system's card (item 91): the program alone, then the program update;
+    [(file, what it is, how to use it)], only those the release has. Android has neither."""
     win = lambda f: "windows" in f.lower()
     first = lambda test: next((f for f in files if test(f)), "")
+    alone = "without the add-ons; they can be installed later, one by one"
+    update = "for a Quillbinder you already have (%s)" % INSTALL
     linux = [
-        (first(lambda f: f.endswith(".AppImage") and "-full-" not in f),
-         "The program alone (the small AppImage)", "without the add-ons; they can be installed later, one by one"),
-        (first(lambda f: f.endswith("-update.qbpkg") and not win(f)),
-         "Program update", "for a Quillbinder you already have (Help &gt; Add-ons and Updates &gt; Install Update or Add-on)"),
-        (first(lambda f: f == "media-all-formats.qbpkg"),
-         "Audio and video add-ons", "sound and video in all common formats (Help &gt; Add-ons and Updates &gt; Install Update or Add-on)"),
+        (first(lambda f: f.endswith(".AppImage") and "-full-" not in f), "The program alone (the small AppImage)", alone),
+        (first(lambda f: f.endswith("-update.qbpkg") and not win(f)), "Program update", update),
     ]
     has_setup = bool(first(lambda f: f.endswith("-setup.exe") and win(f) and "-full-" in f))
+    # Windows: the setup program of the program alone when the release has setup programs, else its zip
+    small = first(lambda f: f.endswith("-setup.exe") and win(f) and "-full-" not in f) if has_setup else \
+        first(lambda f: f.endswith(".zip") and win(f) and "-full-" not in f and "symbols" not in f)
     windows = [
-        (first(lambda f: has_setup and f.endswith(".zip") and win(f) and "-full-" in f),
-         "The full version as a zip file", "the same files as the setup program unpacks; unpack it into a folder of your own"),
-        (first(lambda f: f.endswith("-setup.exe") and win(f) and "-full-" not in f),
-         "The program alone (setup program)", "without the add-ons; they can be installed later, one by one"),
-        (first(lambda f: f.endswith(".zip") and win(f) and "-full-" not in f and "symbols" not in f),
-         "The program alone as a zip file" if has_setup else "The program alone",
-         "without the add-ons; they can be installed later, one by one"),
-        (first(lambda f: f.endswith("-update.qbpkg") and win(f)),
-         "Program update", "for a Quillbinder you already have (Help &gt; Add-ons and Updates &gt; Install Update or Add-on)"),
-        (first(lambda f: f.startswith("media-all-formats") and win(f) and f.endswith(".qbpkg")),
-         "Audio and video add-ons", "sound and video in all common formats (Help &gt; Add-ons and Updates &gt; Install Update or Add-on)"),
-    ]
-    # Android 0.92.0: the app carries Translation and Proofreading; its package on its own, for an app that lacks it
-    android = [
-        (first(lambda f: f.startswith("translation-proofreading-android") and f.endswith(".qbpkg")),
-         "Translation and Proofreading on its own", "the app has it already; for Help &gt; Add-ons and Updates &gt; Install Update or Add-on"),
+        (small, "The program alone (setup program)" if has_setup else "The program alone", alone),
+        (first(lambda f: f.endswith("-update.qbpkg") and win(f)), "Program update", update),
     ]
     keep = lambda rows: [r for r in rows if r[0]]
-    return {"linux": keep(linux), "windows": keep(windows), "android": keep(android)}
+    return {"linux": keep(linux), "windows": keep(windows), "android": []}
+
+
+def extras(files):
+    """The other files of each system for the add-ons page (item 91): [(file, what it is, how to use it)]."""
+    win = lambda f: "windows" in f.lower()
+    first = lambda test: next((f for f in files if test(f)), "")
+    media = "sound and video in all common formats (%s)" % INSTALL
+    linux = [(first(lambda f: f == "media-all-formats.qbpkg"), "Audio and video add-ons", media)]
+    has_setup = bool(first(lambda f: f.endswith("-setup.exe") and win(f) and "-full-" in f))
+    unpack = "the same files as the setup program unpacks; unpack it into a folder of your own"
+    windows = [
+        (first(lambda f: has_setup and f.endswith(".zip") and win(f) and "-full-" in f), "The full version as a zip file", unpack),
+        (first(lambda f: has_setup and f.endswith(".zip") and win(f) and "-full-" not in f and "symbols" not in f),
+         "The program alone as a zip file", unpack),
+        (first(lambda f: f.startswith("media-all-formats") and win(f) and f.endswith(".qbpkg")), "Audio and video add-ons", media),
+    ]
+    keep = lambda rows: [r for r in rows if r[0]]
+    return {"linux": keep(linux), "windows": keep(windows), "android": []}
 
 
 # the size of each file by its name, in bytes (filled by main() from the folder: an empty file has none)
@@ -167,8 +180,8 @@ def official_addons(root=ROOT):
 
 
 def addons_section(addons, home):
-    """The list of official add-ons for the page (empty when there are none): name and version, one line, the systems
-    it is for, where to get it, and the note for data that may be used non-commercially only."""
+    """The list of official add-ons for the add-ons page (empty when there are none): name and version, one line, the
+    systems it is for, where to get it, and the note for data that may be used non-commercially only."""
     if not addons:
         return ""
     items = []
@@ -210,92 +223,29 @@ def space_note(addon_bytes):
             'a window shows the progress.</p>' % mb)
 
 
-def page(files, tag, also=(), addon_bytes=0):
-    """also: [(files, tag)] of older releases, newest first (0.91.2): a system the release has no file for is taken
-    from the first of them that has one."""
-    home = cmake_var("APP_HOMEPAGE") or "https://github.com/Shelin-boop/Quillbinder_Collection"
-    shown = shown_of(tag)
-    full = pick(files)
-    more = others(files)
-    addon_of = addon_rows(files)
+# the systems in the page's order without script: (key, name, what it runs on)
+SYSTEMS = [("windows", "Windows 11", "64-bit"), ("linux", "Linux", "x86_64, an AppImage"),
+           ("android", "Android", "tablets, Android 9 or later")]
+
+
+def gather(files, tag, also=()):
+    """Each system's files from its newest release: (full, more, extra, addon_of, tag_of). also: [(files, tag)] of
+    older releases, newest first (0.91.2): a system the release has no file for is taken from them."""
+    full, more, extra, addon_of = pick(files), others(files), extras(files), addon_rows(files)
     tag_of = {key: tag for key in full}
     # 0.93.0 (a version line per system): each system shows its newest release, the one with the highest version
     # among the release and the older ones (a tie goes to the earlier one in the list: this release, then the
     # newest-first "--also" ones); before, the first release that had a file of the system won
     for older_files, older_tag in also:
-        older_full, older_more, older_addons = pick(older_files), others(older_files), addon_rows(older_files)
+        older_full, older_more, older_extra, older_addons = pick(older_files), others(older_files), extras(older_files), addon_rows(older_files)
         for key in full:
             if older_full[key] and (not full[key] or tag_version(older_tag) > tag_version(tag_of[key])):
-                full[key], more[key], tag_of[key] = older_full[key], older_more[key], older_tag
+                full[key], more[key], extra[key], tag_of[key] = older_full[key], older_more[key], older_extra[key], older_tag
                 addon_of[key] = older_addons[key]
-    url = lambda key, f: "%s/releases/download/%s/%s" % (home, tag_of[key], f)
-    if full["windows"].endswith("-setup.exe"):
-        # 0.90.4: the setup program only unpacks (no admin rights, nothing in the registry, no entry under Apps)
-        win_steps = ["Start the downloaded file. Windows may warn because it is not signed: "
-                     "&ldquo;More info&rdquo;, then &ldquo;Run anyway&rdquo;.",
-                     "Choose a folder of your own, for example "
-                     "<code>C:\\Users\\&lt;your name&gt;\\Quillbinder</code> (not Program Files). The setup program only "
-                     "unpacks Quillbinder into it: it needs no admin rights and changes nothing else on the computer.",
-                     "Start <b>quillbinder.exe</b> in that folder. A guide at the first start explains where the program "
-                     "keeps its files and offers a Start menu entry."]
-    else:
-        win_steps = ["Unpack the zip file completely into a folder of your own, for example "
-                     "<code>C:\\Users\\&lt;your name&gt;\\Quillbinder</code> (not into Program Files).",
-                     "Start <b>quillbinder.exe</b> in it. Windows may warn because the program is not signed: "
-                     "&ldquo;More info&rdquo;, then &ldquo;Run anyway&rdquo;.",
-                     "A guide at the first start explains where the program keeps its files."]
-    systems = [
-        ("windows", "Windows 11", "64-bit", win_steps),
-        ("linux", "Linux", "x86_64, an AppImage",
-         ["Make the file executable: right-click &gt; Properties &gt; Permissions &gt; <i>Is executable</i>.",
-          "Double-click it. Your desktop may ask whether to execute the file (KDE Plasma: <i>Execute</i> or <i>Cancel</i>): "
-          "choose <i>Execute</i>. The add-ons are installed at the first start.",
-          "Help &gt; Add to Application Menu puts it into the menu of the desktop."]),
-        # Android (0.91.3, 2026-11-16, the first public APK)
-        ("android", "Android", "tablets, Android 9 or later",
-         ["Download the APK file on the tablet and open it. Android asks whether the browser or the Files app may "
-          "install apps: allow it for this install, then &ldquo;Install&rdquo;.",
-          "At the first start Quillbinder asks for access to the tablet&rsquo;s files: it keeps projects, backups and "
-          "exports in <b>Documents/Quillbinder</b>. Switch on &ldquo;All files access&rdquo; for it and go back.",
-          "A new version comes as a new APK, which installs over the old one and keeps your settings; "
-          "Help &gt; Check for Updates Now tells you when there is one."]),
-    ]
-    cards = []
-    for key, name, detail, steps in systems:
-        f = full[key]
-        if tag_of[key] != tag:
-            # this system's newest files are in an older release (0.91.2)
-            detail += ", version %s" % shown_of(tag_of[key])
-        if f:
-            body = ('<a class="button" href="%s">Download for %s</a>\n'
-                    '      <p class="file">%s</p>%s\n      <ol>%s</ol>'
-                    % (html.escape(url(key, f)), html.escape(name), html.escape(f),
-                       space_note(addon_bytes) if key == "linux" and tag_of[key] == tag else "",
-                       "".join("<li>%s</li>" % s for s in steps)))
-        else:
-            body = '<p class="later">Comes later.</p>'
-        if more[key]:
-            rows = "".join('\n        <li><a href="%s">%s</a>: %s <span class="file">%s</span></li>'
-                           % (html.escape(url(key, of)), what, how, html.escape(of)) for of, what, how in more[key])
-            body += ('\n      <h3>Other downloads</h3>\n      <ul class="others">%s\n      </ul>' % rows)
-        if addon_of[key]:
-            # the add-ons of this system on their own (name, one line, size): for the program alone, or one more later
-            arows = "".join('\n        <li data-addon-file="%s"><a href="%s">%s</a>: %s <span class="file">%s%s</span></li>'
-                            % (html.escape(af), html.escape(url(key, af)), html.escape(an), html.escape(al), html.escape(af),
-                               (" &middot; " + size_text(ab)) if size_text(ab) else "") for af, an, al, ab in addon_of[key])
-            body += ('\n      <h3>Add-ons on their own</h3>\n      <p class="small">The full version has them all. With the '
-                     'program alone, install one with Help &gt; Add-ons and Updates &gt; Install Update or Add-on.</p>\n'
-                     '      <ul class="others">%s\n      </ul>' % arows)
-        cards.append('    <section class="system" data-system="%s">\n      <h2>%s <span>%s</span></h2>\n      %s\n    </section>'
-                     % (key, html.escape(name), html.escape(detail), body))
-    addons = addons_section(official_addons(), home)
-    return """<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Quillbinder Download</title>
-<style>
+    return full, more, extra, addon_of, tag_of
+
+
+STYLE = """<style>
   :root { --bg: #fbfaf7; --fg: #1d1d1b; --muted: #5d5b55; --card: #ffffff; --line: #dedbd2; --accent: #2f5d8a; --accent-fg: #ffffff; }
   @media (prefers-color-scheme: dark) {
     :root { --bg: #1b1c1e; --fg: #ecebe7; --muted: #a9a6a0; --card: #242528; --line: #3a3b3f; --accent: #7fb0e0; --accent-fg: #10161c; }
@@ -318,6 +268,8 @@ def page(files, tag, also=(), addon_bytes=0):
   .others li { margin: 4px 0; }
   .others a { color: var(--accent); font-weight: 600; }
   .others .file { display: block; margin: 0; }
+  .folder { margin: 14px 0 0; }
+  .folder a { color: var(--accent); font-weight: 600; }
   .later { color: var(--muted); margin: 0; }
   .official p { margin: 2px 0 6px; }
   .small { color: var(--muted); font-size: 14px; }
@@ -325,24 +277,9 @@ def page(files, tag, also=(), addon_bytes=0):
   .more a { color: var(--accent); }
   .note { color: var(--muted); font-size: 14px; margin-top: 28px; }
   code { font-size: 15px; }
-</style>
-</head>
-<body>
-<main>
-  <h1>Quillbinder %(shown)s</h1>
-  <p class="lead">A writing studio for long texts. The full version: the program with all add-ons, one download.</p>
-  <div id="systems">
-%(cards)s
-  </div>
-%(addons)s  <p class="more"><a href="%(release)s">All files of this version</a> (single add-ons, the symbols for crash reports,
-  checksums) &middot; <a href="%(home)s/releases">Earlier versions</a> &middot;
-  <a href="%(home)s">Source code</a> &middot;
-  <a href="%(home)s/issues/new/choose">Report a problem or propose a function</a></p>
-  <p class="note">Quillbinder is an independent program. It is not made by or connected with Literature &amp; Latte,
-  the maker of Scrivener; it reads and writes Scrivener 3 projects. This is %(article)s %(label)s version: keep backups of
-  your projects and a copy of your manuscripts outside the program.</p>
-</main>
-<script>
+</style>"""
+
+SCRIPT = """<script>
   // the visitor's own system first
   (function () {
     var ua = navigator.userAgent || "";
@@ -351,12 +288,149 @@ def page(files, tag, also=(), addon_bytes=0):
     var card = own && box.querySelector('[data-system="' + own + '"]');
     if (card) box.insertBefore(card, box.firstChild);
   })();
-</script>
+</script>"""
+
+
+def document(title, body):
+    return """<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>%s</title>
+%s
+</head>
+<body>
+<main>
+%s</main>
+%s
 </body>
 </html>
-""" % {"shown": html.escape(shown), "cards": "\n".join(cards), "addons": addons, "release": html.escape("%s/releases/tag/%s" % (home, tag)),
-       "home": html.escape(home), "label": html.escape(cmake_var("APP_VERSION_LABEL") or "test"),
-       "article": "an" if (cmake_var("APP_VERSION_LABEL")[:1].lower() in "aeiou" and cmake_var("APP_VERSION_LABEL")) else "a"}
+""" % (html.escape(title), STYLE, body, SCRIPT)
+
+
+def note():
+    label = cmake_var("APP_VERSION_LABEL")
+    article = "an" if (label[:1].lower() in "aeiou" and label) else "a"
+    return ('  <p class="note">Quillbinder is an independent program. It is not made by or connected with Literature &amp; Latte,\n'
+            '  the maker of Scrivener; it reads and writes Scrivener 3 projects. This is %s %s version: keep backups of\n'
+            '  your projects and a copy of your manuscripts outside the program.</p>\n' % (article, html.escape(label or "test")))
+
+
+def rows_html(key, rows, url):
+    return "".join('\n        <li><a href="%s">%s</a>: %s <span class="file">%s</span></li>'
+                   % (html.escape(url(key, of)), what, how, html.escape(of)) for of, what, how in rows)
+
+
+def page(files, tag, also=(), addon_bytes=0):
+    """The main page (index.html). also: [(files, tag)] of older releases, newest first (0.91.2)."""
+    home = cmake_var("APP_HOMEPAGE") or "https://github.com/Shelin-boop/Quillbinder_Collection"
+    shown = shown_of(tag)
+    full, more, extra, addon_of, tag_of = gather(files, tag, also)
+    url = lambda key, f: "%s/releases/download/%s/%s" % (home, tag_of[key], f)
+    if full["windows"].endswith("-setup.exe"):
+        # 0.90.4: the setup program only unpacks (no admin rights, nothing in the registry, no entry under Apps)
+        win_steps = ["Start the downloaded file. Windows may warn because it is not signed: "
+                     "&ldquo;More info&rdquo;, then &ldquo;Run anyway&rdquo;.",
+                     "Choose a folder of your own, for example "
+                     "<code>C:\\Users\\&lt;your name&gt;\\Quillbinder</code> (not Program Files). The setup program only "
+                     "unpacks Quillbinder into it: it needs no admin rights and changes nothing else on the computer.",
+                     "Start <b>quillbinder.exe</b> in that folder. A guide at the first start explains where the program "
+                     "keeps its files and offers a Start menu entry."]
+    else:
+        win_steps = ["Unpack the zip file completely into a folder of your own, for example "
+                     "<code>C:\\Users\\&lt;your name&gt;\\Quillbinder</code> (not into Program Files).",
+                     "Start <b>quillbinder.exe</b> in it. Windows may warn because the program is not signed: "
+                     "&ldquo;More info&rdquo;, then &ldquo;Run anyway&rdquo;.",
+                     "A guide at the first start explains where the program keeps its files."]
+    steps_of = {
+        "windows": win_steps,
+        "linux": ["Make the file executable: right-click &gt; Properties &gt; Permissions &gt; <i>Is executable</i>.",
+                  "Double-click it. Your desktop may ask whether to execute the file (KDE Plasma: <i>Execute</i> or <i>Cancel</i>): "
+                  "choose <i>Execute</i>. The add-ons are installed at the first start.",
+                  "Help &gt; Add to Application Menu puts it into the menu of the desktop."],
+        # Android (0.91.3, 2026-11-16, the first public APK)
+        "android": ["Download the APK file on the tablet and open it. Android asks whether the browser or the Files app may "
+                    "install apps: allow it for this install, then &ldquo;Install&rdquo;.",
+                    "At the first start Quillbinder asks for access to the tablet&rsquo;s files: it keeps projects, backups and "
+                    "exports in <b>Documents/Quillbinder</b>. Switch on &ldquo;All files access&rdquo; for it and go back.",
+                    "A new version comes as a new APK, which installs over the old one and keeps your settings; "
+                    "Help &gt; Add-ons and Updates &gt; Check for Updates Now tells you when there is one."],
+    }
+    cards = []
+    for key, name, detail in SYSTEMS:
+        f = full[key]
+        if tag_of[key] != tag:
+            # this system's newest files are in an older release (0.91.2)
+            detail += ", version %s" % shown_of(tag_of[key])
+        if f:
+            body = ('<a class="button" href="%s">Download for %s</a>\n'
+                    '      <p class="file">%s</p>%s\n      <ol>%s</ol>'
+                    % (html.escape(url(key, f)), html.escape(name), html.escape(f),
+                       space_note(addon_bytes) if key == "linux" and tag_of[key] == tag else "",
+                       "".join("<li>%s</li>" % s for s in steps_of[key])))
+            if more[key]:
+                body += '\n      <h3>Other downloads</h3>\n      <ul class="others">%s\n      </ul>' % rows_html(key, more[key], url)
+            # item 91: the add-ons and the other files of the system are on the add-ons page (the site's folder addons/)
+            body += ('\n      <p class="folder"><a href="addons/#%s">Add-ons and other files for %s</a></p>'
+                     % (key, html.escape(name)))
+        else:
+            body = '<p class="later">Comes later.</p>'
+        cards.append('    <section class="system" data-system="%s">\n      <h2>%s <span>%s</span></h2>\n      %s\n    </section>'
+                     % (key, html.escape(name), html.escape(detail), body))
+    body = ("""  <h1>Quillbinder %(shown)s</h1>
+  <p class="lead">A writing studio for long texts. The full version: the program with all add-ons, one download.</p>
+  <div id="systems">
+%(cards)s
+  </div>
+  <p class="more"><a href="addons/">Add-ons and other files</a> (each add-on on its own, the official add-ons) &middot;
+  <a href="%(release)s">All files of this version</a> (the symbols for crash reports, checksums) &middot;
+  <a href="%(home)s/releases">Earlier versions</a> &middot; <a href="%(home)s">Source code</a> &middot;
+  <a href="%(home)s/issues/new/choose">Report a problem or propose a function</a></p>
+""" % {"shown": html.escape(shown), "cards": "\n".join(cards), "release": html.escape("%s/releases/tag/%s" % (home, tag)),
+       "home": html.escape(home)}) + note()
+    return document("Quillbinder Download", body)
+
+
+def addons_page(files, tag, also=()):
+    """The add-ons page (addons/index.html, item 91): per system each add-on on its own and the other files, then the
+    official add-ons."""
+    home = cmake_var("APP_HOMEPAGE") or "https://github.com/Shelin-boop/Quillbinder_Collection"
+    shown = shown_of(tag)
+    full, more, extra, addon_of, tag_of = gather(files, tag, also)
+    url = lambda key, f: "%s/releases/download/%s/%s" % (home, tag_of[key], f)
+    how = {"linux": "The full version has them all. With the program alone, install one with %s." % INSTALL,
+           "windows": "The full version has them all. With the program alone, install one with %s." % INSTALL,
+           "android": "The app has them already; a package on its own is for an app that lacks it (%s)." % INSTALL}
+    sections = []
+    for key, name, detail in SYSTEMS:
+        if tag_of[key] != tag:
+            detail += ", version %s" % shown_of(tag_of[key])
+        parts = []
+        if addon_of[key]:
+            # the add-ons of this system on their own (name, one line, size)
+            arows = "".join('\n        <li data-addon-file="%s"><a href="%s">%s</a>: %s <span class="file">%s%s</span></li>'
+                            % (html.escape(af), html.escape(url(key, af)), html.escape(an), html.escape(al), html.escape(af),
+                               (" &middot; " + size_text(ab)) if size_text(ab) else "") for af, an, al, ab in addon_of[key])
+            parts.append('<h3>Add-ons on their own</h3>\n      <p class="small">%s</p>\n      <ul class="others">%s\n      </ul>'
+                         % (how[key], arows))
+        if extra[key]:
+            parts.append('<h3>Other files</h3>\n      <ul class="others">%s\n      </ul>' % rows_html(key, extra[key], url))
+        if not parts:
+            parts.append('<p class="later">%s</p>' % ("No add-on packages of their own in this version." if full[key] else "Comes later."))
+        sections.append('    <section class="system" data-system="%s" id="%s">\n      <h2>%s <span>%s</span></h2>\n      %s\n    </section>'
+                        % (key, key, html.escape(name), html.escape(detail), "\n      ".join(parts)))
+    body = ("""  <h1>Quillbinder %(shown)s: add-ons and other files</h1>
+  <p class="lead">The full version of each system already has its add-ons: <a href="../">the downloads</a>.</p>
+  <div id="systems">
+%(sections)s
+  </div>
+%(official)s  <p class="more"><a href="../">Back to the downloads</a> &middot;
+  <a href="%(release)s">All files of this version</a> (the symbols for crash reports, checksums) &middot;
+  <a href="%(home)s/releases">Earlier versions</a></p>
+""" % {"shown": html.escape(shown), "sections": "\n".join(sections), "official": addons_section(official_addons(), home),
+       "release": html.escape("%s/releases/tag/%s" % (home, tag)), "home": html.escape(home)}) + note()
+    return document("Quillbinder Add-ons", body)
 
 
 def main(argv):
@@ -391,9 +465,11 @@ def main(argv):
         for n in names:
             if n.endswith(".qbpkg") and n not in SIZES:
                 read_sizes(rest[3 * i + 1], [n])
-    os.makedirs(argv[3], exist_ok=True)
+    os.makedirs(os.path.join(argv[3], "addons"), exist_ok=True)
     with open(os.path.join(argv[3], "index.html"), "w", encoding="utf-8") as f:
         f.write(page(files, argv[2], also, addon_bytes))
+    with open(os.path.join(argv[3], "addons", "index.html"), "w", encoding="utf-8") as f:
+        f.write(addons_page(files, argv[2], also))
     return 0
 
 
