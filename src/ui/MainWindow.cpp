@@ -7,9 +7,6 @@
 #include <memory>
 #include <QSet>
 #include "ui/ManualWindow.h"
-#ifdef Q_OS_ANDROID
-#include "ui/Language.h" // (the Android program's About text: English or German, see aboutText())
-#endif
 #include "ui/BarDock.h"
 #include "ui/GripBar.h"
 #include "ui/ToolbarConfig.h"
@@ -2310,37 +2307,8 @@ QString MainWindow::aboutText()
         .arg(QLatin1String(QB_APP_NAME), version, QLatin1String(qVersion()), QLatin1String(QB_APP_HOMEPAGE));
 #endif
 #ifdef Q_OS_ANDROID
-    // Android (2026-11-14): what the APK ships differs from the AppImage and from the Windows program. English and
-    // German side by side here, not through the translation file, which Linux and Windows share.
-    const QString android = language::active() == QLatin1String("de")
-        ? QString::fromUtf8(
-              "<h2>%1 %2</h2><p>Ein Schreibstudio für lange Texte: Binder, Pinnwand, Gliederung, Gesamttext, "
-              "Momentaufnahmen, Mindmaps, Objekte und Kompilieren.</p>"
-              "<p>Erstellt mit Qt %3.</p>"
-              "<p><b>Mitwirkende</b><br>Hauptentwickler: Claude.AI w. Opus 5.5 Extra</p>"
-              "<p><b>Lizenz</b><br>%1 ist freie Software unter der Apache-Lizenz 2.0: Jeder darf sie mit oder ohne "
-              "Gebühr verwenden, kopieren, ändern und weitergeben, wenn er die Lizenz und die Datei NOTICE beibehält, "
-              "die das Projekt und seinen Quellcode nennt. Ohne Gewährleistung.</p>"
-              "<p>Das Programm verwendet Teile anderer Projekte, jeweils unter ihrer eigenen Lizenz; <b>Lizenzen von "
-              "Drittanbietern…</b> weiter unten (auch im Hilfe-Menü) listet sie mit ihren vollständigen Texten auf:</p>"
-              "<ul><li>Qt, der eigene Build von The Qt Company für Android, unter der GNU LGPL Version 3. Seine "
-              "Bibliotheken sind separate Dateien in der APK; jede kann durch einen anderen Build derselben Version "
-              "ersetzt oder die APK aus dem Quellcode neu gebaut werden.</li>"
-              "<li>Hunspell (Rechtschreibung, verwendet unter der Mozilla Public License 1.1), in das Programm "
-              "eingebaut.</li>"
-              "<li>OpenSSL (sichere Verbindungen für den Import von Webseiten) unter der Apache-Lizenz 2.0.</li>"
-              "<li>Die Rechtschreibwörterbücher für Englisch und Deutsch von LibreOffice, unverändert: die deutschen "
-              "unter der GNU GPL Version 2 oder 3, Britisches Englisch unter der GNU LGPL, Amerikanisches Englisch "
-              "unter der SCOWL-Lizenz.</li>"
-              "<li>Die C++-Laufzeitbibliothek von Androids NDK (LLVM) sowie die AndroidX- und Kotlin-Bibliotheken im "
-              "Java-Teil der App, unter der Apache-Lizenz 2.0.</li></ul>"
-              "<p>Der Quellcode dieser Teile, wie verwendet, befindet sich im Release „Third-party source code“ von "
-              "%4.</p>"
-              "<p>Scrivener und Scapple sind Produkte von Literature &amp; Latte. %1 ist ein unabhängiges Programm, "
-              "das nicht von diesem Unternehmen stammt und nicht mit ihm verbunden ist; es liest und schreibt deren "
-              "Dateiformate, damit Ihre Projekte zwischen den Programmen wechseln können.</p>")
-        : QString::fromUtf8(
-              "<h2>%1 %2</h2><p>A writing studio for long texts: binder, corkboard, outliner, "
+    // Android (2026-11-14): what the APK ships differs from the AppImage and from the Windows program.
+    const QString android = tr("<h2>%1 %2</h2><p>A writing studio for long texts: binder, corkboard, outliner, "
               "combined text, snapshots, mind maps, objects and compile.</p>"
               "<p>Built with Qt %3.</p>"
               "<p><b>Credits</b><br>Main Developer: Claude.AI w. Opus 5.5 Extra</p>"
