@@ -17,6 +17,11 @@ New functions and fixes.
   Zoom Inspector Tabs Separately** on or off it is the same. The zoom you had for both lists is taken for both at first;
   **File > Options > Editing** lists the three parts, and the zoom list in the inspector names the one you zoomed last.
 
+- **Highlights are drawn exactly as picked**. A highlight was drawn about one third transparent, so a light green over a
+  dark field or on a yellowish page showed as another color. It is drawn fully now. Where the text on it would fall below
+  a contrast of 4.5 : 1, the text is shown dark or light on the screen only; the stored colors, the saved file and the
+  compiled file keep what you picked.
+
 - **The first-start page says plainly what moving the AppImage does**. The checkbox reads "Move the AppImage to
   ~/Applications, a fixed place the menu entry starts it from" (the bracket that sounded as if the move broke the entry is
   gone), and the grey line adds that an AppImage you move yourself has to be added to the menu again. Add to Application

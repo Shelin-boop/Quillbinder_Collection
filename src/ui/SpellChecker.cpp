@@ -418,7 +418,12 @@ void SpellHighlighter::highlightBlock(const QString &text)
     const QColor link = theme::color(theme::Role::EditorLink);
     const bool recolor = link.isValid() && link.rgb() != storedLink.rgb();
     const bool plainNotes = s_display.plainAnnotations;
-    if (scale || recolor || plainNotes) {
+    // 0.95.0: a highlight is drawn exactly as picked; where the text on it would be below 4.5 : 1, the text is drawn dark
+    // or light on screen only (its stored color stays)
+    bool highlighted = false;
+    for (auto fit = block.begin(); !fit.atEnd() && !highlighted; ++fit)
+        highlighted = fit.fragment().isValid() && fit.fragment().charFormat().property(props::Highlight).toBool();
+    if (scale || recolor || plainNotes || highlighted) {
         for (auto fit = block.begin(); !fit.atEnd(); ++fit) {
             const QTextFragment f = fit.fragment();
             if (!f.isValid())
@@ -432,6 +437,19 @@ void SpellHighlighter::highlightBlock(const QString &text)
                 shown.setForeground(link);
             if (plainNotes && NoteKind(cf.intProperty(props::NoteKind)) == NoteKind::InlineAnnotation)
                 shown.setForeground(theme::color(theme::Role::EditorText));
+            if (highlighted && cf.property(props::Highlight).toBool() && cf.background().style() == Qt::SolidPattern) {
+                QColor bg = cf.background().color();
+                bg.setAlpha(255);
+                if (cf.background().color().alpha() != 255)
+                    shown.setBackground(bg);
+                const QColor fg = cf.foreground().style() == Qt::SolidPattern && cf.hasProperty(QTextFormat::ForegroundBrush)
+                                      ? cf.foreground().color()
+                                      : theme::color(theme::Role::EditorText);
+                if (theme::contrastRatio(fg, bg) < 4.5) {
+                    const QColor dark(20, 20, 20), light(250, 250, 250);
+                    shown.setForeground(theme::contrastRatio(dark, bg) >= theme::contrastRatio(light, bg) ? dark : light);
+                }
+            }
             if (!shown.isEmpty())
                 setFormat(f.position() - block.position(), f.length(), shown);
         }

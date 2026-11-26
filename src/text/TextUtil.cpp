@@ -146,7 +146,11 @@ QTextCharFormat highlightFormat(const QColor &color)
 {
     QTextCharFormat cf;
     cf.setProperty(props::Highlight, true);
-    cf.setBackground(tint(color.isValid() ? color : QColor(255, 240, 80), 160));
+    // 0.95.0: the picked color, drawn fully (it was drawn with alpha 160, so a light green over a dark field showed as a
+    // different green); the text on it is made readable on screen only (SpellHighlighter)
+    QColor c = color.isValid() ? color : QColor(255, 240, 80);
+    c.setAlpha(255);
+    cf.setBackground(c);
     return cf;
 }
 

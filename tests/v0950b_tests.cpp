@@ -3,7 +3,13 @@
 //    current place (a fresh home, an older entry that is replaced and not doubled, a file moved by hand).
 #include "AppInfo.h"
 #include "compile/PluginManager.h"
+#include "text/RtfIO.h"
+#include "text/MarkdownIO.h"
+#include "text/TextProps.h"
+#include "text/TextUtil.h"
+#include "text/Styles.h"
 #include "ui/AppMenuEntry.h"
+#include "ui/SpellChecker.h"
 #include "ui/AppSettings.h"
 #include "ui/FirstStartDialog.h"
 #include "ui/Theme.h"
@@ -16,6 +22,11 @@
 #include <QFileInfo>
 #include <QLabel>
 #include <QSettings>
+#include <QTextBlock>
+#include <QTextDocument>
+#include <QTextEdit>
+#include <QTextCursor>
+#include <QImage>
 #include <QStyleFactory>
 #include <QTemporaryDir>
 #include <QTest>
@@ -131,6 +142,85 @@ static void appImageMove(const QString &home)
 #endif
 }
 
+// ---- item 99
+static void highlights()
+{
+    const QColor picked(0xb7, 0xf2, 0xb2);
+    const QTextCharFormat hf = text::highlightFormat(picked);
+    check(hf.background().color() == picked && hf.background().color().alpha() == 255,
+          QStringLiteral("the highlight's background is the picked color, fully"), hf.background().color().name(QColor::HexArgb));
+    check(text::highlightFormat().background().color().alpha() == 255, QStringLiteral("the standard highlight is drawn fully too"));
+    for (const char *name : {"dark", "light"}) {
+        AppSettings &as = AppSettings::instance();
+        as.theme = QString::fromLatin1(name);
+        as.save();
+        theme::apply();
+        QTextDocument doc;
+        SpellChecker::attach(&doc);
+        QTextCursor c(&doc);
+        c.insertText(QStringLiteral("plain words "));
+        QTextCharFormat cf = text::highlightFormat(picked);
+        c.insertText(QStringLiteral("highlighted words"), cf);
+        QTextCharFormat dark = text::highlightFormat(QColor(0x20, 0x30, 0x60));
+        c.insertText(QStringLiteral(" and a dark highlight"), dark);
+        SpellChecker::rehighlightAll();
+        settle(100);
+        const QTextBlock b = doc.firstBlock();
+        // the stored format keeps the picked color and no text color of its own
+        const QTextFragment fr = [&] {
+            for (auto it = b.begin(); !it.atEnd(); ++it)
+                if (it.fragment().text().startsWith(QStringLiteral("highlighted")))
+                    return it.fragment();
+            return QTextFragment();
+        }();
+        check(fr.isValid() && fr.charFormat().background().color() == picked && !fr.charFormat().hasProperty(QTextFormat::ForegroundBrush),
+              QStringLiteral("%1 theme: the stored color stays as picked, no text color is stored").arg(QLatin1String(name)));
+        const int pos = int(b.text().indexOf(QStringLiteral("highlighted")));
+        const int pos2 = int(b.text().indexOf(QStringLiteral("dark highlight")));
+        QColor shownFg1, shownFg2;
+        for (const auto &r : b.layout()->formats()) {
+            if (pos >= r.start && pos < r.start + r.length && r.format.hasProperty(QTextFormat::ForegroundBrush))
+                shownFg1 = r.format.foreground().color();
+            if (pos2 >= r.start && pos2 < r.start + r.length && r.format.hasProperty(QTextFormat::ForegroundBrush))
+                shownFg2 = r.format.foreground().color();
+        }
+        const QColor paperText = theme::color(theme::Role::EditorText);
+        const bool needs1 = theme::contrastRatio(paperText, picked) < 4.5;
+        const bool needs2 = theme::contrastRatio(paperText, QColor(0x20, 0x30, 0x60)) < 4.5;
+        check(needs1 == shownFg1.isValid() && (!shownFg1.isValid() || theme::contrastRatio(shownFg1, picked) >= 4.5),
+              QStringLiteral("%1 theme: the text on the light green is made readable on screen only when it needs it").arg(QLatin1String(name)));
+        check(needs2 == shownFg2.isValid() && (!shownFg2.isValid() || theme::contrastRatio(shownFg2, QColor(0x20, 0x30, 0x60)) >= 4.5),
+              QStringLiteral("%1 theme: ... and on the dark blue").arg(QLatin1String(name)));
+        // drawn: the picked color is in the picture exactly
+        QTextEdit ed;
+        ed.setDocument(&doc);
+        ed.resize(600, 120);
+        ed.show();
+        settle(300);
+        const QImage img = ed.viewport()->grab().toImage();
+        int exact = 0;
+        for (int y = 0; y < img.height(); ++y)
+            for (int x = 0; x < img.width(); ++x)
+                if (QColor(img.pixel(x, y)) == picked)
+                    ++exact;
+        check(exact > 200, QStringLiteral("%1 theme: the picked color is drawn exactly (%2 pixels)").arg(QLatin1String(name)).arg(exact));
+        shot(&ed, QStringLiteral("99-highlight-%1").arg(QLatin1String(name)));
+        ed.setDocument(nullptr);
+        // a compiled file and a saved file hold the picked color
+        Formatting f;
+        const QByteArray rtfData = rtf::write(&doc, f);
+        QTextDocument back;
+        rtf::read(rtfData, &back, f);
+        bool found = false;
+        for (auto it = back.firstBlock().begin(); !it.atEnd(); ++it)
+            if (it.fragment().charFormat().property(props::Highlight).toBool() && it.fragment().charFormat().background().color().rgb() == picked.rgb())
+                found = true;
+        check(found, QStringLiteral("%1 theme: a saved RTF file keeps the picked color").arg(QLatin1String(name)));
+    }
+    AppSettings::instance().theme = QStringLiteral("light");
+    theme::apply();
+}
+
 // @@FUNCTIONS@@
 
 // ---- main
@@ -162,6 +252,7 @@ int main(int argc, char **argv)
     compile::PluginManager::instance().load();
 
     appImageMove(home.path());
+    highlights();
     // @@SECTIONS@@
 
     std::printf("%d failure(s)\n", failures);
