@@ -294,7 +294,7 @@ say "$(grep -E '^checks: ' "$OUT/checks-run.log" || echo 'checks: did not finish
 #          it installs at its first start
 singles=$(ls "$OUT"/addons/*.qbpkg | grep -v 'media-all-formats')
 make_bundle
-say "update bundle: $(echo $singles | wc -w) add-ons, $(du -k "$OUT/quillbinder-$ver-windows-update.qbpkg" 2>/dev/null | cut -f1) KiB"
+say "update bundle: $(echo $singles | tr " " "\n" | grep -vc "/dictionary-") add-ons, $(du -k "$OUT/quillbinder-$ver-windows-update.qbpkg" 2>/dev/null | cut -f1) KiB"
 rm -rf full && mkdir -p full && cp -r "$DIST" full/ && mkdir -p full/Quillbinder/full-addons && cp $singles full/Quillbinder/full-addons/
 ( cd full && 7z a -tzip -mx=7 "$OUT/Quillbinder-$ver-full-windows-x64.zip" Quillbinder > /dev/null )
 say "full: $(du -k "$OUT/Quillbinder-$ver-full-windows-x64.zip" | cut -f1) KiB"

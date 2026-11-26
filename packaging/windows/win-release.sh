@@ -55,6 +55,8 @@ singles=$(ls "$SIGNED"/*.qbpkg | grep -v -e '/media-all-formats' -e '/core\.qbpk
 nbuilt=$(ls "$STAGE/packages" | grep -c '\.qbpkg$')
 nsigned=$(ls "$SIGNED" | grep -c '\.qbpkg$')
 nfull=$(echo $singles | wc -w)
+# (Windows 0.95.0) the update bundle carries every add-on but the spelling dictionaries (packaging/windows/win-ci.sh)
+nbundle=$(echo $singles | tr ' ' '\n' | grep -vc '/dictionary-')
 [ "$nbuilt" -eq "$nsigned" ] && [ -f "$bundle" ] && [ "$nfull" -ge 10 ] && pass signed-all \
     || fail signed-all "built $nbuilt, signed $nsigned, for the full version $nfull"
 
@@ -105,8 +107,8 @@ rc=$?
 rm -rf "$CM/data"
 run "$CM" 300 "$OUT/c-bundle.txt" --install "$(cygpath -w "$bundle")"
 rc=$?
-[ $rc -eq 0 ] && [ "$(count_addons "$CM")" -eq "$nfull" ] && pass signed-bundle \
-    || fail signed-bundle "rc=$rc add-ons $(count_addons "$CM") of $nfull; $(tr '\r\n' '  ' < "$OUT/c-bundle.txt" | head -c 400)"
+[ $rc -eq 0 ] && [ "$(count_addons "$CM")" -eq "$nbundle" ] && pass signed-bundle \
+    || fail signed-bundle "rc=$rc add-ons $(count_addons "$CM") of $nbundle; $(tr '\r\n' '  ' < "$OUT/c-bundle.txt" | head -c 400)"
 run "$CM" 180 "$OUT/c-selftest2.txt" --selftest
 rc=$?
 [ $rc -eq 0 ] && grep -q 'selftest ok' "$OUT/c-selftest2.txt" && pass selftest-with-addons \
