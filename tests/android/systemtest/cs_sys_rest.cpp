@@ -717,7 +717,11 @@ void caseSE04()
     const QSet<QString> never = {QStringLiteral("quit"), QStringLiteral("closeProject"), QStringLiteral("emptyTrash"), QStringLiteral("deleteSnapshots"),
                                  QStringLiteral("showProjectFolder"), QStringLiteral("showBackups"), QStringLiteral("pluginFolder"), QStringLiteral("fontFolder"),
                                  QStringLiteral("fontManager"), QStringLiteral("integrate"), QStringLiteral("saveAs"),
-                                 QStringLiteral("installPackage"), QStringLiteral("newProject"), QStringLiteral("openProject"), QStringLiteral("print")};
+                                 QStringLiteral("installPackage"), QStringLiteral("newProject"), QStringLiteral("openProject"), QStringLiteral("print"),
+                                 // Android 0.94.0: Help > Report a Problem opens the browser, which puts the app away, and
+                                 // Qt stops its event loop: the case hung until its time ran out, and the browser stayed in
+                                 // front for the tablet's later cases (seed 894417)
+                                 QStringLiteral("reportProblem")};
     std::mt19937 r(ctx().seed);
     const int n = qEnvironmentVariableIsSet("QB_CS_MONKEY_N") ? qEnvironmentVariableIntValue("QB_CS_MONKEY_N")   // to find a step
                   : ctx().smoke ? 60 : ctx().quick ? 500 : 2000;
