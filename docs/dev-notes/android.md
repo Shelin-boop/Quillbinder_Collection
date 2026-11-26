@@ -2,6 +2,42 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## Android 0.95.0 (2026-11-26): the tablet's texts translated, the dictionaries as add-ons, rows chosen by name
+
+- **The tablet's own texts** (`android/MobileOpen.cpp`, `android/MobileFiles.cpp`, the Android About text in
+  `ui/MainWindow.cpp`) were English or German chosen in the code; they are `QCoreApplication::translate("Mobile", ...)`
+  and `tr()` texts now, in all ten translation files (17 in context `Mobile`, one About text). The Linux program never
+  asks for them; its compiled files differ from before only by these 18 entries.
+- **The spelling dictionaries of the nine new languages** are the add-ons of Linux and Windows (no platform, no
+  libraries): `android-ci.sh` stages and packs them as `dictionary-<code>-android.qbpkg` (and checks them: nine, no
+  platform, no runtime, a `.dic` and an `.aff` each, a `minApp` this APK has); `release-android.yml` signs and publishes
+  them, and its update-file check wants the nine in Android's block with files of this release. English and German stay
+  assets of the APK. `addons::fitsRuntime` lets a package without libraries in on Android, so the Linux packages would
+  install too.
+- **The start check's File menu rows** (to-do item 107): with the menu open (the program's line "tablet: menu open:"),
+  the Android 9 tablet still lost the first key in two of four steps (run 45866598342: Open Project gave New
+  Project's window, Save As gave Save). `android/MobileCare.cpp` logs each row the keys reach ("tablet: menu row:",
+  `QMenu::hovered`, menus of the menu bar only), and `android-emulator.sh`'s `choose_row` presses until that row is
+  named (its "&" and "..." left out). Run 45871565839: the four windows right on both tablets, and step O reached the
+  Files app on Android 9 as well.
+- **A virtual mouse and keyboard** (to-do item 34, a first part): Android 14's `uinput` command (frameworks/base/cmds/uinput,
+  pseudo-JSON from a file; the device goes away when the file ends) registers one device with `EV_KEY` (Esc, the left
+  Ctrl, Shift, Alt, F, the three mouse buttons) and `EV_REL` (X, Y, wheel). Its pointer starts in the middle of the
+  screen, over the text. Ctrl held + three wheel steps zoomed the editor three times (`ui/Zoom.cpp` logs "zoom: Ctrl +
+  wheel" on Android only); Alt + F opened the File menu. The Files app of step O can still be in front: the step starts
+  the app first. Android 9 has no `uinput`. Left: Ctrl / Shift + click, the menu bar under the mouse, a pane's line
+  dragged, the German layout (the pointer's place after relative moves depends on Android's acceleration: not tried).
+- **Ctrl + letter on a Cyrillic layout** (item 111): Qt 6.12.1 for Android takes the key from Android's key code
+  (`androidjniinput.cpp` `mapAndroidKey`: `KEYCODE_A` to `KEYCODE_Z` become `Qt::Key_A` to `Qt::Key_Z`); the layout
+  changes only the character, so the shortcuts' letters do not move. From the source; not tried with real key presses.
+- **Tests**: `qb_mobile_tests` 131 checks (10 new: the Profiles and Labels toolbars at 1472, 1280, 960 and 800 px, the
+  built-in profile's columns on a 1280 px tablet and its way back, a dictionary add-on installed and checking words;
+  a question during a profile switch is answered by a timer, since it runs its own event loop);
+  `qb_mobile_fit_tests` 32 checks at each of the nine sizes (66 windows, Manage Profiles among them). The system test,
+  quick profile (run 45867380904): 186 cases, 185 clean, 9 skipped; S-D01 passed on both fixtures (to-do item 108:
+  the fast writer's p99 85 ms); S-D05 (b) at 200 WPM while autosaves run: a backlog of 4 keys (the limits are 2 and 3), every
+  key there and every delay within its limits.
+
 ## Android 0.93.2 (2026-11-25): NDK r30, the on-screen keyboard with a keyboard attached, the system test's harness
 
 - **NDK r30** (30.0.16248370, Clang 21): Qt 6.12's documentation (read 2026-11-25) names it as the NDK Qt 6.12 is
