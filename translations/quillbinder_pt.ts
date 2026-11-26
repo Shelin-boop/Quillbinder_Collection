@@ -3965,6 +3965,26 @@ Código-fonte: %1</translation>
         <translation>Já existe um perfil chamado “%1”. Escolha outro nome.</translation>
     </message>
     <message>
+        <source>Switch Profile</source>
+        <translation type="unfinished">Mudar de perfil</translation>
+    </message>
+    <message>
+        <source>The profile “%1” was not saved by this program on this computer. It also names programs, folders, files or addresses (a folder may not exist on this computer):
+
+%2
+
+Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>all</source>
+        <translation type="unfinished">todos</translation>
+    </message>
+    <message>
+        <source>The profile “%1” keeps %2 backups of a project, the settings now keep %3. Backups beyond the smaller number are deleted at the next backup. Switch anyway?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Import Profile</source>
         <translation>Importar perfil</translation>
     </message>
@@ -4005,6 +4025,14 @@ Aceitar isso também? Aceite apenas se você mesmo criou o arquivo ou confia na 
         <translation>Não existe o perfil “%1”.</translation>
     </message>
     <message>
+        <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>The profile “%1” cannot be deleted.</source>
         <translation>O perfil “%1” não pode ser excluído.</translation>
     </message>
@@ -4019,6 +4047,10 @@ Aceitar isso também? Aceite apenas se você mesmo criou o arquivo ou confia na 
     <message>
         <source>The profile “%1” cannot be renamed.</source>
         <translation>O perfil “%1” não pode ser renomeado.</translation>
+    </message>
+    <message>
+        <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>

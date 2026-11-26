@@ -3946,6 +3946,26 @@ Sumber: %1</translation>
         <translation>Sudah ada profil bernama “%1”. Pilih nama lain.</translation>
     </message>
     <message>
+        <source>Switch Profile</source>
+        <translation type="unfinished">Beralih Profil</translation>
+    </message>
+    <message>
+        <source>The profile “%1” was not saved by this program on this computer. It also names programs, folders, files or addresses (a folder may not exist on this computer):
+
+%2
+
+Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>all</source>
+        <translation type="unfinished">semua</translation>
+    </message>
+    <message>
+        <source>The profile “%1” keeps %2 backups of a project, the settings now keep %3. Backups beyond the smaller number are deleted at the next backup. Switch anyway?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Import Profile</source>
         <translation>Impor Profil</translation>
     </message>
@@ -3986,6 +4006,14 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
         <translation>Tidak ada profil “%1”.</translation>
     </message>
     <message>
+        <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>The profile “%1” cannot be deleted.</source>
         <translation>Profil “%1” tidak dapat dihapus.</translation>
     </message>
@@ -4000,6 +4028,10 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     <message>
         <source>The profile “%1” cannot be renamed.</source>
         <translation>Nama profil “%1” tidak dapat diganti.</translation>
+    </message>
+    <message>
+        <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>
