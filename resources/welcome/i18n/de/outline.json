@@ -236,6 +236,12 @@
    "synopsis": "Dunkelmodus und andere Designs sofort; die Farbpalette der Formatleiste; Schriften installieren."
   },
   {
+   "title": "Design und Profile",
+   "icon": "qb-cog",
+   "textFile": "docs/08a-profiles.md",
+   "synopsis": "Ein Design ist das Aussehen; ein Profil hält Ihre Einstellungen, Symbolleisten, das Fenster und das Design zusammen und wechselt sie auf einmal."
+  },
+  {
    "title": "Updates und Erweiterungen",
    "icon": "qb-cog",
    "textFile": "docs/09-updates.md",

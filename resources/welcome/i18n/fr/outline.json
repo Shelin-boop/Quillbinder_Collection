@@ -236,6 +236,12 @@
    "synopsis": "Le mode sombre et d'autres thèmes en un instant ; la palette de couleurs de la barre de format ; l'installation de polices."
   },
   {
+   "title": "Thèmes et profils",
+   "icon": "qb-cog",
+   "textFile": "docs/08a-profiles.md",
+   "synopsis": "Un thème est l'aspect ; un profil conserve ensemble vos options, vos barres d'outils, votre fenêtre et votre thème, et les change d'un coup."
+  },
+  {
    "title": "Mises à jour et modules",
    "icon": "qb-cog",
    "textFile": "docs/09-updates.md",

@@ -347,6 +347,10 @@ Os nomes desta lista não são divididos em femininos e masculinos.</translation
         <source>Textual Marks</source>
         <translation>Marcas textuais</translation>
     </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>Cores padrão</translation>
+    </message>
 </context>
 <context>
     <name>Portable</name>
@@ -3265,8 +3269,12 @@ Código-fonte: %1</translation>
         <translation>Inspetor: notas</translation>
     </message>
     <message>
-        <source>Inspector: Bookmark Lists</source>
-        <translation>Inspetor: listas de favoritos</translation>
+        <source>Inspector: Document Bookmarks</source>
+        <translation>Inspetor: favoritos do documento</translation>
+    </message>
+    <message>
+        <source>Inspector: Project Bookmarks</source>
+        <translation>Inspetor: favoritos do projeto</translation>
     </message>
     <message>
         <source>Inspector: Bookmarked Text</source>
@@ -3533,28 +3541,72 @@ Código-fonte: %1</translation>
         <translation>muito difícil</translation>
     </message>
     <message>
-        <source>Protagonist</source>
-        <translation>Protagonista</translation>
+        <source>Name of the profile:</source>
+        <translation>Nome do perfil:</translation>
     </message>
     <message>
-        <source>Supporting</source>
-        <translation>Coadjuvante</translation>
+        <source>There is already a profile named “%1”. Choose another name.</source>
+        <translation>Já existe um perfil chamado “%1”. Escolha outro nome.</translation>
     </message>
     <message>
-        <source>Village</source>
-        <translation>Vila</translation>
+        <source>Import Profile</source>
+        <translation>Importar perfil</translation>
     </message>
     <message>
-        <source>Forest</source>
-        <translation>Floresta</translation>
+        <source>The profile also names programs, folders, files or addresses (a folder may not exist on this computer):
+
+%1
+
+Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
+        <translation>O perfil também cita programas, pastas, arquivos ou endereços (uma pasta pode não existir neste computador):
+
+%1
+
+Aceitar isso também? Aceite apenas se você mesmo criou o arquivo ou confia na origem dele.</translation>
     </message>
     <message>
-        <source>Autumn</source>
-        <translation>Outono</translation>
+        <source>A temporary file could not be made.</source>
+        <translation>Não foi possível criar um arquivo temporário.</translation>
     </message>
     <message>
-        <source>Fog</source>
-        <translation>Neblina</translation>
+        <source>Nothing to write.</source>
+        <translation>Nada para gravar.</translation>
+    </message>
+    <message>
+        <source>The file could not be written (%1). The file that was there is unchanged.</source>
+        <translation>Não foi possível gravar o arquivo (%1). O arquivo que estava lá não foi alterado.</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Meu perfil</translation>
+    </message>
+    <message>
+        <source>The profile “%1” could not be read.</source>
+        <translation>Não foi possível ler o perfil “%1”.</translation>
+    </message>
+    <message>
+        <source>There is no profile “%1”.</source>
+        <translation>Não existe o perfil “%1”.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be deleted.</source>
+        <translation>O perfil “%1” não pode ser excluído.</translation>
+    </message>
+    <message>
+        <source>The profile in use cannot be deleted. Switch to another profile first.</source>
+        <translation>O perfil em uso não pode ser excluído. Mude para outro perfil antes.</translation>
+    </message>
+    <message>
+        <source>The file of the profile could not be deleted.</source>
+        <translation>Não foi possível excluir o arquivo do perfil.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be renamed.</source>
+        <translation>O perfil “%1” não pode ser renomeado.</translation>
+    </message>
+    <message>
+        <source>This is not a file of a profile or of options saved by Quillbinder.</source>
+        <translation>Este não é um arquivo de perfil nem de opções salvo pelo Quillbinder.</translation>
     </message>
 </context>
 <context>
@@ -7097,6 +7149,18 @@ Páginas (250 palavras): %5</translation>
         <translation>Antes de começar: como seus projetos têm backup. Tudo já está preenchido: OK mantém como está. Você pode alterar tudo depois em Arquivo &gt; Opções.</translation>
     </message>
     <message>
+        <source>Language</source>
+        <translation>Idioma</translation>
+    </message>
+    <message>
+        <source>Language of the program:</source>
+        <translation>Idioma do programa:</translation>
+    </message>
+    <message>
+        <source>A language you choose here is used from the next start of the program.</source>
+        <translation>O idioma escolhido aqui será usado a partir da próxima inicialização do programa.</translation>
+    </message>
+    <message>
         <source>Everything in One Folder</source>
         <translation>Tudo em uma pasta</translation>
     </message>
@@ -7131,12 +7195,20 @@ Nada é gravado nas pastas do próprio Windows nem no registro, a menos que voc�
         <translation>Fazer um backup de um projeto automaticamente quando ele for fechado</translation>
     </message>
     <message>
-        <source> backups of each project</source>
-        <translation> backups de cada projeto</translation>
+        <source>Keep the newest</source>
+        <translation>Manter os mais recentes</translation>
     </message>
     <message>
-        <source>Keep the newest:</source>
-        <translation>Manter os mais recentes:</translation>
+        <source>backups of each project</source>
+        <translation>backups de cada projeto</translation>
+    </message>
+    <message>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>Mover o AppImage para %1, um local fixo de onde a entrada do menu o inicia</translation>
+    </message>
+    <message>
+        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
+        <translation>Ajuda &gt; Adicionar ao menu de aplicativos ou Remover do menu de aplicativos altera isso depois. Se você mesmo mover o AppImage, adicione-o ao menu novamente.</translation>
     </message>
     <message>
         <source>Choose a folder: until then no backups are made</source>
@@ -7165,14 +7237,6 @@ Nada é gravado nas pastas do próprio Windows nem no registro, a menos que voc�
     <message>
         <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them</source>
         <translation>Adicionar o %1 ao menu de aplicativos, para que você possa iniciá-lo como qualquer outro programa e abrir projetos com um clique duplo neles</translation>
-    </message>
-    <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>Mover o AppImage para %1 (um arquivo movido não pode ser iniciado pelo menu)</translation>
-    </message>
-    <message>
-        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later.</source>
-        <translation>Ajuda &gt; Adicionar ao menu de aplicativos ou Remover do menu de aplicativos altera isso depois.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -8752,8 +8816,12 @@ O texto do instantâneo &quot;%2&quot; é agora o texto do documento; ele pode s
         <translation>Notas</translation>
     </message>
     <message>
-        <source>Lists</source>
-        <translation>Listas</translation>
+        <source>Document</source>
+        <translation>Documento</translation>
+    </message>
+    <message>
+        <source>Project</source>
+        <translation>Projeto</translation>
     </message>
     <message>
         <source>Text</source>
@@ -8839,6 +8907,14 @@ O texto do instantâneo &quot;%2&quot; é agora o texto do documento; ele pode s
         <translation>Exportar…</translation>
     </message>
     <message>
+        <source>Use the Set of My Keyboard Layout…</source>
+        <translation>Usar o conjunto do meu layout de teclado…</translation>
+    </message>
+    <message>
+        <source>Take the shortcuts that fit the keyboard layout in use now (a German keyboard gets keys that need no AltGr). Shortcuts you set yourself stay as they are.</source>
+        <translation>Adota os atalhos que combinam com o layout de teclado em uso agora (um teclado alemão recebe teclas que não precisam de AltGr). Os atalhos que você definiu continuam como estão.</translation>
+    </message>
+    <message>
         <source>Shortcut in Use</source>
         <translation>Atalho em uso</translation>
     </message>
@@ -8901,6 +8977,30 @@ Dá-lo a “%4” em vez disso? “%2” ficará então sem atalho.</translation
     <message>
         <source>shortcuts</source>
         <translation>atalhos</translation>
+    </message>
+    <message>
+        <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
+        <translation>O sistema não informa qual layout de teclado está em uso, por isso o programa não consegue escolher um conjunto. Você ainda pode alterar atalhos individuais abaixo.</translation>
+    </message>
+    <message>
+        <source>The shortcuts already come from the set for your keyboard layout (%1).</source>
+        <translation>Os atalhos já vêm do conjunto para o seu layout de teclado (%1).</translation>
+    </message>
+    <message>
+        <source> (you set another shortcut: it stays)</source>
+        <translation> (você definiu outro atalho: ele permanece)</translation>
+    </message>
+    <message>
+        <source>Use the set of shortcuts for your keyboard layout (%1)? These standard shortcuts change at once:
+
+%2
+
+Shortcuts you set yourself stay as they are.</source>
+        <translation>Usar o conjunto de atalhos para o seu layout de teclado (%1)? Estes atalhos padrão mudam imediatamente:
+
+%2
+
+Os atalhos que você definiu continuam como estão.</translation>
     </message>
 </context>
 <context>
@@ -11097,8 +11197,8 @@ You can do this later with Help &gt; Add to Application Menu.</source>
 Você pode fazer isso depois em Ajuda &gt; Adicionar ao menu de aplicativos.</translation>
     </message>
     <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>Mover o AppImage para %1 (um arquivo movido não pode ser iniciado pelo menu)</translation>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>Mover o AppImage para %1, um local fixo de onde a entrada do menu o inicia</translation>
     </message>
     <message>
         <source>The menu entry could not be made.
@@ -11335,6 +11435,10 @@ Você pode fazer isso depois em Ajuda &gt; Adicionar ao menu de aplicativos.</tr
     <message>
         <source>&amp;Themes</source>
         <translation>&amp;Temas</translation>
+    </message>
+    <message>
+        <source>&amp;Profiles</source>
+        <translation>&amp;Perfis</translation>
     </message>
     <message>
         <source>&amp;Text Editing</source>
@@ -12849,14 +12953,6 @@ Um instantâneo pode ser comparado com o texto na aba Instantâneos do inspetor.
         <translation>As outras versões continuam sendo mantidas; só este aviso fica de fora até você sair do programa.</translation>
     </message>
     <message>
-        <source>&amp;Translate and Proofread…</source>
-        <translation>&amp;Traduzir e revisar…</translation>
-    </message>
-    <message>
-        <source>Proofread English text or translate German text into English (the add-on is not installed)</source>
-        <translation>Revisar texto em inglês ou traduzir texto em alemão para o inglês (o complemento não está instalado)</translation>
-    </message>
-    <message>
         <source>Speech &amp;Transcription…</source>
         <translation>&amp;Transcrição de fala…</translation>
     </message>
@@ -12867,10 +12963,6 @@ Um instantâneo pode ser comparado com o texto na aba Instantâneos do inspetor.
     <message>
         <source>Speech Transcription</source>
         <translation>Transcrição de fala</translation>
-    </message>
-    <message>
-        <source>Translation and Proofreading</source>
-        <translation>Tradução e revisão</translation>
     </message>
     <message>
         <source>is not installed</source>
@@ -12897,8 +12989,20 @@ Um instantâneo pode ser comparado com o texto na aba Instantâneos do inspetor.
         <translation>Ele transforma fala em texto. Instale-o com Ajuda &gt; Complementos e atualizações &gt; Instalar atualização ou complemento; Ajuda &gt; Complementos e atualizações &gt; Gerenciador de complementos mostra os complementos e os ativa e desativa.</translation>
     </message>
     <message>
-        <source>It proofreads English text and translates German text into English. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
-        <translation>Ele revisa texto em inglês e traduz texto em alemão para o inglês. Instale-o com Ajuda &gt; Complementos e atualizações &gt; Instalar atualização ou complemento; Ajuda &gt; Complementos e atualizações &gt; Gerenciador de complementos mostra os complementos e os ativa e desativa.</translation>
+        <source>&amp;Translation Helper…</source>
+        <translation>&amp;Assistente de tradução…</translation>
+    </message>
+    <message>
+        <source>Suggestions for translating between eleven languages and for English spelling (the add-on is not installed)</source>
+        <translation>Sugestões para traduzir entre onze idiomas e para a ortografia do inglês (o complemento não está instalado)</translation>
+    </message>
+    <message>
+        <source>Translation Helper</source>
+        <translation>Assistente de tradução</translation>
+    </message>
+    <message>
+        <source>It gives suggestions for translating between eleven languages and for English spelling and grammar. Its translations are not precise: check each one, which needs a working knowledge of both languages. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>Ele dá sugestões para traduzir entre onze idiomas e para a ortografia e a gramática do inglês. As traduções não são precisas: confira cada uma, o que exige bom conhecimento dos dois idiomas. Instale-o com Ajuda &gt; Complementos e atualizações &gt; Instalar atualização ou complemento; Ajuda &gt; Complementos e atualizações &gt; Gerenciador de complementos mostra os complementos e os liga e desliga.</translation>
     </message>
     <message>
         <source>Open Add-on Manager</source>
@@ -12995,6 +13099,62 @@ Um instantâneo pode ser comparado com o texto na aba Instantâneos do inspetor.
     <message>
         <source>and %1 earlier steps</source>
         <translation>e mais %1 passos anteriores</translation>
+    </message>
+    <message>
+        <source>&amp;Manage Profiles…</source>
+        <translation>&amp;Gerenciar perfis…</translation>
+    </message>
+    <message>
+        <source>Use, save, rename, copy, delete, export and import profiles</source>
+        <translation>Usar, salvar, renomear, copiar, excluir, exportar e importar perfis</translation>
+    </message>
+    <message>
+        <source>&amp;Save Settings as New Profile…</source>
+        <translation>&amp;Salvar configurações como novo perfil…</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Salvar configurações como novo perfil</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Meu perfil</translation>
+    </message>
+    <message>
+        <source>Keep the options, toolbars, window and theme as they are now in a new profile</source>
+        <translation>Guardar as opções, as barras de ferramentas, a janela e o tema como estão agora em um novo perfil</translation>
+    </message>
+    <message>
+        <source>Profiles</source>
+        <translation>Perfis</translation>
+    </message>
+    <message>
+        <source>Labels</source>
+        <translation>Etiquetas</translation>
+    </message>
+    <message>
+        <source>Profile:</source>
+        <translation>Perfil:</translation>
+    </message>
+    <message>
+        <source>The profile in use: %1. A click lists the profiles.</source>
+        <translation>O perfil em uso: %1. Um clique lista os perfis.</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Etiqueta</translation>
+    </message>
+    <message>
+        <source>No Label</source>
+        <translation>Sem etiqueta</translation>
+    </message>
+    <message>
+        <source>Switch Profile</source>
+        <translation>Mudar de perfil</translation>
+    </message>
+    <message>
+        <source>The profile sets another language; it takes effect when the program is started again.</source>
+        <translation>O perfil define outro idioma; ele entra em vigor quando o programa for iniciado novamente.</translation>
     </message>
 </context>
 <context>
@@ -15463,8 +15623,8 @@ Continuar?</translation>
         <translation>Idioma:</translation>
     </message>
     <message>
-        <source>The language of menus, windows and messages; it changes at the next start of the program. The manual and the welcome project stay in English.</source>
-        <translation>O idioma dos menus, das janelas e das mensagens; ele muda na próxima inicialização do programa. O manual e o projeto de boas-vindas permanecem em inglês.</translation>
+        <source>The language of menus, windows and messages, of the manual, the quick start guide and the welcome project; it changes at the next start of the program. A language marked as a machine translation has not been checked by a speaker yet. Spelling dictionaries for other languages are add-ons (Help &gt; Add-ons and Updates).</source>
+        <translation>O idioma dos menus, das janelas e das mensagens, do manual, do guia de início rápido e do projeto de boas-vindas; ele muda na próxima inicialização do programa. Um idioma marcado como tradução automática ainda não foi conferido por um falante. Os dicionários ortográficos de outros idiomas são complementos (Ajuda &gt; Complementos e atualizações).</translation>
     </message>
     <message>
         <source>Group the digits of large numbers (%1)</source>
@@ -16531,8 +16691,104 @@ Continuar?</translation>
         <translation>todos</translation>
     </message>
     <message>
-        <source>Retain backup files per project:</source>
-        <translation>Manter arquivos de backup por projeto:</translation>
+        <source>Keep the newest</source>
+        <translation>Manter os mais recentes</translation>
+    </message>
+    <message>
+        <source>backups of each project</source>
+        <translation>backups de cada projeto</translation>
+    </message>
+    <message>
+        <source>The colors new things start with. They belong to your profile. Projects that exist keep their own labels.</source>
+        <translation>As cores com que as coisas novas começam. Elas pertencem ao seu perfil. Os projetos existentes mantêm suas próprias etiquetas.</translation>
+    </message>
+    <message>
+        <source>Standard Color</source>
+        <translation>Cor padrão</translation>
+    </message>
+    <message>
+        <source>Labels of new projects</source>
+        <translation>Etiquetas de novos projetos</translation>
+    </message>
+    <message>
+        <source>Color of this label</source>
+        <translation>Cor desta etiqueta</translation>
+    </message>
+    <message>
+        <source>Colors of the popups</source>
+        <translation>Cores dos menus suspensos</translation>
+    </message>
+    <message>
+        <source>Text color:</source>
+        <translation>Cor do texto:</translation>
+    </message>
+    <message>
+        <source>Highlight:</source>
+        <translation>Realce:</translation>
+    </message>
+    <message>
+        <source>A color of the text color popup</source>
+        <translation>Uma cor do menu suspenso de cor do texto</translation>
+    </message>
+    <message>
+        <source>A color of the highlight popup</source>
+        <translation>Uma cor do menu suspenso de realce</translation>
+    </message>
+    <message>
+        <source>The color each button starts with</source>
+        <translation>A cor com que cada botão começa</translation>
+    </message>
+    <message>
+        <source>Text color button:</source>
+        <translation>Botão de cor do texto:</translation>
+    </message>
+    <message>
+        <source>The color of the text color button when the program starts</source>
+        <translation>A cor do botão de cor do texto quando o programa inicia</translation>
+    </message>
+    <message>
+        <source>Highlight button:</source>
+        <translation>Botão de realce:</translation>
+    </message>
+    <message>
+        <source>The color of the highlight button when the program starts</source>
+        <translation>A cor do botão de realce quando o programa inicia</translation>
+    </message>
+    <message>
+        <source>Back to the program&apos;s standard labels and colors</source>
+        <translation>Voltar às etiquetas e cores padrão do programa</translation>
+    </message>
+    <message>
+        <source>Export Profile...</source>
+        <translation>Exportar perfil...</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Exportar perfil</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Perfis (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile...</source>
+        <translation>Importar perfil...</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Importar perfil</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Perfis e opções (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>The profile “%1” was imported. Switch to it under View &gt; Profiles.</source>
+        <translation>O perfil “%1” foi importado. Mude para ele em Visualizar &gt; Perfis.</translation>
+    </message>
+    <message>
+        <source>Manage Profiles...</source>
+        <translation>Gerenciar perfis...</translation>
     </message>
     <message>
         <source>No folder chosen: no automatic backups</source>
@@ -16743,24 +16999,8 @@ Continuar?</translation>
         <translation>Relatórios de falhas</translation>
     </message>
     <message>
-        <source>Load Options from File...</source>
-        <translation>Carregar opções de um arquivo...</translation>
-    </message>
-    <message>
         <source>Load Options</source>
         <translation>Carregar opções</translation>
-    </message>
-    <message>
-        <source>Options (*.qboptions)</source>
-        <translation>Opções (*.qboptions)</translation>
-    </message>
-    <message>
-        <source>Save Options to File...</source>
-        <translation>Salvar opções em um arquivo...</translation>
-    </message>
-    <message>
-        <source>Save Options</source>
-        <translation>Salvar opções</translation>
     </message>
     <message>
         <source>Save Theme Options to File...</source>
@@ -17517,6 +17757,105 @@ Seus projetos recentes, temas próprios, layouts, barras de ferramentas e atalho
     <message>
         <source>cards</source>
         <translation>fichas</translation>
+    </message>
+</context>
+<context>
+    <name>qb::ProfileManagerDialog</name>
+    <message>
+        <source>Manage Profiles</source>
+        <translation>Gerenciar perfis</translation>
+    </message>
+    <message>
+        <source>A profile holds your options, toolbars, window places and sizes, keyboard set, backup settings, standard colors, layouts and the theme. The profile in use is saved when you switch away from it and when the program ends.</source>
+        <translation>Um perfil guarda suas opções, barras de ferramentas, posições e tamanhos de janelas, conjunto de teclado, configurações de backup, cores padrão, layouts e o tema. O perfil em uso é salvo quando você muda para outro e quando o programa termina.</translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <translation>Usar</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile...</source>
+        <translation>Salvar configurações como novo perfil...</translation>
+    </message>
+    <message>
+        <source>Rename...</source>
+        <translation>Renomear...</translation>
+    </message>
+    <message>
+        <source>Copy...</source>
+        <translation>Copiar...</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Excluir</translation>
+    </message>
+    <message>
+        <source>Export...</source>
+        <translation>Exportar...</translation>
+    </message>
+    <message>
+        <source>Import...</source>
+        <translation>Importar...</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Salvar configurações como novo perfil</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Meu perfil</translation>
+    </message>
+    <message>
+        <source>Rename Profile</source>
+        <translation>Renomear perfil</translation>
+    </message>
+    <message>
+        <source>Copy Profile</source>
+        <translation>Copiar perfil</translation>
+    </message>
+    <message>
+        <source>%1 (Copy)</source>
+        <translation>%1 (cópia)</translation>
+    </message>
+    <message>
+        <source>Delete Profile</source>
+        <translation>Excluir perfil</translation>
+    </message>
+    <message>
+        <source>Delete the profile “%1”? This cannot be undone.</source>
+        <translation>Excluir o perfil “%1”? Isso não pode ser desfeito.</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Exportar perfil</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Perfis (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Importar perfil</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Perfis e opções (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>%1 (in use)</source>
+        <translation>%1 (em uso)</translation>
+    </message>
+    <message>
+        <source>Theme: %1.</source>
+        <translation>Tema: %1.</translation>
+    </message>
+    <message>
+        <source>Built-in profile; it can be deleted.</source>
+        <translation>Perfil integrado; ele pode ser excluído.</translation>
+    </message>
+    <message>
+        <source>The profile every program starts with.</source>
+        <translation>O perfil com que todo programa começa.</translation>
     </message>
 </context>
 <context>
@@ -20743,6 +21082,13 @@ Ou baixar a versão atual na página do projeto.</translation>
     <message>
         <source>PDF (.pdf)</source>
         <translation>PDF (.pdf)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::language</name>
+    <message>
+        <source>%1 (machine translation)</source>
+        <translation>%1 (tradução automática)</translation>
     </message>
 </context>
 <context>

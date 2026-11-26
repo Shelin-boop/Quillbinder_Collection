@@ -11,6 +11,7 @@ Ayarların nerede olduğu ve programın yapabildiği her şeyin özeti: **Yardı
 - [Karşılaştır ve Aktar](qb-title:Karşılaştır ve Aktar): Word veya LibreOffice'ten geri gelen bir el yazması
 - [Scrivener Projeleri](qb-title:Scrivener Projeleri): içe aktarın ya da doğrudan onlarda çalışın
 - [Temalar, Renkler ve Yazı Tipleri](qb-title:Temalar, Renkler ve Yazı Tipleri): koyu mod ve daha fazlası, hemen
+- [Temalar ve Profiller](qb-title:Temalar ve Profiller): seçeneklerinizi, araç çubuklarınızı ve görünümünüzü bir arada tutun
 - [Güncellemeler ve Eklentiler](qb-title:Güncellemeler ve Eklentiler): küçük paketler ve geri dönüş yolu
 - [Güvenlik Ağları](qb-title:Güvenlik Ağları): metninizi koruyan şeyler
 - [Sırada Ne Var](qb-title:Sırada Ne Var)

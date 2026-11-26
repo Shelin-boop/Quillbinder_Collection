@@ -236,6 +236,12 @@
    "synopsis": "Modo oscuro y otros temas al instante; la paleta de colores de la barra de formato; instalar fuentes."
   },
   {
+   "title": "Temas y perfiles",
+   "icon": "qb-cog",
+   "textFile": "docs/08a-profiles.md",
+   "synopsis": "Un tema es el aspecto; un perfil conserva juntos tus opciones, barras de herramientas, ventana y tema, y los cambia a la vez."
+  },
+  {
    "title": "Actualizaciones y complementos",
    "icon": "qb-cog",
    "textFile": "docs/09-updates.md",

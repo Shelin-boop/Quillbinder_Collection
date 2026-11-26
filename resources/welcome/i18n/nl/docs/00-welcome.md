@@ -11,6 +11,7 @@ Waar de instellingen staan, en een overzicht van alles wat het programma kan: **
 - [Vergelijken en overbrengen](qb-title:Vergelijken en overbrengen): een manuscript terug uit Word of LibreOffice
 - [Scrivener-projecten](qb-title:Scrivener-projecten): importeer ze, of werk er direct in
 - [Thema's, kleuren en lettertypen](qb-title:Thema's, kleuren en lettertypen): donkere modus en meer, meteen
+- [Thema's en profielen](qb-title:Thema's en profielen): bewaar je opties, werkbalken en uiterlijk samen
 - [Updates en add-ons](qb-title:Updates en add-ons): kleine pakketten, en een weg terug
 - [Vangnetten](qb-title:Vangnetten): wat je tekst beschermt
 - [Hoe nu verder](qb-title:Hoe nu verder)

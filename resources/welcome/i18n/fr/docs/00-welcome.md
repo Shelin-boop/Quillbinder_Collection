@@ -11,6 +11,7 @@ Où se trouvent les réglages, et un résumé de tout ce que le logiciel sait fa
 - [Comparer et transférer](qb-title:Comparer et transférer) : un manuscrit revenu de Word ou de LibreOffice
 - [Projets Scrivener](qb-title:Projets Scrivener) : les importer, ou y travailler directement
 - [Thèmes, couleurs et polices](qb-title:Thèmes, couleurs et polices) : le mode sombre et plus encore, en un instant
+- [Thèmes et profils](qb-title:Thèmes et profils) : gardez ensemble vos options, vos barres d'outils et votre aspect
 - [Mises à jour et modules](qb-title:Mises à jour et modules) : de petits paquets, et un retour en arrière
 - [Filets de sécurité](qb-title:Filets de sécurité) : ce qui protège votre texte
 - [Et ensuite](qb-title:Et ensuite)

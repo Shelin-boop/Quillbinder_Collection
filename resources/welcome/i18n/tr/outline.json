@@ -236,6 +236,12 @@
    "synopsis": "Koyu mod ve diğer temalar hemen; biçim çubuğunun renk paleti; yazı tipi kurma."
   },
   {
+   "title": "Temalar ve Profiller",
+   "icon": "qb-cog",
+   "textFile": "docs/08a-profiles.md",
+   "synopsis": "Tema görünümdür; profil seçeneklerinizi, araç çubuklarınızı, pencerenizi ve temanızı bir arada tutar ve hepsini bir anda değiştirir."
+  },
+  {
    "title": "Güncellemeler ve Eklentiler",
    "icon": "qb-cog",
    "textFile": "docs/09-updates.md",

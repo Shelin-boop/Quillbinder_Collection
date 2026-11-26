@@ -3623,6 +3623,8 @@ Sollen diese mit übernommen werden? Übernehmen Sie sie nur, wenn Sie die Datei
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>
         <translation>Das ist keine Datei mit einem Profil oder mit Einstellungen, die Quillbinder gespeichert hat.</translation>
+    </message>
+    <message>
         <source>Protagonist</source>
         <translation>Hauptfigur</translation>
     </message>

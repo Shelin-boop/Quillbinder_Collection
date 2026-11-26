@@ -349,6 +349,10 @@ The forenames of this list are not divided into female and male.</source>
         <source>Textual Marks</source>
         <translation>Текстовые пометки</translation>
     </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>Стандартные цвета</translation>
+    </message>
 </context>
 <context>
     <name>Portable</name>
@@ -2189,7 +2193,7 @@ What was written so far is in %2. Nothing was changed in the Scrivener project.<
     </message>
     <message>
         <source>&lt;p&gt;%1 itself is under the &lt;b&gt;Apache License 2.0&lt;/b&gt;: anyone may use, copy, change and pass it on, keeping the license and the NOTICE file, which names the project and its source. The AppImage also carries parts of other projects, each under its own license; they are listed here with their full license texts (the same texts are in the AppImage under &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt is The Qt Company&apos;s own build of Qt %3; the other libraries are those of Ubuntu 24.04. The source code of each, exactly in the version used, is in the release &lt;a href=&quot;%2&quot;&gt;Third-party source code&lt;/a&gt; of the project page, in the file named below its license (Ubuntu&apos;s archive has Ubuntu&apos;s as well). You may replace the libraries inside the AppImage with your own builds. Add-ons carry their own license files.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Сама программа %1 распространяется по лицензии &lt;b&gt;Apache License 2.0&lt;/b&gt;: любой может использовать, копировать, изменять и передавать её дальше, сохраняя лицензию и файл NOTICE, в котором указаны проект и его исходный код. AppImage содержит также части других проектов, каждая под своей лицензией; они перечислены здесь с полными текстами лицензий (те же тексты лежат в AppImage в &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt — собственная сборка Qt %3 от The Qt Company; остальные библиотеки взяты из Ubuntu 24.04. Исходный код каждой из них точно той версии, которая используется, находится в выпуске &lt;a href="%2"&gt;Third-party source code&lt;/a&gt; на странице проекта, в файле, имя которого указано под её лицензией (в архиве Ubuntu он тоже есть). Библиотеки внутри AppImage можно заменить собственными сборками. Дополнения содержат собственные файлы лицензий.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Сама программа %1 распространяется по лицензии &lt;b&gt;Apache License 2.0&lt;/b&gt;: любой может использовать, копировать, изменять и передавать её дальше, сохраняя лицензию и файл NOTICE, в котором указаны проект и его исходный код. AppImage содержит также части других проектов, каждая под своей лицензией; они перечислены здесь с полными текстами лицензий (те же тексты лежат в AppImage в &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt — собственная сборка Qt %3 от The Qt Company; остальные библиотеки взяты из Ubuntu 24.04. Исходный код каждой из них точно той версии, которая используется, находится в выпуске &lt;a href=&quot;%2&quot;&gt;Third-party source code&lt;/a&gt; на странице проекта, в файле, имя которого указано под её лицензией (в архиве Ubuntu он тоже есть). Библиотеки внутри AppImage можно заменить собственными сборками. Дополнения содержат собственные файлы лицензий.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1
@@ -3035,7 +3039,7 @@ Source: %1</source>
     </message>
     <message>
         <source>colors and fonts</source>
-        <translation>цвета и шрифты</translation>
+        <translation>цвета и шрифта|цветов и шрифтов</translation>
     </message>
     <message>
         <source>Keep them with the new theme, or use the theme as it is? (Save Current Look as Theme keeps the present look for later.)</source>
@@ -3284,8 +3288,12 @@ Source: %1</source>
         <translation>Инспектор: заметки</translation>
     </message>
     <message>
-        <source>Inspector: Bookmark Lists</source>
-        <translation>Инспектор: списки закладок</translation>
+        <source>Inspector: Document Bookmarks</source>
+        <translation>Инспектор: закладки документа</translation>
+    </message>
+    <message>
+        <source>Inspector: Project Bookmarks</source>
+        <translation>Инспектор: закладки проекта</translation>
     </message>
     <message>
         <source>Inspector: Bookmarked Text</source>
@@ -3552,28 +3560,72 @@ Source: %1</source>
         <translation>очень трудный</translation>
     </message>
     <message>
-        <source>Protagonist</source>
-        <translation>Главная героиня</translation>
+        <source>Name of the profile:</source>
+        <translation>Название профиля:</translation>
     </message>
     <message>
-        <source>Supporting</source>
-        <translation>Второстепенный</translation>
+        <source>There is already a profile named “%1”. Choose another name.</source>
+        <translation>Профиль с названием «%1» уже есть. Выберите другое название.</translation>
     </message>
     <message>
-        <source>Village</source>
-        <translation>Деревня</translation>
+        <source>Import Profile</source>
+        <translation>Импорт профиля</translation>
     </message>
     <message>
-        <source>Forest</source>
-        <translation>Лес</translation>
+        <source>The profile also names programs, folders, files or addresses (a folder may not exist on this computer):
+
+%1
+
+Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
+        <translation>В профиле указаны программы, папки, файлы или адреса (папки может не быть на этом компьютере):
+
+%1
+
+Принять и их? Принимайте их, только если вы сами создали файл или доверяете его источнику.</translation>
     </message>
     <message>
-        <source>Autumn</source>
-        <translation>Осень</translation>
+        <source>A temporary file could not be made.</source>
+        <translation>Не удалось создать временный файл.</translation>
     </message>
     <message>
-        <source>Fog</source>
-        <translation>Туман</translation>
+        <source>Nothing to write.</source>
+        <translation>Нечего записывать.</translation>
+    </message>
+    <message>
+        <source>The file could not be written (%1). The file that was there is unchanged.</source>
+        <translation>Не удалось записать файл (%1). Находившийся там файл не изменён.</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Мой профиль</translation>
+    </message>
+    <message>
+        <source>The profile “%1” could not be read.</source>
+        <translation>Не удалось прочитать профиль «%1».</translation>
+    </message>
+    <message>
+        <source>There is no profile “%1”.</source>
+        <translation>Профиля «%1» нет.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be deleted.</source>
+        <translation>Профиль «%1» нельзя удалить.</translation>
+    </message>
+    <message>
+        <source>The profile in use cannot be deleted. Switch to another profile first.</source>
+        <translation>Профиль, который используется, нельзя удалить. Сначала переключитесь на другой профиль.</translation>
+    </message>
+    <message>
+        <source>The file of the profile could not be deleted.</source>
+        <translation>Не удалось удалить файл профиля.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be renamed.</source>
+        <translation>Профиль «%1» нельзя переименовать.</translation>
+    </message>
+    <message>
+        <source>This is not a file of a profile or of options saved by Quillbinder.</source>
+        <translation>Это не файл профиля и не файл параметров, сохранённый Quillbinder.</translation>
     </message>
 </context>
 <context>
@@ -4974,7 +5026,7 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
     <message>
         <source>&lt;span style=&apos;color:gray&apos;&gt;No add-ons installed. Add-ons are files ending in .qbpkg; choose &quot;Install From File…&quot; or double-click the file.&lt;/span&gt;</source>
-        <translation>&lt;span style='color:gray'&gt;Дополнения не установлены. Дополнения — это файлы с расширением .qbpkg; выберите «Установить из файла…» или дважды щёлкните файл.&lt;/span&gt;</translation>
+        <translation>&lt;span style=&apos;color:gray&apos;&gt;Дополнения не установлены. Дополнения — это файлы с расширением .qbpkg; выберите «Установить из файла…» или дважды щёлкните файл.&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Install Update or Add-on</source>
@@ -6068,11 +6120,11 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
     <message>
         <source>Typographic quotes to &amp;straight quotes (&quot; &apos;)</source>
-        <translation>Типографские кавычки в &amp;прямые (" ')</translation>
+        <translation>Типографские кавычки в &amp;прямые (&quot; &apos;)</translation>
     </message>
     <message>
         <source>An apostrophe inside a word becomes ’. A straight mark with a space on both sides stays as it is; an apostrophe at the start of a word (&apos;tis) becomes an opening mark.</source>
-        <translation>Апостроф внутри слова становится ’. Прямая кавычка с пробелами с обеих сторон остаётся как есть; апостроф в начале слова ('tis) становится открывающей кавычкой.</translation>
+        <translation>Апостроф внутри слова становится ’. Прямая кавычка с пробелами с обеих сторон остаётся как есть; апостроф в начале слова (&apos;tis) становится открывающей кавычкой.</translation>
     </message>
     <message>
         <source>Convert in</source>
@@ -6196,7 +6248,7 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
     <message>
         <source>quote marks</source>
-        <translation>кавычек</translation>
+        <translation>кавычки|кавычек</translation>
     </message>
     <message>
         <source>document</source>
@@ -6204,7 +6256,7 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
     <message>
         <source>documents</source>
-        <translation>документов</translation>
+        <translation>документа|документов</translation>
     </message>
     <message>
         <source>%1 converted in %2: %3.</source>
@@ -6357,7 +6409,7 @@ This cannot be undone as a whole.%3</source>
     </message>
     <message>
         <source>crash reports</source>
-        <translation>отчётов о сбоях</translation>
+        <translation>отчёта о сбое|отчётов о сбоях</translation>
     </message>
     <message>
         <source>Delete All</source>
@@ -6666,7 +6718,7 @@ This cannot be undone as a whole.%3</source>
     </message>
     <message>
         <source>replacements</source>
-        <translation>замен</translation>
+        <translation>замены|замен</translation>
     </message>
     <message>
         <source>match</source>
@@ -6674,7 +6726,7 @@ This cannot be undone as a whole.%3</source>
     </message>
     <message>
         <source>matches</source>
-        <translation>совпадений</translation>
+        <translation>совпадения|совпадений</translation>
     </message>
     <message>
         <source>Words: %1
@@ -6802,7 +6854,7 @@ Pages (250 words): %5</source>
     </message>
     <message>
         <source>pages</source>
-        <translation>страниц</translation>
+        <translation>страницы|страниц</translation>
     </message>
     <message>
         <source>%1 and %2 more</source>
@@ -6822,7 +6874,7 @@ Pages (250 words): %5</source>
     </message>
     <message>
         <source>documents</source>
-        <translation>документов</translation>
+        <translation>документа|документов</translation>
     </message>
     <message>
         <source>Total: %1 characters</source>
@@ -7122,6 +7174,18 @@ Pages (250 words): %5</source>
         <translation>Перед началом: как создаются резервные копии ваших проектов. Всё уже заполнено: «OK» оставляет всё как есть. Всё это можно изменить позже в разделе Файл &gt; Параметры.</translation>
     </message>
     <message>
+        <source>Language</source>
+        <translation>Язык</translation>
+    </message>
+    <message>
+        <source>Language of the program:</source>
+        <translation>Язык программы:</translation>
+    </message>
+    <message>
+        <source>A language you choose here is used from the next start of the program.</source>
+        <translation>Выбранный здесь язык будет использоваться со следующего запуска программы.</translation>
+    </message>
+    <message>
         <source>Everything in One Folder</source>
         <translation>Всё в одной папке</translation>
     </message>
@@ -7156,12 +7220,20 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
         <translation>Автоматически делать резервную копию проекта при его закрытии</translation>
     </message>
     <message>
-        <source> backups of each project</source>
-        <translation> копий каждого проекта</translation>
+        <source>Keep the newest</source>
+        <translation>Хранить последние</translation>
     </message>
     <message>
-        <source>Keep the newest:</source>
-        <translation>Хранить последние:</translation>
+        <source>backups of each project</source>
+        <translation>резервных копий каждого проекта</translation>
+    </message>
+    <message>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>Перенести AppImage в %1 — постоянное место, откуда его запускает пункт меню</translation>
+    </message>
+    <message>
+        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
+        <translation>Позже это можно изменить командой «Справка &gt; Добавить в меню приложений» или «Справка &gt; Убрать из меню приложений». Если вы переместите AppImage сами, добавьте его в меню снова.</translation>
     </message>
     <message>
         <source>Choose a folder: until then no backups are made</source>
@@ -7190,14 +7262,6 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
     <message>
         <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them</source>
         <translation>Добавить %1 в меню приложений, чтобы запускать программу, как любую другую, и открывать проекты двойным щелчком</translation>
-    </message>
-    <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>Переместить AppImage в %1 (перемещённый файл нельзя запустить из меню)</translation>
-    </message>
-    <message>
-        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later.</source>
-        <translation>Справка &gt; Добавить в меню приложений или Убрать из меню приложений изменяет это позже.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -7830,11 +7894,11 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
     </message>
     <message>
         <source>Straight quotes (“ ” ‘ ’ become &quot; &apos;)</source>
-        <translation>Прямые кавычки (“ ” ‘ ’ становятся " ')</translation>
+        <translation>Прямые кавычки (“ ” ‘ ’ становятся &quot; &apos;)</translation>
     </message>
     <message>
         <source>Typographic quotes (&quot; &apos; become “ ” ‘ ’, English)</source>
-        <translation>Типографские кавычки (" ' становятся “ ” ‘ ’, английские)</translation>
+        <translation>Типографские кавычки (&quot; &apos; становятся “ ” ‘ ’, английские)</translation>
     </message>
     <message>
         <source>Dashes as hyphens (— becomes --, – becomes -)</source>
@@ -8052,7 +8116,7 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
     </message>
     <message>
         <source>add-ons</source>
-        <translation>дополнений</translation>
+        <translation>дополнения|дополнений</translation>
     </message>
     <message>
         <source>Done</source>
@@ -8778,8 +8842,12 @@ The text of the snapshot &quot;%2&quot; is now the document&apos;s text; it can 
         <translation>Заметки</translation>
     </message>
     <message>
-        <source>Lists</source>
-        <translation>Списки</translation>
+        <source>Document</source>
+        <translation>Документ</translation>
+    </message>
+    <message>
+        <source>Project</source>
+        <translation>Проект</translation>
     </message>
     <message>
         <source>Text</source>
@@ -8865,6 +8933,14 @@ The text of the snapshot &quot;%2&quot; is now the document&apos;s text; it can 
         <translation>Экспорт…</translation>
     </message>
     <message>
+        <source>Use the Set of My Keyboard Layout…</source>
+        <translation>Использовать набор для моей раскладки клавиатуры…</translation>
+    </message>
+    <message>
+        <source>Take the shortcuts that fit the keyboard layout in use now (a German keyboard gets keys that need no AltGr). Shortcuts you set yourself stay as they are.</source>
+        <translation>Задать сочетания клавиш, подходящие к используемой сейчас раскладке клавиатуры (для немецкой клавиатуры — клавиши, не требующие AltGr). Сочетания, которые вы задали сами, остаются без изменений.</translation>
+    </message>
+    <message>
         <source>Shortcut in Use</source>
         <translation>Сочетание уже используется</translation>
     </message>
@@ -8926,7 +9002,31 @@ Give it to “%4” instead? “%2” will then have no shortcut.</source>
     </message>
     <message>
         <source>shortcuts</source>
-        <translation>сочетаний</translation>
+        <translation>сочетания|сочетаний</translation>
+    </message>
+    <message>
+        <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
+        <translation>Система не сообщает, какая раскладка клавиатуры используется, поэтому программа не может выбрать набор. Отдельные сочетания клавиш можно по-прежнему изменить ниже.</translation>
+    </message>
+    <message>
+        <source>The shortcuts already come from the set for your keyboard layout (%1).</source>
+        <translation>Сочетания клавиш уже взяты из набора для вашей раскладки клавиатуры (%1).</translation>
+    </message>
+    <message>
+        <source> (you set another shortcut: it stays)</source>
+        <translation> (вы задали другое сочетание: оно остаётся)</translation>
+    </message>
+    <message>
+        <source>Use the set of shortcuts for your keyboard layout (%1)? These standard shortcuts change at once:
+
+%2
+
+Shortcuts you set yourself stay as they are.</source>
+        <translation>Использовать набор сочетаний клавиш для вашей раскладки клавиатуры (%1)? Эти стандартные сочетания изменятся сразу:
+
+%2
+
+Сочетания, которые вы задали сами, остаются без изменений.</translation>
     </message>
 </context>
 <context>
@@ -9681,7 +9781,7 @@ Give it to “%4” instead? “%2” will then have no shortcut.</source>
     </message>
     <message>
         <source>documents</source>
-        <translation>документов</translation>
+        <translation>документа|документов</translation>
     </message>
     <message>
         <source>Delete %1 in the Trash forever? This cannot be undone.</source>
@@ -11101,7 +11201,7 @@ Versions 0.70.0 to 0.90.4 kept them there. Move them into the backup folder itse
     </message>
     <message>
         <source>pages</source>
-        <translation>страниц</translation>
+        <translation>страницы|страниц</translation>
     </message>
     <message>
         <source>Print Preview – %1</source>
@@ -11140,8 +11240,8 @@ You can do this later with Help &gt; Add to Application Menu.</source>
 Позже это можно сделать через Справка &gt; Добавить в меню приложений.</translation>
     </message>
     <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>Переместить AppImage в %1 (перемещённый файл нельзя запустить из меню)</translation>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>Перенести AppImage в %1 — постоянное место, откуда его запускает пункт меню</translation>
     </message>
     <message>
         <source>The menu entry could not be made.
@@ -11378,6 +11478,10 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     <message>
         <source>&amp;Themes</source>
         <translation>&amp;Темы</translation>
+    </message>
+    <message>
+        <source>&amp;Profiles</source>
+        <translation>&amp;Профили</translation>
     </message>
     <message>
         <source>&amp;Text Editing</source>
@@ -12537,7 +12641,7 @@ No element of the same kind exists for: %1. Their paragraphs become general text
     </message>
     <message>
         <source>snapshots</source>
-        <translation>снимков</translation>
+        <translation>снимка|снимков</translation>
     </message>
     <message>
         <source>They take %1. The texts stay as they are now; only their earlier versions go, also those of documents in the Trash. This cannot be undone: a backup (File &gt; Back Up) beforehand is a good idea.</source>
@@ -12910,14 +13014,6 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
         <translation>Другие версии по-прежнему сохраняются; только это уведомление не появляется, пока вы не выйдете из программы.</translation>
     </message>
     <message>
-        <source>&amp;Translate and Proofread…</source>
-        <translation>&amp;Перевод и корректура…</translation>
-    </message>
-    <message>
-        <source>Proofread English text or translate German text into English (the add-on is not installed)</source>
-        <translation>Проверить английский текст или перевести немецкий текст на английский (дополнение не установлено)</translation>
-    </message>
-    <message>
         <source>Speech &amp;Transcription…</source>
         <translation>&amp;Расшифровка речи…</translation>
     </message>
@@ -12928,10 +13024,6 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     <message>
         <source>Speech Transcription</source>
         <translation>Расшифровка речи</translation>
-    </message>
-    <message>
-        <source>Translation and Proofreading</source>
-        <translation>Перевод и корректура</translation>
     </message>
     <message>
         <source>is not installed</source>
@@ -12958,8 +13050,20 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
         <translation>Оно превращает речь в текст. Установите его через Справка &gt; Дополнения и обновления &gt; Установить обновление или дополнение; Справка &gt; Дополнения и обновления &gt; Менеджер дополнений показывает дополнения и включает и выключает их.</translation>
     </message>
     <message>
-        <source>It proofreads English text and translates German text into English. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
-        <translation>Оно проверяет английский текст и переводит немецкий текст на английский. Установите его через Справка &gt; Дополнения и обновления &gt; Установить обновление или дополнение; Справка &gt; Дополнения и обновления &gt; Менеджер дополнений показывает дополнения и включает и выключает их.</translation>
+        <source>&amp;Translation Helper…</source>
+        <translation>&amp;Помощник перевода…</translation>
+    </message>
+    <message>
+        <source>Suggestions for translating between eleven languages and for English spelling (the add-on is not installed)</source>
+        <translation>Подсказки для перевода между одиннадцатью языками и для английской орфографии (дополнение не установлено)</translation>
+    </message>
+    <message>
+        <source>Translation Helper</source>
+        <translation>Помощник перевода</translation>
+    </message>
+    <message>
+        <source>It gives suggestions for translating between eleven languages and for English spelling and grammar. Its translations are not precise: check each one, which needs a working knowledge of both languages. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>Он предлагает варианты перевода между одиннадцатью языками и проверяет английскую орфографию и грамматику. Его переводы неточны: проверяйте каждый из них, для чего нужно хорошо знать оба языка. Установите его через «Справка &gt; Дополнения и обновления &gt; Установить обновление или дополнение»; «Справка &gt; Дополнения и обновления &gt; Менеджер дополнений» показывает дополнения и включает и выключает их.</translation>
     </message>
     <message>
         <source>Open Add-on Manager</source>
@@ -13056,6 +13160,62 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     <message>
         <source>and %1 earlier steps</source>
         <translation>и ещё %1 предыдущих шагов</translation>
+    </message>
+    <message>
+        <source>&amp;Manage Profiles…</source>
+        <translation>&amp;Управление профилями…</translation>
+    </message>
+    <message>
+        <source>Use, save, rename, copy, delete, export and import profiles</source>
+        <translation>Применять, сохранять, переименовывать, копировать, удалять, экспортировать и импортировать профили</translation>
+    </message>
+    <message>
+        <source>&amp;Save Settings as New Profile…</source>
+        <translation>&amp;Сохранить настройки как новый профиль…</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Сохранить настройки как новый профиль</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Мой профиль</translation>
+    </message>
+    <message>
+        <source>Keep the options, toolbars, window and theme as they are now in a new profile</source>
+        <translation>Сохранить параметры, панели инструментов, окно и тему в их нынешнем виде в новом профиле</translation>
+    </message>
+    <message>
+        <source>Profiles</source>
+        <translation>Профили</translation>
+    </message>
+    <message>
+        <source>Labels</source>
+        <translation>Метки</translation>
+    </message>
+    <message>
+        <source>Profile:</source>
+        <translation>Профиль:</translation>
+    </message>
+    <message>
+        <source>The profile in use: %1. A click lists the profiles.</source>
+        <translation>Используемый профиль: %1. Щелчок открывает список профилей.</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Метка</translation>
+    </message>
+    <message>
+        <source>No Label</source>
+        <translation>Без метки</translation>
+    </message>
+    <message>
+        <source>Switch Profile</source>
+        <translation>Переключить профиль</translation>
+    </message>
+    <message>
+        <source>The profile sets another language; it takes effect when the program is started again.</source>
+        <translation>В профиле задан другой язык; он вступит в силу при следующем запуске программы.</translation>
     </message>
 </context>
 <context>
@@ -15467,7 +15627,7 @@ Go on?</source>
     </message>
     <message>
         <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</source>
-        <translation>То, что вы меняете здесь, сохраняется в этом проекте. Его собственные настройки: &lt;a href="show"&gt;%1&lt;/a&gt;.</translation>
+        <translation>То, что вы меняете здесь, сохраняется в этом проекте. Его собственные настройки: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>setting</source>
@@ -15475,7 +15635,7 @@ Go on?</source>
     </message>
     <message>
         <source>settings</source>
-        <translation>настроек</translation>
+        <translation>настройки|настроек</translation>
     </message>
     <message>
         <source>What you change here is kept with this project; it has no settings of its own yet.</source>
@@ -15483,7 +15643,7 @@ Go on?</source>
     </message>
     <message>
         <source>The open project has &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; of its own, which it keeps.</source>
-        <translation>У открытого проекта есть собственные настройки (&lt;a href="show"&gt;%1&lt;/a&gt;), которые он сохраняет.</translation>
+        <translation>У открытого проекта есть собственные настройки (&lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;), которые он сохраняет.</translation>
     </message>
     <message>
         <source>Projects&apos; own settings are not used (General &gt; Which settings come first).</source>
@@ -15534,8 +15694,8 @@ Go on?</source>
         <translation>Язык:</translation>
     </message>
     <message>
-        <source>The language of menus, windows and messages; it changes at the next start of the program. The manual and the welcome project stay in English.</source>
-        <translation>Язык меню, окон и сообщений; он меняется при следующем запуске программы. Руководство и приветственный проект остаются на английском.</translation>
+        <source>The language of menus, windows and messages, of the manual, the quick start guide and the welcome project; it changes at the next start of the program. A language marked as a machine translation has not been checked by a speaker yet. Spelling dictionaries for other languages are add-ons (Help &gt; Add-ons and Updates).</source>
+        <translation>Язык меню, окон и сообщений, а также руководства, краткого руководства и приветственного проекта; он изменится при следующем запуске программы. Язык с пометкой «машинный перевод» ещё не проверялся носителем языка. Словари проверки орфографии для других языков — это дополнения (Справка &gt; Дополнения и обновления).</translation>
     </message>
     <message>
         <source>Group the digits of large numbers (%1)</source>
@@ -16347,7 +16507,7 @@ Go on?</source>
     </message>
     <message>
         <source>changes</source>
-        <translation>изменений</translation>
+        <translation>изменения|изменений</translation>
     </message>
     <message>
         <source>Auto-Correction</source>
@@ -16602,8 +16762,104 @@ Go on?</source>
         <translation>все</translation>
     </message>
     <message>
-        <source>Retain backup files per project:</source>
-        <translation>Хранить резервных копий на проект:</translation>
+        <source>Keep the newest</source>
+        <translation>Хранить последние</translation>
+    </message>
+    <message>
+        <source>backups of each project</source>
+        <translation>резервных копий каждого проекта</translation>
+    </message>
+    <message>
+        <source>The colors new things start with. They belong to your profile. Projects that exist keep their own labels.</source>
+        <translation>Цвета, с которых начинаются новые элементы. Они относятся к вашему профилю. В существующих проектах остаются их собственные метки.</translation>
+    </message>
+    <message>
+        <source>Standard Color</source>
+        <translation>Стандартный цвет</translation>
+    </message>
+    <message>
+        <source>Labels of new projects</source>
+        <translation>Метки новых проектов</translation>
+    </message>
+    <message>
+        <source>Color of this label</source>
+        <translation>Цвет этой метки</translation>
+    </message>
+    <message>
+        <source>Colors of the popups</source>
+        <translation>Цвета во всплывающих палитрах</translation>
+    </message>
+    <message>
+        <source>Text color:</source>
+        <translation>Цвет текста:</translation>
+    </message>
+    <message>
+        <source>Highlight:</source>
+        <translation>Выделение цветом:</translation>
+    </message>
+    <message>
+        <source>A color of the text color popup</source>
+        <translation>Цвет из палитры цвета текста</translation>
+    </message>
+    <message>
+        <source>A color of the highlight popup</source>
+        <translation>Цвет из палитры выделения цветом</translation>
+    </message>
+    <message>
+        <source>The color each button starts with</source>
+        <translation>Цвет, с которого начинается каждая кнопка</translation>
+    </message>
+    <message>
+        <source>Text color button:</source>
+        <translation>Кнопка цвета текста:</translation>
+    </message>
+    <message>
+        <source>The color of the text color button when the program starts</source>
+        <translation>Цвет кнопки цвета текста при запуске программы</translation>
+    </message>
+    <message>
+        <source>Highlight button:</source>
+        <translation>Кнопка выделения цветом:</translation>
+    </message>
+    <message>
+        <source>The color of the highlight button when the program starts</source>
+        <translation>Цвет кнопки выделения цветом при запуске программы</translation>
+    </message>
+    <message>
+        <source>Back to the program&apos;s standard labels and colors</source>
+        <translation>Вернуть стандартные метки и цвета программы</translation>
+    </message>
+    <message>
+        <source>Export Profile...</source>
+        <translation>Экспорт профиля...</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Экспорт профиля</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Профили (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile...</source>
+        <translation>Импорт профиля...</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Импорт профиля</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Профили и параметры (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>The profile “%1” was imported. Switch to it under View &gt; Profiles.</source>
+        <translation>Профиль «%1» импортирован. Переключитесь на него в меню «Вид &gt; Профили».</translation>
+    </message>
+    <message>
+        <source>Manage Profiles...</source>
+        <translation>Управление профилями...</translation>
     </message>
     <message>
         <source>No folder chosen: no automatic backups</source>
@@ -16814,24 +17070,8 @@ Go on?</source>
         <translation>Отчёты о сбоях</translation>
     </message>
     <message>
-        <source>Load Options from File...</source>
-        <translation>Загрузить параметры из файла...</translation>
-    </message>
-    <message>
         <source>Load Options</source>
         <translation>Загрузка параметров</translation>
-    </message>
-    <message>
-        <source>Options (*.qboptions)</source>
-        <translation>Параметры (*.qboptions)</translation>
-    </message>
-    <message>
-        <source>Save Options to File...</source>
-        <translation>Сохранить параметры в файл...</translation>
-    </message>
-    <message>
-        <source>Save Options</source>
-        <translation>Сохранение параметров</translation>
     </message>
     <message>
         <source>Save Theme Options to File...</source>
@@ -17587,7 +17827,106 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>cards</source>
-        <translation>карточек</translation>
+        <translation>карточки|карточек</translation>
+    </message>
+</context>
+<context>
+    <name>qb::ProfileManagerDialog</name>
+    <message>
+        <source>Manage Profiles</source>
+        <translation>Управление профилями</translation>
+    </message>
+    <message>
+        <source>A profile holds your options, toolbars, window places and sizes, keyboard set, backup settings, standard colors, layouts and the theme. The profile in use is saved when you switch away from it and when the program ends.</source>
+        <translation>Профиль содержит ваши параметры, панели инструментов, положение и размеры окон, набор сочетаний клавиш, настройки резервного копирования, стандартные цвета, раскладки и тему. Используемый профиль сохраняется, когда вы переключаетесь с него, и при завершении программы.</translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <translation>Применить</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile...</source>
+        <translation>Сохранить настройки как новый профиль...</translation>
+    </message>
+    <message>
+        <source>Rename...</source>
+        <translation>Переименовать...</translation>
+    </message>
+    <message>
+        <source>Copy...</source>
+        <translation>Копировать...</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <source>Export...</source>
+        <translation>Экспорт...</translation>
+    </message>
+    <message>
+        <source>Import...</source>
+        <translation>Импорт...</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Сохранить настройки как новый профиль</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Мой профиль</translation>
+    </message>
+    <message>
+        <source>Rename Profile</source>
+        <translation>Переименование профиля</translation>
+    </message>
+    <message>
+        <source>Copy Profile</source>
+        <translation>Копирование профиля</translation>
+    </message>
+    <message>
+        <source>%1 (Copy)</source>
+        <translation>%1 (копия)</translation>
+    </message>
+    <message>
+        <source>Delete Profile</source>
+        <translation>Удаление профиля</translation>
+    </message>
+    <message>
+        <source>Delete the profile “%1”? This cannot be undone.</source>
+        <translation>Удалить профиль «%1»? Это действие нельзя отменить.</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Экспорт профиля</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Профили (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Импорт профиля</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Профили и параметры (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>%1 (in use)</source>
+        <translation>%1 (используется)</translation>
+    </message>
+    <message>
+        <source>Theme: %1.</source>
+        <translation>Тема: %1.</translation>
+    </message>
+    <message>
+        <source>Built-in profile; it can be deleted.</source>
+        <translation>Встроенный профиль; его можно удалить.</translation>
+    </message>
+    <message>
+        <source>The profile every program starts with.</source>
+        <translation>Профиль, с которым запускается каждая программа.</translation>
     </message>
 </context>
 <context>
@@ -17999,7 +18338,7 @@ Not written:
     </message>
     <message>
         <source>occurrences</source>
-        <translation>вхождений</translation>
+        <translation>вхождения|вхождений</translation>
     </message>
     <message>
         <source>document</source>
@@ -18007,7 +18346,7 @@ Not written:
     </message>
     <message>
         <source>documents</source>
-        <translation>документов</translation>
+        <translation>документа|документов</translation>
     </message>
     <message>
         <source>Snapshots taken: %1.</source>
@@ -18887,7 +19226,7 @@ Fonts, sizes and colors of individual passages are not kept in Markdown; bold, i
     </message>
     <message>
         <source>An element name cannot be empty or contain the characters : &quot; &lt; &gt; \ { } ; /</source>
-        <translation>Название элемента не может быть пустым или содержать символы : " &lt; &gt; \ { } ; /</translation>
+        <translation>Название элемента не может быть пустым или содержать символы : &quot; &lt; &gt; \ { } ; /</translation>
     </message>
     <message>
         <source>New Element</source>
@@ -19189,7 +19528,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>Please enter a name of up to 60 characters without : &quot; &lt; &gt; \ { } ;</source>
-        <translation>Введите название длиной до 60 символов без : " &lt; &gt; \ { } ;</translation>
+        <translation>Введите название длиной до 60 символов без : &quot; &lt; &gt; \ { } ;</translation>
     </message>
     <message>
         <source>There is a style named “%1” already.</source>
@@ -19252,7 +19591,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>Please enter a name of up to 60 characters without : &quot; &lt; &gt; \ { } ;</source>
-        <translation>Введите название длиной до 60 символов без : " &lt; &gt; \ { } ;</translation>
+        <translation>Введите название длиной до 60 символов без : &quot; &lt; &gt; \ { } ;</translation>
     </message>
     <message>
         <source>There is a style named “%1” already. Choose another name, or use Redefine Style From Selection to change that style.</source>
@@ -19895,7 +20234,7 @@ Ctrl+щелчок, чтобы открыть</translation>
     </message>
     <message>
         <source>colors</source>
-        <translation>цветов</translation>
+        <translation>цвета|цветов</translation>
     </message>
     <message>
         <source> and %1</source>
@@ -19907,7 +20246,7 @@ Ctrl+щелчок, чтобы открыть</translation>
     </message>
     <message>
         <source>fonts</source>
-        <translation>шрифтов</translation>
+        <translation>шрифта|шрифтов</translation>
     </message>
 </context>
 <context>
@@ -19958,7 +20297,7 @@ Ctrl+щелчок, чтобы открыть</translation>
     </message>
     <message>
         <source>colors and fonts</source>
-        <translation>цвета и шрифты</translation>
+        <translation>цвета и шрифта|цветов и шрифтов</translation>
     </message>
     <message>
         <source>Save the look in My Look 1 or My Look 2 first (it replaces the look saved there), or switch without saving it?</source>
@@ -20439,7 +20778,7 @@ Or download the current version from the project&apos;s page.</source>
     </message>
     <message>
         <source>themes</source>
-        <translation>тем</translation>
+        <translation>темы|тем</translation>
     </message>
     <message>
         <source>project template</source>
@@ -20447,7 +20786,7 @@ Or download the current version from the project&apos;s page.</source>
     </message>
     <message>
         <source>project templates</source>
-        <translation>шаблонов проектов</translation>
+        <translation>шаблона проектов|шаблонов проектов</translation>
     </message>
     <message>
         <source>compile format</source>
@@ -20455,7 +20794,7 @@ Or download the current version from the project&apos;s page.</source>
     </message>
     <message>
         <source>compile formats</source>
-        <translation>форматов компоновки</translation>
+        <translation>формата компоновки|форматов компоновки</translation>
     </message>
     <message>
         <source>layout</source>
@@ -20463,7 +20802,7 @@ Or download the current version from the project&apos;s page.</source>
     </message>
     <message>
         <source>layouts</source>
-        <translation>раскладок</translation>
+        <translation>раскладки|раскладок</translation>
     </message>
     <message>
         <source>script format</source>
@@ -20471,7 +20810,7 @@ Or download the current version from the project&apos;s page.</source>
     </message>
     <message>
         <source>script formats</source>
-        <translation>форматов сценариев</translation>
+        <translation>формата сценариев|форматов сценариев</translation>
     </message>
     <message>
         <source>name list</source>
@@ -20479,7 +20818,7 @@ Or download the current version from the project&apos;s page.</source>
     </message>
     <message>
         <source>name lists</source>
-        <translation>списков имён</translation>
+        <translation>списка имён|списков имён</translation>
     </message>
     <message>
         <source>plugin file</source>
@@ -20487,7 +20826,7 @@ Or download the current version from the project&apos;s page.</source>
     </message>
     <message>
         <source>plugin files</source>
-        <translation>файлов модулей</translation>
+        <translation>файла модулей|файлов модулей</translation>
     </message>
     <message>
         <source>dictionary</source>
@@ -20495,7 +20834,7 @@ Or download the current version from the project&apos;s page.</source>
     </message>
     <message>
         <source>dictionaries</source>
-        <translation>словарей</translation>
+        <translation>словаря|словарей</translation>
     </message>
     <message>
         <source>video and audio formats licensed under patents (for Media Playback 2.0 or newer)</source>
@@ -20818,6 +21157,13 @@ Or download the current version from the project&apos;s page.</source>
     <message>
         <source>PDF (.pdf)</source>
         <translation>PDF (.pdf)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::language</name>
+    <message>
+        <source>%1 (machine translation)</source>
+        <translation>%1 (машинный перевод)</translation>
     </message>
 </context>
 <context>

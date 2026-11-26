@@ -1,0 +1,6 @@
+**Motyw** to tylko wygląd: kolory i czcionki. **Profil** zachowuje całą resztę: twoje opcje, paski narzędzi, rozmiar i położenie okna, panele, zestaw klawiatury, ustawienia kopii zapasowych, kolory standardowe i zapisane układy, a także nazywa swój motyw. Przełączenie profilu zmienia to wszystko naraz.
+**Wypróbuj:** wybierz **Widok > Profile > Zapisz ustawienia jako nowy profil…**, nadaj mu nazwę, zmień kilka rzeczy (motyw, pasek narzędzi) i wróć do profilu **Default** w **Widok > Profile**.
+- Profil **Default** to miejsce, w którym na początku przechowywane są twoje ustawienia. Nie można go usunąć; pozostałe profile można.
+- **Widok > Profile > Zarządzaj profilami…** zmienia nazwy, kopiuje, usuwa, eksportuje i importuje profile. Wyeksportowany profil to jeden plik, który możesz zabrać na inny komputer; o foldery z niego, których tam nie ma, program pyta.
+- **Widok > Paski narzędzi > Profile** pokazuje mały pasek z używanym profilem. **Widok > Paski narzędzi > Etykiety** pokazuje kolory etykiet otwartego projektu, każdy jednym kliknięciem.
+- **Plik > Opcje > Wygląd > Kolory standardowe** ustawia etykiety, z którymi startują nowe projekty, oraz kolory palet koloru tekstu i wyróżnienia. Należą do profilu.

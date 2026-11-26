@@ -1,0 +1,6 @@
+Un **tema** è solo un aspetto: colori e caratteri. Un **profilo** conserva tutto il resto: le tue opzioni, le barre degli strumenti, la dimensione e la posizione della finestra, i pannelli, il set di tastiera, le impostazioni dei backup, i colori standard e i layout salvati, e nomina il suo tema. Cambiare profilo modifica tutto questo in un colpo solo.
+**Prova:** scegli **Vista > Profili > Salva le impostazioni come nuovo profilo…**, dagli un nome, cambia alcune cose (un tema, una barra degli strumenti) e torna a **Default** in **Vista > Profili**.
+- Il profilo **Default** è dove le tue impostazioni vengono conservate all'inizio. Non può essere eliminato; gli altri profili sì.
+- **Vista > Profili > Gestisci profili…** rinomina, copia, elimina, esporta e importa profili. Un profilo esportato è un unico file che puoi portare su un altro computer; delle cartelle che contiene e che lì non esistono ti viene chiesto.
+- **Vista > Barre degli strumenti > Profili** mostra una piccola barra con il profilo in uso. **Vista > Barre degli strumenti > Etichette** mostra i colori di etichetta del progetto aperto, un clic ciascuno.
+- **File > Opzioni > Aspetto > Colori standard** imposta le etichette con cui partono i nuovi progetti e i colori delle tavolozze del colore del testo e dell'evidenziazione. Appartengono al profilo.

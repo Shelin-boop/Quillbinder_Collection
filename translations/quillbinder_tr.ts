@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>The microphone &quot;%1&quot; could not be opened.</source>
-        <translation>"%1" mikrofonu açılamadı.</translation>
+        <translation>&quot;%1&quot; mikrofonu açılamadı.</translation>
     </message>
 </context>
 <context>
@@ -345,12 +345,16 @@ Bu listedeki adlar kadın ve erkek olarak ayrılmamıştır.</translation>
         <source>Textual Marks</source>
         <translation>Metin İşaretleri</translation>
     </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>Standart Renkler</translation>
+    </message>
 </context>
 <context>
     <name>Portable</name>
     <message>
         <source>the folder &quot;data&quot; cannot be made in %1</source>
-        <translation>"data" klasörü %1 içinde oluşturulamıyor</translation>
+        <translation>&quot;data&quot; klasörü %1 içinde oluşturulamıyor</translation>
     </message>
     <message>
         <source>nothing can be written into %1 (%2)</source>
@@ -435,7 +439,7 @@ Bu listedeki adlar kadın ve erkek olarak ayrılmamıştır.</translation>
     </message>
     <message>
         <source>This format needs the program &quot;%1&quot;, which is not installed.</source>
-        <translation>Bu biçim, kurulu olmayan "%1" programını gerektiriyor.</translation>
+        <translation>Bu biçim, kurulu olmayan &quot;%1&quot; programını gerektiriyor.</translation>
     </message>
     <message>
         <source>Cannot create a temporary folder.</source>
@@ -539,7 +543,7 @@ Bu listedeki adlar kadın ve erkek olarak ayrılmamıştır.</translation>
     </message>
     <message>
         <source>Backing up &quot;%1&quot;...</source>
-        <translation>"%1" yedekleniyor...</translation>
+        <translation>&quot;%1&quot; yedekleniyor...</translation>
     </message>
     <message>
         <source>The backup was cancelled.</source>
@@ -601,7 +605,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Restoring &quot;%1&quot;...</source>
-        <translation>"%1" geri yükleniyor...</translation>
+        <translation>&quot;%1&quot; geri yükleniyor...</translation>
     </message>
     <message>
         <source>The restore was cancelled; the files written so far were removed.</source>
@@ -847,7 +851,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>A project called &quot;%1&quot; already exists in this folder.</source>
-        <translation>Bu klasörde "%1" adında bir proje zaten var.</translation>
+        <translation>Bu klasörde &quot;%1&quot; adında bir proje zaten var.</translation>
     </message>
     <message>
         <source>Could not create the project folder:
@@ -1471,7 +1475,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>&quot;%1&quot; was changed after the comparison and was left alone.</source>
-        <translation>"%1" karşılaştırmadan sonra değişmişti ve dokunulmadan bırakıldı.</translation>
+        <translation>&quot;%1&quot; karşılaştırmadan sonra değişmişti ve dokunulmadan bırakıldı.</translation>
     </message>
     <message>
         <source>Before Compare and Transfer (%1)</source>
@@ -1638,7 +1642,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     <message numerus="yes">
         <source>the binder of the Scrivener project: %n document(s) were added to it elsewhere while it was open here. It was not replaced, so they are kept; close the project and open it again to see them with your changes</source>
         <translation>
-            <numerusform>Scrivener projesinin binder'ı: burada açıkken başka bir yerde ona %n belge eklendi. Binder değiştirilmedi, böylece bu belgeler korunuyor; onları değişikliklerinizle birlikte görmek için projeyi kapatıp yeniden açın</numerusform>
+            <numerusform>Scrivener projesinin binder&apos;ı: burada açıkken başka bir yerde ona %n belge eklendi. Binder değiştirilmedi, böylece bu belgeler korunuyor; onları değişikliklerinizle birlikte görmek için projeyi kapatıp yeniden açın</numerusform>
         </translation>
     </message>
     <message>
@@ -1669,7 +1673,7 @@ Hiçbir şey değiştirilmedi: çalışma kopyası olduğu gibi, Scrivener proje
     </message>
     <message>
         <source>Scrivener has opened this project (%1) while it is open here. So that the two programs do not write over each other&apos;s changes, nothing more is written into the Scrivener project %2. Your changes are kept in this program&apos;s working copy: close the project in Scrivener, then save here again (File &gt; Save).</source>
-        <translation>Scrivener bu projeyi (%1) burada açıkken açtı. İki programın birbirinin değişikliklerinin üzerine yazmaması için %2 Scrivener projesine artık hiçbir şey yazılmıyor. Değişiklikleriniz bu programın çalışma kopyasında saklanıyor: projeyi Scrivener'da kapatın, sonra burada yeniden kaydedin (Dosya &gt; Kaydet).</translation>
+        <translation>Scrivener bu projeyi (%1) burada açıkken açtı. İki programın birbirinin değişikliklerinin üzerine yazmaması için %2 Scrivener projesine artık hiçbir şey yazılmıyor. Değişiklikleriniz bu programın çalışma kopyasında saklanıyor: projeyi Scrivener&apos;da kapatın, sonra burada yeniden kaydedin (Dosya &gt; Kaydet).</translation>
     </message>
     <message>
         <source>Some files of the Scrivener project were changed elsewhere (another computer or program), and those versions could not be kept in %1, so they were not replaced: %2. Check that the project folder is writable and the disk is not full.</source>
@@ -1697,23 +1701,23 @@ Hiçbir şey değiştirilmedi: çalışma kopyası olduğu gibi, Scrivener proje
     </message>
     <message>
         <source>The index card picture of &quot;%1&quot; could not be copied (%2).</source>
-        <translation>"%1" belgesinin dizin kartı resmi kopyalanamadı (%2).</translation>
+        <translation>&quot;%1&quot; belgesinin dizin kartı resmi kopyalanamadı (%2).</translation>
     </message>
     <message>
         <source>The mind map of &quot;%1&quot; could not be copied (%2).</source>
-        <translation>"%1" belgesinin zihin haritası kopyalanamadı (%2).</translation>
+        <translation>&quot;%1&quot; belgesinin zihin haritası kopyalanamadı (%2).</translation>
     </message>
     <message>
         <source>The file of &quot;%1&quot; (%2) could not be copied (%3).</source>
-        <translation>"%1" belgesinin dosyası (%2) kopyalanamadı (%3).</translation>
+        <translation>&quot;%1&quot; belgesinin dosyası (%2) kopyalanamadı (%3).</translation>
     </message>
     <message>
         <source>A file of the page &quot;%1&quot; (%2) could not be copied (%3).</source>
-        <translation>"%1" sayfasının bir dosyası (%2) kopyalanamadı (%3).</translation>
+        <translation>&quot;%1&quot; sayfasının bir dosyası (%2) kopyalanamadı (%3).</translation>
     </message>
     <message>
         <source>Media file of &quot;%1&quot; was not found.</source>
-        <translation>"%1" belgesinin medya dosyası bulunamadı.</translation>
+        <translation>&quot;%1&quot; belgesinin medya dosyası bulunamadı.</translation>
     </message>
     <message>
         <source>Imported snapshot</source>
@@ -1785,7 +1789,7 @@ What was written so far is in %2. Nothing was changed in the Scrivener project.<
     </message>
     <message>
         <source>Plays in the manuscript layout common in the US: centered act and scene headings, character names above the dialogue, stage directions indented and in parentheses.</source>
-        <translation>ABD'de yaygın olan metin düzeninde oyunlar: ortalanmış perde ve sahne başlıkları, diyaloğun üstünde karakter adları, girintili ve parantez içinde sahne yönergeleri.</translation>
+        <translation>ABD&apos;de yaygın olan metin düzeninde oyunlar: ortalanmış perde ve sahne başlıkları, diyaloğun üstünde karakter adları, girintili ve parantez içinde sahne yönergeleri.</translation>
     </message>
     <message>
         <source>Comics and graphic novels: pages, panels, panel descriptions, and the lettering (character, dialogue, captions, sound effects).</source>
@@ -1863,7 +1867,7 @@ What was written so far is in %2. Nothing was changed in the Scrivener project.<
         <source>&quot;%1&quot; cannot be installed.
 
 %2</source>
-        <translation>"%1" kurulamıyor.
+        <translation>&quot;%1&quot; kurulamıyor.
 
 %2</translation>
     </message>
@@ -1881,7 +1885,7 @@ What was written so far is in %2. Nothing was changed in the Scrivener project.<
     </message>
     <message>
         <source>Signed with the add-on key &quot;%1&quot;, which the Quillbinder project vouches for: it is the add-on as published, unchanged.</source>
-        <translation>Quillbinder projesinin güvence verdiği "%1" eklenti anahtarıyla imzalanmış: eklenti yayımlandığı gibi, değiştirilmeden.</translation>
+        <translation>Quillbinder projesinin güvence verdiği &quot;%1&quot; eklenti anahtarıyla imzalanmış: eklenti yayımlandığı gibi, değiştirilmeden.</translation>
     </message>
     <message>
         <source>Not signed by the Quillbinder project: it can come from anyone. Install it only if you made it yourself or trust where it comes from.</source>
@@ -2153,7 +2157,7 @@ What was written so far is in %2. Nothing was changed in the Scrivener project.<
     </message>
     <message>
         <source>&lt;p&gt;%1 itself is under the &lt;b&gt;Apache License 2.0&lt;/b&gt;: anyone may use, copy, change and pass it on, keeping the license and the NOTICE file, which names the project and its source. The AppImage also carries parts of other projects, each under its own license; they are listed here with their full license texts (the same texts are in the AppImage under &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt is The Qt Company&apos;s own build of Qt %3; the other libraries are those of Ubuntu 24.04. The source code of each, exactly in the version used, is in the release &lt;a href=&quot;%2&quot;&gt;Third-party source code&lt;/a&gt; of the project page, in the file named below its license (Ubuntu&apos;s archive has Ubuntu&apos;s as well). You may replace the libraries inside the AppImage with your own builds. Add-ons carry their own license files.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;%1 kendisi &lt;b&gt;Apache License 2.0&lt;/b&gt; altındadır: herkes onu kullanabilir, kopyalayabilir, değiştirebilir ve başkalarına verebilir; yeter ki lisansı ve projeyi ile kaynağını belirten NOTICE dosyasını korusun. AppImage ayrıca başka projelerin parçalarını da taşır, her biri kendi lisansı altındadır; bunlar tam lisans metinleriyle burada listelenmiştir (aynı metinler AppImage içinde &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt; klasöründedir). Qt, The Qt Company'nin Qt %3 için kendi derlemesidir; diğer kitaplıklar Ubuntu 24.04'ün kitaplıklarıdır. Her birinin kaynak kodu, kullanılan sürümüyle birebir, proje sayfasındaki &lt;a href="%2"&gt;Üçüncü taraf kaynak kodu&lt;/a&gt; sürümünde, lisansının altında adı yazılı dosyadadır (Ubuntu'nun arşivinde de Ubuntu'nun sürümleri vardır). AppImage içindeki kitaplıkları kendi derlemelerinizle değiştirebilirsiniz. Eklentiler kendi lisans dosyalarını taşır.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;%1 kendisi &lt;b&gt;Apache License 2.0&lt;/b&gt; altındadır: herkes onu kullanabilir, kopyalayabilir, değiştirebilir ve başkalarına verebilir; yeter ki lisansı ve projeyi ile kaynağını belirten NOTICE dosyasını korusun. AppImage ayrıca başka projelerin parçalarını da taşır, her biri kendi lisansı altındadır; bunlar tam lisans metinleriyle burada listelenmiştir (aynı metinler AppImage içinde &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt; klasöründedir). Qt, The Qt Company&apos;nin Qt %3 için kendi derlemesidir; diğer kitaplıklar Ubuntu 24.04&apos;ün kitaplıklarıdır. Her birinin kaynak kodu, kullanılan sürümüyle birebir, proje sayfasındaki &lt;a href=&quot;%2&quot;&gt;Üçüncü taraf kaynak kodu&lt;/a&gt; sürümünde, lisansının altında adı yazılı dosyadadır (Ubuntu&apos;nun arşivinde de Ubuntu&apos;nun sürümleri vardır). AppImage içindeki kitaplıkları kendi derlemelerinizle değiştirebilirsiniz. Eklentiler kendi lisans dosyalarını taşır.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1
@@ -2247,7 +2251,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>Show Label Colors in the Binder</source>
-        <translation>Etiket Renklerini Binder'da Göster</translation>
+        <translation>Etiket Renklerini Binder&apos;da Göster</translation>
     </message>
     <message>
         <source>Let the Label Color Shine Through the Icons</source>
@@ -3246,8 +3250,12 @@ Kaynak: %1</translation>
         <translation>Denetçi: Notlar</translation>
     </message>
     <message>
-        <source>Inspector: Bookmark Lists</source>
-        <translation>Denetçi: Yer İmi Listeleri</translation>
+        <source>Inspector: Document Bookmarks</source>
+        <translation>Denetçi: Belge Yer İmleri</translation>
+    </message>
+    <message>
+        <source>Inspector: Project Bookmarks</source>
+        <translation>Denetçi: Proje Yer İmleri</translation>
     </message>
     <message>
         <source>Inspector: Bookmarked Text</source>
@@ -3279,7 +3287,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>The file is larger than %1 MB.</source>
-        <translation>Dosya %1 MB'tan büyük.</translation>
+        <translation>Dosya %1 MB&apos;tan büyük.</translation>
     </message>
     <message>
         <source>Cancelled.</source>
@@ -3307,7 +3315,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>This is a document of an older Word (6.0 or 95), which is not read here.</source>
-        <translation>Bu, burada okunmayan eski bir Word'ün (6.0 veya 95) belgesidir.</translation>
+        <translation>Bu, burada okunmayan eski bir Word&apos;ün (6.0 veya 95) belgesidir.</translation>
     </message>
     <message>
         <source>The document is protected with a password. Remove the password in a word processor first.</source>
@@ -3447,7 +3455,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>Download 574 MB, memory about 0.9 GB. Recognition close to Large v3 and faster, but it cannot translate: what is said in the fallback language stays in that language.</source>
-        <translation>574 MB indirme, yaklaşık 0,9 GB bellek. Large v3'e yakın tanıma ve daha hızlı, ancak çeviri yapamaz: yedek dilde söylenenler o dilde kalır.</translation>
+        <translation>574 MB indirme, yaklaşık 0,9 GB bellek. Large v3&apos;e yakın tanıma ve daha hızlı, ancak çeviri yapamaz: yedek dilde söylenenler o dilde kalır.</translation>
     </message>
     <message>
         <source>The file cannot be read: %1</source>
@@ -3471,7 +3479,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>The file holds the model &quot;%1&quot;, not &quot;%2&quot;.</source>
-        <translation>Dosya "%2" değil, "%1" modelini içeriyor.</translation>
+        <translation>Dosya &quot;%2&quot; değil, &quot;%1&quot; modelini içeriyor.</translation>
     </message>
     <message>
         <source>The recording cannot be written: %1</source>
@@ -3514,28 +3522,72 @@ Kaynak: %1</translation>
         <translation>çok zor</translation>
     </message>
     <message>
-        <source>Protagonist</source>
-        <translation>Başkahraman</translation>
+        <source>Name of the profile:</source>
+        <translation>Profilin adı:</translation>
     </message>
     <message>
-        <source>Supporting</source>
-        <translation>Yardımcı Karakter</translation>
+        <source>There is already a profile named “%1”. Choose another name.</source>
+        <translation>“%1” adında bir profil zaten var. Başka bir ad seçin.</translation>
     </message>
     <message>
-        <source>Village</source>
-        <translation>Köy</translation>
+        <source>Import Profile</source>
+        <translation>Profili İçe Aktar</translation>
     </message>
     <message>
-        <source>Forest</source>
-        <translation>Orman</translation>
+        <source>The profile also names programs, folders, files or addresses (a folder may not exist on this computer):
+
+%1
+
+Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
+        <translation>Profil ayrıca programları, klasörleri, dosyaları veya adresleri de belirtiyor (bir klasör bu bilgisayarda bulunmayabilir):
+
+%1
+
+Bunlar da alınsın mı? Bunları yalnızca dosyayı kendiniz hazırladıysanız veya geldiği yere güveniyorsanız alın.</translation>
     </message>
     <message>
-        <source>Autumn</source>
-        <translation>Sonbahar</translation>
+        <source>A temporary file could not be made.</source>
+        <translation>Geçici bir dosya oluşturulamadı.</translation>
     </message>
     <message>
-        <source>Fog</source>
-        <translation>Sis</translation>
+        <source>Nothing to write.</source>
+        <translation>Yazılacak bir şey yok.</translation>
+    </message>
+    <message>
+        <source>The file could not be written (%1). The file that was there is unchanged.</source>
+        <translation>Dosya yazılamadı (%1). Orada bulunan dosya değişmedi.</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Profilim</translation>
+    </message>
+    <message>
+        <source>The profile “%1” could not be read.</source>
+        <translation>“%1” profili okunamadı.</translation>
+    </message>
+    <message>
+        <source>There is no profile “%1”.</source>
+        <translation>“%1” adında bir profil yok.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be deleted.</source>
+        <translation>“%1” profili silinemez.</translation>
+    </message>
+    <message>
+        <source>The profile in use cannot be deleted. Switch to another profile first.</source>
+        <translation>Kullanımdaki profil silinemez. Önce başka bir profile geçin.</translation>
+    </message>
+    <message>
+        <source>The file of the profile could not be deleted.</source>
+        <translation>Profilin dosyası silinemedi.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be renamed.</source>
+        <translation>“%1” profili yeniden adlandırılamaz.</translation>
+    </message>
+    <message>
+        <source>This is not a file of a profile or of options saved by Quillbinder.</source>
+        <translation>Bu, Quillbinder tarafından kaydedilmiş bir profil veya seçenekler dosyası değil.</translation>
     </message>
 </context>
 <context>
@@ -3747,7 +3799,7 @@ Kaynak: %1</translation>
     <name>ScreenGrab</name>
     <message>
         <source>This desktop does not let programs read the screen. On KDE Plasma, install Spectacle (sudo apt install kde-spectacle); it takes the picture for the scratch pad.</source>
-        <translation>Bu masaüstü programların ekranı okumasına izin vermiyor. KDE Plasma'da Spectacle'ı kurun (sudo apt install kde-spectacle); karalama defteri için resmi o alır.</translation>
+        <translation>Bu masaüstü programların ekranı okumasına izin vermiyor. KDE Plasma&apos;da Spectacle&apos;ı kurun (sudo apt install kde-spectacle); karalama defteri için resmi o alır.</translation>
     </message>
 </context>
 <context>
@@ -3782,7 +3834,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>whisper.cpp&apos;s model files on Hugging Face (the usable original source)</source>
-        <translation>whisper.cpp'nin Hugging Face üzerindeki model dosyaları (kullanılabilir özgün kaynak)</translation>
+        <translation>whisper.cpp&apos;nin Hugging Face üzerindeki model dosyaları (kullanılabilir özgün kaynak)</translation>
     </message>
     <message>
         <source>Other address:</source>
@@ -4022,7 +4074,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>No graphics card that whisper.cpp can use (Vulkan) was found; the processor computes.</source>
-        <translation>whisper.cpp'nin kullanabileceği (Vulkan) bir ekran kartı bulunamadı; işlemci hesaplıyor.</translation>
+        <translation>whisper.cpp&apos;nin kullanabileceği (Vulkan) bir ekran kartı bulunamadı; işlemci hesaplıyor.</translation>
     </message>
     <message>
         <source>A graphics card is usually much faster; the speed test shows how much on this computer.</source>
@@ -4173,15 +4225,15 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>Not installed: the downloaded file does not have the known checksum of &quot;%1&quot; (it may be damaged, or not the file of the official source). The model in use stays. Try again later.</source>
-        <translation>Kurulmadı: indirilen dosya, "%1" için bilinen sağlama toplamına sahip değil (hasarlı olabilir veya resmî kaynağın dosyası değil). Kullanımdaki model kalıyor. Daha sonra yeniden deneyin.</translation>
+        <translation>Kurulmadı: indirilen dosya, &quot;%1&quot; için bilinen sağlama toplamına sahip değil (hasarlı olabilir veya resmî kaynağın dosyası değil). Kullanımdaki model kalıyor. Daha sonra yeniden deneyin.</translation>
     </message>
     <message>
         <source>The file differs from the one Quillbinder knows for &quot;%1&quot; (its checksum is another). Use it only if you trust where it comes from: it is read by the speech engine. Check and use it?</source>
-        <translation>Dosya, Quillbinder'ın "%1" için bildiğinden farklı (sağlama toplamı başka). Yalnızca geldiği yere güveniyorsanız kullanın: konuşma motoru tarafından okunur. Denetlenip kullanılsın mı?</translation>
+        <translation>Dosya, Quillbinder&apos;ın &quot;%1&quot; için bildiğinden farklı (sağlama toplamı başka). Yalnızca geldiği yere güveniyorsanız kullanın: konuşma motoru tarafından okunur. Denetlenip kullanılsın mı?</translation>
     </message>
     <message>
         <source>The file is not one of the models Quillbinder knows (its checksum is another). Use it only if you trust where it comes from: it is read by the speech engine. Check and use it?</source>
-        <translation>Dosya, Quillbinder'ın bildiği modellerden biri değil (sağlama toplamı başka). Yalnızca geldiği yere güveniyorsanız kullanın: konuşma motoru tarafından okunur. Denetlenip kullanılsın mı?</translation>
+        <translation>Dosya, Quillbinder&apos;ın bildiği modellerden biri değil (sağlama toplamı başka). Yalnızca geldiği yere güveniyorsanız kullanın: konuşma motoru tarafından okunur. Denetlenip kullanılsın mı?</translation>
     </message>
     <message>
         <source>Not installed: the file differs from the known one. The model in use stays.</source>
@@ -4197,7 +4249,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>it wrote &quot;%1&quot;</source>
-        <translation>"%1" yazdı</translation>
+        <translation>&quot;%1&quot; yazdı</translation>
     </message>
     <message>
         <source>The model did not pass the test transcription (%1). The model in use stays.</source>
@@ -4259,7 +4311,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>Documents selected in the binder</source>
-        <translation>Binder'da seçili belgeler</translation>
+        <translation>Binder&apos;da seçili belgeler</translation>
     </message>
     <message>
         <source>Draft (included in compile)</source>
@@ -4575,7 +4627,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>Words per sentence plus the share of words with more than 6 letters (Björnsson 1968); works for many languages. Rough guide: below 30 very easy, 30–40 easy, 40–50 medium, 50–60 hard, above 60 very hard</source>
-        <translation>Cümle başına sözcük artı 6 harften uzun sözcüklerin payı (Björnsson 1968); birçok dilde işe yarar. Kabaca: 30'un altı çok kolay, 30–40 kolay, 40–50 orta, 50–60 zor, 60'ın üstü çok zor</translation>
+        <translation>Cümle başına sözcük artı 6 harften uzun sözcüklerin payı (Björnsson 1968); birçok dilde işe yarar. Kabaca: 30&apos;un altı çok kolay, 30–40 kolay, 40–50 orta, 50–60 zor, 60&apos;ın üstü çok zor</translation>
     </message>
 </context>
 <context>
@@ -4654,7 +4706,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>Move &quot;%1&quot; to the trash?</source>
-        <translation>"%1" çöp kutusuna taşınsın mı?</translation>
+        <translation>&quot;%1&quot; çöp kutusuna taşınsın mı?</translation>
     </message>
     <message>
         <source>Move to Trash</source>
@@ -4744,7 +4796,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>only on Windows</source>
-        <translation>yalnızca Windows'ta</translation>
+        <translation>yalnızca Windows&apos;ta</translation>
     </message>
     <message>
         <source>the registry entries could not be removed</source>
@@ -4813,7 +4865,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     <name>playback</name>
     <message>
         <source>Playing audio and video inside the program needs the add-on &quot;Media Playback&quot; (Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager).</source>
-        <translation>Ses ve videoyu program içinde oynatmak "Media Playback" eklentisini gerektirir (Yardım &gt; Eklentiler ve Güncellemeler &gt; Güncelleme veya Eklenti Kur; Yardım &gt; Eklentiler ve Güncellemeler &gt; Eklenti Yöneticisi).</translation>
+        <translation>Ses ve videoyu program içinde oynatmak &quot;Media Playback&quot; eklentisini gerektirir (Yardım &gt; Eklentiler ve Güncellemeler &gt; Güncelleme veya Eklenti Kur; Yardım &gt; Eklentiler ve Güncellemeler &gt; Eklenti Yöneticisi).</translation>
     </message>
     <message>
         <source>Audio and video cannot be played here: %1</source>
@@ -4908,11 +4960,11 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Remove the add-on &quot;%1&quot;?</source>
-        <translation>"%1" eklentisi kaldırılsın mı?</translation>
+        <translation>&quot;%1&quot; eklentisi kaldırılsın mı?</translation>
     </message>
     <message>
         <source>%1 (built into the AppImage)</source>
-        <translation>%1 (AppImage'a yerleşik)</translation>
+        <translation>%1 (AppImage&apos;a yerleşik)</translation>
     </message>
     <message>
         <source>running now</source>
@@ -4924,7 +4976,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>does not fit this AppImage</source>
-        <translation>bu AppImage'a uymuyor</translation>
+        <translation>bu AppImage&apos;a uymuyor</translation>
     </message>
     <message>
         <source>Built for an older program: install its new version (its code is not loaded)</source>
@@ -4932,7 +4984,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>&lt;span style=&apos;color:gray&apos;&gt;No add-ons installed. Add-ons are files ending in .qbpkg; choose &quot;Install From File…&quot; or double-click the file.&lt;/span&gt;</source>
-        <translation>&lt;span style='color:gray'&gt;Kurulu eklenti yok. Eklentiler .qbpkg ile biten dosyalardır; "Dosyadan Kur…" seçeneğini kullanın veya dosyaya çift tıklayın.&lt;/span&gt;</translation>
+        <translation>&lt;span style=&apos;color:gray&apos;&gt;Kurulu eklenti yok. Eklentiler .qbpkg ile biten dosyalardır; &quot;Dosyadan Kur…&quot; seçeneğini kullanın veya dosyaya çift tıklayın.&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Install Update or Add-on</source>
@@ -5044,7 +5096,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Back to the binder</source>
-        <translation>Binder'a dön</translation>
+        <translation>Binder&apos;a dön</translation>
     </message>
     <message>
         <source>Release</source>
@@ -5080,7 +5132,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Delete this collection? The documents themselves stay in the binder.</source>
-        <translation>Bu koleksiyon silinsin mi? Belgelerin kendisi binder'da kalır.</translation>
+        <translation>Bu koleksiyon silinsin mi? Belgelerin kendisi binder&apos;da kalır.</translation>
     </message>
     <message>
         <source>Rename…</source>
@@ -5184,11 +5236,11 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Search &quot;Included&quot; Documents</source>
-        <translation>"Dahil" Belgelerde Ara</translation>
+        <translation>&quot;Dahil&quot; Belgelerde Ara</translation>
     </message>
     <message>
         <source>Search &quot;Excluded&quot; Documents</source>
-        <translation>"Hariç" Belgelerde Ara</translation>
+        <translation>&quot;Hariç&quot; Belgelerde Ara</translation>
     </message>
     <message>
         <source>Include Trash</source>
@@ -5483,7 +5535,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>The file has this chapter in another place than Compile; its place is not changed.</source>
-        <translation>Dosyada bu bölüm Derleme'dekinden başka bir yerde; yeri değiştirilmez.</translation>
+        <translation>Dosyada bu bölüm Derleme&apos;dekinden başka bir yerde; yeri değiştirilmez.</translation>
     </message>
     <message>
         <source>The words and their bold, italic and underline are the same.</source>
@@ -5495,7 +5547,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Change %1 of %2, in &quot;%3&quot;</source>
-        <translation>Değişiklik %1 / %2, "%3" içinde</translation>
+        <translation>Değişiklik %1 / %2, &quot;%3&quot; içinde</translation>
     </message>
     <message numerus="yes">
         <source>All changes seen: %n to take. Press Transfer.</source>
@@ -5632,7 +5684,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Built-in formats cannot be changed. Use &quot;+&quot; (Duplicate &amp; Edit) to make your own copy.</source>
-        <translation>Yerleşik biçimler değiştirilemez. Kendi kopyanızı yapmak için "+" (Çoğalt &amp; Düzenle) düğmesini kullanın.</translation>
+        <translation>Yerleşik biçimler değiştirilemez. Kendi kopyanızı yapmak için &quot;+&quot; (Çoğalt &amp; Düzenle) düğmesini kullanın.</translation>
     </message>
     <message>
         <source>Delete Format</source>
@@ -5640,7 +5692,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Delete the compile format &quot;%1&quot;?</source>
-        <translation>"%1" derleme biçimi silinsin mi?</translation>
+        <translation>&quot;%1&quot; derleme biçimi silinsin mi?</translation>
     </message>
     <message>
         <source>Import Compile Format</source>
@@ -5760,7 +5812,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Empty fields use the project title and the author set under File &gt; Options &gt; General &gt; Author Information. Placeholders such as &lt;$projecttitle&gt; work here too. The cover is a picture of the binder.</source>
-        <translation>Boş alanlar proje başlığını ve Dosya &gt; Seçenekler &gt; Genel &gt; Yazar Bilgileri altında ayarlanan yazarı kullanır. &lt;$projecttitle&gt; gibi yer tutucular burada da çalışır. Kapak, binder'dan bir resimdir.</translation>
+        <translation>Boş alanlar proje başlığını ve Dosya &gt; Seçenekler &gt; Genel &gt; Yazar Bilgileri altında ayarlanan yazarı kullanır. &lt;$projecttitle&gt; gibi yer tutucular burada da çalışır. Kapak, binder&apos;dan bir resimdir.</translation>
     </message>
     <message>
         <source>Include the text of the compile group itself</source>
@@ -5936,7 +5988,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>The title page names the author. Who is the author? The name is kept with the author information in File &gt; Options &gt; General. Left empty, the title page has no &quot;by&quot; line.</source>
-        <translation>Başlık sayfasında yazarın adı yer alır. Yazar kim? Ad, Dosya &gt; Seçenekler &gt; Genel altında yazar bilgileriyle birlikte saklanır. Boş bırakılırsa başlık sayfasında "yazan" satırı olmaz.</translation>
+        <translation>Başlık sayfasında yazarın adı yer alır. Yazar kim? Ad, Dosya &gt; Seçenekler &gt; Genel altında yazar bilgileriyle birlikte saklanır. Boş bırakılırsa başlık sayfasında &quot;yazan&quot; satırı olmaz.</translation>
     </message>
     <message>
         <source>First name:</source>
@@ -6018,11 +6070,11 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Typographic quotes to &amp;straight quotes (&quot; &apos;)</source>
-        <translation>Tipografik tırnakları &amp;düz tırnaklara (" ')</translation>
+        <translation>Tipografik tırnakları &amp;düz tırnaklara (&quot; &apos;)</translation>
     </message>
     <message>
         <source>An apostrophe inside a word becomes ’. A straight mark with a space on both sides stays as it is; an apostrophe at the start of a word (&apos;tis) becomes an opening mark.</source>
-        <translation>Bir sözcüğün içindeki kesme işareti ’ olur. İki yanında boşluk olan düz işaret olduğu gibi kalır; sözcüğün başındaki kesme işareti ('tis) açılış işareti olur.</translation>
+        <translation>Bir sözcüğün içindeki kesme işareti ’ olur. İki yanında boşluk olan düz işaret olduğu gibi kalır; sözcüğün başındaki kesme işareti (&apos;tis) açılış işareti olur.</translation>
     </message>
     <message>
         <source>Convert in</source>
@@ -6489,11 +6541,11 @@ Bu bütün olarak geri alınamaz.%3</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be changed here: %2, and its place is kept for it. Close the project and open it again once the sync program is done.</source>
-        <translation>"%1" burada değiştirilemez: %2 ve yeri onun için saklanıyor. Eşitleme programı işini bitirdikten sonra projeyi kapatıp yeniden açın.</translation>
+        <translation>&quot;%1&quot; burada değiştirilemez: %2 ve yeri onun için saklanıyor. Eşitleme programı işini bitirdikten sonra projeyi kapatıp yeniden açın.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be changed here: %2, and such a file is never written over. Check the file&apos;s permissions or the drive it is on, then close and reopen the project.</source>
-        <translation>"%1" burada değiştirilemez: %2 ve böyle bir dosyanın üzerine asla yazılmaz. Dosyanın izinlerini veya bulunduğu sürücüyü denetleyin, sonra projeyi kapatıp yeniden açın.</translation>
+        <translation>&quot;%1&quot; burada değiştirilemez: %2 ve böyle bir dosyanın üzerine asla yazılmaz. Dosyanın izinlerini veya bulunduğu sürücüyü denetleyin, sonra projeyi kapatıp yeniden açın.</translation>
     </message>
     <message>
         <source>%1 notes (damaged)</source>
@@ -6505,7 +6557,7 @@ Bu bütün olarak geri alınamaz.%3</translation>
     </message>
     <message>
         <source>The damaged file of &quot;%1&quot; could not be kept as a copy in %2, so it was not replaced. Check that the project folder is writable and the disk is not full.</source>
-        <translation>"%1" belgesinin hasarlı dosyası %2 içinde kopya olarak saklanamadı, bu yüzden değiştirilmedi. Proje klasörünün yazılabilir olduğunu ve diskin dolu olmadığını denetleyin.</translation>
+        <translation>&quot;%1&quot; belgesinin hasarlı dosyası %2 içinde kopya olarak saklanamadı, bu yüzden değiştirilmedi. Proje klasörünün yazılabilir olduğunu ve diskin dolu olmadığını denetleyin.</translation>
     </message>
     <message>
         <source>%1 notes</source>
@@ -6536,7 +6588,7 @@ Bu bütün olarak geri alınamaz.%3</translation>
     <name>qb::EditorPane</name>
     <message>
         <source>Select a document in the binder</source>
-        <translation>Binder'da bir belge seçin</translation>
+        <translation>Binder&apos;da bir belge seçin</translation>
     </message>
     <message>
         <source>Back (Ctrl+[)</source>
@@ -6684,7 +6736,7 @@ Sayfa (250 sözcük): %5</translation>
     </message>
     <message>
         <source>Reorder the documents in the binder to match the freeform arrangement</source>
-        <translation>Binder'daki belgeleri serbest düzene uyacak şekilde yeniden sırala</translation>
+        <translation>Binder&apos;daki belgeleri serbest düzene uyacak şekilde yeniden sırala</translation>
     </message>
     <message>
         <source>Card size (Ctrl+mouse wheel zooms the whole board)</source>
@@ -6856,7 +6908,7 @@ Sayfa (250 sözcük): %5</translation>
     </message>
     <message>
         <source>Target for &quot;%1&quot;:</source>
-        <translation>"%1" için hedef:</translation>
+        <translation>&quot;%1&quot; için hedef:</translation>
     </message>
     <message>
         <source>Find in the copyholder</source>
@@ -7065,11 +7117,23 @@ Sayfa (250 sözcük): %5</translation>
     </message>
     <message>
         <source>Before you start: where Quillbinder keeps its files on this computer and how your projects are backed up. OK keeps what is filled in; you can change all of it later in File &gt; Options (General &gt; This Computer, Backup) or with Help &gt; Troubleshooting and Development &gt; This Computer.</source>
-        <translation>Başlamadan önce: Quillbinder dosyalarını bu bilgisayarda nerede saklıyor ve projeleriniz nasıl yedekleniyor. Tamam, doldurulanları korur; hepsini sonradan Dosya &gt; Seçenekler'den (Genel &gt; Bu Bilgisayar, Yedekleme) veya Yardım &gt; Sorun Giderme ve Geliştirme &gt; Bu Bilgisayar ile değiştirebilirsiniz.</translation>
+        <translation>Başlamadan önce: Quillbinder dosyalarını bu bilgisayarda nerede saklıyor ve projeleriniz nasıl yedekleniyor. Tamam, doldurulanları korur; hepsini sonradan Dosya &gt; Seçenekler&apos;den (Genel &gt; Bu Bilgisayar, Yedekleme) veya Yardım &gt; Sorun Giderme ve Geliştirme &gt; Bu Bilgisayar ile değiştirebilirsiniz.</translation>
     </message>
     <message>
         <source>Before you start: how your projects are backed up. Everything is filled in already: OK keeps it as it is. You can change all of it later in File &gt; Options.</source>
-        <translation>Başlamadan önce: projeleriniz nasıl yedekleniyor. Her şey zaten dolduruldu: Tamam, olduğu gibi korur. Hepsini sonradan Dosya &gt; Seçenekler'den değiştirebilirsiniz.</translation>
+        <translation>Başlamadan önce: projeleriniz nasıl yedekleniyor. Her şey zaten dolduruldu: Tamam, olduğu gibi korur. Hepsini sonradan Dosya &gt; Seçenekler&apos;den değiştirebilirsiniz.</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Dil</translation>
+    </message>
+    <message>
+        <source>Language of the program:</source>
+        <translation>Programın dili:</translation>
+    </message>
+    <message>
+        <source>A language you choose here is used from the next start of the program.</source>
+        <translation>Burada seçtiğiniz dil, programın bir sonraki başlatılışından itibaren kullanılır.</translation>
     </message>
     <message>
         <source>Everything in One Folder</source>
@@ -7080,10 +7144,10 @@ Sayfa (250 sözcük): %5</translation>
 %1
 
 Nothing is written into Windows&apos; own folders or the registry, unless you ask for it below. The whole folder can be moved or copied, to a USB stick or another computer, and deleting it removes the program. Program updates are installed with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; to move to a version you downloaded anew, unpack it and copy the folder &quot;data&quot; into it. Your projects stay wherever you keep them.</source>
-        <translation>Quillbinder ayarlarını, eklentilerini, program güncellemelerini, yazı tiplerini ve çökme raporlarını kendi klasörünün içindeki "data" klasöründe saklar:
+        <translation>Quillbinder ayarlarını, eklentilerini, program güncellemelerini, yazı tiplerini ve çökme raporlarını kendi klasörünün içindeki &quot;data&quot; klasöründe saklar:
 %1
 
-Aşağıda istemediğiniz sürece Windows'un kendi klasörlerine veya kayıt defterine hiçbir şey yazılmaz. Klasörün tamamı bir USB belleğe veya başka bir bilgisayara taşınabilir ya da kopyalanabilir; silmek programı kaldırır. Program güncellemeleri Yardım &gt; Eklentiler ve Güncellemeler &gt; Güncelleme veya Eklenti Kur ile kurulur; yeniden indirdiğiniz bir sürüme geçmek için onu açın ve "data" klasörünü içine kopyalayın. Projeleriniz tuttuğunuz yerde kalır.</translation>
+Aşağıda istemediğiniz sürece Windows&apos;un kendi klasörlerine veya kayıt defterine hiçbir şey yazılmaz. Klasörün tamamı bir USB belleğe veya başka bir bilgisayara taşınabilir ya da kopyalanabilir; silmek programı kaldırır. Program güncellemeleri Yardım &gt; Eklentiler ve Güncellemeler &gt; Güncelleme veya Eklenti Kur ile kurulur; yeniden indirdiğiniz bir sürüme geçmek için onu açın ve &quot;data&quot; klasörünü içine kopyalayın. Projeleriniz tuttuğunuz yerde kalır.</translation>
     </message>
     <message>
         <source>The program&apos;s folder is inside your %1 folder. That works, but the sync service copies the program&apos;s own files back and forth and may keep them only online. Better: the program&apos;s folder outside it (for example C:\Users\&lt;your name&gt;\Quillbinder), your projects inside it.</source>
@@ -7095,7 +7159,7 @@ Aşağıda istemediğiniz sürece Windows'un kendi klasörlerine veya kayıt def
     </message>
     <message>
         <source>Windows may warn when the program starts for the first time, because it is not signed (SmartScreen: &quot;More info&quot;, then &quot;Run anyway&quot;). That happens again for each new download.</source>
-        <translation>Program ilk kez başladığında imzalı olmadığı için Windows uyarı verebilir (SmartScreen: "Daha fazla bilgi", sonra "Yine de çalıştır"). Bu her yeni indirmede yeniden olur.</translation>
+        <translation>Program ilk kez başladığında imzalı olmadığı için Windows uyarı verebilir (SmartScreen: &quot;Daha fazla bilgi&quot;, sonra &quot;Yine de çalıştır&quot;). Bu her yeni indirmede yeniden olur.</translation>
     </message>
     <message>
         <source>Backups</source>
@@ -7106,12 +7170,20 @@ Aşağıda istemediğiniz sürece Windows'un kendi klasörlerine veya kayıt def
         <translation>Bir proje kapatıldığında otomatik olarak yedeğini al</translation>
     </message>
     <message>
-        <source> backups of each project</source>
-        <translation> yedek, her proje için</translation>
+        <source>Keep the newest</source>
+        <translation>Her projenin en yeni</translation>
     </message>
     <message>
-        <source>Keep the newest:</source>
-        <translation>En yeni olanları sakla:</translation>
+        <source>backups of each project</source>
+        <translation>yedeğini sakla</translation>
+    </message>
+    <message>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>AppImage&apos;ı %1 klasörüne taşı; menü girişi onu buradan, sabit bir yerden başlatır</translation>
+    </message>
+    <message>
+        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
+        <translation>Yardım &gt; Uygulama Menüsüne Ekle veya Uygulama Menüsünden Kaldır bunu sonradan değiştirir. AppImage&apos;ı kendiniz taşırsanız onu menüye yeniden ekleyin.</translation>
     </message>
     <message>
         <source>Choose a folder: until then no backups are made</source>
@@ -7140,14 +7212,6 @@ Aşağıda istemediğiniz sürece Windows'un kendi klasörlerine veya kayıt def
     <message>
         <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them</source>
         <translation>%1 programını uygulama menüsüne ekle; böylece onu diğer programlar gibi başlatabilir ve projeleri çift tıklayarak açabilirsiniz</translation>
-    </message>
-    <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>AppImage dosyasını %1 konumuna taşı (taşınmış bir dosya menüden başlatılamaz)</translation>
-    </message>
-    <message>
-        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later.</source>
-        <translation>Yardım &gt; Uygulama Menüsüne Ekle veya Uygulama Menüsünden Kaldır, bunu sonradan değiştirir.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -7464,7 +7528,7 @@ Aşağıda istemediğiniz sürece Windows'un kendi klasörlerine veya kayıt def
     </message>
     <message>
         <source>Which layout a section type uses by default in this format (by section type name; projects can override this in the Compile window). &quot;*&quot; matches every type.</source>
-        <translation>Bir kesim türünün bu biçimde varsayılan olarak kullandığı yerleşim (kesim türü adına göre; projeler bunu Derleme penceresinde geçersiz kılabilir). "*" her türle eşleşir.</translation>
+        <translation>Bir kesim türünün bu biçimde varsayılan olarak kullandığı yerleşim (kesim türü adına göre; projeler bunu Derleme penceresinde geçersiz kılabilir). &quot;*&quot; her türle eşleşir.</translation>
     </message>
     <message>
         <source>Section type name</source>
@@ -7748,7 +7812,7 @@ Aşağıda istemediğiniz sürece Windows'un kendi klasörlerine veya kayıt def
     </message>
     <message>
         <source>Replaced in the compiled text only; the project stays as it is. With &quot;Regular expression&quot;, \1 … \9 in &quot;With&quot; stand for the parts in brackets.</source>
-        <translation>Yalnızca derlenen metinde değiştirilir; proje olduğu gibi kalır. "Düzenli ifade" ile "Yeni" alanındaki \1 … \9, parantez içindeki parçaların yerine geçer.</translation>
+        <translation>Yalnızca derlenen metinde değiştirilir; proje olduğu gibi kalır. &quot;Düzenli ifade&quot; ile &quot;Yeni&quot; alanındaki \1 … \9, parantez içindeki parçaların yerine geçer.</translation>
     </message>
     <message>
         <source>On</source>
@@ -7780,11 +7844,11 @@ Aşağıda istemediğiniz sürece Windows'un kendi klasörlerine veya kayıt def
     </message>
     <message>
         <source>Straight quotes (“ ” ‘ ’ become &quot; &apos;)</source>
-        <translation>Düz tırnaklar (“ ” ‘ ’ yerine " ' olur)</translation>
+        <translation>Düz tırnaklar (“ ” ‘ ’ yerine &quot; &apos; olur)</translation>
     </message>
     <message>
         <source>Typographic quotes (&quot; &apos; become “ ” ‘ ’, English)</source>
-        <translation>Tipografik tırnaklar (" ' yerine “ ” ‘ ’ olur, İngilizce)</translation>
+        <translation>Tipografik tırnaklar (&quot; &apos; yerine “ ” ‘ ’ olur, İngilizce)</translation>
     </message>
     <message>
         <source>Dashes as hyphens (— becomes --, – becomes -)</source>
@@ -8048,7 +8112,7 @@ Aşağıda istemediğiniz sürece Windows'un kendi klasörlerine veya kayıt def
     </message>
     <message>
         <source>Choose up to %1 icons. A click on one of them in the icon bar gives it to the documents selected in the binder (or to the document in the editor).</source>
-        <translation>En çok %1 simge seçin. Simge çubuğunda birine tıklamak onu binder'da seçili belgelere (veya düzenleyicideki belgeye) verir.</translation>
+        <translation>En çok %1 simge seçin. Simge çubuğunda birine tıklamak onu binder&apos;da seçili belgelere (veya düzenleyicideki belgeye) verir.</translation>
     </message>
     <message>
         <source>Project</source>
@@ -8218,7 +8282,7 @@ Aşağıda istemediğiniz sürece Windows'un kendi klasörlerine veya kayıt def
     </message>
     <message>
         <source>Choose a file to see the binder it makes.</source>
-        <translation>Oluşturacağı binder'ı görmek için bir dosya seçin.</translation>
+        <translation>Oluşturacağı binder&apos;ı görmek için bir dosya seçin.</translation>
     </message>
     <message>
         <source>Splitting at headings works for .docx, .odt and .md files.</source>
@@ -8309,7 +8373,7 @@ Aşağıda istemediğiniz sürece Windows'un kendi klasörlerine veya kayıt def
         <source>Drop an image here.
 (An image file, or a picture from the binder; double-click to choose a file.)</source>
         <translation>Buraya bir resim bırakın.
-(Bir resim dosyası veya binder'dan bir resim; dosya seçmek için çift tıklayın.)</translation>
+(Bir resim dosyası veya binder&apos;dan bir resim; dosya seçmek için çift tıklayın.)</translation>
     </message>
     <message>
         <source>Project Bookmarks</source>
@@ -8509,13 +8573,13 @@ Aşağıda istemediğiniz sürece Windows'un kendi klasörlerine veya kayıt def
     </message>
     <message>
         <source>Delete the snapshot &quot;%1&quot;?</source>
-        <translation>"%1" anlık görüntüsü silinsin mi?</translation>
+        <translation>&quot;%1&quot; anlık görüntüsü silinsin mi?</translation>
     </message>
     <message>
         <source>Replace the current text with the snapshot &quot;%1&quot;?
 
 Do you want to take a snapshot of the current text first?</source>
-        <translation>Geçerli metin "%1" anlık görüntüsüyle değiştirilsin mi?
+        <translation>Geçerli metin &quot;%1&quot; anlık görüntüsüyle değiştirilsin mi?
 
 Önce geçerli metnin bir anlık görüntüsü alınsın mı?</translation>
     </message>
@@ -8529,7 +8593,7 @@ Geçerli metin değiştirilmedi.</translation>
     </message>
     <message>
         <source>The snapshot &quot;%1&quot; holds no text (it may be damaged). Replace the current text with an empty one?</source>
-        <translation>"%1" anlık görüntüsünde metin yok (hasarlı olabilir). Geçerli metin boş bir metinle değiştirilsin mi?</translation>
+        <translation>&quot;%1&quot; anlık görüntüsünde metin yok (hasarlı olabilir). Geçerli metin boş bir metinle değiştirilsin mi?</translation>
     </message>
     <message>
         <source>The snapshot holds no text; the current text was kept.</source>
@@ -8553,7 +8617,7 @@ The text of the snapshot &quot;%2&quot; is now the document&apos;s text; it can 
         <translation>Bu metnin dosyası hasarlıydı. Kopya olarak saklandı:
 %1
 
-"%2" anlık görüntüsünün metni artık belgenin metni; yeniden düzenlenebilir ve bir sonraki kayıtla kaydedilir.</translation>
+&quot;%2&quot; anlık görüntüsünün metni artık belgenin metni; yeniden düzenlenebilir ve bir sonraki kayıtla kaydedilir.</translation>
     </message>
     <message>
         <source>Snapshot</source>
@@ -8726,8 +8790,12 @@ The text of the snapshot &quot;%2&quot; is now the document&apos;s text; it can 
         <translation>Notlar</translation>
     </message>
     <message>
-        <source>Lists</source>
-        <translation>Listeler</translation>
+        <source>Document</source>
+        <translation>Belge</translation>
+    </message>
+    <message>
+        <source>Project</source>
+        <translation>Proje</translation>
     </message>
     <message>
         <source>Text</source>
@@ -8813,6 +8881,14 @@ The text of the snapshot &quot;%2&quot; is now the document&apos;s text; it can 
         <translation>Dışa Aktar…</translation>
     </message>
     <message>
+        <source>Use the Set of My Keyboard Layout…</source>
+        <translation>Klavye Düzenimin Takımını Kullan…</translation>
+    </message>
+    <message>
+        <source>Take the shortcuts that fit the keyboard layout in use now (a German keyboard gets keys that need no AltGr). Shortcuts you set yourself stay as they are.</source>
+        <translation>Şu anda kullanılan klavye düzenine uyan kısayolları al (Almanca bir klavye, AltGr gerektirmeyen tuşlar alır). Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
+    </message>
+    <message>
         <source>Shortcut in Use</source>
         <translation>Kullanımdaki Kısayol</translation>
     </message>
@@ -8876,6 +8952,30 @@ Bunun yerine “%4” komutuna verilsin mi? O zaman “%2” komutunun kısayolu
         <source>shortcuts</source>
         <translation>kısayol</translation>
     </message>
+    <message>
+        <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
+        <translation>Sistem hangi klavye düzeninin kullanıldığını bildirmiyor, bu yüzden program bir takım seçemez. Aşağıdan tek tek kısayolları yine de değiştirebilirsiniz.</translation>
+    </message>
+    <message>
+        <source>The shortcuts already come from the set for your keyboard layout (%1).</source>
+        <translation>Kısayollar zaten klavye düzeninizin (%1) takımından geliyor.</translation>
+    </message>
+    <message>
+        <source> (you set another shortcut: it stays)</source>
+        <translation> (başka bir kısayol belirlediniz: o kalır)</translation>
+    </message>
+    <message>
+        <source>Use the set of shortcuts for your keyboard layout (%1)? These standard shortcuts change at once:
+
+%2
+
+Shortcuts you set yourself stay as they are.</source>
+        <translation>Klavye düzeniniz (%1) için kısayol takımı kullanılsın mı? Şu standart kısayollar hemen değişir:
+
+%2
+
+Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
+    </message>
 </context>
 <context>
     <name>qb::KeywordsDialog</name>
@@ -8909,7 +9009,7 @@ Bunun yerine “%4” komutuna verilsin mi? O zaman “%2” komutunun kısayolu
     </message>
     <message>
         <source>Drag keywords onto documents in the binder, the corkboard or the outliner, or into the keyword list of the inspector. With Alt held down, the group of a keyword is assigned as well. Inside this list, drag a keyword onto another to group them.</source>
-        <translation>Anahtar sözcükleri binder'daki, mantar panodaki veya anahattaki belgelerin üzerine ya da denetçinin anahtar sözcük listesine sürükleyin. Alt tuşu basılıyken bir anahtar sözcüğün grubu da atanır. Bu listenin içinde, bir anahtar sözcüğü başkasının üzerine sürükleyerek onları gruplayın.</translation>
+        <translation>Anahtar sözcükleri binder&apos;daki, mantar panodaki veya anahattaki belgelerin üzerine ya da denetçinin anahtar sözcük listesine sürükleyin. Alt tuşu basılıyken bir anahtar sözcüğün grubu da atanır. Bu listenin içinde, bir anahtar sözcüğü başkasının üzerine sürükleyerek onları gruplayın.</translation>
     </message>
     <message>
         <source>New Keyword</source>
@@ -8921,7 +9021,7 @@ Bunun yerine “%4” komutuna verilsin mi? O zaman “%2” komutunun kısayolu
     </message>
     <message>
         <source>Delete &quot;%1&quot; and remove it from all documents?</source>
-        <translation>"%1" silinsin ve tüm belgelerden kaldırılsın mı?</translation>
+        <translation>&quot;%1&quot; silinsin ve tüm belgelerden kaldırılsın mı?</translation>
     </message>
 </context>
 <context>
@@ -9121,7 +9221,7 @@ Bunun yerine “%4” komutuna verilsin mi? O zaman “%2” komutunun kısayolu
     </message>
     <message>
         <source>The program tries again by itself, and the status bar shows &quot;Not saved&quot; until a save works. Check that the disk is not full and the project folder is writable, or save the texts into another folder.</source>
-        <translation>Program kendiliğinden yeniden dener ve bir kayıt başarılı olana kadar durum çubuğunda "Kaydedilmedi" görünür. Diskin dolu olmadığını ve proje klasörünün yazılabilir olduğunu denetleyin veya metinleri başka bir klasöre kaydedin.</translation>
+        <translation>Program kendiliğinden yeniden dener ve bir kayıt başarılı olana kadar durum çubuğunda &quot;Kaydedilmedi&quot; görünür. Diskin dolu olmadığını ve proje klasörünün yazılabilir olduğunu denetleyin veya metinleri başka bir klasöre kaydedin.</translation>
     </message>
     <message>
         <source>Saving Failed</source>
@@ -9249,7 +9349,7 @@ Bunun yerine “%4” komutuna verilsin mi? O zaman “%2” komutunun kısayolu
     </message>
     <message>
         <source>The template &quot;%1&quot; is now available under File ▸ New Project.</source>
-        <translation>"%1" şablonu artık Dosya ▸ Yeni Proje altında kullanılabilir.</translation>
+        <translation>&quot;%1&quot; şablonu artık Dosya ▸ Yeni Proje altında kullanılabilir.</translation>
     </message>
     <message>
         <source>Back Up &amp;Now</source>
@@ -9509,11 +9609,11 @@ Bunun yerine “%4” komutuna verilsin mi? O zaman “%2” komutunun kısayolu
     </message>
     <message>
         <source>Show &amp;Binder</source>
-        <translation>&amp;Binder'ı Göster</translation>
+        <translation>&amp;Binder&apos;ı Göster</translation>
     </message>
     <message>
         <source>Quick-Add &amp;Keys in the Binder</source>
-        <translation>Binder'da &amp;Hızlı Ekleme Tuşları</translation>
+        <translation>Binder&apos;da &amp;Hızlı Ekleme Tuşları</translation>
     </message>
     <message>
         <source>Return adds a new document below; Space opens a Quick Reference window</source>
@@ -9759,7 +9859,7 @@ Bunun yerine “%4” komutuna verilsin mi? O zaman “%2” komutunun kısayolu
     </message>
     <message>
         <source>Reveal in &amp;Binder</source>
-        <translation>&amp;Binder'da Göster</translation>
+        <translation>&amp;Binder&apos;da Göster</translation>
     </message>
     <message>
         <source>&amp;Lock in Place</source>
@@ -10019,7 +10119,7 @@ Bunun yerine “%4” komutuna verilsin mi? O zaman “%2” komutunun kısayolu
     </message>
     <message>
         <source>&quot;%1&quot; could not be started. Check the program under File &gt; Options &gt; General &gt; Citations.</source>
-        <translation>"%1" başlatılamadı. Programı Dosya &gt; Seçenekler &gt; Genel &gt; Alıntılar altında denetleyin.</translation>
+        <translation>&quot;%1&quot; başlatılamadı. Programı Dosya &gt; Seçenekler &gt; Genel &gt; Alıntılar altında denetleyin.</translation>
     </message>
     <message>
         <source>Current &amp;Time</source>
@@ -10051,7 +10151,7 @@ Bunun yerine “%4” komutuna verilsin mi? O zaman “%2” komutunun kısayolu
     </message>
     <message>
         <source>Focus Bi&amp;nder</source>
-        <translation>Binder'a &amp;Odaklan</translation>
+        <translation>Binder&apos;a &amp;Odaklan</translation>
     </message>
     <message>
         <source>Focus &amp;Editor</source>
@@ -10191,7 +10291,7 @@ Bunun yerine “%4” komutuna verilsin mi? O zaman “%2” komutunun kısayolu
     </message>
     <message>
         <source>Label Color in &amp;Binder</source>
-        <translation>Etiket Rengi &amp;Binder'da</translation>
+        <translation>Etiket Rengi &amp;Binder&apos;da</translation>
     </message>
     <message>
         <source>Label Color in &amp;Icons</source>
@@ -10279,11 +10379,11 @@ Bunun yerine “%4” komutuna verilsin mi? O zaman “%2” komutunun kısayolu
     </message>
     <message>
         <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;A writing studio for long texts: binder, corkboard, outliner, combined text, snapshots, mind maps, objects and compile.&lt;/p&gt;&lt;p&gt;Built with Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Main Developer: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;License&lt;/b&gt;&lt;br&gt;%1 is free software under the Apache License 2.0: anyone may use, copy, change and pass it on, with or without fee, keeping the license and the NOTICE file, which names the project and its source. Without warranty.&lt;/p&gt;&lt;p&gt;The program uses parts of other projects, each under its own license; &lt;b&gt;Third-Party Licenses…&lt;/b&gt; below (also in the Help menu) lists them with their full texts:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, The Qt Company&apos;s own build for Windows, under the GNU LGPL version 3. Its libraries are the separate Qt6*.dll files and plugin folders beside the program; each can be replaced by another build of the same version.&lt;/li&gt;&lt;li&gt;Hunspell (spelling, used under the Mozilla Public License 1.1) and zlib, built into the program.&lt;/li&gt;&lt;li&gt;The spelling dictionaries for English and German from LibreOffice, unchanged: the German ones under the GNU GPL version 2 or 3, British English under the GNU LGPL, American English under the SCOWL license.&lt;/li&gt;&lt;li&gt;Microsoft&apos;s Visual C++ runtime files, passed on unchanged under Microsoft&apos;s terms for redistributable code.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;The add-ons for audio and video bring Qt Multimedia (GNU LGPL version 3). The add-on &quot;Extra Video and Audio Formats&quot; also brings the FFmpeg libraries as built by The Qt Company for Qt Multimedia (avcodec, avformat, avutil, swresample, swscale), licensed under the GNU LGPL 2.1 or later and replaceable as separate DLL files; its notes name the version and how it was built. Whether a patent license is needed to play some of its formats depends on the country.&lt;/p&gt;&lt;p&gt;The source code of these parts, as used, is in the release &quot;Third-party source code&quot; of %4.&lt;/p&gt;&lt;p&gt;Scrivener and Scapple are products of Literature &amp;amp; Latte. %1 is an independent program, not made by or connected with Literature &amp;amp; Latte; it reads and writes their file formats so that your projects can move between the programs.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Uzun metinler için bir yazı stüdyosu: binder, mantar pano, anahat, birleşik metin, anlık görüntüler, zihin haritaları, nesneler ve derleme.&lt;/p&gt;&lt;p&gt;Qt %3 ile derlenmiştir.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Emeği Geçenler&lt;/b&gt;&lt;br&gt;Ana Geliştirici: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Lisans&lt;/b&gt;&lt;br&gt;%1, Apache License 2.0 altında özgür yazılımdır: herkes onu ücretli ya da ücretsiz kullanabilir, kopyalayabilir, değiştirebilir ve başkalarına verebilir; yeter ki lisansı ve projeyi ile kaynağını belirten NOTICE dosyasını korusun. Garanti verilmez.&lt;/p&gt;&lt;p&gt;Program, her biri kendi lisansı altında olan başka projelerin parçalarını kullanır; aşağıdaki &lt;b&gt;Üçüncü Taraf Lisansları…&lt;/b&gt; (Yardım menüsünde de) bunları tam metinleriyle listeler:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, The Qt Company'nin Windows için kendi derlemesi, GNU LGPL sürüm 3 altında. Kitaplıkları, programın yanındaki ayrı Qt6*.dll dosyaları ve eklenti klasörleridir; her biri aynı sürümün başka bir derlemesiyle değiştirilebilir.&lt;/li&gt;&lt;li&gt;Hunspell (yazım denetimi, Mozilla Public License 1.1 altında kullanılır) ve zlib, programa yerleşiktir.&lt;/li&gt;&lt;li&gt;LibreOffice'ten İngilizce ve Almanca yazım sözlükleri, değiştirilmeden: Almanca olanlar GNU GPL sürüm 2 veya 3 altında, İngiliz İngilizcesi GNU LGPL altında, Amerikan İngilizcesi SCOWL lisansı altında.&lt;/li&gt;&lt;li&gt;Microsoft'un Visual C++ çalışma zamanı dosyaları, Microsoft'un yeniden dağıtılabilir kod koşullarıyla değiştirilmeden aktarılır.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Ses ve video eklentileri Qt Multimedia'yı getirir (GNU LGPL sürüm 3). "Extra Video and Audio Formats" eklentisi ayrıca The Qt Company'nin Qt Multimedia için derlediği FFmpeg kitaplıklarını (avcodec, avformat, avutil, swresample, swscale) getirir; bunlar GNU LGPL 2.1 veya üzeri altında lisanslıdır ve ayrı DLL dosyaları olarak değiştirilebilir; notları sürümü ve nasıl derlendiğini belirtir. Biçimlerinden bazılarını oynatmak için patent lisansı gerekip gerekmediği ülkeye bağlıdır.&lt;/p&gt;&lt;p&gt;Bu parçaların kullanıldığı hâliyle kaynak kodu, %4 projesinin "Third-party source code" sürümündedir.&lt;/p&gt;&lt;p&gt;Scrivener ve Scapple, Literature &amp;amp; Latte'nin ürünleridir. %1 bağımsız bir programdır; Literature &amp;amp; Latte tarafından yapılmamıştır ve onunla bağlantılı değildir; projelerinizin programlar arasında taşınabilmesi için dosya biçimlerini okur ve yazar.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Uzun metinler için bir yazı stüdyosu: binder, mantar pano, anahat, birleşik metin, anlık görüntüler, zihin haritaları, nesneler ve derleme.&lt;/p&gt;&lt;p&gt;Qt %3 ile derlenmiştir.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Emeği Geçenler&lt;/b&gt;&lt;br&gt;Ana Geliştirici: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Lisans&lt;/b&gt;&lt;br&gt;%1, Apache License 2.0 altında özgür yazılımdır: herkes onu ücretli ya da ücretsiz kullanabilir, kopyalayabilir, değiştirebilir ve başkalarına verebilir; yeter ki lisansı ve projeyi ile kaynağını belirten NOTICE dosyasını korusun. Garanti verilmez.&lt;/p&gt;&lt;p&gt;Program, her biri kendi lisansı altında olan başka projelerin parçalarını kullanır; aşağıdaki &lt;b&gt;Üçüncü Taraf Lisansları…&lt;/b&gt; (Yardım menüsünde de) bunları tam metinleriyle listeler:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, The Qt Company&apos;nin Windows için kendi derlemesi, GNU LGPL sürüm 3 altında. Kitaplıkları, programın yanındaki ayrı Qt6*.dll dosyaları ve eklenti klasörleridir; her biri aynı sürümün başka bir derlemesiyle değiştirilebilir.&lt;/li&gt;&lt;li&gt;Hunspell (yazım denetimi, Mozilla Public License 1.1 altında kullanılır) ve zlib, programa yerleşiktir.&lt;/li&gt;&lt;li&gt;LibreOffice&apos;ten İngilizce ve Almanca yazım sözlükleri, değiştirilmeden: Almanca olanlar GNU GPL sürüm 2 veya 3 altında, İngiliz İngilizcesi GNU LGPL altında, Amerikan İngilizcesi SCOWL lisansı altında.&lt;/li&gt;&lt;li&gt;Microsoft&apos;un Visual C++ çalışma zamanı dosyaları, Microsoft&apos;un yeniden dağıtılabilir kod koşullarıyla değiştirilmeden aktarılır.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Ses ve video eklentileri Qt Multimedia&apos;yı getirir (GNU LGPL sürüm 3). &quot;Extra Video and Audio Formats&quot; eklentisi ayrıca The Qt Company&apos;nin Qt Multimedia için derlediği FFmpeg kitaplıklarını (avcodec, avformat, avutil, swresample, swscale) getirir; bunlar GNU LGPL 2.1 veya üzeri altında lisanslıdır ve ayrı DLL dosyaları olarak değiştirilebilir; notları sürümü ve nasıl derlendiğini belirtir. Biçimlerinden bazılarını oynatmak için patent lisansı gerekip gerekmediği ülkeye bağlıdır.&lt;/p&gt;&lt;p&gt;Bu parçaların kullanıldığı hâliyle kaynak kodu, %4 projesinin &quot;Third-party source code&quot; sürümündedir.&lt;/p&gt;&lt;p&gt;Scrivener ve Scapple, Literature &amp;amp; Latte&apos;nin ürünleridir. %1 bağımsız bir programdır; Literature &amp;amp; Latte tarafından yapılmamıştır ve onunla bağlantılı değildir; projelerinizin programlar arasında taşınabilmesi için dosya biçimlerini okur ve yazar.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;A writing studio for long texts: binder, corkboard, outliner, combined text, snapshots, mind maps, objects and compile.&lt;/p&gt;&lt;p&gt;Built with Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Main Developer: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;License&lt;/b&gt;&lt;br&gt;%1 is free software under the Apache License 2.0: anyone may use, copy, change and pass it on, with or without fee, keeping the license and the NOTICE file, which names the project and its source. Without warranty.&lt;/p&gt;&lt;p&gt;The program uses parts of other projects (Qt, Hunspell, ICU, the Breeze icons and more), each under its own license. &lt;b&gt;Third-Party Licenses…&lt;/b&gt; below (also in the Help menu) lists them with their full texts.&lt;/p&gt;&lt;p&gt;The add-ons for audio and video use code of FFmpeg, licensed under the GNU LGPL 2.1 or later; its source code, as used, is in the release &quot;Third-party source code&quot; of %4.&lt;/p&gt;&lt;p&gt;Scrivener and Scapple are products of Literature &amp;amp; Latte. %1 is an independent program, not made by or connected with Literature &amp;amp; Latte; it reads and writes their file formats so that your projects can move between the programs.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Uzun metinler için bir yazı stüdyosu: binder, mantar pano, anahat, birleşik metin, anlık görüntüler, zihin haritaları, nesneler ve derleme.&lt;/p&gt;&lt;p&gt;Qt %3 ile derlenmiştir.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Emeği Geçenler&lt;/b&gt;&lt;br&gt;Ana Geliştirici: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Lisans&lt;/b&gt;&lt;br&gt;%1, Apache License 2.0 altında özgür yazılımdır: herkes onu ücretli ya da ücretsiz kullanabilir, kopyalayabilir, değiştirebilir ve başkalarına verebilir; yeter ki lisansı ve projeyi ile kaynağını belirten NOTICE dosyasını korusun. Garanti verilmez.&lt;/p&gt;&lt;p&gt;Program, her biri kendi lisansı altında olan başka projelerin parçalarını (Qt, Hunspell, ICU, Breeze simgeleri ve daha fazlası) kullanır. Aşağıdaki &lt;b&gt;Üçüncü Taraf Lisansları…&lt;/b&gt; (Yardım menüsünde de) bunları tam metinleriyle listeler.&lt;/p&gt;&lt;p&gt;Ses ve video eklentileri, GNU LGPL 2.1 veya üzeri altında lisanslı FFmpeg kodunu kullanır; kullanıldığı hâliyle kaynak kodu, %4 projesinin "Third-party source code" sürümündedir.&lt;/p&gt;&lt;p&gt;Scrivener ve Scapple, Literature &amp;amp; Latte'nin ürünleridir. %1 bağımsız bir programdır; Literature &amp;amp; Latte tarafından yapılmamıştır ve onunla bağlantılı değildir; projelerinizin programlar arasında taşınabilmesi için dosya biçimlerini okur ve yazar.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Uzun metinler için bir yazı stüdyosu: binder, mantar pano, anahat, birleşik metin, anlık görüntüler, zihin haritaları, nesneler ve derleme.&lt;/p&gt;&lt;p&gt;Qt %3 ile derlenmiştir.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Emeği Geçenler&lt;/b&gt;&lt;br&gt;Ana Geliştirici: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Lisans&lt;/b&gt;&lt;br&gt;%1, Apache License 2.0 altında özgür yazılımdır: herkes onu ücretli ya da ücretsiz kullanabilir, kopyalayabilir, değiştirebilir ve başkalarına verebilir; yeter ki lisansı ve projeyi ile kaynağını belirten NOTICE dosyasını korusun. Garanti verilmez.&lt;/p&gt;&lt;p&gt;Program, her biri kendi lisansı altında olan başka projelerin parçalarını (Qt, Hunspell, ICU, Breeze simgeleri ve daha fazlası) kullanır. Aşağıdaki &lt;b&gt;Üçüncü Taraf Lisansları…&lt;/b&gt; (Yardım menüsünde de) bunları tam metinleriyle listeler.&lt;/p&gt;&lt;p&gt;Ses ve video eklentileri, GNU LGPL 2.1 veya üzeri altında lisanslı FFmpeg kodunu kullanır; kullanıldığı hâliyle kaynak kodu, %4 projesinin &quot;Third-party source code&quot; sürümündedir.&lt;/p&gt;&lt;p&gt;Scrivener ve Scapple, Literature &amp;amp; Latte&apos;nin ürünleridir. %1 bağımsız bir programdır; Literature &amp;amp; Latte tarafından yapılmamıştır ve onunla bağlantılı değildir; projelerinizin programlar arasında taşınabilmesi için dosya biçimlerini okur ve yazar.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&amp;Combined Text</source>
@@ -10405,7 +10505,7 @@ There is a copy of it from %2, the last time the project opened. Use that copy? 
         <translation>Proje dosyası okunamıyor:
 %1
 
-Projenin son açıldığı zamandan, %2 tarihli bir kopyası var. Bu kopya kullanılsın mı? Binder'da o zamandan beri yapılan değişiklikler (başlıklar, sıra, etiketler ...) onda yok; belgelerin metinleri etkilenmez. Hasarlı dosya saklanır.</translation>
+Projenin son açıldığı zamandan, %2 tarihli bir kopyası var. Bu kopya kullanılsın mı? Binder&apos;da o zamandan beri yapılan değişiklikler (başlıklar, sıra, etiketler ...) onda yok; belgelerin metinleri etkilenmez. Hasarlı dosya saklanır.</translation>
     </message>
     <message>
         <source>Use the Copy</source>
@@ -10423,11 +10523,11 @@ Projenin son açıldığı zamandan, %2 tarihli bir kopyası var. Bu kopya kulla
     </message>
     <message>
         <source>Scrivener&apos;s style marks were taken out of 1 document.</source>
-        <translation>Scrivener'ın stil işaretleri 1 belgeden çıkarıldı.</translation>
+        <translation>Scrivener&apos;ın stil işaretleri 1 belgeden çıkarıldı.</translation>
     </message>
     <message>
         <source>Scrivener&apos;s style marks were taken out of %1 documents.</source>
-        <translation>Scrivener'ın stil işaretleri %1 belgeden çıkarıldı.</translation>
+        <translation>Scrivener&apos;ın stil işaretleri %1 belgeden çıkarıldı.</translation>
     </message>
     <message>
         <source>Document Cannot Be Read</source>
@@ -10438,7 +10538,7 @@ Projenin son açıldığı zamandan, %2 tarihli bir kopyası var. Bu kopya kulla
 %4
 
 It is shown empty and cannot be edited, so that the file is not overwritten. Check the file&apos;s permissions or the drive it is on, then close and reopen the project.</source>
-        <translation>"%2" belgesinin %1 okunamıyor (%3):
+        <translation>&quot;%2&quot; belgesinin %1 okunamıyor (%3):
 %4
 
 Dosyanın üzerine yazılmaması için boş gösteriliyor ve düzenlenemiyor. Dosyanın izinlerini veya bulunduğu sürücüyü denetleyin, sonra projeyi kapatıp yeniden açın.</translation>
@@ -10460,21 +10560,21 @@ Dosyanın üzerine yazılmaması için boş gösteriliyor ve düzenlenemiyor. Do
 %4
 
 It is shown as well as it could be read, and it cannot be edited, so that the file is not changed. To keep working on the text, select it, copy it, and paste it into a new document; or repair the file (save it in UTF-8 in the program that wrote it), then close and reopen the project.</source>
-        <translation>"%2" belgesinin %1 gerektiği gibi okunamıyor: %3.
+        <translation>&quot;%2&quot; belgesinin %1 gerektiği gibi okunamıyor: %3.
 %4
 
 Okunabildiği kadarıyla gösteriliyor ve dosyanın değişmemesi için düzenlenemiyor. Metin üzerinde çalışmayı sürdürmek için onu seçin, kopyalayın ve yeni bir belgeye yapıştırın; ya da dosyayı onarın (yazan programda UTF-8 olarak kaydedin), sonra projeyi kapatıp yeniden açın.</translation>
     </message>
     <message>
         <source>The %1 of &quot;%2&quot; was changed, but it cannot be saved: its file cannot be read, and such a file is never written over. The change could not be kept as a copy either (is the disk full?); it exists only in this window. Copy the text into a new document to keep it.</source>
-        <translation>"%2" belgesinin %1 değişti, ancak kaydedilemiyor: dosyası okunamıyor ve böyle bir dosyanın üzerine asla yazılmaz. Değişiklik kopya olarak da saklanamadı (disk dolu mu?); yalnızca bu pencerede var. Korumak için metni yeni bir belgeye kopyalayın.</translation>
+        <translation>&quot;%2&quot; belgesinin %1 değişti, ancak kaydedilemiyor: dosyası okunamıyor ve böyle bir dosyanın üzerine asla yazılmaz. Değişiklik kopya olarak da saklanamadı (disk dolu mu?); yalnızca bu pencerede var. Korumak için metni yeni bir belgeye kopyalayın.</translation>
     </message>
     <message>
         <source>The %1 of &quot;%2&quot; was changed, but it is not saved in its place: its file cannot be read, and such a file is never written over. The changed text was kept as a copy:
 %3
 
 Open it in a word processor, or repair the document (Roll Back to a snapshot in the inspector) and take the change over.</source>
-        <translation>"%2" belgesinin %1 değişti, ancak yerine kaydedilmedi: dosyası okunamıyor ve böyle bir dosyanın üzerine asla yazılmaz. Değişen metin kopya olarak saklandı:
+        <translation>&quot;%2&quot; belgesinin %1 değişti, ancak yerine kaydedilmedi: dosyası okunamıyor ve böyle bir dosyanın üzerine asla yazılmaz. Değişen metin kopya olarak saklandı:
 %3
 
 Onu bir kelime işlemcide açın veya belgeyi onarın (denetçide bir anlık görüntüye Geri Al) ve değişikliği devralın.</translation>
@@ -10486,7 +10586,7 @@ Onu bir kelime işlemcide açın veya belgeyi onarın (denetçide bir anlık gö
     <message numerus="yes">
         <source>%n control character(s) in the %1 of &quot;%2&quot; cannot be stored and were left out.</source>
         <translation>
-            <numerusform>"%2" belgesinin %1 içindeki %n denetim karakteri saklanamaz ve dışarıda bırakıldı.</numerusform>
+            <numerusform>&quot;%2&quot; belgesinin %1 içindeki %n denetim karakteri saklanamaz ve dışarıda bırakıldı.</numerusform>
         </translation>
     </message>
     <message>
@@ -10591,7 +10691,7 @@ Açık tutup neden giderildikten sonra yeniden deneyin, henüz kaydedilmemiş me
     </message>
     <message>
         <source>The Mind Map tab of the inspector now stays on &quot;%1&quot;.</source>
-        <translation>Denetçinin Zihin Haritası sekmesi artık "%1" üzerinde kalıyor.</translation>
+        <translation>Denetçinin Zihin Haritası sekmesi artık &quot;%1&quot; üzerinde kalıyor.</translation>
     </message>
     <message>
         <source>The Mind Map tab of the inspector follows the selected item again.</source>
@@ -10609,7 +10709,7 @@ Açık tutup neden giderildikten sonra yeniden deneyin, henüz kaydedilmemiş me
     </message>
     <message>
         <source>When the program was ended (by logging out, shutting down or a command), the project &quot;%1&quot; could not be saved: %2</source>
-        <translation>Program sonlandırıldığında (oturum kapatma, kapatma veya bir komutla) "%1" projesi kaydedilemedi: %2</translation>
+        <translation>Program sonlandırıldığında (oturum kapatma, kapatma veya bir komutla) &quot;%1&quot; projesi kaydedilemedi: %2</translation>
     </message>
     <message>
         <source>The texts and notes that were not saved are in (%1 of %1 files, with the project file as it was in memory):
@@ -10661,7 +10761,7 @@ Açık tutup neden giderildikten sonra yeniden deneyin, henüz kaydedilmemiş me
     </message>
     <message>
         <source>&quot;%1&quot; cannot be split: %2, and such a file is never written over. Repair it first (Roll Back to a snapshot in the inspector, or repair the file in the program that wrote it).</source>
-        <translation>"%1" bölünemiyor: %2 ve böyle bir dosyanın üzerine asla yazılmaz. Önce onarın (denetçide bir anlık görüntüye Geri Al veya dosyayı yazan programda onarın).</translation>
+        <translation>&quot;%1&quot; bölünemiyor: %2 ve böyle bir dosyanın üzerine asla yazılmaz. Önce onarın (denetçide bir anlık görüntüye Geri Al veya dosyayı yazan programda onarın).</translation>
     </message>
     <message>
         <source>A document cannot be split inside a table or a picture&apos;s caption. Put the cursor before or after the table or the picture, then split again.</source>
@@ -10669,11 +10769,11 @@ Açık tutup neden giderildikten sonra yeniden deneyin, henüz kaydedilmemiş me
     </message>
     <message>
         <source>&quot;%1&quot;: %2</source>
-        <translation>"%1": %2</translation>
+        <translation>&quot;%1&quot;: %2</translation>
     </message>
     <message>
         <source>&quot;%1&quot; (notes): %2</source>
-        <translation>"%1" (notlar): %2</translation>
+        <translation>&quot;%1&quot; (notlar): %2</translation>
     </message>
     <message>
         <source>The documents were not merged. These cannot be changed, and their files are never written over:
@@ -10691,7 +10791,7 @@ Repair them first (Roll Back to a snapshot in the inspector, or repair the file 
     </message>
     <message>
         <source>Merge %1 documents into &quot;%2&quot;? The others are moved to the Trash.</source>
-        <translation>%1 belge "%2" içinde birleştirilsin mi? Diğerleri Çöp Kutusuna taşınır.</translation>
+        <translation>%1 belge &quot;%2&quot; içinde birleştirilsin mi? Diğerleri Çöp Kutusuna taşınır.</translation>
     </message>
     <message>
         <source>Merge</source>
@@ -10807,7 +10907,7 @@ En iyisi başka bir sürücüde (bir USB bellek, ikinci bir disk, eşitleme prog
     </message>
     <message>
         <source>Automatic backups are not made until a folder for them is chosen: click here, or File &gt; Options &gt; Backup.</source>
-        <translation>Bir klasör seçilene kadar otomatik yedek alınmaz: buraya veya Dosya &gt; Seçenekler &gt; Yedekleme'ye tıklayın.</translation>
+        <translation>Bir klasör seçilene kadar otomatik yedek alınmaz: buraya veya Dosya &gt; Seçenekler &gt; Yedekleme&apos;ye tıklayın.</translation>
     </message>
     <message>
         <source>Restore From Backup</source>
@@ -10815,7 +10915,7 @@ En iyisi başka bir sürücüde (bir USB bellek, ikinci bir disk, eşitleme prog
     </message>
     <message>
         <source>The backups of &quot;%1&quot;, newest first. The one you choose is unpacked into a new folder beside the project and opened from there; the project you have open now is not changed.</source>
-        <translation>"%1" projesinin yedekleri, en yenisi başta. Seçtiğiniz, projenin yanında yeni bir klasöre açılır ve oradan açılır; şu an açık olan proje değişmez.</translation>
+        <translation>&quot;%1&quot; projesinin yedekleri, en yenisi başta. Seçtiğiniz, projenin yanında yeni bir klasöre açılır ve oradan açılır; şu an açık olan proje değişmez.</translation>
     </message>
     <message>
         <source>Made</source>
@@ -10839,7 +10939,7 @@ En iyisi başka bir sürücüde (bir USB bellek, ikinci bir disk, eşitleme prog
     </message>
     <message>
         <source> (in the folder &quot;%1&quot;)</source>
-        <translation> ("%1" klasöründe)</translation>
+        <translation> (&quot;%1&quot; klasöründe)</translation>
     </message>
     <message>
         <source>, waiting (not yet in the backup folder)</source>
@@ -10913,11 +11013,11 @@ Versions 0.70.0 to 0.90.4 kept them there. Move them into the backup folder itse
     </message>
     <message>
         <source>The title of the restored project could not be marked &quot;(restored ...)&quot;, so it has the title of the project it was made from: %1</source>
-        <translation>Geri yüklenen projenin başlığı "(geri yüklendi ...)" olarak işaretlenemedi, bu yüzden yapıldığı projenin başlığını taşıyor: %1</translation>
+        <translation>Geri yüklenen projenin başlığı &quot;(geri yüklendi ...)&quot; olarak işaretlenemedi, bu yüzden yapıldığı projenin başlığını taşıyor: %1</translation>
     </message>
     <message>
         <source>The restored project could not be opened to mark its title &quot;(restored ...)&quot;: %1</source>
-        <translation>Geri yüklenen proje, başlığını "(geri yüklendi ...)" olarak işaretlemek için açılamadı: %1</translation>
+        <translation>Geri yüklenen proje, başlığını &quot;(geri yüklendi ...)&quot; olarak işaretlemek için açılamadı: %1</translation>
     </message>
     <message>
         <source>The backup was restored INCOMPLETELY into:
@@ -11054,8 +11154,8 @@ You can do this later with Help &gt; Add to Application Menu.</source>
 Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</translation>
     </message>
     <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>AppImage dosyasını %1 konumuna taşı (taşınmış bir dosya menüden başlatılamaz)</translation>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>AppImage&apos;ı %1 klasörüne taşı; menü girişi onu buradan, sabit bir yerden başlatır</translation>
     </message>
     <message>
         <source>The menu entry could not be made.
@@ -11067,7 +11167,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove from Application Menu and then Add to Application Menu again.</source>
-        <translation>AppImage dosyası %1 konumuna taşınamadı (%2). Menü girdisi onu olduğu yerden başlatır; dosyayı kendiniz taşırsanız Yardım &gt; Uygulama Menüsünden Kaldır'ı, sonra yeniden Uygulama Menüsüne Ekle'yi seçin.</translation>
+        <translation>AppImage dosyası %1 konumuna taşınamadı (%2). Menü girdisi onu olduğu yerden başlatır; dosyayı kendiniz taşırsanız Yardım &gt; Uygulama Menüsünden Kaldır&apos;ı, sonra yeniden Uygulama Menüsüne Ekle&apos;yi seçin.</translation>
     </message>
     <message>
         <source>The program&apos;s icon could not be copied, so the menu entry shows no icon.</source>
@@ -11239,7 +11339,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>Word count (rounded to 100)</source>
-        <translation>Sözcük sayısı (100'e yuvarlanmış)</translation>
+        <translation>Sözcük sayısı (100&apos;e yuvarlanmış)</translation>
     </message>
     <message>
         <source>Compile date</source>
@@ -11292,6 +11392,10 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     <message>
         <source>&amp;Themes</source>
         <translation>&amp;Temalar</translation>
+    </message>
+    <message>
+        <source>&amp;Profiles</source>
+        <translation>&amp;Profiller</translation>
     </message>
     <message>
         <source>&amp;Text Editing</source>
@@ -11507,7 +11611,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>Show or hide the binder, the collections and the inspector; layouts</source>
-        <translation>Binder'ı, koleksiyonları ve denetçiyi göster veya gizle; yerleşimler</translation>
+        <translation>Binder&apos;ı, koleksiyonları ve denetçiyi göster veya gizle; yerleşimler</translation>
     </message>
     <message>
         <source>Search in &amp;Document…</source>
@@ -11709,7 +11813,7 @@ Yazı tipleri buraya Biçim &gt; Yazı Tipi &gt; Yazı Tipi Dosyalarını Kur il
     </message>
     <message>
         <source>Compare a Word or LibreOffice file with what Compile makes of the project, and take the differences over to one side</source>
-        <translation>Bir Word veya LibreOffice dosyasını Derleme'nin projeden yaptığıyla karşılaştır ve farkları bir tarafa aktar</translation>
+        <translation>Bir Word veya LibreOffice dosyasını Derleme&apos;nin projeden yaptığıyla karşılaştır ve farkları bir tarafa aktar</translation>
     </message>
     <message>
         <source>By &amp;Chapter</source>
@@ -11837,7 +11941,7 @@ Yazı tipleri hemen kullanılabilir; diğer programlar bir sonraki başlatmalar�
         <source>Only %1 % of the text of &quot;%2&quot; is in what Compile makes of this project; 65 % are needed to call them related.
 
 The file may belong to another project, or Compile leaves out what the file has (documents with Include in Compile switched off, another compile group).</source>
-        <translation>"%2" belgesinin metninin yalnızca yüzde %1 kadarı bu projenin Derleme çıktısında; ilişkili saymak için yüzde 65 gerekir.
+        <translation>&quot;%2&quot; belgesinin metninin yalnızca yüzde %1 kadarı bu projenin Derleme çıktısında; ilişkili saymak için yüzde 65 gerekir.
 
 Dosya başka bir projeye ait olabilir veya Derleme dosyadakileri dışarıda bırakıyor (Derlemeye Dahil Et kapalı belgeler, başka bir derleme grubu).</translation>
     </message>
@@ -11852,7 +11956,7 @@ Dosya başka bir projeye ait olabilir veya Derleme dosyadakileri dışarıda bı
         <translation>
             <numerusform>Yazıldı: %1
 
-İçinde %n değişiklik işaretli. Her birini kabul etmek veya reddetmek için Word veya LibreOffice'te açın. Karşılaştırdığınız dosya değişmedi.</numerusform>
+İçinde %n değişiklik işaretli. Her birini kabul etmek veya reddetmek için Word veya LibreOffice&apos;te açın. Karşılaştırdığınız dosya değişmedi.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -11913,9 +12017,9 @@ Dosya başka bir projeye ait olabilir veya Derleme dosyadakileri dışarıda bı
 Work in Scrivener format: %2 saves your changes into the .scriv, so you can go on in Scrivener as well (not both programs at the same time).
 
 Convert: %2 makes a project of its own from it; the Scrivener project is not changed.</source>
-        <translation>"%1" bir Scrivener projesi.
+        <translation>&quot;%1&quot; bir Scrivener projesi.
 
-Scrivener biçiminde çalış: %2 değişikliklerinizi .scriv içine kaydeder, böylece Scrivener'da da devam edebilirsiniz (iki program aynı anda değil).
+Scrivener biçiminde çalış: %2 değişikliklerinizi .scriv içine kaydeder, böylece Scrivener&apos;da da devam edebilirsiniz (iki program aynı anda değil).
 
 Dönüştür: %2 ondan kendi projesini yapar; Scrivener projesi değişmez.</translation>
     </message>
@@ -11959,7 +12063,7 @@ but this window could not leave the original. Open the new project from File &gt
         <translation>Proje şuraya kaydedildi:
 %1
 
-ancak bu pencere özgün projeyi bırakamadı. Yeni projeyi Dosya &gt; Son Kullanılanlar'dan açın.</translation>
+ancak bu pencere özgün projeyi bırakamadı. Yeni projeyi Dosya &gt; Son Kullanılanlar&apos;dan açın.</translation>
     </message>
     <message>
         <source>Saved as %1. The original stays as it was: %2</source>
@@ -12079,7 +12183,7 @@ The project you are working on stays where it is.</source>
     </message>
     <message>
         <source>a counter of its own called &quot;name&quot; (works with every number above: &lt;$W:chapter&gt;)</source>
-        <translation>"ad" adında kendi sayacı (yukarıdaki her sayıyla çalışır: &lt;$W:chapter&gt;)</translation>
+        <translation>&quot;ad&quot; adında kendi sayacı (yukarıdaki her sayıyla çalışır: &lt;$W:chapter&gt;)</translation>
     </message>
     <message>
         <source>the title of the document (in headers and footers of printouts: what is printed)</source>
@@ -12243,7 +12347,7 @@ The project you are working on stays where it is.</source>
     </message>
     <message>
         <source>Audio and video need the add-on &quot;Media Playback&quot;</source>
-        <translation>Ses ve video "Media Playback" eklentisini gerektirir</translation>
+        <translation>Ses ve video &quot;Media Playback&quot; eklentisini gerektirir</translation>
     </message>
     <message>
         <source>Skip &amp;Back %1 Seconds</source>
@@ -12359,7 +12463,7 @@ The project you are working on stays where it is.</source>
         <source>Use the script format &quot;%1&quot; in this project?
 
 The scripts of the project get the new layout. Elements keep their text; an element the new format does not have becomes the element of the same kind.</source>
-        <translation>"%1" senaryo biçimi bu projede kullanılsın mı?
+        <translation>&quot;%1&quot; senaryo biçimi bu projede kullanılsın mı?
 
 Projenin senaryoları yeni yerleşimi alır. Öğeler metinlerini korur; yeni biçimde bulunmayan bir öğe aynı türdeki öğe olur.</translation>
     </message>
@@ -12385,7 +12489,7 @@ No element of the same kind exists for: %1. Their paragraphs become general text
     </message>
     <message>
         <source>In &quot;%1&quot;.</source>
-        <translation>"%1" içinde.</translation>
+        <translation>&quot;%1&quot; içinde.</translation>
     </message>
     <message>
         <source>No other document has it; continued from the %1.</source>
@@ -12589,7 +12693,7 @@ Dosya ▸ Seçenekler ▸ Düzenleme yerleşik stillere geri döner.</translatio
     </message>
     <message>
         <source>Redefine No Style From Selection</source>
-        <translation>Stil Yok'u Seçimden Yeniden Tanımla</translation>
+        <translation>Stil Yok&apos;u Seçimden Yeniden Tanımla</translation>
     </message>
     <message>
         <source>Click into text that has the formatting the main text should get first.</source>
@@ -12641,7 +12745,7 @@ Hizalama: %6</translation>
 %1
 
 All text without a style in the whole project takes it over, also text with a font, size or spacing of its own. Styles keep what they set themselves; the rest of their look follows the main text style. Project &gt; Project Settings &gt; Formatting shows the same settings.</source>
-        <translation>İmlecin bulunduğu yerdeki biçimlendirme projenin ana metin stili ("Stil Yok") yapılsın mı?
+        <translation>İmlecin bulunduğu yerdeki biçimlendirme projenin ana metin stili (&quot;Stil Yok&quot;) yapılsın mı?
 
 %1
 
@@ -12788,14 +12892,6 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
         <translation>Diğer sürümler yine saklanır; yalnızca bu bildirim, programdan çıkana kadar görünmez.</translation>
     </message>
     <message>
-        <source>&amp;Translate and Proofread…</source>
-        <translation>Çevir ve &amp;Yazım Denetimi Yap…</translation>
-    </message>
-    <message>
-        <source>Proofread English text or translate German text into English (the add-on is not installed)</source>
-        <translation>İngilizce metni gözden geçir veya Almanca metni İngilizceye çevir (eklenti kurulu değil)</translation>
-    </message>
-    <message>
         <source>Speech &amp;Transcription…</source>
         <translation>Konuşmayı &amp;Yazıya Dök…</translation>
     </message>
@@ -12806,10 +12902,6 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     <message>
         <source>Speech Transcription</source>
         <translation>Konuşmayı Yazıya Dökme</translation>
-    </message>
-    <message>
-        <source>Translation and Proofreading</source>
-        <translation>Çeviri ve Yazım Denetimi</translation>
     </message>
     <message>
         <source>is not installed</source>
@@ -12836,8 +12928,20 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
         <translation>Konuşmayı metne çevirir. Yardım &gt; Eklentiler ve Güncellemeler &gt; Güncelleme veya Eklenti Kur ile kurun; Yardım &gt; Eklentiler ve Güncellemeler &gt; Eklenti Yöneticisi eklentileri gösterir ve açıp kapatır.</translation>
     </message>
     <message>
-        <source>It proofreads English text and translates German text into English. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
-        <translation>İngilizce metni gözden geçirir ve Almanca metni İngilizceye çevirir. Yardım &gt; Eklentiler ve Güncellemeler &gt; Güncelleme veya Eklenti Kur ile kurun; Yardım &gt; Eklentiler ve Güncellemeler &gt; Eklenti Yöneticisi eklentileri gösterir ve açıp kapatır.</translation>
+        <source>&amp;Translation Helper…</source>
+        <translation>&amp;Çeviri Yardımcısı…</translation>
+    </message>
+    <message>
+        <source>Suggestions for translating between eleven languages and for English spelling (the add-on is not installed)</source>
+        <translation>On bir dil arasında çeviri ve İngilizce yazım için öneriler (eklenti kurulu değil)</translation>
+    </message>
+    <message>
+        <source>Translation Helper</source>
+        <translation>Çeviri Yardımcısı</translation>
+    </message>
+    <message>
+        <source>It gives suggestions for translating between eleven languages and for English spelling and grammar. Its translations are not precise: check each one, which needs a working knowledge of both languages. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>On bir dil arasında çeviri ve İngilizce yazım ile dil bilgisi için öneriler sunar. Çevirileri kesin değildir: her birini denetleyin; bunun için iki dilin de iş görecek düzeyde bilinmesi gerekir. Yardım &gt; Eklentiler ve Güncellemeler &gt; Güncelleme veya Eklenti Kur ile kurun; Yardım &gt; Eklentiler ve Güncellemeler &gt; Eklenti Yöneticisi eklentileri gösterir ve açıp kapatır.</translation>
     </message>
     <message>
         <source>Open Add-on Manager</source>
@@ -12934,6 +13038,62 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     <message>
         <source>and %1 earlier steps</source>
         <translation>ve %1 önceki adım</translation>
+    </message>
+    <message>
+        <source>&amp;Manage Profiles…</source>
+        <translation>Profilleri &amp;Yönet…</translation>
+    </message>
+    <message>
+        <source>Use, save, rename, copy, delete, export and import profiles</source>
+        <translation>Profilleri kullan, kaydet, yeniden adlandır, kopyala, sil, dışa ve içe aktar</translation>
+    </message>
+    <message>
+        <source>&amp;Save Settings as New Profile…</source>
+        <translation>Ayarları Yeni Profil Olarak &amp;Kaydet…</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Ayarları Yeni Profil Olarak Kaydet</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Profilim</translation>
+    </message>
+    <message>
+        <source>Keep the options, toolbars, window and theme as they are now in a new profile</source>
+        <translation>Seçenekleri, araç çubuklarını, pencereyi ve temayı şu andaki hâliyle yeni bir profilde sakla</translation>
+    </message>
+    <message>
+        <source>Profiles</source>
+        <translation>Profiller</translation>
+    </message>
+    <message>
+        <source>Labels</source>
+        <translation>Etiketler</translation>
+    </message>
+    <message>
+        <source>Profile:</source>
+        <translation>Profil:</translation>
+    </message>
+    <message>
+        <source>The profile in use: %1. A click lists the profiles.</source>
+        <translation>Kullanımdaki profil: %1. Tıklamak profilleri listeler.</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Etiket</translation>
+    </message>
+    <message>
+        <source>No Label</source>
+        <translation>Etiket Yok</translation>
+    </message>
+    <message>
+        <source>Switch Profile</source>
+        <translation>Profil Değiştir</translation>
+    </message>
+    <message>
+        <source>The profile sets another language; it takes effect when the program is started again.</source>
+        <translation>Profil başka bir dil belirliyor; program yeniden başlatıldığında etkili olur.</translation>
     </message>
 </context>
 <context>
@@ -13491,7 +13651,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Add Notes to the B&amp;inder</source>
-        <translation>Notları Binder'a &amp;Ekle</translation>
+        <translation>Notları Binder&apos;a &amp;Ekle</translation>
     </message>
     <message>
         <source>&amp;New Note Style From Selection…</source>
@@ -14161,7 +14321,7 @@ Hayır, bunları bu panonun stillerine ekler.</numerusform>
     </message>
     <message>
         <source>Add Notes to the Binder</source>
-        <translation>Notları Binder'a Ekle</translation>
+        <translation>Notları Binder&apos;a Ekle</translation>
     </message>
     <message numerus="yes">
         <source>%n note(s) become documents inside “%1”, in the reading order of the board (left to right, top to bottom; connected notes after the note they hang on).</source>
@@ -14747,7 +14907,7 @@ Okunabildiği kadarıyla gösteriliyor ve dosyasının üzerine yazılmaması i�
     <name>qb::MindMapPanel</name>
     <message>
         <source>Select a document or folder in the binder: each one can have a mind map of its own.</source>
-        <translation>Binder'da bir belge veya klasör seçin: her birinin kendi zihin haritası olabilir.</translation>
+        <translation>Binder&apos;da bir belge veya klasör seçin: her birinin kendi zihin haritası olabilir.</translation>
     </message>
     <message>
         <source>Menu</source>
@@ -14815,7 +14975,7 @@ Okunabildiği kadarıyla gösteriliyor ve dosyasının üzerine yazılmaması i�
     </message>
     <message>
         <source>This is the mind map of &quot;%1&quot;, not of the selected item. The pin button releases it.</source>
-        <translation>Bu, seçili öğenin değil "%1" öğesinin zihin haritası. Raptiye düğmesi onu bırakır.</translation>
+        <translation>Bu, seçili öğenin değil &quot;%1&quot; öğesinin zihin haritası. Raptiye düğmesi onu bırakır.</translation>
     </message>
 </context>
 <context>
@@ -14869,7 +15029,7 @@ Okunabildiği kadarıyla gösteriliyor ve dosyasının üzerine yazılmaması i�
     </message>
     <message>
         <source>Search the binder</source>
-        <translation>Binder'da ara</translation>
+        <translation>Binder&apos;da ara</translation>
     </message>
     <message>
         <source>Ctrl or Shift chooses several documents.</source>
@@ -15245,7 +15405,7 @@ Okunabildiği kadarıyla gösteriliyor ve dosyasının üzerine yazılmaması i�
     </message>
     <message>
         <source>Projects&apos; own settings are not used: File &gt; Options &gt; General, &quot;Which settings come first&quot;.</source>
-        <translation>Projelerin kendi ayarları kullanılmıyor: Dosya &gt; Seçenekler &gt; Genel, "Hangi ayarlar önce gelir".</translation>
+        <translation>Projelerin kendi ayarları kullanılmıyor: Dosya &gt; Seçenekler &gt; Genel, &quot;Hangi ayarlar önce gelir&quot;.</translation>
     </message>
     <message>
         <source>Changing this applies the changes made so far and shows the other settings.</source>
@@ -15317,7 +15477,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Choose &quot;All projects&quot; at the top to set the program&apos;s options back to the standard</source>
-        <translation>Programın seçeneklerini standarda döndürmek için üstte "Tüm projeler" seçin</translation>
+        <translation>Programın seçeneklerini standarda döndürmek için üstte &quot;Tüm projeler&quot; seçin</translation>
     </message>
     <message>
         <source>Add-ons and Plugins</source>
@@ -15325,7 +15485,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</source>
-        <translation>Burada değiştirdiğiniz şeyler bu projeyle birlikte saklanır. Kendi ayarları: &lt;a href="show"&gt;%1&lt;/a&gt;.</translation>
+        <translation>Burada değiştirdiğiniz şeyler bu projeyle birlikte saklanır. Kendi ayarları: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>setting</source>
@@ -15341,7 +15501,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>The open project has &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; of its own, which it keeps.</source>
-        <translation>Açık projenin saklamaya devam ettiği &lt;a href="show"&gt;%1&lt;/a&gt; kendine ait.</translation>
+        <translation>Açık projenin saklamaya devam ettiği &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; kendine ait.</translation>
     </message>
     <message>
         <source>Projects&apos; own settings are not used (General &gt; Which settings come first).</source>
@@ -15385,15 +15545,15 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Ticked, a project can keep settings of its own (choose &quot;This project&quot; at the top of this window); they apply while it is open. Unticked, the program&apos;s settings apply to every project, also its look; what projects keep stays in them for later.</source>
-        <translation>İşaretliyken bir proje kendi ayarlarını tutabilir (bu pencerenin üstünde "Bu proje" seçin); proje açıkken bunlar geçerlidir. İşaretli değilken programın ayarları, görünümü de dahil, her projeye uygulanır; projelerin tuttukları sonrası için içlerinde kalır.</translation>
+        <translation>İşaretliyken bir proje kendi ayarlarını tutabilir (bu pencerenin üstünde &quot;Bu proje&quot; seçin); proje açıkken bunlar geçerlidir. İşaretli değilken programın ayarları, görünümü de dahil, her projeye uygulanır; projelerin tuttukları sonrası için içlerinde kalır.</translation>
     </message>
     <message>
         <source>Language:</source>
         <translation>Dil:</translation>
     </message>
     <message>
-        <source>The language of menus, windows and messages; it changes at the next start of the program. The manual and the welcome project stay in English.</source>
-        <translation>Menülerin, pencerelerin ve iletilerin dili; programın bir sonraki başlatılışında değişir. Kılavuz ve karşılama projesi İngilizce kalır.</translation>
+        <source>The language of menus, windows and messages, of the manual, the quick start guide and the welcome project; it changes at the next start of the program. A language marked as a machine translation has not been checked by a speaker yet. Spelling dictionaries for other languages are add-ons (Help &gt; Add-ons and Updates).</source>
+        <translation>Menülerin, pencerelerin ve iletilerin, kılavuzun, hızlı başlangıç kılavuzunun ve karşılama projesinin dili; programın bir sonraki başlatılışında değişir. Makine çevirisi olarak işaretlenmiş bir dil henüz o dili konuşan biri tarafından denetlenmemiştir. Diğer diller için yazım sözlükleri eklentidir (Yardım &gt; Eklentiler ve Güncellemeler).</translation>
     </message>
     <message>
         <source>Group the digits of large numbers (%1)</source>
@@ -15433,7 +15593,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>A project in a synced folder (Dropbox, Nextcloud, Syncthing ...) holds a lock while it is open here, and the copies of versions changed elsewhere are named after the computer. Empty: the computer&apos;s own name and your user name on it. A name of your own (&quot;Laptop&quot;) is written instead, and the user name is left out.</source>
-        <translation>Eşitlenen bir klasördeki proje (Dropbox, Nextcloud, Syncthing ...) burada açıkken bir kilit tutar ve başka yerde değişen sürümlerin kopyaları bilgisayarın adını taşır. Boş: bilgisayarın kendi adı ve üzerindeki kullanıcı adınız. Kendi adınız ("Dizüstü") bunun yerine yazılır ve kullanıcı adı dışarıda bırakılır.</translation>
+        <translation>Eşitlenen bir klasördeki proje (Dropbox, Nextcloud, Syncthing ...) burada açıkken bir kilit tutar ve başka yerde değişen sürümlerin kopyaları bilgisayarın adını taşır. Boş: bilgisayarın kendi adı ve üzerindeki kullanıcı adınız. Kendi adınız (&quot;Dizüstü&quot;) bunun yerine yazılır ve kullanıcı adı dışarıda bırakılır.</translation>
     </message>
     <message>
         <source>Saving</source>
@@ -15501,7 +15661,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>The Scratch Pad (Window &gt; Scratch Pad) comes with the add-on &quot;Scratch Pad&quot;; once it is installed (Help &gt; Add-ons and Updates &gt; Add-on Manager), its folder and the kind of new notes are set here.</source>
-        <translation>Karalama Defteri (Pencere &gt; Karalama Defteri) "Scratch Pad" eklentisiyle gelir; kurulduktan sonra (Yardım &gt; Eklentiler ve Güncellemeler &gt; Eklenti Yöneticisi) klasörü ve yeni notların türü burada ayarlanır.</translation>
+        <translation>Karalama Defteri (Pencere &gt; Karalama Defteri) &quot;Scratch Pad&quot; eklentisiyle gelir; kurulduktan sonra (Yardım &gt; Eklentiler ve Güncellemeler &gt; Eklenti Yöneticisi) klasörü ve yeni notların türü burada ayarlanır.</translation>
     </message>
     <message>
         <source>No folder chosen</source>
@@ -15601,7 +15761,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>The messages of the program and of Qt while it runs (the same as the last lines of a crash report).</source>
-        <translation>Programın ve Qt'nin çalışırken verdiği iletiler (bir çökme raporunun son satırlarıyla aynı).</translation>
+        <translation>Programın ve Qt&apos;nin çalışırken verdiği iletiler (bir çökme raporunun son satırlarıyla aynı).</translation>
     </message>
     <message>
         <source>Reset All Warnings</source>
@@ -15613,7 +15773,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Questions you answered with &quot;Don&apos;t ask again&quot; are asked again (for example the folder of new bookmarked documents).</source>
-        <translation>"Bir daha sorma" ile yanıtladığınız sorular yeniden sorulur (örneğin yer imli yeni belgelerin klasörü).</translation>
+        <translation>&quot;Bir daha sorma&quot; ile yanıtladığınız sorular yeniden sorulur (örneğin yer imli yeni belgelerin klasörü).</translation>
     </message>
     <message>
         <source>Warnings</source>
@@ -15969,7 +16129,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>&quot;Pause and rewind&quot; must be switched on in the footer bar of the player.</source>
-        <translation>"Duraklat ve geri sar" oynatıcının alt çubuğunda açık olmalıdır.</translation>
+        <translation>&quot;Duraklat ve geri sar&quot; oynatıcının alt çubuğunda açık olmalıdır.</translation>
     </message>
     <message>
         <source>Playback</source>
@@ -15997,7 +16157,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Off, Return on a selected card or row edits its title (in the binder Return always makes a new item).</source>
-        <translation>Kapalıyken, seçili bir kartta veya satırda Return başlığını düzenler (binder'da Return her zaman yeni bir öğe oluşturur).</translation>
+        <translation>Kapalıyken, seçili bir kartta veya satırda Return başlığını düzenler (binder&apos;da Return her zaman yeni bir öğe oluşturur).</translation>
     </message>
     <message>
         <source>Return Key</source>
@@ -16025,7 +16185,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Every project keeps its own look: the theme, colors and fonts of the binder, editor, corkboard, outliner, inspector and composition mode, the text column width and the border beside the text, whatever &quot;Settings for&quot; says at the top. Menus and panels (General) and the interface font are the same in every project.</source>
-        <translation>Her proje kendi görünümünü tutar: binder, düzenleyici, mantar pano, anahat, denetçi ve yazım modunun teması, renkleri ve yazı tipleri, metin sütunu genişliği ve metnin yanındaki kenarlık; üstteki "Ayarların geçtiği yer" ne derse desin. Menüler ve paneller (Genel) ve arayüz yazı tipi her projede aynıdır.</translation>
+        <translation>Her proje kendi görünümünü tutar: binder, düzenleyici, mantar pano, anahat, denetçi ve yazım modunun teması, renkleri ve yazı tipleri, metin sütunu genişliği ve metnin yanındaki kenarlık; üstteki &quot;Ayarların geçtiği yer&quot; ne derse desin. Menüler ve paneller (Genel) ve arayüz yazı tipi her projede aynıdır.</translation>
     </message>
     <message>
         <source>Theme:</source>
@@ -16057,7 +16217,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>A theme sets the colors and fonts of every area. Changes you make here sit on top of the theme; &quot;Save as Theme&quot; turns the result into a theme of your own.</source>
-        <translation>Bir tema her alanın renklerini ve yazı tiplerini belirler. Burada yaptığınız değişiklikler temanın üstünde durur; "Tema Olarak Kaydet" sonucu kendi temanıza dönüştürür.</translation>
+        <translation>Bir tema her alanın renklerini ve yazı tiplerini belirler. Burada yaptığınız değişiklikler temanın üstünde durur; &quot;Tema Olarak Kaydet&quot; sonucu kendi temanıza dönüştürür.</translation>
     </message>
     <message>
         <source>Show the full project path in the title bar</source>
@@ -16085,7 +16245,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Show label colors in the binder</source>
-        <translation>Etiket renklerini binder'da göster</translation>
+        <translation>Etiket renklerini binder&apos;da göster</translation>
     </message>
     <message>
         <source>Let the label color shine through the icons</source>
@@ -16101,7 +16261,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Qt&apos;s standard is 20 px; the program uses 12 px</source>
-        <translation>Qt'nin standardı 20 px; program 12 px kullanır</translation>
+        <translation>Qt&apos;nin standardı 20 px; program 12 px kullanır</translation>
     </message>
     <message>
         <source>Paper width, zoom and background fade are set in the bar at the bottom of composition mode; a background picture under Project &gt; Project Settings.</source>
@@ -16217,7 +16377,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Capitalize &quot;i&quot;</source>
-        <translation>Tek başına "i" harfini büyük yaz (İngilizce)</translation>
+        <translation>Tek başına &quot;i&quot; harfini büyük yaz (İngilizce)</translation>
     </message>
     <message>
         <source>Punctuation</source>
@@ -16361,7 +16521,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Words added with &quot;Learn Spelling&quot; in the right-click menu of the text.</source>
-        <translation>Metnin sağ tıklama menüsünde "Yazımı Öğren" ile eklenen sözcükler.</translation>
+        <translation>Metnin sağ tıklama menüsünde &quot;Yazımı Öğren&quot; ile eklenen sözcükler.</translation>
     </message>
     <message>
         <source>Spelling</source>
@@ -16417,7 +16577,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>The program&apos;s own reader (add-on &quot;Word 97-2003 Import&quot;)</source>
-        <translation>Programın kendi okuyucusu ("Word 97-2003 Import" eklentisi)</translation>
+        <translation>Programın kendi okuyucusu (&quot;Word 97-2003 Import&quot; eklentisi)</translation>
     </message>
     <message>
         <source>LibreOffice (when installed)</source>
@@ -16460,8 +16620,104 @@ Devam edilsin mi?</translation>
         <translation>tümü</translation>
     </message>
     <message>
-        <source>Retain backup files per project:</source>
-        <translation>Proje başına saklanacak yedek dosyaları:</translation>
+        <source>Keep the newest</source>
+        <translation>Her projenin en yeni</translation>
+    </message>
+    <message>
+        <source>backups of each project</source>
+        <translation>yedeğini sakla</translation>
+    </message>
+    <message>
+        <source>The colors new things start with. They belong to your profile. Projects that exist keep their own labels.</source>
+        <translation>Yeni öğelerin başlangıç renkleri. Profilinize aittirler. Var olan projeler kendi etiketlerini korur.</translation>
+    </message>
+    <message>
+        <source>Standard Color</source>
+        <translation>Standart Renk</translation>
+    </message>
+    <message>
+        <source>Labels of new projects</source>
+        <translation>Yeni projelerin etiketleri</translation>
+    </message>
+    <message>
+        <source>Color of this label</source>
+        <translation>Bu etiketin rengi</translation>
+    </message>
+    <message>
+        <source>Colors of the popups</source>
+        <translation>Açılır pencerelerin renkleri</translation>
+    </message>
+    <message>
+        <source>Text color:</source>
+        <translation>Metin rengi:</translation>
+    </message>
+    <message>
+        <source>Highlight:</source>
+        <translation>Vurgu:</translation>
+    </message>
+    <message>
+        <source>A color of the text color popup</source>
+        <translation>Metin rengi açılır penceresinin bir rengi</translation>
+    </message>
+    <message>
+        <source>A color of the highlight popup</source>
+        <translation>Vurgu açılır penceresinin bir rengi</translation>
+    </message>
+    <message>
+        <source>The color each button starts with</source>
+        <translation>Her düğmenin başlangıç rengi</translation>
+    </message>
+    <message>
+        <source>Text color button:</source>
+        <translation>Metin rengi düğmesi:</translation>
+    </message>
+    <message>
+        <source>The color of the text color button when the program starts</source>
+        <translation>Program başlarken metin rengi düğmesinin rengi</translation>
+    </message>
+    <message>
+        <source>Highlight button:</source>
+        <translation>Vurgu düğmesi:</translation>
+    </message>
+    <message>
+        <source>The color of the highlight button when the program starts</source>
+        <translation>Program başlarken vurgu düğmesinin rengi</translation>
+    </message>
+    <message>
+        <source>Back to the program&apos;s standard labels and colors</source>
+        <translation>Programın standart etiketlerine ve renklerine dön</translation>
+    </message>
+    <message>
+        <source>Export Profile...</source>
+        <translation>Profili Dışa Aktar...</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Profili Dışa Aktar</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profiller (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile...</source>
+        <translation>Profili İçe Aktar...</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Profili İçe Aktar</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profiller ve seçenekler (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>The profile “%1” was imported. Switch to it under View &gt; Profiles.</source>
+        <translation>“%1” profili içe aktarıldı. Görünüm &gt; Profiller altından ona geçin.</translation>
+    </message>
+    <message>
+        <source>Manage Profiles...</source>
+        <translation>Profilleri Yönet...</translation>
     </message>
     <message>
         <source>No folder chosen: no automatic backups</source>
@@ -16597,7 +16853,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Your own templates (saved with &quot;Use for New Projects&quot;)</source>
-        <translation>Kendi şablonlarınız ("Yeni Projeler İçin Kullan" ile kaydedilen)</translation>
+        <translation>Kendi şablonlarınız (&quot;Yeni Projeler İçin Kullan&quot; ile kaydedilen)</translation>
     </message>
     <message>
         <source>The standard templates</source>
@@ -16613,7 +16869,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>The categories, fields and colors of a project are changed under Project &gt; Object Templates and Colors; &quot;Use for New Projects&quot; there makes them the templates of new projects.</source>
-        <translation>Bir projenin kategorileri, alanları ve renkleri Proje &gt; Nesne Şablonları ve Renkleri altında değiştirilir; oradaki "Yeni Projeler İçin Kullan" onları yeni projelerin şablonları yapar.</translation>
+        <translation>Bir projenin kategorileri, alanları ve renkleri Proje &gt; Nesne Şablonları ve Renkleri altında değiştirilir; oradaki &quot;Yeni Projeler İçin Kullan&quot; onları yeni projelerin şablonları yapar.</translation>
     </message>
     <message>
         <source>Objects</source>
@@ -16649,7 +16905,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Add-ons are installed with Help &gt; Add-ons and Updates &gt; Install Update or Add-on and switched on and off in Help &gt; Add-ons and Updates &gt; Add-on Manager.</source>
-        <translation>Eklentiler Yardım &gt; Eklentiler ve Güncellemeler &gt; Güncelleme veya Eklenti Kur ile kurulur ve Yardım &gt; Eklentiler ve Güncellemeler &gt; Eklenti Yöneticisi'nde açılıp kapatılır.</translation>
+        <translation>Eklentiler Yardım &gt; Eklentiler ve Güncellemeler &gt; Güncelleme veya Eklenti Kur ile kurulur ve Yardım &gt; Eklentiler ve Güncellemeler &gt; Eklenti Yöneticisi&apos;nde açılıp kapatılır.</translation>
     </message>
     <message>
         <source>Write a freeze report when the program does not answer for:</source>
@@ -16672,24 +16928,8 @@ Devam edilsin mi?</translation>
         <translation>Çökme Raporları</translation>
     </message>
     <message>
-        <source>Load Options from File...</source>
-        <translation>Seçenekleri Dosyadan Yükle...</translation>
-    </message>
-    <message>
         <source>Load Options</source>
         <translation>Seçenekleri Yükle</translation>
-    </message>
-    <message>
-        <source>Options (*.qboptions)</source>
-        <translation>Seçenekler (*.qboptions)</translation>
-    </message>
-    <message>
-        <source>Save Options to File...</source>
-        <translation>Seçenekleri Dosyaya Kaydet...</translation>
-    </message>
-    <message>
-        <source>Save Options</source>
-        <translation>Seçenekleri Kaydet</translation>
     </message>
     <message>
         <source>Save Theme Options to File...</source>
@@ -17058,7 +17298,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>Your notes of the Scratch Pad and the texts of Speech Transcription are your writing: in Documents or a folder of your own they stay when the program&apos;s folder is deleted or replaced. A change here gives both tools the new place; what they wrote so far stays where it is.</source>
-        <translation>Karalama Defterindeki notlarınız ve Konuşmayı Yazıya Dökme metinleri sizin yazınızdır: Belgelerim'de veya kendi klasörünüzde, programın klasörü silindiğinde veya değiştirildiğinde kalırlar. Buradaki bir değişiklik iki araca da yeni yeri verir; şimdiye kadar yazdıkları olduğu yerde kalır.</translation>
+        <translation>Karalama Defterindeki notlarınız ve Konuşmayı Yazıya Dökme metinleri sizin yazınızdır: Belgelerim&apos;de veya kendi klasörünüzde, programın klasörü silindiğinde veya değiştirildiğinde kalırlar. Buradaki bir değişiklik iki araca da yeni yeri verir; şimdiye kadar yazdıkları olduğu yerde kalır.</translation>
     </message>
     <message>
         <source>Folder for Notes and Transcriptions</source>
@@ -17078,7 +17318,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>Project files: .qbx files open with Quillbinder; it is offered in &quot;Open with&quot; for Scrivener&apos;s .scrivx files</source>
-        <translation>Proje dosyaları: .qbx dosyaları Quillbinder ile açılır; Scrivener'ın .scrivx dosyaları için "Birlikte aç" içinde sunulur</translation>
+        <translation>Proje dosyaları: .qbx dosyaları Quillbinder ile açılır; Scrivener&apos;ın .scrivx dosyaları için &quot;Birlikte aç&quot; içinde sunulur</translation>
     </message>
     <message>
         <source>This could not be removed: %1.</source>
@@ -17090,11 +17330,11 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>These are the only things the program puts outside its folder, and only when you ask for them here. Remove them before you delete or move the program&apos;s folder. To pin Quillbinder to the taskbar: start it, then right-click its button in the taskbar and choose &quot;Pin to taskbar&quot;.</source>
-        <translation>Bunlar, programın kendi klasörünün dışına koyduğu tek şeylerdir ve yalnızca burada istediğinizde. Programın klasörünü silmeden veya taşımadan önce bunları kaldırın. Quillbinder'ı görev çubuğuna sabitlemek için: başlatın, sonra görev çubuğundaki düğmesine sağ tıklayın ve "Görev çubuğuna sabitle" seçeneğini seçin.</translation>
+        <translation>Bunlar, programın kendi klasörünün dışına koyduğu tek şeylerdir ve yalnızca burada istediğinizde. Programın klasörünü silmeden veya taşımadan önce bunları kaldırın. Quillbinder&apos;ı görev çubuğuna sabitlemek için: başlatın, sonra görev çubuğundaki düğmesine sağ tıklayın ve &quot;Görev çubuğuna sabitle&quot; seçeneğini seçin.</translation>
     </message>
     <message>
         <source>only on Windows</source>
-        <translation>yalnızca Windows'ta</translation>
+        <translation>yalnızca Windows&apos;ta</translation>
     </message>
     <message>
         <source>added</source>
@@ -17129,7 +17369,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>How File &gt; Print Current Document puts what the editor shows on paper: the text, the index cards of the corkboard, or the outliner. The settings belong to this project.</source>
-        <translation>Dosya &gt; Geçerli Belgeyi Yazdır'ın düzenleyicinin gösterdiğini kâğıda nasıl koyduğu: metin, mantar panonun dizin kartları veya anahat. Ayarlar bu projeye aittir.</translation>
+        <translation>Dosya &gt; Geçerli Belgeyi Yazdır&apos;ın düzenleyicinin gösterdiğini kâğıda nasıl koyduğu: metin, mantar panonun dizin kartları veya anahat. Ayarlar bu projeye aittir.</translation>
     </message>
     <message>
         <source> cm</source>
@@ -17181,7 +17421,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>The paper and margins of View &gt; Text Editing &gt; Page Size and Margins</source>
-        <translation>Görünüm &gt; Metin Düzenleme &gt; Sayfa Boyutu ve Kenar Boşlukları'ndaki kâğıt ve kenar boşlukları</translation>
+        <translation>Görünüm &gt; Metin Düzenleme &gt; Sayfa Boyutu ve Kenar Boşlukları&apos;ndaki kâğıt ve kenar boşlukları</translation>
     </message>
     <message>
         <source>Margins</source>
@@ -17301,7 +17541,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>Script documents keep their script layout. The selected text alone: choose &quot;Selection&quot; in the print window.</source>
-        <translation>Senaryo belgeleri senaryo yerleşimini korur. Yalnızca seçili metin: yazdırma penceresinde "Seçim" seçin.</translation>
+        <translation>Senaryo belgeleri senaryo yerleşimini korur. Yalnızca seçili metin: yazdırma penceresinde &quot;Seçim&quot; seçin.</translation>
     </message>
     <message>
         <source>Text</source>
@@ -17373,7 +17613,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>The cards of the corkboard in the order shown. Only some: select them and choose &quot;Selection&quot; in the print window.</source>
-        <translation>Mantar panonun kartları gösterilen sırayla. Yalnızca bazıları: onları seçin ve yazdırma penceresinde "Seçim" seçin.</translation>
+        <translation>Mantar panonun kartları gösterilen sırayla. Yalnızca bazıları: onları seçin ve yazdırma penceresinde &quot;Seçim&quot; seçin.</translation>
     </message>
     <message>
         <source>Index Cards</source>
@@ -17413,7 +17653,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>The columns of the outliner in their order and widths (View &gt; Outliner Options); with many columns, Landscape on the Page tab gives them more room. Only some rows: select them and choose &quot;Selection&quot; in the print window.</source>
-        <translation>Anahatın sütunları sıralarıyla ve genişlikleriyle (Görünüm &gt; Anahat Seçenekleri); çok sütun varsa Sayfa sekmesindeki Yatay onlara daha fazla yer verir. Yalnızca bazı satırlar: onları seçin ve yazdırma penceresinde "Seçim" seçin.</translation>
+        <translation>Anahatın sütunları sıralarıyla ve genişlikleriyle (Görünüm &gt; Anahat Seçenekleri); çok sütun varsa Sayfa sekmesindeki Yatay onlara daha fazla yer verir. Yalnızca bazı satırlar: onları seçin ve yazdırma penceresinde &quot;Seçim&quot; seçin.</translation>
     </message>
     <message>
         <source>Outliner</source>
@@ -17449,10 +17689,109 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
 </context>
 <context>
+    <name>qb::ProfileManagerDialog</name>
+    <message>
+        <source>Manage Profiles</source>
+        <translation>Profilleri Yönet</translation>
+    </message>
+    <message>
+        <source>A profile holds your options, toolbars, window places and sizes, keyboard set, backup settings, standard colors, layouts and the theme. The profile in use is saved when you switch away from it and when the program ends.</source>
+        <translation>Bir profil seçeneklerinizi, araç çubuklarınızı, pencere konumlarını ve boyutlarını, klavye takımını, yedek ayarlarını, standart renkleri, yerleşimleri ve temayı tutar. Kullanımdaki profil, ondan başka bir profile geçtiğinizde ve program kapandığında kaydedilir.</translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <translation>Kullan</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile...</source>
+        <translation>Ayarları Yeni Profil Olarak Kaydet...</translation>
+    </message>
+    <message>
+        <source>Rename...</source>
+        <translation>Yeniden Adlandır...</translation>
+    </message>
+    <message>
+        <source>Copy...</source>
+        <translation>Kopyala...</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Sil</translation>
+    </message>
+    <message>
+        <source>Export...</source>
+        <translation>Dışa Aktar...</translation>
+    </message>
+    <message>
+        <source>Import...</source>
+        <translation>İçe Aktar...</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Ayarları Yeni Profil Olarak Kaydet</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Profilim</translation>
+    </message>
+    <message>
+        <source>Rename Profile</source>
+        <translation>Profili Yeniden Adlandır</translation>
+    </message>
+    <message>
+        <source>Copy Profile</source>
+        <translation>Profili Kopyala</translation>
+    </message>
+    <message>
+        <source>%1 (Copy)</source>
+        <translation>%1 (Kopya)</translation>
+    </message>
+    <message>
+        <source>Delete Profile</source>
+        <translation>Profili Sil</translation>
+    </message>
+    <message>
+        <source>Delete the profile “%1”? This cannot be undone.</source>
+        <translation>“%1” profili silinsin mi? Bu geri alınamaz.</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Profili Dışa Aktar</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profiller (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Profili İçe Aktar</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profiller ve seçenekler (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>%1 (in use)</source>
+        <translation>%1 (kullanımda)</translation>
+    </message>
+    <message>
+        <source>Theme: %1.</source>
+        <translation>Tema: %1.</translation>
+    </message>
+    <message>
+        <source>Built-in profile; it can be deleted.</source>
+        <translation>Yerleşik profil; silinebilir.</translation>
+    </message>
+    <message>
+        <source>The profile every program starts with.</source>
+        <translation>Her programın başlangıçta kullandığı profil.</translation>
+    </message>
+</context>
+<context>
     <name>qb::Project</name>
     <message>
         <source>This project&apos;s folder holds other project files beside &quot;%1&quot;, which was opened: %2. A sync program may have made them (a copy from another computer kept beside yours). Compare them before you go on, and open another one with File &gt; Open Project if it holds your latest work.</source>
-        <translation>Bu projenin klasöründe, açılan "%1" dosyasının yanında başka proje dosyaları da var: %2. Bir eşitleme programı bunları yapmış olabilir (başka bir bilgisayardan gelen ve sizinkinin yanında saklanan bir kopya). Devam etmeden önce karşılaştırın ve en son çalışmanızı içeriyorsa başka birini Dosya &gt; Proje Aç ile açın.</translation>
+        <translation>Bu projenin klasöründe, açılan &quot;%1&quot; dosyasının yanında başka proje dosyaları da var: %2. Bir eşitleme programı bunları yapmış olabilir (başka bir bilgisayardan gelen ve sizinkinin yanında saklanan bir kopya). Devam etmeden önce karşılaştırın ve en son çalışmanızı içeriyorsa başka birini Dosya &gt; Proje Aç ile açın.</translation>
     </message>
     <message>
         <source>Red</source>
@@ -17562,7 +17901,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
         <source>The project &quot;%1&quot; (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
 
 </source>
-        <translation>"%1" projesi (%2) kaydedilemedi. Bu klasör henüz kaydedilmeyenleri içerir: RTF dosyaları olarak metinler ve notlar (Word, LibreOffice ve %3 bunları açar), zihin haritası panoları, değişen nesneler ("objects" klasöründe) ve projenin bellekteki hâliyle proje dosyası (binder, başlıklar ve etiketler), %4 olarak. İhtiyacınız olanı projeye geri kopyalayın.
+        <translation>&quot;%1&quot; projesi (%2) kaydedilemedi. Bu klasör henüz kaydedilmeyenleri içerir: RTF dosyaları olarak metinler ve notlar (Word, LibreOffice ve %3 bunları açar), zihin haritası panoları, değişen nesneler (&quot;objects&quot; klasöründe) ve projenin bellekteki hâliyle proje dosyası (binder, başlıklar ve etiketler), %4 olarak. İhtiyacınız olanı projeye geri kopyalayın.
 
 </translation>
     </message>
@@ -17658,7 +17997,7 @@ Yazılmayanlar:
     </message>
     <message>
         <source>The project file is damaged: its binder is nested more than %1 levels deep.</source>
-        <translation>Proje dosyası hasarlı: binder'ı %1 düzeyden daha derin iç içe.</translation>
+        <translation>Proje dosyası hasarlı: binder&apos;ı %1 düzeyden daha derin iç içe.</translation>
     </message>
     <message numerus="yes">
         <source>The project file contained %n character(s) that are not allowed in it (control characters, for example from pasted text), so it could not be read before. They were removed, and the project file is saved without them.</source>
@@ -17672,7 +18011,7 @@ Yazılmayanlar:
     </message>
     <message>
         <source>%1 is not a project file of %2 (it holds &quot;%3&quot;). It was not opened and is not changed.</source>
-        <translation>%1, %2 programının bir proje dosyası değil (içinde "%3" var). Açılmadı ve değiştirilmedi.</translation>
+        <translation>%1, %2 programının bir proje dosyası değil (içinde &quot;%3&quot; var). Açılmadı ve değiştirilmedi.</translation>
     </message>
     <message numerus="yes">
         <source>%n item(s) nested deeper than %1 levels were moved up to that level.</source>
@@ -17727,7 +18066,7 @@ Yazılmayanlar:
     </message>
     <message>
         <source>&quot;Replace&quot; is a regular expression; &quot;With&quot; may use \1 to \9 for its groups.</source>
-        <translation>"Değiştirilecek" bir düzenli ifadedir; "Yeni", grupları için \1 ile \9 arasını kullanabilir.</translation>
+        <translation>&quot;Değiştirilecek&quot; bir düzenli ifadedir; &quot;Yeni&quot;, grupları için \1 ile \9 arasını kullanabilir.</translation>
     </message>
     <message>
         <source>Replace in</source>
@@ -17799,7 +18138,7 @@ Yazılmayanlar:
     </message>
     <message>
         <source>Before replacing &quot;%1&quot;</source>
-        <translation>"%1" değiştirilmeden önce</translation>
+        <translation>&quot;%1&quot; değiştirilmeden önce</translation>
     </message>
     <message>
         <source>Left as they are, because their file cannot be read (such a file is never written over): %1.</source>
@@ -17875,7 +18214,7 @@ Yazılmayanlar:
 %3
 
 This cannot be undone as a whole.%4</source>
-        <translation>"%1", %2 ile değiştirilsin mi?
+        <translation>&quot;%1&quot;, %2 ile değiştirilsin mi?
 
 %3
 
@@ -17938,7 +18277,7 @@ Bu bütün olarak geri alınamaz.%4</translation>
     </message>
     <message>
         <source>Name of the &quot;Label&quot; field (e.g. POV):</source>
-        <translation>"Etiket" alanının adı (ör. Bakış Açısı):</translation>
+        <translation>&quot;Etiket&quot; alanının adı (ör. Bakış Açısı):</translation>
     </message>
     <message>
         <source>Color</source>
@@ -17974,7 +18313,7 @@ Bu bütün olarak geri alınamaz.%4</translation>
     </message>
     <message>
         <source>Name of the &quot;Status&quot; field:</source>
-        <translation>"Durum" alanının adı:</translation>
+        <translation>&quot;Durum&quot; alanının adı:</translation>
     </message>
     <message>
         <source>Add status</source>
@@ -17990,7 +18329,7 @@ Bu bütün olarak geri alınamaz.%4</translation>
     </message>
     <message>
         <source>Section types tell Compile what each document is (part, chapter, scene …). &quot;Default types by structure&quot; assigns them automatically from the binder level; level 0 is the Draft folder itself.</source>
-        <translation>Kesim türleri Derleme'ye her belgenin ne olduğunu söyler (kısım, bölüm, sahne …). "Yapıya göre varsayılan türler" bunları binder düzeyinden otomatik atar; 0. düzey Taslak klasörünün kendisidir.</translation>
+        <translation>Kesim türleri Derleme&apos;ye her belgenin ne olduğunu söyler (kısım, bölüm, sahne …). &quot;Yapıya göre varsayılan türler&quot; bunları binder düzeyinden otomatik atar; 0. düzey Taslak klasörünün kendisidir.</translation>
     </message>
     <message>
         <source>Section types:</source>
@@ -18206,7 +18545,7 @@ Bu bütün olarak geri alınamaz.%4</translation>
     </message>
     <message>
         <source>Used by the &quot;+&quot; button below the bookmarks of a Quick Reference panel: the new document is created in this folder and added to the project bookmarks.</source>
-        <translation>Bir Hızlı Başvuru panelinin yer imlerinin altındaki "+" düğmesi tarafından kullanılır: yeni belge bu klasörde oluşturulur ve proje yer imlerine eklenir.</translation>
+        <translation>Bir Hızlı Başvuru panelinin yer imlerinin altındaki &quot;+&quot; düğmesi tarafından kullanılır: yeni belge bu klasörde oluşturulur ve proje yer imlerine eklenir.</translation>
     </message>
     <message>
         <source>Browse…</source>
@@ -18230,7 +18569,7 @@ Bu bütün olarak geri alınamaz.%4</translation>
     </message>
     <message>
         <source>from File ▸ Options ▸ General</source>
-        <translation>Dosya ▸ Seçenekler ▸ Genel'den</translation>
+        <translation>Dosya ▸ Seçenekler ▸ Genel&apos;den</translation>
     </message>
     <message>
         <source>Project title:</source>
@@ -18260,15 +18599,15 @@ Bu bütün olarak geri alınamaz.%4</translation>
     </message>
     <message>
         <source>Convert all documents from Markdown to RTF?</source>
-        <translation>Tüm belgeler Markdown'dan RTF'ye dönüştürülsün mü?</translation>
+        <translation>Tüm belgeler Markdown&apos;dan RTF&apos;ye dönüştürülsün mü?</translation>
     </message>
     <message>
         <source>Convert all documents from RTF to Markdown?
 
 Fonts, sizes and colors of individual passages are not kept in Markdown; bold, italics, headings, notes and similar are.</source>
-        <translation>Tüm belgeler RTF'den Markdown'a dönüştürülsün mü?
+        <translation>Tüm belgeler RTF&apos;den Markdown&apos;a dönüştürülsün mü?
 
-Tek tek bölümlerin yazı tipleri, boyutları ve renkleri Markdown'da korunmaz; kalın, italik, başlıklar, notlar ve benzerleri korunur.</translation>
+Tek tek bölümlerin yazı tipleri, boyutları ve renkleri Markdown&apos;da korunmaz; kalın, italik, başlıklar, notlar ve benzerleri korunur.</translation>
     </message>
     <message>
         <source>Convert</source>
@@ -18333,7 +18672,7 @@ Tek tek bölümlerin yazı tipleri, boyutları ve renkleri Markdown'da korunmaz;
     </message>
     <message>
         <source>Remove the bookmark (the document stays in the binder)</source>
-        <translation>Yer imini kaldır (belge binder'da kalır)</translation>
+        <translation>Yer imini kaldır (belge binder&apos;da kalır)</translation>
     </message>
     <message>
         <source>Nothing to show</source>
@@ -18429,7 +18768,7 @@ Tek tek bölümlerin yazı tipleri, boyutları ve renkleri Markdown'da korunmaz;
     </message>
     <message>
         <source>Reveal in Binder</source>
-        <translation>Binder'da Göster</translation>
+        <translation>Binder&apos;da Göster</translation>
     </message>
     <message>
         <source>Open in the Editor</source>
@@ -18671,7 +19010,7 @@ Tek tek bölümlerin yazı tipleri, boyutları ve renkleri Markdown'da korunmaz;
     </message>
     <message>
         <source>If this is filled in, Tab types it instead of going to another element (scene headings: &quot; - &quot; before the time of day)</source>
-        <translation>Bu doldurulmuşsa Tab, başka bir öğeye gitmek yerine bunu yazar (sahne başlıkları: gün saatinden önce " - ")</translation>
+        <translation>Bu doldurulmuşsa Tab, başka bir öğeye gitmek yerine bunu yazar (sahne başlıkları: gün saatinden önce &quot; - &quot;)</translation>
     </message>
     <message>
         <source>…or Tab types:</source>
@@ -18695,7 +19034,7 @@ Tek tek bölümlerin yazı tipleri, boyutları ve renkleri Markdown'da korunmaz;
     </message>
     <message>
         <source>Offered after the text Tab types (one per line):</source>
-        <translation>Tab'ın yazdığı metinden sonra sunulan (satır başına bir tane):</translation>
+        <translation>Tab&apos;ın yazdığı metinden sonra sunulan (satır başına bir tane):</translation>
     </message>
     <message>
         <source>Also offer what other paragraphs of this element in the document say (character names, locations)</source>
@@ -18735,11 +19074,11 @@ Tek tek bölümlerin yazı tipleri, boyutları ve renkleri Markdown'da korunmaz;
     </message>
     <message>
         <source>There is an element called &quot;%1&quot; already.</source>
-        <translation>"%1" adında bir öğe zaten var.</translation>
+        <translation>&quot;%1&quot; adında bir öğe zaten var.</translation>
     </message>
     <message>
         <source>An element name cannot be empty or contain the characters : &quot; &lt; &gt; \ { } ; /</source>
-        <translation>Bir öğe adı boş olamaz veya şu karakterleri içeremez: : " &lt; &gt; \ { } ; /</translation>
+        <translation>Bir öğe adı boş olamaz veya şu karakterleri içeremez: : &quot; &lt; &gt; \ { } ; /</translation>
     </message>
     <message>
         <source>New Element</source>
@@ -18783,11 +19122,11 @@ Tek tek bölümlerin yazı tipleri, boyutları ve renkleri Markdown'da korunmaz;
     </message>
     <message>
         <source>&quot;%1&quot; is now in the list of formats under Format &gt; Scriptwriting &gt; Script Format in every project.</source>
-        <translation>"%1" artık her projede Biçim &gt; Senaryo Yazımı &gt; Senaryo Biçimi altındaki biçim listesinde.</translation>
+        <translation>&quot;%1&quot; artık her projede Biçim &gt; Senaryo Yazımı &gt; Senaryo Biçimi altındaki biçim listesinde.</translation>
     </message>
     <message>
         <source>Remove &quot;%1&quot; From My Formats</source>
-        <translation>"%1" Biçimini Biçimlerimden Kaldır</translation>
+        <translation>&quot;%1&quot; Biçimini Biçimlerimden Kaldır</translation>
     </message>
     <message>
         <source>Give the format a name.</source>
@@ -18913,7 +19252,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>Scrivener format: the project can be opened in Scrivener 3 as well (File &gt; Save As)</source>
-        <translation>Scrivener biçimi: proje Scrivener 3'te de açılabilir (Dosya &gt; Farklı Kaydet)</translation>
+        <translation>Scrivener biçimi: proje Scrivener 3&apos;te de açılabilir (Dosya &gt; Farklı Kaydet)</translation>
     </message>
     <message>
         <source>Open Other…</source>
@@ -19023,7 +19362,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>Paragraph after &amp;Enter:</source>
-        <translation>&amp;Enter'dan sonraki paragraf:</translation>
+        <translation>&amp;Enter&apos;dan sonraki paragraf:</translation>
     </message>
     <message>
         <source>&amp;Keep on one page with the next paragraph (when compiled)</source>
@@ -19039,7 +19378,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>Please enter a name of up to 60 characters without : &quot; &lt; &gt; \ { } ;</source>
-        <translation>Lütfen şu karakterleri içermeyen, en çok 60 karakterlik bir ad girin: : " &lt; &gt; \\ { } ;</translation>
+        <translation>Lütfen şu karakterleri içermeyen, en çok 60 karakterlik bir ad girin: : &quot; &lt; &gt; \\ { } ;</translation>
     </message>
     <message>
         <source>There is a style named “%1” already.</source>
@@ -19094,7 +19433,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>Paragraph after &amp;Enter:</source>
-        <translation>&amp;Enter'dan sonraki paragraf:</translation>
+        <translation>&amp;Enter&apos;dan sonraki paragraf:</translation>
     </message>
     <message>
         <source>All text in the project that uses the style is updated.</source>
@@ -19102,11 +19441,11 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>Please enter a name of up to 60 characters without : &quot; &lt; &gt; \ { } ;</source>
-        <translation>Lütfen şu karakterleri içermeyen, en çok 60 karakterlik bir ad girin: : " &lt; &gt; \\ { } ;</translation>
+        <translation>Lütfen şu karakterleri içermeyen, en çok 60 karakterlik bir ad girin: : &quot; &lt; &gt; \\ { } ;</translation>
     </message>
     <message>
         <source>There is a style named “%1” already. Choose another name, or use Redefine Style From Selection to change that style.</source>
-        <translation>“%1” adında bir stil zaten var. Başka bir ad seçin veya o stili değiştirmek için Stili Seçimden Yeniden Tanımla'yı kullanın.</translation>
+        <translation>“%1” adında bir stil zaten var. Başka bir ad seçin veya o stili değiştirmek için Stili Seçimden Yeniden Tanımla&apos;yı kullanın.</translation>
     </message>
 </context>
 <context>
@@ -19500,7 +19839,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>types &quot;%1&quot;</source>
-        <translation>"%1" yazar</translation>
+        <translation>&quot;%1&quot; yazar</translation>
     </message>
     <message>
         <source>list of elements</source>
@@ -19602,11 +19941,11 @@ Açmak için Ctrl+tıklayın</translation>
     </message>
     <message>
         <source>Add &quot;%1&quot; to Dictionary</source>
-        <translation>"%1" Sözlüğe Ekle</translation>
+        <translation>&quot;%1&quot; Sözlüğe Ekle</translation>
     </message>
     <message>
         <source>Ignore &quot;%1&quot;</source>
-        <translation>"%1" Yok Say</translation>
+        <translation>&quot;%1&quot; Yok Say</translation>
     </message>
     <message>
         <source>More Commands</source>
@@ -19681,7 +20020,7 @@ Açmak için Ctrl+tıklayın</translation>
     </message>
     <message>
         <source>To change colors and fonts, use File ▸ Options ▸ Appearance and then Save as Theme. Built-in themes and themes of add-ons cannot be changed; duplicate one to get a theme of your own.</source>
-        <translation>Renkleri ve yazı tiplerini değiştirmek için Dosya ▸ Seçenekler ▸ Dış Görünüm'ü kullanın, sonra Tema Olarak Kaydet'e tıklayın. Yerleşik temalar ve eklentilerin temaları değiştirilemez; kendi temanızı elde etmek için birini çoğaltın.</translation>
+        <translation>Renkleri ve yazı tiplerini değiştirmek için Dosya ▸ Seçenekler ▸ Dış Görünüm&apos;ü kullanın, sonra Tema Olarak Kaydet&apos;e tıklayın. Yerleşik temalar ve eklentilerin temaları değiştirilemez; kendi temanızı elde etmek için birini çoğaltın.</translation>
     </message>
     <message>
         <source>Duplicate Theme</source>
@@ -19816,11 +20155,11 @@ Açmak için Ctrl+tıklayın</translation>
     </message>
     <message>
         <source>Save in My Look 1</source>
-        <translation>Görünümüm 1'e Kaydet</translation>
+        <translation>Görünümüm 1&apos;e Kaydet</translation>
     </message>
     <message>
         <source>Save in My Look 2</source>
-        <translation>Görünümüm 2'ye Kaydet</translation>
+        <translation>Görünümüm 2&apos;ye Kaydet</translation>
     </message>
     <message>
         <source>Switch Without Saving</source>
@@ -20041,7 +20380,7 @@ Günde en çok bir kez küçük bir dosya alır ve programın ya da kurulu bir e
     </message>
     <message>
         <source>This copy of %1 cannot make a secure connection, so it cannot look for updates. Download the current AppImage once from the project&apos;s page; from then on the check works.</source>
-        <translation>Bu %1 kopyası güvenli bağlantı kuramıyor, bu yüzden güncellemeleri arayamaz. Güncel AppImage'ı projenin sayfasından bir kez indirin; ondan sonra denetim çalışır.</translation>
+        <translation>Bu %1 kopyası güvenli bağlantı kuramıyor, bu yüzden güncellemeleri arayamaz. Güncel AppImage&apos;ı projenin sayfasından bir kez indirin; ondan sonra denetim çalışır.</translation>
     </message>
     <message>
         <source>No update information was found at the project&apos;s address.</source>
@@ -20109,7 +20448,7 @@ Günde en çok bir kez küçük bir dosya alır ve programın ya da kurulu bir e
     </message>
     <message>
         <source>The new program version needs a new AppImage. %1 downloads it, puts it in the place of the AppImage you started (%2), keeps the one you have now beside it as &quot;%3&quot;, and starts again.</source>
-        <translation>Yeni program sürümü yeni bir AppImage gerektirir. %1 onu indirir, başlattığınız AppImage'ın (%2) yerine koyar, şu an sahip olduğunuzu "%3" adıyla yanında saklar ve yeniden başlar.</translation>
+        <translation>Yeni program sürümü yeni bir AppImage gerektirir. %1 onu indirir, başlattığınız AppImage&apos;ın (%2) yerine koyar, şu an sahip olduğunuzu &quot;%3&quot; adıyla yanında saklar ve yeniden başlar.</translation>
     </message>
     <message>
         <source>The new program version needs a new AppImage. It is saved in your Downloads folder; close %1, put the new file in the place of the old one and start it.</source>
@@ -20117,7 +20456,7 @@ Günde en çok bir kez küçük bir dosya alır ve programın ya da kurulu bir e
     </message>
     <message>
         <source>The new program version needs the whole program anew. %1 downloads its setup program, checks it and closes; the setup program then unpacks the new version into the folder of this one (%2) and starts it. Your settings, your add-ons and everything else in &quot;data&quot; stay as they are.</source>
-        <translation>Yeni program sürümü programın baştan kurulmasını gerektirir. %1 kurulum programını indirir, denetler ve kapanır; kurulum programı sonra yeni sürümü bunun klasörüne (%2) açar ve başlatır. Ayarlarınız, eklentileriniz ve "data" içindeki her şey olduğu gibi kalır.</translation>
+        <translation>Yeni program sürümü programın baştan kurulmasını gerektirir. %1 kurulum programını indirir, denetler ve kapanır; kurulum programı sonra yeni sürümü bunun klasörüne (%2) açar ve başlatır. Ayarlarınız, eklentileriniz ve &quot;data&quot; içindeki her şey olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>The new version for Android is a new app file (APK). %1 opens its download in your browser; install it from there or from your Downloads folder. Your projects, your settings and your add-ons stay as they are.</source>
@@ -20201,7 +20540,7 @@ Günde en çok bir kez küçük bir dosya alır ve programın ya da kurulu bir e
     </message>
     <message>
         <source>%1 %2 is in the place of your AppImage. The one you had is kept as %3; delete it when the new version works for you.</source>
-        <translation>%1 %2, AppImage'ınızın yerinde. Önceki sürümünüz %3 olarak saklanıyor; yeni sürüm sizin için çalışınca silin.</translation>
+        <translation>%1 %2, AppImage&apos;ınızın yerinde. Önceki sürümünüz %3 olarak saklanıyor; yeni sürüm sizin için çalışınca silin.</translation>
     </message>
     <message>
         <source>%1 %2: %3</source>
@@ -20209,7 +20548,7 @@ Günde en çok bir kez küçük bir dosya alır ve programın ya da kurulu bir e
     </message>
     <message>
         <source>%1 %2 was saved as %3. Close %1, put that file in the place of the AppImage you use, and start it.</source>
-        <translation>%1 %2, %3 olarak kaydedildi. %1 uygulamasını kapatın, bu dosyayı kullandığınız AppImage'ın yerine koyun ve başlatın.</translation>
+        <translation>%1 %2, %3 olarak kaydedildi. %1 uygulamasını kapatın, bu dosyayı kullandığınız AppImage&apos;ın yerine koyun ve başlatın.</translation>
     </message>
     <message>
         <source>Not installed:</source>
@@ -20221,7 +20560,7 @@ Günde en çok bir kez küçük bir dosya alır ve programın ya da kurulu bir e
     </message>
     <message>
         <source>%1 closes now, and the setup program unpacks the new version into this folder and starts it. With &quot;Later&quot; nothing changes, and the update is offered again.</source>
-        <translation>%1 şimdi kapanır; kurulum programı yeni sürümü bu klasöre açar ve başlatır. "Sonra" derseniz hiçbir şey değişmez ve güncelleme yeniden önerilir.</translation>
+        <translation>%1 şimdi kapanır; kurulum programı yeni sürümü bu klasöre açar ve başlatır. &quot;Sonra&quot; derseniz hiçbir şey değişmez ve güncelleme yeniden önerilir.</translation>
     </message>
     <message>
         <source>Close and Update Now</source>
@@ -20401,7 +20740,7 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     </message>
     <message>
         <source>This add-on was built for the libraries of another program version (runtime &quot;%1&quot;; this program has &quot;%2&quot;). Download the add-on&apos;s version for this program from the release page of the project.</source>
-        <translation>Bu eklenti başka bir program sürümünün kitaplıkları için derlenmiş (çalışma zamanı "%1"; bu programda "%2" var). Eklentinin bu programa uygun sürümünü projenin sürüm sayfasından indirin.</translation>
+        <translation>Bu eklenti başka bir program sürümünün kitaplıkları için derlenmiş (çalışma zamanı &quot;%1&quot;; bu programda &quot;%2&quot; var). Eklentinin bu programa uygun sürümünü projenin sürüm sayfasından indirin.</translation>
     </message>
     <message>
         <source>before 0.80.0</source>
@@ -20421,11 +20760,11 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     </message>
     <message>
         <source>This program update does not fit your installed program (it needs runtime &quot;%1&quot;, you have &quot;%2&quot;). A new download of the program is required.</source>
-        <translation>Bu program güncellemesi kurulu programınıza uymuyor ("%1" çalışma zamanı gerekiyor, sizde "%2" var). Programın yeniden indirilmesi gerekiyor.</translation>
+        <translation>Bu program güncellemesi kurulu programınıza uymuyor (&quot;%1&quot; çalışma zamanı gerekiyor, sizde &quot;%2&quot; var). Programın yeniden indirilmesi gerekiyor.</translation>
     </message>
     <message>
         <source>This program update does not fit your AppImage (it needs runtime &quot;%1&quot;, you have &quot;%2&quot;). A new AppImage is required.</source>
-        <translation>Bu program güncellemesi AppImage'ınıza uymuyor ("%1" çalışma zamanı gerekiyor, sizde "%2" var). Yeni bir AppImage gerekiyor.</translation>
+        <translation>Bu program güncellemesi AppImage&apos;ınıza uymuyor (&quot;%1&quot; çalışma zamanı gerekiyor, sizde &quot;%2&quot; var). Yeni bir AppImage gerekiyor.</translation>
     </message>
     <message>
         <source>The program update is incomplete.</source>
@@ -20445,7 +20784,7 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     </message>
     <message>
         <source>Your AppImage already contains version %1 or newer.</source>
-        <translation>AppImage'ınız zaten %1 veya daha yeni sürümü içeriyor.</translation>
+        <translation>AppImage&apos;ınız zaten %1 veya daha yeni sürümü içeriyor.</translation>
     </message>
     <message>
         <source>Updates the program from %1 to %2.</source>
@@ -20497,11 +20836,11 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     </message>
     <message>
         <source>Add-on &quot;%1&quot; was unpacked, but it could not be switched on (%2). Free some space or check the folder, then switch it on in the Add-on Manager.</source>
-        <translation>"%1" eklentisi açıldı ama açılamadı (%2). Biraz yer açın veya klasörü denetleyin, sonra Eklenti Yöneticisi'nde açın.</translation>
+        <translation>&quot;%1&quot; eklentisi açıldı ama açılamadı (%2). Biraz yer açın veya klasörü denetleyin, sonra Eklenti Yöneticisi&apos;nde açın.</translation>
     </message>
     <message>
         <source>Add-on &quot;%1&quot; %2 installed (%3).</source>
-        <translation>"%1" %2 eklentisi kuruldu (%3).</translation>
+        <translation>&quot;%1&quot; %2 eklentisi kuruldu (%3).</translation>
     </message>
     <message>
         <source>no content</source>
@@ -20517,7 +20856,7 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     </message>
     <message>
         <source>the version installed before could not be put back and is in %1 (rename that folder to &quot;%2&quot;)</source>
-        <translation>önceden kurulu sürüm geri konamadı ve %1 içinde (bu klasörü "%2" olarak yeniden adlandırın)</translation>
+        <translation>önceden kurulu sürüm geri konamadı ve %1 içinde (bu klasörü &quot;%2&quot; olarak yeniden adlandırın)</translation>
     </message>
     <message>
         <source>Not everything could be put back as it was: %1.</source>
@@ -20533,7 +20872,7 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is not signed by the Quillbinder project. To install it anyway from the command line, add --allow-unsigned.</source>
-        <translation>"%1" Quillbinder projesi tarafından imzalanmamış. Yine de komut satırından kurmak için --allow-unsigned ekleyin.</translation>
+        <translation>&quot;%1&quot; Quillbinder projesi tarafından imzalanmamış. Yine de komut satırından kurmak için --allow-unsigned ekleyin.</translation>
     </message>
     <message>
         <source>Cannot read %1</source>
@@ -20553,7 +20892,7 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     </message>
     <message>
         <source>Program version %1 is not installed or does not fit this AppImage.</source>
-        <translation>Program sürümü %1 kurulu değil veya bu AppImage'a uymuyor.</translation>
+        <translation>Program sürümü %1 kurulu değil veya bu AppImage&apos;a uymuyor.</translation>
     </message>
     <message>
         <source>The choice could not be saved, so the version in use stays (%1).</source>
@@ -20668,6 +21007,13 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     <message>
         <source>PDF (.pdf)</source>
         <translation>PDF (.pdf)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::language</name>
+    <message>
+        <source>%1 (machine translation)</source>
+        <translation>%1 (makine çevirisi)</translation>
     </message>
 </context>
 <context>
@@ -20801,7 +21147,7 @@ Açmak o bilgisayara bağlanır ve o bilgisayar kullanıcı adınızı öğreneb
 %2
 
 Open it?</source>
-        <translation>Bu bağlantı bir web veya e-posta adresi değil; bu bilgisayarda "%1" için ayarlanmış programa verilir:
+        <translation>Bu bağlantı bir web veya e-posta adresi değil; bu bilgisayarda &quot;%1&quot; için ayarlanmış programa verilir:
 
 %2
 
@@ -20836,7 +21182,7 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>Objects of the unknown category &quot;%1&quot; were found; the category was added.</source>
-        <translation>Bilinmeyen "%1" kategorisinde nesneler bulundu; kategori eklendi.</translation>
+        <translation>Bilinmeyen &quot;%1&quot; kategorisinde nesneler bulundu; kategori eklendi.</translation>
     </message>
     <message>
         <source>Objects: categories and templates</source>
@@ -20875,11 +21221,11 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>Part of the look: kept with this project, as chosen in &quot;Show and change the look of&quot; above.</source>
-        <translation>Görünümün bir parçası: yukarıdaki "Şunun görünümünü göster ve değiştir" seçimine göre bu projeyle birlikte saklanır.</translation>
+        <translation>Görünümün bir parçası: yukarıdaki &quot;Şunun görünümünü göster ve değiştir&quot; seçimine göre bu projeyle birlikte saklanır.</translation>
     </message>
     <message>
         <source>Part of the look: kept by the program as the look for new projects, as chosen in &quot;Show and change the look of&quot; above.</source>
-        <translation>Görünümün bir parçası: yukarıdaki "Şunun görünümünü göster ve değiştir" seçimine göre program tarafından yeni projeler için görünüm olarak saklanır.</translation>
+        <translation>Görünümün bir parçası: yukarıdaki &quot;Şunun görünümünü göster ve değiştir&quot; seçimine göre program tarafından yeni projeler için görünüm olarak saklanır.</translation>
     </message>
     <message>
         <source>Fixed: kept by the program for all projects. A project cannot keep a value of its own here.</source>
@@ -20887,7 +21233,7 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>Depends on the setting: kept by the program for all projects. An open project can keep a value of its own: &quot;Settings for: This project&quot;.</source>
-        <translation>Ayara bağlı: program tarafından tüm projeler için saklanır. Açık bir proje kendi değerini saklayabilir: "Ayarların geçtiği yer: Bu proje".</translation>
+        <translation>Ayara bağlı: program tarafından tüm projeler için saklanır. Açık bir proje kendi değerini saklayabilir: &quot;Ayarların geçtiği yer: Bu proje&quot;.</translation>
     </message>
     <message>
         <source>Depends on the setting: kept by the program for all projects. Projects&apos; own values are not used now (General &gt; Which settings come first).</source>
@@ -20899,7 +21245,7 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>Depends on the setting: this project uses the value for all projects. Change it here and press OK to keep a value of its own.</source>
-        <translation>Ayara bağlı: bu proje tüm projeler için olan değeri kullanıyor. Burada değiştirin ve kendi değerini saklaması için Tamam'a basın.</translation>
+        <translation>Ayara bağlı: bu proje tüm projeler için olan değeri kullanıyor. Burada değiştirin ve kendi değerini saklaması için Tamam&apos;a basın.</translation>
     </message>
     <message>
         <source>Depends on the setting: here you change the value for all projects. This project keeps a value of its own, which it uses while it is open.</source>
@@ -20907,7 +21253,7 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>Depends on the setting: kept by the program for all projects. A project can keep a value of its own: &quot;Settings for: This project&quot;.</source>
-        <translation>Ayara bağlı: program tarafından tüm projeler için saklanır. Bir proje kendi değerini saklayabilir: "Ayarların geçtiği yer: Bu proje".</translation>
+        <translation>Ayara bağlı: program tarafından tüm projeler için saklanır. Bir proje kendi değerini saklayabilir: &quot;Ayarların geçtiği yer: Bu proje&quot;.</translation>
     </message>
 </context>
 <context>
@@ -20998,11 +21344,11 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>it uses %1, formats licensed under patents, which the add-on &quot;Media Playback&quot; leaves out. Install the add-on &quot;Extra Video and Audio Formats&quot; (a separate download).</source>
-        <translation>patentle lisanslı biçimler olan %1 kullanıyor; "Media Playback" eklentisi bunları dışarıda bırakır. "Extra Video and Audio Formats" eklentisini kurun (ayrı bir indirme).</translation>
+        <translation>patentle lisanslı biçimler olan %1 kullanıyor; &quot;Media Playback&quot; eklentisi bunları dışarıda bırakır. &quot;Extra Video and Audio Formats&quot; eklentisini kurun (ayrı bir indirme).</translation>
     </message>
     <message>
         <source>it uses %1, a format licensed under patents, which the add-on &quot;Media Playback&quot; leaves out. Install the add-on &quot;Extra Video and Audio Formats&quot; (a separate download).</source>
-        <translation>patentle lisanslı bir biçim olan %1 kullanıyor; "Media Playback" eklentisi bunu dışarıda bırakır. "Extra Video and Audio Formats" eklentisini kurun (ayrı bir indirme).</translation>
+        <translation>patentle lisanslı bir biçim olan %1 kullanıyor; &quot;Media Playback&quot; eklentisi bunu dışarıda bırakır. &quot;Extra Video and Audio Formats&quot; eklentisini kurun (ayrı bir indirme).</translation>
     </message>
     <message>
         <source>The file cannot be played.</source>
@@ -21018,15 +21364,15 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>Qt&apos;s %1 backend is missing (%2).</source>
-        <translation>Qt'nin %1 arka ucu eksik (%2).</translation>
+        <translation>Qt&apos;nin %1 arka ucu eksik (%2).</translation>
     </message>
     <message>
         <source> with the codecs of Windows (Media Foundation)</source>
-        <translation> Windows'un kodekleriyle (Media Foundation)</translation>
+        <translation> Windows&apos;un kodekleriyle (Media Foundation)</translation>
     </message>
     <message>
         <source> with the FFmpeg of Qt</source>
-        <translation> Qt'nin FFmpeg'iyle</translation>
+        <translation> Qt&apos;nin FFmpeg&apos;iyle</translation>
     </message>
     <message>
         <source> with FFmpeg %1</source>
@@ -21042,7 +21388,7 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source> with GStreamer of the system</source>
-        <translation> sistemin GStreamer'ıyla</translation>
+        <translation> sistemin GStreamer&apos;ıyla</translation>
     </message>
     <message>
         <source>; no sound output found</source>
@@ -21061,19 +21407,19 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>Plays common audio and video files without other programs, also H.264, H.265 and AAC (add-on &quot;Extra Video and Audio Formats&quot;).</source>
-        <translation>Yaygın ses ve video dosyalarını başka programlar olmadan oynatır; H.264, H.265 ve AAC dahil ("Extra Video and Audio Formats" eklentisi).</translation>
+        <translation>Yaygın ses ve video dosyalarını başka programlar olmadan oynatır; H.264, H.265 ve AAC dahil (&quot;Extra Video and Audio Formats&quot; eklentisi).</translation>
     </message>
     <message>
         <source>Plays free formats without other programs (MP3, Ogg, Opus, FLAC, WAV, WebM ...). H.264, H.265, AAC and other formats licensed under patents need the add-on &quot;Extra Video and Audio Formats&quot;.</source>
-        <translation>Özgür biçimleri başka programlar olmadan oynatır (MP3, Ogg, Opus, FLAC, WAV, WebM ...). H.264, H.265, AAC ve patentle lisanslı diğer biçimler "Extra Video and Audio Formats" eklentisini gerektirir.</translation>
+        <translation>Özgür biçimleri başka programlar olmadan oynatır (MP3, Ogg, Opus, FLAC, WAV, WebM ...). H.264, H.265, AAC ve patentle lisanslı diğer biçimler &quot;Extra Video and Audio Formats&quot; eklentisini gerektirir.</translation>
     </message>
     <message>
         <source>GStreamer of the system</source>
-        <translation>Sistemin GStreamer'ı</translation>
+        <translation>Sistemin GStreamer&apos;ı</translation>
     </message>
     <message>
         <source>Not available since %1 0.80.0: the Qt it uses (The Qt Company&apos;s own build of Qt 6.12) plays through FFmpeg only. The built-in way plays the same formats (H.264, H.265 and AAC with the add-on &quot;Extra Video and Audio Formats&quot;).</source>
-        <translation>%1 0.80.0'dan beri kullanılamıyor: kullandığı Qt (The Qt Company'nin kendi Qt 6.12 derlemesi) yalnızca FFmpeg üzerinden oynatır. Yerleşik yol aynı biçimleri oynatır (H.264, H.265 ve AAC için "Extra Video and Audio Formats" eklentisiyle).</translation>
+        <translation>%1 0.80.0&apos;dan beri kullanılamıyor: kullandığı Qt (The Qt Company&apos;nin kendi Qt 6.12 derlemesi) yalnızca FFmpeg üzerinden oynatır. Yerleşik yol aynı biçimleri oynatır (H.264, H.265 ve AAC için &quot;Extra Video and Audio Formats&quot; eklentisiyle).</translation>
     </message>
     <message>
         <source>Cannot load %1: %2</source>
@@ -21081,7 +21427,7 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>Unknown way of playing &quot;%1&quot;.</source>
-        <translation>Bilinmeyen oynatma yolu "%1".</translation>
+        <translation>Bilinmeyen oynatma yolu &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>%1 cannot be used: %2</source>
@@ -21105,27 +21451,27 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>The codecs of Windows (Media Foundation)</source>
-        <translation>Windows'un kodekleri (Media Foundation)</translation>
+        <translation>Windows&apos;un kodekleri (Media Foundation)</translation>
     </message>
     <message>
         <source>Plays what Windows plays (MP3, AAC, H.264, WMA, WAV, FLAC ...); more formats come with codec extensions from the Microsoft Store.</source>
-        <translation>Windows'un oynattığını oynatır (MP3, AAC, H.264, WMA, WAV, FLAC ...); daha fazla biçim Microsoft Store'daki kodek uzantılarıyla gelir.</translation>
+        <translation>Windows&apos;un oynattığını oynatır (MP3, AAC, H.264, WMA, WAV, FLAC ...); daha fazla biçim Microsoft Store&apos;daki kodek uzantılarıyla gelir.</translation>
     </message>
     <message>
         <source>Qt&apos;s Windows backend is missing in the add-on (%1).</source>
-        <translation>Qt'nin Windows arka ucu eklentide eksik (%1).</translation>
+        <translation>Qt&apos;nin Windows arka ucu eklentide eksik (%1).</translation>
     </message>
     <message>
         <source>FFmpeg (add-on &quot;Extra Video and Audio Formats&quot;)</source>
-        <translation>FFmpeg ("Extra Video and Audio Formats" eklentisi)</translation>
+        <translation>FFmpeg (&quot;Extra Video and Audio Formats&quot; eklentisi)</translation>
     </message>
     <message>
         <source>Plays more formats (also Ogg, Opus, WebM, Matroska ...) with the FFmpeg libraries built by The Qt Company for Qt Multimedia.</source>
-        <translation>Qt Multimedia için The Qt Company'nin derlediği FFmpeg kitaplıklarıyla daha çok biçim oynatır (Ogg, Opus, WebM, Matroska ... dahil).</translation>
+        <translation>Qt Multimedia için The Qt Company&apos;nin derlediği FFmpeg kitaplıklarıyla daha çok biçim oynatır (Ogg, Opus, WebM, Matroska ... dahil).</translation>
     </message>
     <message>
         <source>Install the add-on &quot;Extra Video and Audio Formats&quot; (and switch it on) to use it.</source>
-        <translation>Kullanmak için "Extra Video and Audio Formats" eklentisini kurun (ve açın).</translation>
+        <translation>Kullanmak için &quot;Extra Video and Audio Formats&quot; eklentisini kurun (ve açın).</translation>
     </message>
     <message>
         <source>No way of playing is available.</source>
@@ -21136,7 +21482,7 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     <name>qbweb::Loader</name>
     <message>
         <source>Secure web pages (https) cannot be fetched: the TLS support is missing (the add-on&apos;s TLS plugin or the system&apos;s OpenSSL 3, package libssl3).</source>
-        <translation>Güvenli web sayfaları (https) alınamıyor: TLS desteği eksik (eklentinin TLS eklentisi veya sistemin OpenSSL 3'ü, libssl3 paketi).</translation>
+        <translation>Güvenli web sayfaları (https) alınamıyor: TLS desteği eksik (eklentinin TLS eklentisi veya sistemin OpenSSL 3&apos;ü, libssl3 paketi).</translation>
     </message>
     <message>
         <source>Fetching %1 …</source>
@@ -21215,7 +21561,7 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>Type or paste the address of a page and press Load. What will be imported is shown here.</source>
-        <translation>Bir sayfanın adresini yazın veya yapıştırın ve Yükle'ye basın. İçe aktarılacak olan burada gösterilir.</translation>
+        <translation>Bir sayfanın adresini yazın veya yapıştırın ve Yükle&apos;ye basın. İçe aktarılacak olan burada gösterilir.</translation>
     </message>
     <message>
         <source>From the page</source>

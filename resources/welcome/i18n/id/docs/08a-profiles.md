@@ -1,0 +1,6 @@
+**Tema** hanyalah tampilan: warna dan font. **Profil** menyimpan semua yang lain: opsi, bilah alat, ukuran dan posisi jendela, panel, set papan ketik, pengaturan cadangan, warna standar, dan tata letak tersimpan Anda, dan profil menyebutkan temanya. Beralih profil mengubah semuanya sekaligus.
+**Cobalah:** pilih **Tampilan > Profil > Simpan Pengaturan sebagai Profil Baru…**, beri nama, ubah beberapa hal (tema, bilah alat), lalu beralih kembali ke **Default** di **Tampilan > Profil**.
+- Profil **Default** adalah tempat pengaturan Anda disimpan pada awalnya. Profil ini tidak dapat dihapus; profil lain dapat.
+- **Tampilan > Profil > Kelola Profil…** mengganti nama, menyalin, menghapus, mengekspor, dan mengimpor profil. Profil yang diekspor adalah satu berkas yang dapat Anda bawa ke komputer lain; folder di dalamnya yang tidak ada di sana akan ditanyakan.
+- **Tampilan > Bilah Alat > Profil** menampilkan bilah kecil dengan profil yang dipakai. **Tampilan > Bilah Alat > Label** menampilkan warna label proyek yang terbuka, satu klik untuk masing-masing.
+- **Berkas > Opsi > Penampilan > Warna Standar** menetapkan label yang dipakai proyek baru di awal serta warna palet warna teks dan sorotan. Semuanya milik profil.

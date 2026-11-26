@@ -11,6 +11,7 @@ Gdzie są ustawienia i podsumowanie wszystkiego, co potrafi program: **Pomoc > P
 - [Porównaj i przenieś](qb-title:Porównaj i przenieś): maszynopis wraca z Worda lub LibreOffice
 - [Projekty Scrivener](qb-title:Projekty Scrivener): importuj je albo pracuj w nich bezpośrednio
 - [Motywy, kolory i czcionki](qb-title:Motywy, kolory i czcionki): tryb ciemny i nie tylko, od razu
+- [Motywy i profile](qb-title:Motywy i profile): opcje, paski narzędzi i wygląd razem
 - [Aktualizacje i dodatki](qb-title:Aktualizacje i dodatki): małe pakiety i droga powrotna
 - [Zabezpieczenia](qb-title:Zabezpieczenia): co chroni twój tekst
 - [Co dalej](qb-title:Co dalej)

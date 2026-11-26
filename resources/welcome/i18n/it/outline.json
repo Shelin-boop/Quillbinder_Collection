@@ -236,6 +236,12 @@
    "synopsis": "La modalità scura e altri temi all'istante; la tavolozza dei colori della barra di formattazione; l'installazione dei caratteri."
   },
   {
+   "title": "Temi e profili",
+   "icon": "qb-cog",
+   "textFile": "docs/08a-profiles.md",
+   "synopsis": "Un tema è l'aspetto; un profilo conserva insieme le tue opzioni, le barre degli strumenti, la finestra e il tema e li cambia in un colpo solo."
+  },
+  {
    "title": "Aggiornamenti e componenti aggiuntivi",
    "icon": "qb-cog",
    "textFile": "docs/09-updates.md",

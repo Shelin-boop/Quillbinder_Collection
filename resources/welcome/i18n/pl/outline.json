@@ -236,6 +236,12 @@
    "synopsis": "Tryb ciemny i inne motywy od razu; paleta kolorów paska formatowania; instalowanie czcionek."
   },
   {
+   "title": "Motywy i profile",
+   "icon": "qb-cog",
+   "textFile": "docs/08a-profiles.md",
+   "synopsis": "Motyw to wygląd; profil trzyma razem twoje opcje, paski narzędzi, okno i motyw i przełącza je naraz."
+  },
+  {
    "title": "Aktualizacje i dodatki",
    "icon": "qb-cog",
    "textFile": "docs/09-updates.md",

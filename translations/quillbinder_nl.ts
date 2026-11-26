@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>The microphone &quot;%1&quot; could not be opened.</source>
-        <translation>De microfoon "%1" kon niet worden geopend.</translation>
+        <translation>De microfoon &quot;%1&quot; kon niet worden geopend.</translation>
     </message>
 </context>
 <context>
@@ -347,12 +347,16 @@ De voornamen van deze lijst zijn niet verdeeld in vrouwelijk en mannelijk.</tran
         <source>Textual Marks</source>
         <translation>Tekstmarkeringen</translation>
     </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>Standaardkleuren</translation>
+    </message>
 </context>
 <context>
     <name>Portable</name>
     <message>
         <source>the folder &quot;data&quot; cannot be made in %1</source>
-        <translation>de map "data" kan niet worden gemaakt in %1</translation>
+        <translation>de map &quot;data&quot; kan niet worden gemaakt in %1</translation>
     </message>
     <message>
         <source>nothing can be written into %1 (%2)</source>
@@ -427,7 +431,7 @@ De voornamen van deze lijst zijn niet verdeeld in vrouwelijk en mannelijk.</tran
     </message>
     <message>
         <source>The pages could not be painted.</source>
-        <translation>De pagina's konden niet worden getekend.</translation>
+        <translation>De pagina&apos;s konden niet worden getekend.</translation>
     </message>
     <message>
         <source>The PDF file could not be written:
@@ -437,7 +441,7 @@ De voornamen van deze lijst zijn niet verdeeld in vrouwelijk en mannelijk.</tran
     </message>
     <message>
         <source>This format needs the program &quot;%1&quot;, which is not installed.</source>
-        <translation>Deze indeling heeft het programma "%1" nodig, dat niet is geïnstalleerd.</translation>
+        <translation>Deze indeling heeft het programma &quot;%1&quot; nodig, dat niet is geïnstalleerd.</translation>
     </message>
     <message>
         <source>Cannot create a temporary folder.</source>
@@ -541,7 +545,7 @@ De voornamen van deze lijst zijn niet verdeeld in vrouwelijk en mannelijk.</tran
     </message>
     <message>
         <source>Backing up &quot;%1&quot;...</source>
-        <translation>Back-up van "%1" maken...</translation>
+        <translation>Back-up van &quot;%1&quot; maken...</translation>
     </message>
     <message>
         <source>The backup was cancelled.</source>
@@ -604,7 +608,7 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     </message>
     <message>
         <source>Restoring &quot;%1&quot;...</source>
-        <translation>"%1" herstellen...</translation>
+        <translation>&quot;%1&quot; herstellen...</translation>
     </message>
     <message>
         <source>The restore was cancelled; the files written so far were removed.</source>
@@ -853,7 +857,7 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     </message>
     <message>
         <source>A project called &quot;%1&quot; already exists in this folder.</source>
-        <translation>Er bestaat al een project met de naam "%1" in deze map.</translation>
+        <translation>Er bestaat al een project met de naam &quot;%1&quot; in deze map.</translation>
     </message>
     <message>
         <source>Could not create the project folder:
@@ -987,7 +991,7 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
         <translation># Naam van de plaats
 **In één zin:** 
 **Waar het ligt:** 
-**Overdag en 's nachts:** 
+**Overdag en &apos;s nachts:** 
 **Wat je er hoort en ruikt:** 
 **Wie hier komt:** 
 **Wat hier eerder gebeurde:** 
@@ -1487,7 +1491,7 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     </message>
     <message>
         <source>&quot;%1&quot; was changed after the comparison and was left alone.</source>
-        <translation>"%1" is na de vergelijking gewijzigd en is met rust gelaten.</translation>
+        <translation>&quot;%1&quot; is na de vergelijking gewijzigd en is met rust gelaten.</translation>
     </message>
     <message>
         <source>Before Compare and Transfer (%1)</source>
@@ -1687,7 +1691,7 @@ Er is niets gewijzigd: de werkkopie is zoals ze was, en het Scrivener-project oo
     </message>
     <message>
         <source>Scrivener has opened this project (%1) while it is open here. So that the two programs do not write over each other&apos;s changes, nothing more is written into the Scrivener project %2. Your changes are kept in this program&apos;s working copy: close the project in Scrivener, then save here again (File &gt; Save).</source>
-        <translation>Scrivener heeft dit project (%1) geopend terwijl het hier open is. Zodat de twee programma's elkaars wijzigingen niet overschrijven, wordt er niets meer in het Scrivener-project %2 geschreven. Je wijzigingen blijven bewaard in de werkkopie van dit programma: sluit het project in Scrivener en sla hier opnieuw op (Bestand &gt; Opslaan).</translation>
+        <translation>Scrivener heeft dit project (%1) geopend terwijl het hier open is. Zodat de twee programma&apos;s elkaars wijzigingen niet overschrijven, wordt er niets meer in het Scrivener-project %2 geschreven. Je wijzigingen blijven bewaard in de werkkopie van dit programma: sluit het project in Scrivener en sla hier opnieuw op (Bestand &gt; Opslaan).</translation>
     </message>
     <message>
         <source>Some files of the Scrivener project were changed elsewhere (another computer or program), and those versions could not be kept in %1, so they were not replaced: %2. Check that the project folder is writable and the disk is not full.</source>
@@ -1715,23 +1719,23 @@ Er is niets gewijzigd: de werkkopie is zoals ze was, en het Scrivener-project oo
     </message>
     <message>
         <source>The index card picture of &quot;%1&quot; could not be copied (%2).</source>
-        <translation>De afbeelding van de indexkaart van "%1" kon niet worden gekopieerd (%2).</translation>
+        <translation>De afbeelding van de indexkaart van &quot;%1&quot; kon niet worden gekopieerd (%2).</translation>
     </message>
     <message>
         <source>The mind map of &quot;%1&quot; could not be copied (%2).</source>
-        <translation>De mindmap van "%1" kon niet worden gekopieerd (%2).</translation>
+        <translation>De mindmap van &quot;%1&quot; kon niet worden gekopieerd (%2).</translation>
     </message>
     <message>
         <source>The file of &quot;%1&quot; (%2) could not be copied (%3).</source>
-        <translation>Het bestand van "%1" (%2) kon niet worden gekopieerd (%3).</translation>
+        <translation>Het bestand van &quot;%1&quot; (%2) kon niet worden gekopieerd (%3).</translation>
     </message>
     <message>
         <source>A file of the page &quot;%1&quot; (%2) could not be copied (%3).</source>
-        <translation>Een bestand van de pagina "%1" (%2) kon niet worden gekopieerd (%3).</translation>
+        <translation>Een bestand van de pagina &quot;%1&quot; (%2) kon niet worden gekopieerd (%3).</translation>
     </message>
     <message>
         <source>Media file of &quot;%1&quot; was not found.</source>
-        <translation>Mediabestand van "%1" is niet gevonden.</translation>
+        <translation>Mediabestand van &quot;%1&quot; is niet gevonden.</translation>
     </message>
     <message>
         <source>Imported snapshot</source>
@@ -1807,7 +1811,7 @@ Wat tot nu toe is geschreven, staat in %2. Er is niets gewijzigd in het Scrivene
     </message>
     <message>
         <source>Comics and graphic novels: pages, panels, panel descriptions, and the lettering (character, dialogue, captions, sound effects).</source>
-        <translation>Strips en graphic novels: pagina's, panelen, paneelbeschrijvingen en de belettering (personage, dialoog, onderschriften, geluidseffecten).</translation>
+        <translation>Strips en graphic novels: pagina&apos;s, panelen, paneelbeschrijvingen en de belettering (personage, dialoog, onderschriften, geluidseffecten).</translation>
     </message>
     <message>
         <source>The file could not be read.</source>
@@ -1881,7 +1885,7 @@ Wat tot nu toe is geschreven, staat in %2. Er is niets gewijzigd in het Scrivene
         <source>&quot;%1&quot; cannot be installed.
 
 %2</source>
-        <translation>"%1" kan niet worden geïnstalleerd.
+        <translation>&quot;%1&quot; kan niet worden geïnstalleerd.
 
 %2</translation>
     </message>
@@ -1899,7 +1903,7 @@ Wat tot nu toe is geschreven, staat in %2. Er is niets gewijzigd in het Scrivene
     </message>
     <message>
         <source>Signed with the add-on key &quot;%1&quot;, which the Quillbinder project vouches for: it is the add-on as published, unchanged.</source>
-        <translation>Ondertekend met de add-onsleutel "%1", waarvoor het Quillbinder-project instaat: het is de add-on zoals gepubliceerd, ongewijzigd.</translation>
+        <translation>Ondertekend met de add-onsleutel &quot;%1&quot;, waarvoor het Quillbinder-project instaat: het is de add-on zoals gepubliceerd, ongewijzigd.</translation>
     </message>
     <message>
         <source>Not signed by the Quillbinder project: it can come from anyone. Install it only if you made it yourself or trust where it comes from.</source>
@@ -1907,7 +1911,7 @@ Wat tot nu toe is geschreven, staat in %2. Er is niets gewijzigd in het Scrivene
     </message>
     <message>
         <source>It contains program code (libraries, plugins that can start programs, or templates), which runs with your rights.</source>
-        <translation>Het bevat programmacode (bibliotheken, plug-ins die programma's kunnen starten of sjablonen), die met jouw rechten draait.</translation>
+        <translation>Het bevat programmacode (bibliotheken, plug-ins die programma&apos;s kunnen starten of sjablonen), die met jouw rechten draait.</translation>
     </message>
     <message>
         <source>The installation failed.
@@ -2171,7 +2175,7 @@ Wat tot nu toe is geschreven, staat in %2. Er is niets gewijzigd in het Scrivene
     </message>
     <message>
         <source>&lt;p&gt;%1 itself is under the &lt;b&gt;Apache License 2.0&lt;/b&gt;: anyone may use, copy, change and pass it on, keeping the license and the NOTICE file, which names the project and its source. The AppImage also carries parts of other projects, each under its own license; they are listed here with their full license texts (the same texts are in the AppImage under &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt is The Qt Company&apos;s own build of Qt %3; the other libraries are those of Ubuntu 24.04. The source code of each, exactly in the version used, is in the release &lt;a href=&quot;%2&quot;&gt;Third-party source code&lt;/a&gt; of the project page, in the file named below its license (Ubuntu&apos;s archive has Ubuntu&apos;s as well). You may replace the libraries inside the AppImage with your own builds. Add-ons carry their own license files.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;%1 zelf valt onder de &lt;b&gt;Apache License 2.0&lt;/b&gt;: iedereen mag het gebruiken, kopiëren, wijzigen en doorgeven, met behoud van de licentie en het NOTICE-bestand, dat het project en de bron noemt. De AppImage bevat ook onderdelen van andere projecten, elk onder een eigen licentie; ze staan hier met hun volledige licentieteksten (dezelfde teksten staan in de AppImage onder &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt is de eigen build van Qt %3 van The Qt Company; de andere bibliotheken zijn die van Ubuntu 24.04. De broncode van elk daarvan, precies in de gebruikte versie, staat in de release &lt;a href="%2"&gt;Third-party source code&lt;/a&gt; van de projectpagina, in het bestand dat onder de licentie wordt genoemd (het archief van Ubuntu heeft ook die van Ubuntu). Je mag de bibliotheken in de AppImage vervangen door je eigen builds. Add-ons hebben hun eigen licentiebestanden.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;%1 zelf valt onder de &lt;b&gt;Apache License 2.0&lt;/b&gt;: iedereen mag het gebruiken, kopiëren, wijzigen en doorgeven, met behoud van de licentie en het NOTICE-bestand, dat het project en de bron noemt. De AppImage bevat ook onderdelen van andere projecten, elk onder een eigen licentie; ze staan hier met hun volledige licentieteksten (dezelfde teksten staan in de AppImage onder &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt is de eigen build van Qt %3 van The Qt Company; de andere bibliotheken zijn die van Ubuntu 24.04. De broncode van elk daarvan, precies in de gebruikte versie, staat in de release &lt;a href=&quot;%2&quot;&gt;Third-party source code&lt;/a&gt; van de projectpagina, in het bestand dat onder de licentie wordt genoemd (het archief van Ubuntu heeft ook die van Ubuntu). Je mag de bibliotheken in de AppImage vervangen door je eigen builds. Add-ons hebben hun eigen licentiebestanden.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1
@@ -2852,7 +2856,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Around the pages (only in page view)</source>
-        <translation>Rond de pagina's (alleen in paginaweergave)</translation>
+        <translation>Rond de pagina&apos;s (alleen in paginaweergave)</translation>
     </message>
     <message>
         <source>Links in the text</source>
@@ -2936,7 +2940,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Menus, buttons and panels</source>
-        <translation>Menu's, knoppen en panelen</translation>
+        <translation>Menu&apos;s, knoppen en panelen</translation>
     </message>
     <message>
         <source>Binder</source>
@@ -2988,11 +2992,11 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Only your own themes can be deleted.</source>
-        <translation>Alleen je eigen thema's kunnen worden verwijderd.</translation>
+        <translation>Alleen je eigen thema&apos;s kunnen worden verwijderd.</translation>
     </message>
     <message>
         <source>Only your own themes can be renamed.</source>
-        <translation>Alleen je eigen thema's kunnen worden hernoemd.</translation>
+        <translation>Alleen je eigen thema&apos;s kunnen worden hernoemd.</translation>
     </message>
     <message>
         <source>%1 is not a theme file.</source>
@@ -3064,7 +3068,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Themes</source>
-        <translation>Thema's</translation>
+        <translation>Thema&apos;s</translation>
     </message>
     <message>
         <source>Search</source>
@@ -3120,7 +3124,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Theme button (Light, Dark, My Look 1, My Look 2 and all themes)</source>
-        <translation>Themaknop (Licht, Donker, Mijn uiterlijk 1, Mijn uiterlijk 2 en alle thema's)</translation>
+        <translation>Themaknop (Licht, Donker, Mijn uiterlijk 1, Mijn uiterlijk 2 en alle thema&apos;s)</translation>
     </message>
     <message>
         <source>Style list</source>
@@ -3265,8 +3269,12 @@ Bron: %1</translation>
         <translation>Inspector: Notities</translation>
     </message>
     <message>
-        <source>Inspector: Bookmark Lists</source>
-        <translation>Inspector: Bladwijzerlijsten</translation>
+        <source>Inspector: Document Bookmarks</source>
+        <translation>Inspector: bladwijzers van het document</translation>
+    </message>
+    <message>
+        <source>Inspector: Project Bookmarks</source>
+        <translation>Inspector: bladwijzers van het project</translation>
     </message>
     <message>
         <source>Inspector: Bookmarked Text</source>
@@ -3314,7 +3322,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>The page may need a login, or the site does not let programs read it.</source>
-        <translation>De pagina vraagt mogelijk om inloggen, of de site laat programma's hem niet lezen.</translation>
+        <translation>De pagina vraagt mogelijk om inloggen, of de site laat programma&apos;s hem niet lezen.</translation>
     </message>
     <message>
         <source>The file is not a Word document (%1).</source>
@@ -3490,7 +3498,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>The file holds the model &quot;%1&quot;, not &quot;%2&quot;.</source>
-        <translation>Het bestand bevat het model "%1", niet "%2".</translation>
+        <translation>Het bestand bevat het model &quot;%1&quot;, niet &quot;%2&quot;.</translation>
     </message>
     <message>
         <source>The recording cannot be written: %1</source>
@@ -3533,28 +3541,72 @@ Bron: %1</translation>
         <translation>heel moeilijk</translation>
     </message>
     <message>
-        <source>Protagonist</source>
-        <translation>Hoofdpersoon</translation>
+        <source>Name of the profile:</source>
+        <translation>Naam van het profiel:</translation>
     </message>
     <message>
-        <source>Supporting</source>
-        <translation>Bijrol</translation>
+        <source>There is already a profile named “%1”. Choose another name.</source>
+        <translation>Er bestaat al een profiel met de naam “%1”. Kies een andere naam.</translation>
     </message>
     <message>
-        <source>Village</source>
-        <translation>Dorp</translation>
+        <source>Import Profile</source>
+        <translation>Profiel importeren</translation>
     </message>
     <message>
-        <source>Forest</source>
-        <translation>Bos</translation>
+        <source>The profile also names programs, folders, files or addresses (a folder may not exist on this computer):
+
+%1
+
+Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
+        <translation>Het profiel noemt ook programma's, mappen, bestanden of adressen (een map bestaat misschien niet op deze computer):
+
+%1
+
+Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of de herkomst vertrouwt.</translation>
     </message>
     <message>
-        <source>Autumn</source>
-        <translation>Herfst</translation>
+        <source>A temporary file could not be made.</source>
+        <translation>Er kon geen tijdelijk bestand worden gemaakt.</translation>
     </message>
     <message>
-        <source>Fog</source>
-        <translation>Mist</translation>
+        <source>Nothing to write.</source>
+        <translation>Er is niets om te schrijven.</translation>
+    </message>
+    <message>
+        <source>The file could not be written (%1). The file that was there is unchanged.</source>
+        <translation>Het bestand kon niet worden geschreven (%1). Het bestand dat er stond, is ongewijzigd.</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Mijn profiel</translation>
+    </message>
+    <message>
+        <source>The profile “%1” could not be read.</source>
+        <translation>Het profiel “%1” kon niet worden gelezen.</translation>
+    </message>
+    <message>
+        <source>There is no profile “%1”.</source>
+        <translation>Er is geen profiel “%1”.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be deleted.</source>
+        <translation>Het profiel “%1” kan niet worden verwijderd.</translation>
+    </message>
+    <message>
+        <source>The profile in use cannot be deleted. Switch to another profile first.</source>
+        <translation>Het profiel dat in gebruik is, kan niet worden verwijderd. Schakel eerst over naar een ander profiel.</translation>
+    </message>
+    <message>
+        <source>The file of the profile could not be deleted.</source>
+        <translation>Het bestand van het profiel kon niet worden verwijderd.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be renamed.</source>
+        <translation>Het profiel “%1” kan niet worden hernoemd.</translation>
+    </message>
+    <message>
+        <source>This is not a file of a profile or of options saved by Quillbinder.</source>
+        <translation>Dit is geen bestand met een profiel of met opties die door Quillbinder zijn opgeslagen.</translation>
     </message>
 </context>
 <context>
@@ -3766,7 +3818,7 @@ Bron: %1</translation>
     <name>ScreenGrab</name>
     <message>
         <source>This desktop does not let programs read the screen. On KDE Plasma, install Spectacle (sudo apt install kde-spectacle); it takes the picture for the scratch pad.</source>
-        <translation>Dit bureaublad laat programma's het scherm niet lezen. Installeer op KDE Plasma Spectacle (sudo apt install kde-spectacle); dat maakt de afbeelding voor het kladblok.</translation>
+        <translation>Dit bureaublad laat programma&apos;s het scherm niet lezen. Installeer op KDE Plasma Spectacle (sudo apt install kde-spectacle); dat maakt de afbeelding voor het kladblok.</translation>
     </message>
 </context>
 <context>
@@ -4192,11 +4244,11 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Not installed: the downloaded file does not have the known checksum of &quot;%1&quot; (it may be damaged, or not the file of the official source). The model in use stays. Try again later.</source>
-        <translation>Niet geïnstalleerd: het gedownloade bestand heeft niet de bekende controlesom van "%1" (het is mogelijk beschadigd, of niet het bestand van de officiële bron). Het model in gebruik blijft. Probeer het later opnieuw.</translation>
+        <translation>Niet geïnstalleerd: het gedownloade bestand heeft niet de bekende controlesom van &quot;%1&quot; (het is mogelijk beschadigd, of niet het bestand van de officiële bron). Het model in gebruik blijft. Probeer het later opnieuw.</translation>
     </message>
     <message>
         <source>The file differs from the one Quillbinder knows for &quot;%1&quot; (its checksum is another). Use it only if you trust where it comes from: it is read by the speech engine. Check and use it?</source>
-        <translation>Het bestand verschilt van het bestand dat Quillbinder kent voor "%1" (de controlesom is een andere). Gebruik het alleen als je de herkomst vertrouwt: het wordt door de spraakengine gelezen. Controleren en gebruiken?</translation>
+        <translation>Het bestand verschilt van het bestand dat Quillbinder kent voor &quot;%1&quot; (de controlesom is een andere). Gebruik het alleen als je de herkomst vertrouwt: het wordt door de spraakengine gelezen. Controleren en gebruiken?</translation>
     </message>
     <message>
         <source>The file is not one of the models Quillbinder knows (its checksum is another). Use it only if you trust where it comes from: it is read by the speech engine. Check and use it?</source>
@@ -4216,7 +4268,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>it wrote &quot;%1&quot;</source>
-        <translation>het schreef "%1"</translation>
+        <translation>het schreef &quot;%1&quot;</translation>
     </message>
     <message>
         <source>The model did not pass the test transcription (%1). The model in use stays.</source>
@@ -4481,7 +4533,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Paragraphs</source>
-        <translation>Alinea's</translation>
+        <translation>Alinea&apos;s</translation>
     </message>
     <message>
         <source>Different words</source>
@@ -4489,7 +4541,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Pages (250 words each)</source>
-        <translation>Pagina's (elk 250 woorden)</translation>
+        <translation>Pagina&apos;s (elk 250 woorden)</translation>
     </message>
     <message>
         <source>Reading time (230 words a minute)</source>
@@ -4675,7 +4727,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Move &quot;%1&quot; to the trash?</source>
-        <translation>"%1" naar de prullenbak verplaatsen?</translation>
+        <translation>&quot;%1&quot; naar de prullenbak verplaatsen?</translation>
     </message>
     <message>
         <source>Move to Trash</source>
@@ -4742,7 +4794,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>This add-on imports web pages, not files.</source>
-        <translation>Deze add-on importeert webpagina's, geen bestanden.</translation>
+        <translation>Deze add-on importeert webpagina&apos;s, geen bestanden.</translation>
     </message>
 </context>
 <context>
@@ -4834,7 +4886,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     <name>playback</name>
     <message>
         <source>Playing audio and video inside the program needs the add-on &quot;Media Playback&quot; (Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager).</source>
-        <translation>Audio en video afspelen in het programma vereist de add-on "Media Playback" (Help &gt; Add-ons en updates &gt; Update of add-on installeren; Help &gt; Add-ons en updates &gt; Add-onbeheer).</translation>
+        <translation>Audio en video afspelen in het programma vereist de add-on &quot;Media Playback&quot; (Help &gt; Add-ons en updates &gt; Update of add-on installeren; Help &gt; Add-ons en updates &gt; Add-onbeheer).</translation>
     </message>
     <message>
         <source>Audio and video cannot be played here: %1</source>
@@ -4929,7 +4981,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>Remove the add-on &quot;%1&quot;?</source>
-        <translation>De add-on "%1" verwijderen?</translation>
+        <translation>De add-on &quot;%1&quot; verwijderen?</translation>
     </message>
     <message>
         <source>%1 (built into the AppImage)</source>
@@ -4953,7 +5005,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>&lt;span style=&apos;color:gray&apos;&gt;No add-ons installed. Add-ons are files ending in .qbpkg; choose &quot;Install From File…&quot; or double-click the file.&lt;/span&gt;</source>
-        <translation>&lt;span style='color:gray'&gt;Geen add-ons geïnstalleerd. Add-ons zijn bestanden die op .qbpkg eindigen; kies "Installeren uit bestand…" of dubbelklik op het bestand.&lt;/span&gt;</translation>
+        <translation>&lt;span style=&apos;color:gray&apos;&gt;Geen add-ons geïnstalleerd. Add-ons zijn bestanden die op .qbpkg eindigen; kies &quot;Installeren uit bestand…&quot; of dubbelklik op het bestand.&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Install Update or Add-on</source>
@@ -5205,11 +5257,11 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>Search &quot;Included&quot; Documents</source>
-        <translation>In "opgenomen" documenten zoeken</translation>
+        <translation>In &quot;opgenomen&quot; documenten zoeken</translation>
     </message>
     <message>
         <source>Search &quot;Excluded&quot; Documents</source>
-        <translation>In "uitgesloten" documenten zoeken</translation>
+        <translation>In &quot;uitgesloten&quot; documenten zoeken</translation>
     </message>
     <message>
         <source>Include Trash</source>
@@ -5517,7 +5569,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>Change %1 of %2, in &quot;%3&quot;</source>
-        <translation>Wijziging %1 van %2, in "%3"</translation>
+        <translation>Wijziging %1 van %2, in &quot;%3&quot;</translation>
     </message>
     <message numerus="yes">
         <source>All changes seen: %n to take. Press Transfer.</source>
@@ -5637,7 +5689,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>Show the pages of the manuscript with this format (as PDF)</source>
-        <translation>De pagina's van het manuscript met deze indeling tonen (als pdf)</translation>
+        <translation>De pagina&apos;s van het manuscript met deze indeling tonen (als pdf)</translation>
     </message>
     <message>
         <source>Save Settings</source>
@@ -5657,7 +5709,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>Built-in formats cannot be changed. Use &quot;+&quot; (Duplicate &amp; Edit) to make your own copy.</source>
-        <translation>Ingebouwde indelingen kunnen niet worden gewijzigd. Gebruik "+" (Dupliceren &amp; bewerken) om een eigen kopie te maken.</translation>
+        <translation>Ingebouwde indelingen kunnen niet worden gewijzigd. Gebruik &quot;+&quot; (Dupliceren &amp; bewerken) om een eigen kopie te maken.</translation>
     </message>
     <message>
         <source>Delete Format</source>
@@ -5665,7 +5717,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>Delete the compile format &quot;%1&quot;?</source>
-        <translation>De samenstelindeling "%1" verwijderen?</translation>
+        <translation>De samenstelindeling &quot;%1&quot; verwijderen?</translation>
     </message>
     <message>
         <source>Import Compile Format</source>
@@ -5729,7 +5781,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>words, separated by commas</source>
-        <translation>woorden, gescheiden door komma's</translation>
+        <translation>woorden, gescheiden door komma&apos;s</translation>
     </message>
     <message>
         <source>today (YYYY-MM-DD)</source>
@@ -5853,7 +5905,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>The wind rose in the night and the sea came up over the rocks below the lamp.</source>
-        <translation>De wind stak 's nachts op en de zee kwam over de rotsen onder het licht.</translation>
+        <translation>De wind stak &apos;s nachts op en de zee kwam over de rotsen onder het licht.</translation>
     </message>
     <message>
         <source>By morning the boats were gone.</source>
@@ -5961,7 +6013,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>The title page names the author. Who is the author? The name is kept with the author information in File &gt; Options &gt; General. Left empty, the title page has no &quot;by&quot; line.</source>
-        <translation>De titelpagina noemt de auteur. Wie is de auteur? De naam wordt bewaard bij de auteursgegevens in Bestand &gt; Opties &gt; Algemeen. Als je niets invult, heeft de titelpagina geen regel met "door".</translation>
+        <translation>De titelpagina noemt de auteur. Wie is de auteur? De naam wordt bewaard bij de auteursgegevens in Bestand &gt; Opties &gt; Algemeen. Als je niets invult, heeft de titelpagina geen regel met &quot;door&quot;.</translation>
     </message>
     <message>
         <source>First name:</source>
@@ -5981,7 +6033,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>Preview — %1 (%2 pages)</source>
-        <translation>Voorbeeld — %1 (%2 pagina's)</translation>
+        <translation>Voorbeeld — %1 (%2 pagina&apos;s)</translation>
     </message>
 </context>
 <context>
@@ -6043,11 +6095,11 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>Typographic quotes to &amp;straight quotes (&quot; &apos;)</source>
-        <translation>Typografische aanhalingstekens naar &amp;rechte aanhalingstekens (" ')</translation>
+        <translation>Typografische aanhalingstekens naar &amp;rechte aanhalingstekens (&quot; &apos;)</translation>
     </message>
     <message>
         <source>An apostrophe inside a word becomes ’. A straight mark with a space on both sides stays as it is; an apostrophe at the start of a word (&apos;tis) becomes an opening mark.</source>
-        <translation>Een apostrof binnen een woord wordt ’. Een recht teken met een spatie aan beide kanten blijft zoals het is; een apostrof aan het begin van een woord ('tis) wordt een openingsteken.</translation>
+        <translation>Een apostrof binnen een woord wordt ’. Een recht teken met een spatie aan beide kanten blijft zoals het is; een apostrof aan het begin van een woord (&apos;tis) wordt een openingsteken.</translation>
     </message>
     <message>
         <source>Convert in</source>
@@ -6131,7 +6183,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>Left as they are, because their file cannot be read (such a file is never written over): %1.</source>
-        <translation>Gelaten zoals ze zijn, omdat hun bestand niet kan worden gelezen (zo'n bestand wordt nooit overschreven): %1.</translation>
+        <translation>Gelaten zoals ze zijn, omdat hun bestand niet kan worden gelezen (zo&apos;n bestand wordt nooit overschreven): %1.</translation>
     </message>
     <message>
         <source>No quote marks to convert.</source>
@@ -6514,11 +6566,11 @@ Dit kan niet als geheel ongedaan worden gemaakt.%3</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be changed here: %2, and its place is kept for it. Close the project and open it again once the sync program is done.</source>
-        <translation>"%1" kan hier niet worden gewijzigd: %2, en zijn plek blijft voor hem gereserveerd. Sluit het project en open het opnieuw zodra het synchronisatieprogramma klaar is.</translation>
+        <translation>&quot;%1&quot; kan hier niet worden gewijzigd: %2, en zijn plek blijft voor hem gereserveerd. Sluit het project en open het opnieuw zodra het synchronisatieprogramma klaar is.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be changed here: %2, and such a file is never written over. Check the file&apos;s permissions or the drive it is on, then close and reopen the project.</source>
-        <translation>"%1" kan hier niet worden gewijzigd: %2, en zo'n bestand wordt nooit overschreven. Controleer de rechten van het bestand of de schijf waarop het staat, sluit het project dan en open het opnieuw.</translation>
+        <translation>&quot;%1&quot; kan hier niet worden gewijzigd: %2, en zo&apos;n bestand wordt nooit overschreven. Controleer de rechten van het bestand of de schijf waarop het staat, sluit het project dan en open het opnieuw.</translation>
     </message>
     <message>
         <source>%1 notes (damaged)</source>
@@ -6530,7 +6582,7 @@ Dit kan niet als geheel ongedaan worden gemaakt.%3</translation>
     </message>
     <message>
         <source>The damaged file of &quot;%1&quot; could not be kept as a copy in %2, so it was not replaced. Check that the project folder is writable and the disk is not full.</source>
-        <translation>Het beschadigde bestand van "%1" kon niet als kopie in %2 worden bewaard, dus is het niet vervangen. Controleer of de projectmap beschrijfbaar is en de schijf niet vol is.</translation>
+        <translation>Het beschadigde bestand van &quot;%1&quot; kon niet als kopie in %2 worden bewaard, dus is het niet vervangen. Controleer of de projectmap beschrijfbaar is en de schijf niet vol is.</translation>
     </message>
     <message>
         <source>%1 notes</source>
@@ -6660,8 +6712,8 @@ Pages (250 words): %5</source>
         <translation>Woorden: %1
 Tekens: %2
 Tekens (zonder spaties): %3
-Alinea's: %4
-Pagina's (250 woorden): %5</translation>
+Alinea&apos;s: %4
+Pagina&apos;s (250 woorden): %5</translation>
     </message>
     <message>
         <source>Text zoom (does not change the font size)</source>
@@ -6669,7 +6721,7 @@ Pagina's (250 woorden): %5</translation>
     </message>
     <message>
         <source>Page view: the page of the cursor and the number of pages shown</source>
-        <translation>Paginaweergave: de pagina van de cursor en het aantal getoonde pagina's</translation>
+        <translation>Paginaweergave: de pagina van de cursor en het aantal getoonde pagina&apos;s</translation>
     </message>
     <message>
         <source>Click for details</source>
@@ -6777,7 +6829,7 @@ Pagina's (250 woorden): %5</translation>
     </message>
     <message>
         <source>pages</source>
-        <translation>pagina's</translation>
+        <translation>pagina&apos;s</translation>
     </message>
     <message>
         <source>%1 and %2 more</source>
@@ -6881,7 +6933,7 @@ Pagina's (250 woorden): %5</translation>
     </message>
     <message>
         <source>Target for &quot;%1&quot;:</source>
-        <translation>Doel voor "%1":</translation>
+        <translation>Doel voor &quot;%1&quot;:</translation>
     </message>
     <message>
         <source>Find in the copyholder</source>
@@ -6924,7 +6976,7 @@ Pagina's (250 woorden): %5</translation>
     </message>
     <message>
         <source>Pictures, PDF files, web pages, audio and video are exported as they are.</source>
-        <translation>Afbeeldingen, pdf-bestanden, webpagina's, audio en video worden geëxporteerd zoals ze zijn.</translation>
+        <translation>Afbeeldingen, pdf-bestanden, webpagina&apos;s, audio en video worden geëxporteerd zoals ze zijn.</translation>
     </message>
     <message>
         <source>Only notes (and other text files of the options below) use this format; the selected files are exported as they are.</source>
@@ -7097,6 +7149,18 @@ Pagina's (250 woorden): %5</translation>
         <translation>Voordat je begint: hoe je projecten worden geback-upt. Alles is al ingevuld: OK behoudt het zoals het is. Je kunt alles later wijzigen in Bestand &gt; Opties.</translation>
     </message>
     <message>
+        <source>Language</source>
+        <translation>Taal</translation>
+    </message>
+    <message>
+        <source>Language of the program:</source>
+        <translation>Taal van het programma:</translation>
+    </message>
+    <message>
+        <source>A language you choose here is used from the next start of the program.</source>
+        <translation>Een taal die je hier kiest, wordt gebruikt vanaf de volgende keer dat het programma start.</translation>
+    </message>
+    <message>
         <source>Everything in One Folder</source>
         <translation>Alles in één map</translation>
     </message>
@@ -7105,10 +7169,10 @@ Pagina's (250 woorden): %5</translation>
 %1
 
 Nothing is written into Windows&apos; own folders or the registry, unless you ask for it below. The whole folder can be moved or copied, to a USB stick or another computer, and deleting it removes the program. Program updates are installed with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; to move to a version you downloaded anew, unpack it and copy the folder &quot;data&quot; into it. Your projects stay wherever you keep them.</source>
-        <translation>Quillbinder bewaart zijn instellingen, add-ons, programma-updates, lettertypen en crashrapporten in de map "data" in zijn eigen map:
+        <translation>Quillbinder bewaart zijn instellingen, add-ons, programma-updates, lettertypen en crashrapporten in de map &quot;data&quot; in zijn eigen map:
 %1
 
-Er wordt niets geschreven in de eigen mappen van Windows of in het register, tenzij je daar hieronder om vraagt. De hele map kan worden verplaatst of gekopieerd, naar een USB-stick of een andere computer, en door hem te verwijderen verdwijnt het programma. Programma-updates worden geïnstalleerd met Help &gt; Add-ons en updates &gt; Update of add-on installeren; om over te stappen op een versie die je opnieuw hebt gedownload, pak je die uit en kopieer je de map "data" erin. Je projecten blijven staan waar je ze bewaart.</translation>
+Er wordt niets geschreven in de eigen mappen van Windows of in het register, tenzij je daar hieronder om vraagt. De hele map kan worden verplaatst of gekopieerd, naar een USB-stick of een andere computer, en door hem te verwijderen verdwijnt het programma. Programma-updates worden geïnstalleerd met Help &gt; Add-ons en updates &gt; Update of add-on installeren; om over te stappen op een versie die je opnieuw hebt gedownload, pak je die uit en kopieer je de map &quot;data&quot; erin. Je projecten blijven staan waar je ze bewaart.</translation>
     </message>
     <message>
         <source>The program&apos;s folder is inside your %1 folder. That works, but the sync service copies the program&apos;s own files back and forth and may keep them only online. Better: the program&apos;s folder outside it (for example C:\Users\&lt;your name&gt;\Quillbinder), your projects inside it.</source>
@@ -7120,7 +7184,7 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     </message>
     <message>
         <source>Windows may warn when the program starts for the first time, because it is not signed (SmartScreen: &quot;More info&quot;, then &quot;Run anyway&quot;). That happens again for each new download.</source>
-        <translation>Windows waarschuwt mogelijk wanneer het programma voor het eerst start, omdat het niet is ondertekend (SmartScreen: "Meer informatie", daarna "Toch uitvoeren"). Dat gebeurt opnieuw bij elke nieuwe download.</translation>
+        <translation>Windows waarschuwt mogelijk wanneer het programma voor het eerst start, omdat het niet is ondertekend (SmartScreen: &quot;Meer informatie&quot;, daarna &quot;Toch uitvoeren&quot;). Dat gebeurt opnieuw bij elke nieuwe download.</translation>
     </message>
     <message>
         <source>Backups</source>
@@ -7131,12 +7195,20 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
         <translation>Automatisch een back-up van een project maken wanneer het wordt gesloten</translation>
     </message>
     <message>
-        <source> backups of each project</source>
-        <translation> back-ups van elk project</translation>
+        <source>Keep the newest</source>
+        <translation>De nieuwste bewaren</translation>
     </message>
     <message>
-        <source>Keep the newest:</source>
-        <translation>De nieuwste bewaren:</translation>
+        <source>backups of each project</source>
+        <translation>back-ups van elk project</translation>
+    </message>
+    <message>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>De AppImage naar %1 verplaatsen, een vaste plek waar het menu-item hem vanaf start</translation>
+    </message>
+    <message>
+        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
+        <translation>Met Help &gt; Aan toepassingsmenu toevoegen of Uit toepassingsmenu verwijderen wijzig je dit later. Als je de AppImage zelf verplaatst, voeg je hem opnieuw aan het menu toe.</translation>
     </message>
     <message>
         <source>Choose a folder: until then no backups are made</source>
@@ -7165,14 +7237,6 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     <message>
         <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them</source>
         <translation>%1 aan het toepassingsmenu toevoegen, zodat je het kunt starten zoals elk ander programma en projecten kunt openen door erop te dubbelklikken</translation>
-    </message>
-    <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>De AppImage naar %1 verplaatsen (een verplaatst bestand kan niet vanuit het menu worden gestart)</translation>
-    </message>
-    <message>
-        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later.</source>
-        <translation>Help &gt; Aan toepassingsmenu toevoegen of Uit toepassingsmenu verwijderen wijzigt dit later.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -7365,7 +7429,7 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     </message>
     <message>
         <source>Space after paragraphs:</source>
-        <translation>Ruimte na alinea's:</translation>
+        <translation>Ruimte na alinea&apos;s:</translation>
     </message>
     <message>
         <source>Heading font:</source>
@@ -7489,7 +7553,7 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     </message>
     <message>
         <source>Which layout a section type uses by default in this format (by section type name; projects can override this in the Compile window). &quot;*&quot; matches every type.</source>
-        <translation>Welke lay-out een sectietype standaard gebruikt in deze samenstelindeling (op naam van het sectietype; projecten kunnen dit in het venster Samenstellen overschrijven). "*" komt overeen met elk type.</translation>
+        <translation>Welke lay-out een sectietype standaard gebruikt in deze samenstelindeling (op naam van het sectietype; projecten kunnen dit in het venster Samenstellen overschrijven). &quot;*&quot; komt overeen met elk type.</translation>
     </message>
     <message>
         <source>Section type name</source>
@@ -7637,7 +7701,7 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     </message>
     <message>
         <source>Facing pages: left texts on left-hand pages, right texts on right-hand pages</source>
-        <translation>Tegenover elkaar liggende pagina's: linkerteksten op linkerpagina's, rechterteksten op rechterpagina's</translation>
+        <translation>Tegenover elkaar liggende pagina&apos;s: linkerteksten op linkerpagina&apos;s, rechterteksten op rechterpagina&apos;s</translation>
     </message>
     <message>
         <source>Header and footer on the first page</source>
@@ -7645,7 +7709,7 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     </message>
     <message>
         <source>Header and footer on pages where a chapter starts (PDF)</source>
-        <translation>Koptekst en voettekst op pagina's waar een hoofdstuk begint (pdf)</translation>
+        <translation>Koptekst en voettekst op pagina&apos;s waar een hoofdstuk begint (pdf)</translation>
     </message>
     <message>
         <source>Chapters start on a right-hand page (PDF)</source>
@@ -7721,7 +7785,7 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     </message>
     <message>
         <source>&lt;$p&gt; = page number, &lt;$pages&gt; = number of pages (PDF), &lt;$author&gt;, &lt;$surname&gt;, &lt;$shorttitle&gt;, &lt;$projecttitle&gt;, &lt;$date&gt;</source>
-        <translation>&lt;$p&gt; = paginanummer, &lt;$pages&gt; = aantal pagina's (pdf), &lt;$author&gt;, &lt;$surname&gt;, &lt;$shorttitle&gt;, &lt;$projecttitle&gt;, &lt;$date&gt;</translation>
+        <translation>&lt;$p&gt; = paginanummer, &lt;$pages&gt; = aantal pagina&apos;s (pdf), &lt;$author&gt;, &lt;$surname&gt;, &lt;$shorttitle&gt;, &lt;$projecttitle&gt;, &lt;$date&gt;</translation>
     </message>
     <message>
         <source>Page</source>
@@ -7773,7 +7837,7 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     </message>
     <message>
         <source>Replaced in the compiled text only; the project stays as it is. With &quot;Regular expression&quot;, \1 … \9 in &quot;With&quot; stand for the parts in brackets.</source>
-        <translation>Alleen vervangen in de samengestelde tekst; het project blijft zoals het is. Bij "Reguliere expressie" staan \1 … \9 in "Door" voor de delen tussen haakjes.</translation>
+        <translation>Alleen vervangen in de samengestelde tekst; het project blijft zoals het is. Bij &quot;Reguliere expressie&quot; staan \1 … \9 in &quot;Door&quot; voor de delen tussen haakjes.</translation>
     </message>
     <message>
         <source>On</source>
@@ -7805,11 +7869,11 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     </message>
     <message>
         <source>Straight quotes (“ ” ‘ ’ become &quot; &apos;)</source>
-        <translation>Rechte aanhalingstekens (“ ” ‘ ’ worden " ')</translation>
+        <translation>Rechte aanhalingstekens (“ ” ‘ ’ worden &quot; &apos;)</translation>
     </message>
     <message>
         <source>Typographic quotes (&quot; &apos; become “ ” ‘ ’, English)</source>
-        <translation>Typografische aanhalingstekens (" ' worden “ ” ‘ ’, Engels)</translation>
+        <translation>Typografische aanhalingstekens (&quot; &apos; worden “ ” ‘ ’, Engels)</translation>
     </message>
     <message>
         <source>Dashes as hyphens (— becomes --, – becomes -)</source>
@@ -7825,7 +7889,7 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     </message>
     <message>
         <source>Remove spaces at the end of paragraphs</source>
-        <translation>Spaties aan het einde van alinea's verwijderen</translation>
+        <translation>Spaties aan het einde van alinea&apos;s verwijderen</translation>
     </message>
     <message>
         <source>Plain text: no bold, italics, fonts or colors</source>
@@ -8519,7 +8583,7 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     </message>
     <message>
         <source>Paragraphs</source>
-        <translation>Alinea's</translation>
+        <translation>Alinea&apos;s</translation>
     </message>
     <message>
         <source>Characters</source>
@@ -8535,13 +8599,13 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     </message>
     <message>
         <source>Delete the snapshot &quot;%1&quot;?</source>
-        <translation>De momentopname "%1" verwijderen?</translation>
+        <translation>De momentopname &quot;%1&quot; verwijderen?</translation>
     </message>
     <message>
         <source>Replace the current text with the snapshot &quot;%1&quot;?
 
 Do you want to take a snapshot of the current text first?</source>
-        <translation>De huidige tekst vervangen door de momentopname "%1"?
+        <translation>De huidige tekst vervangen door de momentopname &quot;%1&quot;?
 
 Wil je eerst een momentopname van de huidige tekst maken?</translation>
     </message>
@@ -8555,7 +8619,7 @@ De huidige tekst is niet gewijzigd.</translation>
     </message>
     <message>
         <source>The snapshot &quot;%1&quot; holds no text (it may be damaged). Replace the current text with an empty one?</source>
-        <translation>De momentopname "%1" bevat geen tekst (mogelijk is ze beschadigd). De huidige tekst vervangen door een lege?</translation>
+        <translation>De momentopname &quot;%1&quot; bevat geen tekst (mogelijk is ze beschadigd). De huidige tekst vervangen door een lege?</translation>
     </message>
     <message>
         <source>The snapshot holds no text; the current text was kept.</source>
@@ -8579,7 +8643,7 @@ The text of the snapshot &quot;%2&quot; is now the document&apos;s text; it can 
         <translation>Het bestand van deze tekst was beschadigd. Het is als kopie bewaard:
 %1
 
-De tekst van de momentopname "%2" is nu de tekst van het document; hij kan weer worden bewerkt en wordt bij de volgende keer opslaan opgeslagen.</translation>
+De tekst van de momentopname &quot;%2&quot; is nu de tekst van het document; hij kan weer worden bewerkt en wordt bij de volgende keer opslaan opgeslagen.</translation>
     </message>
     <message>
         <source>Snapshot</source>
@@ -8752,8 +8816,12 @@ De tekst van de momentopname "%2" is nu de tekst van het document; hij kan weer 
         <translation>Notities</translation>
     </message>
     <message>
-        <source>Lists</source>
-        <translation>Lijsten</translation>
+        <source>Document</source>
+        <translation>Document</translation>
+    </message>
+    <message>
+        <source>Project</source>
+        <translation>Project</translation>
     </message>
     <message>
         <source>Text</source>
@@ -8820,7 +8888,7 @@ De tekst van de momentopname "%2" is nu de tekst van het document; hij kan weer 
     </message>
     <message>
         <source>&lt;p&gt;&lt;b&gt;Shortcuts in every program.&lt;/b&gt; The shortcuts above work while %1 has the keyboard. For a shortcut that also works in other programs, give the desktop the command below: KDE System Settings &amp;gt; Keyboard &amp;gt; Shortcuts &amp;gt; Add New &amp;gt; Command or Script (or the entry of the application menu, if %1 was added there with Help &amp;gt; Add to Application Menu).&lt;/p&gt;</source>
-        <translation>&lt;p&gt;&lt;b&gt;Sneltoetsen in elk programma.&lt;/b&gt; De sneltoetsen hierboven werken zolang %1 het toetsenbord heeft. Voor een sneltoets die ook in andere programma's werkt, geef je het bureaublad de opdracht hieronder: KDE Systeeminstellingen &amp;gt; Toetsenbord &amp;gt; Sneltoetsen &amp;gt; Nieuw toevoegen &amp;gt; Opdracht of script (of het item van het toepassingsmenu, als %1 daar is toegevoegd met Help &amp;gt; Aan toepassingsmenu toevoegen).&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;&lt;b&gt;Sneltoetsen in elk programma.&lt;/b&gt; De sneltoetsen hierboven werken zolang %1 het toetsenbord heeft. Voor een sneltoets die ook in andere programma&apos;s werkt, geef je het bureaublad de opdracht hieronder: KDE Systeeminstellingen &amp;gt; Toetsenbord &amp;gt; Sneltoetsen &amp;gt; Nieuw toevoegen &amp;gt; Opdracht of script (of het item van het toepassingsmenu, als %1 daar is toegevoegd met Help &amp;gt; Aan toepassingsmenu toevoegen).&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Copy Command</source>
@@ -8837,6 +8905,14 @@ De tekst van de momentopname "%2" is nu de tekst van het document; hij kan weer 
     <message>
         <source>Export…</source>
         <translation>Exporteren…</translation>
+    </message>
+    <message>
+        <source>Use the Set of My Keyboard Layout…</source>
+        <translation>De set van mijn toetsenbordindeling gebruiken…</translation>
+    </message>
+    <message>
+        <source>Take the shortcuts that fit the keyboard layout in use now (a German keyboard gets keys that need no AltGr). Shortcuts you set yourself stay as they are.</source>
+        <translation>Neem de sneltoetsen die passen bij de toetsenbordindeling die nu in gebruik is (een Duits toetsenbord krijgt toetsen waarvoor geen AltGr nodig is). Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Shortcut in Use</source>
@@ -8902,6 +8978,30 @@ In plaats daarvan aan “%4” geven? “%2” heeft dan geen sneltoets meer.</t
         <source>shortcuts</source>
         <translation>sneltoetsen</translation>
     </message>
+    <message>
+        <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
+        <translation>Het systeem geeft niet door welke toetsenbordindeling in gebruik is, dus het programma kan geen set kiezen. Je kunt hieronder nog steeds afzonderlijke sneltoetsen wijzigen.</translation>
+    </message>
+    <message>
+        <source>The shortcuts already come from the set for your keyboard layout (%1).</source>
+        <translation>De sneltoetsen komen al uit de set voor jouw toetsenbordindeling (%1).</translation>
+    </message>
+    <message>
+        <source> (you set another shortcut: it stays)</source>
+        <translation> (je hebt een andere sneltoets ingesteld: die blijft)</translation>
+    </message>
+    <message>
+        <source>Use the set of shortcuts for your keyboard layout (%1)? These standard shortcuts change at once:
+
+%2
+
+Shortcuts you set yourself stay as they are.</source>
+        <translation>De set sneltoetsen voor jouw toetsenbordindeling (%1) gebruiken? Deze standaardsneltoetsen veranderen meteen:
+
+%2
+
+Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
+    </message>
 </context>
 <context>
     <name>qb::KeywordsDialog</name>
@@ -8947,7 +9047,7 @@ In plaats daarvan aan “%4” geven? “%2” heeft dan geen sneltoets meer.</t
     </message>
     <message>
         <source>Delete &quot;%1&quot; and remove it from all documents?</source>
-        <translation>"%1" verwijderen en bij alle documenten weghalen?</translation>
+        <translation>&quot;%1&quot; verwijderen en bij alle documenten weghalen?</translation>
     </message>
 </context>
 <context>
@@ -9147,7 +9247,7 @@ In plaats daarvan aan “%4” geven? “%2” heeft dan geen sneltoets meer.</t
     </message>
     <message>
         <source>The program tries again by itself, and the status bar shows &quot;Not saved&quot; until a save works. Check that the disk is not full and the project folder is writable, or save the texts into another folder.</source>
-        <translation>Het programma probeert het zelf opnieuw en de statusbalk toont "Niet opgeslagen" totdat opslaan lukt. Controleer of de schijf niet vol is en de projectmap beschrijfbaar is, of sla de teksten op in een andere map.</translation>
+        <translation>Het programma probeert het zelf opnieuw en de statusbalk toont &quot;Niet opgeslagen&quot; totdat opslaan lukt. Controleer of de schijf niet vol is en de projectmap beschrijfbaar is, of sla de teksten op in een andere map.</translation>
     </message>
     <message>
         <source>Saving Failed</source>
@@ -9275,7 +9375,7 @@ In plaats daarvan aan “%4” geven? “%2” heeft dan geen sneltoets meer.</t
     </message>
     <message>
         <source>The template &quot;%1&quot; is now available under File ▸ New Project.</source>
-        <translation>Het sjabloon "%1" is nu beschikbaar onder Bestand ▸ Nieuw project.</translation>
+        <translation>Het sjabloon &quot;%1&quot; is nu beschikbaar onder Bestand ▸ Nieuw project.</translation>
     </message>
     <message>
         <source>Back Up &amp;Now</source>
@@ -9375,7 +9475,7 @@ In plaats daarvan aan “%4” geven? “%2” heeft dan geen sneltoets meer.</t
     </message>
     <message>
         <source>&amp;Manage Themes…</source>
-        <translation>Thema's &amp;beheren…</translation>
+        <translation>Thema&apos;s &amp;beheren…</translation>
     </message>
     <message>
         <source>&amp;Colors and Fonts…</source>
@@ -9563,7 +9663,7 @@ In plaats daarvan aan “%4” geven? “%2” heeft dan geen sneltoets meer.</t
     </message>
     <message>
         <source>Show the text on pages</source>
-        <translation>De tekst op pagina's tonen</translation>
+        <translation>De tekst op pagina&apos;s tonen</translation>
     </message>
     <message>
         <source>Page &amp;Size and Margins…</source>
@@ -10048,7 +10148,7 @@ In plaats daarvan aan “%4” geven? “%2” heeft dan geen sneltoets meer.</t
     </message>
     <message>
         <source>&quot;%1&quot; could not be started. Check the program under File &gt; Options &gt; General &gt; Citations.</source>
-        <translation>"%1" kon niet worden gestart. Controleer het programma onder Bestand &gt; Opties &gt; Algemeen &gt; Citaten.</translation>
+        <translation>&quot;%1&quot; kon niet worden gestart. Controleer het programma onder Bestand &gt; Opties &gt; Algemeen &gt; Citaten.</translation>
     </message>
     <message>
         <source>Current &amp;Time</source>
@@ -10308,11 +10408,11 @@ In plaats daarvan aan “%4” geven? “%2” heeft dan geen sneltoets meer.</t
     </message>
     <message>
         <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;A writing studio for long texts: binder, corkboard, outliner, combined text, snapshots, mind maps, objects and compile.&lt;/p&gt;&lt;p&gt;Built with Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Main Developer: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;License&lt;/b&gt;&lt;br&gt;%1 is free software under the Apache License 2.0: anyone may use, copy, change and pass it on, with or without fee, keeping the license and the NOTICE file, which names the project and its source. Without warranty.&lt;/p&gt;&lt;p&gt;The program uses parts of other projects, each under its own license; &lt;b&gt;Third-Party Licenses…&lt;/b&gt; below (also in the Help menu) lists them with their full texts:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, The Qt Company&apos;s own build for Windows, under the GNU LGPL version 3. Its libraries are the separate Qt6*.dll files and plugin folders beside the program; each can be replaced by another build of the same version.&lt;/li&gt;&lt;li&gt;Hunspell (spelling, used under the Mozilla Public License 1.1) and zlib, built into the program.&lt;/li&gt;&lt;li&gt;The spelling dictionaries for English and German from LibreOffice, unchanged: the German ones under the GNU GPL version 2 or 3, British English under the GNU LGPL, American English under the SCOWL license.&lt;/li&gt;&lt;li&gt;Microsoft&apos;s Visual C++ runtime files, passed on unchanged under Microsoft&apos;s terms for redistributable code.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;The add-ons for audio and video bring Qt Multimedia (GNU LGPL version 3). The add-on &quot;Extra Video and Audio Formats&quot; also brings the FFmpeg libraries as built by The Qt Company for Qt Multimedia (avcodec, avformat, avutil, swresample, swscale), licensed under the GNU LGPL 2.1 or later and replaceable as separate DLL files; its notes name the version and how it was built. Whether a patent license is needed to play some of its formats depends on the country.&lt;/p&gt;&lt;p&gt;The source code of these parts, as used, is in the release &quot;Third-party source code&quot; of %4.&lt;/p&gt;&lt;p&gt;Scrivener and Scapple are products of Literature &amp;amp; Latte. %1 is an independent program, not made by or connected with Literature &amp;amp; Latte; it reads and writes their file formats so that your projects can move between the programs.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Een schrijfstudio voor lange teksten: Binder, prikbord, overzicht, gecombineerde tekst, momentopnamen, mindmaps, objecten en samenstellen.&lt;/p&gt;&lt;p&gt;Gebouwd met Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Hoofdontwikkelaar: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Licentie&lt;/b&gt;&lt;br&gt;%1 is vrije software onder de Apache License 2.0: iedereen mag het gebruiken, kopiëren, wijzigen en doorgeven, met of zonder vergoeding, met behoud van de licentie en het NOTICE-bestand, dat het project en de bron noemt. Zonder garantie.&lt;/p&gt;&lt;p&gt;Het programma gebruikt onderdelen van andere projecten, elk onder een eigen licentie; &lt;b&gt;Licenties van derden…&lt;/b&gt; hieronder (ook in het menu Help) toont ze met hun volledige teksten:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, de eigen build van The Qt Company voor Windows, onder de GNU LGPL versie 3. De bibliotheken zijn de losse Qt6*.dll-bestanden en pluginmappen naast het programma; elk kan worden vervangen door een andere build van dezelfde versie.&lt;/li&gt;&lt;li&gt;Hunspell (spelling, gebruikt onder de Mozilla Public License 1.1) en zlib, ingebouwd in het programma.&lt;/li&gt;&lt;li&gt;De spellingwoordenboeken voor Engels en Duits van LibreOffice, ongewijzigd: de Duitse onder de GNU GPL versie 2 of 3, Brits Engels onder de GNU LGPL, Amerikaans Engels onder de SCOWL-licentie.&lt;/li&gt;&lt;li&gt;De runtimebestanden van Microsoft Visual C++, ongewijzigd doorgegeven onder de voorwaarden van Microsoft voor herdistribueerbare code.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;De add-ons voor audio en video brengen Qt Multimedia mee (GNU LGPL versie 3). De add-on "Extra Video and Audio Formats" brengt ook de FFmpeg-bibliotheken mee zoals gebouwd door The Qt Company voor Qt Multimedia (avcodec, avformat, avutil, swresample, swscale), onder de GNU LGPL 2.1 of later en vervangbaar als losse dll-bestanden; de notities ervan noemen de versie en hoe ze is gebouwd. Of voor sommige van de indelingen een patentlicentie nodig is om ze af te spelen, hangt af van het land.&lt;/p&gt;&lt;p&gt;De broncode van deze onderdelen, zoals gebruikt, staat in de release "Third-party source code" van %4.&lt;/p&gt;&lt;p&gt;Scrivener en Scapple zijn producten van Literature &amp;amp; Latte. %1 is een onafhankelijk programma, niet gemaakt door of verbonden met Literature &amp;amp; Latte; het leest en schrijft hun bestandsindelingen zodat je projecten tussen de programma's kunnen verhuizen.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Een schrijfstudio voor lange teksten: Binder, prikbord, overzicht, gecombineerde tekst, momentopnamen, mindmaps, objecten en samenstellen.&lt;/p&gt;&lt;p&gt;Gebouwd met Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Hoofdontwikkelaar: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Licentie&lt;/b&gt;&lt;br&gt;%1 is vrije software onder de Apache License 2.0: iedereen mag het gebruiken, kopiëren, wijzigen en doorgeven, met of zonder vergoeding, met behoud van de licentie en het NOTICE-bestand, dat het project en de bron noemt. Zonder garantie.&lt;/p&gt;&lt;p&gt;Het programma gebruikt onderdelen van andere projecten, elk onder een eigen licentie; &lt;b&gt;Licenties van derden…&lt;/b&gt; hieronder (ook in het menu Help) toont ze met hun volledige teksten:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, de eigen build van The Qt Company voor Windows, onder de GNU LGPL versie 3. De bibliotheken zijn de losse Qt6*.dll-bestanden en pluginmappen naast het programma; elk kan worden vervangen door een andere build van dezelfde versie.&lt;/li&gt;&lt;li&gt;Hunspell (spelling, gebruikt onder de Mozilla Public License 1.1) en zlib, ingebouwd in het programma.&lt;/li&gt;&lt;li&gt;De spellingwoordenboeken voor Engels en Duits van LibreOffice, ongewijzigd: de Duitse onder de GNU GPL versie 2 of 3, Brits Engels onder de GNU LGPL, Amerikaans Engels onder de SCOWL-licentie.&lt;/li&gt;&lt;li&gt;De runtimebestanden van Microsoft Visual C++, ongewijzigd doorgegeven onder de voorwaarden van Microsoft voor herdistribueerbare code.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;De add-ons voor audio en video brengen Qt Multimedia mee (GNU LGPL versie 3). De add-on &quot;Extra Video and Audio Formats&quot; brengt ook de FFmpeg-bibliotheken mee zoals gebouwd door The Qt Company voor Qt Multimedia (avcodec, avformat, avutil, swresample, swscale), onder de GNU LGPL 2.1 of later en vervangbaar als losse dll-bestanden; de notities ervan noemen de versie en hoe ze is gebouwd. Of voor sommige van de indelingen een patentlicentie nodig is om ze af te spelen, hangt af van het land.&lt;/p&gt;&lt;p&gt;De broncode van deze onderdelen, zoals gebruikt, staat in de release &quot;Third-party source code&quot; van %4.&lt;/p&gt;&lt;p&gt;Scrivener en Scapple zijn producten van Literature &amp;amp; Latte. %1 is een onafhankelijk programma, niet gemaakt door of verbonden met Literature &amp;amp; Latte; het leest en schrijft hun bestandsindelingen zodat je projecten tussen de programma&apos;s kunnen verhuizen.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;A writing studio for long texts: binder, corkboard, outliner, combined text, snapshots, mind maps, objects and compile.&lt;/p&gt;&lt;p&gt;Built with Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Main Developer: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;License&lt;/b&gt;&lt;br&gt;%1 is free software under the Apache License 2.0: anyone may use, copy, change and pass it on, with or without fee, keeping the license and the NOTICE file, which names the project and its source. Without warranty.&lt;/p&gt;&lt;p&gt;The program uses parts of other projects (Qt, Hunspell, ICU, the Breeze icons and more), each under its own license. &lt;b&gt;Third-Party Licenses…&lt;/b&gt; below (also in the Help menu) lists them with their full texts.&lt;/p&gt;&lt;p&gt;The add-ons for audio and video use code of FFmpeg, licensed under the GNU LGPL 2.1 or later; its source code, as used, is in the release &quot;Third-party source code&quot; of %4.&lt;/p&gt;&lt;p&gt;Scrivener and Scapple are products of Literature &amp;amp; Latte. %1 is an independent program, not made by or connected with Literature &amp;amp; Latte; it reads and writes their file formats so that your projects can move between the programs.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Een schrijfstudio voor lange teksten: Binder, prikbord, overzicht, gecombineerde tekst, momentopnamen, mindmaps, objecten en samenstellen.&lt;/p&gt;&lt;p&gt;Gebouwd met Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Hoofdontwikkelaar: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Licentie&lt;/b&gt;&lt;br&gt;%1 is vrije software onder de Apache License 2.0: iedereen mag het gebruiken, kopiëren, wijzigen en doorgeven, met of zonder vergoeding, met behoud van de licentie en het NOTICE-bestand, dat het project en de bron noemt. Zonder garantie.&lt;/p&gt;&lt;p&gt;Het programma gebruikt onderdelen van andere projecten (Qt, Hunspell, ICU, de Breeze-pictogrammen en meer), elk onder een eigen licentie. &lt;b&gt;Licenties van derden…&lt;/b&gt; hieronder (ook in het menu Help) toont ze met hun volledige teksten.&lt;/p&gt;&lt;p&gt;De add-ons voor audio en video gebruiken code van FFmpeg, onder de GNU LGPL 2.1 of later; de broncode ervan, zoals gebruikt, staat in de release "Third-party source code" van %4.&lt;/p&gt;&lt;p&gt;Scrivener en Scapple zijn producten van Literature &amp;amp; Latte. %1 is een onafhankelijk programma, niet gemaakt door of verbonden met Literature &amp;amp; Latte; het leest en schrijft hun bestandsindelingen zodat je projecten tussen de programma's kunnen verhuizen.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Een schrijfstudio voor lange teksten: Binder, prikbord, overzicht, gecombineerde tekst, momentopnamen, mindmaps, objecten en samenstellen.&lt;/p&gt;&lt;p&gt;Gebouwd met Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Hoofdontwikkelaar: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Licentie&lt;/b&gt;&lt;br&gt;%1 is vrije software onder de Apache License 2.0: iedereen mag het gebruiken, kopiëren, wijzigen en doorgeven, met of zonder vergoeding, met behoud van de licentie en het NOTICE-bestand, dat het project en de bron noemt. Zonder garantie.&lt;/p&gt;&lt;p&gt;Het programma gebruikt onderdelen van andere projecten (Qt, Hunspell, ICU, de Breeze-pictogrammen en meer), elk onder een eigen licentie. &lt;b&gt;Licenties van derden…&lt;/b&gt; hieronder (ook in het menu Help) toont ze met hun volledige teksten.&lt;/p&gt;&lt;p&gt;De add-ons voor audio en video gebruiken code van FFmpeg, onder de GNU LGPL 2.1 of later; de broncode ervan, zoals gebruikt, staat in de release &quot;Third-party source code&quot; van %4.&lt;/p&gt;&lt;p&gt;Scrivener en Scapple zijn producten van Literature &amp;amp; Latte. %1 is een onafhankelijk programma, niet gemaakt door of verbonden met Literature &amp;amp; Latte; het leest en schrijft hun bestandsindelingen zodat je projecten tussen de programma&apos;s kunnen verhuizen.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&amp;Combined Text</source>
@@ -10468,7 +10568,7 @@ Er is een kopie ervan van %2, de laatste keer dat het project werd geopend. Die 
 %4
 
 It is shown empty and cannot be edited, so that the file is not overwritten. Check the file&apos;s permissions or the drive it is on, then close and reopen the project.</source>
-        <translation>De %1 van "%2" kan niet worden gelezen (%3):
+        <translation>De %1 van &quot;%2&quot; kan niet worden gelezen (%3):
 %4
 
 Hij wordt leeg getoond en kan niet worden bewerkt, zodat het bestand niet wordt overschreven. Controleer de rechten van het bestand of de schijf waarop het staat, sluit het project dan en open het opnieuw.</translation>
@@ -10490,21 +10590,21 @@ Hij wordt leeg getoond en kan niet worden bewerkt, zodat het bestand niet wordt 
 %4
 
 It is shown as well as it could be read, and it cannot be edited, so that the file is not changed. To keep working on the text, select it, copy it, and paste it into a new document; or repair the file (save it in UTF-8 in the program that wrote it), then close and reopen the project.</source>
-        <translation>De %1 van "%2" kan niet worden gelezen zoals het hoort: %3.
+        <translation>De %1 van &quot;%2&quot; kan niet worden gelezen zoals het hoort: %3.
 %4
 
 Hij wordt zo goed mogelijk getoond zoals hij kon worden gelezen en kan niet worden bewerkt, zodat het bestand niet wordt gewijzigd. Om aan de tekst te blijven werken, selecteer je hem, kopieer je hem en plak je hem in een nieuw document; of herstel het bestand (sla het op in UTF-8 in het programma dat het schreef), sluit het project dan en open het opnieuw.</translation>
     </message>
     <message>
         <source>The %1 of &quot;%2&quot; was changed, but it cannot be saved: its file cannot be read, and such a file is never written over. The change could not be kept as a copy either (is the disk full?); it exists only in this window. Copy the text into a new document to keep it.</source>
-        <translation>De %1 van "%2" is gewijzigd, maar kan niet worden opgeslagen: het bestand kan niet worden gelezen en zo'n bestand wordt nooit overschreven. De wijziging kon ook niet als kopie worden bewaard (is de schijf vol?); ze bestaat alleen in dit venster. Kopieer de tekst naar een nieuw document om hem te bewaren.</translation>
+        <translation>De %1 van &quot;%2&quot; is gewijzigd, maar kan niet worden opgeslagen: het bestand kan niet worden gelezen en zo&apos;n bestand wordt nooit overschreven. De wijziging kon ook niet als kopie worden bewaard (is de schijf vol?); ze bestaat alleen in dit venster. Kopieer de tekst naar een nieuw document om hem te bewaren.</translation>
     </message>
     <message>
         <source>The %1 of &quot;%2&quot; was changed, but it is not saved in its place: its file cannot be read, and such a file is never written over. The changed text was kept as a copy:
 %3
 
 Open it in a word processor, or repair the document (Roll Back to a snapshot in the inspector) and take the change over.</source>
-        <translation>De %1 van "%2" is gewijzigd, maar niet op zijn plek opgeslagen: het bestand kan niet worden gelezen en zo'n bestand wordt nooit overschreven. De gewijzigde tekst is als kopie bewaard:
+        <translation>De %1 van &quot;%2&quot; is gewijzigd, maar niet op zijn plek opgeslagen: het bestand kan niet worden gelezen en zo&apos;n bestand wordt nooit overschreven. De gewijzigde tekst is als kopie bewaard:
 %3
 
 Open hem in een tekstverwerker, of herstel het document (Terugzetten naar een momentopname in de Inspector) en neem de wijziging over.</translation>
@@ -10516,8 +10616,8 @@ Open hem in een tekstverwerker, of herstel het document (Terugzetten naar een mo
     <message numerus="yes">
         <source>%n control character(s) in the %1 of &quot;%2&quot; cannot be stored and were left out.</source>
         <translation>
-            <numerusform>%n stuurteken in de %1 van "%2" kan niet worden opgeslagen en is weggelaten.</numerusform>
-            <numerusform>%n stuurtekens in de %1 van "%2" kunnen niet worden opgeslagen en zijn weggelaten.</numerusform>
+            <numerusform>%n stuurteken in de %1 van &quot;%2&quot; kan niet worden opgeslagen en is weggelaten.</numerusform>
+            <numerusform>%n stuurtekens in de %1 van &quot;%2&quot; kunnen niet worden opgeslagen en zijn weggelaten.</numerusform>
         </translation>
     </message>
     <message>
@@ -10625,7 +10725,7 @@ Houd het open en probeer het opnieuw nadat de oorzaak is verholpen, sla de tekst
     </message>
     <message>
         <source>The Mind Map tab of the inspector now stays on &quot;%1&quot;.</source>
-        <translation>Het tabblad Mindmap van de Inspector blijft nu op "%1" staan.</translation>
+        <translation>Het tabblad Mindmap van de Inspector blijft nu op &quot;%1&quot; staan.</translation>
     </message>
     <message>
         <source>The Mind Map tab of the inspector follows the selected item again.</source>
@@ -10643,7 +10743,7 @@ Houd het open en probeer het opnieuw nadat de oorzaak is verholpen, sla de tekst
     </message>
     <message>
         <source>When the program was ended (by logging out, shutting down or a command), the project &quot;%1&quot; could not be saved: %2</source>
-        <translation>Toen het programma werd beëindigd (door uitloggen, afsluiten of een opdracht), kon het project "%1" niet worden opgeslagen: %2</translation>
+        <translation>Toen het programma werd beëindigd (door uitloggen, afsluiten of een opdracht), kon het project &quot;%1&quot; niet worden opgeslagen: %2</translation>
     </message>
     <message>
         <source>The texts and notes that were not saved are in (%1 of %1 files, with the project file as it was in memory):
@@ -10695,7 +10795,7 @@ Houd het open en probeer het opnieuw nadat de oorzaak is verholpen, sla de tekst
     </message>
     <message>
         <source>&quot;%1&quot; cannot be split: %2, and such a file is never written over. Repair it first (Roll Back to a snapshot in the inspector, or repair the file in the program that wrote it).</source>
-        <translation>"%1" kan niet worden gesplitst: %2, en zo'n bestand wordt nooit overschreven. Herstel het eerst (Terugzetten naar een momentopname in de Inspector, of herstel het bestand in het programma dat het schreef).</translation>
+        <translation>&quot;%1&quot; kan niet worden gesplitst: %2, en zo&apos;n bestand wordt nooit overschreven. Herstel het eerst (Terugzetten naar een momentopname in de Inspector, of herstel het bestand in het programma dat het schreef).</translation>
     </message>
     <message>
         <source>A document cannot be split inside a table or a picture&apos;s caption. Put the cursor before or after the table or the picture, then split again.</source>
@@ -10703,11 +10803,11 @@ Houd het open en probeer het opnieuw nadat de oorzaak is verholpen, sla de tekst
     </message>
     <message>
         <source>&quot;%1&quot;: %2</source>
-        <translation>"%1": %2</translation>
+        <translation>&quot;%1&quot;: %2</translation>
     </message>
     <message>
         <source>&quot;%1&quot; (notes): %2</source>
-        <translation>"%1" (notities): %2</translation>
+        <translation>&quot;%1&quot; (notities): %2</translation>
     </message>
     <message>
         <source>The documents were not merged. These cannot be changed, and their files are never written over:
@@ -10725,7 +10825,7 @@ Herstel ze eerst (Terugzetten naar een momentopname in de Inspector, of herstel 
     </message>
     <message>
         <source>Merge %1 documents into &quot;%2&quot;? The others are moved to the Trash.</source>
-        <translation>%1 documenten samenvoegen in "%2"? De andere gaan naar de Prullenbak.</translation>
+        <translation>%1 documenten samenvoegen in &quot;%2&quot;? De andere gaan naar de Prullenbak.</translation>
     </message>
     <message>
         <source>Merge</source>
@@ -10851,7 +10951,7 @@ Het best op een andere schijf (een USB-stick, een tweede schijf, een map die je 
     </message>
     <message>
         <source>The backups of &quot;%1&quot;, newest first. The one you choose is unpacked into a new folder beside the project and opened from there; the project you have open now is not changed.</source>
-        <translation>De back-ups van "%1", nieuwste eerst. Degene die je kiest, wordt uitgepakt in een nieuwe map naast het project en vandaar geopend; het project dat je nu open hebt, wordt niet gewijzigd.</translation>
+        <translation>De back-ups van &quot;%1&quot;, nieuwste eerst. Degene die je kiest, wordt uitgepakt in een nieuwe map naast het project en vandaar geopend; het project dat je nu open hebt, wordt niet gewijzigd.</translation>
     </message>
     <message>
         <source>Made</source>
@@ -10875,7 +10975,7 @@ Het best op een andere schijf (een USB-stick, een tweede schijf, een map die je 
     </message>
     <message>
         <source> (in the folder &quot;%1&quot;)</source>
-        <translation> (in de map "%1")</translation>
+        <translation> (in de map &quot;%1&quot;)</translation>
     </message>
     <message>
         <source>, waiting (not yet in the backup folder)</source>
@@ -10956,11 +11056,11 @@ De versies 0.70.0 tot 0.90.4 bewaarden ze daar. In de back-upmap zelf zetten, on
     </message>
     <message>
         <source>The title of the restored project could not be marked &quot;(restored ...)&quot;, so it has the title of the project it was made from: %1</source>
-        <translation>De titel van het herstelde project kon niet als "(hersteld ...)" worden gemarkeerd, dus heeft het de titel van het project waarvan het is gemaakt: %1</translation>
+        <translation>De titel van het herstelde project kon niet als &quot;(hersteld ...)&quot; worden gemarkeerd, dus heeft het de titel van het project waarvan het is gemaakt: %1</translation>
     </message>
     <message>
         <source>The restored project could not be opened to mark its title &quot;(restored ...)&quot;: %1</source>
-        <translation>Het herstelde project kon niet worden geopend om de titel als "(hersteld ...)" te markeren: %1</translation>
+        <translation>Het herstelde project kon niet worden geopend om de titel als &quot;(hersteld ...)&quot; te markeren: %1</translation>
     </message>
     <message>
         <source>The backup was restored INCOMPLETELY into:
@@ -11020,7 +11120,7 @@ De versies 0.70.0 tot 0.90.4 bewaarden ze daar. In de back-upmap zelf zetten, on
     </message>
     <message>
         <source>Standard Markdown separates paragraphs with empty lines; use it for other programs. %1 Markdown writes one paragraph per line, like the documents inside a project.</source>
-        <translation>Standaard-Markdown scheidt alinea's met lege regels; gebruik het voor andere programma's. %1-Markdown schrijft één alinea per regel, zoals de documenten in een project.</translation>
+        <translation>Standaard-Markdown scheidt alinea&apos;s met lege regels; gebruik het voor andere programma&apos;s. %1-Markdown schrijft één alinea per regel, zoals de documenten in een project.</translation>
     </message>
     <message>
         <source>Standard Markdown</source>
@@ -11058,7 +11158,7 @@ De versies 0.70.0 tot 0.90.4 bewaarden ze daar. In de back-upmap zelf zetten, on
     </message>
     <message>
         <source>pages</source>
-        <translation>pagina's</translation>
+        <translation>pagina&apos;s</translation>
     </message>
     <message>
         <source>Print Preview – %1</source>
@@ -11097,8 +11197,8 @@ You can do this later with Help &gt; Add to Application Menu.</source>
 Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation>
     </message>
     <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>De AppImage naar %1 verplaatsen (een verplaatst bestand kan niet vanuit het menu worden gestart)</translation>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>De AppImage naar %1 verplaatsen, een vaste plek waar het menu-item hem vanaf start</translation>
     </message>
     <message>
         <source>The menu entry could not be made.
@@ -11334,7 +11434,11 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>&amp;Themes</source>
-        <translation>&amp;Thema's</translation>
+        <translation>&amp;Thema&apos;s</translation>
+    </message>
+    <message>
+        <source>&amp;Profiles</source>
+        <translation>&amp;Profielen</translation>
     </message>
     <message>
         <source>&amp;Text Editing</source>
@@ -11802,7 +11906,7 @@ The fonts can be used at once. They stay in the program&apos;s folder: other pro
         <translation>Geïnstalleerd voor Quillbinder (in %1):
 %2
 
-De lettertypen kunnen meteen worden gebruikt. Ze blijven in de map van het programma: andere programma's zien ze niet (om ze ook elders te gebruiken, installeer je ze met Windows: klik met de rechtermuisknop op het lettertypebestand &gt; Installeren).</translation>
+De lettertypen kunnen meteen worden gebruikt. Ze blijven in de map van het programma: andere programma&apos;s zien ze niet (om ze ook elders te gebruiken, installeer je ze met Windows: klik met de rechtermuisknop op het lettertypebestand &gt; Installeren).</translation>
     </message>
     <message>
         <source>Installed for you (in %1):
@@ -11812,7 +11916,7 @@ The fonts can be used at once; other programs see them after their next start.</
         <translation>Voor jou geïnstalleerd (in %1):
 %2
 
-De lettertypen kunnen meteen worden gebruikt; andere programma's zien ze na hun volgende start.</translation>
+De lettertypen kunnen meteen worden gebruikt; andere programma&apos;s zien ze na hun volgende start.</translation>
     </message>
     <message>
         <source>The files are in %1; no new font families came with them (they were installed already).</source>
@@ -11880,7 +11984,7 @@ De lettertypen kunnen meteen worden gebruikt; andere programma's zien ze na hun 
         <source>Only %1 % of the text of &quot;%2&quot; is in what Compile makes of this project; 65 % are needed to call them related.
 
 The file may belong to another project, or Compile leaves out what the file has (documents with Include in Compile switched off, another compile group).</source>
-        <translation>Slechts %1 % van de tekst van "%2" staat in wat Samenstellen van dit project maakt; 65 % is nodig om ze verwant te noemen.
+        <translation>Slechts %1 % van de tekst van &quot;%2&quot; staat in wat Samenstellen van dit project maakt; 65 % is nodig om ze verwant te noemen.
 
 Het bestand hoort mogelijk bij een ander project, of Samenstellen laat weg wat het bestand heeft (documenten waarvoor Opnemen bij samenstellen is uitgezet, een andere samenstelgroep).</translation>
     </message>
@@ -11966,9 +12070,9 @@ Het bestand hoort mogelijk bij een ander project, of Samenstellen laat weg wat h
 Work in Scrivener format: %2 saves your changes into the .scriv, so you can go on in Scrivener as well (not both programs at the same time).
 
 Convert: %2 makes a project of its own from it; the Scrivener project is not changed.</source>
-        <translation>"%1" is een Scrivener-project.
+        <translation>&quot;%1&quot; is een Scrivener-project.
 
-Werken in Scrivener-formaat: %2 slaat je wijzigingen op in de .scriv, zodat je ook in Scrivener verder kunt (niet beide programma's tegelijk).
+Werken in Scrivener-formaat: %2 slaat je wijzigingen op in de .scriv, zodat je ook in Scrivener verder kunt (niet beide programma&apos;s tegelijk).
 
 Omzetten: %2 maakt er een eigen project van; het Scrivener-project wordt niet gewijzigd.</translation>
     </message>
@@ -11986,7 +12090,7 @@ Omzetten: %2 maakt er een eigen project van; het Scrivener-project wordt niet ge
 If both programs work on it at the same time, changes are lost. Open it anyway?</source>
         <translation>Scrivener heeft dit project open (%1), of is niet goed afgesloten.
 
-Als beide programma's er tegelijk aan werken, gaan wijzigingen verloren. Toch openen?</translation>
+Als beide programma&apos;s er tegelijk aan werken, gaan wijzigingen verloren. Toch openen?</translation>
     </message>
     <message>
         <source>The project could not be opened.</source>
@@ -12133,7 +12237,7 @@ Het project waaraan je werkt, blijft waar het is.</translation>
     </message>
     <message>
         <source>a counter of its own called &quot;name&quot; (works with every number above: &lt;$W:chapter&gt;)</source>
-        <translation>een eigen teller genaamd "naam" (werkt met elk nummer hierboven: &lt;$W:chapter&gt;)</translation>
+        <translation>een eigen teller genaamd &quot;naam&quot; (werkt met elk nummer hierboven: &lt;$W:chapter&gt;)</translation>
     </message>
     <message>
         <source>the title of the document (in headers and footers of printouts: what is printed)</source>
@@ -12197,7 +12301,7 @@ Het project waaraan je werkt, blijft waar het is.</translation>
     </message>
     <message>
         <source>the number of pages (headers and footers of PDF files and printouts)</source>
-        <translation>het aantal pagina's (kopteksten en voetteksten van pdf-bestanden en afdrukken)</translation>
+        <translation>het aantal pagina&apos;s (kopteksten en voetteksten van pdf-bestanden en afdrukken)</translation>
     </message>
     <message>
         <source>Placeholder</source>
@@ -12217,7 +12321,7 @@ Het project waaraan je werkt, blijft waar het is.</translation>
     </message>
     <message>
         <source>Web pages are imported by the add-on “Web Page Import”, which is not installed or is switched off.</source>
-        <translation>Webpagina's worden geïmporteerd door de add-on “Web Page Import”, die niet is geïnstalleerd of is uitgeschakeld.</translation>
+        <translation>Webpagina&apos;s worden geïmporteerd door de add-on “Web Page Import”, die niet is geïnstalleerd of is uitgeschakeld.</translation>
     </message>
     <message>
         <source>Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager switches add-ons on and off.</source>
@@ -12297,7 +12401,7 @@ Het project waaraan je werkt, blijft waar het is.</translation>
     </message>
     <message>
         <source>Audio and video need the add-on &quot;Media Playback&quot;</source>
-        <translation>Audio en video hebben de add-on "Media Playback" nodig</translation>
+        <translation>Audio en video hebben de add-on &quot;Media Playback&quot; nodig</translation>
     </message>
     <message>
         <source>Skip &amp;Back %1 Seconds</source>
@@ -12413,7 +12517,7 @@ Het project waaraan je werkt, blijft waar het is.</translation>
         <source>Use the script format &quot;%1&quot; in this project?
 
 The scripts of the project get the new layout. Elements keep their text; an element the new format does not have becomes the element of the same kind.</source>
-        <translation>De scriptopmaak "%1" in dit project gebruiken?
+        <translation>De scriptopmaak &quot;%1&quot; in dit project gebruiken?
 
 De scripts van het project krijgen de nieuwe lay-out. Elementen behouden hun tekst; een element dat de nieuwe opmaak niet heeft, wordt het element van dezelfde soort.</translation>
     </message>
@@ -12423,7 +12527,7 @@ De scripts van het project krijgen de nieuwe lay-out. Elementen behouden hun tek
 No element of the same kind exists for: %1. Their paragraphs become general text that keeps its look.</source>
         <translation>
 
-Er bestaat geen element van dezelfde soort voor: %1. Hun alinea's worden algemene tekst die zijn uiterlijk behoudt.</translation>
+Er bestaat geen element van dezelfde soort voor: %1. Hun alinea&apos;s worden algemene tekst die zijn uiterlijk behoudt.</translation>
     </message>
     <message>
         <source>Continued from the end.</source>
@@ -12439,7 +12543,7 @@ Er bestaat geen element van dezelfde soort voor: %1. Hun alinea's worden algemen
     </message>
     <message>
         <source>In &quot;%1&quot;.</source>
-        <translation>In "%1".</translation>
+        <translation>In &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>No other document has it; continued from the %1.</source>
@@ -12576,7 +12680,7 @@ Er bestaat geen element van dezelfde soort voor: %1. Hun alinea's worden algemen
     </message>
     <message>
         <source>Not changed, because their file cannot be read (such a file is never written over): %1</source>
-        <translation>Niet gewijzigd, omdat hun bestand niet kan worden gelezen (zo'n bestand wordt nooit overschreven): %1</translation>
+        <translation>Niet gewijzigd, omdat hun bestand niet kan worden gelezen (zo&apos;n bestand wordt nooit overschreven): %1</translation>
     </message>
     <message>
         <source>New Style From Selection</source>
@@ -12675,7 +12779,7 @@ Alignment: %6</source>
         <translation>Lettertype: %1, %2 pt
 Regelafstand: %3
 Inspringing eerste regel: %4
-Ruimte na alinea's: %5 pt
+Ruimte na alinea&apos;s: %5 pt
 Uitlijning: %6</translation>
     </message>
     <message>
@@ -12696,7 +12800,7 @@ Uitlijning: %6</translation>
 %1
 
 All text without a style in the whole project takes it over, also text with a font, size or spacing of its own. Styles keep what they set themselves; the rest of their look follows the main text style. Project &gt; Project Settings &gt; Formatting shows the same settings.</source>
-        <translation>De opmaak bij de cursor de hoofdtekststijl van het project maken ("Geen stijl")?
+        <translation>De opmaak bij de cursor de hoofdtekststijl van het project maken (&quot;Geen stijl&quot;)?
 
 %1
 
@@ -12849,14 +12953,6 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
         <translation>Andere versies worden nog steeds bewaard; alleen deze melding blijft weg totdat je het programma afsluit.</translation>
     </message>
     <message>
-        <source>&amp;Translate and Proofread…</source>
-        <translation>&amp;Vertalen en proeflezen…</translation>
-    </message>
-    <message>
-        <source>Proofread English text or translate German text into English (the add-on is not installed)</source>
-        <translation>Engelse tekst proeflezen of Duitse tekst naar het Engels vertalen (de add-on is niet geïnstalleerd)</translation>
-    </message>
-    <message>
         <source>Speech &amp;Transcription…</source>
         <translation>Spraak&amp;transcriptie…</translation>
     </message>
@@ -12867,10 +12963,6 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     <message>
         <source>Speech Transcription</source>
         <translation>Spraaktranscriptie</translation>
-    </message>
-    <message>
-        <source>Translation and Proofreading</source>
-        <translation>Vertalen en proeflezen</translation>
     </message>
     <message>
         <source>is not installed</source>
@@ -12897,8 +12989,20 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
         <translation>Hij zet spraak om in tekst. Installeer hem met Help &gt; Add-ons en updates &gt; Update of add-on installeren; Help &gt; Add-ons en updates &gt; Add-onbeheer toont de add-ons en schakelt ze in en uit.</translation>
     </message>
     <message>
-        <source>It proofreads English text and translates German text into English. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
-        <translation>Hij leest Engelse tekst proef en vertaalt Duitse tekst naar het Engels. Installeer hem met Help &gt; Add-ons en updates &gt; Update of add-on installeren; Help &gt; Add-ons en updates &gt; Add-onbeheer toont de add-ons en schakelt ze in en uit.</translation>
+        <source>&amp;Translation Helper…</source>
+        <translation>&amp;Vertaalhulp…</translation>
+    </message>
+    <message>
+        <source>Suggestions for translating between eleven languages and for English spelling (the add-on is not installed)</source>
+        <translation>Suggesties voor het vertalen tussen elf talen en voor Engelse spelling (de add-on is niet geïnstalleerd)</translation>
+    </message>
+    <message>
+        <source>Translation Helper</source>
+        <translation>Vertaalhulp</translation>
+    </message>
+    <message>
+        <source>It gives suggestions for translating between eleven languages and for English spelling and grammar. Its translations are not precise: check each one, which needs a working knowledge of both languages. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>Het geeft suggesties voor het vertalen tussen elf talen en voor Engelse spelling en grammatica. De vertalingen zijn niet nauwkeurig: controleer elke vertaling, wat een praktische kennis van beide talen vraagt. Installeer de add-on met Help &gt; Add-ons en updates &gt; Update of add-on installeren; Help &gt; Add-ons en updates &gt; Add-onbeheer toont de add-ons en schakelt ze in en uit.</translation>
     </message>
     <message>
         <source>Open Add-on Manager</source>
@@ -12995,6 +13099,62 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     <message>
         <source>and %1 earlier steps</source>
         <translation>en %1 eerdere stappen</translation>
+    </message>
+    <message>
+        <source>&amp;Manage Profiles…</source>
+        <translation>Profielen &amp;beheren…</translation>
+    </message>
+    <message>
+        <source>Use, save, rename, copy, delete, export and import profiles</source>
+        <translation>Profielen gebruiken, opslaan, hernoemen, kopiëren, verwijderen, exporteren en importeren</translation>
+    </message>
+    <message>
+        <source>&amp;Save Settings as New Profile…</source>
+        <translation>Instellingen &amp;opslaan als nieuw profiel…</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Instellingen opslaan als nieuw profiel</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Mijn profiel</translation>
+    </message>
+    <message>
+        <source>Keep the options, toolbars, window and theme as they are now in a new profile</source>
+        <translation>De opties, werkbalken, het venster en het thema zoals ze nu zijn bewaren in een nieuw profiel</translation>
+    </message>
+    <message>
+        <source>Profiles</source>
+        <translation>Profielen</translation>
+    </message>
+    <message>
+        <source>Labels</source>
+        <translation>Labels</translation>
+    </message>
+    <message>
+        <source>Profile:</source>
+        <translation>Profiel:</translation>
+    </message>
+    <message>
+        <source>The profile in use: %1. A click lists the profiles.</source>
+        <translation>Het profiel dat in gebruik is: %1. Een klik toont de lijst met profielen.</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Label</translation>
+    </message>
+    <message>
+        <source>No Label</source>
+        <translation>Geen label</translation>
+    </message>
+    <message>
+        <source>Switch Profile</source>
+        <translation>Van profiel wisselen</translation>
+    </message>
+    <message>
+        <source>The profile sets another language; it takes effect when the program is started again.</source>
+        <translation>Het profiel stelt een andere taal in; die gaat in als het programma opnieuw wordt gestart.</translation>
     </message>
 </context>
 <context>
@@ -13170,7 +13330,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Quillbinder web pages</source>
-        <translation>Quillbinder-webpagina's</translation>
+        <translation>Quillbinder-webpagina&apos;s</translation>
     </message>
     <message>
         <source>Cannot make the folder %1.</source>
@@ -13737,11 +13897,11 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Default for Dark Themes</source>
-        <translation>Standaard voor donkere thema's</translation>
+        <translation>Standaard voor donkere thema&apos;s</translation>
     </message>
     <message>
         <source>Default for Light Themes</source>
-        <translation>Standaard voor lichte thema's</translation>
+        <translation>Standaard voor lichte thema&apos;s</translation>
     </message>
     <message>
         <source>Background Color</source>
@@ -14711,7 +14871,7 @@ Hij wordt getoond voor zover hij kon worden gelezen en kan niet worden gewijzigd
     </message>
     <message>
         <source>The board&apos;s own background for %1 themes; crossed out: the default of File &gt; Options &gt; Extras &gt; Mind Map (a click shows the colors)</source>
-        <translation>De eigen achtergrond van het bord voor %1 thema's; doorgehaald: de standaard van Bestand &gt; Opties &gt; Extra's &gt; Mindmap (een klik toont de kleuren)</translation>
+        <translation>De eigen achtergrond van het bord voor %1 thema&apos;s; doorgehaald: de standaard van Bestand &gt; Opties &gt; Extra&apos;s &gt; Mindmap (een klik toont de kleuren)</translation>
     </message>
     <message>
         <source>dark</source>
@@ -14723,11 +14883,11 @@ Hij wordt getoond voor zover hij kon worden gelezen en kan niet worden gewijzigd
     </message>
     <message>
         <source>Background (dark themes):</source>
-        <translation>Achtergrond (donkere thema's):</translation>
+        <translation>Achtergrond (donkere thema&apos;s):</translation>
     </message>
     <message>
         <source>Background (light themes):</source>
-        <translation>Achtergrond (lichte thema's):</translation>
+        <translation>Achtergrond (lichte thema&apos;s):</translation>
     </message>
 </context>
 <context>
@@ -14885,7 +15045,7 @@ Hij wordt getoond voor zover hij kon worden gelezen en kan niet worden gewijzigd
     </message>
     <message>
         <source>This is the mind map of &quot;%1&quot;, not of the selected item. The pin button releases it.</source>
-        <translation>Dit is de mindmap van "%1", niet van het geselecteerde item. De pushpin-knop maakt hem los.</translation>
+        <translation>Dit is de mindmap van &quot;%1&quot;, niet van het geselecteerde item. De pushpin-knop maakt hem los.</translation>
     </message>
 </context>
 <context>
@@ -15316,7 +15476,7 @@ Hij wordt getoond voor zover hij kon worden gelezen en kan niet worden gewijzigd
     </message>
     <message>
         <source>Projects&apos; own settings are not used: File &gt; Options &gt; General, &quot;Which settings come first&quot;.</source>
-        <translation>De eigen instellingen van projecten worden niet gebruikt: Bestand &gt; Opties &gt; Algemeen, "Welke instellingen voorrang hebben".</translation>
+        <translation>De eigen instellingen van projecten worden niet gebruikt: Bestand &gt; Opties &gt; Algemeen, &quot;Welke instellingen voorrang hebben&quot;.</translation>
     </message>
     <message>
         <source>Changing this applies the changes made so far and shows the other settings.</source>
@@ -15372,7 +15532,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Extras</source>
-        <translation>Extra's</translation>
+        <translation>Extra&apos;s</translation>
     </message>
     <message>
         <source>Manage</source>
@@ -15388,7 +15548,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Choose &quot;All projects&quot; at the top to set the program&apos;s options back to the standard</source>
-        <translation>Kies bovenaan "Alle projecten" om de opties van het programma terug te zetten naar de standaard</translation>
+        <translation>Kies bovenaan &quot;Alle projecten&quot; om de opties van het programma terug te zetten naar de standaard</translation>
     </message>
     <message>
         <source>Add-ons and Plugins</source>
@@ -15396,7 +15556,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</source>
-        <translation>Wat je hier wijzigt, wordt bij dit project bewaard. De eigen instellingen ervan: &lt;a href="show"&gt;%1&lt;/a&gt;.</translation>
+        <translation>Wat je hier wijzigt, wordt bij dit project bewaard. De eigen instellingen ervan: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>setting</source>
@@ -15412,7 +15572,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>The open project has &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; of its own, which it keeps.</source>
-        <translation>Het geopende project heeft &lt;a href="show"&gt;%1&lt;/a&gt; van zichzelf, die het bewaart.</translation>
+        <translation>Het geopende project heeft &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; van zichzelf, die het bewaart.</translation>
     </message>
     <message>
         <source>Projects&apos; own settings are not used (General &gt; Which settings come first).</source>
@@ -15456,15 +15616,15 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Ticked, a project can keep settings of its own (choose &quot;This project&quot; at the top of this window); they apply while it is open. Unticked, the program&apos;s settings apply to every project, also its look; what projects keep stays in them for later.</source>
-        <translation>Aangevinkt kan een project eigen instellingen bewaren (kies bovenaan dit venster "Dit project"); ze gelden zolang het open is. Niet aangevinkt gelden de instellingen van het programma voor elk project, ook het uiterlijk; wat projecten bewaren, blijft er voor later in staan.</translation>
+        <translation>Aangevinkt kan een project eigen instellingen bewaren (kies bovenaan dit venster &quot;Dit project&quot;); ze gelden zolang het open is. Niet aangevinkt gelden de instellingen van het programma voor elk project, ook het uiterlijk; wat projecten bewaren, blijft er voor later in staan.</translation>
     </message>
     <message>
         <source>Language:</source>
         <translation>Taal:</translation>
     </message>
     <message>
-        <source>The language of menus, windows and messages; it changes at the next start of the program. The manual and the welcome project stay in English.</source>
-        <translation>De taal van menu's, vensters en berichten; ze verandert bij de volgende start van het programma. De handleiding en het welkomstproject blijven in het Engels.</translation>
+        <source>The language of menus, windows and messages, of the manual, the quick start guide and the welcome project; it changes at the next start of the program. A language marked as a machine translation has not been checked by a speaker yet. Spelling dictionaries for other languages are add-ons (Help &gt; Add-ons and Updates).</source>
+        <translation>De taal van menu's, vensters en meldingen, van de handleiding, de snelstartgids en het welkomstproject; die verandert bij de volgende start van het programma. Een taal die als machinevertaling is gemarkeerd, is nog niet door een moedertaalspreker gecontroleerd. Spellingwoordenboeken voor andere talen zijn add-ons (Help &gt; Add-ons en updates).</translation>
     </message>
     <message>
         <source>Group the digits of large numbers (%1)</source>
@@ -15504,7 +15664,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>A project in a synced folder (Dropbox, Nextcloud, Syncthing ...) holds a lock while it is open here, and the copies of versions changed elsewhere are named after the computer. Empty: the computer&apos;s own name and your user name on it. A name of your own (&quot;Laptop&quot;) is written instead, and the user name is left out.</source>
-        <translation>Een project in een gesynchroniseerde map (Dropbox, Nextcloud, Syncthing ...) bevat een vergrendeling zolang het hier open is, en de kopieën van elders gewijzigde versies worden naar de computer genoemd. Leeg: de eigen naam van de computer en je gebruikersnaam erop. Een eigen naam ("Laptop") wordt in plaats daarvan geschreven en de gebruikersnaam blijft weg.</translation>
+        <translation>Een project in een gesynchroniseerde map (Dropbox, Nextcloud, Syncthing ...) bevat een vergrendeling zolang het hier open is, en de kopieën van elders gewijzigde versies worden naar de computer genoemd. Leeg: de eigen naam van de computer en je gebruikersnaam erop. Een eigen naam (&quot;Laptop&quot;) wordt in plaats daarvan geschreven en de gebruikersnaam blijft weg.</translation>
     </message>
     <message>
         <source>Saving</source>
@@ -15560,7 +15720,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Used for title pages and manuscript headers when compiling and printing: &lt;$author&gt;, &lt;$firstname&gt;, &lt;$surname&gt;, &lt;$street&gt;, &lt;$city&gt;, &lt;$state&gt;, &lt;$zip&gt;, &lt;$country&gt;, &lt;$phone&gt;, &lt;$email&gt;, and &lt;$address&gt; (street, ZIP and city, state, country on lines of their own). Help &gt; List of All Placeholders shows them all.</source>
-        <translation>Gebruikt voor titelpagina's en manuscriptkoppen bij samenstellen en afdrukken: &lt;$author&gt;, &lt;$firstname&gt;, &lt;$surname&gt;, &lt;$street&gt;, &lt;$city&gt;, &lt;$state&gt;, &lt;$zip&gt;, &lt;$country&gt;, &lt;$phone&gt;, &lt;$email&gt; en &lt;$address&gt; (straat, postcode en plaats, staat, land elk op een eigen regel). Help &gt; Lijst van alle plaatsvervangers toont ze allemaal.</translation>
+        <translation>Gebruikt voor titelpagina&apos;s en manuscriptkoppen bij samenstellen en afdrukken: &lt;$author&gt;, &lt;$firstname&gt;, &lt;$surname&gt;, &lt;$street&gt;, &lt;$city&gt;, &lt;$state&gt;, &lt;$zip&gt;, &lt;$country&gt;, &lt;$phone&gt;, &lt;$email&gt; en &lt;$address&gt; (straat, postcode en plaats, staat, land elk op een eigen regel). Help &gt; Lijst van alle plaatsvervangers toont ze allemaal.</translation>
     </message>
     <message>
         <source>Author Information</source>
@@ -15572,7 +15732,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>The Scratch Pad (Window &gt; Scratch Pad) comes with the add-on &quot;Scratch Pad&quot;; once it is installed (Help &gt; Add-ons and Updates &gt; Add-on Manager), its folder and the kind of new notes are set here.</source>
-        <translation>Het Kladblok (Venster &gt; Kladblok) hoort bij de add-on "Scratch Pad"; zodra die is geïnstalleerd (Help &gt; Add-ons en updates &gt; Add-onbeheer), stel je hier de map en het soort nieuwe notities in.</translation>
+        <translation>Het Kladblok (Venster &gt; Kladblok) hoort bij de add-on &quot;Scratch Pad&quot;; zodra die is geïnstalleerd (Help &gt; Add-ons en updates &gt; Add-onbeheer), stel je hier de map en het soort nieuwe notities in.</translation>
     </message>
     <message>
         <source>No folder chosen</source>
@@ -15684,7 +15844,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Questions you answered with &quot;Don&apos;t ask again&quot; are asked again (for example the folder of new bookmarked documents).</source>
-        <translation>Vragen die je met "Niet meer vragen" hebt beantwoord, worden opnieuw gesteld (bijvoorbeeld de map van nieuwe documenten met bladwijzer).</translation>
+        <translation>Vragen die je met &quot;Niet meer vragen&quot; hebt beantwoord, worden opnieuw gesteld (bijvoorbeeld de map van nieuwe documenten met bladwijzer).</translation>
     </message>
     <message>
         <source>Warnings</source>
@@ -15812,7 +15972,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Space after paragraphs:</source>
-        <translation>Ruimte na alinea's:</translation>
+        <translation>Ruimte na alinea&apos;s:</translation>
     </message>
     <message>
         <source>Alignment:</source>
@@ -16040,7 +16200,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>&quot;Pause and rewind&quot; must be switched on in the footer bar of the player.</source>
-        <translation>"Pauzeren en terugspoelen" moet zijn ingeschakeld in de voettekstbalk van de speler.</translation>
+        <translation>&quot;Pauzeren en terugspoelen&quot; moet zijn ingeschakeld in de voettekstbalk van de speler.</translation>
     </message>
     <message>
         <source>Playback</source>
@@ -16096,7 +16256,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Every project keeps its own look: the theme, colors and fonts of the binder, editor, corkboard, outliner, inspector and composition mode, the text column width and the border beside the text, whatever &quot;Settings for&quot; says at the top. Menus and panels (General) and the interface font are the same in every project.</source>
-        <translation>Elk project bewaart zijn eigen uiterlijk: het thema, de kleuren en lettertypen van de Binder, editor, prikbord, overzicht, Inspector en schrijfmodus, de breedte van de tekstkolom en de rand naast de tekst, wat "Instellingen voor" bovenaan ook zegt. Menu's en panelen (Algemeen) en het interfacelettertype zijn in elk project hetzelfde.</translation>
+        <translation>Elk project bewaart zijn eigen uiterlijk: het thema, de kleuren en lettertypen van de Binder, editor, prikbord, overzicht, Inspector en schrijfmodus, de breedte van de tekstkolom en de rand naast de tekst, wat &quot;Instellingen voor&quot; bovenaan ook zegt. Menu&apos;s en panelen (Algemeen) en het interfacelettertype zijn in elk project hetzelfde.</translation>
     </message>
     <message>
         <source>Theme:</source>
@@ -16112,7 +16272,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Manage Themes...</source>
-        <translation>Thema's beheren...</translation>
+        <translation>Thema&apos;s beheren...</translation>
     </message>
     <message>
         <source>Reset Colors and Fonts to the Theme</source>
@@ -16128,7 +16288,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>A theme sets the colors and fonts of every area. Changes you make here sit on top of the theme; &quot;Save as Theme&quot; turns the result into a theme of your own.</source>
-        <translation>Een thema bepaalt de kleuren en lettertypen van elk gebied. Wijzigingen die je hier maakt, liggen bovenop het thema; "Opslaan als thema" maakt van het resultaat een eigen thema.</translation>
+        <translation>Een thema bepaalt de kleuren en lettertypen van elk gebied. Wijzigingen die je hier maakt, liggen bovenop het thema; &quot;Opslaan als thema&quot; maakt van het resultaat een eigen thema.</translation>
     </message>
     <message>
         <source>Show the full project path in the title bar</source>
@@ -16212,7 +16372,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>View &gt; Text Editing &gt; Page View shows the text on pages; their size and margins are set under View &gt; Text Editing &gt; Page Size and Margins.</source>
-        <translation>Weergave &gt; Tekstbewerking &gt; Paginaweergave toont de tekst op pagina's; hun grootte en marges stel je in onder Weergave &gt; Tekstbewerking &gt; Paginaformaat en marges.</translation>
+        <translation>Weergave &gt; Tekstbewerking &gt; Paginaweergave toont de tekst op pagina&apos;s; hun grootte en marges stel je in onder Weergave &gt; Tekstbewerking &gt; Paginaformaat en marges.</translation>
     </message>
     <message>
         <source>Show document titles in Combined Text</source>
@@ -16288,7 +16448,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Capitalize &quot;i&quot;</source>
-        <translation>"i" met een hoofdletter schrijven</translation>
+        <translation>&quot;i&quot; met een hoofdletter schrijven</translation>
     </message>
     <message>
         <source>Punctuation</source>
@@ -16432,7 +16592,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Words added with &quot;Learn Spelling&quot; in the right-click menu of the text.</source>
-        <translation>Woorden die zijn toegevoegd met "Spelling leren" in het menu van de rechtermuisknop van de tekst.</translation>
+        <translation>Woorden die zijn toegevoegd met &quot;Spelling leren&quot; in het menu van de rechtermuisknop van de tekst.</translation>
     </message>
     <message>
         <source>Spelling</source>
@@ -16488,7 +16648,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>The program&apos;s own reader (add-on &quot;Word 97-2003 Import&quot;)</source>
-        <translation>De eigen lezer van het programma (add-on "Word 97-2003 Import")</translation>
+        <translation>De eigen lezer van het programma (add-on &quot;Word 97-2003 Import&quot;)</translation>
     </message>
     <message>
         <source>LibreOffice (when installed)</source>
@@ -16531,8 +16691,104 @@ Doorgaan?</translation>
         <translation>alle</translation>
     </message>
     <message>
-        <source>Retain backup files per project:</source>
-        <translation>Back-upbestanden bewaren per project:</translation>
+        <source>Keep the newest</source>
+        <translation>De nieuwste bewaren</translation>
+    </message>
+    <message>
+        <source>backups of each project</source>
+        <translation>back-ups van elk project</translation>
+    </message>
+    <message>
+        <source>The colors new things start with. They belong to your profile. Projects that exist keep their own labels.</source>
+        <translation>De kleuren waarmee nieuwe dingen beginnen. Ze horen bij je profiel. Bestaande projecten behouden hun eigen labels.</translation>
+    </message>
+    <message>
+        <source>Standard Color</source>
+        <translation>Standaardkleur</translation>
+    </message>
+    <message>
+        <source>Labels of new projects</source>
+        <translation>Labels van nieuwe projecten</translation>
+    </message>
+    <message>
+        <source>Color of this label</source>
+        <translation>Kleur van dit label</translation>
+    </message>
+    <message>
+        <source>Colors of the popups</source>
+        <translation>Kleuren van de pop-ups</translation>
+    </message>
+    <message>
+        <source>Text color:</source>
+        <translation>Tekstkleur:</translation>
+    </message>
+    <message>
+        <source>Highlight:</source>
+        <translation>Markering:</translation>
+    </message>
+    <message>
+        <source>A color of the text color popup</source>
+        <translation>Een kleur van de pop-up voor tekstkleur</translation>
+    </message>
+    <message>
+        <source>A color of the highlight popup</source>
+        <translation>Een kleur van de pop-up voor markering</translation>
+    </message>
+    <message>
+        <source>The color each button starts with</source>
+        <translation>De kleur waarmee elke knop begint</translation>
+    </message>
+    <message>
+        <source>Text color button:</source>
+        <translation>Knop voor tekstkleur:</translation>
+    </message>
+    <message>
+        <source>The color of the text color button when the program starts</source>
+        <translation>De kleur van de knop voor tekstkleur wanneer het programma start</translation>
+    </message>
+    <message>
+        <source>Highlight button:</source>
+        <translation>Knop voor markering:</translation>
+    </message>
+    <message>
+        <source>The color of the highlight button when the program starts</source>
+        <translation>De kleur van de knop voor markering wanneer het programma start</translation>
+    </message>
+    <message>
+        <source>Back to the program&apos;s standard labels and colors</source>
+        <translation>Terug naar de standaardlabels en -kleuren van het programma</translation>
+    </message>
+    <message>
+        <source>Export Profile...</source>
+        <translation>Profiel exporteren...</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Profiel exporteren</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profielen (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile...</source>
+        <translation>Profiel importeren...</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Profiel importeren</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profielen en opties (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>The profile “%1” was imported. Switch to it under View &gt; Profiles.</source>
+        <translation>Het profiel “%1” is geïmporteerd. Schakel er naartoe over onder Weergave &gt; Profielen.</translation>
+    </message>
+    <message>
+        <source>Manage Profiles...</source>
+        <translation>Profielen beheren...</translation>
     </message>
     <message>
         <source>No folder chosen: no automatic backups</source>
@@ -16636,19 +16892,19 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Background in Light Themes</source>
-        <translation>Achtergrond in lichte thema's</translation>
+        <translation>Achtergrond in lichte thema&apos;s</translation>
     </message>
     <message>
         <source>Background in Dark Themes</source>
-        <translation>Achtergrond in donkere thema's</translation>
+        <translation>Achtergrond in donkere thema&apos;s</translation>
     </message>
     <message>
         <source>Light themes:</source>
-        <translation>Lichte thema's:</translation>
+        <translation>Lichte thema&apos;s:</translation>
     </message>
     <message>
         <source>Dark themes:</source>
-        <translation>Donkere thema's:</translation>
+        <translation>Donkere thema&apos;s:</translation>
     </message>
     <message>
         <source>A board&apos;s own color is chosen by right-clicking an empty place of the board &gt; Background Color; it is kept for the kind of theme in use (light or dark), the other kind keeps its own.</source>
@@ -16668,7 +16924,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Your own templates (saved with &quot;Use for New Projects&quot;)</source>
-        <translation>Je eigen sjablonen (opgeslagen met "Voor nieuwe projecten gebruiken")</translation>
+        <translation>Je eigen sjablonen (opgeslagen met &quot;Voor nieuwe projecten gebruiken&quot;)</translation>
     </message>
     <message>
         <source>The standard templates</source>
@@ -16684,7 +16940,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>The categories, fields and colors of a project are changed under Project &gt; Object Templates and Colors; &quot;Use for New Projects&quot; there makes them the templates of new projects.</source>
-        <translation>De categorieën, velden en kleuren van een project wijzig je onder Project &gt; Objectsjablonen en kleuren; "Voor nieuwe projecten gebruiken" maakt ze daar de sjablonen van nieuwe projecten.</translation>
+        <translation>De categorieën, velden en kleuren van een project wijzig je onder Project &gt; Objectsjablonen en kleuren; &quot;Voor nieuwe projecten gebruiken&quot; maakt ze daar de sjablonen van nieuwe projecten.</translation>
     </message>
     <message>
         <source>Objects</source>
@@ -16743,24 +16999,8 @@ Doorgaan?</translation>
         <translation>Crashrapporten</translation>
     </message>
     <message>
-        <source>Load Options from File...</source>
-        <translation>Opties laden uit bestand...</translation>
-    </message>
-    <message>
         <source>Load Options</source>
         <translation>Opties laden</translation>
-    </message>
-    <message>
-        <source>Options (*.qboptions)</source>
-        <translation>Opties (*.qboptions)</translation>
-    </message>
-    <message>
-        <source>Save Options to File...</source>
-        <translation>Opties opslaan in bestand...</translation>
-    </message>
-    <message>
-        <source>Save Options</source>
-        <translation>Opties opslaan</translation>
     </message>
     <message>
         <source>Save Theme Options to File...</source>
@@ -16772,7 +17012,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Themes (*.qbtheme)</source>
-        <translation>Thema's (*.qbtheme)</translation>
+        <translation>Thema&apos;s (*.qbtheme)</translation>
     </message>
     <message>
         <source>Load Theme from File...</source>
@@ -16804,7 +17044,7 @@ Doorgaan?</translation>
 %1
 
 Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
-        <translation>Het bestand stelt ook programma's in die het programma start, mappen, bestanden of adressen:
+        <translation>Het bestand stelt ook programma&apos;s in die het programma start, mappen, bestanden of adressen:
 
 %1
 
@@ -16820,7 +17060,7 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
 Your recent projects, themes of your own, layouts, toolbars and keyboard shortcuts stay as they are.</source>
         <translation>Elke optie terugzetten naar de standaard van het programma?
 
-Je recente projecten, eigen thema's, lay-outs, werkbalken en sneltoetsen blijven zoals ze zijn.</translation>
+Je recente projecten, eigen thema&apos;s, lay-outs, werkbalken en sneltoetsen blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Restore Defaults</source>
@@ -17149,7 +17389,7 @@ Je recente projecten, eigen thema's, lay-outs, werkbalken en sneltoetsen blijven
     </message>
     <message>
         <source>Project files: .qbx files open with Quillbinder; it is offered in &quot;Open with&quot; for Scrivener&apos;s .scrivx files</source>
-        <translation>Projectbestanden: .qbx-bestanden openen met Quillbinder; het wordt aangeboden in "Openen met" voor .scrivx-bestanden van Scrivener</translation>
+        <translation>Projectbestanden: .qbx-bestanden openen met Quillbinder; het wordt aangeboden in &quot;Openen met&quot; voor .scrivx-bestanden van Scrivener</translation>
     </message>
     <message>
         <source>This could not be removed: %1.</source>
@@ -17161,7 +17401,7 @@ Je recente projecten, eigen thema's, lay-outs, werkbalken en sneltoetsen blijven
     </message>
     <message>
         <source>These are the only things the program puts outside its folder, and only when you ask for them here. Remove them before you delete or move the program&apos;s folder. To pin Quillbinder to the taskbar: start it, then right-click its button in the taskbar and choose &quot;Pin to taskbar&quot;.</source>
-        <translation>Dit zijn de enige dingen die het programma buiten zijn map zet, en alleen wanneer je er hier om vraagt. Verwijder ze voordat je de map van het programma verwijdert of verplaatst. Om Quillbinder aan de taakbalk vast te maken: start het, klik dan met de rechtermuisknop op de knop ervan in de taakbalk en kies "Aan taakbalk vastmaken".</translation>
+        <translation>Dit zijn de enige dingen die het programma buiten zijn map zet, en alleen wanneer je er hier om vraagt. Verwijder ze voordat je de map van het programma verwijdert of verplaatst. Om Quillbinder aan de taakbalk vast te maken: start het, klik dan met de rechtermuisknop op de knop ervan in de taakbalk en kies &quot;Aan taakbalk vastmaken&quot;.</translation>
     </message>
     <message>
         <source>only on Windows</source>
@@ -17304,7 +17544,7 @@ Je recente projecten, eigen thema's, lay-outs, werkbalken en sneltoetsen blijven
     </message>
     <message>
         <source>&lt;$title&gt; what is printed (document, folder), &lt;$projecttitle&gt; the project, &lt;$author&gt; you (File &gt; Options &gt; General), &lt;$date&gt; today, &lt;$p&gt; the page, &lt;$pages&gt; the number of pages.</source>
-        <translation>&lt;$title&gt; wat wordt afgedrukt (document, map), &lt;$projecttitle&gt; het project, &lt;$author&gt; jij (Bestand &gt; Opties &gt; Algemeen), &lt;$date&gt; vandaag, &lt;$p&gt; de pagina, &lt;$pages&gt; het aantal pagina's.</translation>
+        <translation>&lt;$title&gt; wat wordt afgedrukt (document, map), &lt;$projecttitle&gt; het project, &lt;$author&gt; jij (Bestand &gt; Opties &gt; Algemeen), &lt;$date&gt; vandaag, &lt;$p&gt; de pagina, &lt;$pages&gt; het aantal pagina&apos;s.</translation>
     </message>
     <message>
         <source>Page</source>
@@ -17372,7 +17612,7 @@ Je recente projecten, eigen thema's, lay-outs, werkbalken en sneltoetsen blijven
     </message>
     <message>
         <source>Script documents keep their script layout. The selected text alone: choose &quot;Selection&quot; in the print window.</source>
-        <translation>Scriptdocumenten behouden hun scriptlay-out. Alleen de geselecteerde tekst: kies "Selectie" in het afdrukvenster.</translation>
+        <translation>Scriptdocumenten behouden hun scriptlay-out. Alleen de geselecteerde tekst: kies &quot;Selectie&quot; in het afdrukvenster.</translation>
     </message>
     <message>
         <source>Text</source>
@@ -17444,7 +17684,7 @@ Je recente projecten, eigen thema's, lay-outs, werkbalken en sneltoetsen blijven
     </message>
     <message>
         <source>The cards of the corkboard in the order shown. Only some: select them and choose &quot;Selection&quot; in the print window.</source>
-        <translation>De kaarten van het prikbord in de getoonde volgorde. Slechts enkele: selecteer ze en kies "Selectie" in het afdrukvenster.</translation>
+        <translation>De kaarten van het prikbord in de getoonde volgorde. Slechts enkele: selecteer ze en kies &quot;Selectie&quot; in het afdrukvenster.</translation>
     </message>
     <message>
         <source>Index Cards</source>
@@ -17484,7 +17724,7 @@ Je recente projecten, eigen thema's, lay-outs, werkbalken en sneltoetsen blijven
     </message>
     <message>
         <source>The columns of the outliner in their order and widths (View &gt; Outliner Options); with many columns, Landscape on the Page tab gives them more room. Only some rows: select them and choose &quot;Selection&quot; in the print window.</source>
-        <translation>De kolommen van het overzicht in hun volgorde en breedte (Weergave &gt; Overzichtsopties); bij veel kolommen geeft Liggend op het tabblad Pagina ze meer ruimte. Slechts enkele rijen: selecteer ze en kies "Selectie" in het afdrukvenster.</translation>
+        <translation>De kolommen van het overzicht in hun volgorde en breedte (Weergave &gt; Overzichtsopties); bij veel kolommen geeft Liggend op het tabblad Pagina ze meer ruimte. Slechts enkele rijen: selecteer ze en kies &quot;Selectie&quot; in het afdrukvenster.</translation>
     </message>
     <message>
         <source>Outliner</source>
@@ -17520,10 +17760,109 @@ Je recente projecten, eigen thema's, lay-outs, werkbalken en sneltoetsen blijven
     </message>
 </context>
 <context>
+    <name>qb::ProfileManagerDialog</name>
+    <message>
+        <source>Manage Profiles</source>
+        <translation>Profielen beheren</translation>
+    </message>
+    <message>
+        <source>A profile holds your options, toolbars, window places and sizes, keyboard set, backup settings, standard colors, layouts and the theme. The profile in use is saved when you switch away from it and when the program ends.</source>
+        <translation>Een profiel bevat je opties, werkbalken, vensterposities en -groottes, toetsenbordset, back-upinstellingen, standaardkleuren, lay-outs en het thema. Het profiel dat in gebruik is, wordt opgeslagen wanneer je ervan wegschakelt en wanneer het programma wordt afgesloten.</translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <translation>Gebruiken</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile...</source>
+        <translation>Instellingen opslaan als nieuw profiel...</translation>
+    </message>
+    <message>
+        <source>Rename...</source>
+        <translation>Hernoemen...</translation>
+    </message>
+    <message>
+        <source>Copy...</source>
+        <translation>Kopiëren...</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Verwijderen</translation>
+    </message>
+    <message>
+        <source>Export...</source>
+        <translation>Exporteren...</translation>
+    </message>
+    <message>
+        <source>Import...</source>
+        <translation>Importeren...</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Instellingen opslaan als nieuw profiel</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Mijn profiel</translation>
+    </message>
+    <message>
+        <source>Rename Profile</source>
+        <translation>Profiel hernoemen</translation>
+    </message>
+    <message>
+        <source>Copy Profile</source>
+        <translation>Profiel kopiëren</translation>
+    </message>
+    <message>
+        <source>%1 (Copy)</source>
+        <translation>%1 (kopie)</translation>
+    </message>
+    <message>
+        <source>Delete Profile</source>
+        <translation>Profiel verwijderen</translation>
+    </message>
+    <message>
+        <source>Delete the profile “%1”? This cannot be undone.</source>
+        <translation>Het profiel “%1” verwijderen? Dit kan niet ongedaan worden gemaakt.</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Profiel exporteren</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profielen (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Profiel importeren</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profielen en opties (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>%1 (in use)</source>
+        <translation>%1 (in gebruik)</translation>
+    </message>
+    <message>
+        <source>Theme: %1.</source>
+        <translation>Thema: %1.</translation>
+    </message>
+    <message>
+        <source>Built-in profile; it can be deleted.</source>
+        <translation>Ingebouwd profiel; het kan worden verwijderd.</translation>
+    </message>
+    <message>
+        <source>The profile every program starts with.</source>
+        <translation>Het profiel waarmee elk programma start.</translation>
+    </message>
+</context>
+<context>
     <name>qb::Project</name>
     <message>
         <source>This project&apos;s folder holds other project files beside &quot;%1&quot;, which was opened: %2. A sync program may have made them (a copy from another computer kept beside yours). Compare them before you go on, and open another one with File &gt; Open Project if it holds your latest work.</source>
-        <translation>De map van dit project bevat naast "%1", dat is geopend, andere projectbestanden: %2. Een synchronisatieprogramma kan ze hebben gemaakt (een kopie van een andere computer, bewaard naast die van jou). Vergelijk ze voordat je verdergaat en open een ander met Bestand &gt; Project openen als het je laatste werk bevat.</translation>
+        <translation>De map van dit project bevat naast &quot;%1&quot;, dat is geopend, andere projectbestanden: %2. Een synchronisatieprogramma kan ze hebben gemaakt (een kopie van een andere computer, bewaard naast die van jou). Vergelijk ze voordat je verdergaat en open een ander met Bestand &gt; Project openen als het je laatste werk bevat.</translation>
     </message>
     <message>
         <source>Red</source>
@@ -17633,7 +17972,7 @@ Je recente projecten, eigen thema's, lay-outs, werkbalken en sneltoetsen blijven
         <source>The project &quot;%1&quot; (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
 
 </source>
-        <translation>Het project "%1" (%2) kon niet worden opgeslagen. Deze map bevat wat nog niet was opgeslagen: teksten en notities als RTF-bestanden (Word, LibreOffice en %3 openen ze), mindmapborden, gewijzigde objecten (in de map "objects") en het projectbestand zoals het in het geheugen was (de Binder, titels en labels), als %4. Kopieer wat je nodig hebt terug in het project.
+        <translation>Het project &quot;%1&quot; (%2) kon niet worden opgeslagen. Deze map bevat wat nog niet was opgeslagen: teksten en notities als RTF-bestanden (Word, LibreOffice en %3 openen ze), mindmapborden, gewijzigde objecten (in de map &quot;objects&quot;) en het projectbestand zoals het in het geheugen was (de Binder, titels en labels), als %4. Kopieer wat je nodig hebt terug in het project.
 
 </translation>
     </message>
@@ -17744,7 +18083,7 @@ Niet geschreven:
     </message>
     <message>
         <source>%1 is not a project file of %2 (it holds &quot;%3&quot;). It was not opened and is not changed.</source>
-        <translation>%1 is geen projectbestand van %2 (het bevat "%3"). Het is niet geopend en niet gewijzigd.</translation>
+        <translation>%1 is geen projectbestand van %2 (het bevat &quot;%3&quot;). Het is niet geopend en niet gewijzigd.</translation>
     </message>
     <message numerus="yes">
         <source>%n item(s) nested deeper than %1 levels were moved up to that level.</source>
@@ -17801,7 +18140,7 @@ Niet geschreven:
     </message>
     <message>
         <source>&quot;Replace&quot; is a regular expression; &quot;With&quot; may use \1 to \9 for its groups.</source>
-        <translation>"Vervangen" is een reguliere expressie; "Door" mag \1 tot \9 gebruiken voor de groepen ervan.</translation>
+        <translation>&quot;Vervangen&quot; is een reguliere expressie; &quot;Door&quot; mag \1 tot \9 gebruiken voor de groepen ervan.</translation>
     </message>
     <message>
         <source>Replace in</source>
@@ -17873,11 +18212,11 @@ Niet geschreven:
     </message>
     <message>
         <source>Before replacing &quot;%1&quot;</source>
-        <translation>Voor het vervangen van "%1"</translation>
+        <translation>Voor het vervangen van &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Left as they are, because their file cannot be read (such a file is never written over): %1.</source>
-        <translation>Gelaten zoals ze zijn, omdat hun bestand niet kan worden gelezen (zo'n bestand wordt nooit overschreven): %1.</translation>
+        <translation>Gelaten zoals ze zijn, omdat hun bestand niet kan worden gelezen (zo&apos;n bestand wordt nooit overschreven): %1.</translation>
     </message>
     <message>
         <source>Nothing found.</source>
@@ -17949,7 +18288,7 @@ Niet geschreven:
 %3
 
 This cannot be undone as a whole.%4</source>
-        <translation>"%1" vervangen door %2?
+        <translation>&quot;%1&quot; vervangen door %2?
 
 %3
 
@@ -18012,7 +18351,7 @@ Dit kan niet als geheel ongedaan worden gemaakt.%4</translation>
     </message>
     <message>
         <source>Name of the &quot;Label&quot; field (e.g. POV):</source>
-        <translation>Naam van het veld "Label" (bijv. perspectief):</translation>
+        <translation>Naam van het veld &quot;Label&quot; (bijv. perspectief):</translation>
     </message>
     <message>
         <source>Color</source>
@@ -18048,7 +18387,7 @@ Dit kan niet als geheel ongedaan worden gemaakt.%4</translation>
     </message>
     <message>
         <source>Name of the &quot;Status&quot; field:</source>
-        <translation>Naam van het veld "Status":</translation>
+        <translation>Naam van het veld &quot;Status&quot;:</translation>
     </message>
     <message>
         <source>Add status</source>
@@ -18064,7 +18403,7 @@ Dit kan niet als geheel ongedaan worden gemaakt.%4</translation>
     </message>
     <message>
         <source>Section types tell Compile what each document is (part, chapter, scene …). &quot;Default types by structure&quot; assigns them automatically from the binder level; level 0 is the Draft folder itself.</source>
-        <translation>Sectietypen vertellen Samenstellen wat elk document is (deel, hoofdstuk, scène …). "Standaardtypen op structuur" wijst ze automatisch toe op basis van het Binder-niveau; niveau 0 is de map Concept zelf.</translation>
+        <translation>Sectietypen vertellen Samenstellen wat elk document is (deel, hoofdstuk, scène …). &quot;Standaardtypen op structuur&quot; wijst ze automatisch toe op basis van het Binder-niveau; niveau 0 is de map Concept zelf.</translation>
     </message>
     <message>
         <source>Section types:</source>
@@ -18160,7 +18499,7 @@ Dit kan niet als geheel ongedaan worden gemaakt.%4</translation>
     </message>
     <message>
         <source>Space after paragraphs:</source>
-        <translation>Ruimte na alinea's:</translation>
+        <translation>Ruimte na alinea&apos;s:</translation>
     </message>
     <message>
         <source>Alignment:</source>
@@ -18212,7 +18551,7 @@ Dit kan niet als geheel ongedaan worden gemaakt.%4</translation>
     </message>
     <message>
         <source>Custom metadata fields appear in the inspector and as outliner columns. For list fields, enter the choices separated by commas.</source>
-        <translation>Aangepaste metagegevensvelden verschijnen in de Inspector en als kolommen van het overzicht. Voer bij lijstvelden de keuzes in, gescheiden door komma's.</translation>
+        <translation>Aangepaste metagegevensvelden verschijnen in de Inspector en als kolommen van het overzicht. Voer bij lijstvelden de keuzes in, gescheiden door komma&apos;s.</translation>
     </message>
     <message>
         <source>Title</source>
@@ -18280,7 +18619,7 @@ Dit kan niet als geheel ongedaan worden gemaakt.%4</translation>
     </message>
     <message>
         <source>Used by the &quot;+&quot; button below the bookmarks of a Quick Reference panel: the new document is created in this folder and added to the project bookmarks.</source>
-        <translation>Gebruikt door de knop "+" onder de bladwijzers van een paneel Snelle naslag: het nieuwe document wordt in deze map gemaakt en aan de projectbladwijzers toegevoegd.</translation>
+        <translation>Gebruikt door de knop &quot;+&quot; onder de bladwijzers van een paneel Snelle naslag: het nieuwe document wordt in deze map gemaakt en aan de projectbladwijzers toegevoegd.</translation>
     </message>
     <message>
         <source>Browse…</source>
@@ -18629,7 +18968,7 @@ Lettertypen, groottes en kleuren van afzonderlijke passages blijven in Markdown 
     </message>
     <message>
         <source>What the element is to other screenwriting programs (Fountain and Final Draft files)</source>
-        <translation>Wat het element is voor andere scriptschrijfprogramma's (Fountain- en Final Draft-bestanden)</translation>
+        <translation>Wat het element is voor andere scriptschrijfprogramma&apos;s (Fountain- en Final Draft-bestanden)</translation>
     </message>
     <message>
         <source>Kind:</source>
@@ -18745,7 +19084,7 @@ Lettertypen, groottes en kleuren van afzonderlijke passages blijven in Markdown 
     </message>
     <message>
         <source>If this is filled in, Tab types it instead of going to another element (scene headings: &quot; - &quot; before the time of day)</source>
-        <translation>Als dit is ingevuld, typt Tab het in plaats van naar een ander element te gaan (scènekoppen: " - " vóór het dagdeel)</translation>
+        <translation>Als dit is ingevuld, typt Tab het in plaats van naar een ander element te gaan (scènekoppen: &quot; - &quot; vóór het dagdeel)</translation>
     </message>
     <message>
         <source>…or Tab types:</source>
@@ -18773,7 +19112,7 @@ Lettertypen, groottes en kleuren van afzonderlijke passages blijven in Markdown 
     </message>
     <message>
         <source>Also offer what other paragraphs of this element in the document say (character names, locations)</source>
-        <translation>Ook aanbieden wat andere alinea's van dit element in het document zeggen (personagenamen, locaties)</translation>
+        <translation>Ook aanbieden wat andere alinea&apos;s van dit element in het document zeggen (personagenamen, locaties)</translation>
     </message>
     <message>
         <source>Auto-Complete</source>
@@ -18809,11 +19148,11 @@ Lettertypen, groottes en kleuren van afzonderlijke passages blijven in Markdown 
     </message>
     <message>
         <source>There is an element called &quot;%1&quot; already.</source>
-        <translation>Er is al een element met de naam "%1".</translation>
+        <translation>Er is al een element met de naam &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>An element name cannot be empty or contain the characters : &quot; &lt; &gt; \ { } ; /</source>
-        <translation>Een elementnaam mag niet leeg zijn of de tekens : " &lt; &gt; \ { } ; / bevatten</translation>
+        <translation>Een elementnaam mag niet leeg zijn of de tekens : &quot; &lt; &gt; \ { } ; / bevatten</translation>
     </message>
     <message>
         <source>New Element</source>
@@ -18857,11 +19196,11 @@ Lettertypen, groottes en kleuren van afzonderlijke passages blijven in Markdown 
     </message>
     <message>
         <source>&quot;%1&quot; is now in the list of formats under Format &gt; Scriptwriting &gt; Script Format in every project.</source>
-        <translation>"%1" staat nu in de lijst met opmaken onder Opmaak &gt; Scriptschrijven &gt; Scriptopmaak in elk project.</translation>
+        <translation>&quot;%1&quot; staat nu in de lijst met opmaken onder Opmaak &gt; Scriptschrijven &gt; Scriptopmaak in elk project.</translation>
     </message>
     <message>
         <source>Remove &quot;%1&quot; From My Formats</source>
-        <translation>"%1" uit Mijn opmaken verwijderen</translation>
+        <translation>&quot;%1&quot; uit Mijn opmaken verwijderen</translation>
     </message>
     <message>
         <source>Give the format a name.</source>
@@ -19047,7 +19386,7 @@ Opgeslagen %2 uit het project “%3” door %4.</translation>
     </message>
     <message>
         <source>Estimated pages (250 words):</source>
-        <translation>Geschatte pagina's (250 woorden):</translation>
+        <translation>Geschatte pagina&apos;s (250 woorden):</translation>
     </message>
     <message>
         <source>Words in the whole project:</source>
@@ -19114,7 +19453,7 @@ Opgeslagen %2 uit het project “%3” door %4.</translation>
     </message>
     <message>
         <source>Please enter a name of up to 60 characters without : &quot; &lt; &gt; \ { } ;</source>
-        <translation>Voer een naam in van maximaal 60 tekens zonder : " &lt; &gt; \ { } ;</translation>
+        <translation>Voer een naam in van maximaal 60 tekens zonder : &quot; &lt; &gt; \ { } ;</translation>
     </message>
     <message>
         <source>There is a style named “%1” already.</source>
@@ -19177,7 +19516,7 @@ Opgeslagen %2 uit het project “%3” door %4.</translation>
     </message>
     <message>
         <source>Please enter a name of up to 60 characters without : &quot; &lt; &gt; \ { } ;</source>
-        <translation>Voer een naam in van maximaal 60 tekens zonder : " &lt; &gt; \ { } ;</translation>
+        <translation>Voer een naam in van maximaal 60 tekens zonder : &quot; &lt; &gt; \ { } ;</translation>
     </message>
     <message>
         <source>There is a style named “%1” already. Choose another name, or use Redefine Style From Selection to change that style.</source>
@@ -19192,7 +19531,7 @@ Opgeslagen %2 uit het project “%3” door %4.</translation>
     </message>
     <message>
         <source>The ticked entries show in the style list of the format bar and of the right-click menus, in this order (drag them, or use the arrows). With more than %1 the list scrolls. Format ▸ Style always shows all styles.</source>
-        <translation>De aangevinkte items staan in de stijllijst van de opmaakbalk en van de menu's van de rechtermuisknop, in deze volgorde (sleep ze, of gebruik de pijlen). Bij meer dan %1 scrollt de lijst. Opmaak ▸ Stijl toont altijd alle stijlen.</translation>
+        <translation>De aangevinkte items staan in de stijllijst van de opmaakbalk en van de menu&apos;s van de rechtermuisknop, in deze volgorde (sleep ze, of gebruik de pijlen). Bij meer dan %1 scrollt de lijst. Opmaak ▸ Stijl toont altijd alle stijlen.</translation>
     </message>
     <message>
         <source>Move Up</source>
@@ -19575,7 +19914,7 @@ Opgeslagen %2 uit het project “%3” door %4.</translation>
     </message>
     <message>
         <source>types &quot;%1&quot;</source>
-        <translation>typt "%1"</translation>
+        <translation>typt &quot;%1&quot;</translation>
     </message>
     <message>
         <source>list of elements</source>
@@ -19677,11 +20016,11 @@ Ctrl+klik om te openen</translation>
     </message>
     <message>
         <source>Add &quot;%1&quot; to Dictionary</source>
-        <translation>"%1" aan woordenboek toevoegen</translation>
+        <translation>&quot;%1&quot; aan woordenboek toevoegen</translation>
     </message>
     <message>
         <source>Ignore &quot;%1&quot;</source>
-        <translation>"%1" negeren</translation>
+        <translation>&quot;%1&quot; negeren</translation>
     </message>
     <message>
         <source>More Commands</source>
@@ -19728,7 +20067,7 @@ Ctrl+klik om te openen</translation>
     <name>qb::ThemeManagerDialog</name>
     <message>
         <source>Themes</source>
-        <translation>Thema's</translation>
+        <translation>Thema&apos;s</translation>
     </message>
     <message>
         <source>Use This Theme</source>
@@ -19756,7 +20095,7 @@ Ctrl+klik om te openen</translation>
     </message>
     <message>
         <source>To change colors and fonts, use File ▸ Options ▸ Appearance and then Save as Theme. Built-in themes and themes of add-ons cannot be changed; duplicate one to get a theme of your own.</source>
-        <translation>Om kleuren en lettertypen te wijzigen, gebruik je Bestand ▸ Opties ▸ Uiterlijk en dan Opslaan als thema. Ingebouwde thema's en thema's van add-ons kunnen niet worden gewijzigd; dupliceer er een om een eigen thema te krijgen.</translation>
+        <translation>Om kleuren en lettertypen te wijzigen, gebruik je Bestand ▸ Opties ▸ Uiterlijk en dan Opslaan als thema. Ingebouwde thema&apos;s en thema&apos;s van add-ons kunnen niet worden gewijzigd; dupliceer er een om een eigen thema te krijgen.</translation>
     </message>
     <message>
         <source>Duplicate Theme</source>
@@ -19859,7 +20198,7 @@ Ctrl+klik om te openen</translation>
     </message>
     <message>
         <source>Themes</source>
-        <translation>Thema's</translation>
+        <translation>Thema&apos;s</translation>
     </message>
     <message>
         <source>The look could not be saved in %1: %2</source>
@@ -19939,7 +20278,7 @@ Ctrl+klik om te openen</translation>
     </message>
     <message>
         <source>Theme: %1 (click for the list of themes, Light, Dark and your own looks)</source>
-        <translation>Thema: %1 (klik voor de lijst met thema's, Licht, Donker en je eigen uiterlijken)</translation>
+        <translation>Thema: %1 (klik voor de lijst met thema&apos;s, Licht, Donker en je eigen uiterlijken)</translation>
     </message>
 </context>
 <context>
@@ -20184,7 +20523,7 @@ Het haalt één klein bestand op, hoogstens eens per dag, en meldt het wanneer e
     </message>
     <message>
         <source>The new program version needs a new AppImage. %1 downloads it, puts it in the place of the AppImage you started (%2), keeps the one you have now beside it as &quot;%3&quot;, and starts again.</source>
-        <translation>De nieuwe programmaversie heeft een nieuwe AppImage nodig. %1 downloadt hem, zet hem op de plek van de AppImage die je hebt gestart (%2), bewaart de AppImage die je nu hebt ernaast als "%3" en start opnieuw.</translation>
+        <translation>De nieuwe programmaversie heeft een nieuwe AppImage nodig. %1 downloadt hem, zet hem op de plek van de AppImage die je hebt gestart (%2), bewaart de AppImage die je nu hebt ernaast als &quot;%3&quot; en start opnieuw.</translation>
     </message>
     <message>
         <source>The new program version needs a new AppImage. It is saved in your Downloads folder; close %1, put the new file in the place of the old one and start it.</source>
@@ -20192,7 +20531,7 @@ Het haalt één klein bestand op, hoogstens eens per dag, en meldt het wanneer e
     </message>
     <message>
         <source>The new program version needs the whole program anew. %1 downloads its setup program, checks it and closes; the setup program then unpacks the new version into the folder of this one (%2) and starts it. Your settings, your add-ons and everything else in &quot;data&quot; stay as they are.</source>
-        <translation>De nieuwe programmaversie heeft het hele programma opnieuw nodig. %1 downloadt het installatieprogramma ervan, controleert het en sluit af; het installatieprogramma pakt de nieuwe versie dan uit in de map van deze (%2) en start hem. Je instellingen, je add-ons en al het andere in "data" blijven zoals ze zijn.</translation>
+        <translation>De nieuwe programmaversie heeft het hele programma opnieuw nodig. %1 downloadt het installatieprogramma ervan, controleert het en sluit af; het installatieprogramma pakt de nieuwe versie dan uit in de map van deze (%2) en start hem. Je instellingen, je add-ons en al het andere in &quot;data&quot; blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>The new version for Android is a new app file (APK). %1 opens its download in your browser; install it from there or from your Downloads folder. Your projects, your settings and your add-ons stay as they are.</source>
@@ -20296,7 +20635,7 @@ Het haalt één klein bestand op, hoogstens eens per dag, en meldt het wanneer e
     </message>
     <message>
         <source>%1 closes now, and the setup program unpacks the new version into this folder and starts it. With &quot;Later&quot; nothing changes, and the update is offered again.</source>
-        <translation>%1 sluit nu af en het installatieprogramma pakt de nieuwe versie uit in deze map en start hem. Met "Later" verandert er niets en wordt de update opnieuw aangeboden.</translation>
+        <translation>%1 sluit nu af en het installatieprogramma pakt de nieuwe versie uit in deze map en start hem. Met &quot;Later&quot; verandert er niets en wordt de update opnieuw aangeboden.</translation>
     </message>
     <message>
         <source>Close and Update Now</source>
@@ -20364,7 +20703,7 @@ Of download de huidige versie van de pagina van het project.</translation>
     </message>
     <message>
         <source>themes</source>
-        <translation>thema's</translation>
+        <translation>thema&apos;s</translation>
     </message>
     <message>
         <source>project template</source>
@@ -20476,7 +20815,7 @@ Of download de huidige versie van de pagina van het project.</translation>
     </message>
     <message>
         <source>This add-on was built for the libraries of another program version (runtime &quot;%1&quot;; this program has &quot;%2&quot;). Download the add-on&apos;s version for this program from the release page of the project.</source>
-        <translation>Deze add-on is gebouwd voor de bibliotheken van een andere programmaversie (runtime "%1"; dit programma heeft "%2"). Download de versie van de add-on voor dit programma van de releasepagina van het project.</translation>
+        <translation>Deze add-on is gebouwd voor de bibliotheken van een andere programmaversie (runtime &quot;%1&quot;; dit programma heeft &quot;%2&quot;). Download de versie van de add-on voor dit programma van de releasepagina van het project.</translation>
     </message>
     <message>
         <source>before 0.80.0</source>
@@ -20496,11 +20835,11 @@ Of download de huidige versie van de pagina van het project.</translation>
     </message>
     <message>
         <source>This program update does not fit your installed program (it needs runtime &quot;%1&quot;, you have &quot;%2&quot;). A new download of the program is required.</source>
-        <translation>Deze programma-update past niet bij je geïnstalleerde programma (hij heeft runtime "%1" nodig, jij hebt "%2"). Een nieuwe download van het programma is nodig.</translation>
+        <translation>Deze programma-update past niet bij je geïnstalleerde programma (hij heeft runtime &quot;%1&quot; nodig, jij hebt &quot;%2&quot;). Een nieuwe download van het programma is nodig.</translation>
     </message>
     <message>
         <source>This program update does not fit your AppImage (it needs runtime &quot;%1&quot;, you have &quot;%2&quot;). A new AppImage is required.</source>
-        <translation>Deze programma-update past niet bij je AppImage (hij heeft runtime "%1" nodig, jij hebt "%2"). Een nieuwe AppImage is nodig.</translation>
+        <translation>Deze programma-update past niet bij je AppImage (hij heeft runtime &quot;%1&quot; nodig, jij hebt &quot;%2&quot;). Een nieuwe AppImage is nodig.</translation>
     </message>
     <message>
         <source>The program update is incomplete.</source>
@@ -20572,11 +20911,11 @@ Of download de huidige versie van de pagina van het project.</translation>
     </message>
     <message>
         <source>Add-on &quot;%1&quot; was unpacked, but it could not be switched on (%2). Free some space or check the folder, then switch it on in the Add-on Manager.</source>
-        <translation>De add-on "%1" is uitgepakt, maar kon niet worden ingeschakeld (%2). Maak ruimte vrij of controleer de map en schakel hem dan in bij het Add-onbeheer.</translation>
+        <translation>De add-on &quot;%1&quot; is uitgepakt, maar kon niet worden ingeschakeld (%2). Maak ruimte vrij of controleer de map en schakel hem dan in bij het Add-onbeheer.</translation>
     </message>
     <message>
         <source>Add-on &quot;%1&quot; %2 installed (%3).</source>
-        <translation>Add-on "%1" %2 geïnstalleerd (%3).</translation>
+        <translation>Add-on &quot;%1&quot; %2 geïnstalleerd (%3).</translation>
     </message>
     <message>
         <source>no content</source>
@@ -20592,7 +20931,7 @@ Of download de huidige versie van de pagina van het project.</translation>
     </message>
     <message>
         <source>the version installed before could not be put back and is in %1 (rename that folder to &quot;%2&quot;)</source>
-        <translation>de eerder geïnstalleerde versie kon niet worden teruggezet en staat in %1 (hernoem die map naar "%2")</translation>
+        <translation>de eerder geïnstalleerde versie kon niet worden teruggezet en staat in %1 (hernoem die map naar &quot;%2&quot;)</translation>
     </message>
     <message>
         <source>Not everything could be put back as it was: %1.</source>
@@ -20608,7 +20947,7 @@ Of download de huidige versie van de pagina van het project.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is not signed by the Quillbinder project. To install it anyway from the command line, add --allow-unsigned.</source>
-        <translation>"%1" is niet ondertekend door het Quillbinder-project. Om het toch vanaf de opdrachtregel te installeren, voeg je --allow-unsigned toe.</translation>
+        <translation>&quot;%1&quot; is niet ondertekend door het Quillbinder-project. Om het toch vanaf de opdrachtregel te installeren, voeg je --allow-unsigned toe.</translation>
     </message>
     <message>
         <source>Cannot read %1</source>
@@ -20746,6 +21085,13 @@ Of download de huidige versie van de pagina van het project.</translation>
     </message>
 </context>
 <context>
+    <name>qb::language</name>
+    <message>
+        <source>%1 (machine translation)</source>
+        <translation>%1 (machinevertaling)</translation>
+    </message>
+</context>
+<context>
     <name>qb::layouts</name>
     <message>
         <source>Default</source>
@@ -20876,7 +21222,7 @@ Openen maakt verbinding met die computer, die daardoor je gebruikersnaam kan te 
 %2
 
 Open it?</source>
-        <translation>Deze koppeling is geen web- of mailadres; ze wordt doorgegeven aan het programma dat op deze computer is ingesteld voor "%1":
+        <translation>Deze koppeling is geen web- of mailadres; ze wordt doorgegeven aan het programma dat op deze computer is ingesteld voor &quot;%1&quot;:
 
 %2
 
@@ -20911,7 +21257,7 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>Objects of the unknown category &quot;%1&quot; were found; the category was added.</source>
-        <translation>Er zijn objecten van de onbekende categorie "%1" gevonden; de categorie is toegevoegd.</translation>
+        <translation>Er zijn objecten van de onbekende categorie &quot;%1&quot; gevonden; de categorie is toegevoegd.</translation>
     </message>
     <message>
         <source>Objects: categories and templates</source>
@@ -20950,11 +21296,11 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>Part of the look: kept with this project, as chosen in &quot;Show and change the look of&quot; above.</source>
-        <translation>Deel van het uiterlijk: bewaard bij dit project, zoals gekozen in "Het uiterlijk tonen en wijzigen van" hierboven.</translation>
+        <translation>Deel van het uiterlijk: bewaard bij dit project, zoals gekozen in &quot;Het uiterlijk tonen en wijzigen van&quot; hierboven.</translation>
     </message>
     <message>
         <source>Part of the look: kept by the program as the look for new projects, as chosen in &quot;Show and change the look of&quot; above.</source>
-        <translation>Deel van het uiterlijk: door het programma bewaard als het uiterlijk voor nieuwe projecten, zoals gekozen in "Het uiterlijk tonen en wijzigen van" hierboven.</translation>
+        <translation>Deel van het uiterlijk: door het programma bewaard als het uiterlijk voor nieuwe projecten, zoals gekozen in &quot;Het uiterlijk tonen en wijzigen van&quot; hierboven.</translation>
     </message>
     <message>
         <source>Fixed: kept by the program for all projects. A project cannot keep a value of its own here.</source>
@@ -20962,7 +21308,7 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>Depends on the setting: kept by the program for all projects. An open project can keep a value of its own: &quot;Settings for: This project&quot;.</source>
-        <translation>Hangt van de instelling af: door het programma bewaard voor alle projecten. Een geopend project kan een eigen waarde bewaren: "Instellingen voor: Dit project".</translation>
+        <translation>Hangt van de instelling af: door het programma bewaard voor alle projecten. Een geopend project kan een eigen waarde bewaren: &quot;Instellingen voor: Dit project&quot;.</translation>
     </message>
     <message>
         <source>Depends on the setting: kept by the program for all projects. Projects&apos; own values are not used now (General &gt; Which settings come first).</source>
@@ -20982,7 +21328,7 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>Depends on the setting: kept by the program for all projects. A project can keep a value of its own: &quot;Settings for: This project&quot;.</source>
-        <translation>Hangt van de instelling af: door het programma bewaard voor alle projecten. Een project kan een eigen waarde bewaren: "Instellingen voor: Dit project".</translation>
+        <translation>Hangt van de instelling af: door het programma bewaard voor alle projecten. Een project kan een eigen waarde bewaren: &quot;Instellingen voor: Dit project&quot;.</translation>
     </message>
 </context>
 <context>
@@ -21073,11 +21419,11 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>it uses %1, formats licensed under patents, which the add-on &quot;Media Playback&quot; leaves out. Install the add-on &quot;Extra Video and Audio Formats&quot; (a separate download).</source>
-        <translation>het gebruikt %1, indelingen die onder patenten vallen en die de add-on "Media Playback" weglaat. Installeer de add-on "Extra Video and Audio Formats" (een aparte download).</translation>
+        <translation>het gebruikt %1, indelingen die onder patenten vallen en die de add-on &quot;Media Playback&quot; weglaat. Installeer de add-on &quot;Extra Video and Audio Formats&quot; (een aparte download).</translation>
     </message>
     <message>
         <source>it uses %1, a format licensed under patents, which the add-on &quot;Media Playback&quot; leaves out. Install the add-on &quot;Extra Video and Audio Formats&quot; (a separate download).</source>
-        <translation>het gebruikt %1, een indeling die onder patenten valt en die de add-on "Media Playback" weglaat. Installeer de add-on "Extra Video and Audio Formats" (een aparte download).</translation>
+        <translation>het gebruikt %1, een indeling die onder patenten valt en die de add-on &quot;Media Playback&quot; weglaat. Installeer de add-on &quot;Extra Video and Audio Formats&quot; (een aparte download).</translation>
     </message>
     <message>
         <source>The file cannot be played.</source>
@@ -21136,11 +21482,11 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>Plays common audio and video files without other programs, also H.264, H.265 and AAC (add-on &quot;Extra Video and Audio Formats&quot;).</source>
-        <translation>Speelt gangbare audio- en videobestanden af zonder andere programma's, ook H.264, H.265 en AAC (add-on "Extra Video and Audio Formats").</translation>
+        <translation>Speelt gangbare audio- en videobestanden af zonder andere programma&apos;s, ook H.264, H.265 en AAC (add-on &quot;Extra Video and Audio Formats&quot;).</translation>
     </message>
     <message>
         <source>Plays free formats without other programs (MP3, Ogg, Opus, FLAC, WAV, WebM ...). H.264, H.265, AAC and other formats licensed under patents need the add-on &quot;Extra Video and Audio Formats&quot;.</source>
-        <translation>Speelt vrije indelingen af zonder andere programma's (MP3, Ogg, Opus, FLAC, WAV, WebM ...). H.264, H.265, AAC en andere indelingen die onder patenten vallen, hebben de add-on "Extra Video and Audio Formats" nodig.</translation>
+        <translation>Speelt vrije indelingen af zonder andere programma&apos;s (MP3, Ogg, Opus, FLAC, WAV, WebM ...). H.264, H.265, AAC en andere indelingen die onder patenten vallen, hebben de add-on &quot;Extra Video and Audio Formats&quot; nodig.</translation>
     </message>
     <message>
         <source>GStreamer of the system</source>
@@ -21148,7 +21494,7 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>Not available since %1 0.80.0: the Qt it uses (The Qt Company&apos;s own build of Qt 6.12) plays through FFmpeg only. The built-in way plays the same formats (H.264, H.265 and AAC with the add-on &quot;Extra Video and Audio Formats&quot;).</source>
-        <translation>Niet beschikbaar sinds %1 0.80.0: de Qt die het gebruikt (de eigen build van Qt 6.12 van The Qt Company) speelt alleen via FFmpeg af. De ingebouwde manier speelt dezelfde indelingen af (H.264, H.265 en AAC met de add-on "Extra Video and Audio Formats").</translation>
+        <translation>Niet beschikbaar sinds %1 0.80.0: de Qt die het gebruikt (de eigen build van Qt 6.12 van The Qt Company) speelt alleen via FFmpeg af. De ingebouwde manier speelt dezelfde indelingen af (H.264, H.265 en AAC met de add-on &quot;Extra Video and Audio Formats&quot;).</translation>
     </message>
     <message>
         <source>Cannot load %1: %2</source>
@@ -21156,7 +21502,7 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>Unknown way of playing &quot;%1&quot;.</source>
-        <translation>Onbekende manier van afspelen "%1".</translation>
+        <translation>Onbekende manier van afspelen &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>%1 cannot be used: %2</source>
@@ -21192,7 +21538,7 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>FFmpeg (add-on &quot;Extra Video and Audio Formats&quot;)</source>
-        <translation>FFmpeg (add-on "Extra Video and Audio Formats")</translation>
+        <translation>FFmpeg (add-on &quot;Extra Video and Audio Formats&quot;)</translation>
     </message>
     <message>
         <source>Plays more formats (also Ogg, Opus, WebM, Matroska ...) with the FFmpeg libraries built by The Qt Company for Qt Multimedia.</source>
@@ -21200,7 +21546,7 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>Install the add-on &quot;Extra Video and Audio Formats&quot; (and switch it on) to use it.</source>
-        <translation>Installeer de add-on "Extra Video and Audio Formats" (en schakel hem in) om het te gebruiken.</translation>
+        <translation>Installeer de add-on &quot;Extra Video and Audio Formats&quot; (en schakel hem in) om het te gebruiken.</translation>
     </message>
     <message>
         <source>No way of playing is available.</source>
@@ -21211,7 +21557,7 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     <name>qbweb::Loader</name>
     <message>
         <source>Secure web pages (https) cannot be fetched: the TLS support is missing (the add-on&apos;s TLS plugin or the system&apos;s OpenSSL 3, package libssl3).</source>
-        <translation>Beveiligde webpagina's (https) kunnen niet worden opgehaald: de TLS-ondersteuning ontbreekt (de TLS-plug-in van de add-on of OpenSSL 3 van het systeem, pakket libssl3).</translation>
+        <translation>Beveiligde webpagina&apos;s (https) kunnen niet worden opgehaald: de TLS-ondersteuning ontbreekt (de TLS-plug-in van de add-on of OpenSSL 3 van het systeem, pakket libssl3).</translation>
     </message>
     <message>
         <source>Fetching %1 …</source>
@@ -21298,7 +21644,7 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>Only the article (leave out menus, adverts and comments)</source>
-        <translation>Alleen het artikel (menu's, advertenties en reacties weglaten)</translation>
+        <translation>Alleen het artikel (menu&apos;s, advertenties en reacties weglaten)</translation>
     </message>
     <message>
         <source>Pictures</source>

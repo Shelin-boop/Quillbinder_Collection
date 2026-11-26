@@ -236,6 +236,12 @@
    "synopsis": "Mode gelap dan tema lain seketika; palet warna bilah format; menginstal font."
   },
   {
+   "title": "Tema dan Profil",
+   "icon": "qb-cog",
+   "textFile": "docs/08a-profiles.md",
+   "synopsis": "Tema adalah tampilan; profil menyimpan opsi, bilah alat, jendela, dan tema Anda bersama-sama dan mengalihkannya sekaligus."
+  },
+  {
    "title": "Pembaruan dan Pengaya",
    "icon": "qb-cog",
    "textFile": "docs/09-updates.md",

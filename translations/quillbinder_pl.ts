@@ -349,6 +349,10 @@ Imiona z tej listy nie są podzielone na żeńskie i męskie.</translation>
         <source>Textual Marks</source>
         <translation>Znaczniki tekstowe</translation>
     </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>Kolory standardowe</translation>
+    </message>
 </context>
 <context>
     <name>Portable</name>
@@ -2189,7 +2193,7 @@ To, co zapisano dotąd, znajduje się w %2. Nic nie zmieniono w projekcie Scrive
     </message>
     <message>
         <source>&lt;p&gt;%1 itself is under the &lt;b&gt;Apache License 2.0&lt;/b&gt;: anyone may use, copy, change and pass it on, keeping the license and the NOTICE file, which names the project and its source. The AppImage also carries parts of other projects, each under its own license; they are listed here with their full license texts (the same texts are in the AppImage under &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt is The Qt Company&apos;s own build of Qt %3; the other libraries are those of Ubuntu 24.04. The source code of each, exactly in the version used, is in the release &lt;a href=&quot;%2&quot;&gt;Third-party source code&lt;/a&gt; of the project page, in the file named below its license (Ubuntu&apos;s archive has Ubuntu&apos;s as well). You may replace the libraries inside the AppImage with your own builds. Add-ons carry their own license files.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Sam %1 jest objęty &lt;b&gt;licencją Apache License 2.0&lt;/b&gt;: każdy może go używać, kopiować, zmieniać i przekazywać dalej, zachowując licencję i plik NOTICE, który wymienia projekt i jego źródło. AppImage zawiera też części innych projektów, każdą na jej własnej licencji; są tu wymienione wraz z pełnymi tekstami licencji (te same teksty znajdują się w AppImage w &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt to własna kompilacja Qt %3 firmy The Qt Company; pozostałe biblioteki pochodzą z Ubuntu 24.04. Kod źródłowy każdej z nich, dokładnie w użytej wersji, znajduje się w wydaniu &lt;a href="%2"&gt;Third-party source code&lt;/a&gt; na stronie projektu, w pliku wymienionym pod jej licencją (archiwum Ubuntu także go zawiera). Biblioteki wewnątrz AppImage możesz zastąpić własnymi kompilacjami. Dodatki mają własne pliki licencji.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Sam %1 jest objęty &lt;b&gt;licencją Apache License 2.0&lt;/b&gt;: każdy może go używać, kopiować, zmieniać i przekazywać dalej, zachowując licencję i plik NOTICE, który wymienia projekt i jego źródło. AppImage zawiera też części innych projektów, każdą na jej własnej licencji; są tu wymienione wraz z pełnymi tekstami licencji (te same teksty znajdują się w AppImage w &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt to własna kompilacja Qt %3 firmy The Qt Company; pozostałe biblioteki pochodzą z Ubuntu 24.04. Kod źródłowy każdej z nich, dokładnie w użytej wersji, znajduje się w wydaniu &lt;a href=&quot;%2&quot;&gt;Third-party source code&lt;/a&gt; na stronie projektu, w pliku wymienionym pod jej licencją (archiwum Ubuntu także go zawiera). Biblioteki wewnątrz AppImage możesz zastąpić własnymi kompilacjami. Dodatki mają własne pliki licencji.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1
@@ -3035,7 +3039,7 @@ Source: %1</source>
     </message>
     <message>
         <source>colors and fonts</source>
-        <translation>kolory i czcionki</translation>
+        <translation>kolory i czcionki|kolorów i czcionek</translation>
     </message>
     <message>
         <source>Keep them with the new theme, or use the theme as it is? (Save Current Look as Theme keeps the present look for later.)</source>
@@ -3284,8 +3288,12 @@ Source: %1</source>
         <translation>Inspektor: notatki</translation>
     </message>
     <message>
-        <source>Inspector: Bookmark Lists</source>
-        <translation>Inspektor: listy zakładek</translation>
+        <source>Inspector: Document Bookmarks</source>
+        <translation>Inspektor: zakładki dokumentu</translation>
+    </message>
+    <message>
+        <source>Inspector: Project Bookmarks</source>
+        <translation>Inspektor: zakładki projektu</translation>
     </message>
     <message>
         <source>Inspector: Bookmarked Text</source>
@@ -3552,28 +3560,72 @@ Source: %1</source>
         <translation>bardzo trudny</translation>
     </message>
     <message>
-        <source>Protagonist</source>
-        <translation>Bohaterka główna</translation>
+        <source>Name of the profile:</source>
+        <translation>Nazwa profilu:</translation>
     </message>
     <message>
-        <source>Supporting</source>
-        <translation>Drugoplanowy</translation>
+        <source>There is already a profile named “%1”. Choose another name.</source>
+        <translation>Profil o nazwie „%1” już istnieje. Wybierz inną nazwę.</translation>
     </message>
     <message>
-        <source>Village</source>
-        <translation>Wieś</translation>
+        <source>Import Profile</source>
+        <translation>Import profilu</translation>
     </message>
     <message>
-        <source>Forest</source>
-        <translation>Las</translation>
+        <source>The profile also names programs, folders, files or addresses (a folder may not exist on this computer):
+
+%1
+
+Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
+        <translation>Profil wymienia także programy, foldery, pliki lub adresy (folder może nie istnieć na tym komputerze):
+
+%1
+
+Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z zaufanego źródła.</translation>
     </message>
     <message>
-        <source>Autumn</source>
-        <translation>Jesień</translation>
+        <source>A temporary file could not be made.</source>
+        <translation>Nie można utworzyć pliku tymczasowego.</translation>
     </message>
     <message>
-        <source>Fog</source>
-        <translation>Mgła</translation>
+        <source>Nothing to write.</source>
+        <translation>Nie ma nic do zapisania.</translation>
+    </message>
+    <message>
+        <source>The file could not be written (%1). The file that was there is unchanged.</source>
+        <translation>Nie można zapisać pliku (%1). Dotychczasowy plik pozostał bez zmian.</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Mój profil</translation>
+    </message>
+    <message>
+        <source>The profile “%1” could not be read.</source>
+        <translation>Nie można odczytać profilu „%1”.</translation>
+    </message>
+    <message>
+        <source>There is no profile “%1”.</source>
+        <translation>Nie ma profilu „%1”.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be deleted.</source>
+        <translation>Nie można usunąć profilu „%1”.</translation>
+    </message>
+    <message>
+        <source>The profile in use cannot be deleted. Switch to another profile first.</source>
+        <translation>Nie można usunąć używanego profilu. Najpierw przełącz się na inny profil.</translation>
+    </message>
+    <message>
+        <source>The file of the profile could not be deleted.</source>
+        <translation>Nie można usunąć pliku profilu.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be renamed.</source>
+        <translation>Nie można zmienić nazwy profilu „%1”.</translation>
+    </message>
+    <message>
+        <source>This is not a file of a profile or of options saved by Quillbinder.</source>
+        <translation>To nie jest plik profilu ani opcji zapisanych przez Quillbinder.</translation>
     </message>
 </context>
 <context>
@@ -4974,7 +5026,7 @@ Przenieś cały folder Quillbinder w swoje własne miejsce, na przykład C:\User
     </message>
     <message>
         <source>&lt;span style=&apos;color:gray&apos;&gt;No add-ons installed. Add-ons are files ending in .qbpkg; choose &quot;Install From File…&quot; or double-click the file.&lt;/span&gt;</source>
-        <translation>&lt;span style='color:gray'&gt;Nie zainstalowano żadnych dodatków. Dodatki to pliki z rozszerzeniem .qbpkg; wybierz „Zainstaluj z pliku…” albo kliknij plik dwukrotnie.&lt;/span&gt;</translation>
+        <translation>&lt;span style=&apos;color:gray&apos;&gt;Nie zainstalowano żadnych dodatków. Dodatki to pliki z rozszerzeniem .qbpkg; wybierz „Zainstaluj z pliku…” albo kliknij plik dwukrotnie.&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Install Update or Add-on</source>
@@ -6068,11 +6120,11 @@ Przenieś cały folder Quillbinder w swoje własne miejsce, na przykład C:\User
     </message>
     <message>
         <source>Typographic quotes to &amp;straight quotes (&quot; &apos;)</source>
-        <translation>Cudzysłowy typograficzne na &amp;proste (" ')</translation>
+        <translation>Cudzysłowy typograficzne na &amp;proste (&quot; &apos;)</translation>
     </message>
     <message>
         <source>An apostrophe inside a word becomes ’. A straight mark with a space on both sides stays as it is; an apostrophe at the start of a word (&apos;tis) becomes an opening mark.</source>
-        <translation>Apostrof wewnątrz słowa staje się znakiem ’. Prosty znak ze spacją po obu stronach pozostaje bez zmian; apostrof na początku słowa ('tis) staje się znakiem otwierającym.</translation>
+        <translation>Apostrof wewnątrz słowa staje się znakiem ’. Prosty znak ze spacją po obu stronach pozostaje bez zmian; apostrof na początku słowa (&apos;tis) staje się znakiem otwierającym.</translation>
     </message>
     <message>
         <source>Convert in</source>
@@ -6196,7 +6248,7 @@ Przenieś cały folder Quillbinder w swoje własne miejsce, na przykład C:\User
     </message>
     <message>
         <source>quote marks</source>
-        <translation>cudzysłowów</translation>
+        <translation>cudzysłowy|cudzysłowów</translation>
     </message>
     <message>
         <source>document</source>
@@ -6204,7 +6256,7 @@ Przenieś cały folder Quillbinder w swoje własne miejsce, na przykład C:\User
     </message>
     <message>
         <source>documents</source>
-        <translation>dokumentach</translation>
+        <translation>dokumentach|dokumentach</translation>
     </message>
     <message>
         <source>%1 converted in %2: %3.</source>
@@ -6357,7 +6409,7 @@ Tej operacji nie można cofnąć w całości.%3</translation>
     </message>
     <message>
         <source>crash reports</source>
-        <translation>raportów o awariach</translation>
+        <translation>raporty o awariach|raportów o awariach</translation>
     </message>
     <message>
         <source>Delete All</source>
@@ -6666,7 +6718,7 @@ Tej operacji nie można cofnąć w całości.%3</translation>
     </message>
     <message>
         <source>replacements</source>
-        <translation>zamian</translation>
+        <translation>zamiany|zamian</translation>
     </message>
     <message>
         <source>match</source>
@@ -6674,7 +6726,7 @@ Tej operacji nie można cofnąć w całości.%3</translation>
     </message>
     <message>
         <source>matches</source>
-        <translation>trafień</translation>
+        <translation>trafienia|trafień</translation>
     </message>
     <message>
         <source>Words: %1
@@ -6802,7 +6854,7 @@ Strony (250 słów): %5</translation>
     </message>
     <message>
         <source>pages</source>
-        <translation>stron</translation>
+        <translation>strony|stron</translation>
     </message>
     <message>
         <source>%1 and %2 more</source>
@@ -6822,7 +6874,7 @@ Strony (250 słów): %5</translation>
     </message>
     <message>
         <source>documents</source>
-        <translation>dokumentów</translation>
+        <translation>dokumenty|dokumentów</translation>
     </message>
     <message>
         <source>Total: %1 characters</source>
@@ -7122,6 +7174,18 @@ Strony (250 słów): %5</translation>
         <translation>Zanim zaczniesz: jak są tworzone kopie zapasowe twoich projektów. Wszystko jest już wypełnione: OK zachowuje to bez zmian. Wszystko możesz zmienić później w menu Plik &gt; Opcje.</translation>
     </message>
     <message>
+        <source>Language</source>
+        <translation>Język</translation>
+    </message>
+    <message>
+        <source>Language of the program:</source>
+        <translation>Język programu:</translation>
+    </message>
+    <message>
+        <source>A language you choose here is used from the next start of the program.</source>
+        <translation>Wybrany tutaj język będzie używany od następnego uruchomienia programu.</translation>
+    </message>
+    <message>
         <source>Everything in One Folder</source>
         <translation>Wszystko w jednym folderze</translation>
     </message>
@@ -7156,12 +7220,20 @@ Nic nie jest zapisywane w folderach systemu Windows ani w rejestrze, chyba że p
         <translation>Automatycznie twórz kopię zapasową projektu po jego zamknięciu</translation>
     </message>
     <message>
-        <source> backups of each project</source>
-        <translation> kopii zapasowych każdego projektu</translation>
+        <source>Keep the newest</source>
+        <translation>Zachowuj najnowsze</translation>
     </message>
     <message>
-        <source>Keep the newest:</source>
-        <translation>Zachowaj najnowsze:</translation>
+        <source>backups of each project</source>
+        <translation>kopii zapasowych każdego projektu</translation>
+    </message>
+    <message>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>Przenieś AppImage do %1, stałego miejsca, z którego uruchamia go wpis w menu</translation>
+    </message>
+    <message>
+        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
+        <translation>Polecenie Pomoc &gt; Dodaj do menu aplikacji lub Usuń z menu aplikacji zmienia to później. Jeśli sam przeniesiesz AppImage, dodaj go do menu ponownie.</translation>
     </message>
     <message>
         <source>Choose a folder: until then no backups are made</source>
@@ -7190,14 +7262,6 @@ Nic nie jest zapisywane w folderach systemu Windows ani w rejestrze, chyba że p
     <message>
         <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them</source>
         <translation>Dodaj %1 do menu aplikacji, aby uruchamiać go jak każdy inny program i otwierać projekty dwukrotnym kliknięciem</translation>
-    </message>
-    <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>Przenieś AppImage do %1 (przeniesionego pliku nie można uruchomić z menu)</translation>
-    </message>
-    <message>
-        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later.</source>
-        <translation>Pomoc &gt; Dodaj do menu aplikacji albo Usuń z menu aplikacji zmienia to później.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -7830,11 +7894,11 @@ Nic nie jest zapisywane w folderach systemu Windows ani w rejestrze, chyba że p
     </message>
     <message>
         <source>Straight quotes (“ ” ‘ ’ become &quot; &apos;)</source>
-        <translation>Cudzysłowy proste (“ ” ‘ ’ stają się " ')</translation>
+        <translation>Cudzysłowy proste (“ ” ‘ ’ stają się &quot; &apos;)</translation>
     </message>
     <message>
         <source>Typographic quotes (&quot; &apos; become “ ” ‘ ’, English)</source>
-        <translation>Cudzysłowy typograficzne (" ' stają się “ ” ‘ ’, angielskie)</translation>
+        <translation>Cudzysłowy typograficzne (&quot; &apos; stają się “ ” ‘ ’, angielskie)</translation>
     </message>
     <message>
         <source>Dashes as hyphens (— becomes --, – becomes -)</source>
@@ -8052,7 +8116,7 @@ Nic nie jest zapisywane w folderach systemu Windows ani w rejestrze, chyba że p
     </message>
     <message>
         <source>add-ons</source>
-        <translation>dodatków</translation>
+        <translation>dodatki|dodatków</translation>
     </message>
     <message>
         <source>Done</source>
@@ -8778,8 +8842,12 @@ Tekst migawki „%2” jest teraz tekstem dokumentu; można go znów edytować i
         <translation>Notatki</translation>
     </message>
     <message>
-        <source>Lists</source>
-        <translation>Listy</translation>
+        <source>Document</source>
+        <translation>Dokument</translation>
+    </message>
+    <message>
+        <source>Project</source>
+        <translation>Projekt</translation>
     </message>
     <message>
         <source>Text</source>
@@ -8865,6 +8933,14 @@ Tekst migawki „%2” jest teraz tekstem dokumentu; można go znów edytować i
         <translation>Eksportuj…</translation>
     </message>
     <message>
+        <source>Use the Set of My Keyboard Layout…</source>
+        <translation>Użyj zestawu dla mojego układu klawiatury…</translation>
+    </message>
+    <message>
+        <source>Take the shortcuts that fit the keyboard layout in use now (a German keyboard gets keys that need no AltGr). Shortcuts you set yourself stay as they are.</source>
+        <translation>Użyj skrótów pasujących do aktualnie używanego układu klawiatury (klawiatura niemiecka dostaje klawisze niewymagające AltGr). Skróty ustawione przez ciebie pozostają bez zmian.</translation>
+    </message>
+    <message>
         <source>Shortcut in Use</source>
         <translation>Skrót w użyciu</translation>
     </message>
@@ -8926,7 +9002,31 @@ Nadać go zamiast tego poleceniu „%4”? „%2” nie będzie wtedy miało skr
     </message>
     <message>
         <source>shortcuts</source>
-        <translation>skrótów</translation>
+        <translation>skróty|skrótów</translation>
+    </message>
+    <message>
+        <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
+        <translation>System nie podaje, jaki układ klawiatury jest używany, więc program nie może wybrać zestawu. Pojedyncze skróty możesz nadal zmieniać poniżej.</translation>
+    </message>
+    <message>
+        <source>The shortcuts already come from the set for your keyboard layout (%1).</source>
+        <translation>Skróty pochodzą już z zestawu dla twojego układu klawiatury (%1).</translation>
+    </message>
+    <message>
+        <source> (you set another shortcut: it stays)</source>
+        <translation> (ustawiono inny skrót: pozostaje)</translation>
+    </message>
+    <message>
+        <source>Use the set of shortcuts for your keyboard layout (%1)? These standard shortcuts change at once:
+
+%2
+
+Shortcuts you set yourself stay as they are.</source>
+        <translation>Użyć zestawu skrótów dla twojego układu klawiatury (%1)? Te skróty standardowe zmienią się od razu:
+
+%2
+
+Skróty ustawione przez ciebie pozostają bez zmian.</translation>
     </message>
 </context>
 <context>
@@ -9681,7 +9781,7 @@ Nadać go zamiast tego poleceniu „%4”? „%2” nie będzie wtedy miało skr
     </message>
     <message>
         <source>documents</source>
-        <translation>dokumentów</translation>
+        <translation>dokumenty|dokumentów</translation>
     </message>
     <message>
         <source>Delete %1 in the Trash forever? This cannot be undone.</source>
@@ -11101,7 +11201,7 @@ Wersje od 0.70.0 do 0.90.4 przechowywały je tam. Przenieść je do samego folde
     </message>
     <message>
         <source>pages</source>
-        <translation>stron</translation>
+        <translation>strony|stron</translation>
     </message>
     <message>
         <source>Print Preview – %1</source>
@@ -11140,8 +11240,8 @@ You can do this later with Help &gt; Add to Application Menu.</source>
 Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</translation>
     </message>
     <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>Przenieś AppImage do %1 (przeniesionego pliku nie można uruchomić z menu)</translation>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>Przenieś AppImage do %1, stałego miejsca, z którego uruchamia go wpis w menu</translation>
     </message>
     <message>
         <source>The menu entry could not be made.
@@ -11378,6 +11478,10 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
     <message>
         <source>&amp;Themes</source>
         <translation>&amp;Motywy</translation>
+    </message>
+    <message>
+        <source>&amp;Profiles</source>
+        <translation>&amp;Profile</translation>
     </message>
     <message>
         <source>&amp;Text Editing</source>
@@ -12529,7 +12633,7 @@ Brak elementu tego samego rodzaju dla: %1. Ich akapity stają się tekstem zwyk�
     </message>
     <message>
         <source>Delete all %1 of %2 forever?</source>
-        <translation>Usunąć na zawsze wszystkie: %1 z %2?</translation>
+        <translation>Usunąć na zawsze wszystkie: %1 (dotyczą: %2)?</translation>
     </message>
     <message>
         <source>snapshot</source>
@@ -12537,7 +12641,7 @@ Brak elementu tego samego rodzaju dla: %1. Ich akapity stają się tekstem zwyk�
     </message>
     <message>
         <source>snapshots</source>
-        <translation>migawek</translation>
+        <translation>migawki|migawek</translation>
     </message>
     <message>
         <source>They take %1. The texts stay as they are now; only their earlier versions go, also those of documents in the Trash. This cannot be undone: a backup (File &gt; Back Up) beforehand is a good idea.</source>
@@ -12910,14 +13014,6 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
         <translation>Inne wersje są nadal zachowywane; tylko to powiadomienie znika do zakończenia programu.</translation>
     </message>
     <message>
-        <source>&amp;Translate and Proofread…</source>
-        <translation>Tłumacz &amp;i koryguj…</translation>
-    </message>
-    <message>
-        <source>Proofread English text or translate German text into English (the add-on is not installed)</source>
-        <translation>Koryguj tekst angielski albo tłumacz tekst niemiecki na angielski (dodatek nie jest zainstalowany)</translation>
-    </message>
-    <message>
         <source>Speech &amp;Transcription…</source>
         <translation>&amp;Transkrypcja mowy…</translation>
     </message>
@@ -12928,10 +13024,6 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
     <message>
         <source>Speech Transcription</source>
         <translation>Transkrypcja mowy</translation>
-    </message>
-    <message>
-        <source>Translation and Proofreading</source>
-        <translation>Tłumaczenie i korekta</translation>
     </message>
     <message>
         <source>is not installed</source>
@@ -12958,8 +13050,20 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
         <translation>Zamienia mowę na tekst. Zainstaluj go przez Pomoc &gt; Dodatki i aktualizacje &gt; Zainstaluj aktualizację lub dodatek; Pomoc &gt; Dodatki i aktualizacje &gt; Menedżer dodatków pokazuje dodatki i włącza je oraz wyłącza.</translation>
     </message>
     <message>
-        <source>It proofreads English text and translates German text into English. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
-        <translation>Koryguje tekst angielski i tłumaczy tekst niemiecki na angielski. Zainstaluj go przez Pomoc &gt; Dodatki i aktualizacje &gt; Zainstaluj aktualizację lub dodatek; Pomoc &gt; Dodatki i aktualizacje &gt; Menedżer dodatków pokazuje dodatki i włącza je oraz wyłącza.</translation>
+        <source>&amp;Translation Helper…</source>
+        <translation>&amp;Pomocnik tłumaczenia…</translation>
+    </message>
+    <message>
+        <source>Suggestions for translating between eleven languages and for English spelling (the add-on is not installed)</source>
+        <translation>Propozycje tłumaczeń między jedenastoma językami oraz pisowni angielskiej (dodatek nie jest zainstalowany)</translation>
+    </message>
+    <message>
+        <source>Translation Helper</source>
+        <translation>Pomocnik tłumaczenia</translation>
+    </message>
+    <message>
+        <source>It gives suggestions for translating between eleven languages and for English spelling and grammar. Its translations are not precise: check each one, which needs a working knowledge of both languages. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>Podpowiada tłumaczenia między jedenastoma językami oraz pisownię i gramatykę angielską. Jego tłumaczenia nie są precyzyjne: sprawdzaj każde z nich, co wymaga dobrej znajomości obu języków. Zainstaluj go poleceniem Pomoc &gt; Dodatki i aktualizacje &gt; Zainstaluj aktualizację lub dodatek; Pomoc &gt; Dodatki i aktualizacje &gt; Menedżer dodatków pokazuje dodatki i włącza je lub wyłącza.</translation>
     </message>
     <message>
         <source>Open Add-on Manager</source>
@@ -13056,6 +13160,62 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
     <message>
         <source>and %1 earlier steps</source>
         <translation>i %1 wcześniejszych kroków</translation>
+    </message>
+    <message>
+        <source>&amp;Manage Profiles…</source>
+        <translation>&amp;Zarządzaj profilami…</translation>
+    </message>
+    <message>
+        <source>Use, save, rename, copy, delete, export and import profiles</source>
+        <translation>Używaj, zapisuj, zmieniaj nazwę, kopiuj, usuwaj, eksportuj i importuj profile</translation>
+    </message>
+    <message>
+        <source>&amp;Save Settings as New Profile…</source>
+        <translation>&amp;Zapisz ustawienia jako nowy profil…</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Zapisz ustawienia jako nowy profil</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Mój profil</translation>
+    </message>
+    <message>
+        <source>Keep the options, toolbars, window and theme as they are now in a new profile</source>
+        <translation>Zachowaj opcje, paski narzędzi, okno i motyw w bieżącym stanie w nowym profilu</translation>
+    </message>
+    <message>
+        <source>Profiles</source>
+        <translation>Profile</translation>
+    </message>
+    <message>
+        <source>Labels</source>
+        <translation>Etykiety</translation>
+    </message>
+    <message>
+        <source>Profile:</source>
+        <translation>Profil:</translation>
+    </message>
+    <message>
+        <source>The profile in use: %1. A click lists the profiles.</source>
+        <translation>Używany profil: %1. Kliknięcie wyświetla listę profili.</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Etykieta</translation>
+    </message>
+    <message>
+        <source>No Label</source>
+        <translation>Bez etykiety</translation>
+    </message>
+    <message>
+        <source>Switch Profile</source>
+        <translation>Przełącz profil</translation>
+    </message>
+    <message>
+        <source>The profile sets another language; it takes effect when the program is started again.</source>
+        <translation>Profil ustawia inny język; zacznie on obowiązywać po ponownym uruchomieniu programu.</translation>
     </message>
 </context>
 <context>
@@ -15467,7 +15627,7 @@ Kontynuować?</translation>
     </message>
     <message>
         <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</source>
-        <translation>To, co tu zmienisz, jest przechowywane razem z tym projektem. Jego własne ustawienia: &lt;a href="show"&gt;%1&lt;/a&gt;.</translation>
+        <translation>To, co tu zmienisz, jest przechowywane razem z tym projektem. Jego własne ustawienia: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>setting</source>
@@ -15483,7 +15643,7 @@ Kontynuować?</translation>
     </message>
     <message>
         <source>The open project has &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; of its own, which it keeps.</source>
-        <translation>Otwarty projekt ma własne ustawienia (&lt;a href="show"&gt;%1&lt;/a&gt;), które zachowuje.</translation>
+        <translation>Otwarty projekt ma własne ustawienia (&lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;), które zachowuje.</translation>
     </message>
     <message>
         <source>Projects&apos; own settings are not used (General &gt; Which settings come first).</source>
@@ -15534,8 +15694,8 @@ Kontynuować?</translation>
         <translation>Język:</translation>
     </message>
     <message>
-        <source>The language of menus, windows and messages; it changes at the next start of the program. The manual and the welcome project stay in English.</source>
-        <translation>Język menu, okien i komunikatów; zmienia się przy następnym uruchomieniu programu. Podręcznik i projekt powitalny pozostają po angielsku.</translation>
+        <source>The language of menus, windows and messages, of the manual, the quick start guide and the welcome project; it changes at the next start of the program. A language marked as a machine translation has not been checked by a speaker yet. Spelling dictionaries for other languages are add-ons (Help &gt; Add-ons and Updates).</source>
+        <translation>Język menu, okien i komunikatów, podręcznika, przewodnika szybkiego startu i projektu powitalnego; zmienia się przy następnym uruchomieniu programu. Język oznaczony jako tłumaczenie maszynowe nie został jeszcze sprawdzony przez osobę, która nim mówi. Słowniki pisowni dla innych języków są dodatkami (Pomoc &gt; Dodatki i aktualizacje).</translation>
     </message>
     <message>
         <source>Group the digits of large numbers (%1)</source>
@@ -16602,8 +16762,104 @@ Kontynuować?</translation>
         <translation>wszystkie</translation>
     </message>
     <message>
-        <source>Retain backup files per project:</source>
-        <translation>Zachowuj kopii zapasowych na projekt:</translation>
+        <source>Keep the newest</source>
+        <translation>Zachowuj najnowsze</translation>
+    </message>
+    <message>
+        <source>backups of each project</source>
+        <translation>kopii zapasowych każdego projektu</translation>
+    </message>
+    <message>
+        <source>The colors new things start with. They belong to your profile. Projects that exist keep their own labels.</source>
+        <translation>Kolory, od których zaczynają nowe rzeczy. Należą do twojego profilu. Istniejące projekty zachowują własne etykiety.</translation>
+    </message>
+    <message>
+        <source>Standard Color</source>
+        <translation>Kolor standardowy</translation>
+    </message>
+    <message>
+        <source>Labels of new projects</source>
+        <translation>Etykiety nowych projektów</translation>
+    </message>
+    <message>
+        <source>Color of this label</source>
+        <translation>Kolor tej etykiety</translation>
+    </message>
+    <message>
+        <source>Colors of the popups</source>
+        <translation>Kolory wyskakujących okienek</translation>
+    </message>
+    <message>
+        <source>Text color:</source>
+        <translation>Kolor tekstu:</translation>
+    </message>
+    <message>
+        <source>Highlight:</source>
+        <translation>Wyróżnienie:</translation>
+    </message>
+    <message>
+        <source>A color of the text color popup</source>
+        <translation>Kolor z okienka koloru tekstu</translation>
+    </message>
+    <message>
+        <source>A color of the highlight popup</source>
+        <translation>Kolor z okienka wyróżnienia</translation>
+    </message>
+    <message>
+        <source>The color each button starts with</source>
+        <translation>Kolor, od którego zaczyna każdy przycisk</translation>
+    </message>
+    <message>
+        <source>Text color button:</source>
+        <translation>Przycisk koloru tekstu:</translation>
+    </message>
+    <message>
+        <source>The color of the text color button when the program starts</source>
+        <translation>Kolor przycisku koloru tekstu po uruchomieniu programu</translation>
+    </message>
+    <message>
+        <source>Highlight button:</source>
+        <translation>Przycisk wyróżnienia:</translation>
+    </message>
+    <message>
+        <source>The color of the highlight button when the program starts</source>
+        <translation>Kolor przycisku wyróżnienia po uruchomieniu programu</translation>
+    </message>
+    <message>
+        <source>Back to the program&apos;s standard labels and colors</source>
+        <translation>Powrót do standardowych etykiet i kolorów programu</translation>
+    </message>
+    <message>
+        <source>Export Profile...</source>
+        <translation>Eksportuj profil...</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Eksport profilu</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profile (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile...</source>
+        <translation>Importuj profil...</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Import profilu</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profile i opcje (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>The profile “%1” was imported. Switch to it under View &gt; Profiles.</source>
+        <translation>Zaimportowano profil „%1”. Przełącz się na niego w menu Widok &gt; Profile.</translation>
+    </message>
+    <message>
+        <source>Manage Profiles...</source>
+        <translation>Zarządzaj profilami...</translation>
     </message>
     <message>
         <source>No folder chosen: no automatic backups</source>
@@ -16814,24 +17070,8 @@ Kontynuować?</translation>
         <translation>Raporty o awariach</translation>
     </message>
     <message>
-        <source>Load Options from File...</source>
-        <translation>Wczytaj opcje z pliku...</translation>
-    </message>
-    <message>
         <source>Load Options</source>
         <translation>Wczytaj opcje</translation>
-    </message>
-    <message>
-        <source>Options (*.qboptions)</source>
-        <translation>Opcje (*.qboptions)</translation>
-    </message>
-    <message>
-        <source>Save Options to File...</source>
-        <translation>Zapisz opcje do pliku...</translation>
-    </message>
-    <message>
-        <source>Save Options</source>
-        <translation>Zapisz opcje</translation>
     </message>
     <message>
         <source>Save Theme Options to File...</source>
@@ -17587,7 +17827,106 @@ Twoje ostatnie projekty, własne motywy, układy, paski narzędzi i skróty klaw
     </message>
     <message>
         <source>cards</source>
-        <translation>fiszek</translation>
+        <translation>fiszki|fiszek</translation>
+    </message>
+</context>
+<context>
+    <name>qb::ProfileManagerDialog</name>
+    <message>
+        <source>Manage Profiles</source>
+        <translation>Zarządzanie profilami</translation>
+    </message>
+    <message>
+        <source>A profile holds your options, toolbars, window places and sizes, keyboard set, backup settings, standard colors, layouts and the theme. The profile in use is saved when you switch away from it and when the program ends.</source>
+        <translation>Profil zawiera twoje opcje, paski narzędzi, położenia i rozmiary okien, zestaw skrótów klawiaturowych, ustawienia kopii zapasowych, kolory standardowe, układy i motyw. Używany profil jest zapisywany, gdy się z niego przełączasz, i przy zamknięciu programu.</translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <translation>Użyj</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile...</source>
+        <translation>Zapisz ustawienia jako nowy profil...</translation>
+    </message>
+    <message>
+        <source>Rename...</source>
+        <translation>Zmień nazwę...</translation>
+    </message>
+    <message>
+        <source>Copy...</source>
+        <translation>Kopiuj...</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Usuń</translation>
+    </message>
+    <message>
+        <source>Export...</source>
+        <translation>Eksportuj...</translation>
+    </message>
+    <message>
+        <source>Import...</source>
+        <translation>Importuj...</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Zapisz ustawienia jako nowy profil</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Mój profil</translation>
+    </message>
+    <message>
+        <source>Rename Profile</source>
+        <translation>Zmiana nazwy profilu</translation>
+    </message>
+    <message>
+        <source>Copy Profile</source>
+        <translation>Kopiowanie profilu</translation>
+    </message>
+    <message>
+        <source>%1 (Copy)</source>
+        <translation>%1 (kopia)</translation>
+    </message>
+    <message>
+        <source>Delete Profile</source>
+        <translation>Usuwanie profilu</translation>
+    </message>
+    <message>
+        <source>Delete the profile “%1”? This cannot be undone.</source>
+        <translation>Usunąć profil „%1”? Tej operacji nie można cofnąć.</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Eksport profilu</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profile (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Import profilu</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profile i opcje (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>%1 (in use)</source>
+        <translation>%1 (używany)</translation>
+    </message>
+    <message>
+        <source>Theme: %1.</source>
+        <translation>Motyw: %1.</translation>
+    </message>
+    <message>
+        <source>Built-in profile; it can be deleted.</source>
+        <translation>Profil wbudowany; można go usunąć.</translation>
+    </message>
+    <message>
+        <source>The profile every program starts with.</source>
+        <translation>Profil, z którym zaczyna się każde uruchomienie programu.</translation>
     </message>
 </context>
 <context>
@@ -17999,7 +18338,7 @@ Niezapisane:
     </message>
     <message>
         <source>occurrences</source>
-        <translation>wystąpień</translation>
+        <translation>wystąpienia|wystąpień</translation>
     </message>
     <message>
         <source>document</source>
@@ -18007,7 +18346,7 @@ Niezapisane:
     </message>
     <message>
         <source>documents</source>
-        <translation>dokumentach</translation>
+        <translation>dokumentach|dokumentach</translation>
     </message>
     <message>
         <source>Snapshots taken: %1.</source>
@@ -18819,7 +19158,7 @@ Czcionki, rozmiary i kolory poszczególnych fragmentów nie są zachowywane w Ma
     </message>
     <message>
         <source>If this is filled in, Tab types it instead of going to another element (scene headings: &quot; - &quot; before the time of day)</source>
-        <translation>Jeśli to jest wypełnione, Tab wpisuje to zamiast przechodzić do innego elementu (nagłówki scen: " - " przed porą dnia)</translation>
+        <translation>Jeśli to jest wypełnione, Tab wpisuje to zamiast przechodzić do innego elementu (nagłówki scen: &quot; - &quot; przed porą dnia)</translation>
     </message>
     <message>
         <source>…or Tab types:</source>
@@ -18887,7 +19226,7 @@ Czcionki, rozmiary i kolory poszczególnych fragmentów nie są zachowywane w Ma
     </message>
     <message>
         <source>An element name cannot be empty or contain the characters : &quot; &lt; &gt; \ { } ; /</source>
-        <translation>Nazwa elementu nie może być pusta ani zawierać znaków : " &lt; &gt; \ { } ; /</translation>
+        <translation>Nazwa elementu nie może być pusta ani zawierać znaków : &quot; &lt; &gt; \ { } ; /</translation>
     </message>
     <message>
         <source>New Element</source>
@@ -19189,7 +19528,7 @@ Zapisano %2 z projektu „%3” przez %4.</translation>
     </message>
     <message>
         <source>Please enter a name of up to 60 characters without : &quot; &lt; &gt; \ { } ;</source>
-        <translation>Wpisz nazwę o długości do 60 znaków, bez znaków : " &lt; &gt; \ { } ;</translation>
+        <translation>Wpisz nazwę o długości do 60 znaków, bez znaków : &quot; &lt; &gt; \ { } ;</translation>
     </message>
     <message>
         <source>There is a style named “%1” already.</source>
@@ -19252,7 +19591,7 @@ Zapisano %2 z projektu „%3” przez %4.</translation>
     </message>
     <message>
         <source>Please enter a name of up to 60 characters without : &quot; &lt; &gt; \ { } ;</source>
-        <translation>Wpisz nazwę o długości do 60 znaków, bez znaków : " &lt; &gt; \ { } ;</translation>
+        <translation>Wpisz nazwę o długości do 60 znaków, bez znaków : &quot; &lt; &gt; \ { } ;</translation>
     </message>
     <message>
         <source>There is a style named “%1” already. Choose another name, or use Redefine Style From Selection to change that style.</source>
@@ -19958,7 +20297,7 @@ Ctrl+kliknięcie, aby otworzyć</translation>
     </message>
     <message>
         <source>colors and fonts</source>
-        <translation>kolory i czcionki</translation>
+        <translation>kolory i czcionki|kolorów i czcionek</translation>
     </message>
     <message>
         <source>Save the look in My Look 1 or My Look 2 first (it replaces the look saved there), or switch without saving it?</source>
@@ -20439,7 +20778,7 @@ Albo pobrać aktualną wersję ze strony projektu.</translation>
     </message>
     <message>
         <source>themes</source>
-        <translation>motywów</translation>
+        <translation>motywy|motywów</translation>
     </message>
     <message>
         <source>project template</source>
@@ -20447,7 +20786,7 @@ Albo pobrać aktualną wersję ze strony projektu.</translation>
     </message>
     <message>
         <source>project templates</source>
-        <translation>szablonów projektu</translation>
+        <translation>szablony projektu|szablonów projektu</translation>
     </message>
     <message>
         <source>compile format</source>
@@ -20455,7 +20794,7 @@ Albo pobrać aktualną wersję ze strony projektu.</translation>
     </message>
     <message>
         <source>compile formats</source>
-        <translation>formatów kompilacji</translation>
+        <translation>formaty kompilacji|formatów kompilacji</translation>
     </message>
     <message>
         <source>layout</source>
@@ -20463,7 +20802,7 @@ Albo pobrać aktualną wersję ze strony projektu.</translation>
     </message>
     <message>
         <source>layouts</source>
-        <translation>układów</translation>
+        <translation>układy|układów</translation>
     </message>
     <message>
         <source>script format</source>
@@ -20471,7 +20810,7 @@ Albo pobrać aktualną wersję ze strony projektu.</translation>
     </message>
     <message>
         <source>script formats</source>
-        <translation>formatów scenariusza</translation>
+        <translation>formaty scenariusza|formatów scenariusza</translation>
     </message>
     <message>
         <source>name list</source>
@@ -20479,7 +20818,7 @@ Albo pobrać aktualną wersję ze strony projektu.</translation>
     </message>
     <message>
         <source>name lists</source>
-        <translation>list nazw</translation>
+        <translation>listy nazw|list nazw</translation>
     </message>
     <message>
         <source>plugin file</source>
@@ -20818,6 +21157,13 @@ Albo pobrać aktualną wersję ze strony projektu.</translation>
     <message>
         <source>PDF (.pdf)</source>
         <translation>PDF (.pdf)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::language</name>
+    <message>
+        <source>%1 (machine translation)</source>
+        <translation>%1 (tłumaczenie maszynowe)</translation>
     </message>
 </context>
 <context>

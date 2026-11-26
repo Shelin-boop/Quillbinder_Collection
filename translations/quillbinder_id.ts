@@ -268,7 +268,9 @@ Nama depan dalam daftar ini tidak dibedakan antara perempuan dan laki-laki.</tra
     </message>
     <message numerus="yes">
         <source>%n name(s) copied.</source>
-        <translation><numerusform>%n nama disalin.</numerusform></translation>
+        <translation>
+            <numerusform>%n nama disalin.</numerusform>
+        </translation>
     </message>
     <message>
         <source>There is no text editor to insert into. Click into a text first.</source>
@@ -292,7 +294,9 @@ Nama depan dalam daftar ini tidak dibedakan antara perempuan dan laki-laki.</tra
     </message>
     <message numerus="yes">
         <source>List “%1” with %n name(s).</source>
-        <translation><numerusform>Daftar “%1” dengan %n nama.</numerusform></translation>
+        <translation>
+            <numerusform>Daftar “%1” dengan %n nama.</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -340,6 +344,10 @@ Nama depan dalam daftar ini tidak dibedakan antara perempuan dan laki-laki.</tra
     <message>
         <source>Textual Marks</source>
         <translation>Tanda Teks</translation>
+    </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>Warna Standar</translation>
     </message>
 </context>
 <context>
@@ -563,7 +571,9 @@ Cadangan disimpan di %3, dan pencadangan berikutnya akan menempatkannya.</transl
     </message>
     <message numerus="yes">
         <source>The backup is incomplete: %n file(s) could not be read and are missing from it: %1. Older backups were kept.</source>
-        <translation><numerusform>Cadangan tidak lengkap: %n berkas tidak dapat dibaca dan tidak ada di dalamnya: %1. Cadangan yang lebih lama dipertahankan.</numerusform></translation>
+        <translation>
+            <numerusform>Cadangan tidak lengkap: %n berkas tidak dapat dibaca dan tidak ada di dalamnya: %1. Cadangan yang lebih lama dipertahankan.</numerusform>
+        </translation>
     </message>
     <message>
         <source>The new backup %1 is not there after older backups were cleaned up. No backup was made; please make one with File &gt; Back Up &gt; Back Up To...</source>
@@ -603,13 +613,17 @@ Cadangan disimpan di %3, dan pencadangan berikutnya akan menempatkannya.</transl
     </message>
     <message numerus="yes">
         <source>and %n more</source>
-        <translation><numerusform>dan %n lainnya</numerusform></translation>
+        <translation>
+            <numerusform>dan %n lainnya</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>Not every file of the backup could be restored into %1. Not restored (%n):
 %2</source>
-        <translation><numerusform>Tidak semua berkas cadangan dapat dipulihkan ke %1. Tidak dipulihkan (%n):
-%2</numerusform></translation>
+        <translation>
+            <numerusform>Tidak semua berkas cadangan dapat dipulihkan ke %1. Tidak dipulihkan (%n):
+%2</numerusform>
+        </translation>
     </message>
     <message>
         <source>Cannot read %1</source>
@@ -1140,14 +1154,18 @@ Cadangan disimpan di %3, dan pencadangan berikutnya akan menempatkannya.</transl
     <message numerus="yes">
         <source>%n file(s) of that save were moved into:
 %1</source>
-        <translation><numerusform>%n berkas dari penyimpanan itu dipindahkan ke:
-%1</numerusform></translation>
+        <translation>
+            <numerusform>%n berkas dari penyimpanan itu dipindahkan ke:
+%1</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>The journal and the %n file(s) that save had written beside their targets are kept in:
 %1</source>
-        <translation><numerusform>Jurnal dan %n berkas yang ditulis penyimpanan itu di samping targetnya disimpan di:
-%1</numerusform></translation>
+        <translation>
+            <numerusform>Jurnal dan %n berkas yang ditulis penyimpanan itu di samping targetnya disimpan di:
+%1</numerusform>
+        </translation>
     </message>
     <message>
         <source>The documents are as they are on disk: some may be from that save and some from the save before. Look at the documents you changed last; the kept files hold the texts of that save and open in a text editor.</source>
@@ -1287,23 +1305,33 @@ Cadangan disimpan di %3, dan pencadangan berikutnya akan menempatkannya.</transl
     </message>
     <message numerus="yes">
         <source>Label “%1” kept: %n document(s) have it.</source>
-        <translation><numerusform>Label “%1” dipertahankan: %n dokumen memakainya.</numerusform></translation>
+        <translation>
+            <numerusform>Label “%1” dipertahankan: %n dokumen memakainya.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>Status “%1” kept: %n document(s) have it.</source>
-        <translation><numerusform>Status “%1” dipertahankan: %n dokumen memakainya.</numerusform></translation>
+        <translation>
+            <numerusform>Status “%1” dipertahankan: %n dokumen memakainya.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>Section type “%1” kept: %n document(s) have it.</source>
-        <translation><numerusform>Tipe seksi “%1” dipertahankan: %n dokumen memakainya.</numerusform></translation>
+        <translation>
+            <numerusform>Tipe seksi “%1” dipertahankan: %n dokumen memakainya.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>Custom metadata “%1” kept: %n document(s) have a value in it.</source>
-        <translation><numerusform>Metadata kustom “%1” dipertahankan: %n dokumen memiliki nilai di dalamnya.</numerusform></translation>
+        <translation>
+            <numerusform>Metadata kustom “%1” dipertahankan: %n dokumen memiliki nilai di dalamnya.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>Keyword “%1” kept: %n document(s) have it.</source>
-        <translation><numerusform>Kata kunci “%1” dipertahankan: %n dokumen memilikinya.</numerusform></translation>
+        <translation>
+            <numerusform>Kata kunci “%1” dipertahankan: %n dokumen memilikinya.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Compile: no document or folder “%1” for the %2 here; the project&apos;s choice stays.</source>
@@ -1323,7 +1351,9 @@ Cadangan disimpan di %3, dan pencadangan berikutnya akan menempatkannya.</transl
     </message>
     <message numerus="yes">
         <source>Object category “%1” kept: it has %n object(s).</source>
-        <translation><numerusform>Kategori objek “%1” dipertahankan: berisi %n objek.</numerusform></translation>
+        <translation>
+            <numerusform>Kategori objek “%1” dipertahankan: berisi %n objek.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Options of this project: %1 taken from the file.</source>
@@ -1611,7 +1641,9 @@ Cadangan disimpan di %3, dan pencadangan berikutnya akan menempatkannya.</transl
     </message>
     <message numerus="yes">
         <source>the binder of the Scrivener project: %n document(s) were added to it elsewhere while it was open here. It was not replaced, so they are kept; close the project and open it again to see them with your changes</source>
-        <translation><numerusform>binder proyek Scrivener: %n dokumen ditambahkan ke dalamnya di tempat lain saat proyek terbuka di sini. Binder tidak diganti, sehingga dokumen-dokumen itu dipertahankan; tutup proyek dan buka lagi untuk melihatnya beserta perubahan Anda</numerusform></translation>
+        <translation>
+            <numerusform>binder proyek Scrivener: %n dokumen ditambahkan ke dalamnya di tempat lain saat proyek terbuka di sini. Binder tidak diganti, sehingga dokumen-dokumen itu dipertahankan; tutup proyek dan buka lagi untuk melihatnya beserta perubahan Anda</numerusform>
+        </translation>
     </message>
     <message>
         <source>No Scrivener project (.scrivx) was found in:
@@ -1631,7 +1663,9 @@ Tidak ada yang diubah: salinan kerja tetap seperti semula, begitu juga proyek Sc
     </message>
     <message numerus="yes">
         <source>%n document(s) that had not reached the Scrivener project yet (the last save did not end) were kept and are saved into it now.</source>
-        <translation><numerusform>%n dokumen yang belum sampai ke proyek Scrivener (penyimpanan terakhir tidak selesai) dipertahankan dan kini disimpan ke dalamnya.</numerusform></translation>
+        <translation>
+            <numerusform>%n dokumen yang belum sampai ke proyek Scrivener (penyimpanan terakhir tidak selesai) dipertahankan dan kini disimpan ke dalamnya.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Cannot set up the working copy in %1</source>
@@ -2269,7 +2303,9 @@ Sumber: %1</translation>
     </message>
     <message numerus="yes">
         <source>%n minute(s) ago</source>
-        <translation><numerusform>%n menit yang lalu</numerusform></translation>
+        <translation>
+            <numerusform>%n menit yang lalu</numerusform>
+        </translation>
     </message>
     <message>
         <source>User Manual</source>
@@ -3214,8 +3250,12 @@ Sumber: %1</translation>
         <translation>Inspektor: Catatan</translation>
     </message>
     <message>
-        <source>Inspector: Bookmark Lists</source>
-        <translation>Inspektor: Daftar Penanda</translation>
+        <source>Inspector: Document Bookmarks</source>
+        <translation>Inspektor: Penanda Dokumen</translation>
+    </message>
+    <message>
+        <source>Inspector: Project Bookmarks</source>
+        <translation>Inspektor: Penanda Proyek</translation>
     </message>
     <message>
         <source>Inspector: Bookmarked Text</source>
@@ -3482,28 +3522,72 @@ Sumber: %1</translation>
         <translation>sangat sulit</translation>
     </message>
     <message>
-        <source>Protagonist</source>
-        <translation>Tokoh utama</translation>
+        <source>Name of the profile:</source>
+        <translation>Nama profil:</translation>
     </message>
     <message>
-        <source>Supporting</source>
-        <translation>Pendukung</translation>
+        <source>There is already a profile named “%1”. Choose another name.</source>
+        <translation>Sudah ada profil bernama “%1”. Pilih nama lain.</translation>
     </message>
     <message>
-        <source>Village</source>
-        <translation>Desa</translation>
+        <source>Import Profile</source>
+        <translation>Impor Profil</translation>
     </message>
     <message>
-        <source>Forest</source>
-        <translation>Hutan</translation>
+        <source>The profile also names programs, folders, files or addresses (a folder may not exist on this computer):
+
+%1
+
+Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
+        <translation>Profil ini juga menyebutkan program, folder, berkas, atau alamat (mungkin ada folder yang tidak ada di komputer ini):
+
+%1
+
+Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau memercayai asalnya.</translation>
     </message>
     <message>
-        <source>Autumn</source>
-        <translation>Musim gugur</translation>
+        <source>A temporary file could not be made.</source>
+        <translation>Berkas sementara tidak dapat dibuat.</translation>
     </message>
     <message>
-        <source>Fog</source>
-        <translation>Kabut</translation>
+        <source>Nothing to write.</source>
+        <translation>Tidak ada yang perlu ditulis.</translation>
+    </message>
+    <message>
+        <source>The file could not be written (%1). The file that was there is unchanged.</source>
+        <translation>Berkas tidak dapat ditulis (%1). Berkas yang ada sebelumnya tidak berubah.</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Profil Saya</translation>
+    </message>
+    <message>
+        <source>The profile “%1” could not be read.</source>
+        <translation>Profil “%1” tidak dapat dibaca.</translation>
+    </message>
+    <message>
+        <source>There is no profile “%1”.</source>
+        <translation>Tidak ada profil “%1”.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be deleted.</source>
+        <translation>Profil “%1” tidak dapat dihapus.</translation>
+    </message>
+    <message>
+        <source>The profile in use cannot be deleted. Switch to another profile first.</source>
+        <translation>Profil yang sedang dipakai tidak dapat dihapus. Beralihlah dulu ke profil lain.</translation>
+    </message>
+    <message>
+        <source>The file of the profile could not be deleted.</source>
+        <translation>Berkas profil tidak dapat dihapus.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be renamed.</source>
+        <translation>Nama profil “%1” tidak dapat diganti.</translation>
+    </message>
+    <message>
+        <source>This is not a file of a profile or of options saved by Quillbinder.</source>
+        <translation>Ini bukan berkas profil atau opsi yang disimpan oleh Quillbinder.</translation>
     </message>
 </context>
 <context>
@@ -4411,7 +4495,9 @@ Sumber: %1</translation>
     </message>
     <message numerus="yes">
         <source>%1: %2 words in %n document(s)</source>
-        <translation><numerusform>%1: %2 kata dalam %n dokumen</numerusform></translation>
+        <translation>
+            <numerusform>%1: %2 kata dalam %n dokumen</numerusform>
+        </translation>
     </message>
     <message>
         <source>Counts</source>
@@ -4463,7 +4549,9 @@ Sumber: %1</translation>
     </message>
     <message numerus="yes">
         <source>%n word(s)</source>
-        <translation><numerusform>%n kata</numerusform></translation>
+        <translation>
+            <numerusform>%n kata</numerusform>
+        </translation>
     </message>
     <message>
         <source>Different words per 100 words</source>
@@ -5393,7 +5481,9 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     </message>
     <message numerus="yes">
         <source>%n place(s)</source>
-        <translation><numerusform>%n tempat</numerusform></translation>
+        <translation>
+            <numerusform>%n tempat</numerusform>
+        </translation>
     </message>
     <message>
         <source>only in the file: becomes a new document</source>
@@ -5461,15 +5551,21 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     </message>
     <message numerus="yes">
         <source>All changes seen: %n to take. Press Transfer.</source>
-        <translation><numerusform>Semua perubahan sudah dilihat: %n untuk diambil. Tekan Transfer.</numerusform></translation>
+        <translation>
+            <numerusform>Semua perubahan sudah dilihat: %n untuk diambil. Tekan Transfer.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>Transfer %n Change(s) into the Project</source>
-        <translation><numerusform>Transfer %n Perubahan ke dalam Proyek</numerusform></translation>
+        <translation>
+            <numerusform>Transfer %n Perubahan ke dalam Proyek</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>Write %n Change(s) into a Copy of the File</source>
-        <translation><numerusform>Tulis %n Perubahan ke dalam Salinan Berkas</numerusform></translation>
+        <translation>
+            <numerusform>Tulis %n Perubahan ke dalam Salinan Berkas</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -7028,6 +7124,18 @@ Halaman (250 kata): %5</translation>
         <translation>Sebelum Anda mulai: bagaimana proyek Anda dicadangkan. Semuanya sudah terisi: OK mempertahankannya apa adanya. Semuanya dapat Anda ubah nanti di Berkas &gt; Opsi.</translation>
     </message>
     <message>
+        <source>Language</source>
+        <translation>Bahasa</translation>
+    </message>
+    <message>
+        <source>Language of the program:</source>
+        <translation>Bahasa program:</translation>
+    </message>
+    <message>
+        <source>A language you choose here is used from the next start of the program.</source>
+        <translation>Bahasa yang Anda pilih di sini dipakai mulai program dijalankan berikutnya.</translation>
+    </message>
+    <message>
         <source>Everything in One Folder</source>
         <translation>Semuanya dalam Satu Folder</translation>
     </message>
@@ -7062,12 +7170,20 @@ Tidak ada yang ditulis ke folder milik Windows atau ke registri, kecuali jika An
         <translation>Buat cadangan proyek secara otomatis saat proyek ditutup</translation>
     </message>
     <message>
-        <source> backups of each project</source>
-        <translation> cadangan untuk setiap proyek</translation>
+        <source>Keep the newest</source>
+        <translation>Simpan</translation>
     </message>
     <message>
-        <source>Keep the newest:</source>
-        <translation>Simpan yang terbaru:</translation>
+        <source>backups of each project</source>
+        <translation>cadangan terbaru dari setiap proyek</translation>
+    </message>
+    <message>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>Pindahkan AppImage ke %1, tempat tetap yang dipakai entri menu untuk menjalankannya</translation>
+    </message>
+    <message>
+        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
+        <translation>Bantuan &gt; Tambahkan ke Menu Aplikasi atau Hapus dari Menu Aplikasi mengubahnya nanti. Jika Anda memindahkan AppImage sendiri, tambahkan lagi ke menu.</translation>
     </message>
     <message>
         <source>Choose a folder: until then no backups are made</source>
@@ -7096,14 +7212,6 @@ Tidak ada yang ditulis ke folder milik Windows atau ke registri, kecuali jika An
     <message>
         <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them</source>
         <translation>Tambahkan %1 ke menu aplikasi, sehingga Anda dapat memulainya seperti program lain dan membuka proyek dengan mengklik gandanya</translation>
-    </message>
-    <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>Pindahkan AppImage ke %1 (berkas yang dipindahkan tidak dapat dijalankan dari menu)</translation>
-    </message>
-    <message>
-        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later.</source>
-        <translation>Bantuan &gt; Tambahkan ke Menu Aplikasi atau Hapus dari Menu Aplikasi mengubahnya nanti.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -8190,7 +8298,9 @@ Tidak ada yang ditulis ke folder milik Windows atau ke registri, kecuali jika An
     </message>
     <message numerus="yes">
         <source>The binder after the import (%n item(s)):</source>
-        <translation><numerusform>Binder setelah impor (%n item):</numerusform></translation>
+        <translation>
+            <numerusform>Binder setelah impor (%n item):</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -8680,8 +8790,12 @@ Teks snapshot &quot;%2&quot; kini menjadi teks dokumen; teks itu dapat diedit la
         <translation>Catatan</translation>
     </message>
     <message>
-        <source>Lists</source>
-        <translation>Daftar</translation>
+        <source>Document</source>
+        <translation>Dokumen</translation>
+    </message>
+    <message>
+        <source>Project</source>
+        <translation>Proyek</translation>
     </message>
     <message>
         <source>Text</source>
@@ -8767,6 +8881,14 @@ Teks snapshot &quot;%2&quot; kini menjadi teks dokumen; teks itu dapat diedit la
         <translation>Ekspor…</translation>
     </message>
     <message>
+        <source>Use the Set of My Keyboard Layout…</source>
+        <translation>Pakai Set untuk Tata Letak Papan Ketik Saya…</translation>
+    </message>
+    <message>
+        <source>Take the shortcuts that fit the keyboard layout in use now (a German keyboard gets keys that need no AltGr). Shortcuts you set yourself stay as they are.</source>
+        <translation>Ambil pintasan yang cocok dengan tata letak papan ketik yang sedang dipakai (papan ketik Jerman mendapat tombol yang tidak memerlukan AltGr). Pintasan yang Anda atur sendiri tidak berubah.</translation>
+    </message>
+    <message>
         <source>Shortcut in Use</source>
         <translation>Pintasan Sedang Dipakai</translation>
     </message>
@@ -8829,6 +8951,30 @@ Berikan ke “%4” sebagai gantinya? “%2” kemudian tidak akan memiliki pint
     <message>
         <source>shortcuts</source>
         <translation>pintasan</translation>
+    </message>
+    <message>
+        <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
+        <translation>Sistem tidak memberi tahu tata letak papan ketik mana yang dipakai, sehingga program tidak dapat memilih set. Anda tetap dapat mengubah pintasan satu per satu di bawah.</translation>
+    </message>
+    <message>
+        <source>The shortcuts already come from the set for your keyboard layout (%1).</source>
+        <translation>Pintasan sudah berasal dari set untuk tata letak papan ketik Anda (%1).</translation>
+    </message>
+    <message>
+        <source> (you set another shortcut: it stays)</source>
+        <translation> (Anda mengatur pintasan lain: pintasan itu tetap)</translation>
+    </message>
+    <message>
+        <source>Use the set of shortcuts for your keyboard layout (%1)? These standard shortcuts change at once:
+
+%2
+
+Shortcuts you set yourself stay as they are.</source>
+        <translation>Pakai set pintasan untuk tata letak papan ketik Anda (%1)? Pintasan standar berikut langsung berubah:
+
+%2
+
+Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
 </context>
 <context>
@@ -9591,7 +9737,9 @@ Berikan ke “%4” sebagai gantinya? “%2” kemudian tidak akan memiliki pint
     </message>
     <message numerus="yes">
         <source>Delete %1 in the Trash forever, together with their %n snapshot(s)? This cannot be undone.</source>
-        <translation><numerusform>Hapus %1 di Tempat Sampah untuk selamanya, beserta %n snapshot-nya? Tindakan ini tidak dapat dibatalkan.</numerusform></translation>
+        <translation>
+            <numerusform>Hapus %1 di Tempat Sampah untuk selamanya, beserta %n snapshot-nya? Tindakan ini tidak dapat dibatalkan.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Empty Trash</source>
@@ -9692,8 +9840,10 @@ Berikan ke “%4” sebagai gantinya? “%2” kemudian tidak akan memiliki pint
     <message numerus="yes">
         <source>The snapshot of %n document(s) could not be saved: %1
 %2</source>
-        <translation><numerusform>Snapshot %n dokumen tidak dapat disimpan: %1
-%2</numerusform></translation>
+        <translation>
+            <numerusform>Snapshot %n dokumen tidak dapat disimpan: %1
+%2</numerusform>
+        </translation>
     </message>
     <message>
         <source>Take Snapshot with &amp;Title…</source>
@@ -10367,7 +10517,9 @@ Ada salinannya dari %2, saat terakhir proyek dibuka. Pakai salinan itu? Perubaha
     </message>
     <message numerus="yes">
         <source>%n document(s) written after that copy are in the folder “%1” of Research.</source>
-        <translation><numerusform>%n dokumen yang ditulis setelah salinan itu ada di folder “%1” pada Riset.</numerusform></translation>
+        <translation>
+            <numerusform>%n dokumen yang ditulis setelah salinan itu ada di folder “%1” pada Riset.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Scrivener&apos;s style marks were taken out of 1 document.</source>
@@ -10433,7 +10585,9 @@ Buka di pengolah kata, atau perbaiki dokumennya (Kembalikan ke snapshot di inspe
     </message>
     <message numerus="yes">
         <source>%n control character(s) in the %1 of &quot;%2&quot; cannot be stored and were left out.</source>
-        <translation><numerusform>%n karakter kontrol pada %1 milik &quot;%2&quot; tidak dapat disimpan dan dilewati.</numerusform></translation>
+        <translation>
+            <numerusform>%n karakter kontrol pada %1 milik &quot;%2&quot; tidak dapat disimpan dan dilewati.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Not written into the Scrivener project while Scrivener has it open (%1).</source>
@@ -10487,9 +10641,11 @@ Buka di pengolah kata, atau perbaiki dokumennya (Kembalikan ke snapshot di inspe
         <source>The backup was made, but %n older backup(s) could not be deleted and stay in the backup folder. Delete them by hand, or check who may delete there:
 
 %1</source>
-        <translation><numerusform>Cadangan sudah dibuat, tetapi %n cadangan lama tidak dapat dihapus dan tetap berada di folder cadangan. Hapus secara manual, atau periksa siapa yang boleh menghapus di sana:
+        <translation>
+            <numerusform>Cadangan sudah dibuat, tetapi %n cadangan lama tidak dapat dihapus dan tetap berada di folder cadangan. Hapus secara manual, atau periksa siapa yang boleh menghapus di sana:
 
-%1</numerusform></translation>
+%1</numerusform>
+        </translation>
     </message>
     <message>
         <source>An older backup could not be deleted.</source>
@@ -10688,8 +10844,10 @@ Perbaiki dulu (Kembalikan ke snapshot di inspektor, atau perbaiki berkas di prog
     <message numerus="yes">
         <source>%n older backup(s) could not be deleted and stay in the backup folder:
 %1</source>
-        <translation><numerusform>%n cadangan lama tidak dapat dihapus dan tetap berada di folder cadangan:
-%1</numerusform></translation>
+        <translation>
+            <numerusform>%n cadangan lama tidak dapat dihapus dan tetap berada di folder cadangan:
+%1</numerusform>
+        </translation>
     </message>
     <message>
         <source>Backup saved:
@@ -10808,10 +10966,12 @@ Paling baik di drive lain (flash disk USB, disk kedua, folder yang disalin progr
 %1
 
 Versions 0.70.0 to 0.90.4 kept them there. Move them into the backup folder itself, under their names? A backup whose name is already there stays where it is.</source>
-        <translation><numerusform>%n cadangan lama proyek ini ada di folder khususnya di dalam folder cadangan:
+        <translation>
+            <numerusform>%n cadangan lama proyek ini ada di folder khususnya di dalam folder cadangan:
 %1
 
-Versi 0.70.0 hingga 0.90.4 menyimpannya di sana. Pindahkan ke folder cadangan itu sendiri, dengan namanya masing-masing? Cadangan yang namanya sudah ada di sana tetap di tempatnya.</numerusform></translation>
+Versi 0.70.0 hingga 0.90.4 menyimpannya di sana. Pindahkan ke folder cadangan itu sendiri, dengan namanya masing-masing? Cadangan yang namanya sudah ada di sana tetap di tempatnya.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Move</source>
@@ -10819,13 +10979,17 @@ Versi 0.70.0 hingga 0.90.4 menyimpannya di sana. Pindahkan ke folder cadangan it
     </message>
     <message numerus="yes">
         <source>%n backup(s) moved into the backup folder.</source>
-        <translation><numerusform>%n cadangan dipindahkan ke folder cadangan.</numerusform></translation>
+        <translation>
+            <numerusform>%n cadangan dipindahkan ke folder cadangan.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%n backup(s) left where they were:
 %1</source>
-        <translation><numerusform>%n cadangan dibiarkan di tempatnya:
-%1</numerusform></translation>
+        <translation>
+            <numerusform>%n cadangan dibiarkan di tempatnya:
+%1</numerusform>
+        </translation>
     </message>
     <message>
         <source>The old folder is empty and was removed.</source>
@@ -10990,8 +11154,8 @@ You can do this later with Help &gt; Add to Application Menu.</source>
 Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</translation>
     </message>
     <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>Pindahkan AppImage ke %1 (berkas yang dipindahkan tidak dapat dijalankan dari menu)</translation>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>Pindahkan AppImage ke %1, tempat tetap yang dipakai entri menu untuk menjalankannya</translation>
     </message>
     <message>
         <source>The menu entry could not be made.
@@ -11228,6 +11392,10 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     <message>
         <source>&amp;Themes</source>
         <translation>Te&amp;ma</translation>
+    </message>
+    <message>
+        <source>&amp;Profiles</source>
+        <translation>&amp;Profil</translation>
     </message>
     <message>
         <source>&amp;Text Editing</source>
@@ -11785,33 +11953,45 @@ Berkas mungkin milik proyek lain, atau Kompilasi melewatkan isi berkas (dokumen 
         <source>Written: %1
 
 %n change(s) are marked in it. Open it in Word or LibreOffice to accept or reject each of them. The file you compared is unchanged.</source>
-        <translation><numerusform>Tertulis: %1
+        <translation>
+            <numerusform>Tertulis: %1
 
-%n perubahan ditandai di dalamnya. Buka di Word atau LibreOffice untuk menerima atau menolak masing-masing. Berkas yang Anda bandingkan tidak berubah.</numerusform></translation>
+%n perubahan ditandai di dalamnya. Buka di Word atau LibreOffice untuk menerima atau menolak masing-masing. Berkas yang Anda bandingkan tidak berubah.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>Written: %1
 
 %n change(s) are made in it (LibreOffice files get the changes directly, without change marks). The file you compared is unchanged.</source>
-        <translation><numerusform>Tertulis: %1
+        <translation>
+            <numerusform>Tertulis: %1
 
-%n perubahan dibuat di dalamnya (berkas LibreOffice menerima perubahan secara langsung, tanpa tanda perubahan). Berkas yang Anda bandingkan tidak berubah.</numerusform></translation>
+%n perubahan dibuat di dalamnya (berkas LibreOffice menerima perubahan secara langsung, tanpa tanda perubahan). Berkas yang Anda bandingkan tidak berubah.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>Taken into the project: %n place(s)</source>
-        <translation><numerusform>Diambil ke dalam proyek: %n tempat</numerusform></translation>
+        <translation>
+            <numerusform>Diambil ke dalam proyek: %n tempat</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%n document(s) changed</source>
-        <translation><numerusform>%n dokumen berubah</numerusform></translation>
+        <translation>
+            <numerusform>%n dokumen berubah</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%n new</source>
-        <translation><numerusform>%n baru</numerusform></translation>
+        <translation>
+            <numerusform>%n baru</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%n moved to the Trash</source>
-        <translation><numerusform>%n dipindahkan ke Tempat Sampah</numerusform></translation>
+        <translation>
+            <numerusform>%n dipindahkan ke Tempat Sampah</numerusform>
+        </translation>
     </message>
     <message>
         <source>Every changed document has a snapshot from before (Documents &gt; Snapshots).</source>
@@ -11931,7 +12111,9 @@ Proyek yang sedang Anda kerjakan tetap di tempatnya.</translation>
     </message>
     <message numerus="yes">
         <source>Which kind of object should %n sheet(s) become?</source>
-        <translation><numerusform>Jenis objek apa yang harus menjadi %n lembar?</numerusform></translation>
+        <translation>
+            <numerusform>Jenis objek apa yang harus menjadi %n lembar?</numerusform>
+        </translation>
     </message>
     <message>
         <source>Welcome to %1</source>
@@ -12395,7 +12577,9 @@ Tidak ada elemen sejenis untuk: %1. Paragrafnya menjadi teks umum yang mempertah
     </message>
     <message numerus="yes">
         <source>%n section(s) of the project&apos;s settings were changed.</source>
-        <translation><numerusform>%n bagian pengaturan proyek diubah.</numerusform></translation>
+        <translation>
+            <numerusform>%n bagian pengaturan proyek diubah.</numerusform>
+        </translation>
     </message>
     <message>
         <source>The settings as they were before are kept in %1; load that file to go back.</source>
@@ -12665,7 +12849,9 @@ Kerjakan di satu komputer dalam satu waktu: perubahan di keduanya dapat saling m
     </message>
     <message numerus="yes">
         <source>... and %n more</source>
-        <translation><numerusform>... dan %n lainnya</numerusform></translation>
+        <translation>
+            <numerusform>... dan %n lainnya</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%n document(s) of this project have text, but their files are not on this computer (yet). Most likely your sync program has not finished.
@@ -12673,11 +12859,13 @@ Kerjakan di satu komputer dalam satu waktu: perubahan di keduanya dapat saling m
 %1
 
 They are shown empty, cannot be edited and are never saved over. Close the project, wait until the sync program is done, then open it again.</source>
-        <translation><numerusform>%n dokumen proyek ini memiliki teks, tetapi berkasnya (belum) ada di komputer ini. Kemungkinan besar program sinkronisasi Anda belum selesai.
+        <translation>
+            <numerusform>%n dokumen proyek ini memiliki teks, tetapi berkasnya (belum) ada di komputer ini. Kemungkinan besar program sinkronisasi Anda belum selesai.
 
 %1
 
-Dokumen ditampilkan kosong, tidak dapat diedit, dan tidak pernah ditimpa saat menyimpan. Tutup proyek, tunggu sampai program sinkronisasi selesai, lalu buka lagi.</numerusform></translation>
+Dokumen ditampilkan kosong, tidak dapat diedit, dan tidak pernah ditimpa saat menyimpan. Tutup proyek, tunggu sampai program sinkronisasi selesai, lalu buka lagi.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Other Versions Kept</source>
@@ -12704,14 +12892,6 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
         <translation>Versi lain tetap disimpan; hanya pemberitahuan ini yang tidak muncul sampai Anda keluar dari program.</translation>
     </message>
     <message>
-        <source>&amp;Translate and Proofread…</source>
-        <translation>&amp;Terjemahkan dan Koreksi…</translation>
-    </message>
-    <message>
-        <source>Proofread English text or translate German text into English (the add-on is not installed)</source>
-        <translation>Koreksi teks bahasa Inggris atau terjemahkan teks bahasa Jerman ke bahasa Inggris (pengaya belum terpasang)</translation>
-    </message>
-    <message>
         <source>Speech &amp;Transcription…</source>
         <translation>&amp;Transkripsi Ucapan…</translation>
     </message>
@@ -12722,10 +12902,6 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     <message>
         <source>Speech Transcription</source>
         <translation>Transkripsi Ucapan</translation>
-    </message>
-    <message>
-        <source>Translation and Proofreading</source>
-        <translation>Terjemahan dan Koreksi</translation>
     </message>
     <message>
         <source>is not installed</source>
@@ -12752,8 +12928,20 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
         <translation>Pengaya ini mengubah ucapan menjadi teks. Instal dengan Bantuan &gt; Pengaya dan Pembaruan &gt; Instal Pembaruan atau Pengaya; Bantuan &gt; Pengaya dan Pembaruan &gt; Pengelola Pengaya menampilkan pengaya dan menyalakan serta mematikannya.</translation>
     </message>
     <message>
-        <source>It proofreads English text and translates German text into English. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
-        <translation>Pengaya ini mengoreksi teks bahasa Inggris dan menerjemahkan teks bahasa Jerman ke bahasa Inggris. Instal dengan Bantuan &gt; Pengaya dan Pembaruan &gt; Instal Pembaruan atau Pengaya; Bantuan &gt; Pengaya dan Pembaruan &gt; Pengelola Pengaya menampilkan pengaya dan menyalakan serta mematikannya.</translation>
+        <source>&amp;Translation Helper…</source>
+        <translation>&amp;Asisten Penerjemah…</translation>
+    </message>
+    <message>
+        <source>Suggestions for translating between eleven languages and for English spelling (the add-on is not installed)</source>
+        <translation>Saran untuk menerjemahkan antara sebelas bahasa dan untuk ejaan bahasa Inggris (pengaya belum terpasang)</translation>
+    </message>
+    <message>
+        <source>Translation Helper</source>
+        <translation>Asisten Penerjemah</translation>
+    </message>
+    <message>
+        <source>It gives suggestions for translating between eleven languages and for English spelling and grammar. Its translations are not precise: check each one, which needs a working knowledge of both languages. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>Pengaya ini memberi saran untuk menerjemahkan antara sebelas bahasa serta untuk ejaan dan tata bahasa Inggris. Terjemahannya tidak tepat: periksa setiap terjemahan, yang memerlukan pengetahuan kerja tentang kedua bahasa. Instal dengan Bantuan &gt; Pengaya dan Pembaruan &gt; Instal Pembaruan atau Pengaya; Bantuan &gt; Pengaya dan Pembaruan &gt; Pengelola Pengaya menampilkan pengaya dan menyalakan atau mematikannya.</translation>
     </message>
     <message>
         <source>Open Add-on Manager</source>
@@ -12851,6 +13039,62 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
         <source>and %1 earlier steps</source>
         <translation>dan %1 langkah sebelumnya</translation>
     </message>
+    <message>
+        <source>&amp;Manage Profiles…</source>
+        <translation>&amp;Kelola Profil…</translation>
+    </message>
+    <message>
+        <source>Use, save, rename, copy, delete, export and import profiles</source>
+        <translation>Pakai, simpan, ganti nama, salin, hapus, ekspor, dan impor profil</translation>
+    </message>
+    <message>
+        <source>&amp;Save Settings as New Profile…</source>
+        <translation>&amp;Simpan Pengaturan sebagai Profil Baru…</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Simpan Pengaturan sebagai Profil Baru</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Profil Saya</translation>
+    </message>
+    <message>
+        <source>Keep the options, toolbars, window and theme as they are now in a new profile</source>
+        <translation>Simpan opsi, bilah alat, jendela, dan tema seperti sekarang dalam profil baru</translation>
+    </message>
+    <message>
+        <source>Profiles</source>
+        <translation>Profil</translation>
+    </message>
+    <message>
+        <source>Labels</source>
+        <translation>Label</translation>
+    </message>
+    <message>
+        <source>Profile:</source>
+        <translation>Profil:</translation>
+    </message>
+    <message>
+        <source>The profile in use: %1. A click lists the profiles.</source>
+        <translation>Profil yang dipakai: %1. Klik untuk menampilkan daftar profil.</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Label</translation>
+    </message>
+    <message>
+        <source>No Label</source>
+        <translation>Tanpa Label</translation>
+    </message>
+    <message>
+        <source>Switch Profile</source>
+        <translation>Beralih Profil</translation>
+    </message>
+    <message>
+        <source>The profile sets another language; it takes effect when the program is started again.</source>
+        <translation>Profil ini mengatur bahasa lain; berlaku saat program dijalankan lagi.</translation>
+    </message>
 </context>
 <context>
     <name>qb::ManageIconsDialog</name>
@@ -12908,7 +13152,9 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message numerus="yes">
         <source>%n document(s) use this icon; they get their standard icon back.</source>
-        <translation><numerusform>%n dokumen memakai ikon ini; dokumen itu mendapatkan ikon standarnya kembali.</numerusform></translation>
+        <translation>
+            <numerusform>%n dokumen memakai ikon ini; dokumen itu mendapatkan ikon standarnya kembali.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Add Icon</source>
@@ -14023,9 +14269,11 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
         <source>%n note style(s) found. Overwrite the styles of this board with them?
 
 No adds them to the styles of this board.</source>
-        <translation><numerusform>%n gaya catatan ditemukan. Timpa gaya papan ini dengan gaya tersebut?
+        <translation>
+            <numerusform>%n gaya catatan ditemukan. Timpa gaya papan ini dengan gaya tersebut?
 
-Tidak menambahkannya ke gaya papan ini.</numerusform></translation>
+Tidak menambahkannya ke gaya papan ini.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Add Link</source>
@@ -14077,7 +14325,9 @@ Tidak menambahkannya ke gaya papan ini.</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n note(s) become documents inside “%1”, in the reading order of the board (left to right, top to bottom; connected notes after the note they hang on).</source>
-        <translation><numerusform>%n catatan menjadi dokumen di dalam “%1”, menurut urutan baca papan (kiri ke kanan, atas ke bawah; catatan terhubung setelah catatan tempat ia menggantung).</numerusform></translation>
+        <translation>
+            <numerusform>%n catatan menjadi dokumen di dalam “%1”, menurut urutan baca papan (kiri ke kanan, atas ke bawah; catatan terhubung setelah catatan tempat ia menggantung).</numerusform>
+        </translation>
     </message>
     <message>
         <source>The board is empty.</source>
@@ -14149,7 +14399,9 @@ Tidak menambahkannya ke gaya papan ini.</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n picture(s) saved in %1.</source>
-        <translation><numerusform>%n gambar disimpan di %1.</numerusform></translation>
+        <translation>
+            <numerusform>%n gambar disimpan di %1.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Export as Scapple File</source>
@@ -14281,7 +14533,9 @@ Ditampilkan sejauh dapat dibaca, dan tidak dapat diubah, agar berkasnya tidak te
     </message>
     <message numerus="yes">
         <source>%n replaced</source>
-        <translation><numerusform>%n diganti</numerusform></translation>
+        <translation>
+            <numerusform>%n diganti</numerusform>
+        </translation>
     </message>
     <message>
         <source>Not found</source>
@@ -14300,11 +14554,15 @@ Ditampilkan sejauh dapat dibaca, dan tidak dapat diubah, agar berkasnya tidak te
     </message>
     <message numerus="yes">
         <source>%n note(s)</source>
-        <translation><numerusform>%n catatan</numerusform></translation>
+        <translation>
+            <numerusform>%n catatan</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%n selected</source>
-        <translation><numerusform>%n dipilih</numerusform></translation>
+        <translation>
+            <numerusform>%n dipilih</numerusform>
+        </translation>
     </message>
     <message>
         <source>✥ Move</source>
@@ -14977,7 +15235,9 @@ Ditampilkan sejauh dapat dibaca, dan tidak dapat diubah, agar berkasnya tidak te
     </message>
     <message numerus="yes">
         <source>%n object(s) belong to the categories you removed. Delete them as well? (No: nothing is changed.)</source>
-        <translation><numerusform>%n objek termasuk dalam kategori yang Anda hapus. Hapus juga? (Tidak: tidak ada yang diubah.)</numerusform></translation>
+        <translation>
+            <numerusform>%n objek termasuk dalam kategori yang Anda hapus. Hapus juga? (Tidak: tidak ada yang diubah.)</numerusform>
+        </translation>
     </message>
     <message>
         <source>Delete Them</source>
@@ -15292,8 +15552,8 @@ Lanjutkan?</translation>
         <translation>Bahasa:</translation>
     </message>
     <message>
-        <source>The language of menus, windows and messages; it changes at the next start of the program. The manual and the welcome project stay in English.</source>
-        <translation>Bahasa menu, jendela, dan pesan; berubah pada saat program dimulai berikutnya. Panduan dan proyek selamat datang tetap dalam bahasa Inggris.</translation>
+        <source>The language of menus, windows and messages, of the manual, the quick start guide and the welcome project; it changes at the next start of the program. A language marked as a machine translation has not been checked by a speaker yet. Spelling dictionaries for other languages are add-ons (Help &gt; Add-ons and Updates).</source>
+        <translation>Bahasa menu, jendela, dan pesan, serta panduan pengguna, panduan mulai cepat, dan proyek selamat datang; berubah saat program dijalankan berikutnya. Bahasa yang ditandai sebagai terjemahan mesin belum diperiksa oleh penutur. Kamus ejaan untuk bahasa lain berupa pengaya (Bantuan &gt; Pengaya dan Pembaruan).</translation>
     </message>
     <message>
         <source>Group the digits of large numbers (%1)</source>
@@ -16360,8 +16620,104 @@ Lanjutkan?</translation>
         <translation>semua</translation>
     </message>
     <message>
-        <source>Retain backup files per project:</source>
-        <translation>Simpan berkas cadangan per proyek:</translation>
+        <source>Keep the newest</source>
+        <translation>Simpan</translation>
+    </message>
+    <message>
+        <source>backups of each project</source>
+        <translation>cadangan terbaru dari setiap proyek</translation>
+    </message>
+    <message>
+        <source>The colors new things start with. They belong to your profile. Projects that exist keep their own labels.</source>
+        <translation>Warna awal untuk hal-hal baru. Warna ini milik profil Anda. Proyek yang sudah ada tetap memakai labelnya sendiri.</translation>
+    </message>
+    <message>
+        <source>Standard Color</source>
+        <translation>Warna Standar</translation>
+    </message>
+    <message>
+        <source>Labels of new projects</source>
+        <translation>Label proyek baru</translation>
+    </message>
+    <message>
+        <source>Color of this label</source>
+        <translation>Warna label ini</translation>
+    </message>
+    <message>
+        <source>Colors of the popups</source>
+        <translation>Warna popup</translation>
+    </message>
+    <message>
+        <source>Text color:</source>
+        <translation>Warna teks:</translation>
+    </message>
+    <message>
+        <source>Highlight:</source>
+        <translation>Sorotan:</translation>
+    </message>
+    <message>
+        <source>A color of the text color popup</source>
+        <translation>Satu warna dari popup warna teks</translation>
+    </message>
+    <message>
+        <source>A color of the highlight popup</source>
+        <translation>Satu warna dari popup sorotan</translation>
+    </message>
+    <message>
+        <source>The color each button starts with</source>
+        <translation>Warna awal setiap tombol</translation>
+    </message>
+    <message>
+        <source>Text color button:</source>
+        <translation>Tombol warna teks:</translation>
+    </message>
+    <message>
+        <source>The color of the text color button when the program starts</source>
+        <translation>Warna tombol warna teks saat program dimulai</translation>
+    </message>
+    <message>
+        <source>Highlight button:</source>
+        <translation>Tombol sorotan:</translation>
+    </message>
+    <message>
+        <source>The color of the highlight button when the program starts</source>
+        <translation>Warna tombol sorotan saat program dimulai</translation>
+    </message>
+    <message>
+        <source>Back to the program&apos;s standard labels and colors</source>
+        <translation>Kembali ke label dan warna standar program</translation>
+    </message>
+    <message>
+        <source>Export Profile...</source>
+        <translation>Ekspor Profil...</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Ekspor Profil</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profil (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile...</source>
+        <translation>Impor Profil...</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Impor Profil</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profil dan opsi (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>The profile “%1” was imported. Switch to it under View &gt; Profiles.</source>
+        <translation>Profil “%1” telah diimpor. Beralihlah ke profil itu di Tampilan &gt; Profil.</translation>
+    </message>
+    <message>
+        <source>Manage Profiles...</source>
+        <translation>Kelola Profil...</translation>
     </message>
     <message>
         <source>No folder chosen: no automatic backups</source>
@@ -16572,24 +16928,8 @@ Lanjutkan?</translation>
         <translation>Laporan Crash</translation>
     </message>
     <message>
-        <source>Load Options from File...</source>
-        <translation>Muat Opsi dari Berkas...</translation>
-    </message>
-    <message>
         <source>Load Options</source>
         <translation>Muat Opsi</translation>
-    </message>
-    <message>
-        <source>Options (*.qboptions)</source>
-        <translation>Opsi (*.qboptions)</translation>
-    </message>
-    <message>
-        <source>Save Options to File...</source>
-        <translation>Simpan Opsi ke Berkas...</translation>
-    </message>
-    <message>
-        <source>Save Options</source>
-        <translation>Simpan Opsi</translation>
     </message>
     <message>
         <source>Save Theme Options to File...</source>
@@ -17349,6 +17689,105 @@ Proyek terbaru, tema milik Anda sendiri, tata letak, bilah alat, dan pintasan pa
     </message>
 </context>
 <context>
+    <name>qb::ProfileManagerDialog</name>
+    <message>
+        <source>Manage Profiles</source>
+        <translation>Kelola Profil</translation>
+    </message>
+    <message>
+        <source>A profile holds your options, toolbars, window places and sizes, keyboard set, backup settings, standard colors, layouts and the theme. The profile in use is saved when you switch away from it and when the program ends.</source>
+        <translation>Profil menyimpan opsi, bilah alat, posisi dan ukuran jendela, set papan ketik, pengaturan cadangan, warna standar, tata letak, dan tema Anda. Profil yang dipakai disimpan saat Anda beralih darinya dan saat program berakhir.</translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <translation>Pakai</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile...</source>
+        <translation>Simpan Pengaturan sebagai Profil Baru...</translation>
+    </message>
+    <message>
+        <source>Rename...</source>
+        <translation>Ganti Nama...</translation>
+    </message>
+    <message>
+        <source>Copy...</source>
+        <translation>Salin...</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Hapus</translation>
+    </message>
+    <message>
+        <source>Export...</source>
+        <translation>Ekspor...</translation>
+    </message>
+    <message>
+        <source>Import...</source>
+        <translation>Impor...</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Simpan Pengaturan sebagai Profil Baru</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Profil Saya</translation>
+    </message>
+    <message>
+        <source>Rename Profile</source>
+        <translation>Ganti Nama Profil</translation>
+    </message>
+    <message>
+        <source>Copy Profile</source>
+        <translation>Salin Profil</translation>
+    </message>
+    <message>
+        <source>%1 (Copy)</source>
+        <translation>%1 (Salinan)</translation>
+    </message>
+    <message>
+        <source>Delete Profile</source>
+        <translation>Hapus Profil</translation>
+    </message>
+    <message>
+        <source>Delete the profile “%1”? This cannot be undone.</source>
+        <translation>Hapus profil “%1”? Tindakan ini tidak dapat dibatalkan.</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Ekspor Profil</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profil (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Impor Profil</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profil dan opsi (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>%1 (in use)</source>
+        <translation>%1 (sedang dipakai)</translation>
+    </message>
+    <message>
+        <source>Theme: %1.</source>
+        <translation>Tema: %1.</translation>
+    </message>
+    <message>
+        <source>Built-in profile; it can be deleted.</source>
+        <translation>Profil bawaan; dapat dihapus.</translation>
+    </message>
+    <message>
+        <source>The profile every program starts with.</source>
+        <translation>Profil yang dipakai saat program pertama kali dimulai.</translation>
+    </message>
+</context>
+<context>
     <name>qb::Project</name>
     <message>
         <source>This project&apos;s folder holds other project files beside &quot;%1&quot;, which was opened: %2. A sync program may have made them (a copy from another computer kept beside yours). Compare them before you go on, and open another one with File &gt; Open Project if it holds your latest work.</source>
@@ -17562,7 +18001,9 @@ Tidak ditulis:
     </message>
     <message numerus="yes">
         <source>The project file contained %n character(s) that are not allowed in it (control characters, for example from pasted text), so it could not be read before. They were removed, and the project file is saved without them.</source>
-        <translation><numerusform>Berkas proyek berisi %n karakter yang tidak diizinkan di dalamnya (karakter kontrol, misalnya dari teks yang ditempel), sehingga sebelumnya tidak dapat dibaca. Karakter itu dihapus, dan berkas proyek disimpan tanpa karakter tersebut.</numerusform></translation>
+        <translation>
+            <numerusform>Berkas proyek berisi %n karakter yang tidak diizinkan di dalamnya (karakter kontrol, misalnya dari teks yang ditempel), sehingga sebelumnya tidak dapat dibaca. Karakter itu dihapus, dan berkas proyek disimpan tanpa karakter tersebut.</numerusform>
+        </translation>
     </message>
     <message>
         <source>The project file is damaged (%1, line %2).</source>
@@ -17574,11 +18015,15 @@ Tidak ditulis:
     </message>
     <message numerus="yes">
         <source>%n item(s) nested deeper than %1 levels were moved up to that level.</source>
-        <translation><numerusform>%n item yang bersarang lebih dalam dari %1 tingkat dipindahkan naik ke tingkat itu.</numerusform></translation>
+        <translation>
+            <numerusform>%n item yang bersarang lebih dalam dari %1 tingkat dipindahkan naik ke tingkat itu.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <source>%n item(s) had the same id as another item and were given a new one (each keeps a copy of the text they shared); check them.</source>
-        <translation><numerusform>%n item memiliki id yang sama dengan item lain dan diberi id baru (masing-masing menyimpan salinan teks yang dahulu mereka bagi); periksalah.</numerusform></translation>
+        <translation>
+            <numerusform>%n item memiliki id yang sama dengan item lain dan diberi id baru (masing-masing menyimpan salinan teks yang dahulu mereka bagi); periksalah.</numerusform>
+        </translation>
     </message>
     <message>
         <source>The project file was repaired while it was read: %1</source>
@@ -18722,7 +19167,9 @@ Disimpan %2 dari proyek “%3” oleh %4.</translation>
     </message>
     <message numerus="yes">
         <source>The project&apos;s settings differ from the file in %n section(s). Choose for each what to do; “Quillbinder default” is what a new project gets. Labels, status, section types, keywords, custom metadata and styles that documents use are always kept.</source>
-        <translation><numerusform>Pengaturan proyek berbeda dari berkas pada %n seksi. Pilih apa yang dilakukan untuk masing-masing; “Bawaan Quillbinder” adalah yang didapat proyek baru. Label, status, tipe seksi, kata kunci, metadata kustom, dan gaya yang dipakai dokumen selalu dipertahankan.</numerusform></translation>
+        <translation>
+            <numerusform>Pengaturan proyek berbeda dari berkas pada %n seksi. Pilih apa yang dilakukan untuk masing-masing; “Bawaan Quillbinder” adalah yang didapat proyek baru. Label, status, tipe seksi, kata kunci, metadata kustom, dan gaya yang dipakai dokumen selalu dipertahankan.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Section</source>
@@ -20560,6 +21007,13 @@ Atau unduh versi terbaru dari halaman proyek.</translation>
     <message>
         <source>PDF (.pdf)</source>
         <translation>PDF (.pdf)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::language</name>
+    <message>
+        <source>%1 (machine translation)</source>
+        <translation>%1 (terjemahan mesin)</translation>
     </message>
 </context>
 <context>

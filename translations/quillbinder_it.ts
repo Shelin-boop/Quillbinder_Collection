@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>The microphone &quot;%1&quot; could not be opened.</source>
-        <translation>Impossibile aprire il microfono "%1".</translation>
+        <translation>Impossibile aprire il microfono &quot;%1&quot;.</translation>
     </message>
 </context>
 <context>
@@ -32,7 +32,7 @@
     </message>
     <message>
         <source>The program&apos;s messages since it was started (the last 1000). They help to find out why something did not work.</source>
-        <translation>I messaggi del programma dall'avvio (gli ultimi 1000). Aiutano a capire perché qualcosa non ha funzionato.</translation>
+        <translation>I messaggi del programma dall&apos;avvio (gli ultimi 1000). Aiutano a capire perché qualcosa non ha funzionato.</translation>
     </message>
     <message>
         <source>Copy All</source>
@@ -126,7 +126,7 @@
     </message>
     <message>
         <source>The list of the forename</source>
-        <translation>L'elenco dei nomi</translation>
+        <translation>L&apos;elenco dei nomi</translation>
     </message>
     <message>
         <source>Fine-tuning</source>
@@ -202,7 +202,7 @@
     </message>
     <message>
         <source>Puts the selected name at the cursor of the editor</source>
-        <translation>Inserisce il nome selezionato nella posizione del cursore dell'editor</translation>
+        <translation>Inserisce il nome selezionato nella posizione del cursore dell&apos;editor</translation>
     </message>
     <message>
         <source>Add Own List</source>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>Name of the list:</source>
-        <translation>Nome dell'elenco:</translation>
+        <translation>Nome dell&apos;elenco:</translation>
     </message>
     <message>
         <source>Forenames (female and male)</source>
@@ -275,7 +275,7 @@ I nomi di questo elenco non sono suddivisi in femminili e maschili.</translation
     </message>
     <message>
         <source>There is no text editor to insert into. Click into a text first.</source>
-        <translation>Non c'è nessun editor di testo in cui inserire. Fai prima clic in un testo.</translation>
+        <translation>Non c&apos;è nessun editor di testo in cui inserire. Fai prima clic in un testo.</translation>
     </message>
     <message>
         <source>Inserted in “%1”.</source>
@@ -347,12 +347,16 @@ I nomi di questo elenco non sono suddivisi in femminili e maschili.</translation
         <source>Textual Marks</source>
         <translation>Segni testuali</translation>
     </message>
+    <message>
+        <source>Standard Colors</source>
+        <translation>Colori standard</translation>
+    </message>
 </context>
 <context>
     <name>Portable</name>
     <message>
         <source>the folder &quot;data&quot; cannot be made in %1</source>
-        <translation>impossibile creare la cartella "data" in %1</translation>
+        <translation>impossibile creare la cartella &quot;data&quot; in %1</translation>
     </message>
     <message>
         <source>nothing can be written into %1 (%2)</source>
@@ -403,7 +407,7 @@ I nomi di questo elenco non sono suddivisi in femminili e maschili.</translation
     </message>
     <message>
         <source>The table of contents is filled in by Word (or: right-click, Update Field).</source>
-        <translation>L'indice viene compilato da Word (oppure: clic destro, Aggiorna campo).</translation>
+        <translation>L&apos;indice viene compilato da Word (oppure: clic destro, Aggiorna campo).</translation>
     </message>
     <message>
         <source>Start</source>
@@ -437,7 +441,7 @@ I nomi di questo elenco non sono suddivisi in femminili e maschili.</translation
     </message>
     <message>
         <source>This format needs the program &quot;%1&quot;, which is not installed.</source>
-        <translation>Questo formato richiede il programma "%1", che non è installato.</translation>
+        <translation>Questo formato richiede il programma &quot;%1&quot;, che non è installato.</translation>
     </message>
     <message>
         <source>Cannot create a temporary folder.</source>
@@ -485,7 +489,7 @@ I nomi di questo elenco non sono suddivisi in femminili e maschili.</translation
     </message>
     <message>
         <source>%1 is neither an exporter, an importer, a writing tool nor a media engine (or built for another version)</source>
-        <translation>%1 non è un esportatore, un importatore, uno strumento di scrittura né un motore multimediale (oppure è stato creato per un'altra versione)</translation>
+        <translation>%1 non è un esportatore, un importatore, uno strumento di scrittura né un motore multimediale (oppure è stato creato per un&apos;altra versione)</translation>
     </message>
     <message>
         <source>Loaded %1 (%2)</source>
@@ -509,11 +513,11 @@ I nomi di questo elenco non sono suddivisi in femminili e maschili.</translation
     </message>
     <message>
         <source>a file of this name is in the way and cannot be removed</source>
-        <translation>un file con questo nome è d'intralcio e non può essere rimosso</translation>
+        <translation>un file con questo nome è d&apos;intralcio e non può essere rimosso</translation>
     </message>
     <message>
         <source>it is in the backup folder now, but the original could not be removed</source>
-        <translation>ora si trova nella cartella dei backup, ma non è stato possibile rimuovere l'originale</translation>
+        <translation>ora si trova nella cartella dei backup, ma non è stato possibile rimuovere l&apos;originale</translation>
     </message>
     <message>
         <source>a backup of this name is already in the backup folder</source>
@@ -541,7 +545,7 @@ I nomi di questo elenco non sono suddivisi in femminili e maschili.</translation
     </message>
     <message>
         <source>Backing up &quot;%1&quot;...</source>
-        <translation>Backup di "%1" in corso...</translation>
+        <translation>Backup di &quot;%1&quot; in corso...</translation>
     </message>
     <message>
         <source>The backup was cancelled.</source>
@@ -596,7 +600,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The backup needs %1 MB, but only %2 MB are free on the drive of %3. Nothing was restored.</source>
-        <translation>Il backup richiede %1 MB, ma sull'unità di %3 sono liberi solo %2 MB. Non è stato ripristinato nulla.</translation>
+        <translation>Il backup richiede %1 MB, ma sull&apos;unità di %3 sono liberi solo %2 MB. Non è stato ripristinato nulla.</translation>
     </message>
     <message>
         <source>Cannot create %1</source>
@@ -604,7 +608,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Restoring &quot;%1&quot;...</source>
-        <translation>Ripristino di "%1" in corso...</translation>
+        <translation>Ripristino di &quot;%1&quot; in corso...</translation>
     </message>
     <message>
         <source>The restore was cancelled; the files written so far were removed.</source>
@@ -633,7 +637,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>a picture could not be converted</source>
-        <translation>non è stato possibile convertire un'immagine</translation>
+        <translation>non è stato possibile convertire un&apos;immagine</translation>
     </message>
     <message>
         <source>Not converted: %1</source>
@@ -645,7 +649,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The picture could not be read.</source>
-        <translation>Impossibile leggere l'immagine.</translation>
+        <translation>Impossibile leggere l&apos;immagine.</translation>
     </message>
     <message>
         <source>Icon</source>
@@ -653,7 +657,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The icon could not be saved in the project.</source>
-        <translation>Impossibile salvare l'icona nel progetto.</translation>
+        <translation>Impossibile salvare l&apos;icona nel progetto.</translation>
     </message>
     <message>
         <source>Folder (Blue)</source>
@@ -853,7 +857,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>A project called &quot;%1&quot; already exists in this folder.</source>
-        <translation>Nella cartella esiste già un progetto chiamato "%1".</translation>
+        <translation>Nella cartella esiste già un progetto chiamato &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>Could not create the project folder:
@@ -968,7 +972,7 @@ It is kept in %3, and the next backup will put it in place.</source>
 **Paura:** 
 **Segreto:** 
 **Legami con altri personaggi:** 
-**Dalla prima scena all'ultima:** 
+**Dalla prima scena all&apos;ultima:** 
 **Prima apparizione:** 
 **Domande aperte:** 
 </translation>
@@ -1089,7 +1093,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The new project could not be made: %1 could not be written. Is the drive full or write-protected?</source>
-        <translation>Impossibile creare il nuovo progetto: non è stato possibile scrivere %1. L'unità è piena o protetta da scrittura?</translation>
+        <translation>Impossibile creare il nuovo progetto: non è stato possibile scrivere %1. L&apos;unità è piena o protetta da scrittura?</translation>
     </message>
     <message>
         <source>the disk may be full</source>
@@ -1097,11 +1101,11 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The file %1 of an earlier save is in the way and could not be moved aside.</source>
-        <translation>Il file %1 di un salvataggio precedente è d'intralcio e non è stato possibile spostarlo.</translation>
+        <translation>Il file %1 di un salvataggio precedente è d&apos;intralcio e non è stato possibile spostarlo.</translation>
     </message>
     <message>
         <source>The drive reported an error when the folder %1 was synced (%2). Nothing was changed.</source>
-        <translation>L'unità ha segnalato un errore durante la sincronizzazione della cartella %1 (%2). Non è stato modificato nulla.</translation>
+        <translation>L&apos;unità ha segnalato un errore durante la sincronizzazione della cartella %1 (%2). Non è stato modificato nulla.</translation>
     </message>
     <message>
         <source>The save could not be started (its journal was not written): %1</source>
@@ -1117,7 +1121,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The drive reported an error when the folder %1 was synced (%2). The files of this save may not have reached the disk safely.%3</source>
-        <translation>L'unità ha segnalato un errore durante la sincronizzazione della cartella %1 (%2). I file di questo salvataggio potrebbero non essere arrivati sul disco in modo sicuro.%3</translation>
+        <translation>L&apos;unità ha segnalato un errore durante la sincronizzazione della cartella %1 (%2). I file di questo salvataggio potrebbero non essere arrivati sul disco in modo sicuro.%3</translation>
     </message>
     <message>
         <source>The journal of the save is kept, and the next save or opening finishes it.</source>
@@ -1126,13 +1130,13 @@ It is kept in %3, and the next backup will put it in place.</source>
     <message>
         <source>The last save of this project was cut off (the program ended, or the computer stopped). It was finished now; these files were put in place:
 %1</source>
-        <translation>L'ultimo salvataggio di questo progetto è stato interrotto (il programma si è chiuso o il computer si è fermato). Ora è stato completato; questi file sono stati messi al loro posto:
+        <translation>L&apos;ultimo salvataggio di questo progetto è stato interrotto (il programma si è chiuso o il computer si è fermato). Ora è stato completato; questi file sono stati messi al loro posto:
 %1</translation>
     </message>
     <message>
         <source>These files had changed elsewhere since that save began, so they were not replaced; the versions of the interrupted save are kept in settings/conflicts of the project folder:
 %1</source>
-        <translation>Questi file sono cambiati altrove dopo l'inizio di quel salvataggio, quindi non sono stati sostituiti; le versioni del salvataggio interrotto sono conservate in settings/conflicts nella cartella del progetto:
+        <translation>Questi file sono cambiati altrove dopo l&apos;inizio di quel salvataggio, quindi non sono stati sostituiti; le versioni del salvataggio interrotto sono conservate in settings/conflicts nella cartella del progetto:
 %1</translation>
     </message>
     <message>
@@ -1143,11 +1147,11 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The last save of this project was cut off before it was complete. The project is as it was at the save before; changes made after that save are not in it.</source>
-        <translation>L'ultimo salvataggio di questo progetto è stato interrotto prima di essere completo. Il progetto è com'era al salvataggio precedente; le modifiche fatte dopo quel salvataggio non ci sono.</translation>
+        <translation>L&apos;ultimo salvataggio di questo progetto è stato interrotto prima di essere completo. Il progetto è com&apos;era al salvataggio precedente; le modifiche fatte dopo quel salvataggio non ci sono.</translation>
     </message>
     <message>
         <source>The last save of this project was cut off, and its journal (the list of the files that save was putting in place) cannot be read: %1. So it is not known which of its files were already in place; none of them was put in place or deleted now.</source>
-        <translation>L'ultimo salvataggio di questo progetto è stato interrotto e il suo journal (l'elenco dei file che quel salvataggio stava mettendo al loro posto) non può essere letto: %1. Non si sa quindi quali file fossero già al loro posto; nessuno è stato messo al suo posto o eliminato ora.</translation>
+        <translation>L&apos;ultimo salvataggio di questo progetto è stato interrotto e il suo journal (l&apos;elenco dei file che quel salvataggio stava mettendo al loro posto) non può essere letto: %1. Non si sa quindi quali file fossero già al loro posto; nessuno è stato messo al suo posto o eliminato ora.</translation>
     </message>
     <message>
         <source>The journal and the files of that save could not all be moved aside; what stayed is left in the project folder (the journal, and files whose names end in .qbstage).</source>
@@ -1179,7 +1183,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The last save of this project was put in place, but the drive has not confirmed it: %1 The journal of that save is kept; the program saves again once the drive answers.</source>
-        <translation>L'ultimo salvataggio di questo progetto è stato messo al suo posto, ma l'unità non l'ha confermato: %1 Il journal di quel salvataggio è conservato; il programma salva di nuovo appena l'unità risponde.</translation>
+        <translation>L&apos;ultimo salvataggio di questo progetto è stato messo al suo posto, ma l&apos;unità non l&apos;ha confermato: %1 Il journal di quel salvataggio è conservato; il programma salva di nuovo appena l&apos;unità risponde.</translation>
     </message>
     <message>
         <source>Another computer</source>
@@ -1203,7 +1207,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The drive still reports an error for the folder %1 (%2).</source>
-        <translation>L'unità segnala ancora un errore per la cartella %1 (%2).</translation>
+        <translation>L&apos;unità segnala ancora un errore per la cartella %1 (%2).</translation>
     </message>
     <message>
         <source>Labels</source>
@@ -1373,7 +1377,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The list of snapshot titles is damaged and could not be kept: %1</source>
-        <translation>L'elenco dei titoli delle istantanee è danneggiato e non è stato possibile conservarlo: %1</translation>
+        <translation>L&apos;elenco dei titoli delle istantanee è danneggiato e non è stato possibile conservarlo: %1</translation>
     </message>
     <message>
         <source>Untitled Snapshot</source>
@@ -1381,11 +1385,11 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The snapshot was taken, but its title could not be stored: %1</source>
-        <translation>L'istantanea è stata creata, ma non è stato possibile memorizzarne il titolo: %1</translation>
+        <translation>L&apos;istantanea è stata creata, ma non è stato possibile memorizzarne il titolo: %1</translation>
     </message>
     <message>
         <source>The snapshot&apos;s file cannot be read: %1</source>
-        <translation>Impossibile leggere il file dell'istantanea: %1</translation>
+        <translation>Impossibile leggere il file dell&apos;istantanea: %1</translation>
     </message>
     <message>
         <source>it is gone</source>
@@ -1393,7 +1397,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The snapshot&apos;s file could not be read whole (%1 of %2 bytes).</source>
-        <translation>Impossibile leggere per intero il file dell'istantanea (%1 di %2 byte).</translation>
+        <translation>Impossibile leggere per intero il file dell&apos;istantanea (%1 di %2 byte).</translation>
     </message>
     <message>
         <source>Some snapshots could not be deleted:
@@ -1403,7 +1407,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The snapshot holds no text (it may be damaged). The current text was kept.</source>
-        <translation>L'istantanea non contiene testo (potrebbe essere danneggiata). Il testo corrente è stato conservato.</translation>
+        <translation>L&apos;istantanea non contiene testo (potrebbe essere danneggiata). Il testo corrente è stato conservato.</translation>
     </message>
     <message>
         <source>The saved page holds no web page.</source>
@@ -1443,7 +1447,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>the table of contents lies outside the file</source>
-        <translation>l'indice si trova al di fuori del file</translation>
+        <translation>l&apos;indice si trova al di fuori del file</translation>
     </message>
     <message>
         <source>damaged table of contents</source>
@@ -1451,7 +1455,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>the table of contents could not be read</source>
-        <translation>impossibile leggere l'indice</translation>
+        <translation>impossibile leggere l&apos;indice</translation>
     </message>
     <message>
         <source>the sizes named in the file are impossibly large</source>
@@ -1459,7 +1463,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>damaged in the archive</source>
-        <translation>danneggiato nell'archivio</translation>
+        <translation>danneggiato nell&apos;archivio</translation>
     </message>
     <message>
         <source>packed in a way this program cannot unpack</source>
@@ -1467,7 +1471,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>damaged in the archive (its contents do not match its checksum)</source>
-        <translation>danneggiato nell'archivio (il contenuto non corrisponde al checksum)</translation>
+        <translation>danneggiato nell&apos;archivio (il contenuto non corrisponde al checksum)</translation>
     </message>
     <message>
         <source>could not be written to the disk</source>
@@ -1475,7 +1479,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>not in the archive</source>
-        <translation>non presente nell'archivio</translation>
+        <translation>non presente nell&apos;archivio</translation>
     </message>
     <message>
         <source>a name that is not allowed</source>
@@ -1487,7 +1491,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>&quot;%1&quot; was changed after the comparison and was left alone.</source>
-        <translation>"%1" è stato modificato dopo il confronto ed è stato lasciato com'era.</translation>
+        <translation>&quot;%1&quot; è stato modificato dopo il confronto ed è stato lasciato com&apos;era.</translation>
     </message>
     <message>
         <source>Before Compare and Transfer (%1)</source>
@@ -1583,7 +1587,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>%1: Word 97–2003 files become text with the add-on “Word 97–2003 Import” (Help &gt; Add-ons and Updates &gt; Add-on Manager); the file was added as it is.</source>
-        <translation>%1: i file Word 97–2003 diventano testo con il componente aggiuntivo “Word 97–2003 Import” (Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Gestione componenti aggiuntivi); il file è stato aggiunto così com'è.</translation>
+        <translation>%1: i file Word 97–2003 diventano testo con il componente aggiuntivo “Word 97–2003 Import” (Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Gestione componenti aggiuntivi); il file è stato aggiunto così com&apos;è.</translation>
     </message>
     <message>
         <source>%1: only text can be placed in the Draft; it was added to Research instead.</source>
@@ -1595,7 +1599,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>%1: the importer gave no readable result.</source>
-        <translation>%1: l'importatore non ha fornito alcun risultato leggibile.</translation>
+        <translation>%1: l&apos;importatore non ha fornito alcun risultato leggibile.</translation>
     </message>
     <message>
         <source>The document is nested more than %1 levels deep.</source>
@@ -1645,7 +1649,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Cannot copy the icon %1 into the Scrivener project: %2</source>
-        <translation>Impossibile copiare l'icona %1 nel progetto Scrivener: %2</translation>
+        <translation>Impossibile copiare l&apos;icona %1 nel progetto Scrivener: %2</translation>
     </message>
     <message>
         <source>Snapshot</source>
@@ -1672,13 +1676,13 @@ Nothing was changed: the working copy is as it was, and so is the Scrivener proj
         <translation>Il progetto Scrivener è stato modificato altrove e ha dovuto essere riletto, ma non è stato possibile copiare un file presente solo nella copia di lavoro di questo computer:
 %1
 
-Non è stato modificato nulla: la copia di lavoro è com'era e così il progetto Scrivener. Il progetto non è stato aperto. Controlla che il disco non sia pieno e che sia scrivibile, poi apri di nuovo il progetto.</translation>
+Non è stato modificato nulla: la copia di lavoro è com&apos;era e così il progetto Scrivener. Il progetto non è stato aperto. Controlla che il disco non sia pieno e che sia scrivibile, poi apri di nuovo il progetto.</translation>
     </message>
     <message numerus="yes">
         <source>%n document(s) that had not reached the Scrivener project yet (the last save did not end) were kept and are saved into it now.</source>
         <translation>
-            <numerusform>%n documento che non era ancora arrivato nel progetto Scrivener (l'ultimo salvataggio non è terminato) è stato conservato e ora viene salvato al suo interno.</numerusform>
-            <numerusform>%n documenti che non erano ancora arrivati nel progetto Scrivener (l'ultimo salvataggio non è terminato) sono stati conservati e ora vengono salvati al suo interno.</numerusform>
+            <numerusform>%n documento che non era ancora arrivato nel progetto Scrivener (l&apos;ultimo salvataggio non è terminato) è stato conservato e ora viene salvato al suo interno.</numerusform>
+            <numerusform>%n documenti che non erano ancora arrivati nel progetto Scrivener (l&apos;ultimo salvataggio non è terminato) sono stati conservati e ora vengono salvati al suo interno.</numerusform>
         </translation>
     </message>
     <message>
@@ -1687,7 +1691,7 @@ Non è stato modificato nulla: la copia di lavoro è com'era e così il progetto
     </message>
     <message>
         <source>Scrivener has opened this project (%1) while it is open here. So that the two programs do not write over each other&apos;s changes, nothing more is written into the Scrivener project %2. Your changes are kept in this program&apos;s working copy: close the project in Scrivener, then save here again (File &gt; Save).</source>
-        <translation>Scrivener ha aperto questo progetto (%1) mentre è aperto anche qui. Perché i due programmi non sovrascrivano le modifiche l'uno dell'altro, nel progetto Scrivener %2 non viene scritto altro. Le tue modifiche sono conservate nella copia di lavoro di questo programma: chiudi il progetto in Scrivener, poi salva di nuovo qui (File &gt; Salva).</translation>
+        <translation>Scrivener ha aperto questo progetto (%1) mentre è aperto anche qui. Perché i due programmi non sovrascrivano le modifiche l&apos;uno dell&apos;altro, nel progetto Scrivener %2 non viene scritto altro. Le tue modifiche sono conservate nella copia di lavoro di questo programma: chiudi il progetto in Scrivener, poi salva di nuovo qui (File &gt; Salva).</translation>
     </message>
     <message>
         <source>Some files of the Scrivener project were changed elsewhere (another computer or program), and those versions could not be kept in %1, so they were not replaced: %2. Check that the project folder is writable and the disk is not full.</source>
@@ -1696,7 +1700,7 @@ Non è stato modificato nulla: la copia di lavoro è com'era e così il progetto
     <message>
         <source>There is a Scrivener project at this place already:
 %1</source>
-        <translation>In questo punto c'è già un progetto Scrivener:
+        <translation>In questo punto c&apos;è già un progetto Scrivener:
 %1</translation>
     </message>
     <message>
@@ -1715,23 +1719,23 @@ Non è stato modificato nulla: la copia di lavoro è com'era e così il progetto
     </message>
     <message>
         <source>The index card picture of &quot;%1&quot; could not be copied (%2).</source>
-        <translation>Impossibile copiare l'immagine della scheda di "%1" (%2).</translation>
+        <translation>Impossibile copiare l&apos;immagine della scheda di &quot;%1&quot; (%2).</translation>
     </message>
     <message>
         <source>The mind map of &quot;%1&quot; could not be copied (%2).</source>
-        <translation>Impossibile copiare la mappa mentale di "%1" (%2).</translation>
+        <translation>Impossibile copiare la mappa mentale di &quot;%1&quot; (%2).</translation>
     </message>
     <message>
         <source>The file of &quot;%1&quot; (%2) could not be copied (%3).</source>
-        <translation>Impossibile copiare il file di "%1" (%2) (%3).</translation>
+        <translation>Impossibile copiare il file di &quot;%1&quot; (%2) (%3).</translation>
     </message>
     <message>
         <source>A file of the page &quot;%1&quot; (%2) could not be copied (%3).</source>
-        <translation>Impossibile copiare un file della pagina "%1" (%2) (%3).</translation>
+        <translation>Impossibile copiare un file della pagina &quot;%1&quot; (%2) (%3).</translation>
     </message>
     <message>
         <source>Media file of &quot;%1&quot; was not found.</source>
-        <translation>File multimediale di "%1" non trovato.</translation>
+        <translation>File multimediale di &quot;%1&quot; non trovato.</translation>
     </message>
     <message>
         <source>Imported snapshot</source>
@@ -1799,11 +1803,11 @@ Quanto scritto finora si trova in %2. Nel progetto Scrivener non è stato modifi
     </message>
     <message>
         <source>Film and television scripts in the usual layout: scene headings, action, character, parenthetical, dialogue, transition, shot.</source>
-        <translation>Sceneggiature per film e televisione nell'impaginazione usuale: intestazioni di scena, azione, personaggio, didascalia di recitazione, dialogo, transizione, inquadratura.</translation>
+        <translation>Sceneggiature per film e televisione nell&apos;impaginazione usuale: intestazioni di scena, azione, personaggio, didascalia di recitazione, dialogo, transizione, inquadratura.</translation>
     </message>
     <message>
         <source>Plays in the manuscript layout common in the US: centered act and scene headings, character names above the dialogue, stage directions indented and in parentheses.</source>
-        <translation>Opere teatrali nell'impaginazione da manoscritto in uso negli Stati Uniti: intestazioni di atto e di scena centrate, nomi dei personaggi sopra il dialogo, indicazioni di regia con rientro e tra parentesi.</translation>
+        <translation>Opere teatrali nell&apos;impaginazione da manoscritto in uso negli Stati Uniti: intestazioni di atto e di scena centrate, nomi dei personaggi sopra il dialogo, indicazioni di regia con rientro e tra parentesi.</translation>
     </message>
     <message>
         <source>Comics and graphic novels: pages, panels, panel descriptions, and the lettering (character, dialogue, captions, sound effects).</source>
@@ -1881,7 +1885,7 @@ Quanto scritto finora si trova in %2. Nel progetto Scrivener non è stato modifi
         <source>&quot;%1&quot; cannot be installed.
 
 %2</source>
-        <translation>Impossibile installare "%1".
+        <translation>Impossibile installare &quot;%1&quot;.
 
 %2</translation>
     </message>
@@ -1899,7 +1903,7 @@ Quanto scritto finora si trova in %2. Nel progetto Scrivener non è stato modifi
     </message>
     <message>
         <source>Signed with the add-on key &quot;%1&quot;, which the Quillbinder project vouches for: it is the add-on as published, unchanged.</source>
-        <translation>Firmato con la chiave di componente aggiuntivo "%1", garantita dal progetto Quillbinder: è il componente aggiuntivo come pubblicato, non modificato.</translation>
+        <translation>Firmato con la chiave di componente aggiuntivo &quot;%1&quot;, garantita dal progetto Quillbinder: è il componente aggiuntivo come pubblicato, non modificato.</translation>
     </message>
     <message>
         <source>Not signed by the Quillbinder project: it can come from anyone. Install it only if you made it yourself or trust where it comes from.</source>
@@ -1913,7 +1917,7 @@ Quanto scritto finora si trova in %2. Nel progetto Scrivener non è stato modifi
         <source>The installation failed.
 
 %1</source>
-        <translation>L'installazione non è riuscita.
+        <translation>L&apos;installazione non è riuscita.
 
 %1</translation>
     </message>
@@ -2099,7 +2103,7 @@ Quanto scritto finora si trova in %2. Nel progetto Scrivener non è stato modifi
     </message>
     <message>
         <source>no font files inside</source>
-        <translation>nessun file di caratteri all'interno</translation>
+        <translation>nessun file di caratteri all&apos;interno</translation>
     </message>
     <message>
         <source>not a font file</source>
@@ -2171,7 +2175,7 @@ Quanto scritto finora si trova in %2. Nel progetto Scrivener non è stato modifi
     </message>
     <message>
         <source>&lt;p&gt;%1 itself is under the &lt;b&gt;Apache License 2.0&lt;/b&gt;: anyone may use, copy, change and pass it on, keeping the license and the NOTICE file, which names the project and its source. The AppImage also carries parts of other projects, each under its own license; they are listed here with their full license texts (the same texts are in the AppImage under &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt is The Qt Company&apos;s own build of Qt %3; the other libraries are those of Ubuntu 24.04. The source code of each, exactly in the version used, is in the release &lt;a href=&quot;%2&quot;&gt;Third-party source code&lt;/a&gt; of the project page, in the file named below its license (Ubuntu&apos;s archive has Ubuntu&apos;s as well). You may replace the libraries inside the AppImage with your own builds. Add-ons carry their own license files.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;%1 è distribuito con la &lt;b&gt;licenza Apache 2.0&lt;/b&gt;: chiunque può usarlo, copiarlo, modificarlo e ridistribuirlo, mantenendo la licenza e il file NOTICE, che indica il progetto e il suo codice sorgente. L'AppImage contiene anche parti di altri progetti, ciascuna con la propria licenza; sono elencate qui con i testi completi delle licenze (gli stessi testi si trovano nell'AppImage in &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt è la compilazione di Qt %3 della stessa The Qt Company; le altre librerie sono quelle di Ubuntu 24.04. Il codice sorgente di ciascuna, esattamente nella versione usata, si trova nella release &lt;a href="%2"&gt;Third-party source code&lt;/a&gt; della pagina del progetto, nel file indicato sotto la sua licenza (anche l'archivio di Ubuntu ha quello di Ubuntu). Puoi sostituire le librerie all'interno dell'AppImage con le tue compilazioni. I componenti aggiuntivi hanno i propri file di licenza.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;%1 è distribuito con la &lt;b&gt;licenza Apache 2.0&lt;/b&gt;: chiunque può usarlo, copiarlo, modificarlo e ridistribuirlo, mantenendo la licenza e il file NOTICE, che indica il progetto e il suo codice sorgente. L&apos;AppImage contiene anche parti di altri progetti, ciascuna con la propria licenza; sono elencate qui con i testi completi delle licenze (gli stessi testi si trovano nell&apos;AppImage in &lt;i&gt;usr/share/doc/quillbinder/licenses&lt;/i&gt;). Qt è la compilazione di Qt %3 della stessa The Qt Company; le altre librerie sono quelle di Ubuntu 24.04. Il codice sorgente di ciascuna, esattamente nella versione usata, si trova nella release &lt;a href=&quot;%2&quot;&gt;Third-party source code&lt;/a&gt; della pagina del progetto, nel file indicato sotto la sua licenza (anche l&apos;archivio di Ubuntu ha quello di Ubuntu). Puoi sostituire le librerie all&apos;interno dell&apos;AppImage con le tue compilazioni. I componenti aggiuntivi hanno i propri file di licenza.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>%1
@@ -2229,7 +2233,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Inspector Background (All Projects)</source>
-        <translation>Sfondo dell'ispettore (tutti i progetti)</translation>
+        <translation>Sfondo dell&apos;ispettore (tutti i progetti)</translation>
     </message>
     <message>
         <source>Font: %1</source>
@@ -2269,7 +2273,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Let the Label Color Shine Through the Icons</source>
-        <translation>Lascia trasparire il colore dell'etichetta attraverso le icone</translation>
+        <translation>Lascia trasparire il colore dell&apos;etichetta attraverso le icone</translation>
     </message>
     <message>
         <source>Indent per Level</source>
@@ -2281,7 +2285,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Tint Cards with the Label Color</source>
-        <translation>Colora le schede con il colore dell'etichetta</translation>
+        <translation>Colora le schede con il colore dell&apos;etichetta</translation>
     </message>
     <message>
         <source>Card Width</source>
@@ -2384,11 +2388,11 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>One idea</source>
-        <translation>Un'idea</translation>
+        <translation>Un&apos;idea</translation>
     </message>
     <message>
         <source>Another idea</source>
-        <translation>Un'altra idea</translation>
+        <translation>Un&apos;altra idea</translation>
     </message>
     <message>
         <source>leads to</source>
@@ -2408,7 +2412,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>2  Arrows: hold Alt while you let go (an arrow to the note you drop on), Ctrl+Alt (an arrow back), Ctrl+Alt+Shift (both ends). Do it again to take the arrow away.</source>
-        <translation>2  Frecce: tieni premuto Alt mentre rilasci (una freccia verso la nota su cui rilasci), Ctrl+Alt (una freccia all'indietro), Ctrl+Alt+Shift (entrambe le estremità). Ripeti per eliminare la freccia.</translation>
+        <translation>2  Frecce: tieni premuto Alt mentre rilasci (una freccia verso la nota su cui rilasci), Ctrl+Alt (una freccia all&apos;indietro), Ctrl+Alt+Shift (entrambe le estremità). Ripeti per eliminare la freccia.</translation>
     </message>
     <message>
         <source>Drag me with Alt</source>
@@ -2508,11 +2512,11 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Click to choose a picture, or drop one here; right-click to remove it</source>
-        <translation>Fai clic per scegliere un'immagine, oppure rilasciane una qui; clic destro per rimuoverla</translation>
+        <translation>Fai clic per scegliere un&apos;immagine, oppure rilasciane una qui; clic destro per rimuoverla</translation>
     </message>
     <message>
         <source>Choose a Picture</source>
-        <translation>Scegli un'immagine</translation>
+        <translation>Scegli un&apos;immagine</translation>
     </message>
     <message>
         <source>Pictures (*.png *.jpg *.jpeg *.gif *.bmp *.webp *.svg)</source>
@@ -2520,11 +2524,11 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Choose a Picture…</source>
-        <translation>Scegli un'immagine…</translation>
+        <translation>Scegli un&apos;immagine…</translation>
     </message>
     <message>
         <source>Remove the Picture</source>
-        <translation>Rimuovi l'immagine</translation>
+        <translation>Rimuovi l&apos;immagine</translation>
     </message>
     <message>
         <source>Single Return</source>
@@ -2592,7 +2596,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>the picture</source>
-        <translation>l'immagine</translation>
+        <translation>l&apos;immagine</translation>
     </message>
     <message>
         <source>the PDF file</source>
@@ -2604,7 +2608,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>There is nothing to print in this editor.</source>
-        <translation>In questo editor non c'è nulla da stampare.</translation>
+        <translation>In questo editor non c&apos;è nulla da stampare.</translation>
     </message>
     <message>
         <source>No project is open.</source>
@@ -2748,7 +2752,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source> inside a paragraph.</source>
-        <translation> all'interno di un paragrafo.</translation>
+        <translation> all&apos;interno di un paragrafo.</translation>
     </message>
     <message>
         <source>No Style</source>
@@ -2768,7 +2772,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Inspector Background</source>
-        <translation>Sfondo dell'ispettore</translation>
+        <translation>Sfondo dell&apos;ispettore</translation>
     </message>
     <message>
         <source>Alternate list rows</source>
@@ -2788,7 +2792,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Selection and accent</source>
-        <translation>Selezione e colore d'accento</translation>
+        <translation>Selezione e colore d&apos;accento</translation>
     </message>
     <message>
         <source>Selected text</source>
@@ -2796,7 +2800,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Links in the interface</source>
-        <translation>Collegamenti nell'interfaccia</translation>
+        <translation>Collegamenti nell&apos;interfaccia</translation>
     </message>
     <message>
         <source>Tool tips</source>
@@ -2920,7 +2924,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Inspector Strips</source>
-        <translation>Strisce dell'ispettore</translation>
+        <translation>Strisce dell&apos;ispettore</translation>
     </message>
     <message>
         <source>Synopsis card</source>
@@ -3020,11 +3024,11 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Keep them with the new theme, or use the theme as it is? (Save Current Look as Theme keeps the present look for later.)</source>
-        <translation>Vuoi conservarli con il nuovo tema o usare il tema così com'è? (Salva l'aspetto corrente come tema conserva l'aspetto attuale per dopo.)</translation>
+        <translation>Vuoi conservarli con il nuovo tema o usare il tema così com&apos;è? (Salva l&apos;aspetto corrente come tema conserva l&apos;aspetto attuale per dopo.)</translation>
     </message>
     <message>
         <source>Use the Theme as It Is</source>
-        <translation>Usa il tema così com'è</translation>
+        <translation>Usa il tema così com&apos;è</translation>
     </message>
     <message>
         <source>Keep My Changes</source>
@@ -3044,7 +3048,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Save Current Look as Theme</source>
-        <translation>Salva l'aspetto corrente come tema</translation>
+        <translation>Salva l&apos;aspetto corrente come tema</translation>
     </message>
     <message>
         <source>%1 (My Version)</source>
@@ -3136,7 +3140,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Line spacing list</source>
-        <translation>Elenco dell'interlinea</translation>
+        <translation>Elenco dell&apos;interlinea</translation>
     </message>
     <message>
         <source>Space before the paragraph</source>
@@ -3152,7 +3156,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Indent of the whole paragraph</source>
-        <translation>Rientro dell'intero paragrafo</translation>
+        <translation>Rientro dell&apos;intero paragrafo</translation>
     </message>
     <message>
         <source>――  Separator  ――</source>
@@ -3164,7 +3168,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Import Scrivener Project — choose the .scrivx file inside the .scriv folder</source>
-        <translation>Importa progetto Scrivener — scegli il file .scrivx all'interno della cartella .scriv</translation>
+        <translation>Importa progetto Scrivener — scegli il file .scrivx all&apos;interno della cartella .scriv</translation>
     </message>
     <message>
         <source>Scrivener projects (*.scrivx)</source>
@@ -3265,8 +3269,12 @@ Sorgente: %1</translation>
         <translation>Ispettore: Note</translation>
     </message>
     <message>
-        <source>Inspector: Bookmark Lists</source>
-        <translation>Ispettore: Elenchi di segnalibri</translation>
+        <source>Inspector: Document Bookmarks</source>
+        <translation>Ispettore: segnalibri del documento</translation>
+    </message>
+    <message>
+        <source>Inspector: Project Bookmarks</source>
+        <translation>Ispettore: segnalibri del progetto</translation>
     </message>
     <message>
         <source>Inspector: Bookmarked Text</source>
@@ -3278,7 +3286,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Inspector: Snapshot Text</source>
-        <translation>Ispettore: Testo dell'istantanea</translation>
+        <translation>Ispettore: Testo dell&apos;istantanea</translation>
     </message>
     <message>
         <source>Inspector: Objects (Categories and List)</source>
@@ -3286,7 +3294,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Inspector: Object Sheet</source>
-        <translation>Ispettore: Scheda dell'oggetto</translation>
+        <translation>Ispettore: Scheda dell&apos;oggetto</translation>
     </message>
     <message>
         <source>Inspector: %1</source>
@@ -3294,7 +3302,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Not fetched: the address is on this computer or on a private network.</source>
-        <translation>Non recuperato: l'indirizzo è su questo computer o su una rete privata.</translation>
+        <translation>Non recuperato: l&apos;indirizzo è su questo computer o su una rete privata.</translation>
     </message>
     <message>
         <source>The file is larger than %1 MB.</source>
@@ -3306,7 +3314,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>The server “%1” was not found (is the address right, is the computer online?).</source>
-        <translation>Il server “%1” non è stato trovato (l'indirizzo è corretto? Il computer è online?).</translation>
+        <translation>Il server “%1” non è stato trovato (l&apos;indirizzo è corretto? Il computer è online?).</translation>
     </message>
     <message>
         <source>The server answered %1 %2.</source>
@@ -3486,11 +3494,11 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>The model knows English only.</source>
-        <translation>Il modello conosce solo l'inglese.</translation>
+        <translation>Il modello conosce solo l&apos;inglese.</translation>
     </message>
     <message>
         <source>The file holds the model &quot;%1&quot;, not &quot;%2&quot;.</source>
-        <translation>Il file contiene il modello "%1", non "%2".</translation>
+        <translation>Il file contiene il modello &quot;%1&quot;, non &quot;%2&quot;.</translation>
     </message>
     <message>
         <source>The recording cannot be written: %1</source>
@@ -3532,6 +3540,74 @@ Sorgente: %1</translation>
         <source>very difficult</source>
         <translation>molto difficile</translation>
     </message>
+    <message>
+        <source>Name of the profile:</source>
+        <translation>Nome del profilo:</translation>
+    </message>
+    <message>
+        <source>There is already a profile named “%1”. Choose another name.</source>
+        <translation>Esiste già un profilo con il nome “%1”. Scegli un altro nome.</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Importa profilo</translation>
+    </message>
+    <message>
+        <source>The profile also names programs, folders, files or addresses (a folder may not exist on this computer):
+
+%1
+
+Take these too? Take them only if you made the file yourself or trust where it comes from.</source>
+        <translation>Il profilo nomina anche programmi, cartelle, file o indirizzi (una cartella potrebbe non esistere su questo computer):
+
+%1
+
+Accettarli anche? Accettali solo se hai creato tu il file o ti fidi della sua provenienza.</translation>
+    </message>
+    <message>
+        <source>A temporary file could not be made.</source>
+        <translation>Impossibile creare un file temporaneo.</translation>
+    </message>
+    <message>
+        <source>Nothing to write.</source>
+        <translation>Non c&apos;è nulla da scrivere.</translation>
+    </message>
+    <message>
+        <source>The file could not be written (%1). The file that was there is unchanged.</source>
+        <translation>Impossibile scrivere il file (%1). Il file che c&apos;era è rimasto invariato.</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Il mio profilo</translation>
+    </message>
+    <message>
+        <source>The profile “%1” could not be read.</source>
+        <translation>Impossibile leggere il profilo “%1”.</translation>
+    </message>
+    <message>
+        <source>There is no profile “%1”.</source>
+        <translation>Non esiste alcun profilo “%1”.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be deleted.</source>
+        <translation>Il profilo “%1” non può essere eliminato.</translation>
+    </message>
+    <message>
+        <source>The profile in use cannot be deleted. Switch to another profile first.</source>
+        <translation>Il profilo in uso non può essere eliminato. Passa prima a un altro profilo.</translation>
+    </message>
+    <message>
+        <source>The file of the profile could not be deleted.</source>
+        <translation>Impossibile eliminare il file del profilo.</translation>
+    </message>
+    <message>
+        <source>The profile “%1” cannot be renamed.</source>
+        <translation>Il profilo “%1” non può essere rinominato.</translation>
+    </message>
+    <message>
+        <source>This is not a file of a profile or of options saved by Quillbinder.</source>
+        <translation>Questo non è un file di un profilo né di opzioni salvate da Quillbinder.</translation>
+    </message>
 </context>
 <context>
     <name>RegionPicker</name>
@@ -3541,7 +3617,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Drag over the part of the screen you want. Esc cancels, Enter takes the whole screen.</source>
-        <translation>Trascina sulla parte dello schermo che vuoi. Esc annulla, Invio prende l'intero schermo.</translation>
+        <translation>Trascina sulla parte dello schermo che vuoi. Esc annulla, Invio prende l&apos;intero schermo.</translation>
     </message>
 </context>
 <context>
@@ -3607,7 +3683,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>another note is opened</source>
-        <translation>viene aperta un'altra nota</translation>
+        <translation>viene aperta un&apos;altra nota</translation>
     </message>
     <message>
         <source>the notes folder is changed</source>
@@ -3742,7 +3818,7 @@ Sorgente: %1</translation>
     <name>ScreenGrab</name>
     <message>
         <source>This desktop does not let programs read the screen. On KDE Plasma, install Spectacle (sudo apt install kde-spectacle); it takes the picture for the scratch pad.</source>
-        <translation>Questo desktop non consente ai programmi di leggere lo schermo. In KDE Plasma, installa Spectacle (sudo apt install kde-spectacle); cattura l'immagine per il Blocco appunti.</translation>
+        <translation>Questo desktop non consente ai programmi di leggere lo schermo. In KDE Plasma, installa Spectacle (sudo apt install kde-spectacle); cattura l&apos;immagine per il Blocco appunti.</translation>
     </message>
 </context>
 <context>
@@ -3785,7 +3861,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>https://... (a folder with the model files, or the address of one file)</source>
-        <translation>https://... (una cartella con i file dei modelli, o l'indirizzo di un file)</translation>
+        <translation>https://... (una cartella con i file dei modelli, o l&apos;indirizzo di un file)</translation>
     </message>
     <message>
         <source>Source:</source>
@@ -3797,7 +3873,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>The model is downloaded once, when you choose it; after that nothing leaves this computer. Before it is used it is checked: its checksum, the description of the model in the file, and a short test transcription. Only then does it replace the model in use, which is deleted.</source>
-        <translation>Il modello viene scaricato una sola volta, quando lo scegli; dopo di che nulla lascia questo computer. Prima dell'uso viene controllato: il suo checksum, la descrizione del modello nel file e una breve trascrizione di prova. Solo allora sostituisce il modello in uso, che viene eliminato.</translation>
+        <translation>Il modello viene scaricato una sola volta, quando lo scegli; dopo di che nulla lascia questo computer. Prima dell&apos;uso viene controllato: il suo checksum, la descrizione del modello nel file e una breve trascrizione di prova. Solo allora sostituisce il modello in uso, che viene eliminato.</translation>
     </message>
     <message>
         <source>Processing</source>
@@ -3861,7 +3937,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Fallback (also spoken):</source>
-        <translation>Lingua di riserva (parlata anch'essa):</translation>
+        <translation>Lingua di riserva (parlata anch&apos;essa):</translation>
     </message>
     <message>
         <source>Keep what was said beside a translation, in brackets (takes longer)</source>
@@ -3869,7 +3945,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Names and words you use, in the main language&apos;s spelling: Eleanor, Brackwater, Bahnhof ...</source>
-        <translation>Nomi e parole che usi, con l'ortografia della lingua principale: Eleanor, Brackwater, Bahnhof ...</translation>
+        <translation>Nomi e parole che usi, con l&apos;ortografia della lingua principale: Eleanor, Brackwater, Bahnhof ...</translation>
     </message>
     <message>
         <source>Hint words:</source>
@@ -3925,7 +4001,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>When the microphone starts:</source>
-        <translation>All'avvio del microfono:</translation>
+        <translation>All&apos;avvio del microfono:</translation>
     </message>
     <message>
         <source>Transcribe live (the text follows a few seconds after each pause)</source>
@@ -3933,7 +4009,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Record only: the text is written later, when you press Transcribe in the list (uses little power: for a laptop on battery or a phone)</source>
-        <translation>Solo registrazione: il testo viene scritto più tardi, quando premi Trascrivi nell'elenco (consuma poca energia: per un portatile a batteria o un telefono)</translation>
+        <translation>Solo registrazione: il testo viene scritto più tardi, quando premi Trascrivi nell&apos;elenco (consuma poca energia: per un portatile a batteria o un telefono)</translation>
     </message>
     <message>
         <source>Delete a recording once its text is written</source>
@@ -3957,7 +4033,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>The system&apos;s default input</source>
-        <translation>L'ingresso predefinito del sistema</translation>
+        <translation>L&apos;ingresso predefinito del sistema</translation>
     </message>
     <message>
         <source>Folder of the Transcriptions</source>
@@ -4029,7 +4105,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>What you say in %1 is written in English (translated). Words of %1 inside English sentences usually come out in English too.</source>
-        <translation>Ciò che dici in %1 viene scritto in inglese (tradotto). Di solito anche le parole di %1 all'interno di frasi inglesi vengono scritte in inglese.</translation>
+        <translation>Ciò che dici in %1 viene scritto in inglese (tradotto). Di solito anche le parole di %1 all&apos;interno di frasi inglesi vengono scritte in inglese.</translation>
     </message>
     <message>
         <source>This model cannot translate: what you say in %1 stays in %1.</source>
@@ -4056,7 +4132,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>The transcriptions in the inspector</source>
-        <translation>Le trascrizioni nell'ispettore</translation>
+        <translation>Le trascrizioni nell&apos;ispettore</translation>
     </message>
     <message>
         <source>Speech transcriptions</source>
@@ -4068,7 +4144,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>The System&apos;s Default Input</source>
-        <translation>L'ingresso predefinito del sistema</translation>
+        <translation>L&apos;ingresso predefinito del sistema</translation>
     </message>
     <message>
         <source>%1 (default)</source>
@@ -4128,7 +4204,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>The recording is no longer there.</source>
-        <translation>La registrazione non c'è più.</translation>
+        <translation>La registrazione non c&apos;è più.</translation>
     </message>
     <message>
         <source>Stop speech transcription</source>
@@ -4136,7 +4212,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>The address %1 is not used: models are downloaded only from https:// addresses. Change the address in the options.</source>
-        <translation>L'indirizzo %1 non viene usato: i modelli vengono scaricati solo da indirizzi https://. Cambia l'indirizzo nelle opzioni.</translation>
+        <translation>L&apos;indirizzo %1 non viene usato: i modelli vengono scaricati solo da indirizzi https://. Cambia l&apos;indirizzo nelle opzioni.</translation>
     </message>
     <message>
         <source>Downloading %1 from %2 ...</source>
@@ -4168,11 +4244,11 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Not installed: the downloaded file does not have the known checksum of &quot;%1&quot; (it may be damaged, or not the file of the official source). The model in use stays. Try again later.</source>
-        <translation>Non installato: il file scaricato non ha il checksum noto di "%1" (potrebbe essere danneggiato o non essere il file della fonte ufficiale). Resta il modello in uso. Riprova più tardi.</translation>
+        <translation>Non installato: il file scaricato non ha il checksum noto di &quot;%1&quot; (potrebbe essere danneggiato o non essere il file della fonte ufficiale). Resta il modello in uso. Riprova più tardi.</translation>
     </message>
     <message>
         <source>The file differs from the one Quillbinder knows for &quot;%1&quot; (its checksum is another). Use it only if you trust where it comes from: it is read by the speech engine. Check and use it?</source>
-        <translation>Il file è diverso da quello che Quillbinder conosce per "%1" (il suo checksum è diverso). Usalo solo se ti fidi della sua provenienza: viene letto dal motore vocale. Controllarlo e usarlo?</translation>
+        <translation>Il file è diverso da quello che Quillbinder conosce per &quot;%1&quot; (il suo checksum è diverso). Usalo solo se ti fidi della sua provenienza: viene letto dal motore vocale. Controllarlo e usarlo?</translation>
     </message>
     <message>
         <source>The file is not one of the models Quillbinder knows (its checksum is another). Use it only if you trust where it comes from: it is read by the speech engine. Check and use it?</source>
@@ -4188,11 +4264,11 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>it knows English only</source>
-        <translation>conosce solo l'inglese</translation>
+        <translation>conosce solo l&apos;inglese</translation>
     </message>
     <message>
         <source>it wrote &quot;%1&quot;</source>
-        <translation>ha scritto "%1"</translation>
+        <translation>ha scritto &quot;%1&quot;</translation>
     </message>
     <message>
         <source>The model did not pass the test transcription (%1). The model in use stays.</source>
@@ -4231,7 +4307,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Counts, readability, word frequency and repeated phrases of a selection, documents or the whole project</source>
-        <translation>Conteggi, leggibilità, frequenza delle parole e frasi ripetute di una selezione, di documenti o dell'intero progetto</translation>
+        <translation>Conteggi, leggibilità, frequenza delle parole e frasi ripetute di una selezione, di documenti o dell&apos;intero progetto</translation>
     </message>
     <message>
         <source>Text Statistics</source>
@@ -4250,7 +4326,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Text in the editor</source>
-        <translation>Testo nell'editor</translation>
+        <translation>Testo nell&apos;editor</translation>
     </message>
     <message>
         <source>Documents selected in the binder</source>
@@ -4374,7 +4450,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Repeated word groups inside sentences; double-click to search the project</source>
-        <translation>Gruppi di parole ripetuti all'interno delle frasi; doppio clic per cercare nel progetto</translation>
+        <translation>Gruppi di parole ripetuti all&apos;interno delle frasi; doppio clic per cercare nel progetto</translation>
     </message>
     <message>
         <source>Repeated Phrases</source>
@@ -4430,7 +4506,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>No text is selected in the editor.</source>
-        <translation>Nessun testo selezionato nell'editor.</translation>
+        <translation>Nessun testo selezionato nell&apos;editor.</translation>
     </message>
     <message>
         <source>No text documents here.</source>
@@ -4587,7 +4663,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Copy the whole text</source>
-        <translation>Copia l'intero testo</translation>
+        <translation>Copia l&apos;intero testo</translation>
     </message>
     <message>
         <source>Move the transcription to the trash</source>
@@ -4651,7 +4727,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Move &quot;%1&quot; to the trash?</source>
-        <translation>Spostare "%1" nel cestino?</translation>
+        <translation>Spostare &quot;%1&quot; nel cestino?</translation>
     </message>
     <message>
         <source>Move to Trash</source>
@@ -4679,7 +4755,7 @@ Sorgente: %1</translation>
     </message>
     <message>
         <source>Recording (record only): the text is written later, with Transcribe in the list. Press the microphone again to stop.</source>
-        <translation>Registrazione (solo registrazione): il testo viene scritto più tardi, con Trascrivi nell'elenco. Premi di nuovo il microfono per interrompere.</translation>
+        <translation>Registrazione (solo registrazione): il testo viene scritto più tardi, con Trascrivi nell&apos;elenco. Premi di nuovo il microfono per interrompere.</translation>
     </message>
     <message>
         <source>Writing the text of the recording: %1 % read ...</source>
@@ -4698,7 +4774,7 @@ Sorgente: %1</translation>
     <name>WebImporter</name>
     <message>
         <source>“%1” is not the address of a web page.</source>
-        <translation>“%1” non è l'indirizzo di una pagina web.</translation>
+        <translation>“%1” non è l&apos;indirizzo di una pagina web.</translation>
     </message>
     <message>
         <source>Importing %1 …</source>
@@ -4803,14 +4879,14 @@ Sorgente: %1</translation>
 Move the whole Quillbinder folder to a place of your own, for example C:\Users\&lt;your name&gt;\Quillbinder, and start it from there. Program Files and other protected folders do not work, because the program needs no administrator rights.</source>
         <translation>Quillbinder conserva le sue impostazioni, i componenti aggiuntivi e gli aggiornamenti in una cartella propria e non può funzionare lì perché %1.
 
-Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&lt;il tuo nome&gt;\Quillbinder, e avviala da lì. Program Files e altre cartelle protette non vanno bene, perché il programma non richiede diritti di amministratore.</translation>
+Sposta l&apos;intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&lt;il tuo nome&gt;\Quillbinder, e avviala da lì. Program Files e altre cartelle protette non vanno bene, perché il programma non richiede diritti di amministratore.</translation>
     </message>
 </context>
 <context>
     <name>playback</name>
     <message>
         <source>Playing audio and video inside the program needs the add-on &quot;Media Playback&quot; (Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager).</source>
-        <translation>La riproduzione di audio e video all'interno del programma richiede il componente aggiuntivo "Media Playback" (Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Installa aggiornamento o componente aggiuntivo; Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Gestione componenti aggiuntivi).</translation>
+        <translation>La riproduzione di audio e video all&apos;interno del programma richiede il componente aggiuntivo &quot;Media Playback&quot; (Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Installa aggiornamento o componente aggiuntivo; Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Gestione componenti aggiuntivi).</translation>
     </message>
     <message>
         <source>Audio and video cannot be played here: %1</source>
@@ -4818,7 +4894,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Not installed: audio and video files open with the desktop&apos;s default application.</source>
-        <translation>Non installato: i file audio e video si aprono con l'applicazione predefinita del desktop.</translation>
+        <translation>Non installato: i file audio e video si aprono con l&apos;applicazione predefinita del desktop.</translation>
     </message>
     <message>
         <source>%1 %2</source>
@@ -4905,11 +4981,11 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Remove the add-on &quot;%1&quot;?</source>
-        <translation>Rimuovere il componente aggiuntivo "%1"?</translation>
+        <translation>Rimuovere il componente aggiuntivo &quot;%1&quot;?</translation>
     </message>
     <message>
         <source>%1 (built into the AppImage)</source>
-        <translation>%1 (integrato nell'AppImage)</translation>
+        <translation>%1 (integrato nell&apos;AppImage)</translation>
     </message>
     <message>
         <source>running now</source>
@@ -4929,7 +5005,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>&lt;span style=&apos;color:gray&apos;&gt;No add-ons installed. Add-ons are files ending in .qbpkg; choose &quot;Install From File…&quot; or double-click the file.&lt;/span&gt;</source>
-        <translation>&lt;span style='color:gray'&gt;Nessun componente aggiuntivo installato. I componenti aggiuntivi sono file che terminano con .qbpkg; scegli "Installa da file…" oppure fai doppio clic sul file.&lt;/span&gt;</translation>
+        <translation>&lt;span style=&apos;color:gray&apos;&gt;Nessun componente aggiuntivo installato. I componenti aggiuntivi sono file che terminano con .qbpkg; scegli &quot;Installa da file…&quot; oppure fai doppio clic sul file.&lt;/span&gt;</translation>
     </message>
     <message>
         <source>Install Update or Add-on</source>
@@ -4963,7 +5039,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     <name>qb::BarDock</name>
     <message>
         <source>Release the mouse button to put the toolbar at the marked place. Esc leaves it where it is.</source>
-        <translation>Rilascia il pulsante del mouse per mettere la barra degli strumenti nel punto indicato. Esc la lascia dov'è.</translation>
+        <translation>Rilascia il pulsante del mouse per mettere la barra degli strumenti nel punto indicato. Esc la lascia dov&apos;è.</translation>
     </message>
 </context>
 <context>
@@ -5049,7 +5125,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Release the fixed mind map: the inspector&apos;s Mind Map tab follows the selected item again</source>
-        <translation>Rilascia la mappa mentale fissata: la scheda Mappa mentale dell'ispettore torna a seguire l'elemento selezionato</translation>
+        <translation>Rilascia la mappa mentale fissata: la scheda Mappa mentale dell&apos;ispettore torna a seguire l&apos;elemento selezionato</translation>
     </message>
     <message>
         <source>New document (Ctrl+N)</source>
@@ -5213,7 +5289,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>The inspector&apos;s Mind Map tab shows this item&apos;s mind map whatever is selected.</source>
-        <translation>La scheda Mappa mentale dell'ispettore mostra la mappa mentale di questo elemento qualunque cosa sia selezionata.</translation>
+        <translation>La scheda Mappa mentale dell&apos;ispettore mostra la mappa mentale di questo elemento qualunque cosa sia selezionata.</translation>
     </message>
     <message>
         <source>Regular expression: %1</source>
@@ -5225,7 +5301,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Search Results (mistake in the expression)</source>
-        <translation>Risultati della ricerca (errore nell'espressione)</translation>
+        <translation>Risultati della ricerca (errore nell&apos;espressione)</translation>
     </message>
     <message>
         <source>Binder</source>
@@ -5237,7 +5313,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Runs the last project search again</source>
-        <translation>Esegue di nuovo l'ultima ricerca nel progetto</translation>
+        <translation>Esegue di nuovo l&apos;ultima ricerca nel progetto</translation>
     </message>
     <message>
         <source>Search Results (no search yet)</source>
@@ -5248,11 +5324,11 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     <name>qb::BinderTree</name>
     <message>
         <source>The inspector&apos;s Mind Map tab is fixed on this item. Click to release it.</source>
-        <translation>La scheda Mappa mentale dell'ispettore è fissata su questo elemento. Fai clic per rilasciarla.</translation>
+        <translation>La scheda Mappa mentale dell&apos;ispettore è fissata su questo elemento. Fai clic per rilasciarla.</translation>
     </message>
     <message>
         <source>Fix the inspector&apos;s Mind Map tab on this item: it then shows this item&apos;s mind map whatever is selected.</source>
-        <translation>Fissa la scheda Mappa mentale dell'ispettore su questo elemento: mostrerà la mappa mentale di questo elemento qualunque cosa sia selezionata.</translation>
+        <translation>Fissa la scheda Mappa mentale dell&apos;ispettore su questo elemento: mostrerà la mappa mentale di questo elemento qualunque cosa sia selezionata.</translation>
     </message>
 </context>
 <context>
@@ -5402,7 +5478,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Shown: what happens to the &lt;b&gt;project&lt;/b&gt;. %1 is taken from the file, %2 goes, %3 gets the file&apos;s bold, italic or underline. Every changed document gets a snapshot first.</source>
-        <translation>Mostrato: ciò che accade al &lt;b&gt;progetto&lt;/b&gt;. %1 viene preso dal file, %2 viene eliminato, %3 riceve il grassetto, il corsivo o la sottolineatura del file. Ogni documento modificato riceve prima un'istantanea.</translation>
+        <translation>Mostrato: ciò che accade al &lt;b&gt;progetto&lt;/b&gt;. %1 viene preso dal file, %2 viene eliminato, %3 riceve il grassetto, il corsivo o la sottolineatura del file. Ogni documento modificato riceve prima un&apos;istantanea.</translation>
     </message>
     <message>
         <source>green</source>
@@ -5418,7 +5494,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Shown: what happens to the &lt;b&gt;file&lt;/b&gt;. %1 is taken from the project, %2 goes, %3 gets the project&apos;s bold, italic or underline. The file itself stays as it is: the program writes a copy, %4.</source>
-        <translation>Mostrato: ciò che accade al &lt;b&gt;file&lt;/b&gt;. %1 viene preso dal progetto, %2 viene eliminato, %3 riceve il grassetto, il corsivo o la sottolineatura del progetto. Il file stesso resta com'è: il programma scrive una copia, %4.</translation>
+        <translation>Mostrato: ciò che accade al &lt;b&gt;file&lt;/b&gt;. %1 viene preso dal progetto, %2 viene eliminato, %3 riceve il grassetto, il corsivo o la sottolineatura del progetto. Il file stesso resta com&apos;è: il programma scrive una copia, %4.</translation>
     </message>
     <message>
         <source>the same</source>
@@ -5493,7 +5569,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Change %1 of %2, in &quot;%3&quot;</source>
-        <translation>Modifica %1 di %2, in "%3"</translation>
+        <translation>Modifica %1 di %2, in &quot;%3&quot;</translation>
     </message>
     <message numerus="yes">
         <source>All changes seen: %n to take. Press Transfer.</source>
@@ -5565,7 +5641,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>One font for the whole manuscript, or the fonts the format and the text have</source>
-        <translation>Un solo carattere per l'intero manoscritto, oppure i caratteri del formato e del testo</translation>
+        <translation>Un solo carattere per l&apos;intero manoscritto, oppure i caratteri del formato e del testo</translation>
     </message>
     <message>
         <source>Determined by Section Layout</source>
@@ -5633,7 +5709,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Built-in formats cannot be changed. Use &quot;+&quot; (Duplicate &amp; Edit) to make your own copy.</source>
-        <translation>I formati integrati non possono essere modificati. Usa "+" (Duplica &amp; modifica) per crearne una tua copia.</translation>
+        <translation>I formati integrati non possono essere modificati. Usa &quot;+&quot; (Duplica &amp; modifica) per crearne una tua copia.</translation>
     </message>
     <message>
         <source>Delete Format</source>
@@ -5641,7 +5717,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Delete the compile format &quot;%1&quot;?</source>
-        <translation>Eliminare il formato di compilazione "%1"?</translation>
+        <translation>Eliminare il formato di compilazione &quot;%1&quot;?</translation>
     </message>
     <message>
         <source>Import Compile Format</source>
@@ -5689,7 +5765,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>The characters, locations and other objects of the Objects sheet, after the back matter: a heading per category, a section per object with its fields</source>
-        <translation>I personaggi, i luoghi e gli altri oggetti della scheda Oggetti, dopo le ultime pagine: un'intestazione per categoria, una sezione per oggetto con i suoi campi</translation>
+        <translation>I personaggi, i luoghi e gli altri oggetti della scheda Oggetti, dopo le ultime pagine: un&apos;intestazione per categoria, una sezione per oggetto con i suoi campi</translation>
     </message>
     <message>
         <source>All categories</source>
@@ -5761,7 +5837,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Empty fields use the project title and the author set under File &gt; Options &gt; General &gt; Author Information. Placeholders such as &lt;$projecttitle&gt; work here too. The cover is a picture of the binder.</source>
-        <translation>I campi vuoti usano il titolo del progetto e l'autore impostato in File &gt; Opzioni &gt; Generale &gt; Informazioni sull'autore. Anche segnaposto come &lt;$projecttitle&gt; funzionano qui. La copertina è un'immagine del raccoglitore.</translation>
+        <translation>I campi vuoti usano il titolo del progetto e l&apos;autore impostato in File &gt; Opzioni &gt; Generale &gt; Informazioni sull&apos;autore. Anche segnaposto come &lt;$projecttitle&gt; funzionano qui. La copertina è un&apos;immagine del raccoglitore.</translation>
     </message>
     <message>
         <source>Include the text of the compile group itself</source>
@@ -5769,7 +5845,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>The look of the compiled file (text, page, headers and footers, footnotes and comments, styles, transformations, contents and e-book) belongs to the format: choose a format of your own on the left and edit it.</source>
-        <translation>L'aspetto del file compilato (testo, pagina, intestazioni e piè di pagina, note a piè di pagina e commenti, stili, trasformazioni, indice ed e-book) appartiene al formato: scegli a sinistra un formato tuo e modificalo.</translation>
+        <translation>L&apos;aspetto del file compilato (testo, pagina, intestazioni e piè di pagina, note a piè di pagina e commenti, stili, trasformazioni, indice ed e-book) appartiene al formato: scegli a sinistra un formato tuo e modificalo.</translation>
     </message>
     <message>
         <source>Replacements of this project, made after those of the format (for example a name spelled one way in the drafts and another in the book).</source>
@@ -5933,11 +6009,11 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Author&apos;s Name</source>
-        <translation>Nome dell'autore</translation>
+        <translation>Nome dell&apos;autore</translation>
     </message>
     <message>
         <source>The title page names the author. Who is the author? The name is kept with the author information in File &gt; Options &gt; General. Left empty, the title page has no &quot;by&quot; line.</source>
-        <translation>Il frontespizio riporta l'autore. Chi è l'autore? Il nome viene conservato con le informazioni sull'autore in File &gt; Opzioni &gt; Generale. Se lasciato vuoto, il frontespizio non ha la riga "di".</translation>
+        <translation>Il frontespizio riporta l&apos;autore. Chi è l&apos;autore? Il nome viene conservato con le informazioni sull&apos;autore in File &gt; Opzioni &gt; Generale. Se lasciato vuoto, il frontespizio non ha la riga &quot;di&quot;.</translation>
     </message>
     <message>
         <source>First name:</source>
@@ -5949,7 +6025,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Preparing the preview...</source>
-        <translation>Preparazione dell'anteprima...</translation>
+        <translation>Preparazione dell&apos;anteprima...</translation>
     </message>
     <message>
         <source>Preview — %1 (1 page)</source>
@@ -6019,11 +6095,11 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Typographic quotes to &amp;straight quotes (&quot; &apos;)</source>
-        <translation>Virgolette tipografiche in virgolette &amp;dritte (" ')</translation>
+        <translation>Virgolette tipografiche in virgolette &amp;dritte (&quot; &apos;)</translation>
     </message>
     <message>
         <source>An apostrophe inside a word becomes ’. A straight mark with a space on both sides stays as it is; an apostrophe at the start of a word (&apos;tis) becomes an opening mark.</source>
-        <translation>Un apostrofo all'interno di una parola diventa ’. Un segno dritto con uno spazio da entrambi i lati resta com'è; un apostrofo all'inizio di una parola ('tis) diventa un segno di apertura.</translation>
+        <translation>Un apostrofo all&apos;interno di una parola diventa ’. Un segno dritto con uno spazio da entrambi i lati resta com&apos;è; un apostrofo all&apos;inizio di una parola (&apos;tis) diventa un segno di apertura.</translation>
     </message>
     <message>
         <source>Convert in</source>
@@ -6071,7 +6147,7 @@ Sposta l'intera cartella di Quillbinder in un luogo tuo, per esempio C:\Users\&l
     </message>
     <message>
         <source>Take a snapshot of every text before it is changed</source>
-        <translation>Crea un'istantanea di ogni testo prima che venga modificato</translation>
+        <translation>Crea un&apos;istantanea di ogni testo prima che venga modificato</translation>
     </message>
     <message>
         <source>The conversion changes all documents at once and cannot be undone as a whole.</source>
@@ -6191,7 +6267,7 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source> Each changed text gets a snapshot to go back to.</source>
-        <translation> Ogni testo modificato riceve un'istantanea a cui tornare.</translation>
+        <translation> Ogni testo modificato riceve un&apos;istantanea a cui tornare.</translation>
     </message>
     <message>
         <source> A backup (File &gt; Back Up) beforehand is a good idea.</source>
@@ -6210,7 +6286,7 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     <name>qb::Copyholder</name>
     <message>
         <source>Copyholder: right-click to place it left, right, above or below the editor</source>
-        <translation>Copyholder: clic destro per metterlo a sinistra, a destra, sopra o sotto l'editor</translation>
+        <translation>Copyholder: clic destro per metterlo a sinistra, a destra, sopra o sotto l&apos;editor</translation>
     </message>
     <message>
         <source>Close the copyholder and open its document as a Quick Reference panel</source>
@@ -6276,7 +6352,7 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>When %1 ends because of an error, or does not respond for 30 seconds, it writes a report on this computer. Nothing is sent anywhere. To report the problem, copy the report into a message (or send the file). It names files, folders and the commands used before the error, but holds no text of your documents. Names of files and folders (and project titles) can contain personal names: look the report over before you send it.</source>
-        <translation>Quando %1 termina a causa di un errore, o non risponde per 30 secondi, scrive un rapporto su questo computer. Non viene inviato nulla da nessuna parte. Per segnalare il problema, copia il rapporto in un messaggio (o invia il file). Contiene i nomi di file, cartelle e i comandi usati prima dell'errore, ma non il testo dei tuoi documenti. I nomi di file e cartelle (e i titoli dei progetti) possono contenere nomi di persona: controlla il rapporto prima di inviarlo.</translation>
+        <translation>Quando %1 termina a causa di un errore, o non risponde per 30 secondi, scrive un rapporto su questo computer. Non viene inviato nulla da nessuna parte. Per segnalare il problema, copia il rapporto in un messaggio (o invia il file). Contiene i nomi di file, cartelle e i comandi usati prima dell&apos;errore, ma non il testo dei tuoi documenti. I nomi di file e cartelle (e i titoli dei progetti) possono contenere nomi di persona: controlla il rapporto prima di inviarlo.</translation>
     </message>
     <message>
         <source>Copy to Clipboard</source>
@@ -6332,7 +6408,7 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>There are no reports. %1 has not ended because of an error, nor stopped responding, since the reports were last deleted.</source>
-        <translation>Non ci sono rapporti. %1 non è terminato a causa di un errore né ha smesso di rispondere da quando i rapporti sono stati eliminati l'ultima volta.</translation>
+        <translation>Non ci sono rapporti. %1 non è terminato a causa di un errore né ha smesso di rispondere da quando i rapporti sono stati eliminati l&apos;ultima volta.</translation>
     </message>
     <message>
         <source>The report cannot be read: %1</source>
@@ -6340,11 +6416,11 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>Last Session Ended Unexpectedly</source>
-        <translation>L'ultima sessione è terminata inaspettatamente</translation>
+        <translation>L&apos;ultima sessione è terminata inaspettatamente</translation>
     </message>
     <message>
         <source>%1 stopped responding on %2 (version %3) and was then ended from outside.</source>
-        <translation>%1 ha smesso di rispondere il %2 (versione %3) ed è stato poi terminato dall'esterno.</translation>
+        <translation>%1 ha smesso di rispondere il %2 (versione %3) ed è stato poi terminato dall&apos;esterno.</translation>
     </message>
     <message>
         <source>A freeze report was saved on this computer. It shows where the program was stuck: Help &gt; Troubleshooting and Development &gt; Crash Reports shows it, and you can copy it from there into a message. It holds no text of your documents.</source>
@@ -6360,15 +6436,15 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>The last session of %1 (started %2) did not end normally. It was probably stopped from outside, or the computer was switched off without closing %1 first. No crash report was written.</source>
-        <translation>L'ultima sessione di %1 (iniziata %2) non è terminata normalmente. Probabilmente è stata interrotta dall'esterno oppure il computer è stato spento senza prima chiudere %1. Non è stato scritto alcun rapporto di arresto anomalo.</translation>
+        <translation>L&apos;ultima sessione di %1 (iniziata %2) non è terminata normalmente. Probabilmente è stata interrotta dall&apos;esterno oppure il computer è stato spento senza prima chiudere %1. Non è stato scritto alcun rapporto di arresto anomalo.</translation>
     </message>
     <message>
         <source>This happened %1 times since the last normal end.</source>
-        <translation>Questo è successo %1 volte dall'ultima chiusura normale.</translation>
+        <translation>Questo è successo %1 volte dall&apos;ultima chiusura normale.</translation>
     </message>
     <message>
         <source>Your work is saved up to the last automatic save, a few seconds before the end. If something is missing, look at the document&apos;s snapshots or at the newest backup (File &gt; Back Up &gt; Show Backup Folder).</source>
-        <translation>Il tuo lavoro è salvato fino all'ultimo salvataggio automatico, pochi secondi prima della fine. Se manca qualcosa, guarda le istantanee del documento o il backup più recente (File &gt; Backup &gt; Mostra cartella dei backup).</translation>
+        <translation>Il tuo lavoro è salvato fino all&apos;ultimo salvataggio automatico, pochi secondi prima della fine. Se manca qualcosa, guarda le istantanee del documento o il backup più recente (File &gt; Backup &gt; Mostra cartella dei backup).</translation>
     </message>
     <message>
         <source>Show Freeze Report</source>
@@ -6380,11 +6456,11 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>Start Without the Last Project</source>
-        <translation>Avvia senza l'ultimo progetto</translation>
+        <translation>Avvia senza l&apos;ultimo progetto</translation>
     </message>
     <message>
         <source>It ended within a minute of starting. If it ends again when the last project opens, start without it this time.</source>
-        <translation>È terminato entro un minuto dall'avvio. Se termina di nuovo all'apertura dell'ultimo progetto, questa volta avvialo senza di esso.</translation>
+        <translation>È terminato entro un minuto dall&apos;avvio. Se termina di nuovo all&apos;apertura dell&apos;ultimo progetto, questa volta avvialo senza di esso.</translation>
     </message>
 </context>
 <context>
@@ -6411,7 +6487,7 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>Keep the alignment (centered, right, justified)</source>
-        <translation>Mantieni l'allineamento (centrato, a destra, giustificato)</translation>
+        <translation>Mantieni l&apos;allineamento (centrato, a destra, giustificato)</translation>
     </message>
     <message>
         <source>Keep tab stops</source>
@@ -6419,7 +6495,7 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>A snapshot of each document is taken first, so the old formatting can be brought back.</source>
-        <translation>Prima viene creata un'istantanea di ogni documento, così la vecchia formattazione può essere ripristinata.</translation>
+        <translation>Prima viene creata un&apos;istantanea di ogni documento, così la vecchia formattazione può essere ripristinata.</translation>
     </message>
 </context>
 <context>
@@ -6434,7 +6510,7 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>it is not in UTF-8 (saved by another program in another character encoding, such as Windows-1252)</source>
-        <translation>non è in UTF-8 (salvato da un altro programma con un'altra codifica dei caratteri, come Windows-1252)</translation>
+        <translation>non è in UTF-8 (salvato da un altro programma con un&apos;altra codifica dei caratteri, come Windows-1252)</translation>
     </message>
     <message>
         <source>only %1 of %2 bytes could be read</source>
@@ -6446,7 +6522,7 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>A picture of %1 could not be converted for saving.</source>
-        <translation>Impossibile convertire per il salvataggio un'immagine di %1.</translation>
+        <translation>Impossibile convertire per il salvataggio un&apos;immagine di %1.</translation>
     </message>
     <message>
         <source>picture in %1</source>
@@ -6454,7 +6530,7 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>A picture of %1 could not be saved: %2</source>
-        <translation>Impossibile salvare un'immagine di %1: %2</translation>
+        <translation>Impossibile salvare un&apos;immagine di %1: %2</translation>
     </message>
     <message>
         <source>%1 (notes)</source>
@@ -6478,7 +6554,7 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>its file is damaged or was saved by another program in another character encoding</source>
-        <translation>il suo file è danneggiato o è stato salvato da un altro programma con un'altra codifica dei caratteri</translation>
+        <translation>il suo file è danneggiato o è stato salvato da un altro programma con un&apos;altra codifica dei caratteri</translation>
     </message>
     <message>
         <source>its file has not arrived on this computer yet</source>
@@ -6490,11 +6566,11 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be changed here: %2, and its place is kept for it. Close the project and open it again once the sync program is done.</source>
-        <translation>"%1" non può essere modificato qui: %2, e il suo posto viene conservato. Chiudi il progetto e riaprilo quando il programma di sincronizzazione ha finito.</translation>
+        <translation>&quot;%1&quot; non può essere modificato qui: %2, e il suo posto viene conservato. Chiudi il progetto e riaprilo quando il programma di sincronizzazione ha finito.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be changed here: %2, and such a file is never written over. Check the file&apos;s permissions or the drive it is on, then close and reopen the project.</source>
-        <translation>"%1" non può essere modificato qui: %2, e un file simile non viene mai sovrascritto. Controlla i permessi del file o l'unità su cui si trova, poi chiudi e riapri il progetto.</translation>
+        <translation>&quot;%1&quot; non può essere modificato qui: %2, e un file simile non viene mai sovrascritto. Controlla i permessi del file o l&apos;unità su cui si trova, poi chiudi e riapri il progetto.</translation>
     </message>
     <message>
         <source>%1 notes (damaged)</source>
@@ -6506,7 +6582,7 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>The damaged file of &quot;%1&quot; could not be kept as a copy in %2, so it was not replaced. Check that the project folder is writable and the disk is not full.</source>
-        <translation>Impossibile conservare come copia in %2 il file danneggiato di "%1", quindi non è stato sostituito. Controlla che la cartella del progetto sia scrivibile e che il disco non sia pieno.</translation>
+        <translation>Impossibile conservare come copia in %2 il file danneggiato di &quot;%1&quot;, quindi non è stato sostituito. Controlla che la cartella del progetto sia scrivibile e che il disco non sia pieno.</translation>
     </message>
     <message>
         <source>%1 notes</source>
@@ -6569,11 +6645,11 @@ Questa operazione non può essere annullata nel suo insieme.%3</translation>
     </message>
     <message>
         <source>Split the editor / close the split (Alt+click: other direction)</source>
-        <translation>Dividi l'editor / chiudi la divisione (Alt+clic: altra direzione)</translation>
+        <translation>Dividi l&apos;editor / chiudi la divisione (Alt+clic: altra direzione)</translation>
     </message>
     <message>
         <source>Document options (drag the icon to put the document somewhere else)</source>
-        <translation>Opzioni del documento (trascina l'icona per mettere il documento altrove)</translation>
+        <translation>Opzioni del documento (trascina l&apos;icona per mettere il documento altrove)</translation>
     </message>
     <message>
         <source>Find</source>
@@ -6689,11 +6765,11 @@ Pagine (250 parole): %5</translation>
     </message>
     <message>
         <source>Card size (Ctrl+mouse wheel zooms the whole board)</source>
-        <translation>Dimensione delle schede (Ctrl+rotellina del mouse ingrandisce l'intera lavagna)</translation>
+        <translation>Dimensione delle schede (Ctrl+rotellina del mouse ingrandisce l&apos;intera lavagna)</translation>
     </message>
     <message>
         <source>Selection affects the other editor</source>
-        <translation>La selezione agisce sull'altro editor</translation>
+        <translation>La selezione agisce sull&apos;altro editor</translation>
     </message>
     <message>
         <source>Size</source>
@@ -6729,7 +6805,7 @@ Pagine (250 parole): %5</translation>
     </message>
     <message>
         <source>Selection affects nothing (click: the other editor)</source>
-        <translation>La selezione non agisce su nulla (clic: l'altro editor)</translation>
+        <translation>La selezione non agisce su nulla (clic: l&apos;altro editor)</translation>
     </message>
     <message>
         <source>Selection opens in the copyholder (click: switch off)</source>
@@ -6737,11 +6813,11 @@ Pagine (250 parole): %5</translation>
     </message>
     <message>
         <source>Selection opens in the other editor (click: the copyholder)</source>
-        <translation>La selezione si apre nell'altro editor (clic: il copyholder)</translation>
+        <translation>La selezione si apre nell&apos;altro editor (clic: il copyholder)</translation>
     </message>
     <message>
         <source>Selection opens in the other editor (click: switch off)</source>
-        <translation>La selezione si apre nell'altro editor (clic: disattiva)</translation>
+        <translation>La selezione si apre nell&apos;altro editor (clic: disattiva)</translation>
     </message>
     <message>
         <source>Page %1 of %2</source>
@@ -6857,7 +6933,7 @@ Pagine (250 parole): %5</translation>
     </message>
     <message>
         <source>Target for &quot;%1&quot;:</source>
-        <translation>Obiettivo per "%1":</translation>
+        <translation>Obiettivo per &quot;%1&quot;:</translation>
     </message>
     <message>
         <source>Find in the copyholder</source>
@@ -7070,7 +7146,19 @@ Pagine (250 parole): %5</translation>
     </message>
     <message>
         <source>Before you start: how your projects are backed up. Everything is filled in already: OK keeps it as it is. You can change all of it later in File &gt; Options.</source>
-        <translation>Prima di iniziare: come vengono salvati i backup dei tuoi progetti. È già tutto compilato: OK lo mantiene così com'è. Puoi cambiare tutto più tardi in File &gt; Opzioni.</translation>
+        <translation>Prima di iniziare: come vengono salvati i backup dei tuoi progetti. È già tutto compilato: OK lo mantiene così com&apos;è. Puoi cambiare tutto più tardi in File &gt; Opzioni.</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>Lingua</translation>
+    </message>
+    <message>
+        <source>Language of the program:</source>
+        <translation>Lingua del programma:</translation>
+    </message>
+    <message>
+        <source>A language you choose here is used from the next start of the program.</source>
+        <translation>La lingua scelta qui verrà usata dal prossimo avvio del programma.</translation>
     </message>
     <message>
         <source>Everything in One Folder</source>
@@ -7081,14 +7169,14 @@ Pagine (250 parole): %5</translation>
 %1
 
 Nothing is written into Windows&apos; own folders or the registry, unless you ask for it below. The whole folder can be moved or copied, to a USB stick or another computer, and deleting it removes the program. Program updates are installed with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; to move to a version you downloaded anew, unpack it and copy the folder &quot;data&quot; into it. Your projects stay wherever you keep them.</source>
-        <translation>Quillbinder conserva le sue impostazioni, i componenti aggiuntivi, gli aggiornamenti del programma, i caratteri e i rapporti di arresto anomalo nella cartella "data" all'interno della propria cartella:
+        <translation>Quillbinder conserva le sue impostazioni, i componenti aggiuntivi, gli aggiornamenti del programma, i caratteri e i rapporti di arresto anomalo nella cartella &quot;data&quot; all&apos;interno della propria cartella:
 %1
 
-Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a meno che tu non lo chieda qui sotto. L'intera cartella può essere spostata o copiata, su una chiavetta USB o su un altro computer, ed eliminarla rimuove il programma. Gli aggiornamenti del programma si installano con Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Installa aggiornamento o componente aggiuntivo; per passare a una versione appena scaricata, decomprimila e copia al suo interno la cartella "data". I tuoi progetti restano dove li conservi.</translation>
+Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a meno che tu non lo chieda qui sotto. L&apos;intera cartella può essere spostata o copiata, su una chiavetta USB o su un altro computer, ed eliminarla rimuove il programma. Gli aggiornamenti del programma si installano con Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Installa aggiornamento o componente aggiuntivo; per passare a una versione appena scaricata, decomprimila e copia al suo interno la cartella &quot;data&quot;. I tuoi progetti restano dove li conservi.</translation>
     </message>
     <message>
         <source>The program&apos;s folder is inside your %1 folder. That works, but the sync service copies the program&apos;s own files back and forth and may keep them only online. Better: the program&apos;s folder outside it (for example C:\Users\&lt;your name&gt;\Quillbinder), your projects inside it.</source>
-        <translation>La cartella del programma si trova all'interno della tua cartella %1. Funziona, ma il servizio di sincronizzazione copia avanti e indietro i file del programma e potrebbe conservarli solo online. Meglio: la cartella del programma fuori da essa (per esempio C:\Users\&lt;il tuo nome&gt;\Quillbinder) e i tuoi progetti al suo interno.</translation>
+        <translation>La cartella del programma si trova all&apos;interno della tua cartella %1. Funziona, ma il servizio di sincronizzazione copia avanti e indietro i file del programma e potrebbe conservarli solo online. Meglio: la cartella del programma fuori da essa (per esempio C:\Users\&lt;il tuo nome&gt;\Quillbinder) e i tuoi progetti al suo interno.</translation>
     </message>
     <message>
         <source>The program&apos;s folder has a long path. Windows limits most paths to 260 characters; a short place such as C:\Users\&lt;your name&gt;\Quillbinder leaves room for updates and add-ons.</source>
@@ -7096,7 +7184,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Windows may warn when the program starts for the first time, because it is not signed (SmartScreen: &quot;More info&quot;, then &quot;Run anyway&quot;). That happens again for each new download.</source>
-        <translation>Windows potrebbe avvisare al primo avvio del programma, perché non è firmato (SmartScreen: "Ulteriori informazioni", poi "Esegui comunque"). Succede di nuovo a ogni nuovo download.</translation>
+        <translation>Windows potrebbe avvisare al primo avvio del programma, perché non è firmato (SmartScreen: &quot;Ulteriori informazioni&quot;, poi &quot;Esegui comunque&quot;). Succede di nuovo a ogni nuovo download.</translation>
     </message>
     <message>
         <source>Backups</source>
@@ -7107,12 +7195,20 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
         <translation>Esegui automaticamente il backup di un progetto quando viene chiuso</translation>
     </message>
     <message>
-        <source> backups of each project</source>
-        <translation> backup di ogni progetto</translation>
+        <source>Keep the newest</source>
+        <translation>Conserva gli ultimi</translation>
     </message>
     <message>
-        <source>Keep the newest:</source>
-        <translation>Conserva i più recenti:</translation>
+        <source>backups of each project</source>
+        <translation>backup di ogni progetto</translation>
+    </message>
+    <message>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>Sposta l&apos;AppImage in %1, un luogo fisso da cui la voce di menu la avvia</translation>
+    </message>
+    <message>
+        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
+        <translation>Aiuto &gt; Aggiungi al menu delle applicazioni o Rimuovi dal menu delle applicazioni modifica questa scelta in seguito. Se sposti l&apos;AppImage da solo, aggiungila di nuovo al menu.</translation>
     </message>
     <message>
         <source>Choose a folder: until then no backups are made</source>
@@ -7128,7 +7224,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Best on another drive (a USB stick, a second disk, a folder your sync program copies), so that the backups outlive a failing disk. File &gt; Back Up &gt; Restore From Backup brings one back.</source>
-        <translation>Meglio su un'altra unità (una chiavetta USB, un secondo disco, una cartella che il tuo programma di sincronizzazione copia), così i backup sopravvivono a un disco che si guasta. File &gt; Backup &gt; Ripristina da backup ne riporta indietro uno.</translation>
+        <translation>Meglio su un&apos;altra unità (una chiavetta USB, un secondo disco, una cartella che il tuo programma di sincronizzazione copia), così i backup sopravvivono a un disco che si guasta. File &gt; Backup &gt; Ripristina da backup ne riporta indietro uno.</translation>
     </message>
     <message>
         <source>Folder for Backups</source>
@@ -7143,24 +7239,16 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
         <translation>Aggiungi %1 al menu delle applicazioni, così puoi avviarlo come qualsiasi altro programma e aprire i progetti con un doppio clic</translation>
     </message>
     <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>Sposta l'AppImage in %1 (un file spostato non può essere avviato dal menu)</translation>
-    </message>
-    <message>
-        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later.</source>
-        <translation>Aiuto &gt; Aggiungi al menu delle applicazioni o Rimuovi dal menu delle applicazioni lo cambia più tardi.</translation>
-    </message>
-    <message>
         <source>Check for Updates</source>
         <translation>Cerca aggiornamenti</translation>
     </message>
     <message>
         <source>Look for updates when the program starts</source>
-        <translation>Cerca aggiornamenti all'avvio del programma</translation>
+        <translation>Cerca aggiornamenti all&apos;avvio del programma</translation>
     </message>
     <message>
         <source>%1 fetches one small file, at most once a day, and tells you when a newer version of the program or of an installed add-on is there. Nothing about you is sent. You can switch this off or on at any time with Help &gt; Add-ons and Updates &gt; Check for Updates at Startup.</source>
-        <translation>%1 scarica un piccolo file, al massimo una volta al giorno, e ti avvisa quando è disponibile una versione più recente del programma o di un componente aggiuntivo installato. Non viene inviato nulla su di te. Puoi disattivarlo o riattivarlo in qualsiasi momento con Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Cerca aggiornamenti all'avvio.</translation>
+        <translation>%1 scarica un piccolo file, al massimo una volta al giorno, e ti avvisa quando è disponibile una versione più recente del programma o di un componente aggiuntivo installato. Non viene inviato nulla su di te. Puoi disattivarlo o riattivarlo in qualsiasi momento con Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Cerca aggiornamenti all&apos;avvio.</translation>
     </message>
 </context>
 <context>
@@ -7297,7 +7385,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Use the project&apos;s editor formatting instead of the settings below</source>
-        <translation>Usa la formattazione dell'editor del progetto invece delle impostazioni qui sotto</translation>
+        <translation>Usa la formattazione dell&apos;editor del progetto invece delle impostazioni qui sotto</translation>
     </message>
     <message>
         <source>same as text</source>
@@ -7369,11 +7457,11 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Include a heading</source>
-        <translation>Includi un'intestazione</translation>
+        <translation>Includi un&apos;intestazione</translation>
     </message>
     <message>
         <source>Heading shows the document title</source>
-        <translation>L'intestazione mostra il titolo del documento</translation>
+        <translation>L&apos;intestazione mostra il titolo del documento</translation>
     </message>
     <message>
         <source>e.g. Chapter &lt;$W:chapter&gt;\n  (\n = new line)</source>
@@ -7421,23 +7509,23 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Heading prefix:</source>
-        <translation>Prefisso dell'intestazione:</translation>
+        <translation>Prefisso dell&apos;intestazione:</translation>
     </message>
     <message>
         <source>Heading suffix:</source>
-        <translation>Suffisso dell'intestazione:</translation>
+        <translation>Suffisso dell&apos;intestazione:</translation>
     </message>
     <message>
         <source>Heading style:</source>
-        <translation>Stile dell'intestazione:</translation>
+        <translation>Stile dell&apos;intestazione:</translation>
     </message>
     <message>
         <source>Heading alignment:</source>
-        <translation>Allineamento dell'intestazione:</translation>
+        <translation>Allineamento dell&apos;intestazione:</translation>
     </message>
     <message>
         <source>Blank lines before heading:</source>
-        <translation>Righe vuote prima dell'intestazione:</translation>
+        <translation>Righe vuote prima dell&apos;intestazione:</translation>
     </message>
     <message>
         <source>Separator before (after text):</source>
@@ -7465,7 +7553,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Which layout a section type uses by default in this format (by section type name; projects can override this in the Compile window). &quot;*&quot; matches every type.</source>
-        <translation>Quale layout usa per impostazione predefinita un tipo di sezione in questo formato (per nome del tipo di sezione; i progetti possono modificarlo nella finestra Compila). "*" corrisponde a ogni tipo.</translation>
+        <translation>Quale layout usa per impostazione predefinita un tipo di sezione in questo formato (per nome del tipo di sezione; i progetti possono modificarlo nella finestra Compila). &quot;*&quot; corrisponde a ogni tipo.</translation>
     </message>
     <message>
         <source>Section type name</source>
@@ -7481,7 +7569,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>How the styles of the text look in this format. Styles not in the list keep their look (own styles) or get the format&apos;s (headings, title, block quote ...).</source>
-        <translation>Come appaiono gli stili del testo in questo formato. Gli stili che non sono nell'elenco mantengono il loro aspetto (stili propri) oppure ricevono quello del formato (intestazioni, titolo, citazione ...).</translation>
+        <translation>Come appaiono gli stili del testo in questo formato. Gli stili che non sono nell&apos;elenco mantengono il loro aspetto (stili propri) oppure ricevono quello del formato (intestazioni, titolo, citazione ...).</translation>
     </message>
     <message>
         <source>Add a style…</source>
@@ -7749,7 +7837,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Replaced in the compiled text only; the project stays as it is. With &quot;Regular expression&quot;, \1 … \9 in &quot;With&quot; stand for the parts in brackets.</source>
-        <translation>Sostituito solo nel testo compilato; il progetto resta com'è. Con "Espressione regolare", \1 … \9 in "Con" rappresentano le parti tra parentesi.</translation>
+        <translation>Sostituito solo nel testo compilato; il progetto resta com&apos;è. Con &quot;Espressione regolare&quot;, \1 … \9 in &quot;Con&quot; rappresentano le parti tra parentesi.</translation>
     </message>
     <message>
         <source>On</source>
@@ -7781,11 +7869,11 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Straight quotes (“ ” ‘ ’ become &quot; &apos;)</source>
-        <translation>Virgolette dritte (“ ” ‘ ’ diventano " ')</translation>
+        <translation>Virgolette dritte (“ ” ‘ ’ diventano &quot; &apos;)</translation>
     </message>
     <message>
         <source>Typographic quotes (&quot; &apos; become “ ” ‘ ’, English)</source>
-        <translation>Virgolette tipografiche (" ' diventano “ ” ‘ ’, inglese)</translation>
+        <translation>Virgolette tipografiche (&quot; &apos; diventano “ ” ‘ ’, inglese)</translation>
     </message>
     <message>
         <source>Dashes as hyphens (— becomes --, – becomes -)</source>
@@ -7829,7 +7917,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>E-book: the table of contents as a page of the book as well</source>
-        <translation>E-book: l'indice anche come pagina del libro</translation>
+        <translation>E-book: l&apos;indice anche come pagina del libro</translation>
     </message>
     <message>
         <source>Title:</source>
@@ -7841,7 +7929,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>The table of contents lists the headings of the section layouts and the headings in the text. E-books always have one in the reader&apos;s menu; title, author, cover and the like are set under Compile &gt; Metadata.</source>
-        <translation>L'indice elenca le intestazioni dei layout di sezione e le intestazioni nel testo. Gli e-book ne hanno sempre uno nel menu del lettore; titolo, autore, copertina e simili si impostano in Compila &gt; Metadati.</translation>
+        <translation>L&apos;indice elenca le intestazioni dei layout di sezione e le intestazioni nel testo. Gli e-book ne hanno sempre uno nel menu del lettore; titolo, autore, copertina e simili si impostano in Compila &gt; Metadati.</translation>
     </message>
     <message>
         <source>Contents, PDF and E-book</source>
@@ -7904,7 +7992,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>The Current Editor Only</source>
-        <translation>Solo l'editor corrente</translation>
+        <translation>Solo l&apos;editor corrente</translation>
     </message>
     <message>
         <source>&amp;Find:</source>
@@ -8038,7 +8126,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Net words written since tracking began: %1</source>
-        <translation>Parole nette scritte dall'inizio del monitoraggio: %1</translation>
+        <translation>Parole nette scritte dall&apos;inizio del monitoraggio: %1</translation>
     </message>
 </context>
 <context>
@@ -8049,7 +8137,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Choose up to %1 icons. A click on one of them in the icon bar gives it to the documents selected in the binder (or to the document in the editor).</source>
-        <translation>Scegli fino a %1 icone. Un clic su una di esse nella barra delle icone la assegna ai documenti selezionati nel raccoglitore (o al documento nell'editor).</translation>
+        <translation>Scegli fino a %1 icone. Un clic su una di esse nella barra delle icone la assegna ai documenti selezionati nel raccoglitore (o al documento nell&apos;editor).</translation>
     </message>
     <message>
         <source>Project</source>
@@ -8108,7 +8196,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Name of the icon (the text when left empty)</source>
-        <translation>Nome dell'icona (il testo se lasciato vuoto)</translation>
+        <translation>Nome dell&apos;icona (il testo se lasciato vuoto)</translation>
     </message>
     <message>
         <source>Name:</source>
@@ -8140,11 +8228,11 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>A white box lets the label color shine through (View &gt; Use Label Color In &gt; Icons).</source>
-        <translation>Un riquadro bianco lascia trasparire il colore dell'etichetta (Vista &gt; Usa colore etichetta in &gt; Icone).</translation>
+        <translation>Un riquadro bianco lascia trasparire il colore dell&apos;etichetta (Vista &gt; Usa colore etichetta in &gt; Icone).</translation>
     </message>
     <message>
         <source>Type the characters of the icon first.</source>
-        <translation>Digita prima i caratteri dell'icona.</translation>
+        <translation>Digita prima i caratteri dell&apos;icona.</translation>
     </message>
 </context>
 <context>
@@ -8203,7 +8291,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Title of a document: the scene heading.</source>
-        <translation>Titolo di un documento: l'intestazione di scena.</translation>
+        <translation>Titolo di un documento: l&apos;intestazione di scena.</translation>
     </message>
     <message>
         <source>Title of a document: the first line of its text that is not empty (a line longer than 120 characters is shortened and stays in the text); a section without a line is called “&lt;file name&gt; &lt;number&gt;”.</source>
@@ -8236,8 +8324,8 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     <message numerus="yes">
         <source>The binder after the import (%n item(s)):</source>
         <translation>
-            <numerusform>Il raccoglitore dopo l'importazione (%n elemento):</numerusform>
-            <numerusform>Il raccoglitore dopo l'importazione (%n elementi):</numerusform>
+            <numerusform>Il raccoglitore dopo l&apos;importazione (%n elemento):</numerusform>
+            <numerusform>Il raccoglitore dopo l&apos;importazione (%n elementi):</numerusform>
         </translation>
     </message>
 </context>
@@ -8257,7 +8345,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Size of the text of this part of the inspector (also Ctrl + mouse wheel over it). Parts with a zoom of their own: synopsis and notes, bookmark lists and the bookmarked text, snapshot list and text, object list and sheet. Right-click: one zoom for the other tabs or one per tab.</source>
-        <translation>Dimensione del testo di questa parte dell'ispettore (anche Ctrl + rotellina del mouse su di essa). Parti con uno zoom proprio: sinossi e note, elenchi di segnalibri e testo con segnalibri, elenco e testo delle istantanee, elenco e scheda degli oggetti. Clic destro: uno zoom per le altre schede oppure uno per scheda.</translation>
+        <translation>Dimensione del testo di questa parte dell&apos;ispettore (anche Ctrl + rotellina del mouse su di essa). Parti con uno zoom proprio: sinossi e note, elenchi di segnalibri e testo con segnalibri, elenco e testo delle istantanee, elenco e scheda degli oggetti. Clic destro: uno zoom per le altre schede oppure uno per scheda.</translation>
     </message>
     <message>
         <source>Zoom Each Tab Separately</source>
@@ -8273,7 +8361,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Use an image instead of the synopsis text</source>
-        <translation>Usa un'immagine al posto del testo della sinossi</translation>
+        <translation>Usa un&apos;immagine al posto del testo della sinossi</translation>
     </message>
     <message>
         <source>Synopsis: a short summary shown on index cards and in the outliner.</source>
@@ -8285,7 +8373,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Choose an Image</source>
-        <translation>Scegli un'immagine</translation>
+        <translation>Scegli un&apos;immagine</translation>
     </message>
     <message>
         <source>Images (*.png *.jpg *.jpeg *.gif *.bmp *.webp)</source>
@@ -8293,7 +8381,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Remove the Image</source>
-        <translation>Rimuovi l'immagine</translation>
+        <translation>Rimuovi l&apos;immagine</translation>
     </message>
     <message>
         <source>Document Notes</source>
@@ -8305,13 +8393,13 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Drop another image here to replace it; right-click for more.</source>
-        <translation>Rilascia qui un'altra immagine per sostituirla; clic destro per altre opzioni.</translation>
+        <translation>Rilascia qui un&apos;altra immagine per sostituirla; clic destro per altre opzioni.</translation>
     </message>
     <message>
         <source>Drop an image here.
 (An image file, or a picture from the binder; double-click to choose a file.)</source>
-        <translation>Rilascia qui un'immagine.
-(Un file immagine o un'immagine dal raccoglitore; doppio clic per scegliere un file.)</translation>
+        <translation>Rilascia qui un&apos;immagine.
+(Un file immagine o un&apos;immagine dal raccoglitore; doppio clic per scegliere un file.)</translation>
     </message>
     <message>
         <source>Project Bookmarks</source>
@@ -8475,7 +8563,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Replace the current text with the selected snapshot</source>
-        <translation>Sostituisci il testo corrente con l'istantanea selezionata</translation>
+        <translation>Sostituisci il testo corrente con l&apos;istantanea selezionata</translation>
     </message>
     <message>
         <source>Compare</source>
@@ -8483,7 +8571,7 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Show what changed since the snapshot (or between two selected snapshots)</source>
-        <translation>Mostra cosa è cambiato dall'istantanea (o tra due istantanee selezionate)</translation>
+        <translation>Mostra cosa è cambiato dall&apos;istantanea (o tra due istantanee selezionate)</translation>
     </message>
     <message>
         <source>Words</source>
@@ -8511,15 +8599,15 @@ Non viene scritto nulla nelle cartelle di Windows né nel registro di sistema, a
     </message>
     <message>
         <source>Delete the snapshot &quot;%1&quot;?</source>
-        <translation>Eliminare l'istantanea "%1"?</translation>
+        <translation>Eliminare l&apos;istantanea &quot;%1&quot;?</translation>
     </message>
     <message>
         <source>Replace the current text with the snapshot &quot;%1&quot;?
 
 Do you want to take a snapshot of the current text first?</source>
-        <translation>Sostituire il testo corrente con l'istantanea "%1"?
+        <translation>Sostituire il testo corrente con l&apos;istantanea &quot;%1&quot;?
 
-Vuoi prima creare un'istantanea del testo corrente?</translation>
+Vuoi prima creare un&apos;istantanea del testo corrente?</translation>
     </message>
     <message>
         <source>%1
@@ -8531,11 +8619,11 @@ Il testo corrente non è stato modificato.</translation>
     </message>
     <message>
         <source>The snapshot &quot;%1&quot; holds no text (it may be damaged). Replace the current text with an empty one?</source>
-        <translation>L'istantanea "%1" non contiene testo (potrebbe essere danneggiata). Sostituire il testo corrente con uno vuoto?</translation>
+        <translation>L&apos;istantanea &quot;%1&quot; non contiene testo (potrebbe essere danneggiata). Sostituire il testo corrente con uno vuoto?</translation>
     </message>
     <message>
         <source>The snapshot holds no text; the current text was kept.</source>
-        <translation>L'istantanea non contiene testo; il testo corrente è stato conservato.</translation>
+        <translation>L&apos;istantanea non contiene testo; il testo corrente è stato conservato.</translation>
     </message>
     <message>
         <source>Before rolling back</source>
@@ -8544,7 +8632,7 @@ Il testo corrente non è stato modificato.</translation>
     <message>
         <source>A snapshot of the current text could not be taken, so nothing was rolled back:
 %1</source>
-        <translation>Non è stato possibile creare un'istantanea del testo corrente, quindi non è stato ripristinato nulla:
+        <translation>Non è stato possibile creare un&apos;istantanea del testo corrente, quindi non è stato ripristinato nulla:
 %1</translation>
     </message>
     <message>
@@ -8555,7 +8643,7 @@ The text of the snapshot &quot;%2&quot; is now the document&apos;s text; it can 
         <translation>Il file di questo testo era danneggiato. È stato conservato come copia:
 %1
 
-Il testo dell'istantanea "%2" è ora il testo del documento; può essere di nuovo modificato e viene salvato con il prossimo salvataggio.</translation>
+Il testo dell&apos;istantanea &quot;%2&quot; è ora il testo del documento; può essere di nuovo modificato e viene salvato con il prossimo salvataggio.</translation>
     </message>
     <message>
         <source>Snapshot</source>
@@ -8563,7 +8651,7 @@ Il testo dell'istantanea "%2" è ora il testo del documento; può essere di nuov
     </message>
     <message>
         <source>The snapshot&apos;s new title could not be stored: %1</source>
-        <translation>Impossibile memorizzare il nuovo titolo dell'istantanea: %1</translation>
+        <translation>Impossibile memorizzare il nuovo titolo dell&apos;istantanea: %1</translation>
     </message>
     <message>
         <source>Take Snapshot</source>
@@ -8580,7 +8668,7 @@ Il testo dell'istantanea "%2" è ora il testo del documento; può essere di nuov
     <message>
         <source>The snapshot could not be saved.
 %1</source>
-        <translation>Impossibile salvare l'istantanea.
+        <translation>Impossibile salvare l&apos;istantanea.
 %1</translation>
     </message>
     <message>
@@ -8629,11 +8717,11 @@ Il testo dell'istantanea "%2" è ora il testo del documento; può essere di nuov
     </message>
     <message>
         <source>Open the document in the editor</source>
-        <translation>Apri il documento nell'editor</translation>
+        <translation>Apri il documento nell&apos;editor</translation>
     </message>
     <message>
         <source>Show this note in the editor</source>
-        <translation>Mostra questa nota nell'editor</translation>
+        <translation>Mostra questa nota nell&apos;editor</translation>
     </message>
     <message>
         <source>Inline notes are edited directly in the text.</source>
@@ -8728,8 +8816,12 @@ Il testo dell'istantanea "%2" è ora il testo del documento; può essere di nuov
         <translation>Note</translation>
     </message>
     <message>
-        <source>Lists</source>
-        <translation>Elenchi</translation>
+        <source>Document</source>
+        <translation>Documento</translation>
+    </message>
+    <message>
+        <source>Project</source>
+        <translation>Progetto</translation>
     </message>
     <message>
         <source>Text</source>
@@ -8757,7 +8849,7 @@ Il testo dell'istantanea "%2" è ora il testo del documento; può essere di nuov
     </message>
     <message>
         <source>The zoom list shows and sets the zoom of: %1</source>
-        <translation>L'elenco dello zoom mostra e imposta lo zoom di: %1</translation>
+        <translation>L&apos;elenco dello zoom mostra e imposta lo zoom di: %1</translation>
     </message>
     <message>
         <source>Ctrl + mouse wheel over a part changes the zoom of that part. Right-click: one zoom for the tabs Metadata and Comments, or one each.</source>
@@ -8815,6 +8907,14 @@ Il testo dell'istantanea "%2" è ora il testo del documento; può essere di nuov
         <translation>Esporta…</translation>
     </message>
     <message>
+        <source>Use the Set of My Keyboard Layout…</source>
+        <translation>Usa il set per il mio layout di tastiera…</translation>
+    </message>
+    <message>
+        <source>Take the shortcuts that fit the keyboard layout in use now (a German keyboard gets keys that need no AltGr). Shortcuts you set yourself stay as they are.</source>
+        <translation>Adotta le scorciatoie adatte al layout di tastiera in uso ora (una tastiera tedesca riceve tasti che non richiedono AltGr). Le scorciatoie impostate da te restano come sono.</translation>
+    </message>
+    <message>
         <source>Shortcut in Use</source>
         <translation>Scorciatoia in uso</translation>
     </message>
@@ -8860,7 +8960,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Choose a command in the list.</source>
-        <translation>Scegli un comando nell'elenco.</translation>
+        <translation>Scegli un comando nell&apos;elenco.</translation>
     </message>
     <message>
         <source>Shortcut of “%1”:</source>
@@ -8877,6 +8977,30 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     <message>
         <source>shortcuts</source>
         <translation>scorciatoie</translation>
+    </message>
+    <message>
+        <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
+        <translation>Il sistema non indica quale layout di tastiera è in uso, quindi il programma non può scegliere un set. Puoi comunque modificare le singole scorciatoie qui sotto.</translation>
+    </message>
+    <message>
+        <source>The shortcuts already come from the set for your keyboard layout (%1).</source>
+        <translation>Le scorciatoie provengono già dal set per il tuo layout di tastiera (%1).</translation>
+    </message>
+    <message>
+        <source> (you set another shortcut: it stays)</source>
+        <translation> (hai impostato un&apos;altra scorciatoia: resta)</translation>
+    </message>
+    <message>
+        <source>Use the set of shortcuts for your keyboard layout (%1)? These standard shortcuts change at once:
+
+%2
+
+Shortcuts you set yourself stay as they are.</source>
+        <translation>Usare il set di scorciatoie per il tuo layout di tastiera (%1)? Queste scorciatoie standard cambiano subito:
+
+%2
+
+Le scorciatoie impostate da te restano come sono.</translation>
     </message>
 </context>
 <context>
@@ -8911,7 +9035,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Drag keywords onto documents in the binder, the corkboard or the outliner, or into the keyword list of the inspector. With Alt held down, the group of a keyword is assigned as well. Inside this list, drag a keyword onto another to group them.</source>
-        <translation>Trascina le parole chiave sui documenti nel raccoglitore, nella bacheca o nella struttura, oppure nell'elenco delle parole chiave dell'ispettore. Tenendo premuto Alt viene assegnato anche il gruppo di una parola chiave. All'interno di questo elenco, trascina una parola chiave su un'altra per raggrupparle.</translation>
+        <translation>Trascina le parole chiave sui documenti nel raccoglitore, nella bacheca o nella struttura, oppure nell&apos;elenco delle parole chiave dell&apos;ispettore. Tenendo premuto Alt viene assegnato anche il gruppo di una parola chiave. All&apos;interno di questo elenco, trascina una parola chiave su un&apos;altra per raggrupparle.</translation>
     </message>
     <message>
         <source>New Keyword</source>
@@ -8923,7 +9047,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Delete &quot;%1&quot; and remove it from all documents?</source>
-        <translation>Eliminare "%1" e rimuoverla da tutti i documenti?</translation>
+        <translation>Eliminare &quot;%1&quot; e rimuoverla da tutti i documenti?</translation>
     </message>
 </context>
 <context>
@@ -8934,7 +9058,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>A layout remembers which parts of the window are shown, how the editor is split and which view each editor uses. It works in every project.</source>
-        <translation>Un layout ricorda quali parti della finestra sono mostrate, come è diviso l'editor e quale vista usa ciascun editor. Funziona in ogni progetto.</translation>
+        <translation>Un layout ricorda quali parti della finestra sono mostrate, come è diviso l&apos;editor e quale vista usa ciascun editor. Funziona in ogni progetto.</translation>
     </message>
     <message>
         <source>Save Current…</source>
@@ -8942,7 +9066,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Save the window as it is now as a new layout</source>
-        <translation>Salva la finestra così com'è ora come nuovo layout</translation>
+        <translation>Salva la finestra così com&apos;è ora come nuovo layout</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -8958,7 +9082,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Replace the selected layout with the window as it is now</source>
-        <translation>Sostituisci il layout selezionato con la finestra così com'è ora</translation>
+        <translation>Sostituisci il layout selezionato con la finestra così com&apos;è ora</translation>
     </message>
     <message>
         <source>Rename…</source>
@@ -8994,7 +9118,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Replace the layout “%1” with the window as it is now?</source>
-        <translation>Sostituire il layout “%1” con la finestra così com'è ora?</translation>
+        <translation>Sostituire il layout “%1” con la finestra così com&apos;è ora?</translation>
     </message>
     <message>
         <source>Rename Layout</source>
@@ -9085,7 +9209,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Not saved: the last save failed at %1</source>
-        <translation>Non salvato: l'ultimo salvataggio non è riuscito alle %1</translation>
+        <translation>Non salvato: l&apos;ultimo salvataggio non è riuscito alle %1</translation>
     </message>
     <message>
         <source>The latest changes are only in this window. The program tries to save them again by itself.
@@ -9123,7 +9247,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>The program tries again by itself, and the status bar shows &quot;Not saved&quot; until a save works. Check that the disk is not full and the project folder is writable, or save the texts into another folder.</source>
-        <translation>Il programma riprova da solo e la barra di stato mostra "Non salvato" finché un salvataggio non riesce. Controlla che il disco non sia pieno e che la cartella del progetto sia scrivibile, oppure salva i testi in un'altra cartella.</translation>
+        <translation>Il programma riprova da solo e la barra di stato mostra &quot;Non salvato&quot; finché un salvataggio non riesce. Controlla che il disco non sia pieno e che la cartella del progetto sia scrivibile, oppure salva i testi in un&apos;altra cartella.</translation>
     </message>
     <message>
         <source>Saving Failed</source>
@@ -9139,7 +9263,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>The drive of the project can only be read (write-protected, or mounted for reading only).</source>
-        <translation>L'unità del progetto può essere solo letta (protetta da scrittura o montata in sola lettura).</translation>
+        <translation>L&apos;unità del progetto può essere solo letta (protetta da scrittura o montata in sola lettura).</translation>
     </message>
     <message>
         <source>The program may not write into the project folder.</source>
@@ -9147,15 +9271,15 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>The drive reported an error: it may be failing, or it was removed.</source>
-        <translation>L'unità ha segnalato un errore: potrebbe guastarsi o essere stata rimossa.</translation>
+        <translation>L&apos;unità ha segnalato un errore: potrebbe guastarsi o essere stata rimossa.</translation>
     </message>
     <message>
         <source>The project folder is not there any more (renamed, moved, or its drive is not connected).</source>
-        <translation>La cartella del progetto non c'è più (rinominata, spostata o la sua unità non è collegata).</translation>
+        <translation>La cartella del progetto non c&apos;è più (rinominata, spostata o la sua unità non è collegata).</translation>
     </message>
     <message>
         <source>The journal of an earlier save is in the way and could not be moved aside; nothing was written. The message below names the file.</source>
-        <translation>Il journal di un salvataggio precedente è d'intralcio e non è stato possibile spostarlo; non è stato scritto nulla. Il messaggio qui sotto indica il file.</translation>
+        <translation>Il journal di un salvataggio precedente è d&apos;intralcio e non è stato possibile spostarlo; non è stato scritto nulla. Il messaggio qui sotto indica il file.</translation>
     </message>
     <message>
         <source>The files could not be written.</source>
@@ -9251,7 +9375,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>The template &quot;%1&quot; is now available under File ▸ New Project.</source>
-        <translation>Il modello "%1" è ora disponibile in File ▸ Nuovo progetto.</translation>
+        <translation>Il modello &quot;%1&quot; è ora disponibile in File ▸ Nuovo progetto.</translation>
     </message>
     <message>
         <source>Back Up &amp;Now</source>
@@ -9323,7 +9447,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Prints what the editor shows: the text, the index cards of the corkboard, the outliner, a picture or a PDF file</source>
-        <translation>Stampa ciò che mostra l'editor: il testo, le schede della bacheca, la struttura, un'immagine o un file PDF</translation>
+        <translation>Stampa ciò che mostra l&apos;editor: il testo, le schede della bacheca, la struttura, un&apos;immagine o un file PDF</translation>
     </message>
     <message>
         <source>&amp;Options…</source>
@@ -9335,7 +9459,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>&amp;Save Current Look as Theme…</source>
-        <translation>&amp;Salva l'aspetto corrente come tema…</translation>
+        <translation>&amp;Salva l&apos;aspetto corrente come tema…</translation>
     </message>
     <message>
         <source>&amp;Import Theme…</source>
@@ -9483,7 +9607,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Move &amp;Right (into the item above)</source>
-        <translation>Sposta a &amp;destra (nell'elemento sopra)</translation>
+        <translation>Sposta a &amp;destra (nell&apos;elemento sopra)</translation>
     </message>
     <message>
         <source>&amp;Combined Text / Document</source>
@@ -9571,7 +9695,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Zoom Inspector &amp;Tabs Separately</source>
-        <translation>Zoom separato per le &amp;schede dell'ispettore</translation>
+        <translation>Zoom separato per le &amp;schede dell&apos;ispettore</translation>
     </message>
     <message>
         <source>Status &amp;Stamps</source>
@@ -9658,7 +9782,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Open in &amp;Other Editor</source>
-        <translation>Apri nell'&amp;altro editor</translation>
+        <translation>Apri nell&apos;&amp;altro editor</translation>
     </message>
     <message>
         <source>Open as &amp;Quick Reference</source>
@@ -9722,7 +9846,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Make an Object (Window &gt; Objects) of the selected sheet documents: the title is the name, the text goes into Other, a picture becomes the picture. The binder item then shows the Object; the document keeps its text.</source>
-        <translation>Crea un oggetto (Finestra &gt; Oggetti) dalle schede selezionate: il titolo è il nome, il testo va in Altro, un'immagine diventa l'immagine. L'elemento del raccoglitore mostra poi l'oggetto; il documento conserva il suo testo.</translation>
+        <translation>Crea un oggetto (Finestra &gt; Oggetti) dalle schede selezionate: il titolo è il nome, il testo va in Altro, un&apos;immagine diventa l&apos;immagine. L&apos;elemento del raccoglitore mostra poi l&apos;oggetto; il documento conserva il suo testo.</translation>
     </message>
     <message>
         <source>Convert to F&amp;ile</source>
@@ -9744,7 +9868,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
         <source>The snapshot of %n document(s) could not be saved: %1
 %2</source>
         <translation>
-            <numerusform>Impossibile salvare l'istantanea di %n documento: %1
+            <numerusform>Impossibile salvare l&apos;istantanea di %n documento: %1
 %2</numerusform>
             <numerusform>Impossibile salvare le istantanee di %n documenti: %1
 %2</numerusform>
@@ -10024,7 +10148,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; could not be started. Check the program under File &gt; Options &gt; General &gt; Citations.</source>
-        <translation>Impossibile avviare "%1". Controlla il programma in File &gt; Opzioni &gt; Generale &gt; Citazioni.</translation>
+        <translation>Impossibile avviare &quot;%1&quot;. Controlla il programma in File &gt; Opzioni &gt; Generale &gt; Citazioni.</translation>
     </message>
     <message>
         <source>Current &amp;Time</source>
@@ -10052,7 +10176,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Show the folder or group the document in the editor belongs to</source>
-        <translation>Mostra la cartella o il gruppo a cui appartiene il documento nell'editor</translation>
+        <translation>Mostra la cartella o il gruppo a cui appartiene il documento nell&apos;editor</translation>
     </message>
     <message>
         <source>Focus Bi&amp;nder</source>
@@ -10060,7 +10184,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Focus &amp;Editor</source>
-        <translation>Focus sull'&amp;editor</translation>
+        <translation>Focus sull&apos;&amp;editor</translation>
     </message>
     <message>
         <source>&amp;Switch Editor</source>
@@ -10208,7 +10332,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Selection Affects &amp;Other Editor</source>
-        <translation>La selezione agisce sull'&amp;altro editor</translation>
+        <translation>La selezione agisce sull&apos;&amp;altro editor</translation>
     </message>
     <message>
         <source>Selection Affects Copy&amp;holder</source>
@@ -10216,7 +10340,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Open in &amp;Editor</source>
-        <translation>Apri nell'&amp;editor</translation>
+        <translation>Apri nell&apos;&amp;editor</translation>
     </message>
     <message>
         <source>&amp;Current Editor</source>
@@ -10272,7 +10396,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Font, size, line spacing and indents of the text of the whole project</source>
-        <translation>Carattere, dimensione, interlinea e rientri del testo dell'intero progetto</translation>
+        <translation>Carattere, dimensione, interlinea e rientri del testo dell&apos;intero progetto</translation>
     </message>
     <message>
         <source> (program update; installed version %1)</source>
@@ -10284,11 +10408,11 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;A writing studio for long texts: binder, corkboard, outliner, combined text, snapshots, mind maps, objects and compile.&lt;/p&gt;&lt;p&gt;Built with Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Main Developer: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;License&lt;/b&gt;&lt;br&gt;%1 is free software under the Apache License 2.0: anyone may use, copy, change and pass it on, with or without fee, keeping the license and the NOTICE file, which names the project and its source. Without warranty.&lt;/p&gt;&lt;p&gt;The program uses parts of other projects, each under its own license; &lt;b&gt;Third-Party Licenses…&lt;/b&gt; below (also in the Help menu) lists them with their full texts:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, The Qt Company&apos;s own build for Windows, under the GNU LGPL version 3. Its libraries are the separate Qt6*.dll files and plugin folders beside the program; each can be replaced by another build of the same version.&lt;/li&gt;&lt;li&gt;Hunspell (spelling, used under the Mozilla Public License 1.1) and zlib, built into the program.&lt;/li&gt;&lt;li&gt;The spelling dictionaries for English and German from LibreOffice, unchanged: the German ones under the GNU GPL version 2 or 3, British English under the GNU LGPL, American English under the SCOWL license.&lt;/li&gt;&lt;li&gt;Microsoft&apos;s Visual C++ runtime files, passed on unchanged under Microsoft&apos;s terms for redistributable code.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;The add-ons for audio and video bring Qt Multimedia (GNU LGPL version 3). The add-on &quot;Extra Video and Audio Formats&quot; also brings the FFmpeg libraries as built by The Qt Company for Qt Multimedia (avcodec, avformat, avutil, swresample, swscale), licensed under the GNU LGPL 2.1 or later and replaceable as separate DLL files; its notes name the version and how it was built. Whether a patent license is needed to play some of its formats depends on the country.&lt;/p&gt;&lt;p&gt;The source code of these parts, as used, is in the release &quot;Third-party source code&quot; of %4.&lt;/p&gt;&lt;p&gt;Scrivener and Scapple are products of Literature &amp;amp; Latte. %1 is an independent program, not made by or connected with Literature &amp;amp; Latte; it reads and writes their file formats so that your projects can move between the programs.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Uno studio di scrittura per testi lunghi: raccoglitore, bacheca, struttura, testo combinato, istantanee, mappe mentali, oggetti e compilazione.&lt;/p&gt;&lt;p&gt;Creato con Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Crediti&lt;/b&gt;&lt;br&gt;Sviluppatore principale: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Licenza&lt;/b&gt;&lt;br&gt;%1 è software libero con licenza Apache 2.0: chiunque può usarlo, copiarlo, modificarlo e ridistribuirlo, con o senza compenso, mantenendo la licenza e il file NOTICE, che indica il progetto e il suo codice sorgente. Senza garanzia.&lt;/p&gt;&lt;p&gt;Il programma usa parti di altri progetti, ciascuna con la propria licenza; &lt;b&gt;Licenze di terze parti…&lt;/b&gt; qui sotto (anche nel menu Aiuto) le elenca con i testi completi:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, la compilazione di The Qt Company per Windows, con licenza GNU LGPL versione 3. Le sue librerie sono i file Qt6*.dll separati e le cartelle dei plugin accanto al programma; ciascuna può essere sostituita da un'altra compilazione della stessa versione.&lt;/li&gt;&lt;li&gt;Hunspell (controllo ortografico, usato con la Mozilla Public License 1.1) e zlib, integrati nel programma.&lt;/li&gt;&lt;li&gt;I dizionari ortografici per inglese e tedesco di LibreOffice, non modificati: quelli tedeschi con GNU GPL versione 2 o 3, l'inglese britannico con GNU LGPL, l'inglese americano con la licenza SCOWL.&lt;/li&gt;&lt;li&gt;I file runtime di Visual C++ di Microsoft, ridistribuiti senza modifiche secondo i termini di Microsoft per il codice ridistribuibile.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;I componenti aggiuntivi per audio e video portano con sé Qt Multimedia (GNU LGPL versione 3). Il componente aggiuntivo "Extra Video and Audio Formats" porta anche le librerie FFmpeg compilate da The Qt Company per Qt Multimedia (avcodec, avformat, avutil, swresample, swscale), con licenza GNU LGPL 2.1 o successiva e sostituibili come file DLL separati; le sue note indicano la versione e come è stata compilata. Se per riprodurre alcuni dei suoi formati serva una licenza di brevetto dipende dal paese.&lt;/p&gt;&lt;p&gt;Il codice sorgente di queste parti, così come usato, si trova nella release "Third-party source code" di %4.&lt;/p&gt;&lt;p&gt;Scrivener e Scapple sono prodotti di Literature &amp;amp; Latte. %1 è un programma indipendente, non realizzato da Literature &amp;amp; Latte né collegato a essa; legge e scrive i loro formati di file perché i tuoi progetti possano passare da un programma all'altro.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Uno studio di scrittura per testi lunghi: raccoglitore, bacheca, struttura, testo combinato, istantanee, mappe mentali, oggetti e compilazione.&lt;/p&gt;&lt;p&gt;Creato con Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Crediti&lt;/b&gt;&lt;br&gt;Sviluppatore principale: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Licenza&lt;/b&gt;&lt;br&gt;%1 è software libero con licenza Apache 2.0: chiunque può usarlo, copiarlo, modificarlo e ridistribuirlo, con o senza compenso, mantenendo la licenza e il file NOTICE, che indica il progetto e il suo codice sorgente. Senza garanzia.&lt;/p&gt;&lt;p&gt;Il programma usa parti di altri progetti, ciascuna con la propria licenza; &lt;b&gt;Licenze di terze parti…&lt;/b&gt; qui sotto (anche nel menu Aiuto) le elenca con i testi completi:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, la compilazione di The Qt Company per Windows, con licenza GNU LGPL versione 3. Le sue librerie sono i file Qt6*.dll separati e le cartelle dei plugin accanto al programma; ciascuna può essere sostituita da un&apos;altra compilazione della stessa versione.&lt;/li&gt;&lt;li&gt;Hunspell (controllo ortografico, usato con la Mozilla Public License 1.1) e zlib, integrati nel programma.&lt;/li&gt;&lt;li&gt;I dizionari ortografici per inglese e tedesco di LibreOffice, non modificati: quelli tedeschi con GNU GPL versione 2 o 3, l&apos;inglese britannico con GNU LGPL, l&apos;inglese americano con la licenza SCOWL.&lt;/li&gt;&lt;li&gt;I file runtime di Visual C++ di Microsoft, ridistribuiti senza modifiche secondo i termini di Microsoft per il codice ridistribuibile.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;I componenti aggiuntivi per audio e video portano con sé Qt Multimedia (GNU LGPL versione 3). Il componente aggiuntivo &quot;Extra Video and Audio Formats&quot; porta anche le librerie FFmpeg compilate da The Qt Company per Qt Multimedia (avcodec, avformat, avutil, swresample, swscale), con licenza GNU LGPL 2.1 o successiva e sostituibili come file DLL separati; le sue note indicano la versione e come è stata compilata. Se per riprodurre alcuni dei suoi formati serva una licenza di brevetto dipende dal paese.&lt;/p&gt;&lt;p&gt;Il codice sorgente di queste parti, così come usato, si trova nella release &quot;Third-party source code&quot; di %4.&lt;/p&gt;&lt;p&gt;Scrivener e Scapple sono prodotti di Literature &amp;amp; Latte. %1 è un programma indipendente, non realizzato da Literature &amp;amp; Latte né collegato a essa; legge e scrive i loro formati di file perché i tuoi progetti possano passare da un programma all&apos;altro.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;A writing studio for long texts: binder, corkboard, outliner, combined text, snapshots, mind maps, objects and compile.&lt;/p&gt;&lt;p&gt;Built with Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Main Developer: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;License&lt;/b&gt;&lt;br&gt;%1 is free software under the Apache License 2.0: anyone may use, copy, change and pass it on, with or without fee, keeping the license and the NOTICE file, which names the project and its source. Without warranty.&lt;/p&gt;&lt;p&gt;The program uses parts of other projects (Qt, Hunspell, ICU, the Breeze icons and more), each under its own license. &lt;b&gt;Third-Party Licenses…&lt;/b&gt; below (also in the Help menu) lists them with their full texts.&lt;/p&gt;&lt;p&gt;The add-ons for audio and video use code of FFmpeg, licensed under the GNU LGPL 2.1 or later; its source code, as used, is in the release &quot;Third-party source code&quot; of %4.&lt;/p&gt;&lt;p&gt;Scrivener and Scapple are products of Literature &amp;amp; Latte. %1 is an independent program, not made by or connected with Literature &amp;amp; Latte; it reads and writes their file formats so that your projects can move between the programs.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Uno studio di scrittura per testi lunghi: raccoglitore, bacheca, struttura, testo combinato, istantanee, mappe mentali, oggetti e compilazione.&lt;/p&gt;&lt;p&gt;Creato con Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Crediti&lt;/b&gt;&lt;br&gt;Sviluppatore principale: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Licenza&lt;/b&gt;&lt;br&gt;%1 è software libero con licenza Apache 2.0: chiunque può usarlo, copiarlo, modificarlo e ridistribuirlo, con o senza compenso, mantenendo la licenza e il file NOTICE, che indica il progetto e il suo codice sorgente. Senza garanzia.&lt;/p&gt;&lt;p&gt;Il programma usa parti di altri progetti (Qt, Hunspell, ICU, le icone Breeze e altri), ciascuna con la propria licenza. &lt;b&gt;Licenze di terze parti…&lt;/b&gt; qui sotto (anche nel menu Aiuto) le elenca con i testi completi.&lt;/p&gt;&lt;p&gt;I componenti aggiuntivi per audio e video usano codice di FFmpeg, con licenza GNU LGPL 2.1 o successiva; il suo codice sorgente, così come usato, si trova nella release "Third-party source code" di %4.&lt;/p&gt;&lt;p&gt;Scrivener e Scapple sono prodotti di Literature &amp;amp; Latte. %1 è un programma indipendente, non realizzato da Literature &amp;amp; Latte né collegato a essa; legge e scrive i loro formati di file perché i tuoi progetti possano passare da un programma all'altro.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Uno studio di scrittura per testi lunghi: raccoglitore, bacheca, struttura, testo combinato, istantanee, mappe mentali, oggetti e compilazione.&lt;/p&gt;&lt;p&gt;Creato con Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Crediti&lt;/b&gt;&lt;br&gt;Sviluppatore principale: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Licenza&lt;/b&gt;&lt;br&gt;%1 è software libero con licenza Apache 2.0: chiunque può usarlo, copiarlo, modificarlo e ridistribuirlo, con o senza compenso, mantenendo la licenza e il file NOTICE, che indica il progetto e il suo codice sorgente. Senza garanzia.&lt;/p&gt;&lt;p&gt;Il programma usa parti di altri progetti (Qt, Hunspell, ICU, le icone Breeze e altri), ciascuna con la propria licenza. &lt;b&gt;Licenze di terze parti…&lt;/b&gt; qui sotto (anche nel menu Aiuto) le elenca con i testi completi.&lt;/p&gt;&lt;p&gt;I componenti aggiuntivi per audio e video usano codice di FFmpeg, con licenza GNU LGPL 2.1 o successiva; il suo codice sorgente, così come usato, si trova nella release &quot;Third-party source code&quot; di %4.&lt;/p&gt;&lt;p&gt;Scrivener e Scapple sono prodotti di Literature &amp;amp; Latte. %1 è un programma indipendente, non realizzato da Literature &amp;amp; Latte né collegato a essa; legge e scrive i loro formati di file perché i tuoi progetti possano passare da un programma all&apos;altro.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&amp;Combined Text</source>
@@ -10332,7 +10456,7 @@ Assegnarla invece a “%4”? “%2” rimarrà senza scorciatoia.</translation>
     </message>
     <message>
         <source>Changed here only. Use %1 for all “%2” text in the whole project?</source>
-        <translation>Modificato solo qui. Usare %1 per tutto il testo “%2” dell'intero progetto?</translation>
+        <translation>Modificato solo qui. Usare %1 per tutto il testo “%2” dell&apos;intero progetto?</translation>
     </message>
     <message>
         <source>Change the Style “%1”</source>
@@ -10410,7 +10534,7 @@ There is a copy of it from %2, the last time the project opened. Use that copy? 
         <translation>Impossibile leggere il file di progetto:
 %1
 
-Ne esiste una copia del %2, l'ultima volta che il progetto è stato aperto. Usare quella copia? Mancano le modifiche al raccoglitore fatte da allora (titoli, ordine, etichette ...); i testi dei documenti non sono interessati. Il file danneggiato viene conservato.</translation>
+Ne esiste una copia del %2, l&apos;ultima volta che il progetto è stato aperto. Usare quella copia? Mancano le modifiche al raccoglitore fatte da allora (titoli, ordine, etichette ...); i testi dei documenti non sono interessati. Il file danneggiato viene conservato.</translation>
     </message>
     <message>
         <source>Use the Copy</source>
@@ -10444,10 +10568,10 @@ Ne esiste una copia del %2, l'ultima volta che il progetto è stato aperto. Usar
 %4
 
 It is shown empty and cannot be edited, so that the file is not overwritten. Check the file&apos;s permissions or the drive it is on, then close and reopen the project.</source>
-        <translation>Impossibile leggere %1 di "%2" (%3):
+        <translation>Impossibile leggere %1 di &quot;%2&quot; (%3):
 %4
 
-Viene mostrato vuoto e non può essere modificato, in modo che il file non venga sovrascritto. Controlla i permessi del file o l'unità su cui si trova, poi chiudi e riapri il progetto.</translation>
+Viene mostrato vuoto e non può essere modificato, in modo che il file non venga sovrascritto. Controlla i permessi del file o l&apos;unità su cui si trova, poi chiudi e riapri il progetto.</translation>
     </message>
     <message>
         <source>notes</source>
@@ -10466,24 +10590,24 @@ Viene mostrato vuoto e non può essere modificato, in modo che il file non venga
 %4
 
 It is shown as well as it could be read, and it cannot be edited, so that the file is not changed. To keep working on the text, select it, copy it, and paste it into a new document; or repair the file (save it in UTF-8 in the program that wrote it), then close and reopen the project.</source>
-        <translation>Impossibile leggere %1 di "%2" come dovrebbe: %3.
+        <translation>Impossibile leggere %1 di &quot;%2&quot; come dovrebbe: %3.
 %4
 
 Viene mostrato come è stato possibile leggerlo e non può essere modificato, in modo che il file non venga cambiato. Per continuare a lavorare sul testo, selezionalo, copialo e incollalo in un nuovo documento; oppure ripara il file (salvalo in UTF-8 nel programma che lo ha scritto), poi chiudi e riapri il progetto.</translation>
     </message>
     <message>
         <source>The %1 of &quot;%2&quot; was changed, but it cannot be saved: its file cannot be read, and such a file is never written over. The change could not be kept as a copy either (is the disk full?); it exists only in this window. Copy the text into a new document to keep it.</source>
-        <translation>%1 di "%2" è stato modificato, ma non può essere salvato: il suo file non può essere letto e un file simile non viene mai sovrascritto. Non è stato possibile conservare la modifica nemmeno come copia (il disco è pieno?); esiste solo in questa finestra. Copia il testo in un nuovo documento per conservarlo.</translation>
+        <translation>%1 di &quot;%2&quot; è stato modificato, ma non può essere salvato: il suo file non può essere letto e un file simile non viene mai sovrascritto. Non è stato possibile conservare la modifica nemmeno come copia (il disco è pieno?); esiste solo in questa finestra. Copia il testo in un nuovo documento per conservarlo.</translation>
     </message>
     <message>
         <source>The %1 of &quot;%2&quot; was changed, but it is not saved in its place: its file cannot be read, and such a file is never written over. The changed text was kept as a copy:
 %3
 
 Open it in a word processor, or repair the document (Roll Back to a snapshot in the inspector) and take the change over.</source>
-        <translation>%1 di "%2" è stato modificato, ma non è salvato al suo posto: il suo file non può essere letto e un file simile non viene mai sovrascritto. Il testo modificato è stato conservato come copia:
+        <translation>%1 di &quot;%2&quot; è stato modificato, ma non è salvato al suo posto: il suo file non può essere letto e un file simile non viene mai sovrascritto. Il testo modificato è stato conservato come copia:
 %3
 
-Aprilo in un programma di videoscrittura, oppure ripara il documento (Ripristina versione a un'istantanea nell'ispettore) e riprendi la modifica.</translation>
+Aprilo in un programma di videoscrittura, oppure ripara il documento (Ripristina versione a un&apos;istantanea nell&apos;ispettore) e riprendi la modifica.</translation>
     </message>
     <message>
         <source>Change Not Saved in Place</source>
@@ -10492,8 +10616,8 @@ Aprilo in un programma di videoscrittura, oppure ripara il documento (Ripristina
     <message numerus="yes">
         <source>%n control character(s) in the %1 of &quot;%2&quot; cannot be stored and were left out.</source>
         <translation>
-            <numerusform>%n carattere di controllo in %1 di "%2" non può essere memorizzato ed è stato omesso.</numerusform>
-            <numerusform>%n caratteri di controllo in %1 di "%2" non possono essere memorizzati e sono stati omessi.</numerusform>
+            <numerusform>%n carattere di controllo in %1 di &quot;%2&quot; non può essere memorizzato ed è stato omesso.</numerusform>
+            <numerusform>%n caratteri di controllo in %1 di &quot;%2&quot; non possono essere memorizzati e sono stati omessi.</numerusform>
         </translation>
     </message>
     <message>
@@ -10510,11 +10634,11 @@ Aprilo in un programma di videoscrittura, oppure ripara il documento (Ripristina
     </message>
     <message>
         <source>when the project opened</source>
-        <translation>all'apertura del progetto</translation>
+        <translation>all&apos;apertura del progetto</translation>
     </message>
     <message>
         <source>The last session was ended before its backup could be made (a shutdown or a kill command); the backup was made now: %1</source>
-        <translation>L'ultima sessione è stata terminata prima che il suo backup potesse essere eseguito (uno spegnimento o un comando kill); il backup è stato eseguito ora: %1</translation>
+        <translation>L&apos;ultima sessione è stata terminata prima che il suo backup potesse essere eseguito (uno spegnimento o un comando kill); il backup è stato eseguito ora: %1</translation>
     </message>
     <message>
         <source>The automatic backup %1 is incomplete.
@@ -10571,7 +10695,7 @@ Aprilo in un programma di videoscrittura, oppure ripara il documento (Ripristina
 Close the project here anyway? The changes stay in this program&apos;s working copy. When you open the project here again after Scrivener has closed it, they go into the Scrivener project; where Scrivener changed something meanwhile, its version is read.</source>
         <translation>%1
 
-Chiudere comunque il progetto qui? Le modifiche restano nella copia di lavoro di questo programma. Quando riaprirai il progetto qui dopo che Scrivener l'avrà chiuso, entreranno nel progetto Scrivener; dove nel frattempo Scrivener ha cambiato qualcosa, viene letta la sua versione.</translation>
+Chiudere comunque il progetto qui? Le modifiche restano nella copia di lavoro di questo programma. Quando riaprirai il progetto qui dopo che Scrivener l&apos;avrà chiuso, entreranno nel progetto Scrivener; dove nel frattempo Scrivener ha cambiato qualcosa, viene letta la sua versione.</translation>
     </message>
     <message>
         <source>The project could not be saved:
@@ -10581,7 +10705,7 @@ Keep it open and try again after the cause is fixed, save the texts that are not
         <translation>Impossibile salvare il progetto:
 %1
 
-Tienilo aperto e riprova dopo aver risolto la causa, salva in un'altra cartella i testi non ancora salvati, oppure chiudi e perdi le modifiche non salvate.</translation>
+Tienilo aperto e riprova dopo aver risolto la causa, salva in un&apos;altra cartella i testi non ancora salvati, oppure chiudi e perdi le modifiche non salvate.</translation>
     </message>
     <message>
         <source>Keep Open</source>
@@ -10601,11 +10725,11 @@ Tienilo aperto e riprova dopo aver risolto la causa, salva in un'altra cartella 
     </message>
     <message>
         <source>The Mind Map tab of the inspector now stays on &quot;%1&quot;.</source>
-        <translation>La scheda Mappa mentale dell'ispettore ora resta su "%1".</translation>
+        <translation>La scheda Mappa mentale dell&apos;ispettore ora resta su &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>The Mind Map tab of the inspector follows the selected item again.</source>
-        <translation>La scheda Mappa mentale dell'ispettore torna a seguire l'elemento selezionato.</translation>
+        <translation>La scheda Mappa mentale dell&apos;ispettore torna a seguire l&apos;elemento selezionato.</translation>
     </message>
     <message>
         <source>New Project</source>
@@ -10619,12 +10743,12 @@ Tienilo aperto e riprova dopo aver risolto la causa, salva in un'altra cartella 
     </message>
     <message>
         <source>When the program was ended (by logging out, shutting down or a command), the project &quot;%1&quot; could not be saved: %2</source>
-        <translation>Alla chiusura del programma (per disconnessione, spegnimento o un comando) non è stato possibile salvare il progetto "%1": %2</translation>
+        <translation>Alla chiusura del programma (per disconnessione, spegnimento o un comando) non è stato possibile salvare il progetto &quot;%1&quot;: %2</translation>
     </message>
     <message>
         <source>The texts and notes that were not saved are in (%1 of %1 files, with the project file as it was in memory):
 %2</source>
-        <translation>I testi e le note non salvati si trovano in (%1 di %1 file, con il file di progetto com'era in memoria):
+        <translation>I testi e le note non salvati si trovano in (%1 di %1 file, con il file di progetto com&apos;era in memoria):
 %2</translation>
     </message>
     <message>
@@ -10633,7 +10757,7 @@ Tienilo aperto e riprova dopo aver risolto la causa, salva in un'altra cartella 
     </message>
     <message>
         <source>Not Saved Last Time</source>
-        <translation>Non salvato l'ultima volta</translation>
+        <translation>Non salvato l&apos;ultima volta</translation>
     </message>
     <message>
         <source>New Folder</source>
@@ -10671,19 +10795,19 @@ Tienilo aperto e riprova dopo aver risolto la causa, salva in un'altra cartella 
     </message>
     <message>
         <source>&quot;%1&quot; cannot be split: %2, and such a file is never written over. Repair it first (Roll Back to a snapshot in the inspector, or repair the file in the program that wrote it).</source>
-        <translation>"%1" non può essere diviso: %2, e un file simile non viene mai sovrascritto. Riparalo prima (Ripristina versione a un'istantanea nell'ispettore, oppure ripara il file nel programma che lo ha scritto).</translation>
+        <translation>&quot;%1&quot; non può essere diviso: %2, e un file simile non viene mai sovrascritto. Riparalo prima (Ripristina versione a un&apos;istantanea nell&apos;ispettore, oppure ripara il file nel programma che lo ha scritto).</translation>
     </message>
     <message>
         <source>A document cannot be split inside a table or a picture&apos;s caption. Put the cursor before or after the table or the picture, then split again.</source>
-        <translation>Un documento non può essere diviso all'interno di una tabella o della didascalia di un'immagine. Metti il cursore prima o dopo la tabella o l'immagine, poi dividi di nuovo.</translation>
+        <translation>Un documento non può essere diviso all&apos;interno di una tabella o della didascalia di un&apos;immagine. Metti il cursore prima o dopo la tabella o l&apos;immagine, poi dividi di nuovo.</translation>
     </message>
     <message>
         <source>&quot;%1&quot;: %2</source>
-        <translation>"%1": %2</translation>
+        <translation>&quot;%1&quot;: %2</translation>
     </message>
     <message>
         <source>&quot;%1&quot; (notes): %2</source>
-        <translation>"%1" (note): %2</translation>
+        <translation>&quot;%1&quot; (note): %2</translation>
     </message>
     <message>
         <source>The documents were not merged. These cannot be changed, and their files are never written over:
@@ -10693,7 +10817,7 @@ Repair them first (Roll Back to a snapshot in the inspector, or repair the file 
         <translation>I documenti non sono stati uniti. Questi non possono essere modificati e i loro file non vengono mai sovrascritti:
 %1
 
-Riparali prima (Ripristina versione a un'istantanea nell'ispettore, oppure ripara il file nel programma che lo ha scritto e riapri il progetto), poi unisci.</translation>
+Riparali prima (Ripristina versione a un&apos;istantanea nell&apos;ispettore, oppure ripara il file nel programma che lo ha scritto e riapri il progetto), poi unisci.</translation>
     </message>
     <message>
         <source>Merge Documents</source>
@@ -10701,7 +10825,7 @@ Riparali prima (Ripristina versione a un'istantanea nell'ispettore, oppure ripar
     </message>
     <message>
         <source>Merge %1 documents into &quot;%2&quot;? The others are moved to the Trash.</source>
-        <translation>Unire %1 documenti in "%2"? Gli altri vengono spostati nel Cestino.</translation>
+        <translation>Unire %1 documenti in &quot;%2&quot;? Gli altri vengono spostati nel Cestino.</translation>
     </message>
     <message>
         <source>Merge</source>
@@ -10713,7 +10837,7 @@ Riparali prima (Ripristina versione a un'istantanea nell'ispettore, oppure ripar
     </message>
     <message>
         <source>The linked object no longer exists.</source>
-        <translation>L'oggetto collegato non esiste più.</translation>
+        <translation>L&apos;oggetto collegato non esiste più.</translation>
     </message>
     <message>
         <source>Document Link</source>
@@ -10795,7 +10919,7 @@ Riparali prima (Ripristina versione a un'istantanea nell'ispettore, oppure ripar
 Best on another drive (a USB stick, a second disk, a folder your sync program copies): the backups should outlive a failing disk. You can change it later in File &gt; Options &gt; Backup.</source>
         <translation>Non è ancora stata scelta alcuna cartella per i backup, quindi non viene eseguito alcun backup. Sceglierne una ora?
 
-Meglio su un'altra unità (una chiavetta USB, un secondo disco, una cartella che il tuo programma di sincronizzazione copia): i backup devono sopravvivere a un disco che si guasta. Puoi cambiarla più tardi in File &gt; Opzioni &gt; Backup.</translation>
+Meglio su un&apos;altra unità (una chiavetta USB, un secondo disco, una cartella che il tuo programma di sincronizzazione copia): i backup devono sopravvivere a un disco che si guasta. Puoi cambiarla più tardi in File &gt; Opzioni &gt; Backup.</translation>
     </message>
     <message>
         <source>Choose Folder…</source>
@@ -10827,7 +10951,7 @@ Meglio su un'altra unità (una chiavetta USB, un secondo disco, una cartella che
     </message>
     <message>
         <source>The backups of &quot;%1&quot;, newest first. The one you choose is unpacked into a new folder beside the project and opened from there; the project you have open now is not changed.</source>
-        <translation>I backup di "%1", dal più recente. Quello che scegli viene decompresso in una nuova cartella accanto al progetto e aperto da lì; il progetto che hai aperto ora non viene modificato.</translation>
+        <translation>I backup di &quot;%1&quot;, dal più recente. Quello che scegli viene decompresso in una nuova cartella accanto al progetto e aperto da lì; il progetto che hai aperto ora non viene modificato.</translation>
     </message>
     <message>
         <source>Made</source>
@@ -10851,7 +10975,7 @@ Meglio su un'altra unità (una chiavetta USB, un secondo disco, una cartella che
     </message>
     <message>
         <source> (in the folder &quot;%1&quot;)</source>
-        <translation> (nella cartella "%1")</translation>
+        <translation> (nella cartella &quot;%1&quot;)</translation>
     </message>
     <message>
         <source>, waiting (not yet in the backup folder)</source>
@@ -10863,7 +10987,7 @@ Meglio su un'altra unità (una chiavetta USB, un secondo disco, una cartella che
     </message>
     <message>
         <source>There is no backup of this project in the backup folder yet (File &gt; Back Up &gt; Back Up Now makes one).</source>
-        <translation>Nella cartella dei backup non c'è ancora alcun backup di questo progetto (File &gt; Backup &gt; Esegui backup ora ne crea uno).</translation>
+        <translation>Nella cartella dei backup non c&apos;è ancora alcun backup di questo progetto (File &gt; Backup &gt; Esegui backup ora ne crea uno).</translation>
     </message>
     <message>
         <source>There are no old backups of this project to move: the folder that versions 0.70.0 to 0.90.4 kept for it holds none.</source>
@@ -10879,14 +11003,14 @@ Meglio su un'altra unità (una chiavetta USB, un secondo disco, una cartella che
 
 Versions 0.70.0 to 0.90.4 kept them there. Move them into the backup folder itself, under their names? A backup whose name is already there stays where it is.</source>
         <translation>
-            <numerusform>%n vecchio backup di questo progetto si trova nella sua cartella all'interno della cartella dei backup:
+            <numerusform>%n vecchio backup di questo progetto si trova nella sua cartella all&apos;interno della cartella dei backup:
 %1
 
-Le versioni da 0.70.0 a 0.90.4 li conservavano lì. Spostarlo nella cartella dei backup stessa, con il suo nome? Un backup il cui nome è già presente resta dov'è.</numerusform>
-            <numerusform>%n vecchi backup di questo progetto si trovano nella sua cartella all'interno della cartella dei backup:
+Le versioni da 0.70.0 a 0.90.4 li conservavano lì. Spostarlo nella cartella dei backup stessa, con il suo nome? Un backup il cui nome è già presente resta dov&apos;è.</numerusform>
+            <numerusform>%n vecchi backup di questo progetto si trovano nella sua cartella all&apos;interno della cartella dei backup:
 %1
 
-Le versioni da 0.70.0 a 0.90.4 li conservavano lì. Spostarli nella cartella dei backup stessa, con i loro nomi? Un backup il cui nome è già presente resta dov'è.</numerusform>
+Le versioni da 0.70.0 a 0.90.4 li conservavano lì. Spostarli nella cartella dei backup stessa, con i loro nomi? Un backup il cui nome è già presente resta dov&apos;è.</numerusform>
         </translation>
     </message>
     <message>
@@ -10904,9 +11028,9 @@ Le versioni da 0.70.0 a 0.90.4 li conservavano lì. Spostarli nella cartella dei
         <source>%n backup(s) left where they were:
 %1</source>
         <translation>
-            <numerusform>%n backup lasciato dov'era:
+            <numerusform>%n backup lasciato dov&apos;era:
 %1</numerusform>
-            <numerusform>%n backup lasciati dov'erano:
+            <numerusform>%n backup lasciati dov&apos;erano:
 %1</numerusform>
         </translation>
     </message>
@@ -10932,11 +11056,11 @@ Le versioni da 0.70.0 a 0.90.4 li conservavano lì. Spostarli nella cartella dei
     </message>
     <message>
         <source>The title of the restored project could not be marked &quot;(restored ...)&quot;, so it has the title of the project it was made from: %1</source>
-        <translation>Non è stato possibile contrassegnare il titolo del progetto ripristinato come "(ripristinato ...)", quindi ha il titolo del progetto da cui è stato creato: %1</translation>
+        <translation>Non è stato possibile contrassegnare il titolo del progetto ripristinato come &quot;(ripristinato ...)&quot;, quindi ha il titolo del progetto da cui è stato creato: %1</translation>
     </message>
     <message>
         <source>The restored project could not be opened to mark its title &quot;(restored ...)&quot;: %1</source>
-        <translation>Impossibile aprire il progetto ripristinato per contrassegnarne il titolo come "(ripristinato ...)": %1</translation>
+        <translation>Impossibile aprire il progetto ripristinato per contrassegnarne il titolo come &quot;(ripristinato ...)&quot;: %1</translation>
     </message>
     <message>
         <source>The backup was restored INCOMPLETELY into:
@@ -10960,7 +11084,7 @@ Le versioni da 0.70.0 a 0.90.4 li conservavano lì. Spostarli nella cartella dei
     </message>
     <message>
         <source>Open it now? The project open now is closed first (it stays as it is).</source>
-        <translation>Aprirlo ora? Il progetto aperto ora viene prima chiuso (resta com'è).</translation>
+        <translation>Aprirlo ora? Il progetto aperto ora viene prima chiuso (resta com&apos;è).</translation>
     </message>
     <message>
         <source>Open Restored Project</source>
@@ -10996,7 +11120,7 @@ Le versioni da 0.70.0 a 0.90.4 li conservavano lì. Spostarli nella cartella dei
     </message>
     <message>
         <source>Standard Markdown separates paragraphs with empty lines; use it for other programs. %1 Markdown writes one paragraph per line, like the documents inside a project.</source>
-        <translation>Il Markdown standard separa i paragrafi con righe vuote; usalo per altri programmi. Il Markdown di %1 scrive un paragrafo per riga, come i documenti all'interno di un progetto.</translation>
+        <translation>Il Markdown standard separa i paragrafi con righe vuote; usalo per altri programmi. Il Markdown di %1 scrive un paragrafo per riga, come i documenti all&apos;interno di un progetto.</translation>
     </message>
     <message>
         <source>Standard Markdown</source>
@@ -11073,8 +11197,8 @@ You can do this later with Help &gt; Add to Application Menu.</source>
 Puoi farlo anche più tardi con Aiuto &gt; Aggiungi al menu delle applicazioni.</translation>
     </message>
     <message>
-        <source>Move the AppImage to %1 (a moved file cannot be started from the menu)</source>
-        <translation>Sposta l'AppImage in %1 (un file spostato non può essere avviato dal menu)</translation>
+        <source>Move the AppImage to %1, a fixed place the menu entry starts it from</source>
+        <translation>Sposta l&apos;AppImage in %1, un luogo fisso da cui la voce di menu la avvia</translation>
     </message>
     <message>
         <source>The menu entry could not be made.
@@ -11086,11 +11210,11 @@ Puoi farlo anche più tardi con Aiuto &gt; Aggiungi al menu delle applicazioni.<
     </message>
     <message>
         <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove from Application Menu and then Add to Application Menu again.</source>
-        <translation>Impossibile spostare l'AppImage in %1 (%2). La voce di menu la avvia dove si trova; se sposti tu il file, scegli Aiuto &gt; Rimuovi dal menu delle applicazioni e poi di nuovo Aggiungi al menu delle applicazioni.</translation>
+        <translation>Impossibile spostare l&apos;AppImage in %1 (%2). La voce di menu la avvia dove si trova; se sposti tu il file, scegli Aiuto &gt; Rimuovi dal menu delle applicazioni e poi di nuovo Aggiungi al menu delle applicazioni.</translation>
     </message>
     <message>
         <source>The program&apos;s icon could not be copied, so the menu entry shows no icon.</source>
-        <translation>Impossibile copiare l'icona del programma, quindi la voce di menu non mostra alcuna icona.</translation>
+        <translation>Impossibile copiare l&apos;icona del programma, quindi la voce di menu non mostra alcuna icona.</translation>
     </message>
     <message>
         <source>%1 is in the application menu now (%2).</source>
@@ -11254,7 +11378,7 @@ Puoi farlo anche più tardi con Aiuto &gt; Aggiungi al menu delle applicazioni.<
     </message>
     <message>
         <source>Author&apos;s last name</source>
-        <translation>Cognome dell'autore</translation>
+        <translation>Cognome dell&apos;autore</translation>
     </message>
     <message>
         <source>Word count (rounded to 100)</source>
@@ -11311,6 +11435,10 @@ Puoi farlo anche più tardi con Aiuto &gt; Aggiungi al menu delle applicazioni.<
     <message>
         <source>&amp;Themes</source>
         <translation>&amp;Temi</translation>
+    </message>
+    <message>
+        <source>&amp;Profiles</source>
+        <translation>&amp;Profili</translation>
     </message>
     <message>
         <source>&amp;Text Editing</source>
@@ -11370,11 +11498,11 @@ Puoi farlo anche più tardi con Aiuto &gt; Aggiungi al menu delle applicazioni.<
     </message>
     <message>
         <source>in &amp;Editor</source>
-        <translation>nell'&amp;editor</translation>
+        <translation>nell&apos;&amp;editor</translation>
     </message>
     <message>
         <source>in &amp;Other Editor</source>
-        <translation>nell'&amp;altro editor</translation>
+        <translation>nell&apos;&amp;altro editor</translation>
     </message>
     <message>
         <source>in &amp;Copyholder</source>
@@ -11526,7 +11654,7 @@ Puoi farlo anche più tardi con Aiuto &gt; Aggiungi al menu delle applicazioni.<
     </message>
     <message>
         <source>Show or hide the binder, the collections and the inspector; layouts</source>
-        <translation>Mostra o nascondi il raccoglitore, le raccolte e l'ispettore; layout</translation>
+        <translation>Mostra o nascondi il raccoglitore, le raccolte e l&apos;ispettore; layout</translation>
     </message>
     <message>
         <source>Search in &amp;Document…</source>
@@ -11586,7 +11714,7 @@ Puoi farlo anche più tardi con Aiuto &gt; Aggiungi al menu delle applicazioni.<
     </message>
     <message>
         <source>Indent of the whole paragraph</source>
-        <translation>Rientro dell'intero paragrafo</translation>
+        <translation>Rientro dell&apos;intero paragrafo</translation>
     </message>
     <message>
         <source> pt</source>
@@ -11744,11 +11872,11 @@ I caratteri si possono installare qui con Formato &gt; Carattere &gt; Installa f
     </message>
     <message>
         <source>Check for Updates at Startup</source>
-        <translation>Cerca aggiornamenti all'avvio</translation>
+        <translation>Cerca aggiornamenti all&apos;avvio</translation>
     </message>
     <message>
         <source>Look once a day, at the program&apos;s start, whether a newer version of the program or of an installed add-on exists. Nothing about you is sent. Off: the program contacts nothing.</source>
-        <translation>Una volta al giorno, all'avvio del programma, controlla se esiste una versione più recente del programma o di un componente aggiuntivo installato. Non viene inviato nulla su di te. Disattivato: il programma non contatta nulla.</translation>
+        <translation>Una volta al giorno, all&apos;avvio del programma, controlla se esiste una versione più recente del programma o di un componente aggiuntivo installato. Non viene inviato nulla su di te. Disattivato: il programma non contatta nulla.</translation>
     </message>
     <message>
         <source>Check for Updates Now</source>
@@ -11820,7 +11948,7 @@ I caratteri possono essere usati subito; gli altri programmi li vedono dopo il l
     </message>
     <message>
         <source>Give the selected documents the icon “%1”</source>
-        <translation>Dai ai documenti selezionati l'icona “%1”</translation>
+        <translation>Dai ai documenti selezionati l&apos;icona “%1”</translation>
     </message>
     <message>
         <source>Default Icon</source>
@@ -11856,7 +11984,7 @@ I caratteri possono essere usati subito; gli altri programmi li vedono dopo il l
         <source>Only %1 % of the text of &quot;%2&quot; is in what Compile makes of this project; 65 % are needed to call them related.
 
 The file may belong to another project, or Compile leaves out what the file has (documents with Include in Compile switched off, another compile group).</source>
-        <translation>Solo il %1 % del testo di "%2" è in ciò che la compilazione ricava da questo progetto; ne servono il 65 % per considerarli correlati.
+        <translation>Solo il %1 % del testo di &quot;%2&quot; è in ciò che la compilazione ricava da questo progetto; ne servono il 65 % per considerarli correlati.
 
 Il file potrebbe appartenere a un altro progetto, oppure la compilazione omette ciò che il file contiene (documenti con Includi nella compilazione disattivato, un altro gruppo di compilazione).</translation>
     </message>
@@ -11920,7 +12048,7 @@ Il file potrebbe appartenere a un altro progetto, oppure la compilazione omette 
     </message>
     <message>
         <source>Every changed document has a snapshot from before (Documents &gt; Snapshots).</source>
-        <translation>Ogni documento modificato ha un'istantanea precedente (Documenti &gt; Istantanee).</translation>
+        <translation>Ogni documento modificato ha un&apos;istantanea precedente (Documenti &gt; Istantanee).</translation>
     </message>
     <message>
         <source>Open the File</source>
@@ -11942,7 +12070,7 @@ Il file potrebbe appartenere a un altro progetto, oppure la compilazione omette 
 Work in Scrivener format: %2 saves your changes into the .scriv, so you can go on in Scrivener as well (not both programs at the same time).
 
 Convert: %2 makes a project of its own from it; the Scrivener project is not changed.</source>
-        <translation>"%1" è un progetto Scrivener.
+        <translation>&quot;%1&quot; è un progetto Scrivener.
 
 Lavora in formato Scrivener: %2 salva le tue modifiche nel .scriv, così puoi continuare anche in Scrivener (non con entrambi i programmi nello stesso momento).
 
@@ -11970,11 +12098,11 @@ Se entrambi i programmi lavorano su di esso nello stesso momento, le modifiche v
     </message>
     <message>
         <source>1 document changed outside %1 since the last time; its new text was read.</source>
-        <translation>1 documento è cambiato al di fuori di %1 dall'ultima volta; il suo nuovo testo è stato letto.</translation>
+        <translation>1 documento è cambiato al di fuori di %1 dall&apos;ultima volta; il suo nuovo testo è stato letto.</translation>
     </message>
     <message>
         <source>%1 documents changed outside %2 since the last time; their new text was read.</source>
-        <translation>%1 documenti sono cambiati al di fuori di %2 dall'ultima volta; il loro nuovo testo è stato letto.</translation>
+        <translation>%1 documenti sono cambiati al di fuori di %2 dall&apos;ultima volta; il loro nuovo testo è stato letto.</translation>
     </message>
     <message>
         <source>Save As</source>
@@ -11988,11 +12116,11 @@ but this window could not leave the original. Open the new project from File &gt
         <translation>Il progetto è stato salvato come
 %1
 
-ma questa finestra non è riuscita ad abbandonare l'originale. Apri il nuovo progetto da File &gt; Apri recenti.</translation>
+ma questa finestra non è riuscita ad abbandonare l&apos;originale. Apri il nuovo progetto da File &gt; Apri recenti.</translation>
     </message>
     <message>
         <source>Saved as %1. The original stays as it was: %2</source>
-        <translation>Salvato come %1. L'originale resta com'era: %2</translation>
+        <translation>Salvato come %1. L&apos;originale resta com&apos;era: %2</translation>
     </message>
     <message>
         <source>Save a Copy as Scrivener Project</source>
@@ -12010,7 +12138,7 @@ The project you are working on stays where it is.</source>
         <translation>Una copia del progetto è stata salvata in formato Scrivener:
 %1
 
-Il progetto su cui stai lavorando resta dov'è.</translation>
+Il progetto su cui stai lavorando resta dov&apos;è.</translation>
     </message>
     <message>
         <source>Save a Copy as %1 Project</source>
@@ -12024,7 +12152,7 @@ The project you are working on stays where it is.</source>
         <translation>Una copia del progetto è stata salvata nel formato proprio di %1:
 %2
 
-Il progetto su cui stai lavorando resta dov'è.</translation>
+Il progetto su cui stai lavorando resta dov&apos;è.</translation>
     </message>
     <message>
         <source>Group</source>
@@ -12109,7 +12237,7 @@ Il progetto su cui stai lavorando resta dov'è.</translation>
     </message>
     <message>
         <source>a counter of its own called &quot;name&quot; (works with every number above: &lt;$W:chapter&gt;)</source>
-        <translation>un contatore tutto suo chiamato "nome" (funziona con ogni numero qui sopra: &lt;$W:chapter&gt;)</translation>
+        <translation>un contatore tutto suo chiamato &quot;nome&quot; (funziona con ogni numero qui sopra: &lt;$W:chapter&gt;)</translation>
     </message>
     <message>
         <source>the title of the document (in headers and footers of printouts: what is printed)</source>
@@ -12137,7 +12265,7 @@ Il progetto su cui stai lavorando resta dov'è.</translation>
     </message>
     <message>
         <source>your street (File &gt; Options &gt; General &gt; Author Information; also &lt;$city&gt;, &lt;$state&gt;, &lt;$zip&gt;, &lt;$country&gt;)</source>
-        <translation>la tua via (File &gt; Opzioni &gt; Generale &gt; Informazioni sull'autore; anche &lt;$city&gt;, &lt;$state&gt;, &lt;$zip&gt;, &lt;$country&gt;)</translation>
+        <translation>la tua via (File &gt; Opzioni &gt; Generale &gt; Informazioni sull&apos;autore; anche &lt;$city&gt;, &lt;$state&gt;, &lt;$zip&gt;, &lt;$country&gt;)</translation>
     </message>
     <message>
         <source>your phone number</source>
@@ -12165,7 +12293,7 @@ Il progetto su cui stai lavorando resta dov'è.</translation>
     </message>
     <message>
         <source>the year</source>
-        <translation>l'anno</translation>
+        <translation>l&apos;anno</translation>
     </message>
     <message>
         <source>the page number (headers and footers)</source>
@@ -12221,7 +12349,7 @@ Il progetto su cui stai lavorando resta dov'è.</translation>
     </message>
     <message>
         <source>Go to the S&amp;tart</source>
-        <translation>Vai all'&amp;inizio</translation>
+        <translation>Vai all&apos;&amp;inizio</translation>
     </message>
     <message>
         <source>Skip &amp;Back</source>
@@ -12273,7 +12401,7 @@ Il progetto su cui stai lavorando resta dov'è.</translation>
     </message>
     <message>
         <source>Audio and video need the add-on &quot;Media Playback&quot;</source>
-        <translation>Audio e video richiedono il componente aggiuntivo "Media Playback"</translation>
+        <translation>Audio e video richiedono il componente aggiuntivo &quot;Media Playback&quot;</translation>
     </message>
     <message>
         <source>Skip &amp;Back %1 Seconds</source>
@@ -12337,7 +12465,7 @@ Il progetto su cui stai lavorando resta dov'è.</translation>
     </message>
     <message>
         <source>Show the &amp;List of Elements</source>
-        <translation>Mostra l'&amp;elenco degli elementi</translation>
+        <translation>Mostra l&apos;&amp;elenco degli elementi</translation>
     </message>
     <message>
         <source>Script &amp;Settings…</source>
@@ -12389,9 +12517,9 @@ Il progetto su cui stai lavorando resta dov'è.</translation>
         <source>Use the script format &quot;%1&quot; in this project?
 
 The scripts of the project get the new layout. Elements keep their text; an element the new format does not have becomes the element of the same kind.</source>
-        <translation>Usare il formato script "%1" in questo progetto?
+        <translation>Usare il formato script &quot;%1&quot; in questo progetto?
 
-Gli script del progetto ricevono il nuovo layout. Gli elementi conservano il loro testo; un elemento che il nuovo formato non ha diventa l'elemento dello stesso tipo.</translation>
+Gli script del progetto ricevono il nuovo layout. Gli elementi conservano il loro testo; un elemento che il nuovo formato non ha diventa l&apos;elemento dello stesso tipo.</translation>
     </message>
     <message>
         <source>
@@ -12407,7 +12535,7 @@ Non esiste un elemento dello stesso tipo per: %1. I loro paragrafi diventano tes
     </message>
     <message>
         <source>Continued from the beginning.</source>
-        <translation>Proseguito dall'inizio.</translation>
+        <translation>Proseguito dall&apos;inizio.</translation>
     </message>
     <message>
         <source>Not found in this editor.</source>
@@ -12415,11 +12543,11 @@ Non esiste un elemento dello stesso tipo per: %1. I loro paragrafi diventano tes
     </message>
     <message>
         <source>In &quot;%1&quot;.</source>
-        <translation>In "%1".</translation>
+        <translation>In &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>No other document has it; continued from the %1.</source>
-        <translation>Nessun altro documento lo contiene; proseguito dall'%1.</translation>
+        <translation>Nessun altro documento lo contiene; proseguito dall&apos;%1.</translation>
     </message>
     <message>
         <source>end</source>
@@ -12510,7 +12638,7 @@ Non esiste un elemento dello stesso tipo per: %1. I loro paragrafi diventano tes
     </message>
     <message>
         <source>The settings as they were before are kept in %1; load that file to go back.</source>
-        <translation>Le impostazioni com'erano prima sono conservate in %1; carica quel file per tornare indietro.</translation>
+        <translation>Le impostazioni com&apos;erano prima sono conservate in %1; carica quel file per tornare indietro.</translation>
     </message>
     <message>
         <source>Some documents could not follow the new formatting:
@@ -12614,7 +12742,7 @@ Sostituirli con le definizioni importate? Il testo che li usa viene aggiornato.<
         <source>New projects start with the styles of this project from now on.
 
 File ▸ Options ▸ Editing goes back to the built-in styles.</source>
-        <translation>D'ora in poi i nuovi progetti iniziano con gli stili di questo progetto.
+        <translation>D&apos;ora in poi i nuovi progetti iniziano con gli stili di questo progetto.
 
 File ▸ Opzioni ▸ Modifica torna agli stili integrati.</translation>
     </message>
@@ -12672,17 +12800,17 @@ Allineamento: %6</translation>
 %1
 
 All text without a style in the whole project takes it over, also text with a font, size or spacing of its own. Styles keep what they set themselves; the rest of their look follows the main text style. Project &gt; Project Settings &gt; Formatting shows the same settings.</source>
-        <translation>Rendere la formattazione al cursore lo stile del testo principale del progetto ("Nessuno stile")?
+        <translation>Rendere la formattazione al cursore lo stile del testo principale del progetto (&quot;Nessuno stile&quot;)?
 
 %1
 
-Tutto il testo senza stile nell'intero progetto la assume, anche il testo con un carattere, una dimensione o una spaziatura propri. Gli stili conservano ciò che impostano da soli; il resto del loro aspetto segue lo stile del testo principale. Progetto &gt; Impostazioni del progetto &gt; Formattazione mostra le stesse impostazioni.</translation>
+Tutto il testo senza stile nell&apos;intero progetto la assume, anche il testo con un carattere, una dimensione o una spaziatura propri. Gli stili conservano ciò che impostano da soli; il resto del loro aspetto segue lo stile del testo principale. Progetto &gt; Impostazioni del progetto &gt; Formattazione mostra le stesse impostazioni.</translation>
     </message>
     <message>
         <source>This project is open in another %1 window on this computer.
 
 Opening it twice can lose changes. Open it anyway?</source>
-        <translation>Questo progetto è aperto in un'altra finestra di %1 su questo computer.
+        <translation>Questo progetto è aperto in un&apos;altra finestra di %1 su questo computer.
 
 Aprirlo due volte può far perdere modifiche. Aprirlo comunque?</translation>
     </message>
@@ -12692,7 +12820,7 @@ Aprirlo due volte può far perdere modifiche. Aprirlo comunque?</translation>
 If it is open here as well, the two computers can overwrite each other&apos;s work. Close it there first and let your sync program finish, then open it here.</source>
         <translation>Questo progetto è aperto sul computer “%1”%2 dalle %3 (ultimo segno di vita: %4).
 
-Se è aperto anche qui, i due computer possono sovrascrivere il lavoro l'uno dell'altro. Chiudilo prima là e lascia finire il tuo programma di sincronizzazione, poi aprilo qui.</translation>
+Se è aperto anche qui, i due computer possono sovrascrivere il lavoro l&apos;uno dell&apos;altro. Chiudilo prima là e lascia finire il tuo programma di sincronizzazione, poi aprilo qui.</translation>
     </message>
     <message>
         <source> (user %1)</source>
@@ -12760,7 +12888,7 @@ Lavora su di esso su un computer alla volta: le modifiche fatte su entrambi poss
     </message>
     <message>
         <source>a snapshot of the document</source>
-        <translation>un'istantanea del documento</translation>
+        <translation>un&apos;istantanea del documento</translation>
     </message>
     <message>
         <source>, and </source>
@@ -12814,7 +12942,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
 
 %2
 
-Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'ispettore. Per evitarlo, lavora sul progetto su un computer alla volta.</translation>
+Un&apos;istantanea può essere confrontata con il testo nella scheda Istantanee dell&apos;ispettore. Per evitarlo, lavora sul progetto su un computer alla volta.</translation>
     </message>
     <message>
         <source>Don&apos;t Show Again Until %1 Is Closed</source>
@@ -12823,14 +12951,6 @@ Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'
     <message>
         <source>Other versions are still kept; only this notice stays away until you quit the program.</source>
         <translation>Le altre versioni vengono comunque conservate; solo questo avviso resta assente finché non esci dal programma.</translation>
-    </message>
-    <message>
-        <source>&amp;Translate and Proofread…</source>
-        <translation>&amp;Traduci e correggi…</translation>
-    </message>
-    <message>
-        <source>Proofread English text or translate German text into English (the add-on is not installed)</source>
-        <translation>Correggi un testo inglese o traduci un testo tedesco in inglese (il componente aggiuntivo non è installato)</translation>
     </message>
     <message>
         <source>Speech &amp;Transcription…</source>
@@ -12843,10 +12963,6 @@ Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'
     <message>
         <source>Speech Transcription</source>
         <translation>Trascrizione vocale</translation>
-    </message>
-    <message>
-        <source>Translation and Proofreading</source>
-        <translation>Traduzione e correzione</translation>
     </message>
     <message>
         <source>is not installed</source>
@@ -12873,8 +12989,20 @@ Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'
         <translation>Trasforma la voce in testo. Installalo con Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Installa aggiornamento o componente aggiuntivo; Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Gestione componenti aggiuntivi mostra i componenti aggiuntivi e li attiva e disattiva.</translation>
     </message>
     <message>
-        <source>It proofreads English text and translates German text into English. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
-        <translation>Corregge un testo inglese e traduce un testo tedesco in inglese. Installalo con Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Installa aggiornamento o componente aggiuntivo; Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Gestione componenti aggiuntivi mostra i componenti aggiuntivi e li attiva e disattiva.</translation>
+        <source>&amp;Translation Helper…</source>
+        <translation>&amp;Assistente di traduzione…</translation>
+    </message>
+    <message>
+        <source>Suggestions for translating between eleven languages and for English spelling (the add-on is not installed)</source>
+        <translation>Suggerimenti per tradurre tra undici lingue e per l&apos;ortografia inglese (il componente aggiuntivo non è installato)</translation>
+    </message>
+    <message>
+        <source>Translation Helper</source>
+        <translation>Assistente di traduzione</translation>
+    </message>
+    <message>
+        <source>It gives suggestions for translating between eleven languages and for English spelling and grammar. Its translations are not precise: check each one, which needs a working knowledge of both languages. Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager shows the add-ons and switches them on and off.</source>
+        <translation>Offre suggerimenti per tradurre tra undici lingue e per l&apos;ortografia e la grammatica inglesi. Le sue traduzioni non sono precise: controllale una per una, il che richiede una buona conoscenza di entrambe le lingue. Installalo con Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Installa aggiornamento o componente aggiuntivo; Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Gestione componenti aggiuntivi mostra i componenti aggiuntivi e li attiva e disattiva.</translation>
     </message>
     <message>
         <source>Open Add-on Manager</source>
@@ -12906,7 +13034,7 @@ Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'
     </message>
     <message>
         <source>The picture could not be read.</source>
-        <translation>Impossibile leggere l'immagine.</translation>
+        <translation>Impossibile leggere l&apos;immagine.</translation>
     </message>
     <message>
         <source>The text could not be read.</source>
@@ -12972,6 +13100,62 @@ Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'
         <source>and %1 earlier steps</source>
         <translation>e %1 passaggi precedenti</translation>
     </message>
+    <message>
+        <source>&amp;Manage Profiles…</source>
+        <translation>&amp;Gestisci profili…</translation>
+    </message>
+    <message>
+        <source>Use, save, rename, copy, delete, export and import profiles</source>
+        <translation>Usare, salvare, rinominare, copiare, eliminare, esportare e importare profili</translation>
+    </message>
+    <message>
+        <source>&amp;Save Settings as New Profile…</source>
+        <translation>&amp;Salva le impostazioni come nuovo profilo…</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Salva le impostazioni come nuovo profilo</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Il mio profilo</translation>
+    </message>
+    <message>
+        <source>Keep the options, toolbars, window and theme as they are now in a new profile</source>
+        <translation>Conserva in un nuovo profilo le opzioni, le barre degli strumenti, la finestra e il tema così come sono ora</translation>
+    </message>
+    <message>
+        <source>Profiles</source>
+        <translation>Profili</translation>
+    </message>
+    <message>
+        <source>Labels</source>
+        <translation>Etichette</translation>
+    </message>
+    <message>
+        <source>Profile:</source>
+        <translation>Profilo:</translation>
+    </message>
+    <message>
+        <source>The profile in use: %1. A click lists the profiles.</source>
+        <translation>Il profilo in uso: %1. Un clic mostra l&apos;elenco dei profili.</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Etichetta</translation>
+    </message>
+    <message>
+        <source>No Label</source>
+        <translation>Nessuna etichetta</translation>
+    </message>
+    <message>
+        <source>Switch Profile</source>
+        <translation>Cambia profilo</translation>
+    </message>
+    <message>
+        <source>The profile sets another language; it takes effect when the program is started again.</source>
+        <translation>Il profilo imposta un&apos;altra lingua; avrà effetto al prossimo avvio del programma.</translation>
+    </message>
 </context>
 <context>
     <name>qb::ManageIconsDialog</name>
@@ -13021,7 +13205,7 @@ Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'
     </message>
     <message>
         <source>An icon of that name exists already.</source>
-        <translation>Esiste già un'icona con quel nome.</translation>
+        <translation>Esiste già un&apos;icona con quel nome.</translation>
     </message>
     <message>
         <source>Delete Icon</source>
@@ -13040,7 +13224,7 @@ Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'
     </message>
     <message>
         <source>%1 is not a picture the program can read.</source>
-        <translation>%1 non è un'immagine che il programma sa leggere.</translation>
+        <translation>%1 non è un&apos;immagine che il programma sa leggere.</translation>
     </message>
 </context>
 <context>
@@ -13094,19 +13278,19 @@ Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'
     </message>
     <message>
         <source>Shows the page as it was saved, in your web browser. The copy made for that is removed when the program closes.</source>
-        <translation>Mostra la pagina com'è stata salvata, nel tuo browser web. La copia creata a tale scopo viene rimossa alla chiusura del programma.</translation>
+        <translation>Mostra la pagina com&apos;è stata salvata, nel tuo browser web. La copia creata a tale scopo viene rimossa alla chiusura del programma.</translation>
     </message>
     <message>
         <source>Shows the page as it was saved, in your web browser. A copy of it is put into your Downloads folder for that.</source>
-        <translation>Mostra la pagina com'è stata salvata, nel tuo browser web. A tale scopo ne viene messa una copia nella tua cartella Download.</translation>
+        <translation>Mostra la pagina com&apos;è stata salvata, nel tuo browser web. A tale scopo ne viene messa una copia nella tua cartella Download.</translation>
     </message>
     <message>
         <source>Open Original Address</source>
-        <translation>Apri l'indirizzo originale</translation>
+        <translation>Apri l&apos;indirizzo originale</translation>
     </message>
     <message>
         <source>Opens the page&apos;s address in your web browser: the page as it is today.</source>
-        <translation>Apre l'indirizzo della pagina nel tuo browser web: la pagina com'è oggi.</translation>
+        <translation>Apre l&apos;indirizzo della pagina nel tuo browser web: la pagina com&apos;è oggi.</translation>
     </message>
     <message>
         <source>The page could not be opened: %1</source>
@@ -13118,7 +13302,7 @@ Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'
     </message>
     <message>
         <source>Open with Default Application</source>
-        <translation>Apri con l'applicazione predefinita</translation>
+        <translation>Apri con l&apos;applicazione predefinita</translation>
     </message>
     <message>
         <source>Pause</source>
@@ -13130,7 +13314,7 @@ Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'
     </message>
     <message>
         <source>Go to the Start</source>
-        <translation>Vai all'inizio</translation>
+        <translation>Vai all&apos;inizio</translation>
     </message>
     <message>
         <source>The saved page cannot be read.</source>
@@ -13174,7 +13358,7 @@ Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'
     </message>
     <message>
         <source>This kind of file is not played inside the program.</source>
-        <translation>Questo tipo di file non viene riprodotto all'interno del programma.</translation>
+        <translation>Questo tipo di file non viene riprodotto all&apos;interno del programma.</translation>
     </message>
     <message>
         <source>This file cannot be played here: %1</source>
@@ -13182,7 +13366,7 @@ Un'istantanea può essere confrontata con il testo nella scheda Istantanee dell'
     </message>
     <message>
         <source>The image could not be loaded.</source>
-        <translation>Impossibile caricare l'immagine.</translation>
+        <translation>Impossibile caricare l&apos;immagine.</translation>
     </message>
     <message>
         <source>Page %1 of %2</source>
@@ -14194,7 +14378,7 @@ No li aggiunge agli stili di questa lavagna.</numerusform>
     </message>
     <message>
         <source>\n stands for a line break; two line breaks: an empty line</source>
-        <translation>\n sta per un'interruzione di riga; due interruzioni di riga: una riga vuota</translation>
+        <translation>\n sta per un&apos;interruzione di riga; due interruzioni di riga: una riga vuota</translation>
     </message>
     <message>
         <source>Import</source>
@@ -14207,8 +14391,8 @@ No li aggiunge agli stili di questa lavagna.</numerusform>
     <message numerus="yes">
         <source>%n note(s) become documents inside “%1”, in the reading order of the board (left to right, top to bottom; connected notes after the note they hang on).</source>
         <translation>
-            <numerusform>%n nota diventa un documento all'interno di “%1”, nell'ordine di lettura della lavagna (da sinistra a destra, dall'alto in basso; le note collegate dopo la nota a cui sono attaccate).</numerusform>
-            <numerusform>%n note diventano documenti all'interno di “%1”, nell'ordine di lettura della lavagna (da sinistra a destra, dall'alto in basso; le note collegate dopo la nota a cui sono attaccate).</numerusform>
+            <numerusform>%n nota diventa un documento all&apos;interno di “%1”, nell&apos;ordine di lettura della lavagna (da sinistra a destra, dall&apos;alto in basso; le note collegate dopo la nota a cui sono attaccate).</numerusform>
+            <numerusform>%n note diventano documenti all&apos;interno di “%1”, nell&apos;ordine di lettura della lavagna (da sinistra a destra, dall&apos;alto in basso; le note collegate dopo la nota a cui sono attaccate).</numerusform>
         </translation>
     </message>
     <message>
@@ -14261,7 +14445,7 @@ No li aggiunge agli stili di questa lavagna.</numerusform>
     </message>
     <message>
         <source>Create “notes” field (the full text as an OPML note, the beginning as the heading)</source>
-        <translation>Crea il campo “notes” (il testo completo come nota OPML, l'inizio come titolo)</translation>
+        <translation>Crea il campo “notes” (il testo completo come nota OPML, l&apos;inizio come titolo)</translation>
     </message>
     <message>
         <source>Rich Text (*.rtf)</source>
@@ -14738,7 +14922,7 @@ Viene mostrata per quanto è stato possibile leggerla e non può essere modifica
     </message>
     <message>
         <source>Faded transparency:</source>
-        <translation>Trasparenza dell'attenuazione:</translation>
+        <translation>Trasparenza dell&apos;attenuazione:</translation>
     </message>
     <message>
         <source>New Notes</source>
@@ -14833,7 +15017,7 @@ Viene mostrata per quanto è stato possibile leggerla e non può essere modifica
     </message>
     <message>
         <source>Open this mind map in a large window (with the inspector of the board)</source>
-        <translation>Apri questa mappa mentale in una finestra grande (con l'ispettore della lavagna)</translation>
+        <translation>Apri questa mappa mentale in una finestra grande (con l&apos;ispettore della lavagna)</translation>
     </message>
     <message>
         <source>Release</source>
@@ -14845,7 +15029,7 @@ Viene mostrata per quanto è stato possibile leggerla e non può essere modifica
     </message>
     <message>
         <source>Release this mind map: the tab follows the selected item again</source>
-        <translation>Rilascia questa mappa mentale: la scheda torna a seguire l'elemento selezionato</translation>
+        <translation>Rilascia questa mappa mentale: la scheda torna a seguire l&apos;elemento selezionato</translation>
     </message>
     <message>
         <source>Fix this mind map: the tab keeps showing it whatever is selected</source>
@@ -14861,7 +15045,7 @@ Viene mostrata per quanto è stato possibile leggerla e non può essere modifica
     </message>
     <message>
         <source>This is the mind map of &quot;%1&quot;, not of the selected item. The pin button releases it.</source>
-        <translation>Questa è la mappa mentale di "%1", non dell'elemento selezionato. Il pulsante puntina la rilascia.</translation>
+        <translation>Questa è la mappa mentale di &quot;%1&quot;, non dell&apos;elemento selezionato. Il pulsante puntina la rilascia.</translation>
     </message>
 </context>
 <context>
@@ -14930,7 +15114,7 @@ Viene mostrata per quanto è stato possibile leggerla e non può essere modifica
     <name>qb::ObjectForm</name>
     <message>
         <source>Choose an object in the list, or make one with +.</source>
-        <translation>Scegli un oggetto nell'elenco, oppure creane uno con +.</translation>
+        <translation>Scegli un oggetto nell&apos;elenco, oppure creane uno con +.</translation>
     </message>
     <message>
         <source>Color</source>
@@ -14946,7 +15130,7 @@ Viene mostrata per quanto è stato possibile leggerla e non può essere modifica
     </message>
     <message>
         <source>Color of the Object</source>
-        <translation>Colore dell'oggetto</translation>
+        <translation>Colore dell&apos;oggetto</translation>
     </message>
     <message>
         <source>Name</source>
@@ -14954,7 +15138,7 @@ Viene mostrata per quanto è stato possibile leggerla e non può essere modifica
     </message>
     <message>
         <source>a date or a time, in any form</source>
-        <translation>una data o un'ora, in qualsiasi forma</translation>
+        <translation>una data o un&apos;ora, in qualsiasi forma</translation>
     </message>
     <message>
         <source>yes</source>
@@ -14974,7 +15158,7 @@ Viene mostrata per quanto è stato possibile leggerla e non può essere modifica
     </message>
     <message>
         <source>(no picture: click or drop one here)</source>
-        <translation>(nessuna immagine: fai clic o rilascia qui un'immagine)</translation>
+        <translation>(nessuna immagine: fai clic o rilascia qui un&apos;immagine)</translation>
     </message>
     <message>
         <source>(missing document)</source>
@@ -15097,7 +15281,7 @@ Viene mostrata per quanto è stato possibile leggerla e non può essere modifica
     </message>
     <message>
         <source>New projects get these categories and templates from now on.</source>
-        <translation>D'ora in poi i nuovi progetti ricevono queste categorie e questi modelli.</translation>
+        <translation>D&apos;ora in poi i nuovi progetti ricevono queste categorie e questi modelli.</translation>
     </message>
     <message>
         <source>New Category</source>
@@ -15122,8 +15306,8 @@ Viene mostrata per quanto è stato possibile leggerla e non può essere modifica
     <message numerus="yes">
         <source>%n object(s) belong to the categories you removed. Delete them as well? (No: nothing is changed.)</source>
         <translation>
-            <numerusform>%n oggetto appartiene alle categorie che hai rimosso. Eliminarlo anch'esso? (No: non viene modificato nulla.)</numerusform>
-            <numerusform>%n oggetti appartengono alle categorie che hai rimosso. Eliminarli anch'essi? (No: non viene modificato nulla.)</numerusform>
+            <numerusform>%n oggetto appartiene alle categorie che hai rimosso. Eliminarlo anch&apos;esso? (No: non viene modificato nulla.)</numerusform>
+            <numerusform>%n oggetti appartengono alle categorie che hai rimosso. Eliminarli anch&apos;essi? (No: non viene modificato nulla.)</numerusform>
         </translation>
     </message>
     <message>
@@ -15292,7 +15476,7 @@ Viene mostrata per quanto è stato possibile leggerla e non può essere modifica
     </message>
     <message>
         <source>Projects&apos; own settings are not used: File &gt; Options &gt; General, &quot;Which settings come first&quot;.</source>
-        <translation>Le impostazioni proprie dei progetti non sono usate: File &gt; Opzioni &gt; Generale, "Quali impostazioni hanno la precedenza".</translation>
+        <translation>Le impostazioni proprie dei progetti non sono usate: File &gt; Opzioni &gt; Generale, &quot;Quali impostazioni hanno la precedenza&quot;.</translation>
     </message>
     <message>
         <source>Changing this applies the changes made so far and shows the other settings.</source>
@@ -15310,7 +15494,7 @@ Viene mostrata per quanto è stato possibile leggerla e non può essere modifica
         <source>This project&apos;s own settings are removed; the program&apos;s settings apply to it again. Its look (Appearance) stays as it is.
 
 Go on?</source>
-        <translation>Le impostazioni proprie di questo progetto vengono rimosse; si applicano di nuovo quelle del programma. Il suo aspetto (Aspetto) resta com'è.
+        <translation>Le impostazioni proprie di questo progetto vengono rimosse; si applicano di nuovo quelle del programma. Il suo aspetto (Aspetto) resta com&apos;è.
 
 Continuare?</translation>
     </message>
@@ -15364,7 +15548,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Choose &quot;All projects&quot; at the top to set the program&apos;s options back to the standard</source>
-        <translation>Scegli "Tutti i progetti" in alto per riportare le opzioni del programma allo standard</translation>
+        <translation>Scegli &quot;Tutti i progetti&quot; in alto per riportare le opzioni del programma allo standard</translation>
     </message>
     <message>
         <source>Add-ons and Plugins</source>
@@ -15372,7 +15556,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</source>
-        <translation>Ciò che cambi qui viene conservato con questo progetto. Le sue impostazioni proprie: &lt;a href="show"&gt;%1&lt;/a&gt;.</translation>
+        <translation>Ciò che cambi qui viene conservato con questo progetto. Le sue impostazioni proprie: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</translation>
     </message>
     <message>
         <source>setting</source>
@@ -15388,7 +15572,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>The open project has &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; of its own, which it keeps.</source>
-        <translation>Il progetto aperto ha &lt;a href="show"&gt;%1&lt;/a&gt; proprie, che conserva.</translation>
+        <translation>Il progetto aperto ha &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; proprie, che conserva.</translation>
     </message>
     <message>
         <source>Projects&apos; own settings are not used (General &gt; Which settings come first).</source>
@@ -15432,15 +15616,15 @@ Continuare?</translation>
     </message>
     <message>
         <source>Ticked, a project can keep settings of its own (choose &quot;This project&quot; at the top of this window); they apply while it is open. Unticked, the program&apos;s settings apply to every project, also its look; what projects keep stays in them for later.</source>
-        <translation>Se selezionato, un progetto può conservare impostazioni proprie (scegli "Questo progetto" in alto in questa finestra); valgono mentre è aperto. Se non selezionato, le impostazioni del programma valgono per ogni progetto, anche per il suo aspetto; ciò che i progetti conservano resta in essi per dopo.</translation>
+        <translation>Se selezionato, un progetto può conservare impostazioni proprie (scegli &quot;Questo progetto&quot; in alto in questa finestra); valgono mentre è aperto. Se non selezionato, le impostazioni del programma valgono per ogni progetto, anche per il suo aspetto; ciò che i progetti conservano resta in essi per dopo.</translation>
     </message>
     <message>
         <source>Language:</source>
         <translation>Lingua:</translation>
     </message>
     <message>
-        <source>The language of menus, windows and messages; it changes at the next start of the program. The manual and the welcome project stay in English.</source>
-        <translation>La lingua di menu, finestre e messaggi; cambia al prossimo avvio del programma. Il manuale e il progetto di benvenuto restano in inglese.</translation>
+        <source>The language of menus, windows and messages, of the manual, the quick start guide and the welcome project; it changes at the next start of the program. A language marked as a machine translation has not been checked by a speaker yet. Spelling dictionaries for other languages are add-ons (Help &gt; Add-ons and Updates).</source>
+        <translation>La lingua di menu, finestre e messaggi, del manuale, della guida rapida e del progetto di benvenuto; cambia al prossimo avvio del programma. Una lingua contrassegnata come traduzione automatica non è ancora stata controllata da un madrelingua. I dizionari ortografici per altre lingue sono componenti aggiuntivi (Aiuto &gt; Componenti aggiuntivi e aggiornamenti).</translation>
     </message>
     <message>
         <source>Group the digits of large numbers (%1)</source>
@@ -15480,7 +15664,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>A project in a synced folder (Dropbox, Nextcloud, Syncthing ...) holds a lock while it is open here, and the copies of versions changed elsewhere are named after the computer. Empty: the computer&apos;s own name and your user name on it. A name of your own (&quot;Laptop&quot;) is written instead, and the user name is left out.</source>
-        <translation>Un progetto in una cartella sincronizzata (Dropbox, Nextcloud, Syncthing ...) mantiene un blocco mentre è aperto qui, e le copie delle versioni modificate altrove prendono il nome del computer. Vuoto: il nome del computer stesso e il tuo nome utente su di esso. Al suo posto viene scritto un nome tuo ("Portatile") e il nome utente viene omesso.</translation>
+        <translation>Un progetto in una cartella sincronizzata (Dropbox, Nextcloud, Syncthing ...) mantiene un blocco mentre è aperto qui, e le copie delle versioni modificate altrove prendono il nome del computer. Vuoto: il nome del computer stesso e il tuo nome utente su di esso. Al suo posto viene scritto un nome tuo (&quot;Portatile&quot;) e il nome utente viene omesso.</translation>
     </message>
     <message>
         <source>Saving</source>
@@ -15540,7 +15724,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Author Information</source>
-        <translation>Informazioni sull'autore</translation>
+        <translation>Informazioni sull&apos;autore</translation>
     </message>
     <message>
         <source>Scratch Pad</source>
@@ -15548,7 +15732,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>The Scratch Pad (Window &gt; Scratch Pad) comes with the add-on &quot;Scratch Pad&quot;; once it is installed (Help &gt; Add-ons and Updates &gt; Add-on Manager), its folder and the kind of new notes are set here.</source>
-        <translation>Il Blocco appunti (Finestra &gt; Blocco appunti) viene fornito con il componente aggiuntivo "Scratch Pad"; una volta installato (Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Gestione componenti aggiuntivi), la sua cartella e il tipo di nuove note si impostano qui.</translation>
+        <translation>Il Blocco appunti (Finestra &gt; Blocco appunti) viene fornito con il componente aggiuntivo &quot;Scratch Pad&quot;; una volta installato (Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Gestione componenti aggiuntivi), la sua cartella e il tipo di nuove note si impostano qui.</translation>
     </message>
     <message>
         <source>No folder chosen</source>
@@ -15632,7 +15816,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Quit after inactive for:</source>
-        <translation>Esci dopo un'inattività di:</translation>
+        <translation>Esci dopo un&apos;inattività di:</translation>
     </message>
     <message>
         <source>The project is saved and backed up as on a normal exit.</source>
@@ -15660,7 +15844,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Questions you answered with &quot;Don&apos;t ask again&quot; are asked again (for example the folder of new bookmarked documents).</source>
-        <translation>Le domande a cui hai risposto con "Non chiedere più" vengono poste di nuovo (per esempio la cartella dei nuovi documenti con segnalibro).</translation>
+        <translation>Le domande a cui hai risposto con &quot;Non chiedere più&quot; vengono poste di nuovo (per esempio la cartella dei nuovi documenti con segnalibro).</translation>
     </message>
     <message>
         <source>Warnings</source>
@@ -15668,7 +15852,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Reload the main editors&apos; last selected zoom on startup</source>
-        <translation>Ricarica all'avvio l'ultimo zoom scelto degli editor principali</translation>
+        <translation>Ricarica all&apos;avvio l&apos;ultimo zoom scelto degli editor principali</translation>
     </message>
     <message>
         <source>Default text zoom:</source>
@@ -15676,7 +15860,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Ctrl + mouse wheel changes the zoom of the area under the mouse; View &gt; Reset Zoom (Ctrl+0) brings the editors back to this.</source>
-        <translation>Ctrl + rotellina del mouse cambia lo zoom dell'area sotto il mouse; Vista &gt; Ripristina zoom (Ctrl+0) riporta gli editor a questo.</translation>
+        <translation>Ctrl + rotellina del mouse cambia lo zoom dell&apos;area sotto il mouse; Vista &gt; Ripristina zoom (Ctrl+0) riporta gli editor a questo.</translation>
     </message>
     <message>
         <source>As in the system settings</source>
@@ -15768,7 +15952,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Use Formatting in Current Editor</source>
-        <translation>Usa la formattazione nell'editor corrente</translation>
+        <translation>Usa la formattazione nell&apos;editor corrente</translation>
     </message>
     <message>
         <source>Font:</source>
@@ -15896,15 +16080,15 @@ Continuare?</translation>
     </message>
     <message>
         <source>In the other editor (split if needed)</source>
-        <translation>Nell'altro editor (diviso se necessario)</translation>
+        <translation>Nell&apos;altro editor (diviso se necessario)</translation>
     </message>
     <message>
         <source>In the current editor</source>
-        <translation>Nell'editor corrente</translation>
+        <translation>Nell&apos;editor corrente</translation>
     </message>
     <message>
         <source>In the copyholder of the current editor</source>
-        <translation>Nel copyholder dell'editor corrente</translation>
+        <translation>Nel copyholder dell&apos;editor corrente</translation>
     </message>
     <message>
         <source>In a Quick Reference panel</source>
@@ -15964,7 +16148,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Inside the program: drag a document onto text to link it, with Alt to insert its text, onto an editor&apos;s header bar to open it there (with Alt: in the copyholder), onto the Quick Reference or Bookmarks button of the toolbar, or onto a collection.</source>
-        <translation>All'interno del programma: trascina un documento sul testo per collegarlo, con Alt per inserirne il testo, sulla barra del titolo di un editor per aprirlo lì (con Alt: nel copyholder), sul pulsante Riferimento rapido o Segnalibri della barra degli strumenti, oppure su una raccolta.</translation>
+        <translation>All&apos;interno del programma: trascina un documento sul testo per collegarlo, con Alt per inserirne il testo, sulla barra del titolo di un editor per aprirlo lì (con Alt: nel copyholder), sul pulsante Riferimento rapido o Segnalibri della barra degli strumenti, oppure su una raccolta.</translation>
     </message>
     <message>
         <source>Dragging &amp; Dropping</source>
@@ -16016,7 +16200,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>&quot;Pause and rewind&quot; must be switched on in the footer bar of the player.</source>
-        <translation>"Pausa e riavvolgi" deve essere attivato nella barra a piè di pagina del lettore.</translation>
+        <translation>&quot;Pausa e riavvolgi&quot; deve essere attivato nella barra a piè di pagina del lettore.</translation>
     </message>
     <message>
         <source>Playback</source>
@@ -16064,7 +16248,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Show and change the look of:</source>
-        <translation>Mostra e cambia l'aspetto di:</translation>
+        <translation>Mostra e cambia l&apos;aspetto di:</translation>
     </message>
     <message>
         <source>New projects</source>
@@ -16072,7 +16256,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Every project keeps its own look: the theme, colors and fonts of the binder, editor, corkboard, outliner, inspector and composition mode, the text column width and the border beside the text, whatever &quot;Settings for&quot; says at the top. Menus and panels (General) and the interface font are the same in every project.</source>
-        <translation>Ogni progetto conserva il proprio aspetto: il tema, i colori e i caratteri del raccoglitore, dell'editor, della bacheca, della struttura, dell'ispettore e della modalità composizione, la larghezza della colonna di testo e il bordo accanto al testo, qualunque cosa dica "Impostazioni per" in alto. Menu e pannelli (Generale) e il carattere dell'interfaccia sono uguali in ogni progetto.</translation>
+        <translation>Ogni progetto conserva il proprio aspetto: il tema, i colori e i caratteri del raccoglitore, dell&apos;editor, della bacheca, della struttura, dell&apos;ispettore e della modalità composizione, la larghezza della colonna di testo e il bordo accanto al testo, qualunque cosa dica &quot;Impostazioni per&quot; in alto. Menu e pannelli (Generale) e il carattere dell&apos;interfaccia sono uguali in ogni progetto.</translation>
     </message>
     <message>
         <source>Theme:</source>
@@ -16104,7 +16288,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>A theme sets the colors and fonts of every area. Changes you make here sit on top of the theme; &quot;Save as Theme&quot; turns the result into a theme of your own.</source>
-        <translation>Un tema imposta i colori e i caratteri di ogni area. Le modifiche che fai qui si sovrappongono al tema; "Salva come tema" trasforma il risultato in un tema tuo.</translation>
+        <translation>Un tema imposta i colori e i caratteri di ogni area. Le modifiche che fai qui si sovrappongono al tema; &quot;Salva come tema&quot; trasforma il risultato in un tema tuo.</translation>
     </message>
     <message>
         <source>Show the full project path in the title bar</source>
@@ -16112,7 +16296,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Show the draft and session progress as two thin lines under the quick search field (the footer shows it as well)</source>
-        <translation>Mostra l'avanzamento della bozza e della sessione come due linee sottili sotto il campo di ricerca rapida (lo mostra anche il piè di pagina)</translation>
+        <translation>Mostra l&apos;avanzamento della bozza e della sessione come due linee sottili sotto il campo di ricerca rapida (lo mostra anche il piè di pagina)</translation>
     </message>
     <message>
         <source>Main toolbar icon size:</source>
@@ -16136,7 +16320,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Let the label color shine through the icons</source>
-        <translation>Lascia trasparire il colore dell'etichetta attraverso le icone</translation>
+        <translation>Lascia trasparire il colore dell&apos;etichetta attraverso le icone</translation>
     </message>
     <message>
         <source>Binder items extra indent:</source>
@@ -16152,7 +16336,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Paper width, zoom and background fade are set in the bar at the bottom of composition mode; a background picture under Project &gt; Project Settings.</source>
-        <translation>Larghezza della carta, zoom e dissolvenza dello sfondo si impostano nella barra in basso della modalità composizione; un'immagine di sfondo in Progetto &gt; Impostazioni del progetto.</translation>
+        <translation>Larghezza della carta, zoom e dissolvenza dello sfondo si impostano nella barra in basso della modalità composizione; un&apos;immagine di sfondo in Progetto &gt; Impostazioni del progetto.</translation>
     </message>
     <message>
         <source>Show status stamps on index cards</source>
@@ -16160,7 +16344,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Tint index cards with the label color</source>
-        <translation>Colora le schede con il colore dell'etichetta</translation>
+        <translation>Colora le schede con il colore dell&apos;etichetta</translation>
     </message>
     <message>
         <source>Card width:</source>
@@ -16184,7 +16368,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Typewriter scrolling in the main editor</source>
-        <translation>Scorrimento macchina da scrivere nell'editor principale</translation>
+        <translation>Scorrimento macchina da scrivere nell&apos;editor principale</translation>
     </message>
     <message>
         <source>View &gt; Text Editing &gt; Page View shows the text on pages; their size and margins are set under View &gt; Text Editing &gt; Page Size and Margins.</source>
@@ -16260,11 +16444,11 @@ Continuare?</translation>
     </message>
     <message>
         <source>Fix capitalization of sentences</source>
-        <translation>Correggi le maiuscole all'inizio delle frasi</translation>
+        <translation>Correggi le maiuscole all&apos;inizio delle frasi</translation>
     </message>
     <message>
         <source>Capitalize &quot;i&quot;</source>
-        <translation>Scrivi "i" in maiuscolo</translation>
+        <translation>Scrivi &quot;i&quot; in maiuscolo</translation>
     </message>
     <message>
         <source>Punctuation</source>
@@ -16364,7 +16548,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Check spelling as you type</source>
-        <translation>Controlla l'ortografia durante la digitazione</translation>
+        <translation>Controlla l&apos;ortografia durante la digitazione</translation>
     </message>
     <message>
         <source>Ignore words with numbers</source>
@@ -16408,7 +16592,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Words added with &quot;Learn Spelling&quot; in the right-click menu of the text.</source>
-        <translation>Parole aggiunte con "Impara ortografia" nel menu del clic destro del testo.</translation>
+        <translation>Parole aggiunte con &quot;Impara ortografia&quot; nel menu del clic destro del testo.</translation>
     </message>
     <message>
         <source>Spelling</source>
@@ -16464,7 +16648,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>The program&apos;s own reader (add-on &quot;Word 97-2003 Import&quot;)</source>
-        <translation>Il lettore proprio del programma (componente aggiuntivo "Word 97-2003 Import")</translation>
+        <translation>Il lettore proprio del programma (componente aggiuntivo &quot;Word 97-2003 Import&quot;)</translation>
     </message>
     <message>
         <source>LibreOffice (when installed)</source>
@@ -16476,7 +16660,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>The own reader needs no other program; LibreOffice also reads headers, drawings and Word 6/95 files. When the chosen way fails, the other one is tried.</source>
-        <translation>Il lettore proprio non richiede altri programmi; LibreOffice legge anche intestazioni, disegni e file Word 6/95. Se il metodo scelto fallisce, viene provato l'altro.</translation>
+        <translation>Il lettore proprio non richiede altri programmi; LibreOffice legge anche intestazioni, disegni e file Word 6/95. Se il metodo scelto fallisce, viene provato l&apos;altro.</translation>
     </message>
     <message>
         <source>Import</source>
@@ -16492,7 +16676,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Back up on project open</source>
-        <translation>Esegui backup all'apertura del progetto</translation>
+        <translation>Esegui backup all&apos;apertura del progetto</translation>
     </message>
     <message>
         <source>Back up on project close</source>
@@ -16507,8 +16691,104 @@ Continuare?</translation>
         <translation>tutti</translation>
     </message>
     <message>
-        <source>Retain backup files per project:</source>
-        <translation>File di backup da conservare per progetto:</translation>
+        <source>Keep the newest</source>
+        <translation>Conserva gli ultimi</translation>
+    </message>
+    <message>
+        <source>backups of each project</source>
+        <translation>backup di ogni progetto</translation>
+    </message>
+    <message>
+        <source>The colors new things start with. They belong to your profile. Projects that exist keep their own labels.</source>
+        <translation>I colori con cui partono le cose nuove. Appartengono al tuo profilo. I progetti esistenti conservano le proprie etichette.</translation>
+    </message>
+    <message>
+        <source>Standard Color</source>
+        <translation>Colore standard</translation>
+    </message>
+    <message>
+        <source>Labels of new projects</source>
+        <translation>Etichette dei nuovi progetti</translation>
+    </message>
+    <message>
+        <source>Color of this label</source>
+        <translation>Colore di questa etichetta</translation>
+    </message>
+    <message>
+        <source>Colors of the popups</source>
+        <translation>Colori dei popup</translation>
+    </message>
+    <message>
+        <source>Text color:</source>
+        <translation>Colore del testo:</translation>
+    </message>
+    <message>
+        <source>Highlight:</source>
+        <translation>Evidenziazione:</translation>
+    </message>
+    <message>
+        <source>A color of the text color popup</source>
+        <translation>Un colore del popup del colore del testo</translation>
+    </message>
+    <message>
+        <source>A color of the highlight popup</source>
+        <translation>Un colore del popup dell&apos;evidenziazione</translation>
+    </message>
+    <message>
+        <source>The color each button starts with</source>
+        <translation>Il colore con cui parte ogni pulsante</translation>
+    </message>
+    <message>
+        <source>Text color button:</source>
+        <translation>Pulsante del colore del testo:</translation>
+    </message>
+    <message>
+        <source>The color of the text color button when the program starts</source>
+        <translation>Il colore del pulsante del colore del testo all&apos;avvio del programma</translation>
+    </message>
+    <message>
+        <source>Highlight button:</source>
+        <translation>Pulsante di evidenziazione:</translation>
+    </message>
+    <message>
+        <source>The color of the highlight button when the program starts</source>
+        <translation>Il colore del pulsante di evidenziazione all&apos;avvio del programma</translation>
+    </message>
+    <message>
+        <source>Back to the program&apos;s standard labels and colors</source>
+        <translation>Torna alle etichette e ai colori standard del programma</translation>
+    </message>
+    <message>
+        <source>Export Profile...</source>
+        <translation>Esporta profilo...</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Esporta profilo</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profili (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile...</source>
+        <translation>Importa profilo...</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Importa profilo</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profili e opzioni (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>The profile “%1” was imported. Switch to it under View &gt; Profiles.</source>
+        <translation>Il profilo “%1” è stato importato. Passa ad esso con Vista &gt; Profili.</translation>
+    </message>
+    <message>
+        <source>Manage Profiles...</source>
+        <translation>Gestisci profili...</translation>
     </message>
     <message>
         <source>No folder chosen: no automatic backups</source>
@@ -16528,7 +16808,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Backups are ZIP files of the whole project folder. The backups of all projects are in this folder, each named after its project with the date and time. To restore one, use File &gt; Back Up &gt; Restore From Backup, or unpack it and open the project inside.</source>
-        <translation>I backup sono file ZIP dell'intera cartella del progetto. I backup di tutti i progetti si trovano in questa cartella, ciascuno col nome del suo progetto, la data e l'ora. Per ripristinarne uno, usa File &gt; Backup &gt; Ripristina da backup, oppure decomprimilo e apri il progetto al suo interno.</translation>
+        <translation>I backup sono file ZIP dell&apos;intera cartella del progetto. I backup di tutti i progetti si trovano in questa cartella, ciascuno col nome del suo progetto, la data e l&apos;ora. Per ripristinarne uno, usa File &gt; Backup &gt; Ripristina da backup, oppure decomprimilo e apri il progetto al suo interno.</translation>
     </message>
     <message>
         <source>Enter ends editing a note (Shift+Enter: new line)</source>
@@ -16540,7 +16820,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>A new note takes the look of the selected note</source>
-        <translation>Una nuova nota assume l'aspetto della nota selezionata</translation>
+        <translation>Una nuova nota assume l&apos;aspetto della nota selezionata</translation>
     </message>
     <message>
         <source>Lines without arrows are dashed</source>
@@ -16628,7 +16908,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>A board&apos;s own color is chosen by right-clicking an empty place of the board &gt; Background Color; it is kept for the kind of theme in use (light or dark), the other kind keeps its own.</source>
-        <translation>Il colore proprio di una lavagna si sceglie con il clic destro su un punto vuoto della lavagna &gt; Colore di sfondo; viene conservato per il tipo di tema in uso (chiaro o scuro), l'altro tipo conserva il proprio.</translation>
+        <translation>Il colore proprio di una lavagna si sceglie con il clic destro su un punto vuoto della lavagna &gt; Colore di sfondo; viene conservato per il tipo di tema in uso (chiaro o scuro), l&apos;altro tipo conserva il proprio.</translation>
     </message>
     <message>
         <source>Size of icons on notes and lines:</source>
@@ -16636,7 +16916,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Right-click a note for its colors, shape and icons; right-click a line for its arrows, color and icon. Help &gt; Mind Map Help shows how lines and arrows are drawn.</source>
-        <translation>Clic destro su una nota per i suoi colori, la forma e le icone; clic destro su una linea per le sue frecce, il colore e l'icona. Aiuto &gt; Aiuto sulle mappe mentali mostra come vengono disegnate linee e frecce.</translation>
+        <translation>Clic destro su una nota per i suoi colori, la forma e le icone; clic destro su una linea per le sue frecce, il colore e l&apos;icona. Aiuto &gt; Aiuto sulle mappe mentali mostra come vengono disegnate linee e frecce.</translation>
     </message>
     <message>
         <source>Mind Map</source>
@@ -16644,7 +16924,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>Your own templates (saved with &quot;Use for New Projects&quot;)</source>
-        <translation>I tuoi modelli (salvati con "Usa per i nuovi progetti")</translation>
+        <translation>I tuoi modelli (salvati con &quot;Usa per i nuovi progetti&quot;)</translation>
     </message>
     <message>
         <source>The standard templates</source>
@@ -16660,7 +16940,7 @@ Continuare?</translation>
     </message>
     <message>
         <source>The categories, fields and colors of a project are changed under Project &gt; Object Templates and Colors; &quot;Use for New Projects&quot; there makes them the templates of new projects.</source>
-        <translation>Le categorie, i campi e i colori di un progetto si cambiano in Progetto &gt; Modelli di oggetto e colori; "Usa per i nuovi progetti" li rende i modelli dei nuovi progetti.</translation>
+        <translation>Le categorie, i campi e i colori di un progetto si cambiano in Progetto &gt; Modelli di oggetto e colori; &quot;Usa per i nuovi progetti&quot; li rende i modelli dei nuovi progetti.</translation>
     </message>
     <message>
         <source>Objects</source>
@@ -16719,24 +16999,8 @@ Continuare?</translation>
         <translation>Rapporti di arresto anomalo</translation>
     </message>
     <message>
-        <source>Load Options from File...</source>
-        <translation>Carica opzioni da file...</translation>
-    </message>
-    <message>
         <source>Load Options</source>
         <translation>Carica opzioni</translation>
-    </message>
-    <message>
-        <source>Options (*.qboptions)</source>
-        <translation>Opzioni (*.qboptions)</translation>
-    </message>
-    <message>
-        <source>Save Options to File...</source>
-        <translation>Salva opzioni su file...</translation>
-    </message>
-    <message>
-        <source>Save Options</source>
-        <translation>Salva opzioni</translation>
     </message>
     <message>
         <source>Save Theme Options to File...</source>
@@ -16760,11 +17024,11 @@ Continuare?</translation>
     </message>
     <message>
         <source>The file could not be written (%1). The file that was there is unchanged.</source>
-        <translation>Impossibile scrivere il file (%1). Il file che c'era è invariato.</translation>
+        <translation>Impossibile scrivere il file (%1). Il file che c&apos;era è invariato.</translation>
     </message>
     <message>
         <source>The file could not be written. The file that was there is unchanged.</source>
-        <translation>Impossibile scrivere il file. Il file che c'era è invariato.</translation>
+        <translation>Impossibile scrivere il file. Il file che c&apos;era è invariato.</translation>
     </message>
     <message>
         <source>nothing to write</source>
@@ -16809,7 +17073,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     <message>
         <source>The look of the project could not be saved:
 %1</source>
-        <translation>Impossibile salvare l'aspetto del progetto:
+        <translation>Impossibile salvare l&apos;aspetto del progetto:
 %1</translation>
     </message>
     <message>
@@ -16963,7 +17227,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>Multiple of the line height</source>
-        <translation>Multiplo dell'altezza di riga</translation>
+        <translation>Multiplo dell&apos;altezza di riga</translation>
     </message>
     <message>
         <source>Exactly</source>
@@ -17003,7 +17267,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>Positions are measured from the start of the first line.</source>
-        <translation>Le posizioni sono misurate dall'inizio della prima riga.</translation>
+        <translation>Le posizioni sono misurate dall&apos;inizio della prima riga.</translation>
     </message>
     <message>
         <source>Reset to Default</source>
@@ -17034,7 +17298,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>Original size: %1 × %2 px. The height follows the width.</source>
-        <translation>Dimensione originale: %1 × %2 px. L'altezza segue la larghezza.</translation>
+        <translation>Dimensione originale: %1 × %2 px. L&apos;altezza segue la larghezza.</translation>
     </message>
     <message>
         <source>In the line, like a letter</source>
@@ -17066,11 +17330,11 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>Shown under the picture and compiled with it; a picture in the line has none.</source>
-        <translation>Mostrata sotto l'immagine e compilata con essa; un'immagine nella riga non ne ha.</translation>
+        <translation>Mostrata sotto l&apos;immagine e compilata con essa; un&apos;immagine nella riga non ne ha.</translation>
     </message>
     <message>
         <source>What the picture shows, in a sentence or two</source>
-        <translation>Cosa mostra l'immagine, in una o due frasi</translation>
+        <translation>Cosa mostra l&apos;immagine, in una o due frasi</translation>
     </message>
     <message>
         <source>Description:</source>
@@ -17078,7 +17342,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>Not shown in the text: e-books, Word files and screen readers keep it with the picture (alt text), and it appears when the mouse rests on the picture.</source>
-        <translation>Non mostrata nel testo: gli e-book, i file Word e gli screen reader la conservano con l'immagine (testo alternativo) e compare quando il mouse si ferma sull'immagine.</translation>
+        <translation>Non mostrata nel testo: gli e-book, i file Word e gli screen reader la conservano con l&apos;immagine (testo alternativo) e compare quando il mouse si ferma sull&apos;immagine.</translation>
     </message>
 </context>
 <context>
@@ -17105,7 +17369,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>Your notes of the Scratch Pad and the texts of Speech Transcription are your writing: in Documents or a folder of your own they stay when the program&apos;s folder is deleted or replaced. A change here gives both tools the new place; what they wrote so far stays where it is.</source>
-        <translation>Le tue note del Blocco appunti e i testi della trascrizione vocale sono la tua scrittura: in Documenti o in una cartella tua restano quando la cartella del programma viene eliminata o sostituita. Una modifica qui assegna a entrambi gli strumenti il nuovo luogo; ciò che hanno scritto finora resta dov'è.</translation>
+        <translation>Le tue note del Blocco appunti e i testi della trascrizione vocale sono la tua scrittura: in Documenti o in una cartella tua restano quando la cartella del programma viene eliminata o sostituita. Una modifica qui assegna a entrambi gli strumenti il nuovo luogo; ciò che hanno scritto finora resta dov&apos;è.</translation>
     </message>
     <message>
         <source>Folder for Notes and Transcriptions</source>
@@ -17125,7 +17389,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>Project files: .qbx files open with Quillbinder; it is offered in &quot;Open with&quot; for Scrivener&apos;s .scrivx files</source>
-        <translation>File di progetto: i file .qbx si aprono con Quillbinder; viene proposto in "Apri con" per i file .scrivx di Scrivener</translation>
+        <translation>File di progetto: i file .qbx si aprono con Quillbinder; viene proposto in &quot;Apri con&quot; per i file .scrivx di Scrivener</translation>
     </message>
     <message>
         <source>This could not be removed: %1.</source>
@@ -17137,7 +17401,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>These are the only things the program puts outside its folder, and only when you ask for them here. Remove them before you delete or move the program&apos;s folder. To pin Quillbinder to the taskbar: start it, then right-click its button in the taskbar and choose &quot;Pin to taskbar&quot;.</source>
-        <translation>Queste sono le uniche cose che il programma mette fuori dalla sua cartella, e solo quando le chiedi qui. Rimuovile prima di eliminare o spostare la cartella del programma. Per fissare Quillbinder alla barra delle applicazioni: avvialo, poi fai clic destro sul suo pulsante nella barra delle applicazioni e scegli "Aggiungi alla barra delle applicazioni".</translation>
+        <translation>Queste sono le uniche cose che il programma mette fuori dalla sua cartella, e solo quando le chiedi qui. Rimuovile prima di eliminare o spostare la cartella del programma. Per fissare Quillbinder alla barra delle applicazioni: avvialo, poi fai clic destro sul suo pulsante nella barra delle applicazioni e scegli &quot;Aggiungi alla barra delle applicazioni&quot;.</translation>
     </message>
     <message>
         <source>only on Windows</source>
@@ -17149,7 +17413,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>there, for another copy of the program</source>
-        <translation>lì, per un'altra copia del programma</translation>
+        <translation>lì, per un&apos;altra copia del programma</translation>
     </message>
     <message>
         <source>not added</source>
@@ -17176,7 +17440,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>How File &gt; Print Current Document puts what the editor shows on paper: the text, the index cards of the corkboard, or the outliner. The settings belong to this project.</source>
-        <translation>Come File &gt; Stampa documento corrente mette su carta ciò che l'editor mostra: il testo, le schede della bacheca o la struttura. Le impostazioni appartengono a questo progetto.</translation>
+        <translation>Come File &gt; Stampa documento corrente mette su carta ciò che l&apos;editor mostra: il testo, le schede della bacheca o la struttura. Le impostazioni appartengono a questo progetto.</translation>
     </message>
     <message>
         <source> cm</source>
@@ -17320,7 +17584,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>As in the &amp;editor (the fonts of the project, its styles and the text)</source>
-        <translation>Come nell'&amp;editor (i caratteri del progetto, i suoi stili e il testo)</translation>
+        <translation>Come nell&apos;&amp;editor (i caratteri del progetto, i suoi stili e il testo)</translation>
     </message>
     <message>
         <source>&amp;One font:</source>
@@ -17332,7 +17596,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>As in the editor</source>
-        <translation>Come nell'editor</translation>
+        <translation>Come nell&apos;editor</translation>
     </message>
     <message>
         <source>Single</source>
@@ -17348,7 +17612,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>Script documents keep their script layout. The selected text alone: choose &quot;Selection&quot; in the print window.</source>
-        <translation>I documenti script mantengono il loro layout di script. Solo il testo selezionato: scegli "Selezione" nella finestra di stampa.</translation>
+        <translation>I documenti script mantengono il loro layout di script. Solo il testo selezionato: scegli &quot;Selezione&quot; nella finestra di stampa.</translation>
     </message>
     <message>
         <source>Text</source>
@@ -17388,7 +17652,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>The first lines of the text when there is no synopsis</source>
-        <translation>Le prime righe del testo quando non c'è una sinossi</translation>
+        <translation>Le prime righe del testo quando non c&apos;è una sinossi</translation>
     </message>
     <message>
         <source>Pictures (picture documents, pictures of index cards)</source>
@@ -17396,7 +17660,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>Label color (a stripe at the top)</source>
-        <translation>Colore dell'etichetta (una striscia in alto)</translation>
+        <translation>Colore dell&apos;etichetta (una striscia in alto)</translation>
     </message>
     <message>
         <source>Status</source>
@@ -17420,7 +17684,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>The cards of the corkboard in the order shown. Only some: select them and choose &quot;Selection&quot; in the print window.</source>
-        <translation>Le schede della bacheca nell'ordine mostrato. Solo alcune: selezionale e scegli "Selezione" nella finestra di stampa.</translation>
+        <translation>Le schede della bacheca nell&apos;ordine mostrato. Solo alcune: selezionale e scegli &quot;Selezione&quot; nella finestra di stampa.</translation>
     </message>
     <message>
         <source>Index Cards</source>
@@ -17444,7 +17708,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>Also the rows inside &amp;closed groups</source>
-        <translation>Anche le righe all'interno dei gruppi &amp;chiusi</translation>
+        <translation>Anche le righe all&apos;interno dei gruppi &amp;chiusi</translation>
     </message>
     <message>
         <source>Column titles at the top of &amp;every page</source>
@@ -17456,11 +17720,11 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>A dot of the &amp;label color</source>
-        <translation>Un punto del colore dell'&amp;etichetta</translation>
+        <translation>Un punto del colore dell&apos;&amp;etichetta</translation>
     </message>
     <message>
         <source>The columns of the outliner in their order and widths (View &gt; Outliner Options); with many columns, Landscape on the Page tab gives them more room. Only some rows: select them and choose &quot;Selection&quot; in the print window.</source>
-        <translation>Le colonne della struttura nel loro ordine e con le loro larghezze (Vista &gt; Opzioni della struttura); con molte colonne, Orizzontale nella scheda Pagina dà loro più spazio. Solo alcune righe: selezionale e scegli "Selezione" nella finestra di stampa.</translation>
+        <translation>Le colonne della struttura nel loro ordine e con le loro larghezze (Vista &gt; Opzioni della struttura); con molte colonne, Orizzontale nella scheda Pagina dà loro più spazio. Solo alcune righe: selezionale e scegli &quot;Selezione&quot; nella finestra di stampa.</translation>
     </message>
     <message>
         <source>Outliner</source>
@@ -17480,7 +17744,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>A card is larger than the paper inside its margins: one card on each sheet, made smaller.</source>
-        <translation>Una scheda è più grande della carta all'interno dei suoi margini: una scheda per foglio, ridotta.</translation>
+        <translation>Una scheda è più grande della carta all&apos;interno dei suoi margini: una scheda per foglio, ridotta.</translation>
     </message>
     <message>
         <source>%1 on each sheet (%2 × %3) of the paper on the Page tab.</source>
@@ -17496,10 +17760,109 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
 </context>
 <context>
+    <name>qb::ProfileManagerDialog</name>
+    <message>
+        <source>Manage Profiles</source>
+        <translation>Gestisci profili</translation>
+    </message>
+    <message>
+        <source>A profile holds your options, toolbars, window places and sizes, keyboard set, backup settings, standard colors, layouts and the theme. The profile in use is saved when you switch away from it and when the program ends.</source>
+        <translation>Un profilo contiene le tue opzioni, le barre degli strumenti, le posizioni e le dimensioni delle finestre, il set di tastiera, le impostazioni dei backup, i colori standard, i layout e il tema. Il profilo in uso viene salvato quando passi a un altro e quando il programma termina.</translation>
+    </message>
+    <message>
+        <source>Use</source>
+        <translation>Usa</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile...</source>
+        <translation>Salva le impostazioni come nuovo profilo...</translation>
+    </message>
+    <message>
+        <source>Rename...</source>
+        <translation>Rinomina...</translation>
+    </message>
+    <message>
+        <source>Copy...</source>
+        <translation>Copia...</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Elimina</translation>
+    </message>
+    <message>
+        <source>Export...</source>
+        <translation>Esporta...</translation>
+    </message>
+    <message>
+        <source>Import...</source>
+        <translation>Importa...</translation>
+    </message>
+    <message>
+        <source>Save Settings as New Profile</source>
+        <translation>Salva le impostazioni come nuovo profilo</translation>
+    </message>
+    <message>
+        <source>My Profile</source>
+        <translation>Il mio profilo</translation>
+    </message>
+    <message>
+        <source>Rename Profile</source>
+        <translation>Rinomina profilo</translation>
+    </message>
+    <message>
+        <source>Copy Profile</source>
+        <translation>Copia profilo</translation>
+    </message>
+    <message>
+        <source>%1 (Copy)</source>
+        <translation>%1 (copia)</translation>
+    </message>
+    <message>
+        <source>Delete Profile</source>
+        <translation>Elimina profilo</translation>
+    </message>
+    <message>
+        <source>Delete the profile “%1”? This cannot be undone.</source>
+        <translation>Eliminare il profilo “%1”? Questa azione non può essere annullata.</translation>
+    </message>
+    <message>
+        <source>Export Profile</source>
+        <translation>Esporta profilo</translation>
+    </message>
+    <message>
+        <source>Profiles (*.qbprofile)</source>
+        <translation>Profili (*.qbprofile)</translation>
+    </message>
+    <message>
+        <source>Import Profile</source>
+        <translation>Importa profilo</translation>
+    </message>
+    <message>
+        <source>Profiles and options (*.qbprofile *.qboptions)</source>
+        <translation>Profili e opzioni (*.qbprofile *.qboptions)</translation>
+    </message>
+    <message>
+        <source>%1 (in use)</source>
+        <translation>%1 (in uso)</translation>
+    </message>
+    <message>
+        <source>Theme: %1.</source>
+        <translation>Tema: %1.</translation>
+    </message>
+    <message>
+        <source>Built-in profile; it can be deleted.</source>
+        <translation>Profilo integrato; può essere eliminato.</translation>
+    </message>
+    <message>
+        <source>The profile every program starts with.</source>
+        <translation>Il profilo con cui parte ogni programma.</translation>
+    </message>
+</context>
+<context>
     <name>qb::Project</name>
     <message>
         <source>This project&apos;s folder holds other project files beside &quot;%1&quot;, which was opened: %2. A sync program may have made them (a copy from another computer kept beside yours). Compare them before you go on, and open another one with File &gt; Open Project if it holds your latest work.</source>
-        <translation>La cartella di questo progetto contiene altri file di progetto accanto a "%1", che è stato aperto: %2. Può averli creati un programma di sincronizzazione (una copia da un altro computer conservata accanto alla tua). Confrontali prima di continuare e apri un altro con File &gt; Apri progetto se contiene il tuo lavoro più recente.</translation>
+        <translation>La cartella di questo progetto contiene altri file di progetto accanto a &quot;%1&quot;, che è stato aperto: %2. Può averli creati un programma di sincronizzazione (una copia da un altro computer conservata accanto alla tua). Confrontali prima di continuare e apri un altro con File &gt; Apri progetto se contiene il tuo lavoro più recente.</translation>
     </message>
     <message>
         <source>Red</source>
@@ -17575,7 +17938,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
     </message>
     <message>
         <source>Not saved yet: the drive reported an error. %1 The journal of the last save is kept and the program tries again by itself.</source>
-        <translation>Non ancora salvato: l'unità ha segnalato un errore. %1 Il journal dell'ultimo salvataggio è conservato e il programma riprova da solo.</translation>
+        <translation>Non ancora salvato: l&apos;unità ha segnalato un errore. %1 Il journal dell&apos;ultimo salvataggio è conservato e il programma riprova da solo.</translation>
     </message>
     <message>
         <source>Not saved yet: %1 began a save of this project at %2, and that save is not complete here yet (its files may still be arriving through the sync folder). This computer saves once it is complete, at the latest 15 minutes after it began; it tries again by itself.</source>
@@ -17609,7 +17972,7 @@ I tuoi progetti recenti, i temi tuoi, i layout, le barre degli strumenti e le sc
         <source>The project &quot;%1&quot; (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
 
 </source>
-        <translation>Impossibile salvare il progetto "%1" (%2). Questa cartella contiene ciò che non è stato ancora salvato: testi e note come file RTF (li aprono Word, LibreOffice e %3), lavagne delle mappe mentali, oggetti modificati (nella cartella "objects") e il file di progetto com'era in memoria (il raccoglitore, i titoli e le etichette), come %4. Copia ciò che serve nel progetto.
+        <translation>Impossibile salvare il progetto &quot;%1&quot; (%2). Questa cartella contiene ciò che non è stato ancora salvato: testi e note come file RTF (li aprono Word, LibreOffice e %3), lavagne delle mappe mentali, oggetti modificati (nella cartella &quot;objects&quot;) e il file di progetto com&apos;era in memoria (il raccoglitore, i titoli e le etichette), come %4. Copia ciò che serve nel progetto.
 
 </translation>
     </message>
@@ -17665,7 +18028,7 @@ The copy is complete: %2 of %2 files were written, with the project file as it i
         <translation>I testi non salvati si trovano in:
 %1
 
-La copia è completa: sono stati scritti %2 file su %2, con il file di progetto com'è in memoria, chiamato *.copy (il README in quella cartella spiega come rimetterlo a posto).</translation>
+La copia è completa: sono stati scritti %2 file su %2, con il file di progetto com&apos;è in memoria, chiamato *.copy (il README in quella cartella spiega come rimetterlo a posto).</translation>
     </message>
     <message>
         <source>This copy is INCOMPLETE: %1 of %2 files were written, in:
@@ -17720,7 +18083,7 @@ Non scritti:
     </message>
     <message>
         <source>%1 is not a project file of %2 (it holds &quot;%3&quot;). It was not opened and is not changed.</source>
-        <translation>%1 non è un file di progetto di %2 (contiene "%3"). Non è stato aperto e non è stato modificato.</translation>
+        <translation>%1 non è un file di progetto di %2 (contiene &quot;%3&quot;). Non è stato aperto e non è stato modificato.</translation>
     </message>
     <message numerus="yes">
         <source>%n item(s) nested deeper than %1 levels were moved up to that level.</source>
@@ -17777,7 +18140,7 @@ Non scritti:
     </message>
     <message>
         <source>&quot;Replace&quot; is a regular expression; &quot;With&quot; may use \1 to \9 for its groups.</source>
-        <translation>"Sostituisci" è un'espressione regolare; "Con" può usare da \1 a \9 per i suoi gruppi.</translation>
+        <translation>&quot;Sostituisci&quot; è un&apos;espressione regolare; &quot;Con&quot; può usare da \1 a \9 per i suoi gruppi.</translation>
     </message>
     <message>
         <source>Replace in</source>
@@ -17809,7 +18172,7 @@ Non scritti:
     </message>
     <message>
         <source>The texts of the comments and footnotes shown in the inspector</source>
-        <translation>I testi dei commenti e delle note a piè di pagina mostrati nell'ispettore</translation>
+        <translation>I testi dei commenti e delle note a piè di pagina mostrati nell&apos;ispettore</translation>
     </message>
     <message>
         <source>Scope</source>
@@ -17829,7 +18192,7 @@ Non scritti:
     </message>
     <message>
         <source>Take a snapshot of every text before it is changed</source>
-        <translation>Crea un'istantanea di ogni testo prima che venga modificato</translation>
+        <translation>Crea un&apos;istantanea di ogni testo prima che venga modificato</translation>
     </message>
     <message>
         <source>Project Replace changes all documents at once and cannot be undone as a whole.</source>
@@ -17849,7 +18212,7 @@ Non scritti:
     </message>
     <message>
         <source>Before replacing &quot;%1&quot;</source>
-        <translation>Prima di sostituire "%1"</translation>
+        <translation>Prima di sostituire &quot;%1&quot;</translation>
     </message>
     <message>
         <source>Left as they are, because their file cannot be read (such a file is never written over): %1.</source>
@@ -17925,7 +18288,7 @@ Non scritti:
 %3
 
 This cannot be undone as a whole.%4</source>
-        <translation>Sostituire "%1" con %2?
+        <translation>Sostituire &quot;%1&quot; con %2?
 
 %3
 
@@ -17933,7 +18296,7 @@ Questa operazione non può essere annullata nel suo insieme.%4</translation>
     </message>
     <message>
         <source> Each changed text gets a snapshot to go back to.</source>
-        <translation> Ogni testo modificato riceve un'istantanea a cui tornare.</translation>
+        <translation> Ogni testo modificato riceve un&apos;istantanea a cui tornare.</translation>
     </message>
     <message>
         <source> A backup (File &gt; Back Up) beforehand is a good idea.</source>
@@ -17984,11 +18347,11 @@ Questa operazione non può essere annullata nel suo insieme.%4</translation>
     </message>
     <message>
         <source>Take over the settings now; the text of the project changes at once</source>
-        <translation>Applica subito le impostazioni; il testo del progetto cambia all'istante</translation>
+        <translation>Applica subito le impostazioni; il testo del progetto cambia all&apos;istante</translation>
     </message>
     <message>
         <source>Name of the &quot;Label&quot; field (e.g. POV):</source>
-        <translation>Nome del campo "Etichetta" (ad es. punto di vista):</translation>
+        <translation>Nome del campo &quot;Etichetta&quot; (ad es. punto di vista):</translation>
     </message>
     <message>
         <source>Color</source>
@@ -18024,7 +18387,7 @@ Questa operazione non può essere annullata nel suo insieme.%4</translation>
     </message>
     <message>
         <source>Name of the &quot;Status&quot; field:</source>
-        <translation>Nome del campo "Stato":</translation>
+        <translation>Nome del campo &quot;Stato&quot;:</translation>
     </message>
     <message>
         <source>Add status</source>
@@ -18040,7 +18403,7 @@ Questa operazione non può essere annullata nel suo insieme.%4</translation>
     </message>
     <message>
         <source>Section types tell Compile what each document is (part, chapter, scene …). &quot;Default types by structure&quot; assigns them automatically from the binder level; level 0 is the Draft folder itself.</source>
-        <translation>I tipi di sezione dicono alla compilazione cos'è ciascun documento (parte, capitolo, scena …). "Tipi predefiniti per struttura" li assegna automaticamente dal livello del raccoglitore; il livello 0 è la cartella Bozza stessa.</translation>
+        <translation>I tipi di sezione dicono alla compilazione cos&apos;è ciascun documento (parte, capitolo, scena …). &quot;Tipi predefiniti per struttura&quot; li assegna automaticamente dal livello del raccoglitore; il livello 0 è la cartella Bozza stessa.</translation>
     </message>
     <message>
         <source>Section types:</source>
@@ -18108,7 +18471,7 @@ Questa operazione non può essere annullata nel suo insieme.%4</translation>
     </message>
     <message>
         <source>Editor text</source>
-        <translation>Testo dell'editor</translation>
+        <translation>Testo dell&apos;editor</translation>
     </message>
     <message>
         <source>Automatic serif font</source>
@@ -18148,7 +18511,7 @@ Questa operazione non può essere annullata nel suo insieme.%4</translation>
     </message>
     <message>
         <source>Take font, size, spacing and indent from the paragraph that holds the cursor in the editor</source>
-        <translation>Prendi carattere, dimensione, spaziatura e rientro dal paragrafo che contiene il cursore nell'editor</translation>
+        <translation>Prendi carattere, dimensione, spaziatura e rientro dal paragrafo che contiene il cursore nell&apos;editor</translation>
     </message>
     <message>
         <source>Change text with a font, size or spacing of its own as well (for example imported text)</source>
@@ -18160,7 +18523,7 @@ Questa operazione non può essere annullata nel suo insieme.%4</translation>
     </message>
     <message>
         <source>This is the look of the text of the whole project. Apply and OK change all documents at once, and every document that changes gets a snapshot first (Inspector ▸ Snapshots). Text formatted by hand (Format ▸ Font, Format ▸ Paragraph, the ruler) changes only with the last check box.</source>
-        <translation>Questo è l'aspetto del testo dell'intero progetto. Applica e OK modificano tutti i documenti in una volta e ogni documento che cambia riceve prima un'istantanea (Ispettore ▸ Istantanee). Il testo formattato a mano (Formato ▸ Carattere, Formato ▸ Paragrafo, il righello) cambia solo con l'ultima casella.</translation>
+        <translation>Questo è l&apos;aspetto del testo dell&apos;intero progetto. Applica e OK modificano tutti i documenti in una volta e ogni documento che cambia riceve prima un&apos;istantanea (Ispettore ▸ Istantanee). Il testo formattato a mano (Formato ▸ Carattere, Formato ▸ Paragrafo, il righello) cambia solo con l&apos;ultima casella.</translation>
     </message>
     <message>
         <source>How documents are stored</source>
@@ -18188,7 +18551,7 @@ Questa operazione non può essere annullata nel suo insieme.%4</translation>
     </message>
     <message>
         <source>Custom metadata fields appear in the inspector and as outliner columns. For list fields, enter the choices separated by commas.</source>
-        <translation>I campi dei metadati personalizzati compaiono nell'ispettore e come colonne della struttura. Per i campi elenco, inserisci le scelte separate da virgole.</translation>
+        <translation>I campi dei metadati personalizzati compaiono nell&apos;ispettore e come colonne della struttura. Per i campi elenco, inserisci le scelte separate da virgole.</translation>
     </message>
     <message>
         <source>Title</source>
@@ -18244,7 +18607,7 @@ Questa operazione non può essere annullata nel suo insieme.%4</translation>
     </message>
     <message>
         <source>Documents inside the templates folder appear in Project ▸ New From Template.</source>
-        <translation>I documenti all'interno della cartella dei modelli compaiono in Progetto ▸ Nuovo da modello.</translation>
+        <translation>I documenti all&apos;interno della cartella dei modelli compaiono in Progetto ▸ Nuovo da modello.</translation>
     </message>
     <message>
         <source>Folder for new bookmarked documents:</source>
@@ -18256,7 +18619,7 @@ Questa operazione non può essere annullata nel suo insieme.%4</translation>
     </message>
     <message>
         <source>Used by the &quot;+&quot; button below the bookmarks of a Quick Reference panel: the new document is created in this folder and added to the project bookmarks.</source>
-        <translation>Usata dal pulsante "+" sotto i segnalibri di un pannello di riferimento rapido: il nuovo documento viene creato in questa cartella e aggiunto ai segnalibri del progetto.</translation>
+        <translation>Usata dal pulsante &quot;+&quot; sotto i segnalibri di un pannello di riferimento rapido: il nuovo documento viene creato in questa cartella e aggiunto ai segnalibri del progetto.</translation>
     </message>
     <message>
         <source>Browse…</source>
@@ -18335,7 +18698,7 @@ Caratteri, dimensioni e colori dei singoli passaggi non vengono conservati in Ma
     <name>qb::QuickRefWindow</name>
     <message>
         <source>Document options (drag the icon to put the document somewhere else)</source>
-        <translation>Opzioni del documento (trascina l'icona per mettere il documento altrove)</translation>
+        <translation>Opzioni del documento (trascina l&apos;icona per mettere il documento altrove)</translation>
     </message>
     <message>
         <source>Untitled</source>
@@ -18483,7 +18846,7 @@ Caratteri, dimensioni e colori dei singoli passaggi non vengono conservati in Ma
     </message>
     <message>
         <source>Open in the Editor</source>
-        <translation>Apri nell'editor</translation>
+        <translation>Apri nell&apos;editor</translation>
     </message>
     <message>
         <source>Add to Project Bookmarks</source>
@@ -18589,7 +18952,7 @@ Caratteri, dimensioni e colori dei singoli passaggi non vengono conservati in Ma
     </message>
     <message>
         <source>Remove the element</source>
-        <translation>Rimuovi l'elemento</translation>
+        <translation>Rimuovi l&apos;elemento</translation>
     </message>
     <message>
         <source>Move up</source>
@@ -18605,7 +18968,7 @@ Caratteri, dimensioni e colori dei singoli passaggi non vengono conservati in Ma
     </message>
     <message>
         <source>What the element is to other screenwriting programs (Fountain and Final Draft files)</source>
-        <translation>Cosa è l'elemento per altri programmi di sceneggiatura (file Fountain e Final Draft)</translation>
+        <translation>Cosa è l&apos;elemento per altri programmi di sceneggiatura (file Fountain e Final Draft)</translation>
     </message>
     <message>
         <source>Kind:</source>
@@ -18613,11 +18976,11 @@ Caratteri, dimensioni e colori dei singoli passaggi non vengono conservati in Ma
     </message>
     <message>
         <source>The letter that chooses the element in the list of elements (Enter on an empty line)</source>
-        <translation>La lettera che sceglie l'elemento nell'elenco degli elementi (Invio su una riga vuota)</translation>
+        <translation>La lettera che sceglie l&apos;elemento nell&apos;elenco degli elementi (Invio su una riga vuota)</translation>
     </message>
     <message>
         <source>Letter in the list of elements:</source>
-        <translation>Lettera nell'elenco degli elementi:</translation>
+        <translation>Lettera nell&apos;elenco degli elementi:</translation>
     </message>
     <message>
         <source>An empty script starts with this element</source>
@@ -18721,7 +19084,7 @@ Caratteri, dimensioni e colori dei singoli passaggi non vengono conservati in Ma
     </message>
     <message>
         <source>If this is filled in, Tab types it instead of going to another element (scene headings: &quot; - &quot; before the time of day)</source>
-        <translation>Se è compilato, Tab lo digita invece di passare a un altro elemento (intestazioni di scena: " - " prima dell'ora del giorno)</translation>
+        <translation>Se è compilato, Tab lo digita invece di passare a un altro elemento (intestazioni di scena: &quot; - &quot; prima dell&apos;ora del giorno)</translation>
     </message>
     <message>
         <source>…or Tab types:</source>
@@ -18777,7 +19140,7 @@ Caratteri, dimensioni e colori dei singoli passaggi non vengono conservati in Ma
     </message>
     <message>
         <source>(the next element in the list)</source>
-        <translation>(l'elemento successivo nell'elenco)</translation>
+        <translation>(l&apos;elemento successivo nell&apos;elenco)</translation>
     </message>
     <message>
         <source>(nothing)</source>
@@ -18785,11 +19148,11 @@ Caratteri, dimensioni e colori dei singoli passaggi non vengono conservati in Ma
     </message>
     <message>
         <source>There is an element called &quot;%1&quot; already.</source>
-        <translation>Esiste già un elemento chiamato "%1".</translation>
+        <translation>Esiste già un elemento chiamato &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>An element name cannot be empty or contain the characters : &quot; &lt; &gt; \ { } ; /</source>
-        <translation>Il nome di un elemento non può essere vuoto né contenere i caratteri : " &lt; &gt; \ { } ; /</translation>
+        <translation>Il nome di un elemento non può essere vuoto né contenere i caratteri : &quot; &lt; &gt; \ { } ; /</translation>
     </message>
     <message>
         <source>New Element</source>
@@ -18829,15 +19192,15 @@ Caratteri, dimensioni e colori dei singoli passaggi non vengono conservati in Ma
     </message>
     <message>
         <source>Save for Use in Other Projects</source>
-        <translation>Salva per l'uso in altri progetti</translation>
+        <translation>Salva per l&apos;uso in altri progetti</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is now in the list of formats under Format &gt; Scriptwriting &gt; Script Format in every project.</source>
-        <translation>"%1" è ora nell'elenco dei formati in Formato &gt; Scrittura di script &gt; Formato script in ogni progetto.</translation>
+        <translation>&quot;%1&quot; è ora nell&apos;elenco dei formati in Formato &gt; Scrittura di script &gt; Formato script in ogni progetto.</translation>
     </message>
     <message>
         <source>Remove &quot;%1&quot; From My Formats</source>
-        <translation>Rimuovi "%1" dai miei formati</translation>
+        <translation>Rimuovi &quot;%1&quot; dai miei formati</translation>
     </message>
     <message>
         <source>Give the format a name.</source>
@@ -19027,7 +19390,7 @@ Salvato %2 dal progetto “%3” da %4.</translation>
     </message>
     <message>
         <source>Words in the whole project:</source>
-        <translation>Parole nell'intero progetto:</translation>
+        <translation>Parole nell&apos;intero progetto:</translation>
     </message>
     <message>
         <source>Words this session:</source>
@@ -19090,7 +19453,7 @@ Salvato %2 dal progetto “%3” da %4.</translation>
     </message>
     <message>
         <source>Please enter a name of up to 60 characters without : &quot; &lt; &gt; \ { } ;</source>
-        <translation>Inserisci un nome di al massimo 60 caratteri senza : " &lt; &gt; \ { } ;</translation>
+        <translation>Inserisci un nome di al massimo 60 caratteri senza : &quot; &lt; &gt; \ { } ;</translation>
     </message>
     <message>
         <source>There is a style named “%1” already.</source>
@@ -19153,7 +19516,7 @@ Salvato %2 dal progetto “%3” da %4.</translation>
     </message>
     <message>
         <source>Please enter a name of up to 60 characters without : &quot; &lt; &gt; \ { } ;</source>
-        <translation>Inserisci un nome di al massimo 60 caratteri senza : " &lt; &gt; \ { } ;</translation>
+        <translation>Inserisci un nome di al massimo 60 caratteri senza : &quot; &lt; &gt; \ { } ;</translation>
     </message>
     <message>
         <source>There is a style named “%1” already. Choose another name, or use Redefine Style From Selection to change that style.</source>
@@ -19168,7 +19531,7 @@ Salvato %2 dal progetto “%3” da %4.</translation>
     </message>
     <message>
         <source>The ticked entries show in the style list of the format bar and of the right-click menus, in this order (drag them, or use the arrows). With more than %1 the list scrolls. Format ▸ Style always shows all styles.</source>
-        <translation>Le voci selezionate compaiono nell'elenco degli stili della barra di formattazione e dei menu del clic destro, in quest'ordine (trascinale, oppure usa le frecce). Con più di %1 l'elenco scorre. Formato ▸ Stile mostra sempre tutti gli stili.</translation>
+        <translation>Le voci selezionate compaiono nell&apos;elenco degli stili della barra di formattazione e dei menu del clic destro, in quest&apos;ordine (trascinale, oppure usa le frecce). Con più di %1 l&apos;elenco scorre. Formato ▸ Stile mostra sempre tutti gli stili.</translation>
     </message>
     <message>
         <source>Move Up</source>
@@ -19180,7 +19543,7 @@ Salvato %2 dal progetto “%3” da %4.</translation>
     </message>
     <message>
         <source>All, in the Order of the Styles</source>
-        <translation>Tutti, nell'ordine degli stili</translation>
+        <translation>Tutti, nell&apos;ordine degli stili</translation>
     </message>
 </context>
 <context>
@@ -19211,11 +19574,11 @@ Salvato %2 dal progetto “%3” da %4.</translation>
     </message>
     <message>
         <source>Move Up in the List</source>
-        <translation>Sposta su nell'elenco</translation>
+        <translation>Sposta su nell&apos;elenco</translation>
     </message>
     <message>
         <source>Move Down in the List</source>
-        <translation>Sposta giù nell'elenco</translation>
+        <translation>Sposta giù nell&apos;elenco</translation>
     </message>
     <message>
         <source>More</source>
@@ -19357,7 +19720,7 @@ Salvato %2 dal progetto “%3” da %4.</translation>
     </message>
     <message>
         <source>Space inside a cell:</source>
-        <translation>Spazio all'interno di una cella:</translation>
+        <translation>Spazio all&apos;interno di una cella:</translation>
     </message>
     <message>
         <source>0: the lines of neighboring cells are one line</source>
@@ -19488,7 +19851,7 @@ Salvato %2 dal progetto “%3” da %4.</translation>
     </message>
     <message>
         <source>Calculate the session target from the draft deadline</source>
-        <translation>Calcola l'obiettivo della sessione dalla scadenza della bozza</translation>
+        <translation>Calcola l&apos;obiettivo della sessione dalla scadenza della bozza</translation>
     </message>
     <message>
         <source>Writing days:</source>
@@ -19551,7 +19914,7 @@ Salvato %2 dal progetto “%3” da %4.</translation>
     </message>
     <message>
         <source>types &quot;%1&quot;</source>
-        <translation>digita "%1"</translation>
+        <translation>digita &quot;%1&quot;</translation>
     </message>
     <message>
         <source>list of elements</source>
@@ -19559,7 +19922,7 @@ Salvato %2 dal progetto “%3” da %4.</translation>
     </message>
     <message>
         <source>The file of this document is damaged or was saved by another program in another character encoding. Nothing of it could be read, and it cannot be edited here, so the file is not overwritten.</source>
-        <translation>Il file di questo documento è danneggiato o è stato salvato da un altro programma con un'altra codifica dei caratteri. Non è stato possibile leggere nulla e non può essere modificato qui, quindi il file non viene sovrascritto.</translation>
+        <translation>Il file di questo documento è danneggiato o è stato salvato da un altro programma con un&apos;altra codifica dei caratteri. Non è stato possibile leggere nulla e non può essere modificato qui, quindi il file non viene sovrascritto.</translation>
     </message>
     <message>
         <source>The text of this document has not arrived on this computer yet (is your sync program finished?). It is shown empty and cannot be edited, so nothing is saved in its place. Close the project and open it again once the sync program is done.</source>
@@ -19567,7 +19930,7 @@ Salvato %2 dal progetto “%3” da %4.</translation>
     </message>
     <message>
         <source>The file of this document cannot be read, so it is shown empty and cannot be edited (the file is not overwritten). Check its permissions or the drive it is on, then reopen the project.</source>
-        <translation>Il file di questo documento non può essere letto, quindi viene mostrato vuoto e non può essere modificato (il file non viene sovrascritto). Controlla i suoi permessi o l'unità su cui si trova, poi riapri il progetto.</translation>
+        <translation>Il file di questo documento non può essere letto, quindi viene mostrato vuoto e non può essere modificato (il file non viene sovrascritto). Controlla i suoi permessi o l&apos;unità su cui si trova, poi riapri il progetto.</translation>
     </message>
     <message>
         <source>Paste</source>
@@ -19591,7 +19954,7 @@ Salvato %2 dal progetto “%3” da %4.</translation>
     </message>
     <message>
         <source>Object link (click to show the object)</source>
-        <translation>Collegamento a oggetto (fai clic per mostrare l'oggetto)</translation>
+        <translation>Collegamento a oggetto (fai clic per mostrare l&apos;oggetto)</translation>
     </message>
     <message>
         <source>
@@ -19653,11 +20016,11 @@ Ctrl+clic per aprire</translation>
     </message>
     <message>
         <source>Add &quot;%1&quot; to Dictionary</source>
-        <translation>Aggiungi "%1" al dizionario</translation>
+        <translation>Aggiungi &quot;%1&quot; al dizionario</translation>
     </message>
     <message>
         <source>Ignore &quot;%1&quot;</source>
-        <translation>Ignora "%1"</translation>
+        <translation>Ignora &quot;%1&quot;</translation>
     </message>
     <message>
         <source>More Commands</source>
@@ -19681,7 +20044,7 @@ Ctrl+clic per aprire</translation>
     </message>
     <message>
         <source>Image Size</source>
-        <translation>Dimensione dell'immagine</translation>
+        <translation>Dimensione dell&apos;immagine</translation>
     </message>
     <message>
         <source> px</source>
@@ -19693,7 +20056,7 @@ Ctrl+clic per aprire</translation>
     </message>
     <message>
         <source>Original size: %1 × %2 px. The height follows the width.</source>
-        <translation>Dimensione originale: %1 × %2 px. L'altezza segue la larghezza.</translation>
+        <translation>Dimensione originale: %1 × %2 px. L&apos;altezza segue la larghezza.</translation>
     </message>
     <message>
         <source>Original Size</source>
@@ -19839,11 +20202,11 @@ Ctrl+clic per aprire</translation>
     </message>
     <message>
         <source>The look could not be saved in %1: %2</source>
-        <translation>Impossibile salvare l'aspetto in %1: %2</translation>
+        <translation>Impossibile salvare l&apos;aspetto in %1: %2</translation>
     </message>
     <message>
         <source>The look you had was saved in %1 first.</source>
-        <translation>L'aspetto che avevi è stato prima salvato in %1.</translation>
+        <translation>L&apos;aspetto che avevi è stato prima salvato in %1.</translation>
     </message>
     <message>
         <source>Change Theme</source>
@@ -19851,7 +20214,7 @@ Ctrl+clic per aprire</translation>
     </message>
     <message>
         <source>The look you see has %1 of your own that are not saved in My Look 1 or My Look 2.</source>
-        <translation>L'aspetto che vedi ha %1 personali che non sono salvati in Il mio aspetto 1 o Il mio aspetto 2.</translation>
+        <translation>L&apos;aspetto che vedi ha %1 personali che non sono salvati in Il mio aspetto 1 o Il mio aspetto 2.</translation>
     </message>
     <message>
         <source>color or font</source>
@@ -19863,7 +20226,7 @@ Ctrl+clic per aprire</translation>
     </message>
     <message>
         <source>Save the look in My Look 1 or My Look 2 first (it replaces the look saved there), or switch without saving it?</source>
-        <translation>Salvare prima l'aspetto in Il mio aspetto 1 o Il mio aspetto 2 (sostituisce l'aspetto salvato lì), oppure cambiare senza salvarlo?</translation>
+        <translation>Salvare prima l&apos;aspetto in Il mio aspetto 1 o Il mio aspetto 2 (sostituisce l&apos;aspetto salvato lì), oppure cambiare senza salvarlo?</translation>
     </message>
     <message>
         <source>Save in My Look 1</source>
@@ -19879,19 +20242,19 @@ Ctrl+clic per aprire</translation>
     </message>
     <message>
         <source>%1 already holds the look you see.</source>
-        <translation>%1 contiene già l'aspetto che vedi.</translation>
+        <translation>%1 contiene già l&apos;aspetto che vedi.</translation>
     </message>
     <message>
         <source>%1 already holds a look. Replace it with the look you see now? The look saved there cannot be brought back.</source>
-        <translation>%1 contiene già un aspetto. Sostituirlo con l'aspetto che vedi ora? L'aspetto salvato lì non può essere recuperato.</translation>
+        <translation>%1 contiene già un aspetto. Sostituirlo con l&apos;aspetto che vedi ora? L&apos;aspetto salvato lì non può essere recuperato.</translation>
     </message>
     <message>
         <source>Replace the Look in %1</source>
-        <translation>Sostituisci l'aspetto in %1</translation>
+        <translation>Sostituisci l&apos;aspetto in %1</translation>
     </message>
     <message>
         <source>The look you see is saved in %1. A click on %1 brings it back.</source>
-        <translation>L'aspetto che vedi è salvato in %1. Un clic su %1 lo ripristina.</translation>
+        <translation>L&apos;aspetto che vedi è salvato in %1. Un clic su %1 lo ripristina.</translation>
     </message>
     <message>
         <source>%1 (empty)</source>
@@ -19899,7 +20262,7 @@ Ctrl+clic per aprire</translation>
     </message>
     <message>
         <source>Empty: choosing it saves the look you see now as %1</source>
-        <translation>Vuoto: sceglierlo salva l'aspetto che vedi ora come %1</translation>
+        <translation>Vuoto: sceglierlo salva l&apos;aspetto che vedi ora come %1</translation>
     </message>
     <message>
         <source>Your own look saved as %1; it brings back the colors and fonts saved there</source>
@@ -19911,11 +20274,11 @@ Ctrl+clic per aprire</translation>
     </message>
     <message>
         <source>Save the Current Look as %1</source>
-        <translation>Salva l'aspetto corrente come %1</translation>
+        <translation>Salva l&apos;aspetto corrente come %1</translation>
     </message>
     <message>
         <source>Theme: %1 (click for the list of themes, Light, Dark and your own looks)</source>
-        <translation>Tema: %1 (fai clic per l'elenco dei temi, Chiaro, Scuro e i tuoi aspetti personali)</translation>
+        <translation>Tema: %1 (fai clic per l&apos;elenco dei temi, Chiaro, Scuro e i tuoi aspetti personali)</translation>
     </message>
 </context>
 <context>
@@ -20052,7 +20415,7 @@ Ctrl+clic per aprire</translation>
     <name>qb::UpdateChecker</name>
     <message>
         <source>%1 (the copy kept at the last update) could not be removed.</source>
-        <translation>Impossibile rimuovere %1 (la copia conservata all'ultimo aggiornamento).</translation>
+        <translation>Impossibile rimuovere %1 (la copia conservata all&apos;ultimo aggiornamento).</translation>
     </message>
     <message>
         <source>%1 could not be moved aside.</source>
@@ -20074,9 +20437,9 @@ Ctrl+clic per aprire</translation>
         <source>%1 looks for updates when it starts. Nothing about you is sent.
 
 It fetches one small file, at most once a day, and tells you when a newer version of the program or of an installed add-on is there. You can switch this off or on at any time with Help &gt; Add-ons and Updates &gt; Check for Updates at Startup.</source>
-        <translation>%1 cerca aggiornamenti all'avvio. Non viene inviato nulla su di te.
+        <translation>%1 cerca aggiornamenti all&apos;avvio. Non viene inviato nulla su di te.
 
-Scarica un piccolo file, al massimo una volta al giorno, e ti avvisa quando è disponibile una versione più recente del programma o di un componente aggiuntivo installato. Puoi disattivarlo o riattivarlo in qualsiasi momento con Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Cerca aggiornamenti all'avvio.</translation>
+Scarica un piccolo file, al massimo una volta al giorno, e ti avvisa quando è disponibile una versione più recente del programma o di un componente aggiuntivo installato. Puoi disattivarlo o riattivarlo in qualsiasi momento con Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Cerca aggiornamenti all&apos;avvio.</translation>
     </message>
     <message>
         <source>Turn Off</source>
@@ -20092,19 +20455,19 @@ Scarica un piccolo file, al massimo una volta al giorno, e ti avvisa quando è d
     </message>
     <message>
         <source>This copy of %1 cannot make a secure connection, so it cannot look for updates. Download the current AppImage once from the project&apos;s page; from then on the check works.</source>
-        <translation>Questa copia di %1 non può stabilire una connessione sicura, quindi non può cercare aggiornamenti. Scarica una volta l'AppImage attuale dalla pagina del progetto; da allora in poi la verifica funziona.</translation>
+        <translation>Questa copia di %1 non può stabilire una connessione sicura, quindi non può cercare aggiornamenti. Scarica una volta l&apos;AppImage attuale dalla pagina del progetto; da allora in poi la verifica funziona.</translation>
     </message>
     <message>
         <source>No update information was found at the project&apos;s address.</source>
-        <translation>Nessuna informazione di aggiornamento trovata all'indirizzo del progetto.</translation>
+        <translation>Nessuna informazione di aggiornamento trovata all&apos;indirizzo del progetto.</translation>
     </message>
     <message>
         <source>The update address could not be reached (%1).</source>
-        <translation>Impossibile raggiungere l'indirizzo degli aggiornamenti (%1).</translation>
+        <translation>Impossibile raggiungere l&apos;indirizzo degli aggiornamenti (%1).</translation>
     </message>
     <message>
         <source>Could not look for updates (no connection to the update address).</source>
-        <translation>Impossibile cercare aggiornamenti (nessuna connessione all'indirizzo degli aggiornamenti).</translation>
+        <translation>Impossibile cercare aggiornamenti (nessuna connessione all&apos;indirizzo degli aggiornamenti).</translation>
     </message>
     <message>
         <source>The update information could not be trusted and was ignored: %1.</source>
@@ -20160,7 +20523,7 @@ Scarica un piccolo file, al massimo una volta al giorno, e ti avvisa quando è d
     </message>
     <message>
         <source>The new program version needs a new AppImage. %1 downloads it, puts it in the place of the AppImage you started (%2), keeps the one you have now beside it as &quot;%3&quot;, and starts again.</source>
-        <translation>La nuova versione del programma richiede una nuova AppImage. %1 la scarica, la mette al posto dell'AppImage che hai avviato (%2), conserva quella che hai ora accanto ad essa come "%3" e si riavvia.</translation>
+        <translation>La nuova versione del programma richiede una nuova AppImage. %1 la scarica, la mette al posto dell&apos;AppImage che hai avviato (%2), conserva quella che hai ora accanto ad essa come &quot;%3&quot; e si riavvia.</translation>
     </message>
     <message>
         <source>The new program version needs a new AppImage. It is saved in your Downloads folder; close %1, put the new file in the place of the old one and start it.</source>
@@ -20168,11 +20531,11 @@ Scarica un piccolo file, al massimo una volta al giorno, e ti avvisa quando è d
     </message>
     <message>
         <source>The new program version needs the whole program anew. %1 downloads its setup program, checks it and closes; the setup program then unpacks the new version into the folder of this one (%2) and starts it. Your settings, your add-ons and everything else in &quot;data&quot; stay as they are.</source>
-        <translation>La nuova versione del programma richiede di nuovo l'intero programma. %1 scarica il suo programma di installazione, lo controlla e si chiude; il programma di installazione decomprime poi la nuova versione nella cartella di questa (%2) e la avvia. Le tue impostazioni, i tuoi componenti aggiuntivi e tutto il resto in "data" restano come sono.</translation>
+        <translation>La nuova versione del programma richiede di nuovo l&apos;intero programma. %1 scarica il suo programma di installazione, lo controlla e si chiude; il programma di installazione decomprime poi la nuova versione nella cartella di questa (%2) e la avvia. Le tue impostazioni, i tuoi componenti aggiuntivi e tutto il resto in &quot;data&quot; restano come sono.</translation>
     </message>
     <message>
         <source>The new version for Android is a new app file (APK). %1 opens its download in your browser; install it from there or from your Downloads folder. Your projects, your settings and your add-ons stay as they are.</source>
-        <translation>La nuova versione per Android è un nuovo file dell'app (APK). %1 ne apre il download nel tuo browser; installalo da lì o dalla tua cartella Download. I tuoi progetti, le tue impostazioni e i tuoi componenti aggiuntivi restano come sono.</translation>
+        <translation>La nuova versione per Android è un nuovo file dell&apos;app (APK). %1 ne apre il download nel tuo browser; installalo da lì o dalla tua cartella Download. I tuoi progetti, le tue impostazioni e i tuoi componenti aggiuntivi restano come sono.</translation>
     </message>
     <message>
         <source>Delay: you are reminded again in %1. Each further delay waits longer (1 day, 1 week, 2 weeks, then every 4 weeks). A security update cannot be ignored, and its reminders do not end.</source>
@@ -20180,11 +20543,11 @@ Scarica un piccolo file, al massimo una volta al giorno, e ti avvisa quando è d
     </message>
     <message>
         <source>You have delayed this four times. This is the last reminder: Delay now ends the reminders for this version. Help &gt; Add-ons and Updates &gt; Check for Updates Now still shows it.</source>
-        <translation>Hai rinviato questo quattro volte. Questo è l'ultimo promemoria: Rinvia ora termina i promemoria per questa versione. Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Cerca aggiornamenti ora la mostra comunque.</translation>
+        <translation>Hai rinviato questo quattro volte. Questo è l&apos;ultimo promemoria: Rinvia ora termina i promemoria per questa versione. Aiuto &gt; Componenti aggiuntivi e aggiornamenti &gt; Cerca aggiornamenti ora la mostra comunque.</translation>
     </message>
     <message>
         <source>Delay: you are reminded again in %1. Each further delay waits longer (1 day, 1 week, 2 weeks, 4 weeks); after that there is one last reminder, and then the reminders for this version end.</source>
-        <translation>Rinvia: ti verrà ricordato di nuovo tra %1. Ogni ulteriore rinvio attende più a lungo (1 giorno, 1 settimana, 2 settimane, 4 settimane); dopo di che c'è un ultimo promemoria, poi i promemoria per questa versione terminano.</translation>
+        <translation>Rinvia: ti verrà ricordato di nuovo tra %1. Ogni ulteriore rinvio attende più a lungo (1 giorno, 1 settimana, 2 settimane, 4 settimane); dopo di che c&apos;è un ultimo promemoria, poi i promemoria per questa versione terminano.</translation>
     </message>
     <message>
         <source>Open the Download in the Browser</source>
@@ -20244,7 +20607,7 @@ Scarica un piccolo file, al massimo una volta al giorno, e ti avvisa quando è d
     </message>
     <message>
         <source>%1: the downloaded file is not the one the signed list names, so it was not installed.</source>
-        <translation>%1: il file scaricato non è quello indicato dall'elenco firmato, quindi non è stato installato.</translation>
+        <translation>%1: il file scaricato non è quello indicato dall&apos;elenco firmato, quindi non è stato installato.</translation>
     </message>
     <message>
         <source>%1 %2: its setup program is downloaded and checked.</source>
@@ -20260,7 +20623,7 @@ Scarica un piccolo file, al massimo una volta al giorno, e ti avvisa quando è d
     </message>
     <message>
         <source>%1 %2 was saved as %3. Close %1, put that file in the place of the AppImage you use, and start it.</source>
-        <translation>%1 %2 è stato salvato come %3. Chiudi %1, metti quel file al posto dell'AppImage che usi e avvialo.</translation>
+        <translation>%1 %2 è stato salvato come %3. Chiudi %1, metti quel file al posto dell&apos;AppImage che usi e avvialo.</translation>
     </message>
     <message>
         <source>Not installed:</source>
@@ -20272,7 +20635,7 @@ Scarica un piccolo file, al massimo una volta al giorno, e ti avvisa quando è d
     </message>
     <message>
         <source>%1 closes now, and the setup program unpacks the new version into this folder and starts it. With &quot;Later&quot; nothing changes, and the update is offered again.</source>
-        <translation>%1 si chiude ora e il programma di installazione decomprime la nuova versione in questa cartella e la avvia. Con "Più tardi" non cambia nulla e l'aggiornamento viene riproposto.</translation>
+        <translation>%1 si chiude ora e il programma di installazione decomprime la nuova versione in questa cartella e la avvia. Con &quot;Più tardi&quot; non cambia nulla e l&apos;aggiornamento viene riproposto.</translation>
     </message>
     <message>
         <source>Close and Update Now</source>
@@ -20452,7 +20815,7 @@ Oppure scarica la versione attuale dalla pagina del progetto.</translation>
     </message>
     <message>
         <source>This add-on was built for the libraries of another program version (runtime &quot;%1&quot;; this program has &quot;%2&quot;). Download the add-on&apos;s version for this program from the release page of the project.</source>
-        <translation>Questo componente aggiuntivo è stato compilato per le librerie di un'altra versione del programma (runtime "%1"; questo programma ha "%2"). Scarica dalla pagina delle release del progetto la versione del componente aggiuntivo per questo programma.</translation>
+        <translation>Questo componente aggiuntivo è stato compilato per le librerie di un&apos;altra versione del programma (runtime &quot;%1&quot;; questo programma ha &quot;%2&quot;). Scarica dalla pagina delle release del progetto la versione del componente aggiuntivo per questo programma.</translation>
     </message>
     <message>
         <source>before 0.80.0</source>
@@ -20472,15 +20835,15 @@ Oppure scarica la versione attuale dalla pagina del progetto.</translation>
     </message>
     <message>
         <source>This program update does not fit your installed program (it needs runtime &quot;%1&quot;, you have &quot;%2&quot;). A new download of the program is required.</source>
-        <translation>Questo aggiornamento del programma non è adatto al tuo programma installato (richiede il runtime "%1", hai "%2"). È necessario un nuovo download del programma.</translation>
+        <translation>Questo aggiornamento del programma non è adatto al tuo programma installato (richiede il runtime &quot;%1&quot;, hai &quot;%2&quot;). È necessario un nuovo download del programma.</translation>
     </message>
     <message>
         <source>This program update does not fit your AppImage (it needs runtime &quot;%1&quot;, you have &quot;%2&quot;). A new AppImage is required.</source>
-        <translation>Questo aggiornamento del programma non è adatto alla tua AppImage (richiede il runtime "%1", hai "%2"). È necessaria una nuova AppImage.</translation>
+        <translation>Questo aggiornamento del programma non è adatto alla tua AppImage (richiede il runtime &quot;%1&quot;, hai &quot;%2&quot;). È necessaria una nuova AppImage.</translation>
     </message>
     <message>
         <source>The program update is incomplete.</source>
-        <translation>L'aggiornamento del programma è incompleto.</translation>
+        <translation>L&apos;aggiornamento del programma è incompleto.</translation>
     </message>
     <message>
         <source>Program version %1 is already there; this part is left out.</source>
@@ -20548,11 +20911,11 @@ Oppure scarica la versione attuale dalla pagina del progetto.</translation>
     </message>
     <message>
         <source>Add-on &quot;%1&quot; was unpacked, but it could not be switched on (%2). Free some space or check the folder, then switch it on in the Add-on Manager.</source>
-        <translation>Il componente aggiuntivo "%1" è stato decompresso, ma non è stato possibile attivarlo (%2). Libera dello spazio o controlla la cartella, poi attivalo in Gestione componenti aggiuntivi.</translation>
+        <translation>Il componente aggiuntivo &quot;%1&quot; è stato decompresso, ma non è stato possibile attivarlo (%2). Libera dello spazio o controlla la cartella, poi attivalo in Gestione componenti aggiuntivi.</translation>
     </message>
     <message>
         <source>Add-on &quot;%1&quot; %2 installed (%3).</source>
-        <translation>Componente aggiuntivo "%1" %2 installato (%3).</translation>
+        <translation>Componente aggiuntivo &quot;%1&quot; %2 installato (%3).</translation>
     </message>
     <message>
         <source>no content</source>
@@ -20568,11 +20931,11 @@ Oppure scarica la versione attuale dalla pagina del progetto.</translation>
     </message>
     <message>
         <source>the version installed before could not be put back and is in %1 (rename that folder to &quot;%2&quot;)</source>
-        <translation>non è stato possibile rimettere a posto la versione installata prima, che si trova in %1 (rinomina quella cartella in "%2")</translation>
+        <translation>non è stato possibile rimettere a posto la versione installata prima, che si trova in %1 (rinomina quella cartella in &quot;%2&quot;)</translation>
     </message>
     <message>
         <source>Not everything could be put back as it was: %1.</source>
-        <translation>Non è stato possibile rimettere tutto com'era: %1.</translation>
+        <translation>Non è stato possibile rimettere tutto com&apos;era: %1.</translation>
     </message>
     <message>
         <source>Cannot replace %1</source>
@@ -20580,11 +20943,11 @@ Oppure scarica la versione attuale dalla pagina del progetto.</translation>
     </message>
     <message>
         <source>This program update is not signed by the Quillbinder project, so it is not installed. Program updates are installed only with the project&apos;s signature; download the update from the project&apos;s release page.</source>
-        <translation>Questo aggiornamento del programma non è firmato dal progetto Quillbinder, quindi non viene installato. Gli aggiornamenti del programma si installano solo con la firma del progetto; scarica l'aggiornamento dalla pagina delle release del progetto.</translation>
+        <translation>Questo aggiornamento del programma non è firmato dal progetto Quillbinder, quindi non viene installato. Gli aggiornamenti del programma si installano solo con la firma del progetto; scarica l&apos;aggiornamento dalla pagina delle release del progetto.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is not signed by the Quillbinder project. To install it anyway from the command line, add --allow-unsigned.</source>
-        <translation>"%1" non è firmato dal progetto Quillbinder. Per installarlo comunque dalla riga di comando, aggiungi --allow-unsigned.</translation>
+        <translation>&quot;%1&quot; non è firmato dal progetto Quillbinder. Per installarlo comunque dalla riga di comando, aggiungi --allow-unsigned.</translation>
     </message>
     <message>
         <source>Cannot read %1</source>
@@ -20616,11 +20979,11 @@ Oppure scarica la versione attuale dalla pagina del progetto.</translation>
     </message>
     <message>
         <source>This version is running. Switch to another version and restart first.</source>
-        <translation>Questa versione è in esecuzione. Passa prima a un'altra versione e riavvia.</translation>
+        <translation>Questa versione è in esecuzione. Passa prima a un&apos;altra versione e riavvia.</translation>
     </message>
     <message>
         <source>Program version %1 was not removed: the list of versions could not be updated (%2).</source>
-        <translation>La versione %1 del programma non è stata rimossa: non è stato possibile aggiornare l'elenco delle versioni (%2).</translation>
+        <translation>La versione %1 del programma non è stata rimossa: non è stato possibile aggiornare l&apos;elenco delle versioni (%2).</translation>
     </message>
 </context>
 <context>
@@ -20722,6 +21085,13 @@ Oppure scarica la versione attuale dalla pagina del progetto.</translation>
     </message>
 </context>
 <context>
+    <name>qb::language</name>
+    <message>
+        <source>%1 (machine translation)</source>
+        <translation>%1 (traduzione automatica)</translation>
+    </message>
+</context>
+<context>
     <name>qb::layouts</name>
     <message>
         <source>Default</source>
@@ -20729,7 +21099,7 @@ Oppure scarica la versione attuale dalla pagina del progetto.</translation>
     </message>
     <message>
         <source>Binder, one editor and the inspector.</source>
-        <translation>Raccoglitore, un editor e l'ispettore.</translation>
+        <translation>Raccoglitore, un editor e l&apos;ispettore.</translation>
     </message>
     <message>
         <source>Binder and Editor</source>
@@ -20737,7 +21107,7 @@ Oppure scarica la versione attuale dalla pagina del progetto.</translation>
     </message>
     <message>
         <source>Binder and one editor showing text; the inspector is closed.</source>
-        <translation>Raccoglitore e un editor che mostra il testo; l'ispettore è chiuso.</translation>
+        <translation>Raccoglitore e un editor che mostra il testo; l&apos;ispettore è chiuso.</translation>
     </message>
     <message>
         <source>Editor Only</source>
@@ -20745,7 +21115,7 @@ Oppure scarica la versione attuale dalla pagina del progetto.</translation>
     </message>
     <message>
         <source>Nothing but the text, the toolbar and the format bar.</source>
-        <translation>Nient'altro che il testo, la barra degli strumenti e la barra di formattazione.</translation>
+        <translation>Nient&apos;altro che il testo, la barra degli strumenti e la barra di formattazione.</translation>
     </message>
     <message>
         <source>Outliner and Editor</source>
@@ -20816,7 +21186,7 @@ Oppure scarica la versione attuale dalla pagina del progetto.</translation>
     </message>
     <message>
         <source>It is not there now (moved, renamed, or on a drive that is not connected).</source>
-        <translation>Ora non c'è (spostato, rinominato o su un'unità non collegata).</translation>
+        <translation>Ora non c&apos;è (spostato, rinominato o su un&apos;unità non collegata).</translation>
     </message>
     <message>
         <source>Open it?</source>
@@ -20852,7 +21222,7 @@ Aprirlo si connette a quel computer, che potrebbe così conoscere il tuo nome ut
 %2
 
 Open it?</source>
-        <translation>Questo collegamento non è un indirizzo web o di posta; viene passato al programma impostato su questo computer per "%1":
+        <translation>Questo collegamento non è un indirizzo web o di posta; viene passato al programma impostato su questo computer per &quot;%1&quot;:
 
 %2
 
@@ -20879,15 +21249,15 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     <name>qb::objects::Store</name>
     <message>
         <source>The templates of the objects (%1) could not be read; the standard templates are used. The file stays as it is until the templates are changed.</source>
-        <translation>Non è stato possibile leggere i modelli degli oggetti (%1); vengono usati i modelli standard. Il file resta com'è finché i modelli non vengono modificati.</translation>
+        <translation>Non è stato possibile leggere i modelli degli oggetti (%1); vengono usati i modelli standard. Il file resta com&apos;è finché i modelli non vengono modificati.</translation>
     </message>
     <message>
         <source>The object file %1 could not be read; it is left as it is.</source>
-        <translation>Impossibile leggere il file degli oggetti %1; viene lasciato com'è.</translation>
+        <translation>Impossibile leggere il file degli oggetti %1; viene lasciato com&apos;è.</translation>
     </message>
     <message>
         <source>Objects of the unknown category &quot;%1&quot; were found; the category was added.</source>
-        <translation>Sono stati trovati oggetti della categoria sconosciuta "%1"; la categoria è stata aggiunta.</translation>
+        <translation>Sono stati trovati oggetti della categoria sconosciuta &quot;%1&quot;; la categoria è stata aggiunta.</translation>
     </message>
     <message>
         <source>Objects: categories and templates</source>
@@ -20911,7 +21281,7 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>%1 is not a picture that can be shown.</source>
-        <translation>%1 non è un'immagine che si possa mostrare.</translation>
+        <translation>%1 non è un&apos;immagine che si possa mostrare.</translation>
     </message>
     <message>
         <source>Cannot write %1</source>
@@ -20922,15 +21292,15 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     <name>qb::optstore</name>
     <message>
         <source>Part of the look: kept by the program as the look for new projects. An open project keeps a look of its own.</source>
-        <translation>Parte dell'aspetto: conservata dal programma come aspetto dei nuovi progetti. Un progetto aperto conserva un aspetto proprio.</translation>
+        <translation>Parte dell&apos;aspetto: conservata dal programma come aspetto dei nuovi progetti. Un progetto aperto conserva un aspetto proprio.</translation>
     </message>
     <message>
         <source>Part of the look: kept with this project, as chosen in &quot;Show and change the look of&quot; above.</source>
-        <translation>Parte dell'aspetto: conservata con questo progetto, come scelto in "Mostra e cambia l'aspetto di" qui sopra.</translation>
+        <translation>Parte dell&apos;aspetto: conservata con questo progetto, come scelto in &quot;Mostra e cambia l&apos;aspetto di&quot; qui sopra.</translation>
     </message>
     <message>
         <source>Part of the look: kept by the program as the look for new projects, as chosen in &quot;Show and change the look of&quot; above.</source>
-        <translation>Parte dell'aspetto: conservata dal programma come aspetto dei nuovi progetti, come scelto in "Mostra e cambia l'aspetto di" qui sopra.</translation>
+        <translation>Parte dell&apos;aspetto: conservata dal programma come aspetto dei nuovi progetti, come scelto in &quot;Mostra e cambia l&apos;aspetto di&quot; qui sopra.</translation>
     </message>
     <message>
         <source>Fixed: kept by the program for all projects. A project cannot keep a value of its own here.</source>
@@ -20938,34 +21308,34 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>Depends on the setting: kept by the program for all projects. An open project can keep a value of its own: &quot;Settings for: This project&quot;.</source>
-        <translation>Dipende dall'impostazione: conservato dal programma per tutti i progetti. Un progetto aperto può conservare un valore proprio: "Impostazioni per: Questo progetto".</translation>
+        <translation>Dipende dall&apos;impostazione: conservato dal programma per tutti i progetti. Un progetto aperto può conservare un valore proprio: &quot;Impostazioni per: Questo progetto&quot;.</translation>
     </message>
     <message>
         <source>Depends on the setting: kept by the program for all projects. Projects&apos; own values are not used now (General &gt; Which settings come first).</source>
-        <translation>Dipende dall'impostazione: conservato dal programma per tutti i progetti. I valori propri dei progetti ora non vengono usati (Generale &gt; Quali impostazioni hanno la precedenza).</translation>
+        <translation>Dipende dall&apos;impostazione: conservato dal programma per tutti i progetti. I valori propri dei progetti ora non vengono usati (Generale &gt; Quali impostazioni hanno la precedenza).</translation>
     </message>
     <message>
         <source>Depends on the setting: this project keeps a value of its own, used while it is open.</source>
-        <translation>Dipende dall'impostazione: questo progetto conserva un valore proprio, usato mentre è aperto.</translation>
+        <translation>Dipende dall&apos;impostazione: questo progetto conserva un valore proprio, usato mentre è aperto.</translation>
     </message>
     <message>
         <source>Depends on the setting: this project uses the value for all projects. Change it here and press OK to keep a value of its own.</source>
-        <translation>Dipende dall'impostazione: questo progetto usa il valore per tutti i progetti. Cambialo qui e premi OK per conservare un valore proprio.</translation>
+        <translation>Dipende dall&apos;impostazione: questo progetto usa il valore per tutti i progetti. Cambialo qui e premi OK per conservare un valore proprio.</translation>
     </message>
     <message>
         <source>Depends on the setting: here you change the value for all projects. This project keeps a value of its own, which it uses while it is open.</source>
-        <translation>Dipende dall'impostazione: qui cambi il valore per tutti i progetti. Questo progetto conserva un valore proprio, che usa mentre è aperto.</translation>
+        <translation>Dipende dall&apos;impostazione: qui cambi il valore per tutti i progetti. Questo progetto conserva un valore proprio, che usa mentre è aperto.</translation>
     </message>
     <message>
         <source>Depends on the setting: kept by the program for all projects. A project can keep a value of its own: &quot;Settings for: This project&quot;.</source>
-        <translation>Dipende dall'impostazione: conservato dal programma per tutti i progetti. Un progetto può conservare un valore proprio: "Impostazioni per: Questo progetto".</translation>
+        <translation>Dipende dall&apos;impostazione: conservato dal programma per tutti i progetti. Un progetto può conservare un valore proprio: &quot;Impostazioni per: Questo progetto&quot;.</translation>
     </message>
 </context>
 <context>
     <name>qb::playback::MediaControls</name>
     <message>
         <source>Go to the start</source>
-        <translation>Vai all'inizio</translation>
+        <translation>Vai all&apos;inizio</translation>
     </message>
     <message>
         <source>Play (Ctrl+Return)</source>
@@ -21000,7 +21370,7 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     <name>qb::replace</name>
     <message>
         <source>The regular expression has a mistake: %1</source>
-        <translation>L'espressione regolare contiene un errore: %1</translation>
+        <translation>L&apos;espressione regolare contiene un errore: %1</translation>
     </message>
 </context>
 <context>
@@ -21011,7 +21381,7 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>The other window did not answer (it may have been closed).</source>
-        <translation>L'altra finestra non ha risposto (potrebbe essere stata chiusa).</translation>
+        <translation>L&apos;altra finestra non ha risposto (potrebbe essere stata chiusa).</translation>
     </message>
     <message>
         <source>That window has no project open any more.</source>
@@ -21049,11 +21419,11 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>it uses %1, formats licensed under patents, which the add-on &quot;Media Playback&quot; leaves out. Install the add-on &quot;Extra Video and Audio Formats&quot; (a separate download).</source>
-        <translation>usa %1, formati coperti da brevetti, che il componente aggiuntivo "Media Playback" omette. Installa il componente aggiuntivo "Extra Video and Audio Formats" (un download separato).</translation>
+        <translation>usa %1, formati coperti da brevetti, che il componente aggiuntivo &quot;Media Playback&quot; omette. Installa il componente aggiuntivo &quot;Extra Video and Audio Formats&quot; (un download separato).</translation>
     </message>
     <message>
         <source>it uses %1, a format licensed under patents, which the add-on &quot;Media Playback&quot; leaves out. Install the add-on &quot;Extra Video and Audio Formats&quot; (a separate download).</source>
-        <translation>usa %1, un formato coperto da brevetti, che il componente aggiuntivo "Media Playback" omette. Installa il componente aggiuntivo "Extra Video and Audio Formats" (un download separato).</translation>
+        <translation>usa %1, un formato coperto da brevetti, che il componente aggiuntivo &quot;Media Playback&quot; omette. Installa il componente aggiuntivo &quot;Extra Video and Audio Formats&quot; (un download separato).</translation>
     </message>
     <message>
         <source>The file cannot be played.</source>
@@ -21112,11 +21482,11 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>Plays common audio and video files without other programs, also H.264, H.265 and AAC (add-on &quot;Extra Video and Audio Formats&quot;).</source>
-        <translation>Riproduce i comuni file audio e video senza altri programmi, anche H.264, H.265 e AAC (componente aggiuntivo "Extra Video and Audio Formats").</translation>
+        <translation>Riproduce i comuni file audio e video senza altri programmi, anche H.264, H.265 e AAC (componente aggiuntivo &quot;Extra Video and Audio Formats&quot;).</translation>
     </message>
     <message>
         <source>Plays free formats without other programs (MP3, Ogg, Opus, FLAC, WAV, WebM ...). H.264, H.265, AAC and other formats licensed under patents need the add-on &quot;Extra Video and Audio Formats&quot;.</source>
-        <translation>Riproduce i formati liberi senza altri programmi (MP3, Ogg, Opus, FLAC, WAV, WebM ...). H.264, H.265, AAC e altri formati coperti da brevetti richiedono il componente aggiuntivo "Extra Video and Audio Formats".</translation>
+        <translation>Riproduce i formati liberi senza altri programmi (MP3, Ogg, Opus, FLAC, WAV, WebM ...). H.264, H.265, AAC e altri formati coperti da brevetti richiedono il componente aggiuntivo &quot;Extra Video and Audio Formats&quot;.</translation>
     </message>
     <message>
         <source>GStreamer of the system</source>
@@ -21124,7 +21494,7 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>Not available since %1 0.80.0: the Qt it uses (The Qt Company&apos;s own build of Qt 6.12) plays through FFmpeg only. The built-in way plays the same formats (H.264, H.265 and AAC with the add-on &quot;Extra Video and Audio Formats&quot;).</source>
-        <translation>Non disponibile dalla versione 0.80.0 di %1: il Qt che usa (la compilazione di Qt 6.12 di The Qt Company) riproduce solo tramite FFmpeg. Il metodo integrato riproduce gli stessi formati (H.264, H.265 e AAC con il componente aggiuntivo "Extra Video and Audio Formats").</translation>
+        <translation>Non disponibile dalla versione 0.80.0 di %1: il Qt che usa (la compilazione di Qt 6.12 di The Qt Company) riproduce solo tramite FFmpeg. Il metodo integrato riproduce gli stessi formati (H.264, H.265 e AAC con il componente aggiuntivo &quot;Extra Video and Audio Formats&quot;).</translation>
     </message>
     <message>
         <source>Cannot load %1: %2</source>
@@ -21132,7 +21502,7 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>Unknown way of playing &quot;%1&quot;.</source>
-        <translation>Modo di riproduzione sconosciuto "%1".</translation>
+        <translation>Modo di riproduzione sconosciuto &quot;%1&quot;.</translation>
     </message>
     <message>
         <source>%1 cannot be used: %2</source>
@@ -21168,7 +21538,7 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>FFmpeg (add-on &quot;Extra Video and Audio Formats&quot;)</source>
-        <translation>FFmpeg (componente aggiuntivo "Extra Video and Audio Formats")</translation>
+        <translation>FFmpeg (componente aggiuntivo &quot;Extra Video and Audio Formats&quot;)</translation>
     </message>
     <message>
         <source>Plays more formats (also Ogg, Opus, WebM, Matroska ...) with the FFmpeg libraries built by The Qt Company for Qt Multimedia.</source>
@@ -21176,7 +21546,7 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>Install the add-on &quot;Extra Video and Audio Formats&quot; (and switch it on) to use it.</source>
-        <translation>Installa il componente aggiuntivo "Extra Video and Audio Formats" (e attivalo) per usarlo.</translation>
+        <translation>Installa il componente aggiuntivo &quot;Extra Video and Audio Formats&quot; (e attivalo) per usarlo.</translation>
     </message>
     <message>
         <source>No way of playing is available.</source>
@@ -21195,11 +21565,11 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>The address leads to a PDF file. Download it and add it with File &gt; Import &gt; Files.</source>
-        <translation>L'indirizzo porta a un file PDF. Scaricalo e aggiungilo con File &gt; Importa &gt; File.</translation>
+        <translation>L&apos;indirizzo porta a un file PDF. Scaricalo e aggiungilo con File &gt; Importa &gt; File.</translation>
     </message>
     <message>
         <source>The address does not lead to a web page (it is “%1”).</source>
-        <translation>L'indirizzo non porta a una pagina web (è “%1”).</translation>
+        <translation>L&apos;indirizzo non porta a una pagina web (è “%1”).</translation>
     </message>
     <message>
         <source>Fetching 1 picture …</source>
@@ -21235,7 +21605,7 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>Little text was found on the page. It may be built by a script, need a login, or be mostly pictures; “Only the article” off takes the whole page.</source>
-        <translation>Nella pagina è stato trovato poco testo. Potrebbe essere costruito da uno script, richiedere un accesso o essere composto soprattutto da immagini; disattivando “Solo l'articolo” si prende l'intera pagina.</translation>
+        <translation>Nella pagina è stato trovato poco testo. Potrebbe essere costruito da uno script, richiedere un accesso o essere composto soprattutto da immagini; disattivando “Solo l&apos;articolo” si prende l&apos;intera pagina.</translation>
     </message>
     <message>
         <source>From %1 · retrieved %2</source>
@@ -21266,7 +21636,7 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>Type or paste the address of a page and press Load. What will be imported is shown here.</source>
-        <translation>Digita o incolla l'indirizzo di una pagina e premi Carica. Qui viene mostrato ciò che verrà importato.</translation>
+        <translation>Digita o incolla l&apos;indirizzo di una pagina e premi Carica. Qui viene mostrato ciò che verrà importato.</translation>
     </message>
     <message>
         <source>From the page</source>
@@ -21274,7 +21644,7 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>Only the article (leave out menus, adverts and comments)</source>
-        <translation>Solo l'articolo (ometti menu, pubblicità e commenti)</translation>
+        <translation>Solo l&apos;articolo (ometti menu, pubblicità e commenti)</translation>
     </message>
     <message>
         <source>Pictures</source>
@@ -21306,7 +21676,7 @@ Non viene aperto da qui. Se ti fidi, aprilo tu stesso dal tuo gestore file.</tra
     </message>
     <message>
         <source>This is not the address of a web page.</source>
-        <translation>Questo non è l'indirizzo di una pagina web.</translation>
+        <translation>Questo non è l&apos;indirizzo di una pagina web.</translation>
     </message>
     <message>
         <source>1 word</source>

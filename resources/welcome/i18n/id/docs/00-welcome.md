@@ -11,6 +11,7 @@ Di mana pengaturan berada, dan ringkasan semua yang dapat dilakukan program: **B
 - [Bandingkan dan Transfer](qb-title:Bandingkan dan Transfer): naskah yang kembali dari Word atau LibreOffice
 - [Proyek Scrivener](qb-title:Proyek Scrivener): impor, atau bekerja langsung di dalamnya
 - [Tema, Warna, dan Font](qb-title:Tema, Warna, dan Font): mode gelap dan lainnya, seketika
+- [Tema dan Profil](qb-title:Tema dan Profil): simpan opsi, bilah alat, dan tampilan Anda bersama-sama
 - [Pembaruan dan Pengaya](qb-title:Pembaruan dan Pengaya): paket kecil, dan jalan kembali
 - [Jaring Pengaman](qb-title:Jaring Pengaman): apa yang melindungi teks Anda
 - [Langkah Berikutnya](qb-title:Langkah Berikutnya)

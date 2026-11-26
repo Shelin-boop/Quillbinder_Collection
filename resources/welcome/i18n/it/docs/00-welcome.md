@@ -11,6 +11,7 @@ Dove si trovano le impostazioni e un riepilogo di tutto ciò che il programma sa
 - [Confronta e trasferisci](qb-title:Confronta e trasferisci): un manoscritto di ritorno da Word o LibreOffice
 - [Progetti Scrivener](qb-title:Progetti Scrivener): importali, oppure lavoraci direttamente
 - [Temi, colori e caratteri](qb-title:Temi, colori e caratteri): la modalità scura e altro, all'istante
+- [Temi e profili](qb-title:Temi e profili): conserva insieme le tue opzioni, le barre degli strumenti e l'aspetto
 - [Aggiornamenti e componenti aggiuntivi](qb-title:Aggiornamenti e componenti aggiuntivi): piccoli pacchetti e una via per tornare indietro
 - [Reti di sicurezza](qb-title:Reti di sicurezza): ciò che protegge il tuo testo
 - [Come proseguire](qb-title:Come proseguire)

@@ -11,6 +11,7 @@ Wo die Einstellungen sind und was das Programm alles kann, steht unter **Hilfe >
 - [Vergleichen und übertragen](qb-title:Vergleichen und übertragen): ein Manuskript, das aus Word oder LibreOffice zurückkommt
 - [Scrivener-Projekte](qb-title:Scrivener-Projekte): importieren oder direkt darin arbeiten
 - [Designs, Farben und Schriften](qb-title:Designs, Farben und Schriften): Dunkelmodus und mehr, sofort
+- [Design und Profile](qb-title:Design und Profile): Einstellungen, Symbolleisten und Aussehen zusammenhalten
 - [Updates und Erweiterungen](qb-title:Updates und Erweiterungen): kleine Pakete und ein Weg zurück
 - [Sicherheitsnetze](qb-title:Sicherheitsnetze): was Ihren Text schützt
 - [Wie geht es weiter?](qb-title:Wie geht es weiter?)

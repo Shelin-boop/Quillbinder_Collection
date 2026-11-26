@@ -11,6 +11,7 @@ Onde ficam as configurações e um resumo de tudo o que o programa sabe fazer: *
 - [Comparar e transferir](qb-title:Comparar e transferir): um manuscrito que voltou do Word ou do LibreOffice
 - [Projetos do Scrivener](qb-title:Projetos do Scrivener): importe-os ou trabalhe neles diretamente
 - [Temas, cores e fontes](qb-title:Temas, cores e fontes): modo escuro e mais, na hora
+- [Temas e perfis](qb-title:Temas e perfis): guarde juntas as suas opções, barras de ferramentas e aparência
 - [Atualizações e complementos](qb-title:Atualizações e complementos): pequenos pacotes e um caminho de volta
 - [Redes de segurança](qb-title:Redes de segurança): o que protege o seu texto
 - [E agora?](qb-title:E agora?)

@@ -236,6 +236,12 @@
    "synopsis": "Donkere modus en andere thema's meteen; het kleurenpalet van de opmaakbalk; lettertypen installeren."
   },
   {
+   "title": "Thema's en profielen",
+   "icon": "qb-cog",
+   "textFile": "docs/08a-profiles.md",
+   "synopsis": "Een thema is het uiterlijk; een profiel bewaart je opties, werkbalken, venster en thema samen en wisselt ze in één keer."
+  },
+  {
    "title": "Updates en add-ons",
    "icon": "qb-cog",
    "textFile": "docs/09-updates.md",
