@@ -1,0 +1,7 @@
+SHA-1 and SHA-256 (inside libmtmd of llama.cpp b12808, vendor/hash):
+
+sha1.c, sha1.h: "SHA-1 in C, By Steve Reid <steve@edmweb.com>, 100% Public Domain" (as the files say).
+
+sha256.c, sha256.h: "Sha256.h -- SHA-256 Hash, 2010-06-11 : Igor Pavlov : Public domain" (as the files say). Its license file:
+
+2010-06-11 : Igor Pavlov : Public domain

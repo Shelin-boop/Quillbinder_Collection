@@ -1,0 +1,16 @@
+{
+  "id": "ai-engine",
+  "name": "AI Engine",
+  "version": "1.0",
+  "description": "The engine of the AI functions that run on this computer: speech recognition, reading aloud and changing the speed of speech. It is installed from the settings page of a function that needs it (Read Aloud, Speech Transcription) and loaded only while such a function is used. It holds no models: they are downloaded on those pages. Nothing is sent anywhere.",
+  "author": "Quillbinder",
+  "minApp": "0.99.0",
+  "whatsNew": [
+    "The first version: one engine for Read Aloud and Speech Transcription"
+  ],
+  "details": [
+    "ggml with its compute modules for every processor generation and, where the package has it, Vulkan for NVIDIA, AMD and Intel graphics cards; the processor is the fallback.",
+    "whisper.cpp (speech recognition), llama.cpp with libmtmd (Pocket TTS), qwentts.cpp (Qwen3-TTS) and Sonic (the speed of speech, the pitch kept).",
+    "Quillbinder reaches it through its small wrapper libqbai (interface version 1); the program itself links none of these libraries."
+  ]
+}

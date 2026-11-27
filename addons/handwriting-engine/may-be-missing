@@ -1,0 +1,1 @@
+the engine's libraries are built by their own pack (tools/get-ai-engine.sh, tools/get-onnxruntime.sh); a build without them leaves this package out

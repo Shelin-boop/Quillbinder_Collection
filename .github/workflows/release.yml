@@ -237,6 +237,60 @@ jobs:
           path: build/translator-deps
           key: deps-linux-translator-${{ steps.translator-recipe.outputs.hash }}
 
+      # 0.99.0: the libraries of the engine packages "AI Engine" (ggml with Vulkan, whisper.cpp, llama.cpp, qwentts.cpp and Sonic;
+      # about an hour when they are built) and "Handwriting Engine" (ONNX Runtime, Microsoft's build), from their pinned sources
+      # (D3), kept under the hash of their recipe. Before the AppImage: libqbai (engines/qbai) is built with the program when the
+      # AI engine's libraries are there. Without them a package is left out of the release, with a warning.
+      - name: The engine packages' libraries (the names of their caches)
+        id: engine-recipe
+        run: for p in aiengine onnxruntime; do echo "$p=$(tools/deps-pack.sh hash "$p")" | tee -a "$GITHUB_OUTPUT"; done
+
+      - name: The AI engine's libraries from the cache
+        id: aiengine-cache
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/ai-engine
+          key: deps-linux-aiengine-${{ steps.engine-recipe.outputs.aiengine }}
+
+      - name: The AI engine's libraries (built when the cache has none)
+        env:
+          QB_DEPS_PACK: '0'
+        run: tools/ci-step.sh aiengine tools/get-ai-engine.sh
+
+      - name: The AI engine's libraries into the cache (main only)
+        if: github.ref == 'refs/heads/main' && needs.version.outputs.fresh != 'true' && steps.aiengine-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/ai-engine
+          key: deps-linux-aiengine-${{ steps.engine-recipe.outputs.aiengine }}
+
+      - name: ONNX Runtime from the cache
+        id: onnxruntime-cache
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/onnxruntime
+          key: deps-linux-onnxruntime-${{ steps.engine-recipe.outputs.onnxruntime }}
+
+      - name: ONNX Runtime (downloaded when the cache has none; left out while its checksum is not pinned)
+        id: onnxruntime-get
+        env:
+          QB_DEPS_PACK: '0'
+        run: |
+          if tools/ci-step.sh onnxruntime tools/get-onnxruntime.sh; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::ONNX Runtime is not there (tools/get-onnxruntime.sh: is its SHA-256 pinned?): the package handwriting-engine is left out"
+          fi
+
+      - name: ONNX Runtime into the cache (main only)
+        if: github.ref == 'refs/heads/main' && needs.version.outputs.fresh != 'true' && steps.onnxruntime-cache.outputs.cache-hit != 'true' && steps.onnxruntime-get.outputs.ok == 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/onnxruntime
+          key: deps-linux-onnxruntime-${{ steps.engine-recipe.outputs.onnxruntime }}
+
       - name: The compiled files of the last build (ccache)
         if: needs.version.outputs.fresh != 'true'
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
@@ -273,6 +327,15 @@ jobs:
           # 0.92.0: the two add-ons that are left out of a local build without their libraries must be in a release
           for must in speech-transcription translation-proofreading; do
             [ -f "dist/$must.qbpkg" ] || { echo "::error::the add-on $must was not built"; exit 1; }
+          done
+          # 0.99.0: the engine packages, when built, are checked (the expected libraries, the licenses, nothing needed outside
+          # the package and the base system); a missing one is left out of the release and of the full AppImage
+          for e in ai-engine handwriting-engine; do
+            if [ -f "dist/$e.qbpkg" ]; then
+              python3 -I tools/check-engine-package.py "dist/$e.qbpkg"
+            else
+              echo "::warning::the package $e was not built (its libraries are missing): it is left out of this release"
+            fi
           done
           mapfile -t NEWS < <(python3 -I tools/release-notes.py --whats-new)
           BUILD=build-appimage OUT=dist tools/ci-step.sh update packaging/linux/build-update.sh "${NEWS[@]}"

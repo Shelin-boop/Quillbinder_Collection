@@ -1,0 +1,15 @@
+{
+  "id": "handwriting-engine",
+  "name": "Handwriting Engine",
+  "version": "1.0",
+  "description": "The engine of handwriting recognition on this computer (ONNX Runtime). It is installed from the settings page of Handwriting and loaded only while handwriting is recognized. It holds no models: they are downloaded on that page. Nothing is sent anywhere.",
+  "author": "Quillbinder",
+  "minApp": "0.99.0",
+  "whatsNew": [
+    "The first version"
+  ],
+  "details": [
+    "ONNX Runtime by Microsoft, the official build for Linux x64, unchanged; the computations run on the processor.",
+    "Quillbinder opens it at run time; the program itself does not link it."
+  ]
+}
