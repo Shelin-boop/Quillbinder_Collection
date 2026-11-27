@@ -21,16 +21,22 @@ a tag points elsewhere), none changed except where said here.
   RNP 0.18.0 is withdrawn and 0.18.2 was not tagged on 2026-11-27, so 0.18.1.
 - **CTranslate2 4.9.1** (translator recipe, Linux only, the user's decision; fixes #2159, validation of token ids that disable logits);
   Windows and Android recipes stay at 4.9.0. sentencepiece stays at 0.2.1: 0.2.2 and 0.2.3 need abseil-cpp built separately.
-- **onnxruntime** (`tools/get-onnxruntime.sh`, prefix `build/onnxruntime`): Microsoft's prebuilt `onnxruntime-linux-x64-1.32.0.tgz`.
-  The session that made the script could not download it (the repository of microsoft/onnxruntime is closed to it; the release
-  page answers 403/404), so a pack is needed: the workflow downloads it. The SHA-256 is **not pinned yet**: while `SHA256` in the
-  script is empty the download is accepted only with `QB_ONNXRUNTIME_FIRST_RUN=1` (set by deps.yml), and the script prints
-  `pin this: SHA256="..."`, which the lead puts into the script (the recipe's hash changes, the pack is made again in seconds).
-  The first run does not guess the asset name (the guessed `v1.32.0` URL answered 404): it asks the GitHub API for the releases,
-  takes the newest published one with an `onnxruntime-linux-x64-<version>.tgz` (not GPU/CUDA), prints the releases and assets it
-  saw, the archive's top-level contents and `pin this: VERSION=... TAG=... ASSET=... SHA256=...`; the pack is made from what is
-  really in the archive (the folder with `onnxruntime_c_api.h`, the `libonnxruntime.so.*` files, LICENSE/notices if present).
-  The program never links the library (`dlopen` + `OrtGetApiBase`).
+- **onnxruntime** (`tools/get-onnxruntime.sh`, prefix `build/onnxruntime`): taken from **Maven Central**, not from GitHub: the
+  repository microsoft/onnxruntime is not public under that name any more (its release list answers 404, `git ls-remote` asks for a
+  login; PyPI and Maven Central have 1.32.0). The Linux library is `ai/onnxruntime/native/linux-x64/libonnxruntime.so` of the JAR
+  `com.microsoft.onnxruntime:onnxruntime:<v>` (the same JAR has `win-x64/onnxruntime.dll` for the Windows part); the C headers are
+  `headers/*` of the AAR `com.microsoft.onnxruntime:onnxruntime-android:<v>` (its `jni/<abi>/libonnxruntime.so` are for Android
+  later). Pack: `include/`, `lib/libonnxruntime.so.<v>` with the symlinks `libonnxruntime.so.1` and `libonnxruntime.so` (the program
+  `dlopen`s the full path of `libonnxruntime.so`, then `OrtGetApiBase`), `licenses/`, `README.txt` (coordinates, version, SHA-256).
+  The SHA-256 of both files is **not pinned yet**: while `SHA256_JAR` or `SHA256_AAR` is empty the download is accepted only with
+  `QB_ONNXRUNTIME_FIRST_RUN=1` (set by deps.yml). That run reads `maven-metadata.xml` of both packages, takes the newest plain release
+  both have (a version with a word in it is a pre-release), prints both versions, the file lists of both files (native libraries,
+  headers, licenses), the `NEEDED` list of the library (`objdump -p`; it must name only base-system libraries) and
+  `pin this: VERSION=... SHA256_JAR=... SHA256_AAR=...`, which the lead puts into the script (the recipe's hash changes, the pack is
+  made again in seconds). License files that the JAR or AAR carry go into `licenses/`; where they carry none the MIT text named by the
+  POM's license entry is written there and the README says so. `QB_MAVEN_URL` changes the repository (tests: a `file://` folder).
+  The program never links the library. The security watch reads this part from Maven Central (`"maven"` in `tools/security-watch.json`:
+  `maven-metadata.xml` for newer releases, OSV for the Maven package and version; no GitHub advisories).
 - **aiengine** (`tools/get-ai-engine.sh`, prefix `build/ai-engine`, `tools/ai-engine/qwentts/CMakeLists.txt`): ggml 1.1.1,
   whisper.cpp 1.9.6, llama.cpp b12808 (libllama and libmtmd), qwentts.cpp and Sonic at pinned commits, on **one** ggml (installed
   first, the others use it as a system library), shared libraries with `RPATH=$ORIGIN`, ggml with `GGML_BACKEND_DL`,

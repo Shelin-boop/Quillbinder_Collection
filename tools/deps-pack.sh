@@ -4,7 +4,7 @@
 # FFmpeg (both sets of tools/get-ffmpeg.sh), whisper.cpp (tools/get-whisper.sh), the translator's engine libraries
 # (tools/get-translator-deps.sh; 0.93.0), the encryption libraries (tools/get-crypto.sh; 0.99.0), ONNX Runtime
 # (tools/get-onnxruntime.sh; 0.99.0) and the AI engine libraries (tools/get-ai-engine.sh; 0.99.0) are built from pinned
-# sources (ONNX Runtime: the official archive, pinned by its SHA-256).
+# sources (ONNX Runtime: the JAR and AAR of Maven Central, pinned by their SHA-256).
 # The workflow .github/workflows/deps.yml builds each of them once per recipe and puts the result as a
 # .tar.xz on a pre-release titled "not for downloading" (as qt-6.12.0-linux holds Qt).
 # tools/deps-packs.txt pins every pack by its SHA-256, as tools/get-qt.sh pins Qt's archive. get-ffmpeg.sh and
@@ -306,8 +306,8 @@ about() {
         echo "Licenses: Botan under BSD-2-Clause; json-c under MIT; bzip2 under its BSD-style license; zlib under the zlib license; RNP under BSD-2-Clause, BSD-3-Clause, Apache-2.0 and MIT parts (and the OCB license of LICENSE-OCB.md); sexpp under MIT. The license texts are in the pack (the folder licenses). Sources: https://github.com/randombit/botan, https://github.com/json-c/json-c, https://github.com/libarchive/bzip2 (a mirror of bzip2), https://github.com/madler/zlib and https://github.com/rnpgp/rnp at those tags and commits."
         ;;
     onnxruntime)
-        echo "Inside: ONNX Runtime $(setting tools/get-onnxruntime.sh VERSION) for Linux x64 as Microsoft publishes it (the headers and libonnxruntime.so*), unchanged, fetched by tools/get-onnxruntime.sh and checked by its SHA-256."
-        echo "License: MIT; the license text and the third-party notices of the archive are in the pack (the folder licenses). Source: https://github.com/microsoft/onnxruntime at the tag v$(setting tools/get-onnxruntime.sh VERSION) (the prebuilt archive is the release asset of that tag)."
+        echo "Inside: ONNX Runtime $(setting tools/get-onnxruntime.sh VERSION) for Linux x64 as Microsoft publishes it on Maven Central (libonnxruntime.so* from the JAR com.microsoft.onnxruntime:onnxruntime, the headers from the AAR com.microsoft.onnxruntime:onnxruntime-android), unchanged, fetched by tools/get-onnxruntime.sh and checked by their SHA-256."
+        echo "License: MIT; the license files of the JAR and the AAR (or, where they carry none, the MIT text named by the POM) are in the pack (the folder licenses), and README.txt names the Maven coordinates, the version and the SHA-256 of both files. Source: https://central.sonatype.com/artifact/com.microsoft.onnxruntime/onnxruntime (Maven Central, the version $(setting tools/get-onnxruntime.sh VERSION))."
         ;;
     aiengine)
         echo "Inside: ggml $(setting tools/get-ai-engine.sh GGML_TAG), whisper.cpp $(setting tools/get-ai-engine.sh WHISPER_TAG), llama.cpp $(setting tools/get-ai-engine.sh LLAMA_TAG) (libllama and libmtmd only), qwentts.cpp (commit $(setting tools/get-ai-engine.sh QWENTTS_COMMIT)) and Sonic (commit $(setting tools/get-ai-engine.sh SONIC_COMMIT)), as shared libraries with the headers, built from those sources by tools/get-ai-engine.sh (compute modules per instruction set and the Vulkan module as libraries of their own, the Vulkan module where the build machine has it), and the license files of the sources. ggml.h is changed in one line: the length of a tensor's name is 128 (qwentts.cpp needs it)."

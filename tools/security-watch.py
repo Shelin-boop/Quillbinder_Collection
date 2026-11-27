@@ -3,7 +3,9 @@
 
 It reads only its watch list (tools/security-watch.json), never the rest of the repository, and asks public sources:
 
-- each part's own repository (git ls-remote): its newer releases, and the commit of the version we ship (a part with
+- each part's own repository (git ls-remote): its newer releases (a part with "maven": "<group>:<artifact>" in the list
+  has no repository to read: its releases come from Maven Central's maven-metadata.xml and OSV is asked for that Maven
+  package and version; 0.99.0, ONNX Runtime), and the commit of the version we ship (a part with
   "commit": true in the list is pinned by a commit, "version" is that commit: no tags are read, no newer release named);
 - OSV.dev: the known vulnerabilities of those commits and of the Ubuntu packages inside the AppImage;
 - Qt's own list of known vulnerabilities (Qt is the CNA for Qt);
@@ -116,6 +118,21 @@ def git_tags(url):
                 tags[name] = sha
     tags.update(peeled)
     return tags
+
+
+MAVEN = "https://repo1.maven.org/maven2"
+
+
+def maven_versions(coord):
+    """The versions of a Maven Central artifact ('group:artifact') from its maven-metadata.xml, as {version: ""}."""
+    group, _, art = coord.partition(":")
+    st, body = http(f"{MAVEN}/{group.replace('.', '/')}/{art}/maven-metadata.xml")
+    if st != 200:
+        raise SourceError(f"Maven Central's metadata of {coord}: HTTP {st}")
+    found = re.findall(r"<version>([^<]+)</version>", body.decode("utf-8", "replace"))
+    if not found:
+        raise SourceError(f"Maven Central's metadata of {coord} names no version")
+    return {v.strip(): "" for v in found}
 
 
 # ---------------------------------------------------------------------------------------------------- versions
@@ -619,6 +636,12 @@ class Watch:
                 # ("version" is the commit); the repository's tags are not read and no newer release is named
                 comps.append((c, {tag_of(c): c["version"]}))
                 continue
+            if c.get("maven"):
+                tags = maven_versions(c["maven"])
+                if tag_of(c) not in tags:
+                    raise SourceError(f"{c['name']}: the version {c['version']} is not in Maven Central's list of {c['maven']}")
+                comps.append((c, tags))
+                continue
             tags = self.tags(c["repo"])
             if tag_of(c) not in tags:
                 raise SourceError(f"{c['name']}: the tag {tag_of(c)} is not in {c['repo']}")
@@ -627,7 +650,10 @@ class Watch:
         ub = wl["ubuntu"]
         queries, owners = [], []
         for c, tags in comps:
-            if c.get("osv", True):
+            if c.get("maven"):
+                queries.append({"package": {"name": c["maven"], "ecosystem": "Maven"}, "version": c["version"]})
+                owners.append((self.part(c), self.group(c), c))
+            elif c.get("osv", True):
                 queries.append({"commit": tags[tag_of(c)]})
                 owners.append((self.part(c), self.group(c), c))
         for pkg, ver in sorted(ub["packages"].items()):
