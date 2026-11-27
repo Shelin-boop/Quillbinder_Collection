@@ -22,9 +22,11 @@ FocusLine::FocusLine(QWidget *window, QWidget *binder, QWidget *inspector, std::
     setFocusPolicy(Qt::NoFocus);
     window->installEventFilter(this);
     hide();
-    connect(qApp, &QApplication::focusChanged, this, [this](QWidget *, QWidget *) { refresh(); });
+    m_focusLink = connect(qApp, &QApplication::focusChanged, this, [this](QWidget *, QWidget *) { refresh(); });
     connect(&theme::Notifier::instance(), &theme::Notifier::changed, this, [this] { update(); });
 }
+
+void FocusLine::stopListening() { disconnect(m_focusLink); }
 
 QColor FocusLine::lineColor() const { return theme::color(theme::Role::Highlight); }
 

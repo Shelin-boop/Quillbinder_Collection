@@ -198,6 +198,12 @@ static void toolbarChecks(MainWindow &w)
         themesOn->trigger();
         settle(300);
     }
+    // (0.99.0: the Read Aloud toolbar is shown from the start at the end of the first row; these checks are about the
+    // eight toolbars they name, so it is switched off here)
+    if (QAction *readOff = w.findChild<QAction *>(QStringLiteral("showBarReadAloud")); readOff && readOff->isChecked()) {
+        readOff->trigger();
+        settle(300);
+    }
     bool there = all.size() == 7 && iconBar != nullptr, grips = true;
     for (QToolBar *bar : std::as_const(bars)) {
         there = there && bar != nullptr;

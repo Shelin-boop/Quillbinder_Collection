@@ -202,6 +202,14 @@ New functions and fixes (Linux first).
   llama.cpp, qwentts.cpp and Sonic), the daily security watch follows each new part, and `THIRD-PARTY.md` and Help > Third-Party
   Licenses (at the next AppImage) name the parts that go into the program.
 
+### Fixes found by the first full test
+
+- **Options > Read Aloud**: the language, model and device boxes now tell in their tool tips where they are kept (fixed to the
+  program: the voice models belong to this computer), like the other option pages.
+- **The focus frame** no longer listens to the application's focus signal while the window is being closed.
+- The checks of the toolbar rows (suites v0910, v0911), the spelling menu (v0403) and the View > Toolbars list (v0990g) now
+  know the Read Aloud toolbar and the Appearance menu in the short spelling menu.
+
 ### Menus and names
 
 The menu walk (UR-06, UR-15, item 118): names that said the same thing in two ways, menus that were too long or too deep,

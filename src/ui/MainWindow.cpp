@@ -980,6 +980,8 @@ MainWindow::~MainWindow()
     for (const QMetaObject::Connection &c : std::as_const(m_focusLinks))
         disconnect(c);
     m_focusLinks.clear();
+    if (m_focusLine)
+        m_focusLine->stopListening(); // 0.99.0: the focus line is a child that is deleted after this body
     for (const QMetaObject::Connection &c : std::as_const(m_undoWatch))
         disconnect(c);
     m_undoWatch.clear();
