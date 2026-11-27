@@ -28,12 +28,12 @@
 | Bilah alat | **Tampilan > Bilah Alat > Sesuaikan Bilah Alat…** (atau klik kanan sebuah bilah) |
 | Bilah ikon | **Tampilan > Bilah Alat > Bilah Ikon**; **Pilih Ikon untuk Bilah Ikon…** |
 | Pintasan papan ketik | **Berkas > Opsi > Papan Ketik** (cari, tekan tombol baru, ekspor dan impor); **Bantuan > Pintasan Papan Ketik…** mencantumkannya |
-| Mencari perintah di menu | **Bantuan > Temukan Perintah…** (ketik sebagian namanya; Return menjalankannya) |
+| Mencari perintah di menu | **Bantuan > Temukan Perintah…** (ketik sebagian namanya; Enter menjalankannya) |
 | Tata letak jendela | **Tampilan > Tata Letak** (tujuh bawaan; simpan milik Anda sendiri) |
 | Simpan otomatis, proyek terbaru, informasi penulis | **Berkas > Opsi > Umum** |
 | Cadangan | **Berkas > Opsi > Cadangan** (kapan, berapa banyak, di mana); **Berkas > Cadangkan** membuat satu sekarang |
 | Ejaan dan koreksi saat mengetik | **Berkas > Opsi > Koreksi** |
-| Tempat tautan dibuka, tombol Return, mode menulis, pemutaran | **Berkas > Opsi > Perilaku** |
+| Tempat tautan dibuka, tombol Enter, mode menulis, pemutaran | **Berkas > Opsi > Perilaku** |
 | Pengaturan impor dan ekspor | **Berkas > Opsi > Berbagi** |
 | Peta pikiran, objek, pengaya, laporan crash | **Berkas > Opsi > Ekstra** |
 | Label, status, tipe seksi, metadata kustom, folder khusus | **Proyek > Pengaturan Proyek** |

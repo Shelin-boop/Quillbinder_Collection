@@ -5,11 +5,11 @@
     <name>QObject</name>
     <message>
         <source>The %1 dictionary cannot be read (%2): download it again in File &gt; Options &gt; Translation Helper.</source>
-        <translation>Kamus %1 tidak dapat dibaca (%2): unduh lagi di Berkas &gt; Opsi &gt; Asisten Terjemahan.</translation>
+        <translation>Kamus %1 tidak dapat dibaca (%2): unduh lagi di Berkas &gt; Opsi &gt; Asisten Penerjemah.</translation>
     </message>
     <message>
         <source>The %1 dictionary is not downloaded (File &gt; Options &gt; Translation Helper): it gives the word classes and meanings of a %1 word.</source>
-        <translation>Kamus %1 belum diunduh (Berkas &gt; Opsi &gt; Asisten Terjemahan): kamus ini memberi kelas kata dan arti sebuah kata %1.</translation>
+        <translation>Kamus %1 belum diunduh (Berkas &gt; Opsi &gt; Asisten Penerjemah): kamus ini memberi kelas kata dan arti sebuah kata %1.</translation>
     </message>
     <message>
         <source>There is no dictionary of %1 for the add-on: the translation is the model&apos;s.</source>
@@ -25,15 +25,15 @@
     </message>
     <message>
         <source>The German dictionary cannot be read (%1): download it again in File &gt; Options &gt; Translation Helper.</source>
-        <translation>Kamus bahasa Jerman tidak dapat dibaca (%1): unduh lagi di Berkas &gt; Opsi &gt; Asisten Terjemahan.</translation>
+        <translation>Kamus bahasa Jerman tidak dapat dibaca (%1): unduh lagi di Berkas &gt; Opsi &gt; Asisten Penerjemah.</translation>
     </message>
     <message>
         <source>The German dictionary is not downloaded (File &gt; Options &gt; Translation Helper): it gives the word classes and meanings of a German word.</source>
-        <translation>Kamus bahasa Jerman belum diunduh (Berkas &gt; Opsi &gt; Asisten Terjemahan): kamus ini memberi kelas kata dan arti sebuah kata bahasa Jerman.</translation>
+        <translation>Kamus bahasa Jerman belum diunduh (Berkas &gt; Opsi &gt; Asisten Penerjemah): kamus ini memberi kelas kata dan arti sebuah kata bahasa Jerman.</translation>
     </message>
     <message>
         <source>Similar German words need the German dictionary: download it in File &gt; Options &gt; Translation Helper (Models...).</source>
-        <translation>Kata-kata Jerman yang mirip memerlukan kamus bahasa Jerman: unduh di Berkas &gt; Opsi &gt; Asisten Terjemahan (Model...).</translation>
+        <translation>Kata-kata Jerman yang mirip memerlukan kamus bahasa Jerman: unduh di Berkas &gt; Opsi &gt; Asisten Penerjemah (Model...).</translation>
     </message>
 </context>
 <context>
@@ -181,7 +181,7 @@
     <name>tp::OptionsPage</name>
     <message>
         <source>The Translation Helper gives suggestions: it translates between eleven languages and proofreads English text, on this computer. Its translations are not precise; check each one, which needs a working knowledge of both languages. Choose a model for each task and download it once (it is checked, then used without any connection).</source>
-        <translation>Asisten Terjemahan memberi saran: ia menerjemahkan di antara sebelas bahasa dan memeriksa teks bahasa Inggris, di komputer ini. Terjemahannya tidak tepat; periksa setiap terjemahan, yang memerlukan pengetahuan yang baik tentang kedua bahasa. Pilih satu model untuk setiap tugas dan unduh sekali (model diperiksa, lalu dipakai tanpa koneksi).</translation>
+        <translation>Asisten Penerjemah memberi saran: ia menerjemahkan di antara sebelas bahasa dan memeriksa teks bahasa Inggris, di komputer ini. Terjemahannya tidak tepat; periksa setiap terjemahan, yang memerlukan pengetahuan yang baik tentang kedua bahasa. Pilih satu model untuk setiap tugas dan unduh sekali (model diperiksa, lalu dipakai tanpa koneksi).</translation>
     </message>
     <message>
         <source>This computer has %1 GB of memory, %2 GB free now. A model that needs more than it can give is not offered for download, and is not loaded when too little memory is free.</source>
@@ -281,7 +281,7 @@
     </message>
     <message>
         <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation>Jumlah inti prosesor dan waktu setelah model yang tidak dipakai dibongkar diatur untuk semua fungsi AI sekaligus, di File &gt; Options &gt; General &gt; AI Models.</translation>
+        <translation>Jumlah inti prosesor dan waktu setelah model yang tidak dipakai dibongkar diatur untuk semua fungsi AI sekaligus, di Berkas &gt; Opsi &gt; Umum &gt; Model AI.</translation>
     </message>
     <message>
         <source>Careful: the model weighs even more possibilities (slower, now and then better)</source>
@@ -495,7 +495,7 @@ Dengan mengunduhnya, Anda menerima lisensinya: %2</translation>
     </message>
     <message>
         <source>File &gt; Options &gt; Translation Helper: choose and download the models and the German dictionary</source>
-        <translation>Berkas &gt; Opsi &gt; Asisten Terjemahan: pilih dan unduh model serta kamus bahasa Jerman</translation>
+        <translation>Berkas &gt; Opsi &gt; Asisten Penerjemah: pilih dan unduh model serta kamus bahasa Jerman</translation>
     </message>
     <message>
         <source>Ready.</source>
@@ -567,7 +567,7 @@ Dengan mengunduhnya, Anda menerima lisensinya: %2</translation>
     </message>
     <message>
         <source>A word or a short text is translated by the small model, never by the large one, and the small model is not downloaded: choose %1 with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Satu kata atau teks pendek diterjemahkan oleh model kecil, tidak pernah oleh model besar, dan model kecil belum diunduh: pilih %1 dengan Model... (Berkas &gt; Opsi &gt; Asisten Terjemahan).</translation>
+        <translation>Satu kata atau teks pendek diterjemahkan oleh model kecil, tidak pernah oleh model besar, dan model kecil belum diunduh: pilih %1 dengan Model... (Berkas &gt; Opsi &gt; Asisten Penerjemah).</translation>
     </message>
     <message>
         <source>OPUS-MT German to English</source>
@@ -579,11 +579,11 @@ Dengan mengunduhnya, Anda menerima lisensinya: %2</translation>
     </message>
     <message>
         <source>No translation model is downloaded yet. Choose one with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Belum ada model terjemahan yang diunduh. Pilih satu dengan Model... (Berkas &gt; Opsi &gt; Asisten Terjemahan).</translation>
+        <translation>Belum ada model terjemahan yang diunduh. Pilih satu dengan Model... (Berkas &gt; Opsi &gt; Asisten Penerjemah).</translation>
     </message>
     <message>
         <source>No proofreading model is downloaded yet. Choose one with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Belum ada model pemeriksaan yang diunduh. Pilih satu dengan Model... (Berkas &gt; Opsi &gt; Asisten Terjemahan).</translation>
+        <translation>Belum ada model pemeriksaan yang diunduh. Pilih satu dengan Model... (Berkas &gt; Opsi &gt; Asisten Penerjemah).</translation>
     </message>
     <message>
         <source>The engine cannot be used: %1</source>
@@ -591,7 +591,7 @@ Dengan mengunduhnya, Anda menerima lisensinya: %2</translation>
     </message>
     <message>
         <source>German nouns need capital letters for a good translation. The German dictionary (File &gt; Options &gt; Translation Helper, Models...) sets them in the copy the model gets; it is not available.</source>
-        <translation>Kata benda bahasa Jerman memerlukan huruf kapital agar terjemahannya baik. Kamus bahasa Jerman (Berkas &gt; Opsi &gt; Asisten Terjemahan, Model...) menaruhnya pada salinan yang diterima model; kamus itu tidak tersedia.</translation>
+        <translation>Kata benda bahasa Jerman memerlukan huruf kapital agar terjemahannya baik. Kamus bahasa Jerman (Berkas &gt; Opsi &gt; Asisten Penerjemah, Model...) menaruhnya pada salinan yang diterima model; kamus itu tidak tersedia.</translation>
     </message>
     <message>
         <source>1 dash replaced by a comma (rule: no em-dashes): click it to keep the dash.</source>
@@ -619,19 +619,19 @@ Dengan mengunduhnya, Anda menerima lisensinya: %2</translation>
     </message>
     <message>
         <source>No translation model is downloaded yet for %1 to %2: %3. Choose it with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Belum ada model terjemahan yang diunduh untuk %1 ke %2: %3. Pilih dengan Model... (Berkas &gt; Opsi &gt; Asisten Terjemahan).</translation>
+        <translation>Belum ada model terjemahan yang diunduh untuk %1 ke %2: %3. Pilih dengan Model... (Berkas &gt; Opsi &gt; Asisten Penerjemah).</translation>
     </message>
     <message>
         <source>No translation model is downloaded yet for %1 to %2: %3. Choose them with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum ada model terjemahan yang diunduh untuk %1 ke %2: %3. Pilih modelnya dengan Model... (Berkas &gt; Opsi &gt; Asisten Penerjemah).</translation>
     </message>
     <message>
         <source>Missing: %1. Download them in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum ada: %1. Unduh semuanya di opsi pengaya (Berkas &gt; Opsi &gt; Asisten Penerjemah).</translation>
     </message>
     <message>
         <source>Missing: %1. Download it in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum ada: %1. Unduh di opsi pengaya (Berkas &gt; Opsi &gt; Asisten Penerjemah).</translation>
     </message>
     <message>
         <source>Translated through English (%1 to English to %2): two steps, so a mistake of the first one is carried into the second.</source>
@@ -827,7 +827,7 @@ Dengan mengunduhnya, Anda menerima lisensinya: %2</translation>
     </message>
     <message>
         <source>A single word is translated by the small model, never by the large one, and the small model is not downloaded: choose %1 with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Satu kata diterjemahkan oleh model kecil, tidak pernah oleh model besar, dan model kecil belum diunduh: pilih %1 dengan Model... (Berkas &gt; Opsi &gt; Asisten Terjemahan).</translation>
+        <translation>Satu kata diterjemahkan oleh model kecil, tidak pernah oleh model besar, dan model kecil belum diunduh: pilih %1 dengan Model... (Berkas &gt; Opsi &gt; Asisten Penerjemah).</translation>
     </message>
     <message>
         <source>Looking the word up...</source>
@@ -851,7 +851,7 @@ Dengan mengunduhnya, Anda menerima lisensinya: %2</translation>
     </message>
     <message>
         <source>WordNet has no entry for “%1”, so there is no meaning to show. A model can write one: download Qwen3 1.7B or Qwen3 4B in File &gt; Options &gt; Translation Helper.</source>
-        <translation>WordNet tidak punya entri untuk “%1”, jadi tidak ada arti untuk ditampilkan. Sebuah model dapat menulisnya: unduh Qwen3 1.7B atau Qwen3 4B di Berkas &gt; Opsi &gt; Asisten Terjemahan.</translation>
+        <translation>WordNet tidak punya entri untuk “%1”, jadi tidak ada arti untuk ditampilkan. Sebuah model dapat menulisnya: unduh Qwen3 1.7B atau Qwen3 4B di Berkas &gt; Opsi &gt; Asisten Penerjemah.</translation>
     </message>
     <message>
         <source>The model wrote no meaning.</source>
@@ -935,27 +935,27 @@ Dengan mengunduhnya, Anda menerima lisensinya: %2</translation>
     </message>
     <message>
         <source>Similar translations (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Terjemahan serupa (%1, untuk “%2”):</translation>
     </message>
     <message>
         <source>Similar translations (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Terjemahan serupa (%1):</translation>
     </message>
     <message>
         <source>Similar (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Serupa (%1, untuk “%2”):</translation>
     </message>
     <message>
         <source>Similar (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Serupa (%1):</translation>
     </message>
     <message>
         <source>%1 (German): spelling suggestions and similar words are given for English words.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (Jerman): saran ejaan dan kata serupa hanya diberikan untuk kata bahasa Inggris.</translation>
     </message>
     <message>
         <source>%1 (from “%2”)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (dari “%2”)</translation>
     </message>
     <message>
         <source>Similar German words (%1):</source>
@@ -1014,7 +1014,7 @@ Dengan mengunduhnya, Anda menerima lisensinya: %2</translation>
     <name>tp::TranslateTool</name>
     <message>
         <source>&amp;Translation Helper...</source>
-        <translation>&amp;Asisten Terjemahan...</translation>
+        <translation>&amp;Asisten Penerjemah...</translation>
     </message>
     <message>
         <source>Suggestions for translating between eleven languages, and for English spelling, in a window of its own</source>
@@ -1022,15 +1022,15 @@ Dengan mengunduhnya, Anda menerima lisensinya: %2</translation>
     </message>
     <message>
         <source>Translation Helper in the &amp;Inspector</source>
-        <translation>Asisten Terjemahan di &amp;Inspektur</translation>
+        <translation>Asisten Penerjemah di &amp;Inspektor</translation>
     </message>
     <message>
         <source>The same in the inspector, beside the editor</source>
-        <translation>Hal yang sama di inspektur, di samping editor</translation>
+        <translation>Hal yang sama di inspektor, di samping editor</translation>
     </message>
     <message>
         <source>Translation Helper</source>
-        <translation>Asisten Terjemahan</translation>
+        <translation>Asisten Penerjemah</translation>
     </message>
     <message>
         <source>Open the Window</source>
@@ -1038,7 +1038,7 @@ Dengan mengunduhnya, Anda menerima lisensinya: %2</translation>
     </message>
     <message>
         <source>Open in the Inspector</source>
-        <translation>Buka di Inspektur</translation>
+        <translation>Buka di Inspektor</translation>
     </message>
     <message>
         <source>Models and Rules...</source>
