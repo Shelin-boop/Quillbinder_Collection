@@ -68,13 +68,13 @@
 ### Über das Übliche hinaus
 
 - **Mindmaps**: eine Fläche mit Notizen, Linien und Pfeilen für jedes Dokument und jeden Ordner (die Schaltfläche **Mindmap** des Inspektors). **Hilfe > Mindmap-Hilfe** zeigt, wie es funktioniert.
-- **Objekte**: Figuren, Orte, Schauplätze, Sehenswürdigkeiten, Wetter und eigene Kategorien, jeweils mit einem Datenblatt aus Feldern und mit Verknüpfungen untereinander (die Schaltfläche **Objekte** des Inspektors oder **Fenster > Objekte…**).
+- **Objekte**: Figuren, Orte, Schauplätze, Sehenswürdigkeiten, Wetter und eigene Kategorien, jeweils mit einem Datenblatt aus Feldern und mit Verknüpfungen untereinander (die Schaltfläche **Objekte** des Inspektors oder **Fenster > Objekte**).
 - **Tabellen und Bilder**: **Einfügen > Tabelle…** mit fertigen Designs oder eigenen, **Format > Tabelle** für Zeilen, Spalten, verbundene Zellen und Farben; Bilder neben dem Text, vom Text umflossen, mit Bildunterschriften und Beschreibungen, die E-Books und Word-Dateien als Alternativtext behalten (Rechtsklick auf ein Bild, **Bild…**).
 - **Die Icon-Leiste**: bis zu zehn Dokumentsymbole, je einen Klick entfernt. **Dokumente > Symbol ändern** erzeugt Symbole auch aus Text oder aus Ihren eigenen Bildern.
 - **Zoom pro Bereich**: Binder, Editoren, Inspektorbereiche, Pinnwand, Gliederung und Mindmaps behalten jeweils ihren eigenen Zoom.
 - **Gemerkte Stellen**: Jedes Dokument öffnet sich dort, wo Sie den Cursor zuletzt gelassen haben, auch nach dem erneuten Öffnen des Projekts.
 - **Schriften**: **Format > Schrift > Schriftdateien installieren…** fügt Schriften hinzu, ohne das Programm zu verlassen.
-- **Sicherheit**: automatisches Speichern auch während Sie weitertippen, Sicherungen, eine Ersatzkopie der Projektdatei, Absturz- und Hängerberichte (**Hilfe > Fehlersuche und Entwicklung > Absturzberichte…**) und **Hilfe > Fehlersuche und Entwicklung > Systeminformationen…**.
+- **Sicherheit**: automatisches Speichern auch während Sie weitertippen, Sicherungen, eine Ersatzkopie der Projektdatei, Absturz- und Hängerberichte (**Hilfe > Fehlersuche und Entwicklung > Absturzberichte…**) und **Hilfe > Fehlersuche und Entwicklung > Systeminformationen**.
 
 ### Updates und Erweiterungen
 
@@ -88,5 +88,5 @@ Die **Vollversion** des AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) enthält
 - **Hilfe > Willkommensprojekt**: ein kurzes Projekt, das die unter „Über das Übliche hinaus“ aufgeführten Funktionen zeigt und Sie sie ausprobieren lässt.
 - **Hilfe > Mindmap-Hilfe**: Notizen, Linien, Pfeile und Formen, mit Bildern und einer Übungsfläche.
 - **Hilfe > Liste aller Platzhalter** und **Hilfe > Tastenkürzel…**
-- **Hilfe > Lizenzen von Drittanbietern…**: die Lizenzen der Teile anderer Projekte, die {{APP}} verwendet.
+- **Hilfe > Lizenzen von Drittanbietern**: die Lizenzen der Teile anderer Projekte, die {{APP}} verwendet.
 - **Hilfe > Über {{APP}}**: die Version und die Lizenz. {{APP}} ist freie Software unter der Apache License 2.0.
