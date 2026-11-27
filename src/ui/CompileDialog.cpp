@@ -941,7 +941,7 @@ void CompileDialog::refreshContents()
             auto *ti = new QTreeWidgetItem(m_contents);
             ti->setText(0, tr("[objects] ") + cat.name);
             ti->setIcon(0, icons::action(QStringLiteral("qb-objects")));
-            ti->setText(1, tr("%n object sheet(s)", "", n));
+            ti->setText(1, tr("%Ln object sheet(s)", "", n));
             ti->setFlags(Qt::ItemIsEnabled);
             ti->setData(0, Qt::UserRole + 1, true);
         }
@@ -955,8 +955,8 @@ void CompileDialog::refreshContents()
         });
     }
     m_contents->blockSignals(false);
-    const QString docText = tr("%n document(s)", "", docs);
-    const QString wordText = tr("about %n word(s)", "", words);
+    const QString docText = tr("%Ln document(s)", "", docs);
+    const QString wordText = tr("about %Ln word(s)", "", words);
     m_summary->setText(docText + QStringLiteral(", ") + wordText);
 }
 
@@ -1222,7 +1222,7 @@ void CompileDialog::preview()
     dlg->setAttribute(Qt::WA_DeleteOnClose);
     // no translation files: "%n page(s)" would show the "(s)" (also below and in three other places, fixed in 0.14.0)
     const QString formatName = currentFormat().name;
-    dlg->setWindowTitle(tr("Preview — %1 (%n page(s))", "", rep.pages).arg(formatName));
+    dlg->setWindowTitle(tr("Preview — %1 (%Ln page(s))", "", rep.pages).arg(formatName));
     dlg->resize(760, 900);
     auto *l = new QVBoxLayout(dlg);
     auto *doc = new QPdfDocument(dlg);

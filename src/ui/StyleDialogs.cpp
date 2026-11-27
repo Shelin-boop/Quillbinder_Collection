@@ -128,7 +128,7 @@ QString describe(const Style &s)
                 para << QObject::tr("line spacing at least %1 pt").arg(num(pxToPt(s.para.line)));
         }
         if ((s.para.bits & Tabs) && !s.para.tabs.isEmpty())
-            para << (QObject::tr("%n tab stop(s)", "", int(s.para.tabs.size())));
+            para << (QObject::tr("%Ln tab stop(s)", "", int(s.para.tabs.size())));
     }
     QStringList lines;
     if (!font.isEmpty())

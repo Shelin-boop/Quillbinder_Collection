@@ -856,18 +856,18 @@ int main(int argc, char **argv)
         };
         // each text read in English for 0, 1, 2 and 5: <before><n> <word><after>
         const Case cases[] = {
-            {"qb::OptionsDialog", "%n more pair(s) below it too.", "", "more pair", "more pairs", " below it too."},
-            {"qb::BinderModel", "%n word(s)", "", "word", "words", ""},
-            {"qb::TargetsDialog", "%n word(s) in the Draft", "", "word", "words", " in the Draft"},
-            {"qb::TargetsDialog", "%n character(s) in the Draft", "", "character", "characters", " in the Draft"},
-            {"qb::UpdateChecker", "%n day(s)", "", "day", "days", ""},
-            {"qb::UpdateChecker", "%n week(s)", "", "week", "weeks", ""},
-            {"qb::MainWindow", "and %n earlier step(s)", "and ", "earlier step", "earlier steps", ""},
-            {"qb::MainWindow", "Snapshot taken of %n document(s).", "Snapshot taken of ", "document", "documents", "."},
-            {"qb::MainWindow", "%n snapshot(s) deleted.", "", "snapshot", "snapshots", " deleted."},
-            {"qb::EditorPane", "%n match(es)", "", "match", "matches", ""},
-            {"qb::addons", "%n dictionar(y|ies)", "", "dictionary", "dictionaries", ""},
-            {"qbweb::WebImportDialog", "%n picture(s)", "", "picture", "pictures", ""},
+            {"qb::OptionsDialog", "%Ln more pair(s) below it too.", "", "more pair", "more pairs", " below it too."},
+            {"qb::BinderModel", "%Ln word(s)", "", "word", "words", ""},
+            {"qb::TargetsDialog", "%Ln word(s) in the Draft", "", "word", "words", " in the Draft"},
+            {"qb::TargetsDialog", "%Ln character(s) in the Draft", "", "character", "characters", " in the Draft"},
+            {"qb::UpdateChecker", "%Ln day(s)", "", "day", "days", ""},
+            {"qb::UpdateChecker", "%Ln week(s)", "", "week", "weeks", ""},
+            {"qb::MainWindow", "and %Ln earlier step(s)", "and ", "earlier step", "earlier steps", ""},
+            {"qb::MainWindow", "Snapshot taken of %Ln document(s).", "Snapshot taken of ", "document", "documents", "."},
+            {"qb::MainWindow", "%Ln snapshot(s) deleted.", "", "snapshot", "snapshots", " deleted."},
+            {"qb::EditorPane", "%Ln match(es)", "", "match", "matches", ""},
+            {"qb::addons", "%Ln dictionar(y|ies)", "", "dictionary", "dictionaries", ""},
+            {"qbweb::WebImportDialog", "%Ln picture(s)", "", "picture", "pictures", ""},
         };
         QStringList wrong;
         for (const Case &c : cases)
@@ -881,7 +881,7 @@ int main(int argc, char **argv)
         check(wrong.isEmpty(), QStringLiteral("texts with a number: 0, 1, 2 and 5 read right in English (%1 texts)").arg(sizeof(cases) / sizeof(cases[0])),
               wrong.join(QLatin1String("; ")));
         check(language::englishPlural(QStringLiteral("%n file(s) and %n copy(ies)"), 1) == QLatin1String("%n file and %n copy(ies)")
-                  && language::englishPlural(QStringLiteral("%n match(es)"), 3) == QLatin1String("%n matches"),
+                  && language::englishPlural(QStringLiteral("%Ln match(es)"), 3) == QLatin1String("%Ln matches"),
               QStringLiteral("the English plural helper: (s), (es) and (y|ies)"));
         // the pieces are gone from the source (a unit word put after a number, a number put into a sentence)
         const QString root = QStringLiteral(QB_TEST_SOURCE_DIR "/../");

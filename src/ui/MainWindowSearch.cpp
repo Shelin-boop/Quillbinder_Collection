@@ -291,7 +291,7 @@ int MainWindow::deleteOldSnapshots(bool ask)
             bytes = qMax(bytes, scriv);
         }
         QMessageBox box(QMessageBox::Warning, tr("Delete Old Snapshots"),
-                        tr("Delete all %n snapshot(s) of %1 forever?", "", t.snapshots).arg(tr("%n document(s)", "", t.documents)),
+                        tr("Delete all %Ln snapshot(s) of %1 forever?", "", t.snapshots).arg(tr("%Ln document(s)", "", t.documents)),
                         QMessageBox::Cancel, this);
         box.setObjectName(QStringLiteral("deleteSnapshotsQuestion"));
         box.setInformativeText(tr("They take %1. The texts stay as they are now; only their earlier versions go, also those "
@@ -314,7 +314,7 @@ int MainWindow::deleteOldSnapshots(bool ask)
     if (!err.isEmpty())
         QMessageBox::warning(this, tr("Delete Old Snapshots"), err);
     else if (ask)
-        showStatusNote(tr("%n snapshot(s) deleted.", "", n), 6000);
+        showStatusNote(tr("%Ln snapshot(s) deleted.", "", n), 6000);
     return n;
 }
 

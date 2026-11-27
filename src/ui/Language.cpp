@@ -27,7 +27,7 @@ public:
         if (n < 0 || !sourceText)
             return QString();
         const QString src = QString::fromUtf8(sourceText);
-        if (!src.contains(QLatin1String("%n")))
+        if (!src.contains(QLatin1String("%n")) && !src.contains(QLatin1String("%Ln")))
             return QString();
         return englishPlural(src, n);
     }

@@ -431,7 +431,7 @@ void Loader::fetchPictures()
     }
     if (todo.isEmpty())
         return;
-    emit status(tr("Fetching %n picture(s) …", "", int(todo.size())));
+    emit status(tr("Fetching %Ln picture(s) …", "", int(todo.size())));
     const QList<Fetcher::Result> res =
         m_fetcher->getAll(todo, "image/webp,image/png,image/jpeg,image/gif;q=0.9,image/svg+xml;q=0.8", kMaxPicture,
                           [this](int done, int total) { emit status(tr("Fetching pictures: %1 of %2 …").arg(done).arg(total)); });
@@ -771,9 +771,9 @@ void WebImportDialog::updatePreview()
     }
     m_preview->setHtml(toHtml(e.content, names, e.info.title, QString()));
     QStringList info;
-    info << (tr("%n word(s)", "", e.words));
+    info << (tr("%Ln word(s)", "", e.words));
     if (m_pictures->isChecked())
-        info << (tr("%n picture(s)", "", pics));
+        info << (tr("%Ln picture(s)", "", pics));
     if (!e.info.byline.isEmpty())
         info << tr("by %1").arg(e.info.byline);
     if (!e.info.siteName.isEmpty())

@@ -292,7 +292,7 @@ void KeyboardPage::selectionChanged()
     m_label->setText(tr("Shortcut of “%1”:").arg(c->label()));
     m_edit->setKeySequence(shown(c->key));
     const int n = changes();
-    m_hint->setText(n ? tr("%n shortcut(s) changed by you (shown in bold).", "", n) : QString());
+    m_hint->setText(n ? tr("%Ln shortcut(s) changed by you (shown in bold).", "", n) : QString());
 }
 
 QKeySequence KeyboardPage::shown(const QString &key) const

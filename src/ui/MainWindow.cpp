@@ -1633,9 +1633,9 @@ void MainWindow::createActions()
                 for (BinderItem *it : inTrash)
                     if (it->hasSnapshots)
                         snaps += int(snapshots::list(m_project.get(), it->id).size());
-                QString question = tr("Delete %n document(s) in the Trash forever?", "", int(inTrash.size()));
+                QString question = tr("Delete %Ln document(s) in the Trash forever?", "", int(inTrash.size()));
                 if (snaps > 0)
-                    question += QLatin1Char(' ') + tr("Their %n snapshot(s) go with them.", "", snaps);
+                    question += QLatin1Char(' ') + tr("Their %Ln snapshot(s) go with them.", "", snaps);
                 question += QLatin1Char(' ') + tr("This cannot be undone.");
                 if (ask::question(this, tr("Empty Trash"), question, QMessageBox::Yes | QMessageBox::No, QMessageBox::No, tr("Empty Trash"))
                     != QMessageBox::Yes)
@@ -3339,7 +3339,7 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
     // marks ("<$Scr_H::1>Title<!$Scr_H::1>") as text: taken out before anything shows it (0.21.2)
     if (const int fixed = ScrivenerImporter::removeLeftoverMarkers(proj); fixed > 0) {
         QTimer::singleShot(0, this, [this, fixed] {
-            showStatusNote(tr("Scrivener's style marks were taken out of %n document(s).", "", fixed), 15000);
+            showStatusNote(tr("Scrivener's style marks were taken out of %Ln document(s).", "", fixed), 15000);
         });
     }
     // 0.81.2: custom metadata values an earlier import kept in Scrivener's form (a box "Yes", a date with its time)
@@ -5207,7 +5207,7 @@ void MainWindow::printDocument()
         QMessageBox::warning(this, tr("Print"), err.isEmpty() ? tr("Printing did not work.") : err);
         return;
     }
-    showStatusNote(tr("Printed: %1 (%n page(s))", "", pages).arg(printing::describe(job)), 6000);
+    showStatusNote(tr("Printed: %1 (%Ln page(s))", "", pages).arg(printing::describe(job)), 6000);
 }
 
 void MainWindow::printPreview(const PrintSettings *settings)
@@ -5549,7 +5549,7 @@ QStringList MainWindow::editedSinceManualSave() const
 void MainWindow::notifySnapshots(int count)
 {
     if (count > 0 && AppSettings::instance().snapshotNotify)
-        showStatusNote(tr("Snapshot taken of %n document(s).", "", count), 5000);
+        showStatusNote(tr("Snapshot taken of %Ln document(s).", "", count), 5000);
 }
 
 void MainWindow::noteInput(const QDateTime &when)

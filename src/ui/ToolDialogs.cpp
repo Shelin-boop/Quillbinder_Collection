@@ -229,8 +229,8 @@ void TargetsDialog::refresh()
     m_draftLabel->setText(t.draftTarget != 0
                               ? (t.draftChars ? tr("%1 of %2 characters") : tr("%1 of %2 words"))
                                     .arg(loc.toString(draft), targettext::numberHtml(t.draftTarget, back))
-                              : (t.draftChars ? tr("%n character(s) in the Draft", "", qMax(0, draft))
-                                              : tr("%n word(s) in the Draft", "", qMax(0, draft))));
+                              : (t.draftChars ? tr("%Ln character(s) in the Draft", "", qMax(0, draft))
+                                              : tr("%Ln word(s) in the Draft", "", qMax(0, draft))));
     const int session = t.sessionChars ? m_project->sessionChars() : m_project->sessionWords();
     const int target = m_project->sessionTargetToday();
     if (target < 0) { // today's count is net: below 0 where more words were cut than written

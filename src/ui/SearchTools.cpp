@@ -210,8 +210,8 @@ QString ProjectReplaceDialog::describe(const ReplaceResult &r, bool done)
     add(r.notes, tr("notes"));
     add(r.comments, tr("comments and footnotes"));
     add(r.custom, tr("custom metadata"));
-    const QString docs = tr("%n document(s)", "", r.documents);
-    QString s = (done ? tr("%n occurrence(s) replaced in %1: %2.", "", r.total()) : tr("%n occurrence(s) found in %1: %2.", "", r.total()))
+    const QString docs = tr("%Ln document(s)", "", r.documents);
+    QString s = (done ? tr("%Ln occurrence(s) replaced in %1: %2.", "", r.total()) : tr("%Ln occurrence(s) found in %1: %2.", "", r.total()))
                     .arg(docs, parts.join(QLatin1String(", ")));
     if (done && r.snapshots > 0)
         s += QLatin1Char(' ') + tr("Snapshots taken: %1.").arg(r.snapshots);
@@ -440,9 +440,9 @@ static QString describeQuotes(const ReplaceResult &r, bool done)
     add(r.notes, ConvertQuotesDialog::tr("notes"));
     add(r.comments, ConvertQuotesDialog::tr("comments and footnotes"));
     add(r.custom, ConvertQuotesDialog::tr("custom metadata"));
-    const QString docs = ConvertQuotesDialog::tr("%n document(s)", "", r.documents);
-    QString s = (done ? ConvertQuotesDialog::tr("%n quote mark(s) converted in %1: %2.", "", r.total())
-                      : ConvertQuotesDialog::tr("%n quote mark(s) to convert in %1: %2.", "", r.total()))
+    const QString docs = ConvertQuotesDialog::tr("%Ln document(s)", "", r.documents);
+    QString s = (done ? ConvertQuotesDialog::tr("%Ln quote mark(s) converted in %1: %2.", "", r.total())
+                      : ConvertQuotesDialog::tr("%Ln quote mark(s) to convert in %1: %2.", "", r.total()))
                     .arg(docs, parts.join(QLatin1String(", ")));
     if (done && r.snapshots > 0)
         s += QLatin1Char(' ') + ConvertQuotesDialog::tr("Snapshots taken: %1.").arg(r.snapshots);

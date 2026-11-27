@@ -520,7 +520,7 @@ void PrintSettingsDialog::updateEnabled()
     else if (!fits)
         m_cardInfo->setText(tr("A card is larger than the paper inside its margins: one card on each sheet, made smaller."));
     else
-        m_cardInfo->setText(tr("%n card(s) on each sheet (%1 × %2) of the paper on the Page tab.", "", cols * rows)
+        m_cardInfo->setText(tr("%Ln card(s) on each sheet (%1 × %2) of the paper on the Page tab.", "", cols * rows)
                                 .arg(cols)
                                 .arg(rows));
 }

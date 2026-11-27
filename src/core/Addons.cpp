@@ -126,21 +126,21 @@ QStringList summarize(const QList<FileEntry> &files)
     }
     QStringList out;
     if (themes)
-        out << tr("%n theme(s)", "", themes);
+        out << tr("%Ln theme(s)", "", themes);
     if (templates)
-        out << tr("%n project template(s)", "", templates);
+        out << tr("%Ln project template(s)", "", templates);
     if (formats)
-        out << tr("%n compile format(s)", "", formats);
+        out << tr("%Ln compile format(s)", "", formats);
     if (layouts)
-        out << tr("%n layout(s)", "", layouts);
+        out << tr("%Ln layout(s)", "", layouts);
     if (scripts)
-        out << tr("%n script format(s)", "", scripts);
+        out << tr("%Ln script format(s)", "", scripts);
     if (names)
-        out << tr("%n name list(s)", "", names);
+        out << tr("%Ln name list(s)", "", names);
     if (plugins)
-        out << tr("%n plugin file(s)", "", plugins);
+        out << tr("%Ln plugin file(s)", "", plugins);
     if (dicts)
-        out << tr("%n dictionar(y|ies)", "", dicts);
+        out << tr("%Ln dictionar(y|ies)", "", dicts);
     if (mediaExtra)
         out << tr("video and audio formats licensed under patents (for Media Playback 2.0 or newer)");
     if (tutorials)
