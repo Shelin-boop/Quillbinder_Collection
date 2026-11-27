@@ -51,6 +51,7 @@ mkdir -p "$WORK" "$PREFIX/lib" "$PREFIX/include" "$PREFIX/licenses"
 clone botan https://github.com/randombit/botan "$BOTAN_TAG" "$BOTAN_COMMIT"
 clone json-c https://github.com/json-c/json-c "$JSONC_TAG" "$JSONC_COMMIT"
 clone bzip2 https://github.com/libarchive/bzip2 "$BZIP2_TAG" "$BZIP2_COMMIT"
+clone dirent https://github.com/tronkko/dirent 1.26 31db6474b5231c180bd4618c8c90e43af50c86d0   # (header only: RNP's file code includes <dirent.h>, which MSVC lacks; MIT)
 clone rnp https://github.com/rnpgp/rnp "$RNP_TAG" "$RNP_COMMIT"
 git init -q "$WORK/sexpp"
 git -C "$WORK/sexpp" fetch -q --depth 1 https://github.com/rnpgp/sexpp.git "$SEXPP_COMMIT"
@@ -106,8 +107,8 @@ cp "$WORK/bzip2/bzlib.h" "$PREFIX/include/"
 # ---- RNP: static, Botan 3 backend; "-include cstring" is MSVC's -FI (dash form: Git Bash turns a leading slash into a path, run 46029274249) (see tools/get-crypto.sh), -DRNP_STATIC is what the
 # program's own compile needs too (the header says dllimport without it)
 echo "== RNP"
-# (RNP's command line tools need getopt and dirent on Windows and its CMake stops without them; only the library is built,
-# so the three variables get a harmless value)
+# (RNP's command line tools need getopt and its CMake stops without it; only the library is built, so getopt gets a harmless
+# value. dirent.h is needed by the library itself: the header-only dirent of the line above, run 46034044407)
 cmake -S "$WORK/rnp" -B "$WORK/b-rnp" -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$P" \
     -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDLL -DCMAKE_PREFIX_PATH="$P" -DBUILD_SHARED_LIBS=OFF \
     -DCMAKE_CXX_FLAGS="-FIcstring -EHsc -DRNP_STATIC" -DCMAKE_C_FLAGS="-DRNP_STATIC" \
@@ -115,7 +116,7 @@ cmake -S "$WORK/rnp" -B "$WORK/b-rnp" -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAK
     -DENABLE_DOC=OFF -DDOWNLOAD_GTEST=OFF -DENABLE_COVERAGE=OFF -DENABLE_SANITIZERS=OFF -DENABLE_FUZZERS=OFF \
     -DBZIP2_INCLUDE_DIR="$P/include" -DBZIP2_LIBRARY_RELEASE="$P/lib/bz2.lib" \
     -DZLIB_INCLUDE_DIR="$(cygpath -m "$ZI/include")" -DZLIB_LIBRARY="$(cygpath -m "$ZLIB")" \
-    -DGETOPT_INCLUDE_DIR="$P/include" -DDIRENT_INCLUDE_DIR="$P/include" -DGETOPT_LIBRARY="$P/lib/bz2.lib" \
+    -DGETOPT_INCLUDE_DIR="$P/include" -DDIRENT_INCLUDE_DIR="$(cygpath -m "$WORK/dirent/include")" -DGETOPT_LIBRARY="$P/lib/bz2.lib" \
     -DJSON-C_INCLUDE_DIR="$P/include/json-c" -DJSON-C_LIBRARY="$JSONC_LIB" > "$WORK/rnp.log" 2>&1 || { tail -40 "$WORK/rnp.log"; exit 1; }
 cmake --build "$WORK/b-rnp" --target librnp -j"$JOBS" >> "$WORK/rnp.log" 2>&1 || { grep -E 'error|FAILED' "$WORK/rnp.log" | head -30; exit 1; }
 cmake --install "$WORK/b-rnp" --component development >> "$WORK/rnp.log" 2>&1 || { tail -20 "$WORK/rnp.log"; exit 1; }
@@ -125,6 +126,7 @@ cp "$WORK/json-c/COPYING" "$PREFIX/licenses/LICENSE-json-c.txt"
 cp "$WORK/bzip2/LICENSE" "$PREFIX/licenses/LICENSE-bzip2.txt"
 cp "$WORK/rnp/LICENSE.md" "$PREFIX/licenses/LICENSE-rnp.txt"
 cp "$WORK/rnp/LICENSE-OCB.md" "$PREFIX/licenses/LICENSE-rnp-OCB.txt"
+cp "$WORK/dirent/LICENSE" "$PREFIX/licenses/LICENSE-dirent.txt"
 cp "$WORK/sexpp/LICENSE.md" "$PREFIX/licenses/LICENSE-sexpp.txt"
 ls "$PREFIX/lib/librnp.lib" "$PREFIX"/lib/botan-3*.lib > /dev/null
 echo "$STAMP" > "$PREFIX/version.txt"
