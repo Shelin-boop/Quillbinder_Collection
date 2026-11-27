@@ -36,7 +36,7 @@ for n in libzs.lib zs.lib zlib.lib zlibstatic.lib; do [ -f "$ZI/lib/$n" ] && { Z
 ZV=$(sed -n 's/^#define ZLIB_VERSION "\(.*\)".*/\1/p' "$ZI/include/zlib.h" | head -1)
 MSVC=${VCToolsVersion:-unknown}
 STAMP="botan $BOTAN_TAG $BOTAN_COMMIT; json-c $JSONC_TAG $JSONC_COMMIT; bzip2 $BZIP2_TAG $BZIP2_COMMIT; rnp $RNP_TAG $RNP_COMMIT; sexpp $SEXPP_COMMIT; zlib $ZV; msvc $(echo "$MSVC" | cut -d. -f1,2); script $(sha256sum "$0" | cut -c1-16)"
-if [ "$(cat "$PREFIX/version.txt" 2>/dev/null)" = "$STAMP" ] && ls "$PREFIX"/lib/librnp.lib "$PREFIX"/lib/botan-3*.lib > /dev/null 2>&1; then
+if [ "$(cat "$PREFIX/version.txt" 2>/dev/null)" = "$STAMP" ] && ls "$PREFIX"/lib/rnp.lib "$PREFIX"/lib/botan-3*.lib > /dev/null 2>&1; then
     echo "the encryption libraries are there: $PREFIX"
     exit 0
 fi
@@ -132,7 +132,9 @@ cp "$WORK/rnp/LICENSE.md" "$PREFIX/licenses/LICENSE-rnp.txt"
 cp "$WORK/rnp/LICENSE-OCB.md" "$PREFIX/licenses/LICENSE-rnp-OCB.txt"
 cp "$WORK/dirent/LICENSE" "$PREFIX/licenses/LICENSE-dirent.txt"
 cp "$WORK/sexpp/LICENSE.md" "$PREFIX/licenses/LICENSE-sexpp.txt"
-ls "$PREFIX/lib/librnp.lib" "$PREFIX"/lib/botan-3*.lib > /dev/null
+ls "$PREFIX/lib/rnp.lib" "$PREFIX"/lib/botan-3*.lib > /dev/null
+test -f "$PREFIX/include/rnp/rnp.h" || { echo "win-crypto: no include/rnp/rnp.h: $(ls "$PREFIX/include" | tr '\n' ' ')" >&2; exit 1; }
+(cd "$PREFIX" && find include -maxdepth 2 | head -30)
 echo "$STAMP" > "$PREFIX/version.txt"
 rm -rf "$WORK"
 echo "the encryption libraries are built: $PREFIX"
