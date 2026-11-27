@@ -4036,11 +4036,11 @@ Les reprendre aussi&#xa0;? Ne le faites que si vous avez créé le fichier vous-
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation>Les options sont ouvertes pour ce projet. Fermez-les ou choisissez tous les projets, puis exportez le profil.</translation>
+        <translation>Les paramètres du profil n&apos;ont pas pu être écrits entièrement. Vérifiez le dossier du fichier de paramètres.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation>Les paramètres du profil n&apos;ont pas pu être écrits entièrement. Vérifiez le dossier du fichier de paramètres.</translation>
+        <translation>Les dispositions du profil n&apos;ont pas pu être appliquées&#xa0;; vos dispositions actuelles sont conservées.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4060,7 +4060,7 @@ Les reprendre aussi&#xa0;? Ne le faites que si vous avez créé le fichier vous-
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation>Les dispositions du profil n&apos;ont pas pu être appliquées&#xa0;; vos dispositions actuelles sont conservées.</translation>
+        <translation>Les options sont ouvertes pour ce projet. Fermez-les ou choisissez tous les projets, puis exportez le profil.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>

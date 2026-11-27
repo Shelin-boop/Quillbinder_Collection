@@ -4433,11 +4433,11 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation>Opsi sedang terbuka untuk Proyek Ini. Tutup opsi tersebut atau pilih Semua Proyek, lalu ekspor profilnya.</translation>
+        <translation>Pengaturan profil tidak dapat ditulis seluruhnya. Periksa folder berkas pengaturan.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation>Pengaturan profil tidak dapat ditulis seluruhnya. Periksa folder berkas pengaturan.</translation>
+        <translation>Tata letak profil tidak dapat diterapkan; tata letak yang Anda miliki tetap dipertahankan.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4457,7 +4457,7 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation>Tata letak profil tidak dapat diterapkan; tata letak yang Anda miliki tetap dipertahankan.</translation>
+        <translation>Opsi sedang terbuka untuk Proyek Ini. Tutup opsi tersebut atau pilih Semua Proyek, lalu ekspor profilnya.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>

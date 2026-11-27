@@ -4452,11 +4452,11 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation>De opties zijn geopend voor dit project. Sluit ze of kies alle projecten en exporteer daarna het profiel.</translation>
+        <translation>De instellingen van het profiel konden niet volledig worden geschreven. Controleer de map van het instellingenbestand.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation>De instellingen van het profiel konden niet volledig worden geschreven. Controleer de map van het instellingenbestand.</translation>
+        <translation>De indelingen van het profiel konden niet worden toegepast; de indelingen die je had blijven behouden.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4476,7 +4476,7 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation>De indelingen van het profiel konden niet worden toegepast; de indelingen die je had blijven behouden.</translation>
+        <translation>De opties zijn geopend voor dit project. Sluit ze of kies alle projecten en exporteer daarna het profiel.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>

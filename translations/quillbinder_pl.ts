@@ -4471,11 +4471,11 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation>Opcje są otwarte dla tego projektu. Zamknij je lub wybierz wszystkie projekty, a potem wyeksportuj profil.</translation>
+        <translation>Nie udało się w pełni zapisać ustawień profilu. Sprawdź folder pliku ustawień.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation>Nie udało się w pełni zapisać ustawień profilu. Sprawdź folder pliku ustawień.</translation>
+        <translation>Nie udało się zastosować układów profilu; dotychczasowe układy zostały zachowane.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4495,7 +4495,7 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation>Nie udało się zastosować układów profilu; dotychczasowe układy zostały zachowane.</translation>
+        <translation>Opcje są otwarte dla tego projektu. Zamknij je lub wybierz wszystkie projekty, a potem wyeksportuj profil.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>

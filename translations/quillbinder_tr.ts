@@ -4433,11 +4433,11 @@ Bunlar da alınsın mı? Bunları yalnızca dosyayı kendiniz hazırladıysanız
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation>Seçenekler Bu Proje için açık. Onları kapatın veya Tüm Projeler’i seçin, sonra profili dışa aktarın.</translation>
+        <translation>Profilin ayarları tamamen yazılamadı. Ayar dosyasının klasörünü kontrol edin.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation>Profilin ayarları tamamen yazılamadı. Ayar dosyasının klasörünü kontrol edin.</translation>
+        <translation>Profilin düzenleri uygulanamadı; sahip olduğunuz düzenler korundu.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4457,7 +4457,7 @@ Bunlar da alınsın mı? Bunları yalnızca dosyayı kendiniz hazırladıysanız
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation>Profilin düzenleri uygulanamadı; sahip olduğunuz düzenler korundu.</translation>
+        <translation>Seçenekler Bu Proje için açık. Onları kapatın veya Tüm Projeler’i seçin, sonra profili dışa aktarın.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>

@@ -4452,11 +4452,11 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation>Las opciones están abiertas para este proyecto. Ciérralas o elige todos los proyectos y después exporta el perfil.</translation>
+        <translation>No se pudieron escribir por completo los ajustes del perfil. Comprueba la carpeta del archivo de ajustes.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation>No se pudieron escribir por completo los ajustes del perfil. Comprueba la carpeta del archivo de ajustes.</translation>
+        <translation>No se pudieron aplicar los diseños del perfil; se conservan los diseños que tenías.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4476,7 +4476,7 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation>No se pudieron aplicar los diseños del perfil; se conservan los diseños que tenías.</translation>
+        <translation>Las opciones están abiertas para este proyecto. Ciérralas o elige todos los proyectos y después exporta el perfil.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>
