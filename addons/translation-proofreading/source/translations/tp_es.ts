@@ -5,11 +5,11 @@
     <name>QObject</name>
     <message>
         <source>The %1 dictionary cannot be read (%2): download it again in File &gt; Options &gt; Translation Helper.</source>
-        <translation>El diccionario de %1 no se puede leer (%2): descárguelo de nuevo en Archivo &gt; Opciones &gt; Asistente de traducción.</translation>
+        <translation>El diccionario de %1 no se puede leer (%2): descárgalo de nuevo en Archivo &gt; Opciones &gt; Ayudante de traducción.</translation>
     </message>
     <message>
         <source>The %1 dictionary is not downloaded (File &gt; Options &gt; Translation Helper): it gives the word classes and meanings of a %1 word.</source>
-        <translation>El diccionario de %1 no está descargado (Archivo &gt; Opciones &gt; Asistente de traducción): da las clases de palabra y los significados de una palabra en %1.</translation>
+        <translation>El diccionario de %1 no está descargado (Archivo &gt; Opciones &gt; Ayudante de traducción): da las clases de palabra y los significados de una palabra en %1.</translation>
     </message>
     <message>
         <source>There is no dictionary of %1 for the add-on: the translation is the model&apos;s.</source>
@@ -25,22 +25,22 @@
     </message>
     <message>
         <source>The German dictionary cannot be read (%1): download it again in File &gt; Options &gt; Translation Helper.</source>
-        <translation>El diccionario alemán no se puede leer (%1): descárguelo de nuevo en Archivo &gt; Opciones &gt; Asistente de traducción.</translation>
+        <translation>El diccionario alemán no se puede leer (%1): descárgalo de nuevo en Archivo &gt; Opciones &gt; Ayudante de traducción.</translation>
     </message>
     <message>
         <source>The German dictionary is not downloaded (File &gt; Options &gt; Translation Helper): it gives the word classes and meanings of a German word.</source>
-        <translation>El diccionario alemán no está descargado (Archivo &gt; Opciones &gt; Asistente de traducción): da las clases de palabra y los significados de una palabra alemana.</translation>
+        <translation>El diccionario alemán no está descargado (Archivo &gt; Opciones &gt; Ayudante de traducción): da las clases de palabra y los significados de una palabra alemana.</translation>
     </message>
     <message>
         <source>Similar German words need the German dictionary: download it in File &gt; Options &gt; Translation Helper (Models...).</source>
-        <translation>Las palabras alemanas similares necesitan el diccionario alemán: descárguelo en Archivo &gt; Opciones &gt; Asistente de traducción (Modelos...).</translation>
+        <translation>Las palabras alemanas similares necesitan el diccionario alemán: descárgalo en Archivo &gt; Opciones &gt; Ayudante de traducción (Modelos...).</translation>
     </message>
 </context>
 <context>
     <name>tp::InputEdit</name>
     <message>
         <source>Type or paste text here, or take the selected text from the editor. With Translate, choose the language of your text and the language of the translation; English text can also be checked for spelling and grammar.</source>
-        <translation>Escriba o pegue aquí el texto, o tome el texto seleccionado en el editor. Con Traducir, elija el idioma de su texto y el de la traducción; el texto en inglés también se puede revisar en ortografía y gramática.</translation>
+        <translation>Escribe o pega aquí el texto, o toma el texto seleccionado en el editor. Con Traducir, elige el idioma de tu texto y el de la traducción; el texto en inglés también se puede revisar en ortografía y gramática.</translation>
     </message>
     <message>
         <source>Other Words for “%1”...</source>
@@ -102,7 +102,7 @@
     </message>
     <message>
         <source>%1 needs about %2 GB of free memory, and %3 GB are free now. Close other programs or choose a smaller model.</source>
-        <translation>%1 necesita unos %2 GB de memoria libre y ahora hay %3 GB libres. Cierre otros programas o elija un modelo más pequeño.</translation>
+        <translation>%1 necesita unos %2 GB de memoria libre y ahora hay %3 GB libres. Cierra otros programas o elige un modelo más pequeño.</translation>
     </message>
     <message>
         <source>The model is being downloaded.</source>
@@ -154,7 +154,7 @@
     </message>
     <message>
         <source>The download failed: %1. Try again: it goes on where it stopped.</source>
-        <translation>La descarga falló: %1. Inténtelo de nuevo: continúa donde se detuvo.</translation>
+        <translation>La descarga falló: %1. Inténtalo de nuevo: continúa donde se detuvo.</translation>
     </message>
     <message>
         <source>%1 cannot be written.</source>
@@ -181,7 +181,7 @@
     <name>tp::OptionsPage</name>
     <message>
         <source>The Translation Helper gives suggestions: it translates between eleven languages and proofreads English text, on this computer. Its translations are not precise; check each one, which needs a working knowledge of both languages. Choose a model for each task and download it once (it is checked, then used without any connection).</source>
-        <translation>El Asistente de traducción ofrece sugerencias: traduce entre once idiomas y revisa textos en inglés, en este equipo. Sus traducciones no son precisas; compruebe cada una, lo que exige conocer bien ambos idiomas. Elija un modelo para cada tarea y descárguelo una vez (se comprueba y después se usa sin conexión).</translation>
+        <translation>El Ayudante de traducción ofrece sugerencias: traduce entre once idiomas y revisa textos en inglés, en este equipo. Sus traducciones no son precisas; comprueba cada una, lo que exige conocer bien ambos idiomas. Elige un modelo para cada tarea y descárgalo una vez (se comprueba y después se usa sin conexión).</translation>
     </message>
     <message>
         <source>This computer has %1 GB of memory, %2 GB free now. A model that needs more than it can give is not offered for download, and is not loaded when too little memory is free.</source>
@@ -193,7 +193,7 @@
     </message>
     <message>
         <source>Try them: CoEdIT Large finds many errors but rewrites more; the Qwen models are told to fix only real errors and to leave your style and dialogue alone (4B is better, 1.7B faster). A Qwen model downloaded once also translates.</source>
-        <translation>Pruébelos: CoEdIT Large encuentra muchos errores pero reescribe más; a los modelos Qwen se les indica corregir solo errores reales y respetar su estilo y sus diálogos (4B es mejor, 1.7B más rápido). Un modelo Qwen descargado una vez también traduce.</translation>
+        <translation>Pruébalos: CoEdIT Large encuentra muchos errores pero reescribe más; a los modelos Qwen se les indica corregir solo errores reales y respetar su estilo y sus diálogos (4B es mejor, 1.7B más rápido). Un modelo Qwen descargado una vez también traduce.</translation>
     </message>
     <message>
         <source>Translation (German to English)</source>
@@ -201,7 +201,7 @@
     </message>
     <message>
         <source>Single words and texts of up to three words are always translated by the small model (OPUS-MT German to English); the large one is better for whole sentences.</source>
-        <translation>Las palabras sueltas y los textos de hasta tres palabras los traduce siempre el modelo pequeño (OPUS-MT alemán a inglés); el grande es mejor para frases completas.</translation>
+        <translation>Las palabras sueltas y los textos de hasta tres palabras los traduce siempre el modelo pequeño (OPUS-MT alemán a inglés); el grande es mejor para oraciones completas.</translation>
     </message>
     <message>
         <source>Translation (English to German)</source>
@@ -217,7 +217,7 @@
     </message>
     <message>
         <source>What a single German word means: its word classes, meanings and English words. Used first when you translate one German word; it is not needed for sentences. A separate download under its own license, which is shown first.</source>
-        <translation>Qué significa una palabra alemana suelta: sus clases de palabra, significados y palabras en inglés. Se usa primero cuando traduce una palabra alemana; no hace falta para frases. Es una descarga aparte con su propia licencia, que se muestra antes.</translation>
+        <translation>Qué significa una palabra alemana suelta: sus clases de palabra, significados y palabras en inglés. Se usa primero cuando traduces una palabra alemana; no hace falta para oraciones. Es una descarga aparte con su propia licencia, que se muestra antes.</translation>
     </message>
     <message>
         <source>%1: translation to and from English</source>
@@ -281,7 +281,7 @@
     </message>
     <message>
         <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation>El número de núcleos del procesador y el tiempo tras el cual se descarga un modelo que no se usa se ajustan para todas las funciones de IA a la vez, en File &gt; Options &gt; General &gt; AI Models.</translation>
+        <translation>El número de núcleos del procesador y el tiempo tras el cual se descarga un modelo que no se usa se ajustan para todas las funciones de IA a la vez, en Archivo &gt; Opciones &gt; General &gt; Modelos de IA.</translation>
     </message>
     <message>
         <source>Careful: the model weighs even more possibilities (slower, now and then better)</source>
@@ -353,7 +353,7 @@
 By downloading it you accept its license: %2</source>
         <translation>%1
 
-Al descargarlo acepta su licencia: %2</translation>
+Al descargarlo aceptas su licencia: %2</translation>
     </message>
     <message>
         <source>Accept and Download</source>
@@ -372,14 +372,14 @@ Al descargarlo acepta su licencia: %2</translation>
     <name>tp::OutputView</name>
     <message>
         <source>The result. Marked words were changed: click one to keep the original or to choose another word. Every other word can be clicked for other words, too; a double click shows a word&apos;s suggestions at the bottom.</source>
-        <translation>El resultado. Las palabras marcadas se cambiaron: haga clic en una para conservar el original o elegir otra palabra. Cualquier otra palabra también admite clic para ver otras palabras; con doble clic se muestran abajo las sugerencias de una palabra.</translation>
+        <translation>El resultado. Las palabras marcadas se cambiaron: haz clic en una para conservar el original o elegir otra palabra. Cualquier otra palabra también admite clic para ver otras palabras; con doble clic se muestran abajo las sugerencias de una palabra.</translation>
     </message>
 </context>
 <context>
     <name>tp::Panel</name>
     <message>
         <source>Double-click a word in the text or in the result: its spelling suggestions, words of a similar meaning appear here.</source>
-        <translation>Haga doble clic en una palabra del texto o del resultado: aquí aparecen sus sugerencias de ortografía y palabras de significado parecido.</translation>
+        <translation>Haz doble clic en una palabra del texto o del resultado: aquí aparecen sus sugerencias de ortografía y palabras de significado parecido.</translation>
     </message>
     <message>
         <source>Live</source>
@@ -387,7 +387,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Live: about a second after you stop typing, the changed sentences are worked on again</source>
-        <translation>En vivo: un segundo después de dejar de escribir, se vuelven a procesar las frases cambiadas</translation>
+        <translation>En vivo: un segundo después de dejar de escribir, se vuelven a procesar las oraciones cambiadas</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -403,11 +403,11 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Automatic: German text is translated into English, English text is proofread. Translate: choose the language of your text and the language of the translation.</source>
-        <translation>Automático: el texto alemán se traduce al inglés, el texto en inglés se revisa. Traducir: elija el idioma de su texto y el de la traducción.</translation>
+        <translation>Automático: el texto alemán se traduce al inglés, el texto en inglés se revisa. Traducir: elige el idioma de tu texto y el de la traducción.</translation>
     </message>
     <message>
         <source>The language of your text</source>
-        <translation>El idioma de su texto</translation>
+        <translation>El idioma de tu texto</translation>
     </message>
     <message>
         <source>The language of the translation. A pair without English in it is translated through English (two models).</source>
@@ -415,7 +415,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>This tool gives suggestions only. Its translations are not precise: check each one, which needs a working knowledge of both languages.</source>
-        <translation>Esta herramienta solo da sugerencias. Sus traducciones no son precisas: compruebe cada una, lo que exige conocer bien ambos idiomas.</translation>
+        <translation>Esta herramienta solo da sugerencias. Sus traducciones no son precisas: comprueba cada una, lo que exige conocer bien ambos idiomas.</translation>
     </message>
     <message>
         <source>Correct</source>
@@ -443,7 +443,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Translate the result back into the language of your text, to see what it says</source>
-        <translation>Traducir el resultado de vuelta al idioma de su texto, para ver lo que dice</translation>
+        <translation>Traducir el resultado de vuelta al idioma de tu texto, para ver lo que dice</translation>
     </message>
     <message>
         <source>Models...</source>
@@ -479,7 +479,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Put the result into the editor in place of its selection (one step to undo there)</source>
-        <translation>Poner el resultado en el editor en lugar de su selección (un paso para deshacer allí)</translation>
+        <translation>Poner el resultado en el editor en lugar de la selección (un paso para deshacer allí)</translation>
     </message>
     <message>
         <source>Copy</source>
@@ -495,7 +495,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>File &gt; Options &gt; Translation Helper: choose and download the models and the German dictionary</source>
-        <translation>Archivo &gt; Opciones &gt; Asistente de traducción: elegir y descargar los modelos y el diccionario alemán</translation>
+        <translation>Archivo &gt; Opciones &gt; Ayudante de traducción: elegir y descargar los modelos y el diccionario alemán</translation>
     </message>
     <message>
         <source>Ready.</source>
@@ -539,11 +539,11 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Choose two different languages</source>
-        <translation>Elija dos idiomas distintos</translation>
+        <translation>Elige dos idiomas distintos</translation>
     </message>
     <message>
         <source>The translation models of the pair (a pair without English goes through English: two models); download them in the options</source>
-        <translation>Los modelos de traducción del par (un par sin inglés pasa por el inglés: dos modelos); descárguelos en las opciones</translation>
+        <translation>Los modelos de traducción del par (un par sin inglés pasa por el inglés: dos modelos); descárgalos en las opciones</translation>
     </message>
     <message>
         <source>No translation model yet</source>
@@ -555,11 +555,11 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>The translation model (choose and download models in the options)</source>
-        <translation>El modelo de traducción (elija y descargue modelos en las opciones)</translation>
+        <translation>El modelo de traducción (elige y descarga modelos en las opciones)</translation>
     </message>
     <message>
         <source>The proofreading model (choose and download models in the options)</source>
-        <translation>El modelo de revisión (elija y descargue modelos en las opciones)</translation>
+        <translation>El modelo de revisión (elige y descarga modelos en las opciones)</translation>
     </message>
     <message>
         <source>There is no text to work on yet.</source>
@@ -567,7 +567,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>A word or a short text is translated by the small model, never by the large one, and the small model is not downloaded: choose %1 with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Una palabra o un texto corto lo traduce el modelo pequeño, nunca el grande, y el modelo pequeño no está descargado: elija %1 con Modelos... (Archivo &gt; Opciones &gt; Asistente de traducción).</translation>
+        <translation>Una palabra o un texto corto lo traduce el modelo pequeño, nunca el grande, y el modelo pequeño no está descargado: elige %1 con Modelos... (Archivo &gt; Opciones &gt; Ayudante de traducción).</translation>
     </message>
     <message>
         <source>OPUS-MT German to English</source>
@@ -579,11 +579,11 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>No translation model is downloaded yet. Choose one with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Aún no hay modelo de traducción descargado. Elija uno con Modelos... (Archivo &gt; Opciones &gt; Asistente de traducción).</translation>
+        <translation>Aún no hay modelo de traducción descargado. Elige uno con Modelos... (Archivo &gt; Opciones &gt; Ayudante de traducción).</translation>
     </message>
     <message>
         <source>No proofreading model is downloaded yet. Choose one with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Aún no hay modelo de revisión descargado. Elija uno con Modelos... (Archivo &gt; Opciones &gt; Asistente de traducción).</translation>
+        <translation>Aún no hay modelo de revisión descargado. Elige uno con Modelos... (Archivo &gt; Opciones &gt; Ayudante de traducción).</translation>
     </message>
     <message>
         <source>The engine cannot be used: %1</source>
@@ -591,15 +591,15 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>German nouns need capital letters for a good translation. The German dictionary (File &gt; Options &gt; Translation Helper, Models...) sets them in the copy the model gets; it is not available.</source>
-        <translation>Los sustantivos alemanes necesitan mayúsculas para una buena traducción. El diccionario alemán (Archivo &gt; Opciones &gt; Asistente de traducción, Modelos...) las pone en la copia que recibe el modelo; no está disponible.</translation>
+        <translation>Los sustantivos alemanes necesitan mayúsculas para una buena traducción. El diccionario alemán (Archivo &gt; Opciones &gt; Ayudante de traducción, Modelos...) las pone en la copia que recibe el modelo; no está disponible.</translation>
     </message>
     <message>
         <source>1 dash replaced by a comma (rule: no em-dashes): click it to keep the dash.</source>
-        <translation>1 raya sustituida por una coma (regla: sin rayas largas): haga clic en ella para conservar la raya.</translation>
+        <translation>1 raya sustituida por una coma (regla: sin rayas largas): haz clic en ella para conservar la raya.</translation>
     </message>
     <message>
         <source>%1 dashes replaced (rule: no em-dashes): click one to keep the dash.</source>
-        <translation>%1 rayas sustituidas (regla: sin rayas largas): haga clic en una para conservar la raya.</translation>
+        <translation>%1 rayas sustituidas (regla: sin rayas largas): haz clic en una para conservar la raya.</translation>
     </message>
     <message>
         <source>Working...</source>
@@ -611,27 +611,27 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Working: %1 of %2 sentences...</source>
-        <translation>Trabajando: %1 de %2 frases...</translation>
+        <translation>Trabajando: %1 de %2 oraciones...</translation>
     </message>
     <message>
         <source>Choose two different languages.</source>
-        <translation>Elija dos idiomas distintos.</translation>
+        <translation>Elige dos idiomas distintos.</translation>
     </message>
     <message>
         <source>No translation model is downloaded yet for %1 to %2: %3. Choose it with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Aún no hay modelo de traducción descargado para %1 a %2: %3. Elíjalo con Modelos... (Archivo &gt; Opciones &gt; Asistente de traducción).</translation>
+        <translation>Aún no hay modelo de traducción descargado para %1 a %2: %3. Elígelo con Modelos... (Archivo &gt; Opciones &gt; Ayudante de traducción).</translation>
     </message>
     <message>
         <source>No translation model is downloaded yet for %1 to %2: %3. Choose them with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Aún no hay modelo de traducción descargado para %1 a %2: %3. Elígelos con Modelos... (Archivo &gt; Opciones &gt; Ayudante de traducción).</translation>
     </message>
     <message>
         <source>Missing: %1. Download them in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Falta: %1. Descárgalos en las opciones del complemento (Archivo &gt; Opciones &gt; Ayudante de traducción).</translation>
     </message>
     <message>
         <source>Missing: %1. Download it in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Falta: %1. Descárgalo en las opciones del complemento (Archivo &gt; Opciones &gt; Ayudante de traducción).</translation>
     </message>
     <message>
         <source>Translated through English (%1 to English to %2): two steps, so a mistake of the first one is carried into the second.</source>
@@ -643,11 +643,11 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Working (step %1 of %2): %3 of %4 sentences...</source>
-        <translation>Trabajando (paso %1 de %2): %3 de %4 frases...</translation>
+        <translation>Trabajando (paso %1 de %2): %3 de %4 oraciones...</translation>
     </message>
     <message>
         <source>Stopping after the sentences being worked on...</source>
-        <translation>Deteniendo tras las frases en curso...</translation>
+        <translation>Deteniendo tras las oraciones en curso...</translation>
     </message>
     <message>
         <source>The work failed: %1</source>
@@ -659,19 +659,19 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>The model rewrote this sentence too much; your sentence was kept. (It wrote: %1)</source>
-        <translation>El modelo reescribió demasiado esta frase; se conservó su frase. (Escribió: %1)</translation>
+        <translation>El modelo reescribió demasiado esta oración; se conservó tu oración. (Escribió: %1)</translation>
     </message>
     <message>
         <source>The model repeated a word; your sentence was kept. (It wrote: %1)</source>
-        <translation>El modelo repitió una palabra; se conservó su frase. (Escribió: %1)</translation>
+        <translation>El modelo repitió una palabra; se conservó tu oración. (Escribió: %1)</translation>
     </message>
     <message>
         <source>1 sentence kept as you wrote it: the model&apos;s version did not look right (point at the sentence to see what it wrote).</source>
-        <translation>1 frase conservada como usted la escribió: la versión del modelo no parecía correcta (señale la frase para ver lo que escribió).</translation>
+        <translation>1 oración conservada como la escribiste: la versión del modelo no parecía correcta (señala la oración para ver lo que escribió).</translation>
     </message>
     <message>
         <source>%1 sentences kept as you wrote them: the model&apos;s versions did not look right (point at a sentence to see what it wrote).</source>
-        <translation>%1 frases conservadas como usted las escribió: las versiones del modelo no parecían correctas (señale una frase para ver lo que escribió).</translation>
+        <translation>%1 oraciones conservadas como las escribiste: las versiones del modelo no parecían correctas (señala una oración para ver lo que escribió).</translation>
     </message>
     <message>
         <source>Done</source>
@@ -683,11 +683,11 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Working on your changes...</source>
-        <translation>Procesando sus cambios...</translation>
+        <translation>Procesando tus cambios...</translation>
     </message>
     <message>
         <source>Stopped. The sentences done so far are shown; the rest is as you wrote it.</source>
-        <translation>Detenido. Se muestran las frases hechas hasta ahora; el resto está como usted lo escribió.</translation>
+        <translation>Detenido. Se muestran las oraciones hechas hasta ahora; el resto está como lo escribiste.</translation>
     </message>
     <message>
         <source>%1: no changes.</source>
@@ -695,15 +695,15 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>%1: 1 change. Click it for the original and other words.</source>
-        <translation>%1: 1 cambio. Haga clic en él para ver el original y otras palabras.</translation>
+        <translation>%1: 1 cambio. Haz clic en él para ver el original y otras palabras.</translation>
     </message>
     <message>
         <source>%1: %2 changes. Click one for the original and other words.</source>
-        <translation>%1: %2 cambios. Haga clic en uno para ver el original y otras palabras.</translation>
+        <translation>%1: %2 cambios. Haz clic en uno para ver el original y otras palabras.</translation>
     </message>
     <message>
         <source>Translated (%1). Click a word for other words.</source>
-        <translation>Traducido (%1). Haga clic en una palabra para ver otras palabras.</translation>
+        <translation>Traducido (%1). Haz clic en una palabra para ver otras palabras.</translation>
     </message>
     <message>
         <source>at once</source>
@@ -723,11 +723,11 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Suggestion: “%2” is the nearest word to “%1”, which is not in the dictionary. Check it. Below: the other suggestions.</source>
-        <translation>Sugerencia: «%2» es la palabra más cercana a «%1», que no está en el diccionario. Compruébela. Abajo: las otras sugerencias.</translation>
+        <translation>Sugerencia: «%2» es la palabra más cercana a «%1», que no está en el diccionario. Compruébala. Abajo: las otras sugerencias.</translation>
     </message>
     <message>
         <source>Added. Click to leave it out.</source>
-        <translation>Añadido. Haga clic para omitirlo.</translation>
+        <translation>Añadido. Haz clic para omitirlo.</translation>
     </message>
     <message>
         <source>Was: %1</source>
@@ -779,7 +779,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Your Sentence Was Kept</source>
-        <translation>Se conservó su frase</translation>
+        <translation>Se conservó tu oración</translation>
     </message>
     <message>
         <source>Looking for other words...</source>
@@ -823,11 +823,11 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Choose another word; the rest of the sentence is fitted to it.</source>
-        <translation>Elija otra palabra; el resto de la frase se ajusta a ella.</translation>
+        <translation>Elige otra palabra; el resto de la oración se ajusta a ella.</translation>
     </message>
     <message>
         <source>A single word is translated by the small model, never by the large one, and the small model is not downloaded: choose %1 with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Una palabra suelta la traduce el modelo pequeño, nunca el grande, y el modelo pequeño no está descargado: elija %1 con Modelos... (Archivo &gt; Opciones &gt; Asistente de traducción).</translation>
+        <translation>Una palabra suelta la traduce el modelo pequeño, nunca el grande, y el modelo pequeño no está descargado: elige %1 con Modelos... (Archivo &gt; Opciones &gt; Ayudante de traducción).</translation>
     </message>
     <message>
         <source>Looking the word up...</source>
@@ -839,7 +839,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>From the dictionary. Click a word to use it.</source>
-        <translation>Del diccionario. Haga clic en una palabra para usarla.</translation>
+        <translation>Del diccionario. Haz clic en una palabra para usarla.</translation>
     </message>
     <message>
         <source>Translated by the small model: it may be inaccurate.</source>
@@ -851,7 +851,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>WordNet has no entry for “%1”, so there is no meaning to show. A model can write one: download Qwen3 1.7B or Qwen3 4B in File &gt; Options &gt; Translation Helper.</source>
-        <translation>WordNet no tiene entrada para «%1», así que no hay significado que mostrar. Un modelo puede escribir uno: descargue Qwen3 1.7B o Qwen3 4B en Archivo &gt; Opciones &gt; Asistente de traducción.</translation>
+        <translation>WordNet no tiene entrada para «%1», así que no hay significado que mostrar. Un modelo puede escribir uno: descarga Qwen3 1.7B o Qwen3 4B en Archivo &gt; Opciones &gt; Ayudante de traducción.</translation>
     </message>
     <message>
         <source>The model wrote no meaning.</source>
@@ -907,7 +907,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>From the Wiktionary (CC BY-SA 4.0), the %1 dictionary you downloaded.</source>
-        <translation>Del Wikcionario (CC BY-SA 4.0), el diccionario de %1 que descargó.</translation>
+        <translation>Del Wikcionario (CC BY-SA 4.0), el diccionario de %1 que descargaste.</translation>
     </message>
     <message>
         <source>Warning: some of these words come from the small translation model. It may be inaccurate.</source>
@@ -935,27 +935,27 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Similar translations (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Traducciones parecidas (%1, para «%2»):</translation>
     </message>
     <message>
         <source>Similar translations (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Traducciones parecidas (%1):</translation>
     </message>
     <message>
         <source>Similar (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Parecidas (%1, para «%2»):</translation>
     </message>
     <message>
         <source>Similar (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Parecidas (%1):</translation>
     </message>
     <message>
         <source>%1 (German): spelling suggestions and similar words are given for English words.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (alemán): las sugerencias de ortografía y las palabras parecidas se dan para palabras en inglés.</translation>
     </message>
     <message>
         <source>%1 (from “%2”)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (de «%2»)</translation>
     </message>
     <message>
         <source>Similar German words (%1):</source>
@@ -991,7 +991,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Select some text in the editor first.</source>
-        <translation>Seleccione primero un texto en el editor.</translation>
+        <translation>Selecciona primero un texto en el editor.</translation>
     </message>
     <message>
         <source>There is no result yet.</source>
@@ -999,11 +999,11 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Click into a text in the editor first (or select the text to be replaced).</source>
-        <translation>Haga clic primero en un texto del editor (o seleccione el texto que se va a sustituir).</translation>
+        <translation>Haz clic primero en un texto del editor (o selecciona el texto que se va a sustituir).</translation>
     </message>
     <message>
         <source>Put into the editor. Edit &gt; Undo there takes it back.</source>
-        <translation>Puesto en el editor. Editar &gt; Deshacer allí lo revierte.</translation>
+        <translation>Puesto en el editor. Edición &gt; Deshacer allí lo revierte.</translation>
     </message>
     <message>
         <source>The result is copied.</source>
@@ -1014,7 +1014,7 @@ Al descargarlo acepta su licencia: %2</translation>
     <name>tp::TranslateTool</name>
     <message>
         <source>&amp;Translation Helper...</source>
-        <translation>&amp;Asistente de traducción...</translation>
+        <translation>&amp;Ayudante de traducción...</translation>
     </message>
     <message>
         <source>Suggestions for translating between eleven languages, and for English spelling, in a window of its own</source>
@@ -1022,7 +1022,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Translation Helper in the &amp;Inspector</source>
-        <translation>Asistente de traducción en el &amp;inspector</translation>
+        <translation>Ayudante de traducción en el &amp;inspector</translation>
     </message>
     <message>
         <source>The same in the inspector, beside the editor</source>
@@ -1030,7 +1030,7 @@ Al descargarlo acepta su licencia: %2</translation>
     </message>
     <message>
         <source>Translation Helper</source>
-        <translation>Asistente de traducción</translation>
+        <translation>Ayudante de traducción</translation>
     </message>
     <message>
         <source>Open the Window</source>
