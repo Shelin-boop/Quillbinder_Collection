@@ -118,9 +118,18 @@ public:
     }
     bool loaded() const { return m_model != nullptr; }
     QString loadedId() const { return m_id; }
+    // version 2 of the engine's interface (beam search, no-speech limit, language detection) when the installed package has it,
+    // else version 1 ("Careful" then does nothing)
+    const qbai_api *engineApi() const
+    {
+        if (!host)
+            return nullptr;
+        const qbai_api *api = host->aiEngine(QBAI_API_VERSION);
+        return api ? api : host->aiEngine(1);
+    }
     QString engineVersion() const
     {
-        const qbai_api *api = host ? host->aiEngine(QBAI_API_VERSION) : nullptr;
+        const qbai_api *api = engineApi();
         return api && api->engine_version ? QString::fromUtf8(api->engine_version()) : QString();
     }
 
@@ -141,7 +150,7 @@ public:
                 *error = e;
             return false;
         };
-        const qbai_api *api = host ? host->aiEngine(QBAI_API_VERSION) : nullptr;
+        const qbai_api *api = engineApi();
         if (!api)
             return fail(QObject::tr("The AI engine is not installed (or could not be loaded). Install it under File > "
                                     "Options > Speech."));
@@ -220,7 +229,14 @@ public:
         const QByteArray promptBytes = prompt.toUtf8();
         qbai_transcribe_params tp;
         memset(&tp, 0, sizeof tp);
-        tp.size = sizeof tp;
+        tp.size = m_api->version >= 2 ? int(sizeof tp) : int(QBAI_TRANSCRIBE_V1_SIZE);
+        if (m_api->version >= 2) {
+            tp.beam_size = s.careful ? 5 : 0;
+            tp.no_speech_max = s.silenceGuard ? 0.6f : 0.f;   // whisper invents text for stretches without speech
+            tp.suppress_nst = s.silenceGuard ? 1 : 0;
+            tp.no_timestamps = 1;
+            tp.no_context = 1;
+        }
         tp.language = lang.constData();
         tp.translate = translate ? 1 : 0;
         tp.prompt = promptBytes.isEmpty() ? nullptr : promptBytes.constData();
@@ -235,6 +251,21 @@ public:
             return QString();
         }
         return speech::cleanText(out, s.silenceGuard);
+    }
+
+    // The probabilities of the two languages for a piece (version 2 of the interface); false when the engine cannot say.
+    bool detect(const QVector<float> &audio, const QString &a, const QString &b, float *pa, float *pb)
+    {
+        if (!m_model || m_api->version < 2 || !m_api->detect_language)
+            return false;
+        const QByteArray ca = a.toLatin1(), cb = b.toLatin1();
+        const char *codes[2] = {ca.constData(), cb.constData()};
+        float probs[2] = {0.f, 0.f};
+        if (m_api->detect_language(m_model, audio.constData(), audio.size(), codes, 2, probs) != QBAI_OK)
+            return false;
+        *pa = probs[0];
+        *pb = probs[1];
+        return true;
     }
 
 private:
@@ -294,17 +325,28 @@ public slots:
         const bool two = !m_s.fallbackLanguage.isEmpty() && m_s.fallbackLanguage != m_s.mainLanguage;
         // Into English: the main language as the spoken one, and the model translates (one run per piece). Two languages
         // without a translation: the engine finds the language of each piece (it cannot be limited to the two).
+        // As 1.9: into English, the main language is the spoken one (the model translates); otherwise, for "keep the original" and
+        // for Careful, the language of each piece is found first among the two (the engine's detect_language, interface 2)
         QString language = m_s.mainLanguage;
-        if (two && !translate)
-            language.clear();
+        bool spokenOther = false;
+        if (two && (!translate || m_s.keepOriginal || m_s.careful)) {
+            float pa = 0, pb = 0;
+            if (m_h->detect(audio, m_s.mainLanguage, m_s.fallbackLanguage, &pa, &pb)) {
+                const speech::LanguageChoice c = speech::chooseLanguage(m_s.mainLanguage, m_s.fallbackLanguage, pa, pb, m_s.modelTranslates);
+                language = c.language;
+                spokenOther = language != m_s.mainLanguage;
+            } else if (!translate) {
+                language.clear();   // an engine without language detection: it finds the language among all it knows
+            }
+        }
         QString error;
         QString text = m_h->run(m_s, audio, language, translate, m_context, &error);
         if (!error.isEmpty())
             emit failed(error);
-        if (translate && two && m_s.keepOriginal && !text.isEmpty()) {
-            const QString original = m_h->run(m_s, audio, QString(), false, QString(), nullptr);
+        if (translate && spokenOther && m_s.keepOriginal && !text.isEmpty()) {
+            const QString original = m_h->run(m_s, audio, language, false, QString(), nullptr);
             if (!original.isEmpty() && original != text)
-                text += QStringLiteral(" [%1: %2]").arg(m_s.fallbackLanguage, original);
+                text += QStringLiteral(" [%1: %2]").arg(language, original);
         }
         if (!text.isEmpty())
             m_context += QLatin1Char(' ') + text;

@@ -345,6 +345,7 @@ speech::EngineSettings SpeechTool::engineSettings() const
     s.mainLanguage = setting(QStringLiteral("main"), QStringLiteral("en")).toString();
     s.fallbackLanguage = setting(QStringLiteral("fallback"), QStringLiteral("de")).toString();
     s.keepOriginal = setting(QStringLiteral("keepOriginal"), false).toBool();
+    s.careful = setting(QStringLiteral("careful"), false).toBool();
     s.hint = setting(QStringLiteral("hint")).toString();
     s.useContext = setting(QStringLiteral("useContext"), false).toBool();
     s.silenceGuard = setting(QStringLiteral("silenceGuard"), true).toBool();
@@ -1472,7 +1473,7 @@ private:
 
     SpeechTool *m_tool;
     QWidget *m_w;
-    QComboBox *m_model, *m_device, *m_main, *m_fallback, *m_sensitivity, *m_input;
+    QComboBox *m_model, *m_device, *m_accuracy, *m_main, *m_fallback, *m_sensitivity, *m_input;
     QLabel *m_impact, *m_installed, *m_message, *m_deviceNote, *m_langNote, *m_speed;
     QPushButton *m_download, *m_local, *m_remove, *m_cancel, *m_speedTest;
     QRadioButton *m_official, *m_other;
@@ -1585,6 +1586,11 @@ SpeechOptions::SpeechOptions(SpeechTool *tool, QWidget *parent) : QObject(nullpt
                        "for all AI functions together, in File > Options > General > AI Models."));
     m_shared->setObjectName(QStringLiteral("speechSharedSettings"));
     pf->addRow(m_shared);
+    m_accuracy = new QComboBox(procBox);
+    m_accuracy->setObjectName(QStringLiteral("speechAccuracy"));
+    m_accuracy->addItem(tr("Fast"));
+    m_accuracy->addItem(tr("Careful (slower: weighs several possible texts, finds the language of each piece)"));
+    pf->addRow(tr("Accuracy:"), m_accuracy);
     m_speedTest = new QPushButton(tr("Speed Test"), procBox);
     m_speedTest->setObjectName(QStringLiteral("speechSpeedTest"));
     m_speed = note();
@@ -1712,6 +1718,7 @@ SpeechOptions::SpeechOptions(SpeechTool *tool, QWidget *parent) : QObject(nullpt
     }
     m_main->setCurrentIndex(qMax(0, m_main->findData(s.mainLanguage)));
     m_fallback->setCurrentIndex(qMax(0, m_fallback->findData(s.fallbackLanguage)));
+    m_accuracy->setCurrentIndex(s.careful ? 1 : 0);
     m_keepOriginal->setChecked(s.keepOriginal);
     m_hint->setPlainText(s.hint);
     m_sensitivity->setCurrentIndex(s.sensitivity);
@@ -1912,6 +1919,7 @@ void SpeechOptions::apply()
     m_tool->setSetting(QStringLiteral("source"), m_other->isChecked() ? QStringLiteral("other") : QStringLiteral("official"));
     m_tool->setSetting(QStringLiteral("otherAddress"), m_otherAddress->text().trimmed());
     m_tool->setSetting(QStringLiteral("device"), m_device->currentData().toString());
+    m_tool->setSetting(QStringLiteral("careful"), m_accuracy->currentIndex() == 1);
     m_tool->setSetting(QStringLiteral("main"), m_main->currentData().toString());
     m_tool->setSetting(QStringLiteral("fallback"), m_fallback->currentData().toString());
     m_tool->setSetting(QStringLiteral("keepOriginal"), m_keepOriginal->isChecked());

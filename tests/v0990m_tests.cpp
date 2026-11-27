@@ -300,9 +300,17 @@ int main(int argc, char **argv)
             check(aiPanel != nullptr, QStringLiteral("the options show the program's AI panel (engine and models of the catalog)"));
             auto *shared = page->findChild<QLabel *>(QStringLiteral("speechSharedSettings"));
             check(!page->findChild<QSpinBox *>(QStringLiteral("speechThreads")) && !page->findChild<QSpinBox *>(QStringLiteral("speechUnload"))
-                      && !page->findChild<QComboBox *>(QStringLiteral("speechAccuracy")) && shared
+                      && shared
                       && shared->text().contains(QLatin1String("File > Options > General > AI Models")),
                   QStringLiteral("no fields of its own for the cores and the time to free the model: the page points to General > AI Models"));
+            auto *accuracy = page->findChild<QComboBox *>(QStringLiteral("speechAccuracy"));
+            check(accuracy && accuracy->count() == 2 && accuracy->currentIndex() == 0, QStringLiteral("Accuracy: Fast, or Careful (restored in 1.10), Fast at first"));
+            if (accuracy)
+                accuracy->setCurrentIndex(1);
+            sec->apply();
+            check(toolhost::host().setting(QStringLiteral("speech-transcription"), QStringLiteral("careful")).toBool(), QStringLiteral("... Careful is kept by the options"));
+            if (accuracy)
+                accuracy->setCurrentIndex(0);
             auto *device = page->findChild<QComboBox *>(QStringLiteral("speechDevice"));
             QStringList data, names;
             for (int i = 0; device && i < device->count(); ++i) {
@@ -389,6 +397,35 @@ int main(int argc, char **argv)
         modelmem::ModelMemory::instance().modelUnloaded(QStringLiteral("speech-transcription:small"));
         setSpeech(QStringLiteral("device"), QStringLiteral("auto"));
     }
+    // ---- Careful (beam search) and the two-language choice by the engine's language probabilities (interface 2)
+    {
+        using DetectFn = int (*)();
+        auto detects = reinterpret_cast<DetectFn>(fake.resolve("qbai_fake_detects"));
+        auto lastText = [&] { return readFile(callString(tool, "recordingFile")); };
+        setSpeech(QStringLiteral("main"), QStringLiteral("en"));
+        setSpeech(QStringLiteral("fallback"), QStringLiteral("de"));
+        setSpeech(QStringLiteral("careful"), false);
+        runLive(tool, wav);
+        const QString fast = lastText();
+        check(!fast.contains(QLatin1String("(beam")) && fast.contains(QLatin1String("(no-speech limit)")) && detects && detects() == 0,
+              QStringLiteral("Fast: greedy decoding, the no-speech limit of the silence guard goes to the engine, no language detection into English"), fast.left(200));
+        setSpeech(QStringLiteral("careful"), true);
+        qputenv("QBAI_FAKE_LANG", "de");
+        runLive(tool, wav);
+        const QString careful = lastText();
+        check(careful.contains(QLatin1String("(beam 5)")) && careful.contains(QLatin1String("[de]")) && detects && detects() > 0,
+              QStringLiteral("Careful: beam search with 5 beams, and the language of each piece is found by the engine's probabilities (German)"),
+              careful.left(300));
+        qputenv("QBAI_FAKE_LANG", "en");
+        runLive(tool, wav);
+        check(lastText().contains(QLatin1String("[en]")), QStringLiteral("... English when the probabilities say English"), lastText().left(200));
+        setSpeech(QStringLiteral("careful"), false);
+        qunsetenv("QBAI_FAKE_LANG");
+        setSpeech(QStringLiteral("fallback"), QStringLiteral("de"));
+        tm->unloadModel(QStringLiteral("speech-transcription:small"));
+        modelmem::ModelMemory::instance().modelUnloaded(QStringLiteral("speech-transcription:small"));
+    }
+
     // ---- Insert at Cursor
     {
         auto *edit = panel ? panel->findChild<QPlainTextEdit *>(QStringLiteral("speechText")) : nullptr;

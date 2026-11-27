@@ -57,8 +57,10 @@ New functions and fixes (Linux first).
   update of the program itself (a 0.95.0 installation without that update keeps 1.9). The device list shows **Automatic**, the
   processor and **the graphics cards of the engine** (NVIDIA, AMD, Intel through Vulkan). The fields for threads and for the
   time to free the model are gone: the page points to **File > Options > General > AI Models**. The accuracy choice
-  "Careful" is gone (the engine has one way of decoding), and with two languages that cannot be translated into each other
-  the engine finds the language of each piece among all it knows. A model of the program's list ("whisper-<id>", installed
+  "Careful" stays: the C interface of the AI engine is now **version 2** (`tools/QbAi.h`; version 1 is its prefix, the program
+  accepts engine packages of both): `qbai_transcribe_params` gets beam search (`beam_size`), the no-speech limit
+  (`no_speech_max`), `suppress_nst`, `no_timestamps` and `no_context`, and the table gets `detect_language` (the probabilities of
+  languages for a piece), so the silence guard and the choice between the two spoken languages work as in 1.9. A model of the program's list ("whisper-<id>", installed
   with the AI panel at the top of the options page) is used when no model of the add-on's own download is installed. New: the
   button **Insert at Cursor** in the Transcriptions tab (the marked part or all of the text, at the cursor of the text being
   edited, one undo step) and the option **Write into the text as I speak** (off at first; the transcription is still kept in

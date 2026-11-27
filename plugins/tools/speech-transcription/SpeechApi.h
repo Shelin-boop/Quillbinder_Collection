@@ -33,6 +33,7 @@ struct EngineSettings {
     bool keepOriginal = false;    // translated pieces keep what was said, in brackets after them
     QString hint;                 // words and names the text uses
     bool useContext = false;      // the text before as context for the next piece
+    bool careful = false;         // 1.10 (engine interface 2): beam search instead of greedy decoding, and the language of each piece found first
     bool silenceGuard = true;     // leave out what whisper invents in silence or noise
     int sensitivity = 1;          // 0 low, 1 medium, 2 high: how quiet speech may be
     int pauseMs = 700;            // a pause this long ends a piece

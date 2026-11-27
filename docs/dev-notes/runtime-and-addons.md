@@ -79,7 +79,7 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   (`QB_AI_ENGINE_DIR` or `build/ai-engine`), into `<build>/qbai/libqbai.so.1` with links to the pack's libraries beside it,
   as in the package; not `<build>/ai-engine`, which is the pack's own default folder). The program links none of it.
 - **The C interface** `src/tools/QbAi.h` (the program and add-ons include it): one exported entry `qbai_get_api(int version)`
-  returning `const struct qbai_api *`, a table of function pointers, `QBAI_API_VERSION` 1. A newer library keeps every function
+  returning `const struct qbai_api *`, a table of function pointers, `QBAI_API_VERSION` 2 since Speech Transcription 1.10 (1 before). A newer library keeps every function
   of an older version at its place and adds new ones at the end; `qbai_get_api(v)` answers for every `1 <= v <=` its own
   version (NULL above), and `size` says how much of the table there is. Every parameter struct begins with its own `size`.
   Functions: `engine_version`, `last_error` (thread-local, English), `device_count(refresh)`/`device_get` (index 0 the CPU, then
@@ -221,11 +221,14 @@ a tag points elsewhere), none changed except where said here.
   (`ToolModels::unloadModel`, main thread) must never wait for the worker: `Engine::unloadModelOfId` only tries the mutex and
   answers `false` ("in use") when it cannot take it. A blocking wait here would be a deadlock (the same one ai1 met in the
   engine's job lock).
-- **What the engine cannot do that whisper.cpp's own API could**: beam search ("Careful"), the probability of "no speech" per
-  segment (the silence guard now only cleans the text with `speech::cleanText`), and the language probabilities (so the two-language
-  choice of `chooseLanguage` is not used: with two languages that cannot be translated into each other the language is
-  "auto", among all the engine knows). With English as the main language the translating pass is as before (main language as
-  spoken language, `translate`); "keep the original" runs a second pass with "auto" and writes the fallback language's code.
+- **Engine interface 2** (`tools/QbAi.h`, `QBAI_API_VERSION` 2): added at the end, so version 1 is a prefix. `qbai_get_api(1)` returns a
+  table with `size == QBAI_API_V1_SIZE`; `qbai_get_api(2)` the whole one with `detect_language`. `AiEngine::ensureLoaded` accepts
+  version 1 (an older engine package still works for Read Aloud); the add-on asks `aiEngine(2)` and falls back to `aiEngine(1)`
+  (then "Careful" and the language choice do nothing and an unlimited language is "auto"). Transcribe params of version 2 are read
+  only when `size` reaches them (`QBAI_TRANSCRIBE_V1_SIZE`). The add-on passes `beam_size` 5 for Careful, `no_speech_max` 0.6 and
+  `suppress_nst` for the silence guard (whisper's no-speech probability per segment), `no_timestamps` and `no_context` as 1.9
+  did; the two-language choice is `speech::chooseLanguage` on `detect_language`'s probabilities, as in 1.9 (for translation into
+  English, for "keep the original" and for Careful). The fake engine (`QBAI_FAKE_LANG`, `qbai_fake_detects`) follows.
 - **Model files.** `installedModelFile()` is the add-on's own download first, else the program's catalog entry `whisper-<id>`
   (`ToolHost::aiModelFile`, `<id>` from `speech::catalog()`); `ownModelFile()` is what Remove and the replace step touch. The
   catalog's ASR entries (models-5) must use these ids.

@@ -220,8 +220,9 @@ int transcribe(qbai_model *m, const float *pcm, int64_t samples, const qbai_tran
 {
     if (text)
         *text = nullptr;
-    if (!m || m->kind != QBAI_ASR_WHISPER || !pcm || samples <= 0 || !p || p->size < int(sizeof(qbai_transcribe_params)))
+    if (!m || m->kind != QBAI_ASR_WHISPER || !pcm || samples <= 0 || !p || p->size < int(QBAI_TRANSCRIBE_V1_SIZE))
         return fail(QBAI_BAD_ARGS, "bad arguments");
+    const bool v2 = p->size >= int(sizeof(qbai_transcribe_params));
     const std::string lang = p->language ? p->language : "auto";
     const std::string first = "[" + lang + "] The quick brown fox", second = " jumps over the lazy dog.";
     if (p->cancel && p->cancel(p->user))
@@ -236,7 +237,11 @@ int transcribe(qbai_model *m, const float *pcm, int64_t samples, const qbai_tran
         p->segment(second.c_str(), 1500, 3000, p->user);
     if (p->progress)
         p->progress(100, p->user);
-    const std::string all = first + second + (p->translate ? " (in English)" : "");
+    std::string all = first + second + (p->translate ? " (in English)" : "");
+    if (v2 && p->beam_size > 1)
+        all += " (beam " + std::to_string(p->beam_size) + ")";
+    if (v2 && p->no_speech_max > 0.f)
+        all += " (no-speech limit)";
     if (text) {
         *text = static_cast<char *>(std::malloc(all.size() + 1));
         std::memcpy(*text, all.c_str(), all.size() + 1);
@@ -245,6 +250,20 @@ int transcribe(qbai_model *m, const float *pcm, int64_t samples, const qbai_tran
 }
 
 void freeText(char *t) { std::free(t); }
+
+// QBAI_FAKE_LANG=<code>: that language gets 0.9, the others 0.05 (default "en"); QBAI_FAKE_LANG_CALLS counts in g_detects
+std::atomic<int> g_detects{0};
+int detectLanguage(qbai_model *m, const float *pcm, int64_t samples, const char *const *codes, int count, float *probs)
+{
+    if (!m || m->kind != QBAI_ASR_WHISPER || !pcm || samples <= 0 || !codes || count <= 0 || !probs)
+        return fail(QBAI_BAD_ARGS, "bad arguments");
+    ++g_detects;
+    const char *env = std::getenv("QBAI_FAKE_LANG");
+    const std::string want = env && *env ? env : "en";
+    for (int i = 0; i < count; ++i)
+        probs[i] = want == codes[i] ? 0.9f : 0.05f;
+    return QBAI_OK;
+}
 
 bool putPcm(qbai_pcm *out, const float *data, int64_t n, int rate)
 {
@@ -376,10 +395,17 @@ int stretch(const float *pcm, int64_t samples, int rate, float speed, qbai_pcm *
 const char *engineVersion() { return "fake qbai 1 (tests)"; }
 const char *lastError() { return t_error.c_str(); }
 
-const qbai_api kApi = {
-    1, int(sizeof(qbai_api)), engineVersion, lastError, deviceCount, deviceGet, setThreads, threads, modelMemory, load, unload,
-    modelInfo, voiceName, languageName, transcribe, freeText, synthesize, freePcm, stretch, stretchBegin, stretchFeed, stretchEnd,
-};
+qbai_api makeApi(int version, int size)
+{
+    qbai_api a = {
+        version, size, engineVersion, lastError, deviceCount, deviceGet, setThreads, threads, modelMemory, load, unload,
+        modelInfo, voiceName, languageName, transcribe, freeText, synthesize, freePcm, stretch, stretchBegin, stretchFeed, stretchEnd,
+        detectLanguage,
+    };
+    return a;
+}
+const qbai_api kApi1 = makeApi(1, int(QBAI_API_V1_SIZE));
+const qbai_api kApi2 = makeApi(2, int(sizeof(qbai_api)));
 
 } // namespace
 
@@ -387,8 +413,10 @@ extern "C" const qbai_api *qbai_get_api(int version)
 {
     if (version < 1 || version > QBAI_API_VERSION)
         return nullptr;
-    return &kApi;
+    return version == 1 ? &kApi1 : &kApi2;
 }
+
+extern "C" __attribute__((visibility("default"))) int qbai_fake_detects() { return g_detects.load(); }
 
 extern "C" __attribute__((visibility("default"))) void qbai_fake_stats(int *loaded, int *loads, int *lastDevice, int *lastThreads)
 {
