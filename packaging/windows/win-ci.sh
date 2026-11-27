@@ -147,7 +147,7 @@ if [ $rc -eq 0 ]; then
   for f in "$CRYPTO"/lib/*.lib; do LIBS="$LIBS $(cygpath -m "$f")"; done
   for z in libzs.lib zs.lib zlib.lib; do [ -f "$(cygpath -u "$ZM")/$z" ] && LIBS="$LIBS $ZM/$z" && break; done
   LIBS="$LIBS bcrypt.lib advapi32.lib crypt32.lib user32.lib ws2_32.lib"
-  CRYPTO_ARGS=("-DCMAKE_CXX_FLAGS=/DWIN32 /D_WINDOWS /GR /EHsc /DQB_HAVE_RNP=1 /DRNP_STATIC /I$CM/include" "-DCMAKE_CXX_STANDARD_LIBRARIES=$LIBS kernel32.lib")
+  CRYPTO_ARGS=("-DCMAKE_CXX_FLAGS=-DWIN32 -D_WINDOWS -GR -EHsc -DQB_HAVE_RNP=1 -DRNP_STATIC -I$CM/include" "-DCMAKE_CXX_STANDARD_LIBRARIES=$LIBS kernel32.lib")
 fi
 # ---- configure
 cmake -S . -B build -G Ninja \

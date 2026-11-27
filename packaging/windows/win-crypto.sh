@@ -103,12 +103,12 @@ mkdir -p "$WORK/b-bzip2"
 cp "$WORK/b-bzip2/bz2.lib" "$PREFIX/lib/"
 cp "$WORK/bzip2/bzlib.h" "$PREFIX/include/"
 
-# ---- RNP: static, Botan 3 backend; "-include cstring" is MSVC's /FI (see tools/get-crypto.sh), /DRNP_STATIC is what the
+# ---- RNP: static, Botan 3 backend; "-include cstring" is MSVC's -FI (dash form: Git Bash turns a leading slash into a path, run 46029274249) (see tools/get-crypto.sh), -DRNP_STATIC is what the
 # program's own compile needs too (the header says dllimport without it)
 echo "== RNP"
 cmake -S "$WORK/rnp" -B "$WORK/b-rnp" -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$P" \
     -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDLL -DCMAKE_PREFIX_PATH="$P" -DBUILD_SHARED_LIBS=OFF \
-    -DCMAKE_CXX_FLAGS="/FIcstring /EHsc /DRNP_STATIC" -DCMAKE_C_FLAGS="/DRNP_STATIC" \
+    -DCMAKE_CXX_FLAGS="-FIcstring -EHsc -DRNP_STATIC" -DCMAKE_C_FLAGS="-DRNP_STATIC" \
     -DCRYPTO_BACKEND=botan3 -DBOTAN_ROOT_DIR="$P" -DENABLE_CRYPTO_REFRESH=OFF -DENABLE_PQC=OFF -DBUILD_TESTING=OFF \
     -DENABLE_DOC=OFF -DDOWNLOAD_GTEST=OFF -DENABLE_COVERAGE=OFF -DENABLE_SANITIZERS=OFF -DENABLE_FUZZERS=OFF \
     -DBZIP2_INCLUDE_DIR="$P/include" -DBZIP2_LIBRARY_RELEASE="$P/lib/bz2.lib" \
