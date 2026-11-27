@@ -63,12 +63,12 @@ void MainWindow::createExtraActions()
         return ac;
     };
     // ---- Format > Font (0.94.0; before: Format > Font)
-    connect(act(QStringLiteral("installFonts"), tr("&Install Font Files…"), QStringLiteral("font")), &QAction::triggered, this,
+    connect(act(QStringLiteral("installFonts"), tr("I&nstall Font Files…"), QStringLiteral("font")), &QAction::triggered, this,
             [this] { installFonts(); });
-    connect(act(QStringLiteral("fontFolder"), tr("Open &Font Folder"), QStringLiteral("folder-open")), &QAction::triggered, this, [] {
+    connect(act(QStringLiteral("fontFolder"), tr("&Open Font Folder"), QStringLiteral("folder-open")), &QAction::triggered, this, [] {
         QDesktopServices::openUrl(QUrl::fromLocalFile(fontinstall::userFontDir()));
     });
-    connect(act(QStringLiteral("fontManager"), tr("Open Font &Manager of the Desktop"), QStringLiteral("preferences-desktop-font")),
+    connect(act(QStringLiteral("fontManager"), tr("Open Font Manager of &the Desktop"), QStringLiteral("preferences-desktop-font")),
             &QAction::triggered, this, [this] {
                 QString which;
                 if (!fontinstall::openFontManager(&which))

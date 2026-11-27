@@ -2,6 +2,17 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## Texts with numbers and the English Alt letters (0.99.0, the translation check)
+
+`qb_fixes_tests` (last block): twelve source texts with `%n` read right in English for 0, 1, 2 and 5 (through
+`QCoreApplication::translate`, so the `EnglishPlurals` translator of `Language.cpp` is part of it), the helper
+`language::englishPlural`, and a scan that the old piece texts are gone from the source (it needs `QB_TEST_SOURCE_DIR`,
+set for this suite in `tests/CMakeLists.txt`). `qb_m13_tests` (menu audit): "the English source texts of one menu share no
+Alt letter" reads the text of each entry as the source wrote it (`qbMnemonicFrom` of `fixMnemonics`, see ui.md) and lists
+every clash with `English letter clash:`. The add-ons' entries count only when the add-ons of the build are installed
+(`build/addons-dist`): a build without them does not see the entries of Writing Tools, and "every menu place the manual
+names is in the menus" fails there too (the add-ons' places).
+
 ## The system test on GitHub, in shards, and the harness for Windows (0.99.0, item 124)
 
 **The workflow** `.github/workflows/system-test.yml` ("Linux system test"): by hand (Actions > Run workflow, on any

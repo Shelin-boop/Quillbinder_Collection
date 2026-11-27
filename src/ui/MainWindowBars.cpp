@@ -164,8 +164,14 @@ void fixMnemonics(QMenu *m)
         if (best >= 0)
             used.insert(label.at(best).toLower());
         fixed += rest;
-        if (fixed != text)
+        if (fixed != text) {
+            // 0.99.0: the text as it was written in the source, for the menu audit (tests/m13_tests.cpp: no clash before this fix)
+            // (a text that this function wrote last keeps the source text it came from)
+            if (a->property("qbMnemonicFixed").toString() != text)
+                a->setProperty("qbMnemonicFrom", text);
+            a->setProperty("qbMnemonicFixed", fixed);
             a->setText(fixed);
+        }
     }
 }
 
@@ -249,7 +255,7 @@ void MainWindow::createMenus()
     menuAlias(exp, QStringLiteral("exportFiles"), tr("&Files…"));
     menuAlias(exp, QStringLiteral("saveCopyScrivener"), tr("&Scrivener Project…"));
     menuAlias(exp, QStringLiteral("saveCopyQuillbinder"), tr("&%1 Project…").arg(QStringLiteral(QB_APP_NAME)));
-    QMenu *cmp = file->addMenu(tr("Compare and &Transfer"));
+    QMenu *cmp = file->addMenu(tr("Compare an&d Transfer"));
     cmp->setObjectName(QStringLiteral("compareMenu"));
     add(cmp, {"compareFile", "", "compareByChapter", "compareStepByStep"});
     add(file, {"compile", "", "printSettings", "printPreview", "print", "", "showProjectFolder", "convertFile", "",
@@ -261,7 +267,7 @@ void MainWindow::createMenus()
     add(edit, {"undo", "redo", "", "cut", "copy", "paste", "pastePlain", "pasteKeep", "", "selectAll", "selectAnnotation"});
     connect(edit, &QMenu::aboutToShow, this, &MainWindow::updateUndoNames); // 0.90.1: the names of the steps (UR-12)
     edit->addSeparator();
-    QMenu *find = edit->addMenu(icons::action(QStringLiteral("edit-find")), tr("&Find"));
+    QMenu *find = edit->addMenu(icons::action(QStringLiteral("edit-find")), tr("F&ind"));
     add(find, {"find", "replace", "findNext", "findPrev", "useSelectionForFind", "", "projectSearch", "projectReplace", "",
                "findFormat", "findFormatNext", "findFormatPrev"});
     QMenu *move = edit->addMenu(tr("&Move"));
@@ -293,7 +299,7 @@ void MainWindow::createMenus()
                 e->insertPlainText(tag);
         });
     }
-    QMenu *ph = insert->addMenu(tr("&Placeholders"));
+    QMenu *ph = insert->addMenu(tr("Plac&eholders"));
     const QList<QPair<QString, QString>> placeholders = {{tr("Project title"), QStringLiteral("<$projecttitle>")},
                                                          {tr("Author"), QStringLiteral("<$author>")},
                                                          {tr("Author's last name"), QStringLiteral("<$surname>")},
@@ -365,11 +371,11 @@ void MainWindow::createMenus()
     profilesMenu->setObjectName(QStringLiteral("profileMenu"));
     connect(profilesMenu, &QMenu::aboutToShow, this, [this, profilesMenu] { fillProfilesMenu(profilesMenu); });
     fillProfilesMenu(profilesMenu);
-    QMenu *te = view->addMenu(tr("&Text Editing"));
+    QMenu *te = view->addMenu(tr("Te&xt Editing"));
     add(te, {"pageView", "pageSetup", "", "showRuler", "showFormatBar", "showInvisibles", "typewriter", "scrivTitles", "fixedWidth"});
-    QMenu *cork = view->addMenu(tr("&Corkboard Options"));
+    QMenu *cork = view->addMenu(tr("Cor&kboard Options"));
     add(cork, {"stamps", "", "corkFreeform", "corkLabels", "corkCommit", "", "selectionAffectsOther", "selectionAffectsCopyholder"});
-    QMenu *outl = view->addMenu(tr("&Outliner Options"));
+    QMenu *outl = view->addMenu(tr("Out&liner Options"));
     outl->setObjectName(QStringLiteral("outlinerOptionsMenu"));
     auto fillOutlinerMenu = [this, outl] {
         outl->clear();
@@ -384,7 +390,7 @@ void MainWindow::createMenus()
     };
     fillOutlinerMenu();
     connect(outl, &QMenu::aboutToShow, this, fillOutlinerMenu);
-    QMenu *labelIn = view->addMenu(tr("Use Label Color &In"));
+    QMenu *labelIn = view->addMenu(tr("&Use Label Color In"));
     menuAlias(labelIn, QStringLiteral("labelBinder"), tr("&Binder"));
     menuAlias(labelIn, QStringLiteral("labelIcons"), tr("I&cons"));
     menuAlias(labelIn, QStringLiteral("tintCards"), tr("&Index Cards"));
@@ -465,7 +471,7 @@ void MainWindow::createMenus()
     createMediaMenu(nav);
     QMenu *ed = nav->addMenu(tr("&Editor"));
     add(ed, {"lock", "", "closeCopyholder", "", "focusEditor", "switchEditor"});
-    QMenu *affects = nav->addMenu(tr("&Binder Selection Affects"));
+    QMenu *affects = nav->addMenu(tr("Binder &Selection Affects"));
     for (QAction *ac : m_affectsGroup->actions())
         affects->addAction(ac);
     QMenu *inspect = nav->addMenu(tr("&Inspect"));
@@ -491,7 +497,7 @@ void MainWindow::createMenus()
     QMenu *proj = mb->addMenu(tr("&Project"));
     proj->setProperty("qbNeedsProject", true);
     add(proj, {"newText", "newFolder"});
-    m_templateMenu = proj->addMenu(icons::action(QStringLiteral("folder-templates")), tr("New From &Template"));
+    m_templateMenu = proj->addMenu(icons::action(QStringLiteral("folder-templates")), tr("&New From Template"));
     connect(m_templateMenu, &QMenu::aboutToShow, this, [this] {
         m_templateMenu->clear();
         BinderItem *tf = m_project ? m_project->item(m_project->templatesFolderId) : nullptr;
@@ -530,8 +536,8 @@ void MainWindow::createMenus()
     QMenu *convert = docs->addMenu(tr("Con&vert"));
     add(convert, {"toFolder", "toText", "sheetToObject", "", "defaultFormatting"});
     docs->addSeparator();
-    m_iconMenu = docs->addMenu(icons::action(QStringLiteral("preferences-desktop-icons")), tr("Change &Icon"));
-    m_defaultTemplateMenu = docs->addMenu(tr("Default &Template for Subdocuments"));
+    m_iconMenu = docs->addMenu(icons::action(QStringLiteral("preferences-desktop-icons")), tr("&Change Icon"));
+    m_defaultTemplateMenu = docs->addMenu(tr("Default Template &for Subdocuments"));
     m_labelMenu = docs->addMenu(tr("&Label"));
     m_statusMenu = docs->addMenu(tr("&Status"));
     m_labelMenu->menuAction()->setProperty("qbWantsMnemonic", true); // (their titles are the project's own words, 0.99.0)
@@ -624,7 +630,7 @@ void MainWindow::createMenus()
     createFontMenu(fontMenu); // 0.94.0: the commands for fonts that are not on the computer yet (before: Navigate > Fonts)
     QMenu *paraMenu = format->addMenu(tr("&Paragraph"));
     add(paraMenu, {"paragraph", "", "alignLeft", "alignCenter", "alignRight", "alignJustify", ""});
-    QMenu *lineMenu = paraMenu->addMenu(tr("&Line Spacing"));
+    QMenu *lineMenu = paraMenu->addMenu(tr("Line &Spacing"));
     add(lineMenu, {"line100", "line109", "line115", "line120", "line150", "line200", ""});
     lineMenu->addAction(tr("Other…"), this, [this] { a[QStringLiteral("paragraph")]->trigger(); });
     add(paraMenu, {"indentMore", "indentLess", "", "resetParagraph"});
@@ -689,7 +695,7 @@ void MainWindow::createMenus()
     // 0.94.0: one place per topic: the add-ons and the check for updates, the program's own files and the developer's
     // help in submenus; Find Command searches all menus
     add(help, {"findCommand", "", "manual", "quickStart", "welcome", "placeholders", "keyboardShortcuts", "", "mindMapHelp", ""});
-    QMenu *addons = help->addMenu(icons::action(QStringLiteral("preferences-plugin")), tr("&Add-ons and Updates"));
+    QMenu *addons = help->addMenu(icons::action(QStringLiteral("preferences-plugin")), tr("Add-&ons and Updates"));
     addons->setObjectName(QStringLiteral("addonsMenu"));
     add(addons, {"addonManager", "installPackage", "", "updateCheckNow", "updateCheckAuto"});
     add(help, {"integrate"});

@@ -226,9 +226,11 @@ void TargetsDialog::refresh()
         m_draftBar->setValue(qMin(draft, qMax(1, t.draftTarget)));
     }
     m_draftBar->setVisible(t.draftTarget != 0);
-    m_draftLabel->setText(t.draftTarget != 0 ? tr("%1 of %2 %3").arg(loc.toString(draft), targettext::numberHtml(t.draftTarget, back),
-                                                                      t.draftChars ? tr("characters") : tr("words"))
-                                             : tr("%1 %2 in the Draft").arg(loc.toString(draft), t.draftChars ? tr("characters") : tr("words")));
+    m_draftLabel->setText(t.draftTarget != 0
+                              ? (t.draftChars ? tr("%1 of %2 characters") : tr("%1 of %2 words"))
+                                    .arg(loc.toString(draft), targettext::numberHtml(t.draftTarget, back))
+                              : (t.draftChars ? tr("%Ln character(s) in the Draft", "", qMax(0, draft))
+                                              : tr("%Ln word(s) in the Draft", "", qMax(0, draft))));
     const int session = t.sessionChars ? m_project->sessionChars() : m_project->sessionWords();
     const int target = m_project->sessionTargetToday();
     if (target < 0) { // today's count is net: below 0 where more words were cut than written

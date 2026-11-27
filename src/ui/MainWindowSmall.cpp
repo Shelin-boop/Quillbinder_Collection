@@ -99,7 +99,7 @@ void MainWindow::createSmallActions()
         return ac;
     };
 #ifndef Q_OS_ANDROID
-    QAction *check = make(QStringLiteral("smallInterface"), tr("Small &Interface"));
+    QAction *check = make(QStringLiteral("smallInterface"), tr("Sm&all Interface"));
     check->setCheckable(true);
     check->setToolTip(tr("A few round buttons and the most room for the text, for a small screen or for use without a keyboard"));
     connect(check, &QAction::toggled, this, [this](bool on) { setSmallInterface(on); });
@@ -115,7 +115,7 @@ void MainWindow::createSmallActions()
         connect(ac, &QAction::triggered, this, [this, choice] { setSmallChoice(choice); });
     }
     // the check item of the other systems is still there for the code (the menu shows the three choices)
-    QAction *check = make(QStringLiteral("smallInterface"), tr("Small &Interface"));
+    QAction *check = make(QStringLiteral("smallInterface"), tr("Sm&all Interface"));
     check->setCheckable(true);
     connect(check, &QAction::toggled, this, [this](bool on) { setSmallInterface(on); });
 #endif

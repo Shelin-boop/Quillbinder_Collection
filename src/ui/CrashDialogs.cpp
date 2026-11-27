@@ -720,7 +720,7 @@ CrashReportsDialog::CrashReportsDialog(QWidget *parent) : QDialog(parent)
         }
     });
     connect(m_deleteAll, &QPushButton::clicked, this, [this] {
-        if (ask::question(this, tr("Delete All Crash Reports"), tr("Delete all %1?").arg(text::plural(count(), tr("crash report"), tr("crash reports"))), QMessageBox::Yes | QMessageBox::No, QMessageBox::No, tr("Delete All"))
+        if (ask::question(this, tr("Delete All Crash Reports"), tr("Delete all %Ln crash report(s)?", "", count()), QMessageBox::Yes | QMessageBox::No, QMessageBox::No, tr("Delete All"))
             != QMessageBox::Yes)
             return;
         for (const crash::Report &r : crash::reports())

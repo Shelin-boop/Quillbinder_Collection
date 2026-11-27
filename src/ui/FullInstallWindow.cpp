@@ -24,7 +24,7 @@ namespace qb {
 QString FullInstallWindow::message(int count, qint64 bytes)
 {
     const qint64 mb = qMax<qint64>(1, (bytes + 500000) / 1000000);
-    return tr("Installing %1 (%2 MB)...").arg(text::plural(count, tr("add-on"), tr("add-ons"))).arg(mb);
+    return tr("Installing %Ln add-on(s) (%1 MB)...", "", count).arg(mb);
 }
 
 FullInstallWindow::FullInstallWindow(int count, qint64 bytes, QWidget *parent) : QWidget(parent, Qt::Window | Qt::WindowTitleHint)

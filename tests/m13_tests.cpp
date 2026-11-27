@@ -941,6 +941,32 @@ int main(int argc, char **argv)
         check(unconnected.isEmpty(), QStringLiteral("menu audit: every enabled entry does something (is connected)"),
               unconnected.join(QLatin1String("; ")));
         check(mnemonicDup.isEmpty(), QStringLiteral("menu audit: no letter for Alt used twice in one menu"), mnemonicDup.join(QLatin1String("; ")));
+        // 0.99.0: the English texts themselves have no clash: the letters as the source writes them, before fixMnemonics
+        // (which keeps the translations apart) moved any; a moved entry keeps its source text in a property
+        QStringList sourceClash;
+        for (QMenu *m : menus) {
+            if (!m)
+                continue;
+            QHash<QChar, QString> keys;
+            for (QAction *a : m->actions()) {
+                if (a->isSeparator() || !a->isVisible() || qobject_cast<QWidgetAction *>(a))
+                    continue;
+                QString t = a->text();
+                if (a->property("qbMnemonicFixed").toString() == t)
+                    t = a->property("qbMnemonicFrom").toString();
+                const int amp = int(t.indexOf(QLatin1Char('&')));
+                if (amp < 0 || amp + 1 >= t.size() || t.at(amp + 1) == QLatin1Char('&'))
+                    continue;
+                const QChar k = t.at(amp + 1).toLower();
+                if (keys.contains(k))
+                    sourceClash << QStringLiteral("%1: %2 / %3 (%4)").arg(menuText(m->title()), keys.value(k), menuText(t), k);
+                keys.insert(k, menuText(t));
+            }
+        }
+        for (const QString &c : sourceClash)
+            info(QStringLiteral("English letter clash: ") + c);
+        check(sourceClash.isEmpty(), QStringLiteral("menu audit: the English source texts of one menu share no Alt letter (before fixMnemonics)"),
+              sourceClash.join(QLatin1String("; ")));
         // the menu bar's own letters
         QSet<QChar> top;
         bool topUnique = true;

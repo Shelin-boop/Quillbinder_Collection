@@ -1110,7 +1110,7 @@ void TextEditor::contextMenuEvent(QContextMenuEvent *e)
             menu->insertAction(after, a);
         };
         const QMimeData *md = QApplication::clipboard()->mimeData();
-        entry(QStringLiteral("pastePlain"), tr("Paste and &Match Style"), paste->isEnabled() && md && md->hasText(),
+        entry(QStringLiteral("pastePlain"), tr("Paste and Match &Style"), paste->isEnabled() && md && md->hasText(),
               [this] { pasteMatchingStyle(); });
         entry(QStringLiteral("pasteKeep"), tr("Paste With &Formatting"), paste->isEnabled(), [this] { pasteKeepingFormatting(); });
     }

@@ -158,6 +158,11 @@ private slots:
         p.run();
         QVERIFY(!p.isBusy());
         QVERIFY2(p.status().contains(QStringLiteral("No proofreading model")), qPrintable(p.status()));
+        // 1.6: the notice about the missing part is a whole sentence ("it" for one part; no pieces joined with " and ")
+        QLabel *notice = p.findChild<QLabel *>(QStringLiteral("tpNoticeText"));
+        QVERIFY(notice);
+        QVERIFY2(notice->text().startsWith(QStringLiteral("Missing: a proofreading model. Download it in the add-on's options")),
+                 qPrintable(notice->text()));
         p.setInput(QString());
         p.run();
         QVERIFY(p.status().contains(QStringLiteral("no text")));

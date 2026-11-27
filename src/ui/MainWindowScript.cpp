@@ -53,7 +53,7 @@ void MainWindow::createScriptActions()
 
 void MainWindow::createScriptMenu(QMenu *formatMenu)
 {
-    m_scriptMenu = formatMenu->addMenu(tr("S&criptwriting"));
+    m_scriptMenu = formatMenu->addMenu(tr("Script&writing"));
     m_scriptMenu->setObjectName(QStringLiteral("scriptMenu"));
     m_scriptMenu->addAction(a[QStringLiteral("scriptMode")]);
     m_scriptMenu->addSeparator();

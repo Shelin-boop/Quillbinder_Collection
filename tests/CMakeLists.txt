@@ -59,6 +59,7 @@ target_compile_definitions(qb_m13_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURR
 # document icons, search results marked in the editor (QT_QPA_PLATFORM=offscreen ./qb_fixes_tests /tmp/shots)
 add_executable(qb_fixes_tests fixes_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_fixes_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_fixes_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Printing (milestone M14): File > Print Settings, Print Preview, Print Current Document for texts, index cards,
 # the outliner, pictures, PDF files and web pages; the printouts go into PDF files checked with poppler-utils
