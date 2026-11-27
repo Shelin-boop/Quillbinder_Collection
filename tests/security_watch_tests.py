@@ -137,7 +137,9 @@ WL = {
         {"name": "whisper.cpp", "version": "1.9.5", "repo": "https://github.com/ggml-org/whisper.cpp", "tag": "v{v}",
          "uses": "speech"},
         {"name": "Sonic", "version": "b93885dcb70aae50c6f76b0fe4e0868f029a077e", "repo": "https://github.com/waywardgeek/sonic",
-         "tag": "{v}", "commit": True, "uses": "the speed of speech"}],
+         "tag": "{v}", "commit": True, "uses": "the speed of speech"},
+        {"name": "ONNX Runtime", "version": "1.32.0", "repo": "https://central.example/onnxruntime", "tag": "{v}",
+         "maven": "com.microsoft.onnxruntime:onnxruntime", "uses": "AI engines"}],
     "ubuntu": {"ecosystem": "Ubuntu:24.04:LTS", "packages": {"libpng1.6": "1.6.43-5ubuntu0.7"}},
     "osv_canaries": [{"commit_of": "FFmpeg", "tag": "n4.0"},
                      {"package": {"name": "libpng1.6", "ecosystem": "Ubuntu:24.04:LTS"}, "version": "1.6.0-1"}]}
@@ -201,6 +203,8 @@ class Net:
                         out.append({"vulns": [{"id": "CVE-2026-2001"}, {"id": "CVE-2026-2002"}, {"id": "CVE-2026-2003"}]})
                     elif q.get("commit") == "f400":
                         out.append({"vulns": [] if self.over.get("empty_canary") else [{"id": "CVE-2018-1"}]})
+                    elif q.get("package", {}).get("ecosystem") == "Maven":
+                        out.append({})
                     elif q.get("version") == "1.6.43-5ubuntu0.7":
                         out.append({"vulns": [{"id": "UBUNTU-CVE-2026-3001"}, {"id": "UBUNTU-CVE-2026-3002"}]})
                     elif q.get("version") == "1.6.0-1":
@@ -210,6 +214,10 @@ class Net:
                 return 200, json.dumps({"results": out}).encode()
             self.posts.append((url, data))
             return (201 if "/issues" in url or "/labels" in url else 200), b"{}"
+        if url.endswith("/com/microsoft/onnxruntime/onnxruntime/maven-metadata.xml"):
+            if self.over.get("maven_missing"):
+                return 404, b""
+            return 200, b"<metadata><versioning><versions><version>1.32.0</version><version>1.33.0</version></versions></versioning></metadata>"
         if url.startswith("https://api.osv.dev/v1/vulns/"):
             v = OSV_VULNS.get(url.rsplit("/", 1)[1])
             return (200, json.dumps(v).encode()) if v else (404, b"")
@@ -273,6 +281,12 @@ check("the report names every part", all(p in out for p in ("Qt 6.12.0:", "FFmpe
 check("a part pinned by a commit: OSV is asked for that commit, its repository's tags are not read, no newer release",
       {"commit": "b93885dcb70aae50c6f76b0fe4e0868f029a077e"} in net.queries
       and "Sonic b93885dcb70aae50c6f76b0fe4e0868f029a077e: newer releases none; OSV 0" in out, out[-900:])
+check("a part from Maven Central: OSV is asked for the Maven package and version, no repository is read, the newer release is named",
+      {"package": {"name": "com.microsoft.onnxruntime:onnxruntime", "ecosystem": "Maven"}, "version": "1.32.0"} in net.queries
+      and "ONNX Runtime 1.32.0: newer releases 1.33.0" in out, out[-500:])
+rc, out, net = run(True, maven_missing=True)
+check("Maven Central's metadata that cannot be read fails the run", rc == 1 and "Maven Central's metadata" in out, out[-300:])
+rc, out, net = run(True)
 check("the report names newer releases", "newer releases 6.12.1" in out and "newer releases 1.9.6" in out)
 
 rc, out, net = run(False, existing=[

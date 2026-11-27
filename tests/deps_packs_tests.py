@@ -62,7 +62,7 @@ for n, words in (("ffmpeg", ("FFmpeg 9.1", "LGPL-2.1-or-later", "https://ffmpeg.
                  ("translator", ("oneDNN", "CTranslate2", "SentencePiece", "Apache-2.0", "MIT", "BSD-3-Clause",
                                  "https://github.com/OpenNMT/CTranslate2")),
                  ("crypto", ("Botan 3.14.1", "RNP v0.18.1", "json-c", "bzip2", "BSD-2-Clause", "https://github.com/rnpgp/rnp")),
-                 ("onnxruntime", ("ONNX Runtime 1.32.0", "MIT", "https://github.com/microsoft/onnxruntime")),
+                 ("onnxruntime", ("ONNX Runtime 1.32.0", "MIT", "Maven Central", "com.microsoft.onnxruntime:onnxruntime")),
                  ("aiengine", ("ggml v1.1.1", "whisper.cpp v1.9.6", "llama.cpp b12808", "qwentts.cpp", "Sonic", "MIT", "Apache-2.0",
                                "https://github.com/ggml-org/llama.cpp"))):
     a = pack("about", n)
@@ -209,6 +209,11 @@ esac
     os.makedirs(os.path.join(fake2, "tools"))
     for f in ("deps-pack.sh", "get-onnxruntime.sh"):
         shutil.copy(os.path.join(ROOT, "tools", f), os.path.join(fake2, "tools", f))
+    # (the copy runs as an unpinned recipe: the real script's pins are blanked, so the refusal and the first run can be checked)
+    ort = os.path.join(fake2, "tools", "get-onnxruntime.sh")
+    text = re.sub(r'^(SHA256_(JAR|AAR))="[0-9a-f]*"$', r'\1=""', open(ort).read(), flags=re.M)
+    open(ort, "w").write(text)
+    os.chmod(ort, 0o755)
     h2 = subprocess.run([os.path.join(fake2, "tools", "deps-pack.sh"), "hash", "onnxruntime"], capture_output=True, text=True).stdout.strip()
     shutil.copy(os.path.join(work, "out-onnxruntime", next(f for f in os.listdir(os.path.join(work, "out-onnxruntime")) if f.endswith(".tar.xz"))),
                 os.path.join(work, "asset2.tar.xz"))
@@ -232,6 +237,38 @@ esac
                        env=dict(env, QB_DEPS_PACK="0", QB_ONNXRUNTIME_FIRST_RUN="0"))
     check("get-onnxruntime.sh: no SHA-256 pinned, no first-run switch: nothing is downloaded",
           r.returncode == 1 and "no SHA-256 is pinned" in r.stderr and not os.path.exists(os.path.join(work, "no-pin")), r.stdout + r.stderr)
+    # the first run against a made-up Maven repository: the newest plain release of both packages, both files' file lists,
+    # the pin line, the pack's files and the license text from the POM (neither file carries one)
+    import zipfile
+    mv = os.path.join(work, "maven")
+    base = "com/microsoft/onnxruntime"
+    for art, ext, entries in (("onnxruntime", "jar", {"ai/onnxruntime/native/linux-x64/libonnxruntime.so": open("/bin/true", "rb").read(),
+                                                      "ai/onnxruntime/native/win-x64/onnxruntime.dll": b"dll"}),
+                              ("onnxruntime-android", "aar", {"headers/onnxruntime_c_api.h": b"/* h */",
+                                                              "jni/arm64-v8a/libonnxruntime.so": b"so"})):
+        d = os.path.join(mv, base, art)
+        os.makedirs(os.path.join(d, "1.32.0"))
+        with open(os.path.join(d, "maven-metadata.xml"), "w") as fh:
+            fh.write("<metadata><versioning><versions><version>1.31.0</version><version>1.32.0</version>"
+                     "<version>1.33.0-rc1</version></versions></versioning></metadata>")
+        with zipfile.ZipFile(os.path.join(d, "1.32.0", f"{art}-1.32.0.{ext}"), "w") as z:
+            for n, data in entries.items():
+                z.writestr(n, data)
+    open(os.path.join(mv, base, "onnxruntime", "1.32.0", "onnxruntime-1.32.0.pom"), "w").write(
+        "<project><licenses><license><name>MIT License</name></license></licenses></project>")
+    pre = os.path.join(work, "ort-first")
+    r = subprocess.run([os.path.join(fake2, "tools", "get-onnxruntime.sh"), pre], capture_output=True, text=True,
+                       env=dict(env, QB_DEPS_PACK="0", QB_ONNXRUNTIME_FIRST_RUN="1", QB_MAVEN_URL="file://" + mv))
+    check("get-onnxruntime.sh, first run: both versions, the file lists, the NEEDED list and the pin line are printed",
+          r.returncode == 0 and "chosen version 1.32.0" in r.stdout and "jar: ai/onnxruntime/native/linux-x64/libonnxruntime.so" in r.stdout
+          and "aar: headers/onnxruntime_c_api.h" in r.stdout and "NEEDED libc.so.6" in r.stdout
+          and re.search(r'^pin this: VERSION=1\.32\.0 SHA256_JAR="[0-9a-f]{64}" SHA256_AAR="[0-9a-f]{64}"$', r.stdout, re.M), r.stdout + r.stderr)
+    check("get-onnxruntime.sh: the pack has the headers, the library with its symlinks, the license and the README",
+          os.path.isfile(os.path.join(pre, "include/onnxruntime_c_api.h")) and os.path.islink(os.path.join(pre, "lib/libonnxruntime.so"))
+          and os.path.isfile(os.path.join(pre, "lib/libonnxruntime.so.1.32.0")) and os.path.islink(os.path.join(pre, "lib/libonnxruntime.so.1"))
+          and "MIT" in open(os.path.join(pre, "licenses/LICENSE-onnxruntime.txt")).read()
+          and "Maven" in open(os.path.join(pre, "README.txt")).read()
+          and open(os.path.join(pre, "version.txt")).read().strip() == "onnxruntime 1.32.0 linux-x64")
 finally:
     shutil.rmtree(work, ignore_errors=True)
 
