@@ -29,8 +29,8 @@ WORK=$ROOT/build/onnxruntime-src
 MAVEN=${QB_MAVEN_URL:-https://repo1.maven.org/maven2}
 GROUP_PATH=com/microsoft/onnxruntime
 VERSION=1.32.0
-SHA256_JAR=""
-SHA256_AAR=""
+SHA256_JAR="5f14563a52ac9dd5166c18b18ce837fd7589d4834e76e4e552c7b053d4b0538c"
+SHA256_AAR="8e8dbb412ed4939675a157702f0c1e3621b436a645af7f7244536ac20bfad628"
 STAMP="onnxruntime $VERSION linux-x64"
 
 done_here() { [ "$(cat "$PREFIX/version.txt" 2>/dev/null)" = "$STAMP" ] && [ -f "$PREFIX/lib/libonnxruntime.so" ] && [ -f "$PREFIX/include/onnxruntime_c_api.h" ]; }
