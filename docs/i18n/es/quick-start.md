@@ -68,13 +68,13 @@
 ### Más allá de lo habitual
 
 - **Mapas mentales**: un tablero de notas, líneas y flechas para cada documento y carpeta (el botón **Mapa mental** del inspector). **Ayuda > Ayuda del mapa mental** muestra cómo funciona.
-- **Objetos**: personajes, lugares, entornos, puntos de interés, clima y categorías propias, cada uno con una ficha de campos y vínculos entre ellos (el botón **Objetos** del inspector, o **Ventana > Objetos…**).
+- **Objetos**: personajes, lugares, entornos, puntos de interés, clima y categorías propias, cada uno con una ficha de campos y vínculos entre ellos (el botón **Objetos** del inspector, o **Ventana > Objetos**).
 - **Tablas e imágenes**: **Insertar > Tabla…** con diseños prediseñados o propios, **Formato > Tabla** para filas, columnas, celdas combinadas y colores; imágenes junto al texto con el texto fluyendo a su alrededor, leyendas y descripciones que los libros electrónicos y los archivos de Word conservan como texto alternativo (clic derecho sobre una imagen, **Imagen…**).
 - **La barra de iconos**: hasta diez iconos de documentos, un clic para cada uno. **Documentos > Cambiar icono** también crea iconos a partir de texto o de tus propias imágenes.
 - **Zoom por parte**: archivador, editores, partes del inspector, corcho, esquema y mapas mentales conservan cada uno su propio zoom.
 - **Lugares recordados**: cada documento se abre donde dejaste el cursor, también después de reabrir el proyecto.
 - **Fuentes**: **Formato > Fuente > Instalar archivos de fuente…** añade fuentes sin salir del programa.
-- **Seguridad**: guardado automático también mientras sigues escribiendo, copias de seguridad, una copia de reserva del archivo del proyecto, informes de fallos y bloqueos (**Ayuda > Solución de problemas y desarrollo > Informes de fallos…**) y **Ayuda > Solución de problemas y desarrollo > Información del sistema…**.
+- **Seguridad**: guardado automático también mientras sigues escribiendo, copias de seguridad, una copia de reserva del archivo del proyecto, informes de fallos y bloqueos (**Ayuda > Solución de problemas y desarrollo > Informes de fallos…**) y **Ayuda > Solución de problemas y desarrollo > Información del sistema**.
 
 ### Actualizaciones y complementos
 
@@ -88,5 +88,5 @@ La **versión completa** del AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) lle
 - **Ayuda > Proyecto de bienvenida**: un proyecto breve que muestra las funciones enumeradas en «Más allá de lo habitual» y te deja probarlas.
 - **Ayuda > Ayuda del mapa mental**: notas, líneas, flechas y formas, con imágenes y un tablero de práctica.
 - **Ayuda > Lista de todos los marcadores de posición** y **Ayuda > Atajos de teclado…**
-- **Ayuda > Licencias de terceros…**: las licencias de las partes de otros proyectos que usa {{APP}}.
+- **Ayuda > Licencias de terceros**: las licencias de las partes de otros proyectos que usa {{APP}}.
 - **Ayuda > Acerca de {{APP}}**: la versión y la licencia. {{APP}} es software libre bajo la licencia Apache 2.0.
