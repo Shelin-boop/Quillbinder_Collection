@@ -8,6 +8,7 @@
 #include <QJsonObject>
 #include <QDateTime>
 #include <QMainWindow>
+#include "ui/SmallInterface.h"
 #include <QHash>
 #include <QSet>
 #include <QPointer>
@@ -50,6 +51,7 @@ class StylesPanel;
 class FormatFindWindow;
 class Inspector;
 class FocusLine;
+namespace handwriting { class HandwritingController; }
 class TextEditor;
 class CompositionWindow;
 class QuickRefWindow;
@@ -66,6 +68,10 @@ public:
     // 0.94.0: the section of the user manual for what is on the screen now (F1): the view of the active pane, the
     // binder, the inspector's tab; empty: the start of the manual
     QString manualSection() const;
+    // 0.99.0 (handwriting, item 112): the parts the writing layer lies over
+    QWidget *editorAreaWidget() const { return m_editorArea; }
+    handwriting::HandwritingController *handwriting() const { return m_handwriting; }
+    TextEditor *handwritingEditor() const;   // the text editor of the active pane (null when none)
     MainWindow();
     ~MainWindow() override;
 
@@ -192,6 +198,18 @@ public:
     void setUprightBinderLeft(bool left);
     void resetPaneLayout();                       // View > Layout > Reset Layout: the shown shape's start values
     void followWindowShape();                     // arranges the panes for the window's shape now
+    // ---- the small interface (MainWindowSmall.cpp, 0.99.0, item 122): a few round buttons, the binder and the notes as
+    // slide-in panels; off at first on Linux and Windows. Leaving it brings the full interface back as it was.
+    bool smallInterface() const { return m_small; }
+    void setSmallInterface(bool on);
+    void setSmallChoice(smallui::Choice choice);   // Android: Full, Small or Automatic (the others: Full or Small)
+    smallui::Choice smallChoice() const;
+    void applySmallRule(const QSize &physicalPixels);   // the rule for a screen of this size (Android: at start and at a change of the choice)
+    int smallTargetPx() const { return m_smallTargetPx; }   // the side of a round button in pixels
+    QToolBar *smallBar() const { return m_smallBar; }
+    QWidget *smallButton(const QString &name) const;   // "new", "bold", "italic", "style", "binder", "labels", "record", "notes", "menu"
+    smallui::SlidePanel *smallPanel(bool notes) const { return notes ? m_smallNotes : m_smallBinder; }
+    void showSmallPanel(bool notes, bool on, bool keepTab = false);
     QSplitter *paneSplitter() const { return m_mainSplit; }
     QSplitter *sideSplitter() const { return m_sideSplit; }
     QList<int> paneSizes() const;                 // {binder, editor, inspector} of the wide shape (stored or shown)
@@ -544,12 +562,38 @@ private:
     std::unique_ptr<Project> m_project;
     BinderPanel *m_binder = nullptr;
     Inspector *m_inspector = nullptr;
+    handwriting::HandwritingController *m_handwriting = nullptr;   // 0.99.0: the button, the modes, the writing area
     QSplitter *m_mainSplit = nullptr;
     QSplitter *m_editorSplit = nullptr;
     // the panes placed by the window's shape (MainWindowPanes.cpp)
     QSplitter *m_sideSplit = nullptr;               // upright: the binder and the inspector beside each other
     QWidget *m_editorArea = nullptr;
     bool m_upright = false;                         // the arrangement shown now
+    // the small interface (MainWindowSmall.cpp)
+    bool m_small = false;
+    QToolBar *m_smallBar = nullptr;
+    smallui::SlidePanel *m_smallBinder = nullptr;
+    smallui::SlidePanel *m_smallNotes = nullptr;
+    QHash<QString, QPointer<QWidget>> m_smallButtons;
+    QAction *m_smallRecordAction = nullptr;
+    QMenu *m_smallMenu = nullptr;
+    QMenu *m_smallLabelsMenu = nullptr;
+    QMenu *m_barsMenuBar = nullptr;                 // View > Toolbars
+    bool m_smallIconBarShown = false, m_smallMenuBarShown = true;
+    bool m_smallBinderChecked = true, m_smallInspectorChecked = true;
+    smallui::Choice m_smallChoice = smallui::Choice::Automatic;
+    int m_smallTargetPx = 0;
+    bool m_smallQuiet = false;                      // a profile switch sets the switches of the panes: no panel opens for it
+    void createSmallActions();
+    void createSmallInterface();
+    void restyleSmallButtons();
+    void buildSmallButtons();
+    void fillSmallMenu();
+    void placeSmallBar();
+    void refitSmallPanels();
+    void updateSmallRecord();
+    QRect smallArea() const;
+    smallui::SlidePanel::Edge smallEdge(bool notes) const;
     bool m_shapeCheckQueued = false;
     QString m_wideOrder = QStringLiteral("BEI");
     bool m_uprightEditorFirst = true;               // "Editor in the Middle": the editor's row is the upper one

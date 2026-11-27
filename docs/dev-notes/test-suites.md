@@ -33,6 +33,20 @@ process, the real engine when built (Sonic's speed with the pitch kept; with `QB
 model) and `QB_AI_WHISPER_SAMPLE` (jfk.wav) a real transcription; `QB_AI_QWEN_TALKER`/`QB_AI_QWEN_CODEC` a word of Qwen3-TTS).
 The recipe checks take the packs from `QB_AI_ENGINE_DIR` and `QB_ONNXRUNTIME_DIR` (default `build/ai-engine`,
 `build/onnxruntime`). Without the pack and libqbai those parts print a line and are not counted.
+## v0990j (0.99.0: handwriting, part 1)
+
+`qb_v0990j_tests`: one window with a project and a `FakeRecognizer` (a fixed text per line; `PenInput`'s clock is the test's own,
+`InkCanvas::advance()` is called by hand, so nothing waits for real time except the button's long press). Synthetic
+`QTabletEvent` and `QTouchEvent` sequences sent to the canvas. The defaults per system (`forceAndroid`), the plain parts (scratch
+detection, `HandProtection`, `PenInput`), the button and its four looks (tap, long press, right-click, hidden by default, View >
+Toolbars switch), the first use with no recognizer (File > Options > Handwriting opens, the Install slot, Russian greyed), the
+three modes (the tab, the layer's mask, the pane line covered, the grid only over the pad part), writing a line in each mode, a
+pen tap, the side button, finger scroll and tap, one finger writes / long press selects / two fingers scroll, the rest zone and a
+tap on a button, scratching out (ink, text, strip), the fade timing (stay and fade of 400 ms), the strip (alternatives, writing
+over a word, learning store, off switch, delete), Space / Backspace / Enter, Insert at the held cursor after the text moved, Pin
+with check and cross (editor and synopsis), the grid styles and the size slider with its sample, the Options page, the mode
+kept per device and the ModelMemory id. Screenshots `hw-*.png` of the icons, the three modes, the strip, the pin and each grid
+style (`hw-grid-*.png`).
 
 ## v0990b (0.99.0)
 
@@ -42,6 +56,19 @@ the low-memory signal (injected; idle models only), the message line "Model chan
 (`tests/tool13`: registers, is asked to unload, is refused, busy models stay) and one of 1.2 (`tests/tool12`, built with the
 header of 1.2), and the page File > Options > General > AI Models (default, change kept after the settings are read again,
 memory line). The two test tools are loaded from `<build>/tests/tool12-plugins` and `tool13-plugins`.
+## v0990l (0.99.0, item 122: the small interface)
+
+`qb_v0990l_tests`: the rule (`smallui::belowFullHd/resolve/touchTargetPx`, both sides of 1920 x 1080, the three choices), the
+View > Small Interface check item (off at first, no Android choices on Linux), the mode on and off in a wide (1280 x 800) and an
+upright (1080 x 1920) window, with the inspector shown and hidden (pane sizes, toolbars and their places, menu bar, the saved
+state, binder and inspector back in their splitters), the nine round buttons (size at least 9 mm, one row or column, inside
+the window, theme colors, keyboard focus), each button's action (new document, bold, italic, style menu, labels and icons,
+menu with all the menus and the way back), the binder and notes panels (a part of the width from the left or right, a sheet when
+upright, one at a time, Close, Esc, the focus line after the slide), record only (grayed with the reason without the add-on; the
+add-on is loaded in a second run of the same program, `--addon`, because the tools are loaded once per program), a profile that
+keeps the mode (profile files, switching both ways) and the Android rule through `setSmallChoice` / `applySmallRule` with sizes.
+The window is resized by `resize()`; the offscreen screen keeps its size. Run: `xvfb-run -a -s "-screen 0 1920x1080x24"
+./qb_v0990l_tests /tmp/shots`.
 ## v0990g (0.99.0: the menu walk)
 
 `qb_v0990g_tests`: one window with a project. Navigate > Inspect names (25 characters at most), the renamed commands, the

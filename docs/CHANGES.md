@@ -14,12 +14,34 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   that the first normal release, 1.0.0, changes only numbers and one word per system. The names of the files, the tag,
   the title of a release, the update file and the download page follow it, and a release without a word gets plain names
   (`Quillbinder-1.0.0-x86_64.AppImage`, tag `v1.0.0`).
+- **Handwriting (part 1 of item 112): everything but the recognizer.** A button on the Tools bar (hidden at first on Linux
+  and Windows; shown on Android) with four looks (off, editor, inspector, both): a tap switches between off and the last mode,
+  a long press or right-click opens the four choices. One writing area for the three modes: the inspector's new tab
+  **Handwriting** (a pad with a grid), a see-through layer over the editor's text, or a layer over the editor, the pane line
+  and the inspector's pad. A pen writes, a short pen tap puts the cursor, the pen's side button selects, fingers scroll and tap;
+  without a pen one finger writes and two scroll; scratching words out deletes them. Hand protection (a rest zone while the pen
+  writes, large contacts, a strip at the screen's edge). A line is read right after the pause, the ink stays about 3 seconds and
+  fades over about 2, and the text appears in a strip with **Insert**, **Pin**, **Space**, **Backspace** and **Enter**; a tap on
+  a word shows its other readings, writing over it corrects it. Grid styles (ruled, writing lines, squares, dots, none) with a
+  size slider and a live sample. **File > Options > Handwriting** (a page of the General section's list) holds the install part, the languages (Russian greyed
+  out), writing, grid, hand protection, pen and finger, and learning the hand (corrected lines kept only on the device, with an
+  off switch and a delete). The recognizer itself (and the install behind the page's Install button) follows in a later part: until
+  then the first use of the button opens the page.
 - **One size for all toolbars: Small, Normal, Large.** **View > Toolbars > Toolbar Size** (also in the right-click menu of
   every bar, and in **Customize Toolbars**, where "Medium" is now "Normal") sets the icons of every bar at once: the main
   toolbars, the format bars (they were fixed at 18 px), the icon bar, Labels and Profiles. The lists and fields on the bars
   (style, font, size, line spacing, quick search, themes) grow and shrink with the size, so that the bars of a row keep one
   height. Normal is 22 px; Android starts with Large (32 px). The size belongs to the profile in use. The button
   "Standard Set" of Customize Toolbars is now called **Reset**.
+- **The small interface** (item 122): **View > Small Interface** gives the text the whole window and puts a few round
+  buttons at its edge (a column at the right in a wide window, a row at the bottom in an upright one): the menu (all menus
+  of the menu bar and the way back), a new document, bold, italic, a style choice, the binder, labels and icons, record
+  only and the document's notes. The binder and the notes are slide-in panels (from the left and the right, or a sheet in
+  an upright window). The toolbars and the menu bar are hidden while it runs; switching it off gives the full interface back
+  exactly as it was. Off at first on Linux and Windows and switched by hand only; a profile keeps it. On Android it is
+  automatic below 1920 x 1080 physical pixels, with the choice Full, Small or Automatic. The buttons are at least 9 mm wide
+  and high and follow the theme and the toolbar size. **Record Only** needs the speech add-on, which has a new command
+  "Record Only" (also in Edit > Writing Tools); without it the button is grayed and says why.
 - **The update file and the download page follow the label of their system.** The update file names the label of the
   system it is made for (`beta` for Linux, `experimental` for Windows and Android), and the download page leaves out
   the sentence "This is a ... version" when a release has no label.

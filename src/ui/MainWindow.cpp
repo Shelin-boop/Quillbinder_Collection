@@ -64,6 +64,7 @@
 #include "ui/ToolHost.h"
 #include "ui/DocMirror.h"
 #include "ui/Inspector.h"
+#include "ui/handwriting/HandwritingController.h"
 #include "ui/MindMapController.h"
 #include "ui/MindMapDoc.h"
 #include "ui/MindMapUi.h"
@@ -280,6 +281,12 @@ MainWindow::MainWindow()
     m_mainSplit->setChildrenCollapsible(false);
     initPaneSplitters(); // 0.93.0: the row of the binder and the inspector for an upright window
     setCentralWidget(m_mainSplit);
+    // 0.99.0 (item 112): handwriting: the button, the modes and the one writing area; a mode needs a recognizer, so the first use
+    // (and every use while none is installed) opens File > Options > Handwriting
+    m_handwriting = new handwriting::HandwritingController(this, m_inspector);
+    connect(m_handwriting, &handwriting::HandwritingController::settingsRequested, this,
+            [this] { OptionsDialog::run(this, [](OptionsDialog &d) { d.showSection(OptionsDialog::SGeneral, tr("Handwriting")); }); });
+    QTimer::singleShot(0, this, [this] { m_handwriting->applyStored(); });
     m_active = m_panes[0];
     connectPane(m_panes[0]);
     connectPane(m_panes[1]);
@@ -309,6 +316,7 @@ MainWindow::MainWindow()
     createExtraActions();
     createToolActions();
     createPaneActions(); // 0.93.0: View > Layout
+    createSmallActions(); // 0.99.0 (item 122): View > Small Interface
     createMenus();
     commands::addFromMenuBar(menuBar());
     for (QAction *ac : actions()) // commands that sit in no menu
@@ -318,6 +326,7 @@ MainWindow::MainWindow()
     createFormatBar();
     createIconBar();
     createProfileBars(); // 0.95.0
+    createSmallInterface(); // 0.99.0 (item 122): the round buttons and the slide-in panels
     // the fields on the toolbars (quick search, style, font, size ...) in the color of the
     // menus and toolbars, not of lists (0.60.3)
     for (QToolBar *bar : m_bars)
@@ -647,6 +656,23 @@ MainWindow::MainWindow()
         const bool shown = !m_iconBar->isHidden();
         a[QStringLiteral("showIconBar")]->setChecked(shown);
         m_iconBar->setVisible(shown);
+    }
+    // 0.99.0 (item 122): the small interface: Linux and Windows only what the writer switched on (a profile keeps it); Android
+    // the choice (Full, Small, Automatic: below 1920 x 1080 physical pixels)
+    {
+#ifdef Q_OS_ANDROID
+        m_smallChoice = smallui::choiceFromKey(s.value(QLatin1String(smallui::kKeyChoice)).toString());
+        for (auto [key, c] : {std::pair<const char *, smallui::Choice>{"smallChoiceFull", smallui::Choice::Full},
+                              {"smallChoiceSmall", smallui::Choice::Small},
+                              {"smallChoiceAuto", smallui::Choice::Automatic}})
+            if (QAction *ac = a.value(QLatin1String(key)))
+                ac->setChecked(c == m_smallChoice);
+        applySmallRule(smallui::physicalSize(QGuiApplication::primaryScreen()));
+#else
+        if (s.value(QLatin1String(smallui::kKeyOn), false).toBool())
+            setSmallInterface(true);
+#endif
+        placeSmallBar(); // (a window state of a run in the small interface may have put the bar in the layout)
     }
     // 0.70.0 (audit A S-01, B S-1): a sign of the save state that is always there. Since 0.93.0 it sits in the empty
     // stretch of the first editor's footer bar (FooterStatus), together with the warning link and the short messages;
@@ -2414,6 +2440,8 @@ QString MainWindow::aboutText()
         .arg(QLatin1String(QB_APP_NAME), version, QLatin1String(qVersion()), QLatin1String(QB_APP_HOMEPAGE));
 }
 
+TextEditor *MainWindow::handwritingEditor() const { return m_active ? m_active->currentEditor() : nullptr; }
+
 TextEditor *MainWindow::editor() const
 {
     // focus in a notes editor or similar wins
@@ -4123,8 +4151,9 @@ BinderItem *MainWindow::newItem(ItemType type, const QString &templateId)
         if (texts > 0 && scripts == texts)
             m_project->setScriptMode(it, true);
     }
-    // show it and let the user type the title
-    m_binder->show();
+    // show it and let the user type the title (the small interface keeps the text in sight: no binder panel for it)
+    if (!m_small)
+        m_binder->show();
     m_updatingUi = true;
     m_binder->select({it}, false);
     m_updatingUi = false;

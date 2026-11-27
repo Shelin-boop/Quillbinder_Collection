@@ -54,6 +54,7 @@ namespace qb {
 
 class ThemePreview;
 class KeyboardPage;
+namespace handwriting { class HandwritingPage; }
 
 class OptionsDialog : public QDialog
 {
@@ -291,6 +292,7 @@ private:
     QLabel *m_objectsTemplates = nullptr;
     bool m_resetObjectTemplates = false;
     QSpinBox *m_freezeSeconds, *m_keepReports;
+    handwriting::HandwritingPage *m_handwriting = nullptr;   // 0.99.0: Extras > Handwriting
 };
 
 } // namespace qb

@@ -113,6 +113,8 @@ QList<Special> specials(Bar bar)
             {QStringLiteral("notes"), QObject::tr("Comments and Footnotes"), QStringLiteral("edit-comment")},
             {QStringLiteral("layoutsButton"), QObject::tr("Layouts"), QStringLiteral("view-split-left-right")},
             // 0.90.2: the theme list; 0.91.0: with the buttons Bright, Dark, U1 and U2; 0.94.0: one button with a menu
+            // 0.99.0 (item 112): shown only while the handwriting button is switched on (View > Toolbars, File > Options > Handwriting)
+            {QStringLiteral("handwriting"), QObject::tr("Handwriting (off, editor, inspector, both)"), QStringLiteral("handwriting-off")},
             {QStringLiteral("themePicker"), QObject::tr("Theme button (Light, Dark, My Look 1, My Look 2 and all themes)"), QStringLiteral("format-text-color")},
         };
     return {
@@ -191,7 +193,7 @@ QStringList standard(Bar bar)
     case Bar::Tools: {
         QStringList list = {QStringLiteral("bookmarks"), QStringLiteral("quickRef"), QStringLiteral("notes"), Separator,
                             QStringLiteral("compile"), Separator, QStringLiteral("showInvisibles"), QStringLiteral("composition"),
-                            QStringLiteral("showInspector")};
+                            QStringLiteral("handwriting"), QStringLiteral("showInspector")};
         insertToolButtons(list, toolButtonList());
         return list;
     }

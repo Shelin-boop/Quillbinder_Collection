@@ -2,6 +2,7 @@
 // with the project (styles) or the data folder (layouts).
 #include "ui/ThemePicker.h"
 #include "ui/MainWindow.h"
+#include "ui/handwriting/HandwritingController.h"
 #include "ui/UndoNames.h"
 #include "core/Backup.h"
 #include "core/Portable.h"
@@ -328,11 +329,13 @@ void MainWindow::createMenus()
     rebuildLayoutActions(); // (the commands are in the menu before the list of commands is made; made again after the toolbars)
     add(view, {"", "showBinder", "showCollections", "showInspector", "binderScrivenerKeys", ""});
     QMenu *bars = view->addMenu(tr("Tool&bars"));
+    m_barsMenuBar = bars;
     // 0.99.0 (P13): grouped by the row they belong to; Show Toolbar with its bars, Show Format Bar with its bars, then the
     // icon bar and the labels bar; the Toolbar Size submenu (item 116) after the switches, before Reset Toolbar Places
     add(bars, {"showToolbar", "showBarMain", "showBarThemes", "showBarProfiles", "showBarSearch", "showBarTools", "",
                "showFormatBar", "showBarStyle", "showBarCharacter", "showBarParagraph", "", "showIconBar", "showBarLabels", ""});
     bars->addAction(m_toolbarSizeMenu->menuAction()); // 0.99.0: Small, Normal, Large for every bar
+    bars->addAction(m_handwriting->showButtonAction()); // 0.99.0 (item 112): the handwriting button is off by default
     add(bars, {"resetToolbarPlaces", "", "customizeToolbars", "customizeIconBar"});
     QMenu *themes = view->addMenu(tr("&Themes")); // 0.94.0: before, under Window;
     themes->setObjectName(QStringLiteral("themeMenu"));
@@ -384,7 +387,14 @@ void MainWindow::createMenus()
     menuAlias(labelIn, QStringLiteral("labelBinder"), tr("&Binder"));
     menuAlias(labelIn, QStringLiteral("labelIcons"), tr("I&cons"));
     menuAlias(labelIn, QStringLiteral("tintCards"), tr("&Index Cards"));
-    add(view, {"", "zoomIn", "zoomOut", "zoomReset", "zoomInspectorPerTab", "", "composition", "fullScreen"});
+    add(view, {"", "zoomIn", "zoomOut", "zoomReset", "zoomInspectorPerTab", "", "composition", "fullScreen", ""});
+    // 0.99.0 (item 122): the small interface; on Android the choice Full, Small or Automatic (the other systems: a check item)
+#ifdef Q_OS_ANDROID
+    QMenu *smallMenu = view->addMenu(tr("S&mall Interface"));
+    add(smallMenu, {"smallChoiceFull", "smallChoiceSmall", "smallChoiceAuto"});
+#else
+    add(view, {"smallInterface"});
+#endif
 
     // ---- Navigate
     QMenu *nav = mb->addMenu(tr("&Navigate"));
@@ -847,6 +857,24 @@ void MainWindow::createToolBars()
 
     // the theme list with its filter (0.90.2)
     wrap(QStringLiteral("themePicker"), new ThemePicker);
+    // 0.99.0 (item 112): the handwriting button (four looks); on the Tools bar, shown only when it is switched on
+    wrap(QStringLiteral("handwriting"), m_handwriting->button());
+    m_handwriting->setBarAction(m_barItems.value(QStringLiteral("handwriting")));
+    // a Tools bar the writer arranged before has no such button: switching it on puts it at the end of that bar
+    connect(m_handwriting->showButtonAction(), &QAction::toggled, this, [this](bool on) {
+        if (!on)
+            return;
+        for (toolbars::Bar b : toolbars::allBars())
+            if (toolbars::configured(b).contains(QStringLiteral("handwriting")))
+                return;
+        AppSettings &st = AppSettings::instance();
+        if (st.toolbarTools.isEmpty())
+            st.toolbarTools = toolbars::standard(toolbars::Bar::Tools);
+        else
+            st.toolbarTools << QStringLiteral("handwriting");
+        st.notifyChanged();
+        rebuildToolBars();
+    });
     // on a crowded toolbar (large icons, text beside them, a narrow window) it gives way to the quick search (only
     // where the writer put both on one bar: since 0.91.0 they stand on bars of their own)
     for (toolbars::Bar b : toolbars::allBars())
@@ -1263,6 +1291,16 @@ void MainWindow::applyBarVisibility()
 {
     if (!a.contains(QStringLiteral("showToolbar")) || !a.contains(QStringLiteral("showFormatBar")))
         return;
+    if (m_small) {
+        // the small interface: the bars only stay away while it runs (their switches and places are not touched)
+        for (toolbars::Bar bar : toolbars::allBars())
+            if (m_bars[int(bar)])
+                m_bars[int(bar)]->hide();
+        for (QToolBar *bar : {m_profileBar, m_labelBar})
+            if (bar)
+                bar->hide();
+        return;
+    }
     const AppSettings &s = AppSettings::instance();
     const bool mainRow = a[QStringLiteral("showToolbar")]->isChecked();
     const bool formatRow = a[QStringLiteral("showFormatBar")]->isChecked();
@@ -1307,6 +1345,7 @@ void MainWindow::fillBarsMenu(QMenu *menu, int bar)
     menu->addSeparator();
     if (m_toolbarSizeMenu)
         menu->addAction(m_toolbarSizeMenu->menuAction()); // 0.99.0
+    menu->addAction(m_handwriting->showButtonAction());   // 0.99.0 (item 112)
     menu->addAction(a[QStringLiteral("resetToolbarPlaces")]);
     menu->addSeparator();
     if (bar < 0)
