@@ -5,19 +5,19 @@
     <name>EncryptionPage</name>
     <message>
         <source>This system has no key store, so the passphrase is asked for once in each session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sistem ini tidak memiliki penyimpanan kunci, sehingga frasa sandi ditanyakan sekali pada setiap sesi.</translation>
     </message>
     <message>
         <source>The system&apos;s key store refused to keep the passphrase, so it is asked for once in each session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Penyimpanan kunci sistem menolak menyimpan frasa sandi, sehingga frasa sandi ditanyakan sekali pada setiap sesi.</translation>
     </message>
     <message>
         <source>The passphrase could not be kept in the system&apos;s key store, so it is asked for once in each session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Frasa sandi tidak dapat disimpan di penyimpanan kunci sistem, sehingga frasa sandi ditanyakan sekali pada setiap sesi.</translation>
     </message>
     <message>
         <source>Remember the passphrase on this device</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingat frasa sandi di perangkat ini</translation>
     </message>
 </context>
 <context>
@@ -32,11 +32,11 @@
     </message>
     <message>
         <source>Quillbinder asks for permission to use the microphone. Allow it, then press Record again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder meminta izin untuk memakai mikrofon. Izinkan, lalu tekan Rekam lagi.</translation>
     </message>
     <message>
         <source>The microphone is not allowed for Quillbinder. Allow it in the system&apos;s settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mikrofon tidak diizinkan untuk Quillbinder. Izinkan di pengaturan sistem.</translation>
     </message>
     <message>
         <source>No microphone was found.</source>
@@ -51,23 +51,23 @@
     <name>Handwriting</name>
     <message>
         <source>Ruled lines</source>
-        <translation type="unfinished">Garis bantu</translation>
+        <translation>Garis bantu</translation>
     </message>
     <message>
         <source>Writing lines (baseline and midline)</source>
-        <translation type="unfinished"></translation>
+        <translation>Garis tulis (garis dasar dan garis tengah)</translation>
     </message>
     <message>
         <source>Squares</source>
-        <translation type="unfinished"></translation>
+        <translation>Kotak-kotak</translation>
     </message>
     <message>
         <source>Dots</source>
-        <translation type="unfinished">Titik-titik</translation>
+        <translation>Titik-titik</translation>
     </message>
     <message>
         <source>No grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Tanpa kisi</translation>
     </message>
 </context>
 <context>
@@ -172,15 +172,15 @@
     <name>ModelMemory</name>
     <message>
         <source>the memory of the graphics card %1</source>
-        <translation type="unfinished"></translation>
+        <translation>memori kartu grafis %1</translation>
     </message>
     <message>
         <source>the computer&apos;s memory</source>
-        <translation type="unfinished"></translation>
+        <translation>memori komputer</translation>
     </message>
     <message>
         <source>Not enough memory for the model &quot;%1&quot; (%2 MB): %3 is %4 % used, and the model would bring it over %5 %.</source>
-        <translation type="unfinished"></translation>
+        <translation>Memori tidak cukup untuk model &quot;%1&quot; (%2 MB): %3 terpakai %4 %, dan model ini akan menaikkannya melebihi %5 %.</translation>
     </message>
 </context>
 <context>
@@ -505,214 +505,214 @@ Nama depan dalam daftar ini tidak dibedakan antara perempuan dan laki-laki.</tra
     <name>QKeychain::DeletePasswordJobPrivate</name>
     <message>
         <source>Could not open keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuka penyimpanan kunci</translation>
     </message>
     <message>
         <source>Could not remove private key from keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat menghapus kunci privat dari penyimpanan kunci</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan tidak dikenal</translation>
     </message>
     <message>
         <source>Could not open wallet: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuka dompet: %1; %2</translation>
     </message>
     <message>
         <source>Password entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Entri kata sandi tidak ditemukan</translation>
     </message>
     <message>
         <source>Could not delete password</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat menghapus kata sandi</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::Job</name>
     <message>
         <source>Both service name and key are empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Nama layanan dan kunci sama-sama kosong</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::JobPrivate</name>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan tidak dikenal</translation>
     </message>
     <message>
         <source>Access to keychain denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Akses ke keychain ditolak</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::PlainTextStore</name>
     <message>
         <source>Could not store data in settings: access error</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat menyimpan data di pengaturan: kesalahan akses</translation>
     </message>
     <message>
         <source>Could not store data in settings: format error</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat menyimpan data di pengaturan: kesalahan format</translation>
     </message>
     <message>
         <source>Could not delete data from settings: access error</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat menghapus data dari pengaturan: kesalahan akses</translation>
     </message>
     <message>
         <source>Could not delete data from settings: format error</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat menghapus data dari pengaturan: kesalahan format</translation>
     </message>
     <message>
         <source>Entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Entri tidak ditemukan</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::ReadPasswordJobPrivate</name>
     <message>
         <source>Entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Entri tidak ditemukan</translation>
     </message>
     <message>
         <source>Could not open keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuka penyimpanan kunci</translation>
     </message>
     <message>
         <source>Could not retrieve private key from keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat mengambil kunci privat dari penyimpanan kunci</translation>
     </message>
     <message>
         <source>Encrypted data is too short</source>
-        <translation type="unfinished"></translation>
+        <translation>Data terenkripsi terlalu pendek</translation>
     </message>
     <message>
         <source>Could not create RSA decryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuat cipher dekripsi RSA</translation>
     </message>
     <message>
         <source>Could not decrypt AES key: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat mendekripsi kunci AES: %1</translation>
     </message>
     <message>
         <source>Could not create AES decryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuat cipher dekripsi AES</translation>
     </message>
     <message>
         <source>Could not decrypt data: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat mendekripsi data: %1</translation>
     </message>
     <message>
         <source>Could not create decryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuat cipher dekripsi</translation>
     </message>
     <message>
         <source>D-Bus is not running</source>
-        <translation type="unfinished"></translation>
+        <translation>D-Bus tidak berjalan</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan tidak dikenal</translation>
     </message>
     <message>
         <source>No keychain service available</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada layanan keychain yang tersedia</translation>
     </message>
     <message>
         <source>Could not open wallet: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuka dompet: %1; %2</translation>
     </message>
     <message>
         <source>Access to keychain denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Akses ke keychain ditolak</translation>
     </message>
     <message>
         <source>Could not determine data type: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat menentukan tipe data: %1; %2</translation>
     </message>
     <message>
         <source>Unknown kwallet entry type &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Tipe entri kwallet tidak dikenal &apos;%1&apos;</translation>
     </message>
     <message>
         <source>Password entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Entri kata sandi tidak ditemukan</translation>
     </message>
     <message>
         <source>Could not decrypt data</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat mendekripsi data</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::WritePasswordJobPrivate</name>
     <message>
         <source>Could not open keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuka penyimpanan kunci</translation>
     </message>
     <message>
         <source>Could not create private key generator</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuat generator kunci privat</translation>
     </message>
     <message>
         <source>Could not generate new private key</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuat kunci privat baru</translation>
     </message>
     <message>
         <source>Could not retrieve private key from keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat mengambil kunci privat dari penyimpanan kunci</translation>
     </message>
     <message>
         <source>Could not generate AES key</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuat kunci AES</translation>
     </message>
     <message>
         <source>Could not generate IV</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuat IV</translation>
     </message>
     <message>
         <source>Could not create AES encryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuat cipher enkripsi AES</translation>
     </message>
     <message>
         <source>Could not encrypt data: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat mengenkripsi data: %1</translation>
     </message>
     <message>
         <source>Could not create RSA encryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuat cipher enkripsi RSA</translation>
     </message>
     <message>
         <source>Could not encrypt AES key: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat mengenkripsi kunci AES: %1</translation>
     </message>
     <message>
         <source>D-Bus is not running</source>
-        <translation type="unfinished"></translation>
+        <translation>D-Bus tidak berjalan</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan tidak dikenal</translation>
     </message>
     <message>
         <source>Could not open wallet: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membuka dompet: %1; %2</translation>
     </message>
     <message>
         <source>Encryption failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Enkripsi gagal: %1</translation>
     </message>
     <message>
         <source>Credential size exceeds maximum size of %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukuran kredensial melebihi ukuran maksimum %1: %2</translation>
     </message>
     <message>
         <source>Credential key exceeds maximum size of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci kredensial melebihi ukuran maksimum %1</translation>
     </message>
     <message>
         <source>Writing credentials failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Penulisan kredensial gagal: %1</translation>
     </message>
 </context>
 <context>
@@ -885,7 +885,7 @@ Nama depan dalam daftar ini tidak dibedakan antara perempuan dan laki-laki.</tra
     </message>
     <message>
         <source>No backup was made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada cadangan yang dibuat.</translation>
     </message>
     <message>
         <source>The project could not be saved first, so no backup was made: %1</source>
@@ -897,15 +897,15 @@ Nama depan dalam daftar ini tidak dibedakan antara perempuan dan laki-laki.</tra
     </message>
     <message>
         <source>the project&apos;s keys are not named in %1</source>
-        <translation type="unfinished"></translation>
+        <translation>kunci proyek tidak disebutkan di %1</translation>
     </message>
     <message>
         <source>the key %1 is not in Quillbinder&apos;s key ring</source>
-        <translation type="unfinished"></translation>
+        <translation>kunci %1 tidak ada di key ring Quillbinder</translation>
     </message>
     <message>
         <source>The backups of this project are encrypted, but no encrypted backup can be made: %1. No backup was made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadangan proyek ini dienkripsi, tetapi tidak ada cadangan terenkripsi yang dapat dibuat: %1. Tidak ada cadangan yang dibuat.</translation>
     </message>
     <message>
         <source>%1 - working copy of %2</source>
@@ -913,19 +913,19 @@ Nama depan dalam daftar ini tidak dibedakan antara perempuan dan laki-laki.</tra
     </message>
     <message>
         <source>it could not be encrypted: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>tidak dapat dienkripsi: %1</translation>
     </message>
     <message>
         <source>the encrypted backup could not be decrypted again: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>cadangan terenkripsi tidak dapat didekripsi lagi: %1</translation>
     </message>
     <message>
         <source>the encrypted backup, decrypted again, differs from the backup</source>
-        <translation type="unfinished"></translation>
+        <translation>cadangan terenkripsi, setelah didekripsi lagi, berbeda dari cadangannya</translation>
     </message>
     <message>
         <source>the encrypted backup is not whole</source>
-        <translation type="unfinished"></translation>
+        <translation>cadangan terenkripsi tidak utuh</translation>
     </message>
     <message>
         <source>Backing up &quot;%1&quot;...</source>
@@ -967,11 +967,11 @@ Cadangan disimpan di %3, dan pencadangan berikutnya akan menempatkannya.</transl
     </message>
     <message>
         <source>Decrypting &quot;%1&quot;...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mendekripsi &quot;%1&quot;...</translation>
     </message>
     <message>
         <source>%1 could not be decrypted: %2 Nothing was restored.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 tidak dapat didekripsi: %2 Tidak ada yang dipulihkan.</translation>
     </message>
     <message>
         <source>%1 could not be read as a ZIP file (%2). If the file is whole, an archive program of your system may still unpack it.</source>
@@ -1225,7 +1225,7 @@ Cadangan disimpan di %3, dan pencadangan berikutnya akan menempatkannya.</transl
     </message>
     <message>
         <source>Cannot read %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak dapat membaca %1: %2</translation>
     </message>
     <message>
         <source>Full name</source>
@@ -3005,11 +3005,11 @@ Sumber: %1</translation>
     </message>
     <message>
         <source>Other…</source>
-        <translation type="unfinished">Lainnya…</translation>
+        <translation>Lainnya…</translation>
     </message>
     <message>
         <source>Other (%1 px)…</source>
-        <translation type="unfinished"></translation>
+        <translation>Lainnya (%1 px)…</translation>
     </message>
     <message>
         <source>%1 in px (at 100 % zoom):</source>
@@ -3045,31 +3045,31 @@ Sumber: %1</translation>
     </message>
     <message>
         <source>Choose Font…</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih Font…</translation>
     </message>
     <message>
         <source>Fixed Width Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor Lebar Tetap</translation>
     </message>
     <message>
         <source>Label Color in Binder</source>
-        <translation type="unfinished"></translation>
+        <translation>Warna Label di Binder</translation>
     </message>
     <message>
         <source>Label Color in Icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Warna Label di Ikon</translation>
     </message>
     <message>
         <source>Status Stamps</source>
-        <translation type="unfinished"></translation>
+        <translation>Stempel Status</translation>
     </message>
     <message>
         <source>Label Color in Index Cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Warna Label di Kartu Indeks</translation>
     </message>
     <message>
         <source>Appearance Options…</source>
-        <translation type="unfinished"></translation>
+        <translation>Opsi Tampilan…</translation>
     </message>
     <message>
         <source>Font</source>
@@ -3863,7 +3863,7 @@ Sumber: %1</translation>
     </message>
     <message>
         <source>Large</source>
-        <translation type="unfinished">Besar</translation>
+        <translation>Besar</translation>
     </message>
     <message>
         <source>Main</source>
@@ -3927,7 +3927,7 @@ Sumber: %1</translation>
     </message>
     <message>
         <source>Handwriting (off, editor, inspector, both)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulisan tangan (mati, editor, inspektor, keduanya)</translation>
     </message>
     <message>
         <source>Theme button (Light, Dark, My Look 1, My Look 2 and all themes)</source>
@@ -4241,15 +4241,15 @@ Sumber: %1</translation>
     </message>
     <message>
         <source>The AI engine is not installed (or could not be loaded). Install it under File &gt; Options &gt; Speech.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin AI belum terpasang (atau tidak dapat dimuat). Instal di Berkas &gt; Opsi &gt; Ucapan.</translation>
     </message>
     <message>
         <source>Speech Transcription</source>
-        <translation type="unfinished">Transkripsi Ucapan</translation>
+        <translation>Transkripsi Ucapan</translation>
     </message>
     <message>
         <source>The model was not loaded: the memory is needed elsewhere.</source>
-        <translation type="unfinished"></translation>
+        <translation>Model tidak dimuat: memori diperlukan di tempat lain.</translation>
     </message>
     <message>
         <source>The model could not be loaded onto the graphics card. Choose the processor under Options &gt; Speech &gt; Processing, or a smaller model.</source>
@@ -4261,7 +4261,7 @@ Sumber: %1</translation>
     </message>
     <message>
         <source>The AI engine could not transcribe a piece.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin AI tidak dapat mentranskripsikan satu potongan.</translation>
     </message>
     <message>
         <source>Small</source>
@@ -4465,55 +4465,55 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>Access to keychain denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Akses ke keychain ditolak</translation>
     </message>
     <message>
         <source>No keyring daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada daemon keyring</translation>
     </message>
     <message>
         <source>Already unlocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Sudah terbuka kuncinya</translation>
     </message>
     <message>
         <source>No such keyring</source>
-        <translation type="unfinished"></translation>
+        <translation>Keyring tidak ditemukan</translation>
     </message>
     <message>
         <source>Bad arguments</source>
-        <translation type="unfinished"></translation>
+        <translation>Argumen tidak valid</translation>
     </message>
     <message>
         <source>I/O error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan I/O</translation>
     </message>
     <message>
         <source>Cancelled</source>
-        <translation type="unfinished"></translation>
+        <translation>Dibatalkan</translation>
     </message>
     <message>
         <source>Keyring already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Keyring sudah ada</translation>
     </message>
     <message>
         <source>No match</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada yang cocok</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kesalahan tidak dikenal</translation>
     </message>
     <message>
         <source>Entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Entri tidak ditemukan</translation>
     </message>
     <message>
         <source>No matching unlocked entry was deleted</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada entri terbuka yang cocok yang dihapus</translation>
     </message>
     <message>
         <source> s</source>
-        <translation type="unfinished"> dtk</translation>
+        <translation> dtk</translation>
     </message>
 </context>
 <context>
@@ -4796,7 +4796,7 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jumlah inti prosesor dan waktu setelah model yang tidak dipakai dikeluarkan dari memori diatur untuk semua fungsi AI bersama-sama, di Berkas &gt; Opsi &gt; Umum &gt; Model AI.</translation>
     </message>
     <message>
         <source>Fast</source>
@@ -4904,11 +4904,11 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>Write into the text as I speak</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulis ke dalam teks saat saya berbicara</translation>
     </message>
     <message>
         <source>Each piece of live speech is also inserted at the cursor of the text you are editing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Setiap potongan ucapan langsung juga disisipkan pada kursor teks yang sedang Anda edit.</translation>
     </message>
     <message>
         <source>Delete a recording once its text is written</source>
@@ -4980,19 +4980,19 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished">Otomatis</translation>
+        <translation>Otomatis</translation>
     </message>
     <message>
         <source>Processor (CPU)</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosesor (CPU)</translation>
     </message>
     <message>
         <source>No graphics card that the AI engine can use (Vulkan) was found, or the engine is not installed; the processor computes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ditemukan kartu grafis yang dapat dipakai mesin AI (Vulkan), atau mesin belum terpasang; prosesor yang menghitung.</translation>
     </message>
     <message>
         <source>Automatic takes a graphics card with enough free memory for the model, else the processor. A graphics card is usually much faster; the speed test shows how much on this computer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Otomatis memilih kartu grafis dengan memori kosong yang cukup untuk model, jika tidak prosesor. Kartu grafis biasanya jauh lebih cepat; uji kecepatan menunjukkan seberapa besar bedanya di komputer ini.</translation>
     </message>
     <message>
         <source>Everything is written in %1.</source>
@@ -5023,11 +5023,11 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>Record &amp;Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekam &amp;Saja</translation>
     </message>
     <message>
         <source>Start or stop a recording without writing its text (the text can be written later with Transcribe)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mulai atau hentikan rekaman tanpa menulis teksnya (teks dapat ditulis nanti dengan Transkripsikan)</translation>
     </message>
     <message>
         <source>Show &amp;Transcriptions</source>
@@ -5071,7 +5071,7 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>This version of the add-on needs Quillbinder 0.99.0 or later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Versi pengaya ini memerlukan Quillbinder 0.99.0 atau yang lebih baru.</translation>
     </message>
     <message>
         <source>Cannot load the speech engine: %1</source>
@@ -5564,11 +5564,11 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>Put the marked part of the text (all of it when nothing is marked) into the text you are editing, at the cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Masukkan bagian teks yang ditandai (seluruhnya bila tidak ada yang ditandai) ke teks yang sedang Anda edit, pada kursor</translation>
     </message>
     <message>
         <source>Insert at Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Sisipkan pada Kursor</translation>
     </message>
     <message>
         <source>Move the transcription to the trash</source>
@@ -5644,11 +5644,11 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>Open a text in the editor first, and click into it where the transcription should go.</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka teks di editor terlebih dahulu, lalu klik di dalamnya pada tempat transkripsi akan dimasukkan.</translation>
     </message>
     <message>
         <source>The text was inserted at the cursor.</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks telah disisipkan pada kursor.</translation>
     </message>
     <message>
         <source>No speech model yet: File &gt; Options &gt; Speech.</source>
@@ -5933,214 +5933,214 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     <name>qb::AiDownloads</name>
     <message>
         <source>Handwriting Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin Tulisan Tangan</translation>
     </message>
     <message>
         <source>AI Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin AI</translation>
     </message>
     <message>
         <source>%1 is not a package of the %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 bukan paket %2.</translation>
     </message>
     <message>
         <source>Another download is running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unduhan lain sedang berjalan.</translation>
     </message>
     <message>
         <source>The model %1 is not in the catalog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Model %1 tidak ada di katalog.</translation>
     </message>
     <message>
         <source>%1 could not be made.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 tidak dapat dibuat.</translation>
     </message>
     <message>
         <source>The download was cancelled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unduhan dibatalkan.</translation>
     </message>
     <message>
         <source>%1 could not be written.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 tidak dapat ditulis.</translation>
     </message>
     <message>
         <source>%1 is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 telah terpasang.</translation>
     </message>
     <message>
         <source>This copy of %1 cannot make a secure connection, so it cannot download. Download the current AppImage once from the project&apos;s page.</source>
-        <translation type="unfinished"></translation>
+        <translation>Salinan %1 ini tidak dapat membuat sambungan aman, sehingga tidak dapat mengunduh. Unduh AppImage terbaru satu kali dari halaman proyek.</translation>
     </message>
     <message>
         <source>The download failed: the file could not be written, or is larger than announced.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unduhan gagal: berkas tidak dapat ditulis, atau lebih besar daripada yang diumumkan.</translation>
     </message>
     <message>
         <source>The download failed (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Unduhan gagal (%1).</translation>
     </message>
     <message>
         <source>The download is incomplete (%1 of %2 bytes).</source>
-        <translation type="unfinished"></translation>
+        <translation>Unduhan tidak lengkap (%1 dari %2 byte).</translation>
     </message>
     <message>
         <source>The downloaded file is not the one the catalog names (its SHA-256 differs), so it was not kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas yang diunduh bukan berkas yang disebut katalog (SHA-256-nya berbeda), sehingga tidak disimpan.</translation>
     </message>
     <message>
         <source>The download is incomplete.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unduhan tidak lengkap.</translation>
     </message>
     <message>
         <source>The joined file is not the one the catalog names (its SHA-256 differs), so it was not kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas gabungan bukan berkas yang disebut katalog (SHA-256-nya berbeda), sehingga tidak disimpan.</translation>
     </message>
 </context>
 <context>
     <name>qb::AiInstallPanel</name>
     <message>
         <source>many</source>
-        <translation type="unfinished"></translation>
+        <translation>banyak</translation>
     </message>
     <message>
         <source>Install the Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>Instal Mesin</translation>
     </message>
     <message>
         <source>Downloads the engine of this version from the project&apos;s release page and installs it</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengunduh mesin versi ini dari halaman rilis proyek dan memasangnya</translation>
     </message>
     <message>
         <source>Install from File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Instal dari Berkas...</translation>
     </message>
     <message>
         <source>Installs the engine from a package file (for a computer without a connection)</source>
-        <translation type="unfinished"></translation>
+        <translation>Memasang mesin dari berkas paket (untuk komputer tanpa koneksi)</translation>
     </message>
     <message>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Model</translation>
     </message>
     <message>
         <source>Languages</source>
-        <translation type="unfinished">Bahasa</translation>
+        <translation>Bahasa</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Unduh</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Memori</translation>
     </message>
     <message>
         <source>License</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisensi</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished">Keadaan</translation>
+        <translation>Keadaan</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Hapus</translation>
+        <translation>Hapus</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Batal</translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <source>The handwriting engine is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin tulisan tangan belum terpasang.</translation>
     </message>
     <message>
         <source>The AI engine is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin AI belum terpasang.</translation>
     </message>
     <message>
         <source>The installed engine %1 was made for another version of Quillbinder: install it again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin %1 yang terpasang dibuat untuk versi Quillbinder yang lain: instal lagi.</translation>
     </message>
     <message>
         <source>The engine %1 is switched off (Help &gt; Add-ons and Updates &gt; Manage Add-ons).</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin %1 dimatikan (Bantuan &gt; Pengaya dan Pembaruan &gt; Pengelola Pengaya).</translation>
     </message>
     <message>
         <source>The handwriting engine %1 is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin tulisan tangan %1 telah terpasang.</translation>
     </message>
     <message>
         <source>The AI engine %1 is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin AI %1 telah terpasang.</translation>
     </message>
     <message>
         <source>The new engine is used after Quillbinder is started again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin baru dipakai setelah Quillbinder dijalankan lagi.</translation>
     </message>
     <message>
         <source>Install Again</source>
-        <translation type="unfinished"></translation>
+        <translation>Instal Ulang</translation>
     </message>
     <message>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Terpasang</translation>
     </message>
     <message>
         <source>Not published yet</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum dipublikasikan</translation>
     </message>
     <message>
         <source>Not installed</source>
-        <translation type="unfinished">Belum terpasang</translation>
+        <translation>Belum terpasang</translation>
     </message>
     <message>
         <source>The catalog has no models for this function yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Katalog belum memiliki model untuk fungsi ini.</translation>
     </message>
     <message>
         <source>License: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisensi: %1</translation>
     </message>
     <message>
         <source>Downloading the engine...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengunduh mesin...</translation>
     </message>
     <message>
         <source>Downloading %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengunduh %1...</translation>
     </message>
     <message>
         <source>Install the Engine from a File</source>
-        <translation type="unfinished"></translation>
+        <translation>Instal Mesin dari Berkas</translation>
     </message>
     <message>
         <source>Quillbinder packages (*.qbpkg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Paket Quillbinder (*.qbpkg)</translation>
     </message>
     <message>
         <source>This package is not signed by the Quillbinder project, so it cannot be told whether it is the project&apos;s own. Install it only when you trust where it comes from.</source>
-        <translation type="unfinished"></translation>
+        <translation>Paket ini tidak ditandatangani oleh proyek Quillbinder, sehingga tidak dapat dipastikan apakah paket ini milik proyek. Instal hanya jika Anda memercayai asalnya.</translation>
     </message>
     <message>
         <source>Install Anyway</source>
-        <translation type="unfinished"></translation>
+        <translation>Tetap Instal</translation>
     </message>
     <message>
         <source>The engine was not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin tidak dipasang.</translation>
     </message>
     <message>
         <source>The engine is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin telah terpasang.</translation>
     </message>
     <message>
         <source>%1 may be used for non-commercial purposes only (%2). Download it?</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 hanya boleh dipakai untuk tujuan nonkomersial (%2). Unduh?</translation>
     </message>
     <message>
         <source>%1 is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 telah dihapus.</translation>
     </message>
 </context>
 <context>
@@ -7100,11 +7100,11 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     </message>
     <message>
         <source>Cannot write %1: %2</source>
-        <translation type="unfinished">Tidak dapat menulis %1: %2</translation>
+        <translation>Tidak dapat menulis %1: %2</translation>
     </message>
     <message>
         <source>Compile cancelled. No file was made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kompilasi dibatalkan. Tidak ada berkas yang dibuat.</translation>
     </message>
     <message>
         <source>Compile to</source>
@@ -7171,15 +7171,15 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     <name>qb::CompileProgress</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Batal</translation>
+        <translation>Batal</translation>
     </message>
     <message>
         <source>%1 of %2</source>
-        <translation type="unfinished">%1 dari %2</translation>
+        <translation>%1 dari %2</translation>
     </message>
     <message>
         <source>Cancelling...</source>
-        <translation type="unfinished"></translation>
+        <translation>Membatalkan...</translation>
     </message>
 </context>
 <context>
@@ -8090,191 +8090,191 @@ Halaman (250 kata): %5</translation>
     <name>qb::EncryptionPage</name>
     <message>
         <source>Encryption locks the files of a project and its backups with your key, in the OpenPGP format that Kleopatra, Gpg4win and GnuPG open without Quillbinder (see the manual&apos;s page on opening your files without Quillbinder).</source>
-        <translation type="unfinished"></translation>
+        <translation>Enkripsi mengunci berkas proyek dan cadangannya dengan kunci Anda, dalam format OpenPGP yang dapat dibuka Kleopatra, Gpg4win, dan GnuPG tanpa Quillbinder (lihat halaman panduan tentang membuka berkas Anda tanpa Quillbinder).</translation>
     </message>
     <message>
         <source>Keys on this device</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci di perangkat ini</translation>
     </message>
     <message>
         <source>Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci</translation>
     </message>
     <message>
         <source>Fingerprint</source>
-        <translation type="unfinished"></translation>
+        <translation>Sidik jari</translation>
     </message>
     <message>
         <source>Here</source>
-        <translation type="unfinished"></translation>
+        <translation>Di sini</translation>
     </message>
     <message>
         <source>Create Keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>Buat Kunci...</translation>
     </message>
     <message>
         <source>Import Keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>Impor Kunci...</translation>
     </message>
     <message>
         <source>Import a Key File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Impor Berkas Kunci...</translation>
     </message>
     <message>
         <source>Export Keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ekspor Kunci...</translation>
     </message>
     <message>
         <source>Forget the passphrase on this device</source>
-        <translation type="unfinished"></translation>
+        <translation>Lupakan frasa sandi di perangkat ini</translation>
     </message>
     <message>
         <source>The open project</source>
-        <translation type="unfinished"></translation>
+        <translation>Proyek yang terbuka</translation>
     </message>
     <message>
         <source>Encrypted backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Cadangan terenkripsi</translation>
     </message>
     <message>
         <source>Encrypted project</source>
-        <translation type="unfinished"></translation>
+        <translation>Proyek terenkripsi</translation>
     </message>
     <message>
         <source>This place is not allowed</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempat ini tidak diizinkan</translation>
     </message>
     <message>
         <source>Other key</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci lain</translation>
     </message>
     <message>
         <source>My key</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci saya</translation>
     </message>
     <message>
         <source>Recovery key</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci pemulihan</translation>
     </message>
     <message>
         <source>secret part, unlocked</source>
-        <translation type="unfinished"></translation>
+        <translation>bagian rahasia, terbuka</translation>
     </message>
     <message>
         <source>secret part, locked</source>
-        <translation type="unfinished"></translation>
+        <translation>bagian rahasia, terkunci</translation>
     </message>
     <message>
         <source>public part only</source>
-        <translation type="unfinished"></translation>
+        <translation>hanya bagian publik</translation>
     </message>
     <message>
         <source>This device has no keys yet. Create Keys makes your key and a recovery key; on another device, use Import Keys with the key folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Perangkat ini belum memiliki kunci. Buat Kunci membuat kunci Anda dan sebuah kunci pemulihan; di perangkat lain, pakai Impor Kunci dengan folder kunci.</translation>
     </message>
     <message>
         <source>No project is open: the two switches belong to the open project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada proyek yang terbuka: kedua sakelar milik proyek yang terbuka.</translation>
     </message>
     <message>
         <source>Create or import keys first: the switches need your key and the recovery key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Buat atau impor kunci terlebih dahulu: kedua sakelar memerlukan kunci Anda dan kunci pemulihan.</translation>
     </message>
     <message>
         <source>A project in Scrivener&apos;s format cannot be encrypted: Scrivener could not open its files. Its backups can be encrypted; that switch belongs to each computer, so switch it on on every computer that makes backups of the project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Proyek dalam format Scrivener tidak dapat dienkripsi: Scrivener tidak dapat membuka berkasnya. Cadangannya dapat dienkripsi; sakelar itu milik setiap komputer, jadi nyalakan di setiap komputer yang membuat cadangan proyek.</translation>
     </message>
     <message>
         <source>The switch &quot;%1&quot; could not be changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sakelar &quot;%1&quot; tidak dapat diubah.</translation>
     </message>
     <message>
         <source>Choose the key folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih folder kunci</translation>
     </message>
     <message>
         <source>Import Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Impor Kunci</translation>
     </message>
     <message>
         <source>Type the passphrase of your key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ketik frasa sandi kunci Anda.</translation>
     </message>
     <message>
         <source>Your key is on this device now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci Anda kini ada di perangkat ini.</translation>
     </message>
     <message>
         <source>Your key is on this device for this session only: it could not be saved (%1), so it will be gone at the next start. Check the free space and the rights of the program&apos;s data folder, then import it again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci Anda ada di perangkat ini hanya untuk sesi ini: kunci tidak dapat disimpan (%1), sehingga akan hilang pada awal berikutnya. Periksa ruang kosong dan hak akses folder data program, lalu impor lagi.</translation>
     </message>
     <message>
         <source>Choose a key file</source>
-        <translation type="unfinished"></translation>
+        <translation>Pilih berkas kunci</translation>
     </message>
     <message>
         <source>Key files (*.asc *.gpg *.pgp);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas kunci (*.asc *.gpg *.pgp);;Semua berkas (*)</translation>
     </message>
     <message>
         <source>Import a Key File</source>
-        <translation type="unfinished"></translation>
+        <translation>Impor Berkas Kunci</translation>
     </message>
     <message>
         <source>The file could not be read.</source>
-        <translation type="unfinished">Berkas tidak dapat dibaca.</translation>
+        <translation>Berkas tidak dapat dibaca.</translation>
     </message>
     <message>
         <source>Type the passphrase of this key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ketik frasa sandi kunci ini.</translation>
     </message>
     <message>
         <source>The key is on this device as your key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci ada di perangkat ini sebagai kunci Anda.</translation>
     </message>
     <message>
         <source>There is no recovery key yet: import its public file (recovery-key-public.asc) with Import a Key File, or make a new pair with Create Keys.</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum ada kunci pemulihan: impor berkas publiknya (recovery-key-public.asc) dengan Impor Berkas Kunci, atau buat pasangan baru dengan Buat Kunci.</translation>
     </message>
     <message>
         <source>The key is on this device as the recovery key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci ada di perangkat ini sebagai kunci pemulihan.</translation>
     </message>
     <message>
         <source>The public key is on this device. It is not your key and not the recovery key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci publik ada di perangkat ini. Ini bukan kunci Anda dan bukan kunci pemulihan.</translation>
     </message>
     <message>
         <source>The key is on this device for this session only: it could not be saved (%1), so it will be gone at the next start. Check the free space and the rights of the program&apos;s data folder, then import it again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci ada di perangkat ini hanya untuk sesi ini: kunci tidak dapat disimpan (%1), sehingga akan hilang pada awal berikutnya. Periksa ruang kosong dan hak akses folder data program, lalu impor lagi.</translation>
     </message>
     <message>
         <source>Where to write the keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempat menulis kunci</translation>
     </message>
     <message>
         <source>Export Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Ekspor Kunci</translation>
     </message>
     <message>
         <source>The keys are in the folder %1. It holds your key (locked by your passphrase), the public parts and a README.txt. The recovery key&apos;s secret part is only in the folder that Create Keys made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci ada di folder %1. Folder itu berisi kunci Anda (terkunci oleh frasa sandi Anda), bagian-bagian publik, dan README.txt. Bagian rahasia kunci pemulihan hanya ada di folder yang dibuat Buat Kunci.</translation>
     </message>
     <message>
         <source>Forget the passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Lupakan frasa sandi</translation>
     </message>
     <message>
         <source>Quillbinder forgets the passphrase on this device and locks your key. It will ask for the passphrase again when it needs it. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder melupakan frasa sandi di perangkat ini dan mengunci kunci Anda. Frasa sandi akan ditanyakan lagi saat diperlukan. Lanjutkan?</translation>
     </message>
     <message>
         <source>The passphrase is forgotten on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Frasa sandi dilupakan di perangkat ini.</translation>
     </message>
     <message>
         <source>The system&apos;s key store would not remove the passphrase: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Penyimpanan kunci sistem tidak mau menghapus frasa sandi: %1</translation>
     </message>
 </context>
 <context>
@@ -8573,7 +8573,7 @@ Tidak ada yang ditulis ke folder milik Windows atau ke registri, kecuali jika An
     </message>
     <message>
         <source>Help &gt; Add to Application Menu or Remove From Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bantuan &gt; Tambahkan ke Menu Aplikasi atau Hapus dari Menu Aplikasi mengubahnya nanti. Jika Anda memindahkan AppImage sendiri, tambahkan lagi ke menu.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -9521,7 +9521,7 @@ Tidak ada yang ditulis ke folder milik Windows atau ke registri, kecuali jika An
     <name>qb::IconFromTextDialog</name>
     <message>
         <source>Icon From Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikon dari Teks</translation>
     </message>
     <message>
         <source>Up to 3 characters, e.g. PR, Ch1, A</source>
@@ -10117,19 +10117,19 @@ Teks snapshot &quot;%2&quot; kini menjadi teks dokumen; teks itu dapat diedit la
     </message>
     <message>
         <source>Synopsis and Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Sinopsis dan Catatan</translation>
     </message>
     <message>
         <source>Comments and Footnotes</source>
-        <translation type="unfinished">Komentar dan Catatan Kaki</translation>
+        <translation>Komentar dan Catatan Kaki</translation>
     </message>
     <message>
         <source>Mind Map</source>
-        <translation type="unfinished">Peta Pikiran</translation>
+        <translation>Peta Pikiran</translation>
     </message>
     <message>
         <source>Objects</source>
-        <translation type="unfinished">Objek</translation>
+        <translation>Objek</translation>
     </message>
     <message>
         <source>Synopsis and notes</source>
@@ -10212,159 +10212,159 @@ Teks snapshot &quot;%2&quot; kini menjadi teks dokumen; teks itu dapat diedit la
     <name>qb::KeyWizard</name>
     <message>
         <source>Create Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Buat Kunci</translation>
     </message>
     <message>
         <source>Make Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Buat Kunci</translation>
     </message>
     <message>
         <source>Your passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Frasa sandi Anda</translation>
     </message>
     <message>
         <source>The passphrase locks your key. Quillbinder can remember it on this device, so you type it once on each other device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Frasa sandi mengunci kunci Anda. Quillbinder dapat mengingatnya di perangkat ini, sehingga Anda mengetiknya sekali di setiap perangkat lain.</translation>
     </message>
     <message>
         <source>Use these six random words (the safest choice and easy to type):</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakai enam kata acak ini (pilihan paling aman dan mudah diketik):</translation>
     </message>
     <message>
         <source>Other words</source>
-        <translation type="unfinished">Kata lainnya</translation>
+        <translation>Kata lainnya</translation>
     </message>
     <message>
         <source>Use a passphrase of my own:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pakai frasa sandi buatan saya sendiri:</translation>
     </message>
     <message>
         <source>Passphrase:</source>
-        <translation type="unfinished"></translation>
+        <translation>Frasa sandi:</translation>
     </message>
     <message>
         <source>Once more:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sekali lagi:</translation>
     </message>
     <message>
         <source>Remember the passphrase on this device (in the system&apos;s key store)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ingat frasa sandi di perangkat ini (di penyimpanan kunci sistem)</translation>
     </message>
     <message>
         <source>This device already has keys. New keys cannot open files that were locked for the old ones; keep the old key folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Perangkat ini sudah memiliki kunci. Kunci baru tidak dapat membuka berkas yang dikunci untuk kunci lama; simpan folder kunci yang lama.</translation>
     </message>
     <message>
         <source>The two entries are not the same.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kedua entri tidak sama.</translation>
     </message>
     <message>
         <source>This passphrase is accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Frasa sandi ini diterima.</translation>
     </message>
     <message>
         <source>Where to keep the keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempat menyimpan kunci</translation>
     </message>
     <message>
         <source>Quillbinder writes the folder &quot;%1&quot; there. A USB stick is best; project, backup and sync folders are refused.</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder menulis folder &quot;%1&quot; di sana. Flash disk USB paling baik; folder proyek, cadangan, dan sinkronisasi ditolak.</translation>
     </message>
     <message>
         <source>Choose...</source>
-        <translation type="unfinished">Pilih...</translation>
+        <translation>Pilih...</translation>
     </message>
     <message>
         <source>When you press Next, your key and the recovery key are made. This takes a few seconds.</source>
-        <translation type="unfinished"></translation>
+        <translation>Saat Anda menekan Berikutnya, kunci Anda dan kunci pemulihan dibuat. Ini memerlukan beberapa detik.</translation>
     </message>
     <message>
         <source>Folder for the keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Folder untuk kunci</translation>
     </message>
     <message>
         <source>The keys could not be made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci tidak dapat dibuat.</translation>
     </message>
     <message>
         <source>The recovery passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Frasa sandi pemulihan</translation>
     </message>
     <message>
         <source>Write these six words on paper now. They are shown only this once and are saved nowhere, not even in the key folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulis keenam kata ini di kertas sekarang. Kata-kata ini hanya ditampilkan satu kali ini dan tidak disimpan di mana pun, bahkan tidak di folder kunci.</translation>
     </message>
     <message>
         <source>The recovery key opens your files if you lose your own key or forget its passphrase. Keep the paper in another place than the USB stick: the stick alone or the paper alone opens nothing. If both are lost, your text is gone for good.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci pemulihan membuka berkas Anda jika Anda kehilangan kunci sendiri atau lupa frasa sandinya. Simpan kertas itu di tempat lain selain flash disk USB: flash disk saja atau kertas saja tidak membuka apa pun. Jika keduanya hilang, teks Anda hilang selamanya.</translation>
     </message>
     <message>
         <source>I have written the six words on paper</source>
-        <translation type="unfinished"></translation>
+        <translation>Saya sudah menulis keenam kata di kertas</translation>
     </message>
     <message>
         <source>The check</source>
-        <translation type="unfinished"></translation>
+        <translation>Pemeriksaan</translation>
     </message>
     <message>
         <source>Type two of the recovery words from your paper. Quillbinder reads the written files back and opens a test file with each key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ketik dua kata pemulihan dari kertas Anda. Quillbinder membaca kembali berkas yang ditulis dan membuka berkas uji dengan setiap kunci.</translation>
     </message>
     <message>
         <source>Word %1:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kata %1:</translation>
     </message>
     <message>
         <source>The key files were read back.</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas kunci telah dibaca kembali.</translation>
     </message>
     <message>
         <source>README.txt is in the folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>README.txt ada di folder.</translation>
     </message>
     <message>
         <source>A test file opens with your key and your passphrase.</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas uji terbuka dengan kunci dan frasa sandi Anda.</translation>
     </message>
     <message>
         <source>A test file opens with the recovery key and the recovery passphrase.</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas uji terbuka dengan kunci pemulihan dan frasa sandi pemulihan.</translation>
     </message>
     <message>
         <source>The keys could not be put on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci tidak dapat dipasang di perangkat ini.</translation>
     </message>
     <message>
         <source>The keys could not be saved on this device (%1). Nothing was changed; check the free space and the rights of the program&apos;s data folder, and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci tidak dapat disimpan di perangkat ini (%1). Tidak ada yang diubah; periksa ruang kosong dan hak akses folder data program, lalu coba lagi.</translation>
     </message>
     <message>
         <source>A second copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Salinan kedua</translation>
     </message>
     <message>
         <source>Your keys are on this device and in the folder. Keep a second copy of the folder at another place, for example on a second USB stick. You can skip this.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kunci Anda ada di perangkat ini dan di folder. Simpan salinan kedua folder itu di tempat lain, misalnya di flash disk USB kedua. Anda boleh melewatinya.</translation>
     </message>
     <message>
         <source>Copy the folder here</source>
-        <translation type="unfinished"></translation>
+        <translation>Salin folder ke sini</translation>
     </message>
     <message>
         <source>Place for the second copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempat untuk salinan kedua</translation>
     </message>
     <message>
         <source>This is the place of the first copy. Choose another place.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ini tempat salinan pertama. Pilih tempat lain.</translation>
     </message>
     <message>
         <source>The second copy is made and was checked: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Salinan kedua dibuat dan sudah diperiksa: %1</translation>
     </message>
     <message>
         <source>The second copy was made, but the check failed. Make another one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Salinan kedua dibuat, tetapi pemeriksaannya gagal. Buat satu lagi.</translation>
     </message>
 </context>
 <context>
@@ -11824,115 +11824,115 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulisan Tangan</translation>
     </message>
     <message>
         <source>Model change in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Perubahan model sedang berlangsung</translation>
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>Pratinja&amp;u Cetak</translation>
     </message>
     <message>
         <source>Paste With &amp;Formatting</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempel dengan Pe&amp;mformatan</translation>
     </message>
     <message>
         <source>&amp;Objects</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Objek</translation>
     </message>
     <message>
         <source>Move &amp;Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Pindah ke &amp;Kiri</translation>
     </message>
     <message>
         <source>Move &amp;Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Pindah ke K&amp;anan</translation>
     </message>
     <message>
         <source>Out of the folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Keluar dari folder</translation>
     </message>
     <message>
         <source>Into the item above</source>
-        <translation type="unfinished"></translation>
+        <translation>Masuk ke item di atas</translation>
     </message>
     <message>
         <source>&amp;Load Project Settings From File…</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Muat Pengaturan Proyek dari Berkas…</translation>
     </message>
     <message>
         <source>Project S&amp;tatistics</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;tatistik Proyek</translation>
     </message>
     <message>
         <source>&amp;Writing History</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Riwayat Penulisan</translation>
     </message>
     <message>
         <source>Convert &amp;Sheet to Object</source>
-        <translation type="unfinished"></translation>
+        <translation>Konversi &amp;Lembar menjadi Objek</translation>
     </message>
     <message>
         <source>Convert to Te&amp;xt Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Konversi ke Dokumen Te&amp;ks</translation>
     </message>
     <message>
         <source>Take Snapshot With &amp;Title…</source>
-        <translation type="unfinished"></translation>
+        <translation>Buat Snapshot dengan &amp;Judul…</translation>
     </message>
     <message>
         <source>Apply Copied Formattin&amp;g</source>
-        <translation type="unfinished"></translation>
+        <translation>Terapkan Pemformatan yang &amp;Disalin</translation>
     </message>
     <message>
         <source>&amp;Picture From File…</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Gambar dari Berkas…</translation>
     </message>
     <message>
         <source>Insert Picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Sisipkan Gambar</translation>
     </message>
     <message>
         <source>Third-Party &amp;Licenses</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Lisensi Pihak Ketiga</translation>
     </message>
     <message>
         <source>List of All Place&amp;holders</source>
-        <translation type="unfinished"></translation>
+        <translation>Daftar Semua Place&amp;holder</translation>
     </message>
     <message>
         <source>Add to &amp;Application Menu…</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambahkan ke &amp;Menu Aplikasi…</translation>
     </message>
     <message>
         <source>&amp;System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informasi &amp;Sistem</translation>
     </message>
     <message>
         <source>Report a Problem</source>
-        <translation type="unfinished"></translation>
+        <translation>Laporkan Masalah</translation>
     </message>
     <message>
         <source>Toolbar &amp;Size</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ukuran Bilah Alat</translation>
     </message>
     <message>
         <source>&amp;Small</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kecil</translation>
     </message>
     <message>
         <source>&amp;Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Normal</translation>
     </message>
     <message>
         <source>&amp;Large</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Besar</translation>
     </message>
     <message>
         <source>Project &amp;Formatting Settings…</source>
-        <translation type="unfinished"></translation>
+        <translation>Pengaturan &amp;Pemformatan Proyek…</translation>
     </message>
     <message>
         <source>Font, size, line spacing and indents of the text of the whole project</source>
@@ -12282,7 +12282,7 @@ Biarkan terbuka dan coba lagi setelah penyebabnya diperbaiki, simpan teks yang b
     </message>
     <message>
         <source>When the program was ended (by logging out, shutting down or a command), an encrypted project could not be saved. (Its name and the reason are left out of this note, because it is a plain file.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Saat program diakhiri (karena keluar dari sesi, mematikan komputer, atau perintah), proyek terenkripsi tidak dapat disimpan. (Nama dan alasannya tidak dicantumkan dalam catatan ini, karena catatan ini berkas biasa.)</translation>
     </message>
     <message>
         <source>When the program was ended (by logging out, shutting down or a command), the project &quot;%1&quot; could not be saved: %2</source>
@@ -12516,7 +12516,7 @@ Paling baik di drive lain (flash disk USB, disk kedua, folder yang disalin progr
     </message>
     <message>
         <source>, encrypted</source>
-        <translation type="unfinished"></translation>
+        <translation>, terenkripsi</translation>
     </message>
     <message>
         <source> (in the folder &quot;%1&quot;)</source>
@@ -12748,11 +12748,11 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove From Application Menu and then Add to Application Menu again.</source>
-        <translation type="unfinished"></translation>
+        <translation>AppImage tidak dapat dipindahkan ke %1 (%2). Entri menu menjalankannya di tempatnya sekarang; jika Anda memindahkan berkasnya sendiri, pilih Bantuan &gt; Hapus dari Menu Aplikasi lalu Tambahkan ke Menu Aplikasi lagi.</translation>
     </message>
     <message>
         <source>Remove From &amp;Application Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus dari &amp;Menu Aplikasi</translation>
     </message>
     <message>
         <source>The program&apos;s icon could not be copied, so the menu entry shows no icon.</source>
@@ -13008,7 +13008,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>S&amp;mall Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Antarmuka &amp;Kecil</translation>
     </message>
     <message>
         <source>&amp;Navigate</source>
@@ -13036,27 +13036,27 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>In &amp;Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Di &amp;Editor</translation>
     </message>
     <message>
         <source>In &amp;Other Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Di Editor &amp;Lain</translation>
     </message>
     <message>
         <source>In &amp;Copyholder</source>
-        <translation type="unfinished"></translation>
+        <translation>Di Pemegang &amp;Salinan</translation>
     </message>
     <message>
         <source>As &amp;Quick Reference</source>
-        <translation type="unfinished"></translation>
+        <translation>Sebagai &amp;Referensi Cepat</translation>
     </message>
     <message>
         <source>At &amp;Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Pada &amp;Pilihan</translation>
     </message>
     <message>
         <source>With Selection as &amp;Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Dengan Pilihan sebagai &amp;Judul</translation>
     </message>
     <message>
         <source>Open &amp;Quick Reference</source>
@@ -13370,7 +13370,7 @@ Font dapat diinstal di sini dengan Format &gt; Font &gt; Instal Berkas Font, ata
     </message>
     <message>
         <source>Icon From &amp;Text…</source>
-        <translation type="unfinished"></translation>
+        <translation>Ikon dari &amp;Teks…</translation>
     </message>
     <message>
         <source>&amp;Manage Icons…</source>
@@ -13648,7 +13648,7 @@ tetapi jendela ini tidak dapat meninggalkan proyek asli. Buka proyek baru dari B
     </message>
     <message>
         <source>This project is encrypted, and Scrivener cannot read encrypted files. To save it in Scrivener format, turn off the encryption of the project first (File &gt; Options &gt; Encryption); a copy in Quillbinder&apos;s format stays encrypted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Proyek ini terenkripsi, dan Scrivener tidak dapat membaca berkas terenkripsi. Untuk menyimpannya dalam format Scrivener, matikan dulu enkripsi proyek (Berkas &gt; Opsi &gt; Enkripsi); salinan dalam format Quillbinder tetap terenkripsi.</translation>
     </message>
     <message>
         <source>Save a Copy as Scrivener Project</source>
@@ -14678,83 +14678,83 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>&amp;Read Aloud</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Baca Nyaring</translation>
     </message>
     <message>
         <source>Read Aloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Baca Nyaring</translation>
     </message>
     <message>
         <source>Small &amp;Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Antarmuka K&amp;ecil</translation>
     </message>
     <message>
         <source>A few round buttons and the most room for the text, for a small screen or for use without a keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Beberapa tombol bulat dan ruang terluas untuk teks, untuk layar kecil atau pemakaian tanpa papan ketik</translation>
     </message>
     <message>
         <source>&amp;Full</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Penuh</translation>
     </message>
     <message>
         <source>&amp;Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Otomatis</translation>
     </message>
     <message>
         <source>Switch to the &amp;Full Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Beralih ke Antarmuka &amp;Penuh</translation>
     </message>
     <message>
         <source>Binder</source>
-        <translation type="unfinished">Binder</translation>
+        <translation>Binder</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Catatan</translation>
+        <translation>Catatan</translation>
     </message>
     <message>
         <source>The notes of the document, in a panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Catatan dokumen, dalam sebuah panel</translation>
     </message>
     <message>
         <source>The binder, in a panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Binder, dalam sebuah panel</translation>
     </message>
     <message>
         <source>Record Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekam Saja</translation>
     </message>
     <message>
         <source>Small Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Antarmuka Kecil</translation>
     </message>
     <message>
         <source>Menu: all the menus of the program</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu: semua menu program</translation>
     </message>
     <message>
         <source>Style: choose a style for the paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Gaya: pilih gaya untuk paragraf</translation>
     </message>
     <message>
         <source>Labels and icons of the selected documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Label dan ikon dokumen yang dipilih</translation>
     </message>
     <message>
         <source>Stop recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Hentikan perekaman</translation>
     </message>
     <message>
         <source>Record only: the sound is kept and its text can be written later</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekam saja: suaranya disimpan dan teksnya dapat ditulis nanti</translation>
     </message>
     <message>
         <source>Record Only is off: the installed Speech Transcription add-on is too old. Update it in the Add-on Manager.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekam Saja dimatikan: pengaya Transkripsi Ucapan yang terpasang terlalu lama. Perbarui di Pengelola Pengaya.</translation>
     </message>
     <message>
         <source>Record Only is off: it needs the add-on Speech Transcription, which is not installed. The Add-on Manager can add it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rekam Saja dimatikan: fungsi ini memerlukan pengaya Transkripsi Ucapan, yang belum terpasang. Pengelola Pengaya dapat menambahkannya.</translation>
     </message>
 </context>
 <context>
@@ -15900,19 +15900,19 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>Pratinja&amp;u Cetak</translation>
     </message>
     <message>
         <source>&amp;Redefine Note Style From Selection…</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Definisikan Ulang Gaya Catatan dari Pilihan…</translation>
     </message>
     <message>
         <source>Note style to redefine from the selected note:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gaya catatan yang akan didefinisikan ulang dari catatan yang dipilih:</translation>
     </message>
     <message>
         <source>&amp;Delete Note Style…</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hapus Gaya Catatan…</translation>
     </message>
     <message>
         <source>Delete Note Style</source>
@@ -15920,7 +15920,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>Note style to delete:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gaya catatan yang akan dihapus:</translation>
     </message>
     <message>
         <source>Import Note Styles</source>
@@ -17126,7 +17126,7 @@ Lanjutkan?</translation>
     </message>
     <message>
         <source>Encryption</source>
-        <translation type="unfinished"></translation>
+        <translation>Enkripsi</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -17326,71 +17326,71 @@ Lanjutkan?</translation>
     </message>
     <message>
         <source>The processor cores that Speech Transcription, Translation Helper, Read Aloud and Handwriting use. Default for this computer: %1 of %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inti prosesor yang dipakai Transkripsi Ucapan, Asisten Penerjemah, Baca Nyaring, dan Tulisan Tangan. Bawaan untuk komputer ini: %1 dari %2.</translation>
     </message>
     <message>
         <source>Default (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bawaan (%1)</translation>
     </message>
     <message>
         <source>CPU cores for the AI:</source>
-        <translation type="unfinished"></translation>
+        <translation>Inti CPU untuk AI:</translation>
     </message>
     <message>
         <source>One setting for every AI function. The default is three quarters of the cores (rounded down); a computer with 6 cores or fewer keeps one core free. The AI&apos;s work runs at a low priority.</source>
-        <translation type="unfinished"></translation>
+        <translation>Satu pengaturan untuk setiap fungsi AI. Bawaannya tiga perempat jumlah inti (dibulatkan ke bawah); komputer dengan 6 inti atau kurang menyisakan satu inti. Pekerjaan AI berjalan dengan prioritas rendah.</translation>
     </message>
     <message>
         <source>Unload a model after</source>
-        <translation type="unfinished"></translation>
+        <translation>Keluarkan model dari memori setelah</translation>
     </message>
     <message>
         <source>minutes unused</source>
-        <translation type="unfinished"></translation>
+        <translation>menit tidak dipakai</translation>
     </message>
     <message>
         <source>A model that is not used is unloaded after this time. Before a model loads, when more than half of the memory it needs (the computer&apos;s memory or a graphics card&apos;s) is in use, the model unused longest is unloaded first; when the new model would still bring that memory over 80 %, it is not loaded, and the message line under the inspector says why. When the system reports a shortage of memory, idle models are unloaded at once.</source>
-        <translation type="unfinished"></translation>
+        <translation>Model yang tidak dipakai dikeluarkan dari memori setelah waktu ini. Sebelum sebuah model dimuat, bila lebih dari separuh memori yang diperlukannya (memori komputer atau kartu grafis) sedang terpakai, model yang paling lama tidak dipakai dikeluarkan lebih dulu; bila model baru tetap akan menaikkan memori itu melebihi 80 %, model tidak dimuat, dan baris pesan di bawah inspektor menjelaskan alasannya. Bila sistem melaporkan kekurangan memori, model yang menganggur langsung dikeluarkan.</translation>
     </message>
     <message>
         <source>Memory in use:</source>
-        <translation type="unfinished"></translation>
+        <translation>Memori terpakai:</translation>
     </message>
     <message>
         <source>RAM</source>
-        <translation type="unfinished"></translation>
+        <translation>RAM</translation>
     </message>
     <message>
         <source>Graphics card %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartu grafis %1</translation>
     </message>
     <message>
         <source>%1: not known</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: tidak diketahui</translation>
     </message>
     <message>
         <source>%1: %2 of %3 in use (%4 %)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: %2 dari %3 terpakai (%4 %)</translation>
     </message>
     <message>
         <source>No model is loaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada model yang dimuat.</translation>
     </message>
     <message>
         <source>Loaded models:</source>
-        <translation type="unfinished"></translation>
+        <translation>Model yang dimuat:</translation>
     </message>
     <message>
         <source>AI Models</source>
-        <translation type="unfinished"></translation>
+        <translation>Model AI</translation>
     </message>
     <message>
         <source>Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulisan Tangan</translation>
     </message>
     <message>
         <source>Read Aloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Baca Nyaring</translation>
     </message>
     <message>
         <source>Scratch Pad</source>
@@ -18102,19 +18102,19 @@ Lanjutkan?</translation>
     </message>
     <message>
         <source>Note: your colors %1 on %2 have a contrast of %3 : 1. Text is easier to read from 4.5 : 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Catatan: warna Anda %1 pada %2 memiliki kontras %3 : 1. Teks lebih mudah dibaca mulai dari 4,5 : 1.</translation>
     </message>
     <message>
         <source>%1 below it too.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 di bawahnya juga.</translation>
     </message>
     <message>
         <source>more pair</source>
-        <translation type="unfinished"></translation>
+        <translation>pasangan lagi</translation>
     </message>
     <message>
         <source>more pairs</source>
-        <translation type="unfinished"></translation>
+        <translation>pasangan lagi</translation>
     </message>
     <message>
         <source>Auto-Correction</source>
@@ -18474,7 +18474,7 @@ Lanjutkan?</translation>
     </message>
     <message>
         <source>Normal (22 px)</source>
-        <translation type="unfinished"></translation>
+        <translation>Normal (22 px)</translation>
     </message>
     <message>
         <source>Open Backup Folder...</source>
@@ -19544,11 +19544,11 @@ Proyek terbaru, tema milik Anda sendiri, tata letak, bilah alat, dan pintasan pa
     <name>qb::Project</name>
     <message>
         <source>The encryption of this project&apos;s files was not finished; some files are still plain. It is finished at the next opening.</source>
-        <translation type="unfinished"></translation>
+        <translation>Enkripsi berkas proyek ini belum selesai; beberapa berkas masih biasa. Enkripsi diselesaikan pada pembukaan berikutnya.</translation>
     </message>
     <message>
         <source>The decryption of this project&apos;s files was not finished; some files are still encrypted. It is finished at the next opening.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dekripsi berkas proyek ini belum selesai; beberapa berkas masih terenkripsi. Dekripsi diselesaikan pada pembukaan berikutnya.</translation>
     </message>
     <message>
         <source>This project&apos;s folder holds other project files beside &quot;%1&quot;, which was opened: %2. A sync program may have made them (a copy from another computer kept beside yours). Compare them before you go on, and open another one with File &gt; Open Project if it holds your latest work.</source>
@@ -19662,7 +19662,9 @@ Proyek terbaru, tema milik Anda sendiri, tata letak, bilah alat, dan pintasan pa
         <source>The project could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (named by the number of the document: the folder content/&lt;number&gt; of the project holds the document), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %1. Copy what you need back into the project. (Titles and names are left out of this note and of the names in this folder, because the project is encrypted.)
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Proyek tidak dapat disimpan. Folder ini berisi apa yang belum tersimpan: teks dan catatan sebagai berkas RTF (dinamai menurut nomor dokumen: folder content/&lt;nomor&gt; proyek berisi dokumen itu), papan peta pikiran, objek yang berubah (di folder &quot;objects&quot;) dan berkas proyek seperti di memori (binder, judul, dan label), sebagai %1. Salin kembali yang Anda perlukan ke dalam proyek. (Judul dan nama tidak dicantumkan dalam catatan ini dan dalam nama di folder ini, karena proyek terenkripsi.)
+
+</translation>
     </message>
     <message>
         <source>The project &quot;%1&quot; (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
@@ -19676,7 +19678,9 @@ Proyek terbaru, tema milik Anda sendiri, tata letak, bilah alat, dan pintasan pa
         <source>To put the project file back: close the project, rename the project file in the project folder (so that it is kept), copy the file %1 of this folder there and give it the old file&apos;s name. Then open the project again. (The copy&apos;s name ends in .copy so that this folder is not taken for a project.)
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Untuk mengembalikan berkas proyek: tutup proyek, ganti nama berkas proyek di folder proyek (agar tetap tersimpan), salin berkas %1 dari folder ini ke sana dan beri nama berkas yang lama. Lalu buka proyek lagi. (Nama salinan berakhir dengan .copy agar folder ini tidak dikira proyek.)
+
+</translation>
     </message>
     <message>
         <source>To put the project file back: close the project, rename the project file %1 in the project folder %2 (so that it is kept), copy the file %3 of this folder there and rename it to %1. Then open the project again. (The copy&apos;s name ends in .copy so that this folder is not taken for a project.)
@@ -19698,7 +19702,9 @@ Proyek terbaru, tema milik Anda sendiri, tata letak, bilah alat, dan pintasan pa
         <source>The project is encrypted, and so are the files of this copy (OpenPGP, to your key and the recovery key; only this note is plain): Kleopatra, Gpg4win or GnuPG decrypt them with your key.
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Proyek ini terenkripsi, begitu pula berkas salinan ini (OpenPGP, untuk kunci Anda dan kunci pemulihan; hanya catatan ini yang biasa): Kleopatra, Gpg4win, atau GnuPG mendekripsinya dengan kunci Anda.
+
+</translation>
     </message>
     <message>
         <source>This copy is complete: all %1 files were written.
@@ -19776,7 +19782,7 @@ Tidak ditulis:
     </message>
     <message>
         <source>The project file is damaged (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas proyek rusak (%1).</translation>
     </message>
     <message>
         <source>The project file is damaged: its binder is nested more than %1 levels deep.</source>
@@ -21740,7 +21746,7 @@ Ctrl+klik untuk membuka</translation>
     </message>
     <message>
         <source>Paste With &amp;Formatting</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempel dengan Pe&amp;mformatan</translation>
     </message>
     <message>
         <source>Footnote</source>
@@ -22084,15 +22090,15 @@ Ctrl+klik untuk membuka</translation>
     </message>
     <message>
         <source>Size of all toolbars:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ukuran semua bilah alat:</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished">Atur Ulang</translation>
+        <translation>Atur Ulang</translation>
     </message>
     <message>
         <source>Put the standard buttons back into this toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Kembalikan tombol standar ke bilah alat ini</translation>
     </message>
     <message>
         <source>Icons only</source>
@@ -22686,63 +22692,63 @@ Atau unduh versi terbaru dari halaman proyek.</translation>
     <name>qb::ai</name>
     <message>
         <source>%1 could not be removed completely.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 tidak dapat dihapus seluruhnya.</translation>
     </message>
     <message>
         <source>%1 is not published yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 belum dipublikasikan.</translation>
     </message>
     <message>
         <source>%1 needs about %2 GB of memory; this computer has %3 GB.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 memerlukan sekitar %2 GB memori; komputer ini memiliki %3 GB.</translation>
     </message>
     <message>
         <source>There is not enough room on the disk for %1 (%2 MB are needed).</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruang di disk tidak cukup untuk %1 (diperlukan %2 MB).</translation>
     </message>
     <message>
         <source>Processor (CPU)</source>
-        <translation type="unfinished"></translation>
+        <translation>Prosesor (CPU)</translation>
     </message>
     <message>
         <source>The graphics card &quot;%1&quot; was not found; the processor is used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kartu grafis &quot;%1&quot; tidak ditemukan; prosesor yang dipakai.</translation>
     </message>
     <message>
         <source>The model does not fit into the free memory of the graphics card; the processor is used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Model tidak muat di memori kosong kartu grafis; prosesor yang dipakai.</translation>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished">Otomatis</translation>
+        <translation>Otomatis</translation>
     </message>
     <message>
         <source>The AI engine is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin AI belum terpasang.</translation>
     </message>
     <message>
         <source>An add-on has loaded a speech engine of its own (%1). Restart Quillbinder, or update that add-on, to use the AI engine.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sebuah pengaya telah memuat mesin ucapan sendiri (%1). Mulai ulang Quillbinder, atau perbarui pengaya itu, untuk memakai mesin AI.</translation>
     </message>
     <message>
         <source>The AI engine could not be loaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin AI tidak dapat dimuat: %1</translation>
     </message>
     <message>
         <source>The installed AI engine is older than this version of Quillbinder needs. Install the engine again from the settings page.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin AI yang terpasang lebih lama daripada yang diperlukan versi Quillbinder ini. Instal ulang mesin dari halaman pengaturan.</translation>
     </message>
     <message>
         <source>The model &quot;%1&quot; could not be loaded: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Model &quot;%1&quot; tidak dapat dimuat: %2</translation>
     </message>
     <message>
         <source>The model is not loaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Model tidak dimuat.</translation>
     </message>
     <message>
         <source>Stopped.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dihentikan.</translation>
     </message>
 </context>
 <context>
@@ -22847,259 +22853,260 @@ Atau unduh versi terbaru dari halaman proyek.</translation>
     <name>qb::handwriting</name>
     <message>
         <source>The handwriting engine could not be loaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin tulisan tangan tidak dapat dimuat: %1</translation>
     </message>
     <message>
         <source>The handwriting engine does not offer the interface this version needs.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin tulisan tangan tidak menyediakan antarmuka yang diperlukan versi ini.</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::HandwritingController</name>
     <message>
         <source>Off</source>
-        <translation type="unfinished">Mati</translation>
+        <translation>Mati</translation>
     </message>
     <message>
         <source>Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor</translation>
     </message>
     <message>
         <source>Inspector</source>
-        <translation type="unfinished">Inspektor</translation>
+        <translation>Inspektor</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation type="unfinished"></translation>
+        <translation>Keduanya</translation>
     </message>
     <message>
         <source>Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulisan Tangan</translation>
     </message>
     <message>
         <source>Handwriting Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Tombol Tulisan Tangan</translation>
     </message>
     <message>
         <source>Show the button for handwriting on the toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan tombol tulisan tangan di bilah alat</translation>
     </message>
     <message>
         <source>Put the text at the place shown</source>
-        <translation type="unfinished"></translation>
+        <translation>Letakkan teks di tempat yang ditunjukkan</translation>
     </message>
     <message>
         <source>Cancel: the text goes back to the strip</source>
-        <translation type="unfinished"></translation>
+        <translation>Batal: teks kembali ke strip</translation>
     </message>
     <message>
         <source>Handwriting: off. Tap to switch it on; press and hold for the choices.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulisan tangan: mati. Ketuk untuk menyalakan; tekan dan tahan untuk pilihan.</translation>
     </message>
     <message>
         <source>Handwriting: %1. Tap to switch it off; press and hold for the choices.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulisan tangan: %1. Ketuk untuk mematikan; tekan dan tahan untuk pilihan.</translation>
     </message>
     <message>
         <source>Writing on the editor.
 The text you write is collected below.</source>
-        <translation type="unfinished"></translation>
+        <translation>Menulis di editor.
+Teks yang Anda tulis dikumpulkan di bawah.</translation>
     </message>
     <message>
         <source>Writing on the editor and here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Menulis di editor dan di sini.</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::HandwritingPage</name>
     <message>
         <source>no model for this language yet</source>
-        <translation type="unfinished"></translation>
+        <translation>belum ada model untuk bahasa ini</translation>
     </message>
     <message>
         <source>Theme color</source>
-        <translation type="unfinished"></translation>
+        <translation>Warna tema</translation>
     </message>
     <message>
         <source>Recognition</source>
-        <translation type="unfinished"></translation>
+        <translation>Pengenalan</translation>
     </message>
     <message>
         <source>Show the handwriting button on the toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan tombol tulisan tangan di bilah alat</translation>
     </message>
     <message>
         <source>Install</source>
-        <translation type="unfinished">Instal</translation>
+        <translation>Instal</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Hapus</translation>
+        <translation>Hapus</translation>
     </message>
     <message>
         <source>Handwriting model:</source>
-        <translation type="unfinished"></translation>
+        <translation>Model tulisan tangan:</translation>
     </message>
     <message>
         <source>Main language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bahasa utama:</translation>
     </message>
     <message>
         <source>Fallback language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bahasa cadangan:</translation>
     </message>
     <message>
         <source>Writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Menulis</translation>
     </message>
     <message>
         <source>Pause before a line is read:</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeda sebelum satu baris dibaca:</translation>
     </message>
     <message>
         <source>The ink stays for:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tinta bertahan selama:</translation>
     </message>
     <message>
         <source>The ink fades over:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tinta memudar selama:</translation>
     </message>
     <message>
         <source>Ink color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Warna tinta:</translation>
     </message>
     <message>
         <source>Ink Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Warna Tinta</translation>
     </message>
     <message>
         <source> px</source>
-        <translation type="unfinished"> px</translation>
+        <translation> px</translation>
     </message>
     <message>
         <source>Ink width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lebar tinta:</translation>
     </message>
     <message>
         <source>Grid (in the inspector&apos;s pad)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kisi (di area tulis inspektor)</translation>
     </message>
     <message>
         <source>Style:</source>
-        <translation type="unfinished">Gaya:</translation>
+        <translation>Gaya:</translation>
     </message>
     <message>
         <source>Color:</source>
-        <translation type="unfinished">Warna:</translation>
+        <translation>Warna:</translation>
     </message>
     <message>
         <source>Grid Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Warna Kisi</translation>
     </message>
     <message>
         <source>Line width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lebar garis:</translation>
     </message>
     <message>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Opasitas:</translation>
     </message>
     <message>
         <source>small</source>
-        <translation type="unfinished"></translation>
+        <translation>kecil</translation>
     </message>
     <message>
         <source>large</source>
-        <translation type="unfinished"></translation>
+        <translation>besar</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished">Ukuran:</translation>
+        <translation>Ukuran:</translation>
     </message>
     <message>
         <source>Hand protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Perlindungan tangan</translation>
     </message>
     <message>
         <source>Ignore the resting hand while the pen writes</source>
-        <translation type="unfinished"></translation>
+        <translation>Abaikan tangan yang bertumpu saat pena menulis</translation>
     </message>
     <message>
         <source>Right-handed</source>
-        <translation type="unfinished"></translation>
+        <translation>Tangan kanan</translation>
     </message>
     <message>
         <source>Left-handed</source>
-        <translation type="unfinished"></translation>
+        <translation>Tangan kiri</translation>
     </message>
     <message>
         <source>Writing hand:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tangan untuk menulis:</translation>
     </message>
     <message>
         <source>weak</source>
-        <translation type="unfinished"></translation>
+        <translation>lemah</translation>
     </message>
     <message>
         <source>strong</source>
-        <translation type="unfinished"></translation>
+        <translation>kuat</translation>
     </message>
     <message>
         <source>Strength:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kekuatan:</translation>
     </message>
     <message>
         <source>Pen and finger</source>
-        <translation type="unfinished"></translation>
+        <translation>Pena dan jari</translation>
     </message>
     <message>
         <source>Without a pen, one finger writes (two fingers scroll)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tanpa pena, satu jari menulis (dua jari menggulir)</translation>
     </message>
     <message>
         <source>The pen&apos;s side button selects text</source>
-        <translation type="unfinished"></translation>
+        <translation>Tombol samping pena memilih teks</translation>
     </message>
     <message>
         <source> s</source>
-        <translation type="unfinished"> dtk</translation>
+        <translation> dtk</translation>
     </message>
     <message>
         <source>A pen counts as in use after its last touch for:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pena dianggap sedang dipakai setelah sentuhan terakhirnya selama:</translation>
     </message>
     <message>
         <source>Learning your hand</source>
-        <translation type="unfinished"></translation>
+        <translation>Mempelajari tangan Anda</translation>
     </message>
     <message>
         <source>Keep corrected lines on this device</source>
-        <translation type="unfinished"></translation>
+        <translation>Simpan baris yang dikoreksi di perangkat ini</translation>
     </message>
     <message>
         <source>Only lines you corrected are kept: the picture of the ink and the corrected text. They stay on this device and are never sent anywhere. While an encrypted project is open, nothing is kept (the files would be plain).</source>
-        <translation type="unfinished"></translation>
+        <translation>Hanya baris yang Anda koreksi yang disimpan: gambar tinta dan teks yang dikoreksi. Semuanya tetap di perangkat ini dan tidak pernah dikirim ke mana pun. Selama proyek terenkripsi terbuka, tidak ada yang disimpan (berkasnya akan biasa).</translation>
     </message>
     <message>
         <source>Delete the Kept Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus Baris yang Disimpan</translation>
     </message>
     <message>
         <source>Installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Terpasang.</translation>
     </message>
     <message>
         <source>Not installed. Install it to write by hand.</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum terpasang. Instal untuk menulis dengan tangan.</translation>
     </message>
     <message>
         <source>The installer for handwriting models is not available in this version yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Pemasang model tulisan tangan belum tersedia di versi ini.</translation>
     </message>
     <message numerus="yes">
         <source>%n line(s) kept</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n baris disimpan</numerusform>
         </translation>
     </message>
 </context>
@@ -23107,132 +23114,132 @@ The text you write is collected below.</source>
     <name>qb::handwriting::HandwritingPanel</name>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Spasi</translation>
     </message>
     <message>
         <source>Add a space</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambahkan spasi</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Backspace</translation>
     </message>
     <message>
         <source>Delete the last character</source>
-        <translation type="unfinished"></translation>
+        <translation>Hapus karakter terakhir</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Enter</translation>
     </message>
     <message>
         <source>Add a line break</source>
-        <translation type="unfinished"></translation>
+        <translation>Tambahkan pemisah baris</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Kosongkan</translation>
+        <translation>Kosongkan</translation>
     </message>
     <message>
         <source>Throw away the text in the strip</source>
-        <translation type="unfinished"></translation>
+        <translation>Buang teks di strip</translation>
     </message>
     <message>
         <source>Pin</source>
-        <translation type="unfinished"></translation>
+        <translation>Sematkan</translation>
     </message>
     <message>
         <source>Make the text stick to the pen or finger; tap a text field to show the place</source>
-        <translation type="unfinished"></translation>
+        <translation>Buat teks menempel pada pena atau jari; ketuk bidang teks untuk menampilkan tempatnya</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="unfinished">Sisipkan</translation>
+        <translation>Sisipkan</translation>
     </message>
     <message>
         <source>Put the text at the cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Letakkan teks pada kursor</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::InkCanvas</name>
     <message>
         <source>Handwriting is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulisan tangan belum terpasang.</translation>
     </message>
     <message>
         <source>The line could not be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Baris tidak dapat dibaca.</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::OnnxRecognizer</name>
     <message>
         <source>The model&apos;s output has an unexpected shape.</source>
-        <translation type="unfinished"></translation>
+        <translation>Keluaran model memiliki bentuk yang tidak terduga.</translation>
     </message>
     <message>
         <source>Handwriting is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulisan tangan belum terpasang.</translation>
     </message>
     <message>
         <source>The handwriting model&apos;s files could not be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Berkas model tulisan tangan tidak dapat dibaca.</translation>
     </message>
     <message>
         <source>The handwriting model&apos;s codec could not be read: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Codec model tulisan tangan tidak dapat dibaca: %1</translation>
     </message>
     <message>
         <source>The handwriting model could not be loaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Model tulisan tangan tidak dapat dimuat: %1</translation>
     </message>
     <message>
         <source>The line could not be read: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Baris tidak dapat dibaca: %1</translation>
     </message>
     <message>
         <source>Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulisan Tangan</translation>
     </message>
     <message>
         <source>There is not enough memory to load the handwriting model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Memori tidak cukup untuk memuat model tulisan tangan.</translation>
     </message>
     <message>
         <source>Install Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Instal Tulisan Tangan</translation>
     </message>
     <message>
         <source>Installed: the engine, the line model and the word lists of %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Terpasang: mesin, model baris, dan daftar kata untuk %1.</translation>
     </message>
     <message>
         <source>no language</source>
-        <translation type="unfinished"></translation>
+        <translation>tidak ada bahasa</translation>
     </message>
     <message>
         <source>the engine</source>
-        <translation type="unfinished"></translation>
+        <translation>mesin</translation>
     </message>
     <message>
         <source>the line model</source>
-        <translation type="unfinished"></translation>
+        <translation>model baris</translation>
     </message>
     <message>
         <source>Not installed yet: %1. Install it to write by hand.</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum terpasang: %1. Instal untuk menulis dengan tangan.</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::WordStrip</name>
     <message>
         <source>No other readings</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada bacaan lain</translation>
     </message>
     <message>
         <source>The text you write appears here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Teks yang Anda tulis muncul di sini.</translation>
     </message>
 </context>
 <context>
@@ -23521,236 +23528,236 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     <name>qb::readaloud</name>
     <message>
         <source>Female 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Perempuan 1</translation>
     </message>
     <message>
         <source>Female 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Perempuan 2</translation>
     </message>
     <message>
         <source>Female 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Perempuan 3</translation>
     </message>
     <message>
         <source>Male 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Laki-laki 1</translation>
     </message>
     <message>
         <source>Male 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Laki-laki 2</translation>
     </message>
     <message>
         <source>Male 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Laki-laki 3</translation>
     </message>
     <message>
         <source>Calm</source>
-        <translation type="unfinished"></translation>
+        <translation>Tenang</translation>
     </message>
     <message>
         <source>Neutral</source>
-        <translation type="unfinished"></translation>
+        <translation>Netral</translation>
     </message>
     <message>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>Aksi</translation>
     </message>
     <message>
         <source>Slow</source>
-        <translation type="unfinished"></translation>
+        <translation>Lambat</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished">Sedang</translation>
+        <translation>Sedang</translation>
     </message>
     <message>
         <source>Fast</source>
-        <translation type="unfinished">Cepat</translation>
+        <translation>Cepat</translation>
     </message>
     <message>
         <source>fits on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>muat di %1</translation>
     </message>
     <message>
         <source>does not fit (needs %1)</source>
-        <translation type="unfinished"></translation>
+        <translation>tidak muat (perlu %1)</translation>
     </message>
     <message>
         <source>fits in RAM</source>
-        <translation type="unfinished"></translation>
+        <translation>muat di RAM</translation>
     </message>
     <message>
         <source>This model does not have this voice.</source>
-        <translation type="unfinished"></translation>
+        <translation>Model ini tidak memiliki suara ini.</translation>
     </message>
     <message>
         <source>Voice not installed yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Suara belum terpasang.</translation>
     </message>
     <message>
         <source>This model has no style control.</source>
-        <translation type="unfinished"></translation>
+        <translation>Model ini tidak memiliki pengaturan gaya.</translation>
     </message>
     <message>
         <source>The voice&apos;s reference clip cannot be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klip acuan suara tidak dapat dibaca.</translation>
     </message>
     <message>
         <source>The installed AI engine cannot play sound; install its newest version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin AI yang terpasang tidak dapat memutar suara; instal versi terbarunya.</translation>
     </message>
 </context>
 <context>
     <name>qb::readaloud::Controller</name>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Putar</translation>
+        <translation>Putar</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished">Berhenti</translation>
+        <translation>Berhenti</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished">Jeda</translation>
+        <translation>Jeda</translation>
     </message>
     <message>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Lanjutkan</translation>
     </message>
     <message>
         <source>Read Aloud: %1 (the marked text, or from the cursor to the end)</source>
-        <translation type="unfinished"></translation>
+        <translation>Baca Nyaring: %1 (teks yang ditandai, atau dari kursor sampai akhir)</translation>
     </message>
     <message>
         <source>Read Aloud: Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Baca Nyaring: Berhenti</translation>
     </message>
     <message>
         <source>Open a text to read it aloud.</source>
-        <translation type="unfinished"></translation>
+        <translation>Buka sebuah teks untuk membacanya dengan nyaring.</translation>
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Suara</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Gaya</translation>
+        <translation>Gaya</translation>
     </message>
     <message>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Kecepatan</translation>
     </message>
     <message>
         <source>Read Aloud Settings…</source>
-        <translation type="unfinished"></translation>
+        <translation>Pengaturan Baca Nyaring…</translation>
     </message>
 </context>
 <context>
     <name>qb::readaloud::ReadAloudPage</name>
     <message>
         <source>no model for this language yet</source>
-        <translation type="unfinished"></translation>
+        <translation>belum ada model untuk bahasa ini</translation>
     </message>
     <message>
         <source>Read Aloud reads the marked text (or from the cursor to the end) with a speech model on this computer. Nothing is installed until you install it here. The sound is only played, never saved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Baca Nyaring membacakan teks yang ditandai (atau dari kursor sampai akhir) dengan model ucapan di komputer ini. Tidak ada yang dipasang sampai Anda memasangnya di sini. Suara hanya diputar, tidak pernah disimpan.</translation>
     </message>
     <message>
         <source>Voice model</source>
-        <translation type="unfinished"></translation>
+        <translation>Model suara</translation>
     </message>
     <message>
         <source>Language:</source>
-        <translation type="unfinished">Bahasa:</translation>
+        <translation>Bahasa:</translation>
     </message>
     <message>
         <source>Model:</source>
-        <translation type="unfinished">Model:</translation>
+        <translation>Model:</translation>
     </message>
     <message>
         <source>Automatic: the graphics card when the model fits into its free memory, else the computer&apos;s memory and processor.</source>
-        <translation type="unfinished"></translation>
+        <translation>Otomatis: kartu grafis bila model muat di memori kosongnya, jika tidak memori dan prosesor komputer.</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation type="unfinished"></translation>
+        <translation>Perangkat:</translation>
     </message>
     <message>
         <source>Speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Kecepatan:</translation>
     </message>
     <message>
         <source>The processor cores and the minutes a model stays loaded are set for all AI functions in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inti prosesor dan menit sebuah model tetap dimuat diatur untuk semua fungsi AI di Berkas &gt; Opsi &gt; Umum &gt; Model AI.</translation>
     </message>
     <message>
         <source>Automatic (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Otomatis (%1)</translation>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished">Otomatis</translation>
+        <translation>Otomatis</translation>
     </message>
     <message>
         <source>%1: %2, %3, %4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: %2, %3, %4</translation>
     </message>
     <message>
         <source>The engine is not installed yet: install it below, then a model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin belum terpasang: instal di bawah, lalu sebuah model.</translation>
     </message>
     <message>
         <source>No model is installed for this language yet: download one below.</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum ada model yang terpasang untuk bahasa ini: unduh satu di bawah.</translation>
     </message>
     <message>
         <source>Ready: press Play on the Read Aloud toolbar.</source>
-        <translation type="unfinished"></translation>
+        <translation>Siap: tekan Putar pada bilah alat Baca Nyaring.</translation>
     </message>
     <message>
         <source>Not measured: no model is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum diukur: tidak ada model yang terpasang.</translation>
     </message>
     <message>
         <source>Measuring the speed with a short test sentence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Mengukur kecepatan dengan kalimat uji singkat...</translation>
     </message>
     <message>
         <source>Not measured yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum diukur.</translation>
     </message>
     <message>
         <source>Slower than real time (about %1 times slower on this device): Read Aloud makes a few sentences ahead before it plays.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lebih lambat daripada waktu nyata (sekitar %1 kali lebih lambat di perangkat ini): Baca Nyaring membuat beberapa kalimat lebih dulu sebelum memutar.</translation>
     </message>
     <message>
         <source>Faster than real time (%1 seconds of work for one second of sound).</source>
-        <translation type="unfinished"></translation>
+        <translation>Lebih cepat daripada waktu nyata (%1 detik kerja untuk satu detik suara).</translation>
     </message>
     <message>
         <source>The speed test failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Uji kecepatan gagal: %1</translation>
     </message>
 </context>
 <context>
     <name>qb::readaloud::Session</name>
     <message>
         <source>Read Aloud is busy.</source>
-        <translation type="unfinished"></translation>
+        <translation>Baca Nyaring sedang sibuk.</translation>
     </message>
     <message>
         <source>The AI engine is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mesin AI belum terpasang.</translation>
     </message>
     <message>
         <source>No speech model is installed for this language.</source>
-        <translation type="unfinished"></translation>
+        <translation>Belum ada model ucapan yang terpasang untuk bahasa ini.</translation>
     </message>
     <message>
         <source>There is no text to read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tidak ada teks untuk dibaca.</translation>
     </message>
 </context>
 <context>
@@ -23764,11 +23771,11 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     <name>qb::smallui::SlidePanel</name>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Tutup</translation>
+        <translation>Tutup</translation>
     </message>
     <message>
         <source>Close this panel (Esc)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tutup panel ini (Esc)</translation>
     </message>
 </context>
 <context>
@@ -24105,7 +24112,7 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     <name>readaloud</name>
     <message>
         <source>Read Aloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Baca Nyaring</translation>
     </message>
 </context>
 </TS>
