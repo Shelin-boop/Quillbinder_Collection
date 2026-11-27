@@ -18,10 +18,12 @@
 #include "ui/BookmarkList.h"
 #include "ui/MainWindow.h"
 #include "ui/TextEditor.h"
+#include "ui/Theme.h"
 
 #include <QApplication>
 #include <QDialog>
 #include <QDir>
+#include <QDirIterator>
 #include <QFile>
 #include <QStyleFactory>
 #include <QTemporaryDir>
@@ -181,6 +183,8 @@ static void run(const QString &W)
     }
     const bool dirtyAtStart = p->docs()->hasDirty();
 
+    // 0.99.0: the autosave is far out, so that this part does not depend on when it runs
+    p->setAutosaveDelay(600000);
     // one document after another, three runs, a pause after each: a bounded number stays laid out
     int maxLoaded = 0;
     for (int part = 0; part < 3; ++part) {
@@ -305,6 +309,106 @@ static QList<BinderItem *> docsOf(Project *p, BinderItem *parent)
         out << it;
     Q_UNUSED(p);
     return out;
+}
+
+// 0.99.0: showing a document is no change: nothing is dirty, nothing is written again
+static void cleanShow(const QString &W)
+{
+    std::printf("== a shown document is not dirty\n");
+    QString folder, err;
+    {
+        QDir().mkpath(W + QStringLiteral("/clean"));
+        auto p = Project::create(W + QStringLiteral("/clean"), QStringLiteral("Clean"), &err);
+        folder = p->folderPath();
+        for (int i = 0; i < 3; ++i) {
+            BinderItem *it = p->model()->createItem(p->draft(), -1, ItemType::Text, QStringLiteral("Scene %1").arg(i));
+            QTextCursor c(p->docs()->text(it->id));
+            c.insertText(QStringLiteral("Some text %1").arg(i));
+        }
+        p->save(&err);
+    }
+    MainWindow w;
+    w.resize(1200, 800);
+    w.show();
+    QTest::qWait(300);
+    w.openProject(folder);
+    QTest::qWait(500);
+    Project *p = w.project();
+    auto *binder = w.findChild<BinderPanel *>();
+    if (!p || !binder) {
+        check(false, QStringLiteral("(the project is open)"));
+        return;
+    }
+    p->setAutosaveDelay(600000);
+    QList<BinderItem *> items;
+    for (BinderItem *it : p->draft()->children)
+        items << it;
+    // the files' times: found before anything is shown
+    const auto stamps = [&] {
+        QStringList out;
+        QDirIterator di(folder, {QStringLiteral("*")}, QDir::Files, QDirIterator::Subdirectories);
+        while (di.hasNext()) {
+            di.next();
+            out << di.filePath() + QLatin1Char('|') + QString::number(di.fileInfo().lastModified().toMSecsSinceEpoch());
+        }
+        out.sort();
+        return out;
+    };
+    const QStringList before = stamps();
+    for (BinderItem *it : items)
+        show(binder, it, 60);
+    QTest::qWait(200);
+    check(!p->docs()->hasDirty(), QStringLiteral("documents with empty notes are shown: none is dirty"),
+          p->docs()->dirtyTitles().join(QLatin1Char(',')));
+    AppSettings &as = AppSettings::instance();
+    const QString oldTheme = as.theme;
+    as.theme = oldTheme == QLatin1String("dark") ? QStringLiteral("light") : QStringLiteral("dark");
+    theme::apply();
+    QTest::qWait(200);
+    check(!p->docs()->hasDirty(), QStringLiteral("after a switch of the theme none is dirty"), p->docs()->dirtyTitles().join(QLatin1Char(',')));
+    for (TextEditor *e : w.findChildren<TextEditor *>()) {
+        QPalette pal = e->palette();
+        pal.setColor(QPalette::Base, QColor(40, 40, 60));
+        e->setPalette(pal);
+    }
+    QTest::qWait(200);
+    check(!p->docs()->hasDirty(), QStringLiteral("after another paper none is dirty"), p->docs()->dirtyTitles().join(QLatin1Char(',')));
+    as.theme = oldTheme;
+    theme::apply();
+    QTest::qWait(100);
+    QTest::qWait(1100); // (file times)
+    QString e2;
+    p->autosave(&e2);
+    check(stamps() == before, QStringLiteral("the next autosave writes none of the shown documents"),
+          (stamps() + before).join(QLatin1Char('\n')));
+
+    // an undo back to the text as read is a change to save (the document's modified flag is cleared by it)
+    for (int pass = 0; pass < 2; ++pass) {
+        const bool notes = pass == 1;
+        BinderItem *it = items[0];
+        show(binder, it, 200);
+        QTextDocument *d = notes ? p->docs()->notes(it->id) : p->docs()->text(it->id);
+        const QString readText = d->toPlainText();
+        const int readCount = it->wordCount;
+        QTextCursor c(d);
+        c.movePosition(QTextCursor::End);
+        c.insertText(QStringLiteral(" three typed words"));
+        QTest::qWait(1500);
+        QString e3;
+        p->save(&e3);
+        d->undo();
+        QTest::qWait(1500);
+        const QString what = notes ? QStringLiteral("notes") : QStringLiteral("text");
+        check(d->toPlainText() == readText && p->docs()->hasDirty(), QStringLiteral("undo to the read %1 after a save: the document is dirty").arg(what));
+        if (!notes)
+            check(it->wordCount == readCount, QStringLiteral("... and the word count is back (%1 of %2)").arg(it->wordCount).arg(readCount));
+        p->save(&e3);
+        const QString id = it->id;
+        const QString saved = notes ? p->docs()->notes(id)->toPlainText() : p->docs()->text(id)->toPlainText();
+        QFile f(p->contentDir(id) + (notes ? QStringLiteral("/notes.md") : QStringLiteral("/text.md")));
+        const QByteArray bytes = f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray();
+        check(saved == readText && !bytes.contains("three typed words"), QStringLiteral("... after the next save the file holds the read %1").arg(what));
+    }
 }
 
 static void review(const QString &W)
@@ -607,6 +711,7 @@ int main(int argc, char **argv)
     else {
         run(work.path());
         review(work.path());
+        cleanShow(work.path());
     }
     std::printf("%d failure(s)\n", failures);
     return failures;

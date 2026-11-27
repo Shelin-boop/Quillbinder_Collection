@@ -393,7 +393,8 @@ bool SpellHighlighter::eventFilter(QObject *o, QEvent *e)
 {
     if (o == document() && e->type() == QEvent::DynamicPropertyChange
         && (static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName() == "qbZoom"
-            || static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName() == "qbPaper"))
+            || static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName() == "qbPaper")
+        && !document()->isEmpty()) // (0.99.0: a pass over an empty document has nothing to color)
         QMetaObject::invokeMethod(this, "rehighlight", Qt::QueuedConnection);
     return QSyntaxHighlighter::eventFilter(o, e);
 }

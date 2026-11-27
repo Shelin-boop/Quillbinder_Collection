@@ -363,6 +363,11 @@ QTextDocument *DocumentStore::load(const QString &id, bool notes)
         auto it = m_entries.find(key);
         if (it == m_entries.end())
             return;
+        // 0.99.0: a highlighter's pass (palette, theme, zoom, first look) fires this signal without an edit: the document is
+        // not modified and has no undo or redo step then. An undo back to the text as read also clears the modified flag
+        // but leaves a redo step, which tells it apart: that is an edit and must be saved.
+        if (!doc->isModified() && !doc->isUndoAvailable() && !doc->isRedoAvailable())
+            return;
         it->dirty = true;
         ++it->changes;
         m_project->scheduleSave();
@@ -470,7 +475,7 @@ bool DocumentStore::sameAsRead(const QString &key, const Entry &e) const
     if (e.readRtf && m_project->storage == StorageFormat::Markdown)
         display::normalizeDocument(&tmp, m_project->formatting);
     if (e.isNotes && e.doc->property(display::kPlainNotesProp).toBool())
-        return false; // (plain notes are shaped on loading: compared as changed, kept)
+        return tmp.toPlainText() == e.doc->toPlainText(); // (0.99.0: plain notes have no formatting: the text decides)
     return shownBytes(&tmp, m_project->formatting, m_project->storage) == shownBytes(e.doc, m_project->formatting, m_project->storage);
 }
 

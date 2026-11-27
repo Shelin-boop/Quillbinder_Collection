@@ -233,8 +233,9 @@ void TextEditor::setProjectDocument(Project *project, BinderItem *item, QTextDoc
     }
     connect(doc->documentLayout(), &QAbstractTextDocumentLayout::documentSizeChanged, this,
             &TextEditor::updateHeight, Qt::UniqueConnection);
-    SpellChecker::attach(doc);
+    // 0.99.0: the paper first: the highlighter reacts to a changed "qbPaper" with a pass over the text
     syncPaperProperty();
+    SpellChecker::attach(doc);
     widths::registerEditor(this);
     updateHeight();
     updateSearchSelections();

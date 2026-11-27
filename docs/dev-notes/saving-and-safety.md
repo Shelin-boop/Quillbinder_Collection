@@ -2,6 +2,16 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: showing is no edit (suite `v0930f`, `cleanShow`)
+
+A highlighter's pass over a document (a new "qbPaper" or "qbZoom", a palette or theme change, the first look) fires
+`contentsChanged` without an edit. The store's slot now ignores the signal while the document is not modified (every
+real edit sets that flag), so a shown document is not dirty and not written again. `TextEditor::setProjectDocument`
+sets the paper before it attaches the highlighter, and the highlighter does not queue a pass for an empty document.
+`sameAsRead` compares plain notes by their text. An undo back to the text as read clears the modified flag too, but leaves a redo step: the slot skips only a signal with no modified flag, no undo and no redo step.
+Pitfall: a document that was edited stays "modified" (the store does
+not reset the flag after a save), so a later pass marks it dirty again; it is written once more, harmlessly.
+
 ## 0.99.0: encryption, the review's findings (suites `v0990f` "reviewFindings", `v0990j`, `v0990k`, `v0990e`)
 
 - **Copies**: `saveAsQuillbinder` / `copyAsQuillbinder` copy `encryption.json` first (`copyMarkerFirst`) and hold a `vault::Scope`

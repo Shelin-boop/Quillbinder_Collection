@@ -13,6 +13,8 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
 - Texts with numbers and texts built from pieces are now whole sentences, so every language can translate them correctly; the menus' access letters are unique. Counts go into plural texts (`%n word(s)`), English writes them through a small translator that is installed first (`language::englishPlural`); the Translation Helper's notice about missing parts is one sentence for one part and one for several; the manual names the pages of File > Options as they are (General > AI Models, Extras > Add-ons and Plugins).
 - Build files only (no change for a writer): the encryption libraries are linked on Windows and Android by the shared build
   file too, and the Linux workflows fetch the encryption, AI engine and ONNX Runtime packs before they configure.
+- Showing a document no longer marks it as changed; it is only saved when you change it. (Before, every shown document,
+  its empty notes too, was marked changed by the link-color pass and kept in memory and written again at the next save.)
 - **0.99.0 is a security update on every system** (Linux, Windows and Android). The update window says "recommended
   (security)" for a Quillbinder with an older version and offers no "Ignore This Version", also when a newer version has
   come out since (every version after the installed one, up to the newest, counts).
