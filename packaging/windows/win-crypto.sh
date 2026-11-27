@@ -113,7 +113,7 @@ cmake -S "$WORK/rnp" -B "$WORK/b-rnp" -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAK
     -DENABLE_DOC=OFF -DDOWNLOAD_GTEST=OFF -DENABLE_COVERAGE=OFF -DENABLE_SANITIZERS=OFF -DENABLE_FUZZERS=OFF \
     -DBZIP2_INCLUDE_DIR="$P/include" -DBZIP2_LIBRARY_RELEASE="$P/lib/bz2.lib" \
     -DZLIB_INCLUDE_DIR="$(cygpath -m "$ZI/include")" -DZLIB_LIBRARY="$(cygpath -m "$ZLIB")" \
-    -DJSON-C_INCLUDE_DIR="$P/include" -DJSON-C_LIBRARY="$JSONC_LIB" > "$WORK/rnp.log" 2>&1 || { tail -40 "$WORK/rnp.log"; exit 1; }
+    -DJSON-C_INCLUDE_DIR="$P/include/json-c" -DJSON-C_LIBRARY="$JSONC_LIB" > "$WORK/rnp.log" 2>&1 || { tail -40 "$WORK/rnp.log"; exit 1; }
 cmake --build "$WORK/b-rnp" --target librnp -j"$JOBS" >> "$WORK/rnp.log" 2>&1 || { grep -E 'error|FAILED' "$WORK/rnp.log" | head -30; exit 1; }
 cmake --install "$WORK/b-rnp" --component development >> "$WORK/rnp.log" 2>&1 || { tail -20 "$WORK/rnp.log"; exit 1; }
 
