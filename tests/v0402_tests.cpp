@@ -70,7 +70,7 @@
 using namespace qb;
 
 // see builtInThemesUnchanged()
-static const char *const kThemesDigest = "43feb46fb0a97a89d14f7cb150f69ece3bafb2d62c3953c6eb8d26374bf0181d";
+static const char *const kThemesDigest = "9da05bca7c1beb7c7d39d14d1820367d64e85895bcbf4e40174b2a1589ecc5ab";
 
 static int failures = 0;
 static QString outDir;
@@ -1116,7 +1116,9 @@ static void builtInThemesUnchanged()
         QStringList parts;
         for (const theme::RoleInfo &ri : theme::roles())
             if (QLatin1String(ri.key) != QLatin1String("inspectorFields") // new in 0.60.3, the color of the lists (v0603 checks it)
-                && QLatin1String(ri.key) != QLatin1String("invisibles")) // new in 0.90.2, worked out from text and paper (v0902)
+                && QLatin1String(ri.key) != QLatin1String("invisibles") // new in 0.90.2, worked out from text and paper (v0902)
+                && QLatin1String(ri.key) != QLatin1String("link") // 0.99.0 (UR-17): moved to at least 4.5 : 1 on their backgrounds
+                && QLatin1String(ri.key) != QLatin1String("editorLink")) // (qb_v0990d checks them)
                 parts << QLatin1String(ri.key) + QLatin1Char('=') + c.value(ri.role).name();
         lines << te.id + QLatin1Char(':') + parts.join(QLatin1Char(','));
     }

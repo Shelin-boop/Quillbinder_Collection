@@ -15,6 +15,16 @@ void setHandler(std::function<void(double)> handler);
 // done of total (total 0: not known)
 void tick(int done = 0, int total = 0);
 
+// 0.99.0 (UR-09): Cancel. The window sets the flag (requestCancel); the compiler looks at it after each document
+// (cancelled()) and the converter wait loop stops the outside program. documentDone() tells "12 of 148" at once
+// (not held back to 100 ms) and lets the handler run, so a click on Cancel is seen between two documents.
+void requestCancel();
+bool cancelled();
+void clearCancel();
+void documentDone(int done, int total);
+int documentsDone();
+int documentsTotal();
+
 // Sets a handler for as long as it lives.
 class Scope
 {

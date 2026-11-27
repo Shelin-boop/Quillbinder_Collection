@@ -25,6 +25,7 @@
 #include <QMap>
 #include <QObject>
 #include <QPalette>
+#include <QSet>
 #include <QString>
 
 class QWidget;
@@ -193,6 +194,31 @@ QColor readableOn(const QColor &background);
 // least minRatio on bg (fg is moved toward black or white, whichever reaches the ratio sooner; 0.94.0).
 double contrastRatio(const QColor &a, const QColor &b);
 QColor withContrast(const QColor &fg, const QColor &bg, double minRatio = 4.5);
+
+// 0.99.0 (UR-17): the pairs of a color and the background it is shown on. linkPairs(): the links (interface and text) on
+// every paper and background; textPairs(): the texts on theirs. A link color that is not the writer's own is moved to
+// at least 4.5 : 1 on all of its backgrounds (fitContrast); contrastIssues() lists the pairs below 4.5 : 1 in which at
+// least one color is the writer's own (ownRoles), the worst first: Options > Appearance names them in a note.
+struct ContrastPair {
+    Role fg, bg;
+};
+struct ContrastIssue {
+    Role fg, bg;
+    double ratio;
+};
+const QList<ContrastPair> &linkPairs();
+const QList<ContrastPair> &textPairs();
+// the text link on the papers of the text areas other than the editor's (index cards, synopsis, notes, composition mode):
+// each text area gets the link color that fits its own paper (linkOn), so these are not part of linkPairs()
+const QList<ContrastPair> &paperLinkPairs();
+QColor fitContrast(const QColor &fg, const QList<QColor> &backgrounds, double minRatio = 4.5);
+// The link color of the text for a text area with this paper (Role::EditorLink as it is, moved to 4.5 : 1 on the paper
+// unless the writer's own link color is in use); linkOn(link, paper, own) is the same worked out from given colors.
+QColor linkOn(const QColor &paper);
+QColor linkOn(const QColor &link, const QColor &paper, bool ownLink);
+QList<ContrastIssue> contrastIssues(const QMap<Role, QColor> &colors, const QSet<Role> &ownRoles);
+// the label of a role as the color pages show it
+QString roleLabel(Role r);
 
 // Emits changed() at the end of apply(); widgets that paint with theme
 // colors connect to it.

@@ -392,7 +392,8 @@ SpellHighlighter::SpellHighlighter(QTextDocument *doc) : QSyntaxHighlighter(doc)
 bool SpellHighlighter::eventFilter(QObject *o, QEvent *e)
 {
     if (o == document() && e->type() == QEvent::DynamicPropertyChange
-        && static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName() == "qbZoom")
+        && (static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName() == "qbZoom"
+            || static_cast<QDynamicPropertyChangeEvent *>(e)->propertyName() == "qbPaper"))
         QMetaObject::invokeMethod(this, "rehighlight", Qt::QueuedConnection);
     return QSyntaxHighlighter::eventFilter(o, e);
 }
@@ -450,7 +451,11 @@ void SpellHighlighter::highlightBlock(const QString &text)
     // Links are stored with one blue; on screen they get the theme's link
     // color (a dark paper needs a lighter blue). Display only as well.
     static const QColor storedLink(30, 90, 200);
-    const QColor link = theme::color(theme::Role::EditorLink);
+    // 0.99.0 (UR-17): the link color that fits the paper of the text area showing this document (TextEditor keeps it in
+    // "qbPaper"; the editor's paper where none is set)
+    const QVariant paperProp = document()->property("qbPaper");
+    const QColor link = theme::linkOn(paperProp.value<QColor>().isValid() ? paperProp.value<QColor>()
+                                                                          : theme::color(theme::Role::EditorPaper));
     const bool recolor = link.isValid() && link.rgb() != storedLink.rgb();
     const bool plainNotes = s_display.plainAnnotations;
     // 0.95.0: a highlight is drawn exactly as picked; where the text on it would be below 4.5 : 1, the text is drawn dark

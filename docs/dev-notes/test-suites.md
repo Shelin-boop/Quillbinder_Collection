@@ -17,6 +17,16 @@ Appearance and View names alike, the Search button's menu, no lower-case start, 
 entries), the item menu without grayed Convert/Merge entries, Edit > Select gone, View > Toolbars and the bars' right-click
 menu in the same groups, menu depth, the mind map's Note Style menu, an Alt letter on every command, "…" rules, Find Command
 without the binder-title menus, F1 in Project Statistics. Run: `xvfb-run -a ./qb_v0990g_tests /tmp/shots`.
+## v0990d (0.99.0, item 118: tables, focus line, Cancel in Compile, link contrast)
+
+`qb_v0990d_tests`: the table keys (Down and Ctrl+Return in the last row, Up in the first row, in the middle, at the end and at
+the start of a text; a cell of several lines; Undo), the focus line on each part (binder, outliner, corkboard, editor,
+inspector, copyholder, never two at once; its place and its 2 px color in every built-in theme, with screenshots of a light
+and a dark one), the link contrast of every built-in theme x paper/background x link color (504 pairs, listed in `link-contrast.txt` in the shots folder; also with the standard olive paper), a link shown in the notes' dark paper beside the editor's light paper in "Shelin's Dark Theme" (the highlighter's per-paper color),
+the note for own colors in Options > Appearance, and Compile: a project of 80 documents compiled to Word and cancelled by the
+button and by Esc after five documents (the older file untouched, no temporary file, "n of N" shown, the message line), a fake
+converter (`QB_PLUGIN_PATH` with a JSON definition, a script that waits and starts a helper) stopped with its helper (the
+check reads `/proc/<pid>/stat`; Linux only).
 
 ## v0950f and v0950g (0.95.0, item 102: eleven languages)
 

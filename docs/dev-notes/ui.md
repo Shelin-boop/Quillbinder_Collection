@@ -37,6 +37,30 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - Mind map Format > Note Style: the styles are the entries; Redefine and Delete ask in a small `QInputDialog` list (a
   submenu with the styles would be the fourth level). Menus go three levels deep at most (suite `v0990g`).
 - `Inspector::tabName` is the short name for Navigate > Inspect; `tabToolTip` stays the tab buttons' long text.
+## 0.99.0 beta: table keys, the focus line, the contrast of links (item 118)
+
+- **Table keys** (`TextEditor::tableLeaveKey`, `TextEditorTables.cpp`, called from `keyPressEvent` right after the Tab
+  handling): Qt always keeps a paragraph before and after a table, so "leaving" is a move into it; a paragraph is made
+  (`insertBlock` at `lastPosition()+1` / before `firstPosition()`) only where none is there. Up/Down first try
+  `movePosition` inside the same cell, so a cell of several lines is walked through before the table is left.
+- **The focus line** (`FocusLine`, one child of the main window above everything, transparent for the mouse): it follows
+  `QApplication::focusChanged`, finds the part by walking up from the widget with the keyboard (`partOf`: binder,
+  inspector, then per editor pane copyholder, corkboard, outliner, text view) and draws 4 bars of 2 px inside the part's
+  rectangle in `Role::Highlight`. Parts are moved and resized: it listens to the window's and the part's Resize/Move/Show/Hide.
+  A field in a toolbar or a dialog has no part: no line.
+- **Contrast** (`Theme.cpp`): `resolvedColors` ends by `fitContrast` for the links that are not the writer's own: the
+  nearest color toward black or white that reaches 4.5 : 1 on all of `linkPairs()` of that link (the interface link on the
+  window, lists, binder, outliner, inspector, notes, tool tips and header bar; the text link on the editor paper). The
+  other papers that show links (index cards, synopsis, notes, composition mode, Combined Text, quick reference, the
+  copyholder) get their own link color: `TextEditor::syncPaperProperty` tells the document its paper (`qbPaper`, the
+  editor's `QPalette::Base`, on every palette change) and `SpellHighlighter` shows links with `theme::linkOn(paper)` (the
+  text link moved to 4.5 : 1 on that paper; the writer's own link color is kept). `paperLinkPairs()` lists those papers for
+  the tests and the note. `contrastIssues` (own colors only, links and `textPairs()`) feeds the note in Appearance.
+- **Cancel in Compile** (`compile/Progress.*`, `CompileDialog.cpp`): `progress::documentDone(done, total)` is called at the
+  start of each document of `Compiler::build` (not held back to 100 ms) and lets the handler run events (all, so the Cancel
+  button and Esc arrive; the window is modal); `requestCancel/cancelled` is the flag, cleared when a `Scope` starts. The
+  output goes to `.<name>.part-<id>.<ext>` beside the file and `safesave::copyFile` puts it in place at the end;
+  `CommandExporter` starts its program in a group of its own (`setsid`) and kills the group on Cancel and on the timeout.
 
 ## 0.94.0 beta: one place per topic in the menus, Find Command, the first start's page, the application menu entry
 

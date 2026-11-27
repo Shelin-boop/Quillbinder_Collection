@@ -42,6 +42,10 @@ public:
 
     // 0.94.0: the first compile that writes a title page asks for the author's name (kept with the author information in
     // File > Options > General); left empty, the title page has no "by" line. Asks once. False: nothing was asked.
+    // 0.99.0 (UR-09): the compile itself, after the file name is chosen (also for the checks): Cancel in the progress window
+    // stops after the document being made, leaves no file and an older file of that name untouched
+    enum CompileResult { Compiled, Failed, Cancelled };
+    CompileResult compileTo(const QString &path, QString *error = nullptr);
     static bool askAuthorIfNeeded(QWidget *parent, Project *project, const compile::Format &format, const CompileProjectSettings &settings);
     // For the checks: the answer given instead of the window (first name, last name; accept = false: closed with Cancel)
     static void setAuthorAnswerForTests(const QString &first, const QString &last, bool accept = true);

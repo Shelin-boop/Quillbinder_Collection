@@ -504,6 +504,8 @@ static QColor mix(const QColor &a, const QColor &b, double share)
 
 static bool darkColor(const QColor &c) { return c.lightness() < 128; }
 
+static const QList<ContrastPair> &linkPairsFirst();
+
 QMap<Role, QColor> resolvedColors(const Theme &t, const QMap<QString, QColor> &ownIn)
 {
     capture();
@@ -622,6 +624,18 @@ QMap<Role, QColor> resolvedColors(const Theme &t, const QMap<QString, QColor> &o
     put(Role::CompositionBackground, QColor(28, 32, 40));
     put(Role::CompositionPaper, QColor(40, 45, 56));
     put(Role::CompositionText, darkColor(c[Role::CompositionPaper]) ? QColor(230, 230, 230) : QColor(30, 30, 30));
+    // 0.99.0 (UR-17): a link color that is the theme's or derived (not the writer's own) is moved, as little as it takes, to
+    // at least 4.5 : 1 on every background it is shown on (the theme's papers and backgrounds, and the writer's own ones)
+    for (const ContrastPair &pr : linkPairsFirst()) {
+        const QString k = QLatin1String(key(pr.fg));
+        if (own.contains(k) && own.value(k).isValid())
+            continue;
+        QList<QColor> bgs;
+        for (const ContrastPair &q : linkPairs())
+            if (q.fg == pr.fg)
+                bgs << c.value(q.bg);
+        c[pr.fg] = fitContrast(c.value(pr.fg), bgs, 4.5);
+    }
     return c;
 }
 
@@ -664,6 +678,7 @@ QPalette paletteFor(const QMap<Role, QColor> &c)
 static QMap<Role, QColor> s_colors;
 static std::array<FontSpec, size_t(FontRole::Count)> s_fonts;
 static bool s_dark = false;
+static bool s_ownTextLink = false; // 0.99.0: the writer chose the link color of the text himself or herself
 static QString s_name;
 Notifier &Notifier::instance()
 {
@@ -864,6 +879,7 @@ void apply()
     const Theme t = chosenTheme();
     s_name = t.name;
     s_colors = colorsInUse();
+    s_ownTextLink = areaOwnColors().value(QStringLiteral("editorLink")).isValid();
     // palette: untouched desktop colors stay exactly the desktop's palette
     bool generalChanged = !t.followDesktop;
     for (const RoleInfo &i : roles())
@@ -994,6 +1010,8 @@ QColor readableOn(const QColor &background)
     return darkColor(background) ? QColor(235, 235, 235) : QColor(35, 38, 41);
 }
 
+QColor linkOn(const QColor &paper) { return linkOn(color(Role::EditorLink), paper, s_ownTextLink); }
+
 static double relLuminance(const QColor &c)
 {
     auto lin = [](double v) { return v <= 0.04045 ? v / 12.92 : std::pow((v + 0.055) / 1.055, 2.4); };
@@ -1019,6 +1037,105 @@ QColor withContrast(const QColor &fg, const QColor &bg, double minRatio)
             return c;
     }
     return target;
+}
+
+// ---- contrast of links and text (0.99.0, UR-17)
+const QList<ContrastPair> &linkPairs()
+{
+    // the interface's links on the backgrounds they are shown on (lists, panels, notes) and the text's links on the page
+    static const QList<ContrastPair> l = {
+        {Role::Link, Role::Window}, {Role::Link, Role::Base}, {Role::Link, Role::AlternateBase},
+        {Role::Link, Role::ToolTipBase}, {Role::Link, Role::BinderBackground}, {Role::Link, Role::OutlinerBackground},
+        {Role::Link, Role::OutlinerAlternate}, {Role::Link, Role::InspectorBackground}, {Role::Link, Role::InspectorFields},
+        {Role::Link, Role::NotesPaper}, {Role::Link, Role::HeaderBar},
+        {Role::EditorLink, Role::EditorPaper},
+    };
+    return l;
+}
+static const QList<ContrastPair> &linkPairsFirst()
+{
+    static const QList<ContrastPair> l = {{Role::Link, Role::Window}, {Role::EditorLink, Role::EditorPaper}};
+    return l;
+}
+const QList<ContrastPair> &paperLinkPairs()
+{
+    static const QList<ContrastPair> l = {
+        {Role::EditorLink, Role::SynopsisPaper}, {Role::EditorLink, Role::NotesPaper},
+        {Role::EditorLink, Role::CompositionPaper}, {Role::EditorLink, Role::CardPaper},
+    };
+    return l;
+}
+
+QColor linkOn(const QColor &link, const QColor &paper, bool ownLink)
+{
+    if (ownLink || !paper.isValid())
+        return link;
+    return fitContrast(link, {paper}, 4.5);
+}
+
+const QList<ContrastPair> &textPairs()
+{
+    static const QList<ContrastPair> l = {
+        {Role::WindowText, Role::Window}, {Role::Text, Role::Base}, {Role::BinderText, Role::BinderBackground},
+        {Role::EditorText, Role::EditorPaper}, {Role::OutlinerText, Role::OutlinerBackground},
+        {Role::InspectorText, Role::InspectorBackground}, {Role::NotesText, Role::NotesPaper},
+        {Role::CardText, Role::CardPaper}, {Role::CompositionText, Role::CompositionPaper},
+    };
+    return l;
+}
+
+// The color nearest to fg (toward black or white) that reaches minRatio on every one of the backgrounds; where no color
+// does, the one whose worst ratio is the best.
+QColor fitContrast(const QColor &fg, const QList<QColor> &backgrounds, double minRatio)
+{
+    const QColor f(fg.red(), fg.green(), fg.blue());
+    auto worst = [&](const QColor &x) {
+        double m = 1e9;
+        for (const QColor &b : backgrounds)
+            m = qMin(m, contrastRatio(x, b));
+        return m;
+    };
+    if (backgrounds.isEmpty() || worst(f) >= minRatio)
+        return f;
+    QColor best = f;
+    double bestWorst = worst(f);
+    for (int i = 1; i <= 100; ++i)
+        for (const QColor &target : {QColor(0, 0, 0), QColor(255, 255, 255)}) {
+            const QColor x = mix(f, target, i / 100.0);
+            const double w = worst(x);
+            if (w >= minRatio)
+                return x;
+            if (w > bestWorst) {
+                bestWorst = w;
+                best = x;
+            }
+        }
+    return best;
+}
+
+QString roleLabel(Role r)
+{
+    for (const RoleInfo &ri : roles())
+        if (ri.role == r)
+            return QStringLiteral("%1 (%2)").arg(ri.label, areaName(ri.area));
+    return QString();
+}
+
+QList<ContrastIssue> contrastIssues(const QMap<Role, QColor> &colors, const QSet<Role> &ownRoles)
+{
+    QList<ContrastIssue> out;
+    for (const QList<ContrastPair> *list : {&linkPairs(), &paperLinkPairs(), &textPairs()})
+        for (const ContrastPair &p : *list) {
+            if (!ownRoles.contains(p.fg) && !ownRoles.contains(p.bg))
+                continue;
+            if (!colors.contains(p.fg) || !colors.contains(p.bg))
+                continue;
+            const double r = contrastRatio(colors.value(p.fg), colors.value(p.bg));
+            if (r < 4.5)
+                out << ContrastIssue{p.fg, p.bg, r};
+        }
+    std::sort(out.begin(), out.end(), [](const ContrastIssue &a, const ContrastIssue &b) { return a.ratio < b.ratio; });
+    return out;
 }
 
 // Only the roles set here are the widget's own (an empty QPalette has none), so everything else

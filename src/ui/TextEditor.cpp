@@ -233,6 +233,7 @@ void TextEditor::setProjectDocument(Project *project, BinderItem *item, QTextDoc
     connect(doc->documentLayout(), &QAbstractTextDocumentLayout::documentSizeChanged, this,
             &TextEditor::updateHeight, Qt::UniqueConnection);
     SpellChecker::attach(doc);
+    syncPaperProperty();
     widths::registerEditor(this);
     updateHeight();
     updateSearchSelections();
@@ -540,6 +541,19 @@ void TextEditor::changeEvent(QEvent *e)
         return;
     }
     QTextEdit::changeEvent(e);
+    if (e->type() == QEvent::PaletteChange || e->type() == QEvent::EnabledChange)
+        syncPaperProperty();
+}
+
+// 0.99.0 (UR-17): the paper of this text area is told to the document, so that the highlighter gives links the color that
+// fits it (the notes' dark paper beside a light editor paper, the index cards, the synopsis, composition mode)
+void TextEditor::syncPaperProperty()
+{
+    if (!document())
+        return;
+    const QColor paper = palette().color(QPalette::Base);
+    if (document()->property("qbPaper").value<QColor>() != paper)
+        document()->setProperty("qbPaper", paper);
 }
 
 // The narrowest editor that shows a document decides its line width; when an
@@ -750,6 +764,8 @@ void TextEditor::keyPressEvent(QKeyEvent *e)
             return;
         }
     }
+    if (tableLeaveKey(e))
+        return;
     const bool script = scriptActive();
     if (script && scriptKeyPress(e))
         return;

@@ -242,6 +242,7 @@ private:
     QStackedWidget *m_areaStack = nullptr;
     ThemePreview *m_preview = nullptr;
     QLabel *m_ownInfo = nullptr;
+    QLabel *m_contrastNote = nullptr; // 0.99.0 (UR-17)
     QPushButton *m_resetLook = nullptr;
     QMap<QString, QColor> m_ownColors;
     QMap<QString, QString> m_ownFonts;

@@ -935,9 +935,18 @@ Manuscript Compiler::build()
     bool pendingBreak = false;
     bool first = true;
     CompileEntry::Part lastPart = CompileEntry::Front;
+    int docsTotal = 0;
+    for (const CompileEntry &e : list)
+        if (e.included)
+            ++docsTotal;
+    int docsDone = 0;
     for (const CompileEntry &e : list) {
         if (!e.included)
             continue;
+        // 0.99.0 (UR-09): "12 of 148", and Cancel stops here, after the document before (the caller drops the result)
+        progress::documentDone(docsDone++, docsTotal);
+        if (progress::cancelled())
+            break;
         BinderItem *item = e.item;
         const SectionLayout *layout = m_format.layout(layoutNameFor(e));
         SectionLayout fallback;
@@ -1043,6 +1052,9 @@ Manuscript Compiler::build()
         if (layout->name == QLatin1String("Title Page"))
             pendingBreak = true;
     }
+    progress::documentDone(docsTotal, docsTotal); // (the last one is done too)
+    if (progress::cancelled())
+        return m; // 0.99.0 (UR-09): cancelled; the caller drops this partial manuscript
     if (m_settings.objectSheets)
         appendObjectSheets(m);
     if (!m.paragraphs.isEmpty())
