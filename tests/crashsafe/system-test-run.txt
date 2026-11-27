@@ -1,0 +1,10 @@
+# What the next run of the Linux system test does (.github/workflows/system-test.yml reads this file when a branch
+# "linux-st/..." is pushed, or when it is started by hand without inputs).
+#   shards: how many GitHub machines run side by side (tools/system-test-shard.py splits the cases by their estimates)
+#   cases: only these cases or groups (as tools/run-crashsafe.sh takes them: "S-T01 S-T C-1"); empty: all cases
+#   profile: quick | full | smoke (as QB_CS_PROFILE of tools/run-crashsafe.sh)
+#   minutes: the time one machine may spend on its cases; no case is started that would not end in time (at most 330)
+shards: 12
+cases:
+profile: quick
+minutes: 200

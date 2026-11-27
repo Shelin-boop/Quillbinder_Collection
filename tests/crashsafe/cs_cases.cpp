@@ -53,9 +53,12 @@
 
 #include <atomic>
 #include <cmath>
-#include <fcntl.h>
+#include <cstdio>
 #include <random>
+#ifndef Q_OS_WIN
+#include <fcntl.h>
 #include <unistd.h>
+#endif
 
 namespace cs {
 
@@ -1565,9 +1568,13 @@ void caseSD01()
 {
     // the timing lines of the saves (QB_TIMING, set by main for this case) go to a file
     const QString timingFile = ctx().dir + QStringLiteral("/timing.txt");
+#ifdef Q_OS_WIN
+    std::freopen(timingFile.toLocal8Bit().constData(), "w", stderr);
+#else
     const int fd = ::open(timingFile.toLocal8Bit().constData(), O_WRONLY | O_CREAT | O_TRUNC, 0644);
     if (fd >= 0)
         ::dup2(fd, 2);
+#endif
     struct Variant {
         QString fixture;
         int seconds;

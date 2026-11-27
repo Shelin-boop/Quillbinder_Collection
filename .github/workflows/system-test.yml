@@ -1,0 +1,292 @@
+# The system test of the Linux program on GitHub, in shards (0.99.0).
+#
+# Runs by hand (Actions > Linux system test > Run workflow, on any branch) or on a push to a branch "linux-st/..."; never
+# for a pull request or an issue, and it uses no secret (only the run's own token, to write the pre-release).
+# What to run is in tests/crashsafe/system-test-run.txt (shards, cases, profile, minutes); a hand start may override
+# each of them with an input. One job builds the program with the test switches, the packs and the compiler cache as
+# release.yml does; each shard (a machine of its own) runs its part of the cases (tools/system-test-shard.py: the
+# estimates of the harness's list decide) and puts its summary and its cases' logs on the pre-release "linux-st"
+# ("not for downloading"; a new run replaces what is there); the last job joins the summaries into
+# <run id>-st-summary.txt. A Claude Code session cannot read the Actions API, but it can read releases.
+# The notes of the pre-release say "status=running" and, at the end, "status=done".
+# Only when the writer asks for a system test.
+name: Linux system test
+
+on:
+  push:
+    branches: ['linux-st/**']
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: 'quick, full or smoke (empty: the run file)'
+        required: false
+        default: ''
+      shards:
+        description: 'number of machines, 1 to 20 (empty: the run file)'
+        required: false
+        default: ''
+      cases:
+        description: 'only these cases or groups, e.g. "S-T01 C-1" (empty: the run file)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: linux-st-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  plan:
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection' && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    outputs:
+      matrix: ${{ steps.plan.outputs.matrix }}
+      shards: ${{ steps.plan.outputs.shards }}
+      profile: ${{ steps.plan.outputs.profile }}
+      cases: ${{ steps.plan.outputs.cases }}
+      minutes: ${{ steps.plan.outputs.minutes }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      IN_PROFILE: ${{ github.event.inputs.profile }}
+      IN_SHARDS: ${{ github.event.inputs.shards }}
+      IN_CASES: ${{ github.event.inputs.cases }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - name: Read what to run, announce the run on the pre-release linux-st
+        id: plan
+        run: |
+          f=tests/crashsafe/system-test-run.txt
+          get() { sed -n "s/^$1: *//p" "$f" | head -1 | tr -d '\r'; }
+          shards=${IN_SHARDS:-$(get shards)}
+          profile=${IN_PROFILE:-$(get profile)}
+          cases=$IN_CASES
+          [ -z "$cases" ] && cases=$(get cases)
+          minutes=$(get minutes)
+          case "$shards" in ''|*[!0-9]*) shards=12 ;; esac
+          [ "$shards" -lt 1 ] && shards=1
+          [ "$shards" -gt 20 ] && shards=20
+          case "$profile" in quick|full|smoke) ;; *) profile=quick ;; esac
+          case "$minutes" in ''|*[!0-9]*) minutes=200 ;; esac
+          [ "$minutes" -gt 330 ] && minutes=330
+          # only ids, groups, spaces and commas are taken over
+          cases=$(printf '%s' "$cases" | tr -c 'A-Za-z0-9 ,.-' ' ' | tr -s ' ')
+          echo "matrix={\"shard\":[$(seq -s, 0 $((shards - 1)))]}" >> "$GITHUB_OUTPUT"
+          {
+            echo "shards=$shards"
+            echo "profile=$profile"
+            echo "cases=$cases"
+            echo "minutes=$minutes"
+          } >> "$GITHUB_OUTPUT"
+          gh release delete linux-st --cleanup-tag -y || true
+          gh release create linux-st --prerelease --target "$GITHUB_SHA" --title "Linux system test: raw output, not for downloading (running)" \
+            --notes "sha=$GITHUB_SHA status=running stage=build run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME profile=$profile shards=$shards"
+          gh release edit linux-st --draft=false || true
+
+  build:
+    needs: plan
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    timeout-minutes: 120
+    outputs:
+      built: ${{ steps.result.outputs.built }}
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      GH_TOKEN: ${{ github.token }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Tools to fetch the source
+        run: |
+          apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl gh xz-utils openssl ccache zstd
+
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - name: Build tools, LibreOffice and epubcheck
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          bash tools/enable-deb-src.sh
+          QB_FULL_SETUP=1 bash tools/cloud-setup.sh
+
+      - name: The recipes of FFmpeg and whisper.cpp (the names of their caches)
+        id: recipe
+        run: |
+          for p in ffmpeg whisper; do echo "$p=$(tools/deps-pack.sh hash "$p")" | tee -a "$GITHUB_OUTPUT"; done
+
+      # read only, as in the job "tests" of release.yml: the job "build" of release.yml writes these caches
+      - name: FFmpeg from the cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: |
+            build/ffmpeg
+            build/ffmpeg-full
+          key: deps-linux-ffmpeg-${{ steps.recipe.outputs.ffmpeg }}
+
+      - name: whisper.cpp from the cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/whisper
+          key: deps-linux-whisper-${{ steps.recipe.outputs.whisper }}
+
+      - name: FFmpeg and whisper.cpp (built when the cache has none)
+        env:
+          QB_DEPS_PACK: '0'
+        run: |
+          tools/get-ffmpeg.sh > /tmp/ffmpeg.log 2>&1 && tools/get-whisper.sh > /tmp/whisper.log 2>&1 || { tail -40 /tmp/ffmpeg.log /tmp/whisper.log; exit 1; }
+
+      - name: The compiled files of the last test build (ccache)
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: /tmp/ccache
+          key: ccache-linux-tests-${{ github.sha }}
+          restore-keys: ccache-linux-tests-
+
+      - name: Build with the test switches
+        env:
+          CCACHE_DIR: /tmp/ccache
+          CCACHE_MAXSIZE: 500M
+        run: |
+          export CCACHE_BASEDIR="$GITHUB_WORKSPACE"
+          ccache -z > /dev/null
+          cmake -S . -B build -G Ninja -DQB_TEST_SWITCHES=ON -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            > /tmp/configure.log 2>&1 || { tail -40 /tmp/configure.log; exit 1; }
+          cmake --build build -j"$(nproc)" > /tmp/build.log 2>&1 || { grep -m 40 'error' /tmp/build.log; tail -20 /tmp/build.log; exit 1; }
+          ccache -s
+
+      - name: The add-ons the cases install (speech, media)
+        run: |
+          if [ -d build/whisper ]; then
+            QB_FFMPEG_DIR=$PWD/build/ffmpeg QB_FFMPEG_FULL_DIR=$PWD/build/ffmpeg-full \
+              packaging/build-addons.sh build build/addons-dist > /tmp/addons.log 2>&1 || tail -20 /tmp/addons.log
+            git checkout -q -- addons/*/payload/templates/ 2>/dev/null || true
+          fi
+
+      - name: Pack the build for the shards
+        run: |
+          test -x build/tests/qb_crashsafe_tests && test -x build/quillbinder
+          tar --zstd -cf /tmp/qb-st-build.tar.zst --exclude='*.o' --exclude='*.a' --exclude='CMakeFiles' --exclude='.ninja_*' \
+            --exclude='*_autogen' --exclude='crashsafe-results' build
+          ls -l /tmp/qb-st-build.tar.zst
+
+      - name: The end of the build
+        id: result
+        if: always()
+        run: |
+          built=no
+          [ -f /tmp/qb-st-build.tar.zst ] && built=yes
+          echo "built=$built" >> "$GITHUB_OUTPUT"
+          mkdir -p results
+          { echo "result: $([ $built = yes ] && echo ok || echo 'the program was not built (see the run)')"; ccache -s 2>/dev/null | head -3; } > results/st-build-summary.txt
+          [ -f /tmp/build.log ] && tail -c 2000000 /tmp/build.log > results/st-build.log
+          for f in results/*; do gh release upload linux-st "$f" --clobber || echo "upload failed: $f"; done
+          if [ $built = yes ]; then
+            gh release edit linux-st --notes "sha=$GITHUB_SHA status=running stage=cases run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME"
+          else
+            gh release edit linux-st --title "Linux system test: raw output, not for downloading (not built)" \
+              --notes "sha=$GITHUB_SHA status=done build=failed run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME"
+          fi
+          gh release edit linux-st --draft=false || true
+
+      - name: Hand the build to the shards
+        if: steps.result.outputs.built == 'yes'
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: qb-st-build
+          path: /tmp/qb-st-build.tar.zst
+          retention-days: 1
+          compression-level: 0
+
+  cases:
+    needs: [plan, build]
+    if: needs.build.outputs.built == 'yes'
+    runs-on: ubuntu-24.04
+    container: ubuntu:24.04
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.plan.outputs.matrix) }}
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      GH_TOKEN: ${{ github.token }}
+      ST_SHARDS: ${{ needs.plan.outputs.shards }}
+      ST_PROFILE: ${{ needs.plan.outputs.profile }}
+      ST_CASES: ${{ needs.plan.outputs.cases }}
+      ST_MINUTES: ${{ needs.plan.outputs.minutes }}
+      ST_SHARD: ${{ matrix.shard }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Tools to fetch the source
+        run: |
+          apt-get update -qq && apt-get install -y -qq --no-install-recommends git ca-certificates curl gh xz-utils openssl zstd
+
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: qb-st-build
+          path: /tmp/st-build
+
+      - name: The machine (the build tools are not used, Qt and the test tools are)
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          bash tools/enable-deb-src.sh
+          QB_FULL_SETUP=1 bash tools/cloud-setup.sh
+          apt-get install -y -qq --no-install-recommends hunspell-de-de x11-xkb-utils
+          tar --zstd -xf /tmp/st-build/qb-st-build.tar.zst
+          test -x build/tests/qb_crashsafe_tests
+
+      - name: The cases of this machine
+        run: |
+          set +e
+          ids=$(build/tests/qb_crashsafe_tests --list | python3 -I tools/system-test-shard.py --profile "$ST_PROFILE" \
+                  --shards "$ST_SHARDS" --index "$ST_SHARD" --cases "$ST_CASES")
+          echo "shard $ST_SHARD of $ST_SHARDS, profile $ST_PROFILE: $(echo $ids | wc -w) case(s)"
+          echo "$ids" | tr '\n' ' '; echo
+          export QB_CS_PROFILE=$ST_PROFILE QB_CS_BUDGET_MIN=$ST_MINUTES QB_CS_OUT=$PWD/build/crashsafe-results QB_NO_UPDATE_CHECK=1
+          # the budget is the time of the cases; a case that does not fit is left for "a next call", which a run
+          # never makes: it is named in the summary as left
+          # shellcheck disable=SC2086
+          [ -n "$ids" ] && tools/run-crashsafe.sh $ids > /tmp/shard.log 2>&1
+          echo "runner rc=$?"
+          grep -E ' rc=.* time=|^system test' /tmp/shard.log | tail -n 200
+
+      - name: Put this machine's results on the pre-release linux-st
+        if: always()
+        run: |
+          mkdir -p out
+          tools/system-test-collect.sh build/crashsafe-results out "$ST_SHARD"
+          [ -f /tmp/shard.log ] && grep -E '^system test|^crashsafe rc|left' /tmp/shard.log | tail -n 5 >> "out/$ST_SHARD-st-summary.txt"
+          for f in out/*; do gh release upload linux-st "$f" --clobber || echo "upload failed: $f"; done
+
+  finish:
+    needs: [plan, build, cases]
+    if: always() && needs.plan.result == 'success'
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ST_SHARDS: ${{ needs.plan.outputs.shards }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - name: Join the summaries, end the run
+        run: |
+          mkdir -p sums
+          gh release download linux-st --pattern '*-st-summary.txt' --dir sums --clobber || true
+          tools/system-test-join.sh sums "$GITHUB_RUN_ID" "$ST_SHARDS"
+          gh release upload linux-st "sums/$GITHUB_RUN_ID-st-summary.txt" --clobber
+          gh release edit linux-st --title "Linux system test: raw output, not for downloading (done)" \
+            --notes "sha=$GITHUB_SHA status=done cases=${{ needs.cases.result }} run=$GITHUB_RUN_ID branch=$GITHUB_REF_NAME"
+          gh release edit linux-st --draft=false || true

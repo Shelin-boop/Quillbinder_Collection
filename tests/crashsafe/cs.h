@@ -24,6 +24,8 @@
 #include <memory>
 #include <vector>
 
+#include "cs_plat.h"   // 0.99.0: what differs between Linux and Windows
+
 class QTextDocument;
 
 namespace qb {

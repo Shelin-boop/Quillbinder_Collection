@@ -39,7 +39,9 @@
 #include <QTreeWidget>
 
 #include <random>
+#ifndef Q_OS_WIN
 #include <unistd.h>
+#endif
 
 namespace cs {
 
@@ -410,7 +412,7 @@ void caseSD03()
         settle(800);
         BinderItem *again = w->project() ? itemByTitle(w->project(), title) : nullptr;
         check(again && docText(w->project(), again).contains(QLatin1String("After the fix.")), QStringLiteral("%1: the typed text is saved after the fix").arg(fx));
-        if (::geteuid() == 0)
+        if (plat::isRoot())
             note(QStringLiteral("[A] root: the read-only folder is left out"));
         if (w->project())
             finishProject(w);

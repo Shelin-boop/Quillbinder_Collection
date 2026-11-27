@@ -2,6 +2,49 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## The system test on GitHub, in shards, and the harness for Windows (0.99.0, item 124)
+
+**The workflow** `.github/workflows/system-test.yml` ("Linux system test"): by hand (Actions > Run workflow, on any
+branch; optional inputs `profile`, `shards`, `cases`) or by a push to `linux-st/**`; never for a pull request or an
+issue, no secret (only the run's own token, which writes the pre-release). What to run is in
+`tests/crashsafe/system-test-run.txt` (`shards`, `cases` (empty: all; ids or groups such as `S-T`), `profile`
+(quick, full, smoke), `minutes` (the time of one machine's cases)); an input overrides it. Jobs: `plan` (reads the file,
+announces the run on the pre-release `linux-st`, "not for downloading", a new run replaces what is there), `build` (as
+the job `tests` of release.yml: setup, FFmpeg and whisper.cpp from their caches, the compiler cache, the build with
+`-DQB_TEST_SWITCHES=ON`, the add-ons; the build folder without objects goes to the shards as one artifact),
+`cases` (one machine per shard: Qt and the test tools by `tools/cloud-setup.sh`, the cases of its shard through
+`tools/run-crashsafe.sh`), `finish` (joins the summaries). Everything runs in the container `ubuntu:24.04` as root, like
+the release tests (root: the cases that mount a file system or test permissions need it; whether the runner allows the
+mount is not known: such a case names it in its own result).
+
+**The split** (`tools/system-test-shard.py`): reads `qb_crashsafe_tests --list` (the estimates of `cs_list.cpp`; quick,
+full, smoke = half of quick plus 30 s) and gives each case, the longest first, to the shard with the least load (plus 40 s
+per case for the display and the verify step); deterministic. U-17 reads what S-W14 wrote, so it goes into S-W14's
+shard. U-06 collects the messages of the cases of its own results folder: in a shard that is only the shard's cases.
+Twelve shards is the default; the session's full profile took 13 to 14 hours on 2 cores, and the estimates sum to what
+the tool prints with `--plan`. The GitHub machine has 4 cores; the typing gates measure real time and may differ from the
+session's numbers: read their lines before the rest.
+
+**Reading the results** (the pre-release `linux-st`; its notes say `status=running`, at the end `status=done`):
+`<run id>-st-summary.txt` first (totals, the shards that left nothing, then every shard's lines), then per shard `<n>-st-summary.txt`
+(`result:` line, then the runner's line per case: `<id> rc=.. verify=.. pass=.. fail=.. time=..s <state>` and its FAIL
+lines) and `<n>-st-logs.tar.gz` (per case `case.log`, `verify.log`, `result.line`, `facts.json`, crash reports; pictures
+only for cases with a failure), `st-build-summary.txt` and `st-build.log`. A shard whose budget (`minutes`) ended before
+all its cases ran says "left" in its summary; give such a run more shards or minutes. Tests of the tools:
+suite `stshard` (`tests/system_test_tests.py`, Python only, no build).
+
+**The harness for Windows.** `tests/crashsafe/cs_plat.h/.cpp` is the one place of what differs: the program's path
+(`quillbinder.exe`; `QB_CS_PROGRAM` names it), python, the sender (`sender_win.py`: the same arguments and log as
+`sender.py`, Unicode key events by SendInput, the clock of `std::chrono::steady_clock`), the hard end
+(`TerminateProcess`), the request to end (`WM_CLOSE`), a crash (the program's own `QB_TEST_CRASH=access`), windows and
+keys (EnumWindows, SendInput), screenshots (Qt's grab), the mouse drag, and `notOnThisPlatform`: the cases that rest on
+LD_PRELOAD, root, mounts, POSIX permissions or shell scripts say SKIP on Windows (a first list, to be refined by the
+Windows run). There is no Xvfb on Windows: the cases use the runner's desktop. The Linux halves are the commands the cases
+used before, moved unchanged; suite `stshard` fails on a POSIX header or call outside a `#ifndef Q_OS_WIN` branch. The
+Windows target is built only with `-DQB_SYSTEM_TEST_WINDOWS=ON`. Not compiled or run on Windows here: the first Windows run
+compiles it. Pitfall: in the mouse drag the event loop must run between the steps (the dragged program is the test
+itself), so the Windows version waits with `settle`, never with `Sleep`.
+
 ## v0990h (0.99.0)
 
 `qb_v0990h_tests`: the AI engine packages against a fake libqbai (`tests/fakeqbai/FakeQbAi.cpp`, built as

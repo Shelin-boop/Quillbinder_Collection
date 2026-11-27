@@ -40,7 +40,9 @@
 #include <QTextDocument>
 #include <QUuid>
 
+#ifndef Q_OS_WIN
 #include <dlfcn.h>
+#endif
 #include <random>
 
 namespace cs {
@@ -51,7 +53,11 @@ using namespace qb::compile;
 // ---------------------------------------------------------------- the fault library
 QString faultLibrary() { return ctx().buildDir + QStringLiteral("/tests/libqbfault.so"); }
 
+#ifdef Q_OS_WIN
+bool faultsLoaded() { return false; }   // no LD_PRELOAD on Windows: the cases that need it are left out there (cs_plat.cpp)
+#else
 bool faultsLoaded() { return dlsym(RTLD_DEFAULT, "qbfault_reload") != nullptr; }
+#endif
 
 QMap<QString, QString> faultEnv(const QString &dir)
 {
@@ -66,9 +72,11 @@ void setFaults(const QStringList &rules)
     if (ctl.isEmpty())
         return;
     writeText(ctl, (rules.join(QLatin1Char('\n')) + QLatin1Char('\n')).toUtf8());
+#ifndef Q_OS_WIN
     if (auto reload = reinterpret_cast<void (*)()>(dlsym(RTLD_DEFAULT, "qbfault_reload")))
         reload();
     else
+#endif
         settle(120);   // another process: it looks at the file every 50 ms
 }
 

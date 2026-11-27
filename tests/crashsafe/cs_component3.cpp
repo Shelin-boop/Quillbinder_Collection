@@ -40,8 +40,10 @@
 
 #include <cmath>
 #include <random>
+#ifndef Q_OS_WIN
 #include <signal.h>
 #include <unistd.h>
+#endif
 
 namespace cs {
 
@@ -481,7 +483,7 @@ void caseC22()
 void caseC23()
 {
     QString err;
-    const bool root = ::geteuid() == 0;
+    const bool root = plat::isRoot();
     if (root)
         note(QStringLiteral("[A] the tests run as root: read-only folders do not stop root, the read-only steps are left out"));
     // ---- read-only folder
@@ -994,7 +996,7 @@ void caseC26()
               toolString(tool, "modelMessage"));
     }
     // the model folder read-only (not for root)
-    if (::geteuid() != 0) {
+    if (!plat::isRoot()) {
         runTool(QStringLiteral("chmod"), {QStringLiteral("a-w"), modelsDir});
         const bool e2 = modelJob(tool, "downloadModel", QStringLiteral("small"), 60000);
         runTool(QStringLiteral("chmod"), {QStringLiteral("u+w"), modelsDir});
@@ -1175,7 +1177,7 @@ void caseC31()
     const QString dir = ctx().work + QStringLiteral("/locks");
     QDir().mkpath(dir);
     const qint64 stale = 60;
-    auto alive = [](qint64 pid) { return pid > 0 && ::kill(pid_t(pid), 0) == 0; };
+    auto alive = [](qint64 pid) { return plat::alive(pid); };
     auto lockText = [](const QString &device, qint64 pid, const QString &instance, const QDateTime &aliveAt) {
         return QStringLiteral("%1 %2\ndevice=%1\nuser=writer\ninstance=%3\nprogram=Quillbinder test\nopened=%4\nalive=%5\n")
             .arg(device)
