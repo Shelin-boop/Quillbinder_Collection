@@ -72,15 +72,6 @@
   "url": "https://sourceware.org/bzip2/ (the sources as the libarchive project mirrors them: https://github.com/libarchive/bzip2, tag bzip2-1.0.8, commit 6a8690fc8d26c815e798c588f796eabe9d684cf0); built by tools/get-crypto.sh"
  },
  {
-  "name": "zlib (in the encryption libraries)",
-  "version": "1.4",
-  "license": "Zlib",
-  "where": "packed data of the built-in encryption (RNP), compiled into the program (0.99.0)",
-  "source": "packaging/linux/licenses/crypto-zlib.txt",
-  "file": "zlib-encryption.txt",
-  "url": "https://github.com/madler/zlib, tag v1.4 (commit 99623ef7097352da7993ba614161fd6a311e046e); built by tools/get-crypto.sh"
- },
- {
   "name": "QtKeychain",
   "version": "0.18.0",
   "license": "BSD-3-Clause (Modified BSD License)",
