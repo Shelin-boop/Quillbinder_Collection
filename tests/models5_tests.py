@@ -154,7 +154,7 @@ for m in models:
             lang = art.rsplit("-", 1)[-1]
             expect = f"test -s out/{name}" if art == "m5-handwriting" else f"test -s out/{name.replace('-' + lang + '.', '-${{ matrix.lang }}.')}"
             check(f"workflow: the job that makes {f['from']} tests that out/{name} exists before it uploads", expect in wf_text, expect)
-check("workflow: the converter's protobuf is raised for sentencepiece (5.29 or newer)", 'protobuf>=5.29' in wf_text)
+check("workflow: the converter's protobuf is raised for sentencepiece (7.36.1 or newer: sentencepiece's model file was made with it)", 'protobuf>=7.36.1' in wf_text)
 check("convert-ppocr: widths are padded to a multiple of 8 and the pooling kernel is made a plain number",
       "WIDTH_MULTIPLE = 8" in read(os.path.join(M, "convert-ppocr.py")) and "fixed_pool" in read(os.path.join(M, "convert-ppocr.py")))
 check("workflow: the sources file names the same Pocket TTS languages as the matrix", "lang: [en, fr, es, pt, it]" in wf_text)
@@ -211,6 +211,15 @@ try:
     check("licenses: Pocket TTS gets CC BY and CC0 texts joined", open(os.path.join(out, "pocket-tts-fr--LICENSES.txt")).read().count("text") >= 2 if r.returncode == 0 else False)
     bad = subprocess.run([sys.executable, "-I", os.path.join(M, "make-catalog.py"), "--sources", os.path.join(M, "models-5-sources.json"), "build", built, texts, os.path.join(tmp, "out2")], capture_output=True, text=True)
     check("make-catalog build: a file that differs from its pin stops it", bad.returncode != 0 and "differs from the pin" in bad.stderr + bad.stdout)
+    # the release without Pocket TTS: its five models are listed unpublished, the rest is complete
+    shutil.rmtree(os.path.join(built, "m5-pocket-en"))
+    r5 = subprocess.run([sys.executable, "-I", os.path.join(M, "make-catalog.py"), "--sources", fs, "build", built, texts, os.path.join(tmp, "out3"), "--without-pocket"], capture_output=True, text=True)
+    c3 = jload(os.path.join(tmp, "out3", "catalog.json")) if r5.returncode == 0 else {"models": []}
+    pk = [x for x in c3["models"] if x["engine"] == "pocket-tts"]
+    check("make-catalog --without-pocket: five Pocket TTS models without checksums, every other file measured",
+          len(pk) == 5 and all("sha256" not in f for x in pk for f in x["files"]) and all("sha256" in f for x in c3["models"] if x["engine"] != "pocket-tts" for f in x["files"]), r5.stderr)
+    check("workflow: the dispatch input pocket skips Pocket TTS and the catalog still runs (handwriting, word lists, Qwen needed)",
+          "inputs.pocket" in wf_text and "pocket-tts.result == 'skipped'" in wf_text and "--without-pocket" in wf_text)
     target = os.path.join(tmp, "models.json")
     r2 = subprocess.run([sys.executable, "-I", os.path.join(M, "make-catalog.py"), "models-json", target, "--catalog", os.path.join(out, "catalog.json")], capture_output=True, text=True)
     merged = jload(target) if r2.returncode == 0 else {"models": []}

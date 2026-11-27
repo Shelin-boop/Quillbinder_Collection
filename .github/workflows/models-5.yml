@@ -30,6 +30,10 @@ on:
         description: 'Run the stub of the designed voices (they are not made yet: it only prints what it will do)'
         type: boolean
         default: false
+      pocket:
+        description: 'Make Pocket TTS (off: the release is made without it and the catalog marks the five models "not published yet")'
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -129,7 +133,7 @@ jobs:
 
   pocket-tts:
     needs: state
-    if: needs.state.outputs.there != 'true'
+    if: needs.state.outputs.there != 'true' && (github.event_name != 'workflow_dispatch' || inputs.pocket)
     runs-on: ubuntu-24.04
     timeout-minutes: 90
     strategy:
@@ -147,8 +151,8 @@ jobs:
           python3 -m venv /tmp/venv
           /tmp/venv/bin/pip install --quiet --upgrade pip
           /tmp/venv/bin/pip install --quiet -r llama.cpp/requirements/requirements-convert_hf_to_gguf.txt
-          # sentencepiece 0.2.3's model file needs protobuf 5.26 or newer; the converter's requirements pin 4.x
-          /tmp/venv/bin/pip install --quiet "protobuf>=5.29,<7"
+          # sentencepiece 0.2.3's model file was made with protobuf 7.36 and refuses an older runtime; the converter's requirements pin 4.x
+          /tmp/venv/bin/pip install --quiet "protobuf>=7.36.1"
           /tmp/venv/bin/pip list 2>/dev/null | grep -iE '^(torch|transformers|sentencepiece|gguf|numpy|protobuf) ' | tee pip-versions.txt
       - name: Download the model and the licensed voices at their pins
         run: python3 -I tools/models/fetch-hf.py tools/models/models-5-sources.json pocket-${{ matrix.lang }} src
@@ -201,7 +205,7 @@ jobs:
 
   catalog:
     needs: [state, handwriting, wordlists, pocket-tts, qwen]
-    if: ${{ !cancelled() && github.repository == 'Shelin-boop/Quillbinder_Collection' && needs.state.outputs.there != 'true' && needs.handwriting.result == 'success' && needs.wordlists.result == 'success' && needs.pocket-tts.result == 'success' && needs.qwen.result == 'success' }}
+    if: ${{ !cancelled() && github.repository == 'Shelin-boop/Quillbinder_Collection' && needs.state.outputs.there != 'true' && needs.handwriting.result == 'success' && needs.wordlists.result == 'success' && (needs.pocket-tts.result == 'success' || needs.pocket-tts.result == 'skipped') && needs.qwen.result == 'success' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     steps:
@@ -226,7 +230,8 @@ jobs:
           grep -q "Apache License" texts/apache-2.0.txt
       - name: Write the catalog
         run: |
-          python3 -I tools/models/make-catalog.py build built texts out
+          # without Pocket TTS (the dispatch input pocket is off): its five models stay in the catalog, unpublished
+          python3 -I tools/models/make-catalog.py build built texts out ${{ needs.pocket-tts.result == 'skipped' && '--without-pocket' || '' }}
           python3 -I - <<'PY'
           import json, os
           c = json.load(open("out/catalog.json", encoding="utf-8"))

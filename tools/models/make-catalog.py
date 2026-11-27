@@ -3,7 +3,7 @@
 
   make-catalog.py build <built dir> <texts dir> <out dir> [--defs models-5.json] [--sources models-5-sources.json]
       the job "catalog": copies every file of every model into <out dir> under its asset name (a built file from
-      <built dir>/<from>, a license text from <texts dir>), measures size and SHA-256, checks the pins of copied
+      <built dir>/<from>, a license text from <texts dir>; --without-pocket lists the Pocket TTS models unpublished), measures size and SHA-256, checks the pins of copied
       third-party files, writes <out dir>/catalog.json. A shared asset is written once. Any missing file stops it.
   make-catalog.py models-json <resources/ai/models.json> [--catalog catalog.json]
       writes the program's built-in catalog: the same entries; sizes and SHA-256 from the catalog.json of a run, else
@@ -86,6 +86,10 @@ def build(args):
     models = []
     for m in defs["models"]:
         files = []
+        if args.without_pocket and m["engine"] == "pocket-tts":
+            # not made in this run: listed without size and SHA-256, which the program shows as "not published yet"
+            models.append(entry(m, [{"name": f["name"], "asset": f["asset"]} for f in m["files"]]))
+            continue
         for f in m["files"]:
             asset = f["asset"]
             dest = os.path.join(args.out, asset)
@@ -154,6 +158,7 @@ def main():
     b.add_argument("built")
     b.add_argument("texts")
     b.add_argument("out")
+    b.add_argument("--without-pocket", action="store_true", help="Pocket TTS was not made: its models are listed unpublished")
     j = sub.add_parser("models-json")
     j.add_argument("target")
     j.add_argument("--catalog")
