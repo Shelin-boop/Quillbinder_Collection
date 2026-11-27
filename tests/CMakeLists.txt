@@ -585,6 +585,17 @@ add_dependencies(qb_v0990h_tests qb-fake-qbai)
 if(TARGET qbai)
   add_dependencies(qb_v0990h_tests qbai)
 endif()
+
+# 0.99.0: Speech Transcription 1.10 (the recognition through the program's AI engine, the device list with the cards, the shared AI settings,
+# Insert at Cursor, Write into the text as I speak, keepRunning, the minApp in the update file) with the fake engine of v0990h; needs the add-on's
+# two libraries in <build>/tool-plugins (xvfb-run -a ./qb_v0990m_tests /tmp/shots)
+add_executable(qb_v0990m_tests v0990m_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990m_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0990m_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+add_dependencies(qb_v0990m_tests qb-fake-qbai)
+if(TARGET qb-speech-impl)
+  add_dependencies(qb_v0990m_tests qb-speech qb-speech-impl)
+endif()
 # 0.99.0 (item 122): the small interface: a few round buttons, the binder and the notes as slide-in panels, the rule for Android, record only, profiles (xvfb-run -a -s "-screen 0 1920x1080x24" ./qb_v0990l_tests /tmp/shots)
 add_executable(qb_v0990l_tests v0990l_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_SOURCE_DIR}/translations/translations.qrc)
 target_link_libraries(qb_v0990l_tests PRIVATE qbui Qt6::Test)

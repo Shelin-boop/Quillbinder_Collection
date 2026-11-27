@@ -1,0 +1,26 @@
+{
+  "comment": "The preset voices of Pocket TTS that go into the release models-5: only voices whose license Kyutai's voice repository (huggingface.co/kyutai/tts-voices, README) states for the recording the voice was made from. Source folder and license as that README gives them (reading of 2026-11-27). Left out: cosette (Expresso, non-commercial), jean (EARS, non-commercial), giovanni, lola, rafael, daan (no license stated there), juergen (no license or consent stated anywhere: never).",
+  "voices": {
+    "alba": {"license": "CC-BY-4.0", "source": "alba-mackenna/casual.wav"},
+    "anna": {"license": "CC-BY-4.0", "source": "vctk/p228_023_enhanced.wav"},
+    "azelma": {"license": "CC-BY-4.0", "source": "vctk/p303_023_enhanced.wav"},
+    "charles": {"license": "CC-BY-4.0", "source": "vctk/p254_023_enhanced.wav"},
+    "eponine": {"license": "CC-BY-4.0", "source": "vctk/p262_023_enhanced.wav"},
+    "eve": {"license": "CC-BY-4.0", "source": "vctk/p361_023_enhanced.wav"},
+    "fantine": {"license": "CC-BY-4.0", "source": "vctk/p244_023_enhanced.wav"},
+    "george": {"license": "CC-BY-4.0", "source": "vctk/p315_023_enhanced.wav"},
+    "jane": {"license": "CC-BY-4.0", "source": "vctk/p339_023_enhanced.wav"},
+    "mary": {"license": "CC-BY-4.0", "source": "vctk/p333_023_enhanced.wav"},
+    "michael": {"license": "CC-BY-4.0", "source": "vctk/p360_023_enhanced.wav"},
+    "paul": {"license": "CC-BY-4.0", "source": "vctk/p259_023_enhanced.wav"},
+    "vera": {"license": "CC-BY-4.0", "source": "vctk/p229_023_enhanced.wav"},
+    "bill_boerst": {"license": "CC0-1.0", "source": "voice-zero/bill_boerst.wav"},
+    "caro_davy": {"license": "CC0-1.0", "source": "voice-zero/caro_davy.wav"},
+    "peter_yearsley": {"license": "CC0-1.0", "source": "voice-zero/peter_yearsley.wav"},
+    "stuart_bell": {"license": "CC0-1.0", "source": "voice-zero/stuart_bell.wav"},
+    "javert": {"license": "CC0-1.0", "source": "voice-donations/Butter.wav"},
+    "marius": {"license": "CC0-1.0", "source": "voice-donations/Selfie.wav"},
+    "estelle": {"license": "CC0-1.0", "source": "unmute-prod-website/developpeuse-3.wav"}
+  },
+  "never": ["juergen"]
+}

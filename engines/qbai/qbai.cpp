@@ -550,11 +550,21 @@ int transcribe(qbai_model *m, const float *pcm, int64_t samples, const qbai_tran
     t_lastLog.clear();
     if (text)
         *text = nullptr;
-    if (!m || m->kind != QBAI_ASR_WHISPER || !pcm || samples <= 0 || !p || p->size < int(sizeof(qbai_transcribe_params)))
+    if (!m || m->kind != QBAI_ASR_WHISPER || !pcm || samples <= 0 || !p || p->size < int(QBAI_TRANSCRIBE_V1_SIZE))
         return fail(QBAI_BAD_ARGS, "bad arguments");
+    // the fields of version 2 count only when the caller's struct reaches them
+    const bool v2 = p->size >= int(sizeof(qbai_transcribe_params));
+    const int beam = v2 ? p->beam_size : 0;
     WhisperCall call;
     call.p = p;
-    whisper_full_params wp = whisper_full_default_params(WHISPER_SAMPLING_GREEDY);
+    whisper_full_params wp = whisper_full_default_params(beam > 1 ? WHISPER_SAMPLING_BEAM_SEARCH : WHISPER_SAMPLING_GREEDY);
+    if (beam > 1)
+        wp.beam_search.beam_size = beam;
+    if (v2) {
+        wp.suppress_nst = p->suppress_nst != 0;
+        wp.no_timestamps = p->no_timestamps != 0;
+        wp.no_context = p->no_context != 0;
+    }
     wp.n_threads = m->threads;
     wp.language = p->language && *p->language ? p->language : "auto";
     wp.translate = p->translate != 0;
@@ -575,8 +585,12 @@ int transcribe(qbai_model *m, const float *pcm, int64_t samples, const qbai_tran
     if (rc != 0)
         return fail(QBAI_ERROR, "whisper.cpp could not transcribe the audio (code " + std::to_string(rc) + ")");
     std::string all;
-    for (int i = 0; i < whisper_full_n_segments(m->whisper); ++i)
+    const float noSpeechMax = v2 ? p->no_speech_max : 0.f;
+    for (int i = 0; i < whisper_full_n_segments(m->whisper); ++i) {
+        if (noSpeechMax > 0.f && whisper_full_get_segment_no_speech_prob(m->whisper, i) > noSpeechMax)
+            continue;   // most likely no speech: whisper invents text for such stretches
         all += whisper_full_get_segment_text(m->whisper, i);
+    }
     if (text) {
         *text = static_cast<char *>(std::malloc(all.size() + 1));
         if (!*text)
@@ -587,6 +601,25 @@ int transcribe(qbai_model *m, const float *pcm, int64_t samples, const qbai_tran
 }
 
 void freeText(char *text) { std::free(text); }
+
+int detectLanguage(qbai_model *m, const float *pcm, int64_t samples, const char *const *codes, int count, float *probs)
+{
+    t_error.clear();
+    if (!m || m->kind != QBAI_ASR_WHISPER || !pcm || samples <= 0 || !codes || count <= 0 || !probs)
+        return fail(QBAI_BAD_ARGS, "bad arguments");
+    if (!whisper_is_multilingual(m->whisper))
+        return fail(QBAI_UNSUPPORTED, "the model knows English only");
+    if (whisper_pcm_to_mel(m->whisper, pcm, int(std::min<int64_t>(samples, INT32_MAX)), m->threads) != 0)
+        return fail(QBAI_ERROR, "whisper.cpp could not read the audio");
+    std::vector<float> all(size_t(whisper_lang_max_id()) + 1, 0.f);
+    if (whisper_lang_auto_detect(m->whisper, 0, m->threads, all.data()) < 0)
+        return fail(QBAI_ERROR, "whisper.cpp could not detect the language");
+    for (int i = 0; i < count; ++i) {
+        const int id = codes[i] ? whisper_lang_id(codes[i]) : -1;
+        probs[i] = id >= 0 && size_t(id) < all.size() ? all[size_t(id)] : 0.f;
+    }
+    return QBAI_OK;
+}
 
 // ------------------------------------------------------------------ PCM helpers
 
@@ -952,36 +985,45 @@ int stretch(const float *pcm, int64_t samples, int rate, float speed, qbai_pcm *
 
 const char *engineVersion()
 {
-    static const std::string v = std::string("qbai 1; ") + QBAI_PARTS;
+    static const std::string v = std::string("qbai 2; ") + QBAI_PARTS;
     return v.c_str();
 }
 
 const char *lastError() { return t_error.c_str(); }
 
-const qbai_api kApi1 = {
-    1,
-    int(sizeof(qbai_api)),
-    engineVersion,
-    lastError,
-    deviceCount,
-    deviceGet,
-    setThreads,
-    threads,
-    modelMemory,
-    load,
-    unload,
-    modelInfo,
-    voiceName,
-    languageName,
-    transcribe,
-    freeText,
-    synthesize,
-    freePcm,
-    stretch,
-    stretchBegin,
-    stretchFeed,
-    stretchEnd,
-};
+qbai_api makeApi(int version, int size)
+{
+    qbai_api a;
+    std::memset(&a, 0, sizeof a);
+    a.version = version;
+    a.size = size;
+    a.engine_version = engineVersion;
+    a.last_error = lastError;
+    a.device_count = deviceCount;
+    a.device_get = deviceGet;
+    a.set_threads = setThreads;
+    a.threads = threads;
+    a.model_memory = modelMemory;
+    a.load = load;
+    a.unload = unload;
+    a.model_info = modelInfo;
+    a.voice_name = voiceName;
+    a.language_name = languageName;
+    a.transcribe = transcribe;
+    a.free_text = freeText;
+    a.synthesize = synthesize;
+    a.free_pcm = freePcm;
+    a.stretch = stretch;
+    a.stretch_begin = stretchBegin;
+    a.stretch_feed = stretchFeed;
+    a.stretch_end = stretchEnd;
+    a.detect_language = detectLanguage;
+    return a;
+}
+
+// version 1 callers get the table as they know it (the size says where it ends); version 2 the whole
+const qbai_api kApi1 = makeApi(1, int(QBAI_API_V1_SIZE));
+const qbai_api kApi2 = makeApi(2, int(sizeof(qbai_api)));
 
 } // namespace
 
@@ -989,5 +1031,5 @@ extern "C" const qbai_api *qbai_get_api(int version)
 {
     if (version < 1 || version > QBAI_API_VERSION)
         return nullptr;
-    return &kApi1;
+    return version == 1 ? &kApi1 : &kApi2;
 }

@@ -235,8 +235,9 @@ bool Engine::ensureLoaded(QString *error)
         return failed(QCoreApplication::translate("qb::ai", "The AI engine could not be loaded: %1").arg(why));
     }
     auto get = reinterpret_cast<qbai_get_api_fn>(lib->resolve("qbai_get_api"));
-    const qbai_api *api = get ? get(QBAI_API_VERSION) : nullptr;
-    if (!api || api->version < QBAI_API_VERSION || api->size < int(sizeof(qbai_api))) {
+    // version 1 is enough for the program; a tool that wants version 2's functions asks for it (apiFor)
+    const qbai_api *api = get ? get(1) : nullptr;
+    if (!api || api->version < 1 || api->size < int(QBAI_API_V1_SIZE)) {
         lib->unload();
         delete lib;
         return failed(QCoreApplication::translate("qb::ai", "The installed AI engine is older than this version of Quillbinder "

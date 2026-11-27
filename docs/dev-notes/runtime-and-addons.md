@@ -79,7 +79,7 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   (`QB_AI_ENGINE_DIR` or `build/ai-engine`), into `<build>/qbai/libqbai.so.1` with links to the pack's libraries beside it,
   as in the package; not `<build>/ai-engine`, which is the pack's own default folder). The program links none of it.
 - **The C interface** `src/tools/QbAi.h` (the program and add-ons include it): one exported entry `qbai_get_api(int version)`
-  returning `const struct qbai_api *`, a table of function pointers, `QBAI_API_VERSION` 1. A newer library keeps every function
+  returning `const struct qbai_api *`, a table of function pointers, `QBAI_API_VERSION` 2 since Speech Transcription 1.10 (1 before). A newer library keeps every function
   of an older version at its place and adds new ones at the end; `qbai_get_api(v)` answers for every `1 <= v <=` its own
   version (NULL above), and `size` says how much of the table there is. Every parameter struct begins with its own `size`.
   Functions: `engine_version`, `last_error` (thread-local, English), `device_count(refresh)`/`device_get` (index 0 the CPU, then
@@ -207,6 +207,63 @@ a tag points elsewhere), none changed except where said here.
   llama.cpp b12808 runs **Pocket TTS** (architecture `pockettts`: the text side in libllama, the flow net inside the mmproj in
   libmtmd, which is why libmtmd is built with `LLAMA_BUILD_MTMD=ON`) and also has a Qwen3-TTS path of its own (libmtmd's
   `qwen3tts-gen`), apart from qwentts.cpp. whisper.cpp 1.9.6 also installs `libparakeet`.
+
+## 0.99.0: the release models-5 (`models-5.yml`, `tools/models/`)
+
+- Files: `models-5.json` (every catalog field except size and SHA-256), `models-5-sources.json` (pins of the Hugging Face
+  files: commit, size, SHA-256), `pocket-voices.json` (the licensed voices), `fetch-hf.py`, `convert-ppocr.py`,
+  `make-wordlists.py`, `convert-pocket-tts.py`, `make-catalog.py` (`build` for the catalog job, `models-json` writes
+  `resources/ai/models.json`). Suite `models5` keeps them, the workflow and the program's catalog in step.
+- **Handwriting model**: kraken's PP-OCRv6 small (Apache-2.0; the file has 13,065,380 bytes = about 3.24 M parameters, which is what
+  the model card says; the paper's 5.2 M is not this file; the script prints the count of the network it builds). The network's
+  source is taken from `kraken==7.2` installed with `--no-deps`: kraken's package initializer imports Lightning and more, so the
+  script loads `lib/ppocr` as a package of its own. The file's metadata says line height 96 (the card's 128 px is the paper's);
+  the backbone's last `avg_pool2d(kernel_size=(h, 2))` reads h from the tensor, so the export keeps the height fixed and the width
+  free (the export patches `F.avg_pool2d` so that h is a plain number; input widths are multiples of 8, because the network pads each stage by the width's remainder and a trace fixes that for one width; `dynamo=False`; kraken needs torch 2.9 or newer, where the new exporter is the default). The first runner run (2026-11-27) failed in the export (the pooling's Gather node, fixed as said) and the Pocket TTS conversions failed at the tokenizer (sentencepiece 0.2.3's model file was made with protobuf 7.36 and refuses an older runtime, the converter's requirements pin 4.x: the workflow installs `protobuf>=7.36.1`; the second run still failed on 6.33); both failures were hidden by a pipe to `tee` (no pipefail), so the artifacts lacked the files and only the catalog job noticed. The measured parameter count is 3,216,543 (3.22 M). the script stops on a shape or text
+  difference between ONNX Runtime and PyTorch and on a largest difference of 0.001 or more.
+- **Word lists** are Latin-script words only (wordfreq's lists hold some other scripts, e.g. Chinese words in the Indonesian one).
+- **Pocket TTS**: the engine finds a preset voice by name in the mmproj (`voice.<name>` tensors); `kyutai/pocket-tts-without-voice-cloning`'s
+  language folders carry 27 voice states each, and llama.cpp's converter turns the states of the folder `embeddings/` into those
+  tensors, so only the licensed ones are staged. Licenses per voice follow the README of `kyutai/tts-voices` (VCTK and Alba
+  MacKenna: CC BY 4.0; Voice-Zero, voice donations and Kyutai's own recordings: CC0; Expresso and EARS: non-commercial, left out;
+  voices whose recording that README does not name: left out; juergen: never). The model is the 16-layer one of each language.
+- The dispatch input `pocket` (default on) turns Pocket TTS off: the catalog job then runs without it (`make-catalog.py build --without-pocket`) and the five models are listed without checksums ("not published yet"). A published release is never changed, so Pocket TTS would then come with a later release.
+- Published 2026-11-27 (run 46013112875, 73 assets, every size and SHA-256 equal to the release's own digests): `tools/models/models-5-catalog.json` is its catalog.json; `resources/ai/models.json` is made from it. Each Pocket TTS mmproj holds 20 voices (the staged ones; the mmproj has 50.8 MB because it has no voice encoder).
+- A release asset may have less than 2 GiB: the largest file (Qwen 1.7B Q8_0) has 2,079,448,256 bytes, so no file is split.
+  `catalog.json` is uploaded last: a stopped upload is finished by the next run, which skips what is there.
+## 0.99.0: Speech Transcription 1.10 (the AI engine instead of its own whisper.cpp)
+
+- **Layout.** `libqb-speech-impl.so` no longer links whisper.cpp or ggml: it gets the engine from the host (`ToolHost::aiEngine`,
+  `QBAI_API_VERSION`) and calls the C table of `tools/QbAi.h`. `SpeechApi.h`: `EngineSettings::device` ("auto", "cpu",
+  "gpu:<name>") replaces `gpuIndex`; `threads`, `careful` and `unloadMinutes` are gone; `computeDevices()` is gone (the tool's
+  list is `ToolHost::aiDeviceChoices()`); `setHost()` is new, called by the tool right after the library is created. The stage
+  script and CMake need whisper.cpp's folder only for the test recording `samples/jfk.wav`.
+- **One `Holder` for the model.** The live pieces, the model check and the speed test share one loaded model (mutex in `Holder`).
+  The registry id is `speech-transcription:<model id>` (`ToolHost::toolOfModel` takes the part before the colon). Every load
+  asks `requestModelLoad` (with `modelMessage` around it), then `modelLoaded` (a failed load: `modelUnloaded`); each piece calls
+  `modelUsed`. **Pitfall**: `requestModelLoad` waits for the main thread, so the program's request to unload
+  (`ToolModels::unloadModel`, main thread) must never wait for the worker: `Engine::unloadModelOfId` only tries the mutex and
+  answers `false` ("in use") when it cannot take it. A blocking wait here would be a deadlock (the same one ai1 met in the
+  engine's job lock).
+- **Engine interface 2** (`tools/QbAi.h`, `QBAI_API_VERSION` 2): added at the end, so version 1 is a prefix. `qbai_get_api(1)` returns a
+  table with `size == QBAI_API_V1_SIZE`; `qbai_get_api(2)` the whole one with `detect_language`. `AiEngine::ensureLoaded` accepts
+  version 1 (an older engine package still works for Read Aloud); the add-on asks `aiEngine(2)` and falls back to `aiEngine(1)`
+  (then "Careful" and the language choice do nothing and an unlimited language is "auto"). Transcribe params of version 2 are read
+  only when `size` reaches them (`QBAI_TRANSCRIBE_V1_SIZE`). The add-on passes `beam_size` 5 for Careful, `no_speech_max` 0.6 and
+  `suppress_nst` for the silence guard (whisper's no-speech probability per segment), `no_timestamps` and `no_context` as 1.9
+  did; the two-language choice is `speech::chooseLanguage` on `detect_language`'s probabilities, as in 1.9 (for translation into
+  English, for "keep the original" and for Careful). The fake engine (`QBAI_FAKE_LANG`, `qbai_fake_detects`) follows.
+- **Model files.** `installedModelFile()` is the add-on's own download first, else the program's catalog entry `whisper-<id>`
+  (`ToolHost::aiModelFile`, `<id>` from `speech::catalog()`); `ownModelFile()` is what Remove and the replace step touch. The
+  catalog's ASR entries (models-5) must use these ids.
+- **minApp and the update file.** `addons::compareVersions(minApp, programAfter)` in `UpdateCheck.cpp`: an add-on offer needs the program
+  version the writer has after the same check (a program update offered as `ProgramUpdate` counts; a new AppImage does not,
+  as the writer has to install it first). So 1.10 reaches a 0.95.0 installation only with the update to 0.99.0, and
+  `addons::inspect` refuses a package with a higher `minApp`. Checked in `v0990m`.
+- **Microphone permission** (`QMicrophonePermission`, in `startAudio`): granted at once on Linux and Windows; on Android the
+  first recording asks and does not start (the writer presses Record again). `keepRunning("recording")` is set from the start of
+  a recording (live or Record only) until it stops. `recordOnly()` is Android's default (`Q_OS_ANDROID`, `QSysInfo`, or the test
+  switch `QB_SPEECH_ANDROID`).
 
 ## 0.99.0: Translation Helper 1.6 (tool interface 1.3, CTranslate2 4.9.1)
 

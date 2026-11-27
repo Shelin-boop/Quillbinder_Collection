@@ -454,21 +454,20 @@ int main(int argc, char **argv)
         QString err;
         bool restart = false;
         const bool ok = info.isValid() && addons::install(pkg, &log, &err, &restart);
-        check(ok && info.manifest.minApp == QLatin1String(QB_RUNTIME_SINCE),
-              QStringLiteral("the add-on package installs and needs " QB_RUNTIME_SINCE " (its runtime's first version)"),
+        check(ok && info.manifest.minApp == QLatin1String("0.99.0"),
+              QStringLiteral("the add-on package installs and needs 0.99.0 (1.10: its whisper comes from the AI Engine package)"),
               info.error + err + QLatin1String(" minApp ") + info.manifest.minApp);
         const QString dir = addons::contentDirs(QStringLiteral("speech")).value(0);
         QStringList missing;
-        for (const char *f : {"libqb-speech-impl.so", "lib/libwhisper.so.1", "lib/libggml.so.0", "lib/libggml-base.so.0",
-                              "lib/libggml-cpu-haswell.so", "lib/libggml-cpu-x64.so", "lib/libggml-vulkan.so",
-                              "lib/libQt6Multimedia.so.6", "qtplugins/tls/libqopensslbackend.so", "samples/jfk.wav",
-                              "licenses/README.txt", "licenses/whisper.cpp-MIT.txt", "licenses/Qt-LGPL-3.0.txt"})
+        for (const char *f : {"libqb-speech-impl.so", "lib/libQt6Multimedia.so.6", "qtplugins/tls/libqopensslbackend.so",
+                              "samples/jfk.wav", "licenses/README.txt", "licenses/Qt-LGPL-3.0.txt"})
             if (!QFileInfo::exists(dir + QLatin1Char('/') + QLatin1String(f)))
                 missing << QLatin1String(f);
         check(!dir.isEmpty() && missing.isEmpty(),
-              QStringLiteral("its files: the engine, whisper.cpp with a compute module per processor generation and Vulkan, Qt "
-                             "Multimedia, Qt's TLS plugin, the test recording, the licenses"),
+              QStringLiteral("its files: the engine, Qt Multimedia, Qt's TLS plugin, the test recording, the licenses"),
               missing.join(QLatin1String(", ")));
+        check(!QFileInfo::exists(dir + QStringLiteral("/lib/libwhisper.so.1")) && !QFileInfo::exists(dir + QStringLiteral("/lib/libggml.so.0")),
+              QStringLiteral("1.10: the add-on carries no whisper.cpp of its own (its name would clash with the AI engine's)"));
         qint64 bytes = QFileInfo(pkg).size();
         note(QStringLiteral("the add-on package: %1 MB").arg(bytes / 1e6, 0, 'f', 1));
     }
@@ -614,9 +613,18 @@ int main(int argc, char **argv)
     auto *tabButton = w.findChild<QToolButton *>(QStringLiteral("inspectorTab:speech-transcription.list"));
     auto *notesButton = insp ? insp->findChildren<QToolButton *>().value(0) : nullptr;
     QWidget *panel = w.findChild<QWidget *>(QStringLiteral("speechPanel"));
-    check(insp && tabButton && panel && insp->extraTabs() == QStringList{QStringLiteral("speech-transcription.list")}
-              && notesButton && tabButton->x() < insp->findChildren<QToolButton *>().value(1)->x(),
-          QStringLiteral("the inspector has the tab \"Transcriptions\", its button at the left end of the row"));
+    // (0.99.0: the handwriting tab of the program may stand before it; the tabs of add-ons come before the built-in buttons)
+    auto *mindMapButton = insp ? insp->findChild<QToolButton *>(QStringLiteral("inspectorMindMapButton")) : nullptr;
+    check(insp && tabButton && panel && insp->extraTabs().contains(QStringLiteral("speech-transcription.list"))
+              && notesButton && mindMapButton && tabButton->x() < mindMapButton->x(),
+          QStringLiteral("the inspector has the tab \"Transcriptions\", its button at the left end of the row"),
+          [&] {
+              QStringList d;
+              if (insp)
+                  for (QToolButton *b : insp->findChildren<QToolButton *>())
+                      d << QStringLiteral("%1@%2").arg(b->objectName()).arg(b->x());
+              return d.join(QLatin1Char(' ')) + QStringLiteral(" extra=") + (insp ? insp->extraTabs().join(QLatin1Char(',')) : QString());
+          }());
     toolhost::host().runCommand(QStringLiteral("speech-transcription.show"));
     settle(200);
     check(insp && insp->currentExtraTab() == QLatin1String("speech-transcription.list") && panel && panel->isVisible(),
@@ -703,9 +711,10 @@ int main(int argc, char **argv)
         if (device)
             for (int i = 0; i < device->count(); ++i)
                 devs << device->itemText(i);
-        check(device && device->count() == 2 && device->itemData(0).toInt() == -1 && device->itemData(1).toInt() == 0
-                  && devs.value(1).contains(QLatin1String("llvmpipe")),
-              QStringLiteral("compute on: the processor, and a graphics card found through Vulkan (here Mesa's lavapipe)"),
+        // 1.10 (item 117): the program's list: Automatic, the processor and, with an AI engine installed, its cards (v0990m)
+        check(device && device->count() >= 2 && device->itemData(0).toString() == QLatin1String("auto")
+                  && device->itemData(1).toString() == QLatin1String("cpu"),
+              QStringLiteral("compute on: Automatic and the processor (the cards come with the AI engine)"),
               devs.join(QLatin1String(" | ")));
         dlg.show();
         settle(300);
@@ -1110,7 +1119,7 @@ int main(int argc, char **argv)
     if (tool && !official.isEmpty()) {
         const QByteArray keep = qgetenv("QB_SPEECH_SOURCE");
         qunsetenv("QB_SPEECH_SOURCE");
-        setSpeechSetting(QStringLiteral("gpu"), -1);
+        setSpeechSetting(QStringLiteral("device"), QStringLiteral("cpu"));
         QElapsedTimer t;
         t.start();
         const bool ok = runModelJob(tool, "downloadModel", official, 1800000);
@@ -1124,7 +1133,7 @@ int main(int argc, char **argv)
     // ================================================================ a real model (QB_SPEECH_MODEL_FILE)
     const QString real = qEnvironmentVariable("QB_SPEECH_MODEL_FILE");
     if (tool && QFileInfo::exists(real)) {
-        setSpeechSetting(QStringLiteral("gpu"), -1);
+        setSpeechSetting(QStringLiteral("device"), QStringLiteral("cpu"));
         const bool ok = runModelJob(tool, "useLocalModel", real, 900000);
         check(ok && callString(tool, "modelMessage").startsWith(QLatin1String("Installed")),
               QStringLiteral("a real model passes the check (checksum, description, test transcription of the sample)"),

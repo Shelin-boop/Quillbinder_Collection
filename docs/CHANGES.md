@@ -10,6 +10,13 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
 - **0.99.0 is a security update on every system** (Linux, Windows and Android). The update window says "recommended
   (security)" for a Quillbinder with an older version and offers no "Ignore This Version", also when a newer version has
   come out since (every version after the installed one, up to the newest, counts).
+- **The data of the AI functions, the release `models-5`** (items 112 and 114; developer tool, no change to the program's code):
+  the workflow `models-5.yml` makes the handwriting line model (PP-OCRv6 small, converted to ONNX), ten word lists (wordfreq's
+  100,000 most frequent words of en, de, es, fr, pt, it, pl, nl, and as many as there are for id and tr), Pocket TTS in five
+  languages with the preset voices whose license is stated (never one without), and Qwen3-TTS 0.6B and 1.7B with the 12 Hz
+  tokenizer, each file with its SHA-256 and the license texts, and writes `catalog.json`. `resources/ai/models.json` lists the same
+  models; the Qwen files carry their checksums already, the rest get theirs from the first run. The designed voices are not
+  in it yet.
 - **The system test runs on GitHub in shards** (item 124; developer tool, no change to the program): the workflow "Linux system test" builds the program once and runs the cases on several machines side by side (a run file names shards, profile and cases), the summaries are joined on the pre-release `linux-st`; the harness is ready for Windows (`TerminateProcess`, `SendInput`, the program's `.exe`), Linux unchanged.
 - **The word after the version number is one setting per system** (Linux "beta"; Windows and Android "experimental"), so
   that the first normal release, 1.0.0, changes only numbers and one word per system. The names of the files, the tag,
@@ -59,6 +66,26 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
 
 New functions and fixes (Linux first).
 
+- **Speech Transcription 1.10** (items 110, 117; UR-11; add-on `plugins/tools/speech-transcription`, `addons/speech-transcription`).
+  0.95.0 had changed the add-on's language lists without raising its number; the number is now 1.10. The recognition runs in
+  the program's **AI Engine** (tool interface 1.3: `aiEngine`, `aiPickDevice`, `aiPanel`, `aiModelFile`; the model registry,
+  `ToolModels::unloadModel`, `modelMessage`, low-priority threads): the add-on carries **no whisper.cpp of its own** any more
+  (its `libwhisper.so.1` had the same name as the engine's). Because of that **1.10 needs Quillbinder 0.99.0** (`minApp`
+  0.99.0): the update file offers it only to a program of 0.99.0 or later, and to an older program only together with the
+  update of the program itself (a 0.95.0 installation without that update keeps 1.9). The device list shows **Automatic**, the
+  processor and **the graphics cards of the engine** (NVIDIA, AMD, Intel through Vulkan). The fields for threads and for the
+  time to free the model are gone: the page points to **File > Options > General > AI Models**. The accuracy choice
+  "Careful" stays: the C interface of the AI engine is now **version 2** (`tools/QbAi.h`; version 1 is its prefix, the program
+  accepts engine packages of both): `qbai_transcribe_params` gets beam search (`beam_size`), the no-speech limit
+  (`no_speech_max`), `suppress_nst`, `no_timestamps` and `no_context`, and the table gets `detect_language` (the probabilities of
+  languages for a piece), so the silence guard and the choice between the two spoken languages work as in 1.9. A model of the program's list ("whisper-<id>", installed
+  with the AI panel at the top of the options page) is used when no model of the add-on's own download is installed. New: the
+  button **Insert at Cursor** in the Transcriptions tab (the marked part or all of the text, at the cursor of the text being
+  edited, one undo step) and the option **Write into the text as I speak** (off at first; the transcription is still kept in
+  the tab). For Android (written here, compiled by the Android probe): Record only is the default, the microphone permission
+  is asked before recording (Qt's `QMicrophonePermission`; Linux and Windows answer "granted"), and `keepRunning("recording")`
+  surrounds a recording. Suite `v0990m`. The Windows add-on still carries its own whisper.cpp (the Windows packages are made
+  by the Windows part).
 - **Translation Helper 1.6** (item 126; add-on `addons/translation-proofreading`). With tool interface 1.3 (the program 0.99.0)
   the add-on registers its models with the program's model list: it asks before every load (a refusal comes back with its
   reason), reports loaded, used and unloaded models with their sizes ("ram"), and unloads them when the program asks

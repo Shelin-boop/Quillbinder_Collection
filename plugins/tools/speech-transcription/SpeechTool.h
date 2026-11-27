@@ -53,6 +53,9 @@ public slots:
     bool rename(const QString &title);
     bool remove(bool ask = true);
     void copyAll();
+    // 1.10 (UR-11): the marked part of the text (all of it when nothing is marked) at the cursor of the text being edited:
+    // one undo step. false: nothing to insert, or no text is open for editing (the status line says so)
+    bool insertAtCursor();
     QString status() const;
 
     // from the tool while it records
@@ -79,23 +82,23 @@ private:
     int m_pending = 0;          // recordings without text (0.64)
     QListWidget *m_list;
     QPlainTextEdit *m_edit;
-    QToolButton *m_record, *m_rename, *m_delete, *m_copy, *m_folderButton, *m_transcribeAll;
+    QToolButton *m_record, *m_rename, *m_delete, *m_copy, *m_folderButton, *m_transcribeAll, *m_insert;
     QLabel *m_status;
     QProgressBar *m_level;
     QTimer *m_saveTimer;
     QFileSystemWatcher *m_watch;
 };
 
-class SpeechTool : public QObject, public qb::tools::ToolInterface, public qb::tools::ToolExtension
+class SpeechTool : public QObject, public qb::tools::ToolInterface, public qb::tools::ToolExtension, public qb::tools::ToolModels
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QB_TOOL_IID)
-    Q_INTERFACES(qb::tools::ToolInterface qb::tools::ToolExtension)
+    Q_INTERFACES(qb::tools::ToolInterface qb::tools::ToolExtension qb::tools::ToolModels)
 public:
     static constexpr const char *kId = "speech-transcription";
     QString id() const override { return QString::fromLatin1(kId); }
     QString name() const override { return tr("Speech Transcription"); }
-    QString version() const override { return QStringLiteral("1.1"); } // 1.1 (0.64): Record only
+    QString version() const override { return QStringLiteral("1.10"); } // 1.1 (0.64): Record only; 1.10 (0.99.0): the program's AI engine
     QList<qb::tools::Command> commands() const override;
     void setHost(qb::tools::ToolHost *host) override;
     void run(const QString &key) override;
@@ -113,12 +116,15 @@ public:
 
     // ---- for the panel and the options
     qb::tools::ToolHost *host() const { return m_host; }
-    static QString unloadMessage();   // 0.94.0: "Model unloaded, RAM usage minimal"
+    // ToolModels (1.3, 0.99.0): the program's rule asks to unload the model (the add-on has no timer of its own any more)
+    bool unloadModel(const QString &id) override;
     QVariant setting(const QString &key, const QVariant &def = QVariant()) const;
     void setSetting(const QString &key, const QVariant &value);
     QString folder() const;                 // the transcriptions
     QString modelsDir() const;              // ~/.local/share/<App>/tools/speech-transcription/models
-    QString installedModelFile() const;     // empty: none
+    QString installedModelFile() const;     // empty: none (the add-on's own download, else the program's catalog: 1.10)
+    QString ownModelFile() const;           // the add-on's own download or file of the writer
+    QString catalogModelFile() const;       // the model "whisper-<id>" of the program's catalog, when installed there
     QString installedModelId() const;       // catalog id, or "file"
     QString speechDir() const;              // the add-on's speech/ folder (engine, libraries, sample)
     QString samplePath() const;             // the test recording (samples/jfk.wav)
@@ -158,6 +164,7 @@ signals:
     void modelProgress(qint64 done, qint64 total);
     void modelJobFinished(bool ok, const QString &message);
     void recordingChanged(bool on);
+    void aiChanged();   // 1.10: the AI panel says that the engine or a model was installed or removed
 
 private:
     enum class Job { None, Download, Check };
