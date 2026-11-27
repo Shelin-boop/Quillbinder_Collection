@@ -1,6 +1,6 @@
 # {{APP}} – krótki przewodnik
 
-{{APP}} to program do pisania długich tekstów. Jeśli pracowałeś w innych programach opartych na segregatorze, większość rzeczy wyda ci się znajoma: segregator po lewej, edytor pośrodku, inspektor po prawej, a na końcu kompilacja. Ten przewodnik pokazuje, gdzie są najważniejsze ustawienia, i podsumowuje, co potrafi {{APP}}. Pełny podręcznik znajdziesz w **Pomoc > Podręcznik użytkownika** (**F1**; ma spis treści i wyszukiwarkę); krótki przegląd funkcji, których możesz jeszcze nie znać, jest w **Pomoc > Projekt powitalny**.
+{{APP}} to program do pisania długich tekstów. Jeśli pracowałeś(-aś) w innych programach opartych na segregatorze, większość rzeczy wyda ci się znajoma: segregator po lewej, edytor pośrodku, inspektor po prawej, a na końcu kompilacja. Ten przewodnik pokazuje, gdzie są najważniejsze ustawienia, i podsumowuje, co potrafi {{APP}}. Pełny podręcznik znajdziesz w **Pomoc > Podręcznik użytkownika** (**F1**; ma spis treści i wyszukiwarkę); krótki przegląd funkcji, których możesz jeszcze nie znać, jest w **Pomoc > Projekt powitalny**.
 
 ---
 
@@ -28,12 +28,12 @@
 | Paski narzędzi | **Widok > Paski narzędzi > Dostosuj paski narzędzi…** (lub kliknięcie prawym przyciskiem myszy na pasku) |
 | Pasek ikon | **Widok > Paski narzędzi > Pasek ikon**; **Wybierz ikony dla paska ikon…** |
 | Skróty klawiaturowe | **Plik > Opcje > Klawiatura** (wyszukiwanie, naciskanie nowych klawiszy, eksport i import); **Pomoc > Skróty klawiaturowe…** wyświetla ich listę |
-| Szukanie polecenia w menu | **Pomoc > Znajdź polecenie…** (wpisz część nazwy; Return uruchamia polecenie) |
+| Szukanie polecenia w menu | **Pomoc > Znajdź polecenie…** (wpisz część nazwy; Enter uruchamia polecenie) |
 | Układy okna | **Widok > Układ** (siedem wbudowanych; możesz zapisać własne) |
 | Autozapis, ostatnie projekty, dane autora | **Plik > Opcje > Ogólne** |
 | Kopie zapasowe | **Plik > Opcje > Kopia zapasowa** (kiedy, ile, gdzie); **Plik > Kopia zapasowa** tworzy kopię od razu |
 | Pisownia i poprawki w trakcie pisania | **Plik > Opcje > Poprawki** |
-| Gdzie otwierają się odnośniki, klawisz Return, tryb pisania, odtwarzanie | **Plik > Opcje > Zachowanie** |
+| Gdzie otwierają się odnośniki, klawisz Enter, tryb pisania, odtwarzanie | **Plik > Opcje > Zachowanie** |
 | Ustawienia importu i eksportu | **Plik > Opcje > Udostępnianie** |
 | Mapy myśli, obiekty, dodatki, raporty o awariach | **Plik > Opcje > Dodatkowe** |
 | Etykiety, status, typy sekcji, własne metadane, foldery specjalne | **Projekt > Ustawienia projektu** |
@@ -72,7 +72,7 @@
 - **Tabele i obrazy**: **Wstaw > Tabela…** z gotowymi wzorami lub własnymi, **Format > Tabela** dla wierszy, kolumn, scalonych komórek i kolorów; obrazy obok tekstu z opływającym je tekstem, podpisy oraz opisy, które e-booki i pliki Worda zachowują jako tekst alternatywny (kliknij obraz prawym przyciskiem myszy, **Obraz…**).
 - **Pasek ikon**: do dziesięciu ikon dokumentów, każda jednym kliknięciem. **Dokumenty > Zmień ikonę** tworzy też ikony z tekstu lub z twoich własnych obrazów.
 - **Powiększenie osobno dla każdej części**: segregator, edytory, części inspektora, tablica korkowa, konspekt i mapy myśli mają każde własne powiększenie.
-- **Zapamiętane miejsca**: każdy dokument otwiera się tam, gdzie zostawiłeś kursor, także po ponownym otwarciu projektu.
+- **Zapamiętane miejsca**: każdy dokument otwiera się tam, gdzie zostawiłeś(-aś) kursor, także po ponownym otwarciu projektu.
 - **Czcionki**: **Format > Czcionka > Zainstaluj pliki czcionek…** dodaje czcionki bez opuszczania programu.
 - **Bezpieczeństwo**: autozapis także w trakcie pisania, kopie zapasowe, zapasowa kopia pliku projektu, raporty o awariach i zawieszeniach (**Pomoc > Rozwiązywanie problemów i programowanie > Raporty o awariach…**) oraz **Pomoc > Rozwiązywanie problemów i programowanie > Informacje o systemie**.
 
