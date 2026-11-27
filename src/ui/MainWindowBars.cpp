@@ -328,16 +328,12 @@ void MainWindow::createMenus()
     rebuildLayoutActions(); // (the commands are in the menu before the list of commands is made; made again after the toolbars)
     add(view, {"", "showBinder", "showCollections", "showInspector", "binderScrivenerKeys", ""});
     QMenu *bars = view->addMenu(tr("Tool&bars"));
-    // 0.91.0: the rows' switches, a switch per toolbar, the standard places
-    add(bars, {"showToolbar", "showFormatBar", "showIconBar", "", "showBarMain", "showBarThemes", "showBarProfiles", "showBarSearch",
-               "showBarTools", "showBarStyle", "showBarCharacter", "showBarParagraph", "showBarLabels", ""});
-    bars->addAction(m_toolbarSizeMenu->menuAction()); // 0.99.0: Small, Normal, Large for every bar
-    add(bars, {"resetToolbarPlaces", "", "customizeToolbars", "customizeIconBar"});
     // 0.99.0 (P13): grouped by the row they belong to; Show Toolbar with its bars, Show Format Bar with its bars, then the
-    // icon bar and the labels bar. The Toolbar Size submenu of another change goes after the switches, before Reset.
+    // icon bar and the labels bar; the Toolbar Size submenu (item 116) after the switches, before Reset Toolbar Places
     add(bars, {"showToolbar", "showBarMain", "showBarThemes", "showBarProfiles", "showBarSearch", "showBarTools", "",
-               "showFormatBar", "showBarStyle", "showBarCharacter", "showBarParagraph", "", "showIconBar", "showBarLabels", "",
-               "resetToolbarPlaces", "", "customizeToolbars", "customizeIconBar"});
+               "showFormatBar", "showBarStyle", "showBarCharacter", "showBarParagraph", "", "showIconBar", "showBarLabels", ""});
+    bars->addAction(m_toolbarSizeMenu->menuAction()); // 0.99.0: Small, Normal, Large for every bar
+    add(bars, {"", "resetToolbarPlaces", "", "customizeToolbars", "customizeIconBar"});
     QMenu *themes = view->addMenu(tr("&Themes")); // 0.94.0: before, under Window;
     themes->setObjectName(QStringLiteral("themeMenu"));
     // filled when opened: add-ons and the theme list can add and remove themes at any time
