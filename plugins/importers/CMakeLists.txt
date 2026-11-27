@@ -4,6 +4,8 @@ function(qb_importer_plugin target)
   add_library(${target} MODULE ${ARGN})
   target_include_directories(${target} PRIVATE ${CMAKE_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR})
   target_link_libraries(${target} PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets)
+  # 0.99.0: core/SafeSave.h without the program's vault (a plugin links no part of the program)
+  target_compile_definitions(${target} PRIVATE QB_SAFESAVE_HEADER_ONLY=1)
   set_target_properties(${target} PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tool-plugins)
 endfunction()
 

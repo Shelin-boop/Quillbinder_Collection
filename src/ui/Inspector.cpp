@@ -1,4 +1,5 @@
 #include "ui/Inspector.h"
+#include "core/SafeSave.h"
 #include "core/TestSwitches.h"
 #include "ui/HintLabel.h"
 #include "ui/Ask.h"
@@ -439,7 +440,7 @@ void Inspector::setSynopsisImage(const QString &file)
         const QString suffix = QFileInfo(file).suffix().toLower();
         const QString name = QStringLiteral("card.") + (suffix.isEmpty() ? QStringLiteral("png") : suffix);
         QFile::remove(dir + QLatin1Char('/') + name);
-        if (!QFile::copy(file, dir + QLatin1Char('/') + name))
+        if (!safesave::copyFile(file, dir + QLatin1Char('/') + name)) // (0.99.0: encrypted in an encrypted project)
             return;
         m_item->synopsisImage = name;
     }
@@ -465,7 +466,7 @@ void Inspector::refreshNotesTab()
     m_synopsis->setVisible(!showImage);
     m_synopsisImage->setVisible(showImage);
     if (showImage && !m_item->synopsisImage.isEmpty()) {
-        QPixmap pm(m_project->contentDir(m_item->id) + QLatin1Char('/') + m_item->synopsisImage);
+        const QPixmap pm = QPixmap::fromImage(vault::readImage(m_project->contentDir(m_item->id) + QLatin1Char('/') + m_item->synopsisImage));
         m_synopsisImage->setPixmap(pm.scaled(m_synopsisImage->size().expandedTo(QSize(200, 120)), Qt::KeepAspectRatio,
                                              Qt::SmoothTransformation));
         m_synopsisImage->setToolTip(tr("Drop another image here to replace it; right-click for more."));

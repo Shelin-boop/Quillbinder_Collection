@@ -56,6 +56,13 @@ QString groupedFingerprint(const QString &fingerprint);
 // whether the data starts like an OpenPGP message (armored "-----BEGIN PGP MESSAGE-----", or a binary packet that
 // opens an encrypted message: a public-key or symmetric-key session key)
 bool looksEncrypted(const QByteArray &head);
+// 0.99.0 (part 2): whether a file is one whole OpenPGP message as Quillbinder writes them, judged by its packet headers
+// alone (no key needed): session-key packets, then one encrypted data packet that ends exactly at the end of the file.
+// A copy cut off in the middle is not. (Whether its text is intact only the decryption tells.)
+bool isWholeMessage(const QString &path);
+// the key ids (16 hex digits, upper case: the last 16 of the encryption subkey's fingerprint) a message is encrypted to,
+// read from its session-key packets (no key needed); empty for anything else
+QStringList messageKeyIds(const QString &path);
 
 struct KeyInfo {
     QString fingerprint;           // of the primary key, 40 upper-case hex digits
@@ -127,6 +134,9 @@ public:
                        QStringList *recipients = nullptr) const;
     // the same from file to file (no limit but the disk); the target is written only when all went well
     Error decryptFile(const QString &source, const QString &target) const;
+    // 0.99.0 (part 2): decrypts a file without writing its text anywhere and gives the SHA-256 of the text (the check of
+    // an encrypted backup against the backup it was made of); empty on failure
+    QByteArray decryptFileSha256(const QString &source, Error *error = nullptr) const;
 
     // the library's own words about the last failure of this ring (for logs, not for the writer)
     QString errorDetail() const;

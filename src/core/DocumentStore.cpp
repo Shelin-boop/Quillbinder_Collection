@@ -1,6 +1,7 @@
 #include "core/PathSafety.h"
 #include "core/SafeSave.h"
 #include "core/SaveBatch.h"
+#include "core/crypto/Vault.h"
 #include "core/DocumentStore.h"
 #include "core/TestSwitches.h"
 
@@ -114,14 +115,23 @@ void DocumentStore::preloadImages(QTextDocument *doc, const QString &dir)
                 continue;
             const QString name = cf.toImageFormat().name();
             const QUrl url(name);
-            if (doc->resource(QTextDocument::ImageResource, url).isValid())
-                continue;
             QString path = name;
             if (QFileInfo(path).isRelative())
                 path = QDir(dir).filePath(name);
-            QImage img(path);
-            if (!img.isNull())
+            // (0.99.0: in an encrypted project Qt's own loader reads the file's encrypted bytes as a valid resource: only a
+            // picture already decoded counts there; the file is decrypted here)
+            const QVariant have = doc->resource(QTextDocument::ImageResource, url);
+            if (have.isValid()
+                && (!vault::placeOf(path).reads() || (have.canConvert<QImage>() && !have.value<QImage>().isNull())))
+                continue;
+            const QImage img = vault::readImage(path);
+            if (!img.isNull()) {
                 doc->addResource(QTextDocument::ImageResource, url, img);
+                // (0.99.0: also under the name resolved against the document's folder, which Qt looks up first: else the
+                // encrypted bytes Qt read itself would be shown)
+                if (doc->baseUrl().isValid())
+                    doc->addResource(QTextDocument::ImageResource, doc->baseUrl().resolved(url), img);
+            }
         }
     }
 }
@@ -216,12 +226,18 @@ void DocumentStore::readFile(const QString &id, bool notes, QTextDocument *doc, 
             // 0.65.0 (audit F23): a read cut short (an I/O error, a file of a sync folder that is not all there)
             // is not the text: shown empty and never saved over, as a file that cannot be opened
             const bool regular = QFileInfo(path).isFile();
+            QString sealWhy;
             if (f.error() != QFileDevice::NoError || (regular && data.size() != f.size())) {
                 unreadableNow = true;
                 failure = f.error() != QFileDevice::NoError
                               ? f.errorString()
                               : tr("only %1 of %2 bytes could be read").arg(data.size()).arg(f.size());
                 f.close();
+            } else if (!vault::unseal(path, data, &sealWhy)) {
+                // 0.99.0: a file of an encrypted project that cannot be decrypted (damaged, or the key locked): shown
+                // empty, read-only and never written over, as a file that cannot be read
+                unreadableNow = true;
+                failure = sealWhy;
             } else {
                 have = true;
             }
@@ -562,6 +578,21 @@ void DocumentStore::deserialize(const QString &id, const QByteArray &data, QText
     }
 }
 
+// 0.99.0: what a document's file holds now, as text (an encrypted file decrypted)
+DocumentStore::DiskText DocumentStore::diskText(const QString &path, QByteArray *bytes)
+{
+    QFile cur(path);
+    if (!cur.open(QIODevice::ReadOnly))
+        return DiskText::Unreadable;
+    QByteArray d = cur.readAll();
+    if (cur.error() != QFileDevice::NoError)
+        return DiskText::Unreadable;
+    if (!vault::unseal(path, d))
+        return DiskText::Undecryptable;
+    *bytes = d;
+    return DiskText::Read;
+}
+
 bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
 {
     const bool notes = e.isNotes;
@@ -629,9 +660,11 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
                           + (m_project->storage == StorageFormat::Rtf ? QStringLiteral("md") : QStringLiteral("rtf"));
     // 0.64: the file holds exactly this already (a document marked as changed by showing it, or
     // the same text written elsewhere): not written again, so a sync program has nothing to carry
+    // (0.99.0: the texts are compared; a file of an encrypted project is decrypted for it)
+    QByteArray onDisk;
+    const DiskText disk = diskText(path, &onDisk);
     if (!QFile::exists(other)) {
-        QFile cur(path);
-        if (cur.open(QIODevice::ReadOnly) && cur.size() == data.size() && cur.readAll() == data) {
+        if (disk == DiskText::Read && onDisk == data) {
             // 0.93.0: when a save runs, the text counts as saved only after the commit's checked sync (a folder whose
             // sync failed before is synced again there); the stamp is renewed at once, it records what is on disk
             if (savebatch::Batch *b = savebatch::current()) {
@@ -654,8 +687,7 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
     // is kept, told or written for it; only the remembered stamp is renewed. (Without bytes to compare with, a text
     // that was not read from a file here, the stamp decides as before.)
     if (elsewhere && !e.read.isNull()) {
-        QFile cur(path);
-        if (cur.open(QIODevice::ReadOnly) && cur.size() == e.read.size() && cur.readAll() == e.read) {
+        if (disk == DiskText::Read && onDisk == e.read) {
             elsewhere = false;
             e.stamp = syncsafe::stampOf(path);
         }
@@ -663,8 +695,8 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
     // 0.65.0 (audit F14): the same size and time as read or written here, but other bytes (a sync program that sets
     // times of its own, a file system with times in 2 s steps): changed elsewhere too
     if (!elsewhere && e.stamp.known && !e.read.isNull() && QFileInfo::exists(path)) {
-        QFile cur(path);
-        if (cur.open(QIODevice::ReadOnly) && cur.readAll() != e.read)
+        // (0.99.0: a file that cannot be decrypted is another version too: kept before it is replaced)
+        if ((disk == DiskText::Read && onDisk != e.read) || disk == DiskText::Undecryptable)
             elsewhere = true;
     }
     if (elsewhere) {
@@ -866,10 +898,10 @@ bool DocumentStore::keepOtherVersion(const QString &id, bool notes, const QStrin
     bool snap = false;
     if (!notes && it && it->hasText()) {
         // the other version also as a snapshot of the document: it can be compared and taken back
-        QFile f(path);
-        if (f.open(QIODevice::ReadOnly)) {
+        QByteArray otherBytes;
+        if (vault::readFile(path, &otherBytes)) { // (0.99.0: decrypted in an encrypted project)
             QTextDocument other;
-            deserialize(id, f.readAll(), &other, path.endsWith(QLatin1String(".rtf")));
+            deserialize(id, otherBytes, &other, path.endsWith(QLatin1String(".rtf")));
             const QString when = QFileInfo(path).lastModified().toString(QStringLiteral("yyyy-MM-dd HH:mm"));
             snap = snapshots::take(m_project, id, tr("Other version (changed elsewhere, %1)").arg(when), nullptr, &other);
         }

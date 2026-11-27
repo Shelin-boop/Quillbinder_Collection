@@ -14,6 +14,7 @@
 // Keys that belong to the computer or must be known before a project opens (window places,
 // the recent list, reopening the last project, the crash watchdog, this switch itself) never
 // become the project's: programOnly().
+#include <QSettings>
 #include <QString>
 #include <QStringList>
 #include <QVariantMap>
@@ -24,6 +25,8 @@ namespace settingslayer {
 
 // The project's file of own values ("<project>/settings/options.ini").
 QString fileFor(const QString &projectSettingsDir);
+// 0.99.0: the QSettings format of such a file: INI, or (in an encrypted project) INI encrypted through the vault
+QSettings::Format formatFor(const QString &file);
 
 bool programOnly(const QString &key);
 // 0.95.0: a mark of something done once (the first start, an update's one-time change, a migration): a user profile

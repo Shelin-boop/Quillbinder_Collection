@@ -1,4 +1,5 @@
 #include "ui/Printing.h"
+#include "core/crypto/Vault.h"
 
 #include "compile/CompileFormat.h"
 #include "compile/Compiler.h"
@@ -176,7 +177,7 @@ void drawFitted(QPainter &p, const QRectF &box, const QImage &img)
 
 QImage readImage(const QString &path)
 {
-    QImageReader r(path);
+    QImageReader r(vault::plainPath(path)); // (0.99.0: a decrypted copy in an encrypted project)
     r.setAutoTransform(true);
     return r.read();
 }
@@ -706,7 +707,7 @@ bool renderPdf(const Job &job, const PrintSettings &, QPrinter *printer, const R
 {
     BinderItem *it = job.items.value(0);
     QPdfDocument pdf;
-    if (!it || pdf.load(job.project->mediaFilePath(it)) != QPdfDocument::Error::None || pdf.pageCount() < 1) {
+    if (!it || pdf.load(vault::plainPath(job.project->mediaFilePath(it))) != QPdfDocument::Error::None || pdf.pageCount() < 1) {
         if (error)
             *error = QObject::tr("The PDF file could not be read.");
         return false;
@@ -756,7 +757,7 @@ bool renderPdf(const Job &job, const PrintSettings &, QPrinter *printer, const R
 bool renderWebPage(const Job &job, const PrintSettings &s, QPrinter *printer, const Range &range, QString *error, int *pagesOut)
 {
     BinderItem *it = job.items.value(0);
-    const QString path = it ? job.project->mediaFilePath(it) : QString();
+    const QString path = it ? vault::plainPath(job.project->mediaFilePath(it)) : QString();
     QFile file(path);
     if (!file.open(QIODevice::ReadOnly)) {
         if (error)

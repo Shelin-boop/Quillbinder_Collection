@@ -6,6 +6,7 @@
 #include "core/SafeSave.h"
 
 #include <QCoreApplication>
+#include <QCryptographicHash>
 #include <QDir>
 #include <QFile>
 #include <QFileDevice>
@@ -101,6 +102,142 @@ bool looksEncrypted(const QByteArray &head)
         return false;
     const int tag = (b & 0x40) ? (b & 0x3f) : ((b >> 2) & 0x0f);
     return tag == 1 || tag == 3; // a public-key or a symmetric-key encrypted session key
+}
+
+QStringList messageKeyIds(const QString &path)
+{
+    QStringList out;
+    QFile f(path);
+    if (!f.open(QIODevice::ReadOnly))
+        return out;
+    const QByteArray d = f.read(16 * 1024);
+    const auto at = [&d](qsizetype i) { return static_cast<unsigned char>(d.at(i)); };
+    qsizetype pos = 0;
+    while (pos + 2 < d.size()) {
+        const unsigned char b = at(pos);
+        if (!(b & 0x80))
+            break;
+        int tag;
+        qsizetype len, body;
+        if (b & 0x40) {
+            tag = b & 0x3f;
+            const unsigned char o1 = at(pos + 1);
+            if (o1 < 192) {
+                len = o1;
+                body = pos + 2;
+            } else if (o1 < 224 && pos + 2 < d.size()) {
+                len = (qsizetype(o1 - 192) << 8) + at(pos + 2) + 192;
+                body = pos + 3;
+            } else if (o1 == 255 && pos + 5 < d.size()) {
+                len = (qsizetype(at(pos + 2)) << 24) | (qsizetype(at(pos + 3)) << 16) | (qsizetype(at(pos + 4)) << 8) | at(pos + 5);
+                body = pos + 6;
+            } else {
+                break;
+            }
+        } else {
+            tag = (b >> 2) & 0x0f;
+            const int type = b & 3;
+            if (type == 3)
+                break;
+            const int n = type == 0 ? 1 : type == 1 ? 2 : 4;
+            if (pos + n >= d.size())
+                break;
+            len = 0;
+            for (int i = 1; i <= n; ++i)
+                len = (len << 8) | at(pos + i);
+            body = pos + 1 + n;
+        }
+        if (tag != 1)
+            break;
+        if (body + 9 <= d.size() && at(body) == 3)
+            out << QString::fromLatin1(d.mid(body + 1, 8).toHex().toUpper());
+        pos = body + len;
+    }
+    return out;
+}
+
+bool isWholeMessage(const QString &path)
+{
+    QFile f(path);
+    if (!f.open(QIODevice::ReadOnly))
+        return false;
+    const qint64 size = f.size();
+    qint64 pos = 0;
+    int sessionKeys = 0;
+    bool data = false;
+    auto byte = [&f, &pos](int *b) {
+        char c;
+        if (!f.seek(pos) || f.read(&c, 1) != 1)
+            return false;
+        ++pos;
+        *b = static_cast<unsigned char>(c);
+        return true;
+    };
+    while (pos < size) {
+        if (data)
+            return false; // nothing may follow the encrypted data
+        int b = 0;
+        if (!byte(&b) || !(b & 0x80))
+            return false;
+        int tag;
+        if (b & 0x40) {
+            tag = b & 0x3f;
+            // new format: one length, or partial lengths (a power of two each) until a last whole one
+            for (;;) {
+                int o1 = 0;
+                if (!byte(&o1))
+                    return false;
+                qint64 len;
+                bool partial = false;
+                if (o1 < 192) {
+                    len = o1;
+                } else if (o1 < 224) {
+                    int o2 = 0;
+                    if (!byte(&o2))
+                        return false;
+                    len = (qint64(o1 - 192) << 8) + o2 + 192;
+                } else if (o1 == 255) {
+                    len = 0;
+                    for (int i = 0; i < 4; ++i) {
+                        int o = 0;
+                        if (!byte(&o))
+                            return false;
+                        len = (len << 8) | o;
+                    }
+                } else {
+                    len = qint64(1) << (o1 & 0x1f);
+                    partial = true;
+                }
+                if (len > size - pos)
+                    return false; // cut off
+                pos += len;
+                if (!partial)
+                    break;
+            }
+        } else {
+            tag = (b >> 2) & 0x0f;
+            const int type = b & 3;
+            if (type == 3)
+                return false; // a length "to the end": cannot be told whole
+            qint64 len = 0;
+            for (int i = 0; i < (type == 0 ? 1 : type == 1 ? 2 : 4); ++i) {
+                int o = 0;
+                if (!byte(&o))
+                    return false;
+                len = (len << 8) | o;
+            }
+            if (len > size - pos)
+                return false;
+            pos += len;
+        }
+        if (tag == 1 || tag == 3)
+            ++sessionKeys;
+        else if (tag == 18 || tag == 20)
+            data = true;
+        else
+            return false;
+    }
+    return sessionKeys > 0 && data && pos == size;
 }
 
 namespace {
@@ -393,6 +530,7 @@ QByteArray exportKey(rnp_key_handle_t h, uint32_t flags)
 struct Sink {
     QByteArray *buffer = nullptr;
     QSaveFile *file = nullptr;
+    QCryptographicHash *hash = nullptr; // (0.99.0: the text is only hashed)
     qint64 limit = -1;
     qint64 written = 0;
     bool tooLarge = false;
@@ -408,6 +546,8 @@ bool sinkWrite(void *ctx, const void *buf, size_t len)
     }
     if (s->buffer) {
         s->buffer->append(static_cast<const char *>(buf), qsizetype(len));
+    } else if (s->hash) {
+        s->hash->addData(QByteArrayView(static_cast<const char *>(buf), qsizetype(len)));
     } else if (s->file) {
         if (s->file->write(static_cast<const char *>(buf), qint64(len)) != qint64(len)) {
             s->failed = true;
@@ -1215,6 +1355,39 @@ Error KeyRing::decryptFile(const QString &source, const QString &target) const
     return safesave::commit(to) ? Error::None : Error::Io;
 }
 
+QByteArray KeyRing::decryptFileSha256(const QString &source, Error *error) const
+{
+    auto fail = [error](Error e) {
+        if (error)
+            *error = e;
+        return QByteArray();
+    };
+    if (!d->ffi)
+        return fail(Error::Unavailable);
+    QFile from(source);
+    if (!from.open(QIODevice::ReadOnly))
+        return fail(Error::Io);
+    Source src;
+    src.file = &from;
+    QCryptographicHash h(QCryptographicHash::Sha256);
+    Sink sink;
+    sink.hash = &h;
+    rnp_input_t in = nullptr;
+    rnp_output_t out = nullptr;
+    rnp_input_from_callback(&in, sourceRead, sourceClose, &src);
+    rnp_output_to_callback(&out, sinkWrite, sinkClose, &sink);
+    Error e = d->runDecrypt(in, out, sink, nullptr);
+    rnp_output_destroy(out);
+    rnp_input_destroy(in);
+    if (e == Error::None && src.failed)
+        e = Error::Io;
+    if (e != Error::None)
+        return fail(e);
+    if (error)
+        *error = Error::None;
+    return h.result();
+}
+
 #else // no RNP in this build
 
 struct KeyRing::Private {};
@@ -1285,6 +1458,12 @@ QByteArray KeyRing::decrypt(const QByteArray &, Error *error, qint64, QStringLis
     return QByteArray();
 }
 Error KeyRing::decryptFile(const QString &, const QString &) const { return Error::Unavailable; }
+QByteArray KeyRing::decryptFileSha256(const QString &, Error *error) const
+{
+    if (error)
+        *error = Error::Unavailable;
+    return QByteArray();
+}
 
 #endif // QB_HAVE_RNP
 

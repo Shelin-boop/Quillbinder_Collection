@@ -1,4 +1,5 @@
 #include "ui/ObjectsUi.h"
+#include "core/crypto/Vault.h"
 
 #include <algorithm>
 #include "ui/MenuGuard.h"
@@ -9,6 +10,7 @@
 #include "core/Project.h"
 #include "core/ItemIcons.h"
 
+#include <QPixmap>
 #include <QAbstractTextDocumentLayout>
 #include <memory>
 #include <QApplication>
@@ -1142,7 +1144,7 @@ void ObjectForm::reloadValues()
         case FieldType::Picture:
             if (auto *e = static_cast<QLabel *>(w)) {
                 const QString name = m_obj.text(f.id);
-                QPixmap pm(st->picturePath(name));
+                QPixmap pm = QPixmap::fromImage(vault::readImage(st->picturePath(name))); // (0.99.0: decrypted)
                 if (pm.isNull()) {
                     e->setPixmap(QPixmap());
                     e->setText(tr("(no picture: click or drop one here)"));

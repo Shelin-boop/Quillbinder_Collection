@@ -553,3 +553,8 @@ set_target_properties(qb_v0990e_tests PROPERTIES ENABLE_EXPORTS ON)
 add_executable(qb_v0990k_tests v0990k_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0990k_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0990k_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.99.0 (item 113, part 2): the encrypted project and the encrypted backups: the vault, the walk over an encrypted
+# project, conversions (also cut off), keys locked or missing, damaged files, backups of both formats, GnuPG, the
+# window's unlock dialog, the speed of the encrypted autosave (xvfb-run -a ./qb_v0990f_tests /tmp/shots)
+add_executable(qb_v0990f_tests v0990f_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990f_tests PRIVATE qbui Qt6::Test)

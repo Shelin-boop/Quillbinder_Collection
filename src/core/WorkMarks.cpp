@@ -1,5 +1,6 @@
 #include "core/WorkMarks.h"
 #include "core/SafeSave.h"
+#include "core/crypto/Vault.h"
 #include "core/SyncSafety.h"
 
 #include <QDir>
@@ -51,10 +52,10 @@ QList<Entry> others(const QString &lockFile, qint64 staleAfterSecs)
     for (const QFileInfo &fi : dir.entryInfoList({prefixOf(lockFile) + QLatin1String("*.json")}, QDir::Files)) {
         if (fi.size() > 2 * 1024 * 1024)
             continue;   // no list of documents is that long
-        QFile f(fi.absoluteFilePath());
-        if (!f.open(QIODevice::ReadOnly))
+        QByteArray bytes; // (0.99.0: decrypted in an encrypted project)
+        if (!vault::readFile(fi.absoluteFilePath(), &bytes))
             continue;
-        const QJsonObject o = QJsonDocument::fromJson(f.readAll()).object();
+        const QJsonObject o = QJsonDocument::fromJson(bytes).object();
         Entry e;
         e.key = o.value(QStringLiteral("key")).toString();
         if (e.key.isEmpty() || e.key == syncsafe::machineKey())

@@ -5,6 +5,23 @@ Manual in the program) describes every function.
 
 ## 0.99.0 (not released yet)
 
+- **Encryption: the encrypted project and the encrypted backups** (item 113, part 2). Two switches per project (File > Options >
+  Encryption). **Encrypted backups**: each backup is `<name>.zip.gpg`, encrypted to the writer's key and the recovery key; the
+  device needs only the public keys to make one, so a stolen device or a leaked sync folder does not open it; also for projects
+  in Scrivener format. Restore From Backup asks for the passphrase when the key is locked and then restores as before; the
+  backup list, the number of backups kept and Move Old Backups count them with the plain ones, which stay readable; every
+  encrypted backup is checked by decrypting it again when the key is unlocked (else by its structure). **Encrypted project**:
+  every file of the project folder is encrypted on its own (texts, notes, the project file, snapshots, conflict copies, the save
+  journal and its waiting files, settings, objects, mind maps, pictures and media), so sync programs, the lock and the conflict
+  copies work per file as before; only the lock and a small plain marker (`encryption.json`, the two keys' fingerprints) stay
+  plain. Quillbinder's own format only: the switch is greyed for a Scrivener project with the reason, and an encrypted project
+  is not saved in Scrivener format. Turning it on or off converts the whole project once with a progress window; a crash in the
+  middle leaves every file either old or new, the project opens, and the next opening finishes the conversion. An encrypted
+  project opens with the passphrase kept on the device (asked once and then remembered), or says that the key is not on this
+  device and offers Import Keys, without changing anything; a damaged encrypted file is reported for its document and the rest
+  opens. Pictures, PDF files and media are shown from decrypted copies in a private folder in memory, removed when the project
+  closes.
+
 - **Encryption: the key wizard, Import Keys, Export Keys and File > Options > Encryption** (item 113, part 3). **Create
   Keys** proposes six random words as the passphrase (an own one is allowed, a weak one refused), makes the writer's key and
   the recovery key and writes the folder "Quillbinder Keys yyyy-mm-dd" at a place the writer picks (a USB stick; the project,

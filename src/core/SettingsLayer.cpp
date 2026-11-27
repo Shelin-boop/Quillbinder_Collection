@@ -1,6 +1,7 @@
 // Settings per project (0.62); see SettingsLayer.h for what and why.
 #include "core/SettingsLayer.h"
 #include "core/Paths.h"
+#include "core/crypto/Vault.h"
 
 #include <QDir>
 #include <QFile>
@@ -9,9 +10,78 @@
 #include <QSet>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QUuid>
 
 namespace qb {
 namespace settingslayer {
+
+namespace {
+// 0.99.0 (item 113): the settings file of an encrypted project. QSettings reads and writes it itself, so it gets a format
+// of its own: the file's bytes are decrypted (encrypted) here and read (written) as an INI file of QSettings through a
+// plain file in the vault's private folder, which is removed at once.
+bool iniThroughFile(const QByteArray *in, QSettings::SettingsMap *map, const QSettings::SettingsMap *out, QByteArray *bytes)
+{
+    const QString dir = vault::privateFolder();
+    if (dir.isEmpty())
+        return false;
+    const QString file = dir + QStringLiteral("/settings-") + QUuid::createUuid().toString(QUuid::Id128) + QStringLiteral(".ini");
+    bool ok = true;
+    if (in) {
+        QFile f(file);
+        ok = f.open(QIODevice::WriteOnly) && f.write(*in) == in->size();
+        f.close();
+        if (ok) {
+            QSettings ini(file, QSettings::IniFormat);
+            for (const QString &k : ini.allKeys())
+                map->insert(k, ini.value(k));
+            ok = ini.status() == QSettings::NoError;
+        }
+    } else {
+        {
+            QSettings ini(file, QSettings::IniFormat);
+            for (auto it = out->cbegin(); it != out->cend(); ++it)
+                ini.setValue(it.key(), it.value());
+            ini.sync();
+            ok = ini.status() == QSettings::NoError;
+        }
+        QFile f(file);
+        if (ok && f.exists()) {
+            ok = f.open(QIODevice::ReadOnly);
+            *bytes = f.readAll();
+        }
+    }
+    QFile::remove(file);
+    return ok;
+}
+
+bool readSealed(QIODevice &device, QSettings::SettingsMap &map)
+{
+    QByteArray bytes = device.readAll();
+    auto *fd = qobject_cast<QFileDevice *>(&device);
+    if (fd && !vault::unseal(fd->fileName(), bytes))
+        return false;
+    return bytes.isEmpty() || iniThroughFile(&bytes, &map, nullptr, nullptr);
+}
+
+bool writeSealed(QIODevice &device, const QSettings::SettingsMap &map)
+{
+    QByteArray bytes;
+    if (!iniThroughFile(nullptr, nullptr, &map, &bytes))
+        return false;
+    auto *fd = qobject_cast<QFileDevice *>(&device);
+    if (fd && !vault::seal(fd->fileName(), bytes))
+        return false;
+    return device.write(bytes) == bytes.size();
+}
+} // namespace
+
+QSettings::Format formatFor(const QString &file)
+{
+    if (!vault::placeOf(file).reads())
+        return QSettings::IniFormat;
+    static const QSettings::Format sealed = QSettings::registerFormat(QStringLiteral("qbini"), readSealed, writeSealed);
+    return sealed;
+}
 
 namespace {
 
@@ -96,7 +166,7 @@ QVariantMap read(const QString &file)
 {
     if (file.isEmpty() || !QFile::exists(file))
         return {};
-    QSettings s(file, QSettings::IniFormat);
+    QSettings s(file, formatFor(file));
     return snapshot(s);
 }
 
@@ -297,7 +367,7 @@ void sync()
         return;
     const QVariantMap own = read(s.projectFile);
     QSettings p(programFile(), QSettings::IniFormat);
-    QSettings o(s.projectFile, QSettings::IniFormat);
+    QSettings o(s.projectFile, formatFor(s.projectFile));
     QSet<QString> all;
     for (auto it = cur.cbegin(); it != cur.cend(); ++it)
         all.insert(it.key());
@@ -366,7 +436,7 @@ int takeProjectValues()
     {
         QFile::remove(s.projectFile);
         QDir().mkpath(QFileInfo(s.projectFile).absolutePath());
-        QSettings o(s.projectFile, QSettings::IniFormat);
+        QSettings o(s.projectFile, formatFor(s.projectFile));
         QSettings p(programFile(), QSettings::IniFormat);
         for (auto it = cur.cbegin(); it != cur.cend(); ++it) {
             const QString &k = it.key();
@@ -409,7 +479,7 @@ void clearProjectValues(const QStringList &keys)
     if (keys.isEmpty()) {
         QFile::remove(s.projectFile);
     } else {
-        QSettings o(s.projectFile, QSettings::IniFormat);
+        QSettings o(s.projectFile, formatFor(s.projectFile));
         for (const QString &k : keys)
             o.remove(k);
         o.sync();

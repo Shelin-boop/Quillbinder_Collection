@@ -1,6 +1,7 @@
 // File > Save As and File > Export (copies): projects in Scrivener 3 format (.scriv) and in the
 // program's own format, and converting between them (import/ScrivenerFormat.h).
 #include "ui/MainWindow.h"
+#include "core/crypto/Vault.h"
 #include "ui/Ask.h"
 
 #include "core/Platform.h"
@@ -214,6 +215,13 @@ void MainWindow::saveProjectAs()
     m_project->setLeaving(true);
     if (!chooseSaveAs(this, tr("Save As"), m_project->title(), QFileInfo(m_project->displayFolder()).absolutePath(), wasScriv, &c))
         return;
+    // 0.99.0 (item 113): Scrivener cannot read encrypted files, and a plain copy is not made without the writer's word
+    if (c.scriv && m_project->isEncrypted()) {
+        QMessageBox box(QMessageBox::Information, tr("Save As"), encryptedScrivenerText(), QMessageBox::Ok, this);
+        box.setObjectName(QStringLiteral("encryptedNoScrivener"));
+        box.exec();
+        return;
+    }
     const QString target = c.scriv ? QDir(c.parent).filePath(c.name + QLatin1String(".scriv"))
                                    : QDir(c.parent).filePath(text::safeFileName(c.name) + QLatin1String(QB_PROJECT_SUFFIX));
     if (QFileInfo::exists(target)) {
@@ -225,6 +233,7 @@ void MainWindow::saveProjectAs()
     QString err;
     // what the open project holds unsaved goes into the new folder only (the original is not written)
     auto into = [old](const QString &folder, const QString &indexName, QString *e) {
+        vault::Scope encrypted(folder); // 0.99.0: the copy of an encrypted project stays encrypted (its marker came along)
         QString why;
         bool ok = old->writeUnsavedInto(folder, indexName, &why);
         if (!mindmaps::writeDirtyInto(old, folder, &why))
@@ -265,10 +274,23 @@ void MainWindow::saveProjectAs()
     showStatusNote(tr("Saved as %1. The original stays as it was: %2").arg(QDir::toNativeSeparators(where), QDir::toNativeSeparators(from)), 15000);
 }
 
+QString MainWindow::encryptedScrivenerText()
+{
+    return tr("This project is encrypted, and Scrivener cannot read encrypted files. To save it in Scrivener format, turn "
+              "off the encryption of the project first (File > Options > Encryption); a copy in Quillbinder's format stays "
+              "encrypted.");
+}
+
 void MainWindow::saveCopyAsScrivener()
 {
     if (!m_project)
         return;
+    if (m_project->isEncrypted()) { // 0.99.0 (item 113)
+        QMessageBox box(QMessageBox::Information, tr("Save a Copy"), encryptedScrivenerText(), QMessageBox::Ok, this);
+        box.setObjectName(QStringLiteral("encryptedNoScrivener"));
+        box.exec();
+        return;
+    }
     const QString dir = chooseScrivPath(this, tr("Save a Copy as Scrivener Project"), m_project->title());
     if (dir.isEmpty())
         return;

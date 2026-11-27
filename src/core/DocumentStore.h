@@ -260,6 +260,9 @@ private:
     QHash<QString, Shown> m_shown;
     QSet<QString> m_toldNotKept; // keys whose changed text could not be kept either (told once)
     QStringList m_skippedUnreadable;
+    // 0.99.0: what a document's file holds now (writeEntry's comparisons)
+    enum class DiskText { Read, Unreadable, Undecryptable };
+    static DiskText diskText(const QString &path, QByteArray *bytes);
     QHash<QString, QString> m_plainCache;
     qint64 m_plainChars = 0;
     qint64 m_plainBudget = kPlainCacheBudget;

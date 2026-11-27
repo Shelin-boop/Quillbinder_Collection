@@ -8,6 +8,7 @@
 #include <io.h>
 #endif
 #include "core/SaveBatch.h"
+#include "core/crypto/Vault.h"
 #include "core/PathSafety.h"
 #include "core/SafeSave.h"
 
@@ -351,6 +352,8 @@ bool ZipWriter::addDirectory(const QString &diskDir, const QString &prefix)
         const QString rel = base.relativeFilePath(path);
         if (savebatch::isStaged(path) || rel == QLatin1String("settings/journal.json"))
             continue; // a save in progress (0.65.0): not project data
+        if (path.endsWith(QLatin1String(".qbconvert")) || path.contains(QLatin1String(".qbconvert.")))
+            continue; // 0.99.0: a file of an encryption that was cut off (ProjectCrypto.h): not project data
         if (rel == QLatin1String("settings/lock") || rel.endsWith(QLatin1String("/quillbinder.lock"))
             || rel == QLatin1String("quillbinder.lock"))
             continue; // 0.70.0 (audit A U-09): who has the project open (computer and login name) stays out
@@ -363,9 +366,12 @@ bool ZipWriter::addDirectory(const QString &diskDir, const QString &prefix)
                                            QStringLiteral("avi"), QStringLiteral("flac"), QStringLiteral("webp"), QStringLiteral("qbpkg"),
                                            QStringLiteral("docx"), QStringLiteral("odt"), QStringLiteral("epub"), QStringLiteral("gz"),
                                            QStringLiteral("xz")};
+        bool sealed = false; // 0.99.0: an encrypted file does not pack (its bytes look random): stored as it is
         {
             QFile probe(path);
             bool unreadable = !probe.open(QIODevice::ReadOnly);
+            if (!unreadable)
+                sealed = vault::isSealedData(probe.read(64));
 #ifdef QB_TEST_SWITCHES
             // the checks (0.65.0): a file that counts as unreadable (the test machine's root reads every file)
             const QString fake = qEnvironmentVariable("QB_TEST_UNREADABLE");
@@ -376,7 +382,7 @@ bool ZipWriter::addDirectory(const QString &diskDir, const QString &prefix)
                 continue;
             }
         }
-        if (!addFileFromDisk(prefix.isEmpty() ? rel : prefix + QLatin1Char('/') + rel, path, !packed.contains(suffix)))
+        if (!addFileFromDisk(prefix.isEmpty() ? rel : prefix + QLatin1Char('/') + rel, path, !sealed && !packed.contains(suffix)))
             ok = false;
         if (m_cancelled)
             return false;

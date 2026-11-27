@@ -1,7 +1,9 @@
 #include "core/IconCatalog.h"
+#include "core/crypto/Vault.h"
 #include "core/ItemIcons.h"
 #include "core/Project.h"
 
+#include <QPixmap>
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -350,7 +352,7 @@ QString addCustom(Project *project, const QString &wanted, const QImage &picture
     QImage img = picture.convertToFormat(QImage::Format_ARGB32);
     if (img.width() > 64 || img.height() > 64)
         img = img.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    if (!img.save(customPath(project, unique), "PNG")) {
+    if (!vault::saveImage(img, customPath(project, unique), "PNG")) { // (0.99.0: encrypted in an encrypted project)
         if (error)
             *error = QObject::tr("The icon could not be saved in the project.");
         return QString();
@@ -407,8 +409,8 @@ QIcon iconFor(const Project *project, const QString &id)
         return QIcon();
     if (isCustom(id)) {
         const QString path = customPath(project, customName(id));
-        if (QFile::exists(path))
-            return QIcon(path);
+        if (QFile::exists(path)) // (0.99.0: decrypted in an encrypted project)
+            return vault::placeOf(path).reads() ? QIcon(QPixmap::fromImage(vault::readImage(path))) : QIcon(path);
         return get(QStringLiteral("qb-question"));
     }
     if (id.startsWith(QLatin1String("scriv:")))

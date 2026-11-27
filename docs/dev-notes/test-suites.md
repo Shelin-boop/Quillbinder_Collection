@@ -2,6 +2,24 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## v0990f (0.99.0, item 113, part 2: the encrypted project and the encrypted backups)
+
+`qb_v0990f_tests` (a window; needs the crypto pack; `QB_TEST_KEYSTORE=memory` and the device's key roles are set by the suite;
+`gpg` on the PATH or `QB_TEST_GPG_EXTRA` for the GnuPG checks, skipped with a message otherwise): the vault (seal, unseal, plain
+names, copies in and out, pictures, decrypted copies in `$XDG_RUNTIME_DIR`, a failed encryption writes nothing:
+`QB_TEST_SEAL_FAILS`); a project with every kind of file encrypted by `encryptFolder`, the walk (every file OpenPGP but the
+marker and the lock, none holds a word of the project), each kind read back, writes after it (texts, notes, snapshots, objects,
+the shown lock), the waiting files and the journal of a save cut off at a rename and its recovery, the emergency copy, a conflict
+copy and its snapshot, decryption back to the same bytes; a conversion cut off after n files both ways
+(`QB_TEST_CONVERT_STOP`), opened half done and finished; a wrong passphrase, a locked key (refused, nothing written, then the key
+store), a missing key (the sentence, nothing written, the window's box with Import Keys), a damaged file; backups (`.zip.gpg`
+names, made with the key locked, the newest-N rule with plain ones, a cut copy, restore, locked restore, Move Old Backups, GnuPG
+opening a backup and a text, an encrypted project's backup restored encrypted, a Scrivener project's); the window (the unlock
+dialog with a wrong and a right passphrase, Save a Copy as Scrivener refused, `changeProjectEncryption` off and on, File >
+Options > Encryption's switches, Restore asking for the passphrase); and the speed figures of the autosave with and without
+encryption (the welcome project and a large project of 1000 documents; `QB_MEASURE=1` runs only these). Screenshots
+`v0990f-*.png`.
+
 ## v0990k (0.99.0, item 113, part 3: the key wizard, the key folder, Import Keys, export, File > Options > Encryption)
 
 `qb_v0990k_tests` (a window; needs the crypto pack, `gpg` for the key files, `QB_TEST_KEYSTORE=memory` is set by the suite): the
