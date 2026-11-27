@@ -34,7 +34,7 @@ def pack(*args, env=None):
                           env=dict(os.environ, **(env or {})))
 
 
-NAMES = ("ffmpeg", "whisper", "translator")
+NAMES = ("ffmpeg", "whisper", "translator", "crypto", "onnxruntime", "aiengine")
 dp = read("tools/deps-pack.sh")
 wf = read(".github/workflows/deps.yml")
 
@@ -47,15 +47,24 @@ for n in NAMES:
     check(f"the recipe of {n} names its pack, the machine and the files its hash comes from",
           r.returncode == 0 and f"pack: {n} linux format" in r.stdout and "machine:" in r.stdout and "file tools/get-" in r.stdout
           and re.fullmatch(r"[0-9a-f]{64}", hashes[n]) is not None, r.stdout + r.stderr)
-check("the three recipes differ", len(set(hashes.values())) == 3)
+check("the six recipes differ", len(set(hashes.values())) == 6)
 check("the translator's recipe holds its two scripts",
       "file tools/get-translator-deps.sh " in pack("recipe", "translator").stdout
       and "file addons/translation-proofreading/source/packaging/build-deps.sh " in pack("recipe", "translator").stdout)
+check("the new recipes hold their scripts",
+      "file tools/get-crypto.sh " in pack("recipe", "crypto").stdout
+      and "file tools/get-onnxruntime.sh " in pack("recipe", "onnxruntime").stdout
+      and "file tools/get-ai-engine.sh " in pack("recipe", "aiengine").stdout
+      and "file tools/ai-engine/qwentts/CMakeLists.txt " in pack("recipe", "aiengine").stdout)
 check("the FFmpeg recipe holds the signature script", "file tools/verify-ffmpeg-source.sh " in pack("recipe", "ffmpeg").stdout)
 for n, words in (("ffmpeg", ("FFmpeg 9.1", "LGPL-2.1-or-later", "https://ffmpeg.org/releases/ffmpeg-9.1.tar.xz")),
                  ("whisper", ("whisper.cpp", "MIT", "https://github.com/ggml-org/whisper.cpp")),
                  ("translator", ("oneDNN", "CTranslate2", "SentencePiece", "Apache-2.0", "MIT", "BSD-3-Clause",
-                                 "https://github.com/OpenNMT/CTranslate2"))):
+                                 "https://github.com/OpenNMT/CTranslate2")),
+                 ("crypto", ("Botan 3.14.1", "RNP v0.18.1", "json-c", "bzip2", "BSD-2-Clause", "https://github.com/rnpgp/rnp")),
+                 ("onnxruntime", ("ONNX Runtime 1.32.0", "MIT", "https://github.com/microsoft/onnxruntime")),
+                 ("aiengine", ("ggml v1.1.1", "whisper.cpp v1.9.6", "llama.cpp b12808", "qwentts.cpp", "Sonic", "MIT", "Apache-2.0",
+                               "https://github.com/ggml-org/llama.cpp"))):
     a = pack("about", n)
     check(f"the text of the {n} pack says what is inside, its license and its source",
           a.returncode == 0 and a.stdout.count("\n") == 2 and a.stdout.startswith("Inside:") and "\nLicense" in a.stdout
@@ -65,22 +74,31 @@ check("the repository with the packs defaults to this one",
       re.search(r"^REPO=\$\{QB_DEPS_REPO:-Shelin-boop/Quillbinder_Collection\}$", dp, re.M) is not None)
 
 # ---------------------------------------------------------------------------------------------------- the workflow
-check("the workflow builds the three packs", re.search(r"pack: \[ffmpeg, whisper, translator\]", wf) is not None)
+check("the workflow builds the six packs",
+      re.search(r"pack: \[ffmpeg, whisper, translator, crypto, onnxruntime, aiengine\]", wf) is not None)
 for f in ("tools/get-ffmpeg.sh", "tools/build-ffmpeg.sh", "tools/verify-ffmpeg-source.sh", "tools/get-whisper.sh",
           "tools/get-translator-deps.sh", "addons/translation-proofreading/source/packaging/build-deps.sh",
+          "tools/get-crypto.sh", "tools/get-onnxruntime.sh", "tools/get-ai-engine.sh", "tools/ai-engine/**",
           "tools/deps-pack.sh"):
     check(f"a change of {f} starts the workflow", f"      - '{f}'\n" in wf)
-check("the workflow runs the three scripts and packs the three",
+check("the workflow runs the six scripts and packs the six",
       all(s in wf for s in ("ffmpeg) script=tools/get-ffmpeg.sh", "whisper) script=tools/get-whisper.sh",
                             "translator) script=tools/get-translator-deps.sh",
-                            "translator) tools/deps-pack.sh pack translator out build/translator-deps")))
+                            "translator) tools/deps-pack.sh pack translator out build/translator-deps",
+                            "crypto) script=tools/get-crypto.sh", "onnxruntime) script=tools/get-onnxruntime.sh",
+                            "aiengine) script=tools/get-ai-engine.sh",
+                            "crypto) tools/deps-pack.sh pack crypto out build/crypto",
+                            "onnxruntime) tools/deps-pack.sh pack onnxruntime out build/onnxruntime",
+                            "aiengine) tools/deps-pack.sh pack aiengine out build/ai-engine")))
+check("the ONNX Runtime step prints the SHA-256 for the pin and the workflow allows the first run",
+      "QB_ONNXRUNTIME_FIRST_RUN: '1'" in wf and "pin this" in wf and 'PACK" = onnxruntime' in wf)
 check("the pre-release's text names what is inside, the license and the source",
       'tools/deps-pack.sh about "$PACK" > "out/about-$PACK.txt"' in wf and 'cat "$d/about-$p.txt"' in wf)
 check("the FFmpeg step prints the SHA-256 of the signed source for the pin",
       "pin this" in wf and "SHA-256 of" in wf and "verify-ffmpeg-source:" in wf)
 check("only the job publish may write", len(re.findall(r"contents: write", wf)) == 1
       and re.search(r"^permissions:\n  contents: read\n", wf, re.M) is not None)
-for s in ("get-ffmpeg.sh", "get-whisper.sh", "get-translator-deps.sh"):
+for s in ("get-ffmpeg.sh", "get-whisper.sh", "get-translator-deps.sh", "get-crypto.sh", "get-onnxruntime.sh", "get-ai-engine.sh"):
     check(f"{s} asks for a pack first and builds from source without one",
           '"$ROOT/tools/deps-pack.sh" fetch' in read(f"tools/{s}") and "QB_DEPS_PACK=0" in read(f"tools/{s}"))
 
@@ -162,6 +180,58 @@ esac
     r = subprocess.run([os.path.join(fake, "tools", "deps-pack.sh"), "fetch", "translator", dest], capture_output=True, text=True,
                        env=dict(env, QB_DEPS_PACK="0"))
     check("QB_DEPS_PACK=0: nothing is downloaded", r.returncode == 1 and "building translator from source" in r.stdout)
+    # the three packs of 0.99.0: made from made-up prefixes, and the ONNX Runtime one put back through fetch
+    fakes = {"crypto": ["lib/librnp.a", "lib/libbotan-3.a", "include/rnp/rnp.h", "licenses/LICENSE-botan.txt"],
+             "onnxruntime": ["lib/libonnxruntime.so", "lib/libonnxruntime.so.1.32.0", "include/onnxruntime_c_api.h",
+                             "licenses/LICENSE-onnxruntime.txt"],
+             "aiengine": ["lib/libggml.so", "lib/libsonic.so", "lib/libggml-cpu-haswell.so", "include/ggml.h",
+                          "licenses/LICENSE-ggml.txt"]}
+    for name, files in fakes.items():
+        pre = os.path.join(work, "prefix-" + name)
+        for f in files:
+            os.makedirs(os.path.dirname(os.path.join(pre, f)), exist_ok=True)
+            open(os.path.join(pre, f), "w").write("x")
+        open(os.path.join(pre, "version.txt"), "w").write("made up")
+        open(os.path.join(pre, "lib", "libx.pc"), "w").write(f"prefix={pre}\n") if False else None
+        o = os.path.join(work, "out-" + name)
+        p = pack("pack", name, o, pre)
+        tn = next((f for f in os.listdir(o) if f.endswith(".tar.xz")), "") if os.path.isdir(o) else ""
+        lst = subprocess.run(["tar", "-tJf", os.path.join(o, tn)], capture_output=True, text=True).stdout if tn else ""
+        check(f"the {name} pack is made with its files and its pin line",
+              p.returncode == 0 and tn.startswith(f"{name}-linux-") and p.stdout.startswith(f"pin: {name} ")
+              and all(f"{name}/{f}" in lst for f in files), p.stdout + p.stderr + lst)
+    pre = os.path.join(work, "prefix-empty")
+    os.makedirs(pre)
+    check("a pack of an unfinished prefix is refused", all(pack("pack", n, os.path.join(work, "out-x"), pre).returncode != 0
+                                                          for n in ("crypto", "onnxruntime", "aiengine")))
+    # fetch of the ONNX Runtime pack with a made-up gh
+    fake2 = os.path.join(work, "repo2")
+    os.makedirs(os.path.join(fake2, "tools"))
+    for f in ("deps-pack.sh", "get-onnxruntime.sh"):
+        shutil.copy(os.path.join(ROOT, "tools", f), os.path.join(fake2, "tools", f))
+    h2 = subprocess.run([os.path.join(fake2, "tools", "deps-pack.sh"), "hash", "onnxruntime"], capture_output=True, text=True).stdout.strip()
+    shutil.copy(os.path.join(work, "out-onnxruntime", next(f for f in os.listdir(os.path.join(work, "out-onnxruntime")) if f.endswith(".tar.xz"))),
+                os.path.join(work, "asset2.tar.xz"))
+    sha2 = subprocess.run(["sha256sum", os.path.join(work, "asset2.tar.xz")], capture_output=True, text=True).stdout.split()[0]
+    open(os.path.join(fake2, "tools", "deps-packs.txt"), "w").write(f"onnxruntime {h2} onnxruntime-linux-{h2[:16]}.tar.xz {sha2}\n")
+    open(gh, "w").write(f"""#!/bin/bash
+case "$*" in
+  *"--jq"*) echo 4243 ;;
+  *releases/assets/4243*) cat "{work}/asset2.tar.xz" ;;
+  *) exit 1 ;;
+esac
+""")
+    dest2 = os.path.join(work, "restored-onnx")
+    r = subprocess.run([os.path.join(fake2, "tools", "deps-pack.sh"), "fetch", "onnxruntime", dest2], capture_output=True, text=True, env=env)
+    check("fetch: the ONNX Runtime pack is downloaded, checked and put in place",
+          r.returncode == 0 and "SHA-256 checked" in r.stdout and os.path.isfile(os.path.join(dest2, "include/onnxruntime_c_api.h"))
+          and os.path.isfile(os.path.join(dest2, "lib/libonnxruntime.so")) and not os.path.exists(os.path.join(dest2, "prefix.txt")),
+          r.stdout + r.stderr)
+    # get-onnxruntime.sh without a pinned SHA-256 and without the first-run switch refuses to download
+    r = subprocess.run([os.path.join(fake2, "tools", "get-onnxruntime.sh"), os.path.join(work, "no-pin")], capture_output=True, text=True,
+                       env=dict(env, QB_DEPS_PACK="0", QB_ONNXRUNTIME_FIRST_RUN="0"))
+    check("get-onnxruntime.sh: no SHA-256 pinned, no first-run switch: nothing is downloaded",
+          r.returncode == 1 and "no SHA-256 is pinned" in r.stderr and not os.path.exists(os.path.join(work, "no-pin")), r.stdout + r.stderr)
 finally:
     shutil.rmtree(work, ignore_errors=True)
 
