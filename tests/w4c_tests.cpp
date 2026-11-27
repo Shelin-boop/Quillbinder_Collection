@@ -151,10 +151,8 @@ int main(int argc, char **argv)
                                  "licenses/README.txt", "licenses/whisper.cpp-MIT.txt", "licenses/Qt-LGPL-3.0.txt",
                                  "licenses/GPL-3.0.txt"};
 #else
-    const char *const files[] = {"../plugins/libqb-speech.so", "libqb-speech-impl.so", "lib/libwhisper.so.1", "lib/libggml.so.0",
-                                 "lib/libggml-base.so.0", "lib/libggml-cpu-x64.so", "lib/libggml-cpu-haswell.so",
-                                 "lib/libQt6Multimedia.so.6", "samples/jfk.wav", "licenses/README.txt",
-                                 "licenses/whisper.cpp-MIT.txt", "licenses/Qt-LGPL-3.0.txt"};
+    const char *const files[] = {"../plugins/libqb-speech.so", "libqb-speech-impl.so", "lib/libQt6Multimedia.so.6",
+                                 "samples/jfk.wav", "licenses/README.txt", "licenses/Qt-LGPL-3.0.txt"};
 #endif
     for (const char *f : files)
         if (!QFileInfo::exists(dir + QLatin1Char('/') + QLatin1String(f)))
@@ -201,7 +199,7 @@ int main(int argc, char **argv)
         const QString texts = odd + QStringLiteral("/Transkripte \u00fc");
         toolhost::host().setSetting(QStringLiteral("speech-transcription"), QStringLiteral("folder"), texts);
         toolhost::host().setSetting(QStringLiteral("speech-transcription"), QStringLiteral("mode"), QStringLiteral("live"));
-        toolhost::host().setSetting(QStringLiteral("speech-transcription"), QStringLiteral("gpu"), -1);
+        toolhost::host().setSetting(QStringLiteral("speech-transcription"), QStringLiteral("device"), QStringLiteral("cpu"));
         toolhost::host().setSetting(QStringLiteral("speech-transcription"), QStringLiteral("main"), QStringLiteral("en"));
         QElapsedTimer t;
         t.start();

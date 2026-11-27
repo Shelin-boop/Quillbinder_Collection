@@ -2,6 +2,19 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## v0990m (0.99.0)
+
+`qb_v0990m_tests`: Speech Transcription 1.10 with the fake libqbai of `v0990h` (`QB_AI_ENGINE_LIB`, `QBAI_FAKE_CARDS` with two
+cards). The add-on is loaded from `<build>/tool-plugins` (`QB_PLUGIN_PATH`, `QB_SPEECH_DIR`: build the targets `qb-speech` and
+`qb-speech-impl`; no package needed). Checks: version 1.10 and `ToolModels`; the manifest's `minApp` and `offersFor` (a 0.95.0
+installation gets 1.10 only with the program update); the options page (the program's AI panel, no fields for threads and
+unloading, the device list Automatic / processor / the two cards, the new option); a live recording from the sample through the
+fake engine (its text, the card chosen by Automatic, the registry entry, `keepRunning`, the model kept between recordings,
+the program's unload request, a chosen card and the processor); Insert at Cursor (whole text, marked part, one undo step
+each); Write into the text as I speak (off, on); Android's default through `QB_SPEECH_ANDROID`. Screenshots `01-options`,
+`02-insert`, `03-write-as-I-speak`. A real transcription with the tiny model through the real engine is run by hand (see the
+report of the job; the model is `ggml-tiny.en.bin`, never committed).
+
 ## v0990h (0.99.0)
 
 `qb_v0990h_tests`: the AI engine packages against a fake libqbai (`tests/fakeqbai/FakeQbAi.cpp`, built as

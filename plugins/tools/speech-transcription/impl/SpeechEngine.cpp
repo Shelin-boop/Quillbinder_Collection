@@ -1,10 +1,13 @@
 // The engine of the add-on "Speech Transcription" (libqb-speech-impl.so): the microphone
-// through Qt Multimedia, pieces between pauses (SpeechLogic), whisper.cpp in a thread of its
-// own. Loaded by the writing tool (libqb-speech.so) when it is first needed; see SpeechApi.h.
+// through Qt Multimedia, pieces between pauses (SpeechLogic), and the recognition through the program's AI engine (tool
+// interface 1.3: ToolHost::aiEngine, aiPickDevice and the registry of loaded models; 1.10 of the add-on has no whisper.cpp of
+// its own) in a thread of its own. Loaded by the writing tool (libqb-speech.so) when it is first needed; see SpeechApi.h.
 #include "../SpeechApi.h"
 #include "core/TestSwitches.h"
 #include "../SpeechLogic.h"
 #include "core/AudioBackend.h"
+#include "tools/QbAi.h"
+#include "tools/ToolApi.h"
 
 #include <QAudioDevice>
 #include <QAudioFormat>
@@ -16,6 +19,7 @@
 #include <QFileInfo>
 #include <QMediaDevices>
 #include <QMutex>
+#include <QPermissions>
 #include <QPointer>
 #include <QThread>
 #include <QTimer>
@@ -23,14 +27,7 @@
 
 #include <atomic>
 #include <cmath>
-#ifdef Q_OS_WIN
-#include <windows.h>
-#else
-#include <dlfcn.h>
-#endif
-
-#include "ggml-backend.h"
-#include "whisper.h"
+#include <cstring>
 
 Q_DECLARE_METATYPE(speech::EngineSettings)
 
@@ -38,9 +35,8 @@ namespace {
 
 using speech::EngineSettings;
 
-// A path as whisper.cpp and ggml take it: on Windows they read char paths as UTF-8 (whisper's model file, ggml's
-// folder of compute modules; W4c, 2026-11-12: a folder with letters such as "ü" in the writer's name); elsewhere
-// the file system's encoding, as before.
+// A path as the AI engine takes it: on Windows it reads char paths as UTF-8 (a folder with letters such as "ue" in the
+// writer's name); elsewhere the file system's encoding.
 QByteArray pathBytes(const QString &path)
 {
 #ifdef Q_OS_WIN
@@ -48,53 +44,6 @@ QByteArray pathBytes(const QString &path)
 #else
     return QFile::encodeName(path);
 #endif
-}
-
-// the folder of the compute modules (libggml-cpu-*.so, libggml-vulkan.so; on Windows ggml-cpu-*.dll): lib/ next to
-// this library
-QString moduleDir()
-{
-    const QString env = qEnvironmentVariable("QB_SPEECH_GGML_DIR");
-    if (!env.isEmpty())
-        return env;
-#ifdef Q_OS_WIN
-    HMODULE self = nullptr;
-    if (::GetModuleHandleExW(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-                             reinterpret_cast<LPCWSTR>(&moduleDir), &self)) {
-        wchar_t buf[4096];
-        const DWORD n = ::GetModuleFileNameW(self, buf, DWORD(sizeof buf / sizeof buf[0]));
-        if (n > 0 && n < sizeof buf / sizeof buf[0])
-            return QFileInfo(QDir::fromNativeSeparators(QString::fromWCharArray(buf, int(n)))).absolutePath()
-                   + QStringLiteral("/lib");
-    }
-#else
-    Dl_info info;
-    if (dladdr(reinterpret_cast<void *>(&moduleDir), &info) && info.dli_fname)
-        return QFileInfo(QString::fromLocal8Bit(info.dli_fname)).absolutePath() + QStringLiteral("/lib");
-#endif
-    return QString();
-}
-
-void quietLog(enum ggml_log_level level, const char *text, void *)
-{
-    static const bool debug = qEnvironmentVariableIsSet("QB_SPEECH_DEBUG");
-    if (debug || level == GGML_LOG_LEVEL_ERROR)
-        fputs(text, stderr);
-}
-
-void loadBackends()
-{
-    static bool done = false;
-    if (done)
-        return;
-    done = true;
-    whisper_log_set(quietLog, nullptr);
-    ggml_log_set(quietLog, nullptr);
-    const QString dir = moduleDir();
-    if (!dir.isEmpty() && QFileInfo::exists(dir))
-        ggml_backend_load_all_from_path(pathBytes(dir).constData());
-    else
-        ggml_backend_load_all();
 }
 
 // a WAV file (PCM 8/16/24/32 bit or float) as 16 kHz mono
@@ -154,65 +103,141 @@ bool readWav(const QString &file, QVector<float> *out, QString *error)
     return true;
 }
 
-whisper_context *openModel(const EngineSettings &s, QString *error)
+// The model loaded in the program's AI engine. One per add-on: the live pieces, the model check and the speed test
+// share it. Its mutex is held while it is loaded or used; the program's request to unload (the main thread) only tries
+// the mutex, so that it never waits for a job that waits for the program.
+class Holder
 {
-    loadBackends();
-    whisper_context_params cp = whisper_context_default_params();
-    cp.use_gpu = s.gpuIndex >= 0;
-    cp.gpu_device = qMax(0, s.gpuIndex);
-    cp.flash_attn = s.gpuIndex >= 0;
-    whisper_context *ctx = whisper_init_from_file_with_params(pathBytes(s.modelFile).constData(), cp);
-    if (!ctx && error)
-        *error = s.gpuIndex >= 0 ? QObject::tr("The model could not be loaded onto the graphics card. Choose the processor "
-                                              "under Options > Speech > Processing, or a smaller model.")
-                                 : QObject::tr("The model could not be loaded (damaged file, or not enough memory).");
-    return ctx;
-}
+public:
+    QMutex mutex;
+    qb::tools::ToolHost *host = nullptr;
 
-QString segmentText(whisper_context *ctx, bool guard)
-{
-    QString out;
-    const int n = whisper_full_n_segments(ctx);
-    for (int i = 0; i < n; ++i) {
-        if (guard && whisper_full_get_segment_no_speech_prob(ctx, i) > 0.6f)
-            continue; // most likely no speech: whisper invents text for such stretches
-        out += QString::fromUtf8(whisper_full_get_segment_text(ctx, i));
+    static QString registryId(const EngineSettings &s)
+    {
+        return QStringLiteral("speech-transcription:") + (s.modelId.isEmpty() ? QStringLiteral("file") : s.modelId);
     }
-    return speech::cleanText(out, guard);
-}
+    bool loaded() const { return m_model != nullptr; }
+    QString loadedId() const { return m_id; }
+    QString engineVersion() const
+    {
+        const qbai_api *api = host ? host->aiEngine(QBAI_API_VERSION) : nullptr;
+        return api && api->engine_version ? QString::fromUtf8(api->engine_version()) : QString();
+    }
 
-// One run of whisper over a piece. `language` empty: whisper's own guess.
-QString runWhisper(whisper_context *ctx, const EngineSettings &s, const QVector<float> &audio, const QString &language,
-                   bool translate, const QString &context, QString *error)
-{
-    whisper_full_params p = whisper_full_default_params(s.careful ? WHISPER_SAMPLING_BEAM_SEARCH : WHISPER_SAMPLING_GREEDY);
-    if (s.careful)
-        p.beam_search.beam_size = 5;
-    p.n_threads = qMax(1, s.threads);
-    p.translate = translate;
-    const QByteArray lang = language.isEmpty() ? QByteArrayLiteral("auto") : language.toLatin1();
-    p.language = lang.constData();
-    p.no_timestamps = true;
-    p.no_context = true;
-    p.print_progress = false;
-    p.print_realtime = false;
-    p.print_special = false;
-    p.print_timestamps = false;
-    p.suppress_blank = true;
-    p.suppress_nst = s.silenceGuard;
-    QString prompt = s.hint.simplified();
-    if (s.useContext && !context.isEmpty())
-        prompt = (prompt.isEmpty() ? QString() : prompt + QLatin1Char(' ')) + context.right(200);
-    const QByteArray promptBytes = prompt.toUtf8();
-    if (!promptBytes.isEmpty())
-        p.initial_prompt = promptBytes.constData();
-    if (whisper_full(ctx, p, audio.constData(), int(audio.size())) != 0) {
-        if (error)
-            *error = QObject::tr("whisper could not transcribe a piece.");
-        return QString();
+    // The mutex is held. Loads the model for these settings (or keeps the one that is loaded).
+    bool ensure(const EngineSettings &s, QString *error)
+    {
+        const QString id = registryId(s);
+        if (m_model && m_file == s.modelFile && m_device == s.device && m_id == id) {
+            host->modelUsed(id);
+            return true;
+        }
+        drop(true);
+        auto fail = [&](const QString &e) {
+            if (error)
+                *error = e;
+            return false;
+        };
+        const qbai_api *api = host ? host->aiEngine(QBAI_API_VERSION) : nullptr;
+        if (!api)
+            return fail(QObject::tr("The AI engine is not installed (or could not be loaded). Install it under File > "
+                                    "Options > Speech."));
+        const QByteArray path = pathBytes(s.modelFile);
+        qint64 bytes = api->model_memory ? api->model_memory(QBAI_ASR_WHISPER, path.constData(), nullptr, 0) : 0;
+        if (bytes <= 0)
+            bytes = QFileInfo(s.modelFile).size();
+        QString where;
+        const int device = host->aiPickDevice(s.device, bytes, &where);
+        if (device < 0)
+            return fail(QObject::tr("The AI engine is not installed (or could not be loaded). Install it under File > "
+                                    "Options > Speech."));
+        host->modelMessage(true);
+        const qb::tools::ModelDecision d = host->requestModelLoad(id, QObject::tr("Speech Transcription"), bytes, where);
+        if (!d.allowed) {
+            host->modelMessage(false);
+            return fail(d.reason.isEmpty() ? QObject::tr("The model was not loaded: the memory is needed elsewhere.") : d.reason);
+        }
+        qbai_load_params lp;
+        memset(&lp, 0, sizeof lp);
+        lp.size = sizeof lp;
+        lp.kind = QBAI_ASR_WHISPER;
+        lp.model_path = path.constData();
+        lp.device = device;
+        lp.threads = host->aiThreads();
+        qbai_model *m = api->load(&lp);
+        if (!m) {
+            const QString detail = QString::fromUtf8(api->last_error ? api->last_error() : "");
+            host->modelUnloaded(id);
+            host->modelMessage(false);
+            return fail((device > 0 ? QObject::tr("The model could not be loaded onto the graphics card. Choose the processor "
+                                                  "under Options > Speech > Processing, or a smaller model.")
+                                    : QObject::tr("The model could not be loaded (damaged file, or not enough memory)."))
+                        + (detail.isEmpty() ? QString() : QStringLiteral(" (%1)").arg(detail)));
+        }
+        host->modelLoaded(id);
+        host->modelMessage(false);
+        m_api = api;
+        m_model = m;
+        m_file = s.modelFile;
+        m_device = s.device;
+        m_id = id;
+        return true;
     }
-    return segmentText(ctx, s.silenceGuard);
-}
+
+    // The mutex is held. tell: the registry is told (not when the program itself asked for the unload).
+    bool drop(bool tell)
+    {
+        if (!m_model)
+            return false;
+        if (tell)
+            host->modelMessage(true);
+        m_api->unload(m_model);
+        m_model = nullptr;
+        if (tell) {
+            host->modelUnloaded(m_id);
+            host->modelMessage(false);
+        }
+        m_file.clear();
+        m_id.clear();
+        return true;
+    }
+
+    // One run of the model over a piece. `language` empty: the engine finds the language.
+    QString run(const EngineSettings &s, const QVector<float> &audio, const QString &language, bool translate,
+                const QString &context, QString *error)
+    {
+        if (!m_model)
+            return QString();
+        host->modelUsed(m_id);
+        QString prompt = s.hint.simplified();
+        if (s.useContext && !context.isEmpty())
+            prompt = (prompt.isEmpty() ? QString() : prompt + QLatin1Char(' ')) + context.right(200);
+        const QByteArray lang = language.isEmpty() ? QByteArrayLiteral("auto") : language.toLatin1();
+        const QByteArray promptBytes = prompt.toUtf8();
+        qbai_transcribe_params tp;
+        memset(&tp, 0, sizeof tp);
+        tp.size = sizeof tp;
+        tp.language = lang.constData();
+        tp.translate = translate ? 1 : 0;
+        tp.prompt = promptBytes.isEmpty() ? nullptr : promptBytes.constData();
+        char *text = nullptr;
+        const int rc = m_api->transcribe(m_model, audio.constData(), audio.size(), &tp, &text);
+        QString out = text ? QString::fromUtf8(text) : QString();
+        if (text)
+            m_api->free_text(text);
+        if (rc != QBAI_OK) {
+            if (error)
+                *error = QObject::tr("The AI engine could not transcribe a piece.");
+            return QString();
+        }
+        return speech::cleanText(out, s.silenceGuard);
+    }
+
+private:
+    const qbai_api *m_api = nullptr;
+    qbai_model *m_model = nullptr;
+    QString m_file, m_device, m_id;
+};
 
 // ------------------------------------------------------------------ the thread with the model
 
@@ -220,7 +245,7 @@ class Worker : public QObject
 {
     Q_OBJECT
 public:
-    ~Worker() override { unload(); }
+    explicit Worker(Holder *holder) : m_h(holder) {}
 
 public slots:
     void prepare(const speech::EngineSettings &s)
@@ -235,18 +260,14 @@ public slots:
             return;
         }
         m_fake = false;
-        if (m_ctx && (m_file != s.modelFile || m_gpu != s.gpuIndex))
-            unload();
-        if (!m_ctx) {
-            emit state(QStringLiteral("loading"));
-            QString error;
-            m_ctx = openModel(s, &error);
-            if (!m_ctx) {
+        emit state(QStringLiteral("loading"));
+        QString error;
+        {
+            QMutexLocker l(&m_h->mutex);
+            if (!m_h->ensure(s, &error)) {
                 emit failed(error);
                 return;
             }
-            m_file = s.modelFile;
-            m_gpu = s.gpuIndex;
         }
         m_context.clear();
         emit ready();
@@ -260,53 +281,30 @@ public slots:
             emit done(QStringLiteral("Piece %1 (%2 s)").arg(m_pieces).arg(audio.size() / 16000.0, 0, 'f', 1), newParagraph);
             return;
         }
-        if (!m_ctx) {
+        QMutexLocker l(&m_h->mutex);
+        if (!m_h->loaded()) {
             emit done(QString(), newParagraph);
             return;
         }
         const bool translate = speech::canTranslate(m_s.mainLanguage, m_s.fallbackLanguage, m_s.modelTranslates);
         const bool two = !m_s.fallbackLanguage.isEmpty() && m_s.fallbackLanguage != m_s.mainLanguage;
-        // Into English: the main language as the spoken one, and whisper translates (one run of
-        // the model per piece). Otherwise, and for "keep the original", the language of each piece
-        // is found first (one more run of the model's encoder).
+        // Into English: the main language as the spoken one, and the model translates (one run per piece). Two languages
+        // without a translation: the engine finds the language of each piece (it cannot be limited to the two).
         QString language = m_s.mainLanguage;
-        bool spokenOther = false;
-        if (two && (!translate || m_s.keepOriginal || m_s.careful)) {
-            if (whisper_pcm_to_mel(m_ctx, audio.constData(), int(audio.size()), qMax(1, m_s.threads)) == 0) {
-                QVector<float> probs(whisper_lang_max_id() + 1);
-                if (whisper_lang_auto_detect(m_ctx, 0, qMax(1, m_s.threads), probs.data()) >= 0) {
-                    const int a = whisper_lang_id(m_s.mainLanguage.toLatin1().constData());
-                    const int b = whisper_lang_id(m_s.fallbackLanguage.toLatin1().constData());
-                    const speech::LanguageChoice c = speech::chooseLanguage(
-                        m_s.mainLanguage, m_s.fallbackLanguage, a >= 0 ? probs[a] : 0.f, b >= 0 ? probs[b] : 0.f,
-                        m_s.modelTranslates);
-                    language = c.language;
-                    spokenOther = language != m_s.mainLanguage;
-                }
-            }
-        }
+        if (two && !translate)
+            language.clear();
         QString error;
-        QString text = runWhisper(m_ctx, m_s, audio, language, translate, m_context, &error);
+        QString text = m_h->run(m_s, audio, language, translate, m_context, &error);
         if (!error.isEmpty())
             emit failed(error);
-        if (translate && spokenOther && m_s.keepOriginal && !text.isEmpty()) {
-            const QString original = runWhisper(m_ctx, m_s, audio, language, false, QString(), nullptr);
+        if (translate && two && m_s.keepOriginal && !text.isEmpty()) {
+            const QString original = m_h->run(m_s, audio, QString(), false, QString(), nullptr);
             if (!original.isEmpty() && original != text)
-                text += QStringLiteral(" [%1: %2]").arg(language, original);
+                text += QStringLiteral(" [%1: %2]").arg(m_s.fallbackLanguage, original);
         }
         if (!text.isEmpty())
             m_context += QLatin1Char(' ') + text;
         emit done(text, newParagraph);
-    }
-
-    bool unload()   // true: a model was loaded
-    {
-        const bool had = m_ctx != nullptr;
-        if (m_ctx)
-            whisper_free(m_ctx);
-        m_ctx = nullptr;
-        m_file.clear();
-        return had;
     }
 
 signals:
@@ -316,9 +314,7 @@ signals:
     void done(const QString &text, bool newParagraph);
 
 private:
-    whisper_context *m_ctx = nullptr;
-    QString m_file;
-    int m_gpu = -1;
+    Holder *m_h;
     speech::EngineSettings m_s;
     QString m_context;
     int m_pieces = 0;
@@ -335,7 +331,7 @@ public:
     {
         qRegisterMetaType<speech::EngineSettings>("speech::EngineSettings");
         qRegisterMetaType<QVector<float>>("QVector<float>");
-        m_worker = new Worker;
+        m_worker = new Worker(&m_holder);
         m_worker->moveToThread(&m_thread);
         connect(&m_thread, &QThread::finished, m_worker, &QObject::deleteLater);
         connect(m_worker, &Worker::state, this, [this](const QString &s) { report(s); });
@@ -346,6 +342,7 @@ public:
                 stopAudio();
                 m_feedTimer.stop();
                 m_recording = false;
+                setKeep(false);
                 m_fileFast = false;
                 m_waiting = 0;
                 m_busy = false;
@@ -359,12 +356,6 @@ public:
         connect(m_worker, &Worker::done, this, &Engine::pieceDone);
         m_thread.setObjectName(QStringLiteral("speech-transcription"));
         m_thread.start();
-        m_idle.setSingleShot(true);
-        m_idle.setInterval(15 * 60 * 1000); // the model stays loaded 15 minutes after a recording (EngineSettings::unloadMinutes)
-        connect(&m_idle, &QTimer::timeout, this, [this] {
-            if (unloadNow() && onModelUnloaded)
-                onModelUnloaded();
-        });
         m_feedTimer.setInterval(100);
         connect(&m_feedTimer, &QTimer::timeout, this, &Engine::feedFromFile);
     }
@@ -372,8 +363,19 @@ public:
     ~Engine() override
     {
         stopAudio();
+        setKeep(false);
         m_thread.quit();
         m_thread.wait();
+        QMutexLocker l(&m_holder.mutex);
+        m_holder.drop(false);
+    }
+
+    void setHost(qb::tools::ToolHost *host) override
+    {
+        m_holder.host = host;
+        m_host = host;
+        // the worker's computations start from its thread and inherit its priority (tool interface 1.3)
+        QMetaObject::invokeMethod(m_worker, [host] { host->lowerThreadPriority(); }, Qt::QueuedConnection);
     }
 
     QList<speech::AudioInput> audioInputs() override
@@ -382,25 +384,6 @@ public:
         const QAudioDevice def = QMediaDevices::defaultAudioInput();
         for (const QAudioDevice &d : QMediaDevices::audioInputs())
             out << speech::AudioInput{d.id(), d.description(), d.id() == def.id()};
-        return out;
-    }
-
-    QList<speech::ComputeDevice> computeDevices() override
-    {
-        loadBackends();
-        QList<speech::ComputeDevice> out;
-        out << speech::ComputeDevice{-1, tr("Processor"), 0, 0, false};
-        int gpu = 0;
-        for (size_t i = 0; i < ggml_backend_dev_count(); ++i) {
-            ggml_backend_dev_t dev = ggml_backend_dev_get(i);
-            const auto type = ggml_backend_dev_type(dev);
-            if (type != GGML_BACKEND_DEVICE_TYPE_GPU && type != GGML_BACKEND_DEVICE_TYPE_IGPU)
-                continue;
-            size_t freeMem = 0, total = 0;
-            ggml_backend_dev_memory(dev, &freeMem, &total);
-            out << speech::ComputeDevice{gpu++, QString::fromUtf8(ggml_backend_dev_description(dev)), qint64(total),
-                                         qint64(freeMem), type == GGML_BACKEND_DEVICE_TYPE_IGPU};
-        }
         return out;
     }
 
@@ -413,15 +396,14 @@ public:
         r.audioSeconds = audio.size() / 16000.0;
         QElapsedTimer t;
         t.start();
-        whisper_context *ctx = openModel(s, &r.error);
-        if (!ctx)
+        QMutexLocker l(&m_holder.mutex);
+        if (!m_holder.ensure(s, &r.error))
             return r;
         r.loadSeconds = t.elapsed() / 1000.0;
-        r.modelType = QString::fromUtf8(whisper_model_type_readable(ctx));
+        r.modelType = QStringLiteral("whisper");
         t.restart();
-        r.text = runWhisper(ctx, s, audio, translate ? QString() : QStringLiteral("en"), translate, QString(), &r.error);
+        r.text = m_holder.run(s, audio, translate ? QString() : QStringLiteral("en"), translate, QString(), &r.error);
         r.seconds = t.elapsed() / 1000.0;
-        whisper_free(ctx);
         r.ok = r.error.isEmpty();
         return r;
     }
@@ -441,7 +423,6 @@ public:
             return false;
         }
         m_s = s;
-        m_idle.stop();
         speech::Segmenter::Params sp;
         sp.sensitivity = s.sensitivity;
         sp.pauseMs = s.pauseMs;
@@ -467,6 +448,7 @@ public:
             return false;
         }
         m_recording = true;
+        setKeep(true);
         m_busy = true;
         QMetaObject::invokeMethod(m_worker, "prepare", Qt::QueuedConnection, Q_ARG(speech::EngineSettings, s));
         return true;
@@ -481,6 +463,7 @@ public:
             stopAudio();
             m_feedTimer.stop();
             m_recording = false;
+            setKeep(false);
             m_writer->close();
             m_writer.reset();
             m_busy = false;
@@ -490,6 +473,7 @@ public:
         stopAudio();
         m_feedTimer.stop();
         m_recording = false;
+        setKeep(false);
         if (m_seg) {
             m_seg->flush();
             sendPieces();
@@ -504,21 +488,52 @@ public:
     bool isBusy() const override { return m_busy; }
     int waiting() const override { return m_waiting; }
 
-    void unloadModel() override { unloadNow(); }
-    bool unloadNow()
+    void unloadModel() override
     {
         if (m_busy)
+            return;
+        if (m_holder.mutex.tryLock()) {
+            m_holder.drop(true);
+            m_holder.mutex.unlock();
+        }
+    }
+    // the program's rule asks (ToolModels::unloadModel, the main thread): never waits for the worker
+    bool unloadModelOfId(const QString &registryId) override
+    {
+        if (!m_holder.mutex.tryLock())
             return false;
-        bool had = false;
-        QMetaObject::invokeMethod(m_worker, "unload", Qt::BlockingQueuedConnection, Q_RETURN_ARG(bool, had));
-        return had;
+        bool ok = true;
+        if (m_holder.loaded() && m_holder.loadedId() == registryId) {
+            if (m_busy)
+                ok = false;
+            else
+                m_holder.drop(false);
+        }
+        m_holder.mutex.unlock();
+        return ok;
     }
 
-    QString version() const override { return QStringLiteral("1.9.5"); }
+    QString version() const override { return m_holder.engineVersion(); }
 
 private:
     bool startAudio(const QByteArray &id, QString *error)
     {
+        // Qt's microphone permission: Linux and Windows answer "granted"; Android asks the writer the first time (the
+        // answer comes later, so this recording does not start: press Record again)
+        const QMicrophonePermission permission;
+        switch (QCoreApplication::instance()->checkPermission(permission)) {
+        case Qt::PermissionStatus::Granted:
+            break;
+        case Qt::PermissionStatus::Undetermined:
+            QCoreApplication::instance()->requestPermission(permission, this, [](const QPermission &) {});
+            if (error)
+                *error = tr("Quillbinder asks for permission to use the microphone. Allow it, then press Record again.");
+            return false;
+        case Qt::PermissionStatus::Denied:
+            if (error)
+                *error = tr("The microphone is not allowed for Quillbinder. Allow it in the system's settings.");
+            return false;
+        }
         QAudioDevice dev = QMediaDevices::defaultAudioInput();
         for (const QAudioDevice &d : QMediaDevices::audioInputs())
             if (!id.isEmpty() && d.id() == id)
@@ -610,7 +625,6 @@ private:
     bool startRecordOnly(const EngineSettings &s, QString *error, const QString &wavFile)
     {
         m_s = s;
-        m_idle.stop();
         m_levelClock.start();
         m_writer.reset(new speech::WavWriter);
         if (!m_writer->open(s.recordFile, error)) {
@@ -638,6 +652,7 @@ private:
             return false;
         }
         m_recording = true;
+        setKeep(true);
         m_busy = true;
         report(QStringLiteral("recording"));
         return true;
@@ -696,12 +711,6 @@ private:
         m_fileFast = false;
         m_lastPct = -1;
         m_busy = false;
-        // (tests: QB_SPEECH_TEST_UNLOAD_MS shortens the time)
-        const int testMs = qEnvironmentVariableIntValue("QB_SPEECH_TEST_UNLOAD_MS");
-        if (testMs > 0 || m_s.unloadMinutes > 0) {
-            m_idle.setInterval(testMs > 0 ? testMs : m_s.unloadMinutes * 60 * 1000);
-            m_idle.start();
-        }
         report(QStringLiteral("finished"));
     }
 
@@ -716,6 +725,17 @@ private:
             onState(s);
     }
 
+    void setKeep(bool on)
+    {
+        if (m_keeping == on || !m_host)
+            return;
+        m_keeping = on;
+        m_host->keepRunning(QStringLiteral("recording"), on);   // tool interface 1.3: the computer is kept awake
+    }
+
+    Holder m_holder;
+    qb::tools::ToolHost *m_host = nullptr;
+    bool m_keeping = false;
     QThread m_thread;
     Worker *m_worker = nullptr;
     EngineSettings m_s;
@@ -729,7 +749,6 @@ private:
     bool m_fileFast = false;
     int m_lastPct = -1;
     QScopedPointer<speech::WavWriter> m_writer;   // record only (0.64)
-    QTimer m_idle;
     QElapsedTimer m_levelClock;
     int m_waiting = 0;
     bool m_recording = false;

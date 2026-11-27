@@ -1,6 +1,7 @@
 #include "SpeechTool.h"
 #include "core/TestSwitches.h"
 #include "ui/Ask.h"
+#include "tools/QbAi.h"
 
 #include "core/SafeSave.h"
 
@@ -44,6 +45,7 @@
 #include <QSpinBox>
 #include <QStandardItemModel>
 #include <QStandardPaths>
+#include <QSysInfo>
 #include <QThread>
 #include <QTextCursor>
 #include <QTimer>
@@ -108,18 +110,6 @@ QIcon themeIcon(const QString &name)
 }
 
 bool quiet() { return QB_TEST_ENV_SET("QB_NO_DIALOGS"); }
-
-// memory a model needs (bytes, estimate) to offer a graphics card for it
-qint64 memoryNeed(const QString &id)
-{
-    if (id == QLatin1String("small"))
-        return 700LL << 20;
-    if (id == QLatin1String("medium"))
-        return 1400LL << 20;
-    if (id == QLatin1String("large-v3-turbo"))
-        return 1100LL << 20;
-    return 2300LL << 20; // large-v3 and models of unknown kind
-}
 
 QString sizeText(qint64 bytes)
 {
@@ -282,15 +272,38 @@ QString SpeechTool::modelsDir() const
     return d;
 }
 
-QString SpeechTool::installedModelFile() const
+QString SpeechTool::ownModelFile() const
 {
     const QString f = setting(QStringLiteral("modelFile")).toString();
     return !f.isEmpty() && QFileInfo::exists(f) ? f : QString();
 }
 
+// 1.10: the model of the program's catalog ("whisper-<id>", installed in File > Options > Speech with the AI panel) is
+// used when no model of the add-on's own download is installed
+QString SpeechTool::catalogModelFile() const
+{
+    if (!m_host || m_host->apiVersion() < 130)
+        return QString();
+    QString id = setting(QStringLiteral("model")).toString();
+    if (!speech::catalogEntry(id))
+        id = speech::recommendedModel();
+    return m_host->aiModelFile(QStringLiteral("whisper-") + id, QStringLiteral("model"));
+}
+
+QString SpeechTool::installedModelFile() const
+{
+    const QString f = ownModelFile();
+    return f.isEmpty() ? catalogModelFile() : f;
+}
+
 QString SpeechTool::installedModelId() const
 {
-    return installedModelFile().isEmpty() ? QString() : setting(QStringLiteral("model")).toString();
+    if (!ownModelFile().isEmpty())
+        return setting(QStringLiteral("model")).toString();
+    if (catalogModelFile().isEmpty())
+        return QString();
+    const QString id = setting(QStringLiteral("model")).toString();
+    return speech::catalogEntry(id) ? id : speech::recommendedModel();
 }
 
 QString SpeechTool::speechDir() const
@@ -312,15 +325,13 @@ speech::EngineSettings SpeechTool::engineSettings() const
 {
     speech::EngineSettings s;
     s.modelFile = installedModelFile();
+    s.modelId = installedModelId().isEmpty() ? QStringLiteral("file") : installedModelId();
     const speech::ModelHeader h = speech::readModelHeader(s.modelFile);
     s.modelTranslates = !h.ok || h.translates();
-    s.gpuIndex = setting(QStringLiteral("gpu"), -1).toInt();
-    const int ideal = qMax(1, QThread::idealThreadCount());
-    s.threads = qBound(1, setting(QStringLiteral("threads"), qMax(1, ideal - 1)).toInt(), ideal);
+    s.device = setting(QStringLiteral("device"), QStringLiteral("auto")).toString();   // 1.10: "auto", "cpu", "gpu:<name>"
     s.mainLanguage = setting(QStringLiteral("main"), QStringLiteral("en")).toString();
     s.fallbackLanguage = setting(QStringLiteral("fallback"), QStringLiteral("de")).toString();
     s.keepOriginal = setting(QStringLiteral("keepOriginal"), false).toBool();
-    s.careful = setting(QStringLiteral("careful"), false).toBool();
     s.hint = setting(QStringLiteral("hint")).toString();
     s.useContext = setting(QStringLiteral("useContext"), false).toBool();
     s.silenceGuard = setting(QStringLiteral("silenceGuard"), true).toBool();
@@ -328,11 +339,14 @@ speech::EngineSettings SpeechTool::engineSettings() const
     s.pauseMs = qBound(300, setting(QStringLiteral("pauseMs"), 700).toInt(), 3000);
     s.paragraphMs = qBound(0, setting(QStringLiteral("paragraphMs"), 3000).toInt(), 30000);
     s.audioInput = setting(QStringLiteral("audioInput")).toByteArray();
-    s.unloadMinutes = qBound(0, setting(QStringLiteral("unloadMinutes"), 15).toInt(), 24 * 60);   // 0.94.0
     return s;
 }
 
-QString SpeechTool::unloadMessage() { return tr("Model unloaded, RAM usage minimal"); }
+// ToolModels (1.3): the program's rule (idle too long, memory short) asks to unload the model; it never waits for a job
+bool SpeechTool::unloadModel(const QString &id)
+{
+    return m_engine ? m_engine->unloadModelOfId(id) : true;
+}
 
 speech::EngineInterface *SpeechTool::engine(QString *error)
 {
@@ -346,6 +360,8 @@ speech::EngineInterface *SpeechTool::engine(QString *error)
     };
     if (!m_engineError.isEmpty())
         return fail(m_engineError);
+    if (!m_host || m_host->apiVersion() < 130)
+        return fail(tr("This version of the add-on needs Quillbinder 0.99.0 or later."));
     const QString dir = speechDir();
     const QString impl = dir + kImplFile;
     if (dir.isEmpty() || !QFileInfo::exists(impl))
@@ -357,16 +373,6 @@ speech::EngineInterface *SpeechTool::engine(QString *error)
         return fail(tr("Cannot load Qt Multimedia: %1").arg(libraryError()));
     if (QFileInfo::exists(dir + QStringLiteral("/qtplugins")))
         QCoreApplication::addLibraryPath(dir + QStringLiteral("/qtplugins"));
-#ifdef Q_OS_WIN
-    // W4c (2026-11-12): whisper.cpp's libraries sit in lib\ (as on Linux), where Windows does not look for the
-    // engine's libraries; loaded here by their full paths, in the order they need each other, so that the engine
-    // takes these (Windows uses a library of that name that is already loaded)
-    for (const char *name : {"ggml-base", "ggml", "whisper"}) {
-        const QString lib = dir + QStringLiteral("/lib/%1.dll").arg(QLatin1String(name));
-        if (QFileInfo::exists(lib) && !openLibrary(lib, false))
-            return fail(tr("Cannot load %1: %2").arg(QFileInfo(lib).fileName(), libraryError()));
-    }
-#endif
     void *h = openLibrary(impl, false);
     if (!h)
         return fail(tr("Cannot load the speech engine: %1").arg(libraryError()));
@@ -374,16 +380,12 @@ speech::EngineInterface *SpeechTool::engine(QString *error)
     if (!create)
         return fail(tr("The speech engine is damaged (no entry point)."));
     m_engine = create();
+    m_engine->setHost(m_host);
     m_engine->onText = [this](const QString &t, bool p) { onText(t, p); };
     m_engine->onState = [this](const QString &s) { onState(s); };
     m_engine->onLevel = [this](float l) {
         if (m_panel)
             m_panel->setLevel(l);
-    };
-    // 0.94.0: the model freed after the time without use: the program says so under the binder (tool interface 1.2)
-    m_engine->onModelUnloaded = [this] {
-        if (m_host && m_host->apiVersion() >= 120)
-            m_host->showMessage(unloadMessage(), 5000);
     };
     m_engine->onError = [this](const QString &m) {
         m_lastError = m;
@@ -409,11 +411,15 @@ void SpeechTool::toggleRecording()
 
 bool SpeechTool::recordOnly() const
 {
+    // Android: record now, the text later (0.64). 1.10: also a runtime check (and a test switch), so that this branch is
+    // compiled and checked on every system
+    bool phone = false;
 #ifdef Q_OS_ANDROID
-    const QString standard = QStringLiteral("record"); // a phone: record now, the text later (0.64)
-#else
-    const QString standard = QStringLiteral("live");
+    phone = true;
 #endif
+    if (QB_TEST_ENV_SET("QB_SPEECH_ANDROID") || QSysInfo::productType() == QLatin1String("android"))
+        phone = true;
+    const QString standard = phone ? QStringLiteral("record") : QStringLiteral("live");
     return setting(QStringLiteral("mode"), standard).toString() == QLatin1String("record");
 }
 
@@ -639,6 +645,9 @@ void SpeechTool::onText(const QString &text, bool newParagraph)
     m_tail = (m_tail + add).right(8);
     if (m_panel)
         m_panel->appendPiece(add);
+    // 1.10 (UR-11): "Write into the text as I speak": also at the cursor of the text being edited (live speech only)
+    if (m_transcribingWav.isEmpty() && m_host && setting(QStringLiteral("writeIntoText"), false).toBool() && m_host->canInsertText())
+        m_host->insertText(add);
 }
 
 void SpeechTool::onState(const QString &state)
@@ -887,8 +896,11 @@ void SpeechTool::checkModelFile(const QString &file, const speech::CatalogEntry 
         speech::TestResult test;
     };
     auto result = std::make_shared<Result>();
-    QThread *t = QThread::create([file, e, settings, sample, result] {
+    qb::tools::ToolHost *host = m_host;
+    QThread *t = QThread::create([file, e, settings, sample, result, host] {
         result->header = speech::readModelHeader(file);
+        if (host)
+            host->lowerThreadPriority();   // the AI's work runs at a low priority (tool interface 1.3)
         if (result->header.ok && e)
             result->test = e->transcribeFile(sample, settings, false);
     });
@@ -933,7 +945,7 @@ void SpeechTool::checkModelFile(const QString &file, const speech::CatalogEntry 
             target.chop(5);
         if (entry && sumOk)
             target = modelsDir() + QLatin1Char('/') + entry->file;
-        const QString previous = installedModelFile();
+        const QString previous = ownModelFile();
         if (m_engine)
             m_engine->unloadModel();
         if (target != file) {
@@ -967,7 +979,7 @@ void SpeechTool::finishJob(bool ok, const QString &message)
 
 bool SpeechTool::removeModel()
 {
-    const QString f = installedModelFile();
+    const QString f = ownModelFile();
     if (f.isEmpty() || isBusy() || m_job != Job::None)
         return false;
     if (!quiet()
@@ -1006,6 +1018,10 @@ TranscriptPanel::TranscriptPanel(SpeechTool *tool, QWidget *parent) : QWidget(pa
     m_record->setCheckable(true);
     m_rename = button(QStringLiteral("edit-rename"), tr("Rename the transcription"), "speechRename");
     m_copy = button(QStringLiteral("edit-copy"), tr("Copy the whole text"), "speechCopy");
+    m_insert = button(QStringLiteral("insert-text"), tr("Put the marked part of the text (all of it when nothing is marked) into the text you are editing, at the cursor"),
+                      "speechInsert");
+    m_insert->setText(tr("Insert at Cursor"));
+    m_insert->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     m_delete = button(QStringLiteral("edit-delete"), tr("Move the transcription to the trash"), "speechDelete");
     m_transcribeAll = button(QStringLiteral("document-edit"), tr("Write the text of every recording that has none yet"),
                              "speechTranscribeAll");
@@ -1050,6 +1066,9 @@ TranscriptPanel::TranscriptPanel(SpeechTool *tool, QWidget *parent) : QWidget(pa
             rename(t.trimmed());
     });
     connect(m_copy, &QToolButton::clicked, this, &TranscriptPanel::copyAll);
+    connect(m_insert, &QToolButton::clicked, this, [this] { insertAtCursor(); });
+    connect(m_edit, &QPlainTextEdit::selectionChanged, this, &TranscriptPanel::updateButtons);
+    connect(m_edit, &QPlainTextEdit::textChanged, this, &TranscriptPanel::updateButtons);
     connect(m_transcribeAll, &QToolButton::clicked, m_tool, [this] { m_tool->transcribeAll(); updateButtons(); });
     connect(m_delete, &QToolButton::clicked, this, [this] { remove(true); });
     connect(m_folderButton, &QToolButton::clicked, this, [this] {
@@ -1283,6 +1302,25 @@ void TranscriptPanel::copyAll()
     m_status->setText(tr("The text is on the clipboard."));
 }
 
+bool TranscriptPanel::insertAtCursor()
+{
+    QString text = m_edit->textCursor().selectedText();
+    text.replace(QChar(0x2029), QLatin1Char('\n')).replace(QChar(0x2028), QLatin1Char('\n'));
+    if (text.isEmpty())
+        text = m_edit->toPlainText();
+    if (text.trimmed().isEmpty())
+        return false;
+    qb::tools::ToolHost *h = m_tool->host();
+    if (!h || !h->canInsertText()) {
+        m_status->setText(tr("Open a text in the editor first, and click into it where the transcription should go."));
+        return false;
+    }
+    if (!h->insertText(text))    // the host puts it at the cursor as one undo step
+        return false;
+    m_status->setText(tr("The text was inserted at the cursor."));
+    return true;
+}
+
 QString TranscriptPanel::status() const { return m_status->text(); }
 
 void TranscriptPanel::recordingStarted(const QString &file)
@@ -1392,6 +1430,7 @@ void TranscriptPanel::updateButtons()
     m_rename->setEnabled(has && !locked);
     m_delete->setEnabled(has && !locked);
     m_copy->setEnabled(has && QFileInfo::exists(m_file));
+    m_insert->setEnabled(has && !m_edit->toPlainText().trimmed().isEmpty());
     m_transcribeAll->setVisible(m_pending > 0);
     m_transcribeAll->setEnabled(m_pending > 0 && !m_tool->isBusy());
 }
@@ -1417,16 +1456,17 @@ private:
 
     SpeechTool *m_tool;
     QWidget *m_w;
-    QComboBox *m_model, *m_device, *m_main, *m_fallback, *m_accuracy, *m_sensitivity, *m_input;
+    QComboBox *m_model, *m_device, *m_main, *m_fallback, *m_sensitivity, *m_input;
     QLabel *m_impact, *m_installed, *m_message, *m_deviceNote, *m_langNote, *m_speed;
     QPushButton *m_download, *m_local, *m_remove, *m_cancel, *m_speedTest;
     QRadioButton *m_official, *m_other;
     QLineEdit *m_otherAddress, *m_folder;
     QProgressBar *m_progress;
     QWidget *m_progressRow;
-    QSpinBox *m_threads, *m_unload;
+    QLabel *m_shared;
+    QWidget *m_aiPanel = nullptr;
     QDoubleSpinBox *m_pause, *m_paragraph;
-    QCheckBox *m_keepOriginal, *m_guard, *m_context, *m_deleteAfter;
+    QCheckBox *m_keepOriginal, *m_guard, *m_context, *m_deleteAfter, *m_writeInto;
     QRadioButton *m_live, *m_recordOnly;
     QPlainTextEdit *m_hint;
 };
@@ -1448,6 +1488,20 @@ SpeechOptions::SpeechOptions(SpeechTool *tool, QWidget *parent) : QObject(nullpt
     // ---- model
     auto *modelBox = new QGroupBox(tr("Model (speech recognition on this computer)"), m_w);
     auto *mf = new QFormLayout(modelBox);
+    // 1.10: the program's panel: the AI engine ("Install the Engine", "Install from File...") and the models of its catalog
+    if (m_tool->host() && m_tool->host()->apiVersion() >= 130) {
+        m_aiPanel = m_tool->host()->aiPanel({QStringLiteral("asr")}, modelBox);
+        if (m_aiPanel) {
+            m_aiPanel->setObjectName(QStringLiteral("speechAiPanel"));
+            mf->addRow(m_aiPanel);
+            // the panel's signal changed() (engine or a model installed or removed) goes through the tool's own signal
+            connect(m_aiPanel, SIGNAL(changed()), m_tool, SIGNAL(aiChanged()));
+            connect(m_tool, &SpeechTool::aiChanged, this, [this] {
+                showModel();
+                fillDevices();
+            });
+        }
+    }
     m_model = new QComboBox(modelBox);
     m_model->setObjectName(QStringLiteral("speechModel"));
     for (const speech::CatalogEntry &e : speech::catalog())
@@ -1510,24 +1564,11 @@ SpeechOptions::SpeechOptions(SpeechTool *tool, QWidget *parent) : QObject(nullpt
     pf->addRow(tr("Compute on:"), m_device);
     m_deviceNote = note();
     pf->addRow(QString(), m_deviceNote);
-    m_threads = new QSpinBox(procBox);
-    m_threads->setObjectName(QStringLiteral("speechThreads"));
-    const int ideal = qMax(1, QThread::idealThreadCount());
-    m_threads->setRange(1, ideal);
-    pf->addRow(tr("Processor threads:"), m_threads);
-    pf->addRow(QString(), note(tr("One less than the processor has keeps typing smooth while a piece is written.")));
-    m_unload = new QSpinBox(procBox);
-    m_unload->setObjectName(QStringLiteral("speechUnload"));
-    m_unload->setRange(0, 24 * 60);
-    m_unload->setSpecialValueText(tr("never"));
-    m_unload->setSuffix(tr(" minutes"));
-    pf->addRow(tr("Free the model after:"), m_unload);
-    pf->addRow(QString(), note(tr("The model takes memory while it is loaded; after this time without use it is freed and the program says so. It loads again at the next recording.")));
-    m_accuracy = new QComboBox(procBox);
-    m_accuracy->setObjectName(QStringLiteral("speechAccuracy"));
-    m_accuracy->addItem(tr("Fast"));
-    m_accuracy->addItem(tr("Careful (slower: weighs several possible texts, finds the language of each piece)"));
-    pf->addRow(tr("Accuracy:"), m_accuracy);
+    // 1.10 (decision 9): the cores and the time after which an unused model is unloaded are the program's one setting
+    m_shared = note(tr("The number of processor cores and the time after which a model that is not used is unloaded are set "
+                       "for all AI functions together, in File > Options > General > AI Models."));
+    m_shared->setObjectName(QStringLiteral("speechSharedSettings"));
+    pf->addRow(m_shared);
     m_speedTest = new QPushButton(tr("Speed Test"), procBox);
     m_speedTest->setObjectName(QStringLiteral("speechSpeedTest"));
     m_speed = note();
@@ -1615,6 +1656,11 @@ SpeechOptions::SpeechOptions(SpeechTool *tool, QWidget *parent) : QObject(nullpt
     m_recordOnly->setObjectName(QStringLiteral("speechModeRecord"));
     fv->addWidget(m_live);
     fv->addWidget(m_recordOnly);
+    // 1.10 (UR-11): the text also goes into the open text while it is spoken; the transcription is kept in the tab as always
+    m_writeInto = new QCheckBox(tr("Write into the text as I speak"), fileBox);
+    m_writeInto->setObjectName(QStringLiteral("speechWriteIntoText"));
+    m_writeInto->setToolTip(tr("Each piece of live speech is also inserted at the cursor of the text you are editing."));
+    fv->addWidget(m_writeInto);
     m_deleteAfter = new QCheckBox(tr("Delete a recording once its text is written"), fileBox);
     m_deleteAfter->setObjectName(QStringLiteral("speechDeleteAfter"));
     fv->addWidget(m_deleteAfter);
@@ -1642,9 +1688,6 @@ SpeechOptions::SpeechOptions(SpeechTool *tool, QWidget *parent) : QObject(nullpt
     m_other->setChecked(other);
     m_otherAddress->setText(m_tool->setting(QStringLiteral("otherAddress")).toString());
     const speech::EngineSettings s = m_tool->engineSettings();
-    m_threads->setValue(s.threads);
-    m_unload->setValue(s.unloadMinutes);
-    m_accuracy->setCurrentIndex(s.careful ? 1 : 0);
     // a language stored by an older version that is not one of the 11 stays selectable
     for (QComboBox *box : {m_main, m_fallback}) {
         const QString stored = box == m_main ? s.mainLanguage : s.fallbackLanguage;
@@ -1664,6 +1707,7 @@ SpeechOptions::SpeechOptions(SpeechTool *tool, QWidget *parent) : QObject(nullpt
     m_recordOnly->setChecked(m_tool->recordOnly());
     m_live->setChecked(!m_tool->recordOnly());
     m_deleteAfter->setChecked(m_tool->setting(QStringLiteral("deleteRecording"), false).toBool());
+    m_writeInto->setChecked(m_tool->setting(QStringLiteral("writeIntoText"), false).toBool());
     m_progressRow->hide();
 
     // microphones and graphics cards need the engine; without it the lists say why
@@ -1741,7 +1785,12 @@ SpeechOptions::SpeechOptions(SpeechTool *tool, QWidget *parent) : QObject(nullpt
         auto res = std::make_shared<speech::TestResult>();
         const speech::EngineSettings st = m_tool->engineSettings();
         const QString sample = m_tool->samplePath();
-        QThread *t = QThread::create([eng, st, sample, res] { *res = eng->transcribeFile(sample, st, false); });
+        qb::tools::ToolHost *host = m_tool->host();
+        QThread *t = QThread::create([eng, st, sample, res, host] {
+            if (host)
+                host->lowerThreadPriority();   // the AI's work runs at a low priority (tool interface 1.3)
+            *res = eng->transcribeFile(sample, st, false);
+        });
         connect(t, &QThread::finished, this, [this, t, res] {
             t->deleteLater();
             m_speedTest->setEnabled(true);
@@ -1774,47 +1823,38 @@ void SpeechOptions::showModel()
         m_installed->setText(tr("%1 (%2, %3)").arg(in ? in->title : QFileInfo(file).fileName(), sizeText(QFileInfo(file).size()),
                                                   QFileInfo(file).fileName()));
     }
-    m_remove->setEnabled(!file.isEmpty());
+    m_remove->setEnabled(!m_tool->ownModelFile().isEmpty());
     m_download->setText(e && m_tool->installedModelId() == e->id ? tr("Download Again") : tr("Download and Use"));
 }
 
 void SpeechOptions::fillDevices()
 {
-    const int chosen = m_device->count() ? m_device->currentData().toInt() : m_tool->setting(QStringLiteral("gpu"), -1).toInt();
+    // 1.10 (item 117): the program's list: Automatic, the processor, and the graphics cards the AI engine found (Vulkan)
+    const QString chosen = m_device->count() ? m_device->currentData().toString()
+                                             : m_tool->setting(QStringLiteral("device"), QStringLiteral("auto")).toString();
     m_device->clear();
-    QString error;
-    speech::EngineInterface *e = m_tool->engine(&error);
-    QStringList notes;
-    if (!e) {
-        m_device->addItem(tr("Processor"), -1);
-        m_deviceNote->setText(error);
-        return;
+    qb::tools::ToolHost *host = m_tool->host();
+    if (host && host->apiVersion() >= 130)
+        host->aiEngine(QBAI_API_VERSION);   // the cards are known once the engine is loaded (null: not installed)
+    const QList<QPair<QString, QString>> choices = host && host->apiVersion() >= 130 ? host->aiDeviceChoices()
+                                                                                    : QList<QPair<QString, QString>>();
+    for (const auto &c : choices)
+        m_device->addItem(c.second, c.first);
+    if (m_device->count() == 0) {
+        m_device->addItem(tr("Automatic"), QStringLiteral("auto"));
+        m_device->addItem(tr("Processor (CPU)"), QStringLiteral("cpu"));
     }
-    const QString id = m_model->currentData().toString();
-    for (const speech::ComputeDevice &d : e->computeDevices()) {
-        if (d.gpuIndex < 0) {
-            m_device->addItem(d.name, -1);
-            continue;
-        }
-        const bool enough = d.memoryTotal <= 0 || d.memoryTotal >= memoryNeed(id);
-        m_device->addItem(QStringLiteral("%1 (%2)").arg(d.name, d.memoryTotal > 0 ? sizeText(d.memoryTotal) : tr("memory unknown")),
-                          d.gpuIndex);
-        if (!enough) {
-            // shown, but not chosen: the model does not fit into the card's memory
-            auto *model = qobject_cast<QStandardItemModel *>(m_device->model());
-            if (model)
-                model->item(m_device->count() - 1)->setEnabled(false);
-            notes << tr("%1 has too little memory for this model.").arg(d.name);
-        }
-    }
-    if (m_device->count() == 1)
-        notes << tr("No graphics card that whisper.cpp can use (Vulkan) was found; the processor computes.");
+    if (m_device->count() <= 2)
+        m_deviceNote->setText(tr("No graphics card that the AI engine can use (Vulkan) was found, or the engine is not installed; "
+                                 "the processor computes."));
     else
-        notes << tr("A graphics card is usually much faster; the speed test shows how much on this computer.");
-    m_deviceNote->setText(notes.join(QLatin1Char(' ')));
+        m_deviceNote->setText(tr("Automatic takes a graphics card with enough free memory for the model, else the processor. "
+                                 "A graphics card is usually much faster; the speed test shows how much on this computer."));
     int idx = m_device->findData(chosen);
-    if (idx < 0 || !(m_device->model()->flags(m_device->model()->index(idx, 0)) & Qt::ItemIsEnabled))
+    if (idx < 0) {
+        // a card that is not there now stays named (it may be back later) but is not offered silently
         idx = 0;
+    }
     m_device->setCurrentIndex(idx);
 }
 
@@ -1846,7 +1886,7 @@ void SpeechOptions::setBusy(bool busy)
     m_progress->setRange(0, 0);
     m_download->setEnabled(!busy);
     m_local->setEnabled(!busy);
-    m_remove->setEnabled(!busy && !m_tool->installedModelFile().isEmpty());
+    m_remove->setEnabled(!busy && !m_tool->ownModelFile().isEmpty());
     if (busy)
         m_message->setText(m_tool->modelMessage());
 }
@@ -1855,10 +1895,7 @@ void SpeechOptions::apply()
 {
     m_tool->setSetting(QStringLiteral("source"), m_other->isChecked() ? QStringLiteral("other") : QStringLiteral("official"));
     m_tool->setSetting(QStringLiteral("otherAddress"), m_otherAddress->text().trimmed());
-    m_tool->setSetting(QStringLiteral("gpu"), m_device->currentData().toInt());
-    m_tool->setSetting(QStringLiteral("threads"), m_threads->value());
-    m_tool->setSetting(QStringLiteral("unloadMinutes"), m_unload->value());
-    m_tool->setSetting(QStringLiteral("careful"), m_accuracy->currentIndex() == 1);
+    m_tool->setSetting(QStringLiteral("device"), m_device->currentData().toString());
     m_tool->setSetting(QStringLiteral("main"), m_main->currentData().toString());
     m_tool->setSetting(QStringLiteral("fallback"), m_fallback->currentData().toString());
     m_tool->setSetting(QStringLiteral("keepOriginal"), m_keepOriginal->isChecked());
@@ -1873,6 +1910,7 @@ void SpeechOptions::apply()
     m_tool->setSetting(QStringLiteral("useContext"), m_context->isChecked());
     m_tool->setSetting(QStringLiteral("mode"), m_recordOnly->isChecked() ? QStringLiteral("record") : QStringLiteral("live"));
     m_tool->setSetting(QStringLiteral("deleteRecording"), m_deleteAfter->isChecked());
+    m_tool->setSetting(QStringLiteral("writeIntoText"), m_writeInto->isChecked());
     if (m_tool->panel())
         m_tool->panel()->refresh();
 }

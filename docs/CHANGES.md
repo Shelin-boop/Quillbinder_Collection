@@ -26,6 +26,24 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
 
 New functions and fixes (Linux first).
 
+- **Speech Transcription 1.10** (items 110, 117; UR-11; add-on `plugins/tools/speech-transcription`, `addons/speech-transcription`).
+  0.95.0 had changed the add-on's language lists without raising its number; the number is now 1.10. The recognition runs in
+  the program's **AI Engine** (tool interface 1.3: `aiEngine`, `aiPickDevice`, `aiPanel`, `aiModelFile`; the model registry,
+  `ToolModels::unloadModel`, `modelMessage`, low-priority threads): the add-on carries **no whisper.cpp of its own** any more
+  (its `libwhisper.so.1` had the same name as the engine's). Because of that **1.10 needs Quillbinder 0.99.0** (`minApp`
+  0.99.0): the update file offers it only to a program of 0.99.0 or later, and to an older program only together with the
+  update of the program itself (a 0.95.0 installation without that update keeps 1.9). The device list shows **Automatic**, the
+  processor and **the graphics cards of the engine** (NVIDIA, AMD, Intel through Vulkan). The fields for threads and for the
+  time to free the model are gone: the page points to **File > Options > General > AI Models**. The accuracy choice
+  "Careful" is gone (the engine has one way of decoding), and with two languages that cannot be translated into each other
+  the engine finds the language of each piece among all it knows. A model of the program's list ("whisper-<id>", installed
+  with the AI panel at the top of the options page) is used when no model of the add-on's own download is installed. New: the
+  button **Insert at Cursor** in the Transcriptions tab (the marked part or all of the text, at the cursor of the text being
+  edited, one undo step) and the option **Write into the text as I speak** (off at first; the transcription is still kept in
+  the tab). For Android (written here, compiled by the Android probe): Record only is the default, the microphone permission
+  is asked before recording (Qt's `QMicrophonePermission`; Linux and Windows answer "granted"), and `keepRunning("recording")`
+  surrounds a recording. Suite `v0990m`. The Windows add-on still carries its own whisper.cpp (the Windows packages are made
+  by the Windows part).
 - **Translation Helper 1.6** (item 126; add-on `addons/translation-proofreading`). With tool interface 1.3 (the program 0.99.0)
   the add-on registers its models with the program's model list: it asks before every load (a refusal comes back with its
   reason), reports loaded, used and unloaded models with their sizes ("ram"), and unloads them when the program asks

@@ -207,6 +207,37 @@ a tag points elsewhere), none changed except where said here.
   libmtmd, which is why libmtmd is built with `LLAMA_BUILD_MTMD=ON`) and also has a Qwen3-TTS path of its own (libmtmd's
   `qwen3tts-gen`), apart from qwentts.cpp. whisper.cpp 1.9.6 also installs `libparakeet`.
 
+## 0.99.0: Speech Transcription 1.10 (the AI engine instead of its own whisper.cpp)
+
+- **Layout.** `libqb-speech-impl.so` no longer links whisper.cpp or ggml: it gets the engine from the host (`ToolHost::aiEngine`,
+  `QBAI_API_VERSION`) and calls the C table of `tools/QbAi.h`. `SpeechApi.h`: `EngineSettings::device` ("auto", "cpu",
+  "gpu:<name>") replaces `gpuIndex`; `threads`, `careful` and `unloadMinutes` are gone; `computeDevices()` is gone (the tool's
+  list is `ToolHost::aiDeviceChoices()`); `setHost()` is new, called by the tool right after the library is created. The stage
+  script and CMake need whisper.cpp's folder only for the test recording `samples/jfk.wav`.
+- **One `Holder` for the model.** The live pieces, the model check and the speed test share one loaded model (mutex in `Holder`).
+  The registry id is `speech-transcription:<model id>` (`ToolHost::toolOfModel` takes the part before the colon). Every load
+  asks `requestModelLoad` (with `modelMessage` around it), then `modelLoaded` (a failed load: `modelUnloaded`); each piece calls
+  `modelUsed`. **Pitfall**: `requestModelLoad` waits for the main thread, so the program's request to unload
+  (`ToolModels::unloadModel`, main thread) must never wait for the worker: `Engine::unloadModelOfId` only tries the mutex and
+  answers `false` ("in use") when it cannot take it. A blocking wait here would be a deadlock (the same one ai1 met in the
+  engine's job lock).
+- **What the engine cannot do that whisper.cpp's own API could**: beam search ("Careful"), the probability of "no speech" per
+  segment (the silence guard now only cleans the text with `speech::cleanText`), and the language probabilities (so the two-language
+  choice of `chooseLanguage` is not used: with two languages that cannot be translated into each other the language is
+  "auto", among all the engine knows). With English as the main language the translating pass is as before (main language as
+  spoken language, `translate`); "keep the original" runs a second pass with "auto" and writes the fallback language's code.
+- **Model files.** `installedModelFile()` is the add-on's own download first, else the program's catalog entry `whisper-<id>`
+  (`ToolHost::aiModelFile`, `<id>` from `speech::catalog()`); `ownModelFile()` is what Remove and the replace step touch. The
+  catalog's ASR entries (models-5) must use these ids.
+- **minApp and the update file.** `addons::compareVersions(minApp, programAfter)` in `UpdateCheck.cpp`: an add-on offer needs the program
+  version the writer has after the same check (a program update offered as `ProgramUpdate` counts; a new AppImage does not,
+  as the writer has to install it first). So 1.10 reaches a 0.95.0 installation only with the update to 0.99.0, and
+  `addons::inspect` refuses a package with a higher `minApp`. Checked in `v0990m`.
+- **Microphone permission** (`QMicrophonePermission`, in `startAudio`): granted at once on Linux and Windows; on Android the
+  first recording asks and does not start (the writer presses Record again). `keepRunning("recording")` is set from the start of
+  a recording (live or Record only) until it stops. `recordOnly()` is Android's default (`Q_OS_ANDROID`, `QSysInfo`, or the test
+  switch `QB_SPEECH_ANDROID`).
+
 ## 0.99.0: Translation Helper 1.6 (tool interface 1.3, CTranslate2 4.9.1)
 
 - The add-on's `third_party/quillbinder/ToolApi.h` is the program's 1.3 header again (copied whole). `TranslateTool` also
