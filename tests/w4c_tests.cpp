@@ -158,8 +158,7 @@ int main(int argc, char **argv)
         if (!QFileInfo::exists(dir + QLatin1Char('/') + QLatin1String(f)))
             missing << QLatin1String(f);
     check(!dir.isEmpty() && missing.isEmpty(),
-          QStringLiteral("its files: the tool, the engine, whisper.cpp with a compute module per processor generation, Qt "
-                         "Multimedia, the test recording, the licenses"),
+          QStringLiteral("its files: the tool, the engine, Qt Multimedia, the test recording, the licenses"),
           dir + QLatin1String(" missing: ") + missing.join(QLatin1String(", ")));
     const QString readme = readText(dir + QStringLiteral("/licenses/README.txt"));
     const QStringList modules = QDir(dir + QStringLiteral("/lib")).entryList({QStringLiteral("*ggml-cpu-*")}, QDir::Files);
@@ -175,8 +174,8 @@ int main(int argc, char **argv)
           QStringLiteral("Windows: the add-on's description says the processor and names no graphics cards"),
           info.manifest.description);
 #else
-    check(readme.contains(QLatin1String("whisper.cpp")) && readme.contains(QLatin1String("MIT")) && modules.size() >= 5,
-          QStringLiteral("the license notes name whisper.cpp; one compute module per processor generation"),
+    check(readme.contains(QLatin1String("AI Engine")) && readme.contains(QLatin1String("Qt Multimedia")) && modules.isEmpty(),
+          QStringLiteral("1.10: the license notes say the recognition is in the AI Engine add-on; no compute modules in this add-on"),
           modules.join(QLatin1Char(' ')));
 #endif
     note(QStringLiteral("compute modules: %1").arg(modules.join(QLatin1Char(' '))));

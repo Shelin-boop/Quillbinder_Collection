@@ -128,7 +128,10 @@ public:
     bool ensure(const EngineSettings &s, QString *error)
     {
         const QString id = registryId(s);
-        if (m_model && m_file == s.modelFile && m_device == s.device && m_id == id) {
+        // the file's size and time count too: a model checked under a name that an earlier file had is another model
+        const QFileInfo info(s.modelFile);
+        const QString stamp = QStringLiteral("%1/%2").arg(info.size()).arg(info.lastModified().toMSecsSinceEpoch());
+        if (m_model && m_file == s.modelFile && m_stamp == stamp && m_device == s.device && m_id == id) {
             host->modelUsed(id);
             return true;
         }
@@ -179,6 +182,7 @@ public:
         m_api = api;
         m_model = m;
         m_file = s.modelFile;
+        m_stamp = stamp;
         m_device = s.device;
         m_id = id;
         return true;
@@ -236,7 +240,7 @@ public:
 private:
     const qbai_api *m_api = nullptr;
     qbai_model *m_model = nullptr;
-    QString m_file, m_device, m_id;
+    QString m_file, m_stamp, m_device, m_id;
 };
 
 // ------------------------------------------------------------------ the thread with the model

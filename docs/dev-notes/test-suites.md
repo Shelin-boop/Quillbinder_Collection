@@ -12,8 +12,8 @@ unloading, the device list Automatic / processor / the two cards, the new option
 fake engine (its text, the card chosen by Automatic, the registry entry, `keepRunning`, the model kept between recordings,
 the program's unload request, a chosen card and the processor); Insert at Cursor (whole text, marked part, one undo step
 each); Write into the text as I speak (off, on); Android's default through `QB_SPEECH_ANDROID`. Screenshots `01-options`,
-`02-insert`, `03-write-as-I-speak`. A real transcription with the tiny model through the real engine is run by hand (see the
-report of the job; the model is `ggml-tiny.en.bin`, never committed).
+`02-insert`, `03-write-as-I-speak`. `QB_V0990M_REAL=<ggml model>` runs one live recording through the real engine (`<build>/qbai/libqbai.so.1`, from the engine pack) instead (see the
+`ggml-tiny.en.bin` is enough, never committed; the add-on's model check refuses English-only models, so `v061`'s `QB_SPEECH_MODEL_FILE` needs a multilingual one).
 
 ## v0990h (0.99.0)
 

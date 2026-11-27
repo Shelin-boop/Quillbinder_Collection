@@ -433,7 +433,10 @@ bool SpeechTool::recordOnly() const
     if (QB_TEST_ENV_SET("QB_SPEECH_ANDROID") || QSysInfo::productType() == QLatin1String("android"))
         phone = true;
     const QString standard = phone ? QStringLiteral("record") : QStringLiteral("live");
-    return setting(QStringLiteral("mode"), standard).toString() == QLatin1String("record");
+    QString mode = setting(QStringLiteral("mode"), standard).toString();
+    if (mode.isEmpty())
+        mode = standard;
+    return mode == QLatin1String("record");
 }
 
 bool SpeechTool::startRecording(const QString &wavFile)
