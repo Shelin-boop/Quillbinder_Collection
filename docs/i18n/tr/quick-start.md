@@ -20,7 +20,7 @@
 | Pencerenin her bölümünün renkleri ve yazı tipleri | **Dosya > Seçenekler > Dış Görünüm** (veya **Görünüm > Temalar > Renkler ve Yazı Tipleri…**) ya da bölüme sağ tıklayın (**Dış Görünüm**). Her proje kendi görünümünü saklar; en üstteki liste bu projeyi veya yeni projeleri seçer. |
 | Kendi temanız | **Görünüm > Temalar > Geçerli Görünümü Tema Olarak Kaydet…**; **Temaları Yönet…** *.qbtheme* dosyalarını dışa ve içe aktarır. |
 | Arayüz yazı tipi, araç çubuğu simge boyutu, başlık çubuğundaki tam yol | **Dosya > Seçenekler > Dış Görünüm > Genel Arayüz** |
-| Metin sütunu: sabit genişlik, kağıt rengi, genişlik, metnin yanındaki kenarlık | **Dosya > Seçenekler > Dış Görünüm > Ana Düzenleyici** ya da kağıda sağ tıklayın |
+| Metin sütunu: sabit genişlik, kâğıt rengi, genişlik, metnin yanındaki kenarlık | **Dosya > Seçenekler > Dış Görünüm > Ana Düzenleyici** ya da kağıda sağ tıklayın |
 | Projenin ayarlarını bir dosyaya kaydetme ve bu veya başka bir projeye geri yükleme | **Proje > Proje Ayarlarını Dosyaya Kaydet…** / **Proje Ayarlarını Dosyadan Yükle…** |
 | **Yeni** projelerin yazı tipi ve paragraf biçimlendirmesi | **Dosya > Seçenekler > Düzenleme > Biçimlendirme** ("Geçerli Düzenleyicideki Biçimlendirmeyi Kullan") |
 | **Bu** projenin yazı tipi ve paragraf biçimlendirmesi | **Proje > Proje Ayarları > Biçimlendirme** |
@@ -28,12 +28,12 @@
 | Araç çubukları | **Görünüm > Araç Çubukları > Araç Çubuklarını Özelleştir…** (veya bir çubuğa sağ tıklayın) |
 | Simge çubuğu | **Görünüm > Araç Çubukları > Simge Çubuğu**; **Simge Çubuğu İçin Simgeleri Seç…** |
 | Klavye kısayolları | **Dosya > Seçenekler > Klavye** (arama, yeni tuşlara basma, dışa ve içe aktarma); **Yardım > Klavye Kısayolları…** bunları listeler |
-| Menülerde bir komut bulma | **Yardım > Komut Bul…** (adının bir kısmını yazın; Return onu çalıştırır) |
+| Menülerde bir komut bulma | **Yardım > Komut Bul…** (adının bir kısmını yazın; Enter onu çalıştırır) |
 | Pencere yerleşimleri | **Görünüm > Yerleşim** (yedisi yerleşik; kendinizinkini kaydedin) |
 | Otomatik kaydetme, son kullanılan projeler, yazar bilgileri | **Dosya > Seçenekler > Genel** |
 | Yedekler | **Dosya > Seçenekler > Yedekleme** (ne zaman, kaç tane, nereye); **Dosya > Yedekle** hemen bir yedek alır |
 | Yazarken yazım denetimi ve düzeltmeler | **Dosya > Seçenekler > Düzeltmeler** |
-| Bağlantıların nerede açılacağı, Return tuşu, yazım modu, oynatma | **Dosya > Seçenekler > Davranışlar** |
+| Bağlantıların nerede açılacağı, Enter tuşu, yazım modu, oynatma | **Dosya > Seçenekler > Davranışlar** |
 | İçe ve dışa aktarma ayarları | **Dosya > Seçenekler > Paylaşım** |
 | Zihin haritaları, nesneler, eklentiler, çökme raporları | **Dosya > Seçenekler > Ek Özellikler** |
 | Etiketler, durum, kesim türleri, özel üst veri, özel klasörler | **Proje > Proje Ayarları** |

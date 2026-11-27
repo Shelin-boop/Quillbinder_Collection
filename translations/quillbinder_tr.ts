@@ -430,7 +430,7 @@ Bu listedeki adlar kadın ve erkek olarak ayrılmamıştır.</translation>
     </message>
     <message>
         <source>Own list from %1</source>
-        <translation>%1 dosyasından kendi liste</translation>
+        <translation>%1 dosyasından kendi listem</translation>
     </message>
     <message numerus="yes">
         <source>List “%1” with %n name(s).</source>
@@ -3331,7 +3331,7 @@ Kaynak: %1</translation>
     </message>
     <message>
         <source>Single Return</source>
-        <translation>Tek Return</translation>
+        <translation>Tek Enter</translation>
     </message>
     <message>
         <source>Empty Line</source>
@@ -3507,8 +3507,8 @@ Kaynak: %1</translation>
     </message>
     <message numerus="yes">
         <source>%Ln tab stop(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln sekme durağı</numerusform>
         </translation>
     </message>
     <message>
@@ -3809,8 +3809,8 @@ Kaynak: %1</translation>
     </message>
     <message numerus="yes">
         <source>You have changed %Ln color(s) or font(s) of your own on top of the current theme.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Geçerli temanın üzerinde kendinize ait %Ln renk veya yazı tipi değişikliği yaptınız.</numerusform>
         </translation>
     </message>
     <message>
@@ -4429,7 +4429,7 @@ Bunlar da alınsın mı? Bunları yalnızca dosyayı kendiniz hazırladıysanız
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation>Profilin düzenleri uygulanamadı; sahip olduğunuz düzenler korundu.</translation>
+        <translation>Profilin yerleşimleri ayarlanamadı; sahip olduğunuz yerleşimler korundu.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -5011,7 +5011,7 @@ Bunlar da alınsın mı? Bunları yalnızca dosyayı kendiniz hazırladıysanız
     </message>
     <message>
         <source>Record &amp;Only</source>
-        <translation>Yalnızca &amp;Kaydet</translation>
+        <translation>&amp;Yalnızca Kaydet</translation>
     </message>
     <message>
         <source>Start or stop a recording without writing its text (the text can be written later with Transcribe)</source>
@@ -5043,7 +5043,7 @@ Bunlar da alınsın mı? Bunları yalnızca dosyayı kendiniz hazırladıysanız
     </message>
     <message>
         <source>Speech Transcription Options…</source>
-        <translation>Konuşma Yazıya Dökme Seçenekleri…</translation>
+        <translation>Konuşmayı Yazıya Dökme Seçenekleri…</translation>
     </message>
     <message>
         <source>The add-on&apos;s speech engine is missing (install the add-on again).</source>
@@ -5059,11 +5059,11 @@ Bunlar da alınsın mı? Bunları yalnızca dosyayı kendiniz hazırladıysanız
     </message>
     <message>
         <source>&amp;Speech Transcription</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Konuşmayı Yazıya Dökme</translation>
     </message>
     <message>
         <source>Show Transcri&amp;ptions</source>
-        <translation type="unfinished"></translation>
+        <translation>Yazıya Dökmeleri &amp;Göster</translation>
     </message>
     <message>
         <source>Cannot load the speech engine: %1</source>
@@ -5194,7 +5194,7 @@ Bunlar da alınsın mı? Bunları yalnızca dosyayı kendiniz hazırladıysanız
     <name>TextStatisticsTool</name>
     <message>
         <source>Te&amp;xt Statistics…</source>
-        <translation>Metin İ&amp;statistikleri…</translation>
+        <translation>&amp;Metin İstatistikleri…</translation>
     </message>
     <message>
         <source>Counts, readability, word frequency and repeated phrases of a selection, documents or the whole project</source>
@@ -5273,7 +5273,7 @@ Bunlar da alınsın mı? Bunları yalnızca dosyayı kendiniz hazırladıysanız
     </message>
     <message>
         <source>Leaves out articles, pronouns, prepositions and the like (English and German)</source>
-        <translation>Artikelleri, zamirleri, edatları ve benzerlerini dışarıda bırakır (İngilizce ve Almanca)</translation>
+        <translation>Tanımlıkları, zamirleri, edatları ve benzerlerini dışarıda bırakır (İngilizce ve Almanca)</translation>
     </message>
     <message>
         <source>Case-sensitive</source>
@@ -6056,7 +6056,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>The engine %1 is switched off (Help &gt; Add-ons and Updates &gt; Manage Add-ons).</source>
-        <translation>%1 motoru kapalı (Yardım &gt; Eklentiler ve Güncellemeler &gt; Eklentileri Yönet).</translation>
+        <translation>%1 motoru kapalı (Yardım &gt; Eklentiler ve Güncellemeler &gt; Eklenti Yöneticisi).</translation>
     </message>
     <message>
         <source>The handwriting engine %1 is installed.</source>
@@ -6165,8 +6165,8 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     <name>qb::BinderModel</name>
     <message numerus="yes">
         <source>%Ln word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln sözcük</numerusform>
         </translation>
     </message>
     <message>
@@ -6520,7 +6520,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Type part of a command&apos;s name or of its menu. Return or a double-click runs it.</source>
-        <translation>Bir komutun adının veya menüsünün bir kısmını yazın. Return veya çift tıklama onu çalıştırır.</translation>
+        <translation>Bir komutun adının veya menüsünün bir kısmını yazın. Enter veya çift tıklama onu çalıştırır.</translation>
     </message>
     <message>
         <source>Command</source>
@@ -6587,7 +6587,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>&amp;Take</source>
-        <translation>&amp;Al</translation>
+        <translation>A&amp;l</translation>
     </message>
     <message>
         <source>Transfer</source>
@@ -6742,7 +6742,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Section Layouts</source>
-        <translation>Bölüm Yerleşimleri</translation>
+        <translation>Kesim Yerleşimleri</translation>
     </message>
     <message>
         <source>How each section type looks in this format</source>
@@ -6758,7 +6758,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Determined by Section Layout</source>
-        <translation>Bölüm Yerleşimine Göre Belirlenir</translation>
+        <translation>Kesim Yerleşimine Göre Belirlenir</translation>
     </message>
     <message>
         <source>Section type</source>
@@ -6774,7 +6774,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Assign Section Layouts...</source>
-        <translation>Bölüm Yerleşimlerini Ata...</translation>
+        <translation>Kesim Yerleşimlerini Ata...</translation>
     </message>
     <message>
         <source>Placeholders such as &lt;$W:chapter&gt; (One, Two ...), &lt;$n&gt; (1, 2 ...), &lt;$R&gt; (I, II ...), &lt;$title&gt;, &lt;$projecttitle&gt;, &lt;$author&gt;, &lt;$wc100&gt; can be used in text and titles.</source>
@@ -7038,7 +7038,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Assign Section Layouts — %1</source>
-        <translation>Bölüm Yerleşimlerini Ata — %1</translation>
+        <translation>Kesim Yerleşimlerini Ata — %1</translation>
     </message>
     <message>
         <source>Choose a section type on the left, then the layout it gets in this format on the right.</source>
@@ -7062,8 +7062,8 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message numerus="yes">
         <source>Preview — %1 (%Ln page(s))</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Önizleme — %1 (%Ln sayfa)</numerusform>
         </translation>
     </message>
     <message>
@@ -7092,20 +7092,20 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message numerus="yes">
         <source>%Ln object sheet(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln nesne sayfası</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln document(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln belge</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>about %Ln word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>yaklaşık %Ln sözcük</numerusform>
         </translation>
     </message>
     <message>
@@ -7223,7 +7223,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Typographic quotes to &amp;straight quotes (&quot; &apos;)</source>
-        <translation>Tipografik tırnakları &amp;düz tırnaklara (&quot; &apos;)</translation>
+        <translation>T&amp;ipografik tırnakları düz tırnaklara (&quot; &apos;)</translation>
     </message>
     <message>
         <source>An apostrophe inside a word becomes ’. A straight mark with a space on both sides stays as it is; an apostrophe at the start of a word (&apos;tis) becomes an opening mark.</source>
@@ -7235,7 +7235,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>T&amp;itles</source>
-        <translation>&amp;Başlıklar</translation>
+        <translation>B&amp;aşlıklar</translation>
     </message>
     <message>
         <source>Te&amp;xt</source>
@@ -7255,7 +7255,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>Comments and &amp;footnotes</source>
-        <translation>Yorumlar ve &amp;dipnotlar</translation>
+        <translation>&amp;Yorumlar ve dipnotlar</translation>
     </message>
     <message>
         <source>Scope</source>
@@ -7263,7 +7263,7 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message>
         <source>&amp;Entire project</source>
-        <translation>&amp;Tüm proje</translation>
+        <translation>Tüm &amp;proje</translation>
     </message>
     <message>
         <source>Selected &amp;documents only</source>
@@ -7347,20 +7347,20 @@ Quillbinder klasörünün tamamını kendinize ait bir yere taşıyın, örneği
     </message>
     <message numerus="yes">
         <source>%Ln document(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln belge</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln quote mark(s) converted in %1: %2.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 içinde %Ln tırnak işareti dönüştürüldü: %2.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln quote mark(s) to convert in %1: %2.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 içinde dönüştürülecek %Ln tırnak işareti var: %2.</numerusform>
         </translation>
     </message>
     <message>
@@ -7432,7 +7432,7 @@ Bu bütün olarak geri alınamaz.%3</translation>
     </message>
     <message>
         <source>Copyholder on the &amp;Right</source>
-        <translation>Referans Bölmesi &amp;Sağda</translation>
+        <translation>&amp;Referans Bölmesi Sağda</translation>
     </message>
     <message>
         <source>Copyholder at the &amp;Top</source>
@@ -7502,8 +7502,8 @@ Bu bütün olarak geri alınamaz.%3</translation>
     </message>
     <message numerus="yes">
         <source>Delete all %Ln crash report(s)?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Tüm %Ln çökme raporu silinsin mi?</numerusform>
         </translation>
     </message>
     <message>
@@ -8009,35 +8009,35 @@ Sayfa (250 sözcük): %5</translation>
     </message>
     <message numerus="yes">
         <source>%Ln replacement(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln değiştirme</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln match(es)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln eşleşme</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln page(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln sayfa</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln document(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln belge</numerusform>
         </translation>
     </message>
     <message>
         <source>%1 of %2 characters (click to edit)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2 karakter (düzenlemek için tıklayın)</translation>
     </message>
     <message>
         <source>%1 of %2 words (click to edit)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2 sözcük (düzenlemek için tıklayın)</translation>
     </message>
     <message>
         <source>No target</source>
@@ -8852,7 +8852,7 @@ Aşağıda istemediğiniz sürece Windows&apos;un kendi klasörlerine veya kayı
     </message>
     <message>
         <source>Section Layouts</source>
-        <translation>Bölüm Yerleşimleri</translation>
+        <translation>Kesim Yerleşimleri</translation>
     </message>
     <message>
         <source>Which layout a section type uses by default in this format (by section type name; projects can override this in the Compile window). &quot;*&quot; matches every type.</source>
@@ -9184,11 +9184,11 @@ Aşağıda istemediğiniz sürece Windows&apos;un kendi klasörlerine veya kayı
     </message>
     <message>
         <source>Italics as underlining (manuscript convention)</source>
-        <translation>İtalik yerine altı çizili (daktilo yazısı geleneği)</translation>
+        <translation>İtalik yerine altı çizili (daktilo yazım geleneği)</translation>
     </message>
     <message>
         <source>Several spaces become one</source>
-        <translation>Birkaç boşluk bire iner</translation>
+        <translation>Birden çok boşluk tek boşluğa dönüşür</translation>
     </message>
     <message>
         <source>Remove spaces at the end of paragraphs</source>
@@ -9307,7 +9307,7 @@ Aşağıda istemediğiniz sürece Windows&apos;un kendi klasörlerine veya kayı
     </message>
     <message>
         <source>&amp;Search in:</source>
-        <translation>Şurada &amp;ara:</translation>
+        <translation>&amp;Şurada ara:</translation>
     </message>
     <message>
         <source>&amp;Limit search to color:</source>
@@ -9343,7 +9343,7 @@ Aşağıda istemediğiniz sürece Windows&apos;un kendi klasörlerine veya kayı
     </message>
     <message>
         <source>&amp;Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Kalın</translation>
     </message>
     <message>
         <source>&amp;Italic</source>
@@ -9386,8 +9386,8 @@ Aşağıda istemediğiniz sürece Windows&apos;un kendi klasörlerine veya kayı
     <name>qb::FullInstallWindow</name>
     <message numerus="yes">
         <source>Installing %Ln add-on(s) (%1 MB)...</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln eklenti kuruluyor (%1 MB)...</numerusform>
         </translation>
     </message>
     <message>
@@ -10439,8 +10439,8 @@ Bunun yerine “%4” komutuna verilsin mi? O zaman “%2” komutunun kısayolu
     </message>
     <message numerus="yes">
         <source>%Ln shortcut(s) changed by you (shown in bold).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Sizin değiştirdiğiniz %Ln kısayol (kalın gösterilir).</numerusform>
         </translation>
     </message>
     <message>
@@ -10780,7 +10780,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;New Project…</source>
-        <translation>&amp;Yeni Proje…</translation>
+        <translation>Ye&amp;ni Proje…</translation>
     </message>
     <message>
         <source>Open Pro&amp;ject…</source>
@@ -10888,7 +10888,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Compi&amp;le…</source>
-        <translation>&amp;Derle…</translation>
+        <translation>D&amp;erle…</translation>
     </message>
     <message>
         <source>Convert &amp;Markdown ⇄ RTF File…</source>
@@ -10896,7 +10896,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Print Settin&amp;gs…</source>
-        <translation>Yazdırma &amp;Ayarları…</translation>
+        <translation>Ya&amp;zdırma Ayarları…</translation>
     </message>
     <message>
         <source>Paper, header and footer, and how texts, index cards and the outliner are printed</source>
@@ -10904,7 +10904,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Print Current Document…</source>
-        <translation>Geçerli Belgeyi &amp;Yazdır…</translation>
+        <translation>&amp;Geçerli Belgeyi Yazdır…</translation>
     </message>
     <message>
         <source>Prints what the editor shows: the text, the index cards of the corkboard, the outliner, a picture or a PDF file</source>
@@ -10916,7 +10916,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>Çı&amp;kış</translation>
+        <translation>&amp;Çıkış</translation>
     </message>
     <message>
         <source>&amp;Save Current Look as Theme…</source>
@@ -10960,7 +10960,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>&amp;Yapıştır</translation>
+        <translation>Ya&amp;pıştır</translation>
     </message>
     <message>
         <source>Paste and Match &amp;Style</source>
@@ -10968,7 +10968,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Select &amp;All</source>
-        <translation>&amp;Tümünü Seç</translation>
+        <translation>Tümünü &amp;Seç</translation>
     </message>
     <message>
         <source>&amp;Find…</source>
@@ -10976,7 +10976,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Find &amp;and Replace…</source>
-        <translation>Bul ve &amp;Değiştir…</translation>
+        <translation>Bul &amp;ve Değiştir…</translation>
     </message>
     <message>
         <source>Find &amp;Next</source>
@@ -11032,7 +11032,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Object Templates and Colors…</source>
-        <translation>Nesne &amp;Şablonları ve Renkleri…</translation>
+        <translation>&amp;Nesne Şablonları ve Renkleri…</translation>
     </message>
     <message>
         <source>Insert &amp;Web Link…</source>
@@ -11056,7 +11056,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Combined Text / Document</source>
-        <translation>&amp;Birleşik Metin / Belge</translation>
+        <translation>Bi&amp;rleşik Metin / Belge</translation>
     </message>
     <message>
         <source>&amp;Corkboard</source>
@@ -11080,7 +11080,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>S&amp;how Binder</source>
-        <translation>&amp;Binder&apos;ı Göster</translation>
+        <translation>Binder&apos;&amp;ı Göster</translation>
     </message>
     <message>
         <source>&amp;Quick-Add Keys in the Binder</source>
@@ -11088,7 +11088,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Return adds a new document below; Space opens a Quick Reference window</source>
-        <translation>Return altına yeni bir belge ekler; Boşluk tuşu bir Hızlı Başvuru penceresi açar</translation>
+        <translation>Enter altına yeni bir belge ekler; Boşluk tuşu bir Hızlı Başvuru penceresi açar</translation>
     </message>
     <message>
         <source>Show &amp;Inspector</source>
@@ -11096,15 +11096,15 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Sho&amp;w Collections</source>
-        <translation>&amp;Koleksiyonları Göster</translation>
+        <translation>Koleksiyonları &amp;Göster</translation>
     </message>
     <message>
         <source>Composition &amp;Mode</source>
-        <translation>Y&amp;azım Modu</translation>
+        <translation>Ya&amp;zım Modu</translation>
     </message>
     <message>
         <source>&amp;Page View</source>
-        <translation>&amp;Sayfa Görünümü</translation>
+        <translation>Sayfa &amp;Görünümü</translation>
     </message>
     <message>
         <source>Show the text on pages</source>
@@ -11112,7 +11112,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Page &amp;Size and Margins…</source>
-        <translation>Sayfa &amp;Boyutu ve Kenar Boşlukları…</translation>
+        <translation>Sayfa Boyutu &amp;ve Kenar Boşlukları…</translation>
     </message>
     <message>
         <source>&amp;Typewriter Scrolling</source>
@@ -11120,7 +11120,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Show Titles in &amp;Combined Text</source>
-        <translation>Birleşik Metinde &amp;Başlıkları Göster</translation>
+        <translation>Birleşik &amp;Metinde Başlıkları Göster</translation>
     </message>
     <message>
         <source>Fixed &amp;Width Editor</source>
@@ -11128,7 +11128,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Zoom I&amp;n</source>
-        <translation>&amp;Yakınlaştır</translation>
+        <translation>Yakı&amp;nlaştır</translation>
     </message>
     <message>
         <source>&amp;Zoom Out</source>
@@ -11140,11 +11140,11 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Zoom Insp&amp;ector Tabs Separately</source>
-        <translation>Denetçi &amp;Sekmelerini Ayrı Yakınlaştır</translation>
+        <translation>Denetç&amp;i Sekmelerini Ayrı Yakınlaştır</translation>
     </message>
     <message>
         <source>Status &amp;Stamps</source>
-        <translation>Durum &amp;Damgaları</translation>
+        <translation>Du&amp;rum Damgaları</translation>
     </message>
     <message>
         <source>Label Color in &amp;Index Cards</source>
@@ -11164,7 +11164,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Project &amp;Settings…</source>
-        <translation>Proje &amp;Ayarları…</translation>
+        <translation>&amp;Proje Ayarları…</translation>
     </message>
     <message>
         <source>Sa&amp;ve Project Settings to File…</source>
@@ -11184,8 +11184,8 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message numerus="yes">
         <source>Snapshot taken of %Ln document(s).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln belgenin anlık görüntüsü alındı.</numerusform>
         </translation>
     </message>
     <message>
@@ -11194,11 +11194,11 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Delete Old Snapshots…</source>
-        <translation>Eski &amp;Anlık Görüntüleri Sil…</translation>
+        <translation>&amp;Eski Anlık Görüntüleri Sil…</translation>
     </message>
     <message>
         <source>Show Project in &amp;File Manager</source>
-        <translation>Projeyi Dosya &amp;Yöneticisinde Göster</translation>
+        <translation>P&amp;rojeyi Dosya Yöneticisinde Göster</translation>
     </message>
     <message>
         <source>Open in &amp;Other Editor</source>
@@ -11226,7 +11226,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Move to &amp;Trash</source>
-        <translation>&amp;Çöp Kutusuna Taşı</translation>
+        <translation>Çöp &amp;Kutusuna Taşı</translation>
     </message>
     <message>
         <source>Trash</source>
@@ -11266,7 +11266,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Include in Compile</source>
-        <translation>&amp;Derlemeye Dahil Et</translation>
+        <translation>De&amp;rlemeye Dahil Et</translation>
     </message>
     <message>
         <source>Take &amp;Snapshot</source>
@@ -11290,7 +11290,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Add to Project &amp;Bookmarks</source>
-        <translation>Proje &amp;Yer İmlerine Ekle</translation>
+        <translation>&amp;Proje Yer İmlerine Ekle</translation>
     </message>
     <message>
         <source>&amp;Reveal in Binder</source>
@@ -11302,7 +11302,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Bo&amp;ld</source>
-        <translation>&amp;Kalın</translation>
+        <translation>Ka&amp;lın</translation>
     </message>
     <message>
         <source>&amp;Italic</source>
@@ -11322,7 +11322,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Su&amp;bscript</source>
-        <translation>Al&amp;t Simge</translation>
+        <translation>Alt &amp;Simge</translation>
     </message>
     <message>
         <source>&amp;Highlight</source>
@@ -11330,7 +11330,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Align &amp;Left</source>
-        <translation>&amp;Sola Hizala</translation>
+        <translation>Sola &amp;Hizala</translation>
     </message>
     <message>
         <source>&amp;Center</source>
@@ -11358,11 +11358,11 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Outdent List Item</source>
-        <translation>Liste Öğesinin &amp;Girintisini Azalt</translation>
+        <translation>&amp;Liste Öğesinin Girintisini Azalt</translation>
     </message>
     <message>
         <source>&amp;Clear Formatting</source>
-        <translation>Biçimlendirmeyi &amp;Temizle</translation>
+        <translation>B&amp;içimlendirmeyi Temizle</translation>
     </message>
     <message>
         <source>Text &amp;Color…</source>
@@ -11398,7 +11398,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Reset Paragraph &amp;Formatting</source>
-        <translation>Paragraf Biçimlendirmesini &amp;Sıfırla</translation>
+        <translation>Paragraf &amp;Biçimlendirmesini Sıfırla</translation>
     </message>
     <message>
         <source>&amp;New Style From Selection…</source>
@@ -11406,7 +11406,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Redefine Style From Selection…</source>
-        <translation>Stili Seçimden &amp;Yeniden Tanımla…</translation>
+        <translation>Stili Seçimden Yeniden &amp;Tanımla…</translation>
     </message>
     <message>
         <source>Styles &amp;Panel</source>
@@ -11450,7 +11450,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Comment</source>
-        <translation>&amp;Yorum</translation>
+        <translation>Yor&amp;um</translation>
     </message>
     <message>
         <source>&amp;Footnote</source>
@@ -11474,11 +11474,11 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Insert Row &amp;Above</source>
-        <translation>Yukarıya Satır &amp;Ekle</translation>
+        <translation>&amp;Yukarıya Satır Ekle</translation>
     </message>
     <message>
         <source>Insert Row &amp;Below</source>
-        <translation>Aşağıya Satır E&amp;kle</translation>
+        <translation>&amp;Aşağıya Satır Ekle</translation>
     </message>
     <message>
         <source>Insert Column &amp;Left</source>
@@ -11506,7 +11506,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Split Cell</source>
-        <translation>Hücreyi &amp;Böl</translation>
+        <translation>Hü&amp;creyi Böl</translation>
     </message>
     <message>
         <source>Cell &amp;Color…</source>
@@ -11530,11 +11530,11 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Current &amp;Date</source>
-        <translation>Geçerli &amp;Tarih</translation>
+        <translation>&amp;Geçerli Tarih</translation>
     </message>
     <message>
         <source>&amp;Bibliography/Citations…</source>
-        <translation>&amp;Kaynakça/Alıntılar…</translation>
+        <translation>Kaynakça/&amp;Alıntılar…</translation>
     </message>
     <message>
         <source>Bibliography/Citations</source>
@@ -11550,7 +11550,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Back</source>
-        <translation>&amp;Geri</translation>
+        <translation>G&amp;eri</translation>
     </message>
     <message>
         <source>&amp;Forward</source>
@@ -11578,7 +11578,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Focus &amp;Editor</source>
-        <translation>&amp;Düzenleyiciye Odaklan</translation>
+        <translation>Düzenleyiciye &amp;Odaklan</translation>
     </message>
     <message>
         <source>&amp;Switch Editor</source>
@@ -11586,11 +11586,11 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;User Manual</source>
-        <translation>&amp;Kullanım Kılavuzu</translation>
+        <translation>K&amp;ullanım Kılavuzu</translation>
     </message>
     <message>
         <source>&amp;Quick Start Guide</source>
-        <translation>&amp;Hızlı Başlangıç Kılavuzu</translation>
+        <translation>Hızlı &amp;Başlangıç Kılavuzu</translation>
     </message>
     <message>
         <source>Where the important settings are, and what %1 can do</source>
@@ -11598,7 +11598,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Welcome Project…</source>
-        <translation>&amp;Karşılama Projesi…</translation>
+        <translation>Karşılama &amp;Projesi…</translation>
     </message>
     <message>
         <source>A short project that shows what %1 has beyond the usual: icon bar, zoom per part, mind maps, objects and more</source>
@@ -11654,7 +11654,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Keyboard Shortcuts…</source>
-        <translation>Klavye &amp;Kısayolları…</translation>
+        <translation>Kl&amp;avye Kısayolları…</translation>
     </message>
     <message>
         <source>Select Annotation &amp;or Note</source>
@@ -11670,11 +11670,11 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Reset Toolbar &amp;Places</source>
-        <translation>Araç Çubuğu Yerlerini &amp;Sıfırla</translation>
+        <translation>Araç Çubuğu &amp;Yerlerini Sıfırla</translation>
     </message>
     <message>
         <source>&amp;Full Screen</source>
-        <translation>&amp;Tam Ekran</translation>
+        <translation>Tam &amp;Ekran</translation>
     </message>
     <message>
         <source>&amp;Freeform</source>
@@ -11718,7 +11718,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Left or Top Editor</source>
-        <translation>&amp;Soldaki veya Üstteki Düzenleyici</translation>
+        <translation>Soldaki &amp;veya Üstteki Düzenleyici</translation>
     </message>
     <message>
         <source>&amp;Right or Bottom Editor</source>
@@ -11774,7 +11774,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Paste With &amp;Formatting</source>
-        <translation>Biçimlendirmeyle &amp;Yapıştır</translation>
+        <translation>B&amp;içimlendirmeyle Yapıştır</translation>
     </message>
     <message>
         <source>&amp;Objects</source>
@@ -11806,23 +11806,23 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>&amp;Writing History</source>
-        <translation>&amp;Yazma Geçmişi</translation>
+        <translation>Yazma &amp;Geçmişi</translation>
     </message>
     <message numerus="yes">
         <source>Delete %Ln document(s) in the Trash forever?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Çöp Kutusundaki %Ln belge kalıcı olarak silinsin mi?</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>Their %Ln snapshot(s) go with them.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Bunların %Ln anlık görüntüsü de onlarla birlikte gider.</numerusform>
         </translation>
     </message>
     <message>
         <source>This cannot be undone.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu işlem geri alınamaz.</translation>
     </message>
     <message>
         <source>Convert &amp;Sheet to Object</source>
@@ -11862,7 +11862,7 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>A&amp;bout %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 &amp;Hakkında</translation>
     </message>
     <message>
         <source>&amp;System Information</source>
@@ -12698,14 +12698,14 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message numerus="yes">
         <source>Scrivener&apos;s style marks were taken out of %Ln document(s).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Scrivener’ın stil işaretleri %Ln belgeden kaldırıldı.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>Printed: %1 (%Ln page(s))</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Yazdırıldı: %1 (%Ln sayfa)</numerusform>
         </translation>
     </message>
     <message>
@@ -12754,7 +12754,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>Open &amp;Recent</source>
-        <translation>&amp;Son Kullanılanlar</translation>
+        <translation>S&amp;on Kullanılanlar</translation>
     </message>
     <message>
         <source>&amp;Back Up</source>
@@ -12762,7 +12762,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>&amp;Import</source>
-        <translation>İçe &amp;Aktar</translation>
+        <translation>&amp;İçe Aktar</translation>
     </message>
     <message>
         <source>&amp;Files…</source>
@@ -12786,7 +12786,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>Compare an&amp;d Transfer</source>
-        <translation>&amp;Karşılaştır ve Aktar</translation>
+        <translation>Karşılaştır &amp;ve Aktar</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -12802,7 +12802,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>&amp;Writing Tools</source>
-        <translation>&amp;Yazım Araçları</translation>
+        <translation>Ya&amp;zım Araçları</translation>
     </message>
     <message>
         <source>&amp;Insert</source>
@@ -12814,7 +12814,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>Auto &amp;Number</source>
-        <translation>Otomatik &amp;Numara</translation>
+        <translation>&amp;Otomatik Numara</translation>
     </message>
     <message>
         <source>1, 2, 3 …</source>
@@ -12898,7 +12898,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>&amp;Görünüm</translation>
+        <translation>Gö&amp;rünüm</translation>
     </message>
     <message>
         <source>&amp;Split Editor</source>
@@ -12922,15 +12922,15 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>Te&amp;xt Editing</source>
-        <translation>&amp;Metin Düzenleme</translation>
+        <translation>Metin D&amp;üzenleme</translation>
     </message>
     <message>
         <source>Cor&amp;kboard Options</source>
-        <translation>Mantar &amp;Pano Seçenekleri</translation>
+        <translation>Mantar Pan&amp;o Seçenekleri</translation>
     </message>
     <message>
         <source>Out&amp;liner Options</source>
-        <translation>&amp;Anahat Seçenekleri</translation>
+        <translation>Anahat Seçenek&amp;leri</translation>
     </message>
     <message>
         <source>The columns are listed here while an outliner is shown</source>
@@ -12986,7 +12986,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>In &amp;Other Editor</source>
-        <translation>&amp;Diğer Düzenleyicide</translation>
+        <translation>D&amp;iğer Düzenleyicide</translation>
     </message>
     <message>
         <source>In &amp;Copyholder</source>
@@ -13010,11 +13010,11 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>&amp;Editor</source>
-        <translation>&amp;Düzenleyici</translation>
+        <translation>Dü&amp;zenleyici</translation>
     </message>
     <message>
         <source>Binder &amp;Selection Affects</source>
-        <translation>&amp;Binder Seçimi Şunu Etkiler</translation>
+        <translation>Binder Seçimi &amp;Şunu Etkiler</translation>
     </message>
     <message>
         <source>&amp;Inspect</source>
@@ -13022,7 +13022,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>&amp;Project</source>
-        <translation>&amp;Proje</translation>
+        <translation>Pr&amp;oje</translation>
     </message>
     <message>
         <source>&amp;New From Template</source>
@@ -13054,7 +13054,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>Con&amp;vert</source>
-        <translation>&amp;Dönüştür</translation>
+        <translation>Dö&amp;nüştür</translation>
     </message>
     <message>
         <source>&amp;Change Icon</source>
@@ -13082,7 +13082,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>F&amp;ormat</source>
-        <translation>&amp;Biçim</translation>
+        <translation>B&amp;içim</translation>
     </message>
     <message>
         <source>&amp;Font</source>
@@ -13114,7 +13114,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>&amp;Revision Mode</source>
-        <translation>&amp;Revizyon Modu</translation>
+        <translation>Revizyon &amp;Modu</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -13274,7 +13274,7 @@ Bunu sonradan Yardım &gt; Uygulama Menüsüne Ekle ile yapabilirsiniz.</transla
     </message>
     <message>
         <source>Open Font Manager of &amp;the Desktop</source>
-        <translation>Masaüstünün Yazı Tipi &amp;Yöneticisini Aç</translation>
+        <translation>&amp;Masaüstünün Yazı Tipi Yöneticisini Aç</translation>
     </message>
     <message>
         <source>Font Manager</source>
@@ -13292,7 +13292,7 @@ Yazı tipleri buraya Biçim &gt; Yazı Tipi &gt; Yazı Tipi Dosyalarını Kur il
     </message>
     <message>
         <source>&amp;Reload Font List</source>
-        <translation>Yazı Tipi Listesini Yeniden &amp;Yükle</translation>
+        <translation>Yazı &amp;Tipi Listesini Yeniden Yükle</translation>
     </message>
     <message>
         <source>Fonts</source>
@@ -13328,7 +13328,7 @@ Yazı tipleri buraya Biçim &gt; Yazı Tipi &gt; Yazı Tipi Dosyalarını Kur il
     </message>
     <message>
         <source>Choose Icons for the Icon &amp;Bar…</source>
-        <translation>Simge Çubuğu İçin &amp;Simgeleri Seç…</translation>
+        <translation>Simge Çubuğu &amp;İçin Simgeleri Seç…</translation>
     </message>
     <message>
         <source>Compare with &amp;File…</source>
@@ -13830,11 +13830,11 @@ The project you are working on stays where it is.</source>
     </message>
     <message>
         <source>Skip &amp;Forward</source>
-        <translation>İleri &amp;Atla</translation>
+        <translation>&amp;İleri Atla</translation>
     </message>
     <message>
         <source>Pause and &amp;Rewind</source>
-        <translation>Duraklat ve &amp;Geri Sar</translation>
+        <translation>Duraklat &amp;ve Geri Sar</translation>
     </message>
     <message>
         <source>F&amp;aster</source>
@@ -13850,11 +13850,11 @@ The project you are working on stays where it is.</source>
     </message>
     <message>
         <source>Volume &amp;Up</source>
-        <translation>Sesi &amp;Artır</translation>
+        <translation>Sesi A&amp;rtır</translation>
     </message>
     <message>
         <source>Volume &amp;Down</source>
-        <translation>Sesi &amp;Azalt</translation>
+        <translation>Sesi A&amp;zalt</translation>
     </message>
     <message>
         <source>&amp;Mute</source>
@@ -13882,7 +13882,7 @@ The project you are working on stays where it is.</source>
     </message>
     <message>
         <source>Skip &amp;Forward %1 Seconds</source>
-        <translation>%1 Saniye İleri &amp;Atla</translation>
+        <translation>%1 Saniye &amp;İleri Atla</translation>
     </message>
     <message>
         <source>No timestamp (such as [03:07]) in the line of the cursor.</source>
@@ -13898,11 +13898,11 @@ The project you are working on stays where it is.</source>
     </message>
     <message>
         <source>Binder &amp;Left</source>
-        <translation>Binder &amp;Solda</translation>
+        <translation>&amp;Binder Solda</translation>
     </message>
     <message>
         <source>Binder &amp;Right</source>
-        <translation>Binder &amp;Sağda</translation>
+        <translation>B&amp;inder Sağda</translation>
     </message>
     <message>
         <source>Binder, Editor, Inspector</source>
@@ -13938,7 +13938,7 @@ The project you are working on stays where it is.</source>
     </message>
     <message>
         <source>Show the &amp;List of Elements</source>
-        <translation>&amp;Öğe Listesini Göster</translation>
+        <translation>Öğe &amp;Listesini Göster</translation>
     </message>
     <message>
         <source>Script &amp;Settings…</source>
@@ -14052,20 +14052,20 @@ No element of the same kind exists for: %1. Their paragraphs become general text
     </message>
     <message numerus="yes">
         <source>Delete all %Ln snapshot(s) of %1 forever?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 belgesinin tüm %Ln anlık görüntüsü kalıcı olarak silinsin mi?</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln document(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln belge</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln snapshot(s) deleted.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln anlık görüntü silindi.</numerusform>
         </translation>
     </message>
     <message>
@@ -14566,8 +14566,8 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message numerus="yes">
         <source>and %Ln earlier step(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>ve %Ln önceki adım daha</numerusform>
         </translation>
     </message>
     <message>
@@ -14792,7 +14792,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>The previous hit (Shift+Return)</source>
-        <translation>Önceki sonuç (Shift+Return)</translation>
+        <translation>Önceki sonuç (Shift+Enter)</translation>
     </message>
     <message>
         <source>Next</source>
@@ -14800,7 +14800,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>The next hit (Return)</source>
-        <translation>Sonraki sonuç (Return)</translation>
+        <translation>Sonraki sonuç (Enter)</translation>
     </message>
     <message>
         <source>Contents</source>
@@ -14966,7 +14966,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Prevent &amp;Editing</source>
-        <translation>&amp;Düzenlemeyi Engelle</translation>
+        <translation>Düzenlemeyi &amp;Engelle</translation>
     </message>
     <message>
         <source>Prevent Editing</source>
@@ -14974,7 +14974,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Page Set&amp;up…</source>
-        <translation>Sayfa &amp;Yapısı…</translation>
+        <translation>S&amp;ayfa Yapısı…</translation>
     </message>
     <message>
         <source>&amp;Print…</source>
@@ -15002,7 +15002,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>&amp;Redo</source>
-        <translation>&amp;Yinele</translation>
+        <translation>Y&amp;inele</translation>
     </message>
     <message>
         <source>Cu&amp;t</source>
@@ -15010,7 +15010,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>K&amp;opyala</translation>
+        <translation>Ko&amp;pyala</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
@@ -15018,11 +15018,11 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation>&amp;Sil</translation>
+        <translation>Si&amp;l</translation>
     </message>
     <message>
         <source>Arrow Keys &amp;Move Notes</source>
-        <translation>Ok Tuşları Notları &amp;Taşır</translation>
+        <translation>Ok Tuşları &amp;Notları Taşır</translation>
     </message>
     <message>
         <source>Select &amp;All</source>
@@ -15046,11 +15046,11 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>&amp;Invert Selection</source>
-        <translation>Seçimi &amp;Tersine Çevir</translation>
+        <translation>Seçimi Tersine &amp;Çevir</translation>
     </message>
     <message>
         <source>D&amp;eselect</source>
-        <translation>Seçimi &amp;Kaldır</translation>
+        <translation>S&amp;eçimi Kaldır</translation>
     </message>
     <message>
         <source>Add &amp;Link…</source>
@@ -15074,7 +15074,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>&amp;Jump to Selection</source>
-        <translation>&amp;Seçime Git</translation>
+        <translation>Seçime &amp;Git</translation>
     </message>
     <message>
         <source>Show &amp;Inspector</source>
@@ -15086,7 +15086,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>&amp;Page Guides</source>
-        <translation>&amp;Sayfa Kılavuzları</translation>
+        <translation>Sayfa &amp;Kılavuzları</translation>
     </message>
     <message>
         <source>O&amp;verview Always Shown</source>
@@ -15098,7 +15098,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Zoom to &amp;Fit</source>
-        <translation>&amp;Sığacak Şekilde Yakınlaştır</translation>
+        <translation>Sığacak Ş&amp;ekilde Yakınlaştır</translation>
     </message>
     <message>
         <source>Zoom to &amp;Selection</source>
@@ -15114,11 +15114,11 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>New &amp;Background Shape</source>
-        <translation>Yeni &amp;Arka Plan Şekli</translation>
+        <translation>Yeni Arka Plan &amp;Şekli</translation>
     </message>
     <message>
         <source>On &amp;Left</source>
-        <translation>&amp;Solda</translation>
+        <translation>S&amp;olda</translation>
     </message>
     <message>
         <source>On &amp;Right</source>
@@ -15150,11 +15150,11 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Remove &amp;Arrows</source>
-        <translation>&amp;Okları Kaldır</translation>
+        <translation>Okla&amp;rı Kaldır</translation>
     </message>
     <message>
         <source>&amp;Disconnect</source>
-        <translation>Bağlantıyı &amp;Kes</translation>
+        <translation>Ba&amp;ğlantıyı Kes</translation>
     </message>
     <message>
         <source>Connection La&amp;bel…</source>
@@ -15166,11 +15166,11 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>&amp;Stack</source>
-        <translation>&amp;Yığınla</translation>
+        <translation>Y&amp;ığınla</translation>
     </message>
     <message>
         <source>Auto-&amp;Fit</source>
-        <translation>&amp;Otomatik Sığdır</translation>
+        <translation>Otomatik &amp;Sığdır</translation>
     </message>
     <message>
         <source>&amp;Left Edges</source>
@@ -15178,7 +15178,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>&amp;Right Edges</source>
-        <translation>S&amp;ağ Kenarlar</translation>
+        <translation>Sağ &amp;Kenarlar</translation>
     </message>
     <message>
         <source>&amp;Top Edges</source>
@@ -15194,7 +15194,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>&amp;Vertical Centers</source>
-        <translation>&amp;Dikey Merkezler</translation>
+        <translation>Dikey &amp;Merkezler</translation>
     </message>
     <message>
         <source>&amp;Center in Background Shape</source>
@@ -15202,7 +15202,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Center Hori&amp;zontally in Background Shape</source>
-        <translation>Arka Plan Şeklinde &amp;Yatay Ortala</translation>
+        <translation>Arka &amp;Plan Şeklinde Yatay Ortala</translation>
     </message>
     <message>
         <source>Center Verticall&amp;y in Background Shape</source>
@@ -15218,11 +15218,11 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Make Same &amp;Width</source>
-        <translation>Aynı &amp;Genişlik Yap</translation>
+        <translation>Aynı Genişlik Ya&amp;p</translation>
     </message>
     <message>
         <source>Make Same &amp;Height</source>
-        <translation>Aynı &amp;Yükseklik Yap</translation>
+        <translation>Aynı Yü&amp;kseklik Yap</translation>
     </message>
     <message>
         <source>S&amp;plit</source>
@@ -15230,7 +15230,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Mer&amp;ge</source>
-        <translation>&amp;Birleştir</translation>
+        <translation>B&amp;irleştir</translation>
     </message>
     <message>
         <source>Bring to &amp;Front</source>
@@ -15250,11 +15250,11 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Add Notes to the B&amp;inder</source>
-        <translation>Notları Binder&apos;a &amp;Ekle</translation>
+        <translation>&amp;Notları Binder&apos;a Ekle</translation>
     </message>
     <message>
         <source>&amp;New Note Style From Selection…</source>
-        <translation>Seçimden &amp;Yeni Not Stili…</translation>
+        <translation>S&amp;eçimden Yeni Not Stili…</translation>
     </message>
     <message>
         <source>&amp;Copy Note Style</source>
@@ -15294,7 +15294,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>S&amp;maller</source>
-        <translation>&amp;Küçült</translation>
+        <translation>Küçü&amp;lt</translation>
     </message>
     <message>
         <source>Smaller</source>
@@ -15354,7 +15354,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Clea&amp;r Border Color</source>
-        <translation>Kenarlık Rengini Te&amp;mizle</translation>
+        <translation>Kenarlık &amp;Rengini Temizle</translation>
     </message>
     <message>
         <source>&amp;No Border</source>
@@ -15398,11 +15398,11 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>S&amp;hadow</source>
-        <translation>&amp;Gölge</translation>
+        <translation>Gö&amp;lge</translation>
     </message>
     <message>
         <source>F&amp;ade</source>
-        <translation>S&amp;olukluk</translation>
+        <translation>Sol&amp;ukluk</translation>
     </message>
     <message>
         <source>&amp;Export</source>
@@ -15414,7 +15414,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>New &amp;Connected Note</source>
-        <translation>Yeni &amp;Bağlı Not</translation>
+        <translation>Yeni B&amp;ağlı Not</translation>
     </message>
     <message>
         <source>&amp;Align</source>
@@ -15442,7 +15442,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>&amp;Font</source>
-        <translation>&amp;Yazı Tipi</translation>
+        <translation>Yazı &amp;Tipi</translation>
     </message>
     <message>
         <source>&amp;Alignment</source>
@@ -15462,11 +15462,11 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>&amp;Border</source>
-        <translation>&amp;Kenarlık</translation>
+        <translation>Ke&amp;narlık</translation>
     </message>
     <message>
         <source>&amp;Icons</source>
-        <translation>&amp;Simgeler</translation>
+        <translation>S&amp;imgeler</translation>
     </message>
     <message>
         <source>&amp;Writing Direction</source>
@@ -15486,15 +15486,15 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>&amp;Text Color</source>
-        <translation>&amp;Metin Rengi</translation>
+        <translation>Metin &amp;Rengi</translation>
     </message>
     <message>
         <source>Bor&amp;der Color</source>
-        <translation>&amp;Kenarlık Rengi</translation>
+        <translation>Ken&amp;arlık Rengi</translation>
     </message>
     <message>
         <source>S&amp;hape</source>
-        <translation>Şe&amp;kil</translation>
+        <translation>&amp;Şekil</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -15838,23 +15838,23 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Zoom &amp;In</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Yakınlaştır</translation>
     </message>
     <message>
         <source>Zoom &amp;Out</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Uzaklaştır</translation>
     </message>
     <message>
         <source>&amp;Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>Kalı&amp;n</translation>
     </message>
     <message>
         <source>&amp;Find</source>
-        <translation type="unfinished"></translation>
+        <translation>B&amp;ul</translation>
     </message>
     <message>
         <source>&amp;Redefine Note Style From Selection…</source>
-        <translation>Not Stilini Seçimden &amp;Yeniden Tanımla…</translation>
+        <translation>&amp;Not Stilini Seçimden Yeniden Tanımla…</translation>
     </message>
     <message>
         <source>Note style to redefine from the selected note:</source>
@@ -17276,7 +17276,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Unload a model after</source>
-        <translation>Kullanılmayan modeli boşalt:</translation>
+        <translation>Kullanılmayan modeli boşaltma süresi</translation>
     </message>
     <message>
         <source>minutes unused</source>
@@ -17816,23 +17816,23 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Return ends editing the synopsis in corkboard and outliner views</source>
-        <translation>Mantar pano ve anahat görünümlerinde Return özeti düzenlemeyi bitirir</translation>
+        <translation>Mantar pano ve anahat görünümlerinde Enter özeti düzenlemeyi bitirir</translation>
     </message>
     <message>
         <source>Shift+Return then starts a new line in the synopsis.</source>
-        <translation>Shift+Return o zaman özette yeni bir satır başlatır.</translation>
+        <translation>Shift+Enter o zaman özette yeni bir satır başlatır.</translation>
     </message>
     <message>
         <source>Return creates a new item in corkboard and outliner views</source>
-        <translation>Mantar pano ve anahat görünümlerinde Return yeni bir öğe oluşturur</translation>
+        <translation>Mantar pano ve anahat görünümlerinde Enter yeni bir öğe oluşturur</translation>
     </message>
     <message>
         <source>Off, Return on a selected card or row edits its title (in the binder Return always makes a new item).</source>
-        <translation>Kapalıyken, seçili bir kartta veya satırda Return başlığını düzenler (binder&apos;da Return her zaman yeni bir öğe oluşturur).</translation>
+        <translation>Kapalıyken, seçili bir kartta veya satırda Enter başlığını düzenler (binder&apos;da Enter her zaman yeni bir öğe oluşturur).</translation>
     </message>
     <message>
         <source>Return Key</source>
-        <translation>Return Tuşu</translation>
+        <translation>Enter Tuşu</translation>
     </message>
     <message>
         <source>Show a notification when snapshots are taken</source>
@@ -18384,14 +18384,14 @@ Devam edilsin mi?</translation>
     </message>
     <message numerus="yes">
         <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%Ln setting(s)&lt;/a&gt;.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Burada yaptığınız değişiklikler bu projeyle birlikte saklanır. Projenin kendi ayarları: &lt;a href=&quot;show&quot;&gt;%Ln ayar&lt;/a&gt;.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>The open project has &lt;a href=&quot;show&quot;&gt;%Ln setting(s)&lt;/a&gt; of its own, which it keeps.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Açık projenin kendine ait &lt;a href=&quot;show&quot;&gt;%Ln ayarı&lt;/a&gt; var; bunları saklar.</numerusform>
         </translation>
     </message>
     <message>
@@ -18400,14 +18400,14 @@ Devam edilsin mi?</translation>
     </message>
     <message numerus="yes">
         <source>%Ln change(s) of your own on top of the theme (shown in bold below).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Temanın üzerinde sizin yaptığınız %Ln değişiklik (aşağıda kalın gösterilir).</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln more pair(s) below it too.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Bunun altında %Ln renk çifti daha var.</numerusform>
         </translation>
     </message>
     <message>
@@ -18752,7 +18752,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>&amp;Landscape</source>
-        <translation>&amp;Yatay</translation>
+        <translation>Ya&amp;tay</translation>
     </message>
     <message>
         <source>Orientation:</source>
@@ -18764,7 +18764,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>&amp;Top:</source>
-        <translation>Ü&amp;st:</translation>
+        <translation>&amp;Üst:</translation>
     </message>
     <message>
         <source>&amp;Bottom:</source>
@@ -18780,7 +18780,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>Use this page for &amp;new projects as well</source>
-        <translation>Bu sayfayı &amp;yeni projeler için de kullan</translation>
+        <translation>Bu sayfayı yeni &amp;projeler için de kullan</translation>
     </message>
     <message>
         <source>Text area: %1</source>
@@ -19096,7 +19096,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>&amp;Landscape</source>
-        <translation>&amp;Yatay</translation>
+        <translation>Ya&amp;tay</translation>
     </message>
     <message>
         <source>Orientation:</source>
@@ -19104,7 +19104,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>Paper of the Page &amp;View</source>
-        <translation>&amp;Sayfa Görünümünün Kâğıdı</translation>
+        <translation>Sayfa Görünümünün &amp;Kâğıdı</translation>
     </message>
     <message>
         <source>The paper and margins of View &gt; Text Editing &gt; Page Size and Margins</source>
@@ -19124,7 +19124,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>L&amp;eft:</source>
-        <translation>&amp;Sol:</translation>
+        <translation>S&amp;ol:</translation>
     </message>
     <message>
         <source>&amp;Right:</source>
@@ -19156,7 +19156,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>Header and footer on the &amp;first page as well</source>
-        <translation>Üst ve alt bilgi &amp;ilk sayfada da</translation>
+        <translation>&amp;Üst ve alt bilgi ilk sayfada da</translation>
     </message>
     <message>
         <source>&lt;$title&gt; what is printed (document, folder), &lt;$projecttitle&gt; the project, &lt;$author&gt; you (File &gt; Options &gt; General), &lt;$date&gt; today, &lt;$p&gt; the page, &lt;$pages&gt; the number of pages.</source>
@@ -19188,7 +19188,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>&amp;Footnotes at the end of the text (instead of the bottom of each page)</source>
-        <translation>&amp;Dipnotlar metnin sonunda (her sayfanın altı yerine)</translation>
+        <translation>Dipnotlar &amp;metnin sonunda (her sayfanın altı yerine)</translation>
     </message>
     <message>
         <source>Keep &amp;highlighted text highlighted</source>
@@ -19364,8 +19364,8 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message numerus="yes">
         <source>%Ln card(s) on each sheet (%1 × %2) of the paper on the Page tab.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Sayfa sekmesindeki kâğıdın her yaprağında %Ln kart var (%1 × %2).</numerusform>
         </translation>
     </message>
 </context>
@@ -19524,7 +19524,7 @@ Son kullanılan projeleriniz, kendi temalarınız, yerleşimleriniz, araç çubu
     </message>
     <message>
         <source>Final Draft</source>
-        <translation>Son Taslak</translation>
+        <translation>Final Draft</translation>
     </message>
     <message>
         <source>Done</source>
@@ -19763,7 +19763,7 @@ Yazılmayanlar:
     </message>
     <message>
         <source>&amp;Replace:</source>
-        <translation>&amp;Değiştirilecek:</translation>
+        <translation>D&amp;eğiştirilecek:</translation>
     </message>
     <message>
         <source>&amp;With:</source>
@@ -19771,11 +19771,11 @@ Yazılmayanlar:
     </message>
     <message>
         <source>Match &amp;case</source>
-        <translation>&amp;Büyük/küçük harf eşleştir</translation>
+        <translation>Büyük/&amp;küçük harf eşleştir</translation>
     </message>
     <message>
         <source>W&amp;hole words only</source>
-        <translation>Yalnızca &amp;tam sözcükler</translation>
+        <translation>Ya&amp;lnızca tam sözcükler</translation>
     </message>
     <message>
         <source>Re&amp;gular expression</source>
@@ -19791,7 +19791,7 @@ Yazılmayanlar:
     </message>
     <message>
         <source>&amp;Titles</source>
-        <translation>&amp;Başlıklar</translation>
+        <translation>B&amp;aşlıklar</translation>
     </message>
     <message>
         <source>Te&amp;xt</source>
@@ -19823,7 +19823,7 @@ Yazılmayanlar:
     </message>
     <message>
         <source>&amp;Entire project</source>
-        <translation>&amp;Tüm proje</translation>
+        <translation>Tüm &amp;proje</translation>
     </message>
     <message>
         <source>Selected &amp;documents only</source>
@@ -19895,20 +19895,20 @@ Yazılmayanlar:
     </message>
     <message numerus="yes">
         <source>%Ln document(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln belge</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln occurrence(s) replaced in %1: %2.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 içinde %Ln eşleşme değiştirildi: %2.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln occurrence(s) found in %1: %2.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 içinde %Ln eşleşme bulundu: %2.</numerusform>
         </translation>
     </message>
     <message>
@@ -21077,7 +21077,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>&amp;Keep on one page with the next paragraph (when compiled)</source>
-        <translation>Sonraki paragrafla &amp;aynı sayfada tut (derlenirken)</translation>
+        <translation>&amp;Sonraki paragrafla aynı sayfada tut (derlenirken)</translation>
     </message>
     <message>
         <source>Apply and OK update all text in the project that uses the style, also where its old font or size was set by hand.</source>
@@ -21089,7 +21089,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>Please enter a name of up to 60 characters without : &quot; &lt; &gt; \ { } ;</source>
-        <translation>Lütfen şu karakterleri içermeyen, en çok 60 karakterlik bir ad girin: : &quot; &lt; &gt; \\ { } ;</translation>
+        <translation>Lütfen şu karakterleri içermeyen, en çok 60 karakterlik bir ad girin: : &quot; &lt; &gt; \ { } ;</translation>
     </message>
     <message>
         <source>There is a style named “%1” already.</source>
@@ -21124,7 +21124,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>Save &amp;all formatting (paragraph style with character formatting)</source>
-        <translation>Tüm biçimlendirmeyi &amp;kaydet (karakter biçimlendirmeli paragraf stili)</translation>
+        <translation>Tüm &amp;biçimlendirmeyi kaydet (karakter biçimlendirmeli paragraf stili)</translation>
     </message>
     <message>
         <source>Save &amp;paragraph style (indents, spacing, alignment only)</source>
@@ -21136,7 +21136,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>Include the &amp;font</source>
-        <translation>&amp;Yazı tipini dahil et</translation>
+        <translation>Yazı &amp;tipini dahil et</translation>
     </message>
     <message>
         <source>Include the font si&amp;ze</source>
@@ -21152,7 +21152,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>Please enter a name of up to 60 characters without : &quot; &lt; &gt; \ { } ;</source>
-        <translation>Lütfen şu karakterleri içermeyen, en çok 60 karakterlik bir ad girin: : &quot; &lt; &gt; \\ { } ;</translation>
+        <translation>Lütfen şu karakterleri içermeyen, en çok 60 karakterlik bir ad girin: : &quot; &lt; &gt; \ { } ;</translation>
     </message>
     <message>
         <source>There is a style named “%1” already. Choose another name, or use Redefine Style From Selection to change that style.</source>
@@ -21527,22 +21527,22 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>%1 of %2 characters</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2 karakter</translation>
     </message>
     <message>
         <source>%1 of %2 words</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 / %2 sözcük</translation>
     </message>
     <message numerus="yes">
         <source>%Ln character(s) in the Draft</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Taslakta %Ln karakter</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln word(s) in the Draft</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Taslakta %Ln sözcük</numerusform>
         </translation>
     </message>
     <message>
@@ -21799,14 +21799,14 @@ Açmak için Ctrl+tıklayın</translation>
     </message>
     <message numerus="yes">
         <source>%Ln color(s) set</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln renk ayarlı</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln font(s) set</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln yazı tipi ayarlı</numerusform>
         </translation>
     </message>
 </context>
@@ -21850,8 +21850,8 @@ Açmak için Ctrl+tıklayın</translation>
     </message>
     <message numerus="yes">
         <source>The look you see has %Ln color(s) or font(s) of your own that are not saved in My Look 1 or My Look 2.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Gördüğünüz görünümde, Görünümüm 1 veya Görünümüm 2 içinde kayıtlı olmayan, kendinize ait %Ln renk veya yazı tipi var.</numerusform>
         </translation>
     </message>
     <message>
@@ -22101,14 +22101,14 @@ Günde en çok bir kez küçük bir dosya alır ve programın ya da kurulu bir e
     </message>
     <message numerus="yes">
         <source>%Ln day(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln gün</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln week(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln hafta</numerusform>
         </translation>
     </message>
     <message>
@@ -22294,19 +22294,19 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     </message>
     <message>
         <source>Today&apos;s writing: %1 of %2 characters (click for Project Targets)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bugünkü yazı: %1 / %2 karakter (Proje Hedefleri için tıklayın)</translation>
     </message>
     <message>
         <source>Today&apos;s writing: %1 of %2 words (click for Project Targets)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bugünkü yazı: %1 / %2 sözcük (Proje Hedefleri için tıklayın)</translation>
     </message>
     <message>
         <source>The draft: %1 of %2 characters (click for Project Targets)</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslak: %1 / %2 karakter (Proje Hedefleri için tıklayın)</translation>
     </message>
     <message>
         <source>The draft: %1 of %2 words (click for Project Targets)</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslak: %1 / %2 sözcük (Proje Hedefleri için tıklayın)</translation>
     </message>
     <message>
         <source>%1 / %2 draft</source>
@@ -22317,50 +22317,50 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     <name>qb::addons</name>
     <message numerus="yes">
         <source>%Ln theme(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln tema</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln project template(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln proje şablonu</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln compile format(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln derleme biçimi</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln layout(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln yerleşim</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln script format(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln senaryo biçimi</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln name list(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln ad listesi</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln plugin file(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln eklenti dosyası</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln dictionar(y|ies)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln sözlük</numerusform>
         </translation>
     </message>
     <message>
@@ -22513,7 +22513,7 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     </message>
     <message>
         <source>Add-on &quot;%1&quot; was unpacked, but it could not be switched on (%2). Free some space or check the folder, then switch it on in the Add-on Manager.</source>
-        <translation>&quot;%1&quot; eklentisi açıldı ama açılamadı (%2). Biraz yer açın veya klasörü denetleyin, sonra Eklenti Yöneticisi&apos;nde açın.</translation>
+        <translation>“%1” eklentisi paketten çıkarıldı ama etkinleştirilemedi (%2). Biraz yer açın veya klasörü denetleyin, sonra Eklenti Yöneticisi’nde etkinleştirin.</translation>
     </message>
     <message>
         <source>Add-on &quot;%1&quot; %2 installed (%3).</source>
@@ -23076,7 +23076,7 @@ Yazdığınız metin aşağıda toplanır.</translation>
     <name>qb::handwriting::OnnxRecognizer</name>
     <message>
         <source>The model&apos;s output has an unexpected shape.</source>
-        <translation>Modelin çıktısı beklenmeyen bir biçimde.</translation>
+        <translation>Modelin çıktısı beklenmeyen bir yapıya sahip.</translation>
     </message>
     <message>
         <source>Handwriting is not installed.</source>
@@ -23397,7 +23397,7 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>Play (Ctrl+Return)</source>
-        <translation>Oynat (Ctrl+Return)</translation>
+        <translation>Oynat (Ctrl+Enter)</translation>
     </message>
     <message>
         <source>Playing speed</source>
@@ -23421,7 +23421,7 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>Pause (Ctrl+Return)</source>
-        <translation>Duraklat (Ctrl+Return)</translation>
+        <translation>Duraklat (Ctrl+Enter)</translation>
     </message>
 </context>
 <context>
@@ -23878,8 +23878,8 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message numerus="yes">
         <source>Fetching %Ln picture(s) …</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln resim alınıyor …</numerusform>
         </translation>
     </message>
     <message>
@@ -23971,7 +23971,7 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message>
         <source>&amp;Import</source>
-        <translation>İçe &amp;Aktar</translation>
+        <translation>&amp;İçe Aktar</translation>
     </message>
     <message>
         <source>&amp;Stop</source>
@@ -23983,14 +23983,14 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     </message>
     <message numerus="yes">
         <source>%Ln word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln sözcük</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln picture(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln resim</numerusform>
         </translation>
     </message>
     <message>
