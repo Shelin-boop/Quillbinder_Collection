@@ -18,7 +18,7 @@
 |--------------------|----|
 | Le **mode sombre** ou un autre thème de couleurs | **Affichage > Thèmes** : Dark Mode, Midnight, Sepia, Slate, Ocean, High Contrast, Light, ou Par défaut (suit votre bureau). Le changement est immédiat. |
 | Les couleurs et les polices de chaque partie de la fenêtre | **Fichier > Options > Apparence** (ou **Affichage > Thèmes > Couleurs et polices…**), ou un clic droit sur la partie (**Apparence**). Chaque projet garde son propre aspect ; la liste en haut choisit ce projet ou les nouveaux projets. |
-| Votre propre thème | **Affichage > Thèmes > Enregistrer l'apparence actuelle comme thème…** ; **Gérer les thèmes…** exporte et importe des fichiers *.qbtheme*. |
+| Votre propre thème | **Affichage > Thèmes > Enregistrer l'apparence comme thème…** ; **Gérer les thèmes…** exporte et importe des fichiers *.qbtheme*. |
 | La police de l'interface, la taille des icônes des barres d'outils, le chemin complet dans la barre de titre | **Fichier > Options > Apparence > Interface générale** |
 | La colonne de texte : largeur fixe, couleur du papier, largeur, bordure à côté du texte | **Fichier > Options > Apparence > Éditeur principal**, ou un clic droit sur le papier |
 | Les paramètres du projet dans un fichier, et de nouveau dans ce projet ou dans un autre | **Projet > Enregistrer les paramètres du projet…** / **Charger les paramètres du projet depuis un fichier…** |
