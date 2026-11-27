@@ -1525,7 +1525,7 @@ Cadangan disimpan di %3, dan pencadangan berikutnya akan menempatkannya.</transl
     </message>
     <message>
         <source>Landmark</source>
-        <translation>Penanda</translation>
+        <translation>Tengara</translation>
     </message>
     <message>
         <source>Ruin</source>
@@ -1865,7 +1865,7 @@ Cadangan disimpan di %3, dan pencadangan berikutnya akan menempatkannya.</transl
     </message>
     <message>
         <source>Heading</source>
-        <translation>Judul Bagian</translation>
+        <translation>Judul</translation>
     </message>
     <message>
         <source>Subsection</source>
@@ -2115,7 +2115,7 @@ Cadangan disimpan di %3, dan pencadangan berikutnya akan menempatkannya.</transl
     </message>
     <message>
         <source>fields or colors of the categories differ</source>
-        <translation>bidang atau warna kategori berbeda</translation>
+        <translation>kolom atau warna kategori berbeda</translation>
     </message>
     <message numerus="yes">
         <source>Label “%1” kept: %n document(s) have it.</source>
@@ -2385,7 +2385,7 @@ Cadangan disimpan di %3, dan pencadangan berikutnya akan menempatkannya.</transl
     </message>
     <message>
         <source>%1: Word 97–2003 files become text with the add-on “Word 97–2003 Import” (Help &gt; Add-ons and Updates &gt; Add-on Manager); the file was added as it is.</source>
-        <translation>%1: berkas Word 97–2003 menjadi teks dengan pengaya “Impor Word 97–2003” (Bantuan &gt; Pengaya dan Pembaruan &gt; Pengelola Pengaya); berkas ditambahkan apa adanya.</translation>
+        <translation>%1: berkas Word 97–2003 menjadi teks dengan pengaya “Word 97–2003 Import” (Bantuan &gt; Pengaya dan Pembaruan &gt; Pengelola Pengaya); berkas ditambahkan apa adanya.</translation>
     </message>
     <message>
         <source>%1: only text can be placed in the Draft; it was added to Research instead.</source>
@@ -3331,7 +3331,7 @@ Sumber: %1</translation>
     </message>
     <message>
         <source>Single Return</source>
-        <translation>Return Tunggal</translation>
+        <translation>Enter Tunggal</translation>
     </message>
     <message>
         <source>Empty Line</source>
@@ -3507,8 +3507,8 @@ Sumber: %1</translation>
     </message>
     <message numerus="yes">
         <source>%Ln tab stop(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln perhentian tab</numerusform>
         </translation>
     </message>
     <message>
@@ -3809,8 +3809,8 @@ Sumber: %1</translation>
     </message>
     <message numerus="yes">
         <source>You have changed %Ln color(s) or font(s) of your own on top of the current theme.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Anda telah mengubah %Ln warna atau font sendiri di atas tema saat ini.</numerusform>
         </translation>
     </message>
     <message>
@@ -5059,11 +5059,11 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     </message>
     <message>
         <source>&amp;Speech Transcription</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Transkripsi Ucapan</translation>
     </message>
     <message>
         <source>Show Transcri&amp;ptions</source>
-        <translation type="unfinished"></translation>
+        <translation>Tampilkan Transkri&amp;psi</translation>
     </message>
     <message>
         <source>Cannot load the speech engine: %1</source>
@@ -5791,7 +5791,7 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     <name>playback</name>
     <message>
         <source>Playing audio and video inside the program needs the add-on &quot;Media Playback&quot; (Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager).</source>
-        <translation>Memutar audio dan video di dalam program memerlukan pengaya &quot;Pemutaran Media&quot; (Bantuan &gt; Pengaya dan Pembaruan &gt; Instal Pembaruan atau Pengaya; Bantuan &gt; Pengaya dan Pembaruan &gt; Pengelola Pengaya).</translation>
+        <translation>Memutar audio dan video di dalam program memerlukan pengaya &quot;Media Playback&quot; (Bantuan &gt; Pengaya dan Pembaruan &gt; Instal Pembaruan atau Pengaya; Bantuan &gt; Pengaya dan Pembaruan &gt; Pengelola Pengaya).</translation>
     </message>
     <message>
         <source>Audio and video cannot be played here: %1</source>
@@ -5925,11 +5925,11 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     <name>qb::AiDownloads</name>
     <message>
         <source>Handwriting Engine</source>
-        <translation>Mesin Tulisan Tangan</translation>
+        <translation>Handwriting Engine</translation>
     </message>
     <message>
         <source>AI Engine</source>
-        <translation>Mesin AI</translation>
+        <translation>AI Engine</translation>
     </message>
     <message>
         <source>%1 is not a package of the %2.</source>
@@ -6165,8 +6165,8 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     <name>qb::BinderModel</name>
     <message numerus="yes">
         <source>%Ln word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln kata</numerusform>
         </translation>
     </message>
     <message>
@@ -6520,7 +6520,7 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     </message>
     <message>
         <source>Type part of a command&apos;s name or of its menu. Return or a double-click runs it.</source>
-        <translation>Ketik sebagian nama perintah atau nama menunya. Return atau klik ganda menjalankannya.</translation>
+        <translation>Ketik sebagian nama perintah atau nama menunya. Enter atau klik ganda menjalankannya.</translation>
     </message>
     <message>
         <source>Command</source>
@@ -6810,7 +6810,7 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     </message>
     <message>
         <source>Compile...</source>
-        <translation>Kompilasikan...</translation>
+        <translation>Kompilasi...</translation>
     </message>
     <message>
         <source> (copy)</source>
@@ -7062,8 +7062,8 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     </message>
     <message numerus="yes">
         <source>Preview — %1 (%Ln page(s))</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Pratinjau — %1 (%Ln halaman)</numerusform>
         </translation>
     </message>
     <message>
@@ -7092,20 +7092,20 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     </message>
     <message numerus="yes">
         <source>%Ln object sheet(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln lembar objek</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln document(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln dokumen</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>about %Ln word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>sekitar %Ln kata</numerusform>
         </translation>
     </message>
     <message>
@@ -7347,20 +7347,20 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     </message>
     <message numerus="yes">
         <source>%Ln document(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln dokumen</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln quote mark(s) converted in %1: %2.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln tanda kutip dikonversi di %1: %2.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln quote mark(s) to convert in %1: %2.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln tanda kutip akan dikonversi di %1: %2.</numerusform>
         </translation>
     </message>
     <message>
@@ -7502,8 +7502,8 @@ Tindakan ini tidak dapat dibatalkan secara keseluruhan.%3</translation>
     </message>
     <message numerus="yes">
         <source>Delete all %Ln crash report(s)?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Hapus semua %Ln laporan crash?</numerusform>
         </translation>
     </message>
     <message>
@@ -7733,7 +7733,7 @@ Tindakan ini tidak dapat dibatalkan secara keseluruhan.%3</translation>
     </message>
     <message>
         <source>Back (Ctrl+[)</source>
-        <translation>Mundur (Ctrl+[)</translation>
+        <translation>Kembali (Ctrl+[)</translation>
     </message>
     <message>
         <source>Forward (Ctrl+])</source>
@@ -8009,35 +8009,35 @@ Halaman (250 kata): %5</translation>
     </message>
     <message numerus="yes">
         <source>%Ln replacement(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln penggantian</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln match(es)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln kecocokan</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln page(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln halaman</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln document(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln dokumen</numerusform>
         </translation>
     </message>
     <message>
         <source>%1 of %2 characters (click to edit)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 dari %2 karakter (klik untuk mengubah)</translation>
     </message>
     <message>
         <source>%1 of %2 words (click to edit)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 dari %2 kata (klik untuk mengubah)</translation>
     </message>
     <message>
         <source>No target</source>
@@ -9343,7 +9343,7 @@ Tidak ada yang ditulis ke folder milik Windows atau ke registri, kecuali jika An
     </message>
     <message>
         <source>&amp;Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Tebal</translation>
     </message>
     <message>
         <source>&amp;Italic</source>
@@ -9386,8 +9386,8 @@ Tidak ada yang ditulis ke folder milik Windows atau ke registri, kecuali jika An
     <name>qb::FullInstallWindow</name>
     <message numerus="yes">
         <source>Installing %Ln add-on(s) (%1 MB)...</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Memasang %Ln pengaya (%1 MB)...</numerusform>
         </translation>
     </message>
     <message>
@@ -10439,8 +10439,8 @@ Berikan ke “%4” sebagai gantinya? “%2” kemudian tidak akan memiliki pint
     </message>
     <message numerus="yes">
         <source>%Ln shortcut(s) changed by you (shown in bold).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln pintasan Anda ubah (ditampilkan dengan huruf tebal).</numerusform>
         </translation>
     </message>
     <message>
@@ -10784,7 +10784,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Open Pro&amp;ject…</source>
-        <translation>&amp;Buka Proyek…</translation>
+        <translation>Buka Pro&amp;yek…</translation>
     </message>
     <message>
         <source>Open Project</source>
@@ -10888,7 +10888,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Compi&amp;le…</source>
-        <translation>&amp;Kompilasikan…</translation>
+        <translation>&amp;Kompilasi…</translation>
     </message>
     <message>
         <source>Convert &amp;Markdown ⇄ RTF File…</source>
@@ -10948,7 +10948,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Redo</source>
-        <translation>&amp;Ulangi</translation>
+        <translation>U&amp;langi</translation>
     </message>
     <message>
         <source>Cu&amp;t</source>
@@ -10964,11 +10964,11 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Paste and Match &amp;Style</source>
-        <translation>Tempel dan &amp;Samakan Gaya</translation>
+        <translation>Tempel dan Samakan &amp;Gaya</translation>
     </message>
     <message>
         <source>Select &amp;All</source>
-        <translation>Pilih &amp;Semua</translation>
+        <translation>P&amp;ilih Semua</translation>
     </message>
     <message>
         <source>&amp;Find…</source>
@@ -10984,7 +10984,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Find Pre&amp;vious</source>
-        <translation>Cari Se&amp;belumnya</translation>
+        <translation>Cari &amp;Sebelumnya</translation>
     </message>
     <message>
         <source>Use &amp;Selection for Find</source>
@@ -10992,7 +10992,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Project &amp;Replace…</source>
-        <translation>&amp;Ganti di Proyek…</translation>
+        <translation>G&amp;anti di Proyek…</translation>
     </message>
     <message>
         <source>Find by For&amp;matting…</source>
@@ -11008,7 +11008,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Project Search…</source>
-        <translation>Pencarian &amp;Proyek…</translation>
+        <translation>P&amp;encarian Proyek…</translation>
     </message>
     <message>
         <source>&amp;Link to Document…</source>
@@ -11032,11 +11032,11 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Object Templates and Colors…</source>
-        <translation>&amp;Templat dan Warna Objek…</translation>
+        <translation>Templat dan &amp;Warna Objek…</translation>
     </message>
     <message>
         <source>Insert &amp;Web Link…</source>
-        <translation>Sisipkan Tautan &amp;Web…</translation>
+        <translation>S&amp;isipkan Tautan Web…</translation>
     </message>
     <message>
         <source>Insert Web Link</source>
@@ -11048,7 +11048,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Move &amp;Up</source>
-        <translation>Pindah ke &amp;Atas</translation>
+        <translation>&amp;Pindah ke Atas</translation>
     </message>
     <message>
         <source>Move &amp;Down</source>
@@ -11064,7 +11064,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Outliner</source>
-        <translation>&amp;Kerangka</translation>
+        <translation>K&amp;erangka</translation>
     </message>
     <message>
         <source>&amp;No Split</source>
@@ -11084,11 +11084,11 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Quick-Add Keys in the Binder</source>
-        <translation>Tambah Cepat &amp;Tombol di Binder</translation>
+        <translation>Tambah &amp;Cepat Tombol di Binder</translation>
     </message>
     <message>
         <source>Return adds a new document below; Space opens a Quick Reference window</source>
-        <translation>Return menambah dokumen baru di bawahnya; Spasi membuka jendela Referensi Cepat</translation>
+        <translation>Enter menambah dokumen baru di bawahnya; Spasi membuka jendela Referensi Cepat</translation>
     </message>
     <message>
         <source>Show &amp;Inspector</source>
@@ -11100,7 +11100,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Composition &amp;Mode</source>
-        <translation>&amp;Mode Menulis</translation>
+        <translation>Mo&amp;de Menulis</translation>
     </message>
     <message>
         <source>&amp;Page View</source>
@@ -11128,7 +11128,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Zoom I&amp;n</source>
-        <translation>Per&amp;besar</translation>
+        <translation>Pe&amp;rbesar</translation>
     </message>
     <message>
         <source>&amp;Zoom Out</source>
@@ -11140,7 +11140,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Zoom Insp&amp;ector Tabs Separately</source>
-        <translation>Zoom Tab &amp;Inspektor Secara Terpisah</translation>
+        <translation>&amp;Zoom Tab Inspektor Secara Terpisah</translation>
     </message>
     <message>
         <source>Status &amp;Stamps</source>
@@ -11156,7 +11156,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>New &amp;Text</source>
-        <translation>&amp;Teks Baru</translation>
+        <translation>T&amp;eks Baru</translation>
     </message>
     <message>
         <source>New &amp;Folder</source>
@@ -11172,7 +11172,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Project Targets…</source>
-        <translation>&amp;Target Proyek…</translation>
+        <translation>T&amp;arget Proyek…</translation>
     </message>
     <message>
         <source>Project &amp;Keywords…</source>
@@ -11180,12 +11180,12 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Empty Trash…</source>
-        <translation>&amp;Kosongkan Tempat Sampah…</translation>
+        <translation>K&amp;osongkan Tempat Sampah…</translation>
     </message>
     <message numerus="yes">
         <source>Snapshot taken of %Ln document(s).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Snapshot dibuat untuk %Ln dokumen.</numerusform>
         </translation>
     </message>
     <message>
@@ -11218,7 +11218,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Rename</source>
-        <translation>Ganti &amp;Nama</translation>
+        <translation>G&amp;anti Nama</translation>
     </message>
     <message>
         <source>&amp;Duplicate</source>
@@ -11254,7 +11254,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Group</source>
-        <translation>&amp;Grup</translation>
+        <translation>G&amp;rup</translation>
     </message>
     <message>
         <source>Put the selected documents into a new folder, at the place of the first one</source>
@@ -11266,7 +11266,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Include in Compile</source>
-        <translation>&amp;Sertakan dalam Kompilasi</translation>
+        <translation>S&amp;ertakan dalam Kompilasi</translation>
     </message>
     <message>
         <source>Take &amp;Snapshot</source>
@@ -11294,7 +11294,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Reveal in Binder</source>
-        <translation>Tunjukkan di &amp;Binder</translation>
+        <translation>&amp;Tunjukkan di Binder</translation>
     </message>
     <message>
         <source>&amp;Lock in Place</source>
@@ -11330,7 +11330,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Align &amp;Left</source>
-        <translation>Rata &amp;Kiri</translation>
+        <translation>&amp;Rata Kiri</translation>
     </message>
     <message>
         <source>&amp;Center</source>
@@ -11346,7 +11346,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Bulleted List</source>
-        <translation>Daftar &amp;Berpoin</translation>
+        <translation>&amp;Daftar Berpoin</translation>
     </message>
     <message>
         <source>&amp;Numbered List</source>
@@ -11378,7 +11378,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Bi&amp;gger</source>
-        <translation>Le&amp;bih Besar</translation>
+        <translation>&amp;Lebih Besar</translation>
     </message>
     <message>
         <source>S&amp;maller</source>
@@ -11390,7 +11390,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Increase Indent</source>
-        <translation>&amp;Tambah Indentasi</translation>
+        <translation>Tambah &amp;Indentasi</translation>
     </message>
     <message>
         <source>&amp;Decrease Indent</source>
@@ -11398,7 +11398,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Reset Paragraph &amp;Formatting</source>
-        <translation>&amp;Atur Ulang Pemformatan Paragraf</translation>
+        <translation>Atur &amp;Ulang Pemformatan Paragraf</translation>
     </message>
     <message>
         <source>&amp;New Style From Selection…</source>
@@ -11454,7 +11454,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Footnote</source>
-        <translation>Catatan &amp;Kaki</translation>
+        <translation>&amp;Catatan Kaki</translation>
     </message>
     <message>
         <source>Inline &amp;Annotation</source>
@@ -11470,7 +11470,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Table…</source>
-        <translation>&amp;Tabel…</translation>
+        <translation>Ta&amp;bel…</translation>
     </message>
     <message>
         <source>Insert Row &amp;Above</source>
@@ -11486,7 +11486,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Insert Column &amp;Right</source>
-        <translation>Sisipkan Kolom di &amp;Kanan</translation>
+        <translation>&amp;Sisipkan Kolom di Kanan</translation>
     </message>
     <message>
         <source>Delete R&amp;ows</source>
@@ -11506,7 +11506,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Split Cell</source>
-        <translation>&amp;Pisahkan Sel</translation>
+        <translation>P&amp;isahkan Sel</translation>
     </message>
     <message>
         <source>Cell &amp;Color…</source>
@@ -11554,7 +11554,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Forward</source>
-        <translation>&amp;Maju</translation>
+        <translation>M&amp;aju</translation>
     </message>
     <message>
         <source>&amp;Previous Document</source>
@@ -11562,7 +11562,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Next &amp;Document</source>
-        <translation>Dokumen &amp;Berikutnya</translation>
+        <translation>&amp;Dokumen Berikutnya</translation>
     </message>
     <message>
         <source>En&amp;closing Group</source>
@@ -11586,11 +11586,11 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;User Manual</source>
-        <translation>&amp;Panduan Pengguna</translation>
+        <translation>P&amp;anduan Pengguna</translation>
     </message>
     <message>
         <source>&amp;Quick Start Guide</source>
-        <translation>Panduan &amp;Mulai Cepat</translation>
+        <translation>Panduan Mulai &amp;Cepat</translation>
     </message>
     <message>
         <source>Where the important settings are, and what %1 can do</source>
@@ -11606,7 +11606,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Open &amp;Plugin Folder</source>
-        <translation>Buka Folder &amp;Plugin</translation>
+        <translation>&amp;Buka Folder Plugin</translation>
     </message>
     <message>
         <source>Add to Application Menu</source>
@@ -11654,7 +11654,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Keyboard Shortcuts…</source>
-        <translation>Pintasan &amp;Papan Ketik…</translation>
+        <translation>Pintasan Papan &amp;Ketik…</translation>
     </message>
     <message>
         <source>Select Annotation &amp;or Note</source>
@@ -11662,7 +11662,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Show &amp;Toolbar</source>
-        <translation>Tampilkan Bilah &amp;Alat</translation>
+        <translation>&amp;Tampilkan Bilah Alat</translation>
     </message>
     <message>
         <source>&amp;Customize Toolbars…</source>
@@ -11674,7 +11674,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Full Screen</source>
-        <translation>Layar &amp;Penuh</translation>
+        <translation>La&amp;yar Penuh</translation>
     </message>
     <message>
         <source>&amp;Freeform</source>
@@ -11702,11 +11702,11 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Selection Affects &amp;Other Editor</source>
-        <translation>Pilihan Memengaruhi Editor &amp;Lain</translation>
+        <translation>Pilihan &amp;Memengaruhi Editor Lain</translation>
     </message>
     <message>
         <source>Selection Affects Copy&amp;holder</source>
-        <translation>Pilihan Memengaruhi Pemegang &amp;Salinan</translation>
+        <translation>&amp;Pilihan Memengaruhi Pemegang Salinan</translation>
     </message>
     <message>
         <source>Open in &amp;Editor</source>
@@ -11754,7 +11754,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Float Quick Reference Panels</source>
-        <translation>&amp;Ambangkan Panel Referensi Cepat</translation>
+        <translation>Buat Panel Referensi Cepat &amp;Mengambang</translation>
     </message>
     <message>
         <source>&amp;Close All Quick Reference Panels</source>
@@ -11770,11 +11770,11 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation>Pratinja&amp;u Cetak</translation>
+        <translation>Pratin&amp;jau Cetak</translation>
     </message>
     <message>
         <source>Paste With &amp;Formatting</source>
-        <translation>Tempel dengan Pe&amp;mformatan</translation>
+        <translation>T&amp;empel dengan Pemformatan</translation>
     </message>
     <message>
         <source>&amp;Objects</source>
@@ -11806,23 +11806,23 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&amp;Writing History</source>
-        <translation>&amp;Riwayat Penulisan</translation>
+        <translation>R&amp;iwayat Penulisan</translation>
     </message>
     <message numerus="yes">
         <source>Delete %Ln document(s) in the Trash forever?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Hapus %Ln dokumen di Tempat Sampah untuk selamanya?</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>Their %Ln snapshot(s) go with them.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln snapshot milik dokumen itu ikut terhapus.</numerusform>
         </translation>
     </message>
     <message>
         <source>This cannot be undone.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tindakan ini tidak dapat dibatalkan.</translation>
     </message>
     <message>
         <source>Convert &amp;Sheet to Object</source>
@@ -11838,7 +11838,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Apply Copied Formattin&amp;g</source>
-        <translation>Terapkan Pemformatan yang &amp;Disalin</translation>
+        <translation>T&amp;erapkan Pemformatan yang Disalin</translation>
     </message>
     <message>
         <source>&amp;Picture From File…</source>
@@ -11862,7 +11862,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>A&amp;bout %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Te&amp;ntang %1</translation>
     </message>
     <message>
         <source>&amp;System Information</source>
@@ -11890,7 +11890,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>Pr&amp;oject Formatting Settings…</source>
-        <translation>Pengaturan &amp;Pemformatan Proyek…</translation>
+        <translation>Pe&amp;ngaturan Pemformatan Proyek…</translation>
     </message>
     <message>
         <source>Font, size, line spacing and indents of the text of the whole project</source>
@@ -11906,7 +11906,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
     </message>
     <message>
         <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;A writing studio for long texts: binder, corkboard, outliner, combined text, snapshots, mind maps, objects and compile.&lt;/p&gt;&lt;p&gt;Built with Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Main Developer: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;License&lt;/b&gt;&lt;br&gt;%1 is free software under the Apache License 2.0: anyone may use, copy, change and pass it on, with or without fee, keeping the license and the NOTICE file, which names the project and its source. Without warranty.&lt;/p&gt;&lt;p&gt;The program uses parts of other projects, each under its own license; &lt;b&gt;Third-Party Licenses…&lt;/b&gt; below (also in the Help menu) lists them with their full texts:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, The Qt Company&apos;s own build for Windows, under the GNU LGPL version 3. Its libraries are the separate Qt6*.dll files and plugin folders beside the program; each can be replaced by another build of the same version.&lt;/li&gt;&lt;li&gt;Hunspell (spelling, used under the Mozilla Public License 1.1) and zlib, built into the program.&lt;/li&gt;&lt;li&gt;The spelling dictionaries for English and German from LibreOffice, unchanged: the German ones under the GNU GPL version 2 or 3, British English under the GNU LGPL, American English under the SCOWL license.&lt;/li&gt;&lt;li&gt;Microsoft&apos;s Visual C++ runtime files, passed on unchanged under Microsoft&apos;s terms for redistributable code.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;The add-ons for audio and video bring Qt Multimedia (GNU LGPL version 3). The add-on &quot;Extra Video and Audio Formats&quot; also brings the FFmpeg libraries as built by The Qt Company for Qt Multimedia (avcodec, avformat, avutil, swresample, swscale), licensed under the GNU LGPL 2.1 or later and replaceable as separate DLL files; its notes name the version and how it was built. Whether a patent license is needed to play some of its formats depends on the country.&lt;/p&gt;&lt;p&gt;The source code of these parts, as used, is in the release &quot;Third-party source code&quot; of %4.&lt;/p&gt;&lt;p&gt;Scrivener and Scapple are products of Literature &amp;amp; Latte. %1 is an independent program, not made by or connected with Literature &amp;amp; Latte; it reads and writes their file formats so that your projects can move between the programs.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Studio penulisan untuk teks panjang: binder, papan gabus, kerangka, teks gabungan, snapshot, peta pikiran, objek, dan kompilasi.&lt;/p&gt;&lt;p&gt;Dibangun dengan Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Kredit&lt;/b&gt;&lt;br&gt;Pengembang Utama: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Lisensi&lt;/b&gt;&lt;br&gt;%1 adalah perangkat lunak bebas di bawah Apache License 2.0: siapa pun boleh menggunakan, menyalin, mengubah, dan meneruskannya, dengan atau tanpa biaya, dengan tetap menyertakan lisensi dan berkas NOTICE yang menyebutkan proyek dan sumbernya. Tanpa garansi.&lt;/p&gt;&lt;p&gt;Program ini menggunakan bagian dari proyek lain, masing-masing dengan lisensinya sendiri; &lt;b&gt;Lisensi Pihak Ketiga…&lt;/b&gt; di bawah (juga ada di menu Bantuan) mencantumkannya beserta teks lengkapnya:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, build The Qt Company sendiri untuk Windows, di bawah GNU LGPL versi 3. Pustakanya adalah berkas Qt6*.dll terpisah dan folder plugin di samping program; masing-masing dapat diganti dengan build lain dari versi yang sama.&lt;/li&gt;&lt;li&gt;Hunspell (pemeriksa ejaan, digunakan di bawah Mozilla Public License 1.1) dan zlib, tertanam di dalam program.&lt;/li&gt;&lt;li&gt;Kamus ejaan untuk bahasa Inggris dan Jerman dari LibreOffice, tanpa perubahan: kamus Jerman di bawah GNU GPL versi 2 atau 3, bahasa Inggris Britania di bawah GNU LGPL, bahasa Inggris Amerika di bawah lisensi SCOWL.&lt;/li&gt;&lt;li&gt;Berkas runtime Visual C++ dari Microsoft, diteruskan tanpa perubahan di bawah ketentuan Microsoft untuk kode yang dapat didistribusikan ulang.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Pengaya untuk audio dan video membawa Qt Multimedia (GNU LGPL versi 3). Pengaya &quot;Format Video dan Audio Tambahan&quot; juga membawa pustaka FFmpeg seperti yang dibangun oleh The Qt Company untuk Qt Multimedia (avcodec, avformat, avutil, swresample, swscale), berlisensi GNU LGPL 2.1 atau yang lebih baru dan dapat diganti sebagai berkas DLL terpisah; catatannya menyebutkan versi dan cara pembuatannya. Apakah lisensi paten diperlukan untuk memutar sebagian formatnya bergantung pada negara.&lt;/p&gt;&lt;p&gt;Kode sumber bagian-bagian ini, sebagaimana digunakan, ada di rilis &quot;Third-party source code&quot; milik %4.&lt;/p&gt;&lt;p&gt;Scrivener dan Scapple adalah produk Literature &amp;amp; Latte. %1 adalah program independen, tidak dibuat oleh atau terhubung dengan Literature &amp;amp; Latte; program ini membaca dan menulis format berkas mereka agar proyek Anda dapat berpindah antarprogram.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;Studio penulisan untuk teks panjang: binder, papan gabus, kerangka, teks gabungan, snapshot, peta pikiran, objek, dan kompilasi.&lt;/p&gt;&lt;p&gt;Dibangun dengan Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Kredit&lt;/b&gt;&lt;br&gt;Pengembang Utama: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;Lisensi&lt;/b&gt;&lt;br&gt;%1 adalah perangkat lunak bebas di bawah Apache License 2.0: siapa pun boleh menggunakan, menyalin, mengubah, dan meneruskannya, dengan atau tanpa biaya, dengan tetap menyertakan lisensi dan berkas NOTICE yang menyebutkan proyek dan sumbernya. Tanpa garansi.&lt;/p&gt;&lt;p&gt;Program ini menggunakan bagian dari proyek lain, masing-masing dengan lisensinya sendiri; &lt;b&gt;Lisensi Pihak Ketiga…&lt;/b&gt; di bawah (juga ada di menu Bantuan) mencantumkannya beserta teks lengkapnya:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, build The Qt Company sendiri untuk Windows, di bawah GNU LGPL versi 3. Pustakanya adalah berkas Qt6*.dll terpisah dan folder plugin di samping program; masing-masing dapat diganti dengan build lain dari versi yang sama.&lt;/li&gt;&lt;li&gt;Hunspell (pemeriksa ejaan, digunakan di bawah Mozilla Public License 1.1) dan zlib, tertanam di dalam program.&lt;/li&gt;&lt;li&gt;Kamus ejaan untuk bahasa Inggris dan Jerman dari LibreOffice, tanpa perubahan: kamus Jerman di bawah GNU GPL versi 2 atau 3, bahasa Inggris Britania di bawah GNU LGPL, bahasa Inggris Amerika di bawah lisensi SCOWL.&lt;/li&gt;&lt;li&gt;Berkas runtime Visual C++ dari Microsoft, diteruskan tanpa perubahan di bawah ketentuan Microsoft untuk kode yang dapat didistribusikan ulang.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Pengaya untuk audio dan video membawa Qt Multimedia (GNU LGPL versi 3). Pengaya &quot;Extra Video and Audio Formats&quot; juga membawa pustaka FFmpeg seperti yang dibangun oleh The Qt Company untuk Qt Multimedia (avcodec, avformat, avutil, swresample, swscale), berlisensi GNU LGPL 2.1 atau yang lebih baru dan dapat diganti sebagai berkas DLL terpisah; catatannya menyebutkan versi dan cara pembuatannya. Apakah lisensi paten diperlukan untuk memutar sebagian formatnya bergantung pada negara.&lt;/p&gt;&lt;p&gt;Kode sumber bagian-bagian ini, sebagaimana digunakan, ada di rilis &quot;Third-party source code&quot; milik %4.&lt;/p&gt;&lt;p&gt;Scrivener dan Scapple adalah produk Literature &amp;amp; Latte. %1 adalah program independen, tidak dibuat oleh atau terhubung dengan Literature &amp;amp; Latte; program ini membaca dan menulis format berkas mereka agar proyek Anda dapat berpindah antarprogram.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;%1 %2&lt;/h2&gt;&lt;p&gt;A writing studio for long texts: binder, corkboard, outliner, combined text, snapshots, mind maps, objects and compile.&lt;/p&gt;&lt;p&gt;Built with Qt %3.&lt;/p&gt;&lt;p&gt;&lt;b&gt;Credits&lt;/b&gt;&lt;br&gt;Main Developer: Claude.AI w. Opus 5.5 Extra&lt;/p&gt;&lt;p&gt;&lt;b&gt;License&lt;/b&gt;&lt;br&gt;%1 is free software under the Apache License 2.0: anyone may use, copy, change and pass it on, with or without fee, keeping the license and the NOTICE file, which names the project and its source. Without warranty.&lt;/p&gt;&lt;p&gt;The program uses parts of other projects, each under its own license; &lt;b&gt;Third-Party Licenses…&lt;/b&gt; below (also in the Help menu) lists them with their full texts:&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Qt, The Qt Company&apos;s own build for Android, under the GNU LGPL version 3. Its libraries are separate files inside the APK; each can be replaced by another build of the same version, or the APK built anew from the source.&lt;/li&gt;&lt;li&gt;Hunspell (spelling, used under the Mozilla Public License 1.1), built into the program.&lt;/li&gt;&lt;li&gt;OpenSSL (secure connections for the import of web pages) under the Apache License 2.0.&lt;/li&gt;&lt;li&gt;The spelling dictionaries for English and German from LibreOffice, unchanged: the German ones under the GNU GPL version 2 or 3, British English under the GNU LGPL, American English under the SCOWL license.&lt;/li&gt;&lt;li&gt;The C++ runtime of Android&apos;s NDK (LLVM) and the AndroidX and Kotlin libraries of the app&apos;s Java part, under the Apache License 2.0.&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;The source code of these parts, as used, is in the release &quot;Third-party source code&quot; of %4.&lt;/p&gt;&lt;p&gt;Scrivener and Scapple are products of Literature &amp;amp; Latte. %1 is an independent program, not made by or connected with Literature &amp;amp; Latte; it reads and writes their file formats so that your projects can move between the programs.&lt;/p&gt;</source>
@@ -12698,14 +12698,14 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message numerus="yes">
         <source>Scrivener&apos;s style marks were taken out of %Ln document(s).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Tanda gaya Scrivener dihapus dari %Ln dokumen.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>Printed: %1 (%Ln page(s))</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Dicetak: %1 (%Ln halaman)</numerusform>
         </translation>
     </message>
     <message>
@@ -12810,11 +12810,11 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>Insert &amp;Media Timestamp</source>
-        <translation>Sisipkan &amp;Stempel Waktu Media</translation>
+        <translation>Sisipkan Stempel Waktu &amp;Media</translation>
     </message>
     <message>
         <source>Auto &amp;Number</source>
-        <translation>Nomor &amp;Otomatis</translation>
+        <translation>&amp;Nomor Otomatis</translation>
     </message>
     <message>
         <source>1, 2, 3 …</source>
@@ -12870,7 +12870,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>&amp;Special Characters</source>
-        <translation>&amp;Karakter Khusus</translation>
+        <translation>Ka&amp;rakter Khusus</translation>
     </message>
     <message>
         <source>Em dash —</source>
@@ -12910,7 +12910,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>Tool&amp;bars</source>
-        <translation>&amp;Bilah Alat</translation>
+        <translation>Bila&amp;h Alat</translation>
     </message>
     <message>
         <source>&amp;Themes</source>
@@ -12918,7 +12918,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>&amp;Profiles</source>
-        <translation>&amp;Profil</translation>
+        <translation>Pro&amp;fil</translation>
     </message>
     <message>
         <source>Te&amp;xt Editing</source>
@@ -12926,11 +12926,11 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>Cor&amp;kboard Options</source>
-        <translation>Opsi Papan &amp;Gabus</translation>
+        <translation>Opsi Papan Gabus</translation>
     </message>
     <message>
         <source>Out&amp;liner Options</source>
-        <translation>&amp;Opsi Kerangka</translation>
+        <translation>Op&amp;si Kerangka</translation>
     </message>
     <message>
         <source>The columns are listed here while an outliner is shown</source>
@@ -12938,7 +12938,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>&amp;Use Label Color In</source>
-        <translation>Gunakan Warna Label &amp;di</translation>
+        <translation>Gunakan &amp;Warna Label di</translation>
     </message>
     <message>
         <source>&amp;Binder</source>
@@ -12954,7 +12954,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>S&amp;mall Interface</source>
-        <translation>Antarmuka &amp;Kecil</translation>
+        <translation>&amp;Antarmuka Kecil</translation>
     </message>
     <message>
         <source>&amp;Navigate</source>
@@ -12974,7 +12974,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>&amp;Go To</source>
-        <translation>&amp;Buka ke</translation>
+        <translation>B&amp;uka ke</translation>
     </message>
     <message>
         <source>&amp;Open</source>
@@ -13014,7 +13014,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>Binder &amp;Selection Affects</source>
-        <translation>Pilihan &amp;Binder Memengaruhi</translation>
+        <translation>&amp;Pilihan Binder Memengaruhi</translation>
     </message>
     <message>
         <source>&amp;Inspect</source>
@@ -13026,7 +13026,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>&amp;New From Template</source>
-        <translation>Baru dari &amp;Templat</translation>
+        <translation>&amp;Baru dari Templat</translation>
     </message>
     <message>
         <source>No templates folder set for this project</source>
@@ -13062,7 +13062,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>Default Template &amp;for Subdocuments</source>
-        <translation>&amp;Templat Bawaan untuk Subdokumen</translation>
+        <translation>Templat &amp;Bawaan untuk Subdokumen</translation>
     </message>
     <message>
         <source>&amp;Label</source>
@@ -13070,7 +13070,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>&amp;Status</source>
-        <translation>S&amp;tatus</translation>
+        <translation>Stat&amp;us</translation>
     </message>
     <message>
         <source>No %1</source>
@@ -13106,7 +13106,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>&amp;Lists</source>
-        <translation>&amp;Daftar</translation>
+        <translation>D&amp;aftar</translation>
     </message>
     <message>
         <source>&amp;Table</source>
@@ -13114,7 +13114,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>&amp;Revision Mode</source>
-        <translation>&amp;Mode Revisi</translation>
+        <translation>Mode &amp;Revisi</translation>
     </message>
     <message>
         <source>&amp;Window</source>
@@ -13130,7 +13130,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
     </message>
     <message>
         <source>&amp;Troubleshooting and Development</source>
-        <translation>Pemecahan &amp;Masalah dan Pengembangan</translation>
+        <translation>P&amp;emecahan Masalah dan Pengembangan</translation>
     </message>
     <message>
         <source>View</source>
@@ -13328,7 +13328,7 @@ Font dapat diinstal di sini dengan Format &gt; Font &gt; Instal Berkas Font, ata
     </message>
     <message>
         <source>Choose Icons for the Icon &amp;Bar…</source>
-        <translation>Pilih Ikon untuk &amp;Bilah Ikon…</translation>
+        <translation>&amp;Pilih Ikon untuk Bilah Ikon…</translation>
     </message>
     <message>
         <source>Compare with &amp;File…</source>
@@ -13340,7 +13340,7 @@ Font dapat diinstal di sini dengan Format &gt; Font &gt; Instal Berkas Font, ata
     </message>
     <message>
         <source>By &amp;Chapter</source>
-        <translation>Per &amp;Bab</translation>
+        <translation>&amp;Per Bab</translation>
     </message>
     <message>
         <source>&amp;Step by Step</source>
@@ -13364,7 +13364,7 @@ Font dapat diinstal di sini dengan Format &gt; Font &gt; Instal Berkas Font, ata
     </message>
     <message>
         <source>Find &amp;Command…</source>
-        <translation>Temukan &amp;Perintah…</translation>
+        <translation>&amp;Temukan Perintah…</translation>
     </message>
     <message>
         <source>&amp;Developer Guide: Updates and Add-ons</source>
@@ -13794,7 +13794,7 @@ Proyek yang sedang Anda kerjakan tetap di tempatnya.</translation>
     </message>
     <message>
         <source>Web pages are imported by the add-on “Web Page Import”, which is not installed or is switched off.</source>
-        <translation>Halaman web diimpor oleh pengaya “Impor Halaman Web”, yang belum terpasang atau sedang dimatikan.</translation>
+        <translation>Halaman web diimpor oleh pengaya “Web Page Import”, yang belum terpasang atau sedang dimatikan.</translation>
     </message>
     <message>
         <source>Install it with Help &gt; Add-ons and Updates &gt; Install Update or Add-on; Help &gt; Add-ons and Updates &gt; Add-on Manager switches add-ons on and off.</source>
@@ -13818,7 +13818,7 @@ Proyek yang sedang Anda kerjakan tetap di tempatnya.</translation>
     </message>
     <message>
         <source>&amp;Stop</source>
-        <translation>&amp;Berhenti</translation>
+        <translation>B&amp;erhenti</translation>
     </message>
     <message>
         <source>Go to the S&amp;tart</source>
@@ -13834,19 +13834,19 @@ Proyek yang sedang Anda kerjakan tetap di tempatnya.</translation>
     </message>
     <message>
         <source>Pause and &amp;Rewind</source>
-        <translation>Jeda dan &amp;Putar Ulang</translation>
+        <translation>&amp;Jeda dan Putar Ulang</translation>
     </message>
     <message>
         <source>F&amp;aster</source>
-        <translation>Le&amp;bih Cepat</translation>
+        <translation>Lebih &amp;Cepat</translation>
     </message>
     <message>
         <source>S&amp;lower</source>
-        <translation>Le&amp;bih Lambat</translation>
+        <translation>&amp;Lebih Lambat</translation>
     </message>
     <message>
         <source>&amp;Normal Speed</source>
-        <translation>Kecepatan &amp;Normal</translation>
+        <translation>&amp;Kecepatan Normal</translation>
     </message>
     <message>
         <source>Volume &amp;Up</source>
@@ -13866,7 +13866,7 @@ Proyek yang sedang Anda kerjakan tetap di tempatnya.</translation>
     </message>
     <message>
         <source>&amp;Go to Timestamp at Cursor</source>
-        <translation>&amp;Buka ke Stempel Waktu pada Kursor</translation>
+        <translation>Buka ke Stempel &amp;Waktu pada Kursor</translation>
     </message>
     <message>
         <source>&amp;Media</source>
@@ -13874,7 +13874,7 @@ Proyek yang sedang Anda kerjakan tetap di tempatnya.</translation>
     </message>
     <message>
         <source>Audio and video need the add-on &quot;Media Playback&quot;</source>
-        <translation>Audio dan video memerlukan pengaya &quot;Pemutaran Media&quot;</translation>
+        <translation>Audio dan video memerlukan pengaya &quot;Media Playback&quot;</translation>
     </message>
     <message>
         <source>Skip &amp;Back %1 Seconds</source>
@@ -13882,7 +13882,7 @@ Proyek yang sedang Anda kerjakan tetap di tempatnya.</translation>
     </message>
     <message>
         <source>Skip &amp;Forward %1 Seconds</source>
-        <translation>Lompat &amp;Maju %1 Detik</translation>
+        <translation>Lompat Maju %1 &amp;Detik</translation>
     </message>
     <message>
         <source>No timestamp (such as [03:07]) in the line of the cursor.</source>
@@ -14052,20 +14052,20 @@ Tidak ada elemen sejenis untuk: %1. Paragrafnya menjadi teks umum yang mempertah
     </message>
     <message numerus="yes">
         <source>Delete all %Ln snapshot(s) of %1 forever?</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Hapus semua %Ln snapshot %1 untuk selamanya?</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln document(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln dokumen</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln snapshot(s) deleted.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln snapshot dihapus.</numerusform>
         </translation>
     </message>
     <message>
@@ -14566,8 +14566,8 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message numerus="yes">
         <source>and %Ln earlier step(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>dan %Ln langkah sebelumnya</numerusform>
         </translation>
     </message>
     <message>
@@ -14792,7 +14792,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>The previous hit (Shift+Return)</source>
-        <translation>Hasil sebelumnya (Shift+Return)</translation>
+        <translation>Hasil sebelumnya (Shift+Enter)</translation>
     </message>
     <message>
         <source>Next</source>
@@ -14800,7 +14800,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>The next hit (Return)</source>
-        <translation>Hasil berikutnya (Return)</translation>
+        <translation>Hasil berikutnya (Enter)</translation>
     </message>
     <message>
         <source>Contents</source>
@@ -14974,7 +14974,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>Page Set&amp;up…</source>
-        <translation>Pengat&amp;uran Halaman…</translation>
+        <translation>Pengaturan &amp;Halaman…</translation>
     </message>
     <message>
         <source>&amp;Print…</source>
@@ -14998,7 +14998,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>&amp;Undo</source>
-        <translation>&amp;Urungkan</translation>
+        <translation>U&amp;rungkan</translation>
     </message>
     <message>
         <source>&amp;Redo</source>
@@ -15006,15 +15006,15 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>Cu&amp;t</source>
-        <translation>&amp;Potong</translation>
+        <translation>P&amp;otong</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>&amp;Salin</translation>
+        <translation>S&amp;alin</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
-        <translation>&amp;Tempel</translation>
+        <translation>Tem&amp;pel</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
@@ -15042,7 +15042,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>Connected C&amp;lusters</source>
-        <translation>Klaster Terhu&amp;bung</translation>
+        <translation>&amp;Klaster Terhubung</translation>
     </message>
     <message>
         <source>&amp;Invert Selection</source>
@@ -15066,7 +15066,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>Find Pre&amp;vious</source>
-        <translation>Cari Se&amp;belumnya</translation>
+        <translation>Cari &amp;Sebelumnya</translation>
     </message>
     <message>
         <source>&amp;Use Selection for Find</source>
@@ -15082,11 +15082,11 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>Show &amp;Footer Bar</source>
-        <translation>Tampilkan Bilah &amp;Bawah</translation>
+        <translation>&amp;Tampilkan Bilah Bawah</translation>
     </message>
     <message>
         <source>&amp;Page Guides</source>
-        <translation>&amp;Panduan Halaman</translation>
+        <translation>Panduan &amp;Halaman</translation>
     </message>
     <message>
         <source>O&amp;verview Always Shown</source>
@@ -15098,7 +15098,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>Zoom to &amp;Fit</source>
-        <translation>Zoom agar &amp;Pas</translation>
+        <translation>&amp;Zoom agar Pas</translation>
     </message>
     <message>
         <source>Zoom to &amp;Selection</source>
@@ -15110,15 +15110,15 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>&amp;New Note</source>
-        <translation>Catatan &amp;Baru</translation>
+        <translation>&amp;Catatan Baru</translation>
     </message>
     <message>
         <source>New &amp;Background Shape</source>
-        <translation>Bentuk &amp;Latar Belakang Baru</translation>
+        <translation>B&amp;entuk Latar Belakang Baru</translation>
     </message>
     <message>
         <source>On &amp;Left</source>
-        <translation>Di &amp;Kiri</translation>
+        <translation>Di K&amp;iri</translation>
     </message>
     <message>
         <source>On &amp;Right</source>
@@ -15142,15 +15142,15 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>Connect A&amp;ll</source>
-        <translation>Hubungkan &amp;Semua</translation>
+        <translation>Hubu&amp;ngkan Semua</translation>
     </message>
     <message>
         <source>Connect &amp;With Arrow</source>
-        <translation>Hubungkan &amp;dengan Panah</translation>
+        <translation>H&amp;ubungkan dengan Panah</translation>
     </message>
     <message>
         <source>Remove &amp;Arrows</source>
-        <translation>Hapus &amp;Panah</translation>
+        <translation>H&amp;apus Panah</translation>
     </message>
     <message>
         <source>&amp;Disconnect</source>
@@ -15166,7 +15166,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>&amp;Stack</source>
-        <translation>&amp;Tumpuk</translation>
+        <translation>Tumpuk</translation>
     </message>
     <message>
         <source>Auto-&amp;Fit</source>
@@ -15178,7 +15178,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>&amp;Right Edges</source>
-        <translation>Tepi &amp;Kanan</translation>
+        <translation>T&amp;epi Kanan</translation>
     </message>
     <message>
         <source>&amp;Top Edges</source>
@@ -15198,7 +15198,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>&amp;Center in Background Shape</source>
-        <translation>&amp;Tengahkan di Bentuk Latar Belakang</translation>
+        <translation>Tengahkan di Bentuk &amp;Latar Belakang</translation>
     </message>
     <message>
         <source>Center Hori&amp;zontally in Background Shape</source>
@@ -15234,7 +15234,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>Bring to &amp;Front</source>
-        <translation>Bawa ke &amp;Depan</translation>
+        <translation>Ba&amp;wa ke Depan</translation>
     </message>
     <message>
         <source>Bring to Front</source>
@@ -15390,7 +15390,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>&amp;Left to Right</source>
-        <translation>&amp;Kiri ke Kanan</translation>
+        <translation>K&amp;iri ke Kanan</translation>
     </message>
     <message>
         <source>&amp;Right to Left</source>
@@ -15410,11 +15410,11 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>&amp;Select</source>
-        <translation>&amp;Pilih</translation>
+        <translation>P&amp;ilih</translation>
     </message>
     <message>
         <source>New &amp;Connected Note</source>
-        <translation>Catatan Baru yang &amp;Terhubung</translation>
+        <translation>Catatan Baru &amp;yang Terhubung</translation>
     </message>
     <message>
         <source>&amp;Align</source>
@@ -15454,7 +15454,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>&amp;Background Color</source>
-        <translation>&amp;Warna Latar Belakang</translation>
+        <translation>Warna &amp;Latar Belakang</translation>
     </message>
     <message>
         <source>&amp;Colors</source>
@@ -15466,7 +15466,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>&amp;Icons</source>
-        <translation>&amp;Ikon</translation>
+        <translation>I&amp;kon</translation>
     </message>
     <message>
         <source>&amp;Writing Direction</source>
@@ -15490,11 +15490,11 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>Bor&amp;der Color</source>
-        <translation>Warna Bin&amp;gkai</translation>
+        <translation>&amp;Warna Bingkai</translation>
     </message>
     <message>
         <source>S&amp;hape</source>
-        <translation>&amp;Bentuk</translation>
+        <translation>B&amp;entuk</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -15838,19 +15838,19 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     </message>
     <message>
         <source>Zoom &amp;In</source>
-        <translation type="unfinished"></translation>
+        <translation>Per&amp;besar</translation>
     </message>
     <message>
         <source>Zoom &amp;Out</source>
-        <translation type="unfinished"></translation>
+        <translation>Per&amp;kecil</translation>
     </message>
     <message>
         <source>&amp;Bold</source>
-        <translation type="unfinished"></translation>
+        <translation>T&amp;ebal</translation>
     </message>
     <message>
         <source>&amp;Find</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Cari</translation>
     </message>
     <message>
         <source>&amp;Redefine Note Style From Selection…</source>
@@ -16894,7 +16894,7 @@ Ditampilkan sejauh dapat dibaca, dan tidak dapat diubah, agar berkasnya tidak te
     <name>qb::ObjectsPanel</name>
     <message>
         <source>Back</source>
-        <translation>Mundur</translation>
+        <translation>Kembali</translation>
     </message>
     <message>
         <source>Forward</source>
@@ -17816,23 +17816,23 @@ Lanjutkan?</translation>
     </message>
     <message>
         <source>Return ends editing the synopsis in corkboard and outliner views</source>
-        <translation>Return mengakhiri pengeditan sinopsis di tampilan papan gabus dan kerangka</translation>
+        <translation>Enter mengakhiri pengeditan sinopsis di tampilan papan gabus dan kerangka</translation>
     </message>
     <message>
         <source>Shift+Return then starts a new line in the synopsis.</source>
-        <translation>Shift+Return lalu memulai baris baru di sinopsis.</translation>
+        <translation>Shift+Enter lalu memulai baris baru di sinopsis.</translation>
     </message>
     <message>
         <source>Return creates a new item in corkboard and outliner views</source>
-        <translation>Return membuat item baru di tampilan papan gabus dan kerangka</translation>
+        <translation>Enter membuat item baru di tampilan papan gabus dan kerangka</translation>
     </message>
     <message>
         <source>Off, Return on a selected card or row edits its title (in the binder Return always makes a new item).</source>
-        <translation>Jika mati, Return pada kartu atau baris yang dipilih mengedit judulnya (di binder Return selalu membuat item baru).</translation>
+        <translation>Jika mati, Enter pada kartu atau baris yang dipilih mengedit judulnya (di binder Enter selalu membuat item baru).</translation>
     </message>
     <message>
         <source>Return Key</source>
-        <translation>Tombol Return</translation>
+        <translation>Tombol Enter</translation>
     </message>
     <message>
         <source>Show a notification when snapshots are taken</source>
@@ -18236,7 +18236,7 @@ Lanjutkan?</translation>
     </message>
     <message>
         <source>The program&apos;s own reader (add-on &quot;Word 97-2003 Import&quot;)</source>
-        <translation>Pembaca bawaan program (pengaya &quot;Impor Word 97-2003&quot;)</translation>
+        <translation>Pembaca bawaan program (pengaya &quot;Word 97-2003 Import&quot;)</translation>
     </message>
     <message>
         <source>LibreOffice (when installed)</source>
@@ -18384,14 +18384,14 @@ Lanjutkan?</translation>
     </message>
     <message numerus="yes">
         <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%Ln setting(s)&lt;/a&gt;.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Apa yang Anda ubah di sini disimpan bersama proyek ini. Pengaturan miliknya sendiri: &lt;a href=&quot;show&quot;&gt;%Ln pengaturan&lt;/a&gt;.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>The open project has &lt;a href=&quot;show&quot;&gt;%Ln setting(s)&lt;/a&gt; of its own, which it keeps.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Proyek yang terbuka memiliki &lt;a href=&quot;show&quot;&gt;%Ln pengaturan&lt;/a&gt; sendiri, yang tetap disimpannya.</numerusform>
         </translation>
     </message>
     <message>
@@ -18400,14 +18400,14 @@ Lanjutkan?</translation>
     </message>
     <message numerus="yes">
         <source>%Ln change(s) of your own on top of the theme (shown in bold below).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln perubahan sendiri di atas tema (ditampilkan dengan huruf tebal di bawah).</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln more pair(s) below it too.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln pasangan lagi ada di bawahnya.</numerusform>
         </translation>
     </message>
     <message>
@@ -19364,8 +19364,8 @@ Proyek terbaru, tema milik Anda sendiri, tata letak, bilah alat, dan pintasan pa
     </message>
     <message numerus="yes">
         <source>%Ln card(s) on each sheet (%1 × %2) of the paper on the Page tab.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln kartu di setiap lembar (%1 × %2) kertas pada tab Halaman.</numerusform>
         </translation>
     </message>
 </context>
@@ -19532,7 +19532,7 @@ Proyek terbaru, tema milik Anda sendiri, tata letak, bilah alat, dan pintasan pa
     </message>
     <message>
         <source>Heading</source>
-        <translation>Judul Bagian</translation>
+        <translation>Judul</translation>
     </message>
     <message>
         <source>Text</source>
@@ -19895,20 +19895,20 @@ Tidak ditulis:
     </message>
     <message numerus="yes">
         <source>%Ln document(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln dokumen</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln occurrence(s) replaced in %1: %2.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln kemunculan diganti di %1: %2.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln occurrence(s) found in %1: %2.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln kemunculan ditemukan di %1: %2.</numerusform>
         </translation>
     </message>
     <message>
@@ -20347,11 +20347,11 @@ Font, ukuran, dan warna bagian tertentu tidak dipertahankan di Markdown; huruf t
     </message>
     <message>
         <source>Keep this window above the main window (for all windows: Window ▸ Float Quick Reference Panels)</source>
-        <translation>Pertahankan jendela ini di atas jendela utama (untuk semua jendela: Jendela ▸ Ambangkan Panel Referensi Cepat)</translation>
+        <translation>Pertahankan jendela ini di atas jendela utama (untuk semua jendela: Jendela ▸ Buat Panel Referensi Cepat Mengambang)</translation>
     </message>
     <message>
         <source>Float</source>
-        <translation>Ambangkan</translation>
+        <translation>Mengambang</translation>
     </message>
     <message>
         <source>Document Only</source>
@@ -20725,7 +20725,7 @@ Font, ukuran, dan warna bagian tertentu tidak dipertahankan di Markdown; huruf t
     </message>
     <message>
         <source>…or Tab types:</source>
-        <translation>…atau Tab mengetik:</translation>
+        <translation>…atau Tab mengetikkan:</translation>
     </message>
     <message>
         <source>text</source>
@@ -21364,7 +21364,7 @@ Disimpan %2 dari proyek “%3” oleh %4.</translation>
     </message>
     <message>
         <source>Space between cells:</source>
-        <translation>Ruang antarsel:</translation>
+        <translation>Jarak antarsel:</translation>
     </message>
     <message>
         <source>Header rows:</source>
@@ -21527,22 +21527,22 @@ Disimpan %2 dari proyek “%3” oleh %4.</translation>
     </message>
     <message>
         <source>%1 of %2 characters</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 dari %2 karakter</translation>
     </message>
     <message>
         <source>%1 of %2 words</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 dari %2 kata</translation>
     </message>
     <message numerus="yes">
         <source>%Ln character(s) in the Draft</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln karakter di Draf</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln word(s) in the Draft</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln kata di Draf</numerusform>
         </translation>
     </message>
     <message>
@@ -21799,14 +21799,14 @@ Ctrl+klik untuk membuka</translation>
     </message>
     <message numerus="yes">
         <source>%Ln color(s) set</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln warna diatur</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln font(s) set</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln font diatur</numerusform>
         </translation>
     </message>
 </context>
@@ -21850,8 +21850,8 @@ Ctrl+klik untuk membuka</translation>
     </message>
     <message numerus="yes">
         <source>The look you see has %Ln color(s) or font(s) of your own that are not saved in My Look 1 or My Look 2.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Tampilan yang Anda lihat memiliki %Ln warna atau font sendiri yang tidak disimpan di Tampilan Saya 1 atau Tampilan Saya 2.</numerusform>
         </translation>
     </message>
     <message>
@@ -22101,14 +22101,14 @@ Program mengambil satu berkas kecil, paling banyak sekali sehari, dan memberi ta
     </message>
     <message numerus="yes">
         <source>%Ln day(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln hari</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln week(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln minggu</numerusform>
         </translation>
     </message>
     <message>
@@ -22294,19 +22294,19 @@ Atau unduh versi terbaru dari halaman proyek.</translation>
     </message>
     <message>
         <source>Today&apos;s writing: %1 of %2 characters (click for Project Targets)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulisan hari ini: %1 dari %2 karakter (klik untuk Target Proyek)</translation>
     </message>
     <message>
         <source>Today&apos;s writing: %1 of %2 words (click for Project Targets)</source>
-        <translation type="unfinished"></translation>
+        <translation>Tulisan hari ini: %1 dari %2 kata (klik untuk Target Proyek)</translation>
     </message>
     <message>
         <source>The draft: %1 of %2 characters (click for Project Targets)</source>
-        <translation type="unfinished"></translation>
+        <translation>Draf: %1 dari %2 karakter (klik untuk Target Proyek)</translation>
     </message>
     <message>
         <source>The draft: %1 of %2 words (click for Project Targets)</source>
-        <translation type="unfinished"></translation>
+        <translation>Draf: %1 dari %2 kata (klik untuk Target Proyek)</translation>
     </message>
     <message>
         <source>%1 / %2 draft</source>
@@ -22317,55 +22317,55 @@ Atau unduh versi terbaru dari halaman proyek.</translation>
     <name>qb::addons</name>
     <message numerus="yes">
         <source>%Ln theme(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln tema</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln project template(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln templat proyek</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln compile format(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln format kompilasi</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln layout(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln tata letak</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln script format(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln format skenario</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln name list(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln daftar nama</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln plugin file(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln berkas plugin</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln dictionar(y|ies)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln kamus</numerusform>
         </translation>
     </message>
     <message>
         <source>video and audio formats licensed under patents (for Media Playback 2.0 or newer)</source>
-        <translation>format video dan audio yang berlisensi paten (untuk Pemutaran Media 2.0 atau lebih baru)</translation>
+        <translation>format video dan audio yang berlisensi paten (untuk Media Playback 2.0 atau lebih baru)</translation>
     </message>
     <message>
         <source>the old interactive tutorial (no longer used; this add-on can be removed)</source>
@@ -23397,7 +23397,7 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     </message>
     <message>
         <source>Play (Ctrl+Return)</source>
-        <translation>Putar (Ctrl+Return)</translation>
+        <translation>Putar (Ctrl+Enter)</translation>
     </message>
     <message>
         <source>Playing speed</source>
@@ -23421,7 +23421,7 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     </message>
     <message>
         <source>Pause (Ctrl+Return)</source>
-        <translation>Jeda (Ctrl+Return)</translation>
+        <translation>Jeda (Ctrl+Enter)</translation>
     </message>
 </context>
 <context>
@@ -23724,11 +23724,11 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     </message>
     <message>
         <source>it uses %1, formats licensed under patents, which the add-on &quot;Media Playback&quot; leaves out. Install the add-on &quot;Extra Video and Audio Formats&quot; (a separate download).</source>
-        <translation>memakai %1, format berlisensi paten, yang dilewati oleh pengaya &quot;Pemutaran Media&quot;. Instal pengaya &quot;Format Video dan Audio Tambahan&quot; (unduhan terpisah).</translation>
+        <translation>memakai %1, format berlisensi paten, yang dilewati oleh pengaya &quot;Media Playback&quot;. Instal pengaya &quot;Extra Video and Audio Formats&quot; (unduhan terpisah).</translation>
     </message>
     <message>
         <source>it uses %1, a format licensed under patents, which the add-on &quot;Media Playback&quot; leaves out. Install the add-on &quot;Extra Video and Audio Formats&quot; (a separate download).</source>
-        <translation>memakai %1, format berlisensi paten, yang dilewati oleh pengaya &quot;Pemutaran Media&quot;. Instal pengaya &quot;Format Video dan Audio Tambahan&quot; (unduhan terpisah).</translation>
+        <translation>memakai %1, format berlisensi paten, yang dilewati oleh pengaya &quot;Media Playback&quot;. Instal pengaya &quot;Extra Video and Audio Formats&quot; (unduhan terpisah).</translation>
     </message>
     <message>
         <source>The file cannot be played.</source>
@@ -23787,11 +23787,11 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     </message>
     <message>
         <source>Plays common audio and video files without other programs, also H.264, H.265 and AAC (add-on &quot;Extra Video and Audio Formats&quot;).</source>
-        <translation>Memutar berkas audio dan video umum tanpa program lain, juga H.264, H.265, dan AAC (pengaya &quot;Format Video dan Audio Tambahan&quot;).</translation>
+        <translation>Memutar berkas audio dan video umum tanpa program lain, juga H.264, H.265, dan AAC (pengaya &quot;Extra Video and Audio Formats&quot;).</translation>
     </message>
     <message>
         <source>Plays free formats without other programs (MP3, Ogg, Opus, FLAC, WAV, WebM ...). H.264, H.265, AAC and other formats licensed under patents need the add-on &quot;Extra Video and Audio Formats&quot;.</source>
-        <translation>Memutar format bebas tanpa program lain (MP3, Ogg, Opus, FLAC, WAV, WebM ...). H.264, H.265, AAC, dan format berlisensi paten lainnya memerlukan pengaya &quot;Format Video dan Audio Tambahan&quot;.</translation>
+        <translation>Memutar format bebas tanpa program lain (MP3, Ogg, Opus, FLAC, WAV, WebM ...). H.264, H.265, AAC, dan format berlisensi paten lainnya memerlukan pengaya &quot;Extra Video and Audio Formats&quot;.</translation>
     </message>
     <message>
         <source>GStreamer of the system</source>
@@ -23799,7 +23799,7 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     </message>
     <message>
         <source>Not available since %1 0.80.0: the Qt it uses (The Qt Company&apos;s own build of Qt 6.12) plays through FFmpeg only. The built-in way plays the same formats (H.264, H.265 and AAC with the add-on &quot;Extra Video and Audio Formats&quot;).</source>
-        <translation>Tidak tersedia sejak %1 0.80.0: Qt yang dipakainya (build Qt 6.12 dari The Qt Company sendiri) memutar hanya melalui FFmpeg. Cara bawaan program memutar format yang sama (H.264, H.265, dan AAC dengan pengaya &quot;Format Video dan Audio Tambahan&quot;).</translation>
+        <translation>Tidak tersedia sejak %1 0.80.0: Qt yang dipakainya (build Qt 6.12 dari The Qt Company sendiri) memutar hanya melalui FFmpeg. Cara bawaan program memutar format yang sama (H.264, H.265, dan AAC dengan pengaya &quot;Extra Video and Audio Formats&quot;).</translation>
     </message>
     <message>
         <source>Cannot load %1: %2</source>
@@ -23827,7 +23827,7 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     </message>
     <message>
         <source>Media Playback</source>
-        <translation>Pemutaran Media</translation>
+        <translation>Media Playback</translation>
     </message>
     <message>
         <source>The codecs of Windows (Media Foundation)</source>
@@ -23843,7 +23843,7 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     </message>
     <message>
         <source>FFmpeg (add-on &quot;Extra Video and Audio Formats&quot;)</source>
-        <translation>FFmpeg (pengaya &quot;Format Video dan Audio Tambahan&quot;)</translation>
+        <translation>FFmpeg (pengaya &quot;Extra Video and Audio Formats&quot;)</translation>
     </message>
     <message>
         <source>Plays more formats (also Ogg, Opus, WebM, Matroska ...) with the FFmpeg libraries built by The Qt Company for Qt Multimedia.</source>
@@ -23851,7 +23851,7 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     </message>
     <message>
         <source>Install the add-on &quot;Extra Video and Audio Formats&quot; (and switch it on) to use it.</source>
-        <translation>Instal pengaya &quot;Format Video dan Audio Tambahan&quot; (dan nyalakan) untuk memakainya.</translation>
+        <translation>Instal pengaya &quot;Extra Video and Audio Formats&quot; (dan nyalakan) untuk memakainya.</translation>
     </message>
     <message>
         <source>No way of playing is available.</source>
@@ -23878,8 +23878,8 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     </message>
     <message numerus="yes">
         <source>Fetching %Ln picture(s) …</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Mengambil %Ln gambar …</numerusform>
         </translation>
     </message>
     <message>
@@ -23983,14 +23983,14 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
     </message>
     <message numerus="yes">
         <source>%Ln word(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln kata</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%Ln picture(s)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%Ln gambar</numerusform>
         </translation>
     </message>
     <message>
