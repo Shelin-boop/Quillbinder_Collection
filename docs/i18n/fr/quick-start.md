@@ -21,24 +21,24 @@
 | Votre propre thème | **Affichage > Thèmes > Enregistrer l'apparence actuelle comme thème…** ; **Gérer les thèmes…** exporte et importe des fichiers *.qbtheme*. |
 | La police de l'interface, la taille des icônes des barres d'outils, le chemin complet dans la barre de titre | **Fichier > Options > Apparence > Interface générale** |
 | La colonne de texte : largeur fixe, couleur du papier, largeur, bordure à côté du texte | **Fichier > Options > Apparence > Éditeur principal**, ou un clic droit sur le papier |
-| Les paramètres du projet dans un fichier, et de nouveau dans ce projet ou dans un autre | **Projet > Enregistrer les paramètres du projet dans un fichier…** / **Charger les paramètres du projet depuis un fichier…** |
+| Les paramètres du projet dans un fichier, et de nouveau dans ce projet ou dans un autre | **Projet > Enregistrer les paramètres du projet…** / **Charger les paramètres du projet depuis un fichier…** |
 | La police et la mise en forme des paragraphes des **nouveaux** projets | **Fichier > Options > Édition > Mise en forme** (« Utiliser la mise en forme de l'éditeur actuel ») |
 | La police et la mise en forme des paragraphes de **ce** projet | **Projet > Paramètres du projet > Mise en forme** |
 | Le zoom | **Ctrl+molette de la souris** sur n'importe quelle partie de la fenêtre : chaque partie garde son propre zoom. Valeurs de départ : **Fichier > Options > Édition**. |
 | Les barres d'outils | **Affichage > Barres d'outils > Personnaliser les barres d'outils…** (ou clic droit sur une barre) |
 | La barre d'icônes | **Affichage > Barres d'outils > Barre d'icônes** ; **Choisir les icônes de la barre d'icônes…** |
 | Les raccourcis clavier | **Fichier > Options > Clavier** (recherche, saisie de nouvelles touches, export et import) ; **Aide > Raccourcis clavier…** les énumère |
-| Trouver une commande dans les menus | **Aide > Rechercher une commande…** (tapez une partie de son nom ; Return l'exécute) |
+| Trouver une commande dans les menus | **Aide > Rechercher une commande…** (tapez une partie de son nom ; Entrée l'exécute) |
 | Les dispositions de la fenêtre | **Affichage > Disposition** (sept dispositions intégrées ; enregistrez les vôtres) |
 | L'enregistrement automatique, les projets récents, les informations sur l'auteur | **Fichier > Options > Général** |
-| Les sauvegardes | **Fichier > Options > Sauvegarde** (quand, combien, où) ; **Fichier > Sauvegarde** en fait une tout de suite |
+| Les sauvegardes | **Fichier > Options > Sauvegarde** (quand, combien, où) ; **Fichier > Sauvegarde > Sauvegarder maintenant** en fait une tout de suite |
 | L'orthographe et les corrections pendant la frappe | **Fichier > Options > Corrections** |
-| Où s'ouvrent les liens, la touche Return, le mode composition, la lecture | **Fichier > Options > Comportements** |
+| Où s'ouvrent les liens, la touche Entrée, le mode composition, la lecture | **Fichier > Options > Comportements** |
 | Les réglages d'import et d'export | **Fichier > Options > Partage** |
 | Les cartes mentales, les objets, les modules, les rapports de plantage | **Fichier > Options > Extras** |
 | Les libellés, les statuts, les types de section, les métadonnées personnalisées, les dossiers spéciaux | **Projet > Paramètres du projet** |
 | Des options pour un seul projet | **Fichier > Options**, **Paramètres pour :** **Ce projet** en haut ; pour que les paramètres propres aux projets passent en premier : **Fichier > Options > Général** |
-| Emporter vos réglages sur un autre ordinateur | **Fichier > Options > Gestion > Enregistrer les options dans un fichier... / Charger les options depuis un fichier...** |
+| Emporter vos réglages sur un autre ordinateur | **Fichier > Options > Gérer > Exporter le profil... / Importer un profil...** |
 | Tout remettre au standard | **Fichier > Options > Valeurs par défaut** (vos projets, thèmes, dispositions et raccourcis sont conservés) |
 
 ---
@@ -61,7 +61,7 @@
 ### Faire entrer et sortir du texte
 
 - **Importer** : Word (*.docx*), LibreOffice (*.odt*), RTF, texte brut, Markdown, scénarios Fountain et Final Draft, images, fichiers PDF, audio et vidéo. **Importer et diviser…** découpe un long fichier en documents, également à ses titres (.docx, .odt, .md), avec un aperçu du classeur obtenu. **Documents > Grouper** place les éléments sélectionnés dans un nouveau dossier.
-- **Compiler** (**Ctrl+Shift+E**) : Word, PDF et livre numérique intégrés ; Fountain et Final Draft pour les scénarios ; LibreOffice, Pandoc et les formats Markdown sous forme de modules. Formats de compilation, types de section, pages liminaires et finales, remplacements, et un aperçu.
+- **Compiler** (**Ctrl+Maj+E**) : Word, PDF et livre numérique intégrés ; Fountain et Final Draft pour les scénarios ; LibreOffice, Pandoc et les formats Markdown sous forme de modules. Formats de compilation, types de section, pages liminaires et finales, remplacements, et un aperçu.
 - **Comparer et transférer** (**Fichier > Comparer et transférer**) : quand un manuscrit revient d'un éditeur sous forme de fichier Word ou LibreOffice, {{APP}} montre ce qui diffère et reprend le côté que vous choisissez, chapitre par chapitre ou modification par modification. Le projet reçoit d'abord des instantanés ; une copie Word reçoit des modifications suivies.
 - **Exporter** des documents sous forme de fichiers, et **imprimer** des textes, des fiches et le plan.
 
