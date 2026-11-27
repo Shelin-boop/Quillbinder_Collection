@@ -53,6 +53,7 @@
 #include <QTemporaryDir>
 #include <QTest>
 #include <QTextBlock>
+#include <QTextLayout>
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QTextEdit>
@@ -496,10 +497,102 @@ int main(int argc, char **argv)
             }
             check(true, QStringLiteral("(theme %1 looked at)").arg(en.name));
         }
+        // the text link on every paper of the text areas (each text area gets the link color that fits its paper):
+        // theme x paper x link color, all of them listed in link-contrast.txt
+        QStringList listing;
+        for (const theme::Entry &en : theme::available()) {
+            if (en.kind != theme::Kind::BuiltIn)
+                continue;
+            theme::Theme t;
+            if (!theme::load(en.id, &t))
+                continue;
+            for (int variant = 0; variant < 2; ++variant) {
+                const QMap<theme::Role, QColor> c = theme::resolvedColors(
+                    t, variant ? AppSettings::standardOwnColors() : QMap<QString, QColor>());
+                QList<theme::ContrastPair> all = theme::linkPairs();
+                all << theme::paperLinkPairs();
+                for (const theme::ContrastPair &pr : all) {
+                    QColor link = c.value(pr.fg);
+                    // the text link is worked out for the paper it is shown on; the interface link is one color
+                    if (pr.fg == theme::Role::EditorLink)
+                        link = theme::linkOn(link, c.value(pr.bg), false);
+                    const double r = theme::contrastRatio(link, c.value(pr.bg));
+                    ++pairs;
+                    listing << QStringLiteral("%1 %2 | %3 %4 on %5 %6 | %7")
+                                   .arg(en.id).arg(variant ? QStringLiteral("(own standard colors)") : QStringLiteral("(theme only)"),
+                                        theme::roleLabel(pr.fg), link.name(), theme::roleLabel(pr.bg), c.value(pr.bg).name())
+                                   .arg(r, 0, 'f', 2);
+                    if (r < 4.5)
+                        bad << QStringLiteral("%1/%2: %3 on %4 = %5").arg(en.id).arg(variant).arg(theme::roleLabel(pr.fg),
+                                                                                                    theme::roleLabel(pr.bg)).arg(r, 0, 'f', 2);
+                }
+            }
+        }
+        {
+            QFile lf(outDir + QStringLiteral("/link-contrast.txt"));
+            if (lf.open(QIODevice::WriteOnly))
+                lf.write(listing.join(QLatin1Char('\n')).toUtf8());
+        }
         info(QStringLiteral("%1 pairs in %2 themes, the lowest: %3 (%4)").arg(pairs).arg(themes).arg(worst, 0, 'f', 2).arg(worstWhere));
         check(themes >= 8 && bad.isEmpty(),
               QStringLiteral("every built-in theme: links at least 4.5 : 1 on every paper and background (%1 themes)").arg(themes),
               bad.join(QLatin1String("; ")));
+        // the highlighter: a link in the notes (a dark paper) beside the editor's light paper, in the theme "Shelin's Dark Theme"
+        {
+            // the areas take the project's look: its theme is the one that changes the papers
+            const theme::AreaLook savedLook = theme::areaLook();
+            theme::AreaLook look = savedLook;
+            look.set = true;
+            look.theme = QStringLiteral("shelins-dark");
+            look.colors.clear();
+            theme::setAreaLook(look);
+            theme::apply();
+            settle(400);
+            Inspector *insp = w.findChild<Inspector *>();
+            TextEditor *notes = nullptr;
+            for (TextEditor *te : insp ? insp->findChildren<TextEditor *>() : QList<TextEditor *>())
+                if (te->palette().color(QPalette::Base).rgb() == theme::color(theme::Role::NotesPaper).rgb())
+                    notes = te;
+            TextEditor *main = pane0(w)->currentEditor();
+            auto linkShown = [](TextEditor *te, QColor *shownColor) {
+                QTextDocument *d = te->document();
+                QTextCursor c(d);
+                c.movePosition(QTextCursor::End);
+                QTextCharFormat lf;
+                lf.setAnchor(true);
+                lf.setAnchorHref(QStringLiteral("https://example.org"));
+                lf.setForeground(QColor(30, 90, 200));
+                c.insertBlock();
+                c.insertText(QStringLiteral("a link"), lf);
+                d->setModified(false);
+                QCoreApplication::processEvents();
+                QTest::qWait(100);
+                const QTextBlock b = d->lastBlock();
+                for (const QTextLayout::FormatRange &fr : b.layout()->formats())
+                    if (fr.format.hasProperty(QTextFormat::ForegroundBrush)) {
+                        *shownColor = fr.format.foreground().color();
+                        return true;
+                    }
+                return false;
+            };
+            QColor onNotes, onPaper;
+            const bool gotNotes = notes && linkShown(notes, &onNotes);
+            const bool gotMain = main && linkShown(main, &onPaper);
+            check(theme::color(theme::Role::NotesPaper).lightness() < 80 && theme::color(theme::Role::EditorPaper).lightness() > 180,
+                  QStringLiteral("(the theme shows a dark notes paper beside a light editor paper)"));
+            check(gotNotes && theme::contrastRatio(onNotes, theme::color(theme::Role::NotesPaper)) >= 4.5,
+                  QStringLiteral("a link in the notes shows with 4.5 : 1 on the notes' dark paper"),
+                  QStringLiteral("%1 on %2").arg(onNotes.name(), theme::color(theme::Role::NotesPaper).name()));
+            check(gotMain && theme::contrastRatio(onPaper, theme::color(theme::Role::EditorPaper)) >= 4.5,
+                  QStringLiteral("a link in the editor shows with 4.5 : 1 on the editor's light paper"),
+                  QStringLiteral("%1 on %2").arg(onPaper.name(), theme::color(theme::Role::EditorPaper).name()));
+            check(gotNotes && gotMain && onNotes.rgb() != onPaper.rgb(),
+                  QStringLiteral("each text area gets the link color of its own paper (not one for all texts)"),
+                  QStringLiteral("notes %1, editor %2 (got %3 %4)").arg(onNotes.name(), onPaper.name()).arg(gotNotes).arg(gotMain));
+            theme::setAreaLook(savedLook);
+            theme::apply();
+            settle(200);
+        }
         // the olive paper of the standard look, in particular
         theme::Theme light;
         theme::load(QStringLiteral("light"), &light);
@@ -524,19 +617,39 @@ int main(int argc, char **argv)
         dlg.setOwnColor(QStringLiteral("editorPaper"), QColor(0xff, 0xff, 0xff));
         dlg.setOwnColor(QStringLiteral("editorLink"), QColor(0xb0, 0xb8, 0xd0));
         settle(200);
-        const double ratio = theme::contrastRatio(QColor(0xb0, 0xb8, 0xd0), QColor(0xff, 0xff, 0xff));
-        check(note && !note->isHidden() && note->text().contains(QStringLiteral("Links in the text"))
-                  && note->text().contains(QStringLiteral("Paper")) && note->text().contains(QLocale().toString(ratio, 'f', 2)),
-              QStringLiteral("own colors below 4.5 : 1: the note names the pair and the ratio (%1 : 1)").arg(ratio, 0, 'f', 2),
+        QMap<QString, QColor> ownNow;
+        ownNow.insert(QStringLiteral("editorPaper"), QColor(0xff, 0xff, 0xff));
+        ownNow.insert(QStringLiteral("editorLink"), QColor(0xb0, 0xb8, 0xd0));
+        theme::Theme lightT;
+        theme::load(QStringLiteral("light"), &lightT);
+        const QMap<theme::Role, QColor> shownNow = theme::resolvedColors(lightT, ownNow);
+        const QList<theme::ContrastIssue> issues = theme::contrastIssues(shownNow, {theme::Role::EditorPaper, theme::Role::EditorLink});
+        const double ratio = issues.isEmpty() ? 0 : issues.first().ratio;
+        check(note && !note->isHidden() && !issues.isEmpty() && note->text().contains(theme::roleLabel(issues.first().fg))
+                  && note->text().contains(theme::roleLabel(issues.first().bg)) && note->text().contains(QLocale().toString(ratio, 'f', 2)),
+              QStringLiteral("own colors below 4.5 : 1: the note names the worst pair and its ratio (%1 : 1)").arg(ratio, 0, 'f', 2),
               note ? note->text() : QString());
+        bool onEditorPaper = false, onCards = false, onNotesPaper = false, onComposition = false, onSynopsis = false;
+        for (const theme::ContrastIssue &is : issues) {
+            onEditorPaper |= is.bg == theme::Role::EditorPaper;
+            onCards |= is.bg == theme::Role::CardPaper;
+            onNotesPaper |= is.bg == theme::Role::NotesPaper;
+            onComposition |= is.bg == theme::Role::CompositionPaper;
+            onSynopsis |= is.bg == theme::Role::SynopsisPaper;
+        }
+        check(onEditorPaper && onSynopsis && onCards && onNotesPaper && !onComposition,
+              QStringLiteral("the note's pairs include the editor, synopsis, card and notes papers (a light link is fine on the dark composition paper)"), QString::number(issues.size()));
         shot(&dlg, QStringLiteral("contrast-note"));
         QDialogButtonBox *bb = dlg.findChild<QDialogButtonBox *>();
         check(bb && bb->button(QDialogButtonBox::Ok) && bb->button(QDialogButtonBox::Ok)->isEnabled(), QStringLiteral("the note blocks nothing (OK stays on)"));
         dlg.setOwnColor(QStringLiteral("editorLink"), QColor(0x10, 0x20, 0x90));
         settle(200);
-        check(note && note->isHidden(), QStringLiteral("a link color that reaches 4.5 : 1 takes the note away"), note ? note->text() : QString());
+        check(note && !note->text().contains(QStringLiteral("Links in the text (Main Editor) on Paper (Main Editor)")),
+              QStringLiteral("a link color that reaches 4.5 : 1 on the editor paper is no longer named for it"), note ? note->text() : QString());
         dlg.setOwnColor(QStringLiteral("editorLink"), QColor());
         dlg.setOwnColor(QStringLiteral("editorPaper"), QColor());
+        settle(200);
+        check(note && note->isHidden(), QStringLiteral("back to the theme's colors: no note"), note ? note->text() : QString());
         dlg.close();
     }
 

@@ -15,10 +15,12 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   A field in a toolbar or a dialog has no part: no line.
 - **Contrast** (`Theme.cpp`): `resolvedColors` ends by `fitContrast` for the links that are not the writer's own: the
   nearest color toward black or white that reaches 4.5 : 1 on all of `linkPairs()` of that link (the interface link on the
-  window, lists, binder, outliner, inspector, notes, tool tips and header bar; the text link on the editor paper). Papers
-  that never show links (cards, synopsis, composition) are not in the list; the notes' own paper counts for the interface
-  link only (the highlighter colors every text with `EditorLink`: a dark notes paper beside a light editor paper keeps the
-  text link of the editor paper). `contrastIssues` (own colors only, links and `textPairs()`) feeds the note in Appearance.
+  window, lists, binder, outliner, inspector, notes, tool tips and header bar; the text link on the editor paper). The
+  other papers that show links (index cards, synopsis, notes, composition mode, Combined Text, quick reference, the
+  copyholder) get their own link color: `TextEditor::syncPaperProperty` tells the document its paper (`qbPaper`, the
+  editor's `QPalette::Base`, on every palette change) and `SpellHighlighter` shows links with `theme::linkOn(paper)` (the
+  text link moved to 4.5 : 1 on that paper; the writer's own link color is kept). `paperLinkPairs()` lists those papers for
+  the tests and the note. `contrastIssues` (own colors only, links and `textPairs()`) feeds the note in Appearance.
 - **Cancel in Compile** (`compile/Progress.*`, `CompileDialog.cpp`): `progress::documentDone(done, total)` is called at the
   start of each document of `Compiler::build` (not held back to 100 ms) and lets the handler run events (all, so the Cancel
   button and Esc arrive; the window is modal); `requestCancel/cancelled` is the flag, cleared when a `Scope` starts. The

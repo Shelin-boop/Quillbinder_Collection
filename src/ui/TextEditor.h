@@ -270,6 +270,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *e) override;
     void dropEvent(QDropEvent *e) override;
     void changeEvent(QEvent *e) override;
+    void syncPaperProperty();
 
 private:
     void updateHeight();

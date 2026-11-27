@@ -17,7 +17,7 @@ Three usability points (Linux first).
   name as it was (the output is written under a temporary name beside it and moved into place at the end), stops outside
   converters (LibreOffice, Pandoc) with what they started, and says so in the message line.
 - **Link colors reach 4.5 : 1**: the links in the text and in the interface of every built-in theme, on every paper and
-  background the theme shows them on (the standard olive paper had 4.05 : 1). Own colors are never changed; **File >
+  background the theme shows them on, each text area with the link color of its own paper (editor, index cards, synopsis, notes, composition mode; the standard olive paper had 4.05 : 1). Own colors are never changed; **File >
   Options > Appearance** shows a note, which blocks nothing, when own colors fall below 4.5 : 1 (it names the pair and the
   ratio).
 

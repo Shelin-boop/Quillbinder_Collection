@@ -208,7 +208,14 @@ struct ContrastIssue {
 };
 const QList<ContrastPair> &linkPairs();
 const QList<ContrastPair> &textPairs();
+// the text link on the papers of the text areas other than the editor's (index cards, synopsis, notes, composition mode):
+// each text area gets the link color that fits its own paper (linkOn), so these are not part of linkPairs()
+const QList<ContrastPair> &paperLinkPairs();
 QColor fitContrast(const QColor &fg, const QList<QColor> &backgrounds, double minRatio = 4.5);
+// The link color of the text for a text area with this paper (Role::EditorLink as it is, moved to 4.5 : 1 on the paper
+// unless the writer's own link color is in use); linkOn(link, paper, own) is the same worked out from given colors.
+QColor linkOn(const QColor &paper);
+QColor linkOn(const QColor &link, const QColor &paper, bool ownLink);
 QList<ContrastIssue> contrastIssues(const QMap<Role, QColor> &colors, const QSet<Role> &ownRoles);
 // the label of a role as the color pages show it
 QString roleLabel(Role r);

@@ -678,6 +678,7 @@ QPalette paletteFor(const QMap<Role, QColor> &c)
 static QMap<Role, QColor> s_colors;
 static std::array<FontSpec, size_t(FontRole::Count)> s_fonts;
 static bool s_dark = false;
+static bool s_ownTextLink = false; // 0.99.0: the writer chose the link color of the text himself or herself
 static QString s_name;
 Notifier &Notifier::instance()
 {
@@ -878,6 +879,7 @@ void apply()
     const Theme t = chosenTheme();
     s_name = t.name;
     s_colors = colorsInUse();
+    s_ownTextLink = areaOwnColors().value(QStringLiteral("editorLink")).isValid();
     // palette: untouched desktop colors stay exactly the desktop's palette
     bool generalChanged = !t.followDesktop;
     for (const RoleInfo &i : roles())
@@ -1008,6 +1010,8 @@ QColor readableOn(const QColor &background)
     return darkColor(background) ? QColor(235, 235, 235) : QColor(35, 38, 41);
 }
 
+QColor linkOn(const QColor &paper) { return linkOn(color(Role::EditorLink), paper, s_ownTextLink); }
+
 static double relLuminance(const QColor &c)
 {
     auto lin = [](double v) { return v <= 0.04045 ? v / 12.92 : std::pow((v + 0.055) / 1.055, 2.4); };
@@ -1053,6 +1057,22 @@ static const QList<ContrastPair> &linkPairsFirst()
     static const QList<ContrastPair> l = {{Role::Link, Role::Window}, {Role::EditorLink, Role::EditorPaper}};
     return l;
 }
+const QList<ContrastPair> &paperLinkPairs()
+{
+    static const QList<ContrastPair> l = {
+        {Role::EditorLink, Role::SynopsisPaper}, {Role::EditorLink, Role::NotesPaper},
+        {Role::EditorLink, Role::CompositionPaper}, {Role::EditorLink, Role::CardPaper},
+    };
+    return l;
+}
+
+QColor linkOn(const QColor &link, const QColor &paper, bool ownLink)
+{
+    if (ownLink || !paper.isValid())
+        return link;
+    return fitContrast(link, {paper}, 4.5);
+}
+
 const QList<ContrastPair> &textPairs()
 {
     static const QList<ContrastPair> l = {
@@ -1104,7 +1124,7 @@ QString roleLabel(Role r)
 QList<ContrastIssue> contrastIssues(const QMap<Role, QColor> &colors, const QSet<Role> &ownRoles)
 {
     QList<ContrastIssue> out;
-    for (const QList<ContrastPair> *list : {&linkPairs(), &textPairs()})
+    for (const QList<ContrastPair> *list : {&linkPairs(), &paperLinkPairs(), &textPairs()})
         for (const ContrastPair &p : *list) {
             if (!ownRoles.contains(p.fg) && !ownRoles.contains(p.bg))
                 continue;
