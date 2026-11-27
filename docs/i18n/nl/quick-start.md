@@ -28,12 +28,12 @@
 | Werkbalken | **Weergave > Werkbalken > Werkbalken aanpassen…** (of klik met de rechtermuisknop op een balk) |
 | De pictogrammenbalk | **Weergave > Werkbalken > Pictogrammenbalk**; **Pictogrammen voor de pictogrammenbalk kiezen…** |
 | Sneltoetsen | **Bestand > Opties > Toetsenbord** (zoeken, nieuwe toetsen indrukken, exporteren en importeren); **Help > Sneltoetsen…** toont ze |
-| Een opdracht in de menu's vinden | **Help > Opdracht zoeken…** (typ een deel van de naam; Return voert hem uit) |
+| Een opdracht in de menu's vinden | **Help > Opdracht zoeken…** (typ een deel van de naam; Enter voert hem uit) |
 | Vensterlay-outs | **Weergave > Lay-out** (zeven ingebouwd; sla je eigen op) |
 | Automatisch opslaan, recente projecten, auteursgegevens | **Bestand > Opties > Algemeen** |
 | Back-ups | **Bestand > Opties > Back-up** (wanneer, hoeveel, waar); **Bestand > Back-up** maakt er nu een |
 | Spelling en correcties tijdens het typen | **Bestand > Opties > Correcties** |
-| Waar koppelingen openen, de Return-toets, schrijfmodus, afspelen | **Bestand > Opties > Gedrag** |
+| Waar koppelingen openen, de Entertoets, schrijfmodus, afspelen | **Bestand > Opties > Gedrag** |
 | Instellingen voor importeren en exporteren | **Bestand > Opties > Delen** |
 | Mindmaps, objecten, add-ons, crashrapporten | **Bestand > Opties > Extra's** |
 | Labels, status, sectietypen, aangepaste metagegevens, speciale mappen | **Project > Projectinstellingen** |
