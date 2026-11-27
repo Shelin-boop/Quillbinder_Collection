@@ -447,7 +447,8 @@ int writeUnsaved(Project *project, const QString &dir, QString *error, CopyTally
     for (const QPointer<MindMapDoc> &d : registry().value(project)) {
         if (!d || !d->isDirty())
             continue;
-        const QString name = text::safeFileName(d->unsavedTitle());
+        // 0.99.0: an encrypted project's emergency copy names the board by its document's number, not by the title
+        const QString name = text::safeFileName(project->isEncrypted() ? QStringLiteral("mind map ") + d->itemId() : d->unsavedTitle());
         QString base = name;
         for (int k = 2; used.contains(base.toLower()); ++k)
             base = QStringLiteral("%1 (%2)").arg(name).arg(k);

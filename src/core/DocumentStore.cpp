@@ -238,6 +238,12 @@ void DocumentStore::readFile(const QString &id, bool notes, QTextDocument *doc, 
                 // empty, read-only and never written over, as a file that cannot be read
                 unreadableNow = true;
                 failure = sealWhy;
+            } else if (vault::isSealedData(data.left(64))) {
+                // 0.99.0 (encryption review M1): an encrypted file in a folder that is not read through the vault (the
+                // project's encryption was turned off, and another computer wrote it late; or the key is not here):
+                // never read as text, never written over
+                unreadableNow = true;
+                failure = crypto::errorText(crypto::Error::NoSecretKey);
             } else {
                 have = true;
             }
@@ -609,7 +615,10 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
         if (s != m_shown.end() && e.doc && shownBytes(e.doc, s->formatting, s->storage) != s->bytes) {
             const QString title = notes ? tr("%1 (notes)").arg(titleOf(id)) : titleOf(id);
             const QString keep = m_project->settingsDir() + QStringLiteral("/conflicts");
-            const QString base = text::safeFileName(tr("%1 (changed, not saved)").arg(title)) + QLatin1Char(' ')
+            // (0.99.0: an encrypted project's copy is named by the document's number, not its title)
+            const QString base = text::safeFileName(m_project->isEncrypted() ? (notes ? id + QStringLiteral(" (notes)") : id)
+                                                                              : tr("%1 (changed, not saved)").arg(title))
+                                 + QLatin1Char(' ')
                                  + QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd HH-mm-ss"));
             QString copy = keep + QLatin1Char('/') + base + QStringLiteral(".rtf");
             for (int n = 2; QFileInfo::exists(copy); ++n)
@@ -761,7 +770,9 @@ int DocumentStore::writeUnsaved(const QString &dir, QString *error, CopyTally *t
         if (!it->dirty || m_unreadable.contains(it.key()))
             continue;
         const QString id = it->isNotes ? it.key().mid(2) : it.key();
-        QString name = text::safeFileName(it->isNotes ? tr("%1 (notes)").arg(titleOf(id)) : titleOf(id));
+        // 0.99.0: an encrypted project's emergency copy names its files by the document's number, not its title
+        QString name = text::safeFileName(m_project->isEncrypted() ? (it->isNotes ? id + QStringLiteral(" (notes)") : id)
+                                          : (it->isNotes ? tr("%1 (notes)").arg(titleOf(id)) : titleOf(id)));
         if (name.isEmpty())
             name = id;
         QString base = name;

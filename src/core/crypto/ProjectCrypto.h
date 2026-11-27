@@ -57,9 +57,20 @@ struct ProjectSettings {
     QString converting;
     QString convertingDevice; // which computer began it (its key, as the lock names it), and when (UTC, ISO 8601)
     QString convertingSince;
+    // 0.99.0 (encryption review, M3): the marker is there but cannot be read (damaged, or not Quillbinder's): not "all off"
+    bool unreadable = false;
     bool isEncryptedFolder() const { return encryptedProject || !converting.isEmpty(); }
 };
 ProjectSettings settingsOf(const QString &projectFolder, QString *error = nullptr);
+// "" when the folder's marker can be trusted; else the sentence why not: the marker is there but cannot be read, or it is
+// missing although the project file is encrypted (0.99.0, encryption review M3). Such a project is neither opened nor
+// backed up (a backup would be plain, and the opening would write into files it cannot read).
+QString markerProblem(const QString &projectFolder);
+// A recipient's secret key is unlocked on this device now (no passphrase is asked for, the key store is not read)
+bool unlockedHere(const Recipients &recipients);
+// The base folder for a file that must be plain for a moment (a preview, an export, a dropped picture): the private folder
+// of the vault while an encrypted project is open ("" when it cannot be made), else the system's temporary folder
+QString tempFolderBase();
 
 // ---- switch 1: encrypted backups (both project formats) -------------------------------------------------------------
 bool backupsEncrypted(const Project *p);
@@ -72,7 +83,7 @@ bool setBackupsEncrypted(Project *p, bool on, const Recipients &recipients, QStr
 // ---- switch 2: encrypted project (Quillbinder's own format only) ----------------------------------------------------
 bool projectEncrypted(const Project *p);
 // false with the reason for the greyed switch: a project in Scrivener format, a build without encryption, a save of
-// another computer that is still arriving (its journal)
+// another computer that is still arriving (its journal), another computer or window that has the project open (its lock)
 bool canChangeProjectEncryption(const Project *p, QString *reason);
 // The recipients of a project (from its marker; empty when neither switch is on)
 Recipients recipientsOf(const Project *p);
@@ -99,6 +110,9 @@ enum class Access {
                      // had no passphrase for it (or not the right one)
     NoSecretKey,     // encrypted; no recipient's secret key is on this device: Import Keys (*fingerprint: the writer's)
     Unavailable,     // encrypted, but this build has no encryption
+    // 0.99.0 (encryption review): refused before anything is written
+    PublicKeyMissing, // encrypted; a recipient's public key is not on this device, so no save could be encrypted (*fingerprint: it)
+    MarkerDamaged,    // the marker cannot be read, or is missing beside an encrypted project file (markerProblem)
 };
 // What opening the project folder needs. Tries the passphrase kept in the key store (KeyStore::system()) once per key
 // and session when the key is locked.

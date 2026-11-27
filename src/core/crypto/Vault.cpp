@@ -21,6 +21,10 @@
 
 #include <atomic>
 
+#ifdef Q_OS_UNIX
+#include <unistd.h>
+#endif
+
 namespace qb {
 namespace vault {
 
@@ -108,7 +112,26 @@ QString privateDir()
     const QString made = QDir(base).filePath(prefix + QString::number(QCoreApplication::applicationPid()));
     if (!QDir().mkpath(made))
         return QString();
+#ifdef Q_OS_UNIX
+    {
+        const QFileInfo before(made); // (checked before the permissions are set: a link would send that to its target)
+        if (!before.isDir() || before.isSymLink() || before.ownerId() != getuid())
+            return QString();
+    }
+#endif
     QFile::setPermissions(made, QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner);
+    // 0.99.0 (encryption review L2): in the shared temporary folder another user may have made this name first (a folder of
+    // theirs, or a link): it is ours only when it is a real folder, owned by this user, for this user alone
+#ifdef Q_OS_UNIX
+    {
+        const QFileInfo fi(made);
+        const bool mine = fi.isDir() && !fi.isSymLink() && fi.ownerId() == getuid();
+        const bool alone = (fi.permissions() & (QFileDevice::ReadGroup | QFileDevice::WriteGroup | QFileDevice::ExeGroup | QFileDevice::ReadOther
+                                                | QFileDevice::WriteOther | QFileDevice::ExeOther)) == 0;
+        if (!mine || !alone)
+            return QString();
+    }
+#endif
     dir = made;
     qAddPostRoutine(removePlainCopies);
     return dir;
@@ -251,8 +274,26 @@ bool unseal(const QString &path, QByteArray &data, QString *error, crypto::Error
         *kind = crypto::Error::None;
     if (!active())
         return true;
-    if (!sessionKeyPacket(data))
-        return true; // a plain file (a conversion under way, another program's file): read as it is
+    if (!sessionKeyPacket(data)) {
+        // a plain file (a conversion under way, another program's file): read as it is. 0.99.0 (encryption review L1): in
+        // a project whose marker says its files are encrypted and no conversion is under way, a file that does not start
+        // like an encrypted one is a damaged one (its first bytes), not plain text that the next save would write over
+        if (!data.isEmpty()) {
+            const Place plain = placeOf(path);
+            if (plain.seals()) {
+                const crypto::ProjectSettings cs = crypto::settingsOf(plain.folder);
+                if (cs.encryptedProject && cs.converting.isEmpty()) {
+                    if (kind)
+                        *kind = crypto::Error::Damaged;
+                    if (error)
+                        *error = crypto::errorText(crypto::Error::Damaged);
+                    data.clear();
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
     const Place p = placeOf(path);
     if (!p.reads())
         return true;

@@ -728,7 +728,9 @@ Recovery recover(const QString &folder, const QString &journal, const QString &s
             // the target changed since the save began (another computer through a sync folder): both stay
             const QString dir = settingsDir + QStringLiteral("/conflicts");
             QDir().mkpath(dir);
-            QString base = name.isEmpty() ? QFileInfo(rel).completeBaseName() : name;
+            // 0.99.0: in an encrypted project the copy is named by the file's place (the document's number), not by its title
+            QString base = vault::placeOf(target).reads() ? QString(rel).replace(QLatin1Char('/'), QLatin1Char('-')).left(rel.lastIndexOf(QLatin1Char('.')))
+                                                          : (name.isEmpty() ? QFileInfo(rel).completeBaseName() : name);
             for (const QChar c : {QLatin1Char('/'), QLatin1Char('\\'), QLatin1Char(':'), QLatin1Char('*'), QLatin1Char('?'),
                                   QLatin1Char('"'), QLatin1Char('<'), QLatin1Char('>'), QLatin1Char('|')})
                 base.replace(c, QLatin1Char('-'));

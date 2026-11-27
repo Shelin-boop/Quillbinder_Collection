@@ -1,4 +1,5 @@
 #include "ui/handwriting/LearningStore.h"
+#include "core/crypto/Vault.h"
 
 #include "ui/handwriting/HandwritingSettings.h"
 
@@ -18,6 +19,10 @@ QString LearningStore::folder()
 bool LearningStore::add(const QImage &picture, const QString &correctedText)
 {
     if (!HandwritingConfig::instance().get().learning || picture.isNull() || correctedText.trimmed().isEmpty())
+        return false;
+    // 0.99.0 (encryption review H2): the files are plain (the picture of the ink and the corrected text are the writer's
+    // words): while an encrypted project is open, nothing is kept
+    if (vault::active())
         return false;
     QDir().mkpath(folder());
     const QString base = QStringLiteral("%1/%2-%3").arg(folder(), QString::number(QDateTime::currentMSecsSinceEpoch()),

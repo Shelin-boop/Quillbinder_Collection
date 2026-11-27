@@ -11,6 +11,7 @@
 #include "core/ModelMemory.h"
 #include "core/Project.h"
 #include "core/ProjectTemplates.h"
+#include "core/crypto/Vault.h"
 #include "ui/AppSettings.h"
 #include "ui/BinderPanel.h"
 #include "ui/EditorPane.h"
@@ -968,6 +969,22 @@ int main(int argc, char **argv)
         check(LearningStore::count() == 2, QStringLiteral("with learning switched off nothing more is kept"), QString::number(LearningStore::count()));
         s.learning = true;
         HandwritingConfig::instance().set(s);
+        // H2 (encryption review): while an encrypted project is open nothing is kept (the files would be plain text and pictures)
+        {
+            qb::vault::add(QDir::tempPath() + QStringLiteral("/qb-j-encrypted-folder"), {QStringLiteral("A"), QStringLiteral("B")});
+            QImage pic(40, 20, QImage::Format_ARGB32);
+            pic.fill(Qt::black);
+            check(!LearningStore::add(pic, QStringLiteral("secret words")) && LearningStore::count() == 2,
+                  QStringLiteral("H2: with an encrypted project open no corrected line is kept"), QString::number(LearningStore::count()));
+            strip->clear();
+            fake.setLines({QStringLiteral("hello world")});
+            penStroke(canvas, wave(QPointF(30, 70), 160));
+            readAndFade();
+            strip->replaceWord(0, QStringLiteral("hallo"));
+            check(LearningStore::count() == 2, QStringLiteral("... also not by a correction in the strip"), QString::number(LearningStore::count()));
+            qb::vault::remove(QDir::tempPath() + QStringLiteral("/qb-j-encrypted-folder"));
+            check(!qb::vault::active(), QStringLiteral("(the folder left the vault)"));
+        }
         check(LearningStore::removeAll() == 2 && LearningStore::count() == 0, QStringLiteral("the kept lines can be deleted"));
         strip->clear();
     }

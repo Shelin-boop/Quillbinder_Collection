@@ -1,4 +1,5 @@
 #include "core/DocumentStore.h"
+#include "core/crypto/ProjectCrypto.h"
 #include "ui/CompileDialog.h"
 #include "core/TestSwitches.h"
 #include "ui/HintLabel.h"
@@ -1194,7 +1195,9 @@ Manuscript CompileDialog::manuscript()
 void CompileDialog::preview()
 {
     QApplication::setOverrideCursor(Qt::WaitCursor);
-    auto *tmp = new QTemporaryDir;
+    // 0.99.0 (encryption review M2): with an encrypted project open, the preview is written in the vault's private folder
+    const QString tempBase = crypto::tempFolderBase();
+    auto *tmp = new QTemporaryDir(tempBase.isEmpty() ? QString() : tempBase + QStringLiteral("/qb-preview-XXXXXX"));
     const QString path = tmp->filePath(QStringLiteral("preview.pdf"));
     QString err;
     PdfReport rep;

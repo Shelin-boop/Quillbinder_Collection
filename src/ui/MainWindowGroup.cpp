@@ -1,6 +1,7 @@
 // 0.94.0: commands of the binder that have an undo step of their own: Documents > Group (item 76) and Documents > Convert > Sheet
 // to Object (item 67). Edit > Undo and Redo (and the toolbar's lists) work on these steps while the keyboard is in the binder.
 #include "ui/MainWindow.h"
+#include "core/crypto/ProjectCrypto.h"
 
 #include "core/BinderModel.h"
 #include "core/DocumentStore.h"
@@ -268,7 +269,9 @@ QString MainWindow::sheetToObject(BinderItem *item, const QString &categoryId)
     if (doc && pic) {
         const QImage img = firstPicture(doc);
         if (!img.isNull()) {
-            QTemporaryDir tmp;
+            // 0.99.0 (encryption review M2): the vault's private folder while an encrypted project is open
+            const QString tempBase = crypto::tempFolderBase();
+            QTemporaryDir tmp(tempBase.isEmpty() ? QString() : tempBase + QStringLiteral("/qb-sheet-XXXXXX"));
             const QString file = tmp.filePath(QStringLiteral("sheet.png"));
             if (tmp.isValid() && img.save(file)) {
                 const QString name = st->importPicture(id, pic->id, file);

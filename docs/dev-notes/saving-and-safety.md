@@ -2,6 +2,30 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: encryption, the review's findings (suites `v0990f` "reviewFindings", `v0990j`, `v0990k`, `v0990e`)
+
+- **Copies**: `saveAsQuillbinder` / `copyAsQuillbinder` copy `encryption.json` first (`copyMarkerFirst`) and hold a `vault::Scope`
+  over `copyDir`, so `vault::copy` sees both places in the vault with the same keys and copies the bytes as they are (before:
+  the target was not in the vault, every file was decrypted, and the marker came along).
+- **Opening** (`Project::open`) asks `crypto::accessFor` for every project now: `PublicKeyMissing` (both public keys must be in the
+  ring: every write encrypts to both) and `MarkerDamaged` (`crypto::markerProblem`: a marker that is there and cannot be read, or none
+  with an encrypted `*.qbx`) refuse before anything is written; `Backup::backupProject` refuses on `markerProblem` too.
+  `ProjectSettings::unreadable` is the flag. A project with plain files and switch 1 (the marker names the keys) whose key is
+  unlocked is added to the vault with `sealNew=false` (`strayVault` in Project.cpp, no header change) so that a late encrypted
+  file reads decrypted; `DocumentStore` treats data that is still `isSealedData` after `unseal` (folder not in the vault) as
+  unreadable. `canChangeProjectEncryption` refuses while `syncsafe::judge(settings/lock)` says OtherDevice or OtherWindow.
+- **L1**: `vault::unseal` of a plain file with data in a folder whose marker says `encryptedProject` and no conversion is
+  `Damaged` (a conversion, the `sealNew=false` case and a vault added without a marker stay lenient: the old checks of v0990f).
+- **Names without titles** (`vault::placeOf(file).reads()` or `Project::isEncrypted()`): `syncsafe::keepCopy` (the file's path
+  inside the project, `/` as `-`), `savebatch::recover`'s interrupted-save copies, `DocumentStore::writeUnsaved` and the "changed,
+  not saved" copy (the id), `mindmaps::writeUnsaved` ("mind map <id>"), the emergency folder (the date), `README.txt`
+  (`project-file.copy`, no title, no path), the window's `notice.txt` (no title, no error text). Plain projects keep every name.
+  The emergency copy's `tally` names are the file names, so no title reaches the notices either.
+- **Temporary files** (`crypto::tempFolderBase()`: `vault::privateFolder()` while any folder is in the vault, else
+  `QDir::tempPath()`): the compile preview, the compile through another program, the sheet's picture, the export for dragging
+  and a dropped image. Not covered: the add-ons' own temporary files.
+- **Pitfall for tests**: the `QB_REVIEW_ONLY=1` environment variable runs only `reviewFindings` in `v0990f`.
+
 ## 0.99.0: encryption, part 2 (the encrypted project and the encrypted backups; suite `v0990f`)
 
 - **The vault** (`src/core/crypto/Vault.*`, the one layer under every read and write of an encrypted project): a folder is in

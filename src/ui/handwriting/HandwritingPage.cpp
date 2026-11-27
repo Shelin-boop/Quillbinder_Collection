@@ -275,7 +275,8 @@ HandwritingPage::HandwritingPage(QWidget *parent) : QWidget(parent)
     m_learning->setObjectName(QStringLiteral("hwLearning"));
     ll->addWidget(m_learning);
     auto *lh = new QLabel(tr("Only lines you corrected are kept: the picture of the ink and the corrected text. They stay on this "
-                             "device and are never sent anywhere."),
+                             "device and are never sent anywhere. While an encrypted project is open, nothing is kept (the files "
+                             "would be plain)."),
                           lg);
     lh->setWordWrap(true);
     ll->addWidget(lh);

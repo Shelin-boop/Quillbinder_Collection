@@ -149,6 +149,16 @@ bool unlockForFolder(QWidget *parent, const QString &projectFolder, const QStrin
             if (!missingKeys(parent, what, crypto::accessText(a, projectFolder), crypto::settingsOf(projectFolder).recipients.list()))
                 return false;
             break; // keys came in: look again
+        case crypto::Access::PublicKeyMissing: // 0.99.0 (encryption review H3): the same box; Import Keys brings the public key
+            if (!missingKeys(parent, what, crypto::accessText(a, projectFolder), crypto::settingsOf(projectFolder).recipients.list()))
+                return false;
+            break;
+        case crypto::Access::MarkerDamaged: { // 0.99.0 (encryption review M3)
+            QMessageBox box(QMessageBox::Warning, what, crypto::accessText(a, projectFolder), QMessageBox::Ok, parent);
+            box.setObjectName(QStringLiteral("encryptionMarkerDamaged"));
+            box.exec();
+            return false;
+        }
         }
     }
     return false;

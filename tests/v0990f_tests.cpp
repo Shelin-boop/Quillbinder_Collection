@@ -53,6 +53,7 @@
 #include <QMessageBox>
 #include <QPainter>
 #include <QProcess>
+#include <QRegularExpression>
 #include <QPushButton>
 #include <QSettings>
 #include <QStandardPaths>
@@ -716,6 +717,294 @@ static void keysAndDamage(const QString &W)
     }
 }
 
+
+// ------------------------------------------------------------- the findings of the review of the encrypted project
+
+static QStringList fileNamesIn(const QString &folder)
+{
+    QStringList out;
+    QDirIterator it(folder, QDir::Files | QDir::Hidden | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+    while (it.hasNext())
+        out << QDir(folder).relativeFilePath(it.next());
+    out.sort();
+    return out;
+}
+
+static QString joinedText(const QString &folder)
+{
+    QString all = fileNamesIn(folder).join(QLatin1Char('\n'));
+    return all;
+}
+
+static void reviewFindings(const QString &W)
+{
+    std::printf("== the review's findings: copies stay encrypted, missing keys, damaged marker, stray files, titles hidden\n");
+    QString err;
+    KeyRing &ring = KeyRing::device();
+    ring.unlock(g_writer, kWriterPass);
+
+    // H1: Save As and Save a Copy of an encrypted project are encrypted
+    {
+        const Rich r = makeRich(W, QStringLiteral("Copy Source"));
+        encryptFolder(r.folder, recipients(), {}, &err);
+        auto p = openOk(r.index, QStringLiteral("(an encrypted project to copy)"));
+        if (p) {
+            QDir().mkpath(W + QStringLiteral("/saveas"));
+            auto into = [&p](const QString &folder, const QString &indexName, QString *e) {
+                vault::Scope encrypted(folder);
+                QString why;
+                const bool ok = p->writeUnsavedInto(folder, indexName, &why);
+                if (!ok && e)
+                    *e = why;
+                return ok;
+            };
+            auto np = scrivener::saveAsQuillbinder(p.get(), W + QStringLiteral("/saveas"), QStringLiteral("As Copy"), &err, into);
+            check(np != nullptr, QStringLiteral("(Save As of an encrypted project)"), err);
+            if (np) {
+                const QStringList left = plainFilesIn(np->folderPath());
+                check(np->isEncrypted() && left.isEmpty(), QStringLiteral("H1: the Save As copy has no plain file (%1 files)").arg(filesIn(np->folderPath())),
+                      left.join(QLatin1String(", ")));
+                check(np->docs()->text(r.t1)->toPlainText().contains(QLatin1String("Secretword1")), QStringLiteral("... and opens with its texts"));
+            }
+            auto cp = scrivener::copyAsQuillbinder(p.get(), W + QStringLiteral("/saveas"), QStringLiteral("A Second Copy"), &err);
+            check(cp != nullptr, QStringLiteral("(Save a Copy of an encrypted project)"), err);
+            if (cp) {
+                const QStringList left = plainFilesIn(cp->folderPath());
+                check(cp->isEncrypted() && left.isEmpty(), QStringLiteral("H1: the Save a Copy folder has no plain file"), left.join(QLatin1String(", ")));
+            }
+        }
+    }
+
+    // H3: a recipient's public key missing here: the project is not opened (nothing is written)
+    {
+        const Rich r = makeRich(W, QStringLiteral("Missing Public Key"));
+        encryptFolder(r.folder, recipients(), {}, &err);
+        const QByteArray pub = ring.exportPublicKey(g_recovery);
+        ring.removeKey(g_recovery, false);
+        const QMap<QString, QByteArray> before = fingerprintOf(r.folder);
+        QString why;
+        auto p = Project::open(r.index, &why);
+        check(!p && why.contains(groupedFingerprint(g_recovery)), QStringLiteral("H3: no public key of the recovery key here: the project is not opened"), why);
+        check(fingerprintOf(r.folder) == before, QStringLiteral("... and nothing in its folder changed"));
+        p.reset();
+        check(ring.importKeys(pub).imported.contains(g_recovery), QStringLiteral("(the recovery key's public part is back)"));
+        auto q = openOk(r.index, QStringLiteral("... it opens with both public keys"));
+    }
+
+    // M1: another computer's encrypted file in a folder that was decrypted here
+    {
+        const Rich r = makeRich(W, QStringLiteral("Stray Encrypted"));
+        encryptFolder(r.folder, recipients(), {}, &err);
+        check(decryptFolder(r.folder, {}, &err), QStringLiteral("(the project is decrypted)"), err);
+        const QString file = r.folder + QStringLiteral("/content/") + r.t2 + QStringLiteral("/text.md");
+        QByteArray stray = "Stray text of another computer Secretword30";
+        Error e = Error::None;
+        const QByteArray sealed = ring.encrypt(stray, recipients().list(), &e);
+        check(e == Error::None && writeAll(file, sealed), QStringLiteral("(an encrypted text arrives in the plain folder)"));
+        auto p = openOk(r.index, QStringLiteral("(the decrypted project opens)"));
+        if (p) {
+            const QString shown = p->docs()->text(r.t2)->toPlainText();
+            check(shown.contains(QLatin1String("Secretword30")) || (p->docs()->isUnreadable(r.t2) && shown.isEmpty()),
+                  QStringLiteral("M1: the late encrypted file is shown decrypted or read-only, never as ciphertext"), shown.left(80));
+            p->docs()->text(r.t2)->setPlainText(QStringLiteral("typed over it"));
+            p->save(&err);
+        }
+        // a lock of another computer: the encryption is not turned on or off then
+        QString reason;
+        auto q = openOk(r.index, QStringLiteral("(opened again)"));
+        if (q) {
+            const QString lock = q->settingsDir() + QStringLiteral("/lock");
+            writeAll(lock, QStringLiteral("otherhost 4242\ndevice=otherhost\nkey=0123456789abcdef\nalive=%1\n")
+                               .arg(QDateTime::currentDateTimeUtc().toString(Qt::ISODate)).toUtf8());
+            check(!canChangeProjectEncryption(q.get(), &reason) && !reason.isEmpty(),
+                  QStringLiteral("M1: no conversion while another computer has the project open: %1").arg(reason));
+            QFile::remove(lock);
+            check(canChangeProjectEncryption(q.get(), &reason), QStringLiteral("... and with its lock gone, it can be changed"), reason);
+        }
+    }
+
+    // M3: a marker that cannot be read, or none beside an encrypted project file: refused, nothing written
+    {
+        const Rich r = makeRich(W, QStringLiteral("Damaged Marker"));
+        encryptFolder(r.folder, recipients(), {}, &err);
+        const QString marker = r.folder + QStringLiteral("/") + markerName();
+        const QByteArray good = readAll(marker);
+        const QString bdir = W + QStringLiteral("/marker-backups");
+        // a backup after the marker was damaged
+        {
+            auto p = openOk(r.index, QStringLiteral("(an encrypted project with its marker)"));
+            if (p) {
+                writeAll(marker, "{ this is not json");
+                QString m, why;
+                const bool made = backup::backupProject(p.get(), bdir, 3, &m, &why);
+                check(!made && filesIn(bdir) == 0, QStringLiteral("M3: with a damaged marker no backup is made (never a plain one)"), why);
+                writeAll(marker, good);
+            }
+        }
+        // a leftover of a save cut off (an hour old): an opening that writes would clean it up
+        const QString leftover = r.folder + QStringLiteral("/content/") + r.t1 + QStringLiteral("/text.md.AbCd12");
+        writeAll(leftover, "left by a save that was cut off");
+        {
+            QFile f(leftover);
+            f.open(QIODevice::ReadWrite);
+            f.setFileTime(QDateTime::currentDateTime().addSecs(-7200), QFileDevice::FileModificationTime);
+        }
+        writeAll(marker, "{ this is not json");
+        const QMap<QString, QByteArray> before = fingerprintOf(r.folder);
+        QString why;
+        auto p = Project::open(r.index, &why);
+        check(!p && !why.isEmpty(), QStringLiteral("M3: a damaged marker: the project is not opened"), why);
+        check(fingerprintOf(r.folder) == before, QStringLiteral("... and its folder is as it was (no recovery, no clean-up)"));
+        QFile::remove(marker);
+        {
+            QFile f(leftover);
+            f.open(QIODevice::ReadWrite);
+            f.setFileTime(QDateTime::currentDateTime().addSecs(-7200), QFileDevice::FileModificationTime);
+        }
+        const QMap<QString, QByteArray> before2 = fingerprintOf(r.folder);
+        auto q = Project::open(r.index, &why);
+        check(!q && !why.isEmpty(), QStringLiteral("M3: no marker beside an encrypted project file: not opened"), why);
+        check(fingerprintOf(r.folder) == before2, QStringLiteral("... and nothing written"));
+        writeAll(marker, good);
+        auto ok = openOk(r.index, QStringLiteral("(with the marker back it opens)"));
+    }
+
+    // L1: a file whose first bytes are damaged is not taken as plain
+    {
+        const Rich r = makeRich(W, QStringLiteral("Damaged Head"));
+        encryptFolder(r.folder, recipients(), {}, &err);
+        const QString file = r.folder + QStringLiteral("/content/") + r.t2 + QStringLiteral("/text.md");
+        QByteArray bytes = readAll(file);
+        bytes = "Words that are plain now, because the first bytes of the file are damaged. Secretword99";
+        writeAll(file, bytes);
+        auto q = openOk(r.index, QStringLiteral("(a project with a damaged first byte opens)"));
+        if (q) {
+            q->docs()->text(r.t2);
+            check(q->docs()->isUnreadable(r.t2), QStringLiteral("L1: the file with damaged first bytes is unreadable, not plain text"));
+            q->docs()->text(r.t2)->setPlainText(QStringLiteral("typed into a document that cannot be read"));
+            q->save(&err);
+            check(readAll(file) == bytes, QStringLiteral("... and never written over"));
+        }
+    }
+
+    // L7: a restore's plain ZIP file left by a crash is swept (once it is an hour old)
+    {
+        const QString work = backup::workDirectory();
+        QDir().mkpath(work);
+        const QString oldOne = work + QStringLiteral("/restore-0123456789abcdef.zip");
+        const QString newOne = work + QStringLiteral("/restore-fedcba9876543210.zip");
+        writeAll(oldOne, "left by a crash");
+        writeAll(newOne, "a restore that runs now");
+        {
+            QFile f(oldOne);
+            f.open(QIODevice::ReadWrite);
+            f.setFileTime(QDateTime::currentDateTime().addSecs(-7200), QFileDevice::FileModificationTime);
+        }
+        const Rich r = makeRich(W, QStringLiteral("Sweeper"));
+        auto p = openOk(r.index, QStringLiteral("(a project for a backup)"));
+        QString m, why;
+        if (p)
+            check(backup::backupProject(p.get(), W + QStringLiteral("/sweep-backups"), 3, &m, &why), QStringLiteral("(a backup)"), why);
+        check(!QFile::exists(oldOne) && QFile::exists(newOne), QStringLiteral("L7: the old restore-*.zip is swept, a young one stays"));
+        QFile::remove(newOne);
+    }
+
+    // the titles: conflict copies, interrupted-save copies and the emergency copy carry the document's number, not its
+    // title, in an encrypted project; a plain project keeps its names
+    auto conflictCopy = [&](const QString &name, bool encrypted) {
+        const Rich r = makeRich(W, name);
+        if (encrypted)
+            encryptFolder(r.folder, recipients(), {}, &err);
+        auto p = openOk(r.index, QStringLiteral("(a project for a conflict)"));
+        QString kept;
+        if (!p)
+            return std::make_pair(r, kept);
+        p->docs()->text(r.t3);
+        QByteArray other = "Another computer's version Secretword40";
+        vault::seal(p->docs()->textPath(r.t3), other);
+        QTest::qWait(1100);
+        writeAll(p->docs()->textPath(r.t3), other);
+        setText(p.get(), p->item(r.t3), QStringLiteral("This computer's version Secretword41"));
+        QObject::connect(p.get(), &Project::conflictKept, [&kept](const QString &, const QString &, const QString &copy, bool) { kept = copy; });
+        p->save(&err);
+        return std::make_pair(r, kept);
+    };
+    {
+        const auto c = conflictCopy(QStringLiteral("Titles Plain"), false);
+        check(!c.second.isEmpty() && QFileInfo(c.second).fileName().contains(QLatin1String("Research Note")),
+              QStringLiteral("a plain project keeps the title in its conflict copy's name"), c.second);
+        const auto e = conflictCopy(QStringLiteral("Titles Hidden"), true);
+        const QString n = QFileInfo(e.second).fileName();
+        check(!e.second.isEmpty() && !n.contains(QLatin1String("Research")) && n.contains(e.first.t3),
+              QStringLiteral("titles: an encrypted project's conflict copy is named by the document's number"), n);
+    }
+    {
+        const Rich r = makeRich(W, QStringLiteral("Titles Interrupted"));
+        encryptFolder(r.folder, recipients(), {}, &err);
+        auto p = openOk(r.index, QStringLiteral("(a project for an interrupted save)"));
+        if (p) {
+            const QString t1 = p->contentDir(r.t1) + QStringLiteral("/batch-a.md");
+            const QString blocked = p->contentDir(r.t1) + QStringLiteral("/batch-b.md");
+            QDir().mkpath(blocked);
+            writeAll(blocked + QStringLiteral("/x"), "x");
+            savebatch::Batch b(p->folderPath(), p->journalFile());
+            {
+                savebatch::Scope scope(&b);
+                b.stage(t1, "batch text A", QStringLiteral("Chapter One"), QString(), &err);
+                b.stage(blocked, "batch text B", QStringLiteral("Chapter Two"), QString(), &err);
+                b.commit(&err); // cut off at the second rename
+            }
+            QDir(blocked).removeRecursively();
+            QByteArray changed = "another computer's batch-b";
+            vault::seal(blocked, changed);
+            writeAll(blocked, changed);
+            const savebatch::Recovery rec = savebatch::recover(p->folderPath(), p->journalFile(), p->settingsDir());
+            QStringList copies;
+            for (const QString &f : fileNamesIn(p->settingsDir() + QStringLiteral("/conflicts")))
+                copies << f;
+            bool anyTitle = false;
+            for (const QString &f : std::as_const(copies))
+                anyTitle = anyTitle || f.contains(QLatin1String("Chapter"));
+            check(!copies.isEmpty() && !anyTitle, QStringLiteral("titles: the interrupted-save copy of an encrypted project carries no title"),
+                  copies.join(QLatin1String(", ")) + QLatin1Char(' ') + rec.text());
+            QFile::remove(t1);
+        }
+    }
+    {
+        const Rich r = makeRich(W, QStringLiteral("Hidden Titles Book"));
+        encryptFolder(r.folder, recipients(), {}, &err);
+        auto p = openOk(r.index, QStringLiteral("(an encrypted project with unsaved text)"));
+        if (p) {
+            setText(p.get(), p->item(r.t1), QStringLiteral("Unsaved words Secretword42"));
+            QTextCursor n(p->docs()->notes(r.t1));
+            n.insertText(QStringLiteral(" more notes Secretword43"));
+            const EmergencyReport er = p->makeEmergencyCopy(W + QStringLiteral("/emergency-hidden"));
+            const QString folderName = QFileInfo(er.dir).fileName();
+            static const QRegularExpression dateOnly(QStringLiteral("^\\d{4}-\\d\\d-\\d\\d \\d\\d-\\d\\d-\\d\\d( \\(\\d+\\))?$"));
+            check(!er.dir.isEmpty() && dateOnly.match(folderName).hasMatch(),
+                  QStringLiteral("titles: the emergency folder of an encrypted project is named by its date"), folderName);
+            const QString names = joinedText(er.dir);
+            check(!names.isEmpty() && !names.contains(QLatin1String("Chapter")) && !names.contains(QLatin1String("Hidden")) && names.contains(r.t1),
+                  QStringLiteral("... its files are named by the document's number"), names);
+            const QString readme = QString::fromUtf8(readAll(er.dir + QStringLiteral("/README.txt")));
+            check(!readme.isEmpty() && !readme.contains(QLatin1String("Hidden")) && !readme.contains(QLatin1String("Chapter")),
+                  QStringLiteral("... and its README.txt names no title"), readme.left(300));
+            p->save(&err);
+        }
+    }
+    {
+        const Rich r = makeRich(W, QStringLiteral("Plain Titles Book"));
+        auto p = openOk(r.index, QStringLiteral("(a plain project with unsaved text)"));
+        if (p) {
+            setText(p.get(), p->item(r.t1), QStringLiteral("Unsaved words Secretword44"));
+            const EmergencyReport er = p->makeEmergencyCopy(W + QStringLiteral("/emergency-plain"));
+            check(QFileInfo(er.dir).fileName().contains(QLatin1String("Plain Titles Book")) && QFile::exists(er.dir + QStringLiteral("/Chapter One.rtf")),
+                  QStringLiteral("a plain project's emergency copy keeps its names"), QFileInfo(er.dir).fileName());
+            p->save(&err);
+        }
+    }
+}
+
 // --------------------------------------------------------------------------------------------- the backups
 
 static QString gpgProgram()
@@ -1179,6 +1468,8 @@ int main(int argc, char **argv)
     QTemporaryDir work;
     if (qEnvironmentVariableIsSet("QB_MEASURE")) {
         speed(work.path());
+    } else if (qEnvironmentVariableIsSet("QB_REVIEW_ONLY")) {
+        reviewFindings(work.path());
     } else {
         vaultBasics(work.path());
         encryptedProject(work.path());
@@ -1186,6 +1477,7 @@ int main(int argc, char **argv)
         keysAndDamage(work.path());
         backups(work.path());
         window(work.path());
+        reviewFindings(work.path());
         speed(work.path());
     }
     std::printf("%d failure(s)\n", failures);

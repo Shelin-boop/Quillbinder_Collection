@@ -101,6 +101,18 @@ QString keepCopy(const QString &file, const QString &settingsDir, const QString 
     if (!QDir().mkpath(dir))
         return QString(); // nothing kept (0.64.1: the caller then does not write over the file)
     QString name = what;
+    // 0.99.0: in an encrypted project the copy is named by the file's place in the project (the document's number), not by
+    // the document's title
+    {
+        const vault::Place place = vault::placeOf(file);
+        if (place.reads()) {
+            name = QDir(place.folder).relativeFilePath(file);
+            name.replace(QLatin1Char('/'), QLatin1Char('-'));
+            const int dot = name.lastIndexOf(QLatin1Char('.'));
+            if (dot > 0)
+                name.truncate(dot);
+        }
+    }
     for (const QChar c : {QLatin1Char('/'), QLatin1Char('\\'), QLatin1Char(':'), QLatin1Char('*'), QLatin1Char('?'),
                           QLatin1Char('"'), QLatin1Char('<'), QLatin1Char('>'), QLatin1Char('|')})
         name.replace(c, QLatin1Char('-'));

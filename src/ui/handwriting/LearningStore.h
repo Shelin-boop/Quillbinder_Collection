@@ -12,8 +12,8 @@ class LearningStore
 {
 public:
     static QString folder();
-    // Keeps one corrected line (a picture file and a text file with the same number). False when learning is off or the
-    // files could not be written.
+    // Keeps one corrected line (a picture file and a text file with the same number). False when learning is off, when an
+    // encrypted project is open (the files would be plain; 0.99.0), or when the files could not be written.
     static bool add(const QImage &picture, const QString &correctedText);
     static int count();
     static int removeAll();   // returns the number of lines deleted

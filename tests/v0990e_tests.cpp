@@ -512,6 +512,50 @@ int main(int argc, char **argv)
         ring.decrypt("Hello, plain text.", &e);
         check(noiseError == Error::Damaged && emptyError == Error::Damaged && e == Error::Damaged,
               QStringLiteral("noise, nothing and plain text: damaged"));
+        // L3: a message without the integrity check (a symmetrically encrypted data packet, tag 9, after the same session
+        // keys) is refused, and no text comes back
+        {
+            qsizetype pos = 0;
+            while (pos + 2 < cipher.size()) {
+                const unsigned char b = static_cast<unsigned char>(cipher.at(pos));
+                const unsigned char o1 = static_cast<unsigned char>(cipher.at(pos + 1));
+                qsizetype hdr = 0, len = 0;
+                int tag = 0;
+                if (b & 0x40) {
+                    tag = b & 0x3f;
+                    if (o1 < 192) {
+                        hdr = 2;
+                        len = o1;
+                    } else if (o1 < 224) {
+                        hdr = 3;
+                        len = ((o1 - 192) << 8) + static_cast<unsigned char>(cipher.at(pos + 2)) + 192;
+                    } else {
+                        break;
+                    }
+                } else {
+                    tag = (b >> 2) & 0x0f;
+                    const int type = b & 3;
+                    if (type == 0) {
+                        hdr = 2;
+                        len = o1;
+                    } else if (type == 1) {
+                        hdr = 3;
+                        len = (o1 << 8) + static_cast<unsigned char>(cipher.at(pos + 2));
+                    } else {
+                        break;
+                    }
+                }
+                if (tag != 1)
+                    break;
+                pos += hdr + len;
+            }
+            QByteArray sed = cipher.left(pos);
+            sed.append(char(0xA7)); // old format, tag 9, the body runs to the end
+            sed.append(cipher.mid(pos + 6, 300));
+            plain = ring.decrypt(sed, &e);
+            check(pos > 0 && e != Error::None && plain.isEmpty(), QStringLiteral("a message with a tag 9 data packet (no integrity check) is refused: %1").arg(errorText(e)),
+                  ring.errorDetail());
+        }
         QByteArray header = cipher.left(200);
         ring.decrypt(header + QByteArray(5000, '\0'), &e);
         check(e == Error::Damaged, QStringLiteral("a good start and then zeros: damaged"), errorText(e) + QLatin1Char(' ') + ring.errorDetail());

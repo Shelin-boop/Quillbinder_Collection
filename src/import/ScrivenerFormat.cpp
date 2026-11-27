@@ -1,4 +1,6 @@
 #include "import/ScrivenerFormat.h"
+#include "core/crypto/ProjectCrypto.h"
+#include "core/crypto/Vault.h"
 #include "core/Backup.h"
 #include "core/SafeSave.h"
 #include "core/Timing.h"
@@ -311,6 +313,17 @@ bool sameExceptStamps(const QByteArray &a, const QByteArray &b)
         return head.toUtf8() + x.mid(end + 1);
     };
     return norm(a) == norm(b);
+}
+
+// 0.99.0 (encryption review H1): a copy of an encrypted project is written into a folder that is in the vault from the first
+// file on (the marker first: it says so), so that the files are copied as they are, encrypted, and not decrypted
+bool copyMarkerFirst(const QString &from, const QString &to)
+{
+    const QString marker = crypto::markerName();
+    QDir().mkpath(to);
+    if (!QFile::exists(QDir(from).filePath(marker)))
+        return true;
+    return safesave::copyChecked(QDir(from).filePath(marker), QDir(to).filePath(marker));
 }
 
 // (0.92.0: *failedFile names the file that could not be copied)
@@ -3941,6 +3954,12 @@ std::unique_ptr<Project> copyAsQuillbinder(Project *p, const QString &parentDir,
         return nullptr;
     }
     const QString oldIndex = QFileInfo(p->indexPath()).fileName();
+    if (!copyMarkerFirst(p->folderPath(), target)) {
+        if (error)
+            *error = QObject::tr("Cannot copy the project to %1").arg(target);
+        return nullptr;
+    }
+    vault::Scope keepEncrypted(target); // 0.99.0 (H1): the copy of an encrypted project stays encrypted
     if (!copyDir(p->folderPath(), target, {QStringLiteral("settings/lock"), QStringLiteral("settings/scrivener-sync.json"),
                                            oldIndex})) {
         if (error)
@@ -3976,6 +3995,13 @@ std::unique_ptr<Project> saveAsQuillbinder(Project *p, const QString &parentDir,
         return nullptr;
     }
     const QString oldIndex = QFileInfo(p->indexPath()).fileName();
+    if (!copyMarkerFirst(p->folderPath(), target)) {
+        if (error)
+            *error = QObject::tr("Cannot copy the project to %1").arg(QDir::toNativeSeparators(target));
+        QDir(target).removeRecursively();
+        return nullptr;
+    }
+    vault::Scope keepEncrypted(target); // 0.99.0 (H1): the copy of an encrypted project stays encrypted
     if (!copyDir(p->folderPath(), target, {QStringLiteral("settings/lock"), QStringLiteral("settings/scrivener-sync.json"),
                                            QStringLiteral("settings/journal.json"), oldIndex})) {
         if (error)
