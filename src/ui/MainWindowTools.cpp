@@ -80,7 +80,7 @@ void MainWindow::createToolActions()
                        QStringLiteral("applications-education-language"),
                        tr("Suggestions for translating between eleven languages and for English spelling (the add-on is not installed)")};
 #ifndef Q_OS_ANDROID
-    missing << Missing{QStringLiteral("speech-transcription"), QStringLiteral("missingSpeech"), tr("Speech &Transcription…"),
+    missing << Missing{QStringLiteral("speech-transcription"), QStringLiteral("missingSpeech"), tr("&Speech Transcription…"),
                        QStringLiteral("audio-input-microphone"), tr("Turn speech into text (the add-on is not installed)")};
 #endif
     for (const Missing &m : missing) {

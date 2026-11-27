@@ -421,12 +421,10 @@ void OptionsDialog::updateScopeInfo()
     m_scopeReset->setVisible(m_optScope == ThisProject);
     m_scopeReset->setEnabled(n > 0);
     if (m_optScope == ThisProject)
-        m_scopeInfo->setText(n ? tr("What you change here is kept with this project. Its own settings: <a href=\"show\">%1</a>.")
-                                     .arg(text::plural(n, tr("setting"), tr("settings")))
+        m_scopeInfo->setText(n ? tr("What you change here is kept with this project. Its own settings: <a href=\"show\">%n setting(s)</a>.", "", n)
                                : tr("What you change here is kept with this project; it has no settings of its own yet."));
     else if (look::project() && n > 0 && settingslayer::projectFirst())
-        m_scopeInfo->setText(tr("The open project has <a href=\"show\">%1</a> of its own, which it keeps.")
-                                 .arg(text::plural(n, tr("setting"), tr("settings"))));
+        m_scopeInfo->setText(tr("The open project has <a href=\"show\">%n setting(s)</a> of its own, which it keeps.", "", n));
     else
         m_scopeInfo->setText(look::project() && !settingslayer::projectFirst()
                                  ? tr("Projects' own settings are not used (General > Which settings come first).")
@@ -1822,8 +1820,7 @@ void OptionsDialog::refreshLook()
     m_preview->setFonts(fonts);
     const int own = ownChanges();
     m_ownInfo->setText(own == 0 ? tr("Colors and fonts are those of the theme.")
-                                : tr("%1 of your own on top of the theme (shown in bold below).")
-                                      .arg(text::plural(own, tr("change"), tr("changes"))));
+                                : tr("%n change(s) of your own on top of the theme (shown in bold below).", "", own));
     m_resetLook->setEnabled(own > 0);
     // 0.99.0 (UR-17): the worst pair below 4.5 : 1 that has a color of the writer's own (WCAG 2.x); only a note
     QSet<theme::Role> ownRoles;
@@ -1841,7 +1838,7 @@ void OptionsDialog::refreshLook()
         QString note = tr("Note: your colors %1 on %2 have a contrast of %3 : 1. Text is easier to read from 4.5 : 1.")
                            .arg(theme::roleLabel(w.fg), theme::roleLabel(w.bg), QLocale().toString(w.ratio, 'f', 2));
         if (issues.size() > 1)
-            note += QLatin1Char(' ') + tr("%1 below it too.").arg(text::plural(int(issues.size()) - 1, tr("more pair"), tr("more pairs")));
+            note += QLatin1Char(' ') + tr("%n more pair(s) below it too.", "", int(issues.size()) - 1);
         m_contrastNote->setText(note);
         m_contrastNote->show();
     }

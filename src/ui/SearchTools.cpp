@@ -210,9 +210,9 @@ QString ProjectReplaceDialog::describe(const ReplaceResult &r, bool done)
     add(r.notes, tr("notes"));
     add(r.comments, tr("comments and footnotes"));
     add(r.custom, tr("custom metadata"));
-    QString s = (done ? tr("%1 replaced in %2: %3.") : tr("%1 found in %2: %3."))
-                    .arg(text::plural(r.total(), tr("occurrence"), tr("occurrences")),
-                         text::plural(r.documents, tr("document"), tr("documents")), parts.join(QLatin1String(", ")));
+    const QString docs = tr("%n document(s)", "", r.documents);
+    QString s = (done ? tr("%n occurrence(s) replaced in %1: %2.", "", r.total()) : tr("%n occurrence(s) found in %1: %2.", "", r.total()))
+                    .arg(docs, parts.join(QLatin1String(", ")));
     if (done && r.snapshots > 0)
         s += QLatin1Char(' ') + tr("Snapshots taken: %1.").arg(r.snapshots);
     if (!r.error.isEmpty())
@@ -440,10 +440,10 @@ static QString describeQuotes(const ReplaceResult &r, bool done)
     add(r.notes, ConvertQuotesDialog::tr("notes"));
     add(r.comments, ConvertQuotesDialog::tr("comments and footnotes"));
     add(r.custom, ConvertQuotesDialog::tr("custom metadata"));
-    const QString marks = text::plural(r.total(), ConvertQuotesDialog::tr("quote mark"), ConvertQuotesDialog::tr("quote marks"));
-    const QString docs = text::plural(r.documents, ConvertQuotesDialog::tr("document"), ConvertQuotesDialog::tr("documents"));
-    QString s = (done ? ConvertQuotesDialog::tr("%1 converted in %2: %3.") : ConvertQuotesDialog::tr("%1 to convert in %2: %3."))
-                    .arg(marks, docs, parts.join(QLatin1String(", ")));
+    const QString docs = ConvertQuotesDialog::tr("%n document(s)", "", r.documents);
+    QString s = (done ? ConvertQuotesDialog::tr("%n quote mark(s) converted in %1: %2.", "", r.total())
+                      : ConvertQuotesDialog::tr("%n quote mark(s) to convert in %1: %2.", "", r.total()))
+                    .arg(docs, parts.join(QLatin1String(", ")));
     if (done && r.snapshots > 0)
         s += QLatin1Char(' ') + ConvertQuotesDialog::tr("Snapshots taken: %1.").arg(r.snapshots);
     if (!r.error.isEmpty())

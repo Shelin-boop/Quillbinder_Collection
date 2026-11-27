@@ -107,7 +107,7 @@ QVariant BinderModel::data(const QModelIndex &index, int role) const
             return icons::forItem(m_project, it);
         if (role == Qt::ToolTipRole) {
             QString tip = it->title;
-            const auto words = [](int n) { return QLocale().toString(n) + QLatin1Char(' ') + (n == 1 ? tr("word") : tr("words")); };
+            const auto words = [](int n) { return tr("%n word(s)", "", n); };
             if (it->isContainer() && it->type != ItemType::Trash) {
                 // a folder (or a text with subdocuments): its own text and everything inside it,
                 // as the editor's footer shows it (0.60.3; was the folder's own text only)

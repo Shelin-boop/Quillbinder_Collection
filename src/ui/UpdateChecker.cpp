@@ -383,11 +383,9 @@ void UpdateChecker::evaluate(const QByteArray &signature)
 
 static QString delayWords(int days)
 {
-    if (days == 1)
-        return UpdateChecker::tr("1 day");
-    if (days == 7)
-        return UpdateChecker::tr("1 week");
-    return UpdateChecker::tr("%1 weeks").arg(days / 7);
+    if (days < 7)
+        return UpdateChecker::tr("%n day(s)", "", days);
+    return UpdateChecker::tr("%n week(s)", "", days / 7);
 }
 
 void UpdateChecker::offer(const updates::Shown &shown)

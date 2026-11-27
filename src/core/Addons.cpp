@@ -86,7 +86,7 @@ bool moveIntoPlace(const QString &from, const QString &to, int tries, int waitMs
 
 namespace {
 
-QString tr(const char *s) { return QCoreApplication::translate("qb::addons", s); } // 0.70.0: the context lupdate gives these texts
+QString tr(const char *s, const char *disambiguation = nullptr, int n = -1) { return QCoreApplication::translate("qb::addons", s, disambiguation, n); } // 0.70.0: the context lupdate gives these texts
 
 bool safeRelativePath(const QString &p)
 {
@@ -126,21 +126,21 @@ QStringList summarize(const QList<FileEntry> &files)
     }
     QStringList out;
     if (themes)
-        out << text::plural(themes, tr("theme"), tr("themes"));
+        out << tr("%n theme(s)", "", themes);
     if (templates)
-        out << text::plural(templates, tr("project template"), tr("project templates"));
+        out << tr("%n project template(s)", "", templates);
     if (formats)
-        out << text::plural(formats, tr("compile format"), tr("compile formats"));
+        out << tr("%n compile format(s)", "", formats);
     if (layouts)
-        out << text::plural(layouts, tr("layout"), tr("layouts"));
+        out << tr("%n layout(s)", "", layouts);
     if (scripts)
-        out << text::plural(scripts, tr("script format"), tr("script formats"));
+        out << tr("%n script format(s)", "", scripts);
     if (names)
-        out << text::plural(names, tr("name list"), tr("name lists"));
+        out << tr("%n name list(s)", "", names);
     if (plugins)
-        out << text::plural(plugins, tr("plugin file"), tr("plugin files"));
+        out << tr("%n plugin file(s)", "", plugins);
     if (dicts)
-        out << text::plural(dicts, tr("dictionary"), tr("dictionaries"));
+        out << tr("%n dictionar(y|ies)", "", dicts);
     if (mediaExtra)
         out << tr("video and audio formats licensed under patents (for Media Playback 2.0 or newer)");
     if (tutorials)

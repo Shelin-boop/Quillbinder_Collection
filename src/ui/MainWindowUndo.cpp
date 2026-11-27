@@ -209,7 +209,7 @@ void MainWindow::fillUndoList(QMenu *menu, bool undo)
         });
     }
     if (steps.size() > shown)
-        menu->addAction(tr("and %1 earlier steps").arg(QLocale().toString(int(steps.size()) - shown)))->setEnabled(false);
+        menu->addAction(tr("and %n earlier step(s)", "", int(steps.size()) - shown))->setEnabled(false);
 }
 
 } // namespace qb

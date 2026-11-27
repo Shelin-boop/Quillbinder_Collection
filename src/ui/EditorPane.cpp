@@ -385,9 +385,9 @@ void EditorPane::buildFindBar()
         int n = 0;
         for (TextEditor *e : findEditors())
             n += e->replaceAll(m_findEdit->text(), m_replaceEdit->text(), m_findCase->isChecked(), m_findWhole->isChecked());
-        m_replaceEdit->setToolTip(text::plural(n, tr("replacement"), tr("replacements")));
+        m_replaceEdit->setToolTip(tr("%n replacement(s)", "", n));
         updateFindHighlights();
-        m_findCount->setText(text::plural(n, tr("replacement"), tr("replacements")));
+        m_findCount->setText(tr("%n replacement(s)", "", n));
     });
 }
 
@@ -416,7 +416,7 @@ void EditorPane::updateFindHighlights()
         e->setSearchPattern(re);
         n += e->searchMatchCount();
     }
-    m_findCount->setText(bar && !m_findEdit->text().isEmpty() ? text::plural(n, tr("match"), tr("matches")) : QString());
+    m_findCount->setText(bar && !m_findEdit->text().isEmpty() ? tr("%n match(es)", "", n) : QString());
 }
 
 // The lines of the count details of a text or a folder.
@@ -1035,7 +1035,7 @@ void EditorPane::updatePageLabel()
     int page = 0, pages = 0;
     const bool text = m_mode == ViewMode::Single || m_mode == ViewMode::Combined;
     if (text && m_text->pageInfo(&page, &pages)) {
-        m_pageLabel->setText(page > 0 ? tr("Page %1 of %2").arg(page).arg(pages) : text::plural(pages, tr("page"), tr("pages")));
+        m_pageLabel->setText(page > 0 ? tr("Page %1 of %2").arg(page).arg(pages) : tr("%n page(s)", "", pages));
         m_pageLabel->show();
     } else {
         m_pageLabel->hide();
@@ -1304,7 +1304,7 @@ void EditorPane::refreshHeader()
         m_title->setReadOnly(false);
         m_iconButton->setIcon(icons::forItem(m_project, it));
     } else {
-        m_title->setText(text::plural(int(m_items.size()), tr("document"), tr("documents")));
+        m_title->setText(tr("%n document(s)", "", int(m_items.size())));
         m_title->setReadOnly(true);
         m_iconButton->setIcon(icons::get(QStringLiteral("document-multiple")));
     }
@@ -1535,10 +1535,9 @@ void EditorPane::updateFooter()
             m_targetBar->setMaximum(it->target);
             m_targetBar->setValue(qMin(cur, it->target));
         }
-        m_targetBar->setToolTip(tr("%1 of %2 %3 (click to edit)")
+        m_targetBar->setToolTip((it->targetChars ? tr("%1 of %2 characters (click to edit)") : tr("%1 of %2 words (click to edit)"))
                                     .arg(cur)
-                                    .arg(it->target)
-                                    .arg(it->targetChars ? tr("characters") : tr("words")));
+                                    .arg(it->target));
         m_targetBar->show();
         m_targetButton->hide();
     } else {

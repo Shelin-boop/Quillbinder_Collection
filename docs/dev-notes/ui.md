@@ -2,6 +2,22 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: texts with numbers (the translation check)
+
+- A number in a sentence goes into a plural text: `tr("%n word(s)", "", n)`, never `text::plural()` or two texts for the
+  unit word ("words"/"characters" after `%1`). The translators write the plural forms of their language; the English
+  source reads "%n word(s)". English has no translation file, so `Language.cpp` installs `EnglishPlurals` when the
+  application object is made (first, so every language file is asked before it): "(s)" and "(es)" go for 1 and become "s"
+  and "es" otherwise, "dictionar(y|ies)" the same. Irregular words are written with that form, not "(s)".
+- Two numbers in one sentence (a count and a size, "%1 of %2 words"): only the one the unit follows goes into `%n`; the other
+  is `%1`. A target that may be negative (a cutting target) cannot be `%n` (a negative `n` means "no plural"): the sentence
+  has the unit word inside it, one text per unit ("%1 of %2 words", "%1 of %2 characters").
+- A sentence is never put together from pieces: no "and"/"them"/"it" as separate texts. A list is
+  `QLocale().createSeparatedList(...)`; a verb that agrees with the count (is/are) is two texts, or the sentence is
+  written so that it needs none.
+- The menu audit (`tests/m13_tests.cpp`) checks the Alt letters of the English source texts: `fixMnemonics` keeps the
+  source text of an entry it moved in the properties `qbMnemonicFrom` / `qbMnemonicFixed`.
+
 ## 0.99.0: Read Aloud (item 114)
 
 `core/ReadAloud.*` (no windows): `Settings`/`Config` (group `readaloud`, per device), the model choice, the voices, the sentence

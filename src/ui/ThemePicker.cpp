@@ -206,8 +206,7 @@ bool ThemePicker::keepOwnLook()
     int answer = s_answerForTests;
     if (answer == -3) {
         QMessageBox box(QMessageBox::Question, tr("Change Theme"),
-                        tr("The look you see has %1 of your own that are not saved in My Look 1 or My Look 2.")
-                            .arg(text::plural(own, tr("color or font"), tr("colors and fonts"))),
+                        tr("The look you see has %n color(s) or font(s) of your own that are not saved in My Look 1 or My Look 2.", "", own),
                         QMessageBox::NoButton, window());
         box.setObjectName(QStringLiteral("themeKeepQuestion"));
         box.setInformativeText(tr("Save the look in My Look 1 or My Look 2 first (it replaces the look saved there), or switch without "

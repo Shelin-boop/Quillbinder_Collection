@@ -21,6 +21,7 @@
 #include "ui/BookmarkList.h"
 #include "ui/EditorPane.h"
 #include "ui/FormattingChange.h"
+#include "ui/Language.h"
 #include "ui/Inspector.h"
 #include "ui/MainWindow.h"
 #include "ui/ProjectSettingsDialog.h"
@@ -696,7 +697,7 @@ int main(int argc, char **argv)
     {
         QMenu *iconMenu = nullptr;
         for (QMenu *m : w.menuBar()->findChildren<QMenu *>())
-            if (m->title() == QLatin1String("Change &Icon"))
+            if (m->title() == QLatin1String("&Change Icon"))
                 iconMenu = m;
         QStringList missing;
         QList<QAction *> found;
@@ -846,6 +847,77 @@ int main(int argc, char **argv)
         scope->hide();
         if (e)
             e->undo();
+    }
+
+    // ============================================================ 0.99.0: texts with a number are whole sentences
+    {
+        struct Case {
+            const char *context, *source, *before, *one, *many, *after;
+        };
+        // each text read in English for 0, 1, 2 and 5: <before><n> <word><after>
+        const Case cases[] = {
+            {"qb::OptionsDialog", "%n more pair(s) below it too.", "", "more pair", "more pairs", " below it too."},
+            {"qb::BinderModel", "%n word(s)", "", "word", "words", ""},
+            {"qb::TargetsDialog", "%n word(s) in the Draft", "", "word", "words", " in the Draft"},
+            {"qb::TargetsDialog", "%n character(s) in the Draft", "", "character", "characters", " in the Draft"},
+            {"qb::UpdateChecker", "%n day(s)", "", "day", "days", ""},
+            {"qb::UpdateChecker", "%n week(s)", "", "week", "weeks", ""},
+            {"qb::MainWindow", "and %n earlier step(s)", "and ", "earlier step", "earlier steps", ""},
+            {"qb::MainWindow", "Snapshot taken of %n document(s).", "Snapshot taken of ", "document", "documents", "."},
+            {"qb::MainWindow", "%n snapshot(s) deleted.", "", "snapshot", "snapshots", " deleted."},
+            {"qb::EditorPane", "%n match(es)", "", "match", "matches", ""},
+            {"qb::addons", "%n dictionar(y|ies)", "", "dictionary", "dictionaries", ""},
+            {"qbweb::WebImportDialog", "%n picture(s)", "", "picture", "pictures", ""},
+        };
+        QStringList wrong;
+        for (const Case &c : cases)
+            for (int n : {0, 1, 2, 5}) {
+                const QString want = QString::fromLatin1(c.before) + QString::number(n) + QLatin1Char(' ')
+                                     + QLatin1String(n == 1 ? c.one : c.many) + QString::fromLatin1(c.after);
+                const QString got = QCoreApplication::translate(c.context, c.source, "", n);
+                if (got != want)
+                    wrong << QStringLiteral("%1 for %2: '%3' instead of '%4'").arg(QLatin1String(c.source)).arg(n).arg(got, want);
+            }
+        check(wrong.isEmpty(), QStringLiteral("texts with a number: 0, 1, 2 and 5 read right in English (%1 texts)").arg(sizeof(cases) / sizeof(cases[0])),
+              wrong.join(QLatin1String("; ")));
+        check(language::englishPlural(QStringLiteral("%n file(s) and %n copy(ies)"), 1) == QLatin1String("%n file and %n copy(ies)")
+                  && language::englishPlural(QStringLiteral("%n match(es)"), 3) == QLatin1String("%n matches"),
+              QStringLiteral("the English plural helper: (s), (es) and (y|ies)"));
+        // the pieces are gone from the source (a unit word put after a number, a number put into a sentence)
+        const QString root = QStringLiteral(QB_TEST_SOURCE_DIR "/../");
+        auto source = [&](const char *rel) {
+            QFile f(root + QLatin1String(rel));
+            return f.open(QIODevice::ReadOnly) ? QString::fromUtf8(f.readAll()) : QString();
+        };
+        struct Gone {
+            const char *file, *text;
+        };
+        const Gone gone[] = {
+            {"src/ui/OptionsDialog.cpp", "tr(\"more pairs\")"},
+            {"src/ui/OptionsDialog.cpp", "tr(\"setting\"), tr(\"settings\")"},
+            {"addons/translation-proofreading/source/src/Panel.cpp", "tr(\"them\")"},
+            {"addons/translation-proofreading/source/src/Panel.cpp", "tr(\" and \")"},
+            {"src/ui/WritingProgress.cpp", "tr(\"characters\") : tr(\"words\")"},
+            {"src/ui/ToolDialogs.cpp", "t.draftChars ? tr(\"characters\") : tr(\"words\")"},
+            {"src/ui/EditorPane.cpp", "it->targetChars ? tr(\"characters\") : tr(\"words\")"},
+            {"src/core/BinderModel.cpp", "tr(\"word\") : tr(\"words\")"},
+            {"src/ui/UpdateChecker.cpp", "%1 weeks"},
+            {"src/ui/MainWindowUndo.cpp", "earlier steps\").arg"},
+            {"plugins/importers/web/WebImporter.cpp", "%1 pictures\")"},
+            {"src/ui/MainWindow.cpp", "text::plural("},
+            {"src/ui/EditorPane.cpp", "text::plural("},
+            {"src/ui/SearchTools.cpp", "text::plural("},
+            {"src/ui/ThemeDialogs.cpp", "text::plural("},
+        };
+        QStringList left;
+        for (const Gone &g : gone) {
+            const QString text = source(g.file);
+            if (text.isEmpty())
+                left << QStringLiteral("%1 not read").arg(QLatin1String(g.file));
+            else if (text.contains(QLatin1String(g.text)))
+                left << QStringLiteral("%1: %2").arg(QLatin1String(g.file), QLatin1String(g.text));
+        }
+        check(left.isEmpty(), QStringLiteral("the old piece texts are gone from the source"), left.join(QLatin1String("; ")));
     }
 
     w.closeProject();

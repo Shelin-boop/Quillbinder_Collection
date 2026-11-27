@@ -7,6 +7,7 @@ Manual in the program) describes every function.
 
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
 
+- Texts with numbers and texts built from pieces are now whole sentences, so every language can translate them correctly; the menus' access letters are unique. Counts go into plural texts (`%n word(s)`), English writes them through a small translator that is installed first (`language::englishPlural`); the Translation Helper's notice about missing parts is one sentence for one part and one for several; the manual names the pages of File > Options as they are (General > AI Models, Extras > Add-ons and Plugins).
 - Build files only (no change for a writer): the encryption libraries are linked on Windows and Android by the shared build
   file too, and the Linux workflows fetch the encryption, AI engine and ONNX Runtime packs before they configure.
 - **0.99.0 is a security update on every system** (Linux, Windows and Android). The update window says "recommended

@@ -332,7 +332,7 @@ void MainWindow::createPaneActions()
     m_paneGroups[0] = new QActionGroup(this);
     m_paneGroups[1] = new QActionGroup(this);
     m_paneGroups[2] = new QActionGroup(this);
-    connect(make(QStringLiteral("layoutEditorMiddle"), tr("Editor in the &Middle"), m_paneGroups[0]), &QAction::triggered, this,
+    connect(make(QStringLiteral("layoutEditorMiddle"), tr("&Editor in the Middle"), m_paneGroups[0]), &QAction::triggered, this,
             [this] { setUprightEditorFirst(true); });
     connect(make(QStringLiteral("layoutEditorBottom"), tr("Editor at the &Bottom"), m_paneGroups[0]), &QAction::triggered, this,
             [this] { setUprightEditorFirst(false); });
@@ -348,7 +348,7 @@ void MainWindow::createPaneActions()
         connect(make(QStringLiteral("layoutOrder") + order, texts[n++], m_paneGroups[2]), &QAction::triggered, this,
                 [this, order] { setWideOrder(order); });
     }
-    connect(make(QStringLiteral("layoutReset"), tr("&Reset Layout"), nullptr), &QAction::triggered, this,
+    connect(make(QStringLiteral("layoutReset"), tr("Rese&t Layout"), nullptr), &QAction::triggered, this,
             [this] { resetPaneLayout(); });
     // a binder or an inspector shown or hidden: the row of the two in an upright window follows
     connect(a[QStringLiteral("showBinder")], &QAction::toggled, this, [this] { updatePaneRow(); });
