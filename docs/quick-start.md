@@ -21,7 +21,7 @@
 | Your own theme | **View > Themes > Save Current Look as Theme…**; **Manage Themes…** exports and imports *.qbtheme* files. |
 | Interface font, toolbar icon size, the full path in the title bar | **File > Options > Appearance > General Interface** |
 | The text column: fixed width, paper color, width, border beside the text | **File > Options > Appearance > Main Editor**, or a right-click on the paper |
-| The project's settings in a file, and back into this or another project | **Project > Save Project Settings to File…** / **Load Project Settings from File…** |
+| The project's settings in a file, and back into this or another project | **Project > Save Project Settings to File…** / **Load Project Settings From File…** |
 | Font and paragraph formatting of **new** projects | **File > Options > Editing > Formatting** ("Use Formatting in Current Editor") |
 | Font and paragraph formatting of **this** project | **Project > Project Settings > Formatting** |
 | Zoom | **Ctrl+mouse wheel** over any part of the window: each part keeps its own zoom. Start values: **File > Options > Editing**. |
@@ -68,13 +68,13 @@
 ### Beyond the usual
 
 - **Mind maps**: a board of notes, lines, and arrows for every document and folder (the **Mind Map** button of the inspector). **Help > Mind Map Help** shows how it works.
-- **Objects**: characters, locations, environments, points of interest, weather, and categories of your own, each with a sheet of fields and links between them (the **Objects** button of the inspector, or **Window > Objects…**).
+- **Objects**: characters, locations, environments, points of interest, weather, and categories of your own, each with a sheet of fields and links between them (the **Objects** button of the inspector, or **Window > Objects**).
 - **Tables and pictures**: **Insert > Table…** with ready-made designs or your own, **Format > Table** for rows, columns, merged cells, and colors; pictures beside the text with the text flowing around them, captions, and descriptions that e-books and Word files keep as alt text (right-click a picture, **Picture…**).
 - **The icon bar**: up to ten document icons, one click each. **Documents > Change Icon** also makes icons from text or from your own pictures.
 - **Zoom per part**: binder, editors, inspector parts, corkboard, outliner, and mind maps each keep their own zoom.
 - **Places kept**: every document opens where you left the cursor, also after reopening the project.
 - **Fonts**: **Format > Font > Install Font Files…** adds fonts without leaving the program.
-- **Safety**: autosave also while you type on, backups, a spare copy of the project file, crash and freeze reports (**Help > Troubleshooting and Development > Crash Reports…**), and **Help > Troubleshooting and Development > System Information…**.
+- **Safety**: autosave also while you type on, backups, a spare copy of the project file, crash and freeze reports (**Help > Troubleshooting and Development > Crash Reports…**), and **Help > Troubleshooting and Development > System Information**.
 
 ### Updates and add-ons
 
@@ -88,5 +88,5 @@ The **full version** of the AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) has 
 - **Help > Welcome Project**: a short project that shows the features listed under "Beyond the usual" and lets you try them.
 - **Help > Mind Map Help**: notes, lines, arrows, and shapes, with pictures and a practice board.
 - **Help > List of All Placeholders** and **Help > Keyboard Shortcuts…**
-- **Help > Third-Party Licenses…**: the licenses of the parts of other projects that {{APP}} uses.
+- **Help > Third-Party Licenses**: the licenses of the parts of other projects that {{APP}} uses.
 - **Help > About {{APP}}**: the version and the license. {{APP}} is free software under the Apache License 2.0.

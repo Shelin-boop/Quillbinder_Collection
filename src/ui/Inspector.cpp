@@ -2005,7 +2005,23 @@ bool Inspector::focusNotes()
     return true;
 }
 
-// The one name of a tab: the tab button's tooltip and the entry of Navigate > Inspect (0.94.0)
+// 0.99.0: the short name in title case that Navigate > Inspect shows (the tooltips are long sentences; each begins with
+// the same words)
+QString Inspector::tabName(Tab t)
+{
+    switch (t) {
+    case Notes: return tr("Synopsis and Notes");
+    case Bookmarks: return tr("Bookmarks");
+    case Metadata: return tr("Metadata");
+    case Snapshots: return tr("Snapshots");
+    case Comments: return tr("Comments and Footnotes");
+    case MindMap: return tr("Mind Map");
+    case Objects: return tr("Objects");
+    }
+    return {};
+}
+
+// The tab button's tooltip (0.94.0 also the entry of Navigate > Inspect)
 QString Inspector::tabToolTip(Tab t)
 {
     switch (t) {

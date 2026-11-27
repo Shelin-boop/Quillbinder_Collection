@@ -373,7 +373,7 @@ int main(int argc, char **argv)
                 if (!a->isSeparator())
                     fileEntries << a->text().remove(QLatin1Char('&'));
         const int iSettings = int(fileEntries.indexOf(QStringLiteral("Print Settings…")));
-        const int iPreview = int(fileEntries.indexOf(QStringLiteral("Print Preview…")));
+        const int iPreview = int(fileEntries.indexOf(QStringLiteral("Print Preview")));
         const int iPrint = int(fileEntries.indexOf(QStringLiteral("Print Current Document…")));
         check(iSettings >= 0 && iPreview == iSettings + 1 && iPrint == iPreview + 1,
               QStringLiteral("File menu: Print Settings…, Print Preview…, Print Current Document… (in this order, after Compile)"),

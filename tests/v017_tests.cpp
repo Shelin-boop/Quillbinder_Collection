@@ -503,7 +503,7 @@ int main(int argc, char **argv)
         if (iconMenu) {
             emit iconMenu->aboutToShow();
             const QStringList top = menuTexts(iconMenu);
-            check(top.mid(0, 3) == QStringList({QStringLiteral("Reset Icon to Default"), QStringLiteral("Icon from Text…"), QStringLiteral("Manage Icons…")}),
+            check(top.mid(0, 3) == QStringList({QStringLiteral("Reset Icon to Default"), QStringLiteral("Icon From Text…"), QStringLiteral("Manage Icons…")}),
                   QStringLiteral("Change Icon: Reset Icon to Default, Icon from Text, Manage Icons at the top"), top.mid(0, 4).join(QStringLiteral(" | ")));
             QStringList groups;
             for (const QString &g : {QStringLiteral("Book"), QStringLiteral("Characters"), QStringLiteral("Flag"), QStringLiteral("Locations"),

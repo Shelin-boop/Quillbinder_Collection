@@ -452,7 +452,7 @@ int main(int argc, char **argv)
               missing.join(QLatin1String("; ")));
         auto *searchButton = w.findChild<QToolButton *>(QStringLiteral("searchButton"));
         const QStringList tools = searchButton && searchButton->menu() ? menuTexts(searchButton->menu()) : QStringList();
-        check(tools.contains(QStringLiteral("Project Search…")) && tools.contains(QStringLiteral("Search in Document…"))
+        check(tools.contains(QStringLiteral("Project Search…")) && tools.contains(QStringLiteral("Find…"))
                   && tools.contains(QStringLiteral("Project Replace…")) && tools.contains(QStringLiteral("Find by Formatting…")),
               QStringLiteral("the arrow beside the toolbar's search button lists the search tools"), tools.join(QLatin1String(", ")));
         QHash<QString, QString> used;

@@ -25,6 +25,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QProgressDialog>
+#include <QSet>
 #include <QLocale>
 #include <QTextBlock>
 
@@ -87,22 +88,46 @@ void MainWindow::fillStyleMenu(QMenu *menu, TextEditor *target, bool full)
         ac->setChecked(checked);
         return ac;
     };
-    entry(menu, tr("No Style"), QString(), shown && curPara.isEmpty() && curChar.isEmpty());
-    menu->addSeparator();
+    // 0.99.0: the menu lists the styles of the style list (as the format bar and the right-click menu do: Format >
+    // Style > Customize Style List); all styles stay in the Styles Panel. More than ten of them: the scrolling list
+    // of the format bar (the menu then has a dozen entries, not thirty).
+    const QList<stylelist::Entry> listed = stylelist::shown(m_project.get());
+    QSet<QString> listedNames;
+    for (const stylelist::Entry &e : listed)
+        listedNames.insert(e.name);
     const StyleSheet &sheet = styles::sheet(f);
-    bool anyChar = false;
-    for (const Style &s : sheet.styles) {
-        if (s.character) {
-            anyChar = true;
-            continue;
+    if (listed.size() > stylelist::kVisibleRows) {
+        QStringList current;
+        if (shown) {
+            if (curPara.isEmpty() && curChar.isEmpty())
+                current << QString();
+            if (!curPara.isEmpty())
+                current << curPara;
+            if (!curChar.isEmpty())
+                current << curChar;
         }
-        entry(menu, styles::marker(s) + s.name, s.name, s.name == curPara);
-    }
-    if (anyChar) {
+        stylelist::addTo(menu, listed, f, current, apply);
+        if (!shown)
+            for (QAction *ac : menu->actions())
+                ac->setEnabled(false);
+    } else {
+        entry(menu, tr("No Style"), QString(), shown && curPara.isEmpty() && curChar.isEmpty());
         menu->addSeparator();
-        for (const Style &s : sheet.styles)
-            if (s.character)
-                entry(menu, styles::marker(s) + s.name, s.name, s.name == curChar);
+        bool anyChar = false;
+        for (const Style &s : sheet.styles) {
+            if (s.character) {
+                anyChar = true;
+                continue;
+            }
+            if (listedNames.contains(s.name))
+                entry(menu, styles::marker(s) + s.name, s.name, s.name == curPara);
+        }
+        if (anyChar) {
+            menu->addSeparator();
+            for (const Style &s : sheet.styles)
+                if (s.character && listedNames.contains(s.name))
+                    entry(menu, styles::marker(s) + s.name, s.name, s.name == curChar);
+        }
     }
     if (!full)
         return;

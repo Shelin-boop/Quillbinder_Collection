@@ -837,7 +837,7 @@ void caseSB03()
     };
     for (const Cmd &c : {Cmd{QStringLiteral("duplicate"), QStringLiteral("Duplicate")}, Cmd{QStringLiteral("split"), QStringLiteral("Split at Selection")},
                          Cmd{QStringLiteral("splitTitle"), QStringLiteral("Split with Selection as Title")}, Cmd{QStringLiteral("merge"), QStringLiteral("Merge")},
-                         Cmd{QStringLiteral("toFolder"), QStringLiteral("Convert to Folder")}, Cmd{QStringLiteral("toText"), QStringLiteral("Convert to File")},
+                         Cmd{QStringLiteral("toFolder"), QStringLiteral("Convert to Folder")}, Cmd{QStringLiteral("toText"), QStringLiteral("Convert to Text Document")},
                          Cmd{QStringLiteral("defaultFormatting"), QStringLiteral("Text to Default Formatting")}}) {
         step(c.what);
         QStringList notesBefore;   // Merge: the notes of every merged document (0.64.1 joins them)

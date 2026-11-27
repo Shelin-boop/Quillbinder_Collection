@@ -741,7 +741,7 @@ int main(int argc, char **argv)
         settle(300);
         QAction *openHolder = byKey(&w, QStringLiteral("openCopyholder"));
         QAction *closeHolder = byKey(&w, QStringLiteral("closeCopyholder"));
-        check(menuPath(&w, {QStringLiteral("Navigate"), QStringLiteral("Open"), QStringLiteral("in Copyholder")})
+        check(menuPath(&w, {QStringLiteral("Navigate"), QStringLiteral("Open"), QStringLiteral("In Copyholder")})
                   && menuPath(&w, {QStringLiteral("Navigate"), QStringLiteral("Editor"), QStringLiteral("Close Copyholder")}) == closeHolder
                   && openHolder && closeHolder && !closeHolder->isEnabled() && !pane0->hasCopyholder(),
               QStringLiteral("Navigate > Open > in Copyholder and Navigate > Editor > Close Copyholder exist; none is open at first"));

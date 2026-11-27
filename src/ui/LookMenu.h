@@ -14,6 +14,7 @@
 #include <QString>
 #include <functional>
 
+class QAction;
 class QMenu;
 class QWidget;
 
@@ -31,7 +32,9 @@ enum class Part {
 };
 
 // The menu entries: a submenu "Appearance" at the end of menu. Returns the submenu.
-QMenu *add(QMenu *menu, Part part, QWidget *parent);
+// With before: the submenu goes in front of that entry, without a separator of its own (0.99.0: the short menu of a
+// misspelled word).
+QMenu *add(QMenu *menu, Part part, QWidget *parent, QAction *before = nullptr);
 // Fills a menu with the entries of a part (without the submenu around them).
 void fill(QMenu *menu, Part part, QWidget *parent);
 // A menu of its own at globalPos (for places that have no right-click menu yet).

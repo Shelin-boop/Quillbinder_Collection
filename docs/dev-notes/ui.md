@@ -19,6 +19,24 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   `v0990c` checks both values through the function).
 - Customize Toolbars: the button `toolbarReset` was "Standard Set" and now says "Reset" (same behavior: no question; the
   window's Apply or OK makes it count).
+## 0.99.0: menu names
+
+- One name per command: the Appearance menus (`LookMenu.cpp`) and the toolbar buttons' menus use the command's own text; an
+  alias made by `menuAlias` is only for a short name inside a submenu of its own topic (Open, Split) and starts with a capital.
+  "From" and "With" are capitalized (APA title case); a command ends in "…" only when a window opens first and asks.
+- `fixMnemonics` (MainWindowBars.cpp) now also gives a letter to commands without one: an action with an object name that has
+  no ":" and does not start with "qb", and the menus that carry the property `qbWantsMnemonic` (Label and Status: their
+  titles are the project's words). Data lists (styles `style:...`, documents, files, themes) stay without.
+- Format > Style (`fillStyleMenu`) lists `stylelist::shown`; with more than ten entries it is `stylelist::addTo`'s scrolling
+  list, which shows no shortcuts (the commands `style:...` stay on the window, so Ctrl+Alt+0 to 9 work as before).
+- `fillItemMenu` adds Convert and Merge only when the command is enabled (it must run after `updateActions`).
+- Find Command (`CommandFinder.cpp`) skips menus by object name (`goToMenu`, `openQuickRefMenu`, `historyBackMenu`,
+  `historyForwardMenu`): they are filled with binder titles when they open. A new menu of that kind needs its name in the list.
+- The misspelled word's menu: `lookmenu::add(menu, part, parent, before)` puts Appearance in front of the separator that
+  precedes "More Commands" (the hook finds the short menu through the parent of the menu named `spellingMore`).
+- Mind map Format > Note Style: the styles are the entries; Redefine and Delete ask in a small `QInputDialog` list (a
+  submenu with the styles would be the fourth level). Menus go three levels deep at most (suite `v0990g`).
+- `Inspector::tabName` is the short name for Navigate > Inspect; `tabToolTip` stays the tab buttons' long text.
 
 ## 0.94.0 beta: one place per topic in the menus, Find Command, the first start's page, the application menu entry
 

@@ -163,33 +163,37 @@ static void names(MainWindow &w)
     emit inspect->aboutToShow();
     const QStringList it = texts(inspect);
     auto *inspector = w.findChild<Inspector *>();
-    QStringList want;
+    QStringList want, wantTips; // 0.99.0: the menu uses the short names (Inspector::tabName); the tooltips are the long ones
     for (Inspector::Tab t : {Inspector::Notes, Inspector::Bookmarks, Inspector::Metadata, Inspector::Snapshots, Inspector::Comments,
-                             Inspector::MindMap, Inspector::Objects})
-        want << plain(Inspector::tabToolTip(t));
-    for (const QString &key : inspector->extraTabs())
+                             Inspector::MindMap, Inspector::Objects}) {
+        want << plain(Inspector::tabName(t));
+        wantTips << plain(Inspector::tabToolTip(t));
+    }
+    for (const QString &key : inspector->extraTabs()) {
         want << plain(inspector->extraTabToolTip(key));
+        wantTips << plain(inspector->extraTabToolTip(key));
+    }
     bool all = true;
     for (const QString &t : want)
         all = all && it.contains(t);
-    check(all && want.size() >= 7, QStringLiteral("Navigate > Inspect lists every inspector tab under its tooltip's name"),
+    check(all && want.size() >= 7, QStringLiteral("Navigate > Inspect lists every inspector tab under its name"),
           it.join(QStringLiteral(" | ")));
-    check(!it.contains(QStringLiteral("Notes")) && it.contains(QStringLiteral("Synopsis and notes")),
-          QStringLiteral("the first tab is \"Synopsis and notes\", not \"Notes\""));
+    check(!it.contains(QStringLiteral("Notes")) && it.contains(QStringLiteral("Synopsis and Notes")),
+          QStringLiteral("the first tab is \"Synopsis and Notes\", not \"Notes\""));
     // the tab buttons of the inspector carry the same names
     QStringList tips;
     for (QToolButton *b : inspector->findChildren<QToolButton *>())
         if (b->isCheckable() && !b->toolTip().isEmpty())
             tips << plain(b->toolTip());
     bool same = true;
-    for (const QString &t : want)
+    for (const QString &t : wantTips)
         same = same && tips.contains(t);
     check(same, QStringLiteral("... the names of the tab buttons' tooltips"), tips.join(QStringLiteral(" | ")));
     // each entry shows its tab
     inspector->showTab(Inspector::Notes);
     int shown = 0;
     for (QAction *a : inspect->actions())
-        if (plain(a->text()) == plain(Inspector::tabToolTip(Inspector::Snapshots))) {
+        if (plain(a->text()) == plain(Inspector::tabName(Inspector::Snapshots))) {
             a->trigger();
             shown = inspector->currentTab() == int(Inspector::Snapshots);
         }

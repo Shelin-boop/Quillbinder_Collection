@@ -492,7 +492,13 @@ MainWindow::MainWindow()
                                     : qobject_cast<CompositionWindow *>(ed->window()) ? lookmenu::Part::Composition
                                                                                         : lookmenu::Part::Editor;
         laps.lap("notes+links");
-        lookmenu::add(menu, part, this);
+        // 0.99.0: on a misspelled word the Appearance menu sits in the short menu right after Ignore, not three
+        // levels down in "More Commands"
+        QMenu *top = menu->objectName() == QLatin1String("spellingMore") ? qobject_cast<QMenu *>(menu->parentWidget()) : nullptr;
+        if (top && top->actions().contains(menu->menuAction()) && top->actions().indexOf(menu->menuAction()) > 0)
+            lookmenu::add(top, part, this, top->actions().at(top->actions().indexOf(menu->menuAction()) - 1));
+        else
+            lookmenu::add(menu, part, this);
         laps.lap("appearance");
         laps.print("right-click menu, program entries");
     });
@@ -1199,7 +1205,7 @@ void MainWindow::createActions()
     connect(act(QStringLiteral("printSettings"), tr("Print Se&ttings…"), QStringLiteral("printer")), &QAction::triggered,
             this, withProject([this] { showPrintSettings(); }));
     a[QStringLiteral("printSettings")]->setToolTip(tr("Paper, header and footer, and how texts, index cards and the outliner are printed"));
-    connect(act(QStringLiteral("printPreview"), tr("Print Pre&view…"), QStringLiteral("document-print-preview")),
+    connect(act(QStringLiteral("printPreview"), tr("Print Pre&view"), QStringLiteral("document-print-preview")),
             &QAction::triggered, this, [this] { printPreview(); });
     connect(act(QStringLiteral("print"), tr("&Print Current Document…"), QStringLiteral("document-print"), QKeySequence::Print),
             &QAction::triggered, this, [this] { printDocument(); });
@@ -1270,7 +1276,7 @@ void MainWindow::createActions()
                     e->pasteMatchingStyle();
             });
     // 0.60.1: text from a word processor or a web page with its fonts, sizes, colors and paragraphs
-    connect(act(QStringLiteral("pasteKeep"), tr("Paste with &Formatting"), QString(),
+    connect(act(QStringLiteral("pasteKeep"), tr("Paste With &Formatting"), QString(),
                 QKeySequence(Qt::CTRL | Qt::ALT | Qt::SHIFT | Qt::Key_V)),
             &QAction::triggered, this, [this] {
                 if (TextEditor *e = editor())
@@ -1346,7 +1352,7 @@ void MainWindow::createActions()
                     e->insertLink(objects::linkTo(id), o->name);
             }));
     // the objects of the project (0.20): a window of their own, and their templates and colors
-    connect(act(QStringLiteral("objectsWindow"), tr("&Objects…"), QStringLiteral("qb-objects")), &QAction::triggered, this,
+    connect(act(QStringLiteral("objectsWindow"), tr("&Objects"), QStringLiteral("qb-objects")), &QAction::triggered, this,
             withProject([this] {
                 const QString cur = m_inspector->objectsPanel()->currentObject();
                 if (ObjectsWindow *ow = ObjectsWindow::open(m_project.get(), cur, this))
@@ -1370,12 +1376,15 @@ void MainWindow::createActions()
     connect(act(QStringLiteral("moveDown"), tr("Move &Down"), QStringLiteral("arrow-down"),
                 QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_Down)),
             &QAction::triggered, this, [this] { moveSelection(0, 1); });
-    connect(act(QStringLiteral("moveLeft"), tr("Move &Left (out of the folder)"), QStringLiteral("arrow-left"),
+    connect(act(QStringLiteral("moveLeft"), tr("Move &Left"), QStringLiteral("arrow-left"),
                 QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_Left)),
             &QAction::triggered, this, [this] { moveSelection(-1, 0); });
-    connect(act(QStringLiteral("moveRight"), tr("Move &Right (into the item above)"), QStringLiteral("arrow-right"),
+    connect(act(QStringLiteral("moveRight"), tr("Move &Right"), QStringLiteral("arrow-right"),
                 QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_Right)),
             &QAction::triggered, this, [this] { moveSelection(1, 0); });
+    // 0.99.0: the menu names say the direction; the tooltips say what it does (0.94.0 had it in the names)
+    a[QStringLiteral("moveLeft")]->setToolTip(tr("Out of the folder"));
+    a[QStringLiteral("moveRight")]->setToolTip(tr("Into the item above"));
 
     // ---- view
     m_viewGroup = new QActionGroup(this);
@@ -1535,7 +1544,7 @@ void MainWindow::createActions()
     // the project's settings in a file of their own, and back (0.40.2)
     connect(act(QStringLiteral("settingsExport"), tr("Sa&ve Project Settings to File…"), QStringLiteral("document-export")),
             &QAction::triggered, this, withProject([this] { exportProjectSettings(); }));
-    connect(act(QStringLiteral("settingsImport"), tr("&Load Project Settings from File…"), QStringLiteral("document-import")),
+    connect(act(QStringLiteral("settingsImport"), tr("&Load Project Settings From File…"), QStringLiteral("document-import")),
             &QAction::triggered, this, withProject([this] { importProjectSettings(); }));
     connect(act(QStringLiteral("targets"), tr("Project &Targets…"), QStringLiteral("flag"),
                 QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_T)),
@@ -1560,7 +1569,7 @@ void MainWindow::createActions()
                 });
                 d->show();
             }));
-    connect(act(QStringLiteral("statistics"), tr("Project S&tatistics…"), QStringLiteral("view-statistics")),
+    connect(act(QStringLiteral("statistics"), tr("Project S&tatistics"), QStringLiteral("view-statistics")),
             &QAction::triggered, this, withProject([this] {
                 // 0.90.1 (the usability review of 0.90.0, UR-08): the counting took almost 3 s on a large project
                 // without a sign; the busy cursor shows that it runs
@@ -1570,7 +1579,7 @@ void MainWindow::createActions()
                 QApplication::restoreOverrideCursor();
                 d.exec();
             }));
-    connect(act(QStringLiteral("history"), tr("&Writing History…"), QStringLiteral("view-calendar")), &QAction::triggered,
+    connect(act(QStringLiteral("history"), tr("&Writing History"), QStringLiteral("view-calendar")), &QAction::triggered,
             this, withProject([this] {
                 HistoryDialog d(m_project.get(), this);
                 d.exec();
@@ -1677,11 +1686,11 @@ void MainWindow::createActions()
             &QAction::triggered, this, withProject([this] { groupItems(actionItems()); }));
     a[QStringLiteral("group")]->setToolTip(tr("Put the selected documents into a new folder, at the place of the first one"));
     // 0.94.0 (item 67): a sheet document (a character or place sheet) becomes an Object; the binder item then shows it
-    connect(act(QStringLiteral("sheetToObject"), tr("&Sheet to Object"), QStringLiteral("user-identity")), &QAction::triggered, this,
+    connect(act(QStringLiteral("sheetToObject"), tr("Convert &Sheet to Object"), QStringLiteral("user-identity")), &QAction::triggered, this,
             withProject([this] { sheetsToObjects(actionItems()); }));
     a[QStringLiteral("sheetToObject")]->setToolTip(
         tr("Make an Object (Window > Objects) of the selected sheet documents: the title is the name, the text goes into Other, a picture becomes the picture. The binder item then shows the Object; the document keeps its text."));
-    connect(act(QStringLiteral("toText"), tr("Convert to F&ile"), QStringLiteral("text-x-generic")),
+    connect(act(QStringLiteral("toText"), tr("Convert to Te&xt Document"), QStringLiteral("text-x-generic")),
             &QAction::triggered, this, withProject([this] {
                 for (BinderItem *it : actionItems())
                     if (it->type == ItemType::Folder)
@@ -1729,7 +1738,7 @@ void MainWindow::createActions()
                 if (n)
                     setWindowTitle(windowTitle()); // no status bar: inspector shows the new snapshot
             }));
-    connect(act(QStringLiteral("snapshotTitle"), tr("Take Snapshot with &Title…"), QStringLiteral("camera-photo"),
+    connect(act(QStringLiteral("snapshotTitle"), tr("Take Snapshot With &Title…"), QStringLiteral("camera-photo"),
                 QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_5)),
             &QAction::triggered, this, withProject([this] {
                 m_inspector->showTab(Inspector::Snapshots);
@@ -1848,10 +1857,10 @@ void MainWindow::createActions()
             withProject([this] { saveStylesAsDefault(); }));
     fmt(QStringLiteral("copyFormat"), tr("Cop&y Formatting"), QString(), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_C),
         [](TextEditor *e) { e->copyFormatting(); });
-    fmt(QStringLiteral("pasteFormat"), tr("Paste Formattin&g"), QString(), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_V),
+    fmt(QStringLiteral("pasteFormat"), tr("Apply Copied Formattin&g"), QString(), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_V),
         [](TextEditor *e) { e->pasteFormatting(); });
-    for (double sp : {1.0, 1.15, 1.2, 1.5, 2.0})
-        fmt(QStringLiteral("line%1").arg(qRound(sp * 100)), QLocale().toString(sp, 'f', sp == 1.15 ? 2 : 1), QString(),
+    for (double sp : {1.0, 1.09, 1.15, 1.2, 1.5, 2.0}) // 0.99.0: 1.09 as in the format bar's list
+        fmt(QStringLiteral("line%1").arg(qRound(sp * 100)), QLocale().toString(sp, 'f', qRound(sp * 100) % 10 ? 2 : 1), QString(),
             QKeySequence(), [sp](TextEditor *e) { e->setLineSpacing(sp); });
     {
         QAction *r = act(QStringLiteral("showRuler"), tr("Show &Ruler"), QString(), QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_R));
@@ -1914,8 +1923,8 @@ void MainWindow::createActions()
         QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_A), [](TextEditor *e) { e->addInlineNote(NoteKind::InlineAnnotation); });
     fmt(QStringLiteral("inlineFootnote"), tr("&Inline Footnote"), QStringLiteral("format-text-superscript"),
         QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_F), [](TextEditor *e) { e->addInlineNote(NoteKind::InlineFootnote); });
-    fmt(QStringLiteral("image"), tr("&Image From File…"), QStringLiteral("insert-image"), QKeySequence(), [this](TextEditor *e) {
-        const QString f = QFileDialog::getOpenFileName(this, tr("Insert Image"), QDir::homePath(),
+    fmt(QStringLiteral("image"), tr("&Picture From File…"), QStringLiteral("insert-image"), QKeySequence(), [this](TextEditor *e) {
+        const QString f = QFileDialog::getOpenFileName(this, tr("Insert Picture"), QDir::homePath(),
                                                        tr("Images (*.png *.jpg *.jpeg *.gif *.bmp *.webp)"));
         if (!f.isEmpty())
             e->insertImageFile(f);
@@ -2028,16 +2037,16 @@ void MainWindow::createActions()
     a[QStringLiteral("welcome")]->setToolTip(tr("A short project that shows what %1 has beyond the usual: icon bar, zoom per "
                                                 "part, mind maps, objects and more")
                                                  .arg(QLatin1String(QB_APP_NAME)));
-    connect(act(QStringLiteral("licenses"), tr("Third-Party &Licenses…")), &QAction::triggered, this,
+    connect(act(QStringLiteral("licenses"), tr("Third-Party &Licenses")), &QAction::triggered, this,
             [this] { showThirdPartyLicenses(this); });
-    connect(act(QStringLiteral("placeholders"), tr("List of All Place&holders…")), &QAction::triggered, this,
+    connect(act(QStringLiteral("placeholders"), tr("List of All Place&holders")), &QAction::triggered, this,
             [this] { showPlaceholders(); });
     connect(act(QStringLiteral("pluginFolder"), tr("Open &Plugin Folder")), &QAction::triggered, this, [] {
         const QString d = dataDir() + QLatin1String("/plugins");
         QDir().mkpath(d);
         QDesktopServices::openUrl(QUrl::fromLocalFile(d));
     });
-    QAction *integrate = act(QStringLiteral("integrate"), tr("Add to &Application Menu"));
+    QAction *integrate = act(QStringLiteral("integrate"), tr("Add to &Application Menu…"));
     connect(integrate, &QAction::triggered, this, [this] {
         if (appmenu::hasEntry()) {
             removeFromApplicationMenu();
@@ -2080,14 +2089,14 @@ void MainWindow::createActions()
             &QAction::triggered, this, &MainWindow::showAddonManager);
     connect(act(QStringLiteral("about"), tr("&About %1").arg(QLatin1String(QB_APP_NAME)), QStringLiteral("help-about")),
             &QAction::triggered, this, [this] { showAbout(); });
-    connect(act(QStringLiteral("systemInfo"), tr("&System Information…"), QStringLiteral("dialog-information")),
+    connect(act(QStringLiteral("systemInfo"), tr("&System Information"), QStringLiteral("dialog-information")),
             &QAction::triggered, this, [this] {
                 SystemInfoDialog dlg(m_project.get(), this);
                 dlg.exec();
             });
     a[QStringLiteral("systemInfo")]->setToolTip(tr("Program, versions and computer at a glance, to copy into a problem report"));
     // 0.93.0: where to report a problem: the repository's issue forms (a security problem goes privately: SECURITY.md)
-    connect(act(QStringLiteral("reportProblem"), tr("Report a Problem…"), QStringLiteral("help-hint")),
+    connect(act(QStringLiteral("reportProblem"), tr("Report a Problem"), QStringLiteral("help-hint")),
             &QAction::triggered, this, [] {
                 QDesktopServices::openUrl(QUrl(QStringLiteral("https://github.com/Shelin-boop/Quillbinder_Collection/issues/new/choose")));
             });
@@ -2233,7 +2242,7 @@ void MainWindow::createActions()
         // (a word start first) that no tab before it has, in any script (the menu repairs a clash when it opens)
         auto used = std::make_shared<QSet<QChar>>();
         auto named = [used](Inspector::Tab tab, QChar letter) {
-            QString name = Inspector::tabToolTip(tab);
+            QString name = Inspector::tabName(tab);
             int i = -1;
             const int at = int(name.indexOf(letter, 0, Qt::CaseInsensitive));
             if (at >= 0 && !used->contains(name.at(at).toLower()))
@@ -2305,7 +2314,7 @@ void MainWindow::createActions()
     }
 
     // ---- format bar: the project's default text formatting
-    connect(act(QStringLiteral("defaultTextFormatting"), tr("Default Text &Formatting…"), QStringLiteral("configure")),
+    connect(act(QStringLiteral("defaultTextFormatting"), tr("Project &Formatting Settings…"), QStringLiteral("configure")),
             &QAction::triggered, this, withProject([this] {
                 ProjectSettingsDialog dlg(m_project.get(), ProjectSettingsDialog::Formatting, this);
                 dlg.exec();
@@ -2594,7 +2603,7 @@ void MainWindow::updateFormatBar()
                               "alignCenter", "alignRight", "alignJustify", "bullets", "numbers", "indent", "outdent",
                               "clearFormat", "comment", "footnote", "annotation", "inlineFootnote", "image", "textColor",
                               "textColorAuto", "showFonts", "fontBigger", "fontSmaller", "paragraph", "indentMore", "indentLess",
-                              "resetParagraph", "copyFormat", "line100", "line115", "line120", "line150", "line200",
+                              "resetParagraph", "copyFormat", "line100", "line109", "line115", "line120", "line150", "line200",
                               "insertDate", "insertTime", "pastePlain", "pasteKeep", "pasteFormat", "styleNew", "styleRedefine",
                               "insertTable", "tableRowAbove", "tableRowBelow", "tableColLeft", "tableColRight", "tableDeleteRows",
                               "tableDeleteCols", "tableDelete", "tableMerge", "tableSplit", "tableCellColor", "tableCellColorClear",
@@ -2623,7 +2632,7 @@ void MainWindow::updateFormatBar()
                           "alignCenter", "alignRight", "alignJustify", "bullets", "numbers", "indent", "outdent",
                           "clearFormat", "comment", "footnote", "annotation", "inlineFootnote", "image", "textColor",
                           "textColorAuto", "showFonts", "fontBigger", "fontSmaller", "paragraph", "indentMore", "indentLess",
-                          "resetParagraph", "copyFormat", "line100", "line115", "line120", "line150", "line200",
+                          "resetParagraph", "copyFormat", "line100", "line109", "line115", "line120", "line150", "line200",
                           "insertDate", "insertTime", "pastePlain", "pasteKeep"})
         a[QLatin1String(k)]->setEnabled(enabled);
     for (QAction *ac : m_styleActions)
@@ -4580,9 +4589,10 @@ void MainWindow::fillItemMenu(QMenu *menu)
     menu->addAction(a[QStringLiteral("group")]);
     menu->addAction(a[QStringLiteral("trash")]);
     menu->addSeparator();
-    menu->addAction(a[QStringLiteral("toFolder")]);
-    menu->addAction(a[QStringLiteral("toText")]);
-    menu->addAction(a[QStringLiteral("sheetToObject")]);
+    // 0.99.0: a right-click menu shows only what can act (the Documents menu keeps them, grayed)
+    for (const char *k : {"toFolder", "toText", "sheetToObject"})
+        if (a[QLatin1String(k)]->isEnabled())
+            menu->addAction(a[QLatin1String(k)]);
     menu->addMenu(m_labelMenu);
     menu->addMenu(m_statusMenu);
     menu->addAction(a[QStringLiteral("includeCompile")]);
@@ -4600,7 +4610,8 @@ void MainWindow::fillItemMenu(QMenu *menu)
         }
     }
     menu->addAction(a[QStringLiteral("snapshot")]);
-    menu->addAction(a[QStringLiteral("merge")]);
+    if (a[QStringLiteral("merge")]->isEnabled())
+        menu->addAction(a[QStringLiteral("merge")]);
     menu->addAction(a[QStringLiteral("exportFiles")]);
     if (m_project) {
         const auto items = actionItems();
@@ -5343,7 +5354,7 @@ void MainWindow::addToApplicationMenu(bool moveAppImage, bool quiet)
     QStringList problems;
     if (!r.moveError.isEmpty())
         problems << tr("The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the "
-                       "file yourself, choose Help > Remove from Application Menu and then Add to Application Menu again.")
+                       "file yourself, choose Help > Remove From Application Menu and then Add to Application Menu again.")
                         .arg(QDir::toNativeSeparators(appmenu::applicationsFolder()), r.moveError);
     if (!r.iconCopied)
         problems << tr("The program's icon could not be copied, so the menu entry shows no icon.");
@@ -5364,13 +5375,13 @@ void MainWindow::removeFromApplicationMenu()
     showStatusNote(tr("%1 is no longer in the application menu.").arg(QLatin1String(QB_APP_NAME)), 8000);
 }
 
-// Help > Add to Application Menu / Remove from Application Menu follows the state of the entry
+// Help > Add to Application Menu / Remove From Application Menu follows the state of the entry
 void MainWindow::updateApplicationMenuAction()
 {
     QAction *ac = a.value(QStringLiteral("integrate"));
     if (!ac)
         return;
-    ac->setText(appmenu::hasEntry() ? tr("Remove from &Application Menu") : tr("Add to &Application Menu"));
+    ac->setText(appmenu::hasEntry() ? tr("Remove From &Application Menu") : tr("Add to &Application Menu…"));
 }
 
 // ------------------------------------------------------------------ options carried out here (0.21)

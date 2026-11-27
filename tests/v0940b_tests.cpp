@@ -4,7 +4,7 @@
 //    Help > Find Command;
 //  - item 86: Help > Troubleshooting and Development;
 //  - items 60 and 69: the first start's one page (backups, application menu, check for updates), no confirmation
-//    box after the entry, Help > Add to / Remove from Application Menu following the state;
+//    box after the entry, Help > Add to / Remove From Application Menu following the state;
 //  - item 70: the AppImage moved to ~/Applications (the running program and its updater follow the new place);
 //  - item 71: the full AppImage's installation window and its one call (the start script, the folder's packages).
 //
@@ -399,15 +399,15 @@ static void appMenu(MainWindow &w, const QString &home)
         QFile::remove(moved + QLatin1String(".before-update"));
     }
     emit help->aboutToShow();
-    check(plain(integrate->text()) == QLatin1String("Remove from Application Menu"), QStringLiteral("Help now offers \"Remove from Application Menu\""));
+    check(plain(integrate->text()) == QLatin1String("Remove From Application Menu"), QStringLiteral("Help now offers \"Remove From Application Menu\""));
     check(appmenu::hasEntry() && !appmenu::canMove(), QStringLiteral("the entry exists; there is nothing left to move"));
 
-    // Remove from Application Menu: what adding made is gone, the AppImage stays
+    // Remove From Application Menu: what adding made is gone, the AppImage stays
     integrate->trigger();
     settle(300);
     check(!appmenu::hasEntry() && !QFile::exists(data + QLatin1String("/icons/hicolor/scalable/apps/" QB_APP_ID ".svg"))
               && !QFile::exists(data + QLatin1String("/mime/packages/" QB_APP_ID ".xml")) && QFile::exists(moved),
-          QStringLiteral("Remove from Application Menu takes away the entry file, the icon and the file types; the AppImage stays"));
+          QStringLiteral("Remove From Application Menu takes away the entry file, the icon and the file types; the AppImage stays"));
     emit help->aboutToShow();
     check(plain(integrate->text()) == QLatin1String("Add to Application Menu") && QSettings().value(QStringLiteral("app/integrated")).toString().isEmpty(),
           QStringLiteral("... and Help offers \"Add\" again"));
@@ -485,8 +485,8 @@ static void firstStart(MainWindow &w, const QString &home)
         check(add && move && upd && backup && add->isChecked() && move->isChecked() && upd->isChecked(),
               QStringLiteral("the page holds the backups, the application menu (with the move) and the check for updates; everything is filled in"));
         auto *hint = dlg.findChild<QLabel *>(QStringLiteral("firstMenuHint"));
-        check(hint && hint->text().contains(QLatin1String("Remove from Application Menu")) && hint->text().contains(QLatin1String("Add to Application Menu")),
-              QStringLiteral("a line says that Help > Add to / Remove from Application Menu changes it later"));
+        check(hint && hint->text().contains(QLatin1String("Remove From Application Menu")) && hint->text().contains(QLatin1String("Add to Application Menu")),
+              QStringLiteral("a line says that Help > Add to / Remove From Application Menu changes it later"));
         check(dlg.findChildren<QDialogButtonBox *>().size() == 1 && dlg.findChildren<QDialogButtonBox *>().first()->buttons().size() == 1,
               QStringLiteral("one OK"));
         shot(&dlg, QStringLiteral("first-start-page"));

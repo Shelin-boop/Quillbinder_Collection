@@ -55,6 +55,7 @@
 #include <QJsonObject>
 #include <QLabel>
 #include <QListWidget>
+#include <QWidgetAction>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QMessageBox>
@@ -1115,6 +1116,14 @@ int main(int argc, char **argv)
                         hasStanza = true;
                         stanzaChecked = ac->isChecked();
                     }
+                    // 0.99.0: with more than ten styles the menu holds the style list's scrolling list, as the format bar does
+                    if (auto *wa = qobject_cast<QWidgetAction *>(ac))
+                        if (auto *rows = qobject_cast<QListWidget *>(wa->defaultWidget()))
+                            for (int r = 0; r < rows->count(); ++r)
+                                if (rows->item(r)->text().endsWith(QLatin1String("Stanza"))) {
+                                    hasStanza = true;
+                                    stanzaChecked = rows->currentItem() == rows->item(r);
+                                }
                     hasNew = hasNew || ac == byKey(&w, QStringLiteral("styleNew"));
                     hasPanel = hasPanel || ac == byKey(&w, QStringLiteral("stylesPanel"));
                 }
@@ -1741,9 +1750,9 @@ int main(int argc, char **argv)
                 {"File", "Import", "Import and Split…"}, {"File", "Export", "Files…"}, {"File", "Back Up", "Back Up Now"},
                 {"File", "Back Up", "Back Up To…"}, {"File", "Compile…"}, {"File", "Print Current Document…"},
                 {"File", "Show Project in File Manager"}, {"File", "Options…"}, {"File", "Exit"},
-                {"Edit", "Find", "Find…"}, {"Edit", "Find", "Project Search…"}, {"Edit", "Move", "Move Left (out of the folder)"},
-                {"Insert", "Link to Document…"}, {"Edit", "Select", "Select Annotation or Note"},
-                {"Insert", "Image From File…"}, {"Insert", "Comment"}, {"Insert", "Footnote"}, {"Insert", "Inline Footnote"},
+                {"Edit", "Find", "Find…"}, {"Edit", "Find", "Project Search…"}, {"Edit", "Move", "Move Left"},
+                {"Insert", "Link to Document…"}, {"Edit", "Select Annotation or Note"},
+                {"Insert", "Picture From File…"}, {"Insert", "Comment"}, {"Insert", "Footnote"}, {"Insert", "Inline Footnote"},
                 {"Insert", "Inline Annotation"}, {"Insert", "Auto Number"},
                 {"View", "Corkboard"}, {"View", "Outliner"}, {"View", "Split Editor", "Split Horizontally"},
                 {"View", "Split Editor", "Split Vertically"}, {"View", "Text Editing", "Page View"}, {"View", "Text Editing", "Typewriter Scrolling"},
@@ -1751,13 +1760,13 @@ int main(int argc, char **argv)
                 {"View", "Corkboard Options", "Freeform"}, {"View", "Corkboard Options", "Arrange by Label"},
                 {"View", "Outliner Options", "Show Synopses"}, {"View", "Use Label Color In", "Index Cards"},
                 {"View", "Toolbars", "Customize Toolbars…"}, {"View", "Composition Mode"},
-                {"Navigate", "Reveal in Binder"}, {"Navigate", "Open", "as Quick Reference"}, {"Navigate", "Open", "in Other Editor"}, {"Navigate", "Open", "in Copyholder"},
+                {"Navigate", "Reveal in Binder"}, {"Navigate", "Open", "As Quick Reference"}, {"Navigate", "Open", "In Other Editor"}, {"Navigate", "Open", "In Copyholder"},
                 {"Navigate", "Open Quick Reference"}, {"Navigate", "Editor", "Lock in Place"},
                 {"Navigate", "Binder Selection Affects", "Left or Top Editor"}, {"Navigate", "Inspect", "Snapshots"},
                 {"Project", "New From Template"}, {"Project", "Project Settings…"}, {"Project", "Project Targets…"},
-                {"Project", "Project Keywords…"}, {"Project", "Writing History…"}, {"Project", "Empty Trash…"},
-                {"Documents", "Snapshots", "Take Snapshot"}, {"Documents", "Split", "at Selection"},
-                {"Documents", "Split", "with Selection as Title"}, {"Documents", "Merge"},
+                {"Project", "Project Keywords…"}, {"Project", "Writing History"}, {"Project", "Empty Trash…"},
+                {"Documents", "Snapshots", "Take Snapshot"}, {"Documents", "Split", "At Selection"},
+                {"Documents", "Split", "With Selection as Title"}, {"Documents", "Merge"},
                 {"Documents", "Convert", "Convert to Folder"}, {"Documents", "Convert", "Text to Default Formatting…"},
                 {"Documents", "Change Icon"}, {"Documents", "Default Template for Subdocuments"},
                 {"Documents", "Add to Project Bookmarks"},
@@ -1774,7 +1783,7 @@ int main(int argc, char **argv)
                   missing.join(QLatin1String("; ")));
 
             // short entries stand for the commands: text, shortcut, state, action
-            QAction *splitAlias = menuPath(&w, {QStringLiteral("Documents"), QStringLiteral("Split"), QStringLiteral("at Selection")});
+            QAction *splitAlias = menuPath(&w, {QStringLiteral("Documents"), QStringLiteral("Split"), QStringLiteral("At Selection")});
             check(splitAlias && splitAlias->text().endsWith(QLatin1String("\tCtrl+K")) && splitAlias != byKey(&w, QStringLiteral("split")),
                   QStringLiteral("Documents > Split > at Selection shows the shortcut of the command"),
                   splitAlias ? splitAlias->text() : QString());
@@ -1910,7 +1919,7 @@ int main(int argc, char **argv)
                       && commands::shortcutOf(QStringLiteral("style:Block Quote")) == QKeySequence(QStringLiteral("Ctrl+Alt+Q"))
                       && commands::custom().size() == 6,
                   QStringLiteral("OK puts the shortcuts on the commands and stores them"), QString::number(commands::custom().size()));
-            QAction *splitAlias = menuPath(&w, {QStringLiteral("Documents"), QStringLiteral("Split"), QStringLiteral("at Selection")});
+            QAction *splitAlias = menuPath(&w, {QStringLiteral("Documents"), QStringLiteral("Split"), QStringLiteral("At Selection")});
             QAction *mergeAlias = menuPath(&w, {QStringLiteral("Documents"), QStringLiteral("Merge")});
             check(splitAlias && !splitAlias->text().contains(QLatin1Char('\t')) && mergeAlias
                       && mergeAlias->text().endsWith(QLatin1String("\tCtrl+Alt+M")),

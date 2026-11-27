@@ -50,6 +50,7 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QMenu>
+#include <QWidgetAction>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QPdfDocument>
@@ -902,7 +903,8 @@ int main(int argc, char **argv)
         QStringList noText, dupText, unconnected, emptyMenus, mnemonicDup;
         info(QStringLiteral("menus that are in two places: %1").arg(g_sharedMenus.join(QLatin1String("; "))));
         for (const MenuEntry &e : entries)
-            if (e.action && menuText(e.action->text()).isEmpty())
+            // (0.99.0: the style list of Format > Style is one widget, a scrolling list, with no text of its own)
+            if (e.action && !qobject_cast<QWidgetAction *>(e.action) && menuText(e.action->text()).isEmpty())
                 noText << e.path;
         for (QMenu *m : menus) {
             if (!m)

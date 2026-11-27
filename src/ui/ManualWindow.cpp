@@ -452,7 +452,7 @@ QString sectionForWindow(const QWidget *window)
         {QStringLiteral("qb::FormatEditorDialog"), QStringLiteral("Editing a compile format")},
         {QStringLiteral("qb::CompareDialog"), QStringLiteral("Compare and transfer")},
         {QStringLiteral("qb::TargetsDialog"), QStringLiteral("Targets, statistics, and writing tools")},
-        {QStringLiteral("qb::StatisticsDialog"), QStringLiteral("Text Statistics")},
+        {QStringLiteral("qb::StatisticsDialog"), QStringLiteral("Targets, statistics, and writing tools")}, // (0.99.0: Project Statistics is in section 10; "Text Statistics" is the add-on)
         {QStringLiteral("qb::KeywordsDialog"), QStringLiteral("Keywords")},
         {QStringLiteral("qb::ProjectReplaceDialog"), QStringLiteral("Project Replace")},
         {QStringLiteral("qb::FormatFindWindow"), QStringLiteral("Find by Formatting")},

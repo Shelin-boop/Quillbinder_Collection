@@ -10,6 +10,13 @@ the low-memory signal (injected; idle models only), the message line "Model chan
 (`tests/tool13`: registers, is asked to unload, is refused, busy models stay) and one of 1.2 (`tests/tool12`, built with the
 header of 1.2), and the page File > Options > General > AI Models (default, change kept after the settings are read again,
 memory line). The two test tools are loaded from `<build>/tests/tool12-plugins` and `tool13-plugins`.
+## v0990g (0.99.0: the menu walk)
+
+`qb_v0990g_tests`: one window with a project. Navigate > Inspect names (25 characters at most), the renamed commands, the
+Appearance and View names alike, the Search button's menu, no lower-case start, Format > Style with 3 more styles (at most 25
+entries), the item menu without grayed Convert/Merge entries, Edit > Select gone, View > Toolbars and the bars' right-click
+menu in the same groups, menu depth, the mind map's Note Style menu, an Alt letter on every command, "…" rules, Find Command
+without the binder-title menus, F1 in Project Statistics. Run: `xvfb-run -a ./qb_v0990g_tests /tmp/shots`.
 
 ## v0950f and v0950g (0.95.0, item 102: eleven languages)
 

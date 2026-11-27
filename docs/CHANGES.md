@@ -51,6 +51,43 @@ New functions and fixes (Linux first).
   llama.cpp, qwentts.cpp and Sonic), the daily security watch follows each new part, and `THIRD-PARTY.md` and Help > Third-Party
   Licenses (at the next AppImage) name the parts that go into the program.
 
+### Menus and names
+
+The menu walk (UR-06, UR-15, item 118): names that said the same thing in two ways, menus that were too long or too deep,
+and commands without an Alt letter. Renamed commands (old -> new):
+
+- Navigate > Inspect: the long tooltips are gone from the menu: "Synopsis and Notes", "Bookmarks", "Metadata", "Snapshots",
+  "Comments and Footnotes", "Mind Map", "Objects" (the tab buttons keep their tooltips).
+- Paste Formatting -> **Apply Copied Formatting** (Ctrl+Alt+V as before); Paste with Formatting -> **Paste With Formatting**.
+- Appearance menus use the View names: Fixed Width Editor, Label Color in Binder, Label Color in Icons, Status Stamps, Label
+  Color in Index Cards. The Search button's menu shows **Find...** (the Find command itself).
+- Navigate > Open: In Editor, In Other Editor, In Copyholder, As Quick Reference; Documents > Split: At Selection, With
+  Selection as Title; Edit > Move: Move Left and Move Right (the tooltips say "Out of the folder" and "Into the item above").
+- Default Text Formatting... -> **Project Formatting Settings...** (menu and format bar); Image From File... -> **Picture
+  From File...** (its window: "Insert Picture"); Convert to File -> **Convert to Text Document**; Sheet to Object ->
+  **Convert Sheet to Object**.
+- One capitals rule: Load Project Settings From File..., Icon From Text..., Remove From Application Menu, Take Snapshot
+  With Title..., Paste With Formatting.
+- No "..." on commands that only show something: Report a Problem, Third-Party Licenses, System Information, List of All
+  Placeholders, Project Statistics, Writing History, Print Preview (also the mind map's), Window > Objects. **Add to Application
+  Menu...** asks, so it has it. The Appearance menus write the one character instead of three periods.
+
+Shape of the menus:
+
+- Format > Style lists the styles of the style list (as the format bar and the right-click menu do); with more than ten
+  styles it is the scrolling list. All styles stay in the Styles Panel.
+- The right-click menu of a binder item leaves out Convert to Folder, Convert to Text Document, Convert Sheet to Object and
+  Merge when they cannot act (the Documents menu keeps them grayed).
+- Edit > Select (one entry) is gone: **Select Annotation or Note** follows Select All.
+- View > Toolbars and the toolbars' right-click menu are in groups; **Show Format Bar** is also in View > Text Editing.
+- On a misspelled word, Appearance is in the short menu right after Ignore. In the mind map, Format > Note Style lists the
+  note styles directly; Redefine and Delete ask which style.
+- Every command has an Alt letter (also Label and Status, whose names are the project's); Find Command no longer lists the
+  entries of Go To, Open Quick Reference, Back To and Forward To.
+- The line spacing menu has 1.09 as the format bar's list has. F1 in Project Statistics opens section 10 of the manual.
+
+New suite `v0990g` checks all of it.
+
 ## 0.95.0 beta (2026-11-26)
 
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
