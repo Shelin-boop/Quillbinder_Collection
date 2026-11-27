@@ -28,7 +28,7 @@ systems are released from this repository.
 
 ## Build and checks
 
-    packaging/build-deps.sh                     # once: oneDNN 3.9.1, CTranslate2 4.9.0, SentencePiece 0.2.1
+    packaging/build-deps.sh                     # once: oneDNN 3.9.1, CTranslate2 4.9.1, SentencePiece 0.2.1
     cmake -S . -B build -G Ninja -DTP_TEST_SWITCHES=ON [-DCMAKE_PREFIX_PATH=/opt/qt/6.12.1/gcc_64]
     cmake --build build
     TP_MODELS_DIR=<files of the release models-1> QT_QPA_PLATFORM=offscreen ctest --test-dir build --output-on-failure

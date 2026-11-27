@@ -116,7 +116,7 @@ jobs:
           # ONNX Runtime: the SHA-256 of the archive, to pin in tools/get-onnxruntime.sh
           if [ "$PACK" = onnxruntime ]; then
             echo "::group::ONNX Runtime archive: SHA-256 (put the pin into tools/get-onnxruntime.sh)"
-            grep -E 'get-onnxruntime:|pin this' "out/build-$PACK.log" || echo "(no such lines in the log)"
+            grep -E '^(release |get-onnxruntime:|pin this|onnxruntime-linux)' "out/build-$PACK.log" || echo "(no such lines in the log)"
             echo "::endgroup::"
           fi
 

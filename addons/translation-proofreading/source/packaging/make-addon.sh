@@ -81,7 +81,7 @@ plugins/libqb-translation-proofreading.so, translation-proofreading/libqb-tp-eng
     The engine also holds the tokenizer of the Qwen models (src/engine/Bpe.cpp, the add-on's own code).
 
 Linked into libqb-tp-engine.so (static libraries, built by packaging/build-deps.sh of the source):
-    CTranslate2 4.9.0 (github.com/OpenNMT/CTranslate2): MIT (CTranslate2-MIT.txt), with cpu_features
+    CTranslate2 4.9.1 (github.com/OpenNMT/CTranslate2): MIT (CTranslate2-MIT.txt), with cpu_features
         (Apache-2.0) and spdlog (MIT), and the header-only half.hpp (MIT) and nlohmann/json (MIT) whose notices
         are in their headers in the CTranslate2 source.
     oneDNN 3.9.1 (github.com/uxlfoundation/oneDNN): Apache-2.0 (oneDNN-Apache-2.0.txt); the parts it contains from
