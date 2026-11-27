@@ -2,6 +2,44 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: handwriting (item 112, part 1)
+
+- Code: `src/ui/handwriting/` (a GLOB of qbui, so a new file needs no CMake change) and `src/ui/PenInput.*`. **`PenInput`**
+  is the one object that knows the pen (in range, tip down, side button, last seen / lifted by its clock): Linux and Windows feed it
+  from Qt's tablet events (`feedTablet`, the barrel button is Qt's right or middle button); Android's own code feeds `feed()`
+  later. `PenInput::now()` is also the clock of the whole writing area; the checks replace it (`setClock`) and call
+  `InkCanvas::advance()` themselves, so no check waits for real time (the 30 ms timer only calls `advance()`).
+- **`Recognizer.h`** is the interface of the later recognizer: `Request` (strokes in the line picture's coordinates, the
+  picture, the languages), `Result` (words with alternatives), `recognize(request, done)` (the callback may come later),
+  `memoryId()` for `ModelMemory::requestLoad/modelLoaded`, `Recognizer::setCurrent()` and the `Installer` functions (install,
+  status, remove) that File > Options > Handwriting calls from its Install button. `FakeRecognizer` returns a fixed text per line.
+- **`InkCanvas`** is the one writing area: a pad (own ground and grid) in the inspector tab, or an overlay child of the main
+  window (no ground, a faint tint, `setMask` of the editor area, plus the pad's rectangle and the gap between them in "both"; the
+  inspector's tab row and the strip stay free, because the mask leaves them out). `HandwritingController::relayoutNow()`
+  moves it (an event filter on the window, the editor area, the page and the splitter schedules it). A **pointer** (pen id -1,
+  mouse -2, touches by id) has an `Action`: Writing, Select, Scroll or Ignored, decided at the press from the pen/finger rules; a
+  short tap on text (not beside unread ink) places the cursor and leaves no ink; `deleteWordsUnder()` handles the scratch over text.
+  `Ink.h`: `isScratchOut` (four sweeps, three times longer than wide) and `HandProtection` (plain numbers: the rest zone,
+  the palm size, the edge strip), tested without widgets.
+- The text of a line goes to the strip at the **start of the fade** (`textReady(..., startedMs)`), and the chips fade in with
+  `WordStrip::tokenAlpha`. Nothing is inserted by itself. The held cursor (`HandwritingController::held()`) is a copy of a
+  `QTextCursor`, which moves with the text; it is set by a pen/finger tap through the canvas and by the editor losing the
+  keyboard (the application event filter, `FocusOut`).
+- **Pin**: the canvas is made transparent for mouse events (`WA_TransparentForMouseEvents`: Qt's child lookup skips it for mouse,
+  touch and tablet events) and the application event filter takes the release on a text field's viewport as the place.
+  A pinned text is a ghost label with a check and a cross, a place marker is a thin red frame. The text goes back to the strip
+  with `setText`.
+- The button is the bar item `handwriting` (a special on the Tools bar; `QWidgetAction::setVisible` follows `buttonShown`), the
+  inspector tab `handwriting` is added with `addExtraTab` and its button hidden while the mode is off
+  (`Inspector::setExtraTabVisible`). The settings are per device (`QSettings` group `handwriting`, `HandwritingConfig`), not
+  in `AppSettings` and not in a project; the Options page is `HandwritingPage` (a page of General's list, after AI Models), applied from `OptionsDialog::apply()`.
+- Android: the defaults come from `HandwritingConfig::isAndroid()` (`forceAndroid` for the checks); the keyboard switch is the
+  `#ifdef Q_OS_ANDROID` block in `HandwritingController::applyMode()` (`setAutoSipEnabled(false)`, `mobile::followKeyboard()`
+  when off). Android's own palm rejection and its stylus events (feeding `PenInput`) belong to the Android part.
+- Pitfalls: a test cannot set a touch's contact size, so the palm size is tested on `HandProtection` itself; the layer is a
+  child of the main window, never of the splitter (a child of a QSplitter becomes a pane); the touch position is read from
+  `scenePosition()`, because a synthetic event has no local position.
+
 ## 0.99.0: toolbar sizes (item 116)
 
 - One size for every bar: `AppSettings::toolbarIconSize` (settings `toolbars/iconSize`; 16 Small, 22 Normal, 32 Large;

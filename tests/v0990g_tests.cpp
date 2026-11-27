@@ -469,7 +469,7 @@ static void shapes(MainWindow &w, Project *p, BinderPanel *binder)
                                   QStringLiteral("Search"), QStringLiteral("Tools"), QStringLiteral("|"), QStringLiteral("Show Format Bar"),
                                   QStringLiteral("Style and Font"), QStringLiteral("Character and Alignment"), QStringLiteral("Paragraph and Insert"),
                                   QStringLiteral("|"), QStringLiteral("Icon Bar"), QStringLiteral("Labels"), QStringLiteral("|"),
-                                  QStringLiteral("Reset Toolbar Places"), QStringLiteral("|"), QStringLiteral("Customize Toolbars"),
+                                  QStringLiteral("Toolbar Size"), QStringLiteral("Handwriting Button"), QStringLiteral("|"), QStringLiteral("Reset Toolbar Places"), QStringLiteral("|"), QStringLiteral("Customize Toolbars"),
                                   QStringLiteral("Choose Icons for the Icon Bar")};
         const QStringList got = layout(bars);
         check(got == want, QStringLiteral("View > Toolbars: Show Toolbar with its bars, Show Format Bar with its bars, Icon Bar and Labels, Reset, Customize"),
@@ -484,6 +484,10 @@ static void shapes(MainWindow &w, Project *p, BinderPanel *binder)
         QStringList head = pop.entries;
         // (the right-click menu of a bar has "Customize This Toolbar" where the View menu has "Customize Toolbars")
         QStringList wantHead = want;
+        // (and no separator before Reset Toolbar Places)
+        const int r = int(wantHead.indexOf(QStringLiteral("Reset Toolbar Places")));
+        if (r > 0 && wantHead[r - 1] == QLatin1String("|"))
+            wantHead.removeAt(r - 1);
         int c = int(wantHead.indexOf(QStringLiteral("Customize Toolbars")));
         if (c >= 0)
             wantHead[c] = QStringLiteral("Customize This Toolbar");

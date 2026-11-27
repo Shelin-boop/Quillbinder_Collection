@@ -561,3 +561,9 @@ add_dependencies(qb_v0990b_tests qb-test-tool13 qb-test-tool12)
 add_executable(qb_v0990g_tests v0990g_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0990g_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0990g_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.99.0 (item 112, handwriting part 1: everything but the recognizer): the button with its four looks, the modes and the one writing
+# area, pen and finger, hand protection, scratching out, the ink's fade, the strip with Insert and Pin, the grid, the Options page
+# (xvfb-run -a ./qb_v0990j_tests /tmp/shots)
+add_executable(qb_v0990j_tests v0990j_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990j_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0990j_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
