@@ -23,7 +23,7 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   the system's figures lag behind an unload.
 - **Idle**: a timer every 30 s unloads models unused for the set time. **Low memory** (`LowMemoryMonitor`): models used within the
   last 30 s are not idle for it. The count of changes under way (`changeBegin`/`changeEnd`) drives the standing text of the
-  message line (`MessageLine::setStatus`); a load that is allowed counts as under way until `modelLoaded` (or `modelUnloaded`
+  message line (`MessageLine::setStatus`) under the inspector (`Inspector::messageLine`; `MainWindow::modelLine()` takes the binder's line while the inspector is hidden); a load that is allowed counts as under way until `modelLoaded` (or `modelUnloaded`
   when it failed).
 - **`SystemMemory.h`**: `SystemMemoryLinux.cpp` (`/proc/meminfo`; PSI trigger `some 150000 2000000`, a window that is a multiple of
   2 s as an unprivileged trigger needs, watched by a `QSocketNotifier` of type Exception), `SystemMemoryWin.cpp` and

@@ -323,7 +323,7 @@ tools::ModelDecision Host::requestModelLoad(const QString &id, const QString &di
         out.allowed = d.allowed;
         out.reason = d.reason;
         if (!d.allowed && m_window)
-            m_window->showMessage(d.reason, 10000);
+            m_window->showModelMessage(d.reason, 10000);
         return out;
     });
 }

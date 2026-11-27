@@ -702,7 +702,7 @@ QWidget *OptionsDialog::generalSection()
         f->addRow(hint(tr("A model that is not used is unloaded after this time. Before a model loads, when more than half "
                           "of the memory it needs (the computer's memory or a graphics card's) is in use, the model "
                           "unused longest is unloaded first; when the new model would still bring that memory over 80 %, it is "
-                          "not loaded, and the message line under the binder says why. When the system reports a "
+                          "not loaded, and the message line under the inspector says why. When the system reports a "
                           "shortage of memory, idle models are unloaded at once."),
                        ai));
         m_aiMemory = new QLabel(ai);

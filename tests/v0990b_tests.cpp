@@ -18,6 +18,7 @@
 #include "tools/ToolApi.h"
 #include "ui/AppSettings.h"
 #include "ui/BinderPanel.h"
+#include "ui/Inspector.h"
 #include "ui/MainWindow.h"
 #include "ui/MessageLine.h"
 #include "ui/OptionStorage.h"
@@ -337,23 +338,40 @@ int main(int argc, char **argv)
     std::printf("== the message line\n");
     MessageLine *ml = w.messageLine();
     check(ml && !ml->isVisible(), QStringLiteral("the message line has no height while there is nothing to say"));
-    if (ml) {
+    Inspector *insp = w.findChild<Inspector *>();
+    MessageLine *il = insp ? insp->messageLine() : nullptr;
+    check(il && !il->isVisible() && insp->isVisible(), QStringLiteral("a slim message line at the bottom of the inspector takes no room while empty"));
+    if (ml && il) {
         mm.changeBegin();
         settle(50);
-        check(ml->isVisible() && ml->textLabel()->text() == QLatin1String("Model change in progress") && ml->shownText().isEmpty(),
-              QStringLiteral("a model change under way: the line says \"Model change in progress\""), ml->textLabel()->text());
+        check(il->isVisible() && il->textLabel()->text() == QLatin1String("Model change in progress") && il->shownText().isEmpty() && !ml->isVisible(),
+              QStringLiteral("a model change under way: \"Model change in progress\" is under the inspector, not under the binder"), il->textLabel()->text());
+        check(il->geometry().bottom() >= insp->height() - 2 && il->height() > 0 && il->height() < 60,
+              QStringLiteral("... in a slim line at the bottom of the pane"), QStringLiteral("%1 in %2").arg(il->geometry().bottom()).arg(insp->height()));
         shot(&w, QStringLiteral("v0990b-model-change"));
         toolhost::host().showMessage(QStringLiteral("A short message"), 3000);
         settle(50);
-        check(ml->shownText() == QLatin1String("A short message"), QStringLiteral("a short message of a tool goes before it"));
-        ml->dismiss();
-        check(ml->isVisible() && ml->textLabel()->text() == QLatin1String("Model change in progress"), QStringLiteral("... and when it is gone the standing text is back"));
+        check(ml->shownText() == QLatin1String("A short message") && il->textLabel()->text() == QLatin1String("Model change in progress"),
+              QStringLiteral("a short message of a tool stays under the binder, as before"));
+        ml->clearAll();
         mm.changeBegin();
         mm.changeEnd();
-        check(ml->isVisible(), QStringLiteral("two changes at once: the line stays until both are over"));
+        check(il->isVisible(), QStringLiteral("two changes at once: the line stays until both are over"));
         mm.changeEnd();
         settle(50);
-        check(!ml->isVisible() && !mm.changeActive(), QStringLiteral("the change is over: the line is gone"));
+        check(!il->isVisible() && !ml->isVisible() && !mm.changeActive(), QStringLiteral("the change is over: the line is gone"));
+        // the inspector hidden: the binder's line
+        insp->hide();
+        settle(50);
+        mm.changeBegin();
+        settle(50);
+        check(ml->isVisible() && ml->textLabel()->text() == QLatin1String("Model change in progress") && !il->isVisible(),
+              QStringLiteral("while the inspector is hidden the text is under the binder"), ml->textLabel()->text());
+        mm.changeEnd();
+        settle(50);
+        check(!ml->isVisible(), QStringLiteral("... and goes with the change"));
+        insp->show();
+        settle(100);
     }
 
     std::printf("== tool interface 1.3\n");
@@ -419,11 +437,21 @@ int main(int argc, char **argv)
         check(!d2 && why.contains(QLatin1String("Not enough memory")) && !mm.isLoaded(QStringLiteral("model-test:d")),
               QStringLiteral("a load that would bring the memory over 80 % is refused with a reason"), why);
         settle(50);
-        check(ml && ml->shownText().contains(QLatin1String("Not enough memory")) && !mm.changeActive(),
-              QStringLiteral("... the message line says why, and no change stays under way"), ml ? ml->shownText() : QString());
+        check(il && il->shownText().contains(QLatin1String("Not enough memory")) && !mm.changeActive() && (!ml || ml->shownText().isEmpty()),
+              QStringLiteral("... the line under the inspector says why, and no change stays under way"), il ? il->shownText() : QString());
         shot(&w, QStringLiteral("v0990b-refused"));
-        if (ml)
+        if (il)
+            il->clearAll();
+        if (insp && ml) {
+            insp->hide();
+            settle(50);
+            fakeRam(900);
+            callLoad(t13, QStringLiteral("model-test:g"), 900, QStringLiteral("ram"));
+            check(ml->shownText().contains(QLatin1String("Not enough memory")), QStringLiteral("... with the inspector hidden, the reason is under the binder"), ml->shownText());
             ml->clearAll();
+            insp->show();
+            settle(100);
+        }
         QMetaObject::invokeMethod(t13, "dropOwn", Qt::DirectConnection, Q_ARG(QString, QStringLiteral("model-test:c")));
         check(!mm.isLoaded(QStringLiteral("model-test:c")), QStringLiteral("a model the tool unloaded itself leaves the list"));
 

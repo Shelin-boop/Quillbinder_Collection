@@ -1,4 +1,5 @@
 #include "ui/Inspector.h"
+#include "ui/MessageLine.h"
 #include "core/TestSwitches.h"
 #include "ui/HintLabel.h"
 #include "ui/Ask.h"
@@ -293,6 +294,9 @@ Inspector::Inspector(QWidget *parent) : QWidget(parent)
     m_commentTimer.setSingleShot(true);
     m_commentTimer.setInterval(400);
     connect(&m_commentTimer, &QTimer::timeout, this, &Inspector::refreshComments);
+    m_messages = new MessageLine(this);
+    m_messages->setObjectName(QStringLiteral("inspectorMessageLine"));
+    lay->addWidget(m_messages);
     showTab(Notes);
 }
 

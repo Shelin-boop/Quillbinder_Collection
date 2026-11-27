@@ -292,8 +292,13 @@ MainWindow::MainWindow()
     {
         auto &mm = modelmem::ModelMemory::instance();
         auto show = [this](bool on) {
+            // both lines are cleared; the text goes where the writer looks: under the inspector, else under the binder
             if (messageLine())
-                messageLine()->setStatus(on ? tr("Model change in progress") : QString());
+                messageLine()->setStatus(QString());
+            if (m_inspector && m_inspector->messageLine())
+                m_inspector->messageLine()->setStatus(QString());
+            if (on && modelLine())
+                modelLine()->setStatus(tr("Model change in progress"));
         };
         connect(&mm, &modelmem::ModelMemory::changeActiveChanged, this, show);
         show(mm.changeActive());
@@ -706,6 +711,19 @@ void MainWindow::clearStatusNote()
 }
 
 MessageLine *MainWindow::messageLine() const { return m_binder ? m_binder->messageLine() : nullptr; }
+
+MessageLine *MainWindow::modelLine() const
+{
+    if (m_inspector && m_inspector->messageLine() && m_inspector->isVisibleTo(window()))
+        return m_inspector->messageLine();
+    return messageLine();
+}
+
+void MainWindow::showModelMessage(const QString &text, int ms)
+{
+    if (MessageLine *l = modelLine())
+        l->post(text, ms);
+}
 
 void MainWindow::showMessage(const QString &text, int ms, const QString &linkText, std::function<void()> action, const QString &tip)
 {

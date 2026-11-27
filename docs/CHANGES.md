@@ -11,12 +11,13 @@ New functions and fixes (Linux first).
   interface 1.3). The program keeps the list of the loaded AI models. A model unused for 10 minutes is unloaded (the time is
   set in **File > Options > General > AI Models**). Before a model loads, when more than half of the memory it goes into (the
   computer's RAM, or a graphics card's memory as its driver reports it) is in use, the model of Quillbinder unused longest
-  goes first; when the new model would still bring that memory over 80 %, it is not loaded, the message line says why, and
+  goes first; when the new model would still bring that memory over 80 %, it is not loaded, the message line under the inspector says why, and
   the function can offer the next smaller model or the processor. The system's own low-memory signals unload idle models at
   once (Linux: a pressure trigger on `/proc/pressure/memory` when it can be opened; Windows: the low-memory resource
   notification; Android: the memory figures before each load). The AI's threads run at a low priority.
-- **Message line "Model change in progress"** under the binder, from the start of an unload or a load until the new model is
-  ready, also at a first load.
+- **Message line "Model change in progress"**: a slim line at the bottom of the inspector (no room while empty; the line under
+  the binder when the inspector is hidden), from the start of an unload or a load until the new model is ready, also at a
+  first load. The reason a model was not loaded (the 80 % rule) is shown there too. The binder's line keeps its other messages.
 - **File > Options > General > AI Models**: the CPU cores for the AI (one setting for every AI function; default three
   quarters of the cores rounded down, with 6 cores or fewer the cores minus 1, at least 1), "Unload a model after 10 minutes
   unused", and a line with the memory in use and the loaded models. Kept per computer, not in a project. The add-ons' own
