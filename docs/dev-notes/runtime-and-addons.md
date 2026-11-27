@@ -51,6 +51,17 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - **Settings**: `app/aiThreads` (0 = the default, so it follows the computer) and `app/aiUnloadMinutes` (10); program-only
   (`settingslayer::programOnly`), not in profiles; handed over in `AppSettings::pushToModules`.
 - Suite `v0990b`.
+## 0.99.0: the encryption block of CMakeLists.txt on three systems, and the packs in the Linux workflows
+
+- The RNP block no longer excludes Windows and Android: it takes the libraries from `QB_CRYPTO_DIR` (Linux and Android
+  `lib<name>.a`; Windows MSVC `.lib` files, with or without the `lib` prefix, found by name). Windows adds `RNP_STATIC` (the
+  headers say dllimport without it), vcpkg's zlib (`ZLIB::ZLIB`) and `bcrypt advapi32 crypt32 user32 ws2_32`; Android
+  links the NDK's zlib with `-lz`, one prefix per ABI. Not tried on Windows or Android here (no such build in this tree).
+  The Linux link lines of the program and of `qb_v0990e_tests` and the program's `ldd` are byte for byte the same as before.
+- `release.yml` (job `build`: the cache under `deps-linux-crypto-<hash>` then `tools/get-crypto.sh`, written to the cache on
+  main; job `tests`: the three caches read only, then the three scripts), `ccache.yml` and `system-test.yml` fetch the
+  crypto, AI engine and ONNX Runtime packs before they configure; suite `deps` checks it.
+
 ## 0.99.0: the packs crypto, onnxruntime and aiengine (Linux)
 
 ## 0.99.0: the AI engine packages
