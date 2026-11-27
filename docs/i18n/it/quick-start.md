@@ -68,13 +68,13 @@
 ### Oltre il solito
 
 - **Mappe mentali**: una lavagna di note, linee e frecce per ogni documento e cartella (il pulsante **Mappa mentale** dell'ispettore). **Aiuto > Aiuto sulle mappe mentali** mostra come funziona.
-- **Oggetti**: personaggi, luoghi, ambientazioni, punti di interesse, meteo e categorie tue, ciascuno con una scheda di campi e collegamenti tra di loro (il pulsante **Oggetti** dell'ispettore, oppure **Finestra > Oggetti…**).
+- **Oggetti**: personaggi, luoghi, ambientazioni, punti di interesse, meteo e categorie tue, ciascuno con una scheda di campi e collegamenti tra di loro (il pulsante **Oggetti** dell'ispettore, oppure **Finestra > Oggetti**).
 - **Tabelle e immagini**: **Inserisci > Tabella…** con design già pronti o tuoi, **Formato > Tabella** per righe, colonne, celle unite e colori; immagini accanto al testo con il testo che scorre attorno, didascalie e descrizioni che gli e-book e i file Word conservano come testo alternativo (clic destro su un'immagine, **Immagine…**).
 - **La barra delle icone**: fino a dieci icone di documento, un clic ciascuna. **Documenti > Cambia icona** crea anche icone da testo o da immagini tue.
 - **Zoom per parte**: raccoglitore, editor, parti dell'ispettore, bacheca, struttura e mappe mentali conservano ciascuno il proprio zoom.
 - **Posizioni conservate**: ogni documento si apre dove avevi lasciato il cursore, anche dopo aver riaperto il progetto.
 - **Caratteri**: **Formato > Carattere > Installa file di caratteri…** aggiunge caratteri senza uscire dal programma.
-- **Sicurezza**: salvataggio automatico anche mentre continui a scrivere, backup, una copia di riserva del file di progetto, rapporti di arresto anomalo e di blocco (**Aiuto > Risoluzione problemi e sviluppo > Rapporti di arresto anomalo…**) e **Aiuto > Risoluzione problemi e sviluppo > Informazioni di sistema…**.
+- **Sicurezza**: salvataggio automatico anche mentre continui a scrivere, backup, una copia di riserva del file di progetto, rapporti di arresto anomalo e di blocco (**Aiuto > Risoluzione problemi e sviluppo > Rapporti di arresto anomalo…**) e **Aiuto > Risoluzione problemi e sviluppo > Informazioni di sistema**.
 
 ### Aggiornamenti e componenti aggiuntivi
 
@@ -88,5 +88,5 @@ La **versione completa** dell'AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) co
 - **Aiuto > Progetto di benvenuto**: un breve progetto che mostra le funzioni elencate sotto "Oltre il solito" e ti lascia provarle.
 - **Aiuto > Aiuto sulle mappe mentali**: note, linee, frecce e forme, con immagini e una lavagna per esercitarsi.
 - **Aiuto > Elenco di tutti i segnaposto** e **Aiuto > Scorciatoie da tastiera…**
-- **Aiuto > Licenze di terze parti…**: le licenze delle parti di altri progetti che {{APP}} usa.
+- **Aiuto > Licenze di terze parti**: le licenze delle parti di altri progetti che {{APP}} usa.
 - **Aiuto > Informazioni su {{APP}}**: la versione e la licenza. {{APP}} è software libero con licenza Apache 2.0.
