@@ -1,5 +1,6 @@
 #include "ui/OptionsDialog.h"
 #include "ui/handwriting/HandwritingPage.h"
+#include "ui/ReadAloudPage.h"
 #include "ui/EncryptionPage.h"
 #include "ui/ProfileDialogs.h"
 #include "ui/Profiles.h"
@@ -753,6 +754,9 @@ QWidget *OptionsDialog::generalSection()
     // 0.99.0 (item 112): File > Options > Handwriting, a page of its own in the list (like AI Models); kept per device
     m_handwriting = new handwriting::HandwritingPage;
     pages.append({tr("Handwriting"), m_handwriting});
+    // 0.99.0 (item 114): File > Options > Read Aloud (the engine and the models, the language, the device); kept per device
+    m_readAloud = new readaloud::ReadAloudPage;
+    pages.append({tr("Read Aloud"), m_readAloud});
 
     // the writing tools' sections (the scratch pad's folder and the like): a page each
     toolhost::host().attachTools();
@@ -2848,6 +2852,8 @@ void OptionsDialog::apply()
 {
     if (m_handwriting)
         m_handwriting->apply();
+    if (m_readAloud)
+        m_readAloud->apply();
     if (m_encryption) {
         QStringList errors;
         if (!m_encryption->apply(&errors))

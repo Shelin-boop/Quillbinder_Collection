@@ -4,6 +4,7 @@
 // compute modules, in its own folder (RUNPATH $ORIGIN).
 #define QBAI_BUILD 1
 #include "tools/QbAi.h"
+#include "output.h"
 #include "qbai_parts.h"   // QBAI_PARTS: the versions of the pack's parts (engines/qbai/CMakeLists.txt)
 
 #include <ggml-backend.h>
@@ -989,6 +990,46 @@ const char *engineVersion()
     return v.c_str();
 }
 
+// ------------------------------------------------------------------ the sound output (output.cpp: miniaudio)
+
+qbai_output *outputOpen(int rate, int channels)
+{
+    std::string err;
+    qbaiout::Output *o = qbaiout::open(rate, channels, &err);
+    if (!o) {
+        fail(QBAI_ERROR, err);
+        return nullptr;
+    }
+    return reinterpret_cast<qbai_output *>(o);
+}
+int outputWrite(qbai_output *o, const float *pcm, int64_t frames)
+{
+    return qbaiout::write(reinterpret_cast<qbaiout::Output *>(o), pcm, frames) ? QBAI_OK : fail(QBAI_BAD_ARGS, "bad arguments");
+}
+int outputPause(qbai_output *o)
+{
+    if (!o)
+        return fail(QBAI_BAD_ARGS, "bad arguments");
+    qbaiout::pause(reinterpret_cast<qbaiout::Output *>(o));
+    return QBAI_OK;
+}
+int outputResume(qbai_output *o)
+{
+    if (!o)
+        return fail(QBAI_BAD_ARGS, "bad arguments");
+    qbaiout::resume(reinterpret_cast<qbaiout::Output *>(o));
+    return QBAI_OK;
+}
+int outputStop(qbai_output *o)
+{
+    if (!o)
+        return fail(QBAI_BAD_ARGS, "bad arguments");
+    qbaiout::stop(reinterpret_cast<qbaiout::Output *>(o));
+    return QBAI_OK;
+}
+void outputClose(qbai_output *o) { qbaiout::close(reinterpret_cast<qbaiout::Output *>(o)); }
+int64_t outputPlayed(qbai_output *o) { return qbaiout::played(reinterpret_cast<qbaiout::Output *>(o)); }
+
 const char *lastError() { return t_error.c_str(); }
 
 qbai_api makeApi(int version, int size)
@@ -1018,6 +1059,13 @@ qbai_api makeApi(int version, int size)
     a.stretch_feed = stretchFeed;
     a.stretch_end = stretchEnd;
     a.detect_language = detectLanguage;
+    a.output_open = outputOpen;
+    a.output_write = outputWrite;
+    a.output_pause = outputPause;
+    a.output_resume = outputResume;
+    a.output_stop = outputStop;
+    a.output_close = outputClose;
+    a.output_played = outputPlayed;
     return a;
 }
 
