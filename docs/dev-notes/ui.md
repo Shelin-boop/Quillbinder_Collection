@@ -34,6 +34,36 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - Keys not to forget: the other View items that change panes or bars (Layout, Toolbars) are disabled while the mode runs;
   commands that show the inspector by themselves (a click on a comment mark) act on the hidden inspector in the closed panel
   (`m_inspector->show()` has no effect there) and are not redirected to the notes panel.
+## Handwriting recognizer (0.99.0, item 112, part 2)
+
+- Files: `src/ui/handwriting/OnnxRecognizer.*` (the session, the input, the registry, the install part) and `WordLayer.*` (codec, greedy
+  CTC, word lists, the word layer; no ONNX Runtime and no widgets, so the checks feed it frames of their own). `installOnnxRecognizer()`
+  (called by `MainWindow`) sets `Recognizer::current()` (only when none is set) and `Recognizer::setInstaller()`.
+- **ONNX Runtime**: `QLibrary(ai::onnxRuntimeLibrary())`, `OrtGetApiBase`, then `GetApi(v)` for the header's version down to 16 (the
+  structure only grows). The header and its two includes are in `src/third_party/onnxruntime/` (MIT, README.txt) because the pack's
+  header is only there after `tools/get-onnxruntime.sh`. The library is opened once and never closed. CPU provider only; arena and
+  memory pattern off (every line has its own width). Input name and output name are asked of the session.
+- **Input**: the line picture on white, gray, scaled to height 96 (Qt's smooth scaling, not Lanczos), 16 px white left and right,
+  white on the right up to a multiple of 8, three equal planes, value = 1 - pixel / 255. Output (1, 1623, 1, T), log-softmax per step
+  (a step is 8 px of the input), blank 0, greedy; the codec JSON maps a label to a text (NFD, combining marks kept); NFC after decoding.
+  A word's box comes from its first and last step: `x = (8 t - 16) / scale`.
+- **Which strokes are one line** is the surface's rule (`InkCanvas::addStroke`): the same ruled row of the grid, or, without rows, a
+  stroke whose middle lies within 0.4 line heights of the line's box so far.
+- **Word layer** (constants at the top of `WordLayer.cpp`): a word is split at the model's spaces; punctuation around the letters stays;
+  words with digits or fewer than two letters are left as read. Candidates: list words whose folded form is within
+  `allowedDistance(length)` (1 to 3 letters 1, to 5 2, to 8 3, more 4), at most 300 (nearest, then most frequent). Score = CTC forward
+  (natural log) over the word's steps (from the middle of the gap before to the middle of the gap after) divided by 1.5, plus 0.5 times the
+  Zipf value of the list; the raw reading competes with Zipf 1 (not when it is listed itself). Letters count in either case (the case of
+  the raw reading is applied to the choice: capital, all capitals); every combining mark counts as one group (`Token::mark`), which
+  includes the umlaut (a helper's choice: a superset of "all accents count as an umlaut"). Split: tried only when the best single
+  reading is the raw one; at every letter, both parts at least two letters and each best reading listed; the sum minus a penalty of 5
+  must beat the raw score. Two languages: `readBest` keeps the larger total (the main language wins a tie). The total is the sum of the
+  words' best scores, so a language whose list fits more words wins.
+- **Memory**: `recognize()` asks `ModelMemory::requestLoad` on the main thread (it may unload other models), the worker loads the session
+  and the word lists under the mutex and posts `modelLoaded` / `modelUsed` / `cancelLoad` back (a queued call: the worker never waits
+  for the main thread, so the destructor can wait for it). The unloader (`unloadIfIdle`) uses `tryLock`: false while a line is read.
+- Not done: the model sometimes puts a space inside a word (chil dren); the layer does not join words across a space.
+
 ## 0.99.0: handwriting (item 112, part 1)
 
 - Code: `src/ui/handwriting/` (a GLOB of qbui, so a new file needs no CMake change) and `src/ui/PenInput.*`. **`PenInput`**

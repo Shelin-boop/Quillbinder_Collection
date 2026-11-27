@@ -35,6 +35,18 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   out), writing, grid, hand protection, pen and finger, and learning the hand (corrected lines kept only on the device, with an
   off switch and a delete). The recognizer itself (and the install behind the page's Install button) follows in a later part: until
   then the first use of the button opens the page.
+- **Handwriting (part 2 of item 112): the recognizer and the word layer.** A line of ink is drawn alone, scaled to 96 px height
+  with 16 px of white at both sides, and read by the PP-OCRv6 small model (ONNX; the program opens ONNX Runtime from the
+  installed Handwriting Engine with QLibrary and asks for `OrtGetApiBase` only; CPU, the cores of the AI setting, low
+  priority, the model in the memory registry with the idle unload). The characters come from a greedy CTC decode (NFC after
+  decoding). The **word layer** then corrects each word: listed words within 1 to 4 edits (compared without diacritics) are
+  scored by how well the frames fit them (CTC forward over the word's frames, softened by 1.5) plus 0.5 times the word's
+  frequency; the raw reading competes as an unknown word, so a name stays as read; a word is split in two only when no single
+  word fits, with a clear penalty; each line is read with the main and the fallback language and the better total is kept; a
+  tap on a word shows the next candidates and the raw reading. The word lists (ten languages, from wordfreq, CC BY-SA 4.0) and the
+  model are downloads; the Install button of the page opens the install panel (engine, line model, word lists). The header
+  `onnxruntime_c_api.h` of ONNX Runtime 1.32.0 (MIT) is kept in `src/third_party/onnxruntime/` so that a plain build needs no
+  pack. New suite `v0990o`.
 - **One size for all toolbars: Small, Normal, Large.** **View > Toolbars > Toolbar Size** (also in the right-click menu of
   every bar, and in **Customize Toolbars**, where "Medium" is now "Normal") sets the icons of every bar at once: the main
   toolbars, the format bars (they were fixed at 18 px), the icon bar, Labels and Profiles. The lists and fields on the bars
