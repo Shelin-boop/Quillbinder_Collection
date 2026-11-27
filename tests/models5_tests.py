@@ -70,11 +70,15 @@ for m in models:
     check(f"{m['id']}: license fields", bool(m["license"]) and m["licenseUrl"].startswith("https://") and bool(m["credit"]) and bool(m["source"]))
 
 # ---- languages (decision 6)
+ELEVEN = {"en", "de", "es", "fr", "pt", "it", "ru", "id", "tr", "pl", "nl"}
+check("no entry lists a language outside the program's eleven (no zh, ja, ko)",
+      all(set(m["languages"]) <= ELEVEN for m in models + built_in["models"]), {l for m in models for l in m["languages"]} - ELEVEN)
 tts = {l for m in models if "tts" in m["kinds"] for l in m["languages"]}
 hw = {l for m in models if "handwriting" in m["kinds"] for l in m["languages"]}
 wl = sorted(l for m in models if "wordlist" in m["kinds"] for l in m["languages"])
 check("Read Aloud: no id, tr, pl, nl", not ({"id", "tr", "pl", "nl"} & tts), tts)
 check("Read Aloud: en de es fr pt it ru are there", {"en", "de", "es", "fr", "pt", "it", "ru"} <= tts)
+check("Qwen3-TTS lists exactly the seven languages it serves", all(set(m["languages"]) == {"en", "de", "es", "fr", "pt", "it", "ru"} for m in models if m["engine"] == "qwen3-tts"))
 check("Handwriting: no ru, the other nine and en", "ru" not in hw and hw == {"en", "de", "es", "fr", "pt", "it", "id", "tr", "pl", "nl"}, hw)
 check("word lists: en de es fr pt it pl nl id tr, not ru", wl == sorted("en de es fr pt it pl nl id tr".split()), wl)
 check("Pocket TTS: en fr es pt it, one model each", sorted(m["languages"][0] for m in models if m["engine"] == "pocket-tts") == sorted("en fr es pt it".split()))
