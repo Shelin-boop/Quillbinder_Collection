@@ -666,7 +666,7 @@ GateResult typingGate(TextEditor *e, const QString &profile, int seconds, const 
     g_gate.active = true;
     QProcess snd;
     snd.setProcessChannelMode(QProcess::MergedChannels);
-    snd.start(QStringLiteral("python3"), {QStringLiteral("-I"), ctx().sourceDir + QStringLiteral("/tests/crashsafe/sender.py"),
+    snd.start(plat::pythonProgram(), plat::pythonIsolation() + QStringList{plat::senderScript(ctx().sourceDir),
                                           QStringLiteral("--text"), base + QStringLiteral(".txt"), QStringLiteral("--log"),
                                           base + QStringLiteral(".log"), QStringLiteral("--profile"), profile,
                                           QStringLiteral("--seconds"), QString::number(seconds), QStringLiteral("--seed"),

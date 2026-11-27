@@ -38,8 +38,10 @@
 #include <QTextCursor>
 #include <QtEndian>
 
+#ifndef Q_OS_WIN
 #include <sys/stat.h>
 #include <unistd.h>
+#endif
 
 namespace cs {
 
@@ -670,8 +672,10 @@ void caseSI12()
     writeText(t + QStringLiteral("/runme"), "#!/bin/sh\necho no\n");
     writeText(t + QStringLiteral("/winprog"), "MZ\x90\x00 not really\n");
     writeText(t + QStringLiteral("/setup.exe"), "MZ not really\n");
+#ifndef Q_OS_WIN
     for (const QString &x : {QStringLiteral("script.sh"), QStringLiteral("program"), QStringLiteral("runme"), QStringLiteral("winprog")})
         ::chmod(QFile::encodeName(t + QLatin1Char('/') + x).constData(), 0755);
+#endif
     enum Kind { AtOnce, Ask, Refuse };
     struct Target {
         QString href;
@@ -910,7 +914,7 @@ void caseSA07()
     }
     // a program update (the test build's program; only shown, never installed) and a bundle
     const QString core = ctx().work + QStringLiteral("/core.qbpkg");
-    runTool(QStringLiteral("python3"), {QStringLiteral("-I"), tool, QStringLiteral("core"), QStringLiteral("--binary"), ctx().buildDir + QStringLiteral("/quillbinder"),
+    runTool(QStringLiteral("python3"), {QStringLiteral("-I"), tool, QStringLiteral("core"), QStringLiteral("--binary"), plat::programPath(ctx().buildDir),
                                         QStringLiteral("--version"), QStringLiteral("99.0.0"), QStringLiteral("--runtime"), QStringLiteral(QB_RUNTIME_ID), core});   // 0.80.0: the runtime of this build (another one is refused before the window)
     const QString bundle = ctx().work + QStringLiteral("/bundle.qbpkg");
     runTool(QStringLiteral("python3"), {QStringLiteral("-I"), tool, QStringLiteral("bundle"), QStringLiteral("--id"), QStringLiteral("cs.bundle"), QStringLiteral("--name"),

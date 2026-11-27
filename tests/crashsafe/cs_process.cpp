@@ -11,8 +11,12 @@
 #include "ui/EditorPane.h"
 #include "ui/MainWindow.h"
 
+#include "cs_plat.h"
+
+#ifndef Q_OS_WIN
 #include <sys/stat.h>
 #include <unistd.h>
+#endif
 #include <QDir>
 #include <QDirIterator>
 #include <QElapsedTimer>
@@ -25,10 +29,12 @@
 #include <QTimer>
 #include <QUuid>
 
-#include <csignal>
 #include <random>
+#ifndef Q_OS_WIN
+#include <csignal>
 #include <unistd.h>
 #include <sys/resource.h>
+#endif
 
 namespace cs {
 
@@ -42,13 +48,10 @@ QProcess *startProgram(const QStringList &args)
     pe.insert(QStringLiteral("QB_SKIP_FIRST_START"), QStringLiteral("1"));
     pe.remove(QStringLiteral("APPIMAGE"));
     proc->setProcessEnvironment(pe);
-    proc->setChildProcessModifier([] {
-        struct rlimit rl = {0, 0};
-        ::setrlimit(RLIMIT_CORE, &rl);
-    });
+    plat::prepareChild(proc);
     proc->setProcessChannelMode(QProcess::MergedChannels);
     proc->setStandardOutputFile(ctx().dir + QStringLiteral("/program.log"), QIODevice::Append);
-    proc->start(ctx().buildDir + QStringLiteral("/quillbinder"), args);
+    proc->start(plat::programPath(ctx().buildDir), args);
     proc->waitForStarted(10000);
     return proc;
 }
@@ -64,34 +67,7 @@ bool waitUp(QProcess *proc, int ms = 60000)
 // the program's main window: focused, the pointer on it, a click into the middle (the editor)
 bool focusProgram(QProcess *proc)
 {
-    const QString pid = QString::number(proc->processId());
-    QString wid;
-    int area = 0;
-    for (const QString &id : runTool(QStringLiteral("xdotool"), {QStringLiteral("search"), QStringLiteral("--onlyvisible"), QStringLiteral("--pid"), pid})
-                                 .split(QLatin1Char('\n'), Qt::SkipEmptyParts)) {
-        const QString g = runTool(QStringLiteral("xdotool"), {QStringLiteral("getwindowgeometry"), id});
-        const QRegularExpressionMatch m = QRegularExpression(QStringLiteral("Geometry: (\\d+)x(\\d+)")).match(g);
-        if (m.hasMatch() && m.captured(1).toInt() * m.captured(2).toInt() > area) {
-            area = m.captured(1).toInt() * m.captured(2).toInt();
-            wid = id;
-        }
-    }
-    if (wid.isEmpty())
-        return false;
-    // 0.64.2: raised first: the two "computers" of X-08 / X-10 share one screen without a window manager, and the
-    // click below landed on the other program's notice lying above (X-10 B: it pressed "Close the Project Here"
-    // there and the keys went to the other program)
-    runTool(QStringLiteral("xdotool"), {QStringLiteral("windowraise"), wid});
-    runTool(QStringLiteral("xdotool"), {QStringLiteral("windowfocus"), QStringLiteral("--sync"), wid});
-    const QString g = runTool(QStringLiteral("xdotool"), {QStringLiteral("getwindowgeometry"), wid});
-    const QRegularExpressionMatch m = QRegularExpression(QStringLiteral("Geometry: (\\d+)x(\\d+)")).match(g);
-    const int w = m.hasMatch() ? m.captured(1).toInt() : 800, h = m.hasMatch() ? m.captured(2).toInt() : 600;
-    runTool(QStringLiteral("xdotool"), {QStringLiteral("mousemove"), QStringLiteral("--window"), wid, QString::number(w / 2), QString::number(h / 2),
-                                        QStringLiteral("click"), QStringLiteral("1")});
-    settle(400);
-    runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("ctrl+End")});
-    settle(300);
-    return true;
+    return plat::focusMainWindow(proc->processId());
 }
 
 struct Sent {
@@ -118,7 +94,7 @@ QProcess *startSender(const QString &base, const QString &profile, int seconds, 
     writeText(base + QStringLiteral(".txt"), gateText(seed, seconds * 12 + 400).toUtf8());
     auto *snd = new QProcess;
     snd->setProcessChannelMode(QProcess::MergedChannels);
-    snd->start(QStringLiteral("python3"), {QStringLiteral("-I"), ctx().sourceDir + QStringLiteral("/tests/crashsafe/sender.py"), QStringLiteral("--text"),
+    snd->start(plat::pythonProgram(), plat::pythonIsolation() + QStringList{plat::senderScript(ctx().sourceDir), QStringLiteral("--text"),
                                            base + QStringLiteral(".txt"), QStringLiteral("--log"), base + QStringLiteral(".log"), QStringLiteral("--profile"),
                                            profile, QStringLiteral("--seconds"), QString::number(seconds), QStringLiteral("--seed"), QString::number(seed),
                                            QStringLiteral("--burst"), QStringLiteral("0"), QStringLiteral("--start-delay"), QStringLiteral("0.3")});
@@ -250,20 +226,16 @@ void caseX02()
         }
         // what the program shows at its start (a question or notice takes the keys meant for the scene)
         {
-            const QStringList names = runTool(QStringLiteral("sh"), {QStringLiteral("-c"),
-                QStringLiteral("for w in $(xdotool search --onlyvisible --pid %1); do xdotool getwindowname $w; done").arg(proc->processId())})
-                                          .split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+            const QStringList names = plat::windowNames(proc->processId());
             fact(QStringLiteral("X-02 round %1: windows at the start").arg(n), names.join(QLatin1String(" | ")));
             // 0.64.1 (harness): a question at the first opening of a .scriv took the keys meant for the scene;
             // its default answer is taken (Return) before the typing starts, at most three times
             for (int tries = 0; tries < 3; ++tries) {
-                const QStringList now = runTool(QStringLiteral("sh"), {QStringLiteral("-c"),
-                    QStringLiteral("for w in $(xdotool search --onlyvisible --pid %1); do xdotool getwindowname $w; done").arg(proc->processId())})
-                                            .split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+                const QStringList now = plat::windowNames(proc->processId());
                 if (now.size() <= 1)
                     break;
                 note(QStringLiteral("round %1: a window besides the main one (%2): Return").arg(n).arg(now.join(QLatin1String(" | "))));
-                runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("Return")});
+                plat::pressKey(QStringLiteral("Return"));
                 settle(1200);
             }
         }
@@ -275,20 +247,17 @@ void caseX02()
             QElapsedTimer all;
             all.start();
             while (quiet.elapsed() < 2000 && all.elapsed() < 12000) {
-                const QStringList now = runTool(QStringLiteral("sh"), {QStringLiteral("-c"),
-                    QStringLiteral("for w in $(xdotool search --onlyvisible --pid %1); do xdotool getwindowname $w; done").arg(proc->processId())})
-                                            .split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+                const QStringList now = plat::windowNames(proc->processId());
                 if (now.size() > 1) {
                     note(QStringLiteral("round %1: a window came after the start (%2): Return").arg(n).arg(now.join(QLatin1String(" | "))));
-                    runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("Return")});
+                    plat::pressKey(QStringLiteral("Return"));
                     quiet.restart();
                 }
                 settle(250);
             }
         }
         check(focusProgram(proc), QStringLiteral("round %1: (the program's window found and focused)").arg(n));
-        runTool(QStringLiteral("import"), {QStringLiteral("-window"), QStringLiteral("root"),
-                                           ctx().dir + QStringLiteral("/x02-round%1-start.png").arg(n)});
+        plat::screenshot(ctx().dir + QStringLiteral("/x02-round%1-start.png").arg(n));
         const QString base = ctx().dir + QStringLiteral("/x02-round%1").arg(n);
         // 10 to 50 s: with typing that never pauses for 2 s the program saves in the first gap of 0.3 s once
         // the changes are 5 s old (0.64), and every 30 s at the latest (Project::m_maxSaveWait)
@@ -297,6 +266,7 @@ void caseX02()
         const qint64 t0 = nowNs();
         // 0.64.1 (finding 8: a letter lost about 1 s after the typing starts): the window with the focus and the
         // program's windows every 100 ms for the first 3 s, and screenshots at 1 s and 3 s
+#ifndef Q_OS_WIN   // a diagnostic with shell, xdotool and ImageMagick: not on Windows
         {
             QProcess *rec = new QProcess;
             rec->setProcessChannelMode(QProcess::MergedChannels);
@@ -309,18 +279,18 @@ void caseX02()
                 .arg(proc->processId()).arg(base)});
             QObject::connect(rec, qOverload<int, QProcess::ExitStatus>(&QProcess::finished), rec, &QObject::deleteLater);
         }
+#endif
         qint64 killedAt = 0;
         if (rd.fullSave) {
             settle(qMin(killAfterMs, 12000));
-            runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("ctrl+s")});
+            plat::pressKey(QStringLiteral("ctrl+s"));
             settle(150 + int(r() % 300));
         } else
             settle(killAfterMs);
         const qint64 pid = proc->processId();
-        runTool(QStringLiteral("import"), {QStringLiteral("-window"), QStringLiteral("root"),
-                                           ctx().dir + QStringLiteral("/x02-round%1-kill.png").arg(n)});
+        plat::screenshot(ctx().dir + QStringLiteral("/x02-round%1-kill.png").arg(n));
         killedAt = nowNs();
-        ::kill(pid_t(pid), SIGKILL);
+        plat::killHard(pid);
         proc->waitForFinished(10000);
         snd->terminate();
         if (!snd->waitForFinished(1000)) {
@@ -348,7 +318,7 @@ void caseX02()
         const bool up = waitUp(again);
         settle(1500);
         const bool markerGone = !QFile::exists(marker);
-        ::kill(pid_t(again->processId()), SIGTERM);
+        plat::terminate(again->processId());
         again->waitForFinished(30000);
         delete again;
         const QHash<QString, QString> after = texts(path, &err);
@@ -430,7 +400,7 @@ void caseX03()
         loop.exec();
         delete snd;
         settle(1000);   // every key handled
-        ::kill(pid_t(proc->processId()), SIGTERM);
+        plat::terminate(proc->processId());
         const bool ended = proc->waitForFinished(30000);
         const bool normal = ended && proc->exitStatus() == QProcess::NormalExit;
         delete proc;
@@ -460,22 +430,17 @@ QProcess *startWith(const QStringList &args, const QMap<QString, QString> &env, 
         else
             pe.insert(i.key(), i.value());
     proc->setProcessEnvironment(pe);
-    proc->setChildProcessModifier([] {
-        struct rlimit rl = {0, 0};
-        ::setrlimit(RLIMIT_CORE, &rl);
-    });
+    plat::prepareChild(proc);
     proc->setProcessChannelMode(QProcess::MergedChannels);
     proc->setStandardOutputFile(log.isEmpty() ? ctx().dir + QStringLiteral("/program.log") : log, QIODevice::Append);
-    proc->start(ctx().buildDir + QStringLiteral("/quillbinder"), args);
+    proc->start(plat::programPath(ctx().buildDir), args);
     proc->waitForStarted(10000);
     return proc;
 }
 
 QStringList windowNames(QProcess *proc)
 {
-    return runTool(QStringLiteral("sh"), {QStringLiteral("-c"),
-                                          QStringLiteral("for w in $(xdotool search --onlyvisible --pid %1); do xdotool getwindowname $w; done").arg(proc->processId())})
-        .split(QLatin1Char('\n'), Qt::SkipEmptyParts);
+    return plat::windowNames(proc->processId());
 }
 
 void endProgram(QProcess *proc, bool term = true)
@@ -484,7 +449,7 @@ void endProgram(QProcess *proc, bool term = true)
         return;
     if (proc->state() != QProcess::NotRunning) {
         if (term)
-            ::kill(pid_t(proc->processId()), SIGTERM);
+            plat::terminate(proc->processId());
         if (!proc->waitForFinished(30000)) {
             proc->kill();
             proc->waitForFinished(5000);
@@ -552,17 +517,14 @@ bool answerLockQuestion(QProcess *proc, bool openAnyway)
     }, 8000);
     if (!came)
         return false;
-    const QString wid = runTool(QStringLiteral("xdotool"), {QStringLiteral("search"), QStringLiteral("--onlyvisible"), QStringLiteral("--pid"),
-                                                            QString::number(proc->processId()), QStringLiteral("--name"), QStringLiteral("^Open Project( \u2014.*)?$")})
-                            .section(QLatin1Char('\n'), 0, 0)
-                            .trimmed();
+    const QString wid = plat::findWindow(proc->processId(), QStringLiteral("^Open Project( \u2014.*)?$"));
     if (!wid.isEmpty())
-        runTool(QStringLiteral("xdotool"), {QStringLiteral("windowfocus"), QStringLiteral("--sync"), wid});
+        plat::focusWindow(wid);
     settle(300);
     if (openAnyway)
-        runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("Tab"), QStringLiteral("space")});
+        plat::pressKeys({QStringLiteral("Tab"), QStringLiteral("space")});
     else
-        runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("Escape")});
+        plat::pressKey(QStringLiteral("Escape"));
     settle(1500);
     return true;
 }
@@ -589,9 +551,9 @@ void caseX01()
             const Sent s = typeInto(proc, ctx().dir + QStringLiteral("/x01-%1-%2").arg(fx.first, profile), profile, 60, ctx().seed + quint32(profile.size()));
             sentAll += plainOf(s.text);
         }
-        runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("ctrl+s")});
+        plat::pressKey(QStringLiteral("ctrl+s"));
         settle(1500);
-        runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("ctrl+q")});
+        plat::pressKey(QStringLiteral("ctrl+q"));
         proc->waitForFinished(30000);
         endProgram(proc);
         const QHash<QString, QString> after = texts(path, &err);
@@ -643,6 +605,7 @@ void caseX04()
     }
     check(first->state() == QProcess::Running, QStringLiteral("the first program still runs"));
     endProgram(first);
+#ifndef Q_OS_WIN   // the link folder in XDG_RUNTIME_DIR, owners and modes: Linux only (X-04 is left out on Windows)
     // 0.64.1: the folder for the links between running programs (toolhost::Host::linkDir) made before the start
     // by someone else, as a link, or open to everyone. The runner gives each case a runtime folder of its own.
     const QString runtime = QString::fromLocal8Bit(qgetenv("XDG_RUNTIME_DIR"));
@@ -695,6 +658,7 @@ void caseX04()
     }
     QFile::remove(linkDir);
     QDir(linkDir).removeRecursively();
+#endif
 }
 
 // ================================================================ X-05 damaged settings and surroundings
@@ -727,7 +691,7 @@ void caseX05()
         endProgram(proc);
     }
     writeText(settingsFile, good);
-    if (::geteuid() == 0)
+    if (plat::isRoot())
         note(QStringLiteral("[A] root: the read-only HOME is left out"));
 }
 
@@ -742,7 +706,7 @@ void caseX06()
     QProcess *proc = startWith({path}, {});
     waitUp(proc);
     settle(1500);
-    ::kill(pid_t(proc->processId()), SIGSEGV);
+    plat::crashProcess(proc->processId());
     waitFor([proc] { return proc->state() == QProcess::NotRunning; }, 30000);
     endProgram(proc, false);
     settle(500);
@@ -789,11 +753,11 @@ void caseX07()
         if (start == 2)
             check(!firstWindow, QStringLiteral("... and never again"), names.join(QLatin1String(" | ")));
         if (firstWindow) {
-            runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("Return")});
+            plat::pressKey(QStringLiteral("Return"));
             settle(2000);
         }
         // the desktop question, if it comes, is answered No (Escape)
-        runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("Escape")});
+        plat::pressKey(QStringLiteral("Escape"));
         settle(1500);
         check(proc->state() == QProcess::Running || start == 3, QStringLiteral("start %1: the program runs").arg(start));
         endProgram(proc);
@@ -840,11 +804,11 @@ void caseX08()
     const QString laptopTyped = plainOf(typeInto(b, ctx().dir + QStringLiteral("/x08-laptop"), QStringLiteral("fast"), 20, ctx().seed + 1).text);
     fact(QStringLiteral("X-08 the desktop's windows after the laptop took over"), windowNames(a).join(QLatin1String(" | ")));
     const qint64 killed = b->processId();
-    ::kill(pid_t(killed), SIGKILL);
+    plat::killHard(killed);
     b->waitForFinished(5000);
     delete b;
     focusProgram(a);
-    runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("ctrl+s")});
+    plat::pressKey(QStringLiteral("ctrl+s"));
     settle(12000);   // the laptop's lock is older than QB_LOCK_STALE_S now
     const syncsafe::LockInfo li = syncsafe::readLock(QFileInfo(path).absolutePath() + QStringLiteral("/settings/lock"));
     fact(QStringLiteral("X-08 the lock after the kill"), QStringLiteral("device %1, alive %2").arg(li.device, li.alive.toString(Qt::ISODate)));
@@ -890,9 +854,9 @@ void caseX09()
         }
         const QString base = base0 + (corrections ? QStringLiteral("-corrections") : QStringLiteral("-none"));
         const Sent s = typeInto(proc, base, QStringLiteral("fast"), 45, 7);   // the same seed both times: the same text
-        runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("ctrl+s")});
+        plat::pressKey(QStringLiteral("ctrl+s"));
         settle(1500);
-        runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("ctrl+q")});
+        plat::pressKey(QStringLiteral("ctrl+q"));
         proc->waitForFinished(30000);
         endProgram(proc);
         const QHash<QString, QString> after = texts(path, &err);
@@ -1044,7 +1008,12 @@ private:
                     f.setFileTime(QFileInfo(from).lastModified(), QFileDevice::FileModificationTime);
                     f.close();
                 }
+#ifdef Q_OS_WIN
+                QFile::remove(to);   // QFile::rename does not replace a file
+                QFile::rename(part, to);
+#else
                 ::rename(QFile::encodeName(part).constData(), QFile::encodeName(to).constData());
+#endif
             }
             m_base.insert(rel, hash);
         }
@@ -1082,7 +1051,7 @@ void quitProgram(QProcess *proc)
     if (!proc || proc->state() == QProcess::NotRunning)
         return;
     focusProgram(proc);
-    runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("ctrl+q")});
+    plat::pressKey(QStringLiteral("ctrl+q"));
     proc->waitForFinished(30000);
 }
 
@@ -1221,7 +1190,7 @@ void twoComputers(const TwoSetup &st)
         sync.tick();   // online: the desktop's files reach the laptop's folder while it is open there
         settle(1500);
         typed += plainOf(typeInto(b, ctx().dir + QStringLiteral("/a-laptop2"), QStringLiteral("fast"), 10, ctx().seed + 2).text) + QLatin1Char('\n');
-        runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("ctrl+s")});
+        plat::pressKey(QStringLiteral("ctrl+s"));
         settle(2000);
         seen << QStringLiteral("A, the laptop: ") + windowNames(b).join(QLatin1String(" | "));
         quitProgram(b);
@@ -1363,14 +1332,14 @@ void caseSY04()
             continue;
         }
         notices << QStringLiteral("day %1: %2").arg(day).arg(windowNames(proc).join(QLatin1String(" | ")));
-        runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("Escape")});
+        plat::pressKey(QStringLiteral("Escape"));
         typed += plainOf(typeInto(proc, ctx().dir + QStringLiteral("/week-day%1").arg(day), QStringLiteral("slow"), 20, ctx().seed + quint32(day)).text) + QLatin1Char('\n');
         if (other && waitUp(other))
             typed += plainOf(typeInto(other, ctx().dir + QStringLiteral("/week-day%1-other").arg(day), QStringLiteral("slow"), 15, ctx().seed + 100).text) + QLatin1Char('\n');
         for (QProcess *p : {proc, other})
             if (p) {
                 focusProgram(p);
-                runTool(QStringLiteral("xdotool"), {QStringLiteral("key"), QStringLiteral("ctrl+q")});
+                plat::pressKey(QStringLiteral("ctrl+q"));
                 p->waitForFinished(30000);
             }
         endProgram(proc);

@@ -110,6 +110,11 @@ int main(int argc, char **argv)
     }
     common(QString::fromLocal8Bit(argv[3]));
     ctx().id = caseId;
+    // 0.99.0: a case that rests on something only Linux has says so on Windows (cs_plat.cpp; none on Linux)
+    if (const QString why = plat::notOnThisPlatform(caseId); !why.isEmpty()) {
+        std::printf("SKIP  [platform] %s\n%d failure(s)\nEND %s\n", qPrintable(why), 0, qPrintable(caseId));
+        return 0;
+    }
     ctx().seed = qEnvironmentVariableIsSet("QB_CS_SEED") ? quint32(qEnvironmentVariableIntValue("QB_CS_SEED")) : quint32(qHash(caseId)) % 1000000u;
     std::printf("case %s: %s (seed %u, profile %s)\n", qPrintable(caseId), qPrintable(k->title), ctx().seed, ctx().smoke ? "smoke" : ctx().quick ? "quick" : "full");
     if (k->needs.contains(QLatin1Char('S'))) {

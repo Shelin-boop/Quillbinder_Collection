@@ -218,6 +218,9 @@ int subCase(const QString &variantName, const QMap<QString, QString> &env, QStri
 bool realDrag(QWidget *from, const QPoint &a, QWidget *to, const QPoint &b)
 {
     const QPoint ga = from->mapToGlobal(a), gb = to->mapToGlobal(b);
+#ifdef Q_OS_WIN
+    return plat::dragMouse(ga, gb);
+#endif
     QProcess x;
     const QPoint mid = (ga + gb) / 2;
     x.start(QStringLiteral("xdotool"), {QStringLiteral("mousemove"), QString::number(ga.x()), QString::number(ga.y()), QStringLiteral("sleep"), QStringLiteral("0.2"),

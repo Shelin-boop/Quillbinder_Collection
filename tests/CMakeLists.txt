@@ -442,8 +442,10 @@ target_compile_definitions(qb_w4c_tests PRIVATE QB_TEST_BUILD_DIR="${CMAKE_BINAR
 # The system test (crash safety and usability): only on the writer's request, started by tools/run-system-test.sh
 # (all cases) or tools/run-crashsafe.sh (some); not in tools/run-all-tests.sh or tests/check-counts.txt.
 # Specification: the project document claude/quillbinder-test-procedure-crashsafe.md. Linux only (0.90.0: in main).
-if(NOT WIN32)
-add_executable(qb_crashsafe_tests crashsafe_tests.cpp crashsafe/cs.h crashsafe/cs_common.cpp crashsafe/cs_tables.cpp
+# 0.99.0: the Windows run builds it too, with -DQB_SYSTEM_TEST_WINDOWS=ON (crashsafe/cs_plat.cpp holds what differs).
+option(QB_SYSTEM_TEST_WINDOWS "Build the system test's program on Windows" OFF)
+if(NOT WIN32 OR QB_SYSTEM_TEST_WINDOWS)
+add_executable(qb_crashsafe_tests crashsafe_tests.cpp crashsafe/cs.h crashsafe/cs_plat.h crashsafe/cs_plat.cpp crashsafe/cs_common.cpp crashsafe/cs_tables.cpp
                crashsafe/cs_cases.cpp crashsafe/cs_process.cpp crashsafe/cs_sync.cpp
                crashsafe/cs_list.cpp crashsafe/cs_component.cpp crashsafe/cs_component2.cpp crashsafe/cs_component3.cpp
                crashsafe/cs_sys_common.cpp crashsafe/cs_sys_projects.cpp crashsafe/cs_sys_writing.cpp
@@ -455,7 +457,9 @@ add_executable(qb_crashsafe_tests crashsafe_tests.cpp crashsafe/cs.h crashsafe/c
 target_include_directories(qb_crashsafe_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins/tools)
 target_link_libraries(qb_crashsafe_tests PRIVATE qbui Qt6::Test Qt6::Network)
 # line numbers in the crash reports of the system test (addr2line); the program itself is unchanged
-target_compile_options(qb_crashsafe_tests PRIVATE -g1)
+if(NOT MSVC)
+  target_compile_options(qb_crashsafe_tests PRIVATE -g1)
+endif()
 target_compile_definitions(qb_crashsafe_tests PRIVATE QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}" QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
 
 # Fault injection for the system test (LD_PRELOAD; section 3.2 of the procedure): Linux only.
