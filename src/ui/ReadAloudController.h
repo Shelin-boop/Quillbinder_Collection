@@ -69,8 +69,5 @@ private:
     QMetaObject::Connection m_docConn;
 };
 
-// Plays through the media add-on's player (a sink of the add-on): set as the output of the program's reading
-void useMediaOutput();
-
 } // namespace readaloud
 } // namespace qb

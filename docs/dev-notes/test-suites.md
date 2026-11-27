@@ -59,13 +59,13 @@ each); Write into the text as I speak (off, on); Android's default through `QB_S
 
 ## v0990n (0.99.0, item 114: Read Aloud)
 
-`qb_v0990n_tests` (a window; the fake libqbai of v0990h and a fake `Output`, so nothing is played): the choices and sentence splitter,
+`qb_v0990n_tests` (a window; the fake libqbai of v0990h with its fake sound output, so nothing is played): the choices and sentence splitter,
 the model order and fit, the toolbar by system (Android through `Config::forceAndroid`) and size, the first click that opens the
 page (the modal Options window is closed by a timer), reading from the cursor and of a marked text, the sentence highlight, pause,
 stop, typing stops it, nothing written to disk, the Voice menu with the reasons of the greyed entries, Qwen clips, the unload of the
 model after the idle time (a short interval) and its reload, the look-ahead limit (2, or 4 for a model slower than real time),
 cancel while a sentence is made, the device choice reaching the model, the settings page (greyed languages, fit texts, speed test
-through `QBAI_FAKE_SLOW_MS`). Screenshots `toolbar-window`, `voice-menu-*`, `settings-page*`, `options-read-aloud`. A real Pocket TTS
+through `QBAI_FAKE_SLOW_MS`), no sound device (`QBAI_FAKE_NO_SOUND`). Screenshots `toolbar-window`, `voice-menu-*`, `settings-page*`, `options-read-aloud`. A real Pocket TTS
 smoke test was not made (no model in the session).
 
 ## v0990h (0.99.0)
@@ -77,12 +77,12 @@ smoke test was not made (no model in the session).
 device choice (Automatic, fixed cards, the CPU), the engine loaded (`QB_AI_ENGINE_LIB`), its devices reported to `ModelMemory`,
 the shared cores, tool interface 1.3's `aiEngine`/`aiPickDevice`/`aiDeviceChoices`/`aiPanel`/`aiModelFile`, a model registered
 and unloaded, speaking at once and streamed, cancelling, a busy model kept, the 80 % rule, Automatic's fall back to the CPU,
-recognition, the speed of speech; the catalog (`QB_AI_CATALOG`; the program's own), the downloads from a local "release"
+recognition, the speed of speech, the sound output (open, write, position, pause, stop, refusal without a device); the catalog (`QB_AI_CATALOG`; the program's own), the downloads from a local "release"
 (`QB_AI_MODEL_SOURCE`: a file in parts, a wrong checksum, going on after a stop, cancelling, a model too large), the engine
 package from a file and from a "release" (`QB_AI_ENGINE_SOURCE`; `QB_REQUIRE_SIGNED` for the refusal of unsigned ones), the
 panel (screenshots `v0990h-panel-*`), the package recipes (`addons/*-engine`, with the pack and `<build>/qbai/libqbai.so.1`:
 stage, package, `tools/check-engine-package.py`; the handwriting engine's clear message without its pack) and, in a child
-process, the real engine when built (Sonic's speed with the pitch kept; with `QB_AI_WHISPER_MODEL` (whisper.cpp's tiny English
+process, the real engine when built (Sonic's speed with the pitch kept; the real sound output (miniaudio's silent backend in a container); with `QB_AI_WHISPER_MODEL` (whisper.cpp's tiny English
 model) and `QB_AI_WHISPER_SAMPLE` (jfk.wav) a real transcription; `QB_AI_QWEN_TALKER`/`QB_AI_QWEN_CODEC` a word of Qwen3-TTS).
 The recipe checks take the packs from `QB_AI_ENGINE_DIR` and `QB_ONNXRUNTIME_DIR` (default `build/ai-engine`,
 `build/onnxruntime`). Without the pack and libqbai those parts print a line and are not counted.

@@ -486,20 +486,54 @@ QList<Span> splitSentences(const QString &text, int maxLength)
 
 // ============================================================================================= where the sound goes
 
-static OutputFactory &factory()
+namespace {
+// the sound output of the AI engine (libqbai, miniaudio): mono float PCM, only played
+class EngineOutput : public Output
 {
-    static OutputFactory f;
-    return f;
-}
-void setOutputFactory(OutputFactory f) { factory() = std::move(f); }
+public:
+    ~EngineOutput() override
+    {
+        if (m_out)
+            m_api->output_close(m_out);
+    }
+    bool init(const qbai_api *api) { m_api = api; return api && api->size >= int(sizeof(qbai_api)) && api->output_open; }
+    bool open(int rate, QString *error) override
+    {
+        m_rate = rate;
+        m_out = m_api->output_open(rate, 1);
+        if (!m_out) {
+            if (error)
+                *error = QString::fromUtf8(m_api->last_error());
+            return false;
+        }
+        return true;
+    }
+    void write(const float *samples, qint64 count) override { if (m_out) m_api->output_write(m_out, samples, count); }
+    qint64 playedMs() const override { return m_out && m_rate > 0 ? m_api->output_played(m_out) * 1000 / m_rate : 0; }
+    void pause() override { if (m_out) m_api->output_pause(m_out); }
+    void resume() override { if (m_out) m_api->output_resume(m_out); }
+    void stop() override { if (m_out) m_api->output_stop(m_out); }
+
+private:
+    const qbai_api *m_api = nullptr;
+    qbai_output *m_out = nullptr;
+    int m_rate = 0;
+};
+} // namespace
+
 Output *makeOutput(QString *why)
 {
-    if (!factory()) {
+    ai::Engine &e = ai::Engine::instance();
+    if (!e.ensureLoaded(why))
+        return nullptr;
+    auto *o = new EngineOutput;
+    if (!o->init(e.apiFor(QBAI_API_VERSION))) {
+        delete o;
         if (why)
-            *why = tr("There is no way to play sound here. Reading aloud plays through the add-on \"Media Playback\".");
+            *why = tr("The installed AI engine cannot play sound; install its newest version.");
         return nullptr;
     }
-    return factory()(why);
+    return o;
 }
 
 // ============================================================================================================ reading

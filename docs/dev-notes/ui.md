@@ -10,11 +10,15 @@ Aloud), `ui/MainWindowReadAloud.cpp` (the switch and the bar in the first row af
 
 - **The order of the models is one table**: `kModelOrder` in `core/ReadAloud.cpp` (Pocket TTS first where it has the language, then
   Qwen3-TTS 0.6B, 1.7B Q4, 1.7B Q8). The default is the first that is installed, fits and (when measured) reaches real time.
-- **Sound**: the program has no Qt Multimedia. `Output` (core) is implemented by `MediaOutput` (ui) over `media::PcmSink`
-  (`media/MediaApi.h`, optional): the add-on's stage 1 (`MediaEngine`) also implements `PcmEngine` and takes the sink from the
-  player library's exported `qb_media_impl_create_pcm_sink` (`QtPcmSink`: `QAudioSink` in pull mode over a queue). An add-on
-  built before has no such function: Play says it needs the newest Media Playback. The suite uses a fake `Output`; the real sink
-  was compiled but **not run against a sound device** (none in the build environment).
+- **Sound**: through the AI engine, not the Media Playback add-on (the program has no Qt Multimedia). `Output` (core) is
+  implemented by `EngineOutput` over the version 2 table's `output_*` functions (`src/tools/QbAi.h`, `engines/qbai/output.cpp`:
+  miniaudio's device part, f32 mono, a mutex-guarded queue read by the device callback, silence while paused or empty, `played`
+  counts the frames the callback took). miniaudio.h is vendored in `engines/qbai/third_party/miniaudio` (v0.11.26, README with
+  its origin; libmtmd's copy has hidden symbols and cannot be reused); backends load at run time, so no link dependency. The
+  program holds the version 1 table: the output code asks `Engine::apiFor(2)`. Without a sound device miniaudio falls back to its
+  silent "null" backend (so v0990h's real-engine check passes in a container); `open` fails with "no sound output ..." when even
+  that fails. The fake engine counts frames (`qbai_fake_out_stats`, `qbai_fake_out_set_scale` for a faster clock). The real device
+  was not heard (no sound hardware in the build environment).
 - **Qwen's voices**: reference clips `<models>/read-aloud-voices/<voice>-<style>.wav` + `.txt` (`qwenClipFile`); until they exist
   the voice and style are greyed "Voice not installed yet."; the voices job of models-5 must write this layout (or change it here).
 - **Pitfalls**: `Model::load` asks the main thread (ModelMemory), so nothing may wait for the worker on the main thread (the

@@ -36,7 +36,6 @@ void MainWindow::createReadAloudActions()
 
 void MainWindow::createReadAloudBar()
 {
-    readaloud::useMediaOutput();
     m_readAloud = new readaloud::Controller(this, [this]() -> TextEditor * { return handwritingEditor(); });
     GripBar *bar = m_readAloud->createBar();
     m_readAloudBar = bar;

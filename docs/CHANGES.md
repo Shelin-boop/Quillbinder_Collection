@@ -30,8 +30,8 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   model with its size and fit, device, speed test, install part of the AI engine). Pocket TTS reads with its licensed preset
   voices (no style); Qwen3-TTS with reference clips that come later (greyed until then). Speed stretches the finished audio with
   the pitch kept. Only a few sentences are made ahead; the memory rule and the unload time are those of all AI models. The
-  sound is only played, never saved: it goes through the add-on Media Playback (a new, optional sound-output function in its
-  player library; an add-on built before has to be updated).
+  sound is only played, never saved, and needs no other add-on: the AI Engine plays it itself (a sound output in libqbai with
+  miniaudio, public domain / MIT-0, loading the system's sound libraries at run time; no new library dependency).
 - **Handwriting (part 1 of item 112): everything but the recognizer.** A button on the Tools bar (hidden at first on Linux
   and Windows; shown on Android) with four looks (off, editor, inspector, both): a tap switches between off and the last mode,
   a long press or right-click opens the four choices. One writing area for the three modes: the inspector's new tab

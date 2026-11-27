@@ -1543,7 +1543,7 @@ A theme is only a look: colors and fonts. A **profile** (since 0.95) keeps every
 
 ### Read Aloud
 
-**Read Aloud** reads your text to you with a voice that runs on your computer. It is built into {{APP}} on every system and switched off until you set it up: nothing is installed and nothing is loaded before you do. The sound is only played, never saved to a file. It plays through the add-on **Media Playback** (install its newest version if the first Play says it cannot play yet).
+**Read Aloud** reads your text to you with a voice that runs on your computer. It is built into {{APP}} on every system and switched off until you set it up: nothing is installed and nothing is loaded before you do. The sound is only played, never saved to a file. Read Aloud needs only the **AI Engine** and a voice model (both installed from **File > Options > Read Aloud**); no other add-on is needed, because the engine plays the sound itself through the computer's sound system (ALSA, PulseAudio or PipeWire on Linux, WASAPI on Windows, AAudio or OpenSL ES on Android).
 
 **The toolbar.** **View > Toolbars > Read Aloud** shows or hides the toolbar **Read Aloud**; it is shown from the start on Linux and Windows and hidden on Android. It has **Play/Pause** (one button), **Stop** and a small **Voice** button with an arrow. Its buttons follow **View > Toolbars > Toolbar Size**. **Play** reads the marked text; with nothing marked it reads from the cursor to the end of the text. The sentence being read is highlighted in the editor and the editor scrolls to it. Typing in the text stops the reading, because the places would no longer fit. **The first click on Play, and every click while no engine or no voice model is installed, opens File > Options > Read Aloud.**
 

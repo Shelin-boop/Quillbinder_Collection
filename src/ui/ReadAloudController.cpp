@@ -1,11 +1,9 @@
 #include "ui/ReadAloudController.h"
 
 #include "core/AiEngine.h"
-#include "media/MediaApi.h"
 #include "ui/GripBar.h"
 #include "core/ItemIcons.h"
 #include "ui/MainWindow.h"
-#include "ui/MediaPlayback.h"
 #include "ui/TextEditor.h"
 
 #include <QActionGroup>
@@ -16,47 +14,6 @@
 
 namespace qb {
 namespace readaloud {
-
-namespace {
-
-class MediaOutput : public Output
-{
-public:
-    explicit MediaOutput(media::PcmSink *s) : m_sink(s) {}
-    ~MediaOutput() override { delete m_sink; }
-    bool open(int rate, QString *error) override { return m_sink->open(rate, error); }
-    void write(const float *samples, qint64 count) override { m_sink->write(samples, count); }
-    qint64 playedMs() const override { return m_sink->playedMs(); }
-    void pause() override { m_sink->pause(); }
-    void resume() override { m_sink->resume(); }
-    void stop() override { m_sink->stop(); }
-
-private:
-    media::PcmSink *m_sink;
-};
-
-Output *makeMediaOutput(QString *why)
-{
-    QString err;
-    if (!playback::start(&err)) {
-        if (why)
-            *why = err;
-        return nullptr;
-    }
-    auto *pcm = dynamic_cast<media::PcmEngine *>(playback::engine());
-    media::PcmSink *sink = pcm ? pcm->createPcmSink() : nullptr;
-    if (!sink) {
-        if (why)
-            *why = QCoreApplication::translate("readaloud", "The installed add-on \"Media Playback\" cannot play Read Aloud yet. "
-                                                            "Install its newest version (Help > Add-ons and Updates > Add-on Manager).");
-        return nullptr;
-    }
-    return new MediaOutput(sink);
-}
-
-} // namespace
-
-void useMediaOutput() { setOutputFactory(makeMediaOutput); }
 
 Controller::Controller(MainWindow *window, std::function<TextEditor *()> editor)
     : QObject(window), m_window(window), m_editorOf(std::move(editor))

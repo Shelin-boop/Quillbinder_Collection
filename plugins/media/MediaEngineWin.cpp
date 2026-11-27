@@ -222,7 +222,6 @@ bool MediaEngine::start(const QString &backend, QString *error)
             qb::media::EngineInterface *e = create();
             if (e && e->start(chosen, &m_error)) {
                 m_impl = e;
-                m_makeSink = reinterpret_cast<qb::media::PcmSink *(*)()>(::GetProcAddress(h, "qb_media_impl_create_pcm_sink"));
                 m_backend = chosen;
                 m_error.clear();
             } else {
@@ -259,11 +258,6 @@ QStringList MediaEngine::fileSuffixes() const
 qb::media::Player *MediaEngine::createPlayer()
 {
     return m_impl ? m_impl->createPlayer() : nullptr;
-}
-
-qb::media::PcmSink *MediaEngine::createPcmSink()
-{
-    return m_impl && m_makeSink ? m_makeSink() : nullptr;
 }
 
 } // namespace qbmedia

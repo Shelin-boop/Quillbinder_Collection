@@ -32,7 +32,7 @@
 
 namespace qbmedia {
 
-class MediaEngine : public QObject, public qb::media::EngineInterface, public qb::media::PcmEngine
+class MediaEngine : public QObject, public qb::media::EngineInterface
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QB_MEDIA_IID)
@@ -48,8 +48,6 @@ public:
     QString description() const override;
     QStringList fileSuffixes() const override;
     qb::media::Player *createPlayer() override;
-    // (program 0.99.0) sinks for sound the program makes itself (Read Aloud); null with an older player library
-    qb::media::PcmSink *createPcmSink() override;
 
     QString mediaDir() const;
     // media-extra/ of the add-on "Extra Video and Audio Formats", empty when it is not
@@ -61,7 +59,6 @@ public:
 private:
     bool preload(const QString &backend, QString *error);
     qb::media::EngineInterface *m_impl = nullptr;
-    qb::media::PcmSink *(*m_makeSink)() = nullptr;
     QString m_backend;
     QString m_error;
 };

@@ -136,7 +136,7 @@ struct Span {
 QList<Span> splitSentences(const QString &text, int maxLength = 280);
 
 // ---- where the sound goes ----------------------------------------------------------------------------------------------
-// Mono float PCM that is only played. The real one is made by the media add-on (ui/ReadAloudOutput.cpp); the checks set their own.
+// Mono float PCM that is only played, through the AI engine's sound output (libqbai, miniaudio): no other add-on is needed.
 class Output
 {
 public:
@@ -148,8 +148,7 @@ public:
     virtual void resume() = 0;
     virtual void stop() = 0;                                      // drops what is queued
 };
-using OutputFactory = std::function<Output *(QString *why)>;
-void setOutputFactory(OutputFactory f);
+// the engine's output (null with the reason when the engine is missing, too old or has no sound device)
 Output *makeOutput(QString *why);
 
 // ---- reading -----------------------------------------------------------------------------------------------------------

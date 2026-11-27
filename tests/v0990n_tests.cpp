@@ -95,47 +95,18 @@ static void writeFile(const QString &path, const QByteArray &data)
         f.write(data);
 }
 
-// ---- the fake output: plays on a clock that runs `scale` times faster than real time (0: stands still)
-static double g_scale = 40;
-static int g_outputs = 0;
-static qint64 g_samples = 0;
-static int g_rate = 0, g_writes = 0;
-static bool g_paused = false, g_stopped = false;
-class FakeOutput : public readaloud::Output
-{
-public:
-    FakeOutput() { ++g_outputs; g_samples = 0; g_rate = 0; g_writes = 0; g_paused = g_stopped = false; m_clock.start(); }
-    bool open(int rate, QString *) override { m_rate = rate; g_rate = rate; m_last = m_clock.elapsed(); return true; }
-    void write(const float *, qint64 count) override { m_samples += count; ++m_writes; g_samples += count; ++g_writes; }
-    qint64 playedMs() const override
-    {
-        advance();
-        return qint64(m_played);
-    }
-    void pause() override { advance(); m_paused = true; g_paused = true; }
-    void resume() override { advance(); m_paused = false; g_paused = false; }
-    void stop() override { m_stopped = true; g_stopped = true; }
-    static FakeOutput *last;
-    qint64 m_samples = 0;
-    int m_writes = 0, m_rate = 0;
-    bool m_paused = false, m_stopped = false;
-
-private:
-    void advance() const
-    {
-        const qint64 now = m_clock.elapsed();
-        if (!m_paused && !m_stopped)
-            m_played += double(now - m_last) * g_scale;
-        m_last = now;
-        const double total = m_rate > 0 ? 1000.0 * double(m_samples) / m_rate : 0;
-        if (m_played > total)
-            m_played = total;
-    }
-    QElapsedTimer m_clock;
-    mutable double m_played = 0;
-    mutable qint64 m_last = 0;
-};
-FakeOutput *FakeOutput::last = nullptr;
+// ---- the sound output is the fake engine's (nothing is played; its clock runs `scale` times faster than real time)
+typedef void (*OutStats)(int *, long long *, int *, int *, int *, int *);
+typedef void (*OutScale)(double);
+static OutStats g_outStats = nullptr;
+static OutScale g_outScale = nullptr;
+static void setScale(double x) { if (g_outScale) g_outScale(x); }
+static int outOpens() { int v = 0; g_outStats(&v, nullptr, nullptr, nullptr, nullptr, nullptr); return v; }
+static long long outWritten() { long long v = 0; g_outStats(nullptr, &v, nullptr, nullptr, nullptr, nullptr); return v; }
+static bool outPaused() { int v = 0; g_outStats(nullptr, nullptr, &v, nullptr, nullptr, nullptr); return v != 0; }
+static bool outStopped() { int v = 0; g_outStats(nullptr, nullptr, nullptr, &v, nullptr, nullptr); return v != 0; }
+static int outRate() { int v = 0; g_outStats(nullptr, nullptr, nullptr, nullptr, &v, nullptr); return v; }
+static int outLive() { int v = 0; g_outStats(nullptr, nullptr, nullptr, nullptr, nullptr, &v); return v; }
 
 static QByteArray wavFile(int rate, int samples)
 {
@@ -197,6 +168,12 @@ int main(int argc, char **argv)
     const QString catalogFile = work + QStringLiteral("/catalog.json");
     qputenv("QB_AI_CATALOG", catalogFile.toUtf8());
     const QString fakeLib = QStringLiteral(QB_TEST_BUILD_DIR) + QStringLiteral("/tests/fake-ai-engine/libqbai.so.1");
+    g_outStats = reinterpret_cast<OutStats>(QLibrary(fakeLib).resolve("qbai_fake_out_stats"));
+    g_outScale = reinterpret_cast<OutScale>(QLibrary(fakeLib).resolve("qbai_fake_out_set_scale"));
+    if (!g_outStats || !g_outScale) {
+        std::printf("FAIL  (the fake engine's sound functions)\n");
+        return 1;
+    }
     QCoreApplication::setOrganizationName(QStringLiteral("QuillbinderV0990nTest"));
     QCoreApplication::setApplicationName(QStringLiteral("QuillbinderV0990nTest"));
     QApplication app(argc, argv);
@@ -328,7 +305,6 @@ int main(int argc, char **argv)
     (void)QTest::qWaitForWindowActive(&w, 2000);
     w.adoptProject(std::move(proj));
     settle(400);
-    setOutputFactory([](QString *) -> Output * { FakeOutput::last = new FakeOutput; return FakeOutput::last; });
     readaloud::Controller *ctl = w.readAloud();
     check(ctl && w.readAloudBar(), QStringLiteral("the window has the Read Aloud toolbar"));
     if (!ctl)
@@ -356,7 +332,7 @@ int main(int argc, char **argv)
         armDialog(QStringLiteral("options-read-aloud-2"));
         ctl->playAction()->trigger();
         check(spy.size() == 2 && g_dialogs == 2, QStringLiteral("every click while no engine is installed opens it again"));
-        check(ctl->session().state() == Session::Idle && g_outputs == 0, QStringLiteral("nothing was loaded, no sound opened"));
+        check(ctl->session().state() == Session::Idle && outOpens() == 0, QStringLiteral("nothing was loaded, no sound opened"));
     }
 
     // the engine and the models
@@ -529,7 +505,7 @@ int main(int argc, char **argv)
         cur.setPosition(body.indexOf(QLatin1String("Beta")));
         ed->setTextCursor(cur);
         QSignalSpy fin(&ctl->session(), &Session::finished);
-        g_scale = 8;
+        setScale(8);
         ctl->playAction()->trigger();
         check(ctl->session().state() != Session::Idle, QStringLiteral("Play with nothing marked starts reading"));
         check(waitFor([&] { return !fin.isEmpty(); }), QStringLiteral("(the reading ends)"));
@@ -539,7 +515,7 @@ int main(int argc, char **argv)
               QString::number(seen.sentences.size()));
         check(ed->readingLength() == 0 && ctl->session().state() == Session::Idle && !ctl->stopAction()->isEnabled(),
               QStringLiteral("the mark is gone at the end, the buttons are back"));
-        check(g_samples > 0 && g_rate == 24000, QStringLiteral("sound reached the output (24 kHz)"));
+        check(outWritten() > 0 && outRate() == 24000, QStringLiteral("sound reached the output (24 kHz)"));
         seen.sentences.clear();
         QTextCursor sel = ed->textCursor();
         sel.setPosition(body.indexOf(QLatin1String("Gamma")));
@@ -558,7 +534,7 @@ int main(int argc, char **argv)
         QTextCursor cur = ed->textCursor();
         cur.setPosition(0);
         ed->setTextCursor(cur);
-        g_scale = 2;   // slow: a sentence takes a moment
+        setScale(2);   // slow: a sentence takes a moment
         QList<int> marks;
         QMetaObject::Connection c2 = QObject::connect(&ctl->session(), &Session::sentence, [&](int a, int b) { if (b > 0) marks << ed->readingStart(); (void)a; });
         ctl->playAction()->trigger();
@@ -571,34 +547,34 @@ int main(int argc, char **argv)
         shot(&w, QStringLiteral("reading-marked-sentence"));
         check(ctl->playAction()->text() == QLatin1String("Pause"), QStringLiteral("while it plays the button is Pause"));
         ctl->playAction()->trigger();
-        check(ctl->session().state() == Session::Paused && g_paused && ctl->playAction()->text() == QLatin1String("Resume"),
+        check(ctl->session().state() == Session::Paused && outPaused() && ctl->playAction()->text() == QLatin1String("Resume"),
               QStringLiteral("Pause pauses the sound"));
         const int at = ed->readingStart();
         settle(300);
         check(ed->readingStart() == at, QStringLiteral("the mark stands still while paused"));
         ctl->playAction()->trigger();
-        check(ctl->session().state() == Session::Playing && !g_paused, QStringLiteral("Play again goes on"));
-        g_scale = 8;
+        check(ctl->session().state() == Session::Playing && !outPaused(), QStringLiteral("Play again goes on"));
+        setScale(8);
         check(waitFor([&] { return ctl->session().state() == Session::Idle; }) && marks.size() >= 3 && marks[0] == 0 && marks[1] == body.indexOf(QLatin1String("Beta"))
                   && marks[2] == body.indexOf(QLatin1String("Gamma")),
               QStringLiteral("the mark moves sentence by sentence"), QString::number(marks.size()));
         QObject::disconnect(c2);
         // stop
-        g_scale = 1;
+        setScale(1);
         QSignalSpy fin(&ctl->session(), &Session::finished);
         ctl->playAction()->trigger();
         check(waitFor([&] { return ed->readingLength() > 0; }), QStringLiteral("(reading again)"));
         ctl->stopAction()->trigger();
-        check(ctl->session().state() == Session::Idle && ed->readingLength() == 0 && g_stopped && !fin.isEmpty() && !fin.last().value(0).toBool(),
+        check(ctl->session().state() == Session::Idle && ed->readingLength() == 0 && outStopped() && !fin.isEmpty() && !fin.last().value(0).toBool(),
               QStringLiteral("Stop ends the reading, clears the mark and the sound"));
-        g_scale = 40;
+        setScale(40);
         // typing in the text stops a reading
         ctl->playAction()->trigger();
         check(waitFor([&] { return ctl->session().state() == Session::Playing; }), QStringLiteral("(reading, to be changed)"));
-        g_scale = 0;
+        setScale(0);
         ed->textCursor().insertText(QStringLiteral("x"));
         check(ctl->session().state() == Session::Idle, QStringLiteral("a change in the text stops the reading (the places would be wrong)"));
-        g_scale = 40;
+        setScale(40);
     }
     check(listing() == before, QStringLiteral("nothing is written to disk while reading (no sound file, no cache)"));
     {
@@ -608,6 +584,9 @@ int main(int argc, char **argv)
             sounds << it.next();
         check(sounds.isEmpty(), QStringLiteral("... and no sound file in the temporary folder"), sounds.join(QLatin1Char(' ')));
     }
+
+    check(outLive() == 0 && outOpens() > 0, QStringLiteral("the sound goes through the AI engine's output; it is closed when the reading ends"),
+          QStringLiteral("%1 open, %2 opened").arg(outLive()).arg(outOpens()));
 
     // ======================================================================== the model registry and the unload
     std::printf("== the memory rule\n");
@@ -646,7 +625,7 @@ int main(int argc, char **argv)
         Session session;
         const QString text = QStringLiteral("One. Two. Three. Four. Five. Six. Seven. Eight. Nine. Ten.");
         Settings s;
-        g_scale = 0;
+        setScale(0);
         QString e1;
         check(session.start(text, 0, s, &e1), QStringLiteral("(a long text starts)"), e1);
         check(waitFor([&] { return session.generated() >= 2; }), QStringLiteral("(two sentences are made)"));
@@ -654,7 +633,7 @@ int main(int argc, char **argv)
         check(session.generated() == 2 && session.maxAhead() <= 2 && session.sentenceCount() == 10,
               QStringLiteral("with the sound standing still only 2 of 10 sentences are made ahead (never the whole text)"),
               QString::number(session.generated()));
-        g_scale = 200;
+        setScale(200);
         QSignalSpy fin(&session, &Session::finished);
         check(waitFor([&] { return !fin.isEmpty(); }) && session.generated() == 10 && session.maxAhead() <= 2,
               QStringLiteral("then the rest follows as the sound plays, never more than 2 ahead"),
@@ -662,19 +641,19 @@ int main(int argc, char **argv)
 
         rememberSpeed(QStringLiteral("pocket-tts-en"), QStringLiteral("auto"), 2.5);
         s.model = QStringLiteral("pocket-tts-en");
-        g_scale = 0;
+        setScale(0);
         check(session.start(text, 0, s, &e1), QStringLiteral("(starts again, the model is slower than real time)"), e1);
         check(session.lookAhead().ahead == 4 && session.lookAhead().prebuffer == 3, QStringLiteral("a model slower than real time: 4 ahead, 3 ready before the sound"));
         check(waitFor([&] { return session.generated() >= 4; }), QStringLiteral("(four are made)"));
         settle(600);
-        check(session.generated() == 4 && session.maxAhead() <= 4 && g_writes >= 3, QStringLiteral("it makes 4 ahead and no more; the sound started with 3 ready"),
-              QStringLiteral("%1 %2").arg(session.generated()).arg(g_writes));
+        check(session.generated() == 4 && session.maxAhead() <= 4 && outWritten() >= 3 * 4800, QStringLiteral("it makes 4 ahead and no more; the sound started with 3 ready"),
+              QStringLiteral("%1 %2").arg(session.generated()).arg(outWritten()));
         rememberSpeed(QStringLiteral("pocket-tts-en"), QStringLiteral("auto"), 0.0);
         // cancel while the worker is busy
         session.stop();
         check(session.state() == Session::Idle, QStringLiteral("stop() ends it"));
         qputenv("QBAI_FAKE_SLOW_MS", "150");
-        g_scale = 40;
+        setScale(40);
         QSignalSpy marks(&session, &Session::sentence);
         s.model.clear();
         check(session.start(text, 0, s, &e1), QStringLiteral("(starts with a slow engine)"), e1);
@@ -692,6 +671,14 @@ int main(int argc, char **argv)
         int loaded = 0, loads = 0, dev = 0, thr = 0;
         stats(&loaded, &loads, &dev, &thr);
         check(loaded <= 1, QStringLiteral("(no model is loaded twice)"), QString::number(loaded));
+        // no sound device: told, nothing keeps running
+        qputenv("QBAI_FAKE_NO_SOUND", "1");
+        QSignalSpy failed(&session, &Session::failed);
+        setScale(200);
+        check(session.start(QStringLiteral("Short one."), 0, s, &e1) && waitFor([&] { return !failed.isEmpty(); }) && session.state() == Session::Idle
+                  && failed.value(0).value(0).toString().contains(QLatin1String("no sound output")),
+              QStringLiteral("no sound output: the reading ends and the reason is told"), failed.value(0).value(0).toString());
+        qunsetenv("QBAI_FAKE_NO_SOUND");
         // an unknown voice of the model: told
         s.voice = QStringLiteral("male2");
         QString e2;
@@ -702,7 +689,7 @@ int main(int argc, char **argv)
         Session::forgetModels();
         mm.reset();
         QSignalSpy fin2(&session, &Session::finished);
-        g_scale = 200;
+        setScale(200);
         check(session.start(QStringLiteral("Short one."), 0, s, &e2) && waitFor([&] { return !fin2.isEmpty(); }), QStringLiteral("(reads on the processor)"), e2);
         stats(&loaded, &loads, &dev, &thr);
         check(dev == 0, QStringLiteral("the device choice \"cpu\" is used"), QString::number(dev));
