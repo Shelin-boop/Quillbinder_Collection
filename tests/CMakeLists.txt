@@ -600,6 +600,12 @@ endif()
 add_executable(qb_v0990l_tests v0990l_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_SOURCE_DIR}/translations/translations.qrc)
 target_link_libraries(qb_v0990l_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0990l_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.99.0 (item 112, handwriting part 2: the recognizer and the word layer): the model's input, the codec, greedy CTC, the word layer
+# on frames made here, the install part, and with the real model and word lists the accuracy with and without the word layer
+# (xvfb-run -a ./qb_v0990o_tests /tmp/shots)
+add_executable(qb_v0990o_tests v0990o_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990o_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0990o_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # 0.99.0 (item 112, handwriting part 1: everything but the recognizer): the button with its four looks, the modes and the one writing
 # area, pen and finger, hand protection, scratching out, the ink's fade, the strip with Insert and Pin, the grid, the Options page
 # (xvfb-run -a ./qb_v0990j_tests /tmp/shots)

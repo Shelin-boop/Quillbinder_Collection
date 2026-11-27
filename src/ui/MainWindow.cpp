@@ -67,6 +67,7 @@
 #include "ui/DocMirror.h"
 #include "ui/Inspector.h"
 #include "ui/handwriting/HandwritingController.h"
+#include "ui/handwriting/OnnxRecognizer.h"
 #include "ui/MindMapController.h"
 #include "ui/MindMapDoc.h"
 #include "ui/MindMapUi.h"
@@ -285,6 +286,7 @@ MainWindow::MainWindow()
     setCentralWidget(m_mainSplit);
     // 0.99.0 (item 112): handwriting: the button, the modes and the one writing area; a mode needs a recognizer, so the first use
     // (and every use while none is installed) opens File > Options > Handwriting
+    handwriting::installOnnxRecognizer(this); // 0.99.0 (part 2): the recognizer and the Install button of the page
     m_handwriting = new handwriting::HandwritingController(this, m_inspector);
     connect(m_handwriting, &handwriting::HandwritingController::settingsRequested, this,
             [this] { OptionsDialog::run(this, [](OptionsDialog &d) { d.showSection(OptionsDialog::SGeneral, tr("Handwriting")); }); });

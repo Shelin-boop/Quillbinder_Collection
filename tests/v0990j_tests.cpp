@@ -469,7 +469,7 @@ int main(int argc, char **argv)
     }
     // the real window: File > Options > Handwriting, with the install slot
     {
-        bool shownPage = false, slot = false, installDisabled = false, ruGrey = false;
+        bool shownPage = false, slot = false, installEnabled = false, ruGrey = false;
         QString ruText;
         QTimer::singleShot(400, [&] {
             auto *d = qobject_cast<OptionsDialog *>(QApplication::activeModalWidget());
@@ -480,7 +480,7 @@ int main(int argc, char **argv)
             if (page) {
                 slot = page->findChild<QWidget *>(QStringLiteral("hwInstallSlot")) != nullptr;
                 auto *inst = page->findChild<QPushButton *>(QStringLiteral("hwInstall"));
-                installDisabled = inst && inst->text() == QLatin1String("Install") && !inst->isEnabled();
+                installEnabled = inst && inst->text() == QLatin1String("Install") && inst->isEnabled();
                 auto *main = page->findChild<QComboBox *>(QStringLiteral("hwMainLanguage"));
                 const int ru = main ? main->findData(QStringLiteral("ru")) : -1;
                 if (ru >= 0) {
@@ -493,7 +493,7 @@ int main(int argc, char **argv)
         });
         hw->setMode(Mode::Both);   // still no recognizer: opens File > Options > Handwriting
         check(shownPage, QStringLiteral("the first use opens File > Options > Handwriting"));
-        check(slot && installDisabled, QStringLiteral("the install slot with its Install button is there (no installer connected yet)"));
+        check(slot && installEnabled, QStringLiteral("the install slot with its Install button is there (the installer of the recognizer is connected since part 2)"));
         check(ruGrey && ruText.contains(QLatin1String("no model for this language yet")),
               QStringLiteral("Russian is greyed out with \"no model for this language yet\""), ruText);
         check(hw->mode() == Mode::Off, QStringLiteral("... and the mode is still off"));

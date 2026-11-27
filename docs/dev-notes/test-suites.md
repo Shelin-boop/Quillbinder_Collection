@@ -75,6 +75,19 @@ process, the real engine when built (Sonic's speed with the pitch kept; with `QB
 model) and `QB_AI_WHISPER_SAMPLE` (jfk.wav) a real transcription; `QB_AI_QWEN_TALKER`/`QB_AI_QWEN_CODEC` a word of Qwen3-TTS).
 The recipe checks take the packs from `QB_AI_ENGINE_DIR` and `QB_ONNXRUNTIME_DIR` (default `build/ai-engine`,
 `build/onnxruntime`). Without the pack and libqbai those parts print a line and are not counted.
+## v0990o (0.99.0: handwriting, part 2)
+
+`qb_v0990o_tests`: the model's input (96 high, width a multiple of 8, padding, planes, see-through pictures), the codec JSON, the
+greedy path (double letters, NFC), the word lists (TSV, gzip, folding, edit distance), the word layer on frames made by hand (near
+miss, capitals, a name kept, a name with a comma, an umlaut, an acute, a split word, no split with a close word, the main and the
+fallback language, CTC forward), the install part with no engine (status, the panel's kinds). With the real model (a folder
+`QB_HW_MODELS`, else `/home/claude/work/hw-models`, with `ppocrv6-small.onnx`, its codec, `wordlist-en.tsv.gz`, `wordlist-de.tsv.gz`;
+the ONNX Runtime pack of `tools/get-onnxruntime.sh`; Comic Relief, OFL, from the system's fonts) it draws 14 lines of text, clean and
+blurred, tilted and noisy, and prints the characters' and the words' accuracy with and without the word layer, then umlauts, a name,
+the languages' order, alternatives, boxes, the registry and the unload after 11 minutes (the registry's clock is set by hand). The
+real-model checks are skipped with a message when a file is missing (63 checks run without, 83 with). `QB_HW_DEBUG=1` prints each
+word's alternatives. Screenshots `hw2-lines.png` (the lines with the reading without and with the layer), `hw2-install.png`.
+
 ## v0990j (0.99.0: handwriting, part 1)
 
 `qb_v0990j_tests`: one window with a project and a `FakeRecognizer` (a fixed text per line; `PenInput`'s clock is the test's own,
