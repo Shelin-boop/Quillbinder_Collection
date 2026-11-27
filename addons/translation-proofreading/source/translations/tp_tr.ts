@@ -280,6 +280,10 @@
             <translation>Modelleri şu süre sonra kaldır:</translation>
         </message>
         <message>
+            <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
+            <translation>İşlemci çekirdeği sayısı ve kullanılmayan bir modelin kaldırılacağı süre, tüm yapay zekâ işlevleri için birlikte File &gt; Options &gt; General &gt; AI Models bölümünde ayarlanır.</translation>
+        </message>
+        <message>
             <source>Careful: the model weighs even more possibilities (slower, now and then better)</source>
             <translation>Dikkatli: model daha da fazla olasılığı tartar (daha yavaş, bazen daha iyi)</translation>
         </message>

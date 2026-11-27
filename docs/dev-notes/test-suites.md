@@ -294,3 +294,13 @@ needs `build/quillbinder`), the start script and the download page's size note.
   `activateWindow()`; modal dialogs are answered with `QTimer` + `activeModalWidget()`.
 - Never run `pkill -f` / `pgrep -f` with a pattern that also appears in your own
   command line: it kills the shell that runs it.
+
+## The Translation Helper's own suites (add-on 1.6, 0.99.0)
+
+The add-on is a project of its own (`addons/translation-proofreading/source`), so its suites are not in `run-all-tests.sh`: the
+release workflow (`official-addons/translation-proofreading.json`) runs `ctest` there (logic, ui, words, languages, plugin,
+exports and the dictionary tool). Build it by hand against the pack of `tools/get-translator-deps.sh`:
+`cmake -S addons/translation-proofreading/source -B <dir> -G Ninja -DTP_TEST_SWITCHES=ON -DTP_DEPS_DIR=build/translator-deps/install`,
+then `QT_QPA_PLATFORM=offscreen ctest` in `<dir>`. `memoryGuard` of `tp_ui_tests` needs `TP_MODELS_DIR` (the models of the releases):
+without it that one check fails and 15 are skipped. 1.6 added `registryWithAnInterface13Host`, `settingsPageByInterface` and
+`interface12KeepsTheOldWay` to `tp_lang_tests` (a fake program with a model registry: `tests/FakeHost.h`, `version` 130).

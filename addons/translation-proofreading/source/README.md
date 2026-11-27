@@ -27,6 +27,7 @@ model is downloaded, it works without any internet connection.
   only. A single word keeps its correction, shown as a suggestion. The add-on's own texts are in the eleven languages
   of the program (the add-on reads the program's language; English where there is no translation). The line above
   stands in the window under the controls.
+- **One rule for the memory** (1.6, with Quillbinder 0.99.0 or later). The add-on reports its models to the program's model list: the program decides before a load whether it fits, unloads a model that was not used for the set time, and shows "Model change in progress". The processor cores and the unload time are the program's one setting for all AI functions (File > Options > General > AI Models); with an older Quillbinder the add-on keeps its own two fields.
 - **English text is proofread, German text is translated.** With **Automatic** the add-on tells the two apart by
   itself; you can also choose **Proofread English** or **Translate German to English**. **More Formal** lets the model
   also rewrite for a more formal tone.

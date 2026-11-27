@@ -4,8 +4,11 @@
 #include "ToolApi.h"
 
 #include <QDir>
+#include <QElapsedTimer>
 #include <QHash>
 #include <QMainWindow>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QPair>
 #include <QPlainTextEdit>
 #include <QVariant>
@@ -92,6 +95,94 @@ public:
     void showOptions(const QString &toolId) override { shownOptions << toolId; }
     void showMessage(const QString &text, int milliseconds) override { messages.append({text, milliseconds}); }
 
+    // ---- 1.3: a small model registry of the program (set `version` to 130 to use it)
+    int cores = 3;                           // what aiThreads() says
+    int aiThreads() const override { return cores; }
+    int changeCount = 0, changeOn = 0, changeOff = 0;   // modelMessage() calls (on and off counted)
+    void modelMessage(bool on) override
+    {
+        QMutexLocker l(&m_regMutex);
+        if (on) {
+            ++changeOn;
+            ++changeCount;
+        } else {
+            ++changeOff;
+            --changeCount;
+        }
+    }
+    void keepRunning(const QString &, bool) override {}
+    void lowerThreadPriority() override {}
+    struct Registered {
+        QString name, where;
+        qint64 bytes = 0;
+        int used = 0;
+        qint64 lastUsedMs = 0;
+    };
+    QHash<QString, Registered> registry;     // loaded models by id
+    QStringList requests;                    // ids asked for, in order
+    QString refuseReason;                    // not empty: requestModelLoad refuses with it
+    qb::tools::ModelDecision requestModelLoad(const QString &id, const QString &displayName, qint64 bytes, const QString &where) override
+    {
+        QMutexLocker l(&m_regMutex);
+        requests << id;
+        qb::tools::ModelDecision d;
+        if (!refuseReason.isEmpty()) {
+            d.allowed = false;
+            d.reason = refuseReason;
+            return d;
+        }
+        Registered r;
+        r.name = displayName;
+        r.bytes = bytes;
+        r.where = where;
+        pending.insert(id, r);
+        return d;
+    }
+    void modelLoaded(const QString &id) override
+    {
+        QMutexLocker l(&m_regMutex);
+        Registered r = pending.take(id);
+        r.lastUsedMs = clock.elapsed();
+        registry.insert(id, r);
+    }
+    void modelUsed(const QString &id) override
+    {
+        QMutexLocker l(&m_regMutex);
+        if (registry.contains(id)) {
+            ++registry[id].used;
+            registry[id].lastUsedMs = clock.elapsed();
+        }
+    }
+    void modelUnloaded(const QString &id) override
+    {
+        QMutexLocker l(&m_regMutex);
+        registry.remove(id);
+        pending.remove(id);
+    }
+    void reportDeviceMemory(const QString &, qint64, qint64) override {}
+    // The program's rule in a check: asks the tool to unload a model, as the program's idle timer does, and takes it off its
+    // list when the tool says true.
+    QElapsedTimer clock = [] { QElapsedTimer t; t.start(); return t; }();
+    // The program's idle rule with a short time: every model unused for `idleMs` is unloaded; returns the ids.
+    QStringList unloadIdle(qb::tools::ToolModels *tool, qint64 idleMs)
+    {
+        QStringList ids;
+        const QStringList all = registry.keys();
+        for (const QString &id : all)
+            if (clock.elapsed() - registry.value(id).lastUsedMs >= idleMs && unloadByProgram(tool, id))
+                ids << id;
+        return ids;
+    }
+    bool unloadByProgram(qb::tools::ToolModels *tool, const QString &id)
+    {
+        const bool ok = tool->unloadModel(id);
+        if (ok)
+            modelUnloaded(id);
+        return ok;
+    }
+
 private:
     QString m_addonDir, m_dataRoot;
+    mutable QMutex m_regMutex;
+    QHash<QString, Registered> pending;
 };

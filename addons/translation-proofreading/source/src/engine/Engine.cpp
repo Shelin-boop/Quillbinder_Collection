@@ -191,7 +191,12 @@ public:
 
     QString version() const override
     {
+        // 1.6: CTranslate2 4.9.1 in the Linux build; the Windows and Android recipes still build 4.9.0
+#if defined(Q_OS_WIN) || defined(Q_OS_ANDROID)
         return QStringLiteral("CTranslate2 4.9.0, oneDNN 3.9.1, SentencePiece 0.2.1, BPE tokenizer for chat models");
+#else
+        return QStringLiteral("CTranslate2 4.9.1, oneDNN 3.9.1, SentencePiece 0.2.1, BPE tokenizer for chat models");
+#endif
     }
 
 private:

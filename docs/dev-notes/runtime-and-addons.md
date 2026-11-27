@@ -100,6 +100,23 @@ a tag points elsewhere), none changed except where said here.
   libmtmd, which is why libmtmd is built with `LLAMA_BUILD_MTMD=ON`) and also has a Qwen3-TTS path of its own (libmtmd's
   `qwen3tts-gen`), apart from qwentts.cpp. whisper.cpp 1.9.6 also installs `libparakeet`.
 
+## 0.99.0: Translation Helper 1.6 (tool interface 1.3, CTranslate2 4.9.1)
+
+- The add-on's `third_party/quillbinder/ToolApi.h` is the program's 1.3 header again (copied whole). `TranslateTool` also
+  implements `ToolModels` (`Q_INTERFACES(... ToolModels)`). With `host->apiVersion() >= 130` (`hostHasRegistry()`, decided at
+  each call: the checks switch the fake host's version) `engine()` returns a `RegisteredEngine` that wraps the real engine:
+  `load` asks `requestModelLoad("translation-proofreading:<catalog id>", title, memoryMB in bytes, "ram")` (one entry per model,
+  however many slots hold it), calls `modelLoaded` or `modelUnloaded`, and puts `modelMessage(true/false)` around the change;
+  `run`, `variants` and `alternatives` call `modelUsed` (`run` at each batch). The host's calls come from the worker thread and
+  block until the main thread has answered; `unloadModel` runs on the main thread and answers false while any panel is busy.
+- The add-on's own memory check (`loadProblem`) and its unload timer are for 1.2 only; with 1.3 the program's rule decides and
+  its reason reaches the writer through the load's error text. `threads()` is `aiThreads()` with 1.3.
+- The options page shows the two fields only for a 1.2 program; with 1.3 a label (object name `tpSharedSettings`) names the
+  program's page. No call opens it (`showOptions` opens a tool's own section only).
+- Pitfall: `slots` is a Qt keyword (macro) in a class with `Q_OBJECT` headers included: do not use it as a variable name.
+- CTranslate2 4.9.1 is the Linux engine only (`Engine.cpp` `version()` says 4.9.0 on Windows and Android, whose recipes did not
+  change). The pack line of the new recipe hash is in `tools/deps-packs.txt`.
+
 ## 0.94.0: the full AppImage's installation window
 
 - `quillbinder --install-folder <folder>` (`FullInstallWindow.*`, `runInstallFolder`, called from the first loop of

@@ -11,6 +11,8 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QMenu>
+#include <QMutex>
+#include <QMutexLocker>
 #include <QThread>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -80,6 +82,165 @@ private:
 
 } // namespace
 
+// 1.6: with a program that has tool interface 1.3, the engine is used through this: every load asks the program first
+// (ToolHost::requestModelLoad) and reports loaded, used and unloaded models to its registry, with the message "Model change
+// in progress" around a change. A model keeps one entry in the registry, however many slots hold it (a chat model does both
+// tasks; two steps may use one model).
+class RegisteredEngine : public EngineInterface
+{
+public:
+    RegisteredEngine(ToolHost *host, ModelStore *store, EngineInterface *raw)
+        : m_host(host)
+        , m_store(store)
+        , m_raw(raw)
+    {
+    }
+
+    bool load(const QString &slot, const ModelFiles &model, int threads, QString *error) override
+    {
+        const QString current = m_raw->loaded(slot);
+        bool tracked;
+        {
+            QMutexLocker l(&m_mutex);
+            tracked = m_slots.value(slot) == model.id;
+        }
+        if (current == model.id && tracked) {
+            m_host->modelUsed(TranslateTool::registryId(model.id));
+            return m_raw->load(slot, model, threads, error);
+        }
+        m_host->modelMessage(true);
+        bool ok = true;
+        if (!heldElsewhere(model.id, slot)) {
+            const CatalogModel *c = m_store->model(model.id);
+            const qint64 bytes = c ? qint64(c->memoryMB) * 1024 * 1024 : 0;
+            const QString name = c ? c->title : model.id;
+            const ModelDecision d = m_host->requestModelLoad(TranslateTool::registryId(model.id), name, bytes, QStringLiteral("ram"));
+            if (!d.allowed) {
+                if (error)
+                    *error = d.reason;
+                ok = false;
+            }
+        }
+        if (ok) {
+            // the engine frees the model of the slot first
+            ok = m_raw->load(slot, model, threads, error);
+            if (m_raw->loaded(slot) != current)
+                forget(current, slot);
+            {
+                QMutexLocker l(&m_mutex);
+                if (ok)
+                    m_slots.insert(slot, model.id);
+                else
+                    m_slots.remove(slot);
+            }
+            if (ok)
+                m_host->modelLoaded(TranslateTool::registryId(model.id));
+            else if (!heldElsewhere(model.id, slot))
+                m_host->modelUnloaded(TranslateTool::registryId(model.id));
+        }
+        m_host->modelMessage(false);
+        return ok;
+    }
+    void unload(const QString &slot) override
+    {
+        const QString current = m_raw->loaded(slot);
+        if (current.isEmpty())
+            return;
+        m_host->modelMessage(true);
+        m_raw->unload(slot);
+        forget(current, slot);
+        m_host->modelMessage(false);
+    }
+    QString loaded(const QString &slot) const override { return m_raw->loaded(slot); }
+    QStringList run(const QString &slot, const QStringList &texts, const RunOptions &options,
+                    const std::function<bool(int, int)> &progress, QString *error) override
+    {
+        use(slot);
+        return m_raw->run(slot, texts, options,
+                          [this, slot, &progress](int done, int total) {
+                              use(slot);
+                              return progress ? progress(done, total) : true;
+                          },
+                          error);
+    }
+    QList<Alternative> alternatives(const QString &slot, const QString &source, const QString &current, int wordIndex,
+                                    const RunOptions &options, int count, QString *error) override
+    {
+        use(slot);
+        return m_raw->alternatives(slot, source, current, wordIndex, options, count, error);
+    }
+    QStringList variants(const QString &slot, const QString &text, const RunOptions &options, int count, QString *error) override
+    {
+        use(slot);
+        return m_raw->variants(slot, text, options, count, error);
+    }
+    QString version() const override { return m_raw->version(); }
+
+    // The program asks to unload the model `id` (ToolModels::unloadModel): every slot that holds it. The program takes it
+    // off its list itself.
+    void unloadAll(const QString &id)
+    {
+        QStringList heldSlots;
+        {
+            QMutexLocker l(&m_mutex);
+            for (auto it = m_slots.begin(); it != m_slots.end(); ++it)
+                if (it.value() == id)
+                    heldSlots << it.key();
+            for (const QString &s : heldSlots)
+                m_slots.remove(s);
+        }
+        if (heldSlots.isEmpty())
+            return;
+        m_host->modelMessage(true);
+        for (const QString &s : heldSlots)
+            m_raw->unload(s);
+        m_host->modelMessage(false);
+    }
+    bool holds(const QString &id) const
+    {
+        QMutexLocker l(&m_mutex);
+        for (auto it = m_slots.begin(); it != m_slots.end(); ++it)
+            if (it.value() == id)
+                return true;
+        return false;
+    }
+
+private:
+    void use(const QString &slot)
+    {
+        const QString id = m_raw->loaded(slot);
+        if (!id.isEmpty())
+            m_host->modelUsed(TranslateTool::registryId(id));
+    }
+    bool heldElsewhere(const QString &id, const QString &exceptSlot) const
+    {
+        QMutexLocker l(&m_mutex);
+        for (auto it = m_slots.begin(); it != m_slots.end(); ++it)
+            if (it.key() != exceptSlot && it.value() == id)
+                return true;
+        return false;
+    }
+    // the slot no longer holds `id`: when no slot does, the registry loses the model (the program is told)
+    void forget(const QString &id, const QString &slot)
+    {
+        if (id.isEmpty())
+            return;
+        {
+            QMutexLocker l(&m_mutex);
+            if (m_slots.value(slot) == id)
+                m_slots.remove(slot);
+        }
+        if (!heldElsewhere(id, slot) && m_raw->loaded(slot) != id)
+            m_host->modelUnloaded(TranslateTool::registryId(id));
+    }
+
+    ToolHost *m_host;
+    ModelStore *m_store;
+    EngineInterface *m_raw;
+    mutable QMutex m_mutex;
+    QHash<QString, QString> m_slots;   // slot -> model id, as this wrapper loaded them
+};
+
 TranslateTool::TranslateTool()
 {
     // 1.5: the add-on's own texts in the program's language (before the commands are asked for their texts)
@@ -115,6 +276,7 @@ TranslateTool::TranslateTool()
 
 TranslateTool::~TranslateTool()
 {
+    delete m_registered;
     if (m_translator && QCoreApplication::instance())
         QCoreApplication::removeTranslator(m_translator);
 }
@@ -318,12 +480,18 @@ Rules TranslateTool::rules() const
 
 int TranslateTool::threads() const
 {
+    // 1.6: one setting for every AI function (File > Options > General > AI Models)
+    if (hostHasRegistry())
+        return qMax(1, m_host->aiThreads());
     const int ideal = qMax(1, QThread::idealThreadCount());
     return qBound(1, setting(QStringLiteral("threads"), qMax(1, ideal - 1)).toInt(), ideal);
 }
 
 QString TranslateTool::loadProblem(const QString &slot, const QString &modelId)
 {
+    // 1.6: with a 1.3 host the program's rule decides (the load asks it and says why it refuses)
+    if (hostHasRegistry())
+        return QString();
     const CatalogModel *m = m_store.model(modelId);
     if (!m)
         return QString();
@@ -426,7 +594,7 @@ QString TranslateTool::stepModel(const Step &step) const
 EngineInterface *TranslateTool::engine(QString *error)
 {
     if (m_engine)
-        return m_engine;
+        return wrapped();
     auto fail = [&](const QString &e) -> EngineInterface * {
         m_engineError = e;
         if (error)
@@ -459,7 +627,29 @@ EngineInterface *TranslateTool::engine(QString *error)
     if (!create)
         return fail(tr("The engine is damaged (no entry point)."));
     m_engine = create();
-    return m_engine;
+    return wrapped();
+}
+
+// 1.6: the engine as the panel uses it: with a 1.3 host through the registry, else itself
+EngineInterface *TranslateTool::wrapped()
+{
+    if (!m_engine || !hostHasRegistry())
+        return m_engine;
+    if (!m_registered)
+        m_registered = new RegisteredEngine(m_host, &m_store, m_engine);
+    return m_registered;
+}
+
+bool TranslateTool::unloadModel(const QString &id)
+{
+    // the program's rule (idle too long, memory short) asks; a model a job uses now stays
+    for (const QPointer<Panel> &p : m_panels)
+        if (p && p->isBusy())
+            return false;
+    const QString model = id.section(QLatin1Char(':'), 1);
+    if (m_registered)
+        m_registered->unloadAll(model);
+    return true;
 }
 
 QString TranslateTool::unloadMessage()
@@ -483,6 +673,11 @@ int TranslateTool::unloadIntervalMs() const
 
 void TranslateTool::touchEngine()
 {
+    // 1.6: with a 1.3 host the program unloads after its own idle time (ToolModels::unloadModel); the own timer is for 1.2
+    if (hostHasRegistry()) {
+        m_unloadTimer.stop();
+        return;
+    }
     // 0 minutes: the models stay loaded
     if (unloadIntervalMs() > 0)
         m_unloadTimer.start(unloadIntervalMs());

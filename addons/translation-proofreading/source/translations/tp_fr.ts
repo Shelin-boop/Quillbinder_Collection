@@ -280,6 +280,10 @@
             <translation>Décharger les modèles après :</translation>
         </message>
         <message>
+            <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
+            <translation>Le nombre de cœurs du processeur et le délai après lequel un modèle inutilisé est déchargé se règlent pour toutes les fonctions d’IA ensemble, dans File &gt; Options &gt; General &gt; AI Models.</translation>
+        </message>
+        <message>
             <source>Careful: the model weighs even more possibilities (slower, now and then better)</source>
             <translation>Prudent : le modèle pèse encore plus de possibilités (plus lent, parfois meilleur)</translation>
         </message>

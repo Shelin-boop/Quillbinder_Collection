@@ -280,6 +280,10 @@
         <translation>Modellen verwijderen na:</translation>
     </message>
     <message>
+        <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
+        <translation>Het aantal processorkernen en de tijd waarna een ongebruikt model wordt verwijderd, worden voor alle AI-functies samen ingesteld, in File &gt; Options &gt; General &gt; AI Models.</translation>
+    </message>
+    <message>
         <source>Careful: the model weighs even more possibilities (slower, now and then better)</source>
         <translation>Zorgvuldig: het model weegt nog meer mogelijkheden af (langzamer, soms beter)</translation>
     </message>

@@ -22,11 +22,13 @@ namespace tp {
 
 class Panel;
 
-class TranslateTool : public QObject, public qb::tools::ToolInterface, public qb::tools::ToolExtension
+class RegisteredEngine;
+
+class TranslateTool : public QObject, public qb::tools::ToolInterface, public qb::tools::ToolExtension, public qb::tools::ToolModels
 {
     Q_OBJECT
     Q_PLUGIN_METADATA(IID QB_TOOL_IID)
-    Q_INTERFACES(qb::tools::ToolInterface qb::tools::ToolExtension)
+    Q_INTERFACES(qb::tools::ToolInterface qb::tools::ToolExtension qb::tools::ToolModels)
 public:
     TranslateTool();
     ~TranslateTool() override;
@@ -52,13 +54,20 @@ public:
     QString optionsTitle() const override { return tr("Translation Helper"); }
     QString optionsIcon() const override { return iconPath(); }
 
+    // ToolModels 1.3 (program 0.99.0): the program asks to unload a model of the registry; false while a job uses it
+    bool unloadModel(const QString &id) override;
+
     // ---- for the panel and the options
+    // 1.6: the program's model registry and shared cores setting are used when the host says 1.3 or later; a program with
+    // 1.2 keeps the add-on's own threads and its own unload timer, as 1.5 did
+    bool hostHasRegistry() const { return m_host && m_host->apiVersion() >= 130; }
+    static QString registryId(const QString &modelId) { return QStringLiteral("translation-proofreading:") + modelId; }
     qb::tools::ToolHost *host() const { return m_host; }
     ModelStore *store() { return &m_store; }
     QVariant setting(const QString &key, const QVariant &def = QVariant()) const;
     void setSetting(const QString &key, const QVariant &value);
     Rules rules() const;
-    int threads() const;           // 1.1: one core is left free by default
+    int threads() const;           // 1.1: one core is left free by default; 1.6 with a 1.3 host: the shared setting (aiThreads)
     // 1.1: why the model cannot be loaded into the slot now (too little free memory), or empty
     QString loadProblem(const QString &slot, const QString &modelId);
     static void lowerPriority();   // the calling thread (and the threads it starts) at a low priority
@@ -84,7 +93,8 @@ public:
 #endif
     // The engine (loaded on first use); null with *error when it cannot be loaded.
     EngineInterface *engine(QString *error);
-    void touchEngine();            // after work: the models are freed after a while without work (1.4: 15 minutes, a setting)
+    void touchEngine();            // after work: the models are freed after a while without work (1.4: 15 minutes, a setting;
+                                   // 1.6 with a 1.3 host: the program's rule, this does nothing)
     int unloadMinutes() const;     // 1.4: 0 = never
     int unloadIntervalMs() const;
     static QString unloadMessage();   // 1.4: "Model unloaded, RAM usage minimal"
@@ -106,10 +116,12 @@ signals:
 private:
     void openWindow();
     void installTranslations();
+    EngineInterface *wrapped();
 
     qb::tools::ToolHost *m_host = nullptr;
     ModelStore m_store;
-    EngineInterface *m_engine = nullptr;
+    EngineInterface *m_engine = nullptr;           // the engine itself
+    RegisteredEngine *m_registered = nullptr;      // 1.6: with a 1.3 host, what engine() gives: it reports to the registry
     QString m_engineError;
     QTimer m_unloadTimer;
     QList<QPointer<Panel>> m_panels;
