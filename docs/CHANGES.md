@@ -7,6 +7,9 @@ Manual in the program) describes every function.
 
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
 
+- System test (no change for a writer): the cases of the new functions (handwriting, encryption, the model rule, the small
+  interface, Read Aloud, toolbar sizes, Cancel in Compile, the focus line, link contrast, the menu walk), four kill cases and
+  encrypted variants of the data-safety cases.
 - Build files only (no change for a writer): the encryption libraries are linked on Windows and Android by the shared build
   file too, and the Linux workflows fetch the encryption, AI engine and ONNX Runtime packs before they configure.
 - **0.99.0 is a security update on every system** (Linux, Windows and Android). The update window says "recommended

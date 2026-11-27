@@ -340,7 +340,7 @@ void caseSY02()
     settle(400);
     dismiss(waitBox(QStringLiteral("conflictNotice"), 1500));
     {
-        const QStringList kept = QDir(conflicts).entryList({QStringLiteral("project file*")}, QDir::Files);
+        const QStringList kept = QDir(conflicts).entryList({QStringLiteral("project file*"), QStringLiteral("*.qbx")}, QDir::Files);   // an encrypted project names the copy after the file
         check(!kept.isEmpty() && readText(conflicts + QLatin1Char('/') + kept.value(0)).contains(QLatin1String("renamed on the laptop"))
                   && readText(p->indexPath()).contains(QLatin1String("Scene 5 renamed here")),
               QStringLiteral("the project file: this computer's binder is saved, the laptop's version is kept as a copy"),
@@ -354,14 +354,16 @@ void caseSY02()
     const QString p4 = s4 ? p->docs()->textPath(s4->id) : QString();
     QTest::qWait(1100);
     writeText(p4, "Only the laptop changed scene four.\n");
+    const QByteArray rawLaptop = [&] { QFile rf(p4); return rf.open(QIODevice::ReadOnly) ? rf.readAll() : QByteArray(); }();
     typeAtEnd(w, QStringLiteral("Scene 7"), QStringLiteral(" Something else typed."));
     p->save(&err);
     settle(300);
     const QString openPath = p->indexPath();
     w->closeProject();
     settle(300);
-    check(readText(p4).contains(QLatin1String("Only the laptop changed")),
-          QStringLiteral("a text changed only on the laptop is not overwritten here, not even at closing"), readText(p4).left(120));
+    const QByteArray rawNow = [&] { QFile rf(p4); return rf.open(QIODevice::ReadOnly) ? rf.readAll() : QByteArray(); }();
+    check(rawNow == rawLaptop,   // the bytes the laptop wrote (encrypted in an encrypted project, which cannot be read once closed)
+          QStringLiteral("a text changed only on the laptop is not overwritten here, not even at closing"), QString::fromUtf8(rawNow.left(120)));
     w->openProject(openPath);
     settle(500);
     if (w->project()) {
