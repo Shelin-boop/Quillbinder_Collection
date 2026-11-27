@@ -178,6 +178,8 @@ public:
     // tables and pictures (0.62, TextEditorTables.cpp)
     QTextTable *currentTable() const;
     bool insertTableAtCursor(int rows, int columns, const tables::Spec &spec);
+    // 0.99.0 (UR-04): Ctrl+Return and Down in the last row leave the table below, Up in the first row above (true: handled)
+    bool tableLeaveKey(QKeyEvent *e);
     void tableInsertRows(bool below);
     void tableInsertColumns(bool right);
     void tableRemoveRows();

@@ -138,7 +138,7 @@ The window has three columns:
 | **Editor** (middle) | Shows what you selected in the binder: text, a corkboard of index cards, or an outline. |
 | **Inspector** (right) | Information about the current document: synopsis, notes, bookmarks, metadata, snapshots, and comments. |
 
-The first time {{APP}} starts on a screen narrower than 1600 px, the window opens maximized. The window's size, place and state (maximized or not) are saved a moment after each change, so a crash does not lose them. Hide the binder with **Ctrl+Alt+B** and the inspector with **Ctrl+Alt+I** to get more room. That is the window as long as it is wide; a window taller than wide arranges the same three areas differently (next section). The colors and fonts of all three, and of the corkboard, outliner, and composition mode, come from the theme (**View > Themes**) and can be changed area by area (section 16), also with a right-click on the area (**Appearance**). Every project keeps its own look.
+The first time {{APP}} starts on a screen narrower than 1600 px, the window opens maximized. The window's size, place and state (maximized or not) are saved a moment after each change, so a crash does not lose them. Hide the binder with **Ctrl+Alt+B** and the inspector with **Ctrl+Alt+I** to get more room. **The part with the keyboard.** A clear line of 2 px in the theme's highlight color runs around the part of the window that has the keyboard (binder, editor, corkboard, outliner, inspector, or the copyholder inside an editor), in every theme; there is one line at a time. That is the window as long as it is wide; a window taller than wide arranges the same three areas differently (next section). The colors and fonts of all three, and of the corkboard, outliner, and composition mode, come from the theme (**View > Themes**) and can be changed area by area (section 16), also with a right-click on the area (**Appearance**). Every project keeps its own look.
 
 The **toolbar** at the top holds, from left to right: the **View** button (binder, collections, inspector, layouts), new document (with a menu for folders, templates, and import), new folder, trash, **undo** and **redo**, the **search** button (project search; the arrow beside it lists the other search tools: Search in Document, Project Replace, Find by Formatting), the **quick search** field, the three view buttons (text, corkboard, outliner), project bookmarks, quick reference, comments and footnotes, compile, composition mode, the **microphone** of Speech Transcription (when that add-on is installed), and the inspector button. You decide what it holds (see "Toolbars of your own" below).
 
@@ -474,7 +474,7 @@ A click on commented text opens the inspector with that comment. **Alt+click** o
 
 ### Tables
 
-**Insert > Table…** asks for the number of rows and columns and the design, and puts the table at the cursor. Inside a table, **Tab** goes to the next cell (in the last cell it adds a row) and **Shift+Tab** goes back. **Format > Table**, also in the right-click menu inside a table, has the rest:
+**Insert > Table…** asks for the number of rows and columns and the design, and puts the table at the cursor. Inside a table, **Tab** goes to the next cell (in the last cell it adds a row) and **Shift+Tab** goes back. To leave a table with the keyboard, press **Ctrl+Return** (below the table) or **Down** in the last row (below it) or **Up** in the first row (above it); where a line more is in the cell, Up and Down first go through its lines. Where no paragraph is beside the table, {{APP}} makes an empty one there (one step for Undo). **Format > Table**, also in the right-click menu inside a table, has the rest:
 
 - **Insert Row Above / Below**, **Insert Column Left / Right**.
 - **Delete Rows** and **Delete Columns** (those of the selected cells, or of the cell with the cursor), **Delete Table**.
@@ -1116,7 +1116,7 @@ The compile window has **Compile For** at the top, the formats on the left, the 
 
 The font, the replacements, and the object sheets are kept with the project like the other choices (older versions of {{APP}} ignore them).
 
-Click **Compile…**, choose where to save, and the finished file opens in your word processor or reader if you like. **Save Settings** keeps the choices without compiling.
+Click **Compile…**, choose where to save, and the finished file opens in your word processor or reader if you like. A window shows the progress ("12 of 148": the documents done and their total) with a **Cancel** button; **Esc** does the same. Cancel stops after the document being made: no file is made, a file of that name from before stays as it was (the new file is written under a temporary name beside it and moved into place only when it is whole), and a converter such as LibreOffice or Pandoc is stopped. The message line under the binder says that the compile was cancelled. **Save Settings** keeps the choices without compiling.
 
 **Fonts and paragraph formatting set by hand.** With the format *Default (Editor Formatting)*, the compiled file keeps them all: fonts, sizes, colors, capitals, letter spacing, indents, spacing, line spacing, and tab stops. Every other format has a look of its own: it replaces font, size, indents, and spacing, and keeps text color, capitals, letter spacing, alignment, and tab stops.
 
@@ -1495,6 +1495,8 @@ The font and size of the text you write are not part of the theme: they belong t
 When you choose another theme while you have changes of your own, {{APP}} asks whether to keep them with the new theme or to use the theme as it is.
 
 Links in your text are stored with one blue; on dark paper they are shown in a lighter blue (**Main Editor > Links in the text**). Text you colored yourself keeps its color in every theme.
+
+**Contrast of links.** Every built-in theme keeps its link colors (**Links in the text**, **Links in the interface**) at a contrast of at least 4.5 : 1 (WCAG 2.x) on every paper and background it shows them on; a link color that would fall below is moved a little, toward darker or lighter, so also on the standard olive paper (it was 4.05 : 1 before 0.99.0). A color you chose yourself is never changed: when your own colors fall below 4.5 : 1 (links, or the text on its paper), **File > Options > Appearance** shows a note under the list of changes that names the worst pair and its ratio. The note blocks nothing.
 
 ### Profiles
 

@@ -538,3 +538,8 @@ add_executable(qb_v0950g_tests v0950g_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_
 target_include_directories(qb_v0950g_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins/tools)
 target_link_libraries(qb_v0950g_tests PRIVATE qbui Qt6::Test Qt6::Network)
 target_compile_definitions(qb_v0950g_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+
+# 0.99.0, item 118 (part d): the keys that leave a table, the line around the part with the keyboard, Compile can be cancelled, the link contrast of every built-in theme (xvfb-run -a ./qb_v0990d_tests /tmp/shots)
+add_executable(qb_v0990d_tests v0990d_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_SOURCE_DIR}/translations/translations.qrc)
+target_link_libraries(qb_v0990d_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0990d_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")

@@ -11,6 +11,9 @@
 #include "core/ItemIcons.h"
 #include "text/TextUtil.h"
 #include "ui/AppSettings.h"
+#include "ui/MainWindow.h"
+#include "core/SafeSave.h"
+#include <QCoreApplication>
 #include <QProgressDialog>
 #include <QToolButton>
 #include <QTextDocument>
@@ -59,33 +62,53 @@
 namespace qb {
 
 namespace {
-// 0.64.1: a modal progress window while compiling; compile::progress::tick() lands here
+// 0.64.1: a modal progress window while compiling; compile::progress::tick() lands here.
+// 0.99.0 (UR-09): with a Cancel button (and Esc) and the documents done of their total ("12 of 148"). Cancel stops after the
+// document that is being made; the caller looks at cancelled() and drops what was made.
 class CompileProgress
 {
 public:
     CompileProgress(QWidget *parent, const QString &label)
-        : m_dlg(label, QString(), 0, 1000, parent)
+        : m_dlg(label, tr("Cancel"), 0, 1000, parent)
+        , m_label(label)
         , m_scope([this](double share) {
             if (share >= 0)
                 m_dlg.setValue(qBound(0, int(share * 1000), 999));
-            QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+            const int total = compile::progress::documentsTotal();
+            if (total > 0 && !m_cancelled)
+                m_dlg.setLabelText(m_label + QLatin1Char('\n') + tr("%1 of %2").arg(compile::progress::documentsDone()).arg(total));
+            // input is let through (the Cancel button, Esc); the window is modal, so nothing else gets it
+            QCoreApplication::processEvents();
         })
     {
         m_dlg.setObjectName(QStringLiteral("compileProgress"));
         m_dlg.setWindowTitle(QObject::tr("Compile"));
         m_dlg.setWindowModality(Qt::WindowModal);
-        m_dlg.setCancelButton(nullptr);
         m_dlg.setMinimumDuration(0);
         m_dlg.setAutoClose(false);
         m_dlg.setAutoReset(false);
+        if (QPushButton *b = m_dlg.findChild<QPushButton *>())
+            b->setObjectName(QStringLiteral("compileCancel"));
+        auto stop = [this] {
+            m_cancelled = true;
+            compile::progress::requestCancel();
+            m_dlg.setLabelText(tr("Cancelling..."));
+        };
+        QObject::connect(&m_dlg, &QProgressDialog::canceled, &m_dlg, stop);
+        QObject::connect(&m_dlg, &QDialog::rejected, &m_dlg, stop); // Esc
         m_dlg.setValue(0);
         m_dlg.show();
         QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
     }
+    bool cancelled() const { return m_cancelled; }
+    QProgressDialog *dialog() { return &m_dlg; }
 
 private:
+    Q_DECLARE_TR_FUNCTIONS(CompileProgress)
     DocumentStore::Hold unloadHold; // 0.93.0: no document goes while this job runs events
     QProgressDialog m_dlg;
+    QString m_label;
+    bool m_cancelled = false;
     compile::progress::Scope m_scope;
 };
 } // namespace
@@ -990,6 +1013,60 @@ void CompileDialog::saveSettings()
     m_project->markIndexDirty();
 }
 
+CompileDialog::CompileResult CompileDialog::compileTo(const QString &path, QString *error)
+{
+    m_settings.exporterId = m_exporter->currentData().toString(); // (the output format as it stands in the window)
+    ExporterInterface *exp = PluginManager::instance().exporter(m_settings.exporterId);
+    if (!exp) {
+        if (error)
+            *error = tr("The selected output format is not available.");
+        return Failed;
+    }
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    bool ok = false;
+    bool cancelled = false;
+    QString err;
+    {
+        // 0.64.1: a progress window; the event loop runs in between, so the program's
+        // watchdog does not take a long compile for a freeze
+        CompileProgress busy(this, tr("Compiling..."));
+        AuthorInfo author{AppSettings::instance().forename, AppSettings::instance().surname};
+        Compiler c(m_project, currentFormat(), m_project->compile, author);
+        const Manuscript m = c.build();
+        if (!busy.cancelled()) {
+            // 0.99.0 (UR-09): written under a temporary name beside the file and moved into place only at the end, so a
+            // cancelled or failed compile never leaves half a file and never touches an older file of that name
+            const QFileInfo fi(path);
+            const QString part = QDir(fi.absolutePath())
+                                     .filePath(QStringLiteral(".%1.part-%2.%3")
+                                                   .arg(fi.completeBaseName(), QUuid::createUuid().toString(QUuid::Id128).left(8), fi.suffix()));
+            ok = exp->exportManuscript(m, part, &err);
+            if (ok && !busy.cancelled()) {
+                QString why;
+                if (!safesave::copyFile(part, path, &why)) {
+                    ok = false;
+                    err = tr("Cannot write %1: %2").arg(path, why);
+                }
+            }
+            QFile::remove(part);
+        }
+        cancelled = busy.cancelled();
+    }
+    QApplication::restoreOverrideCursor();
+    if (cancelled) {
+        // 0.99.0 (UR-09): said in the message line under the binder; no file was made
+        if (auto *mw = qobject_cast<MainWindow *>(parentWidget()))
+            mw->showMessage(tr("Compile cancelled. No file was made."));
+        return Cancelled;
+    }
+    if (!ok) {
+        if (error)
+            *error = err;
+        return Failed;
+    }
+    return Compiled;
+}
+
 void CompileDialog::compileNow()
 {
     saveSettings();
@@ -1016,20 +1093,11 @@ void CompileDialog::compileNow()
         m_project->markIndexDirty();
     }
     m_project->save();
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    bool ok = false;
     QString err;
-    {
-        // 0.64.1: a progress window; the event loop runs in between (no input), so the program's
-        // watchdog does not take a long compile for a freeze
-        CompileProgress busy(this, tr("Compiling..."));
-        AuthorInfo author{AppSettings::instance().forename, AppSettings::instance().surname};
-        Compiler c(m_project, currentFormat(), m_project->compile, author);
-        const Manuscript m = c.build();
-        ok = exp->exportManuscript(m, path, &err);
-    }
-    QApplication::restoreOverrideCursor();
-    if (!ok) {
+    const CompileResult res = compileTo(path, &err);
+    if (res == Cancelled)
+        return;
+    if (res == Failed) {
         QMessageBox::warning(this, tr("Compile"), tr("Compiling failed:\n%1").arg(err));
         return;
     }
@@ -1134,6 +1202,11 @@ void CompileDialog::preview()
     {
         CompileProgress busy(this, tr("Preparing the preview..."));
         const Manuscript m = manuscript();
+        if (busy.cancelled()) {
+            QApplication::restoreOverrideCursor(); // 0.99.0 (UR-09): no preview
+            delete tmp;
+            return;
+        }
         ok = writePdf(m, path, &err, &rep);
     }
     QApplication::restoreOverrideCursor();

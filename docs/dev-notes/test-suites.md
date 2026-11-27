@@ -2,6 +2,17 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## v0990d (0.99.0, item 118: tables, focus line, Cancel in Compile, link contrast)
+
+`qb_v0990d_tests`: the table keys (Down and Ctrl+Return in the last row, Up in the first row, in the middle, at the end and at
+the start of a text; a cell of several lines; Undo), the focus line on each part (binder, outliner, corkboard, editor,
+inspector, copyholder, never two at once; its place and its 2 px color in every built-in theme, with screenshots of a light
+and a dark one), the link contrast of every built-in theme on every paper and background (also with the standard olive paper),
+the note for own colors in Options > Appearance, and Compile: a project of 80 documents compiled to Word and cancelled by the
+button and by Esc after five documents (the older file untouched, no temporary file, "n of N" shown, the message line), a fake
+converter (`QB_PLUGIN_PATH` with a JSON definition, a script that waits and starts a helper) stopped with its helper (the
+check reads `/proc/<pid>/stat`; Linux only).
+
 ## v0950f and v0950g (0.95.0, item 102: eleven languages)
 
 `qb_v0950f_tests`: the language list (codes, own names, the machine-translation mark in the interface's language, the

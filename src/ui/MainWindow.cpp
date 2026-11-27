@@ -57,6 +57,7 @@
 #include "ui/BinderPanel.h"
 #include "ui/BookmarkList.h"
 #include "ui/CompileDialog.h"
+#include "ui/FocusLine.h"
 #include "ui/Corkboard.h"
 #include "ui/CrashDialogs.h"
 #include "ui/Commands.h"
@@ -552,6 +553,9 @@ MainWindow::MainWindow()
         if (m_active && m_active->hasCopyholder() && m_active->isAncestorOf(now))
             refreshInspector();
     });
+
+    // 0.99.0 (UR-04): the line around the part that has the keyboard
+    m_focusLine = new FocusLine(this, m_binder, m_inspector, [this] { return QList<EditorPane *>{m_panes[0], m_panes[1]}; });
 
     QSettings s;
     restoreGeometry(s.value(QStringLiteral("window/geometry")).toByteArray());

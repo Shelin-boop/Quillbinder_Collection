@@ -3,6 +3,24 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.99.0 beta
+
+Three usability points (Linux first).
+
+- **Tables no longer catch the keyboard**: **Ctrl+Return** and **Down** in the last row leave the table below it, **Up** in
+  the first row leaves it above (an empty paragraph is made there where none is beside the table; one step for Undo). In a
+  cell of several lines Up and Down first go through its lines.
+- **A clear line shows the part with the keyboard**: 2 px in the theme's highlight color around the binder, the editor, the
+  corkboard, the outliner, the inspector or the copyholder, in every theme, one at a time.
+- **Compile can be cancelled**: the progress window has a **Cancel** button (and **Esc**) and shows "12 of 148" (the
+  documents done and their total). Cancel stops after the document being made, makes no file, leaves an older file of that
+  name as it was (the output is written under a temporary name beside it and moved into place at the end), stops outside
+  converters (LibreOffice, Pandoc) with what they started, and says so in the message line.
+- **Link colors reach 4.5 : 1**: the links in the text and in the interface of every built-in theme, on every paper and
+  background the theme shows them on (the standard olive paper had 4.05 : 1). Own colors are never changed; **File >
+  Options > Appearance** shows a note, which blocks nothing, when own colors fall below 4.5 : 1 (it names the pair and the
+  ratio).
+
 ## 0.95.0 beta (2026-11-26)
 
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).

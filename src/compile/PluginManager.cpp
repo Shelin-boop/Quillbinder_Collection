@@ -20,6 +20,11 @@
 #include <QJsonDocument>
 #include <QPluginLoader>
 #include <QProcess>
+#ifdef Q_OS_UNIX
+#include <csignal>
+#include <sys/types.h>
+#include <unistd.h>
+#endif
 #include <QStandardPaths>
 #include <QTemporaryDir>
 
@@ -53,6 +58,18 @@ CommandExporter::CommandExporter(const QJsonObject &def, const QString &sourceFi
         }
     }
 }
+
+namespace {
+// 0.99.0 (UR-09): the program and what it started
+void killTree(QProcess &proc)
+{
+#ifdef Q_OS_UNIX
+    if (proc.processId() > 0)
+        ::kill(-pid_t(proc.processId()), SIGKILL);
+#endif
+    proc.kill();
+}
+} // namespace
 
 bool CommandExporter::exportManuscript(const Manuscript &m, const QString &path, QString *error)
 {
@@ -119,6 +136,10 @@ bool CommandExporter::exportManuscript(const Manuscript &m, const QString &path,
         env.remove(QStringLiteral("QT_QPA_PLATFORMTHEME"));
         proc.setProcessEnvironment(env);
     }
+#ifdef Q_OS_UNIX
+    // 0.99.0 (UR-09): a group of its own, so that Cancel can stop the program's helpers too (soffice starts soffice.bin)
+    proc.setChildProcessModifier([] { ::setsid(); });
+#endif
     proc.start(m_program, args);
     if (!proc.waitForStarted(10000)) {
         if (error)
@@ -131,8 +152,16 @@ bool CommandExporter::exportManuscript(const Manuscript &m, const QString &path,
     waited.start();
     while (!proc.waitForFinished(100) && proc.state() != QProcess::NotRunning) {
         progress::tick();
+        if (progress::cancelled()) {
+            // 0.99.0 (UR-09): Cancel stops the outside program (LibreOffice, Pandoc ...) at once
+            killTree(proc);
+            proc.waitForFinished(3000);
+            if (error)
+                *error = QObject::tr("Cancelled.");
+            return false;
+        }
         if (waited.elapsed() > qint64(m_timeout) * 1000) {
-            proc.kill();
+            killTree(proc);
             proc.waitForFinished(3000);
             if (error)
                 *error = QObject::tr("%1 did not finish in time.").arg(QFileInfo(m_program).fileName());

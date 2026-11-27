@@ -3,6 +3,7 @@
 #include "text/DisplayFormat.h"
 #include "ui/TableDialogs.h"
 
+#include <QKeyEvent>
 #include <QTextBlock>
 #include <QTextCursor>
 #include <QTextDocument>
@@ -111,6 +112,73 @@ void moveTextIntoFirstCell(QTextTable *t, int r0, int rn, int c0, int cn)
         }
 }
 } // namespace
+
+// 0.99.0 (UR-04): the keyboard is not caught in a table. Ctrl+Return and Down in the last row leave the table below it,
+// Up in the first row leaves it above; where the table ends (starts) the text, an empty paragraph is made there (one undo step).
+bool TextEditor::tableLeaveKey(QKeyEvent *e)
+{
+    if (isReadOnly() || plainNotes())
+        return false;
+    QTextTable *t = currentTable();
+    if (!t)
+        return false;
+    const Qt::KeyboardModifiers mods = e->modifiers() & ~Qt::KeypadModifier;
+    const bool isEnter = e->key() == Qt::Key_Return || e->key() == Qt::Key_Enter;
+    const bool ctrlEnter = isEnter && mods == Qt::ControlModifier;
+    const bool down = e->key() == Qt::Key_Down && mods == Qt::NoModifier;
+    const bool up = e->key() == Qt::Key_Up && mods == Qt::NoModifier;
+    if (!ctrlEnter && !down && !up)
+        return false;
+    QTextCursor c = textCursor();
+    if (c.hasSelection() && !ctrlEnter)
+        return false;
+    const QTextTableCell cell = t->cellAt(c);
+    if (!cell.isValid())
+        return false;
+    if (down || up) {
+        const bool edge = down ? cell.row() + cell.rowSpan() >= t->rows() : cell.row() == 0;
+        if (!edge)
+            return false;
+        // a line more in the cell: the cursor moves there as usual
+        QTextCursor n = c;
+        if (n.movePosition(down ? QTextCursor::Down : QTextCursor::Up) && n.position() != c.position()
+            && n.currentTable() == t && t->cellAt(n) == cell)
+            return false;
+    }
+    QTextDocument *doc = document();
+    const Formatting f = m_project ? m_project->formatting : Formatting();
+    QTextCursor to(doc);
+    to.beginEditBlock();
+    if (down || ctrlEnter) {
+        // the paragraph after the table; Qt keeps one there, but should none be (or another table follow at once), one is made
+        const int after = t->lastPosition() + 1;
+        bool have = after < doc->characterCount();
+        if (have) {
+            to.setPosition(after);
+            have = to.position() == after && !to.currentTable() && to.currentFrame() == t->parentFrame();
+        }
+        if (!have) {
+            to.setPosition(qMin(after, doc->characterCount() - 1));
+            to.insertBlock(display::normalBlockFormat(f));
+        }
+    } else {
+        const int before = t->firstPosition() - 1;
+        bool have = before >= 0;
+        if (have) {
+            to.setPosition(before);
+            have = to.position() == before && !to.currentTable() && to.currentFrame() == t->parentFrame();
+        }
+        if (!have) {
+            to.setPosition(qMax(0, before));
+            to.insertBlock(display::normalBlockFormat(f));
+            to.setPosition(qMax(0, before));
+        }
+    }
+    to.endEditBlock();
+    setTextCursor(to);
+    ensureCursorVisible();
+    return true;
+}
 
 void TextEditor::tableInsertRows(bool below)
 {

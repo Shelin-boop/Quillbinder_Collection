@@ -1337,6 +1337,12 @@ QWidget *OptionsDialog::appearanceSection()
     m_ownInfo->setObjectName(QStringLiteral("ownInfo"));
     m_ownInfo->setWordWrap(true);
     left->addWidget(m_ownInfo);
+    // 0.99.0 (UR-17): a note (it blocks nothing) when colors of the writer's own fall below 4.5 : 1
+    m_contrastNote = new QLabel(w);
+    m_contrastNote->setObjectName(QStringLiteral("contrastNote"));
+    m_contrastNote->setWordWrap(true);
+    m_contrastNote->hide();
+    left->addWidget(m_contrastNote);
     m_resetLook = new QPushButton(tr("Reset Colors and Fonts to the Theme"), w);
     m_resetLook->setObjectName(QStringLiteral("resetLook"));
     left->addWidget(m_resetLook, 0, Qt::AlignLeft);
@@ -1725,6 +1731,26 @@ void OptionsDialog::refreshLook()
                                 : tr("%1 of your own on top of the theme (shown in bold below).")
                                       .arg(text::plural(own, tr("change"), tr("changes"))));
     m_resetLook->setEnabled(own > 0);
+    // 0.99.0 (UR-17): the worst pair below 4.5 : 1 that has a color of the writer's own (WCAG 2.x); only a note
+    QSet<theme::Role> ownRoles;
+    for (auto it = m_ownColors.constBegin(); it != m_ownColors.constEnd(); ++it) {
+        theme::Role r;
+        if (theme::roleFromKey(it.key(), &r) && it.value().isValid())
+            ownRoles.insert(r);
+    }
+    const QList<theme::ContrastIssue> issues = theme::contrastIssues(m_shown, ownRoles);
+    if (issues.isEmpty()) {
+        m_contrastNote->clear();
+        m_contrastNote->hide();
+    } else {
+        const theme::ContrastIssue &w = issues.first();
+        QString note = tr("Note: your colors %1 on %2 have a contrast of %3 : 1. Text is easier to read from 4.5 : 1.")
+                           .arg(theme::roleLabel(w.fg), theme::roleLabel(w.bg), QLocale().toString(w.ratio, 'f', 2));
+        if (issues.size() > 1)
+            note += QLatin1Char(' ') + tr("%1 below it too.").arg(text::plural(int(issues.size()) - 1, tr("more pair"), tr("more pairs")));
+        m_contrastNote->setText(note);
+        m_contrastNote->show();
+    }
 }
 
 void OptionsDialog::selectTheme(const QString &id)

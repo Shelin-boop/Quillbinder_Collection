@@ -49,6 +49,7 @@ class UpdateChecker;
 class StylesPanel;
 class FormatFindWindow;
 class Inspector;
+class FocusLine;
 class TextEditor;
 class CompositionWindow;
 class QuickRefWindow;
@@ -144,6 +145,8 @@ public:
     // 0.70.0 (audit A S-01, B U-2, S-1): the state shown in the status bar ("Saved", "Not saved yet", "Not saved:
     // the last save failed at ..."); the time the saves began to fail (invalid: they work)
     QString saveStateText() const;
+    // 0.99.0 (UR-04): the line around the part that has the keyboard
+    FocusLine *focusLine() const { return m_focusLine; }
     EditorPane *editorPane(int i) const { return m_panes[i ? 1 : 0]; } // 0.93.0: the first (left or upper) editor, or the second
     QDateTime saveFailedSince() const { return m_saveFailedSince; }
     // 0.81.0 (audit of 0.80.0, S-08): the reason of a failed save in plain words
@@ -524,6 +527,7 @@ private:
     // 0.93.0: the window's connections to the application's focus signal; ~MainWindow cuts them first, as the focus
     // changes while the window's own widgets are deleted, and a window half gone must not answer
     QList<QMetaObject::Connection> m_focusLinks;
+    FocusLine *m_focusLine = nullptr; // 0.99.0 (UR-04)
     bool m_ending = false;
     // a long text field of the Objects sheet with the cursor (0.21.1): bold, italic,
     // underline, strikethrough, text color and highlight act on it

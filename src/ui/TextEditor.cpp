@@ -750,6 +750,8 @@ void TextEditor::keyPressEvent(QKeyEvent *e)
             return;
         }
     }
+    if (tableLeaveKey(e))
+        return;
     const bool script = scriptActive();
     if (script && scriptKeyPress(e))
         return;

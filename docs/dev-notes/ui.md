@@ -2,6 +2,29 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0 beta: table keys, the focus line, the contrast of links (item 118)
+
+- **Table keys** (`TextEditor::tableLeaveKey`, `TextEditorTables.cpp`, called from `keyPressEvent` right after the Tab
+  handling): Qt always keeps a paragraph before and after a table, so "leaving" is a move into it; a paragraph is made
+  (`insertBlock` at `lastPosition()+1` / before `firstPosition()`) only where none is there. Up/Down first try
+  `movePosition` inside the same cell, so a cell of several lines is walked through before the table is left.
+- **The focus line** (`FocusLine`, one child of the main window above everything, transparent for the mouse): it follows
+  `QApplication::focusChanged`, finds the part by walking up from the widget with the keyboard (`partOf`: binder,
+  inspector, then per editor pane copyholder, corkboard, outliner, text view) and draws 4 bars of 2 px inside the part's
+  rectangle in `Role::Highlight`. Parts are moved and resized: it listens to the window's and the part's Resize/Move/Show/Hide.
+  A field in a toolbar or a dialog has no part: no line.
+- **Contrast** (`Theme.cpp`): `resolvedColors` ends by `fitContrast` for the links that are not the writer's own: the
+  nearest color toward black or white that reaches 4.5 : 1 on all of `linkPairs()` of that link (the interface link on the
+  window, lists, binder, outliner, inspector, notes, tool tips and header bar; the text link on the editor paper). Papers
+  that never show links (cards, synopsis, composition) are not in the list; the notes' own paper counts for the interface
+  link only (the highlighter colors every text with `EditorLink`: a dark notes paper beside a light editor paper keeps the
+  text link of the editor paper). `contrastIssues` (own colors only, links and `textPairs()`) feeds the note in Appearance.
+- **Cancel in Compile** (`compile/Progress.*`, `CompileDialog.cpp`): `progress::documentDone(done, total)` is called at the
+  start of each document of `Compiler::build` (not held back to 100 ms) and lets the handler run events (all, so the Cancel
+  button and Esc arrive; the window is modal); `requestCancel/cancelled` is the flag, cleared when a `Scope` starts. The
+  output goes to `.<name>.part-<id>.<ext>` beside the file and `safesave::copyFile` puts it in place at the end;
+  `CommandExporter` starts its program in a group of its own (`setsid`) and kills the group on Cancel and on the timeout.
+
 ## 0.94.0 beta: one place per topic in the menus, Find Command, the first start's page, the application menu entry
 
 - **Menus** (`MainWindowBars.cpp`, `createMenus`): `m_layoutMenu` is now View > Layout (`paneLayoutMenu`): the positions
