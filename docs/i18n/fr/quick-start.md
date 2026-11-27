@@ -68,13 +68,13 @@
 ### Au-delà de l'ordinaire
 
 - **Cartes mentales** : un tableau de notes, de lignes et de flèches pour chaque document et chaque dossier (le bouton **Carte mentale** de l'inspecteur). **Aide > Aide sur les cartes mentales** explique leur fonctionnement.
-- **Objets** : personnages, lieux, environnements, points d'intérêt, météo et catégories de votre choix, chacun avec une fiche de champs et des liens entre eux (le bouton **Objets** de l'inspecteur, ou **Fenêtre > Objets…**).
+- **Objets** : personnages, lieux, environnements, points d'intérêt, météo et catégories de votre choix, chacun avec une fiche de champs et des liens entre eux (le bouton **Objets** de l'inspecteur, ou **Fenêtre > Objets**).
 - **Tableaux et images** : **Insertion > Tableau…** avec des modèles prêts à l'emploi ou les vôtres, **Format > Tableau** pour les lignes, les colonnes, les cellules fusionnées et les couleurs ; des images à côté du texte avec le texte qui les contourne, des légendes et des descriptions que les livres numériques et les fichiers Word conservent comme texte de remplacement (clic droit sur une image, **Image…**).
 - **La barre d'icônes** : jusqu'à dix icônes de documents, un clic chacune. **Documents > Changer l'icône** crée aussi des icônes à partir de texte ou de vos propres images.
 - **Un zoom par partie** : le classeur, les éditeurs, les parties de l'inspecteur, le tableau en liège, le plan et les cartes mentales gardent chacun leur propre zoom.
 - **Emplacements mémorisés** : chaque document s'ouvre là où vous avez laissé le curseur, y compris après la réouverture du projet.
 - **Polices** : **Format > Police > Installer des fichiers de police…** ajoute des polices sans quitter le logiciel.
-- **Sécurité** : enregistrement automatique même pendant que vous continuez à taper, sauvegardes, copie de secours du fichier de projet, rapports de plantage et de blocage (**Aide > Dépannage et développement > Rapports de plantage…**), et **Aide > Dépannage et développement > Informations système…**.
+- **Sécurité** : enregistrement automatique même pendant que vous continuez à taper, sauvegardes, copie de secours du fichier de projet, rapports de plantage et de blocage (**Aide > Dépannage et développement > Rapports de plantage…**), et **Aide > Dépannage et développement > Informations système**.
 
 ### Mises à jour et modules
 
@@ -88,5 +88,5 @@ La **version complète** de l'AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) co
 - **Aide > Projet de bienvenue** : un court projet qui présente les fonctions énumérées sous « Au-delà de l'ordinaire » et vous permet de les essayer.
 - **Aide > Aide sur les cartes mentales** : notes, lignes, flèches et formes, avec des images et un tableau d'entraînement.
 - **Aide > Liste de tous les espaces réservés** et **Aide > Raccourcis clavier…**
-- **Aide > Licences des composants tiers…** : les licences des éléments d'autres projets que {{APP}} utilise.
+- **Aide > Licences des composants tiers** : les licences des éléments d'autres projets que {{APP}} utilise.
 - **Aide > À propos de {{APP}}** : la version et la licence. {{APP}} est un logiciel libre sous licence Apache 2.0.
