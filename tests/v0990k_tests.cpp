@@ -460,6 +460,13 @@ int main(int argc, char **argv)
             const auto n = kf::importKeyFile(ring3, QByteArray("this is not a key"), QByteArray());
             check(!n.ok && !n.error.isEmpty(), QStringLiteral("Import a Key File: a file that is no key is refused"), n.error);
         }
+        {
+            // L5: the recovery key's secret part is not "your key": refused with a sentence, nothing taken
+            qc::KeyRing ring4;
+            const auto rs = kf::importKeyFile(ring4, readAll(madeFolder + QStringLiteral("/recovery-key-secret.asc")), g_recovery.toUtf8());
+            check(!rs.ok && rs.mine.isEmpty() && !rs.error.isEmpty() && ring4.keys().isEmpty(),
+                  QStringLiteral("Import a Key File: the recovery key's secret file is refused as 'your key'"), rs.error);
+        }
     }
 
     // ---------------------------------------------------------------- Export Keys

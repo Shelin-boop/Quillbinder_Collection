@@ -471,7 +471,15 @@ bool KeyWizard::commitToDevice()
     }
     dev.importKeys(myPublic);
     QString err;
-    dev.save(qc::KeyRing::deviceDir(), &err);
+    // 0.99.0 (encryption review L4): keys that could not be written to this device's key ring would be gone at the next start
+    if (!dev.save(qc::KeyRing::deviceDir(), &err)) {
+        encui::notifyBox(this, tr("Create Keys"),
+                         tr("The keys could not be saved on this device (%1). Nothing was changed; check the free space and the "
+                            "rights of the program's data folder, and try again.")
+                             .arg(err),
+                         true);
+        return false;
+    }
     kf::setRoles(m_keys);
     dev.unlock(m_keys.mine, m_myPass);
     auto *remember = findChild<QCheckBox *>(QStringLiteral("wizRemember"));
@@ -654,7 +662,8 @@ void EncryptionPage::refresh()
         reasons << tr("Create or import keys first: the switches need your key and the recovery key.");
     if (scriv)
         reasons << tr("A project in Scrivener's format cannot be encrypted: Scrivener could not open its files. Its backups can be "
-                      "encrypted.");
+                      "encrypted; that switch belongs to each computer, so switch it on on every computer that makes backups of "
+                      "the project.");
     m_backups->setEnabled(open && keysReady);
     m_project->setEnabled(open && keysReady && !scriv);
     m_reason->setText(reasons.join(QLatin1Char(' ')));
@@ -709,8 +718,12 @@ void EncryptionPage::importKeys()
         roles.recovery = r.recovery;
     kf::setRoles(roles);
     QString err;
-    ring.save(qc::KeyRing::deviceDir(), &err);
+    const bool savedRing = ring.save(qc::KeyRing::deviceDir(), &err);
     QString text = tr("Your key is on this device now.");
+    if (!savedRing)
+        text = tr("Your key is on this device for this session only: it could not be saved (%1), so it will be gone at the next "
+                  "start. Check the free space and the rights of the program's data folder, then import it again.")
+                   .arg(err);
     if (a.remember) {
         const QString why = encui::rememberPassphrase(r.mine, pass);
         if (!why.isEmpty())
@@ -777,7 +790,10 @@ void EncryptionPage::importKeyFile()
     }
     kf::setRoles(roles);
     QString err;
-    ring.save(qc::KeyRing::deviceDir(), &err);
+    if (!ring.save(qc::KeyRing::deviceDir(), &err))
+        text = tr("The key is on this device for this session only: it could not be saved (%1), so it will be gone at the next "
+                  "start. Check the free space and the rights of the program's data folder, then import it again.")
+                   .arg(err);
     if (!r.notes.isEmpty())
         text += QLatin1Char('\n') + r.notes.join(QLatin1Char('\n'));
     say(tr("Import a Key File"), text);

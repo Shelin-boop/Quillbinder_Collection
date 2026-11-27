@@ -1,4 +1,5 @@
 #include "compile/PluginManager.h"
+#include "core/crypto/ProjectCrypto.h"
 #include "compile/Progress.h"
 #include "core/SafeSave.h"
 
@@ -78,8 +79,11 @@ bool CommandExporter::exportManuscript(const Manuscript &m, const QString &path,
             *error = QObject::tr("This format needs the program \"%1\", which is not installed.").arg(m_requires);
         return false;
     }
-    QTemporaryDir tmp;
-    if (!tmp.isValid()) {
+    // 0.99.0 (encryption review M2): with an encrypted project open, the manuscript is written where the vault keeps its
+    // decrypted copies (RAM on most systems), not in the system's temporary folder
+    const QString tempBase = crypto::tempFolderBase();
+    QTemporaryDir tmp(tempBase.isEmpty() ? QString() : tempBase + QStringLiteral("/qb-export-XXXXXX"));
+    if (tempBase.isEmpty() || !tmp.isValid()) {
         if (error)
             *error = QObject::tr("Cannot create a temporary folder.");
         return false;

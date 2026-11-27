@@ -326,6 +326,12 @@ void sweepWork(const QString &work)
     for (const QFileInfo &fi : parts)
         if (fi.lastModified() < limit)
             QFile::remove(fi.absoluteFilePath());
+    // 0.99.0 (encryption review L7): the plain ZIP file of a restore of an encrypted backup (restore-<id>.zip, in the work
+    // directory above this folder) that a crash left; the same hour as above
+    const QFileInfoList restores = QDir(workDirectory()).entryInfoList({QStringLiteral("restore-*.zip")}, QDir::Files);
+    for (const QFileInfo &fi : restores)
+        if (fi.lastModified() < limit)
+            QFile::remove(fi.absoluteFilePath());
 }
 } // namespace
 
@@ -585,6 +591,16 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
     // (0.90.3: an empty *error after a backup means "complete": a text left in it from an earlier step is not kept)
     if (error)
         error->clear();
+    // 0.99.0 (encryption review M3): a marker that cannot be read is not "all off": no plain backup of a project whose
+    // files or backups may be encrypted
+    {
+        const QString problem = crypto::markerProblem(p->folderPath());
+        if (!problem.isEmpty()) {
+            if (error)
+                *error = problem + QLatin1Char(' ') + QObject::tr("No backup was made.");
+            return false;
+        }
+    }
     // 0.91.0: every backup goes straight into the folder given (see Backup.h); the backups of this project are those
     // that carry its title, and only they are counted and cleaned up
     const QString dir = dirIn.isEmpty() ? defaultDirectory() : dirIn;
@@ -762,6 +778,8 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
                 else if (back != plainSha)
                     checkWhy = QObject::tr("the encrypted backup, decrypted again, differs from the backup");
             } else if (!crypto::isWholeMessage(sealedPart)) {
+                // (0.99.0, L6: this is all the check that a project of switch 1 only can make when its key is not unlocked on
+                // this computer: the message's packets are whole, but it is not decrypted again; the manual says so)
                 checkWhy = QObject::tr("the encrypted backup is not whole");
             }
             if (!checkWhy.isEmpty()) {

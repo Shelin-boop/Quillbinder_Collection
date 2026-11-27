@@ -3997,9 +3997,15 @@ void MainWindow::saveForTermination()
             if (!rep.dir.isEmpty())
                 std::fprintf(stderr, "%s: %d of %d files are in %s%s\n", QB_APP_NAME, rep.tally.written,
                              rep.tally.wanted, qPrintable(rep.dir), rep.complete() ? "" : " (INCOMPLETE)");
-            writeEmergencyNotice(tr("When the program was ended (by logging out, shutting down or a command), the "
-                                    "project \"%1\" could not be saved: %2")
-                                     .arg(m_project->title(), err),
+            // 0.99.0: in an encrypted project the notice (a plain file) names neither the title nor the error, which may
+            // name documents
+            writeEmergencyNotice(m_project->isEncrypted()
+                                     ? tr("When the program was ended (by logging out, shutting down or a command), an "
+                                          "encrypted project could not be saved. (Its name and the reason are left out of "
+                                          "this note, because it is a plain file.)")
+                                     : tr("When the program was ended (by logging out, shutting down or a command), the "
+                                          "project \"%1\" could not be saved: %2")
+                                           .arg(m_project->title(), err),
                                  rep);
         }
         // 0.81.0 (audit of 0.80.0, S-03): no time for the backup of the closing here; the next opening makes it

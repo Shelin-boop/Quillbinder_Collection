@@ -140,6 +140,11 @@ New functions and fixes (Linux first).
   opens. Pictures, PDF files and media are shown from decrypted copies in a private folder in memory, removed when the project
   closes.
 
+- **Encryption: the findings of the review** (item 113). Save As and Save a Copy of an encrypted project stay encrypted; a computer
+  without both public keys, a marker that cannot be read, or a conversion while another computer has the project open are
+  refused; no handwriting learning, plain temporary files or title in a conflict copy, interrupted-save copy or emergency
+  copy while an encrypted project is open (they carry the document's number); smaller fixes and manual sentences (Encryption
+  section of the manual).
 - **Encryption: the key wizard, Import Keys, Export Keys and File > Options > Encryption** (item 113, part 3). **Create
   Keys** proposes six random words as the passphrase (an own one is allowed, a weak one refused), makes the writer's key and
   the recovery key and writes the folder "Quillbinder Keys yyyy-mm-dd" at a place the writer picks (a USB stick; the project,

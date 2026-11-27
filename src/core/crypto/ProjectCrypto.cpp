@@ -1,6 +1,7 @@
 // The encrypted project and the encrypted backups (0.99.0, item 113, part 2): see ProjectCrypto.h.
 #include "core/crypto/ProjectCrypto.h"
 
+#include "core/Platform.h"
 #include "core/Project.h"
 #include "core/SafeSave.h"
 #include "core/SaveBatch.h"
@@ -8,6 +9,8 @@
 #include "core/TestSwitches.h"
 #include "core/crypto/KeyStore.h"
 #include "core/crypto/Vault.h"
+
+#include "AppInfo.h"
 
 #include <QCoreApplication>
 #include <QDateTime>
@@ -240,6 +243,7 @@ ProjectSettings settingsOf(const QString &projectFolder, QString *error)
     if (!f.exists())
         return s;
     if (!f.open(QIODevice::ReadOnly)) {
+        s.unreadable = true;
         if (error)
             *error = f.errorString();
         return s;
@@ -248,6 +252,7 @@ ProjectSettings settingsOf(const QString &projectFolder, QString *error)
     const QJsonDocument d = QJsonDocument::fromJson(f.read(64 * 1024), &pe);
     const QJsonObject o = d.object();
     if (pe.error != QJsonParseError::NoError || o.value(QStringLiteral("format")).toString() != QLatin1String(kFormat)) {
+        s.unreadable = true;
         if (error)
             *error = say("%1 is not Quillbinder's encryption marker.").arg(QDir::toNativeSeparators(f.fileName()));
         return s;
@@ -263,6 +268,48 @@ ProjectSettings settingsOf(const QString &projectFolder, QString *error)
     s.convertingSince = o.value(QStringLiteral("convertingSince")).toString();
     return s;
 }
+
+QString markerProblem(const QString &projectFolder)
+{
+    const ProjectSettings s = settingsOf(projectFolder);
+    if (s.unreadable)
+        return say("The file %1 of this project, which says whether its files and backups are encrypted, cannot be read. "
+                   "Nothing was changed, and no backup is made, until it is back (an earlier version of it may be in a "
+                   "backup or in your sync program's version history).")
+            .arg(markerName());
+    if (s.isEncryptedFolder()) {
+        if (!s.recipients.isComplete())
+            return say("The file %1 of this project does not name both keys of the project. Nothing was changed, and no backup "
+                       "is made, until it is back (an earlier version of it may be in a backup or in your sync program's "
+                       "version history).")
+                .arg(markerName());
+        return QString();
+    }
+    // no switch on: an encrypted project file says that the marker went missing
+    const QStringList files = QDir(projectFolder).entryList({QStringLiteral("*") + QLatin1String(QB_PROJECT_FILE_SUFFIX)}, QDir::Files);
+    for (const QString &f : files) {
+        QFile in(QDir(projectFolder).filePath(f));
+        if (in.open(QIODevice::ReadOnly) && vault::isSealedData(in.read(64)))
+            return say("The project file of this project is encrypted, but its file %1 is missing. Nothing was changed, and "
+                       "no backup is made, until it is back (an earlier version of it may be in a backup or in your sync "
+                       "program's version history).")
+                .arg(markerName());
+    }
+    return QString();
+}
+
+bool unlockedHere(const Recipients &recipients)
+{
+    if (!available() || !recipients.isComplete())
+        return false;
+    std::lock_guard<std::recursive_mutex> g(deviceRingLock());
+    for (const QString &f : recipients.list())
+        if (KeyRing::device().hasSecret(f) && KeyRing::device().isUnlocked(f))
+            return true;
+    return false;
+}
+
+QString tempFolderBase() { return vault::active() ? vault::privateFolder() : QDir::tempPath(); }
 
 // ---- switch 1
 
@@ -331,6 +378,19 @@ bool canChangeProjectEncryption(const Project *p, QString *reason)
             *reason = say("A project in Scrivener format cannot be encrypted: Scrivener cannot read encrypted files. Its "
                           "backups can be encrypted.");
         return false;
+    }
+    // 0.99.0 (encryption review M1): another computer or window that has the project open would write its files in the old
+    // way while they are converted (a late file would lie in a folder no longer in the vault)
+    {
+        const syncsafe::LockState st = syncsafe::judge(syncsafe::readLock(p->settingsDir() + QStringLiteral("/lock")),
+                                                       syncsafe::staleAfterSeconds(), platform::processAlive);
+        if (st == syncsafe::LockState::OtherDevice || st == syncsafe::LockState::OtherWindow) {
+            if (reason)
+                *reason = say("Another computer or another Quillbinder window has this project open. Close it there first: its "
+                              "saves would otherwise reach the project's folder in the old way while its files are "
+                              "converted.");
+            return false;
+        }
     }
     return !journalWaiting(p->folderPath(), reason);
 }
@@ -420,6 +480,8 @@ bool finishConversion(const QString &folder, const Progress &progress, QString *
 Access accessFor(const QString &projectFolder, QString *fingerprint)
 {
     const ProjectSettings s = settingsOf(projectFolder);
+    if (!markerProblem(projectFolder).isEmpty())
+        return Access::MarkerDamaged;
     if (!s.isEncryptedFolder())
         return Access::Plain;
     if (fingerprint)
@@ -428,12 +490,28 @@ Access accessFor(const QString &projectFolder, QString *fingerprint)
         return Access::Unavailable;
     std::lock_guard<std::recursive_mutex> g(deviceRingLock());
     KeyRing &ring = KeyRing::device();
+    // 0.99.0 (encryption review H3): every write is encrypted to both keys, so both public keys must be here; a device
+    // with only its secret key would open the project and fail at every save
+    QString missing;
+    for (const QString &f : s.recipients.list())
+        if (!ring.contains(f)) {
+            missing = f;
+            break;
+        }
+    auto ready = [&] {
+        if (!missing.isEmpty()) {
+            if (fingerprint)
+                *fingerprint = missing;
+            return Access::PublicKeyMissing;
+        }
+        return Access::Ready;
+    };
     QStringList locked;
     for (const QString &f : s.recipients.list()) {
         if (f.isEmpty() || !ring.hasSecret(f))
             continue;
         if (ring.isUnlocked(f))
-            return Access::Ready;
+            return ready();
         locked << f;
     }
     // the passphrase kept on this device (a wrong one, or a store that refused, is not tried again in this session; a
@@ -447,7 +525,7 @@ Access accessFor(const QString &projectFolder, QString *fingerprint)
             const Error e = ring.unlock(f, pass);
             wipe(pass);
             if (e == Error::None)
-                return Access::Ready;
+                return ready();
             keyStoreTried().insert(f);
         } else if (st == KeyStore::Status::Denied) {
             keyStoreTried().insert(f);
@@ -494,6 +572,21 @@ QString accessText(Access access, const QString &projectFolder)
     case Access::Unavailable:
         return say("This project is encrypted, and this build of Quillbinder has no encryption. Nothing in the project was "
                    "changed.");
+    case Access::PublicKeyMissing: {
+        QStringList absent;
+        {
+            std::lock_guard<std::recursive_mutex> g(deviceRingLock());
+            for (const QString &f : s.recipients.list())
+                if (!KeyRing::device().contains(f))
+                    absent << groupedFingerprint(f);
+        }
+        return say("This project is encrypted to two keys, and the public part of %1 is not on this device, so nothing could be "
+                   "saved in it here. Import it (the file recovery-key-public.asc or my-key-public.asc of your keys folder) to "
+                   "open the project here. Nothing in the project was changed.")
+            .arg(absent.join(QStringLiteral(", ")));
+    }
+    case Access::MarkerDamaged:
+        return markerProblem(projectFolder);
     }
     return QString();
 }

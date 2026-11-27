@@ -143,7 +143,10 @@ names, made with the key locked, the newest-N rule with plain ones, a cut copy, 
 opening a backup and a text, an encrypted project's backup restored encrypted, a Scrivener project's); the window (the unlock
 dialog with a wrong and a right passphrase, Save a Copy as Scrivener refused, `changeProjectEncryption` off and on, File >
 Options > Encryption's switches, Restore asking for the passphrase); and the speed figures of the autosave with and without
-encryption (the welcome project and a large project of 1000 documents; `QB_MEASURE=1` runs only these). Screenshots
+encryption (the welcome project and a large project of 1000 documents; `QB_MEASURE=1` runs only these); and the review's
+findings (`reviewFindings`, alone with `QB_REVIEW_ONLY=1`: Save As and Save a Copy stay encrypted, a missing public key, a stray
+encrypted file after a decryption, another computer's lock, a damaged or missing marker (no opening, no backup), damaged first
+bytes, the restore's leftover ZIP file, and no title in a conflict copy, an interrupted-save copy or the emergency copy). Screenshots
 `v0990f-*.png`.
 
 ## v0990k (0.99.0, item 113, part 3: the key wizard, the key folder, Import Keys, export, File > Options > Encryption)

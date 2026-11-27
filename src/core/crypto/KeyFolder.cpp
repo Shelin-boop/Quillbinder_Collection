@@ -374,6 +374,17 @@ Imported importKeyFile(KeyRing &ring, const QByteArray &data, const QByteArray &
     const ImportReport pr = probe.importKeys(data);
     if (pr.imported.isEmpty())
         return refuse(pr, errorText(Error::NotAKey));
+    // 0.99.0 (encryption review L5): the recovery key's secret part (recovery-key-secret.asc, kept on paper and on the second
+    // copy) is not "your key": taking it would make the recovery key the writer's key on this device
+    if (!pr.withSecret.isEmpty()) {
+        for (const KeyInfo &k : probe.keys())
+            if (k.fingerprint == pr.withSecret.first() && k.userId == QLatin1String("Quillbinder recovery key")) {
+                out.code = Error::ForeignKey;
+                out.error = say("This is the secret part of the recovery key. It is not your key and is not kept on a device: use "
+                                "your key's file (my-key-secret.asc) instead. Nothing was imported.");
+                return out;
+            }
+    }
     if (!pr.withSecret.isEmpty()) {
         const Error u = probe.unlock(pr.withSecret.first(), passphrase);
         if (u != Error::None) {

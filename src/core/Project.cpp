@@ -39,6 +39,18 @@
 #include <cmath>
 
 namespace qb {
+namespace {
+// 0.99.0 (encryption review M1): the folders of projects with plain files and encrypted backups that were added to the
+// vault only to read a late encrypted file (not written encrypted); removed with their project
+QHash<const Project *, QString> &strayVault()
+{
+    static QHash<const Project *, QString> h;
+    return h;
+}
+} // namespace
+} // namespace qb
+
+namespace qb {
 
 // ---------------------------------------------------------------- types
 
@@ -138,6 +150,11 @@ Project::~Project()
     // 0.99.0: an encrypted project's folder leaves the vault (and the decrypted copies of its media go)
     if (!m_vaultFolder.isEmpty())
         vault::remove(m_vaultFolder);
+    {
+        const auto stray = strayVault().take(this);
+        if (!stray.isEmpty())
+            vault::remove(stray);
+    }
 }
 
 QString Project::resolveProjectFile(const QString &path)
@@ -233,14 +250,16 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
     // read decrypts, every write encrypts.
     {
         const crypto::ProjectSettings cs = crypto::settingsOf(p->m_folder);
-        if (cs.isEncryptedFolder()) {
-            const crypto::Access a = crypto::accessFor(p->m_folder);
-            if (a != crypto::Access::Ready) {
-                if (error)
-                    *error = a == crypto::Access::NeedsPassphrase ? crypto::errorText(crypto::Error::Locked)
-                                                                  : crypto::accessText(a, p->m_folder);
-                return nullptr;
-            }
+        // (0.99.0, encryption review H3 and M3: also refused when a public key is missing, when the marker is damaged, and
+        // when it is missing beside an encrypted project file)
+        const crypto::Access a = crypto::accessFor(p->m_folder);
+        if (a != crypto::Access::Plain && a != crypto::Access::Ready) {
+            if (error)
+                *error = a == crypto::Access::NeedsPassphrase ? crypto::errorText(crypto::Error::Locked)
+                                                              : crypto::accessText(a, p->m_folder);
+            return nullptr;
+        }
+        if (a == crypto::Access::Ready && cs.isEncryptedFolder()) {
             vault::add(p->m_folder, cs.recipients.list(), vault::projectPlainNames(),
                        cs.converting != QLatin1String("decrypt"));
             p->m_vaultFolder = p->m_folder;
@@ -253,6 +272,12 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
                                               "encrypted. It is finished at the next opening.");
                 p->openNotice = p->openNotice.isEmpty() ? told : p->openNotice + QStringLiteral("\n\n") + told;
             }
+        } else if (cs.encryptedBackups && cs.recipients.isComplete() && crypto::unlockedHere(cs.recipients)) {
+            // 0.99.0 (encryption review M1): a project whose files are plain but whose backups are encrypted (switch 1 only,
+            // or its encryption was just turned off): a late encrypted file that another computer wrote is read decrypted;
+            // what is written stays plain
+            vault::add(p->m_folder, cs.recipients.list(), vault::projectPlainNames(), false);
+            strayVault().insert(p.get(), p->m_folder);
         }
     }
     // 0.65.0 (audit F19): a save that was cut off is finished, or dropped as a whole, before anything is read
@@ -1009,7 +1034,10 @@ EmergencyReport Project::makeEmergencyCopy(const QString &parent)
     }
     const QString base = parent.isEmpty() ? dataDir() + QStringLiteral("/Emergency") : parent;
     // 0.93.0: a folder that is there is never used again (its files would be replaced): the new one gets a number
-    const QString name = text::safeFileName(m_title) + QStringLiteral(" ")
+    // 0.99.0: an encrypted project's emergency copy hides the titles: the folder is named by its date, the files by the
+    // documents' numbers, and the README names no title
+    const bool hide = isEncrypted();
+    const QString name = (hide ? QString() : text::safeFileName(m_title) + QStringLiteral(" "))
                          + QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd HH-mm-ss"));
     QString dir;
     if (QDir().mkpath(base)) {
@@ -1050,7 +1078,7 @@ EmergencyReport Project::makeEmergencyCopy(const QString &parent)
     // changes of the binder are not lost
     // The copy must not open as a project (and must never share the original's backup ID): the file's name ends in ".copy"
     const QString indexName = QFileInfo(m_indexFile).fileName();
-    const QString copyName = indexName + QStringLiteral(".copy");
+    const QString copyName = (hide ? QStringLiteral("project-file") : indexName) + QStringLiteral(".copy");
     {
         QString why;
         const bool ok = safesave::writeFile(QDir(dir).filePath(copyName), indexBytes(), &why);
@@ -1062,21 +1090,38 @@ EmergencyReport Project::makeEmergencyCopy(const QString &parent)
         rep.dir.clear();
         return rep;
     }
-    QString readme = tr("The project \"%1\" (%2) could not be saved. This folder holds what was not saved yet: texts and "
-                        "notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the "
-                        "folder \"objects\") and the project file as it was in memory (the binder, titles and labels), as "
-                        "%4. Copy what you need back into the project.\n\n")
-                         .arg(m_title, QDir::toNativeSeparators(displayFile()), QLatin1String(QB_APP_NAME), copyName);
-    if (scrivenerPath.isEmpty())
-        readme += tr("To put the project file back: close the project, rename the project file %1 in the project folder %2 "
-                     "(so that it is kept), copy the file %3 of this folder there and rename it to %1. Then open the "
-                     "project again. (The copy's name ends in .copy so that this folder is not taken for a project.)\n\n")
-                      .arg(indexName, QDir::toNativeSeparators(m_folder), copyName);
+    QString readme;
+    if (hide)
+        readme = tr("The project could not be saved. This folder holds what was not saved yet: texts and notes as RTF files "
+                    "(named by the number of the document: the folder content/<number> of the project holds the "
+                    "document), mind map boards, changed objects (in the folder \"objects\") and the project file as it was "
+                    "in memory (the binder, titles and labels), as %1. Copy what you need back into the project. (Titles and "
+                    "names are left out of this note and of the names in this folder, because the project is encrypted.)\n\n")
+                     .arg(copyName);
     else
+        readme = tr("The project \"%1\" (%2) could not be saved. This folder holds what was not saved yet: texts and "
+                    "notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the "
+                    "folder \"objects\") and the project file as it was in memory (the binder, titles and labels), as "
+                    "%4. Copy what you need back into the project.\n\n")
+                     .arg(m_title, QDir::toNativeSeparators(displayFile()), QLatin1String(QB_APP_NAME), copyName);
+    if (scrivenerPath.isEmpty()) {
+        if (hide)
+            readme += tr("To put the project file back: close the project, rename the project file in the project folder (so "
+                         "that it is kept), copy the file %1 of this folder there and give it the old file's name. Then "
+                         "open the project again. (The copy's name ends in .copy so that this folder is not taken for a "
+                         "project.)\n\n")
+                          .arg(copyName);
+        else
+            readme += tr("To put the project file back: close the project, rename the project file %1 in the project folder "
+                         "%2 (so that it is kept), copy the file %3 of this folder there and rename it to %1. Then open the "
+                         "project again. (The copy's name ends in .copy so that this folder is not taken for a project.)\n\n")
+                          .arg(indexName, QDir::toNativeSeparators(m_folder), copyName);
+    } else {
         readme += tr("The project is in Scrivener format: the file %1 belongs to its working copy (%2), not to the .scriv "
                      "folder. The binder is written into the .scriv with the next save that works; do not copy this file "
                      "over anything by hand.\n\n")
                       .arg(copyName, QDir::toNativeSeparators(m_folder));
+    }
     if (!m_vaultRecipients.isEmpty())
         readme += tr("The project is encrypted, and so are the files of this copy (OpenPGP, to your key and the recovery "
                      "key; only this note is plain): Kleopatra, Gpg4win or GnuPG decrypt them with your key.\n\n");

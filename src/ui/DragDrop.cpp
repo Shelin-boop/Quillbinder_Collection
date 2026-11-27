@@ -1,4 +1,5 @@
 #include "ui/DragDrop.h"
+#include "core/crypto/ProjectCrypto.h"
 #include "core/SafeSave.h"
 
 #include "core/Snapshots.h"
@@ -474,7 +475,12 @@ QList<QUrl> exportForDrag(Project *project, const QStringList &ids)
     QList<QUrl> urls;
     if (!project)
         return urls;
-    auto dir = std::make_unique<QTemporaryDir>(QDir::tempPath() + QLatin1String("/" QB_APP_NAME "-XXXXXX"));
+    // 0.99.0 (encryption review M2): with an encrypted project open, in the vault's private folder (RAM on most systems; removed
+    // with the program's end), not in the system's temporary folder
+    const QString tempBase = crypto::tempFolderBase();
+    if (tempBase.isEmpty())
+        return urls;
+    auto dir = std::make_unique<QTemporaryDir>(tempBase + QLatin1String("/" QB_APP_NAME "-XXXXXX"));
     if (!dir->isValid())
         return urls;
     const AppSettings &s = AppSettings::instance();
@@ -594,9 +600,16 @@ QString imageFileFromMime(const QMimeData *data, Project *project)
     if (data->hasImage()) {
         const QImage img = qvariant_cast<QImage>(data->imageData());
         if (!img.isNull()) {
-            static QTemporaryDir tmp;
+            // (0.99.0, encryption review M2: with an encrypted project open, in the vault's private folder; one folder per
+            // run, made when the first picture is dropped)
+            static std::unique_ptr<QTemporaryDir> tmp;
             static int n = 0;
-            const QString path = tmp.filePath(QStringLiteral("dropped-%1.png").arg(++n));
+            const QString tempBase = crypto::tempFolderBase();
+            if (tempBase.isEmpty())
+                return QString();
+            if (!tmp || !tmp->isValid() || !tmp->path().startsWith(tempBase))
+                tmp = std::make_unique<QTemporaryDir>(tempBase + QLatin1String("/" QB_APP_NAME "-drop-XXXXXX"));
+            const QString path = tmp->filePath(QStringLiteral("dropped-%1.png").arg(++n));
             if (img.save(path))
                 return path;
         }
