@@ -224,6 +224,9 @@ private:
     QCheckBox *m_projectFirst = nullptr;
     QComboBox *m_language = nullptr;
     QCheckBox *m_groupDigits = nullptr;
+    QSpinBox *m_aiThreads = nullptr;      // 0.99.0: General > AI Models
+    QSpinBox *m_aiUnload = nullptr;
+    QLabel *m_aiMemory = nullptr;
     QComboBox *m_scopeCombo = nullptr;
     QLabel *m_scopeInfo = nullptr;
     QPushButton *m_scopeReset = nullptr;

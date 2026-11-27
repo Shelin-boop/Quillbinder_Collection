@@ -20,6 +20,37 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   after the installed one and not after the newest (`securityBetween`, `src/core/UpdateCheck.cpp`), so a program on 0.95.0
   sees 0.99.0's mark even when 1.0.0 is the newest, as long as 0.99.0 stays in `packaging/update-feed/security.json` (the
   feed also keeps what the previous feed listed).
+## 0.99.0: tool interface 1.3, the rule for the AI models' memory
+
+- **Interface** (`src/tools/ToolApi.h`; `apiVersion() == 130`): new functions at the end of `ToolHost` (`aiThreads`, `modelMessage`,
+  `keepRunning`, `lowerThreadPriority`, `requestModelLoad`, `modelLoaded`, `modelUsed`, `modelUnloaded`, `reportDeviceMemory`)
+  and a third interface `ToolModels` (IID `org.quillbinder.ToolModels/1.3`, `bool unloadModel(id)`), declared with
+  `Q_INTERFACES(qb::tools::ToolInterface qb::tools::ToolModels)` and found by `ToolHost::models()` like the 1.1 part. A tool calls
+  the new functions only when `apiVersion() >= 130`. `tests/tool12/` holds a tool built with the header of 1.2 (it still loads
+  and runs), `tests/tool13/` a tool of 1.3. The add-on project `addons/translation-proofreading/source/third_party/quillbinder/ToolApi.h`
+  is a copy of 1.2 and stays so until that add-on adopts 1.3.
+- **The model's id** is `<tool id>:<name>`; the part before the colon tells the program whom to ask to unload it. Calls
+  from a worker thread are passed to the main thread (blocking), so a tool may call from where it loads; do not call while the
+  main thread waits for that thread.
+- **`src/core/ModelMemory.{h,cpp}`** keeps the list (`requestLoad`, `modelLoaded`, `modelUsed`, `modelUnloaded`) and applies the rule
+  (a memory `where` is `"ram"` or `"gpu:<name>"`; RAM from `SystemMemory`, a card from the engine's report; unknown figures
+  never refuse). Order of `requestLoad`: above 50 % used, the models of that memory unused longest go one by one until it is at
+  or under 50 %; then, if the new model would bring it over 80 %, further models go (longest unused first) only when that
+  can make it fit, else nothing more is unloaded and the load is refused (the 50 % step has run already: [helper's choice]).
+  A model whose owner answers `false` (in use) is skipped. Freed bytes are counted from the model's registered size, because
+  the system's figures lag behind an unload.
+- **Idle**: a timer every 30 s unloads models unused for the set time. **Low memory** (`LowMemoryMonitor`): models used within the
+  last 30 s are not idle for it. The count of changes under way (`changeBegin`/`changeEnd`) drives the standing text of the
+  message line (`MessageLine::setStatus`) under the inspector (`Inspector::messageLine`; `MainWindow::modelLine()` takes the binder's line while the inspector is hidden); a load that is allowed counts as under way until `modelLoaded` (or `modelUnloaded`
+  when it failed).
+- **`SystemMemory.h`**: `SystemMemoryLinux.cpp` (`/proc/meminfo`; PSI trigger `some 150000 2000000`, a window that is a multiple of
+  2 s as an unprivileged trigger needs, watched by a `QSocketNotifier` of type Exception), `SystemMemoryWin.cpp` and
+  `SystemMemoryAndroid.cpp` (compile only on their systems; not built or run in the Linux part). `KeepAlive.h` keeps the reasons;
+  `KeepAliveNone.cpp` (Linux, Windows) does nothing, `KeepAliveAndroid.cpp` is a stub for the Android part. CMake picks the
+  files per system (`CORE_SOURCES` filter).
+- **Settings**: `app/aiThreads` (0 = the default, so it follows the computer) and `app/aiUnloadMinutes` (10); program-only
+  (`settingslayer::programOnly`), not in profiles; handed over in `AppSettings::pushToModules`.
+- Suite `v0990b`.
 
 ## 0.94.0: the full AppImage's installation window
 

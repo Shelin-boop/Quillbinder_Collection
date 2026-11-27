@@ -489,8 +489,8 @@ int main(int argc, char **argv)
     QObject *tool = speechTool();
     check(tool != nullptr, QStringLiteral("the writing tool \"Speech Transcription\" is loaded"),
           compile::PluginManager::instance().messages().join(QLatin1String("; ")));
-    check(toolhost::host().apiVersion() == 120 && tool && toolhost::Host::extension(dynamic_cast<tools::ToolInterface *>(tool)),
-          QStringLiteral("the program offers tool interface 1.2 (and the 1.1 part); the speech tool has the 1.1 part (ToolExtension)"));
+    check(toolhost::host().apiVersion() >= 120 && tool && toolhost::Host::extension(dynamic_cast<tools::ToolInterface *>(tool)),
+          QStringLiteral("the program offers tool interface 1.2 or later (and the 1.1 part); the speech tool has the 1.1 part (ToolExtension)"));
     tools::ToolInterface *old = compile::PluginManager::instance().tool(QStringLiteral("old-tool"));
     check(old && !toolhost::Host::extension(old), QStringLiteral("a tool built for interface 1.0 loads (and has no 1.1 part)"));
     const QStringList standard = toolbars::standard(toolbars::Bar::Main);
@@ -560,8 +560,8 @@ int main(int argc, char **argv)
                 e->setTextCursor(c);
                 toolhost::host().runCommand(QStringLiteral("old-tool.write"));
                 settle(100);
-                check(e->toPlainText().contains(QLatin1String("[old tool, host 120]"))
-                          && toolhost::host().setting(QStringLiteral("old-tool"), QStringLiteral("apiVersion")).toInt() == 120,
+                check(e->toPlainText().contains(QLatin1String("[old tool, host 130]"))
+                          && toolhost::host().setting(QStringLiteral("old-tool"), QStringLiteral("apiVersion")).toInt() == 130,
                       QStringLiteral("the 1.0 tool's command runs: it writes at the cursor and keeps a setting"),
                       e->toPlainText());
             }

@@ -67,7 +67,7 @@ public:
     void notifySettingsChanged() { emit settingsChanged(); }
 
     // ---- tools::ToolHost
-    int apiVersion() const override { return 120; }   // 1.2 (0.94.0)
+    int apiVersion() const override { return 130; }   // 1.3 (0.99.0)
     QString appName() const override;
     QString appVersion() const override;
     QWidget *window() const override;
@@ -94,9 +94,23 @@ public:
     void showOptions(const QString &toolId) override;
     // 1.2
     void showMessage(const QString &text, int milliseconds) override;
+    // 1.3 (0.99.0): called from any thread (a call from another thread waits for the main thread)
+    int aiThreads() const override;
+    void modelMessage(bool on) override;
+    void keepRunning(const QString &reason, bool on) override;
+    void lowerThreadPriority() override;
+    tools::ModelDecision requestModelLoad(const QString &id, const QString &displayName, qint64 bytes, const QString &where) override;
+    void modelLoaded(const QString &id) override;
+    void modelUsed(const QString &id) override;
+    void modelUnloaded(const QString &id) override;
+    void reportDeviceMemory(const QString &where, qint64 total, qint64 available) override;
 
     // The 1.1 side of a tool (inspector tabs, toolbar buttons, an options section); null for 1.0 tools.
     static tools::ToolExtension *extension(tools::ToolInterface *tool);
+    // The 1.3 side of a tool (it unloads its models when asked); null for older tools.
+    static tools::ToolModels *models(tools::ToolInterface *tool);
+    // The tool a model id belongs to ("<tool id>:<name>"); null when none is loaded with that id.
+    tools::ToolInterface *toolOfModel(const QString &modelId) const;
 
 signals:
     void projectChanged();

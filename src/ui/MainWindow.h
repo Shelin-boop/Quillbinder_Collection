@@ -294,6 +294,10 @@ public:
     void showMessage(const QString &text, int ms = 0, const QString &linkText = QString(), std::function<void()> action = nullptr,
                      const QString &tip = QString());
     MessageLine *messageLine() const;
+    // 0.99.0: the line for "Model change in progress" and a refused model: the one under the inspector while it is shown,
+    // else the one under the binder
+    MessageLine *modelLine() const;
+    void showModelMessage(const QString &text, int ms = 0);
     // 0.94.0 (items 76, 67): commands of the binder with an undo step of their own (Edit > Undo with the keyboard in the binder)
     // Documents > Group: the selected items into a new folder at the place of the first one; the folder's title is ready to type
     BinderItem *groupItems(const QList<BinderItem *> &items);

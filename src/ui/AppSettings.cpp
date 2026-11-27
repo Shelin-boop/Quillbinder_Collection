@@ -1,4 +1,5 @@
 #include "ui/AppSettings.h"
+#include "core/ModelMemory.h"
 #include "ui/ToolbarConfig.h"
 #include "ui/Language.h"
 #include "core/SettingsLayer.h"
@@ -71,6 +72,8 @@ AppSettings &AppSettings::instance()
 void AppSettings::pushToModules()
 {
     language::applyNumbers(groupDigits);
+    modelmem::ModelMemory::instance().setThreadSetting(aiThreads);   // 0.99.0: one setting for every AI function
+    modelmem::ModelMemory::instance().setIdleMinutes(aiUnloadMinutes);
     text::setRevisionColors(revisionColors);
     compile::setAuthorContact({{QStringLiteral("street"), street}, {QStringLiteral("city"), city}, {QStringLiteral("state"), state},
                                {QStringLiteral("zip"), zip}, {QStringLiteral("country"), country}, {QStringLiteral("phone"), phone},
@@ -149,6 +152,8 @@ void AppSettings::load()
         language = language::available().contains(stored) ? stored : language::configured();
     }
     groupDigits = s.value(QStringLiteral("groupDigits"), true).toBool();
+    aiThreads = qBound(0, s.value(QStringLiteral("aiThreads"), 0).toInt(), 1024);   // 0.99.0
+    aiUnloadMinutes = qBound(1, s.value(QStringLiteral("aiUnloadMinutes"), 10).toInt(), 24 * 60);
     recentProjects = s.value(QStringLiteral("recent")).toStringList();
     welcomeFolder = s.value(QStringLiteral("welcomeFolder")).toString();
     welcomeShown = s.value(QStringLiteral("welcomeShown"), false).toBool();
@@ -529,6 +534,8 @@ void AppSettings::save()
     s.setValue(QStringLiteral("openLast"), openLastProject);
     s.setValue(QStringLiteral("language"), language);
     s.setValue(QStringLiteral("groupDigits"), groupDigits);
+    s.setValue(QStringLiteral("aiThreads"), aiThreads);
+    s.setValue(QStringLiteral("aiUnloadMinutes"), aiUnloadMinutes);
     s.setValue(QStringLiteral("recent"), recentProjects);
     s.setValue(QStringLiteral("welcomeFolder"), welcomeFolder);
     s.setValue(QStringLiteral("welcomeShown"), welcomeShown);

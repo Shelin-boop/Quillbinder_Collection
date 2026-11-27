@@ -3,7 +3,9 @@
 #include "AppInfo.h"
 #include "compile/PluginManager.h"
 #include "core/Addons.h"
+#include "core/KeepAlive.h"
 #include "core/Launcher.h"
+#include "core/ModelMemory.h"
 #include "core/Paths.h"
 #include "core/Platform.h"
 #include "text/TextUtil.h"
@@ -18,11 +20,13 @@
 #include <QFile>
 #include <QLocalServer>
 #include <QLocalSocket>
+#include <QThread>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QTimer>
 
 #include <csignal>
+#include <type_traits>
 #include <cstdio>
 #ifdef Q_OS_UNIX
 #include <sys/stat.h>
@@ -249,6 +253,115 @@ void Host::showMessage(const QString &text, int milliseconds)
 {
     if (m_window)
         m_window->showMessage(text, milliseconds);
+}
+
+// ------------------------------------------------------------------ 1.3 (0.99.0)
+
+namespace {
+// The registry belongs to the main thread: a call from a worker thread waits for it.
+template <typename F>
+auto onMainThread(QObject *context, F fn) -> decltype(fn())
+{
+    using R = decltype(fn());
+    if (!QCoreApplication::instance() || QThread::currentThread() == QCoreApplication::instance()->thread())
+        return fn();
+    if constexpr (std::is_void_v<R>) {
+        QMetaObject::invokeMethod(context, fn, Qt::BlockingQueuedConnection);
+    } else {
+        R r{};
+        QMetaObject::invokeMethod(context, [&r, &fn] { r = fn(); }, Qt::BlockingQueuedConnection);
+        return r;
+    }
+}
+} // namespace
+
+int Host::aiThreads() const
+{
+    return modelmem::ModelMemory::instance().aiThreads();
+}
+
+void Host::modelMessage(bool on)
+{
+    onMainThread(this, [on] {
+        auto &mm = modelmem::ModelMemory::instance();
+        if (on)
+            mm.changeBegin();
+        else
+            mm.changeEnd();
+    });
+}
+
+void Host::keepRunning(const QString &reason, bool on)
+{
+    keepalive::set(reason, on);
+}
+
+void Host::lowerThreadPriority()
+{
+    modelmem::ModelMemory::lowerThreadPriority();
+}
+
+tools::ToolInterface *Host::toolOfModel(const QString &modelId) const
+{
+    const QString toolId = modelId.section(QLatin1Char(':'), 0, 0);
+    for (tools::ToolInterface *t : compile::PluginManager::instance().tools())
+        if (t->id() == toolId)
+            return t;
+    return nullptr;
+}
+
+tools::ModelDecision Host::requestModelLoad(const QString &id, const QString &displayName, qint64 bytes, const QString &where)
+{
+    return onMainThread(this, [this, id, displayName, bytes, where] {
+        auto unloader = [this](const QString &modelId) {
+            tools::ToolInterface *t = toolOfModel(modelId);
+            tools::ToolModels *m = t ? models(t) : nullptr;
+            return m ? m->unloadModel(modelId) : false;
+        };
+        const modelmem::Decision d = modelmem::ModelMemory::instance().requestLoad(id, displayName, bytes, where, unloader);
+        tools::ModelDecision out;
+        out.allowed = d.allowed;
+        out.reason = d.reason;
+        if (!d.allowed && m_window)
+            m_window->showModelMessage(d.reason, 10000);
+        return out;
+    });
+}
+
+void Host::modelLoaded(const QString &id)
+{
+    onMainThread(this, [this, id] {
+        modelmem::ModelMemory::instance().modelLoaded(id, [this](const QString &modelId) {
+            tools::ToolInterface *t = toolOfModel(modelId);
+            tools::ToolModels *m = t ? models(t) : nullptr;
+            return m ? m->unloadModel(modelId) : false;
+        });
+    });
+}
+
+void Host::modelUsed(const QString &id)
+{
+    onMainThread(this, [id] { modelmem::ModelMemory::instance().modelUsed(id); });
+}
+
+void Host::modelUnloaded(const QString &id)
+{
+    onMainThread(this, [id] { modelmem::ModelMemory::instance().modelUnloaded(id); });
+}
+
+void Host::reportDeviceMemory(const QString &where, qint64 total, qint64 available)
+{
+    onMainThread(this, [where, total, available] { modelmem::ModelMemory::instance().reportDeviceMemory(where, total, available); });
+}
+
+tools::ToolModels *Host::models(tools::ToolInterface *tool)
+{
+#ifdef Q_OS_ANDROID
+    QObject *obj = compile::PluginManager::instance().toolObject(tool);
+#else
+    auto *obj = dynamic_cast<QObject *>(tool);
+#endif
+    return obj ? qobject_cast<tools::ToolModels *>(obj) : nullptr;
 }
 
 tools::ToolExtension *Host::extension(tools::ToolInterface *tool)

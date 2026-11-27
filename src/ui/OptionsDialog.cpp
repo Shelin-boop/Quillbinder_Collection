@@ -30,6 +30,7 @@
 #include "ui/SpellChecker.h"
 #include "ui/ThemeDialogs.h"
 #include "ui/ToolHost.h"
+#include "core/ModelMemory.h"
 #include "ui/MainWindow.h"
 #include "core/SettingsLayer.h"
 #include "ui/Zoom.h"
@@ -58,6 +59,8 @@
 #include <QLineEdit>
 #include <QListWidget>
 #include <QLocale>
+#include <QThread>
+#include <QTimer>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPainter>
@@ -664,6 +667,85 @@ QWidget *OptionsDialog::generalSection()
                       "Help > List of All Placeholders shows them all."),
                    author));
     pages.append({tr("Author Information"), author});
+
+    // 0.99.0: AI Models: one place for the cores and the time unused of every AI function, and the memory in use
+    {
+        QWidget *ai = page(&f);
+        const int cores = qMax(1, QThread::idealThreadCount());
+        const int defThreads = modelmem::ModelMemory::defaultThreads(cores);
+        m_aiThreads = new QSpinBox(ai);
+        m_aiThreads->setObjectName(QStringLiteral("optAiThreads"));
+        m_aiThreads->setRange(1, cores);
+        m_aiThreads->setValue(s.aiThreads > 0 ? qMin(s.aiThreads, cores) : defThreads);
+        m_aiThreads->setToolTip(tr("The processor cores that Speech Transcription, Translation Helper, Read Aloud and "
+                                   "Handwriting use. Default for this computer: %1 of %2.").arg(defThreads).arg(cores));
+        auto *threadsRow = new QHBoxLayout;
+        threadsRow->addWidget(m_aiThreads);
+        auto *defBtn = new QPushButton(tr("Default (%1)").arg(defThreads), ai);
+        defBtn->setObjectName(QStringLiteral("optAiThreadsDefault"));
+        connect(defBtn, &QPushButton::clicked, m_aiThreads, [this, defThreads] { m_aiThreads->setValue(defThreads); });
+        threadsRow->addWidget(defBtn);
+        threadsRow->addStretch(1);
+        f->addRow(tr("CPU cores for the AI:"), threadsRow);
+        f->addRow(hint(tr("One setting for every AI function. The default is three quarters of the cores (rounded down); "
+                          "a computer with 6 cores or fewer keeps one core free. The AI's work runs at a low priority."),
+                       ai));
+        m_aiUnload = new QSpinBox(ai);
+        m_aiUnload->setObjectName(QStringLiteral("optAiUnload"));
+        m_aiUnload->setRange(1, 24 * 60);
+        m_aiUnload->setValue(s.aiUnloadMinutes);
+        auto *unloadRow = new QHBoxLayout;
+        unloadRow->addWidget(new QLabel(tr("Unload a model after"), ai));
+        unloadRow->addWidget(m_aiUnload);
+        unloadRow->addWidget(new QLabel(tr("minutes unused"), ai));
+        unloadRow->addStretch(1);
+        f->addRow(unloadRow);
+        f->addRow(hint(tr("A model that is not used is unloaded after this time. Before a model loads, when more than half "
+                          "of the memory it needs (the computer's memory or a graphics card's) is in use, the model "
+                          "unused longest is unloaded first; when the new model would still bring that memory over 80 %, it is "
+                          "not loaded, and the message line under the inspector says why. When the system reports a "
+                          "shortage of memory, idle models are unloaded at once."),
+                       ai));
+        m_aiMemory = new QLabel(ai);
+        m_aiMemory->setObjectName(QStringLiteral("optAiMemory"));
+        m_aiMemory->setTextFormat(Qt::PlainText);
+        m_aiMemory->setWordWrap(true);
+        m_aiMemory->setTextInteractionFlags(Qt::TextSelectableByMouse);
+        f->addRow(tr("Memory in use:"), m_aiMemory);
+        auto refresh = [this] {
+            auto &mm = modelmem::ModelMemory::instance();
+            auto size = [](qint64 b) { return QLocale().formattedDataSize(b, 1, QLocale::DataSizeSIFormat); };
+            QStringList lines;
+            for (const QString &w : mm.devices()) {
+                const modelmem::DeviceFigures d = mm.device(w);
+                const QString label = w == QLatin1String("ram") ? tr("RAM") : tr("Graphics card %1").arg(w.mid(4));
+                if (!d.valid()) {
+                    lines << tr("%1: not known").arg(label);
+                    continue;
+                }
+                lines << tr("%1: %2 of %3 in use (%4 %)")
+                             .arg(label, size(d.total - d.available), size(d.total))
+                             .arg(int(100.0 * double(d.total - d.available) / double(d.total) + 0.5));
+            }
+            const QList<modelmem::LoadedModel> loaded = mm.models();
+            if (loaded.isEmpty()) {
+                lines << tr("No model is loaded.");
+            } else {
+                lines << tr("Loaded models:");
+                for (const modelmem::LoadedModel &m : loaded)
+                    lines << QStringLiteral("  %1, %2, %3").arg(m.name, size(m.bytes),
+                                                               m.where == QLatin1String("ram") ? tr("RAM") : m.where.mid(4));
+            }
+            m_aiMemory->setText(lines.join(QLatin1Char('\n')));
+        };
+        refresh();
+        auto *timer = new QTimer(ai);
+        timer->setInterval(2000);
+        connect(timer, &QTimer::timeout, ai, refresh);
+        timer->start();
+        connect(&modelmem::ModelMemory::instance(), &modelmem::ModelMemory::modelsChanged, ai, refresh);
+        pages.append({tr("AI Models"), ai});
+    }
 
     // the writing tools' sections (the scratch pad's folder and the like): a page each
     toolhost::host().attachTools();
@@ -2743,6 +2825,9 @@ void OptionsDialog::apply()
     // General
     s.openLastProject = m_openLast->isChecked();
     s.groupDigits = m_groupDigits->isChecked();
+    // 0.99.0: the default is stored as 0, so that it follows the computer
+    s.aiThreads = m_aiThreads->value() == modelmem::ModelMemory::defaultThreads() ? 0 : m_aiThreads->value();
+    s.aiUnloadMinutes = m_aiUnload->value();
     s.useDesktopPortal = m_portal->isChecked();
     s.recentCount = m_recentCount->value();
     while (s.recentProjects.size() > s.recentCount)

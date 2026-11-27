@@ -8,6 +8,7 @@
 #include <QWidget>
 
 class QTextDocument;
+namespace qb { class MessageLine; }
 class QIcon;
 
 class QButtonGroup;
@@ -46,6 +47,9 @@ public:
     void setItem(BinderItem *item);
     void setEditor(TextEditor *editor);
     BinderItem *item() const { return m_item; }
+    // 0.99.0: the slim line at the bottom of the pane (MessageLine; no room while empty): "Model change in progress" and
+    // the reason a model was not loaded
+    MessageLine *messageLine() const { return m_messages; }
     // 0.92.0: the item whose mind map the Mind Map tab keeps showing ("" = the selected item's, as before). Only
     // that tab is fixed; the other tabs follow the selected document.
     void setFixedMindMapId(const QString &id);
@@ -205,6 +209,7 @@ private:
     QList<int> sizesToSave(QSplitter *sp);
     // the part of each tab zoomed last (0.21.1)
     QHash<int, QString> m_lastZoomPart;
+    MessageLine *m_messages = nullptr;
     QWidget *m_tabsRow = nullptr, *m_bottomRow = nullptr;
     QLabel *m_zoomTitle = nullptr;
     // mind map

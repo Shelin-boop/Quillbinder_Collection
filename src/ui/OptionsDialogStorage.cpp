@@ -132,6 +132,8 @@ void OptionsDialog::markStorage()
     optstore::mark(m_projectFirst, QStringLiteral("app/projectFirst"));
     optstore::mark(m_language, QStringLiteral("app/language"));
     optstore::mark(m_groupDigits, QStringLiteral("app/groupDigits"));
+    optstore::mark(m_aiThreads, QStringLiteral("app/aiThreads"));        // 0.99.0
+    optstore::mark(m_aiUnload, QStringLiteral("app/aiUnloadMinutes"));
     optstore::mark(m_exportComments, QStringLiteral("export/comments"));
     optstore::mark(m_mmEnterEnds, QStringLiteral("mindmap/enterEnds"));
     optstore::mark(m_mmEnterCreates, QStringLiteral("mindmap/enterCreates"));

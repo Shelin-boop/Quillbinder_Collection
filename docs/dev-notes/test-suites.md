@@ -2,6 +2,15 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## v0990b (0.99.0)
+
+`qb_v0990b_tests`: the AI's default cores (1->1 ... 16->12), the 50 % and 80 % rule with fake RAM and card figures
+(`sysmem::setFakeRam`, `ModelMemory::reportDeviceMemory`; the clock is set by hand), the idle unload (by hand and by the timer),
+the low-memory signal (injected; idle models only), the message line "Model change in progress", a tool of interface 1.3
+(`tests/tool13`: registers, is asked to unload, is refused, busy models stay) and one of 1.2 (`tests/tool12`, built with the
+header of 1.2), and the page File > Options > General > AI Models (default, change kept after the settings are read again,
+memory line). The two test tools are loaded from `<build>/tests/tool12-plugins` and `tool13-plugins`.
+
 ## v0950f and v0950g (0.95.0, item 102: eleven languages)
 
 `qb_v0950f_tests`: the language list (codes, own names, the machine-translation mark in the interface's language, the

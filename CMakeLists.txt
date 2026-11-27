@@ -219,6 +219,15 @@ configure_file(src/app/AppInfo.h.in ${CMAKE_BINARY_DIR}/generated/AppInfo.h @ONL
 file(GLOB_RECURSE CORE_SOURCES CONFIGURE_DEPENDS
   src/core/*.cpp src/core/*.h src/text/*.cpp src/text/*.h
   src/compile/*.cpp src/compile/*.h src/import/*.cpp src/import/*.h)
+# 0.99.0: the files of one system each (SystemMemory<System>.cpp, KeepAlive*.cpp): only the system's own is compiled
+list(FILTER CORE_SOURCES EXCLUDE REGEX "src/core/(SystemMemory(Linux|Win|Android)|KeepAlive(None|Android))\\.cpp$")
+if(ANDROID)
+  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryAndroid.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveAndroid.cpp)
+elseif(WIN32)
+  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryWin.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveNone.cpp)
+else()
+  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryLinux.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveNone.cpp)
+endif()
 add_library(qbcore STATIC ${CORE_SOURCES}
   # package signatures (0.65.0): Monocypher's Ed25519 check, unchanged third-party C code
   src/core/third_party/monocypher/monocypher.c src/core/third_party/monocypher/monocypher-ed25519.c)

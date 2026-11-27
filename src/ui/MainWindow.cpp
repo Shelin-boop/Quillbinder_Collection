@@ -133,6 +133,7 @@
 #include <QPrintPreviewDialog>
 #include "ui/FooterStatus.h"
 #include "ui/MessageLine.h"
+#include "core/ModelMemory.h"
 #include <QPrinter>
 #include <QProcess>
 #include <QPushButton>
@@ -287,6 +288,22 @@ MainWindow::MainWindow()
     m_panes[1]->setStateSuffix(QStringLiteral("1"));
     commands::clear();
     toolhost::host().setWindow(this);
+    // 0.99.0: "Model change in progress" in the message line while an AI model unloads or loads (core/ModelMemory.h)
+    {
+        auto &mm = modelmem::ModelMemory::instance();
+        auto show = [this](bool on) {
+            // both lines are cleared; the text goes where the writer looks: under the inspector, else under the binder
+            if (messageLine())
+                messageLine()->setStatus(QString());
+            if (m_inspector && m_inspector->messageLine())
+                m_inspector->messageLine()->setStatus(QString());
+            if (on && modelLine())
+                modelLine()->setStatus(tr("Model change in progress"));
+        };
+        connect(&mm, &modelmem::ModelMemory::changeActiveChanged, this, show);
+        show(mm.changeActive());
+        mm.startWatching();   // the idle timer and the system's low-memory signal (once)
+    }
     createActions();
     createExtraActions();
     createToolActions();
@@ -694,6 +711,19 @@ void MainWindow::clearStatusNote()
 }
 
 MessageLine *MainWindow::messageLine() const { return m_binder ? m_binder->messageLine() : nullptr; }
+
+MessageLine *MainWindow::modelLine() const
+{
+    if (m_inspector && m_inspector->messageLine() && m_inspector->isVisibleTo(window()))
+        return m_inspector->messageLine();
+    return messageLine();
+}
+
+void MainWindow::showModelMessage(const QString &text, int ms)
+{
+    if (MessageLine *l = modelLine())
+        l->post(text, ms);
+}
 
 void MainWindow::showMessage(const QString &text, int ms, const QString &linkText, std::function<void()> action, const QString &tip)
 {
