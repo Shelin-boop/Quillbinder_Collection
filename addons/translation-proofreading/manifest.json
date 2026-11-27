@@ -1,7 +1,7 @@
 {
   "id": "translation-proofreading",
   "name": "Translation Helper",
-  "version": "1.5",
+  "version": "1.6",
   "description": "This tool gives suggestions only. Its translations are not precise: check each one, which needs a working knowledge of both languages. The Translation Helper translates between any two of eleven languages (English, German, Spanish, French, Portuguese (Brazil), Italian, Russian, Indonesian, Turkish, Polish, Dutch) and checks English text for spelling and grammar, on this computer only. A pair without English goes through English. In the inspector (its own tab) or in a window of its own: the text goes in, the result comes out with every change marked, live while you type; a click on a word keeps the original or offers other words, a double click shows its spelling suggestions and words of a similar meaning. A single word gets what it means (English words: WordNet; words of the other languages: an optional dictionary download from the Wiktionary), its word classes and its suggestions. Swap turns the direction around, Translate back shows what the translation says. Dialogue keeps its quotation marks as written. Rules: no em-dashes, American spelling, curly quotes, three periods instead of the ellipsis character, and your own replacements. The models are chosen and downloaded once under File > Options > Translation Helper (CoEdIT, Qwen3 1.7B and 4B, OPUS-MT), checked, and then used without any connection; models too large for the computer are not offered. The add-on's own texts come in the eleven languages of the program. Engine: CTranslate2 with oneDNN and SentencePiece. Brings Qt's TLS plugin for the download.",
   "author": "Quillbinder",
   "minApp": "0.93.0",

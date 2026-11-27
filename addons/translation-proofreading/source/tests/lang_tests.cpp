@@ -20,6 +20,7 @@
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QSignalSpy>
+#include <QSpinBox>
 #include <QTemporaryDir>
 #include <QTextBrowser>
 #include <QTranslator>
@@ -508,7 +509,7 @@ private slots:
     {
         QCOMPARE(m_tool->name(), QStringLiteral("Translation Helper"));
         QCOMPARE(m_tool->id(), QStringLiteral("translation-proofreading"));   // the id stays: installed copies update
-        QCOMPARE(m_tool->version(), QStringLiteral("1.5"));
+        QCOMPARE(m_tool->version(), QStringLiteral("1.6"));
         QCOMPARE(m_tool->optionsTitle(), QStringLiteral("Translation Helper"));
         const auto cmds = m_tool->commands();
         QCOMPARE(cmds.at(0).text, QStringLiteral("&Translation Helper..."));
@@ -523,7 +524,7 @@ private slots:
             const QJsonObject m = QJsonDocument::fromJson(f.readAll()).object();
             QCOMPARE(m.value(QStringLiteral("id")).toString(), QStringLiteral("translation-proofreading"));
             QCOMPARE(m.value(QStringLiteral("name")).toString(), QStringLiteral("Translation Helper"));
-            QCOMPARE(m.value(QStringLiteral("version")).toString(), QStringLiteral("1.5"));
+            QCOMPARE(m.value(QStringLiteral("version")).toString(), QStringLiteral("1.6"));
             QVERIFY(m.value(QStringLiteral("description")).toString().contains(
                 QStringLiteral("This tool gives suggestions only. Its translations are not precise: check each one, which needs a working "
                                "knowledge of both languages.")));
@@ -637,6 +638,147 @@ private slots:
         QCOMPARE(languageFromSettings(QString(), QStringLiteral("de"), QStringLiteral("es_ES")), QStringLiteral("de"));
         QCOMPARE(languageFromSettings(QString(), QString(), QStringLiteral("es_ES")), QStringLiteral("es"));
         QCOMPARE(languageFromSettings(QString(), QString(), QStringLiteral("zh_CN")), QStringLiteral("en"));
+    }
+
+    // ---- 1.6: a program with tool interface 1.3 (the model registry, the shared cores, the message line)
+    void registryWithAnInterface13Host()
+    {
+        install(QStringLiteral("opus-mt-es-en"));
+        install(QStringLiteral("opus-mt-en-fr"));
+        m_host->version = 130;
+        m_host->cores = 3;
+        m_host->registry.clear();
+        m_host->requests.clear();
+        m_host->changeOn = m_host->changeOff = m_host->changeCount = 0;
+        m_host->messages.clear();
+        m_host->settings.insert(QStringLiteral("translation-proofreading/threads"), 1);   // the old own setting is not read
+        QCOMPARE(m_tool->threads(), 3);                                                    // the shared setting
+        QVERIFY(m_tool->hostHasRegistry());
+        qputenv("TP_TEST_UNLOAD_MS", "50");
+        Panel p(m_tool, Panel::Place::Inspector, nullptr);
+        p.resize(380, 900);
+        p.show();
+        p.setLanguages(QStringLiteral("es"), QStringLiteral("fr"));
+        p.reloadSettings();
+        QVERIFY(runPanel(p, QStringLiteral("La mesa es grande.")));
+        QTRY_VERIFY2(out(p).contains(QStringLiteral("opus-mt-en-fr(opus-mt-es-en(")), qPrintable(out(p)));
+        QTRY_VERIFY(!p.isBusy());
+        // both models were asked for before they loaded, and are on the program's list with their sizes and place
+        QCOMPARE(m_host->requests, (QStringList{"translation-proofreading:opus-mt-es-en", "translation-proofreading:opus-mt-en-fr"}));
+        QCOMPARE(m_host->registry.size(), 2);
+        const auto first = m_host->registry.value(QStringLiteral("translation-proofreading:opus-mt-es-en"));
+        QCOMPARE(first.where, QStringLiteral("ram"));
+        QCOMPARE(first.bytes, qint64(10) * 1024 * 1024);
+        QVERIFY(first.name.contains(QStringLiteral("Spanish")));
+        QVERIFY(first.used > 0);   // used is reported at each run
+        // the message line: every "on" has its "off", and there were changes
+        QVERIFY(m_host->changeOn >= 2);
+        QCOMPARE(m_host->changeOn, m_host->changeOff);
+        QCOMPARE(m_host->changeCount, 0);
+        // the add-on's own unload timer is not running: the program's rule applies (and the add-on shows no message itself)
+        QVERIFY(!m_tool->unloadTimerActive());
+        QTest::qWait(150);
+        QVERIFY(!m_engine.loaded(TranslateTool::pairSlot(0)).isEmpty());
+        QVERIFY(m_host->messages.isEmpty());
+        // the program unloads one model on its request: the slot is empty, the other model stays
+        QVERIFY(m_host->unloadByProgram(m_tool, QStringLiteral("translation-proofreading:opus-mt-es-en")));
+        QVERIFY(m_engine.loaded(TranslateTool::pairSlot(0)).isEmpty());
+        QVERIFY(!m_engine.loaded(TranslateTool::pairSlot(1)).isEmpty());
+        QVERIFY(!m_host->registry.contains(QStringLiteral("translation-proofreading:opus-mt-es-en")));
+        QVERIFY(m_host->changeOn > 2);
+        QCOMPARE(m_host->changeOn, m_host->changeOff);
+        // an id that is not loaded: nothing to do, answered true
+        QVERIFY(m_tool->unloadModel(QStringLiteral("translation-proofreading:opus-mt-fr-en")));
+        // the rule of idle time (short here): the model unused longest goes
+        QTest::qWait(120);
+        QCOMPARE(m_host->unloadIdle(m_tool, 100), QStringList{QStringLiteral("translation-proofreading:opus-mt-en-fr")});
+        QVERIFY(m_engine.loaded(TranslateTool::pairSlot(1)).isEmpty());
+        QVERIFY(m_host->registry.isEmpty());
+        // the next work loads them again, through the registry
+        m_host->requests.clear();
+        QVERIFY(runPanel(p, QStringLiteral("La casa es nueva.")));
+        QTRY_VERIFY2(out(p).contains(QStringLiteral("opus-mt-en-fr(opus-mt-es-en(La casa es nueva")), qPrintable(out(p)));
+        QCOMPARE(m_host->requests.size(), 2);
+        // a refusal of the program: nothing loads, the reason reaches the writer, and the message line is balanced
+        m_host->unloadIdle(m_tool, 0);
+        QVERIFY(m_host->registry.isEmpty());
+        m_host->refuseReason = QStringLiteral("Not enough memory for this model");
+        m_host->requests.clear();
+        QVERIFY(runPanel(p, QStringLiteral("La casa es roja.")));
+        QTRY_VERIFY(!p.isBusy());
+        QVERIFY(m_engine.loaded(TranslateTool::pairSlot(0)).isEmpty());
+        QVERIFY(m_host->registry.isEmpty());
+        bool said = false;   // the reason of the program reaches the writer in the panel (its status line)
+        for (QLabel *l : p.findChildren<QLabel *>())
+            said = said || l->text().contains(QStringLiteral("Not enough memory"));
+        QVERIFY(said);
+        QCOMPARE(m_host->changeOn, m_host->changeOff);
+        m_host->refuseReason.clear();
+        qunsetenv("TP_TEST_UNLOAD_MS");
+        m_host->unloadIdle(m_tool, 0);
+        m_host->version = 120;
+    }
+
+    // 1.6: the page of the settings has no field for the cores and the unload time with a 1.3 program (it names the place), and
+    // keeps them with a 1.2 program
+    void settingsPageByInterface()
+    {
+        m_host->version = 130;
+        {
+            qb::tools::OptionsSection *s = m_tool->createOptions(nullptr);
+            QWidget *w = s->widget();
+            w->resize(520, 800);
+            QVERIFY(w->findChildren<QSpinBox *>().isEmpty());
+            auto *label = w->findChild<QLabel *>(QStringLiteral("tpSharedSettings"));
+            QVERIFY(label);
+            QVERIFY(label->text().contains(QStringLiteral("File > Options > General > AI Models")));
+            shot(w, QStringLiteral("th16-options-13"));
+            s->apply();   // nothing about threads or the unload time is written
+            QVERIFY(!m_host->settings.contains(QStringLiteral("translation-proofreading/threads")));
+            QVERIFY(!m_host->settings.contains(QStringLiteral("translation-proofreading/unloadMinutes")));
+            delete s;
+        }
+        m_host->version = 120;
+        {
+            qb::tools::OptionsSection *s = m_tool->createOptions(nullptr);
+            QWidget *w = s->widget();
+            w->resize(520, 800);
+            QCOMPARE(w->findChildren<QSpinBox *>().size(), 2);
+            QVERIFY(!w->findChild<QLabel *>(QStringLiteral("tpSharedSettings")));
+            shot(w, QStringLiteral("th16-options-12"));
+            delete s;
+        }
+    }
+
+    // 1.6: a program with interface 1.2 keeps what 1.5 did: the add-on's own threads and unload timer, no registry
+    void interface12KeepsTheOldWay()
+    {
+        install(QStringLiteral("opus-mt-es-en"));
+        install(QStringLiteral("opus-mt-en-fr"));
+        m_host->version = 120;
+        m_host->registry.clear();
+        m_host->requests.clear();
+        m_host->messages.clear();
+        m_host->changeOn = m_host->changeOff = m_host->changeCount = 0;
+        QVERIFY(!m_tool->hostHasRegistry());
+        m_host->settings.insert(QStringLiteral("translation-proofreading/threads"), 1);
+        QCOMPARE(m_tool->threads(), 1);                  // the add-on's own setting
+        QCOMPARE(m_tool->unloadMinutes(), 15);           // and its own waiting time
+        qputenv("TP_TEST_UNLOAD_MS", "80");
+        Panel p(m_tool, Panel::Place::Inspector, nullptr);
+        p.resize(380, 900);
+        p.show();
+        p.setLanguages(QStringLiteral("es"), QStringLiteral("fr"));
+        p.reloadSettings();
+        QVERIFY(runPanel(p, QStringLiteral("El libro es azul.")));
+        QTRY_VERIFY(!p.isBusy());
+        QVERIFY(m_host->requests.isEmpty());
+        QVERIFY(m_host->registry.isEmpty());
+        QCOMPARE(m_host->changeOn, 0);
+        // its own timer frees the models and tells the program's message line
+        QTRY_VERIFY(m_engine.loaded(TranslateTool::pairSlot(0)).isEmpty());
+        QCOMPARE(m_host->messages.size(), 1);
+        qunsetenv("TP_TEST_UNLOAD_MS");
     }
 
     void optionsListEveryLanguage()

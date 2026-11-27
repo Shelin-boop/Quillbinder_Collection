@@ -113,18 +113,29 @@ OptionsPage::OptionsPage(TranslateTool *tool, QWidget *parent)
 
     auto *speed = new QGroupBox(tr("Speed"), m_w);
     auto *sf = new QFormLayout(speed);
-    m_threads = new QSpinBox(speed);
-    m_threads->setRange(1, qMax(1, QThread::idealThreadCount()));
-    m_threads->setToolTip(tr("One core is left free by default, so that the computer stays responsive; the work runs "
-                             "at a low priority."));
-    sf->addRow(tr("Processor threads:"), m_threads);
-    m_unload = new QSpinBox(speed);
-    m_unload->setRange(0, 24 * 60);
-    m_unload->setSuffix(tr(" minutes"));
-    m_unload->setSpecialValueText(tr("never"));
-    m_unload->setToolTip(tr("A model that was not used for this long is unloaded, so that it takes no memory. The next work "
-                            "loads it again."));
-    sf->addRow(tr("Unload models after:"), m_unload);
+    if (m_tool->hostHasRegistry()) {
+        // 1.6 (program 0.99.0): the cores and the time after which unused models are unloaded are the program's one setting for
+        // all AI functions; there is no call to open its page from here, so the text names the place
+        auto *shared = new QLabel(tr("The number of processor cores and the time after which a model that is not used is "
+                                     "unloaded are set for all AI functions together, in File > Options > General > AI Models."),
+                                  speed);
+        shared->setObjectName(QStringLiteral("tpSharedSettings"));
+        shared->setWordWrap(true);
+        sf->addRow(shared);
+    } else {
+        m_threads = new QSpinBox(speed);
+        m_threads->setRange(1, qMax(1, QThread::idealThreadCount()));
+        m_threads->setToolTip(tr("One core is left free by default, so that the computer stays responsive; the work runs "
+                                 "at a low priority."));
+        sf->addRow(tr("Processor threads:"), m_threads);
+        m_unload = new QSpinBox(speed);
+        m_unload->setRange(0, 24 * 60);
+        m_unload->setSuffix(tr(" minutes"));
+        m_unload->setSpecialValueText(tr("never"));
+        m_unload->setToolTip(tr("A model that was not used for this long is unloaded, so that it takes no memory. The next work "
+                                "loads it again."));
+        sf->addRow(tr("Unload models after:"), m_unload);
+    }
     m_careful = new QCheckBox(tr("Careful: the model weighs even more possibilities (slower, now and then better)"), speed);
     sf->addRow(m_careful);
     l->addWidget(speed);
@@ -150,9 +161,11 @@ OptionsPage::OptionsPage(TranslateTool *tool, QWidget *parent)
     m_curly->setChecked(m_tool->setting(QStringLiteral("curlyQuotes"), true).toBool());
     m_ellipsis->setChecked(m_tool->setting(QStringLiteral("plainEllipsis"), true).toBool());
     m_replacements->setPlainText(m_tool->setting(QStringLiteral("replacements")).toString());
-    m_threads->setValue(m_tool->threads());
+    if (m_threads)
+        m_threads->setValue(m_tool->threads());
     m_careful->setChecked(m_tool->setting(QStringLiteral("careful"), false).toBool());
-    m_unload->setValue(m_tool->unloadMinutes());
+    if (m_unload)
+        m_unload->setValue(m_tool->unloadMinutes());
 
     connect(m_tool->store(), &ModelStore::progress, this, [this](const QString &id, qint64 done, qint64 total) {
         for (const Row &r : m_rows.values(id)) {
@@ -364,9 +377,11 @@ void OptionsPage::apply()
     m_tool->setSetting(QStringLiteral("curlyQuotes"), m_curly->isChecked());
     m_tool->setSetting(QStringLiteral("plainEllipsis"), m_ellipsis->isChecked());
     m_tool->setSetting(QStringLiteral("replacements"), m_replacements->toPlainText());
-    m_tool->setSetting(QStringLiteral("threads"), m_threads->value());
+    if (m_threads)
+        m_tool->setSetting(QStringLiteral("threads"), m_threads->value());
     m_tool->setSetting(QStringLiteral("careful"), m_careful->isChecked());
-    m_tool->setSetting(QStringLiteral("unloadMinutes"), m_unload->value());
+    if (m_unload)
+        m_tool->setSetting(QStringLiteral("unloadMinutes"), m_unload->value());
     m_tool->settingsApplied();
 }
 

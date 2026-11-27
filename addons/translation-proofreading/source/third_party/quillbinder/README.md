@@ -1,7 +1,7 @@
 # Quillbinder's tool interface
 
-`ToolApi.h` is Quillbinder's interface for writing tools (version 1.2 since Quillbinder 0.94.0, 2026-11-25;
-it was 1.1), copied unchanged from Quillbinder's source (this repository's `src/tools/ToolApi.h`; the 1.1 copy was
+`ToolApi.h` is Quillbinder's interface for writing tools (version 1.3 since Quillbinder 0.99.0, 2026-11-27;
+1.2 since 0.94.0 and 1.1 before), copied unchanged from Quillbinder's source (this repository's `src/tools/ToolApi.h`; the 1.1 copy was
 taken at commit 7b5166520f0d94f749acb7089c10a4e37161e620, 0.91.1 beta, 2026-11-14). Licence: Apache License 2.0, as
 Quillbinder (LICENSE in the repository's root).
 

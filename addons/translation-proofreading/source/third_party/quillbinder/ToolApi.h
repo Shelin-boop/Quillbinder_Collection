@@ -1,5 +1,6 @@
 #pragma once
-// Interface between the program and writing tools (version 1.2; 1.0 since 0.11, 1.1 since 0.61, 1.2 since 0.94.0).
+// Interface between the program and writing tools (version 1.3; 1.0 since 0.11, 1.1 since 0.61, 1.2 since 0.94.0,
+// 1.3 since 0.99.0).
 //
 // A writing tool is a Qt plugin (a MODULE library, *.so) that implements
 // qb::tools::ToolInterface. It is delivered as an add-on: the library goes
@@ -31,6 +32,10 @@
 //    beside them, a section of its own in File > Options.
 // Version 1.2 (0.94.0) adds one more function at the end of ToolHost (showMessage: a short message in the line under
 // the binder). A tool calls it only when host->apiVersion() >= 120.
+// Version 1.3 (0.99.0) adds functions at the end of ToolHost (the shared setting of the AI's cores, the message "Model
+// change in progress", keepRunning, and the program's list of loaded AI models with the rule for their memory) and a
+// third interface, ToolModels (its own IID), through which the program asks a tool to unload one of its models. A tool
+// calls the new functions only when host->apiVersion() >= 130; a tool without ToolModels is never asked.
 // Nothing of 1.0 may change: the program reads the structs and calls the
 // functions of tools built years earlier.
 
@@ -97,6 +102,12 @@ struct SendRequest {
     QString targetId;
 };
 
+// What the host answers to ToolHost::requestModelLoad (1.3).
+struct ModelDecision {
+    bool allowed = true;
+    QString reason;     // when refused: why, as shown to the writer in the message line
+};
+
 class ToolHost
 {
 public:
@@ -154,6 +165,39 @@ public:
     // A short message in the line under the binder: one at a time, each for `milliseconds` (<= 0: 5 seconds) or until it
     // is clicked; other messages wait until it is gone. No window, no sound.
     virtual void showMessage(const QString &text, int milliseconds) = 0;
+
+    // ---- 1.3 (program 0.99.0): only when apiVersion() >= 130
+    // The AI's CPU cores: one setting (File > Options > General > AI Models) for every AI function. Default: 75 % of the
+    // cores rounded down, with 6 cores or fewer the cores minus 1, at least 1. A tool uses it for its engine's threads.
+    virtual int aiThreads() const = 0;
+    // The message line under the binder says "Model change in progress" while `on` (true before an unload or a load of a
+    // model starts, false when the new model is ready, also at a first load). Calls are counted: every true needs a false.
+    virtual void modelMessage(bool on) = 0;
+    // A long job runs and must go on while the program's window is out of sight (`reason`: a short text for the
+    // notification, the same text for on and off). Android starts and stops its foreground service; Linux and Windows do
+    // nothing.
+    virtual void keepRunning(const QString &reason, bool on) = 0;
+    // Lowers the priority of the calling thread: the AI's worker threads call it first thing.
+    virtual void lowerThreadPriority() = 0;
+
+    // The model registry. The program keeps the list of loaded models (a tool cannot unload another tool's model) and applies
+    // the one rule to all of them: a model unused for the set time (default 10 minutes) is unloaded; before a load, when
+    // the memory it goes into is more than 50 % used (the whole computer's use), the model unused longest is unloaded
+    // first; when the new model would still bring that memory over 80 %, it is not loaded.
+    // `id` is unique, "<tool id>:<name>" ("speech-transcription:small"): the part before the colon tells the program
+    // which tool to ask to unload it (ToolModels). `where`: "ram" or "gpu:<name>". `bytes`: what the model takes there.
+    // Ask before every load. When the answer is `allowed`, load the model and then call modelLoaded(id); when the load
+    // fails, call modelUnloaded(id). When refused, the program has shown `reason` in the message line; offer the next
+    // smaller model or the CPU. The program may call ToolModels::unloadModel while this runs (in the tool's thread).
+    virtual ModelDecision requestModelLoad(const QString &id, const QString &displayName, qint64 bytes, const QString &where) = 0;
+    virtual void modelLoaded(const QString &id) = 0;
+    // The model is used now (its idle time starts again): call it at each use, a long job at each step.
+    virtual void modelUsed(const QString &id) = 0;
+    // The tool unloaded the model itself (or its load failed).
+    virtual void modelUnloaded(const QString &id) = 0;
+    // The figures of a device's memory, as the engine's driver reports its budget: "gpu:<name>", total and available
+    // bytes. Report them before requestModelLoad and whenever they change. (The program reads the RAM itself.)
+    virtual void reportDeviceMemory(const QString &where, qint64 total, qint64 available) = 0;
 };
 
 // A section a tool adds to File > Options (ToolInterface::optionsPage).
@@ -222,6 +266,20 @@ public:
     virtual QString optionsIcon() const = 0;   // icon theme name or file path
 };
 
+// ---- 1.3 (0.99.0)
+
+// Implemented by a tool that loads AI models (next to ToolInterface; declared with Q_INTERFACES). The program calls it
+// when the rule asks for a model to go (idle too long, memory short, the system's low-memory signal).
+class ToolModels
+{
+public:
+    virtual ~ToolModels() = default;
+    // Unloads the model `id` (as given to requestModelLoad) and frees its memory; true when it is unloaded (also when it
+    // was not loaded). false: it is in use now and stays. The tool does not call modelUnloaded for this: the program
+    // takes the model off its list when the answer is true.
+    virtual bool unloadModel(const QString &id) = 0;
+};
+
 } // namespace tools
 } // namespace qb
 
@@ -229,3 +287,5 @@ public:
 Q_DECLARE_INTERFACE(qb::tools::ToolInterface, QB_TOOL_IID)
 #define QB_TOOL_EXTENSION_IID "org.quillbinder.ToolExtension/1.1"
 Q_DECLARE_INTERFACE(qb::tools::ToolExtension, QB_TOOL_EXTENSION_IID)
+#define QB_TOOL_MODELS_IID "org.quillbinder.ToolModels/1.3"
+Q_DECLARE_INTERFACE(qb::tools::ToolModels, QB_TOOL_MODELS_IID)

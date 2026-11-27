@@ -26,6 +26,16 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
 
 New functions and fixes (Linux first).
 
+- **Translation Helper 1.6** (item 126; add-on `addons/translation-proofreading`). With tool interface 1.3 (the program 0.99.0)
+  the add-on registers its models with the program's model list: it asks before every load (a refusal comes back with its
+  reason), reports loaded, used and unloaded models with their sizes ("ram"), and unloads them when the program asks
+  (`ToolModels::unloadModel`; a model a job uses now stays). The cores come from the shared setting (`aiThreads()`), the
+  message "Model change in progress" goes around each load and unload, and its own fields "Processor threads" and
+  "Unload models after" are gone from its options page, which names **File > Options > General > AI Models** instead
+  (the interface has no call that opens that page, so the text stands alone). The 15 minutes of 1.5 are the program's 10.
+  With a program of interface 1.2 the add-on works as 1.5 did (own timer, own fields). CTranslate2 4.9.1 in the Linux
+  engine (Windows and Android: 4.9.0); SentencePiece stays 0.2.1. The texts are in the eleven languages. The official
+  entry names version 1.6.
 - **One rule for the memory of every AI function** (Speech Transcription, Translation Helper, Read Aloud and Handwriting; tool
   interface 1.3). The program keeps the list of the loaded AI models. A model unused for 10 minutes is unloaded (the time is
   set in **File > Options > General > AI Models**). Before a model loads, when more than half of the memory it goes into (the

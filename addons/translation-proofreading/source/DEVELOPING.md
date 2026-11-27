@@ -12,7 +12,7 @@ systems are released from this repository.
 
 ## Facts the add-on depends on (from the public Quillbinder source)
 
-- Tool interface 1.2 (since 0.94.0; 1.1 before): `third_party/quillbinder/ToolApi.h` (copied unchanged; see its README). Never
+- Tool interface 1.3 (since 0.99.0, add-on 1.6; 1.2 since 0.94.0, 1.1 before): `third_party/quillbinder/ToolApi.h` (copied unchanged; see its README). Never
   change it; a new Quillbinder interface version would be copied in as a whole.
 - Package format and install: Quillbinder's `docs/developer-guide.md`, sections 2, 3, 5, 6 (`packaging/make-package.py`
   writes it). Add-ons with Linux libraries carry `runtime` = `u2404-qt6.12-r1` and `minApp` >= `0.80.0`.
@@ -256,3 +256,17 @@ loads in a newer one), but releases come only from the workflow "Build" (Qt 6.12
   steps (one decoding step for the candidates, then each sentence finished on its own).
 - Curly quotes in the input made CoEdIT double a word; the models get plain quotes, and the rules put curly ones back.
 - oneDNN's assembler stub has no stack note: link with `-z noexecstack`, else newer systems refuse the engine.
+
+## 1.6: the program's model registry (2026-11-27, to-do item 126)
+
+- Tool interface 1.3: `TranslateTool` also implements `ToolModels::unloadModel`. With a host that says 1.3 or later
+  (`hostHasRegistry()`), `engine()` gives a `RegisteredEngine` (in `TranslateTool.cpp`) around the real engine: each load asks
+  `requestModelLoad("translation-proofreading:<catalog id>", ...)`, then `modelLoaded` (or `modelUnloaded` when it failed),
+  `run` and the like call `modelUsed`, an unload calls `modelUnloaded`, and `modelMessage(true/false)` wraps each change. A
+  model held by two slots has one entry. `unloadModel` answers false while a panel is busy, else frees the slots that hold the
+  model (the program takes it off its list).
+- With 1.3 the cores are `aiThreads()`, the own unload timer and the own memory check are off, and the options page shows a
+  text that names File > Options > General > AI Models instead of the two fields. With a 1.2 host everything is as in 1.5.
+- Checks: `tests/lang_tests.cpp` (`registryWithAnInterface13Host`, `settingsPageByInterface`, `interface12KeepsTheOldWay`);
+  `tests/FakeHost.h` has a small registry of the program (set `version` to 130) with the idle rule at a short time.
+- CTranslate2 4.9.1 in the Linux engine (`packaging/build-deps.sh`); Windows and Android recipes stay at 4.9.0.

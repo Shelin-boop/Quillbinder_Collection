@@ -280,6 +280,10 @@
             <translation>Zwalniaj modele po:</translation>
         </message>
         <message>
+            <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
+            <translation>Liczbę rdzeni procesora i czas, po którym nieużywany model jest zwalniany, ustawia się wspólnie dla wszystkich funkcji AI w File &gt; Options &gt; General &gt; AI Models.</translation>
+        </message>
+        <message>
             <source>Careful: the model weighs even more possibilities (slower, now and then better)</source>
             <translation>Dokładnie: model waży jeszcze więcej możliwości (wolniej, czasem lepiej)</translation>
         </message>

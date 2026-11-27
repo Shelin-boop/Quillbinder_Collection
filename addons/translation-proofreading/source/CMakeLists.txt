@@ -10,7 +10,7 @@
 cmake_minimum_required(VERSION 3.21)
 project(QuillbinderTranslationAddon LANGUAGES CXX)
 
-set(TP_VERSION "1.5")
+set(TP_VERSION "1.6")
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_AUTOMOC ON)
