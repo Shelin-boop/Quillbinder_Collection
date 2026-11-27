@@ -25,6 +25,10 @@ namespace qb {
 // not take them for HTML tags and cut the text off (the manual, the developer guide and the quick start use it)
 QString escapePlaceholders(const QString &md);
 
+// 0.99.0: fills {{LABEL}} in a document with the program's label ("beta"). A release without a label (1.0.0 and later):
+// "-{{LABEL}}" in a file name goes, and a line that only talks about the label ("... is {{LABEL}} software") is left out
+QString applyLabel(QString text);
+
 class ManualWindow : public QDialog
 {
     Q_OBJECT

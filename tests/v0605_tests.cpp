@@ -218,7 +218,7 @@ int main(int argc, char **argv)
     QDir().mkpath(outDir);
 
     check(Project::compareVersionText(QLatin1String(QB_APP_VERSION), QStringLiteral("0.60.5")) >= 0
-              && QLatin1String(QB_APP_VERSION_SHOWN).endsWith(QLatin1String(" " QB_APP_VERSION_LABEL)),
+              && QLatin1String(QB_APP_VERSION_SHOWN) == QLatin1String(sizeof(QB_APP_VERSION_LABEL) > 1 ? QB_APP_VERSION " " QB_APP_VERSION_LABEL : QB_APP_VERSION),
           QStringLiteral("version 0.60.5 or newer, shown with its label"), QStringLiteral(QB_APP_VERSION_SHOWN));
     QApplication::setStyle(QStyleFactory::create(QStringLiteral("Fusion")));
     QIcon::setThemeSearchPaths(QIcon::themeSearchPaths() << QStringLiteral(":/icons"));

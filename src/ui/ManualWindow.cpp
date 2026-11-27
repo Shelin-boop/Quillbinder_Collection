@@ -85,6 +85,19 @@ QString escapePlaceholdersImpl(const QString &md)
 
 QString escapePlaceholders(const QString &md) { return escapePlaceholdersImpl(md); }
 
+QString applyLabel(QString text)
+{
+    const QString label = QLatin1String(QB_APP_VERSION_LABEL);
+    if (!label.isEmpty())
+        return text.replace(QLatin1String("{{LABEL}}"), label);
+    text.replace(QLatin1String("-{{LABEL}}"), QString());
+    QStringList keep;
+    for (const QString &line : text.split(QLatin1Char('\n')))
+        if (!line.contains(QLatin1String("{{LABEL}}")))
+            keep << line;
+    return keep.join(QLatin1Char('\n'));
+}
+
 ManualWindow::ManualWindow(const QString &markdown, const QString &title, const QString &objectName, QSize size, QWidget *parent)
     : QDialog(parent)
 {
@@ -385,9 +398,9 @@ void showManualAt(QWidget *parent, const QString &section)
         QString text = QString::fromUtf8(f.readAll());
         text.replace(QLatin1String("{{APP}}"), QLatin1String(QB_APP_NAME))
             .replace(QLatin1String("{{VERSION}}"), QLatin1String(QB_APP_VERSION))
-            .replace(QLatin1String("{{LABEL}}"), QLatin1String(QB_APP_VERSION_LABEL))
             .replace(QLatin1String("{{SUFFIX}}"), QLatin1String(QB_PROJECT_SUFFIX))
             .replace(QLatin1String("{{FILE}}"), QLatin1String(QB_PROJECT_FILE_SUFFIX));
+        text = applyLabel(text);
         s_window = new ManualWindow(text, QObject::tr("User Manual"), QStringLiteral("manual"), QSize(980, 760), parent);
         if (resource != QLatin1String(":/docs/manual.md")) {
             // a translation: sections are found by their place in the English list of headings

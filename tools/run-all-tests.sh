@@ -168,11 +168,11 @@ run() {
     local rc=$?
     # checks of child runs carry a prefix: "[GStreamer] PASS ..."
     local pass=$(grep -c "^PASS\|\] PASS \|^  ok\|^ok \|\[ok\]" "$log")
-    local fail=$(grep -ci "^FAIL\|\] FAIL \|\[fail\]\|^  FAIL" "$log")
+    local fail=$(grep -c "^FAIL\|\] FAIL \|\[fail\]\|^  FAIL" "$log")
     local summary=$(grep -E "^[0-9]+ failure\(s\)" "$log" | tail -1)
     echo "$name rc=$rc pass=$pass fail=$fail time=$(( $(date +%s) - start ))s ${summary:-(no summary line)}"
     [ -n "$COUNTS" ] && echo "$name $((pass + fail))" >> "$COUNTS"
-    grep -i "^FAIL\|\] FAIL " "$log" | head -5 | sed 's/^/    /'
+    grep "^FAIL\|\] FAIL " "$log" | head -5 | sed 's/^/    /'
     rm -rf "$h"
     # 0.65.0 (audit F08): the result counts for the exit status
     if [ "$rc" != 0 ] || [ "$fail" != 0 ] || [ -z "$summary" ] || [[ "$summary" != "0 failure(s)"* ]]; then

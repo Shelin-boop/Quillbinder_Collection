@@ -273,12 +273,14 @@ static void labelChecks(MainWindow &w)
     const QString manual = readText(kRoot + QStringLiteral("/docs/manual.md"));
     const QString quick = readText(kRoot + QStringLiteral("/docs/quick-start.md"));
     const QString readme = readText(kRoot + QStringLiteral("/README.md"));
-    check(!label.isEmpty() && manual.contains(QLatin1String("{{APP}} is {{LABEL}} software")) && quick.contains(QLatin1String("-full-{{LABEL}}-x86_64")),
+    // 0.99.0: a release without a label (1.0.0 and later) has no label in the names; the placeholders stay in the documents
+    check(manual.contains(QLatin1String("{{APP}} is {{LABEL}} software")) && quick.contains(QLatin1String("-full-{{LABEL}}-x86_64")),
           QStringLiteral("the manual and the Quick Start take the label through a placeholder"));
     const QRegularExpression stale(QStringLiteral("\\b(alpha|beta)\\b(?= software)|-full-(alpha|beta)-"));
     check(!stale.match(manual).hasMatch() && !stale.match(quick).hasMatch(), QStringLiteral("... no label is written out in them"));
-    check(readme.contains(QStringLiteral("Quillbinder is %1 software").arg(label))
-              && readme.contains(QStringLiteral("-%1-full-%2-x86_64.AppImage").arg(QLatin1String(QB_APP_VERSION), label)),
+    const QString dashLabel = label.isEmpty() ? QString() : QLatin1Char('-') + label;
+    check((label.isEmpty() || readme.contains(QStringLiteral("Quillbinder is %1 software").arg(label)))
+              && readme.contains(QStringLiteral("-%1-full%2-x86_64.AppImage").arg(QLatin1String(QB_APP_VERSION), dashLabel)),
           QStringLiteral("the README names the same label (it cannot use the placeholder)"));
     for (const char *name : {"manual", "quickStart"}) {
         QAction *a = act(w, name);
@@ -294,8 +296,8 @@ static void labelChecks(MainWindow &w)
                 if (auto *b = top->findChild<QTextBrowser *>(QLatin1String(name)))
                     tb = b;
         const QString shown = tb ? tb->toPlainText() : QString();
-        check(tb && !shown.contains(QLatin1String("{{")) && (QLatin1String(name) == QLatin1String("manual") ? shown.contains(label + QStringLiteral(" software"))
-                                                                                                             : shown.contains(QStringLiteral("-full-%1-x86_64").arg(label))),
+        check(tb && !shown.contains(QLatin1String("{{")) && (QLatin1String(name) == QLatin1String("manual") ? (label.isEmpty() ? !shown.contains(QLatin1String("is  software")) : shown.contains(label + QStringLiteral(" software")))
+                                                                                                             : shown.contains(QStringLiteral("-full%1-x86_64").arg(dashLabel))),
               QStringLiteral("Help > %1 shows the label \"%2\"").arg(QLatin1String(name), label),
               QString::number(tb != nullptr) + QStringLiteral(" braces %1 ").arg(shown.indexOf(QLatin1String("{{"))) + shown.mid(shown.indexOf(QLatin1String("Getting the program")), 900));
         if (tb)

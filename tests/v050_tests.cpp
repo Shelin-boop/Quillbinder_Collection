@@ -457,7 +457,7 @@ int main(int argc, char **argv)
     // ================================================================ version and project page
     // (0.60: the version itself is checked by qb_v060_tests; here: 0.50.0 or newer, with the label shown)
     check(QVersionNumber::fromString(QLatin1String(QB_APP_VERSION)) >= QVersionNumber(0, 50, 0)
-              && QLatin1String(QB_APP_VERSION_SHOWN) == QLatin1String(QB_APP_VERSION " " QB_APP_VERSION_LABEL),
+              && QLatin1String(QB_APP_VERSION_SHOWN) == QLatin1String(sizeof(QB_APP_VERSION_LABEL) > 1 ? QB_APP_VERSION " " QB_APP_VERSION_LABEL : QB_APP_VERSION),
           QStringLiteral("the version is 0.50.0 or newer, shown with its label (\"%1\")").arg(QStringLiteral(QB_APP_VERSION_SHOWN)));
     check(QLatin1String(QB_APP_HOMEPAGE) == QLatin1String("https://github.com/Shelin-boop/Quillbinder_Collection")
               && QLatin1String(QB_SOURCES_URL) == QLatin1String("https://github.com/Shelin-boop/Quillbinder_Collection/releases/tag/third-party-sources"),
@@ -660,7 +660,10 @@ int main(int argc, char **argv)
         QTemporaryDir dist;
         const QString v = QStringLiteral(QB_APP_VERSION);
         const QString label = QStringLiteral(QB_APP_VERSION_LABEL);
-        for (const QString &n : {QStringLiteral("Quillbinder-%1-%2-x86_64.AppImage").arg(v, label), QStringLiteral("quillbinder-%1-update.qbpkg").arg(v),
+        // 0.99.0: without a label (1.0.0 and later) the names have no dash and word, and the label's notes are gone
+        const QString dashLabel = label.isEmpty() ? QString() : QLatin1Char('-') + label;
+        const QString shownVersion = label.isEmpty() ? v : v + QLatin1Char(' ') + label;
+        for (const QString &n : {QStringLiteral("Quillbinder-%1%2-x86_64.AppImage").arg(v, dashLabel), QStringLiteral("quillbinder-%1-update.qbpkg").arg(v),
                                  QStringLiteral("quillbinder-%1-symbols.xz").arg(v), QStringLiteral("SHA256SUMS.txt"),
                                  QStringLiteral("THIRD-PARTY-SOURCES.txt")}) {
             QFile f(dist.path() + QLatin1Char('/') + n);
@@ -674,12 +677,14 @@ int main(int argc, char **argv)
         if (out.open(QIODevice::WriteOnly))
             out.write(notes.toUtf8());
         const QString article = QStringLiteral("aeiou").contains(label.left(1)) ? QStringLiteral("an") : QStringLiteral("a");
-        check(rc == 0 && notes.contains(QStringLiteral("**This is %1 %2 version.**").arg(article, label)) && notes.contains(QLatin1String("Back Up Now"))
-                  && notes.contains(QStringLiteral("Quillbinder-%1-%2-x86_64.AppImage").arg(v, label))
+        check(rc == 0 && (label.isEmpty() ? !notes.contains(QLatin1String("**This is a"))
+                                                                   : notes.contains(QStringLiteral("**This is %1 %2 version.**").arg(article, label)))
+                  && (label.isEmpty() || notes.contains(QLatin1String("Back Up Now")))
+                  && notes.contains(QStringLiteral("Quillbinder-%1%2-x86_64.AppImage").arg(v, dashLabel))
                   && notes.contains(QLatin1String("Add-on \"Extra Video and Audio Formats\" 2.1"))
                   && notes.contains(QLatin1String("Add-on \"Media Playback\" 2.1"))
                   && notes.contains(QLatin1String("not made by or connected with Literature & Latte"))
-                  && notes.contains(QLatin1String("releases/tag/third-party-sources")) && notes.contains(QStringLiteral("What is new in %1 %2").arg(v, label)),
+                  && notes.contains(QLatin1String("releases/tag/third-party-sources")) && notes.contains(QStringLiteral("What is new in %1").arg(shownVersion)),
               QStringLiteral("the release text: the label's note with backups, every file with what it is, non-affiliation, source code, what is new"),
               notes.left(1500));
         const QString news = run(QStringLiteral("python3"), {QStringLiteral("-I"), tools + QStringLiteral("release-notes.py"), QStringLiteral("--whats-new")}, &rc);
@@ -694,7 +699,8 @@ int main(int argc, char **argv)
         const QString meta = QString::fromUtf8(readAll(kSource + QStringLiteral("/packaging/linux/quillbinder.metainfo.xml")));
         const QString desktop = QString::fromUtf8(readAll(kSource + QStringLiteral("/packaging/linux/quillbinder.desktop")));
         check(meta.contains(QLatin1String("Scrivener 3 format")) && meta.contains(QLatin1String("not made by or connected"))
-                  && meta.contains(QStringLiteral("%1 version: keep backups").arg(label)) && !desktop.contains(QLatin1String("Scrivener")),
+                  && (label.isEmpty() ? !meta.contains(QLatin1String("version: keep backups"))
+                                            : meta.contains(QStringLiteral("%1 version: keep backups").arg(label))) && !desktop.contains(QLatin1String("Scrivener")),
               QStringLiteral("the AppStream description names Scrivener only as a file format, with the non-affiliation and the label's notes; "
                              "the desktop file does not name it"));
         if (!run(QStringLiteral("sh"), {QStringLiteral("-c"), QStringLiteral("command -v appstreamcli")}).trimmed().isEmpty()) {
@@ -704,7 +710,7 @@ int main(int argc, char **argv)
         }
         const QString readme = QString::fromUtf8(readAll(kSource + QStringLiteral("/README.md")));
         const QString third = QString::fromUtf8(readAll(kSource + QStringLiteral("/THIRD-PARTY.md")));
-        check(readme.contains(QLatin1String("## Download")) && readme.contains(QStringLiteral("is %1 software").arg(label))
+        check(readme.contains(QLatin1String("## Download")) && (label.isEmpty() || readme.contains(QStringLiteral("is %1 software").arg(label)))
                   && readme.contains(QLatin1String("releases/tag/third-party-sources")) && third.contains(QLatin1String("releases/tag/third-party-sources"))
                   && third.contains(QLatin1String("Extra Video and Audio Formats")),
               QStringLiteral("README and THIRD-PARTY.md say where to download, that it is %1 software, and where the sources are").arg(label));
