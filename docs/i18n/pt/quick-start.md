@@ -28,12 +28,12 @@ O {{APP}} é um programa de escrita para textos longos. Se você já trabalhou c
 | Barras de ferramentas | **Visualizar > Barras de ferramentas > Personalizar barras de ferramentas…** (ou clique com o botão direito em uma barra) |
 | A barra de ícones | **Visualizar > Barras de ferramentas > Barra de ícones**; **Escolher ícones para a barra de ícones…** |
 | Atalhos de teclado | **Arquivo > Opções > Teclado** (busca, pressionar novas teclas, exportar e importar); **Ajuda > Atalhos de teclado…** os lista |
-| Encontrar um comando nos menus | **Ajuda > Localizar comando…** (digite parte do nome; Return o executa) |
+| Encontrar um comando nos menus | **Ajuda > Localizar comando…** (digite parte do nome; Enter o executa) |
 | Layouts de janela | **Visualizar > Layout** (sete internos; salve os seus) |
 | Salvamento automático, projetos recentes, informações do autor | **Arquivo > Opções > Geral** |
 | Backups | **Arquivo > Opções > Backup** (quando, quantos, onde); **Arquivo > Backup** faz um agora |
 | Ortografia e correções enquanto você digita | **Arquivo > Opções > Correções** |
-| Onde os links abrem, a tecla Return, o modo de composição, a reprodução | **Arquivo > Opções > Comportamentos** |
+| Onde os links abrem, a tecla Enter, o modo de composição, a reprodução | **Arquivo > Opções > Comportamentos** |
 | Configurações de importação e exportação | **Arquivo > Opções > Compartilhamento** |
 | Mapas mentais, objetos, complementos, relatórios de falhas | **Arquivo > Opções > Extras** |
 | Etiquetas, status, tipos de seção, metadados personalizados, pastas especiais | **Projeto > Configurações do projeto** |
