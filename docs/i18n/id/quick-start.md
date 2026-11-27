@@ -38,7 +38,7 @@
 | Peta pikiran, objek, pengaya, laporan crash | **Berkas > Opsi > Ekstra** |
 | Label, status, tipe seksi, metadata kustom, folder khusus | **Proyek > Pengaturan Proyek** |
 | Opsi untuk satu proyek saja | **Berkas > Opsi**, **Pengaturan untuk: Proyek ini** di bagian atas; apakah pengaturan tersendiri proyek didahulukan: **Berkas > Opsi > Umum** |
-| Membawa pengaturan Anda ke komputer lain | **Berkas > Opsi > Kelola > Simpan Opsi ke Berkas… / Muat Opsi dari Berkas…** |
+| Membawa pengaturan Anda ke komputer lain | **Berkas > Opsi > Kelola > Ekspor Profil… / Impor Profil…** |
 | Semuanya kembali ke standar | **Berkas > Opsi > Bawaan** (proyek, tema, tata letak, dan pintasan Anda tetap ada) |
 
 ---

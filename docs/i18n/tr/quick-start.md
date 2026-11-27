@@ -38,7 +38,7 @@
 | Zihin haritaları, nesneler, eklentiler, çökme raporları | **Dosya > Seçenekler > Ek Özellikler** |
 | Etiketler, durum, kesim türleri, özel üst veri, özel klasörler | **Proje > Proje Ayarları** |
 | Yalnızca tek bir proje için seçenekler | **Dosya > Seçenekler**, en üstte **Ayarların geçtiği yer: Bu proje**; projelerin kendi ayarlarının öncelikli olup olmadığı: **Dosya > Seçenekler > Genel** |
-| Ayarlarınızı başka bir bilgisayara taşıma | **Dosya > Seçenekler > Yönet > Seçenekleri Dosyaya Kaydet… / Seçenekleri Dosyadan Yükle…** |
+| Ayarlarınızı başka bir bilgisayara taşıma | **Dosya > Seçenekler > Yönet > Profili Dışa Aktar… / Profili İçe Aktar…** |
 | Her şeyi standart hâline döndürme | **Dosya > Seçenekler > Varsayılanlar** (projeleriniz, temalarınız, yerleşimleriniz ve kısayollarınız kalır) |
 
 ---

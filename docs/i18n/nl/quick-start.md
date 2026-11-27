@@ -38,7 +38,7 @@
 | Mindmaps, objecten, add-ons, crashrapporten | **Bestand > Opties > Extra's** |
 | Labels, status, sectietypen, aangepaste metagegevens, speciale mappen | **Project > Projectinstellingen** |
 | Opties voor één project alleen | **Bestand > Opties**, **Instellingen voor: Dit project** bovenaan; of de eigen instellingen van projecten voorrang hebben: **Bestand > Opties > Algemeen** |
-| Je instellingen meenemen naar een andere computer | **Bestand > Opties > Beheer > Opties opslaan in bestand… / Opties laden uit bestand…** |
+| Je instellingen meenemen naar een andere computer | **Bestand > Opties > Beheer > Profiel exporteren… / Profiel importeren…** |
 | Alles terug naar de standaard | **Bestand > Opties > Standaardwaarden** (je projecten, thema's, lay-outs en sneltoetsen blijven staan) |
 
 ---

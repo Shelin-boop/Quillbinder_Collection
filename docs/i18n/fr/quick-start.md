@@ -38,7 +38,7 @@
 | Les cartes mentales, les objets, les modules, les rapports de plantage | **Fichier > Options > Extras** |
 | Les libellés, les statuts, les types de section, les métadonnées personnalisées, les dossiers spéciaux | **Projet > Paramètres du projet** |
 | Des options pour un seul projet | **Fichier > Options**, **Paramètres pour :** **Ce projet** en haut ; pour que les paramètres propres aux projets passent en premier : **Fichier > Options > Général** |
-| Emporter vos réglages sur un autre ordinateur | **Fichier > Options > Gérer > Exporter le profil... / Importer un profil...** |
+| Emporter vos réglages sur un autre ordinateur | **Fichier > Options > Gérer > Exporter le profil… / Importer un profil…** |
 | Tout remettre au standard | **Fichier > Options > Valeurs par défaut** (vos projets, thèmes, dispositions et raccourcis sont conservés) |
 
 ---

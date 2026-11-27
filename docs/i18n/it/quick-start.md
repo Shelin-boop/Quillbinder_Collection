@@ -38,7 +38,7 @@
 | Mappe mentali, oggetti, componenti aggiuntivi, rapporti di arresto anomalo | **File > Opzioni > Extra** |
 | Etichette, stato, tipi di sezione, metadati personalizzati, cartelle speciali | **Progetto > Impostazioni del progetto** |
 | Opzioni per un solo progetto | **File > Opzioni**, **Impostazioni per: Questo progetto** in alto; se le impostazioni proprie dei progetti hanno la precedenza: **File > Opzioni > Generale** |
-| Portare le tue impostazioni su un altro computer | **File > Opzioni > Gestione > Salva opzioni su file… / Carica opzioni da file…** |
+| Portare le tue impostazioni su un altro computer | **File > Opzioni > Gestione > Esporta profilo… / Importa profilo…** |
 | Tutto di nuovo allo standard | **File > Opzioni > Predefiniti** (i tuoi progetti, temi, layout e scorciatoie restano) |
 
 ---

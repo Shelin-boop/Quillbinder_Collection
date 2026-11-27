@@ -38,7 +38,7 @@
 | Mapy myśli, obiekty, dodatki, raporty o awariach | **Plik > Opcje > Dodatkowe** |
 | Etykiety, status, typy sekcji, własne metadane, foldery specjalne | **Projekt > Ustawienia projektu** |
 | Opcje tylko dla jednego projektu | **Plik > Opcje**, **Ustawienia dla: Ten projekt** na górze; czy ustawienia projektu mają pierwszeństwo: **Plik > Opcje > Ogólne** |
-| Przeniesienie ustawień na inny komputer | **Plik > Opcje > Zarządzanie > Zapisz opcje do pliku… / Wczytaj opcje z pliku…** |
+| Przeniesienie ustawień na inny komputer | **Plik > Opcje > Zarządzanie > Eksportuj profil… / Importuj profil…** |
 | Wszystko z powrotem do standardu | **Plik > Opcje > Domyślne** (twoje projekty, motywy, układy i skróty pozostają) |
 
 ---

@@ -38,7 +38,7 @@
 | Mindmaps, Objekte, Erweiterungen, Absturzberichte | **Datei > Einstellungen > Extras** |
 | Etiketten, Status, Abschnittstypen, eigene Metadaten, Sonderordner | **Projekt > Projekteinstellungen** |
 | Einstellungen nur für ein Projekt | **Datei > Einstellungen**, oben **Einstellungen für: Dieses Projekt**; ob die eigenen Einstellungen der Projekte Vorrang haben: **Datei > Einstellungen > Allgemein** |
-| Ihre Einstellungen auf einen anderen Computer mitnehmen | **Datei > Einstellungen > Verwalten > Einstellungen in Datei speichern… / Einstellungen aus Datei laden…** |
+| Ihre Einstellungen auf einen anderen Computer mitnehmen | **Datei > Einstellungen > Verwalten > Profil exportieren… / Profil importieren…** |
 | Alles zurück auf die Standardwerte | **Datei > Einstellungen > Standardwerte** (Ihre Projekte, Designs, Layouts und Tastenkürzel bleiben erhalten) |
 
 ---

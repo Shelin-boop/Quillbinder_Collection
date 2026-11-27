@@ -38,7 +38,7 @@
 | Mind maps, objects, add-ons, crash reports | **File > Options > Extras** |
 | Labels, status, section types, custom metadata, special folders | **Project > Project Settings** |
 | Options for one project only | **File > Options**, **Settings for: This project** at the top; whether projects' own settings come first: **File > Options > General** |
-| Take your settings to another computer | **File > Options > Manage > Save Options to File… / Load Options from File…** |
+| Take your settings to another computer | **File > Options > Manage > Export Profile… / Import Profile…** |
 | Everything back to the standard | **File > Options > Defaults** (your projects, themes, layouts, and shortcuts stay) |
 
 ---

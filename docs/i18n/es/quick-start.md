@@ -38,7 +38,7 @@
 | Mapas mentales, objetos, complementos, informes de fallos | **Archivo > Opciones > Extras** |
 | Etiquetas, estado, tipos de sección, metadatos personalizados, carpetas especiales | **Proyecto > Ajustes del proyecto** |
 | Opciones solo para un proyecto | **Archivo > Opciones**, **Ajustes para: Este proyecto** arriba; si los ajustes propios de los proyectos tienen prioridad: **Archivo > Opciones > General** |
-| Llevar tus ajustes a otro equipo | **Archivo > Opciones > Gestionar > Guardar opciones en un archivo… / Cargar opciones desde un archivo…** |
+| Llevar tus ajustes a otro equipo | **Archivo > Opciones > Gestionar > Exportar perfil… / Importar perfil…** |
 | Todo de vuelta a lo estándar | **Archivo > Opciones > Valores predeterminados** (tus proyectos, temas, disposiciones y atajos se conservan) |
 
 ---

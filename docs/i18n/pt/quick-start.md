@@ -38,7 +38,7 @@ O {{APP}} é um programa de escrita para textos longos. Se você já trabalhou c
 | Mapas mentais, objetos, complementos, relatórios de falhas | **Arquivo > Opções > Extras** |
 | Etiquetas, status, tipos de seção, metadados personalizados, pastas especiais | **Projeto > Configurações do projeto** |
 | Opções somente para um projeto | **Arquivo > Opções**, **Configurações para: Este projeto** no alto; se as configurações próprias dos projetos têm prioridade: **Arquivo > Opções > Geral** |
-| Levar suas configurações para outro computador | **Arquivo > Opções > Gerenciar > Salvar opções em um arquivo… / Carregar opções de um arquivo…** |
+| Levar suas configurações para outro computador | **Arquivo > Opções > Gerenciar > Exportar perfil… / Importar perfil…** |
 | Tudo de volta ao padrão | **Arquivo > Opções > Padrões** (seus projetos, temas, layouts e atalhos permanecem) |
 
 ---
