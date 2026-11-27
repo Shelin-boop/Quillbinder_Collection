@@ -108,14 +108,14 @@ cp "$WORK/bzip2/bzlib.h" "$PREFIX/include/"
 # program's own compile needs too (the header says dllimport without it)
 echo "== RNP"
 # RNP's library includes <getopt.h> through uniwin.h but calls nothing of it (only its command line tools do, which are not
-# built): an empty header in a folder of its own stands in (run 46036008841: C1083 on getopt.h)
+# built): an empty header in a folder of its own stands in (run 46036008841: C1083 on getopt.h; the library targets do not read GETOPT_INCLUDE_DIR, so the folder is also on the compiler's include path, run 46038780146)
 mkdir -p "$WORK/getopt-stub"
 echo "/* stands in for getopt.h: the RNP library only includes it (win-crypto.sh) */" > "$WORK/getopt-stub/getopt.h"
 # (RNP's command line tools need getopt and its CMake stops without it; only the library is built, so getopt gets a harmless
 # value. dirent.h is needed by the library itself: the header-only dirent of the line above, run 46034044407)
 cmake -S "$WORK/rnp" -B "$WORK/b-rnp" -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$P" \
     -DCMAKE_MSVC_RUNTIME_LIBRARY=MultiThreadedDLL -DCMAKE_PREFIX_PATH="$P" -DBUILD_SHARED_LIBS=OFF \
-    -DCMAKE_CXX_FLAGS="-FIcstring -EHsc -DRNP_STATIC" -DCMAKE_C_FLAGS="-DRNP_STATIC" \
+    -DCMAKE_CXX_FLAGS="-FIcstring -EHsc -DRNP_STATIC -I$(cygpath -m "$WORK/getopt-stub")" -DCMAKE_C_FLAGS="-DRNP_STATIC" \
     -DCRYPTO_BACKEND=botan3 -DBOTAN_ROOT_DIR="$P" -DENABLE_CRYPTO_REFRESH=OFF -DENABLE_PQC=OFF -DBUILD_TESTING=OFF \
     -DENABLE_DOC=OFF -DDOWNLOAD_GTEST=OFF -DENABLE_COVERAGE=OFF -DENABLE_SANITIZERS=OFF -DENABLE_FUZZERS=OFF \
     -DBZIP2_INCLUDE_DIR="$P/include" -DBZIP2_LIBRARY_RELEASE="$P/lib/bz2.lib" \
