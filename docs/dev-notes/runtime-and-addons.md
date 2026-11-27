@@ -228,6 +228,7 @@ a tag points elsewhere), none changed except where said here.
   MacKenna: CC BY 4.0; Voice-Zero, voice donations and Kyutai's own recordings: CC0; Expresso and EARS: non-commercial, left out;
   voices whose recording that README does not name: left out; juergen: never). The model is the 16-layer one of each language.
 - The dispatch input `pocket` (default on) turns Pocket TTS off: the catalog job then runs without it (`make-catalog.py build --without-pocket`) and the five models are listed without checksums ("not published yet"). A published release is never changed, so Pocket TTS would then come with a later release.
+- Published 2026-11-27 (run 46013112875, 73 assets, every size and SHA-256 equal to the release's own digests): `tools/models/models-5-catalog.json` is its catalog.json; `resources/ai/models.json` is made from it. Each Pocket TTS mmproj holds 20 voices (the staged ones; the mmproj has 50.8 MB because it has no voice encoder).
 - A release asset may have less than 2 GiB: the largest file (Qwen 1.7B Q8_0) has 2,079,448,256 bytes, so no file is split.
   `catalog.json` is uploaded last: a stopped upload is finished by the next run, which skips what is there.
 

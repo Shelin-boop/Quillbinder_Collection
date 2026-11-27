@@ -111,11 +111,14 @@ check("pins: the largest asset is under 2 GiB", max(f["size"] for f in groups["q
 qwen_pins = {f["path"]: f for f in groups["qwen"]["files"]}
 for m in built_in["models"]:
     if m["engine"] == "qwen3-tts":
-        pinned = [f for f in m["files"] if "sha256" in f]
+        mine = {f["name"]: f for f in m["files"]}
         check(f"models.json {m['id']}: talker and tokenizer carry the pinned size and SHA-256",
-              len(pinned) == 2 and all(any(p["size"] == f["size"] and p["sha256"] == f["sha256"] for p in qwen_pins.values()) for f in pinned))
-check("models.json: nothing else has a checksum yet (the run writes them) or it matches the definitions",
-      all(("sha256" not in f) or m["engine"] == "qwen3-tts" or len(f["sha256"]) == 64 for m in built_in["models"] for f in m["files"]))
+              all(any(p["size"] == mine[n]["size"] and p["sha256"] == mine[n]["sha256"] for p in qwen_pins.values()) for n in ("talker.gguf", "tokenizer-12hz-Q8_0.gguf")))
+published = jload(os.path.join(M, "models-5-catalog.json"))
+check("the published release's catalog (models-5-catalog.json) lists the same ids and files as the definitions",
+      [(m["id"], [f["asset"] for f in m["files"]]) for m in published["models"]] == [(m["id"], [f["asset"] for f in m["files"]]) for m in models])
+check("models.json: every file has its size and a 64-hex SHA-256 from the published release",
+      all(len(f.get("sha256", "")) == 64 and f.get("size", 0) > 0 for m in built_in["models"] for f in m["files"]))
 
 # ---- the workflow
 check("workflow: release models-5, llama.cpp b12808 with its commit", "RELEASE_TAG: models-5" in wf_text and "LLAMA_TAG: b12808" in wf_text and "ed2153e708de813c35559102aed43b3085179c27" in wf_text)
@@ -224,8 +227,8 @@ try:
     r2 = subprocess.run([sys.executable, "-I", os.path.join(M, "make-catalog.py"), "models-json", target, "--catalog", os.path.join(out, "catalog.json")], capture_output=True, text=True)
     merged = jload(target) if r2.returncode == 0 else {"models": []}
     check("models-json with a catalog: every file has its measured checksum", r2.returncode == 0 and all("sha256" in f for x in merged["models"] for f in x["files"]))
-    r3 = subprocess.run([sys.executable, "-I", os.path.join(M, "make-catalog.py"), "models-json", os.path.join(tmp, "m3.json")], capture_output=True, text=True)
-    check("models-json without a catalog equals the committed built-in catalog", r3.returncode == 0 and jload(os.path.join(tmp, "m3.json")) == built_in, r3.stderr)
+    r3 = subprocess.run([sys.executable, "-I", os.path.join(M, "make-catalog.py"), "models-json", os.path.join(tmp, "m3.json"), "--catalog", os.path.join(M, "models-5-catalog.json")], capture_output=True, text=True)
+    check("models-json with the published release's catalog equals the committed built-in catalog", r3.returncode == 0 and jload(os.path.join(tmp, "m3.json")) == built_in, r3.stderr)
 finally:
     shutil.rmtree(tmp, ignore_errors=True)
 
