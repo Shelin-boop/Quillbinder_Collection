@@ -5,19 +5,19 @@
     <name>EncryptionPage</name>
     <message>
         <source>This system has no key store, so the passphrase is asked for once in each session.</source>
-        <translation type="unfinished"></translation>
+        <translation>В этой системе нет хранилища ключей, поэтому парольную фразу запрашивают один раз за сеанс.</translation>
     </message>
     <message>
         <source>The system&apos;s key store refused to keep the passphrase, so it is asked for once in each session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Хранилище ключей системы отказалось сохранить парольную фразу, поэтому её запрашивают один раз за сеанс.</translation>
     </message>
     <message>
         <source>The passphrase could not be kept in the system&apos;s key store, so it is asked for once in each session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Парольную фразу не удалось сохранить в хранилище ключей системы, поэтому её запрашивают один раз за сеанс.</translation>
     </message>
     <message>
         <source>Remember the passphrase on this device</source>
-        <translation type="unfinished"></translation>
+        <translation>Запомнить парольную фразу на этом устройстве</translation>
     </message>
 </context>
 <context>
@@ -32,11 +32,11 @@
     </message>
     <message>
         <source>Quillbinder asks for permission to use the microphone. Allow it, then press Record again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder запрашивает разрешение на использование микрофона. Разрешите его и снова нажмите «Запись».</translation>
     </message>
     <message>
         <source>The microphone is not allowed for Quillbinder. Allow it in the system&apos;s settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для Quillbinder микрофон не разрешён. Разрешите его в настройках системы.</translation>
     </message>
     <message>
         <source>No microphone was found.</source>
@@ -51,23 +51,23 @@
     <name>Handwriting</name>
     <message>
         <source>Ruled lines</source>
-        <translation type="unfinished">Линейки</translation>
+        <translation>Линейки</translation>
     </message>
     <message>
         <source>Writing lines (baseline and midline)</source>
-        <translation type="unfinished"></translation>
+        <translation>Строки письма (базовая и средняя линии)</translation>
     </message>
     <message>
         <source>Squares</source>
-        <translation type="unfinished"></translation>
+        <translation>Клетки</translation>
     </message>
     <message>
         <source>Dots</source>
-        <translation type="unfinished">Точки</translation>
+        <translation>Точки</translation>
     </message>
     <message>
         <source>No grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Без сетки</translation>
     </message>
 </context>
 <context>
@@ -172,15 +172,15 @@
     <name>ModelMemory</name>
     <message>
         <source>the memory of the graphics card %1</source>
-        <translation type="unfinished"></translation>
+        <translation>память видеокарты %1</translation>
     </message>
     <message>
         <source>the computer&apos;s memory</source>
-        <translation type="unfinished"></translation>
+        <translation>память компьютера</translation>
     </message>
     <message>
         <source>Not enough memory for the model &quot;%1&quot; (%2 MB): %3 is %4 % used, and the model would bring it over %5 %.</source>
-        <translation type="unfinished"></translation>
+        <translation>Недостаточно памяти для модели «%1» (%2 МБ): %3 используется на %4 %, и модель довела бы это значение до более чем %5 %.</translation>
     </message>
 </context>
 <context>
@@ -509,214 +509,214 @@ The forenames of this list are not divided into female and male.</source>
     <name>QKeychain::DeletePasswordJobPrivate</name>
     <message>
         <source>Could not open keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось открыть хранилище ключей</translation>
     </message>
     <message>
         <source>Could not remove private key from keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось удалить закрытый ключ из хранилища ключей</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная ошибка</translation>
     </message>
     <message>
         <source>Could not open wallet: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось открыть кошелёк: %1; %2</translation>
     </message>
     <message>
         <source>Password entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись с паролем не найдена</translation>
     </message>
     <message>
         <source>Could not delete password</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось удалить пароль</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::Job</name>
     <message>
         <source>Both service name and key are empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Не указаны ни имя службы, ни ключ</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::JobPrivate</name>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная ошибка</translation>
     </message>
     <message>
         <source>Access to keychain denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ к связке ключей запрещён</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::PlainTextStore</name>
     <message>
         <source>Could not store data in settings: access error</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось сохранить данные в настройках: ошибка доступа</translation>
     </message>
     <message>
         <source>Could not store data in settings: format error</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось сохранить данные в настройках: ошибка формата</translation>
     </message>
     <message>
         <source>Could not delete data from settings: access error</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось удалить данные из настроек: ошибка доступа</translation>
     </message>
     <message>
         <source>Could not delete data from settings: format error</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось удалить данные из настроек: ошибка формата</translation>
     </message>
     <message>
         <source>Entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись не найдена</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::ReadPasswordJobPrivate</name>
     <message>
         <source>Entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись не найдена</translation>
     </message>
     <message>
         <source>Could not open keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось открыть хранилище ключей</translation>
     </message>
     <message>
         <source>Could not retrieve private key from keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось получить закрытый ключ из хранилища ключей</translation>
     </message>
     <message>
         <source>Encrypted data is too short</source>
-        <translation type="unfinished"></translation>
+        <translation>Зашифрованные данные слишком короткие</translation>
     </message>
     <message>
         <source>Could not create RSA decryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать шифр расшифровки RSA</translation>
     </message>
     <message>
         <source>Could not decrypt AES key: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось расшифровать ключ AES: %1</translation>
     </message>
     <message>
         <source>Could not create AES decryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать шифр расшифровки AES</translation>
     </message>
     <message>
         <source>Could not decrypt data: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось расшифровать данные: %1</translation>
     </message>
     <message>
         <source>Could not create decryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать шифр расшифровки</translation>
     </message>
     <message>
         <source>D-Bus is not running</source>
-        <translation type="unfinished"></translation>
+        <translation>D-Bus не запущен</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная ошибка</translation>
     </message>
     <message>
         <source>No keychain service available</source>
-        <translation type="unfinished"></translation>
+        <translation>Служба связки ключей недоступна</translation>
     </message>
     <message>
         <source>Could not open wallet: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось открыть кошелёк: %1; %2</translation>
     </message>
     <message>
         <source>Access to keychain denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ к связке ключей запрещён</translation>
     </message>
     <message>
         <source>Could not determine data type: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось определить тип данных: %1; %2</translation>
     </message>
     <message>
         <source>Unknown kwallet entry type &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестный тип записи kwallet «%1»</translation>
     </message>
     <message>
         <source>Password entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись с паролем не найдена</translation>
     </message>
     <message>
         <source>Could not decrypt data</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось расшифровать данные</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::WritePasswordJobPrivate</name>
     <message>
         <source>Could not open keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось открыть хранилище ключей</translation>
     </message>
     <message>
         <source>Could not create private key generator</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать генератор закрытых ключей</translation>
     </message>
     <message>
         <source>Could not generate new private key</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать новый закрытый ключ</translation>
     </message>
     <message>
         <source>Could not retrieve private key from keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось получить закрытый ключ из хранилища ключей</translation>
     </message>
     <message>
         <source>Could not generate AES key</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать ключ AES</translation>
     </message>
     <message>
         <source>Could not generate IV</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать вектор инициализации</translation>
     </message>
     <message>
         <source>Could not create AES encryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать шифр зашифровки AES</translation>
     </message>
     <message>
         <source>Could not encrypt data: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось зашифровать данные: %1</translation>
     </message>
     <message>
         <source>Could not create RSA encryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать шифр зашифровки RSA</translation>
     </message>
     <message>
         <source>Could not encrypt AES key: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось зашифровать ключ AES: %1</translation>
     </message>
     <message>
         <source>D-Bus is not running</source>
-        <translation type="unfinished"></translation>
+        <translation>D-Bus не запущен</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная ошибка</translation>
     </message>
     <message>
         <source>Could not open wallet: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось открыть кошелёк: %1; %2</translation>
     </message>
     <message>
         <source>Encryption failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка шифрования: %1</translation>
     </message>
     <message>
         <source>Credential size exceeds maximum size of %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер учётных данных превышает максимальный (%1): %2</translation>
     </message>
     <message>
         <source>Credential key exceeds maximum size of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключ учётных данных превышает максимальный размер (%1)</translation>
     </message>
     <message>
         <source>Writing credentials failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось записать учётные данные: %1</translation>
     </message>
 </context>
 <context>
@@ -889,7 +889,7 @@ The forenames of this list are not divided into female and male.</source>
     </message>
     <message>
         <source>No backup was made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Резервная копия не создана.</translation>
     </message>
     <message>
         <source>The project could not be saved first, so no backup was made: %1</source>
@@ -901,15 +901,15 @@ The forenames of this list are not divided into female and male.</source>
     </message>
     <message>
         <source>the project&apos;s keys are not named in %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ключи проекта не названы в %1</translation>
     </message>
     <message>
         <source>the key %1 is not in Quillbinder&apos;s key ring</source>
-        <translation type="unfinished"></translation>
+        <translation>ключа %1 нет в связке ключей Quillbinder</translation>
     </message>
     <message>
         <source>The backups of this project are encrypted, but no encrypted backup can be made: %1. No backup was made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Резервные копии этого проекта зашифрованы, но зашифрованную копию создать нельзя: %1. Резервная копия не создана.</translation>
     </message>
     <message>
         <source>%1 - working copy of %2</source>
@@ -917,19 +917,19 @@ The forenames of this list are not divided into female and male.</source>
     </message>
     <message>
         <source>it could not be encrypted: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>её не удалось зашифровать: %1</translation>
     </message>
     <message>
         <source>the encrypted backup could not be decrypted again: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>зашифрованную резервную копию не удалось расшифровать снова: %1</translation>
     </message>
     <message>
         <source>the encrypted backup, decrypted again, differs from the backup</source>
-        <translation type="unfinished"></translation>
+        <translation>зашифрованная резервная копия после повторной расшифровки отличается от исходной</translation>
     </message>
     <message>
         <source>the encrypted backup is not whole</source>
-        <translation type="unfinished"></translation>
+        <translation>зашифрованная резервная копия повреждена</translation>
     </message>
     <message>
         <source>Backing up &quot;%1&quot;...</source>
@@ -973,11 +973,11 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Decrypting &quot;%1&quot;...</source>
-        <translation type="unfinished"></translation>
+        <translation>Расшифровывается «%1»...</translation>
     </message>
     <message>
         <source>%1 could not be decrypted: %2 Nothing was restored.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось расшифровать %1: %2 Ничего не восстановлено.</translation>
     </message>
     <message>
         <source>%1 could not be read as a ZIP file (%2). If the file is whole, an archive program of your system may still unpack it.</source>
@@ -1237,7 +1237,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Cannot read %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удаётся прочитать %1: %2</translation>
     </message>
     <message>
         <source>Full name</source>
@@ -3041,11 +3041,11 @@ Source: %1</source>
     </message>
     <message>
         <source>Other…</source>
-        <translation type="unfinished">Другое…</translation>
+        <translation>Другое…</translation>
     </message>
     <message>
         <source>Other (%1 px)…</source>
-        <translation type="unfinished"></translation>
+        <translation>Другое (%1 пикс.)…</translation>
     </message>
     <message>
         <source>%1 in px (at 100 % zoom):</source>
@@ -3081,31 +3081,31 @@ Source: %1</source>
     </message>
     <message>
         <source>Choose Font…</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбрать шрифт…</translation>
     </message>
     <message>
         <source>Fixed Width Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактор фиксированной ширины</translation>
     </message>
     <message>
         <source>Label Color in Binder</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвет метки в биндере</translation>
     </message>
     <message>
         <source>Label Color in Icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвет метки на значках</translation>
     </message>
     <message>
         <source>Status Stamps</source>
-        <translation type="unfinished"></translation>
+        <translation>Штампы статуса</translation>
     </message>
     <message>
         <source>Label Color in Index Cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвет метки на карточках</translation>
     </message>
     <message>
         <source>Appearance Options…</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры внешнего вида…</translation>
     </message>
     <message>
         <source>Font</source>
@@ -3901,7 +3901,7 @@ Source: %1</source>
     </message>
     <message>
         <source>Large</source>
-        <translation type="unfinished">Большие</translation>
+        <translation>Большой</translation>
     </message>
     <message>
         <source>Main</source>
@@ -3965,7 +3965,7 @@ Source: %1</source>
     </message>
     <message>
         <source>Handwriting (off, editor, inspector, both)</source>
-        <translation type="unfinished"></translation>
+        <translation>Рукописный ввод (выкл., редактор, инспектор, оба)</translation>
     </message>
     <message>
         <source>Theme button (Light, Dark, My Look 1, My Look 2 and all themes)</source>
@@ -4279,15 +4279,15 @@ Source: %1</source>
     </message>
     <message>
         <source>The AI engine is not installed (or could not be loaded). Install it under File &gt; Options &gt; Speech.</source>
-        <translation type="unfinished"></translation>
+        <translation>ИИ-движок не установлен (или не удалось его загрузить). Установите его в разделе Файл &gt; Параметры &gt; Речь.</translation>
     </message>
     <message>
         <source>Speech Transcription</source>
-        <translation type="unfinished">Расшифровка речи</translation>
+        <translation>Расшифровка речи</translation>
     </message>
     <message>
         <source>The model was not loaded: the memory is needed elsewhere.</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель не загружена: память нужна для другого.</translation>
     </message>
     <message>
         <source>The model could not be loaded onto the graphics card. Choose the processor under Options &gt; Speech &gt; Processing, or a smaller model.</source>
@@ -4299,7 +4299,7 @@ Source: %1</source>
     </message>
     <message>
         <source>The AI engine could not transcribe a piece.</source>
-        <translation type="unfinished"></translation>
+        <translation>ИИ-движку не удалось расшифровать фрагмент.</translation>
     </message>
     <message>
         <source>Small</source>
@@ -4503,55 +4503,55 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>Access to keychain denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Доступ к связке ключей запрещён</translation>
     </message>
     <message>
         <source>No keyring daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет службы связки ключей</translation>
     </message>
     <message>
         <source>Already unlocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Уже разблокирована</translation>
     </message>
     <message>
         <source>No such keyring</source>
-        <translation type="unfinished"></translation>
+        <translation>Такой связки ключей нет</translation>
     </message>
     <message>
         <source>Bad arguments</source>
-        <translation type="unfinished"></translation>
+        <translation>Неверные аргументы</translation>
     </message>
     <message>
         <source>I/O error</source>
-        <translation type="unfinished"></translation>
+        <translation>Ошибка ввода-вывода</translation>
     </message>
     <message>
         <source>Cancelled</source>
-        <translation type="unfinished"></translation>
+        <translation>Отменено</translation>
     </message>
     <message>
         <source>Keyring already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>Связка ключей уже существует</translation>
     </message>
     <message>
         <source>No match</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет совпадений</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Неизвестная ошибка</translation>
     </message>
     <message>
         <source>Entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Запись не найдена</translation>
     </message>
     <message>
         <source>No matching unlocked entry was deleted</source>
-        <translation type="unfinished"></translation>
+        <translation>Подходящая разблокированная запись не была удалена</translation>
     </message>
     <message>
         <source> s</source>
-        <translation type="unfinished"> с</translation>
+        <translation> с</translation>
     </message>
 </context>
 <context>
@@ -4834,7 +4834,7 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Число ядер процессора и время, по истечении которого неиспользуемая модель выгружается, задаются сразу для всех функций ИИ в разделе Файл &gt; Параметры &gt; Общие &gt; Модели ИИ.</translation>
     </message>
     <message>
         <source>Fast</source>
@@ -4942,11 +4942,11 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>Write into the text as I speak</source>
-        <translation type="unfinished"></translation>
+        <translation>Писать в текст по ходу речи</translation>
     </message>
     <message>
         <source>Each piece of live speech is also inserted at the cursor of the text you are editing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Каждый фрагмент живой речи также вставляется в позицию курсора в редактируемом тексте.</translation>
     </message>
     <message>
         <source>Delete a recording once its text is written</source>
@@ -5018,19 +5018,19 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished">Автоматически</translation>
+        <translation>Автоматически</translation>
     </message>
     <message>
         <source>Processor (CPU)</source>
-        <translation type="unfinished"></translation>
+        <translation>Процессор (CPU)</translation>
     </message>
     <message>
         <source>No graphics card that the AI engine can use (Vulkan) was found, or the engine is not installed; the processor computes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Видеокарта, которую может использовать ИИ-движок (Vulkan), не найдена, или движок не установлен; вычисления выполняет процессор.</translation>
     </message>
     <message>
         <source>Automatic takes a graphics card with enough free memory for the model, else the processor. A graphics card is usually much faster; the speed test shows how much on this computer.</source>
-        <translation type="unfinished"></translation>
+        <translation>При автоматическом выборе берётся видеокарта с достаточным для модели объёмом свободной памяти, иначе процессор. Видеокарта обычно намного быстрее; проверка скорости показывает, насколько именно на этом компьютере.</translation>
     </message>
     <message>
         <source>Everything is written in %1.</source>
@@ -5061,11 +5061,11 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>Record &amp;Only</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Только запись</translation>
     </message>
     <message>
         <source>Start or stop a recording without writing its text (the text can be written later with Transcribe)</source>
-        <translation type="unfinished"></translation>
+        <translation>Начать или остановить запись, не создавая её текст (текст можно создать позже командой «Расшифровать»)</translation>
     </message>
     <message>
         <source>Show &amp;Transcriptions</source>
@@ -5109,7 +5109,7 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>This version of the add-on needs Quillbinder 0.99.0 or later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Этой версии дополнения нужен Quillbinder 0.99.0 или новее.</translation>
     </message>
     <message>
         <source>Cannot load the speech engine: %1</source>
@@ -5606,11 +5606,11 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>Put the marked part of the text (all of it when nothing is marked) into the text you are editing, at the cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставить выделенную часть текста (весь текст, если ничего не выделено) в редактируемый текст, в позицию курсора</translation>
     </message>
     <message>
         <source>Insert at Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставить в позицию курсора</translation>
     </message>
     <message>
         <source>Move the transcription to the trash</source>
@@ -5686,11 +5686,11 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>Open a text in the editor first, and click into it where the transcription should go.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сначала откройте текст в редакторе и щёлкните в нём там, куда должна попасть расшифровка.</translation>
     </message>
     <message>
         <source>The text was inserted at the cursor.</source>
-        <translation type="unfinished"></translation>
+        <translation>Текст вставлен в позицию курсора.</translation>
     </message>
     <message>
         <source>No speech model yet: File &gt; Options &gt; Speech.</source>
@@ -5975,214 +5975,214 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     <name>qb::AiDownloads</name>
     <message>
         <source>Handwriting Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>Движок рукописного ввода</translation>
     </message>
     <message>
         <source>AI Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>ИИ-движок</translation>
     </message>
     <message>
         <source>%1 is not a package of the %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 не является пакетом компонента «%2».</translation>
     </message>
     <message>
         <source>Another download is running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выполняется другое скачивание.</translation>
     </message>
     <message>
         <source>The model %1 is not in the catalog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Модели %1 нет в каталоге.</translation>
     </message>
     <message>
         <source>%1 could not be made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать %1.</translation>
     </message>
     <message>
         <source>The download was cancelled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачивание отменено.</translation>
     </message>
     <message>
         <source>%1 could not be written.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось записать %1.</translation>
     </message>
     <message>
         <source>%1 is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 установлен.</translation>
     </message>
     <message>
         <source>This copy of %1 cannot make a secure connection, so it cannot download. Download the current AppImage once from the project&apos;s page.</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта копия %1 не может установить защищённое соединение, поэтому скачивание невозможно. Один раз скачайте актуальный AppImage со страницы проекта.</translation>
     </message>
     <message>
         <source>The download failed: the file could not be written, or is larger than announced.</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачивание не удалось: файл не удалось записать или он больше объявленного размера.</translation>
     </message>
     <message>
         <source>The download failed (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачивание не удалось (%1).</translation>
     </message>
     <message>
         <source>The download is incomplete (%1 of %2 bytes).</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачивание не завершено (%1 из %2 байт).</translation>
     </message>
     <message>
         <source>The downloaded file is not the one the catalog names (its SHA-256 differs), so it was not kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачанный файл не совпадает с указанным в каталоге (отличается SHA-256), поэтому он не сохранён.</translation>
     </message>
     <message>
         <source>The download is incomplete.</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачивание не завершено.</translation>
     </message>
     <message>
         <source>The joined file is not the one the catalog names (its SHA-256 differs), so it was not kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>Склеенный файл не совпадает с указанным в каталоге (отличается SHA-256), поэтому он не сохранён.</translation>
     </message>
 </context>
 <context>
     <name>qb::AiInstallPanel</name>
     <message>
         <source>many</source>
-        <translation type="unfinished"></translation>
+        <translation>много</translation>
     </message>
     <message>
         <source>Install the Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить движок</translation>
     </message>
     <message>
         <source>Downloads the engine of this version from the project&apos;s release page and installs it</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачивает движок этой версии со страницы выпуска проекта и устанавливает его</translation>
     </message>
     <message>
         <source>Install from File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить из файла...</translation>
     </message>
     <message>
         <source>Installs the engine from a package file (for a computer without a connection)</source>
-        <translation type="unfinished"></translation>
+        <translation>Устанавливает движок из файла пакета (для компьютера без подключения)</translation>
     </message>
     <message>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель</translation>
     </message>
     <message>
         <source>Languages</source>
-        <translation type="unfinished">Языки</translation>
+        <translation>Языки</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачать</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Память</translation>
     </message>
     <message>
         <source>License</source>
-        <translation type="unfinished"></translation>
+        <translation>Лицензия</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished">Состояние</translation>
+        <translation>Состояние</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <source>The handwriting engine is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Движок рукописного ввода не установлен.</translation>
     </message>
     <message>
         <source>The AI engine is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>ИИ-движок не установлен.</translation>
     </message>
     <message>
         <source>The installed engine %1 was made for another version of Quillbinder: install it again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Установленный движок %1 создан для другой версии Quillbinder: установите его заново.</translation>
     </message>
     <message>
         <source>The engine %1 is switched off (Help &gt; Add-ons and Updates &gt; Manage Add-ons).</source>
-        <translation type="unfinished"></translation>
+        <translation>Движок %1 выключен (Справка &gt; Дополнения и обновления &gt; Управление дополнениями).</translation>
     </message>
     <message>
         <source>The handwriting engine %1 is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Движок рукописного ввода %1 установлен.</translation>
     </message>
     <message>
         <source>The AI engine %1 is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>ИИ-движок %1 установлен.</translation>
     </message>
     <message>
         <source>The new engine is used after Quillbinder is started again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Новый движок будет использоваться после повторного запуска Quillbinder.</translation>
     </message>
     <message>
         <source>Install Again</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить заново</translation>
     </message>
     <message>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Установлено</translation>
     </message>
     <message>
         <source>Not published yet</source>
-        <translation type="unfinished"></translation>
+        <translation>Ещё не опубликовано</translation>
     </message>
     <message>
         <source>Not installed</source>
-        <translation type="unfinished">Не установлено</translation>
+        <translation>Не установлено</translation>
     </message>
     <message>
         <source>The catalog has no models for this function yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>В каталоге пока нет моделей для этой функции.</translation>
     </message>
     <message>
         <source>License: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Лицензия: %1</translation>
     </message>
     <message>
         <source>Downloading the engine...</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачивается движок...</translation>
     </message>
     <message>
         <source>Downloading %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Скачивается %1...</translation>
     </message>
     <message>
         <source>Install the Engine from a File</source>
-        <translation type="unfinished"></translation>
+        <translation>Установка движка из файла</translation>
     </message>
     <message>
         <source>Quillbinder packages (*.qbpkg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Пакеты Quillbinder (*.qbpkg)</translation>
     </message>
     <message>
         <source>This package is not signed by the Quillbinder project, so it cannot be told whether it is the project&apos;s own. Install it only when you trust where it comes from.</source>
-        <translation type="unfinished"></translation>
+        <translation>Этот пакет не подписан проектом Quillbinder, поэтому нельзя узнать, принадлежит ли он проекту. Устанавливайте его, только если доверяете источнику.</translation>
     </message>
     <message>
         <source>Install Anyway</source>
-        <translation type="unfinished"></translation>
+        <translation>Всё равно установить</translation>
     </message>
     <message>
         <source>The engine was not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Движок не установлен.</translation>
     </message>
     <message>
         <source>The engine is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Движок установлен.</translation>
     </message>
     <message>
         <source>%1 may be used for non-commercial purposes only (%2). Download it?</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 разрешено использовать только в некоммерческих целях (%2). Скачать?</translation>
     </message>
     <message>
         <source>%1 is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 удалён.</translation>
     </message>
 </context>
 <context>
@@ -7150,11 +7150,11 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
     <message>
         <source>Cannot write %1: %2</source>
-        <translation type="unfinished">Не удаётся записать %1: %2</translation>
+        <translation>Не удаётся записать %1: %2</translation>
     </message>
     <message>
         <source>Compile cancelled. No file was made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Компоновка отменена. Файл не создан.</translation>
     </message>
     <message>
         <source>Compile to</source>
@@ -7221,15 +7221,15 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     <name>qb::CompileProgress</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Отмена</translation>
+        <translation>Отмена</translation>
     </message>
     <message>
         <source>%1 of %2</source>
-        <translation type="unfinished">%1 из %2</translation>
+        <translation>%1 из %2</translation>
     </message>
     <message>
         <source>Cancelling...</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмена...</translation>
     </message>
 </context>
 <context>
@@ -8140,191 +8140,191 @@ Pages (250 words): %5</source>
     <name>qb::EncryptionPage</name>
     <message>
         <source>Encryption locks the files of a project and its backups with your key, in the OpenPGP format that Kleopatra, Gpg4win and GnuPG open without Quillbinder (see the manual&apos;s page on opening your files without Quillbinder).</source>
-        <translation type="unfinished"></translation>
+        <translation>Шифрование защищает файлы проекта и его резервные копии вашим ключом в формате OpenPGP, который открывают Kleopatra, Gpg4win и GnuPG без Quillbinder (см. страницу руководства об открытии файлов без Quillbinder).</translation>
     </message>
     <message>
         <source>Keys on this device</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключи на этом устройстве</translation>
     </message>
     <message>
         <source>Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключ</translation>
     </message>
     <message>
         <source>Fingerprint</source>
-        <translation type="unfinished"></translation>
+        <translation>Отпечаток</translation>
     </message>
     <message>
         <source>Here</source>
-        <translation type="unfinished"></translation>
+        <translation>Здесь</translation>
     </message>
     <message>
         <source>Create Keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>Создать ключи...</translation>
     </message>
     <message>
         <source>Import Keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>Импортировать ключи...</translation>
     </message>
     <message>
         <source>Import a Key File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Импортировать файл ключа...</translation>
     </message>
     <message>
         <source>Export Keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспортировать ключи...</translation>
     </message>
     <message>
         <source>Forget the passphrase on this device</source>
-        <translation type="unfinished"></translation>
+        <translation>Забыть парольную фразу на этом устройстве</translation>
     </message>
     <message>
         <source>The open project</source>
-        <translation type="unfinished"></translation>
+        <translation>Открытый проект</translation>
     </message>
     <message>
         <source>Encrypted backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Зашифрованные резервные копии</translation>
     </message>
     <message>
         <source>Encrypted project</source>
-        <translation type="unfinished"></translation>
+        <translation>Зашифрованный проект</translation>
     </message>
     <message>
         <source>This place is not allowed</source>
-        <translation type="unfinished"></translation>
+        <translation>Это место не разрешено</translation>
     </message>
     <message>
         <source>Other key</source>
-        <translation type="unfinished"></translation>
+        <translation>Другой ключ</translation>
     </message>
     <message>
         <source>My key</source>
-        <translation type="unfinished"></translation>
+        <translation>Мой ключ</translation>
     </message>
     <message>
         <source>Recovery key</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключ восстановления</translation>
     </message>
     <message>
         <source>secret part, unlocked</source>
-        <translation type="unfinished"></translation>
+        <translation>закрытая часть, разблокирована</translation>
     </message>
     <message>
         <source>secret part, locked</source>
-        <translation type="unfinished"></translation>
+        <translation>закрытая часть, заблокирована</translation>
     </message>
     <message>
         <source>public part only</source>
-        <translation type="unfinished"></translation>
+        <translation>только открытая часть</translation>
     </message>
     <message>
         <source>This device has no keys yet. Create Keys makes your key and a recovery key; on another device, use Import Keys with the key folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>На этом устройстве ещё нет ключей. Команда «Создать ключи» создаёт ваш ключ и ключ восстановления; на другом устройстве используйте «Импортировать ключи» с папкой ключей.</translation>
     </message>
     <message>
         <source>No project is open: the two switches belong to the open project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Проект не открыт: два переключателя относятся к открытому проекту.</translation>
     </message>
     <message>
         <source>Create or import keys first: the switches need your key and the recovery key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Сначала создайте или импортируйте ключи: для переключателей нужны ваш ключ и ключ восстановления.</translation>
     </message>
     <message>
         <source>A project in Scrivener&apos;s format cannot be encrypted: Scrivener could not open its files. Its backups can be encrypted; that switch belongs to each computer, so switch it on on every computer that makes backups of the project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Проект в формате Scrivener зашифровать нельзя: Scrivener не смог бы открыть его файлы. Его резервные копии шифровать можно; этот переключатель относится к каждому компьютеру, поэтому включите его на каждом компьютере, который делает резервные копии проекта.</translation>
     </message>
     <message>
         <source>The switch &quot;%1&quot; could not be changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось изменить переключатель «%1».</translation>
     </message>
     <message>
         <source>Choose the key folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите папку ключей</translation>
     </message>
     <message>
         <source>Import Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Импорт ключей</translation>
     </message>
     <message>
         <source>Type the passphrase of your key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите парольную фразу вашего ключа.</translation>
     </message>
     <message>
         <source>Your key is on this device now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваш ключ теперь на этом устройстве.</translation>
     </message>
     <message>
         <source>Your key is on this device for this session only: it could not be saved (%1), so it will be gone at the next start. Check the free space and the rights of the program&apos;s data folder, then import it again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваш ключ находится на этом устройстве только на время этого сеанса: сохранить его не удалось (%1), поэтому при следующем запуске его не будет. Проверьте свободное место и права на папку данных программы, затем импортируйте его снова.</translation>
     </message>
     <message>
         <source>Choose a key file</source>
-        <translation type="unfinished"></translation>
+        <translation>Выберите файл ключа</translation>
     </message>
     <message>
         <source>Key files (*.asc *.gpg *.pgp);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Файлы ключей (*.asc *.gpg *.pgp);;Все файлы (*)</translation>
     </message>
     <message>
         <source>Import a Key File</source>
-        <translation type="unfinished"></translation>
+        <translation>Импорт файла ключа</translation>
     </message>
     <message>
         <source>The file could not be read.</source>
-        <translation type="unfinished">Не удалось прочитать файл.</translation>
+        <translation>Не удалось прочитать файл.</translation>
     </message>
     <message>
         <source>Type the passphrase of this key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите парольную фразу этого ключа.</translation>
     </message>
     <message>
         <source>The key is on this device as your key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключ находится на этом устройстве как ваш ключ.</translation>
     </message>
     <message>
         <source>There is no recovery key yet: import its public file (recovery-key-public.asc) with Import a Key File, or make a new pair with Create Keys.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключа восстановления пока нет: импортируйте его открытый файл (recovery-key-public.asc) командой «Импортировать файл ключа» или создайте новую пару командой «Создать ключи».</translation>
     </message>
     <message>
         <source>The key is on this device as the recovery key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключ находится на этом устройстве как ключ восстановления.</translation>
     </message>
     <message>
         <source>The public key is on this device. It is not your key and not the recovery key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Открытый ключ находится на этом устройстве. Это не ваш ключ и не ключ восстановления.</translation>
     </message>
     <message>
         <source>The key is on this device for this session only: it could not be saved (%1), so it will be gone at the next start. Check the free space and the rights of the program&apos;s data folder, then import it again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключ находится на этом устройстве только на время этого сеанса: сохранить его не удалось (%1), поэтому при следующем запуске его не будет. Проверьте свободное место и права на папку данных программы, затем импортируйте его снова.</translation>
     </message>
     <message>
         <source>Where to write the keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Куда записать ключи</translation>
     </message>
     <message>
         <source>Export Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Экспорт ключей</translation>
     </message>
     <message>
         <source>The keys are in the folder %1. It holds your key (locked by your passphrase), the public parts and a README.txt. The recovery key&apos;s secret part is only in the folder that Create Keys made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключи находятся в папке %1. В ней лежат ваш ключ (защищённый вашей парольной фразой), открытые части и файл README.txt. Закрытая часть ключа восстановления есть только в папке, которую создала команда «Создать ключи».</translation>
     </message>
     <message>
         <source>Forget the passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Забыть парольную фразу</translation>
     </message>
     <message>
         <source>Quillbinder forgets the passphrase on this device and locks your key. It will ask for the passphrase again when it needs it. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder забудет парольную фразу на этом устройстве и заблокирует ваш ключ. Программа снова запросит парольную фразу, когда она понадобится. Продолжить?</translation>
     </message>
     <message>
         <source>The passphrase is forgotten on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Парольная фраза на этом устройстве забыта.</translation>
     </message>
     <message>
         <source>The system&apos;s key store would not remove the passphrase: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Хранилище ключей системы не удалило парольную фразу: %1</translation>
     </message>
 </context>
 <context>
@@ -8623,7 +8623,7 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
     </message>
     <message>
         <source>Help &gt; Add to Application Menu or Remove From Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Позже это можно изменить командой Справка &gt; Добавить в меню приложений или Убрать из меню приложений. Если вы сами переместите AppImage, добавьте его в меню снова.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -9571,7 +9571,7 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
     <name>qb::IconFromTextDialog</name>
     <message>
         <source>Icon From Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Значок из текста</translation>
     </message>
     <message>
         <source>Up to 3 characters, e.g. PR, Ch1, A</source>
@@ -10169,19 +10169,19 @@ The text of the snapshot &quot;%2&quot; is now the document&apos;s text; it can 
     </message>
     <message>
         <source>Synopsis and Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Аннотация и заметки</translation>
     </message>
     <message>
         <source>Comments and Footnotes</source>
-        <translation type="unfinished">Комментарии и сноски</translation>
+        <translation>Комментарии и сноски</translation>
     </message>
     <message>
         <source>Mind Map</source>
-        <translation type="unfinished">Интеллект-карта</translation>
+        <translation>Интеллект-карта</translation>
     </message>
     <message>
         <source>Objects</source>
-        <translation type="unfinished"></translation>
+        <translation>Объекты</translation>
     </message>
     <message>
         <source>Synopsis and notes</source>
@@ -10264,159 +10264,159 @@ The text of the snapshot &quot;%2&quot; is now the document&apos;s text; it can 
     <name>qb::KeyWizard</name>
     <message>
         <source>Create Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Создание ключей</translation>
     </message>
     <message>
         <source>Make Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Создать ключи</translation>
     </message>
     <message>
         <source>Your passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваша парольная фраза</translation>
     </message>
     <message>
         <source>The passphrase locks your key. Quillbinder can remember it on this device, so you type it once on each other device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Парольная фраза защищает ваш ключ. Quillbinder может запомнить её на этом устройстве, так что на каждом другом устройстве её нужно ввести один раз.</translation>
     </message>
     <message>
         <source>Use these six random words (the safest choice and easy to type):</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать эти шесть случайных слов (самый надёжный вариант, их легко набирать):</translation>
     </message>
     <message>
         <source>Other words</source>
-        <translation type="unfinished">Других слов</translation>
+        <translation>Другие слова</translation>
     </message>
     <message>
         <source>Use a passphrase of my own:</source>
-        <translation type="unfinished"></translation>
+        <translation>Использовать собственную парольную фразу:</translation>
     </message>
     <message>
         <source>Passphrase:</source>
-        <translation type="unfinished"></translation>
+        <translation>Парольная фраза:</translation>
     </message>
     <message>
         <source>Once more:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ещё раз:</translation>
     </message>
     <message>
         <source>Remember the passphrase on this device (in the system&apos;s key store)</source>
-        <translation type="unfinished"></translation>
+        <translation>Запомнить парольную фразу на этом устройстве (в хранилище ключей системы)</translation>
     </message>
     <message>
         <source>This device already has keys. New keys cannot open files that were locked for the old ones; keep the old key folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>На этом устройстве уже есть ключи. Новые ключи не откроют файлы, защищённые старыми; сохраните старую папку ключей.</translation>
     </message>
     <message>
         <source>The two entries are not the same.</source>
-        <translation type="unfinished"></translation>
+        <translation>Два введённых значения не совпадают.</translation>
     </message>
     <message>
         <source>This passphrase is accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Эта парольная фраза принята.</translation>
     </message>
     <message>
         <source>Where to keep the keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Где хранить ключи</translation>
     </message>
     <message>
         <source>Quillbinder writes the folder &quot;%1&quot; there. A USB stick is best; project, backup and sync folders are refused.</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder запишет туда папку «%1». Лучше всего подходит USB-накопитель; папки проектов, резервных копий и синхронизации не принимаются.</translation>
     </message>
     <message>
         <source>Choose...</source>
-        <translation type="unfinished">Выбрать...</translation>
+        <translation>Выбрать...</translation>
     </message>
     <message>
         <source>When you press Next, your key and the recovery key are made. This takes a few seconds.</source>
-        <translation type="unfinished"></translation>
+        <translation>Когда вы нажмёте «Далее», будут созданы ваш ключ и ключ восстановления. Это займёт несколько секунд.</translation>
     </message>
     <message>
         <source>Folder for the keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Папка для ключей</translation>
     </message>
     <message>
         <source>The keys could not be made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось создать ключи.</translation>
     </message>
     <message>
         <source>The recovery passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Парольная фраза восстановления</translation>
     </message>
     <message>
         <source>Write these six words on paper now. They are shown only this once and are saved nowhere, not even in the key folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Запишите эти шесть слов на бумаге прямо сейчас. Они показываются только один раз и нигде не сохраняются, даже в папке ключей.</translation>
     </message>
     <message>
         <source>The recovery key opens your files if you lose your own key or forget its passphrase. Keep the paper in another place than the USB stick: the stick alone or the paper alone opens nothing. If both are lost, your text is gone for good.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключ восстановления открывает ваши файлы, если вы потеряете свой ключ или забудете его парольную фразу. Храните бумагу не там, где USB-накопитель: один накопитель или одна бумага ничего не открывают. Если потеряно и то и другое, ваш текст пропал навсегда.</translation>
     </message>
     <message>
         <source>I have written the six words on paper</source>
-        <translation type="unfinished"></translation>
+        <translation>Я записал(а) шесть слов на бумаге</translation>
     </message>
     <message>
         <source>The check</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверка</translation>
     </message>
     <message>
         <source>Type two of the recovery words from your paper. Quillbinder reads the written files back and opens a test file with each key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Введите два слова восстановления с вашей бумаги. Quillbinder прочитает записанные файлы и откроет тестовый файл каждым ключом.</translation>
     </message>
     <message>
         <source>Word %1:</source>
-        <translation type="unfinished"></translation>
+        <translation>Слово %1:</translation>
     </message>
     <message>
         <source>The key files were read back.</source>
-        <translation type="unfinished"></translation>
+        <translation>Файлы ключей прочитаны.</translation>
     </message>
     <message>
         <source>README.txt is in the folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>README.txt лежит в папке.</translation>
     </message>
     <message>
         <source>A test file opens with your key and your passphrase.</source>
-        <translation type="unfinished"></translation>
+        <translation>Тестовый файл открывается вашим ключом и вашей парольной фразой.</translation>
     </message>
     <message>
         <source>A test file opens with the recovery key and the recovery passphrase.</source>
-        <translation type="unfinished"></translation>
+        <translation>Тестовый файл открывается ключом восстановления и парольной фразой восстановления.</translation>
     </message>
     <message>
         <source>The keys could not be put on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось поместить ключи на это устройство.</translation>
     </message>
     <message>
         <source>The keys could not be saved on this device (%1). Nothing was changed; check the free space and the rights of the program&apos;s data folder, and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось сохранить ключи на этом устройстве (%1). Ничего не изменено; проверьте свободное место и права на папку данных программы и повторите попытку.</translation>
     </message>
     <message>
         <source>A second copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Вторая копия</translation>
     </message>
     <message>
         <source>Your keys are on this device and in the folder. Keep a second copy of the folder at another place, for example on a second USB stick. You can skip this.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваши ключи находятся на этом устройстве и в папке. Сохраните вторую копию папки в другом месте, например на втором USB-накопителе. Этот шаг можно пропустить.</translation>
     </message>
     <message>
         <source>Copy the folder here</source>
-        <translation type="unfinished"></translation>
+        <translation>Скопировать папку сюда</translation>
     </message>
     <message>
         <source>Place for the second copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Место для второй копии</translation>
     </message>
     <message>
         <source>This is the place of the first copy. Choose another place.</source>
-        <translation type="unfinished"></translation>
+        <translation>Здесь лежит первая копия. Выберите другое место.</translation>
     </message>
     <message>
         <source>The second copy is made and was checked: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Вторая копия создана и проверена: %1</translation>
     </message>
     <message>
         <source>The second copy was made, but the check failed. Make another one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Вторая копия создана, но проверка не прошла. Создайте ещё одну.</translation>
     </message>
 </context>
 <context>
@@ -11882,115 +11882,115 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Рукописный ввод</translation>
     </message>
     <message>
         <source>Model change in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Идёт смена модели</translation>
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>Предпросмотр &amp;печати</translation>
     </message>
     <message>
         <source>Paste With &amp;Formatting</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставить с &amp;форматированием</translation>
     </message>
     <message>
         <source>&amp;Objects</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Объекты</translation>
     </message>
     <message>
         <source>Move &amp;Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Переместить в&amp;лево</translation>
     </message>
     <message>
         <source>Move &amp;Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Переместить в&amp;право</translation>
     </message>
     <message>
         <source>Out of the folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Из папки</translation>
     </message>
     <message>
         <source>Into the item above</source>
-        <translation type="unfinished"></translation>
+        <translation>В элемент выше</translation>
     </message>
     <message>
         <source>&amp;Load Project Settings From File…</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Загрузить настройки проекта из файла…</translation>
     </message>
     <message>
         <source>Project S&amp;tatistics</source>
-        <translation type="unfinished"></translation>
+        <translation>С&amp;татистика проекта</translation>
     </message>
     <message>
         <source>&amp;Writing History</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;История записи</translation>
     </message>
     <message>
         <source>Convert &amp;Sheet to Object</source>
-        <translation type="unfinished"></translation>
+        <translation>Преобразовать &amp;карточку в объект</translation>
     </message>
     <message>
         <source>Convert to Te&amp;xt Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Преобразовать в &amp;текстовый документ</translation>
     </message>
     <message>
         <source>Take Snapshot With &amp;Title…</source>
-        <translation type="unfinished"></translation>
+        <translation>Сделать снимок с &amp;названием…</translation>
     </message>
     <message>
         <source>Apply Copied Formattin&amp;g</source>
-        <translation type="unfinished"></translation>
+        <translation>Применить скопированное форматирован&amp;ие</translation>
     </message>
     <message>
         <source>&amp;Picture From File…</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Изображение из файла…</translation>
     </message>
     <message>
         <source>Insert Picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставить изображение</translation>
     </message>
     <message>
         <source>Third-Party &amp;Licenses</source>
-        <translation type="unfinished"></translation>
+        <translation>Лицензии &amp;сторонних компонентов</translation>
     </message>
     <message>
         <source>List of All Place&amp;holders</source>
-        <translation type="unfinished"></translation>
+        <translation>Список всех по&amp;дстановок</translation>
     </message>
     <message>
         <source>Add to &amp;Application Menu…</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить в &amp;меню приложений…</translation>
     </message>
     <message>
         <source>&amp;System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Сведения о системе</translation>
     </message>
     <message>
         <source>Report a Problem</source>
-        <translation type="unfinished"></translation>
+        <translation>Сообщить о проблеме</translation>
     </message>
     <message>
         <source>Toolbar &amp;Size</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Размер панелей инструментов</translation>
     </message>
     <message>
         <source>&amp;Small</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Малый</translation>
     </message>
     <message>
         <source>&amp;Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Обычный</translation>
     </message>
     <message>
         <source>&amp;Large</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Большой</translation>
     </message>
     <message>
         <source>Project &amp;Formatting Settings…</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры &amp;форматирования проекта…</translation>
     </message>
     <message>
         <source>Font, size, line spacing and indents of the text of the whole project</source>
@@ -12350,7 +12350,7 @@ Keep it open and try again after the cause is fixed, save the texts that are not
     </message>
     <message>
         <source>When the program was ended (by logging out, shutting down or a command), an encrypted project could not be saved. (Its name and the reason are left out of this note, because it is a plain file.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Когда программа была завершена (при выходе из системы, выключении компьютера или командой), зашифрованный проект не удалось сохранить. (Его название и причина в эту заметку не включены, потому что это обычный файл.)</translation>
     </message>
     <message>
         <source>When the program was ended (by logging out, shutting down or a command), the project &quot;%1&quot; could not be saved: %2</source>
@@ -12588,7 +12588,7 @@ Best on another drive (a USB stick, a second disk, a folder your sync program co
     </message>
     <message>
         <source>, encrypted</source>
-        <translation type="unfinished"></translation>
+        <translation>, зашифрован</translation>
     </message>
     <message>
         <source> (in the folder &quot;%1&quot;)</source>
@@ -12834,11 +12834,11 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove From Application Menu and then Add to Application Menu again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось переместить AppImage в %1 (%2). Пункт меню запускает его там, где он лежит; если вы сами переместите файл, выберите Справка &gt; Убрать из меню приложений, а затем снова Добавить в меню приложений.</translation>
     </message>
     <message>
         <source>Remove From &amp;Application Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Убрать из &amp;меню приложений</translation>
     </message>
     <message>
         <source>The program&apos;s icon could not be copied, so the menu entry shows no icon.</source>
@@ -13094,7 +13094,7 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>S&amp;mall Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Ко&amp;мпактный интерфейс</translation>
     </message>
     <message>
         <source>&amp;Navigate</source>
@@ -13122,27 +13122,27 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>In &amp;Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>В &amp;редакторе</translation>
     </message>
     <message>
         <source>In &amp;Other Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>В &amp;другом редакторе</translation>
     </message>
     <message>
         <source>In &amp;Copyholder</source>
-        <translation type="unfinished"></translation>
+        <translation>В &amp;копихолдере</translation>
     </message>
     <message>
         <source>As &amp;Quick Reference</source>
-        <translation type="unfinished"></translation>
+        <translation>Как &amp;краткий справочник</translation>
     </message>
     <message>
         <source>At &amp;Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>По &amp;выделению</translation>
     </message>
     <message>
         <source>With Selection as &amp;Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Взяв выделение как &amp;название</translation>
     </message>
     <message>
         <source>Open &amp;Quick Reference</source>
@@ -13456,7 +13456,7 @@ Fonts can be installed here with Format &gt; Font &gt; Install Font Files, or by
     </message>
     <message>
         <source>Icon From &amp;Text…</source>
-        <translation type="unfinished"></translation>
+        <translation>Значок из &amp;текста…</translation>
     </message>
     <message>
         <source>&amp;Manage Icons…</source>
@@ -13754,7 +13754,7 @@ but this window could not leave the original. Open the new project from File &gt
     </message>
     <message>
         <source>This project is encrypted, and Scrivener cannot read encrypted files. To save it in Scrivener format, turn off the encryption of the project first (File &gt; Options &gt; Encryption); a copy in Quillbinder&apos;s format stays encrypted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Этот проект зашифрован, а Scrivener не может читать зашифрованные файлы. Чтобы сохранить его в формате Scrivener, сначала отключите шифрование проекта (Файл &gt; Параметры &gt; Шифрование); копия в формате Quillbinder остаётся зашифрованной.</translation>
     </message>
     <message>
         <source>Save a Copy as Scrivener Project</source>
@@ -14800,83 +14800,83 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>&amp;Read Aloud</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Чтение вслух</translation>
     </message>
     <message>
         <source>Read Aloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Чтение вслух</translation>
     </message>
     <message>
         <source>Small &amp;Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Компактный &amp;интерфейс</translation>
     </message>
     <message>
         <source>A few round buttons and the most room for the text, for a small screen or for use without a keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Несколько круглых кнопок и как можно больше места для текста: для маленького экрана или для работы без клавиатуры</translation>
     </message>
     <message>
         <source>&amp;Full</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Полный</translation>
     </message>
     <message>
         <source>&amp;Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Автоматически</translation>
     </message>
     <message>
         <source>Switch to the &amp;Full Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Перейти к &amp;полному интерфейсу</translation>
     </message>
     <message>
         <source>Binder</source>
-        <translation type="unfinished">Биндер</translation>
+        <translation>Биндер</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Заметки</translation>
+        <translation>Заметки</translation>
     </message>
     <message>
         <source>The notes of the document, in a panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Заметки документа в панели</translation>
     </message>
     <message>
         <source>The binder, in a panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Биндер в панели</translation>
     </message>
     <message>
         <source>Record Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Только запись</translation>
     </message>
     <message>
         <source>Small Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Компактный интерфейс</translation>
     </message>
     <message>
         <source>Menu: all the menus of the program</source>
-        <translation type="unfinished"></translation>
+        <translation>Меню: все меню программы</translation>
     </message>
     <message>
         <source>Style: choose a style for the paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиль: выбрать стиль абзаца</translation>
     </message>
     <message>
         <source>Labels and icons of the selected documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Метки и значки выбранных документов</translation>
     </message>
     <message>
         <source>Stop recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Остановить запись</translation>
     </message>
     <message>
         <source>Record only: the sound is kept and its text can be written later</source>
-        <translation type="unfinished"></translation>
+        <translation>Только запись: звук сохраняется, а его текст можно создать позже</translation>
     </message>
     <message>
         <source>Record Only is off: the installed Speech Transcription add-on is too old. Update it in the Add-on Manager.</source>
-        <translation type="unfinished"></translation>
+        <translation>«Только запись» отключена: установленное дополнение «Расшифровка речи» слишком старое. Обновите его в менеджере дополнений.</translation>
     </message>
     <message>
         <source>Record Only is off: it needs the add-on Speech Transcription, which is not installed. The Add-on Manager can add it.</source>
-        <translation type="unfinished"></translation>
+        <translation>«Только запись» отключена: для неё нужно дополнение «Расшифровка речи», которое не установлено. Его можно добавить в менеджере дополнений.</translation>
     </message>
 </context>
 <context>
@@ -16024,19 +16024,19 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>Предпросмотр &amp;печати</translation>
     </message>
     <message>
         <source>&amp;Redefine Note Style From Selection…</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Переопределить стиль заметки по выделению…</translation>
     </message>
     <message>
         <source>Note style to redefine from the selected note:</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиль заметки, который нужно переопределить по выбранной заметке:</translation>
     </message>
     <message>
         <source>&amp;Delete Note Style…</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Удалить стиль заметки…</translation>
     </message>
     <message>
         <source>Delete Note Style</source>
@@ -16044,7 +16044,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>Note style to delete:</source>
-        <translation type="unfinished"></translation>
+        <translation>Стиль заметки, который нужно удалить:</translation>
     </message>
     <message>
         <source>Import Note Styles</source>
@@ -17268,7 +17268,7 @@ Go on?</source>
     </message>
     <message>
         <source>Encryption</source>
-        <translation type="unfinished"></translation>
+        <translation>Шифрование</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -17468,71 +17468,71 @@ Go on?</source>
     </message>
     <message>
         <source>The processor cores that Speech Transcription, Translation Helper, Read Aloud and Handwriting use. Default for this computer: %1 of %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Число ядер процессора, которые используют «Расшифровка речи», «Помощник перевода», «Чтение вслух» и «Рукописный ввод». По умолчанию для этого компьютера: %1 из %2.</translation>
     </message>
     <message>
         <source>Default (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>По умолчанию (%1)</translation>
     </message>
     <message>
         <source>CPU cores for the AI:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ядра процессора для ИИ:</translation>
     </message>
     <message>
         <source>One setting for every AI function. The default is three quarters of the cores (rounded down); a computer with 6 cores or fewer keeps one core free. The AI&apos;s work runs at a low priority.</source>
-        <translation type="unfinished"></translation>
+        <translation>Одна настройка для всех функций ИИ. По умолчанию это три четверти ядер (с округлением вниз); на компьютере с 6 ядрами или меньше одно ядро остаётся свободным. ИИ работает с низким приоритетом.</translation>
     </message>
     <message>
         <source>Unload a model after</source>
-        <translation type="unfinished"></translation>
+        <translation>Выгружать модель через</translation>
     </message>
     <message>
         <source>minutes unused</source>
-        <translation type="unfinished"></translation>
+        <translation>минут без использования</translation>
     </message>
     <message>
         <source>A model that is not used is unloaded after this time. Before a model loads, when more than half of the memory it needs (the computer&apos;s memory or a graphics card&apos;s) is in use, the model unused longest is unloaded first; when the new model would still bring that memory over 80 %, it is not loaded, and the message line under the inspector says why. When the system reports a shortage of memory, idle models are unloaded at once.</source>
-        <translation type="unfinished"></translation>
+        <translation>Неиспользуемая модель выгружается по истечении этого времени. Перед загрузкой модели, если уже занято больше половины нужной ей памяти (памяти компьютера или видеокарты), сначала выгружается модель, которой не пользовались дольше всех; если новая модель всё равно довела бы занятость этой памяти до более чем 80 %, она не загружается, а почему — сообщает строка сообщений под инспектором. Когда система сообщает о нехватке памяти, простаивающие модели выгружаются сразу.</translation>
     </message>
     <message>
         <source>Memory in use:</source>
-        <translation type="unfinished"></translation>
+        <translation>Занятая память:</translation>
     </message>
     <message>
         <source>RAM</source>
-        <translation type="unfinished"></translation>
+        <translation>ОЗУ</translation>
     </message>
     <message>
         <source>Graphics card %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Видеокарта %1</translation>
     </message>
     <message>
         <source>%1: not known</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: неизвестно</translation>
     </message>
     <message>
         <source>%1: %2 of %3 in use (%4 %)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: занято %2 из %3 (%4 %)</translation>
     </message>
     <message>
         <source>No model is loaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ни одна модель не загружена.</translation>
     </message>
     <message>
         <source>Loaded models:</source>
-        <translation type="unfinished"></translation>
+        <translation>Загруженные модели:</translation>
     </message>
     <message>
         <source>AI Models</source>
-        <translation type="unfinished"></translation>
+        <translation>Модели ИИ</translation>
     </message>
     <message>
         <source>Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Рукописный ввод</translation>
     </message>
     <message>
         <source>Read Aloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Чтение вслух</translation>
     </message>
     <message>
         <source>Scratch Pad</source>
@@ -18244,19 +18244,19 @@ Go on?</source>
     </message>
     <message>
         <source>Note: your colors %1 on %2 have a contrast of %3 : 1. Text is easier to read from 4.5 : 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Примечание: у ваших цветов %1 на %2 контрастность %3 : 1. Текст легче читать при контрастности от 4,5 : 1.</translation>
     </message>
     <message>
         <source>%1 below it too.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ещё ниже порога: %1.</translation>
     </message>
     <message>
         <source>more pair</source>
-        <translation type="unfinished"></translation>
+        <translation>пара</translation>
     </message>
     <message>
         <source>more pairs</source>
-        <translation type="unfinished"></translation>
+        <translation>пар(ы)</translation>
     </message>
     <message>
         <source>Auto-Correction</source>
@@ -18616,7 +18616,7 @@ Go on?</source>
     </message>
     <message>
         <source>Normal (22 px)</source>
-        <translation type="unfinished"></translation>
+        <translation>Обычный (22 пикс.)</translation>
     </message>
     <message>
         <source>Open Backup Folder...</source>
@@ -19686,11 +19686,11 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     <name>qb::Project</name>
     <message>
         <source>The encryption of this project&apos;s files was not finished; some files are still plain. It is finished at the next opening.</source>
-        <translation type="unfinished"></translation>
+        <translation>Шифрование файлов этого проекта не завершено; некоторые файлы пока не зашифрованы. Оно будет завершено при следующем открытии.</translation>
     </message>
     <message>
         <source>The decryption of this project&apos;s files was not finished; some files are still encrypted. It is finished at the next opening.</source>
-        <translation type="unfinished"></translation>
+        <translation>Расшифровка файлов этого проекта не завершена; некоторые файлы всё ещё зашифрованы. Она будет завершена при следующем открытии.</translation>
     </message>
     <message>
         <source>This project&apos;s folder holds other project files beside &quot;%1&quot;, which was opened: %2. A sync program may have made them (a copy from another computer kept beside yours). Compare them before you go on, and open another one with File &gt; Open Project if it holds your latest work.</source>
@@ -19804,7 +19804,9 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
         <source>The project could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (named by the number of the document: the folder content/&lt;number&gt; of the project holds the document), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %1. Copy what you need back into the project. (Titles and names are left out of this note and of the names in this folder, because the project is encrypted.)
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Проект не удалось сохранить. В этой папке находится то, что не было сохранено: тексты и заметки в виде файлов RTF (названных по номеру документа: документ лежит в папке content/&lt;номер&gt; проекта), доски интеллект-карт, изменённые объекты (в папке «objects») и файл проекта в том виде, в каком он был в памяти (биндер, названия и метки), как %1. Скопируйте нужное обратно в проект. (Названия и имена не включены ни в эту заметку, ни в имена в этой папке, потому что проект зашифрован.)
+
+</translation>
     </message>
     <message>
         <source>The project &quot;%1&quot; (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
@@ -19818,7 +19820,9 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
         <source>To put the project file back: close the project, rename the project file in the project folder (so that it is kept), copy the file %1 of this folder there and give it the old file&apos;s name. Then open the project again. (The copy&apos;s name ends in .copy so that this folder is not taken for a project.)
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Чтобы вернуть файл проекта на место: закройте проект, переименуйте файл проекта в папке проекта (чтобы он сохранился), скопируйте туда файл %1 из этой папки и дайте ему имя прежнего файла. Затем снова откройте проект. (Имя копии оканчивается на .copy, чтобы эту папку не приняли за проект.)
+
+</translation>
     </message>
     <message>
         <source>To put the project file back: close the project, rename the project file %1 in the project folder %2 (so that it is kept), copy the file %3 of this folder there and rename it to %1. Then open the project again. (The copy&apos;s name ends in .copy so that this folder is not taken for a project.)
@@ -19840,7 +19844,9 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
         <source>The project is encrypted, and so are the files of this copy (OpenPGP, to your key and the recovery key; only this note is plain): Kleopatra, Gpg4win or GnuPG decrypt them with your key.
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Проект зашифрован, и файлы этой копии тоже (OpenPGP, для вашего ключа и ключа восстановления; обычным остаётся только эта заметка): Kleopatra, Gpg4win или GnuPG расшифруют их вашим ключом.
+
+</translation>
     </message>
     <message>
         <source>This copy is complete: all %1 files were written.
@@ -19918,7 +19924,7 @@ Not written:
     </message>
     <message>
         <source>The project file is damaged (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Файл проекта повреждён (%1).</translation>
     </message>
     <message>
         <source>The project file is damaged: its binder is nested more than %1 levels deep.</source>
@@ -21890,7 +21896,7 @@ Ctrl+щелчок, чтобы открыть</translation>
     </message>
     <message>
         <source>Paste With &amp;Formatting</source>
-        <translation type="unfinished"></translation>
+        <translation>Вставить с &amp;форматированием</translation>
     </message>
     <message>
         <source>Footnote</source>
@@ -22234,15 +22240,15 @@ Ctrl+щелчок, чтобы открыть</translation>
     </message>
     <message>
         <source>Size of all toolbars:</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер всех панелей инструментов:</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished">Сбросить</translation>
+        <translation>Сбросить</translation>
     </message>
     <message>
         <source>Put the standard buttons back into this toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Вернуть стандартные кнопки на эту панель инструментов</translation>
     </message>
     <message>
         <source>Icons only</source>
@@ -22836,63 +22842,63 @@ Or download the current version from the project&apos;s page.</source>
     <name>qb::ai</name>
     <message>
         <source>%1 could not be removed completely.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 не удалось удалить полностью.</translation>
     </message>
     <message>
         <source>%1 is not published yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ещё не опубликовано.</translation>
     </message>
     <message>
         <source>%1 needs about %2 GB of memory; this computer has %3 GB.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для %1 нужно около %2 ГБ памяти; на этом компьютере её %3 ГБ.</translation>
     </message>
     <message>
         <source>There is not enough room on the disk for %1 (%2 MB are needed).</source>
-        <translation type="unfinished"></translation>
+        <translation>Недостаточно места на диске для %1 (нужно %2 МБ).</translation>
     </message>
     <message>
         <source>Processor (CPU)</source>
-        <translation type="unfinished"></translation>
+        <translation>Процессор (CPU)</translation>
     </message>
     <message>
         <source>The graphics card &quot;%1&quot; was not found; the processor is used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Видеокарта «%1» не найдена; используется процессор.</translation>
     </message>
     <message>
         <source>The model does not fit into the free memory of the graphics card; the processor is used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель не помещается в свободную память видеокарты; используется процессор.</translation>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished">Автоматически</translation>
+        <translation>Автоматически</translation>
     </message>
     <message>
         <source>The AI engine is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>ИИ-движок не установлен.</translation>
     </message>
     <message>
         <source>An add-on has loaded a speech engine of its own (%1). Restart Quillbinder, or update that add-on, to use the AI engine.</source>
-        <translation type="unfinished"></translation>
+        <translation>Дополнение загрузило собственный речевой движок (%1). Перезапустите Quillbinder или обновите это дополнение, чтобы использовать ИИ-движок.</translation>
     </message>
     <message>
         <source>The AI engine could not be loaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось загрузить ИИ-движок: %1</translation>
     </message>
     <message>
         <source>The installed AI engine is older than this version of Quillbinder needs. Install the engine again from the settings page.</source>
-        <translation type="unfinished"></translation>
+        <translation>Установленный ИИ-движок старше, чем нужно этой версии Quillbinder. Установите движок заново на странице настроек.</translation>
     </message>
     <message>
         <source>The model &quot;%1&quot; could not be loaded: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось загрузить модель «%1»: %2</translation>
     </message>
     <message>
         <source>The model is not loaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель не загружена.</translation>
     </message>
     <message>
         <source>Stopped.</source>
-        <translation type="unfinished"></translation>
+        <translation>Остановлено.</translation>
     </message>
 </context>
 <context>
@@ -22997,261 +23003,262 @@ Or download the current version from the project&apos;s page.</source>
     <name>qb::handwriting</name>
     <message>
         <source>The handwriting engine could not be loaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось загрузить движок рукописного ввода: %1</translation>
     </message>
     <message>
         <source>The handwriting engine does not offer the interface this version needs.</source>
-        <translation type="unfinished"></translation>
+        <translation>Движок рукописного ввода не предоставляет интерфейс, который нужен этой версии.</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::HandwritingController</name>
     <message>
         <source>Off</source>
-        <translation type="unfinished">Выкл.</translation>
+        <translation>Выкл.</translation>
     </message>
     <message>
         <source>Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Редактор</translation>
     </message>
     <message>
         <source>Inspector</source>
-        <translation type="unfinished">Инспектор</translation>
+        <translation>Инспектор</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation type="unfinished"></translation>
+        <translation>Оба</translation>
     </message>
     <message>
         <source>Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Рукописный ввод</translation>
     </message>
     <message>
         <source>Handwriting Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Кнопка рукописного ввода</translation>
     </message>
     <message>
         <source>Show the button for handwriting on the toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать на панели инструментов кнопку рукописного ввода</translation>
     </message>
     <message>
         <source>Put the text at the place shown</source>
-        <translation type="unfinished"></translation>
+        <translation>Поместить текст в показанное место</translation>
     </message>
     <message>
         <source>Cancel: the text goes back to the strip</source>
-        <translation type="unfinished"></translation>
+        <translation>Отмена: текст возвращается в полосу</translation>
     </message>
     <message>
         <source>Handwriting: off. Tap to switch it on; press and hold for the choices.</source>
-        <translation type="unfinished"></translation>
+        <translation>Рукописный ввод: выкл. Коснитесь, чтобы включить; нажмите и удерживайте, чтобы выбрать режим.</translation>
     </message>
     <message>
         <source>Handwriting: %1. Tap to switch it off; press and hold for the choices.</source>
-        <translation type="unfinished"></translation>
+        <translation>Рукописный ввод: %1. Коснитесь, чтобы выключить; нажмите и удерживайте, чтобы выбрать режим.</translation>
     </message>
     <message>
         <source>Writing on the editor.
 The text you write is collected below.</source>
-        <translation type="unfinished"></translation>
+        <translation>Письмо поверх редактора.
+Написанный вами текст собирается ниже.</translation>
     </message>
     <message>
         <source>Writing on the editor and here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Письмо поверх редактора и здесь.</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::HandwritingPage</name>
     <message>
         <source>no model for this language yet</source>
-        <translation type="unfinished"></translation>
+        <translation>для этого языка пока нет модели</translation>
     </message>
     <message>
         <source>Theme color</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвет темы</translation>
     </message>
     <message>
         <source>Recognition</source>
-        <translation type="unfinished"></translation>
+        <translation>Распознавание</translation>
     </message>
     <message>
         <source>Show the handwriting button on the toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Показывать на панели инструментов кнопку рукописного ввода</translation>
     </message>
     <message>
         <source>Install</source>
-        <translation type="unfinished">Установить</translation>
+        <translation>Установить</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить</translation>
     </message>
     <message>
         <source>Handwriting model:</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель рукописного ввода:</translation>
     </message>
     <message>
         <source>Main language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Основной язык:</translation>
     </message>
     <message>
         <source>Fallback language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Запасной язык:</translation>
     </message>
     <message>
         <source>Writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Письмо</translation>
     </message>
     <message>
         <source>Pause before a line is read:</source>
-        <translation type="unfinished"></translation>
+        <translation>Пауза перед чтением строки:</translation>
     </message>
     <message>
         <source>The ink stays for:</source>
-        <translation type="unfinished"></translation>
+        <translation>Чернила остаются на:</translation>
     </message>
     <message>
         <source>The ink fades over:</source>
-        <translation type="unfinished"></translation>
+        <translation>Чернила исчезают за:</translation>
     </message>
     <message>
         <source>Ink color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвет чернил:</translation>
     </message>
     <message>
         <source>Ink Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвет чернил</translation>
     </message>
     <message>
         <source> px</source>
-        <translation type="unfinished"> пикс.</translation>
+        <translation> пикс.</translation>
     </message>
     <message>
         <source>Ink width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Толщина чернил:</translation>
     </message>
     <message>
         <source>Grid (in the inspector&apos;s pad)</source>
-        <translation type="unfinished"></translation>
+        <translation>Сетка (на поле инспектора)</translation>
     </message>
     <message>
         <source>Style:</source>
-        <translation type="unfinished">Стиль:</translation>
+        <translation>Стиль:</translation>
     </message>
     <message>
         <source>Color:</source>
-        <translation type="unfinished">Цвет:</translation>
+        <translation>Цвет:</translation>
     </message>
     <message>
         <source>Grid Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Цвет сетки</translation>
     </message>
     <message>
         <source>Line width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Толщина линии:</translation>
     </message>
     <message>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Непрозрачность:</translation>
     </message>
     <message>
         <source>small</source>
-        <translation type="unfinished"></translation>
+        <translation>мелкая</translation>
     </message>
     <message>
         <source>large</source>
-        <translation type="unfinished"></translation>
+        <translation>крупная</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished">Размер:</translation>
+        <translation>Размер:</translation>
     </message>
     <message>
         <source>Hand protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Защита руки</translation>
     </message>
     <message>
         <source>Ignore the resting hand while the pen writes</source>
-        <translation type="unfinished"></translation>
+        <translation>Игнорировать лежащую на экране руку, пока пишет перо</translation>
     </message>
     <message>
         <source>Right-handed</source>
-        <translation type="unfinished"></translation>
+        <translation>Правша</translation>
     </message>
     <message>
         <source>Left-handed</source>
-        <translation type="unfinished"></translation>
+        <translation>Левша</translation>
     </message>
     <message>
         <source>Writing hand:</source>
-        <translation type="unfinished"></translation>
+        <translation>Пишущая рука:</translation>
     </message>
     <message>
         <source>weak</source>
-        <translation type="unfinished"></translation>
+        <translation>слабая</translation>
     </message>
     <message>
         <source>strong</source>
-        <translation type="unfinished"></translation>
+        <translation>сильная</translation>
     </message>
     <message>
         <source>Strength:</source>
-        <translation type="unfinished"></translation>
+        <translation>Сила:</translation>
     </message>
     <message>
         <source>Pen and finger</source>
-        <translation type="unfinished"></translation>
+        <translation>Перо и палец</translation>
     </message>
     <message>
         <source>Without a pen, one finger writes (two fingers scroll)</source>
-        <translation type="unfinished"></translation>
+        <translation>Без пера пишет один палец (два пальца прокручивают)</translation>
     </message>
     <message>
         <source>The pen&apos;s side button selects text</source>
-        <translation type="unfinished"></translation>
+        <translation>Боковая кнопка пера выделяет текст</translation>
     </message>
     <message>
         <source> s</source>
-        <translation type="unfinished"> с</translation>
+        <translation> с</translation>
     </message>
     <message>
         <source>A pen counts as in use after its last touch for:</source>
-        <translation type="unfinished"></translation>
+        <translation>Перо считается используемым после последнего касания в течение:</translation>
     </message>
     <message>
         <source>Learning your hand</source>
-        <translation type="unfinished"></translation>
+        <translation>Обучение вашему почерку</translation>
     </message>
     <message>
         <source>Keep corrected lines on this device</source>
-        <translation type="unfinished"></translation>
+        <translation>Хранить исправленные строки на этом устройстве</translation>
     </message>
     <message>
         <source>Only lines you corrected are kept: the picture of the ink and the corrected text. They stay on this device and are never sent anywhere. While an encrypted project is open, nothing is kept (the files would be plain).</source>
-        <translation type="unfinished"></translation>
+        <translation>Хранятся только строки, которые вы исправили: изображение чернил и исправленный текст. Они остаются на этом устройстве и никуда не отправляются. Пока открыт зашифрованный проект, ничего не хранится (файлы были бы не зашифрованы).</translation>
     </message>
     <message>
         <source>Delete the Kept Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить сохранённые строки</translation>
     </message>
     <message>
         <source>Installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Установлено.</translation>
     </message>
     <message>
         <source>Not installed. Install it to write by hand.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не установлено. Установите его, чтобы писать от руки.</translation>
     </message>
     <message>
         <source>The installer for handwriting models is not available in this version yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Установщик моделей рукописного ввода в этой версии пока недоступен.</translation>
     </message>
     <message numerus="yes">
         <source>%n line(s) kept</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Сохранена %n строка</numerusform>
+            <numerusform>Сохранено %n строки</numerusform>
+            <numerusform>Сохранено %n строк</numerusform>
         </translation>
     </message>
 </context>
@@ -23259,132 +23266,132 @@ The text you write is collected below.</source>
     <name>qb::handwriting::HandwritingPanel</name>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Пробел</translation>
     </message>
     <message>
         <source>Add a space</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить пробел</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Backspace</translation>
     </message>
     <message>
         <source>Delete the last character</source>
-        <translation type="unfinished"></translation>
+        <translation>Удалить последний символ</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Enter</translation>
     </message>
     <message>
         <source>Add a line break</source>
-        <translation type="unfinished"></translation>
+        <translation>Добавить перевод строки</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Очистить</translation>
+        <translation>Очистить</translation>
     </message>
     <message>
         <source>Throw away the text in the strip</source>
-        <translation type="unfinished"></translation>
+        <translation>Выбросить текст из полосы</translation>
     </message>
     <message>
         <source>Pin</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрепить</translation>
     </message>
     <message>
         <source>Make the text stick to the pen or finger; tap a text field to show the place</source>
-        <translation type="unfinished"></translation>
+        <translation>Прикрепить текст к перу или пальцу; коснитесь текстового поля, чтобы показать место</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="unfinished">Вставить</translation>
+        <translation>Вставить</translation>
     </message>
     <message>
         <source>Put the text at the cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Поместить текст в позицию курсора</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::InkCanvas</name>
     <message>
         <source>Handwriting is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Рукописный ввод не установлен.</translation>
     </message>
     <message>
         <source>The line could not be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось прочитать строку.</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::OnnxRecognizer</name>
     <message>
         <source>The model&apos;s output has an unexpected shape.</source>
-        <translation type="unfinished"></translation>
+        <translation>Выходные данные модели имеют неожиданную форму.</translation>
     </message>
     <message>
         <source>Handwriting is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Рукописный ввод не установлен.</translation>
     </message>
     <message>
         <source>The handwriting model&apos;s files could not be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось прочитать файлы модели рукописного ввода.</translation>
     </message>
     <message>
         <source>The handwriting model&apos;s codec could not be read: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось прочитать кодировку модели рукописного ввода: %1</translation>
     </message>
     <message>
         <source>The handwriting model could not be loaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось загрузить модель рукописного ввода: %1</translation>
     </message>
     <message>
         <source>The line could not be read: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось прочитать строку: %1</translation>
     </message>
     <message>
         <source>Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Рукописный ввод</translation>
     </message>
     <message>
         <source>There is not enough memory to load the handwriting model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Недостаточно памяти для загрузки модели рукописного ввода.</translation>
     </message>
     <message>
         <source>Install Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Установить рукописный ввод</translation>
     </message>
     <message>
         <source>Installed: the engine, the line model and the word lists of %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Установлено: движок, модель строк и списки слов для языка «%1».</translation>
     </message>
     <message>
         <source>no language</source>
-        <translation type="unfinished"></translation>
+        <translation>нет языка</translation>
     </message>
     <message>
         <source>the engine</source>
-        <translation type="unfinished"></translation>
+        <translation>движок</translation>
     </message>
     <message>
         <source>the line model</source>
-        <translation type="unfinished"></translation>
+        <translation>модель строк</translation>
     </message>
     <message>
         <source>Not installed yet: %1. Install it to write by hand.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ещё не установлено: %1. Установите, чтобы писать от руки.</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::WordStrip</name>
     <message>
         <source>No other readings</source>
-        <translation type="unfinished"></translation>
+        <translation>Других вариантов прочтения нет</translation>
     </message>
     <message>
         <source>The text you write appears here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Написанный вами текст появится здесь.</translation>
     </message>
 </context>
 <context>
@@ -23673,236 +23680,236 @@ It is not opened from here. If you trust it, open it yourself from your file man
     <name>qb::readaloud</name>
     <message>
         <source>Female 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Женский 1</translation>
     </message>
     <message>
         <source>Female 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Женский 2</translation>
     </message>
     <message>
         <source>Female 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Женский 3</translation>
     </message>
     <message>
         <source>Male 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Мужской 1</translation>
     </message>
     <message>
         <source>Male 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Мужской 2</translation>
     </message>
     <message>
         <source>Male 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Мужской 3</translation>
     </message>
     <message>
         <source>Calm</source>
-        <translation type="unfinished"></translation>
+        <translation>Спокойный</translation>
     </message>
     <message>
         <source>Neutral</source>
-        <translation type="unfinished"></translation>
+        <translation>Нейтральный</translation>
     </message>
     <message>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>Динамичный</translation>
     </message>
     <message>
         <source>Slow</source>
-        <translation type="unfinished"></translation>
+        <translation>Медленно</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Средне</translation>
     </message>
     <message>
         <source>Fast</source>
-        <translation type="unfinished">Быстро</translation>
+        <translation>Быстро</translation>
     </message>
     <message>
         <source>fits on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>помещается на %1</translation>
     </message>
     <message>
         <source>does not fit (needs %1)</source>
-        <translation type="unfinished"></translation>
+        <translation>не помещается (нужно %1)</translation>
     </message>
     <message>
         <source>fits in RAM</source>
-        <translation type="unfinished"></translation>
+        <translation>помещается в ОЗУ</translation>
     </message>
     <message>
         <source>This model does not have this voice.</source>
-        <translation type="unfinished"></translation>
+        <translation>В этой модели нет такого голоса.</translation>
     </message>
     <message>
         <source>Voice not installed yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Голос ещё не установлен.</translation>
     </message>
     <message>
         <source>This model has no style control.</source>
-        <translation type="unfinished"></translation>
+        <translation>В этой модели нельзя управлять стилем.</translation>
     </message>
     <message>
         <source>The voice&apos;s reference clip cannot be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удаётся прочитать образец голоса.</translation>
     </message>
     <message>
         <source>The installed AI engine cannot play sound; install its newest version.</source>
-        <translation type="unfinished"></translation>
+        <translation>Установленный ИИ-движок не умеет воспроизводить звук; установите его самую новую версию.</translation>
     </message>
 </context>
 <context>
     <name>qb::readaloud::Controller</name>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Воспроизвести</translation>
+        <translation>Воспроизвести</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished">Остановить</translation>
+        <translation>Остановить</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished">Пауза</translation>
+        <translation>Пауза</translation>
     </message>
     <message>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Продолжить</translation>
     </message>
     <message>
         <source>Read Aloud: %1 (the marked text, or from the cursor to the end)</source>
-        <translation type="unfinished"></translation>
+        <translation>Чтение вслух: %1 (выделенный текст или от курсора до конца)</translation>
     </message>
     <message>
         <source>Read Aloud: Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Чтение вслух: стоп</translation>
     </message>
     <message>
         <source>Open a text to read it aloud.</source>
-        <translation type="unfinished"></translation>
+        <translation>Откройте текст, чтобы прочитать его вслух.</translation>
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Голос</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Стиль</translation>
+        <translation>Стиль</translation>
     </message>
     <message>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Скорость</translation>
     </message>
     <message>
         <source>Read Aloud Settings…</source>
-        <translation type="unfinished"></translation>
+        <translation>Параметры чтения вслух…</translation>
     </message>
 </context>
 <context>
     <name>qb::readaloud::ReadAloudPage</name>
     <message>
         <source>no model for this language yet</source>
-        <translation type="unfinished"></translation>
+        <translation>для этого языка пока нет модели</translation>
     </message>
     <message>
         <source>Read Aloud reads the marked text (or from the cursor to the end) with a speech model on this computer. Nothing is installed until you install it here. The sound is only played, never saved.</source>
-        <translation type="unfinished"></translation>
+        <translation>«Чтение вслух» читает выделенный текст (или текст от курсора до конца) с помощью речевой модели на этом компьютере. Пока вы не установите её здесь, ничего не устанавливается. Звук только воспроизводится и никогда не сохраняется.</translation>
     </message>
     <message>
         <source>Voice model</source>
-        <translation type="unfinished"></translation>
+        <translation>Модель голоса</translation>
     </message>
     <message>
         <source>Language:</source>
-        <translation type="unfinished">Язык:</translation>
+        <translation>Язык:</translation>
     </message>
     <message>
         <source>Model:</source>
-        <translation type="unfinished">Модель:</translation>
+        <translation>Модель:</translation>
     </message>
     <message>
         <source>Automatic: the graphics card when the model fits into its free memory, else the computer&apos;s memory and processor.</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматически: видеокарта, если модель помещается в её свободную память, иначе память компьютера и процессор.</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation type="unfinished"></translation>
+        <translation>Устройство:</translation>
     </message>
     <message>
         <source>Speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Скорость:</translation>
     </message>
     <message>
         <source>The processor cores and the minutes a model stays loaded are set for all AI functions in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Число ядер процессора и время, в течение которого модель остаётся загруженной, задаются для всех функций ИИ в разделе Файл &gt; Параметры &gt; Общие &gt; Модели ИИ.</translation>
     </message>
     <message>
         <source>Automatic (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматически (%1)</translation>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished">Автоматически</translation>
+        <translation>Автоматически</translation>
     </message>
     <message>
         <source>%1: %2, %3, %4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: %2, %3, %4</translation>
     </message>
     <message>
         <source>The engine is not installed yet: install it below, then a model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Движок ещё не установлен: установите его ниже, затем модель.</translation>
     </message>
     <message>
         <source>No model is installed for this language yet: download one below.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для этого языка пока не установлена ни одна модель: скачайте её ниже.</translation>
     </message>
     <message>
         <source>Ready: press Play on the Read Aloud toolbar.</source>
-        <translation type="unfinished"></translation>
+        <translation>Готово: нажмите «Воспроизвести» на панели «Чтение вслух».</translation>
     </message>
     <message>
         <source>Not measured: no model is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Не измерено: ни одна модель не установлена.</translation>
     </message>
     <message>
         <source>Measuring the speed with a short test sentence...</source>
-        <translation type="unfinished"></translation>
+        <translation>Скорость измеряется на коротком тестовом предложении...</translation>
     </message>
     <message>
         <source>Not measured yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Пока не измерено.</translation>
     </message>
     <message>
         <source>Slower than real time (about %1 times slower on this device): Read Aloud makes a few sentences ahead before it plays.</source>
-        <translation type="unfinished"></translation>
+        <translation>Медленнее реального времени (примерно в %1 раз медленнее на этом устройстве): «Чтение вслух» готовит несколько предложений вперёд, прежде чем начать воспроизведение.</translation>
     </message>
     <message>
         <source>Faster than real time (%1 seconds of work for one second of sound).</source>
-        <translation type="unfinished"></translation>
+        <translation>Быстрее реального времени (%1 с работы на одну секунду звука).</translation>
     </message>
     <message>
         <source>The speed test failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Проверка скорости не удалась: %1</translation>
     </message>
 </context>
 <context>
     <name>qb::readaloud::Session</name>
     <message>
         <source>Read Aloud is busy.</source>
-        <translation type="unfinished"></translation>
+        <translation>«Чтение вслух» занято.</translation>
     </message>
     <message>
         <source>The AI engine is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>ИИ-движок не установлен.</translation>
     </message>
     <message>
         <source>No speech model is installed for this language.</source>
-        <translation type="unfinished"></translation>
+        <translation>Для этого языка не установлена речевая модель.</translation>
     </message>
     <message>
         <source>There is no text to read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Нет текста для чтения.</translation>
     </message>
 </context>
 <context>
@@ -23916,11 +23923,11 @@ It is not opened from here. If you trust it, open it yourself from your file man
     <name>qb::smallui::SlidePanel</name>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Закрыть</translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <source>Close this panel (Esc)</source>
-        <translation type="unfinished"></translation>
+        <translation>Закрыть эту панель (Esc)</translation>
     </message>
 </context>
 <context>
@@ -24257,7 +24264,7 @@ It is not opened from here. If you trust it, open it yourself from your file man
     <name>readaloud</name>
     <message>
         <source>Read Aloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Чтение вслух</translation>
     </message>
 </context>
 </TS>
