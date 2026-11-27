@@ -623,15 +623,15 @@ Mit dem Herunterladen akzeptieren Sie die Lizenz: %2</translation>
     </message>
     <message>
         <source>No translation model is downloaded yet for %1 to %2: %3. Choose them with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Für %1 nach %2 ist noch kein Übersetzungsmodell heruntergeladen: %3. Wählen Sie sie mit „Modelle...“ (Datei &gt; Einstellungen &gt; Übersetzungshelfer).</translation>
     </message>
     <message>
         <source>Missing: %1. Download them in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehlend: %1. Laden Sie sie in den Einstellungen der Erweiterung herunter (Datei &gt; Einstellungen &gt; Übersetzungshelfer).</translation>
     </message>
     <message>
         <source>Missing: %1. Download it in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehlend: %1. Laden Sie es in den Einstellungen der Erweiterung herunter (Datei &gt; Einstellungen &gt; Übersetzungshelfer).</translation>
     </message>
     <message>
         <source>Translated through English (%1 to English to %2): two steps, so a mistake of the first one is carried into the second.</source>
@@ -935,27 +935,27 @@ Mit dem Herunterladen akzeptieren Sie die Lizenz: %2</translation>
     </message>
     <message>
         <source>Similar translations (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Ähnliche Übersetzungen (%1, für „%2“):</translation>
     </message>
     <message>
         <source>Similar translations (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Ähnliche Übersetzungen (%1):</translation>
     </message>
     <message>
         <source>Similar (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Ähnliche (%1, für „%2“):</translation>
     </message>
     <message>
         <source>Similar (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Ähnliche (%1):</translation>
     </message>
     <message>
         <source>%1 (German): spelling suggestions and similar words are given for English words.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (Deutsch): Rechtschreibvorschläge und ähnliche Wörter gibt es für englische Wörter.</translation>
     </message>
     <message>
         <source>%1 (from “%2”)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (von „%2“)</translation>
     </message>
     <message>
         <source>Similar German words (%1):</source>
