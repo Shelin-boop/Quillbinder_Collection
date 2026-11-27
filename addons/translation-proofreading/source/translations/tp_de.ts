@@ -281,7 +281,7 @@
     </message>
     <message>
         <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation>Die Anzahl der Prozessorkerne und die Zeit, nach der ein nicht benutztes Modell entladen wird, gelten für alle KI-Funktionen gemeinsam und werden unter Datei &gt; Optionen &gt; Allgemein &gt; AI Models eingestellt.</translation>
+        <translation>Die Anzahl der Prozessorkerne und die Zeit, nach der ein nicht benutztes Modell entladen wird, gelten für alle KI-Funktionen gemeinsam und werden unter Datei &gt; Einstellungen &gt; Allgemein &gt; KI-Modelle eingestellt.</translation>
     </message>
     <message>
         <source>Careful: the model weighs even more possibilities (slower, now and then better)</source>
