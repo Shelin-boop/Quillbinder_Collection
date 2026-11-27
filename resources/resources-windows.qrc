@@ -71,6 +71,10 @@
     <file alias="icons/qbicons/actions/16/go-next.svg">icons/qbicons/actions/16/go-next.svg</file>
     <file alias="icons/qbicons/actions/16/go-previous.svg">icons/qbicons/actions/16/go-previous.svg</file>
     <file alias="icons/qbicons/actions/16/go-up.svg">icons/qbicons/actions/16/go-up.svg</file>
+    <file alias="icons/qbicons/actions/16/handwriting-both.svg">icons/qbicons/actions/16/handwriting-both.svg</file>
+    <file alias="icons/qbicons/actions/16/handwriting-editor.svg">icons/qbicons/actions/16/handwriting-editor.svg</file>
+    <file alias="icons/qbicons/actions/16/handwriting-inspector.svg">icons/qbicons/actions/16/handwriting-inspector.svg</file>
+    <file alias="icons/qbicons/actions/16/handwriting-off.svg">icons/qbicons/actions/16/handwriting-off.svg</file>
     <file alias="icons/qbicons/actions/16/help-about.svg">icons/qbicons/actions/16/help-about.svg</file>
     <file alias="icons/qbicons/actions/16/help-contents.svg">icons/qbicons/actions/16/help-contents.svg</file>
     <file alias="icons/qbicons/actions/16/help-hint.svg">icons/qbicons/actions/16/help-hint.svg</file>
@@ -196,6 +200,10 @@
     <file alias="icons/qbicons/actions/22/go-next.svg">icons/qbicons/actions/22/go-next.svg</file>
     <file alias="icons/qbicons/actions/22/go-previous.svg">icons/qbicons/actions/22/go-previous.svg</file>
     <file alias="icons/qbicons/actions/22/go-up.svg">icons/qbicons/actions/22/go-up.svg</file>
+    <file alias="icons/qbicons/actions/22/handwriting-both.svg">icons/qbicons/actions/22/handwriting-both.svg</file>
+    <file alias="icons/qbicons/actions/22/handwriting-editor.svg">icons/qbicons/actions/22/handwriting-editor.svg</file>
+    <file alias="icons/qbicons/actions/22/handwriting-inspector.svg">icons/qbicons/actions/22/handwriting-inspector.svg</file>
+    <file alias="icons/qbicons/actions/22/handwriting-off.svg">icons/qbicons/actions/22/handwriting-off.svg</file>
     <file alias="icons/qbicons/actions/22/help-about.svg">icons/qbicons/actions/22/help-about.svg</file>
     <file alias="icons/qbicons/actions/22/help-contents.svg">icons/qbicons/actions/22/help-contents.svg</file>
     <file alias="icons/qbicons/actions/22/help-hint.svg">icons/qbicons/actions/22/help-hint.svg</file>
@@ -286,6 +294,10 @@
     <file alias="icons/qbicons/actions/32/go-next.svg">icons/qbicons/actions/32/go-next.svg</file>
     <file alias="icons/qbicons/actions/32/go-previous.svg">icons/qbicons/actions/32/go-previous.svg</file>
     <file alias="icons/qbicons/actions/32/go-up.svg">icons/qbicons/actions/32/go-up.svg</file>
+    <file alias="icons/qbicons/actions/32/handwriting-both.svg">icons/qbicons/actions/32/handwriting-both.svg</file>
+    <file alias="icons/qbicons/actions/32/handwriting-editor.svg">icons/qbicons/actions/32/handwriting-editor.svg</file>
+    <file alias="icons/qbicons/actions/32/handwriting-inspector.svg">icons/qbicons/actions/32/handwriting-inspector.svg</file>
+    <file alias="icons/qbicons/actions/32/handwriting-off.svg">icons/qbicons/actions/32/handwriting-off.svg</file>
     <file alias="icons/qbicons/actions/32/help-about.svg">icons/qbicons/actions/32/help-about.svg</file>
     <file alias="icons/qbicons/actions/32/mail-attachment.svg">icons/qbicons/actions/32/mail-attachment.svg</file>
     <file alias="icons/qbicons/actions/32/search.svg">icons/qbicons/actions/32/search.svg</file>
@@ -906,6 +918,10 @@
     <file alias="icons/qbicons-dark/actions/16/go-next.svg">icons/qbicons-dark/actions/16/go-next.svg</file>
     <file alias="icons/qbicons-dark/actions/16/go-previous.svg">icons/qbicons-dark/actions/16/go-previous.svg</file>
     <file alias="icons/qbicons-dark/actions/16/go-up.svg">icons/qbicons-dark/actions/16/go-up.svg</file>
+    <file alias="icons/qbicons-dark/actions/16/handwriting-both.svg">icons/qbicons-dark/actions/16/handwriting-both.svg</file>
+    <file alias="icons/qbicons-dark/actions/16/handwriting-editor.svg">icons/qbicons-dark/actions/16/handwriting-editor.svg</file>
+    <file alias="icons/qbicons-dark/actions/16/handwriting-inspector.svg">icons/qbicons-dark/actions/16/handwriting-inspector.svg</file>
+    <file alias="icons/qbicons-dark/actions/16/handwriting-off.svg">icons/qbicons-dark/actions/16/handwriting-off.svg</file>
     <file alias="icons/qbicons-dark/actions/16/help-about.svg">icons/qbicons-dark/actions/16/help-about.svg</file>
     <file alias="icons/qbicons-dark/actions/16/help-contents.svg">icons/qbicons-dark/actions/16/help-contents.svg</file>
     <file alias="icons/qbicons-dark/actions/16/help-hint.svg">icons/qbicons-dark/actions/16/help-hint.svg</file>
@@ -1031,6 +1047,10 @@
     <file alias="icons/qbicons-dark/actions/22/go-next.svg">icons/qbicons-dark/actions/22/go-next.svg</file>
     <file alias="icons/qbicons-dark/actions/22/go-previous.svg">icons/qbicons-dark/actions/22/go-previous.svg</file>
     <file alias="icons/qbicons-dark/actions/22/go-up.svg">icons/qbicons-dark/actions/22/go-up.svg</file>
+    <file alias="icons/qbicons-dark/actions/22/handwriting-both.svg">icons/qbicons-dark/actions/22/handwriting-both.svg</file>
+    <file alias="icons/qbicons-dark/actions/22/handwriting-editor.svg">icons/qbicons-dark/actions/22/handwriting-editor.svg</file>
+    <file alias="icons/qbicons-dark/actions/22/handwriting-inspector.svg">icons/qbicons-dark/actions/22/handwriting-inspector.svg</file>
+    <file alias="icons/qbicons-dark/actions/22/handwriting-off.svg">icons/qbicons-dark/actions/22/handwriting-off.svg</file>
     <file alias="icons/qbicons-dark/actions/22/help-about.svg">icons/qbicons-dark/actions/22/help-about.svg</file>
     <file alias="icons/qbicons-dark/actions/22/help-contents.svg">icons/qbicons-dark/actions/22/help-contents.svg</file>
     <file alias="icons/qbicons-dark/actions/22/help-hint.svg">icons/qbicons-dark/actions/22/help-hint.svg</file>
@@ -1121,6 +1141,10 @@
     <file alias="icons/qbicons-dark/actions/32/go-next.svg">icons/qbicons-dark/actions/32/go-next.svg</file>
     <file alias="icons/qbicons-dark/actions/32/go-previous.svg">icons/qbicons-dark/actions/32/go-previous.svg</file>
     <file alias="icons/qbicons-dark/actions/32/go-up.svg">icons/qbicons-dark/actions/32/go-up.svg</file>
+    <file alias="icons/qbicons-dark/actions/32/handwriting-both.svg">icons/qbicons-dark/actions/32/handwriting-both.svg</file>
+    <file alias="icons/qbicons-dark/actions/32/handwriting-editor.svg">icons/qbicons-dark/actions/32/handwriting-editor.svg</file>
+    <file alias="icons/qbicons-dark/actions/32/handwriting-inspector.svg">icons/qbicons-dark/actions/32/handwriting-inspector.svg</file>
+    <file alias="icons/qbicons-dark/actions/32/handwriting-off.svg">icons/qbicons-dark/actions/32/handwriting-off.svg</file>
     <file alias="icons/qbicons-dark/actions/32/help-about.svg">icons/qbicons-dark/actions/32/help-about.svg</file>
     <file alias="icons/qbicons-dark/actions/32/mail-attachment.svg">icons/qbicons-dark/actions/32/mail-attachment.svg</file>
     <file alias="icons/qbicons-dark/actions/32/search.svg">icons/qbicons-dark/actions/32/search.svg</file>

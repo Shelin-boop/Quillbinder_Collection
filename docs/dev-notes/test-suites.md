@@ -20,6 +20,20 @@ process, the real engine when built (Sonic's speed with the pitch kept; with `QB
 model) and `QB_AI_WHISPER_SAMPLE` (jfk.wav) a real transcription; `QB_AI_QWEN_TALKER`/`QB_AI_QWEN_CODEC` a word of Qwen3-TTS).
 The recipe checks take the packs from `QB_AI_ENGINE_DIR` and `QB_ONNXRUNTIME_DIR` (default `build/ai-engine`,
 `build/onnxruntime`). Without the pack and libqbai those parts print a line and are not counted.
+## v0990j (0.99.0: handwriting, part 1)
+
+`qb_v0990j_tests`: one window with a project and a `FakeRecognizer` (a fixed text per line; `PenInput`'s clock is the test's own,
+`InkCanvas::advance()` is called by hand, so nothing waits for real time except the button's long press). Synthetic
+`QTabletEvent` and `QTouchEvent` sequences sent to the canvas. The defaults per system (`forceAndroid`), the plain parts (scratch
+detection, `HandProtection`, `PenInput`), the button and its four looks (tap, long press, right-click, hidden by default, View >
+Toolbars switch), the first use with no recognizer (File > Options > Handwriting opens, the Install slot, Russian greyed), the
+three modes (the tab, the layer's mask, the pane line covered, the grid only over the pad part), writing a line in each mode, a
+pen tap, the side button, finger scroll and tap, one finger writes / long press selects / two fingers scroll, the rest zone and a
+tap on a button, scratching out (ink, text, strip), the fade timing (stay and fade of 400 ms), the strip (alternatives, writing
+over a word, learning store, off switch, delete), Space / Backspace / Enter, Insert at the held cursor after the text moved, Pin
+with check and cross (editor and synopsis), the grid styles and the size slider with its sample, the Options page, the mode
+kept per device and the ModelMemory id. Screenshots `hw-*.png` of the icons, the three modes, the strip, the pin and each grid
+style (`hw-grid-*.png`).
 
 ## v0990b (0.99.0)
 

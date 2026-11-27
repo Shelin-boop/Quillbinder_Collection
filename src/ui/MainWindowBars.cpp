@@ -2,6 +2,7 @@
 // with the project (styles) or the data folder (layouts).
 #include "ui/ThemePicker.h"
 #include "ui/MainWindow.h"
+#include "ui/handwriting/HandwritingController.h"
 #include "ui/UndoNames.h"
 #include "core/Backup.h"
 #include "core/Portable.h"
@@ -334,6 +335,7 @@ void MainWindow::createMenus()
     add(bars, {"showToolbar", "showBarMain", "showBarThemes", "showBarProfiles", "showBarSearch", "showBarTools", "",
                "showFormatBar", "showBarStyle", "showBarCharacter", "showBarParagraph", "", "showIconBar", "showBarLabels", ""});
     bars->addAction(m_toolbarSizeMenu->menuAction()); // 0.99.0: Small, Normal, Large for every bar
+    bars->addAction(m_handwriting->showButtonAction()); // 0.99.0 (item 112): the handwriting button is off by default
     add(bars, {"resetToolbarPlaces", "", "customizeToolbars", "customizeIconBar"});
     QMenu *themes = view->addMenu(tr("&Themes")); // 0.94.0: before, under Window;
     themes->setObjectName(QStringLiteral("themeMenu"));
@@ -855,6 +857,24 @@ void MainWindow::createToolBars()
 
     // the theme list with its filter (0.90.2)
     wrap(QStringLiteral("themePicker"), new ThemePicker);
+    // 0.99.0 (item 112): the handwriting button (four looks); on the Tools bar, shown only when it is switched on
+    wrap(QStringLiteral("handwriting"), m_handwriting->button());
+    m_handwriting->setBarAction(m_barItems.value(QStringLiteral("handwriting")));
+    // a Tools bar the writer arranged before has no such button: switching it on puts it at the end of that bar
+    connect(m_handwriting->showButtonAction(), &QAction::toggled, this, [this](bool on) {
+        if (!on)
+            return;
+        for (toolbars::Bar b : toolbars::allBars())
+            if (toolbars::configured(b).contains(QStringLiteral("handwriting")))
+                return;
+        AppSettings &st = AppSettings::instance();
+        if (st.toolbarTools.isEmpty())
+            st.toolbarTools = toolbars::standard(toolbars::Bar::Tools);
+        else
+            st.toolbarTools << QStringLiteral("handwriting");
+        st.notifyChanged();
+        rebuildToolBars();
+    });
     // on a crowded toolbar (large icons, text beside them, a narrow window) it gives way to the quick search (only
     // where the writer put both on one bar: since 0.91.0 they stand on bars of their own)
     for (toolbars::Bar b : toolbars::allBars())
@@ -1325,6 +1345,7 @@ void MainWindow::fillBarsMenu(QMenu *menu, int bar)
     menu->addSeparator();
     if (m_toolbarSizeMenu)
         menu->addAction(m_toolbarSizeMenu->menuAction()); // 0.99.0
+    menu->addAction(m_handwriting->showButtonAction());   // 0.99.0 (item 112)
     menu->addAction(a[QStringLiteral("resetToolbarPlaces")]);
     menu->addSeparator();
     if (bar < 0)

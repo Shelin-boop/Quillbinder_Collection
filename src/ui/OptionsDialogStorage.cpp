@@ -2,6 +2,7 @@
 // is marked with the settings key it writes (the list of controls and keys was worked out from apply() and
 // AppSettings::save(); a new option needs a line here, and qb_v0901_tests checks that every control has one).
 #include "ui/OptionsDialog.h"
+#include "ui/handwriting/HandwritingPage.h"
 
 #include "core/Project.h"
 #include "core/SettingsLayer.h"
@@ -132,6 +133,8 @@ void OptionsDialog::markStorage()
     optstore::mark(m_projectFirst, QStringLiteral("app/projectFirst"));
     optstore::mark(m_language, QStringLiteral("app/language"));
     optstore::mark(m_groupDigits, QStringLiteral("app/groupDigits"));
+    if (m_handwriting)
+        m_handwriting->markStorage();   // 0.99.0
     optstore::mark(m_aiThreads, QStringLiteral("app/aiThreads"));        // 0.99.0
     optstore::mark(m_aiUnload, QStringLiteral("app/aiUnloadMinutes"));
     optstore::mark(m_exportComments, QStringLiteral("export/comments"));
