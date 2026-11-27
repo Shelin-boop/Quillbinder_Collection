@@ -68,13 +68,13 @@ O {{APP}} é um programa de escrita para textos longos. Se você já trabalhou c
 ### Além do comum
 
 - **Mapas mentais**: um quadro de notas, linhas e setas para cada documento e pasta (o botão **Mapa mental** do inspetor). **Ajuda > Ajuda dos mapas mentais** mostra como funciona.
-- **Objetos**: personagens, locais, ambientes, pontos de interesse, clima e categorias suas, cada um com uma ficha de campos e links entre eles (o botão **Objetos** do inspetor, ou **Janela > Objetos…**).
+- **Objetos**: personagens, locais, ambientes, pontos de interesse, clima e categorias suas, cada um com uma ficha de campos e links entre eles (o botão **Objetos** do inspetor, ou **Janela > Objetos**).
 - **Tabelas e imagens**: **Inserir > Tabela…** com designs prontos ou os seus, **Formatar > Tabela** para linhas, colunas, células mescladas e cores; imagens ao lado do texto com o texto fluindo em volta delas, legendas e descrições que os e-books e os arquivos do Word guardam como texto alternativo (clique com o botão direito em uma imagem, **Imagem…**).
 - **A barra de ícones**: até dez ícones de documento, um clique para cada. **Documentos > Alterar ícone** também cria ícones a partir de texto ou das suas próprias imagens.
 - **Zoom por parte**: Fichário, editores, partes do inspetor, quadro de cortiça, estrutura de tópicos e mapas mentais guardam cada um o seu zoom.
 - **Lugares guardados**: cada documento abre onde você deixou o cursor, também depois de reabrir o projeto.
 - **Fontes**: **Formatar > Fonte > Instalar arquivos de fonte…** adiciona fontes sem sair do programa.
-- **Segurança**: salvamento automático também enquanto você continua digitando, backups, uma cópia reserva do arquivo do projeto, relatórios de falhas e de travamentos (**Ajuda > Solução de problemas e desenvolvimento > Relatórios de falhas…**) e **Ajuda > Solução de problemas e desenvolvimento > Informações do sistema…**.
+- **Segurança**: salvamento automático também enquanto você continua digitando, backups, uma cópia reserva do arquivo do projeto, relatórios de falhas e de travamentos (**Ajuda > Solução de problemas e desenvolvimento > Relatórios de falhas…**) e **Ajuda > Solução de problemas e desenvolvimento > Informações do sistema**.
 
 ### Atualizações e complementos
 
@@ -88,5 +88,5 @@ A **versão completa** do AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) traz t
 - **Ajuda > Projeto de boas-vindas**: um projeto curto que mostra os recursos listados em "Além do comum" e deixa você experimentá-los.
 - **Ajuda > Ajuda dos mapas mentais**: notas, linhas, setas e formas, com imagens e um quadro para praticar.
 - **Ajuda > Lista de todos os espaços reservados** e **Ajuda > Atalhos de teclado…**
-- **Ajuda > Licenças de terceiros…**: as licenças das partes de outros projetos que o {{APP}} usa.
+- **Ajuda > Licenças de terceiros**: as licenças das partes de outros projetos que o {{APP}} usa.
 - **Ajuda > Sobre o {{APP}}**: a versão e a licença. O {{APP}} é software livre sob a Apache License 2.0.
