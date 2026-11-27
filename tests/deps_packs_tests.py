@@ -209,6 +209,11 @@ esac
     os.makedirs(os.path.join(fake2, "tools"))
     for f in ("deps-pack.sh", "get-onnxruntime.sh"):
         shutil.copy(os.path.join(ROOT, "tools", f), os.path.join(fake2, "tools", f))
+    # (the copy runs as an unpinned recipe: the real script's pins are blanked, so the refusal and the first run can be checked)
+    ort = os.path.join(fake2, "tools", "get-onnxruntime.sh")
+    text = re.sub(r'^(SHA256_(JAR|AAR))="[0-9a-f]*"$', r'\1=""', open(ort).read(), flags=re.M)
+    open(ort, "w").write(text)
+    os.chmod(ort, 0o755)
     h2 = subprocess.run([os.path.join(fake2, "tools", "deps-pack.sh"), "hash", "onnxruntime"], capture_output=True, text=True).stdout.strip()
     shutil.copy(os.path.join(work, "out-onnxruntime", next(f for f in os.listdir(os.path.join(work, "out-onnxruntime")) if f.endswith(".tar.xz"))),
                 os.path.join(work, "asset2.tar.xz"))
