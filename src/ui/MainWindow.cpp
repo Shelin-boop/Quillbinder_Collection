@@ -976,6 +976,7 @@ MainWindow::~MainWindow()
     // 0.93.0 (Android's system test, a crash at the window's end): the keyboard focus changes while the window's own
     // widgets are deleted (after this body, with the members already gone), and the application's focus signal then
     // reached the undo watcher of a window half destroyed. Every connection to the application's signals is cut first.
+    DocumentStore::setUnlockHandler(nullptr);
     m_ending = true;
     for (const QMetaObject::Connection &c : std::as_const(m_focusLinks))
         disconnect(c);
@@ -3385,12 +3386,28 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
     refreshStyleUi();
     rebuildScriptActions();
     connect(proj, &Project::titleChanged, this, &MainWindow::updateWindowTitle);
+    // 0.99.0 (audit AU-01): a read that finds the key locked asks for the passphrase (the box of the project's opening)
+    DocumentStore::setUnlockHandler([this](const QString &folder) {
+        return ui::unlockForFolder(this, folder, tr("Unlock the Key"));
+    });
     // a text file that is there but cannot be read: shown empty, read-only, never saved over (0.20)
     connect(proj->docs(), &DocumentStore::unreadableFile, this,
             [this](const QString &id, bool notes, const QString &path, const QString &err) {
                 BinderItem *it = m_project ? m_project->item(id) : nullptr;
                 const QString title = it ? it->title : id;
                 QTimer::singleShot(0, this, [this, title, notes, path, err] {
+                    if (err == DocumentStore::lockedKeyText()) {
+                        // 0.99.0 (audit AU-01): the key is locked: no advice about permissions or the drive
+                        QMessageBox box(QMessageBox::Warning, tr("Document Cannot Be Read"),
+                                        tr("The %1 of \"%2\" cannot be read because the key is locked.\n\nIt is shown empty "
+                                           "and cannot be edited, so that the file is not overwritten. Close the project and "
+                                           "open it again, then enter the passphrase.")
+                                            .arg(notes ? tr("notes") : tr("text"), title),
+                                        QMessageBox::Ok, this);
+                        box.setObjectName(QStringLiteral("lockedDocumentNotice"));
+                        box.exec();
+                        return;
+                    }
                     QMessageBox box(QMessageBox::Warning, tr("Document Cannot Be Read"),
                                     tr("The %1 of \"%2\" cannot be read (%3):\n%4\n\nIt is shown empty and cannot be "
                                        "edited, so that the file is not overwritten. Check the file's permissions or the "

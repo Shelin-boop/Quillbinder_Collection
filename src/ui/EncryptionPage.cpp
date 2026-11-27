@@ -3,6 +3,7 @@
 #include "core/Backup.h"
 #include "core/crypto/KeyStore.h"
 #include "core/crypto/Passphrase.h"
+#include "core/crypto/Vault.h"
 #include "core/crypto/ProjectSwitches.h"
 #include "ui/AppSettings.h"
 #include "ui/HintLabel.h"
@@ -823,11 +824,12 @@ void EncryptionPage::forgetPassphrase()
         return;
     if (!encui::confirmBox(this, tr("Forget the passphrase"),
                            tr("Quillbinder forgets the passphrase on this device and locks your key. It will ask for the passphrase "
-                              "again when it needs it. Continue?")))
+                              "again when it needs it. An encrypted project that is open stays unlocked until it is closed. "
+                              "Continue?")))
         return;
     QString err;
     const auto st = qc::KeyStore::system().remove(qc::KeyStore::passphraseEntry(roles.mine), &err);
-    qc::KeyRing::device().lock(roles.mine);
+    vault::lockWhenIdle(roles.mine); // (an open encrypted project keeps its key until it closes)
     if (st == qc::KeyStore::Status::Ok || st == qc::KeyStore::Status::NotFound)
         say(tr("Forget the passphrase"), tr("The passphrase is forgotten on this device."));
     else

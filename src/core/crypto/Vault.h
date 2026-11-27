@@ -34,6 +34,8 @@ void add(const QString &folder, const QStringList &recipients, const QStringList
 // the last one
 void remove(const QString &folder);
 bool active(); // some folder is in the vault
+// 0.99.0 (audit AU-01): locks the key at once when no encrypted project is open, else when the last one is removed
+void lockWhenIdle(const QString &fingerprint);
 bool contains(const QString &folder);
 
 struct Place {
