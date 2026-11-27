@@ -357,15 +357,16 @@ int main(int argc, char **argv)
     // ================================================================ the interface header and the fake library
     std::printf("== the C interface\n");
     {
-        check(QBAI_API_VERSION == 1 && offsetof(qbai_api, version) == 0 && offsetof(qbai_api, size) == sizeof(int)
+        check(QBAI_API_VERSION == 2 && QBAI_API_V1_SIZE < sizeof(qbai_api) && QBAI_TRANSCRIBE_V1_SIZE < sizeof(qbai_transcribe_params) && offsetof(qbai_api, version) == 0 && offsetof(qbai_api, size) == sizeof(int)
                   && offsetof(qbai_load_params, size) == 0 && offsetof(qbai_synth_params, size) == 0 && offsetof(qbai_voice, size) == 0
                   && offsetof(qbai_transcribe_params, size) == 0 && offsetof(qbai_model_info, size) == 0,
-              QStringLiteral("tools/QbAi.h: version 1; the table and every parameter struct begin with their version or size"));
+              QStringLiteral("tools/QbAi.h: version 2 (version 1 is its prefix); the table and every parameter struct begin with their version or size"));
         QLibrary lib(fakeLib);
         const bool loaded = lib.load();
         auto get = loaded ? reinterpret_cast<qbai_get_api_fn>(lib.resolve("qbai_get_api")) : nullptr;
-        check(get && get(1) && get(1)->version == 1 && get(1)->size == int(sizeof(qbai_api)) && !get(0) && !get(2),
-              QStringLiteral("the fake libqbai: qbai_get_api(1) gives the table, versions 0 and 2 give none"), lib.errorString());
+        check(get && get(1) && get(1)->version == 1 && get(1)->size == int(QBAI_API_V1_SIZE) && get(2) && get(2)->version == 2
+                  && get(2)->size == int(sizeof(qbai_api)) && get(2)->detect_language && !get(0) && !get(3),
+              QStringLiteral("the fake libqbai: qbai_get_api(1) gives the version 1 table, (2) the whole one with detect_language, 0 and 3 give none"), lib.errorString());
     }
 
     // ================================================================ no engine installed
@@ -449,8 +450,8 @@ int main(int argc, char **argv)
         mm.setThreadSetting(3);
         e.applyThreads();
         check(e.api()->threads() == 3, QStringLiteral("the shared setting of the AI's cores reaches the engine"));
-        check(toolhost::host().aiEngine(1) == e.api() && toolhost::host().aiEngine(2) == nullptr,
-              QStringLiteral("tool interface 1.3: aiEngine(1) is the program's own table (one engine in the process), aiEngine(2) none"));
+        check(toolhost::host().aiEngine(1) == e.api() && toolhost::host().aiEngine(2) && toolhost::host().aiEngine(2)->version == 2 && toolhost::host().aiEngine(3) == nullptr,
+              QStringLiteral("tool interface 1.3: aiEngine(1) is the program's own table (one engine in the process), aiEngine(2) the version 2 table, aiEngine(3) none"));
         QString where;
         check(toolhost::host().aiPickDevice(QStringLiteral("auto"), 1024 * MB, &where) == 1 && where == QLatin1String("gpu:Fake Card")
                   && toolhost::host().aiPickDevice(QStringLiteral("auto"), 3500 * MB, &where) == 0 && where == QLatin1String("ram"),

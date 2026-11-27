@@ -151,17 +151,14 @@ int main(int argc, char **argv)
                                  "licenses/README.txt", "licenses/whisper.cpp-MIT.txt", "licenses/Qt-LGPL-3.0.txt",
                                  "licenses/GPL-3.0.txt"};
 #else
-    const char *const files[] = {"../plugins/libqb-speech.so", "libqb-speech-impl.so", "lib/libwhisper.so.1", "lib/libggml.so.0",
-                                 "lib/libggml-base.so.0", "lib/libggml-cpu-x64.so", "lib/libggml-cpu-haswell.so",
-                                 "lib/libQt6Multimedia.so.6", "samples/jfk.wav", "licenses/README.txt",
-                                 "licenses/whisper.cpp-MIT.txt", "licenses/Qt-LGPL-3.0.txt"};
+    const char *const files[] = {"../plugins/libqb-speech.so", "libqb-speech-impl.so", "lib/libQt6Multimedia.so.6",
+                                 "samples/jfk.wav", "licenses/README.txt", "licenses/Qt-LGPL-3.0.txt"};
 #endif
     for (const char *f : files)
         if (!QFileInfo::exists(dir + QLatin1Char('/') + QLatin1String(f)))
             missing << QLatin1String(f);
     check(!dir.isEmpty() && missing.isEmpty(),
-          QStringLiteral("its files: the tool, the engine, whisper.cpp with a compute module per processor generation, Qt "
-                         "Multimedia, the test recording, the licenses"),
+          QStringLiteral("its files: the tool, the engine, Qt Multimedia, the test recording, the licenses"),
           dir + QLatin1String(" missing: ") + missing.join(QLatin1String(", ")));
     const QString readme = readText(dir + QStringLiteral("/licenses/README.txt"));
     const QStringList modules = QDir(dir + QStringLiteral("/lib")).entryList({QStringLiteral("*ggml-cpu-*")}, QDir::Files);
@@ -177,8 +174,8 @@ int main(int argc, char **argv)
           QStringLiteral("Windows: the add-on's description says the processor and names no graphics cards"),
           info.manifest.description);
 #else
-    check(readme.contains(QLatin1String("whisper.cpp")) && readme.contains(QLatin1String("MIT")) && modules.size() >= 5,
-          QStringLiteral("the license notes name whisper.cpp; one compute module per processor generation"),
+    check(readme.contains(QLatin1String("AI Engine")) && readme.contains(QLatin1String("Qt Multimedia")) && modules.isEmpty(),
+          QStringLiteral("1.10: the license notes say the recognition is in the AI Engine add-on; no compute modules in this add-on"),
           modules.join(QLatin1Char(' ')));
 #endif
     note(QStringLiteral("compute modules: %1").arg(modules.join(QLatin1Char(' '))));
@@ -201,7 +198,7 @@ int main(int argc, char **argv)
         const QString texts = odd + QStringLiteral("/Transkripte \u00fc");
         toolhost::host().setSetting(QStringLiteral("speech-transcription"), QStringLiteral("folder"), texts);
         toolhost::host().setSetting(QStringLiteral("speech-transcription"), QStringLiteral("mode"), QStringLiteral("live"));
-        toolhost::host().setSetting(QStringLiteral("speech-transcription"), QStringLiteral("gpu"), -1);
+        toolhost::host().setSetting(QStringLiteral("speech-transcription"), QStringLiteral("device"), QStringLiteral("cpu"));
         toolhost::host().setSetting(QStringLiteral("speech-transcription"), QStringLiteral("main"), QStringLiteral("en"));
         QElapsedTimer t;
         t.start();

@@ -32,8 +32,11 @@
 extern "C" {
 #endif
 
-#define QBAI_API_VERSION 1
-
+/* Version 2 (0.99.0, Speech Transcription 1.10) adds, at the end, beam search, the no-speech limit and more switches in
+   qbai_transcribe_params and the function detect_language in qbai_api. A caller that wants them asks qbai_get_api(2) and falls
+   back to qbai_get_api(1) (an older engine package); QBAI_API_VERSION is the newest this header knows, QBAI_API_V1_SIZE the
+   size of the version 1 table. */
+#define QBAI_API_VERSION 2
 /* the library's file name inside the package's engine/lib folder (Linux; Windows: qbai.dll) */
 #define QBAI_LIBRARY_LINUX "libqbai.so.1"
 #define QBAI_LIBRARY_WINDOWS "qbai.dll"
@@ -104,7 +107,16 @@ struct qbai_transcribe_params {
     void (*progress)(int percent, void *user);
     int (*cancel)(void *user); /* not 0: stop (transcribe returns QBAI_CANCELLED) */
     void *user;
+    /* ---- version 2 (read only when `size` reaches them) */
+    int beam_size;             /* > 1: beam search with this many beams ("careful"); 0 or 1: greedy decoding */
+    float no_speech_max;       /* > 0: a segment whose no-speech probability is above this is left out of the text (0.6 usual) */
+    int suppress_nst;          /* 1: whisper's suppression of non-speech tokens */
+    int no_timestamps;         /* 1: no timestamps are decoded (faster; the segment callback then gets 0 for both times) */
+    int no_context;            /* 1: the text before is not used as context (the prompt alone is) */
 };
+
+/* offset of the first version 2 field: callers that pass a struct of version 1 have a smaller `size` */
+#define QBAI_TRANSCRIBE_V1_SIZE offsetof(struct qbai_transcribe_params, beam_size)
 
 /* ---- speech synthesis */
 struct qbai_voice {
@@ -174,7 +186,16 @@ struct qbai_api {
     struct qbai_stretcher *(*stretch_begin)(int rate, float speed);
     int (*stretch_feed)(struct qbai_stretcher *s, const float *pcm, int64_t samples, struct qbai_pcm *out);
     int (*stretch_end)(struct qbai_stretcher *s, struct qbai_pcm *out);   /* the rest; frees s */
+
+    /* ---- version 2 */
+    /* ASR: how likely each of the `count` languages (ISO 639-1 codes) is for this audio (mono float at 16 kHz): probs[i] gets the
+       probability of codes[i] (0 for a code the model does not know). Runs the model's encoder once: use it on a piece, then
+       transcribe with the language chosen. A model that is not multilingual gets QBAI_UNSUPPORTED. */
+    int (*detect_language)(qbai_model *model, const float *pcm, int64_t samples, const char *const *codes, int count, float *probs);
 };
+
+/* the size of the version 1 table (what an engine package of version 1 reports in `size`) */
+#define QBAI_API_V1_SIZE offsetof(struct qbai_api, detect_language)
 
 /* The one entry of libqbai: NULL when version is above the library's own (or below 1). The program and add-ons never
    link it: they look it up by name (QLibrary::resolve("qbai_get_api"), dlsym, GetProcAddress) as qbai_get_api_fn. */

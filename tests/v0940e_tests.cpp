@@ -160,7 +160,7 @@ static void messageLine(MainWindow &w)
 // ---------------------------------------------------------------- the speech tool's time without use
 static void speechUnload()
 {
-    std::printf("== the speech model is freed after a time without use (item 72)\n");
+    std::printf("== the speech model's time without use and the cores are the program's one setting (1.10)\n");
     tools::ToolInterface *speech = compile::PluginManager::instance().tool(QStringLiteral("speech-transcription"));
     if (!speech) {
         std::printf("      (the Speech Transcription add-on is not loaded here: the option is not checked)\n");
@@ -168,17 +168,12 @@ static void speechUnload()
     }
     QWidget host;
     tools::OptionsSection *sec = speech->createOptions(&host);
-    QSpinBox *spin = sec && sec->widget() ? sec->widget()->findChild<QSpinBox *>(QStringLiteral("speechUnload")) : nullptr;
-    check(spin != nullptr, QStringLiteral("the options of Speech Transcription have the time after which the model is freed"));
-    if (!spin)
-        return;
-    check(spin->value() == 15, QStringLiteral("... 15 minutes at first"), QString::number(spin->value()));
-    spin->setValue(30);
-    sec->apply();
-    check(toolhost::host().setting(QStringLiteral("speech-transcription"), QStringLiteral("unloadMinutes")).toInt() == 30,
-          QStringLiteral("... and the setting is kept"));
-    spin->setValue(15);
-    sec->apply();
+    QWidget *page = sec ? sec->widget() : nullptr;
+    check(page && !page->findChild<QSpinBox *>(QStringLiteral("speechUnload")) && !page->findChild<QSpinBox *>(QStringLiteral("speechThreads")),
+          QStringLiteral("the options of Speech Transcription 1.10 have no fields of their own for the cores and the time to free the model"));
+    auto *note = page ? page->findChild<QLabel *>(QStringLiteral("speechSharedSettings")) : nullptr;
+    check(note && note->text().contains(QLatin1String("AI Models")),
+          QStringLiteral("... the page names File > Options > General > AI Models instead"), note ? note->text() : QString());
 }
 
 // ---------------------------------------------------------------- item 85
