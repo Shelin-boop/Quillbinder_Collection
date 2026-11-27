@@ -1129,7 +1129,7 @@ int main(int argc, char **argv)
             QStringLiteral("Edit > Writing Tools > "), QStringLiteral("View > Show Binder"), QStringLiteral("View > Show Collections"),
             QStringLiteral("View > Show Inspector"), QStringLiteral("View > Quick-Add Keys in the Binder"), QStringLiteral("View > Layout > "), QStringLiteral("View > Toolbars > "), QStringLiteral("View > Text Editing > "),
             QStringLiteral("View > Corkboard Options > Status Stamps"), QStringLiteral("View > Use Label Color In > "),
-            QStringLiteral("View > Full Screen"), QStringLiteral("View > Zoom Inspector Tabs Separately"), QStringLiteral("View > Themes > "), QStringLiteral("View > Profiles > "), QStringLiteral("View > Layout > "),
+            QStringLiteral("View > Full Screen"), QStringLiteral("View > Small Interface"), QStringLiteral("View > Zoom Inspector Tabs Separately"), QStringLiteral("View > Themes > "), QStringLiteral("View > Profiles > "), QStringLiteral("View > Layout > "),
             QStringLiteral("Window > Scratch Pad"), QStringLiteral("Window > Float Quick Reference Panels"), QStringLiteral("Help > ")};
         QStringList onWithout, wrongWithout;
         for (const MenuEntry &e : entriesNo)

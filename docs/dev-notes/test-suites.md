@@ -29,6 +29,19 @@ the low-memory signal (injected; idle models only), the message line "Model chan
 (`tests/tool13`: registers, is asked to unload, is refused, busy models stay) and one of 1.2 (`tests/tool12`, built with the
 header of 1.2), and the page File > Options > General > AI Models (default, change kept after the settings are read again,
 memory line). The two test tools are loaded from `<build>/tests/tool12-plugins` and `tool13-plugins`.
+## v0990l (0.99.0, item 122: the small interface)
+
+`qb_v0990l_tests`: the rule (`smallui::belowFullHd/resolve/touchTargetPx`, both sides of 1920 x 1080, the three choices), the
+View > Small Interface check item (off at first, no Android choices on Linux), the mode on and off in a wide (1280 x 800) and an
+upright (1080 x 1920) window, with the inspector shown and hidden (pane sizes, toolbars and their places, menu bar, the saved
+state, binder and inspector back in their splitters), the nine round buttons (size at least 9 mm, one row or column, inside
+the window, theme colors, keyboard focus), each button's action (new document, bold, italic, style menu, labels and icons,
+menu with all the menus and the way back), the binder and notes panels (a part of the width from the left or right, a sheet when
+upright, one at a time, Close, Esc, the focus line after the slide), record only (grayed with the reason without the add-on; the
+add-on is loaded in a second run of the same program, `--addon`, because the tools are loaded once per program), a profile that
+keeps the mode (profile files, switching both ways) and the Android rule through `setSmallChoice` / `applySmallRule` with sizes.
+The window is resized by `resize()`; the offscreen screen keeps its size. Run: `xvfb-run -a -s "-screen 0 1920x1080x24"
+./qb_v0990l_tests /tmp/shots`.
 ## v0990g (0.99.0: the menu walk)
 
 `qb_v0990g_tests`: one window with a project. Navigate > Inspect names (25 characters at most), the renamed commands, the

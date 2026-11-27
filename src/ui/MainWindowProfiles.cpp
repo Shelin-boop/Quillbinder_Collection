@@ -223,6 +223,9 @@ void MainWindow::saveWindowSettings()
     s.setValue(QStringLiteral("window/binder"), a[QStringLiteral("showBinder")]->isChecked());
     s.setValue(QStringLiteral("window/toolbar"), a[QStringLiteral("showToolbar")]->isChecked());
     s.setValue(QStringLiteral("window/formatBar"), a[QStringLiteral("showFormatBar")]->isChecked());
+#ifndef Q_OS_ANDROID
+    s.setValue(QLatin1String(smallui::kKeyOn), m_small); // 0.99.0: the small interface is part of a profile
+#endif
     s.sync();
 }
 
@@ -264,11 +267,26 @@ void MainWindow::reloadFromProfile(bool languageChanged)
     if (m_barDock)
         m_barDock->load();
     loadPaneSettings(st);
+    m_smallQuiet = true; // (the switches of the panes are set; no slide-in panel opens for that)
     a[QStringLiteral("showInspector")]->setChecked(st.value(QStringLiteral("window/inspector"), true).toBool());
     a[QStringLiteral("showBinder")]->setChecked(st.value(QStringLiteral("window/binder"), true).toBool());
+    m_smallQuiet = false;
     a[QStringLiteral("showToolbar")]->setChecked(st.value(QStringLiteral("window/toolbar"), true).toBool());
     a[QStringLiteral("showFormatBar")]->setChecked(st.value(QStringLiteral("window/formatBar"), true).toBool());
     applyBarVisibility();
+    // 0.99.0 (item 122): the profile's small interface (the saved window state may have brought the round buttons' bar back)
+    if (m_small) { // the switches of the binder and the inspector the profile gives are what leaving the mode restores
+        m_smallBinderChecked = a[QStringLiteral("showBinder")]->isChecked();
+        m_smallInspectorChecked = a[QStringLiteral("showInspector")]->isChecked();
+    }
+#ifdef Q_OS_ANDROID
+    m_smallChoice = smallui::choiceFromKey(st.value(QLatin1String(smallui::kKeyChoice)).toString());
+    setSmallChoice(m_smallChoice);
+#else
+    setSmallInterface(st.value(QLatin1String(smallui::kKeyOn), false).toBool());
+#endif
+    if (m_smallBar && !m_small)
+        placeSmallBar();
     // the theme, colors, toolbars and everything applySettings() reads from the settings
     s.notifyChanged();
     // the open project shows the profile's look (as when a theme is chosen in View > Themes)
@@ -316,7 +334,7 @@ void MainWindow::fitWindowToScreen()
 
 void MainWindow::fitPanesToScreen()
 {
-    if (m_upright || !m_mainSplit)
+    if (m_upright || !m_mainSplit || m_small)
         return;
     int total = m_mainSplit->width() - 2 * m_mainSplit->handleWidth();
     if (total < 200)
