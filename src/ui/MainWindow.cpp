@@ -133,6 +133,7 @@
 #include <QPrintPreviewDialog>
 #include "ui/FooterStatus.h"
 #include "ui/MessageLine.h"
+#include "core/ModelMemory.h"
 #include <QPrinter>
 #include <QProcess>
 #include <QPushButton>
@@ -287,6 +288,17 @@ MainWindow::MainWindow()
     m_panes[1]->setStateSuffix(QStringLiteral("1"));
     commands::clear();
     toolhost::host().setWindow(this);
+    // 0.99.0: "Model change in progress" in the message line while an AI model unloads or loads (core/ModelMemory.h)
+    {
+        auto &mm = modelmem::ModelMemory::instance();
+        auto show = [this](bool on) {
+            if (messageLine())
+                messageLine()->setStatus(on ? tr("Model change in progress") : QString());
+        };
+        connect(&mm, &modelmem::ModelMemory::changeActiveChanged, this, show);
+        show(mm.changeActive());
+        mm.startWatching();   // the idle timer and the system's low-memory signal (once)
+    }
     createActions();
     createExtraActions();
     createToolActions();

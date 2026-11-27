@@ -172,7 +172,7 @@ bool programOnly(const QString &key)
     static const QSet<QString> keys = {
         QStringLiteral("app/recent"), QStringLiteral("app/lastDir"), QStringLiteral("app/integrated"),
         QStringLiteral("app/welcomeFolder"), QStringLiteral("app/welcomeShown"), QStringLiteral("app/openLast"),
-        QStringLiteral("app/portal"), QStringLiteral("app/recentCount"), QStringLiteral("app/projectFirst"),
+        QStringLiteral("app/portal"), QStringLiteral("app/aiThreads"), QStringLiteral("app/aiUnloadMinutes"), QStringLiteral("app/recentCount"), QStringLiteral("app/projectFirst"),
         QStringLiteral("app/firstStartDone"), QStringLiteral("app/standard0212"), QStringLiteral("app/freezeSeconds"),
         QStringLiteral("app/keepReports"), QStringLiteral("app/language"), // 0.70.0: the language is the program's
         // the look of a project is its settings/look.json (0.40.2); these are the look for new projects

@@ -121,7 +121,7 @@ static void messageLine(MainWindow &w)
     check(ml != nullptr && !ml->isVisible(), QStringLiteral("the message line is there and has no height while it is empty"));
     if (!ml)
         return;
-    check(toolhost::host().apiVersion() == 120, QStringLiteral("the program offers tool interface 1.2"),
+    check(toolhost::host().apiVersion() >= 120, QStringLiteral("the program offers tool interface 1.2 or later"),
           QString::number(toolhost::host().apiVersion()));
     tools::ToolHost *host = &toolhost::host();
     host->showMessage(QStringLiteral("Model unloaded, RAM usage minimal"), 5000);

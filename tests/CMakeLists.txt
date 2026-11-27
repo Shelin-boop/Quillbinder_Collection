@@ -538,3 +538,18 @@ add_executable(qb_v0950g_tests v0950g_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_
 target_include_directories(qb_v0950g_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins/tools)
 target_link_libraries(qb_v0950g_tests PRIVATE qbui Qt6::Test Qt6::Network)
 target_compile_definitions(qb_v0950g_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+
+# 0.99.0: tool interface 1.3, the one rule for the AI models (memory, idle time, the system's low-memory signal), the message
+# line "Model change in progress", File > Options > General > AI Models (items F3, F4, 115) (xvfb-run -a ./qb_v0990b_tests /tmp/shots).
+# A tool of 1.3 (tool13/) and one of 1.2 (tool12/, with the header of 1.2) are loaded from <build>/tests/tool13-plugins and tool12-plugins.
+add_library(qb-test-tool13 MODULE tool13/ModelTool.cpp)
+target_link_libraries(qb-test-tool13 PRIVATE Qt6::Core)
+target_include_directories(qb-test-tool13 PRIVATE ${CMAKE_SOURCE_DIR}/src)
+set_target_properties(qb-test-tool13 PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests/tool13-plugins AUTOMOC ON)
+add_library(qb-test-tool12 MODULE tool12/Tool12.cpp tool12/ToolApi12.h)
+target_link_libraries(qb-test-tool12 PRIVATE Qt6::Core)
+set_target_properties(qb-test-tool12 PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests/tool12-plugins)
+add_executable(qb_v0990b_tests v0990b_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990b_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0990b_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+add_dependencies(qb_v0990b_tests qb-test-tool13 qb-test-tool12)

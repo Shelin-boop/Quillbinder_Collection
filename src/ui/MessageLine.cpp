@@ -60,8 +60,15 @@ void MessageLine::showNext()
         m_action = nullptr;
         m_shownMs = 0;
         m_timer->stop();
-        m_label->clear();
         m_link->hide();
+        if (!m_status.isEmpty()) {   // 0.99.0: the standing text
+            m_label->setText(m_status);
+            m_label->setToolTip(QString());
+            setToolTip(QString());
+            show();
+            return;
+        }
+        m_label->clear();
         hide();
         return;
     }
@@ -81,6 +88,15 @@ void MessageLine::showNext()
     }
     show();
     m_timer->start(m.ms);
+}
+
+void MessageLine::setStatus(const QString &text)
+{
+    if (m_status == text)
+        return;
+    m_status = text;
+    if (m_text.isEmpty())   // no timed message is shown: show or hide the standing text now
+        showNext();
 }
 
 void MessageLine::dismiss()

@@ -3,6 +3,29 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.99.0 beta
+
+New functions and fixes (Linux first).
+
+- **One rule for the memory of every AI function** (Speech Transcription, Translation Helper, Read Aloud and Handwriting; tool
+  interface 1.3). The program keeps the list of the loaded AI models. A model unused for 10 minutes is unloaded (the time is
+  set in **File > Options > General > AI Models**). Before a model loads, when more than half of the memory it goes into (the
+  computer's RAM, or a graphics card's memory as its driver reports it) is in use, the model of Quillbinder unused longest
+  goes first; when the new model would still bring that memory over 80 %, it is not loaded, the message line says why, and
+  the function can offer the next smaller model or the processor. The system's own low-memory signals unload idle models at
+  once (Linux: a pressure trigger on `/proc/pressure/memory` when it can be opened; Windows: the low-memory resource
+  notification; Android: the memory figures before each load). The AI's threads run at a low priority.
+- **Message line "Model change in progress"** under the binder, from the start of an unload or a load until the new model is
+  ready, also at a first load.
+- **File > Options > General > AI Models**: the CPU cores for the AI (one setting for every AI function; default three
+  quarters of the cores rounded down, with 6 cores or fewer the cores minus 1, at least 1), "Unload a model after 10 minutes
+  unused", and a line with the memory in use and the loaded models. Kept per computer, not in a project. The add-ons' own
+  fields for threads and unloading are replaced by this page in a later version.
+- **Tool interface 1.3** (for add-ons): `aiThreads`, `modelMessage`, `keepRunning` (for Android's foreground service; nothing on
+  Linux and Windows), `lowerThreadPriority`, the model registry (`requestModelLoad`, `modelLoaded`, `modelUsed`,
+  `modelUnloaded`, `reportDeviceMemory`) and a third interface `ToolModels` through which the program asks a tool to unload a
+  model. Tools of 1.0 to 1.2 keep working unchanged.
+
 ## 0.95.0 beta (2026-11-26)
 
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).

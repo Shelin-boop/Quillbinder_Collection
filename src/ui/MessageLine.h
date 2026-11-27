@@ -32,6 +32,9 @@ public:
     // Ends the message shown now (as a click does); the next one follows.
     void dismiss();
     void clearAll();
+    // 0.99.0: a standing text ("Model change in progress") shown while no message is: no timer, ended by setStatus("").
+    void setStatus(const QString &text);
+    QString statusText() const { return m_status; }
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
@@ -49,6 +52,7 @@ private:
     QQueue<Msg> m_queue;
     std::function<void()> m_action;
     QString m_text;
+    QString m_status;
     int m_shownMs = 0;
 };
 

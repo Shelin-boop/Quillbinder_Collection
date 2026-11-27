@@ -47,7 +47,8 @@ bool excluded(const QString &key)
         QStringLiteral("app/street"),        QStringLiteral("app/city"),           QStringLiteral("app/state"),
         QStringLiteral("app/zip"),           QStringLiteral("app/country"),        QStringLiteral("app/phone"),
         QStringLiteral("app/email"),         QStringLiteral("app/deviceName"),     QStringLiteral("app/notesPlace"),
-        QStringLiteral("app/notesOwn"),      QStringLiteral("app/tutorialFolder")};
+        QStringLiteral("app/notesOwn"),      QStringLiteral("app/tutorialFolder"),
+        QStringLiteral("app/aiUnloadMinutes")};   // 0.99.0: per device (app/aiThreads has "threads" in its name)
     if (plain.contains(key))
         return true;
     // once-only marks of updates end in four digits (split0910, themesOff0940, standard0212 ...)

@@ -43,6 +43,8 @@ public:
     int autosaveSeconds = 2;
     bool openLastProject = true;
     QString language = QStringLiteral("en"); // 0.70.0: "en" or "de"; takes effect at the next start (ui/Language.h)
+    int aiThreads = 0;                       // 0.99.0: the AI's CPU cores for every AI function; 0 = the default (app/aiThreads)
+    int aiUnloadMinutes = 10;                // 0.99.0: a model unused this long is unloaded (app/aiUnloadMinutes)
     bool groupDigits = true;                 // 0.90.1 (UR-18): 44,825 rather than 44825 (app/groupDigits)
     QStringList recentProjects;
     QString lastProjectDir;
