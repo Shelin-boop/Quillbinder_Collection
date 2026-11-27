@@ -2828,7 +2828,33 @@ void TextEditor::updateSearchSelections()
         }
         m_searchCount = int(sels.size());
     }
+    if (m_readLength > 0 && m_readStart >= 0) {   // 0.99.0: the sentence that is read aloud
+        QTextEdit::ExtraSelection s;
+        s.cursor = QTextCursor(document());
+        s.cursor.setPosition(qMin(m_readStart, document()->characterCount() - 1));
+        s.cursor.setPosition(qMin(m_readStart + m_readLength, document()->characterCount() - 1), QTextCursor::KeepAnchor);
+        QColor c = palette().color(QPalette::Highlight);
+        c.setAlpha(90);
+        s.format.setBackground(c);
+        sels << s;
+    }
     setExtraSelections(sels);
+}
+
+void TextEditor::setReadingRange(int start, int length)
+{
+    m_readStart = length > 0 ? start : -1;
+    m_readLength = qMax(0, length);
+    updateSearchSelections();
+    if (m_readLength > 0) {
+        QTextCursor c(document());
+        c.setPosition(qMin(m_readStart, document()->characterCount() - 1));
+        const QRect r = cursorRect(c);
+        if (!viewport()->rect().contains(r.topLeft()) || !viewport()->rect().contains(r.bottomLeft())) {
+            QScrollBar *bar = verticalScrollBar();
+            bar->setValue(bar->value() + r.top() - viewport()->height() / 3);
+        }
+    }
 }
 
 // The match after the position (backward: the last one that ends at or before it).

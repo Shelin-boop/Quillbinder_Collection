@@ -55,6 +55,7 @@ namespace qb {
 class ThemePreview;
 class KeyboardPage;
 namespace handwriting { class HandwritingPage; }
+namespace readaloud { class ReadAloudPage; }
 class EncryptionPage;
 
 class OptionsDialog : public QDialog
@@ -295,6 +296,7 @@ private:
     QLabel *m_objectsTemplates = nullptr;
     bool m_resetObjectTemplates = false;
     QSpinBox *m_freezeSeconds, *m_keepReports;
+    readaloud::ReadAloudPage *m_readAloud = nullptr;           // 0.99.0 (item 114): General > Read Aloud
     handwriting::HandwritingPage *m_handwriting = nullptr;   // 0.99.0: Extras > Handwriting
 };
 

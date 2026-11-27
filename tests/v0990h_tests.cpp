@@ -222,6 +222,28 @@ static int childReal(const QString &model, const QString &wav)
           QStringLiteral("real engine: Sonic makes 1 s of a tone 0.5 s long at speed 2, its pitch kept"),
           QStringLiteral("%1 samples (%2), pitch %3 %4").arg(fast.size()).arg(ratio).arg(pitch).arg(why));
 
+    {
+        // the sound output (miniaudio inside libqbai): a computer or container without a sound device gets miniaudio's silent
+        // backend or a clear error; never a crash
+        const qbai_api *a2 = e.apiFor(2);
+        qbai_output *o = a2 && a2->output_open ? a2->output_open(24000, 1) : nullptr;
+        if (!o) {
+            check(a2 && a2->output_open && QString::fromUtf8(a2->last_error()).contains(QLatin1String("sound output")),
+                  QStringLiteral("real engine: no sound output here, and the reason is told"), QString::fromUtf8(a2 ? a2->last_error() : ""));
+        } else {
+            const std::vector<float> beep(12000, 0.0f);   // silence: nothing audible in a check
+            check(a2->output_write(o, beep.data(), 12000) == QBAI_OK, QStringLiteral("real engine: a sound output opens and takes PCM"));
+            QElapsedTimer t;
+            t.start();
+            while (a2->output_played(o) < 3000 && t.elapsed() < 3000)
+                QTest::qWait(20);
+            check(a2->output_played(o) >= 3000, QStringLiteral("real engine: its played position moves with the clock"), QString::number(a2->output_played(o)));
+            a2->output_stop(o);
+            check(a2->output_played(o) == 0, QStringLiteral("real engine: stop puts the position back to 0"));
+            a2->output_close(o);
+        }
+    }
+
     if (model.isEmpty() || !QFileInfo::exists(model) || !QFileInfo::exists(wav)) {
         info(QStringLiteral("(speech recognition not checked: QB_AI_WHISPER_MODEL and QB_AI_WHISPER_SAMPLE name no files)"));
     } else {
@@ -452,6 +474,41 @@ int main(int argc, char **argv)
         check(e.api()->threads() == 3, QStringLiteral("the shared setting of the AI's cores reaches the engine"));
         check(toolhost::host().aiEngine(1) == e.api() && toolhost::host().aiEngine(2) && toolhost::host().aiEngine(2)->version == 2 && toolhost::host().aiEngine(3) == nullptr,
               QStringLiteral("tool interface 1.3: aiEngine(1) is the program's own table (one engine in the process), aiEngine(2) the version 2 table, aiEngine(3) none"));
+        {
+            // the sound output of the engine (Read Aloud): open, write, played, pause, resume, stop, close
+            const qbai_api *a2 = e.apiFor(2);
+            check(a2 && a2->size == int(sizeof(qbai_api)) && a2->output_open && a2->output_write && a2->output_pause && a2->output_resume && a2->output_stop
+                      && a2->output_close && a2->output_played && !(e.api()->size > int(QBAI_API_V1_SIZE)),
+                  QStringLiteral("the version 2 table ends with the sound output functions; the version 1 table (what the program holds) has none"));
+            typedef void (*OutScale)(double);
+            auto setScale = reinterpret_cast<OutScale>(QLibrary(fakeLib).resolve("qbai_fake_out_set_scale"));
+            qbai_output *o = a2 ? a2->output_open(24000, 1) : nullptr;
+            const std::vector<float> pcm(24000, 0.1f);
+            if (setScale)
+                setScale(1000);
+            check(o && a2->output_write(o, pcm.data(), 24000) == QBAI_OK, QStringLiteral("an output opens and takes PCM (24000 frames at 24 kHz)"));
+            QTest::qWait(60);
+            const qint64 p1 = o ? a2->output_played(o) : -1;
+            check(p1 > 0 && p1 <= 24000, QStringLiteral("the played position moves while it plays"), QString::number(p1));
+            if (o) {
+                a2->output_pause(o);
+                const qint64 at = a2->output_played(o);
+                QTest::qWait(60);
+                check(a2->output_played(o) == at, QStringLiteral("paused: the position stands still"));
+                a2->output_resume(o);
+                QTest::qWait(60);
+                check(a2->output_played(o) >= at, QStringLiteral("resumed: it goes on"));
+                a2->output_stop(o);
+                check(a2->output_played(o) == 0, QStringLiteral("stop drops the queue; the position goes back to 0"));
+                a2->output_close(o);
+                a2->output_close(nullptr);
+            }
+            qputenv("QBAI_FAKE_NO_SOUND", "1");
+            check(a2 && a2->output_open(24000, 1) == nullptr && QString::fromUtf8(a2->last_error()).contains(QLatin1String("sound output")),
+                  QStringLiteral("no sound output: open fails with a reason"));
+            qunsetenv("QBAI_FAKE_NO_SOUND");
+            check(a2 && a2->output_write(nullptr, pcm.data(), 10) != QBAI_OK && a2->output_open(0, 1) == nullptr, QStringLiteral("bad arguments are refused"));
+        }
         QString where;
         check(toolhost::host().aiPickDevice(QStringLiteral("auto"), 1024 * MB, &where) == 1 && where == QLatin1String("gpu:Fake Card")
                   && toolhost::host().aiPickDevice(QStringLiteral("auto"), 3500 * MB, &where) == 0 && where == QLatin1String("ram"),

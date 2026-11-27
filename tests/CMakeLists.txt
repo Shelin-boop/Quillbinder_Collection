@@ -631,3 +631,11 @@ target_compile_definitions(qb_v0990k_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_S
 # window's unlock dialog, the speed of the encrypted autosave (xvfb-run -a ./qb_v0990f_tests /tmp/shots)
 add_executable(qb_v0990f_tests v0990f_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0990f_tests PRIVATE qbui Qt6::Test)
+
+# 0.99.0 (item 114): Read Aloud: the toolbar and its Voice menu, the first click, reading (marked text, from the cursor, the marked
+# sentence), voices and styles, the settings page, the memory rule, cancel, nothing written to disk; with the fake libqbai of
+# v0990h (xvfb-run -a ./qb_v0990n_tests /tmp/shots)
+add_executable(qb_v0990n_tests v0990n_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990n_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0990n_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+add_dependencies(qb_v0990n_tests qb-fake-qbai)

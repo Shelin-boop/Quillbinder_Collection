@@ -2,6 +2,32 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: Read Aloud (item 114)
+
+`core/ReadAloud.*` (no windows): `Settings`/`Config` (group `readaloud`, per device), the model choice, the voices, the sentence
+splitter and `Session`; `ui/ReadAloudController.*` (the toolbar and the Voice menu), `ui/ReadAloudPage.*` (File > Options > Read
+Aloud), `ui/MainWindowReadAloud.cpp` (the switch and the bar in the first row after Tools).
+
+- **The order of the models is one table**: `kModelOrder` in `core/ReadAloud.cpp` (Pocket TTS first where it has the language, then
+  Qwen3-TTS 0.6B, 1.7B Q4, 1.7B Q8). The default is the first that is installed, fits and (when measured) reaches real time.
+- **Sound**: through the AI engine, not the Media Playback add-on (the program has no Qt Multimedia). `Output` (core) is
+  implemented by `EngineOutput` over the version 2 table's `output_*` functions (`src/tools/QbAi.h`, `engines/qbai/output.cpp`:
+  miniaudio's device part, f32 mono, a mutex-guarded queue read by the device callback, silence while paused or empty, `played`
+  counts the frames the callback took). miniaudio.h is vendored in `engines/qbai/third_party/miniaudio` (v0.11.26, README with
+  its origin; libmtmd's copy has hidden symbols and cannot be reused); backends load at run time, so no link dependency. The
+  program holds the version 1 table: the output code asks `Engine::apiFor(2)`. Without a sound device miniaudio falls back to its
+  silent "null" backend (so v0990h's real-engine check passes in a container); `open` fails with "no sound output ..." when even
+  that fails. The fake engine counts frames (`qbai_fake_out_stats`, `qbai_fake_out_set_scale` for a faster clock). The real device
+  was not heard (no sound hardware in the build environment).
+- **Qwen's voices**: reference clips `<models>/read-aloud-voices/<voice>-<style>.wav` + `.txt` (`qwenClipFile`); until they exist
+  the voice and style are greyed "Voice not installed yet."; the voices job of models-5 must write this layout (or change it here).
+- **Pitfalls**: `Model::load` asks the main thread (ModelMemory), so nothing may wait for the worker on the main thread (the
+  destructor keeps processing events); the worker may make sentences up to `ahead` past the playing one, and when all written
+  sentences are played it counts as the next (else a reading that fell behind never goes on); the sound's clock and the
+  sentences' lengths differ by rounding, so a sentence counts as played 30 ms before its end. The speed test result is kept per
+  model and device (`readaloud/rtf/...`). The program's language for "Automatic language" is `QLocale().name()`.
+- The editor marks the sentence by an extra selection (`TextEditor::setReadingRange`, joined to the search marks).
+
 ## 0.99.0: small interface (item 122)
 
 - `MainWindowSmall.cpp` (`MainWindow::setSmallInterface`), the rules and the panel in `ui/SmallInterface.*`. The mode is a

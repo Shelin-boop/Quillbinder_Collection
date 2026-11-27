@@ -24,6 +24,16 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   that the first normal release, 1.0.0, changes only numbers and one word per system. The names of the files, the tag,
   the title of a release, the update file and the download page follow it, and a release without a word gets plain names
   (`Quillbinder-1.0.0-x86_64.AppImage`, tag `v1.0.0`).
+- **Read Aloud (item 114).** A toolbar **Read Aloud** (shown at first on Linux and Windows, hidden on Android; View > Toolbars >
+  Read Aloud) with Play/Pause, Stop and a Voice button whose menu has the groups Voice (Female 1 to 3, Male 1 to 3), Style
+  (Calm, Neutral, Action) and Speed (Slow, Medium, Fast) and "Read Aloud Settings..."; a choice the model cannot make is greyed
+  with the reason. Play reads the marked text, else from the cursor to the end, and marks the sentence being read; the first
+  click, and every click while no engine or model is installed, opens the new page **File > Options > Read Aloud** (language,
+  model with its size and fit, device, speed test, install part of the AI engine). Pocket TTS reads with its licensed preset
+  voices (no style); Qwen3-TTS with reference clips that come later (greyed until then). Speed stretches the finished audio with
+  the pitch kept. Only a few sentences are made ahead; the memory rule and the unload time are those of all AI models. The
+  sound is only played, never saved, and needs no other add-on: the AI Engine plays it itself (a sound output in libqbai with
+  miniaudio, public domain / MIT-0, loading the system's sound libraries at run time; no new library dependency).
 - **Handwriting (part 1 of item 112): everything but the recognizer.** A button on the Tools bar (hidden at first on Linux
   and Windows; shown on Android) with four looks (off, editor, inspector, both): a tap switches between off and the last mode,
   a long press or right-click opens the four choices. One writing area for the three modes: the inspector's new tab
