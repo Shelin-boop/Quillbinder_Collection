@@ -349,14 +349,12 @@ jobs:
           for must in speech-transcription translation-proofreading; do
             [ -f "dist/$must.qbpkg" ] || { echo "::error::the add-on $must was not built"; exit 1; }
           done
-          # 0.99.0: the engine packages, when built, are checked (the expected libraries, the licenses, nothing needed outside
-          # the package and the base system); a missing one is left out of the release and of the full AppImage
+          # 0.99.0: the engine packages are checked (the expected libraries, the licenses, nothing needed outside the
+          # package and the base system); a missing one stops the release (audit AU-04: the program fetches only its own
+          # version's engine, so Read Aloud, Speech Transcription and Handwriting could not be installed for that version)
           for e in ai-engine handwriting-engine; do
-            if [ -f "dist/$e.qbpkg" ]; then
-              python3 -I tools/check-engine-package.py "dist/$e.qbpkg"
-            else
-              echo "::warning::the package $e was not built (its libraries are missing): it is left out of this release"
-            fi
+            [ -f "dist/$e.qbpkg" ] || { echo "::error::the package $e was not built (its libraries are missing)"; exit 1; }
+            python3 -I tools/check-engine-package.py "dist/$e.qbpkg"
           done
           mapfile -t NEWS < <(python3 -I tools/release-notes.py --whats-new)
           BUILD=build-appimage OUT=dist tools/ci-step.sh update packaging/linux/build-update.sh "${NEWS[@]}"

@@ -861,7 +861,13 @@ int main(int argc, char **argv)
     // ================================================================ the package recipes
     std::printf("== the engine packages' recipes\n");
     {
-        const QString pack = qEnvironmentVariableIsSet("QB_AI_ENGINE_DIR") ? qEnvironmentVariable("QB_AI_ENGINE_DIR") : kSource + QStringLiteral("/build/ai-engine");
+        // audit AU-04: the program fetches only its own version's engine, so a release without one must not go out
+        const QString wf = QString::fromUtf8(readAll(kSource + QStringLiteral("/.github/workflows/release.yml")));
+        check(wf.contains(QLatin1String("::error::the package $e was not built")) && !wf.contains(QLatin1String("it is left out of this release")),
+              QStringLiteral("release.yml: a missing engine package (ai-engine, handwriting-engine) stops the release instead of a warning"));
+    }
+    {
+        const QString pack =qEnvironmentVariableIsSet("QB_AI_ENGINE_DIR") ? qEnvironmentVariable("QB_AI_ENGINE_DIR") : kSource + QStringLiteral("/build/ai-engine");
         const QString qbai = kBuild + QStringLiteral("/qbai/libqbai.so.1");
         for (const QString id : {QStringLiteral("ai-engine"), QStringLiteral("handwriting-engine")}) {
             const QJsonObject m = QJsonDocument::fromJson(readAll(kSource + QStringLiteral("/addons/") + id + QStringLiteral("/manifest.json"))).object();
