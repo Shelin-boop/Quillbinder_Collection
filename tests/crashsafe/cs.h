@@ -48,6 +48,7 @@ struct Ctx {
     QString buildDir;  // where the program and the tests were built
     QString sourceDir; // the repository
     bool quick = true; // QB_CS_PROFILE=quick (standard) or full
+    bool encrypted = false; // an id ending in "e" (0.99.0): the project copies are encrypted (switch 2 on)
     bool smoke = false; // QB_CS_PROFILE=smoke: quick, with the shortest typing runs and loops (a shakedown)
     quint32 seed = 1;  // QB_CS_SEED or derived from the case id
     int failures = 0;
@@ -219,7 +220,41 @@ void fileDialogLater(int ms, const QString &path, bool *asked = nullptr);
 void closeDialogsLater(int ms);                             // rejects every open dialog
 BinderPanel *binderOf(MainWindow *w);
 void selectItems(MainWindow *w, const QList<BinderItem *> &items);
-QString projectPathOf(Project *p);                          // the .qbx, or the .scriv
+QString projectPathOf(Project *p);
+// 0.99.0 (cs_enc099.cpp): the run's keys in this home, an encrypted copy, the cases of the new families
+void encryptionSetUp();
+bool encryptFixtureAt(const QString &openPath);
+void caseSZ01();
+void caseSZ02();
+void caseSZ03();
+void caseSZ04();
+void caseSZ05();
+void caseSZ06();
+void caseSZ07();
+void caseSZ08();
+void caseSH01();
+void caseSH02();
+void caseSH03();
+void caseSH04();
+void caseSH05();
+void caseSH06();
+void caseSG01();
+void caseSG02();
+void caseSG03();
+void caseSG04();
+void caseSS01();
+void caseSS02();
+void caseSS03();
+void caseU21();
+void caseU22();
+void caseU23();
+void caseU24();
+void caseU25();
+void caseU26();
+void caseX13();
+void caseX14();
+void caseX15();
+void caseX16();                          // the .qbx, or the .scriv
 MainWindow *reopenWindow(MainWindow *w);                    // save, close, open again (deletes w)
 QString docText(Project *p, BinderItem *it);
 QString pdfToText(const QString &pdf, bool layout = false);

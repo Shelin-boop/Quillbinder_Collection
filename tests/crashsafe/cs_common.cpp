@@ -1,6 +1,7 @@
 // The system test, stage 1: the shared parts (results, G5 to G7, the writer's text and typing,
 // the outside sender, the program in the test process, fixtures, the model and the verify step).
 #include "cs.h"
+#include "core/crypto/Vault.h"
 
 #include <deque>
 #include <map>
@@ -840,6 +841,8 @@ void setUpProgram()
     if (qEnvironmentVariableIsEmpty("QB_PLUGIN_PATH"))
         qputenv("QB_PLUGIN_PATH", (ctx().buildDir + QStringLiteral("/plugins")).toUtf8());
     compile::PluginManager::instance().load();
+    if (ctx().encrypted)
+        encryptionSetUp();
     crash::install();
     crash::startWatchdog(10);
     installMessageCounter();
@@ -1579,7 +1582,10 @@ QString fixtureCopy(const QString &name)
     const bool ok = copyTree(src, dst);
     const QString rel = readText(ctx().fixtures + QLatin1Char('/') + name + QStringLiteral(".open")).trimmed();
     check(ok && !rel.isEmpty(), QStringLiteral("(a fresh copy of %1)").arg(name));
-    return QDir::cleanPath(dst + QLatin1Char('/') + rel);
+    const QString opened = QDir::cleanPath(dst + QLatin1Char('/') + rel);
+    if (ctx().encrypted && ok)
+        encryptFixtureAt(opened);   // 0.99.0: the variants "e" run on encrypted copies
+    return opened;
 }
 
 // ================================================================ G3 model, G4, verify
@@ -1808,13 +1814,14 @@ bool writeModel(Project *p)
     m.insert(QStringLiteral("format"), scriv ? QStringLiteral("scriv") : QStringLiteral("qb"));
     m.insert(QStringLiteral("open"), scriv ? p->scrivenerPath : p->indexPath());
     m.insert(QStringLiteral("folder"), p->folderPath());
+    m.insert(QStringLiteral("encrypted"), p->isEncrypted());
     m.insert(QStringLiteral("items"), projectModel(p, false));
     if (scriv)
         m.insert(QStringLiteral("itemsReduced"), projectModel(p, true));
     QJsonObject own;
     const QString ini = settingslayer::fileFor(p->settingsDir());
     if (QFileInfo::exists(ini)) {
-        QSettings s(ini, QSettings::IniFormat);
+        QSettings s(p->isEncrypted() ? qb::vault::plainPath(ini) : ini, QSettings::IniFormat);   // 0.99.0: an encrypted project's file, decrypted
         for (const QString &k : s.allKeys())
             own.insert(k, s.value(k).toString());
     }
@@ -1863,6 +1870,9 @@ int verifyCase(const QString &caseDir)
     const QString open = m.value(QStringLiteral("open")).toString();
     QString err;
     std::unique_ptr<Project> p;
+    const bool encryptedProject = m.value(QStringLiteral("encrypted")).toBool();
+    if (encryptedProject)
+        encryptionSetUp();   // the run's keys in this home
     if (scriv) {
         scrivener::OpenResult r = scrivener::open(open, &err);
         p = std::move(r.project);
@@ -1875,7 +1885,8 @@ int verifyCase(const QString &caseDir)
         p = Project::open(open, &err);
         check(p != nullptr, QStringLiteral("G3: the project opens again"), err);
         QString xe;
-        check(xmlParses(open, &xe), QStringLiteral("G4: the project file parses as XML"), xe);
+        if (!encryptedProject)
+            check(xmlParses(open, &xe), QStringLiteral("G4: the project file parses as XML"), xe);
     }
     if (!p)
         return ctx().failures - before;
@@ -1893,7 +1904,7 @@ int verifyCase(const QString &caseDir)
         check(stray.isEmpty(), QStringLiteral("G4: no temporary or half-written files left"), stray.mid(0, 10).join(QLatin1String(", ")));
         const QString ini = settingslayer::fileFor(p->settingsDir());
         if (QFileInfo::exists(ini)) {
-            QSettings s(ini, QSettings::IniFormat);
+            QSettings s(encryptedProject ? qb::vault::plainPath(ini) : ini, QSettings::IniFormat);
             QStringList programKeys;
             QJsonObject own;
             for (const QString &k : s.allKeys()) {

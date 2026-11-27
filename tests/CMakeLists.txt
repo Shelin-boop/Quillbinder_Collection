@@ -451,7 +451,7 @@ add_executable(qb_crashsafe_tests crashsafe_tests.cpp crashsafe/cs.h crashsafe/c
                crashsafe/cs_sys_common.cpp crashsafe/cs_sys_projects.cpp crashsafe/cs_sys_writing.cpp
                crashsafe/cs_sys_writing2.cpp crashsafe/cs_sys_views.cpp crashsafe/cs_sys_more.cpp
                crashsafe/cs_sys_rest.cpp crashsafe/cs_usability.cpp
-               crashsafe/cs_faults.cpp crashsafe/cs_roundtrip.cpp crashsafe/cs_audit.cpp crashsafe/cs_new090.cpp
+               crashsafe/cs_faults.cpp crashsafe/cs_roundtrip.cpp crashsafe/cs_audit.cpp crashsafe/cs_new090.cpp crashsafe/cs_enc099.cpp crashsafe/cs_new099.cpp crashsafe/cs_new099b.cpp
                ${CMAKE_SOURCE_DIR}/plugins/tools/speech-transcription/SpeechLogic.cpp ${QB_RESOURCES_OBJECTS}
                ${CMAKE_SOURCE_DIR}/translations/translations.qrc)
 target_include_directories(qb_crashsafe_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins/tools)
