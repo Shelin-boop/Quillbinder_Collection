@@ -469,7 +469,8 @@ static void shapes(MainWindow &w, Project *p, BinderPanel *binder)
                                   QStringLiteral("Search"), QStringLiteral("Tools"), QStringLiteral("|"), QStringLiteral("Show Format Bar"),
                                   QStringLiteral("Style and Font"), QStringLiteral("Character and Alignment"), QStringLiteral("Paragraph and Insert"),
                                   QStringLiteral("|"), QStringLiteral("Icon Bar"), QStringLiteral("Labels"), QStringLiteral("|"),
-                                  QStringLiteral("Reset Toolbar Places"), QStringLiteral("|"), QStringLiteral("Customize Toolbars"),
+                                  QStringLiteral("Toolbar Size"), QStringLiteral("Reset Toolbar Places"), QStringLiteral("|"),
+                                  QStringLiteral("Customize Toolbars"),
                                   QStringLiteral("Choose Icons for the Icon Bar")};
         const QStringList got = layout(bars);
         check(got == want, QStringLiteral("View > Toolbars: Show Toolbar with its bars, Show Format Bar with its bars, Icon Bar and Labels, Reset, Customize"),

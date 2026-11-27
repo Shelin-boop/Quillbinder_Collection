@@ -333,7 +333,7 @@ void MainWindow::createMenus()
     add(bars, {"showToolbar", "showBarMain", "showBarThemes", "showBarProfiles", "showBarSearch", "showBarTools", "",
                "showFormatBar", "showBarStyle", "showBarCharacter", "showBarParagraph", "", "showIconBar", "showBarLabels", ""});
     bars->addAction(m_toolbarSizeMenu->menuAction()); // 0.99.0: Small, Normal, Large for every bar
-    add(bars, {"", "resetToolbarPlaces", "", "customizeToolbars", "customizeIconBar"});
+    add(bars, {"resetToolbarPlaces", "", "customizeToolbars", "customizeIconBar"});
     QMenu *themes = view->addMenu(tr("&Themes")); // 0.94.0: before, under Window;
     themes->setObjectName(QStringLiteral("themeMenu"));
     // filled when opened: add-ons and the theme list can add and remove themes at any time
