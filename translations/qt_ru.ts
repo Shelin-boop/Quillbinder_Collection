@@ -5,7 +5,7 @@
         <name>QAbstractSpinBox</name>
         <message>
             <source>Step &amp;down</source>
-            <translation>Шаг &amp;вниз</translation>
+            <translation>Шаг в&amp;низ</translation>
         </message>
         <message>
             <source>&amp;Step up</source>
@@ -632,11 +632,11 @@ Please verify the correct file name was given.</source>
         </message>
         <message>
             <source>&amp;Options &lt;&lt;</source>
-            <translation>&amp;Параметры &lt;&lt;</translation>
+            <translation>Пара&amp;метры &lt;&lt;</translation>
         </message>
         <message>
             <source>&amp;Options &gt;&gt;</source>
-            <translation>&amp;Параметры &gt;&gt;</translation>
+            <translation>Пара&amp;метры &gt;&gt;</translation>
         </message>
         <message>
             <source>Left to Right, Top to Bottom</source>

@@ -281,7 +281,7 @@
     </message>
     <message>
         <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation>Число ядер процессора и время, после которого неиспользуемая модель выгружается, задаются сразу для всех функций ИИ в File &gt; Options &gt; General &gt; AI Models.</translation>
+        <translation>Число ядер процессора и время, после которого неиспользуемая модель выгружается, задаются сразу для всех функций ИИ в Файл &gt; Параметры &gt; Общие &gt; Модели ИИ.</translation>
     </message>
     <message>
         <source>Careful: the model weighs even more possibilities (slower, now and then better)</source>
@@ -623,15 +623,15 @@ By downloading it you accept its license: %2</source>
     </message>
     <message>
         <source>No translation model is downloaded yet for %1 to %2: %3. Choose them with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Для %1 на %2 пока не скачаны модели перевода: %3. Выберите их через «Модели...» (Файл &gt; Параметры &gt; Помощник перевода).</translation>
     </message>
     <message>
         <source>Missing: %1. Download them in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Не хватает: %1. Скачайте их в параметрах дополнения (Файл &gt; Параметры &gt; Помощник перевода).</translation>
     </message>
     <message>
         <source>Missing: %1. Download it in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Не хватает: %1. Скачайте её в параметрах дополнения (Файл &gt; Параметры &gt; Помощник перевода).</translation>
     </message>
     <message>
         <source>Translated through English (%1 to English to %2): two steps, so a mistake of the first one is carried into the second.</source>
@@ -935,27 +935,27 @@ By downloading it you accept its license: %2</source>
     </message>
     <message>
         <source>Similar translations (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Похожие переводы (%1, для «%2»):</translation>
     </message>
     <message>
         <source>Similar translations (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Похожие переводы (%1):</translation>
     </message>
     <message>
         <source>Similar (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Похожие (%1, для «%2»):</translation>
     </message>
     <message>
         <source>Similar (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Похожие (%1):</translation>
     </message>
     <message>
         <source>%1 (German): spelling suggestions and similar words are given for English words.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (немецкое слово): подсказки по написанию и похожие слова даются для английских слов.</translation>
     </message>
     <message>
         <source>%1 (from “%2”)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (от слова «%2»)</translation>
     </message>
     <message>
         <source>Similar German words (%1):</source>
