@@ -219,8 +219,7 @@ a tag points elsewhere), none changed except where said here.
   source is taken from `kraken==7.2` installed with `--no-deps`: kraken's package initializer imports Lightning and more, so the
   script loads `lib/ppocr` as a package of its own. The file's metadata says line height 96 (the card's 128 px is the paper's);
   the backbone's last `avg_pool2d(kernel_size=(h, 2))` reads h from the tensor, so the export keeps the height fixed and the width
-  free (`dynamo=False`; kraken needs torch 2.9 or newer, where the new exporter is the default). Not run in the session (the
-  PyTorch wheels' host is not reachable from it): the runner's first run is its first test; the script stops on a shape or text
+  free (the export patches `F.avg_pool2d` so that h is a plain number; input widths are multiples of 8, because the network pads each stage by the width's remainder and a trace fixes that for one width; `dynamo=False`; kraken needs torch 2.9 or newer, where the new exporter is the default). The first runner run (2026-11-27) failed in the export (the pooling's Gather node, fixed as said) and the Pocket TTS conversions failed at the tokenizer (sentencepiece 0.2.3 needs protobuf 5.26 or newer, the converter's requirements pin 4.x: the workflow raises it); both failures were hidden by a pipe to `tee` (no pipefail), so the artifacts lacked the files and only the catalog job noticed. The measured parameter count is 3,216,543 (3.22 M). the script stops on a shape or text
   difference between ONNX Runtime and PyTorch and on a largest difference of 0.001 or more.
 - **Word lists** are Latin-script words only (wordfreq's lists hold some other scripts, e.g. Chinese words in the Indonesian one).
 - **Pocket TTS**: the engine finds a preset voice by name in the mmproj (`voice.<name>` tensors); `kyutai/pocket-tts-without-voice-cloning`'s

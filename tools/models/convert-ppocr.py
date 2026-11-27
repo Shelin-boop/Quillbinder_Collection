@@ -19,7 +19,7 @@ What it does:
   - writes <name>.onnx and <name>-codec.json and prints the parameter count of the network and the files' sizes.
 
 The program's side of it (these are the facts the notes of the earlier measurement and kraken's input transforms give):
-  input  = the line's ink image, resized to height 96 (Lanczos), 16 px white padding left and right, RGB, value =
+  input  = the line's ink image, resized to height 96 (Lanczos), 16 px white padding left and right (then white on the right up to a width that is a multiple of 8), RGB, value =
            1 - pixel / 255 (white is 0, ink is near 1)
   output = logits (1, 1623, 1, T); class 0 is the CTC blank; greedy CTC (argmax, collapse repeats, drop blanks);
            labels map to graphemes through the codec (a grapheme may have several labels: longest match as kraken's
@@ -36,6 +36,7 @@ import types
 import unicodedata
 
 EXPECTED_CLASSES = 1623
+WIDTH_MULTIPLE = 8
 KEEP_MARKS = [0x0300, 0x0301, 0x0302, 0x0303, 0x0308, 0x0327]
 LICENSE_OF_THE_MODEL = "Apache-2.0"
 
@@ -133,7 +134,10 @@ def prepare(image, height, padding):
     w, h = gray.size
     new_w = max(8, round(w * height / h))
     gray = gray.resize((new_w, height), Image.LANCZOS)
-    canvas = Image.new("L", (new_w + 2 * padding, height), 255)
+    # the width is a multiple of 8 (more white on the right): the network pads each stage by the width's remainder, which a
+    # trace fixes for one width; for multiples of 8 that padding is the same at every width
+    total = -(-(new_w + 2 * padding) // WIDTH_MULTIPLE) * WIDTH_MULTIPLE
+    canvas = Image.new("L", (total, height), 255)
     canvas.paste(gray, (padding, 0))
     arr = np.asarray(canvas.convert("RGB"), dtype=np.float32) / 255.0
     return (1.0 - arr).transpose(2, 0, 1)[None].copy()
@@ -197,15 +201,30 @@ def main():
             return self.inner(x, None)[0]
 
     wrapped = Wrapped(net).eval()
+
+    # The backbone ends with avg_pool2d(x, kernel_size=(h, 2)) and takes h from the tensor: while tracing that is a node the ONNX
+    # exporter cannot turn into a kernel size. The height is fixed here, so h is a plain number.
+    import torch.nn.functional as F
+    original_pool = F.avg_pool2d
+
+    def fixed_pool(x, kernel_size, *a, **k):
+        if isinstance(kernel_size, (tuple, list)):
+            kernel_size = tuple(int(v) for v in kernel_size)
+        return original_pool(x, kernel_size, *a, **k)
+
     dummy = torch.rand(1, 3, args.height, 256)
     onnx_path = os.path.join(args.outdir, args.name + ".onnx")
     kwargs = dict(input_names=["input"], output_names=["logits"],
                   dynamic_axes={"input": {3: "width"}, "logits": {3: "steps"}}, opset_version=17)
-    with torch.no_grad():
-        try:
-            torch.onnx.export(wrapped, (dummy,), onnx_path, dynamo=False, **kwargs)
-        except TypeError:   # torch before 2.5 has no dynamo switch (and always traces)
-            torch.onnx.export(wrapped, (dummy,), onnx_path, **kwargs)
+    F.avg_pool2d = fixed_pool
+    try:
+        with torch.no_grad():
+            try:
+                torch.onnx.export(wrapped, (dummy,), onnx_path, dynamo=False, **kwargs)
+            except TypeError:   # torch before 2.5 has no dynamo switch (and always traces)
+                torch.onnx.export(wrapped, (dummy,), onnx_path, **kwargs)
+    finally:
+        F.avg_pool2d = original_pool
     onnx.checker.check_model(onnx.load(onnx_path))
 
     codec = Codec(info["codec"])
@@ -246,7 +265,7 @@ def main():
         "license": LICENSE_OF_THE_MODEL,
         "variant": info["variant"],
         "parameters": n_params,
-        "input": {"layout": "NCHW", "channels": 3, "height": args.height, "padding": args.padding,
+        "input": {"layout": "NCHW", "channels": 3, "height": args.height, "padding": args.padding, "widthMultiple": WIDTH_MULTIPLE,
                   "value": "1 - pixel / 255 (white is 0)", "resize": "Lanczos to the height, width follows"},
         "output": {"name": "logits", "layout": "(1, classes, 1, T)", "classes": info["num_classes"],
                    "blank": 0, "stepWidthPx": 8},

@@ -90,8 +90,10 @@ jobs:
         run: python3 -I tools/models/fetch-hf.py tools/models/models-5-sources.json ppocr src
       - name: Convert and check
         run: |
+          set -o pipefail
           mkdir -p out
           /tmp/venv/bin/python -I tools/models/convert-ppocr.py src/small.safetensors out 2>&1 | tee convert.log
+          test -s out/ppocrv6-small.onnx && test -s out/ppocrv6-small-codec.json
           cp convert.log pip-versions.txt out/
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -145,13 +147,17 @@ jobs:
           python3 -m venv /tmp/venv
           /tmp/venv/bin/pip install --quiet --upgrade pip
           /tmp/venv/bin/pip install --quiet -r llama.cpp/requirements/requirements-convert_hf_to_gguf.txt
-          /tmp/venv/bin/pip list 2>/dev/null | grep -iE '^(torch|transformers|sentencepiece|gguf|numpy) ' | tee pip-versions.txt
+          # sentencepiece 0.2.3's model file needs protobuf 5.26 or newer; the converter's requirements pin 4.x
+          /tmp/venv/bin/pip install --quiet "protobuf>=5.29,<7"
+          /tmp/venv/bin/pip list 2>/dev/null | grep -iE '^(torch|transformers|sentencepiece|gguf|numpy|protobuf) ' | tee pip-versions.txt
       - name: Download the model and the licensed voices at their pins
         run: python3 -I tools/models/fetch-hf.py tools/models/models-5-sources.json pocket-${{ matrix.lang }} src
       - name: Convert (the model, the mmproj with the voices) and read both back
         run: |
+          set -o pipefail
           mkdir -p out
           /tmp/venv/bin/python -I tools/models/convert-pocket-tts.py ${{ matrix.lang }} src llama.cpp out 2>&1 | tee convert.log
+          test -s out/pocket-tts-${{ matrix.lang }}.gguf && test -s out/mmproj-pocket-tts-${{ matrix.lang }}.gguf
           cp convert.log pip-versions.txt out/
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:

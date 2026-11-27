@@ -142,6 +142,21 @@ for a in arts:
     else:
         expanded.add(a)
 check("workflow: every artifact the definitions read from is uploaded by a job", used <= expanded, used - expanded)
+# the first run failed here: a conversion that failed inside a pipe to tee did not stop its step, and the artifact lacked the files
+for step in ("convert-ppocr.py", "convert-pocket-tts.py"):
+    i = wf_text.index("python -I tools/models/" + step)
+    block = wf_text[wf_text.rindex("run: |", 0, i):i]
+    check(f"workflow: the step with {step} stops when the script fails (pipefail before the pipe to tee)", "set -o pipefail" in block)
+for m in models:
+    for f in m["files"]:
+        if f.get("from", "").startswith(("m5-handwriting/", "m5-pocket-")):
+            art, name = f["from"].split("/")
+            lang = art.rsplit("-", 1)[-1]
+            expect = f"test -s out/{name}" if art == "m5-handwriting" else f"test -s out/{name.replace('-' + lang + '.', '-${{ matrix.lang }}.')}"
+            check(f"workflow: the job that makes {f['from']} tests that out/{name} exists before it uploads", expect in wf_text, expect)
+check("workflow: the converter's protobuf is raised for sentencepiece (5.29 or newer)", 'protobuf>=5.29' in wf_text)
+check("convert-ppocr: widths are padded to a multiple of 8 and the pooling kernel is made a plain number",
+      "WIDTH_MULTIPLE = 8" in read(os.path.join(M, "convert-ppocr.py")) and "fixed_pool" in read(os.path.join(M, "convert-ppocr.py")))
 check("workflow: the sources file names the same Pocket TTS languages as the matrix", "lang: [en, fr, es, pt, it]" in wf_text)
 
 # ---- the scripts' small parts
