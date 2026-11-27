@@ -179,6 +179,16 @@ jobs:
           QB_ANDROID_BUILD: ${{ github.run_number }}
         run: bash packaging/android/android-ci.sh results arm64-v8a
 
+      # 0.99.0 probe: the encryption libraries for the emulator's ABI too (the build above made arm64-v8a's), only to
+      # see that they build; the log goes with the other results
+      - name: The encryption libraries (x86_64, probe)
+        id: cryptox86
+        if: always()
+        run: |
+          bash packaging/android/android-crypto.sh "$ANDROID_NDK_ROOT" x86_64 "$PWD/.crypto/x86_64" > results/crypto-x86_64.log 2>&1 \
+            && echo "crypto x86_64: ok $(grep 'smoke link' results/crypto-x86_64.log)" >> results/summary.txt \
+            || { echo "crypto x86_64: FAILED" >> results/summary.txt; tail -60 results/crypto-x86_64.log >> results/summary.txt; }
+
       # the APK and its results at once, so that they can be read while the emulator stage runs
       - name: Put the first results on the pre-release android-ci
         id: first

@@ -110,6 +110,33 @@ else
   tail -15 "$OUT/openssl.log" >> "$SUM"
 fi
 
+# ---- the encryption libraries (RNP, Botan, json-c, bzip2, zlib; 0.99.0 probe): static, from the pack of their recipe
+# or built here (packaging/android/android-crypto.sh) and the pack published. The program's CMakeLists.txt does not
+# look for them on Android yet (QB_HAVE_RNP is off there): this step shows whether they build, and is told to the
+# configure as -DQB_CRYPTO_DIR for the day the build file uses it.
+CRY="$PWD/.crypto/$ABI"
+if bash packaging/android/android-deps-pack.sh get "crypto-$ABI" "$NDK" "$CRY" > "$OUT/crypto-pack.log" 2>&1; then
+  rc=0
+else
+  bash packaging/android/android-crypto.sh "$NDK" "$ABI" "$CRY" > "$OUT/crypto.log" 2>&1
+  rc=$?
+  if [ $rc -eq 0 ]; then
+    if [ "${QB_ANDROID_PACKS_PUBLISH:-1}" != 0 ]; then
+      bash packaging/android/android-deps-pack.sh publish "crypto-$ABI" "$NDK" "$CRY" >> "$OUT/crypto-pack.log" 2>&1 || echo "publish failed" >> "$OUT/crypto-pack.log"
+    fi
+  fi
+fi
+say "crypto pack: $(grep -E '^(from the pack|no pack|pin:|pack there|publish failed|the pack)' "$OUT/crypto-pack.log" | tr '\n' ' ')"
+say "crypto: rc=$rc, $(cat "$CRY/version.txt" 2>/dev/null | cut -c1-60) ($(mins))"
+if [ $rc -ne 0 ]; then
+  say "crypto failed; last lines of its log:"
+  tail -40 "$OUT/crypto.log" >> "$SUM"
+  grep -nE 'error|Error|undefined|No such|not found' "$OUT/crypto.log" | head -20 >> "$SUM"
+fi
+say "crypto libraries: $(ls "$CRY/lib" 2>/dev/null | tr '\n' ' '); $(grep -h 'smoke link' "$OUT/crypto.log" 2>/dev/null)"
+CRYARGS=""
+[ $rc -eq 0 ] && CRYARGS="-DQB_CRYPTO_DIR=$CRY"
+
 # ---- the spelling dictionaries (English and German, the ones of the Windows program: LibreOffice's, at a fixed tag
 # and checked against their sums) become assets of the APK; the program copies them into its data folder
 ASSETS="$PWD/.apk-assets"
@@ -181,7 +208,7 @@ cmake -S . -B "$B" -G Ninja \
   -DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON \
   -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-z,max-page-size=16384 -DCMAKE_MODULE_LINKER_FLAGS=-Wl,-z,max-page-size=16384 \
   -DQB_ANDROID_BUILD="$build" \
-  $LAUNCH $HUNARGS $SSLARGS \
+  $LAUNCH $HUNARGS $SSLARGS $CRYARGS \
   -DQB_ANDROID_ASSETS="$ASSETS" \
   -DQB_BUILD_TESTS=OFF -DQB_TEST_SWITCHES=OFF -DQB_BUILD_TOOLS=OFF -DQB_BUILD_TOOL_PLUGINS=ON \
   -DQB_BUILD_IMPORTER_PLUGINS=ON -DQB_BUILD_MEDIA_PLUGIN=OFF -DQB_BUILD_EXAMPLE_PLUGIN=ON \

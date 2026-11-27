@@ -33,12 +33,14 @@ recipe() { # <name> <ndk>
     v=$(ndk_version "$ndk")
     [ -n "$v" ] || { echo "android-deps-pack.sh: the NDK's version is not known ($ndk/source.properties)" >&2; exit 2; }
     case "$what" in
-    hunspell | openssl)
+    hunspell | openssl | crypto)
         echo "pack: $what for Android ($abi)"
         echo "script: packaging/android/android-$what.sh $(sha256sum "$ROOT/packaging/android/android-$what.sh" | cut -d' ' -f1)"
+        # (the crypto recipe takes its pins from the Linux recipe's script)
+        [ "$what" = crypto ] && echo "pins: $(grep -E '^(BOTAN|JSONC|BZIP2|ZLIB|RNP)_(TAG|COMMIT)=|^SEXPP_COMMIT=|^BOTAN_MODULES=' "$ROOT/tools/get-crypto.sh" | sha256sum | cut -d' ' -f1)"
         echo "ndk: $v"
         ;;
-    *) echo "android-deps-pack.sh: unknown pack $name (hunspell-<abi>, openssl-<abi>)" >&2; exit 2 ;;
+    *) echo "android-deps-pack.sh: unknown pack $name (hunspell-<abi>, openssl-<abi>, crypto-<abi>)" >&2; exit 2 ;;
     esac
 }
 
@@ -59,6 +61,10 @@ about() { # <name> <dir>
         v=$(sed -n 's/^VERSION=//p' "$ROOT/packaging/android/android-openssl.sh")
         echo "Inside: OpenSSL $v as the shared libraries libcrypto_3.so and libssl_3.so for Android ($abi), unchanged, built with the Android NDK by packaging/android/android-openssl.sh (the source archive is pinned there by its SHA-256)."
         echo "License: Apache-2.0. Source: https://github.com/openssl/openssl/releases/tag/openssl-$v (also on this repository's release third-party-sources)."
+        ;;
+    crypto)
+        echo "Inside: RNP and Botan 3 (the OpenPGP engine of the encryption), json-c, bzip2 and zlib as static libraries for Android ($abi), unchanged, built with the Android NDK by packaging/android/android-crypto.sh (sources pinned by tag and commit in tools/get-crypto.sh)."
+        echo "License: BSD-2-Clause (RNP, Botan), MIT (json-c), bzip2's BSD-style license, zlib license. Sources: https://github.com/rnpgp/rnp, https://github.com/randombit/botan."
         ;;
     esac
     local texts
