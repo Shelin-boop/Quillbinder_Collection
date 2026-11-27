@@ -95,6 +95,46 @@ New functions and fixes (Linux first).
 - **Tool interface 1.3** also gives add-ons the program's engine (`aiEngine`, the device rule `aiPickDevice`,
   `aiDeviceChoices`, the install panel `aiPanel`, `aiModelFile`), so that Speech Transcription 1.10 uses the same engine.
 
+- **Encryption: the encrypted project and the encrypted backups** (item 113, part 2). Two switches per project (File > Options >
+  Encryption). **Encrypted backups**: each backup is `<name>.zip.gpg`, encrypted to the writer's key and the recovery key; the
+  device needs only the public keys to make one, so a stolen device or a leaked sync folder does not open it; also for projects
+  in Scrivener format. Restore From Backup asks for the passphrase when the key is locked and then restores as before; the
+  backup list, the number of backups kept and Move Old Backups count them with the plain ones, which stay readable; every
+  encrypted backup is checked by decrypting it again when the key is unlocked (else by its structure). **Encrypted project**:
+  every file of the project folder is encrypted on its own (texts, notes, the project file, snapshots, conflict copies, the save
+  journal and its waiting files, settings, objects, mind maps, pictures and media), so sync programs, the lock and the conflict
+  copies work per file as before; only the lock and a small plain marker (`encryption.json`, the two keys' fingerprints) stay
+  plain. Quillbinder's own format only: the switch is greyed for a Scrivener project with the reason, and an encrypted project
+  is not saved in Scrivener format. Turning it on or off converts the whole project once with a progress window; a crash in the
+  middle leaves every file either old or new, the project opens, and the next opening finishes the conversion. An encrypted
+  project opens with the passphrase kept on the device (asked once and then remembered), or says that the key is not on this
+  device and offers Import Keys, without changing anything; a damaged encrypted file is reported for its document and the rest
+  opens. Pictures, PDF files and media are shown from decrypted copies in a private folder in memory, removed when the project
+  closes.
+
+- **Encryption: the key wizard, Import Keys, Export Keys and File > Options > Encryption** (item 113, part 3). **Create
+  Keys** proposes six random words as the passphrase (an own one is allowed, a weak one refused), makes the writer's key and
+  the recovery key and writes the folder "Quillbinder Keys yyyy-mm-dd" at a place the writer picks (a USB stick; the project,
+  backup and sync folders are refused): the two secret files each locked by their own passphrase, the two public files and
+  a README.txt in the program's language without any secret (what each file is, where to keep it, how to open files in
+  Kleopatra, Gpg4win or with gpg, how to add the key on another device). The recovery passphrase is shown once, to be written
+  on paper, and is stored in no file. The wizard checks by asking for two of its words, reading the files back and opening a
+  test file with each key, and offers a second copy of the folder. **Import Keys** takes the folder on another device with the
+  passphrase typed once; **Import a Key File** takes a key file of the writer's own (version 4 Curve25519 only); **Export
+  Keys** writes the folder again; **Forget the passphrase on this device** clears the key store entry. The page shows the keys
+  of the device with their fingerprints and the two switches of the open project (Encrypted backups, Encrypted project, the
+  second greyed for a Scrivener project with the reason). The manual has a page on opening the files without Quillbinder and on
+  what encryption protects; design decision 5 is rewritten (optional encryption at rest, OpenPGP).
+
+- **The groundwork of the built-in encryption** (no function in the menus yet): OpenPGP keys of version 4 on Curve25519 (an
+  Ed25519 key with a Cv25519 subkey) are made, exported and imported as `.asc` files; texts and files are encrypted to the
+  writer's key and the recovery key (AES-256 with the integrity check of OpenPGP, no newer packet kinds), and GnuPG 2.4 and
+  2.5, and so Kleopatra and Gpg4win, open them without Quillbinder; files GnuPG makes and keys GnuPG makes work in
+  Quillbinder too. Keys of other kinds (RSA, versions 5 and 6, post-quantum, other curves) are refused with a message. A
+  passphrase generator gives six words of the EFF's word list (English); a passphrase of the writer's own that is too short
+  or too easy to guess is refused. The passphrase can be kept in the system's key store (KWallet or the Secret Service,
+  Windows Credential Manager, Android Keystore) through QtKeychain 0.18.0; the program gets no new library for any of it.
+
 - **Third-party parts for the built-in encryption and the AI add-ons are prepared** (no function of the program yet): three new
   ready-made packs of libraries for the Linux build (Botan, RNP, json-c, bzip2 and zlib; ONNX Runtime; ggml, whisper.cpp,
   llama.cpp, qwentts.cpp and Sonic), the daily security watch follows each new part, and `THIRD-PARTY.md` and Help > Third-Party

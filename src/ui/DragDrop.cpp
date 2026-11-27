@@ -223,8 +223,8 @@ static void copyTreeTo(const QString &from, const QString &to)
     for (const QFileInfo &fi : QDir(from).entryInfoList(QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot)) {
         if (fi.isDir())
             copyTreeTo(fi.absoluteFilePath(), to + QLatin1Char('/') + fi.fileName());
-        else
-            QFile::copy(fi.absoluteFilePath(), to + QLatin1Char('/') + fi.fileName());
+        else // (0.99.0: decrypted when it comes from an encrypted project: it is handed to another program)
+            safesave::copyFile(fi.absoluteFilePath(), to + QLatin1Char('/') + fi.fileName());
     }
 }
 
@@ -399,7 +399,7 @@ static QStringList exportInto(Project *p, BinderItem *it, const QString &dir, co
         }
     } else if (!it->isFolder() || !it->fileExt.isEmpty()) {
         const QString path = base + suffix;
-        if (QFile::copy(p->mediaFilePath(it), path))
+        if (safesave::copyFile(p->mediaFilePath(it), path)) // (0.99.0: decrypted out of an encrypted project)
             made << path;
         // a web page's pictures
         if (it->type == ItemType::WebPage)
@@ -584,7 +584,7 @@ QString imageFileFromMime(const QMimeData *data, Project *project)
         if (project)
             for (BinderItem *it : BinderModel::itemsFromMime(data, project))
                 if (it->type == ItemType::Image)
-                    return project->mediaFilePath(it);
+                    return vault::plainPath(project->mediaFilePath(it)); // (0.99.0: decrypted copy)
         return QString(); // other documents of the project are no pictures
     }
     if (data->hasUrls())

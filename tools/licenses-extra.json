@@ -72,22 +72,22 @@
   "url": "https://sourceware.org/bzip2/ (the sources as the libarchive project mirrors them: https://github.com/libarchive/bzip2, tag bzip2-1.0.8, commit 6a8690fc8d26c815e798c588f796eabe9d684cf0); built by tools/get-crypto.sh"
  },
  {
-  "name": "zlib (in the encryption libraries)",
-  "version": "1.4",
-  "license": "Zlib",
-  "where": "packed data of the built-in encryption (RNP), compiled into the program (0.99.0)",
-  "source": "packaging/linux/licenses/crypto-zlib.txt",
-  "file": "zlib-encryption.txt",
-  "url": "https://github.com/madler/zlib, tag v1.4 (commit 99623ef7097352da7993ba614161fd6a311e046e); built by tools/get-crypto.sh"
- },
- {
   "name": "QtKeychain",
   "version": "0.18.0",
   "license": "BSD-3-Clause (Modified BSD License)",
   "where": "keeping the passwords of the built-in encryption in the system's key store, linked into the program (0.99.0)",
   "source": "packaging/linux/licenses/qtkeychain.txt",
   "file": "qtkeychain.txt",
-  "url": "https://github.com/frankosterfeld/qtkeychain, tag 0.18.0 (commit e86bc3cbb50b172be61ed857803a372412b6ad85)"
+  "url": "https://github.com/frankosterfeld/qtkeychain, tag 0.18.0 (commit e86bc3cbb50b172be61ed857803a372412b6ad85); vendored in src/third_party/qtkeychain (README.txt there names its one change)"
+ },
+ {
+  "name": "EFF large word list",
+  "version": "2016",
+  "license": "CC-BY-3.0",
+  "where": "the words of the passphrases the built-in encryption suggests (7,776 English words), inside the program (0.99.0)",
+  "source": ["src/core/crypto/words/README.txt", "src/core/crypto/words/LICENSE.txt"],
+  "file": "eff-wordlist.txt",
+  "url": "https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt (Electronic Frontier Foundation), unchanged"
  },
  {
   "name": "AppImage type2-runtime",

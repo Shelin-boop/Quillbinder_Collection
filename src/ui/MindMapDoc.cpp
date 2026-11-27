@@ -400,11 +400,11 @@ bool hasMap(Project *project, const QString &itemId)
     if (MindMapDoc *d = registry().value(project).value(itemId))
         return !d->board.isEmpty();
     // a file can hold only a background color (0.21.1): a map has notes or shapes
-    QFile f(mindmap::pathFor(project->contentDir(itemId)));
-    if (!f.open(QIODevice::ReadOnly))
+    QByteArray bytes; // (0.99.0: decrypted in an encrypted project)
+    if (!vault::readFile(mindmap::pathFor(project->contentDir(itemId)), &bytes))
         return false;
     static const QRegularExpression item(QStringLiteral("<(Note|Shape)[\\s/>]"));
-    return item.match(QString::fromUtf8(f.readAll())).hasMatch();
+    return item.match(QString::fromUtf8(bytes)).hasMatch();
 }
 
 bool saveAll(Project *project, QString *error)

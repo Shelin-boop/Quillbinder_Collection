@@ -12,6 +12,13 @@
 #include <QStringList>
 
 #include "core/TestSwitches.h"
+// 0.99.0: the program's own code writes through the vault (core/crypto/Vault.h: an encrypted project's files are
+// encrypted). The add-ons' plugins use this file header-only and link no part of the program: their build sets
+// QB_SAFESAVE_HEADER_ONLY (plugins/tools, plugins/importers), and they write only into folders of their own.
+#ifndef QB_SAFESAVE_HEADER_ONLY
+#include "core/crypto/Vault.h"
+#define QB_SAFESAVE_VAULT 1
+#endif
 
 #ifdef Q_OS_UNIX
 #include <cerrno>
@@ -23,14 +30,32 @@
 namespace qb {
 namespace safesave {
 
-// Writes data; a short write (a full disk after part of it: Qt reports no error then) cancels the file,
-// so the commit below fails and nothing is replaced.
-inline qint64 write(QSaveFile &f, const QByteArray &data)
+// The bytes as they are (a copy of a file that is already in the form its place needs)
+inline qint64 writeRaw(QSaveFile &f, const QByteArray &data)
 {
     const qint64 n = f.write(data);
     if (n != data.size())
         f.cancelWriting();
     return n;
+}
+
+// Writes data; a short write (a full disk after part of it: Qt reports no error then) cancels the file,
+// so the commit below fails and nothing is replaced.
+// 0.99.0: a file of an encrypted project (core/crypto/Vault.h) is written encrypted, whole in one call; the size of
+// the text is returned when it was written. A failed encryption cancels the file.
+inline qint64 write(QSaveFile &f, const QByteArray &data)
+{
+#ifdef QB_SAFESAVE_VAULT
+    if (vault::active() && vault::seals(f.fileName())) {
+        QByteArray sealed = data;
+        if (!vault::seal(f.fileName(), sealed)) {
+            f.cancelWriting();
+            return -1;
+        }
+        return writeRaw(f, sealed) == sealed.size() ? data.size() : -1;
+    }
+#endif
+    return writeRaw(f, data);
 }
 
 inline bool commit(QSaveFile &f)
@@ -80,8 +105,18 @@ inline bool writeFile(const QString &path, const QByteArray &data, QString *erro
             *error = QStringLiteral("%1: %2").arg(path, fake.at(1));
         return false;
     }
+    // 0.99.0: a file of an encrypted project is written encrypted (core/crypto/Vault.h)
+    QByteArray sealed = data;
+#ifdef QB_SAFESAVE_VAULT
+    QString sealError;
+    if (!vault::seal(path, sealed, &sealError)) {
+        if (error)
+            *error = sealError;
+        return false;
+    }
+#endif
     QSaveFile f(path);
-    if (!f.open(QIODevice::WriteOnly) || write(f, data) != data.size() || !commit(f)) {
+    if (!f.open(QIODevice::WriteOnly) || writeRaw(f, sealed) != sealed.size() || !commit(f)) {
         if (error)
             *error = QStringLiteral("%1: %2").arg(path,
                                                  f.errorString().isEmpty() || f.errorString() == QLatin1String("Unknown error")
@@ -97,6 +132,15 @@ inline bool writeFile(const QString &path, const QByteArray &data, QString *erro
 // removed the target first and then copied, so a failed copy left no file at all.
 inline bool copyFile(const QString &from, const QString &to, QString *error = nullptr)
 {
+#ifdef QB_SAFESAVE_VAULT
+    // 0.99.0: into or out of an encrypted project, the copy is encrypted or decrypted as its place needs
+    {
+        bool handled = false;
+        const bool ok = vault::copy(from, to, error, &handled);
+        if (handled)
+            return ok;
+    }
+#endif
     QFile in(from);
     if (!in.open(QIODevice::ReadOnly)) {
         if (error)
@@ -115,7 +159,7 @@ inline bool copyFile(const QString &from, const QString &to, QString *error = nu
         const QByteArray piece = in.read(4 << 20);
         if (piece.isEmpty())
             break;
-        if (write(out, piece) != piece.size())
+        if (writeRaw(out, piece) != piece.size())
             break;
         copied += piece.size();
     }

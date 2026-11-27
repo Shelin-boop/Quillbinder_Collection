@@ -6,6 +6,8 @@
 #include "core/SafeSave.h"
 #include "core/SaveBatch.h"
 #include "core/Zip.h"
+#include "core/crypto/ProjectCrypto.h"
+#include "core/crypto/Vault.h"
 #include "text/TextUtil.h"
 
 #include <QCryptographicHash>
@@ -15,6 +17,7 @@
 #include <QThread>
 
 #include <algorithm>
+#include <memory>
 #include <atomic>
 #include <cerrno>
 #include <cstring>
@@ -81,10 +84,22 @@ QString ageKey(const QFileInfo &fi)
            + fi.lastModified().toString(QStringLiteral("yyyyMMddHHmmsszzz"));
 }
 
-QStringList zipsIn(const QString &dir, const QString &pattern)
+// 0.99.0: the names of backups, plain and encrypted ("<name>.zip", "<name>.zip.gpg")
+QStringList backupPatterns(const QString &pattern = QStringLiteral("* bak *"))
+{
+    return {pattern + QLatin1String(".zip"), pattern + QLatin1String(".zip.gpg")};
+}
+
+// ".zip.gpg" or ".zip"
+QString backupExtension(const QString &fileName)
+{
+    return fileName.endsWith(QLatin1String(".zip.gpg"), Qt::CaseInsensitive) ? QStringLiteral(".zip.gpg") : QStringLiteral(".zip");
+}
+
+QStringList zipsIn(const QString &dir, const QStringList &patterns)
 {
     QStringList out;
-    QFileInfoList files = QDir(dir).entryInfoList({pattern}, QDir::Files);
+    QFileInfoList files = QDir(dir).entryInfoList(patterns, QDir::Files);
     // oldest first
     QHash<QString, QString> key;
     for (const QFileInfo &fi : std::as_const(files))
@@ -104,7 +119,7 @@ QStringList zipsIn(const QString &dir, const QString &pattern)
 const QRegularExpression &ownForm()
 {
     static const QRegularExpression own(QStringLiteral(
-        "^(.+ bak \\d{4}-\\d{2}-\\d{2} \\d{2}-\\d{2}-\\d{2})(?: \\((\\d+)\\))?( \\(incomplete(?: (\\d+))?\\))?\\.zip$"));
+        "^(.+ bak \\d{4}-\\d{2}-\\d{2} \\d{2}-\\d{2}-\\d{2})(?: \\((\\d+)\\))?( \\(incomplete(?: (\\d+))?\\))?\\.zip(?:\\.gpg)?$"));
     return own;
 }
 
@@ -123,7 +138,7 @@ QString ownTitle(const QString &fileName)
 QStringList ownBackupsOf(const QString &dir, const QString &title)
 {
     QStringList out;
-    const QStringList all = zipsIn(dir, QStringLiteral("* bak *.zip"));
+    const QStringList all = zipsIn(dir, backupPatterns());
     for (const QString &f : all) {
         const QString name = QFileInfo(f).fileName();
         if (isOwnBackupName(name) && ownTitle(name) == title)
@@ -136,9 +151,11 @@ QStringList ownBackupsOf(const QString &dir, const QString &title)
 QString numberedName(const QString &fileName, int n)
 {
     const QRegularExpressionMatch m = ownForm().match(fileName);
+    const QString ext = backupExtension(fileName);
     if (!m.hasMatch())
-        return QFileInfo(fileName).completeBaseName() + QStringLiteral(" (%1).zip").arg(n);
-    return m.captured(1) + QStringLiteral(" (%1)").arg(n) + m.captured(3) + QLatin1String(".zip");
+        return fileName.left(fileName.size() - (fileName.endsWith(ext, Qt::CaseInsensitive) ? ext.size() : 0))
+               + QStringLiteral(" (%1)").arg(n) + ext;
+    return m.captured(1) + QStringLiteral(" (%1)").arg(n) + m.captured(3) + ext;
 }
 
 QByteArray sha1Of(const QString &file, qint64 *size)
@@ -258,7 +275,8 @@ Put putInPlace(const QString &staged, const QString &dir, QString *finalPath, QS
             *finalPath = target;
             return Put::Done;
         }
-        if (ZipWriter::verify(target) < 0) {
+        // (0.99.0: an encrypted backup is judged by its packets: no key is needed for it)
+        if (target.endsWith(QLatin1String(".gpg")) ? !crypto::isWholeMessage(target) : ZipWriter::verify(target) < 0) {
             // not a whole ZIP file: what an earlier copy of this backup left when the program ended in the middle
             if (!QFile::remove(target)) {
                 *why = QObject::tr("a file of this name is in the way and cannot be removed");
@@ -352,14 +370,13 @@ QString projectId(const Project *p)
 {
     // a project in Scrivener format: the Identifier of its .scrivx, as the working copy's state keeps it
     QString seed;
-    QFile state(p->settingsDir() + QLatin1String("/scrivener-sync.json"));
-    if (!p->scrivenerPath.isEmpty() && state.open(QIODevice::ReadOnly))
-        seed = QJsonDocument::fromJson(state.readAll()).object().value(QStringLiteral("identifier")).toString().toUpper();
+    QByteArray bytes; // (0.99.0: these files are read through the vault: decrypted in an encrypted project)
+    if (!p->scrivenerPath.isEmpty() && vault::readFile(p->settingsDir() + QLatin1String("/scrivener-sync.json"), &bytes))
+        seed = QJsonDocument::fromJson(bytes).object().value(QStringLiteral("identifier")).toString().toUpper();
     // Quillbinder's own format: the seed of a copy the program made (giveNewId), else the id of the Draft folder
     // (made once with the project, and it cannot be deleted)
-    QFile own(p->settingsDir() + QLatin1String("/backup-id.txt"));
-    if (seed.isEmpty() && own.open(QIODevice::ReadOnly))
-        seed = QString::fromUtf8(own.read(200)).trimmed();
+    if (seed.isEmpty() && vault::readFile(p->settingsDir() + QLatin1String("/backup-id.txt"), &bytes))
+        seed = QString::fromUtf8(bytes.left(200)).trimmed();
     if (seed.isEmpty() && p->draft())
         seed = p->draft()->id;
     if (seed.isEmpty())
@@ -372,9 +389,10 @@ bool giveNewId(const QString &projectFolder)
     const QString dir = projectFolder + QLatin1String("/settings");
     if (!QDir().mkpath(dir))
         return false;
-    QSaveFile f(dir + QLatin1String("/backup-id.txt"));
+    // 0.99.0: the copy of an encrypted project keeps it encrypted (its marker came with it); written checked
+    vault::Scope encrypted(projectFolder);
     const QByteArray seed = QUuid::createUuid().toString(QUuid::WithoutBraces).toUtf8() + '\n';
-    return f.open(QIODevice::WriteOnly) && f.write(seed) == seed.size() && f.commit();
+    return safesave::writeFile(dir + QLatin1String("/backup-id.txt"), seed);
 }
 
 QString nameStart(const Project *p)
@@ -445,7 +463,7 @@ QStringList mineOf(const Project *p, const QStringList &all)
 QStringList backupsFor(const Project *p, const QString &dirIn)
 {
     const QString dir = dirIn.isEmpty() ? defaultDirectory() : dirIn;
-    return mineOf(p, zipsIn(dir, QStringLiteral("* bak *.zip")));
+    return mineOf(p, zipsIn(dir, backupPatterns()));
 }
 
 QStringList waitingBackupsFor(const Project *p, const QString &dirIn)
@@ -462,14 +480,14 @@ QStringList waitingBackupsFor(const Project *p, const QString &dirIn)
     works.removeDuplicates();
     QStringList out;
     for (const QString &w : std::as_const(works))
-        out << mineOf(p, zipsIn(w, QStringLiteral("* bak *.zip")));
+        out << mineOf(p, zipsIn(w, backupPatterns()));
     return out;
 }
 
 QStringList formerBackupsFor(const Project *p, const QString &dir)
 {
     const QString former = formerProjectFolder(p, dir);
-    return former.isEmpty() ? QStringList() : zipsIn(former, QStringLiteral("* bak *.zip"));
+    return former.isEmpty() ? QStringList() : zipsIn(former, backupPatterns());
 }
 
 // 0.93.0: one backup of the project's own folder of 0.70.0 to 0.90.4 into the backup folder, under its name, never
@@ -512,7 +530,7 @@ MoveReport moveFormerBackups(const Project *p, const QString &dirIn)
     r.from = formerProjectFolder(p, dir);
     if (r.from.isEmpty())
         return r;
-    QStringList all = zipsIn(r.from, QStringLiteral("* bak *.zip"));
+    QStringList all = zipsIn(r.from, backupPatterns());
     if (!all.isEmpty() && !QDir().mkpath(dir)) {
         r.left << QObject::tr("the backup folder cannot be created");
         return r;
@@ -604,6 +622,40 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
     }
     noteTarget(work, dir);
     sweepWork(work);
+    // 0.99.0 (item 113): encrypted backups ("<name>.zip.gpg", to the project's two keys). Only the public keys are needed:
+    // the packing thread gets a key ring of its own with them (KeyRing::device() stays the window thread's). Never
+    // written plain instead: a backup that cannot be encrypted is not made.
+    const crypto::ProjectSettings cs = crypto::settingsOf(p->folderPath());
+    const bool sealBackup = cs.encryptedBackups;
+    const QStringList recipients = cs.recipients.list();
+    std::unique_ptr<crypto::KeyRing> sealRing;
+    bool canCheck = false; // a recipient's secret key is unlocked here: the check decrypts what was written
+    if (sealBackup) {
+        QString why;
+        if (!cs.recipients.isComplete()) {
+            why = QObject::tr("the project's keys are not named in %1").arg(crypto::markerName());
+        } else {
+            sealRing = std::make_unique<crypto::KeyRing>();
+            std::lock_guard<std::recursive_mutex> g(crypto::deviceRingLock());
+            crypto::KeyRing &device = crypto::KeyRing::device();
+            for (const QString &f : recipients) {
+                const QByteArray pub = device.exportPublicKey(f);
+                if (pub.isEmpty() || !sealRing->importKeys(pub).imported.contains(f)) {
+                    why = QObject::tr("the key %1 is not in Quillbinder's key ring").arg(crypto::groupedFingerprint(f));
+                    break;
+                }
+                canCheck = canCheck || (device.hasSecret(f) && device.isUnlocked(f));
+            }
+        }
+        if (!why.isEmpty()) {
+            if (error)
+                *error = QObject::tr("The backups of this project are encrypted, but no encrypted backup can be made: %1. No "
+                                     "backup was made.")
+                             .arg(why);
+            return false;
+        }
+    }
+    const QString ext = sealBackup ? QStringLiteral(".zip.gpg") : QStringLiteral(".zip");
     const QString stem = mine + QLatin1String(" bak ")
                          + QDateTime::currentDateTime().toString(QStringLiteral("yyyy-MM-dd HH-mm-ss"));
     // two backups in the same second (File > Save twice with "back up with each manual save",
@@ -612,12 +664,16 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
     auto taken = [&dir, &work](const QString &name) {
         return QFile::exists(QDir(dir).filePath(name)) || QFile::exists(QDir(work).filePath(name));
     };
-    QString name = stem + QLatin1String(".zip");
-    for (int n = 2; taken(name) && n < 100; ++n)
-        name = stem + QStringLiteral(" (%1).zip").arg(n);
+    QString name = stem + ext;
+    QString numbered = stem; // the name without its extension
+    for (int n = 2; taken(name) && n < 100; ++n) {
+        numbered = stem + QStringLiteral(" (%1)").arg(n);
+        name = numbered + ext;
+    }
     // written under a temporary name, checked, then renamed: a backup that was cut off
     // (a crash, a full disk) never looks like a finished one (0.20)
-    const QString part = QDir(work).filePath(name) + QLatin1String(".part");
+    // (0.99.0: an encrypted backup is packed as "<name>.zip.part" too, then encrypted beside it; the plain one goes)
+    const QString part = QDir(work).filePath(numbered + QLatin1String(".zip")) + QLatin1String(".part");
     // what the work needs from the project, taken here in the window's thread
     const QString display = p->displayFolder();
     const QString folderName = QFileInfo(display).fileName();
@@ -671,13 +727,55 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
         // to keep: older complete backups are deleted only after a complete one
         QString finished = name;
         if (!res.skipped.isEmpty()) {
-            const QString base = QFileInfo(name).completeBaseName();
-            finished = base + QLatin1String(" (incomplete).zip");
+            const QString base = numbered;
+            finished = base + QLatin1String(" (incomplete)") + ext;
             for (int n = 2; taken(finished) && n < 100; ++n)
-                finished = base + QStringLiteral(" (incomplete %1).zip").arg(n);
+                finished = base + QStringLiteral(" (incomplete %1)").arg(n) + ext;
         }
         res.staged = QDir(work).filePath(finished);
-        if (!savebatch::replace(part, res.staged)) {
+        if (sealBackup) {
+            // 0.99.0: encrypted from the checked ZIP file; then the backup's own check of what was written: decrypted again
+            // and compared with the ZIP file where a recipient's key is unlocked here, else its packets read (whole, not cut
+            // off: without the secret key nothing more can be told)
+            const QString sealedPart = res.staged + QLatin1String(".part");
+            QByteArray plainSha;
+            {
+                QFile z(part);
+                QCryptographicHash h(QCryptographicHash::Sha256);
+                if (z.open(QIODevice::ReadOnly) && h.addData(&z))
+                    plainSha = h.result();
+            }
+            const crypto::Error e = plainSha.isEmpty() ? crypto::Error::Io : sealRing->encryptFile(part, sealedPart, recipients);
+            QFile::remove(part);
+            QString checkWhy;
+            if (e != crypto::Error::None) {
+                checkWhy = QObject::tr("it could not be encrypted: %1").arg(crypto::errorText(e));
+            } else if (canCheck) {
+                crypto::Error d = crypto::Error::None;
+                QByteArray back;
+                {
+                    std::lock_guard<std::recursive_mutex> g(crypto::deviceRingLock());
+                    back = crypto::KeyRing::device().decryptFileSha256(sealedPart, &d);
+                }
+                if (d != crypto::Error::None)
+                    checkWhy = QObject::tr("the encrypted backup could not be decrypted again: %1").arg(crypto::errorText(d));
+                else if (back != plainSha)
+                    checkWhy = QObject::tr("the encrypted backup, decrypted again, differs from the backup");
+            } else if (!crypto::isWholeMessage(sealedPart)) {
+                checkWhy = QObject::tr("the encrypted backup is not whole");
+            }
+            if (!checkWhy.isEmpty()) {
+                QFile::remove(sealedPart);
+                res.why = checkWhy;
+                res.staged.clear();
+                return;
+            }
+            if (!savebatch::replace(sealedPart, res.staged)) {
+                QFile::remove(sealedPart);
+                res.staged.clear();
+                return;
+            }
+        } else if (!savebatch::replace(part, res.staged)) {
             QFile::remove(part);
             res.staged.clear();
             return;
@@ -686,7 +784,7 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
         // backups that could not be put into the backup folder before go first, oldest first (those of every
         // project: they all belong into this folder)
         bool takes = true;
-        const QStringList waitingOnes = zipsIn(work, QStringLiteral("*.zip"));
+        const QStringList waitingOnes = zipsIn(work, backupPatterns(QStringLiteral("*")));
         for (const QString &w : waitingOnes) {
             if (QFileInfo(w).fileName() == finished)
                 continue;
@@ -700,7 +798,7 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
         for (const QString &fw : std::as_const(formerWork)) {
             if (!takes)
                 break;
-            const QStringList formerOnes = zipsIn(fw, QStringLiteral("*.zip"));
+            const QStringList formerOnes = zipsIn(fw, backupPatterns(QStringLiteral("*")));
             for (const QString &w : formerOnes) {
                 QString at, whyNot;
                 if (putInPlace(w, dir, &at, &whyNot, &cancel) != Put::Done) {
@@ -747,6 +845,7 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
         return false;
     }
     if (!res.packed) {
+        QFile::remove(part); // (0.99.0: never a plain ZIP file left of an encrypted backup)
         const QString shown = QDir(work).filePath(name);
         if (error)
             *error = res.why.isEmpty() ? QObject::tr("Could not write the backup %1").arg(shown)
@@ -887,8 +986,46 @@ bool takeDue(const QString &projectFile)
     return true;
 }
 
-QString restore(const QString &zipFile, const QString &intoParent, QString *projectFile, QString *error)
+QString restore(const QString &zipFile, const QString &intoParent, QString *projectFile, QString *error, crypto::Error *kind)
 {
+    if (kind)
+        *kind = crypto::Error::None;
+    // 0.99.0 (item 113): an encrypted backup is decrypted into the work folder (needs a recipient's secret key, unlocked:
+    // the window asks first), restored from there as any backup, and the plain copy goes
+    if (zipFile.endsWith(QLatin1String(".gpg"), Qt::CaseInsensitive)) {
+        const QString work = workDirectory();
+        QDir().mkpath(work);
+        const QString plain = work + QStringLiteral("/restore-") + QUuid::createUuid().toString(QUuid::Id128) + QStringLiteral(".zip");
+        crypto::Error e = crypto::Error::None;
+        auto decrypt = [&] {
+            std::lock_guard<std::recursive_mutex> g(crypto::deviceRingLock());
+            e = crypto::KeyRing::device().decryptFile(zipFile, plain);
+        };
+        if (progressHandler()) {
+            QThread *t = QThread::create(decrypt);
+            t->start();
+            while (!t->wait(50)) {
+                bool stop = false;
+                progressHandler()(QObject::tr("Decrypting \"%1\"...").arg(QFileInfo(zipFile).completeBaseName()), 0, 0, &stop);
+            }
+            delete t;
+            progressHandler()(QString(), 0, 0, nullptr);
+        } else {
+            decrypt();
+        }
+        if (e != crypto::Error::None) {
+            QFile::remove(plain);
+            if (kind)
+                *kind = e;
+            if (error)
+                *error = QObject::tr("%1 could not be decrypted: %2 Nothing was restored.")
+                             .arg(QDir::toNativeSeparators(zipFile), crypto::errorText(e));
+            return QString();
+        }
+        const QString dest = restore(plain, intoParent, projectFile, error, nullptr);
+        QFile::remove(plain);
+        return dest;
+    }
     ZipReader zr(zipFile);
     if (!zr.isValid()) {
         // 0.81.0 (audit of 0.80.0, U-01): the reader knows ZIP64 now (backups of 2 GiB and more, 65,535 files and

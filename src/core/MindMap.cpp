@@ -1,6 +1,7 @@
 #include "core/MindMap.h"
 #include <cmath>
 #include "core/SafeSave.h"
+#include "core/crypto/Vault.h"
 #include "text/TextUtil.h"
 
 #include <QAbstractTextDocumentLayout>
@@ -1500,13 +1501,15 @@ bool Board::save(const QString &path, QString *error) const
 
 bool Board::load(const QString &path, QString *error)
 {
-    QFile f(path);
-    if (!f.open(QIODevice::ReadOnly)) {
+    QByteArray bytes;
+    QString why;
+    if (!vault::readFile(path, &bytes, &why)) { // (0.99.0: decrypted in an encrypted project)
         if (error)
-            *error = QObject::tr("Cannot read %1").arg(path);
+            *error = QFile::exists(path) && !why.isEmpty() ? QObject::tr("Cannot read %1: %2").arg(path, why)
+                                                            : QObject::tr("Cannot read %1").arg(path);
         return false;
     }
-    return fromXml(f.readAll(), error);
+    return fromXml(bytes, error);
 }
 
 QStringList splitText(const QString &text, const QString &separator)

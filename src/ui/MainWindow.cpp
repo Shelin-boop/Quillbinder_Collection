@@ -4,6 +4,8 @@
 #include "ui/Ask.h"
 #include "ui/LinkOpen.h"
 #include "ui/MainWindow.h"
+#include "ui/ProjectCryptoUi.h"
+#include "core/crypto/Vault.h"
 #include <memory>
 #include <QSet>
 #include "ui/ManualWindow.h"
@@ -3207,8 +3209,24 @@ bool MainWindow::openProject(const QString &path)
     // lock check: another window, or another computer through a sync program (0.64: who, since when)
     if (!confirmLock(QFileInfo(file).absolutePath() + QLatin1String("/settings/lock")))
         return false;
-    // saved by a newer version with something this version would lose
-    const QString needs = Project::neededVersion(file);
+    // 0.99.0 (item 113): an encrypted project is unlocked first (the passphrase kept on this device, else asked), or the
+    // writer is told that the key is not here (with Import Keys); nothing in the project is changed until then. A
+    // conversion of its files that was cut off is finished first (the project opens also when that fails).
+    const QString folder = QFileInfo(file).absolutePath();
+    if (!ui::unlockForFolder(this, folder, tr("Open Project")))
+        return false;
+    QString conversionNote;
+    if (!ui::finishConversion(this, folder, &conversionNote) && !conversionNote.isEmpty() && !QB_TEST_ENV_SET("QB_NO_DIALOGS")) {
+        QMessageBox box(QMessageBox::Warning, tr("Open Project"), conversionNote, QMessageBox::Ok, this);
+        box.setObjectName(QStringLiteral("conversionNotFinished"));
+        box.exec();
+    }
+    // saved by a newer version with something this version would lose (an encrypted project file: read decrypted)
+    QString needs;
+    {
+        vault::Scope encrypted(folder);
+        needs = Project::neededVersion(file);
+    }
     if (!needs.isEmpty() && Project::compareVersionText(needs, QStringLiteral(QB_APP_VERSION)) > 0) {
         QMessageBox box(QMessageBox::Warning, tr("Open Project"),
                         tr("This project was saved by a newer version of %1. It uses things that version %2 does not know "
@@ -3284,6 +3302,7 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
         return false;
     m_project = std::move(p);
     Project *proj = m_project.get();
+    ui::connectWindow(this); // 0.99.0: File > Options > Encryption and Import Keys act on this window's project
     // 0.93.0 (to-do item 39): documents that no editor shows are unloaded a moment after others were read (the
     // store decides which; this tells it which are shown, in every window and place, and that a dialog is open)
     proj->docs()->setShownProbe([](QSet<const QTextDocument *> *shown) {
@@ -4943,6 +4962,8 @@ void MainWindow::restoreBackup()
             row->setText(0, QLocale().toString(fi.lastModified(), QStringLiteral("yyyy-MM-dd HH:mm")));
             row->setText(1, QLocale().formattedDataSize(fi.size()));
             QString state = fi.completeBaseName().contains(QLatin1String(" (incomplete")) ? tr("incomplete") : tr("complete");
+            if (fi.fileName().endsWith(QLatin1String(".zip.gpg"))) // 0.99.0
+                state += tr(", encrypted");
             if (olderKind)
                 state += tr(" (in the folder \"%1\")").arg(olderFolder);
             if (waitingSet.contains(files.at(i)))
@@ -5036,6 +5057,11 @@ bool MainWindow::restoreBackupFile(const QString &zip)
     if (!m_project)
         return false;
     const QString parent = QFileInfo(m_project->displayFolder()).absolutePath();
+    // 0.99.0 (item 113): an encrypted backup needs a key of it unlocked here (asked), or the message with Import Keys
+    if (!ui::unlockForFile(this, zip, tr("Restore From Backup"))) {
+        m_lastRestoreText = tr("The backup could not be restored: %1").arg(crypto::errorText(crypto::Error::Locked));
+        return false;
+    }
     QString projectFile, err;
     const QString dest = backup::restore(zip, parent, &projectFile, &err);
     m_lastRestored = projectFile;

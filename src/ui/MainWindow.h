@@ -141,6 +141,8 @@ public:
     // restored and opened (the checks call restoreBackupFile; lastRestoredProject() names what was opened)
     void restoreBackup();
     bool restoreBackupFile(const QString &zip);
+    // 0.99.0 (item 113): why an encrypted project gets no copy in Scrivener format
+    static QString encryptedScrivenerText();
     // 0.93.0: File > Back Up > Move Old Backups Into the Backup Folder (the backups of the project's own folder of
     // 0.70.0 to 0.90.4); lastMoveOldText() is the report (the checks)
     void moveOldBackups();

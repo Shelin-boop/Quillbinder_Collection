@@ -1,5 +1,6 @@
 #include "ui/OptionsDialog.h"
 #include "ui/handwriting/HandwritingPage.h"
+#include "ui/EncryptionPage.h"
 #include "ui/ProfileDialogs.h"
 #include "ui/Profiles.h"
 #include "ui/OptionStorage.h"
@@ -298,6 +299,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, int page) : QDialog(parent)
         {tr("Behaviors"), QStringLiteral("view-choose")},       {tr("Appearance"), QStringLiteral("format-text-color")},
         {tr("Corrections"), QStringLiteral("edit-find-replace")}, {tr("Keyboard"), QStringLiteral("configure-shortcuts")},
         {tr("Sharing"), QStringLiteral("document-export")},     {tr("Backup"), QStringLiteral("backup")},
+        {tr("Encryption"), QStringLiteral("lock")},
         {tr("Extras"), QStringLiteral("qb-mindmap")}};
     for (const auto &s : sections) {
         auto *li = new QListWidgetItem(icons::action(s.second), s.first, m_pages);
@@ -317,6 +319,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, int page) : QDialog(parent)
     m_stack->addWidget(m_keyboard);
     m_stack->addWidget(sharingSection());
     m_stack->addWidget(backupSection());
+    m_stack->addWidget(encryptionSection());
     m_stack->addWidget(extrasSection());
     // writing tools with a section of their own (0.61): an icon after Extras each
     toolhost::host().attachTools();
@@ -2275,6 +2278,14 @@ QWidget *OptionsDialog::backupSection()
     return w;
 }
 
+// ==================================================================== Encryption (0.99.0)
+
+QWidget *OptionsDialog::encryptionSection()
+{
+    m_encryption = new EncryptionPage;
+    return m_encryption;
+}
+
 // ==================================================================== Extras
 
 QWidget *OptionsDialog::extrasSection()
@@ -2837,6 +2848,11 @@ void OptionsDialog::apply()
 {
     if (m_handwriting)
         m_handwriting->apply();
+    if (m_encryption) {
+        QStringList errors;
+        if (!m_encryption->apply(&errors))
+            QMessageBox::warning(this, tr("Encryption"), errors.join(QLatin1Char('\n')));
+    }
     for (const auto &sec : m_toolSections)
         sec->apply();
     QTimer::singleShot(0, &toolhost::host(), [] { toolhost::host().notifySettingsChanged(); });

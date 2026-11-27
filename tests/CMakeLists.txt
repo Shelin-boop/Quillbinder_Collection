@@ -591,3 +591,22 @@ target_compile_definitions(qb_v0990l_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_S
 add_executable(qb_v0990j_tests v0990j_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0990j_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0990j_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.99.0, item 113 (part 1): the OpenPGP layer of the built-in encryption: keys, the key ring, round trips, damaged files,
+# foreign keys, the passphrase generator and check, the key store, what the program links, GnuPG both ways (each gpg on the
+# PATH and those QB_TEST_GPG_EXTRA names) (xvfb-run -a ./qb_v0990e_tests /tmp/shots). Exports its symbols like the program,
+# so that the check of what is exported means the same.
+add_executable(qb_v0990e_tests v0990e_tests.cpp)
+target_link_libraries(qb_v0990e_tests PRIVATE qbcore)
+set_target_properties(qb_v0990e_tests PROPERTIES ENABLE_EXPORTS ON)
+
+# 0.99.0, item 113 (part 3): the key wizard (Create Keys), the key folder with its README.txt, the refused places, the check,
+# the second copy, Import Keys, Import a Key File (gpg's v4 Curve25519 key taken, RSA refused), Export Keys, File > Options >
+# Encryption with its switches and "Forget the passphrase" (xvfb-run -a ./qb_v0990k_tests /tmp/shots)
+add_executable(qb_v0990k_tests v0990k_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990k_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0990k_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.99.0 (item 113, part 2): the encrypted project and the encrypted backups: the vault, the walk over an encrypted
+# project, conversions (also cut off), keys locked or missing, damaged files, backups of both formats, GnuPG, the
+# window's unlock dialog, the speed of the encrypted autosave (xvfb-run -a ./qb_v0990f_tests /tmp/shots)
+add_executable(qb_v0990f_tests v0990f_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990f_tests PRIVATE qbui Qt6::Test)

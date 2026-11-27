@@ -1,5 +1,7 @@
 #include "ui/IconDialogs.h"
+#include "core/crypto/Vault.h"
 #include "ui/Ask.h"
+#include <QPixmap>
 #include <QMenu>
 #include "core/IconCatalog.h"
 #include "core/ItemIcons.h"
@@ -261,7 +263,7 @@ void ManageIconsDialog::reload(const QString &select)
 {
     m_list->clear();
     for (const QString &n : icons::customNames(m_project)) {
-        auto *it = new QListWidgetItem(QIcon(icons::customPath(m_project, n)), n, m_list);
+        auto *it = new QListWidgetItem(QIcon(QPixmap::fromImage(vault::readImage(icons::customPath(m_project, n)))), n, m_list);
         if (n == select)
             m_list->setCurrentItem(it);
     }

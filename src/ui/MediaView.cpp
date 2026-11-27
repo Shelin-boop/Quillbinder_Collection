@@ -2,6 +2,7 @@
 #include "ui/MenuGuard.h"
 #include "ui/LinkOpen.h"
 #include "core/WebArchive.h"
+#include "core/SafeSave.h"
 #include "ui/ViewMemory.h"
 #include <QTimer>
 #include "core/BinderItem.h"
@@ -178,7 +179,7 @@ MediaView::MediaView(QWidget *parent) : QWidget(parent)
     m_stack->addWidget(m_other);
     auto openExternally = [this] {
         if (m_project && m_item)
-            links::openFile(this, m_project->mediaFilePath(m_item)); // 0.64.1: never a program file
+            links::openFile(this, vault::plainPath(m_project->mediaFilePath(m_item))); // 0.64.1: never a program file
     };
     connect(m_openButton, &QPushButton::clicked, this, openExternally);
 
@@ -282,7 +283,8 @@ void MediaView::showItem(BinderItem *item)
     m_item = item;
     if (!m_project || !item)
         return;
-    const QString path = m_project->mediaFilePath(item);
+    // 0.99.0: a file of an encrypted project is shown from its decrypted copy in the private folder (core/crypto/Vault.h)
+    const QString path = item->type == ItemType::WebPage ? m_project->mediaFilePath(item) : vault::plainPath(m_project->mediaFilePath(item));
     const QString ext = item->fileExt.toLower();
     const bool av = item->type == ItemType::Media || (item->type == ItemType::File && mediaSuffixes().contains(ext));
     switch (item->type) {
@@ -330,9 +332,9 @@ QString MediaView::webAddressOf(BinderItem *item, const QString &path) const
         if (!b.isInternal() && (b.target.startsWith(QLatin1String("http://")) || b.target.startsWith(QLatin1String("https://"))))
             return b.target;
     if (isArchive(item)) {
-        QFile f(path);
-        if (f.open(QIODevice::ReadOnly)) {
-            const QString a = webarchive::addressOf(f.readAll());
+        QByteArray bytes; // (0.99.0: decrypted in an encrypted project)
+        if (vault::readFile(path, &bytes)) {
+            const QString a = webarchive::addressOf(bytes);
             if (a.startsWith(QLatin1String("http://")) || a.startsWith(QLatin1String("https://")))
                 return a;
         }
@@ -347,16 +349,21 @@ void MediaView::showWebPage(BinderItem *item, const QString &path)
     if (isArchive(item)) {
         // unpacked into the cache to be shown here
         // (the portable program, 0.90.4: its folder for this run, not the system's cache in AppData)
-        const QString dir = (qb::portable::active() ? qb::portable::sessionTemp()
-                                                    : QStandardPaths::writableLocation(QStandardPaths::CacheLocation))
+        // (0.99.0: an encrypted project's page into the private folder, never into the cache)
+        const bool sealed = vault::placeOf(path).reads();
+        const QString dir = (sealed                      ? vault::privateFolder()
+                             : qb::portable::active() ? qb::portable::sessionTemp()
+                                                      : QStandardPaths::writableLocation(QStandardPaths::CacheLocation))
                             + QLatin1String("/web pages/") + item->id;
         QDir(dir).removeRecursively();
-        QFile f(path);
+        QByteArray bytes;
         QString page, err;
-        if (f.open(QIODevice::ReadOnly) && webarchive::unpack(f.readAll(), dir, &page, nullptr, &err))
+        if (vault::readFile(path, &bytes) && webarchive::unpack(bytes, dir, &page, nullptr, &err))
             shown = page;
         else
             shown.clear();
+    } else if (vault::placeOf(path).reads()) {
+        shown = vault::plainTree(path); // (0.99.0: the page with its pictures, decrypted)
     }
     QFile f(shown);
     if (!shown.isEmpty() && f.open(QIODevice::ReadOnly)) {
@@ -400,18 +407,19 @@ QString MediaView::openSavedPage(QString *error)
     }
     QString page;
     if (isArchive(m_item)) {
-        QFile f(path);
-        if (!f.open(QIODevice::ReadOnly)) {
+        QByteArray bytes; // (0.99.0: decrypted in an encrypted project)
+        if (!vault::readFile(path, &bytes)) {
             if (error)
                 *error = tr("Cannot read %1.").arg(QDir::toNativeSeparators(path));
             return QString();
         }
-        if (!webarchive::unpack(f.readAll(), dir, &page, nullptr, error))
+        if (!webarchive::unpack(bytes, dir, &page, nullptr, error))
             return QString();
     } else {
         // the page and the folders beside it (its pictures)
         page = dir + QLatin1String("/index.html");
-        if (!QFile::copy(path, page)) {
+        // (0.99.0: copies for the browser are decrypted: the writer asked for the page in another program)
+        if (!safesave::copyFile(path, page)) {
             if (error)
                 *error = tr("Cannot copy %1.").arg(QDir::toNativeSeparators(path));
             return QString();
@@ -425,7 +433,7 @@ QString MediaView::openSavedPage(QString *error)
                 QDir().mkpath(QFileInfo(to).absolutePath());
                 // (0.93.0: the result is not told on purpose: this is a temporary copy for the web browser, the
                 // original stays; a picture that could not be copied is a gap in the page shown)
-                QFile::copy(from, to);
+                safesave::copyFile(from, to);
             }
         }
     }

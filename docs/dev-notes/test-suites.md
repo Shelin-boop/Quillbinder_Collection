@@ -73,6 +73,50 @@ the note for own colors in Options > Appearance, and Compile: a project of 80 do
 button and by Esc after five documents (the older file untouched, no temporary file, "n of N" shown, the message line), a fake
 converter (`QB_PLUGIN_PATH` with a JSON definition, a script that waits and starts a helper) stopped with its helper (the
 check reads `/proc/<pid>/stat`; Linux only).
+## v0990f (0.99.0, item 113, part 2: the encrypted project and the encrypted backups)
+
+`qb_v0990f_tests` (a window; needs the crypto pack; `QB_TEST_KEYSTORE=memory` and the device's key roles are set by the suite;
+`gpg` on the PATH or `QB_TEST_GPG_EXTRA` for the GnuPG checks, skipped with a message otherwise): the vault (seal, unseal, plain
+names, copies in and out, pictures, decrypted copies in `$XDG_RUNTIME_DIR`, a failed encryption writes nothing:
+`QB_TEST_SEAL_FAILS`); a project with every kind of file encrypted by `encryptFolder`, the walk (every file OpenPGP but the
+marker and the lock, none holds a word of the project), each kind read back, writes after it (texts, notes, snapshots, objects,
+the shown lock), the waiting files and the journal of a save cut off at a rename and its recovery, the emergency copy, a conflict
+copy and its snapshot, decryption back to the same bytes; a conversion cut off after n files both ways
+(`QB_TEST_CONVERT_STOP`), opened half done and finished; a wrong passphrase, a locked key (refused, nothing written, then the key
+store), a missing key (the sentence, nothing written, the window's box with Import Keys), a damaged file; backups (`.zip.gpg`
+names, made with the key locked, the newest-N rule with plain ones, a cut copy, restore, locked restore, Move Old Backups, GnuPG
+opening a backup and a text, an encrypted project's backup restored encrypted, a Scrivener project's); the window (the unlock
+dialog with a wrong and a right passphrase, Save a Copy as Scrivener refused, `changeProjectEncryption` off and on, File >
+Options > Encryption's switches, Restore asking for the passphrase); and the speed figures of the autosave with and without
+encryption (the welcome project and a large project of 1000 documents; `QB_MEASURE=1` runs only these). Screenshots
+`v0990f-*.png`.
+
+## v0990k (0.99.0, item 113, part 3: the key wizard, the key folder, Import Keys, export, File > Options > Encryption)
+
+`qb_v0990k_tests` (a window; needs the crypto pack, `gpg` for the key files, `QB_TEST_KEYSTORE=memory` is set by the suite): the
+sync program names and the refused places, the wizard end to end with test hooks for the folder dialog and the shown
+recovery passphrase (six words proposed, a weak own passphrase refused, the project, backup and sync folders refused, the
+recovery passphrase shown once, the two words asked, the check, the second copy), the folder's five files, the README without a
+secret, the recovery passphrase and the passphrase in no file under the test's home, Import Keys on a second device (a wrong
+passphrase takes nothing, the right one once), a key file made by gpg (v4 Curve25519 taken, RSA and a non-key refused),
+Export Keys, the Options page with the switches (no project, own format, Scrivener project with its reason, Apply passes the
+changes, a failing switch is reported) and "Forget the passphrase". Screenshots of each wizard step and of the page. 
+
+## v0990e (0.99.0, item 113, part 1: the OpenPGP layer)
+
+`qb_v0990e_tests` (no window; Qt Core only): keys made, exported and imported (public only, with the secret part),
+unlock (wrong passphrase, once per session, NFC), round trips of texts and files to the writer's and the recovery key
+(the packets: two session keys and SEIPD v1), the size limit, damaged messages (a changed byte, cut short, noise, zeros:
+`Damaged`, no text), a locked key, foreign keys made by hand (v5, v6, RSA, an unknown algorithm), the key ring on disk
+(permissions, read again, damaged), passphrase change and removal, the word list and the generator (1,000 passphrases),
+the strength check (weak, short and strong examples), the key store (in memory; QtKeychain in a child without D-Bus; in a
+child under `dbus-run-session` with `gnome-keyring-daemon` the Secret Service round trip, skipped without them), the
+suite's own libraries (`readelf -d`: nothing new) and exports (`nm -D`: no RNP/Botan names; the target has
+`ENABLE_EXPORTS` like the program), and GnuPG both ways for each `gpg` on the PATH and in `QB_TEST_GPG_EXTRA` (spaces
+between): GnuPG imports and decrypts Quillbinder's keys and files (AES256.CFB, MDC), Quillbinder decrypts GnuPG's files,
+GnuPG's own v4 key works in Quillbinder, RSA, Ed448 (v5), NIST P-256 and, with GnuPG 2.5, its "pqc" key are refused. No
+`gpg`: "SKIPPED" and those checks are left out. Needs the crypto pack (`tools/get-crypto.sh`) in the build; without it
+the first check fails.
 
 ## v0950f and v0950g (0.95.0, item 102: eleven languages)
 

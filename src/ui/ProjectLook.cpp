@@ -116,11 +116,11 @@ Values read(const Project *p, bool *ok)
 {
     if (ok)
         *ok = false;
-    QFile f(fileOf(p));
-    if (!p || !f.open(QIODevice::ReadOnly))
+    QByteArray bytes; // (0.99.0: decrypted in an encrypted project)
+    if (!p || !vault::readFile(fileOf(p), &bytes))
         return forNewProjects();
     QJsonParseError err;
-    const QJsonDocument d = QJsonDocument::fromJson(f.readAll(), &err);
+    const QJsonDocument d = QJsonDocument::fromJson(bytes, &err);
     if (err.error != QJsonParseError::NoError || !d.isObject())
         return forNewProjects();
     if (ok)

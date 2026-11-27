@@ -1,5 +1,6 @@
 #include "core/SettingsFile.h"
 #include "core/SafeSave.h"
+#include "core/crypto/Vault.h"
 #include "core/SettingsLayer.h"
 
 #include "AppInfo.h"
@@ -240,17 +241,18 @@ QJsonObject capture(Project *p)
     }
     s.insert(key(Printing), QJsonObject::fromVariantMap(p->uiState.value(QStringLiteral("printSettings")).toMap()));
     {
-        QFile f(QDir(p->settingsDir()).filePath(QStringLiteral("look.json")));
         QJsonObject look;
-        if (f.open(QIODevice::ReadOnly))
-            look = QJsonDocument::fromJson(f.readAll()).object();
+        QByteArray bytes; // (0.99.0: decrypted in an encrypted project)
+        if (vault::readFile(QDir(p->settingsDir()).filePath(QStringLiteral("look.json")), &bytes))
+            look = QJsonDocument::fromJson(bytes).object();
         s.insert(key(Look), look);
     }
     s.insert(key(ObjectTemplates), p->objects()->schema().toJson(false));
     {
         // 0.62: the options the project keeps a value of its own for
         QJsonObject o;
-        QSettings in(settingslayer::fileFor(p->settingsDir()), QSettings::IniFormat);
+        const QString own = settingslayer::fileFor(p->settingsDir());
+        QSettings in(own, settingslayer::formatFor(own));
         for (const QString &k : in.allKeys()) {
             if (settingslayer::programOnly(k))
                 continue;
@@ -801,7 +803,7 @@ void applyData(Project *p, Section s, const QJsonValue &value, QStringList *note
         QFile::remove(file);
         QDir().mkpath(p->settingsDir());
         {
-            QSettings out(file, QSettings::IniFormat);
+            QSettings out(file, settingslayer::formatFor(file)); // (0.99.0: encrypted in an encrypted project)
             const QJsonObject o = value.toObject();
             for (auto it = o.begin(); it != o.end(); ++it) {
                 if (settingslayer::programOnly(it.key()))

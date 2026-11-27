@@ -3,6 +3,9 @@
 #include <QString>
 #include <QStringList>
 #include <functional>
+
+#include "core/crypto/OpenPgp.h"
+
 namespace qb {
 class Project;
 namespace backup {
@@ -111,6 +114,9 @@ bool takeDue(const QString &projectFile);
 
 // 0.70.0 (audit A U-05): unpacks a backup into a new folder "<name> (restored <date time>)" inside intoParent;
 // that folder, or "" on failure. *projectFile: what to open (the .qbx, or the .scriv folder).
-QString restore(const QString &zipFile, const QString &intoParent, QString *projectFile, QString *error);
+// 0.99.0: an encrypted backup ("<name>.zip.gpg") is decrypted first: a recipient's secret key must be unlocked here
+// (*kind Locked, NoSecretKey, Damaged ... when it cannot be decrypted; nothing is written then)
+QString restore(const QString &zipFile, const QString &intoParent, QString *projectFile, QString *error,
+                crypto::Error *kind = nullptr);
 } // namespace backup
 } // namespace qb

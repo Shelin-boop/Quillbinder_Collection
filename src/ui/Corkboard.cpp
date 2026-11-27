@@ -1,4 +1,5 @@
 #include "ui/Corkboard.h"
+#include "core/crypto/Vault.h"
 #include "ui/Zoom.h"
 #include "core/Search.h"
 #include "ui/DragDrop.h"
@@ -144,7 +145,7 @@ void CardItem::paint(QPainter *p, const QStyleOptionGraphicsItem *, QWidget *)
     else if (!m_item->synopsisImage.isEmpty())
         picture = m_project->contentDir(m_item->id) + QLatin1Char('/') + m_item->synopsisImage;
     if (!picture.isEmpty()) {
-        QImage img(picture);
+        const QImage img = vault::readImage(picture); // (0.99.0: decrypted in an encrypted project)
         if (!img.isNull()) {
             const QSizeF sz = img.size().scaled(body.size().toSize(), Qt::KeepAspectRatio);
             const QRectF ir(body.center().x() - sz.width() / 2, body.center().y() - sz.height() / 2, sz.width(), sz.height());

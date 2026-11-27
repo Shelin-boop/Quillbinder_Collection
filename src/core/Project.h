@@ -110,6 +110,9 @@ public:
     std::function<int(const QString &dir, QString *error, CopyTally *tally)> emergencyExtra;
 
     QString folderPath() const { return m_folder; }
+    // 0.99.0 (item 113): the project's files are encrypted (core/crypto/ProjectCrypto.h); every read and write goes
+    // through the vault (core/crypto/Vault.h)
+    bool isEncrypted() const { return !m_vaultFolder.isEmpty(); }
     QString indexPath() const { return m_indexFile; }
     QString title() const { return m_title; }
     void setTitle(const QString &t);
@@ -290,6 +293,8 @@ private:
 
     QString m_folder;
     QString m_indexFile;
+    QString m_vaultFolder;          // 0.99.0: this encrypted project's folder in the vault ("" = plain)
+    QStringList m_vaultRecipients;  // its recipients (the emergency copy is encrypted to them)
     bool m_leaving = false;
     QString m_title;
     BinderItem *m_root = nullptr;

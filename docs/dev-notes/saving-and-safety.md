@@ -2,6 +2,151 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: encryption, part 2 (the encrypted project and the encrypted backups; suite `v0990f`)
+
+- **The vault** (`src/core/crypto/Vault.*`, the one layer under every read and write of an encrypted project): a folder is in
+  it while an encrypted project there is open (`Project::open` adds it after the access check, `~Project` removes it), while a
+  conversion runs, while a copy of an encrypted project is written (`vault::Scope` reads the copy's marker: Save As,
+  `giveNewId`, `writeUnsavedInto`) and for the emergency copy (to the same keys, its `README.txt` plain). `vault::seal` is in
+  `safesave::write` (by the QSaveFile's name: every direct writer of the program goes through it), `safesave::writeFile`,
+  `savebatch::Batch::stage` (sealed before the SHA is taken: the journal names the bytes on disk, so `recover` compares raw
+  bytes as before) and the journal (through `writeFile`); `safesave::copyFile` calls `vault::copy` (into the vault: encrypted;
+  out of it: decrypted; inside it, same keys: the bytes as they are; the raw loop uses `writeRaw`). SafeSave.h stays
+  header-only for the add-ons' plugins (they link no part of the program): `qb_tool_plugin` and `qb_importer_plugin` set
+  `QB_SAFESAVE_HEADER_ONLY` (found by v0650: the scratch pad's plugin needed `qb::vault::seal` from a host that does not
+  export it; on Windows it would not link). Pictures:
+  `vault::saveImage`, `readImage`. Readers: `vault::readFile` / `unseal` (DocumentStore, Project file, spare copy, ui state,
+  title list, snapshots and their list, objects and the schema, mind maps, look, work marks, backup ID, the journal).
+  `unseal` decrypts only in a vault folder and only data that starts with a v3 session-key packet (`isSealedData`); a plain
+  file there is read as it is (a conversion under way). With no folder in the vault every call returns at once.
+- **Comparisons are of the text**: OpenPGP output differs at every write, so every "the file holds this already" and
+  "changed elsewhere" check decrypts first (`DocumentStore::diskText`, `saveIndex`'s `shaOnDisk`, `writeUiState`, the title
+  list, the spare copy). A file that cannot be decrypted counts as another version (kept in `settings/conflicts` before it is
+  replaced). The journal's SHA values stay those of the raw bytes.
+- **QSettings** reads and writes `settings/options.ini` itself: `settingslayer::formatFor(file)` gives a registered format
+  ("qbini") for a vault folder that decrypts/encrypts the bytes and reads/writes them as INI through a file in the private
+  folder, removed at once (plain projects keep `QSettings::IniFormat`). The merged copy of the layer (program's settings with
+  the project's on top) is in the program's config folder, plain, as before.
+- **Viewers that open by path** (picture and PDF view, media player, open in another program, printing, the web page view,
+  drag and drop): `vault::plainPath` / `plainTree`: a decrypted copy in `$XDG_RUNTIME_DIR/quillbinder-plain-<pid>` (RAM on
+  systemd systems; else the temp folder), 0700, made again when the original changes, removed when the project's folder
+  leaves the vault, at the program's end (`qAddPostRoutine`) and, for a run that crashed, at the next start. "Not protected
+  while open" (the manual) covers these copies.
+- **The marker** `encryption.json` (top of the project folder; for a Scrivener project of its working copy): `format`
+  "quillbinder-encryption", `encryptedProject`, `encryptedBackups`, `writerKey`, `recoveryKey`, and while a conversion runs
+  `converting` ("encrypt"/"decrypt"), `convertingDevice` (`syncsafe::machineKey()`), `convertingSince`. Plain, no secret. It
+  and `settings/lock` are the only plain files (`vault::projectPlainNames()`); the shown lock's files (`lock-work-*.json`)
+  are encrypted.
+- **Turning it on and off, crash-safe** (`encryptFolder`, `decryptFolder`, `finishConversion`; on a closed project:
+  `ui::changeProjectEncryption` saves, closes, converts with a progress window and opens again). (1) The marker with the
+  direction is written and the folder synced before the first file changes; from then on every reader takes both kinds of
+  file and every writer writes the new kind. (2) Each file is converted on its own: written whole as `<file>.qbconvert`
+  (QSaveFile, synced), its permissions copied, renamed over the file in one step: a file is always the old or the new version.
+  (3) The marker gets its final state only after the last file and the folders' syncs. (4) An opening finds the direction in
+  the marker, opens the mixed folder (a notice) and the window finishes the conversion first (`ui::finishConversion`: this
+  device's, or another device's older than `savebatch::kOtherSaveWait`). Leftover `*.qbconvert*` files are removed by the
+  next conversion and never packed into a backup. A conversion refuses while a save journal is there. Test switch
+  `QB_TEST_CONVERT_STOP=<n>` stops after n files like a kill (nothing more done). Turning the project's encryption off keeps
+  switch 1 on [helper's choice]; plain backups made before stay plain.
+- **Opening**: `crypto::accessFor` (Plain, Ready, NeedsPassphrase, NoSecretKey, Unavailable) tries the key store once per key
+  and session; `Project::open` refuses anything but Ready before `savebatch::recover` and before anything is written (the
+  suite compares the folder's bytes). The window (`ui::unlockForFolder` in `MainWindow::openProject`, before the lock's
+  `neededVersion` read, which goes through a `vault::Scope`): the dialog `unlockDialog` (`unlockPassphrase`, `unlockWrong`;
+  the passphrase is kept in the key store after a right one: `unlockAndRemember`), or the box `encryptionKeyMissing` with
+  Import Keys (`crypto::setImportKeysHandler`, set by `ui::connectWindow`: File > Options > Encryption; true when a secret key
+  came in). A damaged encrypted file: the document is unreadable (shown empty, read-only, never written over) with
+  `errorText(Damaged)`; the rest opens.
+- **File > Options > Encryption** (part 3's `ProjectSwitches`) is connected by `ui::connectWindow` at each `adoptProject`;
+  the recipients are `keyfolder::roles()`. Switch 2 is applied while File > Options is open (it may be in "This project"
+  scope), so the conversion waits until no modal dialog is open; until then the getter shows the state asked for.
+- **Backups** (`Backup.cpp`): `"<name>.zip.gpg"` when `encryptedBackups`; the ZIP file is packed and checked in the work
+  folder as before, encrypted beside it by a key ring of the packing thread's own with the two public keys
+  (`KeyRing::device()` is not thread-safe), the plain ZIP file removed, then the check: decrypted again
+  (`decryptFileSha256`, under `deviceRingLock()`) and compared with the ZIP file's SHA-256 where a recipient's secret key is
+  unlocked here, else `isWholeMessage` (the packet headers end exactly at the file's end; needs no key). A backup that cannot
+  be encrypted is not made (never plain instead). Names: `ownForm` takes `.zip(.gpg)?`, `backupPatterns()` everywhere
+  (listing, the newest-N rule, waiting backups, Move Old Backups); `putInPlace` judges a `.gpg` in the way by
+  `isWholeMessage`. Restore: `backup::restore(..., &kind)` decrypts into the work folder (a thread, the progress handler) and
+  restores from there; the window unlocks first (`ui::unlockForFile`, by `messageKeyIds`). An encrypted project's backup is a
+  ZIP file of its encrypted files, encrypted again; restored, it is an encrypted project (its marker came along).
+- **Scrivener format**: switch 2 greyed (`canChangeProjectEncryption`); Save As / Save a Copy in Scrivener format of an
+  encrypted project are refused with `MainWindow::encryptedScrivenerText()` (box `encryptedNoScrivener`).
+- **Not hidden**: file names (ids; the conflict copies, kept versions and the emergency copy carry document titles in their
+  names), sizes and times. A version before 0.99.0 takes an encrypted project file for a damaged one and offers the spare
+  copy (which the writer must agree to; it is encrypted too and does not open either, and "Use the Copy" keeps the project
+  file as `.damaged-<time>`): read in the code, not run. "needs" cannot tell it, being inside the encrypted file.
+
+## 0.99.0: encryption, part 3 (the key wizard, Import Keys, export, File > Options > Encryption; suite `v0990k`)
+
+- **Core without windows**: `src/core/crypto/KeyFolder.*` (Qt Core only): `makeKeys`, `writeFolder` (the folder
+  "Quillbinder Keys yyyy-mm-dd", " (2)" when the name is taken; secret files 0600; `README.txt` from
+  `readmeText`, one `translate("qb::crypto::keyfolder", ...)` text per paragraph, fingerprints only), `checkFolder` (reads the files into
+  two fresh rings, encrypts a random test file to both keys and decrypts it with each key and its passphrase), `copyFolder`,
+  `importFolder`, `importKeyFile`, `exportKeys`, `refusedPlace` (project folders, backup folder, `syncProgramIn`: a folder name
+  of the path that is a sync program's name or starts with it and then no letter, so "OneDrive - Company" and "MEGAsync" count,
+  "Megapixels" does not) and the roles file `<keyring>/roles.json` (`{"mine": fp, "recovery": fp}`), which says which keys of
+  the ring are the writer's key and the recovery key. The project layer takes its two recipients from `kf::roles()`.
+- **Import goes through a ring of its own first** (`importFolder`, `importKeyFile`): a wrong passphrase must leave the device's
+  ring as it was. The recovery key's secret part is never imported, and the wizard builds the keys in a ring of its own
+  and puts them into the device's ring only after the check page (Next there = commit), so a canceled wizard leaves nothing
+  on the device; the recovery key's secret part never reaches the device. `importKeyFile`: a key with a secret part is the writer's
+  key; a public key becomes the recovery key only when the device has the writer's key and no recovery key [helper's choice].
+- **The windows** (`src/ui/EncryptionPage.*`): `KeyWizard` (a `QWizard`; the pages are `FnPage` objects with functions, so no
+  extra `Q_OBJECT`), `EncryptionPage` (section `OptionsDialog::SEncryption`, between Backup and Extras). The page does not
+  know the encrypted project: the two switches go through `qb::crypto::projectSwitches()` (`core/crypto/ProjectSwitches.h`, a
+  struct of functions; not connected = no project open); the main window connects it. The switches are applied by Apply/OK
+  (`OptionsDialog::apply`), the keys at once (Create Keys and the imports change the device, a Cancel does not undo them).
+  `encui::hooks()` lets a suite answer the folder dialog, the file dialog, the passphrase box and the message boxes and read the
+  recovery passphrase the wizard shows; the program leaves them empty.
+- **Pitfalls**: `gpg --quick-gen-key <uid> ed25519 default` makes a key without an encryption subkey (usage "default" for an
+  explicit algorithm is sign and certify); use `default default` for what Kleopatra makes. The options audit of `v0901` lists every input
+  that has no storage key; the page's name is in its `notAnOption` list. A heading added to `docs/manual.md` must be added to
+  every `docs/i18n/*/manual.md` (suite `v0950f`): the encryption text is therefore bold paragraphs at the end of section 15.
+
+## 0.99.0: encryption (item 113, part 1: the OpenPGP layer, keys, the key store; suite `v0990e`)
+
+The writer's decisions are in `src/core/crypto/OpenPgp.h` (v4 Curve25519 keys only, SEIPD v1 with MDC and AES-256, no
+AEAD, every file to the writer's key and the recovery key, no back door). What the next part (the encrypted project layer,
+`<name>.zip.gpg` backups, the key wizard, Import Keys, export, File > Options > Encryption, the key folder's README.txt,
+the manual's page, design decision 5) builds on:
+
+- **The layer** (`qb::crypto`, namespace of `src/core/crypto/`): `KeyRing` wraps one RNP context (one thread at a time).
+  `createKey(userId, passphrase)` (about 0.7 s: an Ed25519 primary key that signs and certifies, a Cv25519 subkey that
+  encrypts, no expiry, both parts protected by RNP's iterated and salted S2K with AES-256/SHA-256, tuned to about 150 ms),
+  `exportPublicKey` / `exportSecretKey` (armored `.asc`; the secret key stays protected by its passphrase),
+  `importKeys(data)` (armored or binary, several keys; refuses with a sentence per key: other versions, other algorithms or
+  curves, revoked, expired, no Cv25519 subkey; a secret part without a passphrase is not taken, its public part is),
+  `removeKey(f, secretOnly)` (the recovery key's secret part after it was exported), `encrypt` / `encryptFile` to a list of
+  primary fingerprints (only public keys needed), `decrypt` / `decryptFile` (need the unlocked secret key; nothing comes
+  back unless the integrity check passed; `decrypt` has a size limit, default 1 GiB), `changePassphrase`. Every call
+  gives an `Error`, and `errorText(Error)` the writer's sentence; `errorDetail()` RNP's words for a log. Files written by
+  `encryptFile`/`decryptFile` go through QSaveFile (whole or not at all). `looksEncrypted(head)` tells an OpenPGP message
+  from a plain file by its first bytes (for a project folder that has both during a conversion).
+- **Unlocked when**: `unlock(fingerprint, passphrase)` opens the encryption subkeys (about 120 ms) and they stay open in
+  that `KeyRing` until `lock()`/`lockAll()` or its end: once per session. Passphrases are normalized to NFC (the same
+  passphrase typed on another system opens the key). Locked key at `decrypt`: `Error::Locked` (ask the writer, then
+  `unlock`); no secret key here: `Error::NoSecretKey`.
+- **Where keys live**: `KeyRing::device()` is the ring of this device, loaded at its first use from `<data folder>/keyring`
+  (`pubring.gpg`, `secring.gpg`, GnuPG's old key ring format; the folder 0700, the files 0600); `save(dir)` after a change.
+  It holds the public keys of every project's recipients and the writer's secret key only where it was made or imported on
+  this device. A project must name its two recipients' fingerprints itself (both are needed to encrypt; RNP picks the
+  subkey).
+- **The passphrase per device**: `KeyStore::system()` (QtKeychain: KWallet over D-Bus, the Secret Service through libsecret
+  loaded at run time, Windows Credential Manager, Android Keystore; never QtKeychain's plain-file fallback), entry
+  `KeyStore::passphraseEntry(fingerprint)` under the service "Quillbinder", kept as text (the writer finds it in KWallet
+  Manager or Seahorse). The calls wait for the answer (KWallet may ask for its own password meanwhile). `NoBackend`,
+  `Denied`, `Failed`: ask for the passphrase each session. Tests: `QB_TEST_KEYSTORE=memory` (test builds only).
+- **Passphrases**: `passphrase::generate()` gives six words of the EFF's large list (English only; 77.5 bits);
+  `passphrase::check(own)` refuses fewer than 12 characters or an estimate under 50 bits, with a sentence. The generated
+  one passes always.
+- **Pitfalls found**: RNP asks for every recipient's key when the first one's text is damaged, so a damaged message to two
+  keys of one ring looked "locked"; `decrypt` now says `Damaged` when one recipient's key here is open. RNP refuses to
+  remove a secret part that is not there. The program does not reference the layer yet: once it does, it grows by about
+  6.6 MB (RNP and Botan), its libraries stay the same (libQt6DBus becomes a direct need; the AppImage carries it for Qt GUI),
+  and none of RNP's, Botan's, json-c's or bzip2's names is exported (`--exclude-libs`; the program exports its own for
+  plugins). RNP uses the system's zlib (already the program's), not the pack's `libz.a`. Without the pack (`tools/get-crypto.sh`)
+  the program builds with a layer that answers `Error::Unavailable` (Windows and Android until their parts).
+
 ## 0.94.0 beta: values compared in the form the file gives back (settings per project)
 
 `takeProjectValues()` in `src/core/SettingsLayer.cpp` compares the program's values with the base. Qt keeps a settings file it has written in its own small cache (about 100 units; 10 + keys/4 per file) with the values as set: an empty list reads back as an empty `QStringList`, a one-item list as a `QStringList`. Once the cache has dropped the file and it is read from disk, an empty list is an invalid `QVariant` and a one-item list a `QString`, and Qt 6 calls these different. The three new keys of 0.94.0 pushed the program file out of the cache, so every empty or one-item list (the 7 toolbars, `revisionColors`, hidden toolbars) counted as changed and went into the project. `snapshot()` now passes every value through `asRead()`, which turns a list into the form read from disk. The check in `tests/v062_settings.cpp` writes a large scratch settings file before `apply()` so that the cache is emptied whatever the key counts are.

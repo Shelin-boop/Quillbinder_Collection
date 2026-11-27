@@ -148,6 +148,7 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 
 
 
+
 Three more dependency packs (`tools/deps-pack.sh`, `.github/workflows/deps.yml`, the pattern of the 0.93.0 packs); each recipe
 is its `get-*.sh` script (a hash over it and the build machine), each part pinned by tag **and commit** (the script stops when
 a tag points elsewhere), none changed except where said here.

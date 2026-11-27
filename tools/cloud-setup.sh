@@ -36,6 +36,9 @@ apt_install \
     libxcb-cursor0 libxcb-icccm4 libxcb-image0 libxcb-keysyms1 libxcb-render-util0 libxcb-shape0 libxcb-xinerama0 \
     libxcb-xkb1 libxcb-randr0 libxcb-xfixes0 libxcb-sync1 libxcb-shm0 libxcb1 libx11-xcb1 \
     libwayland-client0 libwayland-cursor0 libwayland-egl1 libssl3 libcups2t64
+# 0.99.0: the headers of libsecret for the key store's Secret Service backend (QtKeychain loads the library at run time;
+# the program links nothing of it)
+apt_install libsecret-1-dev
 # the add-on "Speech Transcription" (0.61): whisper.cpp's Vulkan module for graphics cards (tools/get-whisper.sh)
 apt_install git libvulkan-dev glslc spirv-headers
 # tests: X server, window tools, the fonts the tests ask for, PDF/EPUB checkers, sound, a Vulkan driver
@@ -46,6 +49,9 @@ apt_install \
     fonts-dejavu fonts-crosextra-caladea fonts-crosextra-carlito fonts-freefont-ttf fonts-liberation \
     gstreamer1.0-plugins-base gstreamer1.0-plugins-good gstreamer1.0-libav pulseaudio pulseaudio-utils \
     mesa-vulkan-drivers
+# 0.99.0 (suite v0990e): GnuPG for the interoperability checks of the encryption, and a Secret Service (gnome-keyring) for
+# the key store's check
+apt_install gnupg gnome-keyring
 # optional, large: epubcheck (EPUB check) and LibreOffice (Word files) for the compile checks
 if [ "${QB_FULL_SETUP:-0}" = 1 ]; then
     apt_install default-jre-headless epubcheck libreoffice-writer-nogui

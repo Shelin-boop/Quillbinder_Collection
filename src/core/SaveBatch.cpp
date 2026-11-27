@@ -5,6 +5,7 @@
 #include "SafeSave.h"
 #include "SyncSafety.h"
 #include "TestSwitches.h"
+#include "crypto/Vault.h"
 
 #include <QCryptographicHash>
 #include <QDateTime>
@@ -264,13 +265,17 @@ bool Batch::contains(const QString &target) const
 bool Batch::stage(const QString &target, const QByteArray &data, const QString &title, const QString &place,
                   QString *error)
 {
+    // 0.99.0: a file of an encrypted project waits encrypted (core/crypto/Vault.h); the journal names the bytes on disk
+    QByteArray onDisk = data;
+    if (!vault::seal(target, onDisk, error))
+        return false;
     Item item;
     item.target = target;
     item.staged = target + QLatin1String(kStageSuffix);
     item.title = title;
     item.place = place;
-    item.sha = shaOf(data);
-    item.size = data.size();
+    item.sha = shaOf(onDisk);
+    item.size = onDisk.size();
     bool exists = false;
     item.before = shaOfFile(target, &exists);
     QDir().mkpath(QFileInfo(target).absolutePath());
@@ -293,7 +298,7 @@ bool Batch::stage(const QString &target, const QByteArray &data, const QString &
         }
         g_keptAside << aside;
     }
-    if (!writeSynced(item.staged, data, error))
+    if (!writeSynced(item.staged, onDisk, error))
         return false;
     if (exists)
         QFile::setPermissions(item.staged, QFile::permissions(target));
@@ -644,9 +649,15 @@ Recovery recover(const QString &folder, const QString &journal, const QString &s
             unreadable = f.errorString();
         } else {
             QJsonParseError pe;
-            const QJsonDocument d = QJsonDocument::fromJson(f.readAll(), &pe);
+            QByteArray bytes = f.readAll();
+            // 0.99.0: the journal of an encrypted project is encrypted too
+            QString sealWhy;
+            const bool opened = f.error() == QFileDevice::NoError && vault::unseal(journal, bytes, &sealWhy);
+            const QJsonDocument d = QJsonDocument::fromJson(bytes, &pe);
             if (f.error() != QFileDevice::NoError)
                 unreadable = f.errorString();
+            else if (!opened)
+                unreadable = sealWhy;
             else if (pe.error != QJsonParseError::NoError)
                 unreadable = QObject::tr("it is not complete or damaged (%1)").arg(pe.errorString());
             else if (!d.isObject() || !d.object().value(QStringLiteral("files")).isArray())

@@ -1,5 +1,6 @@
 #include "core/Objects.h"
 #include "core/SafeSave.h"
+#include "core/crypto/Vault.h"
 #include "core/SaveBatch.h"
 #include "core/Paths.h"
 
@@ -469,7 +470,8 @@ bool Store::load(QString *error)
     QFile sf(m_dir + QLatin1String("/schema.json"));
     if (sf.exists()) {
         QJsonParseError pe;
-        const QJsonDocument d = sf.open(QIODevice::ReadOnly) ? QJsonDocument::fromJson(sf.readAll(), &pe) : QJsonDocument();
+        QByteArray bytes; // (0.99.0: decrypted in an encrypted project)
+        const QJsonDocument d = vault::readFile(sf.fileName(), &bytes) ? QJsonDocument::fromJson(bytes, &pe) : QJsonDocument();
         Schema s = Schema::fromJson(d.object());
         if (s.categories.isEmpty()) {
             m_warnings << tr("The templates of the objects (%1) could not be read; the standard templates are used. "
@@ -485,9 +487,9 @@ bool Store::load(QString *error)
         if (di.fileName() == QLatin1String("images"))
             continue;
         for (const QFileInfo &fi : QDir(di.absoluteFilePath()).entryInfoList({QStringLiteral("*.json")}, QDir::Files)) {
-            QFile f(fi.absoluteFilePath());
             QJsonParseError pe;
-            const QJsonDocument d = f.open(QIODevice::ReadOnly) ? QJsonDocument::fromJson(f.readAll(), &pe) : QJsonDocument();
+            QByteArray bytes; // (0.99.0: decrypted in an encrypted project)
+            const QJsonDocument d = vault::readFile(fi.absoluteFilePath(), &bytes) ? QJsonDocument::fromJson(bytes, &pe) : QJsonDocument();
             Object o = Object::fromJson(d.object());
             if (o.id.isEmpty() || !d.isObject()) {
                 m_warnings << tr("The object file %1 could not be read; it is left as it is.").arg(fi.absoluteFilePath());
@@ -916,7 +918,7 @@ QString Store::importPicture(const QString &objectId, const QString &fieldId, co
     // pictures larger than 1600 px are made smaller (the file in the project stays small)
     if (img.width() > 1600 || img.height() > 1600)
         img = img.scaled(1600, 1600, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    if (!img.save(picturePath(name))) {
+    if (!vault::saveImage(img, picturePath(name))) { // (0.99.0: encrypted in an encrypted project)
         if (error)
             *error = tr("Cannot write %1").arg(picturePath(name));
         return QString();

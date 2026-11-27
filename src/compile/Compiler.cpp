@@ -1,4 +1,5 @@
 #include "compile/Compiler.h"
+#include "core/crypto/Vault.h"
 #include "compile/Progress.h"
 
 #include "text/Script.h"
@@ -1188,7 +1189,7 @@ void Compiler::appendObjectSheets(Manuscript &m)
                 }
                 case objects::FieldType::Picture: {
                     const QString file = o->text(f.id);
-                    const QImage img(file.isEmpty() ? QString() : store->picturePath(file));
+                    const QImage img = file.isEmpty() ? QImage() : vault::readImage(store->picturePath(file));
                     if (img.isNull())
                         continue;
                     Run r;
@@ -1542,7 +1543,7 @@ void Compiler::finish(Manuscript &m)
     o.date = m_settings.date.isEmpty() ? QDate::currentDate().toString(Qt::ISODate) : m_settings.date;
     if (BinderItem *cover = m_project->item(m_settings.coverId))
         if (cover->type == ItemType::Image)
-            o.cover = QImage(m_project->mediaFilePath(cover));
+            o.cover = vault::readImage(m_project->mediaFilePath(cover)); // (0.99.0: decrypted in an encrypted project)
     if (!m_settings.language.isEmpty())
         m.language = m_settings.language;
     if (!m_settings.subtitle.isEmpty())

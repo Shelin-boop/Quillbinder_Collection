@@ -1,4 +1,5 @@
 #include "ui/TextEditor.h"
+#include "core/crypto/Vault.h"
 #include "ui/UndoNames.h"
 #include "ui/Commands.h"
 #include "ui/Zoom.h"
@@ -1474,7 +1475,7 @@ void TextEditor::dropEvent(QDropEvent *e)
             setTextCursor(dropPos);
             for (BinderItem *it : items)
                 if (it->type == ItemType::Image)
-                    insertImageFile(m_project->mediaFilePath(it));
+                    insertImageFile(vault::plainPath(m_project->mediaFilePath(it))); // (0.99.0: decrypted copy)
         } else if (!items.isEmpty()) {
             if (!onSelection)
                 setTextCursor(dropPos);

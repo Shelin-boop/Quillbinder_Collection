@@ -5,6 +5,8 @@
 #include "core/FailureKind.h"
 #include "core/SafeSave.h"
 #include "core/SaveBatch.h"
+#include "core/crypto/ProjectCrypto.h"
+#include "core/crypto/Vault.h"
 #include "core/PathSafety.h"
 #include "core/Paths.h"
 #include "core/Timing.h"
@@ -133,6 +135,9 @@ Project::~Project()
     delete m_model;
     m_model = nullptr;
     delete m_root;
+    // 0.99.0: an encrypted project's folder leaves the vault (and the decrypted copies of its media go)
+    if (!m_vaultFolder.isEmpty())
+        vault::remove(m_vaultFolder);
 }
 
 QString Project::resolveProjectFile(const QString &path)
@@ -223,6 +228,33 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
     std::unique_ptr<Project> p(new Project);
     p->m_indexFile = file;
     p->m_folder = QFileInfo(file).absolutePath();
+    // 0.99.0 (item 113): an encrypted project opens only when this device can decrypt it; before anything is read or
+    // written (a refusal changes nothing in the folder). Its folder is then in the vault (core/crypto/Vault.h): every
+    // read decrypts, every write encrypts.
+    {
+        const crypto::ProjectSettings cs = crypto::settingsOf(p->m_folder);
+        if (cs.isEncryptedFolder()) {
+            const crypto::Access a = crypto::accessFor(p->m_folder);
+            if (a != crypto::Access::Ready) {
+                if (error)
+                    *error = a == crypto::Access::NeedsPassphrase ? crypto::errorText(crypto::Error::Locked)
+                                                                  : crypto::accessText(a, p->m_folder);
+                return nullptr;
+            }
+            vault::add(p->m_folder, cs.recipients.list(), vault::projectPlainNames(),
+                       cs.converting != QLatin1String("decrypt"));
+            p->m_vaultFolder = p->m_folder;
+            p->m_vaultRecipients = cs.recipients.list();
+            if (!cs.converting.isEmpty()) {
+                const QString told = cs.converting == QLatin1String("encrypt")
+                                         ? tr("The encryption of this project's files was not finished; some files are still "
+                                              "plain. It is finished at the next opening.")
+                                         : tr("The decryption of this project's files was not finished; some files are still "
+                                              "encrypted. It is finished at the next opening.");
+                p->openNotice = p->openNotice.isEmpty() ? told : p->openNotice + QStringLiteral("\n\n") + told;
+            }
+        }
+    }
     // 0.65.0 (audit F19): a save that was cut off is finished, or dropped as a whole, before anything is read
     {
         const savebatch::Recovery r = savebatch::recover(p->m_folder, p->journalFile(), p->settingsDir());
@@ -254,9 +286,9 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
     // the project file that just opened: the spare copy if it is ever damaged (0.20); written only
     // when it differs, so opening alone changes no file a sync program would carry (0.64)
     if (!p->m_loadedIndex.isEmpty()) {
-        QFile old(spareCopyOf(file));
-        const bool same = old.open(QIODevice::ReadOnly) && old.readAll() == p->m_loadedIndex;
-        old.close();
+        // (0.99.0: the texts compared, an encrypted copy decrypted)
+        QByteArray spareNow;
+        const bool same = vault::readFile(spareCopyOf(file), &spareNow) && spareNow == p->m_loadedIndex;
         // 0.81.0 (audit of 0.80.0, U-02): the copies of the two openings before stay as spare-copy-2 and
         // spare-copy-3, so that a project file that reads well but is wrong (an older version a sync program brought)
         // does not take the only way back
@@ -279,11 +311,12 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
     // ui state (before the document store, which takes zoom and page view from it): this
     // computer's own file, else the one of versions before 0.64
     // (0.81.0: by the computer's key; 0.64 to 0.80 by its name)
-    QFile ui(QFileInfo::exists(p->uiStateFile())      ? p->uiStateFile()
-             : QFileInfo::exists(p->oldUiStateFile()) ? p->oldUiStateFile()
-                                                       : QDir(p->settingsDir()).filePath(QStringLiteral("ui.json")));
-    if (ui.open(QIODevice::ReadOnly))
-        p->uiState = QJsonDocument::fromJson(ui.readAll()).toVariant().toMap();
+    const QString uiFile = QFileInfo::exists(p->uiStateFile())      ? p->uiStateFile()
+                           : QFileInfo::exists(p->oldUiStateFile()) ? p->oldUiStateFile()
+                                                                     : QDir(p->settingsDir()).filePath(QStringLiteral("ui.json"));
+    QByteArray uiBytes;
+    if (vault::readFile(uiFile, &uiBytes))
+        p->uiState = QJsonDocument::fromJson(uiBytes).toVariant().toMap();
     p->m_docs = new DocumentStore(p.get());
     // snapshots flags
     for (BinderItem *it : p->allItems()) {
@@ -741,10 +774,11 @@ int Project::compareVersionText(const QString &a, const QString &b)
 
 QString Project::neededVersion(const QString &projectFile)
 {
-    QFile f(projectFile);
-    if (!f.open(QIODevice::ReadOnly))
+    // (0.99.0: an encrypted project file is read through the vault: a folder that is not in it gives "")
+    QByteArray bytes;
+    if (!vault::readFile(projectFile, &bytes))
         return QString();
-    QXmlStreamReader xml(&f);
+    QXmlStreamReader xml(bytes);
     while (!xml.atEnd())
         if (xml.readNext() == QXmlStreamReader::StartElement)
             return xml.attributes().value(QLatin1String("needs")).toString(); // the root element
@@ -857,12 +891,11 @@ QString Project::oldUiStateFile() const
 bool Project::writeUiState()
 {
     const QByteArray data = QJsonDocument::fromVariant(uiState).toJson();
-    QFile old(uiStateFile());
-    if (old.open(QIODevice::ReadOnly) && old.readAll() == data) {
+    QByteArray before;
+    if (vault::readFile(uiStateFile(), &before) && before == data) {
         m_uiDirty = false;
         return true; // the same as before: nothing for a sync program to carry
     }
-    old.close();
     // 0.65.0 (audit F16): the mark is cleared only once the file is written, so a failed write is tried again
     QSaveFile ui(uiStateFile());
     const bool ok = ui.open(QIODevice::WriteOnly) && safesave::write(ui, data) == data.size() && safesave::commit(ui);
@@ -993,6 +1026,19 @@ EmergencyReport Project::makeEmergencyCopy(const QString &parent)
         return rep;
     }
     rep.dir = dir;
+    // 0.99.0: the emergency copy of an encrypted project is encrypted too (to the same keys), all but its README
+    struct VaultScope {
+        QString dir;
+        ~VaultScope()
+        {
+            if (!dir.isEmpty())
+                vault::remove(dir);
+        }
+    } emergencyVault;
+    if (!m_vaultRecipients.isEmpty()) {
+        vault::add(dir, m_vaultRecipients, {QStringLiteral("README.txt")});
+        emergencyVault.dir = dir;
+    }
     QString firstError;
     if (m_docs)
         m_docs->writeUnsaved(dir, &firstError, &rep.tally);
@@ -1031,6 +1077,9 @@ EmergencyReport Project::makeEmergencyCopy(const QString &parent)
                      "folder. The binder is written into the .scriv with the next save that works; do not copy this file "
                      "over anything by hand.\n\n")
                       .arg(copyName, QDir::toNativeSeparators(m_folder));
+    if (!m_vaultRecipients.isEmpty())
+        readme += tr("The project is encrypted, and so are the files of this copy (OpenPGP, to your key and the recovery "
+                     "key; only this note is plain): Kleopatra, Gpg4win or GnuPG decrypt them with your key.\n\n");
     if (rep.complete())
         readme += tr("This copy is complete: all %1 files were written.\n").arg(rep.tally.wanted);
     else
@@ -1133,6 +1182,8 @@ int Project::recoverUnlistedDocuments(QString *folderTitle)
 
 bool Project::writeUnsavedInto(const QString &folder, const QString &indexFileName, QString *error)
 {
+    // 0.99.0: the copy of an encrypted project's folder is encrypted (its marker came with the copy)
+    vault::Scope encrypted(folder);
     bool ok = true;
     QString first;
     if (m_docs && !m_docs->writeDirtyInto(folder, &first))
@@ -1275,9 +1326,8 @@ bool Project::saveImpl(QString *error, bool quick)
             // the list of documents with their titles and files (0.65.0): only when it changed
             if (ok && binderChanged && scrivenerPath.isEmpty()) {
                 const QByteArray list = titleListText().toUtf8();
-                QFile cur(titleListFile());
-                if (!(cur.open(QIODevice::ReadOnly) && cur.readAll() == list)) {
-                    cur.close();
+                QByteArray cur;
+                if (!(vault::readFile(titleListFile(), &cur) && cur == list)) {
                     QString why;
                     if (!savebatch::put(titleListFile(), list, &why, tr("list of documents")) && error)
                         *error = why; // not a reason to stop the save: the program never reads it
@@ -1839,9 +1889,14 @@ bool Project::saveIndex(QString *error)
     // what the file holds now (0.65.0, audit F14; 0.92.0)
     QByteArray shaOnDisk;
     if (m_indexMark.known && QFileInfo::exists(m_indexFile)) {
-        QFile cur(m_indexFile);
-        if (cur.open(QIODevice::ReadOnly))
-            shaOnDisk = QCryptographicHash::hash(cur.readAll(), QCryptographicHash::Sha256);
+        // (0.99.0: of the text: an encrypted file is decrypted; one that cannot be decrypted counts as another version)
+        QByteArray cur;
+        QString why;
+        crypto::Error kind = crypto::Error::None;
+        if (vault::readFile(m_indexFile, &cur, &why, &kind))
+            shaOnDisk = QCryptographicHash::hash(cur, QCryptographicHash::Sha256);
+        else if (kind != crypto::Error::Io)
+            shaOnDisk = QByteArray("undecryptable");
     }
     if (!shaOnDisk.isEmpty() && !m_indexSha.isEmpty()) {
         if (shaOnDisk != m_indexSha) {
@@ -1920,6 +1975,15 @@ bool Project::loadIndex(QString *error)
     QString msg;
     int line = 0, col = 0;
     m_loadedIndex = f.readAll();
+    // 0.99.0: an encrypted project file is decrypted; one that cannot be is damaged (the spare copy is offered)
+    {
+        QString why;
+        if (!vault::unseal(m_indexFile, m_loadedIndex, &why)) {
+            if (error)
+                *error = tr("The project file is damaged (%1).").arg(why);
+            return false;
+        }
+    }
     m_indexMark = syncsafe::stampOf(m_indexFile);
     m_indexSha = QCryptographicHash::hash(m_loadedIndex, QCryptographicHash::Sha256);
     {

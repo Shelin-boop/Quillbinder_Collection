@@ -1,5 +1,6 @@
 #include "core/PathSafety.h"
 #include "core/SafeSave.h"
+#include "core/crypto/Vault.h"
 #include "core/Snapshots.h"
 #include "core/BinderItem.h"
 #include "core/DocumentStore.h"
@@ -32,11 +33,14 @@ static QJsonObject readIndex(const QString &dir, bool *damaged = nullptr)
     if (!f.exists())
         return QJsonObject();
     QByteArray data;
-    if (f.open(QIODevice::ReadOnly))
+    bool opened = true; // (0.99.0: decrypted in an encrypted project; one that cannot be counts as damaged)
+    if (f.open(QIODevice::ReadOnly)) {
         data = f.readAll();
+        opened = vault::unseal(f.fileName(), data);
+    }
     QJsonParseError pe{};
     const QJsonDocument d = QJsonDocument::fromJson(data, &pe);
-    if (f.error() == QFileDevice::NoError && pe.error == QJsonParseError::NoError && d.isObject())
+    if (opened && f.error() == QFileDevice::NoError && pe.error == QJsonParseError::NoError && d.isObject())
         return d.object();
     if (damaged)
         *damaged = true;
@@ -112,10 +116,10 @@ bool sameAsNewest(Project *p, const QString &docId)
     const QList<Snapshot> all = list(p, docId);
     if (all.isEmpty())
         return false;
-    QFile f(all.first().file);
-    if (!f.open(QIODevice::ReadOnly))
+    QByteArray newest;
+    if (!vault::readFile(all.first().file, &newest)) // (0.99.0: decrypted in an encrypted project)
         return false;
-    return f.readAll() == p->docs()->serialize(docId, p->docs()->text(docId));
+    return newest == p->docs()->serialize(docId, p->docs()->text(docId));
 }
 
 bool take(Project *p, const QString &docId, const QString &title, QString *error, QTextDocument *from)
@@ -164,11 +168,20 @@ bool load(Project *p, const Snapshot &s, QTextDocument *into, QString *error)
             *error = QObject::tr("The snapshot's file cannot be read: %1").arg(f.exists() ? f.errorString() : QObject::tr("it is gone"));
         return false;
     }
-    const QByteArray data = f.readAll();
+    QByteArray data = f.readAll();
     if (f.error() != QFileDevice::NoError || data.size() != f.size()) {
         if (error)
             *error = QObject::tr("The snapshot's file could not be read whole (%1 of %2 bytes).").arg(data.size()).arg(f.size());
         return false;
+    }
+    // 0.99.0: a snapshot of an encrypted project is decrypted
+    {
+        QString why;
+        if (!vault::unseal(s.file, data, &why)) {
+            if (error)
+                *error = QObject::tr("The snapshot's file cannot be read: %1").arg(why);
+            return false;
+        }
     }
     p->docs()->deserialize(s.id, data, into, s.file.endsWith(QLatin1String(".rtf")));
     return true;
