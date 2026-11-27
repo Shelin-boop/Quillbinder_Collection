@@ -96,7 +96,7 @@ void MainWindow::loadPaneSettings(QSettings &s)
 QList<int> MainWindow::paneSizes() const
 {
     QList<int> r{m_wideSizes[0], m_wideSizes[1], m_wideSizes[2]};
-    if (!m_upright) {
+    if (!m_upright && !m_small) {
         const QList<int> now = m_mainSplit->sizes();
         for (int i = 0; i < 3 && i < now.size(); ++i)
             if (now[i] > 0 && !paneWidget(paneIndex(m_wideOrder.at(i)))->isHidden())
@@ -110,7 +110,7 @@ QList<int> MainWindow::paneSizes() const
 
 void MainWindow::capturePaneSizes()
 {
-    if (!m_mainSplit || !m_sideSplit)
+    if (!m_mainSplit || !m_sideSplit || m_small) // (the small interface keeps the full interface's sizes as they were)
         return;
     const QList<int> main = m_mainSplit->sizes();
     if (!m_upright) {
@@ -135,6 +135,8 @@ void MainWindow::capturePaneSizes()
 
 void MainWindow::applyPaneSizes()
 {
+    if (m_small)
+        return;
     if (!m_upright) {
         QList<int> sizes;
         for (int i = 0; i < 3; ++i) {
@@ -155,7 +157,7 @@ void MainWindow::applyPaneSizes()
 
 void MainWindow::arrangePanes()
 {
-    if (!m_mainSplit || !m_sideSplit)
+    if (!m_mainSplit || !m_sideSplit || m_small)
         return;
     setUpdatesEnabled(false);
     // the side row leaves the main splitter first (it has no place there while the window is wide)
@@ -198,7 +200,7 @@ void MainWindow::arrangePanes()
 
 void MainWindow::updatePaneRow()
 {
-    if (!m_upright)
+    if (!m_upright || m_small)
         return;
     const bool any = !m_binder->isHidden() || !m_inspector->isHidden();
     if (any != !m_sideSplit->isHidden()) {
@@ -216,12 +218,16 @@ void MainWindow::followWindowShape()
     m_upright = up;
     arrangePanes();
     updatePaneActions();
+    if (m_small)
+        refitSmallPanels(); // the bar goes to the bottom or the right edge, the open panel changes its shape
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
     QMainWindow::resizeEvent(e);
     windowPlaceChanged();
+    if (m_small)
+        QTimer::singleShot(0, this, [this] { refitSmallPanels(); });
     if (wantsUpright() != m_upright && !m_shapeCheckQueued) {
         m_shapeCheckQueued = true;
         QTimer::singleShot(0, this, [this] {

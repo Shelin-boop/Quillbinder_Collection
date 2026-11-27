@@ -20,6 +20,15 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   (style, font, size, line spacing, quick search, themes) grow and shrink with the size, so that the bars of a row keep one
   height. Normal is 22 px; Android starts with Large (32 px). The size belongs to the profile in use. The button
   "Standard Set" of Customize Toolbars is now called **Reset**.
+- **The small interface** (item 122): **View > Small Interface** gives the text the whole window and puts a few round
+  buttons at its edge (a column at the right in a wide window, a row at the bottom in an upright one): the menu (all menus
+  of the menu bar and the way back), a new document, bold, italic, a style choice, the binder, labels and icons, record
+  only and the document's notes. The binder and the notes are slide-in panels (from the left and the right, or a sheet in
+  an upright window). The toolbars and the menu bar are hidden while it runs; switching it off gives the full interface back
+  exactly as it was. Off at first on Linux and Windows and switched by hand only; a profile keeps it. On Android it is
+  automatic below 1920 x 1080 physical pixels, with the choice Full, Small or Automatic. The buttons are at least 9 mm wide
+  and high and follow the theme and the toolbar size. **Record Only** needs the speech add-on, which has a new command
+  "Record Only" (also in Edit > Writing Tools); without it the button is grayed and says why.
 - **The update file and the download page follow the label of their system.** The update file names the label of the
   system it is made for (`beta` for Linux, `experimental` for Windows and Android), and the download page leaves out
   the sentence "This is a ... version" when a release has no label.

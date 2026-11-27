@@ -99,6 +99,7 @@ QString libraryError() { return QString::fromLocal8Bit(dlerror()); }
 #endif
 
 const QString kRecord = QStringLiteral("speech-transcription.record");
+const QString kRecordOnly = QStringLiteral("speech-transcription.record-only");
 const QString kShow = QStringLiteral("speech-transcription.show");
 const QString kTab = QStringLiteral("speech-transcription.list");
 
@@ -140,13 +141,20 @@ QList<Command> SpeechTool::commands() const
     rec.place = QStringLiteral("edit/writing-tools");
     rec.icon = QStringLiteral("audio-input-microphone");
     rec.toolTip = tr("Start or stop speech transcription (the arrow beside the button: microphone and options)");
+    // 0.99.0: records only (no model, the text later), whatever the option says; the small interface's round button
+    Command only;
+    only.key = kRecordOnly;
+    only.text = tr("Record &Only");
+    only.place = QStringLiteral("edit/writing-tools");
+    only.icon = QStringLiteral("media-record");
+    only.toolTip = tr("Start or stop a recording without writing its text (the text can be written later with Transcribe)");
     Command show;
     show.key = kShow;
     show.text = tr("Show &Transcriptions");
     show.place = QStringLiteral("edit/writing-tools");
     show.icon = QStringLiteral("view-list-text");
     show.toolTip = tr("The transcriptions in the inspector");
-    return {rec, show};
+    return {rec, only, show};
 }
 
 void SpeechTool::setHost(ToolHost *host)
@@ -164,7 +172,12 @@ void SpeechTool::run(const QString &key)
 {
     if (key == kRecord)
         toggleRecording();
-    else if (key == kShow && m_host && m_host->apiVersion() >= 110)
+    else if (key == kRecordOnly) {
+        if (isRecording())
+            stopRecording();
+        else if (!isBusy())
+            startRecordOnly(QString());
+    } else if (key == kShow && m_host && m_host->apiVersion() >= 110)
         m_host->showInspectorTab(kTab);
 }
 

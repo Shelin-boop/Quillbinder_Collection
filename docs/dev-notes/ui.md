@@ -2,6 +2,39 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: small interface (item 122)
+
+- `MainWindowSmall.cpp` (`MainWindow::setSmallInterface`), the rules and the panel in `ui/SmallInterface.*`. The mode is a
+  program setting (`window/smallInterface`, written by `setSmallInterface` and by `saveWindowSettings`, read at the start and by
+  `reloadFromProfile`), so a profile holds it with no code of its own (`Profiles::ownsKey` takes every key but the excluded
+  ones). Android keeps `window/smallInterfaceChoice` ("full", "small", "auto") instead; `smallui::resolve(choice, physical
+  pixels)` is the rule (the longer side below 1920 or the shorter below 1080), `MainWindow::applySmallRule(size)` applies it
+  and is called with the real screen at the start and at a change of the choice (the tests call it with sizes).
+- Nothing of the full interface is thrown away while the mode runs: the bars are only hidden (`applyBarVisibility` hides them
+  and returns while `m_small`), the menu bar is hidden, the binder and the inspector are moved into the two `SlidePanel`s (the
+  panel's holder takes them with `setContent`: a widget that the window put back into its splitter since is taken again, a
+  pitfall found by the second switch on) and come back through `arrangePanes()`. `arrangePanes`, `applyPaneSizes`,
+  `capturePaneSizes`, `updatePaneRow` and `fitPanesToScreen` do nothing while `m_small`, so the sizes of the full interface
+  (`m_wideSizes`, the upright shares) stay as they were; `paneSizes()` does not read the splitter then. The switches Show
+  Binder and Show Inspector are disabled meanwhile and put back to the values they had (`m_smallBinderChecked` ...); a profile
+  switch updates those values first.
+- The round bar is a plain `QToolBar` (`smallBar`) that is in the window's layout only while the mode runs (`placeSmallBar`
+  adds it to the bottom or the right edge by the window's shape and takes it out again with `removeToolBar`), so the window's
+  saved state never knows it. Buttons: `QToolButton`s with the action as default action (new, bold, italic, binder, notes,
+  record) or a menu (the style menu and the label and icon menus of the Documents menu are the existing `QMenu`s; the menu
+  button lists `menuBar()->actions()` menus, filled when it opens). Size: the larger of 9 mm at the screen's physical DPI
+  (divided by the pixel ratio) and the toolbar icon size plus 14, at most a sixth of the window's short side; the look is a
+  style sheet of palette() colors, so the theme and `:focus` (a 3 px line) follow.
+- Record only: the speech add-on got the command `speech-transcription.record-only` (starts or stops a recording that never
+  loads a model, whatever "When the microphone starts" says). The main window makes `tool:speech-transcription.record-only`
+  for it like for every command; the button follows its presence (grayed with the reason when the add-on is missing or has no
+  such command) and the checked state of `tool:speech-transcription.record`.
+- The focus line is a layer that follows its target by Move and Resize events of the target only; a panel that slides moves its
+  children without such events, so `SlidePanel::settled` makes the window call `FocusLine::refresh()`.
+- Keys not to forget: the other View items that change panes or bars (Layout, Toolbars) are disabled while the mode runs;
+  commands that show the inspector by themselves (a click on a comment mark) act on the hidden inspector in the closed panel
+  (`m_inspector->show()` has no effect there) and are not redirected to the notes panel.
+
 ## 0.99.0: toolbar sizes (item 116)
 
 - One size for every bar: `AppSettings::toolbarIconSize` (settings `toolbars/iconSize`; 16 Small, 22 Normal, 32 Large;
