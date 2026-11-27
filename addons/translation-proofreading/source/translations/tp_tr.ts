@@ -281,7 +281,7 @@
     </message>
     <message>
         <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation>İşlemci çekirdeği sayısı ve kullanılmayan bir modelin kaldırılacağı süre, tüm yapay zekâ işlevleri için birlikte File &gt; Options &gt; General &gt; AI Models bölümünde ayarlanır.</translation>
+        <translation>İşlemci çekirdeklerinin sayısı ve kullanılmayan bir modelin bellekten boşaltılacağı süre, tüm yapay zekâ işlevleri için birlikte Dosya &gt; Seçenekler &gt; Genel &gt; Yapay Zekâ Modelleri bölümünde ayarlanır.</translation>
     </message>
     <message>
         <source>Careful: the model weighs even more possibilities (slower, now and then better)</source>
@@ -443,7 +443,7 @@ By downloading it you accept its license: %2</source>
     </message>
     <message>
         <source>Translate the result back into the language of your text, to see what it says</source>
-        <translation>Sonucu ne dediğini görmek için metninizin diline geri çevirin</translation>
+        <translation>Sonucun ne dediğini görmek için onu metninizin diline geri çevirin</translation>
     </message>
     <message>
         <source>Models...</source>
@@ -623,15 +623,15 @@ By downloading it you accept its license: %2</source>
     </message>
     <message>
         <source>No translation model is downloaded yet for %1 to %2: %3. Choose them with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 → %2 için henüz indirilmiş bir çeviri modeli yok: %3. Bunları Modeller... ile seçin (Dosya &gt; Seçenekler &gt; Çeviri Yardımcısı).</translation>
     </message>
     <message>
         <source>Missing: %1. Download them in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksik: %1. Bunları eklentinin seçeneklerinden indirin (Dosya &gt; Seçenekler &gt; Çeviri Yardımcısı).</translation>
     </message>
     <message>
         <source>Missing: %1. Download it in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksik: %1. Bunu eklentinin seçeneklerinden indirin (Dosya &gt; Seçenekler &gt; Çeviri Yardımcısı).</translation>
     </message>
     <message>
         <source>Translated through English (%1 to English to %2): two steps, so a mistake of the first one is carried into the second.</source>
@@ -935,27 +935,27 @@ By downloading it you accept its license: %2</source>
     </message>
     <message>
         <source>Similar translations (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Benzer çeviriler (%1, “%2” için):</translation>
     </message>
     <message>
         <source>Similar translations (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Benzer çeviriler (%1):</translation>
     </message>
     <message>
         <source>Similar (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Benzerler (%1, “%2” için):</translation>
     </message>
     <message>
         <source>Similar (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Benzerler (%1):</translation>
     </message>
     <message>
         <source>%1 (German): spelling suggestions and similar words are given for English words.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (Almanca): yazım önerileri ve benzer sözcükler İngilizce sözcükler için verilir.</translation>
     </message>
     <message>
         <source>%1 (from “%2”)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (“%2” kökünden)</translation>
     </message>
     <message>
         <source>Similar German words (%1):</source>
@@ -1003,7 +1003,7 @@ By downloading it you accept its license: %2</source>
     </message>
     <message>
         <source>Put into the editor. Edit &gt; Undo there takes it back.</source>
-        <translation>Düzenleyiciye konuldu. Orada Düzen &gt; Geri Al bunu geri alır.</translation>
+        <translation>Düzenleyiciye konuldu. Orada Düzenle &gt; Geri Al bunu geri alır.</translation>
     </message>
     <message>
         <source>The result is copied.</source>

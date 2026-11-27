@@ -9,7 +9,7 @@
         </message>
         <message>
             <source>&amp;Step up</source>
-            <translation>Yukarı &amp;artır</translation>
+            <translation>&amp;Yukarı artır</translation>
         </message>
         <message>
             <source>&amp;Select All</source>
@@ -66,7 +66,7 @@ Press ESC to cancel</source>
         </message>
         <message>
             <source>&amp;Basic colors</source>
-            <translation>&amp;Temel renkler</translation>
+            <translation>Temel &amp;renkler</translation>
         </message>
         <message>
             <source>&amp;Custom colors</source>
@@ -126,7 +126,7 @@ Yine de silmek istiyor musunuz?</translation>
         </message>
         <message>
             <source>File &amp;name:</source>
-            <translation>Dosya &amp;adı:</translation>
+            <translation>&amp;Dosya adı:</translation>
         </message>
         <message>
             <source>Alt+Left</source>
@@ -222,7 +222,7 @@ Lütfen klasör adının doğru girildiğini denetleyin.</translation>
         </message>
         <message>
             <source>&amp;Rename</source>
-            <translation>&amp;Yeniden Adlandır</translation>
+            <translation>Yeniden &amp;Adlandır</translation>
         </message>
         <message>
             <source>Could not delete directory.</source>
@@ -330,7 +330,7 @@ Lütfen dosya adının doğru girildiğini denetleyin.</translation>
         </message>
         <message>
             <source>Font st&amp;yle</source>
-            <translation>Yazı tipi &amp;stili</translation>
+            <translation>Yazı &amp;tipi stili</translation>
         </message>
         <message>
             <source>Wr&amp;iting System</source>
@@ -372,7 +372,7 @@ Lütfen dosya adının doğru girildiğini denetleyin.</translation>
         </message>
         <message>
             <source>&amp;Redo</source>
-            <translation>&amp;Yinele</translation>
+            <translation>Y&amp;inele</translation>
         </message>
         <message>
             <source>&amp;Undo</source>
@@ -478,7 +478,7 @@ Lütfen dosya adının doğru girildiğini denetleyin.</translation>
         </message>
         <message>
             <source>Page Layout</source>
-            <translation>Sayfa Düzeni</translation>
+            <translation>Sayfa Yerleşimi</translation>
         </message>
         <message>
             <source>Width:</source>
@@ -613,11 +613,11 @@ Lütfen dosya adının doğru girildiğini denetleyin.</translation>
         </message>
         <message>
             <source>Discard</source>
-            <translation>At</translation>
+            <translation>Kaydetme</translation>
         </message>
         <message>
             <source>Yes to &amp;All</source>
-            <translation>Tümüne &amp;Evet</translation>
+            <translation>&amp;Tümüne Evet</translation>
         </message>
     </context>
     <context>
@@ -831,7 +831,7 @@ Lütfen farklı bir dosya adı seçin.</translation>
         </message>
         <message>
             <source>Export to PDF</source>
-            <translation>PDF'ye Aktar</translation>
+            <translation>PDF Olarak Dışa Aktar</translation>
         </message>
         <message>
             <source>Previous page</source>
@@ -949,7 +949,7 @@ Lütfen farklı bir dosya adı seçin.</translation>
         </message>
         <message>
             <source>Return</source>
-            <translation>Return</translation>
+            <translation>Enter</translation>
         </message>
         <message>
             <source>Backtab</source>
@@ -1035,7 +1035,7 @@ Lütfen farklı bir dosya adı seçin.</translation>
         </message>
         <message>
             <source>&amp;Redo</source>
-            <translation>&amp;Yinele</translation>
+            <translation>Y&amp;inele</translation>
         </message>
         <message>
             <source>&amp;Undo</source>
@@ -1055,7 +1055,7 @@ Lütfen farklı bir dosya adı seçin.</translation>
         </message>
         <message>
             <source>Copy &amp;Link Location</source>
-            <translation>Bağlantı Bağlantı Konumunu &amp;KopyalaAdresini Kopyala</translation>
+            <translation>&amp;Bağlantı Adresini Kopyala</translation>
         </message>
     </context>
 </TS>
