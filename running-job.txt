@@ -1,8 +1,8 @@
-state: running
-system: android
-job: item 112, the handwriting add-on for Android (an add-on only, no new program version): feasibility of the recognizer and the add-on interface first
-branch: android/handwriting
-chat: started 2026-11-26 20:01 Berlin
-started: 2026-11-26 20:31 Berlin
+state: free
+system:
+job:
+branch:
+chat:
+started:
 paused:
-note: waiting for test pictures (morning of 2026-11-27); the recognizer runs in the session (ONNX), nothing pushed yet. last job: the run 0.95.0 (complete on all three systems).
+note: last job: item 112 (handwriting), first planned as an Android add-on; ended 2026-11-27 03:46 Berlin without a push: the item moved into the next run, built into the program on all three systems. Before it: the run 0.95.0 (complete on all three systems).
