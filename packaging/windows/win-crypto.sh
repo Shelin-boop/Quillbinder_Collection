@@ -66,6 +66,13 @@ P=$(cygpath -m "$PREFIX")
 
 # ---- Botan: static, minimized, MSVC with /MD, built with Ninja
 echo "== Botan"
+# Botan 3.14.1's ffi_util.h line 291 (botan_ffi_visit) does not compile with MSVC 14.52 (run 46026018575: C2512 "no
+# appropriate default constructor" on every FFI file that visits an object): the same test written with std::invoke_result_t,
+# which means the same for a generic lambda. The only change to the source; the script stops when the line is not there.
+FFU="$WORK/botan/src/lib/ffi/ffi_util.h"
+grep -qF 'std::is_void_v<decltype(func(ref))>' "$FFU" || { echo "win-crypto: ffi_util.h is not as expected" >&2; exit 1; }
+sed -i 's/std::is_void_v<decltype(func(ref))>/std::is_void_v<std::invoke_result_t<VisitorFnT\&, std::remove_reference_t<decltype(ref)>\&>>/' "$FFU"
+grep -n 'invoke_result_t' "$FFU"
 ( cd "$WORK/botan"
   "$PY" ./configure.py --prefix="$P" --os=windows --cpu=x86_64 --cc=msvc --msvc-runtime=MD --build-targets=static \
       --disable-shared-library --minimized-build --enable-modules="$(echo $BOTAN_MODULES | tr ' ' ',')" \
