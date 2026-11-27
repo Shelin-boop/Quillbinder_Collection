@@ -61,19 +61,25 @@ Since 0.93.0 the same is asked of the folder's entry after the files of a save a
 
 **What would change it.** A sync program shown to upload files that are still open and to keep the incomplete upload.
 
-## 5. Projects are plain files; the program does not encrypt them
+## 5. Encryption at rest is optional, and it is OpenPGP
 
-**What.** A project is a folder of ordinary text files (Markdown or RTF); a backup is an ordinary ZIP file (manual, "Where your work lives").
+**What.** Since 0.99.0 the writer can lock backups and projects with a key (File > Options > Encryption). It is off until keys are made. Locked files are OpenPGP files: a backup is `<name>.zip.gpg`, and a locked project is encrypted file by file. Everything is locked to two keys, the writer's key and a recovery key. The keys are version 4 keys on Curve25519 (an Ed25519 key with a Cv25519 subkey), the files use the integrity-protected packet of OpenPGP with AES-256, and the layer is RNP with Botan, built into the program. Without keys, and for a project in Scrivener's format, a project is still a folder of ordinary text files and a backup an ordinary ZIP file. (The audits' findings CY-F03 and QBA-S03 asked about this: before 0.99.0 the answer was that the program does not encrypt; this entry replaces that answer.)
 
-**Why.**
-- The writing must stay readable without the program: with any editor, on any system, years from now, and on the day the program itself is broken. [recorded: manual] Encryption inside the program would make the program and a password the only way to the text. A forgotten password or a damaged key would then be a lost manuscript, and for a writer that is the worse risk than someone reading the disk. [reasoning]
-- A project in Scrivener's format must stay a project Scrivener can open. [recorded]
-- Safety in a sync folder works by comparing files' content and keeping versions side by side; that needs files other programs can carry and the writer can open. [reasoning]
-- Encrypting the drive or the home folder (LUKS, fscrypt, BitLocker) protects everything at once, also backups, snapshots, temporary files and crash reports, without these costs. [reasoning]
+**Why optional.**
+- The writing must stay readable without the program, on the day the program itself is broken. [recorded: manual, "Opening your files without Quillbinder"] A project that is not encrypted stays what it was. A project in Scrivener's format must stay one Scrivener can open, so it is never encrypted. [recorded]
+- Encrypting the drive or the home folder (LUKS, fscrypt, BitLocker) protects everything at once; the program's own encryption is for what leaves that drive: backups on sticks and in the cloud, and projects in folders that a sync program carries. [reasoning]
 
-**Cost.** Whoever can read the folder can read the text. Snapshots, the trash and backups keep older text after it was deleted in the document.
+**Why OpenPGP and not age.** The format has to open in tools the writer already has on a desktop: Kleopatra and GnuPG on Linux, Gpg4win on Windows, the `gpg` command. age is smaller and simpler, but no common desktop program opens it, and the manual's way out ("open the file without Quillbinder") would need a command line tool the writer must find first. [reasoning] On Android the way out is the PC, because OpenKeychain is no longer developed. [recorded: manual]
 
-**What would change it.** An optional encrypted backup (not project) with a recovery key would protect backups on sticks and in the cloud without touching the first reason.
+**Why version 4 keys on Curve25519.** GnuPG 2.5 does not take version 6 keys, and the post-quantum keys of 2.5 are not what Kleopatra and Gpg4win handle today; version 4 on Curve25519 is read by GnuPG 2.4 and 2.5 and by RNP, small and fast. Keys of other kinds (RSA, versions 5 and 6, other curves) are refused with a message. [recorded: `docs/dev-notes/saving-and-safety.md`, 0.99.0; the suite v0990e runs both GnuPG versions]
+
+**The recovery key.** Every file is locked to the writer's key and to a recovery key. The recovery key's secret part is written once into the key folder, locked by its own passphrase, and the recovery passphrase is shown once on the screen to be written on paper and is stored in no file: the stick alone or the paper alone opens nothing. A forgotten passphrase or a lost stick then does not lose a manuscript. If both keys are lost, the text is gone; there is no back door. [reasoning]
+
+**The remembered passphrase and what it means.** The passphrase of the writer's key can be kept per device in the system's key store (KWallet, the Secret Service, the Windows Credential Manager, the Android Keystore), so that it is typed once on each device. Anyone who is logged in to the system as the writer, or a program running as the writer, can then open the projects of that device; this is the same limit as for the open project's text in memory and on the clipboard, which encryption at rest does not protect. "Forget the passphrase on this device" removes it. [reasoning]
+
+**Cost.** A forgotten passphrase together with a lost recovery passphrase is a lost manuscript. Locked files cannot be searched by other programs, and a sync program carries them as whole files. Snapshots, the trash and older backups made before the switch stay as they were made until they are replaced.
+
+**What would change it.** A common desktop tool that opens age files; version 6 keys in GnuPG's stable release and in Kleopatra; a weakness in RNP or Botan that the security watch reports.
 
 ## 6. The lock file names the computer and the user
 

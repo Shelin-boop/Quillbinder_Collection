@@ -5,6 +5,20 @@ Manual in the program) describes every function.
 
 ## 0.99.0 (not released yet)
 
+- **Encryption: the key wizard, Import Keys, Export Keys and File > Options > Encryption** (item 113, part 3). **Create
+  Keys** proposes six random words as the passphrase (an own one is allowed, a weak one refused), makes the writer's key and
+  the recovery key and writes the folder "Quillbinder Keys yyyy-mm-dd" at a place the writer picks (a USB stick; the project,
+  backup and sync folders are refused): the two secret files each locked by their own passphrase, the two public files and
+  a README.txt in the program's language without any secret (what each file is, where to keep it, how to open files in
+  Kleopatra, Gpg4win or with gpg, how to add the key on another device). The recovery passphrase is shown once, to be written
+  on paper, and is stored in no file. The wizard checks by asking for two of its words, reading the files back and opening a
+  test file with each key, and offers a second copy of the folder. **Import Keys** takes the folder on another device with the
+  passphrase typed once; **Import a Key File** takes a key file of the writer's own (version 4 Curve25519 only); **Export
+  Keys** writes the folder again; **Forget the passphrase on this device** clears the key store entry. The page shows the keys
+  of the device with their fingerprints and the two switches of the open project (Encrypted backups, Encrypted project, the
+  second greyed for a Scrivener project with the reason). The manual has a page on opening the files without Quillbinder and on
+  what encryption protects; design decision 5 is rewritten (optional encryption at rest, OpenPGP).
+
 - **The groundwork of the built-in encryption** (no function in the menus yet): OpenPGP keys of version 4 on Curve25519 (an
   Ed25519 key with a Cv25519 subkey) are made, exported and imported as `.asc` files; texts and files are encrypted to the
   writer's key and the recovery key (AES-256 with the integrity check of OpenPGP, no newer packet kinds), and GnuPG 2.4 and

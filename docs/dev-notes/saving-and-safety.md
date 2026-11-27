@@ -2,6 +2,33 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: encryption, part 3 (the key wizard, Import Keys, export, File > Options > Encryption; suite `v0990k`)
+
+- **Core without windows**: `src/core/crypto/KeyFolder.*` (Qt Core only): `makeKeys`, `writeFolder` (the folder
+  "Quillbinder Keys yyyy-mm-dd", " (2)" when the name is taken; secret files 0600; `README.txt` from
+  `readmeText`, one `translate("qb::crypto::keyfolder", ...)` text per paragraph, fingerprints only), `checkFolder` (reads the files into
+  two fresh rings, encrypts a random test file to both keys and decrypts it with each key and its passphrase), `copyFolder`,
+  `importFolder`, `importKeyFile`, `exportKeys`, `refusedPlace` (project folders, backup folder, `syncProgramIn`: a folder name
+  of the path that is a sync program's name or starts with it and then no letter, so "OneDrive - Company" and "MEGAsync" count,
+  "Megapixels" does not) and the roles file `<keyring>/roles.json` (`{"mine": fp, "recovery": fp}`), which says which keys of
+  the ring are the writer's key and the recovery key. The project layer takes its two recipients from `kf::roles()`.
+- **Import goes through a ring of its own first** (`importFolder`, `importKeyFile`): a wrong passphrase must leave the device's
+  ring as it was. The recovery key's secret part is never imported, and the wizard builds the keys in a ring of its own
+  and puts them into the device's ring only after the check page (Next there = commit), so a canceled wizard leaves nothing
+  on the device; the recovery key's secret part never reaches the device. `importKeyFile`: a key with a secret part is the writer's
+  key; a public key becomes the recovery key only when the device has the writer's key and no recovery key [helper's choice].
+- **The windows** (`src/ui/EncryptionPage.*`): `KeyWizard` (a `QWizard`; the pages are `FnPage` objects with functions, so no
+  extra `Q_OBJECT`), `EncryptionPage` (section `OptionsDialog::SEncryption`, between Backup and Extras). The page does not
+  know the encrypted project: the two switches go through `qb::crypto::projectSwitches()` (`core/crypto/ProjectSwitches.h`, a
+  struct of functions; not connected = no project open); the main window connects it. The switches are applied by Apply/OK
+  (`OptionsDialog::apply`), the keys at once (Create Keys and the imports change the device, a Cancel does not undo them).
+  `encui::hooks()` lets a suite answer the folder dialog, the file dialog, the passphrase box and the message boxes and read the
+  recovery passphrase the wizard shows; the program leaves them empty.
+- **Pitfalls**: `gpg --quick-gen-key <uid> ed25519 default` makes a key without an encryption subkey (usage "default" for an
+  explicit algorithm is sign and certify); use `default default` for what Kleopatra makes. The options audit of `v0901` lists every input
+  that has no storage key; the page's name is in its `notAnOption` list. A heading added to `docs/manual.md` must be added to
+  every `docs/i18n/*/manual.md` (suite `v0950f`): the encryption text is therefore bold paragraphs at the end of section 15.
+
 ## 0.99.0: encryption (item 113, part 1: the OpenPGP layer, keys, the key store; suite `v0990e`)
 
 The writer's decisions are in `src/core/crypto/OpenPgp.h` (v4 Curve25519 keys only, SEIPD v1 with MDC and AES-256, no

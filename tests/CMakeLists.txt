@@ -546,3 +546,10 @@ target_compile_definitions(qb_v0950g_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_S
 add_executable(qb_v0990e_tests v0990e_tests.cpp)
 target_link_libraries(qb_v0990e_tests PRIVATE qbcore)
 set_target_properties(qb_v0990e_tests PROPERTIES ENABLE_EXPORTS ON)
+
+# 0.99.0, item 113 (part 3): the key wizard (Create Keys), the key folder with its README.txt, the refused places, the check,
+# the second copy, Import Keys, Import a Key File (gpg's v4 Curve25519 key taken, RSA refused), Export Keys, File > Options >
+# Encryption with its switches and "Forget the passphrase" (xvfb-run -a ./qb_v0990k_tests /tmp/shots)
+add_executable(qb_v0990k_tests v0990k_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990k_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0990k_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")

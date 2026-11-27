@@ -54,6 +54,7 @@ namespace qb {
 
 class ThemePreview;
 class KeyboardPage;
+class EncryptionPage;
 
 class OptionsDialog : public QDialog
 {
@@ -63,7 +64,7 @@ public:
     // is now a section of the icon row (Plugins: Extras > Add-ons and Plugins).
     enum Page { General = 0, Appearance, Editing, Behaviors, Keyboard, Backup, Plugins };
     // The sections of the icon row, in Scrivener's order plus Extras.
-    enum Section { SGeneral = 0, SEditing, SBehaviors, SAppearance, SCorrections, SKeyboard, SSharing, SBackup, SExtras, SectionCount };
+    enum Section { SGeneral = 0, SEditing, SBehaviors, SAppearance, SCorrections, SKeyboard, SSharing, SBackup, SEncryption, SExtras, SectionCount };
 
     explicit OptionsDialog(QWidget *parent = nullptr, int page = 0);
     ~OptionsDialog() override;
@@ -140,6 +141,7 @@ private:
     QWidget *correctionsSection();
     QWidget *sharingSection();
     QWidget *backupSection();
+    QWidget *encryptionSection();
     QWidget *extrasSection();
 
     // Appearance: one page per part of the window, with its options, fonts and colors
@@ -159,6 +161,7 @@ private:
     QHash<int, QListWidget *> m_subLists;       // the page list of a section
     QHash<int, QTabWidget *> m_tabs;            // ... or its tabs
     KeyboardPage *m_keyboard = nullptr;
+    EncryptionPage *m_encryption = nullptr;   // File > Options > Encryption (0.99.0)
     class QMenu *m_manageMenu = nullptr;
 
     // General

@@ -2,6 +2,17 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## v0990k (0.99.0, item 113, part 3: the key wizard, the key folder, Import Keys, export, File > Options > Encryption)
+
+`qb_v0990k_tests` (a window; needs the crypto pack, `gpg` for the key files, `QB_TEST_KEYSTORE=memory` is set by the suite): the
+sync program names and the refused places, the wizard end to end with test hooks for the folder dialog and the shown
+recovery passphrase (six words proposed, a weak own passphrase refused, the project, backup and sync folders refused, the
+recovery passphrase shown once, the two words asked, the check, the second copy), the folder's five files, the README without a
+secret, the recovery passphrase and the passphrase in no file under the test's home, Import Keys on a second device (a wrong
+passphrase takes nothing, the right one once), a key file made by gpg (v4 Curve25519 taken, RSA and a non-key refused),
+Export Keys, the Options page with the switches (no project, own format, Scrivener project with its reason, Apply passes the
+changes, a failing switch is reported) and "Forget the passphrase". Screenshots of each wizard step and of the page. 
+
 ## v0990e (0.99.0, item 113, part 1: the OpenPGP layer)
 
 `qb_v0990e_tests` (no window; Qt Core only): keys made, exported and imported (public only, with the secret part),
