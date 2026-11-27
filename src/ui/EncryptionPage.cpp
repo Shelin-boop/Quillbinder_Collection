@@ -95,7 +95,7 @@ bool confirmBox(QWidget *parent, const QString &title, const QString &text)
 {
     if (hooks().confirm)
         return hooks().confirm(parent, title, text);
-    return QMessageBox::question(parent, title, text) == QMessageBox::Yes;
+    return QMessageBox::question(parent, title, text, QMessageBox::Yes | QMessageBox::No, QMessageBox::No) == QMessageBox::Yes;
 }
 
 Hooks::Answer askPassphraseBox(QWidget *parent, const QString &title, const QString &text)

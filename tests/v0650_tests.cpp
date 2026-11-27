@@ -1161,8 +1161,9 @@ int main(int argc, char **argv)
     // ================================================================ the manual (F21)
     {
         const QString manual = QString::fromUtf8(readAll(src + QStringLiteral("/docs/manual.md")));
-        check(manual.contains(QLatin1String("not encrypted by")) && manual.contains(QLatin1String("SHA256SUMS.txt.sig")),
-              QStringLiteral("the manual says that files are not encrypted and how a download's signature is checked (audit F21, F12)"));
+        // (0.99.0: since the built-in encryption the manual says what it protects and what not, in place of "not encrypted by")
+        check(manual.contains(QLatin1String("What encryption protects, and what it does not")) && manual.contains(QLatin1String("SHA256SUMS.txt.sig")),
+              QStringLiteral("the manual says what encryption protects and how a download's signature is checked (audit F21, F12)"));
     }
 
     delete wp;
