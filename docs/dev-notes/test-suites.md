@@ -2,6 +2,22 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## v0990e (0.99.0, item 113, part 1: the OpenPGP layer)
+
+`qb_v0990e_tests` (no window; Qt Core only): keys made, exported and imported (public only, with the secret part),
+unlock (wrong passphrase, once per session, NFC), round trips of texts and files to the writer's and the recovery key
+(the packets: two session keys and SEIPD v1), the size limit, damaged messages (a changed byte, cut short, noise, zeros:
+`Damaged`, no text), a locked key, foreign keys made by hand (v5, v6, RSA, an unknown algorithm), the key ring on disk
+(permissions, read again, damaged), passphrase change and removal, the word list and the generator (1,000 passphrases),
+the strength check (weak, short and strong examples), the key store (in memory; QtKeychain in a child without D-Bus; in a
+child under `dbus-run-session` with `gnome-keyring-daemon` the Secret Service round trip, skipped without them), the
+suite's own libraries (`readelf -d`: nothing new) and exports (`nm -D`: no RNP/Botan names; the target has
+`ENABLE_EXPORTS` like the program), and GnuPG both ways for each `gpg` on the PATH and in `QB_TEST_GPG_EXTRA` (spaces
+between): GnuPG imports and decrypts Quillbinder's keys and files (AES256.CFB, MDC), Quillbinder decrypts GnuPG's files,
+GnuPG's own v4 key works in Quillbinder, RSA, Ed448 (v5), NIST P-256 and, with GnuPG 2.5, its "pqc" key are refused. No
+`gpg`: "SKIPPED" and those checks are left out. Needs the crypto pack (`tools/get-crypto.sh`) in the build; without it
+the first check fails.
+
 ## v0950f and v0950g (0.95.0, item 102: eleven languages)
 
 `qb_v0950f_tests`: the language list (codes, own names, the machine-translation mark in the interface's language, the

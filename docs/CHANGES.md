@@ -5,6 +5,15 @@ Manual in the program) describes every function.
 
 ## 0.99.0 (not released yet)
 
+- **The groundwork of the built-in encryption** (no function in the menus yet): OpenPGP keys of version 4 on Curve25519 (an
+  Ed25519 key with a Cv25519 subkey) are made, exported and imported as `.asc` files; texts and files are encrypted to the
+  writer's key and the recovery key (AES-256 with the integrity check of OpenPGP, no newer packet kinds), and GnuPG 2.4 and
+  2.5, and so Kleopatra and Gpg4win, open them without Quillbinder; files GnuPG makes and keys GnuPG makes work in
+  Quillbinder too. Keys of other kinds (RSA, versions 5 and 6, post-quantum, other curves) are refused with a message. A
+  passphrase generator gives six words of the EFF's word list (English); a passphrase of the writer's own that is too short
+  or too easy to guess is refused. The passphrase can be kept in the system's key store (KWallet or the Secret Service,
+  Windows Credential Manager, Android Keystore) through QtKeychain 0.18.0; the program gets no new library for any of it.
+
 - **Third-party parts for the built-in encryption and the AI add-ons are prepared** (no function of the program yet): three new
   ready-made packs of libraries for the Linux build (Botan, RNP, json-c, bzip2 and zlib; ONNX Runtime; ggml, whisper.cpp,
   llama.cpp, qwentts.cpp and Sonic), the daily security watch follows each new part, and `THIRD-PARTY.md` and Help > Third-Party

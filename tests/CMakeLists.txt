@@ -538,3 +538,11 @@ add_executable(qb_v0950g_tests v0950g_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_
 target_include_directories(qb_v0950g_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins/tools)
 target_link_libraries(qb_v0950g_tests PRIVATE qbui Qt6::Test Qt6::Network)
 target_compile_definitions(qb_v0950g_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+
+# 0.99.0, item 113 (part 1): the OpenPGP layer of the built-in encryption: keys, the key ring, round trips, damaged files,
+# foreign keys, the passphrase generator and check, the key store, what the program links, GnuPG both ways (each gpg on the
+# PATH and those QB_TEST_GPG_EXTRA names) (xvfb-run -a ./qb_v0990e_tests /tmp/shots). Exports its symbols like the program,
+# so that the check of what is exported means the same.
+add_executable(qb_v0990e_tests v0990e_tests.cpp)
+target_link_libraries(qb_v0990e_tests PRIVATE qbcore)
+set_target_properties(qb_v0990e_tests PROPERTIES ENABLE_EXPORTS ON)

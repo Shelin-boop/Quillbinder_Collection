@@ -2,6 +2,50 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: encryption (item 113, part 1: the OpenPGP layer, keys, the key store; suite `v0990e`)
+
+The writer's decisions are in `src/core/crypto/OpenPgp.h` (v4 Curve25519 keys only, SEIPD v1 with MDC and AES-256, no
+AEAD, every file to the writer's key and the recovery key, no back door). What the next part (the encrypted project layer,
+`<name>.zip.gpg` backups, the key wizard, Import Keys, export, File > Options > Encryption, the key folder's README.txt,
+the manual's page, design decision 5) builds on:
+
+- **The layer** (`qb::crypto`, namespace of `src/core/crypto/`): `KeyRing` wraps one RNP context (one thread at a time).
+  `createKey(userId, passphrase)` (about 0.7 s: an Ed25519 primary key that signs and certifies, a Cv25519 subkey that
+  encrypts, no expiry, both parts protected by RNP's iterated and salted S2K with AES-256/SHA-256, tuned to about 150 ms),
+  `exportPublicKey` / `exportSecretKey` (armored `.asc`; the secret key stays protected by its passphrase),
+  `importKeys(data)` (armored or binary, several keys; refuses with a sentence per key: other versions, other algorithms or
+  curves, revoked, expired, no Cv25519 subkey; a secret part without a passphrase is not taken, its public part is),
+  `removeKey(f, secretOnly)` (the recovery key's secret part after it was exported), `encrypt` / `encryptFile` to a list of
+  primary fingerprints (only public keys needed), `decrypt` / `decryptFile` (need the unlocked secret key; nothing comes
+  back unless the integrity check passed; `decrypt` has a size limit, default 1 GiB), `changePassphrase`. Every call
+  gives an `Error`, and `errorText(Error)` the writer's sentence; `errorDetail()` RNP's words for a log. Files written by
+  `encryptFile`/`decryptFile` go through QSaveFile (whole or not at all). `looksEncrypted(head)` tells an OpenPGP message
+  from a plain file by its first bytes (for a project folder that has both during a conversion).
+- **Unlocked when**: `unlock(fingerprint, passphrase)` opens the encryption subkeys (about 120 ms) and they stay open in
+  that `KeyRing` until `lock()`/`lockAll()` or its end: once per session. Passphrases are normalized to NFC (the same
+  passphrase typed on another system opens the key). Locked key at `decrypt`: `Error::Locked` (ask the writer, then
+  `unlock`); no secret key here: `Error::NoSecretKey`.
+- **Where keys live**: `KeyRing::device()` is the ring of this device, loaded at its first use from `<data folder>/keyring`
+  (`pubring.gpg`, `secring.gpg`, GnuPG's old key ring format; the folder 0700, the files 0600); `save(dir)` after a change.
+  It holds the public keys of every project's recipients and the writer's secret key only where it was made or imported on
+  this device. A project must name its two recipients' fingerprints itself (both are needed to encrypt; RNP picks the
+  subkey).
+- **The passphrase per device**: `KeyStore::system()` (QtKeychain: KWallet over D-Bus, the Secret Service through libsecret
+  loaded at run time, Windows Credential Manager, Android Keystore; never QtKeychain's plain-file fallback), entry
+  `KeyStore::passphraseEntry(fingerprint)` under the service "Quillbinder", kept as text (the writer finds it in KWallet
+  Manager or Seahorse). The calls wait for the answer (KWallet may ask for its own password meanwhile). `NoBackend`,
+  `Denied`, `Failed`: ask for the passphrase each session. Tests: `QB_TEST_KEYSTORE=memory` (test builds only).
+- **Passphrases**: `passphrase::generate()` gives six words of the EFF's large list (English only; 77.5 bits);
+  `passphrase::check(own)` refuses fewer than 12 characters or an estimate under 50 bits, with a sentence. The generated
+  one passes always.
+- **Pitfalls found**: RNP asks for every recipient's key when the first one's text is damaged, so a damaged message to two
+  keys of one ring looked "locked"; `decrypt` now says `Damaged` when one recipient's key here is open. RNP refuses to
+  remove a secret part that is not there. The program does not reference the layer yet: once it does, it grows by about
+  6.6 MB (RNP and Botan), its libraries stay the same (libQt6DBus becomes a direct need; the AppImage carries it for Qt GUI),
+  and none of RNP's, Botan's, json-c's or bzip2's names is exported (`--exclude-libs`; the program exports its own for
+  plugins). RNP uses the system's zlib (already the program's), not the pack's `libz.a`. Without the pack (`tools/get-crypto.sh`)
+  the program builds with a layer that answers `Error::Unavailable` (Windows and Android until their parts).
+
 ## 0.94.0 beta: values compared in the form the file gives back (settings per project)
 
 `takeProjectValues()` in `src/core/SettingsLayer.cpp` compares the program's values with the base. Qt keeps a settings file it has written in its own small cache (about 100 units; 10 + keys/4 per file) with the values as set: an empty list reads back as an empty `QStringList`, a one-item list as a `QStringList`. Once the cache has dropped the file and it is read from disk, an empty list is an invalid `QVariant` and a one-item list a `QString`, and Qt 6 calls these different. The three new keys of 0.94.0 pushed the program file out of the cache, so every empty or one-item list (the 7 toolbars, `revisionColors`, hidden toolbars) counted as changed and went into the project. `snapshot()` now passes every value through `asRead()`, which turns a list into the form read from disk. The check in `tests/v062_settings.cpp` writes a large scratch settings file before `apply()` so that the cache is emptied whatever the key counts are.

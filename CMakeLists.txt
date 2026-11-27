@@ -173,6 +173,47 @@ if(NOT Qt6_VERSION VERSION_EQUAL QB_QT_VERSION)
                       "(tools/get-qt.sh, or -DQB_QT_DIR=<folder of Qt ${QB_QT_VERSION}>)")
 endif()
 find_package(ZLIB REQUIRED)
+# 0.99.0 (to-do item 113): the built-in encryption, OpenPGP through RNP with Botan, linked statically from the pack of
+# tools/get-crypto.sh (QB_CRYPTO_DIR, default build/crypto), so that the program gets no new shared library. RNP takes
+# the system's zlib (already the program's; the pack's own libz.a is for shared objects only) and the pack's bzip2.
+# The archives' symbols are not exported by the program (--exclude-libs), so that no library the program loads binds to
+# them. Without the pack (Windows and Android until their parts add it) the layer builds without RNP and every call
+# says "no encryption" (src/core/crypto/OpenPgp.h); the suite v0990e then fails on Linux.
+set(QB_HAVE_RNP OFF)
+if(NOT WIN32 AND NOT ANDROID)
+  if(NOT QB_CRYPTO_DIR)
+    if(DEFINED ENV{QB_CRYPTO_DIR})
+      set(QB_CRYPTO_DIR "$ENV{QB_CRYPTO_DIR}")
+    else()
+      set(QB_CRYPTO_DIR "${CMAKE_SOURCE_DIR}/build/crypto")
+    endif()
+  endif()
+  set(QB_CRYPTO_DIR "${QB_CRYPTO_DIR}" CACHE PATH "The encryption libraries (RNP, Botan), tools/get-crypto.sh")
+  set(QB_CRYPTO_ARCHIVES rnp sexpp botan-3 json-c bz2)
+  set(QB_CRYPTO_FILES "")
+  foreach(lib ${QB_CRYPTO_ARCHIVES})
+    list(APPEND QB_CRYPTO_FILES "${QB_CRYPTO_DIR}/lib/lib${lib}.a")
+  endforeach()
+  set(QB_HAVE_RNP ON)
+  foreach(f ${QB_CRYPTO_FILES} "${QB_CRYPTO_DIR}/include/rnp/rnp.h")
+    if(NOT EXISTS "${f}")
+      set(QB_HAVE_RNP OFF)
+    endif()
+  endforeach()
+  if(QB_HAVE_RNP)
+    find_package(Threads REQUIRED)
+    add_library(qb_rnp INTERFACE)
+    target_include_directories(qb_rnp SYSTEM INTERFACE "${QB_CRYPTO_DIR}/include")
+    # (as link items, not link options: they reach the programs through the static qbcore too; "-lz" once more after the
+    # archives, because CMake keeps only the first place of the zlib that qbcore names before them)
+    target_link_libraries(qb_rnp INTERFACE ${QB_CRYPTO_FILES} -lz Threads::Threads
+                          "-Wl,--exclude-libs,librnp.a:libsexpp.a:libbotan-3.a:libjson-c.a:libbz2.a")
+    message(STATUS "Encryption: RNP and Botan from ${QB_CRYPTO_DIR}")
+  else()
+    message(WARNING "The encryption libraries are missing in ${QB_CRYPTO_DIR} (tools/get-crypto.sh): this build has no "
+                    "encryption, and the suite v0990e fails")
+  endif()
+endif()
 find_package(PkgConfig)
 # Not on Android (A0): pkg-config there would find the build machine's own Hunspell; the Android build names
 # its Hunspell with QB_HUNSPELL_INCLUDE and QB_HUNSPELL_LIB (packaging/android/android-hunspell.sh).
@@ -213,6 +254,21 @@ add_library(qbcore STATIC ${CORE_SOURCES}
 target_include_directories(qbcore PUBLIC src ${CMAKE_BINARY_DIR}/generated)
 target_link_libraries(qbcore PUBLIC Qt6::Core Qt6::Gui Qt6::Xml ZLIB::ZLIB)
 target_link_libraries(qbcore PRIVATE Qt6::GuiPrivate)
+# 0.99.0: the encryption layer (src/core/crypto): RNP (above), the system's key store through QtKeychain 0.18.0
+# (src/third_party/qtkeychain, static, with this Qt; on Linux through Qt D-Bus, which the AppImage carries for Qt GUI)
+# and the word list of the passphrase generator (a resource of the library)
+if(QB_HAVE_RNP)
+  target_link_libraries(qbcore PRIVATE qb_rnp)
+  target_compile_definitions(qbcore PRIVATE QB_HAVE_RNP=1)
+endif()
+option(QB_KEYCHAIN "The system's key store through QtKeychain (off: a build that keeps no passphrase)" ON)
+if(QB_KEYCHAIN)
+  add_subdirectory(src/third_party/qtkeychain)
+  target_link_libraries(qbcore PRIVATE qb_qtkeychain)
+  target_compile_definitions(qbcore PRIVATE QB_HAVE_QTKEYCHAIN=1)
+endif()
+qt_add_resources(qbcore qb_crypto_words PREFIX "/qb-crypto" BASE src/core/crypto/words
+  FILES src/core/crypto/words/eff_large_wordlist.txt)
 
 # User interface library (shared by the program and the UI tests).
 file(GLOB_RECURSE UI_SOURCES CONFIGURE_DEPENDS src/ui/*.cpp src/ui/*.h)
