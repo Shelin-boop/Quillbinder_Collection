@@ -51,6 +51,54 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - **Settings**: `app/aiThreads` (0 = the default, so it follows the computer) and `app/aiUnloadMinutes` (10); program-only
   (`settingslayer::programOnly`), not in profiles; handed over in `AppSettings::pushToModules`.
 - Suite `v0990b`.
+## 0.99.0: the packs crypto, onnxruntime and aiengine (Linux)
+
+Three more dependency packs (`tools/deps-pack.sh`, `.github/workflows/deps.yml`, the pattern of the 0.93.0 packs); each recipe
+is its `get-*.sh` script (a hash over it and the build machine), each part pinned by tag **and commit** (the script stops when
+a tag points elsewhere), none changed except where said here.
+
+- **crypto** (`tools/get-crypto.sh`, prefix `build/crypto`): Botan 3.14.1 (minimized, static, `-fPIC`), json-c 0.19, bzip2
+  1.0.8 (the libarchive project's GitHub mirror of it, tag `bzip2-1.0.8`), zlib 1.4, RNP v0.18.1 with its submodule sexpp
+  (fetched by its commit), all static, with the license texts in `licenses/`. `tools/check-crypto.sh` builds
+  `tests/crypto_pack_check.cpp` against it (a key made in memory, a buffer encrypted with bzip2 compression and decrypted
+  again) and links the libraries into a shared object too; `ldd` shows only libstdc++, libm, libgcc_s and libc. Pitfalls found:
+  RNP's module list (`ci/botan3-modules`) names `curve25519`, which Botan 3.14 made internal: the public module is `x25519`;
+  RNP asks for the `pcurves_*` modules of the curves since Botan 3.7 (here the six NIST/secp ones, Brainpool and SM2);
+  RNP 0.18.1's `crypto/mem.cpp` uses `strlen` without `<cstring>` (the build adds `-include cstring`, the source stays as it
+  was tagged); RNP has **no switch for bzip2** (`find_package(BZip2 REQUIRED)`), so bzip2 stays; Ubuntu's `libz.a` is **not**
+  position-independent (it cannot go into a shared object, only into a PIE program), so zlib is built in the pack;
+  RNP 0.18.0 is withdrawn and 0.18.2 was not tagged on 2026-11-27, so 0.18.1.
+- **CTranslate2 4.9.1** (translator recipe, Linux only, the user's decision; fixes #2159, validation of token ids that disable logits);
+  Windows and Android recipes stay at 4.9.0. sentencepiece stays at 0.2.1: 0.2.2 and 0.2.3 need abseil-cpp built separately.
+- **onnxruntime** (`tools/get-onnxruntime.sh`, prefix `build/onnxruntime`): Microsoft's prebuilt `onnxruntime-linux-x64-1.32.0.tgz`.
+  The session that made the script could not download it (the repository of microsoft/onnxruntime is closed to it; the release
+  page answers 403/404), so a pack is needed: the workflow downloads it. The SHA-256 is **not pinned yet**: while `SHA256` in the
+  script is empty the download is accepted only with `QB_ONNXRUNTIME_FIRST_RUN=1` (set by deps.yml), and the script prints
+  `pin this: SHA256="..."`, which the lead puts into the script (the recipe's hash changes, the pack is made again in seconds).
+  The first run does not guess the asset name (the guessed `v1.32.0` URL answered 404): it asks the GitHub API for the releases,
+  takes the newest published one with an `onnxruntime-linux-x64-<version>.tgz` (not GPU/CUDA), prints the releases and assets it
+  saw, the archive's top-level contents and `pin this: VERSION=... TAG=... ASSET=... SHA256=...`; the pack is made from what is
+  really in the archive (the folder with `onnxruntime_c_api.h`, the `libonnxruntime.so.*` files, LICENSE/notices if present).
+  The program never links the library (`dlopen` + `OrtGetApiBase`).
+- **aiengine** (`tools/get-ai-engine.sh`, prefix `build/ai-engine`, `tools/ai-engine/qwentts/CMakeLists.txt`): ggml 1.1.1,
+  whisper.cpp 1.9.6, llama.cpp b12808 (libllama and libmtmd), qwentts.cpp and Sonic at pinned commits, on **one** ggml (installed
+  first, the others use it as a system library), shared libraries with `RPATH=$ORIGIN`, ggml with `GGML_BACKEND_DL`,
+  `GGML_CPU_ALL_VARIANTS` and the Vulkan module as its own library. The only change to a source: `ggml.h` gets
+  `GGML_MAX_NAME 128` instead of 64 (qwentts.cpp's audio tokenizer has longer tensor names; the size is part of the layout of a
+  tensor, so the installed header carries it and every consumer must include that header, not another copy).
+  qwentts.cpp's own CMake file is not used (it builds a fork of ggml as a submodule, a server and tools): the wrapper builds
+  its three source files as `libqwentts.so`; its ggml fork differs from ggml 1.0.0 by one CPU speed-up (a fused snake activation)
+  and one Metal kernel, nothing the source calls by name.
+  Proven in the session (no Vulkan: its shaders need a runner with more memory): whisper.cpp 1.9.6 vendors ggml 1.0.0 but
+  builds and runs on the pack's ggml 1.1.1 (`WHISPER_USE_SYSTEM_GGML`); llama.cpp b12808 vendors the very same ggml commit as the
+  1.1.1 tag; a test program linked against libllama, libwhisper, libqwentts and libsonic loaded the CPU module and created a
+  Sonic stream; every library has `RUNPATH=$ORIGIN` and needs only libstdc++, libm, libgcc_s, libc and its siblings. ggml's
+  installation puts the compute modules into `bin/`; the script moves them next to the libraries. The Vulkan module configures
+  with Ubuntu 24.04's packages and all its 349 steps built (one session run was killed for memory: `mul_mm.comp.cpp.o` is a
+  huge generated file, build it with `-j1` or on a bigger machine), a 34 MB library that needs `libvulkan.so.1` only when loaded.
+  llama.cpp b12808 runs **Pocket TTS** (architecture `pockettts`: the text side in libllama, the flow net inside the mmproj in
+  libmtmd, which is why libmtmd is built with `LLAMA_BUILD_MTMD=ON`) and also has a Qwen3-TTS path of its own (libmtmd's
+  `qwen3tts-gen`), apart from qwentts.cpp. whisper.cpp 1.9.6 also installs `libparakeet`.
 
 ## 0.94.0: the full AppImage's installation window
 

@@ -12,7 +12,7 @@ fetch() { # <dir> <url> <tag>
     [ -d "$D/$1/.git" ] || git clone --depth 1 --branch "$3" --recurse-submodules --shallow-submodules "$2" "$D/$1"
 }
 fetch oneDNN https://github.com/uxlfoundation/oneDNN.git v3.9.1
-fetch CTranslate2 https://github.com/OpenNMT/CTranslate2.git v4.9.0
+fetch CTranslate2 https://github.com/OpenNMT/CTranslate2.git v4.9.1
 fetch sentencepiece https://github.com/google/sentencepiece.git v0.2.1
 J=${JOBS:-$(nproc)}
 cmake -S "$D/oneDNN" -B "$D/b-onednn" -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$P" \
