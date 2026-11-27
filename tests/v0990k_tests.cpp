@@ -191,17 +191,17 @@ int main(int argc, char **argv)
     as.backupDir = backups;
 
     // ---------------------------------------------------------------- places
-    for (const auto &c : QList<QPair<QString, QString>>{{QStringLiteral("/home/a/OneDrive/keys"), QStringLiteral("OneDrive")},
-                                                        {QStringLiteral("/home/a/OneDrive - Company/x"), QStringLiteral("OneDrive")},
-                                                        {QStringLiteral("/home/a/Dropbox"), QStringLiteral("Dropbox")},
-                                                        {QStringLiteral("/home/a/Nextcloud/Docs"), QStringLiteral("Nextcloud")},
-                                                        {QStringLiteral("/home/a/Google Drive/x"), QStringLiteral("Google Drive")},
-                                                        {QStringLiteral("/Users/a/iCloud Drive/x"), QStringLiteral("iCloud")},
-                                                        {QStringLiteral("/home/a/Syncthing/x"), QStringLiteral("Syncthing")},
-                                                        {QStringLiteral("/home/a/pCloudDrive/x"), QString()},
-                                                        {QStringLiteral("/home/a/pCloud/x"), QStringLiteral("pCloud")},
-                                                        {QStringLiteral("/home/a/MEGA/x"), QStringLiteral("MEGA")},
-                                                        {QStringLiteral("/home/a/Megapixels/x"), QString()},
+    for (const auto &c : QList<QPair<QString, QString>>{{QStringLiteral("/home/writer/OneDrive/keys"), QStringLiteral("OneDrive")},
+                                                        {QStringLiteral("/home/writer/OneDrive - Company/x"), QStringLiteral("OneDrive")},
+                                                        {QStringLiteral("/home/writer/Dropbox"), QStringLiteral("Dropbox")},
+                                                        {QStringLiteral("/home/writer/Nextcloud/Docs"), QStringLiteral("Nextcloud")},
+                                                        {QStringLiteral("/home/writer/Google Drive/x"), QStringLiteral("Google Drive")},
+                                                        {QStringLiteral("/Users/writer/iCloud Drive/x"), QStringLiteral("iCloud")},
+                                                        {QStringLiteral("/home/writer/Syncthing/x"), QStringLiteral("Syncthing")},
+                                                        {QStringLiteral("/home/writer/pCloudDrive/x"), QString()},
+                                                        {QStringLiteral("/home/writer/pCloud/x"), QStringLiteral("pCloud")},
+                                                        {QStringLiteral("/home/writer/MEGA/x"), QStringLiteral("MEGA")},
+                                                        {QStringLiteral("/home/writer/Megapixels/x"), QString()},
                                                         {QStringLiteral("/media/a/STICK/keys"), QString()}})
         check(kf::syncProgramIn(c.first) == c.second, QStringLiteral("sync folder name: %1 -> '%2'").arg(c.first, c.second), kf::syncProgramIn(c.first));
     check(!kf::refusedPlace(projects, as.recentProjects, backups).isEmpty() && !kf::refusedPlace(projects + QStringLiteral("/Files"), as.recentProjects, backups).isEmpty(),
