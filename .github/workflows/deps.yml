@@ -5,6 +5,9 @@
 # tools/get-whisper.sh and tools/get-translator-deps.sh download the pack that tools/deps-packs.txt pins, and build
 # from source without one. Each pre-release's text says what the pack holds, its licenses and where the source is
 # (tools/deps-pack.sh about).
+# 0.99.0: three more packs, each standing alone: crypto (Botan, json-c, bzip2, RNP: tools/get-crypto.sh), onnxruntime (the
+# official archive: tools/get-onnxruntime.sh) and aiengine (ggml, whisper.cpp, llama.cpp, qwentts.cpp, Sonic with the
+# Vulkan module: tools/get-ai-engine.sh, 40 to 70 minutes on the runner's two cores).
 #
 # Runs when a recipe file changes on main or a linux/ branch, and by hand. A recipe whose pack is there already costs
 # only the setup (about 2 min). The job "build" runs the third-party builds without write permission; only the job
@@ -22,6 +25,10 @@ on:
       - 'tools/ffmpeg-patches/**'
       - 'tools/get-whisper.sh'
       - 'tools/get-translator-deps.sh'
+      - 'tools/get-crypto.sh'
+      - 'tools/get-onnxruntime.sh'
+      - 'tools/get-ai-engine.sh'
+      - 'tools/ai-engine/**'
       - 'addons/translation-proofreading/source/packaging/build-deps.sh'
       - 'tools/deps-pack.sh'
       - 'tools/cloud-setup.sh'
@@ -41,14 +48,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pack: [ffmpeg, whisper, translator]
+        pack: [ffmpeg, whisper, translator, crypto, onnxruntime, aiengine]
     runs-on: ubuntu-24.04
     container: ubuntu:24.04
-    timeout-minutes: 90
+    timeout-minutes: 150   # (the aiengine pack with the Vulkan shaders is the long one)
     env:
       DEBIAN_FRONTEND: noninteractive
       QB_DEPS_PACK: '0'   # build from source here, never from an older pack
-      QB_SKIP_QT: '1'     # (Qt is not needed for these three)
+      QB_SKIP_QT: '1'     # (Qt is not needed for these packs)
+      QB_ONNXRUNTIME_FIRST_RUN: '1'   # the archive's SHA-256 is printed for the pin until tools/get-onnxruntime.sh has one
       GH_TOKEN: ${{ github.token }}
       PACK: ${{ matrix.pack }}
     defaults:
@@ -87,11 +95,15 @@ jobs:
         run: |
           [ "$(cat "out/state-$PACK.txt")" = new ] || exit 0
           start=$(date +%s)
-          # (the scripts' own prefixes: build/ffmpeg, build/ffmpeg-full, build/whisper of this checkout)
+          # (the scripts' own prefixes: build/ffmpeg, build/ffmpeg-full, build/whisper, build/translator-deps, build/crypto,
+          # build/onnxruntime, build/ai-engine of this checkout)
           case "$PACK" in
             ffmpeg) script=tools/get-ffmpeg.sh ;;
             whisper) script=tools/get-whisper.sh ;;
             translator) script=tools/get-translator-deps.sh ;;
+            crypto) script=tools/get-crypto.sh ;;
+            onnxruntime) script=tools/get-onnxruntime.sh ;;
+            aiengine) script=tools/get-ai-engine.sh ;;
           esac
           "$script" > "out/build-$PACK.log" 2>&1 || { tail -60 "out/build-$PACK.log"; exit 1; }
           echo "built in $(( ($(date +%s) - start) / 60 )) min"; tail -5 "out/build-$PACK.log"
@@ -99,6 +111,12 @@ jobs:
           if [ "$PACK" = ffmpeg ]; then
             echo "::group::FFmpeg source archive: release signature and SHA-256 (put the pin into tools/get-ffmpeg.sh)"
             grep -E 'get-ffmpeg:|verify-ffmpeg-source:|SHA-256 of|pin this|tar.xz: OK' "out/build-$PACK.log" || echo "(no such lines in the log)"
+            echo "::endgroup::"
+          fi
+          # ONNX Runtime: the SHA-256 of the archive, to pin in tools/get-onnxruntime.sh
+          if [ "$PACK" = onnxruntime ]; then
+            echo "::group::ONNX Runtime archive: SHA-256 (put the pin into tools/get-onnxruntime.sh)"
+            grep -E 'get-onnxruntime:|pin this' "out/build-$PACK.log" || echo "(no such lines in the log)"
             echo "::endgroup::"
           fi
 
@@ -109,6 +127,9 @@ jobs:
             ffmpeg) tools/deps-pack.sh pack ffmpeg out build/ffmpeg build/ffmpeg-full ;;
             whisper) tools/deps-pack.sh pack whisper out build/whisper ;;
             translator) tools/deps-pack.sh pack translator out build/translator-deps ;;
+            crypto) tools/deps-pack.sh pack crypto out build/crypto ;;
+            onnxruntime) tools/deps-pack.sh pack onnxruntime out build/onnxruntime ;;
+            aiengine) tools/deps-pack.sh pack aiengine out build/ai-engine ;;
           esac
           # the libraries in the pack, for the log (D3 asks the same of the release workflow's caches)
           # (only this pack's folders: a folder that is not there would make find, and with it the step, fail)
@@ -116,6 +137,9 @@ jobs:
             ffmpeg) dirs=(build/ffmpeg build/ffmpeg-full) ;;
             whisper) dirs=(build/whisper) ;;
             translator) dirs=(build/translator-deps/install) ;;
+            crypto) dirs=(build/crypto) ;;
+            onnxruntime) dirs=(build/onnxruntime) ;;
+            aiengine) dirs=(build/ai-engine) ;;
           esac
           find "${dirs[@]}" -type f \( -name '*.so*' -o -name '*.a' \) | sort | xargs -r sha256sum > "out/libraries-$PACK.txt"
           wc -l "out/libraries-$PACK.txt"
