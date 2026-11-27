@@ -27,6 +27,31 @@ QList<Bar> allBars()
     return {Bar::Main, Bar::Themes, Bar::Search, Bar::Tools, Bar::Format, Bar::Character, Bar::Paragraph};
 }
 
+int nearestSize(int side)
+{
+    return side <= (kSmall + kNormal) / 2 ? kSmall : side <= (kNormal + kLarge) / 2 ? kNormal : kLarge;
+}
+
+QString sizeName(int side)
+{
+    switch (nearestSize(side)) {
+    case kSmall: return QObject::tr("Small");
+    case kLarge: return QObject::tr("Large");
+    default: return QObject::tr("Normal");
+    }
+}
+
+double boxFontFactor(int side)
+{
+    if (side <= kSmall)
+        return 0.9;
+    if (side >= kLarge)
+        return 1.3;
+    if (side <= kNormal)
+        return 0.9 + 0.1 * (side - kSmall) / double(kNormal - kSmall);
+    return 1.0 + 0.3 * (side - kNormal) / double(kLarge - kNormal);
+}
+
 bool isFormatBar(Bar bar) { return bar == Bar::Format || bar == Bar::Character || bar == Bar::Paragraph; }
 
 QString barKey(Bar bar)
@@ -320,13 +345,12 @@ ToolbarDialog::ToolbarDialog(QWidget *parent, toolbars::Bar bar) : QDialog(paren
     lay->addLayout(grid, 1);
 
     auto *opts = new QHBoxLayout;
-    opts->addWidget(new QLabel(tr("Icons of the main toolbars:"), this));
+    opts->addWidget(new QLabel(tr("Size of all toolbars:"), this));
     m_iconSize = new QComboBox(this);
     m_iconSize->setObjectName(QStringLiteral("toolbarIconSize"));
-    m_iconSize->addItem(tr("Small"), 16);
-    m_iconSize->addItem(tr("Medium"), 22);
-    m_iconSize->addItem(tr("Large"), 32);
-    m_iconSize->setCurrentIndex(qMax(0, m_iconSize->findData(s.toolbarIconSize)));
+    for (int side : {toolbars::kSmall, toolbars::kNormal, toolbars::kLarge})
+        m_iconSize->addItem(toolbars::sizeName(side), side);
+    m_iconSize->setCurrentIndex(qMax(0, m_iconSize->findData(toolbars::nearestSize(s.toolbarIconSize))));
     opts->addWidget(m_iconSize);
     m_style = new QComboBox(this);
     m_style->setObjectName(QStringLiteral("toolbarStyle"));
@@ -336,9 +360,9 @@ ToolbarDialog::ToolbarDialog(QWidget *parent, toolbars::Bar bar) : QDialog(paren
     m_style->setCurrentIndex(qMax(0, m_style->findData(s.toolbarStyle)));
     opts->addWidget(m_style);
     opts->addStretch(1);
-    auto *reset = new QPushButton(tr("Standard Set"), this);
+    auto *reset = new QPushButton(tr("Reset"), this); // 0.99.0: "Standard Set" before; no question, the buttons come back
     reset->setObjectName(QStringLiteral("toolbarReset"));
-    reset->setToolTip(tr("Put the buttons the program came with back into this toolbar"));
+    reset->setToolTip(tr("Put the standard buttons back into this toolbar"));
     opts->addWidget(reset);
     lay->addLayout(opts);
 

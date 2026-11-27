@@ -14,6 +14,12 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   that the first normal release, 1.0.0, changes only numbers and one word per system. The names of the files, the tag,
   the title of a release, the update file and the download page follow it, and a release without a word gets plain names
   (`Quillbinder-1.0.0-x86_64.AppImage`, tag `v1.0.0`).
+- **One size for all toolbars: Small, Normal, Large.** **View > Toolbars > Toolbar Size** (also in the right-click menu of
+  every bar, and in **Customize Toolbars**, where "Medium" is now "Normal") sets the icons of every bar at once: the main
+  toolbars, the format bars (they were fixed at 18 px), the icon bar, Labels and Profiles. The lists and fields on the bars
+  (style, font, size, line spacing, quick search, themes) grow and shrink with the size, so that the bars of a row keep one
+  height. Normal is 22 px; Android starts with Large (32 px). The size belongs to the profile in use. The button
+  "Standard Set" of Customize Toolbars is now called **Reset**.
 - **The update file and the download page follow the label of their system.** The update file names the label of the
   system it is made for (`beta` for Linux, `experimental` for Windows and Android), and the download page leaves out
   the sentence "This is a ... version" when a release has no label.

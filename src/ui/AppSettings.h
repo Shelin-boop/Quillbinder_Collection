@@ -223,7 +223,13 @@ public:
     QStringList toolbarHidden;
     // 0.95.0: the Profiles ("profiles") and Labels ("labels") toolbars that are switched on; both are off at first (toolbars/extraShown)
     QStringList toolbarExtraShown;
-    int toolbarIconSize = 22;                     // main toolbar: 16 | 22 | 32
+    // 0.99.0: the size of every bar: 16 (Small) | 22 (Normal) | 32 (Large); Normal, on Android Large (a finger)
+    static constexpr int defaultToolbarIconSize(bool android) { return android ? 32 : 22; }
+#ifdef Q_OS_ANDROID
+    int toolbarIconSize = defaultToolbarIconSize(true);
+#else
+    int toolbarIconSize = defaultToolbarIconSize(false);
+#endif
     QString toolbarStyle = QStringLiteral("icons"); // icons | beside | under
 
 signals:

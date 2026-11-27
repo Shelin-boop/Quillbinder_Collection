@@ -2103,6 +2103,26 @@ void MainWindow::createActions()
         }
         connect(act(QStringLiteral("resetToolbarPlaces"), tr("&Reset Toolbar Places")), &QAction::triggered, this,
                 [this] { resetToolbarPlaces(); });
+        // 0.99.0: Toolbar Size: one size for every bar (a group of three choices)
+        m_toolbarSizeMenu = new QMenu(tr("Toolbar &Size"), this);
+        m_toolbarSizeMenu->setObjectName(QStringLiteral("toolbarSizeMenu"));
+        m_toolbarSizeGroup = new QActionGroup(this);
+        m_toolbarSizeGroup->setExclusive(true);
+        for (int side : {toolbars::kSmall, toolbars::kNormal, toolbars::kLarge}) {
+            const QString name = side == toolbars::kSmall ? tr("&Small") : side == toolbars::kNormal ? tr("&Normal") : tr("&Large");
+            QAction *one = act(side == toolbars::kSmall ? QStringLiteral("toolbarSizeSmall")
+                                 : side == toolbars::kNormal ? QStringLiteral("toolbarSizeNormal") : QStringLiteral("toolbarSizeLarge"), name);
+            one->setCheckable(true);
+            one->setData(side);
+            one->setActionGroup(m_toolbarSizeGroup);
+            m_toolbarSizeMenu->addAction(one);
+            connect(one, &QAction::triggered, this, [this, side] { setToolbarSize(side); });
+        }
+        {
+            const int now = toolbars::nearestSize(AppSettings::instance().toolbarIconSize);
+            for (QAction *one : m_toolbarSizeGroup->actions())
+                one->setChecked(one->data().toInt() == now);
+        }
         QAction *fs = act(QStringLiteral("fullScreen"), tr("&Full Screen"), QStringLiteral("view-fullscreen"),
                           QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_F11));
         fs->setCheckable(true);

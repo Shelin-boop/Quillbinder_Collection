@@ -356,6 +356,9 @@ private:
     void applyBarVisibility();
     void resetToolbarPlaces();
     void fillBarsMenu(QMenu *menu, int bar);
+    // 0.99.0: one size (Small, Normal, Large) for all bars and the font of their boxes
+    void applyToolbarSize();
+    void setToolbarSize(int side);
 
 public:
     QMenu *createPopupMenu() override;
@@ -643,6 +646,9 @@ private:
     QHash<QString, QAction *> m_barItems;   // controls of the bars (id -> widget action)
     QString m_builtBars;                    // what the bars were built from
     QList<QToolButton *> m_barButtons;      // buttons among the controls (icon size, text)
+    QMenu *m_toolbarSizeMenu = nullptr;     // View > Toolbars > Toolbar Size (0.99.0); also in the bars' right-click menu
+    QActionGroup *m_toolbarSizeGroup = nullptr;
+    int m_appliedBarSize = 0;               // the size the bars show now
     QList<QAction *> m_barOwned;            // separators and spaces of the bars
     QList<QAction *> m_scriptActions;       // "script:<element>", one per element of the script format
     QMenu *m_scriptMenu = nullptr, *m_scriptElementMenu = nullptr, *m_scriptFormatMenu = nullptr;

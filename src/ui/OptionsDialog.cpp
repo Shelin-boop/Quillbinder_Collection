@@ -4,6 +4,7 @@
 #include "ui/OptionStorage.h"
 #include "core/TestSwitches.h"
 #include "ui/HintLabel.h"
+#include "ui/ToolbarConfig.h"
 #include "ui/Language.h"
 #include "ui/Ask.h"
 #include "compile/PluginManager.h"
@@ -1457,9 +1458,9 @@ QWidget *OptionsDialog::appearancePage(int which)
         m_toolbarIcons = new QComboBox(page);
         m_toolbarIcons->setObjectName(QStringLiteral("optToolbarIcons"));
         m_toolbarIcons->addItem(tr("Small (16 px)"), 16);
-        m_toolbarIcons->addItem(tr("Medium (22 px)"), 22);
+        m_toolbarIcons->addItem(tr("Normal (22 px)"), 22);
         m_toolbarIcons->addItem(tr("Large (32 px)"), 32);
-        m_toolbarIcons->setCurrentIndex(qMax(0, m_toolbarIcons->findData(s.toolbarIconSize)));
+        m_toolbarIcons->setCurrentIndex(qMax(0, m_toolbarIcons->findData(toolbars::nearestSize(s.toolbarIconSize))));
         row->addWidget(m_toolbarIcons);
         row->addStretch(1);
         options->addLayout(row);

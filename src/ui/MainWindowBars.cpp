@@ -321,8 +321,9 @@ void MainWindow::createMenus()
     QMenu *bars = view->addMenu(tr("Tool&bars"));
     // 0.91.0: the rows' switches, a switch per toolbar, the standard places
     add(bars, {"showToolbar", "showFormatBar", "showIconBar", "", "showBarMain", "showBarThemes", "showBarProfiles", "showBarSearch",
-               "showBarTools", "showBarStyle", "showBarCharacter", "showBarParagraph", "showBarLabels", "", "resetToolbarPlaces", "",
-               "customizeToolbars", "customizeIconBar"});
+               "showBarTools", "showBarStyle", "showBarCharacter", "showBarParagraph", "showBarLabels", ""});
+    bars->addAction(m_toolbarSizeMenu->menuAction()); // 0.99.0: Small, Normal, Large for every bar
+    add(bars, {"resetToolbarPlaces", "", "customizeToolbars", "customizeIconBar"});
     QMenu *themes = view->addMenu(tr("&Themes")); // 0.94.0: before, under Window;
     themes->setObjectName(QStringLiteral("themeMenu"));
     // filled when opened: add-ons and the theme list can add and remove themes at any time
@@ -711,9 +712,7 @@ void MainWindow::createToolBars()
         bar->setMovable(true);
         bar->setFloatable(false);
         bar->setAllowedAreas(Qt::TopToolBarArea | Qt::BottomToolBarArea);
-        if (toolbars::isFormatBar(b))
-            bar->setIconSize(QSize(18, 18));
-        m_bars[int(b)] = bar;
+        m_bars[int(b)] = bar; // (0.99.0: every bar has the one size of applyToolbarSize(), the format bars too)
     }
     m_toolbar = m_bars[int(toolbars::Bar::Main)];
     m_formatBar = m_bars[int(toolbars::Bar::Format)];
@@ -1086,6 +1085,7 @@ void MainWindow::rebuildToolBars()
     }
     signature += QString::number(s.toolbarIconSize) + s.toolbarStyle;
     applyBarVisibility(); // (the editor for the buttons switches a bar off when it is left empty)
+    applyToolbarSize();   // (also for a changed size alone, and for the bars made after the first call)
     if (signature == m_builtBars)
         return;
     m_builtBars = signature;
@@ -1133,19 +1133,71 @@ void MainWindow::rebuildToolBars()
     const Qt::ToolButtonStyle style = s.toolbarStyle == QLatin1String("beside") ? Qt::ToolButtonTextBesideIcon
                                       : s.toolbarStyle == QLatin1String("under") ? Qt::ToolButtonTextUnderIcon
                                                                                  : Qt::ToolButtonIconOnly;
-    const QSize size(s.toolbarIconSize, s.toolbarIconSize);
-    // the icon size and the text beside or under the icons are those of the main toolbars (the first row's)
+    // the text beside or under the icons is that of the main toolbars (the first row's); the size is every bar's
     for (toolbars::Bar b : all)
-        if (!toolbars::isFormatBar(b)) {
-            m_bars[int(b)]->setIconSize(size);
+        if (!toolbars::isFormatBar(b))
             m_bars[int(b)]->setToolButtonStyle(style);
-        }
-    for (QToolButton *b : m_barButtons) {
-        b->setIconSize(size);
+    for (QToolButton *b : m_barButtons)
         b->setToolButtonStyle(style);
-    }
+    m_appliedBarSize = 0; // (the buttons were made again: their icon size is set anew)
+    applyToolbarSize();
     installToolbarDropTargets();
     placeToolButtons();
+}
+
+// 0.99.0: one size for all bars (View > Toolbars > Toolbar Size, the bars' right-click menu, Customize Toolbars): the icons
+// of every bar and of the buttons among the controls, and the font of the boxes (style list, font, size, line spacing, quick
+// search, theme list, profile button). The system's display scaling stays on top of it (the pixel sizes are device independent).
+void MainWindow::applyToolbarSize()
+{
+    const int side = qBound(16, AppSettings::instance().toolbarIconSize, 48);
+    // the commands of the size menu show the one in use (their handlers ignore this call: setToolbarSize checks the size)
+    if (m_toolbarSizeGroup)
+        for (QAction *ac : m_toolbarSizeGroup->actions())
+            if (ac->data().toInt() == toolbars::nearestSize(side) && !ac->isChecked())
+                ac->setChecked(true);
+    if (side == m_appliedBarSize)
+        return;
+    m_appliedBarSize = side;
+    const QSize size(side, side);
+    QList<QToolBar *> bars;
+    for (toolbars::Bar b : toolbars::allBars())
+        bars << m_bars[int(b)];
+    bars << m_iconBar << m_profileBar << m_labelBar;
+    for (QToolBar *bar : std::as_const(bars))
+        if (bar)
+            bar->setIconSize(size);
+    for (QToolButton *b : std::as_const(m_barButtons))
+        b->setIconSize(size);
+    // the buttons inside the widgets of the bars (the theme picker's, the profile button) follow, too
+    for (QToolBar *bar : std::as_const(bars))
+        if (bar)
+            for (QToolButton *b : bar->findChildren<QToolButton *>())
+                if (b->objectName() != QLatin1String("qt_toolbar_ext_button"))
+                    b->setIconSize(size);
+    // the boxes: the program's font times the size's factor (the same for every bar, so that a row keeps one height)
+    QFont font = QApplication::font();
+    if (font.pointSizeF() > 0)
+        font.setPointSizeF(font.pointSizeF() * toolbars::boxFontFactor(side));
+    QList<QWidget *> boxes = {m_styleCombo, m_fontCombo, m_sizeSpin, m_lineCombo, m_quickSearch, m_profileButton};
+    if (QAction *tp = m_barItems.value(QStringLiteral("themePicker")))
+        if (auto *wa = qobject_cast<QWidgetAction *>(tp))
+            boxes << wa->defaultWidget();
+    for (QWidget *w : std::as_const(boxes))
+        if (w)
+            w->setFont(font);
+}
+
+// What the size commands do: the size is kept (per device) and shown on every bar at once
+void MainWindow::setToolbarSize(int side)
+{
+    AppSettings &s = AppSettings::instance();
+    if (s.toolbarIconSize == side)
+        return;
+    s.toolbarIconSize = side;
+    s.save();
+    s.notifyChanged();
+    applyToolbarSize();
 }
 
 // 0.91.0: the standard places: Main, Themes, Search, Tools in the first row at the top; Style and Font, Character and
@@ -1236,6 +1288,8 @@ void MainWindow::fillBarsMenu(QMenu *menu, int bar)
     }
     menu->addAction(a[QStringLiteral("showBarLabels")]);
     menu->addSeparator();
+    if (m_toolbarSizeMenu)
+        menu->addAction(m_toolbarSizeMenu->menuAction()); // 0.99.0
     menu->addAction(a[QStringLiteral("resetToolbarPlaces")]);
     menu->addSeparator();
     if (bar < 0)

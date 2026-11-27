@@ -223,8 +223,10 @@ Since 0.91 the window has eight toolbars in two rows (ten since 0.95, with two t
 - Remove a button with the other arrow or a double-click, and move it with the up and down buttons or by dragging.
 - **Separator** and **Flexible Space** can be used as often as you like. A flexible space pushes what follows to the right; two of them center what stands between them.
 - Some entries are more than one command: **View**, **Add**, **Search**, the **Quick Search field**, **View Mode**, **Project Bookmarks**, **Comments and Footnotes**, **Layouts**, and **Themes** (the theme button with its menu) for the four toolbars of the first row; the style, font, size, and line spacing lists and the four paragraph buttons for the three format toolbars. Such a control exists once: added to a toolbar, it moves there from the toolbar that had it. A control of the first row cannot go onto a format toolbar, nor the other way round.
-- Below the lists you choose small, medium, or large icons and whether the toolbars of the first row show text beside or under the icons.
-- **Standard Set** puts the buttons the program came with back into the bar.
+- Below the lists you choose the size of all toolbars (Small, Normal, or Large; see below) and whether the toolbars of the first row show text beside or under the icons.
+- **Reset** puts the buttons the program came with back into the bar (it asks nothing; **Apply** or **OK** makes it count).
+
+**The size of the toolbars.** **View > Toolbars > Toolbar Size** (also in the right-click menu of every bar, and in Customize Toolbars) sets one size for all bars at once: the main toolbars, the format bars, the icon bar, and the Labels and Profiles bars. **Small** has icons of 16 pixels, **Normal** 22, and **Large** 32 (the default on Android tablets). The lists and fields on the bars (style, font, size, line spacing, quick search, themes) grow and shrink with it, so that the bars of a row keep one height. The size of your system's display scaling comes on top. The size belongs to the profile in use (see Profiles) and is kept when you quit.
 
 If a bar holds more than fits into the window, an arrow at its end opens the rest. A toolbar left without any button is switched off; switched on again under **View > Toolbars**, it has its standard set. A toolbar you arranged in a version before 0.91 was split over the new toolbars: every button went to the toolbar that holds it in the standard sets, and what you had taken off stays off.
 

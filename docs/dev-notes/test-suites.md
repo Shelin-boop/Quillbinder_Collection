@@ -220,6 +220,10 @@ needs `build/quillbinder`), the start script and the download page's size note.
   only, a Windows block's own folder, folders outside refused, no folder as before); the real entry of Translation and
   Proofreading against the add-on's manifest and folder (1.3, every script its commands name, models-3 last); the
   add-on's own `make-package.py` naming the program's runtime for Linux and Android.
+- `v0990c` (0.99.0, item 116: toolbar sizes): the default (Normal; Large for Android through the function), the names and
+  font factors; the choices in View > Toolbars (place, one group), the bars' right-click menu and Customize Toolbars; at each of
+  Small, Normal and Large every bar, every button on a bar and every box has the size and font, and the bars of a row have one
+  height (screenshots `size-*.png`); Reset in Customize Toolbars; the size kept across a restart; a profile switch applies it.
 - `verlines` (0.93.0, `tests/version_lines_tests.py`, Python only, no build): the version line per system in
   `CMakeLists.txt` (`APP_VERSION` for Linux, `APP_VERSION_WINDOWS`, `APP_VERSION_ANDROID`: the same first two numbers,
   the build's pick and its stop on a wrong number), the shell lines of the scripts and workflows that read them,

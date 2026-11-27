@@ -2,6 +2,24 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: toolbar sizes (item 116)
+
+- One size for every bar: `AppSettings::toolbarIconSize` (settings `toolbars/iconSize`; 16 Small, 22 Normal, 32 Large;
+  `toolbars::nearestSize/sizeName/boxFontFactor` in `ToolbarConfig`). `MainWindow::applyToolbarSize()` (MainWindowBars.cpp)
+  sets the icon size of all seven bars, the icon bar, Profiles and Labels and of the buttons among the controls
+  (`m_barButtons`, the color buttons too), and the font of the boxes (style list, font, size, line spacing, quick search, the
+  theme picker, the profile button) to the program's font times the factor (0.9 | 1.0 | 1.3). It runs at the start of
+  `rebuildToolBars()` (which every settings change and every profile switch reach: `applySettings()`, the settings reloader)
+  and again at its end, because the buttons are made again; `m_appliedBarSize` stops repeated work. The format bars no longer
+  have 18 px of their own: a row keeps one height.
+- The choices: `toolbarSizeSmall/Normal/Large` in `m_toolbarSizeMenu` (one `QActionGroup`); the menu is in View > Toolbars (after
+  the bar switches, before Reset Toolbar Places) and in `fillBarsMenu()` through `menuAction()`, so that both show the same
+  checked choice. Customize Toolbars' combo (`toolbarIconSize`) and File > Options > Appearance use the same three values.
+- The default is `AppSettings::defaultToolbarIconSize(android)`: 22, and 32 under `Q_OS_ANDROID` (the header picks the branch;
+  `v0990c` checks both values through the function).
+- Customize Toolbars: the button `toolbarReset` was "Standard Set" and now says "Reset" (same behavior: no question; the
+  window's Apply or OK makes it count).
+
 ## 0.94.0 beta: one place per topic in the menus, Find Command, the first start's page, the application menu entry
 
 - **Menus** (`MainWindowBars.cpp`, `createMenus`): `m_layoutMenu` is now View > Layout (`paneLayoutMenu`): the positions

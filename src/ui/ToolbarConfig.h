@@ -76,6 +76,12 @@ bool placeToolButtonsOnce(QStringList &bar, QStringList &done);
 // Items a bar can hold: commands of writing tools ("tool:...") yes, styles and layouts
 // (they come and go with projects and files) no.
 bool usableOnBar(const QString &id);
+// 0.99.0: one icon size for all bars: Small (16 px), Normal (22 px), Large (32 px); the boxes (style list, font, size, line
+// spacing, search, themes) scale their font with it. Values between the three belong to the nearest.
+constexpr int kSmall = 16, kNormal = 22, kLarge = 32;
+int nearestSize(int side);          // kSmall, kNormal or kLarge
+QString sizeName(int side);         // "Small", "Normal", "Large" (translated)
+double boxFontFactor(int side);     // 0.9 | 1.0 | 1.3, in between linear
 QString label(const QString &id);   // for lists; empty for unknown ids
 QIcon icon(const QString &id);
 
