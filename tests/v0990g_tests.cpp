@@ -466,7 +466,7 @@ static void shapes(MainWindow &w, Project *p, BinderPanel *binder)
     {
         QMenu *bars = subMenu(topMenu(w, QStringLiteral("View")), QStringLiteral("Toolbars"));
         const QStringList want = {QStringLiteral("Show Toolbar"), QStringLiteral("Main"), QStringLiteral("Themes"), QStringLiteral("Profiles"),
-                                  QStringLiteral("Search"), QStringLiteral("Tools"), QStringLiteral("|"), QStringLiteral("Show Format Bar"),
+                                  QStringLiteral("Search"), QStringLiteral("Tools"), QStringLiteral("Read Aloud"), QStringLiteral("|"), QStringLiteral("Show Format Bar"),
                                   QStringLiteral("Style and Font"), QStringLiteral("Character and Alignment"), QStringLiteral("Paragraph and Insert"),
                                   QStringLiteral("|"), QStringLiteral("Icon Bar"), QStringLiteral("Labels"), QStringLiteral("|"),
                                   QStringLiteral("Toolbar Size"), QStringLiteral("Handwriting Button"), QStringLiteral("Reset Toolbar Places"), QStringLiteral("|"), QStringLiteral("Customize Toolbars"),

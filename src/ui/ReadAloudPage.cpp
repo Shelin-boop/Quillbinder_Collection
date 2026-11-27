@@ -3,6 +3,7 @@
 #include "core/AiEngine.h"
 #include "ui/AiInstallPanel.h"
 #include "ui/Language.h"
+#include "ui/OptionStorage.h"
 
 #include <QComboBox>
 #include <QFormLayout>
@@ -65,6 +66,12 @@ ReadAloudPage::ReadAloudPage(QWidget *parent) : QWidget(parent)
     m_state->setWordWrap(true);
     f->addRow(m_state);
     lay->addWidget(box);
+
+    // 0.99.0: where each value is kept (File > Options tells it in the tool tip, as on the other pages): the program's,
+    // for this computer's models
+    qb::optstore::mark(m_language, QStringLiteral("readaloud/language"));
+    qb::optstore::mark(m_model, QStringLiteral("readaloud/model"));
+    qb::optstore::mark(m_device, QStringLiteral("readaloud/device"));
 
     m_panel = new AiInstallPanel(ai::aiEngineId(), {QStringLiteral("tts")}, this);
     lay->addWidget(m_panel, 1);

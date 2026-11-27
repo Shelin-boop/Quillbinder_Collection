@@ -2,6 +2,14 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: pitfalls found by the first full test
+
+- Read Aloud's toolbar is shown from the start at the end of the first row, so suites that count the eight old grip bars
+  (v0910, v0911) switch it off first; Profiles and Labels are hidden by default.
+- A child widget that connects to `QApplication::focusChanged` (the focus frame) lives on after `~MainWindow`'s body: cut the
+  connection in the destructor (`FocusLine::stopListening`), as `m_focusLinks` does (suite v0930b).
+- `readaloud/` keys are program-only in `settingslayer::programOnly`; the page's boxes are marked with `optstore::mark`.
+
 ## 0.99.0: Read Aloud (item 114)
 
 `core/ReadAloud.*` (no windows): `Settings`/`Config` (group `readaloud`, per device), the model choice, the voices, the sentence

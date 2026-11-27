@@ -320,6 +320,12 @@ static void windowChecks(MainWindow &w)
         themesOn->trigger(); // (0.94.0: the Themes bar is off by default)
         settle(300);
     }
+    // (0.99.0: the Read Aloud toolbar is shown from the start at the end of the first row; these checks are about the
+    // eight toolbars they name, so it is switched off here)
+    if (QAction *readOff = w.findChild<QAction *>(QStringLiteral("showBarReadAloud")); readOff && readOff->isChecked()) {
+        readOff->trigger();
+        settle(300);
+    }
     GripBar *mainBar = b.all[0], *themes = b.all[1], *search = b.all[2], *tools = b.all[3], *style = b.all[4], *character = b.all[5],
             *paragraph = b.all[6], *iconBar = b.all[7];
     QAction *reset = w.findChild<QAction *>(QStringLiteral("resetToolbarPlaces"));
