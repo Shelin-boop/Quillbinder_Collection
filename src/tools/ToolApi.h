@@ -36,11 +36,16 @@
 // change in progress", keepRunning, and the program's list of loaded AI models with the rule for their memory) and a
 // third interface, ToolModels (its own IID), through which the program asks a tool to unload one of its models. A tool
 // calls the new functions only when host->apiVersion() >= 130; a tool without ToolModels is never asked.
+// 1.3 also gives tools the program's AI engine (the package "ai-engine", its C interface tools/QbAi.h): aiEngine() returns
+// its table, aiPickDevice() applies the one rule of the device choice, aiPanel() is the program's panel that installs the
+// engine and the catalog's models, aiModelFile() finds an installed model. A tool never loads libqbai itself: the program
+// loads it once for itself and every tool (two copies of its libraries in one process do not work).
 // Nothing of 1.0 may change: the program reads the structs and calls the
 // functions of tools built years earlier.
 
 #include <QJsonArray>
 #include <QList>
+#include <QPair>
 #include <QString>
 #include <QStringList>
 #include <QVariant>
@@ -49,6 +54,7 @@
 class QMenu;
 class QObject;
 class QWidget;
+struct qbai_api;   // tools/QbAi.h (1.3): include it to call the engine
 
 namespace qb {
 namespace tools {
@@ -198,6 +204,29 @@ public:
     // The figures of a device's memory, as the engine's driver reports its budget: "gpu:<name>", total and available
     // bytes. Report them before requestModelLoad and whenever they change. (The program reads the RAM itself.)
     virtual void reportDeviceMemory(const QString &where, qint64 total, qint64 available) = 0;
+
+    // The AI engine (also 1.3). Its table: what qbai_get_api(version) of the installed package "ai-engine" returns (tools/QbAi.h,
+    // QBAI_API_VERSION); null when no engine is installed, it could not be loaded, or it is older than `version`. The first call
+    // loads it (do that when the writer uses the function, not at the tool's start: the AI is loaded only when used). Before a
+    // model loads, ask requestModelLoad as above; the engine's devices are those of qbai_api::device_get.
+    virtual const qbai_api *aiEngine(int version) = 0;
+    // The device for a model of `bytes` under the writer's choice ("auto", "cpu" or "gpu:<name>", as the tool keeps it):
+    // Automatic takes the graphics card whose free memory (its driver's budget) holds the model, else the CPU. Returns the
+    // device's index for qbai_load_params::device (0 = the CPU) and in *where its memory for requestModelLoad ("ram" or
+    // "gpu:<name>"); the cards' figures are reported to the registry. It loads the engine as aiEngine() does; -1 when there is
+    // no engine.
+    virtual int aiPickDevice(const QString &choice, qint64 bytes, QString *where) = 0;
+    // The entries of a device setting: the value and its text, ("auto", "Automatic"), ("cpu", "Processor (CPU)"), then the
+    // cards of a loaded engine ("gpu:<name>", "<name>").
+    virtual QList<QPair<QString, QString>> aiDeviceChoices() = 0;
+    // The program's panel for a tool's options: the engine's state with "Install the Engine" and "Install from File...", and
+    // the models of the program's catalog of the given kinds ("asr", "tts") with download, progress, check and removal. Owned
+    // by `parent` (main thread only). Its signal changed() (connect with SIGNAL()) says that the engine or a model was
+    // installed or removed.
+    virtual QWidget *aiPanel(const QStringList &kinds, QWidget *parent) = 0;
+    // The file of an installed model of the catalog ("" when it is not installed): `role` "model" (the file the engine loads)
+    // or "extra" (its mmproj or tokenizer).
+    virtual QString aiModelFile(const QString &modelId, const QString &role) const = 0;
 };
 
 // A section a tool adds to File > Options (ToolInterface::optionsPage).

@@ -3,12 +3,15 @@
 #include "AppInfo.h"
 #include "compile/PluginManager.h"
 #include "core/Addons.h"
+#include "core/AiCatalog.h"
+#include "core/AiEngine.h"
 #include "core/KeepAlive.h"
 #include "core/Launcher.h"
 #include "core/ModelMemory.h"
 #include "core/Paths.h"
 #include "core/Platform.h"
 #include "text/TextUtil.h"
+#include "ui/AiInstallPanel.h"
 #include "ui/MainWindow.h"
 
 #include <QCoreApplication>
@@ -352,6 +355,39 @@ void Host::modelUnloaded(const QString &id)
 void Host::reportDeviceMemory(const QString &where, qint64 total, qint64 available)
 {
     onMainThread(this, [where, total, available] { modelmem::ModelMemory::instance().reportDeviceMemory(where, total, available); });
+}
+
+// the AI engine (1.3): one engine in the process for the program and every tool (core/AiEngine.h); from any thread
+const qbai_api *Host::aiEngine(int version)
+{
+    return ai::Engine::instance().apiFor(version);
+}
+
+int Host::aiPickDevice(const QString &choice, qint64 bytes, QString *where)
+{
+    ai::Engine &e = ai::Engine::instance();
+    if (!e.ensureLoaded())
+        return -1;
+    const ai::Device d = ai::pickDevice(e.devices(true), choice, bytes);
+    if (where)
+        *where = d.where();
+    return d.index;
+}
+
+QList<QPair<QString, QString>> Host::aiDeviceChoices()
+{
+    return ai::deviceChoices(ai::Engine::instance().devices());
+}
+
+QWidget *Host::aiPanel(const QStringList &kinds, QWidget *parent)
+{
+    return new AiInstallPanel(ai::aiEngineId(), kinds, parent);
+}
+
+QString Host::aiModelFile(const QString &modelId, const QString &role) const
+{
+    const ai::CatalogModel *m = ai::Catalog::builtIn().model(modelId);
+    return m ? ai::modelFile(*m, role) : QString();
 }
 
 tools::ToolModels *Host::models(tools::ToolInterface *tool)

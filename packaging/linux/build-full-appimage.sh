@@ -28,8 +28,14 @@ done
 # every add-on of the source, nothing else (not the program update, not the media bundle, which
 # holds two of these packages again)
 packages=()
+# 0.99.0: an add-on folder with a file "may-be-missing" (the engine packages, built only where their pack is) is left out
+# when its package was not built, with a message
 for d in "$ROOT"/addons/*/; do
     id=$(basename "$d")
+    if [ ! -f "$ADDONS/$id.qbpkg" ] && [ -f "$d/may-be-missing" ]; then
+        echo "left out: $id ($(head -1 "$d/may-be-missing"))"
+        continue
+    fi
     [ -f "$ADDONS/$id.qbpkg" ] || { echo "missing add-on package: $ADDONS/$id.qbpkg" >&2; exit 1; }
     packages+=("$ADDONS/$id.qbpkg")
 done

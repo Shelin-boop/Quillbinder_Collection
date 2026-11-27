@@ -2,6 +2,25 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## v0990h (0.99.0)
+
+`qb_v0990h_tests`: the AI engine packages against a fake libqbai (`tests/fakeqbai/FakeQbAi.cpp`, built as
+`<build>/tests/fake-ai-engine/libqbai.so.1`: a sine for speech, a fixed text for recognition, a fake card from
+`QBAI_FAKE_CARDS`, `QBAI_FAKE_SLOW_MS` to slow it down, files beginning with `FAIL` or `NOGPU` that do not load, and
+`qbai_fake_stats`): no network and no engine until a button is pressed, the interface's versions, no engine installed, the
+device choice (Automatic, fixed cards, the CPU), the engine loaded (`QB_AI_ENGINE_LIB`), its devices reported to `ModelMemory`,
+the shared cores, tool interface 1.3's `aiEngine`/`aiPickDevice`/`aiDeviceChoices`/`aiPanel`/`aiModelFile`, a model registered
+and unloaded, speaking at once and streamed, cancelling, a busy model kept, the 80 % rule, Automatic's fall back to the CPU,
+recognition, the speed of speech; the catalog (`QB_AI_CATALOG`; the program's own), the downloads from a local "release"
+(`QB_AI_MODEL_SOURCE`: a file in parts, a wrong checksum, going on after a stop, cancelling, a model too large), the engine
+package from a file and from a "release" (`QB_AI_ENGINE_SOURCE`; `QB_REQUIRE_SIGNED` for the refusal of unsigned ones), the
+panel (screenshots `v0990h-panel-*`), the package recipes (`addons/*-engine`, with the pack and `<build>/qbai/libqbai.so.1`:
+stage, package, `tools/check-engine-package.py`; the handwriting engine's clear message without its pack) and, in a child
+process, the real engine when built (Sonic's speed with the pitch kept; with `QB_AI_WHISPER_MODEL` (whisper.cpp's tiny English
+model) and `QB_AI_WHISPER_SAMPLE` (jfk.wav) a real transcription; `QB_AI_QWEN_TALKER`/`QB_AI_QWEN_CODEC` a word of Qwen3-TTS).
+The recipe checks take the packs from `QB_AI_ENGINE_DIR` and `QB_ONNXRUNTIME_DIR` (default `build/ai-engine`,
+`build/onnxruntime`). Without the pack and libqbai those parts print a line and are not counted.
+
 ## v0990b (0.99.0)
 
 `qb_v0990b_tests`: the AI's default cores (1->1 ... 16->12), the 50 % and 80 % rule with fake RAM and card figures

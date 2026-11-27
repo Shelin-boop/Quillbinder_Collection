@@ -56,6 +56,23 @@ New functions and fixes (Linux first).
   `modelUnloaded`, `reportDeviceMemory`) and a third interface `ToolModels` through which the program asks a tool to unload a
   model. Tools of 1.0 to 1.2 keep working unchanged.
 
+- **The AI engine packages**: the engines of the AI functions that run on the computer come as two packages of their own,
+  installed from the settings page of a function that needs them and never by default: **AI Engine** (ggml with its compute
+  modules for every processor generation and, in the published package, Vulkan for NVIDIA, AMD and Intel graphics cards;
+  whisper.cpp for speech recognition, Pocket TTS through llama.cpp and Qwen3-TTS through qwentts.cpp for reading aloud, Sonic
+  for the speed of speech) and **Handwriting Engine** (ONNX Runtime). The program has no link-time dependency on them: it
+  opens the engine through a small C interface of its own (libqbai) when a function is first used. A settings page offers
+  **Install the Engine** (this version's package from the project's release page, checked as every add-on: only with the
+  project's signature) and **Install from File...** (for a computer without a connection), and the function's models from a
+  catalog built into the program (the release `models-5`, published later), each with its languages, size, memory need and
+  license; a download shows its progress, every file is checked against its SHA-256, a stopped download goes on where it
+  stopped, and models can be deleted. The network is used only when one of these buttons is pressed. Devices: **Automatic**
+  takes a graphics card when the model fits into its free memory (as its driver reports it), else the computer's memory and
+  the processor; a card or the processor can be chosen. Every model is registered with the rule for the AI's memory. Speech is
+  only played, never saved.
+- **Tool interface 1.3** also gives add-ons the program's engine (`aiEngine`, the device rule `aiPickDevice`,
+  `aiDeviceChoices`, the install panel `aiPanel`, `aiModelFile`), so that Speech Transcription 1.10 uses the same engine.
+
 - **Third-party parts for the built-in encryption and the AI add-ons are prepared** (no function of the program yet): three new
   ready-made packs of libraries for the Linux build (Botan, RNP, json-c, bzip2 and zlib; ONNX Runtime; ggml, whisper.cpp,
   llama.cpp, qwentts.cpp and Sonic), the daily security watch follows each new part, and `THIRD-PARTY.md` and Help > Third-Party

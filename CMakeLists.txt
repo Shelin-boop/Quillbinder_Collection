@@ -358,6 +358,12 @@ if(QB_BUILD_TOOL_PLUGINS)
   add_subdirectory(plugins/tools)
 endif()
 
+# 0.99.0: libqbai, the wrapper inside the AI engine package (addons/ai-engine): built when the engine's libraries are there
+# (tools/get-ai-engine.sh). The program does not link it (it opens it with QLibrary); Linux only in this part.
+if(UNIX AND NOT APPLE AND NOT ANDROID)
+  add_subdirectory(engines/qbai)
+endif()
+
 # Importers (src/import/ImporterApi.h): .doc files and web pages, add-ons as well (addons/import-*).
 option(QB_BUILD_IMPORTER_PLUGINS "Build the importer add-ons' plugins" ON)
 if(QB_BUILD_IMPORTER_PLUGINS)

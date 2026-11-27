@@ -87,6 +87,12 @@ def addon_note(f):
                 "1.1. Optional: Media Playback plays the free formats without it.")
     if f.startswith("media-playback"):
         return " Plays audio and video files in free formats (MP3, Ogg, Opus, FLAC, WAV, WebM ...)."
+    if f.startswith("ai-engine"):
+        return (" The engine of the AI functions that run on the computer (Read Aloud, Speech Transcription). They install it "
+                "from their settings pages; this file is for a computer without a connection. It holds no models.")
+    if f.startswith("handwriting-engine"):
+        return (" The engine of handwriting recognition (ONNX Runtime). The settings page of Handwriting installs it; this file "
+                "is for a computer without a connection. It holds no models.")
     return ""
 
 

@@ -18,6 +18,7 @@ for theme in ("qbicons", "qbicons-dark"):
             rel = os.path.relpath(full, RES)
             entries.append(("icons/" + os.path.relpath(full, os.path.join(RES, "icons")), rel))
 entries.append(("app/quillbinder.svg", "app/quillbinder.svg"))
+entries.append(("ai/models.json", "ai/models.json"))   # 0.99.0: the catalog of the AI models (src/core/AiCatalog.h)
 entries.append(("docs/manual.md", "../docs/manual.md"))
 entries.append(("docs/developer-guide.md", "../docs/developer-guide.md"))
 entries.append(("docs/mindmap-help.md", "../docs/mindmap-help.md"))
