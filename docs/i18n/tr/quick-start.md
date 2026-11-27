@@ -68,13 +68,13 @@
 ### Alışılmışın ötesi
 
 - **Zihin haritaları**: her belge ve klasör için notlardan, çizgilerden ve oklardan oluşan bir pano (denetçinin **Zihin Haritası** düğmesi). **Yardım > Zihin Haritası Yardımı** nasıl çalıştığını gösterir.
-- **Nesneler**: karakterler, mekânlar, ortamlar, ilgi çekici noktalar, hava durumu ve kendi kategorileriniz; her birinin bir alan sayfası ve aralarında bağlantılar vardır (denetçinin **Nesneler** düğmesi veya **Pencere > Nesneler…**).
+- **Nesneler**: karakterler, mekânlar, ortamlar, ilgi çekici noktalar, hava durumu ve kendi kategorileriniz; her birinin bir alan sayfası ve aralarında bağlantılar vardır (denetçinin **Nesneler** düğmesi veya **Pencere > Nesneler**).
 - **Tablolar ve resimler**: hazır tasarımlarla veya kendi tasarımınızla **Ekle > Tablo…**, satırlar, sütunlar, birleştirilmiş hücreler ve renkler için **Biçim > Tablo**; metnin çevresinden aktığı, metnin yanındaki resimler, başlıklar ve e-kitapların ve Word dosyalarının alternatif metin olarak sakladığı açıklamalar (bir resme sağ tıklayın, **Resim…**).
 - **Simge çubuğu**: tek tıkla açılan ona kadar belge simgesi. **Belgeler > Simgeyi Değiştir** ayrıca metinden veya kendi resimlerinizden simgeler yapar.
 - **Bölüm bölüm yakınlaştırma**: binder, düzenleyiciler, denetçi bölümleri, mantar pano, anahat ve zihin haritalarının her biri kendi yakınlaştırmasını saklar.
 - **Saklanan yerler**: her belge, imleci bıraktığınız yerde açılır; projeyi yeniden açtıktan sonra da.
 - **Yazı tipleri**: **Biçim > Yazı Tipi > Yazı Tipi Dosyalarını Kur…** programdan çıkmadan yazı tipi ekler.
-- **Güvenlik**: siz yazmaya devam ederken de otomatik kaydetme, yedekler, proje dosyasının yedek bir kopyası, çökme ve donma raporları (**Yardım > Sorun Giderme ve Geliştirme > Çökme Raporları…**) ve **Yardım > Sorun Giderme ve Geliştirme > Sistem Bilgisi…**.
+- **Güvenlik**: siz yazmaya devam ederken de otomatik kaydetme, yedekler, proje dosyasının yedek bir kopyası, çökme ve donma raporları (**Yardım > Sorun Giderme ve Geliştirme > Çökme Raporları…**) ve **Yardım > Sorun Giderme ve Geliştirme > Sistem Bilgisi**.
 
 ### Güncellemeler ve eklentiler
 
@@ -88,5 +88,5 @@ AppImage'ın **tam sürümü** (*...-full-{{LABEL}}-x86_64.AppImage*) tüm eklen
 - **Yardım > Karşılama Projesi**: "Alışılmışın ötesi" altında sıralanan özellikleri gösteren ve denemenize olanak veren kısa bir proje.
 - **Yardım > Zihin Haritası Yardımı**: notlar, çizgiler, oklar ve şekiller; resimler ve bir alıştırma panosuyla.
 - **Yardım > Tüm Yer Tutucuların Listesi** ve **Yardım > Klavye Kısayolları…**
-- **Yardım > Üçüncü Taraf Lisansları…**: {{APP}}'in kullandığı diğer projelerin parçalarının lisansları.
+- **Yardım > Üçüncü Taraf Lisansları**: {{APP}}'in kullandığı diğer projelerin parçalarının lisansları.
 - **Yardım > {{APP}} Hakkında**: sürüm ve lisans. {{APP}}, Apache License 2.0 altında özgür bir yazılımdır.
