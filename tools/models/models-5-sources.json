@@ -1,0 +1,647 @@
+{
+ "comment": "Third-party files of the release models-5 with their pins (Hugging Face repository, commit, file, size, SHA-256 of the file; a file that is no LFS file has the git blob id instead). tools/models/fetch-hf.py downloads a group and checks every pin. Pinned 2026-11-27.",
+ "groups": {
+  "ppocr": {
+   "repo": "small-models-for-glam/kraken-ppocrv6-small",
+   "revision": "49c249bf81d95ab2c5f699638d066f7935da6f16",
+   "files": [
+    {
+     "path": "small.safetensors",
+     "size": 13065380,
+     "sha256": "3108259779f5abfed3908a1c9eafba64d17e4a2a169368c539ecfeff04c018f3"
+    }
+   ]
+  },
+  "pocket-en": {
+   "repo": "kyutai/pocket-tts-without-voice-cloning",
+   "revision": "a7056f505a4a8ca72d8b5fb1440071d6f1a35739",
+   "files": [
+    {
+     "path": "languages/english/model.safetensors",
+     "size": 219029196,
+     "sha256": "4c56cbd171c63e8a26ea61f5d48b8a0cd8f3c51f4652c0ab9a19bfcced8c931d"
+    },
+    {
+     "path": "languages/english/tokenizer.model",
+     "size": 59339,
+     "sha256": "d461765ae179566678c93091c5fa6f2984c31bbe990bf1aa62d92c64d91bc3f6"
+    },
+    {
+     "path": "languages/english/tokenizer.json",
+     "size": 245020,
+     "gitBlob": "fe3e7fe6185e4a3bc218fa8f5ed993ecb098201c"
+    },
+    {
+     "path": "languages/english/embeddings/alba.safetensors",
+     "size": 6244152,
+     "sha256": "5850f417028fb2bf6de31e5e395e56ee7a21ac0e52ef31aebd4a6a2847d72e9c"
+    },
+    {
+     "path": "languages/english/embeddings/anna.safetensors",
+     "size": 7620408,
+     "sha256": "626a19a37e3cbf5cac1e6893748c3f0dd2081b26b1ce787ae0deb42cb1ddb7f6"
+    },
+    {
+     "path": "languages/english/embeddings/azelma.safetensors",
+     "size": 7178040,
+     "sha256": "3073cbb90cd659fbfe15aa38449ddd4588c6d6c1a1de64fa36422bbb95f96b4e"
+    },
+    {
+     "path": "languages/english/embeddings/bill_boerst.safetensors",
+     "size": 6539064,
+     "sha256": "a4510681c5ca6ac978b9fee83fc8a0d6569f7627b380caab0c5d23c53e4c0607"
+    },
+    {
+     "path": "languages/english/embeddings/caro_davy.safetensors",
+     "size": 5064504,
+     "sha256": "90309a130521328aa79f33b5ccc6008ba26163f621967455c0ed5c7b9e2854fd"
+    },
+    {
+     "path": "languages/english/embeddings/charles.safetensors",
+     "size": 6195000,
+     "sha256": "007c66f069aa3a564139974e5d4e1e1902ae95d91e76963bee64f4309a75cf8f"
+    },
+    {
+     "path": "languages/english/embeddings/eponine.safetensors",
+     "size": 6932280,
+     "sha256": "ea923ff050147966af1c7ebd0978fd16f099ead813dfcd1fd2f927d709307f50"
+    },
+    {
+     "path": "languages/english/embeddings/estelle.safetensors",
+     "size": 7571256,
+     "sha256": "20c008682e0ffff57fc642fa8c61f711b1789bd0f42c50d0d0c5e55ae09fbc67"
+    },
+    {
+     "path": "languages/english/embeddings/eve.safetensors",
+     "size": 6145848,
+     "sha256": "4444e6c2671a068ce385bba95fa6dd079e6432e51979ad1bfccd48d618363412"
+    },
+    {
+     "path": "languages/english/embeddings/fantine.safetensors",
+     "size": 6440760,
+     "sha256": "2c3cde0d2324a9bf4d77dc28f9bfb9fe78e8e1f8c29a412f035fb4855b09fda3"
+    },
+    {
+     "path": "languages/english/embeddings/george.safetensors",
+     "size": 5900088,
+     "sha256": "566330f66e20f95efd4fbea1e399e26dd84cf8e3ab1606e0114604e473dbc9fd"
+    },
+    {
+     "path": "languages/english/embeddings/jane.safetensors",
+     "size": 7325496,
+     "sha256": "f802b7b0ce91578dc5448e1cdf4827695e64a34cc6b2f95989dc335082522887"
+    },
+    {
+     "path": "languages/english/embeddings/javert.safetensors",
+     "size": 6145848,
+     "sha256": "2bfe465c053195e9650cbdee889de3c941971ced3f2c69f71ad3e91cde202948"
+    },
+    {
+     "path": "languages/english/embeddings/marius.safetensors",
+     "size": 6244152,
+     "sha256": "05621a1fa88bfe110063dd6fd206d0262891e374a36a04edc309317e961f14c9"
+    },
+    {
+     "path": "languages/english/embeddings/mary.safetensors",
+     "size": 5949240,
+     "sha256": "fc75f7c7cefa8c0b1957ac564037dfaac053dd067ceeffff27982f87314b5a35"
+    },
+    {
+     "path": "languages/english/embeddings/michael.safetensors",
+     "size": 7128888,
+     "sha256": "9f6538650ed3b664ab847d05244f51f04db22ce7ea00e2b285f51d91d6308ce0"
+    },
+    {
+     "path": "languages/english/embeddings/paul.safetensors",
+     "size": 6833976,
+     "sha256": "940ebd4c051aec0a9f7802f5ba36f3265be68029f5ae01c4b1322d50cfb4e03d"
+    },
+    {
+     "path": "languages/english/embeddings/peter_yearsley.safetensors",
+     "size": 3639088,
+     "sha256": "f0eb3f23bb8e2ce5203a27ee4369ebeba07eda564cecebd84ccbdb4d9507cbca"
+    },
+    {
+     "path": "languages/english/embeddings/stuart_bell.safetensors",
+     "size": 5064504,
+     "sha256": "5f1131db588c711127179a65f9eaaeb23b1ff0f5d460352e066c447858abdeb8"
+    },
+    {
+     "path": "languages/english/embeddings/vera.safetensors",
+     "size": 6686520,
+     "sha256": "fe136ebb9c88b65803e73ab8fc04fcc7faaa5aa790559bdab3d2382826eea44a"
+    }
+   ]
+  },
+  "pocket-fr": {
+   "repo": "kyutai/pocket-tts-without-voice-cloning",
+   "revision": "a7056f505a4a8ca72d8b5fb1440071d6f1a35739",
+   "files": [
+    {
+     "path": "languages/french/model.safetensors",
+     "size": 219029196,
+     "sha256": "56366cfed6c25bfcd3bf4c61e66e06efaf52e78a5d06e1dcade1c588495bc699"
+    },
+    {
+     "path": "languages/french/tokenizer.model",
+     "size": 60690,
+     "sha256": "dd8dc8cfad3c4b3711a8629ede27d5be934eb98bcb00462bf91ed40fb8f6f38a"
+    },
+    {
+     "path": "languages/french/tokenizer.json",
+     "size": 246403,
+     "gitBlob": "1b1771e8304a781fef547c86026ad2528cd9ba30"
+    },
+    {
+     "path": "languages/french/embeddings/alba.safetensors",
+     "size": 6244152,
+     "sha256": "4c80b1438668290542068bbc9515abd2c267f4cc86764c6633fcde395d1b2681"
+    },
+    {
+     "path": "languages/french/embeddings/anna.safetensors",
+     "size": 7620408,
+     "sha256": "7a7fae31e4b0e16102cb2514f96189cdb57c8403f5f7aba2b37aa942e2d03488"
+    },
+    {
+     "path": "languages/french/embeddings/azelma.safetensors",
+     "size": 7178040,
+     "sha256": "d5f6e1176878323101cecf7595c3a8fd998048a0a5eefb864dbfcc0e453065f8"
+    },
+    {
+     "path": "languages/french/embeddings/bill_boerst.safetensors",
+     "size": 6539064,
+     "sha256": "acf6b6911e12f9e46b35971cdefb5d2a63b9308834a06477b2cc22ec4003ee61"
+    },
+    {
+     "path": "languages/french/embeddings/caro_davy.safetensors",
+     "size": 5064504,
+     "sha256": "40db2cb5e47bb98f151d7a3591ae269fd437682c08e4762a231009ac516bb66d"
+    },
+    {
+     "path": "languages/french/embeddings/charles.safetensors",
+     "size": 6195000,
+     "sha256": "956942f32745023f512ca99a45514648c8bbf4a4edc5bb5fdcb7c1a5dd5fbf97"
+    },
+    {
+     "path": "languages/french/embeddings/eponine.safetensors",
+     "size": 6932280,
+     "sha256": "8e216220a7e8a69f7aa01ec85db2e63a445f9af6b907c43640a53a1889e6125b"
+    },
+    {
+     "path": "languages/french/embeddings/estelle.safetensors",
+     "size": 7571256,
+     "sha256": "d9efd55657f74ba9483caec23f9fd1d155e121b058feef86af3760d54ea8aa15"
+    },
+    {
+     "path": "languages/french/embeddings/eve.safetensors",
+     "size": 6145848,
+     "sha256": "b642a43b786fb60571656814cc66f9c24f8a457ea9f727903ea97d647d5ceedb"
+    },
+    {
+     "path": "languages/french/embeddings/fantine.safetensors",
+     "size": 6440760,
+     "sha256": "2ebba7baef8586851c589226e58414b21386a20dbac4c45746cd4317e51ff57b"
+    },
+    {
+     "path": "languages/french/embeddings/george.safetensors",
+     "size": 5900088,
+     "sha256": "b7513caf686418ec303dfd87dc6ddbcc020df9bf5964cb4afcd0b72b602afa6f"
+    },
+    {
+     "path": "languages/french/embeddings/jane.safetensors",
+     "size": 7325496,
+     "sha256": "1482685d8a1a22a7294df650f61293bab353445710e26a60ae057cbf4ad85221"
+    },
+    {
+     "path": "languages/french/embeddings/javert.safetensors",
+     "size": 6145848,
+     "sha256": "de53da3263a749289bfed884faab4aba87541133828af506412f88becd3adbc1"
+    },
+    {
+     "path": "languages/french/embeddings/marius.safetensors",
+     "size": 6244152,
+     "sha256": "f2b741148f2bc01f617e0aedfc5767f477b150b36f98490fa49f8ed0a39556fd"
+    },
+    {
+     "path": "languages/french/embeddings/mary.safetensors",
+     "size": 5949240,
+     "sha256": "8d5d4f03bce7660da0ea81d96f8a0ea0913685b21fbbbd7bba714242822368dc"
+    },
+    {
+     "path": "languages/french/embeddings/michael.safetensors",
+     "size": 7128888,
+     "sha256": "7dc7c44c71e514fcec8203a310676c410b3a68280dd52f6d60c424d51a8b638a"
+    },
+    {
+     "path": "languages/french/embeddings/paul.safetensors",
+     "size": 6833976,
+     "sha256": "85d2f623d5de93dbc33b56f7cbdb90bfaf100c1a7a0958848326223bc7cda5ed"
+    },
+    {
+     "path": "languages/french/embeddings/peter_yearsley.safetensors",
+     "size": 3639088,
+     "sha256": "ecd54a21b65e9d94964756421b0b2d2742be3075409aeb52806da2ea15b90880"
+    },
+    {
+     "path": "languages/french/embeddings/stuart_bell.safetensors",
+     "size": 5064504,
+     "sha256": "7d5442a128569a5e81e20e1e43866a7773b989438ee2e0f7e2f0a7904672944d"
+    },
+    {
+     "path": "languages/french/embeddings/vera.safetensors",
+     "size": 6686520,
+     "sha256": "dca0db2aa7d5e63dab39a1826f7a4833b6852057eebb1ce21f4cd0945dce9870"
+    }
+   ]
+  },
+  "pocket-es": {
+   "repo": "kyutai/pocket-tts-without-voice-cloning",
+   "revision": "a7056f505a4a8ca72d8b5fb1440071d6f1a35739",
+   "files": [
+    {
+     "path": "languages/spanish/model.safetensors",
+     "size": 219029196,
+     "sha256": "c4988ff376692f2ab1e85b17350755b08f16e49c0b5f0de8b271efa9abd71de7"
+    },
+    {
+     "path": "languages/spanish/tokenizer.model",
+     "size": 61063,
+     "sha256": "9714c8ce180d8147ab4c1406cd759619828f95d7000c87c41dc9ccec527a3e89"
+    },
+    {
+     "path": "languages/spanish/tokenizer.json",
+     "size": 246610,
+     "gitBlob": "3688d1dc50e27ea062c46d0472b1ba82fdbcb7c2"
+    },
+    {
+     "path": "languages/spanish/embeddings/alba.safetensors",
+     "size": 6244152,
+     "sha256": "3054baa9d54a47667ff333a95f4d3ed9dc7d31ada1fe99cee334d2bb6f1a5029"
+    },
+    {
+     "path": "languages/spanish/embeddings/anna.safetensors",
+     "size": 7620408,
+     "sha256": "1a8b159d01e983321c8be53b9acfcf66fe069ac9b03e5432043972ebc8bd36f3"
+    },
+    {
+     "path": "languages/spanish/embeddings/azelma.safetensors",
+     "size": 7178040,
+     "sha256": "acd979cb34fc704a50c57abb222adca6cd99e524e1385e8ebe4b3ad607efd5cd"
+    },
+    {
+     "path": "languages/spanish/embeddings/bill_boerst.safetensors",
+     "size": 6539064,
+     "sha256": "c31f843c7ed974e16d13a2a6af5936db04b3088557b5d6d539248a4828c1c792"
+    },
+    {
+     "path": "languages/spanish/embeddings/caro_davy.safetensors",
+     "size": 5064504,
+     "sha256": "902c51bc924990679b291ada1f1d8062e1d99de99611070012edcffba20b9500"
+    },
+    {
+     "path": "languages/spanish/embeddings/charles.safetensors",
+     "size": 6195000,
+     "sha256": "e3571dae96c2a1fdac148a1c474ae48f4b1fcd696dabbaa753d64514c294ef3c"
+    },
+    {
+     "path": "languages/spanish/embeddings/eponine.safetensors",
+     "size": 6932280,
+     "sha256": "be444e3b6fb51e70d8cb8df09c8e3905e3f3c1006fb139532f2b67d1bbc5774c"
+    },
+    {
+     "path": "languages/spanish/embeddings/estelle.safetensors",
+     "size": 7571256,
+     "sha256": "ea11513a9654bc2fdd460328eb54ae4de389eb192744e9e5ca06fd3d2c4832cf"
+    },
+    {
+     "path": "languages/spanish/embeddings/eve.safetensors",
+     "size": 6145848,
+     "sha256": "034a2fb66ce02cb19a246f64d0f5a1c4a3a04688b067fa6ba3c7e61b5c15dab0"
+    },
+    {
+     "path": "languages/spanish/embeddings/fantine.safetensors",
+     "size": 6440760,
+     "sha256": "3156e3afa0457d0ab3f7440b9eb59bc3c41b19392652e6dca402367e2a7b6f79"
+    },
+    {
+     "path": "languages/spanish/embeddings/george.safetensors",
+     "size": 5900088,
+     "sha256": "8b5557373a1089c736b417871d64562b113a71d132b0b831c98cf4f0a391f4ce"
+    },
+    {
+     "path": "languages/spanish/embeddings/jane.safetensors",
+     "size": 7325496,
+     "sha256": "a1f1c36c155e84da0bce58d635128059413e618324d47f9679aa012d8bdeb9a0"
+    },
+    {
+     "path": "languages/spanish/embeddings/javert.safetensors",
+     "size": 6145848,
+     "sha256": "0022eeb8632f0124df59701fcf76e394f1f50c83a5926044264639a46869fb2f"
+    },
+    {
+     "path": "languages/spanish/embeddings/marius.safetensors",
+     "size": 6244152,
+     "sha256": "9f5efb293cb02ffe40e8ae8e54633a30c5cc00dd67081d0031d4358131c48b1e"
+    },
+    {
+     "path": "languages/spanish/embeddings/mary.safetensors",
+     "size": 5949240,
+     "sha256": "b2175122cc79a6e54ff0b347bf6f942f59e6d50c20d8e60ad0baa708e030164f"
+    },
+    {
+     "path": "languages/spanish/embeddings/michael.safetensors",
+     "size": 7128888,
+     "sha256": "3512b08d2594526394297c018ecf5cd78995adbae15160b71ce6f1cc2f75642a"
+    },
+    {
+     "path": "languages/spanish/embeddings/paul.safetensors",
+     "size": 6833976,
+     "sha256": "f12174f23762f26ca8808bc438273c709d851cffebf3338ee1c7361233f881f1"
+    },
+    {
+     "path": "languages/spanish/embeddings/peter_yearsley.safetensors",
+     "size": 3639088,
+     "sha256": "7520b713d83595c2f7492d46562c7b03721befef81848c0c002b565c575a0d5c"
+    },
+    {
+     "path": "languages/spanish/embeddings/stuart_bell.safetensors",
+     "size": 5064504,
+     "sha256": "ad7aa629e9be2f9b8f09abb1ce48cf3468f625b048ca7fd3e2204db04926507b"
+    },
+    {
+     "path": "languages/spanish/embeddings/vera.safetensors",
+     "size": 6686520,
+     "sha256": "5c6000c09ee493cd14d84051c5e6f09ce0afd5907d9b79ff840d00636c335a56"
+    }
+   ]
+  },
+  "pocket-pt": {
+   "repo": "kyutai/pocket-tts-without-voice-cloning",
+   "revision": "a7056f505a4a8ca72d8b5fb1440071d6f1a35739",
+   "files": [
+    {
+     "path": "languages/portuguese/model.safetensors",
+     "size": 219029196,
+     "sha256": "28e20f32515ba8bd0eaec69671f11f8921414fcdc375aa072fa09f46cc1057c5"
+    },
+    {
+     "path": "languages/portuguese/tokenizer.model",
+     "size": 61351,
+     "sha256": "fe9db388dc987c8a26bb88789d2f20989e68e00d8534442a141ecccec21cedba"
+    },
+    {
+     "path": "languages/portuguese/tokenizer.json",
+     "size": 247014,
+     "gitBlob": "7c07317c6c617d98bfc412473a9b357f83717d76"
+    },
+    {
+     "path": "languages/portuguese/embeddings/alba.safetensors",
+     "size": 6244152,
+     "sha256": "494d52b7f3b91ed4ff3dec90b44a7f985194485cf5c46cf903867ae8fdc6d2aa"
+    },
+    {
+     "path": "languages/portuguese/embeddings/anna.safetensors",
+     "size": 7620408,
+     "sha256": "6933387edee7aee630834fe2e8bd40a4bf73b5e364da997388fd5de1cb8f5b5d"
+    },
+    {
+     "path": "languages/portuguese/embeddings/azelma.safetensors",
+     "size": 7178040,
+     "sha256": "8b26e719afe49fda3c6b1a23aa1e11e1c842c466ec83f83df016df2f12155270"
+    },
+    {
+     "path": "languages/portuguese/embeddings/bill_boerst.safetensors",
+     "size": 6539064,
+     "sha256": "955d3ddd5455ecde43fbf92bbb48d90a6c50ddce4cacd369cb20dab002abaa0c"
+    },
+    {
+     "path": "languages/portuguese/embeddings/caro_davy.safetensors",
+     "size": 5064504,
+     "sha256": "1c6ad7eb3746121912edda71d26e411f4a3150c0080c07147bccf07e84765df2"
+    },
+    {
+     "path": "languages/portuguese/embeddings/charles.safetensors",
+     "size": 6195000,
+     "sha256": "26654297467c0a3541a37c8e64be9cbad7a78d86bc8f8b51e58874e7eecfd800"
+    },
+    {
+     "path": "languages/portuguese/embeddings/eponine.safetensors",
+     "size": 6932280,
+     "sha256": "bf074c83a0741555e28abd3a6ad7fb195a90bdeae1d18b4f414ac43077cf46bc"
+    },
+    {
+     "path": "languages/portuguese/embeddings/estelle.safetensors",
+     "size": 7571256,
+     "sha256": "3272dfb763dab2f834357b583c603654ac6752a916fb47253c7a186591525e63"
+    },
+    {
+     "path": "languages/portuguese/embeddings/eve.safetensors",
+     "size": 6145848,
+     "sha256": "86840ca3163b6050212ff37e9048575581aff75b74fb40d74ae2f52e6366fc7a"
+    },
+    {
+     "path": "languages/portuguese/embeddings/fantine.safetensors",
+     "size": 6440760,
+     "sha256": "0934eabaa5fa5fe12535614c136bf4d073d4fe1085124495b4866011a02b4a11"
+    },
+    {
+     "path": "languages/portuguese/embeddings/george.safetensors",
+     "size": 5900088,
+     "sha256": "8e37c8fd8839aab501bdc0c30c8e4d37996e62fb66c063d3e54c80c98b4b6ea5"
+    },
+    {
+     "path": "languages/portuguese/embeddings/jane.safetensors",
+     "size": 7325496,
+     "sha256": "161d4cc6b023d20207220d3687e42d41847c1f823956062646b0c9e22705805e"
+    },
+    {
+     "path": "languages/portuguese/embeddings/javert.safetensors",
+     "size": 6145848,
+     "sha256": "1c8cb25be8928811ab7632a0a915f88ef52d05447352ac5d9fee679b62715224"
+    },
+    {
+     "path": "languages/portuguese/embeddings/marius.safetensors",
+     "size": 6244152,
+     "sha256": "9f6cc305d08f6652aa15ff0ac17c216bcd17a3fe50432afc0bcab6cd4573cbdd"
+    },
+    {
+     "path": "languages/portuguese/embeddings/mary.safetensors",
+     "size": 5949240,
+     "sha256": "148e07e6297293af34ea09bcbe2039eb703060c6650122f7de1dd116d4a94226"
+    },
+    {
+     "path": "languages/portuguese/embeddings/michael.safetensors",
+     "size": 7128888,
+     "sha256": "07b19d1897d626a8456a9c58e76461bb8d21289f42b594b9c05ec7b4091cb8b2"
+    },
+    {
+     "path": "languages/portuguese/embeddings/paul.safetensors",
+     "size": 6833976,
+     "sha256": "08c2e7e31b232866c124c312af8e34daf35e867782b2cd5271fde4b4b3c79002"
+    },
+    {
+     "path": "languages/portuguese/embeddings/peter_yearsley.safetensors",
+     "size": 3639088,
+     "sha256": "dbbaf9f0f8f352ca95d7817d49343c5af7d1fc76855e9be8ab7bda398d78fcaf"
+    },
+    {
+     "path": "languages/portuguese/embeddings/stuart_bell.safetensors",
+     "size": 5064504,
+     "sha256": "5a6ce1b11af8d644e81f0daae1a77b463316abd565468cb7424bd28172cd77e7"
+    },
+    {
+     "path": "languages/portuguese/embeddings/vera.safetensors",
+     "size": 6686520,
+     "sha256": "8f802122e2970eb3ae7f193ba3b6604f8da3cc4d59f932e5b30a6fae995dfdeb"
+    }
+   ]
+  },
+  "pocket-it": {
+   "repo": "kyutai/pocket-tts-without-voice-cloning",
+   "revision": "a7056f505a4a8ca72d8b5fb1440071d6f1a35739",
+   "files": [
+    {
+     "path": "languages/italian/model.safetensors",
+     "size": 219029196,
+     "sha256": "16365c43eaabee9b222cd414d6a48f0976b4800a21fe5d55253f645eff7eeb1f"
+    },
+    {
+     "path": "languages/italian/tokenizer.model",
+     "size": 60905,
+     "sha256": "1ef32ed65d0264239fb9d9ecb36a089a637f6e6c5c5a1a8e7df37ce486ec21da"
+    },
+    {
+     "path": "languages/italian/tokenizer.json",
+     "size": 246586,
+     "gitBlob": "9f131c421f0d3fea1d364bf06fa099e88f0b9b2b"
+    },
+    {
+     "path": "languages/italian/embeddings/alba.safetensors",
+     "size": 6244152,
+     "sha256": "259cc88884106f291c7bbff3139da1cc55bd1cdf57e7c988dcbd35818b35e105"
+    },
+    {
+     "path": "languages/italian/embeddings/anna.safetensors",
+     "size": 7620408,
+     "sha256": "d980145802244a61136c4221b3b9a97935ce914e23c18c866df9446b77b8dbde"
+    },
+    {
+     "path": "languages/italian/embeddings/azelma.safetensors",
+     "size": 7178040,
+     "sha256": "8a1e0b615b9761f2665d4af6f9f8c5677d8527b15d7dc20829fa50157dac5fbe"
+    },
+    {
+     "path": "languages/italian/embeddings/bill_boerst.safetensors",
+     "size": 6539064,
+     "sha256": "5aa040787c4d22ca349dbf4b6ccf1f664a9bf5ee12cf51b436ec73721d715ed9"
+    },
+    {
+     "path": "languages/italian/embeddings/caro_davy.safetensors",
+     "size": 5064504,
+     "sha256": "58817a09c7caf0febddef1780111326f3d80fbc26e0ad585f7a033b09f208acf"
+    },
+    {
+     "path": "languages/italian/embeddings/charles.safetensors",
+     "size": 6195000,
+     "sha256": "44d15fcbd75a80db6b73da991f57f5b0e581fabaa24d5d09b552866dacb2204a"
+    },
+    {
+     "path": "languages/italian/embeddings/eponine.safetensors",
+     "size": 6932280,
+     "sha256": "c199f2a04f4c101ebe573b7c978c47cdf2c8c626a5539cb73fda6c5a8b385a8f"
+    },
+    {
+     "path": "languages/italian/embeddings/estelle.safetensors",
+     "size": 7571256,
+     "sha256": "1c687bac16e3e1d0911c633c528728a6544a17ec6125697b61d7a517a7533f85"
+    },
+    {
+     "path": "languages/italian/embeddings/eve.safetensors",
+     "size": 6145848,
+     "sha256": "19bf7611b446437d8b134060f2f8256739f4c14b07dd289c531edc6811a4d330"
+    },
+    {
+     "path": "languages/italian/embeddings/fantine.safetensors",
+     "size": 6440760,
+     "sha256": "f7d900d34f3d4709ea3138d74a5d31956a0d78f7395b9fe1e758d754402622ed"
+    },
+    {
+     "path": "languages/italian/embeddings/george.safetensors",
+     "size": 5900088,
+     "sha256": "14bfdfb5dbdc9ffab3eb457489aa60d586aaaa87fb381db10c598ca4b60b3a98"
+    },
+    {
+     "path": "languages/italian/embeddings/jane.safetensors",
+     "size": 7325496,
+     "sha256": "b9787a3a8e3d3e608c493bd24ec2880fe65717807f938a8c1565c126590acdc4"
+    },
+    {
+     "path": "languages/italian/embeddings/javert.safetensors",
+     "size": 6145848,
+     "sha256": "9e2bfcc88a8c7b3b364b955376cecf1ddffdfd3c9974aa318bcd817343c9b521"
+    },
+    {
+     "path": "languages/italian/embeddings/marius.safetensors",
+     "size": 6244152,
+     "sha256": "f0ff88d23b2afb0f6ecb8f028b1c616a71295531a867746eb5a39561520b1cd9"
+    },
+    {
+     "path": "languages/italian/embeddings/mary.safetensors",
+     "size": 5949240,
+     "sha256": "1204c4898ccc02a91f9d1d560d99ff12617be985313583202c4e49c4cf0386be"
+    },
+    {
+     "path": "languages/italian/embeddings/michael.safetensors",
+     "size": 7128888,
+     "sha256": "fcb8bcbfe18f9875f2aa6c5d404972f7e46f9a9e155ecf88967d82cbc53dd143"
+    },
+    {
+     "path": "languages/italian/embeddings/paul.safetensors",
+     "size": 6833976,
+     "sha256": "a98133aa0a75c221026e97cf7f6368f248301905f75fdcf6e4ccd79f6ae57139"
+    },
+    {
+     "path": "languages/italian/embeddings/peter_yearsley.safetensors",
+     "size": 3639088,
+     "sha256": "1dce605726cfe85afa3ff0123011644e8ffcc8f02a58199c8606642a2c4698a0"
+    },
+    {
+     "path": "languages/italian/embeddings/stuart_bell.safetensors",
+     "size": 5064504,
+     "sha256": "ec0b8709bde934e65be2b2ebb791170ec2e5914012a1bf478e802d873ec41495"
+    },
+    {
+     "path": "languages/italian/embeddings/vera.safetensors",
+     "size": 6686520,
+     "sha256": "54f01613af6cf8ae4e9896f3a31207ccd3535b0e2f12db94591ed1423bac855a"
+    }
+   ]
+  },
+  "qwen": {
+   "repo": "Serveurperso/Qwen3-TTS-GGUF",
+   "revision": "b7ee2e8c7459c3bea99da23e3d178125a7d1713c",
+   "files": [
+    {
+     "path": "qwen-talker-0.6b-base-Q8_0.gguf",
+     "size": 992615488,
+     "sha256": "d54dbaf10591421fa764ed630d764efa717ae40cd959bd48c66d4eb1af226426"
+    },
+    {
+     "path": "qwen-talker-1.7b-base-Q4_K_M.gguf",
+     "size": 1219245248,
+     "sha256": "ea393ebaf2167ea23ce9fc18b093822851358a950d7075cd47ab4f6ce23e887d"
+    },
+    {
+     "path": "qwen-talker-1.7b-base-Q8_0.gguf",
+     "size": 2079448256,
+     "sha256": "4b9a33a236908dd9435a42f7a396e38038329d053b704342a6413c08544c4fda"
+    },
+    {
+     "path": "qwen-tokenizer-12hz-Q8_0.gguf",
+     "size": 291150624,
+     "sha256": "1883beeed99348fc35e23dd225e9082f93f6f8c109330a33d935baa8acdbfd94"
+    }
+   ]
+  }
+ }
+}

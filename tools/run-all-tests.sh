@@ -33,7 +33,7 @@ PYONLY=0
 if [ -n "$QB_SUITES" ] && { [ -z "$QB_SAMPLE" ] || [ "$QB_SAMPLE" = 0 ]; }; then
     PYONLY=1
     for n in $QB_SUITES; do
-        case $n in secwatch|deps|verlines|stshard) ;; *) PYONLY=0 ;; esac
+        case $n in secwatch|deps|verlines|stshard|models5) ;; *) PYONLY=0 ;; esac
     done
 fi
 if [ "$PYONLY" != 1 ] && [ ! -x $B/tests/qb_tests ]; then
@@ -286,6 +286,8 @@ run verlines python3 -I tests/version_lines_tests.py
 run addonentry python3 -I tests/addon_entry_tests.py
 # the system test on GitHub in shards and its harness for Windows (0.99.0): offline, Python only
 run stshard python3 -I tests/system_test_tests.py
+# the release models-5 (handwriting model, word lists, speech models, catalog) and its workflow (0.99.0): offline, Python only
+run models5 python3 -I tests/models5_tests.py
 # a suite that was asked for and is not there at all (a name mistyped in QB_SUITES)
 for n in $SELECTED; do
     [[ " $RAN $MISSING " == *" $n "* ]] || MISSING="$MISSING $n"

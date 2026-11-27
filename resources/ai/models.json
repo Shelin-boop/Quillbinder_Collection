@@ -1,5 +1,839 @@
 {
-  "format": 1,
-  "release": "models-5",
-  "models": []
+ "format": 1,
+ "release": "models-5",
+ "models": [
+  {
+   "id": "handwriting-ppocrv6-small",
+   "title": "Handwriting line model (PP-OCRv6 small)",
+   "summary": "Reads a line of handwriting or print as text, on this computer. Latin-script languages; no model for Russian yet.",
+   "kinds": [
+    "handwriting"
+   ],
+   "engine": "onnx",
+   "languages": [
+    "en",
+    "de",
+    "es",
+    "fr",
+    "pt",
+    "it",
+    "id",
+    "tr",
+    "pl",
+    "nl"
+   ],
+   "license": "Apache-2.0",
+   "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+   "credit": "PP-OCRv6 small for kraken by Benjamin Kiessling (ALMAnaCH, Inria Paris), Apache License 2.0",
+   "source": "small-models-for-glam/kraken-ppocrv6-small at commit 49c249bf81d95ab2c5f699638d066f7935da6f16 (kraken PP-OCRv6 small, Zenodo 10.5281/zenodo.21788405), converted to ONNX by tools/models/convert-ppocr.py",
+   "nonCommercial": false,
+   "sizeMB": 13,
+   "memoryMB": 150,
+   "model": "ppocrv6-small.onnx",
+   "extra": "ppocrv6-small-codec.json",
+   "files": [
+    {
+     "name": "ppocrv6-small.onnx",
+     "asset": "handwriting-ppocrv6-small--ppocrv6-small.onnx"
+    },
+    {
+     "name": "ppocrv6-small-codec.json",
+     "asset": "handwriting-ppocrv6-small--ppocrv6-small-codec.json"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "handwriting-ppocrv6-small--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "wordlist-en",
+   "title": "Word list, English",
+   "summary": "The most frequent English words with their frequency, for the word layer of Handwriting.",
+   "kinds": [
+    "wordlist"
+   ],
+   "engine": "",
+   "languages": [
+    "en"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "credit": "wordfreq 3.1.1 by Robyn Speer (data: Google Books Ngrams, SUBTLEX and others, Creative Commons Attribution-ShareAlike 4.0)",
+   "source": "wordfreq 3.1.1, best word list, made by tools/models/make-wordlists.py",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 40,
+   "model": "wordlist-en.tsv.gz",
+   "files": [
+    {
+     "name": "wordlist-en.tsv.gz",
+     "asset": "wordlist-en--wordlist-en.tsv.gz"
+    },
+    {
+     "name": "ATTRIBUTION.txt",
+     "asset": "wordlist-en--ATTRIBUTION.txt"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "wordlist-en--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "wordlist-de",
+   "title": "Word list, German",
+   "summary": "The most frequent German words with their frequency, for the word layer of Handwriting.",
+   "kinds": [
+    "wordlist"
+   ],
+   "engine": "",
+   "languages": [
+    "de"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "credit": "wordfreq 3.1.1 by Robyn Speer (data: Google Books Ngrams, SUBTLEX and others, Creative Commons Attribution-ShareAlike 4.0)",
+   "source": "wordfreq 3.1.1, best word list, made by tools/models/make-wordlists.py",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 40,
+   "model": "wordlist-de.tsv.gz",
+   "files": [
+    {
+     "name": "wordlist-de.tsv.gz",
+     "asset": "wordlist-de--wordlist-de.tsv.gz"
+    },
+    {
+     "name": "ATTRIBUTION.txt",
+     "asset": "wordlist-de--ATTRIBUTION.txt"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "wordlist-de--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "wordlist-es",
+   "title": "Word list, Spanish",
+   "summary": "The most frequent Spanish words with their frequency, for the word layer of Handwriting.",
+   "kinds": [
+    "wordlist"
+   ],
+   "engine": "",
+   "languages": [
+    "es"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "credit": "wordfreq 3.1.1 by Robyn Speer (data: Google Books Ngrams, SUBTLEX and others, Creative Commons Attribution-ShareAlike 4.0)",
+   "source": "wordfreq 3.1.1, best word list, made by tools/models/make-wordlists.py",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 40,
+   "model": "wordlist-es.tsv.gz",
+   "files": [
+    {
+     "name": "wordlist-es.tsv.gz",
+     "asset": "wordlist-es--wordlist-es.tsv.gz"
+    },
+    {
+     "name": "ATTRIBUTION.txt",
+     "asset": "wordlist-es--ATTRIBUTION.txt"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "wordlist-es--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "wordlist-fr",
+   "title": "Word list, French",
+   "summary": "The most frequent French words with their frequency, for the word layer of Handwriting.",
+   "kinds": [
+    "wordlist"
+   ],
+   "engine": "",
+   "languages": [
+    "fr"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "credit": "wordfreq 3.1.1 by Robyn Speer (data: Google Books Ngrams, SUBTLEX and others, Creative Commons Attribution-ShareAlike 4.0)",
+   "source": "wordfreq 3.1.1, best word list, made by tools/models/make-wordlists.py",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 40,
+   "model": "wordlist-fr.tsv.gz",
+   "files": [
+    {
+     "name": "wordlist-fr.tsv.gz",
+     "asset": "wordlist-fr--wordlist-fr.tsv.gz"
+    },
+    {
+     "name": "ATTRIBUTION.txt",
+     "asset": "wordlist-fr--ATTRIBUTION.txt"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "wordlist-fr--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "wordlist-pt",
+   "title": "Word list, Portuguese",
+   "summary": "The most frequent Portuguese words with their frequency, for the word layer of Handwriting.",
+   "kinds": [
+    "wordlist"
+   ],
+   "engine": "",
+   "languages": [
+    "pt"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "credit": "wordfreq 3.1.1 by Robyn Speer (data: Google Books Ngrams, SUBTLEX and others, Creative Commons Attribution-ShareAlike 4.0)",
+   "source": "wordfreq 3.1.1, best word list, made by tools/models/make-wordlists.py",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 40,
+   "model": "wordlist-pt.tsv.gz",
+   "files": [
+    {
+     "name": "wordlist-pt.tsv.gz",
+     "asset": "wordlist-pt--wordlist-pt.tsv.gz"
+    },
+    {
+     "name": "ATTRIBUTION.txt",
+     "asset": "wordlist-pt--ATTRIBUTION.txt"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "wordlist-pt--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "wordlist-it",
+   "title": "Word list, Italian",
+   "summary": "The most frequent Italian words with their frequency, for the word layer of Handwriting.",
+   "kinds": [
+    "wordlist"
+   ],
+   "engine": "",
+   "languages": [
+    "it"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "credit": "wordfreq 3.1.1 by Robyn Speer (data: Google Books Ngrams, SUBTLEX and others, Creative Commons Attribution-ShareAlike 4.0)",
+   "source": "wordfreq 3.1.1, best word list, made by tools/models/make-wordlists.py",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 40,
+   "model": "wordlist-it.tsv.gz",
+   "files": [
+    {
+     "name": "wordlist-it.tsv.gz",
+     "asset": "wordlist-it--wordlist-it.tsv.gz"
+    },
+    {
+     "name": "ATTRIBUTION.txt",
+     "asset": "wordlist-it--ATTRIBUTION.txt"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "wordlist-it--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "wordlist-pl",
+   "title": "Word list, Polish",
+   "summary": "The most frequent Polish words with their frequency, for the word layer of Handwriting.",
+   "kinds": [
+    "wordlist"
+   ],
+   "engine": "",
+   "languages": [
+    "pl"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "credit": "wordfreq 3.1.1 by Robyn Speer (data: Google Books Ngrams, SUBTLEX and others, Creative Commons Attribution-ShareAlike 4.0)",
+   "source": "wordfreq 3.1.1, best word list, made by tools/models/make-wordlists.py",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 40,
+   "model": "wordlist-pl.tsv.gz",
+   "files": [
+    {
+     "name": "wordlist-pl.tsv.gz",
+     "asset": "wordlist-pl--wordlist-pl.tsv.gz"
+    },
+    {
+     "name": "ATTRIBUTION.txt",
+     "asset": "wordlist-pl--ATTRIBUTION.txt"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "wordlist-pl--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "wordlist-nl",
+   "title": "Word list, Dutch",
+   "summary": "The most frequent Dutch words with their frequency, for the word layer of Handwriting.",
+   "kinds": [
+    "wordlist"
+   ],
+   "engine": "",
+   "languages": [
+    "nl"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "credit": "wordfreq 3.1.1 by Robyn Speer (data: Google Books Ngrams, SUBTLEX and others, Creative Commons Attribution-ShareAlike 4.0)",
+   "source": "wordfreq 3.1.1, best word list, made by tools/models/make-wordlists.py",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 40,
+   "model": "wordlist-nl.tsv.gz",
+   "files": [
+    {
+     "name": "wordlist-nl.tsv.gz",
+     "asset": "wordlist-nl--wordlist-nl.tsv.gz"
+    },
+    {
+     "name": "ATTRIBUTION.txt",
+     "asset": "wordlist-nl--ATTRIBUTION.txt"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "wordlist-nl--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "wordlist-id",
+   "title": "Word list, Indonesian",
+   "summary": "The most frequent Indonesian words with their frequency, for the word layer of Handwriting.",
+   "kinds": [
+    "wordlist"
+   ],
+   "engine": "",
+   "languages": [
+    "id"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "credit": "wordfreq 3.1.1 by Robyn Speer (data: Google Books Ngrams, SUBTLEX and others, Creative Commons Attribution-ShareAlike 4.0)",
+   "source": "wordfreq 3.1.1, best word list, made by tools/models/make-wordlists.py",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 40,
+   "model": "wordlist-id.tsv.gz",
+   "files": [
+    {
+     "name": "wordlist-id.tsv.gz",
+     "asset": "wordlist-id--wordlist-id.tsv.gz"
+    },
+    {
+     "name": "ATTRIBUTION.txt",
+     "asset": "wordlist-id--ATTRIBUTION.txt"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "wordlist-id--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "wordlist-tr",
+   "title": "Word list, Turkish",
+   "summary": "The most frequent Turkish words with their frequency, for the word layer of Handwriting.",
+   "kinds": [
+    "wordlist"
+   ],
+   "engine": "",
+   "languages": [
+    "tr"
+   ],
+   "license": "CC-BY-SA-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+   "credit": "wordfreq 3.1.1 by Robyn Speer (data: Google Books Ngrams, SUBTLEX and others, Creative Commons Attribution-ShareAlike 4.0)",
+   "source": "wordfreq 3.1.1, best word list, made by tools/models/make-wordlists.py",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 40,
+   "model": "wordlist-tr.tsv.gz",
+   "files": [
+    {
+     "name": "wordlist-tr.tsv.gz",
+     "asset": "wordlist-tr--wordlist-tr.tsv.gz"
+    },
+    {
+     "name": "ATTRIBUTION.txt",
+     "asset": "wordlist-tr--ATTRIBUTION.txt"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "wordlist-tr--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "pocket-tts-en",
+   "title": "Pocket TTS, English",
+   "summary": "A small voice that reads English text aloud on the processor, with 20 preset voices.",
+   "kinds": [
+    "tts"
+   ],
+   "engine": "pocket-tts",
+   "languages": [
+    "en"
+   ],
+   "voices": [
+    "alba",
+    "anna",
+    "azelma",
+    "bill_boerst",
+    "caro_davy",
+    "charles",
+    "eponine",
+    "estelle",
+    "eve",
+    "fantine",
+    "george",
+    "jane",
+    "javert",
+    "marius",
+    "mary",
+    "michael",
+    "paul",
+    "peter_yearsley",
+    "stuart_bell",
+    "vera"
+   ],
+   "license": "CC-BY-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "credit": "Pocket TTS by Kyutai (CC BY 4.0); voices from Kyutai's voice repository, each CC BY 4.0 or CC0 (see VOICES.txt)",
+   "source": "kyutai/pocket-tts-without-voice-cloning at commit a7056f505a4a8ca72d8b5fb1440071d6f1a35739, languages/english, converted with llama.cpp b12808",
+   "nonCommercial": false,
+   "sizeMB": 220,
+   "memoryMB": 600,
+   "model": "pocket-tts-en.gguf",
+   "extra": "mmproj-pocket-tts-en.gguf",
+   "files": [
+    {
+     "name": "pocket-tts-en.gguf",
+     "asset": "pocket-tts-en--pocket-tts-en.gguf"
+    },
+    {
+     "name": "mmproj-pocket-tts-en.gguf",
+     "asset": "pocket-tts-en--mmproj-pocket-tts-en.gguf"
+    },
+    {
+     "name": "VOICES.txt",
+     "asset": "pocket-tts-en--VOICES.txt"
+    },
+    {
+     "name": "LICENSES.txt",
+     "asset": "pocket-tts-en--LICENSES.txt"
+    }
+   ]
+  },
+  {
+   "id": "pocket-tts-fr",
+   "title": "Pocket TTS, French",
+   "summary": "A small voice that reads French text aloud on the processor, with 20 preset voices.",
+   "kinds": [
+    "tts"
+   ],
+   "engine": "pocket-tts",
+   "languages": [
+    "fr"
+   ],
+   "voices": [
+    "alba",
+    "anna",
+    "azelma",
+    "bill_boerst",
+    "caro_davy",
+    "charles",
+    "eponine",
+    "estelle",
+    "eve",
+    "fantine",
+    "george",
+    "jane",
+    "javert",
+    "marius",
+    "mary",
+    "michael",
+    "paul",
+    "peter_yearsley",
+    "stuart_bell",
+    "vera"
+   ],
+   "license": "CC-BY-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "credit": "Pocket TTS by Kyutai (CC BY 4.0); voices from Kyutai's voice repository, each CC BY 4.0 or CC0 (see VOICES.txt)",
+   "source": "kyutai/pocket-tts-without-voice-cloning at commit a7056f505a4a8ca72d8b5fb1440071d6f1a35739, languages/french, converted with llama.cpp b12808",
+   "nonCommercial": false,
+   "sizeMB": 220,
+   "memoryMB": 600,
+   "model": "pocket-tts-fr.gguf",
+   "extra": "mmproj-pocket-tts-fr.gguf",
+   "files": [
+    {
+     "name": "pocket-tts-fr.gguf",
+     "asset": "pocket-tts-fr--pocket-tts-fr.gguf"
+    },
+    {
+     "name": "mmproj-pocket-tts-fr.gguf",
+     "asset": "pocket-tts-fr--mmproj-pocket-tts-fr.gguf"
+    },
+    {
+     "name": "VOICES.txt",
+     "asset": "pocket-tts-fr--VOICES.txt"
+    },
+    {
+     "name": "LICENSES.txt",
+     "asset": "pocket-tts-fr--LICENSES.txt"
+    }
+   ]
+  },
+  {
+   "id": "pocket-tts-es",
+   "title": "Pocket TTS, Spanish",
+   "summary": "A small voice that reads Spanish text aloud on the processor, with 20 preset voices.",
+   "kinds": [
+    "tts"
+   ],
+   "engine": "pocket-tts",
+   "languages": [
+    "es"
+   ],
+   "voices": [
+    "alba",
+    "anna",
+    "azelma",
+    "bill_boerst",
+    "caro_davy",
+    "charles",
+    "eponine",
+    "estelle",
+    "eve",
+    "fantine",
+    "george",
+    "jane",
+    "javert",
+    "marius",
+    "mary",
+    "michael",
+    "paul",
+    "peter_yearsley",
+    "stuart_bell",
+    "vera"
+   ],
+   "license": "CC-BY-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "credit": "Pocket TTS by Kyutai (CC BY 4.0); voices from Kyutai's voice repository, each CC BY 4.0 or CC0 (see VOICES.txt)",
+   "source": "kyutai/pocket-tts-without-voice-cloning at commit a7056f505a4a8ca72d8b5fb1440071d6f1a35739, languages/spanish, converted with llama.cpp b12808",
+   "nonCommercial": false,
+   "sizeMB": 220,
+   "memoryMB": 600,
+   "model": "pocket-tts-es.gguf",
+   "extra": "mmproj-pocket-tts-es.gguf",
+   "files": [
+    {
+     "name": "pocket-tts-es.gguf",
+     "asset": "pocket-tts-es--pocket-tts-es.gguf"
+    },
+    {
+     "name": "mmproj-pocket-tts-es.gguf",
+     "asset": "pocket-tts-es--mmproj-pocket-tts-es.gguf"
+    },
+    {
+     "name": "VOICES.txt",
+     "asset": "pocket-tts-es--VOICES.txt"
+    },
+    {
+     "name": "LICENSES.txt",
+     "asset": "pocket-tts-es--LICENSES.txt"
+    }
+   ]
+  },
+  {
+   "id": "pocket-tts-pt",
+   "title": "Pocket TTS, Portuguese",
+   "summary": "A small voice that reads Portuguese text aloud on the processor, with 20 preset voices.",
+   "kinds": [
+    "tts"
+   ],
+   "engine": "pocket-tts",
+   "languages": [
+    "pt"
+   ],
+   "voices": [
+    "alba",
+    "anna",
+    "azelma",
+    "bill_boerst",
+    "caro_davy",
+    "charles",
+    "eponine",
+    "estelle",
+    "eve",
+    "fantine",
+    "george",
+    "jane",
+    "javert",
+    "marius",
+    "mary",
+    "michael",
+    "paul",
+    "peter_yearsley",
+    "stuart_bell",
+    "vera"
+   ],
+   "license": "CC-BY-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "credit": "Pocket TTS by Kyutai (CC BY 4.0); voices from Kyutai's voice repository, each CC BY 4.0 or CC0 (see VOICES.txt)",
+   "source": "kyutai/pocket-tts-without-voice-cloning at commit a7056f505a4a8ca72d8b5fb1440071d6f1a35739, languages/portuguese, converted with llama.cpp b12808",
+   "nonCommercial": false,
+   "sizeMB": 220,
+   "memoryMB": 600,
+   "model": "pocket-tts-pt.gguf",
+   "extra": "mmproj-pocket-tts-pt.gguf",
+   "files": [
+    {
+     "name": "pocket-tts-pt.gguf",
+     "asset": "pocket-tts-pt--pocket-tts-pt.gguf"
+    },
+    {
+     "name": "mmproj-pocket-tts-pt.gguf",
+     "asset": "pocket-tts-pt--mmproj-pocket-tts-pt.gguf"
+    },
+    {
+     "name": "VOICES.txt",
+     "asset": "pocket-tts-pt--VOICES.txt"
+    },
+    {
+     "name": "LICENSES.txt",
+     "asset": "pocket-tts-pt--LICENSES.txt"
+    }
+   ]
+  },
+  {
+   "id": "pocket-tts-it",
+   "title": "Pocket TTS, Italian",
+   "summary": "A small voice that reads Italian text aloud on the processor, with 20 preset voices.",
+   "kinds": [
+    "tts"
+   ],
+   "engine": "pocket-tts",
+   "languages": [
+    "it"
+   ],
+   "voices": [
+    "alba",
+    "anna",
+    "azelma",
+    "bill_boerst",
+    "caro_davy",
+    "charles",
+    "eponine",
+    "estelle",
+    "eve",
+    "fantine",
+    "george",
+    "jane",
+    "javert",
+    "marius",
+    "mary",
+    "michael",
+    "paul",
+    "peter_yearsley",
+    "stuart_bell",
+    "vera"
+   ],
+   "license": "CC-BY-4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+   "credit": "Pocket TTS by Kyutai (CC BY 4.0); voices from Kyutai's voice repository, each CC BY 4.0 or CC0 (see VOICES.txt)",
+   "source": "kyutai/pocket-tts-without-voice-cloning at commit a7056f505a4a8ca72d8b5fb1440071d6f1a35739, languages/italian, converted with llama.cpp b12808",
+   "nonCommercial": false,
+   "sizeMB": 220,
+   "memoryMB": 600,
+   "model": "pocket-tts-it.gguf",
+   "extra": "mmproj-pocket-tts-it.gguf",
+   "files": [
+    {
+     "name": "pocket-tts-it.gguf",
+     "asset": "pocket-tts-it--pocket-tts-it.gguf"
+    },
+    {
+     "name": "mmproj-pocket-tts-it.gguf",
+     "asset": "pocket-tts-it--mmproj-pocket-tts-it.gguf"
+    },
+    {
+     "name": "VOICES.txt",
+     "asset": "pocket-tts-it--VOICES.txt"
+    },
+    {
+     "name": "LICENSES.txt",
+     "asset": "pocket-tts-it--LICENSES.txt"
+    }
+   ]
+  },
+  {
+   "id": "qwen3-tts-0.6b-q8",
+   "title": "Qwen3-TTS 0.6B (8-bit)",
+   "summary": "A voice that reads text aloud in many languages and can follow a reference clip; needs a computer with plenty of memory.",
+   "kinds": [
+    "tts"
+   ],
+   "engine": "qwen3-tts",
+   "languages": [
+    "en",
+    "de",
+    "es",
+    "fr",
+    "pt",
+    "it",
+    "ru",
+    "zh",
+    "ja",
+    "ko"
+   ],
+   "license": "Apache-2.0",
+   "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+   "credit": "Qwen3-TTS by the Qwen team (Alibaba), GGUF files by Serveurperso (Apache License 2.0)",
+   "source": "Serveurperso/Qwen3-TTS-GGUF at commit b7ee2e8c7459c3bea99da23e3d178125a7d1713c, copied unchanged",
+   "nonCommercial": false,
+   "sizeMB": 1225,
+   "memoryMB": 4200,
+   "model": "talker.gguf",
+   "extra": "tokenizer-12hz-Q8_0.gguf",
+   "files": [
+    {
+     "name": "talker.gguf",
+     "asset": "qwen3-tts-0.6b-q8--talker.gguf",
+     "size": 992615488,
+     "sha256": "d54dbaf10591421fa764ed630d764efa717ae40cd959bd48c66d4eb1af226426"
+    },
+    {
+     "name": "tokenizer-12hz-Q8_0.gguf",
+     "asset": "qwen3-tts-tokenizer-12hz-Q8_0.gguf",
+     "size": 291150624,
+     "sha256": "1883beeed99348fc35e23dd225e9082f93f6f8c109330a33d935baa8acdbfd94"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "qwen3-tts-0.6b-q8--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "qwen3-tts-1.7b-q4",
+   "title": "Qwen3-TTS 1.7B (4-bit)",
+   "summary": "A voice that reads text aloud in many languages and can follow a reference clip; needs a computer with plenty of memory.",
+   "kinds": [
+    "tts"
+   ],
+   "engine": "qwen3-tts",
+   "languages": [
+    "en",
+    "de",
+    "es",
+    "fr",
+    "pt",
+    "it",
+    "ru",
+    "zh",
+    "ja",
+    "ko"
+   ],
+   "license": "Apache-2.0",
+   "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+   "credit": "Qwen3-TTS by the Qwen team (Alibaba), GGUF files by Serveurperso (Apache License 2.0)",
+   "source": "Serveurperso/Qwen3-TTS-GGUF at commit b7ee2e8c7459c3bea99da23e3d178125a7d1713c, copied unchanged",
+   "nonCommercial": false,
+   "sizeMB": 1441,
+   "memoryMB": 4600,
+   "model": "talker.gguf",
+   "extra": "tokenizer-12hz-Q8_0.gguf",
+   "files": [
+    {
+     "name": "talker.gguf",
+     "asset": "qwen3-tts-1.7b-q4--talker.gguf",
+     "size": 1219245248,
+     "sha256": "ea393ebaf2167ea23ce9fc18b093822851358a950d7075cd47ab4f6ce23e887d"
+    },
+    {
+     "name": "tokenizer-12hz-Q8_0.gguf",
+     "asset": "qwen3-tts-tokenizer-12hz-Q8_0.gguf",
+     "size": 291150624,
+     "sha256": "1883beeed99348fc35e23dd225e9082f93f6f8c109330a33d935baa8acdbfd94"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "qwen3-tts-1.7b-q4--LICENSE.txt"
+    }
+   ]
+  },
+  {
+   "id": "qwen3-tts-1.7b-q8",
+   "title": "Qwen3-TTS 1.7B (8-bit)",
+   "summary": "A voice that reads text aloud in many languages and can follow a reference clip; needs a computer with plenty of memory.",
+   "kinds": [
+    "tts"
+   ],
+   "engine": "qwen3-tts",
+   "languages": [
+    "en",
+    "de",
+    "es",
+    "fr",
+    "pt",
+    "it",
+    "ru",
+    "zh",
+    "ja",
+    "ko"
+   ],
+   "license": "Apache-2.0",
+   "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+   "credit": "Qwen3-TTS by the Qwen team (Alibaba), GGUF files by Serveurperso (Apache License 2.0)",
+   "source": "Serveurperso/Qwen3-TTS-GGUF at commit b7ee2e8c7459c3bea99da23e3d178125a7d1713c, copied unchanged",
+   "nonCommercial": false,
+   "sizeMB": 2261,
+   "memoryMB": 5800,
+   "model": "talker.gguf",
+   "extra": "tokenizer-12hz-Q8_0.gguf",
+   "files": [
+    {
+     "name": "talker.gguf",
+     "asset": "qwen3-tts-1.7b-q8--talker.gguf",
+     "size": 2079448256,
+     "sha256": "4b9a33a236908dd9435a42f7a396e38038329d053b704342a6413c08544c4fda"
+    },
+    {
+     "name": "tokenizer-12hz-Q8_0.gguf",
+     "asset": "qwen3-tts-tokenizer-12hz-Q8_0.gguf",
+     "size": 291150624,
+     "sha256": "1883beeed99348fc35e23dd225e9082f93f6f8c109330a33d935baa8acdbfd94"
+    },
+    {
+     "name": "LICENSE.txt",
+     "asset": "qwen3-tts-1.7b-q8--LICENSE.txt"
+    }
+   ]
+  }
+ ]
 }

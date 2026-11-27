@@ -10,6 +10,13 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
 - **0.99.0 is a security update on every system** (Linux, Windows and Android). The update window says "recommended
   (security)" for a Quillbinder with an older version and offers no "Ignore This Version", also when a newer version has
   come out since (every version after the installed one, up to the newest, counts).
+- **The data of the AI functions, the release `models-5`** (items 112 and 114; developer tool, no change to the program's code):
+  the workflow `models-5.yml` makes the handwriting line model (PP-OCRv6 small, converted to ONNX), ten word lists (wordfreq's
+  100,000 most frequent words of en, de, es, fr, pt, it, pl, nl, and as many as there are for id and tr), Pocket TTS in five
+  languages with the preset voices whose license is stated (never one without), and Qwen3-TTS 0.6B and 1.7B with the 12 Hz
+  tokenizer, each file with its SHA-256 and the license texts, and writes `catalog.json`. `resources/ai/models.json` lists the same
+  models; the Qwen files carry their checksums already, the rest get theirs from the first run. The designed voices are not
+  in it yet.
 - **The system test runs on GitHub in shards** (item 124; developer tool, no change to the program): the workflow "Linux system test" builds the program once and runs the cases on several machines side by side (a run file names shards, profile and cases), the summaries are joined on the pre-release `linux-st`; the harness is ready for Windows (`TerminateProcess`, `SendInput`, the program's `.exe`), Linux unchanged.
 - **The word after the version number is one setting per system** (Linux "beta"; Windows and Android "experimental"), so
   that the first normal release, 1.0.0, changes only numbers and one word per system. The names of the files, the tag,
