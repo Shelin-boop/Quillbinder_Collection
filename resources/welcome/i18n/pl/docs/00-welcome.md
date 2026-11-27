@@ -2,7 +2,7 @@ Ten mały projekt pokazuje, co ma {{APP}}, a czego możesz nie znać z innych pr
 Nic, co tu zrobisz, nie dotyka twoich własnych projektów. Usuń ten projekt, kiedy zechcesz; **Pomoc > Projekt powitalny** tworzy świeżą kopię.
 Gdzie są ustawienia i podsumowanie wszystkiego, co potrafi program: **Pomoc > Przewodnik szybkiego startu**. Każda funkcja szczegółowo: **Pomoc > Podręcznik użytkownika** (**F1**).
 
-**Przegląd**
+**Przegląd funkcji**
 - [Pasek ikon](qb-title:Pasek ikon): ikony dokumentów jednym kliknięciem
 - [Powiększaj tam, gdzie wskazujesz](qb-title:Powiększaj tam, gdzie wskazujesz): każda część okna ma własne powiększenie
 - [Mapy myśli](qb-title:Mapy myśli): tablica notatek i strzałek dla każdego dokumentu

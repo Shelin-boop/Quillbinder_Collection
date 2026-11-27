@@ -5,11 +5,11 @@
     <name>QObject</name>
     <message>
         <source>The %1 dictionary cannot be read (%2): download it again in File &gt; Options &gt; Translation Helper.</source>
-        <translation>Nie można odczytać słownika %1 (%2): pobierz go ponownie w Plik &gt; Opcje &gt; Pomocnik tłumacza.</translation>
+        <translation>Nie można odczytać słownika %1 (%2): pobierz go ponownie w Plik &gt; Opcje &gt; Pomocnik tłumaczenia.</translation>
     </message>
     <message>
         <source>The %1 dictionary is not downloaded (File &gt; Options &gt; Translation Helper): it gives the word classes and meanings of a %1 word.</source>
-        <translation>Słownik %1 nie jest pobrany (Plik &gt; Opcje &gt; Pomocnik tłumacza): podaje części mowy i znaczenia słowa w języku %1.</translation>
+        <translation>Słownik %1 nie jest pobrany (Plik &gt; Opcje &gt; Pomocnik tłumaczenia): podaje części mowy i znaczenia słowa w języku %1.</translation>
     </message>
     <message>
         <source>There is no dictionary of %1 for the add-on: the translation is the model&apos;s.</source>
@@ -25,15 +25,15 @@
     </message>
     <message>
         <source>The German dictionary cannot be read (%1): download it again in File &gt; Options &gt; Translation Helper.</source>
-        <translation>Nie można odczytać słownika niemieckiego (%1): pobierz go ponownie w Plik &gt; Opcje &gt; Pomocnik tłumacza.</translation>
+        <translation>Nie można odczytać słownika niemieckiego (%1): pobierz go ponownie w Plik &gt; Opcje &gt; Pomocnik tłumaczenia.</translation>
     </message>
     <message>
         <source>The German dictionary is not downloaded (File &gt; Options &gt; Translation Helper): it gives the word classes and meanings of a German word.</source>
-        <translation>Słownik niemiecki nie jest pobrany (Plik &gt; Opcje &gt; Pomocnik tłumacza): podaje części mowy i znaczenia niemieckiego słowa.</translation>
+        <translation>Słownik niemiecki nie jest pobrany (Plik &gt; Opcje &gt; Pomocnik tłumaczenia): podaje części mowy i znaczenia niemieckiego słowa.</translation>
     </message>
     <message>
         <source>Similar German words need the German dictionary: download it in File &gt; Options &gt; Translation Helper (Models...).</source>
-        <translation>Podobne słowa niemieckie wymagają słownika niemieckiego: pobierz go w Plik &gt; Opcje &gt; Pomocnik tłumacza (Modele...).</translation>
+        <translation>Podobne słowa niemieckie wymagają słownika niemieckiego: pobierz go w Plik &gt; Opcje &gt; Pomocnik tłumaczenia (Modele...).</translation>
     </message>
 </context>
 <context>
@@ -181,7 +181,7 @@
     <name>tp::OptionsPage</name>
     <message>
         <source>The Translation Helper gives suggestions: it translates between eleven languages and proofreads English text, on this computer. Its translations are not precise; check each one, which needs a working knowledge of both languages. Choose a model for each task and download it once (it is checked, then used without any connection).</source>
-        <translation>Pomocnik tłumacza podaje sugestie: tłumaczy między jedenastoma językami i sprawdza tekst angielski, na tym komputerze. Jego tłumaczenia nie są dokładne; sprawdź każde z nich, co wymaga dobrej znajomości obu języków. Wybierz model do każdego zadania i pobierz go raz (zostanie sprawdzony, a potem używany bez połączenia).</translation>
+        <translation>Pomocnik tłumaczenia podaje sugestie: tłumaczy między jedenastoma językami i sprawdza tekst angielski, na tym komputerze. Jego tłumaczenia nie są dokładne; sprawdź każde z nich, co wymaga dobrej znajomości obu języków. Wybierz model do każdego zadania i pobierz go raz (zostanie sprawdzony, a potem używany bez połączenia).</translation>
     </message>
     <message>
         <source>This computer has %1 GB of memory, %2 GB free now. A model that needs more than it can give is not offered for download, and is not loaded when too little memory is free.</source>
@@ -225,7 +225,7 @@
     </message>
     <message>
         <source>Both models are needed to translate between %1 and any other language (a pair without English goes through English). The dictionary gives the word classes and meanings of a single word.</source>
-        <translation>Oba modele są potrzebne do tłumaczenia między: %1 a dowolnym innym językiem (para bez angielskiego idzie przez angielski). Słownik podaje części mowy i znaczenia pojedynczego słowa.</translation>
+        <translation>Oba modele są potrzebne do tłumaczenia między %1 a dowolnym innym językiem (para bez angielskiego idzie przez angielski). Słownik podaje części mowy i znaczenia pojedynczego słowa.</translation>
     </message>
     <message>
         <source>Rules for the result</source>
@@ -233,7 +233,7 @@
     </message>
     <message>
         <source>No em-dashes (a dash between words becomes a comma; the models may not write one)</source>
-        <translation>Bez długich myślników (myślnik między słowami zmienia się w przecinek; modele mogą żadnego nie pisać)</translation>
+        <translation>Bez pauz (pauza między słowami zmienia się w przecinek; modele nie mogą jej pisać)</translation>
     </message>
     <message>
         <source>American spelling (colour → color, realise → realize, towards → toward ...)</source>
@@ -281,11 +281,11 @@
     </message>
     <message>
         <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation>Liczbę rdzeni procesora i czas, po którym nieużywany model jest zwalniany, ustawia się wspólnie dla wszystkich funkcji AI w File &gt; Options &gt; General &gt; AI Models.</translation>
+        <translation>Liczbę rdzeni procesora i czas, po którym nieużywany model jest zwalniany, ustawia się wspólnie dla wszystkich funkcji AI w Plik &gt; Opcje &gt; Ogólne &gt; Modele AI.</translation>
     </message>
     <message>
         <source>Careful: the model weighs even more possibilities (slower, now and then better)</source>
-        <translation>Dokładnie: model waży jeszcze więcej możliwości (wolniej, czasem lepiej)</translation>
+        <translation>Dokładniej: model rozważa jeszcze więcej możliwości (wolniej, czasem lepiej)</translation>
     </message>
     <message>
         <source>&lt;b&gt;Models&lt;/b&gt;&lt;ul&gt;%1&lt;/ul&gt;The engine: CTranslate2 (MIT), oneDNN (Apache-2.0), SentencePiece (Apache-2.0); the American spellings from SCOWL by Kevin Atkinson; the words of a similar meaning from Princeton WordNet 3.0 (also its meanings); the dictionaries from the Wiktionary. Details in the add-on&apos;s licenses folder. Add-on %2.</source>
@@ -495,7 +495,7 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>File &gt; Options &gt; Translation Helper: choose and download the models and the German dictionary</source>
-        <translation>Plik &gt; Opcje &gt; Pomocnik tłumacza: wybierz i pobierz modele oraz słownik niemiecki</translation>
+        <translation>Plik &gt; Opcje &gt; Pomocnik tłumaczenia: wybierz i pobierz modele oraz słownik niemiecki</translation>
     </message>
     <message>
         <source>Ready.</source>
@@ -567,7 +567,7 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>A word or a short text is translated by the small model, never by the large one, and the small model is not downloaded: choose %1 with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Słowo lub krótki tekst tłumaczy mały model, nigdy duży, a mały model nie jest pobrany: wybierz %1 przez Modele... (Plik &gt; Opcje &gt; Pomocnik tłumacza).</translation>
+        <translation>Słowo lub krótki tekst tłumaczy mały model, nigdy duży, a mały model nie jest pobrany: wybierz %1 przez Modele... (Plik &gt; Opcje &gt; Pomocnik tłumaczenia).</translation>
     </message>
     <message>
         <source>OPUS-MT German to English</source>
@@ -579,11 +579,11 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>No translation model is downloaded yet. Choose one with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Nie pobrano jeszcze modelu tłumaczenia. Wybierz jeden przez Modele... (Plik &gt; Opcje &gt; Pomocnik tłumacza).</translation>
+        <translation>Nie pobrano jeszcze modelu tłumaczenia. Wybierz jeden przez Modele... (Plik &gt; Opcje &gt; Pomocnik tłumaczenia).</translation>
     </message>
     <message>
         <source>No proofreading model is downloaded yet. Choose one with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Nie pobrano jeszcze modelu korekty. Wybierz jeden przez Modele... (Plik &gt; Opcje &gt; Pomocnik tłumacza).</translation>
+        <translation>Nie pobrano jeszcze modelu korekty. Wybierz jeden przez Modele... (Plik &gt; Opcje &gt; Pomocnik tłumaczenia).</translation>
     </message>
     <message>
         <source>The engine cannot be used: %1</source>
@@ -591,15 +591,15 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>German nouns need capital letters for a good translation. The German dictionary (File &gt; Options &gt; Translation Helper, Models...) sets them in the copy the model gets; it is not available.</source>
-        <translation>Niemieckie rzeczowniki wymagają wielkich liter dla dobrego tłumaczenia. Słownik niemiecki (Plik &gt; Opcje &gt; Pomocnik tłumacza, Modele...) ustawia je w kopii, którą dostaje model; nie jest dostępny.</translation>
+        <translation>Niemieckie rzeczowniki wymagają wielkich liter dla dobrego tłumaczenia. Słownik niemiecki (Plik &gt; Opcje &gt; Pomocnik tłumaczenia, Modele...) ustawia je w kopii, którą dostaje model; nie jest dostępny.</translation>
     </message>
     <message>
         <source>1 dash replaced by a comma (rule: no em-dashes): click it to keep the dash.</source>
-        <translation>1 myślnik zastąpiony przecinkiem (reguła: bez długich myślników): kliknij go, aby zachować myślnik.</translation>
+        <translation>1 pauza zastąpiona przecinkiem (reguła: bez pauz): kliknij ją, aby zachować pauzę.</translation>
     </message>
     <message>
         <source>%1 dashes replaced (rule: no em-dashes): click one to keep the dash.</source>
-        <translation>Zastąpione myślniki: %1 (reguła: bez długich myślników): kliknij jeden, aby zachować myślnik.</translation>
+        <translation>Zastąpione pauzy: %1 (reguła: bez pauz): kliknij jedną, aby zachować pauzę.</translation>
     </message>
     <message>
         <source>Working...</source>
@@ -619,19 +619,19 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>No translation model is downloaded yet for %1 to %2: %3. Choose it with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Nie pobrano jeszcze modelu tłumaczenia dla %1 na %2: %3. Wybierz go przez Modele... (Plik &gt; Opcje &gt; Pomocnik tłumacza).</translation>
+        <translation>Nie pobrano jeszcze modelu tłumaczenia dla %1 na %2: %3. Wybierz go przez Modele... (Plik &gt; Opcje &gt; Pomocnik tłumaczenia).</translation>
     </message>
     <message>
         <source>No translation model is downloaded yet for %1 to %2: %3. Choose them with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie pobrano jeszcze modeli tłumaczenia dla %1 na %2: %3. Wybierz je przez Modele... (Plik &gt; Opcje &gt; Pomocnik tłumaczenia).</translation>
     </message>
     <message>
         <source>Missing: %1. Download them in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Brakuje: %1. Pobierz je w opcjach dodatku (Plik &gt; Opcje &gt; Pomocnik tłumaczenia).</translation>
     </message>
     <message>
         <source>Missing: %1. Download it in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Brakuje: %1. Pobierz go w opcjach dodatku (Plik &gt; Opcje &gt; Pomocnik tłumaczenia).</translation>
     </message>
     <message>
         <source>Translated through English (%1 to English to %2): two steps, so a mistake of the first one is carried into the second.</source>
@@ -667,11 +667,11 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>1 sentence kept as you wrote it: the model&apos;s version did not look right (point at the sentence to see what it wrote).</source>
-        <translation>1 zdanie zachowane tak, jak je napisałeś: wersja modelu nie wyglądała dobrze (wskaż zdanie, aby zobaczyć, co napisał).</translation>
+        <translation>1 zdanie zachowane tak, jak je napisałeś(-aś): wersja modelu nie wyglądała dobrze (wskaż zdanie, aby zobaczyć, co napisał).</translation>
     </message>
     <message>
         <source>%1 sentences kept as you wrote them: the model&apos;s versions did not look right (point at a sentence to see what it wrote).</source>
-        <translation>Zdania zachowane tak, jak je napisałeś: %1: wersje modelu nie wyglądały dobrze (wskaż zdanie, aby zobaczyć, co napisał).</translation>
+        <translation>Zdania zachowane tak, jak je napisałeś(-aś): %1: wersje modelu nie wyglądały dobrze (wskaż zdanie, aby zobaczyć, co napisał).</translation>
     </message>
     <message>
         <source>Done</source>
@@ -687,7 +687,7 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>Stopped. The sentences done so far are shown; the rest is as you wrote it.</source>
-        <translation>Zatrzymano. Pokazane są zdania opracowane dotąd; reszta jest tak, jak ją napisałeś.</translation>
+        <translation>Zatrzymano. Pokazane są zdania opracowane dotąd; reszta jest tak, jak ją napisałeś(-aś).</translation>
     </message>
     <message>
         <source>%1: no changes.</source>
@@ -827,7 +827,7 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>A single word is translated by the small model, never by the large one, and the small model is not downloaded: choose %1 with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Pojedyncze słowo tłumaczy mały model, nigdy duży, a mały model nie jest pobrany: wybierz %1 przez Modele... (Plik &gt; Opcje &gt; Pomocnik tłumacza).</translation>
+        <translation>Pojedyncze słowo tłumaczy mały model, nigdy duży, a mały model nie jest pobrany: wybierz %1 przez Modele... (Plik &gt; Opcje &gt; Pomocnik tłumaczenia).</translation>
     </message>
     <message>
         <source>Looking the word up...</source>
@@ -851,7 +851,7 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>WordNet has no entry for “%1”, so there is no meaning to show. A model can write one: download Qwen3 1.7B or Qwen3 4B in File &gt; Options &gt; Translation Helper.</source>
-        <translation>WordNet nie ma hasła dla „%1”, więc nie ma znaczenia do pokazania. Model może je napisać: pobierz Qwen3 1.7B lub Qwen3 4B w Plik &gt; Opcje &gt; Pomocnik tłumacza.</translation>
+        <translation>WordNet nie ma hasła dla „%1”, więc nie ma znaczenia do pokazania. Model może je napisać: pobierz Qwen3 1.7B lub Qwen3 4B w Plik &gt; Opcje &gt; Pomocnik tłumaczenia.</translation>
     </message>
     <message>
         <source>The model wrote no meaning.</source>
@@ -935,27 +935,27 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>Similar translations (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Podobne tłumaczenia (%1, dla „%2”):</translation>
     </message>
     <message>
         <source>Similar translations (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Podobne tłumaczenia (%1):</translation>
     </message>
     <message>
         <source>Similar (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Podobne (%1, dla „%2”):</translation>
     </message>
     <message>
         <source>Similar (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Podobne (%1):</translation>
     </message>
     <message>
         <source>%1 (German): spelling suggestions and similar words are given for English words.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (niemiecki): podpowiedzi pisowni i podobne słowa są podawane dla słów angielskich.</translation>
     </message>
     <message>
         <source>%1 (from “%2”)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (z „%2”)</translation>
     </message>
     <message>
         <source>Similar German words (%1):</source>
@@ -983,7 +983,7 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>Similar words: none known.</source>
-        <translation>Podobne słowa: żadnych nie znamy.</translation>
+        <translation>Podobne słowa: brak</translation>
     </message>
     <message>
         <source>Similar (%1): %2</source>
@@ -1014,7 +1014,7 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     <name>tp::TranslateTool</name>
     <message>
         <source>&amp;Translation Helper...</source>
-        <translation>&amp;Pomocnik tłumacza...</translation>
+        <translation>&amp;Pomocnik tłumaczenia...</translation>
     </message>
     <message>
         <source>Suggestions for translating between eleven languages, and for English spelling, in a window of its own</source>
@@ -1022,7 +1022,7 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>Translation Helper in the &amp;Inspector</source>
-        <translation>Pomocnik tłumacza w &amp;inspektorze</translation>
+        <translation>Pomocnik tłumaczenia w &amp;inspektorze</translation>
     </message>
     <message>
         <source>The same in the inspector, beside the editor</source>
@@ -1030,7 +1030,7 @@ Pobierając go, akceptujesz jego licencję: %2</translation>
     </message>
     <message>
         <source>Translation Helper</source>
-        <translation>Pomocnik tłumacza</translation>
+        <translation>Pomocnik tłumaczenia</translation>
     </message>
     <message>
         <source>Open the Window</source>
