@@ -45,8 +45,11 @@ mkdir -p "$WORK"
 cd "$WORK"
 if [ "$FIRST" = 1 ]; then
     # find the asset: the newest published release with a Linux x64 CPU archive
-    curl -fsSL -H "Authorization: Bearer ${GH_TOKEN:-}" -H 'Accept: application/vnd.github+json' \
-        'https://api.github.com/repos/microsoft/onnxruntime/releases?per_page=30' -o releases.json
+    # (a workflow's token is scoped to this repository: another repository's API may answer 404 to it, so the
+    #  public API is asked without the token first)
+    api='https://api.github.com/repos/microsoft/onnxruntime/releases?per_page=30'
+    curl -fsSL -H 'Accept: application/vnd.github+json' "$api" -o releases.json \
+        || curl -fsSL -H "Authorization: Bearer ${GH_TOKEN:-}" -H 'Accept: application/vnd.github+json' "$api" -o releases.json
     python3 -I - releases.json > chosen.txt <<'PY'
 import json, re, sys
 rels = json.load(open(sys.argv[1]))
@@ -69,7 +72,8 @@ PY
     VERSION=${VERSION%.tgz}
     echo "get-onnxruntime: chosen release $TAG, asset $ASSET"
     rm -f "$ASSET"
-    curl -fsSL -H "Authorization: Bearer ${GH_TOKEN:-}" -H 'Accept: application/octet-stream' -o "$ASSET" "$ASSET_URL"
+    curl -fsSL -H 'Accept: application/octet-stream' -o "$ASSET" "$ASSET_URL" \
+        || curl -fsSL -o "$ASSET" "https://github.com/microsoft/onnxruntime/releases/download/$TAG/$ASSET"
 else
     [ -f "$ASSET" ] || curl -fsSL -o "$ASSET" "https://github.com/microsoft/onnxruntime/releases/download/$TAG/$ASSET"
 fi
