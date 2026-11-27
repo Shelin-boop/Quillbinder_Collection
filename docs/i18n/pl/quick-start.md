@@ -68,13 +68,13 @@
 ### Poza zwykłym zakresem
 
 - **Mapy myśli**: tablica notatek, linii i strzałek dla każdego dokumentu i folderu (przycisk **Mapa myśli** w inspektorze). **Pomoc > Pomoc do map myśli** pokazuje, jak to działa.
-- **Obiekty**: postacie, miejsca, środowiska, ciekawe punkty, pogoda i własne kategorie, każdy z kartą pól i powiązaniami między nimi (przycisk **Obiekty** w inspektorze lub **Okno > Obiekty…**).
+- **Obiekty**: postacie, miejsca, środowiska, ciekawe punkty, pogoda i własne kategorie, każdy z kartą pól i powiązaniami między nimi (przycisk **Obiekty** w inspektorze lub **Okno > Obiekty**).
 - **Tabele i obrazy**: **Wstaw > Tabela…** z gotowymi wzorami lub własnymi, **Format > Tabela** dla wierszy, kolumn, scalonych komórek i kolorów; obrazy obok tekstu z opływającym je tekstem, podpisy oraz opisy, które e-booki i pliki Worda zachowują jako tekst alternatywny (kliknij obraz prawym przyciskiem myszy, **Obraz…**).
 - **Pasek ikon**: do dziesięciu ikon dokumentów, każda jednym kliknięciem. **Dokumenty > Zmień ikonę** tworzy też ikony z tekstu lub z twoich własnych obrazów.
 - **Powiększenie osobno dla każdej części**: segregator, edytory, części inspektora, tablica korkowa, konspekt i mapy myśli mają każde własne powiększenie.
 - **Zapamiętane miejsca**: każdy dokument otwiera się tam, gdzie zostawiłeś kursor, także po ponownym otwarciu projektu.
 - **Czcionki**: **Format > Czcionka > Zainstaluj pliki czcionek…** dodaje czcionki bez opuszczania programu.
-- **Bezpieczeństwo**: autozapis także w trakcie pisania, kopie zapasowe, zapasowa kopia pliku projektu, raporty o awariach i zawieszeniach (**Pomoc > Rozwiązywanie problemów i programowanie > Raporty o awariach…**) oraz **Pomoc > Rozwiązywanie problemów i programowanie > Informacje o systemie…**.
+- **Bezpieczeństwo**: autozapis także w trakcie pisania, kopie zapasowe, zapasowa kopia pliku projektu, raporty o awariach i zawieszeniach (**Pomoc > Rozwiązywanie problemów i programowanie > Raporty o awariach…**) oraz **Pomoc > Rozwiązywanie problemów i programowanie > Informacje o systemie**.
 
 ### Aktualizacje i dodatki
 
@@ -88,5 +88,5 @@
 - **Pomoc > Projekt powitalny**: krótki projekt, który pokazuje funkcje wymienione w części „Poza zwykłym zakresem” i pozwala je wypróbować.
 - **Pomoc > Pomoc do map myśli**: notatki, linie, strzałki i kształty, z obrazkami i tablicą do ćwiczeń.
 - **Pomoc > Lista wszystkich symboli zastępczych** i **Pomoc > Skróty klawiaturowe…**
-- **Pomoc > Licencje stron trzecich…**: licencje części innych projektów, których używa {{APP}}.
+- **Pomoc > Licencje stron trzecich**: licencje części innych projektów, których używa {{APP}}.
 - **Pomoc > O programie {{APP}}**: wersja i licencja. {{APP}} jest wolnym oprogramowaniem na licencji Apache 2.0.
