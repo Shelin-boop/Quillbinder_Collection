@@ -27,7 +27,8 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   size slider and a live sample. **File > Options > Handwriting** (a page of the General section's list) holds the install part, the languages (Russian greyed
   out), writing, grid, hand protection, pen and finger, and learning the hand (corrected lines kept only on the device, with an
   off switch and a delete). The recognizer itself (and the install behind the page's Install button) follows in a later part: until
-  then the first use of the button opens the page.
+  then the first use of the button opens the page. The pad's six buttons sit in two rows of three, so that the
+  hidden Handwriting tab no longer keeps the inspector at least 510 px wide.
 - **One size for all toolbars: Small, Normal, Large.** **View > Toolbars > Toolbar Size** (also in the right-click menu of
   every bar, and in **Customize Toolbars**, where "Medium" is now "Normal") sets the icons of every bar at once: the main
   toolbars, the format bars (they were fixed at 18 px), the icon bar, Labels and Profiles. The lists and fields on the bars

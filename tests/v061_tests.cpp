@@ -609,12 +609,12 @@ int main(int argc, char **argv)
         }
     }
 
-    // ---- the inspector tab
+    // ---- the inspector tab (0.99.0: the Handwriting tab is there too, its button hidden, so the list is no longer only this one)
     Inspector *insp = w.findChild<Inspector *>();
     auto *tabButton = w.findChild<QToolButton *>(QStringLiteral("inspectorTab:speech-transcription.list"));
     auto *notesButton = insp ? insp->findChildren<QToolButton *>().value(0) : nullptr;
     QWidget *panel = w.findChild<QWidget *>(QStringLiteral("speechPanel"));
-    check(insp && tabButton && panel && insp->extraTabs() == QStringList{QStringLiteral("speech-transcription.list")}
+    check(insp && tabButton && panel && insp->extraTabs().contains(QStringLiteral("speech-transcription.list"))
               && notesButton && tabButton->x() < insp->findChildren<QToolButton *>().value(1)->x(),
           QStringLiteral("the inspector has the tab \"Transcriptions\", its button at the left end of the row"));
     toolhost::host().runCommand(QStringLiteral("speech-transcription.show"));
