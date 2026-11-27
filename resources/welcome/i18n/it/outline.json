@@ -46,7 +46,7 @@
           },
           {
             "id": 2,
-            "text": "Note: fai doppio clic su un punto vuoto. Ctrl+Enter crea una nuova nota sotto quella selezionata.",
+            "text": "Note: fai doppio clic su un punto vuoto. Ctrl+Invio crea una nuova nota sotto quella selezionata.",
             "x": 20,
             "y": 30,
             "width": 200,
