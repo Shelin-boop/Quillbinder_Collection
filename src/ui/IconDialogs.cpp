@@ -63,7 +63,7 @@ QStringList standardIconBar()
 
 IconFromTextDialog::IconFromTextDialog(Project *project, QWidget *parent) : QDialog(parent), m_project(project)
 {
-    setWindowTitle(tr("Icon from Text"));
+    setWindowTitle(tr("Icon From Text"));
     auto *lay = new QVBoxLayout(this);
     auto *form = new QFormLayout;
     m_text = new QLineEdit(this);

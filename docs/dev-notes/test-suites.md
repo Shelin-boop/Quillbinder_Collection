@@ -2,6 +2,14 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## v0990g (0.99.0: the menu walk)
+
+`qb_v0990g_tests`: one window with a project. Navigate > Inspect names (25 characters at most), the renamed commands, the
+Appearance and View names alike, the Search button's menu, no lower-case start, Format > Style with 3 more styles (at most 25
+entries), the item menu without grayed Convert/Merge entries, Edit > Select gone, View > Toolbars and the bars' right-click
+menu in the same groups, menu depth, the mind map's Note Style menu, an Alt letter on every command, "…" rules, Find Command
+without the binder-title menus, F1 in Project Statistics. Run: `xvfb-run -a ./qb_v0990g_tests /tmp/shots`.
+
 ## v0950f and v0950g (0.95.0, item 102: eleven languages)
 
 `qb_v0950f_tests`: the language list (codes, own names, the machine-translation mark in the interface's language, the

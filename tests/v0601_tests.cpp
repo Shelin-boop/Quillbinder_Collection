@@ -228,7 +228,7 @@ static void pasteChecks(MainWindow &w, Project *p, BinderItem *doc)
 {
     QAction *keep = byKey(&w, QStringLiteral("pasteKeep"));
     const QKeySequence seq(Qt::CTRL | Qt::ALT | Qt::SHIFT | Qt::Key_V);
-    check(keep && keep->text().remove(QLatin1Char('&')) == QLatin1String("Paste with Formatting") && keep->shortcut() == seq
+    check(keep && keep->text().remove(QLatin1Char('&')) == QLatin1String("Paste With Formatting") && keep->shortcut() == seq
               && menuNeighbor(keep, -1) == QLatin1String("pastePlain")
               && commands::conflict(QStringLiteral("pasteKeep"), seq, commands::custom()).isEmpty(),
           QStringLiteral("Edit > Paste with Formatting after Paste and Match Style, Ctrl+Alt+Shift+V, no other command has the keys"),
@@ -369,7 +369,7 @@ static QImage grabOf(TextEditor *e)
 static void invisiblesChecks(MainWindow &w, Project *p, BinderItem *doc, BinderItem *folder)
 {
     QAction *inv = byKey(&w, QStringLiteral("showInvisibles"));
-    check(inv && inv->isCheckable() && !inv->isChecked() && menuNeighbor(inv, -1) == QLatin1String("showRuler")
+    check(inv && inv->isCheckable() && !inv->isChecked() && menuNeighbor(inv, -1) == QLatin1String("showFormatBar") /* (0.99.0: Show Format Bar follows Show Ruler) */
               && !inv->icon().isNull(),
           QStringLiteral("View > Text Editing > Show Invisibles after Show Ruler, a switch, off at first, with an icon"),
           inv ? menuNeighbor(inv, -1) : QStringLiteral("no command"));

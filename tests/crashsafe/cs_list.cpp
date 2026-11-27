@@ -128,11 +128,11 @@ const std::vector<Case> &cases()
         {QStringLiteral("S-V10"), QStringLiteral("Zoom everywhere"), 90, 90, QString(), caseSV10, true},
         {QStringLiteral("S-V11"), QStringLiteral("Page view"), 90, 90, QString(), caseSV11, true},
         // ---- inspector
-        {QStringLiteral("S-I01"), QStringLiteral("Synopsis and notes"), 240, 240, QString(), caseSI01, true},
+        {QStringLiteral("S-I01"), QStringLiteral("Synopsis and Notes"), 240, 240, QString(), caseSI01, true},
         {QStringLiteral("S-I02"), QStringLiteral("Metadata and keywords"), 90, 90, QString(), caseSI02, true},
         {QStringLiteral("S-I03"), QStringLiteral("Bookmarks and the editable preview"), 270, 270, QString(), caseSI03, true},
         {QStringLiteral("S-I04"), QStringLiteral("Snapshots"), 90, 90, QString(), caseSI04, true},
-        {QStringLiteral("S-I05"), QStringLiteral("Comments and footnotes tab"), 60, 60, QString(), caseSI05, true},
+        {QStringLiteral("S-I05"), QStringLiteral("Comments and Footnotes tab"), 60, 60, QString(), caseSI05, true},
         {QStringLiteral("S-I06"), QStringLiteral("Mind maps"), 240, 240, QString(), caseSI06, true},
         {QStringLiteral("S-I07"), QStringLiteral("Objects"), 180, 180, QString(), caseSI07, true},
         {QStringLiteral("S-I08"), QStringLiteral("The look of the parts"), 90, 90, QString(), caseSI08, true},

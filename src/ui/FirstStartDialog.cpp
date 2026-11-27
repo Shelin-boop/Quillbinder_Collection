@@ -205,7 +205,7 @@ FirstStartDialog::FirstStartDialog(QWidget *parent, bool again) : QDialog(parent
             mv->addWidget(m_menuMove);
             connect(m_menuAdd, &QCheckBox::toggled, m_menuMove, &QWidget::setEnabled);
         }
-        auto *later = new QLabel(tr("Help > Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage "
+        auto *later = new QLabel(tr("Help > Add to Application Menu or Remove From Application Menu changes this later. If you move the AppImage "
                                 "yourself, add it to the menu again."), menu);
         later->setObjectName(QStringLiteral("firstMenuHint"));
         later->setWordWrap(true);

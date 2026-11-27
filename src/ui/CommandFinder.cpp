@@ -36,6 +36,12 @@ static void walk(QMenu *menu, const QString &path, bool parentsOn, QList<Command
         if (ac->objectName() == QLatin1String("qbWindowEntry"))
             continue;
         if (QMenu *sub = ac->menu()) {
+            // 0.99.0: menus that are filled with binder titles only when they open (Go To, Open Quick Reference, Back To,
+            // Forward To) are no commands: their entries were missing, then listed twice, then stale
+            static const QStringList dataMenus = {QStringLiteral("goToMenu"), QStringLiteral("openQuickRefMenu"),
+                                                  QStringLiteral("historyBackMenu"), QStringLiteral("historyForwardMenu")};
+            if (dataMenus.contains(sub->objectName()))
+                continue;
             walk(sub, path + QLatin1String(" > ") + plain(sub->title().isEmpty() ? ac->text() : sub->title()),
                  parentsOn && ac->isEnabled(), out, seen);
             continue;

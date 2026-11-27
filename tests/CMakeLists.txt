@@ -538,3 +538,8 @@ add_executable(qb_v0950g_tests v0950g_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_
 target_include_directories(qb_v0950g_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins/tools)
 target_link_libraries(qb_v0950g_tests PRIVATE qbui Qt6::Test Qt6::Network)
 target_compile_definitions(qb_v0950g_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+
+# 0.99.0 (the menu walk, UR-06, UR-15, item 118): the names of commands and the shape of the menus (xvfb-run -a ./qb_v0990g_tests /tmp/shots)
+add_executable(qb_v0990g_tests v0990g_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990g_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0990g_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")

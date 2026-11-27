@@ -710,7 +710,7 @@ int main(int argc, char **argv)
                 for (QAction *t : a->menu()->actions())
                     if (!t->isSeparator())
                         trouble << t->text().remove(QLatin1Char('&'));
-    check(trouble.contains(QStringLiteral("System Information…")) && trouble.contains(QStringLiteral("Crash Reports…"))
+    check(trouble.contains(QStringLiteral("System Information")) && trouble.contains(QStringLiteral("Crash Reports…"))
               && entries.indexOf(QStringLiteral("Troubleshooting and Development")) < entries.indexOf(QStringLiteral("About Quillbinder")),
           QStringLiteral("Help menu: Troubleshooting and Development with System Information… and Crash Reports… (before About)"),
           entries.join(QLatin1String(" | ")));

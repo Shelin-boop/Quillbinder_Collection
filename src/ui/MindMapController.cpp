@@ -135,7 +135,7 @@ void MindMapController::createActions()
         updateActions();
     });
     on(add(QStringLiteral("mm_pageSetup"), tr("Page Set&up…"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_P)), [this] { pageSetup(); });
-    on(add(QStringLiteral("mm_printPreview"), tr("Print Pre&view…"), QKeySequence(), QStringLiteral("document-print-preview")),
+    on(add(QStringLiteral("mm_printPreview"), tr("Print Pre&view"), QKeySequence(), QStringLiteral("document-print-preview")),
        [this] { printPreview(); });
     on(add(QStringLiteral("mm_print"), tr("&Print…"), QKeySequence::Print, QStringLiteral("document-print")), [this] { print(); });
     on(add(QStringLiteral("mm_options"), tr("Mind Map &Options…"), QKeySequence(), QStringLiteral("configure")), [this] { showOptions(); });
@@ -544,16 +544,49 @@ void MindMapController::fillBackgroundMenu(QMenu *m)
 
 void MindMapController::fillFormatMenu(QMenu *m)
 {
+    // 0.99.0: the note styles are listed right in the menu (a click applies one), then New, Redefine and Delete; before,
+    // "Apply Note Style", "Redefine ..." and "Delete ..." were submenus with the styles one level further down (four levels
+    // from the Menu button). Redefine and Delete now ask which style in a small window.
     QMenu *st = m->addMenu(tr("Note &Style"));
-    st->addAction(m_a[QStringLiteral("mm_newStyle")]);
-    QMenu *apply = st->addMenu(tr("&Apply Note Style"));
-    QMenu *redef = st->addMenu(tr("&Redefine Note Style From Selection"));
-    QMenu *del = st->addMenu(tr("&Delete Note Style"));
-    connect(st, &QMenu::aboutToShow, this, [this, apply, redef, del] { fillStyleMenus(apply, redef, del); });
-    fillStyleMenus(apply, redef, del);
-    st->addSeparator();
-    for (const char *k : {"mm_copyStyle", "mm_pasteStyle", "mm_importStyles"})
-        st->addAction(m_a[QLatin1String(k)]);
+    auto fillSt = [this, st] {
+        st->clear();
+        fillStyleMenus(st, nullptr, nullptr);
+        st->addSeparator();
+        st->addAction(m_a[QStringLiteral("mm_newStyle")]);
+        const QList<NoteStyle> list = sortedStyles();
+        auto pick = [this, list](const QString &title, const QString &label) {
+            QStringList names;
+            for (const NoteStyle &s : list)
+                names << s.name;
+            bool ok = false;
+            const QString chosen = QInputDialog::getItem(m_owner, title, label, names, 0, false, &ok);
+            if (!ok)
+                return QString();
+            for (const NoteStyle &s : list)
+                if (s.name == chosen)
+                    return s.id;
+            return QString();
+        };
+        QAction *redef = st->addAction(tr("&Redefine Note Style From Selection…"), this, [this, pick] {
+            const QString id = pick(tr("Redefine Note Style"), tr("Note style to redefine from the selected note:"));
+            if (!id.isEmpty())
+                redefineStyle(id);
+        });
+        redef->setObjectName(QStringLiteral("mm_redefineStyle"));
+        redef->setEnabled(!list.isEmpty() && targets().size() == 1);
+        QAction *del = st->addAction(tr("&Delete Note Style…"), this, [this, pick] {
+            const QString id = pick(tr("Delete Note Style"), tr("Note style to delete:"));
+            if (!id.isEmpty())
+                deleteStyle(id);
+        });
+        del->setObjectName(QStringLiteral("mm_deleteStyle"));
+        del->setEnabled(!list.isEmpty());
+        st->addSeparator();
+        for (const char *k : {"mm_copyStyle", "mm_pasteStyle", "mm_importStyles"})
+            st->addAction(m_a[QLatin1String(k)]);
+    };
+    connect(st, &QMenu::aboutToShow, this, fillSt);
+    fillSt();
     QMenu *font = m->addMenu(icons::action(QStringLiteral("font")), tr("&Font"));
     for (const char *k : {"mm_bold", "mm_italic", "mm_underline", "mm_strike", "", "mm_bigger", "mm_smaller"}) {
         if (!*k)

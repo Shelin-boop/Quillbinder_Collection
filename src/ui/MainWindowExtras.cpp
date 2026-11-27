@@ -87,7 +87,7 @@ void MainWindow::createExtraActions()
     });
     // ---- icons
     connect(act(QStringLiteral("resetIcon"), tr("&Reset Icon to Default")), &QAction::triggered, this, [this] { setIconFor(QString()); });
-    connect(act(QStringLiteral("iconFromText"), tr("Icon from &Text…")), &QAction::triggered, this, [this] {
+    connect(act(QStringLiteral("iconFromText"), tr("Icon From &Text…")), &QAction::triggered, this, [this] {
         if (!m_project)
             return;
         IconFromTextDialog dlg(m_project.get(), this);

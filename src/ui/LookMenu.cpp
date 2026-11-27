@@ -103,7 +103,7 @@ void sizeMenu(QMenu *menu, const QString &title, const QString &objectName, int 
         QObject::connect(a, &QAction::triggered, m, [set, px] { set(px); });
     }
     m->addSeparator();
-    QAction *other = m->addAction(known ? QObject::tr("Other...") : QObject::tr("Other (%1 px)...").arg(current));
+    QAction *other = m->addAction(known ? QObject::tr("Other…") : QObject::tr("Other (%1 px)…").arg(current));
     other->setCheckable(!known);
     other->setChecked(!known);
     QPointer<QWidget> p(parent);
@@ -212,7 +212,7 @@ void fill(QMenu *menu, Part part, QWidget *parent)
         QMenu *m = menu->addMenu(QObject::tr("Font: %1").arg(fi->label) + (own ? QObject::tr(" (own font)") : QString()));
         m->setObjectName(QStringLiteral("lookFont_") + key);
         const theme::FontRole role = fi->role;
-        QObject::connect(m->addAction(QObject::tr("Choose Font...")), &QAction::triggered, m, [key, role, p] {
+        QObject::connect(m->addAction(QObject::tr("Choose Font…")), &QAction::triggered, m, [key, role, p] {
             bool ok = false;
             const QFont chosen = QFontDialog::getFont(&ok, theme::font(role), p, QObject::tr("Font"));
             if (!ok)
@@ -253,14 +253,14 @@ void fill(QMenu *menu, Part part, QWidget *parent)
                  [p](int px) { changeLook([&](look::Values &lv) { lv.editorWidth = px; }, p); }, parent);
         sizeMenu(menu, QObject::tr("Border Beside the Text"), QStringLiteral("lookBorder"), v.border, {0, 5, 10, 15, 20, 30, 40},
                  0, 200, [p](int px) { changeLook([&](look::Values &lv) { lv.border = px; }, p); }, parent);
-        programToggle(QObject::tr("Fixed Width (Text as a Centered Column)"), QStringLiteral("lookFixedWidth"), s.fixedWidth,
+        programToggle(QObject::tr("Fixed Width Editor"), QStringLiteral("lookFixedWidth"), s.fixedWidth,
                       [](bool b) { AppSettings::instance().fixedWidth = b; });
         break;
     case Part::Binder:
         menu->addSeparator();
-        programToggle(QObject::tr("Show Label Colors in the Binder"), QStringLiteral("lookLabelBinder"), s.labelColorInBinder,
+        programToggle(QObject::tr("Label Color in Binder"), QStringLiteral("lookLabelBinder"), s.labelColorInBinder,
                       [](bool b) { AppSettings::instance().labelColorInBinder = b; });
-        programToggle(QObject::tr("Let the Label Color Shine Through the Icons"), QStringLiteral("lookLabelIcons"),
+        programToggle(QObject::tr("Label Color in Icons"), QStringLiteral("lookLabelIcons"),
                       s.labelColorInIcons, [](bool b) { AppSettings::instance().labelColorInIcons = b; });
         sizeMenu(menu, QObject::tr("Indent per Level"), QStringLiteral("lookBinderIndent"), s.binderIndent, {8, 10, 12, 16, 20}, 4,
                  40,
@@ -272,9 +272,9 @@ void fill(QMenu *menu, Part part, QWidget *parent)
         break;
     case Part::Corkboard:
         menu->addSeparator();
-        programToggle(QObject::tr("Show Status Stamps"), QStringLiteral("lookStamps"), s.showStatusStamps,
+        programToggle(QObject::tr("Status Stamps"), QStringLiteral("lookStamps"), s.showStatusStamps,
                       [](bool b) { AppSettings::instance().showStatusStamps = b; });
-        programToggle(QObject::tr("Tint Cards with the Label Color"), QStringLiteral("lookTint"), s.tintCardsWithLabel,
+        programToggle(QObject::tr("Label Color in Index Cards"), QStringLiteral("lookTint"), s.tintCardsWithLabel,
                       [](bool b) { AppSettings::instance().tintCardsWithLabel = b; });
         sizeMenu(menu, QObject::tr("Card Width"), QStringLiteral("lookCardWidth"), s.cardWidth, {160, 180, 210, 240, 280, 320}, 120,
                  480,
@@ -288,7 +288,7 @@ void fill(QMenu *menu, Part part, QWidget *parent)
     }
 
     menu->addSeparator();
-    QAction *more = menu->addAction(QObject::tr("Appearance Options..."));
+    QAction *more = menu->addAction(QObject::tr("Appearance Options…"));
     more->setObjectName(QStringLiteral("lookOptions"));
     const QString page = optionsPage(part);
     QObject::connect(more, &QAction::triggered, menu, [page] {
@@ -297,10 +297,17 @@ void fill(QMenu *menu, Part part, QWidget *parent)
     });
 }
 
-QMenu *add(QMenu *menu, Part part, QWidget *parent)
+QMenu *add(QMenu *menu, Part part, QWidget *parent, QAction *before)
 {
-    menu->addSeparator();
-    QMenu *m = menu->addMenu(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")), QObject::tr("Appearance"));
+    QMenu *m = nullptr;
+    if (before) {
+        m = new QMenu(QObject::tr("Appearance"), menu);
+        m->setIcon(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")));
+        menu->insertMenu(before, m);
+    } else {
+        menu->addSeparator();
+        m = menu->addMenu(QIcon::fromTheme(QStringLiteral("preferences-desktop-color")), QObject::tr("Appearance"));
+    }
     m->setObjectName(QStringLiteral("lookMenu"));
     fill(m, part, parent);
     return m;
