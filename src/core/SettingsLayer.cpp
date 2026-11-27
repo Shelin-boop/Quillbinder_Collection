@@ -163,6 +163,7 @@ bool programOnly(const QString &key)
         QStringLiteral("layouts/"),         // saved layouts are the writer's, for every project
         QStringLiteral("appearance/colors/"), QStringLiteral("appearance/fonts/"), // the look: settings/look.json
         QStringLiteral("quillbinderOptions/"),
+        QStringLiteral("handwriting/"),     // 0.99.0: handwriting is kept per device
         QStringLiteral("profile/"),         // 0.95.0: the profile in use and the built-in profile deleted
         QStringLiteral("standardColors/"),  // 0.95.0: part of the user profile, never a project's
         QStringLiteral("themes/")};         // 0.95.0: built-in themes the writer deleted

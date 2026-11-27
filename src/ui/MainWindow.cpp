@@ -63,6 +63,7 @@
 #include "ui/ToolHost.h"
 #include "ui/DocMirror.h"
 #include "ui/Inspector.h"
+#include "ui/handwriting/HandwritingController.h"
 #include "ui/MindMapController.h"
 #include "ui/MindMapDoc.h"
 #include "ui/MindMapUi.h"
@@ -279,6 +280,12 @@ MainWindow::MainWindow()
     m_mainSplit->setChildrenCollapsible(false);
     initPaneSplitters(); // 0.93.0: the row of the binder and the inspector for an upright window
     setCentralWidget(m_mainSplit);
+    // 0.99.0 (item 112): handwriting: the button, the modes and the one writing area; a mode needs a recognizer, so the first use
+    // (and every use while none is installed) opens File > Options > Handwriting
+    m_handwriting = new handwriting::HandwritingController(this, m_inspector);
+    connect(m_handwriting, &handwriting::HandwritingController::settingsRequested, this,
+            [this] { OptionsDialog::run(this, [](OptionsDialog &d) { d.showSection(OptionsDialog::SGeneral, tr("Handwriting")); }); });
+    QTimer::singleShot(0, this, [this] { m_handwriting->applyStored(); });
     m_active = m_panes[0];
     connectPane(m_panes[0]);
     connectPane(m_panes[1]);
@@ -2409,6 +2416,8 @@ QString MainWindow::aboutText()
               "projects can move between the programs.</p>")
         .arg(QLatin1String(QB_APP_NAME), version, QLatin1String(qVersion()), QLatin1String(QB_APP_HOMEPAGE));
 }
+
+TextEditor *MainWindow::handwritingEditor() const { return m_active ? m_active->currentEditor() : nullptr; }
 
 TextEditor *MainWindow::editor() const
 {

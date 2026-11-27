@@ -49,6 +49,7 @@ class UpdateChecker;
 class StylesPanel;
 class FormatFindWindow;
 class Inspector;
+namespace handwriting { class HandwritingController; }
 class TextEditor;
 class CompositionWindow;
 class QuickRefWindow;
@@ -65,6 +66,10 @@ public:
     // 0.94.0: the section of the user manual for what is on the screen now (F1): the view of the active pane, the
     // binder, the inspector's tab; empty: the start of the manual
     QString manualSection() const;
+    // 0.99.0 (handwriting, item 112): the parts the writing layer lies over
+    QWidget *editorAreaWidget() const { return m_editorArea; }
+    handwriting::HandwritingController *handwriting() const { return m_handwriting; }
+    TextEditor *handwritingEditor() const;   // the text editor of the active pane (null when none)
     MainWindow();
     ~MainWindow() override;
 
@@ -540,6 +545,7 @@ private:
     std::unique_ptr<Project> m_project;
     BinderPanel *m_binder = nullptr;
     Inspector *m_inspector = nullptr;
+    handwriting::HandwritingController *m_handwriting = nullptr;   // 0.99.0: the button, the modes, the writing area
     QSplitter *m_mainSplit = nullptr;
     QSplitter *m_editorSplit = nullptr;
     // the panes placed by the window's shape (MainWindowPanes.cpp)

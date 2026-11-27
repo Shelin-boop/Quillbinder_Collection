@@ -2086,6 +2086,22 @@ bool Inspector::showExtraTab(const QString &key)
     return true;
 }
 
+void Inspector::setExtraTabVisible(const QString &key, bool visible)
+{
+    const int i = int(m_extraKeys.indexOf(key));
+    if (i < 0)
+        return;
+    m_extraButtons[i]->setVisible(visible);
+    if (!visible && currentExtraTab() == key)
+        showTab(Notes);
+}
+
+bool Inspector::extraTabVisible(const QString &key) const
+{
+    const int i = int(m_extraKeys.indexOf(key));
+    return i >= 0 && !m_extraButtons[i]->isHidden();
+}
+
 QString Inspector::currentExtraTab() const
 {
     const int i = m_stack->currentIndex() - int(Objects) - 1;

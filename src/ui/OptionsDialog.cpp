@@ -1,4 +1,5 @@
 #include "ui/OptionsDialog.h"
+#include "ui/handwriting/HandwritingPage.h"
 #include "ui/ProfileDialogs.h"
 #include "ui/Profiles.h"
 #include "ui/OptionStorage.h"
@@ -746,6 +747,9 @@ QWidget *OptionsDialog::generalSection()
         connect(&modelmem::ModelMemory::instance(), &modelmem::ModelMemory::modelsChanged, ai, refresh);
         pages.append({tr("AI Models"), ai});
     }
+    // 0.99.0 (item 112): File > Options > Handwriting, a page of its own in the list (like AI Models); kept per device
+    m_handwriting = new handwriting::HandwritingPage;
+    pages.append({tr("Handwriting"), m_handwriting});
 
     // the writing tools' sections (the scratch pad's folder and the like): a page each
     toolhost::host().attachTools();
@@ -2805,6 +2809,8 @@ void OptionsDialog::accept()
 
 void OptionsDialog::apply()
 {
+    if (m_handwriting)
+        m_handwriting->apply();
     for (const auto &sec : m_toolSections)
         sec->apply();
     QTimer::singleShot(0, &toolhost::host(), [] { toolhost::host().notifySettingsChanged(); });

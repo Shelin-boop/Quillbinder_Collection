@@ -65,6 +65,10 @@ public:
     // of the row; their numbers follow Objects in the order they were added.
     void addExtraTab(const QString &key, QWidget *page, const QIcon &icon, const QString &toolTip);
     bool showExtraTab(const QString &key);
+    // 0.99.0: a tool tab's button can be hidden (the Handwriting tab shows only while a handwriting mode is on); a hidden tab
+    // that is shown goes back to the Notes tab
+    void setExtraTabVisible(const QString &key, bool visible);
+    bool extraTabVisible(const QString &key) const;
     QString currentExtraTab() const;     // key of the tool tab shown; empty when a tab of the program is shown
     QStringList extraTabs() const { return m_extraKeys; }
     static QString tabName(Tab t);                     // the short name of a tab: the entry of Navigate > Inspect (0.99.0)
