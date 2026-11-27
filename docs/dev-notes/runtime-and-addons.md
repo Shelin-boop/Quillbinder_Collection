@@ -208,6 +208,30 @@ a tag points elsewhere), none changed except where said here.
   libmtmd, which is why libmtmd is built with `LLAMA_BUILD_MTMD=ON`) and also has a Qwen3-TTS path of its own (libmtmd's
   `qwen3tts-gen`), apart from qwentts.cpp. whisper.cpp 1.9.6 also installs `libparakeet`.
 
+## 0.99.0: the release models-5 (`models-5.yml`, `tools/models/`)
+
+- Files: `models-5.json` (every catalog field except size and SHA-256), `models-5-sources.json` (pins of the Hugging Face
+  files: commit, size, SHA-256), `pocket-voices.json` (the licensed voices), `fetch-hf.py`, `convert-ppocr.py`,
+  `make-wordlists.py`, `convert-pocket-tts.py`, `make-catalog.py` (`build` for the catalog job, `models-json` writes
+  `resources/ai/models.json`). Suite `models5` keeps them, the workflow and the program's catalog in step.
+- **Handwriting model**: kraken's PP-OCRv6 small (Apache-2.0; the file has 13,065,380 bytes = about 3.24 M parameters, which is what
+  the model card says; the paper's 5.2 M is not this file; the script prints the count of the network it builds). The network's
+  source is taken from `kraken==7.2` installed with `--no-deps`: kraken's package initializer imports Lightning and more, so the
+  script loads `lib/ppocr` as a package of its own. The file's metadata says line height 96 (the card's 128 px is the paper's);
+  the backbone's last `avg_pool2d(kernel_size=(h, 2))` reads h from the tensor, so the export keeps the height fixed and the width
+  free (the export patches `F.avg_pool2d` so that h is a plain number; input widths are multiples of 8, because the network pads each stage by the width's remainder and a trace fixes that for one width; `dynamo=False`; kraken needs torch 2.9 or newer, where the new exporter is the default). The first runner run (2026-11-27) failed in the export (the pooling's Gather node, fixed as said) and the Pocket TTS conversions failed at the tokenizer (sentencepiece 0.2.3's model file was made with protobuf 7.36 and refuses an older runtime, the converter's requirements pin 4.x: the workflow installs `protobuf>=7.36.1`; the second run still failed on 6.33); both failures were hidden by a pipe to `tee` (no pipefail), so the artifacts lacked the files and only the catalog job noticed. The measured parameter count is 3,216,543 (3.22 M). the script stops on a shape or text
+  difference between ONNX Runtime and PyTorch and on a largest difference of 0.001 or more.
+- **Word lists** are Latin-script words only (wordfreq's lists hold some other scripts, e.g. Chinese words in the Indonesian one).
+- **Pocket TTS**: the engine finds a preset voice by name in the mmproj (`voice.<name>` tensors); `kyutai/pocket-tts-without-voice-cloning`'s
+  language folders carry 27 voice states each, and llama.cpp's converter turns the states of the folder `embeddings/` into those
+  tensors, so only the licensed ones are staged. Licenses per voice follow the README of `kyutai/tts-voices` (VCTK and Alba
+  MacKenna: CC BY 4.0; Voice-Zero, voice donations and Kyutai's own recordings: CC0; Expresso and EARS: non-commercial, left out;
+  voices whose recording that README does not name: left out; juergen: never). The model is the 16-layer one of each language.
+- The dispatch input `pocket` (default on) turns Pocket TTS off: the catalog job then runs without it (`make-catalog.py build --without-pocket`) and the five models are listed without checksums ("not published yet"). A published release is never changed, so Pocket TTS would then come with a later release.
+- Published 2026-11-27 (run 46013112875, 73 assets, every size and SHA-256 equal to the release's own digests): `tools/models/models-5-catalog.json` is its catalog.json; `resources/ai/models.json` is made from it. Each Pocket TTS mmproj holds 20 voices (the staged ones; the mmproj has 50.8 MB because it has no voice encoder).
+- A release asset may have less than 2 GiB: the largest file (Qwen 1.7B Q8_0) has 2,079,448,256 bytes, so no file is split.
+  `catalog.json` is uploaded last: a stopped upload is finished by the next run, which skips what is there.
+
 ## 0.99.0: Translation Helper 1.6 (tool interface 1.3, CTranslate2 4.9.1)
 
 - The add-on's `third_party/quillbinder/ToolApi.h` is the program's 1.3 header again (copied whole). `TranslateTool` also

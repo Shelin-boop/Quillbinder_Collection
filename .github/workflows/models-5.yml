@@ -1,0 +1,298 @@
+# 0.99.0: the data of the program's AI functions, on the release "models-5" of this repository: the handwriting line model
+# (PP-OCRv6 small, converted to ONNX), the word lists for the word layer of Handwriting, the speech models of Read Aloud
+# (Pocket TTS in five languages with the preset voices that carry a license, Qwen3-TTS 0.6B and 1.7B), each file with its
+# SHA-256 and the license texts, and the catalog `catalog.json` that lists them (format 1, src/core/AiCatalog.h), after the
+# pattern of translator-data-4.yml (models-4).
+#
+# What it does: the jobs "handwriting", "wordlists", "pocket-tts" (one per language) and "qwen" download the originals on
+# GitHub's runner (Hugging Face at pinned commits, files checked against tools/models/models-5-sources.json; wordfreq 3.1.1
+# from PyPI; llama.cpp at the tag b12808 for the conversion), make the files and hand them on as artifacts; the job "catalog"
+# measures every file (tools/models/make-catalog.py), adds the license texts and writes catalog.json; the job "publish" uploads
+# everything to the release "models-5", a pre-release "not for downloading" (the program fetches what it needs), with
+# catalog.json last. It does nothing when that release has catalog.json already. A published release is never changed.
+# The jobs that build have no write permission; only "publish" may write, and it runs nothing that was downloaded or built.
+# The designed voices are not made yet (they wait for the listening verdict): the job "voices" is a stub, off by default.
+# After a run: put the catalog.json of the artifact "models-5" into the program's catalog with
+#   python3 tools/models/make-catalog.py models-json resources/ai/models.json --catalog catalog.json
+# (then python3 tools/gen-resources.py) and commit it.
+# Runs by pushing to a branch linux/** that changes this file or tools/models/, and by hand (once it is on main).
+name: AI models (models-5)
+
+on:
+  push:
+    branches: ['linux/**']
+    paths:
+      - '.github/workflows/models-5.yml'
+      - 'tools/models/**'
+  workflow_dispatch:
+    inputs:
+      voices:
+        description: 'Run the stub of the designed voices (they are not made yet: it only prints what it will do)'
+        type: boolean
+        default: false
+      pocket:
+        description: 'Make Pocket TTS (off: the release is made without it and the catalog marks the five models "not published yet")'
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: models-5
+  cancel-in-progress: false
+
+env:
+  RELEASE_TAG: models-5
+  LLAMA_TAG: b12808
+  LLAMA_COMMIT: ed2153e708de813c35559102aed43b3085179c27
+  LEGAL_BY: https://creativecommons.org/licenses/by/4.0/legalcode.txt
+  LEGAL_BY_SA: https://creativecommons.org/licenses/by-sa/4.0/legalcode.txt
+  LEGAL_CC0: https://creativecommons.org/publicdomain/zero/1.0/legalcode.txt
+
+jobs:
+  state:
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+    outputs:
+      there: ${{ steps.state.outputs.there }}
+    steps:
+      - name: Is it there already
+        id: state
+        run: |
+          have=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" --jq '.assets[].name' 2>/dev/null || true)
+          if grep -qxF catalog.json <<< "$have"; then
+            echo "The release $RELEASE_TAG has its files already: nothing to do."
+            echo "there=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "there=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  handwriting:
+    # PP-OCRv6 small -> ONNX (tools/models/convert-ppocr.py checks that ONNX Runtime and PyTorch agree)
+    needs: state
+    if: needs.state.outputs.there != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - name: Tools
+        run: |
+          python3 -m venv /tmp/venv
+          /tmp/venv/bin/pip install --quiet --upgrade pip
+          # CPU build of torch (the runner has no GPU); kraken only for the source of its network (no dependencies)
+          /tmp/venv/bin/pip install --quiet --extra-index-url https://download.pytorch.org/whl/cpu \
+            "torch>=2.9,<2.12" safetensors onnx onnxruntime numpy pillow
+          /tmp/venv/bin/pip install --quiet --no-deps "kraken==7.2"
+          /tmp/venv/bin/pip list 2>/dev/null | grep -iE '^(torch|onnx|onnxruntime|safetensors|numpy|pillow|kraken) ' | tee pip-versions.txt
+      - name: Download the model at its pin
+        run: python3 -I tools/models/fetch-hf.py tools/models/models-5-sources.json ppocr src
+      - name: Convert and check
+        run: |
+          set -o pipefail
+          mkdir -p out
+          /tmp/venv/bin/python -I tools/models/convert-ppocr.py src/small.safetensors out 2>&1 | tee convert.log
+          test -s out/ppocrv6-small.onnx && test -s out/ppocrv6-small-codec.json
+          cp convert.log pip-versions.txt out/
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: m5-handwriting
+          path: out
+          retention-days: 7
+          if-no-files-found: error
+
+  wordlists:
+    needs: state
+    if: needs.state.outputs.there != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - name: wordfreq 3.1.1
+        run: |
+          python3 -m venv /tmp/venv
+          /tmp/venv/bin/pip install --quiet "wordfreq==3.1.1"
+      - name: The lists
+        run: |
+          mkdir -p out
+          /tmp/venv/bin/python -I tools/models/make-wordlists.py out 2>&1 | tee make.log
+          test "${PIPESTATUS[0]}" = 0
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: m5-wordlists
+          path: out
+          retention-days: 7
+          if-no-files-found: error
+
+  pocket-tts:
+    needs: state
+    if: needs.state.outputs.there != 'true' && (github.event_name != 'workflow_dispatch' || inputs.pocket)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: [en, fr, es, pt, it]
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - name: llama.cpp at the tag, the converter's requirements
+        run: |
+          git clone --quiet --depth 1 --branch "$LLAMA_TAG" https://github.com/ggml-org/llama.cpp llama.cpp
+          test "$(git -C llama.cpp rev-parse HEAD)" = "$LLAMA_COMMIT"
+          python3 -m venv /tmp/venv
+          /tmp/venv/bin/pip install --quiet --upgrade pip
+          /tmp/venv/bin/pip install --quiet -r llama.cpp/requirements/requirements-convert_hf_to_gguf.txt
+          # sentencepiece 0.2.3's model file was made with protobuf 7.36 and refuses an older runtime; the converter's requirements pin 4.x
+          /tmp/venv/bin/pip install --quiet "protobuf>=7.36.1"
+          /tmp/venv/bin/pip list 2>/dev/null | grep -iE '^(torch|transformers|sentencepiece|gguf|numpy|protobuf) ' | tee pip-versions.txt
+      - name: Download the model and the licensed voices at their pins
+        run: python3 -I tools/models/fetch-hf.py tools/models/models-5-sources.json pocket-${{ matrix.lang }} src
+      - name: Convert (the model, the mmproj with the voices) and read both back
+        run: |
+          set -o pipefail
+          mkdir -p out
+          /tmp/venv/bin/python -I tools/models/convert-pocket-tts.py ${{ matrix.lang }} src llama.cpp out 2>&1 | tee convert.log
+          test -s out/pocket-tts-${{ matrix.lang }}.gguf && test -s out/mmproj-pocket-tts-${{ matrix.lang }}.gguf
+          cp convert.log pip-versions.txt out/
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: m5-pocket-${{ matrix.lang }}
+          path: out
+          retention-days: 7
+          if-no-files-found: error
+
+  qwen:
+    # copied unchanged from Serveurperso/Qwen3-TTS-GGUF (Apache License 2.0) at the pinned commit, every file checked
+    needs: state
+    if: needs.state.outputs.there != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - name: Download at the pins
+        run: python3 -I tools/models/fetch-hf.py tools/models/models-5-sources.json qwen pack/qwen
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: m5-qwen
+          path: pack
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+
+  voices:
+    # STUB: the designed voices (made with Qwen3-TTS VoiceDesign) wait for the writer's listening verdict. When they come this job
+    # will: make the chosen voices from their descriptions with the pinned VoiceDesign 1.7B model and qwentts.cpp (the pack's
+    # recipe), store each as a voice file (mono 24 kHz PCM, 16 bit, a reference clip with its text) with the description, the
+    # model and the license (Apache-2.0 for the model; the voices are made here), and add them to the catalog as models of kind
+    # "tts". It is skipped unless the input "voices" is set, and even then it only prints this.
+    needs: state
+    if: github.event_name == 'workflow_dispatch' && inputs.voices && needs.state.outputs.there != 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - run: echo "The designed voices are not made yet. Nothing to do."
+
+  catalog:
+    needs: [state, handwriting, wordlists, pocket-tts, qwen]
+    if: ${{ !cancelled() && github.repository == 'Shelin-boop/Quillbinder_Collection' && needs.state.outputs.there != 'true' && needs.handwriting.result == 'success' && needs.wordlists.result == 'success' && (needs.pocket-tts.result == 'success' || needs.pocket-tts.result == 'skipped') && needs.qwen.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: m5-*
+          path: built
+          # one folder for each artifact: built/m5-<part>/
+      - name: The license texts
+        run: |
+          mkdir -p texts
+          cp LICENSE texts/apache-2.0.txt
+          curl -fsSL --retry 3 -o texts/cc-by-4.0.txt "$LEGAL_BY"
+          curl -fsSL --retry 3 -o texts/cc-by-sa-4.0.txt "$LEGAL_BY_SA"
+          curl -fsSL --retry 3 -o texts/cc0-1.0.txt "$LEGAL_CC0"
+          grep -q "Attribution 4.0 International" texts/cc-by-4.0.txt
+          grep -q "Attribution-ShareAlike 4.0 International" texts/cc-by-sa-4.0.txt
+          grep -qi "CC0 1.0 Universal" texts/cc0-1.0.txt
+          grep -q "Apache License" texts/apache-2.0.txt
+      - name: Write the catalog
+        run: |
+          # without Pocket TTS (the dispatch input pocket is off): its five models stay in the catalog, unpublished
+          python3 -I tools/models/make-catalog.py build built texts out ${{ needs.pocket-tts.result == 'skipped' && '--without-pocket' || '' }}
+          python3 -I - <<'PY'
+          import json, os
+          c = json.load(open("out/catalog.json", encoding="utf-8"))
+          for m in c["models"]:
+              for f in m["files"]:
+                  assert os.path.getsize(os.path.join("out", f["asset"])) == f["size"] > 0, f["asset"]
+              print(m["id"], m["sizeMB"], "MB,", len(m["files"]), "files")
+          PY
+          # the logs of the conversions go along (not part of the catalog)
+          for d in built/m5-handwriting built/m5-pocket-*; do
+            for f in "$d"/convert.log "$d"/pip-versions.txt; do
+              [ -f "$f" ] && cp "$f" "out/$(basename "$d")--$(basename "$f")"
+            done
+          done
+          ls -la out | head -80
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: models-5
+          path: out
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+
+  publish:
+    # the only job with write permission: it creates the release and uploads the files; no checkout, nothing built here
+    needs: catalog
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection' && needs.catalog.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: models-5
+          path: out
+
+      - name: The release models-5
+        run: |
+          if [ ! -f out/catalog.json ]; then echo "nothing was built"; exit 0; fi
+          have=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" --jq '.assets[].name' 2>/dev/null || true)
+          if grep -qxF catalog.json <<< "$have"; then echo "the release $RELEASE_TAG has its files already"; exit 0; fi
+          cat > notes.txt <<'TXT'
+          Data of Quillbinder's AI functions (Handwriting, Read Aloud), which the program downloads when the writer chooses a model in File > Options. Not for downloading by hand: the program fetches what it needs and checks every file's SHA-256 against its catalog.
+
+          - handwriting-ppocrv6-small: PP-OCRv6 small by Benjamin Kiessling for kraken, converted to ONNX. Apache License 2.0.
+          - wordlist-<code>: the most frequent words of a language with their frequency, from wordfreq 3.1.1 by Robyn Speer. Creative Commons Attribution-ShareAlike 4.0 (see each list's ATTRIBUTION.txt and LICENSE.txt).
+          - pocket-tts-<code>: Pocket TTS by Kyutai in English, French, Spanish, Portuguese and Italian, converted for llama.cpp b12808, with the preset voices whose license is stated (CC BY 4.0 or CC0; see VOICES.txt). Creative Commons Attribution 4.0.
+          - qwen3-tts-...: Qwen3-TTS 0.6B and 1.7B by the Qwen team with the 12 Hz tokenizer, GGUF files by Serveurperso. Apache License 2.0.
+
+          Made by .github/workflows/models-5.yml. catalog.json lists every file with its size and SHA-256 (it is uploaded last).
+          TXT
+          gh release view "$RELEASE_TAG" > /dev/null 2>&1 \
+            || gh release create "$RELEASE_TAG" --prerelease --target "$GITHUB_SHA" --title "Models models-5 (not for downloading)" --notes-file notes.txt
+          # no --clobber: a file that is there is never replaced; catalog.json last, so that a stopped upload is finished by a new run
+          for f in $(ls out | grep -vxF catalog.json); do
+            if grep -qxF "$f" <<< "$have"; then echo "$f is there already"; continue; fi
+            for try in 1 2 3; do gh release upload "$RELEASE_TAG" "out/$f" && break; echo "retry $f"; sleep 20; done
+          done
+          gh release upload "$RELEASE_TAG" out/catalog.json
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" --jq '.assets[] | "\(.name) \(.size)"'
