@@ -3,6 +3,13 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.99.0 (not released yet)
+
+- **Third-party parts for the built-in encryption and the AI add-ons are prepared** (no function of the program yet): three new
+  ready-made packs of libraries for the Linux build (Botan, RNP, json-c, bzip2 and zlib; ONNX Runtime; ggml, whisper.cpp,
+  llama.cpp, qwentts.cpp and Sonic), the daily security watch follows each new part, and `THIRD-PARTY.md` and Help > Third-Party
+  Licenses (at the next AppImage) name the parts that go into the program.
+
 ## 0.95.0 beta (2026-11-26)
 
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
