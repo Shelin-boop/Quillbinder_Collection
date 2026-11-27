@@ -534,22 +534,6 @@ Door het te downloaden accepteert u de licentie: %2</translation>
         <translation>het Duitse woordenboek</translation>
     </message>
     <message>
-        <source>Missing: %1. Download %2 in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Ontbreekt: %1. Download %2 in de opties van de add-on (Bestand &gt; Opties &gt; Vertaalhulp).</translation>
-    </message>
-    <message>
-        <source> and </source>
-        <translation> en </translation>
-    </message>
-    <message>
-        <source>them</source>
-        <translation>ze</translation>
-    </message>
-    <message>
-        <source>it</source>
-        <translation>het</translation>
-    </message>
-    <message>
         <source>OPUS-MT %1 to %2</source>
         <translation>OPUS-MT %1 naar %2</translation>
     </message>
@@ -636,6 +620,18 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     <message>
         <source>No translation model is downloaded yet for %1 to %2: %3. Choose it with Models... (File &gt; Options &gt; Translation Helper).</source>
         <translation>Er is nog geen vertaalmodel gedownload voor %1 naar %2: %3. Kies het met Modellen... (Bestand &gt; Opties &gt; Vertaalhulp).</translation>
+    </message>
+    <message>
+        <source>No translation model is downloaded yet for %1 to %2: %3. Choose them with Models... (File &gt; Options &gt; Translation Helper).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Missing: %1. Download them in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Missing: %1. Download it in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Translated through English (%1 to English to %2): two steps, so a mistake of the first one is carried into the second.</source>
@@ -938,20 +934,32 @@ Door het te downloaden accepteert u de licentie: %2</translation>
         <translation>Let op: WordNet heeft geen lemma voor dit woord. %1 schreef deze betekenis, en ze kan onnauwkeurig zijn.</translation>
     </message>
     <message>
-        <source>, for “%1”</source>
-        <translation>, voor ‘%1’</translation>
+        <source>Similar translations (%1, for “%2”):</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Similar translations (%1%2):</source>
-        <translation>Vergelijkbare vertalingen (%1%2):</translation>
+        <source>Similar translations (%1):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Similar (%1, for “%2”):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Similar (%1):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (German): spelling suggestions and similar words are given for English words.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 (from “%2”)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Similar German words (%1):</source>
         <translation>Vergelijkbare Duitse woorden (%1):</translation>
-    </message>
-    <message>
-        <source>Similar (%1%2):</source>
-        <translation>Vergelijkbaar (%1%2):</translation>
     </message>
     <message>
         <source>The model’s other words:</source>
@@ -960,14 +968,6 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     <message>
         <source>Asking the model for other words...</source>
         <translation>Het model om andere woorden vragen...</translation>
-    </message>
-    <message>
-        <source> (German): spelling suggestions and similar words are given for English words.</source>
-        <translation> (Duits): spellingsuggesties en vergelijkbare woorden worden gegeven voor Engelse woorden.</translation>
-    </message>
-    <message>
-        <source> (from “%1”)</source>
-        <translation> (van ‘%1’)</translation>
     </message>
     <message>
         <source>Spelling: correct.</source>

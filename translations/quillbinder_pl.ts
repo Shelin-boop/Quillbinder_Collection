@@ -3543,13 +3543,13 @@ Source: %1</source>
         <source>line spacing at least %1 pt</source>
         <translation>interlinia co najmniej %1 pkt</translation>
     </message>
-    <message>
-        <source>1 tab stop</source>
-        <translation>1 tabulator</translation>
-    </message>
-    <message>
-        <source>%1 tab stops</source>
-        <translation>Tabulatory: %1</translation>
+    <message numerus="yes">
+        <source>%Ln tab stop(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Characters: %1</source>
@@ -3847,17 +3847,13 @@ Source: %1</source>
         <source>Change Theme</source>
         <translation>Zmień motyw</translation>
     </message>
-    <message>
-        <source>You have changed %1 of your own on top of the current theme.</source>
-        <translation>Wprowadzono własne zmiany: %1, na bazie bieżącego motywu.</translation>
-    </message>
-    <message>
-        <source>color or font</source>
-        <translation>kolor lub czcionka</translation>
-    </message>
-    <message>
-        <source>colors and fonts</source>
-        <translation>kolory i czcionki|kolorów i czcionek</translation>
+    <message numerus="yes">
+        <source>You have changed %Ln color(s) or font(s) of your own on top of the current theme.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Keep them with the new theme, or use the theme as it is? (Save Current Look as Theme keeps the present look for later.)</source>
@@ -5052,10 +5048,6 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
 <context>
     <name>SpeechTool</name>
     <message>
-        <source>Speech &amp;Transcription</source>
-        <translation>&amp;Transkrypcja mowy</translation>
-    </message>
-    <message>
         <source>Start or stop speech transcription (the arrow beside the button: microphone and options)</source>
         <translation>Włącz lub wyłącz transkrypcję mowy (strzałka obok przycisku: mikrofon i opcje)</translation>
     </message>
@@ -5066,10 +5058,6 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
     <message>
         <source>Start or stop a recording without writing its text (the text can be written later with Transcribe)</source>
         <translation>Rozpocznij lub zatrzymaj nagrywanie bez zapisywania jego tekstu (tekst można zapisać później poleceniem Transkrybuj)</translation>
-    </message>
-    <message>
-        <source>Show &amp;Transcriptions</source>
-        <translation>Pokaż &amp;transkrypcje</translation>
     </message>
     <message>
         <source>The transcriptions in the inspector</source>
@@ -5110,6 +5098,14 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
     <message>
         <source>This version of the add-on needs Quillbinder 0.99.0 or later.</source>
         <translation>Ta wersja dodatku wymaga Quillbindera 0.99.0 lub nowszego.</translation>
+    </message>
+    <message>
+        <source>&amp;Speech Transcription</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Transcri&amp;ptions</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot load the speech engine: %1</source>
@@ -6213,13 +6209,13 @@ Przenieś cały folder Quillbinder w swoje własne miejsce, na przykład C:\User
 </context>
 <context>
     <name>qb::BinderModel</name>
-    <message>
-        <source>word</source>
-        <translation>słowo</translation>
-    </message>
-    <message>
-        <source>words</source>
-        <translation>słów</translation>
+    <message numerus="yes">
+        <source>%Ln word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>(its own text: %1)</source>
@@ -7120,29 +7116,13 @@ Przenieś cały folder Quillbinder w swoje własne miejsce, na przykład C:\User
         <source>[objects] </source>
         <translation>[obiekty] </translation>
     </message>
-    <message>
-        <source>1 object sheet</source>
-        <translation>1 karta obiektu</translation>
-    </message>
-    <message>
-        <source>%1 object sheets</source>
-        <translation>Karty obiektów: %1</translation>
-    </message>
-    <message>
-        <source>1 document</source>
-        <translation>1 dokument</translation>
-    </message>
-    <message>
-        <source>%1 documents</source>
-        <translation>Dokumenty: %1</translation>
-    </message>
-    <message>
-        <source>1 word</source>
-        <translation>1 słowo</translation>
-    </message>
-    <message>
-        <source>about %1 words</source>
-        <translation>około %1 słów</translation>
+    <message numerus="yes">
+        <source>Preview — %1 (%Ln page(s))</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>The selected output format is not available.</source>
@@ -7167,6 +7147,30 @@ Przenieś cały folder Quillbinder w swoje własne miejsce, na przykład C:\User
     <message>
         <source>Compiling...</source>
         <translation>Kompilowanie...</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln object sheet(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>about %Ln word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Compiling failed:
@@ -7207,14 +7211,6 @@ Przenieś cały folder Quillbinder w swoje własne miejsce, na przykład C:\User
     <message>
         <source>Preparing the preview...</source>
         <translation>Przygotowywanie podglądu...</translation>
-    </message>
-    <message>
-        <source>Preview — %1 (1 page)</source>
-        <translation>Podgląd — %1 (1 strona)</translation>
-    </message>
-    <message>
-        <source>Preview — %1 (%2 pages)</source>
-        <translation>Podgląd — %1 (strony: %2)</translation>
     </message>
 </context>
 <context>
@@ -7413,29 +7409,29 @@ Przenieś cały folder Quillbinder w swoje własne miejsce, na przykład C:\User
         <source>custom metadata</source>
         <translation>metadanych własnych</translation>
     </message>
-    <message>
-        <source>quote mark</source>
-        <translation>cudzysłów</translation>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>quote marks</source>
-        <translation>cudzysłowy|cudzysłowów</translation>
+    <message numerus="yes">
+        <source>%Ln quote mark(s) converted in %1: %2.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>document</source>
-        <translation>dokumencie</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>dokumentach|dokumentach</translation>
-    </message>
-    <message>
-        <source>%1 converted in %2: %3.</source>
-        <translation>Zamieniono %1 w %2: %3.</translation>
-    </message>
-    <message>
-        <source>%1 to convert in %2: %3.</source>
-        <translation>Do zamiany: %1 w %2: %3.</translation>
+    <message numerus="yes">
+        <source>%Ln quote mark(s) to convert in %1: %2.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Snapshots taken: %1.</source>
@@ -7571,20 +7567,16 @@ Tej operacji nie można cofnąć w całości.%3</translation>
         <translation>Usuń wszystkie raporty o awariach</translation>
     </message>
     <message>
-        <source>Delete all %1?</source>
-        <translation>Usunąć wszystkie: %1?</translation>
-    </message>
-    <message>
-        <source>crash report</source>
-        <translation>raport o awarii</translation>
-    </message>
-    <message>
-        <source>crash reports</source>
-        <translation>raporty o awariach|raportów o awariach</translation>
-    </message>
-    <message>
         <source>Delete All</source>
         <translation>Usuń wszystkie</translation>
+    </message>
+    <message numerus="yes">
+        <source>Delete all %Ln crash report(s)?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>freeze (recovered)</source>
@@ -7884,22 +7876,6 @@ Tej operacji nie można cofnąć w całości.%3</translation>
         <translation>Zamień wszystko</translation>
     </message>
     <message>
-        <source>replacement</source>
-        <translation>zamiana</translation>
-    </message>
-    <message>
-        <source>replacements</source>
-        <translation>zamiany|zamian</translation>
-    </message>
-    <message>
-        <source>match</source>
-        <translation>trafienie</translation>
-    </message>
-    <message>
-        <source>matches</source>
-        <translation>trafienia|trafień</translation>
-    </message>
-    <message>
         <source>Words: %1
 Characters: %2
 Characters (no spaces): %3
@@ -8020,14 +7996,6 @@ Strony (250 słów): %5</translation>
         <translation>Strona %1 z %2</translation>
     </message>
     <message>
-        <source>page</source>
-        <translation>strona</translation>
-    </message>
-    <message>
-        <source>pages</source>
-        <translation>strony|stron</translation>
-    </message>
-    <message>
         <source>%1 and %2 more</source>
         <translation>%1 i jeszcze %2</translation>
     </message>
@@ -8038,14 +8006,6 @@ Strony (250 słów): %5</translation>
     <message>
         <source>Nothing to go forward to</source>
         <translation>Nie ma dokąd przejść dalej</translation>
-    </message>
-    <message>
-        <source>document</source>
-        <translation>dokument</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>dokumenty|dokumentów</translation>
     </message>
     <message>
         <source>Total: %1 characters</source>
@@ -8108,10 +8068,6 @@ Strony (250 słów): %5</translation>
         <translation>Słowa: %1</translation>
     </message>
     <message>
-        <source>%1 of %2 %3 (click to edit)</source>
-        <translation>%1 z %2 %3 (kliknij, aby edytować)</translation>
-    </message>
-    <message>
         <source>characters</source>
         <translation>znaków</translation>
     </message>
@@ -8122,6 +8078,46 @@ Strony (250 słów): %5</translation>
     <message>
         <source>Document Target</source>
         <translation>Cel dokumentu</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln replacement(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln match(es)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln page(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>%1 of %2 characters (click to edit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 of %2 words (click to edit)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>No target</source>
@@ -9427,7 +9423,7 @@ Nic nie jest zapisywane w folderach systemu Windows ani w rejestrze, chyba że p
     </message>
     <message>
         <source>&amp;Bold</source>
-        <translation>&amp;Pogrubienie</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Italic</source>
@@ -9468,17 +9464,13 @@ Nic nie jest zapisywane w folderach systemu Windows ani w rejestrze, chyba że p
 </context>
 <context>
     <name>qb::FullInstallWindow</name>
-    <message>
-        <source>Installing %1 (%2 MB)...</source>
-        <translation>Instalowanie %1 (%2 MB)...</translation>
-    </message>
-    <message>
-        <source>add-on</source>
-        <translation>dodatek</translation>
-    </message>
-    <message>
-        <source>add-ons</source>
-        <translation>dodatki|dodatków</translation>
+    <message numerus="yes">
+        <source>Installing %Ln add-on(s) (%1 MB)...</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Done</source>
@@ -10529,17 +10521,13 @@ Nadać go zamiast tego poleceniu „%4”? „%2” nie będzie wtedy miało skr
         <source>Shortcut of “%1”:</source>
         <translation>Skrót polecenia „%1”:</translation>
     </message>
-    <message>
-        <source>%1 changed by you (shown in bold).</source>
-        <translation>Zmienione przez ciebie: %1 (pogrubione).</translation>
-    </message>
-    <message>
-        <source>shortcut</source>
-        <translation>skrót</translation>
-    </message>
-    <message>
-        <source>shortcuts</source>
-        <translation>skróty|skrótów</translation>
+    <message numerus="yes">
+        <source>%Ln shortcut(s) changed by you (shown in bold).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
@@ -10881,7 +10869,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Nowy projekt…</translation>
     </message>
     <message>
-        <source>&amp;Open Project…</source>
+        <source>Open Pro&amp;ject…</source>
         <translation>&amp;Otwórz projekt…</translation>
     </message>
     <message>
@@ -10969,7 +10957,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Importuj &amp;stronę internetową…</translation>
     </message>
     <message>
-        <source>Import and &amp;Split…</source>
+        <source>&amp;Import and Split…</source>
         <translation>&amp;Importuj i podziel…</translation>
     </message>
     <message>
@@ -10985,7 +10973,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Eksportuj pliki…</translation>
     </message>
     <message>
-        <source>&amp;Compile…</source>
+        <source>Compi&amp;le…</source>
         <translation>Kompi&amp;luj…</translation>
     </message>
     <message>
@@ -10993,7 +10981,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Konwert&amp;uj plik Markdown ⇄ RTF…</translation>
     </message>
     <message>
-        <source>Print Se&amp;ttings…</source>
+        <source>Print Settin&amp;gs…</source>
         <translation>Usta&amp;wienia wydruku…</translation>
     </message>
     <message>
@@ -11061,7 +11049,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Wklej</translation>
     </message>
     <message>
-        <source>Paste and &amp;Match Style</source>
+        <source>Paste and Match &amp;Style</source>
         <translation>Wklej i &amp;dopasuj styl</translation>
     </message>
     <message>
@@ -11073,7 +11061,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Znajdź…</translation>
     </message>
     <message>
-        <source>Find and &amp;Replace…</source>
+        <source>Find &amp;and Replace…</source>
         <translation>Znajdź &amp;i zamień…</translation>
     </message>
     <message>
@@ -11109,7 +11097,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Wyszukiwanie w projekcie…</translation>
     </message>
     <message>
-        <source>Link to &amp;Document…</source>
+        <source>&amp;Link to Document…</source>
         <translation>Odnośnik do &amp;dokumentu…</translation>
     </message>
     <message>
@@ -11129,7 +11117,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Odnośnik do obiektu</translation>
     </message>
     <message>
-        <source>Object &amp;Templates and Colors…</source>
+        <source>&amp;Object Templates and Colors…</source>
         <translation>Szablony &amp;i kolory obiektów…</translation>
     </message>
     <message>
@@ -11177,11 +11165,11 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>P&amp;odziel pionowo</translation>
     </message>
     <message>
-        <source>Show &amp;Binder</source>
+        <source>S&amp;how Binder</source>
         <translation>Pokaż &amp;segregator</translation>
     </message>
     <message>
-        <source>Quick-Add &amp;Keys in the Binder</source>
+        <source>&amp;Quick-Add Keys in the Binder</source>
         <translation>Klawisze szybkie&amp;go dodawania w segregatorze</translation>
     </message>
     <message>
@@ -11193,11 +11181,11 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Pokaż &amp;inspektor</translation>
     </message>
     <message>
-        <source>Show &amp;Collections</source>
+        <source>Sho&amp;w Collections</source>
         <translation>P&amp;okaż kolekcje</translation>
     </message>
     <message>
-        <source>&amp;Composition Mode</source>
+        <source>Composition &amp;Mode</source>
         <translation>Try&amp;b pisania</translation>
     </message>
     <message>
@@ -11217,19 +11205,19 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Przewijanie jak w &amp;maszynie do pisania</translation>
     </message>
     <message>
-        <source>Show &amp;Titles in Combined Text</source>
+        <source>Show Titles in &amp;Combined Text</source>
         <translation>Pokaż &amp;tytuły w tekście połączonym</translation>
     </message>
     <message>
-        <source>&amp;Fixed Width Editor</source>
+        <source>Fixed &amp;Width Editor</source>
         <translation>Edytor o &amp;stałej szerokości</translation>
     </message>
     <message>
-        <source>Zoom &amp;In</source>
+        <source>Zoom I&amp;n</source>
         <translation>Powięks&amp;z</translation>
     </message>
     <message>
-        <source>Zoom &amp;Out</source>
+        <source>&amp;Zoom Out</source>
         <translation>Pomnie&amp;jsz</translation>
     </message>
     <message>
@@ -11237,7 +11225,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Przywróć powiększenie</translation>
     </message>
     <message>
-        <source>Zoom Inspector &amp;Tabs Separately</source>
+        <source>Zoom Insp&amp;ector Tabs Separately</source>
         <translation>Powiększaj kart&amp;y inspektora osobno</translation>
     </message>
     <message>
@@ -11269,7 +11257,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Z&amp;apisz ustawienia projektu do pliku…</translation>
     </message>
     <message>
-        <source>Project &amp;Targets…</source>
+        <source>&amp;Project Targets…</source>
         <translation>&amp;Cele projektu…</translation>
     </message>
     <message>
@@ -11280,24 +11268,12 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <source>&amp;Empty Trash…</source>
         <translation>&amp;Opróżnij kosz…</translation>
     </message>
-    <message>
-        <source>document</source>
-        <translation>dokument</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>dokumenty|dokumentów</translation>
-    </message>
-    <message>
-        <source>Delete %1 in the Trash forever? This cannot be undone.</source>
-        <translation>Usunąć na zawsze: %1 w koszu? Tej operacji nie można cofnąć.</translation>
-    </message>
     <message numerus="yes">
-        <source>Delete %1 in the Trash forever, together with their %n snapshot(s)? This cannot be undone.</source>
-        <translation>
-            <numerusform>Usunąć na zawsze: %1 w koszu, razem z %n migawką? Tej operacji nie można cofnąć.</numerusform>
-            <numerusform>Usunąć na zawsze: %1 w koszu, razem z %n migawkami? Tej operacji nie można cofnąć.</numerusform>
-            <numerusform>Usunąć na zawsze: %1 w koszu, razem z %n migawkami? Tej operacji nie można cofnąć.</numerusform>
+        <source>Snapshot taken of %Ln document(s).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -11305,11 +11281,11 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Opróżnij kosz</translation>
     </message>
     <message>
-        <source>Delete Old &amp;Snapshots…</source>
+        <source>&amp;Delete Old Snapshots…</source>
         <translation>Usuń stare &amp;migawki…</translation>
     </message>
     <message>
-        <source>Show Project in File &amp;Manager</source>
+        <source>Show Project in &amp;File Manager</source>
         <translation>Pokaż projekt w &amp;menedżerze plików</translation>
     </message>
     <message>
@@ -11409,7 +11385,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Dod&amp;aj do zakładek projektu</translation>
     </message>
     <message>
-        <source>Reveal in &amp;Binder</source>
+        <source>&amp;Reveal in Binder</source>
         <translation>Po&amp;każ w segregatorze</translation>
     </message>
     <message>
@@ -11417,7 +11393,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Zablokuj w miejscu</translation>
     </message>
     <message>
-        <source>&amp;Bold</source>
+        <source>Bo&amp;ld</source>
         <translation>&amp;Pogrubienie</translation>
     </message>
     <message>
@@ -11513,7 +11489,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Zmniejsz &amp;wcięcie</translation>
     </message>
     <message>
-        <source>&amp;Reset Paragraph Formatting</source>
+        <source>Reset Paragraph &amp;Formatting</source>
         <translation>Przywróć &amp;formatowanie akapitu</translation>
     </message>
     <message>
@@ -11609,7 +11585,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Usuń &amp;wiersze</translation>
     </message>
     <message>
-        <source>Delete C&amp;olumns</source>
+        <source>D&amp;elete Columns</source>
         <translation>Usuń &amp;kolumny</translation>
     </message>
     <message>
@@ -11661,7 +11637,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Nie udało się uruchomić „%1”. Sprawdź program w menu Plik &gt; Opcje &gt; Ogólne &gt; Cytaty.</translation>
     </message>
     <message>
-        <source>Current &amp;Time</source>
+        <source>C&amp;urrent Time</source>
         <translation>Bieżąca &amp;godzina</translation>
     </message>
     <message>
@@ -11677,11 +11653,11 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Poprzedni dokument</translation>
     </message>
     <message>
-        <source>&amp;Next Document</source>
+        <source>Next &amp;Document</source>
         <translation>&amp;Następny dokument</translation>
     </message>
     <message>
-        <source>Enclosing &amp;Group</source>
+        <source>En&amp;closing Group</source>
         <translation>&amp;Grupa nadrzędna</translation>
     </message>
     <message>
@@ -11757,10 +11733,6 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Menedżer dodatków…</translation>
     </message>
     <message>
-        <source>&amp;About %1</source>
-        <translation>&amp;O programie %1</translation>
-    </message>
-    <message>
         <source>Program, versions and computer at a glance, to copy into a problem report</source>
         <translation>Program, wersje i komputer w skrócie, do skopiowania do zgłoszenia problemu</translation>
     </message>
@@ -11777,7 +11749,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Skróty &amp;klawiaturowe…</translation>
     </message>
     <message>
-        <source>Select &amp;Annotation or Note</source>
+        <source>Select Annotation &amp;or Note</source>
         <translation>Zaznacz &amp;adnotację lub notatkę</translation>
     </message>
     <message>
@@ -11789,7 +11761,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Dostosuj paski narzędzi…</translation>
     </message>
     <message>
-        <source>&amp;Reset Toolbar Places</source>
+        <source>Reset Toolbar &amp;Places</source>
         <translation>Przywróć położenie pasków &amp;narzędzi</translation>
     </message>
     <message>
@@ -11921,12 +11893,32 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Wczytaj ustawienia projektu z pliku…</translation>
     </message>
     <message>
-        <source>Project S&amp;tatistics</source>
+        <source>P&amp;roject Statistics</source>
         <translation>S&amp;tatystyki projektu</translation>
     </message>
     <message>
         <source>&amp;Writing History</source>
         <translation>&amp;Historia pisania</translation>
+    </message>
+    <message numerus="yes">
+        <source>Delete %Ln document(s) in the Trash forever?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Their %Ln snapshot(s) go with them.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>This cannot be undone.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Convert &amp;Sheet to Object</source>
@@ -11965,6 +11957,10 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Dodaj do &amp;menu aplikacji…</translation>
     </message>
     <message>
+        <source>A&amp;bout %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&amp;System Information</source>
         <translation>&amp;Informacje o systemie</translation>
     </message>
@@ -11989,7 +11985,7 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Duży</translation>
     </message>
     <message>
-        <source>Project &amp;Formatting Settings…</source>
+        <source>Pr&amp;oject Formatting Settings…</source>
         <translation>&amp;Ustawienia formatowania projektu…</translation>
     </message>
     <message>
@@ -12153,14 +12149,6 @@ Jest jego kopia z %2, z ostatniego otwarcia projektu. Użyć tej kopii? Zmian w 
             <numerusform>%n dokumenty zapisane po tej kopii znajdują się w folderze „%1” w Materiałach.</numerusform>
             <numerusform>%n dokumentów zapisanych po tej kopii znajduje się w folderze „%1” w Materiałach.</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Scrivener&apos;s style marks were taken out of 1 document.</source>
-        <translation>Znaczniki stylów Scrivenera usunięto z 1 dokumentu.</translation>
-    </message>
-    <message>
-        <source>Scrivener&apos;s style marks were taken out of %1 documents.</source>
-        <translation>Znaczniki stylów Scrivenera usunięto z %1 dokumentów.</translation>
     </message>
     <message>
         <source>Document Cannot Be Read</source>
@@ -12773,18 +12761,6 @@ Wersje od 0.70.0 do 0.90.4 przechowywały je tam. Przenieść je do samego folde
         <translation>Drukowanie się nie powiodło.</translation>
     </message>
     <message>
-        <source>Printed: %1 (%2)</source>
-        <translation>Wydrukowano: %1 (%2)</translation>
-    </message>
-    <message>
-        <source>page</source>
-        <translation>strona</translation>
-    </message>
-    <message>
-        <source>pages</source>
-        <translation>strony|stron</translation>
-    </message>
-    <message>
         <source>Print Preview – %1</source>
         <translation>Podgląd wydruku – %1</translation>
     </message>
@@ -12844,6 +12820,22 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <source>The program&apos;s icon could not be copied, so the menu entry shows no icon.</source>
         <translation>Nie udało się skopiować ikony programu, więc wpis w menu nie ma ikony.</translation>
     </message>
+    <message numerus="yes">
+        <source>Scrivener&apos;s style marks were taken out of %Ln document(s).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Printed: %1 (%Ln page(s))</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
         <source>%1 is in the application menu now (%2).</source>
         <translation>%1 jest teraz w menu aplikacji (%2).</translation>
@@ -12885,10 +12877,6 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
 %1</translation>
     </message>
     <message>
-        <source>Snapshot taken of %1.</source>
-        <translation>Wykonano migawkę: %1.</translation>
-    </message>
-    <message>
         <source>&amp;File</source>
         <translation>&amp;Plik</translation>
     </message>
@@ -12925,7 +12913,7 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>Projekt &amp;%1…</translation>
     </message>
     <message>
-        <source>Compare and &amp;Transfer</source>
+        <source>Compare an&amp;d Transfer</source>
         <translation>Po&amp;równaj i przenieś</translation>
     </message>
     <message>
@@ -12933,7 +12921,7 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>&amp;Edycja</translation>
     </message>
     <message>
-        <source>&amp;Find</source>
+        <source>F&amp;ind</source>
         <translation>Zna&amp;jdź</translation>
     </message>
     <message>
@@ -12985,7 +12973,7 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>A, B, C …</translation>
     </message>
     <message>
-        <source>&amp;Placeholders</source>
+        <source>Plac&amp;eholders</source>
         <translation>&amp;Symbole zastępcze</translation>
     </message>
     <message>
@@ -13061,15 +13049,15 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>&amp;Profile</translation>
     </message>
     <message>
-        <source>&amp;Text Editing</source>
+        <source>Te&amp;xt Editing</source>
         <translation>&amp;Edycja tekstu</translation>
     </message>
     <message>
-        <source>&amp;Corkboard Options</source>
+        <source>Cor&amp;kboard Options</source>
         <translation>Opcje &amp;tablicy korkowej</translation>
     </message>
     <message>
-        <source>&amp;Outliner Options</source>
+        <source>Out&amp;liner Options</source>
         <translation>Op&amp;cje konspektu</translation>
     </message>
     <message>
@@ -13077,7 +13065,7 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>Kolumny są wymienione tutaj, gdy pokazany jest konspekt</translation>
     </message>
     <message>
-        <source>Use Label Color &amp;In</source>
+        <source>&amp;Use Label Color In</source>
         <translation>Używaj koloru etykiety &amp;w</translation>
     </message>
     <message>
@@ -13153,7 +13141,7 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>&amp;Edytor</translation>
     </message>
     <message>
-        <source>&amp;Binder Selection Affects</source>
+        <source>Binder &amp;Selection Affects</source>
         <translation>&amp;Zaznaczenie w segregatorze wpływa na</translation>
     </message>
     <message>
@@ -13165,7 +13153,7 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>P&amp;rojekt</translation>
     </message>
     <message>
-        <source>New From &amp;Template</source>
+        <source>&amp;New From Template</source>
         <translation>Nowy z &amp;szablonu</translation>
     </message>
     <message>
@@ -13197,11 +13185,11 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>K&amp;onwertuj</translation>
     </message>
     <message>
-        <source>Change &amp;Icon</source>
+        <source>&amp;Change Icon</source>
         <translation>Zmień &amp;ikonę</translation>
     </message>
     <message>
-        <source>Default &amp;Template for Subdocuments</source>
+        <source>Default Template &amp;for Subdocuments</source>
         <translation>Dom&amp;yślny szablon dla poddokumentów</translation>
     </message>
     <message>
@@ -13233,7 +13221,7 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>&amp;Akapit</translation>
     </message>
     <message>
-        <source>&amp;Line Spacing</source>
+        <source>Line &amp;Spacing</source>
         <translation>&amp;Interlinia</translation>
     </message>
     <message>
@@ -13265,7 +13253,7 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>Po&amp;moc</translation>
     </message>
     <message>
-        <source>&amp;Add-ons and Updates</source>
+        <source>Add-&amp;ons and Updates</source>
         <translation>&amp;Dodatki i aktualizacje</translation>
     </message>
     <message>
@@ -13405,15 +13393,15 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>Zapamiętaj także rozmiar okna</translation>
     </message>
     <message>
-        <source>&amp;Install Font Files…</source>
+        <source>I&amp;nstall Font Files…</source>
         <translation>&amp;Zainstaluj pliki czcionek…</translation>
     </message>
     <message>
-        <source>Open &amp;Font Folder</source>
+        <source>&amp;Open Font Folder</source>
         <translation>Otwórz &amp;folder czcionek</translation>
     </message>
     <message>
-        <source>Open Font &amp;Manager of the Desktop</source>
+        <source>Open Font Manager of &amp;the Desktop</source>
         <translation>Otwórz m&amp;enedżer czcionek pulpitu</translation>
     </message>
     <message>
@@ -14051,7 +14039,7 @@ Projekt, nad którym pracujesz, pozostaje tam, gdzie jest.</translation>
         <translation>Brak znacznika czasu (takiego jak [03:07]) w wierszu kursora.</translation>
     </message>
     <message>
-        <source>Editor in the &amp;Middle</source>
+        <source>&amp;Editor in the Middle</source>
         <translation>Edytor na środ&amp;ku</translation>
     </message>
     <message>
@@ -14091,7 +14079,7 @@ Projekt, nad którym pracujesz, pozostaje tam, gdzie jest.</translation>
         <translation>Inspektor, edytor, segregator</translation>
     </message>
     <message>
-        <source>&amp;Reset Layout</source>
+        <source>Rese&amp;t Layout</source>
         <translation>Przywróć &amp;układ</translation>
     </message>
     <message>
@@ -14107,7 +14095,7 @@ Projekt, nad którym pracujesz, pozostaje tam, gdzie jest.</translation>
         <translation>&amp;Ustawienia scenariusza…</translation>
     </message>
     <message>
-        <source>S&amp;criptwriting</source>
+        <source>Script&amp;writing</source>
         <translation>&amp;Pisanie scenariuszy</translation>
     </message>
     <message>
@@ -14212,17 +14200,29 @@ Brak elementu tego samego rodzaju dla: %1. Ich akapity stają się tekstem zwyk�
         <source>Delete Old Snapshots</source>
         <translation>Usuń stare migawki</translation>
     </message>
-    <message>
-        <source>Delete all %1 of %2 forever?</source>
-        <translation>Usunąć na zawsze wszystkie: %1 (dotyczą: %2)?</translation>
+    <message numerus="yes">
+        <source>Delete all %Ln snapshot(s) of %1 forever?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>snapshot</source>
-        <translation>migawka</translation>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>snapshots</source>
-        <translation>migawki|migawek</translation>
+    <message numerus="yes">
+        <source>%Ln snapshot(s) deleted.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>They take %1. The texts stay as they are now; only their earlier versions go, also those of documents in the Trash. This cannot be undone: a backup (File &gt; Back Up) beforehand is a good idea.</source>
@@ -14231,10 +14231,6 @@ Brak elementu tego samego rodzaju dla: %1. Ich akapity stają się tekstem zwyk�
     <message>
         <source>Delete Snapshots</source>
         <translation>Usuń migawki</translation>
-    </message>
-    <message>
-        <source>%1 deleted.</source>
-        <translation>Usunięto: %1.</translation>
     </message>
     <message>
         <source>Save Project Settings</source>
@@ -14595,7 +14591,7 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
         <translation>Inne wersje są nadal zachowywane; tylko to powiadomienie znika do zakończenia programu.</translation>
     </message>
     <message>
-        <source>Speech &amp;Transcription…</source>
+        <source>&amp;Speech Transcription…</source>
         <translation>&amp;Transkrypcja mowy…</translation>
     </message>
     <message>
@@ -14738,9 +14734,13 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
         <source>Nothing to redo</source>
         <translation>Nie ma nic do ponowienia</translation>
     </message>
-    <message>
-        <source>and %1 earlier steps</source>
-        <translation>i %1 wcześniejszych kroków</translation>
+    <message numerus="yes">
+        <source>and %Ln earlier step(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>&amp;Manage Profiles…</source>
@@ -14807,7 +14807,7 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
         <translation>Czytaj na głos</translation>
     </message>
     <message>
-        <source>Small &amp;Interface</source>
+        <source>Sm&amp;all Interface</source>
         <translation>Mały &amp;interfejs</translation>
     </message>
     <message>
@@ -15275,14 +15275,6 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
         <translation>&amp;Dopasuj powiększenie</translation>
     </message>
     <message>
-        <source>Zoom &amp;In</source>
-        <translation>&amp;Powiększ</translation>
-    </message>
-    <message>
-        <source>Zoom &amp;Out</source>
-        <translation>P&amp;omniejsz</translation>
-    </message>
-    <message>
         <source>Zoom to &amp;Selection</source>
         <translation>Powiększ do &amp;zaznaczenia</translation>
     </message>
@@ -15455,10 +15447,6 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
         <translation>&amp;Domyślny</translation>
     </message>
     <message>
-        <source>&amp;Bold</source>
-        <translation>&amp;Pogrubienie</translation>
-    </message>
-    <message>
         <source>&amp;Italic</source>
         <translation>&amp;Kursywa</translation>
     </message>
@@ -15597,10 +15585,6 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
     <message>
         <source>&amp;Select</source>
         <translation>&amp;Zaznacz</translation>
-    </message>
-    <message>
-        <source>&amp;Find</source>
-        <translation>&amp;Znajdź</translation>
     </message>
     <message>
         <source>New &amp;Connected Note</source>
@@ -16025,6 +16009,22 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
     <message>
         <source>Print Pre&amp;view</source>
         <translation>Podgląd wy&amp;druku</translation>
+    </message>
+    <message>
+        <source>Zoom &amp;In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom &amp;Out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Find</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Redefine Note Style From Selection…</source>
@@ -17295,24 +17295,8 @@ Kontynuować?</translation>
         <translation>Dodatki i wtyczki</translation>
     </message>
     <message>
-        <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</source>
-        <translation>To, co tu zmienisz, jest przechowywane razem z tym projektem. Jego własne ustawienia: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <source>setting</source>
-        <translation>ustawienie</translation>
-    </message>
-    <message>
-        <source>settings</source>
-        <translation>ustawień</translation>
-    </message>
-    <message>
         <source>What you change here is kept with this project; it has no settings of its own yet.</source>
         <translation>To, co tu zmienisz, jest przechowywane razem z tym projektem; nie ma jeszcze własnych ustawień.</translation>
-    </message>
-    <message>
-        <source>The open project has &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; of its own, which it keeps.</source>
-        <translation>Otwarty projekt ma własne ustawienia (&lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;), które zachowuje.</translation>
     </message>
     <message>
         <source>Projects&apos; own settings are not used (General &gt; Which settings come first).</source>
@@ -18231,32 +18215,8 @@ Kontynuować?</translation>
         <translation>Kolory i czcionki są takie jak w motywie.</translation>
     </message>
     <message>
-        <source>%1 of your own on top of the theme (shown in bold below).</source>
-        <translation>Własne zmiany na wierzchu motywu: %1 (pogrubione poniżej).</translation>
-    </message>
-    <message>
-        <source>change</source>
-        <translation>zmiana</translation>
-    </message>
-    <message>
-        <source>changes</source>
-        <translation>zmian</translation>
-    </message>
-    <message>
         <source>Note: your colors %1 on %2 have a contrast of %3 : 1. Text is easier to read from 4.5 : 1.</source>
         <translation>Uwaga: twoje kolory %1 na %2 mają kontrast %3 : 1. Tekst jest łatwiejszy do czytania od 4,5 : 1.</translation>
-    </message>
-    <message>
-        <source>%1 below it too.</source>
-        <translation>Poniżej jest jeszcze %1.</translation>
-    </message>
-    <message>
-        <source>more pair</source>
-        <translation>para</translation>
-    </message>
-    <message>
-        <source>more pairs</source>
-        <translation>pary|par</translation>
     </message>
     <message>
         <source>Auto-Correction</source>
@@ -18614,9 +18574,41 @@ Kontynuować?</translation>
         <source>No folder chosen: no automatic backups</source>
         <translation>Nie wybrano folderu: brak automatycznych kopii zapasowych</translation>
     </message>
+    <message numerus="yes">
+        <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%Ln setting(s)&lt;/a&gt;.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>The open project has &lt;a href=&quot;show&quot;&gt;%Ln setting(s)&lt;/a&gt; of its own, which it keeps.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
         <source>Normal (22 px)</source>
         <translation>Normalny (22 px)</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln change(s) of your own on top of the theme (shown in bold below).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln more pair(s) below it too.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Open Backup Folder...</source>
@@ -19570,17 +19562,13 @@ Twoje ostatnie projekty, własne motywy, układy, paski narzędzi i skróty klaw
         <source>A card is larger than the paper inside its margins: one card on each sheet, made smaller.</source>
         <translation>Fiszka jest większa niż papier w jego marginesach: jedna fiszka na każdym arkuszu, pomniejszona.</translation>
     </message>
-    <message>
-        <source>%1 on each sheet (%2 × %3) of the paper on the Page tab.</source>
-        <translation>%1 na każdym arkuszu (%2 × %3) papieru z karty Strona.</translation>
-    </message>
-    <message>
-        <source>card</source>
-        <translation>fiszka</translation>
-    </message>
-    <message>
-        <source>cards</source>
-        <translation>fiszki|fiszek</translation>
+    <message numerus="yes">
+        <source>%Ln card(s) on each sheet (%1 × %2) of the paper on the Page tab.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -20113,29 +20101,29 @@ Niezapisane:
         <source>custom metadata</source>
         <translation>metadanych własnych</translation>
     </message>
-    <message>
-        <source>%1 replaced in %2: %3.</source>
-        <translation>Zamieniono %1 w %2: %3.</translation>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>%1 found in %2: %3.</source>
-        <translation>Znaleziono %1 w %2: %3.</translation>
+    <message numerus="yes">
+        <source>%Ln occurrence(s) replaced in %1: %2.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>occurrence</source>
-        <translation>wystąpienie</translation>
-    </message>
-    <message>
-        <source>occurrences</source>
-        <translation>wystąpienia|wystąpień</translation>
-    </message>
-    <message>
-        <source>document</source>
-        <translation>dokumencie</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>dokumentach|dokumentach</translation>
+    <message numerus="yes">
+        <source>%Ln occurrence(s) found in %1: %2.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Snapshots taken: %1.</source>
@@ -21754,12 +21742,28 @@ Zapisano %2 z projektu „%3” przez %4.</translation>
         <translation>Zeruj sesję teraz</translation>
     </message>
     <message>
-        <source>%1 of %2 %3</source>
-        <translation>%1 z %2 %3</translation>
+        <source>%1 of %2 characters</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 %2 in the Draft</source>
-        <translation>%1 %2 w szkicu</translation>
+        <source>%1 of %2 words</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln character(s) in the Draft</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln word(s) in the Draft</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>%1 of %2 this session</source>
@@ -21891,7 +21895,7 @@ Ctrl+kliknięcie, aby otworzyć</translation>
         <translation>Więcej poleceń</translation>
     </message>
     <message>
-        <source>Paste and &amp;Match Style</source>
+        <source>Paste and Match &amp;Style</source>
         <translation>Wklej i &amp;dopasuj styl</translation>
     </message>
     <message>
@@ -22013,29 +22017,21 @@ Ctrl+kliknięcie, aby otworzyć</translation>
         <source>uses the colors of the desktop (KDE color scheme)</source>
         <translation>używa kolorów pulpitu (schemat kolorów KDE)</translation>
     </message>
-    <message>
-        <source>sets %1</source>
-        <translation>ustawia %1</translation>
+    <message numerus="yes">
+        <source>%Ln color(s) set</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>color</source>
-        <translation>kolor</translation>
-    </message>
-    <message>
-        <source>colors</source>
-        <translation>kolorów</translation>
-    </message>
-    <message>
-        <source> and %1</source>
-        <translation> i %1</translation>
-    </message>
-    <message>
-        <source>font</source>
-        <translation>czcionkę</translation>
-    </message>
-    <message>
-        <source>fonts</source>
-        <translation>czcionek</translation>
+    <message numerus="yes">
+        <source>%Ln font(s) set</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -22076,17 +22072,13 @@ Ctrl+kliknięcie, aby otworzyć</translation>
         <source>Change Theme</source>
         <translation>Zmień motyw</translation>
     </message>
-    <message>
-        <source>The look you see has %1 of your own that are not saved in My Look 1 or My Look 2.</source>
-        <translation>Wygląd, który widzisz, ma własne zmiany (%1), które nie są zapisane w Mój wygląd 1 ani Mój wygląd 2.</translation>
-    </message>
-    <message>
-        <source>color or font</source>
-        <translation>kolor lub czcionka</translation>
-    </message>
-    <message>
-        <source>colors and fonts</source>
-        <translation>kolory i czcionki|kolorów i czcionek</translation>
+    <message numerus="yes">
+        <source>The look you see has %Ln color(s) or font(s) of your own that are not saved in My Look 1 or My Look 2.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Save the look in My Look 1 or My Look 2 first (it replaces the look saved there), or switch without saving it?</source>
@@ -22333,17 +22325,21 @@ Pobiera jeden mały plik, najwyżej raz dziennie, i informuje, gdy jest nowsza w
         <source>%1 and its add-ons are up to date.</source>
         <translation>%1 i jego dodatki są aktualne.</translation>
     </message>
-    <message>
-        <source>1 day</source>
-        <translation>1 dzień</translation>
+    <message numerus="yes">
+        <source>%Ln day(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>1 week</source>
-        <translation>1 tydzień</translation>
-    </message>
-    <message>
-        <source>%1 weeks</source>
-        <translation>%1 tygodnie</translation>
+    <message numerus="yes">
+        <source>%Ln week(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Updates</source>
@@ -22527,91 +22523,91 @@ Albo pobrać aktualną wersję ze strony projektu.</translation>
         <translation>%1 / %2 dzisiaj</translation>
     </message>
     <message>
-        <source>Today&apos;s writing: %1 of %2 %3 (click for Project Targets)</source>
-        <translation>Dzisiejsze pisanie: %1 z %2 %3 (kliknij, aby zobaczyć Cele projektu)</translation>
+        <source>Today&apos;s writing: %1 of %2 characters (click for Project Targets)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>characters</source>
-        <translation>znaków</translation>
+        <source>Today&apos;s writing: %1 of %2 words (click for Project Targets)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>words</source>
-        <translation>słów</translation>
+        <source>The draft: %1 of %2 characters (click for Project Targets)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The draft: %1 of %2 words (click for Project Targets)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%1 / %2 draft</source>
         <translation>%1 / %2 szkicu</translation>
     </message>
-    <message>
-        <source>The draft: %1 of %2 %3 (click for Project Targets)</source>
-        <translation>Szkic: %1 z %2 %3 (kliknij, aby zobaczyć Cele projektu)</translation>
-    </message>
 </context>
 <context>
     <name>qb::addons</name>
-    <message>
-        <source>theme</source>
-        <translation>motyw</translation>
+    <message numerus="yes">
+        <source>%Ln theme(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>themes</source>
-        <translation>motywy|motywów</translation>
+    <message numerus="yes">
+        <source>%Ln project template(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>project template</source>
-        <translation>szablon projektu</translation>
+    <message numerus="yes">
+        <source>%Ln compile format(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>project templates</source>
-        <translation>szablony projektu|szablonów projektu</translation>
+    <message numerus="yes">
+        <source>%Ln layout(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>compile format</source>
-        <translation>format kompilacji</translation>
+    <message numerus="yes">
+        <source>%Ln script format(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>compile formats</source>
-        <translation>formaty kompilacji|formatów kompilacji</translation>
+    <message numerus="yes">
+        <source>%Ln name list(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>layout</source>
-        <translation>układ</translation>
+    <message numerus="yes">
+        <source>%Ln plugin file(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>layouts</source>
-        <translation>układy|układów</translation>
-    </message>
-    <message>
-        <source>script format</source>
-        <translation>format scenariusza</translation>
-    </message>
-    <message>
-        <source>script formats</source>
-        <translation>formaty scenariusza|formatów scenariusza</translation>
-    </message>
-    <message>
-        <source>name list</source>
-        <translation>lista nazw</translation>
-    </message>
-    <message>
-        <source>name lists</source>
-        <translation>listy nazw|list nazw</translation>
-    </message>
-    <message>
-        <source>plugin file</source>
-        <translation>plik wtyczki</translation>
-    </message>
-    <message>
-        <source>plugin files</source>
-        <translation>plików wtyczek</translation>
-    </message>
-    <message>
-        <source>dictionary</source>
-        <translation>słownik</translation>
-    </message>
-    <message>
-        <source>dictionaries</source>
-        <translation>słowników</translation>
+    <message numerus="yes">
+        <source>%Ln dictionar(y|ies)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>video and audio formats licensed under patents (for Media Playback 2.0 or newer)</source>
@@ -24128,13 +24124,13 @@ Nie jest otwierany stąd. Jeśli mu ufasz, otwórz go sam z menedżera plików.<
         <source>The address does not lead to a web page (it is “%1”).</source>
         <translation>Adres nie prowadzi do strony internetowej (to „%1”).</translation>
     </message>
-    <message>
-        <source>Fetching 1 picture …</source>
-        <translation>Pobieranie 1 obrazu …</translation>
-    </message>
-    <message>
-        <source>Fetching %1 pictures …</source>
-        <translation>Pobieranie obrazów: %1 …</translation>
+    <message numerus="yes">
+        <source>Fetching %Ln picture(s) …</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Fetching pictures: %1 of %2 …</source>
@@ -24235,21 +24231,21 @@ Nie jest otwierany stąd. Jeśli mu ufasz, otwórz go sam z menedżera plików.<
         <source>This is not the address of a web page.</source>
         <translation>To nie jest adres strony internetowej.</translation>
     </message>
-    <message>
-        <source>1 word</source>
-        <translation>1 słowo</translation>
+    <message numerus="yes">
+        <source>%Ln word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>%1 words</source>
-        <translation>%1 słów</translation>
-    </message>
-    <message>
-        <source>1 picture</source>
-        <translation>1 obraz</translation>
-    </message>
-    <message>
-        <source>%1 pictures</source>
-        <translation>%1 obrazów</translation>
+    <message numerus="yes">
+        <source>%Ln picture(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>by %1</source>

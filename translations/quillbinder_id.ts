@@ -3505,13 +3505,11 @@ Sumber: %1</translation>
         <source>line spacing at least %1 pt</source>
         <translation>jarak baris minimal %1 pt</translation>
     </message>
-    <message>
-        <source>1 tab stop</source>
-        <translation>1 perhentian tab</translation>
-    </message>
-    <message>
-        <source>%1 tab stops</source>
-        <translation>%1 perhentian tab</translation>
+    <message numerus="yes">
+        <source>%Ln tab stop(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Characters: %1</source>
@@ -3809,17 +3807,11 @@ Sumber: %1</translation>
         <source>Change Theme</source>
         <translation>Ganti Tema</translation>
     </message>
-    <message>
-        <source>You have changed %1 of your own on top of the current theme.</source>
-        <translation>Anda telah mengubah %1 milik Anda sendiri di atas tema saat ini.</translation>
-    </message>
-    <message>
-        <source>color or font</source>
-        <translation>warna atau font</translation>
-    </message>
-    <message>
-        <source>colors and fonts</source>
-        <translation>warna dan font</translation>
+    <message numerus="yes">
+        <source>You have changed %Ln color(s) or font(s) of your own on top of the current theme.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Keep them with the new theme, or use the theme as it is? (Save Current Look as Theme keeps the present look for later.)</source>
@@ -5014,10 +5006,6 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
 <context>
     <name>SpeechTool</name>
     <message>
-        <source>Speech &amp;Transcription</source>
-        <translation>&amp;Transkripsi Ucapan</translation>
-    </message>
-    <message>
         <source>Start or stop speech transcription (the arrow beside the button: microphone and options)</source>
         <translation>Mulai atau hentikan transkripsi ucapan (panah di samping tombol: mikrofon dan opsi)</translation>
     </message>
@@ -5028,10 +5016,6 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     <message>
         <source>Start or stop a recording without writing its text (the text can be written later with Transcribe)</source>
         <translation>Mulai atau hentikan rekaman tanpa menulis teksnya (teks dapat ditulis nanti dengan Transkripsikan)</translation>
-    </message>
-    <message>
-        <source>Show &amp;Transcriptions</source>
-        <translation>Tampilkan &amp;Transkripsi</translation>
     </message>
     <message>
         <source>The transcriptions in the inspector</source>
@@ -5072,6 +5056,14 @@ Terima juga semuanya? Terima hanya jika Anda membuat berkas ini sendiri atau mem
     <message>
         <source>This version of the add-on needs Quillbinder 0.99.0 or later.</source>
         <translation>Versi pengaya ini memerlukan Quillbinder 0.99.0 atau yang lebih baru.</translation>
+    </message>
+    <message>
+        <source>&amp;Speech Transcription</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show Transcri&amp;ptions</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot load the speech engine: %1</source>
@@ -6171,13 +6163,11 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
 </context>
 <context>
     <name>qb::BinderModel</name>
-    <message>
-        <source>word</source>
-        <translation>kata</translation>
-    </message>
-    <message>
-        <source>words</source>
-        <translation>kata</translation>
+    <message numerus="yes">
+        <source>%Ln word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>(its own text: %1)</source>
@@ -7070,29 +7060,11 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
         <source>[objects] </source>
         <translation>[objek] </translation>
     </message>
-    <message>
-        <source>1 object sheet</source>
-        <translation>1 lembar objek</translation>
-    </message>
-    <message>
-        <source>%1 object sheets</source>
-        <translation>%1 lembar objek</translation>
-    </message>
-    <message>
-        <source>1 document</source>
-        <translation>1 dokumen</translation>
-    </message>
-    <message>
-        <source>%1 documents</source>
-        <translation>%1 dokumen</translation>
-    </message>
-    <message>
-        <source>1 word</source>
-        <translation>1 kata</translation>
-    </message>
-    <message>
-        <source>about %1 words</source>
-        <translation>sekitar %1 kata</translation>
+    <message numerus="yes">
+        <source>Preview — %1 (%Ln page(s))</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>The selected output format is not available.</source>
@@ -7117,6 +7089,24 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     <message>
         <source>Compiling...</source>
         <translation>Mengompilasi...</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln object sheet(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>about %Ln word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Compiling failed:
@@ -7157,14 +7147,6 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
     <message>
         <source>Preparing the preview...</source>
         <translation>Menyiapkan pratinjau...</translation>
-    </message>
-    <message>
-        <source>Preview — %1 (1 page)</source>
-        <translation>Pratinjau — %1 (1 halaman)</translation>
-    </message>
-    <message>
-        <source>Preview — %1 (%2 pages)</source>
-        <translation>Pratinjau — %1 (%2 halaman)</translation>
     </message>
 </context>
 <context>
@@ -7363,29 +7345,23 @@ Pindahkan seluruh folder Quillbinder ke tempat Anda sendiri, misalnya C:\Users\&
         <source>custom metadata</source>
         <translation>metadata kustom</translation>
     </message>
-    <message>
-        <source>quote mark</source>
-        <translation>tanda kutip</translation>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>quote marks</source>
-        <translation>tanda kutip</translation>
+    <message numerus="yes">
+        <source>%Ln quote mark(s) converted in %1: %2.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>document</source>
-        <translation>dokumen</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>dokumen</translation>
-    </message>
-    <message>
-        <source>%1 converted in %2: %3.</source>
-        <translation>%1 dikonversi di %2: %3.</translation>
-    </message>
-    <message>
-        <source>%1 to convert in %2: %3.</source>
-        <translation>%1 untuk dikonversi di %2: %3.</translation>
+    <message numerus="yes">
+        <source>%Ln quote mark(s) to convert in %1: %2.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Snapshots taken: %1.</source>
@@ -7521,20 +7497,14 @@ Tindakan ini tidak dapat dibatalkan secara keseluruhan.%3</translation>
         <translation>Hapus Semua Laporan Crash</translation>
     </message>
     <message>
-        <source>Delete all %1?</source>
-        <translation>Hapus semua %1?</translation>
-    </message>
-    <message>
-        <source>crash report</source>
-        <translation>laporan crash</translation>
-    </message>
-    <message>
-        <source>crash reports</source>
-        <translation>laporan crash</translation>
-    </message>
-    <message>
         <source>Delete All</source>
         <translation>Hapus Semua</translation>
+    </message>
+    <message numerus="yes">
+        <source>Delete all %Ln crash report(s)?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>freeze (recovered)</source>
@@ -7834,22 +7804,6 @@ Tindakan ini tidak dapat dibatalkan secara keseluruhan.%3</translation>
         <translation>Ganti Semua</translation>
     </message>
     <message>
-        <source>replacement</source>
-        <translation>penggantian</translation>
-    </message>
-    <message>
-        <source>replacements</source>
-        <translation>penggantian</translation>
-    </message>
-    <message>
-        <source>match</source>
-        <translation>kecocokan</translation>
-    </message>
-    <message>
-        <source>matches</source>
-        <translation>kecocokan</translation>
-    </message>
-    <message>
         <source>Words: %1
 Characters: %2
 Characters (no spaces): %3
@@ -7970,14 +7924,6 @@ Halaman (250 kata): %5</translation>
         <translation>Halaman %1 dari %2</translation>
     </message>
     <message>
-        <source>page</source>
-        <translation>halaman</translation>
-    </message>
-    <message>
-        <source>pages</source>
-        <translation>halaman</translation>
-    </message>
-    <message>
         <source>%1 and %2 more</source>
         <translation>%1 dan %2 lainnya</translation>
     </message>
@@ -7988,14 +7934,6 @@ Halaman (250 kata): %5</translation>
     <message>
         <source>Nothing to go forward to</source>
         <translation>Tidak ada tujuan untuk maju</translation>
-    </message>
-    <message>
-        <source>document</source>
-        <translation>dokumen</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>dokumen</translation>
     </message>
     <message>
         <source>Total: %1 characters</source>
@@ -8058,10 +7996,6 @@ Halaman (250 kata): %5</translation>
         <translation>Kata: %1</translation>
     </message>
     <message>
-        <source>%1 of %2 %3 (click to edit)</source>
-        <translation>%1 dari %2 %3 (klik untuk mengedit)</translation>
-    </message>
-    <message>
         <source>characters</source>
         <translation>karakter</translation>
     </message>
@@ -8072,6 +8006,38 @@ Halaman (250 kata): %5</translation>
     <message>
         <source>Document Target</source>
         <translation>Target Dokumen</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln replacement(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln match(es)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln page(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>%1 of %2 characters (click to edit)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 of %2 words (click to edit)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>No target</source>
@@ -9377,7 +9343,7 @@ Tidak ada yang ditulis ke folder milik Windows atau ke registri, kecuali jika An
     </message>
     <message>
         <source>&amp;Bold</source>
-        <translation>&amp;Tebal</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Italic</source>
@@ -9418,17 +9384,11 @@ Tidak ada yang ditulis ke folder milik Windows atau ke registri, kecuali jika An
 </context>
 <context>
     <name>qb::FullInstallWindow</name>
-    <message>
-        <source>Installing %1 (%2 MB)...</source>
-        <translation>Menginstal %1 (%2 MB)...</translation>
-    </message>
-    <message>
-        <source>add-on</source>
-        <translation>pengaya</translation>
-    </message>
-    <message>
-        <source>add-ons</source>
-        <translation>pengaya</translation>
+    <message numerus="yes">
+        <source>Installing %Ln add-on(s) (%1 MB)...</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Done</source>
@@ -10477,17 +10437,11 @@ Berikan ke “%4” sebagai gantinya? “%2” kemudian tidak akan memiliki pint
         <source>Shortcut of “%1”:</source>
         <translation>Pintasan “%1”:</translation>
     </message>
-    <message>
-        <source>%1 changed by you (shown in bold).</source>
-        <translation>%1 diubah oleh Anda (ditampilkan tebal).</translation>
-    </message>
-    <message>
-        <source>shortcut</source>
-        <translation>pintasan</translation>
-    </message>
-    <message>
-        <source>shortcuts</source>
-        <translation>pintasan</translation>
+    <message numerus="yes">
+        <source>%Ln shortcut(s) changed by you (shown in bold).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
@@ -10829,7 +10783,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>&amp;Proyek Baru…</translation>
     </message>
     <message>
-        <source>&amp;Open Project…</source>
+        <source>Open Pro&amp;ject…</source>
         <translation>&amp;Buka Proyek…</translation>
     </message>
     <message>
@@ -10917,7 +10871,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Impor Halaman &amp;Web…</translation>
     </message>
     <message>
-        <source>Import and &amp;Split…</source>
+        <source>&amp;Import and Split…</source>
         <translation>Impor dan &amp;Pisahkan…</translation>
     </message>
     <message>
@@ -10933,7 +10887,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>&amp;Ekspor Berkas…</translation>
     </message>
     <message>
-        <source>&amp;Compile…</source>
+        <source>Compi&amp;le…</source>
         <translation>&amp;Kompilasikan…</translation>
     </message>
     <message>
@@ -10941,7 +10895,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Konversi &amp;Markdown ⇄ Berkas RTF…</translation>
     </message>
     <message>
-        <source>Print Se&amp;ttings…</source>
+        <source>Print Settin&amp;gs…</source>
         <translation>Pengat&amp;uran Cetak…</translation>
     </message>
     <message>
@@ -11009,7 +10963,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>&amp;Tempel</translation>
     </message>
     <message>
-        <source>Paste and &amp;Match Style</source>
+        <source>Paste and Match &amp;Style</source>
         <translation>Tempel dan &amp;Samakan Gaya</translation>
     </message>
     <message>
@@ -11021,7 +10975,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>&amp;Cari…</translation>
     </message>
     <message>
-        <source>Find and &amp;Replace…</source>
+        <source>Find &amp;and Replace…</source>
         <translation>Cari dan &amp;Ganti…</translation>
     </message>
     <message>
@@ -11057,7 +11011,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Pencarian &amp;Proyek…</translation>
     </message>
     <message>
-        <source>Link to &amp;Document…</source>
+        <source>&amp;Link to Document…</source>
         <translation>Tautan ke &amp;Dokumen…</translation>
     </message>
     <message>
@@ -11077,7 +11031,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Tautan ke Objek</translation>
     </message>
     <message>
-        <source>Object &amp;Templates and Colors…</source>
+        <source>&amp;Object Templates and Colors…</source>
         <translation>&amp;Templat dan Warna Objek…</translation>
     </message>
     <message>
@@ -11125,11 +11079,11 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Pisahkan Secara &amp;Vertikal</translation>
     </message>
     <message>
-        <source>Show &amp;Binder</source>
+        <source>S&amp;how Binder</source>
         <translation>Tampilkan &amp;Binder</translation>
     </message>
     <message>
-        <source>Quick-Add &amp;Keys in the Binder</source>
+        <source>&amp;Quick-Add Keys in the Binder</source>
         <translation>Tambah Cepat &amp;Tombol di Binder</translation>
     </message>
     <message>
@@ -11141,11 +11095,11 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Tampilkan &amp;Inspektor</translation>
     </message>
     <message>
-        <source>Show &amp;Collections</source>
+        <source>Sho&amp;w Collections</source>
         <translation>Tampilkan K&amp;oleksi</translation>
     </message>
     <message>
-        <source>&amp;Composition Mode</source>
+        <source>Composition &amp;Mode</source>
         <translation>&amp;Mode Menulis</translation>
     </message>
     <message>
@@ -11165,19 +11119,19 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Pengguliran &amp;Mesin Ketik</translation>
     </message>
     <message>
-        <source>Show &amp;Titles in Combined Text</source>
+        <source>Show Titles in &amp;Combined Text</source>
         <translation>Tampilkan &amp;Judul di Teks Gabungan</translation>
     </message>
     <message>
-        <source>&amp;Fixed Width Editor</source>
+        <source>Fixed &amp;Width Editor</source>
         <translation>Editor Lebar &amp;Tetap</translation>
     </message>
     <message>
-        <source>Zoom &amp;In</source>
+        <source>Zoom I&amp;n</source>
         <translation>Per&amp;besar</translation>
     </message>
     <message>
-        <source>Zoom &amp;Out</source>
+        <source>&amp;Zoom Out</source>
         <translation>Per&amp;kecil</translation>
     </message>
     <message>
@@ -11185,7 +11139,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Atur &amp;Ulang Zoom</translation>
     </message>
     <message>
-        <source>Zoom Inspector &amp;Tabs Separately</source>
+        <source>Zoom Insp&amp;ector Tabs Separately</source>
         <translation>Zoom Tab &amp;Inspektor Secara Terpisah</translation>
     </message>
     <message>
@@ -11217,7 +11171,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Sim&amp;pan Pengaturan Proyek ke Berkas…</translation>
     </message>
     <message>
-        <source>Project &amp;Targets…</source>
+        <source>&amp;Project Targets…</source>
         <translation>&amp;Target Proyek…</translation>
     </message>
     <message>
@@ -11228,22 +11182,10 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <source>&amp;Empty Trash…</source>
         <translation>&amp;Kosongkan Tempat Sampah…</translation>
     </message>
-    <message>
-        <source>document</source>
-        <translation>dokumen</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>dokumen</translation>
-    </message>
-    <message>
-        <source>Delete %1 in the Trash forever? This cannot be undone.</source>
-        <translation>Hapus %1 di Tempat Sampah untuk selamanya? Tindakan ini tidak dapat dibatalkan.</translation>
-    </message>
     <message numerus="yes">
-        <source>Delete %1 in the Trash forever, together with their %n snapshot(s)? This cannot be undone.</source>
-        <translation>
-            <numerusform>Hapus %1 di Tempat Sampah untuk selamanya, beserta %n snapshot-nya? Tindakan ini tidak dapat dibatalkan.</numerusform>
+        <source>Snapshot taken of %Ln document(s).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
         </translation>
     </message>
     <message>
@@ -11251,11 +11193,11 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Kosongkan Tempat Sampah</translation>
     </message>
     <message>
-        <source>Delete Old &amp;Snapshots…</source>
+        <source>&amp;Delete Old Snapshots…</source>
         <translation>Hapus &amp;Snapshot Lama…</translation>
     </message>
     <message>
-        <source>Show Project in File &amp;Manager</source>
+        <source>Show Project in &amp;File Manager</source>
         <translation>Tampilkan Proyek di Pengelola &amp;Berkas</translation>
     </message>
     <message>
@@ -11351,7 +11293,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Tambahkan ke &amp;Penanda Proyek</translation>
     </message>
     <message>
-        <source>Reveal in &amp;Binder</source>
+        <source>&amp;Reveal in Binder</source>
         <translation>Tunjukkan di &amp;Binder</translation>
     </message>
     <message>
@@ -11359,7 +11301,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>&amp;Kunci di Tempat</translation>
     </message>
     <message>
-        <source>&amp;Bold</source>
+        <source>Bo&amp;ld</source>
         <translation>&amp;Tebal</translation>
     </message>
     <message>
@@ -11455,7 +11397,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>&amp;Kurangi Indentasi</translation>
     </message>
     <message>
-        <source>&amp;Reset Paragraph Formatting</source>
+        <source>Reset Paragraph &amp;Formatting</source>
         <translation>&amp;Atur Ulang Pemformatan Paragraf</translation>
     </message>
     <message>
@@ -11551,7 +11493,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Hapus Ba&amp;ris</translation>
     </message>
     <message>
-        <source>Delete C&amp;olumns</source>
+        <source>D&amp;elete Columns</source>
         <translation>Hapus K&amp;olom</translation>
     </message>
     <message>
@@ -11603,7 +11545,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>&quot;%1&quot; tidak dapat dijalankan. Periksa programnya di Berkas &gt; Opsi &gt; Umum &gt; Sitasi.</translation>
     </message>
     <message>
-        <source>Current &amp;Time</source>
+        <source>C&amp;urrent Time</source>
         <translation>&amp;Waktu Saat Ini</translation>
     </message>
     <message>
@@ -11619,11 +11561,11 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Dokumen &amp;Sebelumnya</translation>
     </message>
     <message>
-        <source>&amp;Next Document</source>
+        <source>Next &amp;Document</source>
         <translation>Dokumen &amp;Berikutnya</translation>
     </message>
     <message>
-        <source>Enclosing &amp;Group</source>
+        <source>En&amp;closing Group</source>
         <translation>&amp;Grup Pembungkus</translation>
     </message>
     <message>
@@ -11699,10 +11641,6 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Pengelola Pen&amp;gaya…</translation>
     </message>
     <message>
-        <source>&amp;About %1</source>
-        <translation>&amp;Tentang %1</translation>
-    </message>
-    <message>
         <source>Program, versions and computer at a glance, to copy into a problem report</source>
         <translation>Program, versi, dan komputer sekilas, untuk disalin ke laporan masalah</translation>
     </message>
@@ -11719,7 +11657,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Pintasan &amp;Papan Ketik…</translation>
     </message>
     <message>
-        <source>Select &amp;Annotation or Note</source>
+        <source>Select Annotation &amp;or Note</source>
         <translation>Pilih &amp;Anotasi atau Catatan</translation>
     </message>
     <message>
@@ -11731,7 +11669,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>&amp;Sesuaikan Bilah Alat…</translation>
     </message>
     <message>
-        <source>&amp;Reset Toolbar Places</source>
+        <source>Reset Toolbar &amp;Places</source>
         <translation>&amp;Atur Ulang Posisi Bilah Alat</translation>
     </message>
     <message>
@@ -11863,12 +11801,28 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>&amp;Muat Pengaturan Proyek dari Berkas…</translation>
     </message>
     <message>
-        <source>Project S&amp;tatistics</source>
+        <source>P&amp;roject Statistics</source>
         <translation>S&amp;tatistik Proyek</translation>
     </message>
     <message>
         <source>&amp;Writing History</source>
         <translation>&amp;Riwayat Penulisan</translation>
+    </message>
+    <message numerus="yes">
+        <source>Delete %Ln document(s) in the Trash forever?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Their %Ln snapshot(s) go with them.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>This cannot be undone.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Convert &amp;Sheet to Object</source>
@@ -11907,6 +11861,10 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>Tambahkan ke &amp;Menu Aplikasi…</translation>
     </message>
     <message>
+        <source>A&amp;bout %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&amp;System Information</source>
         <translation>Informasi &amp;Sistem</translation>
     </message>
@@ -11931,7 +11889,7 @@ Pintasan yang Anda atur sendiri tidak berubah.</translation>
         <translation>&amp;Besar</translation>
     </message>
     <message>
-        <source>Project &amp;Formatting Settings…</source>
+        <source>Pr&amp;oject Formatting Settings…</source>
         <translation>Pengaturan &amp;Pemformatan Proyek…</translation>
     </message>
     <message>
@@ -12093,14 +12051,6 @@ Ada salinannya dari %2, saat terakhir proyek dibuka. Pakai salinan itu? Perubaha
         <translation>
             <numerusform>%n dokumen yang ditulis setelah salinan itu ada di folder “%1” pada Riset.</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Scrivener&apos;s style marks were taken out of 1 document.</source>
-        <translation>Tanda gaya Scrivener dihapus dari 1 dokumen.</translation>
-    </message>
-    <message>
-        <source>Scrivener&apos;s style marks were taken out of %1 documents.</source>
-        <translation>Tanda gaya Scrivener dihapus dari %1 dokumen.</translation>
     </message>
     <message>
         <source>Document Cannot Be Read</source>
@@ -12687,18 +12637,6 @@ Versi 0.70.0 hingga 0.90.4 menyimpannya di sana. Pindahkan ke folder cadangan it
         <translation>Pencetakan tidak berhasil.</translation>
     </message>
     <message>
-        <source>Printed: %1 (%2)</source>
-        <translation>Tercetak: %1 (%2)</translation>
-    </message>
-    <message>
-        <source>page</source>
-        <translation>halaman</translation>
-    </message>
-    <message>
-        <source>pages</source>
-        <translation>halaman</translation>
-    </message>
-    <message>
         <source>Print Preview – %1</source>
         <translation>Pratinjau Cetak – %1</translation>
     </message>
@@ -12758,6 +12696,18 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
         <source>The program&apos;s icon could not be copied, so the menu entry shows no icon.</source>
         <translation>Ikon program tidak dapat disalin, sehingga entri menu tidak menampilkan ikon.</translation>
     </message>
+    <message numerus="yes">
+        <source>Scrivener&apos;s style marks were taken out of %Ln document(s).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Printed: %1 (%Ln page(s))</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
         <source>%1 is in the application menu now (%2).</source>
         <translation>%1 kini ada di menu aplikasi (%2).</translation>
@@ -12799,10 +12749,6 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
 %1</translation>
     </message>
     <message>
-        <source>Snapshot taken of %1.</source>
-        <translation>Snapshot dibuat untuk %1.</translation>
-    </message>
-    <message>
         <source>&amp;File</source>
         <translation>&amp;Berkas</translation>
     </message>
@@ -12839,7 +12785,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
         <translation>Proyek &amp;%1…</translation>
     </message>
     <message>
-        <source>Compare and &amp;Transfer</source>
+        <source>Compare an&amp;d Transfer</source>
         <translation>Bandingkan dan Tra&amp;nsfer</translation>
     </message>
     <message>
@@ -12847,7 +12793,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
         <translation>&amp;Edit</translation>
     </message>
     <message>
-        <source>&amp;Find</source>
+        <source>F&amp;ind</source>
         <translation>&amp;Cari</translation>
     </message>
     <message>
@@ -12899,7 +12845,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
         <translation>A, B, C …</translation>
     </message>
     <message>
-        <source>&amp;Placeholders</source>
+        <source>Plac&amp;eholders</source>
         <translation>&amp;Placeholder</translation>
     </message>
     <message>
@@ -12975,15 +12921,15 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
         <translation>&amp;Profil</translation>
     </message>
     <message>
-        <source>&amp;Text Editing</source>
+        <source>Te&amp;xt Editing</source>
         <translation>Pe&amp;ngeditan Teks</translation>
     </message>
     <message>
-        <source>&amp;Corkboard Options</source>
+        <source>Cor&amp;kboard Options</source>
         <translation>Opsi Papan &amp;Gabus</translation>
     </message>
     <message>
-        <source>&amp;Outliner Options</source>
+        <source>Out&amp;liner Options</source>
         <translation>&amp;Opsi Kerangka</translation>
     </message>
     <message>
@@ -12991,7 +12937,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
         <translation>Kolom-kolom terdaftar di sini saat kerangka ditampilkan</translation>
     </message>
     <message>
-        <source>Use Label Color &amp;In</source>
+        <source>&amp;Use Label Color In</source>
         <translation>Gunakan Warna Label &amp;di</translation>
     </message>
     <message>
@@ -13067,7 +13013,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
         <translation>&amp;Editor</translation>
     </message>
     <message>
-        <source>&amp;Binder Selection Affects</source>
+        <source>Binder &amp;Selection Affects</source>
         <translation>Pilihan &amp;Binder Memengaruhi</translation>
     </message>
     <message>
@@ -13079,7 +13025,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
         <translation>&amp;Proyek</translation>
     </message>
     <message>
-        <source>New From &amp;Template</source>
+        <source>&amp;New From Template</source>
         <translation>Baru dari &amp;Templat</translation>
     </message>
     <message>
@@ -13111,11 +13057,11 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
         <translation>&amp;Konversi</translation>
     </message>
     <message>
-        <source>Change &amp;Icon</source>
+        <source>&amp;Change Icon</source>
         <translation>Ubah &amp;Ikon</translation>
     </message>
     <message>
-        <source>Default &amp;Template for Subdocuments</source>
+        <source>Default Template &amp;for Subdocuments</source>
         <translation>&amp;Templat Bawaan untuk Subdokumen</translation>
     </message>
     <message>
@@ -13147,7 +13093,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
         <translation>&amp;Paragraf</translation>
     </message>
     <message>
-        <source>&amp;Line Spacing</source>
+        <source>Line &amp;Spacing</source>
         <translation>&amp;Jarak Baris</translation>
     </message>
     <message>
@@ -13179,7 +13125,7 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
         <translation>Ba&amp;ntuan</translation>
     </message>
     <message>
-        <source>&amp;Add-ons and Updates</source>
+        <source>Add-&amp;ons and Updates</source>
         <translation>&amp;Pengaya dan Pembaruan</translation>
     </message>
     <message>
@@ -13319,15 +13265,15 @@ Anda dapat melakukannya nanti dengan Bantuan &gt; Tambahkan ke Menu Aplikasi.</t
         <translation>Ingat juga ukuran jendela</translation>
     </message>
     <message>
-        <source>&amp;Install Font Files…</source>
+        <source>I&amp;nstall Font Files…</source>
         <translation>&amp;Instal Berkas Font…</translation>
     </message>
     <message>
-        <source>Open &amp;Font Folder</source>
+        <source>&amp;Open Font Folder</source>
         <translation>Buka &amp;Folder Font</translation>
     </message>
     <message>
-        <source>Open Font &amp;Manager of the Desktop</source>
+        <source>Open Font Manager of &amp;the Desktop</source>
         <translation>Buka Pengelola &amp;Font Desktop</translation>
     </message>
     <message>
@@ -13943,7 +13889,7 @@ Proyek yang sedang Anda kerjakan tetap di tempatnya.</translation>
         <translation>Tidak ada stempel waktu (seperti [03:07]) pada baris kursor.</translation>
     </message>
     <message>
-        <source>Editor in the &amp;Middle</source>
+        <source>&amp;Editor in the Middle</source>
         <translation>Editor di &amp;Tengah</translation>
     </message>
     <message>
@@ -13983,7 +13929,7 @@ Proyek yang sedang Anda kerjakan tetap di tempatnya.</translation>
         <translation>Inspektor, Editor, Binder</translation>
     </message>
     <message>
-        <source>&amp;Reset Layout</source>
+        <source>Rese&amp;t Layout</source>
         <translation>&amp;Atur Ulang Tata Letak</translation>
     </message>
     <message>
@@ -13999,7 +13945,7 @@ Proyek yang sedang Anda kerjakan tetap di tempatnya.</translation>
         <translation>Pengatu&amp;ran Skenario…</translation>
     </message>
     <message>
-        <source>S&amp;criptwriting</source>
+        <source>Script&amp;writing</source>
         <translation>&amp;Penulisan Skenario</translation>
     </message>
     <message>
@@ -14104,17 +14050,23 @@ Tidak ada elemen sejenis untuk: %1. Paragrafnya menjadi teks umum yang mempertah
         <source>Delete Old Snapshots</source>
         <translation>Hapus Snapshot Lama</translation>
     </message>
-    <message>
-        <source>Delete all %1 of %2 forever?</source>
-        <translation>Hapus semua %1 dari %2 untuk selamanya?</translation>
+    <message numerus="yes">
+        <source>Delete all %Ln snapshot(s) of %1 forever?</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>snapshot</source>
-        <translation>snapshot</translation>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>snapshots</source>
-        <translation>snapshot</translation>
+    <message numerus="yes">
+        <source>%Ln snapshot(s) deleted.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>They take %1. The texts stay as they are now; only their earlier versions go, also those of documents in the Trash. This cannot be undone: a backup (File &gt; Back Up) beforehand is a good idea.</source>
@@ -14123,10 +14075,6 @@ Tidak ada elemen sejenis untuk: %1. Paragrafnya menjadi teks umum yang mempertah
     <message>
         <source>Delete Snapshots</source>
         <translation>Hapus Snapshot</translation>
-    </message>
-    <message>
-        <source>%1 deleted.</source>
-        <translation>%1 dihapus.</translation>
     </message>
     <message>
         <source>Save Project Settings</source>
@@ -14473,7 +14421,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
         <translation>Versi lain tetap disimpan; hanya pemberitahuan ini yang tidak muncul sampai Anda keluar dari program.</translation>
     </message>
     <message>
-        <source>Speech &amp;Transcription…</source>
+        <source>&amp;Speech Transcription…</source>
         <translation>&amp;Transkripsi Ucapan…</translation>
     </message>
     <message>
@@ -14616,9 +14564,11 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
         <source>Nothing to redo</source>
         <translation>Tidak ada yang dapat diulangi</translation>
     </message>
-    <message>
-        <source>and %1 earlier steps</source>
-        <translation>dan %1 langkah sebelumnya</translation>
+    <message numerus="yes">
+        <source>and %Ln earlier step(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>&amp;Manage Profiles…</source>
@@ -14685,7 +14635,7 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
         <translation>Baca Nyaring</translation>
     </message>
     <message>
-        <source>Small &amp;Interface</source>
+        <source>Sm&amp;all Interface</source>
         <translation>Antarmuka K&amp;ecil</translation>
     </message>
     <message>
@@ -15151,14 +15101,6 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
         <translation>Zoom agar &amp;Pas</translation>
     </message>
     <message>
-        <source>Zoom &amp;In</source>
-        <translation>Per&amp;besar</translation>
-    </message>
-    <message>
-        <source>Zoom &amp;Out</source>
-        <translation>Per&amp;kecil</translation>
-    </message>
-    <message>
         <source>Zoom to &amp;Selection</source>
         <translation>Zoom ke &amp;Pilihan</translation>
     </message>
@@ -15331,10 +15273,6 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
         <translation>&amp;Bawaan</translation>
     </message>
     <message>
-        <source>&amp;Bold</source>
-        <translation>&amp;Tebal</translation>
-    </message>
-    <message>
         <source>&amp;Italic</source>
         <translation>&amp;Miring</translation>
     </message>
@@ -15473,10 +15411,6 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     <message>
         <source>&amp;Select</source>
         <translation>&amp;Pilih</translation>
-    </message>
-    <message>
-        <source>&amp;Find</source>
-        <translation>&amp;Cari</translation>
     </message>
     <message>
         <source>New &amp;Connected Note</source>
@@ -15901,6 +15835,22 @@ Snapshot dapat dibandingkan dengan teks di tab Snapshot inspektor. Untuk menghin
     <message>
         <source>Print Pre&amp;view</source>
         <translation>Pratinja&amp;u Cetak</translation>
+    </message>
+    <message>
+        <source>Zoom &amp;In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Zoom &amp;Out</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Bold</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Find</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Redefine Note Style From Selection…</source>
@@ -17153,24 +17103,8 @@ Lanjutkan?</translation>
         <translation>Pengaya dan Plugin</translation>
     </message>
     <message>
-        <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</source>
-        <translation>Apa yang Anda ubah di sini disimpan bersama proyek ini. Pengaturan tersendirinya: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <source>setting</source>
-        <translation>pengaturan</translation>
-    </message>
-    <message>
-        <source>settings</source>
-        <translation>pengaturan</translation>
-    </message>
-    <message>
         <source>What you change here is kept with this project; it has no settings of its own yet.</source>
         <translation>Apa yang Anda ubah di sini disimpan bersama proyek ini; proyek ini belum memiliki pengaturan tersendiri.</translation>
-    </message>
-    <message>
-        <source>The open project has &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; of its own, which it keeps.</source>
-        <translation>Proyek yang terbuka memiliki &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; tersendiri, yang dipertahankannya.</translation>
     </message>
     <message>
         <source>Projects&apos; own settings are not used (General &gt; Which settings come first).</source>
@@ -18089,32 +18023,8 @@ Lanjutkan?</translation>
         <translation>Warna dan font adalah milik tema.</translation>
     </message>
     <message>
-        <source>%1 of your own on top of the theme (shown in bold below).</source>
-        <translation>%1 milik Anda sendiri di atas tema (ditampilkan tebal di bawah).</translation>
-    </message>
-    <message>
-        <source>change</source>
-        <translation>perubahan</translation>
-    </message>
-    <message>
-        <source>changes</source>
-        <translation>perubahan</translation>
-    </message>
-    <message>
         <source>Note: your colors %1 on %2 have a contrast of %3 : 1. Text is easier to read from 4.5 : 1.</source>
         <translation>Catatan: warna Anda %1 pada %2 memiliki kontras %3 : 1. Teks lebih mudah dibaca mulai dari 4,5 : 1.</translation>
-    </message>
-    <message>
-        <source>%1 below it too.</source>
-        <translation>%1 di bawahnya juga.</translation>
-    </message>
-    <message>
-        <source>more pair</source>
-        <translation>pasangan lagi</translation>
-    </message>
-    <message>
-        <source>more pairs</source>
-        <translation>pasangan lagi</translation>
     </message>
     <message>
         <source>Auto-Correction</source>
@@ -18472,9 +18382,33 @@ Lanjutkan?</translation>
         <source>No folder chosen: no automatic backups</source>
         <translation>Belum ada folder yang dipilih: tidak ada cadangan otomatis</translation>
     </message>
+    <message numerus="yes">
+        <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%Ln setting(s)&lt;/a&gt;.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>The open project has &lt;a href=&quot;show&quot;&gt;%Ln setting(s)&lt;/a&gt; of its own, which it keeps.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
     <message>
         <source>Normal (22 px)</source>
         <translation>Normal (22 px)</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln change(s) of your own on top of the theme (shown in bold below).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln more pair(s) below it too.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Open Backup Folder...</source>
@@ -19428,17 +19362,11 @@ Proyek terbaru, tema milik Anda sendiri, tata letak, bilah alat, dan pintasan pa
         <source>A card is larger than the paper inside its margins: one card on each sheet, made smaller.</source>
         <translation>Sebuah kartu lebih besar daripada kertas di dalam marginnya: satu kartu pada setiap lembar, diperkecil.</translation>
     </message>
-    <message>
-        <source>%1 on each sheet (%2 × %3) of the paper on the Page tab.</source>
-        <translation>%1 pada setiap lembar (%2 × %3) kertas di tab Halaman.</translation>
-    </message>
-    <message>
-        <source>card</source>
-        <translation>kartu</translation>
-    </message>
-    <message>
-        <source>cards</source>
-        <translation>kartu</translation>
+    <message numerus="yes">
+        <source>%Ln card(s) on each sheet (%1 × %2) of the paper on the Page tab.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -19965,29 +19893,23 @@ Tidak ditulis:
         <source>custom metadata</source>
         <translation>metadata kustom</translation>
     </message>
-    <message>
-        <source>%1 replaced in %2: %3.</source>
-        <translation>%1 diganti di %2: %3.</translation>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>%1 found in %2: %3.</source>
-        <translation>%1 ditemukan di %2: %3.</translation>
+    <message numerus="yes">
+        <source>%Ln occurrence(s) replaced in %1: %2.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>occurrence</source>
-        <translation>kemunculan</translation>
-    </message>
-    <message>
-        <source>occurrences</source>
-        <translation>kemunculan</translation>
-    </message>
-    <message>
-        <source>document</source>
-        <translation>dokumen</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>dokumen</translation>
+    <message numerus="yes">
+        <source>%Ln occurrence(s) found in %1: %2.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Snapshots taken: %1.</source>
@@ -21604,12 +21526,24 @@ Disimpan %2 dari proyek “%3” oleh %4.</translation>
         <translation>Atur Ulang Sesi Sekarang</translation>
     </message>
     <message>
-        <source>%1 of %2 %3</source>
-        <translation>%1 dari %2 %3</translation>
+        <source>%1 of %2 characters</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 %2 in the Draft</source>
-        <translation>%1 %2 di Draf</translation>
+        <source>%1 of %2 words</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln character(s) in the Draft</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln word(s) in the Draft</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>%1 of %2 this session</source>
@@ -21741,7 +21675,7 @@ Ctrl+klik untuk membuka</translation>
         <translation>Perintah Lainnya</translation>
     </message>
     <message>
-        <source>Paste and &amp;Match Style</source>
+        <source>Paste and Match &amp;Style</source>
         <translation>Tempel dan &amp;Samakan Gaya</translation>
     </message>
     <message>
@@ -21863,29 +21797,17 @@ Ctrl+klik untuk membuka</translation>
         <source>uses the colors of the desktop (KDE color scheme)</source>
         <translation>memakai warna desktop (skema warna KDE)</translation>
     </message>
-    <message>
-        <source>sets %1</source>
-        <translation>mengatur %1</translation>
+    <message numerus="yes">
+        <source>%Ln color(s) set</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>color</source>
-        <translation>warna</translation>
-    </message>
-    <message>
-        <source>colors</source>
-        <translation>warna</translation>
-    </message>
-    <message>
-        <source> and %1</source>
-        <translation> dan %1</translation>
-    </message>
-    <message>
-        <source>font</source>
-        <translation>font</translation>
-    </message>
-    <message>
-        <source>fonts</source>
-        <translation>font</translation>
+    <message numerus="yes">
+        <source>%Ln font(s) set</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -21926,17 +21848,11 @@ Ctrl+klik untuk membuka</translation>
         <source>Change Theme</source>
         <translation>Ganti Tema</translation>
     </message>
-    <message>
-        <source>The look you see has %1 of your own that are not saved in My Look 1 or My Look 2.</source>
-        <translation>Tampilan yang Anda lihat memiliki %1 milik Anda sendiri yang tidak tersimpan di Tampilan Saya 1 atau Tampilan Saya 2.</translation>
-    </message>
-    <message>
-        <source>color or font</source>
-        <translation>warna atau font</translation>
-    </message>
-    <message>
-        <source>colors and fonts</source>
-        <translation>warna dan font</translation>
+    <message numerus="yes">
+        <source>The look you see has %Ln color(s) or font(s) of your own that are not saved in My Look 1 or My Look 2.</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Save the look in My Look 1 or My Look 2 first (it replaces the look saved there), or switch without saving it?</source>
@@ -22183,17 +22099,17 @@ Program mengambil satu berkas kecil, paling banyak sekali sehari, dan memberi ta
         <source>%1 and its add-ons are up to date.</source>
         <translation>%1 dan pengayanya sudah terbaru.</translation>
     </message>
-    <message>
-        <source>1 day</source>
-        <translation>1 hari</translation>
+    <message numerus="yes">
+        <source>%Ln day(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>1 week</source>
-        <translation>1 minggu</translation>
-    </message>
-    <message>
-        <source>%1 weeks</source>
-        <translation>%1 minggu</translation>
+    <message numerus="yes">
+        <source>%Ln week(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Updates</source>
@@ -22377,91 +22293,75 @@ Atau unduh versi terbaru dari halaman proyek.</translation>
         <translation>%1 / %2 hari ini</translation>
     </message>
     <message>
-        <source>Today&apos;s writing: %1 of %2 %3 (click for Project Targets)</source>
-        <translation>Tulisan hari ini: %1 dari %2 %3 (klik untuk Target Proyek)</translation>
+        <source>Today&apos;s writing: %1 of %2 characters (click for Project Targets)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>characters</source>
-        <translation>karakter</translation>
+        <source>Today&apos;s writing: %1 of %2 words (click for Project Targets)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>words</source>
-        <translation>kata</translation>
+        <source>The draft: %1 of %2 characters (click for Project Targets)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The draft: %1 of %2 words (click for Project Targets)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%1 / %2 draft</source>
         <translation>%1 / %2 draf</translation>
     </message>
-    <message>
-        <source>The draft: %1 of %2 %3 (click for Project Targets)</source>
-        <translation>Draf: %1 dari %2 %3 (klik untuk Target Proyek)</translation>
-    </message>
 </context>
 <context>
     <name>qb::addons</name>
-    <message>
-        <source>theme</source>
-        <translation>tema</translation>
+    <message numerus="yes">
+        <source>%Ln theme(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>themes</source>
-        <translation>tema</translation>
+    <message numerus="yes">
+        <source>%Ln project template(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>project template</source>
-        <translation>templat proyek</translation>
+    <message numerus="yes">
+        <source>%Ln compile format(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>project templates</source>
-        <translation>templat proyek</translation>
+    <message numerus="yes">
+        <source>%Ln layout(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>compile format</source>
-        <translation>format kompilasi</translation>
+    <message numerus="yes">
+        <source>%Ln script format(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>compile formats</source>
-        <translation>format kompilasi</translation>
+    <message numerus="yes">
+        <source>%Ln name list(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>layout</source>
-        <translation>tata letak</translation>
+    <message numerus="yes">
+        <source>%Ln plugin file(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>layouts</source>
-        <translation>tata letak</translation>
-    </message>
-    <message>
-        <source>script format</source>
-        <translation>format skenario</translation>
-    </message>
-    <message>
-        <source>script formats</source>
-        <translation>format skenario</translation>
-    </message>
-    <message>
-        <source>name list</source>
-        <translation>daftar nama</translation>
-    </message>
-    <message>
-        <source>name lists</source>
-        <translation>daftar nama</translation>
-    </message>
-    <message>
-        <source>plugin file</source>
-        <translation>berkas plugin</translation>
-    </message>
-    <message>
-        <source>plugin files</source>
-        <translation>berkas plugin</translation>
-    </message>
-    <message>
-        <source>dictionary</source>
-        <translation>kamus</translation>
-    </message>
-    <message>
-        <source>dictionaries</source>
-        <translation>kamus</translation>
+    <message numerus="yes">
+        <source>%Ln dictionar(y|ies)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>video and audio formats licensed under patents (for Media Playback 2.0 or newer)</source>
@@ -23976,13 +23876,11 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
         <source>The address does not lead to a web page (it is “%1”).</source>
         <translation>Alamat ini tidak mengarah ke halaman web (isinya “%1”).</translation>
     </message>
-    <message>
-        <source>Fetching 1 picture …</source>
-        <translation>Mengambil 1 gambar …</translation>
-    </message>
-    <message>
-        <source>Fetching %1 pictures …</source>
-        <translation>Mengambil %1 gambar …</translation>
+    <message numerus="yes">
+        <source>Fetching %Ln picture(s) …</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>Fetching pictures: %1 of %2 …</source>
@@ -24083,21 +23981,17 @@ Berkas ini tidak dibuka dari sini. Jika Anda memercayainya, buka sendiri dari pe
         <source>This is not the address of a web page.</source>
         <translation>Ini bukan alamat halaman web.</translation>
     </message>
-    <message>
-        <source>1 word</source>
-        <translation>1 kata</translation>
+    <message numerus="yes">
+        <source>%Ln word(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
-    <message>
-        <source>%1 words</source>
-        <translation>%1 kata</translation>
-    </message>
-    <message>
-        <source>1 picture</source>
-        <translation>1 gambar</translation>
-    </message>
-    <message>
-        <source>%1 pictures</source>
-        <translation>%1 gambar</translation>
+    <message numerus="yes">
+        <source>%Ln picture(s)</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
     </message>
     <message>
         <source>by %1</source>
