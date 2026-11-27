@@ -2,6 +2,99 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: the AI engine packages
+
+- **Two packages, add-ons of their own** (decision 3): `addons/ai-engine` (ggml 1.x with its CPU modules and, from the
+  GitHub pack, the Vulkan module; whisper.cpp, libllama and libmtmd (Pocket TTS), libqwentts (Qwen3-TTS), libsonic and our
+  libqbai) and `addons/handwriting-engine` (ONNX Runtime's `libonnxruntime.so.1`, no wrapper: Handwriting opens it itself and
+  calls `OrtGetApiBase`; `ai::onnxRuntimeLibrary()` finds it). Payload `engine/lib` (every library with RUNPATH `$ORIGIN`, the
+  compute modules beside them) and `engine/licenses` (the libraries' own license files from the pack, the texts of the code
+  libmtmd and the CPU modules hold besides their own (stb_image, miniaudio, subprocess.h, xxHash, SHA-1/SHA-256, llamafile's
+  sgemm; taken from the pinned sources into `addons/ai-engine/payload/engine/licenses`), and a `README.txt` written by
+  `stage.sh` that names every library). `minApp` 0.99.0; `make-package.py` adds the runtime as for every add-on with libraries;
+  signed with the add-on key at release like the other add-ons. `stage.sh` exits 3 (left out) without the pack or without
+  libqbai; the file `may-be-missing` in their folders lets `build-full-appimage.sh` leave a package out that was not built
+  (with a message) instead of failing, so a release without the packs still builds. `tools/check-engine-package.py` checks a
+  finished package (the expected libraries, nothing else, README names each, the license files, `ldd` of each needs only the
+  package and glibc's libraries, libstdc++ and libgcc_s, `libvulkan.so.1` only for `libggml-vulkan.so`, RUNPATH `$ORIGIN`).
+  Sizes from the published packs: "ai-engine" 21.4 MB with the Vulkan module (10.5 MB without), "handwriting-engine"
+  13.1 MB. ONNX Runtime comes from Maven Central (the JAR's `linux-x64` library, `tools/get-onnxruntime.sh`), whose package
+  holds Microsoft's `ThirdPartyNotices` and `Privacy.md` but not ONNX Runtime's own MIT text: that text is in the recipe
+  (`addons/handwriting-engine/payload/engine/licenses/LICENSE-onnxruntime.txt`); `stage.sh` adds the pack's license files and
+  its `README.txt` (the Maven coordinates and SHA-256) as `SOURCE-onnxruntime.txt`. Seen in the session with the published
+  Vulkan pack: the Vulkan module loads from the package's folder with the system's `libvulkan.so.1`, and Mesa's software
+  renderer (lavapipe) is not listed as a device by ggml, so Automatic never takes it.
+- **libqbai** (`engines/qbai/qbai.cpp`, built by `engines/qbai/CMakeLists.txt` only when the pack is there at configure time
+  (`QB_AI_ENGINE_DIR` or `build/ai-engine`), into `<build>/qbai/libqbai.so.1` with links to the pack's libraries beside it,
+  as in the package; not `<build>/ai-engine`, which is the pack's own default folder). The program links none of it.
+- **The C interface** `src/tools/QbAi.h` (the program and add-ons include it): one exported entry `qbai_get_api(int version)`
+  returning `const struct qbai_api *`, a table of function pointers, `QBAI_API_VERSION` 1. A newer library keeps every function
+  of an older version at its place and adds new ones at the end; `qbai_get_api(v)` answers for every `1 <= v <=` its own
+  version (NULL above), and `size` says how much of the table there is. Every parameter struct begins with its own `size`.
+  Functions: `engine_version`, `last_error` (thread-local, English), `device_count(refresh)`/`device_get` (index 0 the CPU, then
+  ggml's GPU and IGPU devices in ggml's order with `ggml_backend_dev_memory`, for Vulkan the driver's budget),
+  `set_threads`/`threads`, `model_memory` (an estimate from the files: whisper file + 25 % + 200 MB, Pocket TTS + 20 % + 256 MB,
+  Qwen + 25 % + 1 GB; the catalog's `memoryMB` wins), `load`/`unload`/`model_info`/`voice_name`/`language_name`, `transcribe`
+  (16 kHz mono float; segment, progress and cancel callbacks on the calling thread), `synthesize` (one sentence; `chunk`
+  streams it, `cancel` stops it; both may run on an engine thread: qwentts.cpp computes on a worker of its own), `free_text`,
+  `free_pcm`, `stretch` and `stretch_begin/feed/end` (Sonic, speed 0.5 to 4, pitch kept). Threads: one model per handle,
+  calls on a handle from one thread; load, transcribe and synthesize from a worker that lowered its priority first (ggml's
+  and qwentts.cpp's threads are started from it and inherit the nice value).
+- **How the models are driven**: whisper.cpp with `use_gpu`/`gpu_device` (its device number counts ggml's GPU and IGPU devices,
+  so it is our index minus 1). Pocket TTS: `llama_model_load_from_file` with `devices = {card}` (an empty list for the CPU,
+  `n_gpu_layers` 0), a context with `embeddings = true` and `n_ctx` 4096, `mtmd_init_from_file` for the mmproj, then
+  `mtmd_helper_gen_audio_*` as llama.cpp's own `tools/tts/tts.cpp` drives it (prompt steps, then one frame per `step_gen` from
+  the hidden state; the sampled token is not used by Pocket TTS but the loop takes one: a plain `llama_sampler` chain, since
+  libcommon is not in the pack); the voice is `mtmd_gen_audio_get_voice(name)` or a clip through `mtmd_bitmap_init_from_audio`
+  when the model has its voice encoder. Qwen3-TTS: `qt_init` with `device` = ggml's name ("Vulkan0", "CPU"), `max_batch` 1,
+  `codec_chunk_sec` 4 (bounds the decoder's memory), language codes mapped to qwentts.cpp's names ("en" -> "english", else
+  "auto"), Base with a reference clip (resampled to 24 kHz, linearly) and its text, CustomVoice with a speaker and an
+  instruction; VoiceDesign is not offered. **Limit**: qwentts.cpp takes half the logical cores itself (no switch in its API),
+  so the shared setting of the cores does not reach Qwen3-TTS.
+- **The program's side** `src/core/AiEngine.{h,cpp}`: `Engine` (one per process, kept to the end) finds the installed
+  "ai-engine" (`addons::installedAddons`, switched on, of this runtime) and its `engine/lib/libqbai.so.1`, opens it with
+  `QLibrary` on first use (`ensureLoaded`, from any thread), checks the version and `size`, hands the shared setting of the
+  cores over, lists the devices (and reports the cards to `ModelMemory`). A package installed while one is loaded takes effect
+  at the next start (`restartNeeded`; the libraries are in use). **Pitfall**: before loading it looks with `dl_iterate_phdr`
+  for libraries of the engine's names (`libwhisper.so.1`, `libggml.so.1` ...) already loaded from another folder (Speech
+  Transcription up to 1.9 brings its own whisper.cpp): the system's loader goes by the name and would give libqbai that copy,
+  so the engine is refused with a message (restart, or update that add-on). The other way round (the engine loaded first,
+  then Speech Transcription 1.9) is that add-on's matter; 1.10 uses the engine. `pickDevice` is the one rule of the device
+  choice: "auto" takes the card whose free memory holds the model (a card with memory of its own before a graphics part that
+  shares the RAM, then the one with more free memory; size unknown: the CPU), "gpu:<name>" that card while it is there,
+  "cpu". `Model` (one per function and model, id "<function>:<model>") asks `ModelMemory::requestLoad` before every load (from
+  a worker the call waits for the main thread), loads, then `modelLoaded`; when Automatic's card is refused by the 80 % rule,
+  or the card fails to load it, it tries the CPU once; its unloader answers false while a job runs (an atomic count and a
+  `tryLock`), so `ModelMemory` never waits. Device names: "gpu:<the card's name>", " #<index>" added for a second card of
+  the same name.
+- **Tool interface 1.3** (no new version number: 1.3 was not published before these functions): `ToolHost::aiEngine(version)`
+  returns the program's own table (`const qbai_api *`; ToolApi.h forward-declares the struct), so an add-on never opens
+  libqbai itself; `aiPickDevice(choice, bytes, &where)` applies the rule and gives the index and ModelMemory's `where`;
+  `aiDeviceChoices()`; `aiPanel(kinds, parent)` the program's install panel; `aiModelFile(id, role)`.
+- **The catalog** (`src/core/AiCatalog.{h,cpp}`, `resources/ai/models.json`, built into the program; format 1, the pattern of
+  models-4's `catalog.json`): `{"format": 1, "release": "models-5", "models": [{id, title, summary, kinds ["tts" | "asr" |
+  "handwriting"], engine ("whisper" | "pocket-tts" | "qwen3-tts" | "onnx"), languages (ISO codes, "*" for many), voices,
+  license, licenseUrl, credit, source, nonCommercial, sizeMB, memoryMB, release, model, extra, files [{name, asset, size,
+  sha256, parts [{asset, size, sha256}]}]}]}`. An id or file name that would leave its folder is left out; a file without its
+  SHA-256 is "not published yet". The models go into `<data>/ai-models/<id>` (`qb::dataDir()`), `.checked` marks a model whose
+  files were all checked, `.<name>.ok` a file checked in a download that stopped later (it is not fetched again). Until the
+  `models-5` workflow writes it, the catalog lists no models.
+- **Downloads** (`src/ui/AiDownloads.{h,cpp}`, Qt Network is in qbui, not qbcore): only by a button (no network object before);
+  the addresses are `<APP_HOMEPAGE>/releases/download/<release>/<asset>` for models and
+  `.../releases/download/v<version>[-<label>]/ai-engine.qbpkg` (Windows `ai-engine-windows.qbpkg`, Android
+  `ai-engine-android.qbpkg`: names of a later part) for the engine, never asked from a server; the request carries the
+  program's name only, as the check for updates. Each piece is checked against its size and SHA-256 while it comes in, a file
+  in parts again as a whole. An engine download must be signed by the project (`Unsigned::Refuse`); a file the writer chose
+  may be unsigned after the warning (`AllowAddons`). Test builds accept unsigned packages unless `QB_REQUIRE_SIGNED` is set
+  (the installer's own rule). Test switches: `QB_AI_ENGINE_LIB` (a libqbai to load instead), `QB_AI_CATALOG`,
+  `QB_AI_MODEL_SOURCE`, `QB_AI_ENGINE_SOURCE` (a folder or an address ending in "/").
+- **The panel** (`src/ui/AiInstallPanel.{h,cpp}`): the engine's state with Install the Engine / Install Again and Install from
+  File..., the catalog's models of the given kinds (languages, download, memory, license, state), a detail line (summary,
+  credit, license link, why a model cannot be downloaded), Download / Delete, a progress bar with Cancel. The pages of Read
+  Aloud and Handwriting place it; Speech Transcription gets it through `aiPanel`.
+- Suite `v0990h` (a fake libqbai in `tests/fakeqbai`); the release workflow builds the two packs from source into its cache
+  (D3) and checks the packages with `tools/check-engine-package.py`.
+
 ## 0.99.0: tool interface 1.3, the rule for the AI models' memory
 
 - **Interface** (`src/tools/ToolApi.h`; `apiVersion() == 130`): new functions at the end of `ToolHost` (`aiThreads`, `modelMessage`,

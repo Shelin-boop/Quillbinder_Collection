@@ -553,3 +553,19 @@ add_executable(qb_v0990b_tests v0990b_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0990b_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0990b_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 add_dependencies(qb_v0990b_tests qb-test-tool13 qb-test-tool12)
+
+# 0.99.0: the AI engine packages: the C interface (tools/QbAi.h), core/AiEngine.*, the device choice, ModelMemory's registration,
+# cancelling, the catalog (core/AiCatalog.*), installing the engine and models (ui/AiDownloads.*, ui/AiInstallPanel.*), tool
+# interface 1.3's engine functions, the package recipes (xvfb-run -a ./qb_v0990h_tests /tmp/shots). A fake libqbai
+# (fakeqbai/) is built as <build>/tests/fake-ai-engine/libqbai.so.1; the real smoke test uses <build>/qbai/libqbai.so.1.
+add_library(qb-fake-qbai SHARED fakeqbai/FakeQbAi.cpp)
+target_include_directories(qb-fake-qbai PRIVATE ${CMAKE_SOURCE_DIR}/src)
+set_target_properties(qb-fake-qbai PROPERTIES OUTPUT_NAME qbai VERSION 1.0.0 SOVERSION 1 CXX_VISIBILITY_PRESET hidden
+  LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/tests/fake-ai-engine)
+add_executable(qb_v0990h_tests v0990h_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990h_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0990h_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+add_dependencies(qb_v0990h_tests qb-fake-qbai)
+if(TARGET qbai)
+  add_dependencies(qb_v0990h_tests qbai)
+endif()
