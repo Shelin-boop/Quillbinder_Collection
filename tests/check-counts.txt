@@ -80,5 +80,5 @@ w4 27
 w4c 5
 secwatch 62
 deps 33
-verlines 30
+verlines 48
 addonentry 28

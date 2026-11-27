@@ -3,6 +3,21 @@
 What each version of Quillbinder brought, in short. The user manual (`docs/manual.md`, Help > User
 Manual in the program) describes every function.
 
+## 0.99.0 beta (2026-11-27)
+
+New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
+
+- **0.99.0 is a security update on every system** (Linux, Windows and Android). The update window says "recommended
+  (security)" for a Quillbinder with an older version and offers no "Ignore This Version", also when a newer version has
+  come out since (every version after the installed one, up to the newest, counts).
+- **The word after the version number is one setting per system** (Linux "beta"; Windows and Android "experimental"), so
+  that the first normal release, 1.0.0, changes only numbers and one word per system. The names of the files, the tag,
+  the title of a release, the update file and the download page follow it, and a release without a word gets plain names
+  (`Quillbinder-1.0.0-x86_64.AppImage`, tag `v1.0.0`).
+- **The update file and the download page follow the label of their system.** The update file names the label of the
+  system it is made for (`beta` for Linux, `experimental` for Windows and Android), and the download page leaves out
+  the sentence "This is a ... version" when a release has no label.
+
 ## 0.95.0 beta (2026-11-26)
 
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).

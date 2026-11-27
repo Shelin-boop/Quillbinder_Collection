@@ -224,7 +224,10 @@ needs `build/quillbinder`), the start script and the download page's size note.
   `CMakeLists.txt` (`APP_VERSION` for Linux, `APP_VERSION_WINDOWS`, `APP_VERSION_ANDROID`: the same first two numbers,
   the build's pick and its stop on a wrong number), the shell lines of the scripts and workflows that read them,
   `tools/update-feed.py`, `tools/release-notes.py --whats-new [--system]` and `tools/download-page.py` on a copy whose
-  Windows and Android lines have other last numbers, and the version jobs of the two release workflows.
+  Windows and Android lines have other last numbers, and the version jobs of the two release workflows. 0.99.0: the label
+  per system (`APP_VERSION_LABEL`, `_WINDOWS`, `_ANDROID`) and a dry run with version 1.0.0 and empty labels: the tag,
+  the title, the AppImage, full AppImage and update names, the shown version, the release text, the update file and the
+  download page (also the number of every tag form).
 - `qb_v0911_tests` (0.91.1 beta: toolbars rearranged freely by their grips, the row that got stuck; see "Toolbars
   rearranged freely").
 - `qb_v0910_tests` (0.91.0 beta: backups straight in the backup folder, the seven toolbars and the icon bar; see

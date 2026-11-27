@@ -47,6 +47,11 @@ def version_var(system):
     return {"windows": "APP_VERSION_WINDOWS", "android": "APP_VERSION_ANDROID"}.get(system.split("-")[0], "APP_VERSION")
 
 
+def label_var(system):
+    """The line of CMakeLists.txt that holds the system's label (0.99.0: a label per system; "" for a normal release)."""
+    return {"windows": "APP_VERSION_LABEL_WINDOWS", "android": "APP_VERSION_LABEL_ANDROID"}.get(system.split("-")[0], "APP_VERSION_LABEL")
+
+
 def system_version(system):
     return cmake_var(version_var(system)) or cmake_var("APP_VERSION")
 
@@ -113,7 +118,7 @@ def main():
     args = ap.parse_args()
 
     version = system_version(args.system)   # 0.93.0: this system's own line
-    label = args.label or cmake_var("APP_VERSION_LABEL")
+    label = args.label or cmake_var(label_var(args.system))   # 0.99.0: this system's own label
     runtime = args.runtime or cmake_var("APP_RUNTIME")
     previous = {}
     if args.previous and os.path.isfile(args.previous):

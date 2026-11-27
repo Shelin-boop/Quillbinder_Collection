@@ -310,11 +310,13 @@ def document(title, body):
 
 
 def note():
+    # 0.99.0: a release without a label (1.0.0 and later) is no "test version": the sentence leaves that part out
     label = cmake_var("APP_VERSION_LABEL")
-    article = "an" if (label[:1].lower() in "aeiou" and label) else "a"
+    article = "an" if label[:1].lower() in "aeiou" else "a"
+    kind = "This is %s %s version: keep" % (article, html.escape(label)) if label else "Keep"
     return ('  <p class="note">Quillbinder is an independent program. It is not made by or connected with Literature &amp; Latte,\n'
-            '  the maker of Scrivener; it reads and writes Scrivener 3 projects. This is %s %s version: keep backups of\n'
-            '  your projects and a copy of your manuscripts outside the program.</p>\n' % (article, html.escape(label or "test")))
+            '  the maker of Scrivener; it reads and writes Scrivener 3 projects. %s backups of\n'
+            '  your projects and a copy of your manuscripts outside the program.</p>\n' % kind)
 
 
 def rows_html(key, rows, url):

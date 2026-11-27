@@ -30,6 +30,11 @@ def version_var(system):
     return {"windows": "APP_VERSION_WINDOWS", "android": "APP_VERSION_ANDROID"}.get(system, "APP_VERSION")
 
 
+def label_var(system):
+    """The line of CMakeLists.txt that holds the system's label (0.99.0: a label per system; "" for a normal release)."""
+    return {"windows": "APP_VERSION_LABEL_WINDOWS", "android": "APP_VERSION_LABEL_ANDROID"}.get(system, "APP_VERSION_LABEL")
+
+
 def system_version(system="linux"):
     return cmake_var(version_var(system)) or cmake_var("APP_VERSION")
 
@@ -97,7 +102,7 @@ def main(dist, test=False):
     """The release text, the files sorted by system under a short headline each (2026-11-12, the writer's wish:
     the files as before, sorted by system)."""
     version = cmake_var("APP_VERSION")
-    label = cmake_var("APP_VERSION_LABEL")
+    label = cmake_var(label_var("linux"))   # the release text is the Linux release's (0.99.0)
     shown = version + (" " + label if label else "")
     home = cmake_var("APP_HOMEPAGE")
     files = sorted(os.listdir(dist))

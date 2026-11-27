@@ -7,15 +7,15 @@ cmake_minimum_required(VERSION 3.16)
 # ---------------------------------------------------------------------------
 set(APP_NAME "Quillbinder")
 set(APP_ID   "quillbinder")
-set(APP_VERSION "0.95.0")
+set(APP_VERSION "0.99.0")
 # 0.93.0: a version line per system (working rules, section 8). The first two numbers (the functional level) are the same
 # on every system; the last number counts each system's own fixes, so that a system is released as soon as its own
 # tests pass. "APP_VERSION" is the Linux line (the AppImage, the update package; every script that reads it for
 # Linux keeps reading it); the Windows and the Android builds use their own line below: the build takes it as
 # APP_VERSION, so that the program, the packages and AppInfo.h see one number. Scripts of those systems read
 # APP_VERSION_WINDOWS / APP_VERSION_ANDROID from this file (the Python tools take --system). Raise the last number of a system's line when that system gets a delivery of its own.
-set(APP_VERSION_WINDOWS "0.95.0")
-set(APP_VERSION_ANDROID "0.95.0")
+set(APP_VERSION_WINDOWS "0.99.0")
+set(APP_VERSION_ANDROID "0.99.0")
 if(WIN32)
   set(APP_VERSION "${APP_VERSION_WINDOWS}")
 elseif(ANDROID OR CMAKE_SYSTEM_NAME STREQUAL "Android" OR CMAKE_TOOLCHAIN_FILE MATCHES "/android_[^/]+/lib/cmake/Qt6/")
@@ -27,7 +27,19 @@ endif()
 # A word shown after the version number in Help > About, System Information and the
 # AppImage's file name ("alpha", "beta"; empty for a normal release). It is never part
 # of version comparisons: the program, the loader and the packages compare APP_VERSION only.
+# 0.99.0: the label is one setting per system, like the version line: "APP_VERSION_LABEL" is Linux's (the AppImage's
+# file names, the tag v<version>[-<label>], the update file; every Linux script and the shared tools read it from the
+# line below, which must stay in the first column); the Windows and Android builds take their own label as
+# APP_VERSION_LABEL, so that the program, AppInfo.h and the shown version see one label. A normal release has an
+# empty label (names without a word after the number: Quillbinder-1.0.0-x86_64.AppImage, tag v1.0.0).
 set(APP_VERSION_LABEL "beta")
+set(APP_VERSION_LABEL_WINDOWS "experimental")
+set(APP_VERSION_LABEL_ANDROID "experimental")
+if(WIN32)
+  set(APP_VERSION_LABEL "${APP_VERSION_LABEL_WINDOWS}")
+elseif(ANDROID OR CMAKE_SYSTEM_NAME STREQUAL "Android" OR CMAKE_TOOLCHAIN_FILE MATCHES "/android_[^/]+/lib/cmake/Qt6/")
+  set(APP_VERSION_LABEL "${APP_VERSION_LABEL_ANDROID}")
+endif()
 if(APP_VERSION_LABEL)
   set(APP_VERSION_SHOWN "${APP_VERSION} ${APP_VERSION_LABEL}")
 else()

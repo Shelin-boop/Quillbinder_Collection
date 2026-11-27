@@ -116,8 +116,8 @@ int main(int argc, char **argv)
 
     // ================================================================ version
     check(Project::compareVersionText(QLatin1String(QB_APP_VERSION), QStringLiteral("0.60.0")) >= 0
-              && QLatin1String(QB_APP_VERSION_SHOWN).endsWith(QLatin1String(" " QB_APP_VERSION_LABEL)),
-          QStringLiteral("the version is 0.60.0 or newer, shown with its label"), QStringLiteral(QB_APP_VERSION_SHOWN));
+              && QStringLiteral(QB_APP_VERSION_SHOWN) == QStringLiteral(QB_APP_VERSION) + (QStringLiteral(QB_APP_VERSION_LABEL).isEmpty() ? QString() : QStringLiteral(" " QB_APP_VERSION_LABEL)),
+          QStringLiteral("the version is 0.60.0 or newer, shown with its label (none for a normal release)"), QStringLiteral(QB_APP_VERSION_SHOWN));
 
     // ================================================================ About names FFmpeg with its license
     {
@@ -269,10 +269,12 @@ int main(int argc, char **argv)
     {
         QTemporaryDir dist;
         const QString v = QStringLiteral(QB_APP_VERSION);
-        for (const QString &n : {QStringLiteral("Quillbinder-%1-%2-x86_64.AppImage").arg(v, QStringLiteral(QB_APP_VERSION_LABEL)), QStringLiteral("quillbinder-%1-update.qbpkg").arg(v),
+        // 0.99.0: a release without a label (1.0.0 and later) has names without the dash and the word
+        const QString dashLabel = QStringLiteral(QB_APP_VERSION_LABEL).isEmpty() ? QString() : QStringLiteral("-" QB_APP_VERSION_LABEL);
+        for (const QString &n : {QStringLiteral("Quillbinder-%1%2-x86_64.AppImage").arg(v, dashLabel), QStringLiteral("quillbinder-%1-update.qbpkg").arg(v),
                                  QStringLiteral("SHA256SUMS.txt")})
             writeFile(dist.path() + QLatin1Char('/') + n, QByteArray());
-        writeFile(dist.path() + QStringLiteral("/Quillbinder-%1-full-%2-x86_64.AppImage").arg(v, QStringLiteral(QB_APP_VERSION_LABEL)), QByteArray());
+        writeFile(dist.path() + QStringLiteral("/Quillbinder-%1-full%2-x86_64.AppImage").arg(v, dashLabel), QByteArray());
         for (const QString &n : {QStringLiteral("media-playback.qbpkg"), QStringLiteral("media-extra-formats.qbpkg"),
                                  QStringLiteral("media-all-formats.qbpkg"), QStringLiteral("themes-extra.qbpkg")}) {
             const QString built = kBuild + QStringLiteral("/addons-dist/") + n;
@@ -285,7 +287,7 @@ int main(int argc, char **argv)
         check(rc == 0 && notes.contains(QLatin1String("download **media-all-formats.qbpkg**")) && at > 0
                   && at < notes.indexOf(QLatin1String("| media-extra-formats.qbpkg")) && at < notes.indexOf(QLatin1String("| media-playback.qbpkg"))
                   && notes.contains(QLatin1String("one package for the commonly used formats"))
-                  && notes.contains(QStringLiteral("| Quillbinder-%1-full-%2-x86_64.AppImage | **The full version**").arg(v, QStringLiteral(QB_APP_VERSION_LABEL)))
+                  && notes.contains(QStringLiteral("| Quillbinder-%1-full%2-x86_64.AppImage | **The full version**").arg(v, dashLabel))
                   && notes.contains(QLatin1String("the full version, with all add-ons and the libraries they need included")),
               QStringLiteral("the release text names the one media package in the steps and first among the add-ons"), notes.left(2500));
         const QString news = run(QStringLiteral("python3"), {QStringLiteral("-I"), tools + QStringLiteral("release-notes.py"), QStringLiteral("--whats-new")}, &rc);
@@ -301,13 +303,13 @@ int main(int argc, char **argv)
                   && readme.contains(QLatin1String("contains no code, files or pictures of those programs")),
               QStringLiteral("README: the one media package, no old known issues, independent of Literature & Latte"));
         // download links at the top of the README (the public main page): this version's files, the newest release
-        const QString tag = QStringLiteral("v%1").arg(QString::fromLatin1(QB_APP_VERSION_SHOWN).replace(QLatin1Char(' '), QLatin1Char('-')));
+        const QString tag = QStringLiteral("v%1%2").arg(QStringLiteral(QB_APP_VERSION), dashLabel);
         const QString dl = QStringLiteral("https://github.com/Shelin-boop/Quillbinder_Collection/releases/download/") + tag + QLatin1Char('/');
         const int download = readme.indexOf(QLatin1String("## Download"));
         check(download > 0 && download < 1500
                   && readme.contains(QStringLiteral("(%1Quillbinder-%2-x86_64.AppImage)").arg(dl, tag.mid(1)))
                   && readme.contains(QStringLiteral("(%1media-all-formats.qbpkg)").arg(dl))
-                  && readme.contains(QStringLiteral("(%1Quillbinder-%2-full-%3-x86_64.AppImage)").arg(dl, QLatin1String(QB_APP_VERSION), tag.mid(int(qstrlen(QB_APP_VERSION)) + 2)))
+                  && readme.contains(QStringLiteral("(%1Quillbinder-%2-full%3-x86_64.AppImage)").arg(dl, QLatin1String(QB_APP_VERSION), dashLabel))
                   && readme.contains(QLatin1String("**the full version**"))
                   && readme.contains(QLatin1String("(https://github.com/Shelin-boop/Quillbinder_Collection/releases/latest)")),
               QStringLiteral("README: near the top, direct links to this version's AppImage and media package, and to the newest release"),
@@ -325,8 +327,9 @@ int main(int argc, char **argv)
     // ================================================================ downloads sorted by system (2026-11-12)
     {
         QTemporaryDir dist;
-        const QString v = QStringLiteral(QB_APP_VERSION), label = QStringLiteral(QB_APP_VERSION_LABEL);
-        for (const QString &n : {QStringLiteral("Quillbinder-%1-%2-x86_64.AppImage").arg(v, label), QStringLiteral("Quillbinder-%1-full-%2-x86_64.AppImage").arg(v, label),
+        const QString v = QStringLiteral(QB_APP_VERSION),
+                      label = QStringLiteral(QB_APP_VERSION_LABEL).isEmpty() ? QString() : QStringLiteral("-" QB_APP_VERSION_LABEL);
+        for (const QString &n : {QStringLiteral("Quillbinder-%1%2-x86_64.AppImage").arg(v, label), QStringLiteral("Quillbinder-%1-full%2-x86_64.AppImage").arg(v, label),
                                  QStringLiteral("quillbinder-%1-update.qbpkg").arg(v), QStringLiteral("Quillbinder-%1-windows-x64.zip").arg(v),
                                  QStringLiteral("Quillbinder-%1-full-windows-x64.zip").arg(v), QStringLiteral("quillbinder-%1-windows-update.qbpkg").arg(v),
                                  QStringLiteral("SHA256SUMS.txt"), QStringLiteral("SHA256SUMS.txt.sig")})
@@ -357,7 +360,7 @@ int main(int argc, char **argv)
         QTemporaryDir site;
         run(QStringLiteral("python3"), {QStringLiteral("-I"), tools + QStringLiteral("download-page.py"), dist.path(), QStringLiteral("v1.2.3-test"), site.path()}, &rc);
         const QString page = QString::fromUtf8(readAll(site.path() + QStringLiteral("/index.html")));
-        check(rc == 0 && page.contains(QStringLiteral("releases/download/v1.2.3-test/Quillbinder-%1-full-%2-x86_64.AppImage").arg(v, label))
+        check(rc == 0 && page.contains(QStringLiteral("releases/download/v1.2.3-test/Quillbinder-%1-full%2-x86_64.AppImage").arg(v, label))
                   && page.contains(QStringLiteral("releases/download/v1.2.3-test/Quillbinder-%1-full-windows-x64.zip").arg(v))
                   && page.count(QLatin1String("class=\"button\"")) == 2 && page.count(QLatin1String("Comes later.")) == 1
                   && page.contains(QLatin1String("not made by or connected with Literature &amp; Latte"))

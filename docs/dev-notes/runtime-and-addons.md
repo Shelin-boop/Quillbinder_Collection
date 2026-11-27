@@ -2,6 +2,25 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: the label is one setting per system
+
+- `CMakeLists.txt` holds `APP_VERSION_LABEL` (Linux's, in the first column: every Linux script, `release.yml`,
+  `tools/publish-release.sh`, `tools/release-notes.py` and the shared tools read this line), `APP_VERSION_LABEL_WINDOWS`
+  and `APP_VERSION_LABEL_ANDROID`. A Windows or an Android build takes its own as `APP_VERSION_LABEL` (a second
+  `if(WIN32)` / `elseif(ANDROID ...)` block after the version one), so that `AppInfo.h`, `APP_VERSION_SHOWN` and the
+  program see one label. `tools/update-feed.py` takes the label of `--system` (`--label` still wins).
+- A normal release has an empty label and gets plain names: tag `v1.0.0`, `Quillbinder-1.0.0-x86_64.AppImage`,
+  `Quillbinder-1.0.0-full-x86_64.AppImage`, `quillbinder-1.0.0-update.qbpkg` (every name is made with
+  `${LABEL:+-$LABEL}`; never write `-$LABEL` alone). The download page's note leaves out "This is a ... version" without a
+  label. `verlines` runs this as a dry run (a copy with 1.0.0 and empty labels).
+- Still hard-coded for Windows and Android (their parts follow later): the tags `v<version>-windows-experimental` /
+  `-android-experimental` in `release-windows.yml` and `release-android.yml`, and the file names in `packaging/windows/`
+  and `packaging/android/`.
+- A security version is found by number only: the update check offers "recommended (security)" when a listed version lies
+  after the installed one and not after the newest (`securityBetween`, `src/core/UpdateCheck.cpp`), so a program on 0.95.0
+  sees 0.99.0's mark even when 1.0.0 is the newest, as long as 0.99.0 stays in `packaging/update-feed/security.json` (the
+  feed also keeps what the previous feed listed).
+
 ## 0.94.0: the full AppImage's installation window
 
 - `quillbinder --install-folder <folder>` (`FullInstallWindow.*`, `runInstallFolder`, called from the first loop of
