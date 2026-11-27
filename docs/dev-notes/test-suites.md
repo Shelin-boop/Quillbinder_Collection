@@ -45,6 +45,17 @@ Windows target is built only with `-DQB_SYSTEM_TEST_WINDOWS=ON`. Not compiled or
 compiles it. Pitfall: in the mouse drag the event loop must run between the steps (the dragged program is the test
 itself), so the Windows version waits with `settle`, never with `Sleep`.
 
+## v0990n (0.99.0, item 114: Read Aloud)
+
+`qb_v0990n_tests` (a window; the fake libqbai of v0990h and a fake `Output`, so nothing is played): the choices and sentence splitter,
+the model order and fit, the toolbar by system (Android through `Config::forceAndroid`) and size, the first click that opens the
+page (the modal Options window is closed by a timer), reading from the cursor and of a marked text, the sentence highlight, pause,
+stop, typing stops it, nothing written to disk, the Voice menu with the reasons of the greyed entries, Qwen clips, the unload of the
+model after the idle time (a short interval) and its reload, the look-ahead limit (2, or 4 for a model slower than real time),
+cancel while a sentence is made, the device choice reaching the model, the settings page (greyed languages, fit texts, speed test
+through `QBAI_FAKE_SLOW_MS`). Screenshots `toolbar-window`, `voice-menu-*`, `settings-page*`, `options-read-aloud`. A real Pocket TTS
+smoke test was not made (no model in the session).
+
 ## v0990h (0.99.0)
 
 `qb_v0990h_tests`: the AI engine packages against a fake libqbai (`tests/fakeqbai/FakeQbAi.cpp`, built as

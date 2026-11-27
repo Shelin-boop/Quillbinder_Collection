@@ -328,6 +328,7 @@ MainWindow::MainWindow()
     createFormatBar();
     createIconBar();
     createProfileBars(); // 0.95.0
+    createReadAloudBar(); // 0.99.0 (item 114)
     createSmallInterface(); // 0.99.0 (item 122): the round buttons and the slide-in panels
     // the fields on the toolbars (quick search, style, font, size ...) in the color of the
     // menus and toolbars, not of lists (0.60.3)
@@ -623,6 +624,10 @@ MainWindow::MainWindow()
         if (auto *bar = qobject_cast<GripBar *>(m_labelBar)) { // 0.95.0: the Labels toolbar after the icon bar
             gripBars << bar;
             rowTwo << bar->objectName();
+        }
+        if (auto *bar = qobject_cast<GripBar *>(m_readAloudBar)) { // 0.99.0 (item 114): Read Aloud at the end of the first row
+            gripBars << bar;
+            rowOne << bar->objectName();
         }
         m_barDock = new BarDock(this, gripBars, {rowOne, rowTwo});
         m_barDock->load();

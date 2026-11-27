@@ -7,6 +7,9 @@
 
 #include <QAudioDevice>
 #include <QAudioOutput>
+#include <QAudioSink>
+#include <cstring>
+#include <QMutex>
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
@@ -24,6 +27,7 @@
 #include <QWidget>
 
 #ifndef Q_OS_WIN
+#include <cstring>
 #include <dlfcn.h>
 #endif
 
@@ -535,6 +539,106 @@ private:
     QString m_backend, m_backendFile;
 };
 
+// 0.99.0: sound the program makes itself (Read Aloud): mono float PCM that is queued and played by Qt's audio sink in pull
+// mode. Nothing is written to a file.
+class PcmQueue : public QIODevice
+{
+public:
+    explicit PcmQueue(QObject *parent = nullptr) : QIODevice(parent) { open(QIODevice::ReadOnly); }
+    void append(const char *data, qint64 n)
+    {
+        {
+            QMutexLocker g(&m_mutex);
+            m_data.append(data, int(n));
+        }
+        emit readyRead();
+    }
+    void clear()
+    {
+        QMutexLocker g(&m_mutex);
+        m_data.clear();
+    }
+    bool isSequential() const override { return true; }
+    qint64 bytesAvailable() const override
+    {
+        QMutexLocker g(&m_mutex);
+        return m_data.size() + QIODevice::bytesAvailable();
+    }
+
+protected:
+    qint64 readData(char *out, qint64 max) override
+    {
+        QMutexLocker g(&m_mutex);
+        const qint64 n = qMin<qint64>(max, m_data.size());
+        if (n > 0) {
+            std::memcpy(out, m_data.constData(), size_t(n));
+            m_data.remove(0, int(n));
+        }
+        return n;
+    }
+    qint64 writeData(const char *, qint64) override { return -1; }
+
+private:
+    mutable QMutex m_mutex;
+    QByteArray m_data;
+};
+
+class QtPcmSink : public qb::media::PcmSink
+{
+public:
+    ~QtPcmSink() override
+    {
+        if (m_sink)
+            m_sink->stop();
+        delete m_sink;
+        delete m_queue;
+    }
+    bool open(int rate, QString *error) override
+    {
+        QAudioFormat f;
+        f.setSampleRate(rate);
+        f.setChannelCount(1);
+        f.setSampleFormat(QAudioFormat::Float);
+        const QAudioDevice dev = QMediaDevices::defaultAudioOutput();
+        if (dev.isNull()) {
+            if (error)
+                *error = QCoreApplication::translate("qbmedia", "No sound output was found.");
+            return false;
+        }
+        m_sink = new QAudioSink(dev, f);
+        m_queue = new PcmQueue;
+        m_sink->start(m_queue);
+        return true;
+    }
+    void write(const float *samples, qint64 count) override
+    {
+        if (m_queue && count > 0)
+            m_queue->append(reinterpret_cast<const char *>(samples), count * qint64(sizeof(float)));
+    }
+    qint64 playedMs() const override { return m_sink ? m_sink->processedUSecs() / 1000 : 0; }
+    void pause() override
+    {
+        if (m_sink)
+            m_sink->suspend();
+    }
+    void resume() override
+    {
+        if (m_sink)
+            m_sink->resume();
+    }
+    void stop() override
+    {
+        if (m_sink)
+            m_sink->stop();
+        if (m_queue)
+            m_queue->clear();
+    }
+
+private:
+    QAudioSink *m_sink = nullptr;
+    PcmQueue *m_queue = nullptr;
+};
+
 } // namespace
 } // namespace qbmedia
 
@@ -542,4 +646,9 @@ extern "C" Q_DECL_EXPORT qb::media::EngineInterface *qb_media_impl_create()
 {
     audiobackend::avoidUnconfiguredPipeWire(); // 0.80.0: before Qt Multimedia looks for sound devices
     return new qbmedia::QtEngine;
+}
+
+extern "C" Q_DECL_EXPORT qb::media::PcmSink *qb_media_impl_create_pcm_sink()
+{
+    return new qbmedia::QtPcmSink;
 }

@@ -121,6 +121,28 @@ public:
     virtual Player *createPlayer() = 0;
 };
 
+// Optional (program 0.99.0; an add-on built before has no sinks): sound the program makes itself (Read Aloud) is played through the same sound
+// system. A media engine that also implements PcmEngine (the program asks with dynamic_cast) hands out sinks; nothing is saved.
+class PcmSink
+{
+public:
+    virtual ~PcmSink() = default;
+    virtual bool open(int sampleRate, QString *error) = 0;        // mono, 32 bit float
+    virtual void write(const float *samples, qint64 count) = 0;   // queued, never blocks
+    virtual qint64 playedMs() const = 0;                          // of what was written, played so far
+    virtual void pause() = 0;
+    virtual void resume() = 0;
+    virtual void stop() = 0;                                      // drops what is queued
+};
+
+class PcmEngine
+{
+public:
+    virtual ~PcmEngine() = default;
+    // null when the engine is not started or the player library has no sinks (an older add-on)
+    virtual PcmSink *createPcmSink() = 0;
+};
+
 } // namespace media
 } // namespace qb
 

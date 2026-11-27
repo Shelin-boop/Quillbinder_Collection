@@ -52,6 +52,7 @@ class FormatFindWindow;
 class Inspector;
 class FocusLine;
 namespace handwriting { class HandwritingController; }
+namespace readaloud { class Controller; }
 class TextEditor;
 class CompositionWindow;
 class QuickRefWindow;
@@ -71,6 +72,8 @@ public:
     // 0.99.0 (handwriting, item 112): the parts the writing layer lies over
     QWidget *editorAreaWidget() const { return m_editorArea; }
     handwriting::HandwritingController *handwriting() const { return m_handwriting; }
+    readaloud::Controller *readAloud() const { return m_readAloud; }   // 0.99.0 (item 114)
+    QToolBar *readAloudBar() const { return m_readAloudBar; }
     TextEditor *handwritingEditor() const;   // the text editor of the active pane (null when none)
     MainWindow();
     ~MainWindow() override;
@@ -358,6 +361,8 @@ private:
     // 0.95.0 (items 95 and 97, MainWindowProfiles.cpp): profiles, the Profiles toolbar and the Labels toolbar
     void createProfileActions();
     void createProfileBars();
+    void createReadAloudActions();   // 0.99.0 (item 114)
+    void createReadAloudBar();
     void rebuildLabelBar();
     void fillProfilesMenu(QMenu *menu);
     void saveWindowSettings();
@@ -564,6 +569,8 @@ private:
     std::unique_ptr<Project> m_project;
     BinderPanel *m_binder = nullptr;
     Inspector *m_inspector = nullptr;
+    readaloud::Controller *m_readAloud = nullptr;   // 0.99.0 (item 114): the Read Aloud toolbar and its reading
+    QToolBar *m_readAloudBar = nullptr;
     handwriting::HandwritingController *m_handwriting = nullptr;   // 0.99.0: the button, the modes, the writing area
     QSplitter *m_mainSplit = nullptr;
     QSplitter *m_editorSplit = nullptr;

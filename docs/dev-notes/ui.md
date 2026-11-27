@@ -2,6 +2,28 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: Read Aloud (item 114)
+
+`core/ReadAloud.*` (no windows): `Settings`/`Config` (group `readaloud`, per device), the model choice, the voices, the sentence
+splitter and `Session`; `ui/ReadAloudController.*` (the toolbar and the Voice menu), `ui/ReadAloudPage.*` (File > Options > Read
+Aloud), `ui/MainWindowReadAloud.cpp` (the switch and the bar in the first row after Tools).
+
+- **The order of the models is one table**: `kModelOrder` in `core/ReadAloud.cpp` (Pocket TTS first where it has the language, then
+  Qwen3-TTS 0.6B, 1.7B Q4, 1.7B Q8). The default is the first that is installed, fits and (when measured) reaches real time.
+- **Sound**: the program has no Qt Multimedia. `Output` (core) is implemented by `MediaOutput` (ui) over `media::PcmSink`
+  (`media/MediaApi.h`, optional): the add-on's stage 1 (`MediaEngine`) also implements `PcmEngine` and takes the sink from the
+  player library's exported `qb_media_impl_create_pcm_sink` (`QtPcmSink`: `QAudioSink` in pull mode over a queue). An add-on
+  built before has no such function: Play says it needs the newest Media Playback. The suite uses a fake `Output`; the real sink
+  was compiled but **not run against a sound device** (none in the build environment).
+- **Qwen's voices**: reference clips `<models>/read-aloud-voices/<voice>-<style>.wav` + `.txt` (`qwenClipFile`); until they exist
+  the voice and style are greyed "Voice not installed yet."; the voices job of models-5 must write this layout (or change it here).
+- **Pitfalls**: `Model::load` asks the main thread (ModelMemory), so nothing may wait for the worker on the main thread (the
+  destructor keeps processing events); the worker may make sentences up to `ahead` past the playing one, and when all written
+  sentences are played it counts as the next (else a reading that fell behind never goes on); the sound's clock and the
+  sentences' lengths differ by rounding, so a sentence counts as played 30 ms before its end. The speed test result is kept per
+  model and device (`readaloud/rtf/...`). The program's language for "Automatic language" is `QLocale().name()`.
+- The editor marks the sentence by an extra selection (`TextEditor::setReadingRange`, joined to the search marks).
+
 ## 0.99.0: small interface (item 122)
 
 - `MainWindowSmall.cpp` (`MainWindow::setSmallInterface`), the rules and the panel in `ui/SmallInterface.*`. The mode is a

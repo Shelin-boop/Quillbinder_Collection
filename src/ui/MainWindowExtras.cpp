@@ -102,6 +102,7 @@ void MainWindow::createExtraActions()
             setIconFor(dlg.chosen());
     });
     createProfileActions(); // 0.95.0: View > Profiles and the switches of the Profiles and Labels toolbars
+    createReadAloudActions(); // 0.99.0 (item 114): the switch of the Read Aloud toolbar
     // ---- icon bar
     QAction *showBar = act(QStringLiteral("showIconBar"), tr("&Icon Bar"));
     showBar->setCheckable(true);

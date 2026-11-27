@@ -209,6 +209,10 @@ public:
     void setSearchPattern(const QRegularExpression &re);
     QRegularExpression searchPattern() const { return m_searchRe; }
     int searchMatchCount() const { return m_searchCount; }
+    // 0.99.0 (item 114): the sentence Read Aloud is reading, marked in the text (length 0: none); scrolls it into view
+    void setReadingRange(int start, int length);
+    int readingStart() const { return m_readStart; }
+    int readingLength() const { return m_readLength; }
     bool findNext(const QString &term, bool backward, bool caseSensitive, bool wholeWord, bool wrap = true);
     bool findNext(const QRegularExpression &re, bool backward, bool wrap = true);
     int replaceAll(const QString &term, const QString &with, bool caseSensitive, bool wholeWord);
@@ -307,6 +311,7 @@ private:
     QRegularExpression m_searchRe;
     bool m_searchOn = false;
     int m_searchCount = 0;
+    int m_readStart = -1, m_readLength = 0;
     int m_mouseMoving = 0;   // see cursorMovedByMouse()
     QCompleter *m_scriptCompleter = nullptr;
     QStringListModel *m_scriptModel = nullptr;

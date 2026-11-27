@@ -3,6 +3,7 @@
 #include "ui/ThemePicker.h"
 #include "ui/MainWindow.h"
 #include "ui/handwriting/HandwritingController.h"
+#include "ui/ReadAloudController.h"
 #include "ui/UndoNames.h"
 #include "core/Backup.h"
 #include "core/Portable.h"
@@ -332,7 +333,7 @@ void MainWindow::createMenus()
     m_barsMenuBar = bars;
     // 0.99.0 (P13): grouped by the row they belong to; Show Toolbar with its bars, Show Format Bar with its bars, then the
     // icon bar and the labels bar; the Toolbar Size submenu (item 116) after the switches, before Reset Toolbar Places
-    add(bars, {"showToolbar", "showBarMain", "showBarThemes", "showBarProfiles", "showBarSearch", "showBarTools", "",
+    add(bars, {"showToolbar", "showBarMain", "showBarThemes", "showBarProfiles", "showBarSearch", "showBarTools", "showBarReadAloud", "",
                "showFormatBar", "showBarStyle", "showBarCharacter", "showBarParagraph", "", "showIconBar", "showBarLabels", ""});
     bars->addAction(m_toolbarSizeMenu->menuAction()); // 0.99.0: Small, Normal, Large for every bar
     bars->addAction(m_handwriting->showButtonAction()); // 0.99.0 (item 112): the handwriting button is off by default
@@ -1209,7 +1210,7 @@ void MainWindow::applyToolbarSize()
     QList<QToolBar *> bars;
     for (toolbars::Bar b : toolbars::allBars())
         bars << m_bars[int(b)];
-    bars << m_iconBar << m_profileBar << m_labelBar;
+    bars << m_iconBar << m_profileBar << m_labelBar << m_readAloudBar;
     for (QToolBar *bar : std::as_const(bars))
         if (bar)
             bar->setIconSize(size);
@@ -1255,6 +1256,8 @@ void MainWindow::placeToolBars()
         all << m_bars[int(b)];
         if (b == toolbars::Bar::Themes)
             all << m_profileBar;
+        if (b == toolbars::Bar::Tools)
+            all << m_readAloudBar; // 0.99.0 (item 114): the end of the first row
     }
     all << m_iconBar << m_labelBar;
     // (the icon bar shows or not as it did: its switch is not set before the window's state was read)
@@ -1296,7 +1299,7 @@ void MainWindow::applyBarVisibility()
         for (toolbars::Bar bar : toolbars::allBars())
             if (m_bars[int(bar)])
                 m_bars[int(bar)]->hide();
-        for (QToolBar *bar : {m_profileBar, m_labelBar})
+        for (QToolBar *bar : {m_profileBar, m_labelBar, m_readAloudBar})
             if (bar)
                 bar->hide();
         return;
@@ -1327,6 +1330,14 @@ void MainWindow::applyBarVisibility()
         if (bar)
             bar->setVisible(inRow && own);
     }
+    // 0.99.0 (item 114): the Read Aloud toolbar (first row; shown at first on Linux and Windows, hidden on Android)
+    if (QAction *one = a.value(QStringLiteral("showBarReadAloud"))) {
+        const bool own = readaloud::Config::instance().get().barShown;
+        one->setChecked(own);
+        one->setEnabled(mainRow);
+        if (m_readAloudBar)
+            m_readAloudBar->setVisible(mainRow && own);
+    }
     m_applyingBars = false;
 }
 
@@ -1334,7 +1345,7 @@ void MainWindow::applyBarVisibility()
 void MainWindow::fillBarsMenu(QMenu *menu, int bar)
 {
     // 0.99.0 (P13): the same groups as View > Toolbars
-    for (const char *k : {"showToolbar", "showBarMain", "showBarThemes", "showBarProfiles", "showBarSearch", "showBarTools"})
+    for (const char *k : {"showToolbar", "showBarMain", "showBarThemes", "showBarProfiles", "showBarSearch", "showBarTools", "showBarReadAloud"})
         menu->addAction(a[QLatin1String(k)]);
     menu->addSeparator();
     for (const char *k : {"showFormatBar", "showBarStyle", "showBarCharacter", "showBarParagraph"})
