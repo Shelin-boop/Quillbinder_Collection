@@ -2,11 +2,26 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="pl" sourcelanguage="en">
 <context>
-    <name>Engine</name>
+    <name>EncryptionPage</name>
     <message>
-        <source>Processor</source>
-        <translation>Procesor</translation>
+        <source>This system has no key store, so the passphrase is asked for once in each session.</source>
+        <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>The system&apos;s key store refused to keep the passphrase, so it is asked for once in each session.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The passphrase could not be kept in the system&apos;s key store, so it is asked for once in each session.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remember the passphrase on this device</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Engine</name>
     <message>
         <source>A transcription is still running.</source>
         <translation>Transkrypcja nadal trwa.</translation>
@@ -16,12 +31,43 @@
         <translation>Nie zainstalowano żadnego modelu.</translation>
     </message>
     <message>
+        <source>Quillbinder asks for permission to use the microphone. Allow it, then press Record again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The microphone is not allowed for Quillbinder. Allow it in the system&apos;s settings.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>No microphone was found.</source>
         <translation>Nie znaleziono mikrofonu.</translation>
     </message>
     <message>
         <source>The microphone &quot;%1&quot; could not be opened.</source>
         <translation>Nie udało się otworzyć mikrofonu „%1”.</translation>
+    </message>
+</context>
+<context>
+    <name>Handwriting</name>
+    <message>
+        <source>Ruled lines</source>
+        <translation type="unfinished">Linie pomocnicze</translation>
+    </message>
+    <message>
+        <source>Writing lines (baseline and midline)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Squares</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Dots</source>
+        <translation type="unfinished">Kropki</translation>
+    </message>
+    <message>
+        <source>No grid</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -120,6 +166,21 @@
     <message>
         <source>Files on This &amp;Tablet…</source>
         <translation>Pliki na tym &amp;tablecie…</translation>
+    </message>
+</context>
+<context>
+    <name>ModelMemory</name>
+    <message>
+        <source>the memory of the graphics card %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>the computer&apos;s memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not enough memory for the model &quot;%1&quot; (%2 MB): %3 is %4 % used, and the model would bring it over %5 %.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -445,6 +506,220 @@ Imiona z tej listy nie są podzielone na żeńskie i męskie.</translation>
     </message>
 </context>
 <context>
+    <name>QKeychain::DeletePasswordJobPrivate</name>
+    <message>
+        <source>Could not open keystore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not remove private key from keystore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open wallet: %1; %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password entry not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not delete password</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::Job</name>
+    <message>
+        <source>Both service name and key are empty</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::JobPrivate</name>
+    <message>
+        <source>Unknown error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access to keychain denied</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::PlainTextStore</name>
+    <message>
+        <source>Could not store data in settings: access error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not store data in settings: format error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not delete data from settings: access error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not delete data from settings: format error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Entry not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::ReadPasswordJobPrivate</name>
+    <message>
+        <source>Entry not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open keystore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not retrieve private key from keystore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Encrypted data is too short</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not create RSA decryption cipher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not decrypt AES key: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not create AES decryption cipher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not decrypt data: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not create decryption cipher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>D-Bus is not running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No keychain service available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open wallet: %1; %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Access to keychain denied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not determine data type: %1; %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown kwallet entry type &apos;%1&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Password entry not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not decrypt data</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::WritePasswordJobPrivate</name>
+    <message>
+        <source>Could not open keystore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not create private key generator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not generate new private key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not retrieve private key from keystore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not generate AES key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not generate IV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not create AES encryption cipher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not encrypt data: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not create RSA encryption cipher</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not encrypt AES key: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>D-Bus is not running</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Could not open wallet: %1; %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Encryption failed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Credential size exceeds maximum size of %1: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Credential key exceeds maximum size of %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Writing credentials failed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>QObject</name>
     <message>
         <source>Part &lt;$W:part&gt;</source>
@@ -613,6 +888,10 @@ Imiona z tej listy nie są podzielone na żeńskie i męskie.</translation>
         <translation>Brak uprawnień</translation>
     </message>
     <message>
+        <source>No backup was made.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>The project could not be saved first, so no backup was made: %1</source>
         <translation>Nie udało się najpierw zapisać projektu, więc nie utworzono kopii zapasowej: %1</translation>
     </message>
@@ -621,8 +900,36 @@ Imiona z tej listy nie są podzielone na żeńskie i męskie.</translation>
         <translation>Nie można utworzyć folderu roboczego dla kopii zapasowych %1</translation>
     </message>
     <message>
+        <source>the project&apos;s keys are not named in %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>the key %1 is not in Quillbinder&apos;s key ring</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The backups of this project are encrypted, but no encrypted backup can be made: %1. No backup was made.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>%1 - working copy of %2</source>
         <translation>%1 – kopia robocza projektu %2</translation>
+    </message>
+    <message>
+        <source>it could not be encrypted: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>the encrypted backup could not be decrypted again: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>the encrypted backup, decrypted again, differs from the backup</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>the encrypted backup is not whole</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Backing up &quot;%1&quot;...</source>
@@ -663,6 +970,14 @@ Jest przechowywana w %3, a następna kopia zapasowa umieści ją na miejscu.</tr
     <message>
         <source>The new backup %1 is not there after older backups were cleaned up. No backup was made; please make one with File &gt; Back Up &gt; Back Up To...</source>
         <translation>Nowej kopii zapasowej %1 nie ma po usunięciu starszych kopii zapasowych. Nie utworzono kopii zapasowej; utwórz ją w menu Plik &gt; Kopia zapasowa &gt; Utwórz kopię zapasową w...</translation>
+    </message>
+    <message>
+        <source>Decrypting &quot;%1&quot;...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 could not be decrypted: %2 Nothing was restored.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%1 could not be read as a ZIP file (%2). If the file is whole, an archive program of your system may still unpack it.</source>
@@ -919,6 +1234,10 @@ Jest przechowywana w %3, a następna kopia zapasowa umieści ją na miejscu.</tr
     <message>
         <source>Cannot remove %1</source>
         <translation>Nie można usunąć %1</translation>
+    </message>
+    <message>
+        <source>Cannot read %1: %2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Full name</source>
@@ -2721,8 +3040,12 @@ Source: %1</source>
         <translation>%1 px</translation>
     </message>
     <message>
-        <source>Other (%1 px)...</source>
-        <translation>Inny (%1 px)...</translation>
+        <source>Other…</source>
+        <translation type="unfinished">Inna…</translation>
+    </message>
+    <message>
+        <source>Other (%1 px)…</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>%1 in px (at 100 % zoom):</source>
@@ -2757,8 +3080,32 @@ Source: %1</source>
         <translation> (własna czcionka)</translation>
     </message>
     <message>
-        <source>Choose Font...</source>
-        <translation>Wybierz czcionkę...</translation>
+        <source>Choose Font…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fixed Width Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Label Color in Binder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Label Color in Icons</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Status Stamps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Label Color in Index Cards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Appearance Options…</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Font</source>
@@ -2777,36 +3124,12 @@ Source: %1</source>
         <translation>Obramowanie obok tekstu</translation>
     </message>
     <message>
-        <source>Fixed Width (Text as a Centered Column)</source>
-        <translation>Stała szerokość (tekst jako wyśrodkowana kolumna)</translation>
-    </message>
-    <message>
-        <source>Show Label Colors in the Binder</source>
-        <translation>Pokaż kolory etykiet w segregatorze</translation>
-    </message>
-    <message>
-        <source>Let the Label Color Shine Through the Icons</source>
-        <translation>Pozwól, by kolor etykiety prześwitywał przez ikony</translation>
-    </message>
-    <message>
         <source>Indent per Level</source>
         <translation>Wcięcie na poziom</translation>
     </message>
     <message>
-        <source>Show Status Stamps</source>
-        <translation>Pokaż stemple statusu</translation>
-    </message>
-    <message>
-        <source>Tint Cards with the Label Color</source>
-        <translation>Zabarwiaj fiszki kolorem etykiety</translation>
-    </message>
-    <message>
         <source>Card Width</source>
         <translation>Szerokość fiszki</translation>
-    </message>
-    <message>
-        <source>Appearance Options...</source>
-        <translation>Opcje wyglądu...</translation>
     </message>
     <message>
         <source>Double-click to make both editors the same size</source>
@@ -3577,6 +3900,10 @@ Source: %1</source>
         <translation>Pliki motywów (*.qbtheme *.json);;Wszystkie pliki (*)</translation>
     </message>
     <message>
+        <source>Large</source>
+        <translation type="unfinished">Duże</translation>
+    </message>
+    <message>
         <source>Main</source>
         <translation>Główny</translation>
     </message>
@@ -3635,6 +3962,10 @@ Source: %1</source>
     <message>
         <source>Layouts</source>
         <translation>Układy</translation>
+    </message>
+    <message>
+        <source>Handwriting (off, editor, inspector, both)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Theme button (Light, Dark, My Look 1, My Look 2 and all themes)</source>
@@ -3947,6 +4278,18 @@ Source: %1</source>
         <translation>%1: format WAV, którego tu nie odczytujemy</translation>
     </message>
     <message>
+        <source>The AI engine is not installed (or could not be loaded). Install it under File &gt; Options &gt; Speech.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Speech Transcription</source>
+        <translation type="unfinished">Transkrypcja mowy</translation>
+    </message>
+    <message>
+        <source>The model was not loaded: the memory is needed elsewhere.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>The model could not be loaded onto the graphics card. Choose the processor under Options &gt; Speech &gt; Processing, or a smaller model.</source>
         <translation>Nie udało się wczytać modelu na kartę graficzną. Wybierz procesor w menu Opcje &gt; Mowa &gt; Przetwarzanie albo mniejszy model.</translation>
     </message>
@@ -3955,8 +4298,8 @@ Source: %1</source>
         <translation>Nie udało się wczytać modelu (uszkodzony plik albo za mało pamięci).</translation>
     </message>
     <message>
-        <source>whisper could not transcribe a piece.</source>
-        <translation>whisper nie zdołał przepisać fragmentu.</translation>
+        <source>The AI engine could not transcribe a piece.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Small</source>
@@ -4157,6 +4500,58 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>
         <translation>To nie jest plik profilu ani opcji zapisanych przez Quillbinder.</translation>
+    </message>
+    <message>
+        <source>Access to keychain denied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No keyring daemon</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Already unlocked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No such keyring</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Bad arguments</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>I/O error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancelled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keyring already exists</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No match</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Entry not found</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No matching unlocked entry was deleted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> s</source>
+        <translation type="unfinished"> s</translation>
     </message>
 </context>
 <context>
@@ -4434,28 +4829,12 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
         <translation>Obliczenia na:</translation>
     </message>
     <message>
-        <source>Processor threads:</source>
-        <translation>Wątki procesora:</translation>
-    </message>
-    <message>
-        <source>One less than the processor has keeps typing smooth while a piece is written.</source>
-        <translation>O jeden mniej, niż ma procesor, sprawia, że pisanie pozostaje płynne, gdy fragment jest zapisywany.</translation>
-    </message>
-    <message>
         <source>never</source>
         <translation>nigdy</translation>
     </message>
     <message>
-        <source> minutes</source>
-        <translation> min</translation>
-    </message>
-    <message>
-        <source>Free the model after:</source>
-        <translation>Zwolnij model po:</translation>
-    </message>
-    <message>
-        <source>The model takes memory while it is loaded; after this time without use it is freed and the program says so. It loads again at the next recording.</source>
-        <translation>Model zajmuje pamięć, dopóki jest wczytany; po tym czasie bez użycia jest zwalniany i program o tym informuje. Wczytuje się ponownie przy następnym nagraniu.</translation>
+        <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Fast</source>
@@ -4562,6 +4941,14 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
         <translation>Tylko nagrywaj: tekst powstaje później, gdy naciśniesz Transkrybuj na liście (zużywa mało energii: na laptopa na baterii lub telefon)</translation>
     </message>
     <message>
+        <source>Write into the text as I speak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Each piece of live speech is also inserted at the cursor of the text you are editing.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Delete a recording once its text is written</source>
         <translation>Usuń nagranie po zapisaniu jego tekstu</translation>
     </message>
@@ -4630,24 +5017,20 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
         <translation>Pobierz ponownie</translation>
     </message>
     <message>
-        <source>Processor</source>
-        <translation>Procesor</translation>
+        <source>Automatic</source>
+        <translation type="unfinished">Automatyczny</translation>
     </message>
     <message>
-        <source>memory unknown</source>
-        <translation>pamięć nieznana</translation>
+        <source>Processor (CPU)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 has too little memory for this model.</source>
-        <translation>%1 ma za mało pamięci dla tego modelu.</translation>
+        <source>No graphics card that the AI engine can use (Vulkan) was found, or the engine is not installed; the processor computes.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>No graphics card that whisper.cpp can use (Vulkan) was found; the processor computes.</source>
-        <translation>Nie znaleziono karty graficznej, której może użyć whisper.cpp (Vulkan); obliczenia wykonuje procesor.</translation>
-    </message>
-    <message>
-        <source>A graphics card is usually much faster; the speed test shows how much on this computer.</source>
-        <translation>Karta graficzna jest zwykle znacznie szybsza; test szybkości pokazuje, o ile na tym komputerze.</translation>
+        <source>Automatic takes a graphics card with enough free memory for the model, else the processor. A graphics card is usually much faster; the speed test shows how much on this computer.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Everything is written in %1.</source>
@@ -4675,6 +5058,14 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
     <message>
         <source>Start or stop speech transcription (the arrow beside the button: microphone and options)</source>
         <translation>Włącz lub wyłącz transkrypcję mowy (strzałka obok przycisku: mikrofon i opcje)</translation>
+    </message>
+    <message>
+        <source>Record &amp;Only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Start or stop a recording without writing its text (the text can be written later with Transcribe)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Show &amp;Transcriptions</source>
@@ -4709,10 +5100,6 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
         <translation>Opcje transkrypcji mowy…</translation>
     </message>
     <message>
-        <source>Model unloaded, RAM usage minimal</source>
-        <translation>Model wyładowany, zużycie pamięci RAM minimalne</translation>
-    </message>
-    <message>
         <source>The add-on&apos;s speech engine is missing (install the add-on again).</source>
         <translation>Brakuje silnika mowy dodatku (zainstaluj dodatek ponownie).</translation>
     </message>
@@ -4721,8 +5108,8 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
         <translation>Nie można wczytać Qt Multimedia: %1</translation>
     </message>
     <message>
-        <source>Cannot load %1: %2</source>
-        <translation>Nie można wczytać %1: %2</translation>
+        <source>This version of the add-on needs Quillbinder 0.99.0 or later.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Cannot load the speech engine: %1</source>
@@ -5218,6 +5605,14 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
         <translation>Kopiuj cały tekst</translation>
     </message>
     <message>
+        <source>Put the marked part of the text (all of it when nothing is marked) into the text you are editing, at the cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert at Cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Move the transcription to the trash</source>
         <translation>Przenieś transkrypcję do kosza</translation>
     </message>
@@ -5288,6 +5683,14 @@ Wczytać je również? Zrób to tylko wtedy, gdy plik pochodzi od ciebie lub z z
     <message>
         <source>The text is on the clipboard.</source>
         <translation>Tekst jest w schowku.</translation>
+    </message>
+    <message>
+        <source>Open a text in the editor first, and click into it where the transcription should go.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The text was inserted at the cursor.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>No speech model yet: File &gt; Options &gt; Speech.</source>
@@ -5566,6 +5969,220 @@ Przenieś cały folder Quillbinder w swoje własne miejsce, na przykład C:\User
     <message>
         <source>%1 packages (*.qbpkg)</source>
         <translation>Pakiety %1 (*.qbpkg)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::AiDownloads</name>
+    <message>
+        <source>Handwriting Engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AI Engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is not a package of the %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Another download is running.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The model %1 is not in the catalog.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 could not be made.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The download was cancelled.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 could not be written.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This copy of %1 cannot make a secure connection, so it cannot download. Download the current AppImage once from the project&apos;s page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The download failed: the file could not be written, or is larger than announced.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The download failed (%1).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The download is incomplete (%1 of %2 bytes).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The downloaded file is not the one the catalog names (its SHA-256 differs), so it was not kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The download is incomplete.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The joined file is not the one the catalog names (its SHA-256 differs), so it was not kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>qb::AiInstallPanel</name>
+    <message>
+        <source>many</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Install the Engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloads the engine of this version from the project&apos;s release page and installs it</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Install from File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Installs the engine from a package file (for a computer without a connection)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Languages</source>
+        <translation type="unfinished">Języki</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>License</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation type="unfinished">Stan</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Anuluj</translation>
+    </message>
+    <message>
+        <source>The handwriting engine is not installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The AI engine is not installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The installed engine %1 was made for another version of Quillbinder: install it again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The engine %1 is switched off (Help &gt; Add-ons and Updates &gt; Manage Add-ons).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The handwriting engine %1 is installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The AI engine %1 is installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The new engine is used after Quillbinder is started again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Install Again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not published yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not installed</source>
+        <translation type="unfinished">Nie zainstalowano</translation>
+    </message>
+    <message>
+        <source>The catalog has no models for this function yet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>License: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading the engine...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Downloading %1...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Install the Engine from a File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quillbinder packages (*.qbpkg)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This package is not signed by the Quillbinder project, so it cannot be told whether it is the project&apos;s own. Install it only when you trust where it comes from.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Install Anyway</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The engine was not installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The engine is installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 may be used for non-commercial purposes only (%2). Download it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is deleted.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6532,6 +7149,14 @@ Przenieś cały folder Quillbinder w swoje własne miejsce, na przykład C:\User
         <translation>Wybrany format wyjściowy nie jest dostępny.</translation>
     </message>
     <message>
+        <source>Cannot write %1: %2</source>
+        <translation type="unfinished">Nie można zapisać %1: %2</translation>
+    </message>
+    <message>
+        <source>Compile cancelled. No file was made.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Compile to</source>
         <translation>Kompiluj do</translation>
     </message>
@@ -6590,6 +7215,21 @@ Przenieś cały folder Quillbinder w swoje własne miejsce, na przykład C:\User
     <message>
         <source>Preview — %1 (%2 pages)</source>
         <translation>Podgląd — %1 (strony: %2)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::CompileProgress</name>
+    <message>
+        <source>Cancel</source>
+        <translation type="unfinished">Anuluj</translation>
+    </message>
+    <message>
+        <source>%1 of %2</source>
+        <translation type="unfinished">%1 z %2</translation>
+    </message>
+    <message>
+        <source>Cancelling...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7497,6 +8137,197 @@ Strony (250 słów): %5</translation>
     </message>
 </context>
 <context>
+    <name>qb::EncryptionPage</name>
+    <message>
+        <source>Encryption locks the files of a project and its backups with your key, in the OpenPGP format that Kleopatra, Gpg4win and GnuPG open without Quillbinder (see the manual&apos;s page on opening your files without Quillbinder).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keys on this device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fingerprint</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create Keys...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import Keys...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import a Key File...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Keys...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forget the passphrase on this device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The open project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Encrypted backups</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Encrypted project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This place is not allowed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>My key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recovery key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>secret part, unlocked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>secret part, locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>public part only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This device has no keys yet. Create Keys makes your key and a recovery key; on another device, use Import Keys with the key folder.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No project is open: the two switches belong to the open project.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Create or import keys first: the switches need your key and the recovery key.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A project in Scrivener&apos;s format cannot be encrypted: Scrivener could not open its files. Its backups can be encrypted; that switch belongs to each computer, so switch it on on every computer that makes backups of the project.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The switch &quot;%1&quot; could not be changed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose the key folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import Keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type the passphrase of your key.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your key is on this device now.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your key is on this device for this session only: it could not be saved (%1), so it will be gone at the next start. Check the free space and the rights of the program&apos;s data folder, then import it again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose a key file</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Key files (*.asc *.gpg *.pgp);;All files (*)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Import a Key File</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The file could not be read.</source>
+        <translation type="unfinished">Nie udało się odczytać pliku.</translation>
+    </message>
+    <message>
+        <source>Type the passphrase of this key.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The key is on this device as your key.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There is no recovery key yet: import its public file (recovery-key-public.asc) with Import a Key File, or make a new pair with Create Keys.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The key is on this device as the recovery key.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The public key is on this device. It is not your key and not the recovery key.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The key is on this device for this session only: it could not be saved (%1), so it will be gone at the next start. Check the free space and the rights of the program&apos;s data folder, then import it again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Where to write the keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Export Keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The keys are in the folder %1. It holds your key (locked by your passphrase), the public parts and a README.txt. The recovery key&apos;s secret part is only in the folder that Create Keys made.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forget the passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quillbinder forgets the passphrase on this device and locks your key. It will ask for the passphrase again when it needs it. Continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The passphrase is forgotten on this device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The system&apos;s key store would not remove the passphrase: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>qb::ExportFilesDialog</name>
     <message>
         <source>Export Files</source>
@@ -7763,10 +8594,6 @@ Nic nie jest zapisywane w folderach systemu Windows ani w rejestrze, chyba że p
         <translation>Przenieś AppImage do %1, stałego miejsca, z którego uruchamia go wpis w menu</translation>
     </message>
     <message>
-        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
-        <translation>Polecenie Pomoc &gt; Dodaj do menu aplikacji lub Usuń z menu aplikacji zmienia to później. Jeśli sam przeniesiesz AppImage, dodaj go do menu ponownie.</translation>
-    </message>
-    <message>
         <source>Choose a folder: until then no backups are made</source>
         <translation>Wybierz folder: do tego czasu nie są tworzone żadne kopie zapasowe</translation>
     </message>
@@ -7793,6 +8620,10 @@ Nic nie jest zapisywane w folderach systemu Windows ani w rejestrze, chyba że p
     <message>
         <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them</source>
         <translation>Dodaj %1 do menu aplikacji, aby uruchamiać go jak każdy inny program i otwierać projekty dwukrotnym kliknięciem</translation>
+    </message>
+    <message>
+        <source>Help &gt; Add to Application Menu or Remove From Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -8739,8 +9570,8 @@ Nic nie jest zapisywane w folderach systemu Windows ani w rejestrze, chyba że p
 <context>
     <name>qb::IconFromTextDialog</name>
     <message>
-        <source>Icon from Text</source>
-        <translation>Ikona z tekstu</translation>
+        <source>Icon From Text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Up to 3 characters, e.g. PR, Ch1, A</source>
@@ -9337,6 +10168,22 @@ Tekst migawki „%2” jest teraz tekstem dokumentu; można go znów edytować i
         <translation>Edytuj…</translation>
     </message>
     <message>
+        <source>Synopsis and Notes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Comments and Footnotes</source>
+        <translation type="unfinished">Komentarze i przypisy</translation>
+    </message>
+    <message>
+        <source>Mind Map</source>
+        <translation type="unfinished">Mapa myśli</translation>
+    </message>
+    <message>
+        <source>Objects</source>
+        <translation type="unfinished">Obiekty</translation>
+    </message>
+    <message>
         <source>Synopsis and notes</source>
         <translation>Streszczenie i notatki</translation>
     </message>
@@ -9411,6 +10258,165 @@ Tekst migawki „%2” jest teraz tekstem dokumentu; można go znów edytować i
     <message>
         <source>Ctrl + mouse wheel over a part changes the zoom of that part. Right-click: one zoom for the tabs Metadata and Comments, or one each.</source>
         <translation>Ctrl + kółko myszy nad częścią zmienia powiększenie tej części. Kliknięcie prawym przyciskiem: jedno powiększenie dla kart Metadane i Komentarze albo osobne dla każdej.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::KeyWizard</name>
+    <message>
+        <source>Create Keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Make Keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The passphrase locks your key. Quillbinder can remember it on this device, so you type it once on each other device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use these six random words (the safest choice and easy to type):</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Other words</source>
+        <translation type="unfinished">Pozostałe słowa</translation>
+    </message>
+    <message>
+        <source>Use a passphrase of my own:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Passphrase:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Once more:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remember the passphrase on this device (in the system&apos;s key store)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This device already has keys. New keys cannot open files that were locked for the old ones; keep the old key folder.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The two entries are not the same.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This passphrase is accepted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Where to keep the keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Quillbinder writes the folder &quot;%1&quot; there. A USB stick is best; project, backup and sync folders are refused.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Choose...</source>
+        <translation type="unfinished">Wybierz...</translation>
+    </message>
+    <message>
+        <source>When you press Next, your key and the recovery key are made. This takes a few seconds.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Folder for the keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The keys could not be made.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The recovery passphrase</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Write these six words on paper now. They are shown only this once and are saved nowhere, not even in the key folder.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The recovery key opens your files if you lose your own key or forget its passphrase. Keep the paper in another place than the USB stick: the stick alone or the paper alone opens nothing. If both are lost, your text is gone for good.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>I have written the six words on paper</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The check</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Type two of the recovery words from your paper. Quillbinder reads the written files back and opens a test file with each key.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Word %1:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The key files were read back.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>README.txt is in the folder.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A test file opens with your key and your passphrase.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A test file opens with the recovery key and the recovery passphrase.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The keys could not be put on this device.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The keys could not be saved on this device (%1). Nothing was changed; check the free space and the rights of the program&apos;s data folder, and try again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A second copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Your keys are on this device and in the folder. Keep a second copy of the folder at another place, for example on a second USB stick. You can skip this.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Copy the folder here</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Place for the second copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This is the place of the first copy. Choose another place.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The second copy is made and was checked: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The second copy was made, but the check failed. Make another one.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -9995,10 +11001,6 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Papier, nagłówek i stopka oraz sposób drukowania tekstów, fiszek i konspektu</translation>
     </message>
     <message>
-        <source>Print Pre&amp;view…</source>
-        <translation>Pod&amp;gląd wydruku…</translation>
-    </message>
-    <message>
         <source>&amp;Print Current Document…</source>
         <translation>&amp;Drukuj bieżący dokument…</translation>
     </message>
@@ -10061,10 +11063,6 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
     <message>
         <source>Paste and &amp;Match Style</source>
         <translation>Wklej i &amp;dopasuj styl</translation>
-    </message>
-    <message>
-        <source>Paste with &amp;Formatting</source>
-        <translation>Wklej z &amp;formatowaniem</translation>
     </message>
     <message>
         <source>Select &amp;All</source>
@@ -10131,10 +11129,6 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Odnośnik do obiektu</translation>
     </message>
     <message>
-        <source>&amp;Objects…</source>
-        <translation>&amp;Obiekty…</translation>
-    </message>
-    <message>
         <source>Object &amp;Templates and Colors…</source>
         <translation>Szablony &amp;i kolory obiektów…</translation>
     </message>
@@ -10157,14 +11151,6 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
     <message>
         <source>Move &amp;Down</source>
         <translation>Przesuń w &amp;dół</translation>
-    </message>
-    <message>
-        <source>Move &amp;Left (out of the folder)</source>
-        <translation>Przesuń w &amp;lewo (poza folder)</translation>
-    </message>
-    <message>
-        <source>Move &amp;Right (into the item above)</source>
-        <translation>Przesuń w &amp;prawo (do pozycji powyżej)</translation>
     </message>
     <message>
         <source>&amp;Combined Text / Document</source>
@@ -10283,24 +11269,12 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Z&amp;apisz ustawienia projektu do pliku…</translation>
     </message>
     <message>
-        <source>&amp;Load Project Settings from File…</source>
-        <translation>&amp;Wczytaj ustawienia projektu z pliku…</translation>
-    </message>
-    <message>
         <source>Project &amp;Targets…</source>
         <translation>&amp;Cele projektu…</translation>
     </message>
     <message>
         <source>Project &amp;Keywords…</source>
         <translation>Słowa kluczowe &amp;projektu…</translation>
-    </message>
-    <message>
-        <source>Project S&amp;tatistics…</source>
-        <translation>Stat&amp;ystyki projektu…</translation>
-    </message>
-    <message>
-        <source>&amp;Writing History…</source>
-        <translation>&amp;Historia pisania…</translation>
     </message>
     <message>
         <source>&amp;Empty Trash…</source>
@@ -10399,16 +11373,8 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Umieść zaznaczone dokumenty w nowym folderze, w miejscu pierwszego z nich</translation>
     </message>
     <message>
-        <source>&amp;Sheet to Object</source>
-        <translation>&amp;Karta na obiekt</translation>
-    </message>
-    <message>
         <source>Make an Object (Window &gt; Objects) of the selected sheet documents: the title is the name, the text goes into Other, a picture becomes the picture. The binder item then shows the Object; the document keeps its text.</source>
         <translation>Utwórz obiekt (Okno &gt; Obiekty) z zaznaczonych dokumentów-kart: tytuł staje się nazwą, tekst trafia do pola Inne, obraz staje się obrazem. Pozycja segregatora pokazuje wtedy obiekt; dokument zachowuje swój tekst.</translation>
-    </message>
-    <message>
-        <source>Convert to F&amp;ile</source>
-        <translation>Zamień na p&amp;lik</translation>
     </message>
     <message>
         <source>&amp;Include in Compile</source>
@@ -10433,10 +11399,6 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
             <numerusform>Nie udało się zapisać migawek %n dokumentów: %1
 %2</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Take Snapshot with &amp;Title…</source>
-        <translation>Wykonaj migawkę z &amp;tytułem…</translation>
     </message>
     <message>
         <source>Show Snapshots</source>
@@ -10579,10 +11541,6 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Kopiuj formatowanie</translation>
     </message>
     <message>
-        <source>Paste Formattin&amp;g</source>
-        <translation>Wklej &amp;formatowanie</translation>
-    </message>
-    <message>
         <source>Show &amp;Ruler</source>
         <translation>Pokaż &amp;linijkę</translation>
     </message>
@@ -10621,14 +11579,6 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
     <message>
         <source>&amp;Inline Footnote</source>
         <translation>Przypis śródtekstow&amp;y</translation>
-    </message>
-    <message>
-        <source>&amp;Image From File…</source>
-        <translation>&amp;Obraz z pliku…</translation>
-    </message>
-    <message>
-        <source>Insert Image</source>
-        <translation>Wstaw obraz</translation>
     </message>
     <message>
         <source>Images (*.png *.jpg *.jpeg *.gif *.bmp *.webp)</source>
@@ -10771,20 +11721,8 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>Krótki projekt pokazujący, co %1 ma ponad zwykłe możliwości: pasek ikon, powiększenie dla każdej części, mapy myśli, obiekty i więcej</translation>
     </message>
     <message>
-        <source>Third-Party &amp;Licenses…</source>
-        <translation>&amp;Licencje stron trzecich…</translation>
-    </message>
-    <message>
-        <source>List of All Place&amp;holders…</source>
-        <translation>Lista wszystkich &amp;symboli zastępczych…</translation>
-    </message>
-    <message>
         <source>Open &amp;Plugin Folder</source>
         <translation>Otwórz folder &amp;wtyczek</translation>
-    </message>
-    <message>
-        <source>Add to &amp;Application Menu</source>
-        <translation>Dodaj do &amp;menu aplikacji</translation>
     </message>
     <message>
         <source>Add to Application Menu</source>
@@ -10823,16 +11761,8 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;O programie %1</translation>
     </message>
     <message>
-        <source>&amp;System Information…</source>
-        <translation>&amp;Informacje o systemie…</translation>
-    </message>
-    <message>
         <source>Program, versions and computer at a glance, to copy into a problem report</source>
         <translation>Program, wersje i komputer w skrócie, do skopiowania do zgłoszenia problemu</translation>
-    </message>
-    <message>
-        <source>Report a Problem…</source>
-        <translation>Zgłoś problem…</translation>
     </message>
     <message>
         <source>Opens the project&apos;s page for reports of problems and wishes in your browser</source>
@@ -10951,8 +11881,116 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
         <translation>&amp;Zamknij wszystkie panele Szybkiego podglądu</translation>
     </message>
     <message>
-        <source>Default Text &amp;Formatting…</source>
-        <translation>&amp;Domyślne formatowanie tekstu…</translation>
+        <source>Handwriting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Model change in progress</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Print Pre&amp;view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Paste With &amp;Formatting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Objects</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Left</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Move &amp;Right</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Out of the folder</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Into the item above</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Load Project Settings From File…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Project S&amp;tatistics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Writing History</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Convert &amp;Sheet to Object</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Convert to Te&amp;xt Document</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Take Snapshot With &amp;Title…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Apply Copied Formattin&amp;g</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Picture From File…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert Picture</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Third-Party &amp;Licenses</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>List of All Place&amp;holders</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add to &amp;Application Menu…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;System Information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Report a Problem</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Toolbar &amp;Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Small</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Normal</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Large</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Project &amp;Formatting Settings…</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Font, size, line spacing and indents of the text of the whole project</source>
@@ -11311,6 +12349,10 @@ Zostaw go otwartego i spróbuj ponownie po usunięciu przyczyny, zapisz jeszcze 
 %1</translation>
     </message>
     <message>
+        <source>When the program was ended (by logging out, shutting down or a command), an encrypted project could not be saved. (Its name and the reason are left out of this note, because it is a plain file.)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>When the program was ended (by logging out, shutting down or a command), the project &quot;%1&quot; could not be saved: %2</source>
         <translation>Gdy program został zakończony (przez wylogowanie, wyłączenie lub polecenie), nie udało się zapisać projektu „%1”: %2</translation>
     </message>
@@ -11543,6 +12585,10 @@ Najlepiej na innym dysku (pamięci USB, drugim dysku, w folderze kopiowanym prze
     <message>
         <source>complete</source>
         <translation>kompletna</translation>
+    </message>
+    <message>
+        <source>, encrypted</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source> (in the folder &quot;%1&quot;)</source>
@@ -11787,8 +12833,12 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
 %1</translation>
     </message>
     <message>
-        <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove from Application Menu and then Add to Application Menu again.</source>
-        <translation>Nie udało się przenieść AppImage do %1 (%2). Wpis w menu uruchamia go tam, gdzie jest; jeśli sam przeniesiesz plik, wybierz Pomoc &gt; Usuń z menu aplikacji, a potem ponownie Dodaj do menu aplikacji.</translation>
+        <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove From Application Menu and then Add to Application Menu again.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove From &amp;Application Menu</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The program&apos;s icon could not be copied, so the menu entry shows no icon.</source>
@@ -11809,10 +12859,6 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
     <message>
         <source>%1 is no longer in the application menu.</source>
         <translation>%1 nie jest już w menu aplikacji.</translation>
-    </message>
-    <message>
-        <source>Remove from &amp;Application Menu</source>
-        <translation>Usuń z menu &amp;aplikacji</translation>
     </message>
     <message>
         <source>Save</source>
@@ -11885,10 +12931,6 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
     <message>
         <source>&amp;Edit</source>
         <translation>&amp;Edycja</translation>
-    </message>
-    <message>
-        <source>&amp;Select</source>
-        <translation>&amp;Zaznacz</translation>
     </message>
     <message>
         <source>&amp;Find</source>
@@ -12051,6 +13093,10 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>&amp;Fiszkach</translation>
     </message>
     <message>
+        <source>S&amp;mall Interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>&amp;Navigate</source>
         <translation>&amp;Nawigacja</translation>
     </message>
@@ -12075,20 +13121,28 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
         <translation>&amp;Otwórz</translation>
     </message>
     <message>
-        <source>in &amp;Editor</source>
-        <translation>w &amp;edytorze</translation>
+        <source>In &amp;Editor</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>in &amp;Other Editor</source>
-        <translation>w &amp;drugim edytorze</translation>
+        <source>In &amp;Other Editor</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>in &amp;Copyholder</source>
-        <translation>w &amp;podglądzie pomocniczym</translation>
+        <source>In &amp;Copyholder</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>as &amp;Quick Reference</source>
-        <translation>jako &amp;Szybki podgląd</translation>
+        <source>As &amp;Quick Reference</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>At &amp;Selection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>With Selection as &amp;Title</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open &amp;Quick Reference</source>
@@ -12133,14 +13187,6 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
     <message>
         <source>S&amp;plit</source>
         <translation>&amp;Podziel</translation>
-    </message>
-    <message>
-        <source>at &amp;Selection</source>
-        <translation>w miejscu &amp;zaznaczenia</translation>
-    </message>
-    <message>
-        <source>with Selection as &amp;Title</source>
-        <translation>z zaznaczeniem jako &amp;tytułem</translation>
     </message>
     <message>
         <source>&amp;Merge</source>
@@ -12233,10 +13279,6 @@ Możesz to zrobić później w menu Pomoc &gt; Dodaj do menu aplikacji.</transla
     <message>
         <source>Show or hide the binder, the collections and the inspector; layouts</source>
         <translation>Pokaż lub ukryj segregator, kolekcje i inspektor; układy</translation>
-    </message>
-    <message>
-        <source>Search in &amp;Document…</source>
-        <translation>Szukaj w &amp;dokumencie…</translation>
     </message>
     <message>
         <source>Quick search (titles, synopses, text)</source>
@@ -12413,8 +13455,8 @@ Czcionki można zainstalować tutaj przez Format &gt; Czcionka &gt; Zainstaluj p
         <translation>&amp;Przywróć ikonę domyślną</translation>
     </message>
     <message>
-        <source>Icon from &amp;Text…</source>
-        <translation>Ikona z &amp;tekstu…</translation>
+        <source>Icon From &amp;Text…</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>&amp;Manage Icons…</source>
@@ -12709,6 +13751,10 @@ ale to okno nie mogło opuścić oryginału. Otwórz nowy projekt przez Plik &gt
     <message>
         <source>Saved as %1. The original stays as it was: %2</source>
         <translation>Zapisano jako %1. Oryginał pozostaje taki, jaki był: %2</translation>
+    </message>
+    <message>
+        <source>This project is encrypted, and Scrivener cannot read encrypted files. To save it in Scrivener format, turn off the encryption of the project first (File &gt; Options &gt; Encryption); a copy in Quillbinder&apos;s format stays encrypted.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Save a Copy as Scrivener Project</source>
@@ -13752,6 +14798,86 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
         <source>The profile sets another language; it takes effect when the program is started again.</source>
         <translation>Profil ustawia inny język; zacznie on obowiązywać po ponownym uruchomieniu programu.</translation>
     </message>
+    <message>
+        <source>&amp;Read Aloud</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read Aloud</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Small &amp;Interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A few round buttons and the most room for the text, for a small screen or for use without a keyboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Full</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Automatic</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Switch to the &amp;Full Interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Binder</source>
+        <translation type="unfinished">Segregator</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation type="unfinished">Notatki</translation>
+    </message>
+    <message>
+        <source>The notes of the document, in a panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The binder, in a panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record Only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Small Interface</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Menu: all the menus of the program</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style: choose a style for the paragraph</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Labels and icons of the selected documents</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stop recording</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record only: the sound is kept and its text can be written later</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record Only is off: the installed Speech Transcription add-on is too old. Update it in the Add-on Manager.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Record Only is off: it needs the add-on Speech Transcription, which is not installed. The Add-on Manager can add it.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>qb::ManageIconsDialog</name>
@@ -14023,10 +15149,6 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
     <message>
         <source>Page Set&amp;up…</source>
         <translation>&amp;Ustawienia strony…</translation>
-    </message>
-    <message>
-        <source>Print Pre&amp;view…</source>
-        <translation>&amp;Podgląd wydruku…</translation>
     </message>
     <message>
         <source>&amp;Print…</source>
@@ -14509,18 +15631,6 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
         <translation>&amp;Styl notatki</translation>
     </message>
     <message>
-        <source>&amp;Apply Note Style</source>
-        <translation>&amp;Zastosuj styl notatki</translation>
-    </message>
-    <message>
-        <source>&amp;Redefine Note Style From Selection</source>
-        <translation>&amp;Zdefiniuj styl notatki ponownie z zaznaczenia</translation>
-    </message>
-    <message>
-        <source>&amp;Delete Note Style</source>
-        <translation>&amp;Usuń styl notatki</translation>
-    </message>
-    <message>
         <source>&amp;Font</source>
         <translation>&amp;Czcionka</translation>
     </message>
@@ -14913,8 +16023,28 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
         <translation>Zdefiniuj styl notatki ponownie</translation>
     </message>
     <message>
+        <source>Print Pre&amp;view</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Redefine Note Style From Selection…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Note style to redefine from the selected note:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Delete Note Style…</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Delete Note Style</source>
         <translation>Usuń styl notatki</translation>
+    </message>
+    <message>
+        <source>Note style to delete:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Import Note Styles</source>
@@ -16137,6 +17267,10 @@ Kontynuować?</translation>
         <translation>Kopia zapasowa</translation>
     </message>
     <message>
+        <source>Encryption</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Extras</source>
         <translation>Dodatkowe</translation>
     </message>
@@ -16331,6 +17465,74 @@ Kontynuować?</translation>
     <message>
         <source>Author Information</source>
         <translation>Dane autora</translation>
+    </message>
+    <message>
+        <source>The processor cores that Speech Transcription, Translation Helper, Read Aloud and Handwriting use. Default for this computer: %1 of %2.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Default (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>CPU cores for the AI:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>One setting for every AI function. The default is three quarters of the cores (rounded down); a computer with 6 cores or fewer keeps one core free. The AI&apos;s work runs at a low priority.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Unload a model after</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>minutes unused</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>A model that is not used is unloaded after this time. Before a model loads, when more than half of the memory it needs (the computer&apos;s memory or a graphics card&apos;s) is in use, the model unused longest is unloaded first; when the new model would still bring that memory over 80 %, it is not loaded, and the message line under the inspector says why. When the system reports a shortage of memory, idle models are unloaded at once.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Memory in use:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RAM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Graphics card %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1: not known</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1: %2 of %3 in use (%4 %)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No model is loaded.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Loaded models:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>AI Models</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Handwriting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read Aloud</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Scratch Pad</source>
@@ -16913,10 +18115,6 @@ Kontynuować?</translation>
         <translation>Mały (16 px)</translation>
     </message>
     <message>
-        <source>Medium (22 px)</source>
-        <translation>Średni (22 px)</translation>
-    </message>
-    <message>
         <source>Large (32 px)</source>
         <translation>Duży (32 px)</translation>
     </message>
@@ -17043,6 +18241,22 @@ Kontynuować?</translation>
     <message>
         <source>changes</source>
         <translation>zmian</translation>
+    </message>
+    <message>
+        <source>Note: your colors %1 on %2 have a contrast of %3 : 1. Text is easier to read from 4.5 : 1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 below it too.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>more pair</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>more pairs</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Auto-Correction</source>
@@ -17399,6 +18613,10 @@ Kontynuować?</translation>
     <message>
         <source>No folder chosen: no automatic backups</source>
         <translation>Nie wybrano folderu: brak automatycznych kopii zapasowych</translation>
+    </message>
+    <message>
+        <source>Normal (22 px)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Open Backup Folder...</source>
@@ -18467,6 +19685,14 @@ Twoje ostatnie projekty, własne motywy, układy, paski narzędzi i skróty klaw
 <context>
     <name>qb::Project</name>
     <message>
+        <source>The encryption of this project&apos;s files was not finished; some files are still plain. It is finished at the next opening.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The decryption of this project&apos;s files was not finished; some files are still encrypted. It is finished at the next opening.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>This project&apos;s folder holds other project files beside &quot;%1&quot;, which was opened: %2. A sync program may have made them (a copy from another computer kept beside yours). Compare them before you go on, and open another one with File &gt; Open Project if it holds your latest work.</source>
         <translation>Folder tego projektu zawiera inne pliki projektu obok „%1”, który został otwarty: %2. Mógł je utworzyć program synchronizacji (kopia z innego komputera zachowana obok twojej). Porównaj je, zanim pójdziesz dalej, i otwórz inny przez Plik &gt; Otwórz projekt, jeśli zawiera twoją najnowszą pracę.</translation>
     </message>
@@ -18575,12 +19801,24 @@ Twoje ostatnie projekty, własne motywy, układy, paski narzędzi i skróty klaw
         <translation>Nie można utworzyć folderu w %1</translation>
     </message>
     <message>
+        <source>The project could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (named by the number of the document: the folder content/&lt;number&gt; of the project holds the document), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %1. Copy what you need back into the project. (Titles and names are left out of this note and of the names in this folder, because the project is encrypted.)
+
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>The project &quot;%1&quot; (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
 
 </source>
         <translation>Nie udało się zapisać projektu „%1” (%2). Ten folder zawiera to, czego jeszcze nie zapisano: teksty i notatki jako pliki RTF (otwierają je Word, LibreOffice i %3), tablice map myśli, zmienione obiekty (w folderze „objects”) oraz plik projektu w stanie z pamięci (segregator, tytuły i etykiety), jako %4. Skopiuj potrzebne rzeczy z powrotem do projektu.
 
 </translation>
+    </message>
+    <message>
+        <source>To put the project file back: close the project, rename the project file in the project folder (so that it is kept), copy the file %1 of this folder there and give it the old file&apos;s name. Then open the project again. (The copy&apos;s name ends in .copy so that this folder is not taken for a project.)
+
+</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>To put the project file back: close the project, rename the project file %1 in the project folder %2 (so that it is kept), copy the file %3 of this folder there and rename it to %1. Then open the project again. (The copy&apos;s name ends in .copy so that this folder is not taken for a project.)
@@ -18597,6 +19835,12 @@ Twoje ostatnie projekty, własne motywy, układy, paski narzędzi i skróty klaw
         <translation>Projekt jest w formacie Scrivener: plik %1 należy do jego kopii roboczej (%2), nie do folderu .scriv. Segregator zostanie zapisany w .scriv przy następnym udanym zapisie; nie kopiuj tego pliku ręcznie na nic.
 
 </translation>
+    </message>
+    <message>
+        <source>The project is encrypted, and so are the files of this copy (OpenPGP, to your key and the recovery key; only this note is plain): Kleopatra, Gpg4win or GnuPG decrypt them with your key.
+
+</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>This copy is complete: all %1 files were written.
@@ -18671,6 +19915,10 @@ Niezapisane:
     <message>
         <source>Cannot open %1: %2</source>
         <translation>Nie można otworzyć %1: %2</translation>
+    </message>
+    <message>
+        <source>The project file is damaged (%1).</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>The project file is damaged: its binder is nested more than %1 levels deep.</source>
@@ -20641,8 +21889,8 @@ Ctrl+kliknięcie, aby otworzyć</translation>
         <translation>Wklej i &amp;dopasuj styl</translation>
     </message>
     <message>
-        <source>Paste with &amp;Formatting</source>
-        <translation>Wklej z &amp;formatowaniem</translation>
+        <source>Paste With &amp;Formatting</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Footnote</source>
@@ -20985,20 +22233,16 @@ Ctrl+kliknięcie, aby otworzyć</translation>
         <translation>Przesuń w prawo</translation>
     </message>
     <message>
-        <source>Icons of the main toolbars:</source>
-        <translation>Ikony głównych pasków narzędzi:</translation>
+        <source>Size of all toolbars:</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Small</source>
-        <translation>Małe</translation>
+        <source>Reset</source>
+        <translation type="unfinished">Resetuj</translation>
     </message>
     <message>
-        <source>Medium</source>
-        <translation>Średnie</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Duże</translation>
+        <source>Put the standard buttons back into this toolbar</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Icons only</source>
@@ -21011,14 +22255,6 @@ Ctrl+kliknięcie, aby otworzyć</translation>
     <message>
         <source>Text under the icons</source>
         <translation>Tekst pod ikonami</translation>
-    </message>
-    <message>
-        <source>Standard Set</source>
-        <translation>Zestaw standardowy</translation>
-    </message>
-    <message>
-        <source>Put the buttons the program came with back into this toolbar</source>
-        <translation>Przywróć na ten pasek narzędzi przyciski, z którymi przyszedł program</translation>
     </message>
 </context>
 <context>
@@ -21597,6 +22833,69 @@ Albo pobrać aktualną wersję ze strony projektu.</translation>
     </message>
 </context>
 <context>
+    <name>qb::ai</name>
+    <message>
+        <source>%1 could not be removed completely.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 is not published yet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 needs about %2 GB of memory; this computer has %3 GB.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There is not enough room on the disk for %1 (%2 MB are needed).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Processor (CPU)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The graphics card &quot;%1&quot; was not found; the processor is used.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The model does not fit into the free memory of the graphics card; the processor is used.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation type="unfinished">Automatyczny</translation>
+    </message>
+    <message>
+        <source>The AI engine is not installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>An add-on has loaded a speech engine of its own (%1). Restart Quillbinder, or update that add-on, to use the AI engine.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The AI engine could not be loaded: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The installed AI engine is older than this version of Quillbinder needs. Install the engine again from the settings page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The model &quot;%1&quot; could not be loaded: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The model is not loaded.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stopped.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>qb::appmenu</name>
     <message>
         <source>The program does not run from an AppImage file.</source>
@@ -21692,6 +22991,400 @@ Albo pobrać aktualną wersję ze strony projektu.</translation>
     <message>
         <source>PDF (.pdf)</source>
         <translation>PDF (.pdf)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting</name>
+    <message>
+        <source>The handwriting engine could not be loaded: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The handwriting engine does not offer the interface this version needs.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::HandwritingController</name>
+    <message>
+        <source>Off</source>
+        <translation type="unfinished">Wyłączony</translation>
+    </message>
+    <message>
+        <source>Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inspector</source>
+        <translation type="unfinished">Inspektor</translation>
+    </message>
+    <message>
+        <source>Both</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Handwriting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Handwriting Button</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show the button for handwriting on the toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Put the text at the place shown</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Cancel: the text goes back to the strip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Handwriting: off. Tap to switch it on; press and hold for the choices.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Handwriting: %1. Tap to switch it off; press and hold for the choices.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Writing on the editor.
+The text you write is collected below.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Writing on the editor and here.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::HandwritingPage</name>
+    <message>
+        <source>no model for this language yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Theme color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Recognition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Show the handwriting button on the toolbar</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Install</source>
+        <translation type="unfinished">Zainstaluj</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation type="unfinished">Usuń</translation>
+    </message>
+    <message>
+        <source>Handwriting model:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Main language:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fallback language:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Writing</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pause before a line is read:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ink stays for:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ink fades over:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ink color:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ink Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation type="unfinished"> px</translation>
+    </message>
+    <message>
+        <source>Ink width:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Grid (in the inspector&apos;s pad)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style:</source>
+        <translation type="unfinished">Styl:</translation>
+    </message>
+    <message>
+        <source>Color:</source>
+        <translation type="unfinished">Kolor:</translation>
+    </message>
+    <message>
+        <source>Grid Color</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Line width:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opacity:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>small</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>large</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation type="unfinished">Rozmiar:</translation>
+    </message>
+    <message>
+        <source>Hand protection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ignore the resting hand while the pen writes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Right-handed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Left-handed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Writing hand:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>weak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>strong</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Strength:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pen and finger</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Without a pen, one finger writes (two fingers scroll)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The pen&apos;s side button selects text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source> s</source>
+        <translation type="unfinished"> s</translation>
+    </message>
+    <message>
+        <source>A pen counts as in use after its last touch for:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Learning your hand</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Keep corrected lines on this device</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Only lines you corrected are kept: the picture of the ink and the corrected text. They stay on this device and are never sent anywhere. While an encrypted project is open, nothing is kept (the files would be plain).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete the Kept Lines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not installed. Install it to write by hand.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The installer for handwriting models is not available in this version yet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <source>%n line(s) kept</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+            <numerusform></numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::HandwritingPanel</name>
+    <message>
+        <source>Space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a space</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Backspace</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Delete the last character</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Enter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Add a line break</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation type="unfinished">Wyczyść</translation>
+    </message>
+    <message>
+        <source>Throw away the text in the strip</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pin</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Make the text stick to the pen or finger; tap a text field to show the place</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation type="unfinished">Wstaw</translation>
+    </message>
+    <message>
+        <source>Put the text at the cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::InkCanvas</name>
+    <message>
+        <source>Handwriting is not installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The line could not be read.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::OnnxRecognizer</name>
+    <message>
+        <source>The model&apos;s output has an unexpected shape.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Handwriting is not installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The handwriting model&apos;s files could not be read.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The handwriting model&apos;s codec could not be read: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The handwriting model could not be loaded: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The line could not be read: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Handwriting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There is not enough memory to load the handwriting model.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Install Handwriting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Installed: the engine, the line model and the word lists of %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>no language</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>the engine</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>the line model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not installed yet: %1. Install it to write by hand.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::WordStrip</name>
+    <message>
+        <source>No other readings</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The text you write appears here.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -21977,10 +23670,257 @@ Nie jest otwierany stąd. Jeśli mu ufasz, otwórz go sam z menedżera plików.<
     </message>
 </context>
 <context>
+    <name>qb::readaloud</name>
+    <message>
+        <source>Female 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Female 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Female 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Male 1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Male 2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Male 3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Calm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Neutral</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Action</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Fast</source>
+        <translation type="unfinished">Szybko</translation>
+    </message>
+    <message>
+        <source>fits on %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>does not fit (needs %1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>fits in RAM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This model does not have this voice.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voice not installed yet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>This model has no style control.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The voice&apos;s reference clip cannot be read.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The installed AI engine cannot play sound; install its newest version.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>qb::readaloud::Controller</name>
+    <message>
+        <source>Play</source>
+        <translation type="unfinished">Odtwarzaj</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation type="unfinished">Zatrzymaj</translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation type="unfinished">Wstrzymaj</translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read Aloud: %1 (the marked text, or from the cursor to the end)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read Aloud: Stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Open a text to read it aloud.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voice</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation type="unfinished">Styl</translation>
+    </message>
+    <message>
+        <source>Speed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read Aloud Settings…</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>qb::readaloud::ReadAloudPage</name>
+    <message>
+        <source>no model for this language yet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Read Aloud reads the marked text (or from the cursor to the end) with a speech model on this computer. Nothing is installed until you install it here. The sound is only played, never saved.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Voice model</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Language:</source>
+        <translation type="unfinished">Język:</translation>
+    </message>
+    <message>
+        <source>Model:</source>
+        <translation type="unfinished">Model:</translation>
+    </message>
+    <message>
+        <source>Automatic: the graphics card when the model fits into its free memory, else the computer&apos;s memory and processor.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Speed:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The processor cores and the minutes a model stays loaded are set for all AI functions in File &gt; Options &gt; General &gt; AI Models.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatic (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation type="unfinished">Automatyczny</translation>
+    </message>
+    <message>
+        <source>%1: %2, %3, %4</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The engine is not installed yet: install it below, then a model.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No model is installed for this language yet: download one below.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Ready: press Play on the Read Aloud toolbar.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not measured: no model is installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Measuring the speed with a short test sentence...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Not measured yet.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Slower than real time (about %1 times slower on this device): Read Aloud makes a few sentences ahead before it plays.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Faster than real time (%1 seconds of work for one second of sound).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The speed test failed: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>qb::readaloud::Session</name>
+    <message>
+        <source>Read Aloud is busy.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The AI engine is not installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>No speech model is installed for this language.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There is no text to read.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>qb::replace</name>
     <message>
         <source>The regular expression has a mistake: %1</source>
         <translation>Wyrażenie regularne zawiera błąd: %1</translation>
+    </message>
+</context>
+<context>
+    <name>qb::smallui::SlidePanel</name>
+    <message>
+        <source>Close</source>
+        <translation type="unfinished">Zamknij</translation>
+    </message>
+    <message>
+        <source>Close this panel (Esc)</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -22311,6 +24251,13 @@ Nie jest otwierany stąd. Jeśli mu ufasz, otwórz go sam z menedżera plików.<
     <message>
         <source>The page builds its text with a script: the text comes from the page&apos;s data.</source>
         <translation>Strona buduje swój tekst skryptem: tekst pochodzi z danych strony.</translation>
+    </message>
+</context>
+<context>
+    <name>readaloud</name>
+    <message>
+        <source>Read Aloud</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
