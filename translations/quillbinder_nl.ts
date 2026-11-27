@@ -5,19 +5,19 @@
     <name>EncryptionPage</name>
     <message>
         <source>This system has no key store, so the passphrase is asked for once in each session.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit systeem heeft geen sleutelopslag, dus de wachtzin wordt eenmaal per sessie gevraagd.</translation>
     </message>
     <message>
         <source>The system&apos;s key store refused to keep the passphrase, so it is asked for once in each session.</source>
-        <translation type="unfinished"></translation>
+        <translation>De sleutelopslag van het systeem wilde de wachtzin niet bewaren, dus hij wordt eenmaal per sessie gevraagd.</translation>
     </message>
     <message>
         <source>The passphrase could not be kept in the system&apos;s key store, so it is asked for once in each session.</source>
-        <translation type="unfinished"></translation>
+        <translation>De wachtzin kon niet in de sleutelopslag van het systeem worden bewaard, dus hij wordt eenmaal per sessie gevraagd.</translation>
     </message>
     <message>
         <source>Remember the passphrase on this device</source>
-        <translation type="unfinished"></translation>
+        <translation>De wachtzin op dit apparaat onthouden</translation>
     </message>
 </context>
 <context>
@@ -32,11 +32,11 @@
     </message>
     <message>
         <source>Quillbinder asks for permission to use the microphone. Allow it, then press Record again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder vraagt toestemming om de microfoon te gebruiken. Sta dit toe en druk dan nogmaals op Opnemen.</translation>
     </message>
     <message>
         <source>The microphone is not allowed for Quillbinder. Allow it in the system&apos;s settings.</source>
-        <translation type="unfinished"></translation>
+        <translation>De microfoon is niet toegestaan voor Quillbinder. Sta hem toe in de instellingen van het systeem.</translation>
     </message>
     <message>
         <source>No microphone was found.</source>
@@ -51,23 +51,23 @@
     <name>Handwriting</name>
     <message>
         <source>Ruled lines</source>
-        <translation type="unfinished">Hulplijnen</translation>
+        <translation>Hulplijnen</translation>
     </message>
     <message>
         <source>Writing lines (baseline and midline)</source>
-        <translation type="unfinished"></translation>
+        <translation>Schrijflijnen (basislijn en middenlijn)</translation>
     </message>
     <message>
         <source>Squares</source>
-        <translation type="unfinished"></translation>
+        <translation>Ruitjes</translation>
     </message>
     <message>
         <source>Dots</source>
-        <translation type="unfinished">Stippen</translation>
+        <translation>Stippen</translation>
     </message>
     <message>
         <source>No grid</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen raster</translation>
     </message>
 </context>
 <context>
@@ -172,15 +172,15 @@
     <name>ModelMemory</name>
     <message>
         <source>the memory of the graphics card %1</source>
-        <translation type="unfinished"></translation>
+        <translation>het geheugen van de videokaart %1</translation>
     </message>
     <message>
         <source>the computer&apos;s memory</source>
-        <translation type="unfinished"></translation>
+        <translation>het geheugen van de computer</translation>
     </message>
     <message>
         <source>Not enough memory for the model &quot;%1&quot; (%2 MB): %3 is %4 % used, and the model would bring it over %5 %.</source>
-        <translation type="unfinished"></translation>
+        <translation>Niet genoeg geheugen voor het model “%1” (%2 MB): %3 is voor %4 % in gebruik en het model zou dit boven %5 % brengen.</translation>
     </message>
 </context>
 <context>
@@ -507,214 +507,214 @@ De voornamen van deze lijst zijn niet verdeeld in vrouwelijk en mannelijk.</tran
     <name>QKeychain::DeletePasswordJobPrivate</name>
     <message>
         <source>Could not open keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de sleutelopslag niet openen</translation>
     </message>
     <message>
         <source>Could not remove private key from keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de privésleutel niet uit de sleutelopslag verwijderen</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekende fout</translation>
     </message>
     <message>
         <source>Could not open wallet: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de wallet niet openen: %1; %2</translation>
     </message>
     <message>
         <source>Password entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Wachtwoordinvoer niet gevonden</translation>
     </message>
     <message>
         <source>Could not delete password</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon het wachtwoord niet verwijderen</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::Job</name>
     <message>
         <source>Both service name and key are empty</source>
-        <translation type="unfinished"></translation>
+        <translation>Zowel de servicenaam als de sleutel zijn leeg</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::JobPrivate</name>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekende fout</translation>
     </message>
     <message>
         <source>Access to keychain denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Toegang tot de sleutelhanger geweigerd</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::PlainTextStore</name>
     <message>
         <source>Could not store data in settings: access error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon geen gegevens in de instellingen opslaan: toegangsfout</translation>
     </message>
     <message>
         <source>Could not store data in settings: format error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon geen gegevens in de instellingen opslaan: opmaakfout</translation>
     </message>
     <message>
         <source>Could not delete data from settings: access error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon geen gegevens uit de instellingen verwijderen: toegangsfout</translation>
     </message>
     <message>
         <source>Could not delete data from settings: format error</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon geen gegevens uit de instellingen verwijderen: opmaakfout</translation>
     </message>
     <message>
         <source>Entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Invoer niet gevonden</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::ReadPasswordJobPrivate</name>
     <message>
         <source>Entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Invoer niet gevonden</translation>
     </message>
     <message>
         <source>Could not open keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de sleutelopslag niet openen</translation>
     </message>
     <message>
         <source>Could not retrieve private key from keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de privésleutel niet uit de sleutelopslag ophalen</translation>
     </message>
     <message>
         <source>Encrypted data is too short</source>
-        <translation type="unfinished"></translation>
+        <translation>De versleutelde gegevens zijn te kort</translation>
     </message>
     <message>
         <source>Could not create RSA decryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de RSA-ontsleutelingscipher niet maken</translation>
     </message>
     <message>
         <source>Could not decrypt AES key: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de AES-sleutel niet ontsleutelen: %1</translation>
     </message>
     <message>
         <source>Could not create AES decryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de AES-ontsleutelingscipher niet maken</translation>
     </message>
     <message>
         <source>Could not decrypt data: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de gegevens niet ontsleutelen: %1</translation>
     </message>
     <message>
         <source>Could not create decryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de ontsleutelingscipher niet maken</translation>
     </message>
     <message>
         <source>D-Bus is not running</source>
-        <translation type="unfinished"></translation>
+        <translation>D-Bus draait niet</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekende fout</translation>
     </message>
     <message>
         <source>No keychain service available</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen sleutelhangerservice beschikbaar</translation>
     </message>
     <message>
         <source>Could not open wallet: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de wallet niet openen: %1; %2</translation>
     </message>
     <message>
         <source>Access to keychain denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Toegang tot de sleutelhanger geweigerd</translation>
     </message>
     <message>
         <source>Could not determine data type: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon het gegevenstype niet bepalen: %1; %2</translation>
     </message>
     <message>
         <source>Unknown kwallet entry type &apos;%1&apos;</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekend kwallet-invoertype ‘%1’</translation>
     </message>
     <message>
         <source>Password entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Wachtwoordinvoer niet gevonden</translation>
     </message>
     <message>
         <source>Could not decrypt data</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de gegevens niet ontsleutelen</translation>
     </message>
 </context>
 <context>
     <name>QKeychain::WritePasswordJobPrivate</name>
     <message>
         <source>Could not open keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de sleutelopslag niet openen</translation>
     </message>
     <message>
         <source>Could not create private key generator</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de generator voor privésleutels niet maken</translation>
     </message>
     <message>
         <source>Could not generate new private key</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon geen nieuwe privésleutel genereren</translation>
     </message>
     <message>
         <source>Could not retrieve private key from keystore</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de privésleutel niet uit de sleutelopslag ophalen</translation>
     </message>
     <message>
         <source>Could not generate AES key</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon geen AES-sleutel genereren</translation>
     </message>
     <message>
         <source>Could not generate IV</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon geen IV genereren</translation>
     </message>
     <message>
         <source>Could not create AES encryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de AES-versleutelingscipher niet maken</translation>
     </message>
     <message>
         <source>Could not encrypt data: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de gegevens niet versleutelen: %1</translation>
     </message>
     <message>
         <source>Could not create RSA encryption cipher</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de RSA-versleutelingscipher niet maken</translation>
     </message>
     <message>
         <source>Could not encrypt AES key: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de AES-sleutel niet versleutelen: %1</translation>
     </message>
     <message>
         <source>D-Bus is not running</source>
-        <translation type="unfinished"></translation>
+        <translation>D-Bus draait niet</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekende fout</translation>
     </message>
     <message>
         <source>Could not open wallet: %1; %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kon de wallet niet openen: %1; %2</translation>
     </message>
     <message>
         <source>Encryption failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Versleuteling mislukt: %1</translation>
     </message>
     <message>
         <source>Credential size exceeds maximum size of %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>De grootte van de inloggegevens is groter dan het maximum van %1: %2</translation>
     </message>
     <message>
         <source>Credential key exceeds maximum size of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>De sleutel van de inloggegevens is groter dan het maximum van %1</translation>
     </message>
     <message>
         <source>Writing credentials failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Het schrijven van de inloggegevens is mislukt: %1</translation>
     </message>
 </context>
 <context>
@@ -887,7 +887,7 @@ De voornamen van deze lijst zijn niet verdeeld in vrouwelijk en mannelijk.</tran
     </message>
     <message>
         <source>No backup was made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen back-up gemaakt.</translation>
     </message>
     <message>
         <source>The project could not be saved first, so no backup was made: %1</source>
@@ -899,15 +899,15 @@ De voornamen van deze lijst zijn niet verdeeld in vrouwelijk en mannelijk.</tran
     </message>
     <message>
         <source>the project&apos;s keys are not named in %1</source>
-        <translation type="unfinished"></translation>
+        <translation>de sleutels van het project worden niet genoemd in %1</translation>
     </message>
     <message>
         <source>the key %1 is not in Quillbinder&apos;s key ring</source>
-        <translation type="unfinished"></translation>
+        <translation>de sleutel %1 staat niet in de sleutelring van Quillbinder</translation>
     </message>
     <message>
         <source>The backups of this project are encrypted, but no encrypted backup can be made: %1. No backup was made.</source>
-        <translation type="unfinished"></translation>
+        <translation>De back-ups van dit project zijn versleuteld, maar er kan geen versleutelde back-up worden gemaakt: %1. Er is geen back-up gemaakt.</translation>
     </message>
     <message>
         <source>%1 - working copy of %2</source>
@@ -915,19 +915,19 @@ De voornamen van deze lijst zijn niet verdeeld in vrouwelijk en mannelijk.</tran
     </message>
     <message>
         <source>it could not be encrypted: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>hij kon niet worden versleuteld: %1</translation>
     </message>
     <message>
         <source>the encrypted backup could not be decrypted again: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>de versleutelde back-up kon niet opnieuw worden ontsleuteld: %1</translation>
     </message>
     <message>
         <source>the encrypted backup, decrypted again, differs from the backup</source>
-        <translation type="unfinished"></translation>
+        <translation>de versleutelde back-up wijkt, opnieuw ontsleuteld, af van de back-up</translation>
     </message>
     <message>
         <source>the encrypted backup is not whole</source>
-        <translation type="unfinished"></translation>
+        <translation>de versleutelde back-up is niet compleet</translation>
     </message>
     <message>
         <source>Backing up &quot;%1&quot;...</source>
@@ -970,11 +970,11 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     </message>
     <message>
         <source>Decrypting &quot;%1&quot;...</source>
-        <translation type="unfinished"></translation>
+        <translation>“%1” wordt ontsleuteld...</translation>
     </message>
     <message>
         <source>%1 could not be decrypted: %2 Nothing was restored.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kon niet worden ontsleuteld: %2 Er is niets teruggezet.</translation>
     </message>
     <message>
         <source>%1 could not be read as a ZIP file (%2). If the file is whole, an archive program of your system may still unpack it.</source>
@@ -1231,7 +1231,7 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     </message>
     <message>
         <source>Cannot read %1: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan %1 niet lezen: %2</translation>
     </message>
     <message>
         <source>Full name</source>
@@ -3023,11 +3023,11 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Other…</source>
-        <translation type="unfinished">Anders…</translation>
+        <translation>Anders…</translation>
     </message>
     <message>
         <source>Other (%1 px)…</source>
-        <translation type="unfinished"></translation>
+        <translation>Anders (%1 px)…</translation>
     </message>
     <message>
         <source>%1 in px (at 100 % zoom):</source>
@@ -3063,31 +3063,31 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Choose Font…</source>
-        <translation type="unfinished"></translation>
+        <translation>Lettertype kiezen…</translation>
     </message>
     <message>
         <source>Fixed Width Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor met vaste breedte</translation>
     </message>
     <message>
         <source>Label Color in Binder</source>
-        <translation type="unfinished"></translation>
+        <translation>Labelkleur in binder</translation>
     </message>
     <message>
         <source>Label Color in Icons</source>
-        <translation type="unfinished"></translation>
+        <translation>Labelkleur in pictogrammen</translation>
     </message>
     <message>
         <source>Status Stamps</source>
-        <translation type="unfinished"></translation>
+        <translation>Statusstempels</translation>
     </message>
     <message>
         <source>Label Color in Index Cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Labelkleur op indexkaarten</translation>
     </message>
     <message>
         <source>Appearance Options…</source>
-        <translation type="unfinished"></translation>
+        <translation>Uiterlijkopties…</translation>
     </message>
     <message>
         <source>Font</source>
@@ -3882,7 +3882,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Large</source>
-        <translation type="unfinished">Groot</translation>
+        <translation>Groot</translation>
     </message>
     <message>
         <source>Main</source>
@@ -3946,7 +3946,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Handwriting (off, editor, inspector, both)</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschrift (uit, editor, inspector, beide)</translation>
     </message>
     <message>
         <source>Theme button (Light, Dark, My Look 1, My Look 2 and all themes)</source>
@@ -4260,15 +4260,15 @@ Bron: %1</translation>
     </message>
     <message>
         <source>The AI engine is not installed (or could not be loaded). Install it under File &gt; Options &gt; Speech.</source>
-        <translation type="unfinished"></translation>
+        <translation>De AI-engine is niet geïnstalleerd (of kon niet worden geladen). Installeer hem onder Bestand &gt; Opties &gt; Spraak.</translation>
     </message>
     <message>
         <source>Speech Transcription</source>
-        <translation type="unfinished">Spraaktranscriptie</translation>
+        <translation>Spraaktranscriptie</translation>
     </message>
     <message>
         <source>The model was not loaded: the memory is needed elsewhere.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het model is niet geladen: het geheugen is elders nodig.</translation>
     </message>
     <message>
         <source>The model could not be loaded onto the graphics card. Choose the processor under Options &gt; Speech &gt; Processing, or a smaller model.</source>
@@ -4280,7 +4280,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>The AI engine could not transcribe a piece.</source>
-        <translation type="unfinished"></translation>
+        <translation>De AI-engine kon een fragment niet transcriberen.</translation>
     </message>
     <message>
         <source>Small</source>
@@ -4484,55 +4484,55 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>Access to keychain denied</source>
-        <translation type="unfinished"></translation>
+        <translation>Toegang tot de sleutelhanger geweigerd</translation>
     </message>
     <message>
         <source>No keyring daemon</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen sleutelhanger-daemon</translation>
     </message>
     <message>
         <source>Already unlocked</source>
-        <translation type="unfinished"></translation>
+        <translation>Al ontgrendeld</translation>
     </message>
     <message>
         <source>No such keyring</source>
-        <translation type="unfinished"></translation>
+        <translation>Zo’n sleutelhanger bestaat niet</translation>
     </message>
     <message>
         <source>Bad arguments</source>
-        <translation type="unfinished"></translation>
+        <translation>Ongeldige argumenten</translation>
     </message>
     <message>
         <source>I/O error</source>
-        <translation type="unfinished"></translation>
+        <translation>I/O-fout</translation>
     </message>
     <message>
         <source>Cancelled</source>
-        <translation type="unfinished"></translation>
+        <translation>Geannuleerd</translation>
     </message>
     <message>
         <source>Keyring already exists</source>
-        <translation type="unfinished"></translation>
+        <translation>De sleutelhanger bestaat al</translation>
     </message>
     <message>
         <source>No match</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen overeenkomst</translation>
     </message>
     <message>
         <source>Unknown error</source>
-        <translation type="unfinished"></translation>
+        <translation>Onbekende fout</translation>
     </message>
     <message>
         <source>Entry not found</source>
-        <translation type="unfinished"></translation>
+        <translation>Invoer niet gevonden</translation>
     </message>
     <message>
         <source>No matching unlocked entry was deleted</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen overeenkomstige ontgrendelde invoer verwijderd</translation>
     </message>
     <message>
         <source> s</source>
-        <translation type="unfinished"> s</translation>
+        <translation> s</translation>
     </message>
 </context>
 <context>
@@ -4815,7 +4815,7 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het aantal processorkernen en de tijd waarna een ongebruikt model wordt vrijgegeven, worden voor alle AI-functies samen ingesteld in Bestand &gt; Opties &gt; Algemeen &gt; AI-modellen.</translation>
     </message>
     <message>
         <source>Fast</source>
@@ -4923,11 +4923,11 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>Write into the text as I speak</source>
-        <translation type="unfinished"></translation>
+        <translation>In de tekst schrijven terwijl ik spreek</translation>
     </message>
     <message>
         <source>Each piece of live speech is also inserted at the cursor of the text you are editing.</source>
-        <translation type="unfinished"></translation>
+        <translation>Elk stuk live spraak wordt ook ingevoegd bij de cursor van de tekst die je bewerkt.</translation>
     </message>
     <message>
         <source>Delete a recording once its text is written</source>
@@ -4999,19 +4999,19 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished">Automatisch</translation>
+        <translation>Automatisch</translation>
     </message>
     <message>
         <source>Processor (CPU)</source>
-        <translation type="unfinished"></translation>
+        <translation>Processor (CPU)</translation>
     </message>
     <message>
         <source>No graphics card that the AI engine can use (Vulkan) was found, or the engine is not installed; the processor computes.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen videokaart gevonden die de AI-engine kan gebruiken (Vulkan), of de engine is niet geïnstalleerd; de processor rekent.</translation>
     </message>
     <message>
         <source>Automatic takes a graphics card with enough free memory for the model, else the processor. A graphics card is usually much faster; the speed test shows how much on this computer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch kiest een videokaart met genoeg vrij geheugen voor het model, anders de processor. Een videokaart is meestal veel sneller; de snelheidstest laat zien hoeveel op deze computer.</translation>
     </message>
     <message>
         <source>Everything is written in %1.</source>
@@ -5042,11 +5042,11 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>Record &amp;Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Alleen op&amp;nemen</translation>
     </message>
     <message>
         <source>Start or stop a recording without writing its text (the text can be written later with Transcribe)</source>
-        <translation type="unfinished"></translation>
+        <translation>Een opname starten of stoppen zonder de tekst te schrijven (de tekst kan later worden geschreven met Transcriberen)</translation>
     </message>
     <message>
         <source>Show &amp;Transcriptions</source>
@@ -5090,7 +5090,7 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>This version of the add-on needs Quillbinder 0.99.0 or later.</source>
-        <translation type="unfinished"></translation>
+        <translation>Deze versie van de add-on heeft Quillbinder 0.99.0 of nieuwer nodig.</translation>
     </message>
     <message>
         <source>Cannot load the speech engine: %1</source>
@@ -5585,11 +5585,11 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>Put the marked part of the text (all of it when nothing is marked) into the text you are editing, at the cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>De gemarkeerde tekst (alles als niets is gemarkeerd) bij de cursor invoegen in de tekst die je bewerkt</translation>
     </message>
     <message>
         <source>Insert at Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Invoegen bij cursor</translation>
     </message>
     <message>
         <source>Move the transcription to the trash</source>
@@ -5665,11 +5665,11 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>Open a text in the editor first, and click into it where the transcription should go.</source>
-        <translation type="unfinished"></translation>
+        <translation>Open eerst een tekst in de editor en klik erin op de plek waar de transcriptie moet komen.</translation>
     </message>
     <message>
         <source>The text was inserted at the cursor.</source>
-        <translation type="unfinished"></translation>
+        <translation>De tekst is bij de cursor ingevoegd.</translation>
     </message>
     <message>
         <source>No speech model yet: File &gt; Options &gt; Speech.</source>
@@ -5954,214 +5954,214 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     <name>qb::AiDownloads</name>
     <message>
         <source>Handwriting Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschrift-engine</translation>
     </message>
     <message>
         <source>AI Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>AI-engine</translation>
     </message>
     <message>
         <source>%1 is not a package of the %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 is geen pakket van de %2.</translation>
     </message>
     <message>
         <source>Another download is running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er loopt al een andere download.</translation>
     </message>
     <message>
         <source>The model %1 is not in the catalog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het model %1 staat niet in de catalogus.</translation>
     </message>
     <message>
         <source>%1 could not be made.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kon niet worden gemaakt.</translation>
     </message>
     <message>
         <source>The download was cancelled.</source>
-        <translation type="unfinished"></translation>
+        <translation>De download is geannuleerd.</translation>
     </message>
     <message>
         <source>%1 could not be written.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kon niet worden geschreven.</translation>
     </message>
     <message>
         <source>%1 is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 is geïnstalleerd.</translation>
     </message>
     <message>
         <source>This copy of %1 cannot make a secure connection, so it cannot download. Download the current AppImage once from the project&apos;s page.</source>
-        <translation type="unfinished"></translation>
+        <translation>Deze kopie van %1 kan geen beveiligde verbinding maken en dus niet downloaden. Download de huidige AppImage eenmalig van de pagina van het project.</translation>
     </message>
     <message>
         <source>The download failed: the file could not be written, or is larger than announced.</source>
-        <translation type="unfinished"></translation>
+        <translation>De download is mislukt: het bestand kon niet worden geschreven of is groter dan aangekondigd.</translation>
     </message>
     <message>
         <source>The download failed (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>De download is mislukt (%1).</translation>
     </message>
     <message>
         <source>The download is incomplete (%1 of %2 bytes).</source>
-        <translation type="unfinished"></translation>
+        <translation>De download is onvolledig (%1 van %2 bytes).</translation>
     </message>
     <message>
         <source>The downloaded file is not the one the catalog names (its SHA-256 differs), so it was not kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het gedownloade bestand is niet het bestand dat de catalogus noemt (de SHA-256 wijkt af), dus het is niet bewaard.</translation>
     </message>
     <message>
         <source>The download is incomplete.</source>
-        <translation type="unfinished"></translation>
+        <translation>De download is onvolledig.</translation>
     </message>
     <message>
         <source>The joined file is not the one the catalog names (its SHA-256 differs), so it was not kept.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het samengevoegde bestand is niet het bestand dat de catalogus noemt (de SHA-256 wijkt af), dus het is niet bewaard.</translation>
     </message>
 </context>
 <context>
     <name>qb::AiInstallPanel</name>
     <message>
         <source>many</source>
-        <translation type="unfinished"></translation>
+        <translation>veel</translation>
     </message>
     <message>
         <source>Install the Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>De engine installeren</translation>
     </message>
     <message>
         <source>Downloads the engine of this version from the project&apos;s release page and installs it</source>
-        <translation type="unfinished"></translation>
+        <translation>Downloadt de engine van deze versie van de releasepagina van het project en installeert hem</translation>
     </message>
     <message>
         <source>Install from File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Installeren uit bestand...</translation>
     </message>
     <message>
         <source>Installs the engine from a package file (for a computer without a connection)</source>
-        <translation type="unfinished"></translation>
+        <translation>Installeert de engine uit een pakketbestand (voor een computer zonder verbinding)</translation>
     </message>
     <message>
         <source>Model</source>
-        <translation type="unfinished"></translation>
+        <translation>Model</translation>
     </message>
     <message>
         <source>Languages</source>
-        <translation type="unfinished">Talen</translation>
+        <translation>Talen</translation>
     </message>
     <message>
         <source>Download</source>
-        <translation type="unfinished"></translation>
+        <translation>Downloaden</translation>
     </message>
     <message>
         <source>Memory</source>
-        <translation type="unfinished"></translation>
+        <translation>Geheugen</translation>
     </message>
     <message>
         <source>License</source>
-        <translation type="unfinished"></translation>
+        <translation>Licentie</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished">Staat</translation>
+        <translation>Status</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished">Verwijderen</translation>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Annuleren</translation>
+        <translation>Annuleren</translation>
     </message>
     <message>
         <source>The handwriting engine is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>De handschrift-engine is niet geïnstalleerd.</translation>
     </message>
     <message>
         <source>The AI engine is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>De AI-engine is niet geïnstalleerd.</translation>
     </message>
     <message>
         <source>The installed engine %1 was made for another version of Quillbinder: install it again.</source>
-        <translation type="unfinished"></translation>
+        <translation>De geïnstalleerde engine %1 is gemaakt voor een andere versie van Quillbinder: installeer hem opnieuw.</translation>
     </message>
     <message>
         <source>The engine %1 is switched off (Help &gt; Add-ons and Updates &gt; Manage Add-ons).</source>
-        <translation type="unfinished"></translation>
+        <translation>De engine %1 is uitgeschakeld (Help &gt; Add-ons en updates &gt; Add-onbeheer).</translation>
     </message>
     <message>
         <source>The handwriting engine %1 is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>De handschrift-engine %1 is geïnstalleerd.</translation>
     </message>
     <message>
         <source>The AI engine %1 is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>De AI-engine %1 is geïnstalleerd.</translation>
     </message>
     <message>
         <source>The new engine is used after Quillbinder is started again.</source>
-        <translation type="unfinished"></translation>
+        <translation>De nieuwe engine wordt gebruikt nadat Quillbinder opnieuw is gestart.</translation>
     </message>
     <message>
         <source>Install Again</source>
-        <translation type="unfinished"></translation>
+        <translation>Opnieuw installeren</translation>
     </message>
     <message>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation>Geïnstalleerd</translation>
     </message>
     <message>
         <source>Not published yet</source>
-        <translation type="unfinished"></translation>
+        <translation>Nog niet gepubliceerd</translation>
     </message>
     <message>
         <source>Not installed</source>
-        <translation type="unfinished">Niet geïnstalleerd</translation>
+        <translation>Niet geïnstalleerd</translation>
     </message>
     <message>
         <source>The catalog has no models for this function yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>De catalogus heeft nog geen modellen voor deze functie.</translation>
     </message>
     <message>
         <source>License: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Licentie: %1</translation>
     </message>
     <message>
         <source>Downloading the engine...</source>
-        <translation type="unfinished"></translation>
+        <translation>De engine wordt gedownload...</translation>
     </message>
     <message>
         <source>Downloading %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 wordt gedownload...</translation>
     </message>
     <message>
         <source>Install the Engine from a File</source>
-        <translation type="unfinished"></translation>
+        <translation>De engine uit een bestand installeren</translation>
     </message>
     <message>
         <source>Quillbinder packages (*.qbpkg)</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder-pakketten (*.qbpkg)</translation>
     </message>
     <message>
         <source>This package is not signed by the Quillbinder project, so it cannot be told whether it is the project&apos;s own. Install it only when you trust where it comes from.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit pakket is niet ondertekend door het Quillbinder-project, dus er is niet te zien of het van het project zelf komt. Installeer het alleen als je de herkomst vertrouwt.</translation>
     </message>
     <message>
         <source>Install Anyway</source>
-        <translation type="unfinished"></translation>
+        <translation>Toch installeren</translation>
     </message>
     <message>
         <source>The engine was not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>De engine is niet geïnstalleerd.</translation>
     </message>
     <message>
         <source>The engine is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>De engine is geïnstalleerd.</translation>
     </message>
     <message>
         <source>%1 may be used for non-commercial purposes only (%2). Download it?</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 mag alleen voor niet-commerciële doeleinden worden gebruikt (%2). Downloaden?</translation>
     </message>
     <message>
         <source>%1 is deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 is verwijderd.</translation>
     </message>
 </context>
 <context>
@@ -7125,11 +7125,11 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>Cannot write %1: %2</source>
-        <translation type="unfinished">Kan %1 niet schrijven: %2</translation>
+        <translation>Kan %1 niet schrijven: %2</translation>
     </message>
     <message>
         <source>Compile cancelled. No file was made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Samenstellen geannuleerd. Er is geen bestand gemaakt.</translation>
     </message>
     <message>
         <source>Compile to</source>
@@ -7196,15 +7196,15 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     <name>qb::CompileProgress</name>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Annuleren</translation>
+        <translation>Annuleren</translation>
     </message>
     <message>
         <source>%1 of %2</source>
-        <translation type="unfinished">%1 van %2</translation>
+        <translation>%1 van %2</translation>
     </message>
     <message>
         <source>Cancelling...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bezig met annuleren...</translation>
     </message>
 </context>
 <context>
@@ -8115,191 +8115,191 @@ Pagina&apos;s (250 woorden): %5</translation>
     <name>qb::EncryptionPage</name>
     <message>
         <source>Encryption locks the files of a project and its backups with your key, in the OpenPGP format that Kleopatra, Gpg4win and GnuPG open without Quillbinder (see the manual&apos;s page on opening your files without Quillbinder).</source>
-        <translation type="unfinished"></translation>
+        <translation>Versleuteling vergrendelt de bestanden van een project en zijn back-ups met je sleutel, in het OpenPGP-formaat dat Kleopatra, Gpg4win en GnuPG ook zonder Quillbinder openen (zie de pagina van de handleiding over je bestanden openen zonder Quillbinder).</translation>
     </message>
     <message>
         <source>Keys on this device</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleutels op dit apparaat</translation>
     </message>
     <message>
         <source>Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleutel</translation>
     </message>
     <message>
         <source>Fingerprint</source>
-        <translation type="unfinished"></translation>
+        <translation>Vingerafdruk</translation>
     </message>
     <message>
         <source>Here</source>
-        <translation type="unfinished"></translation>
+        <translation>Hier</translation>
     </message>
     <message>
         <source>Create Keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleutels maken...</translation>
     </message>
     <message>
         <source>Import Keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleutels importeren...</translation>
     </message>
     <message>
         <source>Import a Key File...</source>
-        <translation type="unfinished"></translation>
+        <translation>Een sleutelbestand importeren...</translation>
     </message>
     <message>
         <source>Export Keys...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleutels exporteren...</translation>
     </message>
     <message>
         <source>Forget the passphrase on this device</source>
-        <translation type="unfinished"></translation>
+        <translation>De wachtzin op dit apparaat vergeten</translation>
     </message>
     <message>
         <source>The open project</source>
-        <translation type="unfinished"></translation>
+        <translation>Het geopende project</translation>
     </message>
     <message>
         <source>Encrypted backups</source>
-        <translation type="unfinished"></translation>
+        <translation>Versleutelde back-ups</translation>
     </message>
     <message>
         <source>Encrypted project</source>
-        <translation type="unfinished"></translation>
+        <translation>Versleuteld project</translation>
     </message>
     <message>
         <source>This place is not allowed</source>
-        <translation type="unfinished"></translation>
+        <translation>Deze plek is niet toegestaan</translation>
     </message>
     <message>
         <source>Other key</source>
-        <translation type="unfinished"></translation>
+        <translation>Andere sleutel</translation>
     </message>
     <message>
         <source>My key</source>
-        <translation type="unfinished"></translation>
+        <translation>Mijn sleutel</translation>
     </message>
     <message>
         <source>Recovery key</source>
-        <translation type="unfinished"></translation>
+        <translation>Herstelsleutel</translation>
     </message>
     <message>
         <source>secret part, unlocked</source>
-        <translation type="unfinished"></translation>
+        <translation>geheim deel, ontgrendeld</translation>
     </message>
     <message>
         <source>secret part, locked</source>
-        <translation type="unfinished"></translation>
+        <translation>geheim deel, vergrendeld</translation>
     </message>
     <message>
         <source>public part only</source>
-        <translation type="unfinished"></translation>
+        <translation>alleen openbaar deel</translation>
     </message>
     <message>
         <source>This device has no keys yet. Create Keys makes your key and a recovery key; on another device, use Import Keys with the key folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit apparaat heeft nog geen sleutels. Sleutels maken maakt je sleutel en een herstelsleutel; gebruik op een ander apparaat Sleutels importeren met de sleutelmap.</translation>
     </message>
     <message>
         <source>No project is open: the two switches belong to the open project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen project geopend: de twee schakelaars horen bij het geopende project.</translation>
     </message>
     <message>
         <source>Create or import keys first: the switches need your key and the recovery key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Maak of importeer eerst sleutels: de schakelaars hebben je sleutel en de herstelsleutel nodig.</translation>
     </message>
     <message>
         <source>A project in Scrivener&apos;s format cannot be encrypted: Scrivener could not open its files. Its backups can be encrypted; that switch belongs to each computer, so switch it on on every computer that makes backups of the project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Een project in het formaat van Scrivener kan niet worden versleuteld: Scrivener kon de bestanden niet openen. De back-ups ervan kunnen wel worden versleuteld; die schakelaar hoort bij elke computer, dus zet hem aan op elke computer die back-ups van het project maakt.</translation>
     </message>
     <message>
         <source>The switch &quot;%1&quot; could not be changed.</source>
-        <translation type="unfinished"></translation>
+        <translation>De schakelaar “%1” kon niet worden gewijzigd.</translation>
     </message>
     <message>
         <source>Choose the key folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Kies de sleutelmap</translation>
     </message>
     <message>
         <source>Import Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleutels importeren</translation>
     </message>
     <message>
         <source>Type the passphrase of your key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ de wachtzin van je sleutel.</translation>
     </message>
     <message>
         <source>Your key is on this device now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Je sleutel staat nu op dit apparaat.</translation>
     </message>
     <message>
         <source>Your key is on this device for this session only: it could not be saved (%1), so it will be gone at the next start. Check the free space and the rights of the program&apos;s data folder, then import it again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Je sleutel staat alleen voor deze sessie op dit apparaat: hij kon niet worden opgeslagen (%1) en is bij de volgende start weg. Controleer de vrije ruimte en de rechten van de gegevensmap van het programma en importeer hem opnieuw.</translation>
     </message>
     <message>
         <source>Choose a key file</source>
-        <translation type="unfinished"></translation>
+        <translation>Kies een sleutelbestand</translation>
     </message>
     <message>
         <source>Key files (*.asc *.gpg *.pgp);;All files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleutelbestanden (*.asc *.gpg *.pgp);;Alle bestanden (*)</translation>
     </message>
     <message>
         <source>Import a Key File</source>
-        <translation type="unfinished"></translation>
+        <translation>Een sleutelbestand importeren</translation>
     </message>
     <message>
         <source>The file could not be read.</source>
-        <translation type="unfinished">Het bestand kon niet worden gelezen.</translation>
+        <translation>Het bestand kon niet worden gelezen.</translation>
     </message>
     <message>
         <source>Type the passphrase of this key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ de wachtzin van deze sleutel.</translation>
     </message>
     <message>
         <source>The key is on this device as your key.</source>
-        <translation type="unfinished"></translation>
+        <translation>De sleutel staat op dit apparaat als je sleutel.</translation>
     </message>
     <message>
         <source>There is no recovery key yet: import its public file (recovery-key-public.asc) with Import a Key File, or make a new pair with Create Keys.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is nog geen herstelsleutel: importeer het openbare bestand ervan (recovery-key-public.asc) met Een sleutelbestand importeren, of maak een nieuw paar met Sleutels maken.</translation>
     </message>
     <message>
         <source>The key is on this device as the recovery key.</source>
-        <translation type="unfinished"></translation>
+        <translation>De sleutel staat op dit apparaat als herstelsleutel.</translation>
     </message>
     <message>
         <source>The public key is on this device. It is not your key and not the recovery key.</source>
-        <translation type="unfinished"></translation>
+        <translation>De openbare sleutel staat op dit apparaat. Het is niet je sleutel en niet de herstelsleutel.</translation>
     </message>
     <message>
         <source>The key is on this device for this session only: it could not be saved (%1), so it will be gone at the next start. Check the free space and the rights of the program&apos;s data folder, then import it again.</source>
-        <translation type="unfinished"></translation>
+        <translation>De sleutel staat alleen voor deze sessie op dit apparaat: hij kon niet worden opgeslagen (%1) en is bij de volgende start weg. Controleer de vrije ruimte en de rechten van de gegevensmap van het programma en importeer hem opnieuw.</translation>
     </message>
     <message>
         <source>Where to write the keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Waar de sleutels naartoe moeten</translation>
     </message>
     <message>
         <source>Export Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleutels exporteren</translation>
     </message>
     <message>
         <source>The keys are in the folder %1. It holds your key (locked by your passphrase), the public parts and a README.txt. The recovery key&apos;s secret part is only in the folder that Create Keys made.</source>
-        <translation type="unfinished"></translation>
+        <translation>De sleutels staan in de map %1. Ze bevat je sleutel (vergrendeld met je wachtzin), de openbare delen en een README.txt. Het geheime deel van de herstelsleutel staat alleen in de map die Sleutels maken heeft gemaakt.</translation>
     </message>
     <message>
         <source>Forget the passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>De wachtzin vergeten</translation>
     </message>
     <message>
         <source>Quillbinder forgets the passphrase on this device and locks your key. It will ask for the passphrase again when it needs it. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder vergeet de wachtzin op dit apparaat en vergrendelt je sleutel. Hij vraagt opnieuw om de wachtzin wanneer hij die nodig heeft. Doorgaan?</translation>
     </message>
     <message>
         <source>The passphrase is forgotten on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>De wachtzin is op dit apparaat vergeten.</translation>
     </message>
     <message>
         <source>The system&apos;s key store would not remove the passphrase: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>De sleutelopslag van het systeem wilde de wachtzin niet verwijderen: %1</translation>
     </message>
 </context>
 <context>
@@ -8598,7 +8598,7 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     </message>
     <message>
         <source>Help &gt; Add to Application Menu or Remove From Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Help &gt; Aan toepassingsmenu toevoegen of Uit toepassingsmenu verwijderen wijzigt dit later. Als je de AppImage zelf verplaatst, voeg hem dan opnieuw aan het menu toe.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -9546,7 +9546,7 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     <name>qb::IconFromTextDialog</name>
     <message>
         <source>Icon From Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Pictogram uit tekst</translation>
     </message>
     <message>
         <source>Up to 3 characters, e.g. PR, Ch1, A</source>
@@ -10143,19 +10143,19 @@ De tekst van de momentopname &quot;%2&quot; is nu de tekst van het document; hij
     </message>
     <message>
         <source>Synopsis and Notes</source>
-        <translation type="unfinished"></translation>
+        <translation>Samenvatting en notities</translation>
     </message>
     <message>
         <source>Comments and Footnotes</source>
-        <translation type="unfinished">Opmerkingen en voetnoten</translation>
+        <translation>Opmerkingen en voetnoten</translation>
     </message>
     <message>
         <source>Mind Map</source>
-        <translation type="unfinished">Mindmap</translation>
+        <translation>Mindmap</translation>
     </message>
     <message>
         <source>Objects</source>
-        <translation type="unfinished">Objecten</translation>
+        <translation>Objecten</translation>
     </message>
     <message>
         <source>Synopsis and notes</source>
@@ -10238,159 +10238,159 @@ De tekst van de momentopname &quot;%2&quot; is nu de tekst van het document; hij
     <name>qb::KeyWizard</name>
     <message>
         <source>Create Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleutels maken</translation>
     </message>
     <message>
         <source>Make Keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Sleutels aanmaken</translation>
     </message>
     <message>
         <source>Your passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Je wachtzin</translation>
     </message>
     <message>
         <source>The passphrase locks your key. Quillbinder can remember it on this device, so you type it once on each other device.</source>
-        <translation type="unfinished"></translation>
+        <translation>De wachtzin vergrendelt je sleutel. Quillbinder kan hem op dit apparaat onthouden, zodat je hem eenmaal op elk ander apparaat typt.</translation>
     </message>
     <message>
         <source>Use these six random words (the safest choice and easy to type):</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruik deze zes willekeurige woorden (de veiligste keuze en makkelijk te typen):</translation>
     </message>
     <message>
         <source>Other words</source>
-        <translation type="unfinished">Andere woorden</translation>
+        <translation>Andere woorden</translation>
     </message>
     <message>
         <source>Use a passphrase of my own:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gebruik een eigen wachtzin:</translation>
     </message>
     <message>
         <source>Passphrase:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wachtzin:</translation>
     </message>
     <message>
         <source>Once more:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nogmaals:</translation>
     </message>
     <message>
         <source>Remember the passphrase on this device (in the system&apos;s key store)</source>
-        <translation type="unfinished"></translation>
+        <translation>De wachtzin op dit apparaat onthouden (in de sleutelopslag van het systeem)</translation>
     </message>
     <message>
         <source>This device already has keys. New keys cannot open files that were locked for the old ones; keep the old key folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit apparaat heeft al sleutels. Nieuwe sleutels kunnen geen bestanden openen die voor de oude zijn vergrendeld; bewaar de oude sleutelmap.</translation>
     </message>
     <message>
         <source>The two entries are not the same.</source>
-        <translation type="unfinished"></translation>
+        <translation>De twee invoeren zijn niet gelijk.</translation>
     </message>
     <message>
         <source>This passphrase is accepted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Deze wachtzin wordt geaccepteerd.</translation>
     </message>
     <message>
         <source>Where to keep the keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Waar de sleutels worden bewaard</translation>
     </message>
     <message>
         <source>Quillbinder writes the folder &quot;%1&quot; there. A USB stick is best; project, backup and sync folders are refused.</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder schrijft daar de map “%1”. Een USB-stick is het best; project-, back-up- en synchronisatiemappen worden geweigerd.</translation>
     </message>
     <message>
         <source>Choose...</source>
-        <translation type="unfinished">Kiezen...</translation>
+        <translation>Kiezen...</translation>
     </message>
     <message>
         <source>When you press Next, your key and the recovery key are made. This takes a few seconds.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wanneer je op Volgende drukt, worden je sleutel en de herstelsleutel gemaakt. Dit duurt een paar seconden.</translation>
     </message>
     <message>
         <source>Folder for the keys</source>
-        <translation type="unfinished"></translation>
+        <translation>Map voor de sleutels</translation>
     </message>
     <message>
         <source>The keys could not be made.</source>
-        <translation type="unfinished"></translation>
+        <translation>De sleutels konden niet worden gemaakt.</translation>
     </message>
     <message>
         <source>The recovery passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>De herstelwachtzin</translation>
     </message>
     <message>
         <source>Write these six words on paper now. They are shown only this once and are saved nowhere, not even in the key folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schrijf deze zes woorden nu op papier. Ze worden maar één keer getoond en nergens opgeslagen, ook niet in de sleutelmap.</translation>
     </message>
     <message>
         <source>The recovery key opens your files if you lose your own key or forget its passphrase. Keep the paper in another place than the USB stick: the stick alone or the paper alone opens nothing. If both are lost, your text is gone for good.</source>
-        <translation type="unfinished"></translation>
+        <translation>De herstelsleutel opent je bestanden als je je eigen sleutel kwijtraakt of de wachtzin ervan vergeet. Bewaar het papier op een andere plek dan de USB-stick: de stick alleen of het papier alleen opent niets. Als beide kwijt zijn, is je tekst voorgoed weg.</translation>
     </message>
     <message>
         <source>I have written the six words on paper</source>
-        <translation type="unfinished"></translation>
+        <translation>Ik heb de zes woorden op papier geschreven</translation>
     </message>
     <message>
         <source>The check</source>
-        <translation type="unfinished"></translation>
+        <translation>De controle</translation>
     </message>
     <message>
         <source>Type two of the recovery words from your paper. Quillbinder reads the written files back and opens a test file with each key.</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ twee van de herstelwoorden van je papier. Quillbinder leest de geschreven bestanden terug en opent met elke sleutel een testbestand.</translation>
     </message>
     <message>
         <source>Word %1:</source>
-        <translation type="unfinished"></translation>
+        <translation>Woord %1:</translation>
     </message>
     <message>
         <source>The key files were read back.</source>
-        <translation type="unfinished"></translation>
+        <translation>De sleutelbestanden zijn teruggelezen.</translation>
     </message>
     <message>
         <source>README.txt is in the folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>README.txt staat in de map.</translation>
     </message>
     <message>
         <source>A test file opens with your key and your passphrase.</source>
-        <translation type="unfinished"></translation>
+        <translation>Een testbestand opent met je sleutel en je wachtzin.</translation>
     </message>
     <message>
         <source>A test file opens with the recovery key and the recovery passphrase.</source>
-        <translation type="unfinished"></translation>
+        <translation>Een testbestand opent met de herstelsleutel en de herstelwachtzin.</translation>
     </message>
     <message>
         <source>The keys could not be put on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>De sleutels konden niet op dit apparaat worden gezet.</translation>
     </message>
     <message>
         <source>The keys could not be saved on this device (%1). Nothing was changed; check the free space and the rights of the program&apos;s data folder, and try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>De sleutels konden niet op dit apparaat worden opgeslagen (%1). Er is niets gewijzigd; controleer de vrije ruimte en de rechten van de gegevensmap van het programma en probeer het opnieuw.</translation>
     </message>
     <message>
         <source>A second copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Een tweede kopie</translation>
     </message>
     <message>
         <source>Your keys are on this device and in the folder. Keep a second copy of the folder at another place, for example on a second USB stick. You can skip this.</source>
-        <translation type="unfinished"></translation>
+        <translation>Je sleutels staan op dit apparaat en in de map. Bewaar een tweede kopie van de map op een andere plek, bijvoorbeeld op een tweede USB-stick. Je kunt dit overslaan.</translation>
     </message>
     <message>
         <source>Copy the folder here</source>
-        <translation type="unfinished"></translation>
+        <translation>De map hierheen kopiëren</translation>
     </message>
     <message>
         <source>Place for the second copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Plek voor de tweede kopie</translation>
     </message>
     <message>
         <source>This is the place of the first copy. Choose another place.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit is de plek van de eerste kopie. Kies een andere plek.</translation>
     </message>
     <message>
         <source>The second copy is made and was checked: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>De tweede kopie is gemaakt en gecontroleerd: %1</translation>
     </message>
     <message>
         <source>The second copy was made, but the check failed. Make another one.</source>
-        <translation type="unfinished"></translation>
+        <translation>De tweede kopie is gemaakt, maar de controle is mislukt. Maak een nieuwe.</translation>
     </message>
 </context>
 <context>
@@ -11853,115 +11853,115 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschrift</translation>
     </message>
     <message>
         <source>Model change in progress</source>
-        <translation type="unfinished"></translation>
+        <translation>Modelwissel bezig</translation>
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>Afdruk&amp;voorbeeld</translation>
     </message>
     <message>
         <source>Paste With &amp;Formatting</source>
-        <translation type="unfinished"></translation>
+        <translation>Plakken &amp;met opmaak</translation>
     </message>
     <message>
         <source>&amp;Objects</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Objecten</translation>
     </message>
     <message>
         <source>Move &amp;Left</source>
-        <translation type="unfinished"></translation>
+        <translation>Naar &amp;links</translation>
     </message>
     <message>
         <source>Move &amp;Right</source>
-        <translation type="unfinished"></translation>
+        <translation>Naar &amp;rechts</translation>
     </message>
     <message>
         <source>Out of the folder</source>
-        <translation type="unfinished"></translation>
+        <translation>Uit de map</translation>
     </message>
     <message>
         <source>Into the item above</source>
-        <translation type="unfinished"></translation>
+        <translation>In het item erboven</translation>
     </message>
     <message>
         <source>&amp;Load Project Settings From File…</source>
-        <translation type="unfinished"></translation>
+        <translation>Projectinstellingen &amp;laden uit bestand…</translation>
     </message>
     <message>
         <source>Project S&amp;tatistics</source>
-        <translation type="unfinished"></translation>
+        <translation>Project&amp;statistieken</translation>
     </message>
     <message>
         <source>&amp;Writing History</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Schrijfgeschiedenis</translation>
     </message>
     <message>
         <source>Convert &amp;Sheet to Object</source>
-        <translation type="unfinished"></translation>
+        <translation>Blad omzetten naar &amp;object</translation>
     </message>
     <message>
         <source>Convert to Te&amp;xt Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Omzetten naar &amp;tekstdocument</translation>
     </message>
     <message>
         <source>Take Snapshot With &amp;Title…</source>
-        <translation type="unfinished"></translation>
+        <translation>Momentopname nemen met &amp;titel…</translation>
     </message>
     <message>
         <source>Apply Copied Formattin&amp;g</source>
-        <translation type="unfinished"></translation>
+        <translation>Gekopieerde opmaak to&amp;epassen</translation>
     </message>
     <message>
         <source>&amp;Picture From File…</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Afbeelding uit bestand…</translation>
     </message>
     <message>
         <source>Insert Picture</source>
-        <translation type="unfinished"></translation>
+        <translation>Afbeelding invoegen</translation>
     </message>
     <message>
         <source>Third-Party &amp;Licenses</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Licenties van derden</translation>
     </message>
     <message>
         <source>List of All Place&amp;holders</source>
-        <translation type="unfinished"></translation>
+        <translation>Lijst van alle &amp;plaatsvervangers</translation>
     </message>
     <message>
         <source>Add to &amp;Application Menu…</source>
-        <translation type="unfinished"></translation>
+        <translation>Aan &amp;toepassingsmenu toevoegen…</translation>
     </message>
     <message>
         <source>&amp;System Information</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Systeeminformatie</translation>
     </message>
     <message>
         <source>Report a Problem</source>
-        <translation type="unfinished"></translation>
+        <translation>Een probleem melden</translation>
     </message>
     <message>
         <source>Toolbar &amp;Size</source>
-        <translation type="unfinished"></translation>
+        <translation>Werkbalk&amp;grootte</translation>
     </message>
     <message>
         <source>&amp;Small</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Klein</translation>
     </message>
     <message>
         <source>&amp;Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Normaal</translation>
     </message>
     <message>
         <source>&amp;Large</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Groot</translation>
     </message>
     <message>
         <source>Project &amp;Formatting Settings…</source>
-        <translation type="unfinished"></translation>
+        <translation>Project&amp;opmaakinstellingen…</translation>
     </message>
     <message>
         <source>Font, size, line spacing and indents of the text of the whole project</source>
@@ -12316,7 +12316,7 @@ Houd het open en probeer het opnieuw nadat de oorzaak is verholpen, sla de tekst
     </message>
     <message>
         <source>When the program was ended (by logging out, shutting down or a command), an encrypted project could not be saved. (Its name and the reason are left out of this note, because it is a plain file.)</source>
-        <translation type="unfinished"></translation>
+        <translation>Toen het programma werd beëindigd (door uitloggen, afsluiten of een opdracht), kon een versleuteld project niet worden opgeslagen. (De naam en de reden ontbreken in dit bericht, omdat het een gewoon bestand is.)</translation>
     </message>
     <message>
         <source>When the program was ended (by logging out, shutting down or a command), the project &quot;%1&quot; could not be saved: %2</source>
@@ -12552,7 +12552,7 @@ Het best op een andere schijf (een USB-stick, een tweede schijf, een map die je 
     </message>
     <message>
         <source>, encrypted</source>
-        <translation type="unfinished"></translation>
+        <translation>, versleuteld</translation>
     </message>
     <message>
         <source> (in the folder &quot;%1&quot;)</source>
@@ -12791,11 +12791,11 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove From Application Menu and then Add to Application Menu again.</source>
-        <translation type="unfinished"></translation>
+        <translation>De AppImage kon niet naar %1 worden verplaatst (%2). De menu-invoer start hem waar hij staat; als je het bestand zelf verplaatst, kies dan Help &gt; Uit toepassingsmenu verwijderen en daarna opnieuw Aan toepassingsmenu toevoegen.</translation>
     </message>
     <message>
         <source>Remove From &amp;Application Menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Uit &amp;toepassingsmenu verwijderen</translation>
     </message>
     <message>
         <source>The program&apos;s icon could not be copied, so the menu entry shows no icon.</source>
@@ -13051,7 +13051,7 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>S&amp;mall Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>K&amp;leine interface</translation>
     </message>
     <message>
         <source>&amp;Navigate</source>
@@ -13079,27 +13079,27 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>In &amp;Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>In &amp;editor</translation>
     </message>
     <message>
         <source>In &amp;Other Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>In &amp;andere editor</translation>
     </message>
     <message>
         <source>In &amp;Copyholder</source>
-        <translation type="unfinished"></translation>
+        <translation>In &amp;kopijhouder</translation>
     </message>
     <message>
         <source>As &amp;Quick Reference</source>
-        <translation type="unfinished"></translation>
+        <translation>Als &amp;snelle naslag</translation>
     </message>
     <message>
         <source>At &amp;Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Bij &amp;selectie</translation>
     </message>
     <message>
         <source>With Selection as &amp;Title</source>
-        <translation type="unfinished"></translation>
+        <translation>Met selectie als &amp;titel</translation>
     </message>
     <message>
         <source>Open &amp;Quick Reference</source>
@@ -13413,7 +13413,7 @@ Lettertypen kunnen hier worden geïnstalleerd met Opmaak &gt; Lettertype &gt; Le
     </message>
     <message>
         <source>Icon From &amp;Text…</source>
-        <translation type="unfinished"></translation>
+        <translation>Pictogram uit &amp;tekst…</translation>
     </message>
     <message>
         <source>&amp;Manage Icons…</source>
@@ -13701,7 +13701,7 @@ maar dit venster kon het origineel niet verlaten. Open het nieuwe project via Be
     </message>
     <message>
         <source>This project is encrypted, and Scrivener cannot read encrypted files. To save it in Scrivener format, turn off the encryption of the project first (File &gt; Options &gt; Encryption); a copy in Quillbinder&apos;s format stays encrypted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit project is versleuteld en Scrivener kan versleutelde bestanden niet lezen. Zet om het in Scrivener-formaat op te slaan eerst de versleuteling van het project uit (Bestand &gt; Opties &gt; Versleuteling); een kopie in het formaat van Quillbinder blijft versleuteld.</translation>
     </message>
     <message>
         <source>Save a Copy as Scrivener Project</source>
@@ -14739,83 +14739,83 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Read Aloud</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Voorlezen</translation>
     </message>
     <message>
         <source>Read Aloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Voorlezen</translation>
     </message>
     <message>
         <source>Small &amp;Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleine &amp;interface</translation>
     </message>
     <message>
         <source>A few round buttons and the most room for the text, for a small screen or for use without a keyboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Een paar ronde knoppen en zoveel mogelijk ruimte voor de tekst, voor een klein scherm of gebruik zonder toetsenbord</translation>
     </message>
     <message>
         <source>&amp;Full</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Volledig</translation>
     </message>
     <message>
         <source>&amp;Automatic</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Automatisch</translation>
     </message>
     <message>
         <source>Switch to the &amp;Full Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Overschakelen naar de &amp;volledige interface</translation>
     </message>
     <message>
         <source>Binder</source>
-        <translation type="unfinished">Binder</translation>
+        <translation>Binder</translation>
     </message>
     <message>
         <source>Notes</source>
-        <translation type="unfinished">Notities</translation>
+        <translation>Notities</translation>
     </message>
     <message>
         <source>The notes of the document, in a panel</source>
-        <translation type="unfinished"></translation>
+        <translation>De notities van het document, in een paneel</translation>
     </message>
     <message>
         <source>The binder, in a panel</source>
-        <translation type="unfinished"></translation>
+        <translation>De binder, in een paneel</translation>
     </message>
     <message>
         <source>Record Only</source>
-        <translation type="unfinished"></translation>
+        <translation>Alleen opnemen</translation>
     </message>
     <message>
         <source>Small Interface</source>
-        <translation type="unfinished"></translation>
+        <translation>Kleine interface</translation>
     </message>
     <message>
         <source>Menu: all the menus of the program</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu: alle menu’s van het programma</translation>
     </message>
     <message>
         <source>Style: choose a style for the paragraph</source>
-        <translation type="unfinished"></translation>
+        <translation>Stijl: kies een stijl voor de alinea</translation>
     </message>
     <message>
         <source>Labels and icons of the selected documents</source>
-        <translation type="unfinished"></translation>
+        <translation>Labels en pictogrammen van de geselecteerde documenten</translation>
     </message>
     <message>
         <source>Stop recording</source>
-        <translation type="unfinished"></translation>
+        <translation>Opname stoppen</translation>
     </message>
     <message>
         <source>Record only: the sound is kept and its text can be written later</source>
-        <translation type="unfinished"></translation>
+        <translation>Alleen opnemen: het geluid wordt bewaard en de tekst kan later worden geschreven</translation>
     </message>
     <message>
         <source>Record Only is off: the installed Speech Transcription add-on is too old. Update it in the Add-on Manager.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alleen opnemen is uit: de geïnstalleerde add-on Spraaktranscriptie is te oud. Werk hem bij in het Add-onbeheer.</translation>
     </message>
     <message>
         <source>Record Only is off: it needs the add-on Speech Transcription, which is not installed. The Add-on Manager can add it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alleen opnemen is uit: het heeft de add-on Spraaktranscriptie nodig, die niet is geïnstalleerd. Het Add-onbeheer kan hem toevoegen.</translation>
     </message>
 </context>
 <context>
@@ -15962,19 +15962,19 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Print Pre&amp;view</source>
-        <translation type="unfinished"></translation>
+        <translation>Afdruk&amp;voorbeeld</translation>
     </message>
     <message>
         <source>&amp;Redefine Note Style From Selection…</source>
-        <translation type="unfinished"></translation>
+        <translation>Notitiestijl &amp;opnieuw definiëren uit selectie…</translation>
     </message>
     <message>
         <source>Note style to redefine from the selected note:</source>
-        <translation type="unfinished"></translation>
+        <translation>Notitiestijl die opnieuw moet worden gedefinieerd uit de geselecteerde notitie:</translation>
     </message>
     <message>
         <source>&amp;Delete Note Style…</source>
-        <translation type="unfinished"></translation>
+        <translation>Notitiestijl &amp;verwijderen…</translation>
     </message>
     <message>
         <source>Delete Note Style</source>
@@ -15982,7 +15982,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Note style to delete:</source>
-        <translation type="unfinished"></translation>
+        <translation>Te verwijderen notitiestijl:</translation>
     </message>
     <message>
         <source>Import Note Styles</source>
@@ -17197,7 +17197,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Encryption</source>
-        <translation type="unfinished"></translation>
+        <translation>Versleuteling</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -17397,71 +17397,71 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>The processor cores that Speech Transcription, Translation Helper, Read Aloud and Handwriting use. Default for this computer: %1 of %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>De processorkernen die Spraaktranscriptie, Vertaalhulp, Voorlezen en Handschrift gebruiken. Standaard voor deze computer: %1 van %2.</translation>
     </message>
     <message>
         <source>Default (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Standaard (%1)</translation>
     </message>
     <message>
         <source>CPU cores for the AI:</source>
-        <translation type="unfinished"></translation>
+        <translation>CPU-kernen voor de AI:</translation>
     </message>
     <message>
         <source>One setting for every AI function. The default is three quarters of the cores (rounded down); a computer with 6 cores or fewer keeps one core free. The AI&apos;s work runs at a low priority.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eén instelling voor elke AI-functie. De standaard is driekwart van de kernen (naar beneden afgerond); een computer met 6 kernen of minder houdt één kern vrij. Het werk van de AI draait met lage prioriteit.</translation>
     </message>
     <message>
         <source>Unload a model after</source>
-        <translation type="unfinished"></translation>
+        <translation>Een model vrijgeven na</translation>
     </message>
     <message>
         <source>minutes unused</source>
-        <translation type="unfinished"></translation>
+        <translation>minuten ongebruikt</translation>
     </message>
     <message>
         <source>A model that is not used is unloaded after this time. Before a model loads, when more than half of the memory it needs (the computer&apos;s memory or a graphics card&apos;s) is in use, the model unused longest is unloaded first; when the new model would still bring that memory over 80 %, it is not loaded, and the message line under the inspector says why. When the system reports a shortage of memory, idle models are unloaded at once.</source>
-        <translation type="unfinished"></translation>
+        <translation>Een model dat niet wordt gebruikt, wordt na deze tijd vrijgegeven. Voordat een model laadt, wordt het langst ongebruikte model eerst vrijgegeven wanneer meer dan de helft van het geheugen dat het nodig heeft (het geheugen van de computer of van een videokaart) in gebruik is; als het nieuwe model dat geheugen nog steeds boven 80 % zou brengen, wordt het niet geladen en zegt de berichtenregel onder de inspector waarom. Meldt het systeem een tekort aan geheugen, dan worden ongebruikte modellen meteen vrijgegeven.</translation>
     </message>
     <message>
         <source>Memory in use:</source>
-        <translation type="unfinished"></translation>
+        <translation>Geheugen in gebruik:</translation>
     </message>
     <message>
         <source>RAM</source>
-        <translation type="unfinished"></translation>
+        <translation>RAM</translation>
     </message>
     <message>
         <source>Graphics card %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Videokaart %1</translation>
     </message>
     <message>
         <source>%1: not known</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: niet bekend</translation>
     </message>
     <message>
         <source>%1: %2 of %3 in use (%4 %)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: %2 van %3 in gebruik (%4 %)</translation>
     </message>
     <message>
         <source>No model is loaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen model geladen.</translation>
     </message>
     <message>
         <source>Loaded models:</source>
-        <translation type="unfinished"></translation>
+        <translation>Geladen modellen:</translation>
     </message>
     <message>
         <source>AI Models</source>
-        <translation type="unfinished"></translation>
+        <translation>AI-modellen</translation>
     </message>
     <message>
         <source>Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschrift</translation>
     </message>
     <message>
         <source>Read Aloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Voorlezen</translation>
     </message>
     <message>
         <source>Scratch Pad</source>
@@ -18173,19 +18173,19 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Note: your colors %1 on %2 have a contrast of %3 : 1. Text is easier to read from 4.5 : 1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Let op: je kleuren %1 op %2 hebben een contrast van %3 : 1. Tekst is beter leesbaar vanaf 4,5 : 1.</translation>
     </message>
     <message>
         <source>%1 below it too.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 daaronder ook.</translation>
     </message>
     <message>
         <source>more pair</source>
-        <translation type="unfinished"></translation>
+        <translation>paar meer</translation>
     </message>
     <message>
         <source>more pairs</source>
-        <translation type="unfinished"></translation>
+        <translation>paren meer</translation>
     </message>
     <message>
         <source>Auto-Correction</source>
@@ -18545,7 +18545,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Normal (22 px)</source>
-        <translation type="unfinished"></translation>
+        <translation>Normaal (22 px)</translation>
     </message>
     <message>
         <source>Open Backup Folder...</source>
@@ -19615,11 +19615,11 @@ Je recente projecten, eigen thema&apos;s, lay-outs, werkbalken en sneltoetsen bl
     <name>qb::Project</name>
     <message>
         <source>The encryption of this project&apos;s files was not finished; some files are still plain. It is finished at the next opening.</source>
-        <translation type="unfinished"></translation>
+        <translation>De versleuteling van de bestanden van dit project is niet voltooid; sommige bestanden zijn nog gewoon. Ze wordt bij het volgende openen voltooid.</translation>
     </message>
     <message>
         <source>The decryption of this project&apos;s files was not finished; some files are still encrypted. It is finished at the next opening.</source>
-        <translation type="unfinished"></translation>
+        <translation>De ontsleuteling van de bestanden van dit project is niet voltooid; sommige bestanden zijn nog versleuteld. Ze wordt bij het volgende openen voltooid.</translation>
     </message>
     <message>
         <source>This project&apos;s folder holds other project files beside &quot;%1&quot;, which was opened: %2. A sync program may have made them (a copy from another computer kept beside yours). Compare them before you go on, and open another one with File &gt; Open Project if it holds your latest work.</source>
@@ -19733,7 +19733,9 @@ Je recente projecten, eigen thema&apos;s, lay-outs, werkbalken en sneltoetsen bl
         <source>The project could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (named by the number of the document: the folder content/&lt;number&gt; of the project holds the document), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %1. Copy what you need back into the project. (Titles and names are left out of this note and of the names in this folder, because the project is encrypted.)
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Het project kon niet worden opgeslagen. Deze map bevat wat nog niet was opgeslagen: teksten en notities als RTF-bestanden (genoemd naar het nummer van het document: de map content/&lt;nummer&gt; van het project bevat het document), mindmapborden, gewijzigde objecten (in de map “objects”) en het projectbestand zoals het in het geheugen was (de binder, titels en labels), als %1. Kopieer wat je nodig hebt terug in het project. (Titels en namen ontbreken in dit bericht en in de namen in deze map, omdat het project versleuteld is.)
+
+</translation>
     </message>
     <message>
         <source>The project &quot;%1&quot; (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
@@ -19747,7 +19749,9 @@ Je recente projecten, eigen thema&apos;s, lay-outs, werkbalken en sneltoetsen bl
         <source>To put the project file back: close the project, rename the project file in the project folder (so that it is kept), copy the file %1 of this folder there and give it the old file&apos;s name. Then open the project again. (The copy&apos;s name ends in .copy so that this folder is not taken for a project.)
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Zo zet je het projectbestand terug: sluit het project, hernoem het projectbestand in de projectmap (zodat het bewaard blijft), kopieer het bestand %1 van deze map erheen en geef het de naam van het oude bestand. Open het project daarna opnieuw. (De naam van de kopie eindigt op .copy, zodat deze map niet voor een project wordt aangezien.)
+
+</translation>
     </message>
     <message>
         <source>To put the project file back: close the project, rename the project file %1 in the project folder %2 (so that it is kept), copy the file %3 of this folder there and rename it to %1. Then open the project again. (The copy&apos;s name ends in .copy so that this folder is not taken for a project.)
@@ -19769,7 +19773,9 @@ Je recente projecten, eigen thema&apos;s, lay-outs, werkbalken en sneltoetsen bl
         <source>The project is encrypted, and so are the files of this copy (OpenPGP, to your key and the recovery key; only this note is plain): Kleopatra, Gpg4win or GnuPG decrypt them with your key.
 
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Het project is versleuteld, en de bestanden van deze kopie ook (OpenPGP, naar je sleutel en de herstelsleutel; alleen dit bericht is gewoon): Kleopatra, Gpg4win of GnuPG ontsleutelen ze met je sleutel.
+
+</translation>
     </message>
     <message>
         <source>This copy is complete: all %1 files were written.
@@ -19847,7 +19853,7 @@ Niet geschreven:
     </message>
     <message>
         <source>The project file is damaged (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Het projectbestand is beschadigd (%1).</translation>
     </message>
     <message>
         <source>The project file is damaged: its binder is nested more than %1 levels deep.</source>
@@ -21815,7 +21821,7 @@ Ctrl+klik om te openen</translation>
     </message>
     <message>
         <source>Paste With &amp;Formatting</source>
-        <translation type="unfinished"></translation>
+        <translation>Plakken &amp;met opmaak</translation>
     </message>
     <message>
         <source>Footnote</source>
@@ -22159,15 +22165,15 @@ Ctrl+klik om te openen</translation>
     </message>
     <message>
         <source>Size of all toolbars:</source>
-        <translation type="unfinished"></translation>
+        <translation>Grootte van alle werkbalken:</translation>
     </message>
     <message>
         <source>Reset</source>
-        <translation type="unfinished">Herstellen</translation>
+        <translation>Herstellen</translation>
     </message>
     <message>
         <source>Put the standard buttons back into this toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>De standaardknoppen terugzetten in deze werkbalk</translation>
     </message>
     <message>
         <source>Icons only</source>
@@ -22761,63 +22767,63 @@ Of download de huidige versie van de pagina van het project.</translation>
     <name>qb::ai</name>
     <message>
         <source>%1 could not be removed completely.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 kon niet helemaal worden verwijderd.</translation>
     </message>
     <message>
         <source>%1 is not published yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 is nog niet gepubliceerd.</translation>
     </message>
     <message>
         <source>%1 needs about %2 GB of memory; this computer has %3 GB.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 heeft ongeveer %2 GB geheugen nodig; deze computer heeft %3 GB.</translation>
     </message>
     <message>
         <source>There is not enough room on the disk for %1 (%2 MB are needed).</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is niet genoeg ruimte op de schijf voor %1 (%2 MB is nodig).</translation>
     </message>
     <message>
         <source>Processor (CPU)</source>
-        <translation type="unfinished"></translation>
+        <translation>Processor (CPU)</translation>
     </message>
     <message>
         <source>The graphics card &quot;%1&quot; was not found; the processor is used.</source>
-        <translation type="unfinished"></translation>
+        <translation>De videokaart “%1” is niet gevonden; de processor wordt gebruikt.</translation>
     </message>
     <message>
         <source>The model does not fit into the free memory of the graphics card; the processor is used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het model past niet in het vrije geheugen van de videokaart; de processor wordt gebruikt.</translation>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished">Automatisch</translation>
+        <translation>Automatisch</translation>
     </message>
     <message>
         <source>The AI engine is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>De AI-engine is niet geïnstalleerd.</translation>
     </message>
     <message>
         <source>An add-on has loaded a speech engine of its own (%1). Restart Quillbinder, or update that add-on, to use the AI engine.</source>
-        <translation type="unfinished"></translation>
+        <translation>Een add-on heeft een eigen spraakengine geladen (%1). Start Quillbinder opnieuw of werk die add-on bij om de AI-engine te gebruiken.</translation>
     </message>
     <message>
         <source>The AI engine could not be loaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>De AI-engine kon niet worden geladen: %1</translation>
     </message>
     <message>
         <source>The installed AI engine is older than this version of Quillbinder needs. Install the engine again from the settings page.</source>
-        <translation type="unfinished"></translation>
+        <translation>De geïnstalleerde AI-engine is ouder dan deze versie van Quillbinder nodig heeft. Installeer de engine opnieuw vanaf de instellingenpagina.</translation>
     </message>
     <message>
         <source>The model &quot;%1&quot; could not be loaded: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Het model “%1” kon niet worden geladen: %2</translation>
     </message>
     <message>
         <source>The model is not loaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het model is niet geladen.</translation>
     </message>
     <message>
         <source>Stopped.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gestopt.</translation>
     </message>
 </context>
 <context>
@@ -22922,260 +22928,261 @@ Of download de huidige versie van de pagina van het project.</translation>
     <name>qb::handwriting</name>
     <message>
         <source>The handwriting engine could not be loaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>De handschrift-engine kon niet worden geladen: %1</translation>
     </message>
     <message>
         <source>The handwriting engine does not offer the interface this version needs.</source>
-        <translation type="unfinished"></translation>
+        <translation>De handschrift-engine biedt de interface niet die deze versie nodig heeft.</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::HandwritingController</name>
     <message>
         <source>Off</source>
-        <translation type="unfinished">Uit</translation>
+        <translation>Uit</translation>
     </message>
     <message>
         <source>Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editor</translation>
     </message>
     <message>
         <source>Inspector</source>
-        <translation type="unfinished">Inspector</translation>
+        <translation>Inspector</translation>
     </message>
     <message>
         <source>Both</source>
-        <translation type="unfinished"></translation>
+        <translation>Beide</translation>
     </message>
     <message>
         <source>Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschrift</translation>
     </message>
     <message>
         <source>Handwriting Button</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschriftknop</translation>
     </message>
     <message>
         <source>Show the button for handwriting on the toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>De knop voor handschrift op de werkbalk tonen</translation>
     </message>
     <message>
         <source>Put the text at the place shown</source>
-        <translation type="unfinished"></translation>
+        <translation>De tekst op de getoonde plek zetten</translation>
     </message>
     <message>
         <source>Cancel: the text goes back to the strip</source>
-        <translation type="unfinished"></translation>
+        <translation>Annuleren: de tekst gaat terug naar de strook</translation>
     </message>
     <message>
         <source>Handwriting: off. Tap to switch it on; press and hold for the choices.</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschrift: uit. Tik om het in te schakelen; houd ingedrukt voor de keuzes.</translation>
     </message>
     <message>
         <source>Handwriting: %1. Tap to switch it off; press and hold for the choices.</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschrift: %1. Tik om het uit te schakelen; houd ingedrukt voor de keuzes.</translation>
     </message>
     <message>
         <source>Writing on the editor.
 The text you write is collected below.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schrijven op de editor.
+De tekst die je schrijft wordt hieronder verzameld.</translation>
     </message>
     <message>
         <source>Writing on the editor and here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Schrijven op de editor en hier.</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::HandwritingPage</name>
     <message>
         <source>no model for this language yet</source>
-        <translation type="unfinished"></translation>
+        <translation>nog geen model voor deze taal</translation>
     </message>
     <message>
         <source>Theme color</source>
-        <translation type="unfinished"></translation>
+        <translation>Themakleur</translation>
     </message>
     <message>
         <source>Recognition</source>
-        <translation type="unfinished"></translation>
+        <translation>Herkenning</translation>
     </message>
     <message>
         <source>Show the handwriting button on the toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>De handschriftknop op de werkbalk tonen</translation>
     </message>
     <message>
         <source>Install</source>
-        <translation type="unfinished">Installeren</translation>
+        <translation>Installeren</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Verwijderen</translation>
+        <translation>Verwijderen</translation>
     </message>
     <message>
         <source>Handwriting model:</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschriftmodel:</translation>
     </message>
     <message>
         <source>Main language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Hoofdtaal:</translation>
     </message>
     <message>
         <source>Fallback language:</source>
-        <translation type="unfinished"></translation>
+        <translation>Terugvaltaal:</translation>
     </message>
     <message>
         <source>Writing</source>
-        <translation type="unfinished"></translation>
+        <translation>Schrijven</translation>
     </message>
     <message>
         <source>Pause before a line is read:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pauze voordat een regel wordt gelezen:</translation>
     </message>
     <message>
         <source>The ink stays for:</source>
-        <translation type="unfinished"></translation>
+        <translation>De inkt blijft:</translation>
     </message>
     <message>
         <source>The ink fades over:</source>
-        <translation type="unfinished"></translation>
+        <translation>De inkt vervaagt over:</translation>
     </message>
     <message>
         <source>Ink color:</source>
-        <translation type="unfinished"></translation>
+        <translation>Inktkleur:</translation>
     </message>
     <message>
         <source>Ink Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Inktkleur</translation>
     </message>
     <message>
         <source> px</source>
-        <translation type="unfinished"> px</translation>
+        <translation> px</translation>
     </message>
     <message>
         <source>Ink width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Inktdikte:</translation>
     </message>
     <message>
         <source>Grid (in the inspector&apos;s pad)</source>
-        <translation type="unfinished"></translation>
+        <translation>Raster (in het schrijfblok van de inspector)</translation>
     </message>
     <message>
         <source>Style:</source>
-        <translation type="unfinished">Stijl:</translation>
+        <translation>Stijl:</translation>
     </message>
     <message>
         <source>Color:</source>
-        <translation type="unfinished">Kleur:</translation>
+        <translation>Kleur:</translation>
     </message>
     <message>
         <source>Grid Color</source>
-        <translation type="unfinished"></translation>
+        <translation>Rasterkleur</translation>
     </message>
     <message>
         <source>Line width:</source>
-        <translation type="unfinished"></translation>
+        <translation>Lijndikte:</translation>
     </message>
     <message>
         <source>Opacity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Dekking:</translation>
     </message>
     <message>
         <source>small</source>
-        <translation type="unfinished"></translation>
+        <translation>klein</translation>
     </message>
     <message>
         <source>large</source>
-        <translation type="unfinished"></translation>
+        <translation>groot</translation>
     </message>
     <message>
         <source>Size:</source>
-        <translation type="unfinished">Grootte:</translation>
+        <translation>Grootte:</translation>
     </message>
     <message>
         <source>Hand protection</source>
-        <translation type="unfinished"></translation>
+        <translation>Handbescherming</translation>
     </message>
     <message>
         <source>Ignore the resting hand while the pen writes</source>
-        <translation type="unfinished"></translation>
+        <translation>De rustende hand negeren terwijl de pen schrijft</translation>
     </message>
     <message>
         <source>Right-handed</source>
-        <translation type="unfinished"></translation>
+        <translation>Rechtshandig</translation>
     </message>
     <message>
         <source>Left-handed</source>
-        <translation type="unfinished"></translation>
+        <translation>Linkshandig</translation>
     </message>
     <message>
         <source>Writing hand:</source>
-        <translation type="unfinished"></translation>
+        <translation>Schrijfhand:</translation>
     </message>
     <message>
         <source>weak</source>
-        <translation type="unfinished"></translation>
+        <translation>zwak</translation>
     </message>
     <message>
         <source>strong</source>
-        <translation type="unfinished"></translation>
+        <translation>sterk</translation>
     </message>
     <message>
         <source>Strength:</source>
-        <translation type="unfinished"></translation>
+        <translation>Sterkte:</translation>
     </message>
     <message>
         <source>Pen and finger</source>
-        <translation type="unfinished"></translation>
+        <translation>Pen en vinger</translation>
     </message>
     <message>
         <source>Without a pen, one finger writes (two fingers scroll)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zonder pen schrijft één vinger (twee vingers scrollen)</translation>
     </message>
     <message>
         <source>The pen&apos;s side button selects text</source>
-        <translation type="unfinished"></translation>
+        <translation>De zijknop van de pen selecteert tekst</translation>
     </message>
     <message>
         <source> s</source>
-        <translation type="unfinished"> s</translation>
+        <translation> s</translation>
     </message>
     <message>
         <source>A pen counts as in use after its last touch for:</source>
-        <translation type="unfinished"></translation>
+        <translation>Een pen geldt als in gebruik na de laatste aanraking gedurende:</translation>
     </message>
     <message>
         <source>Learning your hand</source>
-        <translation type="unfinished"></translation>
+        <translation>Je hand leren kennen</translation>
     </message>
     <message>
         <source>Keep corrected lines on this device</source>
-        <translation type="unfinished"></translation>
+        <translation>Gecorrigeerde regels op dit apparaat bewaren</translation>
     </message>
     <message>
         <source>Only lines you corrected are kept: the picture of the ink and the corrected text. They stay on this device and are never sent anywhere. While an encrypted project is open, nothing is kept (the files would be plain).</source>
-        <translation type="unfinished"></translation>
+        <translation>Alleen regels die je hebt gecorrigeerd worden bewaard: het beeld van de inkt en de gecorrigeerde tekst. Ze blijven op dit apparaat en worden nergens naartoe gestuurd. Terwijl een versleuteld project open is, wordt niets bewaard (de bestanden zouden gewoon zijn).</translation>
     </message>
     <message>
         <source>Delete the Kept Lines</source>
-        <translation type="unfinished"></translation>
+        <translation>De bewaarde regels verwijderen</translation>
     </message>
     <message>
         <source>Installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geïnstalleerd.</translation>
     </message>
     <message>
         <source>Not installed. Install it to write by hand.</source>
-        <translation type="unfinished"></translation>
+        <translation>Niet geïnstalleerd. Installeer het om met de hand te schrijven.</translation>
     </message>
     <message>
         <source>The installer for handwriting models is not available in this version yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Het installatieprogramma voor handschriftmodellen is in deze versie nog niet beschikbaar.</translation>
     </message>
     <message numerus="yes">
         <source>%n line(s) kept</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n regel bewaard</numerusform>
+            <numerusform>%n regels bewaard</numerusform>
         </translation>
     </message>
 </context>
@@ -23183,132 +23190,132 @@ The text you write is collected below.</source>
     <name>qb::handwriting::HandwritingPanel</name>
     <message>
         <source>Space</source>
-        <translation type="unfinished"></translation>
+        <translation>Spatie</translation>
     </message>
     <message>
         <source>Add a space</source>
-        <translation type="unfinished"></translation>
+        <translation>Een spatie toevoegen</translation>
     </message>
     <message>
         <source>Backspace</source>
-        <translation type="unfinished"></translation>
+        <translation>Backspace</translation>
     </message>
     <message>
         <source>Delete the last character</source>
-        <translation type="unfinished"></translation>
+        <translation>Het laatste teken verwijderen</translation>
     </message>
     <message>
         <source>Enter</source>
-        <translation type="unfinished"></translation>
+        <translation>Enter</translation>
     </message>
     <message>
         <source>Add a line break</source>
-        <translation type="unfinished"></translation>
+        <translation>Een regeleinde toevoegen</translation>
     </message>
     <message>
         <source>Clear</source>
-        <translation type="unfinished">Wissen</translation>
+        <translation>Wissen</translation>
     </message>
     <message>
         <source>Throw away the text in the strip</source>
-        <translation type="unfinished"></translation>
+        <translation>De tekst in de strook weggooien</translation>
     </message>
     <message>
         <source>Pin</source>
-        <translation type="unfinished"></translation>
+        <translation>Vastzetten</translation>
     </message>
     <message>
         <source>Make the text stick to the pen or finger; tap a text field to show the place</source>
-        <translation type="unfinished"></translation>
+        <translation>De tekst aan de pen of vinger laten plakken; tik op een tekstveld om de plek te tonen</translation>
     </message>
     <message>
         <source>Insert</source>
-        <translation type="unfinished">Invoegen</translation>
+        <translation>Invoegen</translation>
     </message>
     <message>
         <source>Put the text at the cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>De tekst bij de cursor zetten</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::InkCanvas</name>
     <message>
         <source>Handwriting is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschrift is niet geïnstalleerd.</translation>
     </message>
     <message>
         <source>The line could not be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>De regel kon niet worden gelezen.</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::OnnxRecognizer</name>
     <message>
         <source>The model&apos;s output has an unexpected shape.</source>
-        <translation type="unfinished"></translation>
+        <translation>De uitvoer van het model heeft een onverwachte vorm.</translation>
     </message>
     <message>
         <source>Handwriting is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschrift is niet geïnstalleerd.</translation>
     </message>
     <message>
         <source>The handwriting model&apos;s files could not be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>De bestanden van het handschriftmodel konden niet worden gelezen.</translation>
     </message>
     <message>
         <source>The handwriting model&apos;s codec could not be read: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>De codec van het handschriftmodel kon niet worden gelezen: %1</translation>
     </message>
     <message>
         <source>The handwriting model could not be loaded: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Het handschriftmodel kon niet worden geladen: %1</translation>
     </message>
     <message>
         <source>The line could not be read: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>De regel kon niet worden gelezen: %1</translation>
     </message>
     <message>
         <source>Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschrift</translation>
     </message>
     <message>
         <source>There is not enough memory to load the handwriting model.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is niet genoeg geheugen om het handschriftmodel te laden.</translation>
     </message>
     <message>
         <source>Install Handwriting</source>
-        <translation type="unfinished"></translation>
+        <translation>Handschrift installeren</translation>
     </message>
     <message>
         <source>Installed: the engine, the line model and the word lists of %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geïnstalleerd: de engine, het regelmodel en de woordenlijsten van %1.</translation>
     </message>
     <message>
         <source>no language</source>
-        <translation type="unfinished"></translation>
+        <translation>geen taal</translation>
     </message>
     <message>
         <source>the engine</source>
-        <translation type="unfinished"></translation>
+        <translation>de engine</translation>
     </message>
     <message>
         <source>the line model</source>
-        <translation type="unfinished"></translation>
+        <translation>het regelmodel</translation>
     </message>
     <message>
         <source>Not installed yet: %1. Install it to write by hand.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nog niet geïnstalleerd: %1. Installeer het om met de hand te schrijven.</translation>
     </message>
 </context>
 <context>
     <name>qb::handwriting::WordStrip</name>
     <message>
         <source>No other readings</source>
-        <translation type="unfinished"></translation>
+        <translation>Geen andere lezingen</translation>
     </message>
     <message>
         <source>The text you write appears here.</source>
-        <translation type="unfinished"></translation>
+        <translation>De tekst die je schrijft verschijnt hier.</translation>
     </message>
 </context>
 <context>
@@ -23597,236 +23604,236 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     <name>qb::readaloud</name>
     <message>
         <source>Female 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Vrouw 1</translation>
     </message>
     <message>
         <source>Female 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Vrouw 2</translation>
     </message>
     <message>
         <source>Female 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Vrouw 3</translation>
     </message>
     <message>
         <source>Male 1</source>
-        <translation type="unfinished"></translation>
+        <translation>Man 1</translation>
     </message>
     <message>
         <source>Male 2</source>
-        <translation type="unfinished"></translation>
+        <translation>Man 2</translation>
     </message>
     <message>
         <source>Male 3</source>
-        <translation type="unfinished"></translation>
+        <translation>Man 3</translation>
     </message>
     <message>
         <source>Calm</source>
-        <translation type="unfinished"></translation>
+        <translation>Rustig</translation>
     </message>
     <message>
         <source>Neutral</source>
-        <translation type="unfinished"></translation>
+        <translation>Neutraal</translation>
     </message>
     <message>
         <source>Action</source>
-        <translation type="unfinished"></translation>
+        <translation>Actie</translation>
     </message>
     <message>
         <source>Slow</source>
-        <translation type="unfinished"></translation>
+        <translation>Langzaam</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished">Middel</translation>
+        <translation>Gemiddeld</translation>
     </message>
     <message>
         <source>Fast</source>
-        <translation type="unfinished">Snel</translation>
+        <translation>Snel</translation>
     </message>
     <message>
         <source>fits on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>past op %1</translation>
     </message>
     <message>
         <source>does not fit (needs %1)</source>
-        <translation type="unfinished"></translation>
+        <translation>past niet (heeft %1 nodig)</translation>
     </message>
     <message>
         <source>fits in RAM</source>
-        <translation type="unfinished"></translation>
+        <translation>past in RAM</translation>
     </message>
     <message>
         <source>This model does not have this voice.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit model heeft deze stem niet.</translation>
     </message>
     <message>
         <source>Voice not installed yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Stem nog niet geïnstalleerd.</translation>
     </message>
     <message>
         <source>This model has no style control.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit model heeft geen stijlregeling.</translation>
     </message>
     <message>
         <source>The voice&apos;s reference clip cannot be read.</source>
-        <translation type="unfinished"></translation>
+        <translation>De referentieclip van de stem kan niet worden gelezen.</translation>
     </message>
     <message>
         <source>The installed AI engine cannot play sound; install its newest version.</source>
-        <translation type="unfinished"></translation>
+        <translation>De geïnstalleerde AI-engine kan geen geluid afspelen; installeer de nieuwste versie ervan.</translation>
     </message>
 </context>
 <context>
     <name>qb::readaloud::Controller</name>
     <message>
         <source>Play</source>
-        <translation type="unfinished">Afspelen</translation>
+        <translation>Afspelen</translation>
     </message>
     <message>
         <source>Stop</source>
-        <translation type="unfinished">Stoppen</translation>
+        <translation>Stoppen</translation>
     </message>
     <message>
         <source>Pause</source>
-        <translation type="unfinished">Pauzeren</translation>
+        <translation>Pauzeren</translation>
     </message>
     <message>
         <source>Resume</source>
-        <translation type="unfinished"></translation>
+        <translation>Hervatten</translation>
     </message>
     <message>
         <source>Read Aloud: %1 (the marked text, or from the cursor to the end)</source>
-        <translation type="unfinished"></translation>
+        <translation>Voorlezen: %1 (de gemarkeerde tekst, of van de cursor tot het einde)</translation>
     </message>
     <message>
         <source>Read Aloud: Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Voorlezen: Stoppen</translation>
     </message>
     <message>
         <source>Open a text to read it aloud.</source>
-        <translation type="unfinished"></translation>
+        <translation>Open een tekst om hem voor te lezen.</translation>
     </message>
     <message>
         <source>Voice</source>
-        <translation type="unfinished"></translation>
+        <translation>Stem</translation>
     </message>
     <message>
         <source>Style</source>
-        <translation type="unfinished">Stijl</translation>
+        <translation>Stijl</translation>
     </message>
     <message>
         <source>Speed</source>
-        <translation type="unfinished"></translation>
+        <translation>Snelheid</translation>
     </message>
     <message>
         <source>Read Aloud Settings…</source>
-        <translation type="unfinished"></translation>
+        <translation>Instellingen voor Voorlezen…</translation>
     </message>
 </context>
 <context>
     <name>qb::readaloud::ReadAloudPage</name>
     <message>
         <source>no model for this language yet</source>
-        <translation type="unfinished"></translation>
+        <translation>nog geen model voor deze taal</translation>
     </message>
     <message>
         <source>Read Aloud reads the marked text (or from the cursor to the end) with a speech model on this computer. Nothing is installed until you install it here. The sound is only played, never saved.</source>
-        <translation type="unfinished"></translation>
+        <translation>Voorlezen leest de gemarkeerde tekst (of van de cursor tot het einde) voor met een spraakmodel op deze computer. Er wordt niets geïnstalleerd voordat je het hier installeert. Het geluid wordt alleen afgespeeld, nooit opgeslagen.</translation>
     </message>
     <message>
         <source>Voice model</source>
-        <translation type="unfinished"></translation>
+        <translation>Stemmodel</translation>
     </message>
     <message>
         <source>Language:</source>
-        <translation type="unfinished">Taal:</translation>
+        <translation>Taal:</translation>
     </message>
     <message>
         <source>Model:</source>
-        <translation type="unfinished">Model:</translation>
+        <translation>Model:</translation>
     </message>
     <message>
         <source>Automatic: the graphics card when the model fits into its free memory, else the computer&apos;s memory and processor.</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch: de videokaart wanneer het model in het vrije geheugen ervan past, anders het geheugen en de processor van de computer.</translation>
     </message>
     <message>
         <source>Device:</source>
-        <translation type="unfinished"></translation>
+        <translation>Apparaat:</translation>
     </message>
     <message>
         <source>Speed:</source>
-        <translation type="unfinished"></translation>
+        <translation>Snelheid:</translation>
     </message>
     <message>
         <source>The processor cores and the minutes a model stays loaded are set for all AI functions in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation type="unfinished"></translation>
+        <translation>De processorkernen en de minuten dat een model geladen blijft, worden voor alle AI-functies ingesteld in Bestand &gt; Opties &gt; Algemeen &gt; AI-modellen.</translation>
     </message>
     <message>
         <source>Automatic (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatisch (%1)</translation>
     </message>
     <message>
         <source>Automatic</source>
-        <translation type="unfinished">Automatisch</translation>
+        <translation>Automatisch</translation>
     </message>
     <message>
         <source>%1: %2, %3, %4</source>
-        <translation type="unfinished"></translation>
+        <translation>%1: %2, %3, %4</translation>
     </message>
     <message>
         <source>The engine is not installed yet: install it below, then a model.</source>
-        <translation type="unfinished"></translation>
+        <translation>De engine is nog niet geïnstalleerd: installeer hem hieronder, daarna een model.</translation>
     </message>
     <message>
         <source>No model is installed for this language yet: download one below.</source>
-        <translation type="unfinished"></translation>
+        <translation>Voor deze taal is nog geen model geïnstalleerd: download er hieronder een.</translation>
     </message>
     <message>
         <source>Ready: press Play on the Read Aloud toolbar.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klaar: druk op Afspelen op de werkbalk Voorlezen.</translation>
     </message>
     <message>
         <source>Not measured: no model is installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Niet gemeten: er is geen model geïnstalleerd.</translation>
     </message>
     <message>
         <source>Measuring the speed with a short test sentence...</source>
-        <translation type="unfinished"></translation>
+        <translation>De snelheid wordt gemeten met een korte testzin...</translation>
     </message>
     <message>
         <source>Not measured yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nog niet gemeten.</translation>
     </message>
     <message>
         <source>Slower than real time (about %1 times slower on this device): Read Aloud makes a few sentences ahead before it plays.</source>
-        <translation type="unfinished"></translation>
+        <translation>Langzamer dan realtime (ongeveer %1 keer langzamer op dit apparaat): Voorlezen maakt een paar zinnen vooruit voordat het afspeelt.</translation>
     </message>
     <message>
         <source>Faster than real time (%1 seconds of work for one second of sound).</source>
-        <translation type="unfinished"></translation>
+        <translation>Sneller dan realtime (%1 seconden werk voor één seconde geluid).</translation>
     </message>
     <message>
         <source>The speed test failed: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>De snelheidstest is mislukt: %1</translation>
     </message>
 </context>
 <context>
     <name>qb::readaloud::Session</name>
     <message>
         <source>Read Aloud is busy.</source>
-        <translation type="unfinished"></translation>
+        <translation>Voorlezen is bezig.</translation>
     </message>
     <message>
         <source>The AI engine is not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>De AI-engine is niet geïnstalleerd.</translation>
     </message>
     <message>
         <source>No speech model is installed for this language.</source>
-        <translation type="unfinished"></translation>
+        <translation>Voor deze taal is geen spraakmodel geïnstalleerd.</translation>
     </message>
     <message>
         <source>There is no text to read.</source>
-        <translation type="unfinished"></translation>
+        <translation>Er is geen tekst om voor te lezen.</translation>
     </message>
 </context>
 <context>
@@ -23840,11 +23847,11 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     <name>qb::smallui::SlidePanel</name>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Sluiten</translation>
+        <translation>Sluiten</translation>
     </message>
     <message>
         <source>Close this panel (Esc)</source>
-        <translation type="unfinished"></translation>
+        <translation>Dit paneel sluiten (Esc)</translation>
     </message>
 </context>
 <context>
@@ -24181,7 +24188,7 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     <name>readaloud</name>
     <message>
         <source>Read Aloud</source>
-        <translation type="unfinished"></translation>
+        <translation>Voorlezen</translation>
     </message>
 </context>
 </TS>

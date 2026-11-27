@@ -68,13 +68,13 @@
 ### Meer dan gebruikelijk
 
 - **Mindmaps**: een bord met notities, lijnen en pijlen voor elk document en elke map (de knop **Mindmap** van de Inspector). **Help > Mindmap-help** laat zien hoe het werkt.
-- **Objecten**: personages, locaties, omgevingen, bezienswaardigheden, weer en categorieën van jezelf, elk met een blad met velden en koppelingen ertussen (de knop **Objecten** van de Inspector, of **Venster > Objecten…**).
+- **Objecten**: personages, locaties, omgevingen, bezienswaardigheden, weer en categorieën van jezelf, elk met een blad met velden en koppelingen ertussen (de knop **Objecten** van de Inspector, of **Venster > Objecten**).
 - **Tabellen en afbeeldingen**: **Invoegen > Tabel…** met kant-en-klare ontwerpen of je eigen, **Opmaak > Tabel** voor rijen, kolommen, samengevoegde cellen en kleuren; afbeeldingen naast de tekst met de tekst eromheen, onderschriften en beschrijvingen die e-books en Word-bestanden als alt-tekst bewaren (klik met de rechtermuisknop op een afbeelding, **Afbeelding…**).
 - **De pictogrammenbalk**: tot tien documentpictogrammen, elk met één klik. **Documenten > Pictogram wijzigen** maakt ook pictogrammen van tekst of van je eigen afbeeldingen.
 - **Zoom per deel**: Binder, editors, delen van de Inspector, prikbord, overzicht en mindmaps bewaren elk hun eigen zoom.
 - **Bewaarde plekken**: elk document opent waar je de cursor hebt achtergelaten, ook nadat je het project opnieuw hebt geopend.
 - **Lettertypen**: **Opmaak > Lettertype > Lettertypebestanden installeren…** voegt lettertypen toe zonder het programma te verlaten.
-- **Veiligheid**: automatisch opslaan ook terwijl je doortypt, back-ups, een reservekopie van het projectbestand, crash- en vastloperrapporten (**Help > Probleemoplossing en ontwikkeling > Crashrapporten…**) en **Help > Probleemoplossing en ontwikkeling > Systeeminformatie…**.
+- **Veiligheid**: automatisch opslaan ook terwijl je doortypt, back-ups, een reservekopie van het projectbestand, crash- en vastloperrapporten (**Help > Probleemoplossing en ontwikkeling > Crashrapporten…**) en **Help > Probleemoplossing en ontwikkeling > Systeeminformatie**.
 
 ### Updates en add-ons
 
@@ -88,5 +88,5 @@ De **volledige versie** van de AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) h
 - **Help > Welkomstproject**: een kort project dat de functies onder "Meer dan gebruikelijk" laat zien en je ze laat uitproberen.
 - **Help > Mindmap-help**: notities, lijnen, pijlen en vormen, met afbeeldingen en een oefenbord.
 - **Help > Lijst van alle plaatsvervangers** en **Help > Sneltoetsen…**
-- **Help > Licenties van derden…**: de licenties van de onderdelen van andere projecten die {{APP}} gebruikt.
+- **Help > Licenties van derden**: de licenties van de onderdelen van andere projecten die {{APP}} gebruikt.
 - **Help > Over {{APP}}**: de versie en de licentie. {{APP}} is vrije software onder de Apache License 2.0.
