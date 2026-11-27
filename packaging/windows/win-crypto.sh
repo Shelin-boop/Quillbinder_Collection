@@ -107,6 +107,10 @@ cp "$WORK/bzip2/bzlib.h" "$PREFIX/include/"
 # ---- RNP: static, Botan 3 backend; "-include cstring" is MSVC's -FI (dash form: Git Bash turns a leading slash into a path, run 46029274249) (see tools/get-crypto.sh), -DRNP_STATIC is what the
 # program's own compile needs too (the header says dllimport without it)
 echo "== RNP"
+# RNP's library includes <getopt.h> through uniwin.h but calls nothing of it (only its command line tools do, which are not
+# built): an empty header in a folder of its own stands in (run 46036008841: C1083 on getopt.h)
+mkdir -p "$WORK/getopt-stub"
+echo "/* stands in for getopt.h: the RNP library only includes it (win-crypto.sh) */" > "$WORK/getopt-stub/getopt.h"
 # (RNP's command line tools need getopt and its CMake stops without it; only the library is built, so getopt gets a harmless
 # value. dirent.h is needed by the library itself: the header-only dirent of the line above, run 46034044407)
 cmake -S "$WORK/rnp" -B "$WORK/b-rnp" -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX="$P" \
@@ -116,7 +120,7 @@ cmake -S "$WORK/rnp" -B "$WORK/b-rnp" -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAK
     -DENABLE_DOC=OFF -DDOWNLOAD_GTEST=OFF -DENABLE_COVERAGE=OFF -DENABLE_SANITIZERS=OFF -DENABLE_FUZZERS=OFF \
     -DBZIP2_INCLUDE_DIR="$P/include" -DBZIP2_LIBRARY_RELEASE="$P/lib/bz2.lib" \
     -DZLIB_INCLUDE_DIR="$(cygpath -m "$ZI/include")" -DZLIB_LIBRARY="$(cygpath -m "$ZLIB")" \
-    -DGETOPT_INCLUDE_DIR="$P/include" -DDIRENT_INCLUDE_DIR="$(cygpath -m "$WORK/dirent/include")" -DGETOPT_LIBRARY="$P/lib/bz2.lib" \
+    -DGETOPT_INCLUDE_DIR="$(cygpath -m "$WORK/getopt-stub")" -DDIRENT_INCLUDE_DIR="$(cygpath -m "$WORK/dirent/include")" -DGETOPT_LIBRARY="$P/lib/bz2.lib" \
     -DJSON-C_INCLUDE_DIR="$P/include/json-c" -DJSON-C_LIBRARY="$JSONC_LIB" > "$WORK/rnp.log" 2>&1 || { tail -40 "$WORK/rnp.log"; exit 1; }
 cmake --build "$WORK/b-rnp" --target librnp -j"$JOBS" >> "$WORK/rnp.log" 2>&1 || { grep -E 'error|FAILED' "$WORK/rnp.log" | head -30; exit 1; }
 cmake --install "$WORK/b-rnp" --component development >> "$WORK/rnp.log" 2>&1 || { tail -20 "$WORK/rnp.log"; exit 1; }
