@@ -47,6 +47,8 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   model are downloads; the Install button of the page opens the install panel (engine, line model, word lists). The header
   `onnxruntime_c_api.h` of ONNX Runtime 1.32.0 (MIT) is kept in `src/third_party/onnxruntime/` so that a plain build needs no
   pack. New suite `v0990o`.
+  then the first use of the button opens the page. The pad's six buttons sit in two rows of three, so that the
+  hidden Handwriting tab no longer keeps the inspector at least 510 px wide.
 - **One size for all toolbars: Small, Normal, Large.** **View > Toolbars > Toolbar Size** (also in the right-click menu of
   every bar, and in **Customize Toolbars**, where "Medium" is now "Normal") sets the icons of every bar at once: the main
   toolbars, the format bars (they were fixed at 18 px), the icon bar, Labels and Profiles. The lists and fields on the bars
