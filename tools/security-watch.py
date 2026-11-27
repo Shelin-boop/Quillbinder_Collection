@@ -3,7 +3,8 @@
 
 It reads only its watch list (tools/security-watch.json), never the rest of the repository, and asks public sources:
 
-- each part's own repository (git ls-remote): its newer releases, and the commit of the version we ship;
+- each part's own repository (git ls-remote): its newer releases, and the commit of the version we ship (a part with
+  "commit": true in the list is pinned by a commit, "version" is that commit: no tags are read, no newer release named);
 - OSV.dev: the known vulnerabilities of those commits and of the Ubuntu packages inside the AppImage;
 - Qt's own list of known vulnerabilities (Qt is the CNA for Qt);
 - the published security advisories of each part's GitHub repository, and the release notes of a newer release;
@@ -613,6 +614,11 @@ class Watch:
             raise SourceError(f"Qt's tag {tag_of(qt)} is not in {qt['repo']}")
         comps = []
         for c in wl["components"]:
+            if c.get("commit"):
+                # a part pinned by a commit of its repository (no release tags to follow): OSV is asked for that commit
+                # ("version" is the commit); the repository's tags are not read and no newer release is named
+                comps.append((c, {tag_of(c): c["version"]}))
+                continue
             tags = self.tags(c["repo"])
             if tag_of(c) not in tags:
                 raise SourceError(f"{c['name']}: the tag {tag_of(c)} is not in {c['repo']}")
@@ -654,7 +660,7 @@ class Watch:
         self.check_qt(qt_tags)
         for c, tags in comps:
             part = self.part(c)
-            newer = newer_versions(c, tags)
+            newer = [] if c.get("commit") else newer_versions(c, tags)
             nx = self.github_extras(c, newer)
             mine = [k for k, f in self.findings.items() if part in f.get("parts", [])]
             top = [k for k in mine if self.is_high(self.findings[k])]

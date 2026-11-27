@@ -213,11 +213,14 @@ needs `build/quillbinder`), the start script and the download page's size note.
 - `secwatch` (2026-11-21, `tests/security_watch_tests.py`, Python only, no build): the security watch
   (`tools/security-watch.py`) offline: versions and ranges, the CVE records' ratings and versions, Qt's list,
   GitHub's advisories, whole runs against made-up sources (what is reported, one issue per project, comments,
-  failed sources), the watch list's versions against the build's files, and the workflow's rights.
+  failed sources, a part pinned by a commit), the watch list's versions against the build's files, and the workflow's rights.
 - `deps` (0.93.0, `tests/deps_packs_tests.py`, Python only, no build): the dependency packs of the Linux build
-  (`tools/deps-pack.sh`): the three recipes and the texts of their pre-releases (what is inside, license, source), the
+  (`tools/deps-pack.sh`): the six recipes (0.99.0: crypto, onnxruntime, aiengine) and the texts of their pre-releases (what is inside, license, source), the
   workflow's matrix, push filter and rights, the translator pack's license files against the add-on's
   `make-addon.sh`, and a pack made and fetched through a made-up `gh` (SHA-256 checked, paths made new).
+  The three packs of 0.99.0 are made from made-up prefixes; the ONNX Runtime one is fetched back (a pack without any `.pc` or
+  `.cmake` file, which `place` once failed on silently), and `get-onnxruntime.sh` refuses an unpinned download.
+  `tools/check-crypto.sh` (not a suite: it needs the built pack) is the real check of the crypto pack.
   `secwatch` also checks `tools/verify-ffmpeg-source.sh` with keys made for the check (needs gpg).
 - `qb_v0931_tests` (0.93.1: the rule that maps the generic font names "monospace", "serif", "sans-serif" on a platform
   that does not know them, with Android-like and Linux-like inputs, and that Linux maps none; the plain texts kept for
