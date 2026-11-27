@@ -28,7 +28,7 @@
 | Barre degli strumenti | **Vista > Barre degli strumenti > Personalizza barre degli strumenti…** (oppure clic destro su una barra) |
 | La barra delle icone | **Vista > Barre degli strumenti > Barra delle icone**; **Scegli le icone per la barra delle icone…** |
 | Scorciatoie da tastiera | **File > Opzioni > Tastiera** (cerca, premi i nuovi tasti, esporta e importa); **Aiuto > Scorciatoie da tastiera…** le elenca |
-| Trovare un comando nei menu | **Aiuto > Trova comando…** (digita parte del suo nome; Return lo esegue) |
+| Trovare un comando nei menu | **Aiuto > Trova comando…** (digita parte del suo nome; Invio lo esegue) |
 | Layout della finestra | **Vista > Layout** (sette integrati; salva i tuoi) |
 | Salvataggio automatico, progetti recenti, informazioni sull'autore | **File > Opzioni > Generale** |
 | Backup | **File > Opzioni > Backup** (quando, quanti, dove); **File > Backup** ne esegue uno subito |

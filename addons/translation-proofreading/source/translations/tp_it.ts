@@ -44,7 +44,7 @@
     </message>
     <message>
         <source>Other Words for “%1”...</source>
-        <translation>Altre parole per «%1»...</translation>
+        <translation>Altre parole per “%1”...</translation>
     </message>
 </context>
 <context>
@@ -281,7 +281,7 @@
     </message>
     <message>
         <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation>Il numero di core del processore e il tempo dopo cui un modello inutilizzato viene scaricato si impostano insieme per tutte le funzioni di IA, in File &gt; Options &gt; General &gt; AI Models.</translation>
+        <translation>Il numero di core del processore e il tempo dopo cui un modello inutilizzato viene scaricato si impostano insieme per tutte le funzioni di IA, in File &gt; Opzioni &gt; Generale &gt; Modelli IA.</translation>
     </message>
     <message>
         <source>Careful: the model weighs even more possibilities (slower, now and then better)</source>
@@ -321,7 +321,7 @@
     </message>
     <message>
         <source>Use the model&apos;s files from a folder (for a computer without internet): the files of the release &quot;%1&quot; of Quillbinder&apos;s repository.</source>
-        <translation>Usa i file del modello da una cartella (per un computer senza internet): i file del rilascio «%1» del repository di Quillbinder.</translation>
+        <translation>Usa i file del modello da una cartella (per un computer senza internet): i file del rilascio “%1” del repository di Quillbinder.</translation>
     </message>
     <message>
         <source>Downloading ...</source>
@@ -515,7 +515,7 @@ Scaricandolo ne accetti la licenza: %2</translation>
     </message>
     <message>
         <source>a translation model (%1 to %2)</source>
-        <translation>un modello di traduzione (%1 in %2)</translation>
+        <translation>un modello di traduzione (da %1 a %2)</translation>
     </message>
     <message>
         <source>the %1 dictionary</source>
@@ -535,7 +535,7 @@ Scaricandolo ne accetti la licenza: %2</translation>
     </message>
     <message>
         <source>OPUS-MT %1 to %2</source>
-        <translation>OPUS-MT %1 in %2</translation>
+        <translation>OPUS-MT da %1 a %2</translation>
     </message>
     <message>
         <source>Choose two different languages</source>
@@ -619,23 +619,23 @@ Scaricandolo ne accetti la licenza: %2</translation>
     </message>
     <message>
         <source>No translation model is downloaded yet for %1 to %2: %3. Choose it with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Nessun modello di traduzione è ancora scaricato per %1 in %2: %3. Sceglilo con Modelli... (File &gt; Opzioni &gt; Assistente di traduzione).</translation>
+        <translation>Nessun modello di traduzione è ancora scaricato per la traduzione da %1 a %2: %3. Scegli il modello con Modelli... (File &gt; Opzioni &gt; Assistente di traduzione).</translation>
     </message>
     <message>
         <source>No translation model is downloaded yet for %1 to %2: %3. Choose them with Models... (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Nessun modello di traduzione è ancora scaricato per la traduzione da %1 a %2: %3. Scegli i modelli con Modelli... (File &gt; Opzioni &gt; Assistente di traduzione).</translation>
     </message>
     <message>
         <source>Missing: %1. Download them in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Mancano: %1. Scaricali nelle opzioni del componente aggiuntivo (File &gt; Opzioni &gt; Assistente di traduzione).</translation>
     </message>
     <message>
         <source>Missing: %1. Download it in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation type="unfinished"></translation>
+        <translation>Manca: %1. Scaricalo nelle opzioni del componente aggiuntivo (File &gt; Opzioni &gt; Assistente di traduzione).</translation>
     </message>
     <message>
         <source>Translated through English (%1 to English to %2): two steps, so a mistake of the first one is carried into the second.</source>
-        <translation>Tradotto passando per l&apos;inglese (%1 in inglese in %2): due passaggi, quindi un errore del primo si trasferisce al secondo.</translation>
+        <translation>Tradotto passando per l&apos;inglese (da %1 a inglese, poi a %2): due passaggi, quindi un errore del primo si trasferisce al secondo.</translation>
     </message>
     <message>
         <source>Loading the models...</source>
@@ -715,15 +715,15 @@ Scaricandolo ne accetti la licenza: %2</translation>
     </message>
     <message>
         <source>“%1” is spelled correctly. Below: words of a similar meaning.</source>
-        <translation>«%1» è scritto correttamente. Sotto: parole di significato simile.</translation>
+        <translation>“%1” è scritto correttamente. Sotto: parole di significato simile.</translation>
     </message>
     <message>
         <source>“%1” is not in the dictionary, and no word near it is.</source>
-        <translation>«%1» non è nel dizionario, e nessuna parola vicina lo è.</translation>
+        <translation>“%1” non è nel dizionario, e nessuna parola vicina lo è.</translation>
     </message>
     <message>
         <source>Suggestion: “%2” is the nearest word to “%1”, which is not in the dictionary. Check it. Below: the other suggestions.</source>
-        <translation>Suggerimento: «%2» è la parola più vicina a «%1», che non è nel dizionario. Controllala. Sotto: gli altri suggerimenti.</translation>
+        <translation>Suggerimento: “%2” è la parola più vicina a “%1”, che non è nel dizionario. Controllala. Sotto: gli altri suggerimenti.</translation>
     </message>
     <message>
         <source>Added. Click to leave it out.</source>
@@ -763,19 +763,19 @@ Scaricandolo ne accetti la licenza: %2</translation>
     </message>
     <message>
         <source>Leave Out “%1”</source>
-        <translation>Ometti «%1»</translation>
+        <translation>Ometti “%1”</translation>
     </message>
     <message>
         <source>Use “%1”</source>
-        <translation>Usa «%1»</translation>
+        <translation>Usa “%1”</translation>
     </message>
     <message>
         <source>Do Not Add “%1”</source>
-        <translation>Non aggiungere «%1»</translation>
+        <translation>Non aggiungere “%1”</translation>
     </message>
     <message>
         <source>Keep “%1”</source>
-        <translation>Mantieni «%1»</translation>
+        <translation>Mantieni “%1”</translation>
     </message>
     <message>
         <source>Your Sentence Was Kept</source>
@@ -815,7 +815,7 @@ Scaricandolo ne accetti la licenza: %2</translation>
     </message>
     <message>
         <source>Looking for other words for “%1”...</source>
-        <translation>Ricerca di altre parole per «%1»...</translation>
+        <translation>Ricerca di altre parole per “%1”...</translation>
     </message>
     <message>
         <source>No other words found.</source>
@@ -851,7 +851,7 @@ Scaricandolo ne accetti la licenza: %2</translation>
     </message>
     <message>
         <source>WordNet has no entry for “%1”, so there is no meaning to show. A model can write one: download Qwen3 1.7B or Qwen3 4B in File &gt; Options &gt; Translation Helper.</source>
-        <translation>WordNet non ha una voce per «%1», quindi non c&apos;è un significato da mostrare. Un modello può scriverne uno: scarica Qwen3 1.7B o Qwen3 4B in File &gt; Opzioni &gt; Assistente di traduzione.</translation>
+        <translation>WordNet non ha una voce per “%1”, quindi non c&apos;è un significato da mostrare. Un modello può scriverne uno: scarica Qwen3 1.7B o Qwen3 4B in File &gt; Opzioni &gt; Assistente di traduzione.</translation>
     </message>
     <message>
         <source>The model wrote no meaning.</source>
@@ -923,7 +923,7 @@ Scaricandolo ne accetti la licenza: %2</translation>
     </message>
     <message>
         <source>Asking %1 what the word means...</source>
-        <translation>Chiedo a %1 che cosa significa la parola...</translation>
+        <translation>Richiesta a %1 del significato della parola...</translation>
     </message>
     <message>
         <source>Meaning:</source>
@@ -935,27 +935,27 @@ Scaricandolo ne accetti la licenza: %2</translation>
     </message>
     <message>
         <source>Similar translations (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Traduzioni simili (%1, per “%2”):</translation>
     </message>
     <message>
         <source>Similar translations (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Traduzioni simili (%1):</translation>
     </message>
     <message>
         <source>Similar (%1, for “%2”):</source>
-        <translation type="unfinished"></translation>
+        <translation>Simili (%1, per “%2”):</translation>
     </message>
     <message>
         <source>Similar (%1):</source>
-        <translation type="unfinished"></translation>
+        <translation>Simili (%1):</translation>
     </message>
     <message>
         <source>%1 (German): spelling suggestions and similar words are given for English words.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (tedesco): i suggerimenti ortografici e le parole simili sono disponibili per le parole inglesi.</translation>
     </message>
     <message>
         <source>%1 (from “%2”)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (da “%2”)</translation>
     </message>
     <message>
         <source>Similar German words (%1):</source>
@@ -967,7 +967,7 @@ Scaricandolo ne accetti la licenza: %2</translation>
     </message>
     <message>
         <source>Asking the model for other words...</source>
-        <translation>Chiedo al modello altre parole...</translation>
+        <translation>Richiesta di altre parole al modello...</translation>
     </message>
     <message>
         <source>Spelling: correct.</source>
