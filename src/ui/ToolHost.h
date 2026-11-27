@@ -104,6 +104,11 @@ public:
     void modelUsed(const QString &id) override;
     void modelUnloaded(const QString &id) override;
     void reportDeviceMemory(const QString &where, qint64 total, qint64 available) override;
+    const qbai_api *aiEngine(int version) override;
+    int aiPickDevice(const QString &choice, qint64 bytes, QString *where) override;
+    QList<QPair<QString, QString>> aiDeviceChoices() override;
+    QWidget *aiPanel(const QStringList &kinds, QWidget *parent) override;
+    QString aiModelFile(const QString &modelId, const QString &role) const override;
 
     // The 1.1 side of a tool (inspector tabs, toolbar buttons, an options section); null for 1.0 tools.
     static tools::ToolExtension *extension(tools::ToolInterface *tool);

@@ -1672,6 +1672,7 @@
     <file alias="icons/qbicons-dark/status/64/qb-waystation-red.svg">icons/qbicons-dark/status/64/qb-waystation-red.svg</file>
     <file alias="icons/qbicons-dark/status/64/qb-waystation-yellow.svg">icons/qbicons-dark/status/64/qb-waystation-yellow.svg</file>
     <file alias="app/quillbinder.svg">app/quillbinder.svg</file>
+    <file alias="ai/models.json">ai/models.json</file>
     <file alias="docs/manual.md">../docs/manual.md</file>
     <file alias="docs/developer-guide.md">../docs/developer-guide.md</file>
     <file alias="docs/mindmap-help.md">../docs/mindmap-help.md</file>
