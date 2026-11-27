@@ -135,7 +135,9 @@ WL = {
         {"name": "FFmpeg", "version": "9.0.2", "repo": "https://github.com/FFmpeg/FFmpeg", "tag": "n{v}",
          "uses": "the media add-ons"},
         {"name": "whisper.cpp", "version": "1.9.5", "repo": "https://github.com/ggml-org/whisper.cpp", "tag": "v{v}",
-         "uses": "speech"}],
+         "uses": "speech"},
+        {"name": "Sonic", "version": "b93885dcb70aae50c6f76b0fe4e0868f029a077e", "repo": "https://github.com/waywardgeek/sonic",
+         "tag": "{v}", "commit": True, "uses": "the speed of speech"}],
     "ubuntu": {"ecosystem": "Ubuntu:24.04:LTS", "packages": {"libpng1.6": "1.6.43-5ubuntu0.7"}},
     "osv_canaries": [{"commit_of": "FFmpeg", "tag": "n4.0"},
                      {"package": {"name": "libpng1.6", "ecosystem": "Ubuntu:24.04:LTS"}, "version": "1.6.0-1"}]}
@@ -180,6 +182,7 @@ OSV_VULNS = {
 class Net:
     def __init__(self, **over):
         self.posts = []
+        self.queries = []
         self.over = over
         self.existing = over.get("existing", [])
 
@@ -193,6 +196,7 @@ class Net:
             if url.endswith("/querybatch"):
                 out = []
                 for q in data["queries"]:
+                    self.queries.append(q)
                     if q.get("commit") == "f902":
                         out.append({"vulns": [{"id": "CVE-2026-2001"}, {"id": "CVE-2026-2002"}, {"id": "CVE-2026-2003"}]})
                     elif q.get("commit") == "f400":
@@ -266,6 +270,9 @@ check("the release asked for is reported", "Release watch: Qt 6.12.1 is out" in 
 check("dry run: no issue written", not net.posts and "(dry run: no issue written)" in out, net.posts)
 check("the report names every part", all(p in out for p in ("Qt 6.12.0:", "FFmpeg 9.0.2:", "whisper.cpp 1.9.5:",
                                                              "Ubuntu packages in the AppImage")))
+check("a part pinned by a commit: OSV is asked for that commit, its repository's tags are not read, no newer release",
+      {"commit": "b93885dcb70aae50c6f76b0fe4e0868f029a077e"} in net.queries
+      and "Sonic b93885dcb70aae50c6f76b0fe4e0868f029a077e: newer releases none; OSV 0" in out, out[-900:])
 check("the report names newer releases", "newer releases 6.12.1" in out and "newer releases 1.9.6" in out)
 
 rc, out, net = run(False, existing=[

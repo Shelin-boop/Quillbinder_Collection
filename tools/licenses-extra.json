@@ -29,6 +29,67 @@
   "url": "src/core/third_party/monocypher of the Quillbinder source (https://github.com/Shelin-boop/Quillbinder_Collection); upstream: https://github.com/LoupVaillant/Monocypher, tag 4.0.3"
  },
  {
+  "name": "Botan",
+  "version": "3.14.1",
+  "license": "BSD-2-Clause",
+  "where": "the cryptography of the built-in encryption (OpenPGP, through RNP), compiled into the program (0.99.0)",
+  "source": "packaging/linux/licenses/crypto-botan.txt",
+  "file": "botan.txt",
+  "url": "https://github.com/randombit/botan, tag 3.14.1 (commit 01af88c039fcfaedc418b1af4d6d3a139674e591); built by tools/get-crypto.sh"
+ },
+ {
+  "name": "RNP (with sexpp)",
+  "version": "0.18.1",
+  "license": "BSD-2-Clause, BSD-3-Clause, Apache-2.0 and MIT parts",
+  "where": "the OpenPGP code of the built-in encryption, with its S-expression library sexpp, compiled into the program (0.99.0)",
+  "source": [
+   "packaging/linux/licenses/crypto-rnp.txt",
+   "packaging/linux/licenses/crypto-rnp-OCB.txt",
+   "packaging/linux/licenses/crypto-sexpp.txt"
+  ],
+  "file": "rnp.txt",
+  "url": "https://github.com/rnpgp/rnp, tag v0.18.1 (commit aad1892e4d8423398a0b973bd0a7e4544c359afc), and https://github.com/rnpgp/sexpp (commit c641a2f36520bab783657a58650d9fda548b9dec); built by tools/get-crypto.sh",
+  "common": [
+   "Apache-2.0"
+  ]
+ },
+ {
+  "name": "json-c",
+  "version": "0.19",
+  "license": "MIT",
+  "where": "reading and writing JSON for RNP, compiled into the program (0.99.0)",
+  "source": "packaging/linux/licenses/crypto-json-c.txt",
+  "file": "json-c.txt",
+  "url": "https://github.com/json-c/json-c, tag json-c-0.19-20260627 (commit aa716cd8d663c976b99b0f30f102ee1d8ef63146); built by tools/get-crypto.sh"
+ },
+ {
+  "name": "bzip2",
+  "version": "1.0.8",
+  "license": "bzip2 and libbzip2 license (BSD-style)",
+  "where": "reading bzip2-compressed OpenPGP data for RNP, compiled into the program (0.99.0)",
+  "source": "packaging/linux/licenses/crypto-bzip2.txt",
+  "file": "bzip2.txt",
+  "url": "https://sourceware.org/bzip2/ (the sources as the libarchive project mirrors them: https://github.com/libarchive/bzip2, tag bzip2-1.0.8, commit 6a8690fc8d26c815e798c588f796eabe9d684cf0); built by tools/get-crypto.sh"
+ },
+ {
+  "name": "zlib (in the encryption libraries)",
+  "version": "1.4",
+  "license": "Zlib",
+  "where": "packed data of the built-in encryption (RNP), compiled into the program (0.99.0)",
+  "source": "packaging/linux/licenses/crypto-zlib.txt",
+  "file": "zlib-encryption.txt",
+  "url": "https://github.com/madler/zlib, tag v1.4 (commit 99623ef7097352da7993ba614161fd6a311e046e); built by tools/get-crypto.sh"
+ },
+ {
+  "name": "QtKeychain",
+  "version": "0.18.0",
+  "license": "BSD-3-Clause (Modified BSD License)",
+  "where": "keeping the passwords of the built-in encryption in the system's key store, linked into the program (0.99.0)",
+  "source": "packaging/linux/licenses/qtkeychain.txt",
+  "file": "qtkeychain.txt",
+  "url": "https://github.com/frankosterfeld/qtkeychain, tag 0.18.0 (commit e86bc3cbb50b172be61ed857803a372412b6ad85)"
+ },
+ {
   "name": "AppImage type2-runtime",
   "license": "MIT",
   "where": "the start code at the beginning of the AppImage file",
