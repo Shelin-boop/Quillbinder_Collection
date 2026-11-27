@@ -31,7 +31,7 @@
 | Encontrar un comando en los menús | **Ayuda > Buscar comando…** (escribe parte de su nombre; Intro lo ejecuta) |
 | Disposiciones de ventana | **Ver > Disposición** (siete integradas; guarda las tuyas) |
 | Guardado automático, proyectos recientes, información del autor | **Archivo > Opciones > General** |
-| Copias de seguridad | **Archivo > Opciones > Copia de seguridad** (cuándo, cuántas, dónde); **Archivo > Copia de seguridad > Hacer copia de seguridad ahora** crea una al momento |
+| Copias de seguridad | **Archivo > Opciones > Copia de seguridad** (cuándo, cuántas, dónde); **Archivo > Copia de seguridad > Copia de seguridad ahora** crea una al momento |
 | Ortografía y correcciones mientras escribes | **Archivo > Opciones > Correcciones** |
 | Dónde se abren los enlaces, la tecla Intro, el modo de composición, la reproducción | **Archivo > Opciones > Comportamientos** |
 | Ajustes de importación y exportación | **Archivo > Opciones > Compartir** |
@@ -78,7 +78,7 @@
 
 ### Actualizaciones y complementos
 
-La **versión completa** del AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) lleva dentro todos los complementos y los instala en su primer inicio. Las actualizaciones y las extensiones llegan como pequeños archivos de paquete (*.qbpkg*), en la página de versiones (Releases) de la página del proyecto (https://github.com/Shelin-boop/Quillbinder_Collection/releases), junto al AppImage. Instálalos con **Ayuda > Complementos y actualizaciones > Instalar actualización o complemento…** (o haz doble clic en el archivo). **Ayuda > Complementos y actualizaciones > Gestor de complementos…** activa y desactiva complementos y vuelve a una versión anterior del programa si una actualización no te conviene. Entre los complementos hay temas adicionales, plantillas de proyecto, formatos de compilación, el Generador de nombres, el Bloc de notas rápidas, Estadísticas de texto, reproducción de audio y vídeo (un paquete para los formatos de uso común, *media-all-formats.qbpkg*; o *media-playback.qbpkg* solo para los formatos libres) y la importación de páginas web y de archivos antiguos de Word.
+La **versión completa** del AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) lleva dentro todos los complementos y los instala en su primer inicio. Las actualizaciones y los complementos llegan como pequeños archivos de paquete (*.qbpkg*), en la página de versiones (Releases) de la página del proyecto (https://github.com/Shelin-boop/Quillbinder_Collection/releases), junto al AppImage. Instálalos con **Ayuda > Complementos y actualizaciones > Instalar actualización o complemento…** (o haz doble clic en el archivo). **Ayuda > Complementos y actualizaciones > Gestor de complementos…** activa y desactiva complementos y vuelve a una versión anterior del programa si una actualización no te conviene. Entre los complementos hay temas adicionales, plantillas de proyecto, formatos de compilación, el Generador de nombres, el Bloc de notas rápidas, Estadísticas de texto, reproducción de audio y vídeo (un paquete para los formatos de uso común, *media-all-formats.qbpkg*; o *media-playback.qbpkg* solo para los formatos libres) y la importación de páginas web y de archivos antiguos de Word.
 
 ---
 
