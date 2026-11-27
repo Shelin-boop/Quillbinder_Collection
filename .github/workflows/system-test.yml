@@ -119,7 +119,7 @@ jobs:
       - name: The recipes of FFmpeg and whisper.cpp (the names of their caches)
         id: recipe
         run: |
-          for p in ffmpeg whisper; do echo "$p=$(tools/deps-pack.sh hash "$p")" | tee -a "$GITHUB_OUTPUT"; done
+          for p in ffmpeg whisper crypto aiengine onnxruntime; do echo "$p=$(tools/deps-pack.sh hash "$p")" | tee -a "$GITHUB_OUTPUT"; done
 
       # read only, as in the job "tests" of release.yml: the job "build" of release.yml writes these caches
       - name: FFmpeg from the cache
@@ -136,11 +136,32 @@ jobs:
           path: build/whisper
           key: deps-linux-whisper-${{ steps.recipe.outputs.whisper }}
 
-      - name: FFmpeg and whisper.cpp (built when the cache has none)
+      - name: The encryption libraries from the cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/crypto
+          key: deps-linux-crypto-${{ steps.recipe.outputs.crypto }}
+
+      - name: The AI engine's libraries from the cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/ai-engine
+          key: deps-linux-aiengine-${{ steps.recipe.outputs.aiengine }}
+
+      - name: ONNX Runtime from the cache
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/onnxruntime
+          key: deps-linux-onnxruntime-${{ steps.recipe.outputs.onnxruntime }}
+
+      - name: FFmpeg, whisper.cpp, encryption, AI engine and ONNX Runtime (built when the cache has none)
         env:
           QB_DEPS_PACK: '0'
         run: |
-          tools/get-ffmpeg.sh > /tmp/ffmpeg.log 2>&1 && tools/get-whisper.sh > /tmp/whisper.log 2>&1 || { tail -40 /tmp/ffmpeg.log /tmp/whisper.log; exit 1; }
+          tools/get-ffmpeg.sh > /tmp/ffmpeg.log 2>&1 && tools/get-whisper.sh > /tmp/whisper.log 2>&1 \
+            && tools/get-crypto.sh > /tmp/crypto.log 2>&1 && tools/get-ai-engine.sh > /tmp/ai-engine.log 2>&1 \
+            && tools/get-onnxruntime.sh > /tmp/onnxruntime.log 2>&1 \
+            || { tail -40 /tmp/ffmpeg.log /tmp/whisper.log /tmp/crypto.log /tmp/ai-engine.log /tmp/onnxruntime.log; exit 1; }
 
       - name: The compiled files of the last test build (ccache)
         uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0

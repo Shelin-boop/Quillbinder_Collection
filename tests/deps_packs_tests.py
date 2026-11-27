@@ -272,5 +272,30 @@ esac
 finally:
     shutil.rmtree(work, ignore_errors=True)
 
+# ---------------------------------------------------------------------------------------------------- the Linux workflows (0.99.0)
+# every job that configures the program on Linux fetches the encryption, AI engine and ONNX Runtime packs first
+for rel, first_config in ((".github/workflows/release.yml", "cmake -S . -B build -G Ninja"),
+                          (".github/workflows/ccache.yml", "cmake -S . -B build -G Ninja"),
+                          (".github/workflows/system-test.yml", "cmake -S . -B build -G Ninja")):
+    text = read(rel)
+    at = text.find(first_config)
+    places = [text.find(f"tools/get-{n}.sh") for n in ("crypto", "ai-engine", "onnxruntime")]
+    check(f"{os.path.basename(rel)}: the three packs are fetched before the program is configured",
+          at > 0 and all(0 < q < at for q in places), f"configure at {at}, packs at {places}")
+rel_text = read(".github/workflows/release.yml")
+check("release.yml: the job build has the encryption libraries before the AppImage's build (cache, then the script)",
+      0 < rel_text.find("tools/ci-step.sh crypto tools/get-crypto.sh") < rel_text.find("tools/ci-step.sh appimage packaging/linux/build-appimage.sh")
+      and "key: deps-linux-crypto-${{ steps.engine-recipe.outputs.crypto }}" in rel_text)
+check("release.yml: the job tests reads the caches of the three packs",
+      all(f"key: deps-linux-{n}-${{{{ steps.recipe.outputs.{m} }}}}" in rel_text
+          for n, m in (("crypto", "crypto"), ("aiengine", "aiengine"), ("onnxruntime", "onnxruntime"))))
+other = [f for f in os.listdir(os.path.join(ROOT, ".github/workflows")) if f.endswith(".yml")
+         and "cmake -S . -B build" in read(".github/workflows/" + f)]
+check("release.yml: the job tests runs the three scripts before its configure",
+      0 < rel_text.find("tools/get-crypto.sh > /tmp/crypto.log") < rel_text.find("cmake -S . -B build -G Ninja")
+      and "tools/get-ai-engine.sh > /tmp/ai-engine.log" in rel_text and "tools/get-onnxruntime.sh > /tmp/onnxruntime.log" in rel_text)
+check("no other workflow configures the program on Linux without the packs",
+      sorted(other) == ["ccache.yml", "release.yml", "system-test.yml"], other)
+
 print(f"{FAILS} failure(s)")
 sys.exit(1 if FAILS else 0)

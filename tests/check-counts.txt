@@ -83,7 +83,7 @@ w3 10
 w4 27
 w4c 5
 secwatch 65
-deps 56
+deps 63
 verlines 48
 addonentry 28
 v0990c 33
