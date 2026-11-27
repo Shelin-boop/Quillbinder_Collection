@@ -211,6 +211,11 @@ const std::vector<Case> &cases()
         {QStringLiteral("S-S01"), QStringLiteral("Small interface: on and off restore the window"), 60, 60, QString(), caseSS01, false},
         {QStringLiteral("S-S02"), QStringLiteral("Small interface: the round buttons"), 60, 60, QString(), caseSS02, false},
         {QStringLiteral("S-S03"), QStringLiteral("Small interface: upright"), 45, 45, QString(), caseSS03, false},
+        {QStringLiteral("S-J01"), QStringLiteral("Read Aloud: marked text"), 45, 45, QString(), caseSJ01, false},
+        {QStringLiteral("S-J02"), QStringLiteral("Read Aloud: from the cursor, the marked sentence"), 60, 60, QString(), caseSJ02, false},
+        {QStringLiteral("S-J03"), QStringLiteral("Read Aloud: Pause and Stop"), 60, 60, QString(), caseSJ03, false},
+        {QStringLiteral("S-J04"), QStringLiteral("Read Aloud: a voice the model lacks is greyed"), 45, 45, QString(), caseSJ04, false},
+        {QStringLiteral("S-J05"), QStringLiteral("Read Aloud: a model that does not fit is refused with its reason"), 60, 60, QString(), caseSJ05, false},
         // ---- data safety
         {QStringLiteral("S-D01"), QStringLiteral("Autosave while typing on the large project"), 510, 510, QString(), caseSD01, true},
         {QStringLiteral("S-D01e"), QStringLiteral("Autosave while typing on the large project (encrypted project)"), 673, 673, QString(), caseSD01, true},

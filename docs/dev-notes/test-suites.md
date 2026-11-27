@@ -44,6 +44,32 @@ used before, moved unchanged; suite `stshard` fails on a POSIX header or call ou
 Windows target is built only with `-DQB_SYSTEM_TEST_WINDOWS=ON`. Not compiled or run on Windows here: the first Windows run
 compiles it. Pitfall: in the mouse drag the event loop must run between the steps (the dragged program is the test
 itself), so the Windows version waits with `settle`, never with `Sleep`.
+## New system-test cases of 0.99.0 (item 124, the harness `tests/crashsafe/`)
+
+New files: `cs_enc099.cpp` (S-Z01 to S-Z08 and `encryptionSetUp`), `cs_new099.cpp` (S-H01 to S-H06 handwriting, S-G01 to S-G04
+model rule, S-S01 to S-S03 small interface, X-14 and X-15, X-16), `cs_new099b.cpp` (U-21 to U-26), `cs_new099c.cpp` (S-J01 to S-J05, Read
+Aloud with the fake engine; the case writes its own catalog and the voice clip; `QB_AI_ENGINE_LIB`, `QBAI_FAKE_CARDS` and
+`QB_AI_CATALOG` are set by `crashsafe_tests.cpp` for ids starting with `S-J`; U-23 gets the fake engine, the tool plug-ins and
+the fast speech switch). X-13 (encrypted kills at the text, the `.qbx` and the snapshots) is in `cs_faults.cpp`.
+
+**The encrypted variants** (suffix `e`): C-34e to C-38e, S-D01e, S-D05e, S-Y01e to S-Y03e run the base case with
+`ctx().encrypted`: `setUpProgram` makes (or finds) the run's key folder, imports it into the device ring, and
+`fixtureCopy` encrypts the copied project (a `.scriv` copy stays plain: the Scrivener format is not encrypted). The harness's
+`readText` and `writeText` read and write sealed files through the vault while the project is open; once it is closed a
+sealed file can only be compared byte for byte. `verifyCase` reads the settings through `vault::plainPath`. Memory key store
+(`QB_TEST_KEYSTORE=memory`), so no case touches a real key store. Estimates: about 1.3 times the base plus 10 s. There is
+no S-Y04e: the real programs of that case would need a way to seed their key store from outside, and `twoComputers`
+looks into plain files; both would change the program or the case.
+
+**Pitfalls found.** The pen's "in use" state ends only after an out-of-range sample and a clock step (`PenInput::setClock`);
+the left-handed zone needs `clearInk()` and a settle before the next stroke; a gpg-agent keeps a passphrase, so the wrong
+attempt comes first (S-Z06); the program refuses the recovery secret as a device key, so S-Z04 opens with gpg and `restore`;
+a compile temp file `.docx.part` is removed only when more than an hour old (X-16 plants one of 2 hours); an encrypted
+project names a conflict copy of the project file `<name> (other version ...).qbx`.
+
+Quick times of the new cases (this machine, 2 cores, xvfb): see the results of the session's run; the estimates in
+`cs_list.cpp` are what the shard split uses. With them the plan stays at 12 shards of about 60 minutes (budget 200).
+
 ## v0990m (0.99.0)
 
 `qb_v0990m_tests`: Speech Transcription 1.10 with the fake libqbai of `v0990h` (`QB_AI_ENGINE_LIB`, `QBAI_FAKE_CARDS` with two

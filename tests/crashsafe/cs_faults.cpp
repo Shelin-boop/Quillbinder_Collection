@@ -387,6 +387,12 @@ void caseC35()
         std::function<bool(const QString &)> complete;   // the output is whole
     };
     auto zipWhole = [](const QString &f) {
+        if (f.endsWith(QLatin1String(".gpg"))) {   // 0.99.0: an encrypted backup is whole when it decrypts and unpacks into a project
+            QString proj, e;
+            const QString into = ctx().work + QStringLiteral("/unz-") + QFileInfo(f).completeBaseName();
+            QDir(into).removeRecursively();
+            return !backup::restore(f, into, &proj, &e).isEmpty() && !proj.isEmpty();
+        }
         ZipReader z(f);
         if (!z.isValid())
             return false;

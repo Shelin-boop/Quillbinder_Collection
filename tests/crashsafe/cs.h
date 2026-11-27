@@ -254,7 +254,12 @@ void caseU26();
 void caseX13();
 void caseX14();
 void caseX15();
-void caseX16();                          // the .qbx, or the .scriv
+void caseX16();
+void caseSJ01();
+void caseSJ02();
+void caseSJ03();
+void caseSJ04();
+void caseSJ05();                          // the .qbx, or the .scriv
 MainWindow *reopenWindow(MainWindow *w);                    // save, close, open again (deletes w)
 QString docText(Project *p, BinderItem *it);
 QString pdfToText(const QString &pdf, bool layout = false);

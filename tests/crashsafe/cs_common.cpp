@@ -242,6 +242,10 @@ void shot(QWidget *w, const QString &name)
 
 QString readText(const QString &file)
 {
+    if (qb::vault::seals(file)) {   // 0.99.0: a file of an open encrypted project is read decrypted
+        QByteArray data;
+        return qb::vault::readFile(file, &data) ? QString::fromUtf8(data) : QString();
+    }
     QFile f(file);
     return f.open(QIODevice::ReadOnly) ? QString::fromUtf8(f.readAll()) : QString();
 }
@@ -257,9 +261,12 @@ QString projectFileIn(const QString &dir)
     return QString();
 }
 
-bool writeText(const QString &file, const QByteArray &data)
+bool writeText(const QString &file, const QByteArray &dataIn)
 {
     QDir().mkpath(QFileInfo(file).absolutePath());
+    QByteArray data = dataIn;
+    if (qb::vault::seals(file))   // 0.99.0: what is written into an open encrypted project is encrypted, as a synced computer's file would be
+        qb::vault::seal(file, data);
     QFile f(file);
     return f.open(QIODevice::WriteOnly | QIODevice::Truncate) && f.write(data) == data.size();
 }

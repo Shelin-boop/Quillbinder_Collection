@@ -116,6 +116,12 @@ int main(int argc, char **argv)
         qputenv("QB_SPEECH_DIR", (b + QStringLiteral("/tool-plugins/speech")).toUtf8());
         qputenv("QB_SPEECH_FAST", "1");
     }
+    if (caseId.startsWith(QLatin1String("S-J"))) {   // 0.99.0: Read Aloud through the fake AI engine and a catalog of the case
+        const QString b = QStringLiteral(QB_TEST_BUILD_DIR);
+        qputenv("QB_AI_ENGINE_LIB", (b + QStringLiteral("/tests/fake-ai-engine/libqbai.so.1")).toUtf8());
+        qputenv("QBAI_FAKE_CARDS", "Big Card,8192,8000;Small Card,1024,40");
+        qputenv("QB_AI_CATALOG", (QString::fromLocal8Bit(argv[3]) + QStringLiteral("/work/catalog.json")).toUtf8());
+    }
     common(QString::fromLocal8Bit(argv[3]));
     ctx().id = caseId;
     ctx().encrypted = caseId.endsWith(QLatin1Char('e'));
