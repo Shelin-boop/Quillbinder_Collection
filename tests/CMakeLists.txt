@@ -663,3 +663,9 @@ target_compile_definitions(qb_welcdark_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE
 add_executable(qb_ls3_tests ls3_tests.cpp)
 target_link_libraries(qb_ls3_tests PRIVATE qbcore Qt6::Test)
 target_compile_definitions(qb_ls3_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
+
+# 0.99.0, Live Sync work package 4 (the protocol): messages, locks with edit requests, manifest, blobs, outbox, host and client
+# sessions over a fake network with a clock moved by hand, and one run of two programs over TLS on localhost (no display)
+# (./qb_ls4_tests /tmp/shots)
+add_executable(qb_ls4_tests ls4_tests.cpp)
+target_link_libraries(qb_ls4_tests PRIVATE qbcore Qt6::Network)
