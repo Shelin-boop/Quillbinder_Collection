@@ -4,5 +4,5 @@ job: the run 0.99.0 (toward 1.0.0), Linux part: to-do items 110, 34, 112 to 127 
 branch: linux/0.99.0
 chat: started 2026-11-27 06:07 Berlin
 started: 2026-11-27 06:08 Berlin
-paused:
+paused: 2026-11-28 13:58 Berlin, at the writer's word (usage); work saved on linux/0.99.0 and linux/0.99.0-ls10-wip
 note: the plan of the run 1.0.0 governs; Windows and Android parts follow in their own chats; 2026-11-28: Live Sync (LAN collaboration) added to 0.99.0 at the writer's request
