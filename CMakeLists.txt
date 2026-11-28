@@ -283,13 +283,16 @@ file(GLOB_RECURSE CORE_SOURCES CONFIGURE_DEPENDS
   src/core/*.cpp src/core/*.h src/text/*.cpp src/text/*.h
   src/compile/*.cpp src/compile/*.h src/import/*.cpp src/import/*.h)
 # 0.99.0: the files of one system each (SystemMemory<System>.cpp, KeepAlive*.cpp): only the system's own is compiled
-list(FILTER CORE_SOURCES EXCLUDE REGEX "src/core/(SystemMemory(Linux|Win|Android)|KeepAlive(None|Android))\\.cpp$")
+list(FILTER CORE_SOURCES EXCLUDE REGEX "src/core/(SystemMemory(Linux|Win|Android)|KeepAlive(None|Android))\\.cpp$|src/core/collab/net/MulticastLock(None|Android)\\.cpp$")
 if(ANDROID)
-  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryAndroid.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveAndroid.cpp)
+  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryAndroid.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveAndroid.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/collab/net/MulticastLockAndroid.cpp)
 elseif(WIN32)
-  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryWin.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveNone.cpp)
+  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryWin.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveNone.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/collab/net/MulticastLockNone.cpp)
 else()
-  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryLinux.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveNone.cpp)
+  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryLinux.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveNone.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/collab/net/MulticastLockNone.cpp)
 endif()
 add_library(qbcore STATIC ${CORE_SOURCES}
   # package signatures (0.65.0): Monocypher's Ed25519 check, unchanged third-party C code
@@ -297,6 +300,7 @@ add_library(qbcore STATIC ${CORE_SOURCES}
 target_include_directories(qbcore PUBLIC src ${CMAKE_BINARY_DIR}/generated)
 target_link_libraries(qbcore PUBLIC Qt6::Core Qt6::Gui Qt6::Xml ZLIB::ZLIB)
 target_link_libraries(qbcore PRIVATE Qt6::GuiPrivate)
+target_link_libraries(qbcore PUBLIC Qt6::Network)   # 0.99.0 Live Sync: discovery's UDP sockets
 # 0.99.0: the encryption layer (src/core/crypto): RNP (above), the system's key store through QtKeychain 0.18.0
 # (src/third_party/qtkeychain, static, with this Qt; on Linux through Qt D-Bus, which the AppImage carries for Qt GUI)
 # and the word list of the passphrase generator (a resource of the library)

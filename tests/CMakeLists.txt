@@ -640,3 +640,8 @@ add_executable(qb_v0990n_tests v0990n_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0990n_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0990n_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 add_dependencies(qb_v0990n_tests qb-fake-qbai)
+# 0.99.0, Live Sync work package 2: discovery (the small multicast DNS writer and strict reader, responder, browser, manual
+# address, multicast lock; real multicast on the loopback interface) (./qb_ls2_tests /tmp/shots)
+add_executable(qb_ls2_tests ls2_tests.cpp)
+target_link_libraries(qb_ls2_tests PRIVATE qbcore Qt6::Core Qt6::Network)
+target_compile_definitions(qb_ls2_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
