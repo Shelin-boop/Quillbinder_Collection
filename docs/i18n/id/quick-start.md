@@ -75,6 +75,7 @@
 - **Tempat yang diingat**: setiap dokumen terbuka di tempat Anda meninggalkan kursor, juga setelah proyek dibuka kembali.
 - **Font**: **Format > Font > Instal Berkas Font…** menambahkan font tanpa meninggalkan program.
 - **Keamanan**: simpan otomatis juga saat Anda terus mengetik, cadangan, salinan cadangan berkas proyek, laporan crash dan macet (**Bantuan > Pemecahan Masalah dan Pengembangan > Laporan Crash…**), dan **Bantuan > Pemecahan Masalah dan Pengembangan > Informasi Sistem**.
+- **Live Sync** (mati sampai Anda menyalakannya di **Berkas > Opsi > Live Sync**): menjaga satu proyek tetap sama di perangkat Anda dalam jaringan yang sama. Pasangkan perangkat satu kali (**Pasangkan Perangkat...**: bandingkan enam angka di kedua perangkat), lalu pilih **Bagikan Proyek Ini...** di menu tombol Live Sync pada bilah alat dan **Gabung ke Proyek...** di perangkat lain. Satu perangkat mengedit sebuah dokumen pada satu waktu; yang lain dapat meminta. Berkas proyek yang tidak terenkripsi, dan cadangan ZIP-nya, tidak dienkripsi oleh Live Sync: pakai enkripsi bawaan perangkat Anda (bagian 21 manual).
 
 ### Pembaruan dan pengaya
 
