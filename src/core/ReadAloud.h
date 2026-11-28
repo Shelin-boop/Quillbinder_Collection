@@ -84,8 +84,12 @@ private:
 // ---- languages and models ----------------------------------------------------------------------------------------------
 // The languages some speech model of the catalog speaks (the program's other languages are greyed on the page)
 bool languageHasModel(const QString &code);
-// the language of a Settings: its own, else the program's language when it has a model, else English
+// the language of a Settings: its own, else the program's language when a model and a voice can be had for it (languageHasVoice),
+// else English
 QString effectiveLanguage(const Settings &s);
+// A speech model of the catalog speaks the language and its voices are there or can be downloaded: Pocket TTS (its preset
+// voices come with the model), or Qwen3-TTS with a published voice pack of that language (installed already, or in the catalog)
+bool languageHasVoice(const QString &code, const ai::Catalog &catalog = ai::Catalog::builtIn());
 // The order of the models, best sounding first: ids (or the beginning of ids, "pocket-tts-" for the five languages' models)
 const QStringList &modelOrder();
 // the catalog's speech models of a language, in modelOrder() (then the others)
@@ -113,9 +117,30 @@ const ai::CatalogModel *resolveModel(const Settings &s, const QList<ai::Device> 
 // Pocket TTS's preset voice for a place of the menu; the same table for every language (the model names its voices; a model
 // that lacks one greys the place out)
 QString pocketVoice(const QString &language, const QString &voiceId);
-// Where the reference clips of Qwen3-TTS' voices are: <models>/read-aloud-voices/<voice>-<style>.wav with the spoken text in
-// <voice>-<style>.txt beside it (they come with the voices of release models-5)
-QString qwenClipFile(const QString &voiceId, const QString &styleId);
+// Where the reference clips of Qwen3-TTS' voices are: <models>/read-aloud-voices/<lang>/<voice>-<style>.wav with the spoken
+// text in <voice>-<style>.txt beside it (they come with the voice pack of the language, release models-5); the flat place
+// <models>/read-aloud-voices/<voice>-<style>.wav of the first trial builds still counts when the language's folder has no such clip
+QString qwenClipFile(const QString &language, const QString &voiceId, const QString &styleId);
+
+// ---- the voice packs (catalog entries of kind "voicepack": read-aloud-voices-<lang>.zip with the 36 clips and their texts,
+// and voices.json). Installing a Qwen model installs the pack of the Read Aloud language, and choosing another language
+// installs its pack; removing the last Qwen model removes the packs.
+QString voicePackId(const QString &language);                 // "voices-de"
+QString voicesDir(const QString &language);                   // <models>/read-aloud-voices/<lang>
+const ai::CatalogModel *voicePackModel(const QString &language, const ai::Catalog &catalog = ai::Catalog::builtIn());
+bool voicePackInstalled(const QString &language);             // the folder has clips
+// the names a pack may hold: "<voice>-<style>.wav", "<voice>-<style>.txt" and "voices.json"
+QStringList voicePackNames();
+// Unpacks a pack's zip file (the program's own reader) into voicesDir(language): a name outside voicePackNames() (a path, a
+// folder, a name twice) refuses the whole pack and changes nothing
+bool installVoicePack(const QString &zipFile, const QString &language, QString *error);
+// the checksummed zip of an installed pack-model (ai-models/voices-<lang>/): unpacks it; the download calls this
+bool installVoicePackModel(const ai::CatalogModel &pack, QString *error);
+bool anyQwenInstalled(const ai::Catalog &catalog = ai::Catalog::builtIn());
+// the pack of `language` is wanted (a Qwen model is installed) and published but not installed: its model, else null
+const ai::CatalogModel *voicePackWanted(const QString &language, const ai::Catalog &catalog = ai::Catalog::builtIn());
+// after a model was removed: when no Qwen model is left, every pack goes (folders and zips); true when something was removed
+bool removeVoicePacksIfNoQwen(const ai::Catalog &catalog = ai::Catalog::builtIn());
 bool readWav(const QString &file, QVector<float> *mono, int *rate);
 
 struct Availability {

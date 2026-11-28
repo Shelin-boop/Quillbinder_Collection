@@ -7,7 +7,12 @@
       third-party files, writes <out dir>/catalog.json. A shared asset is written once. Any missing file stops it.
   make-catalog.py models-json <resources/ai/models.json> [--catalog catalog.json]
       writes the program's built-in catalog: the same entries; sizes and SHA-256 from the catalog.json of a run, else
-      only from the pins (a file without a checksum makes its model "not published yet" in the program).
+      only from the pins (a file without a checksum makes its model "not published yet" in the program). The voice packs
+      (kind "voicepack", files marked "external": made by the job "voices", not by "build") get "size": 0 and
+      "sha256": "" until a catalog.json of a voices run measured them: the placeholders the program's checks refuse.
+  make-catalog.py voices <catalog.json of the release> <zip dir> <new catalog.json>
+      the job "voices": adds (or replaces) the entries of the voice packs of the models whose zip files are in <zip dir>
+      (read-aloud-voices-<lang>.zip) with size and SHA-256 measured; every other entry stays as it is.
 
 Texts (in <texts dir>): apache-2.0.txt, cc-by-4.0.txt, cc-by-sa-4.0.txt, cc0-1.0.txt. The text "pocket-voices" is made
 here from tools/models/pocket-voices.json; "a+b" joins two texts.
@@ -86,6 +91,8 @@ def build(args):
     models = []
     for m in defs["models"]:
         files = []
+        if "voicepack" in m.get("kinds", []):
+            continue   # made by the job "voices" (the subcommand voices), after the release exists
         if args.without_pocket and m["engine"] == "pocket-tts":
             # not made in this run: listed without size and SHA-256, which the program shows as "not published yet"
             models.append(entry(m, [{"name": f["name"], "asset": f["asset"]} for f in m["files"]]))
@@ -141,12 +148,47 @@ def models_json(args):
             elif "pin" in f:
                 p = pin_for(sources, f["pin"])
                 item["size"], item["sha256"] = p["size"], p["sha256"]
+            elif f.get("external"):
+                item["size"], item["sha256"] = 0, ""   # a placeholder: filled from the catalog.json of the voices run
             files.append(item)
         models.append(entry(m, files))
     with open(args.target, "w", encoding="utf-8") as fh:
         json.dump({"format": 1, "release": defs["release"], "models": models}, fh, ensure_ascii=False, indent=1)
         fh.write("\n")
     print(f"{args.target}: {len(models)} models")
+
+
+def voices(args):
+    defs = load(args.defs)
+    cat = load(args.catalog)
+    have = {m["id"]: i for i, m in enumerate(cat["models"])}
+    added = 0
+    for m in defs["models"]:
+        if "voicepack" not in m.get("kinds", []):
+            continue
+        files = []
+        for f in m["files"]:
+            path = os.path.join(args.zips, f["asset"])
+            if not os.path.isfile(path):
+                continue
+            size = os.path.getsize(path)
+            if size <= 0 or size >= 2 * 1024 ** 3:
+                sys.exit(f"{path}: {size} bytes")
+            files.append({"name": f["name"], "asset": f["asset"], "size": size, "sha256": sha256_of(path)})
+        if len(files) != len(m["files"]):
+            continue   # this language was not made in this run
+        e = entry(m, files)
+        if m["id"] in have:
+            cat["models"][have[m["id"]]] = e
+        else:
+            cat["models"].append(e)
+        added += 1
+    if added == 0:
+        sys.exit("no voice pack zip found")
+    with open(args.target, "w", encoding="utf-8") as fh:
+        json.dump(cat, fh, ensure_ascii=False, indent=1)
+        fh.write("\n")
+    print(f"{args.target}: {added} voice packs added, {len(cat['models'])} models")
 
 
 def main():
@@ -162,8 +204,12 @@ def main():
     j = sub.add_parser("models-json")
     j.add_argument("target")
     j.add_argument("--catalog")
+    v = sub.add_parser("voices")
+    v.add_argument("catalog")
+    v.add_argument("zips")
+    v.add_argument("target")
     args = ap.parse_args()
-    (build if args.cmd == "build" else models_json)(args)
+    {"build": build, "models-json": models_json, "voices": voices}[args.cmd](args)
 
 
 if __name__ == "__main__":

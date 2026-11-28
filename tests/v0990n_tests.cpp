@@ -10,6 +10,7 @@
 #include "core/Project.h"
 #include "core/ProjectTemplates.h"
 #include "core/ReadAloud.h"
+#include "core/Zip.h"
 #include "core/BinderModel.h"
 #include "ui/AppSettings.h"
 #include "ui/BinderPanel.h"
@@ -454,6 +455,134 @@ int main(int argc, char **argv)
         int rate = 0;
         check(readWav(ai::modelsRoot() + QStringLiteral("/read-aloud-voices/female1-neutral.wav"), &clip, &rate) && rate == 24000 && clip.size() == 24000,
               QStringLiteral("a reference clip (WAV) is read"));
+
+        // ---- 0.99.0: the voice packs (one folder per language; the flat place of the first builds only as a fallback)
+        std::printf("== voice packs: a folder per language, the zip refused when it is not a pack\n");
+        {
+            const QString root = ai::modelsRoot() + QStringLiteral("/read-aloud-voices");
+            const ai::CatalogModel *qwen = ai::Catalog::builtIn().model(QStringLiteral("qwen3-tts-0.6b-q8"));
+            check(qwen && qwenClipFile(QStringLiteral("de"), QStringLiteral("female1"), QStringLiteral("neutral")) == root + QStringLiteral("/female1-neutral.wav"),
+                  QStringLiteral("the language has no clip: the flat place of the first builds is the fallback"));
+            check(voiceAvailability(qwen, QStringLiteral("de"), QStringLiteral("female1"), QStringLiteral("neutral")).ok,
+                  QStringLiteral("German with only a flat clip: the fallback keeps working"));
+            QFile::remove(root + QStringLiteral("/female1-neutral.wav"));
+            QFile::remove(root + QStringLiteral("/female1-neutral.txt"));
+            check(!voiceAvailability(qwen, QStringLiteral("de"), QStringLiteral("female1"), QStringLiteral("neutral")).ok
+                      && voiceAvailability(qwen, QStringLiteral("de"), QStringLiteral("female1"), QStringLiteral("neutral")).reason == QLatin1String("Voice not installed yet."),
+                  QStringLiteral("German without its pack: \"Voice not installed yet.\""));
+
+            QTemporaryDir zips;
+            auto makeZip = [&](const QString &name, const QList<QPair<QString, QByteArray>> &entries) {
+                const QString path = zips.filePath(name);
+                ZipWriter z(path);
+                for (const auto &e : entries)
+                    z.addFile(e.first, e.second);
+                z.close();
+                return path;
+            };
+            QString why;
+            const QByteArray wav12000 = wavFile(24000, 12000);
+            const QString bad1 = makeZip(QStringLiteral("bad1.zip"), {{QStringLiteral("female1-neutral.wav"), wav12000}, {QStringLiteral("../evil.wav"), wav12000}});
+            const QString bad2 = makeZip(QStringLiteral("bad2.zip"), {{QStringLiteral("female9-neutral.wav"), wav12000}});
+            const QString bad3 = makeZip(QStringLiteral("bad3.zip"), {{QStringLiteral("sub/female1-neutral.wav"), wav12000}});
+            const QString bad4 = makeZip(QStringLiteral("bad4.zip"), {{QStringLiteral("female1-neutral.wav"), wav12000}, {QStringLiteral("female1-neutral.wav"), wav12000}});
+            const QString notZip = zips.filePath(QStringLiteral("not.zip"));
+            writeFile(notZip, "this is not a zip file");
+            bool refused = true;
+            for (const QString &b : {bad1, bad2, bad3, bad4, notZip}) {
+                why.clear();
+                refused = refused && !installVoicePack(b, QStringLiteral("de"), &why) && !why.isEmpty();
+            }
+            check(refused && !voicePackInstalled(QStringLiteral("de")) && !QFileInfo::exists(root + QStringLiteral("/evil.wav"))
+                      && !QFileInfo::exists(root + QStringLiteral("/de/evil.wav")) && !QFileInfo::exists(root + QStringLiteral("/de.new")),
+                  QStringLiteral("a zip with a path outside the folder, a wrong or twice-used name, a folder, or no zip: refused, nothing written"));
+            check(!installVoicePack(bad2, QStringLiteral("../de"), &why) && !installVoicePack(bad2, QStringLiteral("deu"), &why),
+                  QStringLiteral("a language that is not two letters is refused"));
+
+            const QString good = makeZip(QStringLiteral("good.zip"), {{QStringLiteral("female1-neutral.wav"), wav12000},
+                                                                     {QStringLiteral("female1-neutral.txt"), "Das ist ein Satz."},
+                                                                     {QStringLiteral("voices.json"), "{}"}});
+            check(installVoicePack(good, QStringLiteral("de"), &why) && voicePackInstalled(QStringLiteral("de")) && !voicePackInstalled(QStringLiteral("ru")),
+                  QStringLiteral("a good pack is unpacked into read-aloud-voices/de/"), why);
+            check(QFileInfo::exists(root + QStringLiteral("/de/female1-neutral.wav")) && QFileInfo::exists(root + QStringLiteral("/de/voices.json")),
+                  QStringLiteral("its files are there under their names"));
+            check(voiceAvailability(qwen, QStringLiteral("de"), QStringLiteral("female1"), QStringLiteral("neutral")).ok
+                      && styleAvailability(qwen, QStringLiteral("de"), QStringLiteral("female1"), QStringLiteral("neutral")).ok
+                      && !styleAvailability(qwen, QStringLiteral("de"), QStringLiteral("female1"), QStringLiteral("calm")).ok
+                      && !voiceAvailability(qwen, QStringLiteral("en"), QStringLiteral("female1"), QStringLiteral("neutral")).ok
+                      && voiceAvailability(qwen, QStringLiteral("en"), QStringLiteral("female1"), QStringLiteral("neutral")).reason == QLatin1String("Voice not installed yet."),
+                  QStringLiteral("German voices are available with the pack; English (no pack) still says \"Voice not installed yet.\""));
+            ai::Voice v;
+            check(makeVoice(*qwen, QStringLiteral("de"), QStringLiteral("female1"), QStringLiteral("neutral"), &v, &why) && v.clip.size() == 12000
+                      && v.clipText == QLatin1String("Das ist ein Satz.")
+                      && qwenClipFile(QStringLiteral("de"), QStringLiteral("female1"), QStringLiteral("neutral")).contains(QLatin1String("/read-aloud-voices/de/")),
+                  QStringLiteral("the clip and the words of the right language are used"), why);
+
+            // the program's own catalog (the resource; the checks above use a made-up one): seven packs, each of its language,
+            // a kind of its own (so they are in no model list)
+            QFile resCat(QStringLiteral(":/ai/models.json"));
+            const ai::Catalog own = resCat.open(QIODevice::ReadOnly) ? ai::Catalog::fromJson(resCat.readAll()) : ai::Catalog();
+            int packs = 0;
+            QStringList langs;
+            for (const ai::CatalogModel &m : own.models)
+                if (m.is(QStringLiteral("voicepack"))) {
+                    ++packs;
+                    langs << m.languages;
+                    if (m.id != voicePackId(m.languages.value(0)) || m.files.size() != 1 || m.files[0].name != QLatin1String("read-aloud-voices-") + m.languages.value(0) + QLatin1String(".zip"))
+                        packs += 100;
+                }
+            langs.sort();
+            check(packs == 7 && langs == QStringList({"de", "en", "es", "fr", "it", "pt", "ru"}) && own.ofKinds({QStringLiteral("tts")}).size() == 8
+                      && own.ofKinds({QStringLiteral("voicepack")}).size() == 7,
+                  QStringLiteral("the catalog has seven voice packs, one per Qwen language, and they are no \"tts\" models"), QString::number(packs));
+
+            // the default language: the system language when a model and a voice are there for it, else English
+            const QLocale keepLocale = QLocale();
+            QLocale::setDefault(QLocale(QLocale::German, QLocale::Germany));
+            Settings none;
+            check(voicePackInstalled(QStringLiteral("de")) && effectiveLanguage(none) == QLatin1String("de"),
+                  QStringLiteral("a German system with the German pack: Read Aloud reads German"));
+            QDir(root + QStringLiteral("/de")).removeRecursively();
+            QLocale::setDefault(QLocale(QLocale::Russian, QLocale::Russia));
+            check(!languageHasVoice(QStringLiteral("ru")) && effectiveLanguage(none) == QLatin1String("en"),
+                  QStringLiteral("a Russian system without a voice for Russian: English"));
+            QLocale::setDefault(QLocale(QLocale::French, QLocale::France));
+            check(!languageHasVoice(QStringLiteral("fr")) && effectiveLanguage(none) == QLatin1String("en"),
+                  QStringLiteral("(this catalog's Pocket French is not published) French has no voice: English"));
+            const ai::Catalog withPocket = ai::Catalog::fromJson(QJsonDocument(QJsonObject{
+                {"format", 1}, {"release", "models-5"},
+                {"models", QJsonArray{QJsonObject{{"id", "pocket-tts-fr"}, {"engine", "pocket-tts"}, {"kinds", QJsonArray{"tts"}}, {"languages", QJsonArray{"fr"}},
+                                                  {"files", QJsonArray{QJsonObject{{"name", "a"}, {"asset", "a"}, {"size", 1}, {"sha256", QString(64, QLatin1Char('a'))}}}}}}}}).toJson());
+            check(languageHasVoice(QStringLiteral("fr"), withPocket) && !languageHasVoice(QStringLiteral("id"), withPocket),
+                  QStringLiteral("Pocket TTS with its preset voices, published: a voice can be had"));
+            const ai::Catalog withPack = ai::Catalog::fromJson(QJsonDocument(QJsonObject{
+                {"format", 1}, {"release", "models-5"},
+                {"models", QJsonArray{QJsonObject{{"id", "qwen3-tts-0.6b-q8"}, {"engine", "qwen3-tts"}, {"kinds", QJsonArray{"tts"}}, {"languages", QJsonArray{"ru"}},
+                                                  {"files", QJsonArray{QJsonObject{{"name", "a"}, {"asset", "a"}, {"size", 1}, {"sha256", QString(64, QLatin1Char('a'))}}}}},
+                                      QJsonObject{{"id", "voices-ru"}, {"kinds", QJsonArray{"voicepack"}}, {"languages", QJsonArray{"ru"}},
+                                                  {"files", QJsonArray{QJsonObject{{"name", "read-aloud-voices-ru.zip"}, {"asset", "read-aloud-voices-ru.zip"}, {"size", 5}, {"sha256", QString(64, QLatin1Char('b'))}}}}}}}}).toJson());
+            check(languageHasVoice(QStringLiteral("ru"), withPack), QStringLiteral("Russian with a published pack in the catalog: a voice can be had"));
+            QLocale::setDefault(keepLocale);
+
+            // removing the last Qwen model removes the packs (no Qwen model is installed in this check)
+            const QStringList qwenIds = {QStringLiteral("qwen3-tts-0.6b-q8"), QStringLiteral("qwen3-tts-1.7b-q4")};
+            const bool qwenWas = ai::isInstalled(*qwen);
+            check(installVoicePack(good, QStringLiteral("ru"), &why) && (!qwenWas || (!removeVoicePacksIfNoQwen() && voicePackInstalled(QStringLiteral("ru")))),
+                  QStringLiteral("a Qwen model is still installed: the packs stay"));
+            for (const QString &id : qwenIds)
+                QDir(ai::modelDir(id)).removeRecursively();
+            check(removeVoicePacksIfNoQwen() && !voicePackInstalled(QStringLiteral("ru")),
+                  QStringLiteral("no Qwen model left: the packs are removed"));
+            if (qwenWas)
+                for (const QString &id : qwenIds) {
+                    writeFile(ai::modelDir(id) + QStringLiteral("/talker.gguf"), QByteArray(2000, 'm'));
+                    writeFile(ai::modelDir(id) + QStringLiteral("/tok.gguf"), QByteArray(500, 't'));
+                    writeFile(ai::modelDir(id) + QStringLiteral("/.checked"), "ok");
+                }
+            // (the later checks read the flat clip of the first builds)
+            writeFile(root + QStringLiteral("/female1-neutral.wav"), wavFile(24000, 24000));
+            writeFile(root + QStringLiteral("/female1-neutral.txt"), "A reference sentence.");
+        }
         s.model.clear();
         s.voice = QStringLiteral("female1");
         s.style = QStringLiteral("neutral");

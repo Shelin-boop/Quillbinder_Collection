@@ -219,6 +219,30 @@ a tag points elsewhere), none changed except where said here.
   libmtmd, which is why libmtmd is built with `LLAMA_BUILD_MTMD=ON`) and also has a Qwen3-TTS path of its own (libmtmd's
   `qwen3tts-gen`), apart from qwentts.cpp. whisper.cpp 1.9.6 also installs `libparakeet`.
 
+## 0.99.0: the designed voices (job `voices` of `models-5.yml`)
+
+- **What**: 7 languages x 6 voices x 3 styles = 126 clips, designed from the descriptions in `design-voices.py` with the
+  VoiceDesign 1.7B Q8_0 GGUF (pins: group `qwen-voicedesign` of `models-5-sources.json`, same repo and commit as `qwen`) and
+  qwentts.cpp at its pinned commit. `design-voices.cpp` is a small tool on the engine's public interface (`qwen.h`: it loads the model
+  once and writes mono 24 kHz 16 bit WAV); it is built in the job next to the engine pack's libraries (the compute modules are found
+  beside the program) and runs on the processor. `design-voices.py make` checks each clip (5 to 25 s, RMS above 0.01, no run of 10
+  samples at full scale), designs a failed clip once more with another seed, then fails the job; it writes `read-aloud-voices-<lang>.zip`
+  (36 files + `voices.json`: model, license Apache-2.0, descriptions, "no real person's voice").
+- **How to run** (the release must exist): dispatch `models-5.yml` with `voices=true`. The `state` job then switches every other job
+  off; `voices` (matrix of the seven languages, read-only) -> `voices-catalog` (read-only: `make-catalog.py voices` adds the seven
+  `voicepack` entries to the release's own catalog.json) -> `voices-publish` (write; no checkout; uploads the zips and the catalog with
+  `--clobber`: a run again replaces a language's zip). Nothing else of the release changes. The run time of a language is not known
+  (CPU, 18 clips of 5 to 25 s; the job's limit is 300 minutes).
+- **After a run** (by hand): download the release's `catalog.json`, run `python3 tools/models/make-catalog.py models-json
+  resources/ai/models.json --catalog catalog.json` (fills `size` and `sha256` of the seven `voices-<lang>` entries; until then they are
+  `0` and `""`, and `tests/models5_tests.py` fails with the list of the unfilled ones), replace `tools/models/models-5-catalog.json` with
+  that catalog.json, run `python3 tools/gen-resources.py` if the build asks, commit.
+- **In the program**: `readaloud::installVoicePack` (core/ReadAloud.cpp) unpacks with `ZipReader` only names of `voicePackNames()`
+  (no folder, no path, no name twice) into `read-aloud-voices/<lang>.new`, then swaps it for `<lang>/`; `AiDownloads` calls it after the
+  zip's SHA-256 was checked and a Qwen model's download is followed by `ensureVoicePack(effectiveLanguage)`; the Read Aloud page calls it when
+  the language is chosen; the panel calls `removeVoicePacksIfNoQwen()` after a delete. `languageHasVoice` decides the default language.
+  A pack entry with `size` 0 / no SHA-256 is "not published yet" (no download, `ensureVoicePack` does nothing).
+
 ## 0.99.0: the release models-5 (`models-5.yml`, `tools/models/`)
 
 - Files: `models-5.json` (every catalog field except size and SHA-256), `models-5-sources.json` (pins of the Hugging Face
