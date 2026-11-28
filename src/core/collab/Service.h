@@ -11,11 +11,14 @@
 //
 // Nothing is started, listened on or written until a project is shared or joined: with no registry entry the service is never
 // started by a window, and the program behaves as it did before.
+#include "core/collab/Authority.h"
 #include "core/collab/ChangeUnits.h"
 #include "core/collab/ClientSession.h"
 #include "core/collab/Clock.h"
+#include "core/collab/Drafts.h"
 #include "core/collab/HostSession.h"
 #include "core/collab/LocalLink.h"
+#include "core/collab/Membership.h"
 #include "core/collab/ProjectHostBackend.h"
 #include "core/collab/Registry.h"
 #include "core/collab/StatusModel.h"
@@ -101,6 +104,13 @@ public:
     QString joinProject(const QString &hostDeviceId, const QString &uuid, const QString &title, const QString &address, quint16 port,
                         QString *error = nullptr);
 
+    // ---- who hosts (package 6 through the service)
+    // where a paired device can be reached when discovery does not know it (a new host after a handover or a failover)
+    void setPeerAddress(const QString &deviceId, const QString &host, quint16 port);
+    Authority *authority(const QString &uuid) const;
+    // "Transfer Hosting...": false with a reason when it cannot start
+    bool transferHosting(const QString &uuid, const QString &targetDeviceId, QString *why = nullptr);
+
     // ---- windows
     // a window's link is Ready (a LocalLink from the socket, or one end of a MemLink pair in the same process)
     void attachWindow(net::Link *link);
@@ -129,6 +139,7 @@ signals:
 
 private:
     friend class ServiceStatus;
+    friend class ServiceHosting;
     struct Proj;
     struct Window;
     struct PendingSubmit {
@@ -138,6 +149,18 @@ private:
         QHash<QString, QByteArray> data;
     };
 
+    Proj *openProject(const RegistryEntry &entry);
+    bool beginHost(Proj *p, qint64 epoch, QString *why);
+    void failHost(Proj *p, const QString &why);
+    void startClientPart(Proj *p);
+    void makeAuthority(Proj *p);
+    bool activateHost(Proj *p, qint64 epoch, QString *why);
+    void retireHost(Proj *p);
+    void followNewHost(Proj *p, const QString &hostDeviceId, qint64 epoch);
+    bool authSend(const QString &uuid, const QString &deviceId, const QJsonObject &m);
+    Membership membershipFor(const RegistryEntry &e) const;
+    void publishAccess(Proj *p);
+    void refreshHostInfo(Proj *p);
     void startHost(const RegistryEntry &entry);
     void startClient(const RegistryEntry &entry);
     void stopProject(const QString &uuid, bool removeEntry);
@@ -186,6 +209,8 @@ private:
     QSet<QString> m_statePending;
     QSet<QString> m_asks; // "uuid|resource": an edit request of this device that is open
     QSet<QString> m_declined;
+    QHash<QString, QPair<QString, quint16>> m_peerAddr; // device id -> where it was reached or told to be
+    QTimer m_presence;                                  // once a second: the connected devices were heard of
     std::unique_ptr<ServiceStatus> m_status;
 };
 

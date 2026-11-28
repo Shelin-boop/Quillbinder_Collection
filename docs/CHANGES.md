@@ -47,7 +47,13 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   wait for it), applies what other devices changed into the open documents without overwriting unsaved text, and hands its
   changes over and gives its locks up when the project closes. The host keeps its own project: when it applies a commit it
   recomputes word and character counts, modified times and the list of documents with its normal code. A small status window
-  shows what the service hosts after the last window closed. Suite `ls5`.
+  shows what the service hosts after the last window closed. The service also carries out the decisions of who hosts: it founds
+  the project's authority when a project is shared, publishes the list of devices when access changes, hands hosting over on
+  "Transfer Hosting" (the old host stays connected until it follows the new one), takes over after a host has been lost for about
+  half a minute (two devices; the copy must be complete), writes every commit a device made into a ledger, tells the authority
+  who is connected, and shows a warning in the project's status when an unknown device announces hosting. The list of paired
+  devices now keeps each device's public key (needed for the signed list; a device paired before this version is paired again to
+  be a member). Suite `ls5`.
 - Live Sync, who hosts a shared project (no change for a writer; Live Sync stays off): the list of a project's devices in
   the order of their priority, signed with the host's device key; proofs of authority (the founding, a planned handover signed
   by the old host, a failover with the signed votes of a majority) and a chain of them that every device can verify; the

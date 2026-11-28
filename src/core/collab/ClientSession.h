@@ -110,6 +110,10 @@ public:
     QStringList heldLocks() const { return m_held.keys(); }
     // the sequence of the host's newest commit as far as known
     qint64 headSeq() const { return m_head; }
+    QHash<QString, qint64> revs() const { return m_revs; }
+    // every change request not yet confirmed becomes a recovery draft (the old host took commits after the split); the number
+    int pendingToDrafts(const QString &reason);
+    bool isLoopback() const { return m_cfg.loopback; }
     // edit requests
     void askToEdit(const QString &resource);
     void cancelAsk(const QString &resource);
@@ -150,6 +154,8 @@ signals:
     void editAsked(const QString &resource, const QString &askerName, qint64 waitMs);
     void editStatus(const QString &resource, bool declined, qint64 waitMs, bool mayForce, const QString &holder);
     void epochChanged(qint64 from, qint64 to);
+    // the host's answer to the join: its signed membership and the chain of proofs of its authority (package 6 reads them)
+    void joinedInfo(const QJsonObject &membership, const QJsonArray &proofs);
     void failedWith(const QString &code, const QString &why);
 
 private:

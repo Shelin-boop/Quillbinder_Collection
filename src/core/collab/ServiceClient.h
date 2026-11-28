@@ -69,6 +69,8 @@ public:
     int pendingCount() const { return m_pending; }
     int draftCount() const { return m_drafts; }
     qint64 seq() const { return m_seq; }
+    qint64 epoch() const { return m_epoch; }          // the hosting epoch of the project as the service knows it
+    QString hostDeviceId() const { return m_hostId; }
     QString hostName() const { return m_hostName; }
     bool holds(const QString &resource) const { return m_follower.holdsLock(resource); }
     QString heldBy(const QString &resource) const { return m_held.value(resource); }
@@ -91,6 +93,8 @@ public:
     void answerEdit(const QString &resource, bool handOver, const QString &askerDevice = QString());
     void requestBackup();
     void stopSharing();
+    // "Transfer Hosting...": the service starts a planned hand-over to this paired device
+    void transferHosting(const QString &targetDeviceId);
     void detach();
     // waits (running the event loop) until every request sent is answered (or the time is up); true when none is open
     bool flush(int timeoutMs = 5000);
@@ -125,6 +129,8 @@ private:
     bool m_host = false, m_ready = false, m_readOnly = false;
     int m_state = 0, m_pending = 0, m_drafts = 0;
     qint64 m_seq = 0;
+    qint64 m_epoch = 0;
+    QString m_hostId;
     QHash<QString, QString> m_held;
     QSet<QString> m_unreachable;
     QStringList m_open;

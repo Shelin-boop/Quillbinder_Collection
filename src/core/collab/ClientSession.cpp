@@ -91,6 +91,20 @@ bool ClientSession::open(QString *error)
     return m_outbox->load(error);
 }
 
+int ClientSession::pendingToDrafts(const QString &reason)
+{
+    int n = 0;
+    const QList<OutboxEntry> list = m_outbox->pending();
+    for (const OutboxEntry &e : list)
+        if (m_outbox->toDraft(e.opId, reason)) {
+            ++n;
+            emit draftKept(e.opId, reason);
+        }
+    m_inFlight.clear();
+    m_requestSent = false;
+    return n;
+}
+
 bool ClientSession::saveReplicaState(bool ready, QString *error)
 {
     QJsonObject r;
@@ -261,6 +275,7 @@ void ClientSession::onJoined(const QJsonObject &m)
         epochDiffers = true;
     }
     m_epoch = epoch;
+    emit joinedInfo(m.value(QStringLiteral("membership")).toObject(), m.value(QStringLiteral("proofs")).toArray());
     // the locks: ours are taken as they are (the host kept them), those missing are asked for again where nothing changed
     const QJsonArray table = m.value(QStringLiteral("locks")).toArray();
     QSet<QString> mine;

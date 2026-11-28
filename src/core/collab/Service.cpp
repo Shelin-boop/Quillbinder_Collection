@@ -42,6 +42,14 @@ struct Service::Proj {
     QSet<QString> online;                  // device ids of the joined peers (a host)
     QHash<QString, QString> peerNames;     // device id -> name
     QHash<QString, QString> lastNote;
+    // who hosts (package 6)
+    std::unique_ptr<HostingBackend> hb;
+    std::unique_ptr<Authority> auth;
+    std::unique_ptr<CommitLedger> ledger;
+    QPointer<Link> rawLink;                // the old host's connection after this device took over (carries the hand-over's last message)
+    QString rawPeer;
+    bool retired = false;                  // a host that handed over: commits are refused until it follows the new host
+    QStringList notices;
 };
 
 struct Service::Window {
@@ -223,6 +231,17 @@ bool Service::start(QString *error)
         connect(m_local.get(), &LocalServer::newLink, this, [this](LocalLink *l) { attachWindow(l); });
     }
     m_running = true;
+    m_presence.setInterval(1000);
+    connect(&m_presence, &QTimer::timeout, this, [this] {
+        for (Proj *p : m_projects) {
+            if (!p->auth)
+                continue;
+            ServiceScope scope;
+            for (const QString &d : p->online)
+                p->auth->heardFrom(d); // a connected device was heard of: the connection is the heartbeat
+        }
+    });
+    m_presence.start();
     // the projects of the registry resume
     for (const RegistryEntry &e : m_registry->entries()) {
         if (e.stopped || !QFileInfo(e.folder).isDir())
@@ -243,6 +262,7 @@ void Service::stop()
     if (!m_running && m_projects.isEmpty())
         return;
     m_running = false;
+    m_presence.stop();
     const QList<Window *> windows = m_windows; // (closing a link removes its window from the list)
     for (Window *w : windows) {
         if (m_windows.contains(w) && w->link)
@@ -313,48 +333,473 @@ ClientSession *Service::clientSession(const QString &uuid) const
 
 // ---------------------------------------------------------------- hosted projects
 
-void Service::startHost(const RegistryEntry &entry)
+// the files Live Sync keeps in a hosted folder for one project's authority
+static void removeAuthorityFiles(const QString &folder)
+{
+    for (const char *n : {"/livesync/authority.json", "/livesync/membership.json", "/livesync-local/ledger.json"})
+        QFile::remove(folder + QLatin1String(n));
+}
+
+static bool writeHostState(const QString &folder, const QString &uuid, qint64 epoch, qint64 seq, const QHash<QString, qint64> &revs)
+{
+    QDir(folder + QStringLiteral("/livesync/log")).removeRecursively();
+    QFile::remove(folder + QStringLiteral("/livesync/hashes.json"));
+    QDir().mkpath(folder + QStringLiteral("/livesync/log"));
+    QJsonObject r;
+    for (auto it = revs.constBegin(); it != revs.constEnd(); ++it)
+        r.insert(it.key(), double(it.value()));
+    const QByteArray b = QJsonDocument(QJsonObject{{QStringLiteral("v"), 1}, {QStringLiteral("p"), uuid}, {QStringLiteral("epoch"), double(epoch)},
+                                                   {QStringLiteral("seq"), double(seq)}, {QStringLiteral("genReserve"), 0}, {QStringLiteral("revs"), r}})
+                             .toJson(QJsonDocument::Compact);
+    return safesave::writeFile(folder + QStringLiteral("/livesync/state.json"), b, nullptr);
+}
+
+static bool writeReplicaState(const QString &folder, const QString &uuid, qint64 epoch, qint64 seq, const QHash<QString, qint64> &revs)
+{
+    QJsonObject r;
+    for (auto it = revs.constBegin(); it != revs.constEnd(); ++it)
+        r.insert(it.key(), double(it.value()));
+    const QByteArray b = QJsonDocument(QJsonObject{{QStringLiteral("p"), uuid}, {QStringLiteral("epoch"), double(epoch)}, {QStringLiteral("seq"), double(seq)},
+                                                   {QStringLiteral("ready"), true}, {QStringLiteral("revs"), r}})
+                             .toJson(QJsonDocument::Compact);
+    return safesave::writeFile(folder + QStringLiteral("/livesync-replica.json"), b, nullptr);
+}
+
+// ---------------------------------------------------------------- what the authority asks of the service
+
+class ServiceHosting : public HostingBackend {
+public:
+    ServiceHosting(Service *s, Service::Proj *p) : m_s(s), m_p(p) {}
+    qint64 seq() const override { return m_p->host ? m_p->host->seq() : m_p->client ? m_p->client->seq() : 0; }
+    QString stateHash() const override
+    {
+        if (m_p->host)
+            return m_p->host->manifest().stateHash();
+        Manifest mf;
+        const QString folder = m_p->entry.folder;
+        if (!Manifest::scan(folder, folder + QStringLiteral("/livesync-local/hashes.json"), m_p->client ? m_p->client->revs() : QHash<QString, qint64>(), &mf))
+            return QString();
+        return mf.stateHash();
+    }
+    bool replicaReady() const override
+    {
+        return m_p->client && !m_p->client->isLoopback() && m_p->client->replicaReady(); // (the copy is complete; the connection may be gone)
+    }
+    bool startHosting(qint64 epoch, const QJsonArray &locks, QString *error) override
+    {
+        Q_UNUSED(locks); // the new host starts with no lock: the windows ask again when they notice (their leases ran with the old host)
+        return m_s->activateHost(m_p, epoch, error);
+    }
+    void stopHosting() override { m_s->retireHost(m_p); }
+    void followHost(const QString &hostDeviceId, qint64 epoch) override { m_s->followNewHost(m_p, hostDeviceId, epoch); }
+    void resyncFromHost() override
+    {
+        if (m_p->client && !m_p->client->isLoopback())
+            m_p->client->resync();
+    }
+    void setAcceptingLocks(bool on) override
+    {
+        if (m_p->host)
+            m_p->host->setAcceptingLocks(on);
+    }
+    void setAcceptingCommits(bool on) override
+    {
+        if (m_p->host)
+            m_p->host->setAcceptingCommits(on);
+    }
+    bool drained() const override { return !m_p->client || !m_p->client->hasPending(); }
+    QJsonArray lockTable() const override { return m_p->host ? m_p->host->locks().toJson() : QJsonArray(); }
+    bool busy() const override { return m_p->auth && m_p->auth->handoverRunning(); }
+    QList<AuthoredCommit> authoredCommits(qint64 afterSeq, qint64 beforeEpoch) override
+    {
+        return m_p->ledger ? m_p->ledger->after(afterSeq, beforeEpoch) : QList<AuthoredCommit>();
+    }
+    int outboxToDrafts(const QString &reason) override { return m_p->client ? m_p->client->pendingToDrafts(reason) : 0; }
+    void reunionDone(qint64 afterSeq, qint64 newEpoch) override
+    {
+        if (m_p->ledger)
+            m_p->ledger->forget(afterSeq, newEpoch);
+    }
+
+private:
+    Service *m_s;
+    Service::Proj *m_p;
+};
+
+Service::Proj *Service::openProject(const RegistryEntry &entry)
 {
     if (m_projects.contains(entry.uuid))
-        return;
+        return nullptr;
     auto *p = new Proj;
     p->entry = entry;
     m_projects.insert(entry.uuid, p);
-    auto failWith = [&](const QString &why) {
-        p->problem = why;
-        emit notice(tr("Hosting \"%1\" could not start: %2").arg(entry.title, why));
+    QDir().mkpath(entry.folder + QStringLiteral("/livesync-local"));
+    p->hb = std::make_unique<ServiceHosting>(this, p);
+    p->ledger = std::make_unique<CommitLedger>(entry.folder + QStringLiteral("/livesync-local/ledger.json"));
+    p->ledger->load();
+    makeAuthority(p);
+    return p;
+}
+
+void Service::failHost(Proj *p, const QString &why)
+{
+    p->problem = why;
+    emit notice(tr("Hosting \"%1\" could not start: %2").arg(p->entry.title, why));
+    emit projectChanged(p->entry.uuid);
+}
+
+Membership Service::membershipFor(const RegistryEntry &e) const
+{
+    Membership m;
+    m.project = e.uuid;
+    auto add = [&](const QString &id, const QByteArray &key, const QString &name, bool editor) {
+        Member mb;
+        mb.id = id;
+        mb.key = key;
+        mb.name = name;
+        mb.editor = editor;
+        mb.mayHost = Membership::defaultMayHost(editor, false);
+        m.members << mb;
     };
+    add(m_id->deviceId(), m_id->publicKeyDer(), m_cfg.deviceName.isEmpty() ? m_id->name() : m_cfg.deviceName, true);
+    for (const net::PeerRecord &r : m_peers->peers()) {
+        const QString role = e.access.value(r.deviceId()).toString();
+        if (role.isEmpty() || r.publicKey.isEmpty())
+            continue; // (a device paired before the keys were kept cannot be a member: pair it again)
+        add(r.deviceId(), r.publicKey, r.name, role == QLatin1String("editor"));
+    }
+    m.version = 1;
+    m.signWith(*m_id);
+    return m;
+}
+
+void Service::publishAccess(Proj *p)
+{
+    if (!p->auth || !p->auth->isHost())
+        return;
+    Membership m = membershipFor(p->entry);
+    m.version = p->auth->membership().version; // (publishMembership counts up)
+    // keep the order of priority already agreed: known members first, new ones after
+    QList<Member> list;
+    for (const Member &old : p->auth->membership().members)
+        for (const Member &mb : m.members)
+            if (mb.id == old.id)
+                list << mb;
+    for (const Member &mb : m.members) {
+        bool known = false;
+        for (const Member &o : list)
+            known = known || o.id == mb.id;
+        if (!known)
+            list << mb;
+    }
+    if (list.size() == p->auth->membership().members.size()) {
+        bool same = true;
+        for (int i = 0; i < list.size(); ++i)
+            same = same && list.at(i).id == p->auth->membership().members.at(i).id && list.at(i).editor == p->auth->membership().members.at(i).editor;
+        if (same)
+            return;
+    }
     QString why;
-    if (!m_registry->lockHost(entry.uuid, &why)) {
-        failWith(why);
+    if (!p->auth->publishMembership(list, &why))
+        emit notice(tr("The list of devices of \"%1\" could not be saved: %2").arg(p->entry.title, why));
+    refreshHostInfo(p);
+}
+
+void Service::refreshHostInfo(Proj *p)
+{
+    if (!p->host || !p->auth)
+        return;
+    p->host->setMembership(p->auth->membership().toJson());
+    QJsonArray chain;
+    for (const Proof &pr : p->auth->chain())
+        chain.append(pr.toJson());
+    p->host->setProofs(chain);
+}
+
+void Service::makeAuthority(Proj *p)
+{
+    const QString uuid = p->entry.uuid;
+    Authority::Config ac;
+    ac.project = uuid;
+    ac.title = p->entry.title;
+    ac.folder = p->entry.folder;
+    ac.localRoot = p->entry.folder + QStringLiteral("/livesync-local");
+    ac.identity = m_id;
+    ac.clock = m_scopedClock.get();
+    ac.backend = p->hb.get();
+    ac.send = [this, uuid](const QString &device, const QJsonObject &m) { return authSend(uuid, device, m); };
+    p->auth = std::make_unique<Authority>(ac);
+    QString why;
+    if (!p->auth->load(&why))
+        p->problem = why;
+    Authority *a = p->auth.get();
+    connect(a, &Authority::unknownDeviceRefused, this, [this, uuid](const QString &, const QString &) {
+        Proj *q = m_projects.value(uuid);
+        if (!q)
+            return;
+        const QString w = q->auth->unknownDeviceWarning();
+        if (!q->notices.contains(w))
+            q->notices << w;
+        while (q->notices.size() > 3)
+            q->notices.removeFirst();
+        emit notice(w);
+        emit projectChanged(uuid);
+    });
+    connect(a, &Authority::hostChanged, this, [this, uuid] {
+        if (Proj *q = m_projects.value(uuid)) {
+            refreshHostInfo(q);
+            emit projectChanged(uuid);
+        }
+    });
+    connect(a, &Authority::membershipChanged, this, [this, uuid] {
+        if (Proj *q = m_projects.value(uuid))
+            refreshHostInfo(q);
+    });
+    connect(a, &Authority::stateChanged, this, [this, uuid] { emit projectChanged(uuid); });
+    connect(a, &Authority::handoverFinished, this, [this, uuid](bool ok, const QString &why) {
+        if (!ok && !why.isEmpty())
+            emit notice(tr("Hosting was not handed over: %1").arg(why));
+        emit projectChanged(uuid);
+    });
+    connect(a, &Authority::failed, this, [this, uuid](const QString &what) {
+        if (Proj *q = m_projects.value(uuid)) {
+            q->problem = what;
+            emit projectChanged(uuid);
+        }
+    });
+}
+
+bool Service::activateHost(Proj *p, qint64 epoch, QString *why)
+{
+    QString w;
+    const bool ok = beginHost(p, epoch, &w);
+    if (!ok) {
+        if (why)
+            *why = w;
+        failHost(p, w);
+        return false;
+    }
+    // a replica that takes over knows who may join from the signed list of devices
+    if (p->entry.access.isEmpty() && p->auth) {
+        for (const Member &mb : p->auth->membership().members)
+            if (mb.id != m_id->deviceId())
+                p->entry.access.insert(mb.id, mb.editor ? QStringLiteral("editor") : QStringLiteral("reader"));
+    }
+    p->entry.host = true;
+    p->entry.hostDeviceId = m_id->deviceId();
+    p->entry.hostName = m_cfg.deviceName.isEmpty() ? m_id->name() : m_cfg.deviceName;
+    p->entry.epoch = epoch;
+    p->retired = false;
+    m_registry->upsert(p->entry);
+    emit projectsChanged();
+    return true;
+}
+
+// a hand-over's old host: no more commits; it stays connected until it follows the new host (the last messages travel on it)
+void Service::retireHost(Proj *p)
+{
+    p->retired = true;
+    if (p->host) {
+        p->host->setAcceptingCommits(false);
+        p->host->setAcceptingLocks(false);
+    }
+    emit projectChanged(p->entry.uuid);
+}
+
+void Service::followNewHost(Proj *p, const QString &hostDeviceId, qint64 epoch)
+{
+    // (called from inside a message of the authority or a session: the sessions are changed one turn of the event loop later)
+    QTimer::singleShot(0, this, [this, uuid = p->entry.uuid, hostDeviceId, epoch] {
+        Proj *p = m_projects.value(uuid);
+        if (!p || !m_running)
+            return;
+        const bool wasHost = p->host != nullptr;
+        const bool changed = hostDeviceId != p->entry.hostDeviceId;
+        qint64 seq = 0;
+        QHash<QString, qint64> revs;
+        if (wasHost) {
+            seq = p->host->seq();
+            revs = p->host->revs();
+            p->host->stop();
+            p->host.reset();
+            p->backend.reset();
+            m_registry->releaseHost(uuid);
+            p->retired = false;
+            if (p->client) {
+                p->client->detach();
+                p->client.reset();
+            }
+            p->scope.reset();
+            p->online.clear();
+        }
+        p->entry.host = false;
+        p->entry.hostDeviceId = hostDeviceId;
+        p->entry.epoch = epoch;
+        for (const net::PeerRecord &r : m_peers->peers())
+            if (r.deviceId() == hostDeviceId)
+                p->entry.hostName = r.name;
+        if (wasHost || changed) {
+            if (m_peerAddr.contains(hostDeviceId)) {
+                p->entry.lastAddress = m_peerAddr.value(hostDeviceId).first;
+                p->entry.lastPort = m_peerAddr.value(hostDeviceId).second;
+            } else {
+                p->entry.lastAddress.clear();
+            }
+        }
+        m_registry->upsert(p->entry);
+        if (wasHost) {
+            if (p->link)
+                p->link->close();
+            writeReplicaState(p->entry.folder, uuid, epoch, seq, revs);
+            p->tries = 0;
+            startClientPart(p);
+        } else if (changed && p->client) {
+            QPointer<TlsLink> old = p->link;
+            p->link = nullptr;
+            p->client->detach();
+            if (old)
+                old->close();
+            p->online.clear();
+            p->tries = 0;
+            connectClient(p);
+        }
+        emit projectsChanged();
+        emit projectChanged(uuid);
+    });
+}
+
+bool Service::authSend(const QString &uuid, const QString &deviceId, const QJsonObject &m)
+{
+    Proj *p = m_projects.value(uuid);
+    if (!p)
+        return false;
+    if (p->host && p->host->sendToDevice(deviceId, m))
+        return true;
+    if (p->rawLink && p->rawPeer == deviceId && p->rawLink->state() == Link::State::Ready) {
+        p->rawLink->send(Frame::json(m));
+        return true;
+    }
+    if (p->client && !p->client->isLoopback() && deviceId == p->entry.hostDeviceId)
+        return p->client->sendMessage(m);
+    return false;
+}
+
+void Service::setPeerAddress(const QString &deviceId, const QString &host, quint16 port) { m_peerAddr.insert(deviceId, qMakePair(host, port)); }
+
+Authority *Service::authority(const QString &uuid) const
+{
+    const Proj *p = m_projects.value(uuid);
+    return p ? p->auth.get() : nullptr;
+}
+
+bool Service::transferHosting(const QString &uuid, const QString &targetDeviceId, QString *why)
+{
+    Proj *p = m_projects.value(uuid);
+    if (!p || !p->auth)
+        return false;
+    return p->auth->transferHosting(targetDeviceId, why);
+}
+
+// ---------------------------------------------------------------- hosted projects
+
+void Service::startHost(const RegistryEntry &entry)
+{
+    Proj *p = openProject(entry);
+    if (!p)
+        return;
+    if (!p->problem.isEmpty()) {
+        failHost(p, p->problem); // (a damaged authority file is never overwritten)
         return;
     }
+    QString why;
+    if (!m_registry->lockHost(entry.uuid, &why)) {
+        failHost(p, why);
+        return;
+    }
+    m_registry->releaseHost(entry.uuid); // (beginHost takes it again)
+    if (p->auth->record().chain.isEmpty()) {
+        // a project shared before the authority existed: this device founds it now
+        if (!p->auth->found(membershipFor(entry), qMax<qint64>(1, entry.epoch), &why) && p->problem.isEmpty())
+            failHost(p, why);
+        return;
+    }
+    p->auth->start();
+    if (p->auth->isHost()) {
+        if (!activateHost(p, p->auth->epoch(), &why))
+            return;
+        refreshHostInfo(p);
+    } else {
+        p->entry.host = false;
+        p->entry.hostDeviceId = p->auth->host();
+        m_registry->upsert(p->entry);
+        startClientPart(p);
+    }
+}
+
+bool Service::beginHost(Proj *p, qint64 epoch, QString *whyOut)
+{
+    const RegistryEntry &entry = p->entry;
+    QString why;
+    auto fail = [&](const QString &w) {
+        if (whyOut)
+            *whyOut = w;
+        return false;
+    };
+    if (!m_registry->lockHost(entry.uuid, &why))
+        return fail(why);
     p->scope = std::make_unique<vault::Scope>(entry.folder);
+    // a replica that becomes the host: its state is the host's state from now on
+    if (p->client && !p->client->isLoopback()) {
+        if (!writeHostState(entry.folder, entry.uuid, epoch, p->client->seq(), p->client->revs())) {
+            m_registry->releaseHost(entry.uuid);
+            return fail(QStringLiteral("the state of Live Sync cannot be written"));
+        }
+        p->retry.stop();
+        QFile::remove(entry.folder + QStringLiteral("/livesync-local/loopback.json")); // (the loopback copy starts again from the host's state)
+        p->rawPeer = p->entry.hostDeviceId;
+        p->rawLink = p->link; // (kept: the old host's DONE message comes on it)
+        p->client->detach();
+        p->client.reset();
+        if (p->rawLink) {
+            Link *raw = p->rawLink;
+            connect(raw, &Link::frameReceived, this, [this, uuid = entry.uuid](const Frame &f) {
+                Proj *q = m_projects.value(uuid);
+                bool ok = false;
+                const QJsonObject m = f.kind == Frame::Json ? f.object(&ok) : QJsonObject();
+                if (q && q->auth && ok)
+                    q->auth->handleMessage(q->rawPeer, m);
+            });
+            connect(raw, &Link::closed, this, [this, uuid = entry.uuid](const QString &) {
+                if (Proj *q = m_projects.value(uuid))
+                    q->rawLink = nullptr;
+            });
+        }
+        p->link = nullptr;
+    }
     HostSession::Options o;
     o.folder = entry.folder;
     o.uuid = entry.uuid;
     o.hostName = m_cfg.deviceName.isEmpty() ? m_id->name() : m_cfg.deviceName;
     o.clock = m_scopedClock.get();
-    o.epoch = qMax<qint64>(1, entry.epoch);
+    o.epoch = qMax<qint64>(1, epoch);
     p->host = std::make_unique<HostSession>(o);
     {
         ServiceScope scope;
         if (!p->host->start(&why)) {
-            failWith(why);
             p->host.reset();
             m_registry->releaseHost(entry.uuid);
-            return;
+            return fail(why);
         }
         p->backend = std::make_unique<ProjectHostBackend>(entry.folder);
         if (!p->backend->open(&why)) {
-            failWith(why);
             p->backend.reset();
             p->host.reset();
             m_registry->releaseHost(entry.uuid);
-            return;
+            return fail(why);
         }
         p->host->setBackend(p->backend.get());
     }
+    p->host->setEpoch(qMax<qint64>(1, epoch));
     const QString uuid = entry.uuid;
     p->host->setRoleProvider([this, uuid](const QString &device) {
         if (device == m_id->deviceId())
@@ -365,20 +810,34 @@ void Service::startHost(const RegistryEntry &entry)
         const QString r = e.access.value(device).toString();
         return r == QLatin1String("editor") ? Role::Editor : r == QLatin1String("reader") ? Role::Reader : Role::None;
     });
+    p->host->setExtensionHandler([this, uuid](const QString &device, Link *, const QJsonObject &m) {
+        Proj *q = m_projects.value(uuid);
+        return q && q->auth && q->auth->handleMessage(device, m);
+    });
     connect(p->host.get(), &HostSession::peerJoined, this, [this, uuid](const QString &device, const QString &name) {
         if (Proj *q = m_projects.value(uuid)) {
             q->online.insert(device);
             q->peerNames.insert(device, name);
+            if (q->auth && device != m_id->deviceId()) {
+                q->auth->peerConnected(device);
+                q->auth->setPeerInSync(device, true); // (helper's choice: a joined device is taken as in step; it catches up at once)
+            }
         }
         emit projectChanged(uuid);
     });
     connect(p->host.get(), &HostSession::peerLeft, this, [this, uuid](const QString &device) {
         if (Proj *q = m_projects.value(uuid)) {
             bool still = false;
-            for (const HostSession::PeerSummary &s : q->host->joinedPeers())
-                still = still || s.deviceId == device;
-            if (!still)
+            if (q->host)
+                for (const HostSession::PeerSummary &s : q->host->joinedPeers())
+                    still = still || s.deviceId == device;
+            if (!still) {
                 q->online.remove(device);
+                if (q->auth && device != m_id->deviceId()) {
+                    q->auth->setPeerInSync(device, false);
+                    q->auth->peerDisconnected(device);
+                }
+            }
         }
         emit projectChanged(uuid);
     });
@@ -387,6 +846,7 @@ void Service::startHost(const RegistryEntry &entry)
         scheduleState(uuid);
     });
     connect(p->host.get(), &HostSession::committed, this, [this, uuid] { emit projectChanged(uuid); });
+    refreshHostInfo(p);
     // the loopback session: this device's windows are clients of its own host
     ClientSession::Config cc;
     cc.folder = entry.folder;
@@ -397,8 +857,11 @@ void Service::startHost(const RegistryEntry &entry)
     cc.loopback = true;
     p->client = std::make_unique<ClientSession>(cc);
     if (!p->client->open(&why)) {
-        failWith(why);
-        return;
+        p->client.reset();
+        p->host->stop();
+        p->host.reset();
+        m_registry->releaseHost(entry.uuid);
+        return fail(why);
     }
     const QByteArray hostPin = QCryptographicHash::hash(QByteArray("loopback-host") + entry.uuid.toUtf8(), QCryptographicHash::Sha256);
     MemLink::Pair pair = MemLink::createPair(hostPin, m_id->pin(), p->host.get());
@@ -407,6 +870,7 @@ void Service::startHost(const RegistryEntry &entry)
     wireClient(p);
     p->client->attach(ScopedLink::wrap(pair.b));
     emit projectsChanged();
+    return true;
 }
 
 void Service::stopProject(const QString &uuid, bool removeEntry)
@@ -415,10 +879,13 @@ void Service::stopProject(const QString &uuid, bool removeEntry)
     if (!p)
         return;
     p->retry.stop();
+    p->auth.reset();
     if (p->client) {
         p->client->detach();
         p->client.reset();
     }
+    if (p->rawLink)
+        p->rawLink->close();
     if (p->host) {
         p->host->stop();
         p->host.reset();
@@ -466,6 +933,7 @@ QString Service::shareProject(const QString &folder, QString *error)
     if (!p || !p->host) {
         const QString reason = p ? p->problem : QStringLiteral("unknown");
         stopProject(e.uuid, true);
+        removeAuthorityFiles(dir);
         return fail(reason);
     }
     return e.uuid;
@@ -479,6 +947,8 @@ bool Service::stopSharing(const QString &uuid, QString *error)
         return false;
     const bool host = e.host;
     stopProject(uuid, false);
+    if (host)
+        removeAuthorityFiles(e.folder);
     // the entry stays, marked, so that the folder is never taken for a copy of a project that is shared elsewhere
     e.stopped = true;
     if (host)
@@ -498,8 +968,10 @@ void Service::setAccess(const QString &uuid, const QString &deviceId, Role role)
     else
         e.access.insert(deviceId, role == Role::Editor ? QStringLiteral("editor") : QStringLiteral("reader"));
     m_registry->upsert(e);
-    if (Proj *p = m_projects.value(uuid))
+    if (Proj *p = m_projects.value(uuid)) {
         p->entry = e;
+        publishAccess(p);
+    }
     emit projectChanged(uuid);
 }
 
@@ -556,11 +1028,35 @@ QString Service::joinProject(const QString &hostDeviceId, const QString &uuid, c
 
 void Service::startClient(const RegistryEntry &entry)
 {
-    if (m_projects.contains(entry.uuid))
+    Proj *p = openProject(entry);
+    if (!p)
         return;
-    auto *p = new Proj;
-    p->entry = entry;
-    m_projects.insert(entry.uuid, p);
+    if (!p->problem.isEmpty()) {
+        emit notice(tr("The copy of \"%1\" cannot be used: %2").arg(entry.title, p->problem));
+        return;
+    }
+    if (!p->auth->record().chain.isEmpty()) {
+        p->auth->start();
+        QString why;
+        if (p->auth->isHost()) {
+            // this replica became the host (a failover or a hand-over) and the service ended before the registry said so
+            p->client.reset();
+            if (!activateHost(p, p->auth->epoch(), &why))
+                return;
+            refreshHostInfo(p);
+            return;
+        }
+        if (!p->auth->host().isEmpty() && p->auth->host() != p->entry.hostDeviceId) {
+            p->entry.hostDeviceId = p->auth->host();
+            m_registry->upsert(p->entry);
+        }
+    }
+    startClientPart(p);
+}
+
+void Service::startClientPart(Proj *p)
+{
+    const RegistryEntry &entry = p->entry;
     ClientSession::Config cc;
     cc.folder = entry.folder;
     cc.uuid = entry.uuid;
@@ -571,11 +1067,13 @@ void Service::startClient(const RegistryEntry &entry)
     QString why;
     if (!p->client->open(&why)) {
         p->problem = why;
+        p->client.reset();
         emit notice(tr("The copy of \"%1\" cannot be used: %2").arg(entry.title, why));
         return;
     }
     wireClient(p);
     p->retry.setSingleShot(true);
+    disconnect(&p->retry, nullptr, this, nullptr);
     connect(&p->retry, &QTimer::timeout, this, [this, uuid = entry.uuid] {
         if (Proj *q = m_projects.value(uuid))
             connectClient(q);
@@ -588,13 +1086,59 @@ void Service::wireClient(Proj *p)
 {
     const QString uuid = p->entry.uuid;
     ClientSession *c = p->client.get();
-    connect(c, &ClientSession::stateChanged, this, [this, uuid](ClientSession::State) {
+    connect(c, &ClientSession::stateChanged, this, [this, uuid](ClientSession::State st) {
+        if (Proj *q = m_projects.value(uuid); q && q->auth && q->client && !q->client->isLoopback() && !q->entry.hostDeviceId.isEmpty()) {
+            const QString h = q->entry.hostDeviceId;
+            if (st == ClientSession::State::Ready && !q->online.contains(h)) {
+                q->online.insert(h);
+                q->auth->peerConnected(h);
+            } else if (st != ClientSession::State::Ready && q->online.contains(h)) {
+                q->online.remove(h);
+                q->auth->peerDisconnected(h);
+            }
+        }
         scheduleState(uuid);
         emit projectChanged(uuid);
     });
+    if (!c->isLoopback()) {
+        c->setExtensionHandler([this, uuid](const QJsonObject &m) {
+            Proj *q = m_projects.value(uuid);
+            return q && q->auth && q->auth->handleMessage(q->entry.hostDeviceId, m);
+        });
+        connect(c, &ClientSession::joinedInfo, this, [this, uuid](const QJsonObject &membership, const QJsonArray &proofs) {
+            Proj *q = m_projects.value(uuid);
+            if (!q || !q->auth || !q->auth->record().chain.isEmpty() || membership.isEmpty() || proofs.isEmpty())
+                return;
+            Membership m;
+            QString why;
+            QList<Proof> chain;
+            bool ok = Membership::fromJson(membership, &m, &why);
+            for (const QJsonValue &v : proofs) {
+                Proof pr;
+                ok = ok && Proof::fromJson(v.toObject(), &pr, &why);
+                chain << pr;
+            }
+            if (ok && q->auth->joinWith(chain, m, &why)) {
+                q->auth->start();
+            } else {
+                q->problem = tr("The host's list of devices cannot be used: %1").arg(why);
+                emit projectChanged(uuid);
+            }
+        });
+    }
     connect(c, &ClientSession::readyToUse, this, [this, uuid] { scheduleState(uuid); });
     connect(c, &ClientSession::eventApplied, this,
             [this, uuid](qint64 seq, const QString &opId, const QString &actor, bool own, const QJsonArray &ops, const QStringList &paths, const QJsonObject &revs) {
+                if (own) {
+                    if (Proj *q = m_projects.value(uuid); q && q->ledger && q->client) {
+                        AuthoredCommit ac;
+                        ac.seq = seq;
+                        ac.epoch = q->client->epoch();
+                        ac.paths = paths;
+                        ac.ops = ops;
+                        q->ledger->add(ac);
+                    }
+                }
                 tellWindows(uuid, local::msg(local::EVENT, {{"uuid", uuid}, {"seq", double(seq)}, {"opId", opId}, {"actor", actor}, {"own", own},
                                                               {"ops", ops}, {"paths", QJsonArray::fromStringList(paths)}, {"revs", revs}}));
                 scheduleState(uuid);
@@ -686,6 +1230,8 @@ void Service::connectClient(Proj *p)
             if (pi.id == rec.instanceId)
                 for (const QHostAddress &a : pi.addresses)
                     where << std::make_pair(a.toString(), pi.port);
+    if (m_peerAddr.contains(rec.deviceId()) && p->entry.lastAddress.isEmpty())
+        where << std::make_pair(m_peerAddr.value(rec.deviceId()).first, m_peerAddr.value(rec.deviceId()).second);
     if (where.isEmpty()) {
         scheduleReconnect(p);
         return;
@@ -702,6 +1248,7 @@ void Service::connectClient(Proj *p)
             q->tries = 0;
             q->entry.lastAddress = target.first;
             q->entry.lastPort = target.second;
+            m_peerAddr.insert(q->entry.hostDeviceId, qMakePair(target.first, target.second));
             m_registry->upsert(q->entry);
             q->client->attach(ScopedLink::wrap(link));
         }
@@ -911,6 +1458,7 @@ QJsonObject Service::stateJson(const QString &uuid) const
     o.insert(QStringLiteral("title"), p->entry.title);
     o.insert(QStringLiteral("hostName"), p->entry.hostName);
     o.insert(QStringLiteral("hostDeviceId"), p->entry.hostDeviceId);
+    o.insert(QStringLiteral("epoch"), double(p->auth ? p->auth->epoch() : p->entry.epoch));
     o.insert(QStringLiteral("state"), int(shareStateOf(*p)));
     o.insert(QStringLiteral("problem"), p->problem.isEmpty() && c && c->state() == ClientSession::State::Failed ? c->failure() : p->problem);
     o.insert(QStringLiteral("ready"), c && c->state() == ClientSession::State::Ready && c->replicaReady());
@@ -999,6 +1547,11 @@ void Service::onWindowMessage(Window *w, const QJsonObject &m)
                 QTimer::singleShot(0, this, [this, uuid] { stopSharing(uuid); });
             else if (action == QLatin1String("requestBackup"))
                 m_status->requestBackup(uuid);
+            else if (action == QLatin1String("transferHosting")) {
+                QString why;
+                if (!transferHosting(uuid, m.value(QStringLiteral("target")).toString(), &why))
+                    emit notice(tr("Hosting cannot be handed over now: %1").arg(why));
+            }
         }
     }
 }
@@ -1116,6 +1669,7 @@ ProjectStatus ServiceStatus::project(const QString &uuid) const
     s.pendingChanges = p->client ? int(p->client->outbox().pending().size()) : 0;
     s.draftCount = p->client ? int(p->client->outbox().drafts().size()) : 0;
     const QString why = m_s->readOnlyReason(*p);
+    s.notices = p->notices;
     s.readOnly = !why.isEmpty();
     s.readOnlyReason = why;
     const QString self = m_s->m_id->deviceId();

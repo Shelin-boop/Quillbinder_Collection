@@ -279,6 +279,16 @@ QList<HostSession::PeerSummary> HostSession::joinedPeers() const
     return out;
 }
 
+bool HostSession::sendToDevice(const QString &deviceId, const QJsonObject &message)
+{
+    for (Peer *p : m_peers)
+        if (p->joined && p->owner.device == deviceId) {
+            send(p, message);
+            return true;
+        }
+    return false;
+}
+
 Role HostSession::roleOf(const QString &device) const
 {
     if (m_roleProvider)
@@ -735,6 +745,10 @@ void HostSession::onCommit(Peer *p, const QJsonObject &m)
     }
     if (p->role != Role::Editor) {
         commitResult(p, m, QStringLiteral("error"), QStringLiteral("READ_ONLY"));
+        return;
+    }
+    if (!m_acceptCommits) {
+        commitResult(p, m, QStringLiteral("error"), QStringLiteral("HOST_BUSY"));
         return;
     }
     if (m_broken) {

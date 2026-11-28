@@ -11,6 +11,10 @@
 #include "core/Project.h"
 #include "core/SafeSave.h"
 #include "core/collab/ChangeUnits.h"
+#include "core/collab/Authority.h"
+#include "core/collab/Clock.h"
+#include "core/collab/Drafts.h"
+#include "core/collab/Membership.h"
 #include "core/collab/Gate.h"
 #include "core/collab/LocalLink.h"
 #include "core/collab/Manifest.h"
@@ -21,6 +25,8 @@
 #include "core/collab/StatusModel.h"
 #include "core/collab/net/DeviceIdentity.h"
 #include "core/collab/net/MemLink.h"
+#include "core/collab/net/PeerStore.h"
+#include "core/collab/proto/Messages.h"
 #include "core/crypto/KeyFolder.h"
 #include "core/crypto/KeyStore.h"
 #include "core/crypto/OpenPgp.h"
@@ -43,6 +49,9 @@
 #include <QFileInfo>
 #include <QJsonDocument>
 #include <QProcess>
+#include <QSslCertificate>
+#include <QSslKey>
+#include <QTcpServer>
 #include <QSignalSpy>
 #include <QTemporaryDir>
 #include <QTest>
@@ -389,10 +398,11 @@ struct Dev {
     QString name, dir;
     std::unique_ptr<net::DeviceIdentity> id;
     std::unique_ptr<Service> svc;
+    std::unique_ptr<ManualClock> clock; // only when the test moves time itself
     QString deviceId() const { return id->deviceId(); }
 };
 
-static std::unique_ptr<Dev> makeDev(const QString &tmp, const QString &name, bool localSocket = false)
+static std::unique_ptr<Dev> makeDev(const QString &tmp, const QString &name, bool localSocket = false, bool manualClock = false)
 {
     auto d = std::make_unique<Dev>();
     d->name = name;
@@ -406,6 +416,10 @@ static std::unique_ptr<Dev> makeDev(const QString &tmp, const QString &name, boo
     cfg.port = 0;
     cfg.discovery = false;
     cfg.localSocket = localSocket;
+    if (manualClock) {
+        d->clock = std::make_unique<ManualClock>();
+        cfg.clock = d->clock.get();
+    }
     if (localSocket)
         cfg.localName = "qb-ls5-" + name + "-" + QString::number(QCoreApplication::applicationPid());
     d->svc = std::make_unique<Service>(cfg);
@@ -595,6 +609,140 @@ static void testServices(const QString &tmp)
     cw.client.reset();
     hw.project.reset();
     hw.client.reset();
+}
+
+// ---------------------------------------------------------------- 6b. who hosts: hand-over, failover, unknown device
+
+static void testHosting(const QString &tmp)
+{
+    std::printf("== who hosts (package 6 through the service)\n");
+    if (!net::DeviceIdentity::available() || !net::TlsLink::available()) {
+        check(true, QStringLiteral("(this build has no Botan TLS: the hosting checks are skipped)"));
+        return;
+    }
+    // ---- a planned hand-over between two services
+    auto A = makeDev(tmp, "HoA");
+    auto B = makeDev(tmp, "HoB");
+    check(pair(*A, *B), QStringLiteral("two devices pair (the keys are kept for the list of devices)"));
+    Made m = makeProject(tmp + "/hoproj", "Handover");
+    QString err;
+    const QString uuid = A->svc->shareProject(m.folder, &err);
+    check(!uuid.isEmpty() && A->svc->authority(uuid) && A->svc->authority(uuid)->isHost() && A->svc->authority(uuid)->epoch() == 1,
+          QStringLiteral("sharing founds the authority: this device hosts in epoch 1"), err);
+    A->svc->setAccess(uuid, B->deviceId(), Role::Editor);
+    check(A->svc->authority(uuid)->membership().count() == 2 && A->svc->authority(uuid)->membership().version >= 2,
+          QStringLiteral("giving access publishes a signed list with both devices"));
+    const QString replica = B->svc->joinProject(A->deviceId(), uuid, "Handover", "127.0.0.1", A->svc->port(), &err);
+    check(!replica.isEmpty() && waitFor([&] { return B->svc->clientSession(uuid) && B->svc->clientSession(uuid)->state() == ClientSession::State::Ready; }, 25000),
+          QStringLiteral("the other device joins"), err);
+    check(waitFor([&] { return B->svc->authority(uuid) && B->svc->authority(uuid)->membership().count() == 2 && !B->svc->authority(uuid)->chain().isEmpty(); }, 5000),
+          QStringLiteral("the joining device took the list and the chain of proofs from its host"));
+    // an edit through the host's own window, so that the copy and the state are not empty
+    {
+        Win hw;
+        check(hw.open(*A->svc, m.folder) && hw.lock(m.ch1), QStringLiteral("a window of the first host edits"), hw.error);
+        hw.setText(m.ch1, QStringLiteral("Before the hand-over there were exactly seven words."));
+        check(waitFor([&] { return B->svc->clientSession(uuid)->seq() >= 1 && treeHash(replica) == treeHash(m.folder); }, 10000), QStringLiteral("and the replica follows"));
+        CommitLedger ledger(m.folder + "/livesync-local/ledger.json");
+        ledger.load();
+        check(ledger.size() >= 1, QStringLiteral("the commit the device wrote was entered in its ledger"), QString::number(ledger.size()));
+        hw.project.reset();
+        hw.client.reset();
+    }
+    A->svc->setPeerAddress(B->deviceId(), "127.0.0.1", B->svc->port());
+    B->svc->setPeerAddress(A->deviceId(), "127.0.0.1", A->svc->port());
+    QString why;
+    check(A->svc->transferHosting(uuid, B->deviceId(), &why), QStringLiteral("Transfer Hosting starts"), why);
+    check(waitFor([&] { return B->svc->isHosting(uuid) && B->svc->authority(uuid)->isHost(); }, 20000), QStringLiteral("the other device hosts after the hand-over"),
+          QString::number(int(B->svc->authority(uuid)->state())) + " " + QString::number(int(A->svc->authority(uuid)->state())));
+    check(waitFor([&] { return !A->svc->isHosting(uuid) && A->svc->authority(uuid)->state() == AuthState::Follower && A->svc->authority(uuid)->host() == B->deviceId(); }, 20000),
+          QStringLiteral("the first device became a client of the new host"));
+    check(B->svc->authority(uuid)->epoch() == 2 && A->svc->authority(uuid)->epoch() == 2, QStringLiteral("both are in epoch 2"));
+    check(waitFor([&] { return A->svc->clientSession(uuid) && A->svc->clientSession(uuid)->state() == ClientSession::State::Ready; }, 25000),
+          QStringLiteral("the first device is connected to the new host and ready"));
+    {
+        Win bw, aw;
+        check(bw.open(*B->svc, replica) && bw.client->isHost(), QStringLiteral("a window on the new host attaches to the hosted project"), bw.error);
+        check(aw.open(*A->svc, m.folder) && !aw.client->isHost(), QStringLiteral("a window on the old host's device attaches as a client of it"), aw.error);
+        check(aw.lock(m.ch2), QStringLiteral("the client window takes a lock from the new host"));
+        aw.setText(m.ch2, QStringLiteral("After the hand-over, three words."));
+        check(waitFor([&] { return readAll(replica + "/content/" + m.ch2 + "/text.md").contains("three words") && wordsOfItem(replica, m.ch2) == 5; }, 15000),
+              QStringLiteral("a change of the old host's device reaches the new host's folder, and the new host counted its words"), QString::number(wordsOfItem(replica, m.ch2)));
+        check(waitFor([&] { return treeHash(replica) == treeHash(m.folder); }, 15000), QStringLiteral("and the old host's copy equals the new host's folder"));
+        aw.project.reset();
+        aw.client.reset();
+        bw.project.reset();
+        bw.client.reset();
+    }
+    const ProjectStatus pa = A->svc->statusModel()->project(uuid), pb = B->svc->statusModel()->project(uuid);
+    check(pb.thisDeviceHosts() && !pa.thisDeviceHosts() && pa.hostDeviceId == B->deviceId() && pa.epoch == 2,
+          QStringLiteral("the status model names the new host on both devices"));
+
+    // ---- an unknown device announces hosting: refused, the warning is in the status model
+    {
+        auto X = net::DeviceIdentity::createEphemeral("Stranger");
+        Membership own;
+        own.project = uuid;
+        own.version = 1;
+        Member sm;
+        sm.id = X->deviceId();
+        sm.key = X->publicKeyDer();
+        sm.name = "S";
+        own.members = {sm};
+        own.signWith(*X);
+        const Proof founding = makeFounding(uuid, 9, *X);
+        B->svc->authority(uuid)->handleMessage(X->deviceId(), proto::make(proto::T::AUTHORITY, uuid, {{"chain", QJsonArray{founding.toJson()}}, {"membership", own.toJson()}}));
+        const ProjectStatus ps = B->svc->statusModel()->project(uuid);
+        check(ps.notices.size() == 1 && ps.notices.first().contains("unknown device") && B->svc->authority(uuid)->epoch() == 2,
+              QStringLiteral("an unknown device that announces hosting is refused and the warning shows in the status model"), ps.notices.join("|"));
+    }
+    A.reset();
+    B.reset();
+
+    // ---- a failover: the host goes away, the other device takes over
+    auto F = makeDev(tmp, "FoA", false, true);
+    auto G = makeDev(tmp, "FoB", false, true);
+    check(pair(*F, *G), QStringLiteral("two devices pair"));
+    Made m2 = makeProject(tmp + "/foproj", "Failover");
+    const QString u2 = F->svc->shareProject(m2.folder, &err);
+    F->svc->setAccess(u2, G->deviceId(), Role::Editor);
+    const QString rep2 = G->svc->joinProject(F->deviceId(), u2, "Failover", "127.0.0.1", F->svc->port(), &err);
+    check(!rep2.isEmpty() && waitFor([&] { return G->svc->clientSession(u2) && G->svc->clientSession(u2)->state() == ClientSession::State::Ready; }, 25000),
+          QStringLiteral("the other device joins"), err);
+    check(waitFor([&] { return G->svc->authority(u2) && !G->svc->authority(u2)->chain().isEmpty(); }, 5000), QStringLiteral("and holds the chain"));
+    // the host's last commit: one document changed
+    {
+        Win fw;
+        fw.open(*F->svc, m2.folder);
+        fw.lock(m2.ch1);
+        fw.setText(m2.ch1, QStringLiteral("Written before the host went away."));
+        check(waitFor([&] { return G->svc->clientSession(u2)->seq() >= 1 && treeHash(rep2) == treeHash(m2.folder); }, 10000), QStringLiteral("the replica holds the last commit"));
+        fw.project.reset();
+        fw.client.reset();
+    }
+    F->svc->stop();
+    F.reset();
+    check(waitFor([&] { return G->svc->clientSession(u2) && G->svc->clientSession(u2)->state() != ClientSession::State::Ready; }, 8000), QStringLiteral("the host is gone"));
+    for (int i = 0; i < 20 && !G->svc->isHosting(u2); ++i) {
+        G->clock->advance(5000, 250);
+        waitFor([&] { return G->svc->isHosting(u2); }, 100);
+    }
+    check(G->svc->isHosting(u2) && G->svc->authority(u2)->isHost() && G->svc->authority(u2)->epoch() == 2,
+          QStringLiteral("after the host was out of contact for the failover time the other device hosts in epoch 2"),
+          QString::number(int(G->svc->authority(u2)->state())) + " epoch " + QString::number(G->svc->authority(u2)->epoch()));
+    {
+        Win gw;
+        check(gw.open(*G->svc, rep2) && gw.client->isHost(), QStringLiteral("a window on the new host attaches"), gw.error);
+        if (gw.project) {
+            check(gw.lock(m2.ch2), QStringLiteral("it takes a lock"));
+            gw.setText(m2.ch2, QStringLiteral("Hosted by the replica now."));
+            check(waitFor([&] { return readAll(rep2 + "/content/" + m2.ch2 + "/text.md").contains("replica now") && wordsOfItem(rep2, m2.ch2) == 5; }, 10000),
+                  QStringLiteral("a commit goes through the new host, and it counted the words"), QString::number(wordsOfItem(rep2, m2.ch2)));
+            check(readAll(rep2 + "/content/" + m2.ch1 + "/text.md").contains("before the host went away"), QStringLiteral("what the old host last committed is kept"));
+        }
+        gw.project.reset();
+        gw.client.reset();
+    }
 }
 
 // ---------------------------------------------------------------- 7. a real window
@@ -798,6 +946,163 @@ static int serviceProcess(const QString &tmp, const QString &app)
     return 0;
 }
 
+// ---------------------------------------------------------------- 9. two service processes: hand-over and failover
+
+namespace {
+struct ProcDev {
+    QString name, xdg, lsdir, keys, id;
+    quint16 port = 0;
+    QByteArray spki, cert;
+    QString instance;
+    std::unique_ptr<QProcess> proc;
+};
+quint16 freePort()
+{
+    QTcpServer s;
+    s.listen(QHostAddress::LocalHost, 0);
+    return s.serverPort();
+}
+void startProc(ProcDev &d, const QString &app, int idleMs, const QString &peers)
+{
+    d.proc = std::make_unique<QProcess>();
+    d.proc->setProcessChannelMode(QProcess::ForwardedChannels);
+    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    env.insert("XDG_DATA_HOME", d.xdg);
+    env.insert("QB_TEST_KEYSTORE", "file:" + d.keys);
+    env.insert("QT_QPA_PLATFORM", "offscreen");
+    env.insert("QB_LS_PORT", QString::number(d.port));
+    env.insert("QB_LS_NO_DISCOVERY", "1");
+    env.insert("QB_LS_IDLE_MS", QString::number(idleMs));
+    env.insert("QB_NO_UPDATE_CHECK", "1");
+    env.insert("QB_LS_PEERS", peers);
+    d.proc->setProcessEnvironment(env);
+    d.proc->start(app, {"--live-sync-service"});
+}
+} // namespace
+
+static void testHostingProcesses(const QString &tmp, const QString &app)
+{
+    std::printf("== two service processes: hand-over and failover\n");
+    if (app.isEmpty() || !QFileInfo::exists(app) || !net::DeviceIdentity::available()) {
+        check(true, QStringLiteral("(the program's file or the TLS pack is not here: the process checks are skipped)"));
+        return;
+    }
+    ProcDev A, B;
+    for (ProcDev *d : {&A, &B}) {
+        d->name = d == &A ? "ProcA" : "ProcB";
+        d->xdg = tmp + "/hp-" + d->name;
+        d->lsdir = d->xdg + "/Quillbinder/livesync";
+        d->keys = tmp + "/hp-" + d->name + "-keys.json";
+        QDir().mkpath(d->lsdir);
+        d->port = freePort();
+    }
+    // 1. each process makes its identity once and ends again
+    for (ProcDev *d : {&A, &B}) {
+        startProc(*d, app, 300, QString());
+        d->proc->waitForFinished(30000);
+        QFile f(d->lsdir + "/device.json");
+        QJsonObject o;
+        if (f.open(QIODevice::ReadOnly))
+            o = QJsonDocument::fromJson(f.readAll()).object();
+        d->cert = QByteArray::fromBase64(o.value("cert").toString().toLatin1());
+        d->instance = o.value("instance").toString();
+        d->name = o.value("name").toString().isEmpty() ? d->name : o.value("name").toString();
+        d->spki = QSslCertificate(d->cert, QSsl::Der).publicKey().toDer();
+        d->id = net::DeviceIdentity::deviceIdOfPin(net::DeviceIdentity::pinOfPublicKey(d->spki));
+    }
+    check(!A.id.isEmpty() && !B.id.isEmpty() && A.id != B.id, QStringLiteral("both processes made an identity"));
+    if (A.id.isEmpty() || B.id.isEmpty())
+        return;
+    // 2. the two know each other (as if paired) and share a project
+    for (ProcDev *d : {&A, &B}) {
+        const ProcDev *o = d == &A ? &B : &A;
+        net::PeerStore ps(d->lsdir);
+        net::PeerRecord r;
+        r.pin = net::DeviceIdentity::pinOfPublicKey(o->spki);
+        r.publicKey = o->spki;
+        r.name = o->name;
+        r.instanceId = o->instance;
+        r.pairedAt = 1700000000;
+        ps.add(r);
+    }
+    Made m = makeProject(tmp + "/hpproj", "ProcHandover");
+    const QString uuid = Registry::newUuid();
+    const QString replica = tmp + "/hp-replica/ProcHandover.quillbinder";
+    QDir().mkpath(replica);
+    {
+        Registry ra(A.lsdir);
+        RegistryEntry e;
+        e.uuid = uuid;
+        e.folder = m.folder;
+        e.title = "ProcHandover";
+        e.host = true;
+        e.hostDeviceId = A.id;
+        e.hostName = A.name;
+        e.epoch = 1;
+        e.access.insert(B.id, "editor");
+        ra.upsert(e);
+        Registry rb(B.lsdir);
+        RegistryEntry r;
+        r.uuid = uuid;
+        r.folder = replica;
+        r.title = "ProcHandover";
+        r.host = false;
+        r.hostDeviceId = A.id;
+        r.hostName = A.name;
+        r.lastAddress = "127.0.0.1";
+        r.lastPort = A.port;
+        rb.upsert(r);
+    }
+    startProc(A, app, 600000, B.id + "=127.0.0.1:" + QString::number(B.port));
+    startProc(B, app, 600000, A.id + "=127.0.0.1:" + QString::number(A.port));
+    const QString nameA = LocalLink::serverName(A.lsdir), nameB = LocalLink::serverName(B.lsdir);
+    check(waitFor([&] { return LocalServer::isServed(nameA, 100) && LocalServer::isServed(nameB, 100); }, 30000), QStringLiteral("both service processes listen on their sockets"));
+    LocalLink *la = LocalLink::connectTo(nameA);
+    LocalLink *lb = LocalLink::connectTo(nameB);
+    waitFor([&] { return la->state() == net::Link::State::Ready && lb->state() == net::Link::State::Ready; }, 3000);
+    ServiceClient ca(la), cb(lb);
+    const ServiceClient::Attached aa = ca.attach(m.folder, false);
+    const ServiceClient::Attached ab = cb.attach(replica, false);
+    check(aa.ok && aa.host && ab.ok && !ab.host, QStringLiteral("a window of each process attaches: one hosts, one holds a copy"), aa.code + "/" + ab.code);
+    check(waitFor([&] { return cb.replicaReady() && treeHash(replica) == treeHash(m.folder); }, 40000), QStringLiteral("the second process's copy is complete and equals the host's folder"));
+    check(waitFor([&] { return ca.epoch() == 1; }, 3000), QStringLiteral("the host's epoch is 1"));
+    // 3. a planned hand-over
+    ca.transferHosting(B.id);
+    check(waitFor([&] { return cb.isHost() && cb.epoch() == 2 && !ca.isHost() && ca.epoch() == 2; }, 30000), QStringLiteral("the second process hosts in epoch 2 and the first became its client"),
+          QStringLiteral("A host=%1 epoch=%2, B host=%3 epoch=%4").arg(ca.isHost()).arg(ca.epoch()).arg(cb.isHost()).arg(cb.epoch()));
+    check(waitFor([&] { return ca.replicaReady() && ca.stateCode() == int(ShareState::UpToDate); }, 30000), QStringLiteral("the first process is connected to the new host and up to date"), QString::number(ca.stateCode()));
+    QString err;
+    auto p = Project::open(m.folder, &err, ca.follower());
+    check(bool(p), QStringLiteral("a window of the first process opens its copy as a follower"), err);
+    if (p) {
+        ca.lock({"doc:" + m.ch1});
+        check(waitFor([&] { return ca.holds("doc:" + m.ch1); }, 8000), QStringLiteral("the lock comes from the new host's process"));
+        ca.follower()->capture().setListener([&] { QMetaObject::invokeMethod(&ca, [&] { ca.sendCaptured(); }, Qt::QueuedConnection); });
+        p->docs()->text(m.ch1)->setPlainText(QStringLiteral("Typed after the hand-over by the old host's device."));
+        p->save(&err);
+        check(waitFor([&] { return readAll(replica + "/content/" + m.ch1 + "/text.md").contains("old host's device"); }, 15000),
+              QStringLiteral("the text reached the new host's folder"));
+        check(waitFor([&] { return wordsOfItem(replica, m.ch1) == 8; }, 6000), QStringLiteral("and the new host's process counted its words"), QString::number(wordsOfItem(replica, m.ch1)));
+        check(waitFor([&] { return treeHash(replica) == treeHash(m.folder); }, 15000), QStringLiteral("the first process's copy follows"));
+        p.reset();
+    }
+    // 4. the new host's process dies: after the failover time the first device hosts (epoch 3)
+    cb.detach();
+    lb->close();
+    B.proc->kill();
+    B.proc->waitForFinished(5000);
+    QElapsedTimer since;
+    since.start();
+    check(waitFor([&] { return ca.isHost() && ca.epoch() == 3; }, 70000), QStringLiteral("after the failover time the first process hosts in epoch 3"),
+          QStringLiteral("host=%1 epoch=%2 state=%3").arg(ca.isHost()).arg(ca.epoch()).arg(ca.stateCode()));
+    check(since.elapsed() >= 25000, QStringLiteral("... not before the host was out of contact for about half a minute"), QString::number(since.elapsed()));
+    check(readAll(m.folder + "/content/" + m.ch1 + "/text.md").contains("old host's device"), QStringLiteral("the text of the dead host's last commit is in the new host's folder"));
+    ca.detach();
+    la->close();
+    A.proc->kill();
+    A.proc->waitForFinished(5000);
+}
+
 // ---------------------------------------------------------------- main
 
 int main(int argc, char **argv)
@@ -825,9 +1130,11 @@ int main(int argc, char **argv)
     testLocalLink(tmp);
     testFakeStatus();
     testServices(tmp);
+    testHosting(tmp);
     testWindow(tmp);
     testEncryptedHost(tmp);
     serviceProcess(tmp, program);
+    testHostingProcesses(tmp, program);
 
     std::printf("\n%d check(s), %d failure(s)\n", total, failures);
     return failures;

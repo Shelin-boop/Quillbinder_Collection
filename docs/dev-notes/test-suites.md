@@ -14,10 +14,14 @@ an open edit request, "not connected"); two `Service` objects in one process on 
 pairing with the code, sharing, joining, two windows editing different chapters, the host's `Project` recomputing counts and the
 list of documents, the replica equal to the host's folder, an edit request and the hand-over, the host going away; a `MainWindow`
 of a shared project (the in-process service): the first key waits for the lock and is typed after the grant, a remote commit in an
-open document, the other device refused a lock held here, close and release; and a service process reached through its socket.
+open document, the other device refused a lock held here, close and release; a service process reached through its socket;
+who hosts through the service (a planned hand-over between two in-process services, a window on each side, the commit ledger, an
+unknown device announcing hosting shown in the status model, a failover with a `ManualClock`); and two real service processes
+(identities made by a first short run, `peers.json` and the registries written by the test): hand-over, a commit through the new
+host, the new host killed, the failover after about 30 s of real time (this part takes about 40 s).
 Pitfalls: services of one test process share the gate and the vault (they are one program); a window must be given the follower
 before `Project::open`; the TLS peers are on 127.0.0.1 with port 0; `QB_LS_PORT`, `QB_LS_IDLE_MS`, `QB_LS_NO_DISCOVERY` are the
-service process's test switches.
+service process's test switches (`QB_LS_PEERS="<device id>=<address>:<port>;..."` gives the addresses where discovery is off).
 ## ls6 (0.99.0: Live Sync, who hosts)
 
 `qb_ls6_tests` (no display; about 20 s, nearly all of it Botan signing; skipped except the drafts store without the encryption pack

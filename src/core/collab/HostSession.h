@@ -89,6 +89,10 @@ public:
     void setProofs(const QJsonArray &proofs) { m_proofs = proofs; }
     // while false no new lock is granted (HOST_BUSY): a planned handover drains
     void setAcceptingLocks(bool on) { m_acceptLocks = on; }
+    // while false a change request is answered HOST_BUSY (a planned handover is preparing: no commits)
+    void setAcceptingCommits(bool on) { m_acceptCommits = on; }
+    // sends a message to the first joined connection of this device; false when there is none
+    bool sendToDevice(const QString &deviceId, const QJsonObject &message);
     void setEpoch(qint64 epoch);
 
     // ---- hooks
@@ -196,6 +200,7 @@ private:
     qint64 m_horizon = 0;
     bool m_started = false;
     bool m_acceptLocks = true;
+    bool m_acceptCommits = true;
     bool m_broken = false;
     QString m_indexPath;
     QHash<QString, qint64> m_revs;

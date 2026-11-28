@@ -107,6 +107,11 @@ int runLiveSyncService(int argc, char **argv)
         cfg.discovery = false;
     cfg.idleMs = idleMs;
     collab::Service service(cfg);
+    if (QB_TEST_ENV_SET("QB_LS_PEERS")) // "<device id>=<address>:<port>;..." where discovery is off (the suites)
+        for (const QString &part : QB_TEST_ENV("QB_LS_PEERS").split(QLatin1Char(';'), Qt::SkipEmptyParts)) {
+            const QString id = part.section(QLatin1Char('='), 0, 0), where = part.section(QLatin1Char('='), 1);
+            service.setPeerAddress(id, where.section(QLatin1Char(':'), 0, 0), quint16(where.section(QLatin1Char(':'), 1).toUInt()));
+        }
     QString error;
     if (!service.start(&error)) {
         // another service of this device is already running: nothing to do; any other reason is told

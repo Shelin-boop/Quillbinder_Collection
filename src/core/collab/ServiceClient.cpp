@@ -99,6 +99,8 @@ void ServiceClient::applyState(const QJsonObject &m)
     m_pending = m.value(QStringLiteral("pending")).toInt();
     m_drafts = m.value(QStringLiteral("drafts")).toInt();
     m_seq = qint64(m.value(QStringLiteral("seq")).toDouble());
+    m_epoch = qint64(m.value(QStringLiteral("epoch")).toDouble());
+    m_hostId = m.value(QStringLiteral("hostDeviceId")).toString();
     QHash<QString, QString> held;
     const QJsonObject h = m.value(QStringLiteral("held")).toObject();
     for (auto it = h.constBegin(); it != h.constEnd(); ++it)
@@ -251,6 +253,10 @@ void ServiceClient::answerEdit(const QString &r, bool handOver, const QString &a
     sendMsg(local::msg(local::ANSWER, {{"uuid", m_uuid}, {"resource", r}, {"handOver", handOver}, {"asker", asker}}));
 }
 void ServiceClient::requestBackup() { sendMsg(local::msg(local::ACTION, {{"uuid", m_uuid}, {"action", "requestBackup"}})); }
+void ServiceClient::transferHosting(const QString &targetDeviceId)
+{
+    sendMsg(local::msg(local::ACTION, {{"uuid", m_uuid}, {"action", "transferHosting"}, {"target", targetDeviceId}}));
+}
 void ServiceClient::stopSharing() { sendMsg(local::msg(local::ACTION, {{"uuid", m_uuid}, {"action", "stopSharing"}})); }
 
 } // namespace collab
