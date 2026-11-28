@@ -104,3 +104,4 @@ welcdark 33
 ls3 139
 ls4 238
 ls6 200
+ls7 148

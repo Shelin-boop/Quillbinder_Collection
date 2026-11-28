@@ -17,6 +17,9 @@ host that restarts, failover of two devices (29 s no, 31 s yes) and of three to 
 crash, unknown devices and forged proofs, reunion with drafts per document and author, the drafts store and ledger, the handback
 after 60 s (not before, not without sync, not while busy). Seven of the checks were each seen to fail with its code taken out
 (majority, the stored RETIRED, the stored vote, the member test, 60 s, the drafts, 30 s, the hash test).
+## ls7 (0.99.0: Live Sync, the interface)
+
+`qb_ls7_tests` (needs a display; runs under the runner, a few seconds). Everything runs against `FakeLiveSyncControl` (`ui/LiveSyncControl.h`: the calls are noted in `calls`, the model's calls in `status.calls()`; the suite fires the signals). Checks: Live Sync off shows nothing (button, tab, bars, marks) and is off by default in the stand-in; the options page (switch, name, hosting, devices with Remove asking first, the folded parts, the line on where the keys are kept and the warning about plain files and ZIP backups, the page between Encryption and Extras); the button in its five states (own icon each, text, accessible name, tool tip) and the worst state with no shared project; the menu for host, client, not shared and a closed project; the inspector tab; the binder's three marks; every bar and its buttons; the pairing, join, hosted projects and recovery drafts windows (non-modal) with their buttons; the wallet's dialogs and the handler through a real wallet in the test's data folder; the inspector's picture removal and the project's look through the gate in a follower. Pitfalls: windows that ask a question go through `dialogHooks()` (confirm, input, pick), which the suite sets; the menu audit for the button's menu is in `m13` (it puts the button's actions into a menu bar of its own); the main window's own audit on a shared project needs the service of work package 5.
 
 ## ls4 (0.99.0: Live Sync, the protocol)
 
