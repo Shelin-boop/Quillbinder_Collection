@@ -7,6 +7,10 @@ of the jobs, and a made-up run of the catalog step.
   python3 -I tests/models5_tests.py
 """
 import gzip
+import math
+import struct
+import wave
+import zipfile
 import importlib.util
 import json
 import os
@@ -55,18 +59,18 @@ models = defs["models"]
 by_id = {m["id"]: m for m in models}
 
 # ---- the definitions and the program's catalog
-check("definitions: release models-5, 19 models, unique ids", defs["release"] == "models-5" and len(models) == 19 and len(by_id) == 19)
+check("definitions: release models-5, 19 models and 7 voice packs, unique ids", defs["release"] == "models-5" and len(models) == 26 and len(by_id) == 26)
 check("models.json: format 1, release models-5", built_in["format"] == 1 and built_in["release"] == "models-5")
 check("models.json has the same ids in the same order as the definitions", [m["id"] for m in built_in["models"]] == [m["id"] for m in models])
 kinds = {k for m in models for k in m["kinds"]}
-check("kinds are handwriting, wordlist and tts", kinds == {"handwriting", "wordlist", "tts"}, kinds)
+check("kinds are handwriting, wordlist, tts and voicepack", kinds == {"handwriting", "wordlist", "tts", "voicepack"}, kinds)
 check("engines are onnx, pocket-tts, qwen3-tts or none (word lists)", {m["engine"] for m in models} == {"onnx", "pocket-tts", "qwen3-tts", ""})
 for m in models:
     names = [f["name"] for f in m["files"]]
     ok = (m["model"] in names and (not m.get("extra") or m["extra"] in names) and len(set(names)) == len(names)
           and all(re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._+-]*", n) for n in names + [f["asset"] for f in m["files"]]))
     check(f"{m['id']}: model/extra are files, names are safe", ok)
-    check(f"{m['id']}: every file has a source (from or text)", all(("from" in f) != ("text" in f) for f in m["files"]))
+    check(f"{m['id']}: every file has a source (from, text, or external: made by the voices run)", all(("from" in f) + ("text" in f) + ("external" in f) == 1 for f in m["files"]))
     check(f"{m['id']}: license fields", bool(m["license"]) and m["licenseUrl"].startswith("https://") and bool(m["credit"]) and bool(m["source"]))
 
 # ---- languages (decision 6)
@@ -97,7 +101,7 @@ check("juergen is in no definition, pin or catalog file", not any("juergen" in r
 
 # ---- the pins
 groups = sources["groups"]
-check("pins: groups ppocr, qwen and pocket-<lang> for the five languages", set(groups) == {"ppocr", "qwen", "pocket-en", "pocket-fr", "pocket-es", "pocket-pt", "pocket-it"})
+check("pins: groups ppocr, qwen, qwen-voicedesign and pocket-<lang> for the five languages", set(groups) == {"ppocr", "qwen", "qwen-voicedesign", "pocket-en", "pocket-fr", "pocket-es", "pocket-pt", "pocket-it"})
 check("pins: a 40-hex commit for every group", all(re.fullmatch(r"[0-9a-f]{40}", g["revision"]) for g in groups.values()))
 check("pins: every file has a size and a SHA-256 (or a git blob id for a file without LFS)",
       all(f["size"] > 0 and (re.fullmatch(r"[0-9a-f]{64}", f.get("sha256", "")) or re.fullmatch(r"[0-9a-f]{40}", f.get("gitBlob", ""))) for g in groups.values() for f in g["files"]))
@@ -116,20 +120,34 @@ for m in built_in["models"]:
               all(any(p["size"] == mine[n]["size"] and p["sha256"] == mine[n]["sha256"] for p in qwen_pins.values()) for n in ("talker.gguf", "tokenizer-12hz-Q8_0.gguf")))
 published = jload(os.path.join(M, "models-5-catalog.json"))
 check("the published release's catalog (models-5-catalog.json) lists the same ids and files as the definitions",
-      [(m["id"], [f["asset"] for f in m["files"]]) for m in published["models"]] == [(m["id"], [f["asset"] for f in m["files"]]) for m in models])
+      [(m["id"], [f["asset"] for f in m["files"]]) for m in published["models"] if "voicepack" not in m["kinds"]] == [(m["id"], [f["asset"] for f in m["files"]]) for m in models if "voicepack" not in m["kinds"]])
 check("models.json: every file has its size and a 64-hex SHA-256 from the published release",
-      all(len(f.get("sha256", "")) == 64 and f.get("size", 0) > 0 for m in built_in["models"] for f in m["files"]))
+      all(len(f.get("sha256", "")) == 64 and f.get("size", 0) > 0 for m in built_in["models"] if "voicepack" not in m["kinds"] for f in m["files"]))
+# THE PLACEHOLDER CHECK: it fails until the lead has run the job "voices" and put the measured size and SHA-256 of the seven
+# packs into resources/ai/models.json (python3 tools/models/make-catalog.py models-json resources/ai/models.json --catalog <catalog.json of the release>)
+packs = [m for m in built_in["models"] if "voicepack" in m["kinds"]]
+unfilled = [m["id"] for m in packs if not all(len(f.get("sha256", "")) == 64 and f.get("size", 0) > 0 for f in m["files"])]
+check("voice packs: seven of them, and none with a placeholder for its size or SHA-256 (fill them after the run of the job voices: " + ", ".join(unfilled) + ")",
+      len(packs) == 7 and sorted(m["languages"][0] for m in packs) == ["de", "en", "es", "fr", "it", "pt", "ru"] and not unfilled)
 
 # ---- the workflow
 check("workflow: release models-5, llama.cpp b12808 with its commit", "RELEASE_TAG: models-5" in wf_text and "LLAMA_TAG: b12808" in wf_text and "ed2153e708de813c35559102aed43b3085179c27" in wf_text)
 check("workflow: pushes of linux/** that change it or tools/models, and a dispatch", "'linux/**'" in wf_text and "'tools/models/**'" in wf_text and "workflow_dispatch:" in wf_text)
 jobs = re.findall(r"^  ([a-z-]+):\n", wf_text.split("\njobs:\n", 1)[1], re.M)
-check("workflow: the jobs", jobs == ["state", "handwriting", "wordlists", "pocket-tts", "qwen", "voices", "catalog", "publish"], jobs)
-check("workflow: contents: write only in the job publish", wf_text.count("contents: write") == 1 and wf_text.index("contents: write") > wf_text.index("\n  publish:\n"))
+check("workflow: the jobs", jobs == ["state", "handwriting", "wordlists", "pocket-tts", "qwen", "voices", "voices-catalog", "catalog", "publish", "voices-publish"], jobs)
+check("workflow: contents: write only in the jobs publish and voices-publish", wf_text.count("contents: write") == 2 and wf_text.index("contents: write") > wf_text.index("\n  publish:\n"))
 check("workflow: a published release is never changed (no --clobber), catalog.json is uploaded last",
-      "--clobber" not in wf_text.replace("# no --clobber", "") and wf_text.rindex("out/catalog.json") > wf_text.rindex('gh release upload "$RELEASE_TAG" "out/$f"'))
+      "--clobber" not in wf_text.split("\n  voices-publish:\n")[0].replace("# no --clobber", "") and wf_text.rindex("out/catalog.json") > wf_text.rindex('gh release upload "$RELEASE_TAG" "out/$f"'))
 check("workflow: does nothing when catalog.json is on the release", "grep -qxF catalog.json" in wf_text and "needs.state.outputs.there != 'true'" in wf_text)
-check("workflow: the stub job voices is skipped by an input switch", "inputs.voices" in wf_text and "default: false" in wf_text)
+check("workflow: the voice jobs run only by the input voices; every other job is switched off by it", "inputs.voices" in wf_text and "default: false" in wf_text and 'VOICES: ${{ github.event_name' in wf_text)
+vp = wf_text.split("\n  voices-publish:\n")[1]
+vj = wf_text.split("\n  voices:\n")[1].split("\n  voices-catalog:\n")[0]
+check("workflow voices: seven languages in a matrix, the repository guard, no write permission, pinned sources",
+      "lang: [en, de, es, fr, pt, it, ru]" in vj and "github.repository == 'Shelin-boop/Quillbinder_Collection'" in vj and "contents: write" not in vj
+      and "fetch-hf.py tools/models/models-5-sources.json qwen-voicedesign" in vj and "get-ai-engine.sh" in vj)
+check("workflow voices-publish: only adds zip files and replaces catalog.json (nothing is deleted), no checkout",
+      "gh release upload" in vp and "gh release delete" not in vp and "gh release edit" not in vp and "actions/checkout" not in vp and "out/catalog.json" in vp)
+check("workflow: every action is pinned by a commit", all(re.fullmatch(r"[0-9a-f]{40}", m) for m in re.findall(r"uses: [^@\s]+@(\S+)", wf_text)))
 check("workflow: marked a pre-release 'not for downloading'", "--prerelease" in wf_text and "not for downloading" in wf_text)
 translator = read(os.path.join(ROOT, ".github/workflows/translator-data-4.yml"))
 pinned_actions = set(re.findall(r"uses: (actions/[a-z-]+@[0-9a-f]{40})", wf_text))
@@ -207,7 +225,7 @@ try:
     check("make-catalog build: runs on made-up files", r.returncode == 0, r.stdout + r.stderr)
     cat = jload(os.path.join(out, "catalog.json")) if r.returncode == 0 else {"models": []}
     check("catalog: 19 models, every file with size and a 64-hex SHA-256 and its asset on disk",
-          len(cat["models"]) == 19 and all(len(f["sha256"]) == 64 and os.path.getsize(os.path.join(out, f["asset"])) == f["size"] for x in cat["models"] for f in x["files"]))
+          len(cat["models"]) == 19 and all("voicepack" not in x["kinds"] for x in cat["models"]) and all(len(f["sha256"]) == 64 and os.path.getsize(os.path.join(out, f["asset"])) == f["size"] for x in cat["models"] for f in x["files"]))
     check("catalog: the shared tokenizer is one asset", len({f["asset"] for x in cat["models"] for f in x["files"] if f["name"].startswith("tokenizer")}) == 1)
     voices_txt = open(os.path.join(out, "pocket-tts-en--VOICES.txt"), encoding="utf-8").read() if r.returncode == 0 else ""
     check("VOICES.txt names every voice with its license, and no juergen", all(n in voices_txt for n in v) and "juergen" not in voices_txt.lower())
@@ -223,10 +241,79 @@ try:
           len(pk) == 5 and all("sha256" not in f for x in pk for f in x["files"]) and all("sha256" in f for x in c3["models"] if x["engine"] != "pocket-tts" for f in x["files"]), r5.stderr)
     check("workflow: the dispatch input pocket skips Pocket TTS and the catalog still runs (handwriting, word lists, Qwen needed)",
           "inputs.pocket" in wf_text and "pocket-tts.result == 'skipped'" in wf_text and "--without-pocket" in wf_text)
+    # ---- the voices run: the packs are added to the release's catalog
+    zd = os.path.join(tmp, "zips")
+    os.makedirs(zd)
+    for l in ("en", "de"):
+        open(os.path.join(zd, f"read-aloud-voices-{l}.zip"), "wb").write(b"PK" + l.encode() * 50)
+    rv = subprocess.run([sys.executable, "-I", os.path.join(M, "make-catalog.py"), "voices", os.path.join(out, "catalog.json"), zd, os.path.join(tmp, "withvoices.json")], capture_output=True, text=True)
+    cv = jload(os.path.join(tmp, "withvoices.json")) if rv.returncode == 0 else {"models": []}
+    vp_models = [x for x in cv["models"] if "voicepack" in x["kinds"]]
+    check("make-catalog voices: adds the packs whose zip is there with size and SHA-256, every other entry stays as it was",
+          rv.returncode == 0 and [x["id"] for x in vp_models] == ["voices-en", "voices-de"] and all(len(x["files"][0]["sha256"]) == 64 and x["files"][0]["size"] > 0 for x in vp_models)
+          and cv["models"][:len(cat["models"])] == cat["models"], rv.stderr)
+    rv2 = subprocess.run([sys.executable, "-I", os.path.join(M, "make-catalog.py"), "voices", os.path.join(tmp, "withvoices.json"), os.path.join(tmp, "nozips"), os.path.join(tmp, "x.json")], capture_output=True, text=True)
+    check("make-catalog voices: without any zip it stops", rv2.returncode != 0)
     target = os.path.join(tmp, "models.json")
     r2 = subprocess.run([sys.executable, "-I", os.path.join(M, "make-catalog.py"), "models-json", target, "--catalog", os.path.join(out, "catalog.json")], capture_output=True, text=True)
     merged = jload(target) if r2.returncode == 0 else {"models": []}
-    check("models-json with a catalog: every file has its measured checksum", r2.returncode == 0 and all("sha256" in f for x in merged["models"] for f in x["files"]))
+    check("models-json with a catalog: every file has its measured checksum (a voice pack not measured yet: size 0 and an empty SHA-256)",
+          r2.returncode == 0 and all("sha256" in f for x in merged["models"] for f in x["files"]) and all(f["size"] == 0 and f["sha256"] == "" for x in merged["models"] if "voicepack" in x["kinds"] for f in x["files"]))
+    r2b = subprocess.run([sys.executable, "-I", os.path.join(M, "make-catalog.py"), "models-json", os.path.join(tmp, "m4.json"), "--catalog", os.path.join(tmp, "withvoices.json")], capture_output=True, text=True)
+    m4 = {x["id"]: x for x in jload(os.path.join(tmp, "m4.json"))["models"]} if r2b.returncode == 0 else {}
+    check("models-json with the voices run's catalog: the measured packs are filled in, the others stay placeholders",
+          m4.get("voices-de", {}).get("files", [{}])[0].get("size", 0) > 0 and len(m4["voices-de"]["files"][0]["sha256"]) == 64 and m4["voices-fr"]["files"][0]["sha256"] == "")
+
+    # ---- the designing script: texts, descriptions, and the clip check on made-up WAV files
+    dv = module("design_voices", "design-voices.py")
+    check("voices: six voices with the written descriptions and three styles, 18 clips", len(dv.names()) == 18 and dv.VOICES["male1"] == "Male, adult, deep warm baritone voice"
+          and dv.STYLES["action"] == "energetic, urgent, fast pace, tense and intense" and dv.description("female2-calm") == "Female, middle-aged, lower pitch, slightly husky voice, calm and soothing, soft, slow relaxed pace")
+    check("voices: one reference text of 25 to 35 words for each of the seven languages", sorted(dv.TEXTS) == ["de", "en", "es", "fr", "it", "pt", "ru"] and all(25 <= len(t.split()) <= 35 for t in dv.TEXTS.values()))
+    def wavfile(name, seconds, amp, rate=24000, clip=False, width=2, channels=1):
+        n = int(seconds * rate)
+        samples = [int(amp * 32767 * math.sin(i * 0.3)) for i in range(n)]
+        if clip:
+            samples[1000:1020] = [32767] * 20
+        path = os.path.join(tmp, name)
+        with wave.open(path, "wb") as w:
+            w.setnchannels(channels)
+            w.setsampwidth(width)
+            w.setframerate(rate)
+            w.writeframes(b"".join(struct.pack("<h", x) for x in samples) if channels == 1 else b"\0" * (n * 2 * channels))
+        return path
+    check("clip check: a good clip passes", dv.clip_problem(wavfile("good.wav", 8, 0.3)) is None)
+    check("clip check: too short, too long, silent, clipped, wrong rate are refused",
+          all(dv.clip_problem(wavfile(n, sec, a, rate=r, clip=c)) for n, sec, a, r, c in
+              (("short.wav", 2, 0.3, 24000, False), ("long.wav", 25, 0.3, 24000, False), ("silent.wav", 8, 0.0005, 24000, False), ("clipped.wav", 8, 0.3, 24000, True), ("rate.wav", 8, 0.3, 16000, False))))
+    check("clip check: the command line says OK or the reason and its exit code follows",
+          subprocess.run([sys.executable, "-I", os.path.join(M, "design-voices.py"), "check", os.path.join(tmp, "good.wav")], capture_output=True, text=True).returncode == 0
+          and subprocess.run([sys.executable, "-I", os.path.join(M, "design-voices.py"), "check", os.path.join(tmp, "silent.wav")], capture_output=True, text=True).returncode == 1)
+    # the whole make step with a fake tool that writes the clips (one bad clip the first time, good the second time)
+    fake = os.path.join(tmp, "faketool.py")
+    open(fake, "w").write("import sys, wave, struct, math, os\n"
+                          "lst, out, seed = sys.argv[4], sys.argv[5], int(sys.argv[6])\n"
+                          "for line in open(lst, encoding='utf-8'):\n"
+                          "    name = line.split('\\t')[0]\n"
+                          "    amp = 0.0005 if (name == 'male3-calm' and seed == 1000) else 0.3\n"
+                          "    w = wave.open(os.path.join(out, name + '.wav'), 'wb'); w.setnchannels(1); w.setsampwidth(2); w.setframerate(24000)\n"
+                          "    w.writeframes(b''.join(struct.pack('<h', int(amp * 32767 * math.sin(i * 0.3))) for i in range(24000 * 6))); w.close()\n")
+    wrapper = os.path.join(tmp, "tool.sh")
+    open(wrapper, "w").write(f'#!/bin/sh\nexec {sys.executable} {fake} "$@"\n')
+    os.chmod(wrapper, 0o755)
+    mo = os.path.join(tmp, "made")
+    rm = subprocess.run([sys.executable, "-I", os.path.join(M, "design-voices.py"), "make", "de", wrapper, "t.gguf", "c.gguf", mo], capture_output=True, text=True)
+    zp = os.path.join(mo, "read-aloud-voices-de.zip")
+    zn = zipfile.ZipFile(zp).namelist() if rm.returncode == 0 else []
+    check("make: a failed clip is designed again once; the zip holds the 36 files and voices.json; the clip texts are the language's",
+          rm.returncode == 0 and "male3-calm: nearly silent" in rm.stdout and len(zn) == 37 and "voices.json" in zn and "female1-neutral.txt" in zn
+          and open(os.path.join(mo, "de", "female1-neutral.txt"), encoding="utf-8").read().strip() == dv.TEXTS["de"], rm.stdout[-400:] + rm.stderr[-400:])
+    vj_meta = json.loads(zipfile.ZipFile(zp).read("voices.json")) if rm.returncode == 0 else {}
+    check("make: voices.json names the model, its license, the descriptions and says no real person's voice",
+          vj_meta.get("modelLicense") == "Apache-2.0" and "voicedesign" in vj_meta.get("model", "") and "no real person's voice" in vj_meta.get("note", "") and vj_meta["voices"]["female3"]["description"] == dv.VOICES["female3"])
+    open(fake, "a").write("    if name == 'male3-calm': os.remove(os.path.join(out, name + '.wav'))\n")
+    rm2 = subprocess.run([sys.executable, "-I", os.path.join(M, "design-voices.py"), "make", "en", wrapper, "t.gguf", "c.gguf", os.path.join(tmp, "made2")], capture_output=True, text=True)
+    check("make: a clip that fails twice fails the run", rm2.returncode != 0 and "failed twice" in rm2.stdout + rm2.stderr)
+    target = os.path.join(tmp, "models.json")
     r3 = subprocess.run([sys.executable, "-I", os.path.join(M, "make-catalog.py"), "models-json", os.path.join(tmp, "m3.json"), "--catalog", os.path.join(M, "models-5-catalog.json")], capture_output=True, text=True)
     check("models-json with the published release's catalog equals the committed built-in catalog", r3.returncode == 0 and jload(os.path.join(tmp, "m3.json")) == built_in, r3.stderr)
 finally:

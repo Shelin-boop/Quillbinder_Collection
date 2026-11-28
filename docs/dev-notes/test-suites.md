@@ -436,6 +436,7 @@ needs `build/quillbinder`), the start script and the download page's size note.
   `QB_TEST_APPIMAGE`, `QB_TEST_NO_RESTART`; a key made with openssl in `QB_TEST_SIGNING_KEY`), `tools/update-feed.py`,
   and the translator add-on's place. Needs python3 and openssl; links Qt Network. The unreachable case waits for
   two tries and a fading note, so the suite takes about 50 s.)
+- `models5` also checks the designed voices (0.99.0): the voices job of the workflow, the voice-design pins, the clip check on made-up WAV files, `make-catalog.py voices`, a whole `design-voices.py make` with a fake tool (one bad clip designed again, a clip bad twice fails the run), and one check that **fails while a voice pack's size or SHA-256 is a placeholder** in `resources/ai/models.json`. `v0990n` (Read Aloud) has the voice-pack checks (a folder per language, the flat fallback, bad zips refused, the default language), `v0990h` the download of a pack after a Qwen model and its removal.
 - `models5` (0.99.0, `tests/models5_tests.py`, Python only, no build): the release models-5: the definitions, the program's built-in
   catalog and the workflow agree (ids, kinds, engines, files, license fields), languages (Read Aloud has none of id, tr, pl, nl;
   Handwriting none of ru; the ten word lists), the licensed voices (never juergen), the pins, the workflow's rights (write only
