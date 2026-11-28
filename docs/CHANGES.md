@@ -38,6 +38,15 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   declines (a decline starts the 20 seconds again and tells the asker), and a takeover is possible only after 20 seconds with
   no answer, after a protective copy of the text. Everything waits on an injectable clock. Suite `ls4`, with one run of two
   programs over TLS on localhost.
+- Live Sync, the service and the windows (no change for a writer; Live Sync stays off until a project is shared): the service of a
+  device (`quillbinder --live-sync-service`, a program without a window that ends by itself ten seconds after the last window
+  unless it keeps hosting) holds the device's identity, listener, pairing and the sessions of every shared project, and the
+  registry of what is shared or joined. A window of a shared project opens the folder as a follower, hands what its saves would
+  have written to the service through a local socket, takes a document's lock at the first key (the keys of the next 1.5 seconds
+  wait for it), applies what other devices changed into the open documents without overwriting unsaved text, and hands its
+  changes over and gives its locks up when the project closes. The host keeps its own project: when it applies a commit it
+  recomputes word and character counts, modified times and the list of documents with its normal code. A small status window
+  shows what the service hosts after the last window closed. Suite `ls5`.
 - **0.99.0 is a security update on every system** (Linux, Windows and Android). The update window says "recommended
   (security)" for a Quillbinder with an older version and offers no "Ignore This Version", also when a newer version has
   come out since (every version after the installed one, up to the newest, counts).

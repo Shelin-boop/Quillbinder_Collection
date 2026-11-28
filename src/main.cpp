@@ -15,6 +15,7 @@
 #include "ui/FontInstall.h"
 #include "ui/Language.h"
 #include "ui/CrashDialogs.h"
+#include "ui/LiveSyncStatusWindow.h"
 #include "ui/MainWindow.h"
 #include "ui/UpdateChecker.h"
 #include "ui/MediaPlayback.h"
@@ -64,6 +65,11 @@ int main(int argc, char **argv)
     QCoreApplication::setOrganizationName(QStringLiteral(QB_APP_NAME));
     QCoreApplication::setApplicationName(QStringLiteral(QB_APP_NAME));
     QCoreApplication::setApplicationVersion(QStringLiteral(QB_APP_VERSION));
+
+    // 0.99.0 (Live Sync): the service of this device, without a window of the program (design 4.1)
+    for (int i = 1; i < argc; ++i)
+        if (QByteArray(argv[i]) == "--live-sync-service")
+            return qb::ui::runLiveSyncService(argc, argv);
 
     // --version / --help work without a display
     for (int i = 1; i < argc; ++i) {

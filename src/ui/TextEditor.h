@@ -3,11 +3,13 @@
 #include "text/DirectFormat.h"
 #include "text/TextProps.h"
 
+#include <QKeyEvent>
 #include <QPointer>
 #include <QRegularExpression>
 #include <QTextBlock>
 #include "text/Tables.h"
 #include <QTextEdit>
+#include <QTimer>
 #include <functional>
 
 class QMenu;
@@ -58,6 +60,19 @@ public:
     Project *project() const { return m_project; }
     BinderItem *item() const { return m_item; }
     bool isNotes() const { return m_isNotes; }
+    // 0.99.0 (Live Sync): the editor of a shared project takes the document's lock at the first key (design 5.2). The window
+    // sets one gate for the program: it gets the document's id and whether it is the notes, and answers true when the lock is
+    // held (the key goes on) or false when it was asked for: the editor then keeps the keys of the next 1.5 s and types them
+    // when lockResult(true) comes, and drops them when lockResult(false) comes or the time is up. A paste, a drop or an input
+    // method text arriving without the lock is refused (the lock is asked for; the writer does it again). Without a gate
+    // (the program as it was) nothing changes.
+    using LockGate = std::function<bool(const QString &docId, bool notes)>;
+    static void setLockGate(LockGate gate);
+    static bool hasLockGate();
+    // every editor that waits for the lock of this document is told the result
+    static void lockResult(const QString &docId, bool granted);
+    // whether some editor shows this document (text or notes): the window gives its lock up when none does
+    static bool shown(const QString &docId);
     // notes that start as plain text (0.93.0): no look of the project's text formatting
     bool plainNotes() const { return document() && document()->property("qbPlainNotes").toBool(); }
 
@@ -296,6 +311,11 @@ private:
     void updateScriptCompletion(bool evenIfEmpty);
     void hideScriptCompletion();
 
+    bool needsLock(bool notesOnly = false);
+    void replayHeldKeys(bool granted);
+    QList<QKeyEvent *> m_heldKeys;
+    QTimer *m_heldTimer = nullptr;
+    bool m_replaying = false;
     QPointer<Project> m_project;
     QTextDocument *m_placeholder = nullptr;
     BinderItem *m_item = nullptr;

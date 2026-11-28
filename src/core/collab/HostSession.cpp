@@ -270,6 +270,15 @@ int HostSession::joinedCount() const
     return n;
 }
 
+QList<HostSession::PeerSummary> HostSession::joinedPeers() const
+{
+    QList<PeerSummary> out;
+    for (const Peer *p : m_peers)
+        if (p->joined)
+            out.append(PeerSummary{p->owner.device, p->owner.session, p->name, p->role});
+    return out;
+}
+
 Role HostSession::roleOf(const QString &device) const
 {
     if (m_roleProvider)
@@ -922,8 +931,13 @@ void HostSession::onCommit(Peer *p, const QJsonObject &m)
         if (f.kind == FileOp::Put)
             putPaths << f.path;
     }
-    if (indexChanged)
+    // with a backend the project file and the derived files may change although the operations do not (a text's counts)
+    const bool indexListed = indexChanged || m_backend;
+    if (indexListed)
         logFiles.append(object({{QStringLiteral("path"), QFileInfo(m_indexPath).fileName()}, {QStringLiteral("kind"), QStringLiteral("put")}}));
+    const QStringList derived = m_backend ? m_backend->derivedPaths() : QStringList();
+    for (const QString &d : derived)
+        logFiles.append(object({{QStringLiteral("path"), d}, {QStringLiteral("kind"), QStringLiteral("put")}}));
     const QJsonObject logEntryJson = object({{QStringLiteral("seq"), double(newSeq)},
                                              {QStringLiteral("opId"), opId},
                                              {QStringLiteral("actor"), actor},
@@ -975,6 +989,15 @@ void HostSession::onCommit(Peer *p, const QJsonObject &m)
         else if (f.kind == FileOp::RemoveTree && QFileInfo(abs).isDir())
             pathsafety::removeTreeInside(abs, m_folder);
     }
+    if (m_backend) {
+        QStringList removed;
+        for (const FileOp &f : files)
+            if (f.kind != FileOp::Put)
+                removed << f.path;
+        QString backendErr;
+        if (!m_backend->afterCommit(allOps, putPaths, removed, &backendErr))
+            std::fprintf(stderr, "Live Sync: derived data of commit %lld could not be recomputed: %s\n", static_cast<long long>(newSeq), qPrintable(backendErr));
+    }
     m_seq = newSeq;
     m_revs = newRevs;
     QJsonArray eventFiles;
@@ -1022,8 +1045,12 @@ void HostSession::onCommit(Peer *p, const QJsonObject &m)
             eventFiles.append(object({{QStringLiteral("path"), f.path}, {QStringLiteral("kind"), QStringLiteral("removeTree")}}));
         }
     }
-    if (indexChanged)
+    if (indexListed)
         upsert(QFileInfo(m_indexPath).fileName());
+    for (const QString &d : derived) {
+        if (QFileInfo::exists(m_folder + QLatin1Char('/') + d))
+            upsert(d);
+    }
     StoredResult sr;
     sr.seq = newSeq;
     sr.revs = changedRevs;

@@ -64,6 +64,32 @@ private:
     QHash<QString, QString> m_held; // resource -> device name
 };
 
+// The service of a program (collab/Service.h) writes the shared files itself: the host's commits and a replica's events.
+// When a window of the same folder lives in the same process (Android, the tests), those writes must not be captured as
+// the window's own. The service marks the stretch of its own work with a ServiceScope: inside it Gate::decide() passes
+// everything. The mark belongs to the thread and nests. A window that is called from inside the service's work (a slot
+// of one of its signals) steps out with WindowScope for the time of its own writes, so that what it writes is captured.
+class ServiceScope
+{
+public:
+    ServiceScope();
+    ~ServiceScope();
+    ServiceScope(const ServiceScope &) = delete;
+    ServiceScope &operator=(const ServiceScope &) = delete;
+    static bool active();
+};
+class WindowScope
+{
+public:
+    WindowScope();
+    ~WindowScope();
+    WindowScope(const WindowScope &) = delete;
+    WindowScope &operator=(const WindowScope &) = delete;
+
+private:
+    int m_saved;
+};
+
 enum class Verdict {
     Pass,     // not a follower's folder, or a file of this device only: the caller goes on
     Captured, // kept in the follower's change set: the caller treats the write as done
