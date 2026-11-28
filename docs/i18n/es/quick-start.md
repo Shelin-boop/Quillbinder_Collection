@@ -75,6 +75,7 @@
 - **Lugares recordados**: cada documento se abre donde dejaste el cursor, también después de reabrir el proyecto.
 - **Fuentes**: **Formato > Fuente > Instalar archivos de fuente…** añade fuentes sin salir del programa.
 - **Seguridad**: guardado automático también mientras sigues escribiendo, copias de seguridad, una copia de reserva del archivo del proyecto, informes de fallos y bloqueos (**Ayuda > Solución de problemas y desarrollo > Informes de fallos…**) y **Ayuda > Solución de problemas y desarrollo > Información del sistema**.
+- **Live Sync** (desactivado hasta que lo actives en **Archivo > Opciones > Live Sync**): mantiene un proyecto igual en tus dispositivos de la misma red. Empareja los dispositivos una vez (**Emparejar un dispositivo...**: compara las seis cifras en ambos), y después elige **Compartir este proyecto...** en el menú del botón Live Sync de la barra de herramientas y **Unirse a un proyecto...** en el otro dispositivo. Un dispositivo edita un documento a la vez; los demás pueden pedirlo. Los archivos de un proyecto sin cifrar, y sus copias de seguridad ZIP, no los cifra Live Sync: usa el cifrado propio de tus dispositivos (sección 21 del manual).
 
 ### Actualizaciones y complementos
 
