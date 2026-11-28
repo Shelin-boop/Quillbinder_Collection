@@ -436,14 +436,14 @@ void Inspector::setSynopsisImage(const QString &file)
         return;
     const QString dir = m_project->contentDir(m_item->id);
     if (!m_item->synopsisImage.isEmpty())
-        QFile::remove(dir + QLatin1Char('/') + m_item->synopsisImage);
+        safesave::removeFile(dir + QLatin1Char('/') + m_item->synopsisImage); // 0.99.0: through the gate (Live Sync)
     if (file.isEmpty()) {
         m_item->synopsisImage.clear();
     } else {
         QDir().mkpath(dir);
         const QString suffix = QFileInfo(file).suffix().toLower();
         const QString name = QStringLiteral("card.") + (suffix.isEmpty() ? QStringLiteral("png") : suffix);
-        QFile::remove(dir + QLatin1Char('/') + name);
+        safesave::removeFile(dir + QLatin1Char('/') + name);
         if (!safesave::copyFile(file, dir + QLatin1Char('/') + name)) // (0.99.0: encrypted in an encrypted project)
             return;
         m_item->synopsisImage = name;

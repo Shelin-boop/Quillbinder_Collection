@@ -287,8 +287,8 @@ static void optionsChecks()
         names << icons->item(i)->text();
     check(names == QStringList({QStringLiteral("General"), QStringLiteral("Editing"), QStringLiteral("Behaviors"), QStringLiteral("Appearance"),
                                 QStringLiteral("Corrections"), QStringLiteral("Keyboard"), QStringLiteral("Sharing"), QStringLiteral("Backup"),
-                                QStringLiteral("Encryption"), QStringLiteral("Extras")}),
-          QStringLiteral("the icon row has Scrivener's eight sections, Encryption (0.99.0) and Extras"), names.join(QLatin1String(", ")));
+                                QStringLiteral("Encryption"), QStringLiteral("Live Sync"), QStringLiteral("Extras")}),
+          QStringLiteral("the icon row has Scrivener's eight sections, Encryption and Live Sync (0.99.0) and Extras"), names.join(QLatin1String(", ")));
     const QStringList general = od.pageNames(OptionsDialog::SGeneral);
     check(general.mid(0, 3) == QStringList({QStringLiteral("Startup"), QStringLiteral("Saving"), QStringLiteral("Author Information")})
               && general.contains(QStringLiteral("Separators")) && general.contains(QStringLiteral("Warnings")),
