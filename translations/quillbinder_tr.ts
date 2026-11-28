@@ -74,146 +74,142 @@
     <name>LiveSync</name>
     <message>
         <source>Not shared</source>
-        <translation type="unfinished"></translation>
+        <translation>Paylaşılmıyor</translation>
     </message>
     <message>
         <source>Up to date</source>
-        <translation type="unfinished"></translation>
+        <translation>Güncel</translation>
     </message>
     <message>
         <source>Sending changes...</source>
-        <translation type="unfinished"></translation>
+        <translation>Değişiklikler gönderiliyor...</translation>
     </message>
     <message>
         <source>Not connected (draft kept)</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlı değil (taslak saklandı)</translation>
     </message>
     <message>
         <source>Problem</source>
-        <translation type="unfinished"></translation>
+        <translation>Sorun</translation>
     </message>
     <message>
         <source>Stop sharing &quot;%1&quot;? The other devices keep their copies as projects of their own that no longer follow this one.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; paylaşımı durdurulsun mu? Diğer cihazlar kopyalarını, artık bunu izlemeyen kendi projeleri olarak saklar.</translation>
     </message>
     <message>
         <source>Leave &quot;%1&quot;? The copy on this device stays as a project of its own that no longer follows the host. Changes not sent yet are kept as recovery drafts.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; projesinden ayrılınsın mı? Bu cihazdaki kopya, artık ana cihazı izlemeyen kendi projesi olarak kalır. Henüz gönderilmemiş değişiklikler kurtarma taslağı olarak saklanır.</translation>
     </message>
     <message numerus="yes">
         <source>%n other device(s) are connected now.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>Şu anda %n başka cihaz bağlı.</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n change(s) are not confirmed yet.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%n değişiklik henüz onaylanmadı.</numerusform></translation>
     </message>
     <message>
         <source>Stop Sharing</source>
-        <translation type="unfinished"></translation>
+        <translation>Paylaşımı Durdur</translation>
     </message>
     <message>
         <source>Leave</source>
-        <translation type="unfinished"></translation>
+        <translation>Ayrıl</translation>
     </message>
     <message>
         <source>Transfer Hosting</source>
-        <translation type="unfinished"></translation>
+        <translation>Barındırmayı Devret</translation>
     </message>
     <message>
         <source>Hand hosting of this project to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu projenin barındırılması şuna devredilsin:</translation>
     </message>
     <message>
         <source>Editor</source>
-        <translation type="unfinished">Düzenleyici</translation>
+        <translation>Düzenleyici</translation>
     </message>
     <message>
         <source>Reader</source>
-        <translation type="unfinished"></translation>
+        <translation>Okuyucu</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Yok</translation>
     </message>
     <message>
         <source>No backup yet</source>
-        <translation type="unfinished"></translation>
+        <translation>Henüz yedek yok</translation>
     </message>
     <message>
         <source>Backup running</source>
-        <translation type="unfinished"></translation>
+        <translation>Yedek alınıyor</translation>
     </message>
     <message>
         <source>Backup done</source>
-        <translation type="unfinished"></translation>
+        <translation>Yedek alındı</translation>
     </message>
     <message>
         <source>Backup waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>Yedek bekliyor</translation>
     </message>
     <message>
         <source>Backup incomplete</source>
-        <translation type="unfinished"></translation>
+        <translation>Yedek eksik</translation>
     </message>
     <message>
         <source>Backup failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Yedek alınamadı</translation>
     </message>
     <message>
         <source>Last successful backup: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Son başarılı yedek: %1</translation>
     </message>
     <message>
         <source>a document</source>
-        <translation type="unfinished"></translation>
+        <translation>bir belge</translation>
     </message>
     <message>
         <source>the binder&apos;s structure</source>
-        <translation type="unfinished"></translation>
+        <translation>binder&apos;ın yapısı</translation>
     </message>
     <message>
         <source>the project&apos;s settings</source>
-        <translation type="unfinished"></translation>
+        <translation>projenin ayarları</translation>
     </message>
     <message>
         <source>an object</source>
-        <translation type="unfinished"></translation>
+        <translation>bir nesne</translation>
     </message>
     <message>
         <source>a mind map</source>
-        <translation type="unfinished"></translation>
+        <translation>bir zihin haritası</translation>
     </message>
     <message>
         <source>the whole project</source>
-        <translation type="unfinished"></translation>
+        <translation>projenin tamamı</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihaz</translation>
     </message>
 </context>
 <context>
     <name>LiveSyncWallet</name>
     <message>
         <source>This device has no place to keep keys: the system has no key store and this build has no wallet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu cihazda anahtarları saklayacak bir yer yok: sistemde anahtar deposu yok ve bu derlemede cüzdan yok.</translation>
     </message>
     <message>
         <source>Keys are kept in the Quillbinder wallet: a file in the program&apos;s data folder, locked with a master passphrase that is asked once each time you start Quillbinder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anahtarlar Quillbinder cüzdanında saklanır: programın veri klasöründeki, bir ana parolayla kilitli bir dosya. Parola, Quillbinder&apos;ı her başlattığınızda bir kez sorulur.</translation>
     </message>
     <message>
         <source>Keys are kept in the system&apos;s key store (%1); where a device has none, Quillbinder keeps them in its own wallet, locked with a master passphrase.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anahtarlar sistemin anahtar deposunda (%1) saklanır; deponun olmadığı yerde Quillbinder onları, bir ana parolayla kilitli kendi cüzdanında saklar.</translation>
     </message>
     <message>
         <source>This device has a wallet already.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu cihazda zaten bir cüzdan var.</translation>
     </message>
 </context>
 <context>
@@ -2055,7 +2051,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>%1 is not part of a shared project&apos;s files and was not written.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1, paylaşılan bir projenin dosyalarından biri değil ve yazılmadı.</translation>
     </message>
     <message>
         <source>The file %1 of an earlier save is in the way and could not be moved aside.</source>
@@ -2325,7 +2321,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Snapshots of a shared project are made by the device that hosts it, which cannot be reached now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Paylaşılan bir projenin anlık görüntüleri onu barındıran cihaz tarafından alınır; şu anda ona ulaşılamıyor.</translation>
     </message>
     <message>
         <source>The list of snapshot titles is damaged and could not be kept: %1</source>
@@ -2353,7 +2349,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>The snapshots of a shared project are deleted on the device that hosts it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Paylaşılan bir projenin anlık görüntüleri onu barındıran cihazda silinir.</translation>
     </message>
     <message>
         <source>Some snapshots could not be deleted:
@@ -7808,7 +7804,7 @@ Bu bütün olarak geri alınamaz.%3</translation>
     </message>
     <message>
         <source>The key is locked. Close the project and open it again to enter the passphrase.</source>
-        <translation type="unfinished"></translation>
+        <translation>Anahtar kilitli. Projeyi kapatın ve parolayı girmek için yeniden açın.</translation>
     </message>
     <message>
         <source>%1 (notes)</source>
@@ -8394,7 +8390,7 @@ Sayfa (250 sözcük): %5</translation>
     </message>
     <message>
         <source>Quillbinder forgets the passphrase on this device and locks your key. It will ask for the passphrase again when it needs it. An encrypted project that is open stays unlocked until it is closed. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder parolayı bu cihazda unutur ve anahtarınızı kilitler. Gerektiğinde parolayı yeniden isteyecektir. Açık olan şifrelenmiş bir proje kapatılana kadar kilidi açık kalır. Devam edilsin mi?</translation>
     </message>
     <message>
         <source>The passphrase is forgotten on this device.</source>
@@ -10808,47 +10804,47 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     <name>qb::LiveSyncGlue</name>
     <message>
         <source>The Live Sync service did not answer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync hizmeti yanıt vermedi.</translation>
     </message>
     <message>
         <source>The host refused the snapshot job (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihaz anlık görüntü işini reddetti (%1).</translation>
     </message>
     <message>
         <source>it is being edited on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 üzerinde düzenleniyor</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is now edited on another device. Your unsaved changes there are kept as a draft.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; artık başka bir cihazda düzenleniyor. Orada kaydedilmemiş değişiklikleriniz taslak olarak saklandı.</translation>
     </message>
     <message>
         <source>Some changes were not accepted by the host and were kept as a draft: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bazı değişiklikler ana cihaz tarafından kabul edilmedi ve taslak olarak saklandı: %1</translation>
     </message>
     <message>
         <source>The connection to the Live Sync service was lost. Your changes are kept on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync hizmetiyle bağlantı kesildi. Değişiklikleriniz bu cihazda saklanıyor.</translation>
     </message>
     <message>
         <source>the lock was not granted in time</source>
-        <translation type="unfinished"></translation>
+        <translation>kilit zamanında verilmedi</translation>
     </message>
     <message>
         <source>Not connected. Your changes are kept on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlı değil. Değişiklikleriniz bu cihazda saklanıyor.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be edited here now: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; şu anda burada düzenlenemez: %2</translation>
     </message>
     <message>
         <source>the lock was refused</source>
-        <translation type="unfinished"></translation>
+        <translation>kilit reddedildi</translation>
     </message>
     <message>
         <source>A change from another device could not be taken in; close and open the project again. (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Başka bir cihazdan gelen bir değişiklik alınamadı; projeyi kapatıp yeniden açın. (%1)</translation>
     </message>
 </context>
 <context>
@@ -11393,13 +11389,15 @@ Kendiniz belirlediğiniz kısayollar olduğu gibi kalır.</translation>
     </message>
     <message>
         <source>Unlock the Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Anahtarın Kilidini Aç</translation>
     </message>
     <message>
         <source>The %1 of &quot;%2&quot; cannot be read because the key is locked.
 
 It is shown empty and cannot be edited, so that the file is not overwritten. Close the project and open it again, then enter the passphrase.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%2&quot; projesinin %1 öğesi, anahtar kilitli olduğu için okunamıyor.
+
+Dosyanın üzerine yazılmaması için boş gösteriliyor ve düzenlenemiyor. Projeyi kapatıp yeniden açın, sonra parolayı girin.</translation>
     </message>
     <message numerus="yes">
         <source>Snapshot taken of %Ln document(s).</source>
@@ -14899,11 +14897,11 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Menu: all the menus of the program (press Alt, or Alt and the letter of a menu)</source>
-        <translation type="unfinished"></translation>
+        <translation>Menü: programın tüm menüleri (Alt tuşuna basın ya da Alt ve bir menünün harfine basın)</translation>
     </message>
     <message>
         <source>Menu: all the menus of the program (press Alt, or Alt and the letter of a menu). %1 switches the small interface off and on</source>
-        <translation type="unfinished"></translation>
+        <translation>Menü: programın tüm menüleri (Alt tuşuna basın ya da Alt ve bir menünün harfine basın). %1 küçük arayüzü açıp kapatır</translation>
     </message>
     <message>
         <source>Style: choose a style for the paragraph</source>
@@ -14931,85 +14929,83 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>This project is shared with Live Sync, but the Live Sync service of this device did not start. The project was not opened, so that nothing is changed outside Live Sync.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu proje Live Sync ile paylaşılıyor, ancak bu cihazın Live Sync hizmeti başlamadı. Hiçbir şey Live Sync dışında değişmesin diye proje açılmadı.</translation>
     </message>
     <message>
         <source>This folder is no longer shared by Live Sync on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu klasör bu cihazda artık Live Sync ile paylaşılmıyor.</translation>
     </message>
     <message>
         <source>Live Sync cannot take this project now: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync bu projeyi şu anda alamıyor: %1</translation>
     </message>
     <message>
         <source>Close and Stop Hosting</source>
-        <translation type="unfinished"></translation>
+        <translation>Kapat ve Barındırmayı Durdur</translation>
     </message>
     <message numerus="yes">
         <source>%n other device(s) are working on &quot;%1&quot; through this device. Closing the last window stops the hosting: they cannot change the project until it is hosted again. Turn on &quot;Keep hosting when the last window is closed&quot; in File &gt; Options &gt; Live Sync to go on hosting.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>&quot;%1&quot; projesinde %n başka cihaz bu cihaz üzerinden çalışıyor. Son pencereyi kapatmak barındırmayı durdurur: proje yeniden barındırılana kadar projeyi değiştiremezler. Barındırmayı sürdürmek için Dosya &gt; Seçenekler &gt; Live Sync altında &quot;Son pencere kapatıldığında barındırmayı sürdür&quot; seçeneğini açın.</numerusform></translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Kapat</translation>
+        <translation>Kapat</translation>
     </message>
     <message>
         <source>The document of this draft is not in the project any more.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu taslağın belgesi artık projede değil.</translation>
     </message>
     <message>
         <source>%1 (draft)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (taslak)</translation>
     </message>
     <message>
         <source>The copy could not be made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopya oluşturulamadı.</translation>
     </message>
     <message>
         <source>The copy could not be saved: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopya kaydedilemedi: %1</translation>
     </message>
     <message>
         <source>The draft is kept as the new document &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslak, &quot;%1&quot; adlı yeni belge olarak saklandı.</translation>
     </message>
     <message>
         <source>The draft cannot be shown: no temporary file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslak gösterilemiyor: geçici dosya yok.</translation>
     </message>
     <message>
         <source>The draft cannot be shown: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslak gösterilemiyor: %1</translation>
     </message>
     <message>
         <source>Recovery draft of &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; için kurtarma taslağı</translation>
     </message>
     <message>
         <source>The draft is shown for reading only: &quot;%1&quot; cannot be changed here now (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslak yalnızca okumak için gösteriliyor: &quot;%1&quot; şu anda burada değiştirilemez (%2).</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be taken over now: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; şu anda devralınamıyor: %2.</translation>
     </message>
     <message>
         <source>Before taking over a recovery draft</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir kurtarma taslağı devralınmadan önce</translation>
     </message>
     <message>
         <source>Nothing was changed: the snapshot of the present text could not be made (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiçbir şey değiştirilmedi: mevcut metnin anlık görüntüsü alınamadı (%1).</translation>
     </message>
     <message>
         <source>The draft&apos;s text could not be saved: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslağın metni kaydedilemedi: %1</translation>
     </message>
     <message>
         <source>The draft&apos;s text is now the text of &quot;%1&quot;; a snapshot of the text before is kept. The draft stays in the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslağın metni artık &quot;%1&quot; belgesinin metni; önceki metnin bir anlık görüntüsü saklandı. Taslak listede kalır.</translation>
     </message>
 </context>
 <context>
@@ -15427,7 +15423,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>On Le&amp;ft With Arrow</source>
-        <translation type="unfinished"></translation>
+        <translation>O&amp;kla Solda</translation>
     </message>
     <message>
         <source>On &amp;Right</source>
@@ -15435,7 +15431,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>On Ri&amp;ght With Arrow</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok&amp;la Sağda</translation>
     </message>
     <message>
         <source>&amp;Above</source>
@@ -15443,7 +15439,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Abo&amp;ve With Arrow</source>
-        <translation type="unfinished"></translation>
+        <translation>Okla Üs&amp;tte</translation>
     </message>
     <message>
         <source>&amp;Below</source>
@@ -16091,11 +16087,11 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Font Size</source>
-        <translation type="unfinished">Yazı Tipi Boyutu</translation>
+        <translation>Yazı Tipi Boyutu</translation>
     </message>
     <message>
         <source>Clear Formatting</source>
-        <translation type="unfinished"></translation>
+        <translation>Biçimlendirmeyi Temizle</translation>
     </message>
     <message>
         <source>Bold</source>
@@ -16167,7 +16163,7 @@ Bir anlık görüntü, denetçinin Anlık Görüntüler sekmesinde metinle karş
     </message>
     <message>
         <source>Belo&amp;w With Arrow</source>
-        <translation type="unfinished"></translation>
+        <translation>Okla Alt&amp;ta</translation>
     </message>
     <message>
         <source>&amp;Bold</source>
@@ -17405,7 +17401,7 @@ Devam edilsin mi?</translation>
     </message>
     <message>
         <source>Live Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -23028,197 +23024,197 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     <name>qb::collab</name>
     <message>
         <source>An unknown device tried to take over hosting of &apos;%1&apos;. It was refused.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tanınmayan bir cihaz &apos;%1&apos; projesinin barındırılmasını devralmaya çalıştı. Reddedildi.</translation>
     </message>
 </context>
 <context>
     <name>qb::collab::Follower</name>
     <message>
         <source>this device has read-only access to the project</source>
-        <translation type="unfinished"></translation>
+        <translation>bu cihazın projeye yalnızca okuma erişimi var</translation>
     </message>
     <message>
         <source>it is being edited on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 üzerinde düzenleniyor</translation>
     </message>
 </context>
 <context>
     <name>qb::collab::Gate</name>
     <message>
         <source>%1 belongs to a shared project and cannot be written on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 paylaşılan bir projeye ait ve bu cihazda yazılamaz.</translation>
     </message>
 </context>
 <context>
     <name>qb::collab::HostBackup</name>
     <message>
         <source>There is not enough free space on the host for the backup.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihazda yedek için yeterli boş alan yok.</translation>
     </message>
     <message>
         <source>The project was being saved all the time; no whole copy could be made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Proje sürekli kaydediliyordu; tam bir kopya alınamadı.</translation>
     </message>
     <message>
         <source>The host could not make a copy of the project to back up.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihaz, yedeklenecek proje kopyasını oluşturamadı.</translation>
     </message>
     <message>
         <source>The backup was made, but the backup folder cannot take it now. It waits on the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yedek alındı, ancak yedek klasörü onu şu anda kabul edemiyor. Ana cihazda bekliyor.</translation>
     </message>
     <message>
         <source>Some files could not be read, so the backup is incomplete.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bazı dosyalar okunamadı, bu yüzden yedek eksik.</translation>
     </message>
     <message>
         <source>The host could not write the backup.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihaz yedeği yazamadı.</translation>
     </message>
     <message>
         <source>The host was closed while the backup ran.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yedek alınırken ana cihaz kapatıldı.</translation>
     </message>
     <message>
         <source>The host cannot back up this project now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihaz bu projeyi şu anda yedekleyemiyor.</translation>
     </message>
     <message>
         <source>A backup is running already.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir yedek zaten alınıyor.</translation>
     </message>
     <message>
         <source>The document is being edited on %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Belge %1 üzerinde düzenleniyor.</translation>
     </message>
     <message>
         <source>Rolling back needs the document&apos;s edit lock.</source>
-        <translation type="unfinished"></translation>
+        <translation>Geri almak için belgenin düzenleme kilidi gerekir.</translation>
     </message>
     <message>
         <source>This device may only read the project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu cihaz projeyi yalnızca okuyabilir.</translation>
     </message>
     <message>
         <source>The host could not do it: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihaz bunu yapamadı: %1</translation>
     </message>
     <message>
         <source>The host refused the snapshot job (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihaz anlık görüntü işini reddetti (%1).</translation>
     </message>
     <message>
         <source>The device that hosts the project cannot be reached now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Projeyi barındıran cihaza şu anda ulaşılamıyor.</translation>
     </message>
     <message>
         <source>The host did not answer in time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihaz zamanında yanıt vermedi.</translation>
     </message>
 </context>
 <context>
     <name>qb::collab::Service</name>
     <message>
         <source>Hosting &quot;%1&quot; could not start: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; barındırması başlatılamadı: %2</translation>
     </message>
     <message>
         <source>The list of devices of &quot;%1&quot; could not be saved: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; projesinin cihaz listesi kaydedilemedi: %2</translation>
     </message>
     <message>
         <source>Hosting was not handed over: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Barındırma devredilmedi: %1</translation>
     </message>
     <message>
         <source>A snapshot job that was cut off could not be finished: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Yarıda kesilen bir anlık görüntü işi tamamlanamadı: %1</translation>
     </message>
     <message>
         <source>Live Sync is not running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync çalışmıyor.</translation>
     </message>
     <message>
         <source>Only projects in Quillbinder&apos;s own format can be shared.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yalnızca Quillbinder&apos;ın kendi biçimindeki projeler paylaşılabilir.</translation>
     </message>
     <message>
         <source>This device is not paired with the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu cihaz ana cihazla eşleştirilmemiş.</translation>
     </message>
     <message>
         <source>The folder for the copy could not be made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopya için klasör oluşturulamadı.</translation>
     </message>
     <message>
         <source>The copy of &quot;%1&quot; cannot be used: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; kopyası kullanılamıyor: %2</translation>
     </message>
     <message>
         <source>The host&apos;s list of devices cannot be used: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihazın cihaz listesi kullanılamıyor: %1</translation>
     </message>
     <message>
         <source>The host is not paired with this device any more.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihaz artık bu cihazla eşleştirilmiş değil.</translation>
     </message>
     <message>
         <source>Only the host can change the order.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sırayı yalnızca ana cihaz değiştirebilir.</translation>
     </message>
     <message>
         <source>This draft holds no text of a document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu taslakta bir belgenin metni yok.</translation>
     </message>
     <message>
         <source>The project of this draft is not shared on this device any more.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu taslağın projesi bu cihazda artık paylaşılmıyor.</translation>
     </message>
     <message>
         <source>The draft is not there any more.</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslak artık yok.</translation>
     </message>
     <message>
         <source>the project is not available</source>
-        <translation type="unfinished"></translation>
+        <translation>proje kullanılamıyor</translation>
     </message>
     <message>
         <source>this device has read-only access to the project</source>
-        <translation type="unfinished"></translation>
+        <translation>bu cihazın projeye yalnızca okuma erişimi var</translation>
     </message>
     <message>
         <source>Live Sync stopped for this project</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync bu proje için durduruldu</translation>
     </message>
     <message>
         <source>this device is not connected to the host</source>
-        <translation type="unfinished"></translation>
+        <translation>bu cihaz ana cihaza bağlı değil</translation>
     </message>
     <message>
         <source>the project is being brought up to date</source>
-        <translation type="unfinished"></translation>
+        <translation>proje güncelleniyor</translation>
     </message>
     <message>
         <source>The device that hosts the project cannot be reached now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Projeyi barındıran cihaza şu anda ulaşılamıyor.</translation>
     </message>
     <message>
         <source>Hosting cannot be handed over now: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Barındırma şu anda devredilemiyor: %1</translation>
     </message>
 </context>
 <context>
     <name>qb::collab::ServiceClient</name>
     <message>
         <source>the connection to the Live Sync service was lost</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync hizmetiyle bağlantı kesildi</translation>
     </message>
 </context>
 <context>
     <name>qb::collab::ServiceStatus</name>
     <message>
         <source>The backup could not be asked for: this device is not connected to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yedek istenemedi: bu cihaz ana cihaza bağlı değil.</translation>
     </message>
 </context>
 <context>
@@ -23279,11 +23275,11 @@ Ya da güncel sürümü projenin sayfasından indirin.</translation>
     <name>qb::crypto</name>
     <message>
         <source>The Quillbinder wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder cüzdanı</translation>
     </message>
     <message>
         <source>no key store</source>
-        <translation type="unfinished"></translation>
+        <translation>anahtar deposu yok</translation>
     </message>
 </context>
 <context>
@@ -23844,775 +23840,773 @@ Buradan açılmaz. Güveniyorsanız dosya yöneticinizden kendiniz açın.</tran
     <name>qb::livesync::DraftsDialog</name>
     <message>
         <source>Recovery Drafts</source>
-        <translation type="unfinished"></translation>
+        <translation>Kurtarma Taslakları</translation>
     </message>
     <message>
         <source>Changes that were kept on this device because they could not be sent. They are never deleted by themselves.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gönderilemedikleri için bu cihazda saklanan değişiklikler. Kendiliğinden asla silinmezler.</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaman</translation>
     </message>
     <message>
         <source>Document</source>
-        <translation type="unfinished">Belge</translation>
+        <translation>Belge</translation>
     </message>
     <message>
         <source>Why</source>
-        <translation type="unfinished"></translation>
+        <translation>Neden</translation>
     </message>
     <message>
         <source>There are no recovery drafts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kurtarma taslağı yok.</translation>
     </message>
     <message>
         <source>What happened to the draft</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslağa ne oldu</translation>
     </message>
     <message>
         <source>Compare</source>
-        <translation type="unfinished">Karşılaştır</translation>
+        <translation>Karşılaştır</translation>
     </message>
     <message>
         <source>Keep as Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopya Olarak Sakla</translation>
     </message>
     <message>
         <source>Take Over</source>
-        <translation type="unfinished"></translation>
+        <translation>Devral</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Sil</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Kapat</translation>
+        <translation>Kapat</translation>
     </message>
     <message>
         <source>Take over this draft? The document is locked for you, a snapshot of its present text is made first, and the draft&apos;s text replaces it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu taslak devralınsın mı? Belgenin kilidi sizin için alınır, önce şimdiki metninin anlık görüntüsü alınır ve taslağın metni onun yerine geçer.</translation>
     </message>
     <message>
         <source>Delete Draft</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslağı Sil</translation>
     </message>
     <message>
         <source>Delete this draft? Its text cannot be brought back.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu taslak silinsin mi? Metni geri getirilemez.</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::HostedProjectsDialog</name>
     <message>
         <source>Hosted Projects</source>
-        <translation type="unfinished"></translation>
+        <translation>Barındırılan Projeler</translation>
     </message>
     <message>
         <source>Project</source>
-        <translation type="unfinished">Proje</translation>
+        <translation>Proje</translation>
     </message>
     <message>
         <source>Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Cihaz</translation>
     </message>
     <message>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Erişim</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished">Durum</translation>
+        <translation>Durum</translation>
     </message>
     <message>
         <source>The order of the list is the order in which devices take over hosting if this one is lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Listenin sırası, bu cihaz kaybolursa cihazların barındırmayı devralma sırasıdır.</translation>
     </message>
     <message>
         <source>Move Up</source>
-        <translation type="unfinished">Yukarı Taşı</translation>
+        <translation>Yukarı Taşı</translation>
     </message>
     <message>
         <source>Move Down</source>
-        <translation type="unfinished">Aşağı Taşı</translation>
+        <translation>Aşağı Taşı</translation>
     </message>
     <message>
         <source>Transfer Hosting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Barındırmayı Devret...</translation>
     </message>
     <message>
         <source>Stop Sharing</source>
-        <translation type="unfinished"></translation>
+        <translation>Paylaşımı Durdur</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Kapat</translation>
+        <translation>Kapat</translation>
     </message>
     <message>
         <source>This device hosts no shared project.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu cihaz paylaşılan hiçbir projeyi barındırmıyor.</translation>
     </message>
     <message>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Çevrimiçi</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlı değil</translation>
     </message>
     <message>
         <source>Access of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 için erişim</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::JoinDialog</name>
     <message>
         <source>Join a Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir Projeye Katıl</translation>
     </message>
     <message>
         <source>Projects shared by your paired devices. Joining makes a full copy on this device, kept up to date while you are connected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eşleştirilmiş cihazlarınızın paylaştığı projeler. Katılmak bu cihazda tam bir kopya oluşturur; bağlı olduğunuz sürece güncel tutulur.</translation>
     </message>
     <message>
         <source>Project</source>
-        <translation type="unfinished">Proje</translation>
+        <translation>Proje</translation>
     </message>
     <message>
         <source>Shared by</source>
-        <translation type="unfinished"></translation>
+        <translation>Paylaşan</translation>
     </message>
     <message>
         <source>Pair a Device...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir Cihazı Eşleştir...</translation>
     </message>
     <message>
         <source>Join</source>
-        <translation type="unfinished"></translation>
+        <translation>Katıl</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Kapat</translation>
+        <translation>Kapat</translation>
     </message>
     <message>
         <source>Copying the project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Proje kopyalanıyor...</translation>
     </message>
     <message>
         <source>The project is here. Opening it...</source>
-        <translation type="unfinished"></translation>
+        <translation>Proje geldi. Açılıyor...</translation>
     </message>
     <message>
         <source>The project could not be joined: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Projeye katılınamadı: %1</translation>
     </message>
     <message>
         <source>Live Sync is off. Turn it on in File &gt; Options &gt; Live Sync first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync kapalı. Önce Dosya &gt; Seçenekler &gt; Live Sync altında açın.</translation>
     </message>
     <message>
         <source>%1 (not reachable)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (ulaşılamıyor)</translation>
     </message>
     <message>
         <source>Pair first</source>
-        <translation type="unfinished"></translation>
+        <translation>Önce eşleştirin</translation>
     </message>
     <message>
         <source>Pair this device first (Pair a Device...); then its projects are listed here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Önce bu cihazı eşleştirin (Bir Cihazı Eşleştir...); projeleri sonra burada listelenir.</translation>
     </message>
     <message>
         <source>No shared projects found. Pair the device that shares the project first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Paylaşılan proje bulunamadı. Önce projeyi paylaşan cihazı eşleştirin.</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::LiveSyncBars</name>
     <message>
         <source>Not connected. Your changes are kept on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlı değil. Değişiklikleriniz bu cihazda saklanıyor.</translation>
     </message>
     <message>
         <source>Read-only: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Salt okunur: %1</translation>
     </message>
     <message>
         <source>%1 asks to edit &quot;%2&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1, &quot;%2&quot; belgesini düzenlemek istiyor.</translation>
     </message>
     <message>
         <source>Save and Hand Over</source>
-        <translation type="unfinished"></translation>
+        <translation>Kaydet ve Devret</translation>
     </message>
     <message>
         <source>Decline</source>
-        <translation type="unfinished"></translation>
+        <translation>Reddet</translation>
     </message>
     <message>
         <source>another device</source>
-        <translation type="unfinished"></translation>
+        <translation>başka bir cihaz</translation>
     </message>
     <message>
         <source>%1 has not answered. You can take over &quot;%2&quot;; the changes %1 has not saved stay on %1 as a recovery draft.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 yanıt vermedi. &quot;%2&quot; belgesini devralabilirsiniz; %1 üzerinde kaydedilmemiş değişiklikler, kurtarma taslağı olarak %1 üzerinde kalır.</translation>
     </message>
     <message>
         <source>Take Over</source>
-        <translation type="unfinished"></translation>
+        <translation>Devral</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">İptal</translation>
+        <translation>İptal</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is being worked on on %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; belgesi %2 üzerinde çalışılıyor.</translation>
     </message>
     <message>
         <source>Asked %1 to let you edit &quot;%2&quot;...</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%2&quot; belgesini düzenlemenize izin vermesi için %1 cihazından istekte bulunuldu...</translation>
     </message>
     <message>
         <source>Read-only: held by %1, who has not been reachable since %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Salt okunur: belgeyi tutan %1, %2 zamanından beri ulaşılamıyor.</translation>
     </message>
     <message>
         <source>a while</source>
-        <translation type="unfinished"></translation>
+        <translation>bir süre</translation>
     </message>
     <message>
         <source>Read-only: being edited on %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Salt okunur: %1 üzerinde düzenleniyor.</translation>
     </message>
     <message>
         <source>Ask to Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzenleme İste</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::LiveSyncControl</name>
     <message>
         <source>Live Sync is not running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync çalışmıyor.</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::LiveSyncPage</name>
     <message>
         <source>Live Sync keeps one project the same on several of your devices in the same network, while they are connected. It is off until you turn it on. Content travels encrypted between your paired devices; the files of a project that is not encrypted stay readable on each device, and so do ZIP backups of such a project: use your device&apos;s own encryption and an encrypted backup drive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync, bir projeyi, aynı ağdaki birkaç cihazınızda, bağlı oldukları sürece aynı tutar. Siz açana kadar kapalıdır. İçerik, eşleştirilmiş cihazlarınız arasında şifreli olarak taşınır; şifrelenmemiş bir projenin dosyaları her cihazda okunabilir kalır, böyle bir projenin ZIP yedekleri de öyle: cihazınızın kendi şifrelemesini ve şifreli bir yedek sürücüsünü kullanın.</translation>
     </message>
     <message>
         <source>Turn on Live Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync&apos;i aç</translation>
     </message>
     <message>
         <source>This device&apos;s name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu cihazın adı:</translation>
     </message>
     <message>
         <source>Keep hosting when the last window is closed</source>
-        <translation type="unfinished"></translation>
+        <translation>Son pencere kapatıldığında barındırmayı sürdür</translation>
     </message>
     <message>
         <source>Paired Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Eşleştirilmiş Cihazlar</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Ad</translation>
+        <translation>Ad</translation>
     </message>
     <message>
         <source>Last seen</source>
-        <translation type="unfinished"></translation>
+        <translation>Son görülme</translation>
     </message>
     <message>
         <source>Pair a Device...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir Cihazı Eşleştir...</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Kaldır</translation>
+        <translation>Kaldır</translation>
     </message>
     <message>
         <source>Connect by Address...</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresle Bağlan...</translation>
     </message>
     <message>
         <source>More Ways to Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlanmanın Diğer Yolları</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished">Ayrıntılar</translation>
+        <translation>Ayrıntılar</translation>
     </message>
     <message>
         <source>Connect by Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresle Bağlan</translation>
     </message>
     <message>
         <source>Address of the other device (name or number, and a port if it is not the usual one):</source>
-        <translation type="unfinished"></translation>
+        <translation>Diğer cihazın adresi (ad veya numara, olağan olmayan bir bağlantı noktası varsa onu da yazın):</translation>
     </message>
     <message>
         <source>Remove Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Cihazı Kaldır</translation>
     </message>
     <message>
         <source>Remove &quot;%1&quot;? It loses access to every project of this device at once, and has to be paired again to take part.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; kaldırılsın mı? Bu cihazın tüm projelerine erişimi bir anda kaybolur ve katılabilmesi için yeniden eşleştirilmesi gerekir.</translation>
     </message>
     <message>
         <source>No address yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Henüz adres yok.</translation>
     </message>
     <message>
         <source>Addresses of this device: %1. Port: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu cihazın adresleri: %1. Bağlantı noktası: %2.</translation>
     </message>
     <message>
         <source>Turn on Live Sync to see them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bunları görmek için Live Sync&apos;i açın.</translation>
     </message>
     <message>
         <source>Fingerprint: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Parmak izi: %1</translation>
     </message>
     <message>
         <source>Protocol: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokol: %1</translation>
     </message>
     <message>
         <source>Round trips: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Gidiş dönüş sayısı: %1</translation>
     </message>
     <message>
         <source>Nothing to show.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gösterilecek bir şey yok.</translation>
     </message>
     <message>
         <source>Online now</source>
-        <translation type="unfinished"></translation>
+        <translation>Şu anda çevrimiçi</translation>
     </message>
     <message>
         <source>Never</source>
-        <translation type="unfinished">Hiçbir zaman</translation>
+        <translation>Hiçbir zaman</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::LiveSyncTab</name>
     <message>
         <source>Participants</source>
-        <translation type="unfinished"></translation>
+        <translation>Katılımcılar</translation>
     </message>
     <message>
         <source>Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Cihaz</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished">Durum</translation>
+        <translation>Durum</translation>
     </message>
     <message>
         <source>Editing</source>
-        <translation type="unfinished">Düzenleme</translation>
+        <translation>Düzenleme</translation>
     </message>
     <message>
         <source>Request Backup</source>
-        <translation type="unfinished"></translation>
+        <translation>Yedek İste</translation>
     </message>
     <message>
         <source>Recovery Drafts...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kurtarma Taslakları...</translation>
     </message>
     <message>
         <source>Selected Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Seçili Belge</translation>
     </message>
     <message>
         <source>Ask to Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzenleme İste</translation>
     </message>
     <message>
         <source>Take Over</source>
-        <translation type="unfinished"></translation>
+        <translation>Devral</translation>
     </message>
     <message>
         <source>Stop Editing</source>
-        <translation type="unfinished"></translation>
+        <translation>Düzenlemeyi Bırak</translation>
     </message>
     <message>
         <source>This project is not shared.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu proje paylaşılmıyor.</translation>
     </message>
     <message>
         <source>Host: %1
 Your role: %2
 State: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihaz: %1
+Rolünüz: %2
+Durum: %3</translation>
     </message>
     <message>
         <source>this device</source>
-        <translation type="unfinished"></translation>
+        <translation>bu cihaz</translation>
     </message>
     <message>
         <source>Read-only: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Salt okunur: %1</translation>
     </message>
     <message>
         <source>(this device)</source>
-        <translation type="unfinished"></translation>
+        <translation>(bu cihaz)</translation>
     </message>
     <message>
         <source>(host)</source>
-        <translation type="unfinished"></translation>
+        <translation>(ana cihaz)</translation>
     </message>
     <message>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Çevrimiçi</translation>
     </message>
     <message>
         <source>Not connected since %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 zamanından beri bağlı değil</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlı değil</translation>
     </message>
     <message numerus="yes">
         <source>%n recovery draft(s) on this device</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>Bu cihazda %n kurtarma taslağı</numerusform></translation>
     </message>
     <message>
         <source>No recovery drafts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kurtarma taslağı yok.</translation>
     </message>
     <message>
         <source>No document is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Hiçbir belge seçili değil.</translation>
     </message>
     <message>
         <source>Nobody is editing &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; belgesini kimse düzenlemiyor.</translation>
     </message>
     <message>
         <source>You are editing &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; belgesini düzenliyorsunuz.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is held by %2, who has not been reachable since %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; belgesini tutan %2, %3 zamanından beri ulaşılamıyor.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is being edited on %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; belgesi %2 üzerinde düzenleniyor.</translation>
     </message>
     <message>
         <source>There was no answer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Yanıt gelmedi.</translation>
     </message>
     <message>
         <source>The request was declined.</source>
-        <translation type="unfinished"></translation>
+        <translation>İstek reddedildi.</translation>
     </message>
     <message>
         <source>You asked; waiting for the answer.</source>
-        <translation type="unfinished"></translation>
+        <translation>İstekte bulundunuz; yanıt bekleniyor.</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::LiveSyncUi</name>
     <message>
         <source>Share This Project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu Projeyi Paylaş...</translation>
     </message>
     <message>
         <source>Join a Project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir Projeye Katıl...</translation>
     </message>
     <message>
         <source>Request Backup</source>
-        <translation type="unfinished"></translation>
+        <translation>Yedek İste</translation>
     </message>
     <message>
         <source>Transfer Hosting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Barındırmayı Devret...</translation>
     </message>
     <message>
         <source>Hosted Projects...</source>
-        <translation type="unfinished"></translation>
+        <translation>Barındırılan Projeler...</translation>
     </message>
     <message>
         <source>Recovery Drafts...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kurtarma Taslakları...</translation>
     </message>
     <message>
         <source>Stop Sharing</source>
-        <translation type="unfinished"></translation>
+        <translation>Paylaşımı Durdur</translation>
     </message>
     <message>
         <source>Live Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync</translation>
     </message>
     <message>
         <source>An unknown device tried to take over hosting of &quot;%1&quot;. It was refused.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tanınmayan bir cihaz &quot;%1&quot; projesinin barındırılmasını devralmaya çalıştı. Reddedildi.</translation>
     </message>
     <message>
         <source>Live Sync, %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync, %1</translation>
     </message>
     <message>
         <source>Live Sync: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync: %1</translation>
     </message>
     <message>
         <source>Host: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihaz: %1</translation>
     </message>
     <message numerus="yes">
         <source>%n change(s) waiting to be sent</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>Gönderilmeyi bekleyen %n değişiklik</numerusform></translation>
     </message>
     <message>
         <source>Leave</source>
-        <translation type="unfinished"></translation>
+        <translation>Ayrıl</translation>
     </message>
     <message>
         <source>You are editing this document</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu belgeyi siz düzenliyorsunuz</translation>
     </message>
     <message>
         <source>Not reachable since %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 zamanından beri ulaşılamıyor</translation>
     </message>
     <message>
         <source>Not reachable</source>
-        <translation type="unfinished"></translation>
+        <translation>Ulaşılamıyor</translation>
     </message>
     <message>
         <source>Being edited on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 üzerinde düzenleniyor</translation>
     </message>
     <message>
         <source>Share This Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu Projeyi Paylaş</translation>
     </message>
     <message>
         <source>This project cannot be shared: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu proje paylaşılamıyor: %1</translation>
     </message>
     <message>
         <source>Live Sync is not running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync çalışmıyor.</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::PairingDialog</name>
     <message>
         <source>Pair a Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Bir Cihazı Eşleştir</translation>
     </message>
     <message>
         <source>To pair two devices, open the pairing window on one of them (it stays open for two minutes), then pick that device here on the other. Both show the same six digits: compare them and confirm.</source>
-        <translation type="unfinished"></translation>
+        <translation>İki cihazı eşleştirmek için birinde eşleştirme penceresini açın (iki dakika açık kalır), sonra diğerinde burada o cihazı seçin. İkisinde de aynı altı rakam görünür: karşılaştırıp onaylayın.</translation>
     </message>
     <message>
         <source>Devices with an open pairing window</source>
-        <translation type="unfinished"></translation>
+        <translation>Eşleştirme penceresi açık olan cihazlar</translation>
     </message>
     <message>
         <source>Open the Pairing Window on This Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu Cihazda Eşleştirme Penceresini Aç</translation>
     </message>
     <message>
         <source>Pair With Selected Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Seçili Cihazla Eşleştir</translation>
     </message>
     <message>
         <source>Connect by Address...</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresle Bağlan...</translation>
     </message>
     <message>
         <source>Pairing code</source>
-        <translation type="unfinished"></translation>
+        <translation>Eşleştirme kodu</translation>
     </message>
     <message>
         <source>Codes Match</source>
-        <translation type="unfinished"></translation>
+        <translation>Kodlar Aynı</translation>
     </message>
     <message>
         <source>They Differ</source>
-        <translation type="unfinished"></translation>
+        <translation>Farklı</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Kapat</translation>
+        <translation>Kapat</translation>
     </message>
     <message>
         <source>Waiting for the other device...</source>
-        <translation type="unfinished"></translation>
+        <translation>Diğer cihaz bekleniyor...</translation>
     </message>
     <message>
         <source>Connect by Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresle Bağlan</translation>
     </message>
     <message>
         <source>Address of the other device (name or number, and a port if it is not the usual one):</source>
-        <translation type="unfinished"></translation>
+        <translation>Diğer cihazın adresi (ad veya numara, olağan olmayan bir bağlantı noktası varsa onu da yazın):</translation>
     </message>
     <message>
         <source>Waiting for the other device to confirm...</source>
-        <translation type="unfinished"></translation>
+        <translation>Diğer cihazın onaylaması bekleniyor...</translation>
     </message>
     <message>
         <source>Pairing stopped: the codes differ. Someone else may be between the devices; do not pair them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eşleştirme durdu: kodlar farklı. Cihazların arasında başka biri olabilir; onları eşleştirmeyin.</translation>
     </message>
     <message>
         <source>Close the Pairing Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Eşleştirme Penceresini Kapat</translation>
     </message>
     <message>
         <source>Live Sync is off. Turn it on in File &gt; Options &gt; Live Sync first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync kapalı. Önce Dosya &gt; Seçenekler &gt; Live Sync altında açın.</translation>
     </message>
     <message>
         <source>The pairing window of this device is open. On the other device, pick this one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu cihazın eşleştirme penceresi açık. Diğer cihazda bunu seçin.</translation>
     </message>
     <message>
         <source>No device with an open pairing window was found. Open the window on the other device, or connect by address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eşleştirme penceresi açık olan bir cihaz bulunamadı. Pencereyi diğer cihazda açın ya da adresle bağlanın.</translation>
     </message>
     <message>
         <source>Pick the device to pair with.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eşleştirilecek cihazı seçin.</translation>
     </message>
     <message>
         <source>Pairing with %1</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 ile eşleştirme</translation>
     </message>
     <message>
         <source>Compare these digits with those on the other device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu rakamları diğer cihazdakilerle karşılaştırın.</translation>
     </message>
     <message>
         <source>Paired. %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Eşleştirildi. %1</translation>
     </message>
     <message>
         <source>Pairing failed. %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Eşleştirme başarısız oldu. %1</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::ServiceControl</name>
     <message>
         <source>The devices are paired.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cihazlar eşleştirildi.</translation>
     </message>
     <message>
         <source>Pairing did not finish.</source>
-        <translation type="unfinished"></translation>
+        <translation>Eşleştirme tamamlanmadı.</translation>
     </message>
     <message>
         <source>Another program of this device runs Live Sync&apos;s service.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu cihazdaki başka bir program Live Sync&apos;in hizmetini çalıştırıyor.</translation>
     </message>
     <message>
         <source>Live Sync 1, TLS 1.3</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync 1, TLS 1.3</translation>
     </message>
     <message>
         <source>The device is not found in the network any more.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cihaz ağda artık bulunamıyor.</translation>
     </message>
     <message>
         <source>The project is not offered by that device any more.</source>
-        <translation type="unfinished"></translation>
+        <translation>Proje o cihaz tarafından artık sunulmuyor.</translation>
     </message>
     <message>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Bağlanılıyor...</translation>
     </message>
     <message>
         <source>The host did not let this device in.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ana cihaz bu cihazı içeri almadı.</translation>
     </message>
     <message>
         <source>Copying the project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Proje kopyalanıyor...</translation>
     </message>
     <message>
         <source>The copy did not finish in time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopyalama zamanında tamamlanmadı.</translation>
     </message>
     <message>
         <source>Hosting cannot be handed over now: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Barındırma şu anda devredilemiyor: %1</translation>
     </message>
     <message>
         <source>made after the split</source>
-        <translation type="unfinished"></translation>
+        <translation>ayrılmadan sonra yapıldı</translation>
     </message>
     <message>
         <source>not sent before the takeover</source>
-        <translation type="unfinished"></translation>
+        <translation>devralmadan önce gönderilmedi</translation>
     </message>
     <message>
         <source>The draft could not be deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Taslak silinemedi.</translation>
     </message>
     <message>
         <source>This draft cannot be used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu taslak kullanılamaz.</translation>
     </message>
     <message>
         <source>Open the project &quot;%1&quot; in a window first: the draft&apos;s text is taken into it from there.</source>
-        <translation type="unfinished"></translation>
+        <translation>Önce &quot;%1&quot; projesini bir pencerede açın: taslağın metni oradan ona alınır.</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::WalletPassphraseDialog</name>
     <message>
         <source>Create the Quillbinder Wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder Cüzdanını Oluştur</translation>
     </message>
     <message>
         <source>Unlock the Quillbinder Wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder Cüzdanının Kilidini Aç</translation>
     </message>
     <message>
         <source>This device has no system key store, so Quillbinder keeps its keys in its own wallet, a file locked with a master passphrase. Choose the passphrase now; it is asked once each time you start Quillbinder. It is never stored, and nobody can recover it for you: if you lose it, the keys in the wallet are lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Bu cihazda sistem anahtar deposu yok, bu yüzden Quillbinder anahtarlarını kendi cüzdanında, bir ana parolayla kilitli bir dosyada saklar. Parolayı şimdi seçin; Quillbinder&apos;ı her başlattığınızda bir kez sorulur. Parola hiçbir yerde saklanmaz ve kimse onu sizin için kurtaramaz: kaybederseniz cüzdandaki anahtarlar da kaybolur.</translation>
     </message>
     <message>
         <source>Type the master passphrase of the Quillbinder wallet. It is asked once each time you start Quillbinder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder cüzdanının ana parolasını yazın. Quillbinder&apos;ı her başlattığınızda bir kez sorulur.</translation>
     </message>
     <message>
         <source>Passphrase:</source>
-        <translation type="unfinished">Parola:</translation>
+        <translation>Parola:</translation>
     </message>
     <message>
         <source>Once more:</source>
-        <translation type="unfinished">Bir kez daha:</translation>
+        <translation>Bir kez daha:</translation>
     </message>
     <message>
         <source>The two entries are not the same.</source>
-        <translation type="unfinished">İki giriş aynı değil.</translation>
+        <translation>İki giriş aynı değil.</translation>
     </message>
     <message>
         <source>This passphrase is accepted.</source>
-        <translation type="unfinished">Bu parola kabul edildi.</translation>
+        <translation>Bu parola kabul edildi.</translation>
     </message>
 </context>
 <context>
@@ -24800,31 +24794,31 @@ State: %3</source>
     </message>
     <message>
         <source>The language of the voice pack is not valid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses paketinin dili geçerli değil.</translation>
     </message>
     <message>
         <source>The voice pack cannot be read as a zip file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses paketi zip dosyası olarak okunamıyor.</translation>
     </message>
     <message>
         <source>The voice pack holds a file that does not belong to it (%1), so it was not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses paketinde ona ait olmayan bir dosya var (%1), bu yüzden kurulmadı.</translation>
     </message>
     <message>
         <source>The voice pack is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses paketi boş.</translation>
     </message>
     <message>
         <source>%1 could not be made.</source>
-        <translation type="unfinished">%1 oluşturulamadı.</translation>
+        <translation>%1 oluşturulamadı.</translation>
     </message>
     <message>
         <source>%1 could not be written.</source>
-        <translation type="unfinished">%1 yazılamadı.</translation>
+        <translation>%1 yazılamadı.</translation>
     </message>
     <message>
         <source>The voice pack has no file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ses paketinde dosya yok.</translation>
     </message>
     <message>
         <source>This model does not have this voice.</source>
@@ -25037,35 +25031,31 @@ State: %3</source>
     <name>qb::ui::LiveSyncStatusWindow</name>
     <message>
         <source>Live Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync</translation>
     </message>
     <message>
         <source>Hosted projects</source>
-        <translation type="unfinished"></translation>
+        <translation>Barındırılan projeler</translation>
     </message>
     <message>
         <source>Projects hosted for other devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Diğer cihazlar için barındırılan projeler</translation>
     </message>
     <message>
         <source>Open Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Projeyi Aç</translation>
     </message>
     <message>
         <source>Stop Hosting and Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>Barındırmayı Durdur ve Çık</translation>
     </message>
     <message numerus="yes">
         <source>Hosting %n project(s) for other devices</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>Diğer cihazlar için %n proje barındırılıyor</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%1 (%n device(s) connected)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-        </translation>
+        <translation><numerusform>%1 (%n cihaz bağlı)</numerusform></translation>
     </message>
 </context>
 <context>
