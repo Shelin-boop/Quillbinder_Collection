@@ -130,13 +130,9 @@ else
 fi
 say "translator libraries: rc=$rc, $how, $(ls "$TPDEPS/install/lib" 2>/dev/null | grep -c '\.lib$') libraries ($(mins))"
 [ $rc -eq 0 ] && export QB_TRANSLATOR_DEPS="$TPDEPS"
-# ---- the encryption libraries (0.99.0 probe: packaging/windows/win-crypto.sh; the workflow caches them under the script's
-# hash). The program's CMakeLists.txt links RNP only outside Windows, so the probe hands the compiler and linker what that
-# block would: QB_HAVE_RNP, RNP_STATIC, the include folder and the libraries (CMAKE_CXX_STANDARD_LIBRARIES reaches every
-# link line). Shared code is not changed by the probe. 0.99.0 probe: Live Sync needs Botan's TLS and Argon2 headers (botan-3/)
-# and QB_HAVE_BOTAN_TLS, which the shared CMake gives only outside Windows; the probe passes both on the command line. The four
-# files that include Botan are C++20 in the shared CMake (per-file, set only inside its RNP block): not passed here, so
-# MSVC compiles them as C++17 and their errors show what is missing.
+# ---- the encryption libraries (0.99.0: packaging/windows/win-crypto.sh; the workflow caches them under the script's
+# hash). The shared CMakeLists.txt takes them from QB_CRYPTO_DIR on Windows (rnp, json-c, bz2 and Botan's libraries,
+# RNP_STATIC, the system libraries, QB_HAVE_RNP, and the Live Sync block), exactly as the Windows part will.
 CRYPTO="$PWD/.crypto"
 bash packaging/windows/win-crypto.sh "$CRYPTO" > "$OUT/crypto.log" 2>&1
 rc=$?
@@ -144,13 +140,7 @@ rc=$?
 say "crypto libraries: rc=$rc, $(ls "$CRYPTO/lib" 2>/dev/null | tr '\n' ' ')($(mins))"
 CRYPTO_ARGS=()
 if [ $rc -eq 0 ]; then
-  CM=$(cygpath -m "$CRYPTO")
-  ZM=$(cygpath -m "$(cygpath -u "$VCPKG")/installed/$VCPKG_TRIPLET/lib")
-  LIBS=""
-  for f in "$CRYPTO"/lib/*.lib; do LIBS="$LIBS $(cygpath -m "$f")"; done
-  for z in libzs.lib zs.lib zlib.lib; do [ -f "$(cygpath -u "$ZM")/$z" ] && LIBS="$LIBS $ZM/$z" && break; done
-  LIBS="$LIBS bcrypt.lib advapi32.lib crypt32.lib user32.lib ws2_32.lib"
-  CRYPTO_ARGS=("-DCMAKE_CXX_FLAGS=-DWIN32 -D_WINDOWS -GR -EHsc -DQB_HAVE_RNP=1 -DRNP_STATIC -I$CM/include -I$CM/include/botan-3 -DQB_HAVE_BOTAN_TLS=1" "-DCMAKE_CXX_STANDARD_LIBRARIES=$LIBS kernel32.lib")
+  CRYPTO_ARGS=("-DQB_CRYPTO_DIR=$(cygpath -m "$CRYPTO")")
 fi
 # ---- configure
 cmake -S . -B build -G Ninja \
