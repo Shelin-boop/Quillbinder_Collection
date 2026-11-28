@@ -645,3 +645,8 @@ add_dependencies(qb_v0990n_tests qb-fake-qbai)
 add_executable(qb_ls2_tests ls2_tests.cpp)
 target_link_libraries(qb_ls2_tests PRIVATE qbcore Qt6::Core Qt6::Network)
 target_compile_definitions(qb_ls2_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
+
+# 0.99.0: the welcome project's contrast, its mind maps too (xvfb-run -a ./qb_welcdark_tests /tmp/shots)
+add_executable(qb_welcdark_tests welcdark_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_welcdark_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_welcdark_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")

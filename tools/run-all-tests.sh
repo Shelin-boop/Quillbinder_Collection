@@ -269,6 +269,7 @@ runx v0990h $B/tests/qb_v0990h_tests $B/tests/qb_v0990h_tests "$OUT/shots-v0990h
 runx v0990e $B/tests/qb_v0990e_tests $B/tests/qb_v0990e_tests "$OUT/shots-v0990e"
 runx v0990k $B/tests/qb_v0990k_tests $B/tests/qb_v0990k_tests "$OUT/shots-v0990k"
 runx v0990f $B/tests/qb_v0990f_tests $B/tests/qb_v0990f_tests "$OUT/shots-v0990f"
+runx welcdark $B/tests/qb_welcdark_tests $B/tests/qb_welcdark_tests "$OUT/shots-welcdark"
 runx v0990n $B/tests/qb_v0990n_tests $B/tests/qb_v0990n_tests "$OUT/shots-v0990n"
 runx v0990m $B/tests/qb_v0990m_tests $B/tests/qb_v0990m_tests "$OUT/shots-v0990m"
 runx notesplain $B/tests/qb_notesplain_tests $B/tests/qb_notesplain_tests "$OUT/shots-notesplain"

@@ -81,6 +81,10 @@ project names a conflict copy of the project file `<name> (other version ...).qb
 Quick times of the new cases (this machine, 2 cores, xvfb): see the results of the session's run; the estimates in
 `cs_list.cpp` are what the shard split uses. With them the plan stays at 12 shards of about 60 minutes (budget 200).
 
+## welcdark (0.99.0)
+
+The welcome project (English and ten translations, made from `resources/welcome`) on the light and the dark board that every theme leads to: text of each mind map note against its fill (or the shape under it, or the board) 4.5 : 1, borders and lines 3 : 1. Pitfall: a note with a fill but no text color of its own takes the board's text color, light on a dark board, so a pastel fill needs `textColor` and `borderColor` in the outline (the program itself does not choose text by the fill). Pictures of the board go to the shots folder. 33 checks.
+
 ## v0990m (0.99.0)
 
 `qb_v0990m_tests`: Speech Transcription 1.10 with the fake libqbai of `v0990h` (`QB_AI_ENGINE_LIB`, `QBAI_FAKE_CARDS` with two
