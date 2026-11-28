@@ -7,6 +7,7 @@
 #include "core/SafeSave.h"
 #include "core/SaveBatch.h"
 #include "core/TestSwitches.h"
+#include "core/collab/Gate.h"
 #include "core/collab/PathClass.h"
 #include "core/crypto/Vault.h"
 
@@ -353,12 +354,13 @@ void HostBackup::setState(BackupStatus::State state, const QString &code, const 
 
 bool HostBackup::requestBackup(QString *why)
 {
+    ServiceScope serviceScope; // the host's own writes are never a window's (Gate.h)
     if (running()) {
         if (why)
             *why = tr("A backup is running already.");
         return false;
     }
-    if (!m_cfg.project || !m_cfg.host || !m_cfg.host->isStarted()) {
+    if (!project() || !m_cfg.host || !m_cfg.host->isStarted()) {
         if (why)
             *why = backupReasonText(QStringLiteral("no-project"), QString());
         return false;
@@ -371,6 +373,7 @@ bool HostBackup::requestBackup(QString *why)
 
 void HostBackup::begin(const QString &)
 {
+    ServiceScope serviceScope; // the host's own writes are never a window's (Gate.h)
     HostSession *host = m_cfg.host;
     if (m_cfg.pauseCommits)
         m_cfg.pauseCommits();
@@ -387,12 +390,14 @@ void HostBackup::begin(const QString &)
 
 void HostBackup::pack(const FreezeResult &view)
 {
+    ServiceScope serviceScope; // the host's own writes are never a window's (Gate.h)
     QPointer<HostBackup> self(this);
     backup::FrozenView fv;
     fv.folder = view.folder;
     fv.keepAlive = [self] {
         if (self && !self->m_inPump) { // the host goes on answering its devices while the copy is packed
             self->m_inPump = true;
+            WindowScope outside; // what the windows of this process do meanwhile is theirs, not the host's
             QCoreApplication::processEvents(QEventLoop::AllEvents, 20);
             if (self)
                 self->m_inPump = false;
@@ -401,7 +406,7 @@ void HostBackup::pack(const FreezeResult &view)
     QString out, err;
     bool waiting = false;
     QStringList notes;
-    const bool ok = backup::backupProject(m_cfg.project, m_cfg.backupDir, m_cfg.keep, &out, &err, backup::Where::BackupFolder, &waiting, &notes, &fv);
+    const bool ok = backup::backupProject(project(), m_cfg.backupDirOf ? m_cfg.backupDirOf() : m_cfg.backupDir, m_cfg.keepOf ? m_cfg.keepOf() : m_cfg.keep, &out, &err, backup::Where::BackupFolder, &waiting, &notes, &fv);
     if (!self)
         return;
     pathsafety::removeTreeInside(view.folder, m_cfg.host->m_folder);
@@ -433,6 +438,7 @@ void HostBackup::refuse(const QString &deviceId, net::Link *link, const QString 
 
 bool HostBackup::handle(const QString &deviceId, net::Link *link, const QJsonObject &m)
 {
+    ServiceScope serviceScope; // the host's own writes are never a window's (Gate.h)
     const QString t = m.value(QStringLiteral("t")).toString();
     if (is(t, T::BACKUP_REQUEST)) {
         onBackupRequest(deviceId, link, m);
@@ -515,6 +521,35 @@ void HostBackup::onSnapshotOp(const QString &deviceId, net::Link *link, const QJ
     reply(r, host->m_seq);
 }
 
+static QString jobCodeText(const QString &code, const QString &host);
+
+HostBackup::JobAnswer HostBackup::runJobFor(const QString &deviceId, const QJsonObject &body)
+{
+    ServiceScope serviceScope;
+    JobAnswer a;
+    QJsonObject m = body;
+    QString opId = m.value(QStringLiteral("opId")).toString();
+    if (!opIdRx().match(opId).hasMatch()) {
+        opId = newId();
+        m.insert(QStringLiteral("opId"), opId);
+    }
+    JobResult r;
+    if (m_doneJobs.contains(opId)) {
+        r = m_doneJobs.value(opId);
+    } else {
+        r = runSnapshotJob(deviceId, m);
+        m_doneJobs.insert(opId, r);
+        m_doneOrder << opId;
+        while (m_doneOrder.size() > 1000)
+            m_doneJobs.remove(m_doneOrder.takeFirst());
+    }
+    a.ok = r.ok;
+    a.code = r.code;
+    a.text = r.ok ? QString() : jobCodeText(r.code, r.text);
+    a.file = r.file;
+    return a;
+}
+
 HostBackup::JobResult HostBackup::runSnapshotJob(const QString &deviceId, const QJsonObject &m)
 {
     static const QRegularExpression docRx(QStringLiteral("^[0-9A-Za-z_.-]{1,64}$"));
@@ -527,7 +562,7 @@ HostBackup::JobResult HostBackup::runSnapshotJob(const QString &deviceId, const 
         return r;
     };
     HostSession *host = m_cfg.host;
-    Project *p = m_cfg.project;
+    Project *p = project();
     if (!p || !host->isStarted() || host->m_broken)
         return fail("STORAGE_FAILED", QStringLiteral("the host cannot change the project now"));
     if (host->roleOf(deviceId) != Role::Editor)
@@ -629,7 +664,8 @@ HostBackup::JobResult HostBackup::runSnapshotJob(const QString &deviceId, const 
 
 bool HostBackup::keepProtectiveSnapshot(const QString &resource, const QString &label, QString *error)
 {
-    Project *p = m_cfg.project;
+    ServiceScope serviceScope; // the host's own writes are never a window's (Gate.h)
+    Project *p = project();
     if (!p || !resource.startsWith(QLatin1String("doc:"))) {
         if (error)
             *error = QStringLiteral("no document to keep");
@@ -678,9 +714,10 @@ HostSession::SnapshotHook HostBackup::protectiveSnapshotHook()
 
 bool HostBackup::recoverJobs(QString *error)
 {
+    ServiceScope serviceScope; // the host's own writes are never a window's (Gate.h)
     if (!QFileInfo::exists(pendingPath()))
         return true;
-    const bool ok = publishChanges(newId(), QString(), error);
+    const bool ok = publishChanges(newId(), QString(), error, nullptr, true);
     if (ok)
         QFile::remove(pendingPath());
     return ok;
@@ -689,7 +726,7 @@ bool HostBackup::recoverJobs(QString *error)
 // What the host's own code changed in the project folder becomes one commit: the files are on disk already, so the batch holds
 // the state and the log record. The host's list of files is compared with the folder; every changed file raises the revision of its
 // resource, and the others are told by an event like for any commit.
-bool HostBackup::publishChanges(const QString &opId, const QString &actorDevice, QString *error, qint64 *seqOut)
+bool HostBackup::publishChanges(const QString &opId, const QString &actorDevice, QString *error, qint64 *seqOut, bool afterRestart)
 {
     HostSession *h = m_cfg.host;
     auto fail = [&](const QString &w) {
@@ -707,7 +744,7 @@ bool HostBackup::publishChanges(const QString &opId, const QString &actorDevice,
     QStringList put, removed;
     for (const ManifestEntry &e : now.entries) {
         const ManifestEntry *old = before.value(e.path, nullptr);
-        if (!old || old->sha256 != e.sha256 || old->size != e.size)
+        if (!old || old->sha256 != e.sha256 || old->size != e.size || (afterRestart && (classify(e.path).kind == PathKind::Snapshot || classify(e.path).kind == PathKind::Index)))
             put << e.path;
     }
     QSet<QString> nowPaths;

@@ -130,6 +130,7 @@ private:
     QPushButton *m_take = nullptr;
     QPushButton *m_delete = nullptr;
     QLabel *m_empty = nullptr;
+    QLabel *m_note = nullptr; // what the last action did, or why it could not
 };
 
 // open (or raise) the window of its kind; each is shown without blocking

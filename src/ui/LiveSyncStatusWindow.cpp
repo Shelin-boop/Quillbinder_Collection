@@ -3,6 +3,8 @@
 #include "AppInfo.h"
 #include "core/TestSwitches.h"
 #include "core/collab/Service.h"
+#include "ui/AppSettings.h"
+#include "ui/LiveSyncControl.h"
 
 #include <QApplication>
 #include <QCoreApplication>
@@ -97,6 +99,8 @@ int runLiveSyncService(int argc, char **argv)
     app.setQuitOnLastWindowClosed(false);
     collab::Service::Config cfg;
     cfg.quitWhenIdle = true;
+    cfg.backupDir = [] { return AppSettings::instance().backupDir; }; // the backups of hosted projects go where the writer's program puts them
+    cfg.backupKeep = [] { return AppSettings::instance().backupKeep; };
     // the suites' switches (test builds only): a port of their own, a short wait before the service ends
     int idleMs = 10000;
     if (QB_TEST_ENV_SET("QB_LS_PORT"))
@@ -107,6 +111,7 @@ int runLiveSyncService(int argc, char **argv)
         cfg.discovery = false;
     cfg.idleMs = idleMs;
     collab::Service service(cfg);
+    service.setKeepHosting(livesync::prefKeepHosting() || QB_TEST_ENV("QB_LS_KEEP_HOSTING") == QLatin1String("1")); // the writer's choice, as the program that handed hosting over had it
     if (QB_TEST_ENV_SET("QB_LS_PEERS")) // "<device id>=<address>:<port>;..." where discovery is off (the suites)
         for (const QString &part : QB_TEST_ENV("QB_LS_PEERS").split(QLatin1Char(';'), Qt::SkipEmptyParts)) {
             const QString id = part.section(QLatin1Char('='), 0, 0), where = part.section(QLatin1Char('='), 1);

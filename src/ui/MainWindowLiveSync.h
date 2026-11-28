@@ -5,11 +5,13 @@
 // the open documents without overwriting unsaved text), takes the document's lock at the first key and gives it up when the
 // document is no longer shown.
 #include "core/Project.h"
+#include "core/Snapshots.h"
 #include "core/collab/ServiceClient.h"
 
 #include <QObject>
 #include <QSet>
 #include <QTimer>
+#include <memory>
 
 namespace qb {
 namespace livesync {
@@ -50,6 +52,8 @@ public:
 
     // for the status of a window: the reasons a document may not be changed here
     QString whyReadOnly() const;
+    // takes the explicit lock of a document and waits (running the event loop) for the answer; false with the reason
+    bool lockAndWait(const QString &docId, QString *why, int timeoutMs = 6000);
 
 private:
     void onEvent(qint64 seq, const QString &opId, const QString &actor, bool own, const QJsonArray &ops, const QStringList &paths);
@@ -65,6 +69,8 @@ private:
     QSet<QString> m_wanted; // documents whose lock was asked for by the editor
     bool m_ended = false;
     int m_lastState = -1;
+    std::unique_ptr<snapshots::RemoteJobs> m_jobs; // the snapshot jobs of this window's project: done by the host through the service
+    QString m_jobsFolder;
 };
 
 } // namespace qb

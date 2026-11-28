@@ -244,6 +244,8 @@ void ClientSession::onMessage(const QJsonObject &m)
     } else if (is(t, T::EDIT_ASKED)) {
         emit editAsked(m.value(QStringLiteral("resource")).toString(), m.value(QStringLiteral("askerName")).toString(),
                        qint64(m.value(QStringLiteral("waitMs")).toDouble()));
+    } else if (is(t, T::EDIT_ENDED)) {
+        emit editEnded(m.value(QStringLiteral("resource")).toString(), m.value(QStringLiteral("asker")).toString());
     } else if (is(t, T::EDIT_STATUS)) {
         const QString r = m.value(QStringLiteral("resource")).toString();
         const qint64 wait = qint64(m.value(QStringLiteral("waitMs")).toDouble());

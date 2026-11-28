@@ -369,7 +369,7 @@ static void testMessages()
 {
     std::printf("== messages\n");
     const QStringList types = messageTypes();
-    check(types.size() == 51 && knownType("COMMIT_REQUEST") && knownType("EDIT_FORCE") && !knownType("NOPE"), QStringLiteral("the message types of the design are known (and the cancel of an edit request)"),
+    check(types.size() == 52 && knownType("EDIT_ENDED") && knownType("COMMIT_REQUEST") && knownType("EDIT_FORCE") && !knownType("NOPE"), QStringLiteral("the message types of the design are known (and the cancel and the end of an edit request)"),
           QString::number(types.size()));
     check(errorCodes().size() == 31 && knownError("LOCK_STALE") && knownError("UNKNOWN_OLD") && !knownError("OOPS"), QStringLiteral("the error codes of section 3.2 are known"));
     QString code, why;

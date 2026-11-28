@@ -30,6 +30,7 @@ public:
     // reads the folders; entries that are damaged are moved to the drafts with a reason (never dropped)
     bool load(QString *error = nullptr);
     BlobStore &blobs() { return m_blobs; }
+    const BlobStore &blobs() const { return m_blobs; }
 
     // keeps a new entry (the bytes first, then the entry) and returns its operation id; empty with *error when it could not be kept
     QString add(const QJsonArray &units, const QHash<QString, QByteArray> &blobsByHash, qint64 createdMs, QString *error = nullptr,

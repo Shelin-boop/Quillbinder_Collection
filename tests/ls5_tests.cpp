@@ -10,6 +10,7 @@
 #include "core/DocumentStore.h"
 #include "core/Project.h"
 #include "core/SafeSave.h"
+#include "core/Snapshots.h"
 #include "core/collab/ChangeUnits.h"
 #include "core/collab/Authority.h"
 #include "core/collab/Clock.h"
@@ -1096,18 +1097,6 @@ static void testScreens(const QString &tmp)
         return;
     check(waitFor([&] { return treeHash(opened) == treeHash(m.folder); }, 10000), QStringLiteral("the copy equals the host's folder"));
 
-    // The rest (two documents in parallel, the edit request with Decline and Take Over) is not reliable yet: in some runs a window
-    // of the first program loses its follower while the second joins (two main windows in one process share more than a real
-    // pair of programs does). It runs only with QB_LS5_SCREENS_FULL=1 and is reported as open.
-    if (qEnvironmentVariable("QB_LS5_SCREENS_FULL") != QLatin1String("1")) {
-        useA();
-        wa.closeProject();
-        useB();
-        wb.closeProject();
-        ui::setInProcessLiveSyncService(nullptr);
-        livesync::setLiveSyncControl(nullptr);
-        return;
-    }
     // ---- two documents in parallel, one in each program
     auto editorOf = [&](MainWindow &w, const QString &id) -> TextEditor * {
         for (EditorPane *ep : w.findChildren<EditorPane *>())
@@ -1151,7 +1140,13 @@ static void testScreens(const QString &tmp)
     check(waitFor([&] { return treeHash(opened) == treeHash(m.folder); }, 20000), QStringLiteral("and the copy follows"),
           treeDiff(m.folder, opened) + QStringLiteral(" Bstate=%1 Bseq=%2 Bhead=%3 hostseq=%4 Apending=%5 Bpending=%6")
               .arg(int(B->svc->clientSession(uuid)->state())).arg(B->svc->clientSession(uuid)->seq()).arg(B->svc->clientSession(uuid)->headSeq())
-              .arg(A->svc->hostSession(uuid)->seq()).arg(A->svc->clientSession(uuid)->outbox().pending().size()).arg(B->svc->clientSession(uuid)->outbox().pending().size()));
+              .arg(A->svc->hostSession(uuid)->seq()).arg(A->svc->clientSession(uuid)->outbox().pending().size()).arg(B->svc->clientSession(uuid)->outbox().pending().size())
+              + QStringLiteral(" problem=[%1] Afail=[%2] Bfail=[%3] drafts=%4").arg(B->svc->statusModel()->project(uuid).problemText, A->svc->clientSession(uuid)->failure(), B->svc->clientSession(uuid)->failure())
+                    .arg(B->svc->clientSession(uuid)->outbox().drafts().size())
+              + QStringLiteral(" Afollower=%1 Bfollower=%2 gateA=%3 gateB=%4 hostCh1=[%5] hostCh2=[%6]")
+                    .arg(wa.project()->isFollower()).arg(wb.project()->isFollower()).arg(gate().followerOfFolder(wa.project()->folderPath()) != nullptr)
+                    .arg(gate().followerOfFolder(wb.project()->folderPath()) != nullptr).arg(QString::fromUtf8(readAll(m.folder + "/content/" + m.ch1 + "/text.md")).left(30),
+                                                                                                    QString::fromUtf8(readAll(m.folder + "/content/" + m.ch2 + "/text.md")).left(30)));
     check(waitFor([&] { return wa.project()->docs()->text(m.ch2)->toPlainText().contains("Beta") && wb.project()->docs()->text(m.ch1)->toPlainText().contains("Alpha"); }, 10000),
           QStringLiteral("each program's open documents received the other's text"));
     wa.grab().save(QDir::tempPath() + "/ls5-screen-a.png");
@@ -1184,18 +1179,46 @@ static void testScreens(const QString &tmp)
         dec->click();
     useB();
     check(waitFor([&] { return B->svc->statusModel()->lockInfo(uuid, "doc:" + m.ch1).declined; }, 8000), QStringLiteral("Decline reaches the asker: the status shows the request declined"));
-    ask->click(); // asks again
+    // the request stays open after a Decline: the holder's bar stays, the asker's tab shows the request as open (Ask to Edit cannot be
+    // used twice), and a second Decline starts the waiting time again
     useA();
-    check(waitFor([&] { return barsA->findChild<QPushButton *>("barAsked:Decline") != nullptr; }, 8000), QStringLiteral("a second request shows again"));
+    check(barsA->findChild<QPushButton *>("barAsked:Decline") != nullptr, QStringLiteral("a declined request stays open: the first program's bar stays"));
+    useB();
+    check(ask && !ask->isEnabled() && B->svc->statusModel()->lockInfo(uuid, "doc:" + m.ch1).askOpen, QStringLiteral("the asker's tab shows the request as open"));
+    advance(15000);
+    const qint64 leftBefore = B->svc->statusModel()->lockInfo(uuid, "doc:" + m.ch1).askWaitMs;
+    useA();
+    if (auto *dec2 = barsA->findChild<QPushButton *>("barAsked:Decline"))
+        dec2->click();
+    useB();
+    check(waitFor([&] { return B->svc->statusModel()->lockInfo(uuid, "doc:" + m.ch1).askWaitMs > leftBefore + 5000; }, 8000),
+          QStringLiteral("a second Decline starts the asker's waiting time again"),
+          QStringLiteral("before=%1 now=%2").arg(leftBefore).arg(B->svc->statusModel()->lockInfo(uuid, "doc:" + m.ch1).askWaitMs));
     advance(21000);
     useB();
     auto *take = uiB->tab()->findChild<QPushButton *>("lsTake");
     check(take && waitFor([&] { return take->isEnabled(); }, 4000), QStringLiteral("after the waiting time Take Over can be used"));
+    // the first program types once more, not yet saved, just before the other one takes over
+    useA();
+    ea->setFocus();
+    QTest::keyClicks(ea, "?");
+    const bool unsavedBefore = ea->toPlainText().contains('?');
+    useB();
+    check(unsavedBefore, QStringLiteral("the first program has text it has not sent when the other takes over"));
     if (take)
         take->click();
     check(waitFor([&] { return B->svc->clientSession(uuid) && B->svc->clientSession(uuid)->heldLocks().contains("doc:" + m.ch1); }, 10000),
           QStringLiteral("taking over gives the second program the lock of the document"));
     check(waitFor([&] { return !A->svc->clientSession(uuid)->heldLocks().contains("doc:" + m.ch1); }, 8000), QStringLiteral("and the first program lost it"));
+    // the protective snapshot of the committed text came first, and the first program's unsent text became a draft on its device
+    check(waitFor([&] {
+              for (const Snapshot &sn : snapshots::list(wa.project(), m.ch1))
+                  if (sn.title.startsWith(QLatin1String("Before takeover by")))
+                      return true;
+              return false;
+          }, 8000), QStringLiteral("a protective snapshot \"Before takeover by ...\" of the document was made first"));
+    check(waitFor([&] { return A->svc->clientSession(uuid)->outbox().drafts().size() >= 1; }, 10000), QStringLiteral("the text the first program had not sent is kept as a recovery draft on its device"),
+          QStringLiteral("drafts=%1 pending=%2").arg(A->svc->clientSession(uuid)->outbox().drafts().size()).arg(A->svc->clientSession(uuid)->outbox().pending().size()));
     wb.grab().save(QDir::tempPath() + "/ls5-screen-b.png");
 
     useA();
@@ -1324,7 +1347,10 @@ static void testHostingProcesses(const QString &tmp, const QString &app)
     const ServiceClient::Attached aa = ca.attach(m.folder, false);
     const ServiceClient::Attached ab = cb.attach(replica, false);
     check(aa.ok && aa.host && ab.ok && !ab.host, QStringLiteral("a window of each process attaches: one hosts, one holds a copy"), aa.code + "/" + ab.code);
-    check(waitFor([&] { return cb.replicaReady() && treeHash(replica) == treeHash(m.folder); }, 40000), QStringLiteral("the second process's copy is complete and equals the host's folder"));
+    check(waitFor([&] { return cb.replicaReady() && treeHash(replica) == treeHash(m.folder); }, 40000), QStringLiteral("the second process's copy is complete and equals the host's folder"),
+          QStringLiteral("ready=%1 state=%2 seq=%3 pending=%4 %5\nhost state: %6\nreplica state: %7")
+              .arg(cb.replicaReady()).arg(cb.stateCode()).arg(cb.seq()).arg(cb.pendingCount()).arg(treeDiff(replica, m.folder))
+              .arg(QString::fromUtf8(readAll(m.folder + "/livesync/state.json")).left(300), QString::fromUtf8(readAll(replica + "/livesync-replica.json")).left(300)));
     check(waitFor([&] { return ca.epoch() == 1; }, 3000), QStringLiteral("the host's epoch is 1"));
     // 3. a planned hand-over
     ca.transferHosting(B.id);

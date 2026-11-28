@@ -10,7 +10,12 @@
 #include "core/collab/Service.h"
 #include "core/collab/net/DeviceIdentity.h"
 #include "ui/LiveSyncServiceControl.h"
+#include "ui/CompareDialog.h"
+#include "ui/LiveSyncControl.h"
+#include "ui/LiveSyncDialogs.h"
 #include "ui/LiveSyncUi.h"
+#include "import/Compare.h"
+#include "import/CompareFiles.h"
 #include "ui/MainWindow.h"
 #include "ui/TextEditor.h"
 
@@ -21,6 +26,10 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QProcess>
+#include <QTemporaryFile>
+#include <QTextCursor>
+#include <QTextDocument>
+#include <QTextDocumentFragment>
 #include <QVBoxLayout>
 
 namespace qb {
@@ -34,7 +43,7 @@ namespace ui {
 void setInProcessLiveSyncService(collab::Service *service) { g_inProcess = service; }
 collab::Service *inProcessLiveSyncService() { return g_inProcess; }
 void setLiveSyncKeepHosting(bool on) { g_keepHosting = on; }
-bool liveSyncKeepHosting() { return g_keepHosting; }
+bool liveSyncKeepHosting() { return g_keepHosting || livesync::prefKeepHosting(); } // (the writer's choice in the options; a window tells it to the service it attaches to)
 QString liveSyncDir() { return g_inProcess ? g_inProcess->dir() : collab::net::DeviceIdentity::standardDir(); }
 } // namespace ui
 
@@ -42,9 +51,18 @@ QString liveSyncDir() { return g_inProcess ? g_inProcess->dir() : collab::net::D
 
 // Whether the project's folder is one this device shares or has joined (the registry says; a program that never shared
 // anything has no registry and goes on as it did)
+// The service this window is a window of: the in-process service of the program when the window was made (it stays this window's
+// when the program's pointer is changed meanwhile: the suites run several services in one process), else the program's.
+collab::Service *MainWindow::liveSyncService() const
+{
+    if (auto *s = qobject_cast<collab::Service *>(m_liveSyncService.data()))
+        return s;
+    return ui::inProcessLiveSyncService();
+}
+
 bool MainWindow::liveSyncShared(const QString &projectFile) const
 {
-    const QString dir = ui::liveSyncDir();
+    const QString dir = liveSyncService() ? liveSyncService()->dir() : ui::liveSyncDir();
     if (!QFileInfo::exists(dir + QStringLiteral("/registry.json")))
         return false;
     collab::Registry reg(dir);
@@ -57,7 +75,7 @@ bool MainWindow::liveSyncBegin(const QString &projectFile)
 {
     const QString folder = QFileInfo(projectFile).absolutePath();
     collab::ServiceClient *client = nullptr;
-    if (collab::Service *svc = ui::inProcessLiveSyncService()) {
+    if (collab::Service *svc = liveSyncService()) {
         collab::net::MemLink::Pair pair = collab::net::MemLink::createPair(QByteArray(32, 'w'), QByteArray(32, 's'), nullptr);
         svc->attachWindow(pair.a);
         client = new collab::ServiceClient(pair.b);
@@ -104,6 +122,33 @@ bool MainWindow::liveSyncBegin(const QString &projectFile)
     return true;
 }
 
+// Without "Keep hosting when the last window is closed", closing the last window of a project this device hosts ends the hosting: with
+// other devices online the writer is asked first.
+bool MainWindow::liveSyncConfirmClose()
+{
+    collab::Service *svc = liveSyncService();
+    if (!m_liveSync || !m_project || !svc || !svc->isRunning() || svc->keepHosting())
+        return true;
+    const QString uuid = m_liveSync->client()->uuid();
+    if (!svc->isHosting(uuid))
+        return true;
+    for (QWidget *w : QApplication::topLevelWidgets())
+        if (w != this && qobject_cast<MainWindow *>(w) && w->isVisible())
+            return true; // another window of this program goes on
+    int others = 0;
+    for (const collab::ParticipantStatus &p : svc->statusModel()->project(uuid).participants)
+        others += !p.thisDevice && p.online;
+    if (others == 0)
+        return true;
+    return livesync::confirmAction(this, tr("Close and Stop Hosting"),
+                                   tr("%n other device(s) are working on \"%1\" through this device. Closing the last window stops the hosting: they cannot "
+                                      "change the project until it is hosted again. Turn on \"Keep hosting when the last window is closed\" in File > Options > "
+                                      "Live Sync to go on hosting.",
+                                      nullptr, others)
+                                       .arg(m_project->title()),
+                                   tr("Close"));
+}
+
 void MainWindow::liveSyncAdopted()
 {
     if (m_liveSyncUi)
@@ -132,7 +177,50 @@ LiveSyncGlue::LiveSyncGlue(MainWindow *window, collab::ServiceClient *client) : 
     connect(&m_release, &QTimer::timeout, this, &LiveSyncGlue::releaseUnused);
 }
 
-LiveSyncGlue::~LiveSyncGlue() = default;
+LiveSyncGlue::~LiveSyncGlue()
+{
+    if (!m_jobsFolder.isEmpty() && snapshots::remoteJobsFor(m_jobsFolder) == m_jobs.get())
+        snapshots::setRemoteJobs(m_jobsFolder, nullptr);
+}
+
+namespace {
+// The snapshots of a shared project are changed by its host: the window asks its service, which asks the host (or is the host).
+class WindowJobs : public snapshots::RemoteJobs {
+public:
+    explicit WindowJobs(collab::ServiceClient *client) : m_c(client) {}
+    bool take(const QString &docId, const QString &title, QString *error) override
+    {
+        return run({{"op", "take"}, {"doc", docId}, {"title", title}}, error);
+    }
+    bool setTitle(const QString &docId, const QString &file, const QString &title, QString *error) override
+    {
+        return run({{"op", "rename"}, {"doc", docId}, {"file", file}, {"title", title}}, error);
+    }
+    bool remove(const QString &docId, const QString &file, QString *error) override
+    {
+        return run({{"op", "delete"}, {"doc", docId}, {"file", file}}, error);
+    }
+    bool rollBack(const QString &docId, const QString &file, bool allowEmpty, QString *error) override
+    {
+        return run({{"op", "rollBack"}, {"doc", docId}, {"file", file}, {"allowEmpty", allowEmpty}}, error);
+    }
+
+private:
+    bool run(const QJsonObject &body, QString *error)
+    {
+        QString code, text;
+        if (m_c && m_c->snapshotJob(body, &code, &text))
+            return true;
+        if (error)
+            *error = !text.isEmpty() ? text
+                     : code == QLatin1String("TIMEOUT") || code == QLatin1String("LINK")
+                         ? QCoreApplication::translate("qb::LiveSyncGlue", "The Live Sync service did not answer.")
+                         : QCoreApplication::translate("qb::LiveSyncGlue", "The host refused the snapshot job (%1).").arg(code);
+        return false;
+    }
+    QPointer<collab::ServiceClient> m_c;
+};
+} // namespace
 
 QString LiveSyncGlue::titleOf(const QString &id) const
 {
@@ -159,8 +247,17 @@ void LiveSyncGlue::begin(Project *project)
     });
     connect(m_client, &collab::ServiceClient::lockRevoked, this, [this](const QString &r, const QString &reason) {
         Q_UNUSED(reason);
-        if (r.startsWith(QLatin1String("doc:")))
+        if (r.startsWith(QLatin1String("doc:"))) {
             m_window->showStatusNote(tr("\"%1\" is now edited on another device. Your unsaved changes there are kept as a draft.").arg(titleOf(r.mid(4))), 8000);
+            // what was typed and not yet saved is handed to the service now: without the lock the host refuses it and it is kept as a
+            // recovery draft (Live Sync > Recovery Drafts); it is never written over the other device's text
+            QTimer::singleShot(0, this, [this] {
+                if (m_project && !m_ended) {
+                    QString err;
+                    m_project->save(&err);
+                }
+            });
+        }
     });
     connect(m_client, &collab::ServiceClient::replicaReplaced, this, [this] {
         // the folder was made again from the host's files: the window opens the project anew
@@ -191,6 +288,9 @@ void LiveSyncGlue::begin(Project *project)
         m_client->lock({resource});
         return false;
     });
+    m_jobs = std::make_unique<WindowJobs>(m_client);
+    m_jobsFolder = project->folderPath();
+    snapshots::setRemoteJobs(m_jobsFolder, m_jobs.get());
     m_release.start();
     onState();
 }
@@ -201,6 +301,8 @@ void LiveSyncGlue::end()
         return;
     m_ended = true;
     m_release.stop();
+    if (!m_jobsFolder.isEmpty() && snapshots::remoteJobsFor(m_jobsFolder) == m_jobs.get())
+        snapshots::setRemoteJobs(m_jobsFolder, nullptr);
     TextEditor::setLockGate(m_project, TextEditor::LockGate());
     m_client->follower()->capture().setListener(nullptr);
     // what was captured is handed over, then every lock is given up once the host confirmed
@@ -219,6 +321,39 @@ void LiveSyncGlue::end()
         }
     }
     m_client->detach();
+}
+
+bool LiveSyncGlue::lockAndWait(const QString &docId, QString *why, int timeoutMs)
+{
+    const QString resource = QStringLiteral("doc:") + docId;
+    if (m_client->holds(resource))
+        return true;
+    bool answered = false, granted = false;
+    QString text;
+    auto c1 = connect(m_client, &collab::ServiceClient::lockGranted, this, [&](const QString &r) {
+        if (r == resource) {
+            answered = granted = true;
+        }
+    });
+    auto c2 = connect(m_client, &collab::ServiceClient::lockDenied, this, [&](const QString &r, const QString &holder, const QString &reason) {
+        if (r == resource) {
+            answered = true;
+            text = holder.isEmpty() ? reason : tr("it is being edited on %1").arg(holder);
+        }
+    });
+    m_client->lock({resource});
+    QElapsedTimer t;
+    t.start();
+    while (!answered && t.elapsed() < timeoutMs && m_client->linkAlive()) {
+        QEventLoop l;
+        QTimer::singleShot(10, &l, &QEventLoop::quit);
+        l.exec();
+    }
+    disconnect(c1);
+    disconnect(c2);
+    if (!granted && why)
+        *why = text.isEmpty() ? tr("the lock was not granted in time") : text;
+    return granted;
 }
 
 void LiveSyncGlue::onState()
@@ -328,6 +463,7 @@ void MainWindow::liveSyncInstallUi()
     if (m_liveSyncUi)
         return;
     ui::programLiveSyncControl();
+    m_liveSyncService = ui::inProcessLiveSyncService();
     m_liveSyncUi = new livesync::LiveSyncUi(this);
     m_liveSyncUi->installToolbarButton(m_toolbar);
     m_liveSyncUi->installInspectorTab(m_inspector);
@@ -352,8 +488,91 @@ void MainWindow::liveSyncInstallUi()
             m_liveSyncReopening = false;
         });
     });
+    connect(&livesync::liveSyncControl(), &livesync::LiveSyncControl::draftActionRequested, this,
+            [this](livesync::DraftAction *action) { liveSyncDraftAction(action); }, Qt::DirectConnection);
     if (m_project)
         m_liveSyncUi->setProject(m_project.get());
+}
+
+// A recovery draft's text goes into the project from this window: compared with the document (the Compare view), kept as a new
+// document beside it, or taken over (the document's lock, a snapshot of its present text first, then the draft's text as a change).
+// The draft itself stays in the list until the writer deletes it.
+void MainWindow::liveSyncDraftAction(livesync::DraftAction *a)
+{
+    if (!a || a->handled || !m_project || !m_liveSync || !m_project->isFollower() || m_liveSync->client()->uuid() != a->uuid)
+        return;
+    a->handled = true;
+    livesync::LiveSyncControl &control = livesync::liveSyncControl();
+    BinderItem *item = m_project->item(a->docId);
+    if (!item || !item->hasText()) {
+        emit control.draftNote(tr("The document of this draft is not in the project any more."));
+        return;
+    }
+    QTextDocument draft;
+    m_project->docs()->deserialize(a->docId, a->text, &draft, a->rtf);
+    if (a->kind == livesync::DraftAction::KeepAsCopy) {
+        BinderItem *parent = item->parent ? item->parent : m_project->draft();
+        BinderItem *copy = m_project->model()->createItem(parent, item->parent ? item->row() + 1 : -1, ItemType::Text, tr("%1 (draft)").arg(item->title));
+        if (!copy) {
+            emit control.draftNote(tr("The copy could not be made."));
+            return;
+        }
+        QTextCursor c(m_project->docs()->text(copy->id));
+        c.insertFragment(QTextDocumentFragment(&draft));
+        QString err;
+        if (!m_project->save(&err)) {
+            emit control.draftNote(tr("The copy could not be saved: %1").arg(err));
+            return;
+        }
+        emit control.draftNote(tr("The draft is kept as the new document \"%1\".").arg(copy->title));
+        return;
+    }
+    if (a->kind == livesync::DraftAction::Compare) {
+        QTemporaryFile file(QDir::tempPath() + QStringLiteral("/qb-draft-XXXXXX.txt"));
+        if (!file.open()) {
+            emit control.draftNote(tr("The draft cannot be shown: no temporary file."));
+            return;
+        }
+        file.write(draft.toPlainText().toUtf8());
+        file.flush();
+        QString err;
+        std::unique_ptr<compare::FileText> text = compare::openFile(file.fileName(), m_project->formatting, &err);
+        if (!text) {
+            emit control.draftNote(tr("The draft cannot be shown: %1").arg(err));
+            return;
+        }
+        compare::Result r = compare::compareTexts(m_project.get(), {a->docId}, m_project->docs()->text(a->docId)->toPlainText(), text.get());
+        r.filePath = tr("Recovery draft of \"%1\"").arg(item->title);
+        // the draft's text is taken into the document only with its lock (the compare window changes the document itself)
+        QString why;
+        if (!m_liveSync->lockAndWait(a->docId, &why))
+            emit control.draftNote(tr("The draft is shown for reading only: \"%1\" cannot be changed here now (%2).").arg(item->title, why));
+        CompareDialog dlg(m_project.get(), r, this);
+        dlg.exec();
+        return;
+    }
+    // Take Over
+    QString why;
+    if (!m_liveSync->lockAndWait(a->docId, &why)) {
+        emit control.draftNote(tr("\"%1\" cannot be taken over now: %2.").arg(item->title, why));
+        return;
+    }
+    QString err;
+    if (!snapshots::take(m_project.get(), a->docId, tr("Before taking over a recovery draft"), &err)) {
+        emit control.draftNote(tr("Nothing was changed: the snapshot of the present text could not be made (%1).").arg(err));
+        return;
+    }
+    QTextCursor c(m_project->docs()->text(a->docId));
+    c.beginEditBlock();
+    c.select(QTextCursor::Document);
+    c.removeSelectedText();
+    c.insertFragment(QTextDocumentFragment(&draft));
+    c.endEditBlock();
+    if (!m_project->save(&err)) {
+        emit control.draftNote(tr("The draft's text could not be saved: %1").arg(err));
+        return;
+    }
+    emit control.draftNote(tr("The draft's text is now the text of \"%1\"; a snapshot of the text before is kept. The draft stays in the list.").arg(item->title));
 }
 
 void MainWindow::liveSyncSelected(const QString &docId)
