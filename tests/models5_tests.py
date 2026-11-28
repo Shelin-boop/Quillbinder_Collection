@@ -281,10 +281,10 @@ try:
             w.setframerate(rate)
             w.writeframes(b"".join(struct.pack("<h", x) for x in samples) if channels == 1 else b"\0" * (n * 2 * channels))
         return path
-    check("clip check: a good clip passes", dv.clip_problem(wavfile("good.wav", 8, 0.3)) is None)
+    check("clip check: a good clip passes, also a slow one of 24 s", dv.clip_problem(wavfile("good.wav", 8, 0.3)) is None and dv.clip_problem(wavfile("slow.wav", 24, 0.3)) is None)
     check("clip check: too short, too long, silent, clipped, wrong rate are refused",
           all(dv.clip_problem(wavfile(n, sec, a, rate=r, clip=c)) for n, sec, a, r, c in
-              (("short.wav", 2, 0.3, 24000, False), ("long.wav", 25, 0.3, 24000, False), ("silent.wav", 8, 0.0005, 24000, False), ("clipped.wav", 8, 0.3, 24000, True), ("rate.wav", 8, 0.3, 16000, False))))
+              (("short.wav", 2, 0.3, 24000, False), ("long.wav", 26, 0.3, 24000, False), ("silent.wav", 8, 0.0005, 24000, False), ("clipped.wav", 8, 0.3, 24000, True), ("rate.wav", 8, 0.3, 16000, False))))
     check("clip check: the command line says OK or the reason and its exit code follows",
           subprocess.run([sys.executable, "-I", os.path.join(M, "design-voices.py"), "check", os.path.join(tmp, "good.wav")], capture_output=True, text=True).returncode == 0
           and subprocess.run([sys.executable, "-I", os.path.join(M, "design-voices.py"), "check", os.path.join(tmp, "silent.wav")], capture_output=True, text=True).returncode == 1)
@@ -312,7 +312,7 @@ try:
           vj_meta.get("modelLicense") == "Apache-2.0" and "voicedesign" in vj_meta.get("model", "") and "no real person's voice" in vj_meta.get("note", "") and vj_meta["voices"]["female3"]["description"] == dv.VOICES["female3"])
     open(fake, "a").write("    if name == 'male3-calm': os.remove(os.path.join(out, name + '.wav'))\n")
     rm2 = subprocess.run([sys.executable, "-I", os.path.join(M, "design-voices.py"), "make", "en", wrapper, "t.gguf", "c.gguf", os.path.join(tmp, "made2")], capture_output=True, text=True)
-    check("make: a clip that fails twice fails the run", rm2.returncode != 0 and "failed twice" in rm2.stdout + rm2.stderr)
+    check("make: a clip that fails three times fails the run", rm2.returncode != 0 and "failed three times" in rm2.stdout + rm2.stderr)
     target = os.path.join(tmp, "models.json")
     r3 = subprocess.run([sys.executable, "-I", os.path.join(M, "make-catalog.py"), "models-json", os.path.join(tmp, "m3.json"), "--catalog", os.path.join(M, "models-5-catalog.json")], capture_output=True, text=True)
     check("models-json with the published release's catalog equals the committed built-in catalog", r3.returncode == 0 and jload(os.path.join(tmp, "m3.json")) == built_in, r3.stderr)
