@@ -270,6 +270,7 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *e) override;
+    bool eventFilter(QObject *o, QEvent *e) override; // Alt letters (0.99.0, AU-03): MainWindowSmall.cpp
     void changeEvent(QEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;
     void moveEvent(QMoveEvent *e) override;
@@ -598,6 +599,8 @@ private:
     void restyleSmallButtons();
     void buildSmallButtons();
     void fillSmallMenu();
+    void openSmallMenu(QAction *top);               // the round button's menu, with the submenu of a menu bar menu opened
+    bool m_altAlone = false;                        // Alt pressed and nothing since
     void placeSmallBar();
     void refitSmallPanels();
     void updateSmallRecord();

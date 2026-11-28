@@ -7,6 +7,7 @@ Manual in the program) describes every function.
 
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
 
+- Fix (audit AU-03): **Alt and a letter** no longer types the letter into the text when no command uses it. In the small interface (no menu bar), Alt and the letter of a menu opens that menu at the round menu button, and Alt alone opens the button's menu. **View > Small Interface** has the shortcut **Ctrl+Alt+S**, named in the menu button's tip. In the mind map, the four "With Arrow" entries of **New Connected Note** have Alt letters of their own.
 - Fix: **Forget the passphrase** no longer locks the key while an encrypted project is open (it is locked when the project closes), so saves make no false "changed elsewhere" copies; a document read with the key locked asks for the passphrase.
 - System test (no change for a writer): the cases of the new functions (handwriting, encryption, the model rule, the small
   interface, Read Aloud, toolbar sizes, Cancel in Compile, the focus line, link contrast, the menu walk), four kill cases and

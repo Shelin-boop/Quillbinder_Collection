@@ -879,6 +879,24 @@ int main(int argc, char **argv)
         const int storm = b.notes.last().id;
         check(b.pointsTo(keeper, storm) && b.rectOf(storm).top() > b.rectOf(keeper).bottom(),
               QStringLiteral("... Below With Arrow: below, with an arrow pointing to the new note"));
+        // AU-03: every entry of New Connected Note has an Alt letter of its own
+        {
+            QMenu notes;
+            ctl->fillNotesMenu(&notes);
+            QMenu *conn = nullptr;
+            for (QAction *ac : notes.actions())
+                if (ac->menu() && ac->menu()->title().remove(QLatin1Char('&')).startsWith(QStringLiteral("New Connected")))
+                    conn = ac->menu();
+            QStringList letters, texts;
+            for (QAction *ac : conn ? conn->actions() : QList<QAction *>())
+                if (!ac->isSeparator()) {
+                    letters << QKeySequence::mnemonic(ac->text()).toString().toLower();
+                    texts << ac->text();
+                }
+            const QSet<QString> unique(letters.cbegin(), letters.cend());
+            check(conn && letters.size() == 8 && unique.size() == 8 && !unique.contains(QString()),
+                  QStringLiteral("New Connected Note: the eight entries have eight different Alt letters"), texts.join(QStringLiteral(" | ")));
+        }
         // a stack: New Stacked Note under the selected note
         scene->selectIds({storm});
         ctl->action(QStringLiteral("mm_newNote"))->trigger();

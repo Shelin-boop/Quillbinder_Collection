@@ -28,6 +28,12 @@
 #include <QApplication>
 #include <QEvent>
 #include <QGuiApplication>
+#include <QKeyEvent>
+#include <QKeySequence>
+#include <QLineEdit>
+#include <QPlainTextEdit>
+#include <QAbstractSpinBox>
+#include <QTextEdit>
 #include <QMenu>
 #include <QMenuBar>
 #include <QScreen>
@@ -103,6 +109,7 @@ void MainWindow::createSmallActions()
     check->setCheckable(true);
     check->setToolTip(tr("A few round buttons and the most room for the text, for a small screen or for use without a keyboard"));
     connect(check, &QAction::toggled, this, [this](bool on) { setSmallInterface(on); });
+    check->setShortcut(QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_S)); // (0.99.0, AU-03: the way back without the menu bar)
 #else
     QActionGroup *group = new QActionGroup(this);
     for (auto [key, text, c] : {std::tuple<QString, QString, smallui::Choice>{QStringLiteral("smallChoiceFull"), tr("&Full"), smallui::Choice::Full},
@@ -118,6 +125,7 @@ void MainWindow::createSmallActions()
     QAction *check = make(QStringLiteral("smallInterface"), tr("Sm&all Interface"));
     check->setCheckable(true);
     connect(check, &QAction::toggled, this, [this](bool on) { setSmallInterface(on); });
+    check->setShortcut(QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_S));
 #endif
     // the menu button's way back
     auto *full = new QAction(tr("Switch to the &Full Interface"), this);
@@ -200,6 +208,7 @@ void MainWindow::createSmallInterface()
             QTimer::singleShot(0, this, [this] { showSmallPanel(false, false); });
     });
 
+    qApp->installEventFilter(this); // (Alt letters, see eventFilter)
     m_smallMenu = new QMenu(this);
     m_smallMenu->setObjectName(QStringLiteral("smallMenu"));
     connect(m_smallMenu, &QMenu::aboutToShow, this, &MainWindow::fillSmallMenu);
@@ -253,7 +262,21 @@ void MainWindow::buildSmallButtons()
         b->setIcon(icons::action(QStringLiteral("view-list-text")));
         b->setPopupMode(QToolButton::InstantPopup);
         b->setMenu(m_smallMenu);
-        add(QStringLiteral("menu"), b, tr("Menu: all the menus of the program"));
+        add(QStringLiteral("menu"), b, QString());
+        // the tip names the keys (the shortcut of the check item can be changed: the tip follows it)
+        auto tip = [this, b] {
+            const QAction *ac = a.value(QStringLiteral("smallInterface"));
+            const QString keys = ac ? ac->shortcut().toString(QKeySequence::NativeText) : QString();
+            const QString t = keys.isEmpty() ? tr("Menu: all the menus of the program (press Alt, or Alt and the letter of a menu)")
+                                             : tr("Menu: all the menus of the program (press Alt, or Alt and the letter of a menu). "
+                                                  "%1 switches the small interface off and on")
+                                                   .arg(keys);
+            b->setToolTip(t);
+            b->setAccessibleName(t);
+        };
+        tip();
+        if (QAction *ac = a.value(QStringLiteral("smallInterface")))
+            connect(ac, &QAction::changed, b, tip);
     }
     withAction(QStringLiteral("new"), QStringLiteral("newText"));
     withAction(QStringLiteral("bold"), QStringLiteral("bold"));
@@ -358,6 +381,86 @@ void MainWindow::fillSmallMenu()
             m_smallMenu->addMenu(top->menu());
     m_smallMenu->addSeparator();
     m_smallMenu->addAction(a[QStringLiteral("smallToFull")]);
+}
+
+// the menu button's menu at the button (above it in a row at the bottom, left of it in a column at the right edge); with a menu
+// bar menu given, its submenu is open
+void MainWindow::openSmallMenu(QAction *top)
+{
+    QWidget *b = m_smallButtons.value(QStringLiteral("menu"));
+    if (!m_small || !b || !b->isVisible())
+        return;
+    fillSmallMenu();
+    const QRect br(b->mapToGlobal(QPoint(0, 0)), b->size());
+    const QSize sz = m_smallMenu->sizeHint();
+    const QRect avail = (b->screen() ? b->screen() : QGuiApplication::primaryScreen())->availableGeometry();
+    QPoint pos = wantsUpright() ? QPoint(br.left(), br.top() - sz.height()) : QPoint(br.left() - sz.width(), br.top());
+    pos.setX(qMax(avail.left(), qMin(pos.x(), avail.right() - sz.width())));
+    pos.setY(qMax(avail.top(), qMin(pos.y(), avail.bottom() - sz.height())));
+    m_smallMenu->popup(pos);
+    if (top)
+        for (QAction *ac : m_smallMenu->actions())
+            if (ac->menu() && ac->menu() == top->menu()) {
+                m_smallMenu->setActiveAction(ac);
+                break;
+            }
+}
+
+// Alt letters (AU-03): without a menu bar, Alt and the letter of a menu opens that menu at the round button, and a plain Alt
+// opens the button's menu; an Alt letter that no command uses is not typed into a text field of the window (a character that
+// Alt-less keys give, such as AltGr+Q = "@", is typed as before: only a key that carries its own letter is held back)
+bool MainWindow::eventFilter(QObject *o, QEvent *e)
+{
+    const QEvent::Type t = e->type();
+    if (t == QEvent::MouseButtonPress || t == QEvent::Wheel) {
+        m_altAlone = false;
+        return QMainWindow::eventFilter(o, e);
+    }
+    if (t != QEvent::KeyPress && t != QEvent::KeyRelease)
+        return QMainWindow::eventFilter(o, e);
+    auto *w = qobject_cast<QWidget *>(o);
+    if (!w || w->window() != this)
+        return QMainWindow::eventFilter(o, e);
+    auto *ke = static_cast<QKeyEvent *>(e);
+    const bool ours = QApplication::activeWindow() == this && !QApplication::activePopupWidget() && !QApplication::activeModalWidget();
+    if (t == QEvent::KeyRelease) {
+        if (ke->key() == Qt::Key_Alt && m_altAlone) {
+            m_altAlone = false;
+            if (m_small && ours)
+                QTimer::singleShot(0, this, [this] {
+                    if (m_small && !QApplication::activePopupWidget())
+                        openSmallMenu(nullptr);
+                });
+        }
+        return QMainWindow::eventFilter(o, e);
+    }
+    if (ke->key() == Qt::Key_Alt) {
+        if (!ke->isAutoRepeat()) // (the key's own modifier may or may not be in its event: only Ctrl, Shift or Meta held make it no plain Alt)
+            m_altAlone = (ke->modifiers() & ~(Qt::KeypadModifier | Qt::AltModifier)) == 0;
+        return QMainWindow::eventFilter(o, e);
+    }
+    m_altAlone = false;
+    const Qt::KeyboardModifiers mods = ke->modifiers() & ~(Qt::KeypadModifier | Qt::ShiftModifier);
+    const int key = ke->key();
+    if (mods != Qt::AltModifier || !((key >= Qt::Key_A && key <= Qt::Key_Z) || (key >= Qt::Key_0 && key <= Qt::Key_9)))
+        return QMainWindow::eventFilter(o, e);
+    const QString text = ke->text();
+    if (!text.isEmpty() && !(text.size() == 1 && text.at(0).toUpper() == QChar(key)))
+        return QMainWindow::eventFilter(o, e); // (a typed character of another key: AltGr on a layout that reports it with Alt)
+    if (ours && m_small)
+        for (QAction *top : menuBar()->actions())
+            if (top->menu() && QKeySequence::mnemonic(top->text()) == QKeySequence(Qt::ALT | key)) {
+                QTimer::singleShot(0, this, [this, top] {
+                    if (m_small && !QApplication::activePopupWidget())
+                        openSmallMenu(top);
+                });
+                return true;
+            }
+    // no command uses it (a command's shortcut was taken before the key reached the field): it types nothing
+    if (qobject_cast<QTextEdit *>(o) || qobject_cast<QPlainTextEdit *>(o) || qobject_cast<QLineEdit *>(o) ||
+        qobject_cast<QAbstractSpinBox *>(o))
+        return true;
+    return QMainWindow::eventFilter(o, e);
 }
 
 // ---- where things stand
