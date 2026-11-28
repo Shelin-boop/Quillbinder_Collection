@@ -2,6 +2,22 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## ls6 (0.99.0: Live Sync, who hosts)
+
+`qb_ls6_tests` (no display; about 20 s, nearly all of it Botan signing; skipped except the drafts store without the encryption pack
+with Botan TLS). A `World` has N devices in one process, each with its own `DeviceIdentity`, folder, `FakeBackend` (the interface
+the service implements: seq, state hash, start and stop hosting ...) and `Authority`; `Net` is a fake network (messages are queued
+and delivered by `pump()`, pairs can be cut, message types dropped) and `step(ms)` moves one `ManualClock` and sends the heartbeats
+of the connected pairs. `checkInvariants()` runs after every delivered message: at most one host per epoch, at most one proof per
+epoch in all chains, and (`strict`, no partition) at most one device hosting at a time. Checks: membership records and their
+successors, proofs and chains (majority table 2:0, 3:2, 4:3, 5:3, votes of the lost host and duplicates not counted), the handover
+with all states and an abort, the handover killed at each of ten kill points (`Authority::setKillHook`: the object stops at a named
+point, the test makes a new one from the same folder) with the old host or the target down for 0 s and 45 s, a lost DONE, a retired
+host that restarts, failover of two devices (29 s no, 31 s yes) and of three to five (1:2, 2:1, 2:2, 2:3), a vote that survives a
+crash, unknown devices and forged proofs, reunion with drafts per document and author, the drafts store and ledger, the handback
+after 60 s (not before, not without sync, not while busy). Seven of the checks were each seen to fail with its code taken out
+(majority, the stored RETIRED, the stored vote, the member test, 60 s, the drafts, 30 s, the hash test).
+
 ## ls4 (0.99.0: Live Sync, the protocol)
 
 `qb_ls4_tests` (no display; runs under the runner, about 1 s; the TLS part needs the encryption pack with Botan TLS and is skipped
