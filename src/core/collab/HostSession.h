@@ -33,8 +33,11 @@ QString roleName(Role r);
 constexpr int kKeepCommits = 10000;
 constexpr qint64 kKeepDays = 30;
 
+class HostBackup; // the host jobs (backups, snapshots) publish their own commits through the private parts
+
 class HostSession : public QObject {
     Q_OBJECT
+    friend class HostBackup;
 public:
     struct Options {
         QString folder;   // the project folder
