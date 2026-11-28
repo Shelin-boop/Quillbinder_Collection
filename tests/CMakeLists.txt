@@ -669,3 +669,9 @@ target_compile_definitions(qb_ls3_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOUR
 # (./qb_ls4_tests /tmp/shots)
 add_executable(qb_ls4_tests ls4_tests.cpp)
 target_link_libraries(qb_ls4_tests PRIVATE qbcore Qt6::Network)
+
+# 0.99.0, Live Sync work package 6 (who hosts): membership and proofs signed with the device key, the planned handover killed at
+# every step, failover with a majority, unknown devices refused, reunion with recovery drafts, handback (no display)
+# (./qb_ls6_tests /tmp/shots)
+add_executable(qb_ls6_tests ls6_tests.cpp)
+target_link_libraries(qb_ls6_tests PRIVATE qbcore Qt6::Network)
