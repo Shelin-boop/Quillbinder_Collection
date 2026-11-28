@@ -76,6 +76,12 @@ FFU="$WORK/botan/src/lib/ffi/ffi_util.h"
 grep -qF 'std::is_void_v<decltype(func(ref))>' "$FFU" || { echo "win-crypto: ffi_util.h is not as expected" >&2; exit 1; }
 sed -i 's/std::is_void_v<decltype(func(ref))>/std::is_void_v<std::invoke_result_t<VisitorFnT\&, std::remove_reference_t<decltype(ref)>\&>>/' "$FFU"
 grep -n 'invoke_result_t' "$FFU"
+# 0.99.0 (Live Sync, module x509): ocsp.cpp uses std::ranges::equal without including <algorithm>; GCC's library brings it
+# in through other headers, MSVC 14.52's does not (run 46142310271: C2039 "'equal': is not a member of 'std::ranges'").
+OCSP="$WORK/botan/src/lib/x509/ocsp.cpp"
+grep -qF 'std::ranges::equal' "$OCSP" || { echo "win-crypto: ocsp.cpp is not as expected" >&2; exit 1; }
+grep -qF '#include <algorithm>' "$OCSP" || sed -i '0,/^#include /s//#include <algorithm>\n#include /' "$OCSP"
+grep -n '#include <algorithm>' "$OCSP"
 ( cd "$WORK/botan"
   "$PY" ./configure.py --prefix="$P" --os=windows --cpu=x86_64 --cc=msvc --msvc-runtime=MD --build-targets=static \
       --disable-shared-library --minimized-build --enable-modules="$(echo $BOTAN_MODULES | tr ' ' ',')" \

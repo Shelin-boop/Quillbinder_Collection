@@ -33,6 +33,10 @@ namespace {
 QString say(const char *text) { return QCoreApplication::translate("qb::collab", text); }
 } // namespace
 
+#ifndef QB_HAVE_BOTAN_TLS
+struct DeviceIdentity::Impl {}; // (a build without Botan's TLS: nothing to hold)
+#endif
+
 DeviceIdentity::DeviceIdentity() : d(new Impl) {}
 DeviceIdentity::~DeviceIdentity() = default;
 
