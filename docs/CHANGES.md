@@ -22,6 +22,13 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   file too, and the Linux workflows fetch the encryption, AI engine and ONNX Runtime packs before they configure.
 - Showing a document no longer marks it as changed; it is only saved when you change it. (Before, every shown document,
   its empty notes too, was marked changed by the link-color pass and kept in memory and written again at the next save.)
+- Live Sync, the core's write gate (no change for a writer; Live Sync stays off and nothing it adds runs): a window of a shared
+  project will be a "follower" that never writes the shared files. `Project::open` takes a follower; the writes that reach
+  `safesave`, `savebatch`, the vault and the remove helpers are then captured as plain bytes in a change set instead of reaching the
+  disk (a path of no class is refused). New in the core: the path classes, the project file turned into operations by item id and
+  section (`IndexDiff`) and applied again (`OpApply`, to the XML and to a project in memory), the reasons a document cannot be
+  changed here (`DocumentStore::whyNotEditable`), `DocumentStore::reload`, and files that the authority's save adds to its batch.
+  Suite `ls3`, with a source audit that lists every place of the program that writes or removes files.
 - **0.99.0 is a security update on every system** (Linux, Windows and Android). The update window says "recommended
   (security)" for a Quillbinder with an older version and offers no "Ignore This Version", also when a newer version has
   come out since (every version after the installed one, up to the newest, counts).

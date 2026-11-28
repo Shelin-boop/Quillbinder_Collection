@@ -360,6 +360,8 @@ QTextDocument *DocumentStore::load(const QString &id, bool notes)
     if (m_probe && m_entries.size() > kKeepLoaded && !m_unloadTimer.isActive())
         m_unloadTimer.start();
     connect(doc, &QTextDocument::contentsChanged, this, [this, doc, key, id, notes] {
+        if (m_reloadingKey == key)
+            return; // (0.99.0: reload() fills the document)
         auto it = m_entries.find(key);
         if (it == m_entries.end())
             return;
@@ -383,6 +385,76 @@ QTextDocument *DocumentStore::load(const QString &id, bool notes)
         }
     });
     return doc;
+}
+
+bool DocumentStore::reload(const QString &id)
+{
+    bool all = true;
+    for (const bool notes : {false, true}) {
+        const QString key = keyFor(id, notes);
+        m_kept.remove(key);
+        auto it = m_entries.find(key);
+        if (it == m_entries.end()) {
+            // not loaded: the next reading reads the new file; what was known about the old one goes
+            m_unreadable.remove(key);
+            m_damaged.remove(key);
+            m_shown.remove(key);
+            if (!notes)
+                m_missing.remove(id);
+            dropPlain(key);
+            if (!notes)
+                dropPlain(id);
+            continue;
+        }
+        if (it->dirty || (it->doc->isModified() && it->doc->isUndoAvailable())) {
+            all = false; // unsaved text here is never overwritten
+            continue;
+        }
+        QTextDocument *doc = it->doc;
+        emit aboutToReload(id, notes);
+        it = m_entries.find(key); // (a slot may have changed the table)
+        if (it == m_entries.end())
+            continue;
+        m_unreadable.remove(key);
+        m_damaged.remove(key);
+        m_shown.remove(key);
+        if (!notes)
+            m_missing.remove(id);
+        m_reloadingKey = key;
+        doc->setUndoRedoEnabled(false);
+        doc->clear();
+        // (clear() keeps the document's own properties, base address and defaults; the plain-notes mark is read again)
+        doc->setProperty(display::kPlainNotesProp, QVariant());
+        QByteArray bytes;
+        bool rtf = false;
+        readFile(id, notes, doc, &bytes, &rtf);
+        if (notes) {
+            if (!doc->property(display::kPlainNotesProp).toBool() && doc->isEmpty())
+                doc->setProperty(display::kPlainNotesProp, true);
+            if (doc->property(display::kPlainNotesProp).toBool())
+                display::applyPlainNotes(doc, zoomFor(true), m_project->storage == StorageFormat::Markdown);
+        }
+        doc->setModified(false);
+        doc->setUndoRedoEnabled(true);
+        m_reloadingKey.clear();
+        it = m_entries.find(key);
+        if (it != m_entries.end()) {
+            it->read = bytes;
+            it->readRtf = rtf;
+            it->dirty = false;
+            it->stamp = syncsafe::stampOf(notes ? notesPath(id) : textPath(id));
+            ++it->changes;
+            it->comparedAt = ~quint64(0);
+        }
+        if (m_unreadable.contains(key))
+            m_shown.insert(key, Shown{shownBytes(doc, m_project->formatting, m_project->storage), m_project->formatting,
+                                      m_project->storage});
+        dropPlain(key);
+        if (!notes)
+            dropPlain(id);
+        emit reloaded(id, notes);
+    }
+    return all;
 }
 
 // 0.93.0 (to-do item 39): see the header. What is kept: a shown document, one with a change not saved, one with an
@@ -729,7 +801,15 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
     // the same text written elsewhere): not written again, so a sync program has nothing to carry
     // (0.99.0: the texts are compared; a file of an encrypted project is decrypted for it)
     QByteArray onDisk;
-    const DiskText disk = diskText(path, &onDisk);
+    DiskText disk = diskText(path, &onDisk);
+    // 0.99.0 (Live Sync): a follower's file on disk is the replica's, which only the service writes; what this window knows
+    // is what it read or last handed over, so that is what the new text is compared with, and nothing counts as "changed
+    // elsewhere"
+    const bool follower = m_project->isFollower();
+    if (follower) {
+        onDisk = e.read;
+        disk = e.read.isNull() ? DiskText::Unreadable : DiskText::Read;
+    }
     if (!QFile::exists(other)) {
         if (disk == DiskText::Read && onDisk == data) {
             // 0.93.0: when a save runs, the text counts as saved only after the commit's checked sync (a folder whose
@@ -748,7 +828,7 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
             return true;
         }
     }
-    bool elsewhere = syncsafe::changedSince(e.stamp, path) && QFileInfo::exists(path);
+    bool elsewhere = !follower && syncsafe::changedSince(e.stamp, path) && QFileInfo::exists(path);
     // 0.92.0: the content decides, not the time. A sync program can set a file's time again a few seconds after this
     // program wrote it (after its upload): the same bytes as read or last written here are no other version. Nothing
     // is kept, told or written for it; only the remembered stamp is renewed. (Without bytes to compare with, a text
@@ -761,7 +841,7 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
     }
     // 0.65.0 (audit F14): the same size and time as read or written here, but other bytes (a sync program that sets
     // times of its own, a file system with times in 2 s steps): changed elsewhere too
-    if (!elsewhere && e.stamp.known && !e.read.isNull() && QFileInfo::exists(path)) {
+    if (!follower && !elsewhere && e.stamp.known && !e.read.isNull() && QFileInfo::exists(path)) {
         // (0.99.0: a file that cannot be decrypted is another version too: kept before it is replaced)
         if ((disk == DiskText::Read && onDisk != e.read) || disk == DiskText::Undecryptable)
             elsewhere = true;
@@ -798,7 +878,7 @@ bool DocumentStore::writeEntry(const QString &key, Entry &e, QString *error)
                                     [this, key, other] {
                                         // counts as saved (after a good sync): remove a file of the other storage format
                                         if (QFile::exists(other))
-                                            QFile::remove(other);
+                                            safesave::removeFile(other);
                                         auto it = m_entries.find(key);
                                         if (it != m_entries.end())
                                             it->dirty = false;
@@ -891,6 +971,11 @@ QByteArray DocumentStore::shownBytes(const QTextDocument *doc, const Formatting 
 
 QString DocumentStore::whyNotEditable(const QString &id, bool notes) const
 {
+    if (const collab::Follower *f = m_project->follower()) {
+        const QString why = f->whyNotEditable(id, notes);
+        if (!why.isEmpty())
+            return why;
+    }
     const QString key = keyFor(id, notes);
     if (!m_unreadable.contains(key))
         return QString();
@@ -1033,7 +1118,7 @@ bool DocumentStore::writeDirtyInto(const QString &folder, QString *error)
         const QString other = dir + (it->isNotes ? QLatin1String("/notes.") : QLatin1String("/text."))
                               + (m_project->storage == StorageFormat::Rtf ? QStringLiteral("md") : QStringLiteral("rtf"));
         if (QFile::exists(other))
-            QFile::remove(other);
+            safesave::removeFile(other);
     }
     m_serializeFolder.clear();
     return ok;

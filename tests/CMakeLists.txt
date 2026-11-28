@@ -655,3 +655,11 @@ target_link_libraries(qb_ls1_tests PRIVATE qbcore Qt6::Network)
 add_executable(qb_welcdark_tests welcdark_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_welcdark_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_welcdark_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
+
+# 0.99.0, Live Sync work package 3 (the core write gate): follower mode, the gate in safesave/savebatch/the vault/the
+# removes, capture, the project file as operations and their application, path classes, the reasons a document cannot be
+# changed, DocumentStore::reload, the authority's extra batch files, the source audit and "Live Sync off changes nothing"
+# (xvfb-run -a ./qb_ls3_tests /tmp/shots)
+add_executable(qb_ls3_tests ls3_tests.cpp)
+target_link_libraries(qb_ls3_tests PRIVATE qbcore Qt6::Test)
+target_compile_definitions(qb_ls3_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")

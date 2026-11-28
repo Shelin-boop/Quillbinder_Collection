@@ -2,6 +2,18 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## ls3 (0.99.0: Live Sync, the core write gate)
+
+`qb_ls3_tests` (needs no display; runs under the runner): the path classes (a table of 30 paths, the rules of section 3.5 of the design:
+reserved names, 240 bytes, case collisions, symbolic links); Live Sync off (the same writes, the batch, the journal, no `livesync`
+file, the extra batch files of a save and their failure); the gate on its own (every write call into a follower's folder captured
+and nothing on disk, a device-local file written, an unknown path refused, the vault's backstop, suspended capture, a batch committed
+and dropped); a follower's `Project::open` with one scripted action per write path (a text, notes, structure, settings, an object,
+a picture, a deleted document, window state) and the second save without a conflict copy; the operations (`diffIndex`, `applyToIndex`,
+`applyToProject`) on a scripted change and on random edits (3 seeds, 40 rounds); the reasons and `DocumentStore::reload`; an encrypted
+replica (plain bytes captured, the sealed files unchanged); the source audit (`kAudit`: every file of `src/` that writes or removes
+files must be listed with how it reaches the gate; add a new file there). `QB_LS_STRICT` is set to 0 by the suite.
+
 ## Texts with numbers and the English Alt letters (0.99.0, the translation check)
 
 `qb_fixes_tests` (last block): twelve source texts with `%n` read right in English for 0, 1, 2 and 5 (through
