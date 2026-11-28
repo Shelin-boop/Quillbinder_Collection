@@ -4,7 +4,7 @@
   design-voices.py make <language> <design-voices binary> <talker.gguf> <tokenizer.gguf> <out dir>
       designs 6 voices x 3 styles = 18 clips in that language with Qwen3-TTS VoiceDesign (tools/models/design-voices.cpp
       loads the model once), each clip reading the same reference text of the language; checks every clip (length,
-      not silent, no clipped run); a clip that fails is designed again once with another seed, then the run fails; writes
+      not silent, no clipped run); a clip that fails is designed again with other seeds (three tries in all), then the run fails; writes
       <out dir>/read-aloud-voices-<language>.zip (36 files and voices.json) and the same files in <out dir>/<language>/.
   design-voices.py check <wav file>...
       the clip check alone (prints OK or the reason for each file; exit code 1 when one fails).
@@ -44,14 +44,14 @@ TEXTS = {
     "it": "La luce del mattino scivolava piano sul tavolo silenzioso della cucina, dove una tazza di tè si raffreddava accanto a un quaderno aperto, e per un attimo niente in casa sembrava chiedere una risposta.",
     "ru": "Утренний свет медленно скользил по тихому кухонному столу, где рядом с раскрытой тетрадью остывала чашка чая, и на мгновение казалось, что в доме ничто не требует ответа.",
 }
-MIN_SECONDS, MAX_SECONDS = 5.0, 20.0
+MIN_SECONDS, MAX_SECONDS = 5.0, 25.0  # a calm, slow voice reads the passage in up to about 25 s
 RMS_FLOOR = 0.01          # of full scale; speech is far above
 CLIP_RUN = 10             # this many samples in a row at the limit: clipped
 MODEL = "qwen-talker-1.7b-voicedesign-Q8_0.gguf"
 
 
 def clip_problem(path):
-    """None for a good clip, else the reason (mono 24 kHz 16 bit, 5 to 20 s, not silent, no clipping run)."""
+    """None for a good clip, else the reason (mono 24 kHz 16 bit, 5 to 25 s, not silent, no clipping run)."""
     try:
         with wave.open(path, "rb") as w:
             ch, width, rate, n = w.getnchannels(), w.getsampwidth(), w.getframerate(), w.getnframes()
@@ -101,7 +101,7 @@ def make(lang, tool, talker, codec, out):
         sys.exit(f"no reference text for {lang}")
     os.makedirs(out, exist_ok=True)
     todo = names()
-    for attempt, seed in enumerate((1000, 2000)):
+    for attempt, seed in enumerate((1000, 2000, 3000)):
         for n in todo:
             p = os.path.join(out, n + ".wav")
             if os.path.exists(p):
@@ -117,8 +117,8 @@ def make(lang, tool, talker, codec, out):
         # keep the good ones of the first round: only the failed clips are designed again
         if not bad:
             break
-        if attempt == 1:
-            sys.exit(f"clips that failed twice: {' '.join(bad)}")
+        if attempt == 2:
+            sys.exit(f"clips that failed three times: {' '.join(bad)}")
         todo = bad
     folder = os.path.join(out, lang)
     os.makedirs(folder, exist_ok=True)
