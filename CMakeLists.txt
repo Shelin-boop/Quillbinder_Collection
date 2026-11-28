@@ -244,6 +244,15 @@ if(QB_HAVE_RNP)
                           "-Wl,--exclude-libs,librnp.a:libsexpp.a:libbotan-3.a:libjson-c.a:libbz2.a")
   endif()
   message(STATUS "Encryption: RNP and Botan from ${QB_CRYPTO_DIR}")
+  # Live Sync (0.99.0): Botan's own headers (TLS 1.3, X.509, Argon2) for src/core/collab and the wallet; a pack built
+  # without the modules x509 and tls13 (tools/get-crypto.sh) has no tls.h: then those parts build as "not available"
+  if(EXISTS "${QB_CRYPTO_DIR}/include/botan-3/botan/tls.h" AND EXISTS "${QB_CRYPTO_DIR}/include/botan-3/botan/argon2.h")
+    set(QB_HAVE_BOTAN_TLS ON)
+    target_include_directories(qb_rnp SYSTEM INTERFACE "${QB_CRYPTO_DIR}/include/botan-3")
+    message(STATUS "Live Sync: Botan TLS 1.3, X.509 and Argon2 are in the pack")
+  else()
+    message(WARNING "The encryption pack has no Botan TLS or Argon2 (tools/get-crypto.sh builds them): Live Sync and the wallet are not in this build")
+  endif()
 else()
   message(WARNING "The encryption libraries are missing in ${QB_CRYPTO_DIR} (${QB_CRYPTO_MISSING}; tools/get-crypto.sh on "
                   "Linux): this build has no encryption, and the suite v0990e fails")
@@ -295,7 +304,7 @@ add_library(qbcore STATIC ${CORE_SOURCES}
   # package signatures (0.65.0): Monocypher's Ed25519 check, unchanged third-party C code
   src/core/third_party/monocypher/monocypher.c src/core/third_party/monocypher/monocypher-ed25519.c)
 target_include_directories(qbcore PUBLIC src ${CMAKE_BINARY_DIR}/generated)
-target_link_libraries(qbcore PUBLIC Qt6::Core Qt6::Gui Qt6::Xml ZLIB::ZLIB)
+target_link_libraries(qbcore PUBLIC Qt6::Core Qt6::Gui Qt6::Xml Qt6::Network ZLIB::ZLIB) # (Network: Live Sync, src/core/collab)
 target_link_libraries(qbcore PRIVATE Qt6::GuiPrivate)
 # 0.99.0: the encryption layer (src/core/crypto): RNP (above), the system's key store through QtKeychain 0.18.0
 # (src/third_party/qtkeychain, static, with this Qt; on Linux through Qt D-Bus, which the AppImage carries for Qt GUI)
@@ -303,6 +312,16 @@ target_link_libraries(qbcore PRIVATE Qt6::GuiPrivate)
 if(QB_HAVE_RNP)
   target_link_libraries(qbcore PRIVATE qb_rnp)
   target_compile_definitions(qbcore PRIVATE QB_HAVE_RNP=1)
+  if(QB_HAVE_BOTAN_TLS)
+    target_compile_definitions(qbcore PRIVATE QB_HAVE_BOTAN_TLS=1)
+    # Botan 3 needs C++20; the program is C++17: only the files that include Botan's own headers are compiled as C++20
+    set_source_files_properties(
+      src/core/crypto/Wallet.cpp src/core/collab/net/DeviceIdentity.cpp src/core/collab/net/TlsLink.cpp
+      src/core/collab/net/Pairing.cpp
+      PROPERTIES COMPILE_OPTIONS "$<IF:$<CXX_COMPILER_ID:MSVC>,/std:c++20,-std=c++20>;$<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-fvisibility=hidden>;$<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-fvisibility-inlines-hidden>")
+    # (hidden: the inline parts of Botan's headers that these files instantiate must not be exported by a program that
+    # exports its symbols for plugins; qb_v0990e_tests checks that no Botan name is exported)
+  endif()
 endif()
 option(QB_KEYCHAIN "The system's key store through QtKeychain (off: a build that keeps no passphrase)" ON)
 if(QB_KEYCHAIN)
