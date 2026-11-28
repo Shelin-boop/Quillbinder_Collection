@@ -75,6 +75,7 @@
 - **Posizioni conservate**: ogni documento si apre dove avevi lasciato il cursore, anche dopo aver riaperto il progetto.
 - **Caratteri**: **Formato > Carattere > Installa file di caratteri…** aggiunge caratteri senza uscire dal programma.
 - **Sicurezza**: salvataggio automatico anche mentre continui a scrivere, backup, una copia di riserva del file di progetto, rapporti di arresto anomalo e di blocco (**Aiuto > Risoluzione problemi e sviluppo > Rapporti di arresto anomalo…**) e **Aiuto > Risoluzione problemi e sviluppo > Informazioni di sistema**.
+- **Live Sync** (disattivato finché non lo attivi in **File > Opzioni > Live Sync**): mantiene identico un progetto sui tuoi dispositivi nella stessa rete. Associa i dispositivi una volta (**Associa un dispositivo...**: confronta le sei cifre su entrambi), poi scegli **Condividi questo progetto...** nel menu del pulsante Live Sync della barra degli strumenti e **Unisciti a un progetto...** sull'altro dispositivo. Un solo dispositivo alla volta modifica un documento; gli altri possono chiedere. I file di un progetto non cifrato, e i suoi backup ZIP, non sono cifrati da Live Sync: usa la cifratura propria dei tuoi dispositivi (sezione 21 del manuale).
 
 ### Aggiornamenti e componenti aggiuntivi
 
