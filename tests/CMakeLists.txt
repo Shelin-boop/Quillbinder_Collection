@@ -689,3 +689,10 @@ target_compile_definitions(qb_ls7_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOUR
 # import's folder) go through the gate (xvfb-run -a ./qb_lsroute_tests /tmp/shots)
 add_executable(qb_lsroute_tests lsroute_tests.cpp)
 target_link_libraries(qb_lsroute_tests PRIVATE qbcore Qt6::Test)
+
+# 0.99.0, Live Sync work package 8 (backups and snapshots as jobs of the host): a backup made from a copy that is whole at one commit
+# while commits go on, the state a client sees, failures that are told, snapshot jobs with their locks and their replication,
+# restore as a new project, a security sweep over the network code, and (--measure) the time from a change to the copy on another
+# device with three programs over TLS (xvfb-run -a ./qb_ls8_tests /tmp/shots)
+add_executable(qb_ls8_tests ls8_tests.cpp)
+target_link_libraries(qb_ls8_tests PRIVATE qbcore Qt6::Network)
