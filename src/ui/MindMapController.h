@@ -122,6 +122,7 @@ public:
     static void setDocumentOpener(std::function<void(const QString &)> fn);
 
 signals:
+    void formatStateChanged();   // 0.99.0: the selection, the editing or the notes changed (the format bar follows)
     void inspectorToggled(bool on);
     void footerToggled(bool on);
     void findRequested();

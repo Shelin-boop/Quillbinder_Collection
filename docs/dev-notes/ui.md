@@ -8,8 +8,9 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
   finds it from the widget with the keyboard (a `MindMapView`). Keys are the bar's action keys; the mind map enables only
   bold, italic, underline, strike, textColor(Auto), the four alignments, fontBigger/Smaller, size, clearFormat (a note has no
   font, highlight, list or superscript). In editing, the toggles act on the selected words, the rest on the whole note.
-- The bar's own code (`MainWindow`: the `fmt` lambda, `updateFormatBar`, `editor()`) must ask `forWidget` first, as it asks
-  `objectTextTarget()`; this is the one step that is left.
+- `MainWindow` asks it first (`noteTargetNow()`: the mind map with the keyboard, kept while the keyboard is on a bar or in a
+  popup; the `fmt` lambda and `updateFormatBar`), and follows `MindMapController::formatStateChanged`. The font, size, line and
+  style fields stay greyed for notes (their handlers are in `MainWindowBars.cpp` and act on the editor).
 
 ## 0.99.0: pitfalls found by the first full test
 

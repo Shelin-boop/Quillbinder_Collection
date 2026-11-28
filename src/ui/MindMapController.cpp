@@ -1028,6 +1028,7 @@ void MindMapController::updateActions()
         if (n.isImage())
             images = true;
     en("mm_exportImages", images);
+    emit formatStateChanged();
 }
 
 // ------------------------------------------------------------------ helpers

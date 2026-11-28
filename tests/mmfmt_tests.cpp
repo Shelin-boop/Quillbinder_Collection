@@ -5,6 +5,9 @@
 #include "core/Project.h"
 #include "core/ProjectTemplates.h"
 #include "ui/AppSettings.h"
+#include "ui/BinderPanel.h"
+#include "ui/Inspector.h"
+#include "ui/MainWindow.h"
 #include "ui/MindMapController.h"
 #include "ui/MindMapDoc.h"
 #include "ui/MindMapScene.h"
@@ -280,8 +283,107 @@ int main(int argc, char **argv)
         check(r1 >= 4.5 && r2 >= 4.5, QStringLiteral("board %1: text %2:1 and border %3:1 on the fill").arg(bg.name()).arg(r1, 0, 'f', 1).arg(r2, 0, 'f', 1));
     }
     doc->board.settings.background = oldBg;
+    delete win;
+
+    // ================================================ the real format bar of the main window
+    std::printf("== the main window's format bar on a mind map\n");
+    auto *wp = new MainWindow;
+    MainWindow &w = *wp;
+    w.move(0, 0);
+    w.resize(1400, 860);
+    w.show();
+    w.activateWindow();
+    (void)QTest::qWaitForWindowActive(&w, 2000);
+    check(w.adoptProject(std::move(proj)), QStringLiteral("(project open)"));
+    settle(400);
+    auto bar = [&](const QString &key) -> QAction * {
+        for (QAction *ac : w.findChildren<QAction *>())
+            if (ac->objectName() == key && ac->parent() == &w)
+                return ac;
+        return nullptr;
+    };
+    if (QAction *si = bar(QStringLiteral("showInspector")); si && !si->isChecked())
+        si->trigger();
+    auto *binder = w.findChild<BinderPanel *>();
+    auto *insp = w.findChild<Inspector *>();
+    binder->select({a}, true);
+    settle(300);
+    insp->showTab(Inspector::MindMap);
+    settle(400);
+    MindMapPanel *panel = insp->mindMapPanel();
+    MindMapController *mc = panel ? panel->controller() : nullptr;
+    check(mc != nullptr, QStringLiteral("(the board is in the inspector)"));
+    if (mc) {
+        MindMapScene *sc = panel->view()->boardScene();
+        QUndoStack *us = doc->undoStack();
+        auto nt = [&](int id) { return doc->board.note(id); };
+        for (int i = 1; i <= 3; ++i) {
+            nt(i)->bold = false;
+            nt(i)->italic = false;
+            nt(i)->look.textColor = QColor();
+            nt(i)->align = Align::Left;
+        }
+        sc->endEditing();
+        panel->view()->setFocus();
+        sc->selectIds({1});
+        settle(150);
+        check(bar(QStringLiteral("bold"))->isEnabled() && bar(QStringLiteral("textColor"))->isEnabled() &&
+                  bar(QStringLiteral("alignCenter"))->isEnabled() && bar(QStringLiteral("fontBigger"))->isEnabled(),
+              QStringLiteral("one note: the bar's bold, color, alignment and size buttons are on"));
+        check(!bar(QStringLiteral("superscript"))->isEnabled() && !bar(QStringLiteral("highlight"))->isEnabled() &&
+                  !bar(QStringLiteral("bullets"))->isEnabled(),
+              QStringLiteral("... and what a note cannot hold is greyed, not hidden"));
+        bar(QStringLiteral("bold"))->trigger();
+        settle(50);
+        check(nt(1)->bold && bar(QStringLiteral("bold"))->isChecked(), QStringLiteral("the bar's Bold changes the note, and shows it"),
+              QStringLiteral("bold %1 checked %2 undo %3").arg(nt(1)->bold).arg(bar(QStringLiteral("bold"))->isChecked()).arg(us->index()));
+        bar(QStringLiteral("alignRight"))->trigger();
+        check(nt(1)->align == Align::Right && bar(QStringLiteral("alignRight"))->isChecked() && !bar(QStringLiteral("alignLeft"))->isChecked(),
+              QStringLiteral("the bar's alignment changes the note, and shows it"));
+        const double sz = nt(1)->fontSize;
+        bar(QStringLiteral("fontBigger"))->trigger();
+        check(nt(1)->fontSize > sz, QStringLiteral("the bar's Bigger changes the note's size"));
+        bar(QStringLiteral("textColorAuto"))->trigger();
+        check(!nt(1)->look.textColor.isValid(), QStringLiteral("the bar's Automatic Text Color works on the note"));
+        // three notes
+        sc->endEditing();
+        sc->selectIds({1, 2, 3});
+        settle(150);
+        check(bar(QStringLiteral("bold"))->isEnabled() && !bar(QStringLiteral("bold"))->isChecked(),
+              QStringLiteral("three notes, one bold: the bar shows the neutral state"));
+        nt(1)->bold = false;
+        us->clear();
+        bar(QStringLiteral("italic"))->trigger();
+        settle(50);
+        check(nt(1)->italic && nt(2)->italic && nt(3)->italic && us->index() == 1, QStringLiteral("three notes: the bar's Italic changes all, one undo step"),
+              QStringLiteral("%1%2%3 index %4").arg(nt(1)->italic).arg(nt(2)->italic).arg(nt(3)->italic).arg(us->index()));
+        check(us->undoText() == QLatin1String("Italic"), QStringLiteral("... named after the change"), us->undoText());
+        us->undo();
+        check(!nt(1)->italic && !nt(2)->italic && !nt(3)->italic, QStringLiteral("... one undo puts all three back"));
+        bar(QStringLiteral("alignCenter"))->trigger();
+        bar(QStringLiteral("bold"))->trigger();
+        settle(100);
+        w.grab().save(outDir + QStringLiteral("/bar-three-notes.png"));
+        // a note in editing
+        for (int i = 1; i <= 3; ++i)
+            nt(i)->bold = false;
+        sc->endEditing();
+        sc->selectIds({2});
+        sc->startEditing(2, false);
+        settle(150);
+        if (NoteItem *ni = sc->editingNote()) {
+            QTextCursor c = ni->textItem()->textCursor();
+            c.setPosition(0);
+            c.setPosition(4, QTextCursor::KeepAnchor);
+            ni->textItem()->setTextCursor(c);
+            bar(QStringLiteral("bold"))->trigger();
+            check(ni->textItem()->textCursor().charFormat().fontWeight() >= QFont::Bold && !nt(2)->bold && !nt(1)->bold && !nt(3)->bold,
+                  QStringLiteral("a note in editing: the bar's Bold changes the selected words only"));
+        } else {
+            check(false, QStringLiteral("(a note is being edited)"));
+        }
+    }
     int rc = failures;
     std::printf("%d failure(s)\n", rc);
-    delete win;
     return rc ? 1 : 0;
 }
