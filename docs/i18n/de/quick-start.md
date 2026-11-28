@@ -75,6 +75,7 @@
 - **Gemerkte Stellen**: Jedes Dokument öffnet sich dort, wo Sie den Cursor zuletzt gelassen haben, auch nach dem erneuten Öffnen des Projekts.
 - **Schriften**: **Format > Schrift > Schriftdateien installieren…** fügt Schriften hinzu, ohne das Programm zu verlassen.
 - **Sicherheit**: automatisches Speichern auch während Sie weitertippen, Sicherungen, eine Ersatzkopie der Projektdatei, Absturz- und Hängerberichte (**Hilfe > Fehlersuche und Entwicklung > Absturzberichte…**) und **Hilfe > Fehlersuche und Entwicklung > Systeminformationen**.
+- **Live Sync** (aus, bis Sie es unter **Datei > Einstellungen > Live Sync** einschalten): hält ein Projekt auf Ihren Geräten im selben Netzwerk gleich. Koppeln Sie die Geräte einmal (**Gerät koppeln...**: Vergleichen Sie die sechs Ziffern auf beiden), wählen Sie dann **Dieses Projekt teilen...** im Menü der Live-Sync-Schaltfläche der Symbolleiste und auf dem anderen Gerät **Einem Projekt beitreten...**. Ein Dokument wird jeweils auf einem Gerät bearbeitet; die anderen können anfragen. Die Dateien eines nicht verschlüsselten Projekts und seine ZIP-Sicherungen verschlüsselt Live Sync nicht: Nutzen Sie die eigene Verschlüsselung Ihrer Geräte (Abschnitt 21 des Handbuchs).
 
 ### Updates und Erweiterungen
 
