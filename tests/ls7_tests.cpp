@@ -148,7 +148,7 @@ static void testOff(const QString &tmp, FakeLiveSyncControl &fake)
     w.setCentralWidget(&insp);
     w.show();
     settle();
-    check(a && !a->isVisible(), QStringLiteral("off: the toolbar button is not visible"));
+    check(!a && !ui.button() && bar->actions().isEmpty(), QStringLiteral("off: the toolbar has no Live Sync button at all (it holds what it held before Live Sync)"));
     check(!insp.extraTabVisible(QStringLiteral("livesync")), QStringLiteral("off: the inspector's Live Sync tab is not visible"));
     check(!ui.bars()->isVisible() && ui.barsWidget()->barCount() == 0, QStringLiteral("off: no bar"));
     check(!ui.active(), QStringLiteral("off: the interface says it is not active"));
@@ -157,7 +157,7 @@ static void testOff(const QString &tmp, FakeLiveSyncControl &fake)
     ui.setProject(p.get());
     fake.status.setProject(makeStatus(QStringLiteral("u1"), p->folderPath(), col::ShareRole::Host, col::ShareState::UpToDate));
     settle();
-    check(!a->isVisible() && !insp.extraTabVisible(QStringLiteral("livesync")) && ui.barsWidget()->barCount() == 0,
+    check(bar->actions().isEmpty() && !insp.extraTabVisible(QStringLiteral("livesync")) && ui.barsWidget()->barCount() == 0,
           QStringLiteral("off: even with a shared project in the model nothing shows"));
     check(panel.tree()->lockTip(QStringLiteral("x")).isEmpty(), QStringLiteral("off: no binder mark"));
     fake.status.removeProject(QStringLiteral("u1"));
@@ -321,7 +321,7 @@ static void testWindowParts(const QString &tmp, FakeLiveSyncControl &fake)
     Inspector insp;
     BinderPanel panel;
     LiveSyncUi ui(&w);
-    QAction *act = ui.installToolbarButton(bar);
+    QPointer<QAction> act = ui.installToolbarButton(bar);
     ui.installInspectorTab(&insp);
     ui.attachBinder(&panel);
     lay->addWidget(ui.bars());
@@ -592,7 +592,22 @@ static void testWindowParts(const QString &tmp, FakeLiveSyncControl &fake)
     fake.on = false;
     emit fake.enabledChanged();
     settle(50);
-    check(!act->isVisible() && !insp.extraTabVisible(QStringLiteral("livesync")), QStringLiteral("off again: button and tab go"));
+    check(!act && bar->actions().isEmpty() && !insp.extraTabVisible(QStringLiteral("livesync")), QStringLiteral("off again: button and tab go"));
+    // switching on adds the button again, at the end of the bar; a bar built again keeps it
+    fake.on = true;
+    emit fake.enabledChanged();
+    settle(50);
+    check(bar->actions().size() == 1 && bar->actions().first()->objectName() == QLatin1String("liveSyncButtonAction") && ui.button(),
+          QStringLiteral("on again: the button is added to the bar"));
+    auto *other = bar->addAction(QStringLiteral("Other"));
+    bar->removeAction(bar->actions().first());
+    ui.syncToolbarButton();
+    check(bar->actions().size() == 2 && bar->actions().first() == other && bar->actions().last()->objectName() == QLatin1String("liveSyncButtonAction"),
+          QStringLiteral("a bar cleared and filled again gets the button back at its end"));
+    fake.on = false;
+    emit fake.enabledChanged();
+    settle(50);
+    check(bar->actions().size() == 1 && bar->actions().first() == other, QStringLiteral("off again: only the button goes, the other actions stay"));
     fake.on = true;
 }
 

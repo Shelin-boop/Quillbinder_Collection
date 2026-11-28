@@ -16,7 +16,10 @@
 
 #include <QIcon>
 #include <QObject>
+#include <QAction>
 #include <QPointer>
+#include <QToolBar>
+#include <QToolButton>
 
 class QAction;
 class QMenu;
@@ -46,6 +49,7 @@ public:
     ~LiveSyncUi() override;
 
     // adds the button at the end of the bar; the returned action shows and hides it
+    void syncToolbarButton();
     QAction *installToolbarButton(QToolBar *bar);
     void installInspectorTab(Inspector *inspector);
     void attachBinder(BinderPanel *binder);
@@ -81,8 +85,9 @@ private:
     QPointer<Project> m_project;
     QString m_docId;
     bool m_marked = false;   // the binder shows our marks
-    QToolButton *m_button = nullptr;
-    QAction *m_buttonAction = nullptr;
+    QPointer<QToolButton> m_button;
+    QPointer<QAction> m_buttonAction;
+    QPointer<QToolBar> m_bar;
     QMenu *m_menu = nullptr;
     QAction *m_share = nullptr;
     QAction *m_join = nullptr;

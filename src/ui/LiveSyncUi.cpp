@@ -173,7 +173,17 @@ LiveSyncUi::~LiveSyncUi()
 
 QAction *LiveSyncUi::installToolbarButton(QToolBar *bar)
 {
-    if (!m_button) {
+    // the button exists only while Live Sync is on: with it off the bar holds exactly what it held before Live Sync
+    m_bar = bar;
+    refreshButton();
+    return m_buttonAction.data();
+}
+
+void LiveSyncUi::syncToolbarButton()
+{
+    if (!m_bar)
+        return;
+    if (active() && !m_buttonAction) {
         m_button = new QToolButton;
         m_button->setObjectName(QStringLiteral("liveSyncButton"));
         m_button->setMenu(m_menu);
@@ -182,11 +192,14 @@ QAction *LiveSyncUi::installToolbarButton(QToolBar *bar)
         m_button->setAutoRaise(true);
         if (windowcare::tabletMode())
             m_button->setMinimumSize(48, 48); // a finger's size
+        m_buttonAction = m_bar->addWidget(m_button); // the end of the bar; the action owns the button
+        m_buttonAction->setObjectName(QStringLiteral("liveSyncButtonAction"));
+    } else if (active() && m_buttonAction && !m_bar->actions().contains(m_buttonAction)) {
+        m_bar->addAction(m_buttonAction); // the bar was built again (Customize Toolbars, Standard Set)
+    } else if (!active() && m_buttonAction) {
+        m_bar->removeAction(m_buttonAction);
+        delete m_buttonAction.data(); // takes the button with it (the menu belongs to this object)
     }
-    m_buttonAction = bar->addWidget(m_button);
-    m_buttonAction->setObjectName(QStringLiteral("liveSyncButtonAction"));
-    refreshButton();
-    return m_buttonAction;
 }
 
 void LiveSyncUi::installInspectorTab(Inspector *inspector)
@@ -252,8 +265,7 @@ void LiveSyncUi::refresh()
 
 void LiveSyncUi::refreshButton()
 {
-    if (m_buttonAction)
-        m_buttonAction->setVisible(active());
+    syncToolbarButton();
     if (!m_button)
         return;
     LiveSyncControl &c = liveSyncControl();

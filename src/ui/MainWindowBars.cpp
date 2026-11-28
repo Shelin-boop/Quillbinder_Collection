@@ -37,6 +37,7 @@
 #include "ui/ThemeDialogs.h"
 #include "ui/BarDock.h"
 #include "ui/GripBar.h"
+#include "ui/LiveSyncUi.h"
 #include "ui/ToolbarConfig.h"
 #include "ui/Windows.h"
 
@@ -1196,6 +1197,8 @@ void MainWindow::rebuildToolBars()
     applyToolbarSize();
     installToolbarDropTargets();
     placeToolButtons();
+    if (m_liveSyncUi)
+        m_liveSyncUi->syncToolbarButton(); // (0.99.0) the Live Sync button comes back after a rebuilt bar, only while Live Sync is on
 }
 
 // 0.99.0: one size for all bars (View > Toolbars > Toolbar Size, the bars' right-click menu, Customize Toolbars): the icons
