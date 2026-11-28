@@ -75,6 +75,7 @@
 - **Emplacements mémorisés** : chaque document s'ouvre là où vous avez laissé le curseur, y compris après la réouverture du projet.
 - **Polices** : **Format > Police > Installer des fichiers de police…** ajoute des polices sans quitter le logiciel.
 - **Sécurité** : enregistrement automatique même pendant que vous continuez à taper, sauvegardes, copie de secours du fichier de projet, rapports de plantage et de blocage (**Aide > Dépannage et développement > Rapports de plantage…**), et **Aide > Dépannage et développement > Informations système**.
+- **Live Sync** (désactivé tant que vous ne l'activez pas dans **Fichier > Options > Live Sync**) : maintient un projet identique sur vos appareils du même réseau. Associez les appareils une fois (**Associer un appareil...** : comparez les six chiffres sur les deux), puis choisissez **Partager ce projet...** dans le menu du bouton Live Sync de la barre d'outils et **Rejoindre un projet...** sur l'autre appareil. Un seul appareil modifie un document à la fois ; les autres peuvent le demander. Les fichiers d'un projet non chiffré, et ses sauvegardes ZIP, ne sont pas chiffrés par Live Sync : utilisez le chiffrement propre à vos appareils (section 21 du manuel).
 
 ### Mises à jour et modules
 
