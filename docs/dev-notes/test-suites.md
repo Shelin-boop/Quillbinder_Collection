@@ -2,6 +2,26 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## ls5 (0.99.0: Live Sync, the service and the windows)
+
+`qb_ls5_tests` (needs a display, e.g. under xvfb; the service and window parts need the encryption pack with Botan TLS and are
+skipped without it; the last part starts the built program `quillbinder --live-sync-service`, so build the `quillbinder` target
+first). Checks: the registry (two registries of one folder see each other, the claim of one host session per project, a damaged file
+kept aside); the gate's service scope (a write inside it reaches the disk, a window's write inside it is captured); change sets
+as units (an edit per document, a created document with its text in one unit, the project file never sent, derived files left out);
+the local link; the status model (the fake, then the service's real one: states, participants and what they edit, lock holders,
+an open edit request, "not connected"); two `Service` objects in one process on localhost (own folders, ephemeral identities):
+pairing with the code, sharing, joining, two windows editing different chapters, the host's `Project` recomputing counts and the
+list of documents, the replica equal to the host's folder, an edit request and the hand-over, the host going away; a `MainWindow`
+of a shared project (the in-process service): the first key waits for the lock and is typed after the grant, a remote commit in an
+open document, the other device refused a lock held here, close and release; a service process reached through its socket;
+who hosts through the service (a planned hand-over between two in-process services, a window on each side, the commit ledger, an
+unknown device announcing hosting shown in the status model, a failover with a `ManualClock`); and two real service processes
+(identities made by a first short run, `peers.json` and the registries written by the test): hand-over, a commit through the new
+host, the new host killed, the failover after about 30 s of real time (this part takes about 40 s). Also: the real screens of two programs in one process (pairing window with matching codes, Share This Project, Hosted Projects access, Join window, copy opened as a follower); its second half (parallel edits, Decline and Take Over) runs only with `QB_LS5_SCREENS_FULL=1` and is not reliable yet. `QB_LS5_PART=<small|services|hosting|window|screens|encrypted|process|processes>` runs one part.
+Pitfalls: services of one test process share the gate and the vault (they are one program); a window must be given the follower
+before `Project::open`; the TLS peers are on 127.0.0.1 with port 0; `QB_LS_PORT`, `QB_LS_IDLE_MS`, `QB_LS_NO_DISCOVERY` are the
+service process's test switches (`QB_LS_PEERS="<device id>=<address>:<port>;..."` gives the addresses where discovery is off).
 ## ls6 (0.99.0: Live Sync, who hosts)
 
 `qb_ls6_tests` (no display; about 20 s, nearly all of it Botan signing; skipped except the drafts store without the encryption pack

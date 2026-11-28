@@ -298,6 +298,7 @@ MainWindow::MainWindow()
     connectPane(m_panes[0]);
     connectPane(m_panes[1]);
     dnd::installFileProvider(); // documents dragged to the file manager become files
+    QTimer::singleShot(0, this, [this] { liveSyncInstallUi(); }); // 0.99.0 (Live Sync): after the bars exist
     new SplitEqualizer(m_editorSplit); // a double click on the divider gives both editors the same room
 
     m_panes[1]->setStateSuffix(QStringLiteral("1"));
@@ -356,6 +357,8 @@ MainWindow::MainWindow()
     connect(m_binder, &BinderPanel::selectionChanged, this, [this](const QList<BinderItem *> &items) {
         if (!m_project || m_updatingUi)
             return;
+        if (m_liveSyncUi) // 0.99.0 (Live Sync): the tab and the bars follow the chosen document
+            liveSyncSelected(items.size() == 1 ? items.first()->id : QString());
         EditorPane *target = binderTarget();
         if (m_quickSearchMark && !m_binder->showsSearchResults()) {
             // the matches of a quick search are marked until another document is chosen
@@ -3296,7 +3299,9 @@ bool MainWindow::openProject(const QString &path)
     if (m_project && QFileInfo(m_project->indexPath()) == QFileInfo(file))
         return true;
     // lock check: another window, or another computer through a sync program (0.64: who, since when)
-    if (!confirmLock(QFileInfo(file).absolutePath() + QLatin1String("/settings/lock")))
+    // 0.99.0 (Live Sync): a shared project has the service's locks instead; the sync program's lock is not used
+    const bool liveShared = liveSyncShared(file);
+    if (!liveShared && !confirmLock(QFileInfo(file).absolutePath() + QLatin1String("/settings/lock")))
         return false;
     // 0.99.0 (item 113): an encrypted project is unlocked first (the passphrase kept on this device, else asked), or the
     // writer is told that the key is not here (with Import Keys); nothing in the project is changed until then. A
@@ -3333,8 +3338,10 @@ bool MainWindow::openProject(const QString &path)
     }
     if (m_project && !closeProject())
         return false;
+    if (liveShared && !liveSyncBegin(file)) // 0.99.0 (Live Sync): the window is a follower of the service
+        return false;
     QString err;
-    auto p = Project::open(file, &err);
+    auto p = Project::open(file, &err, liveSyncFollower());
     if (!p && QFile::exists(Project::spareCopyOf(file))) {
         // the project file is damaged: the copy kept when the project last opened (0.20)
         QMessageBox box(QMessageBox::Warning, tr("Open Project"),
@@ -3355,7 +3362,7 @@ bool MainWindow::openProject(const QString &path)
             QMessageBox::warning(this, tr("Open Project"), err);
             return false;
         }
-        p = Project::open(file, &err);
+        p = Project::open(file, &err, liveSyncFollower());
         if (p) {
             p->openNotice = tr("The project was opened from the copy of its project file. The damaged file is kept as %1.").arg(keptAs);
             QString folder;
@@ -3366,12 +3373,16 @@ bool MainWindow::openProject(const QString &path)
         }
     }
     if (!p) {
+        liveSyncEnd();
         QMessageBox::warning(this, tr("Open Project"), err);
         return false;
     }
     QString notice = p->openNotice;
-    if (!adoptProject(std::move(p)))
+    if (!adoptProject(std::move(p))) {
+        liveSyncEnd();
         return false;
+    }
+    liveSyncAdopted();
     // object files that could not be read (0.20): they stay as they are, the writer is told
     if (m_project && !m_project->objects()->warnings().isEmpty())
         notice += (notice.isEmpty() ? QString() : QStringLiteral("\n\n")) + m_project->objects()->warnings().join(QLatin1Char('\n'));
@@ -3415,7 +3426,8 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
     look::activate(proj, look::settle(proj, isNew));
     // 0.62: the project's own settings (File > Options, "This project") over the program's
     settingslayer::activate(settingslayer::fileFor(proj->settingsDir()));
-    takeLocks();             // 0.64: names this computer, renewed every few minutes
+    if (!m_liveSync)         // (0.99.0: a shared project has Live Sync's locks instead)
+        takeLocks();         // 0.64: names this computer, renewed every few minutes
     connectSyncSafety(proj); // versions kept on conflicts, texts not arrived yet
     proj->setAutosaveDelay(qMax(1, AppSettings::instance().autosaveSeconds) * 1000);
     // a project imported from Scrivener by a version before 0.14.0 still has Scrivener's style
@@ -3789,6 +3801,7 @@ bool MainWindow::closeProject()
             tellBackupProblem(ok, err, tr("when the project closed"));
         tellBackupCleanup(notes, true);
     }
+    liveSyncEnd(); // 0.99.0 (Live Sync): what was captured is handed over, the locks are given up
     releaseLocks();
     for (QWidget *w : QApplication::topLevelWidgets())
         if (auto *qr = qobject_cast<QuickRefWindow *>(w))

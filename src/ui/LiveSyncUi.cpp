@@ -203,7 +203,9 @@ void LiveSyncUi::attachBinder(BinderPanel *binder)
     refreshMarks();
 }
 
-QWidget *LiveSyncUi::bars() const { return m_bars; }
+QWidget *LiveSyncUi::bars() const { return m_bars.data(); }
+LiveSyncTab *LiveSyncUi::tab() const { return m_tab.data(); }
+LiveSyncBars *LiveSyncUi::barsWidget() const { return m_bars.data(); }
 
 void LiveSyncUi::setProject(Project *project)
 {

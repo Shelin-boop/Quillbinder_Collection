@@ -59,11 +59,16 @@ void ClientSession::fail(const QString &code, const QString &why)
         m_link->close(code);
 }
 
+QString ClientSession::statePath() const
+{
+    return m_cfg.folder + (m_cfg.loopback ? QStringLiteral("/livesync-local/loopback.json") : QStringLiteral("/livesync-replica.json"));
+}
+
 bool ClientSession::open(QString *error)
 {
     QDir().mkpath(m_cfg.folder);
     QByteArray raw;
-    const QString path = m_cfg.folder + QStringLiteral("/livesync-replica.json");
+    const QString path = statePath();
     if (QFileInfo::exists(path)) {
         if (!vault::readFile(path, &raw)) {
             if (error)
@@ -86,6 +91,20 @@ bool ClientSession::open(QString *error)
     return m_outbox->load(error);
 }
 
+int ClientSession::pendingToDrafts(const QString &reason)
+{
+    int n = 0;
+    const QList<OutboxEntry> list = m_outbox->pending();
+    for (const OutboxEntry &e : list)
+        if (m_outbox->toDraft(e.opId, reason)) {
+            ++n;
+            emit draftKept(e.opId, reason);
+        }
+    m_inFlight.clear();
+    m_requestSent = false;
+    return n;
+}
+
 bool ClientSession::saveReplicaState(bool ready, QString *error)
 {
     QJsonObject r;
@@ -97,7 +116,8 @@ bool ClientSession::saveReplicaState(bool ready, QString *error)
                                                {QStringLiteral("ready"), ready},
                                                {QStringLiteral("revs"), r}}))
                             .toJson(QJsonDocument::Compact);
-    if (!safesave::writeFile(m_cfg.folder + QStringLiteral("/livesync-replica.json"), b, error))
+    QDir().mkpath(QFileInfo(statePath()).absolutePath());
+    if (!safesave::writeFile(statePath(), b, error))
         return false;
     m_ready = ready;
     return true;
@@ -255,6 +275,7 @@ void ClientSession::onJoined(const QJsonObject &m)
         epochDiffers = true;
     }
     m_epoch = epoch;
+    emit joinedInfo(m.value(QStringLiteral("membership")).toObject(), m.value(QStringLiteral("proofs")).toArray());
     // the locks: ours are taken as they are (the host kept them), those missing are asked for again where nothing changed
     const QJsonArray table = m.value(QStringLiteral("locks")).toArray();
     QSet<QString> mine;
@@ -310,6 +331,11 @@ void ClientSession::onError(const QJsonObject &m)
     const QString re = m.value(QStringLiteral("re")).toString();
     if (m_hub)
         m_hub->requestFailed(re, code);
+    // the host does not take this device into the project (yet): the session stops; the service tries again later
+    if (code == QLatin1String("NO_ACCESS") || code == QLatin1String("UNKNOWN_PROJECT") || code == QLatin1String("UNSUPPORTED_VERSION")) {
+        fail(code, m.value(QStringLiteral("text")).toString());
+        return;
+    }
     if (m_lockReqs.contains(re)) {
         for (const QString &r : m_lockReqs.take(re))
             emit lockDenied(r, QString(), code);
@@ -388,6 +414,11 @@ void ClientSession::onManifest(const QJsonObject &m)
     if (m_target.epoch != m_epoch && m_epoch != 0)
         emit epochChanged(m_epoch, m_target.epoch);
     m_epoch = m_target.epoch;
+    if (m_cfg.loopback) { // the files are the host's own: nothing to compare or fetch
+        m_plan = ManifestDiff();
+        pumpDownloads();
+        return;
+    }
     Manifest local;
     QString err;
     if (!Manifest::scan(m_cfg.folder, localDir(m_cfg.folder) + QStringLiteral("/hashes.json"), {}, &local, &err)) {
@@ -448,6 +479,10 @@ void ClientSession::onBlobFailed(const QString &hash, const QString &code)
 
 bool ClientSession::placeFiles(const QJsonArray &files, QString *error)
 {
+    if (m_cfg.loopback) {
+        Q_UNUSED(error);
+        return true; // the host wrote them
+    }
     savebatch::Batch batch(m_cfg.folder, m_cfg.folder + QStringLiteral("/settings/journal.json"));
     QStringList removes, trees;
     for (const QJsonValue &v : files) {
@@ -570,7 +605,7 @@ void ClientSession::applyEvent(QJsonObject ev)
     bool waiting = false;
     for (const QJsonValue &v : ev.value(QStringLiteral("files")).toArray()) {
         const QJsonObject f = v.toObject();
-        if (f.value(QStringLiteral("kind")).toString() != QLatin1String("put"))
+        if (m_cfg.loopback || f.value(QStringLiteral("kind")).toString() != QLatin1String("put"))
             continue;
         const QString h = f.value(QStringLiteral("hash")).toString();
         if (!isHashHex(h)) {

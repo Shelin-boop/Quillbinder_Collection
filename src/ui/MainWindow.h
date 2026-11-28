@@ -38,6 +38,9 @@ class QCompleter;
 class QStandardItemModel;
 
 namespace qb {
+namespace livesync {
+class LiveSyncUi;
+}
 namespace script {
 struct Format;
 }
@@ -51,6 +54,7 @@ class StylesPanel;
 class FormatFindWindow;
 class Inspector;
 class FocusLine;
+class LiveSyncGlue;
 namespace handwriting { class HandwritingController; }
 namespace readaloud { class Controller; }
 class TextEditor;
@@ -568,6 +572,18 @@ private:
     bool objectFormat(const QString &key, ObjectTextEdit *o);
 
     std::unique_ptr<Project> m_project;
+    // 0.99.0 (Live Sync, MainWindowLiveSync.cpp): this window's project is shared; the window is a follower of the service
+    friend class LiveSyncGlue;
+    LiveSyncGlue *m_liveSync = nullptr;
+    livesync::LiveSyncUi *m_liveSyncUi = nullptr; // the button, the tab, the bars and the marks (0.99.0)
+    bool m_liveSyncReopening = false;
+    void liveSyncInstallUi();
+    void liveSyncSelected(const QString &docId);
+    bool liveSyncShared(const QString &projectFile) const;
+    bool liveSyncBegin(const QString &projectFile);
+    collab::Follower *liveSyncFollower() const;
+    void liveSyncAdopted();
+    void liveSyncEnd();
     BinderPanel *m_binder = nullptr;
     Inspector *m_inspector = nullptr;
     readaloud::Controller *m_readAloud = nullptr;   // 0.99.0 (item 114): the Read Aloud toolbar and its reading

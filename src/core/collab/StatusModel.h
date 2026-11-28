@@ -104,6 +104,7 @@ struct ProjectStatus {
     QString readOnlyReason;   // part of a sentence ("" when it may be changed)
     QList<ParticipantStatus> participants; // the host first, then the others by name; this device included
     BackupStatus backup;
+    QStringList notices;      // warnings of this project (an unknown device announced hosting ...), newest last; additive field
 };
 
 // A paired device (the options page's list, the join dialog, the access list of the hosted projects).

@@ -140,8 +140,13 @@ void update(QTextDocument *doc)
 
 // ------------------------------------------------------------------ editor
 
+namespace {
+QList<TextEditor *> &allEditors();
+}
+
 TextEditor::TextEditor(QWidget *parent) : QTextEdit(parent)
 {
+    allEditors().append(this); // 0.99.0 (Live Sync)
     zoom::skip(this); // the zoom of a text comes from its document (DocumentStore), not from an area around it
     setLineWrapMode(QTextEdit::FixedPixelWidth);
     setLineWrapColumnOrWidth(600);
@@ -167,6 +172,8 @@ TextEditor::TextEditor(QWidget *parent) : QTextEdit(parent)
 
 TextEditor::~TextEditor()
 {
+    allEditors().removeAll(this);
+    qDeleteAll(m_heldKeys);
     widths::unregisterEditor(this);
     // The right-click menu is a child of the editor. A command chosen in it may replace the editor
     // (Split at Selection loads the new document, Open Link another one): the editor is deleted
@@ -717,8 +724,117 @@ bool TextEditor::makeDocumentLink()
     return true;
 }
 
+// ---------------------------------------------------------------- 0.99.0 (Live Sync): the lock at the first key
+
+namespace {
+QHash<const Project *, TextEditor::LockGate> &lockGates()
+{
+    static QHash<const Project *, TextEditor::LockGate> g;
+    return g;
+}
+const TextEditor::LockGate &lockGateFor(const Project *p)
+{
+    static const TextEditor::LockGate none;
+    auto it = lockGates().constFind(p);
+    return it == lockGates().constEnd() ? none : it.value();
+}
+QList<TextEditor *> &allEditors()
+{
+    static QList<TextEditor *> l;
+    return l;
+}
+// a key that changes the text (not a movement, a selection or a shortcut that only reads)
+bool keyChangesText(const QKeyEvent *e)
+{
+    if (e->matches(QKeySequence::Paste) || e->matches(QKeySequence::Cut) || e->matches(QKeySequence::Undo) || e->matches(QKeySequence::Redo)
+        || e->matches(QKeySequence::Delete) || e->matches(QKeySequence::DeleteStartOfWord) || e->matches(QKeySequence::DeleteEndOfWord)
+        || e->matches(QKeySequence::DeleteEndOfLine))
+        return true;
+    switch (e->key()) {
+    case Qt::Key_Backspace:
+    case Qt::Key_Delete:
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+    case Qt::Key_Tab:
+        return !(e->modifiers() & (Qt::ControlModifier | Qt::MetaModifier)) || e->key() == Qt::Key_Backspace || e->key() == Qt::Key_Delete;
+    default:
+        break;
+    }
+    if (e->modifiers() & (Qt::ControlModifier | Qt::MetaModifier) && !(e->modifiers() & Qt::AltModifier))
+        return false;
+    return !e->text().isEmpty() && e->text().at(0).isPrint();
+}
+} // namespace
+
+void TextEditor::setLockGate(const Project *project, LockGate gate)
+{
+    if (gate)
+        lockGates().insert(project, std::move(gate));
+    else
+        lockGates().remove(project);
+}
+bool TextEditor::hasLockGate() { return !lockGates().isEmpty(); }
+
+bool TextEditor::shown(const Project *project, const QString &docId)
+{
+    for (TextEditor *t : allEditors())
+        if (t->m_project == project && t->m_item && t->m_item->id == docId && t->isVisible())
+            return true;
+    return false;
+}
+
+void TextEditor::lockResult(const Project *project, const QString &docId, bool granted)
+{
+    const QList<TextEditor *> editors = allEditors();
+    for (TextEditor *t : editors)
+        if (t->m_project == project && t->m_item && t->m_item->id == docId)
+            t->replayHeldKeys(granted);
+}
+
+// true: the change may go on now (no gate, a document this does not concern, or the lock is held)
+bool TextEditor::needsLock(bool notesOnly)
+{
+    Q_UNUSED(notesOnly);
+    const LockGate &gate = lockGateFor(m_project);
+    if (!gate || !m_item || !m_project || m_replaying || isReadOnly())
+        return false;
+    return !gate(m_item->id, m_isNotes);
+}
+
+void TextEditor::replayHeldKeys(bool granted)
+{
+    if (m_heldTimer)
+        m_heldTimer->stop();
+    const QList<QKeyEvent *> keys = m_heldKeys;
+    m_heldKeys.clear();
+    if (!granted) {
+        qDeleteAll(keys);
+        return;
+    }
+    m_replaying = true;
+    for (QKeyEvent *k : keys) {
+        QCoreApplication::sendEvent(this, k);
+        delete k;
+    }
+    m_replaying = false;
+}
+
 void TextEditor::keyPressEvent(QKeyEvent *e)
 {
+    // 0.99.0 (Live Sync): the first key that changes a shared document asks for its lock; the key waits for the answer
+    if (!m_replaying && lockGateFor(m_project) && keyChangesText(e) && needsLock()) {
+        m_heldKeys.append(new QKeyEvent(e->type(), e->key(), e->modifiers(), e->nativeScanCode(), e->nativeVirtualKey(),
+                                        e->nativeModifiers(), e->text(), e->isAutoRepeat(), e->count()));
+        if (!m_heldTimer) {
+            m_heldTimer = new QTimer(this);
+            m_heldTimer->setSingleShot(true);
+            m_heldTimer->setInterval(1500);
+            connect(m_heldTimer, &QTimer::timeout, this, [this] { replayHeldKeys(false); });
+        }
+        m_heldTimer->start();
+        e->accept();
+        return;
+    }
     const bool noMods = !(e->modifiers() & (Qt::ControlModifier | Qt::AltModifier | Qt::MetaModifier));
     // 0.90.1 (the usability review of 0.90.0, UR-12): the undo step a key makes is named after it
     if (e->matches(QKeySequence::Paste))
@@ -1329,6 +1445,8 @@ void TextEditor::pasteKeepingFormatting()
 
 void TextEditor::insertFromMimeData(const QMimeData *source)
 {
+    if (!m_replaying && lockGateFor(m_project) && needsLock())
+        return; // 0.99.0 (Live Sync): the lock was asked for; the paste is done again by the writer
 #ifdef Q_OS_ANDROID
     source = withOwnCopy(source, true);
 #endif
@@ -1454,6 +1572,10 @@ void TextEditor::dragMoveEvent(QDragMoveEvent *e)
 
 void TextEditor::dropEvent(QDropEvent *e)
 {
+    if (lockGateFor(m_project) && needsLock()) { // 0.99.0 (Live Sync): see insertFromMimeData
+        e->ignore();
+        return;
+    }
     if (e->mimeData()->hasFormat(QString::fromLatin1(kItemsMime)) && m_project) {
         const QList<BinderItem *> items = BinderModel::itemsFromMime(e->mimeData(), m_project);
         QTextCursor sel = textCursor();

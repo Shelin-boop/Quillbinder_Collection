@@ -669,6 +669,13 @@ target_compile_definitions(qb_ls3_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOUR
 # (./qb_ls4_tests /tmp/shots)
 add_executable(qb_ls4_tests ls4_tests.cpp)
 target_link_libraries(qb_ls4_tests PRIVATE qbcore Qt6::Network)
+
+# 0.99.0, Live Sync work package 5 (the service and the windows): the registry, the gate's service scope, change sets as units, the
+# local link, the status model, two services on localhost, a window of a shared project and a real service process
+# (xvfb-run -a ./qb_ls5_tests /tmp/shots)
+add_executable(qb_ls5_tests ls5_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_ls5_tests PRIVATE qbui Qt6::Test Qt6::Network)
+target_compile_definitions(qb_ls5_tests PRIVATE QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # 0.99.0 (the format bar's controls act on the notes of a mind map, NoteFormatTarget; several notes at once) (xvfb-run -a ./qb_mmfmt_tests /tmp/shots)
 add_executable(qb_mmfmt_tests mmfmt_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_mmfmt_tests PRIVATE qbui Qt6::Test)

@@ -13,6 +13,7 @@ namespace net {
 
 struct PeerRecord {
     QByteArray pin; // 32 bytes
+    QByteArray publicKey; // DER SubjectPublicKeyInfo (empty for a device paired before 0.99.0 test builds)
     QString name;
     QString instanceId;
     qint64 pairedAt = 0; // seconds since 1970

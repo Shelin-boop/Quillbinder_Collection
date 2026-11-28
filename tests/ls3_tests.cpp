@@ -915,6 +915,7 @@ static const AuditEntry kAudit[] = {
     {"src/core/collab/Blobs.cpp", "outside", "partial blob files in Live Sync's own folder, renamed when whole"},
     {"src/core/collab/HostBackup.cpp", "outside", "the host's own copies for a backup in livesync/freeze-<seq>/ (hard links or copies, removed afterwards) and its job marks in livesync/; the host is no follower"},
     {"src/core/collab/Drafts.cpp", "outside", "recovery drafts in the device-local folder (writes through safesave)"},
+    {"src/core/collab/Service.cpp", "outside", "the service writes only Live Sync's own files (authority, state, log, replica state) and removes them when sharing stops; every project file goes through the host session and the backend"},
     {"src/core/collab/net/DeviceIdentity.cpp", "outside", "the device key and certificate in the program's data folder"},
     {"src/core/collab/net/PeerStore.cpp", "outside", "the paired devices in the program's data folder"},
     {"src/core/crypto/KeyStore.cpp", "outside", "the key store's test file and the wallet hook, outside projects"},

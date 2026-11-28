@@ -41,6 +41,10 @@ public:
         QString deviceName; // shown to the others
         QString session = QStringLiteral("main");
         Clock *clock = nullptr;
+        // The folder is the host's own project folder (a window of the hosting device): the files are already there and
+        // are never written or fetched; only the bookkeeping (sequence, revisions, locks, the outbox) is kept, in
+        // livesync-local/loopback.json instead of livesync-replica.json.
+        bool loopback = false;
     };
     explicit ClientSession(const Config &config, QObject *parent = nullptr);
     ~ClientSession() override;
@@ -61,6 +65,7 @@ public:
     QString role() const { return m_role; }
     qint64 revOf(const QString &resource) const { return m_revs.value(resource); }
     Outbox &outbox() { return *m_outbox; }
+    const Outbox &outbox() const { return *m_outbox; }
     QString folder() const { return m_cfg.folder; }
 
     // ---- changes
@@ -79,6 +84,36 @@ public:
     // who holds the resource now (""): a device of another session
     QString heldElsewhere(const QString &resource) const { return m_others.value(resource).name; }
     bool isUnreachable(const QString &resource) const { return m_others.value(resource).unreachable; }
+    // the locks of other devices as this session knows them: resource -> the holder's name; and the resources of this session's own
+    QHash<QString, QString> othersLocks() const
+    {
+        QHash<QString, QString> h;
+        for (auto it = m_others.constBegin(); it != m_others.constEnd(); ++it)
+            h.insert(it.key(), it->name);
+        return h;
+    }
+    QHash<QString, QString> othersDevices() const
+    {
+        QHash<QString, QString> h;
+        for (auto it = m_others.constBegin(); it != m_others.constEnd(); ++it)
+            h.insert(it.key(), it->device);
+        return h;
+    }
+    QStringList unreachableLocks() const
+    {
+        QStringList l;
+        for (auto it = m_others.constBegin(); it != m_others.constEnd(); ++it)
+            if (it->unreachable)
+                l << it.key();
+        return l;
+    }
+    QStringList heldLocks() const { return m_held.keys(); }
+    // the sequence of the host's newest commit as far as known
+    qint64 headSeq() const { return m_head; }
+    QHash<QString, qint64> revs() const { return m_revs; }
+    // every change request not yet confirmed becomes a recovery draft (the old host took commits after the split); the number
+    int pendingToDrafts(const QString &reason);
+    bool isLoopback() const { return m_cfg.loopback; }
     // edit requests
     void askToEdit(const QString &resource);
     void cancelAsk(const QString &resource);
@@ -119,6 +154,8 @@ signals:
     void editAsked(const QString &resource, const QString &askerName, qint64 waitMs);
     void editStatus(const QString &resource, bool declined, qint64 waitMs, bool mayForce, const QString &holder);
     void epochChanged(qint64 from, qint64 to);
+    // the host's answer to the join: its signed membership and the chain of proofs of its authority (package 6 reads them)
+    void joinedInfo(const QJsonObject &membership, const QJsonArray &proofs);
     void failedWith(const QString &code, const QString &why);
 
 private:
@@ -158,6 +195,7 @@ private:
     QStringList resourcesOfUnits(const QJsonArray &units) const;
     void toDraft(const QString &opId, const QString &reason);
     bool saveReplicaState(bool ready, QString *error = nullptr);
+    QString statePath() const;
     void dropHeldFor(const QString &resource, const QString &reason);
     void flushReleases();
     QString sendLockRequest(const QStringList &resources);

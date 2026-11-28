@@ -61,8 +61,8 @@ public:
 
     QToolButton *button() const { return m_button; }
     QMenu *menu() const { return m_menu; }
-    LiveSyncTab *tab() const { return m_tab; }
-    LiveSyncBars *barsWidget() const { return m_bars; }
+    LiveSyncTab *tab() const;
+    LiveSyncBars *barsWidget() const;
     // the project's uuid as the model knows it ("" when not shared)
     QString projectUuid() const;
 
@@ -91,8 +91,8 @@ private:
     QAction *m_hosted = nullptr;
     QAction *m_drafts = nullptr;
     QAction *m_stop = nullptr;
-    LiveSyncTab *m_tab = nullptr;
-    LiveSyncBars *m_bars = nullptr;
+    QPointer<LiveSyncTab> m_tab;     // (the window may delete them first)
+    QPointer<LiveSyncBars> m_bars;
     QPointer<Inspector> m_inspector;
     QPointer<BinderPanel> m_binder;
 };

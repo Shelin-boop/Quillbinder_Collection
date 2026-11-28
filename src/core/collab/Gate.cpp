@@ -77,6 +77,17 @@ QString Follower::whyNotEditable(const QString &id, bool notes) const
 
 // ---------------------------------------------------------------- Gate
 
+// ---------------------------------------------------------------- service scope
+
+static thread_local int t_serviceDepth = 0;
+
+ServiceScope::ServiceScope() { ++t_serviceDepth; }
+ServiceScope::~ServiceScope() { --t_serviceDepth; }
+bool ServiceScope::active() { return t_serviceDepth > 0; }
+
+WindowScope::WindowScope() : m_saved(t_serviceDepth) { t_serviceDepth = 0; }
+WindowScope::~WindowScope() { t_serviceDepth = m_saved; }
+
 Gate &gate()
 {
     static Gate g;
@@ -120,7 +131,7 @@ Follower *Gate::followerOfFolder(const QString &projectFolder) const
 Gate::Decision Gate::decide(const QString &path, bool tree) const
 {
     Decision d;
-    if (!active() || path.isEmpty())
+    if (!active() || path.isEmpty() || t_serviceDepth > 0)
         return d;
     const QString c = cleanAbsolute(path);
     QMutexLocker l(&m_lock);

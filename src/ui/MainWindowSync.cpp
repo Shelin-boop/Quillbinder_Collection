@@ -202,6 +202,8 @@ void MainWindow::releaseLocks()
 
 void MainWindow::startWorkMarks()
 {
+    if (m_liveSync) // 0.99.0 (Live Sync): a shared project has Live Sync's own marks; nothing is written beside it
+        return;
     if (!m_workDebounce) {
         m_workDebounce = new QTimer(this);
         m_workDebounce->setSingleShot(true);
@@ -249,6 +251,8 @@ QStringList MainWindow::workDocs() const
 
 void MainWindow::writeWorkMarks(bool renew)
 {
+    if (m_liveSync) // 0.99.0 (Live Sync): a shared project has Live Sync's own marks; nothing is written beside it
+        return;
     if (!m_project)
         return;
     const QStringList docs = workDocs();
@@ -263,6 +267,8 @@ void MainWindow::writeWorkMarks(bool renew)
 
 void MainWindow::readWorkMarks()
 {
+    if (m_liveSync) // 0.99.0 (Live Sync): a shared project has Live Sync's own marks; nothing is written beside it
+        return;
     if (!m_project)
         return;
     QHash<QString, QString> tips;

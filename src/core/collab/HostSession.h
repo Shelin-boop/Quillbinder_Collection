@@ -28,6 +28,24 @@ namespace qb {
 namespace collab {
 
 enum class Role { None, Reader, Editor };
+
+// The host's program computes data of its own when it saves a project: modified times, word and character counts of the
+// documents, the list of documents with their titles. A host that has a Project (the service of a device, package 5)
+// plugs it in here, so that those values are recomputed by the Project's own code when the host applies a commit, and
+// every replica receives the result as it receives any file. Without a backend the host writes what the commit says and
+// leaves derived data as it was.
+class HostBackend {
+public:
+    virtual ~HostBackend() = default;
+    // the paths (relative to the project folder) this backend may rewrite at a commit, besides the project file itself;
+    // they are listed in the commit's log record and event with their hash as it is afterwards
+    virtual QStringList derivedPaths() const = 0;
+    // Called when a commit's batch is on disk (the files, the project file made by the operations, the state and log) and
+    // before anyone is told. `putPaths` and `removedPaths` are the commit's files; `ops` its operations. The backend takes
+    // the new state into its Project, computes what depends on it and rewrites the project file and its derived paths. A
+    // false return (with a reason) leaves the commit as it is, valid but with stale derived data, and is logged.
+    virtual bool afterCommit(const OpList &ops, const QStringList &putPaths, const QStringList &removedPaths, QString *error) = 0;
+};
 QString roleName(Role r);
 
 constexpr int kKeepCommits = 10000;
@@ -59,6 +77,12 @@ public:
     void addLink(net::Link *link);
     int linkCount() const { return m_peers.size(); }
     int joinedCount() const;
+    // the connections that joined: device, session, name and role (for the status model)
+    struct PeerSummary {
+        QString deviceId, session, name;
+        Role role = Role::None;
+    };
+    QList<PeerSummary> joinedPeers() const;
 
     // ---- who may do what
     void setRole(const QString &deviceId, Role role) { m_roles.insert(deviceId, role); }
@@ -68,6 +92,10 @@ public:
     void setProofs(const QJsonArray &proofs) { m_proofs = proofs; }
     // while false no new lock is granted (HOST_BUSY): a planned handover drains
     void setAcceptingLocks(bool on) { m_acceptLocks = on; }
+    // while false a change request is answered HOST_BUSY (a planned handover is preparing: no commits)
+    void setAcceptingCommits(bool on) { m_acceptCommits = on; }
+    // sends a message to the first joined connection of this device; false when there is none
+    bool sendToDevice(const QString &deviceId, const QJsonObject &message);
     void setEpoch(qint64 epoch);
 
     // ---- hooks
@@ -80,6 +108,9 @@ public:
     using Extension = std::function<bool(const QString &deviceId, net::Link *link, const QJsonObject &message)>;
     void setExtensionHandler(Extension handler) { m_extension = std::move(handler); }
     void setFreeSpaceProbe(std::function<qint64()> probe) { m_free = std::move(probe); }
+    // see HostBackend; not owned
+    void setBackend(HostBackend *backend) { m_backend = backend; }
+    HostBackend *backend() const { return m_backend; }
 
     // ---- state
     QString folder() const { return m_folder; }
@@ -172,6 +203,7 @@ private:
     qint64 m_horizon = 0;
     bool m_started = false;
     bool m_acceptLocks = true;
+    bool m_acceptCommits = true;
     bool m_broken = false;
     QString m_indexPath;
     QHash<QString, qint64> m_revs;
@@ -188,6 +220,7 @@ private:
     QJsonObject m_membership;
     QJsonArray m_proofs;
     SnapshotHook m_snapshot;
+    HostBackend *m_backend = nullptr;
     Extension m_extension;
     std::function<qint64()> m_free;
     int m_sincePrune = 0;
