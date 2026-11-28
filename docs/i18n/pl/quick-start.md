@@ -1,6 +1,6 @@
 # {{APP}} – krótki przewodnik
 
-{{APP}} to program do pisania długich tekstów. Jeśli pracowałeś w innych programach opartych na segregatorze, większość rzeczy wyda ci się znajoma: segregator po lewej, edytor pośrodku, inspektor po prawej, a na końcu kompilacja. Ten przewodnik pokazuje, gdzie są najważniejsze ustawienia, i podsumowuje, co potrafi {{APP}}. Pełny podręcznik znajdziesz w **Pomoc > Podręcznik użytkownika** (**F1**; ma spis treści i wyszukiwarkę); krótki przegląd funkcji, których możesz jeszcze nie znać, jest w **Pomoc > Projekt powitalny**.
+{{APP}} to program do pisania długich tekstów. Jeśli pracowałeś(-aś) w innych programach opartych na segregatorze, większość rzeczy wyda ci się znajoma: segregator po lewej, edytor pośrodku, inspektor po prawej, a na końcu kompilacja. Ten przewodnik pokazuje, gdzie są najważniejsze ustawienia, i podsumowuje, co potrafi {{APP}}. Pełny podręcznik znajdziesz w **Pomoc > Podręcznik użytkownika** (**F1**; ma spis treści i wyszukiwarkę); krótki przegląd funkcji, których możesz jeszcze nie znać, jest w **Pomoc > Projekt powitalny**.
 
 ---
 
@@ -28,17 +28,17 @@
 | Paski narzędzi | **Widok > Paski narzędzi > Dostosuj paski narzędzi…** (lub kliknięcie prawym przyciskiem myszy na pasku) |
 | Pasek ikon | **Widok > Paski narzędzi > Pasek ikon**; **Wybierz ikony dla paska ikon…** |
 | Skróty klawiaturowe | **Plik > Opcje > Klawiatura** (wyszukiwanie, naciskanie nowych klawiszy, eksport i import); **Pomoc > Skróty klawiaturowe…** wyświetla ich listę |
-| Szukanie polecenia w menu | **Pomoc > Znajdź polecenie…** (wpisz część nazwy; Return uruchamia polecenie) |
+| Szukanie polecenia w menu | **Pomoc > Znajdź polecenie…** (wpisz część nazwy; Enter uruchamia polecenie) |
 | Układy okna | **Widok > Układ** (siedem wbudowanych; możesz zapisać własne) |
 | Autozapis, ostatnie projekty, dane autora | **Plik > Opcje > Ogólne** |
 | Kopie zapasowe | **Plik > Opcje > Kopia zapasowa** (kiedy, ile, gdzie); **Plik > Kopia zapasowa** tworzy kopię od razu |
 | Pisownia i poprawki w trakcie pisania | **Plik > Opcje > Poprawki** |
-| Gdzie otwierają się odnośniki, klawisz Return, tryb pisania, odtwarzanie | **Plik > Opcje > Zachowanie** |
+| Gdzie otwierają się odnośniki, klawisz Enter, tryb pisania, odtwarzanie | **Plik > Opcje > Zachowanie** |
 | Ustawienia importu i eksportu | **Plik > Opcje > Udostępnianie** |
 | Mapy myśli, obiekty, dodatki, raporty o awariach | **Plik > Opcje > Dodatkowe** |
 | Etykiety, status, typy sekcji, własne metadane, foldery specjalne | **Projekt > Ustawienia projektu** |
 | Opcje tylko dla jednego projektu | **Plik > Opcje**, **Ustawienia dla: Ten projekt** na górze; czy ustawienia projektu mają pierwszeństwo: **Plik > Opcje > Ogólne** |
-| Przeniesienie ustawień na inny komputer | **Plik > Opcje > Zarządzanie > Zapisz opcje do pliku… / Wczytaj opcje z pliku…** |
+| Przeniesienie ustawień na inny komputer | **Plik > Opcje > Zarządzanie > Eksportuj profil… / Importuj profil…** |
 | Wszystko z powrotem do standardu | **Plik > Opcje > Domyślne** (twoje projekty, motywy, układy i skróty pozostają) |
 
 ---
@@ -68,13 +68,13 @@
 ### Poza zwykłym zakresem
 
 - **Mapy myśli**: tablica notatek, linii i strzałek dla każdego dokumentu i folderu (przycisk **Mapa myśli** w inspektorze). **Pomoc > Pomoc do map myśli** pokazuje, jak to działa.
-- **Obiekty**: postacie, miejsca, środowiska, ciekawe punkty, pogoda i własne kategorie, każdy z kartą pól i powiązaniami między nimi (przycisk **Obiekty** w inspektorze lub **Okno > Obiekty…**).
+- **Obiekty**: postacie, miejsca, środowiska, ciekawe punkty, pogoda i własne kategorie, każdy z kartą pól i powiązaniami między nimi (przycisk **Obiekty** w inspektorze lub **Okno > Obiekty**).
 - **Tabele i obrazy**: **Wstaw > Tabela…** z gotowymi wzorami lub własnymi, **Format > Tabela** dla wierszy, kolumn, scalonych komórek i kolorów; obrazy obok tekstu z opływającym je tekstem, podpisy oraz opisy, które e-booki i pliki Worda zachowują jako tekst alternatywny (kliknij obraz prawym przyciskiem myszy, **Obraz…**).
 - **Pasek ikon**: do dziesięciu ikon dokumentów, każda jednym kliknięciem. **Dokumenty > Zmień ikonę** tworzy też ikony z tekstu lub z twoich własnych obrazów.
 - **Powiększenie osobno dla każdej części**: segregator, edytory, części inspektora, tablica korkowa, konspekt i mapy myśli mają każde własne powiększenie.
-- **Zapamiętane miejsca**: każdy dokument otwiera się tam, gdzie zostawiłeś kursor, także po ponownym otwarciu projektu.
+- **Zapamiętane miejsca**: każdy dokument otwiera się tam, gdzie zostawiłeś(-aś) kursor, także po ponownym otwarciu projektu.
 - **Czcionki**: **Format > Czcionka > Zainstaluj pliki czcionek…** dodaje czcionki bez opuszczania programu.
-- **Bezpieczeństwo**: autozapis także w trakcie pisania, kopie zapasowe, zapasowa kopia pliku projektu, raporty o awariach i zawieszeniach (**Pomoc > Rozwiązywanie problemów i programowanie > Raporty o awariach…**) oraz **Pomoc > Rozwiązywanie problemów i programowanie > Informacje o systemie…**.
+- **Bezpieczeństwo**: autozapis także w trakcie pisania, kopie zapasowe, zapasowa kopia pliku projektu, raporty o awariach i zawieszeniach (**Pomoc > Rozwiązywanie problemów i programowanie > Raporty o awariach…**) oraz **Pomoc > Rozwiązywanie problemów i programowanie > Informacje o systemie**.
 
 ### Aktualizacje i dodatki
 
@@ -88,5 +88,5 @@
 - **Pomoc > Projekt powitalny**: krótki projekt, który pokazuje funkcje wymienione w części „Poza zwykłym zakresem” i pozwala je wypróbować.
 - **Pomoc > Pomoc do map myśli**: notatki, linie, strzałki i kształty, z obrazkami i tablicą do ćwiczeń.
 - **Pomoc > Lista wszystkich symboli zastępczych** i **Pomoc > Skróty klawiaturowe…**
-- **Pomoc > Licencje stron trzecich…**: licencje części innych projektów, których używa {{APP}}.
+- **Pomoc > Licencje stron trzecich**: licencje części innych projektów, których używa {{APP}}.
 - **Pomoc > O programie {{APP}}**: wersja i licencja. {{APP}} jest wolnym oprogramowaniem na licencji Apache 2.0.

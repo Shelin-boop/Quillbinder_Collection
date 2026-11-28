@@ -642,6 +642,22 @@
      "sha256": "1883beeed99348fc35e23dd225e9082f93f6f8c109330a33d935baa8acdbfd94"
     }
    ]
+  },
+  "qwen-voicedesign": {
+   "repo": "Serveurperso/Qwen3-TTS-GGUF",
+   "revision": "b7ee2e8c7459c3bea99da23e3d178125a7d1713c",
+   "files": [
+    {
+     "path": "qwen-talker-1.7b-voicedesign-Q8_0.gguf",
+     "size": 2042833824,
+     "sha256": "575610ab1ddcca4dca6bd9a64bcd859d93bbad8764f9cab24e1dbc0c51f62276"
+    },
+    {
+     "path": "qwen-tokenizer-12hz-Q8_0.gguf",
+     "size": 291150624,
+     "sha256": "1883beeed99348fc35e23dd225e9082f93f6f8c109330a33d935baa8acdbfd94"
+    }
+   ]
   }
  }
 }

@@ -201,8 +201,7 @@ bool choose(QWidget *parent, const QString &id, bool ask)
     bool discard = false;
     if (own > 0 && ask && (id != s.theme || id != pl.theme)) {
         QMessageBox box(QMessageBox::Question, QObject::tr("Change Theme"),
-                        QObject::tr("You have changed %1 of your own on top of the current theme.")
-                            .arg(text::plural(own, QObject::tr("color or font"), QObject::tr("colors and fonts"))),
+                        QObject::tr("You have changed %Ln color(s) or font(s) of your own on top of the current theme.", "", own),
                         QMessageBox::NoButton, parent);
         box.setInformativeText(QObject::tr("Keep them with the new theme, or use the theme as it is? "
                                            "(Save Current Look as Theme keeps the present look for later.)"));
@@ -495,11 +494,14 @@ void ThemeManagerDialog::updateButtons()
         const QString kindText = kind == theme::Kind::BuiltIn ? tr("Built-in theme")
                                  : kind == theme::Kind::Addon ? tr("Theme of an add-on")
                                                               : tr("Your own theme");
-        QString what = t.followDesktop && t.colors.isEmpty()
-                           ? tr("uses the colors of the desktop (KDE color scheme)")
-                           : tr("sets %1").arg(text::plural(int(t.colors.size()), tr("color"), tr("colors")));
+        QStringList parts;
+        if (t.followDesktop && t.colors.isEmpty())
+            parts << tr("uses the colors of the desktop (KDE color scheme)");
+        else
+            parts << tr("%Ln color(s) set", "", int(t.colors.size()));
         if (!t.fonts.isEmpty())
-            what += tr(" and %1").arg(text::plural(int(t.fonts.size()), tr("font"), tr("fonts")));
+            parts << tr("%Ln font(s) set", "", int(t.fonts.size()));
+        const QString what = QLocale().createSeparatedList(parts);
         m_info->setText(QStringLiteral("%1: %2.").arg(kindText, what));
     } else {
         m_preview->setColors({});

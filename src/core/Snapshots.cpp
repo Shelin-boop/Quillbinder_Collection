@@ -9,17 +9,48 @@
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
+#include <QHash>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QRegularExpression>
-#include <QSaveFile>
 #include <QTextDocument>
 #include <functional>
 #include <vector>
 
 namespace qb {
 namespace snapshots {
+
+// 0.99.0 (Live Sync): the hooks of the windows of shared projects, by project folder (see Snapshots.h)
+static QHash<QString, RemoteJobs *> &remoteTable()
+{
+    static QHash<QString, RemoteJobs *> table;
+    return table;
+}
+static QString folderKey(const QString &folder) { return QDir::cleanPath(QFileInfo(folder).absoluteFilePath()); }
+void setRemoteJobs(const QString &projectFolder, RemoteJobs *jobs)
+{
+    if (jobs)
+        remoteTable().insert(folderKey(projectFolder), jobs);
+    else
+        remoteTable().remove(folderKey(projectFolder));
+}
+RemoteJobs *remoteJobsFor(const QString &projectFolder) { return remoteTable().value(folderKey(projectFolder), nullptr); }
+
+// A follower's change of snapshots goes to the host. Returns true when the call was handled here (its result in *ok).
+static bool viaHost(Project *p, bool *ok, QString *error, const std::function<bool(RemoteJobs *, QString *)> &call)
+{
+    if (!p->isFollower())
+        return false;
+    RemoteJobs *jobs = remoteJobsFor(p->folderPath());
+    QString why;
+    if (!jobs)
+        why = QObject::tr("Snapshots of a shared project are made by the device that hosts it, which cannot be reached now.");
+    *ok = jobs && call(jobs, &why);
+    if (!*ok && error && !why.isEmpty())
+        *error = why;
+    return true;
+}
 
 // 0.81.0 (audit of 0.80.0, F-04): a list of titles that is there but cannot be read is told from one that is missing.
 // Before, a damaged index.json counted as empty, and the next snapshot wrote a new list with only its own title:
@@ -59,13 +90,13 @@ static QJsonObject readIndex(const QString &dir, bool *damaged = nullptr)
 
 static bool writeIndex(const QString &dir, const QJsonObject &o, QString *error)
 {
-    QSaveFile f(QDir(dir).filePath(QStringLiteral("index.json")));
-    const QByteArray data = QJsonDocument(o).toJson();
-    if (!f.open(QIODevice::WriteOnly) || safesave::write(f, data) != data.size() || !safesave::commit(f)) {
+    // 0.99.0 (Live Sync): through safesave::writeFile, which asks the write gate (a follower's folder never gets here: its
+    // snapshot changes are the host's jobs) and seals the file of an encrypted project as before
+    const QString path = QDir(dir).filePath(QStringLiteral("index.json"));
+    QString why;
+    if (!safesave::writeFile(path, QJsonDocument(o).toJson(), &why)) {
         if (error)
-            *error = f.errorString().isEmpty() || f.errorString() == QLatin1String("Unknown error")
-                         ? QObject::tr("Cannot write %1").arg(QDir::toNativeSeparators(QDir(dir).filePath(QStringLiteral("index.json"))))
-                         : f.errorString();
+            *error = why.isEmpty() ? QObject::tr("Cannot write %1").arg(QDir::toNativeSeparators(path)) : why;
         return false;
     }
     return true;
@@ -124,6 +155,10 @@ bool sameAsNewest(Project *p, const QString &docId)
 
 bool take(Project *p, const QString &docId, const QString &title, QString *error, QTextDocument *from)
 {
+    bool remoteOk = false;
+    // (the text a follower's window may hold unsaved is not sent: the host keeps the document's last committed text)
+    if (viaHost(p, &remoteOk, error, [&](RemoteJobs *j, QString *why) { return j->take(docId, title, why); }))
+        return remoteOk;
     BinderItem *it = p->item(docId);
     if (!it || !it->hasText())
         return false;
@@ -137,13 +172,13 @@ bool take(Project *p, const QString &docId, const QString &title, QString *error
         name = now.toString(QStringLiteral("yyyyMMdd-HHmmss")) + QLatin1Char('.') + p->docs()->extension();
         now = now.addSecs(1);
     } while (QFile::exists(QDir(dir).filePath(name)));
-    QSaveFile f(QDir(dir).filePath(name));
-    if (!f.open(QIODevice::WriteOnly) || safesave::write(f, data) != data.size() || !safesave::commit(f)) {
-        if (error)   // 0.64.2: the file's name when Qt gives no reason
-            *error = f.errorString().isEmpty() || f.errorString() == QLatin1String("Unknown error")
-                         ? QObject::tr("Cannot write %1").arg(QDir::toNativeSeparators(QDir(dir).filePath(name)))
-                         : f.errorString();
-        return false;
+    {
+        QString why; // 0.99.0: through safesave::writeFile (the write gate); 0.64.2: the file's name when Qt gives no reason
+        if (!safesave::writeFile(QDir(dir).filePath(name), data, &why)) {
+            if (error)
+                *error = why.isEmpty() ? QObject::tr("Cannot write %1").arg(QDir::toNativeSeparators(QDir(dir).filePath(name))) : why;
+            return false;
+        }
     }
     QString why;
     const QString shown = title.isEmpty() ? QObject::tr("Untitled Snapshot") : title;
@@ -189,8 +224,11 @@ bool load(Project *p, const Snapshot &s, QTextDocument *into, QString *error)
 
 bool remove(Project *p, const Snapshot &s)
 {
+    bool remoteOk = false;
+    if (viaHost(p, &remoteOk, nullptr, [&](RemoteJobs *j, QString *why) { return j->remove(s.id, QFileInfo(s.file).fileName(), why); }))
+        return remoteOk;
     const QString dir = QFileInfo(s.file).absolutePath();
-    const bool ok = QFile::remove(s.file);
+    const bool ok = safesave::removeFile(s.file); // 0.99.0: through the write gate
     if (ok) // a title left in the list for a file that is gone does no harm
         updateIndex(dir, [&](QJsonObject &idx) { idx.remove(QFileInfo(s.file).fileName()); }, nullptr);
     if (BinderItem *it = p->item(s.id)) {
@@ -221,6 +259,11 @@ Totals totals(Project *p)
 
 int removeAll(Project *p, QString *error)
 {
+    if (p->isFollower()) { // 0.99.0: Delete Old Snapshots of a shared project is not offered to a follower in this version
+        if (error)
+            *error = QObject::tr("The snapshots of a shared project are deleted on the device that hosts it.");
+        return 0;
+    }
     const Totals before = totals(p);
     QDir root(p->snapshotsDir(QString()));
     QStringList failed;
@@ -238,14 +281,20 @@ int removeAll(Project *p, QString *error)
     return before.snapshots - totals(p).snapshots;
 }
 
-bool setTitle(Project *, const Snapshot &s, const QString &title, QString *error)
+bool setTitle(Project *p, const Snapshot &s, const QString &title, QString *error)
 {
+    bool remoteOk = false;
+    if (viaHost(p, &remoteOk, error, [&](RemoteJobs *j, QString *why) { return j->setTitle(s.id, QFileInfo(s.file).fileName(), title, why); }))
+        return remoteOk;
     const QString dir = QFileInfo(s.file).absolutePath();
     return updateIndex(dir, [&](QJsonObject &idx) { idx.insert(QFileInfo(s.file).fileName(), title); }, error);
 }
 
 bool rollBack(Project *p, const Snapshot &s, QString *error, bool allowEmpty, QString *keptCopy)
 {
+    bool remoteOk = false;
+    if (viaHost(p, &remoteOk, error, [&](RemoteJobs *j, QString *why) { return j->rollBack(s.id, QFileInfo(s.file).fileName(), allowEmpty, why); }))
+        return remoteOk;
     QTextDocument tmp;
     if (!load(p, s, &tmp, error))
         return false;

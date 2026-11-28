@@ -235,6 +235,8 @@ static void footerChecks(const QString &W)
     settle(200);
     w.editorPane(0)->setViewMode(ViewMode::Corkboard);
     settle(300);
+    // the bar is laid out a moment after the view changes: wait for it (a loaded machine needs more than 300 ms)
+    QTest::qWaitFor([&] { return fs->isVisible() && text->isVisible() && text->text() == fs->saveText(); }, 3000);
     check(fs->isVisible() && text->isVisible() && text->text() == fs->saveText() && !fs->saveText().isEmpty(),
           QStringLiteral("the corkboard's footer bar holds the save text as well"),
           QStringLiteral("bar %1, text %2: \"%3\", save text \"%4\"").arg(fs->isVisible()).arg(text->isVisible()).arg(text->text(), fs->saveText()));
@@ -354,7 +356,7 @@ static void reportChecks(MainWindow &w, bool withProject)
     for (QAction *m : w.menuBar()->actions())
         if (m->menu() && m->menu()->title().contains(QLatin1String("Help")))
             inHelp = m->menu()->actions().contains(a);
-    check(a && inHelp && a->isEnabled() && a->text().startsWith(QLatin1String("Report a Problem")),
+    check(a && inHelp && a->isEnabled() && QString(a->text()).remove(QLatin1Char('&')).startsWith(QLatin1String("Report a Problem")),
           QStringLiteral("Help > Report a Problem... is there and enabled %1").arg(withProject ? QStringLiteral("(project open)") : QStringLiteral("(no project)")));
 }
 

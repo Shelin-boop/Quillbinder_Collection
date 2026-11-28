@@ -185,46 +185,77 @@ if(NOT Qt6_VERSION VERSION_EQUAL QB_QT_VERSION)
                       "(tools/get-qt.sh, or -DQB_QT_DIR=<folder of Qt ${QB_QT_VERSION}>)")
 endif()
 find_package(ZLIB REQUIRED)
-# 0.99.0 (to-do item 113): the built-in encryption, OpenPGP through RNP with Botan, linked statically from the pack of
-# tools/get-crypto.sh (QB_CRYPTO_DIR, default build/crypto), so that the program gets no new shared library. RNP takes
-# the system's zlib (already the program's; the pack's own libz.a is for shared objects only) and the pack's bzip2.
-# The archives' symbols are not exported by the program (--exclude-libs), so that no library the program loads binds to
-# them. Without the pack (Windows and Android until their parts add it) the layer builds without RNP and every call
-# says "no encryption" (src/core/crypto/OpenPgp.h); the suite v0990e then fails on Linux.
+# 0.99.0 (to-do item 113): the built-in encryption, OpenPGP through RNP with Botan, linked statically from a prefix
+# (QB_CRYPTO_DIR, default build/crypto) so that the program gets no new shared library. The prefix comes from
+# tools/get-crypto.sh on Linux, packaging/windows/win-crypto.sh on Windows (MSVC .lib files) and
+# packaging/android/android-crypto.sh on Android (the NDK's static .a files, one prefix per ABI).
+# Linux: RNP takes the system's zlib (already the program's; the pack's own libz.a is for shared objects only) and the
+# pack's bzip2; the archives' symbols are not exported by the program (--exclude-libs), so that no library the program
+# loads binds to them. Windows: RNP_STATIC (the headers say dllimport without it), vcpkg's zlib (find_package above),
+# and the system libraries Botan and RNP call. Android: the NDK's own zlib (-lz) and the same --exclude-libs.
+# Without the libraries the layer builds without RNP and every call says "no encryption" (src/core/crypto/OpenPgp.h);
+# the suite v0990e then fails.
 set(QB_HAVE_RNP OFF)
-if(NOT WIN32 AND NOT ANDROID)
-  if(NOT QB_CRYPTO_DIR)
-    if(DEFINED ENV{QB_CRYPTO_DIR})
-      set(QB_CRYPTO_DIR "$ENV{QB_CRYPTO_DIR}")
-    else()
-      set(QB_CRYPTO_DIR "${CMAKE_SOURCE_DIR}/build/crypto")
-    endif()
+if(NOT QB_CRYPTO_DIR)
+  if(DEFINED ENV{QB_CRYPTO_DIR})
+    set(QB_CRYPTO_DIR "$ENV{QB_CRYPTO_DIR}")
+  else()
+    set(QB_CRYPTO_DIR "${CMAKE_SOURCE_DIR}/build/crypto")
   endif()
-  set(QB_CRYPTO_DIR "${QB_CRYPTO_DIR}" CACHE PATH "The encryption libraries (RNP, Botan), tools/get-crypto.sh")
-  set(QB_CRYPTO_ARCHIVES rnp sexpp botan-3 json-c bz2)
-  set(QB_CRYPTO_FILES "")
-  foreach(lib ${QB_CRYPTO_ARCHIVES})
-    list(APPEND QB_CRYPTO_FILES "${QB_CRYPTO_DIR}/lib/lib${lib}.a")
-  endforeach()
-  set(QB_HAVE_RNP ON)
-  foreach(f ${QB_CRYPTO_FILES} "${QB_CRYPTO_DIR}/include/rnp/rnp.h")
-    if(NOT EXISTS "${f}")
-      set(QB_HAVE_RNP OFF)
+endif()
+set(QB_CRYPTO_DIR "${QB_CRYPTO_DIR}" CACHE PATH "The encryption libraries (RNP, Botan), tools/get-crypto.sh")
+set(QB_CRYPTO_ARCHIVES rnp sexpp botan-3 json-c bz2)
+set(QB_CRYPTO_FILES "")
+set(QB_CRYPTO_MISSING "")
+foreach(lib ${QB_CRYPTO_ARCHIVES})
+  # the file names per system: lib<name>.a (Linux, Android); MSVC's .lib files with or without the "lib" prefix
+  if(WIN32)
+    set(_names "lib${lib}.lib" "${lib}.lib" "${lib}-static.lib")
+  else()
+    set(_names "lib${lib}.a")
+  endif()
+  set(_found "")
+  foreach(n ${_names})
+    if(NOT _found AND EXISTS "${QB_CRYPTO_DIR}/lib/${n}")
+      set(_found "${QB_CRYPTO_DIR}/lib/${n}")
     endif()
   endforeach()
-  if(QB_HAVE_RNP)
+  if(_found)
+    list(APPEND QB_CRYPTO_FILES "${_found}")
+  else()
+    list(APPEND QB_CRYPTO_MISSING "${lib}")
+  endif()
+endforeach()
+if(NOT QB_CRYPTO_MISSING AND EXISTS "${QB_CRYPTO_DIR}/include/rnp/rnp.h")
+  set(QB_HAVE_RNP ON)
+endif()
+if(QB_HAVE_RNP)
+  add_library(qb_rnp INTERFACE)
+  target_include_directories(qb_rnp SYSTEM INTERFACE "${QB_CRYPTO_DIR}/include")
+  if(WIN32)
+    target_compile_definitions(qb_rnp INTERFACE RNP_STATIC)
+    target_link_libraries(qb_rnp INTERFACE ${QB_CRYPTO_FILES} ZLIB::ZLIB bcrypt advapi32 crypt32 user32 ws2_32)
+  else()
     find_package(Threads REQUIRED)
-    add_library(qb_rnp INTERFACE)
-    target_include_directories(qb_rnp SYSTEM INTERFACE "${QB_CRYPTO_DIR}/include")
     # (as link items, not link options: they reach the programs through the static qbcore too; "-lz" once more after the
-    # archives, because CMake keeps only the first place of the zlib that qbcore names before them)
+    # archives, because CMake keeps only the first place of the zlib that qbcore names before them; on Android it is the
+    # NDK's zlib)
     target_link_libraries(qb_rnp INTERFACE ${QB_CRYPTO_FILES} -lz Threads::Threads
                           "-Wl,--exclude-libs,librnp.a:libsexpp.a:libbotan-3.a:libjson-c.a:libbz2.a")
-    message(STATUS "Encryption: RNP and Botan from ${QB_CRYPTO_DIR}")
-  else()
-    message(WARNING "The encryption libraries are missing in ${QB_CRYPTO_DIR} (tools/get-crypto.sh): this build has no "
-                    "encryption, and the suite v0990e fails")
   endif()
+  message(STATUS "Encryption: RNP and Botan from ${QB_CRYPTO_DIR}")
+  # Live Sync (0.99.0): Botan's own headers (TLS 1.3, X.509, Argon2) for src/core/collab and the wallet; a pack built
+  # without the modules x509 and tls13 (tools/get-crypto.sh) has no tls.h: then those parts build as "not available"
+  if(EXISTS "${QB_CRYPTO_DIR}/include/botan-3/botan/tls.h" AND EXISTS "${QB_CRYPTO_DIR}/include/botan-3/botan/argon2.h")
+    set(QB_HAVE_BOTAN_TLS ON)
+    target_include_directories(qb_rnp SYSTEM INTERFACE "${QB_CRYPTO_DIR}/include/botan-3")
+    message(STATUS "Live Sync: Botan TLS 1.3, X.509 and Argon2 are in the pack")
+  else()
+    message(WARNING "The encryption pack has no Botan TLS or Argon2 (tools/get-crypto.sh builds them): Live Sync and the wallet are not in this build")
+  endif()
+else()
+  message(WARNING "The encryption libraries are missing in ${QB_CRYPTO_DIR} (${QB_CRYPTO_MISSING}; tools/get-crypto.sh on "
+                  "Linux): this build has no encryption, and the suite v0990e fails")
 endif()
 find_package(PkgConfig)
 # Not on Android (A0): pkg-config there would find the build machine's own Hunspell; the Android build names
@@ -261,19 +292,22 @@ file(GLOB_RECURSE CORE_SOURCES CONFIGURE_DEPENDS
   src/core/*.cpp src/core/*.h src/text/*.cpp src/text/*.h
   src/compile/*.cpp src/compile/*.h src/import/*.cpp src/import/*.h)
 # 0.99.0: the files of one system each (SystemMemory<System>.cpp, KeepAlive*.cpp): only the system's own is compiled
-list(FILTER CORE_SOURCES EXCLUDE REGEX "src/core/(SystemMemory(Linux|Win|Android)|KeepAlive(None|Android))\\.cpp$")
+list(FILTER CORE_SOURCES EXCLUDE REGEX "src/core/(SystemMemory(Linux|Win|Android)|KeepAlive(None|Android))\\.cpp$|src/core/collab/net/MulticastLock(None|Android)\\.cpp$")
 if(ANDROID)
-  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryAndroid.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveAndroid.cpp)
+  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryAndroid.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveAndroid.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/collab/net/MulticastLockAndroid.cpp)
 elseif(WIN32)
-  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryWin.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveNone.cpp)
+  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryWin.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveNone.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/collab/net/MulticastLockNone.cpp)
 else()
-  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryLinux.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveNone.cpp)
+  list(APPEND CORE_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/core/SystemMemoryLinux.cpp ${CMAKE_CURRENT_SOURCE_DIR}/src/core/KeepAliveNone.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/core/collab/net/MulticastLockNone.cpp)
 endif()
 add_library(qbcore STATIC ${CORE_SOURCES}
   # package signatures (0.65.0): Monocypher's Ed25519 check, unchanged third-party C code
   src/core/third_party/monocypher/monocypher.c src/core/third_party/monocypher/monocypher-ed25519.c)
 target_include_directories(qbcore PUBLIC src ${CMAKE_BINARY_DIR}/generated)
-target_link_libraries(qbcore PUBLIC Qt6::Core Qt6::Gui Qt6::Xml ZLIB::ZLIB)
+target_link_libraries(qbcore PUBLIC Qt6::Core Qt6::Gui Qt6::Xml Qt6::Network ZLIB::ZLIB) # (Network: Live Sync, src/core/collab)
 target_link_libraries(qbcore PRIVATE Qt6::GuiPrivate)
 # 0.99.0: the encryption layer (src/core/crypto): RNP (above), the system's key store through QtKeychain 0.18.0
 # (src/third_party/qtkeychain, static, with this Qt; on Linux through Qt D-Bus, which the AppImage carries for Qt GUI)
@@ -281,6 +315,16 @@ target_link_libraries(qbcore PRIVATE Qt6::GuiPrivate)
 if(QB_HAVE_RNP)
   target_link_libraries(qbcore PRIVATE qb_rnp)
   target_compile_definitions(qbcore PRIVATE QB_HAVE_RNP=1)
+  if(QB_HAVE_BOTAN_TLS)
+    target_compile_definitions(qbcore PRIVATE QB_HAVE_BOTAN_TLS=1)
+    # Botan 3 needs C++20; the program is C++17: only the files that include Botan's own headers are compiled as C++20
+    set_source_files_properties(
+      src/core/crypto/Wallet.cpp src/core/collab/net/DeviceIdentity.cpp src/core/collab/net/TlsLink.cpp
+      src/core/collab/net/Pairing.cpp
+      PROPERTIES COMPILE_OPTIONS "$<IF:$<CXX_COMPILER_ID:MSVC>,/std:c++20,-std=c++20>;$<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-fvisibility=hidden>;$<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-fvisibility-inlines-hidden>")
+    # (hidden: the inline parts of Botan's headers that these files instantiate must not be exported by a program that
+    # exports its symbols for plugins; qb_v0990e_tests checks that no Botan name is exported)
+  endif()
 endif()
 option(QB_KEYCHAIN "The system's key store through QtKeychain (off: a build that keeps no passphrase)" ON)
 if(QB_KEYCHAIN)

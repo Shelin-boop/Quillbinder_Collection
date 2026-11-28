@@ -234,6 +234,7 @@ bool programOnly(const QString &key)
         QStringLiteral("appearance/colors/"), QStringLiteral("appearance/fonts/"), // the look: settings/look.json
         QStringLiteral("quillbinderOptions/"),
         QStringLiteral("handwriting/"),     // 0.99.0: handwriting is kept per device
+        QStringLiteral("readaloud/"),       // 0.99.0: the voice model, device and bar are this computer's
         QStringLiteral("profile/"),         // 0.95.0: the profile in use and the built-in profile deleted
         QStringLiteral("standardColors/"),  // 0.95.0: part of the user profile, never a project's
         QStringLiteral("themes/")};         // 0.95.0: built-in themes the writer deleted

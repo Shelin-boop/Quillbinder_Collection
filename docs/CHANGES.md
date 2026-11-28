@@ -7,6 +7,71 @@ Manual in the program) describes every function.
 
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
 
+- **Live Sync, backups and snapshots of a shared project** (off with Live Sync; no change for a writer otherwise): only the device that hosts a project makes its backups. A backup is made from a copy of the project that is whole at one commit (hard links where the file system has them, else copies; commits go on while it is packed), packed and checked by the usual backup code; Live Sync's own folders are never in it (the ZIP code leaves them out as well). Another device can **Request Backup** and sees running, done, waiting, incomplete or failed with the reason, and the time of the last success; a backup that could not be made is never shown as done, and older complete backups stay. A backup is restored only as a new project (a backup id of its own, no identity of the shared project). Snapshots of a shared project are jobs of the host: take, rename, delete and roll back are done by the host with the same locks (a roll back needs the asker's lock and first keeps the text as a snapshot of its own), and the snapshot files reach every copy as one commit. A protective snapshot is also made before a takeover. `Snapshots.cpp` writes through the write gate. Suite `ls8` (92 checks), with a security sweep over the network code (an unpaired device, a wrong certificate, paths that leave the project, a replayed message, an oversize frame, a hostile manifest, event and blob), and a measurement mode (`qb_ls8_tests --measure <folder>`: three programs over TLS on localhost).
+- **Live Sync, the interface** (off by default; with it off no button, tab, mark or bar shows): **File > Options > Live Sync** (the switch, this device's name, hosting after the last window closes, the paired devices with Pair a Device and Remove, More Ways to Connect, Details), a **Live Sync** toolbar button with five states (icon shape, color and text) and its menu, an inspector tab (host, role, state, who edits what, last backup, drafts, Ask to Edit / Take Over / Stop Editing), marks in the binder (padlock, pen, dimmed padlock), bars above the editor (read-only with Ask to Edit, a request with Save and Hand Over / Decline, the waiting time with Take Over, not connected), and the windows for pairing (the six digits, Codes Match / They Differ), joining, hosted projects (access, priority, backup, Stop Sharing, Transfer Hosting) and recovery drafts, none of which blocks the program. **The Quillbinder wallet's passphrase windows** (create with the passphrase typed twice and a strength check as the key wizard does; unlock once per session), and a line on the Live Sync and Encryption pages saying where the keys are kept. The manual has a chapter "Live Sync" (with what is not encrypted for plain projects and ZIP backups and the advice to use device encryption), the quick start a line. The inspector's picture removal and the project look go through the write gate (suite `ls7`, the menu audit of `m13`).
+- Fix: **the welcome project's mind map is readable in dark themes**. Its notes had pastel fills but took the board's light text (1 : 1 on the fill), their borders and two line colors fell below 3 : 1; the notes now carry dark text and a dark border of their own and the two colored lines are lighter, in the English project and the ten translations (suite `welcdark`).
+- Mind map: **the format bar works on notes**, through a small interface (`NoteFormatTarget`): the whole text of every selected note (bold, italic, underline, strikethrough, text color, size, alignment, clear formatting; mixed states shown neutral), or the selected words of a note being edited; one undo step per change. Several selected notes change together from the right-click menu as well. A note with a fill and no text color of its own takes black or white text (and border) by contrast against the fill (at least 4.5:1), so light text no longer sits on a pastel fill of a dark board.
+- Live Sync, groundwork (no change for a writer while Live Sync is off, which is the default): the program can find other Quillbinder devices on the local network with a small multicast DNS of its own (a strict reader that refuses oversized, looping or malformed packets, a responder, a browser; only an opaque instance id, the port and the addresses are published, never a device or machine name) and accepts a manual address as well; on Android a multicast lock is held while it looks.
+- **Live Sync, first part (nothing a writer sees yet)**: the transport and trust of the coming Live Sync, built into the program and off: a device identity (an ECDSA P-256 key kept in the key store, a self-signed certificate, the device id and the pin from the public key), TLS 1.3 links with Botan (both sides show a certificate, trusted only by their pin), the frames and their limits, the list of paired devices, the pairing exchange with its six-digit code and its 120-second window, and a fake network for the tests. The encryption pack gets the Botan modules `x509`, `tls13` and `argon2` (Linux and Windows scripts; the pack is built again).
+- **The Quillbinder wallet** (groundwork; the window that asks for its passphrase comes with Live Sync's pages): where the system has no key store, the key store's fallback is one file in the data folder, sealed with AES-256/GCM under a key made from a master passphrase by Argon2id. It is asked once per session, never stored, and holds the device key of Live Sync and, there, the encryption passphrase. The system's key store stays first where it exists; without a way to ask for the passphrase the answer is "no key store", as before.
+- Fix (audit AU-03): **Alt and a letter** no longer types the letter into the text when no command uses it. In the small interface (no menu bar), Alt and the letter of a menu opens that menu at the round menu button, and Alt alone opens the button's menu. **View > Small Interface** has the shortcut **Ctrl+Alt+S**, named in the menu button's tip. In the mind map, the four "With Arrow" entries of **New Connected Note** have Alt letters of their own.
+- **Read Aloud: the voices of Qwen3-TTS are made** (German ships with the other six languages). Six voices in three styles for each of English, German, Spanish, French, Portuguese, Italian and Russian were designed from written descriptions with Qwen3-TTS VoiceDesign (no real person's voice) and are offered as one small **voice pack** per language (release `models-5`, kind `voicepack` in the catalog). Installing a Qwen3-TTS model also installs the pack of the Read Aloud language, and choosing another language installs its pack; the zip is checked (SHA-256, only the expected file names, nothing outside its folder) and unpacked into `read-aloud-voices/<language>/`; the clips of the first trial builds in the flat folder still count as a fallback. Deleting the last Qwen3-TTS model deletes the packs. German and Russian can now be read. Read Aloud starts in the system language only when a model and a voice can be had for it, else in English. (Workflow `models-5.yml`: the dispatch input `voices` adds the packs to the existing release and its catalog; `tools/models/design-voices.py` and `design-voices.cpp`.)
+- Fix: **Forget the passphrase** no longer locks the key while an encrypted project is open (it is locked when the project closes), so saves make no false "changed elsewhere" copies; a document read with the key locked asks for the passphrase.
+- System test (no change for a writer): the cases of the new functions (handwriting, encryption, the model rule, the small
+  interface, Read Aloud, toolbar sizes, Cancel in Compile, the focus line, link contrast, the menu walk), four kill cases and
+  encrypted variants of the data-safety cases.
+- Texts with numbers and texts built from pieces are now whole sentences, so every language can translate them correctly; the menus' access letters are unique. Counts go into plural texts (`%n word(s)`), English writes them through a small translator that is installed first (`language::englishPlural`); the Translation Helper's notice about missing parts is one sentence for one part and one for several; the manual names the pages of File > Options as they are (General > AI Models, Extras > Add-ons and Plugins).
+- Build files only (no change for a writer): the encryption libraries are linked on Windows and Android by the shared build
+  file too, and the Linux workflows fetch the encryption, AI engine and ONNX Runtime packs before they configure.
+- Showing a document no longer marks it as changed; it is only saved when you change it. (Before, every shown document,
+  its empty notes too, was marked changed by the link-color pass and kept in memory and written again at the next save.)
+- Live Sync, the last writers routed through the gate (no change for a writer; Live Sync stays off): the removal of a mind map's file
+  (an emptied board), the removal of an object's file and of pictures that go with it, the copy that keeps a damaged object schema
+  aside, and the folder a failed import removes now go through `safesave` and `pathsafety`, so a shared project's follower captures
+  them like every other write (suite `lsroute`).
+- Live Sync, the core's write gate (no change for a writer; Live Sync stays off and nothing it adds runs): a window of a shared
+  project will be a "follower" that never writes the shared files. `Project::open` takes a follower; the writes that reach
+  `safesave`, `savebatch`, the vault and the remove helpers are then captured as plain bytes in a change set instead of reaching the
+  disk (a path of no class is refused). New in the core: the path classes, the project file turned into operations by item id and
+  section (`IndexDiff`) and applied again (`OpApply`, to the XML and to a project in memory), the reasons a document cannot be
+  changed here (`DocumentStore::whyNotEditable`), `DocumentStore::reload`, and files that the authority's save adds to its batch.
+  Suite `ls3`, with a source audit that lists every place of the program that writes or removes files.
+- Live Sync, the protocol (no change for a writer; Live Sync stays off and nothing it adds runs): the messages between devices
+  (their envelope, types, error codes and a strict validator), the host's side of a shared project (connections, the lock
+  table with leases of 3, 10 and 30 seconds and fencing by epoch and generation, edit requests, commits written in one batch
+  with the host's state and a commit log, replay and resync) and the client's side (a replica made by manifest and kept by
+  events, an outbox on disk that is sent after a break, drafts for changes that can no longer be sent, the locks of a
+  device). A lock is never given up by itself while a document is shown; another device asks, the holder hands over or
+  declines (a decline starts the 20 seconds again and tells the asker), and a takeover is possible only after 20 seconds with
+  no answer, after a protective copy of the text. Everything waits on an injectable clock. Suite `ls4`, with one run of two
+  programs over TLS on localhost.
+- Live Sync, the service and the windows (no change for a writer; Live Sync stays off until a project is shared): the service of a
+  device (`quillbinder --live-sync-service`, a program without a window that ends by itself ten seconds after the last window
+  unless it keeps hosting) holds the device's identity, listener, pairing and the sessions of every shared project, and the
+  registry of what is shared or joined. A window of a shared project opens the folder as a follower, hands what its saves would
+  have written to the service through a local socket, takes a document's lock at the first key (the keys of the next 1.5 seconds
+  wait for it), applies what other devices changed into the open documents without overwriting unsaved text, and hands its
+  changes over and gives its locks up when the project closes. The host keeps its own project: when it applies a commit it
+  recomputes word and character counts, modified times and the list of documents with its normal code. A small status window
+  shows what the service hosts after the last window closed. The service also carries out the decisions of who hosts: it founds
+  the project's authority when a project is shared, publishes the list of devices when access changes, hands hosting over on
+  "Transfer Hosting" (the old host stays connected until it follows the new one), takes over after a host has been lost for about
+  half a minute (two devices; the copy must be complete), writes every commit a device made into a ledger, tells the authority
+  who is connected, and shows a warning in the project's status when an unknown device announces hosting. The list of paired
+  devices now keeps each device's public key (needed for the signed list; a device paired before this version is paired again to
+  be a member). The program that has Live Sync switched on runs the service itself (Live Sync's screens use it: pairing,
+  sharing, joining, access, hosting hand-over, edit requests, drafts list); a project shared from a window opens again as a
+  follower; the editors' lock gate is per project; the old sync-lock marks stay off while a project is shared. Suite `ls5`.
+- Live Sync, who hosts a shared project (no change for a writer; Live Sync stays off): the list of a project's devices in
+  the order of their priority, signed with the host's device key; proofs of authority (the founding, a planned handover signed
+  by the old host, a failover with the signed votes of a majority) and a chain of them that every device can verify; the
+  planned handover of hosting (old host: active, draining, prepared, retired; target: follower, prepared, active), written to
+  disk before each message that depends on it, so that a crash at any step leaves one host and never two in one epoch; failover
+  after about 30 seconds without the host (two devices: the other alone; three or more: only with more than half of all
+  devices); a device that is no member, or whose proof does not hold, is refused with a warning; when two hosts meet again the
+  newer one stays, the old one becomes a client and everything it accepted after the split is kept as one recovery draft per
+  document and author (never merged); then hosting goes back to the highest-priority device after it was in sync for 60
+  seconds. Suite `ls6`, with every handover step killed in turn and a clock moved by hand.
 - **0.99.0 is a security update on every system** (Linux, Windows and Android). The update window says "recommended
   (security)" for a Quillbinder with an older version and offers no "Ignore This Version", also when a newer version has
   come out since (every version after the installed one, up to the newest, counts).
@@ -22,6 +87,16 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   that the first normal release, 1.0.0, changes only numbers and one word per system. The names of the files, the tag,
   the title of a release, the update file and the download page follow it, and a release without a word gets plain names
   (`Quillbinder-1.0.0-x86_64.AppImage`, tag `v1.0.0`).
+- **Read Aloud (item 114).** A toolbar **Read Aloud** (shown at first on Linux and Windows, hidden on Android; View > Toolbars >
+  Read Aloud) with Play/Pause, Stop and a Voice button whose menu has the groups Voice (Female 1 to 3, Male 1 to 3), Style
+  (Calm, Neutral, Action) and Speed (Slow, Medium, Fast) and "Read Aloud Settings..."; a choice the model cannot make is greyed
+  with the reason. Play reads the marked text, else from the cursor to the end, and marks the sentence being read; the first
+  click, and every click while no engine or model is installed, opens the new page **File > Options > Read Aloud** (language,
+  model with its size and fit, device, speed test, install part of the AI engine). Pocket TTS reads with its licensed preset
+  voices (no style); Qwen3-TTS with reference clips that come later (greyed until then). Speed stretches the finished audio with
+  the pitch kept. Only a few sentences are made ahead; the memory rule and the unload time are those of all AI models. The
+  sound is only played, never saved, and needs no other add-on: the AI Engine plays it itself (a sound output in libqbai with
+  miniaudio, public domain / MIT-0, loading the system's sound libraries at run time; no new library dependency).
 - **Handwriting (part 1 of item 112): everything but the recognizer.** A button on the Tools bar (hidden at first on Linux
   and Windows; shown on Android) with four looks (off, editor, inspector, both): a tap switches between off and the last mode,
   a long press or right-click opens the four choices. One writing area for the three modes: the inspector's new tab
@@ -35,6 +110,20 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   out), writing, grid, hand protection, pen and finger, and learning the hand (corrected lines kept only on the device, with an
   off switch and a delete). The recognizer itself (and the install behind the page's Install button) follows in a later part: until
   then the first use of the button opens the page.
+- **Handwriting (part 2 of item 112): the recognizer and the word layer.** A line of ink is drawn alone, scaled to 96 px height
+  with 16 px of white at both sides, and read by the PP-OCRv6 small model (ONNX; the program opens ONNX Runtime from the
+  installed Handwriting Engine with QLibrary and asks for `OrtGetApiBase` only; CPU, the cores of the AI setting, low
+  priority, the model in the memory registry with the idle unload). The characters come from a greedy CTC decode (NFC after
+  decoding). The **word layer** then corrects each word: listed words within 1 to 4 edits (compared without diacritics) are
+  scored by how well the frames fit them (CTC forward over the word's frames, softened by 1.5) plus 0.5 times the word's
+  frequency; the raw reading competes as an unknown word, so a name stays as read; a word is split in two only when no single
+  word fits, with a clear penalty; each line is read with the main and the fallback language and the better total is kept; a
+  tap on a word shows the next candidates and the raw reading. The word lists (ten languages, from wordfreq, CC BY-SA 4.0) and the
+  model are downloads; the Install button of the page opens the install panel (engine, line model, word lists). The header
+  `onnxruntime_c_api.h` of ONNX Runtime 1.32.0 (MIT) is kept in `src/third_party/onnxruntime/` so that a plain build needs no
+  pack. New suite `v0990o`.
+  then the first use of the button opens the page. The pad's six buttons sit in two rows of three, so that the
+  hidden Handwriting tab no longer keeps the inspector at least 510 px wide.
 - **One size for all toolbars: Small, Normal, Large.** **View > Toolbars > Toolbar Size** (also in the right-click menu of
   every bar, and in **Customize Toolbars**, where "Medium" is now "Normal") sets the icons of every bar at once: the main
   toolbars, the format bars (they were fixed at 18 px), the icon bar, Labels and Profiles. The lists and fields on the bars
@@ -172,6 +261,14 @@ New functions and fixes (Linux first).
   ready-made packs of libraries for the Linux build (Botan, RNP, json-c, bzip2 and zlib; ONNX Runtime; ggml, whisper.cpp,
   llama.cpp, qwentts.cpp and Sonic), the daily security watch follows each new part, and `THIRD-PARTY.md` and Help > Third-Party
   Licenses (at the next AppImage) name the parts that go into the program.
+
+### Fixes found by the first full test
+
+- **Options > Read Aloud**: the language, model and device boxes now tell in their tool tips where they are kept (fixed to the
+  program: the voice models belong to this computer), like the other option pages.
+- **The focus frame** no longer listens to the application's focus signal while the window is being closed.
+- The checks of the toolbar rows (suites v0910, v0911), the spelling menu (v0403) and the View > Toolbars list (v0990g) now
+  know the Read Aloud toolbar and the Appearance menu in the short spelling menu.
 
 ### Menus and names
 

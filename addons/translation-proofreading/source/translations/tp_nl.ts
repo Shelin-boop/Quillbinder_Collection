@@ -40,7 +40,7 @@
     <name>tp::InputEdit</name>
     <message>
         <source>Type or paste text here, or take the selected text from the editor. With Translate, choose the language of your text and the language of the translation; English text can also be checked for spelling and grammar.</source>
-        <translation>Typ of plak hier tekst, of neem de in de editor geselecteerde tekst over. Kies bij Vertalen de taal van uw tekst en de taal van de vertaling; Engelse tekst kan ook op spelling en grammatica worden gecontroleerd.</translation>
+        <translation>Typ of plak hier tekst, of neem de in de editor geselecteerde tekst over. Kies bij Vertalen de taal van je tekst en de taal van de vertaling; Engelse tekst kan ook op spelling en grammatica worden gecontroleerd.</translation>
     </message>
     <message>
         <source>Other Words for “%1”...</source>
@@ -193,7 +193,7 @@
     </message>
     <message>
         <source>Try them: CoEdIT Large finds many errors but rewrites more; the Qwen models are told to fix only real errors and to leave your style and dialogue alone (4B is better, 1.7B faster). A Qwen model downloaded once also translates.</source>
-        <translation>Probeer ze uit: CoEdIT Large vindt veel fouten maar herschrijft meer; de Qwen-modellen krijgen de opdracht alleen echte fouten te herstellen en uw stijl en dialogen met rust te laten (4B is beter, 1.7B sneller). Een eenmaal gedownload Qwen-model vertaalt ook.</translation>
+        <translation>Probeer ze uit: CoEdIT Large vindt veel fouten maar herschrijft meer; de Qwen-modellen krijgen de opdracht alleen echte fouten te herstellen en je stijl en dialogen met rust te laten (4B is beter, 1.7B sneller). Een eenmaal gedownload Qwen-model vertaalt ook.</translation>
     </message>
     <message>
         <source>Translation (German to English)</source>
@@ -217,7 +217,7 @@
     </message>
     <message>
         <source>What a single German word means: its word classes, meanings and English words. Used first when you translate one German word; it is not needed for sentences. A separate download under its own license, which is shown first.</source>
-        <translation>Wat een los Duits woord betekent: zijn woordsoorten, betekenissen en Engelse woorden. Het wordt als eerste gebruikt wanneer u één Duits woord vertaalt; voor zinnen is het niet nodig. Een aparte download onder een eigen licentie, die eerst wordt getoond.</translation>
+        <translation>Wat een los Duits woord betekent: zijn woordsoorten, betekenissen en Engelse woorden. Het wordt als eerste gebruikt wanneer je één Duits woord vertaalt; voor zinnen is het niet nodig. Een aparte download onder een eigen licentie, die eerst wordt getoond.</translation>
     </message>
     <message>
         <source>%1: translation to and from English</source>
@@ -249,7 +249,7 @@
     </message>
     <message>
         <source>Your own replacements, one per line, as &lt;i&gt;old =&amp;gt; new&lt;/i&gt; (whole words; the case of the first letter is kept):</source>
-        <translation>Uw eigen vervangingen, één per regel, als &lt;i&gt;oud =&amp;gt; nieuw&lt;/i&gt; (hele woorden; de hoofdletter of kleine letter van de eerste letter blijft behouden):</translation>
+        <translation>Je eigen vervangingen, één per regel, als &lt;i&gt;oud =&amp;gt; nieuw&lt;/i&gt; (hele woorden; de hoofdletter of kleine letter van de eerste letter blijft behouden):</translation>
     </message>
     <message>
         <source>Speed</source>
@@ -281,7 +281,7 @@
     </message>
     <message>
         <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
-        <translation>Het aantal processorkernen en de tijd waarna een ongebruikt model wordt verwijderd, worden voor alle AI-functies samen ingesteld, in File &gt; Options &gt; General &gt; AI Models.</translation>
+        <translation>Het aantal processorkernen en de tijd waarna een ongebruikt model wordt verwijderd, worden voor alle AI-functies samen ingesteld, in Bestand &gt; Opties &gt; Algemeen &gt; AI-modellen.</translation>
     </message>
     <message>
         <source>Careful: the model weighs even more possibilities (slower, now and then better)</source>
@@ -353,7 +353,7 @@
 By downloading it you accept its license: %2</source>
         <translation>%1
 
-Door het te downloaden accepteert u de licentie: %2</translation>
+Door het te downloaden accepteer je de licentie: %2</translation>
     </message>
     <message>
         <source>Accept and Download</source>
@@ -387,7 +387,7 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     </message>
     <message>
         <source>Live: about a second after you stop typing, the changed sentences are worked on again</source>
-        <translation>Live: ongeveer een seconde nadat u stopt met typen, worden de gewijzigde zinnen opnieuw verwerkt</translation>
+        <translation>Live: ongeveer een seconde nadat je stopt met typen, worden de gewijzigde zinnen opnieuw verwerkt</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -403,11 +403,11 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     </message>
     <message>
         <source>Automatic: German text is translated into English, English text is proofread. Translate: choose the language of your text and the language of the translation.</source>
-        <translation>Automatisch: Duitse tekst wordt naar het Engels vertaald, Engelse tekst wordt nagekeken. Vertalen: kies de taal van uw tekst en de taal van de vertaling.</translation>
+        <translation>Automatisch: Duitse tekst wordt naar het Engels vertaald, Engelse tekst wordt nagekeken. Vertalen: kies de taal van je tekst en de taal van de vertaling.</translation>
     </message>
     <message>
         <source>The language of your text</source>
-        <translation>De taal van uw tekst</translation>
+        <translation>De taal van je tekst</translation>
     </message>
     <message>
         <source>The language of the translation. A pair without English in it is translated through English (two models).</source>
@@ -443,7 +443,7 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     </message>
     <message>
         <source>Translate the result back into the language of your text, to see what it says</source>
-        <translation>Vertaal het resultaat terug naar de taal van uw tekst, om te zien wat er staat</translation>
+        <translation>Vertaal het resultaat terug naar de taal van je tekst, om te zien wat er staat</translation>
     </message>
     <message>
         <source>Models...</source>
@@ -534,22 +534,6 @@ Door het te downloaden accepteert u de licentie: %2</translation>
         <translation>het Duitse woordenboek</translation>
     </message>
     <message>
-        <source>Missing: %1. Download %2 in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
-        <translation>Ontbreekt: %1. Download %2 in de opties van de add-on (Bestand &gt; Opties &gt; Vertaalhulp).</translation>
-    </message>
-    <message>
-        <source> and </source>
-        <translation> en </translation>
-    </message>
-    <message>
-        <source>them</source>
-        <translation>ze</translation>
-    </message>
-    <message>
-        <source>it</source>
-        <translation>het</translation>
-    </message>
-    <message>
         <source>OPUS-MT %1 to %2</source>
         <translation>OPUS-MT %1 naar %2</translation>
     </message>
@@ -638,6 +622,18 @@ Door het te downloaden accepteert u de licentie: %2</translation>
         <translation>Er is nog geen vertaalmodel gedownload voor %1 naar %2: %3. Kies het met Modellen... (Bestand &gt; Opties &gt; Vertaalhulp).</translation>
     </message>
     <message>
+        <source>No translation model is downloaded yet for %1 to %2: %3. Choose them with Models... (File &gt; Options &gt; Translation Helper).</source>
+        <translation>Er is nog geen vertaalmodel gedownload voor %1 naar %2: %3. Kies ze met Modellen... (Bestand &gt; Opties &gt; Vertaalhulp).</translation>
+    </message>
+    <message>
+        <source>Missing: %1. Download them in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
+        <translation>Ontbreekt: %1. Download ze in de opties van de add-on (Bestand &gt; Opties &gt; Vertaalhulp).</translation>
+    </message>
+    <message>
+        <source>Missing: %1. Download it in the add-on&apos;s options (File &gt; Options &gt; Translation Helper).</source>
+        <translation>Ontbreekt: %1. Download het in de opties van de add-on (Bestand &gt; Opties &gt; Vertaalhulp).</translation>
+    </message>
+    <message>
         <source>Translated through English (%1 to English to %2): two steps, so a mistake of the first one is carried into the second.</source>
         <translation>Via het Engels vertaald (%1 naar Engels naar %2): twee stappen, dus een fout van de eerste wordt meegenomen naar de tweede.</translation>
     </message>
@@ -663,19 +659,19 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     </message>
     <message>
         <source>The model rewrote this sentence too much; your sentence was kept. (It wrote: %1)</source>
-        <translation>Het model heeft deze zin te veel herschreven; uw zin is behouden. (Het schreef: %1)</translation>
+        <translation>Het model heeft deze zin te veel herschreven; je zin is behouden. (Het schreef: %1)</translation>
     </message>
     <message>
         <source>The model repeated a word; your sentence was kept. (It wrote: %1)</source>
-        <translation>Het model herhaalde een woord; uw zin is behouden. (Het schreef: %1)</translation>
+        <translation>Het model herhaalde een woord; je zin is behouden. (Het schreef: %1)</translation>
     </message>
     <message>
         <source>1 sentence kept as you wrote it: the model&apos;s version did not look right (point at the sentence to see what it wrote).</source>
-        <translation>1 zin behouden zoals u hem schreef: de versie van het model zag er niet goed uit (wijs naar de zin om te zien wat het schreef).</translation>
+        <translation>1 zin behouden zoals je hem schreef: de versie van het model zag er niet goed uit (wijs naar de zin om te zien wat het schreef).</translation>
     </message>
     <message>
         <source>%1 sentences kept as you wrote them: the model&apos;s versions did not look right (point at a sentence to see what it wrote).</source>
-        <translation>%1 zinnen behouden zoals u ze schreef: de versies van het model zagen er niet goed uit (wijs naar een zin om te zien wat het schreef).</translation>
+        <translation>%1 zinnen behouden zoals je ze schreef: de versies van het model zagen er niet goed uit (wijs naar een zin om te zien wat het schreef).</translation>
     </message>
     <message>
         <source>Done</source>
@@ -687,11 +683,11 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     </message>
     <message>
         <source>Working on your changes...</source>
-        <translation>Uw wijzigingen worden verwerkt...</translation>
+        <translation>Je wijzigingen worden verwerkt...</translation>
     </message>
     <message>
         <source>Stopped. The sentences done so far are shown; the rest is as you wrote it.</source>
-        <translation>Gestopt. De tot nu toe verwerkte zinnen worden getoond; de rest is zoals u het schreef.</translation>
+        <translation>Gestopt. De tot nu toe verwerkte zinnen worden getoond; de rest is zoals je het schreef.</translation>
     </message>
     <message>
         <source>%1: no changes.</source>
@@ -783,7 +779,7 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     </message>
     <message>
         <source>Your Sentence Was Kept</source>
-        <translation>Uw zin is behouden</translation>
+        <translation>Je zin is behouden</translation>
     </message>
     <message>
         <source>Looking for other words...</source>
@@ -911,7 +907,7 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     </message>
     <message>
         <source>From the Wiktionary (CC BY-SA 4.0), the %1 dictionary you downloaded.</source>
-        <translation>Uit het Wiktionary (CC BY-SA 4.0), het woordenboek %1 dat u hebt gedownload.</translation>
+        <translation>Uit het Wiktionary (CC BY-SA 4.0), het woordenboek %1 dat je hebt gedownload.</translation>
     </message>
     <message>
         <source>Warning: some of these words come from the small translation model. It may be inaccurate.</source>
@@ -938,20 +934,32 @@ Door het te downloaden accepteert u de licentie: %2</translation>
         <translation>Let op: WordNet heeft geen lemma voor dit woord. %1 schreef deze betekenis, en ze kan onnauwkeurig zijn.</translation>
     </message>
     <message>
-        <source>, for “%1”</source>
-        <translation>, voor ‘%1’</translation>
+        <source>Similar translations (%1, for “%2”):</source>
+        <translation>Vergelijkbare vertalingen (%1, voor “%2”):</translation>
     </message>
     <message>
-        <source>Similar translations (%1%2):</source>
-        <translation>Vergelijkbare vertalingen (%1%2):</translation>
+        <source>Similar translations (%1):</source>
+        <translation>Vergelijkbare vertalingen (%1):</translation>
+    </message>
+    <message>
+        <source>Similar (%1, for “%2”):</source>
+        <translation>Vergelijkbaar (%1, voor “%2”):</translation>
+    </message>
+    <message>
+        <source>Similar (%1):</source>
+        <translation>Vergelijkbaar (%1):</translation>
+    </message>
+    <message>
+        <source>%1 (German): spelling suggestions and similar words are given for English words.</source>
+        <translation>%1 (Duits): spellingsuggesties en vergelijkbare woorden worden gegeven voor Engelse woorden.</translation>
+    </message>
+    <message>
+        <source>%1 (from “%2”)</source>
+        <translation>%1 (uit “%2”)</translation>
     </message>
     <message>
         <source>Similar German words (%1):</source>
         <translation>Vergelijkbare Duitse woorden (%1):</translation>
-    </message>
-    <message>
-        <source>Similar (%1%2):</source>
-        <translation>Vergelijkbaar (%1%2):</translation>
     </message>
     <message>
         <source>The model’s other words:</source>
@@ -960,14 +968,6 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     <message>
         <source>Asking the model for other words...</source>
         <translation>Het model om andere woorden vragen...</translation>
-    </message>
-    <message>
-        <source> (German): spelling suggestions and similar words are given for English words.</source>
-        <translation> (Duits): spellingsuggesties en vergelijkbare woorden worden gegeven voor Engelse woorden.</translation>
-    </message>
-    <message>
-        <source> (from “%1”)</source>
-        <translation> (van ‘%1’)</translation>
     </message>
     <message>
         <source>Spelling: correct.</source>
@@ -979,7 +979,7 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     </message>
     <message>
         <source>Spelling: not in the dictionary. Did you mean %1?</source>
-        <translation>Spelling: niet in het woordenboek. Bedoelde u %1?</translation>
+        <translation>Spelling: niet in het woordenboek. Bedoelde je %1?</translation>
     </message>
     <message>
         <source>Similar words: none known.</source>
@@ -1022,11 +1022,11 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     </message>
     <message>
         <source>Translation Helper in the &amp;Inspector</source>
-        <translation>Vertaalhulp in de &amp;inspecteur</translation>
+        <translation>Vertaalhulp in de &amp;Inspector</translation>
     </message>
     <message>
         <source>The same in the inspector, beside the editor</source>
-        <translation>Hetzelfde in de inspecteur, naast de editor</translation>
+        <translation>Hetzelfde in de Inspector, naast de editor</translation>
     </message>
     <message>
         <source>Translation Helper</source>
@@ -1038,7 +1038,7 @@ Door het te downloaden accepteert u de licentie: %2</translation>
     </message>
     <message>
         <source>Open in the Inspector</source>
-        <translation>In de inspecteur openen</translation>
+        <translation>In de Inspector openen</translation>
     </message>
     <message>
         <source>Models and Rules...</source>

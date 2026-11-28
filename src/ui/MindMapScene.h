@@ -154,6 +154,7 @@ public:
 
     double fadedOpacity() const;
     bool isFaded(int id) const;          // faded itself or lying on a faded shape
+    QColor inkOn(const mindmap::Appearance &look) const; // board ink, or black/white on a fill it cannot be read on (0.99.0)
     QColor textColor(const mindmap::Appearance &look) const;
     QRectF contentRect() const;          // all items, for exports and Zoom to Fit
     // the board as a picture / in a PDF or on paper (scene coordinates)

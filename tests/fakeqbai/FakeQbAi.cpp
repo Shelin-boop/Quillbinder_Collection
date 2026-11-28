@@ -10,6 +10,7 @@
 //  - synthesize: a sine of 440 Hz at 24 kHz, 50 ms per character of the text, in pieces of 1200 samples (QBAI_FAKE_SLOW_MS
 //    waits after each piece, so that a test can cancel)
 //  - stretch: the samples resampled to 1/speed of their count
+//  - output_*: a sound output that plays nothing and counts (qbai_fake_out_stats, qbai_fake_out_set_scale); QBAI_FAKE_NO_SOUND: none
 //  - qbai_fake_stats(&loaded, &loads, &lastDevice, &lastThreads): what the tests look at (not part of the interface)
 #define QBAI_BUILD 1
 #include "tools/QbAi.h"
@@ -392,6 +393,105 @@ int stretch(const float *pcm, int64_t samples, int rate, float speed, qbai_pcm *
     return putPcm(out, r.data(), int64_t(r.size()), rate) ? QBAI_OK : QBAI_NO_MEMORY;
 }
 
+// ------------------------------------------------------------------ the sound output: nothing is played; the clock runs
+// `scale` times faster than real time (qbai_fake_out_set_scale; default 1; 0 stands still) over what was written
+} // namespace
+
+struct qbai_output {
+    int rate = 0, channels = 1;
+    int64_t written = 0;
+    double played = 0;   // frames
+    bool paused = false, stopped = false;
+    std::chrono::steady_clock::time_point last = std::chrono::steady_clock::now();
+};
+namespace {
+
+std::atomic<double> g_outScale{1.0};
+std::atomic<int> g_outOpens{0};
+std::atomic<long long> g_outWritten{0};
+std::atomic<int> g_outPaused{0}, g_outStopped{0}, g_outRate{0}, g_outLive{0};
+std::mutex g_outMutex;
+
+void outAdvance(qbai_output *o)
+{
+    const auto now = std::chrono::steady_clock::now();
+    const double sec = std::chrono::duration<double>(now - o->last).count();
+    o->last = now;
+    if (!o->paused)
+        o->played = std::min<double>(double(o->written), o->played + sec * g_outScale.load() * o->rate);
+}
+qbai_output *outputOpen(int rate, int channels)
+{
+    if (rate <= 0 || channels < 1) {
+        fail(QBAI_BAD_ARGS, "bad sound output parameters");
+        return nullptr;
+    }
+    if (std::getenv("QBAI_FAKE_NO_SOUND")) {
+        fail(QBAI_ERROR, "the fake has no sound output");
+        return nullptr;
+    }
+    auto *o = new qbai_output;
+    o->rate = rate;
+    o->channels = channels;
+    ++g_outOpens;
+    ++g_outLive;
+    g_outRate = rate;
+    g_outWritten = 0;
+    g_outPaused = 0;
+    g_outStopped = 0;
+    return o;
+}
+int outputWrite(qbai_output *o, const float *pcm, int64_t frames)
+{
+    if (!o || frames < 0 || (frames > 0 && !pcm))
+        return fail(QBAI_BAD_ARGS, "bad arguments");
+    std::lock_guard<std::mutex> g(g_outMutex);
+    outAdvance(o);
+    o->written += frames;
+    g_outWritten += frames;
+    return QBAI_OK;
+}
+int outputPause(qbai_output *o)
+{
+    if (!o) return fail(QBAI_BAD_ARGS, "bad arguments");
+    std::lock_guard<std::mutex> g(g_outMutex);
+    outAdvance(o);
+    o->paused = true;
+    g_outPaused = 1;
+    return QBAI_OK;
+}
+int outputResume(qbai_output *o)
+{
+    if (!o) return fail(QBAI_BAD_ARGS, "bad arguments");
+    std::lock_guard<std::mutex> g(g_outMutex);
+    outAdvance(o);
+    o->paused = false;
+    g_outPaused = 0;
+    return QBAI_OK;
+}
+int outputStop(qbai_output *o)
+{
+    if (!o) return fail(QBAI_BAD_ARGS, "bad arguments");
+    std::lock_guard<std::mutex> g(g_outMutex);
+    o->written = 0;
+    o->played = 0;
+    g_outStopped = 1;
+    return QBAI_OK;
+}
+void outputClose(qbai_output *o)
+{
+    if (!o) return;
+    --g_outLive;
+    delete o;
+}
+int64_t outputPlayed(qbai_output *o)
+{
+    if (!o) return 0;
+    std::lock_guard<std::mutex> g(g_outMutex);
+    outAdvance(o);
+    return int64_t(o->played);
+}
+
 const char *engineVersion() { return "fake qbai 1 (tests)"; }
 const char *lastError() { return t_error.c_str(); }
 
@@ -400,7 +500,7 @@ qbai_api makeApi(int version, int size)
     qbai_api a = {
         version, size, engineVersion, lastError, deviceCount, deviceGet, setThreads, threads, modelMemory, load, unload,
         modelInfo, voiceName, languageName, transcribe, freeText, synthesize, freePcm, stretch, stretchBegin, stretchFeed, stretchEnd,
-        detectLanguage,
+        detectLanguage, outputOpen, outputWrite, outputPause, outputResume, outputStop, outputClose, outputPlayed,
     };
     return a;
 }
@@ -429,3 +529,16 @@ extern "C" __attribute__((visibility("default"))) void qbai_fake_stats(int *load
     if (lastThreads)
         *lastThreads = g_lastThreads.load();
 }
+
+// what the checks look at: the number of opens, frames written since the last open, 1 while paused, 1 after a stop, the rate,
+// the outputs still open; and the speed of the clock
+extern "C" __attribute__((visibility("default"))) void qbai_fake_out_stats(int *opens, long long *written, int *paused, int *stopped, int *rate, int *live)
+{
+    if (opens) *opens = g_outOpens.load();
+    if (written) *written = g_outWritten.load();
+    if (paused) *paused = g_outPaused.load();
+    if (stopped) *stopped = g_outStopped.load();
+    if (rate) *rate = g_outRate.load();
+    if (live) *live = g_outLive.load();
+}
+extern "C" __attribute__((visibility("default"))) void qbai_fake_out_set_scale(double scale) { g_outScale = scale; }

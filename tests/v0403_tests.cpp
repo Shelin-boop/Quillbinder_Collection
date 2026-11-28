@@ -524,8 +524,11 @@ static void spellingChecks(MainWindow &w, Project *p)
                 appearance = appearance || (a->menu() && a->text().contains(QLatin1String("Appearance")));
             }
         bool pasteOnTop = false;
-        for (QAction *a : m->actions())
+        for (QAction *a : m->actions()) {
             pasteOnTop = pasteOnTop || a->text().contains(QLatin1String("Paste"));
+            // 0.99.0: the Appearance menu sits in the short menu itself, right after Ignore
+            appearance = appearance || (a->menu() && a->text().contains(QLatin1String("Appearance")));
+        }
         shot(m, QStringLiteral("04-short-spelling-menu"));
         const QRect firstRect = first ? m->actionGeometry(first) : QRect();
         const QPoint menuTop = m->mapToGlobal(QPoint(0, 0));

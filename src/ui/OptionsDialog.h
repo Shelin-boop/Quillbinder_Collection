@@ -55,6 +55,7 @@ namespace qb {
 class ThemePreview;
 class KeyboardPage;
 namespace handwriting { class HandwritingPage; }
+namespace readaloud { class ReadAloudPage; }
 class EncryptionPage;
 
 class OptionsDialog : public QDialog
@@ -65,7 +66,7 @@ public:
     // is now a section of the icon row (Plugins: Extras > Add-ons and Plugins).
     enum Page { General = 0, Appearance, Editing, Behaviors, Keyboard, Backup, Plugins };
     // The sections of the icon row, in Scrivener's order plus Extras.
-    enum Section { SGeneral = 0, SEditing, SBehaviors, SAppearance, SCorrections, SKeyboard, SSharing, SBackup, SEncryption, SExtras, SectionCount };
+    enum Section { SGeneral = 0, SEditing, SBehaviors, SAppearance, SCorrections, SKeyboard, SSharing, SBackup, SEncryption, SLiveSync, SExtras, SectionCount };
 
     explicit OptionsDialog(QWidget *parent = nullptr, int page = 0);
     ~OptionsDialog() override;
@@ -295,6 +296,7 @@ private:
     QLabel *m_objectsTemplates = nullptr;
     bool m_resetObjectTemplates = false;
     QSpinBox *m_freezeSeconds, *m_keepReports;
+    readaloud::ReadAloudPage *m_readAloud = nullptr;           // 0.99.0 (item 114): General > Read Aloud
     handwriting::HandwritingPage *m_handwriting = nullptr;   // 0.99.0: Extras > Handwriting
 };
 

@@ -20,7 +20,7 @@
 | Pencerenin her bölümünün renkleri ve yazı tipleri | **Dosya > Seçenekler > Dış Görünüm** (veya **Görünüm > Temalar > Renkler ve Yazı Tipleri…**) ya da bölüme sağ tıklayın (**Dış Görünüm**). Her proje kendi görünümünü saklar; en üstteki liste bu projeyi veya yeni projeleri seçer. |
 | Kendi temanız | **Görünüm > Temalar > Geçerli Görünümü Tema Olarak Kaydet…**; **Temaları Yönet…** *.qbtheme* dosyalarını dışa ve içe aktarır. |
 | Arayüz yazı tipi, araç çubuğu simge boyutu, başlık çubuğundaki tam yol | **Dosya > Seçenekler > Dış Görünüm > Genel Arayüz** |
-| Metin sütunu: sabit genişlik, kağıt rengi, genişlik, metnin yanındaki kenarlık | **Dosya > Seçenekler > Dış Görünüm > Ana Düzenleyici** ya da kağıda sağ tıklayın |
+| Metin sütunu: sabit genişlik, kâğıt rengi, genişlik, metnin yanındaki kenarlık | **Dosya > Seçenekler > Dış Görünüm > Ana Düzenleyici** ya da kağıda sağ tıklayın |
 | Projenin ayarlarını bir dosyaya kaydetme ve bu veya başka bir projeye geri yükleme | **Proje > Proje Ayarlarını Dosyaya Kaydet…** / **Proje Ayarlarını Dosyadan Yükle…** |
 | **Yeni** projelerin yazı tipi ve paragraf biçimlendirmesi | **Dosya > Seçenekler > Düzenleme > Biçimlendirme** ("Geçerli Düzenleyicideki Biçimlendirmeyi Kullan") |
 | **Bu** projenin yazı tipi ve paragraf biçimlendirmesi | **Proje > Proje Ayarları > Biçimlendirme** |
@@ -28,17 +28,17 @@
 | Araç çubukları | **Görünüm > Araç Çubukları > Araç Çubuklarını Özelleştir…** (veya bir çubuğa sağ tıklayın) |
 | Simge çubuğu | **Görünüm > Araç Çubukları > Simge Çubuğu**; **Simge Çubuğu İçin Simgeleri Seç…** |
 | Klavye kısayolları | **Dosya > Seçenekler > Klavye** (arama, yeni tuşlara basma, dışa ve içe aktarma); **Yardım > Klavye Kısayolları…** bunları listeler |
-| Menülerde bir komut bulma | **Yardım > Komut Bul…** (adının bir kısmını yazın; Return onu çalıştırır) |
+| Menülerde bir komut bulma | **Yardım > Komut Bul…** (adının bir kısmını yazın; Enter onu çalıştırır) |
 | Pencere yerleşimleri | **Görünüm > Yerleşim** (yedisi yerleşik; kendinizinkini kaydedin) |
 | Otomatik kaydetme, son kullanılan projeler, yazar bilgileri | **Dosya > Seçenekler > Genel** |
 | Yedekler | **Dosya > Seçenekler > Yedekleme** (ne zaman, kaç tane, nereye); **Dosya > Yedekle** hemen bir yedek alır |
 | Yazarken yazım denetimi ve düzeltmeler | **Dosya > Seçenekler > Düzeltmeler** |
-| Bağlantıların nerede açılacağı, Return tuşu, yazım modu, oynatma | **Dosya > Seçenekler > Davranışlar** |
+| Bağlantıların nerede açılacağı, Enter tuşu, yazım modu, oynatma | **Dosya > Seçenekler > Davranışlar** |
 | İçe ve dışa aktarma ayarları | **Dosya > Seçenekler > Paylaşım** |
 | Zihin haritaları, nesneler, eklentiler, çökme raporları | **Dosya > Seçenekler > Ek Özellikler** |
 | Etiketler, durum, kesim türleri, özel üst veri, özel klasörler | **Proje > Proje Ayarları** |
 | Yalnızca tek bir proje için seçenekler | **Dosya > Seçenekler**, en üstte **Ayarların geçtiği yer: Bu proje**; projelerin kendi ayarlarının öncelikli olup olmadığı: **Dosya > Seçenekler > Genel** |
-| Ayarlarınızı başka bir bilgisayara taşıma | **Dosya > Seçenekler > Yönet > Seçenekleri Dosyaya Kaydet… / Seçenekleri Dosyadan Yükle…** |
+| Ayarlarınızı başka bir bilgisayara taşıma | **Dosya > Seçenekler > Yönet > Profili Dışa Aktar… / Profili İçe Aktar…** |
 | Her şeyi standart hâline döndürme | **Dosya > Seçenekler > Varsayılanlar** (projeleriniz, temalarınız, yerleşimleriniz ve kısayollarınız kalır) |
 
 ---
@@ -68,13 +68,13 @@
 ### Alışılmışın ötesi
 
 - **Zihin haritaları**: her belge ve klasör için notlardan, çizgilerden ve oklardan oluşan bir pano (denetçinin **Zihin Haritası** düğmesi). **Yardım > Zihin Haritası Yardımı** nasıl çalıştığını gösterir.
-- **Nesneler**: karakterler, mekânlar, ortamlar, ilgi çekici noktalar, hava durumu ve kendi kategorileriniz; her birinin bir alan sayfası ve aralarında bağlantılar vardır (denetçinin **Nesneler** düğmesi veya **Pencere > Nesneler…**).
+- **Nesneler**: karakterler, mekânlar, ortamlar, ilgi çekici noktalar, hava durumu ve kendi kategorileriniz; her birinin bir alan sayfası ve aralarında bağlantılar vardır (denetçinin **Nesneler** düğmesi veya **Pencere > Nesneler**).
 - **Tablolar ve resimler**: hazır tasarımlarla veya kendi tasarımınızla **Ekle > Tablo…**, satırlar, sütunlar, birleştirilmiş hücreler ve renkler için **Biçim > Tablo**; metnin çevresinden aktığı, metnin yanındaki resimler, başlıklar ve e-kitapların ve Word dosyalarının alternatif metin olarak sakladığı açıklamalar (bir resme sağ tıklayın, **Resim…**).
 - **Simge çubuğu**: tek tıkla açılan ona kadar belge simgesi. **Belgeler > Simgeyi Değiştir** ayrıca metinden veya kendi resimlerinizden simgeler yapar.
 - **Bölüm bölüm yakınlaştırma**: binder, düzenleyiciler, denetçi bölümleri, mantar pano, anahat ve zihin haritalarının her biri kendi yakınlaştırmasını saklar.
 - **Saklanan yerler**: her belge, imleci bıraktığınız yerde açılır; projeyi yeniden açtıktan sonra da.
 - **Yazı tipleri**: **Biçim > Yazı Tipi > Yazı Tipi Dosyalarını Kur…** programdan çıkmadan yazı tipi ekler.
-- **Güvenlik**: siz yazmaya devam ederken de otomatik kaydetme, yedekler, proje dosyasının yedek bir kopyası, çökme ve donma raporları (**Yardım > Sorun Giderme ve Geliştirme > Çökme Raporları…**) ve **Yardım > Sorun Giderme ve Geliştirme > Sistem Bilgisi…**.
+- **Güvenlik**: siz yazmaya devam ederken de otomatik kaydetme, yedekler, proje dosyasının yedek bir kopyası, çökme ve donma raporları (**Yardım > Sorun Giderme ve Geliştirme > Çökme Raporları…**) ve **Yardım > Sorun Giderme ve Geliştirme > Sistem Bilgisi**.
 
 ### Güncellemeler ve eklentiler
 
@@ -88,5 +88,5 @@ AppImage'ın **tam sürümü** (*...-full-{{LABEL}}-x86_64.AppImage*) tüm eklen
 - **Yardım > Karşılama Projesi**: "Alışılmışın ötesi" altında sıralanan özellikleri gösteren ve denemenize olanak veren kısa bir proje.
 - **Yardım > Zihin Haritası Yardımı**: notlar, çizgiler, oklar ve şekiller; resimler ve bir alıştırma panosuyla.
 - **Yardım > Tüm Yer Tutucuların Listesi** ve **Yardım > Klavye Kısayolları…**
-- **Yardım > Üçüncü Taraf Lisansları…**: {{APP}}'in kullandığı diğer projelerin parçalarının lisansları.
+- **Yardım > Üçüncü Taraf Lisansları**: {{APP}}'in kullandığı diğer projelerin parçalarının lisansları.
 - **Yardım > {{APP}} Hakkında**: sürüm ve lisans. {{APP}}, Apache License 2.0 altında özgür bir yazılımdır.

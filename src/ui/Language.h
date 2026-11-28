@@ -32,6 +32,9 @@ QString welcomeRoot(const QString &code = QString());
 QLocale localeFor(const QString &code);
 QString configured();                    // what the settings (or QB_LANGUAGE) ask for
 QString active();                        // what install() put in place
+// 0.99.0: the English form of a source text with a count: "%n file(s)" for 1 is "%n file", else "%n files" ("(es)" and "(y|ies)"
+// same); the %n itself is filled in by Qt. A translator for English (and the fallback of every language) uses it.
+QString englishPlural(const QString &source, int n);
 // Installs the translator of the configured language (call once, right after the QApplication is made).
 void install();
 // 0.90.1 (the usability review of 0.90.0, UR-18): large numbers with their digits grouped as the locale writes them

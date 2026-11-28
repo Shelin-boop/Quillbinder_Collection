@@ -2,6 +2,7 @@
 
 #include "core/AiCatalog.h"
 #include "core/AiEngine.h"
+#include "core/ReadAloud.h"
 #include "ui/AiDownloads.h"
 
 #include <QDir>
@@ -157,7 +158,13 @@ void AiInstallPanel::refresh()
         it->setText(0, m.title);
         it->setData(0, Qt::UserRole, m.id);
         it->setText(1, languagesText(m.languages));
-        it->setText(2, megabytes(m.downloadBytes()));
+        qint64 bytes = m.downloadBytes();
+        if (m.engine == QLatin1String("qwen3-tts")) {   // the voice pack of the Read Aloud language comes with the model
+            const ai::CatalogModel *pack = readaloud::voicePackModel(readaloud::effectiveLanguage(readaloud::Config::instance().get()));
+            if (pack && pack->published())
+                bytes += pack->downloadBytes();
+        }
+        it->setText(2, megabytes(bytes));
         it->setText(3, m.memoryMB > 0 ? megabytes(qint64(m.memoryMB) * 1024 * 1024) : QStringLiteral("-"));
         it->setText(4, m.license);
         it->setText(5, ai::isInstalled(m) ? tr("Installed") : !m.published() ? tr("Not published yet") : tr("Not installed"));
@@ -277,6 +284,7 @@ void AiInstallPanel::deleteSelected()
         return;
     QString why;
     if (ai::removeModel(*m, &why)) {
+        readaloud::removeVoicePacksIfNoQwen();   // the last Qwen model takes the voice packs with it
         m_message->setText(tr("%1 is deleted.").arg(m->title));
         emit changed();
     } else {

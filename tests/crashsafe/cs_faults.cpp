@@ -3,6 +3,7 @@
 // libqbfault.so (faultinject.cpp), loaded with LD_PRELOAD: a case that finds it missing runs itself again
 // in a sub-run with the library loaded.
 #include "cs.h"
+#include "core/crypto/Vault.h"
 
 #include "compile/CompileFormat.h"
 #include "compile/Compiler.h"
@@ -386,6 +387,12 @@ void caseC35()
         std::function<bool(const QString &)> complete;   // the output is whole
     };
     auto zipWhole = [](const QString &f) {
+        if (f.endsWith(QLatin1String(".gpg"))) {   // 0.99.0: an encrypted backup is whole when it decrypts and unpacks into a project
+            QString proj, e;
+            const QString into = ctx().work + QStringLiteral("/unz-") + QFileInfo(f).completeBaseName();
+            QDir(into).removeRecursively();
+            return !backup::restore(f, into, &proj, &e).isEmpty() && !proj.isEmpty();
+        }
         ZipReader z(f);
         if (!z.isValid())
             return false;
@@ -1031,6 +1038,78 @@ void caseSD06()
         if (!home.isEmpty())
             QDir(home).removeRecursively();
     }
+}
+
+
+// ================================================================ X-13 killed during an encrypted save (0.99.0, item 124)
+// as C-36, on an encrypted project: every field its old or its new value, the project opens with the keys, no plain file
+void caseX13()
+{
+    encryptionSetUp();
+    const QString v = variant();
+    if (v.startsWith(QLatin1String("kill:"))) {
+        const QStringList a = v.split(QLatin1Char(':'));
+        const QString path = qEnvironmentVariable("QB_CS_PROJECT");
+        QString err;
+        std::unique_ptr<Project> p = Project::open(path, &err);
+        if (!p)
+            return;
+        editAll(p.get(), 3, QStringLiteral("C36"));
+        writeText(qEnvironmentVariable("QB_CS_AFTER"), QJsonDocument(modelOf(p.get(), false)).toJson());
+        QString pattern = a.value(1);
+        if (pattern == QLatin1String("text"))
+            pattern = QFileInfo(p->docs()->textPath(textItems(p.get()).value(3)->id)).absolutePath() + QLatin1Char('/');
+        setFaults({QStringLiteral("kill %1 0 %2").arg(pattern, a.value(2))});
+        p->save(&err);
+        clearFaults();
+        note(QStringLiteral("the save ended without the kill (the rule did not hit)"));
+        return;
+    }
+    if (!QFileInfo::exists(faultLibrary())) {
+        check(false, QStringLiteral("(the fault library is built)"));
+        return;
+    }
+    struct Point {
+        QString pattern;
+        QList<int> bytes;
+    };
+    const QList<Point> points = {{QStringLiteral("text"), {0, 1, 300, 3000}}, {QStringLiteral(".qbx"), {0, 2000, 20000}}, {QStringLiteral("snapshots"), {0, 100}}};
+    int n = 0, opened = 0, plainLeft = 0;
+    for (const Point &pt : points)
+        for (int b : pt.bytes) {
+            ++n;
+            const QString path = fixtureCopy(QStringLiteral("fx1-qb"));
+            if (!ctx().encrypted)
+                encryptFixtureAt(path);
+            QString err;
+            const QJsonObject before = diskModel(path, &err);
+            const QString afterFile = ctx().dir + QStringLiteral("/x13-after-%1.json").arg(n);
+            QMap<QString, QString> env = faultEnv(ctx().dir + QStringLiteral("/variant-kill:%1:%2").arg(pt.pattern).arg(b));
+            env.insert(QStringLiteral("QB_CS_PROJECT"), path);
+            env.insert(QStringLiteral("QB_CS_AFTER"), afterFile);
+            env.insert(QStringLiteral("QB_TEST_KEYSTORE"), QStringLiteral("memory"));
+            subCase(QStringLiteral("kill:%1:%2").arg(pt.pattern).arg(b), env, nullptr);
+            const QJsonObject after = QJsonDocument::fromJson(readText(afterFile).toUtf8()).object();
+            const QJsonObject disk = diskModel(path, &err);
+            const QString what = QStringLiteral("killed after %1 bytes of %2 (encrypted)").arg(b).arg(pt.pattern);
+            check(!disk.isEmpty(), QStringLiteral("%1: the project opens").arg(what), err);
+            if (disk.isEmpty())
+                continue;
+            ++opened;
+            const QStringList mixed = outsideOldAndNew(before, after, disk);
+            check(mixed.isEmpty(), QStringLiteral("%1: every field is its old or its new value").arg(what), mixed.mid(0, 5).join(QLatin1String(", ")));
+            QDirIterator di(QFileInfo(path).absolutePath(), QDir::Files | QDir::Hidden, QDirIterator::Subdirectories);
+            while (di.hasNext()) {
+                const QString f = di.next();
+                QFile file(f);
+                const QString rel = QDir(QFileInfo(path).absolutePath()).relativeFilePath(f);
+                if (file.open(QIODevice::ReadOnly) && !qb::vault::projectPlainNames().contains(rel) && !qb::vault::isSealedData(file.read(64)) && !rel.contains(QLatin1String("qbstage")) &&
+                    !rel.contains(QLatin1String("journal")))
+                    ++plainLeft;
+            }
+        }
+    check(plainLeft == 0, QStringLiteral("no killed save left a readable (plain) file in the project's folder"), QString::number(plainLeft));
+    fact(QStringLiteral("X-13 kills / projects that open"), QStringLiteral("%1 / %2").arg(n).arg(opened));
 }
 
 } // namespace cs

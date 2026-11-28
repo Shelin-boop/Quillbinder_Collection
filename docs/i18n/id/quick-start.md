@@ -28,17 +28,17 @@
 | Bilah alat | **Tampilan > Bilah Alat > Sesuaikan Bilah Alat…** (atau klik kanan sebuah bilah) |
 | Bilah ikon | **Tampilan > Bilah Alat > Bilah Ikon**; **Pilih Ikon untuk Bilah Ikon…** |
 | Pintasan papan ketik | **Berkas > Opsi > Papan Ketik** (cari, tekan tombol baru, ekspor dan impor); **Bantuan > Pintasan Papan Ketik…** mencantumkannya |
-| Mencari perintah di menu | **Bantuan > Temukan Perintah…** (ketik sebagian namanya; Return menjalankannya) |
+| Mencari perintah di menu | **Bantuan > Temukan Perintah…** (ketik sebagian namanya; Enter menjalankannya) |
 | Tata letak jendela | **Tampilan > Tata Letak** (tujuh bawaan; simpan milik Anda sendiri) |
 | Simpan otomatis, proyek terbaru, informasi penulis | **Berkas > Opsi > Umum** |
 | Cadangan | **Berkas > Opsi > Cadangan** (kapan, berapa banyak, di mana); **Berkas > Cadangkan** membuat satu sekarang |
 | Ejaan dan koreksi saat mengetik | **Berkas > Opsi > Koreksi** |
-| Tempat tautan dibuka, tombol Return, mode menulis, pemutaran | **Berkas > Opsi > Perilaku** |
+| Tempat tautan dibuka, tombol Enter, mode menulis, pemutaran | **Berkas > Opsi > Perilaku** |
 | Pengaturan impor dan ekspor | **Berkas > Opsi > Berbagi** |
 | Peta pikiran, objek, pengaya, laporan crash | **Berkas > Opsi > Ekstra** |
 | Label, status, tipe seksi, metadata kustom, folder khusus | **Proyek > Pengaturan Proyek** |
 | Opsi untuk satu proyek saja | **Berkas > Opsi**, **Pengaturan untuk: Proyek ini** di bagian atas; apakah pengaturan tersendiri proyek didahulukan: **Berkas > Opsi > Umum** |
-| Membawa pengaturan Anda ke komputer lain | **Berkas > Opsi > Kelola > Simpan Opsi ke Berkas… / Muat Opsi dari Berkas…** |
+| Membawa pengaturan Anda ke komputer lain | **Berkas > Opsi > Kelola > Ekspor Profil… / Impor Profil…** |
 | Semuanya kembali ke standar | **Berkas > Opsi > Bawaan** (proyek, tema, tata letak, dan pintasan Anda tetap ada) |
 
 ---
@@ -68,13 +68,13 @@
 ### Di luar yang biasa
 
 - **Peta pikiran**: papan berisi catatan, garis, dan panah untuk setiap dokumen dan folder (tombol **Peta Pikiran** di inspektor). **Bantuan > Bantuan Peta Pikiran** menunjukkan cara kerjanya.
-- **Objek**: tokoh, lokasi, lingkungan, tempat menarik, cuaca, dan kategori buatan Anda sendiri, masing-masing dengan lembar kolom dan tautan di antaranya (tombol **Objek** di inspektor, atau **Jendela > Objek…**).
+- **Objek**: tokoh, lokasi, lingkungan, tempat menarik, cuaca, dan kategori buatan Anda sendiri, masing-masing dengan lembar kolom dan tautan di antaranya (tombol **Objek** di inspektor, atau **Jendela > Objek**).
 - **Tabel dan gambar**: **Sisipkan > Tabel…** dengan desain siap pakai atau milik Anda sendiri, **Format > Tabel** untuk baris, kolom, sel yang digabung, dan warna; gambar di samping teks dengan teks mengalir di sekelilingnya, keterangan, dan deskripsi yang disimpan e-book dan berkas Word sebagai teks alternatif (klik kanan gambar, **Gambar…**).
 - **Bilah ikon**: hingga sepuluh ikon dokumen, satu klik untuk masing-masing. **Dokumen > Ubah Ikon** juga membuat ikon dari teks atau dari gambar Anda sendiri.
 - **Zoom per bagian**: binder, editor, bagian inspektor, papan gabus, kerangka, dan peta pikiran masing-masing menyimpan zoomnya sendiri.
 - **Tempat yang diingat**: setiap dokumen terbuka di tempat Anda meninggalkan kursor, juga setelah proyek dibuka kembali.
 - **Font**: **Format > Font > Instal Berkas Font…** menambahkan font tanpa meninggalkan program.
-- **Keamanan**: simpan otomatis juga saat Anda terus mengetik, cadangan, salinan cadangan berkas proyek, laporan crash dan macet (**Bantuan > Pemecahan Masalah dan Pengembangan > Laporan Crash…**), dan **Bantuan > Pemecahan Masalah dan Pengembangan > Informasi Sistem…**.
+- **Keamanan**: simpan otomatis juga saat Anda terus mengetik, cadangan, salinan cadangan berkas proyek, laporan crash dan macet (**Bantuan > Pemecahan Masalah dan Pengembangan > Laporan Crash…**), dan **Bantuan > Pemecahan Masalah dan Pengembangan > Informasi Sistem**.
 
 ### Pembaruan dan pengaya
 
@@ -88,5 +88,5 @@
 - **Bantuan > Proyek Selamat Datang**: proyek singkat yang menunjukkan fitur-fitur yang tercantum di bawah "Di luar yang biasa" dan memungkinkan Anda mencobanya.
 - **Bantuan > Bantuan Peta Pikiran**: catatan, garis, panah, dan bentuk, dengan gambar dan papan latihan.
 - **Bantuan > Daftar Semua Placeholder** dan **Bantuan > Pintasan Papan Ketik…**
-- **Bantuan > Lisensi Pihak Ketiga…**: lisensi bagian-bagian proyek lain yang digunakan {{APP}}.
+- **Bantuan > Lisensi Pihak Ketiga**: lisensi bagian-bagian proyek lain yang digunakan {{APP}}.
 - **Bantuan > Tentang {{APP}}**: versi dan lisensi. {{APP}} adalah perangkat lunak bebas di bawah Apache License 2.0.

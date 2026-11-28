@@ -949,7 +949,7 @@ Wybierz inną nazwę pliku.</translation>
         </message>
         <message>
             <source>Return</source>
-            <translation>Return</translation>
+            <translation>Enter</translation>
         </message>
         <message>
             <source>Backtab</source>

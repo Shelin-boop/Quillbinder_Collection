@@ -38,6 +38,9 @@ class QCompleter;
 class QStandardItemModel;
 
 namespace qb {
+namespace livesync {
+class LiveSyncUi;
+}
 namespace script {
 struct Format;
 }
@@ -51,7 +54,9 @@ class StylesPanel;
 class FormatFindWindow;
 class Inspector;
 class FocusLine;
+class LiveSyncGlue;
 namespace handwriting { class HandwritingController; }
+namespace readaloud { class Controller; }
 class TextEditor;
 class CompositionWindow;
 class QuickRefWindow;
@@ -71,6 +76,8 @@ public:
     // 0.99.0 (handwriting, item 112): the parts the writing layer lies over
     QWidget *editorAreaWidget() const { return m_editorArea; }
     handwriting::HandwritingController *handwriting() const { return m_handwriting; }
+    readaloud::Controller *readAloud() const { return m_readAloud; }   // 0.99.0 (item 114)
+    QToolBar *readAloudBar() const { return m_readAloudBar; }
     TextEditor *handwritingEditor() const;   // the text editor of the active pane (null when none)
     MainWindow();
     ~MainWindow() override;
@@ -267,6 +274,7 @@ public:
 
 protected:
     void closeEvent(QCloseEvent *e) override;
+    bool eventFilter(QObject *o, QEvent *e) override; // Alt letters (0.99.0, AU-03): MainWindowSmall.cpp
     void changeEvent(QEvent *e) override;
     void resizeEvent(QResizeEvent *e) override;
     void moveEvent(QMoveEvent *e) override;
@@ -358,6 +366,8 @@ private:
     // 0.95.0 (items 95 and 97, MainWindowProfiles.cpp): profiles, the Profiles toolbar and the Labels toolbar
     void createProfileActions();
     void createProfileBars();
+    void createReadAloudActions();   // 0.99.0 (item 114)
+    void createReadAloudBar();
     void rebuildLabelBar();
     void fillProfilesMenu(QMenu *menu);
     void saveWindowSettings();
@@ -562,8 +572,22 @@ private:
     bool objectFormat(const QString &key, ObjectTextEdit *o);
 
     std::unique_ptr<Project> m_project;
+    // 0.99.0 (Live Sync, MainWindowLiveSync.cpp): this window's project is shared; the window is a follower of the service
+    friend class LiveSyncGlue;
+    LiveSyncGlue *m_liveSync = nullptr;
+    livesync::LiveSyncUi *m_liveSyncUi = nullptr; // the button, the tab, the bars and the marks (0.99.0)
+    bool m_liveSyncReopening = false;
+    void liveSyncInstallUi();
+    void liveSyncSelected(const QString &docId);
+    bool liveSyncShared(const QString &projectFile) const;
+    bool liveSyncBegin(const QString &projectFile);
+    collab::Follower *liveSyncFollower() const;
+    void liveSyncAdopted();
+    void liveSyncEnd();
     BinderPanel *m_binder = nullptr;
     Inspector *m_inspector = nullptr;
+    readaloud::Controller *m_readAloud = nullptr;   // 0.99.0 (item 114): the Read Aloud toolbar and its reading
+    QToolBar *m_readAloudBar = nullptr;
     handwriting::HandwritingController *m_handwriting = nullptr;   // 0.99.0: the button, the modes, the writing area
     QSplitter *m_mainSplit = nullptr;
     QSplitter *m_editorSplit = nullptr;
@@ -591,6 +615,8 @@ private:
     void restyleSmallButtons();
     void buildSmallButtons();
     void fillSmallMenu();
+    void openSmallMenu(QAction *top);               // the round button's menu, with the submenu of a menu bar menu opened
+    bool m_altAlone = false;                        // Alt pressed and nothing since
     void placeSmallBar();
     void refitSmallPanels();
     void updateSmallRecord();

@@ -34,25 +34,34 @@ HandwritingPanel::HandwritingPanel(QWidget *parent) : QWidget(parent)
     m_strip = new WordStrip(this);
     lay->addWidget(m_strip);
 
+    // two rows of three buttons: one row of six made the page (and with it the whole inspector) 510 px wide at least,
+    // although the Handwriting tab is hidden most of the time
     auto *row = new QHBoxLayout;
-    row->setContentsMargins(4, 4, 4, 4);
+    row->setContentsMargins(4, 4, 4, 0);
     row->setSpacing(4);
-    auto button = [this, row](const QString &name, const QString &text, const QString &tip) {
+    auto *row2 = new QHBoxLayout;
+    row2->setContentsMargins(4, 4, 4, 4);
+    row2->setSpacing(4);
+    QHBoxLayout *cur = row;
+    auto button = [this, &cur](const QString &name, const QString &text, const QString &tip) {
         auto *b = new QPushButton(text, this);
         b->setObjectName(name);
         b->setToolTip(tip);
         b->setFocusPolicy(Qt::NoFocus);   // a tap on a button leaves the text where the cursor is
-        row->addWidget(b);
+        cur->addWidget(b);
         return b;
     };
     m_space = button(QStringLiteral("hwSpace"), tr("Space"), tr("Add a space"));
     m_back = button(QStringLiteral("hwBackspace"), tr("Backspace"), tr("Delete the last character"));
     m_enter = button(QStringLiteral("hwEnter"), tr("Enter"), tr("Add a line break"));
     row->addStretch(1);
+    cur = row2;
     m_clear = button(QStringLiteral("hwClear"), tr("Clear"), tr("Throw away the text in the strip"));
     m_pin = button(QStringLiteral("hwPin"), tr("Pin"), tr("Make the text stick to the pen or finger; tap a text field to show the place"));
     m_insert = button(QStringLiteral("hwInsert"), tr("Insert"), tr("Put the text at the cursor"));
+    row2->addStretch(1);
     lay->addLayout(row);
+    lay->addLayout(row2);
 }
 
 void HandwritingPanel::setPlaceholderText(const QString &text) { m_placeholder->setText(text); }

@@ -725,6 +725,16 @@ QStringList Panel::missingParts() const
     return missing;
 }
 
+// 1.6: whole sentences (one model, several models), the list written the way the language writes lists
+QString Panel::noModelText(const QString &from, const QString &to, const QStringList &missing)
+{
+    return (missing.size() > 1 ? tr("No translation model is downloaded yet for %1 to %2: %3. Choose them with Models... (File > Options > "
+                                    "Translation Helper).")
+                               : tr("No translation model is downloaded yet for %1 to %2: %3. Choose it with Models... (File > Options > "
+                                    "Translation Helper)."))
+        .arg(from, to, QLocale().createSeparatedList(missing));
+}
+
 void Panel::updateNotice()
 {
     if (!m_notice)
@@ -732,8 +742,9 @@ void Panel::updateNotice()
     const QStringList missing = missingParts();
     m_notice->setVisible(!missing.isEmpty());
     if (!missing.isEmpty())
-        m_noticeText->setText(tr("Missing: %1. Download %2 in the add-on's options (File > Options > Translation Helper).")
-                                  .arg(missing.join(tr(" and ")), missing.size() > 1 ? tr("them") : tr("it")));
+        m_noticeText->setText((missing.size() > 1 ? tr("Missing: %1. Download them in the add-on's options (File > Options > Translation Helper).")
+                                                  : tr("Missing: %1. Download it in the add-on's options (File > Options > Translation Helper)."))
+                                  .arg(QLocale().createSeparatedList(missing)));
 }
 
 void Panel::updateModelBox()
@@ -1156,9 +1167,7 @@ void Panel::runPair(const QString &text, const QHash<QString, QList<Segment>> &p
             ids << id;
     }
     if (!missing.isEmpty()) {
-        setStatus(tr("No translation model is downloaded yet for %1 to %2: %3. Choose it with Models... (File > Options > "
-                     "Translation Helper).")
-                      .arg(languageName(m_srcLang), languageName(m_tgtLang), missing.join(tr(" and "))));
+        setStatus(noModelText(languageName(m_srcLang), languageName(m_tgtLang), missing));
         updateNotice();
         emit finished();
         return;
@@ -2362,9 +2371,7 @@ void Panel::runSingleTranslation(const QString &word)
         if (steps.isEmpty()) {
             job.modelNote = tr("Choose two different languages.");
         } else if (!missing.isEmpty()) {
-            job.modelNote = tr("No translation model is downloaded yet for %1 to %2: %3. Choose it with Models... (File > Options > "
-                               "Translation Helper).")
-                                .arg(languageName(m_srcLang), languageName(m_tgtLang), missing.join(tr(" and ")));
+            job.modelNote = noModelText(languageName(m_srcLang), languageName(m_tgtLang), missing);
         } else {
             job.engine = m_tool->engine(&error);
             QString memory = job.engine ? QString() : error;
@@ -2923,16 +2930,15 @@ void Panel::renderSingle(QTextCursor &c, const QTextCharFormat &plain)
         }
     }
     for (const Similar &sim : std::as_const(m_single.similar)) {
-        const QString forBase = m_single.base.isEmpty() || m_single.base == m_single.result.toLower()
-                                    ? QString()
-                                    : tr(", for “%1”").arg(m_single.base);
+        const bool withBase = !(m_single.base.isEmpty() || m_single.base == m_single.result.toLower());
         // 1.4: a translated word has similar translations (English: the thesaurus of the meaning; German: the dictionary's words)
         if (m_single.kind == QLatin1String("de-en") || m_single.kind == QLatin1String("pair-en"))
-            list(tr("Similar translations (%1%2):").arg(sim.pos, forBase), sim.words);
+            list((withBase ? tr("Similar translations (%1, for “%2”):").arg(sim.pos, m_single.base) : tr("Similar translations (%1):").arg(sim.pos)),
+                 sim.words);
         else if (m_single.kind == QLatin1String("en-de"))
             list(tr("Similar German words (%1):").arg(sim.pos), sim.words);
         else
-            list(tr("Similar (%1%2):").arg(sim.pos, forBase), sim.words);
+            list((withBase ? tr("Similar (%1, for “%2”):").arg(sim.pos, m_single.base) : tr("Similar (%1):").arg(sim.pos)), sim.words);
     }
     if (proof) {
         if (!m_single.modelWords.isEmpty())
@@ -2988,17 +2994,16 @@ void Panel::showInfoForInput(int position)
 void Panel::fillInfo()
 {
     const QString w = m_infoWord;
-    QString html = QStringLiteral("<p><b>%1</b>").arg(w.toHtmlEscaped());
+    const QString bold = QStringLiteral("<b>%1</b>").arg(w.toHtmlEscaped());
+    QString html = QStringLiteral("<p>");
     if (!m_infoEnglish) {
-        html += tr(" (German): spelling suggestions and similar words are given for English words.") + QStringLiteral("</p>");
+        html += tr("%1 (German): spelling suggestions and similar words are given for English words.").arg(bold) + QStringLiteral("</p>");
         m_info->setHtml(html);
         return;
     }
     QString base;
     const QList<Similar> similar = similarWords(w, &base);
-    if (!base.isEmpty() && base != w.toLower())
-        html += tr(" (from “%1”)").arg(base.toHtmlEscaped());
-    html += QStringLiteral("</p>");
+    html += (!base.isEmpty() && base != w.toLower() ? tr("%1 (from “%2”)").arg(bold, base.toHtmlEscaped()) : bold) + QStringLiteral("</p>");
     if (m_infoContext == QLatin1String("output")) {
         // 1.4: the words of the result are the program's own: no line about their spelling
     } else if (knownWord(w)) {

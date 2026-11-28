@@ -18,6 +18,9 @@
 #include "import/ScrivenerFormat.h"
 #include "ui/AppSettings.h"
 #include "ui/CompileDialog.h"
+#include "ui/LiveSyncControl.h"
+#include "ui/LiveSyncDialogs.h"
+#include "ui/LiveSyncUi.h"
 #include "ui/MainWindow.h"
 #include "ui/StartDialog.h"
 #include "ui/Theme.h"
@@ -941,6 +944,32 @@ int main(int argc, char **argv)
         check(unconnected.isEmpty(), QStringLiteral("menu audit: every enabled entry does something (is connected)"),
               unconnected.join(QLatin1String("; ")));
         check(mnemonicDup.isEmpty(), QStringLiteral("menu audit: no letter for Alt used twice in one menu"), mnemonicDup.join(QLatin1String("; ")));
+        // 0.99.0: the English texts themselves have no clash: the letters as the source writes them, before fixMnemonics
+        // (which keeps the translations apart) moved any; a moved entry keeps its source text in a property
+        QStringList sourceClash;
+        for (QMenu *m : menus) {
+            if (!m)
+                continue;
+            QHash<QChar, QString> keys;
+            for (QAction *a : m->actions()) {
+                if (a->isSeparator() || !a->isVisible() || qobject_cast<QWidgetAction *>(a))
+                    continue;
+                QString t = a->text();
+                if (a->property("qbMnemonicFixed").toString() == t)
+                    t = a->property("qbMnemonicFrom").toString();
+                const int amp = int(t.indexOf(QLatin1Char('&')));
+                if (amp < 0 || amp + 1 >= t.size() || t.at(amp + 1) == QLatin1Char('&'))
+                    continue;
+                const QChar k = t.at(amp + 1).toLower();
+                if (keys.contains(k))
+                    sourceClash << QStringLiteral("%1: %2 / %3 (%4)").arg(menuText(m->title()), keys.value(k), menuText(t), k);
+                keys.insert(k, menuText(t));
+            }
+        }
+        for (const QString &c : sourceClash)
+            info(QStringLiteral("English letter clash: ") + c);
+        check(sourceClash.isEmpty(), QStringLiteral("menu audit: the English source texts of one menu share no Alt letter (before fixMnemonics)"),
+              sourceClash.join(QLatin1String("; ")));
         // the menu bar's own letters
         QSet<QChar> top;
         bool topUnique = true;
@@ -1184,6 +1213,139 @@ int main(int argc, char **argv)
                     keysOn << ac->objectName() + QLatin1Char(' ') + ac->shortcut().toString();
             }
         info(QStringLiteral("shortcuts that still work without a project: %1").arg(keysOn.join(QLatin1String(", "))));
+    }
+
+
+    // =========================================================== menu audit: Live Sync (0.99.0, work package 7)
+    // The Live Sync button's menu in every situation it can be in: every entry has a text, a letter for Alt at most once, does
+    // something when it is on, is on only where it can act, and its command works (a call to the service or a window).
+    {
+        using namespace qb::livesync;
+        FakeLiveSyncControl fake;
+        setLiveSyncControl(&fake);
+        dialogHooks().confirm = [](QWidget *, const QString &, const QString &, const QString &) { return true; };
+        dialogHooks().pickItem = [](QWidget *, const QString &, const QString &, const QStringList &items) { return items.value(0); };
+        QTemporaryDir lsTmp;
+        auto proj = Project::create(lsTmp.path(), QStringLiteral("LsAudit"), nullptr);
+        QMainWindow lw;
+        LiveSyncUi ui(&lw);
+        auto *bar = lw.addToolBar(QStringLiteral("t"));
+        ui.installToolbarButton(bar);
+        auto *lm = lw.menuBar()->addMenu(QStringLiteral("Live Sync"));
+        lm->setObjectName(QStringLiteral("auditLiveSyncMenu"));
+        for (QAction *act : ui.menu()->actions())
+            lm->addAction(act);
+        lw.show();
+        ui.setProject(proj.get());
+        struct Case {
+            QString name;
+            bool on;
+            int role; // -1 not shared, 0 host, 1 editor
+            bool drafts, device;
+            QStringList enabled; // object names expected on
+        };
+        const QList<Case> cases = {
+            {QStringLiteral("off"), false, -1, false, false, {}},
+            {QStringLiteral("on, project not shared"), true, -1, false, false, {QStringLiteral("lsShareProject"), QStringLiteral("lsJoinProject")}},
+            {QStringLiteral("host"), true, 0, true, true,
+             {QStringLiteral("lsJoinProject"), QStringLiteral("lsRequestBackup"), QStringLiteral("lsTransferHosting"), QStringLiteral("lsHostedProjects"),
+              QStringLiteral("lsRecoveryDrafts"), QStringLiteral("lsStopSharing")}},
+            {QStringLiteral("client"), true, 1, true, false,
+             {QStringLiteral("lsJoinProject"), QStringLiteral("lsRequestBackup"), QStringLiteral("lsRecoveryDrafts"), QStringLiteral("lsStopSharing")}},
+        };
+        QStringList bad, noText, unconnected, noEffect;
+        for (const Case &c : cases) {
+            fake.on = c.on;
+            fake.status.setRunning(c.on);
+            fake.status.removeProject(QStringLiteral("a1"));
+            fake.accessList.clear();
+            if (c.role >= 0) {
+                qb::collab::ProjectStatus st;
+                st.valid = true;
+                st.uuid = QStringLiteral("a1");
+                st.title = QStringLiteral("LsAudit");
+                st.folder = proj->folderPath();
+                st.role = c.role == 0 ? qb::collab::ShareRole::Host : qb::collab::ShareRole::Editor;
+                st.state = qb::collab::ShareState::UpToDate;
+                st.draftCount = c.drafts ? 1 : 0;
+                fake.status.setProject(st);
+                if (c.device) {
+                    AccessEntry e;
+                    e.deviceId = QStringLiteral("d");
+                    e.name = QStringLiteral("Tablet");
+                    e.role = AccessEntry::Editor;
+                    e.online = true;
+                    fake.accessList.insert(QStringLiteral("a1"), {e});
+                }
+            }
+            emit fake.enabledChanged();
+            QList<QPointer<QMenu>> menus;
+            const QList<MenuEntry> entries = allEntries(&lw, &menus);
+            QStringList onNow;
+            QSet<QChar> keys;
+            for (const MenuEntry &e : entries) {
+                if (menuText(e.action->text()).isEmpty())
+                    noText << c.name + QLatin1String(": ") + e.path;
+                const int amp = int(e.action->text().indexOf(QLatin1Char('&')));
+                if (amp >= 0 && amp + 1 < e.action->text().size()) {
+                    const QChar k = e.action->text().at(amp + 1).toLower();
+                    if (keys.contains(k))
+                        bad << c.name + QLatin1String(": letter twice ") + k;
+                    keys.insert(k);
+                }
+                if (e.action->isEnabled()) {
+                    onNow << e.action->objectName();
+                    if (!isConnected(e.action))
+                        unconnected << c.name + QLatin1String(": ") + e.path;
+                }
+            }
+            QStringList expect = c.enabled, got = onNow;
+            expect.sort();
+            got.sort();
+            if (expect != got)
+                bad << QStringLiteral("%1: enabled %2, expected %3").arg(c.name, got.join(QLatin1Char(',')), expect.join(QLatin1Char(',')));
+            // every command that is on works
+            for (const MenuEntry &e : entries) {
+                if (!e.action->isEnabled())
+                    continue;
+                fake.calls.clear();
+                const int callsBefore = int(fake.status.calls().size());
+                const QWidgetList tops = QApplication::topLevelWidgets();
+                const QSet<QWidget *> before(tops.begin(), tops.end());
+                e.action->trigger();
+                settle(60);
+                bool effect = !fake.calls.isEmpty() || fake.status.calls().size() > callsBefore;
+                for (QWidget *tl : QApplication::topLevelWidgets())
+                    if (!before.contains(tl) && tl->isVisible()) {
+                        effect = true;
+                        tl->close();
+                    }
+                settle(30);
+                if (!effect)
+                    noEffect << c.name + QLatin1String(": ") + e.path;
+                if (e.action->objectName() == QLatin1String("lsStopSharing")) {
+                    // the call ended the sharing in the real service; the fake only notes it: put the project back
+                    fake.status.setProject(fake.status.project(QStringLiteral("a1")));
+                }
+            }
+        }
+        check(noText.isEmpty(), QStringLiteral("menu audit: Live Sync: every entry has a text"), noText.join(QLatin1String("; ")));
+        check(unconnected.isEmpty(), QStringLiteral("menu audit: Live Sync: every enabled entry does something (is connected)"), unconnected.join(QLatin1String("; ")));
+        check(bad.isEmpty(), QStringLiteral("menu audit: Live Sync: entries are on only where they can act (off, not shared, host, client); no letter twice"), bad.join(QLatin1String("; ")));
+        check(noEffect.isEmpty(), QStringLiteral("menu audit: Live Sync: every enabled command has an effect (a call or a window)"), noEffect.join(QLatin1String("; ")));
+        // with Live Sync off the program's own menus hold nothing of it
+        fake.on = false;
+        emit fake.enabledChanged();
+        QList<QPointer<QMenu>> menusMain;
+        const QList<MenuEntry> mainEntries = allEntries(&w, &menusMain);
+        QStringList lsHere;
+        for (const MenuEntry &e : mainEntries)
+            if (e.path.contains(QLatin1String("Live Sync")) || e.path.contains(QLatin1String("Hosted Projects")) || e.path.contains(QLatin1String("Recovery Drafts")))
+                lsHere << e.path;
+        check(lsHere.isEmpty(), QStringLiteral("menu audit: with Live Sync off no menu of the window has an entry of it"), lsHere.join(QLatin1String("; ")));
+        dialogHooks().confirm = nullptr;
+        dialogHooks().pickItem = nullptr;
+        setLiveSyncControl(nullptr);
     }
 
     w.closeProject();

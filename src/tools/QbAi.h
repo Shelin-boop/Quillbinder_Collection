@@ -149,6 +149,7 @@ struct qbai_synth_params {
 };
 
 struct qbai_stretcher;         /* Sonic's stream, for PCM that comes in pieces */
+typedef struct qbai_output qbai_output;   /* a sound output (output_open) */
 
 struct qbai_api {
     int version;               /* the version this struct was made for (what was asked) */
@@ -192,6 +193,22 @@ struct qbai_api {
        probability of codes[i] (0 for a code the model does not know). Runs the model's encoder once: use it on a piece, then
        transcribe with the language chosen. A model that is not multilingual gets QBAI_UNSUPPORTED. */
     int (*detect_language)(qbai_model *model, const float *pcm, int64_t samples, const char *const *codes, int count, float *probs);
+
+    /* Sound output (Read Aloud; miniaudio inside the engine: ALSA, PulseAudio or PipeWire on Linux, WASAPI on Windows, AAudio or
+       OpenSL ES on Android, all loaded at run time). Only played, never saved. All calls may come from any thread but the
+       output itself is used from one at a time. */
+    /* The system's default output, `channels` interleaved float channels at `rate`; NULL on failure (last_error). It starts
+       stopped-and-empty: playing begins with the first write. */
+    qbai_output *(*output_open)(int rate, int channels);
+    /* Queues `frames` frames (frames * channels floats); never blocks for the sound to play. */
+    int (*output_write)(qbai_output *out, const float *pcm, int64_t frames);
+    int (*output_pause)(qbai_output *out);
+    int (*output_resume)(qbai_output *out);
+    /* Drops what is queued and not yet played; the played position goes back to 0. */
+    int (*output_stop)(qbai_output *out);
+    void (*output_close)(qbai_output *out);   /* NULL is allowed */
+    /* The frames played so far of what was written since the open (or the last stop). */
+    int64_t (*output_played)(qbai_output *out);
 };
 
 /* the size of the version 1 table (what an engine package of version 1 reports in `size`) */

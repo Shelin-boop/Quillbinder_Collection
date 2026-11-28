@@ -2,6 +2,48 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: Live Sync's write gate (suite `ls3`, `src/core/collab/`)
+
+- **One gate for every write into a follower's folder**: `collab::gate()` is asked first by `safesave::write`, `writeFile`, `copyFile`,
+  `removeFile`, `savebatch::Batch::stage`, `vault::saveImage` and `pathsafety::removeTreeInside`. It answers `Pass` (not a
+  follower's folder, or a device-local file such as `settings/ui-*.json`), `Captured` (kept as plain bytes in the follower's
+  `Capture`; the caller treats the write as done) or `Refused` (a path of no class: counted, and `QB_LS_STRICT=1` in a test build
+  aborts). With no follower attached `gate().active()` is false and every call returns at once.
+- **Capture happens before sealing**: `Batch::stage` asks the gate before `vault::seal`, so an encrypted replica's followers hand
+  over plain bytes (the host seals them when it saves). `vault::seal` and `vault::copy` ask `sealAllowed` as a backstop: a write that
+  reached them for a follower's capturable path is refused.
+- **A captured `QSaveFile`** is cancelled on purpose (it opens a temporary file beside the target for a moment); `safesave::commit`
+  recognizes it by the error `cancelWriting` leaves and the pointer the gate remembers.
+- **A batch hands its captured files over at the end of its commit**, after the files in place, so the follow-up steps (the removal of
+  the other storage format's file) land in the same change set. A dropped batch hands over nothing.
+- **A follower never compares with the disk for "changed elsewhere"**: the replica's file is the service's. `DocumentStore::writeEntry`
+  and `Project::saveIndex` compare with what the window last read or handed over; after a remote commit the window calls
+  `DocumentStore::reload(id)` and `Project::acknowledgeIndexOnDisk()`. Without this a second save would keep a "conflict copy".
+- **Remote commits**: `Project::beginRemoteApply/endRemoteApply` (used by `collab::applyToProject`) stop `markIndexDirty` and make the
+  follower's capture drop writes while a commit is applied; the files are already there.
+- **Open work**: files that write into a project folder on their own are listed in `tests/ls3_tests.cpp` (`kAudit`, status
+  "pending"): MindMap, Objects (removes), Snapshots, FileImporter, Inspector, MindMapController, ProjectLook. They must go through
+  `safesave` or the gate before sharing can be switched on; the suite prints them.
+
+## 0.99.0: a locked key is no other version (audit AU-01, suite `v0990f`)
+
+A locked or missing key says nothing about what a file holds: `DocumentStore::diskText` returns "cannot compare" for
+`Error::Locked` and `NoSecretKey` (the stamp decides, as for a plain file); only a damaged file counts as another version.
+**Forget the passphrase** calls `vault::lockWhenIdle`: the key is locked at once only when no encrypted project is open,
+else when the last vault folder is removed. A read that finds the key locked (`DocumentStore::unsealAsking`) asks through
+`DocumentStore::setUnlockHandler` (the window sets `ui::unlockForFolder`); Cancel is remembered (`m_unlockDeclined`) so that
+the next documents are not asked again until a read works.
+
+## 0.99.0: showing is no edit (suite `v0930f`, `cleanShow`)
+
+A highlighter's pass over a document (a new "qbPaper" or "qbZoom", a palette or theme change, the first look) fires
+`contentsChanged` without an edit. The store's slot now ignores the signal while the document is not modified (every
+real edit sets that flag), so a shown document is not dirty and not written again. `TextEditor::setProjectDocument`
+sets the paper before it attaches the highlighter, and the highlighter does not queue a pass for an empty document.
+`sameAsRead` compares plain notes by their text. An undo back to the text as read clears the modified flag too, but leaves a redo step: the slot skips only a signal with no modified flag, no undo and no redo step.
+Pitfall: a document that was edited stays "modified" (the store does
+not reset the flag after a save), so a later pass marks it dirty again; it is written once more, harmlessly.
+
 ## 0.99.0: encryption, the review's findings (suites `v0990f` "reviewFindings", `v0990j`, `v0990k`, `v0990e`)
 
 - **Copies**: `saveAsQuillbinder` / `copyAsQuillbinder` copy `encryption.json` first (`copyMarkerFirst`) and hold a `vault::Scope`

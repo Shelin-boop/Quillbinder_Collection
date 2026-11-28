@@ -67,6 +67,7 @@
 #include "ui/DocMirror.h"
 #include "ui/Inspector.h"
 #include "ui/handwriting/HandwritingController.h"
+#include "ui/handwriting/OnnxRecognizer.h"
 #include "ui/MindMapController.h"
 #include "ui/MindMapDoc.h"
 #include "ui/MindMapUi.h"
@@ -74,6 +75,7 @@
 #include "ui/ColorPickButton.h"
 #include "ui/ViewMemory.h"
 #include "ui/MindMapView.h"
+#include "ui/NoteFormatTarget.h"
 #include "core/Objects.h"
 #include "ui/Layouts.h"
 #include "ui/OptionsDialog.h"
@@ -157,6 +159,8 @@
 #include <QUrl>
 
 namespace qb {
+
+static NoteFormatTarget *noteTargetNow(); // the mind map the format bar acts on (0.99.0)
 
 namespace {
 // A double click on the divider between the two editors makes them equally large.
@@ -285,6 +289,7 @@ MainWindow::MainWindow()
     setCentralWidget(m_mainSplit);
     // 0.99.0 (item 112): handwriting: the button, the modes and the one writing area; a mode needs a recognizer, so the first use
     // (and every use while none is installed) opens File > Options > Handwriting
+    handwriting::installOnnxRecognizer(this); // 0.99.0 (part 2): the recognizer and the Install button of the page
     m_handwriting = new handwriting::HandwritingController(this, m_inspector);
     connect(m_handwriting, &handwriting::HandwritingController::settingsRequested, this,
             [this] { OptionsDialog::run(this, [](OptionsDialog &d) { d.showSection(OptionsDialog::SGeneral, tr("Handwriting")); }); });
@@ -293,6 +298,7 @@ MainWindow::MainWindow()
     connectPane(m_panes[0]);
     connectPane(m_panes[1]);
     dnd::installFileProvider(); // documents dragged to the file manager become files
+    QTimer::singleShot(0, this, [this] { liveSyncInstallUi(); }); // 0.99.0 (Live Sync): after the bars exist
     new SplitEqualizer(m_editorSplit); // a double click on the divider gives both editors the same room
 
     m_panes[1]->setStateSuffix(QStringLiteral("1"));
@@ -328,6 +334,7 @@ MainWindow::MainWindow()
     createFormatBar();
     createIconBar();
     createProfileBars(); // 0.95.0
+    createReadAloudBar(); // 0.99.0 (item 114)
     createSmallInterface(); // 0.99.0 (item 122): the round buttons and the slide-in panels
     // the fields on the toolbars (quick search, style, font, size ...) in the color of the
     // menus and toolbars, not of lists (0.60.3)
@@ -350,6 +357,8 @@ MainWindow::MainWindow()
     connect(m_binder, &BinderPanel::selectionChanged, this, [this](const QList<BinderItem *> &items) {
         if (!m_project || m_updatingUi)
             return;
+        if (m_liveSyncUi) // 0.99.0 (Live Sync): the tab and the bars follow the chosen document
+            liveSyncSelected(items.size() == 1 ? items.first()->id : QString());
         EditorPane *target = binderTarget();
         if (m_quickSearchMark && !m_binder->showsSearchResults()) {
             // the matches of a quick search are marked until another document is chosen
@@ -623,6 +632,10 @@ MainWindow::MainWindow()
         if (auto *bar = qobject_cast<GripBar *>(m_labelBar)) { // 0.95.0: the Labels toolbar after the icon bar
             gripBars << bar;
             rowTwo << bar->objectName();
+        }
+        if (auto *bar = qobject_cast<GripBar *>(m_readAloudBar)) { // 0.99.0 (item 114): Read Aloud at the end of the first row
+            gripBars << bar;
+            rowOne << bar->objectName();
         }
         m_barDock = new BarDock(this, gripBars, {rowOne, rowTwo});
         m_barDock->load();
@@ -969,10 +982,13 @@ MainWindow::~MainWindow()
     // 0.93.0 (Android's system test, a crash at the window's end): the keyboard focus changes while the window's own
     // widgets are deleted (after this body, with the members already gone), and the application's focus signal then
     // reached the undo watcher of a window half destroyed. Every connection to the application's signals is cut first.
+    DocumentStore::setUnlockHandler(nullptr);
     m_ending = true;
     for (const QMetaObject::Connection &c : std::as_const(m_focusLinks))
         disconnect(c);
     m_focusLinks.clear();
+    if (m_focusLine)
+        m_focusLine->stopListening(); // 0.99.0: the focus line is a child that is deleted after this body
     for (const QMetaObject::Connection &c : std::as_const(m_undoWatch))
         disconnect(c);
     m_undoWatch.clear();
@@ -1120,7 +1136,7 @@ void MainWindow::createActions()
     connect(act(QStringLiteral("newProject"), tr("&New Project…"), QStringLiteral("document-new"),
                 QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_N)),
             &QAction::triggered, this, [this] { showStartDialog(false); });
-    connect(act(QStringLiteral("openProject"), tr("&Open Project…"), QStringLiteral("document-open"), QKeySequence::Open),
+    connect(act(QStringLiteral("openProject"), tr("Open Pro&ject…"), QStringLiteral("document-open"), QKeySequence::Open),
             &QAction::triggered, this, [this] {
                 const QString f = QFileDialog::getOpenFileName(this, tr("Open Project"), AppSettings::instance().lastProjectDir,
                                                                projectFileFilter());
@@ -1199,7 +1215,7 @@ void MainWindow::createActions()
             &QAction::triggered, this, withProject([this] { importFiles(); }));
     connect(act(QStringLiteral("importWebPage"), tr("Import &Web Page…"), QStringLiteral("text-html")),
             &QAction::triggered, this, withProject([this] { importWebPage(); }));
-    connect(act(QStringLiteral("importSplit"), tr("Import and &Split…")), &QAction::triggered, this, withProject([this] {
+    connect(act(QStringLiteral("importSplit"), tr("&Import and Split…")), &QAction::triggered, this, withProject([this] {
         ImportSplitDialog dlg(m_project.get(), this);
         if (dlg.exec() != QDialog::Accepted || dlg.file().isEmpty())
             return;
@@ -1225,7 +1241,7 @@ void MainWindow::createActions()
     }));
     connect(act(QStringLiteral("exportFiles"), tr("&Export Files…"), QStringLiteral("document-export")),
             &QAction::triggered, this, withProject([this] { exportItems(m_project.get(), actionItems(), this); }));
-    connect(act(QStringLiteral("compile"), tr("&Compile…"), QStringLiteral("document-export"),
+    connect(act(QStringLiteral("compile"), tr("Compi&le…"), QStringLiteral("document-export"),
                 QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_E)),
             &QAction::triggered, this, withProject([this] {
                 m_project->save();
@@ -1234,7 +1250,7 @@ void MainWindow::createActions()
             }));
     connect(act(QStringLiteral("convertFile"), tr("Convert &Markdown ⇄ RTF File…"), QStringLiteral("view-refresh")),
             &QAction::triggered, this, [this] { convertFileTool(); });
-    connect(act(QStringLiteral("printSettings"), tr("Print Se&ttings…"), QStringLiteral("printer")), &QAction::triggered,
+    connect(act(QStringLiteral("printSettings"), tr("Print Settin&gs…"), QStringLiteral("printer")), &QAction::triggered,
             this, withProject([this] { showPrintSettings(); }));
     a[QStringLiteral("printSettings")]->setToolTip(tr("Paper, header and footer, and how texts, index cards and the outliner are printed"));
     connect(act(QStringLiteral("printPreview"), tr("Print Pre&view"), QStringLiteral("document-print-preview")),
@@ -1302,7 +1318,7 @@ void MainWindow::createActions()
             this, route([](QTextEdit *e) { e->copy(); }, [](QPlainTextEdit *e) { e->copy(); }, [](QLineEdit *e) { e->copy(); }));
     connect(act(QStringLiteral("paste"), tr("&Paste"), QStringLiteral("edit-paste"), QKeySequence::Paste), &QAction::triggered,
             this, route([](QTextEdit *e) { e->paste(); }, [](QPlainTextEdit *e) { e->paste(); }, [](QLineEdit *e) { e->paste(); }));
-    connect(act(QStringLiteral("pastePlain"), tr("Paste and &Match Style"), QString(), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_V)),
+    connect(act(QStringLiteral("pastePlain"), tr("Paste and Match &Style"), QString(), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_V)),
             &QAction::triggered, this, [this] {
                 if (TextEditor *e = editor())
                     e->pasteMatchingStyle();
@@ -1319,7 +1335,7 @@ void MainWindow::createActions()
             route([](QTextEdit *e) { e->selectAll(); }, [](QPlainTextEdit *e) { e->selectAll(); }, [](QLineEdit *e) { e->selectAll(); }));
     connect(act(QStringLiteral("find"), tr("&Find…"), QStringLiteral("edit-find"), QKeySequence::Find), &QAction::triggered,
             this, [this] { m_active->showFindBar(false); });
-    connect(act(QStringLiteral("replace"), tr("Find and &Replace…"), QStringLiteral("edit-find-replace"),
+    connect(act(QStringLiteral("replace"), tr("Find &and Replace…"), QStringLiteral("edit-find-replace"),
                 QKeySequence(Qt::CTRL | Qt::Key_H)),
             &QAction::triggered, this, [this] { m_active->showFindBar(true); });
     connect(act(QStringLiteral("findNext"), tr("Find &Next"), QString(), QKeySequence(Qt::Key_F3)), &QAction::triggered, this,
@@ -1349,7 +1365,7 @@ void MainWindow::createActions()
                 else
                     m_binder->showSearch(true);
             }));
-    connect(act(QStringLiteral("docLink"), tr("Link to &Document…"), QStringLiteral("insert-link"),
+    connect(act(QStringLiteral("docLink"), tr("&Link to Document…"), QStringLiteral("insert-link"),
                 QKeySequence(Qt::CTRL | Qt::Key_L)),
             &QAction::triggered, this, withProject([this] {
                 TextEditor *e = editor();
@@ -1390,7 +1406,7 @@ void MainWindow::createActions()
                 if (ObjectsWindow *ow = ObjectsWindow::open(m_project.get(), cur, this))
                     shareShortcuts(ow); // Ctrl+B and the like in the text of objects (0.21.1)
             }));
-    connect(act(QStringLiteral("objectTemplates"), tr("Object &Templates and Colors…")), &QAction::triggered, this,
+    connect(act(QStringLiteral("objectTemplates"), tr("&Object Templates and Colors…")), &QAction::triggered, this,
             withProject([this] { ObjectTemplatesDialog::run(m_project.get(), m_inspector->objectsPanel()->category(), this); }));
     connect(act(QStringLiteral("hyperlink"), tr("Insert &Web Link…"), QStringLiteral("insert-link")), &QAction::triggered, this,
             [this] {
@@ -1457,13 +1473,13 @@ void MainWindow::createActions()
             &QAction::triggered, this, [this] { setSplit(Qt::Vertical, true); });
     connect(act(QStringLiteral("splitV"), tr("Split &Vertically"), QStringLiteral("view-split-left-right")),
             &QAction::triggered, this, [this] { setSplit(Qt::Horizontal, true); });
-    QAction *sb = act(QStringLiteral("showBinder"), tr("Show &Binder"), QStringLiteral("view-list-tree"),
+    QAction *sb = act(QStringLiteral("showBinder"), tr("S&how Binder"), QStringLiteral("view-list-tree"),
                       QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_B));
     sb->setCheckable(true);
     sb->setChecked(true);
     connect(sb, &QAction::toggled, m_binder, &QWidget::setVisible);
     // 0.94.0: the keys of the binder (Return makes a new document, Space opens a Quick Reference window)
-    QAction *sk = act(QStringLiteral("binderScrivenerKeys"), tr("Quick-Add &Keys in the Binder"));
+    QAction *sk = act(QStringLiteral("binderScrivenerKeys"), tr("&Quick-Add Keys in the Binder"));
     sk->setCheckable(true);
     sk->setChecked(AppSettings::instance().binderScrivenerKeys); // (the setting's key keeps its old name)
     sk->setToolTip(tr("Return adds a new document below; Space opens a Quick Reference window"));
@@ -1477,10 +1493,10 @@ void MainWindow::createActions()
     si->setCheckable(true);
     si->setChecked(true);
     connect(si, &QAction::toggled, m_inspector, &QWidget::setVisible);
-    QAction *cols = act(QStringLiteral("showCollections"), tr("Show &Collections"), QStringLiteral("bookmarks"));
+    QAction *cols = act(QStringLiteral("showCollections"), tr("Sho&w Collections"), QStringLiteral("bookmarks"));
     cols->setCheckable(true);
     connect(cols, &QAction::toggled, m_binder, &BinderPanel::setCollectionsVisible);
-    connect(act(QStringLiteral("composition"), tr("&Composition Mode"), QStringLiteral("view-fullscreen"),
+    connect(act(QStringLiteral("composition"), tr("Composition &Mode"), QStringLiteral("view-fullscreen"),
                 QKeySequence(Qt::Key_F11)),
             &QAction::triggered, this, [this] { enterComposition(); });
     QAction *pv = act(QStringLiteral("pageView"), tr("&Page View"), QStringLiteral("view-pages-continuous"));
@@ -1502,7 +1518,7 @@ void MainWindow::createActions()
         for (EditorPane *p : m_panes)
             p->textView()->setTypewriter(on);
     });
-    QAction *titles = act(QStringLiteral("scrivTitles"), tr("Show &Titles in Combined Text"));
+    QAction *titles = act(QStringLiteral("scrivTitles"), tr("Show Titles in &Combined Text"));
     titles->setCheckable(true);
     connect(titles, &QAction::toggled, this, [this](bool on) {
         if (m_updatingUi)
@@ -1513,7 +1529,7 @@ void MainWindow::createActions()
             if (p->mode() == ViewMode::Combined)
                 p->showItems(p->items(), false, int(ViewMode::Combined));
     });
-    QAction *fixed = act(QStringLiteral("fixedWidth"), tr("&Fixed Width Editor"));
+    QAction *fixed = act(QStringLiteral("fixedWidth"), tr("Fixed &Width Editor"));
     fixed->setCheckable(true);
     connect(fixed, &QAction::toggled, this, [this](bool on) {
         if (m_updatingUi)
@@ -1523,14 +1539,14 @@ void MainWindow::createActions()
         for (EditorPane *p : m_panes)
             p->textView()->applySettings();
     });
-    connect(act(QStringLiteral("zoomIn"), tr("Zoom &In"), QStringLiteral("zoom-in"), QKeySequence::ZoomIn),
+    connect(act(QStringLiteral("zoomIn"), tr("Zoom I&n"), QStringLiteral("zoom-in"), QKeySequence::ZoomIn),
             &QAction::triggered, this, withProject([this] { m_project->docs()->setZoom(m_project->docs()->zoom() + 0.1); }));
-    connect(act(QStringLiteral("zoomOut"), tr("Zoom &Out"), QStringLiteral("zoom-out"), QKeySequence::ZoomOut),
+    connect(act(QStringLiteral("zoomOut"), tr("&Zoom Out"), QStringLiteral("zoom-out"), QKeySequence::ZoomOut),
             &QAction::triggered, this, withProject([this] { m_project->docs()->setZoom(m_project->docs()->zoom() - 0.1); }));
     // 0.21: back to the default text zoom of File > Options > Editing, and the inspector's zoom per tab
     connect(act(QStringLiteral("zoomReset"), tr("&Reset Zoom"), QStringLiteral("zoom-original"), QKeySequence(Qt::CTRL | Qt::Key_0)),
             &QAction::triggered, this, withProject([this] { m_project->docs()->setZoom(zoom::defaultFactor(QLatin1String(zoom::kEditor))); }));
-    QAction *perTab = act(QStringLiteral("zoomInspectorPerTab"), tr("Zoom Inspector &Tabs Separately"));
+    QAction *perTab = act(QStringLiteral("zoomInspectorPerTab"), tr("Zoom Insp&ector Tabs Separately"));
     perTab->setCheckable(true);
     perTab->setChecked(zoom::perTab());
     connect(perTab, &QAction::toggled, this, [](bool on) { zoom::setPerTab(on); });
@@ -1578,7 +1594,7 @@ void MainWindow::createActions()
             &QAction::triggered, this, withProject([this] { exportProjectSettings(); }));
     connect(act(QStringLiteral("settingsImport"), tr("&Load Project Settings From File…"), QStringLiteral("document-import")),
             &QAction::triggered, this, withProject([this] { importProjectSettings(); }));
-    connect(act(QStringLiteral("targets"), tr("Project &Targets…"), QStringLiteral("flag"),
+    connect(act(QStringLiteral("targets"), tr("&Project Targets…"), QStringLiteral("flag"),
                 QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_T)),
             &QAction::triggered, this, withProject([this] {
                 auto *d = new TargetsDialog(m_project.get(), this);
@@ -1601,7 +1617,7 @@ void MainWindow::createActions()
                 });
                 d->show();
             }));
-    connect(act(QStringLiteral("statistics"), tr("Project S&tatistics"), QStringLiteral("view-statistics")),
+    connect(act(QStringLiteral("statistics"), tr("P&roject Statistics"), QStringLiteral("view-statistics")),
             &QAction::triggered, this, withProject([this] {
                 // 0.90.1 (the usability review of 0.90.0, UR-08): the counting took almost 3 s on a large project
                 // without a sign; the busy cursor shows that it runs
@@ -1626,11 +1642,10 @@ void MainWindow::createActions()
                 for (BinderItem *it : inTrash)
                     if (it->hasSnapshots)
                         snaps += int(snapshots::list(m_project.get(), it->id).size());
-                const QString docs = text::plural(int(inTrash.size()), tr("document"), tr("documents"));
-                const QString question = snaps == 0 ? tr("Delete %1 in the Trash forever? This cannot be undone.").arg(docs)
-                                                    : tr("Delete %1 in the Trash forever, together with their %n snapshot(s)? "
-                                                         "This cannot be undone.", nullptr, snaps)
-                                                          .arg(docs);
+                QString question = tr("Delete %Ln document(s) in the Trash forever?", "", int(inTrash.size()));
+                if (snaps > 0)
+                    question += QLatin1Char(' ') + tr("Their %Ln snapshot(s) go with them.", "", snaps);
+                question += QLatin1Char(' ') + tr("This cannot be undone.");
                 if (ask::question(this, tr("Empty Trash"), question, QMessageBox::Yes | QMessageBox::No, QMessageBox::No, tr("Empty Trash"))
                     != QMessageBox::Yes)
                     return;
@@ -1641,9 +1656,9 @@ void MainWindow::createActions()
                     noteSaveFailed(err); // the files stay until a save works (the project file still lists them)
             }));
     // Project > Delete Old Snapshots (0.61.1)
-    connect(act(QStringLiteral("deleteSnapshots"), tr("Delete Old &Snapshots…"), QStringLiteral("edit-clear")), &QAction::triggered,
+    connect(act(QStringLiteral("deleteSnapshots"), tr("&Delete Old Snapshots…"), QStringLiteral("edit-clear")), &QAction::triggered,
             this, withProject([this] { deleteOldSnapshots(true); }));
-    connect(act(QStringLiteral("showProjectFolder"), tr("Show Project in File &Manager"), QStringLiteral("folder-open")),
+    connect(act(QStringLiteral("showProjectFolder"), tr("Show Project in &File Manager"), QStringLiteral("folder-open")),
             &QAction::triggered, this, withProject([this] { QDesktopServices::openUrl(QUrl::fromLocalFile(m_project->displayFolder())); }));
 
     // ---- documents
@@ -1785,7 +1800,7 @@ void MainWindow::createActions()
             &QAction::triggered, this, withProject([this] {
                 addToProjectBookmarks(actionItems());
             }));
-    connect(act(QStringLiteral("reveal"), tr("Reveal in &Binder"), QStringLiteral("go-jump"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R)),
+    connect(act(QStringLiteral("reveal"), tr("&Reveal in Binder"), QStringLiteral("go-jump"), QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R)),
             &QAction::triggered, this, [this] {
                 if (BinderItem *it = m_active->currentItem()) {
                     m_binder->show();
@@ -1805,6 +1820,23 @@ void MainWindow::createActions()
         QAction *ac = act(key, text, icon, ks);
         ac->setCheckable(checkable);
         connect(ac, &QAction::triggered, this, [this, fn, key] {
+            // the notes of a mind map (0.99.0): what a note can hold; the color asks first
+            if (NoteFormatTarget *nt = noteTargetNow()) {
+                if (nt->noteFormatEnabled(key)) {
+                    QVariant v;
+                    bool go = true;
+                    if (key == QLatin1String("textColor")) {
+                        const QColor now = nt->noteFormatState().textColor;
+                        const QColor c = QColorDialog::getColor(now.isValid() ? now : Qt::black, this);
+                        go = c.isValid();
+                        v = c;
+                    }
+                    if (go)
+                        nt->noteFormatApply(key, v);
+                }
+                updateFormatBar();
+                return;
+            }
             // the text of an object (0.21.1): only the commands it can hold
             if (ObjectTextEdit *o = objectTextTarget()) {
                 objectFormat(key, o);
@@ -1825,7 +1857,7 @@ void MainWindow::createActions()
         });
         return ac;
     };
-    fmt(QStringLiteral("bold"), tr("&Bold"), QStringLiteral("format-text-bold"), QKeySequence::Bold, [](TextEditor *e) { e->toggleBold(); }, true);
+    fmt(QStringLiteral("bold"), tr("Bo&ld"), QStringLiteral("format-text-bold"), QKeySequence::Bold, [](TextEditor *e) { e->toggleBold(); }, true);
     fmt(QStringLiteral("italic"), tr("&Italic"), QStringLiteral("format-text-italic"), QKeySequence::Italic,
         [](TextEditor *e) { e->toggleItalic(); }, true);
     fmt(QStringLiteral("underline"), tr("&Underline"), QStringLiteral("format-text-underline"), QKeySequence::Underline,
@@ -1876,7 +1908,7 @@ void MainWindow::createActions()
         [](TextEditor *e) { e->changeLeftIndent(units::toPx(units::metric() ? 1.0 : 0.5)); });
     fmt(QStringLiteral("indentLess"), tr("&Decrease Indent"), QStringLiteral("format-indent-less"), QKeySequence(),
         [](TextEditor *e) { e->changeLeftIndent(-units::toPx(units::metric() ? 1.0 : 0.5)); });
-    fmt(QStringLiteral("resetParagraph"), tr("&Reset Paragraph Formatting"), QString(), QKeySequence(),
+    fmt(QStringLiteral("resetParagraph"), tr("Reset Paragraph &Formatting"), QString(), QKeySequence(),
         [](TextEditor *e) { e->resetParagraphFormatting(); });
     connect(act(QStringLiteral("styleNew"), tr("&New Style From Selection…")), &QAction::triggered, this,
             withProject([this] { newStyleFromSelection(); }));
@@ -1969,7 +2001,7 @@ void MainWindow::createActions()
     fmt(QStringLiteral("tableColLeft"), tr("Insert Column &Left"), QString(), QKeySequence(), [](TextEditor *e) { e->tableInsertColumns(false); });
     fmt(QStringLiteral("tableColRight"), tr("Insert Column &Right"), QString(), QKeySequence(), [](TextEditor *e) { e->tableInsertColumns(true); });
     fmt(QStringLiteral("tableDeleteRows"), tr("Delete R&ows"), QString(), QKeySequence(), [](TextEditor *e) { e->tableRemoveRows(); });
-    fmt(QStringLiteral("tableDeleteCols"), tr("Delete C&olumns"), QString(), QKeySequence(), [](TextEditor *e) { e->tableRemoveColumns(); });
+    fmt(QStringLiteral("tableDeleteCols"), tr("D&elete Columns"), QString(), QKeySequence(), [](TextEditor *e) { e->tableRemoveColumns(); });
     fmt(QStringLiteral("tableDelete"), tr("Delete &Table"), QString(), QKeySequence(), [](TextEditor *e) { e->tableRemove(); });
     fmt(QStringLiteral("tableMerge"), tr("&Merge Cells"), QString(), QKeySequence(), [](TextEditor *e) { e->tableMergeCells(); });
     fmt(QStringLiteral("tableSplit"), tr("&Split Cell"), QString(), QKeySequence(), [](TextEditor *e) { e->tableSplitCell(); });
@@ -1998,7 +2030,7 @@ void MainWindow::createActions()
             QMessageBox::warning(this, tr("Bibliography/Citations"),
                                  tr("\"%1\" could not be started. Check the program under File > Options > General > Citations.").arg(program));
     });
-    fmt(QStringLiteral("insertTime"), tr("Current &Time"), QStringLiteral("chronometer"), QKeySequence(),
+    fmt(QStringLiteral("insertTime"), tr("C&urrent Time"), QStringLiteral("chronometer"), QKeySequence(),
         [](TextEditor *e) { e->insertPlainText(QTime::currentTime().toString(QStringLiteral("HH:mm"))); });
 
     // ---- navigate
@@ -2027,9 +2059,9 @@ void MainWindow::createActions()
     };
     connect(act(QStringLiteral("prevDoc"), tr("&Previous Document"), QStringLiteral("go-up"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_Up)),
             &QAction::triggered, this, [sibling] { sibling(false); });
-    connect(act(QStringLiteral("nextDoc"), tr("&Next Document"), QStringLiteral("go-down"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_Down)),
+    connect(act(QStringLiteral("nextDoc"), tr("Next &Document"), QStringLiteral("go-down"), QKeySequence(Qt::ALT | Qt::SHIFT | Qt::Key_Down)),
             &QAction::triggered, this, [sibling] { sibling(true); });
-    connect(act(QStringLiteral("enclosingGroup"), tr("Enclosing &Group"), QStringLiteral("go-parent-folder")),
+    connect(act(QStringLiteral("enclosingGroup"), tr("En&closing Group"), QStringLiteral("go-parent-folder")),
             &QAction::triggered, this, [this] {
                 m_active->goToEnclosingGroup();
                 refreshInspector();
@@ -2119,7 +2151,7 @@ void MainWindow::createActions()
             });
     connect(act(QStringLiteral("addonManager"), tr("Add-on &Manager…"), QStringLiteral("preferences-plugin")),
             &QAction::triggered, this, &MainWindow::showAddonManager);
-    connect(act(QStringLiteral("about"), tr("&About %1").arg(QLatin1String(QB_APP_NAME)), QStringLiteral("help-about")),
+    connect(act(QStringLiteral("about"), tr("A&bout %1").arg(QLatin1String(QB_APP_NAME)), QStringLiteral("help-about")),
             &QAction::triggered, this, [this] { showAbout(); });
     connect(act(QStringLiteral("systemInfo"), tr("&System Information"), QStringLiteral("dialog-information")),
             &QAction::triggered, this, [this] {
@@ -2141,7 +2173,7 @@ void MainWindow::createActions()
             &QAction::triggered, this, [this] { OptionsDialog::run(this, {}, OptionsDialog::Keyboard); });
 
     // ---- edit: select
-    fmt(QStringLiteral("selectAnnotation"), tr("Select &Annotation or Note"), QString(), QKeySequence(), [](TextEditor *e) {
+    fmt(QStringLiteral("selectAnnotation"), tr("Select Annotation &or Note"), QString(), QKeySequence(), [](TextEditor *e) {
         const QString id = e->noteIdAt(e->textCursor().position());
         if (!id.isEmpty())
             e->selectNote(id);
@@ -2172,7 +2204,7 @@ void MainWindow::createActions()
                 applyBarVisibility();
             });
         }
-        connect(act(QStringLiteral("resetToolbarPlaces"), tr("&Reset Toolbar Places")), &QAction::triggered, this,
+        connect(act(QStringLiteral("resetToolbarPlaces"), tr("Reset Toolbar &Places")), &QAction::triggered, this,
                 [this] { resetToolbarPlaces(); });
         // 0.99.0: Toolbar Size: one size for every bar (a group of three choices)
         m_toolbarSizeMenu = new QMenu(tr("Toolbar &Size"), this);
@@ -2346,7 +2378,7 @@ void MainWindow::createActions()
     }
 
     // ---- format bar: the project's default text formatting
-    connect(act(QStringLiteral("defaultTextFormatting"), tr("Project &Formatting Settings…"), QStringLiteral("configure")),
+    connect(act(QStringLiteral("defaultTextFormatting"), tr("Pr&oject Formatting Settings…"), QStringLiteral("configure")),
             &QAction::triggered, this, withProject([this] {
                 ProjectSettingsDialog dlg(m_project.get(), ProjectSettingsDialog::Formatting, this);
                 dlg.exec();
@@ -2455,6 +2487,28 @@ TextEditor *MainWindow::editor() const
     if (auto *last = qobject_cast<TextEditor *>(m_lastTextField.data()); last && last->isVisible() && last->isEnabled())
         return last;
     return m_active ? m_active->currentEditor() : nullptr;
+}
+
+// The mind map the format bar acts on (0.99.0): the one that has the keyboard, also while the keyboard is on a bar or in
+// a popup; any other text field takes it away.
+static QPointer<MindMapController> s_noteCtl;
+static NoteFormatTarget *noteTargetNow()
+{
+    QWidget *f = QApplication::focusWidget();
+    if (f) {
+        if (auto *t = NoteFormatTarget::forWidget(f)) {
+            s_noteCtl = dynamic_cast<MindMapController *>(t);
+            return t;
+        }
+        bool keep = f->window() && (f->window()->windowType() == Qt::Popup || qobject_cast<QMenu *>(f->window()));
+        for (QWidget *w = f; w && !keep; w = w->parentWidget())
+            keep = qobject_cast<QToolBar *>(w) != nullptr;
+        if (!keep)
+            s_noteCtl = nullptr;
+    }
+    if (s_noteCtl && s_noteCtl->view() && s_noteCtl->view()->isVisible())
+        return s_noteCtl.data();
+    return nullptr;
 }
 
 ObjectTextEdit *MainWindow::objectTextTarget() const
@@ -2628,6 +2682,44 @@ void MainWindow::updateFormatBar()
 {
     checkFontOffer();
     updateScriptActions();
+    if (NoteFormatTarget *nt = noteTargetNow()) {
+        // the notes of a mind map (0.99.0): the controls that mean something for a note, the state of the selection
+        if (auto *mc = dynamic_cast<MindMapController *>(nt))
+            connect(mc, &MindMapController::formatStateChanged, this, &MainWindow::updateFormatBar, Qt::UniqueConnection);
+        for (const char *k : {"bold", "italic", "underline", "strike", "superscript", "subscript", "highlight", "alignLeft",
+                              "alignCenter", "alignRight", "alignJustify", "bullets", "numbers", "indent", "outdent",
+                              "clearFormat", "comment", "footnote", "annotation", "inlineFootnote", "image", "textColor",
+                              "textColorAuto", "showFonts", "fontBigger", "fontSmaller", "paragraph", "indentMore", "indentLess",
+                              "resetParagraph", "copyFormat", "line100", "line109", "line115", "line120", "line150", "line200",
+                              "insertDate", "insertTime", "pastePlain", "pasteKeep", "pasteFormat", "styleNew", "styleRedefine",
+                              "insertTable", "tableRowAbove", "tableRowBelow", "tableColLeft", "tableColRight", "tableDeleteRows",
+                              "tableDeleteCols", "tableDelete", "tableMerge", "tableSplit", "tableCellColor", "tableCellColorClear",
+                              "tableProperties", "picture"})
+            a[QLatin1String(k)]->setEnabled(nt->noteFormatEnabled(QLatin1String(k)));
+        for (QAction *ac : m_styleActions)
+            ac->setEnabled(false);
+        m_styleCombo->setEnabled(false);
+        m_fontCombo->setEnabled(false);
+        m_sizeSpin->setEnabled(false);
+        m_lineCombo->setEnabled(false);
+        for (QToolButton *b : m_paraButtons)
+            if (b)
+                b->setEnabled(false);
+        const NoteFormatState st = nt->noteFormatState();
+        m_updatingUi = true;
+        a[QStringLiteral("bold")]->setChecked(st.bold == 1);
+        a[QStringLiteral("italic")]->setChecked(st.italic == 1);
+        a[QStringLiteral("underline")]->setChecked(st.underline == 1);
+        a[QStringLiteral("strike")]->setChecked(st.strike == 1);
+        a[QStringLiteral("superscript")]->setChecked(false);
+        a[QStringLiteral("subscript")]->setChecked(false);
+        a[QStringLiteral("alignLeft")]->setChecked(st.align == 0);
+        a[QStringLiteral("alignCenter")]->setChecked(st.align == 1);
+        a[QStringLiteral("alignRight")]->setChecked(st.align == 2);
+        a[QStringLiteral("alignJustify")]->setChecked(st.align == 3);
+        m_updatingUi = false;
+        return;
+    }
     if (ObjectTextEdit *o = objectTextTarget()) {
         // the text of an object (0.21.1): bold, italic, underline, strikethrough, colors
         static const QSet<QString> objectKeys = {QStringLiteral("bold"), QStringLiteral("italic"), QStringLiteral("underline"),
@@ -3207,7 +3299,9 @@ bool MainWindow::openProject(const QString &path)
     if (m_project && QFileInfo(m_project->indexPath()) == QFileInfo(file))
         return true;
     // lock check: another window, or another computer through a sync program (0.64: who, since when)
-    if (!confirmLock(QFileInfo(file).absolutePath() + QLatin1String("/settings/lock")))
+    // 0.99.0 (Live Sync): a shared project has the service's locks instead; the sync program's lock is not used
+    const bool liveShared = liveSyncShared(file);
+    if (!liveShared && !confirmLock(QFileInfo(file).absolutePath() + QLatin1String("/settings/lock")))
         return false;
     // 0.99.0 (item 113): an encrypted project is unlocked first (the passphrase kept on this device, else asked), or the
     // writer is told that the key is not here (with Import Keys); nothing in the project is changed until then. A
@@ -3244,8 +3338,10 @@ bool MainWindow::openProject(const QString &path)
     }
     if (m_project && !closeProject())
         return false;
+    if (liveShared && !liveSyncBegin(file)) // 0.99.0 (Live Sync): the window is a follower of the service
+        return false;
     QString err;
-    auto p = Project::open(file, &err);
+    auto p = Project::open(file, &err, liveSyncFollower());
     if (!p && QFile::exists(Project::spareCopyOf(file))) {
         // the project file is damaged: the copy kept when the project last opened (0.20)
         QMessageBox box(QMessageBox::Warning, tr("Open Project"),
@@ -3266,7 +3362,7 @@ bool MainWindow::openProject(const QString &path)
             QMessageBox::warning(this, tr("Open Project"), err);
             return false;
         }
-        p = Project::open(file, &err);
+        p = Project::open(file, &err, liveSyncFollower());
         if (p) {
             p->openNotice = tr("The project was opened from the copy of its project file. The damaged file is kept as %1.").arg(keptAs);
             QString folder;
@@ -3277,12 +3373,16 @@ bool MainWindow::openProject(const QString &path)
         }
     }
     if (!p) {
+        liveSyncEnd();
         QMessageBox::warning(this, tr("Open Project"), err);
         return false;
     }
     QString notice = p->openNotice;
-    if (!adoptProject(std::move(p)))
+    if (!adoptProject(std::move(p))) {
+        liveSyncEnd();
         return false;
+    }
+    liveSyncAdopted();
     // object files that could not be read (0.20): they stay as they are, the writer is told
     if (m_project && !m_project->objects()->warnings().isEmpty())
         notice += (notice.isEmpty() ? QString() : QStringLiteral("\n\n")) + m_project->objects()->warnings().join(QLatin1Char('\n'));
@@ -3326,16 +3426,15 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
     look::activate(proj, look::settle(proj, isNew));
     // 0.62: the project's own settings (File > Options, "This project") over the program's
     settingslayer::activate(settingslayer::fileFor(proj->settingsDir()));
-    takeLocks();             // 0.64: names this computer, renewed every few minutes
+    if (!m_liveSync)         // (0.99.0: a shared project has Live Sync's locks instead)
+        takeLocks();         // 0.64: names this computer, renewed every few minutes
     connectSyncSafety(proj); // versions kept on conflicts, texts not arrived yet
     proj->setAutosaveDelay(qMax(1, AppSettings::instance().autosaveSeconds) * 1000);
     // a project imported from Scrivener by a version before 0.14.0 still has Scrivener's style
     // marks ("<$Scr_H::1>Title<!$Scr_H::1>") as text: taken out before anything shows it (0.21.2)
     if (const int fixed = ScrivenerImporter::removeLeftoverMarkers(proj); fixed > 0) {
         QTimer::singleShot(0, this, [this, fixed] {
-            showStatusNote(fixed == 1 ? tr("Scrivener's style marks were taken out of 1 document.")
-                                                : tr("Scrivener's style marks were taken out of %1 documents.").arg(fixed),
-                                     15000);
+            showStatusNote(tr("Scrivener's style marks were taken out of %Ln document(s).", "", fixed), 15000);
         });
     }
     // 0.81.2: custom metadata values an earlier import kept in Scrivener's form (a box "Yes", a date with its time)
@@ -3379,12 +3478,28 @@ bool MainWindow::adoptProject(std::unique_ptr<Project> p, bool isNew)
     refreshStyleUi();
     rebuildScriptActions();
     connect(proj, &Project::titleChanged, this, &MainWindow::updateWindowTitle);
+    // 0.99.0 (audit AU-01): a read that finds the key locked asks for the passphrase (the box of the project's opening)
+    DocumentStore::setUnlockHandler([this](const QString &folder) {
+        return ui::unlockForFolder(this, folder, tr("Unlock the Key"));
+    });
     // a text file that is there but cannot be read: shown empty, read-only, never saved over (0.20)
     connect(proj->docs(), &DocumentStore::unreadableFile, this,
             [this](const QString &id, bool notes, const QString &path, const QString &err) {
                 BinderItem *it = m_project ? m_project->item(id) : nullptr;
                 const QString title = it ? it->title : id;
                 QTimer::singleShot(0, this, [this, title, notes, path, err] {
+                    if (err == DocumentStore::lockedKeyText()) {
+                        // 0.99.0 (audit AU-01): the key is locked: no advice about permissions or the drive
+                        QMessageBox box(QMessageBox::Warning, tr("Document Cannot Be Read"),
+                                        tr("The %1 of \"%2\" cannot be read because the key is locked.\n\nIt is shown empty "
+                                           "and cannot be edited, so that the file is not overwritten. Close the project and "
+                                           "open it again, then enter the passphrase.")
+                                            .arg(notes ? tr("notes") : tr("text"), title),
+                                        QMessageBox::Ok, this);
+                        box.setObjectName(QStringLiteral("lockedDocumentNotice"));
+                        box.exec();
+                        return;
+                    }
                     QMessageBox box(QMessageBox::Warning, tr("Document Cannot Be Read"),
                                     tr("The %1 of \"%2\" cannot be read (%3):\n%4\n\nIt is shown empty and cannot be "
                                        "edited, so that the file is not overwritten. Check the file's permissions or the "
@@ -3686,6 +3801,7 @@ bool MainWindow::closeProject()
             tellBackupProblem(ok, err, tr("when the project closed"));
         tellBackupCleanup(notes, true);
     }
+    liveSyncEnd(); // 0.99.0 (Live Sync): what was captured is handed over, the locks are given up
     releaseLocks();
     for (QWidget *w : QApplication::topLevelWidgets())
         if (auto *qr = qobject_cast<QuickRefWindow *>(w))
@@ -5203,7 +5319,7 @@ void MainWindow::printDocument()
         QMessageBox::warning(this, tr("Print"), err.isEmpty() ? tr("Printing did not work.") : err);
         return;
     }
-    showStatusNote(tr("Printed: %1 (%2)").arg(printing::describe(job), text::plural(pages, tr("page"), tr("pages"))), 6000);
+    showStatusNote(tr("Printed: %1 (%Ln page(s))", "", pages).arg(printing::describe(job)), 6000);
 }
 
 void MainWindow::printPreview(const PrintSettings *settings)
@@ -5545,7 +5661,7 @@ QStringList MainWindow::editedSinceManualSave() const
 void MainWindow::notifySnapshots(int count)
 {
     if (count > 0 && AppSettings::instance().snapshotNotify)
-        showStatusNote(tr("Snapshot taken of %1.").arg(text::plural(count, tr("document"), tr("documents"))), 5000);
+        showStatusNote(tr("Snapshot taken of %Ln document(s).", "", count), 5000);
 }
 
 void MainWindow::noteInput(const QDateTime &when)

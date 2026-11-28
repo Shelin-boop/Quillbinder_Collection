@@ -158,7 +158,7 @@ Voulez-vous quand même le supprimer ?</translation>
         </message>
         <message>
             <source>Look in:</source>
-            <translation>Regarder dans :</translation>
+            <translation>Rechercher dans&#xa0;:</translation>
         </message>
         <message>
             <source>Alt+Right</source>
@@ -287,7 +287,7 @@ Veuillez vérifier que le nom du fichier est correct.</translation>
         <name>QFileSystemModel</name>
         <message>
             <source>Kind</source>
-            <translation>Genre</translation>
+            <translation>Type de fichier</translation>
         </message>
         <message>
             <source>Name</source>
@@ -613,7 +613,7 @@ Veuillez vérifier que le nom du fichier est correct.</translation>
         </message>
         <message>
             <source>Discard</source>
-            <translation>Abandonner</translation>
+            <translation>Ignorer les modifications</translation>
         </message>
         <message>
             <source>Yes to &amp;All</source>
@@ -857,7 +857,7 @@ Veuillez choisir un autre nom de fichier.</translation>
         <name>QShortcut</name>
         <message>
             <source>Up</source>
-            <translation>Up</translation>
+            <translation>Haut</translation>
         </message>
         <message>
             <source>Alt</source>
@@ -869,19 +869,19 @@ Veuillez choisir un autre nom de fichier.</translation>
         </message>
         <message>
             <source>Del</source>
-            <translation>Del</translation>
+            <translation>Suppr</translation>
         </message>
         <message>
             <source>End</source>
-            <translation>End</translation>
+            <translation>Fin</translation>
         </message>
         <message>
             <source>Esc</source>
-            <translation>Esc</translation>
+            <translation>Échap</translation>
         </message>
         <message>
             <source>Ins</source>
-            <translation>Ins</translation>
+            <translation>Inser</translation>
         </message>
         <message>
             <source>Num</source>
@@ -897,15 +897,15 @@ Veuillez choisir un autre nom de fichier.</translation>
         </message>
         <message>
             <source>Down</source>
-            <translation>Down</translation>
+            <translation>Bas</translation>
         </message>
         <message>
             <source>Home</source>
-            <translation>Home</translation>
+            <translation>Début</translation>
         </message>
         <message>
             <source>Left</source>
-            <translation>Left</translation>
+            <translation>Gauche</translation>
         </message>
         <message>
             <source>Menu</source>
@@ -913,15 +913,15 @@ Veuillez choisir un autre nom de fichier.</translation>
         </message>
         <message>
             <source>Meta</source>
-            <translation>Meta</translation>
+            <translation>Méta</translation>
         </message>
         <message>
             <source>PgUp</source>
-            <translation>PgUp</translation>
+            <translation>Pg préc.</translation>
         </message>
         <message>
             <source>Enter</source>
-            <translation>Enter</translation>
+            <translation>Entrée</translation>
         </message>
         <message>
             <source>Pause</source>
@@ -929,35 +929,35 @@ Veuillez choisir un autre nom de fichier.</translation>
         </message>
         <message>
             <source>Print</source>
-            <translation>Print</translation>
+            <translation>Impr. écran</translation>
         </message>
         <message>
             <source>Right</source>
-            <translation>Right</translation>
+            <translation>Droite</translation>
         </message>
         <message>
             <source>Shift</source>
-            <translation>Shift</translation>
+            <translation>Maj</translation>
         </message>
         <message>
             <source>Space</source>
-            <translation>Space</translation>
+            <translation>Espace</translation>
         </message>
         <message>
             <source>PgDown</source>
-            <translation>PgDown</translation>
+            <translation>Pg suiv.</translation>
         </message>
         <message>
             <source>Return</source>
-            <translation>Return</translation>
+            <translation>Entrée</translation>
         </message>
         <message>
             <source>Backtab</source>
-            <translation>Backtab</translation>
+            <translation>Tab arrière</translation>
         </message>
         <message>
             <source>Backspace</source>
-            <translation>Backspace</translation>
+            <translation>Retour arrière</translation>
         </message>
     </context>
     <context>
