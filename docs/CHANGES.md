@@ -39,6 +39,16 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   declines (a decline starts the 20 seconds again and tells the asker), and a takeover is possible only after 20 seconds with
   no answer, after a protective copy of the text. Everything waits on an injectable clock. Suite `ls4`, with one run of two
   programs over TLS on localhost.
+- Live Sync, who hosts a shared project (no change for a writer; Live Sync stays off): the list of a project's devices in
+  the order of their priority, signed with the host's device key; proofs of authority (the founding, a planned handover signed
+  by the old host, a failover with the signed votes of a majority) and a chain of them that every device can verify; the
+  planned handover of hosting (old host: active, draining, prepared, retired; target: follower, prepared, active), written to
+  disk before each message that depends on it, so that a crash at any step leaves one host and never two in one epoch; failover
+  after about 30 seconds without the host (two devices: the other alone; three or more: only with more than half of all
+  devices); a device that is no member, or whose proof does not hold, is refused with a warning; when two hosts meet again the
+  newer one stays, the old one becomes a client and everything it accepted after the split is kept as one recovery draft per
+  document and author (never merged); then hosting goes back to the highest-priority device after it was in sync for 60
+  seconds. Suite `ls6`, with every handover step killed in turn and a clock moved by hand.
 - **0.99.0 is a security update on every system** (Linux, Windows and Android). The update window says "recommended
   (security)" for a Quillbinder with an older version and offers no "Ignore This Version", also when a newer version has
   come out since (every version after the installed one, up to the newest, counts).
