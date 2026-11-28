@@ -18,7 +18,9 @@
 #include "core/AiCatalog.h"
 #include "core/AiEngine.h"
 #include "core/ModelMemory.h"
+#include "core/ReadAloud.h"
 #include "core/SystemMemory.h"
+#include "core/Zip.h"
 #include "ui/AiDownloads.h"
 #include "ui/AiInstallPanel.h"
 #include "ui/AppSettings.h"
@@ -335,6 +337,25 @@ int main(int argc, char **argv)
     writeFile(source + QStringLiteral("/fake-bad--bad.bin"), wrong);           // not what the catalog says
     writeFile(source + QStringLiteral("/fake-two--a.bin"), good);
     writeFile(source + QStringLiteral("/fake-two--b.bin"), wrong);             // first wrong, later right
+    // voice packs of Read Aloud (0.99.0): a zip that is a pack, one that is not, and a Qwen model whose download brings the pack of the language
+    QTemporaryDir zipDir;
+    auto makeZip = [&](const QString &name, const QStringList &entries) {
+        const QString path = zipDir.filePath(name);
+        {
+            ZipWriter z(path);
+            for (const QString &e : entries)
+                z.addFile(e, e.endsWith(QLatin1String(".txt")) ? QByteArray("Words of the clip.") : QByteArray(48044, 'w'));
+            z.close();
+        }
+        return readAll(path);
+    };
+    const QByteArray packEn = makeZip(QStringLiteral("en.zip"), {QStringLiteral("female1-neutral.wav"), QStringLiteral("female1-neutral.txt"), QStringLiteral("voices.json")});
+    const QByteArray packDe = makeZip(QStringLiteral("de.zip"), {QStringLiteral("male1-calm.wav"), QStringLiteral("male1-calm.txt")});
+    const QByteArray packBad = makeZip(QStringLiteral("bad.zip"), {QStringLiteral("female1-neutral.wav"), QStringLiteral("../outside.wav")});
+    writeFile(source + QStringLiteral("/read-aloud-voices-en.zip"), packEn);
+    writeFile(source + QStringLiteral("/read-aloud-voices-de.zip"), packDe);
+    writeFile(source + QStringLiteral("/read-aloud-voices-fr.zip"), packBad);
+    writeFile(source + QStringLiteral("/fake-qwen--q.gguf"), good);
     auto file = [](const QString &name, const QString &asset, const QByteArray &d) {
         return QJsonObject{{"name", name}, {"asset", asset}, {"size", double(d.size())}, {"sha256", sha(d)}};
     };
@@ -360,6 +381,16 @@ int main(int argc, char **argv)
         QJsonObject{{"id", "../evil"}, {"title", "Out of its folder"}, {"kinds", QJsonArray{"tts"}}, {"files", QJsonArray{file("e", "e", good)}}},
         QJsonObject{{"id", "fake-evil-file"}, {"title", "A file out of its folder"}, {"kinds", QJsonArray{"tts"}},
                     {"files", QJsonArray{file("../e", "e", good)}}},
+        QJsonObject{{"id", "fake-qwen"}, {"title", "Fake Qwen"}, {"kinds", QJsonArray{"tts"}}, {"engine", "qwen3-tts"}, {"languages", QJsonArray{"en", "de"}},
+                    {"memoryMB", 50}, {"model", "q.gguf"}, {"files", QJsonArray{file("q.gguf", "fake-qwen--q.gguf", good)}}},
+        QJsonObject{{"id", "voices-en"}, {"title", "Voices, English"}, {"kinds", QJsonArray{"voicepack"}}, {"languages", QJsonArray{"en"}},
+                    {"files", QJsonArray{file("read-aloud-voices-en.zip", "read-aloud-voices-en.zip", packEn)}}},
+        QJsonObject{{"id", "voices-de"}, {"title", "Voices, German"}, {"kinds", QJsonArray{"voicepack"}}, {"languages", QJsonArray{"de"}},
+                    {"files", QJsonArray{file("read-aloud-voices-de.zip", "read-aloud-voices-de.zip", packDe)}}},
+        QJsonObject{{"id", "voices-fr"}, {"title", "Voices, French"}, {"kinds", QJsonArray{"voicepack"}}, {"languages", QJsonArray{"fr"}},
+                    {"files", QJsonArray{file("read-aloud-voices-fr.zip", "read-aloud-voices-fr.zip", packBad)}}},
+        QJsonObject{{"id", "voices-ru"}, {"title", "Voices, Russian"}, {"kinds", QJsonArray{"voicepack"}}, {"languages", QJsonArray{"ru"}},
+                    {"files", QJsonArray{QJsonObject{{"name", "read-aloud-voices-ru.zip"}, {"asset", "read-aloud-voices-ru.zip"}, {"size", 0}, {"sha256", ""}}}}},
     };
     writeFile(catalogFile, QJsonDocument(QJsonObject{{"format", 1}, {"release", "models-5"}, {"models", models}}).toJson());
 
@@ -670,14 +701,15 @@ int main(int argc, char **argv)
         for (const ai::CatalogModel &m : c.models)
             ids << m.id;
         check(c.format == 1 && ids == QStringList({QStringLiteral("fake-tts"), QStringLiteral("fake-asr"), QStringLiteral("fake-unpublished"),
-                                                   QStringLiteral("fake-huge"), QStringLiteral("fake-bad"), QStringLiteral("fake-two")}),
+                                                   QStringLiteral("fake-huge"), QStringLiteral("fake-bad"), QStringLiteral("fake-two"), QStringLiteral("fake-qwen"),
+                                                   QStringLiteral("voices-en"), QStringLiteral("voices-de"), QStringLiteral("voices-fr"), QStringLiteral("voices-ru")}),
               QStringLiteral("QB_AI_CATALOG: the checks' catalog; a model whose id or file name leaves its folder is left out"), ids.join(QLatin1String(", ")));
         const ai::CatalogModel *t = c.model(QStringLiteral("fake-tts"));
         check(t && t->engineKind() == QBAI_TTS_POCKET && t->languages == QStringList({QStringLiteral("en"), QStringLiteral("de")})
                   && t->memoryMB == 50 && t->files.size() == 2 && t->files[1].parts.size() == 2 && t->downloadBytes() == voice.size() + mm1.size() + mm2.size()
                   && t->release == QLatin1String("models-5") && t->published(),
               QStringLiteral("a model: its engine, languages, memory, files (one in two parts), release"));
-        check(c.ofKinds({QStringLiteral("tts")}).size() == 3 && c.ofKinds({QStringLiteral("asr")}).size() == 3 && c.ofKinds({}).size() == 6,
+        check(c.ofKinds({QStringLiteral("tts")}).size() == 4 && c.ofKinds({QStringLiteral("asr")}).size() == 3 && c.ofKinds({QStringLiteral("voicepack")}).size() == 4 && c.ofKinds({}).size() == 11,
               QStringLiteral("the models of a kind (\"tts\", \"asr\")"));
         check(!c.model(QStringLiteral("fake-unpublished"))->published()
                   && ai::downloadProblem(*c.model(QStringLiteral("fake-unpublished"))).contains(QLatin1String("not published")),
@@ -734,6 +766,38 @@ int main(int argc, char **argv)
               QStringLiteral("a cancelled download leaves nothing behind"), cancelled.message);
         const Done huge = waitFinished(d, [&] { d.download(QStringLiteral("fake-huge")); });
         check(!huge.ok && huge.message.contains(QLatin1String("memory")), QStringLiteral("a model too large for the computer is not downloaded"));
+
+        // ---- 0.99.0: the voice packs of Read Aloud
+        {
+            using namespace qb::readaloud;
+            const QString root = ai::modelsRoot() + QStringLiteral("/read-aloud-voices");
+            check(!d.ensureVoicePack(QStringLiteral("de")) && !d.busy() && !ai::isInstalled(*c.model(QStringLiteral("voices-de"))),
+                  QStringLiteral("a pack is not fetched while no Qwen model is installed"));
+            const Done q = waitFinished(d, [&] { d.download(QStringLiteral("fake-qwen")); });
+            check(q.ok && ai::isInstalled(*c.model(QStringLiteral("fake-qwen"))), QStringLiteral("a Qwen model downloads"), q.message);
+            QElapsedTimer waited;
+            waited.start();
+            while (!voicePackInstalled(QStringLiteral("en")) && waited.elapsed() < 20000)
+                QTest::qWait(20);
+            check(voicePackInstalled(QStringLiteral("en")) && QFileInfo::exists(root + QStringLiteral("/en/female1-neutral.wav"))
+                      && QFileInfo::exists(root + QStringLiteral("/en/voices.json")) && ai::isInstalled(*c.model(QStringLiteral("voices-en"))),
+                  QStringLiteral("... and its download is followed by the voice pack of the Read Aloud language (checked, unpacked into read-aloud-voices/en/)"));
+            const Done de = waitFinished(d, [&] { check(d.ensureVoicePack(QStringLiteral("de")), QStringLiteral("choosing German starts its pack's download")); });
+            check(de.ok && QFileInfo::exists(root + QStringLiteral("/de/male1-calm.wav")) && !d.ensureVoicePack(QStringLiteral("de")),
+                  QStringLiteral("a language chosen later: its pack is fetched; once installed it is not fetched again"), de.message);
+            const Done badPack = waitFinished(d, [&] { d.download(QStringLiteral("voices-fr")); });
+            check(!badPack.ok && !voicePackInstalled(QStringLiteral("fr")) && !QFileInfo::exists(root + QStringLiteral("/outside.wav"))
+                      && !QFileInfo::exists(ai::modelDir(QStringLiteral("voices-fr")) + QStringLiteral("/.checked")),
+                  QStringLiteral("a pack with a path outside its folder is refused and does not count as installed"), badPack.message);
+            const Done ru = waitFinished(d, [&] { d.download(QStringLiteral("voices-ru")); });
+            check(!ru.ok && ru.message.contains(QLatin1String("not published")) && !d.ensureVoicePack(QStringLiteral("ru")),
+                  QStringLiteral("a pack with a placeholder for its size and SHA-256 is \"not published yet\": no download"), ru.message);
+            // removing the last Qwen model removes the packs
+            ai::removeModel(*c.model(QStringLiteral("fake-qwen")));
+            check(removeVoicePacksIfNoQwen() && !voicePackInstalled(QStringLiteral("en")) && !voicePackInstalled(QStringLiteral("de"))
+                      && !ai::isInstalled(*c.model(QStringLiteral("voices-en"))),
+                  QStringLiteral("the last Qwen model is removed: the packs go with it (folders and zips)"));
+        }
         check(toolhost::host().aiModelFile(QStringLiteral("fake-tts"), QStringLiteral("model")) == ai::modelFile(t, QStringLiteral("model"))
                   && toolhost::host().aiModelFile(QStringLiteral("fake-asr"), QStringLiteral("model")).isEmpty(),
               QStringLiteral("tool interface 1.3: aiModelFile() finds an installed model, \"\" for one that is not"));
@@ -798,7 +862,7 @@ int main(int argc, char **argv)
         const QTreeWidget *list = panel->findChild<QTreeWidget *>(QStringLiteral("aiModels"));
         check(state.contains(QLatin1String("1.0 is installed")) && state.contains(QLatin1String("started again"))
                   && panel->findChild<QPushButton *>(QStringLiteral("aiInstallEngine"))->text() == QLatin1String("Install Again")
-                  && list->topLevelItemCount() == 3 && list->topLevelItem(0)->text(5) == QLatin1String("Not installed")
+                  && list->topLevelItemCount() == 4 && list->topLevelItem(0)->text(5) == QLatin1String("Not installed")
                   && list->topLevelItem(1)->text(5) == QLatin1String("Not published yet"),
               QStringLiteral("the panel: the installed engine (a restart pending), the catalog's voices with their state"), state);
         shot(panel, QStringLiteral("v0990h-panel-installed"));

@@ -1,6 +1,7 @@
 #include "core/ReadAloud.h"
 
 #include "core/ModelMemory.h"
+#include "core/Zip.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -160,7 +161,24 @@ QString effectiveLanguage(const Settings &s)
     if (!s.language.isEmpty())
         return s.language;
     const QString own = QLocale().name().left(2);
-    return languageHasModel(own) ? own : QStringLiteral("en");
+    return languageHasModel(own) && languageHasVoice(own) ? own : QStringLiteral("en");
+}
+
+static bool isPocket(const ai::CatalogModel *m);
+static bool isQwen(const ai::CatalogModel *m);
+
+bool languageHasVoice(const QString &code, const ai::Catalog &catalog)
+{
+    if (!languageHasModel(code))
+        return false;
+    const ai::CatalogModel *pack = voicePackModel(code, catalog);
+    for (const ai::CatalogModel *m : modelsFor(code, catalog)) {
+        if (isPocket(m) && m->published())
+            return true;
+        if (isQwen(m) && ((pack && pack->published()) || voicePackInstalled(code)))
+            return true;
+    }
+    return false;
 }
 
 // THE ONE TABLE of the order of the models, best sounding first (the first that is installed, fits the memory and reaches real
@@ -279,9 +297,130 @@ QString pocketVoice(const QString &, const QString &voiceId)
     return table.value(voiceId);
 }
 
-QString qwenClipFile(const QString &voiceId, const QString &styleId)
+QString qwenClipFile(const QString &language, const QString &voiceId, const QString &styleId)
 {
-    return ai::modelsRoot() + QStringLiteral("/read-aloud-voices/") + voiceId + QLatin1Char('-') + styleId + QStringLiteral(".wav");
+    const QString name = voiceId + QLatin1Char('-') + styleId + QStringLiteral(".wav");
+    const QString own = voicesDir(language) + QLatin1Char('/') + name;
+    if (QFileInfo::exists(own))
+        return own;
+    const QString flat = ai::modelsRoot() + QStringLiteral("/read-aloud-voices/") + name;
+    return QFileInfo::exists(flat) ? flat : own;
+}
+
+// ================================================================================================ the voice packs
+
+static bool plainLanguage(const QString &l)
+{
+    return l.size() == 2 && l[0] >= QLatin1Char('a') && l[0] <= QLatin1Char('z') && l[1] >= QLatin1Char('a') && l[1] <= QLatin1Char('z');
+}
+QString voicePackId(const QString &language) { return QStringLiteral("voices-") + language; }
+QString voicesDir(const QString &language)
+{
+    return ai::modelsRoot() + QStringLiteral("/read-aloud-voices/") + (plainLanguage(language) ? language : QStringLiteral("xx"));
+}
+const ai::CatalogModel *voicePackModel(const QString &language, const ai::Catalog &catalog)
+{
+    const ai::CatalogModel *m = catalog.model(voicePackId(language));
+    return m && m->is(QStringLiteral("voicepack")) ? m : nullptr;
+}
+bool voicePackInstalled(const QString &language)
+{
+    return !QDir(voicesDir(language)).entryList({QStringLiteral("*.wav")}, QDir::Files).isEmpty();
+}
+QStringList voicePackNames()
+{
+    QStringList n = {QStringLiteral("voices.json")};
+    for (const QString &v : voiceIds())
+        for (const QString &s : styleIds())
+            n << v + QLatin1Char('-') + s + QStringLiteral(".wav") << v + QLatin1Char('-') + s + QStringLiteral(".txt");
+    return n;
+}
+
+bool installVoicePack(const QString &zipFile, const QString &language, QString *error)
+{
+    auto fail = [&](const QString &why) {
+        if (error)
+            *error = why;
+        return false;
+    };
+    if (!plainLanguage(language))
+        return fail(tr("The language of the voice pack is not valid."));
+    const ZipReader zip(zipFile);
+    if (!zip.isValid())
+        return fail(tr("The voice pack cannot be read as a zip file."));
+    const QStringList names = zip.fileNames();
+    const QStringList allowed = voicePackNames();
+    QStringList seen;
+    for (const QString &n : names) {
+        if (!allowed.contains(n) || seen.contains(n))
+            return fail(tr("The voice pack holds a file that does not belong to it (%1), so it was not installed.").arg(n));
+        seen << n;
+    }
+    if (names.isEmpty())
+        return fail(tr("The voice pack is empty."));
+    const QString target = voicesDir(language);
+    const QString tmp = target + QStringLiteral(".new");
+    QDir(tmp).removeRecursively();
+    if (!QDir().mkpath(tmp))
+        return fail(tr("%1 could not be made.").arg(QDir::toNativeSeparators(tmp)));
+    for (const QString &n : names) {
+        QString why;
+        if (!zip.extractFile(n, tmp + QLatin1Char('/') + n, &why)) {
+            QDir(tmp).removeRecursively();
+            return fail(why.isEmpty() ? tr("%1 could not be written.").arg(n) : why);
+        }
+    }
+    QDir(target).removeRecursively();
+    if (!QDir().rename(tmp, target)) {
+        QDir(tmp).removeRecursively();
+        return fail(tr("%1 could not be written.").arg(QDir::toNativeSeparators(target)));
+    }
+    return true;
+}
+
+bool installVoicePackModel(const ai::CatalogModel &pack, QString *error)
+{
+    if (pack.files.isEmpty() || pack.languages.isEmpty()) {
+        if (error)
+            *error = tr("The voice pack has no file.");
+        return false;
+    }
+    return installVoicePack(ai::modelDir(pack.id) + QLatin1Char('/') + pack.files.first().name, pack.languages.first(), error);
+}
+
+bool anyQwenInstalled(const ai::Catalog &catalog)
+{
+    for (const ai::CatalogModel &m : catalog.models)
+        if (isQwen(&m) && ai::isInstalled(m))
+            return true;
+    return false;
+}
+
+const ai::CatalogModel *voicePackWanted(const QString &language, const ai::Catalog &catalog)
+{
+    const ai::CatalogModel *p = voicePackModel(language, catalog);
+    if (!p || !p->published() || !anyQwenInstalled(catalog) || (ai::isInstalled(*p) && voicePackInstalled(language)))
+        return nullptr;
+    return p;
+}
+
+bool removeVoicePacksIfNoQwen(const ai::Catalog &catalog)
+{
+    if (anyQwenInstalled(catalog))
+        return false;
+    bool any = false;
+    for (const ai::CatalogModel &m : catalog.models)
+        if (m.is(QStringLiteral("voicepack")) && QFileInfo::exists(ai::modelDir(m.id))) {
+            ai::removeModel(m);
+            any = true;
+        }
+    for (const QString &l : QStringList{QStringLiteral("en"), QStringLiteral("de"), QStringLiteral("es"), QStringLiteral("fr"),
+                                        QStringLiteral("pt"), QStringLiteral("it"), QStringLiteral("ru")})
+        if (QFileInfo::exists(voicesDir(l))) {
+            QDir(voicesDir(l)).removeRecursively();
+            any = true;
+        }
+    return any;
 }
 
 static quint32 le32(const QByteArray &b, int p) { return quint32(uchar(b[p])) | quint32(uchar(b[p + 1])) << 8 | quint32(uchar(b[p + 2])) << 16 | quint32(uchar(b[p + 3])) << 24; }
@@ -349,7 +488,7 @@ Availability voiceAvailability(const ai::CatalogModel *m, const QString &languag
             a.reason = tr("This model does not have this voice.");
         }
     } else if (isQwen(m)) {
-        if (!QFileInfo::exists(qwenClipFile(voiceId, QStringLiteral("neutral")))) {
+        if (!QFileInfo::exists(qwenClipFile(language, voiceId, QStringLiteral("neutral")))) {
             a.ok = false;
             a.reason = tr("Voice not installed yet.");
         }
@@ -357,14 +496,14 @@ Availability voiceAvailability(const ai::CatalogModel *m, const QString &languag
     return a;
 }
 
-Availability styleAvailability(const ai::CatalogModel *m, const QString &, const QString &voiceId, const QString &styleId)
+Availability styleAvailability(const ai::CatalogModel *m, const QString &language, const QString &voiceId, const QString &styleId)
 {
     Availability a;
     if (isPocket(m)) {
         a.ok = false;
         a.reason = tr("This model has no style control.");
     } else if (isQwen(m)) {
-        if (!QFileInfo::exists(qwenClipFile(voiceId, styleId))) {
+        if (!QFileInfo::exists(qwenClipFile(language, voiceId, styleId))) {
             a.ok = false;
             a.reason = tr("Voice not installed yet.");
         }
@@ -388,9 +527,9 @@ bool makeVoice(const ai::CatalogModel &m, const QString &language, const QString
     }
     if (isQwen(&m)) {
         QString style = styleId;
-        if (!QFileInfo::exists(qwenClipFile(voiceId, style)))
+        if (!QFileInfo::exists(qwenClipFile(language, voiceId, style)))
             style = QStringLiteral("neutral");
-        const QString file = qwenClipFile(voiceId, style);
+        const QString file = qwenClipFile(language, voiceId, style);
         if (!readWav(file, &out->clip, &out->clipRate)) {
             if (why)
                 *why = tr("The voice's reference clip cannot be read.");

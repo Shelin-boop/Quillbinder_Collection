@@ -1,6 +1,7 @@
 #include "ui/ReadAloudPage.h"
 
 #include "core/AiEngine.h"
+#include "ui/AiDownloads.h"
 #include "ui/AiInstallPanel.h"
 #include "ui/Language.h"
 #include "ui/OptionStorage.h"
@@ -92,6 +93,7 @@ ReadAloudPage::ReadAloudPage(QWidget *parent) : QWidget(parent)
             m_keep.model.clear();
             fill();
             measure();
+            AiDownloads::instance().ensureVoicePack(m_keep.language);   // the voices of the chosen language, when a Qwen model is installed
         }
     });
     connect(m_model, &QComboBox::currentIndexChanged, this, [this] {

@@ -937,6 +937,202 @@
      "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
     }
    ]
+  },
+  {
+   "id": "voices-en",
+   "title": "Read Aloud voices, English",
+   "summary": "The six voices of Qwen3-TTS in English, each in three styles: short reference clips designed for Quillbinder; no real person's voice.",
+   "kinds": [
+    "voicepack"
+   ],
+   "engine": "",
+   "languages": [
+    "en"
+   ],
+   "license": "Apache-2.0",
+   "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+   "credit": "Designed for Quillbinder with Qwen3-TTS VoiceDesign 1.7B by the Qwen team (Apache License 2.0); no real person's voice",
+   "source": "made by tools/models/design-voices.py (job voices of models-5.yml) from Serveurperso/Qwen3-TTS-GGUF at commit b7ee2e8c7459c3bea99da23e3d178125a7d1713c, qwen-talker-1.7b-voicedesign-Q8_0.gguf",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 0,
+   "model": "read-aloud-voices-en.zip",
+   "files": [
+    {
+     "name": "read-aloud-voices-en.zip",
+     "asset": "read-aloud-voices-en.zip",
+     "size": 0,
+     "sha256": ""
+    }
+   ]
+  },
+  {
+   "id": "voices-de",
+   "title": "Read Aloud voices, German",
+   "summary": "The six voices of Qwen3-TTS in German, each in three styles: short reference clips designed for Quillbinder; no real person's voice.",
+   "kinds": [
+    "voicepack"
+   ],
+   "engine": "",
+   "languages": [
+    "de"
+   ],
+   "license": "Apache-2.0",
+   "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+   "credit": "Designed for Quillbinder with Qwen3-TTS VoiceDesign 1.7B by the Qwen team (Apache License 2.0); no real person's voice",
+   "source": "made by tools/models/design-voices.py (job voices of models-5.yml) from Serveurperso/Qwen3-TTS-GGUF at commit b7ee2e8c7459c3bea99da23e3d178125a7d1713c, qwen-talker-1.7b-voicedesign-Q8_0.gguf",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 0,
+   "model": "read-aloud-voices-de.zip",
+   "files": [
+    {
+     "name": "read-aloud-voices-de.zip",
+     "asset": "read-aloud-voices-de.zip",
+     "size": 0,
+     "sha256": ""
+    }
+   ]
+  },
+  {
+   "id": "voices-es",
+   "title": "Read Aloud voices, Spanish",
+   "summary": "The six voices of Qwen3-TTS in Spanish, each in three styles: short reference clips designed for Quillbinder; no real person's voice.",
+   "kinds": [
+    "voicepack"
+   ],
+   "engine": "",
+   "languages": [
+    "es"
+   ],
+   "license": "Apache-2.0",
+   "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+   "credit": "Designed for Quillbinder with Qwen3-TTS VoiceDesign 1.7B by the Qwen team (Apache License 2.0); no real person's voice",
+   "source": "made by tools/models/design-voices.py (job voices of models-5.yml) from Serveurperso/Qwen3-TTS-GGUF at commit b7ee2e8c7459c3bea99da23e3d178125a7d1713c, qwen-talker-1.7b-voicedesign-Q8_0.gguf",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 0,
+   "model": "read-aloud-voices-es.zip",
+   "files": [
+    {
+     "name": "read-aloud-voices-es.zip",
+     "asset": "read-aloud-voices-es.zip",
+     "size": 0,
+     "sha256": ""
+    }
+   ]
+  },
+  {
+   "id": "voices-fr",
+   "title": "Read Aloud voices, French",
+   "summary": "The six voices of Qwen3-TTS in French, each in three styles: short reference clips designed for Quillbinder; no real person's voice.",
+   "kinds": [
+    "voicepack"
+   ],
+   "engine": "",
+   "languages": [
+    "fr"
+   ],
+   "license": "Apache-2.0",
+   "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+   "credit": "Designed for Quillbinder with Qwen3-TTS VoiceDesign 1.7B by the Qwen team (Apache License 2.0); no real person's voice",
+   "source": "made by tools/models/design-voices.py (job voices of models-5.yml) from Serveurperso/Qwen3-TTS-GGUF at commit b7ee2e8c7459c3bea99da23e3d178125a7d1713c, qwen-talker-1.7b-voicedesign-Q8_0.gguf",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 0,
+   "model": "read-aloud-voices-fr.zip",
+   "files": [
+    {
+     "name": "read-aloud-voices-fr.zip",
+     "asset": "read-aloud-voices-fr.zip",
+     "size": 0,
+     "sha256": ""
+    }
+   ]
+  },
+  {
+   "id": "voices-pt",
+   "title": "Read Aloud voices, Portuguese",
+   "summary": "The six voices of Qwen3-TTS in Portuguese, each in three styles: short reference clips designed for Quillbinder; no real person's voice.",
+   "kinds": [
+    "voicepack"
+   ],
+   "engine": "",
+   "languages": [
+    "pt"
+   ],
+   "license": "Apache-2.0",
+   "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+   "credit": "Designed for Quillbinder with Qwen3-TTS VoiceDesign 1.7B by the Qwen team (Apache License 2.0); no real person's voice",
+   "source": "made by tools/models/design-voices.py (job voices of models-5.yml) from Serveurperso/Qwen3-TTS-GGUF at commit b7ee2e8c7459c3bea99da23e3d178125a7d1713c, qwen-talker-1.7b-voicedesign-Q8_0.gguf",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 0,
+   "model": "read-aloud-voices-pt.zip",
+   "files": [
+    {
+     "name": "read-aloud-voices-pt.zip",
+     "asset": "read-aloud-voices-pt.zip",
+     "size": 0,
+     "sha256": ""
+    }
+   ]
+  },
+  {
+   "id": "voices-it",
+   "title": "Read Aloud voices, Italian",
+   "summary": "The six voices of Qwen3-TTS in Italian, each in three styles: short reference clips designed for Quillbinder; no real person's voice.",
+   "kinds": [
+    "voicepack"
+   ],
+   "engine": "",
+   "languages": [
+    "it"
+   ],
+   "license": "Apache-2.0",
+   "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+   "credit": "Designed for Quillbinder with Qwen3-TTS VoiceDesign 1.7B by the Qwen team (Apache License 2.0); no real person's voice",
+   "source": "made by tools/models/design-voices.py (job voices of models-5.yml) from Serveurperso/Qwen3-TTS-GGUF at commit b7ee2e8c7459c3bea99da23e3d178125a7d1713c, qwen-talker-1.7b-voicedesign-Q8_0.gguf",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 0,
+   "model": "read-aloud-voices-it.zip",
+   "files": [
+    {
+     "name": "read-aloud-voices-it.zip",
+     "asset": "read-aloud-voices-it.zip",
+     "size": 0,
+     "sha256": ""
+    }
+   ]
+  },
+  {
+   "id": "voices-ru",
+   "title": "Read Aloud voices, Russian",
+   "summary": "The six voices of Qwen3-TTS in Russian, each in three styles: short reference clips designed for Quillbinder; no real person's voice.",
+   "kinds": [
+    "voicepack"
+   ],
+   "engine": "",
+   "languages": [
+    "ru"
+   ],
+   "license": "Apache-2.0",
+   "licenseUrl": "https://www.apache.org/licenses/LICENSE-2.0",
+   "credit": "Designed for Quillbinder with Qwen3-TTS VoiceDesign 1.7B by the Qwen team (Apache License 2.0); no real person's voice",
+   "source": "made by tools/models/design-voices.py (job voices of models-5.yml) from Serveurperso/Qwen3-TTS-GGUF at commit b7ee2e8c7459c3bea99da23e3d178125a7d1713c, qwen-talker-1.7b-voicedesign-Q8_0.gguf",
+   "nonCommercial": false,
+   "sizeMB": 1,
+   "memoryMB": 0,
+   "model": "read-aloud-voices-ru.zip",
+   "files": [
+    {
+     "name": "read-aloud-voices-ru.zip",
+     "asset": "read-aloud-voices-ru.zip",
+     "size": 0,
+     "sha256": ""
+    }
+   ]
   }
  ]
 }

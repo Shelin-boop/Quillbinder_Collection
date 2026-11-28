@@ -4,6 +4,7 @@
 #include "core/Addons.h"
 #include "core/AiCatalog.h"
 #include "core/AiEngine.h"
+#include "core/ReadAloud.h"
 
 #include <QCoreApplication>
 #include <QDir>
@@ -12,6 +13,7 @@
 #include <QNetworkReply>
 #include <QNetworkRequest>
 #include <QSslSocket>
+#include <QTimer>
 #include <QUrl>
 
 namespace qb {
@@ -170,6 +172,17 @@ void AiDownloads::download(const QString &modelId)
     nextPiece();
 }
 
+bool AiDownloads::ensureVoicePack(const QString &language)
+{
+    if (busy())
+        return false;
+    const ai::CatalogModel *p = readaloud::voicePackWanted(language);
+    if (!p)
+        return false;
+    download(p->id);
+    return true;
+}
+
 void AiDownloads::cancel()
 {
     if (!busy())
@@ -198,6 +211,14 @@ void AiDownloads::nextPiece()
         }
         marker.write(QByteArrayLiteral("checked\n"));
         marker.close();
+        if (m->is(QStringLiteral("voicepack"))) {
+            QString why;
+            if (!readaloud::installVoicePackModel(*m, &why)) {
+                QFile::remove(marker.fileName());
+                finish(false, why);
+                return;
+            }
+        }
         for (const ai::CatalogFile &f : m->files)
             QFile::remove(okMarker(dir, f.name));
         finish(true, tr("%1 is installed.").arg(m->title));
@@ -312,6 +333,8 @@ bool AiDownloads::placeFile(const Piece &p, QString *error)
 void AiDownloads::finish(bool ok, const QString &message)
 {
     const QString what = m_job;
+    const ai::CatalogModel *done = m_engineJob ? nullptr : ai::Catalog::builtIn().model(what);
+    const bool qwen = ok && done && done->engine == QLatin1String("qwen3-tts");
     m_job.clear();
     m_pieces.clear();
     m_reply = nullptr;
@@ -319,6 +342,10 @@ void AiDownloads::finish(bool ok, const QString &message)
     emit finished(what, ok, message);
     if (ok)
         emit changed();
+    // a Qwen model reads with the voices of the Read Aloud language: its pack follows (a moment later: the slots of
+    // finished() have run)
+    if (qwen)
+        QTimer::singleShot(0, this, [this] { ensureVoicePack(readaloud::effectiveLanguage(readaloud::Config::instance().get())); });
 }
 
 } // namespace qb

@@ -42,8 +42,9 @@ Aloud), `ui/MainWindowReadAloud.cpp` (the switch and the bar in the first row af
   silent "null" backend (so v0990h's real-engine check passes in a container); `open` fails with "no sound output ..." when even
   that fails. The fake engine counts frames (`qbai_fake_out_stats`, `qbai_fake_out_set_scale` for a faster clock). The real device
   was not heard (no sound hardware in the build environment).
-- **Qwen's voices**: reference clips `<models>/read-aloud-voices/<voice>-<style>.wav` + `.txt` (`qwenClipFile`); until they exist
-  the voice and style are greyed "Voice not installed yet."; the voices job of models-5 must write this layout (or change it here).
+- **Qwen's voices** (changed in 0.99.0, see runtime-and-addons.md "The designed voices"): reference clips `<models>/read-aloud-voices/<lang>/<voice>-<style>.wav` + `.txt`
+  (`qwenClipFile(language, voice, style)`; the flat `<voice>-<style>.wav` of the first trial builds is the fallback); until a pack is
+  installed the voice and style are greyed "Voice not installed yet.".
 - **Pitfalls**: `Model::load` asks the main thread (ModelMemory), so nothing may wait for the worker on the main thread (the
   destructor keeps processing events); the worker may make sentences up to `ahead` past the playing one, and when all written
   sentences are played it counts as the next (else a reading that fell behind never goes on); the sound's clock and the

@@ -9,6 +9,8 @@
 //    connection), checked as the package installer checks every add-on (its signature, the add-on key's certificate, the
 //    SHA-256 of every file) and installed with it. A download must be signed by the project; a file the writer chose may
 //    be unsigned after the writer's yes (as Help > Add-ons and Updates > Install Update or Add-on allows).
+//  - A voice pack (Read Aloud): downloaded as a model (the zip, checked), then unpacked into read-aloud-voices/<lang>/ by
+//    readaloud::installVoicePack; a Qwen model's download is followed by the pack of the Read Aloud language.
 //  - A model: its files one after the other into <data>/ai-models/<id>, each checked against its size and SHA-256 (a file in
 //    parts: each part, then the whole); the model counts as installed when all are checked.
 #include <QCryptographicHash>
@@ -43,6 +45,10 @@ public:
 
     // ---- models of the catalog
     void download(const QString &modelId);
+    // 0.99.0: the voice pack of a language (catalog kind "voicepack", core/ReadAloud.h) when a Qwen model is installed and the
+    // pack is published but not installed: starts its download. False when nothing was started (no Qwen model, installed
+    // already, not published yet, or another job is running).
+    bool ensureVoicePack(const QString &language);
     void cancel();
     bool busy() const { return !m_job.isEmpty(); }
     QString busyWith() const { return m_job; }
