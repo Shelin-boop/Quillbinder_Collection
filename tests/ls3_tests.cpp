@@ -912,6 +912,10 @@ struct AuditEntry {
 // package that owns the file, before sharing can be switched on.
 static const AuditEntry kAudit[] = {
     {"src/android/MobileStart.cpp", "outside", "the Android program's own files"},
+    {"src/core/collab/net/DeviceIdentity.cpp", "outside", "the device key and certificate in the program's data folder"},
+    {"src/core/collab/net/PeerStore.cpp", "outside", "the paired devices in the program's data folder"},
+    {"src/core/crypto/KeyStore.cpp", "outside", "the key store's test file and the wallet hook, outside projects"},
+    {"src/core/crypto/Wallet.cpp", "outside", "the Quillbinder wallet in the program's data folder"},
     {"src/compile/CompileFormat.cpp", "outside", "exports go to a file the writer chooses"},
     {"src/compile/DocxWriter.cpp", "outside", "exports"},
     {"src/compile/EpubExporter.cpp", "outside", "exports"},
