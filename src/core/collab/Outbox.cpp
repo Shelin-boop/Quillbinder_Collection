@@ -69,7 +69,8 @@ bool Outbox::load(QString *error)
         e = OutboxEntry();
         e.opId = QFileInfo(name).completeBaseName();
         e.reason = QStringLiteral("DAMAGED");
-        QFile::rename(path, m_root + QStringLiteral("/drafts/") + name);
+        if (safesave::copyFile(path, m_root + QStringLiteral("/drafts/") + name))
+            safesave::removeFile(path);
     }
     for (const QString &name : QDir(m_root + QStringLiteral("/drafts")).entryList({QStringLiteral("*.json")}, QDir::Files, QDir::Name)) {
         QByteArray raw;

@@ -15,6 +15,7 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QJsonDocument>
+#include <QPointer>
 #include <QRegularExpression>
 #include <QStorageInfo>
 #include <algorithm>
@@ -27,7 +28,7 @@ using namespace proto;
 QString roleName(Role r) { return r == Role::Editor ? QStringLiteral("editor") : r == Role::Reader ? QStringLiteral("reader") : QStringLiteral("none"); }
 
 struct HostSession::Peer {
-    net::Link *link = nullptr;
+    QPointer<net::Link> link; // (a link deleted under the session reads as gone)
     Owner owner;
     QString name;
     Role role = Role::None;
@@ -35,7 +36,7 @@ struct HostSession::Peer {
     bool joined = false;
     QSet<QString> seen;
     QList<QString> seenOrder;
-    BlobHub *hub = nullptr;
+    QPointer<BlobHub> hub;
     QList<QMetaObject::Connection> connections;
 };
 
@@ -176,7 +177,8 @@ void HostSession::stop()
     const QList<Peer *> peers = m_peers;
     for (Peer *p : peers) {
         send(p, make(QLatin1String(T::BYE)));
-        p->link->close();
+        if (p->link)
+            p->link->close();
     }
     m_started = false;
 }
@@ -324,7 +326,8 @@ void HostSession::onClosed(Peer *p)
     m_requests.dropOf(p->owner);
     const QString device = p->owner.device;
     const bool joined = p->joined;
-    p->hub->deleteLater();
+    if (p->hub)
+        p->hub->deleteLater();
     delete p;
     if (joined)
         emit peerLeft(device);
@@ -332,7 +335,7 @@ void HostSession::onClosed(Peer *p)
 
 void HostSession::send(Peer *p, const QJsonObject &m)
 {
-    if (p && p->link->state() == net::Link::State::Ready)
+    if (p && p->link && p->link->state() == net::Link::State::Ready)
         p->link->sendJson(m);
 }
 

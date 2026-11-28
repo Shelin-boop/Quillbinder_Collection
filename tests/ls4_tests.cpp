@@ -1619,6 +1619,6 @@ int main(int argc, char **argv)
     testRestartAndReacquire();
     testSecurity(tmp.path());
     testTls(tmp.path());
-    std::printf("\n%d check(s), %d failure(s)\n", total, failures);
+    std::printf("\n%d checks\n%d failure(s)\n", total, failures);
     return failures;
 }
