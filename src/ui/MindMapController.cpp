@@ -256,15 +256,18 @@ void MindMapController::createActions()
     struct Dir {
         const char *key;
         const char *text;
+        const char *arrowText; // (its own text and its own Alt letter: no two entries of the submenu share one)
         int dx, dy;
         Qt::Key k;
     };
-    for (const Dir &d : {Dir{"Left", QT_TR_NOOP("On &Left"), -1, 0, Qt::Key_Left}, Dir{"Right", QT_TR_NOOP("On &Right"), 1, 0, Qt::Key_Right},
-                         Dir{"Above", QT_TR_NOOP("&Above"), 0, -1, Qt::Key_Up}, Dir{"Below", QT_TR_NOOP("&Below"), 0, 1, Qt::Key_Down}}) {
+    for (const Dir &d : {Dir{"Left", QT_TR_NOOP("On &Left"), QT_TR_NOOP("On Le&ft With Arrow"), -1, 0, Qt::Key_Left},
+                         Dir{"Right", QT_TR_NOOP("On &Right"), QT_TR_NOOP("On Ri&ght With Arrow"), 1, 0, Qt::Key_Right},
+                         Dir{"Above", QT_TR_NOOP("&Above"), QT_TR_NOOP("Abo&ve With Arrow"), 0, -1, Qt::Key_Up},
+                         Dir{"Below", QT_TR_NOOP("&Below"), QT_TR_NOOP("Belo&w With Arrow"), 0, 1, Qt::Key_Down}}) {
         const int dx = d.dx, dy = d.dy;
         on(add(QStringLiteral("mm_conn%1").arg(QLatin1String(d.key)), tr(d.text), QKeySequence(Qt::ALT | d.k)),
            [this, dx, dy] { newConnectedNote(dx, dy, false); });
-        on(add(QStringLiteral("mm_connArrow%1").arg(QLatin1String(d.key)), tr("%1 With Arrow").arg(tr(d.text)),
+        on(add(QStringLiteral("mm_connArrow%1").arg(QLatin1String(d.key)), tr(d.arrowText),
                QKeySequence(Qt::ALT | Qt::SHIFT | d.k)),
            [this, dx, dy] { newConnectedNote(dx, dy, true); });
     }

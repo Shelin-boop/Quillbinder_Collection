@@ -170,6 +170,7 @@ menu with all the menus and the way back), the binder and notes panels (a part o
 upright, one at a time, Close, Esc, the focus line after the slide), record only (grayed with the reason without the add-on; the
 add-on is loaded in a second run of the same program, `--addon`, because the tools are loaded once per program), a profile that
 keeps the mode (profile files, switching both ways) and the Android rule through `setSmallChoice` / `applySmallRule` with sizes.
+Since AU-03 it also runs the Alt letters: Alt+Q types nothing, AltGr+Q still types "@", Alt+F opens File (full), Ctrl+Alt+S switches the mode, and in the small interface Alt+V, Alt+F and a plain Alt open the menu button's menu (screenshot `small-alt-v.png` is a grab of the screen, because a menu is a window of its own); `qb_v017_tests` checks that the eight entries of New Connected Note have eight Alt letters.
 The window is resized by `resize()`; the offscreen screen keeps its size. Run: `xvfb-run -a -s "-screen 0 1920x1080x24"
 ./qb_v0990l_tests /tmp/shots`.
 ## v0990g (0.99.0: the menu walk)

@@ -28,6 +28,8 @@
 #include <QApplication>
 #include <QDir>
 #include <QElapsedTimer>
+#include <QKeyEvent>
+#include <QTextCursor>
 #include <QMenu>
 #include <QMenuBar>
 #include <QProcess>
@@ -573,6 +575,121 @@ static void android(MainWindow &w)
     settle(300);
 }
 
+// AU-03: Alt and a letter in the full and in the small interface, the shortcut of the check item and the tip of the menu button
+static QMenu *popupMenu() { return qobject_cast<QMenu *>(QApplication::activePopupWidget()); }
+
+static void closePopups()
+{
+    for (int i = 0; i < 4 && QApplication::activePopupWidget(); ++i) {
+        QTest::keyClick(QApplication::activePopupWidget(), Qt::Key_Escape);
+        settle(100);
+    }
+}
+
+static void altKeys(MainWindow &w)
+{
+    std::printf("== Alt letters (AU-03)\n");
+    w.resize(1280, 800);
+    w.activateWindow();
+    settle(400);
+    TextEditor *ed = visibleEditor(w);
+    check(ed != nullptr, QStringLiteral("(an editor is shown)"));
+    if (!ed)
+        return;
+    auto typed = [&](const std::function<void()> &send) {
+        ed->moveCursor(QTextCursor::End); // (no selection: a typed character would replace it)
+        const QString before = ed->toPlainText();
+        send();
+        settle(150);
+        if (ed->toPlainText().size() - before.size() != 0)
+            std::printf("      (typed: \"%s\" -> \"%s\")\n", qPrintable(before.left(30)), qPrintable(ed->toPlainText().left(30)));
+        return ed->toPlainText().size() - before.size();
+    };
+    ed->setFocus();
+    settle(100);
+    // the full interface
+    check(typed([&] { QTest::keyClick(ed, Qt::Key_Q, Qt::AltModifier); }) == 0, QStringLiteral("full interface: Alt+Q types nothing"));
+    check(typed([&] { QTest::keyClick(ed, Qt::Key_Z, Qt::AltModifier); }) == 0, QStringLiteral("full interface: Alt+Z types nothing"));
+    check(typed([&] {
+              QKeyEvent ev(QEvent::KeyPress, Qt::Key_At, Qt::GroupSwitchModifier, QStringLiteral("@"));
+              QApplication::sendEvent(ed, &ev);
+          }) == 1,
+          QStringLiteral("AltGr+Q of a German layout (the key '@', with the group switch) still types \"@\""),
+          QStringLiteral("focus %1, text size %2").arg(ed->hasFocus()).arg(ed->toPlainText().size()));
+    ed->undo();
+    check(typed([&] {
+              QKeyEvent ev(QEvent::KeyPress, Qt::Key_Q, Qt::AltModifier, QStringLiteral("@"));
+              QApplication::sendEvent(ed, &ev);
+          }) == 1,
+          QStringLiteral("a layout that reports AltGr+Q as Alt with the text \"@\": still types it"));
+    ed->undo();
+    QTest::keyClick(ed, Qt::Key_F, Qt::AltModifier);
+    settle(200);
+    check(popupMenu() && popupMenu()->title().remove(QLatin1Char('&')) == QLatin1String("File"), QStringLiteral("full interface: Alt+F still opens the File menu"));
+    closePopups();
+    // the small interface, through its shortcut
+    QAction *item = viewAction(w, QStringLiteral("Small Interface"));
+    check(item && item->shortcut() == QKeySequence(Qt::CTRL | Qt::ALT | Qt::Key_S), QStringLiteral("View > Small Interface has the shortcut Ctrl+Alt+S"));
+    ed->setFocus();
+    QTest::keyClick(ed, Qt::Key_S, Qt::ControlModifier | Qt::AltModifier);
+    settle(600);
+    check(w.smallInterface() && item->isChecked(), QStringLiteral("Ctrl+Alt+S switches the small interface on"));
+    QToolButton *menuButton = button(w, QStringLiteral("menu"));
+    const QString keys = item->shortcut().toString(QKeySequence::NativeText);
+    check(menuButton && menuButton->toolTip().contains(keys) && menuButton->toolTip().contains(QStringLiteral("Alt")),
+          QStringLiteral("the menu button's tip names the shortcut and the Alt keys"), menuButton ? menuButton->toolTip() : QString());
+    ed = visibleEditor(w);
+    ed->setFocus();
+    w.activateWindow();
+    settle(200);
+    QMenu *small = w.findChild<QMenu *>(QStringLiteral("smallMenu"));
+    auto openedBy = [&](Qt::Key key, const QString &title) {
+        closePopups();
+        const int n = typed([&] { QTest::keyClick(ed, key, Qt::AltModifier); });
+        settle(500);
+        QMenu *sub = nullptr;
+        if (small && small->isVisible() && small->activeAction())
+            sub = small->activeAction()->menu();
+        const bool ok = n == 0 && sub && sub->isVisible() && sub->title().remove(QLatin1Char('&')) == title;
+        check(ok, QStringLiteral("small interface: Alt+%1 opens the %2 menu at the menu button and types nothing").arg(QChar(static_cast<int>(key))).arg(title),
+              QStringLiteral("typed %1, menu visible %2, sub %3").arg(n).arg(small && small->isVisible()).arg(sub ? sub->title() : QString()));
+        return ok;
+    };
+    openedBy(Qt::Key_V, QStringLiteral("View"));
+    settle(300);
+    QGuiApplication::primaryScreen()->grabWindow(0).save(outDir + QLatin1String("/small-alt-v.png")); // (a menu is a window of its own: the screen)
+    const QRect btn(menuButton->mapToGlobal(QPoint(0, 0)), menuButton->size());
+    check(small && small->isVisible() && !small->geometry().intersects(btn), QStringLiteral("the menu opens beside the button, not over it"));
+    openedBy(Qt::Key_F, QStringLiteral("File"));
+    closePopups();
+    check(typed([&] { QTest::keyClick(ed, Qt::Key_Q, Qt::AltModifier); }) == 0 && !(small && small->isVisible()),
+          QStringLiteral("small interface: Alt+Q (no menu has it) types nothing and opens nothing"));
+    check(typed([&] {
+              QKeyEvent ev(QEvent::KeyPress, Qt::Key_At, Qt::GroupSwitchModifier, QStringLiteral("@"));
+              QApplication::sendEvent(ed, &ev);
+          }) == 1,
+          QStringLiteral("small interface: AltGr+Q still types \"@\""));
+    ed->undo();
+    // a plain Alt
+    QTest::keyPress(ed, Qt::Key_Alt, Qt::AltModifier);
+    QTest::keyRelease(ed, Qt::Key_Alt);
+    settle(400);
+    check(small && small->isVisible() && !small->activeAction(), QStringLiteral("small interface: Alt pressed and released opens the menu button's menu"),
+          QStringLiteral("visible %1, active %2, window active %3").arg(small && small->isVisible()).arg(small && small->activeAction() ? small->activeAction()->text() : QString()).arg(QApplication::activeWindow() == &w));
+    closePopups();
+    QTest::keyPress(ed, Qt::Key_Alt, Qt::AltModifier);
+    QTest::keyClick(ed, Qt::Key_Left, Qt::AltModifier);
+    QTest::keyRelease(ed, Qt::Key_Alt);
+    settle(300);
+    closePopups();
+    check(!(small && small->isVisible()), QStringLiteral("Alt used with another key opens no menu"));
+    // back with the shortcut
+    ed->setFocus();
+    QTest::keyClick(ed, Qt::Key_S, Qt::ControlModifier | Qt::AltModifier);
+    settle(600);
+    check(!w.smallInterface() && !item->isChecked() && w.menuBar()->isVisible(), QStringLiteral("Ctrl+Alt+S switches the small interface off again"));
+}
+
 int main(int argc, char **argv)
 {
     QTemporaryDir home;
@@ -654,6 +771,7 @@ int main(int argc, char **argv)
     settle(500);
     record(w, false);
     profilesKeep(w);
+    altKeys(w);
     android(w);
 
     delete wp;

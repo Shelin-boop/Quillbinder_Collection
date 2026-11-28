@@ -202,7 +202,7 @@ Choose a layout under **View > Layout** or from the **View** button of the toolb
 
 ### The small interface
 
-For a small screen, or for writing without a keyboard, the **small interface** gives the text the whole window and puts a few round buttons at its edge: in an upright window as a row at the bottom, in a wide window as a column at the right edge. Switch it on and off with **View > Small Interface** (a check item). It is off when you start the program, and only you switch it; **View > Profiles** keeps it like any other setting, so a profile can start in the small interface. On Android the item has three choices instead: **Full**, **Small** and **Automatic**; Automatic shows the small interface on a screen with fewer than 1920 x 1080 physical pixels (held either way).
+For a small screen, or for writing without a keyboard, the **small interface** gives the text the whole window and puts a few round buttons at its edge: in an upright window as a row at the bottom, in a wide window as a column at the right edge. Switch it on and off with **View > Small Interface** (a check item) or with **Ctrl+Alt+S**. The menu bar is hidden then: press **Alt** and release it to open the menu button's menu, or press **Alt** with the letter of a menu (for example **Alt+V** for View) to open that menu at the button. An Alt letter that no command uses types nothing into the text. It is off when you start the program, and only you switch it; **View > Profiles** keeps it like any other setting, so a profile can start in the small interface. On Android the item has three choices instead: **Full**, **Small** and **Automatic**; Automatic shows the small interface on a screen with fewer than 1920 x 1080 physical pixels (held either way).
 
 The buttons, from the first: **Menu** (every menu of the menu bar, and **Switch to the Full Interface**), **New Text** (a new document), **Bold**, **Italic**, **Style** (the paragraph styles of the project), **Binder**, **Labels and Icons** (the label and the icon of the selected documents), **Record Only** and **Notes**. The buttons are round, use the colors of your theme, take the size of your toolbar setting (View > Toolbars > Toolbar Size, Large on Android) and are never less than 9 mm wide and high on your screen. The keyboard still works: the buttons can be reached with the Tab key, the shortcuts of the commands work as before, and the line around the part that has the keyboard is shown.
 
@@ -1786,6 +1786,7 @@ The menus show every key as the layout names it. A program that was used before 
 | No Style / Heading 1 / Heading 2 / Heading 3 | Ctrl+Alt+0 / Ctrl+Alt+1 / Ctrl+Alt+2 / Ctrl+Alt+3 |
 | The next six styles of the style list (Format > Style > Customize Style List) | Ctrl+Alt+4 ... Ctrl+Alt+9 |
 | Go to the synopsis / go to the document notes (Navigate > Inspect) | Ctrl+Alt+Y / Ctrl+Alt+N |
+| Small interface on or off (View > Small Interface) | Ctrl+Alt+S |
 | Back up now | Ctrl+Shift+B |
 | Script mode / list of script elements | Ctrl+8 / Ctrl+\\ (German layout: Ctrl+8 / Ctrl+Shift+O) |
 | In a script: next element / change element | Enter / Tab (see section 4, Scriptwriting) |

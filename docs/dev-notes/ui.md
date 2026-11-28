@@ -51,6 +51,15 @@ Aloud), `ui/MainWindowReadAloud.cpp` (the switch and the bar in the first row af
   model and device (`readaloud/rtf/...`). The program's language for "Automatic language" is `QLocale().name()`.
 - The editor marks the sentence by an extra selection (`TextEditor::setReadingRange`, joined to the search marks).
 
+## 0.99.0: Alt letters (AU-03)
+
+A hidden menu bar has no mnemonics, and a text field types an Alt letter that no shortcut took (shortcuts are tried before the key
+reaches the field, so a key that arrives is unused). `MainWindow::eventFilter` (on the application, `MainWindowSmall.cpp`) holds
+back an Alt+letter that carries its own letter in the text (AltGr characters, which differ from the key, pass; so does a key with
+the group switch), opens the menu bar menu with that mnemonic at the round button in the small interface (`openSmallMenu`), and
+opens the button's menu on a plain Alt (press and release, no other key or mouse button in between). Ctrl+Alt+S is the small
+interface's shortcut. Mind map: each "With Arrow" entry has its own text, so each has its own letter.
+
 ## 0.99.0: small interface (item 122)
 
 - `MainWindowSmall.cpp` (`MainWindow::setSmallInterface`), the rules and the panel in `ui/SmallInterface.*`. The mode is a
