@@ -33,7 +33,11 @@ SEXPP_COMMIT=c641a2f36520bab783657a58650d9fda548b9dec
 # "curve25519" an internal module (configure refuses it), the public one is "x25519"; since 3.7 RNP also asks for the
 # "pcurves" modules of the curves it offers (the ones at the end of the list; pcurves_impl comes with them)
 BOTAN_MODULES="aead aes auto_rng bigint blowfish camellia cast128 cbc cfb crc24 x25519 des dl_algo dl_group dsa eax ecc_key ecdh ecdsa ed25519 elgamal eme_pkcs1 emsa_pkcs1 emsa_raw ffi hash raw_hash hmac hmac_drbg idea kdf md5 ocb pgp_s2k rfc3394 rmd160 rsa sha1 sha2_32 sha2_64 sha3 sm2 sm3 sm4 sp800_56a twofish pcurves_secp192r1 pcurves_secp256k1 pcurves_secp256r1 pcurves_secp384r1 pcurves_secp521r1 pcurves_brainpool256r1 pcurves_brainpool384r1 pcurves_brainpool512r1 pcurves_sm2p256v1"
-STAMP="botan $BOTAN_TAG $BOTAN_COMMIT; json-c $JSONC_TAG $JSONC_COMMIT; bzip2 $BZIP2_TAG $BZIP2_COMMIT; zlib $ZLIB_TAG $ZLIB_COMMIT; rnp $RNP_TAG $RNP_COMMIT; sexpp $SEXPP_COMMIT"
+# Live Sync (0.99.0): the TLS 1.3 channel and the device certificates and the wallet (argon2 for its passphrase; x509 and tls13 bring dns_name, email, ip_address,
+# telephone_number, uri, dh, gcm, ghash, hkdf and tls with them); the module list is part of the stamp below, so that a
+# finished build with an older list is built again
+BOTAN_MODULES="$BOTAN_MODULES x509 tls13 argon2"
+STAMP="botan $BOTAN_TAG $BOTAN_COMMIT [$BOTAN_MODULES]; json-c $JSONC_TAG $JSONC_COMMIT; bzip2 $BZIP2_TAG $BZIP2_COMMIT; zlib $ZLIB_TAG $ZLIB_COMMIT; rnp $RNP_TAG $RNP_COMMIT; sexpp $SEXPP_COMMIT"
 
 done_here() { [ "$(cat "$PREFIX/version.txt" 2>/dev/null)" = "$STAMP" ] && [ -f "$PREFIX/lib/librnp.a" ] && [ -f "$PREFIX/lib/libbotan-3.a" ]; }
 if done_here; then

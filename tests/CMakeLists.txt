@@ -645,3 +645,9 @@ add_dependencies(qb_v0990n_tests qb-fake-qbai)
 add_executable(qb_ls2_tests ls2_tests.cpp)
 target_link_libraries(qb_ls2_tests PRIVATE qbcore Qt6::Core Qt6::Network)
 target_compile_definitions(qb_ls2_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
+
+# 0.99.0, Live Sync work package 1: the Quillbinder wallet (the key store's fallback), the device identity, frames, the peer
+# store, the in-memory link, TLS 1.3 with pins and the listener's limits, pairing with its window (no display needed)
+# (./qb_ls1_tests /tmp/shots)
+add_executable(qb_ls1_tests ls1_tests.cpp)
+target_link_libraries(qb_ls1_tests PRIVATE qbcore Qt6::Network)

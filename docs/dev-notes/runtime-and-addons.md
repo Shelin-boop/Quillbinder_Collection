@@ -2,6 +2,33 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: Live Sync transport, identity, pairing, the wallet (work package 1)
+
+- **Botan modules**: `tools/get-crypto.sh` and `packaging/windows/win-crypto.sh` add `x509 tls13 argon2` to `BOTAN_MODULES`; the list is part of the
+  Linux `STAMP` (before, a finished `build/crypto` was never rebuilt for a changed list; the Windows stamp already holds the script's hash). The pack key
+  of `tools/deps-pack.sh` is the script's hash, so `deps.yml` builds the packs anew. `CMakeLists.txt` finds `botan/tls.h` and `botan/argon2.h` in the pack
+  and defines `QB_HAVE_BOTAN_TLS` for `qbcore`; an older pack builds everything as "not available" (the suite then skips what needs TLS).
+- **C++20 for four files**: Botan 3 headers need C++20, the program is C++17. `Wallet.cpp`, `DeviceIdentity.cpp`, `TlsLink.cpp` and `Pairing.cpp` get
+  `-std=c++20` through `set_source_files_properties`; no public header of the program includes a Botan header (pimpl), so everything else stays C++17.
+- **Ed25519 probe (2026-11-28, Botan 3.14.1)**: TLS 1.3 with Ed25519 certificates and client authentication fails ("Failed to agree on a signature
+  algorithm"): `Signature_Scheme::all_available_schemes()` has the EdDSA schemes commented out for certificates. The same exchange with ECDSA P-256
+  certificates works (both sides active, data passes). So the device key is **ECDSA P-256**; signatures for proofs, votes and membership records are
+  ECDSA with SHA-256 (`DeviceIdentity::sign/verify`, fixed r||s form). A later Botan that supports EdDSA certificates would be a new key kind and a new pairing.
+- **Trust**: `TlsLink` verifies in `tls_verify_cert_chain`: one self-signed ECDSA certificate, then `TrustPolicy::decide(pin, isServer)`. A client refuses
+  a server it does not know (`IDENTITY_MISMATCH`, the handshake is stopped); a server completes the handshake with an unknown key and says only
+  `{"t":"ERROR","code":"NOT_PAIRED"}` before closing, so that nothing (no names, no counts) leaves. Policy: TLS 1.3 only, AES-GCM, ECDSA with SHA-256/384,
+  X25519 and P-256, client certificate required, no tickets (`Session_Manager_Noop`).
+- **Pairing**: the nonces and the commitment are in `Pairing.h`. A man in the middle who only relays frames is stopped by the guest's commitment check
+  (the host committed to the pins it saw); one who plays both roles with keys of his own gets different codes on the two devices. After a pairing the side
+  that finishes last closes the link; `MemLink::close` delivers what was sent before the close first, as a wire does (a closed link must not overtake a
+  confirmation).
+- **The wallet** (`src/core/crypto/Wallet.*`, used by `KeyStore::system()` as `FallbackStore`): file `<data>/wallet.qbw`, header line with the Argon2id
+  costs (limits `kMaxMemoryKiB`, `kMaxPasses`, `kMaxLanes` guard against a planted file) and the salt and nonce, AES-256/GCM over the entries with the
+  magic and header as associated data. Each write seals the whole file again under a fresh nonce and replaces the file (`QSaveFile`). The unlock handler
+  (`Wallet::setUnlockHandler`) is set by the window code; **no code sets it yet** (the dialog comes with Live Sync's pages), so today `KeyStore::system()`
+  behaves as before where the system has no key store. Test switches: `QB_TEST_KEYSTORE=file:<path>` (a plain JSON store shared by processes),
+  `QB_TEST_WALLET_FAST=1` (a cheap Argon2 setting), `QB_TEST_WALLET_PASSPHRASE=<text>` (answers the question).
+
 ## 0.99.0: the label is one setting per system
 
 - `CMakeLists.txt` holds `APP_VERSION_LABEL` (Linux's, in the first column: every Linux script, `release.yml`,

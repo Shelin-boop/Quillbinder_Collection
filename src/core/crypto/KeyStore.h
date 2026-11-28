@@ -5,8 +5,14 @@
 //     the Secret Service (GNOME and others; libsecret loaded at run time), Windows Credential Manager, Android
 //     Keystore. Never QtKeychain's "insecure fallback" (a plain file). A build without QtKeychain, or a system
 //     without a key store: Status::NoBackend, and the writer types the passphrase once per session.
+//   - the Quillbinder wallet (0.99.0, Live Sync; Wallet.h): where the system has no key store, system() falls back to the
+//     wallet (one file in the data folder, sealed under a master passphrase that is asked once per program session
+//     through Wallet::setUnlockHandler). Without a handler (or when the writer cancels) the answer is the same as
+//     before: NoBackend (or Denied after a cancel).
 //   - memory(): kept in memory only, for the tests (builds with the test switches: QB_TEST_KEYSTORE=memory makes
 //     system() one too, shared by the whole program run).
+// Test builds: QB_TEST_KEYSTORE=file:<path> keeps the entries in one plain file (so that program instances of a test keep
+// their identities across restarts; never in a release build).
 // The calls wait for the store's answer (the store may show a dialog of its own, e.g. KWallet asking for the wallet's
 // password); meanwhile the program's windows are drawn, but take no input.
 #include <QByteArray>
@@ -15,6 +21,8 @@
 
 namespace qb {
 namespace crypto {
+
+class Wallet;
 
 class KeyStore {
 public:
@@ -38,6 +46,8 @@ public:
     static QString passphraseEntry(const QString &fingerprint);
     // the system's key store (see above); the program keeps one
     static KeyStore &system();
+    // the system's store with a wallet behind it, as system() builds it (for the tests: any primary, any wallet)
+    static std::unique_ptr<KeyStore> withWallet(std::unique_ptr<KeyStore> primary, Wallet *wallet);
     // a store in memory (a new, empty one each time)
     static std::unique_ptr<KeyStore> memory();
 };

@@ -55,6 +55,16 @@ used before, moved unchanged; suite `stshard` fails on a POSIX header or call ou
 Windows target is built only with `-DQB_SYSTEM_TEST_WINDOWS=ON`. Not compiled or run on Windows here: the first Windows run
 compiles it. Pitfall: in the mouse drag the event loop must run between the steps (the dragged program is the test
 itself), so the Windows version waits with `settle`, never with `Sleep`.
+## ls1 (0.99.0, Live Sync work package 1)
+
+`qb_ls1_tests`, no display, about 2 s, needs the encryption pack with Botan TLS (the Live Sync parts are skipped with an old pack). Checks the wallet (file
+holds nothing in plain form, wrong passphrase, a changed byte in the sealed part or the header, header limits, changing the passphrase, a failed write)
+and the key store's fallback (no store and no handler: `NoBackend` as before; handler asked once; wrong three times; cancel), the device identity (keys,
+restart, lost certificate, lost or damaged key, no key store), the frames (every limit and error code, the rate limit with a fake clock), the peer store,
+`MemLink`, TLS 1.3 on loopback with pins (paired, removed, wrong pin, unknown key with the window closed and open, TLS 1.2 refused, plain bytes, HELLO
+timeout and wrong id, frame errors over TLS, the listener's limits), pairing (codes, window, one at a time, three attempts, five windows, mismatch,
+relaying and playing man in the middle, a reveal that breaks the commitment, over TLS and then with pins alone).
+
 ## New system-test cases of 0.99.0 (item 124, the harness `tests/crashsafe/`)
 
 New files: `cs_enc099.cpp` (S-Z01 to S-Z08 and `encryptionSetUp`), `cs_new099.cpp` (S-H01 to S-H06 handwriting, S-G01 to S-G04
