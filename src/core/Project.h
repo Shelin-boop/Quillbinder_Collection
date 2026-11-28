@@ -13,10 +13,18 @@
 #include <functional>
 #include <memory>
 
+class QDomElement;
+
 namespace qb {
 
 class BinderModel;
 class DocumentStore;
+namespace collab {
+class Follower;
+}
+namespace savebatch {
+class Batch;
+}
 namespace objects {
 class Store;
 }
@@ -34,7 +42,10 @@ public:
     // special folders. Templates add their own structure afterwards.
     static std::unique_ptr<Project> create(const QString &parentDir, const QString &name, QString *error);
     // path may be the project folder or the .qbx file inside it
-    static std::unique_ptr<Project> open(const QString &path, QString *error);
+    // 0.99.0 (Live Sync): with a follower the project opens in follower mode (see setFollower): nothing that only the
+    // authority does is done at the opening (the recovery of a cut-off save, the spare copy, the removal of leftovers),
+    // and the writes of the window are captured, not written
+    static std::unique_ptr<Project> open(const QString &path, QString *error = nullptr, collab::Follower *follower = nullptr);
     static QString resolveProjectFile(const QString &path);
 
     bool save(QString *error = nullptr);
@@ -110,6 +121,38 @@ public:
     std::function<int(const QString &dir, QString *error, CopyTally *tally)> emergencyExtra;
 
     QString folderPath() const { return m_folder; }
+
+    // ---- Live Sync (0.99.0, core/collab) -------------------------------------
+    // The window of a shared project is a follower: it never writes the shared files (collab/Gate.h). Attached to the
+    // gate with the project's folder; the follower must outlive the project.
+    void setFollower(collab::Follower *follower);
+    collab::Follower *follower() const { return m_follower; }
+    bool isFollower() const { return m_follower != nullptr; }
+    // The replica's project file was replaced by the service (a remote commit): what this window knows of the file on disk
+    // is read again, so that its next save compares with it
+    void acknowledgeIndexOnDisk();
+    // May this device change the resource now ("doc:<id>", "structure", "settings", "object:<oid>", "mindmap:<id>",
+    // "project")? Always true for a project that is no follower's.
+    bool canChange(const QString &resource) const;
+    // The authority's save adds files to its batch (livesync/state.json and the log of the commit): called inside the
+    // save, after the texts, the objects and the project file, with the batch of the save; false stops the save (the
+    // reason in *error)
+    std::function<bool(savebatch::Batch &batch, QString *error)> extraBatchFiles;
+    // While a remote commit is applied to this project (collab/OpApply.h) nothing it does counts as a change of the
+    // writer's: the binder is not marked unsaved, and a follower's capture drops what the program writes meanwhile
+    void beginRemoteApply();
+    void endRemoteApply();
+    bool applyingRemote() const { return m_remoteApply > 0; }
+    // Reads every part of the project file that is no item (labels, statuses, keywords, custom fields, section types,
+    // formatting, targets, collections, compile settings, writing history) from `indexXml` into this project; the
+    // binder is left as it is. False with a reason when the bytes are not a project file.
+    bool applySectionsFromIndex(const QByteArray &indexXml, QString *error = nullptr);
+    // One item of the project file as XML (an <Item> element without its children), and the other way: an item made from
+    // such an element (no parent, no children); `fields` copies every field the project file holds from `from` into
+    // `to` (not id, parent or children)
+    static QString itemToXml(const BinderItem *item);
+    static BinderItem *itemFromXml(const QString &xml);
+    static void copyItemFields(BinderItem *to, const BinderItem &from);
     // 0.99.0 (item 113): the project's files are encrypted (core/crypto/ProjectCrypto.h); every read and write goes
     // through the vault (core/crypto/Vault.h)
     bool isEncrypted() const { return !m_vaultFolder.isEmpty(); }
@@ -288,6 +331,9 @@ signals:
 private:
     explicit Project(QObject *parent = nullptr);
     bool loadIndex(QString *error);
+    void readSections(const QDomElement &rootEl);
+    collab::Follower *m_follower = nullptr; // 0.99.0 (Live Sync)
+    int m_remoteApply = 0;
     void setupDefaults();
     void ensureSpecialFolders();
 

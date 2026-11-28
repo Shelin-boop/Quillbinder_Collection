@@ -1,5 +1,7 @@
 #include "SaveBatch.h"
 
+#include "collab/Gate.h"
+
 #include "FailureKind.h"
 #include "PathSafety.h"
 #include "SafeSave.h"
@@ -256,6 +258,9 @@ Batch::~Batch()
 
 bool Batch::contains(const QString &target) const
 {
+    for (const collab::FileChange &c : m_captured)
+        if (QDir::cleanPath(m_folder + QLatin1Char('/') + c.path) == QDir::cleanPath(target))
+            return true;
     for (const Item &i : m_items)
         if (i.target == target)
             return true;
@@ -265,6 +270,34 @@ bool Batch::contains(const QString &target) const
 bool Batch::stage(const QString &target, const QByteArray &data, const QString &title, const QString &place,
                   QString *error)
 {
+    // 0.99.0 (Live Sync): a file of a follower's folder is kept as it is (plain), before any encryption, and handed to the
+    // follower's capture by the commit; nothing waits on disk for it
+    if (collab::gate().active()) {
+        const collab::Gate::Decision d = collab::gate().decide(target);
+        if (d.verdict == collab::Verdict::Refused) {
+            collab::gate().write(target, data); // (counts it; aborts in strict mode)
+            if (error)
+                *error = QObject::tr("%1 is not part of a shared project's files and was not written.")
+                             .arg(QDir::toNativeSeparators(target));
+            return false;
+        }
+        if (d.verdict == collab::Verdict::Captured) {
+            collab::FileChange c;
+            c.kind = collab::FileChange::Put;
+            c.path = d.relative;
+            c.data = data;
+            c.sha256 = QCryptographicHash::hash(data, QCryptographicHash::Sha256).toHex();
+            c.info = d.info;
+            m_follower = d.follower;
+            for (collab::FileChange &o : m_captured)
+                if (o.path == c.path) {
+                    o = c; // staged again in the same save: the newer content counts
+                    return true;
+                }
+            m_captured << c;
+            return true;
+        }
+    }
     // 0.99.0: a file of an encrypted project waits encrypted (core/crypto/Vault.h); the journal names the bytes on disk
     QByteArray onDisk = data;
     if (!vault::seal(target, onDisk, error))
@@ -410,6 +443,22 @@ bool Batch::commit(QString *error)
         }
         dirs.insert(QFileInfo(i.target).absolutePath());
     }
+    // 0.99.0 (Live Sync): the files captured for a follower become one change set now that the save is complete
+    // (closed when this commit ends, after the follow-up steps, which may remove a file of the other storage format)
+    struct CloseSet {
+        collab::Follower *f;
+        ~CloseSet()
+        {
+            if (f)
+                f->capture().flush();
+        }
+    } closeSet{nullptr};
+    if (m_follower && !m_captured.isEmpty()) {
+        const QList<collab::FileChange> files = m_captured;
+        m_captured.clear();
+        m_follower->capture().add(files);
+        closeSet.f = m_follower;
+    }
     // 0.93.0: every file is in place: what records that (stamps, what was read, sha) runs now, whatever the sync says
     m_placedAll = true;
     {
@@ -473,6 +522,7 @@ void Batch::drop()
         for (const Item &i : std::as_const(m_items))
             QFile::remove(i.staged);
     m_items.clear();
+    m_captured.clear();
     m_after.clear();
     m_placedSteps.clear();
     m_done = true;

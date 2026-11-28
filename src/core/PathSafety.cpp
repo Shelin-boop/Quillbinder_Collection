@@ -1,5 +1,7 @@
 #include "core/PathSafety.h"
 
+#include "core/collab/Gate.h"
+
 #include <QDir>
 #include <QFile>
 #include <QFileInfo>
@@ -79,6 +81,17 @@ bool isInside(const QString &path, const QString &folder)
 
 bool removeTreeInside(const QString &dir, const QString &root)
 {
+    // 0.99.0 (Live Sync): a folder of a follower's project is not removed here: the removal is captured (collab/Gate.h)
+    if (collab::gate().active()) {
+        switch (collab::gate().removeTree(dir)) {
+        case collab::Verdict::Captured:
+            return true;
+        case collab::Verdict::Refused:
+            return false;
+        case collab::Verdict::Pass:
+            break;
+        }
+    }
     const QFileInfo fi(dir);
     if (fi.isSymLink())
         return QFile::remove(dir); // the link only

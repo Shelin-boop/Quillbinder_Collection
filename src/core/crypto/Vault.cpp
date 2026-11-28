@@ -266,6 +266,9 @@ bool isSealedData(const QByteArray &head) { return sessionKeyPacket(head); }
 
 bool seal(const QString &path, QByteArray &data, QString *error)
 {
+    // 0.99.0 (Live Sync): the gate's backstop: a write into a follower's folder that got here without being captured
+    if (collab::gate().active() && !collab::gate().sealAllowed(path, error))
+        return false;
     if (!active())
         return true;
     const Place p = placeOf(path);
@@ -389,6 +392,19 @@ QImage readImage(const QString &path)
 
 bool saveImage(const QImage &image, const QString &path, const char *format)
 {
+    if (collab::gate().active() && collab::gate().decide(path).verdict != collab::Verdict::Pass) {
+        // a follower's folder: the picture is encoded here and captured (collab/Gate.h)
+        QByteArray fmt = format ? QByteArray(format) : QFileInfo(path).suffix().toLower().toLatin1();
+        if (fmt == "jpeg")
+            fmt = "jpg";
+        if (fmt.isEmpty())
+            fmt = "png";
+        QByteArray bytes;
+        QBuffer buf(&bytes);
+        if (!buf.open(QIODevice::WriteOnly) || !image.save(&buf, fmt.constData()))
+            return false;
+        return collab::gate().write(path, bytes) == collab::Verdict::Captured;
+    }
     if (!seals(path))
         return image.save(path, format);
     QByteArray fmt = format ? QByteArray(format) : QFileInfo(path).suffix().toLower().toLatin1();
@@ -406,6 +422,10 @@ bool saveImage(const QImage &image, const QString &path, const char *format)
 bool copy(const QString &from, const QString &to, QString *error, bool *handled)
 {
     *handled = false;
+    if (collab::gate().active() && !collab::gate().sealAllowed(to, error)) {
+        *handled = true; // (the gate's backstop: safesave::copyFile asks the gate first)
+        return false;
+    }
     if (!active())
         return false;
     const Place a = placeOf(from), b = placeOf(to);

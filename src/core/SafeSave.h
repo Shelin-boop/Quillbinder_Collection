@@ -16,6 +16,7 @@
 // encrypted). The add-ons' plugins use this file header-only and link no part of the program: their build sets
 // QB_SAFESAVE_HEADER_ONLY (plugins/tools, plugins/importers), and they write only into folders of their own.
 #ifndef QB_SAFESAVE_HEADER_ONLY
+#include "core/collab/Gate.h"
 #include "core/crypto/Vault.h"
 #define QB_SAFESAVE_VAULT 1
 #endif
@@ -46,6 +47,20 @@ inline qint64 writeRaw(QSaveFile &f, const QByteArray &data)
 inline qint64 write(QSaveFile &f, const QByteArray &data)
 {
 #ifdef QB_SAFESAVE_VAULT
+    // 0.99.0 (Live Sync): a file of a shared project's folder on a follower's window is captured, not written (collab/Gate.h)
+    if (collab::gate().active()) {
+        switch (collab::gate().write(f.fileName(), data)) {
+        case collab::Verdict::Captured:
+            f.cancelWriting();
+            collab::gate().noteCapturedSave(&f);
+            return data.size();
+        case collab::Verdict::Refused:
+            f.cancelWriting();
+            return -1;
+        case collab::Verdict::Pass:
+            break;
+        }
+    }
     if (vault::active() && vault::seals(f.fileName())) {
         QByteArray sealed = data;
         if (!vault::seal(f.fileName(), sealed)) {
@@ -60,6 +75,11 @@ inline qint64 write(QSaveFile &f, const QByteArray &data)
 
 inline bool commit(QSaveFile &f)
 {
+#ifdef QB_SAFESAVE_VAULT
+    // a captured write (see write above) is done: the file was cancelled on purpose (so it reports an error)
+    if (f.error() != QFileDevice::NoError && collab::gate().takeCapturedSave(&f))
+        return true;
+#endif
     if (!f.isOpen() || f.error() != QFileDevice::NoError)
         return false;
     if (!f.flush() || f.error() != QFileDevice::NoError) {
@@ -108,6 +128,17 @@ inline bool writeFile(const QString &path, const QByteArray &data, QString *erro
     // 0.99.0: a file of an encrypted project is written encrypted (core/crypto/Vault.h)
     QByteArray sealed = data;
 #ifdef QB_SAFESAVE_VAULT
+    // 0.99.0 (Live Sync): captured for a follower's folder (collab/Gate.h)
+    if (collab::gate().active()) {
+        const collab::Verdict v = collab::gate().write(path, data);
+        if (v == collab::Verdict::Captured)
+            return true;
+        if (v == collab::Verdict::Refused) {
+            if (error)
+                *error = QStringLiteral("%1: not written (a path of no class in a shared project)").arg(path);
+            return false;
+        }
+    }
     QString sealError;
     if (!vault::seal(path, sealed, &sealError)) {
         if (error)
@@ -133,6 +164,17 @@ inline bool writeFile(const QString &path, const QByteArray &data, QString *erro
 inline bool copyFile(const QString &from, const QString &to, QString *error = nullptr)
 {
 #ifdef QB_SAFESAVE_VAULT
+    // 0.99.0 (Live Sync): a copy into a follower's folder is captured (collab/Gate.h)
+    if (collab::gate().active()) {
+        const collab::Verdict v = collab::gate().copy(from, to, error);
+        if (v == collab::Verdict::Captured)
+            return true;
+        if (v == collab::Verdict::Refused) {
+            if (error && error->isEmpty())
+                *error = QStringLiteral("%1: not written (a path of no class in a shared project)").arg(to);
+            return false;
+        }
+    }
     // 0.99.0: into or out of an encrypted project, the copy is encrypted or decrypted as its place needs
     {
         bool handled = false;
@@ -188,6 +230,22 @@ inline bool copyChecked(const QString &from, const QString &to, QString *error =
     }
     return copyFile(from, to, error);
 }
+
+#ifdef QB_SAFESAVE_VAULT
+// 0.99.0 (Live Sync): a file removed. For a follower's folder the removal is captured (collab/Gate.h) and nothing is removed;
+// else QFile::remove. True when the file is gone or was captured as removed.
+inline bool removeFile(const QString &path)
+{
+    if (collab::gate().active()) {
+        const collab::Verdict v = collab::gate().remove(path);
+        if (v == collab::Verdict::Captured)
+            return true;
+        if (v == collab::Verdict::Refused)
+            return false;
+    }
+    return QFile::remove(path);
+}
+#endif
 
 } // namespace safesave
 } // namespace qb

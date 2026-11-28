@@ -160,7 +160,15 @@ public:
     bool isDamaged(const QString &id, bool notes = false) const { return m_damaged.contains(keyFor(id, notes)); }
     // 0.81.1 (audit of 0.81.0, F-01): why a command must not change the text (or notes) of this document, as a part
     // of a sentence ("its file cannot be read"); "" when it may. Only documents read so far are known.
+    // 0.99.0 (Live Sync): also the follower's reasons ("it is being edited on <device>", "this device has read-only access
+    // to the project"; collab::Follower::whyNotEditable), checked first, for every document, read or not
     QString whyNotEditable(const QString &id, bool notes = false) const;
+    // 0.99.0 (Live Sync): the text and the notes of a document whose files were changed elsewhere are read again into the
+    // documents already loaded (the same QTextDocument objects, so every editor keeps showing them); a document that is
+    // not loaded just forgets what it kept. A document with unsaved changes here is never overwritten: it is skipped and
+    // false is returned for it. aboutToReload / reloaded surround the change, so that an editor can note its cursor and
+    // scroll position and put them back (clamped to the new length). True when nothing was skipped.
+    bool reload(const QString &id);
     // 0.81.1 (F-01, Roll Back): a damaged text becomes editable again; its damaged file is kept as a copy in
     // settings/conflicts first (*copy). False with a reason when the copy could not be made, or when the file was
     // not read at all (cannot be read, has not arrived): such a text stays read-only.
@@ -195,6 +203,9 @@ signals:
     void charactersLeftOut(const QString &id, bool notes, int count);
     // 0.81.1 (audit of 0.81.0, F-01): a text that was read-only because its file was damaged can be edited again
     void editableAgain(const QString &id, bool notes);
+    // 0.99.0 (Live Sync): around reload()
+    void aboutToReload(const QString &id, bool notes);
+    void reloaded(const QString &id, bool notes);
     // 0.81.1 (F-01): a document whose file cannot be read was changed in memory all the same (by a command that does
     // not ask first). Its file is not written over; the changed text was kept as an RTF file `copy` in
     // settings/conflicts ("" when that failed too: then it stays unsaved).
@@ -268,6 +279,7 @@ private:
     bool m_unlockDeclined = false;
     enum class DiskText { Read, Unreadable, Undecryptable };
     static DiskText diskText(const QString &path, QByteArray *bytes);
+    QString m_reloadingKey; // 0.99.0: the document reload() is filling (its changes are no edits)
     QHash<QString, QString> m_plainCache;
     qint64 m_plainChars = 0;
     qint64 m_plainBudget = kPlainCacheBudget;
