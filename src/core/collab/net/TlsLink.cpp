@@ -193,6 +193,7 @@ struct TlsLink::Impl {
             const std::vector<uint8_t> &spki = chain[0].subject_public_key_info();
             const QByteArray der(reinterpret_cast<const char *>(spki.data()), qsizetype(spki.size()));
             seen.pin = DeviceIdentity::pinOfPublicKey(der);
+            seen.publicKey = der;
             seen.deviceId = DeviceIdentity::deviceIdOfPin(seen.pin);
             const Trust v = trust.decide ? trust.decide(seen.pin, server) : TrustPolicy::Reject;
             if (v == TrustPolicy::Reject || (!server && v == Trust::Unknown))
@@ -347,6 +348,7 @@ void TlsLink::activated()
     helloSent = true;
     proto = QStringLiteral("TLS v1.3"); // (the policy allows nothing else)
     info.pin = d->cb->seen.pin;
+    info.publicKey = d->cb->seen.publicKey;
     info.deviceId = d->cb->seen.deviceId;
     info.trust = d->cb->seen.trust;
     d->timer.start(helloMs);

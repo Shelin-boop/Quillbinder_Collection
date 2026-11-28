@@ -20,6 +20,7 @@ struct PeerInfo {
         Paired,  // the key is in the peer store
         Member,  // the key is in the signed membership of the project asked for
     };
+    QByteArray publicKey; // the peer's public key (DER SubjectPublicKeyInfo), for signed records (membership)
     QByteArray pin;      // SHA-256 of the peer's public key (DER SubjectPublicKeyInfo), 32 bytes
     QString deviceId;    // the first 16 bytes of the pin as hex (32 characters); what the peer's HELLO must say
     QString address;     // the peer's network address (for the writer's information only)

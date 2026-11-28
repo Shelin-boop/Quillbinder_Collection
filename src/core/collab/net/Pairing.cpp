@@ -309,6 +309,7 @@ void PairingSession::proceed()
         return;
     PeerRecord r;
     r.pin = link->peer().pin;
+    r.publicKey = link->peer().publicKey;
     r.name = otherName;
     r.instanceId = otherInstance;
     QString err;

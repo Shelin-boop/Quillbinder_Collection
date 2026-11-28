@@ -43,6 +43,7 @@ void PeerStore::reload()
                 }
                 r.name = o.value(QStringLiteral("name")).toString();
                 r.instanceId = o.value(QStringLiteral("instance")).toString();
+                r.publicKey = QByteArray::fromBase64(o.value(QStringLiteral("key")).toString().toLatin1());
                 r.pairedAt = o.value(QStringLiteral("pairedAt")).toInteger();
                 read.append(r);
             }
@@ -78,6 +79,7 @@ bool PeerStore::save(const QList<PeerRecord> &next, QString *error) const
         o[QStringLiteral("pin")] = QString::fromLatin1(r.pin.toHex());
         o[QStringLiteral("name")] = r.name;
         o[QStringLiteral("instance")] = r.instanceId;
+        o[QStringLiteral("key")] = QString::fromLatin1(r.publicKey.toBase64());
         o[QStringLiteral("pairedAt")] = r.pairedAt;
         a.append(o);
     }
