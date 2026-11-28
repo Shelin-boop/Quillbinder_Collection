@@ -29,7 +29,7 @@ RANLIB="$BIN/llvm-ranlib"
 
 # the pins of the Linux recipe
 eval "$(grep -E '^(BOTAN|JSONC|BZIP2|ZLIB|RNP)_(TAG|COMMIT)=|^SEXPP_COMMIT=|^BOTAN_MODULES=' "$ROOT/tools/get-crypto.sh")"
-STAMP="botan $BOTAN_TAG $BOTAN_COMMIT; json-c $JSONC_TAG $JSONC_COMMIT; bzip2 $BZIP2_TAG $BZIP2_COMMIT; zlib $ZLIB_TAG $ZLIB_COMMIT; rnp $RNP_TAG $RNP_COMMIT; sexpp $SEXPP_COMMIT; ndk $ABI"
+STAMP="botan $BOTAN_TAG $BOTAN_COMMIT [$BOTAN_MODULES]; json-c $JSONC_TAG $JSONC_COMMIT; bzip2 $BZIP2_TAG $BZIP2_COMMIT; zlib $ZLIB_TAG $ZLIB_COMMIT; rnp $RNP_TAG $RNP_COMMIT; sexpp $SEXPP_COMMIT; ndk $ABI"
 if [ "$(cat "$PREFIX/version.txt" 2>/dev/null)" = "$STAMP" ] && [ -f "$PREFIX/lib/librnp.a" ] && [ -f "$PREFIX/lib/libbotan-3.a" ]; then
   echo "the encryption libraries for $ABI are there: $PREFIX"
   exit 0
