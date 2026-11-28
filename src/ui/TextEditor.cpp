@@ -727,10 +727,16 @@ bool TextEditor::makeDocumentLink()
 // ---------------------------------------------------------------- 0.99.0 (Live Sync): the lock at the first key
 
 namespace {
-TextEditor::LockGate &lockGateRef()
+QHash<const Project *, TextEditor::LockGate> &lockGates()
 {
-    static TextEditor::LockGate g;
+    static QHash<const Project *, TextEditor::LockGate> g;
     return g;
+}
+const TextEditor::LockGate &lockGateFor(const Project *p)
+{
+    static const TextEditor::LockGate none;
+    auto it = lockGates().constFind(p);
+    return it == lockGates().constEnd() ? none : it.value();
 }
 QList<TextEditor *> &allEditors()
 {
@@ -760,22 +766,28 @@ bool keyChangesText(const QKeyEvent *e)
 }
 } // namespace
 
-void TextEditor::setLockGate(LockGate gate) { lockGateRef() = std::move(gate); }
-bool TextEditor::hasLockGate() { return bool(lockGateRef()); }
+void TextEditor::setLockGate(const Project *project, LockGate gate)
+{
+    if (gate)
+        lockGates().insert(project, std::move(gate));
+    else
+        lockGates().remove(project);
+}
+bool TextEditor::hasLockGate() { return !lockGates().isEmpty(); }
 
-bool TextEditor::shown(const QString &docId)
+bool TextEditor::shown(const Project *project, const QString &docId)
 {
     for (TextEditor *t : allEditors())
-        if (t->m_item && t->m_item->id == docId && t->isVisible())
+        if (t->m_project == project && t->m_item && t->m_item->id == docId && t->isVisible())
             return true;
     return false;
 }
 
-void TextEditor::lockResult(const QString &docId, bool granted)
+void TextEditor::lockResult(const Project *project, const QString &docId, bool granted)
 {
     const QList<TextEditor *> editors = allEditors();
     for (TextEditor *t : editors)
-        if (t->m_item && t->m_item->id == docId)
+        if (t->m_project == project && t->m_item && t->m_item->id == docId)
             t->replayHeldKeys(granted);
 }
 
@@ -783,7 +795,7 @@ void TextEditor::lockResult(const QString &docId, bool granted)
 bool TextEditor::needsLock(bool notesOnly)
 {
     Q_UNUSED(notesOnly);
-    const LockGate &gate = lockGateRef();
+    const LockGate &gate = lockGateFor(m_project);
     if (!gate || !m_item || !m_project || m_replaying || isReadOnly())
         return false;
     return !gate(m_item->id, m_isNotes);
@@ -810,7 +822,7 @@ void TextEditor::replayHeldKeys(bool granted)
 void TextEditor::keyPressEvent(QKeyEvent *e)
 {
     // 0.99.0 (Live Sync): the first key that changes a shared document asks for its lock; the key waits for the answer
-    if (!m_replaying && lockGateRef() && keyChangesText(e) && needsLock()) {
+    if (!m_replaying && lockGateFor(m_project) && keyChangesText(e) && needsLock()) {
         m_heldKeys.append(new QKeyEvent(e->type(), e->key(), e->modifiers(), e->nativeScanCode(), e->nativeVirtualKey(),
                                         e->nativeModifiers(), e->text(), e->isAutoRepeat(), e->count()));
         if (!m_heldTimer) {
@@ -1433,7 +1445,7 @@ void TextEditor::pasteKeepingFormatting()
 
 void TextEditor::insertFromMimeData(const QMimeData *source)
 {
-    if (!m_replaying && lockGateRef() && needsLock())
+    if (!m_replaying && lockGateFor(m_project) && needsLock())
         return; // 0.99.0 (Live Sync): the lock was asked for; the paste is done again by the writer
 #ifdef Q_OS_ANDROID
     source = withOwnCopy(source, true);
@@ -1560,7 +1572,7 @@ void TextEditor::dragMoveEvent(QDragMoveEvent *e)
 
 void TextEditor::dropEvent(QDropEvent *e)
 {
-    if (lockGateRef() && needsLock()) { // 0.99.0 (Live Sync): see insertFromMimeData
+    if (lockGateFor(m_project) && needsLock()) { // 0.99.0 (Live Sync): see insertFromMimeData
         e->ignore();
         return;
     }

@@ -9,6 +9,8 @@
 #include "core/collab/PathClass.h"
 #include "core/collab/Service.h"
 #include "core/collab/net/DeviceIdentity.h"
+#include "ui/LiveSyncServiceControl.h"
+#include "ui/LiveSyncUi.h"
 #include "ui/MainWindow.h"
 #include "ui/TextEditor.h"
 
@@ -19,6 +21,7 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QProcess>
+#include <QVBoxLayout>
 
 namespace qb {
 
@@ -103,12 +106,16 @@ bool MainWindow::liveSyncBegin(const QString &projectFile)
 
 void MainWindow::liveSyncAdopted()
 {
+    if (m_liveSyncUi)
+        m_liveSyncUi->setProject(m_project.get());
     if (m_liveSync && m_project)
         m_liveSync->begin(m_project.get());
 }
 
 void MainWindow::liveSyncEnd()
 {
+    if (m_liveSyncUi)
+        m_liveSyncUi->setProject(nullptr);
     if (!m_liveSync)
         return;
     m_liveSync->end();
@@ -174,7 +181,7 @@ void LiveSyncGlue::begin(Project *project)
     connect(m_client, &collab::ServiceClient::serviceGone, this, [this] {
         m_window->showStatusNote(tr("The connection to the Live Sync service was lost. Your changes are kept on this device."), 0);
     });
-    TextEditor::setLockGate([this](const QString &docId, bool) {
+    TextEditor::setLockGate(m_project, [this](const QString &docId, bool) {
         const QString resource = QStringLiteral("doc:") + docId;
         if (m_client->holds(resource))
             return true;
@@ -194,7 +201,7 @@ void LiveSyncGlue::end()
         return;
     m_ended = true;
     m_release.stop();
-    TextEditor::setLockGate(TextEditor::LockGate());
+    TextEditor::setLockGate(m_project, TextEditor::LockGate());
     m_client->follower()->capture().setListener(nullptr);
     // what was captured is handed over, then every lock is given up once the host confirmed
     if (m_project)
@@ -231,7 +238,7 @@ void LiveSyncGlue::onLockResult(const QString &resource, bool granted, const QSt
         return;
     const QString id = resource.mid(4);
     m_wanted.remove(id);
-    TextEditor::lockResult(id, granted);
+    TextEditor::lockResult(m_project, id, granted);
     if (!granted)
         m_window->showStatusNote(tr("\"%1\" cannot be edited here now: %2").arg(titleOf(id), text.isEmpty() ? tr("the lock was refused") : text), 8000);
 }
@@ -242,7 +249,7 @@ void LiveSyncGlue::releaseUnused()
         return;
     QStringList give;
     for (const QString &r : m_client->follower()->mine()) {
-        if (r.startsWith(QLatin1String("doc:")) && !TextEditor::shown(r.mid(4)))
+        if (r.startsWith(QLatin1String("doc:")) && !TextEditor::shown(m_project, r.mid(4)))
             give << r;
     }
     if (!give.isEmpty())
@@ -295,6 +302,64 @@ void LiveSyncGlue::onEvent(qint64, const QString &, const QString &, bool own, c
     p->endRemoteApply();
     cap.setSuspended(false);
     m_window->updateActions();
+}
+
+} // namespace qb
+
+namespace qb {
+namespace ui {
+
+// the program's control of Live Sync: made once, with a service of its own that starts when Live Sync is on in the settings
+livesync::LiveSyncControl *programLiveSyncControl()
+{
+    static livesync::ServiceControl *control = nullptr;
+    if (!control && !livesync::hasLiveSyncControl()) {
+        control = new livesync::ServiceControl(nullptr, qApp);
+        livesync::setLiveSyncControl(control);
+        control->startIfEnabled();
+    }
+    return control;
+}
+
+} // namespace ui
+
+void MainWindow::liveSyncInstallUi()
+{
+    if (m_liveSyncUi)
+        return;
+    ui::programLiveSyncControl();
+    m_liveSyncUi = new livesync::LiveSyncUi(this);
+    m_liveSyncUi->installToolbarButton(m_toolbar);
+    m_liveSyncUi->installInspectorTab(m_inspector);
+    m_liveSyncUi->attachBinder(m_binder);
+    if (auto *lay = qobject_cast<QVBoxLayout *>(m_editorArea->layout()))
+        lay->insertWidget(1, m_liveSyncUi->bars());
+    connect(m_liveSyncUi, &livesync::LiveSyncUi::openProjectRequested, this, [this](const QString &folder) {
+        const QString file = Project::resolveProjectFile(folder);
+        openProject(file.isEmpty() ? folder : file);
+    });
+    // a project shared from this window is opened again as a follower of the service (closing saves it first)
+    connect(&livesync::liveSyncControl(), &livesync::LiveSyncControl::accessChanged, this, [this] {
+        QTimer::singleShot(0, this, [this] {
+            if (!m_project || m_liveSync || m_project->isFollower())
+                return;
+            const QString file = Project::resolveProjectFile(m_project->folderPath());
+            if (m_liveSyncReopening || file.isEmpty() || !liveSyncShared(file))
+                return;
+            m_liveSyncReopening = true; // (opening spins the event loop: another signal must not start a second reopening)
+            if (closeProject())
+                openProject(file);
+            m_liveSyncReopening = false;
+        });
+    });
+    if (m_project)
+        m_liveSyncUi->setProject(m_project.get());
+}
+
+void MainWindow::liveSyncSelected(const QString &docId)
+{
+    if (m_liveSyncUi)
+        m_liveSyncUi->setSelectedDocument(docId);
 }
 
 } // namespace qb

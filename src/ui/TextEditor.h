@@ -67,12 +67,13 @@ public:
     // method text arriving without the lock is refused (the lock is asked for; the writer does it again). Without a gate
     // (the program as it was) nothing changes.
     using LockGate = std::function<bool(const QString &docId, bool notes)>;
-    static void setLockGate(LockGate gate);
+    // (one gate per project: windows of several shared projects in one process each have their own)
+    static void setLockGate(const Project *project, LockGate gate);
     static bool hasLockGate();
     // every editor that waits for the lock of this document is told the result
-    static void lockResult(const QString &docId, bool granted);
+    static void lockResult(const Project *project, const QString &docId, bool granted);
     // whether some editor shows this document (text or notes): the window gives its lock up when none does
-    static bool shown(const QString &docId);
+    static bool shown(const Project *project, const QString &docId);
     // notes that start as plain text (0.93.0): no look of the project's text formatting
     bool plainNotes() const { return document() && document()->property("qbPlainNotes").toBool(); }
 

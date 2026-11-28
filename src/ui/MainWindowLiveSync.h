@@ -12,6 +12,9 @@
 #include <QTimer>
 
 namespace qb {
+namespace livesync {
+class LiveSyncControl;
+}
 class MainWindow;
 class Project;
 namespace collab {
@@ -23,6 +26,8 @@ namespace ui {
 // socket (started when needed); Android and the tests give the service they run in their own process.
 void setInProcessLiveSyncService(collab::Service *service);
 collab::Service *inProcessLiveSyncService();
+// the program's own control of Live Sync (made at the first call; a service of its own that starts when Live Sync is on)
+livesync::LiveSyncControl *programLiveSyncControl();
 // Live Sync's folder as this program uses it (the in-process service's, else the program's own)
 QString liveSyncDir();
 // "Keep hosting when the last window is closed" (File > Options > Live Sync): the windows tell it to the service when they attach

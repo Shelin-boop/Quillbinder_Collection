@@ -38,6 +38,9 @@ class QCompleter;
 class QStandardItemModel;
 
 namespace qb {
+namespace livesync {
+class LiveSyncUi;
+}
 namespace script {
 struct Format;
 }
@@ -572,6 +575,10 @@ private:
     // 0.99.0 (Live Sync, MainWindowLiveSync.cpp): this window's project is shared; the window is a follower of the service
     friend class LiveSyncGlue;
     LiveSyncGlue *m_liveSync = nullptr;
+    livesync::LiveSyncUi *m_liveSyncUi = nullptr; // the button, the tab, the bars and the marks (0.99.0)
+    bool m_liveSyncReopening = false;
+    void liveSyncInstallUi();
+    void liveSyncSelected(const QString &docId);
     bool liveSyncShared(const QString &projectFile) const;
     bool liveSyncBegin(const QString &projectFile);
     collab::Follower *liveSyncFollower() const;

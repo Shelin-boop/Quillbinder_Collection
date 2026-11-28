@@ -160,6 +160,7 @@ Service::Service(const Config &config, QObject *parent)
         if (m_windows.isEmpty() && !m_keepHosting)
             emit idle();
     });
+    m_status = std::make_unique<ServiceStatus>(this); // (stable from here on: the screens connect to it before the service runs)
     connect(&m_pairWindow, &net::PairingWindow::closed, this, [this] {
         if (m_discovery)
             m_discovery->setPairingOpen(false);
@@ -205,7 +206,6 @@ bool Service::start(QString *error)
     m_peers = std::make_unique<net::PeerStore>(m_cfg.dir);
     connect(m_peers.get(), &net::PeerStore::changed, this, &Service::devicesChanged);
     m_registry = std::make_unique<Registry>(m_cfg.dir);
-    m_status = std::make_unique<ServiceStatus>(this);
     if (m_cfg.listen) {
         net::TrustPolicy trust = TrustPolicy::pairedOrPairing(m_peers.get(), [this] { return m_pairWindow.isOpen(); });
         m_server = std::make_unique<net::TlsServer>(m_id, trust);
@@ -219,6 +219,11 @@ bool Service::start(QString *error)
         m_discovery.reset(Discovery::createUdp());
         if (m_discovery && m_discovery->start() && m_server)
             m_discovery->publish(m_id->instanceId(), m_server->port(), m_pairWindow.isOpen());
+        if (m_discovery) {
+            connect(m_discovery.get(), &Discovery::peerFound, this, &Service::discoveredChanged);
+            connect(m_discovery.get(), &Discovery::peerChanged, this, &Service::discoveredChanged);
+            connect(m_discovery.get(), &Discovery::peerLost, this, &Service::discoveredChanged);
+        }
     }
     m_localName = m_cfg.localName.isEmpty() ? LocalLink::serverName(m_cfg.dir) : m_cfg.localName;
     if (m_cfg.localSocket) {
@@ -543,6 +548,7 @@ void Service::makeAuthority(Proj *p)
         while (q->notices.size() > 3)
             q->notices.removeFirst();
         emit notice(w);
+        emit unknownHostRefused(q->entry.title);
         emit projectChanged(uuid);
     });
     connect(a, &Authority::hostChanged, this, [this, uuid] {
@@ -1183,6 +1189,7 @@ void Service::wireClient(Proj *p)
         emit locksChanged(uuid);
     });
     connect(c, &ClientSession::editAsked, this, [this, uuid](const QString &resource, const QString &asker, qint64 waitMs) {
+        emit editAsked(uuid, resource, asker);
         tellWindows(uuid, local::msg(local::EDIT_EVT, {{"uuid", uuid}, {"kind", "asked"}, {"resource", resource}, {"asker", asker}, {"waitMs", double(waitMs)}}));
     });
     connect(c, &ClientSession::editStatus, this, [this, uuid](const QString &resource, bool declined, qint64 waitMs, bool mayForce, const QString &holder) {
@@ -1298,10 +1305,33 @@ void Service::onTlsLink(TlsLink *link)
     });
 }
 
+// a paired device asks which projects of this device it may join (before any HELLO)
+void Service::answerProjectList(TlsLink *link, const QJsonObject &m)
+{
+    const QString device = link->peer().deviceId;
+    QJsonArray list;
+    for (const Proj *p : m_projects) {
+        if (!p->entry.host || !p->host || p->retired)
+            continue;
+        const QString role = p->entry.access.value(device).toString();
+        if (role.isEmpty())
+            continue;
+        list.append(QJsonObject{{QStringLiteral("p"), p->entry.uuid}, {QStringLiteral("title"), p->entry.title},
+                                {QStringLiteral("name"), m_cfg.deviceName.isEmpty() ? m_id->name() : m_cfg.deviceName},
+                                {QStringLiteral("role"), role}});
+    }
+    link->send(Frame::json(proto::replyTo(m, QLatin1String(proto::T::PROJECTS), QJsonObject{{QStringLiteral("projects"), list}})));
+    QTimer::singleShot(200, link, [link] { link->close(); });
+}
+
 void Service::route(TlsLink *link, const Frame &first)
 {
     bool ok = false;
     const QJsonObject m = first.kind == Frame::Json ? first.object(&ok) : QJsonObject();
+    if (ok && m.value(QStringLiteral("t")).toString() == QLatin1String(proto::T::PROJECT_LIST)) {
+        answerProjectList(link, m);
+        return;
+    }
     const QString project = m.value(QStringLiteral("p")).toString();
     Proj *p = ok && m.value(QStringLiteral("t")).toString() == QLatin1String("HELLO") ? m_projects.value(project) : nullptr;
     if (!p || !p->host) {
@@ -1312,6 +1342,166 @@ void Service::route(TlsLink *link, const Frame &first)
     ScopedLink *scoped = ScopedLink::wrap(link);
     p->host->addLink(scoped);
     emit scoped->frameReceived(first); // the session sees the message that named it
+}
+
+QString Service::fingerprint() const
+{
+    const QByteArray h = m_id->pin().left(8).toHex().toUpper();
+    QStringList parts;
+    for (int i = 0; i + 4 <= h.size(); i += 4)
+        parts << QString::fromLatin1(h.mid(i, 4));
+    return parts.join(QLatin1Char(' '));
+}
+
+QList<Service::DiscoveredPeer> Service::discovered() const
+{
+    QList<DiscoveredPeer> l;
+    if (!m_discovery)
+        return l;
+    for (const mdns::PeerInfo &pi : m_discovery->peers()) {
+        if (pi.id == m_id->instanceId())
+            continue;
+        DiscoveredPeer d;
+        d.key = pi.id;
+        d.port = pi.port;
+        d.pairingOpen = pi.pairingOpen;
+        if (!pi.addresses.isEmpty())
+            d.address = pi.addresses.first().toString();
+        for (const net::PeerRecord &r : m_peers->peers())
+            if (r.instanceId == pi.id) {
+                d.paired = true;
+                d.name = r.name;
+            }
+        l << d;
+    }
+    return l;
+}
+
+void Service::fetchRemoteProjects()
+{
+    m_remote.clear();
+    emit remoteProjectsChanged();
+    for (const net::PeerRecord &r : m_peers->peers()) {
+        QString address;
+        quint16 port = 0;
+        if (m_peerAddr.contains(r.deviceId())) {
+            address = m_peerAddr.value(r.deviceId()).first;
+            port = m_peerAddr.value(r.deviceId()).second;
+        }
+        if (m_discovery)
+            for (const mdns::PeerInfo &pi : m_discovery->peers())
+                if (pi.id == r.instanceId && !pi.addresses.isEmpty()) {
+                    address = pi.addresses.first().toString();
+                    port = pi.port;
+                }
+        if (address.isEmpty())
+            continue;
+        TlsLink *link = TlsLink::connectTo(address, port, m_id, TrustPolicy::pinned(r.pin), this);
+        const QString devId = r.deviceId(), devName = r.name;
+        connect(link, &Link::stateChanged, this, [link](Link::State st) {
+            if (st == Link::State::Ready)
+                link->send(Frame::json(proto::make(QLatin1String(proto::T::PROJECT_LIST), QString(), QJsonObject{{QStringLiteral("id"), Registry::newUuid()}})));
+        });
+        connect(link, &Link::frameReceived, this, [this, link, devId, devName, address, port](const Frame &f) {
+            bool ok = false;
+            const QJsonObject m = f.kind == Frame::Json ? f.object(&ok) : QJsonObject();
+            if (!ok || m.value(QStringLiteral("t")).toString() != QLatin1String(proto::T::PROJECTS))
+                return;
+            for (const QJsonValue &v : m.value(QStringLiteral("projects")).toArray()) {
+                const QJsonObject o = v.toObject();
+                RemoteProject rp;
+                rp.uuid = o.value(QStringLiteral("p")).toString();
+                rp.title = o.value(QStringLiteral("title")).toString();
+                rp.hostDeviceId = devId;
+                rp.hostName = devName;
+                rp.address = address;
+                rp.port = port;
+                RegistryEntry known;
+                if (!rp.uuid.isEmpty() && !(m_registry->find(rp.uuid, &known) && !known.stopped))
+                    m_remote << rp;
+            }
+            emit remoteProjectsChanged();
+            link->close();
+        });
+        connect(link, &Link::closed, link, &QObject::deleteLater);
+    }
+}
+
+bool Service::setPriority(const QString &uuid, const QStringList &order, QString *why)
+{
+    Proj *p = m_projects.value(uuid);
+    if (!p || !p->auth || !p->auth->isHost()) {
+        if (why)
+            *why = tr("Only the host can change the order.");
+        return false;
+    }
+    QList<Member> list;
+    for (const QString &id : order)
+        for (const Member &mb : p->auth->membership().members)
+            if (mb.id == id)
+                list << mb;
+    for (const Member &mb : p->auth->membership().members) {
+        bool in = false;
+        for (const Member &o : list)
+            in = in || o.id == mb.id;
+        if (!in)
+            list << mb;
+    }
+    const bool ok = p->auth->publishMembership(list, why);
+    refreshHostInfo(p);
+    return ok;
+}
+
+void Service::answerEditRequest(const QString &uuid, const QString &resource, bool handOver)
+{
+    if (ClientSession *c = clientSession(uuid))
+        c->answerEdit(resource, handOver);
+    emit editAskEnded(uuid, resource);
+}
+
+QList<Service::DraftEntry> Service::drafts(const QString &uuid) const
+{
+    QList<DraftEntry> l;
+    for (auto it = m_projects.constBegin(); it != m_projects.constEnd(); ++it) {
+        if (!uuid.isEmpty() && it.key() != uuid)
+            continue;
+        const Proj *p = it.value();
+        if (p->auth)
+            for (const Draft &d : p->auth->drafts().list()) {
+                DraftEntry e;
+                e.id = d.id;
+                e.uuid = it.key();
+                e.docId = d.document;
+                e.reason = d.reason;
+                e.whenMs = d.createdMs;
+                l << e;
+            }
+        if (p->client)
+            for (const OutboxEntry &d : p->client->outbox().drafts()) {
+                DraftEntry e;
+                e.id = QStringLiteral("outbox:") + it.key() + QLatin1Char(':') + d.opId;
+                e.uuid = it.key();
+                e.reason = d.reason;
+                e.whenMs = d.createdMs;
+                for (const QJsonValue &u : d.units)
+                    if (e.docId.isEmpty())
+                        e.docId = u.toObject().value(QStringLiteral("resource")).toString().section(QLatin1Char(':'), 1);
+                l << e;
+            }
+    }
+    return l;
+}
+
+bool Service::deleteDraft(const QString &id)
+{
+    if (id.startsWith(QLatin1String("outbox:")))
+        return false; // (kept until a later package decides what to do with a refused change)
+    for (Proj *p : m_projects)
+        if (p->auth && p->auth->drafts().exists(id)) {
+            const bool ok = p->auth->drafts().remove(id);
+            return ok;
+        }
+    return false;
 }
 
 // ---------------------------------------------------------------- pairing

@@ -79,6 +79,8 @@ LiveSyncControl &liveSyncControl()
     return standIn;
 }
 
+bool hasLiveSyncControl() { return g_control != nullptr; }
+
 void setLiveSyncControl(LiveSyncControl *control) { g_control = control; }
 
 } // namespace livesync

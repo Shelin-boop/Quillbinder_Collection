@@ -18,7 +18,7 @@ open document, the other device refused a lock held here, close and release; a s
 who hosts through the service (a planned hand-over between two in-process services, a window on each side, the commit ledger, an
 unknown device announcing hosting shown in the status model, a failover with a `ManualClock`); and two real service processes
 (identities made by a first short run, `peers.json` and the registries written by the test): hand-over, a commit through the new
-host, the new host killed, the failover after about 30 s of real time (this part takes about 40 s).
+host, the new host killed, the failover after about 30 s of real time (this part takes about 40 s). Also: the real screens of two programs in one process (pairing window with matching codes, Share This Project, Hosted Projects access, Join window, copy opened as a follower); its second half (parallel edits, Decline and Take Over) runs only with `QB_LS5_SCREENS_FULL=1` and is not reliable yet. `QB_LS5_PART=<small|services|hosting|window|screens|encrypted|process|processes>` runs one part.
 Pitfalls: services of one test process share the gate and the vault (they are one program); a window must be given the follower
 before `Project::open`; the TLS peers are on 127.0.0.1 with port 0; `QB_LS_PORT`, `QB_LS_IDLE_MS`, `QB_LS_NO_DISCOVERY` are the
 service process's test switches (`QB_LS_PEERS="<device id>=<address>:<port>;..."` gives the addresses where discovery is off).

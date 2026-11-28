@@ -298,6 +298,7 @@ MainWindow::MainWindow()
     connectPane(m_panes[0]);
     connectPane(m_panes[1]);
     dnd::installFileProvider(); // documents dragged to the file manager become files
+    QTimer::singleShot(0, this, [this] { liveSyncInstallUi(); }); // 0.99.0 (Live Sync): after the bars exist
     new SplitEqualizer(m_editorSplit); // a double click on the divider gives both editors the same room
 
     m_panes[1]->setStateSuffix(QStringLiteral("1"));
@@ -356,6 +357,8 @@ MainWindow::MainWindow()
     connect(m_binder, &BinderPanel::selectionChanged, this, [this](const QList<BinderItem *> &items) {
         if (!m_project || m_updatingUi)
             return;
+        if (m_liveSyncUi) // 0.99.0 (Live Sync): the tab and the bars follow the chosen document
+            liveSyncSelected(items.size() == 1 ? items.first()->id : QString());
         EditorPane *target = binderTarget();
         if (m_quickSearchMark && !m_binder->showsSearchResults()) {
             // the matches of a quick search are marked until another document is chosen

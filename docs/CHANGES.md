@@ -54,7 +54,9 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   half a minute (two devices; the copy must be complete), writes every commit a device made into a ledger, tells the authority
   who is connected, and shows a warning in the project's status when an unknown device announces hosting. The list of paired
   devices now keeps each device's public key (needed for the signed list; a device paired before this version is paired again to
-  be a member). Suite `ls5`.
+  be a member). The program that has Live Sync switched on runs the service itself (Live Sync's screens use it: pairing,
+  sharing, joining, access, hosting hand-over, edit requests, drafts list); a project shared from a window opens again as a
+  follower; the editors' lock gate is per project; the old sync-lock marks stay off while a project is shared. Suite `ls5`.
 - Live Sync, who hosts a shared project (no change for a writer; Live Sync stays off): the list of a project's devices in
   the order of their priority, signed with the host's device key; proofs of authority (the founding, a planned handover signed
   by the old host, a failover with the signed votes of a majority) and a chain of them that every device can verify; the

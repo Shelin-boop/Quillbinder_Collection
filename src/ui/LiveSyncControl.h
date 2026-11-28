@@ -139,6 +139,7 @@ signals:
 
 // The control the interface uses: the service's once it is set, else the stand-in. Never null. The service owns its control.
 LiveSyncControl &liveSyncControl();
+bool hasLiveSyncControl();                            // a control of the service (or of a suite) is set
 void setLiveSyncControl(LiveSyncControl *control);   // nullptr: the stand-in again
 
 // This program's three settings of Live Sync (File > Options > Live Sync), for the stand-in and for the service.

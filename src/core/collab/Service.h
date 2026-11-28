@@ -104,6 +104,37 @@ public:
     QString joinProject(const QString &hostDeviceId, const QString &uuid, const QString &title, const QString &address, quint16 port,
                         QString *error = nullptr);
 
+    // ---- for the screens (ui/LiveSyncServiceControl)
+    struct DiscoveredPeer {
+        QString key;       // the instance id
+        QString name;      // the paired device's name; "" for an unpaired one (names show only while a pairing window is open)
+        QString address;
+        quint16 port = 0;
+        bool pairingOpen = false;
+        bool paired = false;
+    };
+    QList<DiscoveredPeer> discovered() const;
+    // a project a paired device shares with this one (asked with PROJECT_LIST; fetchRemoteProjects() fills the list)
+    struct RemoteProject {
+        QString uuid, title, hostDeviceId, hostName;
+        QString address;
+        quint16 port = 0;
+    };
+    void fetchRemoteProjects();
+    QList<RemoteProject> remoteProjects() const { return m_remote; }
+    QString fingerprint() const;           // the short form of this device's pin
+    void setDeviceName(const QString &name) { m_cfg.deviceName = name; }
+    // the order of priority of the devices that may host (the first one hosts when it can); published by the host
+    bool setPriority(const QString &uuid, const QStringList &deviceIdsInOrder, QString *why = nullptr);
+    void answerEditRequest(const QString &uuid, const QString &resource, bool handOver);
+    // recovery drafts of a project (the outbox's kept changes and the authority's drafts), for the drafts dialog
+    struct DraftEntry {
+        QString id, uuid, docId, reason;
+        qint64 whenMs = 0;
+    };
+    QList<DraftEntry> drafts(const QString &uuid) const;
+    bool deleteDraft(const QString &id);
+
     // ---- who hosts (package 6 through the service)
     // where a paired device can be reached when discovery does not know it (a new host after a handover or a failover)
     void setPeerAddress(const QString &deviceId, const QString &host, quint16 port);
@@ -136,6 +167,11 @@ signals:
     void quitRequested();
     // a message line for the writer ("an unknown device tried ...", a hosting that could not start)
     void notice(const QString &text);
+    void discoveredChanged();
+    void remoteProjectsChanged();
+    void editAsked(const QString &uuid, const QString &resource, const QString &askerName);
+    void editAskEnded(const QString &uuid, const QString &resource);
+    void unknownHostRefused(const QString &projectTitle);
 
 private:
     friend class ServiceStatus;
@@ -169,6 +205,7 @@ private:
     void scheduleReconnect(Proj *p);
     void onTlsLink(net::TlsLink *link);
     void route(net::TlsLink *link, const net::Frame &first);
+    void answerProjectList(net::TlsLink *link, const QJsonObject &m);
     void onWindowFrame(Window *w, const net::Frame &f);
     void onWindowMessage(Window *w, const QJsonObject &m);
     void onWindowClosed(Window *w);
@@ -209,6 +246,7 @@ private:
     QSet<QString> m_statePending;
     QSet<QString> m_asks; // "uuid|resource": an edit request of this device that is open
     QSet<QString> m_declined;
+    QList<RemoteProject> m_remote;
     QHash<QString, QPair<QString, quint16>> m_peerAddr; // device id -> where it was reached or told to be
     QTimer m_presence;                                  // once a second: the connected devices were heard of
     std::unique_ptr<ServiceStatus> m_status;
