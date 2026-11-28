@@ -75,6 +75,7 @@
 - **Zapamiętane miejsca**: każdy dokument otwiera się tam, gdzie zostawiłeś(-aś) kursor, także po ponownym otwarciu projektu.
 - **Czcionki**: **Format > Czcionka > Zainstaluj pliki czcionek…** dodaje czcionki bez opuszczania programu.
 - **Bezpieczeństwo**: autozapis także w trakcie pisania, kopie zapasowe, zapasowa kopia pliku projektu, raporty o awariach i zawieszeniach (**Pomoc > Rozwiązywanie problemów i programowanie > Raporty o awariach…**) oraz **Pomoc > Rozwiązywanie problemów i programowanie > Informacje o systemie**.
+- **Live Sync** (wyłączony, dopóki nie włączysz go w **Plik > Opcje > Live Sync**): utrzymuje jeden projekt jednakowy na twoich urządzeniach w tej samej sieci. Sparuj urządzenia raz (**Sparuj urządzenie...**: porównaj sześć cyfr na obu), potem wybierz **Udostępnij ten projekt...** w menu przycisku Live Sync na pasku narzędzi, a na drugim urządzeniu **Dołącz do projektu...**. Dokument edytuje naraz jedno urządzenie; pozostałe mogą o niego poprosić. Pliki projektu, który nie jest zaszyfrowany, i jego kopie zapasowe ZIP nie są szyfrowane przez Live Sync: użyj własnego szyfrowania swoich urządzeń (rozdział 21 podręcznika).
 
 ### Aktualizacje i dodatki
 
