@@ -266,6 +266,7 @@ runx v0950d $B/tests/qb_v0950d_tests $B/tests/qb_v0950d_tests "$OUT/shots-v0950d
 runx v0990b $B/tests/qb_v0990b_tests $B/tests/qb_v0990b_tests "$OUT/shots-v0990b"
 runx v0990d $B/tests/qb_v0990d_tests $B/tests/qb_v0990d_tests "$OUT/shots-v0990d"
 runx v0990h $B/tests/qb_v0990h_tests $B/tests/qb_v0990h_tests "$OUT/shots-v0990h"
+runx ls1 $B/tests/qb_ls1_tests $B/tests/qb_ls1_tests "$OUT/shots-ls1"
 runx v0990e $B/tests/qb_v0990e_tests $B/tests/qb_v0990e_tests "$OUT/shots-v0990e"
 runx v0990k $B/tests/qb_v0990k_tests $B/tests/qb_v0990k_tests "$OUT/shots-v0990k"
 runx v0990f $B/tests/qb_v0990f_tests $B/tests/qb_v0990f_tests "$OUT/shots-v0990f"
