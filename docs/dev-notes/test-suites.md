@@ -520,3 +520,14 @@ exports and the dictionary tool). Build it by hand against the pack of `tools/ge
 then `QT_QPA_PLATFORM=offscreen ctest` in `<dir>`. `memoryGuard` of `tp_ui_tests` needs `TP_MODELS_DIR` (the models of the releases):
 without it that one check fails and 15 are skipped. 1.6 added `registryWithAnInterface13Host`, `settingsPageByInterface` and
 `interface12KeepsTheOldWay` to `tp_lang_tests` (a fake program with a model registry: `tests/FakeHost.h`, `version` 130).
+
+## ls2 (0.99.0, Live Sync discovery)
+
+`qb_ls2_tests` (no display; `tests/ls2_tests.cpp`): the multicast DNS writer and strict reader (round trip, every cut-short packet,
+self and forward pointers, a pointer chain over 8, labels and names over their limits, 64 records, data past a record, a bad A, TXT
+or SRV, error codes, 40,000 mutated and 20,000 random packets), the manual address parser, the browser and responder over a stand-in
+bus (found, changed, goodbye, expiry with a fake clock, query rate, own id, loopback/multicast/any/broadcast addresses, port 0,
+version, another host in SRV, the 256-peer limit and the expiry of half entries), the multicast lock's holders, and **real UDP
+multicast on the loopback interface** (`UdpOptions::onlyLoopback`, a port derived from the process id so that a parallel run does not
+meet it; the checks print SKIP with the reason where multicast is impossible). The reader lowercases names (DNS is case-blind), so
+an upper-case id is the same id. Without the pointer rule the suite hangs, which the runner counts as failed.

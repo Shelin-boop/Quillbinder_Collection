@@ -291,6 +291,7 @@ run addonentry python3 -I tests/addon_entry_tests.py
 run stshard python3 -I tests/system_test_tests.py
 # the release models-5 (handwriting model, word lists, speech models, catalog) and its workflow (0.99.0): offline, Python only
 run models5 python3 -I tests/models5_tests.py
+runx ls2 $B/tests/qb_ls2_tests $B/tests/qb_ls2_tests "$OUT/shots-ls2"
 # a suite that was asked for and is not there at all (a name mistyped in QB_SUITES)
 for n in $SELECTED; do
     [[ " $RAN $MISSING " == *" $n "* ]] || MISSING="$MISSING $n"
