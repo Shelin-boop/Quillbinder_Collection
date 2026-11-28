@@ -221,7 +221,7 @@ jobs:
         env:
           QB_AI_ENGINE_VULKAN: 'OFF'
           GH_TOKEN: ${{ github.token }}
-        run: tools/get-ai-engine.sh build/ai-engine
+        run: tools/get-ai-engine.sh "$PWD/build/ai-engine"   # an absolute prefix: the script builds parts from other folders
       - name: The designing tool (the engine's public interface only), next to the libraries
         run: |
           g++ -std=c++17 -O2 -I build/ai-engine/include tools/models/design-voices.cpp -o build/ai-engine/lib/design-voices \
