@@ -74,150 +74,150 @@
     <name>LiveSync</name>
     <message>
         <source>Not shared</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieudostępniony</translation>
     </message>
     <message>
         <source>Up to date</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualny</translation>
     </message>
     <message>
         <source>Sending changes...</source>
-        <translation type="unfinished"></translation>
+        <translation>Wysyłanie zmian...</translation>
     </message>
     <message>
         <source>Not connected (draft kept)</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak połączenia (wersja robocza zachowana)</translation>
     </message>
     <message>
         <source>Problem</source>
-        <translation type="unfinished"></translation>
+        <translation>Problem</translation>
     </message>
     <message>
         <source>Stop sharing &quot;%1&quot;? The other devices keep their copies as projects of their own that no longer follow this one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zakończyć udostępnianie „%1”? Pozostałe urządzenia zachowają swoje kopie jako osobne projekty, które nie będą już podążać za tym.</translation>
     </message>
     <message>
         <source>Leave &quot;%1&quot;? The copy on this device stays as a project of its own that no longer follows the host. Changes not sent yet are kept as recovery drafts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Opuścić „%1”? Kopia na tym urządzeniu zostanie jako osobny projekt, który nie będzie już podążać za hostem. Zmiany, które nie zostały jeszcze wysłane, zostaną zachowane jako wersje robocze do odzyskania.</translation>
     </message>
     <message numerus="yes">
         <source>%n other device(s) are connected now.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Teraz jest połączone %n inne urządzenie.</numerusform>
+            <numerusform>Teraz są połączone %n inne urządzenia.</numerusform>
+            <numerusform>Teraz jest połączonych %n innych urządzeń.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%n change(s) are not confirmed yet.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n zmiana nie została jeszcze potwierdzona.</numerusform>
+            <numerusform>%n zmiany nie zostały jeszcze potwierdzone.</numerusform>
+            <numerusform>%n zmian nie zostało jeszcze potwierdzonych.</numerusform>
         </translation>
     </message>
     <message>
         <source>Stop Sharing</source>
-        <translation type="unfinished"></translation>
+        <translation>Zakończ udostępnianie</translation>
     </message>
     <message>
         <source>Leave</source>
-        <translation type="unfinished"></translation>
+        <translation>Opuść</translation>
     </message>
     <message>
         <source>Transfer Hosting</source>
-        <translation type="unfinished"></translation>
+        <translation>Przekaż hostowanie</translation>
     </message>
     <message>
         <source>Hand hosting of this project to:</source>
-        <translation type="unfinished"></translation>
+        <translation>Przekaż hostowanie tego projektu urządzeniu:</translation>
     </message>
     <message>
         <source>Editor</source>
-        <translation type="unfinished">Edytor</translation>
+        <translation>Edytor</translation>
     </message>
     <message>
         <source>Reader</source>
-        <translation type="unfinished"></translation>
+        <translation>Czytelnik</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished">Brak</translation>
+        <translation>Brak</translation>
     </message>
     <message>
         <source>No backup yet</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeszcze brak kopii zapasowej</translation>
     </message>
     <message>
         <source>Backup running</source>
-        <translation type="unfinished"></translation>
+        <translation>Trwa tworzenie kopii zapasowej</translation>
     </message>
     <message>
         <source>Backup done</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopia zapasowa gotowa</translation>
     </message>
     <message>
         <source>Backup waiting</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopia zapasowa oczekuje</translation>
     </message>
     <message>
         <source>Backup incomplete</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopia zapasowa niekompletna</translation>
     </message>
     <message>
         <source>Backup failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopia zapasowa nie powiodła się</translation>
     </message>
     <message>
         <source>Last successful backup: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Ostatnia udana kopia zapasowa: %1</translation>
     </message>
     <message>
         <source>a document</source>
-        <translation type="unfinished"></translation>
+        <translation>dokument</translation>
     </message>
     <message>
         <source>the binder&apos;s structure</source>
-        <translation type="unfinished"></translation>
+        <translation>struktura segregatora</translation>
     </message>
     <message>
         <source>the project&apos;s settings</source>
-        <translation type="unfinished"></translation>
+        <translation>ustawienia projektu</translation>
     </message>
     <message>
         <source>an object</source>
-        <translation type="unfinished"></translation>
+        <translation>obiekt</translation>
     </message>
     <message>
         <source>a mind map</source>
-        <translation type="unfinished"></translation>
+        <translation>mapa myśli</translation>
     </message>
     <message>
         <source>the whole project</source>
-        <translation type="unfinished"></translation>
+        <translation>cały projekt</translation>
     </message>
     <message>
         <source>Host</source>
-        <translation type="unfinished"></translation>
+        <translation>Host</translation>
     </message>
 </context>
 <context>
     <name>LiveSyncWallet</name>
     <message>
         <source>This device has no place to keep keys: the system has no key store and this build has no wallet.</source>
-        <translation type="unfinished"></translation>
+        <translation>To urządzenie nie ma miejsca na klucze: system nie ma magazynu kluczy, a ta wersja programu nie ma portfela.</translation>
     </message>
     <message>
         <source>Keys are kept in the Quillbinder wallet: a file in the program&apos;s data folder, locked with a master passphrase that is asked once each time you start Quillbinder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klucze są przechowywane w portfelu Quillbinder: pliku w folderze danych programu, zablokowanym głównym hasłem, o które program pyta raz przy każdym uruchomieniu Quillbinder.</translation>
     </message>
     <message>
         <source>Keys are kept in the system&apos;s key store (%1); where a device has none, Quillbinder keeps them in its own wallet, locked with a master passphrase.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klucze są przechowywane w magazynie kluczy systemu (%1); gdy urządzenie go nie ma, Quillbinder przechowuje je we własnym portfelu, zablokowanym głównym hasłem.</translation>
     </message>
     <message>
         <source>This device has a wallet already.</source>
-        <translation type="unfinished"></translation>
+        <translation>To urządzenie ma już portfel.</translation>
     </message>
 </context>
 <context>
@@ -2071,7 +2071,7 @@ Jest przechowywana w %3, a następna kopia zapasowa umieści ją na miejscu.</tr
     </message>
     <message>
         <source>%1 is not part of a shared project&apos;s files and was not written.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 nie należy do plików projektu udostępnionego i nie został zapisany.</translation>
     </message>
     <message>
         <source>The file %1 of an earlier save is in the way and could not be moved aside.</source>
@@ -2361,7 +2361,7 @@ Jest przechowywana w %3, a następna kopia zapasowa umieści ją na miejscu.</tr
     </message>
     <message>
         <source>Snapshots of a shared project are made by the device that hosts it, which cannot be reached now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Migawki projektu udostępnionego tworzy urządzenie, które go hostuje, a ono jest teraz nieosiągalne.</translation>
     </message>
     <message>
         <source>The list of snapshot titles is damaged and could not be kept: %1</source>
@@ -2389,7 +2389,7 @@ Jest przechowywana w %3, a następna kopia zapasowa umieści ją na miejscu.</tr
     </message>
     <message>
         <source>The snapshots of a shared project are deleted on the device that hosts it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Migawki projektu udostępnionego są usuwane na urządzeniu, które go hostuje.</translation>
     </message>
     <message>
         <source>Some snapshots could not be deleted:
@@ -7884,7 +7884,7 @@ Tej operacji nie można cofnąć w całości.%3</translation>
     </message>
     <message>
         <source>The key is locked. Close the project and open it again to enter the passphrase.</source>
-        <translation type="unfinished"></translation>
+        <translation>Klucz jest zablokowany. Zamknij projekt i otwórz go ponownie, aby wpisać hasło.</translation>
     </message>
     <message>
         <source>%1 (notes)</source>
@@ -8478,7 +8478,7 @@ Strony (250 słów): %5</translation>
     </message>
     <message>
         <source>Quillbinder forgets the passphrase on this device and locks your key. It will ask for the passphrase again when it needs it. An encrypted project that is open stays unlocked until it is closed. Continue?</source>
-        <translation type="unfinished"></translation>
+        <translation>Quillbinder zapomni hasło na tym urządzeniu i zablokuje twój klucz. Zapyta o hasło ponownie, gdy będzie go potrzebował. Otwarty zaszyfrowany projekt pozostanie odblokowany do czasu zamknięcia. Kontynuować?</translation>
     </message>
     <message>
         <source>The passphrase is forgotten on this device.</source>
@@ -10898,47 +10898,47 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
     <name>qb::LiveSyncGlue</name>
     <message>
         <source>The Live Sync service did not answer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Usługa Live Sync nie odpowiedziała.</translation>
     </message>
     <message>
         <source>The host refused the snapshot job (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Host odrzucił zadanie migawki (%1).</translation>
     </message>
     <message>
         <source>it is being edited on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>jest edytowany na urządzeniu %1</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is now edited on another device. Your unsaved changes there are kept as a draft.</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” jest teraz edytowany na innym urządzeniu. Twoje niezapisane zmiany pozostały tam jako wersja robocza.</translation>
     </message>
     <message>
         <source>Some changes were not accepted by the host and were kept as a draft: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Host nie przyjął niektórych zmian i zachował je jako wersję roboczą: %1</translation>
     </message>
     <message>
         <source>The connection to the Live Sync service was lost. Your changes are kept on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Połączenie z usługą Live Sync zostało utracone. Twoje zmiany pozostają na tym urządzeniu.</translation>
     </message>
     <message>
         <source>the lock was not granted in time</source>
-        <translation type="unfinished"></translation>
+        <translation>blokada nie została przyznana w wyznaczonym czasie</translation>
     </message>
     <message>
         <source>Not connected. Your changes are kept on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak połączenia. Twoje zmiany pozostają na tym urządzeniu.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be edited here now: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” nie może być teraz tu edytowany: %2</translation>
     </message>
     <message>
         <source>the lock was refused</source>
-        <translation type="unfinished"></translation>
+        <translation>blokada została odrzucona</translation>
     </message>
     <message>
         <source>A change from another device could not be taken in; close and open the project again. (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się przyjąć zmiany z innego urządzenia; zamknij projekt i otwórz go ponownie. (%1)</translation>
     </message>
 </context>
 <context>
@@ -11483,13 +11483,15 @@ Skróty ustawione przez ciebie pozostają bez zmian.</translation>
     </message>
     <message>
         <source>Unlock the Key</source>
-        <translation type="unfinished"></translation>
+        <translation>Odblokuj klucz</translation>
     </message>
     <message>
         <source>The %1 of &quot;%2&quot; cannot be read because the key is locked.
 
 It is shown empty and cannot be edited, so that the file is not overwritten. Close the project and open it again, then enter the passphrase.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można odczytać: %1 dokumentu „%2”, ponieważ klucz jest zablokowany.
+
+Jest pokazywany jako pusty i nie można go edytować, aby plik nie został nadpisany. Zamknij projekt i otwórz go ponownie, a następnie wpisz hasło.</translation>
     </message>
     <message numerus="yes">
         <source>Snapshot taken of %Ln document(s).</source>
@@ -15075,11 +15077,11 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
     </message>
     <message>
         <source>Menu: all the menus of the program (press Alt, or Alt and the letter of a menu)</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu: wszystkie menu programu (naciśnij Alt albo Alt i literę menu)</translation>
     </message>
     <message>
         <source>Menu: all the menus of the program (press Alt, or Alt and the letter of a menu). %1 switches the small interface off and on</source>
-        <translation type="unfinished"></translation>
+        <translation>Menu: wszystkie menu programu (naciśnij Alt albo Alt i literę menu). %1 włącza i wyłącza mały interfejs</translation>
     </message>
     <message>
         <source>Style: choose a style for the paragraph</source>
@@ -15107,87 +15109,87 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
     </message>
     <message>
         <source>This project is shared with Live Sync, but the Live Sync service of this device did not start. The project was not opened, so that nothing is changed outside Live Sync.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten projekt jest udostępniony przez Live Sync, ale usługa Live Sync tego urządzenia nie uruchomiła się. Projekt nie został otwarty, aby nic nie zostało zmienione poza Live Sync.</translation>
     </message>
     <message>
         <source>This folder is no longer shared by Live Sync on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten folder nie jest już udostępniany przez Live Sync na tym urządzeniu.</translation>
     </message>
     <message>
         <source>Live Sync cannot take this project now: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync nie może teraz przejąć tego projektu: %1</translation>
     </message>
     <message>
         <source>Close and Stop Hosting</source>
-        <translation type="unfinished"></translation>
+        <translation>Zamknij i zakończ hostowanie</translation>
     </message>
     <message numerus="yes">
         <source>%n other device(s) are working on &quot;%1&quot; through this device. Closing the last window stops the hosting: they cannot change the project until it is hosted again. Turn on &quot;Keep hosting when the last window is closed&quot; in File &gt; Options &gt; Live Sync to go on hosting.</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n inne urządzenie pracuje nad „%1” za pośrednictwem tego urządzenia. Zamknięcie ostatniego okna zakończy hostowanie: do czasu ponownego hostowania nie będzie można zmieniać projektu. Aby hostować dalej, włącz „Hostuj dalej po zamknięciu ostatniego okna” w Plik &gt; Opcje &gt; Live Sync.</numerusform>
+            <numerusform>%n inne urządzenia pracują nad „%1” za pośrednictwem tego urządzenia. Zamknięcie ostatniego okna zakończy hostowanie: do czasu ponownego hostowania nie będzie można zmieniać projektu. Aby hostować dalej, włącz „Hostuj dalej po zamknięciu ostatniego okna” w Plik &gt; Opcje &gt; Live Sync.</numerusform>
+            <numerusform>%n innych urządzeń pracuje nad „%1” za pośrednictwem tego urządzenia. Zamknięcie ostatniego okna zakończy hostowanie: do czasu ponownego hostowania nie będzie można zmieniać projektu. Aby hostować dalej, włącz „Hostuj dalej po zamknięciu ostatniego okna” w Plik &gt; Opcje &gt; Live Sync.</numerusform>
         </translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Zamknij</translation>
+        <translation>Zamknij</translation>
     </message>
     <message>
         <source>The document of this draft is not in the project any more.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokumentu tej wersji roboczej nie ma już w projekcie.</translation>
     </message>
     <message>
         <source>%1 (draft)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (wersja robocza)</translation>
     </message>
     <message>
         <source>The copy could not be made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się utworzyć kopii.</translation>
     </message>
     <message>
         <source>The copy could not be saved: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się zapisać kopii: %1</translation>
     </message>
     <message>
         <source>The draft is kept as the new document &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wersja robocza została zachowana jako nowy dokument „%1”.</translation>
     </message>
     <message>
         <source>The draft cannot be shown: no temporary file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można wyświetlić wersji roboczej: brak pliku tymczasowego.</translation>
     </message>
     <message>
         <source>The draft cannot be shown: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można wyświetlić wersji roboczej: %1</translation>
     </message>
     <message>
         <source>Recovery draft of &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Wersja robocza do odzyskania: „%1”</translation>
     </message>
     <message>
         <source>The draft is shown for reading only: &quot;%1&quot; cannot be changed here now (%2).</source>
-        <translation type="unfinished"></translation>
+        <translation>Wersja robocza jest wyświetlana tylko do odczytu: „%1” nie może być teraz tu zmieniany (%2).</translation>
     </message>
     <message>
         <source>&quot;%1&quot; cannot be taken over now: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można teraz przejąć „%1”: %2.</translation>
     </message>
     <message>
         <source>Before taking over a recovery draft</source>
-        <translation type="unfinished"></translation>
+        <translation>Przed przejęciem wersji roboczej do odzyskania</translation>
     </message>
     <message>
         <source>Nothing was changed: the snapshot of the present text could not be made (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Nic nie zmieniono: nie udało się utworzyć migawki obecnego tekstu (%1).</translation>
     </message>
     <message>
         <source>The draft&apos;s text could not be saved: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się zapisać tekstu wersji roboczej: %1</translation>
     </message>
     <message>
         <source>The draft&apos;s text is now the text of &quot;%1&quot;; a snapshot of the text before is kept. The draft stays in the list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tekst wersji roboczej jest teraz tekstem „%1”; migawka poprzedniego tekstu została zachowana. Wersja robocza pozostaje na liście.</translation>
     </message>
 </context>
 <context>
@@ -15607,7 +15609,7 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
     </message>
     <message>
         <source>On Le&amp;ft With Arrow</source>
-        <translation type="unfinished"></translation>
+        <translation>Po l&amp;ewej ze strzałką</translation>
     </message>
     <message>
         <source>On &amp;Right</source>
@@ -15615,7 +15617,7 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
     </message>
     <message>
         <source>On Ri&amp;ght With Arrow</source>
-        <translation type="unfinished"></translation>
+        <translation>Po p&amp;rawej ze strzałką</translation>
     </message>
     <message>
         <source>&amp;Above</source>
@@ -15623,7 +15625,7 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
     </message>
     <message>
         <source>Abo&amp;ve With Arrow</source>
-        <translation type="unfinished"></translation>
+        <translation>Pow&amp;yżej ze strzałką</translation>
     </message>
     <message>
         <source>&amp;Below</source>
@@ -16271,11 +16273,11 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
     </message>
     <message>
         <source>Font Size</source>
-        <translation type="unfinished">Rozmiar czcionki</translation>
+        <translation>Rozmiar czcionki</translation>
     </message>
     <message>
         <source>Clear Formatting</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyczyść formatowanie</translation>
     </message>
     <message>
         <source>Bold</source>
@@ -16347,7 +16349,7 @@ Migawkę można porównać z tekstem na karcie Migawki w inspektorze. Aby tego u
     </message>
     <message>
         <source>Belo&amp;w With Arrow</source>
-        <translation type="unfinished"></translation>
+        <translation>Poni&amp;żej ze strzałką</translation>
     </message>
     <message>
         <source>&amp;Bold</source>
@@ -17603,7 +17605,7 @@ Kontynuować?</translation>
     </message>
     <message>
         <source>Live Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync</translation>
     </message>
     <message>
         <source>Extras</source>
@@ -23280,197 +23282,197 @@ Albo pobrać aktualną wersję ze strony projektu.</translation>
     <name>qb::collab</name>
     <message>
         <source>An unknown device tried to take over hosting of &apos;%1&apos;. It was refused.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieznane urządzenie próbowało przejąć hostowanie „%1”. Zostało odrzucone.</translation>
     </message>
 </context>
 <context>
     <name>qb::collab::Follower</name>
     <message>
         <source>this device has read-only access to the project</source>
-        <translation type="unfinished"></translation>
+        <translation>to urządzenie ma dostęp do projektu tylko do odczytu</translation>
     </message>
     <message>
         <source>it is being edited on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>jest edytowany na urządzeniu %1</translation>
     </message>
 </context>
 <context>
     <name>qb::collab::Gate</name>
     <message>
         <source>%1 belongs to a shared project and cannot be written on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 należy do projektu udostępnionego i nie może być zapisany na tym urządzeniu.</translation>
     </message>
 </context>
 <context>
     <name>qb::collab::HostBackup</name>
     <message>
         <source>There is not enough free space on the host for the backup.</source>
-        <translation type="unfinished"></translation>
+        <translation>Na hoście nie ma dość wolnego miejsca na kopię zapasową.</translation>
     </message>
     <message>
         <source>The project was being saved all the time; no whole copy could be made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt był cały czas zapisywany; nie udało się utworzyć pełnej kopii.</translation>
     </message>
     <message>
         <source>The host could not make a copy of the project to back up.</source>
-        <translation type="unfinished"></translation>
+        <translation>Host nie mógł utworzyć kopii projektu do wykonania kopii zapasowej.</translation>
     </message>
     <message>
         <source>The backup was made, but the backup folder cannot take it now. It waits on the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopia zapasowa została utworzona, ale folder kopii zapasowych nie może jej teraz przyjąć. Czeka na hoście.</translation>
     </message>
     <message>
         <source>Some files could not be read, so the backup is incomplete.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się odczytać niektórych plików, więc kopia zapasowa jest niekompletna.</translation>
     </message>
     <message>
         <source>The host could not write the backup.</source>
-        <translation type="unfinished"></translation>
+        <translation>Host nie mógł zapisać kopii zapasowej.</translation>
     </message>
     <message>
         <source>The host was closed while the backup ran.</source>
-        <translation type="unfinished"></translation>
+        <translation>Host został zamknięty w trakcie tworzenia kopii zapasowej.</translation>
     </message>
     <message>
         <source>The host cannot back up this project now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Host nie może teraz wykonać kopii zapasowej tego projektu.</translation>
     </message>
     <message>
         <source>A backup is running already.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopia zapasowa jest już tworzona.</translation>
     </message>
     <message>
         <source>The document is being edited on %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokument jest edytowany na urządzeniu %1.</translation>
     </message>
     <message>
         <source>Rolling back needs the document&apos;s edit lock.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cofnięcie wymaga blokady edycji dokumentu.</translation>
     </message>
     <message>
         <source>This device may only read the project.</source>
-        <translation type="unfinished"></translation>
+        <translation>To urządzenie może tylko czytać projekt.</translation>
     </message>
     <message>
         <source>The host could not do it: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Host nie mógł tego wykonać: %1</translation>
     </message>
     <message>
         <source>The host refused the snapshot job (%1).</source>
-        <translation type="unfinished"></translation>
+        <translation>Host odrzucił zadanie migawki (%1).</translation>
     </message>
     <message>
         <source>The device that hosts the project cannot be reached now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Urządzenie, które hostuje projekt, jest teraz nieosiągalne.</translation>
     </message>
     <message>
         <source>The host did not answer in time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Host nie odpowiedział w wyznaczonym czasie.</translation>
     </message>
 </context>
 <context>
     <name>qb::collab::Service</name>
     <message>
         <source>Hosting &quot;%1&quot; could not start: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się rozpocząć hostowania „%1”: %2</translation>
     </message>
     <message>
         <source>The list of devices of &quot;%1&quot; could not be saved: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się zapisać listy urządzeń projektu „%1”: %2</translation>
     </message>
     <message>
         <source>Hosting was not handed over: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Hostowanie nie zostało przekazane: %1</translation>
     </message>
     <message>
         <source>A snapshot job that was cut off could not be finished: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się dokończyć przerwanego zadania migawki: %1</translation>
     </message>
     <message>
         <source>Live Sync is not running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync nie jest uruchomiony.</translation>
     </message>
     <message>
         <source>Only projects in Quillbinder&apos;s own format can be shared.</source>
-        <translation type="unfinished"></translation>
+        <translation>Można udostępniać tylko projekty we własnym formacie Quillbinder.</translation>
     </message>
     <message>
         <source>This device is not paired with the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>To urządzenie nie jest sparowane z hostem.</translation>
     </message>
     <message>
         <source>The folder for the copy could not be made.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się utworzyć folderu na kopię.</translation>
     </message>
     <message>
         <source>The copy of &quot;%1&quot; cannot be used: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można użyć kopii „%1”: %2</translation>
     </message>
     <message>
         <source>The host&apos;s list of devices cannot be used: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można użyć listy urządzeń hosta: %1</translation>
     </message>
     <message>
         <source>The host is not paired with this device any more.</source>
-        <translation type="unfinished"></translation>
+        <translation>Host nie jest już sparowany z tym urządzeniem.</translation>
     </message>
     <message>
         <source>Only the host can change the order.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tylko host może zmienić kolejność.</translation>
     </message>
     <message>
         <source>This draft holds no text of a document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ta wersja robocza nie zawiera tekstu dokumentu.</translation>
     </message>
     <message>
         <source>The project of this draft is not shared on this device any more.</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt tej wersji roboczej nie jest już udostępniany na tym urządzeniu.</translation>
     </message>
     <message>
         <source>The draft is not there any more.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wersji roboczej już nie ma.</translation>
     </message>
     <message>
         <source>the project is not available</source>
-        <translation type="unfinished"></translation>
+        <translation>projekt jest niedostępny</translation>
     </message>
     <message>
         <source>this device has read-only access to the project</source>
-        <translation type="unfinished"></translation>
+        <translation>to urządzenie ma dostęp do projektu tylko do odczytu</translation>
     </message>
     <message>
         <source>Live Sync stopped for this project</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync został zatrzymany dla tego projektu</translation>
     </message>
     <message>
         <source>this device is not connected to the host</source>
-        <translation type="unfinished"></translation>
+        <translation>to urządzenie nie jest połączone z hostem</translation>
     </message>
     <message>
         <source>the project is being brought up to date</source>
-        <translation type="unfinished"></translation>
+        <translation>projekt jest właśnie aktualizowany</translation>
     </message>
     <message>
         <source>The device that hosts the project cannot be reached now.</source>
-        <translation type="unfinished"></translation>
+        <translation>Urządzenie, które hostuje projekt, jest teraz nieosiągalne.</translation>
     </message>
     <message>
         <source>Hosting cannot be handed over now: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można teraz przekazać hostowania: %1</translation>
     </message>
 </context>
 <context>
     <name>qb::collab::ServiceClient</name>
     <message>
         <source>the connection to the Live Sync service was lost</source>
-        <translation type="unfinished"></translation>
+        <translation>połączenie z usługą Live Sync zostało utracone</translation>
     </message>
 </context>
 <context>
     <name>qb::collab::ServiceStatus</name>
     <message>
         <source>The backup could not be asked for: this device is not connected to the host.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można poprosić o kopię zapasową: to urządzenie nie jest połączone z hostem.</translation>
     </message>
 </context>
 <context>
@@ -23531,11 +23533,11 @@ Albo pobrać aktualną wersję ze strony projektu.</translation>
     <name>qb::crypto</name>
     <message>
         <source>The Quillbinder wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Portfel Quillbinder</translation>
     </message>
     <message>
         <source>no key store</source>
-        <translation type="unfinished"></translation>
+        <translation>brak magazynu kluczy</translation>
     </message>
 </context>
 <context>
@@ -24098,779 +24100,781 @@ Nie jest otwierany stąd. Jeśli mu ufasz, otwórz go sam(a) z menedżera plikó
     <name>qb::livesync::DraftsDialog</name>
     <message>
         <source>Recovery Drafts</source>
-        <translation type="unfinished"></translation>
+        <translation>Wersje robocze do odzyskania</translation>
     </message>
     <message>
         <source>Changes that were kept on this device because they could not be sent. They are never deleted by themselves.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmiany zachowane na tym urządzeniu, ponieważ nie udało się ich wysłać. Nigdy nie są usuwane samoczynnie.</translation>
     </message>
     <message>
         <source>Time</source>
-        <translation type="unfinished"></translation>
+        <translation>Czas</translation>
     </message>
     <message>
         <source>Document</source>
-        <translation type="unfinished">Dokument</translation>
+        <translation>Dokument</translation>
     </message>
     <message>
         <source>Why</source>
-        <translation type="unfinished"></translation>
+        <translation>Powód</translation>
     </message>
     <message>
         <source>There are no recovery drafts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie ma wersji roboczych do odzyskania.</translation>
     </message>
     <message>
         <source>What happened to the draft</source>
-        <translation type="unfinished"></translation>
+        <translation>Co się stało z wersją roboczą</translation>
     </message>
     <message>
         <source>Compare</source>
-        <translation type="unfinished">Porównaj</translation>
+        <translation>Porównaj</translation>
     </message>
     <message>
         <source>Keep as Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>Zachowaj jako kopię</translation>
     </message>
     <message>
         <source>Take Over</source>
-        <translation type="unfinished"></translation>
+        <translation>Przejmij</translation>
     </message>
     <message>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuń</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Zamknij</translation>
+        <translation>Zamknij</translation>
     </message>
     <message>
         <source>Take over this draft? The document is locked for you, a snapshot of its present text is made first, and the draft&apos;s text replaces it.</source>
-        <translation type="unfinished"></translation>
+        <translation>Przejąć tę wersję roboczą? Dokument zostanie dla ciebie zablokowany, najpierw powstanie migawka jego obecnego tekstu, a tekst wersji roboczej go zastąpi.</translation>
     </message>
     <message>
         <source>Delete Draft</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuń wersję roboczą</translation>
     </message>
     <message>
         <source>Delete this draft? Its text cannot be brought back.</source>
-        <translation type="unfinished"></translation>
+        <translation>Usunąć tę wersję roboczą? Jej tekstu nie będzie można przywrócić.</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::HostedProjectsDialog</name>
     <message>
         <source>Hosted Projects</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekty hostowane</translation>
     </message>
     <message>
         <source>Project</source>
-        <translation type="unfinished">Projekt</translation>
+        <translation>Projekt</translation>
     </message>
     <message>
         <source>Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Urządzenie</translation>
     </message>
     <message>
         <source>Access</source>
-        <translation type="unfinished"></translation>
+        <translation>Dostęp</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished">Stan</translation>
+        <translation>Stan</translation>
     </message>
     <message>
         <source>The order of the list is the order in which devices take over hosting if this one is lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kolejność na liście to kolejność, w jakiej urządzenia przejmują hostowanie, jeśli to urządzenie zostanie utracone.</translation>
     </message>
     <message>
         <source>Move Up</source>
-        <translation type="unfinished">W górę</translation>
+        <translation>W górę</translation>
     </message>
     <message>
         <source>Move Down</source>
-        <translation type="unfinished">W dół</translation>
+        <translation>W dół</translation>
     </message>
     <message>
         <source>Transfer Hosting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Przekaż hostowanie...</translation>
     </message>
     <message>
         <source>Stop Sharing</source>
-        <translation type="unfinished"></translation>
+        <translation>Zakończ udostępnianie</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Zamknij</translation>
+        <translation>Zamknij</translation>
     </message>
     <message>
         <source>This device hosts no shared project.</source>
-        <translation type="unfinished"></translation>
+        <translation>To urządzenie nie hostuje żadnego udostępnionego projektu.</translation>
     </message>
     <message>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Połączone</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak połączenia</translation>
     </message>
     <message>
         <source>Access of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Dostęp urządzenia %1</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::JoinDialog</name>
     <message>
         <source>Join a Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Dołącz do projektu</translation>
     </message>
     <message>
         <source>Projects shared by your paired devices. Joining makes a full copy on this device, kept up to date while you are connected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekty udostępnione przez twoje sparowane urządzenia. Dołączenie tworzy pełną kopię na tym urządzeniu, aktualizowaną, dopóki jesteś połączony.</translation>
     </message>
     <message>
         <source>Project</source>
-        <translation type="unfinished">Projekt</translation>
+        <translation>Projekt</translation>
     </message>
     <message>
         <source>Shared by</source>
-        <translation type="unfinished"></translation>
+        <translation>Udostępnia</translation>
     </message>
     <message>
         <source>Pair a Device...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparuj urządzenie...</translation>
     </message>
     <message>
         <source>Join</source>
-        <translation type="unfinished"></translation>
+        <translation>Dołącz</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Zamknij</translation>
+        <translation>Zamknij</translation>
     </message>
     <message>
         <source>Copying the project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiowanie projektu...</translation>
     </message>
     <message>
         <source>The project is here. Opening it...</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekt jest już tutaj. Otwieranie...</translation>
     </message>
     <message>
         <source>The project could not be joined: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się dołączyć do projektu: %1</translation>
     </message>
     <message>
         <source>Live Sync is off. Turn it on in File &gt; Options &gt; Live Sync first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync jest wyłączony. Najpierw włącz go w Plik &gt; Opcje &gt; Live Sync.</translation>
     </message>
     <message>
         <source>%1 (not reachable)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 (nieosiągalne)</translation>
     </message>
     <message>
         <source>Pair first</source>
-        <translation type="unfinished"></translation>
+        <translation>Najpierw sparuj</translation>
     </message>
     <message>
         <source>Pair this device first (Pair a Device...); then its projects are listed here.</source>
-        <translation type="unfinished"></translation>
+        <translation>Najpierw sparuj to urządzenie (Sparuj urządzenie...); wtedy jego projekty pojawią się tutaj.</translation>
     </message>
     <message>
         <source>No shared projects found. Pair the device that shares the project first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie znaleziono udostępnionych projektów. Najpierw sparuj urządzenie, które udostępnia projekt.</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::LiveSyncBars</name>
     <message>
         <source>Not connected. Your changes are kept on this device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak połączenia. Twoje zmiany pozostają na tym urządzeniu.</translation>
     </message>
     <message>
         <source>Read-only: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tylko do odczytu: %1</translation>
     </message>
     <message>
         <source>%1 asks to edit &quot;%2&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Urządzenie %1 prosi o możliwość edycji „%2”.</translation>
     </message>
     <message>
         <source>Save and Hand Over</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapisz i przekaż</translation>
     </message>
     <message>
         <source>Decline</source>
-        <translation type="unfinished"></translation>
+        <translation>Odrzuć</translation>
     </message>
     <message>
         <source>another device</source>
-        <translation type="unfinished"></translation>
+        <translation>inne urządzenie</translation>
     </message>
     <message>
         <source>%1 has not answered. You can take over &quot;%2&quot;; the changes %1 has not saved stay on %1 as a recovery draft.</source>
-        <translation type="unfinished"></translation>
+        <translation>Urządzenie %1 nie odpowiedziało. Możesz przejąć „%2”; zmiany, których %1 nie zapisało, pozostaną na urządzeniu %1 jako wersja robocza do odzyskania.</translation>
     </message>
     <message>
         <source>Take Over</source>
-        <translation type="unfinished"></translation>
+        <translation>Przejmij</translation>
     </message>
     <message>
         <source>Cancel</source>
-        <translation type="unfinished">Anuluj</translation>
+        <translation>Anuluj</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is being worked on on %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nad „%1” pracuje się na urządzeniu %2.</translation>
     </message>
     <message>
         <source>Asked %1 to let you edit &quot;%2&quot;...</source>
-        <translation type="unfinished"></translation>
+        <translation>Poproszono urządzenie %1 o umożliwienie edycji „%2”...</translation>
     </message>
     <message>
         <source>Read-only: held by %1, who has not been reachable since %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tylko do odczytu: dokument jest zajęty przez urządzenie %1, które jest nieosiągalne od %2.</translation>
     </message>
     <message>
         <source>a while</source>
-        <translation type="unfinished"></translation>
+        <translation>jakiś czas</translation>
     </message>
     <message>
         <source>Read-only: being edited on %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tylko do odczytu: dokument jest edytowany na urządzeniu %1.</translation>
     </message>
     <message>
         <source>Ask to Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Poproś o edycję</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::LiveSyncControl</name>
     <message>
         <source>Live Sync is not running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync nie jest uruchomiony.</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::LiveSyncPage</name>
     <message>
         <source>Live Sync keeps one project the same on several of your devices in the same network, while they are connected. It is off until you turn it on. Content travels encrypted between your paired devices; the files of a project that is not encrypted stay readable on each device, and so do ZIP backups of such a project: use your device&apos;s own encryption and an encrypted backup drive.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync utrzymuje jeden projekt jednakowy na kilku twoich urządzeniach w tej samej sieci, dopóki są połączone. Jest wyłączony, dopóki go nie włączysz. Treść jest przesyłana między sparowanymi urządzeniami w postaci zaszyfrowanej; pliki niezaszyfrowanego projektu pozostają czytelne na każdym urządzeniu, podobnie jak kopie zapasowe ZIP takiego projektu: użyj szyfrowania własnego urządzenia i zaszyfrowanego dysku na kopie zapasowe.</translation>
     </message>
     <message>
         <source>Turn on Live Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Włącz Live Sync</translation>
     </message>
     <message>
         <source>This device&apos;s name:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nazwa tego urządzenia:</translation>
     </message>
     <message>
         <source>Keep hosting when the last window is closed</source>
-        <translation type="unfinished"></translation>
+        <translation>Hostuj dalej po zamknięciu ostatniego okna</translation>
     </message>
     <message>
         <source>Paired Devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparowane urządzenia</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nazwa</translation>
+        <translation>Nazwa</translation>
     </message>
     <message>
         <source>Last seen</source>
-        <translation type="unfinished"></translation>
+        <translation>Ostatnio widziane</translation>
     </message>
     <message>
         <source>Pair a Device...</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparuj urządzenie...</translation>
     </message>
     <message>
         <source>Remove</source>
-        <translation type="unfinished">Usuń</translation>
+        <translation>Usuń</translation>
     </message>
     <message>
         <source>Connect by Address...</source>
-        <translation type="unfinished"></translation>
+        <translation>Połącz przez adres...</translation>
     </message>
     <message>
         <source>More Ways to Connect</source>
-        <translation type="unfinished"></translation>
+        <translation>Więcej sposobów połączenia</translation>
     </message>
     <message>
         <source>Details</source>
-        <translation type="unfinished">Szczegóły</translation>
+        <translation>Szczegóły</translation>
     </message>
     <message>
         <source>Connect by Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Połącz przez adres</translation>
     </message>
     <message>
         <source>Address of the other device (name or number, and a port if it is not the usual one):</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres drugiego urządzenia (nazwa lub numer oraz port, jeśli nie jest zwykły):</translation>
     </message>
     <message>
         <source>Remove Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuń urządzenie</translation>
     </message>
     <message>
         <source>Remove &quot;%1&quot;? It loses access to every project of this device at once, and has to be paired again to take part.</source>
-        <translation type="unfinished"></translation>
+        <translation>Usunąć „%1”? Urządzenie od razu straci dostęp do wszystkich projektów tego urządzenia i aby brać udział, trzeba je sparować ponownie.</translation>
     </message>
     <message>
         <source>No address yet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Jeszcze brak adresu.</translation>
     </message>
     <message>
         <source>Addresses of this device: %1. Port: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresy tego urządzenia: %1. Port: %2.</translation>
     </message>
     <message>
         <source>Turn on Live Sync to see them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Włącz Live Sync, aby je zobaczyć.</translation>
     </message>
     <message>
         <source>Fingerprint: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Odcisk: %1</translation>
     </message>
     <message>
         <source>Protocol: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Protokół: %1</translation>
     </message>
     <message>
         <source>Round trips: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Czas odpowiedzi: %1</translation>
     </message>
     <message>
         <source>Nothing to show.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie ma nic do pokazania.</translation>
     </message>
     <message>
         <source>Online now</source>
-        <translation type="unfinished"></translation>
+        <translation>Teraz połączone</translation>
     </message>
     <message>
         <source>Never</source>
-        <translation type="unfinished">Nigdy</translation>
+        <translation>Nigdy</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::LiveSyncTab</name>
     <message>
         <source>Participants</source>
-        <translation type="unfinished"></translation>
+        <translation>Uczestnicy</translation>
     </message>
     <message>
         <source>Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Urządzenie</translation>
     </message>
     <message>
         <source>State</source>
-        <translation type="unfinished">Stan</translation>
+        <translation>Stan</translation>
     </message>
     <message>
         <source>Editing</source>
-        <translation type="unfinished">Edycja</translation>
+        <translation>Edytuje</translation>
     </message>
     <message>
         <source>Request Backup</source>
-        <translation type="unfinished"></translation>
+        <translation>Poproś o kopię zapasową</translation>
     </message>
     <message>
         <source>Recovery Drafts...</source>
-        <translation type="unfinished"></translation>
+        <translation>Wersje robocze do odzyskania...</translation>
     </message>
     <message>
         <source>Selected Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaznaczony dokument</translation>
     </message>
     <message>
         <source>Ask to Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>Poproś o edycję</translation>
     </message>
     <message>
         <source>Take Over</source>
-        <translation type="unfinished"></translation>
+        <translation>Przejmij</translation>
     </message>
     <message>
         <source>Stop Editing</source>
-        <translation type="unfinished"></translation>
+        <translation>Zakończ edycję</translation>
     </message>
     <message>
         <source>This project is not shared.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ten projekt nie jest udostępniony.</translation>
     </message>
     <message>
         <source>Host: %1
 Your role: %2
 State: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Host: %1
+Twoja rola: %2
+Stan: %3</translation>
     </message>
     <message>
         <source>this device</source>
-        <translation type="unfinished"></translation>
+        <translation>to urządzenie</translation>
     </message>
     <message>
         <source>Read-only: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tylko do odczytu: %1</translation>
     </message>
     <message>
         <source>(this device)</source>
-        <translation type="unfinished"></translation>
+        <translation>(to urządzenie)</translation>
     </message>
     <message>
         <source>(host)</source>
-        <translation type="unfinished"></translation>
+        <translation>(host)</translation>
     </message>
     <message>
         <source>Online</source>
-        <translation type="unfinished"></translation>
+        <translation>Połączone</translation>
     </message>
     <message>
         <source>Not connected since %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak połączenia od %1</translation>
     </message>
     <message>
         <source>Not connected</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak połączenia</translation>
     </message>
     <message numerus="yes">
         <source>%n recovery draft(s) on this device</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n wersja robocza do odzyskania na tym urządzeniu</numerusform>
+            <numerusform>%n wersje robocze do odzyskania na tym urządzeniu</numerusform>
+            <numerusform>%n wersji roboczych do odzyskania na tym urządzeniu</numerusform>
         </translation>
     </message>
     <message>
         <source>No recovery drafts.</source>
-        <translation type="unfinished"></translation>
+        <translation>Brak wersji roboczych do odzyskania.</translation>
     </message>
     <message>
         <source>No document is selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie zaznaczono dokumentu.</translation>
     </message>
     <message>
         <source>Nobody is editing &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nikt nie edytuje „%1”.</translation>
     </message>
     <message>
         <source>You are editing &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Edytujesz „%1”.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is held by %2, who has not been reachable since %3.</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” jest zajęty przez urządzenie %2, które jest nieosiągalne od %3.</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is being edited on %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>„%1” jest edytowany na urządzeniu %2.</translation>
     </message>
     <message>
         <source>There was no answer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie było odpowiedzi.</translation>
     </message>
     <message>
         <source>The request was declined.</source>
-        <translation type="unfinished"></translation>
+        <translation>Prośba została odrzucona.</translation>
     </message>
     <message>
         <source>You asked; waiting for the answer.</source>
-        <translation type="unfinished"></translation>
+        <translation>Poproszono; czekanie na odpowiedź.</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::LiveSyncUi</name>
     <message>
         <source>Share This Project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Udostępnij ten projekt...</translation>
     </message>
     <message>
         <source>Join a Project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Dołącz do projektu...</translation>
     </message>
     <message>
         <source>Request Backup</source>
-        <translation type="unfinished"></translation>
+        <translation>Poproś o kopię zapasową</translation>
     </message>
     <message>
         <source>Transfer Hosting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Przekaż hostowanie...</translation>
     </message>
     <message>
         <source>Hosted Projects...</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekty hostowane...</translation>
     </message>
     <message>
         <source>Recovery Drafts...</source>
-        <translation type="unfinished"></translation>
+        <translation>Wersje robocze do odzyskania...</translation>
     </message>
     <message>
         <source>Stop Sharing</source>
-        <translation type="unfinished"></translation>
+        <translation>Zakończ udostępnianie</translation>
     </message>
     <message>
         <source>Live Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync</translation>
     </message>
     <message>
         <source>An unknown device tried to take over hosting of &quot;%1&quot;. It was refused.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieznane urządzenie próbowało przejąć hostowanie „%1”. Zostało odrzucone.</translation>
     </message>
     <message>
         <source>Live Sync, %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync, %1</translation>
     </message>
     <message>
         <source>Live Sync: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync: %1</translation>
     </message>
     <message>
         <source>Host: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Host: %1</translation>
     </message>
     <message numerus="yes">
         <source>%n change(s) waiting to be sent</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%n zmiana czeka na wysłanie</numerusform>
+            <numerusform>%n zmiany czekają na wysłanie</numerusform>
+            <numerusform>%n zmian czeka na wysłanie</numerusform>
         </translation>
     </message>
     <message>
         <source>Leave</source>
-        <translation type="unfinished"></translation>
+        <translation>Opuść</translation>
     </message>
     <message>
         <source>You are editing this document</source>
-        <translation type="unfinished"></translation>
+        <translation>Edytujesz ten dokument</translation>
     </message>
     <message>
         <source>Not reachable since %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieosiągalne od %1</translation>
     </message>
     <message>
         <source>Not reachable</source>
-        <translation type="unfinished"></translation>
+        <translation>Nieosiągalne</translation>
     </message>
     <message>
         <source>Being edited on %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Edytowany na urządzeniu %1</translation>
     </message>
     <message>
         <source>Share This Project</source>
-        <translation type="unfinished"></translation>
+        <translation>Udostępnij ten projekt</translation>
     </message>
     <message>
         <source>This project cannot be shared: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Tego projektu nie można udostępnić: %1</translation>
     </message>
     <message>
         <source>Live Sync is not running.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync nie jest uruchomiony.</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::PairingDialog</name>
     <message>
         <source>Pair a Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparuj urządzenie</translation>
     </message>
     <message>
         <source>To pair two devices, open the pairing window on one of them (it stays open for two minutes), then pick that device here on the other. Both show the same six digits: compare them and confirm.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aby sparować dwa urządzenia, otwórz okno parowania na jednym z nich (pozostaje otwarte przez dwie minuty), a potem wybierz to urządzenie tutaj, na drugim. Oba pokazują te same sześć cyfr: porównaj je i potwierdź.</translation>
     </message>
     <message>
         <source>Devices with an open pairing window</source>
-        <translation type="unfinished"></translation>
+        <translation>Urządzenia z otwartym oknem parowania</translation>
     </message>
     <message>
         <source>Open the Pairing Window on This Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Otwórz okno parowania na tym urządzeniu</translation>
     </message>
     <message>
         <source>Pair With Selected Device</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparuj z zaznaczonym urządzeniem</translation>
     </message>
     <message>
         <source>Connect by Address...</source>
-        <translation type="unfinished"></translation>
+        <translation>Połącz przez adres...</translation>
     </message>
     <message>
         <source>Pairing code</source>
-        <translation type="unfinished"></translation>
+        <translation>Kod parowania</translation>
     </message>
     <message>
         <source>Codes Match</source>
-        <translation type="unfinished"></translation>
+        <translation>Kody są zgodne</translation>
     </message>
     <message>
         <source>They Differ</source>
-        <translation type="unfinished"></translation>
+        <translation>Różnią się</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished">Zamknij</translation>
+        <translation>Zamknij</translation>
     </message>
     <message>
         <source>Waiting for the other device...</source>
-        <translation type="unfinished"></translation>
+        <translation>Czekanie na drugie urządzenie...</translation>
     </message>
     <message>
         <source>Connect by Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Połącz przez adres</translation>
     </message>
     <message>
         <source>Address of the other device (name or number, and a port if it is not the usual one):</source>
-        <translation type="unfinished"></translation>
+        <translation>Adres drugiego urządzenia (nazwa lub numer oraz port, jeśli nie jest zwykły):</translation>
     </message>
     <message>
         <source>Waiting for the other device to confirm...</source>
-        <translation type="unfinished"></translation>
+        <translation>Czekanie na potwierdzenie z drugiego urządzenia...</translation>
     </message>
     <message>
         <source>Pairing stopped: the codes differ. Someone else may be between the devices; do not pair them.</source>
-        <translation type="unfinished"></translation>
+        <translation>Parowanie zatrzymane: kody się różnią. Ktoś inny może znajdować się między urządzeniami; nie paruj ich.</translation>
     </message>
     <message>
         <source>Close the Pairing Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Zamknij okno parowania</translation>
     </message>
     <message>
         <source>Live Sync is off. Turn it on in File &gt; Options &gt; Live Sync first.</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync jest wyłączony. Najpierw włącz go w Plik &gt; Opcje &gt; Live Sync.</translation>
     </message>
     <message>
         <source>The pairing window of this device is open. On the other device, pick this one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Okno parowania tego urządzenia jest otwarte. Na drugim urządzeniu wybierz to.</translation>
     </message>
     <message>
         <source>No device with an open pairing window was found. Open the window on the other device, or connect by address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie znaleziono urządzenia z otwartym oknem parowania. Otwórz okno na drugim urządzeniu albo połącz się przez adres.</translation>
     </message>
     <message>
         <source>Pick the device to pair with.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz urządzenie do sparowania.</translation>
     </message>
     <message>
         <source>Pairing with %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Parowanie z urządzeniem %1</translation>
     </message>
     <message>
         <source>Compare these digits with those on the other device.</source>
-        <translation type="unfinished"></translation>
+        <translation>Porównaj te cyfry z cyframi na drugim urządzeniu.</translation>
     </message>
     <message>
         <source>Paired. %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sparowano. %1</translation>
     </message>
     <message>
         <source>Pairing failed. %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Parowanie nie powiodło się. %1</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::ServiceControl</name>
     <message>
         <source>The devices are paired.</source>
-        <translation type="unfinished"></translation>
+        <translation>Urządzenia zostały sparowane.</translation>
     </message>
     <message>
         <source>Pairing did not finish.</source>
-        <translation type="unfinished"></translation>
+        <translation>Parowanie nie zostało zakończone.</translation>
     </message>
     <message>
         <source>Another program of this device runs Live Sync&apos;s service.</source>
-        <translation type="unfinished"></translation>
+        <translation>Inny program na tym urządzeniu uruchamia usługę Live Sync.</translation>
     </message>
     <message>
         <source>Live Sync 1, TLS 1.3</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync 1, TLS 1.3</translation>
     </message>
     <message>
         <source>The device is not found in the network any more.</source>
-        <translation type="unfinished"></translation>
+        <translation>Urządzenia nie ma już w sieci.</translation>
     </message>
     <message>
         <source>The project is not offered by that device any more.</source>
-        <translation type="unfinished"></translation>
+        <translation>To urządzenie nie oferuje już tego projektu.</translation>
     </message>
     <message>
         <source>Connecting...</source>
-        <translation type="unfinished"></translation>
+        <translation>Łączenie...</translation>
     </message>
     <message>
         <source>The host did not let this device in.</source>
-        <translation type="unfinished"></translation>
+        <translation>Host nie wpuścił tego urządzenia.</translation>
     </message>
     <message>
         <source>Copying the project...</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiowanie projektu...</translation>
     </message>
     <message>
         <source>The copy did not finish in time.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kopiowanie nie zakończyło się w wyznaczonym czasie.</translation>
     </message>
     <message>
         <source>Hosting cannot be handed over now: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można teraz przekazać hostowania: %1</translation>
     </message>
     <message>
         <source>made after the split</source>
-        <translation type="unfinished"></translation>
+        <translation>utworzona po rozdzieleniu</translation>
     </message>
     <message>
         <source>not sent before the takeover</source>
-        <translation type="unfinished"></translation>
+        <translation>niewysłana przed przejęciem</translation>
     </message>
     <message>
         <source>The draft could not be deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie udało się usunąć wersji roboczej.</translation>
     </message>
     <message>
         <source>This draft cannot be used.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tej wersji roboczej nie można użyć.</translation>
     </message>
     <message>
         <source>Open the project &quot;%1&quot; in a window first: the draft&apos;s text is taken into it from there.</source>
-        <translation type="unfinished"></translation>
+        <translation>Najpierw otwórz projekt „%1” w oknie: tekst wersji roboczej jest stamtąd do niego przenoszony.</translation>
     </message>
 </context>
 <context>
     <name>qb::livesync::WalletPassphraseDialog</name>
     <message>
         <source>Create the Quillbinder Wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Utwórz portfel Quillbinder</translation>
     </message>
     <message>
         <source>Unlock the Quillbinder Wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Odblokuj portfel Quillbinder</translation>
     </message>
     <message>
         <source>This device has no system key store, so Quillbinder keeps its keys in its own wallet, a file locked with a master passphrase. Choose the passphrase now; it is asked once each time you start Quillbinder. It is never stored, and nobody can recover it for you: if you lose it, the keys in the wallet are lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>To urządzenie nie ma systemowego magazynu kluczy, więc Quillbinder przechowuje swoje klucze we własnym portfelu, pliku zablokowanym głównym hasłem. Wybierz hasło teraz; program pyta o nie raz przy każdym uruchomieniu Quillbinder. Nigdzie nie jest zapisywane i nikt nie może go dla ciebie odzyskać: jeśli je zgubisz, klucze w portfelu przepadną.</translation>
     </message>
     <message>
         <source>Type the master passphrase of the Quillbinder wallet. It is asked once each time you start Quillbinder.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wpisz główne hasło portfela Quillbinder. Program pyta o nie raz przy każdym uruchomieniu Quillbinder.</translation>
     </message>
     <message>
         <source>Passphrase:</source>
-        <translation type="unfinished">Hasło:</translation>
+        <translation>Hasło:</translation>
     </message>
     <message>
         <source>Once more:</source>
-        <translation type="unfinished">Jeszcze raz:</translation>
+        <translation>Jeszcze raz:</translation>
     </message>
     <message>
         <source>The two entries are not the same.</source>
-        <translation type="unfinished">Oba wpisy nie są takie same.</translation>
+        <translation>Oba wpisy nie są takie same.</translation>
     </message>
     <message>
         <source>This passphrase is accepted.</source>
-        <translation type="unfinished">To hasło jest akceptowane.</translation>
+        <translation>To hasło jest akceptowane.</translation>
     </message>
 </context>
 <context>
@@ -25058,31 +25062,31 @@ State: %3</source>
     </message>
     <message>
         <source>The language of the voice pack is not valid.</source>
-        <translation type="unfinished"></translation>
+        <translation>Język paczki głosów jest nieprawidłowy.</translation>
     </message>
     <message>
         <source>The voice pack cannot be read as a zip file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Paczki głosów nie można odczytać jako pliku zip.</translation>
     </message>
     <message>
         <source>The voice pack holds a file that does not belong to it (%1), so it was not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Paczka głosów zawiera plik, który do niej nie należy (%1), więc nie została zainstalowana.</translation>
     </message>
     <message>
         <source>The voice pack is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>Paczka głosów jest pusta.</translation>
     </message>
     <message>
         <source>%1 could not be made.</source>
-        <translation type="unfinished">Nie udało się utworzyć: %1.</translation>
+        <translation>Nie udało się utworzyć: %1.</translation>
     </message>
     <message>
         <source>%1 could not be written.</source>
-        <translation type="unfinished">Nie udało się zapisać: %1.</translation>
+        <translation>Nie udało się zapisać: %1.</translation>
     </message>
     <message>
         <source>The voice pack has no file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Paczka głosów nie zawiera pliku.</translation>
     </message>
     <message>
         <source>This model does not have this voice.</source>
@@ -25295,38 +25299,38 @@ State: %3</source>
     <name>qb::ui::LiveSyncStatusWindow</name>
     <message>
         <source>Live Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>Live Sync</translation>
     </message>
     <message>
         <source>Hosted projects</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekty hostowane</translation>
     </message>
     <message>
         <source>Projects hosted for other devices</source>
-        <translation type="unfinished"></translation>
+        <translation>Projekty hostowane dla innych urządzeń</translation>
     </message>
     <message>
         <source>Open Project</source>
-        <translation type="unfinished">Otwórz projekt</translation>
+        <translation>Otwórz projekt</translation>
     </message>
     <message>
         <source>Stop Hosting and Quit</source>
-        <translation type="unfinished"></translation>
+        <translation>Zakończ hostowanie i zamknij program</translation>
     </message>
     <message numerus="yes">
         <source>Hosting %n project(s) for other devices</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Hostowanie %n projektu dla innych urządzeń</numerusform>
+            <numerusform>Hostowanie %n projektów dla innych urządzeń</numerusform>
+            <numerusform>Hostowanie %n projektów dla innych urządzeń</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>%1 (%n device(s) connected)</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>%1 (%n urządzenie połączone)</numerusform>
+            <numerusform>%1 (%n urządzenia połączone)</numerusform>
+            <numerusform>%1 (%n urządzeń połączonych)</numerusform>
         </translation>
     </message>
 </context>
