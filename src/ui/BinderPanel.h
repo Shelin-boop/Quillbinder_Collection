@@ -49,6 +49,10 @@ public:
     // 0.92.0: the documents another device works on, with the tool tip of each ("" = none): a padlock on their rows
     void setLockMarks(const QHash<QString, QString> &tips);
     QString lockTip(const QString &id) const { return m_lockTips.value(id); }
+    // 0.99.0 (Live Sync): which mark a row with a tip shows: 0 the padlock (another device edits it), 1 the pen (you edit
+    // it), 2 the dimmed padlock (the holder is not reachable); a row without an entry shows the padlock
+    void setLockKinds(const QHash<QString, int> &kinds);
+    int lockKind(const QString &id) const { return m_lockKinds.value(id, 0); }
     // the places of the two marks in a row, for the tests (viewport coordinates)
     QRect pinRectOf(const QModelIndex &index) const;
     QRect lockRectOf(const QModelIndex &index) const;
@@ -82,6 +86,7 @@ private:
     QString m_fixedMapId;
     QPersistentModelIndex m_hover;
     QHash<QString, QString> m_lockTips;
+    QHash<QString, int> m_lockKinds;
     bool m_pinPressed = false;
     QPersistentModelIndex m_lockPressed;   // Android 0.92.0: a tap that began on this row's padlock
     QTimer *m_widthTimer = nullptr;
@@ -174,6 +179,7 @@ public:
     void setFixedMindMap(BinderItem *item);
     // 0.92.0: the padlocks (documents another device works on; id -> tool tip)
     void setLockMarks(const QHash<QString, QString> &tips);
+    void setLockKinds(const QHash<QString, int> &kinds); // 0.99.0 (Live Sync): the pen and the dimmed padlock
 
     // project search
     void showSearch(bool focus);

@@ -685,3 +685,10 @@ target_link_libraries(qb_mmfmt_tests PRIVATE qbui Qt6::Test)
 # (./qb_ls6_tests /tmp/shots)
 add_executable(qb_ls6_tests ls6_tests.cpp)
 target_link_libraries(qb_ls6_tests PRIVATE qbcore Qt6::Network)
+
+# 0.99.0, Live Sync work package 7 (the interface): the options page, the toolbar button and its menu, the inspector tab, the
+# binder's marks, the bars, the pairing / join / hosted projects / recovery drafts windows, the wallet's passphrase dialogs,
+# "off shows nothing", and the two files routed through the write gate (xvfb-run -a ./qb_ls7_tests /tmp/shots)
+add_executable(qb_ls7_tests ls7_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_ls7_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_ls7_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")

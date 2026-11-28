@@ -7,6 +7,7 @@
 #include "core/crypto/ProjectSwitches.h"
 #include "ui/AppSettings.h"
 #include "ui/HintLabel.h"
+#include "ui/LiveSyncWallet.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -564,6 +565,13 @@ EncryptionPage::EncryptionPage(QWidget *parent) : QWidget(parent)
     intro->setWordWrap(true);
     hintlabel::style(intro);
     v->addWidget(intro);
+    // 0.99.0 (Live Sync): where this device keeps its keys (the system's key store or the Quillbinder wallet)
+    livesync::installWalletDialogs();
+    auto *place = new QLabel(livesync::keyPlaceText(), this);
+    place->setObjectName(QStringLiteral("encKeyPlace"));
+    place->setWordWrap(true);
+    hintlabel::style(place);
+    v->addWidget(place);
 
     auto *keys = new QGroupBox(tr("Keys on this device"), this);
     auto *kv = new QVBoxLayout(keys);

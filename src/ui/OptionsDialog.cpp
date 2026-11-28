@@ -2,6 +2,7 @@
 #include "ui/handwriting/HandwritingPage.h"
 #include "ui/ReadAloudPage.h"
 #include "ui/EncryptionPage.h"
+#include "ui/LiveSyncPage.h"
 #include "ui/ProfileDialogs.h"
 #include "ui/Profiles.h"
 #include "ui/OptionStorage.h"
@@ -301,6 +302,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, int page) : QDialog(parent)
         {tr("Corrections"), QStringLiteral("edit-find-replace")}, {tr("Keyboard"), QStringLiteral("configure-shortcuts")},
         {tr("Sharing"), QStringLiteral("document-export")},     {tr("Backup"), QStringLiteral("backup")},
         {tr("Encryption"), QStringLiteral("lock")},
+        {tr("Live Sync"), QStringLiteral("view-refresh")},
         {tr("Extras"), QStringLiteral("qb-mindmap")}};
     for (const auto &s : sections) {
         auto *li = new QListWidgetItem(icons::action(s.second), s.first, m_pages);
@@ -321,6 +323,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, int page) : QDialog(parent)
     m_stack->addWidget(sharingSection());
     m_stack->addWidget(backupSection());
     m_stack->addWidget(encryptionSection());
+    m_stack->addWidget(new livesync::LiveSyncPage(this)); // 0.99.0 (Live Sync)
     m_stack->addWidget(extrasSection());
     // writing tools with a section of their own (0.61): an icon after Extras each
     toolhost::host().attachTools();
