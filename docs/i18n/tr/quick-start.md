@@ -75,6 +75,7 @@
 - **Saklanan yerler**: her belge, imleci bıraktığınız yerde açılır; projeyi yeniden açtıktan sonra da.
 - **Yazı tipleri**: **Biçim > Yazı Tipi > Yazı Tipi Dosyalarını Kur…** programdan çıkmadan yazı tipi ekler.
 - **Güvenlik**: siz yazmaya devam ederken de otomatik kaydetme, yedekler, proje dosyasının yedek bir kopyası, çökme ve donma raporları (**Yardım > Sorun Giderme ve Geliştirme > Çökme Raporları…**) ve **Yardım > Sorun Giderme ve Geliştirme > Sistem Bilgisi**.
+- **Live Sync** (**Dosya > Seçenekler > Live Sync** altında açana kadar kapalı): bir projeyi aynı ağdaki cihazlarınızda aynı tutar. Cihazları bir kez eşleştirin (**Bir Cihazı Eşleştir...**: ikisindeki altı rakamı karşılaştırın), sonra araç çubuğundaki Live Sync düğmesinin menüsünde **Bu Projeyi Paylaş...**, diğer cihazda **Bir Projeye Katıl...** seçin. Bir belgeyi aynı anda tek bir cihaz düzenler; diğerleri izin isteyebilir. Şifrelenmemiş bir projenin dosyaları ve ZIP yedekleri Live Sync tarafından şifrelenmez: cihazlarınızın kendi şifrelemesini kullanın (kılavuzun 21. bölümü).
 
 ### Güncellemeler ve eklentiler
 
