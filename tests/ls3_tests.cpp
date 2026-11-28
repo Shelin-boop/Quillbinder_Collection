@@ -913,6 +913,7 @@ struct AuditEntry {
 static const AuditEntry kAudit[] = {
     {"src/android/MobileStart.cpp", "outside", "the Android program's own files"},
     {"src/core/collab/Blobs.cpp", "outside", "partial blob files in Live Sync's own folder, renamed when whole"},
+    {"src/core/collab/HostBackup.cpp", "outside", "the host's own copies for a backup in livesync/freeze-<seq>/ (hard links or copies, removed afterwards) and its job marks in livesync/; the host is no follower"},
     {"src/core/collab/Drafts.cpp", "outside", "recovery drafts in the device-local folder (writes through safesave)"},
     {"src/core/collab/net/DeviceIdentity.cpp", "outside", "the device key and certificate in the program's data folder"},
     {"src/core/collab/net/PeerStore.cpp", "outside", "the paired devices in the program's data folder"},
@@ -943,7 +944,7 @@ static const AuditEntry kAudit[] = {
     {"src/core/SaveBatch.cpp", "gated", "stage asks the gate; commit hands captured files over"},
     {"src/core/SettingsFile.cpp", "outside", "the program's settings file and exported settings files the writer chooses"},
     {"src/core/SettingsLayer.cpp", "outside", "settings/options.ini is a device-local class (the project's own program settings are not shared)"},
-    {"src/core/Snapshots.cpp", "pending package 8", "index.json and the snapshot texts are written with a QSaveFile; snapshots are host jobs (taken, renamed, deleted, rolled back on the host)"},
+    {"src/core/Snapshots.cpp", "gated", "index.json and the snapshot texts are written through safesave::writeFile and removed through safesave::removeFile (the gate refuses a follower's folder); a follower's changes are host jobs (RemoteJobs, collab/HostBackup.h)"},
     {"src/core/SyncSafety.cpp", "outside", "the copies kept in settings/conflicts (device-local) and the stamps"},
     {"src/core/UpdateCheck.cpp", "outside", "the update file in the data folder"},
     {"src/core/WebArchive.cpp", "outside", "saves a web page into a temporary place; it joins a project through the import (gated)"},

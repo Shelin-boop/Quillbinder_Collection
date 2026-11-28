@@ -685,3 +685,10 @@ target_link_libraries(qb_ls6_tests PRIVATE qbcore Qt6::Network)
 add_executable(qb_ls7_tests ls7_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_ls7_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_ls7_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
+
+# 0.99.0, Live Sync work package 8 (backups and snapshots as jobs of the host): a backup made from a copy that is whole at one commit
+# while commits go on, the state a client sees, failures that are told, snapshot jobs with their locks and their replication,
+# restore as a new project, a security sweep over the network code, and (--measure) the time from a change to the copy on another
+# device with three programs over TLS (xvfb-run -a ./qb_ls8_tests /tmp/shots)
+add_executable(qb_ls8_tests ls8_tests.cpp)
+target_link_libraries(qb_ls8_tests PRIVATE qbcore Qt6::Network)
