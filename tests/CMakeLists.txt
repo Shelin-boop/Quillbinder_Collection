@@ -680,6 +680,11 @@ target_compile_definitions(qb_ls5_tests PRIVATE QB_TEST_BUILD_DIR="${CMAKE_BINAR
 add_executable(qb_ls9_tests ls9_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_ls9_tests PRIVATE qbui Qt6::Test Qt6::Network)
 target_compile_definitions(qb_ls9_tests PRIVATE QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.99.0 (Live Sync, work package 10: the networking behind the failover rules: direct links, names, locks across a hand-over, three
+# and more devices, real programs) (xvfb-run -a ./qb_ls10_tests /tmp/shots)
+add_executable(qb_ls10_tests ls10_tests.cpp)
+target_link_libraries(qb_ls10_tests PRIVATE qbcore Qt6::Network)
+target_compile_definitions(qb_ls10_tests PRIVATE QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # 0.99.0 (the format bar's controls act on the notes of a mind map, NoteFormatTarget; several notes at once) (xvfb-run -a ./qb_mmfmt_tests /tmp/shots)
 add_executable(qb_mmfmt_tests mmfmt_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_mmfmt_tests PRIVATE qbui Qt6::Test)

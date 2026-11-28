@@ -74,6 +74,9 @@ public:
     QString hostName() const { return m_hostName; }
     bool holds(const QString &resource) const { return m_follower.holdsLock(resource); }
     QString heldBy(const QString &resource) const { return m_held.value(resource); }
+    // the lease and epoch of this device's own lock, as the service reports them (empty / 0 when not held)
+    QString heldLease(const QString &resource) const { return m_tokens.value(resource).toObject().value(QStringLiteral("lease")).toString(); }
+    qint64 heldEpoch(const QString &resource) const { return qint64(m_tokens.value(resource).toObject().value(QStringLiteral("epoch")).toDouble()); }
     QHash<QString, QString> heldElsewhere() const { return m_held; }
     bool unreachable(const QString &resource) const { return m_unreachable.contains(resource); }
 
@@ -135,6 +138,7 @@ private:
     qint64 m_epoch = 0;
     QString m_hostId;
     QHash<QString, QString> m_held;
+    QJsonObject m_tokens;
     QSet<QString> m_unreachable;
     QStringList m_open;
     QSet<QString> m_submitIds; // requests sent whose answer (the operation id) has not come

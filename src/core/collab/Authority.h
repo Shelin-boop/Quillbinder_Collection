@@ -37,6 +37,8 @@ constexpr qint64 kDrainMs = 10000;          // a planned handover lets the clien
 constexpr qint64 kHandoverWaitMs = 15000;   // the old host waits this long for READY
 constexpr qint64 kTargetWaitMs = 10000;     // the target waits this long for its replica to reach the handover state
 constexpr qint64 kPendingMs = 30000;        // a PREPARED target without COMMIT goes back to FOLLOWER
+constexpr qint64 kVoteSlackMs = 2000;       // a voter counts the host as lost this much earlier than a candidate does (the clocks of two devices differ by about a heartbeat) [helper's choice]
+constexpr qint64 kLockGraceMs = 5000;       // a new host after a failover: first lock requests wait this long while the editors ask again
 constexpr qint64 kResendMs = 3000;          // the old host resends a proof that was not answered
 constexpr qint64 kHandbackMs = 60000;       // the highest-priority device must be online and in sync this long
 
@@ -130,6 +132,9 @@ public:
     virtual QString stateHash() const = 0;  // the state hash of those files
     virtual bool replicaReady() const = 0;  // the copy is complete and may be hosted from
     virtual bool canHost(QString *why) const { Q_UNUSED(why); return true; } // writable folder, free space ...
+    // called just before startHosting() when the device takes over after the host was lost (an election): the table starts empty and
+    // the devices that were editing are given a short time to ask for their locks again
+    virtual void hostingAfterFailover() {}
     // this device starts hosting `epoch` (a new host session; the lock table starts from `locks`, which is empty after a failover)
     virtual bool startHosting(qint64 epoch, const QJsonArray &locks, QString *error) = 0;
     // this device stops hosting at once (BYE to its clients); it is a client from now on

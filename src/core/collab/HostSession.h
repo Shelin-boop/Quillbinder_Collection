@@ -92,6 +92,18 @@ public:
     void setProofs(const QJsonArray &proofs) { m_proofs = proofs; }
     // while false no new lock is granted (HOST_BUSY): a planned handover drains
     void setAcceptingLocks(bool on) { m_acceptLocks = on; }
+    // After a failover the table starts empty and the devices that were editing ask for their locks again (a request that names
+    // the revision it was based on). For `ms` milliseconds a first request for another lock waits (HOST_BUSY), so that nobody
+    // takes a document from a device that is still on its way back.
+    void setLockGrace(qint64 ms);
+    // After a planned handover: the old host's lock table moves along; the owners keep their locks (the same lease, this
+    // epoch's generation). Returns how many were taken over.
+    int adoptLocks(const QJsonArray &table);
+    // a device shows another name from now on: its connections, its locks and the people that read the lock table
+    void renameDevice(const QString &deviceId, const QString &name);
+    void setHostName(const QString &name) { m_hostName = name; }
+    // closes every connection of a device (a test build's cut network)
+    void closeDevice(const QString &deviceId, const QString &code);
     // while false a change request is answered HOST_BUSY (a planned handover is preparing: no commits)
     void setAcceptingCommits(bool on) { m_acceptCommits = on; }
     // sends a message to the first joined connection of this device; false when there is none
@@ -203,6 +215,7 @@ private:
     qint64 m_horizon = 0;
     bool m_started = false;
     bool m_acceptLocks = true;
+    qint64 m_lockGraceUntil = 0;
     bool m_acceptCommits = true;
     bool m_broken = false;
     QString m_indexPath;

@@ -1,6 +1,7 @@
 #include "core/collab/Election.h"
 
 #include "core/collab/net/DeviceIdentity.h"
+#include <cstdio>
 
 namespace qb {
 namespace collab {
@@ -129,6 +130,7 @@ void Election::becomeHost(qint64 epoch, const QList<Vote> &votes, qint64 baseSeq
         return;
     QString err;
     A.resetHostContact();
+    A.m_cfg.backend->hostingAfterFailover();
     if (!A.m_cfg.backend->startHosting(epoch, QJsonArray(), &err))
         emit A.failed(err);
     emit A.stateChanged(rec.state);
@@ -141,7 +143,7 @@ void Election::onRequest(const QString &from, const QJsonObject &m)
 {
     AuthorityRecord &rec = A.m_rec;
     const QString re = m.value(QStringLiteral("id")).toString();
-    auto deny = [&](const char *code) { A.sendTo(from, proto::errorMessage(QLatin1String(code), re, QString(), A.m_cfg.project)); };
+    auto deny = [&](const char *code) { if (qEnvironmentVariableIsSet("QB_LS_TRACE")) std::fprintf(stderr, "[%s] denies %s: %s\n", qPrintable(A.selfId().left(4)), qPrintable(from.left(4)), code); A.sendTo(from, proto::errorMessage(QLatin1String(code), re, QString(), A.m_cfg.project)); };
     if (!wholeNumber(m.value(QStringLiteral("epoch"))) || !wholeNumber(m.value(QStringLiteral("seq"))) || !m.value(QStringLiteral("stateHash")).isString() ||
         m.value(QStringLiteral("candidate")).toString() != from) {
         deny("BAD_OP");
@@ -171,7 +173,7 @@ void Election::onRequest(const QString &from, const QJsonObject &m)
         return;
     }
     const qint64 now = A.m_cfg.clock->now();
-    if (rec.state != AuthState::Follower || now - A.m_lastHostContact < kFailoverMs) {
+    if (rec.state != AuthState::Follower || now - A.m_lastHostContact < kFailoverMs - kVoteSlackMs) {
         deny("HOST_ALIVE");
         return;
     }

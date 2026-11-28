@@ -262,6 +262,42 @@ void HostSession::pruneLog()
 
 // ---------------------------------------------------------------- connections
 
+void HostSession::setLockGrace(qint64 ms) { m_lockGraceUntil = ms > 0 && m_clock ? m_clock->now() + ms : 0; }
+
+int HostSession::adoptLocks(const QJsonArray &table)
+{
+    const int n = m_locks.adopt(table);
+    if (n > 0)
+        broadcastLocks();
+    return n;
+}
+
+void HostSession::renameDevice(const QString &deviceId, const QString &name)
+{
+    const QString clean = name.left(100);
+    if (clean.isEmpty())
+        return;
+    bool changed = false;
+    for (Peer *p : m_peers)
+        if (p->owner.device == deviceId && p->name != clean) {
+            p->name = clean;
+            changed = true;
+        }
+    changed = m_locks.renameDevice(deviceId, clean) > 0 || changed;
+    if (changed) {
+        broadcastLocks();
+        emit locksChanged();
+    }
+}
+
+void HostSession::closeDevice(const QString &deviceId, const QString &code)
+{
+    const QList<Peer *> peers = m_peers;
+    for (Peer *p : peers)
+        if (p->owner.device == deviceId && p->link)
+            p->link->close(code);
+}
+
 int HostSession::joinedCount() const
 {
     int n = 0;
@@ -1117,6 +1153,10 @@ void HostSession::onLockRequest(Peer *p, const QJsonObject &m)
         sendError(p, QStringLiteral("HOST_BUSY"), re);
         return;
     }
+    if (m_lockGraceUntil && m_clock && m_clock->now() < m_lockGraceUntil && !m.contains(QStringLiteral("bases"))) {
+        sendError(p, QStringLiteral("HOST_BUSY"), re); // (the grace after a failover: only the devices that held locks come back first)
+        return;
+    }
     QStringList resources;
     for (const QJsonValue &v : m.value(QStringLiteral("resources")).toArray()) {
         if (!v.isString() || !validResource(v.toString())) {
@@ -1216,7 +1256,7 @@ void HostSession::onEditRequest(Peer *p, const QJsonObject &m)
     }
     const QList<Lock> blockers = m_locks.blockers(resource, p->owner);
     if (blockers.isEmpty()) { // nobody holds it: it is simply given
-        if (!m_acceptLocks) {
+        if (!m_acceptLocks || (m_lockGraceUntil && m_clock && m_clock->now() < m_lockGraceUntil)) {
             sendError(p, QStringLiteral("HOST_BUSY"), re);
             return;
         }

@@ -121,6 +121,7 @@ void ServiceClient::applyState(const QJsonObject &m)
     for (const QJsonValue &v : m.value(QStringLiteral("mine")).toArray())
         mine << v.toString();
     m_follower.setMine(mine);
+    m_tokens = m.value(QStringLiteral("mineTokens")).toObject();
     m_follower.setReadOnly(m_readOnly, m_readOnlyReason);
 }
 

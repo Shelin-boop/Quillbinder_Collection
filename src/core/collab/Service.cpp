@@ -2,6 +2,7 @@
 #include "core/collab/HostBackup.h"
 
 #include "core/Project.h"
+#include "core/TestSwitches.h"
 #include "core/crypto/Vault.h"
 #include "core/collab/proto/Messages.h"
 #include "core/SafeSave.h"
@@ -10,12 +11,14 @@
 #include "core/collab/ServiceProtocol.h"
 
 #include <QCoreApplication>
+#include <cstdio>
 #include <QCryptographicHash>
 #include <QDomDocument>
 #include <QDir>
 #include <QFileInfo>
 #include <QJsonArray>
 #include <QJsonDocument>
+#include <QNetworkInterface>
 #include <QPointer>
 #include <QStorageInfo>
 
@@ -30,6 +33,15 @@ using net::TlsLink;
 using net::TrustPolicy;
 
 // ---------------------------------------------------------------- the parts of the service
+
+struct Service::MeshPeer {
+    QPointer<TlsLink> link;    // the one connection that is Ready
+    QPointer<TlsLink> dialing; // our attempt
+    bool outgoing = false;
+    qint64 nextTry = 0;
+    int tries = 0, turn = 0;
+    qint64 lastFrame = 0;
+};
 
 struct Service::Proj {
     RegistryEntry entry;
@@ -56,6 +68,10 @@ struct Service::Proj {
     QString rawPeer;
     bool retired = false;                  // a host that handed over: commits are refused until it follows the new host
     QStringList notices;
+    // direct links to the other members and what their signed presence messages said (package 10)
+    QHash<QString, MeshPeer> mesh;
+    QHash<QString, QPair<QJsonObject, QString>> book; // device id -> its last presence record and the address it was seen at
+    QHash<QString, double> bookAt;                    // device id -> the time of that record (older ones are ignored)
 };
 
 struct Service::Window {
@@ -224,7 +240,7 @@ bool Service::start(QString *error)
     connect(m_peers.get(), &net::PeerStore::changed, this, &Service::devicesChanged);
     m_registry = std::make_unique<Registry>(m_cfg.dir);
     if (m_cfg.listen) {
-        net::TrustPolicy trust = TrustPolicy::pairedOrPairing(m_peers.get(), [this] { return m_pairWindow.isOpen(); });
+        net::TrustPolicy trust = memberTrust();
         m_server = std::make_unique<net::TlsServer>(m_id, trust);
         if (!m_server->listen(m_cfg.address, m_cfg.port) && m_cfg.port != 0 && !m_server->listen(m_cfg.address, 0)) {
             m_server.reset();
@@ -269,6 +285,7 @@ bool Service::start(QString *error)
             for (const QString &d : p->online)
                 p->auth->heardFrom(d); // a connected device was heard of: the connection is the heartbeat
         }
+        meshTick();
     });
     m_presence.start();
     // the projects of the registry resume
@@ -414,10 +431,14 @@ public:
     {
         return m_p->client && !m_p->client->isLoopback() && m_p->client->replicaReady(); // (the copy is complete; the connection may be gone)
     }
+    void hostingAfterFailover() override { m_failover = true; }
     bool startHosting(qint64 epoch, const QJsonArray &locks, QString *error) override
     {
-        Q_UNUSED(locks); // the new host starts with no lock: the windows ask again when they notice (their leases ran with the old host)
-        return m_s->activateHost(m_p, epoch, error);
+        // a planned handover brings the lock table along (the editors keep their locks); after a failover the table starts empty and
+        // the devices that were editing ask for their locks again during a short grace time
+        const bool failover = m_failover;
+        m_failover = false;
+        return m_s->activateHost(m_p, epoch, error, locks, failover);
     }
     void stopHosting() override { m_s->retireHost(m_p); }
     void followHost(const QString &hostDeviceId, qint64 epoch) override { m_s->followNewHost(m_p, hostDeviceId, epoch); }
@@ -453,6 +474,7 @@ public:
 private:
     Service *m_s;
     Service::Proj *m_p;
+    bool m_failover = false;
 };
 
 Service::Proj *Service::openProject(const RegistryEntry &entry)
@@ -510,10 +532,16 @@ void Service::publishAccess(Proj *p)
     m.version = p->auth->membership().version; // (publishMembership counts up)
     // keep the order of priority already agreed: known members first, new ones after
     QList<Member> list;
-    for (const Member &old : p->auth->membership().members)
+    for (const Member &old : p->auth->membership().members) {
+        bool found = false;
         for (const Member &mb : m.members)
-            if (mb.id == old.id)
+            if (mb.id == old.id) {
                 list << mb;
+                found = true;
+            }
+        if (!found && old.id != m_id->deviceId() && !m_peers->contains(old.pin()))
+            list << old; // a member this device never paired with (it came with a failover): only a device that is paired here can be removed here
+    }
     for (const Member &mb : m.members) {
         bool known = false;
         for (const Member &o : list)
@@ -524,7 +552,8 @@ void Service::publishAccess(Proj *p)
     if (list.size() == p->auth->membership().members.size()) {
         bool same = true;
         for (int i = 0; i < list.size(); ++i)
-            same = same && list.at(i).id == p->auth->membership().members.at(i).id && list.at(i).editor == p->auth->membership().members.at(i).editor;
+            same = same && list.at(i).id == p->auth->membership().members.at(i).id && list.at(i).editor == p->auth->membership().members.at(i).editor &&
+                   list.at(i).name == p->auth->membership().members.at(i).name;
         if (same)
             return;
     }
@@ -562,6 +591,11 @@ void Service::makeAuthority(Proj *p)
     if (!p->auth->load(&why))
         p->problem = why;
     Authority *a = p->auth.get();
+    if (QB_TEST_ENV_SET("QB_LS_TRACE")) {
+        connect(a, &Authority::electionStarted, this, [this](qint64 e) { std::fprintf(stderr, "[%s] election started %lld\n", qPrintable(m_id->deviceId().left(4)), (long long)e); });
+        connect(a, &Authority::electionFinished, this, [this](bool w, qint64 e) { std::fprintf(stderr, "[%s] election finished won=%d %lld\n", qPrintable(m_id->deviceId().left(4)), w, (long long)e); });
+        connect(a, &Authority::hostChanged, this, [this](const QString &h, qint64 e) { std::fprintf(stderr, "[%s] host now %s %lld\n", qPrintable(m_id->deviceId().left(4)), qPrintable(h.left(4)), (long long)e); });
+    }
     connect(a, &Authority::unknownDeviceRefused, this, [this, uuid](const QString &, const QString &) {
         Proj *q = m_projects.value(uuid);
         if (!q)
@@ -599,7 +633,7 @@ void Service::makeAuthority(Proj *p)
     });
 }
 
-bool Service::activateHost(Proj *p, qint64 epoch, QString *why)
+bool Service::activateHost(Proj *p, qint64 epoch, QString *why, const QJsonArray &locks, bool afterFailover)
 {
     QString w;
     const bool ok = beginHost(p, epoch, &w);
@@ -609,10 +643,17 @@ bool Service::activateHost(Proj *p, qint64 epoch, QString *why)
         failHost(p, w);
         return false;
     }
+    if (p->host) {
+        ServiceScope scope;
+        if (!locks.isEmpty())
+            p->host->adoptLocks(locks);
+        else if (afterFailover)
+            p->host->setLockGrace(kLockGraceMs);
+    }
     // a replica that takes over knows who may join from the signed list of devices
-    if (p->entry.access.isEmpty() && p->auth) {
+    if (p->auth) {
         for (const Member &mb : p->auth->membership().members)
-            if (mb.id != m_id->deviceId())
+            if (mb.id != m_id->deviceId() && !p->entry.access.contains(mb.id))
                 p->entry.access.insert(mb.id, mb.editor ? QStringLiteral("editor") : QStringLiteral("reader"));
     }
     p->entry.host = true;
@@ -669,6 +710,9 @@ void Service::followNewHost(Proj *p, const QString &hostDeviceId, qint64 epoch)
         for (const net::PeerRecord &r : m_peers->peers())
             if (r.deviceId() == hostDeviceId)
                 p->entry.hostName = r.name;
+        if (p->auth)
+            if (const Member *mb = p->auth->membership().find(hostDeviceId); mb && p->entry.hostName.isEmpty())
+                p->entry.hostName = mb->name; // (a host this device never paired with: its name comes from the signed list)
         if (wasHost || changed) {
             if (m_peerAddr.contains(hostDeviceId)) {
                 p->entry.lastAddress = m_peerAddr.value(hostDeviceId).first;
@@ -710,6 +754,12 @@ bool Service::authSend(const QString &uuid, const QString &deviceId, const QJson
         p->rawLink->send(Frame::json(m));
         return true;
     }
+    if (p->client && !p->client->isLoopback() && deviceId == p->entry.hostDeviceId && p->client->state() == ClientSession::State::Ready)
+        return p->client->sendMessage(m);
+    // no main connection: the direct link between the two members (votes and proofs travel here when the host is lost)
+    const auto it = p->mesh.constFind(deviceId);
+    if (it != p->mesh.constEnd() && it->link && it->link->state() == Link::State::Ready)
+        return it->link->send(Frame::json(m));
     if (p->client && !p->client->isLoopback() && deviceId == p->entry.hostDeviceId)
         return p->client->sendMessage(m);
     return false;
@@ -838,13 +888,22 @@ bool Service::beginHost(Proj *p, qint64 epoch, QString *whyOut)
         RegistryEntry e;
         if (!m_registry->find(uuid, &e))
             return Role::None;
-        const QString r = e.access.value(device).toString();
+        QString r = e.access.value(device).toString();
+        if (r.isEmpty()) { // a device that joins a host it never paired with: the signed list of devices says what it may do
+            if (Proj *q = m_projects.value(uuid); q && q->auth)
+                if (const Member *mb = q->auth->membership().find(device))
+                    r = mb->editor ? QStringLiteral("editor") : QStringLiteral("reader");
+        }
         return r == QLatin1String("editor") ? Role::Editor : r == QLatin1String("reader") ? Role::Reader : Role::None;
     });
     p->host->setExtensionHandler([this, uuid](const QString &device, Link *link, const QJsonObject &m) {
         Proj *q = m_projects.value(uuid);
         if (!q)
             return false;
+        if (m.value(QStringLiteral("t")).toString() == QLatin1String(proto::T::PRESENCE)) {
+            onPresence(q, device, m, link ? link->peer().address : QString());
+            return true;
+        }
         if (q->auth && q->auth->handleMessage(device, m))
             return true;
         return q->jobs && q->jobs->handle(device, link, m); // BACKUP_REQUEST, SNAPSHOT_OP
@@ -888,7 +947,8 @@ bool Service::beginHost(Proj *p, qint64 epoch, QString *whyOut)
                 q->online.remove(device);
                 if (q->auth && device != m_id->deviceId()) {
                     q->auth->setPeerInSync(device, false);
-                    q->auth->peerDisconnected(device);
+                    if (!meshReady(q, device))
+                        q->auth->peerDisconnected(device);
                 }
             }
         }
@@ -1150,7 +1210,8 @@ void Service::wireClient(Proj *p)
                 q->auth->peerConnected(h);
             } else if (st != ClientSession::State::Ready && q->online.contains(h)) {
                 q->online.remove(h);
-                q->auth->peerDisconnected(h);
+                if (!meshReady(q, h))
+                    q->auth->peerDisconnected(h);
             }
         }
         scheduleState(uuid);
@@ -1161,6 +1222,10 @@ void Service::wireClient(Proj *p)
             Proj *q = m_projects.value(uuid);
             if (!q)
                 return false;
+            if (m.value(QStringLiteral("t")).toString() == QLatin1String(proto::T::PRESENCE)) {
+                onPresence(q, q->entry.hostDeviceId, m, QString());
+                return true;
+            }
             if (q->auth && q->auth->handleMessage(q->entry.hostDeviceId, m))
                 return true;
             return q->jobsClient && q->jobsClient->handle(m); // BACKUP_STATUS, SNAPSHOT_RESULT
@@ -1289,9 +1354,22 @@ void Service::connectClient(Proj *p)
             rec = r;
             found = true;
         }
+    if (!found && p->auth) {
+        // a host this device never paired with (it took over after a failover): its key is in the signed list of devices
+        if (const Member *mb = p->auth->membership().find(p->entry.hostDeviceId)) {
+            rec.pin = mb->pin();
+            rec.publicKey = mb->key;
+            rec.name = mb->name;
+            found = true;
+        }
+    }
     if (!found) {
         p->problem = tr("The host is not paired with this device any more.");
         emit projectChanged(p->entry.uuid);
+        return;
+    }
+    if (blocked(p->entry.hostDeviceId)) {
+        scheduleReconnect(p);
         return;
     }
     p->problem.clear();
@@ -1304,6 +1382,8 @@ void Service::connectClient(Proj *p)
             if (pi.id == rec.instanceId)
                 for (const QHostAddress &a : pi.addresses)
                     where << std::make_pair(a.toString(), pi.port);
+    for (const auto &a : m_addrs.value(rec.deviceId())) // (what the signed presence messages of the host named)
+        where << std::make_pair(a.first, a.second);
     if (m_peerAddr.contains(rec.deviceId()) && p->entry.lastAddress.isEmpty())
         where << std::make_pair(m_peerAddr.value(rec.deviceId()).first, m_peerAddr.value(rec.deviceId()).second);
     if (where.isEmpty()) {
@@ -1339,6 +1419,451 @@ void Service::connectClient(Proj *p)
     });
 }
 
+// ---------------------------------------------------------------- direct links between the members of a project (package 10)
+
+namespace {
+constexpr qint64 kPresenceMs = 3000;      // every device tells its addresses and name this often
+constexpr qint64 kMeshDeadMs = 10000;     // a direct link that was silent this long is closed
+constexpr qint64 kMeshBackoffMaxMs = 15000;
+
+QString cleanName(const QString &n)
+{
+    QString out;
+    for (const QChar c : n.left(100))
+        if (!c.isNonCharacter() && c.category() != QChar::Other_Control)
+            out.append(c);
+    return out.trimmed();
+}
+
+// "::ffff:127.0.0.1" and "127.0.0.1" both read 127.0.0.1
+QString plainAddress(const QString &a)
+{
+    QHostAddress h(a);
+    bool ok = false;
+    const quint32 v4 = h.toIPv4Address(&ok);
+    return ok ? QHostAddress(v4).toString() : QString();
+}
+
+QByteArray presenceBytes(const QString &project, const QJsonObject &rec)
+{
+    QStringList addrs;
+    for (const QJsonValue &v : rec.value(QStringLiteral("addrs")).toArray())
+        addrs << v.toString();
+    return QByteArray("QB-LS-PRESENCE-1\n") + project.toUtf8() + '\n' + rec.value(QStringLiteral("device")).toString().toUtf8() + '\n' +
+           rec.value(QStringLiteral("name")).toString().toUtf8() + '\n' + QByteArray::number(qint64(rec.value(QStringLiteral("port")).toDouble())) + '\n' +
+           addrs.join(QLatin1Char(',')).toUtf8() + '\n' + QByteArray::number(qint64(rec.value(QStringLiteral("at")).toDouble()));
+}
+} // namespace
+
+bool Service::blocked(const QString &device) const
+{
+    // a test build can cut the network between devices: the names of the devices this one may not talk to are in a file of its folder
+    if (!QB_TEST_ENV_SET("QB_LS_BLOCK") || device.isEmpty())
+        return false;
+    QFile f(m_cfg.dir + QStringLiteral("/ls-block.txt"));
+    if (!f.open(QIODevice::ReadOnly))
+        return false;
+    return QString::fromUtf8(f.readAll()).split(QLatin1Char('\n'), Qt::SkipEmptyParts).contains(device);
+}
+
+net::TrustPolicy Service::memberTrust()
+{
+    TrustPolicy t;
+    t.decide = [this](const QByteArray &pin, bool isServer) {
+        using Trust = PeerInfo::Trust;
+        if (m_peers && m_peers->contains(pin))
+            return Trust::Paired;
+        // a device of the signed list of a shared project: taken for the direct links of that project (and a join of a host it
+        // never paired with); the first message says which, and anything else is refused there
+        for (const Proj *p : m_projects)
+            if (p->auth)
+                for (const Member &mb : p->auth->membership().members)
+                    if (mb.pin() == pin)
+                        return Trust::Member;
+        if (m_pairWindow.isOpen())
+            return Trust::Pairing;
+        return isServer ? Trust::Unknown : TrustPolicy::Reject;
+    };
+    return t;
+}
+
+QStringList Service::ownAddresses() const
+{
+    QStringList out;
+    const QString forced = QB_TEST_ENV("QB_LS_ADDRESS"); // (a suite on one machine)
+    if (!forced.isEmpty())
+        out << forced;
+    for (const QNetworkInterface &i : QNetworkInterface::allInterfaces()) {
+        if (!(i.flags() & QNetworkInterface::IsUp) || !(i.flags() & QNetworkInterface::IsRunning) || (i.flags() & QNetworkInterface::IsLoopBack))
+            continue;
+        for (const QNetworkAddressEntry &e : i.addressEntries()) {
+            const QString a = plainAddress(e.ip().toString());
+            if (!a.isEmpty() && !out.contains(a) && out.size() < 4)
+                out << a;
+        }
+    }
+    return out;
+}
+
+QStringList Service::directLinks(const QString &uuid) const
+{
+    QStringList out;
+    if (const Proj *p = m_projects.value(uuid))
+        for (auto it = p->mesh.constBegin(); it != p->mesh.constEnd(); ++it)
+            if (it->link && it->link->state() == Link::State::Ready)
+                out << it.key();
+    out.sort();
+    return out;
+}
+
+bool Service::meshReady(const Proj *p, const QString &device) const
+{
+    const auto it = p->mesh.constFind(device);
+    return it != p->mesh.constEnd() && it->link && it->link->state() == Link::State::Ready;
+}
+
+bool Service::mainReach(const Proj *p, const QString &device) const
+{
+    if (p->host && p->online.contains(device))
+        return true;
+    return !p->entry.host && p->client && !p->client->isLoopback() && p->entry.hostDeviceId == device && p->client->state() == ClientSession::State::Ready;
+}
+
+void Service::meshLost(Proj *p, const QString &device)
+{
+    if (p->auth && !mainReach(p, device))
+        p->auth->peerDisconnected(device);
+    scheduleState(p->entry.uuid);
+}
+
+void Service::learnAddress(const QString &device, const QString &address, quint16 port)
+{
+    if (device == m_id->deviceId() || address.isEmpty() || port == 0)
+        return;
+    QList<QPair<QString, quint16>> &l = m_addrs[device];
+    const QPair<QString, quint16> a = qMakePair(address, port);
+    l.removeAll(a);
+    l.prepend(a);
+    while (l.size() > 4)
+        l.removeLast();
+    m_peerAddr.insert(device, a);
+}
+
+QJsonObject Service::presenceRecord(Proj *p)
+{
+    Q_UNUSED(p);
+    QJsonArray addrs;
+    for (const QString &a : ownAddresses())
+        addrs.append(a);
+    QJsonObject rec{{QStringLiteral("device"), m_id->deviceId()},
+                    {QStringLiteral("name"), m_cfg.deviceName.isEmpty() ? m_id->name() : m_cfg.deviceName},
+                    {QStringLiteral("port"), m_server ? int(m_server->port()) : 0},
+                    {QStringLiteral("addrs"), addrs},
+                    {QStringLiteral("at"), double(m_clock->wallMs() / 1000)}};
+    rec.insert(QStringLiteral("sig"), QString::fromLatin1(m_id->sign(presenceBytes(p->entry.uuid, rec)).toBase64()));
+    return rec;
+}
+
+void Service::sendPresence(Proj *p)
+{
+    if (!p->auth || p->auth->membership().isEmpty() || !m_server)
+        return;
+    const QJsonObject rec = presenceRecord(p);
+    QJsonObject body{{QStringLiteral("rec"), rec}};
+    if (p->host) { // the host passes on what the others told it (signed by them), so that clients learn each other's addresses
+        QJsonArray relay;
+        for (auto it = p->book.constBegin(); it != p->book.constEnd(); ++it) {
+            QJsonObject r = it.value().first;
+            if (!it.value().second.isEmpty())
+                r.insert(QStringLiteral("seen"), it.value().second);
+            relay.append(r);
+        }
+        if (!relay.isEmpty())
+            body.insert(QStringLiteral("relay"), relay);
+    }
+    const QJsonObject msg = proto::make(proto::T::PRESENCE, p->entry.uuid, body);
+    if (QB_TEST_ENV_SET("QB_LS_TRACE"))
+        std::fprintf(stderr, "[%s] send presence host=%d online=%d client=%d\n", qPrintable(m_id->deviceId().left(4)), int(p->host != nullptr), int(p->online.size()),
+                     int(p->client && !p->client->isLoopback() && p->client->state() == ClientSession::State::Ready));
+    if (p->host)
+        for (const QString &d : p->online)
+            if (d != m_id->deviceId())
+                p->host->sendToDevice(d, msg);
+    if (p->client && !p->client->isLoopback() && p->client->state() == ClientSession::State::Ready)
+        p->client->sendMessage(msg);
+    for (auto it = p->mesh.constBegin(); it != p->mesh.constEnd(); ++it)
+        if (it->link && it->link->state() == Link::State::Ready)
+            it->link->send(Frame::json(msg));
+}
+
+void Service::onPresence(Proj *p, const QString &from, const QJsonObject &m, const QString &seenRaw)
+{
+    if (QB_TEST_ENV_SET("QB_LS_TRACE"))
+        std::fprintf(stderr, "[%s] presence from %s seen=%s relay=%d\n", qPrintable(m_id->deviceId().left(4)), qPrintable(from.left(4)), qPrintable(seenRaw), int(m.value(QStringLiteral("relay")).toArray().size()));
+    if (!p->auth || p->auth->membership().isEmpty())
+        return;
+    const Membership &ms = p->auth->membership();
+    auto take = [&](const QJsonObject &r, const QString &seen) {
+        const QString device = r.value(QStringLiteral("device")).toString();
+        const Member *mb = ms.find(device);
+        if (!mb || device == m_id->deviceId())
+            return;
+        const QByteArray sig = QByteArray::fromBase64(r.value(QStringLiteral("sig")).toString().toLatin1());
+        if (!net::DeviceIdentity::verify(mb->key, presenceBytes(p->entry.uuid, r), sig))
+            return; // only the device itself speaks for its address and name
+        const double at = r.value(QStringLiteral("at")).toDouble();
+        if (at < p->bookAt.value(device, -1))
+            return;
+        p->bookAt.insert(device, at);
+        const QString shown = plainAddress(seen);
+        p->book.insert(device, qMakePair(r, shown));
+        const int port = r.value(QStringLiteral("port")).toInt();
+        if (port > 0 && port < 65536) {
+            QStringList list;
+            for (const QJsonValue &v : r.value(QStringLiteral("addrs")).toArray())
+                if (!plainAddress(v.toString()).isEmpty())
+                    list << plainAddress(v.toString());
+            if (!shown.isEmpty())
+                list.prepend(shown); // what the other end saw is the best address; what the device says of itself follows
+            for (int i = list.size() - 1; i >= 0; --i) // (the first one ends up first)
+                learnAddress(device, list.at(i), quint16(port));
+        }
+        const QString name = cleanName(r.value(QStringLiteral("name")).toString());
+        const bool hostShownOld = device == p->entry.hostDeviceId && !p->entry.host && p->entry.hostName != name;
+        if (!name.isEmpty() && (name != p->peerNames.value(device, mb->name) || hostShownOld))
+            applyDeviceName(p, device, name);
+        // the host that this device waits for is on its way: knock at once instead of at the next turn
+        if (device == p->entry.hostDeviceId && !p->entry.host && p->client && !p->client->isLoopback() && p->client->state() != ClientSession::State::Ready &&
+            (!p->link || p->link->state() == Link::State::Closed)) {
+            p->tries = 0;
+            connectClient(p);
+        }
+    };
+    if (m.value(QStringLiteral("rec")).toObject().value(QStringLiteral("device")).toString() == from)
+        take(m.value(QStringLiteral("rec")).toObject(), seenRaw);
+    if (from == p->auth->host() || from == p->entry.hostDeviceId)
+        for (const QJsonValue &v : m.value(QStringLiteral("relay")).toArray()) {
+            const QJsonObject r = v.toObject();
+            take(r, r.value(QStringLiteral("seen")).toString());
+        }
+}
+
+void Service::applyDeviceName(Proj *p, const QString &device, const QString &name)
+{
+    p->peerNames.insert(device, name);
+    if (p->host)
+        p->host->renameDevice(device, name);
+    for (const net::PeerRecord &r : m_peers->peers())
+        if (r.deviceId() == device && r.name != name) {
+            net::PeerRecord n = r;
+            n.name = name;
+            m_peers->add(n);
+        }
+    if (device == p->entry.hostDeviceId && !p->entry.host && p->entry.hostName != name) {
+        p->entry.hostName = name;
+        m_registry->upsert(p->entry);
+    }
+    if (p->auth && p->auth->isHost())
+        publishAccess(p);
+    emit devicesChanged();
+    emit projectChanged(p->entry.uuid);
+    scheduleState(p->entry.uuid);
+}
+
+void Service::setDeviceName(const QString &name)
+{
+    const QString n = cleanName(name);
+    m_cfg.deviceName = n;
+    if (!m_running || n.isEmpty())
+        return;
+    ServiceScope scope;
+    for (Proj *p : m_projects) {
+        if (p->host) {
+            p->host->setHostName(n);
+            p->host->renameDevice(m_id->deviceId(), n);
+        }
+        if (p->auth && p->auth->isHost())
+            publishAccess(p);
+        sendPresence(p);
+        emit projectChanged(p->entry.uuid);
+    }
+    emit devicesChanged();
+}
+
+void Service::meshTick()
+{
+    if (!m_running || !m_server)
+        return;
+    const qint64 now = m_clock->now();
+    const bool presenceDue = now - m_lastPresence >= kPresenceMs;
+    if (presenceDue)
+        m_lastPresence = now;
+    for (Proj *p : m_projects) {
+        if (!p->auth || p->auth->membership().isEmpty() || p->auth->record().chain.isEmpty())
+            continue;
+        ServiceScope scope;
+        const QList<Member> members = p->auth->membership().members;
+        for (const Member &mb : members) {
+            if (mb.id == m_id->deviceId())
+                continue;
+            MeshPeer &mp = p->mesh[mb.id];
+            if (blocked(mb.id)) { // (a cut network of a test build: every connection to the device goes)
+                if (mp.link)
+                    mp.link->close(QStringLiteral("BLOCKED"));
+                if (p->host)
+                    p->host->closeDevice(mb.id, QStringLiteral("BLOCKED"));
+                if (p->link && p->entry.hostDeviceId == mb.id)
+                    p->link->close(QStringLiteral("BLOCKED"));
+                continue;
+            }
+            if (mp.link && mp.link->state() == Link::State::Ready) {
+                if (now - mp.lastFrame > kMeshDeadMs)
+                    mp.link->close(QStringLiteral("TIMEOUT"));
+                continue;
+            }
+            if (mp.dialing || now < mp.nextTry || mainReach(p, mb.id))
+                continue;
+            meshDial(p, mb);
+        }
+        if (presenceDue)
+            sendPresence(p);
+    }
+}
+
+void Service::meshDial(Proj *p, const Member &mb)
+{
+    MeshPeer &mp = p->mesh[mb.id];
+    if (QB_TEST_ENV_SET("QB_LS_TRACE"))
+        std::fprintf(stderr, "[%s] dial %s known=%d\n", qPrintable(m_id->deviceId().left(4)), qPrintable(mb.id.left(4)), int(m_addrs.value(mb.id).size()));
+    QList<std::pair<QString, quint16>> where;
+    for (const auto &a : m_addrs.value(mb.id))
+        where << std::make_pair(a.first, a.second);
+    if (m_peerAddr.contains(mb.id))
+        where << std::make_pair(m_peerAddr.value(mb.id).first, m_peerAddr.value(mb.id).second);
+    if (mb.id == p->entry.hostDeviceId && !p->entry.lastAddress.isEmpty())
+        where << std::make_pair(p->entry.lastAddress, quint16(p->entry.lastPort ? p->entry.lastPort : net::TlsServer::kPreferredPort));
+    if (m_discovery)
+        for (const net::PeerRecord &r : m_peers->peers())
+            if (r.deviceId() == mb.id)
+                for (const mdns::PeerInfo &pi : m_discovery->peers())
+                    if (pi.id == r.instanceId)
+                        for (const QHostAddress &a : pi.addresses)
+                            where << std::make_pair(a.toString(), pi.port);
+    const qint64 now = m_clock->now();
+    if (where.isEmpty()) {
+        mp.nextTry = now + 2000;
+        return;
+    }
+    const auto target = where.at(mp.turn++ % where.size());
+    const QString uuid = p->entry.uuid;
+    const QString device = mb.id;
+    TlsLink *link = TlsLink::connectTo(target.first, target.second, m_id, TrustPolicy::pinned(mb.pin()), this);
+    mp.dialing = link;
+    connect(link, &Link::stateChanged, this, [this, uuid, device, link, target](Link::State st) {
+        Proj *q = m_projects.value(uuid);
+        if (!q || st != Link::State::Ready)
+            return;
+        MeshPeer &m = q->mesh[device];
+        if (m.dialing != link)
+            return;
+        m.dialing = nullptr;
+        if (!q->auth || !q->auth->membership().isMember(device)) {
+            link->close(QStringLiteral("UNKNOWN_DEVICE"));
+            return;
+        }
+        ServiceScope scope;
+        // the first message names the project (and tells this device's address and name)
+        link->send(Frame::json(proto::make(proto::T::PRESENCE, uuid, {{QStringLiteral("rec"), presenceRecord(q)}})));
+        if (meshAdopt(q, device, link, true))
+            learnAddress(device, target.first, target.second);
+    });
+    connect(link, &Link::closed, this, [this, uuid, device, link](const QString &code) {
+        if (Proj *q = m_projects.value(uuid)) {
+            MeshPeer &m = q->mesh[device];
+            if (m.dialing == link)
+                m.dialing = nullptr;
+            const qint64 t = m_clock ? m_clock->now() : 0;
+            if (code == QLatin1String("DUPLICATE")) {
+                m.nextTry = t + 3000;
+            } else {
+                ++m.tries;
+                m.nextTry = t + qMin<qint64>(kMeshBackoffMaxMs, 1000LL << qMin(m.tries, 4));
+            }
+        }
+        link->deleteLater();
+    });
+}
+
+bool Service::meshAccept(TlsLink *link, const QJsonObject &first)
+{
+    Proj *p = m_projects.value(first.value(QStringLiteral("p")).toString());
+    const QString device = link->peer().deviceId;
+    if (!p || !p->auth || !p->auth->membership().isMember(device) || blocked(device))
+        return false;
+    ServiceScope scope;
+    if (!meshAdopt(p, device, link, false))
+        return true; // (the other link of the two is kept: this one was closed as a duplicate)
+    onPresence(p, device, first, link->peer().address);
+    link->send(Frame::json(proto::make(proto::T::PRESENCE, p->entry.uuid, {{QStringLiteral("rec"), presenceRecord(p)}})));
+    return true;
+}
+
+bool Service::meshAdopt(Proj *p, const QString &device, TlsLink *link, bool outgoing)
+{
+    MeshPeer &mp = p->mesh[device];
+    if (mp.link && mp.link != link && mp.link->state() == Link::State::Ready) {
+        // two links between the same two devices: the one the lower device id opened stays (both ends decide the same way)
+        const bool keepOutgoing = m_id->deviceId() < device;
+        if (outgoing != keepOutgoing) {
+            link->close(QStringLiteral("DUPLICATE"));
+            return false;
+        }
+        TlsLink *old = mp.link;
+        mp.link = nullptr;
+        old->close(QStringLiteral("DUPLICATE"));
+    }
+    if (QB_TEST_ENV_SET("QB_LS_TRACE"))
+        std::fprintf(stderr, "[%s] direct link to %s (%s)\n", qPrintable(m_id->deviceId().left(4)), qPrintable(device.left(4)), outgoing ? "out" : "in");
+    mp.link = link;
+    mp.outgoing = outgoing;
+    mp.lastFrame = m_clock->now();
+    mp.tries = 0;
+    const QString uuid = p->entry.uuid;
+    connect(link, &Link::frameReceived, this, [this, uuid, device, link](const Frame &f) {
+        Proj *q = m_projects.value(uuid);
+        if (q && q->mesh.value(device).link == link)
+            meshFrame(q, device, f);
+    });
+    connect(link, &Link::closed, this, [this, uuid, device, link](const QString &) {
+        Proj *q = m_projects.value(uuid);
+        if (q && q->mesh.value(device).link == link) {
+            q->mesh[device].link = nullptr;
+            meshLost(q, device);
+        }
+    });
+    if (p->auth)
+        p->auth->peerConnected(device); // (sends this device's chain: an old host that was cut off learns of the new epoch here)
+    scheduleState(uuid);
+    return true;
+}
+
+void Service::meshFrame(Proj *p, const QString &device, const Frame &f)
+{
+    p->mesh[device].lastFrame = m_clock->now();
+    bool ok = false;
+    const QJsonObject m = f.kind == Frame::Json ? f.object(&ok) : QJsonObject();
+    if (!ok || !p->auth)
+        return;
+    ServiceScope scope;
+    if (m.value(QStringLiteral("t")).toString() == QLatin1String(proto::T::PRESENCE)) {
+        const auto it = p->mesh.constFind(device);
+        onPresence(p, device, m, it != p->mesh.constEnd() && it->link ? it->link->peer().address : QString());
+        p->auth->heardFrom(device); // (a sign of life: the host that answers here is not lost)
+        return;
+    }
+    p->auth->handleMessage(device, m);
+}
+
 // ---------------------------------------------------------------- the listener
 
 void Service::onTlsLink(TlsLink *link)
@@ -1347,11 +1872,14 @@ void Service::onTlsLink(TlsLink *link)
         if (st != Link::State::Ready)
             return;
         const PeerInfo info = link->peer();
+        if (blocked(info.deviceId))
+            return link->close(QStringLiteral("BLOCKED"));
         if (info.trust == PeerInfo::Trust::Pairing) {
             if (m_pairing)
                 return link->close(QStringLiteral("PAIRING_BUSY"));
             m_pairLink = link;
             m_pairing = new net::PairingSession(net::PairingSession::Role::Host, link, m_id, m_peers.get(), &m_pairWindow, link);
+            endPairingWith(link);
             connect(m_pairing.data(), &net::PairingSession::codeReady, this, [this](const QString &code) {
                 m_pairCode = code;
                 emit pairingCodeReady(code, m_pairing ? m_pairing->peerName() : QString(), true);
@@ -1396,11 +1924,27 @@ void Service::route(TlsLink *link, const Frame &first)
     bool ok = false;
     const QJsonObject m = first.kind == Frame::Json ? first.object(&ok) : QJsonObject();
     if (ok && m.value(QStringLiteral("t")).toString() == QLatin1String(proto::T::PROJECT_LIST)) {
+        if (link->peer().trust != PeerInfo::Trust::Paired) { // (the list of projects is for paired devices)
+            link->send(Frame::json(proto::errorMessage(QStringLiteral("NOT_PAIRED"), m.value(QStringLiteral("id")).toString())));
+            link->close(QStringLiteral("NOT_PAIRED"));
+            return;
+        }
         answerProjectList(link, m);
+        return;
+    }
+    if (ok && m.value(QStringLiteral("t")).toString() == QLatin1String(proto::T::PRESENCE)) {
+        // a member opens a direct link (the first message names the project)
+        if (!meshAccept(link, m)) {
+            link->send(Frame::json(proto::errorMessage(QStringLiteral("UNKNOWN_PROJECT"), m.value(QStringLiteral("id")).toString())));
+            link->close(QStringLiteral("UNKNOWN_PROJECT"));
+        }
         return;
     }
     const QString project = m.value(QStringLiteral("p")).toString();
     Proj *p = ok && m.value(QStringLiteral("t")).toString() == QLatin1String("HELLO") ? m_projects.value(project) : nullptr;
+    // a device that is only a member of the signed list (it never paired with this one) may join a project this device hosts, nothing else
+    if (p && link->peer().trust == PeerInfo::Trust::Member && !(p->auth && p->auth->membership().isMember(link->peer().deviceId)))
+        p = nullptr;
     if (!p || !p->host) {
         link->send(Frame::json(proto::errorMessage(QStringLiteral("UNKNOWN_PROJECT"), m.value(QStringLiteral("id")).toString())));
         link->close(QStringLiteral("UNKNOWN_PROJECT"));
@@ -1683,6 +2227,20 @@ bool Service::openPairing(QString *why)
     return true;
 }
 
+// when the pairing connection closes its session goes with it: the next device may pair (before, the first session stayed until the
+// service ended and every later attempt was refused as busy)
+void Service::endPairingWith(TlsLink *link)
+{
+    connect(link, &Link::closed, this, [this, link](const QString &) {
+        QPointer<net::PairingSession> session = m_pairing;
+        QTimer::singleShot(0, this, [this, link, session] {
+            if (session && session->parent() == link)
+                delete session.data();
+            link->deleteLater();
+        });
+    });
+}
+
 void Service::closePairing() { m_pairWindow.close(); }
 
 void Service::pairWith(const QString &host, quint16 port)
@@ -1694,6 +2252,7 @@ void Service::pairWith(const QString &host, quint16 port)
     connect(link, &Link::stateChanged, this, [this, link](Link::State st) {
         if (st == Link::State::Ready && !m_pairing) {
             m_pairing = new net::PairingSession(net::PairingSession::Role::Guest, link, m_id, m_peers.get(), nullptr, link);
+            endPairingWith(link);
             connect(m_pairing.data(), &net::PairingSession::codeReady, this, [this](const QString &code) {
                 m_pairCode = code;
                 emit pairingCodeReady(code, m_pairing ? m_pairing->peerName() : QString(), false);
@@ -1835,6 +2394,13 @@ QJsonObject Service::stateJson(const QString &uuid) const
         for (const QString &r : c->heldLocks())
             mine.append(r);
     }
+    QJsonObject tokens; // the tokens of this device's own locks (a test looks at the lease: a lock that went along with a handover keeps it)
+    if (c)
+        for (const QString &r : c->heldLocks()) {
+            const proto::Token t = c->token(r);
+            tokens.insert(r, QJsonObject{{QStringLiteral("epoch"), double(t.epoch)}, {QStringLiteral("generation"), double(t.generation)}, {QStringLiteral("lease"), t.lease}});
+        }
+    o.insert(QStringLiteral("mineTokens"), tokens);
     o.insert(QStringLiteral("held"), held);
     o.insert(QStringLiteral("unreachable"), unreachable);
     o.insert(QStringLiteral("mine"), mine);

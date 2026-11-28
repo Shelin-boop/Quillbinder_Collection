@@ -240,6 +240,47 @@ QList<Lock> LockTable::newlyUnreachable()
     return out;
 }
 
+int LockTable::adopt(const QJsonArray &table)
+{
+    int n = 0;
+    const qint64 now = m_clock->now();
+    for (const QJsonValue &v : table) {
+        const QJsonObject o = v.toObject();
+        const QString resource = o.value(QStringLiteral("resource")).toString();
+        Owner owner{o.value(QStringLiteral("device")).toString(), o.value(QStringLiteral("session")).toString()};
+        const QString lease = o.value(QStringLiteral("lease")).toString();
+        if (!validResource(resource) || owner.device.isEmpty() || owner.session.isEmpty() || lease.isEmpty() || m_locks.contains(resource) ||
+            !blockers(resource, owner).isEmpty())
+            continue;
+        bool failed = false;
+        const qint64 g = nextGeneration(&failed);
+        if (failed)
+            break;
+        Lock l;
+        l.resource = resource;
+        l.owner = owner;
+        l.ownerName = o.value(QStringLiteral("name")).toString().left(100);
+        l.epoch = m_epoch;
+        l.generation = g;
+        l.lease = lease;
+        l.grantedAt = l.renewedAt = now;
+        m_locks.insert(resource, l);
+        ++n;
+    }
+    return n;
+}
+
+int LockTable::renameDevice(const QString &device, const QString &name)
+{
+    int n = 0;
+    for (Lock &l : m_locks)
+        if (l.owner.device == device && l.ownerName != name) {
+            l.ownerName = name;
+            ++n;
+        }
+    return n;
+}
+
 bool LockTable::valid(const proto::Token &t) const
 {
     const Lock *l = find(t.resource);

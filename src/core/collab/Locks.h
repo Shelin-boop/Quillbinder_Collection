@@ -96,6 +96,13 @@ public:
     // a lock given to another owner of the same device (a new window takes over the leases of a crashed one)
     int moveSessions(const QString &device, const std::function<bool(const Owner &)> &isGone, const Owner &to);
 
+    // A planned handover's lock table (the `toJson` form of the old host): each lock of a valid resource is taken over for its
+    // owner with the next generation of this table's epoch and the SAME lease id, so the editors keep their locks. Entries that
+    // are no valid resource, that clash with one taken before or that lack an owner are left out. Returns how many were taken.
+    int adopt(const QJsonArray &table);
+    // the device shows another name from now on (its locks too); the number of locks renamed
+    int renameDevice(const QString &device, const QString &name);
+
     // the heartbeat of a device renews all its leases
     void renewDevice(const QString &device);
     bool isReachable(const Lock &l) const { return m_clock->now() - l.renewedAt < kUnreachableMs; }

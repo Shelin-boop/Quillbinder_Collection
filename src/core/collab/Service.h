@@ -128,7 +128,9 @@ public:
     void fetchRemoteProjects();
     QList<RemoteProject> remoteProjects() const { return m_remote; }
     QString fingerprint() const;           // the short form of this device's pin
-    void setDeviceName(const QString &name) { m_cfg.deviceName = name; }
+    // the name shown to the others; sessions that exist already learn it (a signed presence message to every device of every
+    // shared project, the host's lock table and lists change at once)
+    void setDeviceName(const QString &name);
     // the order of priority of the devices that may host (the first one hosts when it can); published by the host
     bool setPriority(const QString &uuid, const QStringList &deviceIdsInOrder, QString *why = nullptr);
     void answerEditRequest(const QString &uuid, const QString &resource, bool handOver);
@@ -154,6 +156,10 @@ public:
     // where a paired device can be reached when discovery does not know it (a new host after a handover or a failover)
     void setPeerAddress(const QString &deviceId, const QString &host, quint16 port);
     Authority *authority(const QString &uuid) const;
+    // the devices this one has a direct link to for the project (besides the main link to the host); and where the signed presence
+    // messages said a device can be reached
+    QStringList directLinks(const QString &uuid) const;
+    QList<QPair<QString, quint16>> addressesOf(const QString &deviceId) const { return m_addrs.value(deviceId); }
     // "Transfer Hosting...": false with a reason when it cannot start
     bool transferHosting(const QString &uuid, const QString &targetDeviceId, QString *why = nullptr);
 
@@ -205,7 +211,7 @@ private:
     void failHost(Proj *p, const QString &why);
     void startClientPart(Proj *p);
     void makeAuthority(Proj *p);
-    bool activateHost(Proj *p, qint64 epoch, QString *why);
+    bool activateHost(Proj *p, qint64 epoch, QString *why, const QJsonArray &locks = QJsonArray(), bool afterHandover = false);
     void retireHost(Proj *p);
     void followNewHost(Proj *p, const QString &hostDeviceId, qint64 epoch);
     bool authSend(const QString &uuid, const QString &deviceId, const QJsonObject &m);
@@ -218,6 +224,28 @@ private:
     void wireClient(Proj *p);
     void connectClient(Proj *p);
     void scheduleReconnect(Proj *p);
+    // ---- direct links between the devices of one project (package 10)
+    // Every device of a shared project keeps a link to each other member that the main link (client to host) does not cover:
+    // the host (also an old host that was cut off) dials out to the members, the clients to each other. They carry the
+    // messages of the authority (votes, proofs, announcements) and the signed presence messages (addresses and names).
+    struct MeshPeer;
+    void endPairingWith(net::TlsLink *link);
+    void meshTick();
+    void meshDial(Proj *p, const Member &m);
+    bool meshAccept(net::TlsLink *link, const QJsonObject &first);
+    bool meshAdopt(Proj *p, const QString &device, net::TlsLink *link, bool outgoing);
+    void meshFrame(Proj *p, const QString &device, const net::Frame &f);
+    bool meshReady(const Proj *p, const QString &device) const;
+    bool mainReach(const Proj *p, const QString &device) const;
+    void meshLost(Proj *p, const QString &device);
+    QJsonObject presenceRecord(Proj *p);
+    void sendPresence(Proj *p);
+    void onPresence(Proj *p, const QString &from, const QJsonObject &m, const QString &seen);
+    void learnAddress(const QString &device, const QString &address, quint16 port);
+    void applyDeviceName(Proj *p, const QString &device, const QString &name);
+    QStringList ownAddresses() const;
+    net::TrustPolicy memberTrust();
+    bool blocked(const QString &device) const; // a test build's way to cut the network between two devices
     void onTlsLink(net::TlsLink *link);
     void route(net::TlsLink *link, const net::Frame &first);
     void answerProjectList(net::TlsLink *link, const QJsonObject &m);
@@ -264,6 +292,8 @@ private:
     QSet<QString> m_declined;
     QList<RemoteProject> m_remote;
     QHash<QString, QPair<QString, quint16>> m_peerAddr; // device id -> where it was reached or told to be
+    QHash<QString, QList<QPair<QString, quint16>>> m_addrs; // device id -> the addresses its signed presence messages named (newest first)
+    qint64 m_lastPresence = 0;
     QTimer m_presence;                                  // once a second: the connected devices were heard of
     std::unique_ptr<ServiceStatus> m_status;
 };
