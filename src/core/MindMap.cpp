@@ -1476,7 +1476,7 @@ bool Board::fromXml(const QByteArray &xml, QString *error)
 bool Board::save(const QString &path, QString *error) const
 {
     if (!worthSaving()) {
-        if (QFile::exists(path) && !QFile::remove(path)) {
+        if (QFile::exists(path) && !safesave::removeFile(path)) {
             if (error)
                 *error = QObject::tr("Cannot remove %1").arg(path);
             return false;
