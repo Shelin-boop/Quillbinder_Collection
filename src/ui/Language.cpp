@@ -12,7 +12,36 @@
 namespace qb {
 namespace language {
 
+QString englishPlural(const QString &source, int n);
+
 namespace {
+// 0.99.0: the source texts with a count are written "%n word(s)" (lupdate makes the plural forms of every language from
+// them); English has no translation file, so this translator, installed first (the last one it asks), writes the
+// English form: "(s)" and "(es)" are dropped for 1 and become "s" and "es" otherwise.
+class EnglishPlurals : public QTranslator
+{
+public:
+    using QTranslator::QTranslator;
+    QString translate(const char *, const char *sourceText, const char *, int n) const override
+    {
+        if (n < 0 || !sourceText)
+            return QString();
+        const QString src = QString::fromUtf8(sourceText);
+        if (!src.contains(QLatin1String("%n")) && !src.contains(QLatin1String("%Ln")))
+            return QString();
+        return englishPlural(src, n);
+    }
+    bool isEmpty() const override { return false; }
+};
+
+// installed when the application object is made (every program and every suite), before any language file, so that it is
+// the one asked last
+void installEnglishPlurals()
+{
+    QCoreApplication::installTranslator(new EnglishPlurals(QCoreApplication::instance()));
+}
+Q_COREAPP_STARTUP_FUNCTION(installEnglishPlurals)
+
 QString &activeCode()
 {
     static QString c = QStringLiteral("en");
@@ -178,6 +207,15 @@ QString numberExample()
     QLocale loc = QLocale();
     loc.setNumberOptions(QLocale::DefaultNumberOptions);
     return loc.toString(44825);
+}
+
+QString englishPlural(const QString &source, int n)
+{
+    QString out = source;
+    out.replace(QLatin1String("(s)"), n == 1 ? QString() : QStringLiteral("s"));
+    out.replace(QLatin1String("(es)"), n == 1 ? QString() : QStringLiteral("es"));
+    out.replace(QLatin1String("(y|ies)"), n == 1 ? QStringLiteral("y") : QStringLiteral("ies"));
+    return out;
 }
 
 void install()

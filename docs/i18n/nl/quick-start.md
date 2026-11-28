@@ -28,17 +28,17 @@
 | Werkbalken | **Weergave > Werkbalken > Werkbalken aanpassen…** (of klik met de rechtermuisknop op een balk) |
 | De pictogrammenbalk | **Weergave > Werkbalken > Pictogrammenbalk**; **Pictogrammen voor de pictogrammenbalk kiezen…** |
 | Sneltoetsen | **Bestand > Opties > Toetsenbord** (zoeken, nieuwe toetsen indrukken, exporteren en importeren); **Help > Sneltoetsen…** toont ze |
-| Een opdracht in de menu's vinden | **Help > Opdracht zoeken…** (typ een deel van de naam; Return voert hem uit) |
+| Een opdracht in de menu's vinden | **Help > Opdracht zoeken…** (typ een deel van de naam; Enter voert hem uit) |
 | Vensterlay-outs | **Weergave > Lay-out** (zeven ingebouwd; sla je eigen op) |
 | Automatisch opslaan, recente projecten, auteursgegevens | **Bestand > Opties > Algemeen** |
 | Back-ups | **Bestand > Opties > Back-up** (wanneer, hoeveel, waar); **Bestand > Back-up** maakt er nu een |
 | Spelling en correcties tijdens het typen | **Bestand > Opties > Correcties** |
-| Waar koppelingen openen, de Return-toets, schrijfmodus, afspelen | **Bestand > Opties > Gedrag** |
+| Waar koppelingen openen, de Entertoets, schrijfmodus, afspelen | **Bestand > Opties > Gedrag** |
 | Instellingen voor importeren en exporteren | **Bestand > Opties > Delen** |
 | Mindmaps, objecten, add-ons, crashrapporten | **Bestand > Opties > Extra's** |
 | Labels, status, sectietypen, aangepaste metagegevens, speciale mappen | **Project > Projectinstellingen** |
 | Opties voor één project alleen | **Bestand > Opties**, **Instellingen voor: Dit project** bovenaan; of de eigen instellingen van projecten voorrang hebben: **Bestand > Opties > Algemeen** |
-| Je instellingen meenemen naar een andere computer | **Bestand > Opties > Beheer > Opties opslaan in bestand… / Opties laden uit bestand…** |
+| Je instellingen meenemen naar een andere computer | **Bestand > Opties > Beheer > Profiel exporteren… / Profiel importeren…** |
 | Alles terug naar de standaard | **Bestand > Opties > Standaardwaarden** (je projecten, thema's, lay-outs en sneltoetsen blijven staan) |
 
 ---
@@ -68,13 +68,13 @@
 ### Meer dan gebruikelijk
 
 - **Mindmaps**: een bord met notities, lijnen en pijlen voor elk document en elke map (de knop **Mindmap** van de Inspector). **Help > Mindmap-help** laat zien hoe het werkt.
-- **Objecten**: personages, locaties, omgevingen, bezienswaardigheden, weer en categorieën van jezelf, elk met een blad met velden en koppelingen ertussen (de knop **Objecten** van de Inspector, of **Venster > Objecten…**).
+- **Objecten**: personages, locaties, omgevingen, bezienswaardigheden, weer en categorieën van jezelf, elk met een blad met velden en koppelingen ertussen (de knop **Objecten** van de Inspector, of **Venster > Objecten**).
 - **Tabellen en afbeeldingen**: **Invoegen > Tabel…** met kant-en-klare ontwerpen of je eigen, **Opmaak > Tabel** voor rijen, kolommen, samengevoegde cellen en kleuren; afbeeldingen naast de tekst met de tekst eromheen, onderschriften en beschrijvingen die e-books en Word-bestanden als alt-tekst bewaren (klik met de rechtermuisknop op een afbeelding, **Afbeelding…**).
 - **De pictogrammenbalk**: tot tien documentpictogrammen, elk met één klik. **Documenten > Pictogram wijzigen** maakt ook pictogrammen van tekst of van je eigen afbeeldingen.
 - **Zoom per deel**: Binder, editors, delen van de Inspector, prikbord, overzicht en mindmaps bewaren elk hun eigen zoom.
 - **Bewaarde plekken**: elk document opent waar je de cursor hebt achtergelaten, ook nadat je het project opnieuw hebt geopend.
 - **Lettertypen**: **Opmaak > Lettertype > Lettertypebestanden installeren…** voegt lettertypen toe zonder het programma te verlaten.
-- **Veiligheid**: automatisch opslaan ook terwijl je doortypt, back-ups, een reservekopie van het projectbestand, crash- en vastloperrapporten (**Help > Probleemoplossing en ontwikkeling > Crashrapporten…**) en **Help > Probleemoplossing en ontwikkeling > Systeeminformatie…**.
+- **Veiligheid**: automatisch opslaan ook terwijl je doortypt, back-ups, een reservekopie van het projectbestand, crash- en vastloperrapporten (**Help > Probleemoplossing en ontwikkeling > Crashrapporten…**) en **Help > Probleemoplossing en ontwikkeling > Systeeminformatie**.
 
 ### Updates en add-ons
 
@@ -88,5 +88,5 @@ De **volledige versie** van de AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) h
 - **Help > Welkomstproject**: een kort project dat de functies onder "Meer dan gebruikelijk" laat zien en je ze laat uitproberen.
 - **Help > Mindmap-help**: notities, lijnen, pijlen en vormen, met afbeeldingen en een oefenbord.
 - **Help > Lijst van alle plaatsvervangers** en **Help > Sneltoetsen…**
-- **Help > Licenties van derden…**: de licenties van de onderdelen van andere projecten die {{APP}} gebruikt.
+- **Help > Licenties van derden**: de licenties van de onderdelen van andere projecten die {{APP}} gebruikt.
 - **Help > Over {{APP}}**: de versie en de licentie. {{APP}} is vrije software onder de Apache License 2.0.

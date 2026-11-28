@@ -249,6 +249,7 @@ private:
     void updateModelBox();
     void updateModeUi();
     void updateNotice();
+    static QString noModelText(const QString &from, const QString &to, const QStringList &missing);
     void runSingleTranslation(const QString &word);
     void runPair(const QString &text, const QHash<QString, QList<Segment>> &previous);
     void translateBackPair();

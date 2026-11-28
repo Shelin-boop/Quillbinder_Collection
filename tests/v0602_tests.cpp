@@ -260,7 +260,7 @@ int main(int argc, char **argv)
     QAction *plain = named(m, QStringLiteral("ctx-pastePlain")), *keep = named(m, QStringLiteral("ctx-pasteKeep"));
     const QString plainKeys = commands::shortcutOf(QStringLiteral("pastePlain")).toString(QKeySequence::NativeText);
     const QString keepKeys = commands::shortcutOf(QStringLiteral("pasteKeep")).toString(QKeySequence::NativeText);
-    check(plain && keep && plain->text().startsWith(QLatin1String("Paste and &Match Style\t")) && plain->text().endsWith(plainKeys)
+    check(plain && keep && plain->text().startsWith(QLatin1String("Paste and Match &Style\t")) && plain->text().endsWith(plainKeys)
               && keep->text().startsWith(QLatin1String("Paste With &Formatting\t")) && keep->text().endsWith(keepKeys)
               && plainKeys == QLatin1String("Ctrl+Shift+V") && plain->isEnabled() && keep->isEnabled(),
           QStringLiteral("... named as in the Edit menu, with their shortcuts (Ctrl+Shift+V, %1), on while there is something to paste").arg(keepKeys),

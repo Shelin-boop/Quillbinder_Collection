@@ -1,6 +1,8 @@
 #include "ui/OptionsDialog.h"
 #include "ui/handwriting/HandwritingPage.h"
+#include "ui/ReadAloudPage.h"
 #include "ui/EncryptionPage.h"
+#include "ui/LiveSyncPage.h"
 #include "ui/ProfileDialogs.h"
 #include "ui/Profiles.h"
 #include "ui/OptionStorage.h"
@@ -300,6 +302,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, int page) : QDialog(parent)
         {tr("Corrections"), QStringLiteral("edit-find-replace")}, {tr("Keyboard"), QStringLiteral("configure-shortcuts")},
         {tr("Sharing"), QStringLiteral("document-export")},     {tr("Backup"), QStringLiteral("backup")},
         {tr("Encryption"), QStringLiteral("lock")},
+        {tr("Live Sync"), QStringLiteral("view-refresh")},
         {tr("Extras"), QStringLiteral("qb-mindmap")}};
     for (const auto &s : sections) {
         auto *li = new QListWidgetItem(icons::action(s.second), s.first, m_pages);
@@ -320,6 +323,7 @@ OptionsDialog::OptionsDialog(QWidget *parent, int page) : QDialog(parent)
     m_stack->addWidget(sharingSection());
     m_stack->addWidget(backupSection());
     m_stack->addWidget(encryptionSection());
+    m_stack->addWidget(new livesync::LiveSyncPage(this)); // 0.99.0 (Live Sync)
     m_stack->addWidget(extrasSection());
     // writing tools with a section of their own (0.61): an icon after Extras each
     toolhost::host().attachTools();
@@ -420,12 +424,10 @@ void OptionsDialog::updateScopeInfo()
     m_scopeReset->setVisible(m_optScope == ThisProject);
     m_scopeReset->setEnabled(n > 0);
     if (m_optScope == ThisProject)
-        m_scopeInfo->setText(n ? tr("What you change here is kept with this project. Its own settings: <a href=\"show\">%1</a>.")
-                                     .arg(text::plural(n, tr("setting"), tr("settings")))
+        m_scopeInfo->setText(n ? tr("What you change here is kept with this project. Its own settings: <a href=\"show\">%Ln setting(s)</a>.", "", n)
                                : tr("What you change here is kept with this project; it has no settings of its own yet."));
     else if (look::project() && n > 0 && settingslayer::projectFirst())
-        m_scopeInfo->setText(tr("The open project has <a href=\"show\">%1</a> of its own, which it keeps.")
-                                 .arg(text::plural(n, tr("setting"), tr("settings"))));
+        m_scopeInfo->setText(tr("The open project has <a href=\"show\">%Ln setting(s)</a> of its own, which it keeps.", "", n));
     else
         m_scopeInfo->setText(look::project() && !settingslayer::projectFirst()
                                  ? tr("Projects' own settings are not used (General > Which settings come first).")
@@ -753,6 +755,9 @@ QWidget *OptionsDialog::generalSection()
     // 0.99.0 (item 112): File > Options > Handwriting, a page of its own in the list (like AI Models); kept per device
     m_handwriting = new handwriting::HandwritingPage;
     pages.append({tr("Handwriting"), m_handwriting});
+    // 0.99.0 (item 114): File > Options > Read Aloud (the engine and the models, the language, the device); kept per device
+    m_readAloud = new readaloud::ReadAloudPage;
+    pages.append({tr("Read Aloud"), m_readAloud});
 
     // the writing tools' sections (the scratch pad's folder and the like): a page each
     toolhost::host().attachTools();
@@ -1818,8 +1823,7 @@ void OptionsDialog::refreshLook()
     m_preview->setFonts(fonts);
     const int own = ownChanges();
     m_ownInfo->setText(own == 0 ? tr("Colors and fonts are those of the theme.")
-                                : tr("%1 of your own on top of the theme (shown in bold below).")
-                                      .arg(text::plural(own, tr("change"), tr("changes"))));
+                                : tr("%Ln change(s) of your own on top of the theme (shown in bold below).", "", own));
     m_resetLook->setEnabled(own > 0);
     // 0.99.0 (UR-17): the worst pair below 4.5 : 1 that has a color of the writer's own (WCAG 2.x); only a note
     QSet<theme::Role> ownRoles;
@@ -1837,7 +1841,7 @@ void OptionsDialog::refreshLook()
         QString note = tr("Note: your colors %1 on %2 have a contrast of %3 : 1. Text is easier to read from 4.5 : 1.")
                            .arg(theme::roleLabel(w.fg), theme::roleLabel(w.bg), QLocale().toString(w.ratio, 'f', 2));
         if (issues.size() > 1)
-            note += QLatin1Char(' ') + tr("%1 below it too.").arg(text::plural(int(issues.size()) - 1, tr("more pair"), tr("more pairs")));
+            note += QLatin1Char(' ') + tr("%Ln more pair(s) below it too.", "", int(issues.size()) - 1);
         m_contrastNote->setText(note);
         m_contrastNote->show();
     }
@@ -2848,6 +2852,8 @@ void OptionsDialog::apply()
 {
     if (m_handwriting)
         m_handwriting->apply();
+    if (m_readAloud)
+        m_readAloud->apply();
     if (m_encryption) {
         QStringList errors;
         if (!m_encryption->apply(&errors))

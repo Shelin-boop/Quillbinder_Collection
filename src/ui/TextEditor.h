@@ -3,11 +3,13 @@
 #include "text/DirectFormat.h"
 #include "text/TextProps.h"
 
+#include <QKeyEvent>
 #include <QPointer>
 #include <QRegularExpression>
 #include <QTextBlock>
 #include "text/Tables.h"
 #include <QTextEdit>
+#include <QTimer>
 #include <functional>
 
 class QMenu;
@@ -58,6 +60,20 @@ public:
     Project *project() const { return m_project; }
     BinderItem *item() const { return m_item; }
     bool isNotes() const { return m_isNotes; }
+    // 0.99.0 (Live Sync): the editor of a shared project takes the document's lock at the first key (design 5.2). The window
+    // sets one gate for the program: it gets the document's id and whether it is the notes, and answers true when the lock is
+    // held (the key goes on) or false when it was asked for: the editor then keeps the keys of the next 1.5 s and types them
+    // when lockResult(true) comes, and drops them when lockResult(false) comes or the time is up. A paste, a drop or an input
+    // method text arriving without the lock is refused (the lock is asked for; the writer does it again). Without a gate
+    // (the program as it was) nothing changes.
+    using LockGate = std::function<bool(const QString &docId, bool notes)>;
+    // (one gate per project: windows of several shared projects in one process each have their own)
+    static void setLockGate(const Project *project, LockGate gate);
+    static bool hasLockGate();
+    // every editor that waits for the lock of this document is told the result
+    static void lockResult(const Project *project, const QString &docId, bool granted);
+    // whether some editor shows this document (text or notes): the window gives its lock up when none does
+    static bool shown(const Project *project, const QString &docId);
     // notes that start as plain text (0.93.0): no look of the project's text formatting
     bool plainNotes() const { return document() && document()->property("qbPlainNotes").toBool(); }
 
@@ -209,6 +225,10 @@ public:
     void setSearchPattern(const QRegularExpression &re);
     QRegularExpression searchPattern() const { return m_searchRe; }
     int searchMatchCount() const { return m_searchCount; }
+    // 0.99.0 (item 114): the sentence Read Aloud is reading, marked in the text (length 0: none); scrolls it into view
+    void setReadingRange(int start, int length);
+    int readingStart() const { return m_readStart; }
+    int readingLength() const { return m_readLength; }
     bool findNext(const QString &term, bool backward, bool caseSensitive, bool wholeWord, bool wrap = true);
     bool findNext(const QRegularExpression &re, bool backward, bool wrap = true);
     int replaceAll(const QString &term, const QString &with, bool caseSensitive, bool wholeWord);
@@ -292,6 +312,11 @@ private:
     void updateScriptCompletion(bool evenIfEmpty);
     void hideScriptCompletion();
 
+    bool needsLock(bool notesOnly = false);
+    void replayHeldKeys(bool granted);
+    QList<QKeyEvent *> m_heldKeys;
+    QTimer *m_heldTimer = nullptr;
+    bool m_replaying = false;
     QPointer<Project> m_project;
     QTextDocument *m_placeholder = nullptr;
     BinderItem *m_item = nullptr;
@@ -307,6 +332,7 @@ private:
     QRegularExpression m_searchRe;
     bool m_searchOn = false;
     int m_searchCount = 0;
+    int m_readStart = -1, m_readLength = 0;
     int m_mouseMoving = 0;   // see cursorMovedByMouse()
     QCompleter *m_scriptCompleter = nullptr;
     QStringListModel *m_scriptModel = nullptr;

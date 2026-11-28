@@ -41,16 +41,20 @@
             "bold": true,
             "align": "center",
             "fill": "#fff2a8",
+            "textColor": "#141414",
+            "borderColor": "#555555",
             "border": 2,
             "shape": "cloud"
           },
           {
             "id": 2,
-            "text": "Notes : double-cliquez sur un endroit vide. Ctrl+Enter crée une nouvelle note sous la note sélectionnée.",
+            "text": "Notes : double-cliquez sur un endroit vide. Ctrl+Entrée crée une nouvelle note sous la note sélectionnée.",
             "x": 20,
             "y": 30,
             "width": 200,
             "fill": "#dcecff",
+            "textColor": "#141414",
+            "borderColor": "#555555",
             "border": 1
           },
           {
@@ -60,15 +64,19 @@
             "y": 30,
             "width": 190,
             "fill": "#dcecff",
+            "textColor": "#141414",
+            "borderColor": "#555555",
             "border": 1
           },
           {
             "id": 4,
-            "text": "Flèches : maintenez Alt en relâchant. Ctrl+Alt : une flèche en sens inverse. Ctrl+Alt+Shift : aux deux extrémités.",
+            "text": "Flèches : maintenez Alt en relâchant. Ctrl+Alt : une flèche en sens inverse. Ctrl+Alt+Maj : aux deux extrémités.",
             "x": 530,
             "y": 30,
             "width": 210,
             "fill": "#dcecff",
+            "textColor": "#141414",
+            "borderColor": "#555555",
             "border": 1
           },
           {
@@ -78,6 +86,8 @@
             "y": 250,
             "width": 180,
             "fill": "#ffd6d6",
+            "textColor": "#141414",
+            "borderColor": "#555555",
             "border": 1,
             "shape": "jagged"
           },
@@ -88,6 +98,8 @@
             "y": 420,
             "width": 200,
             "fill": "#e3f6d8",
+            "textColor": "#141414",
+            "borderColor": "#555555",
             "border": 1,
             "icons": {
               "topLeft": "qb-flag-red",
@@ -100,7 +112,8 @@
             "text": "Les formes d'arrière-plan regroupent des notes. Une forme magnétique emporte ses notes avec elle.",
             "x": 290,
             "y": 455,
-            "width": 170
+            "width": 170,
+            "textColor": "#141414"
           },
           {
             "id": 8,
@@ -109,6 +122,8 @@
             "y": 430,
             "width": 200,
             "fill": "#f0e6ff",
+            "textColor": "#141414",
+            "borderColor": "#555555",
             "border": 1,
             "shape": "square"
           },
@@ -119,6 +134,8 @@
             "y": 245,
             "width": 200,
             "fill": "#f0e6ff",
+            "textColor": "#141414",
+            "borderColor": "#555555",
             "border": 1
           }
         ],
@@ -149,7 +166,7 @@
             "from": 1,
             "to": 4,
             "arrow": "to",
-            "color": "#c0392b"
+            "color": "#d9534f"
           },
           {
             "from": 1,
@@ -175,7 +192,7 @@
             "from": 1,
             "to": 9,
             "arrow": "to",
-            "color": "#2f6fbf"
+            "color": "#4f8fe0"
           }
         ]
       }
@@ -211,7 +228,7 @@
           "synopsis": "Une scène avec un commentaire."
         },
         {
-          "title": "Soir",
+          "title": "Le soir",
           "textFile": "docs/05b-scene-two.md",
           "synopsis": "Une scène avec une note de bas de page et une annotation en ligne."
         }

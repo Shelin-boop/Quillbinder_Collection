@@ -2,11 +2,26 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ru" sourcelanguage="en">
 <context>
-    <name>Engine</name>
+    <name>EncryptionPage</name>
     <message>
-        <source>Processor</source>
-        <translation>Процессор</translation>
+        <source>This system has no key store, so the passphrase is asked for once in each session.</source>
+        <translation>В этой системе нет хранилища ключей, поэтому парольную фразу запрашивают один раз за сеанс.</translation>
     </message>
+    <message>
+        <source>The system&apos;s key store refused to keep the passphrase, so it is asked for once in each session.</source>
+        <translation>Хранилище ключей системы отказалось сохранить парольную фразу, поэтому её запрашивают один раз за сеанс.</translation>
+    </message>
+    <message>
+        <source>The passphrase could not be kept in the system&apos;s key store, so it is asked for once in each session.</source>
+        <translation>Парольную фразу не удалось сохранить в хранилище ключей системы, поэтому её запрашивают один раз за сеанс.</translation>
+    </message>
+    <message>
+        <source>Remember the passphrase on this device</source>
+        <translation>Запомнить парольную фразу на этом устройстве</translation>
+    </message>
+</context>
+<context>
+    <name>Engine</name>
     <message>
         <source>A transcription is still running.</source>
         <translation>Расшифровка ещё выполняется.</translation>
@@ -16,12 +31,43 @@
         <translation>Модель не установлена.</translation>
     </message>
     <message>
+        <source>Quillbinder asks for permission to use the microphone. Allow it, then press Record again.</source>
+        <translation>Quillbinder запрашивает разрешение на использование микрофона. Разрешите его и снова нажмите «Запись».</translation>
+    </message>
+    <message>
+        <source>The microphone is not allowed for Quillbinder. Allow it in the system&apos;s settings.</source>
+        <translation>Для Quillbinder микрофон не разрешён. Разрешите его в настройках системы.</translation>
+    </message>
+    <message>
         <source>No microphone was found.</source>
         <translation>Микрофон не найден.</translation>
     </message>
     <message>
         <source>The microphone &quot;%1&quot; could not be opened.</source>
         <translation>Не удалось открыть микрофон «%1».</translation>
+    </message>
+</context>
+<context>
+    <name>Handwriting</name>
+    <message>
+        <source>Ruled lines</source>
+        <translation>Линейки</translation>
+    </message>
+    <message>
+        <source>Writing lines (baseline and midline)</source>
+        <translation>Строки письма (базовая и средняя линии)</translation>
+    </message>
+    <message>
+        <source>Squares</source>
+        <translation>Клетки</translation>
+    </message>
+    <message>
+        <source>Dots</source>
+        <translation>Точки</translation>
+    </message>
+    <message>
+        <source>No grid</source>
+        <translation>Без сетки</translation>
     </message>
 </context>
 <context>
@@ -120,6 +166,21 @@
     <message>
         <source>Files on This &amp;Tablet…</source>
         <translation>Файлы на этом &amp;планшете…</translation>
+    </message>
+</context>
+<context>
+    <name>ModelMemory</name>
+    <message>
+        <source>the memory of the graphics card %1</source>
+        <translation>память видеокарты %1</translation>
+    </message>
+    <message>
+        <source>the computer&apos;s memory</source>
+        <translation>память компьютера</translation>
+    </message>
+    <message>
+        <source>Not enough memory for the model &quot;%1&quot; (%2 MB): %3 is %4 % used, and the model would bring it over %5 %.</source>
+        <translation>Недостаточно памяти для модели «%1» (%2 МБ): %3 используется на %4 %, и модель довела бы это значение до более чем %5 %.</translation>
     </message>
 </context>
 <context>
@@ -321,7 +382,7 @@
     </message>
     <message>
         <source>No name lists found. They come with the add-on “Name Generator” (Help &gt; Add-ons and Updates &gt; Add-on Manager).</source>
-        <translation>Списки имён не найдены. Они входят в дополнение «Генератор имён» (Справка &gt; Дополнения и обновления &gt; Менеджер дополнений).</translation>
+        <translation>Списки имён не найдены. Они входят в дополнение «Name Generator» (Справка &gt; Дополнения и обновления &gt; Менеджер дополнений).</translation>
     </message>
     <message>
         <source> (by frequency)</source>
@@ -442,6 +503,220 @@ The forenames of this list are not divided into female and male.</source>
     <message>
         <source>nothing can be written into %1 (%2)</source>
         <translation>в %1 нельзя ничего записать (%2)</translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::DeletePasswordJobPrivate</name>
+    <message>
+        <source>Could not open keystore</source>
+        <translation>Не удалось открыть хранилище ключей</translation>
+    </message>
+    <message>
+        <source>Could not remove private key from keystore</source>
+        <translation>Не удалось удалить закрытый ключ из хранилища ключей</translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation>Неизвестная ошибка</translation>
+    </message>
+    <message>
+        <source>Could not open wallet: %1; %2</source>
+        <translation>Не удалось открыть кошелёк: %1; %2</translation>
+    </message>
+    <message>
+        <source>Password entry not found</source>
+        <translation>Запись с паролем не найдена</translation>
+    </message>
+    <message>
+        <source>Could not delete password</source>
+        <translation>Не удалось удалить пароль</translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::Job</name>
+    <message>
+        <source>Both service name and key are empty</source>
+        <translation>Не указаны ни имя службы, ни ключ</translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::JobPrivate</name>
+    <message>
+        <source>Unknown error</source>
+        <translation>Неизвестная ошибка</translation>
+    </message>
+    <message>
+        <source>Access to keychain denied</source>
+        <translation>Доступ к связке ключей запрещён</translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::PlainTextStore</name>
+    <message>
+        <source>Could not store data in settings: access error</source>
+        <translation>Не удалось сохранить данные в настройках: ошибка доступа</translation>
+    </message>
+    <message>
+        <source>Could not store data in settings: format error</source>
+        <translation>Не удалось сохранить данные в настройках: ошибка формата</translation>
+    </message>
+    <message>
+        <source>Could not delete data from settings: access error</source>
+        <translation>Не удалось удалить данные из настроек: ошибка доступа</translation>
+    </message>
+    <message>
+        <source>Could not delete data from settings: format error</source>
+        <translation>Не удалось удалить данные из настроек: ошибка формата</translation>
+    </message>
+    <message>
+        <source>Entry not found</source>
+        <translation>Запись не найдена</translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::ReadPasswordJobPrivate</name>
+    <message>
+        <source>Entry not found</source>
+        <translation>Запись не найдена</translation>
+    </message>
+    <message>
+        <source>Could not open keystore</source>
+        <translation>Не удалось открыть хранилище ключей</translation>
+    </message>
+    <message>
+        <source>Could not retrieve private key from keystore</source>
+        <translation>Не удалось получить закрытый ключ из хранилища ключей</translation>
+    </message>
+    <message>
+        <source>Encrypted data is too short</source>
+        <translation>Зашифрованные данные слишком короткие</translation>
+    </message>
+    <message>
+        <source>Could not create RSA decryption cipher</source>
+        <translation>Не удалось создать шифр расшифровки RSA</translation>
+    </message>
+    <message>
+        <source>Could not decrypt AES key: %1</source>
+        <translation>Не удалось расшифровать ключ AES: %1</translation>
+    </message>
+    <message>
+        <source>Could not create AES decryption cipher</source>
+        <translation>Не удалось создать шифр расшифровки AES</translation>
+    </message>
+    <message>
+        <source>Could not decrypt data: %1</source>
+        <translation>Не удалось расшифровать данные: %1</translation>
+    </message>
+    <message>
+        <source>Could not create decryption cipher</source>
+        <translation>Не удалось создать шифр расшифровки</translation>
+    </message>
+    <message>
+        <source>D-Bus is not running</source>
+        <translation>D-Bus не запущен</translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation>Неизвестная ошибка</translation>
+    </message>
+    <message>
+        <source>No keychain service available</source>
+        <translation>Служба связки ключей недоступна</translation>
+    </message>
+    <message>
+        <source>Could not open wallet: %1; %2</source>
+        <translation>Не удалось открыть кошелёк: %1; %2</translation>
+    </message>
+    <message>
+        <source>Access to keychain denied</source>
+        <translation>Доступ к связке ключей запрещён</translation>
+    </message>
+    <message>
+        <source>Could not determine data type: %1; %2</source>
+        <translation>Не удалось определить тип данных: %1; %2</translation>
+    </message>
+    <message>
+        <source>Unknown kwallet entry type &apos;%1&apos;</source>
+        <translation>Неизвестный тип записи kwallet «%1»</translation>
+    </message>
+    <message>
+        <source>Password entry not found</source>
+        <translation>Запись с паролем не найдена</translation>
+    </message>
+    <message>
+        <source>Could not decrypt data</source>
+        <translation>Не удалось расшифровать данные</translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::WritePasswordJobPrivate</name>
+    <message>
+        <source>Could not open keystore</source>
+        <translation>Не удалось открыть хранилище ключей</translation>
+    </message>
+    <message>
+        <source>Could not create private key generator</source>
+        <translation>Не удалось создать генератор закрытых ключей</translation>
+    </message>
+    <message>
+        <source>Could not generate new private key</source>
+        <translation>Не удалось создать новый закрытый ключ</translation>
+    </message>
+    <message>
+        <source>Could not retrieve private key from keystore</source>
+        <translation>Не удалось получить закрытый ключ из хранилища ключей</translation>
+    </message>
+    <message>
+        <source>Could not generate AES key</source>
+        <translation>Не удалось создать ключ AES</translation>
+    </message>
+    <message>
+        <source>Could not generate IV</source>
+        <translation>Не удалось создать вектор инициализации</translation>
+    </message>
+    <message>
+        <source>Could not create AES encryption cipher</source>
+        <translation>Не удалось создать шифр зашифровки AES</translation>
+    </message>
+    <message>
+        <source>Could not encrypt data: %1</source>
+        <translation>Не удалось зашифровать данные: %1</translation>
+    </message>
+    <message>
+        <source>Could not create RSA encryption cipher</source>
+        <translation>Не удалось создать шифр зашифровки RSA</translation>
+    </message>
+    <message>
+        <source>Could not encrypt AES key: %1</source>
+        <translation>Не удалось зашифровать ключ AES: %1</translation>
+    </message>
+    <message>
+        <source>D-Bus is not running</source>
+        <translation>D-Bus не запущен</translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation>Неизвестная ошибка</translation>
+    </message>
+    <message>
+        <source>Could not open wallet: %1; %2</source>
+        <translation>Не удалось открыть кошелёк: %1; %2</translation>
+    </message>
+    <message>
+        <source>Encryption failed: %1</source>
+        <translation>Ошибка шифрования: %1</translation>
+    </message>
+    <message>
+        <source>Credential size exceeds maximum size of %1: %2</source>
+        <translation>Размер учётных данных превышает максимальный (%1): %2</translation>
+    </message>
+    <message>
+        <source>Credential key exceeds maximum size of %1</source>
+        <translation>Ключ учётных данных превышает максимальный размер (%1)</translation>
+    </message>
+    <message>
+        <source>Writing credentials failed: %1</source>
+        <translation>Не удалось записать учётные данные: %1</translation>
     </message>
 </context>
 <context>
@@ -613,6 +888,10 @@ The forenames of this list are not divided into female and male.</source>
         <translation>Отказано в доступе</translation>
     </message>
     <message>
+        <source>No backup was made.</source>
+        <translation>Резервная копия не создана.</translation>
+    </message>
+    <message>
         <source>The project could not be saved first, so no backup was made: %1</source>
         <translation>Сначала не удалось сохранить проект, поэтому резервная копия не создана: %1</translation>
     </message>
@@ -621,8 +900,36 @@ The forenames of this list are not divided into female and male.</source>
         <translation>Не удаётся создать рабочую папку для резервных копий %1</translation>
     </message>
     <message>
+        <source>the project&apos;s keys are not named in %1</source>
+        <translation>ключи проекта не названы в %1</translation>
+    </message>
+    <message>
+        <source>the key %1 is not in Quillbinder&apos;s key ring</source>
+        <translation>ключа %1 нет в связке ключей Quillbinder</translation>
+    </message>
+    <message>
+        <source>The backups of this project are encrypted, but no encrypted backup can be made: %1. No backup was made.</source>
+        <translation>Резервные копии этого проекта зашифрованы, но зашифрованную копию создать нельзя: %1. Резервная копия не создана.</translation>
+    </message>
+    <message>
         <source>%1 - working copy of %2</source>
         <translation>%1 — рабочая копия %2</translation>
+    </message>
+    <message>
+        <source>it could not be encrypted: %1</source>
+        <translation>её не удалось зашифровать: %1</translation>
+    </message>
+    <message>
+        <source>the encrypted backup could not be decrypted again: %1</source>
+        <translation>зашифрованную резервную копию не удалось расшифровать снова: %1</translation>
+    </message>
+    <message>
+        <source>the encrypted backup, decrypted again, differs from the backup</source>
+        <translation>зашифрованная резервная копия после повторной расшифровки отличается от исходной</translation>
+    </message>
+    <message>
+        <source>the encrypted backup is not whole</source>
+        <translation>зашифрованная резервная копия повреждена</translation>
     </message>
     <message>
         <source>Backing up &quot;%1&quot;...</source>
@@ -663,6 +970,14 @@ It is kept in %3, and the next backup will put it in place.</source>
     <message>
         <source>The new backup %1 is not there after older backups were cleaned up. No backup was made; please make one with File &gt; Back Up &gt; Back Up To...</source>
         <translation>Новой резервной копии %1 нет на месте после очистки прежних копий. Резервная копия не создана; сделайте её вручную через Файл &gt; Резервная копия &gt; Сделать копию в...</translation>
+    </message>
+    <message>
+        <source>Decrypting &quot;%1&quot;...</source>
+        <translation>Расшифровывается «%1»...</translation>
+    </message>
+    <message>
+        <source>%1 could not be decrypted: %2 Nothing was restored.</source>
+        <translation>Не удалось расшифровать %1: %2 Ничего не восстановлено.</translation>
     </message>
     <message>
         <source>%1 could not be read as a ZIP file (%2). If the file is whole, an archive program of your system may still unpack it.</source>
@@ -921,6 +1236,10 @@ It is kept in %3, and the next backup will put it in place.</source>
         <translation>Не удаётся удалить %1</translation>
     </message>
     <message>
+        <source>Cannot read %1: %2</source>
+        <translation>Не удаётся прочитать %1: %2</translation>
+    </message>
+    <message>
         <source>Full name</source>
         <translation>Полное имя</translation>
     </message>
@@ -1122,7 +1441,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Environments</source>
-        <translation>Окружение</translation>
+        <translation>Окружения</translation>
     </message>
     <message>
         <source>Kind of landscape</source>
@@ -1510,7 +1829,7 @@ It is kept in %3, and the next backup will put it in place.</source>
     </message>
     <message>
         <source>Template Sheets</source>
-        <translation>Шаблонные листы</translation>
+        <translation>Листы-шаблоны</translation>
     </message>
     <message>
         <source>Character Sheet</source>
@@ -2376,7 +2695,7 @@ What was written so far is in %2. Nothing was changed in the Scrivener project.<
     </message>
     <message>
         <source>Update bundle</source>
-        <translation>Пакет обновлений</translation>
+        <translation>Комплект обновлений</translation>
     </message>
     <message>
         <source>Add-on</source>
@@ -2721,8 +3040,12 @@ Source: %1</source>
         <translation>%1 пикс.</translation>
     </message>
     <message>
-        <source>Other (%1 px)...</source>
-        <translation>Другое (%1 пикс.)...</translation>
+        <source>Other…</source>
+        <translation>Другое…</translation>
+    </message>
+    <message>
+        <source>Other (%1 px)…</source>
+        <translation>Другое (%1 пикс.)…</translation>
     </message>
     <message>
         <source>%1 in px (at 100 % zoom):</source>
@@ -2757,8 +3080,32 @@ Source: %1</source>
         <translation> (свой шрифт)</translation>
     </message>
     <message>
-        <source>Choose Font...</source>
-        <translation>Выбрать шрифт...</translation>
+        <source>Choose Font…</source>
+        <translation>Выбрать шрифт…</translation>
+    </message>
+    <message>
+        <source>Fixed Width Editor</source>
+        <translation>Редактор фиксированной ширины</translation>
+    </message>
+    <message>
+        <source>Label Color in Binder</source>
+        <translation>Цвет метки в биндере</translation>
+    </message>
+    <message>
+        <source>Label Color in Icons</source>
+        <translation>Цвет метки на значках</translation>
+    </message>
+    <message>
+        <source>Status Stamps</source>
+        <translation>Штампы статуса</translation>
+    </message>
+    <message>
+        <source>Label Color in Index Cards</source>
+        <translation>Цвет метки на карточках</translation>
+    </message>
+    <message>
+        <source>Appearance Options…</source>
+        <translation>Параметры внешнего вида…</translation>
     </message>
     <message>
         <source>Font</source>
@@ -2777,36 +3124,12 @@ Source: %1</source>
         <translation>Поле рядом с текстом</translation>
     </message>
     <message>
-        <source>Fixed Width (Text as a Centered Column)</source>
-        <translation>Фиксированная ширина (текст в виде центрированной колонки)</translation>
-    </message>
-    <message>
-        <source>Show Label Colors in the Binder</source>
-        <translation>Показывать цвета меток в биндере</translation>
-    </message>
-    <message>
-        <source>Let the Label Color Shine Through the Icons</source>
-        <translation>Пусть цвет метки просвечивает сквозь значки</translation>
-    </message>
-    <message>
         <source>Indent per Level</source>
         <translation>Отступ на уровень</translation>
     </message>
     <message>
-        <source>Show Status Stamps</source>
-        <translation>Показывать штампы статуса</translation>
-    </message>
-    <message>
-        <source>Tint Cards with the Label Color</source>
-        <translation>Подкрашивать карточки цветом метки</translation>
-    </message>
-    <message>
         <source>Card Width</source>
         <translation>Ширина карточки</translation>
-    </message>
-    <message>
-        <source>Appearance Options...</source>
-        <translation>Параметры внешнего вида...</translation>
     </message>
     <message>
         <source>Double-click to make both editors the same size</source>
@@ -2922,11 +3245,11 @@ Source: %1</source>
     </message>
     <message>
         <source>Drop here</source>
-        <translation>Бросьте сюда</translation>
+        <translation>Перетащите сюда</translation>
     </message>
     <message>
         <source>2  Arrows: hold Alt while you let go (an arrow to the note you drop on), Ctrl+Alt (an arrow back), Ctrl+Alt+Shift (both ends). Do it again to take the arrow away.</source>
-        <translation>2  Стрелки: удерживайте Alt, когда отпускаете (стрелка к заметке, на которую вы бросаете), Ctrl+Alt (стрелка назад), Ctrl+Alt+Shift (с обоих концов). Повторите, чтобы убрать стрелку.</translation>
+        <translation>2  Стрелки: удерживайте Alt, когда отпускаете (стрелка к заметке, на которую вы перетащили), Ctrl+Alt (стрелка назад), Ctrl+Alt+Shift (с обоих концов). Повторите, чтобы убрать стрелку.</translation>
     </message>
     <message>
         <source>Drag me with Alt</source>
@@ -3026,7 +3349,7 @@ Source: %1</source>
     </message>
     <message>
         <source>Click to choose a picture, or drop one here; right-click to remove it</source>
-        <translation>Щёлкните, чтобы выбрать изображение, или бросьте его сюда; щёлкните правой кнопкой, чтобы убрать его</translation>
+        <translation>Щёлкните, чтобы выбрать изображение, или перетащите его сюда; щёлкните правой кнопкой, чтобы убрать его</translation>
     </message>
     <message>
         <source>Choose a Picture</source>
@@ -3046,7 +3369,7 @@ Source: %1</source>
     </message>
     <message>
         <source>Single Return</source>
-        <translation>Один Return</translation>
+        <translation>Один Enter</translation>
     </message>
     <message>
         <source>Empty Line</source>
@@ -3062,7 +3385,7 @@ Source: %1</source>
     </message>
     <message>
         <source>Custom</source>
-        <translation>Другое</translation>
+        <translation>Свой</translation>
     </message>
     <message>
         <source>Synopsis</source>
@@ -3220,13 +3543,13 @@ Source: %1</source>
         <source>line spacing at least %1 pt</source>
         <translation>межстрочный интервал не менее %1 пт</translation>
     </message>
-    <message>
-        <source>1 tab stop</source>
-        <translation>1 позиция табуляции</translation>
-    </message>
-    <message>
-        <source>%1 tab stops</source>
-        <translation>Позиций табуляции: %1</translation>
+    <message numerus="yes">
+        <source>%Ln tab stop(s)</source>
+        <translation>
+            <numerusform>%n позиция табуляции</numerusform>
+            <numerusform>%n позиции табуляции</numerusform>
+            <numerusform>%n позиций табуляции</numerusform>
+        </translation>
     </message>
     <message>
         <source>Characters: %1</source>
@@ -3524,17 +3847,13 @@ Source: %1</source>
         <source>Change Theme</source>
         <translation>Смена темы</translation>
     </message>
-    <message>
-        <source>You have changed %1 of your own on top of the current theme.</source>
-        <translation>Вы изменили %1 поверх текущей темы.</translation>
-    </message>
-    <message>
-        <source>color or font</source>
-        <translation>цвет или шрифт</translation>
-    </message>
-    <message>
-        <source>colors and fonts</source>
-        <translation>цвета и шрифта|цветов и шрифтов</translation>
+    <message numerus="yes">
+        <source>You have changed %Ln color(s) or font(s) of your own on top of the current theme.</source>
+        <translation>
+            <numerusform>Поверх текущей темы вы изменили цвета или шрифты (всего: %n).</numerusform>
+            <numerusform>Поверх текущей темы вы изменили цвета или шрифты (всего: %n).</numerusform>
+            <numerusform>Поверх текущей темы вы изменили цвета или шрифты (всего: %n).</numerusform>
+        </translation>
     </message>
     <message>
         <source>Keep them with the new theme, or use the theme as it is? (Save Current Look as Theme keeps the present look for later.)</source>
@@ -3575,6 +3894,10 @@ Source: %1</source>
     <message>
         <source>Theme files (*.qbtheme *.json);;All files (*)</source>
         <translation>Файлы тем (*.qbtheme *.json);;Все файлы (*)</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Большой</translation>
     </message>
     <message>
         <source>Main</source>
@@ -3635,6 +3958,10 @@ Source: %1</source>
     <message>
         <source>Layouts</source>
         <translation>Раскладки</translation>
+    </message>
+    <message>
+        <source>Handwriting (off, editor, inspector, both)</source>
+        <translation>Рукописный ввод (выкл., редактор, инспектор, оба)</translation>
     </message>
     <message>
         <source>Theme button (Light, Dark, My Look 1, My Look 2 and all themes)</source>
@@ -3947,6 +4274,18 @@ Source: %1</source>
         <translation>%1: формат WAV, который здесь не читается</translation>
     </message>
     <message>
+        <source>The AI engine is not installed (or could not be loaded). Install it under File &gt; Options &gt; Speech.</source>
+        <translation>ИИ-движок не установлен (или не удалось его загрузить). Установите его в разделе Файл &gt; Параметры &gt; Речь.</translation>
+    </message>
+    <message>
+        <source>Speech Transcription</source>
+        <translation>Расшифровка речи</translation>
+    </message>
+    <message>
+        <source>The model was not loaded: the memory is needed elsewhere.</source>
+        <translation>Модель не загружена: память нужна для другого.</translation>
+    </message>
+    <message>
         <source>The model could not be loaded onto the graphics card. Choose the processor under Options &gt; Speech &gt; Processing, or a smaller model.</source>
         <translation>Не удалось загрузить модель в видеокарту. Выберите процессор в разделе Параметры &gt; Речь &gt; Обработка или модель поменьше.</translation>
     </message>
@@ -3955,8 +4294,8 @@ Source: %1</source>
         <translation>Не удалось загрузить модель (повреждённый файл или не хватает памяти).</translation>
     </message>
     <message>
-        <source>whisper could not transcribe a piece.</source>
-        <translation>whisper не смог расшифровать фрагмент.</translation>
+        <source>The AI engine could not transcribe a piece.</source>
+        <translation>ИИ-движку не удалось расшифровать фрагмент.</translation>
     </message>
     <message>
         <source>Small</source>
@@ -4128,11 +4467,11 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation>Параметры открыты для этого проекта. Закройте их или выберите все проекты, затем экспортируйте профиль.</translation>
+        <translation>Настройки профиля не удалось записать полностью. Проверьте папку файла настроек.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation>Настройки профиля не удалось записать полностью. Проверьте папку файла настроек.</translation>
+        <translation>Не удалось применить раскладки профиля; прежние раскладки сохранены.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4152,11 +4491,63 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation>Не удалось применить раскладки профиля; прежние раскладки сохранены.</translation>
+        <translation>Параметры открыты для этого проекта. Закройте их или выберите все проекты, затем экспортируйте профиль.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>
         <translation>Это не файл профиля и не файл параметров, сохранённый Quillbinder.</translation>
+    </message>
+    <message>
+        <source>Access to keychain denied</source>
+        <translation>Доступ к связке ключей запрещён</translation>
+    </message>
+    <message>
+        <source>No keyring daemon</source>
+        <translation>Нет службы связки ключей</translation>
+    </message>
+    <message>
+        <source>Already unlocked</source>
+        <translation>Уже разблокирована</translation>
+    </message>
+    <message>
+        <source>No such keyring</source>
+        <translation>Такой связки ключей нет</translation>
+    </message>
+    <message>
+        <source>Bad arguments</source>
+        <translation>Неверные аргументы</translation>
+    </message>
+    <message>
+        <source>I/O error</source>
+        <translation>Ошибка ввода-вывода</translation>
+    </message>
+    <message>
+        <source>Cancelled</source>
+        <translation>Отменено</translation>
+    </message>
+    <message>
+        <source>Keyring already exists</source>
+        <translation>Связка ключей уже существует</translation>
+    </message>
+    <message>
+        <source>No match</source>
+        <translation>Нет совпадений</translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation>Неизвестная ошибка</translation>
+    </message>
+    <message>
+        <source>Entry not found</source>
+        <translation>Запись не найдена</translation>
+    </message>
+    <message>
+        <source>No matching unlocked entry was deleted</source>
+        <translation>Подходящая разблокированная запись не была удалена</translation>
+    </message>
+    <message>
+        <source> s</source>
+        <translation> с</translation>
     </message>
 </context>
 <context>
@@ -4434,28 +4825,12 @@ Take these too? Take them only if you made the file yourself or trust where it c
         <translation>Вычислять на:</translation>
     </message>
     <message>
-        <source>Processor threads:</source>
-        <translation>Потоки процессора:</translation>
-    </message>
-    <message>
-        <source>One less than the processor has keeps typing smooth while a piece is written.</source>
-        <translation>Если взять на один поток меньше, чем есть у процессора, ввод остаётся плавным, пока записывается фрагмент.</translation>
-    </message>
-    <message>
         <source>never</source>
         <translation>никогда</translation>
     </message>
     <message>
-        <source> minutes</source>
-        <translation> мин</translation>
-    </message>
-    <message>
-        <source>Free the model after:</source>
-        <translation>Освобождать модель через:</translation>
-    </message>
-    <message>
-        <source>The model takes memory while it is loaded; after this time without use it is freed and the program says so. It loads again at the next recording.</source>
-        <translation>Пока модель загружена, она занимает память; по истечении этого времени без использования она освобождается, и программа сообщает об этом. При следующей записи она загрузится снова.</translation>
+        <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
+        <translation>Число ядер процессора и время, по истечении которого неиспользуемая модель выгружается, задаются сразу для всех функций ИИ в разделе Файл &gt; Параметры &gt; Общие &gt; Модели ИИ.</translation>
     </message>
     <message>
         <source>Fast</source>
@@ -4487,7 +4862,7 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>Fallback (also spoken):</source>
-        <translation>Запасной (тоже звучит в речи):</translation>
+        <translation>Запасной язык (на нём вы тоже говорите):</translation>
     </message>
     <message>
         <source>Keep what was said beside a translation, in brackets (takes longer)</source>
@@ -4562,6 +4937,14 @@ Take these too? Take them only if you made the file yourself or trust where it c
         <translation>Только записывать: текст пишется позже, когда вы нажмёте «Расшифровать» в списке (экономит энергию: для ноутбука от батареи или телефона)</translation>
     </message>
     <message>
+        <source>Write into the text as I speak</source>
+        <translation>Писать в текст по ходу речи</translation>
+    </message>
+    <message>
+        <source>Each piece of live speech is also inserted at the cursor of the text you are editing.</source>
+        <translation>Каждый фрагмент живой речи также вставляется в позицию курсора в редактируемом тексте.</translation>
+    </message>
+    <message>
         <source>Delete a recording once its text is written</source>
         <translation>Удалять запись после того, как её текст записан</translation>
     </message>
@@ -4630,24 +5013,20 @@ Take these too? Take them only if you made the file yourself or trust where it c
         <translation>Скачать заново</translation>
     </message>
     <message>
-        <source>Processor</source>
-        <translation>Процессор</translation>
+        <source>Automatic</source>
+        <translation>Автоматически</translation>
     </message>
     <message>
-        <source>memory unknown</source>
-        <translation>объём памяти неизвестен</translation>
+        <source>Processor (CPU)</source>
+        <translation>Процессор (CPU)</translation>
     </message>
     <message>
-        <source>%1 has too little memory for this model.</source>
-        <translation>У %1 слишком мало памяти для этой модели.</translation>
+        <source>No graphics card that the AI engine can use (Vulkan) was found, or the engine is not installed; the processor computes.</source>
+        <translation>Видеокарта, которую может использовать ИИ-движок (Vulkan), не найдена, или движок не установлен; вычисления выполняет процессор.</translation>
     </message>
     <message>
-        <source>No graphics card that whisper.cpp can use (Vulkan) was found; the processor computes.</source>
-        <translation>Видеокарта, которую может использовать whisper.cpp (Vulkan), не найдена; вычисляет процессор.</translation>
-    </message>
-    <message>
-        <source>A graphics card is usually much faster; the speed test shows how much on this computer.</source>
-        <translation>Видеокарта обычно намного быстрее; проверка скорости покажет, насколько именно на этом компьютере.</translation>
+        <source>Automatic takes a graphics card with enough free memory for the model, else the processor. A graphics card is usually much faster; the speed test shows how much on this computer.</source>
+        <translation>При автоматическом выборе берётся видеокарта с достаточным для модели объёмом свободной памяти, иначе процессор. Видеокарта обычно намного быстрее; проверка скорости показывает, насколько именно на этом компьютере.</translation>
     </message>
     <message>
         <source>Everything is written in %1.</source>
@@ -4669,16 +5048,16 @@ Take these too? Take them only if you made the file yourself or trust where it c
 <context>
     <name>SpeechTool</name>
     <message>
-        <source>Speech &amp;Transcription</source>
-        <translation>Расшифровка &amp;речи</translation>
-    </message>
-    <message>
         <source>Start or stop speech transcription (the arrow beside the button: microphone and options)</source>
         <translation>Начать или остановить расшифровку речи (стрелка рядом с кнопкой: микрофон и параметры)</translation>
     </message>
     <message>
-        <source>Show &amp;Transcriptions</source>
-        <translation>Показать &amp;расшифровки</translation>
+        <source>Record &amp;Only</source>
+        <translation>&amp;Только запись</translation>
+    </message>
+    <message>
+        <source>Start or stop a recording without writing its text (the text can be written later with Transcribe)</source>
+        <translation>Начать или остановить запись, не создавая её текст (текст можно создать позже командой «Расшифровать»)</translation>
     </message>
     <message>
         <source>The transcriptions in the inspector</source>
@@ -4709,10 +5088,6 @@ Take these too? Take them only if you made the file yourself or trust where it c
         <translation>Параметры расшифровки речи…</translation>
     </message>
     <message>
-        <source>Model unloaded, RAM usage minimal</source>
-        <translation>Модель выгружена, память почти не занята</translation>
-    </message>
-    <message>
         <source>The add-on&apos;s speech engine is missing (install the add-on again).</source>
         <translation>Нет модуля распознавания речи из дополнения (установите дополнение заново).</translation>
     </message>
@@ -4721,8 +5096,16 @@ Take these too? Take them only if you made the file yourself or trust where it c
         <translation>Не удаётся загрузить Qt Multimedia: %1</translation>
     </message>
     <message>
-        <source>Cannot load %1: %2</source>
-        <translation>Не удаётся загрузить %1: %2</translation>
+        <source>This version of the add-on needs Quillbinder 0.99.0 or later.</source>
+        <translation>Этой версии дополнения нужен Quillbinder 0.99.0 или новее.</translation>
+    </message>
+    <message>
+        <source>&amp;Speech Transcription</source>
+        <translation>&amp;Расшифровка речи</translation>
+    </message>
+    <message>
+        <source>Show Transcri&amp;ptions</source>
+        <translation>&amp;Показать расшифровки</translation>
     </message>
     <message>
         <source>Cannot load the speech engine: %1</source>
@@ -4884,7 +5267,7 @@ Take these too? Take them only if you made the file yourself or trust where it c
     </message>
     <message>
         <source>Draft (included in compile)</source>
-        <translation>Черновик (включённое в компоновку)</translation>
+        <translation>Черновик (включённые в компоновку документы)</translation>
     </message>
     <message>
         <source>Whole project</source>
@@ -5218,6 +5601,14 @@ Take these too? Take them only if you made the file yourself or trust where it c
         <translation>Копировать весь текст</translation>
     </message>
     <message>
+        <source>Put the marked part of the text (all of it when nothing is marked) into the text you are editing, at the cursor</source>
+        <translation>Вставить выделенную часть текста (весь текст, если ничего не выделено) в редактируемый текст, в позицию курсора</translation>
+    </message>
+    <message>
+        <source>Insert at Cursor</source>
+        <translation>Вставить в позицию курсора</translation>
+    </message>
+    <message>
         <source>Move the transcription to the trash</source>
         <translation>Переместить расшифровку в корзину</translation>
     </message>
@@ -5288,6 +5679,14 @@ Take these too? Take them only if you made the file yourself or trust where it c
     <message>
         <source>The text is on the clipboard.</source>
         <translation>Текст находится в буфере обмена.</translation>
+    </message>
+    <message>
+        <source>Open a text in the editor first, and click into it where the transcription should go.</source>
+        <translation>Сначала откройте текст в редакторе и щёлкните в нём там, куда должна попасть расшифровка.</translation>
+    </message>
+    <message>
+        <source>The text was inserted at the cursor.</source>
+        <translation>Текст вставлен в позицию курсора.</translation>
     </message>
     <message>
         <source>No speech model yet: File &gt; Options &gt; Speech.</source>
@@ -5569,6 +5968,220 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
 </context>
 <context>
+    <name>qb::AiDownloads</name>
+    <message>
+        <source>Handwriting Engine</source>
+        <translation>Handwriting Engine</translation>
+    </message>
+    <message>
+        <source>AI Engine</source>
+        <translation>AI Engine</translation>
+    </message>
+    <message>
+        <source>%1 is not a package of the %2.</source>
+        <translation>%1 не является пакетом компонента «%2».</translation>
+    </message>
+    <message>
+        <source>Another download is running.</source>
+        <translation>Выполняется другое скачивание.</translation>
+    </message>
+    <message>
+        <source>The model %1 is not in the catalog.</source>
+        <translation>Модели %1 нет в каталоге.</translation>
+    </message>
+    <message>
+        <source>%1 could not be made.</source>
+        <translation>Не удалось создать %1.</translation>
+    </message>
+    <message>
+        <source>The download was cancelled.</source>
+        <translation>Скачивание отменено.</translation>
+    </message>
+    <message>
+        <source>%1 could not be written.</source>
+        <translation>Не удалось записать %1.</translation>
+    </message>
+    <message>
+        <source>%1 is installed.</source>
+        <translation>%1 установлен.</translation>
+    </message>
+    <message>
+        <source>This copy of %1 cannot make a secure connection, so it cannot download. Download the current AppImage once from the project&apos;s page.</source>
+        <translation>Эта копия %1 не может установить защищённое соединение, поэтому скачивание невозможно. Один раз скачайте актуальный AppImage со страницы проекта.</translation>
+    </message>
+    <message>
+        <source>The download failed: the file could not be written, or is larger than announced.</source>
+        <translation>Скачивание не удалось: файл не удалось записать или он больше объявленного размера.</translation>
+    </message>
+    <message>
+        <source>The download failed (%1).</source>
+        <translation>Скачивание не удалось (%1).</translation>
+    </message>
+    <message>
+        <source>The download is incomplete (%1 of %2 bytes).</source>
+        <translation>Скачивание не завершено (%1 из %2 байт).</translation>
+    </message>
+    <message>
+        <source>The downloaded file is not the one the catalog names (its SHA-256 differs), so it was not kept.</source>
+        <translation>Скачанный файл не совпадает с указанным в каталоге (отличается SHA-256), поэтому он не сохранён.</translation>
+    </message>
+    <message>
+        <source>The download is incomplete.</source>
+        <translation>Скачивание не завершено.</translation>
+    </message>
+    <message>
+        <source>The joined file is not the one the catalog names (its SHA-256 differs), so it was not kept.</source>
+        <translation>Склеенный файл не совпадает с указанным в каталоге (отличается SHA-256), поэтому он не сохранён.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::AiInstallPanel</name>
+    <message>
+        <source>many</source>
+        <translation>много</translation>
+    </message>
+    <message>
+        <source>Install the Engine</source>
+        <translation>Установить движок</translation>
+    </message>
+    <message>
+        <source>Downloads the engine of this version from the project&apos;s release page and installs it</source>
+        <translation>Скачивает движок этой версии со страницы выпуска проекта и устанавливает его</translation>
+    </message>
+    <message>
+        <source>Install from File...</source>
+        <translation>Установить из файла...</translation>
+    </message>
+    <message>
+        <source>Installs the engine from a package file (for a computer without a connection)</source>
+        <translation>Устанавливает движок из файла пакета (для компьютера без подключения)</translation>
+    </message>
+    <message>
+        <source>Model</source>
+        <translation>Модель</translation>
+    </message>
+    <message>
+        <source>Languages</source>
+        <translation>Языки</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation>Скачать</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation>Память</translation>
+    </message>
+    <message>
+        <source>License</source>
+        <translation>Лицензия</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation>Состояние</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <source>The handwriting engine is not installed.</source>
+        <translation>Движок рукописного ввода не установлен.</translation>
+    </message>
+    <message>
+        <source>The AI engine is not installed.</source>
+        <translation>ИИ-движок не установлен.</translation>
+    </message>
+    <message>
+        <source>The installed engine %1 was made for another version of Quillbinder: install it again.</source>
+        <translation>Установленный движок %1 создан для другой версии Quillbinder: установите его заново.</translation>
+    </message>
+    <message>
+        <source>The engine %1 is switched off (Help &gt; Add-ons and Updates &gt; Manage Add-ons).</source>
+        <translation>Движок %1 выключен (Справка &gt; Дополнения и обновления &gt; Управление дополнениями).</translation>
+    </message>
+    <message>
+        <source>The handwriting engine %1 is installed.</source>
+        <translation>Движок рукописного ввода %1 установлен.</translation>
+    </message>
+    <message>
+        <source>The AI engine %1 is installed.</source>
+        <translation>ИИ-движок %1 установлен.</translation>
+    </message>
+    <message>
+        <source>The new engine is used after Quillbinder is started again.</source>
+        <translation>Новый движок будет использоваться после повторного запуска Quillbinder.</translation>
+    </message>
+    <message>
+        <source>Install Again</source>
+        <translation>Установить заново</translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation>Установлено</translation>
+    </message>
+    <message>
+        <source>Not published yet</source>
+        <translation>Ещё не опубликовано</translation>
+    </message>
+    <message>
+        <source>Not installed</source>
+        <translation>Не установлено</translation>
+    </message>
+    <message>
+        <source>The catalog has no models for this function yet.</source>
+        <translation>В каталоге пока нет моделей для этой функции.</translation>
+    </message>
+    <message>
+        <source>License: %1</source>
+        <translation>Лицензия: %1</translation>
+    </message>
+    <message>
+        <source>Downloading the engine...</source>
+        <translation>Скачивается движок...</translation>
+    </message>
+    <message>
+        <source>Downloading %1...</source>
+        <translation>Скачивается %1...</translation>
+    </message>
+    <message>
+        <source>Install the Engine from a File</source>
+        <translation>Установка движка из файла</translation>
+    </message>
+    <message>
+        <source>Quillbinder packages (*.qbpkg)</source>
+        <translation>Пакеты Quillbinder (*.qbpkg)</translation>
+    </message>
+    <message>
+        <source>This package is not signed by the Quillbinder project, so it cannot be told whether it is the project&apos;s own. Install it only when you trust where it comes from.</source>
+        <translation>Этот пакет не подписан проектом Quillbinder, поэтому нельзя узнать, принадлежит ли он проекту. Устанавливайте его, только если доверяете источнику.</translation>
+    </message>
+    <message>
+        <source>Install Anyway</source>
+        <translation>Всё равно установить</translation>
+    </message>
+    <message>
+        <source>The engine was not installed.</source>
+        <translation>Движок не установлен.</translation>
+    </message>
+    <message>
+        <source>The engine is installed.</source>
+        <translation>Движок установлен.</translation>
+    </message>
+    <message>
+        <source>%1 may be used for non-commercial purposes only (%2). Download it?</source>
+        <translation>%1 разрешено использовать только в некоммерческих целях (%2). Скачать?</translation>
+    </message>
+    <message>
+        <source>%1 is deleted.</source>
+        <translation>%1 удалён.</translation>
+    </message>
+</context>
+<context>
     <name>qb::AlignButtons</name>
     <message>
         <source>Align left</source>
@@ -5596,13 +6209,13 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
 </context>
 <context>
     <name>qb::BinderModel</name>
-    <message>
-        <source>word</source>
-        <translation>слово</translation>
-    </message>
-    <message>
-        <source>words</source>
-        <translation>слов</translation>
+    <message numerus="yes">
+        <source>%Ln word(s)</source>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
     <message>
         <source>(its own text: %1)</source>
@@ -5955,7 +6568,7 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
     <message>
         <source>Type part of a command&apos;s name or of its menu. Return or a double-click runs it.</source>
-        <translation>Введите часть названия команды или её меню. Return или двойной щелчок выполняет её.</translation>
+        <translation>Введите часть названия команды или её меню. Enter или двойной щелчок выполняет её.</translation>
     </message>
     <message>
         <source>Command</source>
@@ -5982,7 +6595,7 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
     <message>
         <source>Update the &amp;file from the project (a copy)</source>
-        <translation>Обновить &amp;файл из проекта (копия)</translation>
+        <translation>&amp;Обновить файл из проекта (копия)</translation>
     </message>
     <message>
         <source>Only Word (.docx) and LibreOffice (.odt) files can be changed; this file can only be read.</source>
@@ -6022,7 +6635,7 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
     <message>
         <source>&amp;Take</source>
-        <translation>&amp;Принять</translation>
+        <translation>Пр&amp;инять</translation>
     </message>
     <message>
         <source>Transfer</source>
@@ -6503,33 +7116,25 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
         <source>[objects] </source>
         <translation>[объекты] </translation>
     </message>
-    <message>
-        <source>1 object sheet</source>
-        <translation>1 карточка объекта</translation>
-    </message>
-    <message>
-        <source>%1 object sheets</source>
-        <translation>Карточек объектов: %1</translation>
-    </message>
-    <message>
-        <source>1 document</source>
-        <translation>1 документ</translation>
-    </message>
-    <message>
-        <source>%1 documents</source>
-        <translation>Документов: %1</translation>
-    </message>
-    <message>
-        <source>1 word</source>
-        <translation>1 слово</translation>
-    </message>
-    <message>
-        <source>about %1 words</source>
-        <translation>около %1 слов</translation>
+    <message numerus="yes">
+        <source>Preview — %1 (%Ln page(s))</source>
+        <translation>
+            <numerusform>Предпросмотр — %1 (%n страница)</numerusform>
+            <numerusform>Предпросмотр — %1 (%n страницы)</numerusform>
+            <numerusform>Предпросмотр — %1 (%n страниц)</numerusform>
+        </translation>
     </message>
     <message>
         <source>The selected output format is not available.</source>
         <translation>Выбранный выходной формат недоступен.</translation>
+    </message>
+    <message>
+        <source>Cannot write %1: %2</source>
+        <translation>Не удаётся записать %1: %2</translation>
+    </message>
+    <message>
+        <source>Compile cancelled. No file was made.</source>
+        <translation>Компоновка отменена. Файл не создан.</translation>
     </message>
     <message>
         <source>Compile to</source>
@@ -6542,6 +7147,30 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     <message>
         <source>Compiling...</source>
         <translation>Компоновка...</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln object sheet(s)</source>
+        <translation>
+            <numerusform>%n лист объектов</numerusform>
+            <numerusform>%n листа объектов</numerusform>
+            <numerusform>%n листов объектов</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation>
+            <numerusform>%n документ</numerusform>
+            <numerusform>%n документа</numerusform>
+            <numerusform>%n документов</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>about %Ln word(s)</source>
+        <translation>
+            <numerusform>около %n слова</numerusform>
+            <numerusform>около %n слов</numerusform>
+            <numerusform>около %n слов</numerusform>
+        </translation>
     </message>
     <message>
         <source>Compiling failed:
@@ -6583,13 +7212,20 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
         <source>Preparing the preview...</source>
         <translation>Подготовка предпросмотра...</translation>
     </message>
+</context>
+<context>
+    <name>qb::CompileProgress</name>
     <message>
-        <source>Preview — %1 (1 page)</source>
-        <translation>Предпросмотр — %1 (1 страница)</translation>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
     </message>
     <message>
-        <source>Preview — %1 (%2 pages)</source>
-        <translation>Предпросмотр — %1 (страниц: %2)</translation>
+        <source>%1 of %2</source>
+        <translation>%1 из %2</translation>
+    </message>
+    <message>
+        <source>Cancelling...</source>
+        <translation>Отмена...</translation>
     </message>
 </context>
 <context>
@@ -6667,7 +7303,7 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
     <message>
         <source>Te&amp;xt</source>
-        <translation>&amp;Тексте</translation>
+        <translation>Т&amp;ексте</translation>
     </message>
     <message>
         <source>&amp;Notes</source>
@@ -6679,7 +7315,7 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
     <message>
         <source>Custom &amp;metadata</source>
-        <translation>&amp;Пользовательских метаданных</translation>
+        <translation>Пользовательских &amp;метаданных</translation>
     </message>
     <message>
         <source>Comments and &amp;footnotes</source>
@@ -6711,7 +7347,7 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
     <message>
         <source>C&amp;ount</source>
-        <translation>&amp;Подсчитать</translation>
+        <translation>П&amp;одсчитать</translation>
     </message>
     <message>
         <source>Con&amp;vert</source>
@@ -6719,7 +7355,7 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
     </message>
     <message>
         <source>Selected &amp;documents only (%1, with what is inside them)</source>
-        <translation>Только выбранные &amp;документы (%1, вместе с их содержимым)</translation>
+        <translation>Только выбранные документы (%1, вместе с &amp;их содержимым)</translation>
     </message>
     <message>
         <source>Convert to Typographic Quotes</source>
@@ -6773,29 +7409,29 @@ Move the whole Quillbinder folder to a place of your own, for example C:\Users\&
         <source>custom metadata</source>
         <translation>пользовательских метаданных</translation>
     </message>
-    <message>
-        <source>quote mark</source>
-        <translation>кавычка</translation>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation>
+            <numerusform>%n документ</numerusform>
+            <numerusform>%n документа</numerusform>
+            <numerusform>%n документов</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>quote marks</source>
-        <translation>кавычки|кавычек</translation>
+    <message numerus="yes">
+        <source>%Ln quote mark(s) converted in %1: %2.</source>
+        <translation>
+            <numerusform>Кавычек преобразовано: %n; затронуто: %1 (%2).</numerusform>
+            <numerusform>Кавычек преобразовано: %n; затронуто: %1 (%2).</numerusform>
+            <numerusform>Кавычек преобразовано: %n; затронуто: %1 (%2).</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>document</source>
-        <translation>документ</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>документа|документов</translation>
-    </message>
-    <message>
-        <source>%1 converted in %2: %3.</source>
-        <translation>Преобразовано %1 в %2: %3.</translation>
-    </message>
-    <message>
-        <source>%1 to convert in %2: %3.</source>
-        <translation>К преобразованию %1 в %2: %3.</translation>
+    <message numerus="yes">
+        <source>%Ln quote mark(s) to convert in %1: %2.</source>
+        <translation>
+            <numerusform>Кавычек для преобразования: %n; затронуто: %1 (%2).</numerusform>
+            <numerusform>Кавычек для преобразования: %n; затронуто: %1 (%2).</numerusform>
+            <numerusform>Кавычек для преобразования: %n; затронуто: %1 (%2).</numerusform>
+        </translation>
     </message>
     <message>
         <source>Snapshots taken: %1.</source>
@@ -6866,11 +7502,11 @@ This cannot be undone as a whole.%3</source>
     </message>
     <message>
         <source>Copyholder on the &amp;Right</source>
-        <translation>Копихолдер &amp;справа</translation>
+        <translation>К&amp;опихолдер справа</translation>
     </message>
     <message>
         <source>Copyholder at the &amp;Top</source>
-        <translation>Копихолдер &amp;сверху</translation>
+        <translation>Ко&amp;пихолдер сверху</translation>
     </message>
     <message>
         <source>Copyholder at the &amp;Bottom</source>
@@ -6931,20 +7567,16 @@ This cannot be undone as a whole.%3</source>
         <translation>Удаление всех отчётов о сбоях</translation>
     </message>
     <message>
-        <source>Delete all %1?</source>
-        <translation>Удалить все: %1?</translation>
-    </message>
-    <message>
-        <source>crash report</source>
-        <translation>отчёт о сбое</translation>
-    </message>
-    <message>
-        <source>crash reports</source>
-        <translation>отчёта о сбое|отчётов о сбоях</translation>
-    </message>
-    <message>
         <source>Delete All</source>
         <translation>Удалить все</translation>
+    </message>
+    <message numerus="yes">
+        <source>Delete all %Ln crash report(s)?</source>
+        <translation>
+            <numerusform>Удалить все отчёты о сбоях (%n)?</numerusform>
+            <numerusform>Удалить все отчёты о сбоях (%n)?</numerusform>
+            <numerusform>Удалить все отчёты о сбоях (%n)?</numerusform>
+        </translation>
     </message>
     <message>
         <source>freeze (recovered)</source>
@@ -7244,22 +7876,6 @@ This cannot be undone as a whole.%3</source>
         <translation>Заменить все</translation>
     </message>
     <message>
-        <source>replacement</source>
-        <translation>замена</translation>
-    </message>
-    <message>
-        <source>replacements</source>
-        <translation>замены|замен</translation>
-    </message>
-    <message>
-        <source>match</source>
-        <translation>совпадение</translation>
-    </message>
-    <message>
-        <source>matches</source>
-        <translation>совпадения|совпадений</translation>
-    </message>
-    <message>
         <source>Words: %1
 Characters: %2
 Characters (no spaces): %3
@@ -7380,14 +7996,6 @@ Pages (250 words): %5</source>
         <translation>Страница %1 из %2</translation>
     </message>
     <message>
-        <source>page</source>
-        <translation>страница</translation>
-    </message>
-    <message>
-        <source>pages</source>
-        <translation>страницы|страниц</translation>
-    </message>
-    <message>
         <source>%1 and %2 more</source>
         <translation>%1 и ещё %2</translation>
     </message>
@@ -7398,14 +8006,6 @@ Pages (250 words): %5</source>
     <message>
         <source>Nothing to go forward to</source>
         <translation>Некуда переходить вперёд</translation>
-    </message>
-    <message>
-        <source>document</source>
-        <translation>документ</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>документа|документов</translation>
     </message>
     <message>
         <source>Total: %1 characters</source>
@@ -7468,10 +8068,6 @@ Pages (250 words): %5</source>
         <translation>Слов: %1</translation>
     </message>
     <message>
-        <source>%1 of %2 %3 (click to edit)</source>
-        <translation>%1 из %2 %3 (щёлкните, чтобы изменить)</translation>
-    </message>
-    <message>
         <source>characters</source>
         <translation>символов</translation>
     </message>
@@ -7482,6 +8078,46 @@ Pages (250 words): %5</source>
     <message>
         <source>Document Target</source>
         <translation>Цель документа</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln replacement(s)</source>
+        <translation>
+            <numerusform>%n замена</numerusform>
+            <numerusform>%n замены</numerusform>
+            <numerusform>%n замен</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln match(es)</source>
+        <translation>
+            <numerusform>%n совпадение</numerusform>
+            <numerusform>%n совпадения</numerusform>
+            <numerusform>%n совпадений</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln page(s)</source>
+        <translation>
+            <numerusform>%n страница</numerusform>
+            <numerusform>%n страницы</numerusform>
+            <numerusform>%n страниц</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation>
+            <numerusform>%n документ</numerusform>
+            <numerusform>%n документа</numerusform>
+            <numerusform>%n документов</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>%1 of %2 characters (click to edit)</source>
+        <translation>%1 из %2 символов (щёлкните, чтобы изменить)</translation>
+    </message>
+    <message>
+        <source>%1 of %2 words (click to edit)</source>
+        <translation>%1 из %2 слов (щёлкните, чтобы изменить)</translation>
     </message>
     <message>
         <source>No target</source>
@@ -7494,6 +8130,197 @@ Pages (250 words): %5</source>
     <message>
         <source>Find in the copyholder</source>
         <translation>Найти в копихолдере</translation>
+    </message>
+</context>
+<context>
+    <name>qb::EncryptionPage</name>
+    <message>
+        <source>Encryption locks the files of a project and its backups with your key, in the OpenPGP format that Kleopatra, Gpg4win and GnuPG open without Quillbinder (see the manual&apos;s page on opening your files without Quillbinder).</source>
+        <translation>Шифрование защищает файлы проекта и его резервные копии вашим ключом в формате OpenPGP, который открывают Kleopatra, Gpg4win и GnuPG без Quillbinder (см. страницу руководства об открытии файлов без Quillbinder).</translation>
+    </message>
+    <message>
+        <source>Keys on this device</source>
+        <translation>Ключи на этом устройстве</translation>
+    </message>
+    <message>
+        <source>Key</source>
+        <translation>Ключ</translation>
+    </message>
+    <message>
+        <source>Fingerprint</source>
+        <translation>Отпечаток</translation>
+    </message>
+    <message>
+        <source>Here</source>
+        <translation>Здесь</translation>
+    </message>
+    <message>
+        <source>Create Keys...</source>
+        <translation>Создать ключи...</translation>
+    </message>
+    <message>
+        <source>Import Keys...</source>
+        <translation>Импортировать ключи...</translation>
+    </message>
+    <message>
+        <source>Import a Key File...</source>
+        <translation>Импортировать файл ключа...</translation>
+    </message>
+    <message>
+        <source>Export Keys...</source>
+        <translation>Экспортировать ключи...</translation>
+    </message>
+    <message>
+        <source>Forget the passphrase on this device</source>
+        <translation>Забыть парольную фразу на этом устройстве</translation>
+    </message>
+    <message>
+        <source>The open project</source>
+        <translation>Открытый проект</translation>
+    </message>
+    <message>
+        <source>Encrypted backups</source>
+        <translation>Зашифрованные резервные копии</translation>
+    </message>
+    <message>
+        <source>Encrypted project</source>
+        <translation>Зашифрованный проект</translation>
+    </message>
+    <message>
+        <source>This place is not allowed</source>
+        <translation>Это место не разрешено</translation>
+    </message>
+    <message>
+        <source>Other key</source>
+        <translation>Другой ключ</translation>
+    </message>
+    <message>
+        <source>My key</source>
+        <translation>Мой ключ</translation>
+    </message>
+    <message>
+        <source>Recovery key</source>
+        <translation>Ключ восстановления</translation>
+    </message>
+    <message>
+        <source>secret part, unlocked</source>
+        <translation>закрытая часть, разблокирована</translation>
+    </message>
+    <message>
+        <source>secret part, locked</source>
+        <translation>закрытая часть, заблокирована</translation>
+    </message>
+    <message>
+        <source>public part only</source>
+        <translation>только открытая часть</translation>
+    </message>
+    <message>
+        <source>This device has no keys yet. Create Keys makes your key and a recovery key; on another device, use Import Keys with the key folder.</source>
+        <translation>На этом устройстве ещё нет ключей. Команда «Создать ключи» создаёт ваш ключ и ключ восстановления; на другом устройстве используйте «Импортировать ключи» с папкой ключей.</translation>
+    </message>
+    <message>
+        <source>No project is open: the two switches belong to the open project.</source>
+        <translation>Проект не открыт: два переключателя относятся к открытому проекту.</translation>
+    </message>
+    <message>
+        <source>Create or import keys first: the switches need your key and the recovery key.</source>
+        <translation>Сначала создайте или импортируйте ключи: для переключателей нужны ваш ключ и ключ восстановления.</translation>
+    </message>
+    <message>
+        <source>A project in Scrivener&apos;s format cannot be encrypted: Scrivener could not open its files. Its backups can be encrypted; that switch belongs to each computer, so switch it on on every computer that makes backups of the project.</source>
+        <translation>Проект в формате Scrivener зашифровать нельзя: Scrivener не смог бы открыть его файлы. Его резервные копии шифровать можно; этот переключатель относится к каждому компьютеру, поэтому включите его на каждом компьютере, который делает резервные копии проекта.</translation>
+    </message>
+    <message>
+        <source>The switch &quot;%1&quot; could not be changed.</source>
+        <translation>Не удалось изменить переключатель «%1».</translation>
+    </message>
+    <message>
+        <source>Choose the key folder</source>
+        <translation>Выберите папку ключей</translation>
+    </message>
+    <message>
+        <source>Import Keys</source>
+        <translation>Импорт ключей</translation>
+    </message>
+    <message>
+        <source>Type the passphrase of your key.</source>
+        <translation>Введите парольную фразу вашего ключа.</translation>
+    </message>
+    <message>
+        <source>Your key is on this device now.</source>
+        <translation>Ваш ключ теперь на этом устройстве.</translation>
+    </message>
+    <message>
+        <source>Your key is on this device for this session only: it could not be saved (%1), so it will be gone at the next start. Check the free space and the rights of the program&apos;s data folder, then import it again.</source>
+        <translation>Ваш ключ находится на этом устройстве только на время этого сеанса: сохранить его не удалось (%1), поэтому при следующем запуске его не будет. Проверьте свободное место и права на папку данных программы, затем импортируйте его снова.</translation>
+    </message>
+    <message>
+        <source>Choose a key file</source>
+        <translation>Выберите файл ключа</translation>
+    </message>
+    <message>
+        <source>Key files (*.asc *.gpg *.pgp);;All files (*)</source>
+        <translation>Файлы ключей (*.asc *.gpg *.pgp);;Все файлы (*)</translation>
+    </message>
+    <message>
+        <source>Import a Key File</source>
+        <translation>Импорт файла ключа</translation>
+    </message>
+    <message>
+        <source>The file could not be read.</source>
+        <translation>Не удалось прочитать файл.</translation>
+    </message>
+    <message>
+        <source>Type the passphrase of this key.</source>
+        <translation>Введите парольную фразу этого ключа.</translation>
+    </message>
+    <message>
+        <source>The key is on this device as your key.</source>
+        <translation>Ключ находится на этом устройстве как ваш ключ.</translation>
+    </message>
+    <message>
+        <source>There is no recovery key yet: import its public file (recovery-key-public.asc) with Import a Key File, or make a new pair with Create Keys.</source>
+        <translation>Ключа восстановления пока нет: импортируйте его открытый файл (recovery-key-public.asc) командой «Импортировать файл ключа» или создайте новую пару командой «Создать ключи».</translation>
+    </message>
+    <message>
+        <source>The key is on this device as the recovery key.</source>
+        <translation>Ключ находится на этом устройстве как ключ восстановления.</translation>
+    </message>
+    <message>
+        <source>The public key is on this device. It is not your key and not the recovery key.</source>
+        <translation>Открытый ключ находится на этом устройстве. Это не ваш ключ и не ключ восстановления.</translation>
+    </message>
+    <message>
+        <source>The key is on this device for this session only: it could not be saved (%1), so it will be gone at the next start. Check the free space and the rights of the program&apos;s data folder, then import it again.</source>
+        <translation>Ключ находится на этом устройстве только на время этого сеанса: сохранить его не удалось (%1), поэтому при следующем запуске его не будет. Проверьте свободное место и права на папку данных программы, затем импортируйте его снова.</translation>
+    </message>
+    <message>
+        <source>Where to write the keys</source>
+        <translation>Куда записать ключи</translation>
+    </message>
+    <message>
+        <source>Export Keys</source>
+        <translation>Экспорт ключей</translation>
+    </message>
+    <message>
+        <source>The keys are in the folder %1. It holds your key (locked by your passphrase), the public parts and a README.txt. The recovery key&apos;s secret part is only in the folder that Create Keys made.</source>
+        <translation>Ключи находятся в папке %1. В ней лежат ваш ключ (защищённый вашей парольной фразой), открытые части и файл README.txt. Закрытая часть ключа восстановления есть только в папке, которую создала команда «Создать ключи».</translation>
+    </message>
+    <message>
+        <source>Forget the passphrase</source>
+        <translation>Забыть парольную фразу</translation>
+    </message>
+    <message>
+        <source>Quillbinder forgets the passphrase on this device and locks your key. It will ask for the passphrase again when it needs it. Continue?</source>
+        <translation>Quillbinder забудет парольную фразу на этом устройстве и заблокирует ваш ключ. Программа снова запросит парольную фразу, когда она понадобится. Продолжить?</translation>
+    </message>
+    <message>
+        <source>The passphrase is forgotten on this device.</source>
+        <translation>Парольная фраза на этом устройстве забыта.</translation>
+    </message>
+    <message>
+        <source>The system&apos;s key store would not remove the passphrase: %1</source>
+        <translation>Хранилище ключей системы не удалило парольную фразу: %1</translation>
     </message>
 </context>
 <context>
@@ -7763,10 +8590,6 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
         <translation>Перенести AppImage в %1 — постоянное место, откуда его запускает пункт меню</translation>
     </message>
     <message>
-        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
-        <translation>Позже это можно изменить командой «Справка &gt; Добавить в меню приложений» или «Справка &gt; Убрать из меню приложений». Если вы переместите AppImage сами, добавьте его в меню снова.</translation>
-    </message>
-    <message>
         <source>Choose a folder: until then no backups are made</source>
         <translation>Выберите папку: пока она не выбрана, резервные копии не создаются</translation>
     </message>
@@ -7793,6 +8616,10 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
     <message>
         <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them</source>
         <translation>Добавить %1 в меню приложений, чтобы запускать программу, как любую другую, и открывать проекты двойным щелчком</translation>
+    </message>
+    <message>
+        <source>Help &gt; Add to Application Menu or Remove From Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
+        <translation>Позже это можно изменить командой Справка &gt; Добавить в меню приложений или Убрать из меню приложений. Если вы сами переместите AppImage, добавьте его в меню снова.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -8249,7 +9076,7 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
     </message>
     <message>
         <source>Custom</source>
-        <translation>Другое</translation>
+        <translation>Другая</translation>
     </message>
     <message>
         <source>Mirror margins (books: inside and outside)</source>
@@ -8596,7 +9423,7 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
     </message>
     <message>
         <source>&amp;Bold</source>
-        <translation>По&amp;лужирный</translation>
+        <translation>&amp;Полужирный</translation>
     </message>
     <message>
         <source>&amp;Italic</source>
@@ -8604,7 +9431,7 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
     </message>
     <message>
         <source>&amp;Underline</source>
-        <translation>П&amp;одчёркнутый</translation>
+        <translation>По&amp;дчёркнутый</translation>
     </message>
     <message>
         <source>Stri&amp;kethrough</source>
@@ -8616,7 +9443,7 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
     </message>
     <message>
         <source>&amp;Previous</source>
-        <translation>&amp;Предыдущее</translation>
+        <translation>П&amp;редыдущее</translation>
     </message>
     <message>
         <source>&amp;Next</source>
@@ -8637,17 +9464,13 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
 </context>
 <context>
     <name>qb::FullInstallWindow</name>
-    <message>
-        <source>Installing %1 (%2 MB)...</source>
-        <translation>Установка %1 (%2 МБ)...</translation>
-    </message>
-    <message>
-        <source>add-on</source>
-        <translation>дополнение</translation>
-    </message>
-    <message>
-        <source>add-ons</source>
-        <translation>дополнения|дополнений</translation>
+    <message numerus="yes">
+        <source>Installing %Ln add-on(s) (%1 MB)...</source>
+        <translation>
+            <numerusform>Установка %n дополнения (%1 МБ)...</numerusform>
+            <numerusform>Установка %n дополнений (%1 МБ)...</numerusform>
+            <numerusform>Установка %n дополнений (%1 МБ)...</numerusform>
+        </translation>
     </message>
     <message>
         <source>Done</source>
@@ -8739,7 +9562,7 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
 <context>
     <name>qb::IconFromTextDialog</name>
     <message>
-        <source>Icon from Text</source>
+        <source>Icon From Text</source>
         <translation>Значок из текста</translation>
     </message>
     <message>
@@ -8950,12 +9773,12 @@ Nothing is written into Windows&apos; own folders or the registry, unless you as
     </message>
     <message>
         <source>Drop another image here to replace it; right-click for more.</source>
-        <translation>Бросьте сюда другое изображение, чтобы заменить его; щёлкните правой кнопкой, чтобы увидеть больше.</translation>
+        <translation>Перетащите сюда другое изображение, чтобы заменить его; щёлкните правой кнопкой, чтобы увидеть больше.</translation>
     </message>
     <message>
         <source>Drop an image here.
 (An image file, or a picture from the binder; double-click to choose a file.)</source>
-        <translation>Бросьте сюда изображение.
+        <translation>Перетащите сюда изображение.
 (Файл изображения или картинка из биндера; двойной щелчок позволяет выбрать файл.)</translation>
     </message>
     <message>
@@ -9337,6 +10160,22 @@ The text of the snapshot &quot;%2&quot; is now the document&apos;s text; it can 
         <translation>Изменить…</translation>
     </message>
     <message>
+        <source>Synopsis and Notes</source>
+        <translation>Аннотация и заметки</translation>
+    </message>
+    <message>
+        <source>Comments and Footnotes</source>
+        <translation>Комментарии и сноски</translation>
+    </message>
+    <message>
+        <source>Mind Map</source>
+        <translation>Интеллект-карта</translation>
+    </message>
+    <message>
+        <source>Objects</source>
+        <translation>Объекты</translation>
+    </message>
+    <message>
         <source>Synopsis and notes</source>
         <translation>Аннотация и заметки</translation>
     </message>
@@ -9411,6 +10250,165 @@ The text of the snapshot &quot;%2&quot; is now the document&apos;s text; it can 
     <message>
         <source>Ctrl + mouse wheel over a part changes the zoom of that part. Right-click: one zoom for the tabs Metadata and Comments, or one each.</source>
         <translation>Ctrl + колесо мыши над частью меняет масштаб этой части. Щелчок правой кнопкой: один масштаб для вкладок «Метаданные» и «Комментарии» или отдельный для каждой.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::KeyWizard</name>
+    <message>
+        <source>Create Keys</source>
+        <translation>Создание ключей</translation>
+    </message>
+    <message>
+        <source>Make Keys</source>
+        <translation>Создать ключи</translation>
+    </message>
+    <message>
+        <source>Your passphrase</source>
+        <translation>Ваша парольная фраза</translation>
+    </message>
+    <message>
+        <source>The passphrase locks your key. Quillbinder can remember it on this device, so you type it once on each other device.</source>
+        <translation>Парольная фраза защищает ваш ключ. Quillbinder может запомнить её на этом устройстве, так что на каждом другом устройстве её нужно ввести один раз.</translation>
+    </message>
+    <message>
+        <source>Use these six random words (the safest choice and easy to type):</source>
+        <translation>Использовать эти шесть случайных слов (самый надёжный вариант, их легко набирать):</translation>
+    </message>
+    <message>
+        <source>Other words</source>
+        <translation>Другие слова</translation>
+    </message>
+    <message>
+        <source>Use a passphrase of my own:</source>
+        <translation>Использовать собственную парольную фразу:</translation>
+    </message>
+    <message>
+        <source>Passphrase:</source>
+        <translation>Парольная фраза:</translation>
+    </message>
+    <message>
+        <source>Once more:</source>
+        <translation>Ещё раз:</translation>
+    </message>
+    <message>
+        <source>Remember the passphrase on this device (in the system&apos;s key store)</source>
+        <translation>Запомнить парольную фразу на этом устройстве (в хранилище ключей системы)</translation>
+    </message>
+    <message>
+        <source>This device already has keys. New keys cannot open files that were locked for the old ones; keep the old key folder.</source>
+        <translation>На этом устройстве уже есть ключи. Новые ключи не откроют файлы, защищённые старыми; сохраните старую папку ключей.</translation>
+    </message>
+    <message>
+        <source>The two entries are not the same.</source>
+        <translation>Два введённых значения не совпадают.</translation>
+    </message>
+    <message>
+        <source>This passphrase is accepted.</source>
+        <translation>Эта парольная фраза принята.</translation>
+    </message>
+    <message>
+        <source>Where to keep the keys</source>
+        <translation>Где хранить ключи</translation>
+    </message>
+    <message>
+        <source>Quillbinder writes the folder &quot;%1&quot; there. A USB stick is best; project, backup and sync folders are refused.</source>
+        <translation>Quillbinder запишет туда папку «%1». Лучше всего подходит USB-накопитель; папки проектов, резервных копий и синхронизации не принимаются.</translation>
+    </message>
+    <message>
+        <source>Choose...</source>
+        <translation>Выбрать...</translation>
+    </message>
+    <message>
+        <source>When you press Next, your key and the recovery key are made. This takes a few seconds.</source>
+        <translation>Когда вы нажмёте «Далее», будут созданы ваш ключ и ключ восстановления. Это займёт несколько секунд.</translation>
+    </message>
+    <message>
+        <source>Folder for the keys</source>
+        <translation>Папка для ключей</translation>
+    </message>
+    <message>
+        <source>The keys could not be made.</source>
+        <translation>Не удалось создать ключи.</translation>
+    </message>
+    <message>
+        <source>The recovery passphrase</source>
+        <translation>Парольная фраза восстановления</translation>
+    </message>
+    <message>
+        <source>Write these six words on paper now. They are shown only this once and are saved nowhere, not even in the key folder.</source>
+        <translation>Запишите эти шесть слов на бумаге прямо сейчас. Они показываются только один раз и нигде не сохраняются, даже в папке ключей.</translation>
+    </message>
+    <message>
+        <source>The recovery key opens your files if you lose your own key or forget its passphrase. Keep the paper in another place than the USB stick: the stick alone or the paper alone opens nothing. If both are lost, your text is gone for good.</source>
+        <translation>Ключ восстановления открывает ваши файлы, если вы потеряете свой ключ или забудете его парольную фразу. Храните бумагу не там, где USB-накопитель: один накопитель или одна бумага ничего не открывают. Если потеряно и то и другое, ваш текст пропал навсегда.</translation>
+    </message>
+    <message>
+        <source>I have written the six words on paper</source>
+        <translation>Я записал(а) шесть слов на бумаге</translation>
+    </message>
+    <message>
+        <source>The check</source>
+        <translation>Проверка</translation>
+    </message>
+    <message>
+        <source>Type two of the recovery words from your paper. Quillbinder reads the written files back and opens a test file with each key.</source>
+        <translation>Введите два слова восстановления с вашей бумаги. Quillbinder прочитает записанные файлы и откроет тестовый файл каждым ключом.</translation>
+    </message>
+    <message>
+        <source>Word %1:</source>
+        <translation>Слово %1:</translation>
+    </message>
+    <message>
+        <source>The key files were read back.</source>
+        <translation>Файлы ключей прочитаны.</translation>
+    </message>
+    <message>
+        <source>README.txt is in the folder.</source>
+        <translation>README.txt лежит в папке.</translation>
+    </message>
+    <message>
+        <source>A test file opens with your key and your passphrase.</source>
+        <translation>Тестовый файл открывается вашим ключом и вашей парольной фразой.</translation>
+    </message>
+    <message>
+        <source>A test file opens with the recovery key and the recovery passphrase.</source>
+        <translation>Тестовый файл открывается ключом восстановления и парольной фразой восстановления.</translation>
+    </message>
+    <message>
+        <source>The keys could not be put on this device.</source>
+        <translation>Не удалось поместить ключи на это устройство.</translation>
+    </message>
+    <message>
+        <source>The keys could not be saved on this device (%1). Nothing was changed; check the free space and the rights of the program&apos;s data folder, and try again.</source>
+        <translation>Не удалось сохранить ключи на этом устройстве (%1). Ничего не изменено; проверьте свободное место и права на папку данных программы и повторите попытку.</translation>
+    </message>
+    <message>
+        <source>A second copy</source>
+        <translation>Вторая копия</translation>
+    </message>
+    <message>
+        <source>Your keys are on this device and in the folder. Keep a second copy of the folder at another place, for example on a second USB stick. You can skip this.</source>
+        <translation>Ваши ключи находятся на этом устройстве и в папке. Сохраните вторую копию папки в другом месте, например на втором USB-накопителе. Этот шаг можно пропустить.</translation>
+    </message>
+    <message>
+        <source>Copy the folder here</source>
+        <translation>Скопировать папку сюда</translation>
+    </message>
+    <message>
+        <source>Place for the second copy</source>
+        <translation>Место для второй копии</translation>
+    </message>
+    <message>
+        <source>This is the place of the first copy. Choose another place.</source>
+        <translation>Здесь лежит первая копия. Выберите другое место.</translation>
+    </message>
+    <message>
+        <source>The second copy is made and was checked: %1</source>
+        <translation>Вторая копия создана и проверена: %1</translation>
+    </message>
+    <message>
+        <source>The second copy was made, but the check failed. Make another one.</source>
+        <translation>Вторая копия создана, но проверка не прошла. Создайте ещё одну.</translation>
     </message>
 </context>
 <context>
@@ -9523,17 +10521,13 @@ Give it to “%4” instead? “%2” will then have no shortcut.</source>
         <source>Shortcut of “%1”:</source>
         <translation>Сочетание клавиш для «%1»:</translation>
     </message>
-    <message>
-        <source>%1 changed by you (shown in bold).</source>
-        <translation>Вами изменено: %1 (выделено полужирным).</translation>
-    </message>
-    <message>
-        <source>shortcut</source>
-        <translation>сочетание</translation>
-    </message>
-    <message>
-        <source>shortcuts</source>
-        <translation>сочетания|сочетаний</translation>
+    <message numerus="yes">
+        <source>%Ln shortcut(s) changed by you (shown in bold).</source>
+        <translation>
+            <numerusform>Изменено вами сочетаний: %n (показаны полужирным).</numerusform>
+            <numerusform>Изменено вами сочетаний: %n (показаны полужирным).</numerusform>
+            <numerusform>Изменено вами сочетаний: %n (показаны полужирным).</numerusform>
+        </translation>
     </message>
     <message>
         <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
@@ -9875,7 +10869,7 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>&amp;Новый проект…</translation>
     </message>
     <message>
-        <source>&amp;Open Project…</source>
+        <source>Open Pro&amp;ject…</source>
         <translation>&amp;Открыть проект…</translation>
     </message>
     <message>
@@ -9948,11 +10942,11 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>&amp;Restore From Backup…</source>
-        <translation>&amp;Восстановить из резервной копии…</translation>
+        <translation>Восстановить из &amp;резервной копии…</translation>
     </message>
     <message>
         <source>Move &amp;Old Backups Into the Backup Folder…</source>
-        <translation>Перенести &amp;старые резервные копии в папку резервных копий…</translation>
+        <translation>&amp;Перенести старые резервные копии в папку резервных копий…</translation>
     </message>
     <message>
         <source>Import &amp;Files…</source>
@@ -9963,7 +10957,7 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>Импорт &amp;веб-страницы…</translation>
     </message>
     <message>
-        <source>Import and &amp;Split…</source>
+        <source>&amp;Import and Split…</source>
         <translation>Импорт с &amp;разделением…</translation>
     </message>
     <message>
@@ -9979,28 +10973,24 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>&amp;Экспорт файлов…</translation>
     </message>
     <message>
-        <source>&amp;Compile…</source>
-        <translation>&amp;Компоновка…</translation>
+        <source>Compi&amp;le…</source>
+        <translation>Компоновк&amp;а…</translation>
     </message>
     <message>
         <source>Convert &amp;Markdown ⇄ RTF File…</source>
         <translation>Преобразовать файл &amp;Markdown ⇄ RTF…</translation>
     </message>
     <message>
-        <source>Print Se&amp;ttings…</source>
-        <translation>Па&amp;раметры печати…</translation>
+        <source>Print Settin&amp;gs…</source>
+        <translation>Парам&amp;етры печати…</translation>
     </message>
     <message>
         <source>Paper, header and footer, and how texts, index cards and the outliner are printed</source>
         <translation>Бумага, колонтитулы и то, как печатаются тексты, карточки и структура</translation>
     </message>
     <message>
-        <source>Print Pre&amp;view…</source>
-        <translation>Пред&amp;просмотр печати…</translation>
-    </message>
-    <message>
         <source>&amp;Print Current Document…</source>
-        <translation>&amp;Печать текущего документа…</translation>
+        <translation>Печать &amp;текущего документа…</translation>
     </message>
     <message>
         <source>Prints what the editor shows: the text, the index cards of the corkboard, the outliner, a picture or a PDF file</source>
@@ -10008,7 +10998,7 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>&amp;Options…</source>
-        <translation>&amp;Параметры…</translation>
+        <translation>Параметр&amp;ы…</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
@@ -10059,12 +11049,8 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>Вс&amp;тавить</translation>
     </message>
     <message>
-        <source>Paste and &amp;Match Style</source>
-        <translation>Вставить по &amp;стилю</translation>
-    </message>
-    <message>
-        <source>Paste with &amp;Formatting</source>
-        <translation>Вставить с &amp;форматированием</translation>
+        <source>Paste and Match &amp;Style</source>
+        <translation>Вставить в &amp;стиле окружающего текста</translation>
     </message>
     <message>
         <source>Select &amp;All</source>
@@ -10075,7 +11061,7 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>&amp;Найти…</translation>
     </message>
     <message>
-        <source>Find and &amp;Replace…</source>
+        <source>Find &amp;and Replace…</source>
         <translation>Найти и &amp;заменить…</translation>
     </message>
     <message>
@@ -10084,7 +11070,7 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>Find Pre&amp;vious</source>
-        <translation>Найти пре&amp;дыдущее</translation>
+        <translation>Н&amp;айти предыдущее</translation>
     </message>
     <message>
         <source>Use &amp;Selection for Find</source>
@@ -10111,7 +11097,7 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>Поиск по п&amp;роекту…</translation>
     </message>
     <message>
-        <source>Link to &amp;Document…</source>
+        <source>&amp;Link to Document…</source>
         <translation>Ссылка на &amp;документ…</translation>
     </message>
     <message>
@@ -10131,11 +11117,7 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>Ссылка на объект</translation>
     </message>
     <message>
-        <source>&amp;Objects…</source>
-        <translation>&amp;Объекты…</translation>
-    </message>
-    <message>
-        <source>Object &amp;Templates and Colors…</source>
+        <source>&amp;Object Templates and Colors…</source>
         <translation>&amp;Шаблоны объектов и цвета…</translation>
     </message>
     <message>
@@ -10156,15 +11138,7 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>Move &amp;Down</source>
-        <translation>Переместить &amp;вниз</translation>
-    </message>
-    <message>
-        <source>Move &amp;Left (out of the folder)</source>
-        <translation>Переместить в&amp;лево (из папки)</translation>
-    </message>
-    <message>
-        <source>Move &amp;Right (into the item above)</source>
-        <translation>Переместить в&amp;право (в элемент выше)</translation>
+        <translation>П&amp;ереместить вниз</translation>
     </message>
     <message>
         <source>&amp;Combined Text / Document</source>
@@ -10172,7 +11146,7 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>&amp;Corkboard</source>
-        <translation>&amp;Пробковая доска</translation>
+        <translation>Пробкова&amp;я доска</translation>
     </message>
     <message>
         <source>&amp;Outliner</source>
@@ -10191,28 +11165,28 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>Разделить по &amp;вертикали</translation>
     </message>
     <message>
-        <source>Show &amp;Binder</source>
+        <source>S&amp;how Binder</source>
         <translation>Показать &amp;биндер</translation>
     </message>
     <message>
-        <source>Quick-Add &amp;Keys in the Binder</source>
-        <translation>Клавиши &amp;быстрого добавления в биндере</translation>
+        <source>&amp;Quick-Add Keys in the Binder</source>
+        <translation>Клавиши быстрого &amp;добавления в биндере</translation>
     </message>
     <message>
         <source>Return adds a new document below; Space opens a Quick Reference window</source>
-        <translation>Return добавляет новый документ ниже; пробел открывает окно краткого справочника</translation>
+        <translation>Enter добавляет новый документ ниже; пробел открывает окно краткого справочника</translation>
     </message>
     <message>
         <source>Show &amp;Inspector</source>
         <translation>Показать &amp;инспектор</translation>
     </message>
     <message>
-        <source>Show &amp;Collections</source>
-        <translation>Показать &amp;подборки</translation>
+        <source>Sho&amp;w Collections</source>
+        <translation>Пока&amp;зать подборки</translation>
     </message>
     <message>
-        <source>&amp;Composition Mode</source>
-        <translation>&amp;Режим сосредоточения</translation>
+        <source>Composition &amp;Mode</source>
+        <translation>Ре&amp;жим сосредоточения</translation>
     </message>
     <message>
         <source>&amp;Page View</source>
@@ -10228,31 +11202,31 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>&amp;Typewriter Scrolling</source>
-        <translation>Прокрутка как у &amp;пишущей машинки</translation>
+        <translation>Прокрутка как у пишущей &amp;машинки</translation>
     </message>
     <message>
-        <source>Show &amp;Titles in Combined Text</source>
-        <translation>Показывать &amp;названия в общем тексте</translation>
+        <source>Show Titles in &amp;Combined Text</source>
+        <translation>Показывать названия в &amp;общем тексте</translation>
     </message>
     <message>
-        <source>&amp;Fixed Width Editor</source>
-        <translation>Редактор &amp;фиксированной ширины</translation>
+        <source>Fixed &amp;Width Editor</source>
+        <translation>Редактор фиксированной &amp;ширины</translation>
     </message>
     <message>
-        <source>Zoom &amp;In</source>
+        <source>Zoom I&amp;n</source>
         <translation>&amp;Увеличить</translation>
     </message>
     <message>
-        <source>Zoom &amp;Out</source>
-        <translation>&amp;Уменьшить</translation>
+        <source>&amp;Zoom Out</source>
+        <translation>Уме&amp;ньшить</translation>
     </message>
     <message>
         <source>&amp;Reset Zoom</source>
-        <translation>&amp;Сбросить масштаб</translation>
+        <translation>Сбросить мас&amp;штаб</translation>
     </message>
     <message>
-        <source>Zoom Inspector &amp;Tabs Separately</source>
-        <translation>Масштабировать &amp;вкладки инспектора отдельно</translation>
+        <source>Zoom Insp&amp;ector Tabs Separately</source>
+        <translation>Масштабировать вк&amp;ладки инспектора отдельно</translation>
     </message>
     <message>
         <source>Status &amp;Stamps</source>
@@ -10280,14 +11254,10 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>Sa&amp;ve Project Settings to File…</source>
-        <translation>Сохранить &amp;настройки проекта в файл…</translation>
+        <translation>Сохранить настройки проекта в &amp;файл…</translation>
     </message>
     <message>
-        <source>&amp;Load Project Settings from File…</source>
-        <translation>&amp;Загрузить настройки проекта из файла…</translation>
-    </message>
-    <message>
-        <source>Project &amp;Targets…</source>
+        <source>&amp;Project Targets…</source>
         <translation>&amp;Цели проекта…</translation>
     </message>
     <message>
@@ -10295,35 +11265,15 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>&amp;Ключевые слова проекта…</translation>
     </message>
     <message>
-        <source>Project S&amp;tatistics…</source>
-        <translation>&amp;Статистика проекта…</translation>
-    </message>
-    <message>
-        <source>&amp;Writing History…</source>
-        <translation>&amp;История записи…</translation>
-    </message>
-    <message>
         <source>&amp;Empty Trash…</source>
         <translation>&amp;Очистить корзину…</translation>
     </message>
-    <message>
-        <source>document</source>
-        <translation>документ</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>документа|документов</translation>
-    </message>
-    <message>
-        <source>Delete %1 in the Trash forever? This cannot be undone.</source>
-        <translation>Удалить %1 в корзине навсегда? Это нельзя отменить.</translation>
-    </message>
     <message numerus="yes">
-        <source>Delete %1 in the Trash forever, together with their %n snapshot(s)? This cannot be undone.</source>
+        <source>Snapshot taken of %Ln document(s).</source>
         <translation>
-            <numerusform>Удалить %1 в корзине навсегда вместе с их %n снимком? Это нельзя отменить.</numerusform>
-            <numerusform>Удалить %1 в корзине навсегда вместе с их %n снимками? Это нельзя отменить.</numerusform>
-            <numerusform>Удалить %1 в корзине навсегда вместе с их %n снимками? Это нельзя отменить.</numerusform>
+            <numerusform>Снимок сделан для %n документа.</numerusform>
+            <numerusform>Снимок сделан для %n документов.</numerusform>
+            <numerusform>Снимок сделан для %n документов.</numerusform>
         </translation>
     </message>
     <message>
@@ -10331,11 +11281,11 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>Очистка корзины</translation>
     </message>
     <message>
-        <source>Delete Old &amp;Snapshots…</source>
+        <source>&amp;Delete Old Snapshots…</source>
         <translation>Удалить старые &amp;снимки…</translation>
     </message>
     <message>
-        <source>Show Project in File &amp;Manager</source>
+        <source>Show Project in &amp;File Manager</source>
         <translation>Показать проект в &amp;менеджере файлов</translation>
     </message>
     <message>
@@ -10399,16 +11349,8 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>Поместить выбранные документы в новую папку на место первого из них</translation>
     </message>
     <message>
-        <source>&amp;Sheet to Object</source>
-        <translation>&amp;Карточка в объект</translation>
-    </message>
-    <message>
         <source>Make an Object (Window &gt; Objects) of the selected sheet documents: the title is the name, the text goes into Other, a picture becomes the picture. The binder item then shows the Object; the document keeps its text.</source>
         <translation>Сделать объект (Окно &gt; Объекты) из выбранных документов-карточек: название становится именем, текст попадает в «Другое», изображение становится изображением. Элемент биндера тогда показывает объект; документ сохраняет свой текст.</translation>
-    </message>
-    <message>
-        <source>Convert to F&amp;ile</source>
-        <translation>Преобразовать в &amp;файл</translation>
     </message>
     <message>
         <source>&amp;Include in Compile</source>
@@ -10435,10 +11377,6 @@ Shortcuts you set yourself stay as they are.</source>
         </translation>
     </message>
     <message>
-        <source>Take Snapshot with &amp;Title…</source>
-        <translation>Сделать снимок с &amp;названием…</translation>
-    </message>
-    <message>
         <source>Show Snapshots</source>
         <translation>Показать снимки</translation>
     </message>
@@ -10447,7 +11385,7 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>Добавить в &amp;закладки проекта</translation>
     </message>
     <message>
-        <source>Reveal in &amp;Binder</source>
+        <source>&amp;Reveal in Binder</source>
         <translation>Показать в &amp;биндере</translation>
     </message>
     <message>
@@ -10455,7 +11393,7 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>&amp;Закрепить на месте</translation>
     </message>
     <message>
-        <source>&amp;Bold</source>
+        <source>Bo&amp;ld</source>
         <translation>&amp;Полужирный</translation>
     </message>
     <message>
@@ -10512,7 +11450,7 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>&amp;Outdent List Item</source>
-        <translation>С&amp;местить пункт списка влево</translation>
+        <translation>Сместить &amp;пункт списка влево</translation>
     </message>
     <message>
         <source>&amp;Clear Formatting</source>
@@ -10532,7 +11470,7 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>Bi&amp;gger</source>
-        <translation>&amp;Крупнее</translation>
+        <translation>К&amp;рупнее</translation>
     </message>
     <message>
         <source>S&amp;maller</source>
@@ -10548,10 +11486,10 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>&amp;Decrease Indent</source>
-        <translation>&amp;Уменьшить отступ</translation>
+        <translation>Уменьшить &amp;отступ</translation>
     </message>
     <message>
-        <source>&amp;Reset Paragraph Formatting</source>
+        <source>Reset Paragraph &amp;Formatting</source>
         <translation>&amp;Сбросить форматирование абзаца</translation>
     </message>
     <message>
@@ -10577,10 +11515,6 @@ Shortcuts you set yourself stay as they are.</source>
     <message>
         <source>Cop&amp;y Formatting</source>
         <translation>&amp;Копировать форматирование</translation>
-    </message>
-    <message>
-        <source>Paste Formattin&amp;g</source>
-        <translation>Вставить форматирован&amp;ие</translation>
     </message>
     <message>
         <source>Show &amp;Ruler</source>
@@ -10620,15 +11554,7 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>&amp;Inline Footnote</source>
-        <translation>&amp;Встроенная сноска</translation>
-    </message>
-    <message>
-        <source>&amp;Image From File…</source>
-        <translation>&amp;Изображение из файла…</translation>
-    </message>
-    <message>
-        <source>Insert Image</source>
-        <translation>Вставка изображения</translation>
+        <translation>Вст&amp;роенная сноска</translation>
     </message>
     <message>
         <source>Images (*.png *.jpg *.jpeg *.gif *.bmp *.webp)</source>
@@ -10652,15 +11578,15 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>Insert Column &amp;Right</source>
-        <translation>Вставить столбец &amp;справа</translation>
+        <translation>Вст&amp;авить столбец справа</translation>
     </message>
     <message>
         <source>Delete R&amp;ows</source>
-        <translation>Удалить &amp;строки</translation>
+        <translation>&amp;Удалить строки</translation>
     </message>
     <message>
-        <source>Delete C&amp;olumns</source>
-        <translation>Удалить &amp;столбцы</translation>
+        <source>D&amp;elete Columns</source>
+        <translation>У&amp;далить столбцы</translation>
     </message>
     <message>
         <source>Delete &amp;Table</source>
@@ -10684,11 +11610,11 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>Cell Color of the &amp;Design</source>
-        <translation>Цвет ячейки из &amp;оформления</translation>
+        <translation>Цвет &amp;ячейки из оформления</translation>
     </message>
     <message>
         <source>Table &amp;Properties…</source>
-        <translation>&amp;Свойства таблицы…</translation>
+        <translation>Свойства та&amp;блицы…</translation>
     </message>
     <message>
         <source>P&amp;icture…</source>
@@ -10696,7 +11622,7 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>Current &amp;Date</source>
-        <translation>Текущая &amp;дата</translation>
+        <translation>Тек&amp;ущая дата</translation>
     </message>
     <message>
         <source>&amp;Bibliography/Citations…</source>
@@ -10711,8 +11637,8 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>Не удалось запустить «%1». Проверьте программу в разделе Файл &gt; Параметры &gt; Общие &gt; Цитаты.</translation>
     </message>
     <message>
-        <source>Current &amp;Time</source>
-        <translation>Текущее &amp;время</translation>
+        <source>C&amp;urrent Time</source>
+        <translation>Теку&amp;щее время</translation>
     </message>
     <message>
         <source>&amp;Back</source>
@@ -10727,11 +11653,11 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>&amp;Предыдущий документ</translation>
     </message>
     <message>
-        <source>&amp;Next Document</source>
+        <source>Next &amp;Document</source>
         <translation>&amp;Следующий документ</translation>
     </message>
     <message>
-        <source>Enclosing &amp;Group</source>
+        <source>En&amp;closing Group</source>
         <translation>Охватывающая &amp;группа</translation>
     </message>
     <message>
@@ -10740,7 +11666,7 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>Focus Bi&amp;nder</source>
-        <translation>Фокус на би&amp;ндер</translation>
+        <translation>&amp;Фокус на биндер</translation>
     </message>
     <message>
         <source>Focus &amp;Editor</source>
@@ -10756,7 +11682,7 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>&amp;Quick Start Guide</source>
-        <translation>&amp;Краткое руководство</translation>
+        <translation>Кр&amp;аткое руководство</translation>
     </message>
     <message>
         <source>Where the important settings are, and what %1 can do</source>
@@ -10771,20 +11697,8 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>Небольшой проект, показывающий, что есть в %1 помимо привычного: панель значков, масштаб по частям, интеллект-карты, объекты и другое</translation>
     </message>
     <message>
-        <source>Third-Party &amp;Licenses…</source>
-        <translation>&amp;Лицензии сторонних компонентов…</translation>
-    </message>
-    <message>
-        <source>List of All Place&amp;holders…</source>
-        <translation>Список всех &amp;подстановок…</translation>
-    </message>
-    <message>
         <source>Open &amp;Plugin Folder</source>
         <translation>Открыть папку &amp;модулей</translation>
-    </message>
-    <message>
-        <source>Add to &amp;Application Menu</source>
-        <translation>Добавить в &amp;меню приложений</translation>
     </message>
     <message>
         <source>Add to Application Menu</source>
@@ -10819,20 +11733,8 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>&amp;Менеджер дополнений…</translation>
     </message>
     <message>
-        <source>&amp;About %1</source>
-        <translation>&amp;О программе %1</translation>
-    </message>
-    <message>
-        <source>&amp;System Information…</source>
-        <translation>&amp;Сведения о системе…</translation>
-    </message>
-    <message>
         <source>Program, versions and computer at a glance, to copy into a problem report</source>
         <translation>Программа, версии и компьютер вкратце, чтобы скопировать в сообщение о проблеме</translation>
-    </message>
-    <message>
-        <source>Report a Problem…</source>
-        <translation>Сообщить о проблеме…</translation>
     </message>
     <message>
         <source>Opens the project&apos;s page for reports of problems and wishes in your browser</source>
@@ -10847,8 +11749,8 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>&amp;Сочетания клавиш…</translation>
     </message>
     <message>
-        <source>Select &amp;Annotation or Note</source>
-        <translation>Выбрать &amp;примечание или заметку</translation>
+        <source>Select Annotation &amp;or Note</source>
+        <translation>Выбрать примечание или &amp;заметку</translation>
     </message>
     <message>
         <source>Show &amp;Toolbar</source>
@@ -10859,12 +11761,12 @@ Shortcuts you set yourself stay as they are.</source>
         <translation>&amp;Настроить панели инструментов…</translation>
     </message>
     <message>
-        <source>&amp;Reset Toolbar Places</source>
+        <source>Reset Toolbar &amp;Places</source>
         <translation>&amp;Сбросить расположение панелей</translation>
     </message>
     <message>
         <source>&amp;Full Screen</source>
-        <translation>&amp;Полный экран</translation>
+        <translation>Полны&amp;й экран</translation>
     </message>
     <message>
         <source>&amp;Freeform</source>
@@ -10920,7 +11822,7 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>&amp;Fix the Mind Map of This Item</source>
-        <translation>&amp;Закрепить интеллект-карту этого элемента</translation>
+        <translation>Закрепить &amp;интеллект-карту этого элемента</translation>
     </message>
     <message>
         <source>&amp;Release the Fixed Mind Map</source>
@@ -10944,15 +11846,147 @@ Shortcuts you set yourself stay as they are.</source>
     </message>
     <message>
         <source>&amp;Float Quick Reference Panels</source>
-        <translation>&amp;Открепить панели краткого справочника</translation>
+        <translation>Открепить &amp;панели краткого справочника</translation>
     </message>
     <message>
         <source>&amp;Close All Quick Reference Panels</source>
         <translation>&amp;Закрыть все панели краткого справочника</translation>
     </message>
     <message>
-        <source>Default Text &amp;Formatting…</source>
-        <translation>&amp;Форматирование текста по умолчанию…</translation>
+        <source>Handwriting</source>
+        <translation>Рукописный ввод</translation>
+    </message>
+    <message>
+        <source>Model change in progress</source>
+        <translation>Идёт смена модели</translation>
+    </message>
+    <message>
+        <source>Print Pre&amp;view</source>
+        <translation>Пре&amp;дпросмотр печати</translation>
+    </message>
+    <message>
+        <source>Paste With &amp;Formatting</source>
+        <translation>Вставить с &amp;форматированием</translation>
+    </message>
+    <message>
+        <source>&amp;Objects</source>
+        <translation>&amp;Объекты</translation>
+    </message>
+    <message>
+        <source>Move &amp;Left</source>
+        <translation>Переместить в&amp;лево</translation>
+    </message>
+    <message>
+        <source>Move &amp;Right</source>
+        <translation>Переместить в&amp;право</translation>
+    </message>
+    <message>
+        <source>Out of the folder</source>
+        <translation>Из папки</translation>
+    </message>
+    <message>
+        <source>Into the item above</source>
+        <translation>В элемент выше</translation>
+    </message>
+    <message>
+        <source>&amp;Load Project Settings From File…</source>
+        <translation>&amp;Загрузить настройки проекта из файла…</translation>
+    </message>
+    <message>
+        <source>P&amp;roject Statistics</source>
+        <translation>Ст&amp;атистика проекта</translation>
+    </message>
+    <message>
+        <source>&amp;Writing History</source>
+        <translation>&amp;История записи</translation>
+    </message>
+    <message numerus="yes">
+        <source>Delete %Ln document(s) in the Trash forever?</source>
+        <translation>
+            <numerusform>Удалить %n документ из корзины навсегда?</numerusform>
+            <numerusform>Удалить %n документа из корзины навсегда?</numerusform>
+            <numerusform>Удалить %n документов из корзины навсегда?</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Their %Ln snapshot(s) go with them.</source>
+        <translation>
+            <numerusform>Вместе с ними удаляются их снимки: %n.</numerusform>
+            <numerusform>Вместе с ними удаляются их снимки: %n.</numerusform>
+            <numerusform>Вместе с ними удаляются их снимки: %n.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>This cannot be undone.</source>
+        <translation>Это нельзя отменить.</translation>
+    </message>
+    <message>
+        <source>Convert &amp;Sheet to Object</source>
+        <translation>Преобразовать &amp;карточку в объект</translation>
+    </message>
+    <message>
+        <source>Convert to Te&amp;xt Document</source>
+        <translation>Преобразовать в &amp;текстовый документ</translation>
+    </message>
+    <message>
+        <source>Take Snapshot With &amp;Title…</source>
+        <translation>Сделать снимок с &amp;названием…</translation>
+    </message>
+    <message>
+        <source>Apply Copied Formattin&amp;g</source>
+        <translation>При&amp;менить скопированное форматирование</translation>
+    </message>
+    <message>
+        <source>&amp;Picture From File…</source>
+        <translation>&amp;Изображение из файла…</translation>
+    </message>
+    <message>
+        <source>Insert Picture</source>
+        <translation>Вставить изображение</translation>
+    </message>
+    <message>
+        <source>Third-Party &amp;Licenses</source>
+        <translation>Лицензии &amp;сторонних компонентов</translation>
+    </message>
+    <message>
+        <source>List of All Place&amp;holders</source>
+        <translation>Список всех по&amp;дстановок</translation>
+    </message>
+    <message>
+        <source>Add to &amp;Application Menu…</source>
+        <translation>Добавить в &amp;меню приложений…</translation>
+    </message>
+    <message>
+        <source>A&amp;bout %1</source>
+        <translation>О &amp;программе %1</translation>
+    </message>
+    <message>
+        <source>&amp;System Information</source>
+        <translation>&amp;Сведения о системе</translation>
+    </message>
+    <message>
+        <source>Report a Problem</source>
+        <translation>Сообщить о проблеме</translation>
+    </message>
+    <message>
+        <source>Toolbar &amp;Size</source>
+        <translation>&amp;Размер панелей инструментов</translation>
+    </message>
+    <message>
+        <source>&amp;Small</source>
+        <translation>&amp;Малый</translation>
+    </message>
+    <message>
+        <source>&amp;Normal</source>
+        <translation>&amp;Обычный</translation>
+    </message>
+    <message>
+        <source>&amp;Large</source>
+        <translation>&amp;Большой</translation>
+    </message>
+    <message>
+        <source>Pr&amp;oject Formatting Settings…</source>
+        <translation>Параметры &amp;форматирования проекта…</translation>
     </message>
     <message>
         <source>Font, size, line spacing and indents of the text of the whole project</source>
@@ -11115,14 +12149,6 @@ There is a copy of it from %2, the last time the project opened. Use that copy? 
             <numerusform>%n документа, записанные после этой копии, находятся в папке «%1» в исследованиях.</numerusform>
             <numerusform>%n документов, записанные после этой копии, находятся в папке «%1» в исследованиях.</numerusform>
         </translation>
-    </message>
-    <message>
-        <source>Scrivener&apos;s style marks were taken out of 1 document.</source>
-        <translation>Метки стилей Scrivener убраны из 1 документа.</translation>
-    </message>
-    <message>
-        <source>Scrivener&apos;s style marks were taken out of %1 documents.</source>
-        <translation>Метки стилей Scrivener убраны из документов: %1.</translation>
     </message>
     <message>
         <source>Document Cannot Be Read</source>
@@ -11309,6 +12335,10 @@ Keep it open and try again after the cause is fixed, save the texts that are not
 %1</source>
         <translation>Файл или папка с таким именем уже есть:
 %1</translation>
+    </message>
+    <message>
+        <source>When the program was ended (by logging out, shutting down or a command), an encrypted project could not be saved. (Its name and the reason are left out of this note, because it is a plain file.)</source>
+        <translation>Когда программа была завершена (при выходе из системы, выключении компьютера или командой), зашифрованный проект не удалось сохранить. (Его название и причина в эту заметку не включены, потому что это обычный файл.)</translation>
     </message>
     <message>
         <source>When the program was ended (by logging out, shutting down or a command), the project &quot;%1&quot; could not be saved: %2</source>
@@ -11545,6 +12575,10 @@ Best on another drive (a USB stick, a second disk, a folder your sync program co
         <translation>полная</translation>
     </message>
     <message>
+        <source>, encrypted</source>
+        <translation>, зашифрован</translation>
+    </message>
+    <message>
         <source> (in the folder &quot;%1&quot;)</source>
         <translation> (в папке «%1»)</translation>
     </message>
@@ -11727,18 +12761,6 @@ Versions 0.70.0 to 0.90.4 kept them there. Move them into the backup folder itse
         <translation>Не удалось выполнить печать.</translation>
     </message>
     <message>
-        <source>Printed: %1 (%2)</source>
-        <translation>Напечатано: %1 (%2)</translation>
-    </message>
-    <message>
-        <source>page</source>
-        <translation>страница</translation>
-    </message>
-    <message>
-        <source>pages</source>
-        <translation>страницы|страниц</translation>
-    </message>
-    <message>
         <source>Print Preview – %1</source>
         <translation>Предпросмотр печати – %1</translation>
     </message>
@@ -11787,12 +12809,32 @@ You can do this later with Help &gt; Add to Application Menu.</source>
 %1</translation>
     </message>
     <message>
-        <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove from Application Menu and then Add to Application Menu again.</source>
-        <translation>Не удалось переместить AppImage в %1 (%2). Запись меню запускает его там, где он лежит; если вы переместите файл сами, выберите Справка &gt; Убрать из меню приложений, а затем снова Добавить в меню приложений.</translation>
+        <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove From Application Menu and then Add to Application Menu again.</source>
+        <translation>Не удалось переместить AppImage в %1 (%2). Пункт меню запускает его там, где он лежит; если вы сами переместите файл, выберите Справка &gt; Убрать из меню приложений, а затем снова Добавить в меню приложений.</translation>
+    </message>
+    <message>
+        <source>Remove From &amp;Application Menu</source>
+        <translation>Убрать из &amp;меню приложений</translation>
     </message>
     <message>
         <source>The program&apos;s icon could not be copied, so the menu entry shows no icon.</source>
         <translation>Не удалось скопировать значок программы, поэтому запись меню без значка.</translation>
+    </message>
+    <message numerus="yes">
+        <source>Scrivener&apos;s style marks were taken out of %Ln document(s).</source>
+        <translation>
+            <numerusform>Метки стилей Scrivener удалены из %n документа.</numerusform>
+            <numerusform>Метки стилей Scrivener удалены из %n документов.</numerusform>
+            <numerusform>Метки стилей Scrivener удалены из %n документов.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Printed: %1 (%Ln page(s))</source>
+        <translation>
+            <numerusform>Напечатано: %1 (%n страница)</numerusform>
+            <numerusform>Напечатано: %1 (%n страницы)</numerusform>
+            <numerusform>Напечатано: %1 (%n страниц)</numerusform>
+        </translation>
     </message>
     <message>
         <source>%1 is in the application menu now (%2).</source>
@@ -11809,10 +12851,6 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     <message>
         <source>%1 is no longer in the application menu.</source>
         <translation>%1 больше нет в меню приложений.</translation>
-    </message>
-    <message>
-        <source>Remove from &amp;Application Menu</source>
-        <translation>Убрать из &amp;меню приложений</translation>
     </message>
     <message>
         <source>Save</source>
@@ -11837,10 +12875,6 @@ You can do this later with Help &gt; Add to Application Menu.</source>
         <translation>Ваши изменения сохранены, но резервную копию, которая идёт с каждым ручным сохранением, сделать не удалось.
 
 %1</translation>
-    </message>
-    <message>
-        <source>Snapshot taken of %1.</source>
-        <translation>Сделан снимок: %1.</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -11879,7 +12913,7 @@ You can do this later with Help &gt; Add to Application Menu.</source>
         <translation>Проект &amp;%1…</translation>
     </message>
     <message>
-        <source>Compare and &amp;Transfer</source>
+        <source>Compare an&amp;d Transfer</source>
         <translation>Сравнение и &amp;перенос</translation>
     </message>
     <message>
@@ -11887,16 +12921,12 @@ You can do this later with Help &gt; Add to Application Menu.</source>
         <translation>&amp;Правка</translation>
     </message>
     <message>
-        <source>&amp;Select</source>
-        <translation>&amp;Выделение</translation>
-    </message>
-    <message>
-        <source>&amp;Find</source>
+        <source>F&amp;ind</source>
         <translation>&amp;Поиск</translation>
     </message>
     <message>
         <source>&amp;Move</source>
-        <translation>&amp;Перемещение</translation>
+        <translation>П&amp;еремещение</translation>
     </message>
     <message>
         <source>&amp;Writing Tools</source>
@@ -11943,8 +12973,8 @@ You can do this later with Help &gt; Add to Application Menu.</source>
         <translation>А, Б, В …</translation>
     </message>
     <message>
-        <source>&amp;Placeholders</source>
-        <translation>&amp;Подстановки</translation>
+        <source>Plac&amp;eholders</source>
+        <translation>Подст&amp;ановки</translation>
     </message>
     <message>
         <source>Project title</source>
@@ -11968,7 +12998,7 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>&amp;Special Characters</source>
-        <translation>&amp;Специальные символы</translation>
+        <translation>Сп&amp;ециальные символы</translation>
     </message>
     <message>
         <source>Em dash —</source>
@@ -11996,7 +13026,7 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>&amp;View</source>
-        <translation>&amp;Вид</translation>
+        <translation>В&amp;ид</translation>
     </message>
     <message>
         <source>&amp;Split Editor</source>
@@ -12008,7 +13038,7 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>Tool&amp;bars</source>
-        <translation>Панели &amp;инструментов</translation>
+        <translation>П&amp;анели инструментов</translation>
     </message>
     <message>
         <source>&amp;Themes</source>
@@ -12016,26 +13046,26 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>&amp;Profiles</source>
-        <translation>&amp;Профили</translation>
+        <translation>Про&amp;фили</translation>
     </message>
     <message>
-        <source>&amp;Text Editing</source>
-        <translation>&amp;Редактирование текста</translation>
+        <source>Te&amp;xt Editing</source>
+        <translation>Р&amp;едактирование текста</translation>
     </message>
     <message>
-        <source>&amp;Corkboard Options</source>
-        <translation>&amp;Параметры пробковой доски</translation>
+        <source>Cor&amp;kboard Options</source>
+        <translation>Параметр&amp;ы пробковой доски</translation>
     </message>
     <message>
-        <source>&amp;Outliner Options</source>
-        <translation>Параметры &amp;структуры</translation>
+        <source>Out&amp;liner Options</source>
+        <translation>&amp;Параметры структуры</translation>
     </message>
     <message>
         <source>The columns are listed here while an outliner is shown</source>
         <translation>Столбцы перечислены здесь, пока показана структура</translation>
     </message>
     <message>
-        <source>Use Label Color &amp;In</source>
+        <source>&amp;Use Label Color In</source>
         <translation>Цвет метки &amp;в</translation>
     </message>
     <message>
@@ -12049,6 +13079,10 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     <message>
         <source>&amp;Index Cards</source>
         <translation>&amp;Карточках</translation>
+    </message>
+    <message>
+        <source>S&amp;mall Interface</source>
+        <translation>Ко&amp;мпактный интерфейс</translation>
     </message>
     <message>
         <source>&amp;Navigate</source>
@@ -12075,20 +13109,28 @@ You can do this later with Help &gt; Add to Application Menu.</source>
         <translation>&amp;Открыть</translation>
     </message>
     <message>
-        <source>in &amp;Editor</source>
-        <translation>в &amp;редакторе</translation>
+        <source>In &amp;Editor</source>
+        <translation>В &amp;редакторе</translation>
     </message>
     <message>
-        <source>in &amp;Other Editor</source>
-        <translation>в &amp;другом редакторе</translation>
+        <source>In &amp;Other Editor</source>
+        <translation>В &amp;другом редакторе</translation>
     </message>
     <message>
-        <source>in &amp;Copyholder</source>
-        <translation>в &amp;копихолдере</translation>
+        <source>In &amp;Copyholder</source>
+        <translation>В &amp;копихолдере</translation>
     </message>
     <message>
-        <source>as &amp;Quick Reference</source>
-        <translation>как &amp;краткий справочник</translation>
+        <source>As &amp;Quick Reference</source>
+        <translation>Как краткий &amp;справочник</translation>
+    </message>
+    <message>
+        <source>At &amp;Selection</source>
+        <translation>По &amp;выделению</translation>
+    </message>
+    <message>
+        <source>With Selection as &amp;Title</source>
+        <translation>Взяв выделение как &amp;название</translation>
     </message>
     <message>
         <source>Open &amp;Quick Reference</source>
@@ -12099,8 +13141,8 @@ You can do this later with Help &gt; Add to Application Menu.</source>
         <translation>&amp;Редактор</translation>
     </message>
     <message>
-        <source>&amp;Binder Selection Affects</source>
-        <translation>Выбор в &amp;биндере влияет на</translation>
+        <source>Binder &amp;Selection Affects</source>
+        <translation>Выбор в бин&amp;дере влияет на</translation>
     </message>
     <message>
         <source>&amp;Inspect</source>
@@ -12108,10 +13150,10 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>&amp;Project</source>
-        <translation>&amp;Проект</translation>
+        <translation>П&amp;роект</translation>
     </message>
     <message>
-        <source>New From &amp;Template</source>
+        <source>&amp;New From Template</source>
         <translation>Новый из &amp;шаблона</translation>
     </message>
     <message>
@@ -12135,27 +13177,19 @@ You can do this later with Help &gt; Add to Application Menu.</source>
         <translation>&amp;Разделить</translation>
     </message>
     <message>
-        <source>at &amp;Selection</source>
-        <translation>по &amp;выделению</translation>
-    </message>
-    <message>
-        <source>with Selection as &amp;Title</source>
-        <translation>с выделением как &amp;названием</translation>
-    </message>
-    <message>
         <source>&amp;Merge</source>
         <translation>&amp;Объединить</translation>
     </message>
     <message>
         <source>Con&amp;vert</source>
-        <translation>&amp;Преобразовать</translation>
+        <translation>Пр&amp;еобразовать</translation>
     </message>
     <message>
-        <source>Change &amp;Icon</source>
+        <source>&amp;Change Icon</source>
         <translation>Сменить &amp;значок</translation>
     </message>
     <message>
-        <source>Default &amp;Template for Subdocuments</source>
+        <source>Default Template &amp;for Subdocuments</source>
         <translation>&amp;Шаблон по умолчанию для вложенных документов</translation>
     </message>
     <message>
@@ -12164,7 +13198,7 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>&amp;Status</source>
-        <translation>&amp;Статус</translation>
+        <translation>С&amp;татус</translation>
     </message>
     <message>
         <source>No %1</source>
@@ -12176,7 +13210,7 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>F&amp;ormat</source>
-        <translation>&amp;Формат</translation>
+        <translation>Фор&amp;мат</translation>
     </message>
     <message>
         <source>&amp;Font</source>
@@ -12187,7 +13221,7 @@ You can do this later with Help &gt; Add to Application Menu.</source>
         <translation>&amp;Абзац</translation>
     </message>
     <message>
-        <source>&amp;Line Spacing</source>
+        <source>Line &amp;Spacing</source>
         <translation>&amp;Межстрочный интервал</translation>
     </message>
     <message>
@@ -12200,7 +13234,7 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>&amp;Lists</source>
-        <translation>&amp;Списки</translation>
+        <translation>С&amp;писки</translation>
     </message>
     <message>
         <source>&amp;Table</source>
@@ -12219,7 +13253,7 @@ You can do this later with Help &gt; Add to Application Menu.</source>
         <translation>&amp;Справка</translation>
     </message>
     <message>
-        <source>&amp;Add-ons and Updates</source>
+        <source>Add-&amp;ons and Updates</source>
         <translation>&amp;Дополнения и обновления</translation>
     </message>
     <message>
@@ -12233,10 +13267,6 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     <message>
         <source>Show or hide the binder, the collections and the inspector; layouts</source>
         <translation>Показать или скрыть биндер, подборки и инспектор; раскладки</translation>
-    </message>
-    <message>
-        <source>Search in &amp;Document…</source>
-        <translation>Поиск в &amp;документе…</translation>
     </message>
     <message>
         <source>Quick search (titles, synopses, text)</source>
@@ -12320,11 +13350,11 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>Open as Quick Reference (documents dropped here open in panels of their own)</source>
-        <translation>Открыть как краткий справочник (документы, брошенные сюда, открываются в отдельных панелях)</translation>
+        <translation>Открыть как краткий справочник (документы, перетащенные сюда, открываются в отдельных панелях)</translation>
     </message>
     <message>
         <source>Project bookmarks (documents dropped here are added)</source>
-        <translation>Закладки проекта (брошенные сюда документы добавляются)</translation>
+        <translation>Закладки проекта (перетащенные сюда документы добавляются)</translation>
     </message>
     <message>
         <source>Styles</source>
@@ -12336,7 +13366,7 @@ You can do this later with Help &gt; Add to Application Menu.</source>
     </message>
     <message>
         <source>Upright window</source>
-        <translation>Узкое окно</translation>
+        <translation>Высокое окно</translation>
     </message>
     <message>
         <source>Wide window</source>
@@ -12363,15 +13393,15 @@ You can do this later with Help &gt; Add to Application Menu.</source>
         <translation>Запомнить также размер окна</translation>
     </message>
     <message>
-        <source>&amp;Install Font Files…</source>
+        <source>I&amp;nstall Font Files…</source>
         <translation>&amp;Установить файлы шрифтов…</translation>
     </message>
     <message>
-        <source>Open &amp;Font Folder</source>
+        <source>&amp;Open Font Folder</source>
         <translation>Открыть папку &amp;шрифтов</translation>
     </message>
     <message>
-        <source>Open Font &amp;Manager of the Desktop</source>
+        <source>Open Font Manager of &amp;the Desktop</source>
         <translation>Открыть &amp;менеджер шрифтов рабочего стола</translation>
     </message>
     <message>
@@ -12413,7 +13443,7 @@ Fonts can be installed here with Format &gt; Font &gt; Install Font Files, or by
         <translation>&amp;Вернуть значок по умолчанию</translation>
     </message>
     <message>
-        <source>Icon from &amp;Text…</source>
+        <source>Icon From &amp;Text…</source>
         <translation>Значок из &amp;текста…</translation>
     </message>
     <message>
@@ -12422,11 +13452,11 @@ Fonts can be installed here with Format &gt; Font &gt; Install Font Files, or by
     </message>
     <message>
         <source>&amp;Icon Bar</source>
-        <translation>&amp;Панель значков</translation>
+        <translation>Панель &amp;значков</translation>
     </message>
     <message>
         <source>Choose Icons for the Icon &amp;Bar…</source>
-        <translation>Выбрать значки для &amp;панели значков…</translation>
+        <translation>&amp;Выбрать значки для панели значков…</translation>
     </message>
     <message>
         <source>Compare with &amp;File…</source>
@@ -12446,7 +13476,7 @@ Fonts can be installed here with Format &gt; Font &gt; Install Font Files, or by
     </message>
     <message>
         <source>&amp;Mind Map Help</source>
-        <translation>&amp;Справка по интеллект-картам</translation>
+        <translation>Справка по &amp;интеллект-картам</translation>
     </message>
     <message>
         <source>Check for Updates at Startup</source>
@@ -12709,6 +13739,10 @@ but this window could not leave the original. Open the new project from File &gt
     <message>
         <source>Saved as %1. The original stays as it was: %2</source>
         <translation>Сохранено как %1. Оригинал остался как был: %2</translation>
+    </message>
+    <message>
+        <source>This project is encrypted, and Scrivener cannot read encrypted files. To save it in Scrivener format, turn off the encryption of the project first (File &gt; Options &gt; Encryption); a copy in Quillbinder&apos;s format stays encrypted.</source>
+        <translation>Этот проект зашифрован, а Scrivener не может читать зашифрованные файлы. Чтобы сохранить его в формате Scrivener, сначала отключите шифрование проекта (Файл &gt; Параметры &gt; Шифрование); копия в формате Quillbinder остаётся зашифрованной.</translation>
     </message>
     <message>
         <source>Save a Copy as Scrivener Project</source>
@@ -13005,7 +14039,7 @@ The project you are working on stays where it is.</source>
         <translation>В строке с курсором нет метки времени (например, [03:07]).</translation>
     </message>
     <message>
-        <source>Editor in the &amp;Middle</source>
+        <source>&amp;Editor in the Middle</source>
         <translation>Редактор &amp;посередине</translation>
     </message>
     <message>
@@ -13045,7 +14079,7 @@ The project you are working on stays where it is.</source>
         <translation>Инспектор, редактор, биндер</translation>
     </message>
     <message>
-        <source>&amp;Reset Layout</source>
+        <source>Rese&amp;t Layout</source>
         <translation>&amp;Сбросить раскладку</translation>
     </message>
     <message>
@@ -13061,7 +14095,7 @@ The project you are working on stays where it is.</source>
         <translation>&amp;Настройки сценария…</translation>
     </message>
     <message>
-        <source>S&amp;criptwriting</source>
+        <source>Script&amp;writing</source>
         <translation>&amp;Сценарная работа</translation>
     </message>
     <message>
@@ -13166,17 +14200,29 @@ No element of the same kind exists for: %1. Their paragraphs become general text
         <source>Delete Old Snapshots</source>
         <translation>Удаление старых снимков</translation>
     </message>
-    <message>
-        <source>Delete all %1 of %2 forever?</source>
-        <translation>Удалить навсегда все %1 из %2?</translation>
+    <message numerus="yes">
+        <source>Delete all %Ln snapshot(s) of %1 forever?</source>
+        <translation>
+            <numerusform>Удалить навсегда все снимки (%n) для %1?</numerusform>
+            <numerusform>Удалить навсегда все снимки (%n) для %1?</numerusform>
+            <numerusform>Удалить навсегда все снимки (%n) для %1?</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>snapshot</source>
-        <translation>снимок</translation>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation>
+            <numerusform>%n документ</numerusform>
+            <numerusform>%n документа</numerusform>
+            <numerusform>%n документов</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>snapshots</source>
-        <translation>снимка|снимков</translation>
+    <message numerus="yes">
+        <source>%Ln snapshot(s) deleted.</source>
+        <translation>
+            <numerusform>Удалён %n снимок.</numerusform>
+            <numerusform>Удалено %n снимка.</numerusform>
+            <numerusform>Удалено %n снимков.</numerusform>
+        </translation>
     </message>
     <message>
         <source>They take %1. The texts stay as they are now; only their earlier versions go, also those of documents in the Trash. This cannot be undone: a backup (File &gt; Back Up) beforehand is a good idea.</source>
@@ -13185,10 +14231,6 @@ No element of the same kind exists for: %1. Their paragraphs become general text
     <message>
         <source>Delete Snapshots</source>
         <translation>Удалить снимки</translation>
-    </message>
-    <message>
-        <source>%1 deleted.</source>
-        <translation>Удалено: %1.</translation>
     </message>
     <message>
         <source>Save Project Settings</source>
@@ -13549,7 +14591,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
         <translation>Другие версии по-прежнему сохраняются; только это уведомление не появляется, пока вы не выйдете из программы.</translation>
     </message>
     <message>
-        <source>Speech &amp;Transcription…</source>
+        <source>&amp;Speech Transcription…</source>
         <translation>&amp;Расшифровка речи…</translation>
     </message>
     <message>
@@ -13674,7 +14716,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>Nothing to undo in the field that has the keyboard</source>
-        <translation>В поле, которое владеет клавиатурой, нечего отменять</translation>
+        <translation>В поле ввода нечего отменять</translation>
     </message>
     <message>
         <source>Redo %1</source>
@@ -13682,7 +14724,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>Nothing to redo in the field that has the keyboard</source>
-        <translation>В поле, которое владеет клавиатурой, нечего повторять</translation>
+        <translation>В поле ввода нечего повторять</translation>
     </message>
     <message>
         <source>Nothing to undo</source>
@@ -13692,9 +14734,13 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
         <source>Nothing to redo</source>
         <translation>Нечего повторять</translation>
     </message>
-    <message>
-        <source>and %1 earlier steps</source>
-        <translation>и ещё %1 предыдущих шагов</translation>
+    <message numerus="yes">
+        <source>and %Ln earlier step(s)</source>
+        <translation>
+            <numerusform>и ещё %n более ранний шаг</numerusform>
+            <numerusform>и ещё %n более ранних шага</numerusform>
+            <numerusform>и ещё %n более ранних шагов</numerusform>
+        </translation>
     </message>
     <message>
         <source>&amp;Manage Profiles…</source>
@@ -13751,6 +14797,86 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     <message>
         <source>The profile sets another language; it takes effect when the program is started again.</source>
         <translation>В профиле задан другой язык; он вступит в силу при следующем запуске программы.</translation>
+    </message>
+    <message>
+        <source>&amp;Read Aloud</source>
+        <translation>&amp;Чтение вслух</translation>
+    </message>
+    <message>
+        <source>Read Aloud</source>
+        <translation>Чтение вслух</translation>
+    </message>
+    <message>
+        <source>Sm&amp;all Interface</source>
+        <translation>&amp;Компактный интерфейс</translation>
+    </message>
+    <message>
+        <source>A few round buttons and the most room for the text, for a small screen or for use without a keyboard</source>
+        <translation>Несколько круглых кнопок и как можно больше места для текста: для маленького экрана или для работы без клавиатуры</translation>
+    </message>
+    <message>
+        <source>&amp;Full</source>
+        <translation>&amp;Полный</translation>
+    </message>
+    <message>
+        <source>&amp;Automatic</source>
+        <translation>&amp;Автоматически</translation>
+    </message>
+    <message>
+        <source>Switch to the &amp;Full Interface</source>
+        <translation>Перейти к &amp;полному интерфейсу</translation>
+    </message>
+    <message>
+        <source>Binder</source>
+        <translation>Биндер</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation>Заметки</translation>
+    </message>
+    <message>
+        <source>The notes of the document, in a panel</source>
+        <translation>Заметки документа в панели</translation>
+    </message>
+    <message>
+        <source>The binder, in a panel</source>
+        <translation>Биндер в панели</translation>
+    </message>
+    <message>
+        <source>Record Only</source>
+        <translation>Только запись</translation>
+    </message>
+    <message>
+        <source>Small Interface</source>
+        <translation>Компактный интерфейс</translation>
+    </message>
+    <message>
+        <source>Menu: all the menus of the program</source>
+        <translation>Меню: все меню программы</translation>
+    </message>
+    <message>
+        <source>Style: choose a style for the paragraph</source>
+        <translation>Стиль: выбрать стиль абзаца</translation>
+    </message>
+    <message>
+        <source>Labels and icons of the selected documents</source>
+        <translation>Метки и значки выбранных документов</translation>
+    </message>
+    <message>
+        <source>Stop recording</source>
+        <translation>Остановить запись</translation>
+    </message>
+    <message>
+        <source>Record only: the sound is kept and its text can be written later</source>
+        <translation>Только запись: звук сохраняется, а его текст можно создать позже</translation>
+    </message>
+    <message>
+        <source>Record Only is off: the installed Speech Transcription add-on is too old. Update it in the Add-on Manager.</source>
+        <translation>«Только запись» отключена: установленное дополнение «Speech Transcription» слишком старое. Обновите его в менеджере дополнений.</translation>
+    </message>
+    <message>
+        <source>Record Only is off: it needs the add-on Speech Transcription, which is not installed. The Add-on Manager can add it.</source>
+        <translation>«Только запись» отключена: для неё нужно дополнение «Speech Transcription», которое не установлено. Его можно добавить в менеджере дополнений.</translation>
     </message>
 </context>
 <context>
@@ -13840,7 +14966,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>The previous hit (Shift+Return)</source>
-        <translation>Предыдущее совпадение (Shift+Return)</translation>
+        <translation>Предыдущее совпадение (Shift+Enter)</translation>
     </message>
     <message>
         <source>Next</source>
@@ -13848,7 +14974,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>The next hit (Return)</source>
-        <translation>Следующее совпадение (Return)</translation>
+        <translation>Следующее совпадение (Enter)</translation>
     </message>
     <message>
         <source>Contents</source>
@@ -14022,19 +15148,15 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>Page Set&amp;up…</source>
-        <translation>Па&amp;раметры страницы…</translation>
-    </message>
-    <message>
-        <source>Print Pre&amp;view…</source>
-        <translation>Пред&amp;просмотр печати…</translation>
+        <translation>Параметры &amp;страницы…</translation>
     </message>
     <message>
         <source>&amp;Print…</source>
-        <translation>&amp;Печать…</translation>
+        <translation>П&amp;ечать…</translation>
     </message>
     <message>
         <source>Mind Map &amp;Options…</source>
-        <translation>&amp;Параметры интеллект-карты…</translation>
+        <translation>Параметры интеллект-&amp;карты…</translation>
     </message>
     <message>
         <source>Mind Map &amp;Help</source>
@@ -14058,7 +15180,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>Cu&amp;t</source>
-        <translation>Вы&amp;резать</translation>
+        <translation>Выр&amp;езать</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
@@ -14106,7 +15228,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>Add &amp;Link…</source>
-        <translation>Добавить &amp;ссылку…</translation>
+        <translation>До&amp;бавить ссылку…</translation>
     </message>
     <message>
         <source>&amp;Find…</source>
@@ -14118,7 +15240,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>Find Pre&amp;vious</source>
-        <translation>Найти пре&amp;дыдущее</translation>
+        <translation>Н&amp;айти предыдущее</translation>
     </message>
     <message>
         <source>&amp;Use Selection for Find</source>
@@ -14150,15 +15272,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>Zoom to &amp;Fit</source>
-        <translation>Масштаб по &amp;размеру окна</translation>
-    </message>
-    <message>
-        <source>Zoom &amp;In</source>
-        <translation>&amp;Увеличить</translation>
-    </message>
-    <message>
-        <source>Zoom &amp;Out</source>
-        <translation>&amp;Уменьшить</translation>
+        <translation>&amp;Масштаб по размеру окна</translation>
     </message>
     <message>
         <source>Zoom to &amp;Selection</source>
@@ -14282,11 +15396,11 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>Make Same &amp;Height</source>
-        <translation>Сделать одинаковой &amp;высоты</translation>
+        <translation>С&amp;делать одинаковой высоты</translation>
     </message>
     <message>
         <source>S&amp;plit</source>
-        <translation>&amp;Разделить</translation>
+        <translation>Р&amp;азделить</translation>
     </message>
     <message>
         <source>Mer&amp;ge</source>
@@ -14333,12 +15447,8 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
         <translation>&amp;По умолчанию</translation>
     </message>
     <message>
-        <source>&amp;Bold</source>
-        <translation>&amp;Полужирный</translation>
-    </message>
-    <message>
         <source>&amp;Italic</source>
-        <translation>&amp;Курсив</translation>
+        <translation>Курс&amp;ив</translation>
     </message>
     <message>
         <source>&amp;Underline</source>
@@ -14350,7 +15460,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>Bi&amp;gger</source>
-        <translation>&amp;Крупнее</translation>
+        <translation>К&amp;рупнее</translation>
     </message>
     <message>
         <source>Bigger</source>
@@ -14386,11 +15496,11 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>&amp;Decrease Indent Level</source>
-        <translation>&amp;Уменьшить уровень отступа</translation>
+        <translation>Уменьшить уровень &amp;отступа</translation>
     </message>
     <message>
         <source>&amp;Remove Indents</source>
-        <translation>&amp;Убрать отступы</translation>
+        <translation>У&amp;брать отступы</translation>
     </message>
     <message>
         <source>Remove Indents</source>
@@ -14458,7 +15568,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>&amp;Right to Left</source>
-        <translation>&amp;Справа налево</translation>
+        <translation>Справа &amp;налево</translation>
     </message>
     <message>
         <source>S&amp;hadow</source>
@@ -14466,7 +15576,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>F&amp;ade</source>
-        <translation>&amp;Затухание</translation>
+        <translation>Зат&amp;ухание</translation>
     </message>
     <message>
         <source>&amp;Export</source>
@@ -14474,11 +15584,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>&amp;Select</source>
-        <translation>&amp;Выделение</translation>
-    </message>
-    <message>
-        <source>&amp;Find</source>
-        <translation>&amp;Поиск</translation>
+        <translation>Вы&amp;деление</translation>
     </message>
     <message>
         <source>New &amp;Connected Note</source>
@@ -14509,18 +15615,6 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
         <translation>&amp;Стиль заметки</translation>
     </message>
     <message>
-        <source>&amp;Apply Note Style</source>
-        <translation>&amp;Применить стиль заметки</translation>
-    </message>
-    <message>
-        <source>&amp;Redefine Note Style From Selection</source>
-        <translation>&amp;Переопределить стиль заметки по выделению</translation>
-    </message>
-    <message>
-        <source>&amp;Delete Note Style</source>
-        <translation>&amp;Удалить стиль заметки</translation>
-    </message>
-    <message>
         <source>&amp;Font</source>
         <translation>&amp;Шрифт</translation>
     </message>
@@ -14534,11 +15628,11 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>&amp;Background Color</source>
-        <translation>Цвет &amp;фона</translation>
+        <translation>&amp;Цвет фона</translation>
     </message>
     <message>
         <source>&amp;Colors</source>
-        <translation>&amp;Цвета</translation>
+        <translation>Цв&amp;ета</translation>
     </message>
     <message>
         <source>&amp;Border</source>
@@ -14558,7 +15652,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>Apply &amp;Style</source>
-        <translation>Применить &amp;стиль</translation>
+        <translation>Приме&amp;нить стиль</translation>
     </message>
     <message>
         <source>&amp;Fill Color</source>
@@ -14574,7 +15668,7 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
     </message>
     <message>
         <source>S&amp;hape</source>
-        <translation>&amp;Фигура</translation>
+        <translation>Фи&amp;гура</translation>
     </message>
     <message>
         <source>Automatic</source>
@@ -14913,8 +16007,44 @@ A snapshot can be compared with the text in the inspector&apos;s Snapshots tab. 
         <translation>Переопределение стиля заметки</translation>
     </message>
     <message>
+        <source>Print Pre&amp;view</source>
+        <translation>Предпросмотр &amp;печати</translation>
+    </message>
+    <message>
+        <source>Zoom &amp;In</source>
+        <translation>&amp;Увеличить</translation>
+    </message>
+    <message>
+        <source>Zoom &amp;Out</source>
+        <translation>&amp;Уменьшить</translation>
+    </message>
+    <message>
+        <source>&amp;Bold</source>
+        <translation>&amp;Полужирный</translation>
+    </message>
+    <message>
+        <source>&amp;Find</source>
+        <translation>&amp;Найти</translation>
+    </message>
+    <message>
+        <source>&amp;Redefine Note Style From Selection…</source>
+        <translation>&amp;Переопределить стиль заметки по выделению…</translation>
+    </message>
+    <message>
+        <source>Note style to redefine from the selected note:</source>
+        <translation>Стиль заметки, который нужно переопределить по выбранной заметке:</translation>
+    </message>
+    <message>
+        <source>&amp;Delete Note Style…</source>
+        <translation>&amp;Удалить стиль заметки…</translation>
+    </message>
+    <message>
         <source>Delete Note Style</source>
         <translation>Удаление стиля заметки</translation>
+    </message>
+    <message>
+        <source>Note style to delete:</source>
+        <translation>Стиль заметки, который нужно удалить:</translation>
     </message>
     <message>
         <source>Import Note Styles</source>
@@ -15610,7 +16740,7 @@ It is shown as far as it could be read, and it cannot be changed, so that its fi
     </message>
     <message>
         <source>F&amp;ormat</source>
-        <translation>&amp;Формат</translation>
+        <translation>Ф&amp;ормат</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -15673,11 +16803,11 @@ It is shown as far as it could be read, and it cannot be changed, so that its fi
     </message>
     <message>
         <source>&amp;Notes</source>
-        <translation>&amp;Заметки</translation>
+        <translation>З&amp;аметки</translation>
     </message>
     <message>
         <source>F&amp;ormat</source>
-        <translation>&amp;Формат</translation>
+        <translation>Ф&amp;ормат</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -15763,7 +16893,7 @@ It is shown as far as it could be read, and it cannot be changed, so that its fi
     </message>
     <message>
         <source>(no picture: click or drop one here)</source>
-        <translation>(нет изображения: щёлкните или бросьте его сюда)</translation>
+        <translation>(нет изображения: щёлкните или перетащите его сюда)</translation>
     </message>
     <message>
         <source>(missing document)</source>
@@ -15775,7 +16905,7 @@ It is shown as far as it could be read, and it cannot be changed, so that its fi
     </message>
     <message>
         <source>Linked from</source>
-        <translation>Ссылки отсюда</translation>
+        <translation>Ссылки сюда</translation>
     </message>
     <message>
         <source>Picture</source>
@@ -16118,7 +17248,7 @@ Go on?</source>
     </message>
     <message>
         <source>Appearance</source>
-        <translation>Оформление</translation>
+        <translation>Внешний вид</translation>
     </message>
     <message>
         <source>Corrections</source>
@@ -16137,8 +17267,12 @@ Go on?</source>
         <translation>Резервные копии</translation>
     </message>
     <message>
+        <source>Encryption</source>
+        <translation>Шифрование</translation>
+    </message>
+    <message>
         <source>Extras</source>
-        <translation>Дополнительно</translation>
+        <translation>Прочее</translation>
     </message>
     <message>
         <source>Manage</source>
@@ -16161,24 +17295,8 @@ Go on?</source>
         <translation>Дополнения и модули</translation>
     </message>
     <message>
-        <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</source>
-        <translation>То, что вы меняете здесь, сохраняется в этом проекте. Его собственные настройки: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <source>setting</source>
-        <translation>настройка</translation>
-    </message>
-    <message>
-        <source>settings</source>
-        <translation>настройки|настроек</translation>
-    </message>
-    <message>
         <source>What you change here is kept with this project; it has no settings of its own yet.</source>
         <translation>То, что вы меняете здесь, сохраняется в этом проекте; собственных настроек у него пока нет.</translation>
-    </message>
-    <message>
-        <source>The open project has &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; of its own, which it keeps.</source>
-        <translation>У открытого проекта есть собственные настройки (&lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;), которые он сохраняет.</translation>
     </message>
     <message>
         <source>Projects&apos; own settings are not used (General &gt; Which settings come first).</source>
@@ -16331,6 +17449,74 @@ Go on?</source>
     <message>
         <source>Author Information</source>
         <translation>Сведения об авторе</translation>
+    </message>
+    <message>
+        <source>The processor cores that Speech Transcription, Translation Helper, Read Aloud and Handwriting use. Default for this computer: %1 of %2.</source>
+        <translation>Число ядер процессора, которые используют «Расшифровка речи», «Помощник перевода», «Чтение вслух» и «Рукописный ввод». По умолчанию для этого компьютера: %1 из %2.</translation>
+    </message>
+    <message>
+        <source>Default (%1)</source>
+        <translation>По умолчанию (%1)</translation>
+    </message>
+    <message>
+        <source>CPU cores for the AI:</source>
+        <translation>Ядра процессора для ИИ:</translation>
+    </message>
+    <message>
+        <source>One setting for every AI function. The default is three quarters of the cores (rounded down); a computer with 6 cores or fewer keeps one core free. The AI&apos;s work runs at a low priority.</source>
+        <translation>Одна настройка для всех функций ИИ. По умолчанию это три четверти ядер (с округлением вниз); на компьютере с 6 ядрами или меньше одно ядро остаётся свободным. ИИ работает с низким приоритетом.</translation>
+    </message>
+    <message>
+        <source>Unload a model after</source>
+        <translation>Выгружать модель через</translation>
+    </message>
+    <message>
+        <source>minutes unused</source>
+        <translation>минут без использования</translation>
+    </message>
+    <message>
+        <source>A model that is not used is unloaded after this time. Before a model loads, when more than half of the memory it needs (the computer&apos;s memory or a graphics card&apos;s) is in use, the model unused longest is unloaded first; when the new model would still bring that memory over 80 %, it is not loaded, and the message line under the inspector says why. When the system reports a shortage of memory, idle models are unloaded at once.</source>
+        <translation>Неиспользуемая модель выгружается по истечении этого времени. Перед загрузкой модели, если уже занято больше половины нужной ей памяти (памяти компьютера или видеокарты), сначала выгружается модель, которой не пользовались дольше всех; если новая модель всё равно довела бы занятость этой памяти до более чем 80 %, она не загружается, а почему — сообщает строка сообщений под инспектором. Когда система сообщает о нехватке памяти, простаивающие модели выгружаются сразу.</translation>
+    </message>
+    <message>
+        <source>Memory in use:</source>
+        <translation>Занятая память:</translation>
+    </message>
+    <message>
+        <source>RAM</source>
+        <translation>ОЗУ</translation>
+    </message>
+    <message>
+        <source>Graphics card %1</source>
+        <translation>Видеокарта %1</translation>
+    </message>
+    <message>
+        <source>%1: not known</source>
+        <translation>%1: неизвестно</translation>
+    </message>
+    <message>
+        <source>%1: %2 of %3 in use (%4 %)</source>
+        <translation>%1: занято %2 из %3 (%4 %)</translation>
+    </message>
+    <message>
+        <source>No model is loaded.</source>
+        <translation>Ни одна модель не загружена.</translation>
+    </message>
+    <message>
+        <source>Loaded models:</source>
+        <translation>Загруженные модели:</translation>
+    </message>
+    <message>
+        <source>AI Models</source>
+        <translation>Модели ИИ</translation>
+    </message>
+    <message>
+        <source>Handwriting</source>
+        <translation>Рукописный ввод</translation>
+    </message>
+    <message>
+        <source>Read Aloud</source>
+        <translation>Чтение вслух</translation>
     </message>
     <message>
         <source>Scratch Pad</source>
@@ -16722,11 +17908,11 @@ Go on?</source>
     </message>
     <message>
         <source>Documents can be dropped onto text documents (they become subdocuments)</source>
-        <translation>Документы можно бросать на текстовые документы (они становятся вложенными документами)</translation>
+        <translation>Документы можно перетаскивать на текстовые документы (они становятся вложенными документами)</translation>
     </message>
     <message>
         <source>Switched off, documents can still be dropped between other documents and onto folders.</source>
-        <translation>Если выключено, документы по-прежнему можно бросать между другими документами и на папки.</translation>
+        <translation>Если выключено, документы по-прежнему можно перетаскивать между другими документами и на папки.</translation>
     </message>
     <message>
         <source>Rich Text (.rtf)</source>
@@ -16822,23 +18008,23 @@ Go on?</source>
     </message>
     <message>
         <source>Return ends editing the synopsis in corkboard and outliner views</source>
-        <translation>Return завершает редактирование аннотации в видах пробковой доски и структуры</translation>
+        <translation>Enter завершает редактирование аннотации в видах пробковой доски и структуры</translation>
     </message>
     <message>
         <source>Shift+Return then starts a new line in the synopsis.</source>
-        <translation>Тогда Shift+Return начинает в аннотации новую строку.</translation>
+        <translation>Тогда Shift+Enter начинает в аннотации новую строку.</translation>
     </message>
     <message>
         <source>Return creates a new item in corkboard and outliner views</source>
-        <translation>Return создаёт новый элемент в видах пробковой доски и структуры</translation>
+        <translation>Enter создаёт новый элемент в видах пробковой доски и структуры</translation>
     </message>
     <message>
         <source>Off, Return on a selected card or row edits its title (in the binder Return always makes a new item).</source>
-        <translation>Если выключено, Return на выбранной карточке или строке изменяет её название (в биндере Return всегда создаёт новый элемент).</translation>
+        <translation>Если выключено, Enter на выбранной карточке или строке изменяет её название (в биндере Enter всегда создаёт новый элемент).</translation>
     </message>
     <message>
         <source>Return Key</source>
-        <translation>Клавиша Return</translation>
+        <translation>Клавиша Enter</translation>
     </message>
     <message>
         <source>Show a notification when snapshots are taken</source>
@@ -16913,10 +18099,6 @@ Go on?</source>
         <translation>Малый (16 пикс.)</translation>
     </message>
     <message>
-        <source>Medium (22 px)</source>
-        <translation>Средний (22 пикс.)</translation>
-    </message>
-    <message>
         <source>Large (32 px)</source>
         <translation>Большой (32 пикс.)</translation>
     </message>
@@ -16926,7 +18108,7 @@ Go on?</source>
     </message>
     <message>
         <source>Let the label color shine through the icons</source>
-        <translation>Пусть цвет метки просвечивает сквозь значки</translation>
+        <translation>Цвет метки просвечивает сквозь значки</translation>
     </message>
     <message>
         <source>Binder items extra indent:</source>
@@ -17033,16 +18215,8 @@ Go on?</source>
         <translation>Цвета и шрифты — из темы.</translation>
     </message>
     <message>
-        <source>%1 of your own on top of the theme (shown in bold below).</source>
-        <translation>%1 поверх темы (ниже выделены полужирным).</translation>
-    </message>
-    <message>
-        <source>change</source>
-        <translation>изменение</translation>
-    </message>
-    <message>
-        <source>changes</source>
-        <translation>изменения|изменений</translation>
+        <source>Note: your colors %1 on %2 have a contrast of %3 : 1. Text is easier to read from 4.5 : 1.</source>
+        <translation>Примечание: у ваших цветов %1 на %2 контрастность %3 : 1. Текст легче читать при контрастности от 4,5 : 1.</translation>
     </message>
     <message>
         <source>Auto-Correction</source>
@@ -17400,6 +18574,42 @@ Go on?</source>
         <source>No folder chosen: no automatic backups</source>
         <translation>Папка не выбрана: автоматических резервных копий нет</translation>
     </message>
+    <message numerus="yes">
+        <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%Ln setting(s)&lt;/a&gt;.</source>
+        <translation>
+            <numerusform>Всё, что вы меняете здесь, сохраняется вместе с этим проектом. Его собственные настройки: &lt;a href="show"&gt;%n настройка&lt;/a&gt;.</numerusform>
+            <numerusform>Всё, что вы меняете здесь, сохраняется вместе с этим проектом. Его собственные настройки: &lt;a href="show"&gt;%n настройки&lt;/a&gt;.</numerusform>
+            <numerusform>Всё, что вы меняете здесь, сохраняется вместе с этим проектом. Его собственные настройки: &lt;a href="show"&gt;%n настроек&lt;/a&gt;.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>The open project has &lt;a href=&quot;show&quot;&gt;%Ln setting(s)&lt;/a&gt; of its own, which it keeps.</source>
+        <translation>
+            <numerusform>У открытого проекта есть собственные настройки, которые он сохраняет: &lt;a href="show"&gt;%n настройка&lt;/a&gt;.</numerusform>
+            <numerusform>У открытого проекта есть собственные настройки, которые он сохраняет: &lt;a href="show"&gt;%n настройки&lt;/a&gt;.</numerusform>
+            <numerusform>У открытого проекта есть собственные настройки, которые он сохраняет: &lt;a href="show"&gt;%n настроек&lt;/a&gt;.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Normal (22 px)</source>
+        <translation>Обычный (22 пикс.)</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln change(s) of your own on top of the theme (shown in bold below).</source>
+        <translation>
+            <numerusform>%n ваше изменение поверх темы (ниже показано полужирным).</numerusform>
+            <numerusform>%n ваших изменения поверх темы (ниже показаны полужирным).</numerusform>
+            <numerusform>%n ваших изменений поверх темы (ниже показаны полужирным).</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln more pair(s) below it too.</source>
+        <translation>
+            <numerusform>Ниже есть ещё %n пара.</numerusform>
+            <numerusform>Ниже есть ещё %n пары.</numerusform>
+            <numerusform>Ниже есть ещё %n пар.</numerusform>
+        </translation>
+    </message>
     <message>
         <source>Open Backup Folder...</source>
         <translation>Открыть папку резервных копий...</translation>
@@ -17754,7 +18964,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>&amp;Top:</source>
-        <translation>&amp;Верхнее:</translation>
+        <translation>В&amp;ерхнее:</translation>
     </message>
     <message>
         <source>&amp;Bottom:</source>
@@ -17770,7 +18980,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>Use this page for &amp;new projects as well</source>
-        <translation>Использовать эту страницу и для &amp;новых проектов</translation>
+        <translation>&amp;Использовать эту страницу и для новых проектов</translation>
     </message>
     <message>
         <source>Text area: %1</source>
@@ -18070,7 +19280,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>&amp;Size:</source>
-        <translation>&amp;Размер:</translation>
+        <translation>Р&amp;азмер:</translation>
     </message>
     <message>
         <source>&amp;Width:</source>
@@ -18086,7 +19296,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>&amp;Landscape</source>
-        <translation>&amp;Альбомная</translation>
+        <translation>Альбомна&amp;я</translation>
     </message>
     <message>
         <source>Orientation:</source>
@@ -18094,7 +19304,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>Paper of the Page &amp;View</source>
-        <translation>Бумага &amp;постраничного вида</translation>
+        <translation>&amp;Бумага постраничного вида</translation>
     </message>
     <message>
         <source>The paper and margins of View &gt; Text Editing &gt; Page Size and Margins</source>
@@ -18106,11 +19316,11 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>&amp;Top:</source>
-        <translation>&amp;Верхнее:</translation>
+        <translation>В&amp;ерхнее:</translation>
     </message>
     <message>
         <source>&amp;Bottom:</source>
-        <translation>&amp;Нижнее:</translation>
+        <translation>Н&amp;ижнее:</translation>
     </message>
     <message>
         <source>L&amp;eft:</source>
@@ -18118,7 +19328,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>&amp;Right:</source>
-        <translation>&amp;Правое:</translation>
+        <translation>П&amp;равое:</translation>
     </message>
     <message>
         <source>Header and Footer</source>
@@ -18146,7 +19356,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>Header and footer on the &amp;first page as well</source>
-        <translation>Колонтитулы и на &amp;первой странице</translation>
+        <translation>Колонтитул&amp;ы и на первой странице</translation>
     </message>
     <message>
         <source>&lt;$title&gt; what is printed (document, folder), &lt;$projecttitle&gt; the project, &lt;$author&gt; you (File &gt; Options &gt; General), &lt;$date&gt; today, &lt;$p&gt; the page, &lt;$pages&gt; the number of pages.</source>
@@ -18162,11 +19372,11 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>The &amp;title of each document above its text</source>
-        <translation>&amp;Название каждого документа над его текстом</translation>
+        <translation>Название каждого &amp;документа над его текстом</translation>
     </message>
     <message>
         <source>The s&amp;ynopsis below the title</source>
-        <translation>&amp;Аннотацию под названием</translation>
+        <translation>Анно&amp;тацию под названием</translation>
     </message>
     <message>
         <source>The document &amp;notes after the text</source>
@@ -18174,7 +19384,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>&amp;Comments and inline annotations as notes at the bottom of the page</source>
-        <translation>&amp;Комментарии и встроенные примечания как заметки внизу страницы</translation>
+        <translation>Ко&amp;мментарии и встроенные примечания как заметки внизу страницы</translation>
     </message>
     <message>
         <source>&amp;Footnotes at the end of the text (instead of the bottom of each page)</source>
@@ -18182,7 +19392,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>Keep &amp;highlighted text highlighted</source>
-        <translation>Сохранять &amp;выделение цветом</translation>
+        <translation>Со&amp;хранять выделение цветом</translation>
     </message>
     <message>
         <source>Font and Spacing</source>
@@ -18190,7 +19400,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>As in the &amp;editor (the fonts of the project, its styles and the text)</source>
-        <translation>Как в &amp;редакторе (шрифты проекта, его стили и текст)</translation>
+        <translation>Как в редакторе (шри&amp;фты проекта, его стили и текст)</translation>
     </message>
     <message>
         <source>&amp;One font:</source>
@@ -18230,7 +19440,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>Card si&amp;ze:</source>
-        <translation>&amp;Размер карточки:</translation>
+        <translation>Размер карто&amp;чки:</translation>
     </message>
     <message>
         <source>Width × height:</source>
@@ -18238,7 +19448,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>As many cards on a sheet as &amp;fit (with lines to cut along)</source>
-        <translation>На листе столько карточек, сколько &amp;помещается (с линиями для вырезания)</translation>
+        <translation>На листе столько карточек, сколько поме&amp;щается (с линиями для вырезания)</translation>
     </message>
     <message>
         <source>One card on each sheet: for index card stock (the paper is as large as a card)</source>
@@ -18310,19 +19520,19 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>S&amp;ynopses:</source>
-        <translation>&amp;Аннотации:</translation>
+        <translation>А&amp;ннотации:</translation>
     </message>
     <message>
         <source>Also the rows inside &amp;closed groups</source>
-        <translation>Также строки внутри &amp;закрытых групп</translation>
+        <translation>Также строки внутри закрытых &amp;групп</translation>
     </message>
     <message>
         <source>Column titles at the top of &amp;every page</source>
-        <translation>Названия столбцов вверху &amp;каждой страницы</translation>
+        <translation>Названия столбцов вверх&amp;у каждой страницы</translation>
     </message>
     <message>
         <source>A &amp;line between rows</source>
-        <translation>&amp;Линия между строками</translation>
+        <translation>Линия ме&amp;жду строками</translation>
     </message>
     <message>
         <source>A dot of the &amp;label color</source>
@@ -18342,7 +19552,7 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
     </message>
     <message>
         <source>Pre&amp;view…</source>
-        <translation>Пред&amp;просмотр…</translation>
+        <translation>&amp;Предпросмотр…</translation>
     </message>
     <message>
         <source>Each card is a sheet of its own: choose index card paper in the print window if the printer asks.</source>
@@ -18352,17 +19562,13 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
         <source>A card is larger than the paper inside its margins: one card on each sheet, made smaller.</source>
         <translation>Карточка больше бумаги внутри полей: по одной карточке на листе, уменьшенной.</translation>
     </message>
-    <message>
-        <source>%1 on each sheet (%2 × %3) of the paper on the Page tab.</source>
-        <translation>%1 на каждом листе (%2 × %3) бумаги со вкладки «Страница».</translation>
-    </message>
-    <message>
-        <source>card</source>
-        <translation>карточка</translation>
-    </message>
-    <message>
-        <source>cards</source>
-        <translation>карточки|карточек</translation>
+    <message numerus="yes">
+        <source>%Ln card(s) on each sheet (%1 × %2) of the paper on the Page tab.</source>
+        <translation>
+            <numerusform>%n карточка на каждом листе (%1 × %2) бумаги, выбранной на вкладке «Страница».</numerusform>
+            <numerusform>%n карточки на каждом листе (%1 × %2) бумаги, выбранной на вкладке «Страница».</numerusform>
+            <numerusform>%n карточек на каждом листе (%1 × %2) бумаги, выбранной на вкладке «Страница».</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -18466,6 +19672,14 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
 </context>
 <context>
     <name>qb::Project</name>
+    <message>
+        <source>The encryption of this project&apos;s files was not finished; some files are still plain. It is finished at the next opening.</source>
+        <translation>Шифрование файлов этого проекта не завершено; некоторые файлы пока не зашифрованы. Оно будет завершено при следующем открытии.</translation>
+    </message>
+    <message>
+        <source>The decryption of this project&apos;s files was not finished; some files are still encrypted. It is finished at the next opening.</source>
+        <translation>Расшифровка файлов этого проекта не завершена; некоторые файлы всё ещё зашифрованы. Она будет завершена при следующем открытии.</translation>
+    </message>
     <message>
         <source>This project&apos;s folder holds other project files beside &quot;%1&quot;, which was opened: %2. A sync program may have made them (a copy from another computer kept beside yours). Compare them before you go on, and open another one with File &gt; Open Project if it holds your latest work.</source>
         <translation>В папке этого проекта лежат другие файлы проекта рядом с открытым «%1»: %2. Возможно, их создала программа синхронизации (копия с другого компьютера, сохранённая рядом с вашей). Сравните их, прежде чем продолжить, и откройте другой через Файл &gt; Открыть проект, если в нём ваша последняя работа.</translation>
@@ -18575,10 +19789,26 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
         <translation>Не удаётся создать папку в %1</translation>
     </message>
     <message>
+        <source>The project could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (named by the number of the document: the folder content/&lt;number&gt; of the project holds the document), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %1. Copy what you need back into the project. (Titles and names are left out of this note and of the names in this folder, because the project is encrypted.)
+
+</source>
+        <translation>Проект не удалось сохранить. В этой папке находится то, что не было сохранено: тексты и заметки в виде файлов RTF (названных по номеру документа: документ лежит в папке content/&lt;номер&gt; проекта), доски интеллект-карт, изменённые объекты (в папке «objects») и файл проекта в том виде, в каком он был в памяти (биндер, названия и метки), как %1. Скопируйте нужное обратно в проект. (Названия и имена не включены ни в эту заметку, ни в имена в этой папке, потому что проект зашифрован.)
+
+</translation>
+    </message>
+    <message>
         <source>The project &quot;%1&quot; (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
 
 </source>
         <translation>Проект «%1» (%2) не удалось сохранить. В этой папке лежит то, что ещё не сохранено: тексты и заметки в виде файлов RTF (их открывают Word, LibreOffice и %3), интеллект-карты, изменённые объекты (в папке «objects») и файл проекта в том виде, в каком он был в памяти (биндер, названия и метки), как %4. Скопируйте нужное обратно в проект.
+
+</translation>
+    </message>
+    <message>
+        <source>To put the project file back: close the project, rename the project file in the project folder (so that it is kept), copy the file %1 of this folder there and give it the old file&apos;s name. Then open the project again. (The copy&apos;s name ends in .copy so that this folder is not taken for a project.)
+
+</source>
+        <translation>Чтобы вернуть файл проекта на место: закройте проект, переименуйте файл проекта в папке проекта (чтобы он сохранился), скопируйте туда файл %1 из этой папки и дайте ему имя прежнего файла. Затем снова откройте проект. (Имя копии оканчивается на .copy, чтобы эту папку не приняли за проект.)
 
 </translation>
     </message>
@@ -18595,6 +19825,14 @@ Your recent projects, themes of your own, layouts, toolbars and keyboard shortcu
 
 </source>
         <translation>Проект в формате Scrivener: файл %1 относится к его рабочей копии (%2), а не к папке .scriv. Биндер будет записан в .scriv при следующем удавшемся сохранении; не копируйте этот файл вручную поверх чего-либо.
+
+</translation>
+    </message>
+    <message>
+        <source>The project is encrypted, and so are the files of this copy (OpenPGP, to your key and the recovery key; only this note is plain): Kleopatra, Gpg4win or GnuPG decrypt them with your key.
+
+</source>
+        <translation>Проект зашифрован, и файлы этой копии тоже (OpenPGP, для вашего ключа и ключа восстановления; обычным остаётся только эта заметка): Kleopatra, Gpg4win или GnuPG расшифруют их вашим ключом.
 
 </translation>
     </message>
@@ -18673,6 +19911,10 @@ Not written:
         <translation>Не удаётся открыть %1: %2</translation>
     </message>
     <message>
+        <source>The project file is damaged (%1).</source>
+        <translation>Файл проекта повреждён (%1).</translation>
+    </message>
+    <message>
         <source>The project file is damaged: its binder is nested more than %1 levels deep.</source>
         <translation>Файл проекта повреждён: вложенность его биндера превышает %1 уровней.</translation>
     </message>
@@ -18745,7 +19987,7 @@ Not written:
     </message>
     <message>
         <source>Re&amp;gular expression</source>
-        <translation>Регуля&amp;рное выражение</translation>
+        <translation>Р&amp;егулярное выражение</translation>
     </message>
     <message>
         <source>&quot;Replace&quot; is a regular expression; &quot;With&quot; may use \1 to \9 for its groups.</source>
@@ -18757,7 +19999,7 @@ Not written:
     </message>
     <message>
         <source>&amp;Titles</source>
-        <translation>&amp;Названиях</translation>
+        <translation>Назван&amp;иях</translation>
     </message>
     <message>
         <source>Te&amp;xt</source>
@@ -18765,7 +20007,7 @@ Not written:
     </message>
     <message>
         <source>&amp;Notes</source>
-        <translation>&amp;Заметках</translation>
+        <translation>За&amp;метках</translation>
     </message>
     <message>
         <source>&amp;Synopses</source>
@@ -18809,15 +20051,15 @@ Not written:
     </message>
     <message>
         <source>C&amp;ount</source>
-        <translation>&amp;Подсчитать</translation>
+        <translation>П&amp;одсчитать</translation>
     </message>
     <message>
         <source>Replace &amp;All</source>
-        <translation>Заменить &amp;все</translation>
+        <translation>Заменит&amp;ь все</translation>
     </message>
     <message>
         <source>Selected &amp;documents only (%1, with what is inside them)</source>
-        <translation>Только выбранные &amp;документы (%1, вместе с их содержимым)</translation>
+        <translation>То&amp;лько выбранные документы (%1, вместе с их содержимым)</translation>
     </message>
     <message>
         <source>Before replacing &quot;%1&quot;</source>
@@ -18859,29 +20101,29 @@ Not written:
         <source>custom metadata</source>
         <translation>пользовательских метаданных</translation>
     </message>
-    <message>
-        <source>%1 replaced in %2: %3.</source>
-        <translation>Заменено %1 в %2: %3.</translation>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation>
+            <numerusform>%n документ</numerusform>
+            <numerusform>%n документа</numerusform>
+            <numerusform>%n документов</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>%1 found in %2: %3.</source>
-        <translation>Найдено %1 в %2: %3.</translation>
+    <message numerus="yes">
+        <source>%Ln occurrence(s) replaced in %1: %2.</source>
+        <translation>
+            <numerusform>Замен выполнено: %n; затронуто: %1 (%2).</numerusform>
+            <numerusform>Замен выполнено: %n; затронуто: %1 (%2).</numerusform>
+            <numerusform>Замен выполнено: %n; затронуто: %1 (%2).</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>occurrence</source>
-        <translation>вхождение</translation>
-    </message>
-    <message>
-        <source>occurrences</source>
-        <translation>вхождения|вхождений</translation>
-    </message>
-    <message>
-        <source>document</source>
-        <translation>документ</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>документа|документов</translation>
+    <message numerus="yes">
+        <source>%Ln occurrence(s) found in %1: %2.</source>
+        <translation>
+            <numerusform>Найдено вхождений: %n; затронуто: %1 (%2).</numerusform>
+            <numerusform>Найдено вхождений: %n; затронуто: %1 (%2).</numerusform>
+            <numerusform>Найдено вхождений: %n; затронуто: %1 (%2).</numerusform>
+        </translation>
     </message>
     <message>
         <source>Snapshots taken: %1.</source>
@@ -19721,7 +20963,7 @@ Fonts, sizes and colors of individual passages are not kept in Markdown; bold, i
     </message>
     <message>
         <source>Also offer what other paragraphs of this element in the document say (character names, locations)</source>
-        <translation>Предлагать также то, что говорят другие абзацы этого элемента в документе (имена персонажей, места действия)</translation>
+        <translation>Предлагать также то, что содержат другие абзацы этого элемента в документе (имена персонажей, места действия)</translation>
     </message>
     <message>
         <source>Auto-Complete</source>
@@ -20102,7 +21344,7 @@ Saved %2 from the project “%3” by %4.</source>
     </message>
     <message>
         <source>Save &amp;paragraph style (indents, spacing, alignment only)</source>
-        <translation>Сохранить &amp;стиль абзаца (только отступы, интервалы, выравнивание)</translation>
+        <translation>Сохранить стиль абзаца (&amp;только отступы, интервалы, выравнивание)</translation>
     </message>
     <message>
         <source>Save &amp;character attributes (character style)</source>
@@ -20500,12 +21742,28 @@ Saved %2 from the project “%3” by %4.</source>
         <translation>Сбросить сеанс сейчас</translation>
     </message>
     <message>
-        <source>%1 of %2 %3</source>
-        <translation>%1 из %2 %3</translation>
+        <source>%1 of %2 characters</source>
+        <translation>%1 из %2 символов</translation>
     </message>
     <message>
-        <source>%1 %2 in the Draft</source>
-        <translation>%1 %2 в черновике</translation>
+        <source>%1 of %2 words</source>
+        <translation>%1 из %2 слов</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln character(s) in the Draft</source>
+        <translation>
+            <numerusform>%n символ в черновике</numerusform>
+            <numerusform>%n символа в черновике</numerusform>
+            <numerusform>%n символов в черновике</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln word(s) in the Draft</source>
+        <translation>
+            <numerusform>%n слово в черновике</numerusform>
+            <numerusform>%n слова в черновике</numerusform>
+            <numerusform>%n слов в черновике</numerusform>
+        </translation>
     </message>
     <message>
         <source>%1 of %2 this session</source>
@@ -20637,11 +21895,11 @@ Ctrl+щелчок, чтобы открыть</translation>
         <translation>Другие команды</translation>
     </message>
     <message>
-        <source>Paste and &amp;Match Style</source>
-        <translation>Вставить по &amp;стилю</translation>
+        <source>Paste and Match &amp;Style</source>
+        <translation>Вставить в &amp;стиле окружающего текста</translation>
     </message>
     <message>
-        <source>Paste with &amp;Formatting</source>
+        <source>Paste With &amp;Formatting</source>
         <translation>Вставить с &amp;форматированием</translation>
     </message>
     <message>
@@ -20705,7 +21963,7 @@ Ctrl+щелчок, чтобы открыть</translation>
     </message>
     <message>
         <source>To change colors and fonts, use File ▸ Options ▸ Appearance and then Save as Theme. Built-in themes and themes of add-ons cannot be changed; duplicate one to get a theme of your own.</source>
-        <translation>Чтобы изменить цвета и шрифты, используйте Файл ▸ Параметры ▸ Оформление, а затем «Сохранить как тему». Встроенные темы и темы дополнений изменять нельзя; продублируйте тему, чтобы получить собственную.</translation>
+        <translation>Чтобы изменить цвета и шрифты, используйте Файл ▸ Параметры ▸ Внешний вид, а затем «Сохранить как тему». Встроенные темы и темы дополнений изменять нельзя; продублируйте тему, чтобы получить собственную.</translation>
     </message>
     <message>
         <source>Duplicate Theme</source>
@@ -20759,29 +22017,21 @@ Ctrl+щелчок, чтобы открыть</translation>
         <source>uses the colors of the desktop (KDE color scheme)</source>
         <translation>использует цвета рабочего стола (цветовая схема KDE)</translation>
     </message>
-    <message>
-        <source>sets %1</source>
-        <translation>задаёт: %1</translation>
+    <message numerus="yes">
+        <source>%Ln color(s) set</source>
+        <translation>
+            <numerusform>Задан %n цвет</numerusform>
+            <numerusform>Задано %n цвета</numerusform>
+            <numerusform>Задано %n цветов</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>color</source>
-        <translation>цвет</translation>
-    </message>
-    <message>
-        <source>colors</source>
-        <translation>цвета|цветов</translation>
-    </message>
-    <message>
-        <source> and %1</source>
-        <translation> и %1</translation>
-    </message>
-    <message>
-        <source>font</source>
-        <translation>шрифт</translation>
-    </message>
-    <message>
-        <source>fonts</source>
-        <translation>шрифта|шрифтов</translation>
+    <message numerus="yes">
+        <source>%Ln font(s) set</source>
+        <translation>
+            <numerusform>Задан %n шрифт</numerusform>
+            <numerusform>Задано %n шрифта</numerusform>
+            <numerusform>Задано %n шрифтов</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -20822,17 +22072,13 @@ Ctrl+щелчок, чтобы открыть</translation>
         <source>Change Theme</source>
         <translation>Смена темы</translation>
     </message>
-    <message>
-        <source>The look you see has %1 of your own that are not saved in My Look 1 or My Look 2.</source>
-        <translation>В виде, который вы видите, есть собственные изменения (%1), не сохранённые в «Мой вид 1» или «Мой вид 2».</translation>
-    </message>
-    <message>
-        <source>color or font</source>
-        <translation>цвет или шрифт</translation>
-    </message>
-    <message>
-        <source>colors and fonts</source>
-        <translation>цвета и шрифта|цветов и шрифтов</translation>
+    <message numerus="yes">
+        <source>The look you see has %Ln color(s) or font(s) of your own that are not saved in My Look 1 or My Look 2.</source>
+        <translation>
+            <numerusform>В том, что вы видите, есть ваши цвета или шрифты (%n), не сохранённые в «Мой вид 1» и «Мой вид 2».</numerusform>
+            <numerusform>В том, что вы видите, есть ваши цвета или шрифты (%n), не сохранённые в «Мой вид 1» и «Мой вид 2».</numerusform>
+            <numerusform>В том, что вы видите, есть ваши цвета или шрифты (%n), не сохранённые в «Мой вид 1» и «Мой вид 2».</numerusform>
+        </translation>
     </message>
     <message>
         <source>Save the look in My Look 1 or My Look 2 first (it replaces the look saved there), or switch without saving it?</source>
@@ -20985,20 +22231,16 @@ Ctrl+щелчок, чтобы открыть</translation>
         <translation>Переместить вправо</translation>
     </message>
     <message>
-        <source>Icons of the main toolbars:</source>
-        <translation>Значки главных панелей инструментов:</translation>
+        <source>Size of all toolbars:</source>
+        <translation>Размер всех панелей инструментов:</translation>
     </message>
     <message>
-        <source>Small</source>
-        <translation>Малые</translation>
+        <source>Reset</source>
+        <translation>Сбросить</translation>
     </message>
     <message>
-        <source>Medium</source>
-        <translation>Средние</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Большие</translation>
+        <source>Put the standard buttons back into this toolbar</source>
+        <translation>Вернуть стандартные кнопки на эту панель инструментов</translation>
     </message>
     <message>
         <source>Icons only</source>
@@ -21011,14 +22253,6 @@ Ctrl+щелчок, чтобы открыть</translation>
     <message>
         <source>Text under the icons</source>
         <translation>Текст под значками</translation>
-    </message>
-    <message>
-        <source>Standard Set</source>
-        <translation>Стандартный набор</translation>
-    </message>
-    <message>
-        <source>Put the buttons the program came with back into this toolbar</source>
-        <translation>Вернуть на эту панель инструментов кнопки, с которыми поставлялась программа</translation>
     </message>
 </context>
 <context>
@@ -21091,17 +22325,21 @@ It fetches one small file, at most once a day, and tells you when a newer versio
         <source>%1 and its add-ons are up to date.</source>
         <translation>%1 и её дополнения обновлены.</translation>
     </message>
-    <message>
-        <source>1 day</source>
-        <translation>1 день</translation>
+    <message numerus="yes">
+        <source>%Ln day(s)</source>
+        <translation>
+            <numerusform>%n день</numerusform>
+            <numerusform>%n дня</numerusform>
+            <numerusform>%n дней</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>1 week</source>
-        <translation>1 неделя</translation>
-    </message>
-    <message>
-        <source>%1 weeks</source>
-        <translation>%1 недели</translation>
+    <message numerus="yes">
+        <source>%Ln week(s)</source>
+        <translation>
+            <numerusform>%n неделя</numerusform>
+            <numerusform>%n недели</numerusform>
+            <numerusform>%n недель</numerusform>
+        </translation>
     </message>
     <message>
         <source>Updates</source>
@@ -21285,91 +22523,91 @@ Or download the current version from the project&apos;s page.</source>
         <translation>%1 / %2 сегодня</translation>
     </message>
     <message>
-        <source>Today&apos;s writing: %1 of %2 %3 (click for Project Targets)</source>
-        <translation>Написано сегодня: %1 из %2 %3 (щёлкните, чтобы открыть цели проекта)</translation>
+        <source>Today&apos;s writing: %1 of %2 characters (click for Project Targets)</source>
+        <translation>Написано сегодня: %1 из %2 символов (щёлкните, чтобы открыть цели проекта)</translation>
     </message>
     <message>
-        <source>characters</source>
-        <translation>символов</translation>
+        <source>Today&apos;s writing: %1 of %2 words (click for Project Targets)</source>
+        <translation>Написано сегодня: %1 из %2 слов (щёлкните, чтобы открыть цели проекта)</translation>
     </message>
     <message>
-        <source>words</source>
-        <translation>слов</translation>
+        <source>The draft: %1 of %2 characters (click for Project Targets)</source>
+        <translation>Черновик: %1 из %2 символов (щёлкните, чтобы открыть цели проекта)</translation>
+    </message>
+    <message>
+        <source>The draft: %1 of %2 words (click for Project Targets)</source>
+        <translation>Черновик: %1 из %2 слов (щёлкните, чтобы открыть цели проекта)</translation>
     </message>
     <message>
         <source>%1 / %2 draft</source>
         <translation>%1 / %2 черновик</translation>
     </message>
-    <message>
-        <source>The draft: %1 of %2 %3 (click for Project Targets)</source>
-        <translation>Черновик: %1 из %2 %3 (щёлкните, чтобы открыть цели проекта)</translation>
-    </message>
 </context>
 <context>
     <name>qb::addons</name>
-    <message>
-        <source>theme</source>
-        <translation>тема</translation>
+    <message numerus="yes">
+        <source>%Ln theme(s)</source>
+        <translation>
+            <numerusform>%n тема</numerusform>
+            <numerusform>%n темы</numerusform>
+            <numerusform>%n тем</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>themes</source>
-        <translation>темы|тем</translation>
+    <message numerus="yes">
+        <source>%Ln project template(s)</source>
+        <translation>
+            <numerusform>%n шаблон проекта</numerusform>
+            <numerusform>%n шаблона проекта</numerusform>
+            <numerusform>%n шаблонов проекта</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>project template</source>
-        <translation>шаблон проекта</translation>
+    <message numerus="yes">
+        <source>%Ln compile format(s)</source>
+        <translation>
+            <numerusform>%n формат компоновки</numerusform>
+            <numerusform>%n формата компоновки</numerusform>
+            <numerusform>%n форматов компоновки</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>project templates</source>
-        <translation>шаблона проектов|шаблонов проектов</translation>
+    <message numerus="yes">
+        <source>%Ln layout(s)</source>
+        <translation>
+            <numerusform>%n раскладка</numerusform>
+            <numerusform>%n раскладки</numerusform>
+            <numerusform>%n раскладок</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>compile format</source>
-        <translation>формат компоновки</translation>
+    <message numerus="yes">
+        <source>%Ln script format(s)</source>
+        <translation>
+            <numerusform>%n формат сценария</numerusform>
+            <numerusform>%n формата сценария</numerusform>
+            <numerusform>%n форматов сценария</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>compile formats</source>
-        <translation>формата компоновки|форматов компоновки</translation>
+    <message numerus="yes">
+        <source>%Ln name list(s)</source>
+        <translation>
+            <numerusform>%n список имён</numerusform>
+            <numerusform>%n списка имён</numerusform>
+            <numerusform>%n списков имён</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>layout</source>
-        <translation>раскладка</translation>
+    <message numerus="yes">
+        <source>%Ln plugin file(s)</source>
+        <translation>
+            <numerusform>%n файл модуля</numerusform>
+            <numerusform>%n файла модуля</numerusform>
+            <numerusform>%n файлов модуля</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>layouts</source>
-        <translation>раскладки|раскладок</translation>
-    </message>
-    <message>
-        <source>script format</source>
-        <translation>формат сценария</translation>
-    </message>
-    <message>
-        <source>script formats</source>
-        <translation>формата сценариев|форматов сценариев</translation>
-    </message>
-    <message>
-        <source>name list</source>
-        <translation>список имён</translation>
-    </message>
-    <message>
-        <source>name lists</source>
-        <translation>списка имён|списков имён</translation>
-    </message>
-    <message>
-        <source>plugin file</source>
-        <translation>файл модуля</translation>
-    </message>
-    <message>
-        <source>plugin files</source>
-        <translation>файла модулей|файлов модулей</translation>
-    </message>
-    <message>
-        <source>dictionary</source>
-        <translation>словарь</translation>
-    </message>
-    <message>
-        <source>dictionaries</source>
-        <translation>словаря|словарей</translation>
+    <message numerus="yes">
+        <source>%Ln dictionar(y|ies)</source>
+        <translation>
+            <numerusform>%n словарь</numerusform>
+            <numerusform>%n словаря</numerusform>
+            <numerusform>%n словарей</numerusform>
+        </translation>
     </message>
     <message>
         <source>video and audio formats licensed under patents (for Media Playback 2.0 or newer)</source>
@@ -21489,11 +22727,11 @@ Or download the current version from the project&apos;s page.</source>
     </message>
     <message>
         <source>Bundles cannot contain other bundles.</source>
-        <translation>Наборы не могут содержать другие наборы.</translation>
+        <translation>Комплекты не могут содержать другие комплекты.</translation>
     </message>
     <message>
         <source>The bundle is empty.</source>
-        <translation>Набор пуст.</translation>
+        <translation>Комплект пуст.</translation>
     </message>
     <message>
         <source>%1: %2</source>
@@ -21597,6 +22835,69 @@ Or download the current version from the project&apos;s page.</source>
     </message>
 </context>
 <context>
+    <name>qb::ai</name>
+    <message>
+        <source>%1 could not be removed completely.</source>
+        <translation>%1 не удалось удалить полностью.</translation>
+    </message>
+    <message>
+        <source>%1 is not published yet.</source>
+        <translation>%1 ещё не опубликовано.</translation>
+    </message>
+    <message>
+        <source>%1 needs about %2 GB of memory; this computer has %3 GB.</source>
+        <translation>Для %1 нужно около %2 ГБ памяти; на этом компьютере её %3 ГБ.</translation>
+    </message>
+    <message>
+        <source>There is not enough room on the disk for %1 (%2 MB are needed).</source>
+        <translation>Недостаточно места на диске для %1 (нужно %2 МБ).</translation>
+    </message>
+    <message>
+        <source>Processor (CPU)</source>
+        <translation>Процессор (CPU)</translation>
+    </message>
+    <message>
+        <source>The graphics card &quot;%1&quot; was not found; the processor is used.</source>
+        <translation>Видеокарта «%1» не найдена; используется процессор.</translation>
+    </message>
+    <message>
+        <source>The model does not fit into the free memory of the graphics card; the processor is used.</source>
+        <translation>Модель не помещается в свободную память видеокарты; используется процессор.</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>Автоматически</translation>
+    </message>
+    <message>
+        <source>The AI engine is not installed.</source>
+        <translation>ИИ-движок не установлен.</translation>
+    </message>
+    <message>
+        <source>An add-on has loaded a speech engine of its own (%1). Restart Quillbinder, or update that add-on, to use the AI engine.</source>
+        <translation>Дополнение загрузило собственный речевой движок (%1). Перезапустите Quillbinder или обновите это дополнение, чтобы использовать ИИ-движок.</translation>
+    </message>
+    <message>
+        <source>The AI engine could not be loaded: %1</source>
+        <translation>Не удалось загрузить ИИ-движок: %1</translation>
+    </message>
+    <message>
+        <source>The installed AI engine is older than this version of Quillbinder needs. Install the engine again from the settings page.</source>
+        <translation>Установленный ИИ-движок старше, чем нужно этой версии Quillbinder. Установите движок заново на странице настроек.</translation>
+    </message>
+    <message>
+        <source>The model &quot;%1&quot; could not be loaded: %2</source>
+        <translation>Не удалось загрузить модель «%1»: %2</translation>
+    </message>
+    <message>
+        <source>The model is not loaded.</source>
+        <translation>Модель не загружена.</translation>
+    </message>
+    <message>
+        <source>Stopped.</source>
+        <translation>Остановлено.</translation>
+    </message>
+</context>
+<context>
     <name>qb::appmenu</name>
     <message>
         <source>The program does not run from an AppImage file.</source>
@@ -21692,6 +22993,401 @@ Or download the current version from the project&apos;s page.</source>
     <message>
         <source>PDF (.pdf)</source>
         <translation>PDF (.pdf)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting</name>
+    <message>
+        <source>The handwriting engine could not be loaded: %1</source>
+        <translation>Не удалось загрузить движок рукописного ввода: %1</translation>
+    </message>
+    <message>
+        <source>The handwriting engine does not offer the interface this version needs.</source>
+        <translation>Движок рукописного ввода не предоставляет интерфейс, который нужен этой версии.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::HandwritingController</name>
+    <message>
+        <source>Off</source>
+        <translation>Выкл.</translation>
+    </message>
+    <message>
+        <source>Editor</source>
+        <translation>Редактор</translation>
+    </message>
+    <message>
+        <source>Inspector</source>
+        <translation>Инспектор</translation>
+    </message>
+    <message>
+        <source>Both</source>
+        <translation>Оба</translation>
+    </message>
+    <message>
+        <source>Handwriting</source>
+        <translation>Рукописный ввод</translation>
+    </message>
+    <message>
+        <source>Handwriting Button</source>
+        <translation>Кнопка рукописного ввода</translation>
+    </message>
+    <message>
+        <source>Show the button for handwriting on the toolbar</source>
+        <translation>Показывать на панели инструментов кнопку рукописного ввода</translation>
+    </message>
+    <message>
+        <source>Put the text at the place shown</source>
+        <translation>Поместить текст в показанное место</translation>
+    </message>
+    <message>
+        <source>Cancel: the text goes back to the strip</source>
+        <translation>Отмена: текст возвращается в полосу</translation>
+    </message>
+    <message>
+        <source>Handwriting: off. Tap to switch it on; press and hold for the choices.</source>
+        <translation>Рукописный ввод: выкл. Коснитесь, чтобы включить; нажмите и удерживайте, чтобы выбрать режим.</translation>
+    </message>
+    <message>
+        <source>Handwriting: %1. Tap to switch it off; press and hold for the choices.</source>
+        <translation>Рукописный ввод: %1. Коснитесь, чтобы выключить; нажмите и удерживайте, чтобы выбрать режим.</translation>
+    </message>
+    <message>
+        <source>Writing on the editor.
+The text you write is collected below.</source>
+        <translation>Письмо поверх редактора.
+Написанный вами текст собирается ниже.</translation>
+    </message>
+    <message>
+        <source>Writing on the editor and here.</source>
+        <translation>Письмо поверх редактора и здесь.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::HandwritingPage</name>
+    <message>
+        <source>no model for this language yet</source>
+        <translation>для этого языка пока нет модели</translation>
+    </message>
+    <message>
+        <source>Theme color</source>
+        <translation>Цвет темы</translation>
+    </message>
+    <message>
+        <source>Recognition</source>
+        <translation>Распознавание</translation>
+    </message>
+    <message>
+        <source>Show the handwriting button on the toolbar</source>
+        <translation>Показывать на панели инструментов кнопку рукописного ввода</translation>
+    </message>
+    <message>
+        <source>Install</source>
+        <translation>Установить</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <source>Handwriting model:</source>
+        <translation>Модель рукописного ввода:</translation>
+    </message>
+    <message>
+        <source>Main language:</source>
+        <translation>Основной язык:</translation>
+    </message>
+    <message>
+        <source>Fallback language:</source>
+        <translation>Запасной язык:</translation>
+    </message>
+    <message>
+        <source>Writing</source>
+        <translation>Письмо</translation>
+    </message>
+    <message>
+        <source>Pause before a line is read:</source>
+        <translation>Пауза перед чтением строки:</translation>
+    </message>
+    <message>
+        <source>The ink stays for:</source>
+        <translation>Чернила остаются на:</translation>
+    </message>
+    <message>
+        <source>The ink fades over:</source>
+        <translation>Чернила исчезают за:</translation>
+    </message>
+    <message>
+        <source>Ink color:</source>
+        <translation>Цвет чернил:</translation>
+    </message>
+    <message>
+        <source>Ink Color</source>
+        <translation>Цвет чернил</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> пикс.</translation>
+    </message>
+    <message>
+        <source>Ink width:</source>
+        <translation>Толщина чернил:</translation>
+    </message>
+    <message>
+        <source>Grid (in the inspector&apos;s pad)</source>
+        <translation>Сетка (на поле инспектора)</translation>
+    </message>
+    <message>
+        <source>Style:</source>
+        <translation>Стиль:</translation>
+    </message>
+    <message>
+        <source>Color:</source>
+        <translation>Цвет:</translation>
+    </message>
+    <message>
+        <source>Grid Color</source>
+        <translation>Цвет сетки</translation>
+    </message>
+    <message>
+        <source>Line width:</source>
+        <translation>Толщина линии:</translation>
+    </message>
+    <message>
+        <source>Opacity:</source>
+        <translation>Непрозрачность:</translation>
+    </message>
+    <message>
+        <source>small</source>
+        <translation>мелкая</translation>
+    </message>
+    <message>
+        <source>large</source>
+        <translation>крупная</translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation>Размер:</translation>
+    </message>
+    <message>
+        <source>Hand protection</source>
+        <translation>Защита руки</translation>
+    </message>
+    <message>
+        <source>Ignore the resting hand while the pen writes</source>
+        <translation>Игнорировать лежащую на экране руку, пока пишет перо</translation>
+    </message>
+    <message>
+        <source>Right-handed</source>
+        <translation>Правша</translation>
+    </message>
+    <message>
+        <source>Left-handed</source>
+        <translation>Левша</translation>
+    </message>
+    <message>
+        <source>Writing hand:</source>
+        <translation>Пишущая рука:</translation>
+    </message>
+    <message>
+        <source>weak</source>
+        <translation>слабая</translation>
+    </message>
+    <message>
+        <source>strong</source>
+        <translation>сильная</translation>
+    </message>
+    <message>
+        <source>Strength:</source>
+        <translation>Сила:</translation>
+    </message>
+    <message>
+        <source>Pen and finger</source>
+        <translation>Перо и палец</translation>
+    </message>
+    <message>
+        <source>Without a pen, one finger writes (two fingers scroll)</source>
+        <translation>Без пера пишет один палец (два пальца прокручивают)</translation>
+    </message>
+    <message>
+        <source>The pen&apos;s side button selects text</source>
+        <translation>Боковая кнопка пера выделяет текст</translation>
+    </message>
+    <message>
+        <source> s</source>
+        <translation> с</translation>
+    </message>
+    <message>
+        <source>A pen counts as in use after its last touch for:</source>
+        <translation>Перо считается используемым после последнего касания в течение:</translation>
+    </message>
+    <message>
+        <source>Learning your hand</source>
+        <translation>Обучение вашему почерку</translation>
+    </message>
+    <message>
+        <source>Keep corrected lines on this device</source>
+        <translation>Хранить исправленные строки на этом устройстве</translation>
+    </message>
+    <message>
+        <source>Only lines you corrected are kept: the picture of the ink and the corrected text. They stay on this device and are never sent anywhere. While an encrypted project is open, nothing is kept (the files would be plain).</source>
+        <translation>Хранятся только строки, которые вы исправили: изображение чернил и исправленный текст. Они остаются на этом устройстве и никуда не отправляются. Пока открыт зашифрованный проект, ничего не хранится (файлы были бы не зашифрованы).</translation>
+    </message>
+    <message>
+        <source>Delete the Kept Lines</source>
+        <translation>Удалить сохранённые строки</translation>
+    </message>
+    <message>
+        <source>Installed.</source>
+        <translation>Установлено.</translation>
+    </message>
+    <message>
+        <source>Not installed. Install it to write by hand.</source>
+        <translation>Не установлено. Установите его, чтобы писать от руки.</translation>
+    </message>
+    <message>
+        <source>The installer for handwriting models is not available in this version yet.</source>
+        <translation>Установщик моделей рукописного ввода в этой версии пока недоступен.</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n line(s) kept</source>
+        <translation>
+            <numerusform>Сохранена %n строка</numerusform>
+            <numerusform>Сохранено %n строки</numerusform>
+            <numerusform>Сохранено %n строк</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::HandwritingPanel</name>
+    <message>
+        <source>Space</source>
+        <translation>Пробел</translation>
+    </message>
+    <message>
+        <source>Add a space</source>
+        <translation>Добавить пробел</translation>
+    </message>
+    <message>
+        <source>Backspace</source>
+        <translation>Backspace</translation>
+    </message>
+    <message>
+        <source>Delete the last character</source>
+        <translation>Удалить последний символ</translation>
+    </message>
+    <message>
+        <source>Enter</source>
+        <translation>Enter</translation>
+    </message>
+    <message>
+        <source>Add a line break</source>
+        <translation>Добавить перевод строки</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Очистить</translation>
+    </message>
+    <message>
+        <source>Throw away the text in the strip</source>
+        <translation>Очистить полосу</translation>
+    </message>
+    <message>
+        <source>Pin</source>
+        <translation>Закрепить</translation>
+    </message>
+    <message>
+        <source>Make the text stick to the pen or finger; tap a text field to show the place</source>
+        <translation>Прикрепить текст к перу или пальцу; коснитесь текстового поля, чтобы показать место</translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation>Вставить</translation>
+    </message>
+    <message>
+        <source>Put the text at the cursor</source>
+        <translation>Поместить текст в позицию курсора</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::InkCanvas</name>
+    <message>
+        <source>Handwriting is not installed.</source>
+        <translation>Рукописный ввод не установлен.</translation>
+    </message>
+    <message>
+        <source>The line could not be read.</source>
+        <translation>Не удалось прочитать строку.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::OnnxRecognizer</name>
+    <message>
+        <source>The model&apos;s output has an unexpected shape.</source>
+        <translation>Выходные данные модели имеют неожиданную форму.</translation>
+    </message>
+    <message>
+        <source>Handwriting is not installed.</source>
+        <translation>Рукописный ввод не установлен.</translation>
+    </message>
+    <message>
+        <source>The handwriting model&apos;s files could not be read.</source>
+        <translation>Не удалось прочитать файлы модели рукописного ввода.</translation>
+    </message>
+    <message>
+        <source>The handwriting model&apos;s codec could not be read: %1</source>
+        <translation>Не удалось прочитать кодировку модели рукописного ввода: %1</translation>
+    </message>
+    <message>
+        <source>The handwriting model could not be loaded: %1</source>
+        <translation>Не удалось загрузить модель рукописного ввода: %1</translation>
+    </message>
+    <message>
+        <source>The line could not be read: %1</source>
+        <translation>Не удалось прочитать строку: %1</translation>
+    </message>
+    <message>
+        <source>Handwriting</source>
+        <translation>Рукописный ввод</translation>
+    </message>
+    <message>
+        <source>There is not enough memory to load the handwriting model.</source>
+        <translation>Недостаточно памяти для загрузки модели рукописного ввода.</translation>
+    </message>
+    <message>
+        <source>Install Handwriting</source>
+        <translation>Установить рукописный ввод</translation>
+    </message>
+    <message>
+        <source>Installed: the engine, the line model and the word lists of %1.</source>
+        <translation>Установлено: движок, модель строк и списки слов для языка «%1».</translation>
+    </message>
+    <message>
+        <source>no language</source>
+        <translation>нет языка</translation>
+    </message>
+    <message>
+        <source>the engine</source>
+        <translation>движок</translation>
+    </message>
+    <message>
+        <source>the line model</source>
+        <translation>модель строк</translation>
+    </message>
+    <message>
+        <source>Not installed yet: %1. Install it to write by hand.</source>
+        <translation>Ещё не установлено: %1. Установите, чтобы писать от руки.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::WordStrip</name>
+    <message>
+        <source>No other readings</source>
+        <translation>Других вариантов прочтения нет</translation>
+    </message>
+    <message>
+        <source>The text you write appears here.</source>
+        <translation>Написанный вами текст появится здесь.</translation>
     </message>
 </context>
 <context>
@@ -21949,7 +23645,7 @@ It is not opened from here. If you trust it, open it yourself from your file man
     </message>
     <message>
         <source>Play (Ctrl+Return)</source>
-        <translation>Воспроизвести (Ctrl+Return)</translation>
+        <translation>Воспроизвести (Ctrl+Enter)</translation>
     </message>
     <message>
         <source>Playing speed</source>
@@ -21973,7 +23669,243 @@ It is not opened from here. If you trust it, open it yourself from your file man
     </message>
     <message>
         <source>Pause (Ctrl+Return)</source>
-        <translation>Пауза (Ctrl+Return)</translation>
+        <translation>Пауза (Ctrl+Enter)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::readaloud</name>
+    <message>
+        <source>Female 1</source>
+        <translation>Женский 1</translation>
+    </message>
+    <message>
+        <source>Female 2</source>
+        <translation>Женский 2</translation>
+    </message>
+    <message>
+        <source>Female 3</source>
+        <translation>Женский 3</translation>
+    </message>
+    <message>
+        <source>Male 1</source>
+        <translation>Мужской 1</translation>
+    </message>
+    <message>
+        <source>Male 2</source>
+        <translation>Мужской 2</translation>
+    </message>
+    <message>
+        <source>Male 3</source>
+        <translation>Мужской 3</translation>
+    </message>
+    <message>
+        <source>Calm</source>
+        <translation>Спокойный</translation>
+    </message>
+    <message>
+        <source>Neutral</source>
+        <translation>Нейтральный</translation>
+    </message>
+    <message>
+        <source>Action</source>
+        <translation>Динамичный</translation>
+    </message>
+    <message>
+        <source>Slow</source>
+        <translation>Медленно</translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation>Средне</translation>
+    </message>
+    <message>
+        <source>Fast</source>
+        <translation>Быстро</translation>
+    </message>
+    <message>
+        <source>fits on %1</source>
+        <translation>помещается на %1</translation>
+    </message>
+    <message>
+        <source>does not fit (needs %1)</source>
+        <translation>не помещается (нужно %1)</translation>
+    </message>
+    <message>
+        <source>fits in RAM</source>
+        <translation>помещается в ОЗУ</translation>
+    </message>
+    <message>
+        <source>This model does not have this voice.</source>
+        <translation>В этой модели нет такого голоса.</translation>
+    </message>
+    <message>
+        <source>Voice not installed yet.</source>
+        <translation>Голос ещё не установлен.</translation>
+    </message>
+    <message>
+        <source>This model has no style control.</source>
+        <translation>В этой модели нельзя управлять стилем.</translation>
+    </message>
+    <message>
+        <source>The voice&apos;s reference clip cannot be read.</source>
+        <translation>Не удаётся прочитать образец голоса.</translation>
+    </message>
+    <message>
+        <source>The installed AI engine cannot play sound; install its newest version.</source>
+        <translation>Установленный ИИ-движок не умеет воспроизводить звук; установите его самую новую версию.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::readaloud::Controller</name>
+    <message>
+        <source>Play</source>
+        <translation>Воспроизвести</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation>Остановить</translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation>Пауза</translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation>Продолжить</translation>
+    </message>
+    <message>
+        <source>Read Aloud: %1 (the marked text, or from the cursor to the end)</source>
+        <translation>Чтение вслух: %1 (выделенный текст или от курсора до конца)</translation>
+    </message>
+    <message>
+        <source>Read Aloud: Stop</source>
+        <translation>Чтение вслух: стоп</translation>
+    </message>
+    <message>
+        <source>Open a text to read it aloud.</source>
+        <translation>Откройте текст, чтобы прочитать его вслух.</translation>
+    </message>
+    <message>
+        <source>Voice</source>
+        <translation>Голос</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Стиль</translation>
+    </message>
+    <message>
+        <source>Speed</source>
+        <translation>Скорость</translation>
+    </message>
+    <message>
+        <source>Read Aloud Settings…</source>
+        <translation>Параметры чтения вслух…</translation>
+    </message>
+</context>
+<context>
+    <name>qb::readaloud::ReadAloudPage</name>
+    <message>
+        <source>no model for this language yet</source>
+        <translation>для этого языка пока нет модели</translation>
+    </message>
+    <message>
+        <source>Read Aloud reads the marked text (or from the cursor to the end) with a speech model on this computer. Nothing is installed until you install it here. The sound is only played, never saved.</source>
+        <translation>«Чтение вслух» читает выделенный текст (или текст от курсора до конца) с помощью речевой модели на этом компьютере. Пока вы не установите её здесь, ничего не устанавливается. Звук только воспроизводится и никогда не сохраняется.</translation>
+    </message>
+    <message>
+        <source>Voice model</source>
+        <translation>Модель голоса</translation>
+    </message>
+    <message>
+        <source>Language:</source>
+        <translation>Язык:</translation>
+    </message>
+    <message>
+        <source>Model:</source>
+        <translation>Модель:</translation>
+    </message>
+    <message>
+        <source>Automatic: the graphics card when the model fits into its free memory, else the computer&apos;s memory and processor.</source>
+        <translation>Автоматически: видеокарта, если модель помещается в её свободную память, иначе память компьютера и процессор.</translation>
+    </message>
+    <message>
+        <source>Device:</source>
+        <translation>Устройство:</translation>
+    </message>
+    <message>
+        <source>Speed:</source>
+        <translation>Скорость:</translation>
+    </message>
+    <message>
+        <source>The processor cores and the minutes a model stays loaded are set for all AI functions in File &gt; Options &gt; General &gt; AI Models.</source>
+        <translation>Число ядер процессора и время, в течение которого модель остаётся загруженной, задаются для всех функций ИИ в разделе Файл &gt; Параметры &gt; Общие &gt; Модели ИИ.</translation>
+    </message>
+    <message>
+        <source>Automatic (%1)</source>
+        <translation>Автоматически (%1)</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>Автоматически</translation>
+    </message>
+    <message>
+        <source>%1: %2, %3, %4</source>
+        <translation>%1: %2, %3, %4</translation>
+    </message>
+    <message>
+        <source>The engine is not installed yet: install it below, then a model.</source>
+        <translation>Движок ещё не установлен: установите его ниже, затем модель.</translation>
+    </message>
+    <message>
+        <source>No model is installed for this language yet: download one below.</source>
+        <translation>Для этого языка пока не установлена ни одна модель: скачайте её ниже.</translation>
+    </message>
+    <message>
+        <source>Ready: press Play on the Read Aloud toolbar.</source>
+        <translation>Готово: нажмите «Воспроизвести» на панели «Чтение вслух».</translation>
+    </message>
+    <message>
+        <source>Not measured: no model is installed.</source>
+        <translation>Не измерено: ни одна модель не установлена.</translation>
+    </message>
+    <message>
+        <source>Measuring the speed with a short test sentence...</source>
+        <translation>Скорость измеряется на коротком тестовом предложении...</translation>
+    </message>
+    <message>
+        <source>Not measured yet.</source>
+        <translation>Пока не измерено.</translation>
+    </message>
+    <message>
+        <source>Slower than real time (about %1 times slower on this device): Read Aloud makes a few sentences ahead before it plays.</source>
+        <translation>Медленнее реального времени (примерно в %1 раз медленнее на этом устройстве): «Чтение вслух» готовит несколько предложений вперёд, прежде чем начать воспроизведение.</translation>
+    </message>
+    <message>
+        <source>Faster than real time (%1 seconds of work for one second of sound).</source>
+        <translation>Быстрее реального времени (%1 с работы на одну секунду звука).</translation>
+    </message>
+    <message>
+        <source>The speed test failed: %1</source>
+        <translation>Проверка скорости не удалась: %1</translation>
+    </message>
+</context>
+<context>
+    <name>qb::readaloud::Session</name>
+    <message>
+        <source>Read Aloud is busy.</source>
+        <translation>«Чтение вслух» занято.</translation>
+    </message>
+    <message>
+        <source>The AI engine is not installed.</source>
+        <translation>ИИ-движок не установлен.</translation>
+    </message>
+    <message>
+        <source>No speech model is installed for this language.</source>
+        <translation>Для этого языка не установлена речевая модель.</translation>
+    </message>
+    <message>
+        <source>There is no text to read.</source>
+        <translation>Нет текста для чтения.</translation>
     </message>
 </context>
 <context>
@@ -21981,6 +23913,17 @@ It is not opened from here. If you trust it, open it yourself from your file man
     <message>
         <source>The regular expression has a mistake: %1</source>
         <translation>В регулярном выражении ошибка: %1</translation>
+    </message>
+</context>
+<context>
+    <name>qb::smallui::SlidePanel</name>
+    <message>
+        <source>Close</source>
+        <translation>Закрыть</translation>
+    </message>
+    <message>
+        <source>Close this panel (Esc)</source>
+        <translation>Закрыть эту панель (Esc)</translation>
     </message>
 </context>
 <context>
@@ -22132,7 +24075,7 @@ It is not opened from here. If you trust it, open it yourself from your file man
     </message>
     <message>
         <source>Media Playback</source>
-        <translation>Воспроизведение медиа</translation>
+        <translation>Media Playback</translation>
     </message>
     <message>
         <source>The codecs of Windows (Media Foundation)</source>
@@ -22181,13 +24124,13 @@ It is not opened from here. If you trust it, open it yourself from your file man
         <source>The address does not lead to a web page (it is “%1”).</source>
         <translation>Адрес не ведёт к веб-странице («%1»).</translation>
     </message>
-    <message>
-        <source>Fetching 1 picture …</source>
-        <translation>Загрузка 1 изображения …</translation>
-    </message>
-    <message>
-        <source>Fetching %1 pictures …</source>
-        <translation>Загрузка изображений: %1 …</translation>
+    <message numerus="yes">
+        <source>Fetching %Ln picture(s) …</source>
+        <translation>
+            <numerusform>Загрузка изображений: %n …</numerusform>
+            <numerusform>Загрузка изображений: %n …</numerusform>
+            <numerusform>Загрузка изображений: %n …</numerusform>
+        </translation>
     </message>
     <message>
         <source>Fetching pictures: %1 of %2 …</source>
@@ -22288,21 +24231,21 @@ It is not opened from here. If you trust it, open it yourself from your file man
         <source>This is not the address of a web page.</source>
         <translation>Это не адрес веб-страницы.</translation>
     </message>
-    <message>
-        <source>1 word</source>
-        <translation>1 слово</translation>
+    <message numerus="yes">
+        <source>%Ln word(s)</source>
+        <translation>
+            <numerusform>%n слово</numerusform>
+            <numerusform>%n слова</numerusform>
+            <numerusform>%n слов</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>%1 words</source>
-        <translation>Слов: %1</translation>
-    </message>
-    <message>
-        <source>1 picture</source>
-        <translation>1 изображение</translation>
-    </message>
-    <message>
-        <source>%1 pictures</source>
-        <translation>Изображений: %1</translation>
+    <message numerus="yes">
+        <source>%Ln picture(s)</source>
+        <translation>
+            <numerusform>%n изображение</numerusform>
+            <numerusform>%n изображения</numerusform>
+            <numerusform>%n изображений</numerusform>
+        </translation>
     </message>
     <message>
         <source>by %1</source>
@@ -22311,6 +24254,13 @@ It is not opened from here. If you trust it, open it yourself from your file man
     <message>
         <source>The page builds its text with a script: the text comes from the page&apos;s data.</source>
         <translation>Страница строит свой текст скриптом: текст берётся из данных страницы.</translation>
+    </message>
+</context>
+<context>
+    <name>readaloud</name>
+    <message>
+        <source>Read Aloud</source>
+        <translation>Чтение вслух</translation>
     </message>
 </context>
 </TS>

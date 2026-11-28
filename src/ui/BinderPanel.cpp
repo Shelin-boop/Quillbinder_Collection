@@ -71,7 +71,14 @@ public:
             if (!tree->lockTip(id).isEmpty()) {
                 QColor c = ink;
                 c.setAlpha(190);
-                rowmarks::paintLock(p, rowmarks::lockRect(option.rect, right), c);
+                const int kind = tree->lockKind(id);
+                if (kind == 1) // 0.99.0 (Live Sync): the pen of your own lock
+                    rowmarks::paintPen(p, rowmarks::lockRect(option.rect, right), c);
+                else {
+                    if (kind == 2) // the holder is not reachable: dimmed
+                        c.setAlpha(90);
+                    rowmarks::paintLock(p, rowmarks::lockRect(option.rect, right), c);
+                }
             }
             const bool fixed = !id.isEmpty() && id == tree->fixedMindMapId();
             const bool hovered = tree->pinShownOn(index);
@@ -309,6 +316,14 @@ void BinderTree::setLockMarks(const QHash<QString, QString> &tips)
     if (tips == m_lockTips)
         return;
     m_lockTips = tips;
+    viewport()->update();
+}
+
+void BinderTree::setLockKinds(const QHash<QString, int> &kinds)
+{
+    if (kinds == m_lockKinds)
+        return;
+    m_lockKinds = kinds;
     viewport()->update();
 }
 
@@ -1172,11 +1187,17 @@ void BinderPanel::setLockMarks(const QHash<QString, QString> &tips)
     m_tree->setLockMarks(tips);
 }
 
+void BinderPanel::setLockKinds(const QHash<QString, int> &kinds)
+{
+    m_tree->setLockKinds(kinds);
+}
+
 void BinderPanel::setProject(Project *p)
 {
     m_project = p;
     setFixedMindMap(nullptr);
     m_tree->setLockMarks({});
+    m_tree->setLockKinds({});
     m_results->setProject(p);
     m_results->setReorderable(false);
     m_tree->setEditorItemId(QString());

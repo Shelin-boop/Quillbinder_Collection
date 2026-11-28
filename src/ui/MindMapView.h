@@ -22,6 +22,7 @@ class MindMapView : public QGraphicsView
 public:
     explicit MindMapView(QWidget *parent = nullptr);
     void setController(MindMapController *c) { m_ctl = c; }
+    MindMapController *controller() const { return m_ctl; }
     void setBoardScene(MindMapScene *scene);
     MindMapScene *boardScene() const { return m_scene; }
 

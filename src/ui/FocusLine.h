@@ -33,6 +33,7 @@ public:
     // The part a widget with the keyboard belongs to (also for the checks); the widget of the part in *target
     QString partOf(QWidget *focus, QWidget **target = nullptr) const;
     void refresh(); // looks at where the keyboard is now
+    void stopListening(); // cuts the connection to the application's focus signal (the window's end)
 
 protected:
     void paintEvent(QPaintEvent *) override;
@@ -45,6 +46,7 @@ private:
     QPointer<QWidget> m_window;
     QPointer<QWidget> m_binder, m_inspector;
     std::function<QList<EditorPane *>()> m_panes;
+    QMetaObject::Connection m_focusLink;
     QString m_part;
     QPointer<QWidget> m_target;
     QRect m_rect;

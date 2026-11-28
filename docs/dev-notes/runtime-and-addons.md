@@ -2,6 +2,33 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: Live Sync transport, identity, pairing, the wallet (work package 1)
+
+- **Botan modules**: `tools/get-crypto.sh` and `packaging/windows/win-crypto.sh` add `x509 tls13 argon2` to `BOTAN_MODULES`; the list is part of the
+  Linux `STAMP` (before, a finished `build/crypto` was never rebuilt for a changed list; the Windows stamp already holds the script's hash). The pack key
+  of `tools/deps-pack.sh` is the script's hash, so `deps.yml` builds the packs anew. `CMakeLists.txt` finds `botan/tls.h` and `botan/argon2.h` in the pack
+  and defines `QB_HAVE_BOTAN_TLS` for `qbcore`; an older pack builds everything as "not available" (the suite then skips what needs TLS).
+- **C++20 for four files**: Botan 3 headers need C++20, the program is C++17. `Wallet.cpp`, `DeviceIdentity.cpp`, `TlsLink.cpp` and `Pairing.cpp` get
+  `-std=c++20` through `set_source_files_properties`; no public header of the program includes a Botan header (pimpl), so everything else stays C++17.
+- **Ed25519 probe (2026-11-28, Botan 3.14.1)**: TLS 1.3 with Ed25519 certificates and client authentication fails ("Failed to agree on a signature
+  algorithm"): `Signature_Scheme::all_available_schemes()` has the EdDSA schemes commented out for certificates. The same exchange with ECDSA P-256
+  certificates works (both sides active, data passes). So the device key is **ECDSA P-256**; signatures for proofs, votes and membership records are
+  ECDSA with SHA-256 (`DeviceIdentity::sign/verify`, fixed r||s form). A later Botan that supports EdDSA certificates would be a new key kind and a new pairing.
+- **Trust**: `TlsLink` verifies in `tls_verify_cert_chain`: one self-signed ECDSA certificate, then `TrustPolicy::decide(pin, isServer)`. A client refuses
+  a server it does not know (`IDENTITY_MISMATCH`, the handshake is stopped); a server completes the handshake with an unknown key and says only
+  `{"t":"ERROR","code":"NOT_PAIRED"}` before closing, so that nothing (no names, no counts) leaves. Policy: TLS 1.3 only, AES-GCM, ECDSA with SHA-256/384,
+  X25519 and P-256, client certificate required, no tickets (`Session_Manager_Noop`).
+- **Pairing**: the nonces and the commitment are in `Pairing.h`. A man in the middle who only relays frames is stopped by the guest's commitment check
+  (the host committed to the pins it saw); one who plays both roles with keys of his own gets different codes on the two devices. After a pairing the side
+  that finishes last closes the link; `MemLink::close` delivers what was sent before the close first, as a wire does (a closed link must not overtake a
+  confirmation).
+- **The wallet** (`src/core/crypto/Wallet.*`, used by `KeyStore::system()` as `FallbackStore`): file `<data>/wallet.qbw`, header line with the Argon2id
+  costs (limits `kMaxMemoryKiB`, `kMaxPasses`, `kMaxLanes` guard against a planted file) and the salt and nonce, AES-256/GCM over the entries with the
+  magic and header as associated data. Each write seals the whole file again under a fresh nonce and replaces the file (`QSaveFile`). The unlock handler
+  (`Wallet::setUnlockHandler`) is set by the window code; **no code sets it yet** (the dialog comes with Live Sync's pages), so today `KeyStore::system()`
+  behaves as before where the system has no key store. Test switches: `QB_TEST_KEYSTORE=file:<path>` (a plain JSON store shared by processes),
+  `QB_TEST_WALLET_FAST=1` (a cheap Argon2 setting), `QB_TEST_WALLET_PASSPHRASE=<text>` (answers the question).
+
 ## 0.99.0: the label is one setting per system
 
 - `CMakeLists.txt` holds `APP_VERSION_LABEL` (Linux's, in the first column: every Linux script, `release.yml`,
@@ -51,6 +78,17 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - **Settings**: `app/aiThreads` (0 = the default, so it follows the computer) and `app/aiUnloadMinutes` (10); program-only
   (`settingslayer::programOnly`), not in profiles; handed over in `AppSettings::pushToModules`.
 - Suite `v0990b`.
+## 0.99.0: the encryption block of CMakeLists.txt on three systems, and the packs in the Linux workflows
+
+- The RNP block no longer excludes Windows and Android: it takes the libraries from `QB_CRYPTO_DIR` (Linux and Android
+  `lib<name>.a`; Windows MSVC `.lib` files, with or without the `lib` prefix, found by name). Windows adds `RNP_STATIC` (the
+  headers say dllimport without it), vcpkg's zlib (`ZLIB::ZLIB`) and `bcrypt advapi32 crypt32 user32 ws2_32`; Android
+  links the NDK's zlib with `-lz`, one prefix per ABI. Not tried on Windows or Android here (no such build in this tree).
+  The Linux link lines of the program and of `qb_v0990e_tests` and the program's `ldd` are byte for byte the same as before.
+- `release.yml` (job `build`: the cache under `deps-linux-crypto-<hash>` then `tools/get-crypto.sh`, written to the cache on
+  main; job `tests`: the three caches read only, then the three scripts), `ccache.yml` and `system-test.yml` fetch the
+  crypto, AI engine and ONNX Runtime packs before they configure; suite `deps` checks it.
+
 ## 0.99.0: the packs crypto, onnxruntime and aiengine (Linux)
 
 ## 0.99.0: the AI engine packages
@@ -207,6 +245,30 @@ a tag points elsewhere), none changed except where said here.
   llama.cpp b12808 runs **Pocket TTS** (architecture `pockettts`: the text side in libllama, the flow net inside the mmproj in
   libmtmd, which is why libmtmd is built with `LLAMA_BUILD_MTMD=ON`) and also has a Qwen3-TTS path of its own (libmtmd's
   `qwen3tts-gen`), apart from qwentts.cpp. whisper.cpp 1.9.6 also installs `libparakeet`.
+
+## 0.99.0: the designed voices (job `voices` of `models-5.yml`)
+
+- **What**: 7 languages x 6 voices x 3 styles = 126 clips, designed from the descriptions in `design-voices.py` with the
+  VoiceDesign 1.7B Q8_0 GGUF (pins: group `qwen-voicedesign` of `models-5-sources.json`, same repo and commit as `qwen`) and
+  qwentts.cpp at its pinned commit. `design-voices.cpp` is a small tool on the engine's public interface (`qwen.h`: it loads the model
+  once and writes mono 24 kHz 16 bit WAV); it is built in the job next to the engine pack's libraries (the compute modules are found
+  beside the program) and runs on the processor. `design-voices.py make` checks each clip (5 to 25 s, RMS above 0.01, no run of 10
+  samples at full scale), designs a failed clip once more with another seed, then fails the job; it writes `read-aloud-voices-<lang>.zip`
+  (36 files + `voices.json`: model, license Apache-2.0, descriptions, "no real person's voice").
+- **How to run** (the release must exist): dispatch `models-5.yml` with `voices=true`. The `state` job then switches every other job
+  off; `voices` (matrix of the seven languages, read-only) -> `voices-catalog` (read-only: `make-catalog.py voices` adds the seven
+  `voicepack` entries to the release's own catalog.json) -> `voices-publish` (write; no checkout; uploads the zips and the catalog with
+  `--clobber`: a run again replaces a language's zip). Nothing else of the release changes. The run time of a language is not known
+  (CPU, 18 clips of 5 to 25 s; the job's limit is 300 minutes).
+- **After a run** (by hand): download the release's `catalog.json`, run `python3 tools/models/make-catalog.py models-json
+  resources/ai/models.json --catalog catalog.json` (fills `size` and `sha256` of the seven `voices-<lang>` entries; until then they are
+  `0` and `""`, and `tests/models5_tests.py` fails with the list of the unfilled ones), replace `tools/models/models-5-catalog.json` with
+  that catalog.json, run `python3 tools/gen-resources.py` if the build asks, commit.
+- **In the program**: `readaloud::installVoicePack` (core/ReadAloud.cpp) unpacks with `ZipReader` only names of `voicePackNames()`
+  (no folder, no path, no name twice) into `read-aloud-voices/<lang>.new`, then swaps it for `<lang>/`; `AiDownloads` calls it after the
+  zip's SHA-256 was checked and a Qwen model's download is followed by `ensureVoicePack(effectiveLanguage)`; the Read Aloud page calls it when
+  the language is chosen; the panel calls `removeVoicePacksIfNoQwen()` after a delete. `languageHasVoice` decides the default language.
+  A pack entry with `size` 0 / no SHA-256 is "not published yet" (no download, `ensureVoicePack` does nothing).
 
 ## 0.99.0: the release models-5 (`models-5.yml`, `tools/models/`)
 

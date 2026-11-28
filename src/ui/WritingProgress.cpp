@@ -63,9 +63,9 @@ void WritingProgress::setProgress(int session, int sessionTarget, bool sessionCh
             m_sessionBar->setValue(qBound(0, session, sessionTarget));
         }
         m_sessionLabel->setText(tr("%1 / %2 today").arg(targettext::numberHtml(session, back), targettext::numberHtml(sessionTarget, back)));
-        m_sessionBox->setToolTip(tr("Today's writing: %1 of %2 %3 (click for Project Targets)")
-                                     .arg(loc.toString(session), loc.toString(sessionTarget),
-                                          sessionChars ? tr("characters") : tr("words")));
+        m_sessionBox->setToolTip((sessionChars ? tr("Today's writing: %1 of %2 characters (click for Project Targets)")
+                                               : tr("Today's writing: %1 of %2 words (click for Project Targets)"))
+                                     .arg(loc.toString(session), loc.toString(sessionTarget)));
     }
     if (d) {
         if (draftTarget < 0) {
@@ -76,8 +76,9 @@ void WritingProgress::setProgress(int session, int sessionTarget, bool sessionCh
             m_draftBar->setValue(qBound(0, draft, draftTarget));
         }
         m_draftLabel->setText(tr("%1 / %2 draft").arg(loc.toString(draft), targettext::numberHtml(draftTarget, back)));
-        m_draftBox->setToolTip(tr("The draft: %1 of %2 %3 (click for Project Targets)")
-                                   .arg(loc.toString(draft), loc.toString(draftTarget), draftChars ? tr("characters") : tr("words")));
+        m_draftBox->setToolTip((draftChars ? tr("The draft: %1 of %2 characters (click for Project Targets)")
+                                           : tr("The draft: %1 of %2 words (click for Project Targets)"))
+                                   .arg(loc.toString(draft), loc.toString(draftTarget)));
     }
     m_any = s || d;
     setVisible(m_any);

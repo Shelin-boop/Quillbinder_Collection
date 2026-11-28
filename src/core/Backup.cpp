@@ -582,7 +582,7 @@ bool removeBackupFile(const QString &path, QStringList *notes)
 } // namespace
 
 bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath, QString *error, Where where, bool *waiting,
-                   QStringList *cleanupNotes)
+                   QStringList *cleanupNotes, const FrozenView *frozen)
 {
     if (cleanupNotes)
         cleanupNotes->clear();
@@ -619,7 +619,8 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
     }
     // 0.64.1: a backup is made only of a project whose latest changes were saved (before, a failed save
     // was passed over and the backup reported success without them)
-    {
+    // (0.99.0: not for a frozen view of a shared project: it is the state at one commit, and the host's commits write the files)
+    if (!frozen) {
         QString why;
         if (!p->save(&why)) {
             if (error)
@@ -691,11 +692,12 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
     // (0.99.0: an encrypted backup is packed as "<name>.zip.part" too, then encrypted beside it; the plain one goes)
     const QString part = QDir(work).filePath(numbered + QLatin1String(".zip")) + QLatin1String(".part");
     // what the work needs from the project, taken here in the window's thread
-    const QString display = p->displayFolder();
-    const QString folderName = QFileInfo(display).fileName();
+    const QString projectDisplay = p->displayFolder();
+    const QString display = frozen ? frozen->folder : projectDisplay;
+    const QString folderName = QFileInfo(projectDisplay).fileName(); // (0.99.0: a frozen view is packed under the project's name)
     const QString working = p->scrivenerPath.isEmpty() ? QString() : p->folderPath();
     const QString workingName = working.isEmpty() ? QString()
-                                                  : QObject::tr("%1 - working copy of %2").arg(QFileInfo(display).completeBaseName(),
+                                                  : QObject::tr("%1 - working copy of %2").arg(QFileInfo(projectDisplay).completeBaseName(),
                                                                                               QLatin1String(QB_APP_NAME))
                                                         + QLatin1Char('/') + QFileInfo(working).fileName();
     struct Result {
@@ -838,19 +840,23 @@ bool backupProject(Project *p, const QString &dirIn, int keep, QString *outPath,
             res.cancelled = true;
     };
     const qint64 total = sizeOf(display) + (working.isEmpty() ? 0 : sizeOf(working));
-    if (progressHandler()) {
+    if (progressHandler() || (frozen && frozen->keepAlive)) {
         QThread *t = QThread::create(work_);
         t->start();
         QElapsedTimer clock;
         clock.start();
         while (!t->wait(50)) {
             bool stop = false;
-            progressHandler()(QObject::tr("Backing up \"%1\"...").arg(p->title()), done.load(), total, &stop);
+            if (progressHandler())
+                progressHandler()(QObject::tr("Backing up \"%1\"...").arg(p->title()), done.load(), total, &stop);
+            if (frozen && frozen->keepAlive)
+                frozen->keepAlive();
             if (stop)
                 cancel.store(true);
         }
         delete t;
-        progressHandler()(QString(), total, total, nullptr); // done: the progress window goes
+        if (progressHandler())
+            progressHandler()(QString(), total, total, nullptr); // done: the progress window goes
     } else {
         work_();
     }
@@ -1131,8 +1137,15 @@ QString restore(const QString &zipFile, const QString &intoParent, QString *proj
     const QString projectDir = QDir(dest).filePath(top);
     // 0.92.0: the restored project is a project of its own, with its own backups (not for a .scriv: its ID comes
     // from Scrivener's identifier)
-    if (!top.endsWith(QLatin1String(".scriv"), Qt::CaseInsensitive) && QDir(projectDir).exists())
+    if (!top.endsWith(QLatin1String(".scriv"), Qt::CaseInsensitive) && QDir(projectDir).exists()) {
         giveNewId(projectDir);
+        // 0.99.0 (Live Sync): a restored backup is a project of its own, never a second copy of a shared one: whatever of
+        // Live Sync's identity and state a ZIP file might hold (a hand-made one) does not stay
+        for (const char *name : {"livesync", "livesync-local"})
+            if (QFileInfo(projectDir + QLatin1Char('/') + QLatin1String(name)).exists())
+                pathsafety::removeTreeInside(projectDir + QLatin1Char('/') + QLatin1String(name), projectDir);
+        QFile::remove(projectDir + QStringLiteral("/livesync-replica.json"));
+    }
     if (projectFile) {
         if (top.endsWith(QLatin1String(".scriv"), Qt::CaseInsensitive)) {
             *projectFile = projectDir;

@@ -2,11 +2,26 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="nl" sourcelanguage="en">
 <context>
-    <name>Engine</name>
+    <name>EncryptionPage</name>
     <message>
-        <source>Processor</source>
-        <translation>Verwerker</translation>
+        <source>This system has no key store, so the passphrase is asked for once in each session.</source>
+        <translation>Dit systeem heeft geen sleutelopslag, dus de wachtzin wordt eenmaal per sessie gevraagd.</translation>
     </message>
+    <message>
+        <source>The system&apos;s key store refused to keep the passphrase, so it is asked for once in each session.</source>
+        <translation>De sleutelopslag van het systeem wilde de wachtzin niet bewaren, dus hij wordt eenmaal per sessie gevraagd.</translation>
+    </message>
+    <message>
+        <source>The passphrase could not be kept in the system&apos;s key store, so it is asked for once in each session.</source>
+        <translation>De wachtzin kon niet in de sleutelopslag van het systeem worden bewaard, dus hij wordt eenmaal per sessie gevraagd.</translation>
+    </message>
+    <message>
+        <source>Remember the passphrase on this device</source>
+        <translation>De wachtzin op dit apparaat onthouden</translation>
+    </message>
+</context>
+<context>
+    <name>Engine</name>
     <message>
         <source>A transcription is still running.</source>
         <translation>Er loopt nog een transcriptie.</translation>
@@ -16,12 +31,43 @@
         <translation>Er is geen model geïnstalleerd.</translation>
     </message>
     <message>
+        <source>Quillbinder asks for permission to use the microphone. Allow it, then press Record again.</source>
+        <translation>Quillbinder vraagt toestemming om de microfoon te gebruiken. Sta dit toe en druk dan nogmaals op Opnemen.</translation>
+    </message>
+    <message>
+        <source>The microphone is not allowed for Quillbinder. Allow it in the system&apos;s settings.</source>
+        <translation>De microfoon is niet toegestaan voor Quillbinder. Sta hem toe in de instellingen van het systeem.</translation>
+    </message>
+    <message>
         <source>No microphone was found.</source>
         <translation>Er is geen microfoon gevonden.</translation>
     </message>
     <message>
         <source>The microphone &quot;%1&quot; could not be opened.</source>
         <translation>De microfoon &quot;%1&quot; kon niet worden geopend.</translation>
+    </message>
+</context>
+<context>
+    <name>Handwriting</name>
+    <message>
+        <source>Ruled lines</source>
+        <translation>Hulplijnen</translation>
+    </message>
+    <message>
+        <source>Writing lines (baseline and midline)</source>
+        <translation>Schrijflijnen (basislijn en middenlijn)</translation>
+    </message>
+    <message>
+        <source>Squares</source>
+        <translation>Ruitjes</translation>
+    </message>
+    <message>
+        <source>Dots</source>
+        <translation>Stippen</translation>
+    </message>
+    <message>
+        <source>No grid</source>
+        <translation>Geen raster</translation>
     </message>
 </context>
 <context>
@@ -120,6 +166,21 @@
     <message>
         <source>Files on This &amp;Tablet…</source>
         <translation>Bestanden op deze &amp;tablet…</translation>
+    </message>
+</context>
+<context>
+    <name>ModelMemory</name>
+    <message>
+        <source>the memory of the graphics card %1</source>
+        <translation>het geheugen van de videokaart %1</translation>
+    </message>
+    <message>
+        <source>the computer&apos;s memory</source>
+        <translation>het geheugen van de computer</translation>
+    </message>
+    <message>
+        <source>Not enough memory for the model &quot;%1&quot; (%2 MB): %3 is %4 % used, and the model would bring it over %5 %.</source>
+        <translation>Niet genoeg geheugen voor het model “%1” (%2 MB): %3 is voor %4 % in gebruik en het model zou dit boven %5 % brengen.</translation>
     </message>
 </context>
 <context>
@@ -321,7 +382,7 @@
     </message>
     <message>
         <source>No name lists found. They come with the add-on “Name Generator” (Help &gt; Add-ons and Updates &gt; Add-on Manager).</source>
-        <translation>Geen namenlijsten gevonden. Ze horen bij de add-on “Namengenerator” (Help &gt; Add-ons en updates &gt; Add-onbeheer).</translation>
+        <translation>Geen namenlijsten gevonden. Ze horen bij de add-on “Name Generator” (Help &gt; Add-ons en updates &gt; Add-onbeheer).</translation>
     </message>
     <message>
         <source> (by frequency)</source>
@@ -440,6 +501,220 @@ De voornamen van deze lijst zijn niet verdeeld in vrouwelijk en mannelijk.</tran
     <message>
         <source>nothing can be written into %1 (%2)</source>
         <translation>er kan niets worden geschreven naar %1 (%2)</translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::DeletePasswordJobPrivate</name>
+    <message>
+        <source>Could not open keystore</source>
+        <translation>Kon de sleutelopslag niet openen</translation>
+    </message>
+    <message>
+        <source>Could not remove private key from keystore</source>
+        <translation>Kon de privésleutel niet uit de sleutelopslag verwijderen</translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation>Onbekende fout</translation>
+    </message>
+    <message>
+        <source>Could not open wallet: %1; %2</source>
+        <translation>Kon de wallet niet openen: %1; %2</translation>
+    </message>
+    <message>
+        <source>Password entry not found</source>
+        <translation>Wachtwoordinvoer niet gevonden</translation>
+    </message>
+    <message>
+        <source>Could not delete password</source>
+        <translation>Kon het wachtwoord niet verwijderen</translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::Job</name>
+    <message>
+        <source>Both service name and key are empty</source>
+        <translation>Zowel de servicenaam als de sleutel zijn leeg</translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::JobPrivate</name>
+    <message>
+        <source>Unknown error</source>
+        <translation>Onbekende fout</translation>
+    </message>
+    <message>
+        <source>Access to keychain denied</source>
+        <translation>Toegang tot de sleutelhanger geweigerd</translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::PlainTextStore</name>
+    <message>
+        <source>Could not store data in settings: access error</source>
+        <translation>Kon geen gegevens in de instellingen opslaan: toegangsfout</translation>
+    </message>
+    <message>
+        <source>Could not store data in settings: format error</source>
+        <translation>Kon geen gegevens in de instellingen opslaan: opmaakfout</translation>
+    </message>
+    <message>
+        <source>Could not delete data from settings: access error</source>
+        <translation>Kon geen gegevens uit de instellingen verwijderen: toegangsfout</translation>
+    </message>
+    <message>
+        <source>Could not delete data from settings: format error</source>
+        <translation>Kon geen gegevens uit de instellingen verwijderen: opmaakfout</translation>
+    </message>
+    <message>
+        <source>Entry not found</source>
+        <translation>Invoer niet gevonden</translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::ReadPasswordJobPrivate</name>
+    <message>
+        <source>Entry not found</source>
+        <translation>Invoer niet gevonden</translation>
+    </message>
+    <message>
+        <source>Could not open keystore</source>
+        <translation>Kon de sleutelopslag niet openen</translation>
+    </message>
+    <message>
+        <source>Could not retrieve private key from keystore</source>
+        <translation>Kon de privésleutel niet uit de sleutelopslag ophalen</translation>
+    </message>
+    <message>
+        <source>Encrypted data is too short</source>
+        <translation>De versleutelde gegevens zijn te kort</translation>
+    </message>
+    <message>
+        <source>Could not create RSA decryption cipher</source>
+        <translation>Kon de RSA-ontsleutelingscipher niet maken</translation>
+    </message>
+    <message>
+        <source>Could not decrypt AES key: %1</source>
+        <translation>Kon de AES-sleutel niet ontsleutelen: %1</translation>
+    </message>
+    <message>
+        <source>Could not create AES decryption cipher</source>
+        <translation>Kon de AES-ontsleutelingscipher niet maken</translation>
+    </message>
+    <message>
+        <source>Could not decrypt data: %1</source>
+        <translation>Kon de gegevens niet ontsleutelen: %1</translation>
+    </message>
+    <message>
+        <source>Could not create decryption cipher</source>
+        <translation>Kon de ontsleutelingscipher niet maken</translation>
+    </message>
+    <message>
+        <source>D-Bus is not running</source>
+        <translation>D-Bus draait niet</translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation>Onbekende fout</translation>
+    </message>
+    <message>
+        <source>No keychain service available</source>
+        <translation>Geen sleutelhangerservice beschikbaar</translation>
+    </message>
+    <message>
+        <source>Could not open wallet: %1; %2</source>
+        <translation>Kon de wallet niet openen: %1; %2</translation>
+    </message>
+    <message>
+        <source>Access to keychain denied</source>
+        <translation>Toegang tot de sleutelhanger geweigerd</translation>
+    </message>
+    <message>
+        <source>Could not determine data type: %1; %2</source>
+        <translation>Kon het gegevenstype niet bepalen: %1; %2</translation>
+    </message>
+    <message>
+        <source>Unknown kwallet entry type &apos;%1&apos;</source>
+        <translation>Onbekend kwallet-invoertype ‘%1’</translation>
+    </message>
+    <message>
+        <source>Password entry not found</source>
+        <translation>Wachtwoordinvoer niet gevonden</translation>
+    </message>
+    <message>
+        <source>Could not decrypt data</source>
+        <translation>Kon de gegevens niet ontsleutelen</translation>
+    </message>
+</context>
+<context>
+    <name>QKeychain::WritePasswordJobPrivate</name>
+    <message>
+        <source>Could not open keystore</source>
+        <translation>Kon de sleutelopslag niet openen</translation>
+    </message>
+    <message>
+        <source>Could not create private key generator</source>
+        <translation>Kon de generator voor privésleutels niet maken</translation>
+    </message>
+    <message>
+        <source>Could not generate new private key</source>
+        <translation>Kon geen nieuwe privésleutel genereren</translation>
+    </message>
+    <message>
+        <source>Could not retrieve private key from keystore</source>
+        <translation>Kon de privésleutel niet uit de sleutelopslag ophalen</translation>
+    </message>
+    <message>
+        <source>Could not generate AES key</source>
+        <translation>Kon geen AES-sleutel genereren</translation>
+    </message>
+    <message>
+        <source>Could not generate IV</source>
+        <translation>Kon geen IV genereren</translation>
+    </message>
+    <message>
+        <source>Could not create AES encryption cipher</source>
+        <translation>Kon de AES-versleutelingscipher niet maken</translation>
+    </message>
+    <message>
+        <source>Could not encrypt data: %1</source>
+        <translation>Kon de gegevens niet versleutelen: %1</translation>
+    </message>
+    <message>
+        <source>Could not create RSA encryption cipher</source>
+        <translation>Kon de RSA-versleutelingscipher niet maken</translation>
+    </message>
+    <message>
+        <source>Could not encrypt AES key: %1</source>
+        <translation>Kon de AES-sleutel niet versleutelen: %1</translation>
+    </message>
+    <message>
+        <source>D-Bus is not running</source>
+        <translation>D-Bus draait niet</translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation>Onbekende fout</translation>
+    </message>
+    <message>
+        <source>Could not open wallet: %1; %2</source>
+        <translation>Kon de wallet niet openen: %1; %2</translation>
+    </message>
+    <message>
+        <source>Encryption failed: %1</source>
+        <translation>Versleuteling mislukt: %1</translation>
+    </message>
+    <message>
+        <source>Credential size exceeds maximum size of %1: %2</source>
+        <translation>De grootte van de inloggegevens is groter dan het maximum van %1: %2</translation>
+    </message>
+    <message>
+        <source>Credential key exceeds maximum size of %1</source>
+        <translation>De sleutel van de inloggegevens is groter dan het maximum van %1</translation>
+    </message>
+    <message>
+        <source>Writing credentials failed: %1</source>
+        <translation>Het schrijven van de inloggegevens is mislukt: %1</translation>
     </message>
 </context>
 <context>
@@ -611,6 +886,10 @@ De voornamen van deze lijst zijn niet verdeeld in vrouwelijk en mannelijk.</tran
         <translation>Toegang geweigerd</translation>
     </message>
     <message>
+        <source>No backup was made.</source>
+        <translation>Er is geen back-up gemaakt.</translation>
+    </message>
+    <message>
         <source>The project could not be saved first, so no backup was made: %1</source>
         <translation>Het project kon niet eerst worden opgeslagen, dus is er geen back-up gemaakt: %1</translation>
     </message>
@@ -619,8 +898,36 @@ De voornamen van deze lijst zijn niet verdeeld in vrouwelijk en mannelijk.</tran
         <translation>Kan de werkmap voor back-ups %1 niet maken</translation>
     </message>
     <message>
+        <source>the project&apos;s keys are not named in %1</source>
+        <translation>de sleutels van het project worden niet genoemd in %1</translation>
+    </message>
+    <message>
+        <source>the key %1 is not in Quillbinder&apos;s key ring</source>
+        <translation>de sleutel %1 staat niet in de sleutelring van Quillbinder</translation>
+    </message>
+    <message>
+        <source>The backups of this project are encrypted, but no encrypted backup can be made: %1. No backup was made.</source>
+        <translation>De back-ups van dit project zijn versleuteld, maar er kan geen versleutelde back-up worden gemaakt: %1. Er is geen back-up gemaakt.</translation>
+    </message>
+    <message>
         <source>%1 - working copy of %2</source>
         <translation>%1 - werkkopie van %2</translation>
+    </message>
+    <message>
+        <source>it could not be encrypted: %1</source>
+        <translation>hij kon niet worden versleuteld: %1</translation>
+    </message>
+    <message>
+        <source>the encrypted backup could not be decrypted again: %1</source>
+        <translation>de versleutelde back-up kon niet opnieuw worden ontsleuteld: %1</translation>
+    </message>
+    <message>
+        <source>the encrypted backup, decrypted again, differs from the backup</source>
+        <translation>de versleutelde back-up wijkt, opnieuw ontsleuteld, af van de back-up</translation>
+    </message>
+    <message>
+        <source>the encrypted backup is not whole</source>
+        <translation>de versleutelde back-up is niet compleet</translation>
     </message>
     <message>
         <source>Backing up &quot;%1&quot;...</source>
@@ -660,6 +967,14 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     <message>
         <source>The new backup %1 is not there after older backups were cleaned up. No backup was made; please make one with File &gt; Back Up &gt; Back Up To...</source>
         <translation>De nieuwe back-up %1 is er niet meer nadat oudere back-ups zijn opgeruimd. Er is geen back-up gemaakt; maak er een met Bestand &gt; Back-up &gt; Back-up maken naar...</translation>
+    </message>
+    <message>
+        <source>Decrypting &quot;%1&quot;...</source>
+        <translation>“%1” wordt ontsleuteld...</translation>
+    </message>
+    <message>
+        <source>%1 could not be decrypted: %2 Nothing was restored.</source>
+        <translation>%1 kon niet worden ontsleuteld: %2 Er is niets teruggezet.</translation>
     </message>
     <message>
         <source>%1 could not be read as a ZIP file (%2). If the file is whole, an archive program of your system may still unpack it.</source>
@@ -913,6 +1228,10 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     <message>
         <source>Cannot remove %1</source>
         <translation>Kan %1 niet verwijderen</translation>
+    </message>
+    <message>
+        <source>Cannot read %1: %2</source>
+        <translation>Kan %1 niet lezen: %2</translation>
     </message>
     <message>
         <source>Full name</source>
@@ -1284,11 +1603,11 @@ Hij wordt bewaard in %3 en de volgende back-up plaatst hem op zijn plek.</transl
     </message>
     <message>
         <source>Rainy season</source>
-        <translation>Regentijd</translation>
+        <translation>Regenseizoen</translation>
     </message>
     <message>
         <source>Dry season</source>
-        <translation>Droge tijd</translation>
+        <translation>Droogseizoen</translation>
     </message>
     <message>
         <source>All year</source>
@@ -2703,8 +3022,12 @@ Bron: %1</translation>
         <translation>%1 px</translation>
     </message>
     <message>
-        <source>Other (%1 px)...</source>
-        <translation>Anders (%1 px)...</translation>
+        <source>Other…</source>
+        <translation>Anders…</translation>
+    </message>
+    <message>
+        <source>Other (%1 px)…</source>
+        <translation>Anders (%1 px)…</translation>
     </message>
     <message>
         <source>%1 in px (at 100 % zoom):</source>
@@ -2739,8 +3062,32 @@ Bron: %1</translation>
         <translation> (eigen lettertype)</translation>
     </message>
     <message>
-        <source>Choose Font...</source>
-        <translation>Lettertype kiezen...</translation>
+        <source>Choose Font…</source>
+        <translation>Lettertype kiezen…</translation>
+    </message>
+    <message>
+        <source>Fixed Width Editor</source>
+        <translation>Editor met vaste breedte</translation>
+    </message>
+    <message>
+        <source>Label Color in Binder</source>
+        <translation>Labelkleur in binder</translation>
+    </message>
+    <message>
+        <source>Label Color in Icons</source>
+        <translation>Labelkleur in pictogrammen</translation>
+    </message>
+    <message>
+        <source>Status Stamps</source>
+        <translation>Statusstempels</translation>
+    </message>
+    <message>
+        <source>Label Color in Index Cards</source>
+        <translation>Labelkleur op indexkaarten</translation>
+    </message>
+    <message>
+        <source>Appearance Options…</source>
+        <translation>Uiterlijkopties…</translation>
     </message>
     <message>
         <source>Font</source>
@@ -2759,36 +3106,12 @@ Bron: %1</translation>
         <translation>Rand naast de tekst</translation>
     </message>
     <message>
-        <source>Fixed Width (Text as a Centered Column)</source>
-        <translation>Vaste breedte (tekst als gecentreerde kolom)</translation>
-    </message>
-    <message>
-        <source>Show Label Colors in the Binder</source>
-        <translation>Labelkleuren tonen in de Binder</translation>
-    </message>
-    <message>
-        <source>Let the Label Color Shine Through the Icons</source>
-        <translation>Labelkleur door de pictogrammen laten schijnen</translation>
-    </message>
-    <message>
         <source>Indent per Level</source>
         <translation>Inspringing per niveau</translation>
     </message>
     <message>
-        <source>Show Status Stamps</source>
-        <translation>Statusstempels tonen</translation>
-    </message>
-    <message>
-        <source>Tint Cards with the Label Color</source>
-        <translation>Kaarten inkleuren met de labelkleur</translation>
-    </message>
-    <message>
         <source>Card Width</source>
         <translation>Kaartbreedte</translation>
-    </message>
-    <message>
-        <source>Appearance Options...</source>
-        <translation>Uiterlijkopties...</translation>
     </message>
     <message>
         <source>Double-click to make both editors the same size</source>
@@ -3027,7 +3350,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Single Return</source>
-        <translation>Enkele return</translation>
+        <translation>Enkele Enter</translation>
     </message>
     <message>
         <source>Empty Line</source>
@@ -3201,13 +3524,12 @@ Bron: %1</translation>
         <source>line spacing at least %1 pt</source>
         <translation>regelafstand minimaal %1 pt</translation>
     </message>
-    <message>
-        <source>1 tab stop</source>
-        <translation>1 tabstop</translation>
-    </message>
-    <message>
-        <source>%1 tab stops</source>
-        <translation>%1 tabstops</translation>
+    <message numerus="yes">
+        <source>%Ln tab stop(s)</source>
+        <translation>
+            <numerusform>%Ln tabstop</numerusform>
+            <numerusform>%Ln tabstops</numerusform>
+        </translation>
     </message>
     <message>
         <source>Characters: %1</source>
@@ -3505,17 +3827,12 @@ Bron: %1</translation>
         <source>Change Theme</source>
         <translation>Thema wijzigen</translation>
     </message>
-    <message>
-        <source>You have changed %1 of your own on top of the current theme.</source>
-        <translation>Je hebt %1 van jezelf gewijzigd bovenop het huidige thema.</translation>
-    </message>
-    <message>
-        <source>color or font</source>
-        <translation>kleur of lettertype</translation>
-    </message>
-    <message>
-        <source>colors and fonts</source>
-        <translation>kleuren en lettertypen</translation>
+    <message numerus="yes">
+        <source>You have changed %Ln color(s) or font(s) of your own on top of the current theme.</source>
+        <translation>
+            <numerusform>Je hebt bovenop het huidige thema %Ln eigen kleur of eigen lettertype gewijzigd.</numerusform>
+            <numerusform>Je hebt bovenop het huidige thema %Ln eigen kleuren of lettertypen gewijzigd.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Keep them with the new theme, or use the theme as it is? (Save Current Look as Theme keeps the present look for later.)</source>
@@ -3556,6 +3873,10 @@ Bron: %1</translation>
     <message>
         <source>Theme files (*.qbtheme *.json);;All files (*)</source>
         <translation>Themabestanden (*.qbtheme *.json);;Alle bestanden (*)</translation>
+    </message>
+    <message>
+        <source>Large</source>
+        <translation>Groot</translation>
     </message>
     <message>
         <source>Main</source>
@@ -3616,6 +3937,10 @@ Bron: %1</translation>
     <message>
         <source>Layouts</source>
         <translation>Lay-outs</translation>
+    </message>
+    <message>
+        <source>Handwriting (off, editor, inspector, both)</source>
+        <translation>Handschrift (uit, editor, inspector, beide)</translation>
     </message>
     <message>
         <source>Theme button (Light, Dark, My Look 1, My Look 2 and all themes)</source>
@@ -3928,6 +4253,18 @@ Bron: %1</translation>
         <translation>%1: een WAV-indeling die hier niet wordt gelezen</translation>
     </message>
     <message>
+        <source>The AI engine is not installed (or could not be loaded). Install it under File &gt; Options &gt; Speech.</source>
+        <translation>De AI-engine is niet geïnstalleerd (of kon niet worden geladen). Installeer hem onder Bestand &gt; Opties &gt; Spraak.</translation>
+    </message>
+    <message>
+        <source>Speech Transcription</source>
+        <translation>Spraaktranscriptie</translation>
+    </message>
+    <message>
+        <source>The model was not loaded: the memory is needed elsewhere.</source>
+        <translation>Het model is niet geladen: het geheugen is elders nodig.</translation>
+    </message>
+    <message>
         <source>The model could not be loaded onto the graphics card. Choose the processor under Options &gt; Speech &gt; Processing, or a smaller model.</source>
         <translation>Het model kon niet op de videokaart worden geladen. Kies de processor onder Opties &gt; Spraak &gt; Verwerking, of een kleiner model.</translation>
     </message>
@@ -3936,8 +4273,8 @@ Bron: %1</translation>
         <translation>Het model kon niet worden geladen (beschadigd bestand of onvoldoende geheugen).</translation>
     </message>
     <message>
-        <source>whisper could not transcribe a piece.</source>
-        <translation>whisper kon een stuk niet transcriberen.</translation>
+        <source>The AI engine could not transcribe a piece.</source>
+        <translation>De AI-engine kon een fragment niet transcriberen.</translation>
     </message>
     <message>
         <source>Small</source>
@@ -3949,7 +4286,7 @@ Bron: %1</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation>Middel</translation>
+        <translation>Middelgroot</translation>
     </message>
     <message>
         <source>Download 539 MB, memory about 1.2 GB. Keeps up with speech on most processors of recent years (estimate). Good recognition and translation.</source>
@@ -4109,11 +4446,11 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>The settings of the profile could not be written completely. Check the folder of the settings file.</source>
-        <translation>De opties zijn geopend voor dit project. Sluit ze of kies alle projecten en exporteer daarna het profiel.</translation>
+        <translation>De instellingen van het profiel konden niet volledig worden geschreven. Controleer de map van het instellingenbestand.</translation>
     </message>
     <message>
         <source>The layouts of the profile could not be set; the layouts you had are kept.</source>
-        <translation>De instellingen van het profiel konden niet volledig worden geschreven. Controleer de map van het instellingenbestand.</translation>
+        <translation>De indelingen van het profiel konden niet worden toegepast; de indelingen die je had blijven behouden.</translation>
     </message>
     <message>
         <source>The profile “%1” cannot be deleted.</source>
@@ -4133,11 +4470,63 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>Options are open for This Project. Close them or choose All Projects, then export the profile.</source>
-        <translation>De indelingen van het profiel konden niet worden toegepast; de indelingen die je had blijven behouden.</translation>
+        <translation>De opties zijn geopend voor Dit project. Sluit ze of kies Alle projecten en exporteer daarna het profiel.</translation>
     </message>
     <message>
         <source>This is not a file of a profile or of options saved by Quillbinder.</source>
         <translation>Dit is geen bestand met een profiel of met opties die door Quillbinder zijn opgeslagen.</translation>
+    </message>
+    <message>
+        <source>Access to keychain denied</source>
+        <translation>Toegang tot de sleutelhanger geweigerd</translation>
+    </message>
+    <message>
+        <source>No keyring daemon</source>
+        <translation>Geen sleutelhanger-daemon</translation>
+    </message>
+    <message>
+        <source>Already unlocked</source>
+        <translation>Al ontgrendeld</translation>
+    </message>
+    <message>
+        <source>No such keyring</source>
+        <translation>Zo’n sleutelhanger bestaat niet</translation>
+    </message>
+    <message>
+        <source>Bad arguments</source>
+        <translation>Ongeldige argumenten</translation>
+    </message>
+    <message>
+        <source>I/O error</source>
+        <translation>I/O-fout</translation>
+    </message>
+    <message>
+        <source>Cancelled</source>
+        <translation>Geannuleerd</translation>
+    </message>
+    <message>
+        <source>Keyring already exists</source>
+        <translation>De sleutelhanger bestaat al</translation>
+    </message>
+    <message>
+        <source>No match</source>
+        <translation>Geen overeenkomst</translation>
+    </message>
+    <message>
+        <source>Unknown error</source>
+        <translation>Onbekende fout</translation>
+    </message>
+    <message>
+        <source>Entry not found</source>
+        <translation>Invoer niet gevonden</translation>
+    </message>
+    <message>
+        <source>No matching unlocked entry was deleted</source>
+        <translation>Er is geen overeenkomstige ontgrendelde invoer verwijderd</translation>
+    </message>
+    <message>
+        <source> s</source>
+        <translation> s</translation>
     </message>
 </context>
 <context>
@@ -4415,28 +4804,12 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
         <translation>Berekenen op:</translation>
     </message>
     <message>
-        <source>Processor threads:</source>
-        <translation>Processorthreads:</translation>
-    </message>
-    <message>
-        <source>One less than the processor has keeps typing smooth while a piece is written.</source>
-        <translation>Eén minder dan de processor heeft houdt het typen soepel terwijl een stuk wordt geschreven.</translation>
-    </message>
-    <message>
         <source>never</source>
         <translation>nooit</translation>
     </message>
     <message>
-        <source> minutes</source>
-        <translation> minuten</translation>
-    </message>
-    <message>
-        <source>Free the model after:</source>
-        <translation>Model vrijgeven na:</translation>
-    </message>
-    <message>
-        <source>The model takes memory while it is loaded; after this time without use it is freed and the program says so. It loads again at the next recording.</source>
-        <translation>Het model neemt geheugen in beslag zolang het is geladen; na deze tijd zonder gebruik wordt het vrijgegeven en meldt het programma dat. Bij de volgende opname wordt het opnieuw geladen.</translation>
+        <source>The number of processor cores and the time after which a model that is not used is unloaded are set for all AI functions together, in File &gt; Options &gt; General &gt; AI Models.</source>
+        <translation>Het aantal processorkernen en de tijd waarna een ongebruikt model wordt vrijgegeven, worden voor alle AI-functies samen ingesteld in Bestand &gt; Opties &gt; Algemeen &gt; AI-modellen.</translation>
     </message>
     <message>
         <source>Fast</source>
@@ -4496,7 +4869,7 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>Medium</source>
-        <translation>Middel</translation>
+        <translation>Gemiddeld</translation>
     </message>
     <message>
         <source>High (quiet voice)</source>
@@ -4541,6 +4914,14 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     <message>
         <source>Record only: the text is written later, when you press Transcribe in the list (uses little power: for a laptop on battery or a phone)</source>
         <translation>Alleen opnemen: de tekst wordt later geschreven, wanneer je in de lijst op Transcriberen drukt (gebruikt weinig stroom: voor een laptop op accu of een telefoon)</translation>
+    </message>
+    <message>
+        <source>Write into the text as I speak</source>
+        <translation>In de tekst schrijven terwijl ik spreek</translation>
+    </message>
+    <message>
+        <source>Each piece of live speech is also inserted at the cursor of the text you are editing.</source>
+        <translation>Elk stuk live spraak wordt ook ingevoegd bij de cursor van de tekst die je bewerkt.</translation>
     </message>
     <message>
         <source>Delete a recording once its text is written</source>
@@ -4611,24 +4992,20 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
         <translation>Opnieuw downloaden</translation>
     </message>
     <message>
-        <source>Processor</source>
-        <translation>Processor</translation>
+        <source>Automatic</source>
+        <translation>Automatisch</translation>
     </message>
     <message>
-        <source>memory unknown</source>
-        <translation>geheugen onbekend</translation>
+        <source>Processor (CPU)</source>
+        <translation>Processor (CPU)</translation>
     </message>
     <message>
-        <source>%1 has too little memory for this model.</source>
-        <translation>%1 heeft te weinig geheugen voor dit model.</translation>
+        <source>No graphics card that the AI engine can use (Vulkan) was found, or the engine is not installed; the processor computes.</source>
+        <translation>Er is geen videokaart gevonden die de AI-engine kan gebruiken (Vulkan), of de engine is niet geïnstalleerd; de processor rekent.</translation>
     </message>
     <message>
-        <source>No graphics card that whisper.cpp can use (Vulkan) was found; the processor computes.</source>
-        <translation>Er is geen videokaart gevonden die whisper.cpp kan gebruiken (Vulkan); de processor rekent.</translation>
-    </message>
-    <message>
-        <source>A graphics card is usually much faster; the speed test shows how much on this computer.</source>
-        <translation>Een videokaart is meestal veel sneller; de snelheidstest laat zien hoeveel op deze computer.</translation>
+        <source>Automatic takes a graphics card with enough free memory for the model, else the processor. A graphics card is usually much faster; the speed test shows how much on this computer.</source>
+        <translation>Automatisch kiest een videokaart met genoeg vrij geheugen voor het model, anders de processor. Een videokaart is meestal veel sneller; de snelheidstest laat zien hoeveel op deze computer.</translation>
     </message>
     <message>
         <source>Everything is written in %1.</source>
@@ -4650,16 +5027,16 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
 <context>
     <name>SpeechTool</name>
     <message>
-        <source>Speech &amp;Transcription</source>
-        <translation>Spraak&amp;transcriptie</translation>
-    </message>
-    <message>
         <source>Start or stop speech transcription (the arrow beside the button: microphone and options)</source>
         <translation>Spraaktranscriptie starten of stoppen (de pijl naast de knop: microfoon en opties)</translation>
     </message>
     <message>
-        <source>Show &amp;Transcriptions</source>
-        <translation>&amp;Transcripties tonen</translation>
+        <source>Record &amp;Only</source>
+        <translation>Alleen &amp;opnemen</translation>
+    </message>
+    <message>
+        <source>Start or stop a recording without writing its text (the text can be written later with Transcribe)</source>
+        <translation>Een opname starten of stoppen zonder de tekst te schrijven (de tekst kan later worden geschreven met Transcriberen)</translation>
     </message>
     <message>
         <source>The transcriptions in the inspector</source>
@@ -4690,10 +5067,6 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
         <translation>Opties voor spraaktranscriptie…</translation>
     </message>
     <message>
-        <source>Model unloaded, RAM usage minimal</source>
-        <translation>Model verwijderd uit het geheugen, minimaal RAM-gebruik</translation>
-    </message>
-    <message>
         <source>The add-on&apos;s speech engine is missing (install the add-on again).</source>
         <translation>De spraakengine van de add-on ontbreekt (installeer de add-on opnieuw).</translation>
     </message>
@@ -4702,8 +5075,16 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
         <translation>Kan Qt Multimedia niet laden: %1</translation>
     </message>
     <message>
-        <source>Cannot load %1: %2</source>
-        <translation>Kan %1 niet laden: %2</translation>
+        <source>This version of the add-on needs Quillbinder 0.99.0 or later.</source>
+        <translation>Deze versie van de add-on heeft Quillbinder 0.99.0 of nieuwer nodig.</translation>
+    </message>
+    <message>
+        <source>&amp;Speech Transcription</source>
+        <translation>&amp;Spraaktranscriptie</translation>
+    </message>
+    <message>
+        <source>Show Transcri&amp;ptions</source>
+        <translation>Transcripties &amp;tonen</translation>
     </message>
     <message>
         <source>Cannot load the speech engine: %1</source>
@@ -4969,11 +5350,11 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>Phrases</source>
-        <translation>Zinsdelen</translation>
+        <translation>Woordgroepen</translation>
     </message>
     <message>
         <source>Phrase</source>
-        <translation>Zinsdeel</translation>
+        <translation>Woordgroep</translation>
     </message>
     <message>
         <source>Words</source>
@@ -4985,7 +5366,7 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     </message>
     <message>
         <source>Repeated Phrases</source>
-        <translation>Herhaalde zinsdelen</translation>
+        <translation>Herhaalde woordgroepen</translation>
     </message>
     <message>
         <source>Document</source>
@@ -5197,6 +5578,14 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
         <translation>De hele tekst kopiëren</translation>
     </message>
     <message>
+        <source>Put the marked part of the text (all of it when nothing is marked) into the text you are editing, at the cursor</source>
+        <translation>De gemarkeerde tekst (alles als niets is gemarkeerd) bij de cursor invoegen in de tekst die je bewerkt</translation>
+    </message>
+    <message>
+        <source>Insert at Cursor</source>
+        <translation>Invoegen bij cursor</translation>
+    </message>
+    <message>
         <source>Move the transcription to the trash</source>
         <translation>De transcriptie naar de prullenbak verplaatsen</translation>
     </message>
@@ -5267,6 +5656,14 @@ Deze ook overnemen? Neem ze alleen over als je het bestand zelf hebt gemaakt of 
     <message>
         <source>The text is on the clipboard.</source>
         <translation>De tekst staat op het klembord.</translation>
+    </message>
+    <message>
+        <source>Open a text in the editor first, and click into it where the transcription should go.</source>
+        <translation>Open eerst een tekst in de editor en klik erin op de plek waar de transcriptie moet komen.</translation>
+    </message>
+    <message>
+        <source>The text was inserted at the cursor.</source>
+        <translation>De tekst is bij de cursor ingevoegd.</translation>
     </message>
     <message>
         <source>No speech model yet: File &gt; Options &gt; Speech.</source>
@@ -5548,6 +5945,220 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
 </context>
 <context>
+    <name>qb::AiDownloads</name>
+    <message>
+        <source>Handwriting Engine</source>
+        <translation>Handschrift-engine</translation>
+    </message>
+    <message>
+        <source>AI Engine</source>
+        <translation>AI-engine</translation>
+    </message>
+    <message>
+        <source>%1 is not a package of the %2.</source>
+        <translation>%1 is geen pakket van de %2.</translation>
+    </message>
+    <message>
+        <source>Another download is running.</source>
+        <translation>Er loopt al een andere download.</translation>
+    </message>
+    <message>
+        <source>The model %1 is not in the catalog.</source>
+        <translation>Het model %1 staat niet in de catalogus.</translation>
+    </message>
+    <message>
+        <source>%1 could not be made.</source>
+        <translation>%1 kon niet worden gemaakt.</translation>
+    </message>
+    <message>
+        <source>The download was cancelled.</source>
+        <translation>De download is geannuleerd.</translation>
+    </message>
+    <message>
+        <source>%1 could not be written.</source>
+        <translation>%1 kon niet worden geschreven.</translation>
+    </message>
+    <message>
+        <source>%1 is installed.</source>
+        <translation>%1 is geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>This copy of %1 cannot make a secure connection, so it cannot download. Download the current AppImage once from the project&apos;s page.</source>
+        <translation>Deze kopie van %1 kan geen beveiligde verbinding maken en dus niet downloaden. Download de huidige AppImage eenmalig van de pagina van het project.</translation>
+    </message>
+    <message>
+        <source>The download failed: the file could not be written, or is larger than announced.</source>
+        <translation>De download is mislukt: het bestand kon niet worden geschreven of is groter dan aangekondigd.</translation>
+    </message>
+    <message>
+        <source>The download failed (%1).</source>
+        <translation>De download is mislukt (%1).</translation>
+    </message>
+    <message>
+        <source>The download is incomplete (%1 of %2 bytes).</source>
+        <translation>De download is onvolledig (%1 van %2 bytes).</translation>
+    </message>
+    <message>
+        <source>The downloaded file is not the one the catalog names (its SHA-256 differs), so it was not kept.</source>
+        <translation>Het gedownloade bestand is niet het bestand dat de catalogus noemt (de SHA-256 wijkt af), dus het is niet bewaard.</translation>
+    </message>
+    <message>
+        <source>The download is incomplete.</source>
+        <translation>De download is onvolledig.</translation>
+    </message>
+    <message>
+        <source>The joined file is not the one the catalog names (its SHA-256 differs), so it was not kept.</source>
+        <translation>Het samengevoegde bestand is niet het bestand dat de catalogus noemt (de SHA-256 wijkt af), dus het is niet bewaard.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::AiInstallPanel</name>
+    <message>
+        <source>many</source>
+        <translation>veel</translation>
+    </message>
+    <message>
+        <source>Install the Engine</source>
+        <translation>De engine installeren</translation>
+    </message>
+    <message>
+        <source>Downloads the engine of this version from the project&apos;s release page and installs it</source>
+        <translation>Downloadt de engine van deze versie van de releasepagina van het project en installeert hem</translation>
+    </message>
+    <message>
+        <source>Install from File...</source>
+        <translation>Installeren uit bestand...</translation>
+    </message>
+    <message>
+        <source>Installs the engine from a package file (for a computer without a connection)</source>
+        <translation>Installeert de engine uit een pakketbestand (voor een computer zonder verbinding)</translation>
+    </message>
+    <message>
+        <source>Model</source>
+        <translation>Model</translation>
+    </message>
+    <message>
+        <source>Languages</source>
+        <translation>Talen</translation>
+    </message>
+    <message>
+        <source>Download</source>
+        <translation>Downloaden</translation>
+    </message>
+    <message>
+        <source>Memory</source>
+        <translation>Geheugen</translation>
+    </message>
+    <message>
+        <source>License</source>
+        <translation>Licentie</translation>
+    </message>
+    <message>
+        <source>State</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Verwijderen</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuleren</translation>
+    </message>
+    <message>
+        <source>The handwriting engine is not installed.</source>
+        <translation>De handschrift-engine is niet geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>The AI engine is not installed.</source>
+        <translation>De AI-engine is niet geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>The installed engine %1 was made for another version of Quillbinder: install it again.</source>
+        <translation>De geïnstalleerde engine %1 is gemaakt voor een andere versie van Quillbinder: installeer hem opnieuw.</translation>
+    </message>
+    <message>
+        <source>The engine %1 is switched off (Help &gt; Add-ons and Updates &gt; Manage Add-ons).</source>
+        <translation>De engine %1 is uitgeschakeld (Help &gt; Add-ons en updates &gt; Add-onbeheer).</translation>
+    </message>
+    <message>
+        <source>The handwriting engine %1 is installed.</source>
+        <translation>De handschrift-engine %1 is geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>The AI engine %1 is installed.</source>
+        <translation>De AI-engine %1 is geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>The new engine is used after Quillbinder is started again.</source>
+        <translation>De nieuwe engine wordt gebruikt nadat Quillbinder opnieuw is gestart.</translation>
+    </message>
+    <message>
+        <source>Install Again</source>
+        <translation>Opnieuw installeren</translation>
+    </message>
+    <message>
+        <source>Installed</source>
+        <translation>Geïnstalleerd</translation>
+    </message>
+    <message>
+        <source>Not published yet</source>
+        <translation>Nog niet gepubliceerd</translation>
+    </message>
+    <message>
+        <source>Not installed</source>
+        <translation>Niet geïnstalleerd</translation>
+    </message>
+    <message>
+        <source>The catalog has no models for this function yet.</source>
+        <translation>De catalogus heeft nog geen modellen voor deze functie.</translation>
+    </message>
+    <message>
+        <source>License: %1</source>
+        <translation>Licentie: %1</translation>
+    </message>
+    <message>
+        <source>Downloading the engine...</source>
+        <translation>De engine wordt gedownload...</translation>
+    </message>
+    <message>
+        <source>Downloading %1...</source>
+        <translation>%1 wordt gedownload...</translation>
+    </message>
+    <message>
+        <source>Install the Engine from a File</source>
+        <translation>De engine uit een bestand installeren</translation>
+    </message>
+    <message>
+        <source>Quillbinder packages (*.qbpkg)</source>
+        <translation>Quillbinder-pakketten (*.qbpkg)</translation>
+    </message>
+    <message>
+        <source>This package is not signed by the Quillbinder project, so it cannot be told whether it is the project&apos;s own. Install it only when you trust where it comes from.</source>
+        <translation>Dit pakket is niet ondertekend door het Quillbinder-project, dus er is niet te zien of het van het project zelf komt. Installeer het alleen als je de herkomst vertrouwt.</translation>
+    </message>
+    <message>
+        <source>Install Anyway</source>
+        <translation>Toch installeren</translation>
+    </message>
+    <message>
+        <source>The engine was not installed.</source>
+        <translation>De engine is niet geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>The engine is installed.</source>
+        <translation>De engine is geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>%1 may be used for non-commercial purposes only (%2). Download it?</source>
+        <translation>%1 mag alleen voor niet-commerciële doeleinden worden gebruikt (%2). Downloaden?</translation>
+    </message>
+    <message>
+        <source>%1 is deleted.</source>
+        <translation>%1 is verwijderd.</translation>
+    </message>
+</context>
+<context>
     <name>qb::AlignButtons</name>
     <message>
         <source>Align left</source>
@@ -5575,13 +6186,12 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
 </context>
 <context>
     <name>qb::BinderModel</name>
-    <message>
-        <source>word</source>
-        <translation>woord</translation>
-    </message>
-    <message>
-        <source>words</source>
-        <translation>woorden</translation>
+    <message numerus="yes">
+        <source>%Ln word(s)</source>
+        <translation>
+            <numerusform>%Ln woord</numerusform>
+            <numerusform>%Ln woorden</numerusform>
+        </translation>
     </message>
     <message>
         <source>(its own text: %1)</source>
@@ -5934,7 +6544,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     </message>
     <message>
         <source>Type part of a command&apos;s name or of its menu. Return or a double-click runs it.</source>
-        <translation>Typ een deel van de naam van een opdracht of van het menu ervan. Return of een dubbelklik voert hem uit.</translation>
+        <translation>Typ een deel van de naam van een opdracht of van het menu ervan. Enter of een dubbelklik voert hem uit.</translation>
     </message>
     <message>
         <source>Command</source>
@@ -6128,7 +6738,7 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     <name>qb::CompileDialog</name>
     <message>
         <source>Compile Overview</source>
-        <translation>Overzicht van samenstellen</translation>
+        <translation>Samenstelling in één oogopslag</translation>
     </message>
     <message>
         <source>Compile For:</source>
@@ -6478,33 +7088,24 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
         <source>[objects] </source>
         <translation>[objecten] </translation>
     </message>
-    <message>
-        <source>1 object sheet</source>
-        <translation>1 objectblad</translation>
-    </message>
-    <message>
-        <source>%1 object sheets</source>
-        <translation>%1 objectbladen</translation>
-    </message>
-    <message>
-        <source>1 document</source>
-        <translation>1 document</translation>
-    </message>
-    <message>
-        <source>%1 documents</source>
-        <translation>%1 documenten</translation>
-    </message>
-    <message>
-        <source>1 word</source>
-        <translation>1 woord</translation>
-    </message>
-    <message>
-        <source>about %1 words</source>
-        <translation>ongeveer %1 woorden</translation>
+    <message numerus="yes">
+        <source>Preview — %1 (%Ln page(s))</source>
+        <translation>
+            <numerusform>Voorbeeld — %1 (%Ln pagina)</numerusform>
+            <numerusform>Voorbeeld — %1 (%Ln pagina&apos;s)</numerusform>
+        </translation>
     </message>
     <message>
         <source>The selected output format is not available.</source>
         <translation>De geselecteerde uitvoerindeling is niet beschikbaar.</translation>
+    </message>
+    <message>
+        <source>Cannot write %1: %2</source>
+        <translation>Kan %1 niet schrijven: %2</translation>
+    </message>
+    <message>
+        <source>Compile cancelled. No file was made.</source>
+        <translation>Samenstellen geannuleerd. Er is geen bestand gemaakt.</translation>
     </message>
     <message>
         <source>Compile to</source>
@@ -6517,6 +7118,27 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
     <message>
         <source>Compiling...</source>
         <translation>Bezig met samenstellen...</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln object sheet(s)</source>
+        <translation>
+            <numerusform>%Ln objectblad</numerusform>
+            <numerusform>%Ln objectbladen</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation>
+            <numerusform>%Ln document</numerusform>
+            <numerusform>%Ln documenten</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>about %Ln word(s)</source>
+        <translation>
+            <numerusform>ongeveer %Ln woord</numerusform>
+            <numerusform>ongeveer %Ln woorden</numerusform>
+        </translation>
     </message>
     <message>
         <source>Compiling failed:
@@ -6558,13 +7180,20 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
         <source>Preparing the preview...</source>
         <translation>Het voorbeeld voorbereiden...</translation>
     </message>
+</context>
+<context>
+    <name>qb::CompileProgress</name>
     <message>
-        <source>Preview — %1 (1 page)</source>
-        <translation>Voorbeeld — %1 (1 pagina)</translation>
+        <source>Cancel</source>
+        <translation>Annuleren</translation>
     </message>
     <message>
-        <source>Preview — %1 (%2 pages)</source>
-        <translation>Voorbeeld — %1 (%2 pagina&apos;s)</translation>
+        <source>%1 of %2</source>
+        <translation>%1 van %2</translation>
+    </message>
+    <message>
+        <source>Cancelling...</source>
+        <translation>Bezig met annuleren...</translation>
     </message>
 </context>
 <context>
@@ -6748,29 +7377,26 @@ Verplaats de hele Quillbinder-map naar een plek van jezelf, bijvoorbeeld C:\User
         <source>custom metadata</source>
         <translation>aangepaste metagegevens</translation>
     </message>
-    <message>
-        <source>quote mark</source>
-        <translation>aanhalingsteken</translation>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation>
+            <numerusform>%Ln document</numerusform>
+            <numerusform>%Ln documenten</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>quote marks</source>
-        <translation>aanhalingstekens</translation>
+    <message numerus="yes">
+        <source>%Ln quote mark(s) converted in %1: %2.</source>
+        <translation>
+            <numerusform>%Ln aanhalingsteken omgezet in %1: %2.</numerusform>
+            <numerusform>%Ln aanhalingstekens omgezet in %1: %2.</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>document</source>
-        <translation>document</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>documenten</translation>
-    </message>
-    <message>
-        <source>%1 converted in %2: %3.</source>
-        <translation>%1 omgezet in %2: %3.</translation>
-    </message>
-    <message>
-        <source>%1 to convert in %2: %3.</source>
-        <translation>%1 om te zetten in %2: %3.</translation>
+    <message numerus="yes">
+        <source>%Ln quote mark(s) to convert in %1: %2.</source>
+        <translation>
+            <numerusform>%Ln aanhalingsteken om te zetten in %1: %2.</numerusform>
+            <numerusform>%Ln aanhalingstekens om te zetten in %1: %2.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Snapshots taken: %1.</source>
@@ -6906,20 +7532,15 @@ Dit kan niet als geheel ongedaan worden gemaakt.%3</translation>
         <translation>Alle crashrapporten verwijderen</translation>
     </message>
     <message>
-        <source>Delete all %1?</source>
-        <translation>Alle %1 verwijderen?</translation>
-    </message>
-    <message>
-        <source>crash report</source>
-        <translation>crashrapport</translation>
-    </message>
-    <message>
-        <source>crash reports</source>
-        <translation>crashrapporten</translation>
-    </message>
-    <message>
         <source>Delete All</source>
         <translation>Alles verwijderen</translation>
+    </message>
+    <message numerus="yes">
+        <source>Delete all %Ln crash report(s)?</source>
+        <translation>
+            <numerusform>%Ln crashrapport verwijderen?</numerusform>
+            <numerusform>Alle %Ln crashrapporten verwijderen?</numerusform>
+        </translation>
     </message>
     <message>
         <source>freeze (recovered)</source>
@@ -7219,22 +7840,6 @@ Dit kan niet als geheel ongedaan worden gemaakt.%3</translation>
         <translation>Alles vervangen</translation>
     </message>
     <message>
-        <source>replacement</source>
-        <translation>vervanging</translation>
-    </message>
-    <message>
-        <source>replacements</source>
-        <translation>vervangingen</translation>
-    </message>
-    <message>
-        <source>match</source>
-        <translation>resultaat</translation>
-    </message>
-    <message>
-        <source>matches</source>
-        <translation>resultaten</translation>
-    </message>
-    <message>
         <source>Words: %1
 Characters: %2
 Characters (no spaces): %3
@@ -7355,14 +7960,6 @@ Pagina&apos;s (250 woorden): %5</translation>
         <translation>Pagina %1 van %2</translation>
     </message>
     <message>
-        <source>page</source>
-        <translation>pagina</translation>
-    </message>
-    <message>
-        <source>pages</source>
-        <translation>pagina&apos;s</translation>
-    </message>
-    <message>
         <source>%1 and %2 more</source>
         <translation>%1 en %2 meer</translation>
     </message>
@@ -7373,14 +7970,6 @@ Pagina&apos;s (250 woorden): %5</translation>
     <message>
         <source>Nothing to go forward to</source>
         <translation>Niets om naar vooruit te gaan</translation>
-    </message>
-    <message>
-        <source>document</source>
-        <translation>document</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>documenten</translation>
     </message>
     <message>
         <source>Total: %1 characters</source>
@@ -7443,10 +8032,6 @@ Pagina&apos;s (250 woorden): %5</translation>
         <translation>Woorden: %1</translation>
     </message>
     <message>
-        <source>%1 of %2 %3 (click to edit)</source>
-        <translation>%1 van %2 %3 (klik om te bewerken)</translation>
-    </message>
-    <message>
         <source>characters</source>
         <translation>tekens</translation>
     </message>
@@ -7457,6 +8042,42 @@ Pagina&apos;s (250 woorden): %5</translation>
     <message>
         <source>Document Target</source>
         <translation>Documentdoel</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln replacement(s)</source>
+        <translation>
+            <numerusform>%Ln vervanging</numerusform>
+            <numerusform>%Ln vervangingen</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln match(es)</source>
+        <translation>
+            <numerusform>%Ln treffer</numerusform>
+            <numerusform>%Ln treffers</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln page(s)</source>
+        <translation>
+            <numerusform>%Ln pagina</numerusform>
+            <numerusform>%Ln pagina&apos;s</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation>
+            <numerusform>%Ln document</numerusform>
+            <numerusform>%Ln documenten</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>%1 of %2 characters (click to edit)</source>
+        <translation>%1 van %2 tekens (klik om te bewerken)</translation>
+    </message>
+    <message>
+        <source>%1 of %2 words (click to edit)</source>
+        <translation>%1 van %2 woorden (klik om te bewerken)</translation>
     </message>
     <message>
         <source>No target</source>
@@ -7469,6 +8090,197 @@ Pagina&apos;s (250 woorden): %5</translation>
     <message>
         <source>Find in the copyholder</source>
         <translation>Zoeken in de kopijhouder</translation>
+    </message>
+</context>
+<context>
+    <name>qb::EncryptionPage</name>
+    <message>
+        <source>Encryption locks the files of a project and its backups with your key, in the OpenPGP format that Kleopatra, Gpg4win and GnuPG open without Quillbinder (see the manual&apos;s page on opening your files without Quillbinder).</source>
+        <translation>Versleuteling vergrendelt de bestanden van een project en zijn back-ups met je sleutel, in het OpenPGP-formaat dat Kleopatra, Gpg4win en GnuPG ook zonder Quillbinder openen (zie de pagina van de handleiding over je bestanden openen zonder Quillbinder).</translation>
+    </message>
+    <message>
+        <source>Keys on this device</source>
+        <translation>Sleutels op dit apparaat</translation>
+    </message>
+    <message>
+        <source>Key</source>
+        <translation>Sleutel</translation>
+    </message>
+    <message>
+        <source>Fingerprint</source>
+        <translation>Vingerafdruk</translation>
+    </message>
+    <message>
+        <source>Here</source>
+        <translation>Hier</translation>
+    </message>
+    <message>
+        <source>Create Keys...</source>
+        <translation>Sleutels maken...</translation>
+    </message>
+    <message>
+        <source>Import Keys...</source>
+        <translation>Sleutels importeren...</translation>
+    </message>
+    <message>
+        <source>Import a Key File...</source>
+        <translation>Een sleutelbestand importeren...</translation>
+    </message>
+    <message>
+        <source>Export Keys...</source>
+        <translation>Sleutels exporteren...</translation>
+    </message>
+    <message>
+        <source>Forget the passphrase on this device</source>
+        <translation>De wachtzin op dit apparaat vergeten</translation>
+    </message>
+    <message>
+        <source>The open project</source>
+        <translation>Het geopende project</translation>
+    </message>
+    <message>
+        <source>Encrypted backups</source>
+        <translation>Versleutelde back-ups</translation>
+    </message>
+    <message>
+        <source>Encrypted project</source>
+        <translation>Versleuteld project</translation>
+    </message>
+    <message>
+        <source>This place is not allowed</source>
+        <translation>Deze plek is niet toegestaan</translation>
+    </message>
+    <message>
+        <source>Other key</source>
+        <translation>Andere sleutel</translation>
+    </message>
+    <message>
+        <source>My key</source>
+        <translation>Mijn sleutel</translation>
+    </message>
+    <message>
+        <source>Recovery key</source>
+        <translation>Herstelsleutel</translation>
+    </message>
+    <message>
+        <source>secret part, unlocked</source>
+        <translation>geheim deel, ontgrendeld</translation>
+    </message>
+    <message>
+        <source>secret part, locked</source>
+        <translation>geheim deel, vergrendeld</translation>
+    </message>
+    <message>
+        <source>public part only</source>
+        <translation>alleen openbaar deel</translation>
+    </message>
+    <message>
+        <source>This device has no keys yet. Create Keys makes your key and a recovery key; on another device, use Import Keys with the key folder.</source>
+        <translation>Dit apparaat heeft nog geen sleutels. Sleutels maken maakt je sleutel en een herstelsleutel; gebruik op een ander apparaat Sleutels importeren met de sleutelmap.</translation>
+    </message>
+    <message>
+        <source>No project is open: the two switches belong to the open project.</source>
+        <translation>Er is geen project geopend: de twee schakelaars horen bij het geopende project.</translation>
+    </message>
+    <message>
+        <source>Create or import keys first: the switches need your key and the recovery key.</source>
+        <translation>Maak of importeer eerst sleutels: de schakelaars hebben je sleutel en de herstelsleutel nodig.</translation>
+    </message>
+    <message>
+        <source>A project in Scrivener&apos;s format cannot be encrypted: Scrivener could not open its files. Its backups can be encrypted; that switch belongs to each computer, so switch it on on every computer that makes backups of the project.</source>
+        <translation>Een project in het formaat van Scrivener kan niet worden versleuteld: Scrivener kon de bestanden niet openen. De back-ups ervan kunnen wel worden versleuteld; die schakelaar hoort bij elke computer, dus zet hem aan op elke computer die back-ups van het project maakt.</translation>
+    </message>
+    <message>
+        <source>The switch &quot;%1&quot; could not be changed.</source>
+        <translation>De schakelaar “%1” kon niet worden gewijzigd.</translation>
+    </message>
+    <message>
+        <source>Choose the key folder</source>
+        <translation>Kies de sleutelmap</translation>
+    </message>
+    <message>
+        <source>Import Keys</source>
+        <translation>Sleutels importeren</translation>
+    </message>
+    <message>
+        <source>Type the passphrase of your key.</source>
+        <translation>Typ de wachtzin van je sleutel.</translation>
+    </message>
+    <message>
+        <source>Your key is on this device now.</source>
+        <translation>Je sleutel staat nu op dit apparaat.</translation>
+    </message>
+    <message>
+        <source>Your key is on this device for this session only: it could not be saved (%1), so it will be gone at the next start. Check the free space and the rights of the program&apos;s data folder, then import it again.</source>
+        <translation>Je sleutel staat alleen voor deze sessie op dit apparaat: hij kon niet worden opgeslagen (%1) en is bij de volgende start weg. Controleer de vrije ruimte en de rechten van de gegevensmap van het programma en importeer hem opnieuw.</translation>
+    </message>
+    <message>
+        <source>Choose a key file</source>
+        <translation>Kies een sleutelbestand</translation>
+    </message>
+    <message>
+        <source>Key files (*.asc *.gpg *.pgp);;All files (*)</source>
+        <translation>Sleutelbestanden (*.asc *.gpg *.pgp);;Alle bestanden (*)</translation>
+    </message>
+    <message>
+        <source>Import a Key File</source>
+        <translation>Een sleutelbestand importeren</translation>
+    </message>
+    <message>
+        <source>The file could not be read.</source>
+        <translation>Het bestand kon niet worden gelezen.</translation>
+    </message>
+    <message>
+        <source>Type the passphrase of this key.</source>
+        <translation>Typ de wachtzin van deze sleutel.</translation>
+    </message>
+    <message>
+        <source>The key is on this device as your key.</source>
+        <translation>De sleutel staat op dit apparaat als je sleutel.</translation>
+    </message>
+    <message>
+        <source>There is no recovery key yet: import its public file (recovery-key-public.asc) with Import a Key File, or make a new pair with Create Keys.</source>
+        <translation>Er is nog geen herstelsleutel: importeer het openbare bestand ervan (recovery-key-public.asc) met Een sleutelbestand importeren, of maak een nieuw paar met Sleutels maken.</translation>
+    </message>
+    <message>
+        <source>The key is on this device as the recovery key.</source>
+        <translation>De sleutel staat op dit apparaat als herstelsleutel.</translation>
+    </message>
+    <message>
+        <source>The public key is on this device. It is not your key and not the recovery key.</source>
+        <translation>De openbare sleutel staat op dit apparaat. Het is niet je sleutel en niet de herstelsleutel.</translation>
+    </message>
+    <message>
+        <source>The key is on this device for this session only: it could not be saved (%1), so it will be gone at the next start. Check the free space and the rights of the program&apos;s data folder, then import it again.</source>
+        <translation>De sleutel staat alleen voor deze sessie op dit apparaat: hij kon niet worden opgeslagen (%1) en is bij de volgende start weg. Controleer de vrije ruimte en de rechten van de gegevensmap van het programma en importeer hem opnieuw.</translation>
+    </message>
+    <message>
+        <source>Where to write the keys</source>
+        <translation>Waar de sleutels naartoe moeten</translation>
+    </message>
+    <message>
+        <source>Export Keys</source>
+        <translation>Sleutels exporteren</translation>
+    </message>
+    <message>
+        <source>The keys are in the folder %1. It holds your key (locked by your passphrase), the public parts and a README.txt. The recovery key&apos;s secret part is only in the folder that Create Keys made.</source>
+        <translation>De sleutels staan in de map %1. Ze bevat je sleutel (vergrendeld met je wachtzin), de openbare delen en een README.txt. Het geheime deel van de herstelsleutel staat alleen in de map die Sleutels maken heeft gemaakt.</translation>
+    </message>
+    <message>
+        <source>Forget the passphrase</source>
+        <translation>De wachtzin vergeten</translation>
+    </message>
+    <message>
+        <source>Quillbinder forgets the passphrase on this device and locks your key. It will ask for the passphrase again when it needs it. Continue?</source>
+        <translation>Quillbinder vergeet de wachtzin op dit apparaat en vergrendelt je sleutel. Hij vraagt opnieuw om de wachtzin wanneer hij die nodig heeft. Doorgaan?</translation>
+    </message>
+    <message>
+        <source>The passphrase is forgotten on this device.</source>
+        <translation>De wachtzin is op dit apparaat vergeten.</translation>
+    </message>
+    <message>
+        <source>The system&apos;s key store would not remove the passphrase: %1</source>
+        <translation>De sleutelopslag van het systeem wilde de wachtzin niet verwijderen: %1</translation>
     </message>
 </context>
 <context>
@@ -7738,10 +8550,6 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
         <translation>De AppImage naar %1 verplaatsen, een vaste plek waar het menu-item hem vanaf start</translation>
     </message>
     <message>
-        <source>Help &gt; Add to Application Menu or Remove from Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
-        <translation>Met Help &gt; Aan toepassingsmenu toevoegen of Uit toepassingsmenu verwijderen wijzig je dit later. Als je de AppImage zelf verplaatst, voeg je hem opnieuw aan het menu toe.</translation>
-    </message>
-    <message>
         <source>Choose a folder: until then no backups are made</source>
         <translation>Kies een map: tot die tijd worden geen back-ups gemaakt</translation>
     </message>
@@ -7768,6 +8576,10 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
     <message>
         <source>Add %1 to the application menu, so that you can start it like any other program and open projects by double-clicking them</source>
         <translation>%1 aan het toepassingsmenu toevoegen, zodat je het kunt starten zoals elk ander programma en projecten kunt openen door erop te dubbelklikken</translation>
+    </message>
+    <message>
+        <source>Help &gt; Add to Application Menu or Remove From Application Menu changes this later. If you move the AppImage yourself, add it to the menu again.</source>
+        <translation>Help &gt; Aan toepassingsmenu toevoegen of Uit toepassingsmenu verwijderen wijzigt dit later. Als je de AppImage zelf verplaatst, voeg hem dan opnieuw aan het menu toe.</translation>
     </message>
     <message>
         <source>Check for Updates</source>
@@ -8612,17 +9424,12 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
 </context>
 <context>
     <name>qb::FullInstallWindow</name>
-    <message>
-        <source>Installing %1 (%2 MB)...</source>
-        <translation>%1 installeren (%2 MB)...</translation>
-    </message>
-    <message>
-        <source>add-on</source>
-        <translation>add-on</translation>
-    </message>
-    <message>
-        <source>add-ons</source>
-        <translation>add-ons</translation>
+    <message numerus="yes">
+        <source>Installing %Ln add-on(s) (%1 MB)...</source>
+        <translation>
+            <numerusform>%Ln add-on wordt geïnstalleerd (%1 MB)...</numerusform>
+            <numerusform>%Ln add-ons worden geïnstalleerd (%1 MB)...</numerusform>
+        </translation>
     </message>
     <message>
         <source>Done</source>
@@ -8714,7 +9521,7 @@ Er wordt niets geschreven in de eigen mappen van Windows of in het register, ten
 <context>
     <name>qb::IconFromTextDialog</name>
     <message>
-        <source>Icon from Text</source>
+        <source>Icon From Text</source>
         <translation>Pictogram uit tekst</translation>
     </message>
     <message>
@@ -9311,6 +10118,22 @@ De tekst van de momentopname &quot;%2&quot; is nu de tekst van het document; hij
         <translation>Bewerken…</translation>
     </message>
     <message>
+        <source>Synopsis and Notes</source>
+        <translation>Samenvatting en notities</translation>
+    </message>
+    <message>
+        <source>Comments and Footnotes</source>
+        <translation>Opmerkingen en voetnoten</translation>
+    </message>
+    <message>
+        <source>Mind Map</source>
+        <translation>Mindmap</translation>
+    </message>
+    <message>
+        <source>Objects</source>
+        <translation>Objecten</translation>
+    </message>
+    <message>
         <source>Synopsis and notes</source>
         <translation>Samenvatting en notities</translation>
     </message>
@@ -9385,6 +10208,165 @@ De tekst van de momentopname &quot;%2&quot; is nu de tekst van het document; hij
     <message>
         <source>Ctrl + mouse wheel over a part changes the zoom of that part. Right-click: one zoom for the tabs Metadata and Comments, or one each.</source>
         <translation>Ctrl + muiswiel boven een deel wijzigt de zoom van dat deel. Rechtsklikken: één zoom voor de tabbladen Metagegevens en Opmerkingen, of één per tabblad.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::KeyWizard</name>
+    <message>
+        <source>Create Keys</source>
+        <translation>Sleutels maken</translation>
+    </message>
+    <message>
+        <source>Make Keys</source>
+        <translation>Sleutels aanmaken</translation>
+    </message>
+    <message>
+        <source>Your passphrase</source>
+        <translation>Je wachtzin</translation>
+    </message>
+    <message>
+        <source>The passphrase locks your key. Quillbinder can remember it on this device, so you type it once on each other device.</source>
+        <translation>De wachtzin vergrendelt je sleutel. Quillbinder kan hem op dit apparaat onthouden, zodat je hem eenmaal op elk ander apparaat typt.</translation>
+    </message>
+    <message>
+        <source>Use these six random words (the safest choice and easy to type):</source>
+        <translation>Gebruik deze zes willekeurige woorden (de veiligste keuze en makkelijk te typen):</translation>
+    </message>
+    <message>
+        <source>Other words</source>
+        <translation>Andere woorden</translation>
+    </message>
+    <message>
+        <source>Use a passphrase of my own:</source>
+        <translation>Gebruik een eigen wachtzin:</translation>
+    </message>
+    <message>
+        <source>Passphrase:</source>
+        <translation>Wachtzin:</translation>
+    </message>
+    <message>
+        <source>Once more:</source>
+        <translation>Nogmaals:</translation>
+    </message>
+    <message>
+        <source>Remember the passphrase on this device (in the system&apos;s key store)</source>
+        <translation>De wachtzin op dit apparaat onthouden (in de sleutelopslag van het systeem)</translation>
+    </message>
+    <message>
+        <source>This device already has keys. New keys cannot open files that were locked for the old ones; keep the old key folder.</source>
+        <translation>Dit apparaat heeft al sleutels. Nieuwe sleutels kunnen geen bestanden openen die voor de oude zijn vergrendeld; bewaar de oude sleutelmap.</translation>
+    </message>
+    <message>
+        <source>The two entries are not the same.</source>
+        <translation>De twee invoeren zijn niet gelijk.</translation>
+    </message>
+    <message>
+        <source>This passphrase is accepted.</source>
+        <translation>Deze wachtzin wordt geaccepteerd.</translation>
+    </message>
+    <message>
+        <source>Where to keep the keys</source>
+        <translation>Waar de sleutels worden bewaard</translation>
+    </message>
+    <message>
+        <source>Quillbinder writes the folder &quot;%1&quot; there. A USB stick is best; project, backup and sync folders are refused.</source>
+        <translation>Quillbinder schrijft daar de map “%1”. Een USB-stick is het best; project-, back-up- en synchronisatiemappen worden geweigerd.</translation>
+    </message>
+    <message>
+        <source>Choose...</source>
+        <translation>Kiezen...</translation>
+    </message>
+    <message>
+        <source>When you press Next, your key and the recovery key are made. This takes a few seconds.</source>
+        <translation>Wanneer je op Volgende drukt, worden je sleutel en de herstelsleutel gemaakt. Dit duurt een paar seconden.</translation>
+    </message>
+    <message>
+        <source>Folder for the keys</source>
+        <translation>Map voor de sleutels</translation>
+    </message>
+    <message>
+        <source>The keys could not be made.</source>
+        <translation>De sleutels konden niet worden gemaakt.</translation>
+    </message>
+    <message>
+        <source>The recovery passphrase</source>
+        <translation>De herstelwachtzin</translation>
+    </message>
+    <message>
+        <source>Write these six words on paper now. They are shown only this once and are saved nowhere, not even in the key folder.</source>
+        <translation>Schrijf deze zes woorden nu op papier. Ze worden maar één keer getoond en nergens opgeslagen, ook niet in de sleutelmap.</translation>
+    </message>
+    <message>
+        <source>The recovery key opens your files if you lose your own key or forget its passphrase. Keep the paper in another place than the USB stick: the stick alone or the paper alone opens nothing. If both are lost, your text is gone for good.</source>
+        <translation>De herstelsleutel opent je bestanden als je je eigen sleutel kwijtraakt of de wachtzin ervan vergeet. Bewaar het papier op een andere plek dan de USB-stick: de stick alleen of het papier alleen opent niets. Als beide kwijt zijn, is je tekst voorgoed weg.</translation>
+    </message>
+    <message>
+        <source>I have written the six words on paper</source>
+        <translation>Ik heb de zes woorden op papier geschreven</translation>
+    </message>
+    <message>
+        <source>The check</source>
+        <translation>De controle</translation>
+    </message>
+    <message>
+        <source>Type two of the recovery words from your paper. Quillbinder reads the written files back and opens a test file with each key.</source>
+        <translation>Typ twee van de herstelwoorden van je papier. Quillbinder leest de geschreven bestanden terug en opent met elke sleutel een testbestand.</translation>
+    </message>
+    <message>
+        <source>Word %1:</source>
+        <translation>Woord %1:</translation>
+    </message>
+    <message>
+        <source>The key files were read back.</source>
+        <translation>De sleutelbestanden zijn teruggelezen.</translation>
+    </message>
+    <message>
+        <source>README.txt is in the folder.</source>
+        <translation>README.txt staat in de map.</translation>
+    </message>
+    <message>
+        <source>A test file opens with your key and your passphrase.</source>
+        <translation>Een testbestand opent met je sleutel en je wachtzin.</translation>
+    </message>
+    <message>
+        <source>A test file opens with the recovery key and the recovery passphrase.</source>
+        <translation>Een testbestand opent met de herstelsleutel en de herstelwachtzin.</translation>
+    </message>
+    <message>
+        <source>The keys could not be put on this device.</source>
+        <translation>De sleutels konden niet op dit apparaat worden gezet.</translation>
+    </message>
+    <message>
+        <source>The keys could not be saved on this device (%1). Nothing was changed; check the free space and the rights of the program&apos;s data folder, and try again.</source>
+        <translation>De sleutels konden niet op dit apparaat worden opgeslagen (%1). Er is niets gewijzigd; controleer de vrije ruimte en de rechten van de gegevensmap van het programma en probeer het opnieuw.</translation>
+    </message>
+    <message>
+        <source>A second copy</source>
+        <translation>Een tweede kopie</translation>
+    </message>
+    <message>
+        <source>Your keys are on this device and in the folder. Keep a second copy of the folder at another place, for example on a second USB stick. You can skip this.</source>
+        <translation>Je sleutels staan op dit apparaat en in de map. Bewaar een tweede kopie van de map op een andere plek, bijvoorbeeld op een tweede USB-stick. Je kunt dit overslaan.</translation>
+    </message>
+    <message>
+        <source>Copy the folder here</source>
+        <translation>De map hierheen kopiëren</translation>
+    </message>
+    <message>
+        <source>Place for the second copy</source>
+        <translation>Plek voor de tweede kopie</translation>
+    </message>
+    <message>
+        <source>This is the place of the first copy. Choose another place.</source>
+        <translation>Dit is de plek van de eerste kopie. Kies een andere plek.</translation>
+    </message>
+    <message>
+        <source>The second copy is made and was checked: %1</source>
+        <translation>De tweede kopie is gemaakt en gecontroleerd: %1</translation>
+    </message>
+    <message>
+        <source>The second copy was made, but the check failed. Make another one.</source>
+        <translation>De tweede kopie is gemaakt, maar de controle is mislukt. Maak een nieuwe.</translation>
     </message>
 </context>
 <context>
@@ -9497,17 +10479,12 @@ In plaats daarvan aan “%4” geven? “%2” heeft dan geen sneltoets meer.</t
         <source>Shortcut of “%1”:</source>
         <translation>Sneltoets van “%1”:</translation>
     </message>
-    <message>
-        <source>%1 changed by you (shown in bold).</source>
-        <translation>%1 door jou gewijzigd (vet weergegeven).</translation>
-    </message>
-    <message>
-        <source>shortcut</source>
-        <translation>sneltoets</translation>
-    </message>
-    <message>
-        <source>shortcuts</source>
-        <translation>sneltoetsen</translation>
+    <message numerus="yes">
+        <source>%Ln shortcut(s) changed by you (shown in bold).</source>
+        <translation>
+            <numerusform>%Ln sneltoets door jou gewijzigd (vet weergegeven).</numerusform>
+            <numerusform>%Ln sneltoetsen door jou gewijzigd (vet weergegeven).</numerusform>
+        </translation>
     </message>
     <message>
         <source>The system does not tell which keyboard layout is in use, so the program cannot choose a set. You can still change single shortcuts below.</source>
@@ -9849,7 +10826,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>&amp;Nieuw project…</translation>
     </message>
     <message>
-        <source>&amp;Open Project…</source>
+        <source>Open Pro&amp;ject…</source>
         <translation>Project &amp;openen…</translation>
     </message>
     <message>
@@ -9862,7 +10839,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Save &amp;As…</source>
-        <translation>Opslaan &amp;als…</translation>
+        <translation>Opsl&amp;aan als…</translation>
     </message>
     <message>
         <source>Save the project under another name or in another place, in Scrivener 3 format or in %1&apos;s own format; the window works on the new project from then on</source>
@@ -9882,7 +10859,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Save</source>
-        <translation>Op&amp;slaan</translation>
+        <translation>O&amp;pslaan</translation>
     </message>
     <message>
         <source>Save as &amp;Template…</source>
@@ -9914,7 +10891,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Back Up &amp;To…</source>
-        <translation>Back-up maken na&amp;ar…</translation>
+        <translation>B&amp;ack-up maken naar…</translation>
     </message>
     <message>
         <source>Show Backup Folder</source>
@@ -9937,8 +10914,8 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>&amp;Webpagina importeren…</translation>
     </message>
     <message>
-        <source>Import and &amp;Split…</source>
-        <translation>Importeren en s&amp;plitsen…</translation>
+        <source>&amp;Import and Split…</source>
+        <translation>Im&amp;porteren en splitsen…</translation>
     </message>
     <message>
         <source>Import and Split</source>
@@ -9953,7 +10930,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>Bestanden e&amp;xporteren…</translation>
     </message>
     <message>
-        <source>&amp;Compile…</source>
+        <source>Compi&amp;le…</source>
         <translation>&amp;Samenstellen…</translation>
     </message>
     <message>
@@ -9961,20 +10938,16 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>&amp;Markdown ⇄ RTF-bestand omzetten…</translation>
     </message>
     <message>
-        <source>Print Se&amp;ttings…</source>
-        <translation>Afdrukinstelli&amp;ngen…</translation>
+        <source>Print Settin&amp;gs…</source>
+        <translation>Af&amp;drukinstellingen…</translation>
     </message>
     <message>
         <source>Paper, header and footer, and how texts, index cards and the outliner are printed</source>
         <translation>Papier, koptekst en voettekst, en hoe teksten, indexkaarten en het overzicht worden afgedrukt</translation>
     </message>
     <message>
-        <source>Print Pre&amp;view…</source>
-        <translation>Afdrukvoor&amp;beeld…</translation>
-    </message>
-    <message>
         <source>&amp;Print Current Document…</source>
-        <translation>Huidig document &amp;afdrukken…</translation>
+        <translation>&amp;Huidig document afdrukken…</translation>
     </message>
     <message>
         <source>Prints what the editor shows: the text, the index cards of the corkboard, the outliner, a picture or a PDF file</source>
@@ -9982,11 +10955,11 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Options…</source>
-        <translation>&amp;Opties…</translation>
+        <translation>Op&amp;ties…</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>&amp;Afsluiten</translation>
+        <translation>A&amp;fsluiten</translation>
     </message>
     <message>
         <source>&amp;Save Current Look as Theme…</source>
@@ -10018,7 +10991,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Redo</source>
-        <translation>&amp;Opnieuw</translation>
+        <translation>Opnieuw &amp;uitvoeren</translation>
     </message>
     <message>
         <source>Cu&amp;t</source>
@@ -10026,19 +10999,15 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>K&amp;opiëren</translation>
+        <translation>Kop&amp;iëren</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
         <translation>&amp;Plakken</translation>
     </message>
     <message>
-        <source>Paste and &amp;Match Style</source>
+        <source>Paste and Match &amp;Style</source>
         <translation>Plakken en &amp;stijl aanpassen</translation>
-    </message>
-    <message>
-        <source>Paste with &amp;Formatting</source>
-        <translation>Plakken met &amp;opmaak</translation>
     </message>
     <message>
         <source>Select &amp;All</source>
@@ -10049,8 +11018,8 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>&amp;Zoeken…</translation>
     </message>
     <message>
-        <source>Find and &amp;Replace…</source>
-        <translation>Zoeken en &amp;vervangen…</translation>
+        <source>Find &amp;and Replace…</source>
+        <translation>Zo&amp;eken en vervangen…</translation>
     </message>
     <message>
         <source>Find &amp;Next</source>
@@ -10058,7 +11027,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Find Pre&amp;vious</source>
-        <translation>Vorige &amp;zoeken</translation>
+        <translation>Vor&amp;ige zoeken</translation>
     </message>
     <message>
         <source>Use &amp;Selection for Find</source>
@@ -10066,7 +11035,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Project &amp;Replace…</source>
-        <translation>Project &amp;vervangen…</translation>
+        <translation>P&amp;roject vervangen…</translation>
     </message>
     <message>
         <source>Find by For&amp;matting…</source>
@@ -10074,7 +11043,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Find Next Formattin&amp;g</source>
-        <translation>Volgende opmaak zoe&amp;ken</translation>
+        <translation>Volgende opmaa&amp;k zoeken</translation>
     </message>
     <message>
         <source>Find Previous Formatting</source>
@@ -10085,7 +11054,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>&amp;Projectzoekopdracht…</translation>
     </message>
     <message>
-        <source>Link to &amp;Document…</source>
+        <source>&amp;Link to Document…</source>
         <translation>Koppelen aan &amp;document…</translation>
     </message>
     <message>
@@ -10098,19 +11067,15 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Link to &amp;Object…</source>
-        <translation>Koppelen aan &amp;object…</translation>
+        <translation>&amp;Koppelen aan object…</translation>
     </message>
     <message>
         <source>Link to Object</source>
         <translation>Koppelen aan object</translation>
     </message>
     <message>
-        <source>&amp;Objects…</source>
-        <translation>&amp;Objecten…</translation>
-    </message>
-    <message>
-        <source>Object &amp;Templates and Colors…</source>
-        <translation>Object&amp;sjablonen en kleuren…</translation>
+        <source>&amp;Object Templates and Colors…</source>
+        <translation>Objectsjablonen en &amp;kleuren…</translation>
     </message>
     <message>
         <source>Insert &amp;Web Link…</source>
@@ -10130,15 +11095,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Move &amp;Down</source>
-        <translation>Om&amp;laag verplaatsen</translation>
-    </message>
-    <message>
-        <source>Move &amp;Left (out of the folder)</source>
-        <translation>Naar &amp;links verplaatsen (uit de map)</translation>
-    </message>
-    <message>
-        <source>Move &amp;Right (into the item above)</source>
-        <translation>Naar &amp;rechts verplaatsen (in het item erboven)</translation>
+        <translation>Omlaag &amp;verplaatsen</translation>
     </message>
     <message>
         <source>&amp;Combined Text / Document</source>
@@ -10165,28 +11122,28 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>&amp;Verticaal splitsen</translation>
     </message>
     <message>
-        <source>Show &amp;Binder</source>
+        <source>S&amp;how Binder</source>
         <translation>&amp;Binder tonen</translation>
     </message>
     <message>
-        <source>Quick-Add &amp;Keys in the Binder</source>
-        <translation>Snelle toetsen in de &amp;Binder</translation>
+        <source>&amp;Quick-Add Keys in the Binder</source>
+        <translation>S&amp;nelle toetsen in de Binder</translation>
     </message>
     <message>
         <source>Return adds a new document below; Space opens a Quick Reference window</source>
-        <translation>Return voegt eronder een nieuw document toe; Space opent een venster Snelle naslag</translation>
+        <translation>Enter voegt eronder een nieuw document toe; Space opent een venster Snelle naslag</translation>
     </message>
     <message>
         <source>Show &amp;Inspector</source>
         <translation>&amp;Inspector tonen</translation>
     </message>
     <message>
-        <source>Show &amp;Collections</source>
+        <source>Sho&amp;w Collections</source>
         <translation>&amp;Verzamelingen tonen</translation>
     </message>
     <message>
-        <source>&amp;Composition Mode</source>
-        <translation>&amp;Schrijfmodus</translation>
+        <source>Composition &amp;Mode</source>
+        <translation>S&amp;chrijfmodus</translation>
     </message>
     <message>
         <source>&amp;Page View</source>
@@ -10202,22 +11159,22 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Typewriter Scrolling</source>
-        <translation>&amp;Typemachinescrollen</translation>
+        <translation>T&amp;ypemachinescrollen</translation>
     </message>
     <message>
-        <source>Show &amp;Titles in Combined Text</source>
-        <translation>&amp;Titels tonen in Gecombineerde tekst</translation>
+        <source>Show Titles in &amp;Combined Text</source>
+        <translation>Titels tonen in &amp;Gecombineerde tekst</translation>
     </message>
     <message>
-        <source>&amp;Fixed Width Editor</source>
+        <source>Fixed &amp;Width Editor</source>
         <translation>Editor met &amp;vaste breedte</translation>
     </message>
     <message>
-        <source>Zoom &amp;In</source>
-        <translation>&amp;Inzoomen</translation>
+        <source>Zoom I&amp;n</source>
+        <translation>In&amp;zoomen</translation>
     </message>
     <message>
-        <source>Zoom &amp;Out</source>
+        <source>&amp;Zoom Out</source>
         <translation>&amp;Uitzoomen</translation>
     </message>
     <message>
@@ -10225,12 +11182,12 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>Zoom &amp;herstellen</translation>
     </message>
     <message>
-        <source>Zoom Inspector &amp;Tabs Separately</source>
+        <source>Zoom Insp&amp;ector Tabs Separately</source>
         <translation>Tabbladen van de Inspector &amp;apart zoomen</translation>
     </message>
     <message>
         <source>Status &amp;Stamps</source>
-        <translation>Status&amp;stempels</translation>
+        <translation>&amp;Statusstempels</translation>
     </message>
     <message>
         <source>Label Color in &amp;Index Cards</source>
@@ -10254,49 +11211,25 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Sa&amp;ve Project Settings to File…</source>
-        <translation>Projectinstellingen opsla&amp;an in bestand…</translation>
+        <translation>Projectinstellingen opsl&amp;aan in bestand…</translation>
     </message>
     <message>
-        <source>&amp;Load Project Settings from File…</source>
-        <translation>Projectinstellingen &amp;laden uit bestand…</translation>
-    </message>
-    <message>
-        <source>Project &amp;Targets…</source>
+        <source>&amp;Project Targets…</source>
         <translation>Project&amp;doelen…</translation>
     </message>
     <message>
         <source>Project &amp;Keywords…</source>
-        <translation>Project&amp;trefwoorden…</translation>
-    </message>
-    <message>
-        <source>Project S&amp;tatistics…</source>
-        <translation>Project&amp;statistieken…</translation>
-    </message>
-    <message>
-        <source>&amp;Writing History…</source>
-        <translation>&amp;Schrijfgeschiedenis…</translation>
+        <translation>Pro&amp;jecttrefwoorden…</translation>
     </message>
     <message>
         <source>&amp;Empty Trash…</source>
         <translation>&amp;Prullenbak legen…</translation>
     </message>
-    <message>
-        <source>document</source>
-        <translation>document</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>documenten</translation>
-    </message>
-    <message>
-        <source>Delete %1 in the Trash forever? This cannot be undone.</source>
-        <translation>%1 in de Prullenbak voorgoed verwijderen? Dit kan niet ongedaan worden gemaakt.</translation>
-    </message>
     <message numerus="yes">
-        <source>Delete %1 in the Trash forever, together with their %n snapshot(s)? This cannot be undone.</source>
+        <source>Snapshot taken of %Ln document(s).</source>
         <translation>
-            <numerusform>%1 in de Prullenbak voorgoed verwijderen, samen met hun %n momentopname? Dit kan niet ongedaan worden gemaakt.</numerusform>
-            <numerusform>%1 in de Prullenbak voorgoed verwijderen, samen met hun %n momentopnamen? Dit kan niet ongedaan worden gemaakt.</numerusform>
+            <numerusform>Momentopname gemaakt van %Ln document.</numerusform>
+            <numerusform>Momentopname gemaakt van %Ln documenten.</numerusform>
         </translation>
     </message>
     <message>
@@ -10304,11 +11237,11 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>Prullenbak legen</translation>
     </message>
     <message>
-        <source>Delete Old &amp;Snapshots…</source>
-        <translation>Oude &amp;momentopnamen verwijderen…</translation>
+        <source>&amp;Delete Old Snapshots…</source>
+        <translation>&amp;Oude momentopnamen verwijderen…</translation>
     </message>
     <message>
-        <source>Show Project in File &amp;Manager</source>
+        <source>Show Project in &amp;File Manager</source>
         <translation>Project tonen in &amp;bestandsbeheer</translation>
     </message>
     <message>
@@ -10372,16 +11305,8 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>De geselecteerde documenten in een nieuwe map zetten, op de plaats van het eerste</translation>
     </message>
     <message>
-        <source>&amp;Sheet to Object</source>
-        <translation>&amp;Blad naar object</translation>
-    </message>
-    <message>
         <source>Make an Object (Window &gt; Objects) of the selected sheet documents: the title is the name, the text goes into Other, a picture becomes the picture. The binder item then shows the Object; the document keeps its text.</source>
         <translation>Van de geselecteerde bladdocumenten een object maken (Venster &gt; Objecten): de titel is de naam, de tekst gaat naar Overig, een afbeelding wordt de afbeelding. Het Binder-item toont dan het object; het document behoudt zijn tekst.</translation>
-    </message>
-    <message>
-        <source>Convert to F&amp;ile</source>
-        <translation>Omzetten naar &amp;bestand</translation>
     </message>
     <message>
         <source>&amp;Include in Compile</source>
@@ -10406,10 +11331,6 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         </translation>
     </message>
     <message>
-        <source>Take Snapshot with &amp;Title…</source>
-        <translation>Momentopname maken met &amp;titel…</translation>
-    </message>
-    <message>
         <source>Show Snapshots</source>
         <translation>Momentopnamen tonen</translation>
     </message>
@@ -10418,7 +11339,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>Aan project&amp;bladwijzers toevoegen</translation>
     </message>
     <message>
-        <source>Reveal in &amp;Binder</source>
+        <source>&amp;Reveal in Binder</source>
         <translation>In de &amp;Binder tonen</translation>
     </message>
     <message>
@@ -10426,7 +11347,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>&amp;Vastzetten</translation>
     </message>
     <message>
-        <source>&amp;Bold</source>
+        <source>Bo&amp;ld</source>
         <translation>&amp;Vet</translation>
     </message>
     <message>
@@ -10471,7 +11392,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Bulleted List</source>
-        <translation>&amp;Lijst met opsommingstekens</translation>
+        <translation>Lijst met &amp;opsommingstekens</translation>
     </message>
     <message>
         <source>&amp;Numbered List</source>
@@ -10479,7 +11400,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Indent List Item</source>
-        <translation>Lijstitem &amp;laten inspringen</translation>
+        <translation>&amp;Lijstitem laten inspringen</translation>
     </message>
     <message>
         <source>&amp;Outdent List Item</source>
@@ -10491,7 +11412,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Text &amp;Color…</source>
-        <translation>Tekst&amp;kleur…</translation>
+        <translation>&amp;Tekstkleur…</translation>
     </message>
     <message>
         <source>&amp;Automatic Text Color</source>
@@ -10519,10 +11440,10 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Decrease Indent</source>
-        <translation>Inspringing &amp;verkleinen</translation>
+        <translation>&amp;Inspringing verkleinen</translation>
     </message>
     <message>
-        <source>&amp;Reset Paragraph Formatting</source>
+        <source>Reset Paragraph &amp;Formatting</source>
         <translation>Alinea-opmaak &amp;herstellen</translation>
     </message>
     <message>
@@ -10547,11 +11468,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Cop&amp;y Formatting</source>
-        <translation>Opmaak k&amp;opiëren</translation>
-    </message>
-    <message>
-        <source>Paste Formattin&amp;g</source>
-        <translation>Opmaak pla&amp;kken</translation>
+        <translation>&amp;Opmaak kopiëren</translation>
     </message>
     <message>
         <source>Show &amp;Ruler</source>
@@ -10594,14 +11511,6 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>&amp;Inline-voetnoot</translation>
     </message>
     <message>
-        <source>&amp;Image From File…</source>
-        <translation>&amp;Afbeelding uit bestand…</translation>
-    </message>
-    <message>
-        <source>Insert Image</source>
-        <translation>Afbeelding invoegen</translation>
-    </message>
-    <message>
         <source>Images (*.png *.jpg *.jpeg *.gif *.bmp *.webp)</source>
         <translation>Afbeeldingen (*.png *.jpg *.jpeg *.gif *.bmp *.webp)</translation>
     </message>
@@ -10615,7 +11524,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Insert Row &amp;Below</source>
-        <translation>Rij e&amp;ronder invoegen</translation>
+        <translation>&amp;Rij eronder invoegen</translation>
     </message>
     <message>
         <source>Insert Column &amp;Left</source>
@@ -10623,14 +11532,14 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Insert Column &amp;Right</source>
-        <translation>Kolom &amp;rechts invoegen</translation>
+        <translation>Kolom rechts &amp;invoegen</translation>
     </message>
     <message>
         <source>Delete R&amp;ows</source>
-        <translation>&amp;Rijen verwijderen</translation>
+        <translation>Rijen &amp;verwijderen</translation>
     </message>
     <message>
-        <source>Delete C&amp;olumns</source>
+        <source>D&amp;elete Columns</source>
         <translation>&amp;Kolommen verwijderen</translation>
     </message>
     <message>
@@ -10643,11 +11552,11 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Split Cell</source>
-        <translation>Cel &amp;splitsen</translation>
+        <translation>Cel s&amp;plitsen</translation>
     </message>
     <message>
         <source>Cell &amp;Color…</source>
-        <translation>Cel&amp;kleur…</translation>
+        <translation>&amp;Celkleur…</translation>
     </message>
     <message>
         <source>Cell Color</source>
@@ -10659,7 +11568,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Table &amp;Properties…</source>
-        <translation>Tabel&amp;eigenschappen…</translation>
+        <translation>T&amp;abeleigenschappen…</translation>
     </message>
     <message>
         <source>P&amp;icture…</source>
@@ -10667,7 +11576,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Current &amp;Date</source>
-        <translation>Huidige &amp;datum</translation>
+        <translation>&amp;Huidige datum</translation>
     </message>
     <message>
         <source>&amp;Bibliography/Citations…</source>
@@ -10682,8 +11591,8 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>&quot;%1&quot; kon niet worden gestart. Controleer het programma onder Bestand &gt; Opties &gt; Algemeen &gt; Citaten.</translation>
     </message>
     <message>
-        <source>Current &amp;Time</source>
-        <translation>Huidige &amp;tijd</translation>
+        <source>C&amp;urrent Time</source>
+        <translation>H&amp;uidige tijd</translation>
     </message>
     <message>
         <source>&amp;Back</source>
@@ -10695,15 +11604,15 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Previous Document</source>
-        <translation>&amp;Vorig document</translation>
+        <translation>Vorig &amp;document</translation>
     </message>
     <message>
-        <source>&amp;Next Document</source>
+        <source>Next &amp;Document</source>
         <translation>Volge&amp;nd document</translation>
     </message>
     <message>
-        <source>Enclosing &amp;Group</source>
-        <translation>Omsluitende &amp;groep</translation>
+        <source>En&amp;closing Group</source>
+        <translation>O&amp;msluitende groep</translation>
     </message>
     <message>
         <source>Show the folder or group the document in the editor belongs to</source>
@@ -10711,7 +11620,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>Focus Bi&amp;nder</source>
-        <translation>Focus op Bi&amp;nder</translation>
+        <translation>&amp;Focus op Binder</translation>
     </message>
     <message>
         <source>Focus &amp;Editor</source>
@@ -10742,20 +11651,8 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>Een kort project dat laat zien wat %1 meer heeft dan gebruikelijk: pictogrammenbalk, zoom per deel, mindmaps, objecten en meer</translation>
     </message>
     <message>
-        <source>Third-Party &amp;Licenses…</source>
-        <translation>&amp;Licenties van derden…</translation>
-    </message>
-    <message>
-        <source>List of All Place&amp;holders…</source>
-        <translation>Lijst van alle plaats&amp;vervangers…</translation>
-    </message>
-    <message>
         <source>Open &amp;Plugin Folder</source>
-        <translation>&amp;Pluginmap openen</translation>
-    </message>
-    <message>
-        <source>Add to &amp;Application Menu</source>
-        <translation>Aan &amp;toepassingsmenu toevoegen</translation>
+        <translation>&amp;Plug-inmap openen</translation>
     </message>
     <message>
         <source>Add to Application Menu</source>
@@ -10767,7 +11664,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>This &amp;Computer…</source>
-        <translation>Deze &amp;computer…</translation>
+        <translation>&amp;Deze computer…</translation>
     </message>
     <message>
         <source>Where the program keeps its files, the backup folder, the place of notes and transcriptions, the Start menu entry and the project file types</source>
@@ -10790,20 +11687,8 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>Add-on&amp;beheer…</translation>
     </message>
     <message>
-        <source>&amp;About %1</source>
-        <translation>&amp;Over %1</translation>
-    </message>
-    <message>
-        <source>&amp;System Information…</source>
-        <translation>&amp;Systeeminformatie…</translation>
-    </message>
-    <message>
         <source>Program, versions and computer at a glance, to copy into a problem report</source>
         <translation>Programma, versies en computer in één oogopslag, om in een probleemmelding te kopiëren</translation>
-    </message>
-    <message>
-        <source>Report a Problem…</source>
-        <translation>Een probleem melden…</translation>
     </message>
     <message>
         <source>Opens the project&apos;s page for reports of problems and wishes in your browser</source>
@@ -10815,11 +11700,11 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Keyboard Shortcuts…</source>
-        <translation>&amp;Sneltoetsen…</translation>
+        <translation>S&amp;neltoetsen…</translation>
     </message>
     <message>
-        <source>Select &amp;Annotation or Note</source>
-        <translation>&amp;Aantekening of notitie selecteren</translation>
+        <source>Select Annotation &amp;or Note</source>
+        <translation>Aantekening of &amp;notitie selecteren</translation>
     </message>
     <message>
         <source>Show &amp;Toolbar</source>
@@ -10830,16 +11715,16 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
         <translation>Werkbalken &amp;aanpassen…</translation>
     </message>
     <message>
-        <source>&amp;Reset Toolbar Places</source>
+        <source>Reset Toolbar &amp;Places</source>
         <translation>Werkbalkposities &amp;herstellen</translation>
     </message>
     <message>
         <source>&amp;Full Screen</source>
-        <translation>&amp;Volledig scherm</translation>
+        <translation>Volle&amp;dig scherm</translation>
     </message>
     <message>
         <source>&amp;Freeform</source>
-        <translation>&amp;Vrij</translation>
+        <translation>V&amp;rij</translation>
     </message>
     <message>
         <source>Arrange by &amp;Label</source>
@@ -10847,7 +11732,7 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Commit Freeform Order</source>
-        <translation>Vrije &amp;volgorde vastleggen</translation>
+        <translation>&amp;Vrije volgorde vastleggen</translation>
     </message>
     <message>
         <source>Label Color in &amp;Binder</source>
@@ -10919,11 +11804,141 @@ Sneltoetsen die je zelf hebt ingesteld, blijven zoals ze zijn.</translation>
     </message>
     <message>
         <source>&amp;Close All Quick Reference Panels</source>
-        <translation>Alle panelen Snelle naslag &amp;sluiten</translation>
+        <translation>Alle panelen &amp;Snelle naslag sluiten</translation>
     </message>
     <message>
-        <source>Default Text &amp;Formatting…</source>
-        <translation>Standaard tekst&amp;opmaak…</translation>
+        <source>Handwriting</source>
+        <translation>Handschrift</translation>
+    </message>
+    <message>
+        <source>Model change in progress</source>
+        <translation>Modelwissel bezig</translation>
+    </message>
+    <message>
+        <source>Print Pre&amp;view</source>
+        <translation>Afdruk&amp;voorbeeld</translation>
+    </message>
+    <message>
+        <source>Paste With &amp;Formatting</source>
+        <translation>Plakken met op&amp;maak</translation>
+    </message>
+    <message>
+        <source>&amp;Objects</source>
+        <translation>&amp;Objecten</translation>
+    </message>
+    <message>
+        <source>Move &amp;Left</source>
+        <translation>Naar &amp;links</translation>
+    </message>
+    <message>
+        <source>Move &amp;Right</source>
+        <translation>Naar &amp;rechts</translation>
+    </message>
+    <message>
+        <source>Out of the folder</source>
+        <translation>Uit de map</translation>
+    </message>
+    <message>
+        <source>Into the item above</source>
+        <translation>In het item erboven</translation>
+    </message>
+    <message>
+        <source>&amp;Load Project Settings From File…</source>
+        <translation>Projectinstellingen &amp;laden uit bestand…</translation>
+    </message>
+    <message>
+        <source>P&amp;roject Statistics</source>
+        <translation>P&amp;rojectstatistieken</translation>
+    </message>
+    <message>
+        <source>&amp;Writing History</source>
+        <translation>&amp;Schrijfgeschiedenis</translation>
+    </message>
+    <message numerus="yes">
+        <source>Delete %Ln document(s) in the Trash forever?</source>
+        <translation>
+            <numerusform>%Ln document in de Prullenbak definitief verwijderen?</numerusform>
+            <numerusform>%Ln documenten in de Prullenbak definitief verwijderen?</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Their %Ln snapshot(s) go with them.</source>
+        <translation>
+            <numerusform>De bijbehorende %Ln momentopname gaat mee.</numerusform>
+            <numerusform>De bijbehorende %Ln momentopnamen gaan mee.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>This cannot be undone.</source>
+        <translation>Dit kan niet ongedaan worden gemaakt.</translation>
+    </message>
+    <message>
+        <source>Convert &amp;Sheet to Object</source>
+        <translation>Blad &amp;omzetten naar object</translation>
+    </message>
+    <message>
+        <source>Convert to Te&amp;xt Document</source>
+        <translation>Omzetten naar &amp;tekstdocument</translation>
+    </message>
+    <message>
+        <source>Take Snapshot With &amp;Title…</source>
+        <translation>Momentopname nemen met &amp;titel…</translation>
+    </message>
+    <message>
+        <source>Apply Copied Formattin&amp;g</source>
+        <translation>G&amp;ekopieerde opmaak toepassen</translation>
+    </message>
+    <message>
+        <source>&amp;Picture From File…</source>
+        <translation>Afbeelding uit &amp;bestand…</translation>
+    </message>
+    <message>
+        <source>Insert Picture</source>
+        <translation>Afbeelding invoegen</translation>
+    </message>
+    <message>
+        <source>Third-Party &amp;Licenses</source>
+        <translation>&amp;Licenties van derden</translation>
+    </message>
+    <message>
+        <source>List of All Place&amp;holders</source>
+        <translation>L&amp;ijst van alle plaatsvervangers</translation>
+    </message>
+    <message>
+        <source>Add to &amp;Application Menu…</source>
+        <translation>Aan &amp;toepassingsmenu toevoegen…</translation>
+    </message>
+    <message>
+        <source>A&amp;bout %1</source>
+        <translation>O&amp;ver %1</translation>
+    </message>
+    <message>
+        <source>&amp;System Information</source>
+        <translation>&amp;Systeeminformatie</translation>
+    </message>
+    <message>
+        <source>Report a Problem</source>
+        <translation>Een probleem melden</translation>
+    </message>
+    <message>
+        <source>Toolbar &amp;Size</source>
+        <translation>Werkbalk&amp;grootte</translation>
+    </message>
+    <message>
+        <source>&amp;Small</source>
+        <translation>&amp;Klein</translation>
+    </message>
+    <message>
+        <source>&amp;Normal</source>
+        <translation>&amp;Normaal</translation>
+    </message>
+    <message>
+        <source>&amp;Large</source>
+        <translation>&amp;Groot</translation>
+    </message>
+    <message>
+        <source>Pr&amp;oject Formatting Settings…</source>
+        <translation>&amp;Projectopmaakinstellingen…</translation>
     </message>
     <message>
         <source>Font, size, line spacing and indents of the text of the whole project</source>
@@ -11087,14 +12102,6 @@ Er is een kopie ervan van %2, de laatste keer dat het project werd geopend. Die 
         </translation>
     </message>
     <message>
-        <source>Scrivener&apos;s style marks were taken out of 1 document.</source>
-        <translation>De stijlmarkeringen van Scrivener zijn uit 1 document gehaald.</translation>
-    </message>
-    <message>
-        <source>Scrivener&apos;s style marks were taken out of %1 documents.</source>
-        <translation>De stijlmarkeringen van Scrivener zijn uit %1 documenten gehaald.</translation>
-    </message>
-    <message>
         <source>Document Cannot Be Read</source>
         <translation>Document kan niet worden gelezen</translation>
     </message>
@@ -11103,10 +12110,10 @@ Er is een kopie ervan van %2, de laatste keer dat het project werd geopend. Die 
 %4
 
 It is shown empty and cannot be edited, so that the file is not overwritten. Check the file&apos;s permissions or the drive it is on, then close and reopen the project.</source>
-        <translation>De %1 van &quot;%2&quot; kan niet worden gelezen (%3):
+        <translation>Wat er in de %1 van &quot;%2&quot; staat, kan niet worden gelezen (%3):
 %4
 
-Hij wordt leeg getoond en kan niet worden bewerkt, zodat het bestand niet wordt overschreven. Controleer de rechten van het bestand of de schijf waarop het staat, sluit het project dan en open het opnieuw.</translation>
+Dit wordt leeg getoond en kan niet worden bewerkt, zodat het bestand niet wordt overschreven. Controleer de rechten van het bestand of de schijf waarop het staat, sluit het project dan en open het opnieuw.</translation>
     </message>
     <message>
         <source>notes</source>
@@ -11125,24 +12132,24 @@ Hij wordt leeg getoond en kan niet worden bewerkt, zodat het bestand niet wordt 
 %4
 
 It is shown as well as it could be read, and it cannot be edited, so that the file is not changed. To keep working on the text, select it, copy it, and paste it into a new document; or repair the file (save it in UTF-8 in the program that wrote it), then close and reopen the project.</source>
-        <translation>De %1 van &quot;%2&quot; kan niet worden gelezen zoals het hoort: %3.
+        <translation>Wat er in de %1 van &quot;%2&quot; staat, kan niet worden gelezen zoals het hoort: %3.
 %4
 
-Hij wordt zo goed mogelijk getoond zoals hij kon worden gelezen en kan niet worden bewerkt, zodat het bestand niet wordt gewijzigd. Om aan de tekst te blijven werken, selecteer je hem, kopieer je hem en plak je hem in een nieuw document; of herstel het bestand (sla het op in UTF-8 in het programma dat het schreef), sluit het project dan en open het opnieuw.</translation>
+Dit wordt zo goed mogelijk getoond en kan niet worden bewerkt, zodat het bestand niet wordt gewijzigd. Om aan de tekst te blijven werken, selecteer je alles, kopieer je dat en plak je het in een nieuw document; of herstel het bestand (sla het op in UTF-8 in het programma dat het schreef), sluit het project dan en open het opnieuw.</translation>
     </message>
     <message>
         <source>The %1 of &quot;%2&quot; was changed, but it cannot be saved: its file cannot be read, and such a file is never written over. The change could not be kept as a copy either (is the disk full?); it exists only in this window. Copy the text into a new document to keep it.</source>
-        <translation>De %1 van &quot;%2&quot; is gewijzigd, maar kan niet worden opgeslagen: het bestand kan niet worden gelezen en zo&apos;n bestand wordt nooit overschreven. De wijziging kon ook niet als kopie worden bewaard (is de schijf vol?); ze bestaat alleen in dit venster. Kopieer de tekst naar een nieuw document om hem te bewaren.</translation>
+        <translation>In de %1 van &quot;%2&quot; is iets gewijzigd, maar dat kan niet worden opgeslagen: het bestand kan niet worden gelezen en zo&apos;n bestand wordt nooit overschreven. De wijziging kon ook niet als kopie worden bewaard (is de schijf vol?); ze bestaat alleen in dit venster. Kopieer de tekst naar een nieuw document om die te bewaren.</translation>
     </message>
     <message>
         <source>The %1 of &quot;%2&quot; was changed, but it is not saved in its place: its file cannot be read, and such a file is never written over. The changed text was kept as a copy:
 %3
 
 Open it in a word processor, or repair the document (Roll Back to a snapshot in the inspector) and take the change over.</source>
-        <translation>De %1 van &quot;%2&quot; is gewijzigd, maar niet op zijn plek opgeslagen: het bestand kan niet worden gelezen en zo&apos;n bestand wordt nooit overschreven. De gewijzigde tekst is als kopie bewaard:
+        <translation>In de %1 van &quot;%2&quot; is iets gewijzigd, maar dat is niet op de oorspronkelijke plek opgeslagen: het bestand kan niet worden gelezen en zo&apos;n bestand wordt nooit overschreven. De gewijzigde tekst is als kopie bewaard:
 %3
 
-Open hem in een tekstverwerker, of herstel het document (Terugzetten naar een momentopname in de Inspector) en neem de wijziging over.</translation>
+Open de kopie in een tekstverwerker, of herstel het document (Terugzetten naar een momentopname in de Inspector) en neem de wijziging over.</translation>
     </message>
     <message>
         <source>Change Not Saved in Place</source>
@@ -11277,6 +12284,10 @@ Houd het open en probeer het opnieuw nadat de oorzaak is verholpen, sla de tekst
 %1</translation>
     </message>
     <message>
+        <source>When the program was ended (by logging out, shutting down or a command), an encrypted project could not be saved. (Its name and the reason are left out of this note, because it is a plain file.)</source>
+        <translation>Toen het programma werd beëindigd (door uitloggen, afsluiten of een opdracht), kon een versleuteld project niet worden opgeslagen. (De naam en de reden ontbreken in dit bericht, omdat het een gewoon bestand is.)</translation>
+    </message>
+    <message>
         <source>When the program was ended (by logging out, shutting down or a command), the project &quot;%1&quot; could not be saved: %2</source>
         <translation>Toen het programma werd beëindigd (door uitloggen, afsluiten of een opdracht), kon het project &quot;%1&quot; niet worden opgeslagen: %2</translation>
     </message>
@@ -11396,7 +12407,7 @@ Herstel ze eerst (Terugzetten naar een momentopname in de Inspector, of herstel 
     </message>
     <message>
         <source>Lock in Place</source>
-        <translation>Vastzetten</translation>
+        <translation>Op zijn plaats vergrendelen</translation>
     </message>
     <message>
         <source>Import Files</source>
@@ -11498,7 +12509,7 @@ Het best op een andere schijf (een USB-stick, een tweede schijf, een map die je 
     </message>
     <message>
         <source>State</source>
-        <translation>Staat</translation>
+        <translation>Status</translation>
     </message>
     <message>
         <source>incomplete</source>
@@ -11507,6 +12518,10 @@ Het best op een andere schijf (een USB-stick, een tweede schijf, een map die je 
     <message>
         <source>complete</source>
         <translation>compleet</translation>
+    </message>
+    <message>
+        <source>, encrypted</source>
+        <translation>, versleuteld</translation>
     </message>
     <message>
         <source> (in the folder &quot;%1&quot;)</source>
@@ -11684,18 +12699,6 @@ De versies 0.70.0 tot 0.90.4 bewaarden ze daar. In de back-upmap zelf zetten, on
         <translation>Afdrukken is niet gelukt.</translation>
     </message>
     <message>
-        <source>Printed: %1 (%2)</source>
-        <translation>Afgedrukt: %1 (%2)</translation>
-    </message>
-    <message>
-        <source>page</source>
-        <translation>pagina</translation>
-    </message>
-    <message>
-        <source>pages</source>
-        <translation>pagina&apos;s</translation>
-    </message>
-    <message>
         <source>Print Preview – %1</source>
         <translation>Afdrukvoorbeeld – %1</translation>
     </message>
@@ -11744,12 +12747,30 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
 %1</translation>
     </message>
     <message>
-        <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove from Application Menu and then Add to Application Menu again.</source>
-        <translation>De AppImage kon niet naar %1 worden verplaatst (%2). Het menu-item start hem waar hij is; als je het bestand zelf verplaatst, kies je Help &gt; Uit toepassingsmenu verwijderen en daarna opnieuw Aan toepassingsmenu toevoegen.</translation>
+        <source>The AppImage could not be moved to %1 (%2). The menu entry starts it where it is; if you move the file yourself, choose Help &gt; Remove From Application Menu and then Add to Application Menu again.</source>
+        <translation>De AppImage kon niet naar %1 worden verplaatst (%2). De menu-invoer start hem waar hij staat; als je het bestand zelf verplaatst, kies dan Help &gt; Uit toepassingsmenu verwijderen en daarna opnieuw Aan toepassingsmenu toevoegen.</translation>
+    </message>
+    <message>
+        <source>Remove From &amp;Application Menu</source>
+        <translation>Uit &amp;toepassingsmenu verwijderen</translation>
     </message>
     <message>
         <source>The program&apos;s icon could not be copied, so the menu entry shows no icon.</source>
         <translation>Het pictogram van het programma kon niet worden gekopieerd, dus het menu-item toont geen pictogram.</translation>
+    </message>
+    <message numerus="yes">
+        <source>Scrivener&apos;s style marks were taken out of %Ln document(s).</source>
+        <translation>
+            <numerusform>De stijlmarkeringen van Scrivener zijn uit %Ln document gehaald.</numerusform>
+            <numerusform>De stijlmarkeringen van Scrivener zijn uit %Ln documenten gehaald.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Printed: %1 (%Ln page(s))</source>
+        <translation>
+            <numerusform>Afgedrukt: %1 (%Ln pagina)</numerusform>
+            <numerusform>Afgedrukt: %1 (%Ln pagina&apos;s)</numerusform>
+        </translation>
     </message>
     <message>
         <source>%1 is in the application menu now (%2).</source>
@@ -11766,10 +12787,6 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     <message>
         <source>%1 is no longer in the application menu.</source>
         <translation>%1 staat niet meer in het toepassingsmenu.</translation>
-    </message>
-    <message>
-        <source>Remove from &amp;Application Menu</source>
-        <translation>Uit &amp;toepassingsmenu verwijderen</translation>
     </message>
     <message>
         <source>Save</source>
@@ -11796,10 +12813,6 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
 %1</translation>
     </message>
     <message>
-        <source>Snapshot taken of %1.</source>
-        <translation>Momentopname gemaakt van %1.</translation>
-    </message>
-    <message>
         <source>&amp;File</source>
         <translation>&amp;Bestand</translation>
     </message>
@@ -11809,7 +12822,7 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>&amp;Back Up</source>
-        <translation>&amp;Back-up</translation>
+        <translation>Back-&amp;up</translation>
     </message>
     <message>
         <source>&amp;Import</source>
@@ -11836,19 +12849,15 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
         <translation>&amp;%1-project…</translation>
     </message>
     <message>
-        <source>Compare and &amp;Transfer</source>
-        <translation>Vergelijken en &amp;overbrengen</translation>
+        <source>Compare an&amp;d Transfer</source>
+        <translation>Ver&amp;gelijken en overbrengen</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
         <translation>B&amp;ewerken</translation>
     </message>
     <message>
-        <source>&amp;Select</source>
-        <translation>&amp;Selecteren</translation>
-    </message>
-    <message>
-        <source>&amp;Find</source>
+        <source>F&amp;ind</source>
         <translation>&amp;Zoeken</translation>
     </message>
     <message>
@@ -11857,7 +12866,7 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>&amp;Writing Tools</source>
-        <translation>&amp;Schrijfhulpmiddelen</translation>
+        <translation>S&amp;chrijfhulpmiddelen</translation>
     </message>
     <message>
         <source>&amp;Insert</source>
@@ -11900,7 +12909,7 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
         <translation>A, B, C …</translation>
     </message>
     <message>
-        <source>&amp;Placeholders</source>
+        <source>Plac&amp;eholders</source>
         <translation>&amp;Plaatsvervangers</translation>
     </message>
     <message>
@@ -11925,7 +12934,7 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>&amp;Special Characters</source>
-        <translation>Speciale &amp;tekens</translation>
+        <translation>&amp;Speciale tekens</translation>
     </message>
     <message>
         <source>Em dash —</source>
@@ -11961,39 +12970,39 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>La&amp;yout</source>
-        <translation>&amp;Lay-out</translation>
+        <translation>La&amp;y-out</translation>
     </message>
     <message>
         <source>Tool&amp;bars</source>
-        <translation>Werk&amp;balken</translation>
+        <translation>&amp;Werkbalken</translation>
     </message>
     <message>
         <source>&amp;Themes</source>
-        <translation>&amp;Thema&apos;s</translation>
+        <translation>The&amp;ma&apos;s</translation>
     </message>
     <message>
         <source>&amp;Profiles</source>
-        <translation>&amp;Profielen</translation>
+        <translation>Pro&amp;fielen</translation>
     </message>
     <message>
-        <source>&amp;Text Editing</source>
+        <source>Te&amp;xt Editing</source>
         <translation>&amp;Tekstbewerking</translation>
     </message>
     <message>
-        <source>&amp;Corkboard Options</source>
-        <translation>&amp;Prikbordopties</translation>
+        <source>Cor&amp;kboard Options</source>
+        <translation>P&amp;rikbordopties</translation>
     </message>
     <message>
-        <source>&amp;Outliner Options</source>
-        <translation>&amp;Overzichtsopties</translation>
+        <source>Out&amp;liner Options</source>
+        <translation>Ov&amp;erzichtsopties</translation>
     </message>
     <message>
         <source>The columns are listed here while an outliner is shown</source>
         <translation>De kolommen staan hier terwijl een overzicht wordt getoond</translation>
     </message>
     <message>
-        <source>Use Label Color &amp;In</source>
-        <translation>Labelkleur gebruiken &amp;in</translation>
+        <source>&amp;Use Label Color In</source>
+        <translation>Label&amp;kleur gebruiken in</translation>
     </message>
     <message>
         <source>&amp;Binder</source>
@@ -12001,11 +13010,15 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>I&amp;cons</source>
-        <translation>P&amp;ictogrammen</translation>
+        <translation>&amp;Pictogrammen</translation>
     </message>
     <message>
         <source>&amp;Index Cards</source>
         <translation>&amp;Indexkaarten</translation>
+    </message>
+    <message>
+        <source>S&amp;mall Interface</source>
+        <translation>K&amp;leine interface</translation>
     </message>
     <message>
         <source>&amp;Navigate</source>
@@ -12032,20 +13045,28 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
         <translation>&amp;Openen</translation>
     </message>
     <message>
-        <source>in &amp;Editor</source>
-        <translation>in &amp;editor</translation>
+        <source>In &amp;Editor</source>
+        <translation>In &amp;editor</translation>
     </message>
     <message>
-        <source>in &amp;Other Editor</source>
-        <translation>in &amp;andere editor</translation>
+        <source>In &amp;Other Editor</source>
+        <translation>In &amp;andere editor</translation>
     </message>
     <message>
-        <source>in &amp;Copyholder</source>
-        <translation>in &amp;kopijhouder</translation>
+        <source>In &amp;Copyholder</source>
+        <translation>In &amp;kopijhouder</translation>
     </message>
     <message>
-        <source>as &amp;Quick Reference</source>
-        <translation>als &amp;snelle naslag</translation>
+        <source>As &amp;Quick Reference</source>
+        <translation>Als &amp;snelle naslag</translation>
+    </message>
+    <message>
+        <source>At &amp;Selection</source>
+        <translation>Bij &amp;selectie</translation>
+    </message>
+    <message>
+        <source>With Selection as &amp;Title</source>
+        <translation>Met selectie als &amp;titel</translation>
     </message>
     <message>
         <source>Open &amp;Quick Reference</source>
@@ -12056,8 +13077,8 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
         <translation>&amp;Editor</translation>
     </message>
     <message>
-        <source>&amp;Binder Selection Affects</source>
-        <translation>&amp;Selectie in de Binder werkt op</translation>
+        <source>Binder &amp;Selection Affects</source>
+        <translation>Selectie in de Binder &amp;werkt op</translation>
     </message>
     <message>
         <source>&amp;Inspect</source>
@@ -12068,8 +13089,8 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
         <translation>&amp;Project</translation>
     </message>
     <message>
-        <source>New From &amp;Template</source>
-        <translation>Nieuw uit &amp;sjabloon</translation>
+        <source>&amp;New From Template</source>
+        <translation>&amp;Nieuw uit sjabloon</translation>
     </message>
     <message>
         <source>No templates folder set for this project</source>
@@ -12089,15 +13110,7 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>S&amp;plit</source>
-        <translation>S&amp;plitsen</translation>
-    </message>
-    <message>
-        <source>at &amp;Selection</source>
-        <translation>bij &amp;selectie</translation>
-    </message>
-    <message>
-        <source>with Selection as &amp;Title</source>
-        <translation>met selectie als &amp;titel</translation>
+        <translation>Spl&amp;itsen</translation>
     </message>
     <message>
         <source>&amp;Merge</source>
@@ -12105,15 +13118,15 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>Con&amp;vert</source>
-        <translation>&amp;Omzetten</translation>
+        <translation>O&amp;mzetten</translation>
     </message>
     <message>
-        <source>Change &amp;Icon</source>
-        <translation>&amp;Pictogram wijzigen</translation>
+        <source>&amp;Change Icon</source>
+        <translation>Pictogram &amp;wijzigen</translation>
     </message>
     <message>
-        <source>Default &amp;Template for Subdocuments</source>
-        <translation>Standaard&amp;sjabloon voor subdocumenten</translation>
+        <source>Default Template &amp;for Subdocuments</source>
+        <translation>&amp;Standaardsjabloon voor subdocumenten</translation>
     </message>
     <message>
         <source>&amp;Label</source>
@@ -12121,7 +13134,7 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>&amp;Status</source>
-        <translation>&amp;Status</translation>
+        <translation>St&amp;atus</translation>
     </message>
     <message>
         <source>No %1</source>
@@ -12133,7 +13146,7 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>F&amp;ormat</source>
-        <translation>O&amp;pmaak</translation>
+        <translation>&amp;Opmaak</translation>
     </message>
     <message>
         <source>&amp;Font</source>
@@ -12144,8 +13157,8 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
         <translation>&amp;Alinea</translation>
     </message>
     <message>
-        <source>&amp;Line Spacing</source>
-        <translation>&amp;Regelafstand</translation>
+        <source>Line &amp;Spacing</source>
+        <translation>R&amp;egelafstand</translation>
     </message>
     <message>
         <source>Other…</source>
@@ -12157,7 +13170,7 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     </message>
     <message>
         <source>&amp;Lists</source>
-        <translation>&amp;Lijsten</translation>
+        <translation>L&amp;ijsten</translation>
     </message>
     <message>
         <source>&amp;Table</source>
@@ -12176,7 +13189,7 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
         <translation>&amp;Help</translation>
     </message>
     <message>
-        <source>&amp;Add-ons and Updates</source>
+        <source>Add-&amp;ons and Updates</source>
         <translation>&amp;Add-ons en updates</translation>
     </message>
     <message>
@@ -12190,10 +13203,6 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
     <message>
         <source>Show or hide the binder, the collections and the inspector; layouts</source>
         <translation>De Binder, de verzamelingen en de Inspector tonen of verbergen; lay-outs</translation>
-    </message>
-    <message>
-        <source>Search in &amp;Document…</source>
-        <translation>Zoeken in &amp;document…</translation>
     </message>
     <message>
         <source>Quick search (titles, synopses, text)</source>
@@ -12320,16 +13329,16 @@ Je kunt dit later doen met Help &gt; Aan toepassingsmenu toevoegen.</translation
         <translation>Ook de venstergrootte onthouden</translation>
     </message>
     <message>
-        <source>&amp;Install Font Files…</source>
+        <source>I&amp;nstall Font Files…</source>
         <translation>Lettertypebestanden &amp;installeren…</translation>
     </message>
     <message>
-        <source>Open &amp;Font Folder</source>
-        <translation>&amp;Lettertypemap openen</translation>
+        <source>&amp;Open Font Folder</source>
+        <translation>Lettertype&amp;map openen</translation>
     </message>
     <message>
-        <source>Open Font &amp;Manager of the Desktop</source>
-        <translation>&amp;Lettertypebeheer van het bureaublad openen</translation>
+        <source>Open Font Manager of &amp;the Desktop</source>
+        <translation>Lettertypebe&amp;heer van het bureaublad openen</translation>
     </message>
     <message>
         <source>Font Manager</source>
@@ -12347,7 +13356,7 @@ Lettertypen kunnen hier worden geïnstalleerd met Opmaak &gt; Lettertype &gt; Le
     </message>
     <message>
         <source>&amp;Reload Font List</source>
-        <translation>Lettertypelijst opnieuw &amp;laden</translation>
+        <translation>Lettertypelijst op&amp;nieuw laden</translation>
     </message>
     <message>
         <source>Fonts</source>
@@ -12370,7 +13379,7 @@ Lettertypen kunnen hier worden geïnstalleerd met Opmaak &gt; Lettertype &gt; Le
         <translation>Pictogram op &amp;standaard terugzetten</translation>
     </message>
     <message>
-        <source>Icon from &amp;Text…</source>
+        <source>Icon From &amp;Text…</source>
         <translation>Pictogram uit &amp;tekst…</translation>
     </message>
     <message>
@@ -12379,11 +13388,11 @@ Lettertypen kunnen hier worden geïnstalleerd met Opmaak &gt; Lettertype &gt; Le
     </message>
     <message>
         <source>&amp;Icon Bar</source>
-        <translation>&amp;Pictogrammenbalk</translation>
+        <translation>P&amp;ictogrammenbalk</translation>
     </message>
     <message>
         <source>Choose Icons for the Icon &amp;Bar…</source>
-        <translation>Pictogrammen voor de &amp;pictogrammenbalk kiezen…</translation>
+        <translation>&amp;Pictogrammen voor de pictogrammenbalk kiezen…</translation>
     </message>
     <message>
         <source>Compare with &amp;File…</source>
@@ -12658,6 +13667,10 @@ maar dit venster kon het origineel niet verlaten. Open het nieuwe project via Be
         <translation>Opgeslagen als %1. Het origineel blijft zoals het was: %2</translation>
     </message>
     <message>
+        <source>This project is encrypted, and Scrivener cannot read encrypted files. To save it in Scrivener format, turn off the encryption of the project first (File &gt; Options &gt; Encryption); a copy in Quillbinder&apos;s format stays encrypted.</source>
+        <translation>Dit project is versleuteld en Scrivener kan versleutelde bestanden niet lezen. Zet om het in Scrivener-formaat op te slaan eerst de versleuteling van het project uit (Bestand &gt; Opties &gt; Versleuteling); een kopie in het formaat van Quillbinder blijft versleuteld.</translation>
+    </message>
+    <message>
         <source>Save a Copy as Scrivener Project</source>
         <translation>Een kopie opslaan als Scrivener-project</translation>
     </message>
@@ -12888,19 +13901,19 @@ Het project waaraan je werkt, blijft waar het is.</translation>
     </message>
     <message>
         <source>Skip &amp;Back</source>
-        <translation>Terug&amp;spoelen</translation>
+        <translation>&amp;Terugspoelen</translation>
     </message>
     <message>
         <source>Skip &amp;Forward</source>
-        <translation>Vooruit&amp;spoelen</translation>
+        <translation>&amp;Vooruitspoelen</translation>
     </message>
     <message>
         <source>Pause and &amp;Rewind</source>
-        <translation>Pauzeren en &amp;terugspoelen</translation>
+        <translation>Pau&amp;zeren en terugspoelen</translation>
     </message>
     <message>
         <source>F&amp;aster</source>
-        <translation>&amp;Sneller</translation>
+        <translation>Sn&amp;eller</translation>
     </message>
     <message>
         <source>S&amp;lower</source>
@@ -12912,7 +13925,7 @@ Het project waaraan je werkt, blijft waar het is.</translation>
     </message>
     <message>
         <source>Volume &amp;Up</source>
-        <translation>Volume &amp;omhoog</translation>
+        <translation>Volume o&amp;mhoog</translation>
     </message>
     <message>
         <source>Volume &amp;Down</source>
@@ -12940,23 +13953,23 @@ Het project waaraan je werkt, blijft waar het is.</translation>
     </message>
     <message>
         <source>Skip &amp;Back %1 Seconds</source>
-        <translation>%1 seconden terug&amp;spoelen</translation>
+        <translation>%1 seconden &amp;terugspoelen</translation>
     </message>
     <message>
         <source>Skip &amp;Forward %1 Seconds</source>
-        <translation>%1 seconden vooruit&amp;spoelen</translation>
+        <translation>%1 seconden &amp;vooruitspoelen</translation>
     </message>
     <message>
         <source>No timestamp (such as [03:07]) in the line of the cursor.</source>
         <translation>Geen tijdstempel (zoals [03:07]) in de regel van de cursor.</translation>
     </message>
     <message>
-        <source>Editor in the &amp;Middle</source>
+        <source>&amp;Editor in the Middle</source>
         <translation>Editor in het &amp;midden</translation>
     </message>
     <message>
         <source>Editor at the &amp;Bottom</source>
-        <translation>Editor &amp;onderaan</translation>
+        <translation>&amp;Editor onderaan</translation>
     </message>
     <message>
         <source>Binder &amp;Left</source>
@@ -12991,7 +14004,7 @@ Het project waaraan je werkt, blijft waar het is.</translation>
         <translation>Inspector, editor, Binder</translation>
     </message>
     <message>
-        <source>&amp;Reset Layout</source>
+        <source>Rese&amp;t Layout</source>
         <translation>Lay-out &amp;herstellen</translation>
     </message>
     <message>
@@ -13007,8 +14020,8 @@ Het project waaraan je werkt, blijft waar het is.</translation>
         <translation>Script&amp;instellingen…</translation>
     </message>
     <message>
-        <source>S&amp;criptwriting</source>
-        <translation>Script&amp;schrijven</translation>
+        <source>Script&amp;writing</source>
+        <translation>S&amp;criptschrijven</translation>
     </message>
     <message>
         <source>Change &amp;Element To</source>
@@ -13112,17 +14125,26 @@ Er bestaat geen element van dezelfde soort voor: %1. Hun alinea&apos;s worden al
         <source>Delete Old Snapshots</source>
         <translation>Oude momentopnamen verwijderen</translation>
     </message>
-    <message>
-        <source>Delete all %1 of %2 forever?</source>
-        <translation>Alle %1 van %2 voorgoed verwijderen?</translation>
+    <message numerus="yes">
+        <source>Delete all %Ln snapshot(s) of %1 forever?</source>
+        <translation>
+            <numerusform>De %Ln momentopname van %1 definitief verwijderen?</numerusform>
+            <numerusform>Alle %Ln momentopnamen van %1 definitief verwijderen?</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>snapshot</source>
-        <translation>momentopname</translation>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation>
+            <numerusform>%Ln document</numerusform>
+            <numerusform>%Ln documenten</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>snapshots</source>
-        <translation>momentopnamen</translation>
+    <message numerus="yes">
+        <source>%Ln snapshot(s) deleted.</source>
+        <translation>
+            <numerusform>%Ln momentopname verwijderd.</numerusform>
+            <numerusform>%Ln momentopnamen verwijderd.</numerusform>
+        </translation>
     </message>
     <message>
         <source>They take %1. The texts stay as they are now; only their earlier versions go, also those of documents in the Trash. This cannot be undone: a backup (File &gt; Back Up) beforehand is a good idea.</source>
@@ -13131,10 +14153,6 @@ Er bestaat geen element van dezelfde soort voor: %1. Hun alinea&apos;s worden al
     <message>
         <source>Delete Snapshots</source>
         <translation>Momentopnamen verwijderen</translation>
-    </message>
-    <message>
-        <source>%1 deleted.</source>
-        <translation>%1 verwijderd.</translation>
     </message>
     <message>
         <source>Save Project Settings</source>
@@ -13488,7 +14506,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
         <translation>Andere versies worden nog steeds bewaard; alleen deze melding blijft weg totdat je het programma afsluit.</translation>
     </message>
     <message>
-        <source>Speech &amp;Transcription…</source>
+        <source>&amp;Speech Transcription…</source>
         <translation>Spraak&amp;transcriptie…</translation>
     </message>
     <message>
@@ -13597,7 +14615,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Redo %1</source>
-        <translation>%1 &amp;opnieuw</translation>
+        <translation>%1 opnieuw &amp;uitvoeren</translation>
     </message>
     <message>
         <source>Undo</source>
@@ -13605,7 +14623,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Redo</source>
-        <translation>Opnieuw</translation>
+        <translation>Opnieuw uitvoeren</translation>
     </message>
     <message>
         <source>Undo %1</source>
@@ -13617,11 +14635,11 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Redo %1</source>
-        <translation>%1 opnieuw</translation>
+        <translation>%1 opnieuw uitvoeren</translation>
     </message>
     <message>
         <source>Nothing to redo in the field that has the keyboard</source>
-        <translation>Niets opnieuw te doen in het veld dat het toetsenbord heeft</translation>
+        <translation>Niets opnieuw uit te voeren in het veld met de toetsenbordfocus</translation>
     </message>
     <message>
         <source>Nothing to undo</source>
@@ -13629,11 +14647,14 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Nothing to redo</source>
-        <translation>Niets opnieuw te doen</translation>
+        <translation>Niets opnieuw uit te voeren</translation>
     </message>
-    <message>
-        <source>and %1 earlier steps</source>
-        <translation>en %1 eerdere stappen</translation>
+    <message numerus="yes">
+        <source>and %Ln earlier step(s)</source>
+        <translation>
+            <numerusform>en %Ln eerdere stap</numerusform>
+            <numerusform>en %Ln eerdere stappen</numerusform>
+        </translation>
     </message>
     <message>
         <source>&amp;Manage Profiles…</source>
@@ -13690,6 +14711,86 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     <message>
         <source>The profile sets another language; it takes effect when the program is started again.</source>
         <translation>Het profiel stelt een andere taal in; die gaat in als het programma opnieuw wordt gestart.</translation>
+    </message>
+    <message>
+        <source>&amp;Read Aloud</source>
+        <translation>&amp;Voorlezen</translation>
+    </message>
+    <message>
+        <source>Read Aloud</source>
+        <translation>Voorlezen</translation>
+    </message>
+    <message>
+        <source>Sm&amp;all Interface</source>
+        <translation>Kleine &amp;interface</translation>
+    </message>
+    <message>
+        <source>A few round buttons and the most room for the text, for a small screen or for use without a keyboard</source>
+        <translation>Een paar ronde knoppen en zoveel mogelijk ruimte voor de tekst, voor een klein scherm of gebruik zonder toetsenbord</translation>
+    </message>
+    <message>
+        <source>&amp;Full</source>
+        <translation>&amp;Volledig</translation>
+    </message>
+    <message>
+        <source>&amp;Automatic</source>
+        <translation>&amp;Automatisch</translation>
+    </message>
+    <message>
+        <source>Switch to the &amp;Full Interface</source>
+        <translation>Overschakelen naar de &amp;volledige interface</translation>
+    </message>
+    <message>
+        <source>Binder</source>
+        <translation>Binder</translation>
+    </message>
+    <message>
+        <source>Notes</source>
+        <translation>Notities</translation>
+    </message>
+    <message>
+        <source>The notes of the document, in a panel</source>
+        <translation>De notities van het document, in een paneel</translation>
+    </message>
+    <message>
+        <source>The binder, in a panel</source>
+        <translation>De binder, in een paneel</translation>
+    </message>
+    <message>
+        <source>Record Only</source>
+        <translation>Alleen opnemen</translation>
+    </message>
+    <message>
+        <source>Small Interface</source>
+        <translation>Kleine interface</translation>
+    </message>
+    <message>
+        <source>Menu: all the menus of the program</source>
+        <translation>Menu: alle menu’s van het programma</translation>
+    </message>
+    <message>
+        <source>Style: choose a style for the paragraph</source>
+        <translation>Stijl: kies een stijl voor de alinea</translation>
+    </message>
+    <message>
+        <source>Labels and icons of the selected documents</source>
+        <translation>Labels en pictogrammen van de geselecteerde documenten</translation>
+    </message>
+    <message>
+        <source>Stop recording</source>
+        <translation>Opname stoppen</translation>
+    </message>
+    <message>
+        <source>Record only: the sound is kept and its text can be written later</source>
+        <translation>Alleen opnemen: het geluid wordt bewaard en de tekst kan later worden geschreven</translation>
+    </message>
+    <message>
+        <source>Record Only is off: the installed Speech Transcription add-on is too old. Update it in the Add-on Manager.</source>
+        <translation>Alleen opnemen is uit: de geïnstalleerde add-on Spraaktranscriptie is te oud. Werk hem bij in het Add-onbeheer.</translation>
+    </message>
+    <message>
+        <source>Record Only is off: it needs the add-on Speech Transcription, which is not installed. The Add-on Manager can add it.</source>
+        <translation>Alleen opnemen is uit: het heeft de add-on Spraaktranscriptie nodig, die niet is geïnstalleerd. Het Add-onbeheer kan hem toevoegen.</translation>
     </message>
 </context>
 <context>
@@ -13778,7 +14879,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>The previous hit (Shift+Return)</source>
-        <translation>Het vorige resultaat (Shift+Return)</translation>
+        <translation>Het vorige resultaat (Shift+Enter)</translation>
     </message>
     <message>
         <source>Next</source>
@@ -13786,7 +14887,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>The next hit (Return)</source>
-        <translation>Het volgende resultaat (Return)</translation>
+        <translation>Het volgende resultaat (Enter)</translation>
     </message>
     <message>
         <source>Contents</source>
@@ -13924,7 +15025,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Plain &amp;Text (.txt)…</source>
-        <translation>&amp;Platte tekst (.txt)…</translation>
+        <translation>Platte &amp;tekst (.txt)…</translation>
     </message>
     <message>
         <source>&amp;Rich Text (.rtf)…</source>
@@ -13948,7 +15049,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Import Mind Map or Scapple File…</source>
-        <translation>Mindmap- of Scapple-bestand &amp;importeren…</translation>
+        <translation>&amp;Mindmap- of Scapple-bestand importeren…</translation>
     </message>
     <message>
         <source>Prevent &amp;Editing</source>
@@ -13961,10 +15062,6 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     <message>
         <source>Page Set&amp;up…</source>
         <translation>Pagina-&amp;instelling…</translation>
-    </message>
-    <message>
-        <source>Print Pre&amp;view…</source>
-        <translation>Afdrukvoor&amp;beeld…</translation>
     </message>
     <message>
         <source>&amp;Print…</source>
@@ -13984,15 +15081,15 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Open in &amp;Window</source>
-        <translation>In &amp;venster openen</translation>
+        <translation>In venster &amp;openen</translation>
     </message>
     <message>
         <source>&amp;Undo</source>
-        <translation>&amp;Ongedaan maken</translation>
+        <translation>Ongedaan &amp;maken</translation>
     </message>
     <message>
         <source>&amp;Redo</source>
-        <translation>&amp;Opnieuw</translation>
+        <translation>Opnieuw &amp;uitvoeren</translation>
     </message>
     <message>
         <source>Cu&amp;t</source>
@@ -14000,7 +15097,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>K&amp;opiëren</translation>
+        <translation>Kop&amp;iëren</translation>
     </message>
     <message>
         <source>&amp;Paste</source>
@@ -14008,11 +15105,11 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation>&amp;Verwijderen</translation>
+        <translation>Ver&amp;wijderen</translation>
     </message>
     <message>
         <source>Arrow Keys &amp;Move Notes</source>
-        <translation>Met pijltjestoetsen notities &amp;verplaatsen</translation>
+        <translation>Met pijltjestoetsen &amp;notities verplaatsen</translation>
     </message>
     <message>
         <source>Select &amp;All</source>
@@ -14036,7 +15133,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Invert Selection</source>
-        <translation>Selectie &amp;omkeren</translation>
+        <translation>S&amp;electie omkeren</translation>
     </message>
     <message>
         <source>D&amp;eselect</source>
@@ -14044,7 +15141,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Add &amp;Link…</source>
-        <translation>&amp;Koppeling toevoegen…</translation>
+        <translation>Koppeling &amp;toevoegen…</translation>
     </message>
     <message>
         <source>&amp;Find…</source>
@@ -14056,7 +15153,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Find Pre&amp;vious</source>
-        <translation>Vorige &amp;zoeken</translation>
+        <translation>V&amp;orige zoeken</translation>
     </message>
     <message>
         <source>&amp;Use Selection for Find</source>
@@ -14064,7 +15161,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Jump to Selection</source>
-        <translation>&amp;Naar selectie springen</translation>
+        <translation>Naar selectie spri&amp;ngen</translation>
     </message>
     <message>
         <source>Show &amp;Inspector</source>
@@ -14084,19 +15181,11 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Actual Size</source>
-        <translation>&amp;Ware grootte</translation>
+        <translation>Ware &amp;grootte</translation>
     </message>
     <message>
         <source>Zoom to &amp;Fit</source>
-        <translation>Zoomen om te &amp;passen</translation>
-    </message>
-    <message>
-        <source>Zoom &amp;In</source>
-        <translation>&amp;Inzoomen</translation>
-    </message>
-    <message>
-        <source>Zoom &amp;Out</source>
-        <translation>&amp;Uitzoomen</translation>
+        <translation>&amp;Zoomen om te passen</translation>
     </message>
     <message>
         <source>Zoom to &amp;Selection</source>
@@ -14108,11 +15197,11 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;New Note</source>
-        <translation>&amp;Nieuwe notitie</translation>
+        <translation>N&amp;ieuwe notitie</translation>
     </message>
     <message>
         <source>New &amp;Background Shape</source>
-        <translation>Nieuwe &amp;achtergrondvorm</translation>
+        <translation>Nieuwe a&amp;chtergrondvorm</translation>
     </message>
     <message>
         <source>On &amp;Left</source>
@@ -14128,7 +15217,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Below</source>
-        <translation>&amp;Eronder</translation>
+        <translation>Eron&amp;der</translation>
     </message>
     <message>
         <source>%1 With Arrow</source>
@@ -14136,23 +15225,23 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Connect</source>
-        <translation>&amp;Verbinden</translation>
+        <translation>Ver&amp;binden</translation>
     </message>
     <message>
         <source>Connect A&amp;ll</source>
-        <translation>&amp;Alles verbinden</translation>
+        <translation>Alles ve&amp;rbinden</translation>
     </message>
     <message>
         <source>Connect &amp;With Arrow</source>
-        <translation>Verbinden &amp;met pijl</translation>
+        <translation>V&amp;erbinden met pijl</translation>
     </message>
     <message>
         <source>Remove &amp;Arrows</source>
-        <translation>&amp;Pijlen verwijderen</translation>
+        <translation>Pi&amp;jlen verwijderen</translation>
     </message>
     <message>
         <source>&amp;Disconnect</source>
-        <translation>Verbinding &amp;verbreken</translation>
+        <translation>&amp;Verbinding verbreken</translation>
     </message>
     <message>
         <source>Connection La&amp;bel…</source>
@@ -14168,7 +15257,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Auto-&amp;Fit</source>
-        <translation>&amp;Automatisch passend</translation>
+        <translation>Automatisch &amp;passend</translation>
     </message>
     <message>
         <source>&amp;Left Edges</source>
@@ -14200,11 +15289,11 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Center Hori&amp;zontally in Background Shape</source>
-        <translation>Horizontaal cen&amp;treren in achtergrondvorm</translation>
+        <translation>Horizon&amp;taal centreren in achtergrondvorm</translation>
     </message>
     <message>
         <source>Center Verticall&amp;y in Background Shape</source>
-        <translation>Verticaal cent&amp;reren in achtergrondvorm</translation>
+        <translation>Verticaal centreren in &amp;achtergrondvorm</translation>
     </message>
     <message>
         <source>&amp;Horizontally</source>
@@ -14216,23 +15305,23 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Make Same &amp;Width</source>
-        <translation>Even &amp;breed maken</translation>
+        <translation>Even breed ma&amp;ken</translation>
     </message>
     <message>
         <source>Make Same &amp;Height</source>
-        <translation>Even &amp;hoog maken</translation>
+        <translation>Even h&amp;oog maken</translation>
     </message>
     <message>
         <source>S&amp;plit</source>
-        <translation>S&amp;plitsen</translation>
+        <translation>Splitse&amp;n</translation>
     </message>
     <message>
         <source>Mer&amp;ge</source>
-        <translation>Sa&amp;menvoegen</translation>
+        <translation>Samenvoe&amp;gen</translation>
     </message>
     <message>
         <source>Bring to &amp;Front</source>
-        <translation>Naar &amp;voren halen</translation>
+        <translation>Naar voren &amp;halen</translation>
     </message>
     <message>
         <source>Bring to Front</source>
@@ -14248,7 +15337,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Add Notes to the B&amp;inder</source>
-        <translation>Notities aan de B&amp;inder toevoegen</translation>
+        <translation>Notities aan de Binder &amp;toevoegen</translation>
     </message>
     <message>
         <source>&amp;New Note Style From Selection…</source>
@@ -14269,10 +15358,6 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     <message>
         <source>&amp;Default</source>
         <translation>&amp;Standaard</translation>
-    </message>
-    <message>
-        <source>&amp;Bold</source>
-        <translation>&amp;Vet</translation>
     </message>
     <message>
         <source>&amp;Italic</source>
@@ -14324,11 +15409,11 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Decrease Indent Level</source>
-        <translation>Inspringniveau &amp;verkleinen</translation>
+        <translation>&amp;Inspringniveau verkleinen</translation>
     </message>
     <message>
         <source>&amp;Remove Indents</source>
-        <translation>Inspringingen &amp;verwijderen</translation>
+        <translation>I&amp;nspringingen verwijderen</translation>
     </message>
     <message>
         <source>Remove Indents</source>
@@ -14384,7 +15469,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Jagged</source>
-        <translation>&amp;Gekarteld</translation>
+        <translation>G&amp;ekarteld</translation>
     </message>
     <message>
         <source>&amp;Cloud</source>
@@ -14400,11 +15485,11 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>S&amp;hadow</source>
-        <translation>S&amp;chaduw</translation>
+        <translation>Scha&amp;duw</translation>
     </message>
     <message>
         <source>F&amp;ade</source>
-        <translation>&amp;Vervagen</translation>
+        <translation>Verva&amp;gen</translation>
     </message>
     <message>
         <source>&amp;Export</source>
@@ -14415,12 +15500,8 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
         <translation>&amp;Selecteren</translation>
     </message>
     <message>
-        <source>&amp;Find</source>
-        <translation>&amp;Zoeken</translation>
-    </message>
-    <message>
         <source>New &amp;Connected Note</source>
-        <translation>Nieuwe &amp;verbonden notitie</translation>
+        <translation>Nieu&amp;we verbonden notitie</translation>
     </message>
     <message>
         <source>&amp;Align</source>
@@ -14428,7 +15509,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Distribute</source>
-        <translation>&amp;Verdelen</translation>
+        <translation>Ver&amp;delen</translation>
     </message>
     <message>
         <source>Default for Dark Themes</source>
@@ -14444,19 +15525,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Note &amp;Style</source>
-        <translation>Notitie&amp;stijl</translation>
-    </message>
-    <message>
-        <source>&amp;Apply Note Style</source>
-        <translation>Notitiestijl &amp;toepassen</translation>
-    </message>
-    <message>
-        <source>&amp;Redefine Note Style From Selection</source>
-        <translation>Notitiestijl &amp;opnieuw definiëren uit selectie</translation>
-    </message>
-    <message>
-        <source>&amp;Delete Note Style</source>
-        <translation>Notitiestijl &amp;verwijderen</translation>
+        <translation>&amp;Notitiestijl</translation>
     </message>
     <message>
         <source>&amp;Font</source>
@@ -14472,7 +15541,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Background Color</source>
-        <translation>&amp;Achtergrondkleur</translation>
+        <translation>Ac&amp;htergrondkleur</translation>
     </message>
     <message>
         <source>&amp;Colors</source>
@@ -14484,7 +15553,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Icons</source>
-        <translation>&amp;Pictogrammen</translation>
+        <translation>Pi&amp;ctogrammen</translation>
     </message>
     <message>
         <source>&amp;Writing Direction</source>
@@ -14496,11 +15565,11 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>Apply &amp;Style</source>
-        <translation>&amp;Stijl toepassen</translation>
+        <translation>Sti&amp;jl toepassen</translation>
     </message>
     <message>
         <source>&amp;Fill Color</source>
-        <translation>&amp;Vulkleur</translation>
+        <translation>V&amp;ulkleur</translation>
     </message>
     <message>
         <source>&amp;Text Color</source>
@@ -14660,7 +15729,7 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
     </message>
     <message>
         <source>&amp;Redo %1</source>
-        <translation>%1 &amp;opnieuw</translation>
+        <translation>%1 opnieuw &amp;uitvoeren</translation>
     </message>
     <message>
         <source>&amp;New Stacked Note</source>
@@ -14851,8 +15920,44 @@ Een momentopname kun je met de tekst vergelijken op het tabblad Momentopnamen va
         <translation>Notitiestijl opnieuw definiëren</translation>
     </message>
     <message>
+        <source>Print Pre&amp;view</source>
+        <translation>Afdruk&amp;voorbeeld</translation>
+    </message>
+    <message>
+        <source>Zoom &amp;In</source>
+        <translation>I&amp;nzoomen</translation>
+    </message>
+    <message>
+        <source>Zoom &amp;Out</source>
+        <translation>&amp;Uitzoomen</translation>
+    </message>
+    <message>
+        <source>&amp;Bold</source>
+        <translation>&amp;Vet</translation>
+    </message>
+    <message>
+        <source>&amp;Find</source>
+        <translation>&amp;Zoeken</translation>
+    </message>
+    <message>
+        <source>&amp;Redefine Note Style From Selection…</source>
+        <translation>Notitiestijl &amp;opnieuw definiëren uit selectie…</translation>
+    </message>
+    <message>
+        <source>Note style to redefine from the selected note:</source>
+        <translation>Notitiestijl die opnieuw moet worden gedefinieerd uit de geselecteerde notitie:</translation>
+    </message>
+    <message>
+        <source>&amp;Delete Note Style…</source>
+        <translation>Notitiestijl &amp;verwijderen…</translation>
+    </message>
+    <message>
         <source>Delete Note Style</source>
         <translation>Notitiestijl verwijderen</translation>
+    </message>
+    <message>
+        <source>Note style to delete:</source>
+        <translation>Te verwijderen notitiestijl:</translation>
     </message>
     <message>
         <source>Import Note Styles</source>
@@ -15580,7 +16685,7 @@ Hij wordt getoond voor zover hij kon worden gelezen en kan niet worden gewijzigd
     </message>
     <message>
         <source>This is the mind map of &quot;%1&quot;, not of the selected item. The pin button releases it.</source>
-        <translation>Dit is de mindmap van &quot;%1&quot;, niet van het geselecteerde item. De pushpin-knop maakt hem los.</translation>
+        <translation>Dit is de mindmap van &quot;%1&quot;, niet van het geselecteerde item. De knop Vastzetten maakt hem los.</translation>
     </message>
 </context>
 <context>
@@ -16066,6 +17171,10 @@ Doorgaan?</translation>
         <translation>Back-up</translation>
     </message>
     <message>
+        <source>Encryption</source>
+        <translation>Versleuteling</translation>
+    </message>
+    <message>
         <source>Extras</source>
         <translation>Extra&apos;s</translation>
     </message>
@@ -16090,24 +17199,8 @@ Doorgaan?</translation>
         <translation>Add-ons en plug-ins</translation>
     </message>
     <message>
-        <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</source>
-        <translation>Wat je hier wijzigt, wordt bij dit project bewaard. De eigen instellingen ervan: &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt;.</translation>
-    </message>
-    <message>
-        <source>setting</source>
-        <translation>instelling</translation>
-    </message>
-    <message>
-        <source>settings</source>
-        <translation>instellingen</translation>
-    </message>
-    <message>
         <source>What you change here is kept with this project; it has no settings of its own yet.</source>
         <translation>Wat je hier wijzigt, wordt bij dit project bewaard; het heeft nog geen eigen instellingen.</translation>
-    </message>
-    <message>
-        <source>The open project has &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; of its own, which it keeps.</source>
-        <translation>Het geopende project heeft &lt;a href=&quot;show&quot;&gt;%1&lt;/a&gt; van zichzelf, die het bewaart.</translation>
     </message>
     <message>
         <source>Projects&apos; own settings are not used (General &gt; Which settings come first).</source>
@@ -16260,6 +17353,74 @@ Doorgaan?</translation>
     <message>
         <source>Author Information</source>
         <translation>Auteursgegevens</translation>
+    </message>
+    <message>
+        <source>The processor cores that Speech Transcription, Translation Helper, Read Aloud and Handwriting use. Default for this computer: %1 of %2.</source>
+        <translation>De processorkernen die Spraaktranscriptie, Vertaalhulp, Voorlezen en Handschrift gebruiken. Standaard voor deze computer: %1 van %2.</translation>
+    </message>
+    <message>
+        <source>Default (%1)</source>
+        <translation>Standaard (%1)</translation>
+    </message>
+    <message>
+        <source>CPU cores for the AI:</source>
+        <translation>CPU-kernen voor de AI:</translation>
+    </message>
+    <message>
+        <source>One setting for every AI function. The default is three quarters of the cores (rounded down); a computer with 6 cores or fewer keeps one core free. The AI&apos;s work runs at a low priority.</source>
+        <translation>Eén instelling voor elke AI-functie. De standaard is driekwart van de kernen (naar beneden afgerond); een computer met 6 kernen of minder houdt één kern vrij. Het werk van de AI draait met lage prioriteit.</translation>
+    </message>
+    <message>
+        <source>Unload a model after</source>
+        <translation>Een model vrijgeven na</translation>
+    </message>
+    <message>
+        <source>minutes unused</source>
+        <translation>minuten ongebruikt</translation>
+    </message>
+    <message>
+        <source>A model that is not used is unloaded after this time. Before a model loads, when more than half of the memory it needs (the computer&apos;s memory or a graphics card&apos;s) is in use, the model unused longest is unloaded first; when the new model would still bring that memory over 80 %, it is not loaded, and the message line under the inspector says why. When the system reports a shortage of memory, idle models are unloaded at once.</source>
+        <translation>Een model dat niet wordt gebruikt, wordt na deze tijd vrijgegeven. Voordat een model laadt, wordt het langst ongebruikte model eerst vrijgegeven wanneer meer dan de helft van het geheugen dat het nodig heeft (het geheugen van de computer of van een videokaart) in gebruik is; als het nieuwe model dat geheugen nog steeds boven 80 % zou brengen, wordt het niet geladen en zegt de berichtenregel onder de inspector waarom. Meldt het systeem een tekort aan geheugen, dan worden ongebruikte modellen meteen vrijgegeven.</translation>
+    </message>
+    <message>
+        <source>Memory in use:</source>
+        <translation>Geheugen in gebruik:</translation>
+    </message>
+    <message>
+        <source>RAM</source>
+        <translation>RAM</translation>
+    </message>
+    <message>
+        <source>Graphics card %1</source>
+        <translation>Videokaart %1</translation>
+    </message>
+    <message>
+        <source>%1: not known</source>
+        <translation>%1: niet bekend</translation>
+    </message>
+    <message>
+        <source>%1: %2 of %3 in use (%4 %)</source>
+        <translation>%1: %2 van %3 in gebruik (%4 %)</translation>
+    </message>
+    <message>
+        <source>No model is loaded.</source>
+        <translation>Er is geen model geladen.</translation>
+    </message>
+    <message>
+        <source>Loaded models:</source>
+        <translation>Geladen modellen:</translation>
+    </message>
+    <message>
+        <source>AI Models</source>
+        <translation>AI-modellen</translation>
+    </message>
+    <message>
+        <source>Handwriting</source>
+        <translation>Handschrift</translation>
+    </message>
+    <message>
+        <source>Read Aloud</source>
+        <translation>Voorlezen</translation>
     </message>
     <message>
         <source>Scratch Pad</source>
@@ -16751,23 +17912,23 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Return ends editing the synopsis in corkboard and outliner views</source>
-        <translation>Return beëindigt het bewerken van de samenvatting in prikbord- en overzichtsweergave</translation>
+        <translation>Enter beëindigt het bewerken van de samenvatting in prikbord- en overzichtsweergave</translation>
     </message>
     <message>
         <source>Shift+Return then starts a new line in the synopsis.</source>
-        <translation>Shift+Return begint dan een nieuwe regel in de samenvatting.</translation>
+        <translation>Shift+Enter begint dan een nieuwe regel in de samenvatting.</translation>
     </message>
     <message>
         <source>Return creates a new item in corkboard and outliner views</source>
-        <translation>Return maakt een nieuw item in prikbord- en overzichtsweergave</translation>
+        <translation>Enter maakt een nieuw item in prikbord- en overzichtsweergave</translation>
     </message>
     <message>
         <source>Off, Return on a selected card or row edits its title (in the binder Return always makes a new item).</source>
-        <translation>Uitgeschakeld bewerkt Return op een geselecteerde kaart of rij de titel ervan (in de Binder maakt Return altijd een nieuw item).</translation>
+        <translation>Uitgeschakeld bewerkt Enter op een geselecteerde kaart of rij de titel ervan (in de Binder maakt Enter altijd een nieuw item).</translation>
     </message>
     <message>
         <source>Return Key</source>
-        <translation>Returntoets</translation>
+        <translation>Entertoets</translation>
     </message>
     <message>
         <source>Show a notification when snapshots are taken</source>
@@ -16840,10 +18001,6 @@ Doorgaan?</translation>
     <message>
         <source>Small (16 px)</source>
         <translation>Klein (16 px)</translation>
-    </message>
-    <message>
-        <source>Medium (22 px)</source>
-        <translation>Middel (22 px)</translation>
     </message>
     <message>
         <source>Large (32 px)</source>
@@ -16962,16 +18119,8 @@ Doorgaan?</translation>
         <translation>Kleuren en lettertypen zijn die van het thema.</translation>
     </message>
     <message>
-        <source>%1 of your own on top of the theme (shown in bold below).</source>
-        <translation>%1 van jezelf bovenop het thema (hieronder vet weergegeven).</translation>
-    </message>
-    <message>
-        <source>change</source>
-        <translation>wijziging</translation>
-    </message>
-    <message>
-        <source>changes</source>
-        <translation>wijzigingen</translation>
+        <source>Note: your colors %1 on %2 have a contrast of %3 : 1. Text is easier to read from 4.5 : 1.</source>
+        <translation>Let op: je kleuren %1 op %2 hebben een contrast van %3 : 1. Tekst is beter leesbaar vanaf 4,5 : 1.</translation>
     </message>
     <message>
         <source>Auto-Correction</source>
@@ -17329,6 +18478,38 @@ Doorgaan?</translation>
         <source>No folder chosen: no automatic backups</source>
         <translation>Geen map gekozen: geen automatische back-ups</translation>
     </message>
+    <message numerus="yes">
+        <source>What you change here is kept with this project. Its own settings: &lt;a href=&quot;show&quot;&gt;%Ln setting(s)&lt;/a&gt;.</source>
+        <translation>
+            <numerusform>Wat je hier wijzigt, wordt bij dit project bewaard. Eigen instellingen: &lt;a href=&quot;show&quot;&gt;%Ln instelling&lt;/a&gt;.</numerusform>
+            <numerusform>Wat je hier wijzigt, wordt bij dit project bewaard. Eigen instellingen: &lt;a href=&quot;show&quot;&gt;%Ln instellingen&lt;/a&gt;.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>The open project has &lt;a href=&quot;show&quot;&gt;%Ln setting(s)&lt;/a&gt; of its own, which it keeps.</source>
+        <translation>
+            <numerusform>Het geopende project heeft &lt;a href=&quot;show&quot;&gt;%Ln eigen instelling&lt;/a&gt;, die het bewaart.</numerusform>
+            <numerusform>Het geopende project heeft &lt;a href=&quot;show&quot;&gt;%Ln eigen instellingen&lt;/a&gt;, die het bewaart.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <source>Normal (22 px)</source>
+        <translation>Normaal (22 px)</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln change(s) of your own on top of the theme (shown in bold below).</source>
+        <translation>
+            <numerusform>%Ln eigen wijziging bovenop het thema (hieronder vet weergegeven).</numerusform>
+            <numerusform>%Ln eigen wijzigingen bovenop het thema (hieronder vet weergegeven).</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln more pair(s) below it too.</source>
+        <translation>
+            <numerusform>Daaronder staat nog %Ln paar.</numerusform>
+            <numerusform>Daaronder staan nog %Ln paren.</numerusform>
+        </translation>
+    </message>
     <message>
         <source>Open Backup Folder...</source>
         <translation>Back-upmap openen...</translation>
@@ -17499,7 +18680,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Put plugin files (.so libraries or .json command descriptions) into one of these folders and restart:</source>
-        <translation>Zet pluginbestanden (.so-bibliotheken of .json-opdrachtbeschrijvingen) in een van deze mappen en start opnieuw:</translation>
+        <translation>Zet plug-inbestanden (.so-bibliotheken of .json-opdrachtbeschrijvingen) in een van deze mappen en start opnieuw:</translation>
     </message>
     <message>
         <source>Log</source>
@@ -17507,7 +18688,7 @@ Doorgaan?</translation>
     </message>
     <message>
         <source>Open My Plugin Folder</source>
-        <translation>Mijn pluginmap openen</translation>
+        <translation>Mijn plug-inmap openen</translation>
     </message>
     <message>
         <source>Add-ons are installed with Help &gt; Add-ons and Updates &gt; Install Update or Add-on and switched on and off in Help &gt; Add-ons and Updates &gt; Add-on Manager.</source>
@@ -17647,7 +18828,7 @@ Je recente projecten, eigen thema&apos;s, lay-outs, werkbalken en sneltoetsen bl
     </message>
     <message>
         <source>&amp;Size:</source>
-        <translation>&amp;Formaat:</translation>
+        <translation>&amp;Grootte:</translation>
     </message>
     <message>
         <source> cm</source>
@@ -17999,7 +19180,7 @@ Je recente projecten, eigen thema&apos;s, lay-outs, werkbalken en sneltoetsen bl
     </message>
     <message>
         <source>&amp;Size:</source>
-        <translation>&amp;Formaat:</translation>
+        <translation>&amp;Grootte:</translation>
     </message>
     <message>
         <source>&amp;Width:</source>
@@ -18281,17 +19462,12 @@ Je recente projecten, eigen thema&apos;s, lay-outs, werkbalken en sneltoetsen bl
         <source>A card is larger than the paper inside its margins: one card on each sheet, made smaller.</source>
         <translation>Een kaart is groter dan het papier binnen zijn marges: één kaart op elk vel, kleiner gemaakt.</translation>
     </message>
-    <message>
-        <source>%1 on each sheet (%2 × %3) of the paper on the Page tab.</source>
-        <translation>%1 op elk vel (%2 × %3) van het papier op het tabblad Pagina.</translation>
-    </message>
-    <message>
-        <source>card</source>
-        <translation>kaart</translation>
-    </message>
-    <message>
-        <source>cards</source>
-        <translation>kaarten</translation>
+    <message numerus="yes">
+        <source>%Ln card(s) on each sheet (%1 × %2) of the paper on the Page tab.</source>
+        <translation>
+            <numerusform>%Ln kaart op elk vel (%1 × %2) van het papier op het tabblad Pagina.</numerusform>
+            <numerusform>%Ln kaarten op elk vel (%1 × %2) van het papier op het tabblad Pagina.</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -18395,6 +19571,14 @@ Je recente projecten, eigen thema&apos;s, lay-outs, werkbalken en sneltoetsen bl
 </context>
 <context>
     <name>qb::Project</name>
+    <message>
+        <source>The encryption of this project&apos;s files was not finished; some files are still plain. It is finished at the next opening.</source>
+        <translation>De versleuteling van de bestanden van dit project is niet voltooid; sommige bestanden zijn nog gewoon. Ze wordt bij het volgende openen voltooid.</translation>
+    </message>
+    <message>
+        <source>The decryption of this project&apos;s files was not finished; some files are still encrypted. It is finished at the next opening.</source>
+        <translation>De ontsleuteling van de bestanden van dit project is niet voltooid; sommige bestanden zijn nog versleuteld. Ze wordt bij het volgende openen voltooid.</translation>
+    </message>
     <message>
         <source>This project&apos;s folder holds other project files beside &quot;%1&quot;, which was opened: %2. A sync program may have made them (a copy from another computer kept beside yours). Compare them before you go on, and open another one with File &gt; Open Project if it holds your latest work.</source>
         <translation>De map van dit project bevat naast &quot;%1&quot;, dat is geopend, andere projectbestanden: %2. Een synchronisatieprogramma kan ze hebben gemaakt (een kopie van een andere computer, bewaard naast die van jou). Vergelijk ze voordat je verdergaat en open een ander met Bestand &gt; Project openen als het je laatste werk bevat.</translation>
@@ -18504,10 +19688,26 @@ Je recente projecten, eigen thema&apos;s, lay-outs, werkbalken en sneltoetsen bl
         <translation>Kan geen map maken in %1</translation>
     </message>
     <message>
+        <source>The project could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (named by the number of the document: the folder content/&lt;number&gt; of the project holds the document), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %1. Copy what you need back into the project. (Titles and names are left out of this note and of the names in this folder, because the project is encrypted.)
+
+</source>
+        <translation>Het project kon niet worden opgeslagen. Deze map bevat wat nog niet was opgeslagen: teksten en notities als RTF-bestanden (genoemd naar het nummer van het document: de map content/&lt;nummer&gt; van het project bevat het document), mindmapborden, gewijzigde objecten (in de map “objects”) en het projectbestand zoals het in het geheugen was (de binder, titels en labels), als %1. Kopieer wat je nodig hebt terug in het project. (Titels en namen ontbreken in dit bericht en in de namen in deze map, omdat het project versleuteld is.)
+
+</translation>
+    </message>
+    <message>
         <source>The project &quot;%1&quot; (%2) could not be saved. This folder holds what was not saved yet: texts and notes as RTF files (Word, LibreOffice and %3 open them), mind map boards, changed objects (in the folder &quot;objects&quot;) and the project file as it was in memory (the binder, titles and labels), as %4. Copy what you need back into the project.
 
 </source>
         <translation>Het project &quot;%1&quot; (%2) kon niet worden opgeslagen. Deze map bevat wat nog niet was opgeslagen: teksten en notities als RTF-bestanden (Word, LibreOffice en %3 openen ze), mindmapborden, gewijzigde objecten (in de map &quot;objects&quot;) en het projectbestand zoals het in het geheugen was (de Binder, titels en labels), als %4. Kopieer wat je nodig hebt terug in het project.
+
+</translation>
+    </message>
+    <message>
+        <source>To put the project file back: close the project, rename the project file in the project folder (so that it is kept), copy the file %1 of this folder there and give it the old file&apos;s name. Then open the project again. (The copy&apos;s name ends in .copy so that this folder is not taken for a project.)
+
+</source>
+        <translation>Zo zet je het projectbestand terug: sluit het project, hernoem het projectbestand in de projectmap (zodat het bewaard blijft), kopieer het bestand %1 van deze map erheen en geef het de naam van het oude bestand. Open het project daarna opnieuw. (De naam van de kopie eindigt op .copy, zodat deze map niet voor een project wordt aangezien.)
 
 </translation>
     </message>
@@ -18524,6 +19724,14 @@ Je recente projecten, eigen thema&apos;s, lay-outs, werkbalken en sneltoetsen bl
 
 </source>
         <translation>Het project heeft Scrivener-formaat: het bestand %1 hoort bij zijn werkkopie (%2), niet bij de .scriv-map. De Binder wordt in de .scriv geschreven bij het volgende opslaan dat lukt; kopieer dit bestand niet met de hand over iets heen.
+
+</translation>
+    </message>
+    <message>
+        <source>The project is encrypted, and so are the files of this copy (OpenPGP, to your key and the recovery key; only this note is plain): Kleopatra, Gpg4win or GnuPG decrypt them with your key.
+
+</source>
+        <translation>Het project is versleuteld, en de bestanden van deze kopie ook (OpenPGP, naar je sleutel en de herstelsleutel; alleen dit bericht is gewoon): Kleopatra, Gpg4win of GnuPG ontsleutelen ze met je sleutel.
 
 </translation>
     </message>
@@ -18600,6 +19808,10 @@ Niet geschreven:
     <message>
         <source>Cannot open %1: %2</source>
         <translation>Kan %1 niet openen: %2</translation>
+    </message>
+    <message>
+        <source>The project file is damaged (%1).</source>
+        <translation>Het projectbestand is beschadigd (%1).</translation>
     </message>
     <message>
         <source>The project file is damaged: its binder is nested more than %1 levels deep.</source>
@@ -18785,29 +19997,26 @@ Niet geschreven:
         <source>custom metadata</source>
         <translation>aangepaste metagegevens</translation>
     </message>
-    <message>
-        <source>%1 replaced in %2: %3.</source>
-        <translation>%1 vervangen in %2: %3.</translation>
+    <message numerus="yes">
+        <source>%Ln document(s)</source>
+        <translation>
+            <numerusform>%Ln document</numerusform>
+            <numerusform>%Ln documenten</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>%1 found in %2: %3.</source>
-        <translation>%1 gevonden in %2: %3.</translation>
+    <message numerus="yes">
+        <source>%Ln occurrence(s) replaced in %1: %2.</source>
+        <translation>
+            <numerusform>%Ln keer vervangen in %1: %2.</numerusform>
+            <numerusform>%Ln keer vervangen in %1: %2.</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>occurrence</source>
-        <translation>voorkomen</translation>
-    </message>
-    <message>
-        <source>occurrences</source>
-        <translation>voorkomens</translation>
-    </message>
-    <message>
-        <source>document</source>
-        <translation>document</translation>
-    </message>
-    <message>
-        <source>documents</source>
-        <translation>documenten</translation>
+    <message numerus="yes">
+        <source>%Ln occurrence(s) found in %1: %2.</source>
+        <translation>
+            <numerusform>%Ln keer gevonden in %1: %2.</numerusform>
+            <numerusform>%Ln keer gevonden in %1: %2.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Snapshots taken: %1.</source>
@@ -19054,7 +20263,7 @@ Dit kan niet als geheel ongedaan worden gemaakt.%4</translation>
     </message>
     <message>
         <source>Text in the main font, size and spacing of its document takes the new values; what differs from it (larger headings, a passage in another font, a paragraph without indent) stays</source>
-        <translation>Tekst in het hoofdlettertype, de hoofdgrootte en de hoofdtussenruimte van zijn document neemt de nieuwe waarden over; wat ervan afwijkt (grotere koppen, een passage in een ander lettertype, een alinea zonder inspringing) blijft</translation>
+        <translation>Tekst in het standaardlettertype, de standaardgrootte en de standaardtussenruimte van zijn document neemt de nieuwe waarden over; wat ervan afwijkt (grotere koppen, een passage in een ander lettertype, een alinea zonder inspringing) blijft</translation>
     </message>
     <message>
         <source>This is the look of the text of the whole project. Apply and OK change all documents at once, and every document that changes gets a snapshot first (Inspector ▸ Snapshots). Text formatted by hand (Format ▸ Font, Format ▸ Paragraph, the ruler) changes only with the last check box.</source>
@@ -20425,12 +21634,26 @@ Opgeslagen %2 uit het project “%3” door %4.</translation>
         <translation>Sessie nu herstellen</translation>
     </message>
     <message>
-        <source>%1 of %2 %3</source>
-        <translation>%1 van %2 %3</translation>
+        <source>%1 of %2 characters</source>
+        <translation>%1 van %2 tekens</translation>
     </message>
     <message>
-        <source>%1 %2 in the Draft</source>
-        <translation>%1 %2 in het Concept</translation>
+        <source>%1 of %2 words</source>
+        <translation>%1 van %2 woorden</translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln character(s) in the Draft</source>
+        <translation>
+            <numerusform>%Ln teken in het Concept</numerusform>
+            <numerusform>%Ln tekens in het Concept</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%Ln word(s) in the Draft</source>
+        <translation>
+            <numerusform>%Ln woord in het Concept</numerusform>
+            <numerusform>%Ln woorden in het Concept</numerusform>
+        </translation>
     </message>
     <message>
         <source>%1 of %2 this session</source>
@@ -20562,12 +21785,12 @@ Ctrl+klik om te openen</translation>
         <translation>Meer opdrachten</translation>
     </message>
     <message>
-        <source>Paste and &amp;Match Style</source>
+        <source>Paste and Match &amp;Style</source>
         <translation>Plakken en &amp;stijl aanpassen</translation>
     </message>
     <message>
-        <source>Paste with &amp;Formatting</source>
-        <translation>Plakken met &amp;opmaak</translation>
+        <source>Paste With &amp;Formatting</source>
+        <translation>Plakken &amp;met opmaak</translation>
     </message>
     <message>
         <source>Footnote</source>
@@ -20684,29 +21907,19 @@ Ctrl+klik om te openen</translation>
         <source>uses the colors of the desktop (KDE color scheme)</source>
         <translation>gebruikt de kleuren van het bureaublad (KDE-kleurenschema)</translation>
     </message>
-    <message>
-        <source>sets %1</source>
-        <translation>stelt %1 in</translation>
+    <message numerus="yes">
+        <source>%Ln color(s) set</source>
+        <translation>
+            <numerusform>%Ln kleur ingesteld</numerusform>
+            <numerusform>%Ln kleuren ingesteld</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>color</source>
-        <translation>kleur</translation>
-    </message>
-    <message>
-        <source>colors</source>
-        <translation>kleuren</translation>
-    </message>
-    <message>
-        <source> and %1</source>
-        <translation> en %1</translation>
-    </message>
-    <message>
-        <source>font</source>
-        <translation>lettertype</translation>
-    </message>
-    <message>
-        <source>fonts</source>
-        <translation>lettertypen</translation>
+    <message numerus="yes">
+        <source>%Ln font(s) set</source>
+        <translation>
+            <numerusform>%Ln lettertype ingesteld</numerusform>
+            <numerusform>%Ln lettertypen ingesteld</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -20747,17 +21960,12 @@ Ctrl+klik om te openen</translation>
         <source>Change Theme</source>
         <translation>Thema wijzigen</translation>
     </message>
-    <message>
-        <source>The look you see has %1 of your own that are not saved in My Look 1 or My Look 2.</source>
-        <translation>Het uiterlijk dat je ziet, heeft %1 van jezelf die niet zijn opgeslagen in Mijn uiterlijk 1 of Mijn uiterlijk 2.</translation>
-    </message>
-    <message>
-        <source>color or font</source>
-        <translation>kleur of lettertype</translation>
-    </message>
-    <message>
-        <source>colors and fonts</source>
-        <translation>kleuren en lettertypen</translation>
+    <message numerus="yes">
+        <source>The look you see has %Ln color(s) or font(s) of your own that are not saved in My Look 1 or My Look 2.</source>
+        <translation>
+            <numerusform>Het uiterlijk dat je ziet, heeft %Ln eigen kleur of eigen lettertype dat niet is opgeslagen in Mijn uiterlijk 1 of Mijn uiterlijk 2.</numerusform>
+            <numerusform>Het uiterlijk dat je ziet, heeft %Ln eigen kleuren of lettertypen die niet zijn opgeslagen in Mijn uiterlijk 1 of Mijn uiterlijk 2.</numerusform>
+        </translation>
     </message>
     <message>
         <source>Save the look in My Look 1 or My Look 2 first (it replaces the look saved there), or switch without saving it?</source>
@@ -20910,20 +22118,16 @@ Ctrl+klik om te openen</translation>
         <translation>Naar rechts verplaatsen</translation>
     </message>
     <message>
-        <source>Icons of the main toolbars:</source>
-        <translation>Pictogrammen van de hoofdwerkbalken:</translation>
+        <source>Size of all toolbars:</source>
+        <translation>Grootte van alle werkbalken:</translation>
     </message>
     <message>
-        <source>Small</source>
-        <translation>Klein</translation>
+        <source>Reset</source>
+        <translation>Herstellen</translation>
     </message>
     <message>
-        <source>Medium</source>
-        <translation>Middel</translation>
-    </message>
-    <message>
-        <source>Large</source>
-        <translation>Groot</translation>
+        <source>Put the standard buttons back into this toolbar</source>
+        <translation>De standaardknoppen terugzetten in deze werkbalk</translation>
     </message>
     <message>
         <source>Icons only</source>
@@ -20936,14 +22140,6 @@ Ctrl+klik om te openen</translation>
     <message>
         <source>Text under the icons</source>
         <translation>Tekst onder de pictogrammen</translation>
-    </message>
-    <message>
-        <source>Standard Set</source>
-        <translation>Standaardset</translation>
-    </message>
-    <message>
-        <source>Put the buttons the program came with back into this toolbar</source>
-        <translation>De knoppen waarmee het programma werd geleverd, terugzetten in deze werkbalk</translation>
     </message>
 </context>
 <context>
@@ -21016,17 +22212,19 @@ Het haalt één klein bestand op, hoogstens eens per dag, en meldt het wanneer e
         <source>%1 and its add-ons are up to date.</source>
         <translation>%1 en zijn add-ons zijn up-to-date.</translation>
     </message>
-    <message>
-        <source>1 day</source>
-        <translation>1 dag</translation>
+    <message numerus="yes">
+        <source>%Ln day(s)</source>
+        <translation>
+            <numerusform>%Ln dag</numerusform>
+            <numerusform>%Ln dagen</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>1 week</source>
-        <translation>1 week</translation>
-    </message>
-    <message>
-        <source>%1 weeks</source>
-        <translation>%1 weken</translation>
+    <message numerus="yes">
+        <source>%Ln week(s)</source>
+        <translation>
+            <numerusform>%Ln week</numerusform>
+            <numerusform>%Ln weken</numerusform>
+        </translation>
     </message>
     <message>
         <source>Updates</source>
@@ -21210,91 +22408,83 @@ Of download de huidige versie van de pagina van het project.</translation>
         <translation>%1 / %2 vandaag</translation>
     </message>
     <message>
-        <source>Today&apos;s writing: %1 of %2 %3 (click for Project Targets)</source>
-        <translation>Schrijfwerk van vandaag: %1 van %2 %3 (klik voor Projectdoelen)</translation>
+        <source>Today&apos;s writing: %1 of %2 characters (click for Project Targets)</source>
+        <translation>Vandaag geschreven: %1 van %2 tekens (klik voor Projectdoelen)</translation>
     </message>
     <message>
-        <source>characters</source>
-        <translation>tekens</translation>
+        <source>Today&apos;s writing: %1 of %2 words (click for Project Targets)</source>
+        <translation>Vandaag geschreven: %1 van %2 woorden (klik voor Projectdoelen)</translation>
     </message>
     <message>
-        <source>words</source>
-        <translation>woorden</translation>
+        <source>The draft: %1 of %2 characters (click for Project Targets)</source>
+        <translation>Het concept: %1 van %2 tekens (klik voor Projectdoelen)</translation>
+    </message>
+    <message>
+        <source>The draft: %1 of %2 words (click for Project Targets)</source>
+        <translation>Het concept: %1 van %2 woorden (klik voor Projectdoelen)</translation>
     </message>
     <message>
         <source>%1 / %2 draft</source>
         <translation>%1 / %2 concept</translation>
     </message>
-    <message>
-        <source>The draft: %1 of %2 %3 (click for Project Targets)</source>
-        <translation>Het concept: %1 van %2 %3 (klik voor Projectdoelen)</translation>
-    </message>
 </context>
 <context>
     <name>qb::addons</name>
-    <message>
-        <source>theme</source>
-        <translation>thema</translation>
+    <message numerus="yes">
+        <source>%Ln theme(s)</source>
+        <translation>
+            <numerusform>%Ln thema</numerusform>
+            <numerusform>%Ln thema&apos;s</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>themes</source>
-        <translation>thema&apos;s</translation>
+    <message numerus="yes">
+        <source>%Ln project template(s)</source>
+        <translation>
+            <numerusform>%Ln projectsjabloon</numerusform>
+            <numerusform>%Ln projectsjablonen</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>project template</source>
-        <translation>projectsjabloon</translation>
+    <message numerus="yes">
+        <source>%Ln compile format(s)</source>
+        <translation>
+            <numerusform>%Ln samenstelindeling</numerusform>
+            <numerusform>%Ln samenstelindelingen</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>project templates</source>
-        <translation>projectsjablonen</translation>
+    <message numerus="yes">
+        <source>%Ln layout(s)</source>
+        <translation>
+            <numerusform>%Ln lay-out</numerusform>
+            <numerusform>%Ln lay-outs</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>compile format</source>
-        <translation>samenstelindeling</translation>
+    <message numerus="yes">
+        <source>%Ln script format(s)</source>
+        <translation>
+            <numerusform>%Ln scriptopmaak</numerusform>
+            <numerusform>%Ln scriptopmaken</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>compile formats</source>
-        <translation>samenstelindelingen</translation>
+    <message numerus="yes">
+        <source>%Ln name list(s)</source>
+        <translation>
+            <numerusform>%Ln namenlijst</numerusform>
+            <numerusform>%Ln namenlijsten</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>layout</source>
-        <translation>lay-out</translation>
+    <message numerus="yes">
+        <source>%Ln plugin file(s)</source>
+        <translation>
+            <numerusform>%Ln plug-inbestand</numerusform>
+            <numerusform>%Ln plug-inbestanden</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>layouts</source>
-        <translation>lay-outs</translation>
-    </message>
-    <message>
-        <source>script format</source>
-        <translation>scriptopmaak</translation>
-    </message>
-    <message>
-        <source>script formats</source>
-        <translation>scriptopmaken</translation>
-    </message>
-    <message>
-        <source>name list</source>
-        <translation>namenlijst</translation>
-    </message>
-    <message>
-        <source>name lists</source>
-        <translation>namenlijsten</translation>
-    </message>
-    <message>
-        <source>plugin file</source>
-        <translation>pluginbestand</translation>
-    </message>
-    <message>
-        <source>plugin files</source>
-        <translation>pluginbestanden</translation>
-    </message>
-    <message>
-        <source>dictionary</source>
-        <translation>woordenboek</translation>
-    </message>
-    <message>
-        <source>dictionaries</source>
-        <translation>woordenboeken</translation>
+    <message numerus="yes">
+        <source>%Ln dictionar(y|ies)</source>
+        <translation>
+            <numerusform>%Ln woordenboek</numerusform>
+            <numerusform>%Ln woordenboeken</numerusform>
+        </translation>
     </message>
     <message>
         <source>video and audio formats licensed under patents (for Media Playback 2.0 or newer)</source>
@@ -21522,6 +22712,69 @@ Of download de huidige versie van de pagina van het project.</translation>
     </message>
 </context>
 <context>
+    <name>qb::ai</name>
+    <message>
+        <source>%1 could not be removed completely.</source>
+        <translation>%1 kon niet helemaal worden verwijderd.</translation>
+    </message>
+    <message>
+        <source>%1 is not published yet.</source>
+        <translation>%1 is nog niet gepubliceerd.</translation>
+    </message>
+    <message>
+        <source>%1 needs about %2 GB of memory; this computer has %3 GB.</source>
+        <translation>%1 heeft ongeveer %2 GB geheugen nodig; deze computer heeft %3 GB.</translation>
+    </message>
+    <message>
+        <source>There is not enough room on the disk for %1 (%2 MB are needed).</source>
+        <translation>Er is niet genoeg ruimte op de schijf voor %1 (%2 MB is nodig).</translation>
+    </message>
+    <message>
+        <source>Processor (CPU)</source>
+        <translation>Processor (CPU)</translation>
+    </message>
+    <message>
+        <source>The graphics card &quot;%1&quot; was not found; the processor is used.</source>
+        <translation>De videokaart “%1” is niet gevonden; de processor wordt gebruikt.</translation>
+    </message>
+    <message>
+        <source>The model does not fit into the free memory of the graphics card; the processor is used.</source>
+        <translation>Het model past niet in het vrije geheugen van de videokaart; de processor wordt gebruikt.</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>Automatisch</translation>
+    </message>
+    <message>
+        <source>The AI engine is not installed.</source>
+        <translation>De AI-engine is niet geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>An add-on has loaded a speech engine of its own (%1). Restart Quillbinder, or update that add-on, to use the AI engine.</source>
+        <translation>Een add-on heeft een eigen spraakengine geladen (%1). Start Quillbinder opnieuw of werk die add-on bij om de AI-engine te gebruiken.</translation>
+    </message>
+    <message>
+        <source>The AI engine could not be loaded: %1</source>
+        <translation>De AI-engine kon niet worden geladen: %1</translation>
+    </message>
+    <message>
+        <source>The installed AI engine is older than this version of Quillbinder needs. Install the engine again from the settings page.</source>
+        <translation>De geïnstalleerde AI-engine is ouder dan deze versie van Quillbinder nodig heeft. Installeer de engine opnieuw vanaf de instellingenpagina.</translation>
+    </message>
+    <message>
+        <source>The model &quot;%1&quot; could not be loaded: %2</source>
+        <translation>Het model “%1” kon niet worden geladen: %2</translation>
+    </message>
+    <message>
+        <source>The model is not loaded.</source>
+        <translation>Het model is niet geladen.</translation>
+    </message>
+    <message>
+        <source>Stopped.</source>
+        <translation>Gestopt.</translation>
+    </message>
+</context>
+<context>
     <name>qb::appmenu</name>
     <message>
         <source>The program does not run from an AppImage file.</source>
@@ -21617,6 +22870,400 @@ Of download de huidige versie van de pagina van het project.</translation>
     <message>
         <source>PDF (.pdf)</source>
         <translation>PDF (.pdf)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting</name>
+    <message>
+        <source>The handwriting engine could not be loaded: %1</source>
+        <translation>De handschrift-engine kon niet worden geladen: %1</translation>
+    </message>
+    <message>
+        <source>The handwriting engine does not offer the interface this version needs.</source>
+        <translation>De handschrift-engine biedt de interface niet die deze versie nodig heeft.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::HandwritingController</name>
+    <message>
+        <source>Off</source>
+        <translation>Uit</translation>
+    </message>
+    <message>
+        <source>Editor</source>
+        <translation>Editor</translation>
+    </message>
+    <message>
+        <source>Inspector</source>
+        <translation>Inspector</translation>
+    </message>
+    <message>
+        <source>Both</source>
+        <translation>Beide</translation>
+    </message>
+    <message>
+        <source>Handwriting</source>
+        <translation>Handschrift</translation>
+    </message>
+    <message>
+        <source>Handwriting Button</source>
+        <translation>Handschriftknop</translation>
+    </message>
+    <message>
+        <source>Show the button for handwriting on the toolbar</source>
+        <translation>De knop voor handschrift op de werkbalk tonen</translation>
+    </message>
+    <message>
+        <source>Put the text at the place shown</source>
+        <translation>De tekst op de getoonde plek zetten</translation>
+    </message>
+    <message>
+        <source>Cancel: the text goes back to the strip</source>
+        <translation>Annuleren: de tekst gaat terug naar de strook</translation>
+    </message>
+    <message>
+        <source>Handwriting: off. Tap to switch it on; press and hold for the choices.</source>
+        <translation>Handschrift: uit. Tik om het in te schakelen; houd ingedrukt voor de keuzes.</translation>
+    </message>
+    <message>
+        <source>Handwriting: %1. Tap to switch it off; press and hold for the choices.</source>
+        <translation>Handschrift: %1. Tik om het uit te schakelen; houd ingedrukt voor de keuzes.</translation>
+    </message>
+    <message>
+        <source>Writing on the editor.
+The text you write is collected below.</source>
+        <translation>Schrijven op de editor.
+De tekst die je schrijft wordt hieronder verzameld.</translation>
+    </message>
+    <message>
+        <source>Writing on the editor and here.</source>
+        <translation>Schrijven op de editor en hier.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::HandwritingPage</name>
+    <message>
+        <source>no model for this language yet</source>
+        <translation>nog geen model voor deze taal</translation>
+    </message>
+    <message>
+        <source>Theme color</source>
+        <translation>Themakleur</translation>
+    </message>
+    <message>
+        <source>Recognition</source>
+        <translation>Herkenning</translation>
+    </message>
+    <message>
+        <source>Show the handwriting button on the toolbar</source>
+        <translation>De handschriftknop op de werkbalk tonen</translation>
+    </message>
+    <message>
+        <source>Install</source>
+        <translation>Installeren</translation>
+    </message>
+    <message>
+        <source>Remove</source>
+        <translation>Verwijderen</translation>
+    </message>
+    <message>
+        <source>Handwriting model:</source>
+        <translation>Handschriftmodel:</translation>
+    </message>
+    <message>
+        <source>Main language:</source>
+        <translation>Hoofdtaal:</translation>
+    </message>
+    <message>
+        <source>Fallback language:</source>
+        <translation>Terugvaltaal:</translation>
+    </message>
+    <message>
+        <source>Writing</source>
+        <translation>Schrijven</translation>
+    </message>
+    <message>
+        <source>Pause before a line is read:</source>
+        <translation>Pauze voordat een regel wordt gelezen:</translation>
+    </message>
+    <message>
+        <source>The ink stays for:</source>
+        <translation>De inkt blijft:</translation>
+    </message>
+    <message>
+        <source>The ink fades over:</source>
+        <translation>De inkt vervaagt over:</translation>
+    </message>
+    <message>
+        <source>Ink color:</source>
+        <translation>Inktkleur:</translation>
+    </message>
+    <message>
+        <source>Ink Color</source>
+        <translation>Inktkleur</translation>
+    </message>
+    <message>
+        <source> px</source>
+        <translation> px</translation>
+    </message>
+    <message>
+        <source>Ink width:</source>
+        <translation>Inktdikte:</translation>
+    </message>
+    <message>
+        <source>Grid (in the inspector&apos;s pad)</source>
+        <translation>Raster (in het schrijfblok van de inspector)</translation>
+    </message>
+    <message>
+        <source>Style:</source>
+        <translation>Stijl:</translation>
+    </message>
+    <message>
+        <source>Color:</source>
+        <translation>Kleur:</translation>
+    </message>
+    <message>
+        <source>Grid Color</source>
+        <translation>Rasterkleur</translation>
+    </message>
+    <message>
+        <source>Line width:</source>
+        <translation>Lijndikte:</translation>
+    </message>
+    <message>
+        <source>Opacity:</source>
+        <translation>Dekking:</translation>
+    </message>
+    <message>
+        <source>small</source>
+        <translation>klein</translation>
+    </message>
+    <message>
+        <source>large</source>
+        <translation>groot</translation>
+    </message>
+    <message>
+        <source>Size:</source>
+        <translation>Grootte:</translation>
+    </message>
+    <message>
+        <source>Hand protection</source>
+        <translation>Handbescherming</translation>
+    </message>
+    <message>
+        <source>Ignore the resting hand while the pen writes</source>
+        <translation>De rustende hand negeren terwijl de pen schrijft</translation>
+    </message>
+    <message>
+        <source>Right-handed</source>
+        <translation>Rechtshandig</translation>
+    </message>
+    <message>
+        <source>Left-handed</source>
+        <translation>Linkshandig</translation>
+    </message>
+    <message>
+        <source>Writing hand:</source>
+        <translation>Schrijfhand:</translation>
+    </message>
+    <message>
+        <source>weak</source>
+        <translation>zwak</translation>
+    </message>
+    <message>
+        <source>strong</source>
+        <translation>sterk</translation>
+    </message>
+    <message>
+        <source>Strength:</source>
+        <translation>Sterkte:</translation>
+    </message>
+    <message>
+        <source>Pen and finger</source>
+        <translation>Pen en vinger</translation>
+    </message>
+    <message>
+        <source>Without a pen, one finger writes (two fingers scroll)</source>
+        <translation>Zonder pen schrijft één vinger (twee vingers scrollen)</translation>
+    </message>
+    <message>
+        <source>The pen&apos;s side button selects text</source>
+        <translation>De zijknop van de pen selecteert tekst</translation>
+    </message>
+    <message>
+        <source> s</source>
+        <translation> s</translation>
+    </message>
+    <message>
+        <source>A pen counts as in use after its last touch for:</source>
+        <translation>Een pen geldt als in gebruik na de laatste aanraking gedurende:</translation>
+    </message>
+    <message>
+        <source>Learning your hand</source>
+        <translation>Je hand leren kennen</translation>
+    </message>
+    <message>
+        <source>Keep corrected lines on this device</source>
+        <translation>Gecorrigeerde regels op dit apparaat bewaren</translation>
+    </message>
+    <message>
+        <source>Only lines you corrected are kept: the picture of the ink and the corrected text. They stay on this device and are never sent anywhere. While an encrypted project is open, nothing is kept (the files would be plain).</source>
+        <translation>Alleen regels die je hebt gecorrigeerd worden bewaard: het beeld van de inkt en de gecorrigeerde tekst. Ze blijven op dit apparaat en worden nergens naartoe gestuurd. Terwijl een versleuteld project open is, wordt niets bewaard (de bestanden zouden gewoon zijn).</translation>
+    </message>
+    <message>
+        <source>Delete the Kept Lines</source>
+        <translation>De bewaarde regels verwijderen</translation>
+    </message>
+    <message>
+        <source>Installed.</source>
+        <translation>Geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>Not installed. Install it to write by hand.</source>
+        <translation>Niet geïnstalleerd. Installeer het om met de hand te schrijven.</translation>
+    </message>
+    <message>
+        <source>The installer for handwriting models is not available in this version yet.</source>
+        <translation>Het installatieprogramma voor handschriftmodellen is in deze versie nog niet beschikbaar.</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n line(s) kept</source>
+        <translation>
+            <numerusform>%n regel bewaard</numerusform>
+            <numerusform>%n regels bewaard</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::HandwritingPanel</name>
+    <message>
+        <source>Space</source>
+        <translation>Spatie</translation>
+    </message>
+    <message>
+        <source>Add a space</source>
+        <translation>Een spatie toevoegen</translation>
+    </message>
+    <message>
+        <source>Backspace</source>
+        <translation>Backspace</translation>
+    </message>
+    <message>
+        <source>Delete the last character</source>
+        <translation>Het laatste teken verwijderen</translation>
+    </message>
+    <message>
+        <source>Enter</source>
+        <translation>Enter</translation>
+    </message>
+    <message>
+        <source>Add a line break</source>
+        <translation>Een regeleinde toevoegen</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>Wissen</translation>
+    </message>
+    <message>
+        <source>Throw away the text in the strip</source>
+        <translation>De tekst in de strook weggooien</translation>
+    </message>
+    <message>
+        <source>Pin</source>
+        <translation>Vastpinnen</translation>
+    </message>
+    <message>
+        <source>Make the text stick to the pen or finger; tap a text field to show the place</source>
+        <translation>De tekst aan de pen of vinger laten plakken; tik op een tekstveld om de plek te tonen</translation>
+    </message>
+    <message>
+        <source>Insert</source>
+        <translation>Invoegen</translation>
+    </message>
+    <message>
+        <source>Put the text at the cursor</source>
+        <translation>De tekst bij de cursor zetten</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::InkCanvas</name>
+    <message>
+        <source>Handwriting is not installed.</source>
+        <translation>Handschrift is niet geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>The line could not be read.</source>
+        <translation>De regel kon niet worden gelezen.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::OnnxRecognizer</name>
+    <message>
+        <source>The model&apos;s output has an unexpected shape.</source>
+        <translation>De uitvoer van het model heeft een onverwachte vorm.</translation>
+    </message>
+    <message>
+        <source>Handwriting is not installed.</source>
+        <translation>Handschrift is niet geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>The handwriting model&apos;s files could not be read.</source>
+        <translation>De bestanden van het handschriftmodel konden niet worden gelezen.</translation>
+    </message>
+    <message>
+        <source>The handwriting model&apos;s codec could not be read: %1</source>
+        <translation>De codec van het handschriftmodel kon niet worden gelezen: %1</translation>
+    </message>
+    <message>
+        <source>The handwriting model could not be loaded: %1</source>
+        <translation>Het handschriftmodel kon niet worden geladen: %1</translation>
+    </message>
+    <message>
+        <source>The line could not be read: %1</source>
+        <translation>De regel kon niet worden gelezen: %1</translation>
+    </message>
+    <message>
+        <source>Handwriting</source>
+        <translation>Handschrift</translation>
+    </message>
+    <message>
+        <source>There is not enough memory to load the handwriting model.</source>
+        <translation>Er is niet genoeg geheugen om het handschriftmodel te laden.</translation>
+    </message>
+    <message>
+        <source>Install Handwriting</source>
+        <translation>Handschrift installeren</translation>
+    </message>
+    <message>
+        <source>Installed: the engine, the line model and the word lists of %1.</source>
+        <translation>Geïnstalleerd: de engine, het regelmodel en de woordenlijsten van %1.</translation>
+    </message>
+    <message>
+        <source>no language</source>
+        <translation>geen taal</translation>
+    </message>
+    <message>
+        <source>the engine</source>
+        <translation>de engine</translation>
+    </message>
+    <message>
+        <source>the line model</source>
+        <translation>het regelmodel</translation>
+    </message>
+    <message>
+        <source>Not installed yet: %1. Install it to write by hand.</source>
+        <translation>Nog niet geïnstalleerd: %1. Installeer het om met de hand te schrijven.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::handwriting::WordStrip</name>
+    <message>
+        <source>No other readings</source>
+        <translation>Geen andere lezingen</translation>
+    </message>
+    <message>
+        <source>The text you write appears here.</source>
+        <translation>De tekst die je schrijft verschijnt hier.</translation>
     </message>
 </context>
 <context>
@@ -21874,7 +23521,7 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>Play (Ctrl+Return)</source>
-        <translation>Afspelen (Ctrl+Return)</translation>
+        <translation>Afspelen (Ctrl+Enter)</translation>
     </message>
     <message>
         <source>Playing speed</source>
@@ -21898,7 +23545,243 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     </message>
     <message>
         <source>Pause (Ctrl+Return)</source>
-        <translation>Pauzeren (Ctrl+Return)</translation>
+        <translation>Pauzeren (Ctrl+Enter)</translation>
+    </message>
+</context>
+<context>
+    <name>qb::readaloud</name>
+    <message>
+        <source>Female 1</source>
+        <translation>Vrouw 1</translation>
+    </message>
+    <message>
+        <source>Female 2</source>
+        <translation>Vrouw 2</translation>
+    </message>
+    <message>
+        <source>Female 3</source>
+        <translation>Vrouw 3</translation>
+    </message>
+    <message>
+        <source>Male 1</source>
+        <translation>Man 1</translation>
+    </message>
+    <message>
+        <source>Male 2</source>
+        <translation>Man 2</translation>
+    </message>
+    <message>
+        <source>Male 3</source>
+        <translation>Man 3</translation>
+    </message>
+    <message>
+        <source>Calm</source>
+        <translation>Rustig</translation>
+    </message>
+    <message>
+        <source>Neutral</source>
+        <translation>Neutraal</translation>
+    </message>
+    <message>
+        <source>Action</source>
+        <translation>Actie</translation>
+    </message>
+    <message>
+        <source>Slow</source>
+        <translation>Langzaam</translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation>Gemiddeld</translation>
+    </message>
+    <message>
+        <source>Fast</source>
+        <translation>Snel</translation>
+    </message>
+    <message>
+        <source>fits on %1</source>
+        <translation>past op %1</translation>
+    </message>
+    <message>
+        <source>does not fit (needs %1)</source>
+        <translation>past niet (heeft %1 nodig)</translation>
+    </message>
+    <message>
+        <source>fits in RAM</source>
+        <translation>past in RAM</translation>
+    </message>
+    <message>
+        <source>This model does not have this voice.</source>
+        <translation>Dit model heeft deze stem niet.</translation>
+    </message>
+    <message>
+        <source>Voice not installed yet.</source>
+        <translation>Stem nog niet geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>This model has no style control.</source>
+        <translation>Dit model heeft geen stijlregeling.</translation>
+    </message>
+    <message>
+        <source>The voice&apos;s reference clip cannot be read.</source>
+        <translation>De referentieclip van de stem kan niet worden gelezen.</translation>
+    </message>
+    <message>
+        <source>The installed AI engine cannot play sound; install its newest version.</source>
+        <translation>De geïnstalleerde AI-engine kan geen geluid afspelen; installeer de nieuwste versie ervan.</translation>
+    </message>
+</context>
+<context>
+    <name>qb::readaloud::Controller</name>
+    <message>
+        <source>Play</source>
+        <translation>Afspelen</translation>
+    </message>
+    <message>
+        <source>Stop</source>
+        <translation>Stoppen</translation>
+    </message>
+    <message>
+        <source>Pause</source>
+        <translation>Pauzeren</translation>
+    </message>
+    <message>
+        <source>Resume</source>
+        <translation>Hervatten</translation>
+    </message>
+    <message>
+        <source>Read Aloud: %1 (the marked text, or from the cursor to the end)</source>
+        <translation>Voorlezen: %1 (de gemarkeerde tekst, of van de cursor tot het einde)</translation>
+    </message>
+    <message>
+        <source>Read Aloud: Stop</source>
+        <translation>Voorlezen: Stoppen</translation>
+    </message>
+    <message>
+        <source>Open a text to read it aloud.</source>
+        <translation>Open een tekst om hem voor te lezen.</translation>
+    </message>
+    <message>
+        <source>Voice</source>
+        <translation>Stem</translation>
+    </message>
+    <message>
+        <source>Style</source>
+        <translation>Stijl</translation>
+    </message>
+    <message>
+        <source>Speed</source>
+        <translation>Snelheid</translation>
+    </message>
+    <message>
+        <source>Read Aloud Settings…</source>
+        <translation>Instellingen voor Voorlezen…</translation>
+    </message>
+</context>
+<context>
+    <name>qb::readaloud::ReadAloudPage</name>
+    <message>
+        <source>no model for this language yet</source>
+        <translation>nog geen model voor deze taal</translation>
+    </message>
+    <message>
+        <source>Read Aloud reads the marked text (or from the cursor to the end) with a speech model on this computer. Nothing is installed until you install it here. The sound is only played, never saved.</source>
+        <translation>Voorlezen leest de gemarkeerde tekst (of van de cursor tot het einde) voor met een spraakmodel op deze computer. Er wordt niets geïnstalleerd voordat je het hier installeert. Het geluid wordt alleen afgespeeld, nooit opgeslagen.</translation>
+    </message>
+    <message>
+        <source>Voice model</source>
+        <translation>Stemmodel</translation>
+    </message>
+    <message>
+        <source>Language:</source>
+        <translation>Taal:</translation>
+    </message>
+    <message>
+        <source>Model:</source>
+        <translation>Model:</translation>
+    </message>
+    <message>
+        <source>Automatic: the graphics card when the model fits into its free memory, else the computer&apos;s memory and processor.</source>
+        <translation>Automatisch: de videokaart wanneer het model in het vrije geheugen ervan past, anders het geheugen en de processor van de computer.</translation>
+    </message>
+    <message>
+        <source>Device:</source>
+        <translation>Apparaat:</translation>
+    </message>
+    <message>
+        <source>Speed:</source>
+        <translation>Snelheid:</translation>
+    </message>
+    <message>
+        <source>The processor cores and the minutes a model stays loaded are set for all AI functions in File &gt; Options &gt; General &gt; AI Models.</source>
+        <translation>De processorkernen en de minuten dat een model geladen blijft, worden voor alle AI-functies ingesteld in Bestand &gt; Opties &gt; Algemeen &gt; AI-modellen.</translation>
+    </message>
+    <message>
+        <source>Automatic (%1)</source>
+        <translation>Automatisch (%1)</translation>
+    </message>
+    <message>
+        <source>Automatic</source>
+        <translation>Automatisch</translation>
+    </message>
+    <message>
+        <source>%1: %2, %3, %4</source>
+        <translation>%1: %2, %3, %4</translation>
+    </message>
+    <message>
+        <source>The engine is not installed yet: install it below, then a model.</source>
+        <translation>De engine is nog niet geïnstalleerd: installeer hem hieronder, daarna een model.</translation>
+    </message>
+    <message>
+        <source>No model is installed for this language yet: download one below.</source>
+        <translation>Voor deze taal is nog geen model geïnstalleerd: download er hieronder een.</translation>
+    </message>
+    <message>
+        <source>Ready: press Play on the Read Aloud toolbar.</source>
+        <translation>Klaar: druk op Afspelen op de werkbalk Voorlezen.</translation>
+    </message>
+    <message>
+        <source>Not measured: no model is installed.</source>
+        <translation>Niet gemeten: er is geen model geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>Measuring the speed with a short test sentence...</source>
+        <translation>De snelheid wordt gemeten met een korte testzin...</translation>
+    </message>
+    <message>
+        <source>Not measured yet.</source>
+        <translation>Nog niet gemeten.</translation>
+    </message>
+    <message>
+        <source>Slower than real time (about %1 times slower on this device): Read Aloud makes a few sentences ahead before it plays.</source>
+        <translation>Langzamer dan realtime (ongeveer %1 keer langzamer op dit apparaat): Voorlezen maakt een paar zinnen vooruit voordat het afspeelt.</translation>
+    </message>
+    <message>
+        <source>Faster than real time (%1 seconds of work for one second of sound).</source>
+        <translation>Sneller dan realtime (%1 seconden werk voor één seconde geluid).</translation>
+    </message>
+    <message>
+        <source>The speed test failed: %1</source>
+        <translation>De snelheidstest is mislukt: %1</translation>
+    </message>
+</context>
+<context>
+    <name>qb::readaloud::Session</name>
+    <message>
+        <source>Read Aloud is busy.</source>
+        <translation>Voorlezen is bezig.</translation>
+    </message>
+    <message>
+        <source>The AI engine is not installed.</source>
+        <translation>De AI-engine is niet geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>No speech model is installed for this language.</source>
+        <translation>Voor deze taal is geen spraakmodel geïnstalleerd.</translation>
+    </message>
+    <message>
+        <source>There is no text to read.</source>
+        <translation>Er is geen tekst om voor te lezen.</translation>
     </message>
 </context>
 <context>
@@ -21906,6 +23789,17 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     <message>
         <source>The regular expression has a mistake: %1</source>
         <translation>De reguliere expressie bevat een fout: %1</translation>
+    </message>
+</context>
+<context>
+    <name>qb::smallui::SlidePanel</name>
+    <message>
+        <source>Close</source>
+        <translation>Sluiten</translation>
+    </message>
+    <message>
+        <source>Close this panel (Esc)</source>
+        <translation>Dit paneel sluiten (Esc)</translation>
     </message>
 </context>
 <context>
@@ -22106,13 +24000,12 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
         <source>The address does not lead to a web page (it is “%1”).</source>
         <translation>Het adres leidt niet naar een webpagina (het is “%1”).</translation>
     </message>
-    <message>
-        <source>Fetching 1 picture …</source>
-        <translation>1 afbeelding ophalen …</translation>
-    </message>
-    <message>
-        <source>Fetching %1 pictures …</source>
-        <translation>%1 afbeeldingen ophalen …</translation>
+    <message numerus="yes">
+        <source>Fetching %Ln picture(s) …</source>
+        <translation>
+            <numerusform>%Ln afbeelding wordt opgehaald …</numerusform>
+            <numerusform>%Ln afbeeldingen worden opgehaald …</numerusform>
+        </translation>
     </message>
     <message>
         <source>Fetching pictures: %1 of %2 …</source>
@@ -22213,21 +24106,19 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
         <source>This is not the address of a web page.</source>
         <translation>Dit is niet het adres van een webpagina.</translation>
     </message>
-    <message>
-        <source>1 word</source>
-        <translation>1 woord</translation>
+    <message numerus="yes">
+        <source>%Ln word(s)</source>
+        <translation>
+            <numerusform>%Ln woord</numerusform>
+            <numerusform>%Ln woorden</numerusform>
+        </translation>
     </message>
-    <message>
-        <source>%1 words</source>
-        <translation>%1 woorden</translation>
-    </message>
-    <message>
-        <source>1 picture</source>
-        <translation>1 afbeelding</translation>
-    </message>
-    <message>
-        <source>%1 pictures</source>
-        <translation>%1 afbeeldingen</translation>
+    <message numerus="yes">
+        <source>%Ln picture(s)</source>
+        <translation>
+            <numerusform>%Ln afbeelding</numerusform>
+            <numerusform>%Ln afbeeldingen</numerusform>
+        </translation>
     </message>
     <message>
         <source>by %1</source>
@@ -22236,6 +24127,13 @@ Het wordt niet vanaf hier geopend. Als je het vertrouwt, open het dan zelf vanui
     <message>
         <source>The page builds its text with a script: the text comes from the page&apos;s data.</source>
         <translation>De pagina bouwt zijn tekst met een script op: de tekst komt uit de gegevens van de pagina.</translation>
+    </message>
+</context>
+<context>
+    <name>readaloud</name>
+    <message>
+        <source>Read Aloud</source>
+        <translation>Voorlezen</translation>
     </message>
 </context>
 </TS>

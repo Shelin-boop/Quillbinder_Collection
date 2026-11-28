@@ -561,7 +561,7 @@ void Store::removeLeftoversIn(const QString &projectFolder) const
             return;
         const QString rel = root.relativeFilePath(file);
         if (!rel.startsWith(QLatin1String("..")))
-            QFile::remove(QDir(projectFolder).filePath(rel));
+            safesave::removeFile(QDir(projectFolder).filePath(rel));
     };
     for (const QString &f : m_removedFiles)
         drop(f);
@@ -573,10 +573,10 @@ bool Store::save(QString *error)
 {
     bool ok = true;
     if (m_schemaDirty || (!m_schemaLoaded && (!m_objects.isEmpty() || !m_removedFiles.isEmpty()))) {
-        // a damaged schema file is kept aside before it is replaced
+        // a damaged schema file is kept aside (a copy through safesave, so that a follower captures it) before it is replaced
         const QString sf = m_dir + QLatin1String("/schema.json");
         if (!m_schemaLoaded && QFile::exists(sf))
-            QFile::rename(sf, sf + QStringLiteral(".damaged-%1").arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-HHmmss"))));
+            safesave::copyFile(sf, sf + QStringLiteral(".damaged-%1").arg(QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-HHmmss"))));
         if (!writeJson(sf, m_schema.toJson(), error, tr("Objects: categories and templates"), [this] {
                 m_schemaDirty = false;
                 m_schemaLoaded = true;
@@ -597,14 +597,14 @@ bool Store::save(QString *error)
     // picture that cannot be removed is tried again at the next save
     auto cleanup = [this] {
         for (auto it = m_removedFiles.begin(); it != m_removedFiles.end();) {
-            if (!QFile::exists(it.value()) || QFile::remove(it.value()))
+            if (!QFile::exists(it.value()) || safesave::removeFile(it.value()))
                 it = m_removedFiles.erase(it);
             else
                 ++it;
         }
         QStringList left;
         for (const QString &p : std::as_const(m_orphanPictures))
-            if (QFile::exists(picturePath(p)) && !QFile::remove(picturePath(p)))
+            if (QFile::exists(picturePath(p)) && !safesave::removeFile(picturePath(p)))
                 left << p;
         m_orphanPictures = left;
     };

@@ -11,7 +11,12 @@
 # everything to the release "models-5", a pre-release "not for downloading" (the program fetches what it needs), with
 # catalog.json last. It does nothing when that release has catalog.json already. A published release is never changed.
 # The jobs that build have no write permission; only "publish" may write, and it runs nothing that was downloaded or built.
-# The designed voices are not made yet (they wait for the listening verdict): the job "voices" is a stub, off by default.
+# The designed voices of Read Aloud (Qwen3-TTS): a run by hand with the input "voices" does only the jobs "voices" (one per
+# language: tools/models/design-voices.py designs 6 voices x 3 styles with the VoiceDesign 1.7B model and checks every clip),
+# "voices-catalog" (adds the seven packs to the release's catalog.json) and "voices-publish" (the only other job with write
+# permission: it ADDS read-aloud-voices-<lang>.zip and the new catalog.json to the existing release; nothing else of it changes).
+# It needs the release models-5 with its catalog.json. After it, fill the packs' size and SHA-256 into the program's catalog:
+#   python3 tools/models/make-catalog.py models-json resources/ai/models.json --catalog catalog.json   (the catalog.json of the release)
 # After a run: put the catalog.json of the artifact "models-5" into the program's catalog with
 #   python3 tools/models/make-catalog.py models-json resources/ai/models.json --catalog catalog.json
 # (then python3 tools/gen-resources.py) and commit it.
@@ -27,7 +32,7 @@ on:
   workflow_dispatch:
     inputs:
       voices:
-        description: 'Run the stub of the designed voices (they are not made yet: it only prints what it will do)'
+        description: 'Make only the designed voices of Read Aloud (seven languages) and add them to the existing release models-5 and its catalog'
         type: boolean
         default: false
       pocket:
@@ -62,9 +67,15 @@ jobs:
     steps:
       - name: Is it there already
         id: state
+        env:
+          VOICES: ${{ github.event_name == 'workflow_dispatch' && inputs.voices }}
         run: |
           have=$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" --jq '.assets[].name' 2>/dev/null || true)
-          if grep -qxF catalog.json <<< "$have"; then
+          if [ "$VOICES" = true ]; then
+            # only the voice jobs run: "there" switches every other job off, and the release must exist
+            grep -qxF catalog.json <<< "$have" || { echo "The release $RELEASE_TAG with its catalog.json is not there: the voices are added to it."; exit 1; }
+            echo "there=true" >> "$GITHUB_OUTPUT"
+          elif grep -qxF catalog.json <<< "$have"; then
             echo "The release $RELEASE_TAG has its files already: nothing to do."
             echo "there=true" >> "$GITHUB_OUTPUT"
           else
@@ -191,17 +202,93 @@ jobs:
           compression-level: 0
 
   voices:
-    # STUB: the designed voices (made with Qwen3-TTS VoiceDesign) wait for the writer's listening verdict. When they come this job
-    # will: make the chosen voices from their descriptions with the pinned VoiceDesign 1.7B model and qwentts.cpp (the pack's
-    # recipe), store each as a voice file (mono 24 kHz PCM, 16 bit, a reference clip with its text) with the description, the
-    # model and the license (Apache-2.0 for the model; the voices are made here), and add them to the catalog as models of kind
-    # "tts". It is skipped unless the input "voices" is set, and even then it only prints this.
+    # The designed voices: 6 voices x 3 styles in one language, made from written descriptions with the VoiceDesign 1.7B model
+    # (Qwen3-TTS, Apache License 2.0) and qwentts.cpp at its pinned commit (the AI engine pack of tools/get-ai-engine.sh), each
+    # clip checked (length, not silent, no clipping), a failed clip designed once more, then the job fails.
     needs: state
-    if: github.event_name == 'workflow_dispatch' && inputs.voices && needs.state.outputs.there != 'true'
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection' && github.event_name == 'workflow_dispatch' && inputs.voices
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        lang: [en, de, es, fr, pt, it, ru]
     steps:
-      - run: echo "The designed voices are not made yet. Nothing to do."
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - name: The engine libraries (the pack of this recipe, built from the pinned sources without it)
+        env:
+          QB_AI_ENGINE_VULKAN: 'OFF'
+          GH_TOKEN: ${{ github.token }}
+        run: tools/get-ai-engine.sh "$PWD/build/ai-engine"   # an absolute prefix: the script builds parts from other folders
+      - name: The designing tool (the engine's public interface only), next to the libraries
+        run: |
+          g++ -std=c++17 -O2 -I build/ai-engine/include tools/models/design-voices.cpp -o build/ai-engine/lib/design-voices \
+              -Lbuild/ai-engine/lib -l:libqwentts.so.0 -Wl,-rpath,'$ORIGIN'
+          ls -la build/ai-engine/lib | head -30
+      - name: Download the VoiceDesign model and the audio tokenizer at their pins
+        run: python3 -I tools/models/fetch-hf.py tools/models/models-5-sources.json qwen-voicedesign src
+      - name: Design and check the clips, pack them
+        run: |
+          mkdir -p out
+          python3 -I tools/models/design-voices.py make ${{ matrix.lang }} "$PWD/build/ai-engine/lib/design-voices" \
+              "$PWD/src/qwen-talker-1.7b-voicedesign-Q8_0.gguf" "$PWD/src/qwen-tokenizer-12hz-Q8_0.gguf" out 2>&1 | tee out/design.log
+          test -s out/read-aloud-voices-${{ matrix.lang }}.zip
+      - name: The clips for listening, the log
+        run: |
+          mkdir -p keep
+          cp out/read-aloud-voices-${{ matrix.lang }}.zip keep/
+          cp out/design.log keep/design-${{ matrix.lang }}.log
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: m5-voices-${{ matrix.lang }}
+          path: keep
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
+
+  voices-catalog:
+    # no write permission: the existing catalog.json of the release plus the seven packs, measured
+    needs: [state, voices]
+    if: ${{ !cancelled() && github.repository == 'Shelin-boop/Quillbinder_Collection' && needs.voices.result == 'success' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          pattern: m5-voices-*
+          path: built
+          merge-multiple: true
+      - name: The catalog of the release, with the packs added
+        run: |
+          mkdir -p old out
+          gh release download "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --pattern catalog.json --dir old
+          python3 -I tools/models/make-catalog.py voices old/catalog.json built out/catalog.json
+          python3 -I - <<'PY'
+          import json
+          c = json.load(open("out/catalog.json", encoding="utf-8"))
+          packs = [m for m in c["models"] if "voicepack" in m["kinds"]]
+          assert len(packs) == 7, len(packs)
+          for m in packs:
+              f = m["files"][0]
+              assert f["size"] > 0 and len(f["sha256"]) == 64, m["id"]
+              print(m["id"], f["size"], f["sha256"])
+          PY
+          cp built/read-aloud-voices-*.zip built/design-*.log out/
+          ls -la out
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: models-5-voices
+          path: out
+          retention-days: 7
+          if-no-files-found: error
+          compression-level: 0
 
   catalog:
     needs: [state, handwriting, wordlists, pocket-tts, qwen]
@@ -296,3 +383,30 @@ jobs:
           done
           gh release upload "$RELEASE_TAG" out/catalog.json
           gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" --jq '.assets[] | "\(.name) \(.size)"'
+
+  voices-publish:
+    # write permission, no checkout, nothing built here: ADDS the seven zip files to the release models-5 (a run again for a
+    # language replaces its zip) and replaces catalog.json (the same entries plus the packs); nothing else of the release changes
+    needs: voices-catalog
+    if: github.repository == 'Shelin-boop/Quillbinder_Collection' && needs.voices-catalog.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: models-5-voices
+          path: out
+      - name: Add the voice packs to the release
+        run: |
+          gh release view "$RELEASE_TAG" > /dev/null
+          for f in out/read-aloud-voices-*.zip; do
+            for try in 1 2 3; do gh release upload "$RELEASE_TAG" "$f" --clobber && break; echo "retry $f"; sleep 20; done
+          done
+          # the catalog last, so that a stopped upload is finished by a new run
+          gh release upload "$RELEASE_TAG" out/catalog.json --clobber
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG" --jq '.assets[] | select(.name | test("^(catalog.json|read-aloud-voices-)")) | "\(.name) \(.size)"'

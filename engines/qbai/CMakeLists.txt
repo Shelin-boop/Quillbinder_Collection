@@ -19,7 +19,7 @@ string(STRIP "${QB_AI_PARTS}" QB_AI_PARTS)
 string(REPLACE "\"" "'" QB_AI_PARTS_TEXT "${QB_AI_PARTS}")
 # the parts' versions (with ";" between them, which a compile definition would split): a generated header
 file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/generated/qbai_parts.h" "#define QBAI_PARTS \"${QB_AI_PARTS_TEXT}\"\n")
-add_library(qbai SHARED qbai.cpp ${CMAKE_SOURCE_DIR}/src/tools/QbAi.h)
+add_library(qbai SHARED qbai.cpp output.cpp output.h ${CMAKE_SOURCE_DIR}/src/tools/QbAi.h)
 target_include_directories(qbai PRIVATE ${CMAKE_SOURCE_DIR}/src "${CMAKE_CURRENT_BINARY_DIR}/generated")
 target_include_directories(qbai SYSTEM PRIVATE "${D}/include")
 target_link_libraries(qbai PRIVATE
@@ -36,4 +36,6 @@ set_target_properties(qbai PROPERTIES
 add_custom_command(TARGET qbai POST_BUILD
   COMMAND sh -c "for f in \"$1\"/lib/*.so*; do ln -sf \"$f\" \"$2/\"; done" sh "${D}" "${CMAKE_BINARY_DIR}/qbai"
   VERBATIM)
+# output.cpp compiles miniaudio (third_party/miniaudio, public domain / MIT-0): the sound of Read Aloud, backends loaded at run time
+set_source_files_properties(output.cpp PROPERTIES COMPILE_OPTIONS "-w")
 message(STATUS "AI engine: libqbai with ${D} (${QB_AI_PARTS})")

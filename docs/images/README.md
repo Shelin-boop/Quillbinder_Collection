@@ -9,6 +9,7 @@ by a scripted run of the test suite `qb_v0930e_tests`:
 The picture holds no text, picture or project of a person, and nothing of Scrivener or Scapple.
 
 `highlights.png` (0.99.0; shown in the README and on the download page from 1.0.0 on): the main window of Quillbinder
-with the program's own welcome project and, beside it, a panel "Quillbinder Highlights" that names the program's key
-advantages and possibilities. It was made for the project from a screenshot of the program; its panel's text was
+in a dark theme with the program's own welcome project (the document "Mind Maps" and its board in the inspector) and,
+beside the text, panels "Quillbinder Highlights" and "More possibilities" that name the program's key advantages and
+possibilities. It was made for the project from a screenshot of the program; its panel's text was
 written for Quillbinder. It holds no text, picture or project of a person, and nothing of Scrivener or Scapple.

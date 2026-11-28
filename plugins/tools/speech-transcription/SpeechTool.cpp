@@ -127,7 +127,7 @@ QList<Command> SpeechTool::commands() const
 {
     Command rec;
     rec.key = kRecord;
-    rec.text = tr("Speech &Transcription");
+    rec.text = tr("&Speech Transcription");
     rec.place = QStringLiteral("edit/writing-tools");
     rec.icon = QStringLiteral("audio-input-microphone");
     rec.toolTip = tr("Start or stop speech transcription (the arrow beside the button: microphone and options)");
@@ -140,7 +140,7 @@ QList<Command> SpeechTool::commands() const
     only.toolTip = tr("Start or stop a recording without writing its text (the text can be written later with Transcribe)");
     Command show;
     show.key = kShow;
-    show.text = tr("Show &Transcriptions");
+    show.text = tr("Show Transcri&ptions");
     show.place = QStringLiteral("edit/writing-tools");
     show.icon = QStringLiteral("view-list-text");
     show.toolTip = tr("The transcriptions in the inspector");

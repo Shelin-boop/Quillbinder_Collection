@@ -34,6 +34,7 @@
 #include <QTextDocument>
 #include <QRegularExpression>
 #include <QSaveFile>
+#include <QTextStream>
 #include <QTimer>
 #include <QXmlStreamReader>
 #include <cmath>
@@ -142,6 +143,8 @@ Project::Project(QObject *parent) : QObject(parent)
 
 Project::~Project()
 {
+    if (m_follower)
+        collab::gate().detach(m_follower);
     delete m_docs;
     m_docs = nullptr;
     delete m_model;
@@ -234,7 +237,7 @@ std::unique_ptr<Project> Project::create(const QString &parentDir, const QString
     return p;
 }
 
-std::unique_ptr<Project> Project::open(const QString &path, QString *error)
+std::unique_ptr<Project> Project::open(const QString &path, QString *error, collab::Follower *follower)
 {
     const QString file = resolveProjectFile(path);
     if (file.isEmpty()) {
@@ -245,6 +248,9 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
     std::unique_ptr<Project> p(new Project);
     p->m_indexFile = file;
     p->m_folder = QFileInfo(file).absolutePath();
+    // 0.99.0 (Live Sync): a follower's window never writes the shared files; attached before anything is read or written
+    if (follower)
+        p->setFollower(follower);
     // 0.99.0 (item 113): an encrypted project opens only when this device can decrypt it; before anything is read or
     // written (a refusal changes nothing in the folder). Its folder is then in the vault (core/crypto/Vault.h): every
     // read decrypts, every write encrypts.
@@ -281,7 +287,8 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
         }
     }
     // 0.65.0 (audit F19): a save that was cut off is finished, or dropped as a whole, before anything is read
-    {
+    // (0.99.0: not by a follower: only the authority finishes or drops a save, and removes what a cut-off write left)
+    if (!follower) {
         const savebatch::Recovery r = savebatch::recover(p->m_folder, p->journalFile(), p->settingsDir());
         if (r.any())
             p->m_saveRecovery = r.text();
@@ -310,6 +317,8 @@ std::unique_ptr<Project> Project::open(const QString &path, QString *error)
     QDir().mkpath(p->m_folder + QLatin1String("/settings"));
     // the project file that just opened: the spare copy if it is ever damaged (0.20); written only
     // when it differs, so opening alone changes no file a sync program would carry (0.64)
+    if (!p->m_loadedIndex.isEmpty() && follower)
+        p->m_loadedIndex.clear(); // (0.99.0: the spare copy is the authority's)
     if (!p->m_loadedIndex.isEmpty()) {
         // (0.99.0: the texts compared, an encrypted copy decrypted)
         QByteArray spareNow;
@@ -863,6 +872,8 @@ void Project::notifySettingsChanged()
 
 void Project::markIndexDirty()
 {
+    if (m_remoteApply > 0)
+        return; // (0.99.0: a remote commit applied to the window is no change of the writer's)
     m_indexDirty = true;
     binderChangedSinceSync = true;
     scheduleSave();
@@ -938,7 +949,7 @@ QString Project::journalFile() const { return settingsDir() + QStringLiteral("/j
 // Why the journal has one fixed name: docs/design-decisions.md, entry 1.
 bool Project::finishInterruptedSave(QString *error)
 {
-    if (!QFile::exists(journalFile()))
+    if (m_follower || !QFile::exists(journalFile()))
         return true;
     const savebatch::Recovery r = savebatch::recover(m_folder, journalFile(), settingsDir());
     // 0.93.0: a journal that cannot be read and could not be set aside is tried again at every save, and told once
@@ -1194,6 +1205,8 @@ bool Project::restoreSpareCopy(const QString &projectFile, QString *keptAs, QStr
 
 int Project::recoverUnlistedDocuments(QString *folderTitle)
 {
+    if (m_follower)
+        return 0; // (0.99.0: a follower writes nothing of its own; the authority's opening does this)
     QDir content(m_folder + QLatin1String("/content"));
     BinderItem *folder = nullptr;
     int n = 0;
@@ -1369,7 +1382,7 @@ bool Project::saveImpl(QString *error, bool quick)
             if (!saveIndex(error))
                 ok = false;
             // the list of documents with their titles and files (0.65.0): only when it changed
-            if (ok && binderChanged && scrivenerPath.isEmpty()) {
+            if (ok && binderChanged && scrivenerPath.isEmpty() && !m_follower) { // (0.99.0: the host computes the list)
                 const QByteArray list = titleListText().toUtf8();
                 QByteArray cur;
                 if (!(vault::readFile(titleListFile(), &cur) && cur == list)) {
@@ -1384,6 +1397,9 @@ bool Project::saveImpl(QString *error, bool quick)
                     scheduleSave();
             });
         }
+        // 0.99.0 (Live Sync): the authority's own files of this commit (its state and log) go into the same batch
+        if (ok && extraBatchFiles && !extraBatchFiles(batch, error))
+            ok = false;
     }
     if (!ok)
         batch.drop();
@@ -1940,8 +1956,14 @@ bool Project::saveIndex(QString *error)
         crypto::Error kind = crypto::Error::None;
         if (vault::readFile(m_indexFile, &cur, &why, &kind))
             shaOnDisk = QCryptographicHash::hash(cur, QCryptographicHash::Sha256);
-        else if (kind != crypto::Error::Io)
-            shaOnDisk = QByteArray("undecryptable");
+        else if (kind != crypto::Error::Io && kind != crypto::Error::Locked && kind != crypto::Error::NoSecretKey)
+            shaOnDisk = QByteArray("undecryptable"); // (0.99.0, audit AU-01: a locked or missing key is no comparison)
+    }
+    // 0.99.0 (Live Sync): a follower's file on disk is the replica's, which only the service writes; what the window knows
+    // is what it read or last handed over (captured), so nothing counts as "changed elsewhere" here
+    if (m_follower) {
+        indexElsewhere = false;
+        shaOnDisk = m_indexSha;
     }
     if (!shaOnDisk.isEmpty() && !m_indexSha.isEmpty()) {
         if (shaOnDisk != m_indexSha) {
@@ -2144,6 +2166,14 @@ bool Project::loadIndex(QString *error)
             m_trash = c;
     }
 
+    readSections(rootEl);
+    return true;
+}
+
+// 0.99.0 (Live Sync): the parts of the project file that are no items, read from the root element (loadIndex above, and
+// applySectionsFromIndex for a remote commit)
+void Project::readSections(const QDomElement &rootEl)
+{
     const QDomElement lab = rootEl.firstChildElement(QStringLiteral("Labels"));
     labelTitle = lab.attribute(QStringLiteral("title"), tr("Label"));
     labels.clear();
@@ -2327,7 +2357,105 @@ bool Project::loadIndex(QString *error)
         if (w.date.isValid())
             history.append(w);
     }
+}
+
+bool Project::applySectionsFromIndex(const QByteArray &indexXml, QString *error)
+{
+    QDomDocument dom;
+    QString msg;
+    if (!dom.setContent(indexXml, &msg) || dom.documentElement().tagName() != QLatin1String("QuillbinderProject")) {
+        if (error)
+            *error = tr("The project file is damaged (%1).").arg(msg);
+        return false;
+    }
+    readSections(dom.documentElement());
+    emit settingsChanged();
     return true;
+}
+
+void Project::setFollower(collab::Follower *follower)
+{
+    if (m_follower && m_follower != follower)
+        collab::gate().detach(m_follower);
+    m_follower = follower;
+    if (follower)
+        collab::gate().attach(follower, m_folder);
+}
+
+void Project::acknowledgeIndexOnDisk()
+{
+    QByteArray cur;
+    m_indexMark = syncsafe::stampOf(m_indexFile);
+    if (vault::readFile(m_indexFile, &cur))
+        m_indexSha = QCryptographicHash::hash(cur, QCryptographicHash::Sha256);
+}
+
+bool Project::canChange(const QString &resource) const { return !m_follower || m_follower->canChange(resource); }
+
+void Project::beginRemoteApply()
+{
+    if (m_remoteApply++ == 0 && m_follower)
+        m_follower->capture().setSuspended(true);
+}
+
+void Project::endRemoteApply()
+{
+    if (m_remoteApply > 0 && --m_remoteApply == 0 && m_follower)
+        m_follower->capture().setSuspended(false);
+}
+
+QString Project::itemToXml(const BinderItem *item)
+{
+    QDomDocument dom;
+    QDomElement holder = dom.createElement(QStringLiteral("H"));
+    dom.appendChild(holder);
+    writeItem(dom, holder, item);
+    QDomElement e = holder.firstChildElement(QStringLiteral("Item"));
+    const QDomElement ch = e.firstChildElement(QStringLiteral("Children"));
+    if (!ch.isNull())
+        e.removeChild(ch);
+    QString out;
+    QTextStream ts(&out);
+    e.save(ts, 0);
+    return out;
+}
+
+BinderItem *Project::itemFromXml(const QString &xml)
+{
+    QDomDocument dom;
+    if (!dom.setContent(xml) || dom.documentElement().tagName() != QLatin1String("Item"))
+        return nullptr;
+    return readOneItem(dom.documentElement(), nullptr);
+}
+
+void Project::copyItemFields(BinderItem *to, const BinderItem &from)
+{
+    to->type = from.type;
+    to->title = from.title;
+    to->label = from.label;
+    to->status = from.status;
+    to->includeInCompile = from.includeInCompile;
+    to->sectionType = from.sectionType;
+    to->keywords = from.keywords;
+    to->custom = from.custom;
+    to->created = from.created;
+    to->modified = from.modified;
+    to->icon = from.icon;
+    to->synopsis = from.synopsis;
+    to->synopsisImage = from.synopsisImage;
+    to->fileExt = from.fileExt;
+    to->originalFileName = from.originalFileName;
+    to->sourceUrl = from.sourceUrl;
+    to->target = from.target;
+    to->targetChars = from.targetChars;
+    to->defaultTemplate = from.defaultTemplate;
+    to->scriptMode = from.scriptMode;
+    to->autoTitle = from.autoTitle;
+    to->bookmarks = from.bookmarks;
+    to->corkboardPos = from.corkboardPos;
+    to->corkArrangement = from.corkArrangement;
+    to->wordCount = from.wordCount;
+    to->charCount = from.charCount;
 }
 
 } // namespace qb

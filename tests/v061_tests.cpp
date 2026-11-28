@@ -608,7 +608,7 @@ int main(int argc, char **argv)
         }
     }
 
-    // ---- the inspector tab
+    // ---- the inspector tab (0.99.0: the Handwriting tab is there too, its button hidden, so the list is no longer only this one)
     Inspector *insp = w.findChild<Inspector *>();
     auto *tabButton = w.findChild<QToolButton *>(QStringLiteral("inspectorTab:speech-transcription.list"));
     auto *notesButton = insp ? insp->findChildren<QToolButton *>().value(0) : nullptr;

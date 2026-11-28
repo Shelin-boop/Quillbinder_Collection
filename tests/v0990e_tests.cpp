@@ -764,7 +764,7 @@ int main(int argc, char **argv)
             for (auto it = lib.globalMatch(QString::fromUtf8(d.out)); it.hasNext();)
                 needed << it.next().captured(1);
             static const QRegularExpression allowed(
-                QStringLiteral("^(libQt6(Core|Gui|Xml|DBus)\\.so\\.6|libz\\.so\\.1|libhunspell-1\\.7\\.so\\.0|libstdc\\+\\+\\.so\\.6|"
+                QStringLiteral("^(libQt6(Core|Gui|Xml|DBus|Network)\\.so\\.6|libz\\.so\\.1|libhunspell-1\\.7\\.so\\.0|libstdc\\+\\+\\.so\\.6|"
                                "libm\\.so\\.6|libgcc_s\\.so\\.1|libc\\.so\\.6|ld-linux-x86-64\\.so\\.2)$"));
             QStringList other;
             for (const QString &n : needed)

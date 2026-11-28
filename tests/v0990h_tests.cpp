@@ -18,7 +18,9 @@
 #include "core/AiCatalog.h"
 #include "core/AiEngine.h"
 #include "core/ModelMemory.h"
+#include "core/ReadAloud.h"
 #include "core/SystemMemory.h"
+#include "core/Zip.h"
 #include "ui/AiDownloads.h"
 #include "ui/AiInstallPanel.h"
 #include "ui/AppSettings.h"
@@ -222,6 +224,28 @@ static int childReal(const QString &model, const QString &wav)
           QStringLiteral("real engine: Sonic makes 1 s of a tone 0.5 s long at speed 2, its pitch kept"),
           QStringLiteral("%1 samples (%2), pitch %3 %4").arg(fast.size()).arg(ratio).arg(pitch).arg(why));
 
+    {
+        // the sound output (miniaudio inside libqbai): a computer or container without a sound device gets miniaudio's silent
+        // backend or a clear error; never a crash
+        const qbai_api *a2 = e.apiFor(2);
+        qbai_output *o = a2 && a2->output_open ? a2->output_open(24000, 1) : nullptr;
+        if (!o) {
+            check(a2 && a2->output_open && QString::fromUtf8(a2->last_error()).contains(QLatin1String("sound output")),
+                  QStringLiteral("real engine: no sound output here, and the reason is told"), QString::fromUtf8(a2 ? a2->last_error() : ""));
+        } else {
+            const std::vector<float> beep(12000, 0.0f);   // silence: nothing audible in a check
+            check(a2->output_write(o, beep.data(), 12000) == QBAI_OK, QStringLiteral("real engine: a sound output opens and takes PCM"));
+            QElapsedTimer t;
+            t.start();
+            while (a2->output_played(o) < 3000 && t.elapsed() < 3000)
+                QTest::qWait(20);
+            check(a2->output_played(o) >= 3000, QStringLiteral("real engine: its played position moves with the clock"), QString::number(a2->output_played(o)));
+            a2->output_stop(o);
+            check(a2->output_played(o) == 0, QStringLiteral("real engine: stop puts the position back to 0"));
+            a2->output_close(o);
+        }
+    }
+
     if (model.isEmpty() || !QFileInfo::exists(model) || !QFileInfo::exists(wav)) {
         info(QStringLiteral("(speech recognition not checked: QB_AI_WHISPER_MODEL and QB_AI_WHISPER_SAMPLE name no files)"));
     } else {
@@ -313,6 +337,25 @@ int main(int argc, char **argv)
     writeFile(source + QStringLiteral("/fake-bad--bad.bin"), wrong);           // not what the catalog says
     writeFile(source + QStringLiteral("/fake-two--a.bin"), good);
     writeFile(source + QStringLiteral("/fake-two--b.bin"), wrong);             // first wrong, later right
+    // voice packs of Read Aloud (0.99.0): a zip that is a pack, one that is not, and a Qwen model whose download brings the pack of the language
+    QTemporaryDir zipDir;
+    auto makeZip = [&](const QString &name, const QStringList &entries) {
+        const QString path = zipDir.filePath(name);
+        {
+            ZipWriter z(path);
+            for (const QString &e : entries)
+                z.addFile(e, e.endsWith(QLatin1String(".txt")) ? QByteArray("Words of the clip.") : QByteArray(48044, 'w'));
+            z.close();
+        }
+        return readAll(path);
+    };
+    const QByteArray packEn = makeZip(QStringLiteral("en.zip"), {QStringLiteral("female1-neutral.wav"), QStringLiteral("female1-neutral.txt"), QStringLiteral("voices.json")});
+    const QByteArray packDe = makeZip(QStringLiteral("de.zip"), {QStringLiteral("male1-calm.wav"), QStringLiteral("male1-calm.txt")});
+    const QByteArray packBad = makeZip(QStringLiteral("bad.zip"), {QStringLiteral("female1-neutral.wav"), QStringLiteral("../outside.wav")});
+    writeFile(source + QStringLiteral("/read-aloud-voices-en.zip"), packEn);
+    writeFile(source + QStringLiteral("/read-aloud-voices-de.zip"), packDe);
+    writeFile(source + QStringLiteral("/read-aloud-voices-fr.zip"), packBad);
+    writeFile(source + QStringLiteral("/fake-qwen--q.gguf"), good);
     auto file = [](const QString &name, const QString &asset, const QByteArray &d) {
         return QJsonObject{{"name", name}, {"asset", asset}, {"size", double(d.size())}, {"sha256", sha(d)}};
     };
@@ -338,6 +381,16 @@ int main(int argc, char **argv)
         QJsonObject{{"id", "../evil"}, {"title", "Out of its folder"}, {"kinds", QJsonArray{"tts"}}, {"files", QJsonArray{file("e", "e", good)}}},
         QJsonObject{{"id", "fake-evil-file"}, {"title", "A file out of its folder"}, {"kinds", QJsonArray{"tts"}},
                     {"files", QJsonArray{file("../e", "e", good)}}},
+        QJsonObject{{"id", "fake-qwen"}, {"title", "Fake Qwen"}, {"kinds", QJsonArray{"tts"}}, {"engine", "qwen3-tts"}, {"languages", QJsonArray{"en", "de"}},
+                    {"memoryMB", 50}, {"model", "q.gguf"}, {"files", QJsonArray{file("q.gguf", "fake-qwen--q.gguf", good)}}},
+        QJsonObject{{"id", "voices-en"}, {"title", "Voices, English"}, {"kinds", QJsonArray{"voicepack"}}, {"languages", QJsonArray{"en"}},
+                    {"files", QJsonArray{file("read-aloud-voices-en.zip", "read-aloud-voices-en.zip", packEn)}}},
+        QJsonObject{{"id", "voices-de"}, {"title", "Voices, German"}, {"kinds", QJsonArray{"voicepack"}}, {"languages", QJsonArray{"de"}},
+                    {"files", QJsonArray{file("read-aloud-voices-de.zip", "read-aloud-voices-de.zip", packDe)}}},
+        QJsonObject{{"id", "voices-fr"}, {"title", "Voices, French"}, {"kinds", QJsonArray{"voicepack"}}, {"languages", QJsonArray{"fr"}},
+                    {"files", QJsonArray{file("read-aloud-voices-fr.zip", "read-aloud-voices-fr.zip", packBad)}}},
+        QJsonObject{{"id", "voices-ru"}, {"title", "Voices, Russian"}, {"kinds", QJsonArray{"voicepack"}}, {"languages", QJsonArray{"ru"}},
+                    {"files", QJsonArray{QJsonObject{{"name", "read-aloud-voices-ru.zip"}, {"asset", "read-aloud-voices-ru.zip"}, {"size", 0}, {"sha256", ""}}}}},
     };
     writeFile(catalogFile, QJsonDocument(QJsonObject{{"format", 1}, {"release", "models-5"}, {"models", models}}).toJson());
 
@@ -452,6 +505,41 @@ int main(int argc, char **argv)
         check(e.api()->threads() == 3, QStringLiteral("the shared setting of the AI's cores reaches the engine"));
         check(toolhost::host().aiEngine(1) == e.api() && toolhost::host().aiEngine(2) && toolhost::host().aiEngine(2)->version == 2 && toolhost::host().aiEngine(3) == nullptr,
               QStringLiteral("tool interface 1.3: aiEngine(1) is the program's own table (one engine in the process), aiEngine(2) the version 2 table, aiEngine(3) none"));
+        {
+            // the sound output of the engine (Read Aloud): open, write, played, pause, resume, stop, close
+            const qbai_api *a2 = e.apiFor(2);
+            check(a2 && a2->size == int(sizeof(qbai_api)) && a2->output_open && a2->output_write && a2->output_pause && a2->output_resume && a2->output_stop
+                      && a2->output_close && a2->output_played && !(e.api()->size > int(QBAI_API_V1_SIZE)),
+                  QStringLiteral("the version 2 table ends with the sound output functions; the version 1 table (what the program holds) has none"));
+            typedef void (*OutScale)(double);
+            auto setScale = reinterpret_cast<OutScale>(QLibrary(fakeLib).resolve("qbai_fake_out_set_scale"));
+            qbai_output *o = a2 ? a2->output_open(24000, 1) : nullptr;
+            const std::vector<float> pcm(24000, 0.1f);
+            if (setScale)
+                setScale(1000);
+            check(o && a2->output_write(o, pcm.data(), 24000) == QBAI_OK, QStringLiteral("an output opens and takes PCM (24000 frames at 24 kHz)"));
+            QTest::qWait(60);
+            const qint64 p1 = o ? a2->output_played(o) : -1;
+            check(p1 > 0 && p1 <= 24000, QStringLiteral("the played position moves while it plays"), QString::number(p1));
+            if (o) {
+                a2->output_pause(o);
+                const qint64 at = a2->output_played(o);
+                QTest::qWait(60);
+                check(a2->output_played(o) == at, QStringLiteral("paused: the position stands still"));
+                a2->output_resume(o);
+                QTest::qWait(60);
+                check(a2->output_played(o) >= at, QStringLiteral("resumed: it goes on"));
+                a2->output_stop(o);
+                check(a2->output_played(o) == 0, QStringLiteral("stop drops the queue; the position goes back to 0"));
+                a2->output_close(o);
+                a2->output_close(nullptr);
+            }
+            qputenv("QBAI_FAKE_NO_SOUND", "1");
+            check(a2 && a2->output_open(24000, 1) == nullptr && QString::fromUtf8(a2->last_error()).contains(QLatin1String("sound output")),
+                  QStringLiteral("no sound output: open fails with a reason"));
+            qunsetenv("QBAI_FAKE_NO_SOUND");
+            check(a2 && a2->output_write(nullptr, pcm.data(), 10) != QBAI_OK && a2->output_open(0, 1) == nullptr, QStringLiteral("bad arguments are refused"));
+        }
         QString where;
         check(toolhost::host().aiPickDevice(QStringLiteral("auto"), 1024 * MB, &where) == 1 && where == QLatin1String("gpu:Fake Card")
                   && toolhost::host().aiPickDevice(QStringLiteral("auto"), 3500 * MB, &where) == 0 && where == QLatin1String("ram"),
@@ -613,14 +701,15 @@ int main(int argc, char **argv)
         for (const ai::CatalogModel &m : c.models)
             ids << m.id;
         check(c.format == 1 && ids == QStringList({QStringLiteral("fake-tts"), QStringLiteral("fake-asr"), QStringLiteral("fake-unpublished"),
-                                                   QStringLiteral("fake-huge"), QStringLiteral("fake-bad"), QStringLiteral("fake-two")}),
+                                                   QStringLiteral("fake-huge"), QStringLiteral("fake-bad"), QStringLiteral("fake-two"), QStringLiteral("fake-qwen"),
+                                                   QStringLiteral("voices-en"), QStringLiteral("voices-de"), QStringLiteral("voices-fr"), QStringLiteral("voices-ru")}),
               QStringLiteral("QB_AI_CATALOG: the checks' catalog; a model whose id or file name leaves its folder is left out"), ids.join(QLatin1String(", ")));
         const ai::CatalogModel *t = c.model(QStringLiteral("fake-tts"));
         check(t && t->engineKind() == QBAI_TTS_POCKET && t->languages == QStringList({QStringLiteral("en"), QStringLiteral("de")})
                   && t->memoryMB == 50 && t->files.size() == 2 && t->files[1].parts.size() == 2 && t->downloadBytes() == voice.size() + mm1.size() + mm2.size()
                   && t->release == QLatin1String("models-5") && t->published(),
               QStringLiteral("a model: its engine, languages, memory, files (one in two parts), release"));
-        check(c.ofKinds({QStringLiteral("tts")}).size() == 3 && c.ofKinds({QStringLiteral("asr")}).size() == 3 && c.ofKinds({}).size() == 6,
+        check(c.ofKinds({QStringLiteral("tts")}).size() == 4 && c.ofKinds({QStringLiteral("asr")}).size() == 3 && c.ofKinds({QStringLiteral("voicepack")}).size() == 4 && c.ofKinds({}).size() == 11,
               QStringLiteral("the models of a kind (\"tts\", \"asr\")"));
         check(!c.model(QStringLiteral("fake-unpublished"))->published()
                   && ai::downloadProblem(*c.model(QStringLiteral("fake-unpublished"))).contains(QLatin1String("not published")),
@@ -677,6 +766,38 @@ int main(int argc, char **argv)
               QStringLiteral("a cancelled download leaves nothing behind"), cancelled.message);
         const Done huge = waitFinished(d, [&] { d.download(QStringLiteral("fake-huge")); });
         check(!huge.ok && huge.message.contains(QLatin1String("memory")), QStringLiteral("a model too large for the computer is not downloaded"));
+
+        // ---- 0.99.0: the voice packs of Read Aloud
+        {
+            using namespace qb::readaloud;
+            const QString root = ai::modelsRoot() + QStringLiteral("/read-aloud-voices");
+            check(!d.ensureVoicePack(QStringLiteral("de")) && !d.busy() && !ai::isInstalled(*c.model(QStringLiteral("voices-de"))),
+                  QStringLiteral("a pack is not fetched while no Qwen model is installed"));
+            const Done q = waitFinished(d, [&] { d.download(QStringLiteral("fake-qwen")); });
+            check(q.ok && ai::isInstalled(*c.model(QStringLiteral("fake-qwen"))), QStringLiteral("a Qwen model downloads"), q.message);
+            QElapsedTimer waited;
+            waited.start();
+            while (!voicePackInstalled(QStringLiteral("en")) && waited.elapsed() < 20000)
+                QTest::qWait(20);
+            check(voicePackInstalled(QStringLiteral("en")) && QFileInfo::exists(root + QStringLiteral("/en/female1-neutral.wav"))
+                      && QFileInfo::exists(root + QStringLiteral("/en/voices.json")) && ai::isInstalled(*c.model(QStringLiteral("voices-en"))),
+                  QStringLiteral("... and its download is followed by the voice pack of the Read Aloud language (checked, unpacked into read-aloud-voices/en/)"));
+            const Done de = waitFinished(d, [&] { check(d.ensureVoicePack(QStringLiteral("de")), QStringLiteral("choosing German starts its pack's download")); });
+            check(de.ok && QFileInfo::exists(root + QStringLiteral("/de/male1-calm.wav")) && !d.ensureVoicePack(QStringLiteral("de")),
+                  QStringLiteral("a language chosen later: its pack is fetched; once installed it is not fetched again"), de.message);
+            const Done badPack = waitFinished(d, [&] { d.download(QStringLiteral("voices-fr")); });
+            check(!badPack.ok && !voicePackInstalled(QStringLiteral("fr")) && !QFileInfo::exists(root + QStringLiteral("/outside.wav"))
+                      && !QFileInfo::exists(ai::modelDir(QStringLiteral("voices-fr")) + QStringLiteral("/.checked")),
+                  QStringLiteral("a pack with a path outside its folder is refused and does not count as installed"), badPack.message);
+            const Done ru = waitFinished(d, [&] { d.download(QStringLiteral("voices-ru")); });
+            check(!ru.ok && ru.message.contains(QLatin1String("not published")) && !d.ensureVoicePack(QStringLiteral("ru")),
+                  QStringLiteral("a pack with a placeholder for its size and SHA-256 is \"not published yet\": no download"), ru.message);
+            // removing the last Qwen model removes the packs
+            ai::removeModel(*c.model(QStringLiteral("fake-qwen")));
+            check(removeVoicePacksIfNoQwen() && !voicePackInstalled(QStringLiteral("en")) && !voicePackInstalled(QStringLiteral("de"))
+                      && !ai::isInstalled(*c.model(QStringLiteral("voices-en"))),
+                  QStringLiteral("the last Qwen model is removed: the packs go with it (folders and zips)"));
+        }
         check(toolhost::host().aiModelFile(QStringLiteral("fake-tts"), QStringLiteral("model")) == ai::modelFile(t, QStringLiteral("model"))
                   && toolhost::host().aiModelFile(QStringLiteral("fake-asr"), QStringLiteral("model")).isEmpty(),
               QStringLiteral("tool interface 1.3: aiModelFile() finds an installed model, \"\" for one that is not"));
@@ -741,7 +862,7 @@ int main(int argc, char **argv)
         const QTreeWidget *list = panel->findChild<QTreeWidget *>(QStringLiteral("aiModels"));
         check(state.contains(QLatin1String("1.0 is installed")) && state.contains(QLatin1String("started again"))
                   && panel->findChild<QPushButton *>(QStringLiteral("aiInstallEngine"))->text() == QLatin1String("Install Again")
-                  && list->topLevelItemCount() == 3 && list->topLevelItem(0)->text(5) == QLatin1String("Not installed")
+                  && list->topLevelItemCount() == 4 && list->topLevelItem(0)->text(5) == QLatin1String("Not installed")
                   && list->topLevelItem(1)->text(5) == QLatin1String("Not published yet"),
               QStringLiteral("the panel: the installed engine (a restart pending), the catalog's voices with their state"), state);
         shot(panel, QStringLiteral("v0990h-panel-installed"));
@@ -804,7 +925,13 @@ int main(int argc, char **argv)
     // ================================================================ the package recipes
     std::printf("== the engine packages' recipes\n");
     {
-        const QString pack = qEnvironmentVariableIsSet("QB_AI_ENGINE_DIR") ? qEnvironmentVariable("QB_AI_ENGINE_DIR") : kSource + QStringLiteral("/build/ai-engine");
+        // audit AU-04: the program fetches only its own version's engine, so a release without one must not go out
+        const QString wf = QString::fromUtf8(readAll(kSource + QStringLiteral("/.github/workflows/release.yml")));
+        check(wf.contains(QLatin1String("::error::the package $e was not built")) && !wf.contains(QLatin1String("it is left out of this release")),
+              QStringLiteral("release.yml: a missing engine package (ai-engine, handwriting-engine) stops the release instead of a warning"));
+    }
+    {
+        const QString pack =qEnvironmentVariableIsSet("QB_AI_ENGINE_DIR") ? qEnvironmentVariable("QB_AI_ENGINE_DIR") : kSource + QStringLiteral("/build/ai-engine");
         const QString qbai = kBuild + QStringLiteral("/qbai/libqbai.so.1");
         for (const QString id : {QStringLiteral("ai-engine"), QStringLiteral("handwriting-engine")}) {
             const QJsonObject m = QJsonDocument::fromJson(readAll(kSource + QStringLiteral("/addons/") + id + QStringLiteral("/manifest.json"))).object();

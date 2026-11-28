@@ -352,6 +352,8 @@ bool ZipWriter::addDirectory(const QString &diskDir, const QString &prefix)
         const QString rel = base.relativeFilePath(path);
         if (savebatch::isStaged(path) || rel == QLatin1String("settings/journal.json"))
             continue; // a save in progress (0.65.0): not project data
+        if (rel.startsWith(QLatin1String("livesync/")) || rel.startsWith(QLatin1String("livesync-local/")) || rel == QLatin1String("livesync-replica.json"))
+            continue; // 0.99.0 (Live Sync): the identity and state of a shared project belong to its place, never into a copy (4.8)
         if (path.endsWith(QLatin1String(".qbconvert")) || path.contains(QLatin1String(".qbconvert.")))
             continue; // 0.99.0: a file of an encryption that was cut off (ProjectCrypto.h): not project data
         if (rel == QLatin1String("settings/lock") || rel.endsWith(QLatin1String("/quillbinder.lock"))

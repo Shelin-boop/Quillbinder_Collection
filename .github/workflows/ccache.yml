@@ -64,13 +64,15 @@ jobs:
           cp -a "$GITHUB_WORKSPACE" "$Q"
           git config --global --add safe.directory "$Q"
 
-      - name: Build tools, Qt, FFmpeg and whisper.cpp (the packs)
+      - name: Build tools, Qt, FFmpeg, whisper.cpp, encryption, AI engine and ONNX Runtime (the packs)
         working-directory: /home/claude/quillbinder_collection
         run: |
           bash tools/cloud-setup.sh > /tmp/setup.log 2>&1 || { tail -40 /tmp/setup.log; exit 1; }
           tools/get-ffmpeg.sh > /tmp/ffmpeg.log 2>&1 && tools/get-whisper.sh > /tmp/whisper.log 2>&1 \
-            || { tail -40 /tmp/ffmpeg.log /tmp/whisper.log; exit 1; }
-          tail -1 /tmp/ffmpeg.log; tail -1 /tmp/whisper.log
+            && tools/get-crypto.sh > /tmp/crypto.log 2>&1 && tools/get-ai-engine.sh > /tmp/ai-engine.log 2>&1 \
+            && tools/get-onnxruntime.sh > /tmp/onnxruntime.log 2>&1 \
+            || { tail -40 /tmp/ffmpeg.log /tmp/whisper.log /tmp/crypto.log /tmp/ai-engine.log /tmp/onnxruntime.log; exit 1; }
+          tail -1 /tmp/ffmpeg.log; tail -1 /tmp/whisper.log; tail -1 /tmp/crypto.log
 
       - name: The last compiled files
         working-directory: /home/claude/quillbinder_collection

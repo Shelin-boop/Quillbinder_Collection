@@ -38,7 +38,7 @@
 | Mind maps, objects, add-ons, crash reports | **File > Options > Extras** |
 | Labels, status, section types, custom metadata, special folders | **Project > Project Settings** |
 | Options for one project only | **File > Options**, **Settings for: This project** at the top; whether projects' own settings come first: **File > Options > General** |
-| Take your settings to another computer | **File > Options > Manage > Save Options to File… / Load Options from File…** |
+| Take your settings to another computer | **File > Options > Manage > Export Profile… / Import Profile…** |
 | Everything back to the standard | **File > Options > Defaults** (your projects, themes, layouts, and shortcuts stay) |
 
 ---
@@ -75,6 +75,7 @@
 - **Places kept**: every document opens where you left the cursor, also after reopening the project.
 - **Fonts**: **Format > Font > Install Font Files…** adds fonts without leaving the program.
 - **Safety**: autosave also while you type on, backups, a spare copy of the project file, crash and freeze reports (**Help > Troubleshooting and Development > Crash Reports…**), and **Help > Troubleshooting and Development > System Information**.
+- **Live Sync** (off until you turn it on in **File > Options > Live Sync**): keeps one project the same on your devices in the same network. Pair the devices once (**Pair a Device...**: compare the six digits on both), then choose **Share This Project...** in the menu of the toolbar's Live Sync button and **Join a Project...** on the other device. One device edits a document at a time; the others can ask. The files of a project that is not encrypted, and its ZIP backups, are not encrypted by Live Sync: use your devices' own encryption (section 21 of the manual).
 
 ### Updates and add-ons
 

@@ -243,7 +243,28 @@ jobs:
       # AI engine's libraries are there. Without them a package is left out of the release, with a warning.
       - name: The engine packages' libraries (the names of their caches)
         id: engine-recipe
-        run: for p in aiengine onnxruntime; do echo "$p=$(tools/deps-pack.sh hash "$p")" | tee -a "$GITHUB_OUTPUT"; done
+        run: for p in crypto aiengine onnxruntime; do echo "$p=$(tools/deps-pack.sh hash "$p")" | tee -a "$GITHUB_OUTPUT"; done
+
+      # the built-in encryption (RNP with Botan, linked statically; tools/get-crypto.sh, about 20 minutes when built)
+      - name: The encryption libraries from the cache
+        id: crypto-cache
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/crypto
+          key: deps-linux-crypto-${{ steps.engine-recipe.outputs.crypto }}
+
+      - name: The encryption libraries (built when the cache has none)
+        env:
+          QB_DEPS_PACK: '0'
+        run: tools/ci-step.sh crypto tools/get-crypto.sh
+
+      - name: The encryption libraries into the cache (main only)
+        if: github.ref == 'refs/heads/main' && needs.version.outputs.fresh != 'true' && steps.crypto-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/crypto
+          key: deps-linux-crypto-${{ steps.engine-recipe.outputs.crypto }}
 
       - name: The AI engine's libraries from the cache
         id: aiengine-cache
@@ -328,14 +349,12 @@ jobs:
           for must in speech-transcription translation-proofreading; do
             [ -f "dist/$must.qbpkg" ] || { echo "::error::the add-on $must was not built"; exit 1; }
           done
-          # 0.99.0: the engine packages, when built, are checked (the expected libraries, the licenses, nothing needed outside
-          # the package and the base system); a missing one is left out of the release and of the full AppImage
+          # 0.99.0: the engine packages are checked (the expected libraries, the licenses, nothing needed outside the
+          # package and the base system); a missing one stops the release (audit AU-04: the program fetches only its own
+          # version's engine, so Read Aloud, Speech Transcription and Handwriting could not be installed for that version)
           for e in ai-engine handwriting-engine; do
-            if [ -f "dist/$e.qbpkg" ]; then
-              python3 -I tools/check-engine-package.py "dist/$e.qbpkg"
-            else
-              echo "::warning::the package $e was not built (its libraries are missing): it is left out of this release"
-            fi
+            [ -f "dist/$e.qbpkg" ] || { echo "::error::the package $e was not built (its libraries are missing)"; exit 1; }
+            python3 -I tools/check-engine-package.py "dist/$e.qbpkg"
           done
           mapfile -t NEWS < <(python3 -I tools/release-notes.py --whats-new)
           BUILD=build-appimage OUT=dist tools/ci-step.sh update packaging/linux/build-update.sh "${NEWS[@]}"
@@ -409,7 +428,7 @@ jobs:
       - name: The recipes of FFmpeg and whisper.cpp (the names of their caches)
         id: recipe
         run: |
-          for p in ffmpeg whisper; do echo "$p=$(tools/deps-pack.sh hash "$p")" | tee -a "$GITHUB_OUTPUT"; done
+          for p in ffmpeg whisper crypto aiengine onnxruntime; do echo "$p=$(tools/deps-pack.sh hash "$p")" | tee -a "$GITHUB_OUTPUT"; done
 
       # read only: the job "build" writes these caches (D3)
       - name: FFmpeg from the cache
@@ -440,6 +459,35 @@ jobs:
           echo "FFmpeg: $([ "$FFMPEG_HIT" = true ] && echo 'from the cache' || echo 'built in this run')"
           echo "whisper.cpp: $([ "$WHISPER_HIT" = true ] && echo 'from the cache' || echo 'built in this run')"
           find build/ffmpeg build/ffmpeg-full build/whisper -type f -name '*.so*' | sort | xargs sha256sum
+
+      # 0.99.0: the packs the suites v0990e/f/h/k/n/o need (encryption, AI engine, ONNX Runtime), as the job "build" has them
+      - name: The encryption libraries from the cache
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/crypto
+          key: deps-linux-crypto-${{ steps.recipe.outputs.crypto }}
+
+      - name: The AI engine's libraries from the cache
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/ai-engine
+          key: deps-linux-aiengine-${{ steps.recipe.outputs.aiengine }}
+
+      - name: ONNX Runtime from the cache
+        if: needs.version.outputs.fresh != 'true'
+        uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25 # v5.1.0
+        with:
+          path: build/onnxruntime
+          key: deps-linux-onnxruntime-${{ steps.recipe.outputs.onnxruntime }}
+
+      - name: The encryption, AI engine and ONNX Runtime libraries (built or downloaded when the cache has none)
+        env:
+          QB_DEPS_PACK: '0'
+        run: |
+          tools/get-crypto.sh > /tmp/crypto.log 2>&1 && tools/get-ai-engine.sh > /tmp/ai-engine.log 2>&1 \
+            && tools/get-onnxruntime.sh > /tmp/onnxruntime.log 2>&1 || { tail -40 /tmp/crypto.log /tmp/ai-engine.log /tmp/onnxruntime.log; exit 1; }
 
       - name: The compiled files of the last test build (ccache)
         if: needs.version.outputs.fresh != 'true'

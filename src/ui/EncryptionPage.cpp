@@ -3,9 +3,11 @@
 #include "core/Backup.h"
 #include "core/crypto/KeyStore.h"
 #include "core/crypto/Passphrase.h"
+#include "core/crypto/Vault.h"
 #include "core/crypto/ProjectSwitches.h"
 #include "ui/AppSettings.h"
 #include "ui/HintLabel.h"
+#include "ui/LiveSyncWallet.h"
 
 #include <QApplication>
 #include <QCheckBox>
@@ -563,6 +565,13 @@ EncryptionPage::EncryptionPage(QWidget *parent) : QWidget(parent)
     intro->setWordWrap(true);
     hintlabel::style(intro);
     v->addWidget(intro);
+    // 0.99.0 (Live Sync): where this device keeps its keys (the system's key store or the Quillbinder wallet)
+    livesync::installWalletDialogs();
+    auto *place = new QLabel(livesync::keyPlaceText(), this);
+    place->setObjectName(QStringLiteral("encKeyPlace"));
+    place->setWordWrap(true);
+    hintlabel::style(place);
+    v->addWidget(place);
 
     auto *keys = new QGroupBox(tr("Keys on this device"), this);
     auto *kv = new QVBoxLayout(keys);
@@ -823,11 +832,12 @@ void EncryptionPage::forgetPassphrase()
         return;
     if (!encui::confirmBox(this, tr("Forget the passphrase"),
                            tr("Quillbinder forgets the passphrase on this device and locks your key. It will ask for the passphrase "
-                              "again when it needs it. Continue?")))
+                              "again when it needs it. An encrypted project that is open stays unlocked until it is closed. "
+                              "Continue?")))
         return;
     QString err;
     const auto st = qc::KeyStore::system().remove(qc::KeyStore::passphraseEntry(roles.mine), &err);
-    qc::KeyRing::device().lock(roles.mine);
+    vault::lockWhenIdle(roles.mine); // (an open encrypted project keeps its key until it closes)
     if (st == qc::KeyStore::Status::Ok || st == qc::KeyStore::Status::NotFound)
         say(tr("Forget the passphrase"), tr("The passphrase is forgotten on this device."));
     else

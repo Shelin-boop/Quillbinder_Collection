@@ -257,6 +257,14 @@ runx v0990c $B/tests/qb_v0990c_tests $B/tests/qb_v0990c_tests "$OUT/shots-v0990c
 runx v0990g $B/tests/qb_v0990g_tests $B/tests/qb_v0990g_tests "$OUT/shots-v0990g"
 runx v0990l $B/tests/qb_v0990l_tests $B/tests/qb_v0990l_tests "$OUT/shots-v0990l"
 runx v0990j $B/tests/qb_v0990j_tests $B/tests/qb_v0990j_tests "$OUT/shots-v0990j"
+runx v0990o $B/tests/qb_v0990o_tests $B/tests/qb_v0990o_tests "$OUT/shots-v0990o"
+runx ls3 $B/tests/qb_ls3_tests $B/tests/qb_ls3_tests "$OUT/shots-ls3"
+runx lsroute $B/tests/qb_lsroute_tests $B/tests/qb_lsroute_tests "$OUT/shots-lsroute"
+runx ls4 $B/tests/qb_ls4_tests $B/tests/qb_ls4_tests "$OUT/shots-ls4"
+runx ls5 $B/tests/qb_ls5_tests $B/tests/qb_ls5_tests "$OUT/shots-ls5"
+runx ls6 $B/tests/qb_ls6_tests $B/tests/qb_ls6_tests "$OUT/shots-ls6"
+runx ls7 $B/tests/qb_ls7_tests $B/tests/qb_ls7_tests "$OUT/shots-ls7"
+runx ls8 $B/tests/qb_ls8_tests $B/tests/qb_ls8_tests "$OUT/shots-ls8"
 runx v0940e $B/tests/qb_v0940e_tests $B/tests/qb_v0940e_tests "$OUT/shots-v0940e"
 runx v0950a $B/tests/qb_v0950a_tests $B/tests/qb_v0950a_tests "$OUT/shots-v0950a"
 runx v0950b $B/tests/qb_v0950b_tests $B/tests/qb_v0950b_tests "$OUT/shots-v0950b"
@@ -265,12 +273,16 @@ runx v0950d $B/tests/qb_v0950d_tests $B/tests/qb_v0950d_tests "$OUT/shots-v0950d
 runx v0990b $B/tests/qb_v0990b_tests $B/tests/qb_v0990b_tests "$OUT/shots-v0990b"
 runx v0990d $B/tests/qb_v0990d_tests $B/tests/qb_v0990d_tests "$OUT/shots-v0990d"
 runx v0990h $B/tests/qb_v0990h_tests $B/tests/qb_v0990h_tests "$OUT/shots-v0990h"
+runx ls1 $B/tests/qb_ls1_tests $B/tests/qb_ls1_tests "$OUT/shots-ls1"
 runx v0990e $B/tests/qb_v0990e_tests $B/tests/qb_v0990e_tests "$OUT/shots-v0990e"
 runx v0990k $B/tests/qb_v0990k_tests $B/tests/qb_v0990k_tests "$OUT/shots-v0990k"
 runx v0990f $B/tests/qb_v0990f_tests $B/tests/qb_v0990f_tests "$OUT/shots-v0990f"
+runx welcdark $B/tests/qb_welcdark_tests $B/tests/qb_welcdark_tests "$OUT/shots-welcdark"
+runx v0990n $B/tests/qb_v0990n_tests $B/tests/qb_v0990n_tests "$OUT/shots-v0990n"
 runx v0990m $B/tests/qb_v0990m_tests $B/tests/qb_v0990m_tests "$OUT/shots-v0990m"
 runx notesplain $B/tests/qb_notesplain_tests $B/tests/qb_notesplain_tests "$OUT/shots-notesplain"
 runx mmoverview $B/tests/qb_mmoverview_tests $B/tests/qb_mmoverview_tests "$OUT/shots-mmoverview"
+runx mmfmt $B/tests/qb_mmfmt_tests $B/tests/qb_mmfmt_tests "$OUT/shots-mmfmt"
 runx audit1 $B/tests/qb_audit1_tests $B/tests/qb_audit1_tests "$OUT/shots-audit1"
 runx fuzz $B/tests/qb_fuzz_tests $B/tests/qb_fuzz_tests "$OUT/shots-fuzz"
 runx w2 $B/tests/qb_w2_tests $B/tests/qb_w2_tests "$OUT/shots-w2"
@@ -289,6 +301,7 @@ run addonentry python3 -I tests/addon_entry_tests.py
 run stshard python3 -I tests/system_test_tests.py
 # the release models-5 (handwriting model, word lists, speech models, catalog) and its workflow (0.99.0): offline, Python only
 run models5 python3 -I tests/models5_tests.py
+runx ls2 $B/tests/qb_ls2_tests $B/tests/qb_ls2_tests "$OUT/shots-ls2"
 # a suite that was asked for and is not there at all (a name mistyped in QB_SUITES)
 for n in $SELECTED; do
     [[ " $RAN $MISSING " == *" $n "* ]] || MISSING="$MISSING $n"

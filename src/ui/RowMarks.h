@@ -19,6 +19,8 @@ QRect pinRect(const QRect &rowRect, int right);
 
 void paintPin(QPainter *p, const QRectF &r, const QColor &color, bool filled);
 void paintLock(QPainter *p, const QRectF &r, const QColor &color);
+// 0.99.0 (Live Sync): a small pen, the mark of a document this device edits itself
+void paintPen(QPainter *p, const QRectF &r, const QColor &color);
 QIcon pinIcon(const QColor &color, bool filled);
 
 } // namespace rowmarks

@@ -2,6 +2,75 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: the format bar and the mind map (`NoteFormatTarget`)
+
+- `src/ui/NoteFormatTarget.h` is the interface; `MindMapController` implements it, `NoteFormatTarget::forWidget(focusWidget)`
+  finds it from the widget with the keyboard (a `MindMapView`). Keys are the bar's action keys; the mind map enables only
+  bold, italic, underline, strike, textColor(Auto), the four alignments, fontBigger/Smaller, size, clearFormat (a note has no
+  font, highlight, list or superscript). In editing, the toggles act on the selected words, the rest on the whole note.
+- `MainWindow` asks it first (`noteTargetNow()`: the mind map with the keyboard, kept while the keyboard is on a bar or in a
+  popup; the `fmt` lambda and `updateFormatBar`), and follows `MindMapController::formatStateChanged`. The font, size, line and
+  style fields stay greyed for notes (their handlers are in `MainWindowBars.cpp` and act on the editor).
+
+## 0.99.0: pitfalls found by the first full test
+
+- Read Aloud's toolbar is shown from the start at the end of the first row, so suites that count the eight old grip bars
+  (v0910, v0911) switch it off first; Profiles and Labels are hidden by default.
+- A child widget that connects to `QApplication::focusChanged` (the focus frame) lives on after `~MainWindow`'s body: cut the
+  connection in the destructor (`FocusLine::stopListening`), as `m_focusLinks` does (suite v0930b).
+- `readaloud/` keys are program-only in `settingslayer::programOnly`; the page's boxes are marked with `optstore::mark`.
+## 0.99.0: texts with numbers (the translation check)
+
+- A number in a sentence goes into a plural text: `tr("%n word(s)", "", n)`, never `text::plural()` or two texts for the
+  unit word ("words"/"characters" after `%1`). The translators write the plural forms of their language; the English
+  source reads "%n word(s)". English has no translation file, so `Language.cpp` installs `EnglishPlurals` when the
+  application object is made (first, so every language file is asked before it): "(s)" and "(es)" go for 1 and become "s"
+  and "es" otherwise, "dictionar(y|ies)" the same. Irregular words are written with that form, not "(s)".
+- Two numbers in one sentence (a count and a size, "%1 of %2 words"): only the one the unit follows goes into `%n`; the other
+  is `%1`. A target that may be negative (a cutting target) cannot be `%n` (a negative `n` means "no plural"): the sentence
+  has the unit word inside it, one text per unit ("%1 of %2 words", "%1 of %2 characters").
+- A sentence is never put together from pieces: no "and"/"them"/"it" as separate texts. A list is
+  `QLocale().createSeparatedList(...)`; a verb that agrees with the count (is/are) is two texts, or the sentence is
+  written so that it needs none.
+- The menu audit (`tests/m13_tests.cpp`) checks the Alt letters of the English source texts: `fixMnemonics` keeps the
+  source text of an entry it moved in the properties `qbMnemonicFrom` / `qbMnemonicFixed`.
+
+## 0.99.0: Read Aloud (item 114)
+
+`core/ReadAloud.*` (no windows): `Settings`/`Config` (group `readaloud`, per device), the model choice, the voices, the sentence
+splitter and `Session`; `ui/ReadAloudController.*` (the toolbar and the Voice menu), `ui/ReadAloudPage.*` (File > Options > Read
+Aloud), `ui/MainWindowReadAloud.cpp` (the switch and the bar in the first row after Tools).
+
+- **The order of the models is one table**: `kModelOrder` in `core/ReadAloud.cpp` (Pocket TTS first where it has the language, then
+  Qwen3-TTS 0.6B, 1.7B Q4, 1.7B Q8). The default is the first that is installed, fits and (when measured) reaches real time.
+- **Sound**: through the AI engine, not the Media Playback add-on (the program has no Qt Multimedia). `Output` (core) is
+  implemented by `EngineOutput` over the version 2 table's `output_*` functions (`src/tools/QbAi.h`, `engines/qbai/output.cpp`:
+  miniaudio's device part, f32 mono, a mutex-guarded queue read by the device callback, silence while paused or empty, `played`
+  counts the frames the callback took). miniaudio.h is vendored in `engines/qbai/third_party/miniaudio` (v0.11.26, README with
+  its origin; libmtmd's copy has hidden symbols and cannot be reused); backends load at run time, so no link dependency. The
+  program holds the version 1 table: the output code asks `Engine::apiFor(2)`. Without a sound device miniaudio falls back to its
+  silent "null" backend (so v0990h's real-engine check passes in a container); `open` fails with "no sound output ..." when even
+  that fails. The fake engine counts frames (`qbai_fake_out_stats`, `qbai_fake_out_set_scale` for a faster clock). The real device
+  was not heard (no sound hardware in the build environment).
+- **Qwen's voices** (changed in 0.99.0, see runtime-and-addons.md "The designed voices"): reference clips `<models>/read-aloud-voices/<lang>/<voice>-<style>.wav` + `.txt`
+  (`qwenClipFile(language, voice, style)`; the flat `<voice>-<style>.wav` of the first trial builds is the fallback); until a pack is
+  installed the voice and style are greyed "Voice not installed yet.".
+- **Pitfalls**: `Model::load` asks the main thread (ModelMemory), so nothing may wait for the worker on the main thread (the
+  destructor keeps processing events); the worker may make sentences up to `ahead` past the playing one, and when all written
+  sentences are played it counts as the next (else a reading that fell behind never goes on); the sound's clock and the
+  sentences' lengths differ by rounding, so a sentence counts as played 30 ms before its end. The speed test result is kept per
+  model and device (`readaloud/rtf/...`). The program's language for "Automatic language" is `QLocale().name()`.
+- The editor marks the sentence by an extra selection (`TextEditor::setReadingRange`, joined to the search marks).
+
+## 0.99.0: Alt letters (AU-03)
+
+A hidden menu bar has no mnemonics, and a text field types an Alt letter that no shortcut took (shortcuts are tried before the key
+reaches the field, so a key that arrives is unused). `MainWindow::eventFilter` (on the application, `MainWindowSmall.cpp`) holds
+back an Alt+letter that carries its own letter in the text (AltGr characters, which differ from the key, pass; so does a key with
+the group switch), opens the menu bar menu with that mnemonic at the round button in the small interface (`openSmallMenu`), and
+opens the button's menu on a plain Alt (press and release, no other key or mouse button in between). Ctrl+Alt+S is the small
+interface's shortcut. Mind map: each "With Arrow" entry has its own text, so each has its own letter.
+
 ## 0.99.0: small interface (item 122)
 
 - `MainWindowSmall.cpp` (`MainWindow::setSmallInterface`), the rules and the panel in `ui/SmallInterface.*`. The mode is a
@@ -34,6 +103,36 @@ Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); secti
 - Keys not to forget: the other View items that change panes or bars (Layout, Toolbars) are disabled while the mode runs;
   commands that show the inspector by themselves (a click on a comment mark) act on the hidden inspector in the closed panel
   (`m_inspector->show()` has no effect there) and are not redirected to the notes panel.
+## Handwriting recognizer (0.99.0, item 112, part 2)
+
+- Files: `src/ui/handwriting/OnnxRecognizer.*` (the session, the input, the registry, the install part) and `WordLayer.*` (codec, greedy
+  CTC, word lists, the word layer; no ONNX Runtime and no widgets, so the checks feed it frames of their own). `installOnnxRecognizer()`
+  (called by `MainWindow`) sets `Recognizer::current()` (only when none is set) and `Recognizer::setInstaller()`.
+- **ONNX Runtime**: `QLibrary(ai::onnxRuntimeLibrary())`, `OrtGetApiBase`, then `GetApi(v)` for the header's version down to 16 (the
+  structure only grows). The header and its two includes are in `src/third_party/onnxruntime/` (MIT, README.txt) because the pack's
+  header is only there after `tools/get-onnxruntime.sh`. The library is opened once and never closed. CPU provider only; arena and
+  memory pattern off (every line has its own width). Input name and output name are asked of the session.
+- **Input**: the line picture on white, gray, scaled to height 96 (Qt's smooth scaling, not Lanczos), 16 px white left and right,
+  white on the right up to a multiple of 8, three equal planes, value = 1 - pixel / 255. Output (1, 1623, 1, T), log-softmax per step
+  (a step is 8 px of the input), blank 0, greedy; the codec JSON maps a label to a text (NFD, combining marks kept); NFC after decoding.
+  A word's box comes from its first and last step: `x = (8 t - 16) / scale`.
+- **Which strokes are one line** is the surface's rule (`InkCanvas::addStroke`): the same ruled row of the grid, or, without rows, a
+  stroke whose middle lies within 0.4 line heights of the line's box so far.
+- **Word layer** (constants at the top of `WordLayer.cpp`): a word is split at the model's spaces; punctuation around the letters stays;
+  words with digits or fewer than two letters are left as read. Candidates: list words whose folded form is within
+  `allowedDistance(length)` (1 to 3 letters 1, to 5 2, to 8 3, more 4), at most 300 (nearest, then most frequent). Score = CTC forward
+  (natural log) over the word's steps (from the middle of the gap before to the middle of the gap after) divided by 1.5, plus 0.5 times the
+  Zipf value of the list; the raw reading competes with Zipf 1 (not when it is listed itself). Letters count in either case (the case of
+  the raw reading is applied to the choice: capital, all capitals); every combining mark counts as one group (`Token::mark`), which
+  includes the umlaut (a helper's choice: a superset of "all accents count as an umlaut"). Split: tried only when the best single
+  reading is the raw one; at every letter, both parts at least two letters and each best reading listed; the sum minus a penalty of 5
+  must beat the raw score. Two languages: `readBest` keeps the larger total (the main language wins a tie). The total is the sum of the
+  words' best scores, so a language whose list fits more words wins.
+- **Memory**: `recognize()` asks `ModelMemory::requestLoad` on the main thread (it may unload other models), the worker loads the session
+  and the word lists under the mutex and posts `modelLoaded` / `modelUsed` / `cancelLoad` back (a queued call: the worker never waits
+  for the main thread, so the destructor can wait for it). The unloader (`unloadIfIdle`) uses `tryLock`: false while a line is read.
+- Not done: the model sometimes puts a space inside a word (chil dren); the layer does not join words across a space.
+
 ## 0.99.0: handwriting (item 112, part 1)
 
 - Code: `src/ui/handwriting/` (a GLOB of qbui, so a new file needs no CMake change) and `src/ui/PenInput.*`. **`PenInput`**

@@ -28,17 +28,17 @@ O {{APP}} é um programa de escrita para textos longos. Se você já trabalhou c
 | Barras de ferramentas | **Visualizar > Barras de ferramentas > Personalizar barras de ferramentas…** (ou clique com o botão direito em uma barra) |
 | A barra de ícones | **Visualizar > Barras de ferramentas > Barra de ícones**; **Escolher ícones para a barra de ícones…** |
 | Atalhos de teclado | **Arquivo > Opções > Teclado** (busca, pressionar novas teclas, exportar e importar); **Ajuda > Atalhos de teclado…** os lista |
-| Encontrar um comando nos menus | **Ajuda > Localizar comando…** (digite parte do nome; Return o executa) |
+| Encontrar um comando nos menus | **Ajuda > Localizar comando…** (digite parte do nome; Enter o executa) |
 | Layouts de janela | **Visualizar > Layout** (sete internos; salve os seus) |
 | Salvamento automático, projetos recentes, informações do autor | **Arquivo > Opções > Geral** |
 | Backups | **Arquivo > Opções > Backup** (quando, quantos, onde); **Arquivo > Backup** faz um agora |
 | Ortografia e correções enquanto você digita | **Arquivo > Opções > Correções** |
-| Onde os links abrem, a tecla Return, o modo de composição, a reprodução | **Arquivo > Opções > Comportamentos** |
+| Onde os links abrem, a tecla Enter, o modo de composição, a reprodução | **Arquivo > Opções > Comportamentos** |
 | Configurações de importação e exportação | **Arquivo > Opções > Compartilhamento** |
 | Mapas mentais, objetos, complementos, relatórios de falhas | **Arquivo > Opções > Extras** |
 | Etiquetas, status, tipos de seção, metadados personalizados, pastas especiais | **Projeto > Configurações do projeto** |
 | Opções somente para um projeto | **Arquivo > Opções**, **Configurações para: Este projeto** no alto; se as configurações próprias dos projetos têm prioridade: **Arquivo > Opções > Geral** |
-| Levar suas configurações para outro computador | **Arquivo > Opções > Gerenciar > Salvar opções em um arquivo… / Carregar opções de um arquivo…** |
+| Levar suas configurações para outro computador | **Arquivo > Opções > Gerenciar > Exportar perfil… / Importar perfil…** |
 | Tudo de volta ao padrão | **Arquivo > Opções > Padrões** (seus projetos, temas, layouts e atalhos permanecem) |
 
 ---
@@ -68,13 +68,13 @@ O {{APP}} é um programa de escrita para textos longos. Se você já trabalhou c
 ### Além do comum
 
 - **Mapas mentais**: um quadro de notas, linhas e setas para cada documento e pasta (o botão **Mapa mental** do inspetor). **Ajuda > Ajuda dos mapas mentais** mostra como funciona.
-- **Objetos**: personagens, locais, ambientes, pontos de interesse, clima e categorias suas, cada um com uma ficha de campos e links entre eles (o botão **Objetos** do inspetor, ou **Janela > Objetos…**).
+- **Objetos**: personagens, locais, ambientes, pontos de interesse, clima e categorias suas, cada um com uma ficha de campos e links entre eles (o botão **Objetos** do inspetor, ou **Janela > Objetos**).
 - **Tabelas e imagens**: **Inserir > Tabela…** com designs prontos ou os seus, **Formatar > Tabela** para linhas, colunas, células mescladas e cores; imagens ao lado do texto com o texto fluindo em volta delas, legendas e descrições que os e-books e os arquivos do Word guardam como texto alternativo (clique com o botão direito em uma imagem, **Imagem…**).
 - **A barra de ícones**: até dez ícones de documento, um clique para cada. **Documentos > Alterar ícone** também cria ícones a partir de texto ou das suas próprias imagens.
 - **Zoom por parte**: Fichário, editores, partes do inspetor, quadro de cortiça, estrutura de tópicos e mapas mentais guardam cada um o seu zoom.
 - **Lugares guardados**: cada documento abre onde você deixou o cursor, também depois de reabrir o projeto.
 - **Fontes**: **Formatar > Fonte > Instalar arquivos de fonte…** adiciona fontes sem sair do programa.
-- **Segurança**: salvamento automático também enquanto você continua digitando, backups, uma cópia reserva do arquivo do projeto, relatórios de falhas e de travamentos (**Ajuda > Solução de problemas e desenvolvimento > Relatórios de falhas…**) e **Ajuda > Solução de problemas e desenvolvimento > Informações do sistema…**.
+- **Segurança**: salvamento automático também enquanto você continua digitando, backups, uma cópia reserva do arquivo do projeto, relatórios de falhas e de travamentos (**Ajuda > Solução de problemas e desenvolvimento > Relatórios de falhas…**) e **Ajuda > Solução de problemas e desenvolvimento > Informações do sistema**.
 
 ### Atualizações e complementos
 
@@ -88,5 +88,5 @@ A **versão completa** do AppImage (*...-full-{{LABEL}}-x86_64.AppImage*) traz t
 - **Ajuda > Projeto de boas-vindas**: um projeto curto que mostra os recursos listados em "Além do comum" e deixa você experimentá-los.
 - **Ajuda > Ajuda dos mapas mentais**: notas, linhas, setas e formas, com imagens e um quadro para praticar.
 - **Ajuda > Lista de todos os espaços reservados** e **Ajuda > Atalhos de teclado…**
-- **Ajuda > Licenças de terceiros…**: as licenças das partes de outros projetos que o {{APP}} usa.
+- **Ajuda > Licenças de terceiros**: as licenças das partes de outros projetos que o {{APP}} usa.
 - **Ajuda > Sobre o {{APP}}**: a versão e a licença. O {{APP}} é software livre sob a Apache License 2.0.

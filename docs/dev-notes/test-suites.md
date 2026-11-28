@@ -2,6 +2,109 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## ls5 (0.99.0: Live Sync, the service and the windows)
+
+`qb_ls5_tests` (needs a display, e.g. under xvfb; the service and window parts need the encryption pack with Botan TLS and are
+skipped without it; the last part starts the built program `quillbinder --live-sync-service`, so build the `quillbinder` target
+first). Checks: the registry (two registries of one folder see each other, the claim of one host session per project, a damaged file
+kept aside); the gate's service scope (a write inside it reaches the disk, a window's write inside it is captured); change sets
+as units (an edit per document, a created document with its text in one unit, the project file never sent, derived files left out);
+the local link; the status model (the fake, then the service's real one: states, participants and what they edit, lock holders,
+an open edit request, "not connected"); two `Service` objects in one process on localhost (own folders, ephemeral identities):
+pairing with the code, sharing, joining, two windows editing different chapters, the host's `Project` recomputing counts and the
+list of documents, the replica equal to the host's folder, an edit request and the hand-over, the host going away; a `MainWindow`
+of a shared project (the in-process service): the first key waits for the lock and is typed after the grant, a remote commit in an
+open document, the other device refused a lock held here, close and release; a service process reached through its socket;
+who hosts through the service (a planned hand-over between two in-process services, a window on each side, the commit ledger, an
+unknown device announcing hosting shown in the status model, a failover with a `ManualClock`); and two real service processes
+(identities made by a first short run, `peers.json` and the registries written by the test): hand-over, a commit through the new
+host, the new host killed, the failover after about 30 s of real time (this part takes about 40 s). Also: the real screens of two programs in one process (pairing window with matching codes, Share This Project, Hosted Projects access, Join window, copy opened as a follower); its second half (parallel edits, Decline and Take Over) runs only with `QB_LS5_SCREENS_FULL=1` and is not reliable yet. `QB_LS5_PART=<small|services|hosting|window|screens|encrypted|process|processes>` runs one part.
+Pitfalls: services of one test process share the gate and the vault (they are one program); a window must be given the follower
+before `Project::open`; the TLS peers are on 127.0.0.1 with port 0; `QB_LS_PORT`, `QB_LS_IDLE_MS`, `QB_LS_NO_DISCOVERY` are the
+service process's test switches (`QB_LS_PEERS="<device id>=<address>:<port>;..."` gives the addresses where discovery is off).
+## ls6 (0.99.0: Live Sync, who hosts)
+
+`qb_ls6_tests` (no display; about 20 s, nearly all of it Botan signing; skipped except the drafts store without the encryption pack
+with Botan TLS). A `World` has N devices in one process, each with its own `DeviceIdentity`, folder, `FakeBackend` (the interface
+the service implements: seq, state hash, start and stop hosting ...) and `Authority`; `Net` is a fake network (messages are queued
+and delivered by `pump()`, pairs can be cut, message types dropped) and `step(ms)` moves one `ManualClock` and sends the heartbeats
+of the connected pairs. `checkInvariants()` runs after every delivered message: at most one host per epoch, at most one proof per
+epoch in all chains, and (`strict`, no partition) at most one device hosting at a time. Checks: membership records and their
+successors, proofs and chains (majority table 2:0, 3:2, 4:3, 5:3, votes of the lost host and duplicates not counted), the handover
+with all states and an abort, the handover killed at each of ten kill points (`Authority::setKillHook`: the object stops at a named
+point, the test makes a new one from the same folder) with the old host or the target down for 0 s and 45 s, a lost DONE, a retired
+host that restarts, failover of two devices (29 s no, 31 s yes) and of three to five (1:2, 2:1, 2:2, 2:3), a vote that survives a
+crash, unknown devices and forged proofs, reunion with drafts per document and author, the drafts store and ledger, the handback
+after 60 s (not before, not without sync, not while busy). Seven of the checks were each seen to fail with its code taken out
+(majority, the stored RETIRED, the stored vote, the member test, 60 s, the drafts, 30 s, the hash test).
+## ls8 (0.99.0: Live Sync, backups, snapshot jobs, the security sweep)
+
+`qb_ls8_tests` (no windows, under xvfb like the others; about 10 s; the TLS cases need the encryption pack with Botan TLS). Real
+`Project`s as hosts (`HostBackup` beside `HostSession`), clients over `MemLink`. Checks: the copy at one commit (hard links, copy
+fallback, nothing of `livesync*`, a commit after the copy leaves it alone); a backup while commits keep coming restores to exactly the
+host's files at the commit the status names; the state a client sees (running, done, the last success; a reader too; HOST_BUSY
+for a second request); failures (unusable backup folder, a file that cannot be copied, no room, unreadable files, a host that
+stopped while running) are never "done" and keep the older backups; snapshot jobs (take, rename, delete, roll back, protective
+snapshot before a takeover, LOCK_HELD, LOCK_NEEDED, READ_ONLY, the program's own `snapshots::take` of a follower going to the host);
+a job cut off between its files and its commit; restore as a new project; the security sweep (unpaired device, wrong certificate,
+oversize and unknown frames, rate limit, traversal in jobs, a replayed message, a hostile event, manifest and blob).
+Measurement: `qb_ls8_tests --measure <folder>` starts the host and two children (`--ls8-typer`, `--ls8-watcher`) and writes
+`results.txt`; it is not part of the runner (it takes a few minutes and its numbers depend on the machine).
+
+## ls7 (0.99.0: Live Sync, the interface)
+
+`qb_ls7_tests` (needs a display; runs under the runner, a few seconds). Everything runs against `FakeLiveSyncControl` (`ui/LiveSyncControl.h`: the calls are noted in `calls`, the model's calls in `status.calls()`; the suite fires the signals). Checks: Live Sync off shows nothing (button, tab, bars, marks) and is off by default in the stand-in; the options page (switch, name, hosting, devices with Remove asking first, the folded parts, the line on where the keys are kept and the warning about plain files and ZIP backups, the page between Encryption and Extras); the button in its five states (own icon each, text, accessible name, tool tip) and the worst state with no shared project; the menu for host, client, not shared and a closed project; the inspector tab; the binder's three marks; every bar and its buttons; the pairing, join, hosted projects and recovery drafts windows (non-modal) with their buttons; the wallet's dialogs and the handler through a real wallet in the test's data folder; the inspector's picture removal and the project's look through the gate in a follower. Pitfalls: windows that ask a question go through `dialogHooks()` (confirm, input, pick), which the suite sets; the menu audit for the button's menu is in `m13` (it puts the button's actions into a menu bar of its own); the main window's own audit on a shared project needs the service of work package 5.
+
+## ls4 (0.99.0: Live Sync, the protocol)
+
+`qb_ls4_tests` (no display; runs under the runner, about 1 s; the TLS part needs the encryption pack with Botan TLS and is skipped
+without it). A `World` has a `HostSession` on a small project folder, `ClientSession`s joined by `MemLink` pairs and a
+`ManualClock` that the test moves (`advance`); `settle()` lets the in-memory frames arrive. Checks: the message types, the validator
+(also 3000 random objects), units; the lock matrix of the design for every pair, all or none, leases (not reachable at 10 s, expired
+at 30 s, renewed by a heartbeat, no idle release), generations never reused after a restart, a generation block that cannot be stored,
+takeover; edit requests (20 s, a decline restarts it, a takeover only after it); the manifest; blobs (several frames, resume, hash
+and size, 2 GiB, free space, a partition); the outbox (restart, drafts, damaged entry); the sessions over MemLink (join, a commit
+written in one batch with state and log, own commit written from the event, repeated operation id, lost result, restart, UNKNOWN_OLD,
+holes and replay, GAP and a copy by manifest, repair, offline outbox, two requests at once, structure beside text, trash needing
+the documents below, reader, leases, the takeover with its snapshot, hand over, unreachable holder, host restart and the re-acquire
+rule, traversal, reserved names, case collisions, symbolic link, 240 bytes, wrong epoch and base, all or nothing, 512 KiB, no space, a
+failing write, replayed message); and one run of two programs (the test starts itself with `--ls4-child`) over TLS on localhost.
+Pitfalls: the frame reader's limit of 200 control frames per second counts real time, so a test must not move the clock by many
+minutes in one go (heartbeats are frames); a `MemLink` pair is a child of the host, so a client must be cut before its host is deleted;
+a test that sends and then changes the host's switches must `settle()` between.
+
+## lsroute (0.99.0: the last writers behind the gate)
+
+`qb_lsroute_tests`: with Live Sync off an emptied board, a removed object and its picture are removed from disk as before; in a
+follower the removal of the mind map file, of an object's file and of its picture, and the folder of a failed import are captured
+and the files stay on disk (each check fails with the old `QFile::remove` / `removeRecursively`).
+
+## ls3 (0.99.0: Live Sync, the core write gate)
+
+`qb_ls3_tests` (needs no display; runs under the runner): the path classes (a table of 30 paths, the rules of section 3.5 of the design:
+reserved names, 240 bytes, case collisions, symbolic links); Live Sync off (the same writes, the batch, the journal, no `livesync`
+file, the extra batch files of a save and their failure); the gate on its own (every write call into a follower's folder captured
+and nothing on disk, a device-local file written, an unknown path refused, the vault's backstop, suspended capture, a batch committed
+and dropped); a follower's `Project::open` with one scripted action per write path (a text, notes, structure, settings, an object,
+a picture, a deleted document, window state) and the second save without a conflict copy; the operations (`diffIndex`, `applyToIndex`,
+`applyToProject`) on a scripted change and on random edits (3 seeds, 40 rounds); the reasons and `DocumentStore::reload`; an encrypted
+replica (plain bytes captured, the sealed files unchanged); the source audit (`kAudit`: every file of `src/` that writes or removes
+files must be listed with how it reaches the gate; add a new file there). `QB_LS_STRICT` is set to 0 by the suite.
+## mmfmt (0.99.0)
+
+The mind map as a target of the format bar (`NoteFormatTarget`): the interface is found from the widget with the keyboard, one and three notes (bold, italic, underline, strike, color, size, alignment, clear), one undo step named after the change, the mixed state, the right-click colors and border on three notes, and a note in editing (only the selected words). Needs no main window; the wiring of the bar lives in `MainWindow`.
+
+## Texts with numbers and the English Alt letters (0.99.0, the translation check)
+
+`qb_fixes_tests` (last block): twelve source texts with `%n` read right in English for 0, 1, 2 and 5 (through
+`QCoreApplication::translate`, so the `EnglishPlurals` translator of `Language.cpp` is part of it), the helper
+`language::englishPlural`, and a scan that the old piece texts are gone from the source (it needs `QB_TEST_SOURCE_DIR`,
+set for this suite in `tests/CMakeLists.txt`). `qb_m13_tests` (menu audit): "the English source texts of one menu share no
+Alt letter" reads the text of each entry as the source wrote it (`qbMnemonicFrom` of `fixMnemonics`, see ui.md) and lists
+every clash with `English letter clash:`. The add-ons' entries count only when the add-ons of the build are installed
+(`build/addons-dist`): a build without them does not see the entries of Writing Tools, and "every menu place the manual
+names is in the menus" fails there too (the add-ons' places).
+
 ## The system test on GitHub, in shards, and the harness for Windows (0.99.0, item 124)
 
 **The workflow** `.github/workflows/system-test.yml` ("Linux system test"): by hand (Actions > Run workflow, on any
@@ -44,6 +147,46 @@ used before, moved unchanged; suite `stshard` fails on a POSIX header or call ou
 Windows target is built only with `-DQB_SYSTEM_TEST_WINDOWS=ON`. Not compiled or run on Windows here: the first Windows run
 compiles it. Pitfall: in the mouse drag the event loop must run between the steps (the dragged program is the test
 itself), so the Windows version waits with `settle`, never with `Sleep`.
+## ls1 (0.99.0, Live Sync work package 1)
+
+`qb_ls1_tests`, no display, about 2 s, needs the encryption pack with Botan TLS (the Live Sync parts are skipped with an old pack). Checks the wallet (file
+holds nothing in plain form, wrong passphrase, a changed byte in the sealed part or the header, header limits, changing the passphrase, a failed write)
+and the key store's fallback (no store and no handler: `NoBackend` as before; handler asked once; wrong three times; cancel), the device identity (keys,
+restart, lost certificate, lost or damaged key, no key store), the frames (every limit and error code, the rate limit with a fake clock), the peer store,
+`MemLink`, TLS 1.3 on loopback with pins (paired, removed, wrong pin, unknown key with the window closed and open, TLS 1.2 refused, plain bytes, HELLO
+timeout and wrong id, frame errors over TLS, the listener's limits), pairing (codes, window, one at a time, three attempts, five windows, mismatch,
+relaying and playing man in the middle, a reveal that breaks the commitment, over TLS and then with pins alone).
+
+## New system-test cases of 0.99.0 (item 124, the harness `tests/crashsafe/`)
+
+New files: `cs_enc099.cpp` (S-Z01 to S-Z08 and `encryptionSetUp`), `cs_new099.cpp` (S-H01 to S-H06 handwriting, S-G01 to S-G04
+model rule, S-S01 to S-S03 small interface, X-14 and X-15, X-16), `cs_new099b.cpp` (U-21 to U-26), `cs_new099c.cpp` (S-J01 to S-J05, Read
+Aloud with the fake engine; the case writes its own catalog and the voice clip; `QB_AI_ENGINE_LIB`, `QBAI_FAKE_CARDS` and
+`QB_AI_CATALOG` are set by `crashsafe_tests.cpp` for ids starting with `S-J`; U-23 gets the fake engine, the tool plug-ins and
+the fast speech switch). X-13 (encrypted kills at the text, the `.qbx` and the snapshots) is in `cs_faults.cpp`.
+
+**The encrypted variants** (suffix `e`): C-34e to C-38e, S-D01e, S-D05e, S-Y01e to S-Y03e run the base case with
+`ctx().encrypted`: `setUpProgram` makes (or finds) the run's key folder, imports it into the device ring, and
+`fixtureCopy` encrypts the copied project (a `.scriv` copy stays plain: the Scrivener format is not encrypted). The harness's
+`readText` and `writeText` read and write sealed files through the vault while the project is open; once it is closed a
+sealed file can only be compared byte for byte. `verifyCase` reads the settings through `vault::plainPath`. Memory key store
+(`QB_TEST_KEYSTORE=memory`), so no case touches a real key store. Estimates: about 1.3 times the base plus 10 s. There is
+no S-Y04e: the real programs of that case would need a way to seed their key store from outside, and `twoComputers`
+looks into plain files; both would change the program or the case.
+
+**Pitfalls found.** The pen's "in use" state ends only after an out-of-range sample and a clock step (`PenInput::setClock`);
+the left-handed zone needs `clearInk()` and a settle before the next stroke; a gpg-agent keeps a passphrase, so the wrong
+attempt comes first (S-Z06); the program refuses the recovery secret as a device key, so S-Z04 opens with gpg and `restore`;
+a compile temp file `.docx.part` is removed only when more than an hour old (X-16 plants one of 2 hours); an encrypted
+project names a conflict copy of the project file `<name> (other version ...).qbx`.
+
+Quick times of the new cases (this machine, 2 cores, xvfb): see the results of the session's run; the estimates in
+`cs_list.cpp` are what the shard split uses. With them the plan stays at 12 shards of about 60 minutes (budget 200).
+
+## welcdark (0.99.0)
+
+The welcome project (English and ten translations, made from `resources/welcome`) on the light and the dark board that every theme leads to: text of each mind map note against its fill (or the shape under it, or the board) 4.5 : 1, borders and lines 3 : 1. Pitfall: a note with a fill but no text color of its own takes the board's text color, light on a dark board, so a pastel fill needs `textColor` and `borderColor` in the outline (the program itself does not choose text by the fill). Pictures of the board go to the shots folder. 33 checks.
+
 ## v0990m (0.99.0)
 
 `qb_v0990m_tests`: Speech Transcription 1.10 with the fake libqbai of `v0990h` (`QB_AI_ENGINE_LIB`, `QBAI_FAKE_CARDS` with two
@@ -57,6 +200,17 @@ each); Write into the text as I speak (off, on); Android's default through `QB_S
 `02-insert`, `03-write-as-I-speak`. `QB_V0990M_REAL=<ggml model>` runs one live recording through the real engine (`<build>/qbai/libqbai.so.1`, from the engine pack) instead (see the
 `ggml-tiny.en.bin` is enough, never committed; the add-on's model check refuses English-only models, so `v061`'s `QB_SPEECH_MODEL_FILE` needs a multilingual one).
 
+## v0990n (0.99.0, item 114: Read Aloud)
+
+`qb_v0990n_tests` (a window; the fake libqbai of v0990h with its fake sound output, so nothing is played): the choices and sentence splitter,
+the model order and fit, the toolbar by system (Android through `Config::forceAndroid`) and size, the first click that opens the
+page (the modal Options window is closed by a timer), reading from the cursor and of a marked text, the sentence highlight, pause,
+stop, typing stops it, nothing written to disk, the Voice menu with the reasons of the greyed entries, Qwen clips, the unload of the
+model after the idle time (a short interval) and its reload, the look-ahead limit (2, or 4 for a model slower than real time),
+cancel while a sentence is made, the device choice reaching the model, the settings page (greyed languages, fit texts, speed test
+through `QBAI_FAKE_SLOW_MS`), no sound device (`QBAI_FAKE_NO_SOUND`). Screenshots `toolbar-window`, `voice-menu-*`, `settings-page*`, `options-read-aloud`. A real Pocket TTS
+smoke test was not made (no model in the session).
+
 ## v0990h (0.99.0)
 
 `qb_v0990h_tests`: the AI engine packages against a fake libqbai (`tests/fakeqbai/FakeQbAi.cpp`, built as
@@ -66,15 +220,28 @@ each); Write into the text as I speak (off, on); Android's default through `QB_S
 device choice (Automatic, fixed cards, the CPU), the engine loaded (`QB_AI_ENGINE_LIB`), its devices reported to `ModelMemory`,
 the shared cores, tool interface 1.3's `aiEngine`/`aiPickDevice`/`aiDeviceChoices`/`aiPanel`/`aiModelFile`, a model registered
 and unloaded, speaking at once and streamed, cancelling, a busy model kept, the 80 % rule, Automatic's fall back to the CPU,
-recognition, the speed of speech; the catalog (`QB_AI_CATALOG`; the program's own), the downloads from a local "release"
+recognition, the speed of speech, the sound output (open, write, position, pause, stop, refusal without a device); the catalog (`QB_AI_CATALOG`; the program's own), the downloads from a local "release"
 (`QB_AI_MODEL_SOURCE`: a file in parts, a wrong checksum, going on after a stop, cancelling, a model too large), the engine
 package from a file and from a "release" (`QB_AI_ENGINE_SOURCE`; `QB_REQUIRE_SIGNED` for the refusal of unsigned ones), the
 panel (screenshots `v0990h-panel-*`), the package recipes (`addons/*-engine`, with the pack and `<build>/qbai/libqbai.so.1`:
 stage, package, `tools/check-engine-package.py`; the handwriting engine's clear message without its pack) and, in a child
-process, the real engine when built (Sonic's speed with the pitch kept; with `QB_AI_WHISPER_MODEL` (whisper.cpp's tiny English
+process, the real engine when built (Sonic's speed with the pitch kept; the real sound output (miniaudio's silent backend in a container); with `QB_AI_WHISPER_MODEL` (whisper.cpp's tiny English
 model) and `QB_AI_WHISPER_SAMPLE` (jfk.wav) a real transcription; `QB_AI_QWEN_TALKER`/`QB_AI_QWEN_CODEC` a word of Qwen3-TTS).
 The recipe checks take the packs from `QB_AI_ENGINE_DIR` and `QB_ONNXRUNTIME_DIR` (default `build/ai-engine`,
 `build/onnxruntime`). Without the pack and libqbai those parts print a line and are not counted.
+## v0990o (0.99.0: handwriting, part 2)
+
+`qb_v0990o_tests`: the model's input (96 high, width a multiple of 8, padding, planes, see-through pictures), the codec JSON, the
+greedy path (double letters, NFC), the word lists (TSV, gzip, folding, edit distance), the word layer on frames made by hand (near
+miss, capitals, a name kept, a name with a comma, an umlaut, an acute, a split word, no split with a close word, the main and the
+fallback language, CTC forward), the install part with no engine (status, the panel's kinds). With the real model (a folder
+`QB_HW_MODELS`, else `/home/claude/work/hw-models`, with `ppocrv6-small.onnx`, its codec, `wordlist-en.tsv.gz`, `wordlist-de.tsv.gz`;
+the ONNX Runtime pack of `tools/get-onnxruntime.sh`; Comic Relief, OFL, from the system's fonts) it draws 14 lines of text, clean and
+blurred, tilted and noisy, and prints the characters' and the words' accuracy with and without the word layer, then umlauts, a name,
+the languages' order, alternatives, boxes, the registry and the unload after 11 minutes (the registry's clock is set by hand). The
+real-model checks are skipped with a message when a file is missing (63 checks run without, 83 with). `QB_HW_DEBUG=1` prints each
+word's alternatives. Screenshots `hw2-lines.png` (the lines with the reading without and with the layer), `hw2-install.png`.
+
 ## v0990j (0.99.0: handwriting, part 1)
 
 `qb_v0990j_tests`: one window with a project and a `FakeRecognizer` (a fixed text per line; `PenInput`'s clock is the test's own,
@@ -109,6 +276,7 @@ menu with all the menus and the way back), the binder and notes panels (a part o
 upright, one at a time, Close, Esc, the focus line after the slide), record only (grayed with the reason without the add-on; the
 add-on is loaded in a second run of the same program, `--addon`, because the tools are loaded once per program), a profile that
 keeps the mode (profile files, switching both ways) and the Android rule through `setSmallChoice` / `applySmallRule` with sizes.
+Since AU-03 it also runs the Alt letters: Alt+Q types nothing, AltGr+Q still types "@", Alt+F opens File (full), Ctrl+Alt+S switches the mode, and in the small interface Alt+V, Alt+F and a plain Alt open the menu button's menu (screenshot `small-alt-v.png` is a grab of the screen, because a menu is a window of its own); `qb_v017_tests` checks that the eight entries of New Connected Note have eight Alt letters.
 The window is resized by `resize()`; the offscreen screen keeps its size. Run: `xvfb-run -a -s "-screen 0 1920x1080x24"
 ./qb_v0990l_tests /tmp/shots`.
 ## v0990g (0.99.0: the menu walk)
@@ -147,7 +315,7 @@ encryption (the welcome project and a large project of 1000 documents; `QB_MEASU
 findings (`reviewFindings`, alone with `QB_REVIEW_ONLY=1`: Save As and Save a Copy stay encrypted, a missing public key, a stray
 encrypted file after a decryption, another computer's lock, a damaged or missing marker (no opening, no backup), damaged first
 bytes, the restore's leftover ZIP file, and no title in a conflict copy, an interrupted-save copy or the emergency copy). Screenshots
-`v0990f-*.png`.
+`v0990f-*.png`. `forgetFinding` (AU-01, alone with `QB_FORGET_ONLY=1`): Forget the passphrase with a project open keeps the key unlocked (no conflict copy, no "changed elsewhere"), an unread document is still shown, a locked key makes a read ask for the passphrase (right one: the text; Cancel: the locked-key notice, no conflict copy at the next save), and the key is locked when the last encrypted project closes.
 
 ## v0990k (0.99.0, item 113, part 3: the key wizard, the key folder, Import Keys, export, File > Options > Encryption)
 
@@ -375,6 +543,7 @@ needs `build/quillbinder`), the start script and the download page's size note.
   `QB_TEST_APPIMAGE`, `QB_TEST_NO_RESTART`; a key made with openssl in `QB_TEST_SIGNING_KEY`), `tools/update-feed.py`,
   and the translator add-on's place. Needs python3 and openssl; links Qt Network. The unreachable case waits for
   two tries and a fading note, so the suite takes about 50 s.)
+- `models5` also checks the designed voices (0.99.0): the voices job of the workflow, the voice-design pins, the clip check on made-up WAV files, `make-catalog.py voices`, a whole `design-voices.py make` with a fake tool (one bad clip designed again, a clip bad twice fails the run), and one check that **fails while a voice pack's size or SHA-256 is a placeholder** in `resources/ai/models.json`. `v0990n` (Read Aloud) has the voice-pack checks (a folder per language, the flat fallback, bad zips refused, the default language), `v0990h` the download of a pack after a Qwen model and its removal.
 - `models5` (0.99.0, `tests/models5_tests.py`, Python only, no build): the release models-5: the definitions, the program's built-in
   catalog and the workflow agree (ids, kinds, engines, files, license fields), languages (Read Aloud has none of id, tr, pl, nl;
   Handwriting none of ru; the ten word lists), the licensed voices (never juergen), the pins, the workflow's rights (write only
@@ -457,3 +626,14 @@ exports and the dictionary tool). Build it by hand against the pack of `tools/ge
 then `QT_QPA_PLATFORM=offscreen ctest` in `<dir>`. `memoryGuard` of `tp_ui_tests` needs `TP_MODELS_DIR` (the models of the releases):
 without it that one check fails and 15 are skipped. 1.6 added `registryWithAnInterface13Host`, `settingsPageByInterface` and
 `interface12KeepsTheOldWay` to `tp_lang_tests` (a fake program with a model registry: `tests/FakeHost.h`, `version` 130).
+
+## ls2 (0.99.0, Live Sync discovery)
+
+`qb_ls2_tests` (no display; `tests/ls2_tests.cpp`): the multicast DNS writer and strict reader (round trip, every cut-short packet,
+self and forward pointers, a pointer chain over 8, labels and names over their limits, 64 records, data past a record, a bad A, TXT
+or SRV, error codes, 40,000 mutated and 20,000 random packets), the manual address parser, the browser and responder over a stand-in
+bus (found, changed, goodbye, expiry with a fake clock, query rate, own id, loopback/multicast/any/broadcast addresses, port 0,
+version, another host in SRV, the 256-peer limit and the expiry of half entries), the multicast lock's holders, and **real UDP
+multicast on the loopback interface** (`UdpOptions::onlyLoopback`, a port derived from the process id so that a parallel run does not
+meet it; the checks print SKIP with the reason where multicast is impossible). The reader lowercases names (DNS is case-blind), so
+an upper-case id is the same id. Without the pointer rule the suite hangs, which the runner counts as failed.

@@ -108,8 +108,23 @@ int main(int argc, char **argv)
         std::printf("no case %s\n", qPrintable(caseId));
         return 2;
     }
+    if (caseId == QLatin1String("U-23")) {   // 0.99.0: the speech add-on of the build with the fake AI engine
+        const QString b = QStringLiteral(QB_TEST_BUILD_DIR);
+        qputenv("QB_AI_ENGINE_LIB", (b + QStringLiteral("/tests/fake-ai-engine/libqbai.so.1")).toUtf8());
+        qputenv("QBAI_FAKE_CARDS", "Card A,8192,6000;Card B,2048,1500");
+        qputenv("QB_PLUGIN_PATH", (b + QStringLiteral("/tool-plugins")).toUtf8());
+        qputenv("QB_SPEECH_DIR", (b + QStringLiteral("/tool-plugins/speech")).toUtf8());
+        qputenv("QB_SPEECH_FAST", "1");
+    }
+    if (caseId.startsWith(QLatin1String("S-J"))) {   // 0.99.0: Read Aloud through the fake AI engine and a catalog of the case
+        const QString b = QStringLiteral(QB_TEST_BUILD_DIR);
+        qputenv("QB_AI_ENGINE_LIB", (b + QStringLiteral("/tests/fake-ai-engine/libqbai.so.1")).toUtf8());
+        qputenv("QBAI_FAKE_CARDS", "Big Card,8192,8000;Small Card,1024,40");
+        qputenv("QB_AI_CATALOG", (QString::fromLocal8Bit(argv[3]) + QStringLiteral("/work/catalog.json")).toUtf8());
+    }
     common(QString::fromLocal8Bit(argv[3]));
     ctx().id = caseId;
+    ctx().encrypted = caseId.endsWith(QLatin1Char('e'));
     // 0.99.0: a case that rests on something only Linux has says so on Windows (cs_plat.cpp; none on Linux)
     if (const QString why = plat::notOnThisPlatform(caseId); !why.isEmpty()) {
         std::printf("SKIP  [platform] %s\n%d failure(s)\nEND %s\n", qPrintable(why), 0, qPrintable(caseId));

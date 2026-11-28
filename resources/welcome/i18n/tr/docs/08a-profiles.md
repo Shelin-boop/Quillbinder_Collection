@@ -1,6 +1,6 @@
 Bir **tema** yalnızca bir görünümdür: renkler ve yazı tipleri. Bir **profil** geri kalan her şeyi tutar: seçeneklerinizi, araç çubuklarınızı, pencerenin boyutunu ve yerini, panelleri, klavye takımını, yedek ayarlarını, standart renkleri ve kayıtlı yerleşimleri; temasını da adlandırır. Profili değiştirmek bunların hepsini bir anda değiştirir.
-**Deneyin:** **Görünüm > Profiller > Ayarları Yeni Profil Olarak Kaydet…** komutunu seçin, ona bir ad verin, birkaç şeyi değiştirin (bir tema, bir araç çubuğu) ve **Görünüm > Profiller** altından **Default** profiline geri dönün.
-- **Default** profili, ayarlarınızın başlangıçta tutulduğu yerdir. Silinemez; diğer profiller silinebilir.
+**Deneyin:** **Görünüm > Profiller > Ayarları Yeni Profil Olarak Kaydet…** komutunu seçin, ona bir ad verin, birkaç şeyi değiştirin (bir tema, bir araç çubuğu) ve **Görünüm > Profiller** altından **Varsayılan** profiline geri dönün.
+- **Varsayılan** profili, ayarlarınızın başlangıçta tutulduğu yerdir. Silinemez; diğer profiller silinebilir.
 - **Görünüm > Profiller > Profilleri Yönet…** profilleri yeniden adlandırır, kopyalar, siler, dışa ve içe aktarır. Dışa aktarılan bir profil, başka bir bilgisayara götürebileceğiniz tek bir dosyadır; içinde orada bulunmayan klasörler varsa size sorulur.
 - **Görünüm > Araç Çubukları > Profiller**, kullanımdaki profili gösteren küçük bir çubuk gösterir. **Görünüm > Araç Çubukları > Etiketler**, açık projenin etiket renklerini gösterir; her biri tek tıkla.
 - **Dosya > Seçenekler > Dış Görünüm > Standart Renkler**, yeni projelerin başladığı etiketleri ve metin rengi ile vurgu paletlerinin renklerini ayarlar. Bunlar profile aittir.

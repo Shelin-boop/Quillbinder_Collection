@@ -236,6 +236,7 @@ static bool notAnOption(QWidget *w)
         QStringLiteral("shortcutFilter"), // Keyboard: the search field of the commands
         QStringLiteral("optZoomArea"),   // Editing: which area's zoom the field beside it shows
         QStringLiteral("encryptionPage"), // Encryption (0.99.0): the project's two switches are not options of the program
+        QStringLiteral("liveSyncPage"),   // Live Sync (0.99.0): its switches are carried out at once by the service
     };
     for (QWidget *x = w; x; x = x->parentWidget()) {
         if (names.contains(x->objectName()))

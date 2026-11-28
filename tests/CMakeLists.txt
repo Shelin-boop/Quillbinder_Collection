@@ -59,6 +59,7 @@ target_compile_definitions(qb_m13_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURR
 # document icons, search results marked in the editor (QT_QPA_PLATFORM=offscreen ./qb_fixes_tests /tmp/shots)
 add_executable(qb_fixes_tests fixes_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_fixes_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_fixes_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Printing (milestone M14): File > Print Settings, Print Preview, Print Current Document for texts, index cards,
 # the outliner, pictures, PDF files and web pages; the printouts go into PDF files checked with poppler-utils
@@ -451,7 +452,7 @@ add_executable(qb_crashsafe_tests crashsafe_tests.cpp crashsafe/cs.h crashsafe/c
                crashsafe/cs_sys_common.cpp crashsafe/cs_sys_projects.cpp crashsafe/cs_sys_writing.cpp
                crashsafe/cs_sys_writing2.cpp crashsafe/cs_sys_views.cpp crashsafe/cs_sys_more.cpp
                crashsafe/cs_sys_rest.cpp crashsafe/cs_usability.cpp
-               crashsafe/cs_faults.cpp crashsafe/cs_roundtrip.cpp crashsafe/cs_audit.cpp crashsafe/cs_new090.cpp
+               crashsafe/cs_faults.cpp crashsafe/cs_roundtrip.cpp crashsafe/cs_audit.cpp crashsafe/cs_new090.cpp crashsafe/cs_enc099.cpp crashsafe/cs_new099.cpp crashsafe/cs_new099b.cpp crashsafe/cs_new099c.cpp
                ${CMAKE_SOURCE_DIR}/plugins/tools/speech-transcription/SpeechLogic.cpp ${QB_RESOURCES_OBJECTS}
                ${CMAKE_SOURCE_DIR}/translations/translations.qrc)
 target_include_directories(qb_crashsafe_tests PRIVATE ${CMAKE_SOURCE_DIR}/plugins/tools)
@@ -600,6 +601,12 @@ endif()
 add_executable(qb_v0990l_tests v0990l_tests.cpp ${QB_RESOURCES_OBJECTS} ${CMAKE_SOURCE_DIR}/translations/translations.qrc)
 target_link_libraries(qb_v0990l_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_v0990l_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.99.0 (item 112, handwriting part 2: the recognizer and the word layer): the model's input, the codec, greedy CTC, the word layer
+# on frames made here, the install part, and with the real model and word lists the accuracy with and without the word layer
+# (xvfb-run -a ./qb_v0990o_tests /tmp/shots)
+add_executable(qb_v0990o_tests v0990o_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990o_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0990o_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
 # 0.99.0 (item 112, handwriting part 1: everything but the recognizer): the button with its four looks, the modes and the one writing
 # area, pen and finger, hand protection, scratching out, the ink's fade, the strip with Insert and Pin, the grid, the Options page
 # (xvfb-run -a ./qb_v0990j_tests /tmp/shots)
@@ -625,3 +632,74 @@ target_compile_definitions(qb_v0990k_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_S
 # window's unlock dialog, the speed of the encrypted autosave (xvfb-run -a ./qb_v0990f_tests /tmp/shots)
 add_executable(qb_v0990f_tests v0990f_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_v0990f_tests PRIVATE qbui Qt6::Test)
+
+# 0.99.0 (item 114): Read Aloud: the toolbar and its Voice menu, the first click, reading (marked text, from the cursor, the marked
+# sentence), voices and styles, the settings page, the memory rule, cancel, nothing written to disk; with the fake libqbai of
+# v0990h (xvfb-run -a ./qb_v0990n_tests /tmp/shots)
+add_executable(qb_v0990n_tests v0990n_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_v0990n_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_v0990n_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}" QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+add_dependencies(qb_v0990n_tests qb-fake-qbai)
+# 0.99.0, Live Sync work package 2: discovery (the small multicast DNS writer and strict reader, responder, browser, manual
+# address, multicast lock; real multicast on the loopback interface) (./qb_ls2_tests /tmp/shots)
+add_executable(qb_ls2_tests ls2_tests.cpp)
+target_link_libraries(qb_ls2_tests PRIVATE qbcore Qt6::Core Qt6::Network)
+target_compile_definitions(qb_ls2_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
+
+# 0.99.0, Live Sync work package 1: the Quillbinder wallet (the key store's fallback), the device identity, frames, the peer
+# store, the in-memory link, TLS 1.3 with pins and the listener's limits, pairing with its window (no display needed)
+# (./qb_ls1_tests /tmp/shots)
+add_executable(qb_ls1_tests ls1_tests.cpp)
+target_link_libraries(qb_ls1_tests PRIVATE qbcore Qt6::Network)
+# 0.99.0: the welcome project's contrast, its mind maps too (xvfb-run -a ./qb_welcdark_tests /tmp/shots)
+add_executable(qb_welcdark_tests welcdark_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_welcdark_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_welcdark_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
+
+# 0.99.0, Live Sync work package 3 (the core write gate): follower mode, the gate in safesave/savebatch/the vault/the
+# removes, capture, the project file as operations and their application, path classes, the reasons a document cannot be
+# changed, DocumentStore::reload, the authority's extra batch files, the source audit and "Live Sync off changes nothing"
+# (xvfb-run -a ./qb_ls3_tests /tmp/shots)
+add_executable(qb_ls3_tests ls3_tests.cpp)
+target_link_libraries(qb_ls3_tests PRIVATE qbcore Qt6::Test)
+target_compile_definitions(qb_ls3_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
+
+# 0.99.0, Live Sync work package 4 (the protocol): messages, locks with edit requests, manifest, blobs, outbox, host and client
+# sessions over a fake network with a clock moved by hand, and one run of two programs over TLS on localhost (no display)
+# (./qb_ls4_tests /tmp/shots)
+add_executable(qb_ls4_tests ls4_tests.cpp)
+target_link_libraries(qb_ls4_tests PRIVATE qbcore Qt6::Network)
+
+# 0.99.0, Live Sync work package 5 (the service and the windows): the registry, the gate's service scope, change sets as units, the
+# local link, the status model, two services on localhost, a window of a shared project and a real service process
+# (xvfb-run -a ./qb_ls5_tests /tmp/shots)
+add_executable(qb_ls5_tests ls5_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_ls5_tests PRIVATE qbui Qt6::Test Qt6::Network)
+target_compile_definitions(qb_ls5_tests PRIVATE QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.99.0 (the format bar's controls act on the notes of a mind map, NoteFormatTarget; several notes at once) (xvfb-run -a ./qb_mmfmt_tests /tmp/shots)
+add_executable(qb_mmfmt_tests mmfmt_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_mmfmt_tests PRIVATE qbui Qt6::Test)
+
+# 0.99.0, Live Sync work package 6 (who hosts): membership and proofs signed with the device key, the planned handover killed at
+# every step, failover with a majority, unknown devices refused, reunion with recovery drafts, handback (no display)
+# (./qb_ls6_tests /tmp/shots)
+add_executable(qb_ls6_tests ls6_tests.cpp)
+target_link_libraries(qb_ls6_tests PRIVATE qbcore Qt6::Network)
+
+# 0.99.0, Live Sync work package 7 (the interface): the options page, the toolbar button and its menu, the inspector tab, the
+# binder's marks, the bars, the pairing / join / hosted projects / recovery drafts windows, the wallet's passphrase dialogs,
+# "off shows nothing", and the two files routed through the write gate (xvfb-run -a ./qb_ls7_tests /tmp/shots)
+add_executable(qb_ls7_tests ls7_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_ls7_tests PRIVATE qbui Qt6::Test)
+target_compile_definitions(qb_ls7_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
+# 0.99.0, Live Sync: the last writers into a project folder (the mind map file's removal, an object's files, a failed
+# import's folder) go through the gate (xvfb-run -a ./qb_lsroute_tests /tmp/shots)
+add_executable(qb_lsroute_tests lsroute_tests.cpp)
+target_link_libraries(qb_lsroute_tests PRIVATE qbcore Qt6::Test)
+
+# 0.99.0, Live Sync work package 8 (backups and snapshots as jobs of the host): a backup made from a copy that is whole at one commit
+# while commits go on, the state a client sees, failures that are told, snapshot jobs with their locks and their replication,
+# restore as a new project, a security sweep over the network code, and (--measure) the time from a change to the copy on another
+# device with three programs over TLS (xvfb-run -a ./qb_ls8_tests /tmp/shots)
+add_executable(qb_ls8_tests ls8_tests.cpp)
+target_link_libraries(qb_ls8_tests PRIVATE qbcore Qt6::Network)

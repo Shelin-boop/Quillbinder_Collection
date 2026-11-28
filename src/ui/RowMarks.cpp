@@ -69,6 +69,31 @@ void paintLock(QPainter *p, const QRectF &r, const QColor &color)
     p->restore();
 }
 
+void paintPen(QPainter *p, const QRectF &r, const QColor &color)
+{
+    const qreal w = r.width(), h = r.height();
+    auto pt = [&](qreal x, qreal y) { return QPointF(r.left() + x * w, r.top() + y * h); };
+    // a slanted pen: body, tip, and a line under it
+    QPainterPath body;
+    body.moveTo(pt(0.72, 0.08));
+    body.lineTo(pt(0.92, 0.28));
+    body.lineTo(pt(0.38, 0.82));
+    body.lineTo(pt(0.12, 0.88));
+    body.lineTo(pt(0.18, 0.62));
+    body.closeSubpath();
+    p->save();
+    p->setRenderHint(QPainter::Antialiasing);
+    QPen pen(color, qMax<qreal>(1.0, w / 12.0));
+    pen.setJoinStyle(Qt::RoundJoin);
+    pen.setCapStyle(Qt::RoundCap);
+    p->setPen(pen);
+    p->setBrush(color);
+    p->drawPath(body);
+    p->setBrush(Qt::NoBrush);
+    p->drawLine(pt(0.10, 0.96), pt(0.60, 0.96));
+    p->restore();
+}
+
 QIcon pinIcon(const QColor &color, bool filled)
 {
     QIcon icon;

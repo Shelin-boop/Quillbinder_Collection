@@ -14,6 +14,8 @@
 // before it was complete: they are removed, and the project stays as it was at the save before.
 //
 // A save of one file needs no journal: the rename alone is all or nothing.
+#include "core/collab/Capture.h"
+
 #include <QByteArray>
 #include <QString>
 #include <QStringList>
@@ -21,6 +23,9 @@
 #include <functional>
 
 namespace qb {
+namespace collab {
+class Follower;
+}
 namespace savebatch {
 
 // Why a waiting file carries its target's name and a fixed ending: docs/design-decisions.md, entry 1.
@@ -55,7 +60,9 @@ public:
     void afterPlaced(std::function<void()> placed);
     // 0.93.0: every rename is done (the files are in place), whatever the sync said
     bool placed() const { return m_placedAll; }
-    int size() const { return m_items.size(); }
+    int size() const { return m_items.size() + int(m_captured.size()); }
+    // 0.99.0 (Live Sync): how many of the files were captured for a follower (nothing of them is on disk)
+    int capturedCount() const { return int(m_captured.size()); }
     QString folder() const { return m_folder; }
     bool contains(const QString &target) const;
 
@@ -72,6 +79,9 @@ private:
     };
     QString m_folder, m_journal;
     QVector<Item> m_items;
+    // 0.99.0 (Live Sync): the files of a follower's folder: kept (plain) until the commit hands them to its capture
+    collab::Follower *m_follower = nullptr;
+    QList<collab::FileChange> m_captured;
     QVector<std::function<void()>> m_after;
     QVector<std::function<void()>> m_placedSteps;
     bool m_placedAll = false;
