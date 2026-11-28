@@ -18,7 +18,7 @@ open document, the other device refused a lock held here, close and release; a s
 who hosts through the service (a planned hand-over between two in-process services, a window on each side, the commit ledger, an
 unknown device announcing hosting shown in the status model, a failover with a `ManualClock`); and two real service processes
 (identities made by a first short run, `peers.json` and the registries written by the test): hand-over, a commit through the new
-host, the new host killed, the failover after about 30 s of real time (this part takes about 40 s). Also: the real screens of two programs in one process (pairing window with matching codes, Share This Project, Hosted Projects access, Join window, copy opened as a follower); its second half (parallel edits, Decline and Take Over) runs only with `QB_LS5_SCREENS_FULL=1` and is not reliable yet. `QB_LS5_PART=<small|services|hosting|window|screens|encrypted|process|processes>` runs one part.
+host, the new host killed, the failover after about 30 s of real time (this part takes about 40 s). Also: the real screens of two programs in one process (pairing window with matching codes, Share This Project, Hosted Projects access, Join window, copy opened as a follower); its second half (parallel edits of two documents, an edit request with Decline and its restarted waiting time, Take Over with the protective snapshot and the old holder's unsent text kept as a draft) is part of the normal run. `QB_LS5_PART=<small|services|hosting|window|screens|encrypted|process|processes>` runs one part.
 Pitfalls: services of one test process share the gate and the vault (they are one program); a window must be given the follower
 before `Project::open`; the TLS peers are on 127.0.0.1 with port 0; `QB_LS_PORT`, `QB_LS_IDLE_MS`, `QB_LS_NO_DISCOVERY` are the
 service process's test switches (`QB_LS_PEERS="<device id>=<address>:<port>;..."` gives the addresses where discovery is off).
@@ -37,6 +37,17 @@ host that restarts, failover of two devices (29 s no, 31 s yes) and of three to 
 crash, unknown devices and forged proofs, reunion with drafts per document and author, the drafts store and ledger, the handback
 after 60 s (not before, not without sync, not while busy). Seven of the checks were each seen to fail with its code taken out
 (majority, the stored RETIRED, the stored vote, the member test, 60 s, the drafts, 30 s, the hash test).
+## ls9 (0.99.0: Live Sync, the integration finished)
+
+`qb_ls9_tests` (under xvfb; about 1.5 minutes; needs the Botan TLS pack; `QB_LS9_PART=<wiring|asks|drafts|close|hosting>` runs one part). The host's backups
+and snapshot jobs through the service (a request of the host's window and of another device, the state on both, the backup folder of the
+writer, snapshot jobs of both windows, a structure change then a snapshot job then the project file still holds the change, a cut-off job
+published at the restart); a window's attach answer followed at once by a state; the Decline / cancel / unlock behavior of the holder's bar;
+recovery drafts in a real window (Compare, Keep as Copy, Take Over with its snapshot, Delete asks, no window); closing the last window of
+a hosted project asks; keep hosting with a real service process started from the test program's data folder and key file, a window of
+the test attaching to it, a change committed by it, the take-back by `W_STOP`. Mutations tried: the host's Project stale, the Decline ending the
+bar, the attach answer not taken in at once: each fails its check.
+
 ## ls8 (0.99.0: Live Sync, backups, snapshot jobs, the security sweep)
 
 `qb_ls8_tests` (no windows, under xvfb like the others; about 10 s; the TLS cases need the encryption pack with Botan TLS). Real

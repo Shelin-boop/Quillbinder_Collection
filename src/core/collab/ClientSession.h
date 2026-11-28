@@ -151,6 +151,8 @@ signals:
     void lockDenied(const QString &resource, const QString &holder, const QString &reason);
     void lockRevoked(const QString &resource, const QString &reason);
     void locksChanged();
+    // the host says that a request for a document this session holds is over (the asker gave up or took over)
+    void editEnded(const QString &resource, const QString &askerDevice);
     void editAsked(const QString &resource, const QString &askerName, qint64 waitMs);
     void editStatus(const QString &resource, bool declined, qint64 waitMs, bool mayForce, const QString &holder);
     void epochChanged(qint64 from, qint64 to);

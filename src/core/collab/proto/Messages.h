@@ -35,9 +35,10 @@ constexpr const char *COMMIT_REQUEST = "COMMIT_REQUEST", *COMMIT_RESULT = "COMMI
 // locks
 constexpr const char *LOCK_REQUEST = "LOCK_REQUEST", *LOCK_GRANTED = "LOCK_GRANTED", *LOCK_DENIED = "LOCK_DENIED",
                      *LOCK_RELEASE = "LOCK_RELEASE", *LOCK_REVOKED = "LOCK_REVOKED", *LOCK_TABLE = "LOCK_TABLE";
-// edit requests (EDIT_CANCEL: the asker gives up; the design's list had no name for it)
+// edit requests (EDIT_CANCEL: the asker gives up; EDIT_ENDED: the host tells the holder that a request is over, so its bar goes;
+// the design's list had no names for them)
 constexpr const char *EDIT_REQUEST = "EDIT_REQUEST", *EDIT_ASKED = "EDIT_ASKED", *EDIT_ANSWER = "EDIT_ANSWER", *EDIT_STATUS = "EDIT_STATUS",
-                     *EDIT_FORCE = "EDIT_FORCE", *EDIT_CANCEL = "EDIT_CANCEL";
+                     *EDIT_FORCE = "EDIT_FORCE", *EDIT_CANCEL = "EDIT_CANCEL", *EDIT_ENDED = "EDIT_ENDED";
 // host jobs (package 8)
 constexpr const char *SNAPSHOT_OP = "SNAPSHOT_OP", *SNAPSHOT_RESULT = "SNAPSHOT_RESULT", *BACKUP_REQUEST = "BACKUP_REQUEST",
                      *BACKUP_STATUS = "BACKUP_STATUS";
