@@ -5,6 +5,7 @@
 // MindMapDoc::change, so that it is one undo step and saved.
 
 #include "core/MindMap.h"
+#include "ui/NoteFormatTarget.h"
 
 #include <QHash>
 #include <QKeySequence>
@@ -27,7 +28,7 @@ class MindMapScene;
 class MindMapView;
 class MindMapFindBar;
 
-class MindMapController : public QObject
+class MindMapController : public QObject, public NoteFormatTarget
 {
     Q_OBJECT
 public:
@@ -108,6 +109,11 @@ public:
     bool replaceCurrent(const QString &with);
 
     void updateActions();
+    // the format bar acts on notes (NoteFormatTarget, 0.99.0)
+    bool noteFormatActive() const override;
+    bool noteFormatEnabled(const QString &key) const override;
+    NoteFormatState noteFormatState() const override;
+    bool noteFormatApply(const QString &key, const QVariant &value = QVariant()) override;
     // changes the selected notes in one undo step (notes as narrow as their text stay so)
     void forNotes(const QString &undoText, const std::function<void(mindmap::Note &)> &fn, bool editingRange = false);
     // a link in a note was clicked: web and file addresses open, qb:// documents in the editor

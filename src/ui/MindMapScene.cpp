@@ -1,4 +1,5 @@
 #include "ui/MindMapScene.h"
+#include <cmath>
 #include "core/IconCatalog.h"
 #include "ui/MindMapDoc.h"
 #include "ui/SpellChecker.h"
@@ -197,7 +198,7 @@ void BoardItem::paintBody(QPainter *p, const Appearance &look, const QRectF &r, 
     else if (look.shadow)
         p->fillPath(body, m_scene->board().settings.background);
     if (look.borderWeight > 0) {
-        QColor bc = look.borderColor.isValid() ? look.borderColor : m_scene->board().settings.effectiveTextColor();
+        QColor bc = look.borderColor.isValid() ? look.borderColor : m_scene->inkOn(look);
         QPen pen(bc, look.borderWeight);
         pen.setJoinStyle(Qt::RoundJoin);
         p->setPen(pen);
@@ -867,11 +868,41 @@ bool MindMapScene::isFaded(int id) const
     return false;
 }
 
+static double relLuminance(const QColor &c)
+{
+    auto ch = [](double v) { return v <= 0.03928 ? v / 12.92 : std::pow((v + 0.055) / 1.055, 2.4); };
+    return 0.2126 * ch(c.redF()) + 0.7152 * ch(c.greenF()) + 0.0722 * ch(c.blueF());
+}
+
+static double ratio(const QColor &a, const QColor &b)
+{
+    const double x = relLuminance(a), y = relLuminance(b);
+    return (qMax(x, y) + 0.05) / (qMin(x, y) + 0.05);
+}
+
+// The board's color for text and borders, unless the note has a fill of its own that it cannot be read on (a light
+// text on a pastel fill of a dark board, 0.99.0): then black or white, whichever has the better contrast.
+QColor MindMapScene::inkOn(const Appearance &look) const
+{
+    const QColor board0 = board().settings.effectiveTextColor();
+    if (!look.fill.isValid())
+        return board0;
+    QColor bg = board().settings.background;
+    if (!bg.isValid())
+        bg = Qt::white;
+    const double a = look.fill.alphaF();
+    const QColor under((look.fill.red() * a + bg.red() * (1 - a)) + 0.5, (look.fill.green() * a + bg.green() * (1 - a)) + 0.5,
+                       (look.fill.blue() * a + bg.blue() * (1 - a)) + 0.5);
+    if (ratio(board0, under) >= 4.5)
+        return board0;
+    return ratio(Qt::black, under) >= ratio(Qt::white, under) ? QColor(Qt::black) : QColor(Qt::white);
+}
+
 QColor MindMapScene::textColor(const Appearance &look) const
 {
     if (m_printing && !m_printBackground && !look.textColor.isValid())
         return Qt::black;
-    return look.textColor.isValid() ? look.textColor : board().settings.effectiveTextColor();
+    return look.textColor.isValid() ? look.textColor : inkOn(look);
 }
 
 QRectF MindMapScene::contentRect() const

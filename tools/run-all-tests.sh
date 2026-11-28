@@ -273,6 +273,7 @@ runx v0990n $B/tests/qb_v0990n_tests $B/tests/qb_v0990n_tests "$OUT/shots-v0990n
 runx v0990m $B/tests/qb_v0990m_tests $B/tests/qb_v0990m_tests "$OUT/shots-v0990m"
 runx notesplain $B/tests/qb_notesplain_tests $B/tests/qb_notesplain_tests "$OUT/shots-notesplain"
 runx mmoverview $B/tests/qb_mmoverview_tests $B/tests/qb_mmoverview_tests "$OUT/shots-mmoverview"
+runx mmfmt $B/tests/qb_mmfmt_tests $B/tests/qb_mmfmt_tests "$OUT/shots-mmfmt"
 runx audit1 $B/tests/qb_audit1_tests $B/tests/qb_audit1_tests "$OUT/shots-audit1"
 runx fuzz $B/tests/qb_fuzz_tests $B/tests/qb_fuzz_tests "$OUT/shots-fuzz"
 runx w2 $B/tests/qb_w2_tests $B/tests/qb_w2_tests "$OUT/shots-w2"

@@ -2,6 +2,10 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## mmfmt (0.99.0)
+
+The mind map as a target of the format bar (`NoteFormatTarget`): the interface is found from the widget with the keyboard, one and three notes (bold, italic, underline, strike, color, size, alignment, clear), one undo step named after the change, the mixed state, the right-click colors and border on three notes, and a note in editing (only the selected words). Needs no main window; the wiring of the bar lives in `MainWindow`.
+
 ## Texts with numbers and the English Alt letters (0.99.0, the translation check)
 
 `qb_fixes_tests` (last block): twelve source texts with `%n` read right in English for 0, 1, 2 and 5 (through
