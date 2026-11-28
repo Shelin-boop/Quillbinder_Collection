@@ -2,6 +2,24 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## ls4 (0.99.0: Live Sync, the protocol)
+
+`qb_ls4_tests` (no display; runs under the runner, about 1 s; the TLS part needs the encryption pack with Botan TLS and is skipped
+without it). A `World` has a `HostSession` on a small project folder, `ClientSession`s joined by `MemLink` pairs and a
+`ManualClock` that the test moves (`advance`); `settle()` lets the in-memory frames arrive. Checks: the message types, the validator
+(also 3000 random objects), units; the lock matrix of the design for every pair, all or none, leases (not reachable at 10 s, expired
+at 30 s, renewed by a heartbeat, no idle release), generations never reused after a restart, a generation block that cannot be stored,
+takeover; edit requests (20 s, a decline restarts it, a takeover only after it); the manifest; blobs (several frames, resume, hash
+and size, 2 GiB, free space, a partition); the outbox (restart, drafts, damaged entry); the sessions over MemLink (join, a commit
+written in one batch with state and log, own commit written from the event, repeated operation id, lost result, restart, UNKNOWN_OLD,
+holes and replay, GAP and a copy by manifest, repair, offline outbox, two requests at once, structure beside text, trash needing
+the documents below, reader, leases, the takeover with its snapshot, hand over, unreachable holder, host restart and the re-acquire
+rule, traversal, reserved names, case collisions, symbolic link, 240 bytes, wrong epoch and base, all or nothing, 512 KiB, no space, a
+failing write, replayed message); and one run of two programs (the test starts itself with `--ls4-child`) over TLS on localhost.
+Pitfalls: the frame reader's limit of 200 control frames per second counts real time, so a test must not move the clock by many
+minutes in one go (heartbeats are frames); a `MemLink` pair is a child of the host, so a client must be cut before its host is deleted;
+a test that sends and then changes the host's switches must `settle()` between.
+
 ## ls3 (0.99.0: Live Sync, the core write gate)
 
 `qb_ls3_tests` (needs no display; runs under the runner): the path classes (a table of 30 paths, the rules of section 3.5 of the design:

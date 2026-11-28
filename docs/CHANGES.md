@@ -29,6 +29,15 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   section (`IndexDiff`) and applied again (`OpApply`, to the XML and to a project in memory), the reasons a document cannot be
   changed here (`DocumentStore::whyNotEditable`), `DocumentStore::reload`, and files that the authority's save adds to its batch.
   Suite `ls3`, with a source audit that lists every place of the program that writes or removes files.
+- Live Sync, the protocol (no change for a writer; Live Sync stays off and nothing it adds runs): the messages between devices
+  (their envelope, types, error codes and a strict validator), the host's side of a shared project (connections, the lock
+  table with leases of 3, 10 and 30 seconds and fencing by epoch and generation, edit requests, commits written in one batch
+  with the host's state and a commit log, replay and resync) and the client's side (a replica made by manifest and kept by
+  events, an outbox on disk that is sent after a break, drafts for changes that can no longer be sent, the locks of a
+  device). A lock is never given up by itself while a document is shown; another device asks, the holder hands over or
+  declines (a decline starts the 20 seconds again and tells the asker), and a takeover is possible only after 20 seconds with
+  no answer, after a protective copy of the text. Everything waits on an injectable clock. Suite `ls4`, with one run of two
+  programs over TLS on localhost.
 - **0.99.0 is a security update on every system** (Linux, Windows and Android). The update window says "recommended
   (security)" for a Quillbinder with an older version and offers no "Ignore This Version", also when a newer version has
   come out since (every version after the installed one, up to the newest, counts).

@@ -135,7 +135,8 @@ void ClientSession::attach(net::Link *link)
 
 void ClientSession::detach()
 {
-    if (!m_link)
+    const bool had = !m_conns.isEmpty() || m_link || m_hub;
+    if (!had && (m_state == State::Idle || m_state == State::Offline || m_state == State::Failed))
         return;
     for (const QMetaObject::Connection &c : m_conns)
         disconnect(c);
@@ -563,7 +564,7 @@ void ClientSession::processEvents()
     applyEvent(m_events.first());
 }
 
-void ClientSession::applyEvent(const QJsonObject &ev)
+void ClientSession::applyEvent(QJsonObject ev)
 {
     // the files first: every blob must be here
     bool waiting = false;

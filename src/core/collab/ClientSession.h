@@ -22,6 +22,7 @@
 #include <QJsonObject>
 #include <QMap>
 #include <QObject>
+#include <QPointer>
 #include <QSet>
 #include <memory>
 
@@ -50,7 +51,7 @@ public:
     void attach(net::Link *link);
     // the link is gone (also called when it closes): the session is Offline, the locks are kept as far as known
     void detach();
-    bool isAttached() const { return m_link != nullptr; }
+    bool isAttached() const { return !m_link.isNull(); }
 
     State state() const { return m_state; }
     QString failure() const { return m_failure; }
@@ -93,6 +94,8 @@ public:
     // sends a message of an extension (false when not attached)
     bool sendMessage(const QJsonObject &m);
     void setFreeSpaceProbe(std::function<qint64()> probe) { m_free = std::move(probe); }
+    // makes the replica again from the host's manifest (repairs files that differ; also what a gap in the log leads to)
+    void resync() { startFullSync(); }
     // the number of full copies made (tests: a resync by manifest happened)
     int fullSyncCount() const { return m_fullSyncs; }
 
@@ -145,7 +148,7 @@ private:
     void pumpDownloads();
     void placeFullSync();
     void processEvents();
-    void applyEvent(const QJsonObject &event);
+    void applyEvent(QJsonObject event); // (by value: the buffered copy is removed while it runs)
     bool placeFiles(const QJsonArray &files, QString *error);
     void checkSyncDone();
     void becomeReady();
@@ -161,8 +164,8 @@ private:
 
     Config m_cfg;
     std::unique_ptr<Outbox> m_outbox;
-    net::Link *m_link = nullptr;
-    BlobHub *m_hub = nullptr;
+    QPointer<net::Link> m_link; // (a link that is deleted under the session reads as gone)
+    QPointer<BlobHub> m_hub;
     QList<QMetaObject::Connection> m_conns;
     State m_state = State::Idle;
     QString m_failure;
