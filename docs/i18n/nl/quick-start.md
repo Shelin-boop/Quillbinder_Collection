@@ -75,6 +75,7 @@
 - **Bewaarde plekken**: elk document opent waar je de cursor hebt achtergelaten, ook nadat je het project opnieuw hebt geopend.
 - **Lettertypen**: **Opmaak > Lettertype > Lettertypebestanden installeren…** voegt lettertypen toe zonder het programma te verlaten.
 - **Veiligheid**: automatisch opslaan ook terwijl je doortypt, back-ups, een reservekopie van het projectbestand, crash- en vastloperrapporten (**Help > Probleemoplossing en ontwikkeling > Crashrapporten…**) en **Help > Probleemoplossing en ontwikkeling > Systeeminformatie**.
+- **Live Sync** (uit totdat je het aanzet in **Bestand > Opties > Live Sync**): houdt één project gelijk op je apparaten in hetzelfde netwerk. Koppel de apparaten eenmaal (**Een apparaat koppelen...**: vergelijk de zes cijfers op beide), kies dan **Dit project delen...** in het menu van de Live Sync-knop van de werkbalk en **Deelnemen aan een project...** op het andere apparaat. Eén apparaat bewerkt tegelijk een document; de anderen kunnen erom vragen. De bestanden van een project dat niet is versleuteld, en zijn ZIP-back-ups, worden door Live Sync niet versleuteld: gebruik de eigen versleuteling van je apparaten (paragraaf 21 van de handleiding).
 
 ### Updates en add-ons
 
