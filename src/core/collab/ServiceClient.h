@@ -92,6 +92,9 @@ public:
     void takeOver(const QString &resource);
     void answerEdit(const QString &resource, bool handOver, const QString &askerDevice = QString());
     void requestBackup();
+    // A snapshot job of the shared project (op: take, rename, delete, rollBack) done by its host through the service; waits (running
+    // the event loop) for the answer. False with *code (the host's reason code, or LINK / TIMEOUT) and *text.
+    bool snapshotJob(const QJsonObject &body, QString *code, QString *text, int timeoutMs = 20000);
     void stopSharing();
     // "Transfer Hosting...": the service starts a planned hand-over to this paired device
     void transferHosting(const QString &targetDeviceId);

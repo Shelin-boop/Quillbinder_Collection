@@ -2,9 +2,17 @@
 
 #include "core/collab/Authority.h"
 #include "core/collab/net/PeerStore.h"
+#include "ui/AppSettings.h"
 #include "ui/MainWindowLiveSync.h"
 
+#include "core/collab/LocalLink.h"
+#include "core/collab/ServiceProtocol.h"
+
+#include <QCoreApplication>
+#include <QElapsedTimer>
+#include <QEventLoop>
 #include <QNetworkInterface>
+#include <QProcess>
 
 namespace qb {
 namespace livesync {
@@ -19,10 +27,67 @@ ServiceControl::ServiceControl(Service *external, QObject *parent) : LiveSyncCon
     } else {
         Service::Config cfg; // the defaults: this device's identity and data folder, the listener, discovery and the windows' socket
         cfg.deviceName = prefDeviceName();
+        cfg.backupDir = [] { return AppSettings::instance().backupDir; }; // the writer's backup folder and number kept, as they are then
+        cfg.backupKeep = [] { return AppSettings::instance().backupKeep; };
         m_svc = new Service(cfg, this);
         m_owned = true;
     }
     wire();
+    if (m_owned) // the last window is closed and the program ends: hosting may go on in a service process
+        connect(qApp, &QCoreApplication::aboutToQuit, this, [this] { handOffHosting(); });
+}
+
+bool ServiceControl::handOffHosting(const QString &program)
+{
+    if (!m_svc || !m_svc->isRunning() || !m_svc->keepHosting() || m_svc->hostedCount() == 0)
+        return false;
+    const QString app = program.isEmpty() ? QCoreApplication::applicationFilePath() : program;
+    if (ui::inProcessLiveSyncService() == m_svc)
+        ui::setInProcessLiveSyncService(nullptr);
+    m_svc->stop(); // its listener, its socket and the projects' claims are free for the service process
+    return QProcess::startDetached(app, {QStringLiteral("--live-sync-service")});
+}
+
+bool ServiceControl::takeBackFromServiceProcess(int timeoutMs)
+{
+    const QString name = collab::LocalLink::serverName(m_svc->dir().isEmpty() ? collab::net::DeviceIdentity::standardDir() : m_svc->dir());
+    if (!collab::LocalServer::isServed(name, 300))
+        return true; // none runs
+    collab::LocalLink *link = collab::LocalLink::connectTo(name);
+    QElapsedTimer t;
+    t.start();
+    while (link->state() == collab::net::Link::State::Connecting && t.elapsed() < 2000) {
+        QEventLoop l;
+        QTimer::singleShot(10, &l, &QEventLoop::quit);
+        l.exec();
+    }
+    bool stopping = false, answered = false;
+    connect(link, &collab::net::Link::frameReceived, link, [&](const collab::net::Frame &f) {
+        bool ok = false;
+        const QJsonObject m = f.kind == collab::net::Frame::Json ? f.object(&ok) : QJsonObject();
+        if (ok && collab::local::typeOf(m) == QLatin1String(collab::local::PONG) && m.value(QStringLiteral("re")).toString() == QLatin1String("stop")) {
+            answered = true;
+            stopping = m.value(QStringLiteral("stopping")).toBool();
+        }
+    });
+    if (link->state() == collab::net::Link::State::Ready)
+        link->send(collab::net::Frame::json(collab::local::msg(collab::local::STOP, {{"id", "stop"}})));
+    t.restart();
+    while (!answered && t.elapsed() < 2000 && link->state() == collab::net::Link::State::Ready) {
+        QEventLoop l;
+        QTimer::singleShot(10, &l, &QEventLoop::quit);
+        l.exec();
+    }
+    delete link;
+    if (!stopping)
+        return false; // another program runs the service: it is not ours to end
+    t.restart();
+    while (collab::LocalServer::isServed(name, 200) && t.elapsed() < timeoutMs) {
+        QEventLoop l;
+        QTimer::singleShot(50, &l, &QEventLoop::quit);
+        l.exec();
+    }
+    return !collab::LocalServer::isServed(name, 200);
 }
 
 ServiceControl::~ServiceControl()
@@ -61,7 +126,11 @@ void ServiceControl::setEnabled(bool on)
     m_unavailable.clear();
     if (on && !m_svc->isRunning()) {
         QString err;
-        if (!m_svc->start(&err)) {
+        if (!m_svc->start(&err) && m_owned && err.contains(QLatin1String("already")) && takeBackFromServiceProcess()) {
+            err.clear();
+            m_svc->start(&err); // the hosting a service process kept goes on here
+        }
+        if (!m_svc->isRunning()) {
             m_unavailable = err.contains(QLatin1String("already")) ? tr("Another program of this device runs Live Sync's service.") : err;
             setPrefEnabled(false);
         } else {
@@ -271,7 +340,7 @@ QList<DraftInfo> ServiceControl::drafts(const QString &uuid) const
         d.id = e.id;
         d.uuid = e.uuid;
         d.docId = e.docId;
-        d.docTitle = e.docId;
+        d.docTitle = e.docTitle.isEmpty() ? e.docId : e.docTitle;
         d.when = QDateTime::fromMSecsSinceEpoch(e.whenMs);
         d.reason = e.reason == QLatin1String("split") ? tr("made after the split") : tr("not sent before the takeover");
         l << d;
@@ -281,8 +350,30 @@ QList<DraftInfo> ServiceControl::drafts(const QString &uuid) const
 
 void ServiceControl::deleteDraft(const QString &id)
 {
-    m_svc->deleteDraft(id);
+    if (!m_svc->deleteDraft(id))
+        emit draftNote(tr("The draft could not be deleted."));
     emit draftsChanged();
+}
+
+// Compare, Keep as Copy and Take Over need the project open in a window of this program (the text goes in as a change of the
+// shared project): the window that has it open carries the action out
+void ServiceControl::draftAction(DraftAction::Kind kind, const QString &id)
+{
+    const Service::DraftContent c = m_svc->draftContent(id);
+    if (!c.ok) {
+        emit draftNote(c.why.isEmpty() ? tr("This draft cannot be used.") : c.why);
+        return;
+    }
+    DraftAction a;
+    a.kind = kind;
+    a.uuid = c.uuid;
+    a.docId = c.docId;
+    a.docTitle = c.docTitle;
+    a.text = c.text;
+    a.rtf = c.rtf;
+    emit draftActionRequested(&a);
+    if (!a.handled)
+        emit draftNote(tr("Open the project \"%1\" in a window first: the draft's text is taken into it from there.").arg(m_svc->statusModel()->project(c.uuid).title));
 }
 
 } // namespace livesync

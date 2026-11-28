@@ -56,6 +56,18 @@ struct DraftInfo {
     QString reason;   // "not sent before the takeover", "made after the split" (translated)
 };
 
+// What a window is asked to do with the text of a recovery draft (Compare, Keep as Copy, Take Over). The window that has the draft's
+// project open sets `handled` and carries it out; when none does, the interface tells the writer to open the project first.
+struct DraftAction {
+    enum Kind { Compare, KeepAsCopy, TakeOver } kind = Compare;
+    QString uuid;
+    QString docId;
+    QString docTitle;
+    QByteArray text;   // the draft's text file (Markdown, or RTF when `rtf`)
+    bool rtf = false;
+    bool handled = false;
+};
+
 class LiveSyncControl : public QObject
 {
     Q_OBJECT
@@ -132,6 +144,10 @@ signals:
     void joinFinished(const QString &uuid, bool ok, const QString &folderOrError);
     void accessChanged(const QString &uuid);
     void draftsChanged();
+    // a window is asked to carry out a draft action (see DraftAction); a direct connection: the receiver sets `handled`
+    void draftActionRequested(qb::livesync::DraftAction *action);
+    // a sentence for the writer about a draft action (it could not be done, or what was done)
+    void draftNote(const QString &text);
     void editAsked(const QString &uuid, const QString &resource, const QString &askerName);
     void editAskEnded(const QString &uuid, const QString &resource);
     void foundUnknownHostRefused(const QString &projectTitle);   // "An unknown device tried to take over hosting ..."

@@ -60,12 +60,22 @@ public:
     void transferHosting(const QString &uuid, const QString &deviceId) override;
 
     QList<DraftInfo> drafts(const QString &uuid) const override;
+    // "Keep hosting when the last window is closed": the program is about to end with projects hosted for other devices, so the
+    // hosting goes to a Live Sync service process (`quillbinder --live-sync-service`), which shows its small status window. False when
+    // there was nothing to hand over. `program` is the program's file (default: this one).
+    bool handOffHosting(const QString &program = QString());
+    // a program that starts while such a service process runs asks it to end, then hosts in its own process again
+    bool takeBackFromServiceProcess(int timeoutMs = 10000);
+    void compareDraft(const QString &id) override { draftAction(DraftAction::Compare, id); }
+    void keepDraftAsCopy(const QString &id) override { draftAction(DraftAction::KeepAsCopy, id); }
+    void takeOverDraft(const QString &id) override { draftAction(DraftAction::TakeOver, id); }
     void deleteDraft(const QString &id) override;
 
     void handOver(const QString &uuid, const QString &resource) override { m_svc->answerEditRequest(uuid, resource, true); }
     void decline(const QString &uuid, const QString &resource) override { m_svc->answerEditRequest(uuid, resource, false); }
 
 private:
+    void draftAction(DraftAction::Kind kind, const QString &id);
     void wire();
     collab::Service *m_svc = nullptr;
     bool m_owned = false;

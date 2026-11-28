@@ -1,6 +1,9 @@
 #include "core/collab/Service.h"
+#include "core/collab/HostBackup.h"
 
 #include "core/Project.h"
+#include "core/crypto/Vault.h"
+#include "core/collab/proto/Messages.h"
 #include "core/SafeSave.h"
 #include "core/collab/PathClass.h"
 #include "core/collab/ScopedLink.h"
@@ -8,6 +11,7 @@
 
 #include <QCoreApplication>
 #include <QCryptographicHash>
+#include <QDomDocument>
 #include <QDir>
 #include <QFileInfo>
 #include <QJsonArray>
@@ -31,6 +35,8 @@ struct Service::Proj {
     RegistryEntry entry;
     std::unique_ptr<HostSession> host;
     std::unique_ptr<ProjectHostBackend> backend;
+    std::unique_ptr<HostBackup> jobs;           // the host's backups and snapshot jobs (package 8); gone before the host
+    std::unique_ptr<HostJobsClient> jobsClient; // a replica's side of them: the backup state and the snapshot calls
     std::unique_ptr<vault::Scope> scope; // the host's folder is in the vault while it is hosted (an encrypted project)
     std::unique_ptr<ClientSession> client; // a replica's session, or the loopback session of a hosted project
     QPointer<TlsLink> link;                // a client's connection to its host
@@ -139,7 +145,18 @@ public:
     }
     void requestBackup(const QString &uuid) override
     {
-        Q_UNUSED(uuid); // backups of hosted projects are package 8's: nothing to ask yet
+        Service::Proj *p = m_s->m_projects.value(uuid);
+        if (!p)
+            return;
+        ServiceScope scope;
+        if (p->jobs) {
+            QString why;
+            if (!p->jobs->requestBackup(&why) && !why.isEmpty())
+                emit m_s->notice(why); // (a backup that runs already, a project that cannot be backed up now)
+        } else if (p->jobsClient) {
+            if (!p->jobsClient->requestBackup())
+                emit m_s->notice(tr("The backup could not be asked for: this device is not connected to the host."));
+        }
     }
     void stopSharing(const QString &uuid) override { m_s->stopSharing(uuid); }
 
@@ -231,6 +248,13 @@ bool Service::start(QString *error)
         QString why;
         if (!m_local->listen(m_localName, &why)) {
             m_local.reset();
+            // (nothing that was opened stays open: another service of this device is running)
+            if (m_discovery) {
+                m_discovery->unpublish();
+                m_discovery->stop();
+            }
+            m_discovery.reset();
+            m_server.reset();
             return fail(why);
         }
         connect(m_local.get(), &LocalServer::newLink, this, [this](LocalLink *l) { attachWindow(l); });
@@ -626,6 +650,7 @@ void Service::followNewHost(Proj *p, const QString &hostDeviceId, qint64 epoch)
         if (wasHost) {
             seq = p->host->seq();
             revs = p->host->revs();
+            p->jobs.reset();
             p->host->stop();
             p->host.reset();
             p->backend.reset();
@@ -816,10 +841,32 @@ bool Service::beginHost(Proj *p, qint64 epoch, QString *whyOut)
         const QString r = e.access.value(device).toString();
         return r == QLatin1String("editor") ? Role::Editor : r == QLatin1String("reader") ? Role::Reader : Role::None;
     });
-    p->host->setExtensionHandler([this, uuid](const QString &device, Link *, const QJsonObject &m) {
+    p->host->setExtensionHandler([this, uuid](const QString &device, Link *link, const QJsonObject &m) {
         Proj *q = m_projects.value(uuid);
-        return q && q->auth && q->auth->handleMessage(device, m);
+        if (!q)
+            return false;
+        if (q->auth && q->auth->handleMessage(device, m))
+            return true;
+        return q->jobs && q->jobs->handle(device, link, m); // BACKUP_REQUEST, SNAPSHOT_OP
     });
+    {
+        HostBackup::Config jc;
+        jc.host = p->host.get();
+        ProjectHostBackend *backend = p->backend.get();
+        jc.projectOf = [backend] { return backend->project(); };
+        jc.backupDirOf = m_cfg.backupDir;
+        jc.keepOf = m_cfg.backupKeep;
+        p->jobs = std::make_unique<HostBackup>(jc);
+        connect(p->jobs.get(), &HostBackup::statusChanged, this, [this, uuid] {
+            scheduleState(uuid);
+            emit projectChanged(uuid);
+        });
+        p->host->setSnapshotHook(p->jobs->protectiveSnapshotHook());
+        p->jobs->removeOldFreezes();
+        QString jobErr;
+        if (!p->jobs->recoverJobs(&jobErr)) // a job that was cut off between its files and its commit is published now
+            p->notices << tr("A snapshot job that was cut off could not be finished: %1").arg(jobErr);
+    }
     connect(p->host.get(), &HostSession::peerJoined, this, [this, uuid](const QString &device, const QString &name) {
         if (Proj *q = m_projects.value(uuid)) {
             q->online.insert(device);
@@ -864,6 +911,7 @@ bool Service::beginHost(Proj *p, qint64 epoch, QString *whyOut)
     p->client = std::make_unique<ClientSession>(cc);
     if (!p->client->open(&why)) {
         p->client.reset();
+        p->jobs.reset();
         p->host->stop();
         p->host.reset();
         m_registry->releaseHost(entry.uuid);
@@ -892,6 +940,8 @@ void Service::stopProject(const QString &uuid, bool removeEntry)
     }
     if (p->rawLink)
         p->rawLink->close();
+    p->jobsClient.reset();
+    p->jobs.reset();
     if (p->host) {
         p->host->stop();
         p->host.reset();
@@ -1109,7 +1159,16 @@ void Service::wireClient(Proj *p)
     if (!c->isLoopback()) {
         c->setExtensionHandler([this, uuid](const QJsonObject &m) {
             Proj *q = m_projects.value(uuid);
-            return q && q->auth && q->auth->handleMessage(q->entry.hostDeviceId, m);
+            if (!q)
+                return false;
+            if (q->auth && q->auth->handleMessage(q->entry.hostDeviceId, m))
+                return true;
+            return q->jobsClient && q->jobsClient->handle(m); // BACKUP_STATUS, SNAPSHOT_RESULT
+        });
+        p->jobsClient = std::make_unique<HostJobsClient>(c, uuid);
+        connect(p->jobsClient.get(), &HostJobsClient::statusChanged, this, [this, uuid] {
+            scheduleState(uuid);
+            emit projectChanged(uuid);
         });
         connect(c, &ClientSession::joinedInfo, this, [this, uuid](const QJsonObject &membership, const QJsonArray &proofs) {
             Proj *q = m_projects.value(uuid);
@@ -1131,8 +1190,14 @@ void Service::wireClient(Proj *p)
                 emit projectChanged(uuid);
             }
         });
+    } else {
+        p->jobsClient.reset();
     }
-    connect(c, &ClientSession::readyToUse, this, [this, uuid] { scheduleState(uuid); });
+    connect(c, &ClientSession::readyToUse, this, [this, uuid] {
+        if (Proj *q = m_projects.value(uuid); q && q->jobsClient)
+            q->jobsClient->queryStatus(); // the host's backup state, for the inspector tab and the tooltip
+        scheduleState(uuid);
+    });
     connect(c, &ClientSession::eventApplied, this,
             [this, uuid](qint64 seq, const QString &opId, const QString &actor, bool own, const QJsonArray &ops, const QStringList &paths, const QJsonObject &revs) {
                 if (own) {
@@ -1180,6 +1245,7 @@ void Service::wireClient(Proj *p)
         scheduleState(uuid);
     });
     connect(c, &ClientSession::lockRevoked, this, [this, uuid](const QString &resource, const QString &reason) {
+        emit editAskEnded(uuid, resource); // (a request for a lock this device lost is over)
         tellWindows(uuid, local::msg(local::LOCK_EVT, {{"uuid", uuid}, {"kind", "revoked"}, {"resource", resource}, {"reason", reason}}));
         scheduleState(uuid);
         emit locksChanged(uuid);
@@ -1192,6 +1258,7 @@ void Service::wireClient(Proj *p)
         emit editAsked(uuid, resource, asker);
         tellWindows(uuid, local::msg(local::EDIT_EVT, {{"uuid", uuid}, {"kind", "asked"}, {"resource", resource}, {"asker", asker}, {"waitMs", double(waitMs)}}));
     });
+    connect(c, &ClientSession::editEnded, this, [this, uuid](const QString &resource, const QString &) { emit editAskEnded(uuid, resource); });
     connect(c, &ClientSession::editStatus, this, [this, uuid](const QString &resource, bool declined, qint64 waitMs, bool mayForce, const QString &holder) {
         const QString key = uuid + QLatin1Char('|') + resource;
         if (declined)
@@ -1456,7 +1523,52 @@ void Service::answerEditRequest(const QString &uuid, const QString &resource, bo
 {
     if (ClientSession *c = clientSession(uuid))
         c->answerEdit(resource, handOver);
-    emit editAskEnded(uuid, resource);
+    // a Decline leaves the request open (the asker's waiting time starts again): the holder's bar stays until it is handed over, the
+    // asker gives up or takes over
+    if (handOver)
+        emit editAskEnded(uuid, resource);
+}
+
+// the title of a binder item as the project file of `folder` has it (a replica's headless view: no Project is opened for it)
+static QString itemTitleIn(const QString &folder, const QString &docId)
+{
+    if (docId.isEmpty())
+        return QString();
+    const QString file = Project::resolveProjectFile(folder);
+    QByteArray raw;
+    if (file.isEmpty() || !vault::readFile(file, &raw))
+        return docId;
+    QDomDocument dom;
+    if (!dom.setContent(raw))
+        return docId;
+    const QDomNodeList items = dom.elementsByTagName(QStringLiteral("Item"));
+    for (int i = 0; i < items.size(); ++i) {
+        const QDomElement e = items.at(i).toElement();
+        if (e.attribute(QStringLiteral("id")) == docId) {
+            const QString t = e.firstChildElement(QStringLiteral("Title")).text();
+            return t.isEmpty() ? docId : t;
+        }
+    }
+    return docId;
+}
+
+// the first document of an outbox entry that has a text file put in it (the units name the files by path)
+static QString firstTextOfUnits(const QJsonArray &units, QString *path, QString *hash)
+{
+    for (const QJsonValue &v : units) {
+        proto::Unit u;
+        if (!v.isObject() || !proto::fromJson(v.toObject(), &u))
+            continue;
+        for (const proto::FileOp &f : u.files) {
+            const PathInfo info = classify(f.path);
+            if (f.kind == proto::FileOp::Put && info.kind == PathKind::Text) {
+                *path = f.path;
+                *hash = f.hash;
+                return info.id;
+            }
+        }
+    }
+    return QString();
 }
 
 QList<Service::DraftEntry> Service::drafts(const QString &uuid) const
@@ -1472,6 +1584,7 @@ QList<Service::DraftEntry> Service::drafts(const QString &uuid) const
                 e.id = d.id;
                 e.uuid = it.key();
                 e.docId = d.document;
+                e.docTitle = itemTitleIn(p->entry.folder, d.document);
                 e.reason = d.reason;
                 e.whenMs = d.createdMs;
                 l << e;
@@ -1483,19 +1596,74 @@ QList<Service::DraftEntry> Service::drafts(const QString &uuid) const
                 e.uuid = it.key();
                 e.reason = d.reason;
                 e.whenMs = d.createdMs;
-                for (const QJsonValue &u : d.units)
-                    if (e.docId.isEmpty())
-                        e.docId = u.toObject().value(QStringLiteral("resource")).toString().section(QLatin1Char(':'), 1);
+                QString path, hash;
+                e.docId = firstTextOfUnits(d.units, &path, &hash);
+                e.docTitle = itemTitleIn(p->entry.folder, e.docId);
                 l << e;
             }
     }
     return l;
 }
 
+Service::DraftContent Service::draftContent(const QString &id) const
+{
+    DraftContent c;
+    auto fill = [&](const QString &uuid, const QString &docId, const QByteArray &text, bool rtf, const QString &reason, qint64 when) {
+        const Proj *p = m_projects.value(uuid);
+        c.uuid = uuid;
+        c.docId = docId;
+        c.docTitle = p ? itemTitleIn(p->entry.folder, docId) : docId;
+        c.text = text;
+        c.rtf = rtf;
+        c.reason = reason;
+        c.whenMs = when;
+        c.ok = !docId.isEmpty() && !text.isNull();
+        if (!c.ok)
+            c.why = tr("This draft holds no text of a document.");
+    };
+    if (id.startsWith(QLatin1String("outbox:"))) {
+        const QString rest = id.mid(7);
+        const QString uuid = rest.section(QLatin1Char(':'), 0, 0), opId = rest.section(QLatin1Char(':'), 1);
+        const Proj *p = m_projects.value(uuid);
+        if (!p || !p->client) {
+            c.why = tr("The project of this draft is not shared on this device any more.");
+            return c;
+        }
+        for (const OutboxEntry &d : p->client->outbox().drafts())
+            if (d.opId == opId) {
+                QString path, hash;
+                const QString doc = firstTextOfUnits(d.units, &path, &hash);
+                QByteArray bytes;
+                if (!doc.isEmpty())
+                    p->client->outbox().blobs().read(hash, &bytes);
+                fill(uuid, doc, bytes, path.endsWith(QLatin1String(".rtf")), d.reason, d.createdMs);
+                return c;
+            }
+        c.why = tr("The draft is not there any more.");
+        return c;
+    }
+    for (const Proj *p : m_projects)
+        if (p->auth && p->auth->drafts().exists(id))
+            for (const Draft &d : p->auth->drafts().list())
+                if (d.id == id) {
+                    fill(p->entry.uuid, d.document, d.hasText ? p->auth->drafts().text(id) : QByteArray(), d.textPath.endsWith(QLatin1String(".rtf")), d.reason,
+                         d.createdMs);
+                    return c;
+                }
+    c.why = tr("The draft is not there any more.");
+    return c;
+}
+
 bool Service::deleteDraft(const QString &id)
 {
-    if (id.startsWith(QLatin1String("outbox:")))
-        return false; // (kept until a later package decides what to do with a refused change)
+    if (id.startsWith(QLatin1String("outbox:"))) {
+        const QString rest = id.mid(7);
+        const QString uuid = rest.section(QLatin1Char(':'), 0, 0), opId = rest.section(QLatin1Char(':'), 1);
+        Proj *p = m_projects.value(uuid);
+        if (!p || !p->client)
+            return false;
+        return p->client->outbox().removeDraft(opId);
+    }
     for (Proj *p : m_projects)
         if (p->auth && p->auth->drafts().exists(id)) {
             const bool ok = p->auth->drafts().remove(id);
@@ -1700,6 +1868,58 @@ void Service::onWindowFrame(Window *w, const Frame &f)
         onWindowMessage(w, m);
 }
 
+// A snapshot job of a window: the host does it (this device's own host code, or the host over the network). The answer comes when the
+// host has answered and its files are in this device's copy.
+void Service::windowJob(Window *w, const QJsonObject &m)
+{
+    const QString uuid = m.value(QStringLiteral("uuid")).toString();
+    const QString id = m.value(QStringLiteral("id")).toString();
+    bool ok = false;
+    QString code, text, file;
+    Proj *p = m_projects.value(uuid);
+    const QString op = m.value(QStringLiteral("op")).toString();
+    const QString doc = m.value(QStringLiteral("doc")).toString();
+    const QString fileName = m.value(QStringLiteral("file")).toString();
+    const QString title = m.value(QStringLiteral("title")).toString();
+    if (!p) {
+        code = QStringLiteral("NOT_SHARED");
+    } else if (p->jobs) {
+        ServiceScope scope;
+        QJsonObject body = m;
+        body.remove(QStringLiteral("t"));
+        body.remove(QStringLiteral("id"));
+        body.remove(QStringLiteral("uuid"));
+        const HostBackup::JobAnswer a = p->jobs->runJobFor(m_id->deviceId(), body);
+        ok = a.ok;
+        code = a.code;
+        text = a.text;
+        file = a.file;
+    } else if (p->jobsClient) {
+        QPointer<HostJobsClient> jc(p->jobsClient.get());
+        snapshots::RemoteJobs *r = jc->remoteJobs();
+        QString err;
+        if (op == QLatin1String("take"))
+            ok = r->take(doc, title, &err);
+        else if (op == QLatin1String("rename"))
+            ok = r->setTitle(doc, fileName, title, &err);
+        else if (op == QLatin1String("delete"))
+            ok = r->remove(doc, fileName, &err);
+        else if (op == QLatin1String("rollBack"))
+            ok = r->rollBack(doc, fileName, m.value(QStringLiteral("allowEmpty")).toBool(false), &err);
+        else
+            code = QStringLiteral("BAD_OP");
+        text = err;
+        if (jc && !ok)
+            code = jc->lastJobCode().isEmpty() ? QStringLiteral("FAILED") : jc->lastJobCode();
+    } else {
+        code = QStringLiteral("NOT_CONNECTED");
+        text = tr("The device that hosts the project cannot be reached now.");
+    }
+    if (!m_windows.contains(w)) // (the window went away while the host was asked)
+        return;
+    sendWindow(w, local::msg(local::JOB_RESULT, {{"re", id}, {"ok", ok}, {"code", code}, {"text", text}, {"file", file}}));
+}
+
 void Service::onWindowMessage(Window *w, const QJsonObject &m)
 {
     const QString t = local::typeOf(m);
@@ -1712,6 +1932,13 @@ void Service::onWindowMessage(Window *w, const QJsonObject &m)
         w->uuids.remove(uuid);
     } else if (t == QLatin1String(local::SUBMIT)) {
         windowSubmit(w, m);
+    } else if (t == QLatin1String(local::JOB)) {
+        windowJob(w, m);
+    } else if (t == QLatin1String(local::STOP)) {
+        // only a service process (no window of its own) ends on request; the caller wants to host in its own program
+        sendWindow(w, local::msg(local::PONG, {{"re", m.value(QStringLiteral("id"))}, {"stopping", m_cfg.quitWhenIdle}}));
+        if (m_cfg.quitWhenIdle)
+            QTimer::singleShot(0, this, [this] { emit quitRequested(); });
     } else if (ClientSession *c = clientSession(uuid)) {
         QStringList res;
         for (const QJsonValue &v : m.value(QStringLiteral("resources")).toArray())
@@ -1721,6 +1948,8 @@ void Service::onWindowMessage(Window *w, const QJsonObject &m)
             c->lock(res);
         else if (t == QLatin1String(local::UNLOCK)) {
             c->unlock(res);
+            for (const QString &r : res)
+                emit editAskEnded(uuid, r); // (a lock this device gives up has no request to answer any more)
             scheduleState(uuid); // the window waits for the list of its locks to shrink
         }
         else if (t == QLatin1String(local::ASK))
@@ -1919,7 +2148,10 @@ ProjectStatus ServiceStatus::project(const QString &uuid) const
     QList<ParticipantStatus> rest = others.values();
     std::sort(rest.begin(), rest.end(), [](const ParticipantStatus &a, const ParticipantStatus &b) { return a.name.toLower() < b.name.toLower(); });
     s.participants << rest;
-    // the backup state is the host's job (package 8): none yet
+    if (p->jobs)
+        s.backup = p->jobs->status();
+    else if (p->jobsClient)
+        s.backup = p->jobsClient->status();
     return s;
 }
 

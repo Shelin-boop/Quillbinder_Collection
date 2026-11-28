@@ -644,6 +644,11 @@ DraftsDialog::DraftsDialog(QWidget *parent) : QDialog(parent)
     m_empty = new QLabel(tr("There are no recovery drafts."), this);
     m_empty->setObjectName(QStringLiteral("draftsEmpty"));
     v->addWidget(m_empty);
+    m_note = new QLabel(this);
+    m_note->setObjectName(QStringLiteral("draftNote"));
+    m_note->setWordWrap(true);
+    m_note->setAccessibleName(tr("What happened to the draft"));
+    v->addWidget(m_note);
     auto *row = new QHBoxLayout;
     m_compare = new QPushButton(tr("Compare"), this);
     m_compare->setObjectName(QStringLiteral("draftCompare"));
@@ -682,6 +687,7 @@ DraftsDialog::DraftsDialog(QWidget *parent) : QDialog(parent)
     });
     connect(close, &QPushButton::clicked, this, &QDialog::close);
     connect(&c, &LiveSyncControl::draftsChanged, this, &DraftsDialog::refresh);
+    connect(&c, &LiveSyncControl::draftNote, this, [this](const QString &t) { m_note->setText(t); });
     refresh();
 }
 

@@ -55,8 +55,14 @@ public:
     struct Config {
         HostSession *host = nullptr;  // not owned
         Project *project = nullptr;   // the host's own Project of the same folder; not owned
+        // the host's Project as it is now (it is made again when the model could not follow a commit, so a pointer kept from the
+        // start may be stale); used instead of `project` when set
+        std::function<Project *()> projectOf;
         QString backupDir;            // "" = the program's default backup folder
         int keep = 5;                 // complete backups kept (backup::backupProject)
+        // the writer's settings as they are when a backup is made (the service of a program gives them); used instead of the two above when set
+        std::function<QString()> backupDirOf;
+        std::function<int()> keepOf;
         qint64 minIntervalMs = 10000; // a device may ask for a backup this often (a host that is asked more often says HOST_BUSY)
         // What the host does around the copy. The copy itself is made in one step of the host's own thread, between two commits
         // (the host commits in that thread); a host that commits in another thread pauses its queue here.
@@ -80,6 +86,14 @@ public:
     // Messages of the host jobs (BACKUP_REQUEST, SNAPSHOT_OP): the host session's extension handler; true = handled.
     bool handle(const QString &deviceId, net::Link *link, const QJsonObject &message);
 
+    // A snapshot job of this device's own window (the host's own windows reach the host's code without a connection): the same
+    // job as SNAPSHOT_OP, with the same checks, for the device `deviceId`. `body` holds op, doc, file, title, allowEmpty and opId.
+    struct JobAnswer {
+        bool ok = false;
+        QString code, text, file;
+    };
+    JobAnswer runJobFor(const QString &deviceId, const QJsonObject &body);
+
     // before a takeover (and a draft taken over): the last committed text of "doc:<id>" kept as a snapshot of the document, then
     // published to the copies. HostSession::setSnapshotHook(jobs->protectiveSnapshotHook()).
     HostSession::SnapshotHook protectiveSnapshotHook();
@@ -87,7 +101,9 @@ public:
 
     // Publishes what the host's own code changed on disk (its snapshot jobs) as one commit: state, log and events. False with
     // *error when the commit could not be written (the changes are on disk, the copies catch up by manifest).
-    bool publishChanges(const QString &opId, const QString &actorDevice, QString *error, qint64 *seqOut = nullptr);
+    // `afterRestart`: the host has read the folder at its start, so a cut-off job's files are in its list already; every snapshot file and the
+    // project file are then published again (copies that have them take them as they are)
+    bool publishChanges(const QString &opId, const QString &actorDevice, QString *error, qint64 *seqOut = nullptr, bool afterRestart = false);
     // after a restart: a job that was cut off between its files and its commit is published now
     bool recoverJobs(QString *error = nullptr);
 
@@ -108,6 +124,7 @@ private:
         QString code, text, file;
     };
     friend class HostBackupTestPeer;
+    Project *project() const { return m_cfg.projectOf ? m_cfg.projectOf() : m_cfg.project; }
     void begin(const QString &requester);
     void pack(const FreezeResult &view);
     void finish(BackupStatus::State state, const QString &code, const QString &detail);

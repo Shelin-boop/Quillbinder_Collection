@@ -1352,7 +1352,14 @@ void HostSession::onEditForce(Peer *p, const QJsonObject &m)
 
 void HostSession::onEditCancel(Peer *p, const QJsonObject &m)
 {
-    m_requests.cancel(m.value(QStringLiteral("resource")).toString(), p->owner);
+    const QString resource = m.value(QStringLiteral("resource")).toString();
+    const bool had = m_requests.find(resource, p->owner) != nullptr;
+    m_requests.cancel(resource, p->owner);
+    // the holder's bar for the request goes
+    if (had)
+        if (const Lock *held = m_locks.find(resource))
+            for (Peer *h : peersOfOwner(held->owner))
+                send(h, make(QLatin1String(T::EDIT_ENDED), m_uuid, object({{QStringLiteral("resource"), resource}, {QStringLiteral("asker"), p->owner.device}})));
 }
 
 bool HostSession::defaultSnapshot(const QString &resource, const QString &label, QString *error)

@@ -4062,6 +4062,10 @@ void MainWindow::showStartDialog(bool recentFirst)
 
 void MainWindow::closeEvent(QCloseEvent *e)
 {
+    if (!liveSyncConfirmClose()) { // 0.99.0 (Live Sync): closing the last window ends the hosting
+        e->ignore();
+        return;
+    }
     if (!closeProject()) {
         e->ignore();
         return;

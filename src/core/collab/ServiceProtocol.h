@@ -14,9 +14,14 @@
 //     W_ANSWER     {uuid, resource, handOver, asker}   the holder's answer to a request
 //     W_ACTION     {uuid, action}                      "requestBackup" or "stopSharing"
 //     W_PING       {id}                                answered by W_PONG
+//     W_JOB        {id, uuid, op, doc, file, title, allowEmpty}  a snapshot job (take, rename, delete, rollBack) for the host of the
+//                                                      project, which may be this device; answered by W_JOB_RESULT
+//     W_STOP       {}                                  asks a service process to end (a program that wants to host itself); ignored
+//                                                      by a service that lives inside a program
 //   service -> window
 //     W_ATTACHED   {re, ok, code, uuid, host, state...}
 //     W_SUBMITTED  {re, ok, opId, error}
+//     W_JOB_RESULT {re, ok, code, text, file}
 //     W_STATE      {uuid, ...}                         the state of the project as the window needs it (see Service::stateJson)
 //     W_EVENT      {uuid, seq, opId, actor, own, ops[], paths[], revs{}}   a commit is in the folder
 //     W_REPLACED   {uuid}                              the folder was made again from the host's files
@@ -34,10 +39,10 @@ namespace local {
 
 constexpr const char *ATTACH = "W_ATTACH", *DETACH = "W_DETACH", *SUBMIT = "W_SUBMIT", *LOCK = "W_LOCK", *UNLOCK = "W_UNLOCK",
                      *ASK = "W_ASK", *CANCEL_ASK = "W_CANCEL_ASK", *TAKEOVER = "W_TAKEOVER", *ANSWER = "W_ANSWER",
-                     *ACTION = "W_ACTION", *PING = "W_PING";
+                     *ACTION = "W_ACTION", *PING = "W_PING", *JOB = "W_JOB", *STOP = "W_STOP";
 constexpr const char *ATTACHED = "W_ATTACHED", *SUBMITTED = "W_SUBMITTED", *STATE = "W_STATE", *EVENT = "W_EVENT",
                      *REPLACED = "W_REPLACED", *RESULT = "W_RESULT", *LOCK_EVT = "W_LOCK_EVT", *EDIT_EVT = "W_EDIT_EVT",
-                     *PONG = "W_PONG", *QUIT = "W_QUIT";
+                     *PONG = "W_PONG", *QUIT = "W_QUIT", *JOB_RESULT = "W_JOB_RESULT";
 
 inline QJsonObject msg(const char *type, const QJsonObject &body = QJsonObject())
 {

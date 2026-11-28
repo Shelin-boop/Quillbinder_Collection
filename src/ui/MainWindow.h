@@ -40,6 +40,10 @@ class QStandardItemModel;
 namespace qb {
 namespace livesync {
 class LiveSyncUi;
+struct DraftAction;
+}
+namespace collab {
+class Service;
 }
 namespace script {
 struct Format;
@@ -577,12 +581,16 @@ private:
     LiveSyncGlue *m_liveSync = nullptr;
     livesync::LiveSyncUi *m_liveSyncUi = nullptr; // the button, the tab, the bars and the marks (0.99.0)
     bool m_liveSyncReopening = false;
+    QPointer<QObject> m_liveSyncService; // the in-process service this window belongs to (a program has one; the tests have several)
+    collab::Service *liveSyncService() const;
     void liveSyncInstallUi();
     void liveSyncSelected(const QString &docId);
     bool liveSyncShared(const QString &projectFile) const;
     bool liveSyncBegin(const QString &projectFile);
     collab::Follower *liveSyncFollower() const;
     void liveSyncAdopted();
+    bool liveSyncConfirmClose(); // the last window of a hosted project with devices online, hosting not kept: asks first
+    void liveSyncDraftAction(livesync::DraftAction *action); // Compare, Keep as Copy, Take Over of a recovery draft
     void liveSyncEnd();
     BinderPanel *m_binder = nullptr;
     Inspector *m_inspector = nullptr;

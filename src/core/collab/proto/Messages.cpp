@@ -54,6 +54,7 @@ const QList<Rule> &rules()
         {T::EDIT_STATUS, {{"resource", S}}, 0},
         {T::EDIT_FORCE, {{"resource", S}}, 0},
         {T::EDIT_CANCEL, {{"resource", S}}, 0},
+        {T::EDIT_ENDED, {{"resource", S}}, 0},
     };
     return r;
 }
@@ -87,7 +88,7 @@ QStringList messageTypes()
             T::JOINED,       T::LEAVE,         T::MANIFEST_GET, T::MANIFEST,      T::BLOB_GET,     T::BLOB_PUT,     T::BLOB_DONE,
             T::COMMIT_REQUEST, T::COMMIT_RESULT, T::COMMIT_EVENT, T::RESYNC,      T::LOCK_REQUEST, T::LOCK_GRANTED, T::LOCK_DENIED,
             T::LOCK_RELEASE, T::LOCK_REVOKED,  T::LOCK_TABLE,   T::EDIT_REQUEST,  T::EDIT_ASKED,   T::EDIT_ANSWER,  T::EDIT_STATUS,
-            T::EDIT_FORCE,   T::EDIT_CANCEL,   T::SNAPSHOT_OP,  T::SNAPSHOT_RESULT, T::BACKUP_REQUEST, T::BACKUP_STATUS, T::PRESENCE,
+            T::EDIT_FORCE,   T::EDIT_CANCEL,   T::EDIT_ENDED,   T::SNAPSHOT_OP,  T::SNAPSHOT_RESULT, T::BACKUP_REQUEST, T::BACKUP_STATUS, T::PRESENCE,
             T::MEMBERSHIP,   T::HANDOVER_PREPARE, T::HANDOVER_READY, T::HANDOVER_COMMIT, T::HANDOVER_DONE, T::HANDOVER_ABORT,
             T::ELECTION_REQUEST, T::VOTE,      T::AUTHORITY};
 }

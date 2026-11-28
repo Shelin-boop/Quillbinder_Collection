@@ -33,6 +33,7 @@
 #include <QObject>
 #include <QPointer>
 #include <QTimer>
+#include <functional>
 #include <memory>
 
 namespace qb {
@@ -57,6 +58,10 @@ public:
         bool quitWhenIdle = false;   // the service process: ends after the last window unless it keeps hosting
         int idleMs = 10000;          // ... after this many milliseconds
         QString replicasDir;         // default <dir>/replicas
+        // where and how many backups of a hosted project are kept: the writer's settings of the program, read when a backup is made
+        // ("" = the default backup folder, 5)
+        std::function<QString()> backupDir;
+        std::function<int()> backupKeep;
     };
     explicit Service(const Config &config, QObject *parent = nullptr);
     ~Service() override;
@@ -129,10 +134,20 @@ public:
     void answerEditRequest(const QString &uuid, const QString &resource, bool handOver);
     // recovery drafts of a project (the outbox's kept changes and the authority's drafts), for the drafts dialog
     struct DraftEntry {
-        QString id, uuid, docId, reason;
+        QString id, uuid, docId, docTitle, reason;
         qint64 whenMs = 0;
     };
     QList<DraftEntry> drafts(const QString &uuid) const;
+    // what a draft holds: the text of its document (the interface compares it, keeps it as a copy or takes it over)
+    struct DraftContent {
+        bool ok = false;
+        QString uuid, docId, docTitle, reason, why; // `why`: the reason when not ok (a draft that holds no text of a document)
+        QByteArray text;                            // the document's text file as it was (Markdown, or RTF when `rtf`)
+        bool rtf = false;
+        qint64 whenMs = 0;
+    };
+    DraftContent draftContent(const QString &id) const;
+    // only on the writer's decision (the interface asks first); an unknown id is false
     bool deleteDraft(const QString &id);
 
     // ---- who hosts (package 6 through the service)
@@ -211,6 +226,7 @@ private:
     void onWindowClosed(Window *w);
     void windowAttach(Window *w, const QJsonObject &m);
     void windowSubmit(Window *w, const QJsonObject &m);
+    void windowJob(Window *w, const QJsonObject &m);
     void finishSubmit(Window *w, const QString &id);
     void sendWindow(Window *w, const QJsonObject &m);
     void tellWindows(const QString &uuid, const QJsonObject &m);

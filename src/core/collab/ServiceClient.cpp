@@ -70,8 +70,10 @@ ServiceClient::Attached ServiceClient::attach(const QString &folder, bool keepHo
     a.code = r.value(QStringLiteral("code")).toString();
     a.text = r.value(QStringLiteral("text")).toString();
     if (a.ok) {
-        m_uuid = r.value(QStringLiteral("uuid")).toString();
-        applyState(r);
+        if (m_uuid != r.value(QStringLiteral("uuid")).toString()) { // (not when onFrame took the answer in already: its state may be older than a later one)
+            m_uuid = r.value(QStringLiteral("uuid")).toString();
+            applyState(r);
+        }
         a.uuid = m_uuid;
         a.title = r.value(QStringLiteral("title")).toString();
         a.hostName = m_hostName;
@@ -140,8 +142,14 @@ void ServiceClient::onFrame(const Frame &f)
         }
         return;
     }
-    if (t == QLatin1String(local::ATTACHED) || t == QLatin1String(local::PONG)) {
+    if (t == QLatin1String(local::ATTACHED) || t == QLatin1String(local::PONG) || t == QLatin1String(local::JOB_RESULT)) {
         m_answers.insert(m.value(QStringLiteral("re")).toString(), m);
+        // The answer to an attach is taken in at once: the service's next messages of the project (a state change right after it)
+        // may be read before attach() looks at its answer, and they would be dropped as "not my project" otherwise.
+        if (t == QLatin1String(local::ATTACHED) && m.value(QStringLiteral("ok")).toBool() && m_uuid.isEmpty()) {
+            m_uuid = m.value(QStringLiteral("uuid")).toString();
+            applyState(m);
+        }
         return;
     }
     if (t == QLatin1String(local::QUIT)) {
@@ -259,5 +267,41 @@ void ServiceClient::transferHosting(const QString &targetDeviceId)
 }
 void ServiceClient::stopSharing() { sendMsg(local::msg(local::ACTION, {{"uuid", m_uuid}, {"action", "stopSharing"}})); }
 
+} // namespace collab
+} // namespace qb
+
+namespace qb {
+namespace collab {
+bool ServiceClient::snapshotJob(const QJsonObject &body, QString *code, QString *text, int timeoutMs)
+{
+    const QString id = nextId();
+    QJsonObject b = body;
+    b.insert(QStringLiteral("id"), id);
+    b.insert(QStringLiteral("uuid"), m_uuid);
+    if (m_uuid.isEmpty() || m_gone) {
+        if (code)
+            *code = QStringLiteral("LINK");
+        return false;
+    }
+    sendMsg(local::msg(local::JOB, b));
+    QElapsedTimer t;
+    t.start();
+    while (!m_answers.contains(id) && t.elapsed() < timeoutMs && !m_gone) {
+        QEventLoop l;
+        QTimer::singleShot(5, &l, &QEventLoop::quit);
+        l.exec();
+    }
+    if (!m_answers.contains(id)) {
+        if (code)
+            *code = m_gone ? QStringLiteral("LINK") : QStringLiteral("TIMEOUT");
+        return false;
+    }
+    const QJsonObject r = m_answers.take(id);
+    if (code)
+        *code = r.value(QStringLiteral("code")).toString();
+    if (text)
+        *text = r.value(QStringLiteral("text")).toString();
+    return r.value(QStringLiteral("ok")).toBool();
+}
 } // namespace collab
 } // namespace qb
