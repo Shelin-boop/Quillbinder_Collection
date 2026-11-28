@@ -1940,8 +1940,8 @@ bool Project::saveIndex(QString *error)
         crypto::Error kind = crypto::Error::None;
         if (vault::readFile(m_indexFile, &cur, &why, &kind))
             shaOnDisk = QCryptographicHash::hash(cur, QCryptographicHash::Sha256);
-        else if (kind != crypto::Error::Io)
-            shaOnDisk = QByteArray("undecryptable");
+        else if (kind != crypto::Error::Io && kind != crypto::Error::Locked && kind != crypto::Error::NoSecretKey)
+            shaOnDisk = QByteArray("undecryptable"); // (0.99.0, audit AU-01: a locked or missing key is no comparison)
     }
     if (!shaOnDisk.isEmpty() && !m_indexSha.isEmpty()) {
         if (shaOnDisk != m_indexSha) {

@@ -208,7 +208,7 @@ encryption (the welcome project and a large project of 1000 documents; `QB_MEASU
 findings (`reviewFindings`, alone with `QB_REVIEW_ONLY=1`: Save As and Save a Copy stay encrypted, a missing public key, a stray
 encrypted file after a decryption, another computer's lock, a damaged or missing marker (no opening, no backup), damaged first
 bytes, the restore's leftover ZIP file, and no title in a conflict copy, an interrupted-save copy or the emergency copy). Screenshots
-`v0990f-*.png`.
+`v0990f-*.png`. `forgetFinding` (AU-01, alone with `QB_FORGET_ONLY=1`): Forget the passphrase with a project open keeps the key unlocked (no conflict copy, no "changed elsewhere"), an unread document is still shown, a locked key makes a read ask for the passphrase (right one: the text; Cancel: the locked-key notice, no conflict copy at the next save), and the key is locked when the last encrypted project closes.
 
 ## v0990k (0.99.0, item 113, part 3: the key wizard, the key folder, Import Keys, export, File > Options > Encryption)
 

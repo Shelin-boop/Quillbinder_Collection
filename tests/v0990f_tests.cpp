@@ -33,6 +33,7 @@
 #include "core/crypto/Vault.h"
 #include "import/ScrivenerFormat.h"
 #include "ui/AppSettings.h"
+#include "ui/EncryptionPage.h"
 #include "ui/MainWindow.h"
 #include "ui/ProjectCryptoUi.h"
 #include "text/TextUtil.h"
@@ -1307,6 +1308,168 @@ static void window(const QString &W)
     w.closeProject();
 }
 
+
+// ------------------------------------------------------------------------------ AU-01: Forget the passphrase, a locked key
+
+static QString conflictFilesIn(const QString &folder)
+{
+    QStringList l;
+    QDirIterator it(folder + QStringLiteral("/settings/conflicts"), QDir::Files, QDirIterator::Subdirectories);
+    while (it.hasNext())
+        l << it.next();
+    return l.join(QLatin1String(", "));
+}
+
+static QString textFileOf(Project *p, const QString &id, const char *name)
+{
+    for (const char *ext : {".md", ".rtf"}) {
+        const QString f = p->contentDir(id) + QLatin1Char('/') + QLatin1String(name) + QLatin1String(ext);
+        if (QFileInfo::exists(f))
+            return f;
+    }
+    return QString();
+}
+
+static void forgetFinding(const QString &W)
+{
+    std::printf("== AU-01: forgetting the passphrase with the project open; a read with the key locked asks for it\n");
+    QString err;
+    const Rich r = makeRich(W, QStringLiteral("Forget Book"));
+    QString lateId;
+    { // one more document, which is not read before the Cancel case
+        auto plain = openOk(r.index, QStringLiteral("(the plain project opens)"));
+        BinderItem *d = plain->model()->createItem(plain->draft(), -1, ItemType::Text, QStringLiteral("Chapter Four"));
+        lateId = d->id;
+        setText(plain.get(), d, QStringLiteral("Fourth chapter Secretword6."));
+        plain->save(&err);
+    }
+    encryptFolder(r.folder, recipients(), {}, &err);
+    MainWindow w;
+    w.resize(1000, 700);
+    w.show();
+    QTest::qWait(150);
+    check(w.openProject(r.index) && w.project() && w.project()->isEncrypted(), QStringLiteral("(the encrypted project is open)"));
+    if (!w.project())
+        return;
+    Project *p = w.project();
+    QByteArray rememberWords = kWriterPass;
+    KeyStore::system().write(KeyStore::passphraseEntry(g_writer), rememberWords);
+    // answers of the dialogs: the passphrase box (by mode) and the notice of an unreadable document
+    enum Mode { Idle, Right, Cancel } mode = Idle;
+    int boxes = 0;
+    QString notice;
+    QTimer ticker;
+    ticker.setInterval(50);
+    QObject::connect(&ticker, &QTimer::timeout, [&] {
+        QWidget *dlg = QApplication::activeModalWidget();
+        if (!dlg)
+            return;
+        if (dlg->objectName() == QLatin1String("unlockDialog")) {
+            ++boxes;
+            if (mode == Right) {
+                dlg->findChild<QLineEdit *>(QStringLiteral("unlockPassphrase"))->setText(QString::fromUtf8(kWriterPass));
+                QTest::keyClick(dlg->findChild<QLineEdit *>(QStringLiteral("unlockPassphrase")), Qt::Key_Return);
+            } else {
+                dlg->grab().save(outDir + QStringLiteral("/v0990f-forget-locked-ask.png"));
+                static_cast<QDialog *>(dlg)->reject();
+            }
+        } else if (auto *box = qobject_cast<QMessageBox *>(dlg)) {
+            notice = box->objectName() + QLatin1Char('|') + box->text();
+            box->grab().save(outDir + QStringLiteral("/v0990f-forget-notice.png"));
+            box->accept();
+        }
+    });
+    ticker.start();
+
+    // 1. forget with the project open: the key stays unlocked; edits save without a false conflict
+    setText(p, p->item(r.t1), QStringLiteral("Edit before forgetting Editword1"));
+    check(p->save(&err), QStringLiteral("(saved before)"), err);
+    encui::hooks().confirm = [](QWidget *, const QString &, const QString &) { return true; };
+    encui::hooks().notify = [](QWidget *, const QString &, const QString &, bool) {};
+    {
+        EncryptionPage page;
+        auto *btn = page.findChild<QPushButton *>(QStringLiteral("encForget"));
+        check(btn != nullptr, QStringLiteral("(the Forget button is there)"));
+        if (btn)
+            btn->click();
+    }
+    QByteArray left;
+    check(KeyStore::system().read(KeyStore::passphraseEntry(g_writer), &left) == KeyStore::Status::NotFound,
+          QStringLiteral("forget: the stored passphrase is gone"));
+    check(KeyRing::device().isUnlocked(g_writer), QStringLiteral("forget with an encrypted project open: the key stays unlocked"));
+    QString saveErr;
+    setText(p, p->item(r.t1), QStringLiteral("Edit after forgetting Editword2"));
+    bool ok1 = p->save(&saveErr);
+    QTest::qWait(1100);
+    setText(p, p->item(r.t1), QStringLiteral("Second edit after forgetting Editword3"));
+    bool ok2 = p->save(&saveErr);
+    check(ok1 && ok2 && !saveErr.contains(QLatin1String("elsewhere")), QStringLiteral("two saves after forget: no 'changed elsewhere'"), saveErr);
+    check(conflictFilesIn(r.folder).isEmpty(), QStringLiteral("... and no copy in settings/conflicts"), conflictFilesIn(r.folder));
+    {
+        QByteArray d;
+        const bool got = vault::readFile(textFileOf(p, r.t1, "text"), &d);
+        check(got && d.contains("Editword3"), QStringLiteral("... the text on disk decrypts to the edit"));
+        QFile raw(textFileOf(p, r.t1, "text"));
+        raw.open(QIODevice::ReadOnly);
+        check(!raw.readAll().contains("Editword3"), QStringLiteral("... and the file on disk is encrypted"));
+    }
+    // 2. a document not shown before can still be shown
+    check(p->docs()->text(r.t2)->toPlainText().contains(QLatin1String("Secretword2")) && notice.isEmpty() && boxes == 0,
+          QStringLiteral("a document not shown before is shown after forget"), notice);
+
+    // 3. the key locked by force: showing an unread document asks for the passphrase
+    KeyRing::device().lock(g_writer);
+    mode = Right;
+    boxes = 0;
+    check(p->docs()->text(r.t3)->toPlainText().contains(QLatin1String("Secretword3")) && boxes == 1 && KeyRing::device().isUnlocked(g_writer),
+          QStringLiteral("locked key: an unread document asks for the passphrase, and after it the text is there"),
+          QStringLiteral("boxes=%1").arg(boxes));
+    // 4. Cancel: read-only, the message names the locked key, no conflict copy at the next save
+    KeyStore::system().remove(KeyStore::passphraseEntry(g_writer)); // (the right answer was kept: the key store would unlock again)
+    KeyRing::device().lock(g_writer);
+    mode = Cancel;
+    boxes = 0;
+    notice.clear();
+    QTextDocument *notes = p->docs()->text(lateId);
+    QTest::qWait(300);
+    check(boxes == 1 && notes->toPlainText().isEmpty(), QStringLiteral("Cancel: the passphrase was asked once and the text stays empty"),
+          QStringLiteral("boxes=%1").arg(boxes));
+    check(notice.startsWith(QLatin1String("lockedDocumentNotice")) && notice.contains(QLatin1String("key is locked"))
+              && !notice.contains(QLatin1String("permissions")),
+          QStringLiteral("Cancel: the message names the locked key, without advice about permissions"), notice);
+    setText(p, p->item(r.t1), QStringLiteral("Edit with the key locked Editword4"));
+    saveErr.clear();
+    ok1 = p->save(&saveErr);
+    QTest::qWait(1100);
+    setText(p, p->item(r.t1), QStringLiteral("Another edit with the key locked Editword5"));
+    ok2 = p->save(&saveErr);
+    check(ok1 && ok2 && !saveErr.contains(QLatin1String("elsewhere")) && conflictFilesIn(r.folder).isEmpty(),
+          QStringLiteral("locked key: saves make no conflict copy and no 'changed elsewhere'"), saveErr + conflictFilesIn(r.folder));
+    ticker.stop();
+    KeyRing::device().unlock(g_writer, kWriterPass);
+    {
+        QByteArray d;
+        check(vault::readFile(textFileOf(p, r.t1, "text"), &d) && d.contains("Editword5"), QStringLiteral("... and the text on disk is the last edit"));
+    }
+    // 5. closing the last encrypted project locks a key whose passphrase was forgotten while it was open
+    w.closeProject();
+    check(!KeyRing::device().isUnlocked(g_writer), QStringLiteral("the passphrase forgotten while the project was open: the key is locked at its close"));
+    KeyRing::device().unlock(g_writer, kWriterPass);
+    // forget again with the project open, then close: the key is locked at the close
+    check(w.openProject(r.index) && w.project(), QStringLiteral("(opened again)"));
+    {
+        EncryptionPage page;
+        if (auto *btn = page.findChild<QPushButton *>(QStringLiteral("encForget")))
+            btn->click();
+    }
+    check(KeyRing::device().isUnlocked(g_writer), QStringLiteral("forget again with the project open: still unlocked"));
+    w.closeProject();
+    check(!KeyRing::device().isUnlocked(g_writer), QStringLiteral("the key is locked when the last encrypted project closes"));
+    KeyRing::device().unlock(g_writer, kWriterPass);
+    encui::hooks().confirm = nullptr;
+    encui::hooks().notify = nullptr;
+}
+
 // --------------------------------------------------------------------------------------------------- speed
 
 static void speed(const QString &W)
@@ -1468,6 +1631,8 @@ int main(int argc, char **argv)
     QTemporaryDir work;
     if (qEnvironmentVariableIsSet("QB_MEASURE")) {
         speed(work.path());
+    } else if (qEnvironmentVariableIsSet("QB_FORGET_ONLY")) {
+        forgetFinding(work.path());
     } else if (qEnvironmentVariableIsSet("QB_REVIEW_ONLY")) {
         reviewFindings(work.path());
     } else {
@@ -1478,6 +1643,7 @@ int main(int argc, char **argv)
         backups(work.path());
         window(work.path());
         reviewFindings(work.path());
+        forgetFinding(work.path());
         speed(work.path());
     }
     std::printf("%d failure(s)\n", failures);

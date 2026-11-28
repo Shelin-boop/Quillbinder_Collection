@@ -233,7 +233,7 @@ void DocumentStore::readFile(const QString &id, bool notes, QTextDocument *doc, 
                               ? f.errorString()
                               : tr("only %1 of %2 bytes could be read").arg(data.size()).arg(f.size());
                 f.close();
-            } else if (!vault::unseal(path, data, &sealWhy)) {
+            } else if (!unsealAsking(path, data, &sealWhy)) {
                 // 0.99.0: a file of an encrypted project that cannot be decrypted (damaged, or the key locked): shown
                 // empty, read-only and never written over, as a file that cannot be read
                 unreadableNow = true;
@@ -589,6 +589,53 @@ void DocumentStore::deserialize(const QString &id, const QByteArray &data, QText
     }
 }
 
+// 0.99.0 (audit AU-01): the handler that asks for the passphrase (set by the window; none: no question)
+static std::function<bool(const QString &)> &unlockHandler()
+{
+    static std::function<bool(const QString &)> h;
+    return h;
+}
+
+QString DocumentStore::lockedKeyText()
+{
+    return tr("The key is locked. Close the project and open it again to enter the passphrase.");
+}
+
+void DocumentStore::setUnlockHandler(std::function<bool(const QString &folder)> handler)
+{
+    unlockHandler() = std::move(handler);
+}
+
+// vault::unseal; when the key is locked, the passphrase is asked for once (the same box as the opening of a project) and the
+// file is decrypted again. Cancel: the reason says that the key is locked and how to unlock it (m_unlockDeclined: not asked
+// again for the next documents until the key is unlocked)
+bool DocumentStore::unsealAsking(const QString &path, QByteArray &data, QString *why)
+{
+    const QByteArray raw = data;
+    crypto::Error kind = crypto::Error::None;
+    if (vault::unseal(path, data, why, &kind)) {
+        m_unlockDeclined = false;
+        return true;
+    }
+    if (kind != crypto::Error::Locked)
+        return false;
+    const QString lockedText = lockedKeyText();
+    if (!m_unlockDeclined && unlockHandler() && unlockHandler()(m_project->folderPath())) {
+        data = raw;
+        if (vault::unseal(path, data, why, &kind)) {
+            m_unlockDeclined = false;
+            return true;
+        }
+        if (kind != crypto::Error::Locked)
+            return false;
+    }
+    m_unlockDeclined = true;
+    data.clear();
+    if (why)
+        *why = lockedText;
+    return false;
+}
+
 // 0.99.0: what a document's file holds now, as text (an encrypted file decrypted)
 DocumentStore::DiskText DocumentStore::diskText(const QString &path, QByteArray *bytes)
 {
@@ -598,8 +645,14 @@ DocumentStore::DiskText DocumentStore::diskText(const QString &path, QByteArray 
     QByteArray d = cur.readAll();
     if (cur.error() != QFileDevice::NoError)
         return DiskText::Unreadable;
-    if (!vault::unseal(path, d))
+    crypto::Error kind = crypto::Error::None;
+    if (!vault::unseal(path, d, nullptr, &kind)) {
+        // 0.99.0 (audit AU-01): a locked or missing key says nothing about the file: no comparison (the stamp decides, as for
+        // a plain file); only a damaged one, or one that is not ours, counts as another version
+        if (kind == crypto::Error::Locked || kind == crypto::Error::NoSecretKey)
+            return DiskText::Unreadable;
         return DiskText::Undecryptable;
+    }
     *bytes = d;
     return DiskText::Read;
 }

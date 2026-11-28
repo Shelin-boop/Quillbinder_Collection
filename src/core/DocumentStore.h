@@ -26,6 +26,9 @@ class DocumentStore : public QObject
 {
     Q_OBJECT
 public:
+    // 0.99.0 (audit AU-01): asks for the passphrase when a read finds the key locked (the window sets it; true = unlocked)
+    static void setUnlockHandler(std::function<bool(const QString &folder)> handler);
+    static QString lockedKeyText();
     explicit DocumentStore(Project *project);
     ~DocumentStore() override;
 
@@ -261,6 +264,8 @@ private:
     QSet<QString> m_toldNotKept; // keys whose changed text could not be kept either (told once)
     QStringList m_skippedUnreadable;
     // 0.99.0: what a document's file holds now (writeEntry's comparisons)
+    bool unsealAsking(const QString &path, QByteArray &data, QString *why);
+    bool m_unlockDeclined = false;
     enum class DiskText { Read, Unreadable, Undecryptable };
     static DiskText diskText(const QString &path, QByteArray *bytes);
     QHash<QString, QString> m_plainCache;

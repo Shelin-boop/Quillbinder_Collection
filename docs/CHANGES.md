@@ -7,6 +7,7 @@ Manual in the program) describes every function.
 
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
 
+- Fix: **Forget the passphrase** no longer locks the key while an encrypted project is open (it is locked when the project closes), so saves make no false "changed elsewhere" copies; a document read with the key locked asks for the passphrase.
 - System test (no change for a writer): the cases of the new functions (handwriting, encryption, the model rule, the small
   interface, Read Aloud, toolbar sizes, Cancel in Compile, the focus line, link contrast, the menu walk), four kill cases and
   encrypted variants of the data-safety cases.

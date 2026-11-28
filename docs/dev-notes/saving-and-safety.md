@@ -2,6 +2,15 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: a locked key is no other version (audit AU-01, suite `v0990f`)
+
+A locked or missing key says nothing about what a file holds: `DocumentStore::diskText` returns "cannot compare" for
+`Error::Locked` and `NoSecretKey` (the stamp decides, as for a plain file); only a damaged file counts as another version.
+**Forget the passphrase** calls `vault::lockWhenIdle`: the key is locked at once only when no encrypted project is open,
+else when the last vault folder is removed. A read that finds the key locked (`DocumentStore::unsealAsking`) asks through
+`DocumentStore::setUnlockHandler` (the window sets `ui::unlockForFolder`); Cancel is remembered (`m_unlockDeclined`) so that
+the next documents are not asked again until a read works.
+
 ## 0.99.0: showing is no edit (suite `v0930f`, `cleanShow`)
 
 A highlighter's pass over a document (a new "qbPaper" or "qbZoom", a palette or theme change, the first look) fires

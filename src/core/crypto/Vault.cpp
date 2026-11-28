@@ -176,10 +176,32 @@ void add(const QString &folderIn, const QStringList &recipients, const QStringLi
     g_count.store(int(g_folders.size()));
 }
 
+static QStringList g_lockWhenIdle; // keys to lock when the last encrypted project closes (guarded by g_lock)
+
+static void lockKeyNow(const QString &fingerprint)
+{
+    std::lock_guard<std::recursive_mutex> g(crypto::deviceRingLock());
+    crypto::KeyRing::device().lock(fingerprint);
+}
+
+void lockWhenIdle(const QString &fingerprint)
+{
+    {
+        QMutexLocker l(&g_lock);
+        if (!g_folders.isEmpty()) {
+            if (!g_lockWhenIdle.contains(fingerprint))
+                g_lockWhenIdle.append(fingerprint);
+            return;
+        }
+    }
+    lockKeyNow(fingerprint);
+}
+
 void remove(const QString &folderIn)
 {
     const QString folder = clean(folderIn);
     bool gone = false;
+    QStringList toLock;
     {
         QMutexLocker l(&g_lock);
         for (qsizetype i = 0; i < g_folders.size(); ++i) {
@@ -192,9 +214,13 @@ void remove(const QString &folderIn)
             }
         }
         g_count.store(int(g_folders.size()));
+        if (g_folders.isEmpty())
+            toLock.swap(g_lockWhenIdle);
     }
     if (gone)
         dropCopiesOf(folder);
+    for (const QString &fp : std::as_const(toLock))
+        lockKeyNow(fp);
 }
 
 bool active() { return g_count.load() > 0; }
