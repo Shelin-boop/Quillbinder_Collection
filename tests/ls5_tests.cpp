@@ -1435,6 +1435,6 @@ int main(int argc, char **argv)
     if (want("processes"))
         testHostingProcesses(tmp, program);
 
-    std::printf("\n%d check(s), %d failure(s)\n", total, failures);
+    std::printf("\n%d check(s)\n%d failure(s)\n", total, failures); // (the runner reads a line that starts with "<n> failure(s)")
     return failures;
 }
