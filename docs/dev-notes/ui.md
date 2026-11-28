@@ -2,6 +2,16 @@
 
 Moved out of `CLAUDE.md` on 2026-11-15 (the index there lists every file); sections newest first. Search with grep and read only the section a job needs. A job adds its notes here as a new section at the top.
 
+## 0.99.0: the format bar and the mind map (`NoteFormatTarget`)
+
+- `src/ui/NoteFormatTarget.h` is the interface; `MindMapController` implements it, `NoteFormatTarget::forWidget(focusWidget)`
+  finds it from the widget with the keyboard (a `MindMapView`). Keys are the bar's action keys; the mind map enables only
+  bold, italic, underline, strike, textColor(Auto), the four alignments, fontBigger/Smaller, size, clearFormat (a note has no
+  font, highlight, list or superscript). In editing, the toggles act on the selected words, the rest on the whole note.
+- `MainWindow` asks it first (`noteTargetNow()`: the mind map with the keyboard, kept while the keyboard is on a bar or in a
+  popup; the `fmt` lambda and `updateFormatBar`), and follows `MindMapController::formatStateChanged`. The font, size, line and
+  style fields stay greyed for notes (their handlers are in `MainWindowBars.cpp` and act on the editor).
+
 ## 0.99.0: pitfalls found by the first full test
 
 - Read Aloud's toolbar is shown from the start at the end of the first row, so suites that count the eight old grip bars

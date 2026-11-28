@@ -8,6 +8,7 @@ Manual in the program) describes every function.
 New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-qt6.12-r2`).
 
 - Fix: **the welcome project's mind map is readable in dark themes**. Its notes had pastel fills but took the board's light text (1 : 1 on the fill), their borders and two line colors fell below 3 : 1; the notes now carry dark text and a dark border of their own and the two colored lines are lighter, in the English project and the ten translations (suite `welcdark`).
+- Mind map: **the format bar works on notes**, through a small interface (`NoteFormatTarget`): the whole text of every selected note (bold, italic, underline, strikethrough, text color, size, alignment, clear formatting; mixed states shown neutral), or the selected words of a note being edited; one undo step per change. Several selected notes change together from the right-click menu as well. A note with a fill and no text color of its own takes black or white text (and border) by contrast against the fill (at least 4.5:1), so light text no longer sits on a pastel fill of a dark board.
 - Live Sync, groundwork (no change for a writer while Live Sync is off, which is the default): the program can find other Quillbinder devices on the local network with a small multicast DNS of its own (a strict reader that refuses oversized, looping or malformed packets, a responder, a browser; only an opaque instance id, the port and the addresses are published, never a device or machine name) and accepts a manual address as well; on Android a multicast lock is held while it looks.
 - **Live Sync, first part (nothing a writer sees yet)**: the transport and trust of the coming Live Sync, built into the program and off: a device identity (an ECDSA P-256 key kept in the key store, a self-signed certificate, the device id and the pin from the public key), TLS 1.3 links with Botan (both sides show a certificate, trusted only by their pin), the frames and their limits, the list of paired devices, the pairing exchange with its six-digit code and its 120-second window, and a fake network for the tests. The encryption pack gets the Botan modules `x509`, `tls13` and `argon2` (Linux and Windows scripts; the pack is built again).
 - **The Quillbinder wallet** (groundwork; the window that asks for its passphrase comes with Live Sync's pages): where the system has no key store, the key store's fallback is one file in the data folder, sealed with AES-256/GCM under a key made from a master passphrase by Argon2id. It is asked once per session, never stored, and holds the device key of Live Sync and, there, the encryption passphrase. The system's key store stays first where it exists; without a way to ask for the passphrase the answer is "no key store", as before.
@@ -47,6 +48,16 @@ New functions and fixes (Linux first; the AppImage stays on the runtime `u2404-q
   changes over and gives its locks up when the project closes. The host keeps its own project: when it applies a commit it
   recomputes word and character counts, modified times and the list of documents with its normal code. A small status window
   shows what the service hosts after the last window closed. Suite `ls5`.
+- Live Sync, who hosts a shared project (no change for a writer; Live Sync stays off): the list of a project's devices in
+  the order of their priority, signed with the host's device key; proofs of authority (the founding, a planned handover signed
+  by the old host, a failover with the signed votes of a majority) and a chain of them that every device can verify; the
+  planned handover of hosting (old host: active, draining, prepared, retired; target: follower, prepared, active), written to
+  disk before each message that depends on it, so that a crash at any step leaves one host and never two in one epoch; failover
+  after about 30 seconds without the host (two devices: the other alone; three or more: only with more than half of all
+  devices); a device that is no member, or whose proof does not hold, is refused with a warning; when two hosts meet again the
+  newer one stays, the old one becomes a client and everything it accepted after the split is kept as one recovery draft per
+  document and author (never merged); then hosting goes back to the highest-priority device after it was in sync for 60
+  seconds. Suite `ls6`, with every handover step killed in turn and a clock moved by hand.
 - **0.99.0 is a security update on every system** (Linux, Windows and Android). The update window says "recommended
   (security)" for a Quillbinder with an older version and offers no "Ignore This Version", also when a newer version has
   come out since (every version after the installed one, up to the newest, counts).

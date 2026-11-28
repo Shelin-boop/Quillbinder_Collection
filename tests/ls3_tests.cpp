@@ -913,6 +913,7 @@ struct AuditEntry {
 static const AuditEntry kAudit[] = {
     {"src/android/MobileStart.cpp", "outside", "the Android program's own files"},
     {"src/core/collab/Blobs.cpp", "outside", "partial blob files in Live Sync's own folder, renamed when whole"},
+    {"src/core/collab/Drafts.cpp", "outside", "recovery drafts in the device-local folder (writes through safesave)"},
     {"src/core/collab/net/DeviceIdentity.cpp", "outside", "the device key and certificate in the program's data folder"},
     {"src/core/collab/net/PeerStore.cpp", "outside", "the paired devices in the program's data folder"},
     {"src/core/crypto/KeyStore.cpp", "outside", "the key store's test file and the wallet hook, outside projects"},

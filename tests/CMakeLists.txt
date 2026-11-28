@@ -676,3 +676,12 @@ target_link_libraries(qb_ls4_tests PRIVATE qbcore Qt6::Network)
 add_executable(qb_ls5_tests ls5_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_ls5_tests PRIVATE qbui Qt6::Test Qt6::Network)
 target_compile_definitions(qb_ls5_tests PRIVATE QB_TEST_BUILD_DIR="${CMAKE_BINARY_DIR}")
+# 0.99.0 (the format bar's controls act on the notes of a mind map, NoteFormatTarget; several notes at once) (xvfb-run -a ./qb_mmfmt_tests /tmp/shots)
+add_executable(qb_mmfmt_tests mmfmt_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_mmfmt_tests PRIVATE qbui Qt6::Test)
+
+# 0.99.0, Live Sync work package 6 (who hosts): membership and proofs signed with the device key, the planned handover killed at
+# every step, failover with a majority, unknown devices refused, reunion with recovery drafts, handback (no display)
+# (./qb_ls6_tests /tmp/shots)
+add_executable(qb_ls6_tests ls6_tests.cpp)
+target_link_libraries(qb_ls6_tests PRIVATE qbcore Qt6::Network)
