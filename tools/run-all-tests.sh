@@ -259,6 +259,7 @@ runx v0990l $B/tests/qb_v0990l_tests $B/tests/qb_v0990l_tests "$OUT/shots-v0990l
 runx v0990j $B/tests/qb_v0990j_tests $B/tests/qb_v0990j_tests "$OUT/shots-v0990j"
 runx v0990o $B/tests/qb_v0990o_tests $B/tests/qb_v0990o_tests "$OUT/shots-v0990o"
 runx ls3 $B/tests/qb_ls3_tests $B/tests/qb_ls3_tests "$OUT/shots-ls3"
+runx lsroute $B/tests/qb_lsroute_tests $B/tests/qb_lsroute_tests "$OUT/shots-lsroute"
 runx ls4 $B/tests/qb_ls4_tests $B/tests/qb_ls4_tests "$OUT/shots-ls4"
 runx ls6 $B/tests/qb_ls6_tests $B/tests/qb_ls6_tests "$OUT/shots-ls6"
 runx ls7 $B/tests/qb_ls7_tests $B/tests/qb_ls7_tests "$OUT/shots-ls7"

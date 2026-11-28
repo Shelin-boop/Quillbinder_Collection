@@ -11,6 +11,7 @@
 #include "core/BinderModel.h"
 #include "core/DocumentStore.h"
 #include "core/Project.h"
+#include "core/PathSafety.h"
 #include "core/Zip.h"
 #include "text/DisplayFormat.h"
 #include "text/MarkdownIO.h"
@@ -986,7 +987,7 @@ BinderItem *importMedia(Project *p, const QString &path, BinderItem *parent, int
     if (!safesave::copyChecked(path, p->mediaFilePath(it), &why)) {
         if (warnings)
             warnings->append(QObject::tr("%1 could not be copied into the project and was not imported (%2).").arg(fi.fileName(), why));
-        QDir(p->contentDir(it->id)).removeRecursively();
+        pathsafety::removeTreeInside(p->contentDir(it->id), p->folderPath());
         p->model()->deletePermanently(it);
         return nullptr;
     }
@@ -1044,7 +1045,7 @@ BinderItem *addWebPage(Project *p, const importers::WebPage &page, BinderItem *p
         if (!safesave::copyChecked(page.htmlFile, p->mediaFilePath(it), &why)) {
             if (warnings)
                 warnings->append(QObject::tr("“%1”: the page could not be copied into the project and was not added (%2).").arg(title, why));
-            QDir(dir).removeRecursively();
+            pathsafety::removeTreeInside(dir, p->folderPath());
             p->model()->deletePermanently(it);
             return nullptr;
         }

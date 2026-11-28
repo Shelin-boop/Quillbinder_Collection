@@ -39,6 +39,12 @@ Pitfalls: the frame reader's limit of 200 control frames per second counts real 
 minutes in one go (heartbeats are frames); a `MemLink` pair is a child of the host, so a client must be cut before its host is deleted;
 a test that sends and then changes the host's switches must `settle()` between.
 
+## lsroute (0.99.0: the last writers behind the gate)
+
+`qb_lsroute_tests`: with Live Sync off an emptied board, a removed object and its picture are removed from disk as before; in a
+follower the removal of the mind map file, of an object's file and of its picture, and the folder of a failed import are captured
+and the files stay on disk (each check fails with the old `QFile::remove` / `removeRecursively`).
+
 ## ls3 (0.99.0: Live Sync, the core write gate)
 
 `qb_ls3_tests` (needs no display; runs under the runner): the path classes (a table of 30 paths, the rules of section 3.5 of the design:

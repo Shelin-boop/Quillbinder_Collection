@@ -685,3 +685,7 @@ target_link_libraries(qb_ls6_tests PRIVATE qbcore Qt6::Network)
 add_executable(qb_ls7_tests ls7_tests.cpp ${QB_RESOURCES_OBJECTS})
 target_link_libraries(qb_ls7_tests PRIVATE qbui Qt6::Test)
 target_compile_definitions(qb_ls7_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
+# 0.99.0, Live Sync: the last writers into a project folder (the mind map file's removal, an object's files, a failed
+# import's folder) go through the gate (xvfb-run -a ./qb_lsroute_tests /tmp/shots)
+add_executable(qb_lsroute_tests lsroute_tests.cpp)
+target_link_libraries(qb_lsroute_tests PRIVATE qbcore Qt6::Test)
