@@ -31,6 +31,9 @@ a picture, a deleted document, window state) and the second save without a confl
 `applyToProject`) on a scripted change and on random edits (3 seeds, 40 rounds); the reasons and `DocumentStore::reload`; an encrypted
 replica (plain bytes captured, the sealed files unchanged); the source audit (`kAudit`: every file of `src/` that writes or removes
 files must be listed with how it reaches the gate; add a new file there). `QB_LS_STRICT` is set to 0 by the suite.
+## mmfmt (0.99.0)
+
+The mind map as a target of the format bar (`NoteFormatTarget`): the interface is found from the widget with the keyboard, one and three notes (bold, italic, underline, strike, color, size, alignment, clear), one undo step named after the change, the mixed state, the right-click colors and border on three notes, and a note in editing (only the selected words). Needs no main window; the wiring of the bar lives in `MainWindow`.
 
 ## Texts with numbers and the English Alt letters (0.99.0, the translation check)
 

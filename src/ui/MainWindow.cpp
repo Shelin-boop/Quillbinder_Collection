@@ -75,6 +75,7 @@
 #include "ui/ColorPickButton.h"
 #include "ui/ViewMemory.h"
 #include "ui/MindMapView.h"
+#include "ui/NoteFormatTarget.h"
 #include "core/Objects.h"
 #include "ui/Layouts.h"
 #include "ui/OptionsDialog.h"
@@ -158,6 +159,8 @@
 #include <QUrl>
 
 namespace qb {
+
+static NoteFormatTarget *noteTargetNow(); // the mind map the format bar acts on (0.99.0)
 
 namespace {
 // A double click on the divider between the two editors makes them equally large.
@@ -1814,6 +1817,23 @@ void MainWindow::createActions()
         QAction *ac = act(key, text, icon, ks);
         ac->setCheckable(checkable);
         connect(ac, &QAction::triggered, this, [this, fn, key] {
+            // the notes of a mind map (0.99.0): what a note can hold; the color asks first
+            if (NoteFormatTarget *nt = noteTargetNow()) {
+                if (nt->noteFormatEnabled(key)) {
+                    QVariant v;
+                    bool go = true;
+                    if (key == QLatin1String("textColor")) {
+                        const QColor now = nt->noteFormatState().textColor;
+                        const QColor c = QColorDialog::getColor(now.isValid() ? now : Qt::black, this);
+                        go = c.isValid();
+                        v = c;
+                    }
+                    if (go)
+                        nt->noteFormatApply(key, v);
+                }
+                updateFormatBar();
+                return;
+            }
             // the text of an object (0.21.1): only the commands it can hold
             if (ObjectTextEdit *o = objectTextTarget()) {
                 objectFormat(key, o);
@@ -2466,6 +2486,28 @@ TextEditor *MainWindow::editor() const
     return m_active ? m_active->currentEditor() : nullptr;
 }
 
+// The mind map the format bar acts on (0.99.0): the one that has the keyboard, also while the keyboard is on a bar or in
+// a popup; any other text field takes it away.
+static QPointer<MindMapController> s_noteCtl;
+static NoteFormatTarget *noteTargetNow()
+{
+    QWidget *f = QApplication::focusWidget();
+    if (f) {
+        if (auto *t = NoteFormatTarget::forWidget(f)) {
+            s_noteCtl = dynamic_cast<MindMapController *>(t);
+            return t;
+        }
+        bool keep = f->window() && (f->window()->windowType() == Qt::Popup || qobject_cast<QMenu *>(f->window()));
+        for (QWidget *w = f; w && !keep; w = w->parentWidget())
+            keep = qobject_cast<QToolBar *>(w) != nullptr;
+        if (!keep)
+            s_noteCtl = nullptr;
+    }
+    if (s_noteCtl && s_noteCtl->view() && s_noteCtl->view()->isVisible())
+        return s_noteCtl.data();
+    return nullptr;
+}
+
 ObjectTextEdit *MainWindow::objectTextTarget() const
 {
     QWidget *f = QApplication::focusWidget();
@@ -2637,6 +2679,44 @@ void MainWindow::updateFormatBar()
 {
     checkFontOffer();
     updateScriptActions();
+    if (NoteFormatTarget *nt = noteTargetNow()) {
+        // the notes of a mind map (0.99.0): the controls that mean something for a note, the state of the selection
+        if (auto *mc = dynamic_cast<MindMapController *>(nt))
+            connect(mc, &MindMapController::formatStateChanged, this, &MainWindow::updateFormatBar, Qt::UniqueConnection);
+        for (const char *k : {"bold", "italic", "underline", "strike", "superscript", "subscript", "highlight", "alignLeft",
+                              "alignCenter", "alignRight", "alignJustify", "bullets", "numbers", "indent", "outdent",
+                              "clearFormat", "comment", "footnote", "annotation", "inlineFootnote", "image", "textColor",
+                              "textColorAuto", "showFonts", "fontBigger", "fontSmaller", "paragraph", "indentMore", "indentLess",
+                              "resetParagraph", "copyFormat", "line100", "line109", "line115", "line120", "line150", "line200",
+                              "insertDate", "insertTime", "pastePlain", "pasteKeep", "pasteFormat", "styleNew", "styleRedefine",
+                              "insertTable", "tableRowAbove", "tableRowBelow", "tableColLeft", "tableColRight", "tableDeleteRows",
+                              "tableDeleteCols", "tableDelete", "tableMerge", "tableSplit", "tableCellColor", "tableCellColorClear",
+                              "tableProperties", "picture"})
+            a[QLatin1String(k)]->setEnabled(nt->noteFormatEnabled(QLatin1String(k)));
+        for (QAction *ac : m_styleActions)
+            ac->setEnabled(false);
+        m_styleCombo->setEnabled(false);
+        m_fontCombo->setEnabled(false);
+        m_sizeSpin->setEnabled(false);
+        m_lineCombo->setEnabled(false);
+        for (QToolButton *b : m_paraButtons)
+            if (b)
+                b->setEnabled(false);
+        const NoteFormatState st = nt->noteFormatState();
+        m_updatingUi = true;
+        a[QStringLiteral("bold")]->setChecked(st.bold == 1);
+        a[QStringLiteral("italic")]->setChecked(st.italic == 1);
+        a[QStringLiteral("underline")]->setChecked(st.underline == 1);
+        a[QStringLiteral("strike")]->setChecked(st.strike == 1);
+        a[QStringLiteral("superscript")]->setChecked(false);
+        a[QStringLiteral("subscript")]->setChecked(false);
+        a[QStringLiteral("alignLeft")]->setChecked(st.align == 0);
+        a[QStringLiteral("alignCenter")]->setChecked(st.align == 1);
+        a[QStringLiteral("alignRight")]->setChecked(st.align == 2);
+        a[QStringLiteral("alignJustify")]->setChecked(st.align == 3);
+        m_updatingUi = false;
+        return;
+    }
     if (ObjectTextEdit *o = objectTextTarget()) {
         // the text of an object (0.21.1): bold, italic, underline, strikethrough, colors
         static const QSet<QString> objectKeys = {QStringLiteral("bold"), QStringLiteral("italic"), QStringLiteral("underline"),

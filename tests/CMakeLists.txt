@@ -669,3 +669,6 @@ target_compile_definitions(qb_ls3_tests PRIVATE QB_TEST_SOURCE_DIR="${CMAKE_SOUR
 # (./qb_ls4_tests /tmp/shots)
 add_executable(qb_ls4_tests ls4_tests.cpp)
 target_link_libraries(qb_ls4_tests PRIVATE qbcore Qt6::Network)
+# 0.99.0 (the format bar's controls act on the notes of a mind map, NoteFormatTarget; several notes at once) (xvfb-run -a ./qb_mmfmt_tests /tmp/shots)
+add_executable(qb_mmfmt_tests mmfmt_tests.cpp ${QB_RESOURCES_OBJECTS})
+target_link_libraries(qb_mmfmt_tests PRIVATE qbui Qt6::Test)

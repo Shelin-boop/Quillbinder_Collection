@@ -51,6 +51,7 @@
 #include <QPrintPreviewDialog>
 #include <QRandomGenerator>
 #include <QSaveFile>
+#include <QSet>
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QTextDocumentFragment>
@@ -1027,6 +1028,7 @@ void MindMapController::updateActions()
         if (n.isImage())
             images = true;
     en("mm_exportImages", images);
+    emit formatStateChanged();
 }
 
 // ------------------------------------------------------------------ helpers
@@ -1711,6 +1713,131 @@ void MindMapController::openLink(const QString &href)
         return;
     }
     links::open(m_view, href); // 0.64.1: other targets than web and mail asked
+}
+
+// ------------------------------------------------------------------ the format bar (0.99.0)
+
+NoteFormatTarget *NoteFormatTarget::forWidget(QWidget *focus)
+{
+    for (QWidget *w = focus; w; w = w->parentWidget())
+        if (auto *v = qobject_cast<MindMapView *>(w))
+            return v->controller();
+    return nullptr;
+}
+
+bool MindMapController::noteFormatActive() const
+{
+    return scene()->editingNote() || !scene()->selectedNotes().isEmpty();
+}
+
+bool MindMapController::noteFormatEnabled(const QString &key) const
+{
+    if (m_doc->locked() || !noteFormatActive())
+        return false;
+    static const QSet<QString> toggles = {QStringLiteral("bold"), QStringLiteral("italic"), QStringLiteral("underline"),
+                                          QStringLiteral("strike")};
+    if (toggles.contains(key))
+        return true;
+    // the color, size and alignment belong to the whole note, also while one is edited
+    static const QSet<QString> more = {QStringLiteral("textColor"),    QStringLiteral("textColorAuto"), QStringLiteral("alignLeft"),
+                                       QStringLiteral("alignCenter"),  QStringLiteral("alignRight"),    QStringLiteral("alignJustify"),
+                                       QStringLiteral("fontBigger"),   QStringLiteral("fontSmaller"),   QStringLiteral("size"),
+                                       QStringLiteral("clearFormat")};
+    return more.contains(key) && !scene()->selectedNotes().isEmpty();
+}
+
+NoteFormatState MindMapController::noteFormatState() const
+{
+    NoteFormatState st;
+    const QList<int> ids = scene()->selectedNotes();
+    bool firstNote = true;
+    for (int id : ids) {
+        const Note *n = board().note(id);
+        if (!n)
+            continue;
+        if (firstNote) {
+            st.size = n->fontSize;
+            st.textColor = n->look.textColor;
+            st.align = int(n->align);
+            if (!scene()->editingNote()) {
+                st.bold = n->bold;
+                st.italic = n->italic;
+                st.underline = n->underline;
+                st.strike = n->strike;
+            }
+            firstNote = false;
+            continue;
+        }
+        if (!scene()->editingNote()) {
+            if (st.bold != int(n->bold))
+                st.bold = -1;
+            if (st.italic != int(n->italic))
+                st.italic = -1;
+            if (st.underline != int(n->underline))
+                st.underline = -1;
+            if (st.strike != int(n->strike))
+                st.strike = -1;
+        }
+        if (st.size != n->fontSize)
+            st.size = 0;
+        if (st.textColor != n->look.textColor)
+            st.textColorMixed = true;
+        if (st.align != int(n->align))
+            st.align = -1;
+    }
+    if (st.textColorMixed)
+        st.textColor = QColor();
+    if (NoteItem *ni = scene()->editingNote()) {
+        const QTextCharFormat f = ni->textItem()->textCursor().charFormat();
+        st.bold = f.fontWeight() >= QFont::Bold;
+        st.italic = f.fontItalic();
+        st.underline = f.fontUnderline();
+        st.strike = f.fontStrikeOut();
+    }
+    return st;
+}
+
+bool MindMapController::noteFormatApply(const QString &key, const QVariant &value)
+{
+    if (!noteFormatEnabled(key))
+        return false;
+    if (key == QLatin1String("bold"))
+        toggleFont(0);
+    else if (key == QLatin1String("italic"))
+        toggleFont(1);
+    else if (key == QLatin1String("underline"))
+        toggleFont(2);
+    else if (key == QLatin1String("strike"))
+        toggleFont(3);
+    else if (key == QLatin1String("textColor"))
+        setColor(0, value.value<QColor>());
+    else if (key == QLatin1String("textColorAuto"))
+        clearColor(0);
+    else if (key == QLatin1String("alignLeft"))
+        setAlignment(Align::Left);
+    else if (key == QLatin1String("alignCenter"))
+        setAlignment(Align::Center);
+    else if (key == QLatin1String("alignRight"))
+        setAlignment(Align::Right);
+    else if (key == QLatin1String("alignJustify"))
+        setAlignment(Align::Justify);
+    else if (key == QLatin1String("fontBigger"))
+        forNotes(tr("Bigger"), [](Note &n) { n.fontSize = qMin(96.0, n.fontSize + 1); });
+    else if (key == QLatin1String("fontSmaller"))
+        forNotes(tr("Smaller"), [](Note &n) { n.fontSize = qMax(6.0, n.fontSize - 1); });
+    else if (key == QLatin1String("size")) {
+        const double v = qBound(6.0, value.toDouble(), 96.0);
+        forNotes(tr("Font Size"), [v](Note &n) { n.fontSize = v; });
+    } else if (key == QLatin1String("clearFormat"))
+        forNotes(tr("Clear Formatting"), [](Note &n) {
+            n.bold = n.italic = n.underline = n.strike = false;
+            n.ranges.clear();
+            n.align = Align::Left;
+            n.look.textColor = QColor();
+        });
+    else
+        return false;
+    return true;
 }
 
 // ------------------------------------------------------------------ format
