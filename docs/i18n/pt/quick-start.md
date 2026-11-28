@@ -75,6 +75,7 @@ O {{APP}} é um programa de escrita para textos longos. Se você já trabalhou c
 - **Lugares guardados**: cada documento abre onde você deixou o cursor, também depois de reabrir o projeto.
 - **Fontes**: **Formatar > Fonte > Instalar arquivos de fonte…** adiciona fontes sem sair do programa.
 - **Segurança**: salvamento automático também enquanto você continua digitando, backups, uma cópia reserva do arquivo do projeto, relatórios de falhas e de travamentos (**Ajuda > Solução de problemas e desenvolvimento > Relatórios de falhas…**) e **Ajuda > Solução de problemas e desenvolvimento > Informações do sistema**.
+- **Live Sync** (desativado até você ativá-lo em **Arquivo > Opções > Live Sync**): mantém um projeto igual nos seus dispositivos na mesma rede. Pareie os dispositivos uma vez (**Parear um dispositivo...**: compare os seis dígitos nos dois), depois escolha **Compartilhar este projeto...** no menu do botão Live Sync da barra de ferramentas e **Entrar em um projeto...** no outro dispositivo. Um dispositivo edita um documento por vez; os outros podem pedir. Os arquivos de um projeto que não é criptografado, e os backups ZIP dele, não são criptografados pelo Live Sync: use a criptografia dos seus próprios dispositivos (seção 21 do manual).
 
 ### Atualizações e complementos
 
