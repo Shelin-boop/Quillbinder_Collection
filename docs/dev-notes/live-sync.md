@@ -88,3 +88,35 @@ over two TLS listeners on localhost, and starts itself twice: a typer (edits spa
 changes at 10 a second into one document per project, then 20 fresh locks) and a watcher (each change carries the time of the monotonic
 clock, which is the same in all programs of a machine; the watcher reads it from its replica when the event is applied and notes the
 difference). It writes `results.txt` with p50, p95, p99 and the maximum. The numbers depend on the machine; they are recorded, not promised.
+
+## Finishing the integration (work package 9)
+
+- **Per hosted project** the service keeps a `HostBackup` (extension handler chained after the authority's, the snapshot hook, `recoverJobs` at
+  start) and per replica a `HostJobsClient` (`Service::Proj::jobs` / `jobsClient`). `HostBackup` gets the host's Project through
+  `Config::projectOf`: `ProjectHostBackend` makes the Project again when its model could not follow a commit, so a pointer kept from the
+  start would be stale and a snapshot job's `Project::save()` would write an older project file over a newer one (check in `ls9`).
+  Every entry point of `HostBackup` runs inside a `ServiceScope` (the gate would capture the host's writes when a window of the same
+  folder lives in the process); the event pump while a backup is packed steps out with a `WindowScope`.
+- **Windows reach the snapshot jobs** through the service: `W_JOB` / `W_JOB_RESULT` (`ServiceClient::snapshotJob`); `LiveSyncGlue` installs
+  a `snapshots::RemoteJobs` per project folder. On the host's own device the service calls `HostBackup::runJobFor`.
+- **A restart and a cut-off job**: `HostSession::start` reads the folder, so the job's files are already in the host's list; `recoverJobs`
+  therefore publishes every snapshot file and the project file again (`publishChanges(..., afterRestart)`).
+- **The first message of a window**: the service's answer to `W_ATTACH` and a `W_STATE` can arrive in one read; `ServiceClient::onFrame`
+  takes the answer in at once (before: the state was dropped as "not my project" and the window never saw the host ready; it made
+  `ls5`'s process check fail in about one run of five).
+- **One window, one service**: `MainWindow::liveSyncService()` keeps the in-process service the window was made with. Suites run several
+  services in one process and switch `ui::setInProcessLiveSyncService`; a reopen (after a replaced copy) that read the global opened the
+  window without its follower, so its writes went straight into the host's folder.
+- **Edit requests**: `EDIT_ENDED` (host to holder) when the asker cancels; the service ends the holder's bar on a hand-over, an unlock of
+  the resource and a revoked lock, not on a Decline. After a takeover the window saves the document at once: without the lock the host
+  refuses the text and it is kept as an outbox draft.
+- **Drafts**: `Service::draftContent` reads the text of an authority draft or of an outbox draft (the first text file of its units, bytes
+  from the blob store); `LiveSyncControl::draftActionRequested(DraftAction *)` goes to the window that has the project open
+  (`MainWindow::liveSyncDraftAction`); none: the dialog says to open the project. Take Over keeps the draft in the list.
+  Compare writes the draft's text to a temporary `.txt` and uses `compare::compareTexts` for that one document; text that shares no
+  four-word run with the document is shown as a section of its own (nothing is changed until the writer ticks it).
+- **Keep hosting**: `ServiceControl::handOffHosting` (on `aboutToQuit` of a program that owns its service) stops the in-process service and
+  starts `--live-sync-service`; the process reads the choice from the settings (`QB_LS_KEEP_HOSTING=1` in the suites). A program that
+  starts finds the socket taken and sends `W_STOP`; only a service process (`quitWhenIdle`) answers "stopping" and ends, then the program
+  hosts itself. A failed `Service::start` closes its listener and discovery again.
+- Pitfall: `QB_LS5_SCREENS_FULL` is gone, the second half of the screens test always runs.
